@@ -2,6 +2,7 @@ import base64
 import json
 import logging
 import secrets
+import threading
 import time
 import uuid
 from datetime import datetime, timedelta, timezone
@@ -16,12 +17,16 @@ from dotenv import load_dotenv
 _PROJ_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(_PROJ_ROOT / ".env")
 
-from fastapi import Depends, FastAPI, File, Form, HTTPException, Request, UploadFile
+from fastapi import Depends, FastAPI, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, Response
 from fastapi.staticfiles import StaticFiles
+from slowapi import Limiter
+from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
+from slowapi.middleware import SlowAPIMiddleware
+from sqlalchemy import or_, text
 from sqlmodel import Session, select
 
 from app.admin import admin_router as new_admin_router
@@ -37,9 +42,11 @@ from app.models import (  # noqa: F401
     AnalysisJob,
     AnalysisRecord,
     AuditLog,
+    DiscountCode,
     ErrorLog,
     PaymentOrder,
     Presence,
+    PushSubscription,
     SecurityLog,
     UploadLog,
     EmailVerifyToken,
@@ -48,6 +55,7 @@ from app.models import (  # noqa: F401
     ShareToken,
     User,
 )
+from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_report_pdf
 from app.schemas.analyze import (
     AnalysisDetail,
@@ -73,6 +81,30 @@ def _cors_origins_list() -> list[str]:
 ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 MIME_MAP = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
+ALLOWED_UPLOAD_MIME_TYPES = {"application/pdf", "image/jpeg", "image/png"}
+
+
+def _max_upload_bytes() -> int:
+    try:
+        mb = int(getattr(settings, "upload_max_mb", 10) or 10)
+    except (TypeError, ValueError):
+        mb = 10
+    return max(mb, 1) * 1024 * 1024
+
+
+def _detect_magic_type(content: bytes) -> str | None:
+    if not content or len(content) < 4:
+        return None
+    # PDF: %PDF-
+    if content.startswith(b"%PDF"):
+        return "pdf"
+    # JPEG: FF D8 FF
+    if content[0:2] == b"\xFF\xD8":
+        return "jpeg"
+    # PNG: 89 50 4E 47 0D 0A 1A 0A
+    if content.startswith(b"\x89PNG\r\n\x1a\n"):
+        return "png"
+    return None
 
 # Proje kökü: app/main.py -> app/ -> norya/
 _ROOT = Path(__file__).resolve().parent.parent
@@ -88,6 +120,11 @@ async def lifespan(app: FastAPI):
     init_db()
     key_ok = bool((settings.openai_api_key or "").strip())
     log.info("OPENAI_API_KEY loaded: %s", "yes" if key_ok else "NO (.env dosyasına OPENAI_API_KEY=sk-... ekleyin)")
+    from app.services.email_sender import is_mail_configured
+    if is_mail_configured():
+        log.info("E-posta (şifre sıfırlama): SMTP yapılandırıldı, gerçek mail gönderilecek.")
+    else:
+        log.warning("E-posta (şifre sıfırlama): SMTP yapılandırılmadı — .env içinde SMTP_HOST, SMTP_USER, SMTP_PASSWORD ayarlayın; şifre sıfırlama mailleri GÖNDERİLMEYECEK.")
     yield
 
 
@@ -107,7 +144,8 @@ def _error_response(request: Request, status_code: int, detail: str) -> JSONResp
     return JSONResponse(status_code=status_code, content=body)
 
 
-def _rate_limit_handler(request: Request, exc: RateLimitExceeded) -> JSONResponse:
+def _rate_limit_exceeded_handler(request: Request, exc: RateLimitExceeded) -> JSONResponse:
+    """Production format: {"error":"Too many requests","detail":"..."}"""
     try:
         ip = (request.headers.get("x-forwarded-for") or "").split(",")[0].strip() or (request.client.host if request.client else "")
         with Session(engine) as db:
@@ -115,7 +153,10 @@ def _rate_limit_handler(request: Request, exc: RateLimitExceeded) -> JSONRespons
             db.commit()
     except Exception as e:
         log.warning("SecurityLog rate_limit write failed: %s", e)
-    return _error_response(request, 429, "Çok fazla istek. Lütfen bir dakika bekleyin.")
+    return JSONResponse(
+        status_code=429,
+        content={"error": "Too many requests", "detail": "Rate limit exceeded. Please try again later."},
+    )
 
 
 def _validation_error_message(exc: RequestValidationError) -> str:
@@ -164,11 +205,20 @@ def validation_exception_handler(request: Request, exc: RequestValidationError) 
     return JSONResponse(status_code=422, content=body)
 
 
-app.add_exception_handler(RateLimitExceeded, _rate_limit_handler)
+app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # custom handler for {"error":"Too many requests","detail":"..."}
+
+# Tüm istekler için IP bazlı rate limit (SlowAPI middleware)
+app.add_middleware(SlowAPIMiddleware)
 
 
 @app.exception_handler(HTTPException)
 def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+    if exc.status_code == 429:
+        detail = exc.detail if isinstance(exc.detail, str) else "Rate limit exceeded. Please try again later."
+        return JSONResponse(
+            status_code=429,
+            content={"error": "Too many requests", "detail": detail},
+        )
     return _error_response(request, exc.status_code, exc.detail if isinstance(exc.detail, str) else str(exc.detail))
 
 
@@ -198,6 +248,24 @@ def unhandled_exception_handler(request: Request, exc: Exception) -> JSONRespons
 
 
 @app.middleware("http")
+async def security_headers(request: Request, call_next):
+    """Production güvenlik başlıkları: CSP, X-Content-Type-Options, X-Frame-Options, HSTS (HTTPS)."""
+    response = await call_next(request)
+    response.headers["X-Content-Type-Options"] = "nosniff"
+    response.headers["X-Frame-Options"] = "SAMEORIGIN"
+    response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    if getattr(settings, "environment", "development") == "production":
+        response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
+        # API + form + inline script için makul CSP (frontend form/JS çalışsın)
+        response.headers["Content-Security-Policy"] = (
+            "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self';"
+        )
+    return response
+
+
+@app.middleware("http")
 async def request_id_and_latency(request: Request, call_next):
     request.state.request_id = str(uuid.uuid4())
     start = time.perf_counter()
@@ -223,12 +291,13 @@ app.add_middleware(
     allow_headers=["*"],
 )
 app.include_router(auth_router)
-app.include_router(new_admin_router)  # Yeni modüler admin (Jinja2); /admin/ -> dashboard
-# GET /admin (slash yok) yeni panele yönlendir; eski admin'den önce kayıt edilmeli
+app.include_router(auth_router, prefix="/v1")  # Geriye uyumlu: /v1/auth/login vb.
+app.include_router(new_admin_router)  # Yeni modüler admin (Jinja2); /admin/ -> login/dashboard
+# GET /admin (slash yok) için her zaman önce login sayfası açılsın
 @app.get("/admin")
 def admin_redirect():
     from fastapi.responses import RedirectResponse
-    return RedirectResponse(url="/admin/dashboard", status_code=302)
+    return RedirectResponse(url="/admin/login", status_code=302)
 
 app.include_router(admin_router)  # Eski API paneli: /admin/stats, /admin/analyses, vb.
 
@@ -241,14 +310,34 @@ def admin_yonetim():
     return RedirectResponse(url="/admin", status_code=302)
 
 
+# PWA: Service worker kökten sunulur (scope / için)
 if STATIC_DIR.is_dir():
+    _sw_path = STATIC_DIR / "sw.js"
+    if _sw_path.is_file():
+        @app.get("/sw.js", response_class=PlainTextResponse)
+        def serve_sw():
+            return PlainTextResponse(
+                _sw_path.read_text(encoding="utf-8"),
+                media_type="application/javascript; charset=utf-8",
+            )
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/health")
 def health():
     openai_configured = bool((getattr(settings, "openai_api_key", None) or "").strip())
-    return {"status": "ok", "openai_configured": openai_configured}
+    database_status = "ok"
+    try:
+        with Session(engine) as s:
+            s.execute(text("SELECT 1"))
+    except Exception as e:
+        database_status = "error"
+        log.warning("Health check DB failed: %s", e)
+    return {
+        "status": "ok",
+        "openai_configured": openai_configured,
+        "database": database_status,
+    }
 
 
 # Ülke kodu -> dil kodu. Global: tr, en, de, ar, he, hi, it, es, fr
@@ -409,12 +498,61 @@ def get_pricing(request: Request, country: str | None = None):
         return _pricing_response("EUR", 1.0)
 
 
+@app.get("/api/push/vapid-public")
+def get_push_vapid_public():
+    """PWA push bildirimleri için VAPID public key (base64url). Boşsa push kullanılamaz."""
+    key = (getattr(settings, "vapid_public_key", None) or "").strip()
+    if not key:
+        return JSONResponse(content={"publicKey": None}, status_code=200)
+    return {"publicKey": key}
+
+
+@app.post("/api/push/subscribe")
+async def push_subscribe(
+    request: Request,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Kullanıcının push aboneliğini kaydeder (PWA bildirimleri için)."""
+    try:
+        body = await request.json()
+    except Exception:
+        body = {}
+    if not isinstance(body, dict):
+        raise HTTPException(status_code=400, detail="Geçersiz istek.")
+    endpoint = (body.get("endpoint") or "").strip()
+    keys = body.get("keys") or {}
+    p256dh = (keys.get("p256dh") or keys.get("p256dh") or "").strip()
+    auth = (keys.get("auth") or "").strip()
+    if not endpoint:
+        raise HTTPException(status_code=400, detail="endpoint gerekli.")
+    user_id = user.id or 0
+    existing = db.exec(select(PushSubscription).where(PushSubscription.user_id == user_id, PushSubscription.endpoint == endpoint)).first()
+    if existing:
+        existing.p256dh = p256dh
+        existing.auth = auth
+        db.add(existing)
+    else:
+        db.add(PushSubscription(user_id=user_id, endpoint=endpoint, p256dh=p256dh, auth=auth))
+    db.commit()
+    return {"ok": True}
+
+
 @app.get("/api-check")
 def api_check():
     """OpenAI anahtarı yüklü mü kontrol et (anahtar gösterilmez)."""
     from app.core.config import settings
     key_ok = bool(settings.openai_api_key and settings.openai_api_key.startswith("sk-"))
     return {"openai_ayarli": key_ok, "mesaj": "Anahtar tanımlı." if key_ok else "OPENAI_API_KEY .env'de eksik veya geçersiz."}
+
+
+# DEBUG ONLY: Rate limit test endpoint — production'da kapalı (kolayca silinebilir)
+if getattr(settings, "environment", "development") != "production":
+    @app.get("/debug/rate-test")
+    @limiter.limit("5/minute")
+    async def debug_rate_test(request: Request):
+        """Rate limit'i test etmek için basit endpoint. Global SlowAPI limitine tabidir."""
+        return {"ok": True}
 
 
 @app.get("/")
@@ -494,6 +632,30 @@ def _client_ip(request: Request) -> str:
     return request.client.host if request.client else ""
 
 
+# 30/hour per user for /analyze and /analyze/upload (in-memory; key = user_id)
+_analyze_hourly: dict[str, list[float]] = {}
+_analyze_hourly_lock = threading.Lock()
+ANALYZE_HOURLY_LIMIT = 30
+HOUR_SECONDS = 3600.0
+
+
+def _check_analyze_hourly_limit(user_id: int) -> None:
+    """Raises HTTPException 429 if this user has >= ANALYZE_HOURLY_LIMIT analyses in the last hour."""
+    key = f"u_{user_id}"
+    now = time.time()
+    with _analyze_hourly_lock:
+        if key not in _analyze_hourly:
+            _analyze_hourly[key] = []
+        times = _analyze_hourly[key]
+        times[:] = [t for t in times if now - t < HOUR_SECONDS]
+        if len(times) >= ANALYZE_HOURLY_LIMIT:
+            raise HTTPException(
+                status_code=429,
+                detail="Too many analyses in the last hour. Please try again later.",
+            )
+        times.append(now)
+
+
 def _audit(db: Session, event: str, user_id: int | None, ip: str | None) -> None:
     try:
         country = get_country_from_ip(ip) if ip else None
@@ -562,12 +724,16 @@ def _is_test_mode(request: Request) -> bool:
 
 
 @app.post("/analyze", response_model=AnalyzeResponse)
+@limiter.limit("10/minute")
 async def analyze(
     request: Request,
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
     """Metin analizi. JSON body veya form (text, doctor_notes, lang) — PDF/görsel akışı ile aynı form gönderimi desteklenir."""
+    test_mode = _is_test_mode(request)
+    if not test_mode:
+        _check_analyze_hourly_limit(user.id or 0)
     content_type = (request.headers.get("content-type") or "").lower()
     if "application/json" in content_type:
         try:
@@ -586,7 +752,6 @@ async def analyze(
         lang = form.get("lang") or None
     if not text:
         raise HTTPException(status_code=400, detail="Lütfen tahlil metnini girin veya PDF/görsel yükleyin.")
-    test_mode = _is_test_mode(request)
     if not test_mode:
         plan = getattr(user, "plan", "free") or "free"
         limit = _aylik_limit(plan)
@@ -649,6 +814,7 @@ async def analyze(
 
 
 @app.post("/analyze/upload", response_model=AnalyzeResponse)
+@limiter.limit("10/minute")
 async def analyze_upload(
     request: Request,
     file: UploadFile = File(...),
@@ -660,6 +826,7 @@ async def analyze_upload(
     log.info("analyze/upload: filename=%s", getattr(file, "filename", ""))
     test_mode = _is_test_mode(request)
     if not test_mode:
+        _check_analyze_hourly_limit(user.id or 0)
         plan = getattr(user, "plan", "free") or "free"
         limit = _aylik_limit(plan)
         kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
@@ -675,22 +842,78 @@ async def analyze_upload(
     if not file.filename:
         raise HTTPException(status_code=400, detail="Dosya seçin.")
     ext = "." + file.filename.lower().rsplit(".", 1)[-1] if "." in file.filename else ""
-    if ext not in ALLOWED_UPLOAD_EXTENSIONS:
-        raise HTTPException(
-            status_code=400,
-            detail="Sadece PDF, JPG veya PNG yükleyebilirsiniz.",
-        )
     report_lang = _report_lang_from_request(request, lang)
     try:
         content = await file.read()
     except Exception as e:
         log.exception("analyze/upload file read error: %s", e)
         raise HTTPException(status_code=400, detail="Dosya okunamadı.")
-    MAX_UPLOAD_BYTES = 10 * 1024 * 1024  # 10 MB
-    if len(content) > MAX_UPLOAD_BYTES:
-        raise HTTPException(status_code=413, detail="Dosya en fazla 10 MB olabilir.")
-    if len(content) == 0:
+
+    size_bytes = len(content)
+    if size_bytes == 0:
         raise HTTPException(status_code=400, detail="Dosya boş.")
+
+    max_bytes = _max_upload_bytes()
+    if size_bytes > max_bytes:
+        # Limit aşımı UploadLog
+        try:
+            ul = UploadLog(
+                user_id=user.id or 0,
+                filename=file.filename,
+                file_size_bytes=size_bytes,
+                status="failed",
+                error_message=f"too_large: size={size_bytes}, limit={max_bytes}, mime={getattr(file, 'content_type', '')}",
+            )
+            db.add(ul)
+            db.commit()
+        except Exception as e:
+            log.warning("UploadLog write failed for size limit: %s", e)
+        mb_limit = max_bytes // (1024 * 1024)
+        raise HTTPException(status_code=413, detail=f"Dosya en fazla {mb_limit} MB olabilir.")
+
+    # MIME + magic bytes kontrolü
+    reported_mime = getattr(file, "content_type", "") or ""
+    magic_type = _detect_magic_type(content)
+    magic_ext = None
+    expected_mime = None
+    if magic_type == "pdf":
+        magic_ext = ".pdf"
+        expected_mime = "application/pdf"
+    elif magic_type == "jpeg":
+        magic_ext = ".jpg"
+        expected_mime = "image/jpeg"
+    elif magic_type == "png":
+        magic_ext = ".png"
+        expected_mime = "image/png"
+
+    valid = (
+        ext in ALLOWED_UPLOAD_EXTENSIONS
+        and reported_mime in ALLOWED_UPLOAD_MIME_TYPES
+        and magic_type is not None
+        and magic_ext == ext
+        and reported_mime == expected_mime
+    )
+
+    if not valid:
+        # Tip uyuşmazlığı UploadLog
+        try:
+            ul = UploadLog(
+                user_id=user.id or 0,
+                filename=file.filename,
+                file_size_bytes=size_bytes,
+                status="failed",
+                error_message=(
+                    f"invalid_type: ext={ext}, mime={reported_mime}, magic={magic_type}"
+                ),
+            )
+            db.add(ul)
+            db.commit()
+        except Exception as e:
+            log.warning("UploadLog write failed for invalid type: %s", e)
+        raise HTTPException(
+            status_code=400,
+            detail="Sadece PDF, JPG veya PNG dosyalarını yükleyebilirsiniz.",
+        )
     try:
         return _process_uploaded_content(
             content, file.filename, report_lang, user.id or 0, db, request, save=not test_mode
@@ -857,6 +1080,9 @@ def analyze_history(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
     limit: int = 50,
+    source: str | None = Query(None, description="Filtre: text, pdf, image"),
+    q: str | None = Query(None, description="Arama (giriş veya sonuç metninde)"),
+    favorite_only: bool = Query(False, description="Sadece favoriler"),
 ):
     stmt = (
         select(AnalysisRecord)
@@ -864,6 +1090,15 @@ def analyze_history(
         .order_by(AnalysisRecord.created_at.desc())
         .limit(limit)
     )
+    if source and source.strip():
+        stmt = stmt.where(AnalysisRecord.source == source.strip().lower())
+    if getattr(AnalysisRecord, "is_favorite", None) is not None and favorite_only:
+        stmt = stmt.where(AnalysisRecord.is_favorite == True)
+    if q and q.strip():
+        q = q.strip()
+        stmt = stmt.where(
+            or_(AnalysisRecord.input_text.contains(q), AnalysisRecord.result_text.contains(q))
+        )
     rows = list(db.exec(stmt).all())
     return [
         AnalysisHistoryItem(
@@ -872,9 +1107,44 @@ def analyze_history(
             result_preview=(r.result_text[:200] + "…") if len(r.result_text) > 200 else r.result_text,
             source=r.source,
             created_at=r.created_at.isoformat() if hasattr(r.created_at, "isoformat") else str(r.created_at),
+            is_favorite=getattr(r, "is_favorite", False),
         )
         for r in rows
     ]
+
+
+@app.get("/analyze/export")
+def analyze_export(
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Kullanıcının tüm analizlerini JSON olarak döner (KVKK/GDPR veri taşınabilirliği)."""
+    stmt = (
+        select(AnalysisRecord)
+        .where(AnalysisRecord.user_id == user.id)
+        .order_by(AnalysisRecord.created_at.desc())
+    )
+    rows = list(db.exec(stmt).all())
+    data = {
+        "exported_at": datetime.utcnow().isoformat() + "Z",
+        "analyses": [
+            {
+                "id": r.id,
+                "input_text": r.input_text,
+                "result_text": r.result_text,
+                "source": r.source,
+                "created_at": r.created_at.isoformat() if hasattr(r.created_at, "isoformat") else str(r.created_at),
+                "doctor_notes": getattr(r, "doctor_notes", None),
+            }
+            for r in rows
+        ],
+    }
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        content=data,
+        media_type="application/json",
+        headers={"Content-Disposition": "attachment; filename=norya-verilerim.json"},
+    )
 
 
 @app.get("/analyze/history/{analysis_id}", response_model=AnalysisDetail)
@@ -893,16 +1163,35 @@ def analyze_history_detail(
         source=rec.source,
         created_at=rec.created_at.isoformat() if hasattr(rec.created_at, "isoformat") else str(rec.created_at),
         doctor_notes=getattr(rec, "doctor_notes", None),
+        is_favorite=getattr(rec, "is_favorite", False),
     )
+
+
+@app.patch("/analyze/history/{analysis_id}")
+def analyze_history_toggle_favorite(
+    analysis_id: int,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Favori işaretini aç/kapa."""
+    rec = db.get(AnalysisRecord, analysis_id)
+    if not rec or rec.user_id != (user.id or 0):
+        raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
+    rec.is_favorite = not getattr(rec, "is_favorite", False)
+    db.add(rec)
+    db.commit()
+    db.refresh(rec)
+    return {"is_favorite": getattr(rec, "is_favorite", False)}
 
 
 @app.get("/analyze/history/{analysis_id}/pdf")
 def download_analysis_pdf(
     analysis_id: int,
+    lang: str = Query("tr", description="Rapor dili: tr, en, de, fr, es, it, he, ar, hi, el, cs, sr"),
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """İlgili analizin premium PDF raporunu indirir (WeasyPrint + Jinja2)."""
+    """İlgili analizin premium PDF raporunu indirir (WeasyPrint + Jinja2). Dil seçimine göre başlık/etiketler o dilde."""
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec or rec.user_id != (user.id or 0):
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
@@ -913,11 +1202,12 @@ def download_analysis_pdf(
             report_date = dt.strftime("%d.%m.%Y %H:%M")
         else:
             report_date = str(dt)
+    report_lang = (lang or "tr").strip().lower()[:5]
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
             report_date=report_date,
-            lang="tr",
+            lang=report_lang,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
@@ -980,6 +1270,26 @@ def _paytr_amount(product: str) -> int:
     return 300
 
 
+@app.get("/api/coupon/validate")
+def coupon_validate(
+    code: str,
+    product: str,
+    db: Session = Depends(get_db),
+):
+    """İndirim kodunu doğrular; geçerliyse indirim tutarı ve son fiyat döner."""
+    if product not in ("single", "monthly", "yearly"):
+        raise HTTPException(status_code=400, detail="Geçersiz ürün.")
+    base = _paytr_amount(product)
+    discount, err = validate_coupon(db, code, product, base)
+    if err:
+        return {"valid": False, "reason": err}
+    return {
+        "valid": True,
+        "discount_cents": discount,
+        "final_amount_cents": max(1, base - discount),
+    }
+
+
 @app.post("/payment/get-token")
 def payment_get_token(
     body: CreateSessionRequest,
@@ -1001,7 +1311,21 @@ def payment_get_token(
 
     merchant_oid = f"norya_{user.id}_{int(datetime.now(timezone.utc).timestamp())}_{secrets.token_hex(4)}"
     amount = _paytr_amount(body.product)
-    order = PaymentOrder(merchant_oid=merchant_oid, user_id=user.id or 0, product=body.product, amount_kurus=amount, currency=currency)
+    coupon_used: str | None = None
+    if body.coupon_code and (code := (body.coupon_code or "").strip()):
+        discount, err = validate_coupon(db, code, body.product, amount)
+        if err:
+            raise HTTPException(status_code=400, detail=err)
+        amount = max(1, amount - discount)
+        coupon_used = code
+    order = PaymentOrder(
+        merchant_oid=merchant_oid,
+        user_id=user.id or 0,
+        product=body.product,
+        amount_kurus=amount,
+        currency=currency,
+        coupon_code_used=coupon_used,
+    )
     db.add(order)
     db.commit()
 
@@ -1093,7 +1417,21 @@ def payment_get_token_guest(
     user_id = user.id or 0
     merchant_oid = f"norya_guest_{user_id}_{int(datetime.now(timezone.utc).timestamp())}_{secrets.token_hex(4)}"
     amount = _paytr_amount("single")
-    order = PaymentOrder(merchant_oid=merchant_oid, user_id=user_id, product="single", amount_kurus=amount, currency=currency)
+    coupon_used: str | None = None
+    if body.coupon_code and (code := (body.coupon_code or "").strip()):
+        discount, err = validate_coupon(db, code, "single", amount)
+        if err:
+            raise HTTPException(status_code=400, detail=err)
+        amount = max(1, amount - discount)
+        coupon_used = code
+    order = PaymentOrder(
+        merchant_oid=merchant_oid,
+        user_id=user_id,
+        product="single",
+        amount_kurus=amount,
+        currency=currency,
+        coupon_code_used=coupon_used,
+    )
     db.add(order)
     guest_token = secrets.token_hex(32)
     expires_at = datetime.now(timezone.utc) + timedelta(days=7)
@@ -1177,27 +1515,83 @@ async def _paytr_callback_handle(request: Request, db: Session):
     status = post.get("status", "")
     total_amount = post.get("total_amount", "")
     paytr_hash = post.get("hash", "")
+     # PayTR dokümanına göre payment_id veya benzeri bir transaction_id alanı olabilir; ikisini de deneriz.
+    transaction_id = post.get("payment_id") or post.get("transaction_id") or ""
 
     if not merchant_oid or not status or not total_amount or not paytr_hash:
         return PlainTextResponse("OK", status_code=200)
 
-    merchant_key = settings.paytr_merchant_key.encode() if isinstance(settings.paytr_merchant_key, str) else settings.paytr_merchant_key
-    merchant_salt = settings.paytr_merchant_salt
+    # Hash/imza doğrulaması: merchant_key ve merchant_salt env'den okunur
+    merchant_key = (settings.paytr_merchant_key or "").strip()
+    merchant_salt = (settings.paytr_merchant_salt or "").strip()
+    if not merchant_key or not merchant_salt:
+        log.warning("PayTR callback: PAYTR_MERCHANT_KEY veya PAYTR_MERCHANT_SALT eksik, hash doğrulanamıyor.")
+        try:
+            db.add(
+                SecurityLog(
+                    event="paytr_invalid_hash",
+                    ip=_client_ip(request),
+                    endpoint="/payment/callback",
+                    detail="missing_merchant_key_or_salt",
+                )
+            )
+            db.commit()
+        except Exception as e:
+            log.warning("SecurityLog write failed: %s", e)
+        return PlainTextResponse("PAYTR notification failed: misconfiguration", status_code=400)
     import base64
     import hmac
     import hashlib
+    key_bytes = merchant_key.encode() if isinstance(merchant_key, str) else merchant_key
     hash_str = f"{merchant_oid}{merchant_salt}{status}{total_amount}"
     our_hash = base64.b64encode(
-        hmac.new(merchant_key, hash_str.encode(), hashlib.sha256).digest()
+        hmac.new(key_bytes, hash_str.encode(), hashlib.sha256).digest()
     ).decode()
     if our_hash != paytr_hash:
+        try:
+            db.add(
+                SecurityLog(
+                    event="paytr_invalid_hash",
+                    ip=_client_ip(request),
+                    endpoint="/payment/callback",
+                    detail=f"merchant_oid={merchant_oid} status={status} total_amount={total_amount}",
+                )
+            )
+            db.commit()
+        except Exception as e:
+            log.warning("SecurityLog write failed: %s", e)
         return PlainTextResponse("PAYTR notification failed: bad hash", status_code=400)
 
-    stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == merchant_oid)
-    order = db.exec(stmt).first()
+    # Önce transaction_id (varsa), yoksa merchant_oid ile siparişi bul
+    order = None
+    if transaction_id:
+        order = db.exec(
+            select(PaymentOrder).where(PaymentOrder.paytr_transaction_id == transaction_id)
+        ).first()
     if not order:
+        order = db.exec(
+            select(PaymentOrder).where(PaymentOrder.merchant_oid == merchant_oid)
+        ).first()
+
+    if not order:
+        # Sipariş bulunamadıysa güvenlik loguna yaz, 200 dön (PayTR tekrar denemesin)
+        try:
+            db.add(
+                SecurityLog(
+                    event="suspicious",
+                    user_id=None,
+                    ip=_client_ip(request),
+                    endpoint="/payment/callback",
+                    detail=f"unknown_order: merchant_oid={merchant_oid} tx={transaction_id}",
+                )
+            )
+            db.commit()
+        except Exception as e:
+            log.warning("SecurityLog write failed for missing order: %s", e)
         return PlainTextResponse("OK", status_code=200)
-    if order.status == "completed":
+
+    # Idempotent: sipariş zaten işlendi ise hiçbir şey yapmadan OK dön
+    if getattr(order, "is_processed", False):
         return PlainTextResponse("OK", status_code=200)
 
     try:
@@ -1211,10 +1605,20 @@ async def _paytr_callback_handle(request: Request, db: Session):
                     user.plan = "pro"
                     db.add(user)
                 _audit(db, f"payment_{order.product}", order.user_id, None)
+            # Ödeme başarıyla işlendi
             order.status = "completed"
+            order.is_processed = True
+            order.processed_at = datetime.now(timezone.utc)
+            if transaction_id and not order.paytr_transaction_id:
+                order.paytr_transaction_id = transaction_id
             db.add(order)
+            if getattr(order, "coupon_code_used", None):
+                apply_coupon_use(db, order.coupon_code_used)
         else:
+            # Başarısız / iptal: durum failed, ancak is_processed False kalsın
             order.status = "failed"
+            if transaction_id and not order.paytr_transaction_id:
+                order.paytr_transaction_id = transaction_id
             db.add(order)
         db.commit()
     except Exception as e:

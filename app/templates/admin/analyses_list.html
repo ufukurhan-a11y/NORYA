@@ -1,0 +1,45 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Analiz geçmişi - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Analiz geçmişi</h1>
+<form method="get" class="mb-4 flex flex-wrap gap-3 items-end">
+  <input type="text" name="q" value="{{ q }}" placeholder="E-posta veya kullanıcı ID" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white w-48" />
+  <input type="date" name="date_from" value="{{ date_from }}" placeholder="Başlangıç" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
+  <input type="date" name="date_to" value="{{ date_to }}" placeholder="Bitiş" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
+  <select name="source" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white">
+    <option value="">Tümü</option>
+    <option value="text" {% if source == 'text' %}selected{% endif %}>text</option>
+    <option value="pdf" {% if source == 'pdf' %}selected{% endif %}>pdf</option>
+    <option value="image" {% if source == 'image' %}selected{% endif %}>image</option>
+  </select>
+  <button type="submit" class="px-4 py-2 rounded-lg bg-brand text-white">Filtrele</button>
+</form>
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left text-slate-400 border-b border-slate-700">
+        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">Kullanıcı</th>
+        <th class="px-4 py-2">Tarih</th>
+        <th class="px-4 py-2">Kaynak</th>
+        <th class="px-4 py-2">Girdi önizleme</th>
+        <th class="px-4 py-2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for a in analyses %}
+      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
+        <td class="px-4 py-2">{{ a.id }}</td>
+        <td class="px-4 py-2">{{ a.email }} <span class="text-slate-500">({{ a.user_id }})</span></td>
+        <td class="px-4 py-2">{{ a.created_at }}</td>
+        <td class="px-4 py-2">{{ a.source }}</td>
+        <td class="px-4 py-2 max-w-md truncate" title="{{ a.input_preview }}">{{ a.input_preview }}</td>
+        <td class="px-4 py-2"><a href="/admin/users/{{ a.user_id }}" class="text-brand hover:underline">Kullanıcı</a></td>
+      </tr>
+      {% else %}
+      <tr><td colspan="6" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

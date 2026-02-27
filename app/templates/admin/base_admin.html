@@ -22,8 +22,11 @@
       <nav class="p-2">
         <a href="/admin/dashboard" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path == '/admin/dashboard' or request.url.path == '/admin' %}active{% endif %}">Dashboard</a>
         <a href="/admin/users" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/users') %}active{% endif %}">Kullanıcılar</a>
+        <a href="/admin/analyses" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/analyses') %}active{% endif %}">Analiz geçmişi</a>
+        <a href="/admin/reports" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/reports') %}active{% endif %}">Raporlar</a>
         <a href="/admin/live" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/live') %}active{% endif %}">Canlı Kullanıcılar</a>
         <a href="/admin/payments" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/payments') %}active{% endif %}">Ödemeler</a>
+        <a href="/admin/coupons" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/coupons') %}active{% endif %}">İndirim Kodları</a>
         <a href="/admin/errors" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/errors') %}active{% endif %}">Hata Logları</a>
         <a href="/admin/uploads" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/uploads') %}active{% endif %}">Upload Logları</a>
         <a href="/admin/queue" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/queue') %}active{% endif %}">Analiz Kuyruğu</a>

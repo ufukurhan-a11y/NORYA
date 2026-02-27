@@ -1,6 +1,6 @@
-"""Satış & ödeme paneli: başarılı/hatalı/bekleyen, PayTR."""
-from fastapi import APIRouter, Depends, Request
-from fastapi.responses import HTMLResponse
+"""Satış & ödeme paneli: başarılı/hatalı/bekleyen, PayTR, detay, admin notu."""
+from fastapi import APIRouter, Depends, Form, Request
+from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select
 
@@ -36,7 +36,10 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
             "currency": getattr(o, "currency", None) or "EUR",
             "status": o.status,
             "paytr_transaction_id": getattr(o, "paytr_transaction_id", None) or "-",
+            "is_processed": getattr(o, "is_processed", False),
+            "processed_at": (o.processed_at.strftime("%d.%m.%Y %H:%M") if getattr(o, "processed_at", None) else "-"),
             "created_at": (o.created_at.strftime("%d.%m.%Y %H:%M") if o.created_at else "-"),
+            "admin_note": getattr(o, "admin_note", None) or "",
         }
         for o in orders
     ]
@@ -44,3 +47,45 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
         "admin/payments_list.html",
         {"request": request, "payments": rows, "status_filter": status_filter or ""},
     )
+
+
+@router.get("/{order_id}", response_class=HTMLResponse)
+def payment_detail(
+    request: Request,
+    order_id: int,
+    _=Depends(require_admin_cookie),
+    db: Session = Depends(get_db),
+):
+    order = db.get(PaymentOrder, order_id)
+    if not order:
+        from fastapi import HTTPException
+        raise HTTPException(404, "Ödeme bulunamadı.")
+    user = db.get(User, order.user_id)
+    user_email = user.email if user else ""
+    return templates.TemplateResponse(
+        "admin/payment_detail.html",
+        {
+            "request": request,
+            "order": order,
+            "user_email": user_email,
+            "amount_eur": (order.amount_kurus or 0) / 100,
+            "admin_note": getattr(order, "admin_note", None) or "",
+        },
+    )
+
+
+@router.post("/{order_id}/note")
+def payment_save_note(
+    order_id: int,
+    admin_note: str | None = Form(None),
+    _=Depends(require_admin_cookie),
+    db: Session = Depends(get_db),
+):
+    order = db.get(PaymentOrder, order_id)
+    if not order:
+        from fastapi import HTTPException
+        raise HTTPException(404, "Ödeme bulunamadı.")
+    order.admin_note = (admin_note or "").strip() or None
+    db.add(order)
+    db.commit()
+    return RedirectResponse(url=f"/admin/payments/{order_id}", status_code=302)

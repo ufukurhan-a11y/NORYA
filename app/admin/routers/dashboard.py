@@ -6,10 +6,18 @@ from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select, func
 
-from app.admin.deps import ADMIN_COOKIE, _admin_cookie_value, require_admin_cookie
+from app.admin.deps import (
+    ADMIN_COOKIE,
+    ADMIN_LOCKOUT_MINUTES,
+    ADMIN_LOGIN_MAX_FAILURES,
+    _admin_cookie_value,
+    _admin_secret_constant_time_compare,
+    get_client_ip,
+    require_admin_cookie,
+)
 from app.core.config import settings
 from app.core.database import get_db
-from app.models import AnalysisJob, PaymentOrder, Presence, User
+from app.models import AnalysisJob, PaymentOrder, Presence, SecurityLog, User
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -23,17 +31,52 @@ def admin_login_page(request: Request, err: str | None = None):
 
 
 @router.post("/login")
-def admin_login_submit(admin_secret: str | None = Form(None)):
-    if not (admin_secret or "").strip() or admin_secret.strip() != (settings.admin_secret or "").strip():
+def admin_login_submit(
+    request: Request,
+    admin_secret: str | None = Form(None),
+    db: Session = Depends(get_db),
+):
+    if not (settings.admin_secret or "").strip():
+        return RedirectResponse(url="/admin/login?err=config", status_code=302)
+    ip = get_client_ip(request)
+    cutoff = datetime.utcnow() - timedelta(minutes=ADMIN_LOCKOUT_MINUTES)
+    fail_count = (
+        db.exec(
+            select(func.count(SecurityLog.id)).where(SecurityLog.event == "admin_login_failed").where(SecurityLog.ip == ip).where(SecurityLog.created_at >= cutoff)
+        ).one()
+        or 0
+    )
+    if fail_count >= ADMIN_LOGIN_MAX_FAILURES:
+        try:
+            db.add(SecurityLog(event="admin_lockout", ip=ip, detail="lockout_15m"))
+            db.commit()
+        except Exception:
+            pass
+        return RedirectResponse(url="/admin/login?err=lockout", status_code=302)
+    if not _admin_secret_constant_time_compare(admin_secret, settings.admin_secret):
+        try:
+            db.add(SecurityLog(event="admin_login_failed", ip=ip, endpoint="/admin/login"))
+            db.commit()
+        except Exception:
+            pass
         return RedirectResponse(url="/admin/login?err=1", status_code=302)
     response = RedirectResponse(url="/admin/dashboard", status_code=302)
-    response.set_cookie(key=ADMIN_COOKIE, value=_admin_cookie_value(), httponly=True, samesite="lax", max_age=86400)
+    secure = (settings.environment or "").strip().lower() == "production"
+    response.set_cookie(
+        key=ADMIN_COOKIE,
+        value=_admin_cookie_value(),
+        httponly=True,
+        secure=secure,
+        samesite="lax",
+        max_age=86400,
+    )
     return response
 
 
 @router.get("/", response_class=HTMLResponse)
-def admin_index(_=Depends(require_admin_cookie)):
-    return RedirectResponse(url="/admin/dashboard", status_code=302)
+def admin_index():
+    """ /admin/ her zaman önce login sayfasına yönlendirsin. """
+    return RedirectResponse(url="/admin/login", status_code=302)
 
 
 @router.get("/legacy", response_class=HTMLResponse)

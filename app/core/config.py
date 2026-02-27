@@ -14,7 +14,9 @@ class Settings(BaseSettings):
     # CORS: virgülle ayrılmış origin listesi; production'da https://alandiniz.com
     cors_origins: str = "*"
     # IP başına dakikada max istek (rate limit)
-    rate_limit_per_minute: int = 30
+    rate_limit_per_minute: int = 60
+    # Kayıt endpoint'i için ayrı limit (testte yüksek tutulabilir)
+    rate_limit_register_per_minute: int = 3
     # PayTR (Türkiye sanal pos): iFrame API, önce ödeme alınır, bildirim URL ile hak tanınır
     paytr_merchant_id: str = ""
     paytr_merchant_key: str = ""
@@ -28,6 +30,21 @@ class Settings(BaseSettings):
     paytr_amount_yearly: int = 9900   # Yıllık Pro (euro cent), 9900 = 99,00 €
     paytr_test_mode: str = "0"         # Test için 1
     admin_secret: str = ""             # Manuel hak tanıma (destek): POST /payment/grant için
+    upload_max_mb: int = 10            # /analyze/upload için max dosya boyutu (MB)
+    environment: str = "development"   # production: admin cookie Secure=True
+    # E-posta (şifre sıfırlama, doğrulama): SMTP
+    smtp_host: str = ""
+    smtp_port: int = 587
+    smtp_user: str = ""
+    smtp_password: str = ""
+    smtp_from: str = "noreply@norya.com"
+    smtp_from_name: str = "Norya"
+    smtp_use_tls: bool = True
+    # Şifre sıfırlama linkindeki site adresi (e-postadaki buton linki)
+    frontend_url: str = "http://127.0.0.1:8000"
+    # PWA push bildirimleri (opsiyonel): VAPID public key (base64url). Boşsa push aboneliği alınmaz.
+    vapid_public_key: str = ""
+    vapid_private_key: str = ""  # Bildirim göndermek için (pywebpush ile kullanılır)
 
     model_config = {
         "env_file": _ENV_FILE if _ENV_FILE.is_file() else ".env",

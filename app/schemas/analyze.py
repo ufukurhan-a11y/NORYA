@@ -28,6 +28,7 @@ class AnalysisHistoryItem(BaseModel):
     result_preview: str
     source: str
     created_at: str
+    is_favorite: bool = False
 
 
 class AnalysisDetail(BaseModel):
@@ -37,3 +38,4 @@ class AnalysisDetail(BaseModel):
     source: str
     created_at: str
     doctor_notes: str | None = None
+    is_favorite: bool = False

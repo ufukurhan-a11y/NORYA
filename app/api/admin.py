@@ -8,6 +8,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from fastapi.responses import HTMLResponse, Response
 from sqlmodel import Session, select, func
 
+from app.admin.deps import _admin_secret_constant_time_compare
 from app.core.config import settings
 from app.core.database import get_db
 from app.models import AnalysisRecord, AuditLog, PaymentOrder, Presence, User
@@ -28,9 +29,9 @@ def _get_admin_secret(
 
 
 def _require_admin(secret: str | None = Depends(_get_admin_secret)) -> None:
-    if not settings.admin_secret:
+    if not (settings.admin_secret or "").strip():
         raise HTTPException(status_code=503, detail="Admin paneli yapılandırılmamış (ADMIN_SECRET yok).")
-    if not secret or secret != settings.admin_secret:
+    if not _admin_secret_constant_time_compare(secret, settings.admin_secret):
         raise HTTPException(status_code=403, detail="Yetkisiz.")
 
 
@@ -314,10 +315,11 @@ def admin_analyses(
 @router.get("/analyses/{analysis_id}/pdf", response_class=Response)
 def admin_analysis_pdf(
     analysis_id: int,
+    lang: str = Query("tr", description="Rapor dili: tr, en, de, fr, es, it, he, ar, hi, el, cs, sr"),
     db: Session = Depends(get_db),
     _: None = Depends(_require_admin),
 ):
-    """Admin: İlgili analizin PDF raporunu döndürür (kullanıcıların PDF'lerini görüntülemek için)."""
+    """Admin: İlgili analizin PDF raporunu döndürür (çok dilli başlık/etiketler)."""
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec:
         raise HTTPException(status_code=404, detail="Analiz bulunamadı.")
@@ -328,11 +330,12 @@ def admin_analysis_pdf(
             report_date = dt.strftime("%d.%m.%Y %H:%M")
         else:
             report_date = str(dt)
+    report_lang = (lang or "tr").strip().lower()[:5]
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
             report_date=report_date,
-            lang="tr",
+            lang=report_lang,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
@@ -437,7 +440,7 @@ def admin_payments(
     limit: int = Query(100, le=300),
     status: str | None = Query(None, description="pending | completed | failed"),
 ):
-    """Ödeme siparişleri: merchant_oid, user_id, email, product, amount_kurus, status, created_at."""
+    """Ödeme siparişleri: merchant_oid, user_id, email, product, amount_kurus, status, is_processed, created_at."""
     stmt = select(PaymentOrder).order_by(PaymentOrder.id.desc()).limit(limit)
     if status:
         stmt = stmt.where(PaymentOrder.status == status)
@@ -458,6 +461,8 @@ def admin_payments(
             "amount_eur": (o.amount_kurus or 0) / 100,
             "currency": getattr(o, "currency", None) or "EUR",
             "status": o.status,
+            "is_processed": getattr(o, "is_processed", False),
+            "processed_at": o.processed_at.isoformat() if getattr(o, "processed_at", None) else None,
             "created_at": o.created_at.isoformat() if o.created_at else None,
         }
         for o in orders

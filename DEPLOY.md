@@ -150,7 +150,29 @@ sudo apt install certbot python3-certbot-nginx
 sudo certbot --nginx -d norya.example.com
 ```
 
-### 2.7 Özet (VPS)
+### 2.7 Veritabanı yedekleme
+
+Proje kökünde çalıştırın:
+
+```bash
+chmod +x scripts/backup_db.sh
+./scripts/backup_db.sh          # Yedekler ./backups/ içine yazılır
+./scripts/backup_db.sh /yol      # İsteğe bağlı hedef dizin
+```
+
+- **SQLite:** `sqlite3 .backup` ile `backups/norya_sqlite_YYYYMMDD_HHMMSS.db` oluşturulur.
+- **PostgreSQL:** `pg_dump` ile `backups/norya_pg_YYYYMMDD_HHMMSS.sql` oluşturulur (sunucuda `pg_dump` kurulu olmalı).
+
+Yedekleri düzenli almak için cron kullanın (örnek: her gece 03:00):
+
+```cron
+0 3 * * * cd /var/www/norya && ./scripts/backup_db.sh /var/backups/norya
+```
+
+**Geri yükleme (SQLite):** `cp backups/norya_sqlite_....db norya.db` (uygulama kapalıyken).  
+**Geri yükleme (PostgreSQL):** `psql $DATABASE_URL -f backups/norya_pg_....sql`
+
+### 2.8 Özet (VPS)
 
 | Adım | Komut / dosya |
 |------|----------------|
@@ -160,6 +182,7 @@ sudo certbot --nginx -d norya.example.com
 | Env | `.env` (SECRET_KEY, OPENAI_API_KEY, DATABASE_URL, ADMIN_SECRET) |
 | Servis | `norya.service` → systemd enable/start |
 | Dış erişim | Nginx reverse proxy → 127.0.0.1:8000, SSL: certbot |
+| Yedek | `scripts/backup_db.sh` + cron (isteğe bağlı) |
 
 ---
 
@@ -171,4 +194,4 @@ sudo certbot --nginx -d norya.example.com
 - [ ] PayTR kullanıyorsanız: `PAYTR_*` ve callback URL’leri doğru
 - [ ] Admin: `ADMIN_SECRET` ayarlı
 - [ ] HTTPS (Render otomatik; VPS’te certbot)
-- [ ] Rate limit zaten uygulama içinde (IP bazlı)
+- [ ] Rate limit zaten uygulama içinde (IP bazlı). Çok worker veya birden fazla sunucu kullanıyorsanız limiti tüm instance’lar arasında paylaşmak için Redis önerilir: `.env` içinde `REDIS_URL=redis://...` tanımlayıp uygulama tarafında SlowAPI storage’ı Redis’e bağlayabilirsiniz (şu an in-memory; worker başına 60/dk).

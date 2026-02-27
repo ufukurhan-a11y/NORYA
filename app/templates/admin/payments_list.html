@@ -19,7 +19,9 @@
         <th class="px-4 py-2">Ürün</th>
         <th class="px-4 py-2">Tutar (EUR)</th>
         <th class="px-4 py-2">Durum</th>
-        <th class="px-4 py-2">PayTR tx</th>
+        <th class="px-4 py-2">İşlendi</th>
+        <th class="px-4 py-2">Not</th>
+        <th class="px-4 py-2"></th>
       </tr>
     </thead>
     <tbody>
@@ -31,10 +33,19 @@
         <td class="px-4 py-2">{{ p.product }}</td>
         <td class="px-4 py-2">{{ "%.2f"|format(p.amount_eur) }} €</td>
         <td class="px-4 py-2"><span class="{% if p.status == 'completed' %}text-green-400{% elif p.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ p.status }}</span></td>
-        <td class="px-4 py-2 font-mono text-xs">{{ p.paytr_transaction_id }}</td>
+        <td class="px-4 py-2">
+          {% if p.is_processed %}
+            <span class="text-green-400">Evet</span>
+            <span class="block text-xs text-slate-400">{{ p.processed_at }}</span>
+          {% else %}
+            <span class="text-amber-400">Hayır</span>
+          {% endif %}
+        </td>
+        <td class="px-4 py-2 text-xs max-w-20 truncate" title="{{ p.admin_note or '' }}">{{ p.admin_note or "-" }}</td>
+        <td class="px-4 py-2"><a href="/admin/payments/{{ p.id }}" class="text-brand hover:underline">Detay</a></td>
       </tr>
       {% else %}
-      <tr><td colspan="7" class="px-4 py-4 text-slate-500">Ödeme yok.</td></tr>
+      <tr><td colspan="9" class="px-4 py-4 text-slate-500">Ödeme yok.</td></tr>
       {% endfor %}
     </tbody>
   </table>

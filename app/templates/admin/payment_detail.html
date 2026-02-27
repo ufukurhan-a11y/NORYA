@@ -1,0 +1,25 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Ödeme #{{ order.id }} - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Ödeme Detayı</h1>
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-4 max-w-2xl">
+  <p><span class="text-slate-400">ID:</span> {{ order.id }}</p>
+  <p><span class="text-slate-400">merchant_oid:</span> <code class="text-sm">{{ order.merchant_oid }}</code></p>
+  <p><span class="text-slate-400">Kullanıcı:</span> {{ user_email }} (ID: {{ order.user_id }})</p>
+  <p><span class="text-slate-400">Ürün:</span> {{ order.product }}</p>
+  <p><span class="text-slate-400">Tutar:</span> {{ "%.2f"|format(amount_eur) }} {{ order.currency }}</p>
+  <p><span class="text-slate-400">Durum:</span> <span class="{% if order.status == 'completed' %}text-green-400{% elif order.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ order.status }}</span></p>
+  <p><span class="text-slate-400">İşlendi:</span> {% if order.is_processed %}Evet ({{ order.processed_at.strftime("%d.%m.%Y %H:%M") if order.processed_at else "-" }}){% else %}Hayır{% endif %}</p>
+  <p><span class="text-slate-400">PayTR tx:</span> <code class="text-xs">{{ order.paytr_transaction_id or "-" }}</code></p>
+  <p><span class="text-slate-400">Kupon:</span> {{ order.coupon_code_used or "-" }}</p>
+  <p><span class="text-slate-400">Tarih:</span> {{ order.created_at.strftime("%d.%m.%Y %H:%M") if order.created_at else "-" }}</p>
+</div>
+<form method="post" action="/admin/payments/{{ order.id }}/note" class="mb-4 max-w-2xl">
+  <label class="block text-slate-400 text-sm mb-1">Admin notu (iade / açıklama)</label>
+  <textarea name="admin_note" rows="3" class="w-full px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" placeholder="İade veya not...">{{ admin_note }}</textarea>
+  <div class="mt-2 flex gap-2">
+    <button type="submit" class="px-4 py-2 rounded-lg bg-brand text-white">Kaydet</button>
+    <a href="/admin/payments" class="px-4 py-2 rounded-lg bg-slate-600 text-white">Listeye dön</a>
+  </div>
+</form>
+{% endblock %}

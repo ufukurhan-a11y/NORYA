@@ -1,0 +1,26 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Raporlar - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Raporlar</h1>
+<form method="get" class="mb-6 flex flex-wrap gap-4 items-end">
+  <label class="flex flex-col gap-1">
+    <span class="text-slate-400 text-sm">Başlangıç</span>
+    <input type="date" name="date_from" value="{{ date_from }}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
+  </label>
+  <label class="flex flex-col gap-1">
+    <span class="text-slate-400 text-sm">Bitiş</span>
+    <input type="date" name="date_to" value="{{ date_to }}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
+  </label>
+  <button type="submit" class="px-4 py-2 rounded-lg bg-brand text-white">Hesapla</button>
+  <a href="?date_from={{ date_from }}&date_to={{ date_to }}&export=csv" class="px-4 py-2 rounded-lg bg-green-600 text-white">CSV indir</a>
+</form>
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-6 max-w-xl">
+  <h2 class="text-lg font-medium text-white mb-4">Seçili tarih aralığı özeti</h2>
+  <ul class="space-y-2 text-slate-200">
+    <li><span class="text-slate-400">Yeni kullanıcı:</span> {{ new_users }}</li>
+    <li><span class="text-slate-400">Analiz sayısı:</span> {{ analyses_count }}</li>
+    <li><span class="text-slate-400">Tamamlanan ödeme:</span> {{ payments_count }}</li>
+    <li><span class="text-slate-400">Ciro (EUR):</span> {{ revenue_eur }}</li>
+  </ul>
+</div>
+{% endblock %}

@@ -95,8 +95,8 @@
       button:not([class*="p-"]):not([class*="px-"]):not([class*="py-"]), .touch-target-min { min-height: 44px; min-width: 44px; }
     }
     /* Kapalı modallar tıklamayı asla engellemesin (görünmez overlay riski) */
-    #modal-login.hidden, #modal-register.hidden, #modal-forgot.hidden,
-    #guest-checkout-modal.hidden, #payment-modal.hidden {
+    #modal-login.hidden, #modal-register.hidden, #modal-forgot.hidden, #modal-reset.hidden,
+    #guest-checkout-modal.hidden, #payment-modal.hidden, #a2hs-banner.hidden, #ios-a2hs-banner.hidden {
       pointer-events: none !important;
     }
   </style>
@@ -151,6 +151,7 @@
             <a href="#rehber" id="nav-menu-guide" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_guide">Tahlil Rehberi</a>
             <a href="#seffaflik" id="nav-menu-transparency" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_transparency">Şeffaflık</a>
             <a href="#fiyatlandirma" id="nav-menu-pricing" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_pricing">Fiyatlandırma</a>
+            <button type="button" onclick="closeNavMenu(); requestPushAndSubscribe();" class="block w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_notifications">Bildirimleri aç</button>
             <a href="#sss" id="nav-menu-faq" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" data-i18n="nav_faq">SSS</a>
           </div>
         </div>
@@ -166,6 +167,7 @@
           </span>
           <button onclick="showHistorySection()" class="text-slate-700 hover:text-primary-600 font-medium hidden sm:inline" data-i18n="nav_history">Geçmiş</button>
           <button onclick="openAnalyze()" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium" data-i18n="nav_analyze">Analiz Yap</button>
+          <button onclick="openProfile()" class="text-slate-700 hover:text-primary-600 font-medium hidden sm:inline" data-i18n="nav_profile">Profil</button>
           <button onclick="logout()" class="text-slate-600 hover:text-red-600 text-sm font-medium" data-i18n="nav_logout">Çıkış</button>
         </span>
       </div>
@@ -993,19 +995,41 @@
           <p class="text-primary-100 text-sm mt-0.5" data-i18n="checkout_subtitle">Norya — Kan tahlili analizi</p>
         </div>
         <div class="p-6">
+          <p class="text-xs font-medium text-accent-500 dark:text-accent-400 mb-2" data-i18n="checkout_choose_plan">Planı değiştir</p>
+          <div class="flex flex-wrap gap-2 mb-4">
+            <button type="button" id="checkout-btn-single" onclick="openCheckout('single')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="single">Tek Analiz</button>
+            <button type="button" id="checkout-btn-monthly" onclick="openCheckout('monthly')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="monthly">Aylık</button>
+            <button type="button" id="checkout-btn-yearly" onclick="openCheckout('yearly')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="yearly">Yıllık</button>
+          </div>
           <div class="flex justify-between items-center py-3 border-b border-accent-200 dark:border-accent-700">
             <span class="text-accent-600 dark:text-accent-400" data-i18n="checkout_plan">Seçilen plan</span>
             <span id="checkout-plan-name" class="font-semibold text-accent-900 dark:text-white">—</span>
           </div>
+          <div id="checkout-plan-features" class="py-3 border-b border-accent-200 dark:border-accent-700">
+            <p class="text-xs font-medium text-accent-500 dark:text-accent-400 mb-2" data-i18n="checkout_plan_includes">Dahil olanlar</p>
+            <ul id="checkout-plan-features-list" class="space-y-1 text-sm text-accent-700 dark:text-accent-300">
+              <li>—</li>
+            </ul>
+          </div>
           <div class="flex justify-between items-center py-3 border-b border-accent-200 dark:border-accent-700">
             <span class="text-accent-600 dark:text-accent-400" data-i18n="checkout_total">Toplam</span>
             <span id="checkout-total" class="text-2xl font-bold text-primary-600">—</span>
+          </div>
+          <div id="checkout-coupon-row" class="py-3 border-b border-accent-200 dark:border-accent-700">
+            <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="checkout-coupon-input" data-i18n="checkout_coupon">İndirim kodu</label>
+            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="checkout_coupon_hint">İndirimden faydalanmak için kupon kodunuzu aşağıya yazıp «Uygula»ya tıklayın.</p>
+            <div class="flex gap-2">
+              <input type="text" id="checkout-coupon-input" placeholder="INDIRIM20" maxlength="64" class="flex-1 px-3 py-2 rounded-lg border border-accent-300 dark:border-accent-600 bg-white dark:bg-accent-800 text-accent-900 dark:text-white placeholder-accent-400" />
+              <button type="button" id="checkout-coupon-apply" onclick="applyCheckoutCoupon()" class="px-4 py-2 rounded-lg bg-accent-200 dark:bg-accent-700 text-accent-800 dark:text-accent-200 font-medium hover:bg-accent-300 dark:hover:bg-accent-600" data-i18n="checkout_coupon_apply">Uygula</button>
+            </div>
+            <p id="checkout-coupon-message" class="mt-1 text-sm hidden"></p>
           </div>
           <p class="mt-4 flex items-center gap-2 text-sm text-accent-600 dark:text-accent-400">
             <span class="inline-flex w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/40 items-center justify-center text-primary-600">🔒</span>
             <span data-i18n="checkout_secure">Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.</span>
           </p>
           <button type="button" id="checkout-pay-btn" onclick="submitCheckout()" class="mt-6 w-full py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg transition shadow-lg" data-i18n="checkout_btn">Güvenli ödemeye geç</button>
+          <p class="mt-3 text-center text-xs text-accent-500" data-i18n="checkout_paytr_note">PayTR ayarlı değilse kart ödeme sayfası açılmaz; ödeme özeti ve indirim kodu burada görüntülenir.</p>
         </div>
       </div>
       <p class="mt-4 text-center text-xs text-accent-500" data-i18n="checkout_trust_note">Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.</p>
@@ -1027,7 +1051,7 @@
             <li data-i18n="price_single_2">✓ Metin, PDF veya görsel</li>
             <li data-i18n="price_single_3">✓ Detaylı rapor</li>
           </ul>
-          <button onclick="(getToken() ? openCheckout('single') : openGuestCheckoutModal())" class="mt-6 w-full py-3 rounded-xl border-2 border-primary-600 text-primary-600 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30"><span id="btn-single">13 €</span><span data-i18n="price_btn_single"> — Tek Analiz</span></button>
+          <button onclick="openCheckout('single')" class="mt-6 w-full py-3 rounded-xl border-2 border-primary-600 text-primary-600 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30"><span id="btn-single">13 €</span><span data-i18n="price_btn_single"> — Tek Analiz</span></button>
         </div>
         <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border border-accent-100 dark:border-accent-700">
           <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_monthly_title">Aylık Abonelik</h3>
@@ -1138,6 +1162,19 @@
           </div>
         </div>
       </div>
+      <div class="flex flex-wrap gap-2 mb-3 items-center">
+        <input type="text" id="history-search" placeholder="Ara..." class="rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white px-3 py-2 text-sm w-40 focus:ring-2 focus:ring-primary-500" oninput="loadHistory()" />
+        <select id="history-source-filter" class="rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white px-3 py-2 text-sm focus:ring-2 focus:ring-primary-500" onchange="loadHistory()">
+          <option value="">Tümü</option>
+          <option value="text">Metin</option>
+          <option value="pdf">PDF</option>
+          <option value="image">Görsel</option>
+        </select>
+        <label class="flex items-center gap-2 text-sm text-accent-700 dark:text-accent-300 cursor-pointer">
+          <input type="checkbox" id="history-favorite-only" onchange="loadHistory()" class="rounded border-accent-300" />
+          <span data-i18n="history_favorite_only">Sadece favoriler</span>
+        </label>
+      </div>
       <h3 class="text-lg font-semibold text-accent-800 dark:text-accent-200 mb-3" data-i18n="history_timeline">Zaman çizelgesi</h3>
       <div id="history-list" class="relative pl-6 border-l-2 border-primary-200 dark:border-primary-800 space-y-0"></div>
       <div id="history-detail" class="mt-6 p-4 rounded-xl bg-primary-50 dark:bg-primary-900/30 border border-primary-100 dark:border-primary-800 hidden">
@@ -1145,7 +1182,10 @@
         <p id="history-detail-input" class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap mb-4"></p>
         <p class="text-sm text-primary-800 dark:text-primary-200 font-medium mb-2" data-i18n="history_detail_result">Norya AI yorumu:</p>
         <p id="history-detail-result" class="text-accent-700 dark:text-accent-300 whitespace-pre-wrap"></p>
-        <button type="button" onclick="closeHistoryDetail()" class="mt-3 text-primary-600 text-sm hover:underline" data-i18n="history_close">Kapat</button>
+        <div class="mt-3 flex flex-wrap gap-2">
+          <button type="button" onclick="downloadHistoryPdf()" class="text-xs px-3 py-2 rounded-lg bg-norya-brand hover:bg-norya-brand-hover text-white font-medium" data-i18n="report_download">Raporu İndir</button>
+          <button type="button" onclick="closeHistoryDetail()" class="text-primary-600 text-sm hover:underline" data-i18n="history_close">Kapat</button>
+        </div>
       </div>
     </div>
   </section>
@@ -1285,7 +1325,96 @@
     </div>
   </div>
 
+  <!-- Reset Password (e-postadaki link: ?reset=TOKEN) -->
+  <div id="modal-reset" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
+    <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700">
+      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4">Yeni şifre belirle</h3>
+      <p class="text-sm text-accent-600 dark:text-accent-400 mb-4">E-postanıza gelen linkteki token ile yeni şifrenizi girin.</p>
+      <form id="form-reset-password" onsubmit="submitResetPassword(event)">
+        <input type="password" id="reset-new-password" required minlength="6" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="reset-confirm" required minlength="6" placeholder="Şifreyi tekrar girin" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <p id="reset-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="reset-success" class="text-primary-600 text-sm mb-2 hidden"></p>
+        <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700">Şifreyi güncelle</button>
+      </form>
+      <button type="button" onclick="closeResetPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600">✕</button>
+    </div>
+  </div>
+
+  <!-- Profil modal: ad, telefon, ülke, e-posta doğrulama, şifre değiştir, veri indir, hesap sil -->
+  <div id="modal-profile" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
+    <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700 max-h-[90vh] overflow-y-auto">
+      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="nav_profile">Profil</h3>
+      <p id="profile-email" class="text-sm text-accent-600 dark:text-accent-400 mb-2"></p>
+      <p id="profile-email-verified" class="text-xs mb-4 hidden"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300" data-i18n="profile_email_verified">E-posta doğrulandı</span></p>
+      <form onsubmit="submitProfile(event)">
+        <input type="text" id="profile-full-name" placeholder="Ad Soyad" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="tel" id="profile-phone" placeholder="Telefon (+90 555 123 45 67)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <select id="profile-country" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500">
+          <option value="">Ülke seçin</option>
+          <option value="TR">Türkiye</option>
+          <option value="US">ABD</option>
+          <option value="GB">Birleşik Krallık</option>
+          <option value="DE">Almanya</option>
+          <option value="FR">Fransa</option>
+          <option value="IT">İtalya</option>
+          <option value="ES">İspanya</option>
+          <option value="XX">Diğer</option>
+        </select>
+        <p id="profile-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="profile_save">Kaydet</button>
+      </form>
+      <hr class="my-4 border-accent-200 dark:border-accent-700" />
+      <h4 class="text-sm font-semibold text-accent-800 dark:text-accent-200 mb-2" data-i18n="profile_change_password">Şifre değiştir</h4>
+      <form onsubmit="submitChangePassword(event)">
+        <input type="password" id="profile-current-password" placeholder="Mevcut şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="profile-new-password" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+        <p id="profile-password-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <button type="submit" class="w-full py-2 rounded-lg bg-accent-100 dark:bg-accent-700 text-accent-900 dark:text-white font-medium hover:bg-accent-200 dark:hover:bg-accent-600" data-i18n="profile_change_password_btn">Şifreyi güncelle</button>
+      </form>
+      <hr class="my-4 border-accent-200 dark:border-accent-700" />
+      <button type="button" onclick="downloadMyData()" class="w-full py-2 rounded-lg border border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 text-sm font-medium hover:bg-accent-50 dark:hover:bg-accent-700/50 mb-2" data-i18n="profile_export_data">Verilerimi indir (JSON)</button>
+      <button type="button" onclick="openDeleteAccountConfirm()" class="w-full py-2 rounded-lg border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20" data-i18n="profile_delete_account">Hesabımı sil</button>
+      <button type="button" onclick="closeProfile()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600">✕</button>
+    </div>
+  </div>
+  <!-- Hesap silme onay modal -->
+  <div id="modal-delete-account" class="fixed inset-0 z-[101] hidden items-center justify-center p-4 bg-black/50">
+    <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700">
+      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-2" data-i18n="profile_delete_confirm_title">Hesabı sil</h3>
+      <p class="text-sm text-accent-600 dark:text-accent-400 mb-4" data-i18n="profile_delete_confirm_desc">Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.</p>
+      <form onsubmit="submitDeleteAccount(event)">
+        <input type="password" id="delete-account-password" placeholder="Şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+        <p id="delete-account-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <div class="flex gap-2">
+          <button type="button" onclick="closeDeleteAccountConfirm()" class="flex-1 py-3 rounded-lg border border-accent-300 text-accent-700 dark:text-accent-300 font-medium" data-i18n="profile_cancel">İptal</button>
+          <button type="submit" class="flex-1 py-3 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700" data-i18n="profile_delete_confirm_btn">Hesabı sil</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
   <div id="toast-container" aria-live="polite"></div>
+
+  <!-- PWA: Ana ekrana ekle (Android/Chrome) -->
+  <div id="a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-3 px-4 py-3 bg-slate-800 text-white shadow-lg border-t border-slate-700" style="padding-bottom: max(12px, env(safe-area-inset-bottom));">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-norya-brand flex items-center justify-center">N</span>
+      <p class="text-sm truncate">Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.</p>
+    </div>
+    <div class="flex items-center gap-2 flex-shrink-0">
+      <button type="button" onclick="dismissA2HS()" class="text-slate-400 hover:text-white text-sm px-2">Sonra</button>
+      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="px-4 py-2 rounded-lg bg-norya-brand hover:bg-norya-brand-hover text-white font-medium text-sm">Ekle</button>
+    </div>
+  </div>
+  <!-- PWA: iOS Ana ekrana ekle (Safari) -->
+  <div id="ios-a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-3 px-4 py-3 bg-slate-800 text-white shadow-lg border-t border-slate-700" style="padding-bottom: max(12px, env(safe-area-inset-bottom));">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-norya-brand flex items-center justify-center">N</span>
+      <p class="text-sm">Ana ekrana ekle: <strong>Paylaş</strong> <span aria-hidden="true">⎋</span> <strong>Ana Ekrana Ekle</strong></p>
+    </div>
+    <button type="button" onclick="dismissIOSA2HS()" class="text-slate-400 hover:text-white text-sm px-2 flex-shrink-0">Kapat</button>
+  </div>
 
   <script>
     const API_BASE = window.location.origin;
@@ -1296,6 +1425,85 @@
     const THEME_KEY = 'norya_theme';
     var lastAnalysisId = null;
     var lastShareToken = null;
+    var deferredInstallPrompt = null;
+    var A2HS_DISMISS_KEY = 'norya_a2hs_dismissed';
+    var IOS_A2HS_DISMISS_KEY = 'norya_ios_a2hs_dismissed';
+
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register(API_BASE + '/sw.js', { scope: '/' }).then(function () {}).catch(function () {});
+    }
+    window.addEventListener('beforeinstallprompt', function (e) {
+      e.preventDefault();
+      deferredInstallPrompt = e;
+      if (!localStorage.getItem(A2HS_DISMISS_KEY)) {
+        var b = document.getElementById('a2hs-banner');
+        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
+      }
+    });
+    function installPWA() {
+      if (!deferredInstallPrompt) return;
+      deferredInstallPrompt.prompt();
+      deferredInstallPrompt.userChoice.then(function (choice) {
+        if (choice.outcome === 'accepted') document.getElementById('a2hs-banner').classList.add('hidden');
+        deferredInstallPrompt = null;
+      });
+    }
+    function dismissA2HS() {
+      localStorage.setItem(A2HS_DISMISS_KEY, '1');
+      document.getElementById('a2hs-banner').classList.add('hidden');
+    }
+    function dismissIOSA2HS() {
+      localStorage.setItem(IOS_A2HS_DISMISS_KEY, '1');
+      document.getElementById('ios-a2hs-banner').classList.add('hidden');
+    }
+    function showIOSA2HSIfNeeded() {
+      var ua = navigator.userAgent || '';
+      var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+      var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+      if (isIOS && !isStandalone && !localStorage.getItem(IOS_A2HS_DISMISS_KEY)) {
+        var b = document.getElementById('ios-a2hs-banner');
+        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
+      }
+    }
+    setTimeout(showIOSA2HSIfNeeded, 2000);
+    async function requestPushAndSubscribe() {
+      if (!('Notification' in window) || !('PushManager' in window)) {
+        toast('Bu tarayıcı push bildirimleri desteklemiyor.', 'info');
+        return;
+      }
+      if (Notification.permission === 'granted') {
+        toast('Bildirimler zaten açık. Rapor hazır olunca bildirim alacaksınız.', 'success');
+        return;
+      }
+      if (Notification.permission === 'denied') {
+        toast('Bildirimler engelli. Tarayıcı ayarlarından izin verin.', 'info');
+        return;
+      }
+      var perm = await Notification.requestPermission();
+      if (perm !== 'granted') { toast('Bildirim izni verilmedi.', 'info'); return; }
+      try {
+        var reg = await navigator.serviceWorker.ready;
+        var sub = await reg.pushManager.getSubscription();
+        if (!sub) {
+          var vapidRes = await fetch(API_BASE + '/api/push/vapid-public').catch(function () { return null; });
+          var vapidKey = vapidRes && vapidRes.ok ? (await vapidRes.json()).publicKey : null;
+          if (vapidKey) {
+            sub = await reg.pushManager.subscribe({ userVisibleOnly: true, applicationServerKey: vapidKey });
+            var token = getToken();
+            if (token) {
+              await fetch(API_BASE + '/api/push/subscribe', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + token },
+                body: JSON.stringify(sub)
+              });
+            }
+          }
+        }
+        toast('Bildirimler açıldı. Rapor hazır olunca bildirim alacaksınız.', 'success');
+      } catch (e) {
+        toast('Bildirimler açıldı.', 'success');
+      }
+    }
 
     function toast(msg, type) {
       type = type || 'info';
@@ -1352,6 +1560,92 @@
       } else {
         errEl.textContent = data.detail || 'Bir hata oluştu.';
         errEl.classList.remove('hidden');
+      }
+    }
+    var resetPasswordToken = null;
+    function openResetPassword(token) {
+      resetPasswordToken = token;
+      var el = document.getElementById('modal-reset');
+      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+      document.getElementById('reset-error').classList.add('hidden');
+      document.getElementById('reset-success').classList.add('hidden');
+      document.getElementById('reset-new-password').value = '';
+      document.getElementById('reset-confirm').value = '';
+    }
+    function closeResetPassword() {
+      resetPasswordToken = null;
+      var el = document.getElementById('modal-reset');
+      if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+      var url = new URL(location.href);
+      url.searchParams.delete('reset');
+      if (history.replaceState) history.replaceState({}, '', url.pathname + (url.search || ''));
+    }
+    async function submitResetPassword(e) {
+      e.preventDefault();
+      var errEl = document.getElementById('reset-error');
+      var okEl = document.getElementById('reset-success');
+      errEl.classList.add('hidden');
+      okEl.classList.add('hidden');
+      var newPw = (document.getElementById('reset-new-password').value || '').trim();
+      var confirmPw = (document.getElementById('reset-confirm').value || '').trim();
+      if (newPw.length < 6) {
+        errEl.textContent = 'Şifre en az 6 karakter olmalı.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (newPw !== confirmPw) {
+        errEl.textContent = 'Şifreler eşleşmiyor.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      if (!resetPasswordToken) {
+        errEl.textContent = 'Geçersiz veya süresi dolmuş link. Lütfen şifre sıfırlama talebini tekrarlayın.';
+        errEl.classList.remove('hidden');
+        return;
+      }
+      var res = await fetch(API_BASE + '/auth/reset-password', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ token: resetPasswordToken, new_password: newPw })
+      });
+      var data = await res.json().catch(function() { return {}; });
+      if (res.ok) {
+        okEl.textContent = data.message || 'Şifre güncellendi. Giriş yapabilirsiniz.';
+        okEl.classList.remove('hidden');
+        toast(data.message || 'Şifre güncellendi.', 'success');
+        resetPasswordToken = null;
+        setTimeout(function() {
+          closeResetPassword();
+          openLogin();
+        }, 1500);
+      } else {
+        errEl.textContent = data.detail || 'Geçersiz veya süresi dolmuş link.';
+        errEl.classList.remove('hidden');
+      }
+    }
+    function checkResetTokenInUrl() {
+      var p = new URLSearchParams(location.search);
+      var t = p.get('reset');
+      if (t) openResetPassword(t);
+    }
+    async function checkVerifyEmailInUrl() {
+      var p = new URLSearchParams(location.search);
+      var token = p.get('verify-email');
+      if (!token) return;
+      var url = new URL(location.href);
+      url.searchParams.delete('verify-email');
+      if (history.replaceState) history.replaceState({}, '', url.pathname + (url.search || ''));
+      try {
+        var res = await fetch(API_BASE + '/auth/verify-email?token=' + encodeURIComponent(token));
+        var data = await res.json().catch(function() { return {}; });
+        if (res.ok) {
+          toast(data.message || 'E-posta adresiniz doğrulandı.', 'success');
+          if (getToken()) updateNav();
+        } else {
+          toast(data.detail || 'Link geçersiz veya süresi doldu.', 'error');
+        }
+      } catch (e) {
+        toast('Bağlantı hatası. Lütfen tekrar deneyin.', 'error');
       }
     }
     function downloadReportPdf() {
@@ -1624,7 +1918,7 @@
     const T = {
       tr: {
         nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
-        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_faq: "SSS",
+        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?",
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade ve anlaşılır bir dille açıklayan bir hizmettir. Laboratuvardan elinize ulaşan sayılar ve kısaltmalar çoğu zaman anlaşılması zor olur; Norya bu sonuçları özetleyen, her değerin referans aralığına göre ne anlama geldiğini anlatan ve günlük hayatta uygulanabilir kısa öneriler sunan raporlar üretir.",
         about_what_2: "Tahlilinizi PDF, görsel veya doğrudan metin olarak yükleyebilirsiniz; raporunuz dakikalar içinde hazır olur. Norya bir teşhis aracı değildir; amacı, tahlilinizi daha iyi kavramanıza yardımcı olmak ve doktorunuzla görüşürken kendinizi daha bilinçli hissetmenizi sağlamaktır. Son karar ve tedavi her zaman bir sağlık uzmanıyla birlikte alınmalıdır.",
@@ -1632,7 +1926,9 @@
         about_who_1: "Norya, sağlık okuryazarlığını güçlendirmek isteyen küçük bir ekip tarafından kuruldu. Kurucumuz Ufuk Urhan, kullanıcıların kendi tahlil sonuçlarını anlamasının sağlıkla ilgili kararlarda önemli bir adım olduğuna inanıyor; Norya da bu ihtiyacı güvenli, sade ve hızlı bir şekilde karşılamak için tasarlandı.",
         about_who_2: "Türkiye'den başlayarak dünya genelinde farklı dillerde hizmet veriyoruz. Gizliliğinize önem veriyoruz: verileriniz yalnızca size özel rapor üretmek için kullanılır ve güvenli bir altyapı ile korunur. Sorularınız, geri bildirimleriniz veya teknik destek talepleriniz için her zaman aşağıdaki e-posta adresinden bize ulaşabilirsiniz.",
         about_who_3: "Norya olarak amacımız, laboratuvar sonuçlarınızı korkulacak bir belge olmaktan çıkarıp anlaşılır bir rehbere dönüştürmektir. Sizin deneyiminiz ve geri bildirimleriniz bu yolculukta bize yön veriyor.",
-        nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
+        nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_profile: "Profil", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
+        profile_email_verified: "E-posta doğrulandı", profile_save: "Kaydet", profile_change_password: "Şifre değiştir", profile_change_password_btn: "Şifreyi güncelle", profile_export_data: "Verilerimi indir (JSON)", profile_delete_account: "Hesabımı sil", profile_delete_confirm_title: "Hesabı sil", profile_delete_confirm_desc: "Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.", profile_cancel: "İptal", profile_delete_confirm_btn: "Hesabı sil",
+        history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
         hero_sub: "Laboratuvar sonuçlarınız için güvenilir rapor",
         hero_title: "Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.",
         hero_desc: "Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.",
@@ -1781,7 +2077,7 @@
       },
       en: {
         nav_about: "About us", nav_how: "How it works", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
-        nav_features: "Features", nav_pricing: "Pricing", nav_faq: "FAQ",
+        nav_features: "Features", nav_pricing: "Pricing", nav_notifications: "Enable notifications", nav_faq: "FAQ",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?",
         about_what_1: "Norya is a service that explains your blood test results in plain language. The numbers and abbreviations from the lab are often hard to understand; Norya produces reports that summarise your results, explain what each value means in relation to reference ranges, and offer short, practical suggestions for daily life.",
         about_what_2: "You can upload your test as a PDF, image, or plain text; your report is ready within minutes. Norya is not a diagnostic tool; its aim is to help you better understand your results and feel more confident when talking to your doctor. The final decision and treatment should always be made with a healthcare professional.",
@@ -1789,7 +2085,9 @@
         about_who_1: "Norya was founded by a small team that wants to strengthen health literacy. Our founder Ufuk Urhan believes that understanding your own test results is an important step in health-related decisions; Norya was designed to meet this need in a secure, simple, and fast way.",
         about_who_2: "We serve users in many languages around the world, starting from Turkey. We care about your privacy: your data is used only to generate your personal report and is protected by a secure infrastructure. You can always reach us at the email address below for questions, feedback, or technical support.",
         about_who_3: "Our goal at Norya is to turn your lab results from a document to fear into a clear guide. Your experience and feedback guide us on this journey.",
-        nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_analyze: "Analyze", nav_logout: "Log out",
+        nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_profile: "Profile", nav_analyze: "Analyze", nav_logout: "Log out",
+        profile_email_verified: "Email verified", profile_save: "Save", profile_change_password: "Change password", profile_change_password_btn: "Update password", profile_export_data: "Download my data (JSON)", profile_delete_account: "Delete my account", profile_delete_confirm_title: "Delete account", profile_delete_confirm_desc: "This cannot be undone. All your analyses and data will be deleted. Enter your password to confirm.", profile_cancel: "Cancel", profile_delete_confirm_btn: "Delete account",
+        history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
         hero_sub: "AI-powered blood test interpretation",
         hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
         hero_desc: "Paste text or upload a photo — get a clear summary, values, and a report to take to your doctor. First analysis free.",
@@ -1938,7 +2236,7 @@
       },
       it: {
         nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
-        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_faq: "FAQ",
+        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?",
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
         about_what_2: "Puoi caricare l'analisi in PDF, immagine o testo; il report è pronto in pochi minuti. Norya non è uno strumento diagnostico; l'obiettivo è aiutarti a capire meglio i risultati e a sentirti più sicuro quando parli con il medico. La decisione finale e la terapia spettano sempre a un professionista sanitario.",
@@ -2083,7 +2381,7 @@
       },
       es: {
         nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
-        nav_features: "Características", nav_pricing: "Precios", nav_faq: "FAQ",
+        nav_features: "Características", nav_pricing: "Precios", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?",
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
         about_what_2: "Puedes subir el análisis en PDF, imagen o texto; el informe estará listo en minutos. Norya no es una herramienta de diagnóstico; su objetivo es ayudarte a entender mejor los resultados y a sentirte más seguro al hablar con tu médico. La decisión final y el tratamiento siempre deben ser con un profesional sanitario.",
@@ -2228,7 +2526,7 @@
       },
       fr: {
         nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
-        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_faq: "FAQ",
+        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?",
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
         about_what_2: "Vous pouvez envoyer l'analyse en PDF, image ou texte ; le rapport est prêt en quelques minutes. Norya n'est pas un outil de diagnostic ; l'objectif est de vous aider à mieux comprendre vos résultats et à vous sentir plus à l'aise avec votre médecin. La décision finale et le traitement relèvent toujours d'un professionnel de santé.",
@@ -2373,7 +2671,7 @@
       },
       de: {
         nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
-        nav_features: "Funktionen", nav_pricing: "Preise", nav_faq: "FAQ",
+        nav_features: "Funktionen", nav_pricing: "Preise", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?",
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
         about_what_2: "Sie können die Analyse als PDF, Bild oder Text hochladen; der Bericht ist in wenigen Minuten fertig. Norya ist kein Diagnoseinstrument; das Ziel ist, Ihnen zu helfen, Ihre Ergebnisse besser zu verstehen und sich beim Arztgespräch sicherer zu fühlen. Die endgültige Entscheidung und Behandlung liegen immer beim medizinischen Fachpersonal.",
@@ -3484,6 +3782,10 @@
             var meData = await meRes.json();
             user = { email: meData.email, full_name: meData.full_name, phone: meData.phone, country: meData.country };
             localStorage.setItem(USER_KEY, JSON.stringify(user));
+          } else if (meRes.status === 403 || meRes.status === 401) {
+            clearAuth();
+            user = {};
+            toast(meRes.status === 403 ? 'Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.' : 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.', 'info');
           }
         } catch (_) {}
       }
@@ -3602,7 +3904,7 @@
         if (/password|şifre|6 karakter/i.test(m)) return 'Şifre en az 6 karakter olmalı.';
         return first.msg || first.message || 'Kayıt başarısız.';
       }
-      return data.detail ? String(data.detail) : (status === 500 ? 'Sunucu hatası. Terminalde hata var mı bakın.' : 'Kayıt başarısız.');
+      return data.detail ? String(data.detail) : (status === 500 ? 'Bir hata oluştu. Lütfen kısa süre sonra tekrar deneyin.' : 'Kayıt başarısız.');
     }
 
     async function submitRegister(e) {
@@ -3669,8 +3971,12 @@
     async function loadUsage() {
       if (!getToken()) return;
       var t = T[getLang()] || T.tr;
-      const res = await fetch(API_BASE + '/analyze/usage', { headers: { 'Authorization': 'Bearer ' + getToken() } });
-      const data = await res.json().catch(() => ({}));
+      var res, data = {};
+      try {
+        res = await fetch(API_BASE + '/analyze/usage', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+        data = await res.json().catch(() => ({}));
+        if (res.status === 401 || res.status === 403) { clearAuth(); updateNav(); return; }
+      } catch (e) { if (typeof updateNav === 'function') updateNav(); return; }
       const usageEl = document.getElementById('analyze-usage');
       const limitMsgEl = document.getElementById('analyze-limit-msg');
       const paymentActions = document.getElementById('analyze-payment-actions');
@@ -3702,22 +4008,79 @@
       }
     }
     var selectedCheckoutPlan = null;
+    var appliedCouponCode = null;
+    var checkoutBasePrice = null;
+    var checkoutSymbol = '€';
     function openCheckout(plan) {
       if (!plan || !['single','monthly','yearly'].includes(plan)) return;
       selectedCheckoutPlan = plan;
+      appliedCouponCode = null;
       var t = T[getLang()] || T.tr;
       var planNames = { single: t.price_single_title || 'Tek Analiz', monthly: t.price_monthly_title || 'Aylık Abonelik', yearly: t.price_yearly_title || 'Yıllık Abonelik' };
       var priceEl = document.getElementById(plan === 'single' ? 'price-single' : plan === 'monthly' ? 'price-monthly' : 'price-yearly');
       var symbolEl = document.getElementById(plan === 'single' ? 'price-symbol' : plan === 'monthly' ? 'price-symbol-monthly' : 'price-symbol-yearly');
       var price = priceEl ? priceEl.textContent.trim() : '';
       var symbol = symbolEl ? symbolEl.textContent.trim() : '€';
+      checkoutBasePrice = price;
+      checkoutSymbol = symbol || '€';
       document.getElementById('checkout-plan-name').textContent = planNames[plan];
+      var featureKeys = { single: ['price_single_1', 'price_single_2', 'price_single_3'], monthly: ['price_monthly_1', 'price_monthly_2', 'price_monthly_3'], yearly: ['price_yearly_1', 'price_yearly_2', 'price_yearly_3'] }[plan] || [];
+      var listEl = document.getElementById('checkout-plan-features-list');
+      if (listEl) {
+        listEl.innerHTML = featureKeys.map(function(k) { var s = (t[k] || '').replace(/^✓\s*/, ''); return s ? '<li class="flex items-center gap-2"><span class="text-primary-500 font-medium">✓</span><span>' + s + '</span></li>' : ''; }).filter(Boolean).join('') || '<li>—</li>';
+      }
       document.getElementById('checkout-total').textContent = (price && symbol) ? price + ' ' + symbol : '—';
+      ['single','monthly','yearly'].forEach(function(p) {
+        var btn = document.getElementById('checkout-btn-' + p);
+        if (!btn) return;
+        btn.textContent = (p === 'single' ? t.price_single_title : p === 'monthly' ? t.price_monthly_title : t.price_yearly_title) || btn.textContent;
+        var active = p === plan;
+        btn.classList.toggle('bg-primary-600', active);
+        btn.classList.toggle('text-white', active);
+        btn.classList.toggle('border-primary-600', active);
+        btn.classList.toggle('border-accent-300', !active);
+        btn.classList.toggle('dark:border-accent-600', !active);
+        btn.classList.toggle('text-accent-700', !active);
+        btn.classList.toggle('dark:text-accent-300', !active);
+      });
+      var inp = document.getElementById('checkout-coupon-input'); if (inp) inp.value = '';
+      var msg = document.getElementById('checkout-coupon-message'); if (msg) { msg.classList.add('hidden'); msg.textContent = ''; }
       var sec = document.getElementById('odeme-section');
       if (sec) { sec.classList.remove('hidden'); sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
     }
+    async function applyCheckoutCoupon() {
+      var code = (document.getElementById('checkout-coupon-input').value || '').trim();
+      var msgEl = document.getElementById('checkout-coupon-message');
+      if (!code) { if (msgEl) { msgEl.textContent = ''; msgEl.classList.add('hidden'); } return; }
+      if (!selectedCheckoutPlan) return;
+      try {
+        var r = await fetch(API_BASE + '/api/coupon/validate?code=' + encodeURIComponent(code) + '&product=' + encodeURIComponent(selectedCheckoutPlan));
+        var data = await r.json().catch(function() { return {}; });
+        if (data.valid) {
+          appliedCouponCode = code;
+          var finalCents = data.final_amount_cents || 0;
+          var finalPrice = (finalCents / 100).toFixed(2).replace('.', ',');
+          document.getElementById('checkout-total').textContent = finalPrice + ' ' + checkoutSymbol;
+          if (msgEl) { msgEl.textContent = 'İndirim uygulandı.'; msgEl.classList.remove('hidden'); msgEl.classList.remove('text-red-500'); msgEl.classList.add('text-green-600'); }
+        } else {
+          appliedCouponCode = null;
+          document.getElementById('checkout-total').textContent = (checkoutBasePrice && checkoutSymbol) ? checkoutBasePrice + ' ' + checkoutSymbol : '—';
+          if (msgEl) { msgEl.textContent = data.reason || 'Geçersiz kod.'; msgEl.classList.remove('hidden'); msgEl.classList.add('text-red-500'); }
+        }
+      } catch (e) {
+        if (msgEl) { msgEl.textContent = 'Kod kontrol edilemedi.'; msgEl.classList.remove('hidden'); msgEl.classList.add('text-red-500'); }
+      }
+    }
     function submitCheckout() {
       if (!selectedCheckoutPlan) return;
+      if (!getToken() && selectedCheckoutPlan === 'single') {
+        openGuestCheckoutModal();
+        return;
+      }
+      if (!getToken()) {
+        if (typeof openRegister === 'function') openRegister();
+        return;
+      }
       goToPayment(selectedCheckoutPlan);
     }
 
@@ -3741,6 +4104,7 @@
       if (btn) btn.disabled = true;
       var base = window.location.origin + window.location.pathname;
       try {
+        var guestCoupon = (document.getElementById('checkout-coupon-input') && document.getElementById('checkout-coupon-input').value) ? document.getElementById('checkout-coupon-input').value.trim() : (appliedCouponCode || '');
         var res = await fetch(API_BASE + '/payment/get-token-guest', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -3749,7 +4113,8 @@
             email: email,
             full_name: fullName || null,
             success_url: base + '#payment-ok',
-            cancel_url: base + '#pricing'
+            cancel_url: base + '#pricing',
+            coupon_code: guestCoupon || null
           })
         });
         var data = await res.json().catch(function() { return {}; });
@@ -3773,7 +4138,7 @@
       var res = await fetch(API_BASE + '/payment/get-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
-        body: JSON.stringify({ product: product, success_url: successUrl, cancel_url: cancelUrl })
+        body: JSON.stringify({ product: product, success_url: successUrl, cancel_url: cancelUrl, coupon_code: appliedCouponCode || null })
       });
       var data = await res.json().catch(() => ({}));
       if (res.status === 401) {
@@ -3864,9 +4229,21 @@
       var t = T[getLang()] || T.tr;
       var locale = getLocale();
       const listEl = document.getElementById('history-list');
+      if (!listEl) return;
       listEl.innerHTML = '<p class="text-accent-500">' + (t.history_loading || 'Yükleniyor...') + '</p>';
-      const res = await fetch(API_BASE + '/analyze/history', { headers: { 'Authorization': 'Bearer ' + getToken() } });
-      const data = await res.json().catch(() => []);
+      var q = (document.getElementById('history-search') && document.getElementById('history-search').value) ? document.getElementById('history-search').value.trim() : '';
+      var source = (document.getElementById('history-source-filter') && document.getElementById('history-source-filter').value) ? document.getElementById('history-source-filter').value : '';
+      var favoriteOnly = document.getElementById('history-favorite-only') && document.getElementById('history-favorite-only').checked;
+      var url = API_BASE + '/analyze/history?limit=50';
+      if (source) url += '&source=' + encodeURIComponent(source);
+      if (q) url += '&q=' + encodeURIComponent(q);
+      if (favoriteOnly) url += '&favorite_only=true';
+      var res, data = [];
+      try {
+        res = await fetch(url, { headers: { 'Authorization': 'Bearer ' + getToken() } });
+        data = await res.json().catch(() => []);
+        if (res.status === 401 || res.status === 403) { clearAuth(); updateNav(); listEl.innerHTML = '<p class="text-accent-500">' + (t.history_empty || 'Henüz analiz yok.') + '</p>'; return; }
+      } catch (e) { listEl.innerHTML = '<p class="text-red-600">' + (t.history_load_error || 'Geçmiş yüklenemedi.') + '</p>'; return; }
       if (!res.ok) { listEl.innerHTML = '<p class="text-red-600">' + (t.history_load_error || 'Geçmiş yüklenemedi.') + '</p>'; return; }
       var selectPlaceholder = t.history_select_analysis || '— Analiz seçin —';
       var srcPdf = t.source_pdf || 'PDF', srcImg = t.source_image || 'Görsel', srcTxt = t.source_text || 'Metin';
@@ -3879,9 +4256,11 @@
       listEl.innerHTML = data.map(function(item) {
         const date = item.created_at ? new Date(item.created_at).toLocaleDateString(locale) : '';
         var src = item.source === 'pdf' ? srcPdf : item.source === 'image' ? srcImg : srcTxt;
-        return '<div class="relative -left-6 mb-4">' +
+        var star = item.is_favorite ? '★' : '☆';
+        return '<div class="relative -left-6 mb-4 flex items-start gap-1">' +
           '<span class="absolute left-0 w-3 h-3 rounded-full bg-primary-500 border-2 border-white dark:border-accent-800" style="margin-left: -5px;"></span>' +
-          '<button type="button" onclick="showHistoryDetail(' + item.id + ')" class="w-full text-left ml-4 p-4 rounded-xl bg-white dark:bg-accent-800 border border-accent-200 dark:border-accent-700 hover:border-primary-300 hover:bg-primary-50/50 dark:hover:bg-primary-900/20">' +
+          '<button type="button" onclick="event.stopPropagation(); toggleHistoryFavorite(' + item.id + ')" class="mt-4 text-amber-500 hover:text-amber-400 text-lg flex-shrink-0" title="' + (item.is_favorite ? (t.history_unfavorite || 'Favoriden çıkar') : (t.history_favorite || 'Favorilere ekle')) + '">' + star + '</button>' +
+          '<button type="button" onclick="showHistoryDetail(' + item.id + ')" class="flex-1 text-left ml-2 p-4 rounded-xl bg-white dark:bg-accent-800 border border-accent-200 dark:border-accent-700 hover:border-primary-300 hover:bg-primary-50/50 dark:hover:bg-primary-900/20">' +
           '<span class="text-xs text-accent-500">' + date + ' • ' + src + '</span><br>' +
           '<span class="text-accent-800 dark:text-accent-200">' + escapeHtml(item.input_preview) + '</span></button></div>';
       }).join('');
@@ -3891,6 +4270,16 @@
       }).join('');
       document.getElementById('compare-a').innerHTML = opt;
       document.getElementById('compare-b').innerHTML = opt;
+    }
+    async function toggleHistoryFavorite(analysisId) {
+      if (!getToken()) return;
+      try {
+        var res = await fetch(API_BASE + '/analyze/history/' + analysisId, {
+          method: 'PATCH',
+          headers: { 'Authorization': 'Bearer ' + getToken() }
+        });
+        if (res.ok) loadHistory();
+      } catch (e) {}
     }
     async function runCompare() {
       var t = T[getLang()] || T.tr;
@@ -3916,13 +4305,33 @@
       d.textContent = s;
       return d.innerHTML;
     }
+    var lastHistoryDetailId = null;
     async function showHistoryDetail(id) {
+      lastHistoryDetailId = id;
       const res = await fetch(API_BASE + '/analyze/history/' + id, { headers: { 'Authorization': 'Bearer ' + getToken() } });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) return;
       document.getElementById('history-detail-input').textContent = data.input_text || '';
       document.getElementById('history-detail-result').textContent = data.result_text || '';
       document.getElementById('history-detail').classList.remove('hidden');
+    }
+    async function downloadHistoryPdf() {
+      if (!lastHistoryDetailId) return;
+      var lang = getLang() || 'tr';
+      var t = T[lang] || T.tr;
+      try {
+        var res = await fetch(API_BASE + '/analyze/history/' + lastHistoryDetailId + '/pdf?lang=' + encodeURIComponent(lang), { headers: { 'Authorization': 'Bearer ' + getToken() } });
+        if (!res.ok) { toast(t.history_load_error || 'PDF indirilemedi.', 'error'); return; }
+        var blob = await res.blob();
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'norya-rapor-' + lastHistoryDetailId + '.pdf';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        toast(t.toast_report_pdf || 'Rapor PDF olarak indirildi.', 'success');
+      } catch (e) {
+        toast(t.history_load_error || 'PDF indirilemedi.', 'error');
+      }
     }
     function closeHistoryDetail() {
       document.getElementById('history-detail').classList.add('hidden');
@@ -4017,13 +4426,14 @@
           data = await res.json().catch(function() { return {}; });
         }
         if (!res.ok) {
-          if (res.status === 401) {
+          if (res.status === 401 || res.status === 403) {
             clearAuth();
+            updateNav();
             var t = T[getLang()] || T.tr;
-            var sessionMsg = t.session_expired || 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.';
-            errEl.textContent = sessionMsg;
+            var msg = res.status === 403 ? (data.detail || data.error || 'Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.') : (t.session_expired || 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+            errEl.textContent = msg;
             errEl.classList.remove('hidden');
-            toast(sessionMsg, 'info');
+            toast(msg, 'info');
             return;
           }
           var rawMsg = (data && (data.error || data.detail)) ? (data.error || (typeof data.detail === 'string' ? data.detail : (data.detail && data.detail[0] && (data.detail[0].msg || data.detail[0].message)) || 'Analiz alınamadı.')) : 'Analiz alınamadı. Sunucu veya bağlantı hatası.';
@@ -4055,6 +4465,12 @@
         lastShareToken = null;
         if (getToken()) { loadHistory(); loadUsage(); }
         toast('Analiz tamamlandı.', 'success');
+      } catch (e) {
+        var t = T[getLang()] || T.tr;
+        var networkMsg = (t.network_error || 'Bağlantı hatası. Lütfen tekrar deneyin.');
+        errEl.textContent = networkMsg;
+        errEl.classList.remove('hidden');
+        toast(networkMsg, 'error');
       } finally {
         btn.removeAttribute('data-loading');
         updateAnalyzeButtonState();
@@ -4071,6 +4487,140 @@
       analyzeTextEl.addEventListener('change', updateAnalyzeButtonState);
     }
 
+    function openProfile() {
+      var el = document.getElementById('modal-profile');
+      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+      var err = document.getElementById('profile-error');
+      var pwdErr = document.getElementById('profile-password-error');
+      if (err) err.classList.add('hidden');
+      if (pwdErr) pwdErr.classList.add('hidden');
+      var user = getUser();
+      document.getElementById('profile-email').textContent = user.email || '';
+      document.getElementById('profile-full-name').value = user.full_name || '';
+      document.getElementById('profile-phone').value = user.phone || '';
+      document.getElementById('profile-country').value = user.country || '';
+      document.getElementById('profile-current-password').value = '';
+      document.getElementById('profile-new-password').value = '';
+      fetch(API_BASE + '/auth/me', { headers: { 'Authorization': 'Bearer ' + getToken() } }).then(function(r) { return r.json(); }).then(function(me) {
+        document.getElementById('profile-email').textContent = me.email || '';
+        document.getElementById('profile-full-name').value = me.full_name || '';
+        document.getElementById('profile-phone').value = me.phone || '';
+        document.getElementById('profile-country').value = me.country || '';
+        var verifiedEl = document.getElementById('profile-email-verified');
+        if (verifiedEl) { verifiedEl.classList.toggle('hidden', !me.email_verified); }
+      }).catch(function() {});
+    }
+    function closeProfile() {
+      var el = document.getElementById('modal-profile');
+      if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+    }
+    async function submitProfile(e) {
+      e.preventDefault();
+      var errEl = document.getElementById('profile-error');
+      errEl.classList.add('hidden');
+      var fullName = (document.getElementById('profile-full-name').value || '').trim();
+      var phone = (document.getElementById('profile-phone').value || '').trim();
+      var country = (document.getElementById('profile-country').value || '').trim();
+      try {
+        var res = await fetch(API_BASE + '/auth/me', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+          body: JSON.stringify({ full_name: fullName || null, phone: phone || null, country: country || null })
+        });
+        var data = await res.json().catch(function() { return {}; });
+        if (res.ok) {
+          setAuth(getToken(), { email: data.email, full_name: data.full_name, phone: data.phone, country: data.country });
+          updateNav();
+          toast('Profil güncellendi.', 'success');
+          closeProfile();
+        } else {
+          errEl.textContent = data.detail || data.error || 'Güncelleme başarısız.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Bağlantı hatası.';
+        errEl.classList.remove('hidden');
+      }
+    }
+    async function submitChangePassword(e) {
+      e.preventDefault();
+      var errEl = document.getElementById('profile-password-error');
+      errEl.classList.add('hidden');
+      var current = document.getElementById('profile-current-password').value || '';
+      var newPw = document.getElementById('profile-new-password').value || '';
+      if (newPw.length < 6) { errEl.textContent = 'Yeni şifre en az 6 karakter olmalı.'; errEl.classList.remove('hidden'); return; }
+      try {
+        var res = await fetch(API_BASE + '/auth/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+          body: JSON.stringify({ current_password: current, new_password: newPw })
+        });
+        var data = await res.json().catch(function() { return {}; });
+        if (res.ok) {
+          toast('Şifre güncellendi.', 'success');
+          document.getElementById('profile-current-password').value = '';
+          document.getElementById('profile-new-password').value = '';
+        } else {
+          errEl.textContent = data.detail || data.error || 'Şifre güncellenemedi.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Bağlantı hatası.';
+        errEl.classList.remove('hidden');
+      }
+    }
+    async function downloadMyData() {
+      try {
+        var res = await fetch(API_BASE + '/analyze/export', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+        if (!res.ok) { toast('Veri indirilemedi.', 'error'); return; }
+        var data = await res.json();
+        var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+        var a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'norya-verilerim-' + new Date().toISOString().slice(0,10) + '.json';
+        a.click();
+        URL.revokeObjectURL(a.href);
+        toast('Verileriniz indirildi.', 'success');
+      } catch (e) { toast('Veri indirilemedi.', 'error'); }
+    }
+    function openDeleteAccountConfirm() {
+      document.getElementById('delete-account-password').value = '';
+      document.getElementById('delete-account-error').classList.add('hidden');
+      document.getElementById('modal-delete-account').classList.remove('hidden');
+      document.getElementById('modal-delete-account').classList.add('flex');
+    }
+    function closeDeleteAccountConfirm() {
+      document.getElementById('modal-delete-account').classList.add('hidden');
+      document.getElementById('modal-delete-account').classList.remove('flex');
+    }
+    async function submitDeleteAccount(e) {
+      e.preventDefault();
+      var errEl = document.getElementById('delete-account-error');
+      errEl.classList.add('hidden');
+      var password = document.getElementById('delete-account-password').value || '';
+      try {
+        var res = await fetch(API_BASE + '/auth/delete-account', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+          body: JSON.stringify({ password: password })
+        });
+        var data = await res.json().catch(function() { return {}; });
+        if (res.ok) {
+          clearAuth();
+          updateNav();
+          closeProfile();
+          closeDeleteAccountConfirm();
+          toast('Hesabınız silindi.', 'info');
+        } else {
+          errEl.textContent = data.detail || data.error || 'İşlem başarısız.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Bağlantı hatası.';
+        errEl.classList.remove('hidden');
+      }
+    }
+
     function logout() {
       clearAuth();
     }
@@ -4085,6 +4635,8 @@
       setLang(getLang());
     }
     applyTheme();
+    checkResetTokenInUrl();
+    checkVerifyEmailInUrl();
 
     function formatPrice(n) {
       if (n == null || n === undefined || isNaN(n)) return '0';

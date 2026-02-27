@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <title>{{ title or 'Norya Analiz Raporu' }}</title>
+  <!-- dir: RTL for Arabic/Hebrew -->
   <style>
     @page {
       size: A4;
@@ -10,7 +11,7 @@
       @bottom-center {
         font-size: 9px;
         color: #64748b;
-        content: "Bu rapor bilgilendirme amaçlıdır. Tıbbi karar için hekime danışın. — Norya";
+        content: "{{ page_footer | default('Bu rapor bilgilendirme amaçlıdır. Tıbbi karar için hekime danışın. — Norya', true) }}";
       }
     }
     * { box-sizing: border-box; }
@@ -117,35 +118,35 @@
       </svg>
       <span class="brand">Norya</span>
     </div>
-    <div class="brand-sub">Kan Tahlili Analiz Raporu — Yapay Zeka Destekli Yorum</div>
-    <div class="report-meta">Rapor Tarihi: {{ report_date }}</div>
+    <div class="brand-sub">{{ subtitle | default('Kan Tahlili Analiz Raporu — Yapay Zeka Destekli Yorum', true) }}</div>
+    <div class="report-meta">{{ report_date_label | default('Rapor Tarihi', true) }}: {{ report_date }}</div>
   </div>
 
   {% if risk_level != 'none' %}
   <div class="risk-banner risk-{{ risk_level }}">
-    {{ risk_message or 'Değerlerinizde dikkat edilmesi gereken parametreler olabilir. Öneriler bölümünü okuyun ve gerekirse hekime danışın.' }}
+    {{ risk_message or risk_default_attention }}
   </div>
   {% else %}
   <div class="risk-banner risk-normal">
-    {{ risk_message or 'Tüm değerler referans aralığında. Genel özet ve öneriler aşağıdadır.' }}
+    {{ risk_message or risk_default_normal }}
   </div>
   {% endif %}
 
   {% if summary %}
-  <div class="section-title">Özet</div>
+  <div class="section-title">{{ summary_heading | default('Özet', true) }}</div>
   <div class="section-body">{{ summary }}</div>
   {% endif %}
 
   {% if biomarkers %}
-  <div class="section-title">Biyobelirteçler ve Referans Aralıkları</div>
+  <div class="section-title">{{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}</div>
   <table class="biomarkers">
     <thead>
       <tr>
-        <th>Parametre</th>
-        <th>Sonuç</th>
-        <th>Birim</th>
-        <th>Referans Aralığı</th>
-        <th>Durum</th>
+        <th>{{ param | default('Parametre', true) }}</th>
+        <th>{{ result | default('Sonuç', true) }}</th>
+        <th>{{ unit | default('Birim', true) }}</th>
+        <th>{{ ref_range | default('Referans Aralığı', true) }}</th>
+        <th>{{ status | default('Durum', true) }}</th>
       </tr>
     </thead>
     <tbody>
@@ -170,12 +171,12 @@
   {% endif %}
 
   {% if possible_causes %}
-  <div class="section-title">Olası Nedenler</div>
+  <div class="section-title">{{ possible_causes_heading | default('Olası Nedenler', true) }}</div>
   <div class="section-body">{{ possible_causes }}</div>
   {% endif %}
 
   {% if recommendations %}
-  <div class="section-title">Öneriler</div>
+  <div class="section-title">{{ recommendations_heading | default('Öneriler', true) }}</div>
   <div class="section-body">{{ recommendations }}</div>
   {% endif %}
 
@@ -187,7 +188,7 @@
   {% endif %}
 
   <div class="footer-note">
-    Bu rapor Norya yapay zeka yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.
+    {{ footer_note | default('Bu rapor Norya yapay zeka yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.', true) }}
   </div>
 </body>
 </html>

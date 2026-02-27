@@ -5,18 +5,93 @@
 <div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-4 max-w-2xl">
   <p><span class="text-slate-400">ID:</span> {{ user.id }}</p>
   <p><span class="text-slate-400">E-posta:</span> {{ user.email }}</p>
+  <p><span class="text-slate-400">E-posta doğrulama:</span> {% if user.email_verified_at %}<span class="text-green-400">Doğrulandı</span> ({{ user.email_verified_at.strftime('%d.%m.%Y %H:%M') }}){% else %}<span class="text-slate-500">Doğrulanmadı</span>{% endif %}</p>
   <p><span class="text-slate-400">Ad:</span> {{ user.full_name or '-' }}</p>
   <p><span class="text-slate-400">Plan:</span> {{ user.plan }} · Ek hak: {{ user.extra_credits or 0 }}</p>
   <p><span class="text-slate-400">Toplam analiz:</span> {{ analysis_count }}</p>
   <p><span class="text-slate-400">Son giriş:</span> {{ last_login }}</p>
   <p><span class="text-slate-400">Durum:</span> {% if user.is_banned %}<span class="text-red-400">Yasaklı</span>{% else %}Aktif{% endif %}</p>
 </div>
-<div class="flex gap-2">
+<div class="flex flex-wrap gap-2 mb-6">
   {% if user.is_banned %}
   <form method="post" action="/admin/users/{{ user.id }}/unban"><button type="submit" class="px-4 py-2 rounded-lg bg-green-600 text-white">Yasağı kaldır</button></form>
   {% else %}
   <form method="post" action="/admin/users/{{ user.id }}/ban"><button type="submit" class="px-4 py-2 rounded-lg bg-red-600 text-white">Yasakla</button></form>
   {% endif %}
   <a href="/admin/users" class="px-4 py-2 rounded-lg bg-slate-600 text-white">Listeye dön</a>
+</div>
+
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-4 max-w-2xl">
+  <h2 class="text-lg font-medium text-white mb-2">Manuel kredi / plan atama</h2>
+  <form method="post" action="/admin/users/{{ user.id }}/grant" class="flex flex-wrap gap-3 items-end">
+    <label class="flex flex-col gap-1">
+      <span class="text-slate-400 text-sm">Ek hak (sayı)</span>
+      <input type="number" name="extra_credits" value="{{ user.extra_credits or 0 }}" min="0" class="px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white w-24" />
+    </label>
+    <label class="flex flex-col gap-1">
+      <span class="text-slate-400 text-sm">Plan</span>
+      <select name="plan" class="px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white">
+        <option value="free" {% if user.plan == 'free' %}selected{% endif %}>free</option>
+        <option value="pro" {% if user.plan == 'pro' %}selected{% endif %}>pro</option>
+      </select>
+    </label>
+    <button type="submit" class="px-4 py-2 rounded-lg bg-brand text-white">Kaydet</button>
+  </form>
+</div>
+
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden mb-4">
+  <h2 class="text-lg font-medium text-white p-4 border-b border-slate-700">Analiz geçmişi (son 50)</h2>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-slate-400 border-b border-slate-700">
+          <th class="px-4 py-2">ID</th>
+          <th class="px-4 py-2">Tarih</th>
+          <th class="px-4 py-2">Kaynak</th>
+          <th class="px-4 py-2">Girdi önizleme</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in analyses %}
+        <tr class="border-b border-slate-700/50">
+          <td class="px-4 py-2">{{ a.id }}</td>
+          <td class="px-4 py-2">{{ a.created_at.strftime('%d.%m.%Y %H:%M') if a.created_at else '-' }}</td>
+          <td class="px-4 py-2">{{ a.source }}</td>
+          <td class="px-4 py-2 max-w-xs truncate" title="{{ a.input_text[:200] }}">{{ (a.input_text or '')[:80] }}{% if (a.input_text or '')|length > 80 %}…{% endif %}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="px-4 py-4 text-slate-500">Analiz yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+  <h2 class="text-lg font-medium text-white p-4 border-b border-slate-700">Audit log (son 100)</h2>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-slate-400 border-b border-slate-700">
+          <th class="px-4 py-2">Tarih</th>
+          <th class="px-4 py-2">Olay</th>
+          <th class="px-4 py-2">IP</th>
+          <th class="px-4 py-2">Ülke</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in audit_logs %}
+        <tr class="border-b border-slate-700/50">
+          <td class="px-4 py-2">{{ log.created_at.strftime('%d.%m.%Y %H:%M') if log.created_at else '-' }}</td>
+          <td class="px-4 py-2">{{ log.event }}</td>
+          <td class="px-4 py-2">{{ log.ip or '-' }}</td>
+          <td class="px-4 py-2">{{ log.country or '-' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

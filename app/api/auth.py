@@ -17,6 +17,8 @@ from app.core.security import (
 from app.api.deps import get_current_user
 from app.models import AuditLog, EmailVerifyToken, GuestLoginToken, PasswordResetToken, Presence, SecurityLog, User
 from app.schemas import (
+    ChangePasswordRequest,
+    DeleteAccountRequest,
     ForgotPasswordRequest,
     GuestLoginRequest,
     ResetPasswordRequest,
@@ -24,10 +26,12 @@ from app.schemas import (
     UserCreate,
     UserLogin,
     UserResponse,
+    UserUpdate,
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
 _AUTH_RATE_LIMIT = f"{settings.rate_limit_per_minute}/minute"
+_REGISTER_LIMIT = f"{getattr(settings, 'rate_limit_register_per_minute', 3)}/minute;100/hour"
 
 
 def _client_ip(request: Request) -> str:
@@ -46,18 +50,28 @@ def _audit(db: Session, event: str, user_id: int | None, ip: str | None) -> None
         pass
 
 
-def _send_verify_email_stub(email: str, token: str) -> None:
-    # Gerçek ortamda: SMTP veya SendGrid ile e-posta gönder
-    # Örnek link: {FRONTEND_URL}/verify-email?token={token}
-    pass
+def _send_verify_email(email: str, token: str, country: str | None = None) -> None:
+    """E-posta doğrulama linki gönderir (frontend_url + token, dil ülkeye göre)."""
+    from app.services.email_sender import country_to_lang, send_verify_email
+
+    frontend_url = (getattr(settings, "frontend_url", None) or "").strip().rstrip("/") or "http://127.0.0.1:8000"
+    verify_link = f"{frontend_url}/?verify-email={token}"
+    lang = country_to_lang(country)
+    send_verify_email(email, verify_link, lang)
 
 
-def _send_reset_email_stub(email: str, token: str) -> None:
-    # Gerçek ortamda: şifre sıfırlama linki gönder
-    pass
+def _send_reset_email(email: str, token: str, lang: str, expiry_hours: int = 1) -> None:
+    """Şifre sıfırlama linki e-postası (ülkeye göre dil, kurumsal şablon)."""
+    from app.core.config import settings
+    from app.services.email_sender import send_password_reset_email
+
+    frontend_url = (getattr(settings, "frontend_url", None) or "").strip().rstrip("/") or "http://127.0.0.1:8000"
+    reset_link = f"{frontend_url}/?reset={token}"
+    send_password_reset_email(email, reset_link, lang, expiry_hours)
 
 
 @router.post("/register", response_model=UserResponse)
+@limiter.limit(_REGISTER_LIMIT)
 async def register(
     request: Request,
     db: Session = Depends(get_db),
@@ -103,7 +117,7 @@ async def register(
             )
         )
         db.commit()
-        _send_verify_email_stub(email, token_str)
+        _send_verify_email(email, token_str, country or (get_country_from_ip(ip) if ip else None))
         _audit(db, "register", user.id, ip)
         country = get_country_from_ip(ip)
         if country and not getattr(user, "country", None):
@@ -117,6 +131,7 @@ async def register(
             full_name=user.full_name,
             phone=getattr(user, "phone", None),
             country=getattr(user, "country", None),
+            email_verified=bool(getattr(user, "email_verified_at", None)),
         )
     except HTTPException:
         raise
@@ -128,6 +143,7 @@ async def register(
 
 
 @router.post("/login", response_model=Token)
+@limiter.limit("5/minute;20/hour")
 async def login(
     request: Request,
     db: Session = Depends(get_db),
@@ -175,14 +191,93 @@ async def login(
 
 @router.get("/me", response_model=UserResponse)
 def me(user: User = Depends(get_current_user)):
-    """Giriş yapmış kullanıcının ad, e-posta, telefon, ülke bilgisi."""
+    """Giriş yapmış kullanıcının ad, e-posta, telefon, ülke, e-posta doğrulama bilgisi."""
     return UserResponse(
         id=user.id or 0,
         email=user.email,
         full_name=user.full_name or "",
         phone=getattr(user, "phone", None),
         country=getattr(user, "country", None),
+        email_verified=bool(getattr(user, "email_verified_at", None)),
     )
+
+
+@router.patch("/me", response_model=UserResponse)
+def update_me(
+    body: UserUpdate,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Profil güncelleme: ad, telefon, ülke."""
+    if body.full_name is not None:
+        user.full_name = (body.full_name or "").strip() or user.full_name
+    if body.phone is not None:
+        user.phone = (body.phone or "").strip() or None
+    if body.country is not None:
+        user.country = (body.country or "").strip().upper()[:2] or None
+    db.add(user)
+    db.commit()
+    db.refresh(user)
+    return UserResponse(
+        id=user.id or 0,
+        email=user.email,
+        full_name=user.full_name or "",
+        phone=getattr(user, "phone", None),
+        country=getattr(user, "country", None),
+        email_verified=bool(getattr(user, "email_verified_at", None)),
+    )
+
+
+@router.post("/change-password")
+def change_password(
+    body: ChangePasswordRequest,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Giriş yapmış kullanıcı şifre değiştirir (mevcut şifre + yeni şifre)."""
+    if not verify_password(body.current_password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Mevcut şifre hatalı.")
+    user.hashed_password = hash_password(body.new_password)
+    db.add(user)
+    db.commit()
+    return {"message": "Şifre güncellendi."}
+
+
+@router.post("/delete-account")
+def delete_account(
+    body: DeleteAccountRequest,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Hesabı siler (şifre ile onay). Kullanıcı ve ilişkili veriler silinir."""
+    if not verify_password(body.password, user.hashed_password):
+        raise HTTPException(status_code=400, detail="Şifre hatalı.")
+    from app.models import AnalysisRecord, AuditLog, EmailVerifyToken, GuestLoginToken, PasswordResetToken, Presence, ShareToken
+
+    uid = user.id
+    user_email = user.email
+    try:
+        analysis_ids = [r.id for r in db.exec(select(AnalysisRecord.id).where(AnalysisRecord.user_id == uid)).all() if r.id]
+        for aid in analysis_ids:
+            for st in db.exec(select(ShareToken).where(ShareToken.analysis_id == aid)).all():
+                db.delete(st)
+        for rec in db.exec(select(AnalysisRecord).where(AnalysisRecord.user_id == uid)).all():
+            db.delete(rec)
+        for rec in db.exec(select(AuditLog).where(AuditLog.user_id == uid)).all():
+            db.delete(rec)
+        for rec in db.exec(select(Presence).where(Presence.user_id == uid)).all():
+            db.delete(rec)
+        for rec in db.exec(select(EmailVerifyToken).where(EmailVerifyToken.email == user_email)).all():
+            db.delete(rec)
+        for rec in db.exec(select(PasswordResetToken).where(PasswordResetToken.email == user_email)).all():
+            db.delete(rec)
+        for rec in db.exec(select(GuestLoginToken).where(GuestLoginToken.user_id == uid)).all():
+            db.delete(rec)
+        db.delete(user)
+        db.commit()
+    except Exception:
+        raise HTTPException(status_code=500, detail="Hesap silinirken hata oluştu.")
+    return {"message": "Hesabınız silindi."}
 
 
 @router.post("/guest-login", response_model=Token)
@@ -222,15 +317,19 @@ def forgot_password(
     if not user:
         return {"message": "Bu e-posta kayıtlıysa şifre sıfırlama linki gönderildi."}
     token_str = secrets.token_urlsafe(32)
+    expiry_hours = 1
     db.add(
         PasswordResetToken(
             email=body.email,
             token=token_str,
-            expires_at=datetime.utcnow() + timedelta(hours=1),
+            expires_at=datetime.utcnow() + timedelta(hours=expiry_hours),
         )
     )
     db.commit()
-    _send_reset_email_stub(body.email, token_str)
+    from app.services.email_sender import country_to_lang
+
+    lang = country_to_lang(getattr(user, "country", None))
+    _send_reset_email(body.email, token_str, lang, expiry_hours)
     return {"message": "E-posta adresinize şifre sıfırlama linki gönderildi."}
 
 

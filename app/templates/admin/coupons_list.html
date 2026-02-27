@@ -1,0 +1,44 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}İndirim Kodları - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">İndirim Kodları</h1>
+<p class="text-slate-400 text-sm mb-4">Kupon kodları ödeme sayfasında girilir. Ayın belirli günleri için <strong>Ay günleri</strong> alanına örn. <code class="bg-slate-700 px-1 rounded">1-7</code> veya <code class="bg-slate-700 px-1 rounded">15,20,25</code> yazın.</p>
+<p class="mb-4"><a href="/admin/coupons/new" class="px-4 py-2 rounded-lg bg-brand text-white hover:bg-brand/90">+ Yeni kod</a></p>
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left text-slate-400 border-b border-slate-700">
+        <th class="px-4 py-2">Kod</th>
+        <th class="px-4 py-2">Tip</th>
+        <th class="px-4 py-2">Değer</th>
+        <th class="px-4 py-2">Geçerlilik</th>
+        <th class="px-4 py-2">Ay günleri</th>
+        <th class="px-4 py-2">Kullanım</th>
+        <th class="px-4 py-2">Ürünler</th>
+        <th class="px-4 py-2"></th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for c in coupons %}
+      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
+        <td class="px-4 py-2 font-mono font-semibold">{{ c.code }}</td>
+        <td class="px-4 py-2">{{ c.discount_type }}</td>
+        <td class="px-4 py-2">{{ c.discount_value }}{% if c.discount_type == 'percent' %}%{% else %} cent{% endif %}</td>
+        <td class="px-4 py-2">{{ c.valid_from or '—' }} / {{ c.valid_until or '—' }}</td>
+        <td class="px-4 py-2">{{ c.valid_days_of_month or 'her gün' }}</td>
+        <td class="px-4 py-2">{{ c.use_count }}{% if c.max_uses %} / {{ c.max_uses }}{% endif %}</td>
+        <td class="px-4 py-2">{{ c.products or 'tümü' }}</td>
+        <td class="px-4 py-2">
+          <a href="/admin/coupons/{{ c.id }}/edit" class="text-brand hover:underline">Düzenle</a>
+          <form action="/admin/coupons/{{ c.id }}/delete" method="post" class="inline ml-2" onsubmit="return confirm('Bu kodu silmek istediğinize emin misiniz?');">
+            <button type="submit" class="text-red-400 hover:underline">Sil</button>
+          </form>
+        </td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" class="px-4 py-4 text-slate-500">Henüz indirim kodu yok. <a href="/admin/coupons/new" class="text-brand">Yeni kod ekle</a>.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

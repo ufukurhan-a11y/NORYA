@@ -11,7 +11,7 @@
     <h1 class="text-xl font-semibold text-white mb-2">Norya Admin</h1>
     <p class="text-slate-400 text-sm mb-4">ADMIN_SECRET ile giriş yapın.</p>
     {% if err %}
-    <p class="text-red-400 text-sm mb-2">{% if err == 'config' %}Admin yapılandırılmamış.{% else %}Geçersiz şifre.{% endif %}</p>
+    <p class="text-red-400 text-sm mb-2">{% if err == 'config' %}Admin yapılandırılmamış.{% elif err == 'lockout' %}Çok fazla başarısız deneme. 15 dakika sonra tekrar deneyin.{% else %}Geçersiz şifre.{% endif %}</p>
     {% endif %}
     <form method="post" action="/admin/login" class="space-y-4">
       <input type="hidden" name="csrf_token" value="{{ csrf_token or '' }}" />

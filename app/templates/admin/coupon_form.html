@@ -1,0 +1,54 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}{% if is_edit %}Kodu düzenle{% else %}Yeni indirim kodu{% endif %} - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">{% if is_edit %}İndirim kodunu düzenle{% else %}Yeni indirim kodu{% endif %}</h1>
+{% if error %}<p class="mb-4 text-red-400">{{ error }}</p>{% endif %}
+<form method="post" action="{% if is_edit %}/admin/coupons/{{ coupon.id }}/edit{% else %}/admin/coupons/new{% endif %}" class="max-w-xl space-y-4">
+  <div>
+    <label class="block text-slate-300 text-sm mb-1" for="code">Kod (örn. indirim20)</label>
+    <input type="text" id="code" name="code" value="{{ coupon.code if coupon else '' }}" required maxlength="64" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white" placeholder="INDIRIM20">
+    <p class="text-xs text-slate-500 mt-1">Kayıt sırasında büyük harfe çevrilir.</p>
+  </div>
+  <div class="flex gap-4">
+    <div class="flex-1">
+      <label class="block text-slate-300 text-sm mb-1" for="discount_type">İndirim tipi</label>
+      <select id="discount_type" name="discount_type" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white">
+        <option value="percent" {% if coupon and coupon.discount_type == 'percent' %}selected{% endif %}>Yüzde (%)</option>
+        <option value="fixed" {% if coupon and coupon.discount_type == 'fixed' %}selected{% endif %}>Sabit (euro cent)</option>
+      </select>
+    </div>
+    <div class="flex-1">
+      <label class="block text-slate-300 text-sm mb-1" for="discount_value">Değer</label>
+      <input type="number" id="discount_value" name="discount_value" value="{{ coupon.discount_value if coupon else 20 }}" min="1" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white" placeholder="20">
+      <p class="text-xs text-slate-500 mt-1">Yüzde: 1–100. Sabit: euro cent (130 = 1,30 €).</p>
+    </div>
+  </div>
+  <div class="flex gap-4">
+    <div class="flex-1">
+      <label class="block text-slate-300 text-sm mb-1" for="valid_from">Geçerlilik başlangıç (tarih)</label>
+      <input type="date" id="valid_from" name="valid_from" value="{{ coupon.valid_from.strftime('%Y-%m-%d') if coupon and coupon.valid_from else '' }}" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white">
+    </div>
+    <div class="flex-1">
+      <label class="block text-slate-300 text-sm mb-1" for="valid_until">Geçerlilik bitiş (tarih)</label>
+      <input type="date" id="valid_until" name="valid_until" value="{{ coupon.valid_until.strftime('%Y-%m-%d') if coupon and coupon.valid_until else '' }}" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white">
+    </div>
+  </div>
+  <div>
+    <label class="block text-slate-300 text-sm mb-1" for="valid_days_of_month">Sadece ayın bu günlerinde geçerli</label>
+    <input type="text" id="valid_days_of_month" name="valid_days_of_month" value="{{ coupon.valid_days_of_month if coupon else '' }}" maxlength="128" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white" placeholder="1-7 veya 15,20,25">
+    <p class="text-xs text-slate-500 mt-1">Boş bırakırsanız her gün geçerli olur. Örn: <code>1-7</code> (ayın 1–7’si), <code>15,20,25</code> (sadece 15, 20, 25).</p>
+  </div>
+  <div>
+    <label class="block text-slate-300 text-sm mb-1" for="max_uses">Maksimum kullanım</label>
+    <input type="number" id="max_uses" name="max_uses" value="{{ coupon.max_uses if coupon and coupon.max_uses else '' }}" min="1" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white" placeholder="Boş = sınırsız">
+  </div>
+  <div>
+    <label class="block text-slate-300 text-sm mb-1" for="products">Ürünler (virgülle)</label>
+    <input type="text" id="products" name="products" value="{{ coupon.products if coupon else '' }}" maxlength="64" class="w-full px-3 py-2 rounded bg-slate-700 border border-slate-600 text-white" placeholder="single,monthly,yearly veya boş = tümü">
+  </div>
+  <div class="flex gap-2">
+    <button type="submit" class="px-4 py-2 rounded-lg bg-brand text-white hover:bg-brand/90">{% if is_edit %}Kaydet{% else %}Oluştur{% endif %}</button>
+    <a href="/admin/coupons" class="px-4 py-2 rounded-lg bg-slate-600 text-slate-200 hover:bg-slate-500">İptal</a>
+  </div>
+</form>
+{% endblock %}

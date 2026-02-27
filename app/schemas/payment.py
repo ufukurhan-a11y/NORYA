@@ -8,6 +8,7 @@ class CreateSessionRequest(BaseModel):
     product: Literal["single", "monthly", "yearly"]
     success_url: str | None = None
     cancel_url: str | None = None
+    coupon_code: str | None = None
 
 
 class GrantPaymentRequest(BaseModel):
@@ -23,3 +24,4 @@ class GuestSessionRequest(BaseModel):
     full_name: str | None = None
     success_url: str | None = None
     cancel_url: str | None = None
+    coupon_code: str | None = None

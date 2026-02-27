@@ -14,3 +14,4 @@ class AnalysisRecord(SQLModel, table=True):
     # Yüklenen orijinal belge (PDF/görsel) — admin panelinde "hastanın gönderdiği" ile rapor yan yana
     original_filename: str | None = None  # örn. "tahlil.pdf"
     original_stored_path: str | None = None  # örn. "42.pdf" (data/uploads/ altında)
+    is_favorite: bool = False  # Kullanıcının "favori" veya "doktora göstereceğim" işareti

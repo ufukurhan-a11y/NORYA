@@ -27,9 +27,11 @@ Sunucu kapalıysa sayfa açılmaz. Terminalde `Uvicorn running on...` görünmü
 
 ## Mevcut Durum
 
-- **API:** FastAPI ile `/analyze` endpoint’i (OpenAI ile tahlil açıklama)
-- **Auth:** Yok (herkes API’yi kullanabilir)
-- **Veri:** Kalıcı depolama yok
+- **API:** FastAPI ile `/analyze` endpoint’i (OpenAI ile tahlil açıklama); `/health` ve `/api-check` sağlık kontrolleri.
+- **Auth:** JWT tabanlı kayıt/giriş (`/auth/register`, `/auth/login`), e-posta doğrulama (SMTP ile), şifre sıfırlama; API v1 prefix: `/v1/auth/...` de kullanılabilir.
+- **Veritabanı:** SQLite (geliştirme) veya PostgreSQL (production); kullanıcılar, analiz geçmişi, ödemeler, indirim kodları, admin paneli.
+- **Ödeme:** PayTR entegrasyonu (tek analiz / aylık-yıllık Pro), misafir ödeme (kayıt olmadan tek analiz).
+- **Güvenlik:** Rate limit (IP başına dakikada istek), güvenlik başlıkları (CSP, HSTS, X-Content-Type-Options), production’da debug endpoint’leri kapalı.
 
 ## SaaS için Gerekli Bileşenler
 
