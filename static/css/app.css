@@ -1,0 +1,41 @@
+/**
+ * Norya Design System – ek stiller
+ * Tailwind ile birlikte kullanılır.
+ */
+
+/* Kurumsal renk değişkenleri (JS config’e ek) */
+:root {
+  --norya-brand: #e07a5f;
+  --norya-brand-hover: #c9684a;
+  --norya-brand-light: #fdf4f2;
+  --norya-trust: #1e3a5f;
+  --norya-surface: #f8f9fb;
+}
+
+/* Buton odak halkası */
+.norya-btn:focus-visible {
+  outline: 2px solid var(--norya-brand);
+  outline-offset: 2px;
+}
+
+/* Kart hover (isteğe bağlı) */
+.norya-card-hover:hover {
+  box-shadow: 0 8px 32px rgba(14, 23, 41, 0.1);
+}
+
+/* Risk badge tutarlı yükseklik */
+.norya-badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.75rem;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+/* Upload alanı sürükle-bırak vurgusu */
+.norya-upload-zone.dragover {
+  border-color: var(--norya-brand);
+  background-color: var(--norya-brand-light);
+}

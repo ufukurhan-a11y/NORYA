@@ -1,0 +1,19 @@
+# Norya systemd servisi
+# Kullanım: Düzenleyip kopyalayın: sudo cp deploy/norya.service.example /etc/systemd/system/norya.service
+#          sudo systemctl daemon-reload && sudo systemctl enable norya && sudo systemctl start norya
+
+[Unit]
+Description=Norya FastAPI
+After=network.target
+
+[Service]
+User=www-data
+Group=www-data
+WorkingDirectory=/var/www/norya
+EnvironmentFile=/var/www/norya/.env
+ExecStart=/var/www/norya/.venv/bin/gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker -b 127.0.0.1:8000
+Restart=always
+RestartSec=5
+
+[Install]
+WantedBy=multi-user.target

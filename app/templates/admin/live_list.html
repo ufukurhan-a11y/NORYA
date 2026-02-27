@@ -1,0 +1,32 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Canlı Kullanıcılar - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Canlı Kullanıcı Takibi</h1>
+<p class="text-slate-400 text-sm mb-4">Son 2 dakikada heartbeat atan kullanıcılar.</p>
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left text-slate-400 border-b border-slate-700">
+        <th class="px-4 py-2">Kullanıcı</th>
+        <th class="px-4 py-2">IP</th>
+        <th class="px-4 py-2">Ülke</th>
+        <th class="px-4 py-2">Sayfa</th>
+        <th class="px-4 py-2">Son aktivite</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for p in presences %}
+      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
+        <td class="px-4 py-2">{{ p.email }}</td>
+        <td class="px-4 py-2 font-mono">{{ p.ip }}</td>
+        <td class="px-4 py-2">{{ p.country }}</td>
+        <td class="px-4 py-2">{{ p.current_page }}</td>
+        <td class="px-4 py-2">{{ p.last_seen_at }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="px-4 py-4 text-slate-500">Aktif kullanıcı yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

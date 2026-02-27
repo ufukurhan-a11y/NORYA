@@ -1,0 +1,16 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Hata #{{ e.id }} - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Hata #{{ e.id }}</h1>
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-4">
+  <p><span class="text-slate-400">Tarih:</span> {{ created_at }}</p>
+  <p><span class="text-slate-400">user_id:</span> {{ e.user_id or '-' }}</p>
+  <p><span class="text-slate-400">Method:</span> {{ e.method or '-' }}</p>
+  <p><span class="text-slate-400">Endpoint:</span> {{ e.endpoint or '-' }}</p>
+  <p><span class="text-slate-400">Hata:</span> <span class="text-red-300">{{ e.error_message or '-' }}</span></p>
+  {% if e.stack_trace %}
+  <pre class="mt-4 p-3 bg-slate-900 rounded text-xs overflow-x-auto whitespace-pre-wrap">{{ e.stack_trace }}</pre>
+  {% endif %}
+</div>
+<a href="/admin/errors" class="text-brand hover:underline">← Listeye dön</a>
+{% endblock %}

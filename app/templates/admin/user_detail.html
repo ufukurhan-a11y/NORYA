@@ -1,0 +1,22 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Kullanıcı {{ user.email }} - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Kullanıcı: {{ user.email }}</h1>
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-4 max-w-2xl">
+  <p><span class="text-slate-400">ID:</span> {{ user.id }}</p>
+  <p><span class="text-slate-400">E-posta:</span> {{ user.email }}</p>
+  <p><span class="text-slate-400">Ad:</span> {{ user.full_name or '-' }}</p>
+  <p><span class="text-slate-400">Plan:</span> {{ user.plan }} · Ek hak: {{ user.extra_credits or 0 }}</p>
+  <p><span class="text-slate-400">Toplam analiz:</span> {{ analysis_count }}</p>
+  <p><span class="text-slate-400">Son giriş:</span> {{ last_login }}</p>
+  <p><span class="text-slate-400">Durum:</span> {% if user.is_banned %}<span class="text-red-400">Yasaklı</span>{% else %}Aktif{% endif %}</p>
+</div>
+<div class="flex gap-2">
+  {% if user.is_banned %}
+  <form method="post" action="/admin/users/{{ user.id }}/unban"><button type="submit" class="px-4 py-2 rounded-lg bg-green-600 text-white">Yasağı kaldır</button></form>
+  {% else %}
+  <form method="post" action="/admin/users/{{ user.id }}/ban"><button type="submit" class="px-4 py-2 rounded-lg bg-red-600 text-white">Yasakla</button></form>
+  {% endif %}
+  <a href="/admin/users" class="px-4 py-2 rounded-lg bg-slate-600 text-white">Listeye dön</a>
+</div>
+{% endblock %}

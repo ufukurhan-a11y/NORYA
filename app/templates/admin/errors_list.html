@@ -1,0 +1,31 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Hata Logları - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Hata Log Merkezi</h1>
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left text-slate-400 border-b border-slate-700">
+        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">Tarih</th>
+        <th class="px-4 py-2">user_id</th>
+        <th class="px-4 py-2">Endpoint</th>
+        <th class="px-4 py-2">Hata (özet)</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for e in errors %}
+      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
+        <td class="px-4 py-2"><a href="/admin/errors/{{ e.id }}" class="text-brand">{{ e.id }}</a></td>
+        <td class="px-4 py-2">{{ e.created_at }}</td>
+        <td class="px-4 py-2">{{ e.user_id or '-' }}</td>
+        <td class="px-4 py-2">{{ e.method }} {{ e.endpoint }}</td>
+        <td class="px-4 py-2 text-red-300 truncate max-w-xs">{{ e.error_message }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="5" class="px-4 py-4 text-slate-500">Hata kaydı yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

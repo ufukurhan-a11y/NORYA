@@ -1,5 +1,6 @@
 from .auth import (
     ForgotPasswordRequest,
+    GuestLoginRequest,
     ResetPasswordRequest,
     Token,
     UserCreate,
@@ -9,6 +10,7 @@ from .auth import (
 
 __all__ = [
     "ForgotPasswordRequest",
+    "GuestLoginRequest",
     "ResetPasswordRequest",
     "Token",
     "UserCreate",

@@ -1,0 +1,42 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Güvenlik - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Güvenlik Paneli</h1>
+<p class="text-slate-400 text-sm mb-4">Başarısız girişler, rate limit ve şüpheli aktiviteler.</p>
+<div class="flex gap-2 mb-4">
+  <a href="/admin/security" class="px-3 py-1.5 rounded {% if not event_filter %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Tümü</a>
+  <a href="/admin/security?event=failed_login" class="px-3 py-1.5 rounded {% if event_filter == 'failed_login' %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Başarısız giriş</a>
+  <a href="/admin/security?event=rate_limit" class="px-3 py-1.5 rounded {% if event_filter == 'rate_limit' %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Rate limit</a>
+  <a href="/admin/security?event=suspicious" class="px-3 py-1.5 rounded {% if event_filter == 'suspicious' %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Şüpheli</a>
+</div>
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left text-slate-400 border-b border-slate-700">
+        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">Tarih</th>
+        <th class="px-4 py-2">Event</th>
+        <th class="px-4 py-2">user_id</th>
+        <th class="px-4 py-2">IP</th>
+        <th class="px-4 py-2">Endpoint</th>
+        <th class="px-4 py-2">Detay</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in logs %}
+      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
+        <td class="px-4 py-2">{{ s.id }}</td>
+        <td class="px-4 py-2">{{ s.created_at }}</td>
+        <td class="px-4 py-2"><span class="{% if s.event == 'failed_login' %}text-red-400{% elif s.event == 'rate_limit' %}text-amber-400{% else %}text-orange-400{% endif %}">{{ s.event }}</span></td>
+        <td class="px-4 py-2">{{ s.user_id or '-' }}</td>
+        <td class="px-4 py-2 font-mono">{{ s.ip }}</td>
+        <td class="px-4 py-2">{{ s.endpoint }}</td>
+        <td class="px-4 py-2 truncate max-w-xs">{{ s.detail }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="7" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

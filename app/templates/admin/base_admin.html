@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Norya Admin{% endblock %}</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>tailwind.config = { theme: { extend: { colors: { brand: '#e07a5f' } } } }</script>
+  <style>
+    .sidebar-link.active { background: rgba(224, 122, 95, 0.2); color: #e07a5f; }
+  </style>
+</head>
+<body class="bg-slate-900 text-slate-200 min-h-screen">
+  <div class="flex">
+    <aside class="w-56 min-h-screen bg-slate-800 border-r border-slate-700 flex-shrink-0">
+      <div class="p-4 border-b border-slate-700">
+        <a href="/admin/dashboard" class="font-semibold text-lg text-white flex items-center gap-2">
+          <span class="w-8 h-8 rounded-lg bg-brand flex items-center justify-center text-white text-sm">N</span>
+          Norya Admin
+        </a>
+      </div>
+      <nav class="p-2">
+        <a href="/admin/dashboard" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path == '/admin/dashboard' or request.url.path == '/admin' %}active{% endif %}">Dashboard</a>
+        <a href="/admin/users" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/users') %}active{% endif %}">Kullanıcılar</a>
+        <a href="/admin/live" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/live') %}active{% endif %}">Canlı Kullanıcılar</a>
+        <a href="/admin/payments" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/payments') %}active{% endif %}">Ödemeler</a>
+        <a href="/admin/errors" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/errors') %}active{% endif %}">Hata Logları</a>
+        <a href="/admin/uploads" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/uploads') %}active{% endif %}">Upload Logları</a>
+        <a href="/admin/queue" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/queue') %}active{% endif %}">Analiz Kuyruğu</a>
+        <a href="/admin/security" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/security') %}active{% endif %}">Güvenlik</a>
+        <a href="/admin/legacy" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-400 hover:bg-slate-700 mt-2" target="_blank">Eski panel (API)</a>
+      </nav>
+    </aside>
+    <main class="flex-1 p-6">
+      {% block content %}{% endblock %}
+    </main>
+  </div>
+</body>
+</html>

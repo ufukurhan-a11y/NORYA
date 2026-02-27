@@ -1,0 +1,37 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Upload Logları - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-4">Dosya Upload Logları</h1>
+<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
+  <table class="w-full text-sm">
+    <thead>
+      <tr class="text-left text-slate-400 border-b border-slate-700">
+        <th class="px-4 py-2">ID</th>
+        <th class="px-4 py-2">Tarih</th>
+        <th class="px-4 py-2">user_id</th>
+        <th class="px-4 py-2">Dosya</th>
+        <th class="px-4 py-2">Boyut</th>
+        <th class="px-4 py-2">Durum</th>
+        <th class="px-4 py-2">Süre (ms)</th>
+        <th class="px-4 py-2">Hata</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for u in uploads %}
+      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
+        <td class="px-4 py-2">{{ u.id }}</td>
+        <td class="px-4 py-2">{{ u.created_at }}</td>
+        <td class="px-4 py-2">{{ u.user_id or '-' }}</td>
+        <td class="px-4 py-2">{{ u.filename }}</td>
+        <td class="px-4 py-2">{{ u.file_size_bytes }}</td>
+        <td class="px-4 py-2"><span class="{% if u.status == 'success' %}text-green-400{% elif u.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ u.status }}</span></td>
+        <td class="px-4 py-2">{{ u.duration_ms }}</td>
+        <td class="px-4 py-2 text-red-300 truncate max-w-xs">{{ u.error_message if u.error_message != '-' else '' }}</td>
+      </tr>
+      {% else %}
+      <tr><td colspan="8" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}

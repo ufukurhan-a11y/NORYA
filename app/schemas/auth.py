@@ -5,6 +5,7 @@ class UserCreate(BaseModel):
     email: EmailStr
     password: str
     full_name: str = ""
+    phone: str | None = None
 
     @field_validator("password")
     @classmethod
@@ -23,6 +24,8 @@ class UserResponse(BaseModel):
     id: int
     email: str
     full_name: str
+    phone: str | None = None
+    country: str | None = None
 
 
 class Token(BaseModel):
@@ -32,6 +35,11 @@ class Token(BaseModel):
 
 class ForgotPasswordRequest(BaseModel):
     email: EmailStr
+
+
+class GuestLoginRequest(BaseModel):
+    """Ödeme sonrası misafir oturumu: tek kullanımlık guest_token."""
+    guest_token: str
 
 
 class ResetPasswordRequest(BaseModel):

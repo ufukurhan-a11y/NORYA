@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="{{ lang or 'tr' }}">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ title or 'Norya Analiz Raporu' }}</title>
+  <style>
+    @page {
+      size: A4;
+      margin: 20mm;
+      @bottom-center {
+        font-size: 9px;
+        color: #64748b;
+        content: "Bu rapor bilgilendirme amaçlıdır. Tıbbi karar için hekime danışın. — Norya";
+      }
+    }
+    * { box-sizing: border-box; }
+    body {
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 11px;
+      line-height: 1.5;
+      color: #334155;
+      margin: 0;
+      padding: 0;
+    }
+    .header {
+      border-bottom: 3px solid #e07a5f;
+      padding-bottom: 12px;
+      margin-bottom: 20px;
+    }
+    .brand-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .brand-logo { width: 40px; height: 40px; flex-shrink: 0; }
+    .brand {
+      font-size: 22px;
+      font-weight: 700;
+      color: #e07a5f;
+      letter-spacing: -0.02em;
+    }
+    .brand-sub {
+      font-size: 10px;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .report-meta {
+      margin-top: 8px;
+      font-size: 10px;
+      color: #64748b;
+    }
+    .risk-banner {
+      padding: 10px 14px;
+      border-radius: 6px;
+      margin-bottom: 18px;
+      font-size: 11px;
+      font-weight: 600;
+    }
+    .risk-normal { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
+    .risk-attention { background: #fef3c7; color: #92400e; border-left: 4px solid #f59e0b; }
+    .risk-high { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+    .section-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: #0f172a;
+      margin: 16px 0 8px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid #e2e8f0;
+    }
+    .section-body {
+      margin-bottom: 14px;
+      white-space: pre-wrap;
+    }
+    table.biomarkers {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 10px 0 18px 0;
+      font-size: 10px;
+    }
+    table.biomarkers th {
+      text-align: left;
+      padding: 8px 10px;
+      background: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+    }
+    table.biomarkers td {
+      padding: 8px 10px;
+      border: 1px solid #e2e8f0;
+    }
+    table.biomarkers tr:nth-child(even) { background: #f8fafc; }
+    .range-chart {
+      max-width: 100%;
+      height: auto;
+      margin-top: 6px;
+      display: block;
+      page-break-inside: avoid;
+    }
+    td.chart-cell { padding: 4px 10px 14px 10px; vertical-align: top; overflow: hidden; }
+    .status-normal { color: #059669; font-weight: 600; }
+    .status-low { color: #d97706; font-weight: 600; }
+    .status-high { color: #dc2626; font-weight: 600; }
+    .status-border { color: #b45309; font-weight: 600; }
+    .footer-note {
+      margin-top: 24px;
+      padding-top: 12px;
+      border-top: 1px solid #e2e8f0;
+      font-size: 9px;
+      color: #64748b;
+    }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand-wrap">
+      <svg class="brand-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="36" height="36" rx="12" fill="#e07a5f"/>
+        <path d="M10 26V10h3.2l5.6 10.4V10H22v16h-3.2L13.2 15.6V26H10z" fill="#fff"/>
+        <circle cx="26" cy="24" r="2.5" fill="#fff" opacity="0.9"/>
+      </svg>
+      <span class="brand">Norya</span>
+    </div>
+    <div class="brand-sub">Kan Tahlili Analiz Raporu — Yapay Zeka Destekli Yorum</div>
+    <div class="report-meta">Rapor Tarihi: {{ report_date }}</div>
+  </div>
+
+  {% if risk_level != 'none' %}
+  <div class="risk-banner risk-{{ risk_level }}">
+    {{ risk_message or 'Değerlerinizde dikkat edilmesi gereken parametreler olabilir. Öneriler bölümünü okuyun ve gerekirse hekime danışın.' }}
+  </div>
+  {% else %}
+  <div class="risk-banner risk-normal">
+    {{ risk_message or 'Tüm değerler referans aralığında. Genel özet ve öneriler aşağıdadır.' }}
+  </div>
+  {% endif %}
+
+  {% if summary %}
+  <div class="section-title">Özet</div>
+  <div class="section-body">{{ summary }}</div>
+  {% endif %}
+
+  {% if biomarkers %}
+  <div class="section-title">Biyobelirteçler ve Referans Aralıkları</div>
+  <table class="biomarkers">
+    <thead>
+      <tr>
+        <th>Parametre</th>
+        <th>Sonuç</th>
+        <th>Birim</th>
+        <th>Referans Aralığı</th>
+        <th>Durum</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in biomarkers %}
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.value }}</td>
+        <td>{{ row.unit or '—' }}</td>
+        <td>{{ row.reference or '—' }}</td>
+        <td class="status-{{ row.status }}">{{ row.status_label }}</td>
+      </tr>
+      {% if row.chart_svg_base64 %}
+      <tr>
+        <td colspan="5" class="chart-cell">
+          <img class="range-chart" src="data:image/svg+xml;base64,{{ row.chart_svg_base64 }}" alt="Referans aralığı: {{ row.name }}" />
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {% if possible_causes %}
+  <div class="section-title">Olası Nedenler</div>
+  <div class="section-body">{{ possible_causes }}</div>
+  {% endif %}
+
+  {% if recommendations %}
+  <div class="section-title">Öneriler</div>
+  <div class="section-body">{{ recommendations }}</div>
+  {% endif %}
+
+  {% if raw_sections %}
+  {% for section in raw_sections %}
+  <div class="section-title">{{ section.title }}</div>
+  <div class="section-body">{{ section.body }}</div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="footer-note">
+    Bu rapor Norya yapay zeka yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.
+  </div>
+</body>
+</html>

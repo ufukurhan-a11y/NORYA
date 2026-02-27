@@ -11,3 +11,6 @@ class AnalysisRecord(SQLModel, table=True):
     source: str = "text"  # "text" | "pdf" | "image"
     doctor_notes: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    # Yüklenen orijinal belge (PDF/görsel) — admin panelinde "hastanın gönderdiği" ile rapor yan yana
+    original_filename: str | None = None  # örn. "tahlil.pdf"
+    original_stored_path: str | None = None  # örn. "42.pdf" (data/uploads/ altında)

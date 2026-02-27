@@ -1,0 +1,16 @@
+from datetime import datetime
+
+from sqlmodel import Field, SQLModel
+
+
+class PaymentOrder(SQLModel, table=True):
+    """Ödeme siparişi: merchant_oid ile callback'te kullanıcıya hak tanınır. Tahsilat EUR."""
+    id: int | None = Field(default=None, primary_key=True)
+    merchant_oid: str = Field(unique=True, index=True)
+    user_id: int
+    product: str  # "single" | "monthly" | "yearly"
+    amount_kurus: int  # Tutar en küçük birimde: EUR için cent (13,00 € = 1300)
+    currency: str = "EUR"  # Para birimi (tahsilat EUR)
+    status: str = "pending"  # pending | completed | failed
+    paytr_transaction_id: str | None = None
+    created_at: datetime | None = Field(default_factory=datetime.utcnow)

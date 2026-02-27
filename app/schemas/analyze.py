@@ -15,6 +15,13 @@ class AnalyzeResponse(BaseModel):
     analiz_id: int | None = None
 
 
+class UploadJsonRequest(BaseModel):
+    """Dosyayı base64 ile göndermek için (multipart sorunlu tarayıcılar için yedek)."""
+    file_base64: str | None = None  # boş/null gelirse endpoint 400 döner
+    filename: str = "upload"
+    lang: str | None = None
+
+
 class AnalysisHistoryItem(BaseModel):
     id: int
     input_preview: str
