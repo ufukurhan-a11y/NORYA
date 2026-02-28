@@ -10,9 +10,9 @@ Norya, kan tahlili sonuçlarını hastalara anlaşılır şekilde açıklayan bi
 
 **2. Şu komutu yazıp Enter’a bas:**
 ```bash
-cd /Users/ufukurhan/norya && ./baslat.sh
+cd /Users/ufukurhan/norya && ./start.sh
 ```
-*(Port 8000 doluysa `baslat.sh` eski sunucuyu kapatıp yeniyi açar.)*
+*(Port 8000 doluysa `start.sh` eski sunucuyu kapatıp yeniyi açar.)*
 
 **3. Şu yazıyı görünce** tarayıcıyı aç:
 ```text
@@ -99,7 +99,7 @@ Bu mesaj **güvenlik** değil, **PayTR’nin yapılandırılmamış olması** an
    - `PAYTR_MERCHANT_ID=...`
    - `PAYTR_MERCHANT_KEY=...`
    - `PAYTR_MERCHANT_SALT=...`
-3. Sunucuyu yeniden başlatın (`./baslat.sh` veya `uvicorn app.main:app --reload`).
+3. Sunucuyu yeniden başlatın (`./start.sh` veya `uvicorn app.main:app --reload`).
 
 Test için `PAYTR_TEST_MODE=1` ekleyebilirsiniz. Canlıya geçince `0` yapın.
 

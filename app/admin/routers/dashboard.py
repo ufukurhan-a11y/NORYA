@@ -1,8 +1,9 @@
 """Dashboard: özet metrikler, son işlemler, aylık trend grafiği."""
+import time as _time
 from datetime import date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, Form, Request
-from fastapi.responses import HTMLResponse, RedirectResponse
+from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select, func
 
@@ -68,6 +69,33 @@ def _last_24_months_monthly_stats(db: Session, now: datetime) -> tuple[list[str]
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
+
+# AI durumu cache (60 sn) — dashboard'daki "AI Durumu" bu endpoint'i kullanır
+_ai_health_cache: dict = {"ts": 0.0, "data": None}
+_AI_CACHE_TTL = 60.0
+
+
+@router.get("/api/health-ai", response_class=JSONResponse)
+def admin_api_health_ai(_=Depends(require_admin_cookie)):
+    """Dashboard'daki AI Durumu kutusu bu endpoint'i çağırır (path her zaman /admin altında)."""
+    from app.services.analyze import ping_openai
+
+    now = _time.time()
+    if _ai_health_cache["data"] is not None and (now - _ai_health_cache["ts"]) < _AI_CACHE_TTL:
+        return JSONResponse(_ai_health_cache["data"])
+    ok, latency_ms, err = ping_openai()
+    if ok:
+        data = {"status": "ok", "provider": "openai", "latency_ms": latency_ms}
+    else:
+        data = {
+            "status": "fail",
+            "provider": "openai",
+            "latency_ms": latency_ms,
+            "error": err or "Bilinmeyen hata",
+        }
+    _ai_health_cache["ts"] = now
+    _ai_health_cache["data"] = data
+    return JSONResponse(data)
 
 
 @router.get("/login", response_class=HTMLResponse)
@@ -161,6 +189,18 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
 
     failed_payments = db.exec(select(func.count(PaymentOrder.id)).where(PaymentOrder.status == "failed")).one() or 0
 
+    # Bu ay OpenAI token kullanımı (tahmini maliyet için)
+    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    prompt_sum = db.exec(
+        select(func.coalesce(func.sum(AnalysisJob.prompt_tokens), 0)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
+    ).one() or 0
+    completion_sum = db.exec(
+        select(func.coalesce(func.sum(AnalysisJob.completion_tokens), 0)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
+    ).one() or 0
+    # gpt-4o-mini: input $0.15/1M, output $0.60/1M (yaklaşık)
+    openai_cost_usd = (prompt_sum / 1_000_000 * 0.15) + (completion_sum / 1_000_000 * 0.60)
+    openai_tokens_month = int(prompt_sum) + int(completion_sum)
+
     # Son 10 işlem (payment)
     orders = list(
         db.exec(
@@ -185,8 +225,12 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
         for o in orders
     ]
 
-    # Son 24 ay trend (grafik için)
+    # Son 24 ay trend (grafik için) — hiçbir zaman None gitmesin
     chart_labels, chart_analyses, chart_sales, chart_users = _last_24_months_monthly_stats(db, now)
+    chart_labels = list(chart_labels) if chart_labels else []
+    chart_analyses = list(chart_analyses) if chart_analyses else []
+    chart_sales = list(chart_sales) if chart_sales else []
+    chart_users = list(chart_users) if chart_users else []
 
     return templates.TemplateResponse(
         "admin/dashboard.html",
@@ -203,5 +247,7 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
             "chart_analyses": chart_analyses,
             "chart_sales": chart_sales,
             "chart_users": chart_users,
+            "openai_tokens_month": openai_tokens_month,
+            "openai_cost_usd": openai_cost_usd,
         },
     )

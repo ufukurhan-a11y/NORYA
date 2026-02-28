@@ -33,13 +33,25 @@
   </div>
 </div>
 
-<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-8">
-  <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-    <p class="text-slate-400 text-sm font-medium">AI Durumu</p>
-    <button type="button" id="ai-refresh" class="text-xs px-3 py-1.5 rounded bg-slate-600 text-slate-200 hover:bg-slate-500">Yenile</button>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+      <p class="text-slate-400 text-sm font-medium">AI Durumu</p>
+      <button type="button" id="ai-refresh" class="text-xs px-3 py-1.5 rounded bg-slate-600 text-slate-200 hover:bg-slate-500">Yenile</button>
+    </div>
+    <p id="ai-badge" class="text-lg font-semibold text-slate-300">Kontrol ediliyor…</p>
+    <p id="ai-detail" class="text-sm text-slate-500 mt-1"></p>
   </div>
-  <p id="ai-badge" class="text-lg font-semibold text-slate-300">Kontrol ediliyor…</p>
-  <p id="ai-detail" class="text-sm text-slate-500 mt-1"></p>
+  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
+    <p class="text-slate-400 text-sm font-medium mb-2">OpenAI kullanımı (bu ay)</p>
+    <p class="text-2xl font-bold text-white">{{ openai_tokens_month | default(0) | int }} <span class="text-sm font-normal text-slate-400">token</span></p>
+    <p class="text-sm text-slate-400 mt-1">Tahmini maliyet: <span class="text-brand font-semibold">{{ "%.2f"|format(openai_cost_usd | default(0)) }} USD</span></p>
+    <p class="text-xs text-slate-500 mt-1">gpt-4o-mini · Sadece bu uygulama üzerinden yapılan analizler.</p>
+  </div>
+</div>
+
+<div class="bg-slate-800/80 rounded-lg border border-slate-600 p-3 mb-8 text-sm text-slate-300">
+  <strong class="text-slate-200">E-arşiv fatura:</strong> Ödemeler menüsüne girip bir siparişe tıklayın; tamamlanmış siparişlerde <strong>«E-arşiv fatura kes»</strong> ile GİB faturası kesebilirsiniz.
 </div>
 
 <!-- Son 24 ay trend grafiği: analiz sayısı, satış, yeni kullanıcı -->
@@ -91,13 +103,18 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 (function() {
-  // Son 12 ay trend grafiği
+  var chartLabels = {{ chart_labels | tojson }};
+  var chartAnalyses = {{ chart_analyses | tojson }};
+  var chartSales = {{ chart_sales | tojson }};
+  var chartUsers = {{ chart_users | tojson }};
+  if (!Array.isArray(chartLabels)) chartLabels = [];
+  if (!Array.isArray(chartAnalyses)) chartAnalyses = [];
+  if (!Array.isArray(chartSales)) chartSales = [];
+  if (!Array.isArray(chartUsers)) chartUsers = [];
+
   var trendCanvas = document.getElementById('trend-chart');
-  if (trendCanvas) {
-    var chartLabels = {{ chart_labels | tojson }};
-    var chartAnalyses = {{ chart_analyses | tojson }};
-    var chartSales = {{ chart_sales | tojson }};
-    var chartUsers = {{ chart_users | tojson }};
+  if (trendCanvas && typeof Chart !== 'undefined') {
+    try {
     new Chart(trendCanvas, {
       type: 'line',
       data: {
@@ -161,56 +178,82 @@
         }
       }
     });
-  }
-
-  var badgeEl = document.getElementById('ai-badge');
-  var detailEl = document.getElementById('ai-detail');
-  var refreshBtn = document.getElementById('ai-refresh');
-  if (!badgeEl || !detailEl) return;
-
-  function setAIState(loading, ok, msg, detail) {
-    if (loading) {
-      badgeEl.textContent = 'Kontrol ediliyor…';
-      badgeEl.className = 'text-lg font-semibold text-slate-400';
-      detailEl.textContent = '';
-      return;
-    }
-    if (ok) {
-      badgeEl.innerHTML = '🟢 Çalışıyor';
-      badgeEl.className = 'text-lg font-semibold text-green-400';
-      detailEl.textContent = detail || '';
-      detailEl.className = 'text-sm text-slate-500 mt-1';
-    } else {
-      badgeEl.innerHTML = '🔴 Sorun var';
-      badgeEl.className = 'text-lg font-semibold text-red-400';
-      detailEl.textContent = msg || 'AI erişilemedi.';
-      detailEl.className = 'text-sm text-red-300 mt-1';
+    } catch (e) {
+      trendCanvas.parentElement.innerHTML = '<p class="text-amber-400 text-sm">Grafik yüklenemedi: ' + (e.message || 'bilinmeyen hata') + '</p>';
     }
   }
 
-  function fetchAIHealth() {
-    setAIState(true);
-    fetch('/health/ai', { credentials: 'same-origin' })
-      .then(function(res) { return res.json().then(function(data) { return { res: res, data: data }; }); })
-      .then(function(r) {
-        var data = r.data;
-        var res = r.res;
-        if (res.ok && data && data.status === 'ok') {
-          var detail = data.latency_ms != null ? 'Gecikme: ' + data.latency_ms + ' ms' : '';
-          setAIState(false, true, null, detail);
-        } else {
-          var errMsg = (data && data.error) ? data.error : (data && data.detail) ? (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail)) : 'Yanıt alınamadı (HTTP ' + (res.status || '') + ')';
-          setAIState(false, false, errMsg);
+  function initAIStatus() {
+    var badgeEl = document.getElementById('ai-badge');
+    var detailEl = document.getElementById('ai-detail');
+    var refreshBtn = document.getElementById('ai-refresh');
+    if (!badgeEl || !detailEl) return;
+
+    function setAIState(loading, ok, msg, detail) {
+      try {
+        if (loading) {
+          badgeEl.textContent = 'Kontrol ediliyor…';
+          badgeEl.className = 'text-lg font-semibold text-slate-400';
+          detailEl.textContent = '';
+          detailEl.className = 'text-sm text-slate-500 mt-1';
+          return;
         }
-      })
-      .catch(function(e) {
-        setAIState(false, false, 'Erişilemiyor: ' + (e.message || 'Bağlantı hatası'));
-      });
+        if (ok) {
+          badgeEl.innerHTML = '🟢 Çalışıyor';
+          badgeEl.className = 'text-lg font-semibold text-green-400';
+          detailEl.textContent = detail || '';
+          detailEl.className = 'text-sm text-slate-500 mt-1';
+        } else {
+          badgeEl.innerHTML = '🔴 Sorun var';
+          badgeEl.className = 'text-lg font-semibold text-red-400';
+          detailEl.textContent = msg || 'AI erişilemedi.';
+          detailEl.className = 'text-sm text-red-300 mt-1';
+        }
+      } catch (e) {
+        if (detailEl) detailEl.textContent = 'Güncelleme hatası: ' + (e.message || String(e));
+      }
+    }
+
+    function fetchAIHealth() {
+      setAIState(true);
+      var url = '/admin/api/health-ai';
+      fetch(url, { method: 'GET', credentials: 'same-origin', headers: { 'Accept': 'application/json' }, redirect: 'manual' })
+        .then(function(res) {
+          if (res.type === 'opaqueredirect' || res.status === 302 || res.status === 301) {
+            return { ok: false, status: res.status, data: null, text: 'Oturum süresi dolmuş. Sayfayı yenileyip tekrar giriş yapın.' };
+          }
+          var ct = res.headers.get('content-type') || '';
+          if (ct.indexOf('application/json') !== -1) {
+            return res.json().then(function(data) { return { ok: res.ok, status: res.status, data: data }; });
+          }
+          return res.text().then(function(t) { return { ok: false, status: res.status, data: null, text: t ? t.slice(0, 200) : '' }; });
+        })
+        .then(function(r) {
+          if (r.ok && r.data && r.data.status === 'ok') {
+            var detail = r.data.latency_ms != null ? 'Gecikme: ' + r.data.latency_ms + ' ms' : '';
+            setAIState(false, true, null, detail);
+          } else {
+            var errMsg = (r.data && r.data.error) ? r.data.error : (r.data && r.data.detail) ? (typeof r.data.detail === 'string' ? r.data.detail : JSON.stringify(r.data.detail)) : (r.text || 'Yanıt alınamadı (HTTP ' + r.status + ')');
+            setAIState(false, false, errMsg);
+          }
+        })
+        .catch(function(e) {
+          setAIState(false, false, 'Bağlantı hatası: ' + (e.message || String(e)));
+        });
+    }
+
+    if (refreshBtn) {
+      refreshBtn.addEventListener('click', function(ev) { ev.preventDefault(); fetchAIHealth(); });
+    }
+    fetchAIHealth();
+    setInterval(fetchAIHealth, 60000);
   }
 
-  if (refreshBtn) refreshBtn.addEventListener('click', function() { fetchAIHealth(); });
-  fetchAIHealth();
-  setInterval(fetchAIHealth, 60000);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initAIStatus);
+  } else {
+    initAIStatus();
+  }
 })();
 </script>
 {% endblock %}

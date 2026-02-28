@@ -38,6 +38,7 @@ class Settings(BaseSettings):
     admin_secret: str = ""             # Manuel hak tanıma (destek): POST /payment/grant için
     upload_max_mb: int = 10            # /analyze/upload için max dosya boyutu (MB)
     environment: str = "development"   # production: admin cookie Secure=True
+    force_https_redirect: bool = True  # production'da HTTP istekleri HTTPS'e yönlendirilir (PayTR / güvenlik)
     # E-posta (şifre sıfırlama, doğrulama): SMTP
     smtp_host: str = ""
     smtp_port: int = 587
@@ -53,6 +54,16 @@ class Settings(BaseSettings):
     vapid_private_key: str = ""  # Bildirim göndermek için (pywebpush ile kullanılır)
     # Google Analytics 4: Ölçüm kimliği (G-XXXXXXXXXX). Boşsa script eklenmez.
     ga_measurement_id: str = ""
+    # GİB e-Arşiv fatura (admin'den sipariş başına kesim)
+    gib_earsiv_user: str = ""           # Vergi/TC no (10/11 hane)
+    gib_earsiv_password: str = ""
+    gib_earsiv_test_mode: str = "1"     # 1=test, 0=canlı
+    invoice_company_title: str = ""     # Fatura ünvanı
+    invoice_company_tax_office: str = ""
+    invoice_company_address: str = ""
+    invoice_company_city: str = ""
+    invoice_company_email: str = ""
+    invoice_eur_to_try_rate: float = 35.0  # 1 EUR = X TL (fatura tutarı TL)
 
     model_config = {
         "env_file": _ENV_FILE if _ENV_FILE.is_file() else ".env",

@@ -20,3 +20,6 @@ class PaymentOrder(SQLModel, table=True):
     coupon_code_used: str | None = Field(default=None, max_length=64)
     created_at: datetime | None = Field(default_factory=datetime.utcnow)
     admin_note: str | None = None  # İade / not (admin panelinden)
+    # E-arşiv fatura (GİB)
+    invoice_ettn: str | None = Field(default=None, index=True)   # GİB'deki fatura ETTN
+    invoice_gib_no: str | None = Field(default=None)            # GİB belge numarası (GIB2025...)

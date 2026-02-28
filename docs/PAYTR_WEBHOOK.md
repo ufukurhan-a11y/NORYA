@@ -64,7 +64,7 @@ Yerel test için bu alanları kendin üretirsin; `hash`'i yukarıdaki formüle g
 ### 1. Ortam
 
 - `.env` içinde `PAYTR_MERCHANT_KEY` ve `PAYTR_MERCHANT_SALT` dolu olmalı.
-- Uygulama çalışıyor olmalı: `bash baslat.sh` (port 8000).
+- Uygulama çalışıyor olmalı: `./start.sh` veya `uvicorn app.main:app --reload` (port 8000).
 
 ### 2. Geçerli hash ile test (200 / işlem başarılı)
 

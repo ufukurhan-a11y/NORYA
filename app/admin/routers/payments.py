@@ -1,5 +1,7 @@
-"""Satış & ödeme paneli: başarılı/hatalı/bekleyen, PayTR, detay, admin notu."""
-from fastapi import APIRouter, Depends, Form, Request
+"""Satış & ödeme paneli: başarılı/hatalı/bekleyen, PayTR, detay, admin notu, e-arşiv fatura."""
+from urllib.parse import quote
+
+from fastapi import APIRouter, Depends, Form, Query, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
 from sqlmodel import Session, select
@@ -7,6 +9,7 @@ from sqlmodel import Session, select
 from app.admin.deps import require_admin_cookie
 from app.core.database import get_db
 from app.models import PaymentOrder, User
+from app.services.invoice_earsiv import create_earsiv_invoice
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -40,6 +43,7 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
             "processed_at": (o.processed_at.strftime("%d.%m.%Y %H:%M") if getattr(o, "processed_at", None) else "-"),
             "created_at": (o.created_at.strftime("%d.%m.%Y %H:%M") if o.created_at else "-"),
             "admin_note": getattr(o, "admin_note", None) or "",
+            "invoice_ettn": getattr(o, "invoice_ettn", None) or "",
         }
         for o in orders
     ]
@@ -53,6 +57,8 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
 def payment_detail(
     request: Request,
     order_id: int,
+    invoice_ok: str | None = Query(None),
+    invoice_err: str | None = Query(None),
     _=Depends(require_admin_cookie),
     db: Session = Depends(get_db),
 ):
@@ -70,6 +76,10 @@ def payment_detail(
             "user_email": user_email,
             "amount_eur": (order.amount_kurus or 0) / 100,
             "admin_note": getattr(order, "admin_note", None) or "",
+            "invoice_ettn": getattr(order, "invoice_ettn", None) or "",
+            "invoice_gib_no": getattr(order, "invoice_gib_no", None) or "",
+            "invoice_ok": invoice_ok,
+            "invoice_err": invoice_err,
         },
     )
 
@@ -89,3 +99,58 @@ def payment_save_note(
     db.add(order)
     db.commit()
     return RedirectResponse(url=f"/admin/payments/{order_id}", status_code=302)
+
+
+@router.post("/{order_id}/invoice")
+def payment_create_invoice(
+    request: Request,
+    order_id: int,
+    customer_tckn: str = Form(..., min_length=10, max_length=11),
+    customer_ad: str = Form(""),
+    customer_soyad: str = Form(""),
+    customer_unvan: str = Form(""),
+    customer_vergi_dairesi: str = Form(""),
+    fatura_notu: str = Form(""),
+    _=Depends(require_admin_cookie),
+    db: Session = Depends(get_db),
+):
+    """E-arşiv fatura keser; sipariş tamamlanmış ve daha önce kesilmemiş olmalı."""
+    from fastapi import HTTPException
+
+    order = db.get(PaymentOrder, order_id)
+    if not order:
+        raise HTTPException(404, "Ödeme bulunamadı.")
+    if order.status != "completed":
+        return RedirectResponse(
+            url=f"/admin/payments/{order_id}?invoice_err=" + quote("Sipariş tamamlanmış olmalı"),
+            status_code=302,
+        )
+    if getattr(order, "invoice_ettn", None):
+        return RedirectResponse(
+            url=f"/admin/payments/{order_id}?invoice_err=" + quote("Bu sipariş için zaten fatura kesildi"),
+            status_code=302,
+        )
+    result = create_earsiv_invoice(
+        amount_eur_cents=order.amount_kurus or 0,
+        product=order.product,
+        customer_tckn=customer_tckn.strip(),
+        customer_ad=customer_ad.strip(),
+        customer_soyad=customer_soyad.strip(),
+        customer_unvan=customer_unvan.strip(),
+        customer_vergi_dairesi=customer_vergi_dairesi.strip(),
+        fatura_notu=fatura_notu.strip(),
+    )
+    if not result.success:
+        err = (result.message or "Bilinmeyen hata")[:200]
+        return RedirectResponse(
+            url=f"/admin/payments/{order_id}?invoice_err=" + quote(err),
+            status_code=302,
+        )
+    order.invoice_ettn = result.ettn
+    order.invoice_gib_no = result.gib_no
+    db.add(order)
+    db.commit()
+    return RedirectResponse(
+        url=f"/admin/payments/{order_id}?invoice_ok=1",
+        status_code=302,
+    )

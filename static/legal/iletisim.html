@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>İletişim — Norya</title>
+  <link rel="icon" type="image/svg+xml" href="/static/icon.svg" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: { 500: '#14b8a6', 600: '#0d9488' },
+            accent: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 500: '#64748b', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root { --norya-brand: #e07a5f; --norya-brand-hover: #c9684a; }
+    .text-norya-brand { color: var(--norya-brand); }
+    .bg-norya-brand { background-color: var(--norya-brand); }
+    .bg-norya-brand:hover { background-color: var(--norya-brand-hover); }
+  </style>
+</head>
+<body class="bg-white text-accent-800 min-h-screen flex flex-col font-sans antialiased">
+  <header class="border-b border-accent-200 bg-white/95 backdrop-blur sticky top-0 z-10">
+    <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
+      <a href="/" class="text-xl font-bold text-norya-brand hover:text-norya-brand-hover transition">Norya</a>
+      <a href="/" class="text-sm text-accent-600 hover:text-primary-600 font-medium">← Ana sayfa</a>
+    </div>
+  </header>
+
+  <main class="flex-1 py-12 px-4">
+    <article class="max-w-2xl mx-auto text-accent-700 text-sm leading-relaxed">
+      <h1 class="text-2xl font-bold text-accent-900 mb-6">İletişim</h1>
+      <p class="mb-4">Sorularınız, iade talepleriniz veya “ödeme alındı ama analiz hakkı gelmedi” gibi teknik konular için bize ulaşabilirsiniz.</p>
+      <p class="mb-4"><strong>E-posta:</strong> <a href="mailto:norya.destek@gmail.com" class="text-norya-brand hover:underline font-medium">norya.destek@gmail.com</a></p>
+      <p class="mb-4">Mümkünse hesap e-posta adresinizi ve konuyla ilgili kısa açıklamayı (sipariş no, tarih vb.) yazın. En geç 2 iş günü içinde dönüş yapıyoruz.</p>
+      <p class="text-accent-500">Norya — Kan tahlili sonuçlarınızı anlaşılır dilde açıklayan hizmet.</p>
+    </article>
+  </main>
+
+  <footer class="border-t border-accent-200 bg-accent-50 py-10 px-4 mt-auto">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 text-xs font-medium text-accent-600">
+        <span class="inline-flex items-center gap-1.5">🔒 SSL</span>
+        <span class="inline-flex items-center gap-1.5">🛡️ KVKK</span>
+        <span class="inline-flex items-center gap-1.5">✓ GDPR</span>
+        <span class="inline-flex items-center gap-1.5">💳 PayTR</span>
+      </div>
+      <nav class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm mb-6" aria-label="Yasal ve iletişim">
+        <a href="/legal/mesafeli-satis-sozlesmesi" class="text-accent-600 hover:text-norya-brand transition">Mesafeli Satış Sözleşmesi</a>
+        <a href="/legal/gizlilik-politikasi" class="text-accent-600 hover:text-norya-brand transition">Gizlilik Politikası</a>
+        <a href="/iade-iptal" class="text-accent-600 hover:text-norya-brand transition">İade ve İptal Politikası</a>
+        <a href="/legal/kvkk-gdpr" class="text-accent-600 hover:text-norya-brand transition">KVKK / GDPR</a>
+        <a href="/legal/kullanim-sartlari" class="text-accent-600 hover:text-norya-brand transition">Kullanım Şartları</a>
+        <a href="/legal/iletisim" class="text-accent-600 hover:text-norya-brand transition">İletişim</a>
+      </nav>
+      <p class="text-center text-accent-500 text-sm"><strong class="text-accent-700">Norya</strong> — Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.</p>
+      <p class="text-center text-accent-400 text-xs mt-1">Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.</p>
+    </div>
+  </footer>
+</body>
+</html>

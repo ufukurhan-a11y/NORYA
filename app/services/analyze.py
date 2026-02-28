@@ -189,7 +189,7 @@ def _raise_openai_http_error(exc: Exception) -> None:
     raise HTTPException(status_code=500, detail="Beklenmeyen sunucu hatası.") from exc
 
 
-def analyze_blood_test(text: str, detailed: bool = True, doctor_notes: str | None = None, lang: str | None = None) -> str:
+def analyze_blood_test(text: str, detailed: bool = True, doctor_notes: str | None = None, lang: str | None = None) -> tuple[str, dict | None]:
     lang_instruction = _language_instruction(lang)
     if not detailed:
         prompt = lang_instruction + "\n\nExplain this blood test in short, simple terms:\n" + text
@@ -205,7 +205,12 @@ def analyze_blood_test(text: str, detailed: bool = True, doctor_notes: str | Non
 
     try:
         response = _openai_create_with_fallback(_create)
-        return response.choices[0].message.content or ""
+        content = response.choices[0].message.content or ""
+        usage = None
+        if getattr(response, "usage", None):
+            u = response.usage
+            usage = {"prompt_tokens": getattr(u, "prompt_tokens", 0) or 0, "completion_tokens": getattr(u, "completion_tokens", 0) or 0}
+        return content, usage
     except (AuthenticationError, RateLimitError, APIConnectionError, APIError) as e:
         logger.exception("OpenAI API error in analyze_blood_test: %s", e)
         _raise_openai_http_error(e)
@@ -214,7 +219,7 @@ def analyze_blood_test(text: str, detailed: bool = True, doctor_notes: str | Non
         _raise_openai_http_error(e)
 
 
-def analyze_blood_test_from_image(image_bytes: bytes, mime_type: str, lang: str | None = None) -> str:
+def analyze_blood_test_from_image(image_bytes: bytes, mime_type: str, lang: str | None = None) -> tuple[str, dict | None]:
     """Görsel (JPG/PNG) tahlil fotoğrafından doğrudan rapor üretir (OpenAI Vision)."""
     lang_instruction = _language_instruction(lang)
     image_prompt = lang_instruction + "\n\n" + IMAGE_PROMPT_BASE
@@ -242,7 +247,12 @@ def analyze_blood_test_from_image(image_bytes: bytes, mime_type: str, lang: str 
 
     try:
         response = _openai_create_with_fallback(_create)
-        return response.choices[0].message.content or "Görsel analiz edilemedi."
+        content = response.choices[0].message.content or "Görsel analiz edilemedi."
+        usage = None
+        if getattr(response, "usage", None):
+            u = response.usage
+            usage = {"prompt_tokens": getattr(u, "prompt_tokens", 0) or 0, "completion_tokens": getattr(u, "completion_tokens", 0) or 0}
+        return content, usage
     except (AuthenticationError, RateLimitError, APIConnectionError, APIError) as e:
         logger.exception("OpenAI API error in analyze_blood_test_from_image: %s", e)
         _raise_openai_http_error(e)

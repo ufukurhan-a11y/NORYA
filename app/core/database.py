@@ -68,6 +68,10 @@ def init_db():
             "ALTER TABLE paymentorder ADD COLUMN coupon_code_used TEXT",
             "ALTER TABLE analysisrecord ADD COLUMN is_favorite BOOLEAN DEFAULT 0",
             "ALTER TABLE paymentorder ADD COLUMN admin_note TEXT",
+            "ALTER TABLE paymentorder ADD COLUMN invoice_ettn TEXT",
+            "ALTER TABLE paymentorder ADD COLUMN invoice_gib_no TEXT",
+            "ALTER TABLE analysis_jobs ADD COLUMN prompt_tokens INTEGER",
+            "ALTER TABLE analysis_jobs ADD COLUMN completion_tokens INTEGER",
         ):
             try:
                 with engine.connect() as conn:

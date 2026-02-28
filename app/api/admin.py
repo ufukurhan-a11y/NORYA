@@ -228,7 +228,7 @@ def admin_analyze_control(
     if not (body.text or "").strip():
         raise HTTPException(status_code=400, detail="Metin boş.")
     try:
-        sonuc = analyze_blood_test(body.text.strip(), detailed=True, lang=body.lang or "tr")
+        sonuc, _ = analyze_blood_test(body.text.strip(), detailed=True, lang=body.lang or "tr")
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"Analiz hatası: {e!s}")
     return {"sonuc": sonuc}

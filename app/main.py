@@ -20,8 +20,9 @@ load_dotenv(_PROJ_ROOT / ".env")
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Query, Request, UploadFile
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
-from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, Response
+from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -108,11 +109,15 @@ def _detect_magic_type(content: bytes) -> str | None:
 
 # Proje kökü: app/main.py -> app/ -> norya/
 _ROOT = Path(__file__).resolve().parent.parent
+_APP_DIR = Path(__file__).resolve().parent
 STATIC_DIR = _ROOT / "static"
 UPLOADS_DIR = _ROOT / "data" / "uploads"  # Yüklenen orijinal belgeler (admin: hastanın gönderdiği)
 # Çalışma dizininden de dene (uvicorn farklı yerden çalıştırılırsa)
 if not STATIC_DIR.is_dir():
     STATIC_DIR = Path.cwd() / "static"
+
+# Jinja2: yasal sayfalar (örn. /iade-iptal) app/templates kullanır
+templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
 
 
 @asynccontextmanager
@@ -304,6 +309,43 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+
+class ForceHTTPSRedirectMiddleware:
+    """Production'da HTTP istekleri HTTPS'e 302 ile yönlendirir (proxy: X-Forwarded-Proto/Host). PayTR güvenli site görsün."""
+
+    def __init__(self, app):
+        self.app = app
+
+    async def __call__(self, scope, receive, send):
+        if scope.get("type") != "http":
+            await self.app(scope, receive, send)
+            return
+        if getattr(settings, "environment", "").lower() != "production":
+            await self.app(scope, receive, send)
+            return
+        if not getattr(settings, "force_https_redirect", True):
+            await self.app(scope, receive, send)
+            return
+        h = {k: v for k, v in (scope.get("headers") or [])}
+        proto = (h.get(b"x-forwarded-proto") or b"").decode("utf-8", errors="ignore").strip().lower()
+        if proto == "https":
+            await self.app(scope, receive, send)
+            return
+        host = (h.get(b"x-forwarded-host") or h.get(b"host") or b"").decode("utf-8", errors="ignore").strip()
+        if not host:
+            host = scope.get("server") and f"{scope['server'][0]}:{scope['server'][1]}" or "localhost"
+        path = (scope.get("path") or "/").strip() or "/"
+        query = scope.get("query_string")
+        if query:
+            path = path + "?" + (query.decode() if isinstance(query, bytes) else query)
+        redirect_url = f"https://{host}{path}"
+        response = RedirectResponse(url=redirect_url, status_code=302)
+        await response(scope, receive, send)
+
+
+app.add_middleware(ForceHTTPSRedirectMiddleware)
+
 app.include_router(auth_router)
 app.include_router(auth_router, prefix="/v1")  # Geriye uyumlu: /v1/auth/login vb.
 app.include_router(new_admin_router)  # Yeni modüler admin (Jinja2); /admin/ -> login/dashboard
@@ -614,6 +656,35 @@ def _inject_ga(html: str) -> str:
     return html.replace("<!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->", inject)
 
 
+LEGAL_PAGES = {
+    "mesafeli-satis-sozlesmesi",
+    "gizlilik-politikasi",
+    "iade-iptal-politikasi",
+    "kvkk-gdpr",
+    "kullanim-sartlari",
+    "iletisim",
+}
+
+
+@app.get("/legal/{page}", response_class=HTMLResponse)
+def legal_page(page: str):
+    """Yasal sayfalar: mesafeli-satis-sozlesmesi, gizlilik-politikasi, iade-iptal-politikasi, kvkk-gdpr, kullanim-sartlari, iletisim."""
+    if page not in LEGAL_PAGES:
+        raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
+    path = STATIC_DIR / "legal" / f"{page}.html"
+    if not path.is_file():
+        path = Path.cwd() / "static" / "legal" / f"{page}.html"
+    if not path.is_file():
+        raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
+    return HTMLResponse(path.read_text(encoding="utf-8"))
+
+
+@app.get("/iade-iptal", response_class=HTMLResponse)
+def iade_iptal_page(request: Request):
+    """PayTR uyumlu İade ve İptal Politikası sayfası. Metin app/templates/legal/iade-iptal-content.html içinde düzenlenebilir."""
+    return templates.TemplateResponse("legal/iade-iptal.html", {"request": request})
+
+
 @app.get("/")
 def index():
     index_file = STATIC_DIR / "index.html"
@@ -836,7 +907,7 @@ async def analyze(
     t0 = time.perf_counter()
     try:
         report_lang = _report_lang_from_request(request, lang)
-        result = analyze_blood_test(text, detailed=True, doctor_notes=doctor_notes, lang=report_lang)
+        result, usage = analyze_blood_test(text, detailed=True, doctor_notes=doctor_notes, lang=report_lang)
         if test_mode:
             return AnalyzeResponse(sonuc=result, analiz_id=None)
         aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes)
@@ -844,6 +915,9 @@ async def analyze(
             job.status = "done"
             job.analysis_record_id = aid
             job.duration_ms = int((time.perf_counter() - t0) * 1000)
+            if usage:
+                job.prompt_tokens = usage.get("prompt_tokens")
+                job.completion_tokens = usage.get("completion_tokens")
             db.add(job)
             db.commit()
         _audit(db, "analyze", user.id, _client_ip(request))
@@ -1017,7 +1091,7 @@ def _process_uploaded_content(
                 db.add(job)
                 db.commit()
                 db.refresh(job)
-            result = analyze_blood_test_from_image(content, mime, lang=report_lang)
+            result, usage = analyze_blood_test_from_image(content, mime, lang=report_lang)
             if not save:
                 return AnalyzeResponse(sonuc=result, analiz_id=None)
             input_preview = f"[Görsel: {filename}]"
@@ -1026,6 +1100,9 @@ def _process_uploaded_content(
                 job.status = "done"
                 job.analysis_record_id = aid
                 job.duration_ms = int((time.perf_counter() - t0) * 1000)
+                if usage:
+                    job.prompt_tokens = usage.get("prompt_tokens")
+                    job.completion_tokens = usage.get("completion_tokens")
                 db.add(job)
                 db.commit()
             _attach_original_file(db, aid, content, filename, "image")
@@ -1044,7 +1121,7 @@ def _process_uploaded_content(
             db.add(job)
             db.commit()
             db.refresh(job)
-        result = analyze_blood_test(text, lang=report_lang)
+        result, usage = analyze_blood_test(text, lang=report_lang)
         if not save:
             return AnalyzeResponse(sonuc=result, analiz_id=None)
         aid = _save_analysis(db, user_id, text[:2000], result, "pdf")
@@ -1052,6 +1129,9 @@ def _process_uploaded_content(
             job.status = "done"
             job.analysis_record_id = aid
             job.duration_ms = int((time.perf_counter() - t0) * 1000)
+            if usage:
+                job.prompt_tokens = usage.get("prompt_tokens")
+                job.completion_tokens = usage.get("completion_tokens")
             db.add(job)
             db.commit()
         _attach_original_file(db, aid, content, filename, "pdf")

@@ -3,7 +3,7 @@
 ## 1. Admin panele giriş
 
 1. Tarayıcıda aç: **http://127.0.0.1:8000/admin**  
-   (Sunucu kapalıysa proje klasöründe `./baslat.sh` çalıştır.)
+   (Sunucu kapalıysa proje klasöründe `./start.sh` çalıştır.)
 
 2. `/admin` sizi otomatik **http://127.0.0.1:8000/admin/login** sayfasına yönlendirir.
 
