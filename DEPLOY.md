@@ -55,5 +55,6 @@ Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri list
 - [ ] SMTP ayarlı (şifre sıfırlama için)
 - [ ] HTTPS ve reverse proxy
 - [ ] `data/uploads` kalıcı
+- [ ] İsteğe bağlı: `GA_MEASUREMENT_ID=G-XXX` (Google Analytics 4); Cloudflare/DNS: `docs/CLOUDFLARE-VE-GOOGLE-ANALYTICS.md`
 
 Bu adımlar tamamsa uygulama yayına hazırdır.

@@ -602,13 +602,28 @@ if getattr(settings, "environment", "development") != "production":
         return {"ok": True}
 
 
+def _inject_ga(html: str) -> str:
+    """GA_MEASUREMENT_ID doluysa GA4 script'ini <!-- GA_INJECT --> yerine koyar; boşsa o satırı siler."""
+    ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
+    inject = (
+        f'<script async src="https://www.googletagmanager.com/gtag/js?id={ga_id}"></script>\n'
+        f'  <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{ga_id}");</script>\n  '
+        if ga_id
+        else ""
+    )
+    return html.replace("<!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->", inject)
+
+
 @app.get("/")
 def index():
     index_file = STATIC_DIR / "index.html"
     if not index_file.is_file():
         index_file = Path.cwd() / "static" / "index.html"
     if index_file.is_file():
-        return FileResponse(str(index_file), media_type="text/html; charset=utf-8")
+        raw = index_file.read_text(encoding="utf-8")
+        if getattr(settings, "ga_measurement_id", ""):
+            raw = _inject_ga(raw)
+        return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
 
 

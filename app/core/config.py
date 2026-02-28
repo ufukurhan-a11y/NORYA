@@ -51,6 +51,8 @@ class Settings(BaseSettings):
     # PWA push bildirimleri (opsiyonel): VAPID public key (base64url). Boşsa push aboneliği alınmaz.
     vapid_public_key: str = ""
     vapid_private_key: str = ""  # Bildirim göndermek için (pywebpush ile kullanılır)
+    # Google Analytics 4: Ölçüm kimliği (G-XXXXXXXXXX). Boşsa script eklenmez.
+    ga_measurement_id: str = ""
 
     model_config = {
         "env_file": _ENV_FILE if _ENV_FILE.is_file() else ".env",
