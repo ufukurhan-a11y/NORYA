@@ -143,6 +143,7 @@ def user_detail(
             .order_by(AuditLog.created_at.desc())
             .limit(100)
         ).all()
+    )
     return templates.TemplateResponse(
         "admin/user_detail.html",
         {

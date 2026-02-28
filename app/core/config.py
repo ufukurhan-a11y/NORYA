@@ -1,14 +1,20 @@
 from pathlib import Path
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
 # .env proje kökünde (norya/): app/core/config.py -> app/core -> app -> norya
 _ROOT = Path(__file__).resolve().parent.parent.parent
 _ENV_FILE = _ROOT / ".env"
 
+# OpenAI anahtarının geçerli sayılması için (başında boşluk vb. olmaması)
+OPENAI_KEY_PREFIX = "sk-"
+
 
 class Settings(BaseSettings):
     openai_api_key: str = ""
+    # Birden fazla anahtar: virgülle ayrılmış. Boşsa OPENAI_API_KEY kullanılır. Biri bozulunca/limit dolunca sıradakine geçilir.
+    openai_api_keys: str = ""
     secret_key: str = "change-me-in-production"
     database_url: str = "sqlite:///./norya.db"
     # CORS: virgülle ayrılmış origin listesi; production'da https://alandiniz.com
@@ -51,5 +57,37 @@ class Settings(BaseSettings):
         "extra": "ignore",
     }
 
+    @field_validator("openai_api_key", mode="before")
+    @classmethod
+    def strip_openai_key(cls, v: str | None) -> str:
+        """Boşluk/yanlış kopya kaynaklı hataları azaltır."""
+        return (v or "").strip()
+
+    @field_validator("openai_api_keys", mode="before")
+    @classmethod
+    def strip_openai_keys(cls, v: str | None) -> str:
+        return (v or "").strip()
+
 
 settings = Settings()
+
+
+def get_openai_keys() -> list[str]:
+    """
+    Geçerli OpenAI anahtarlarını döner (sk- ile başlayan, boşluksuz).
+    OPENAI_API_KEYS varsa virgülle ayrılmış liste; yoksa OPENAI_API_KEY tek eleman.
+    """
+    keys_raw = (settings.openai_api_keys or "").strip()
+    if keys_raw:
+        keys = [k.strip() for k in keys_raw.split(",") if k.strip() and k.strip().startswith(OPENAI_KEY_PREFIX)]
+        if keys:
+            return keys
+    single = (settings.openai_api_key or "").strip()
+    if single and single.startswith(OPENAI_KEY_PREFIX):
+        return [single]
+    return []
+
+
+def is_openai_configured() -> bool:
+    """En az bir geçerli OpenAI anahtarı var mı?"""
+    return len(get_openai_keys()) > 0

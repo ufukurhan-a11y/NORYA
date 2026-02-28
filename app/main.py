@@ -33,7 +33,7 @@ from app.admin import admin_router as new_admin_router
 from app.api.admin import get_admin_html, router as admin_router
 from app.api.auth import router as auth_router
 from app.api.deps import get_current_user
-from app.core.config import settings
+from app.core.config import is_openai_configured, settings
 from app.core.database import engine, get_db, init_db
 from app.core.rate_limit import limiter
 from app.core.geo import get_country_from_ip
@@ -118,8 +118,22 @@ if not STATIC_DIR.is_dir():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
-    key_ok = bool((settings.openai_api_key or "").strip())
-    log.info("OPENAI_API_KEY loaded: %s", "yes" if key_ok else "NO (.env dosyasına OPENAI_API_KEY=sk-... ekleyin)")
+    key_ok = is_openai_configured()
+    if key_ok:
+        log.info("OPENAI_API_KEY: ok (sk-... ile yüklendi)")
+    else:
+        log.error(
+            "OPENAI_API_KEY EKSİK VEYA GEÇERSİZ — Analiz çalışmaz. .env dosyasına OPENAI_API_KEY=sk-... ekleyin (başında/sonunda boşluk olmasın)."
+        )
+        if getattr(settings, "environment", "").lower() == "production":
+            raise RuntimeError(
+                "OPENAI_API_KEY tanımlı değil. Production'da analiz servisi açılamaz. .env veya ortam değişkenine OPENAI_API_KEY=sk-... ekleyin."
+            )
+    env_prod = getattr(settings, "environment", "").lower() == "production"
+    if env_prod and (not settings.secret_key or settings.secret_key == "change-me-in-production"):
+        raise RuntimeError(
+            "SECRET_KEY production'da değiştirilmeli. .env içinde SECRET_KEY=<güçlü-rastgele-key> ekleyin (örn. openssl rand -hex 32)."
+        )
     from app.services.email_sender import is_mail_configured
     if is_mail_configured():
         log.info("E-posta (şifre sıfırlama): SMTP yapılandırıldı, gerçek mail gönderilecek.")
@@ -325,7 +339,7 @@ if STATIC_DIR.is_dir():
 
 @app.get("/health")
 def health():
-    openai_configured = bool((getattr(settings, "openai_api_key", None) or "").strip())
+    openai_configured = is_openai_configured()
     database_status = "ok"
     try:
         with Session(engine) as s:
@@ -338,6 +352,37 @@ def health():
         "openai_configured": openai_configured,
         "database": database_status,
     }
+
+
+# /health/ai: OpenAI erişim kontrolü, 60 sn TTL cache (admin dashboard için)
+_AI_HEALTH_CACHE: dict = {"ts": 0.0, "data": None}
+_AI_HEALTH_CACHE_TTL = 60.0
+
+
+@app.get("/health/ai")
+def health_ai():
+    """AI (OpenAI) durumu: status, provider, latency_ms, error. 60 sn cache."""
+    import time as _time
+    from app.services.analyze import ping_openai
+
+    now = _time.time()
+    cache = _AI_HEALTH_CACHE
+    if cache["data"] is not None and (now - cache["ts"]) < _AI_HEALTH_CACHE_TTL:
+        return cache["data"]
+
+    ok, latency_ms, err = ping_openai()
+    if ok:
+        data = {"status": "ok", "provider": "openai", "latency_ms": latency_ms}
+    else:
+        data = {
+            "status": "fail",
+            "provider": "openai",
+            "latency_ms": latency_ms,
+            "error": err or "Bilinmeyen hata",
+        }
+    cache["ts"] = now
+    cache["data"] = data
+    return data
 
 
 # Ülke kodu -> dil kodu. Global: tr, en, de, ar, he, hi, it, es, fr
@@ -541,9 +586,11 @@ async def push_subscribe(
 @app.get("/api-check")
 def api_check():
     """OpenAI anahtarı yüklü mü kontrol et (anahtar gösterilmez)."""
-    from app.core.config import settings
-    key_ok = bool(settings.openai_api_key and settings.openai_api_key.startswith("sk-"))
-    return {"openai_ayarli": key_ok, "mesaj": "Anahtar tanımlı." if key_ok else "OPENAI_API_KEY .env'de eksik veya geçersiz."}
+    key_ok = is_openai_configured()
+    return {
+        "openai_ayarli": key_ok,
+        "mesaj": "Anahtar tanımlı (sk-...)." if key_ok else "OPENAI_API_KEY .env'de eksik veya geçersiz (sk- ile başlamalı, boşluksuz).",
+    }
 
 
 # DEBUG ONLY: Rate limit test endpoint — production'da kapalı (kolayca silinebilir)
@@ -567,8 +614,8 @@ def index():
 
 # Ücretsiz planda: ilk analiz ücretsiz, sonrası için ödeme gerekir (ayda 1 hak)
 AYLIK_LIMIT_UCRETSIZ = 1
-# Pro planında limit yok (büyük sayı)
-AYLIK_LIMIT_PRO = 999_999
+# Pro planı (50€ aylık / 99€ yıllık): ayda 10+3 = 13 analiz
+AYLIK_LIMIT_PRO = 13
 
 
 def _ayin_ilk_gunu() -> datetime:

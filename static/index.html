@@ -13,6 +13,15 @@
   <link rel="icon" type="image/svg+xml" href="/static/icon.svg" />
   <link rel="apple-touch-icon" href="/static/icon.svg" />
   <title>Norya — Güvenilir Yapay Zeka Kan Tahlili Analizi</title>
+  <meta name="description" content="Kan tahlili sonuçlarınızı yapay zeka ile anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
+  <meta property="og:title" content="Norya — Güvenilir Yapay Zeka Kan Tahlili Analizi" />
+  <meta property="og:description" content="Kan tahlili sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor alın. 9 dilde." />
+  <meta property="og:image" content="/static/logo.png" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="tr_TR" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="Norya — Kan Tahlili Analizi" />
+  <meta name="twitter:description" content="Kan tahlili sonuçlarınızı yapay zeka ile anlaşılır dilde açıklayın." />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -87,13 +96,19 @@
     .risk-legend span.risk-red { background: linear-gradient(135deg, #b91c1c, #ef4444); box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35); }
     .value-bar-marker { position: absolute; top: -3px; width: 4px; height: 18px; border-radius: 2px; background: #0a1929; transform: translateX(-50%); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
     .dark .value-bar-marker { background: #e8eef4; }
-    /* Apple / Android: güvenli alan (çentik, yuvarlak köşe) ve mobil viewport */
-    body { padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); min-height: 100vh; min-height: -webkit-fill-available; }
+    /* Safari / iOS: sayfa kaydırma ve viewport */
+    html { overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    body { position: relative; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); min-height: 100vh; min-height: -webkit-fill-available; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+    @supports (min-height: 100dvh) {
+      body { min-height: 100dvh; }
+    }
     nav { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
     @media (pointer: coarse) {
       button:not([class*="p-"]):not([class*="px-"]):not([class*="py-"]), .touch-target-min { min-height: 44px; min-width: 44px; }
     }
+    /* Erişilebilirlik: ekran okuyucu için etiket (görselde gizli) */
+    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     /* Kapalı modallar tıklamayı asla engellemesin (görünmez overlay riski) */
     #modal-login.hidden, #modal-register.hidden, #modal-forgot.hidden, #modal-reset.hidden,
     #guest-checkout-modal.hidden, #payment-modal.hidden, #a2hs-banner.hidden, #ios-a2hs-banner.hidden {
@@ -103,20 +118,13 @@
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
   <!-- Nav -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-white backdrop-blur-sm border-b border-slate-200 shadow-sm pt-[env(safe-area-inset-top)]">
-    <div class="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-      <a href="#" class="flex items-center gap-2.5">
-        <span class="norya-logo w-12 h-12 sm:w-14 sm:h-14 flex items-center justify-center flex-shrink-0 rounded-2xl shadow-lg" aria-hidden="true">
-          <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full rounded-2xl">
-            <rect width="36" height="36" rx="12" fill="var(--norya-brand)"/>
-            <path d="M10 26V10h3.2l5.6 10.4V10H22v16h-3.2L13.2 15.6V26H10z" fill="#fff"/>
-            <circle cx="26" cy="24" r="2.5" fill="#fff" opacity="0.9"/>
-          </svg>
-        </span>
-        <span class="font-bold text-norya-brand text-xl sm:text-2xl tracking-tight">Norya</span>
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-accent-900 border-b border-slate-200 dark:border-accent-700 shadow-sm pt-[env(safe-area-inset-top)]">
+    <div class="max-w-6xl mx-auto px-4 flex items-center justify-between py-2 h-24 sm:h-28 min-h-0">
+      <a href="#" class="flex items-center min-h-0 shrink-0 rounded-lg -ml-14 sm:-ml-24 overflow-hidden">
+        <img src="/static/logo.png" alt="Norya AI" class="h-[92px] sm:h-[108px] w-auto max-w-[500px] sm:max-w-[620px] flex-shrink-0 object-contain object-left bg-white" />
       </a>
       <div class="flex items-center gap-2 sm:gap-4">
-        <button type="button" onclick="toggleDark()" class="p-2 rounded-lg text-slate-700 hover:bg-slate-100" aria-label="Tema" id="theme-btn">
+        <button type="button" onclick="toggleDark()" class="p-2 rounded-lg text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700" aria-label="Tema değiştir (açık/koyu)" id="theme-btn">
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
         <div class="relative" id="lang-wrap">
@@ -185,7 +193,11 @@
         <button onclick="openRegister(); scrollToAnalyze();" class="px-8 py-4 rounded-2xl bg-white text-navy-900 font-semibold hover:bg-primary-50 norya-card-shadow inline-flex items-center justify-center gap-2 transition hover:scale-[1.02]" data-i18n="hero_cta">İlk Analizimi Ücretsiz Yap</button>
         <a href="#ornek-rapor" class="px-8 py-4 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 inline-flex items-center justify-center font-medium transition" data-i18n="hero_see_sample">Örnek Raporu Gör</a>
       </div>
-      <p class="mt-6 text-navy-200 text-sm font-medium" data-i18n="hero_secure">Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu</p>
+      <ul class="mt-6 flex flex-wrap justify-center gap-x-6 gap-y-2 text-navy-200 text-sm font-medium" aria-label="Güven rozetleri">
+        <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL ile korunur</span></li>
+        <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡️</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR uyumlu</span></li>
+        <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">PayTR ile güvenli ödeme</span></li>
+      </ul>
     </div>
     <!-- Örnek rapor taslağı -->
     <div class="max-w-2xl mx-auto mt-14 relative z-10">
@@ -216,12 +228,12 @@
 
   <!-- Güven çizgisi -->
   <div class="py-5 px-4 bg-navy-800/30 dark:bg-navy-900/50 border-y border-navy-700/50">
-    <p class="text-center text-sm text-navy-200 dark:text-navy-200 font-medium">
+    <p class="text-center text-sm sm:text-base text-white/95 font-semibold">
       <span class="inline-flex items-center gap-1.5" data-i18n="trust_since">2017'den beri</span>
-      <span class="mx-2 text-primary-400">•</span>
+      <span class="mx-2 text-primary-300">•</span>
       <span class="inline-flex items-center gap-1.5" data-i18n="trust_satisfaction">%100 müşteri memnuniyeti</span>
     </p>
-    <p class="text-center text-sm text-primary-300 dark:text-primary-400 font-medium mt-1" data-i18n="trust_users">100.000+ kullanıcıya bu zamana kadar hizmet verdik</p>
+    <p class="text-center text-sm sm:text-base text-primary-200 dark:text-primary-100 font-semibold mt-1" data-i18n="trust_users">100.000+ kullanıcıya bu zamana kadar hizmet verdik</p>
   </div>
 
   <!-- Norya nedir / Biz kimiz -->
@@ -684,6 +696,36 @@
           </div>
           <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_4_quote">Üç aydır neredeyse her tahlil sonrası hastalarıma Norya çıktısı veriyorum. Artık alışkanlık oldu, memnunlar. Sürekli buradan sonuç vereceğim.</p>
         </div>
+        <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-12 h-12 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold shrink-0">ŞA</span>
+            <div>
+              <p class="font-semibold text-accent-900 dark:text-white" data-i18n="doctor_5_name">Dr. Şebnem A.</p>
+              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_5_role">Endokrinoloji</p>
+            </div>
+          </div>
+          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_5_quote">Diyabet ve tiroid takibinde hastalarıma Norya raporunu öneriyorum. Değerleri evde okuyup randevuya gelince daha bilinçli soru soruyorlar. Tavsiye ediyorum.</p>
+        </div>
+        <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-12 h-12 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold shrink-0">TŞ</span>
+            <div>
+              <p class="font-semibold text-accent-900 dark:text-white" data-i18n="doctor_6_name">Dr. Tolga Ş.</p>
+              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_6_role">Aile Hekimi</p>
+            </div>
+          </div>
+          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_6_quote">Tahlil sonucu verirken «Norya'da açtır, özet çıkar» diyorum. Özellikle yaşlı hastalarım raporu anlaşılır buluyor. Kullanmaya devam edeceğim.</p>
+        </div>
+        <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
+          <div class="flex items-center gap-3 mb-4">
+            <span class="w-12 h-12 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold shrink-0">NY</span>
+            <div>
+              <p class="font-semibold text-accent-900 dark:text-white" data-i18n="doctor_7_name">Dr. Nazlı Y.</p>
+              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_7_role">Dahiliye Uzmanı</p>
+            </div>
+          </div>
+          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_7_quote">Kontrol randevularında hastanın tahlilini Norya ile birlikte yorumluyoruz. Hem hasta hem ben zaman kazanıyoruz. Teşhis yerine geçmez ama hazırlık için çok faydalı.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -696,13 +738,7 @@
       <div class="rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 overflow-hidden shadow-lg">
         <div class="px-5 py-4 border-b-2 border-norya-brand bg-[var(--norya-brand-light)] flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-3">
-            <span class="w-10 h-10 flex-shrink-0 rounded-xl shadow-md flex items-center justify-center">
-              <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full rounded-xl">
-                <rect width="36" height="36" rx="12" fill="var(--norya-brand)"/>
-                <path d="M10 26V10h3.2l5.6 10.4V10H22v16h-3.2L13.2 15.6V26H10z" fill="#fff"/>
-                <circle cx="26" cy="24" r="2.5" fill="#fff" opacity="0.9"/>
-              </svg>
-            </span>
+            <img src="/static/logo.png" alt="Norya AI" class="h-14 w-auto flex-shrink-0 object-contain bg-white" />
             <div>
               <h3 class="font-bold text-norya-brand" data-i18n="example_report_heading">Norya Analiz Raporu</h3>
               <p class="text-xs text-navy-500 dark:text-navy-400 mt-0.5" data-i18n="example_report_date">Örnek tarih</p>
@@ -903,7 +939,7 @@
       <div id="analyze-box" class="bg-white dark:bg-navy-800/90 rounded-3xl p-8 norya-card-shadow border border-navy-100 dark:border-navy-600/50 backdrop-blur">
         <p id="analyze-login-prompt" class="text-navy-600 dark:text-navy-300 text-center py-10 font-medium"><span data-i18n="analyze_prompt">Analiz yapmak için lütfen </span><button type="button" onclick="openLogin()" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline" data-i18n="nav_login">Giriş</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button>.</p>
         <div id="analyze-form" class="hidden">
-          <div class="flex flex-wrap items-center gap-2 mb-2">
+          <div class="flex flex-wrap items-center gap-2 mb-4">
             <p id="analyze-usage" class="text-accent-600 dark:text-accent-400 text-sm mb-0"></p>
             <button type="button" id="test-mode-btn" onclick="toggleTestMode()" class="text-xs px-2 py-1 rounded-lg border border-emerald-500 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30" data-i18n="test_mode_link">Sınırsız test</button>
             <span id="test-mode-badge" class="hidden text-xs px-2 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-medium" data-i18n="test_mode_on">Test modu – sınırsız, hak düşülmez</span>
@@ -912,43 +948,119 @@
           <div id="analyze-payment-actions" class="hidden mb-3 flex flex-wrap gap-2">
             <button type="button" onclick="goToPayment('single')" class="px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-medium hover:bg-primary-700" data-i18n="payment_btn_single">1 Analiz Satın Al</button>
             <button type="button" onclick="goToPayment('monthly')" class="px-4 py-2 rounded-xl bg-accent-600 text-white text-sm font-medium hover:bg-accent-700" data-i18n="payment_btn_pro">Pro'ya Geç</button>
-          </div>          <label for="analyze-text" class="block text-sm font-semibold text-navy-700 dark:text-navy-200 mb-2">Tahlil metni</label>
-          <textarea id="analyze-text" name="analyze-text" rows="5" class="w-full rounded-2xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-900/50 text-navy-900 dark:text-white p-4 focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition" data-i18n-placeholder="analyze_placeholder" placeholder="Örn: Hemoglobin: 14 g/dL, WBC: 7.2, Glukoz: 95 mg/dL..."></textarea>
-          <label class="block mt-4 text-sm font-semibold text-navy-700 dark:text-navy-200" data-i18n="analyze_doctor_notes_label">Doktorunuzun notu / ek bilgi (isteğe bağlı)</label>
-          <textarea id="analyze-doctor-notes" rows="2" class="mt-1 w-full rounded-2xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-900/50 text-navy-900 dark:text-white p-3 text-sm focus:ring-2 focus:ring-primary-500 transition" data-i18n-placeholder="analyze_doctor_notes_placeholder" placeholder="Örn: Doktorum B12 takviyesi verdi, bu sonuçla birlikte değerlendirin."></textarea>
-          <p class="text-center text-navy-500 text-sm my-3 font-medium" data-i18n="analyze_or">— veya —</p>
-          <div class="border-2 border-dashed border-primary-300 dark:border-primary-600 rounded-2xl p-6 text-center bg-primary-50/50 dark:bg-primary-900/20">
-            <input type="file" id="analyze-pdf" accept=".pdf,.jpg,.jpeg,.png" class="hidden" />
-            <button type="button" onclick="document.getElementById('analyze-pdf').click()" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline" data-i18n="analyze_upload_btn">PDF veya görsel (JPG, PNG) yükle</button>
-            <span id="pdf-name" class="text-sm text-navy-500 ml-2"></span>
-            <p class="text-xs text-navy-500 mt-2" data-i18n="analyze_upload_hint">Dosyayı seçin (adı görünecek), sonra aşağıdaki Analiz Et'e tıklayın.</p>
           </div>
-          <button type="button" onclick="runAnalyze()" id="analyze-btn" class="mt-6 w-full py-4 rounded-2xl bg-primary-600 text-white font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed norya-card-shadow transition hover:scale-[1.01]" data-i18n="analyze_btn">Analiz Et</button>
-          <div id="analyze-result" class="mt-8 rounded-3xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-800/90 overflow-hidden hidden norya-card-shadow">
-            <div class="px-6 py-5 border-b-2 border-norya-brand bg-[var(--norya-brand-light)] flex flex-wrap items-center justify-between gap-2">
+
+          <!-- 4 adımlı sihirbaz: stepper -->
+          <div id="wizard-stepper" class="flex items-center justify-between mb-8">
+            <div class="flex items-center flex-1">
+              <div id="wizard-dot-1" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm bg-primary-600 border-primary-600 text-white">1</div>
+              <div id="wizard-line-1" class="flex-1 h-0.5 mx-1 bg-primary-300 dark:bg-primary-700 min-w-[20px]"></div>
+            </div>
+            <div class="flex items-center flex-1">
+              <div id="wizard-dot-2" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm border-navy-300 dark:border-navy-600 text-navy-500 bg-white dark:bg-navy-800">2</div>
+              <div id="wizard-line-2" class="flex-1 h-0.5 mx-1 bg-navy-200 dark:bg-navy-700 min-w-[20px]"></div>
+            </div>
+            <div class="flex items-center flex-1">
+              <div id="wizard-dot-3" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm border-navy-300 dark:border-navy-600 text-navy-500 bg-white dark:bg-navy-800">3</div>
+              <div id="wizard-line-3" class="flex-1 h-0.5 mx-1 bg-navy-200 dark:bg-navy-700 min-w-[20px]"></div>
+            </div>
+            <div class="flex items-center">
+              <div id="wizard-dot-4" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm border-navy-300 dark:border-navy-600 text-navy-500 bg-white dark:bg-navy-800">4</div>
+            </div>
+          </div>
+
+          <!-- Adım 1: Dosya yükleme -->
+          <div id="wizard-step-1" class="wizard-step">
+            <p class="text-sm font-semibold text-navy-700 dark:text-navy-200 mb-3" data-i18n="wizard_step1_title">Dosya veya metin</p>
+            <div id="wizard-drop-zone" class="border-2 border-dashed border-primary-400 dark:border-primary-500 rounded-2xl p-8 sm:p-10 text-center bg-primary-50/50 dark:bg-primary-900/20 transition hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/30 cursor-pointer">
+              <input type="file" id="analyze-pdf" accept=".pdf,.jpg,.jpeg,.png" class="hidden" />
+              <div class="flex flex-col items-center gap-2">
+                <span class="text-4xl" aria-hidden="true">📄</span>
+                <p class="text-navy-700 dark:text-navy-200 font-medium" data-i18n="wizard_drop">Dosyayı buraya sürükleyin veya tıklayın</p>
+                <p class="text-xs text-navy-500 dark:text-navy-400" data-i18n="analyze_upload_hint">PDF, JPG veya PNG — en fazla 15 MB</p>
+                <span id="pdf-name" class="text-sm text-primary-600 dark:text-primary-400 font-medium mt-1"></span>
+              </div>
+            </div>
+            <p class="text-center text-navy-500 text-sm my-4 font-medium" data-i18n="analyze_or">— veya metin yapıştır —</p>
+            <textarea id="analyze-text" name="analyze-text" rows="4" aria-describedby="analyze-error analyze-usage" class="w-full rounded-2xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-900/50 text-navy-900 dark:text-white p-4 focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition text-sm" data-i18n-placeholder="analyze_placeholder" placeholder="Örn: Hemoglobin: 14 g/dL, WBC: 7.2, Glukoz: 95 mg/dL..."></textarea>
+          </div>
+
+          <!-- Adım 2: Önizleme + dil -->
+          <div id="wizard-step-2" class="wizard-step hidden">
+            <p class="text-sm font-semibold text-navy-700 dark:text-navy-200 mb-3" data-i18n="wizard_step2_title">Önizleme ve dil</p>
+            <div id="wizard-preview-card" class="rounded-2xl border-2 border-primary-200 dark:border-primary-700 bg-primary-50/30 dark:bg-primary-900/20 p-4 mb-4">
+              <div id="wizard-preview-file" class="flex items-center gap-3">
+                <div id="wizard-thumb" class="w-14 h-14 rounded-xl bg-navy-200 dark:bg-navy-700 flex items-center justify-center text-2xl shrink-0">📄</div>
+                <div class="min-w-0">
+                  <p id="wizard-preview-name" class="font-medium text-navy-900 dark:text-white truncate">—</p>
+                  <p id="wizard-preview-meta" class="text-xs text-navy-500 dark:text-navy-400">—</p>
+                </div>
+              </div>
+              <div id="wizard-preview-text" class="hidden">
+                <p class="text-xs text-navy-500 dark:text-navy-400 mb-1" data-i18n="wizard_preview_text">Metin girişi</p>
+                <p id="wizard-preview-char" class="font-medium text-navy-900 dark:text-white">0 karakter</p>
+              </div>
+            </div>
+            <label class="block text-sm font-semibold text-navy-700 dark:text-navy-200 mb-2" data-i18n="wizard_lang">Rapor dili</label>
+            <select id="wizard-lang" class="w-full rounded-xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-900/50 text-navy-900 dark:text-white px-4 py-2.5 focus:ring-2 focus:ring-primary-500 mb-4">
+              <option value="tr">Türkçe</option>
+              <option value="en">English</option>
+              <option value="de">Deutsch</option>
+              <option value="it">Italiano</option>
+              <option value="es">Español</option>
+              <option value="fr">Français</option>
+              <option value="el">Ελληνικά</option>
+              <option value="he">עברית</option>
+              <option value="ar">العربية</option>
+              <option value="hi">हिन्दी</option>
+              <option value="cs">Čeština</option>
+              <option value="sr">Srpski</option>
+            </select>
+            <label class="block text-sm font-semibold text-navy-700 dark:text-navy-200 mb-1" data-i18n="analyze_doctor_notes_label">Doktor notu (isteğe bağlı)</label>
+            <textarea id="analyze-doctor-notes" rows="2" class="w-full rounded-xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-900/50 text-navy-900 dark:text-white p-3 text-sm focus:ring-2 focus:ring-primary-500" data-i18n-placeholder="analyze_doctor_notes_placeholder" placeholder="Örn: Doktorum B12 takviyesi verdi."></textarea>
+          </div>
+
+          <!-- Adım 3: Analiz ediliyor -->
+          <div id="wizard-step-3" class="wizard-step hidden">
+            <p class="text-sm font-semibold text-navy-700 dark:text-navy-200 mb-4" data-i18n="wizard_step3_title">Raporunuz hazırlanıyor</p>
+            <div class="rounded-2xl border-2 border-primary-200 dark:border-primary-700 bg-primary-50/30 dark:bg-primary-900/20 p-6 sm:p-8">
+              <div class="h-2 rounded-full bg-primary-200 dark:bg-primary-800 overflow-hidden">
+                <div id="wizard-progress-bar" class="h-full rounded-full bg-primary-600 dark:bg-primary-500 transition-all duration-500" style="width: 0%"></div>
+              </div>
+              <p class="text-center text-navy-600 dark:text-navy-300 text-sm mt-4" data-i18n="wizard_step3_time">Ortalama 20–30 saniye sürer.</p>
+            </div>
+          </div>
+
+          <!-- Adım 4: Sonuç (mevcut bileşen) -->
+          <div id="wizard-step-4" class="wizard-step hidden">
+            <div id="analyze-result" class="rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-primary-50/40 dark:bg-navy-800/90 overflow-hidden shadow-xl shadow-primary-900/5 dark:shadow-black/20">
+            <div class="px-6 py-5 border-b border-primary-200 dark:border-primary-800 bg-gradient-to-r from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700 flex flex-wrap items-center justify-between gap-2">
               <div class="flex items-center gap-3">
-                <span class="norya-logo w-10 h-10 flex-shrink-0 rounded-xl shadow-md flex items-center justify-center" aria-hidden="true">
-                  <svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" class="w-full h-full rounded-xl">
-                    <rect width="36" height="36" rx="12" fill="var(--norya-brand)"/>
-                    <path d="M10 26V10h3.2l5.6 10.4V10H22v16h-3.2L13.2 15.6V26H10z" fill="#fff"/>
-                    <circle cx="26" cy="24" r="2.5" fill="#fff" opacity="0.9"/>
-                  </svg>
-                </span>
+                <img src="/static/logo.png" alt="Norya AI" class="h-20 sm:h-24 w-auto flex-shrink-0 object-contain rounded-xl p-1.5 bg-primary-200/40 dark:bg-primary-300/30 border border-primary-300/50 dark:border-primary-400/30" />
                 <div>
-                  <h3 class="font-bold text-norya-brand text-lg" data-i18n="report_title">Norya Analiz Raporu</h3>
-                  <p class="text-xs text-navy-500 dark:text-navy-400 mt-0.5" id="analyze-result-date"></p>
+                  <h3 class="font-bold text-white text-lg drop-shadow-sm" data-i18n="report_title">Norya Analiz Raporu</h3>
+                  <p class="text-xs text-primary-100 mt-0.5" id="analyze-result-date"></p>
                 </div>
               </div>
               <div class="flex flex-wrap gap-2">
-                <button type="button" onclick="downloadReportPdf()" class="text-xs px-4 py-2 rounded-xl bg-norya-brand hover:bg-norya-brand-hover text-white font-medium transition" data-i18n="report_download">Raporu İndir</button>
-                <button type="button" onclick="downloadForDoctor()" class="text-xs px-4 py-2 rounded-xl bg-norya-brand hover:bg-norya-brand-hover text-white font-medium transition" data-i18n="report_for_doctor">Doktoruma götür</button>
-                <button type="button" onclick="copyShareLink()" class="text-xs px-4 py-2 rounded-xl report-btn-outline font-medium transition" data-i18n="report_copy_link">Link Kopyala</button>
+                <button type="button" onclick="downloadReportPdf()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_download">Raporu İndir</button>
+                <button type="button" onclick="downloadForDoctor()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_for_doctor">Doktoruma götür</button>
+                <button type="button" onclick="shareReport()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_share">Raporumu Paylaş</button>
+                <button type="button" onclick="copyShareLink()" class="text-xs px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-medium transition border border-white/40" data-i18n="report_copy_link">Link Kopyala</button>
               </div>
             </div>
-            <div id="analyze-result-body" class="p-6 space-y-4"></div>
-            <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-navy-200 dark:border-navy-600"></div>
+            <div id="analyze-result-body" class="p-6 space-y-4 bg-white/80 dark:bg-navy-800/50"></div>
+            <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
+            </div>
           </div>
-          <p id="analyze-error" class="mt-2 text-red-600 text-sm hidden"></p>
+
+          <!-- Sihirbaz: Geri / Sonraki. runAnalyze() analyze-btn arar; wizard'da gizli tutuyoruz. -->
+          <button type="button" id="analyze-btn" class="hidden" aria-hidden="true">Analiz Et</button>
+          <div id="wizard-actions" class="mt-6 flex flex-wrap gap-3">
+            <button type="button" id="wizard-btn-prev" onclick="wizardPrev()" class="px-5 py-2.5 rounded-xl border-2 border-navy-200 dark:border-navy-600 text-navy-700 dark:text-navy-200 font-medium hover:bg-navy-50 dark:hover:bg-navy-800/50 transition hidden" data-i18n="wizard_back">Geri</button>
+            <button type="button" id="wizard-btn-next" onclick="wizardNext()" class="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition flex-1 min-w-[140px]" data-i18n="wizard_next">Sonraki</button>
+          </div>
+          <p id="analyze-error" class="mt-2 text-red-600 text-sm hidden" role="alert" aria-live="assertive"></p>
         </div>
       </div>
     </div>
@@ -990,9 +1102,12 @@
     <div class="max-w-xl mx-auto">
       <a href="#fiyatlandirma" onclick="document.getElementById('odeme-section').classList.add('hidden')" class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:underline mb-6" data-i18n="checkout_back">← Planı değiştir</a>
       <div class="rounded-2xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-accent-800 overflow-hidden drop-shadow-soft">
-        <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-white">
-          <h2 class="text-xl font-bold" data-i18n="checkout_title">Ödeme özeti</h2>
-          <p class="text-primary-100 text-sm mt-0.5" data-i18n="checkout_subtitle">Norya — Kan tahlili analizi</p>
+        <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-white flex items-center gap-3">
+          <img src="/static/logo.png" alt="Norya AI" class="h-12 w-auto flex-shrink-0 object-contain rounded-lg bg-white/95" />
+          <div>
+            <h2 class="text-xl font-bold" data-i18n="checkout_title">Ödeme özeti</h2>
+            <p class="text-primary-100 text-sm mt-0.5" data-i18n="checkout_subtitle">Norya — Kan tahlili analizi</p>
+          </div>
         </div>
         <div class="p-6">
           <p class="text-xs font-medium text-accent-500 dark:text-accent-400 mb-2" data-i18n="checkout_choose_plan">Planı değiştir</p>
@@ -1029,6 +1144,9 @@
             <span data-i18n="checkout_secure">Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.</span>
           </p>
           <button type="button" id="checkout-pay-btn" onclick="submitCheckout()" class="mt-6 w-full py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg transition shadow-lg" data-i18n="checkout_btn">Güvenli ödemeye geç</button>
+          <p class="mt-3 flex justify-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-medium" data-i18n="trust_badge_secure_paytr">🔒 Güvenli ödeme – PayTR</span>
+          </p>
           <p class="mt-3 text-center text-xs text-accent-500" data-i18n="checkout_paytr_note">PayTR ayarlı değilse kart ödeme sayfası açılmaz; ödeme özeti ve indirim kodu burada görüntülenir.</p>
         </div>
       </div>
@@ -1056,9 +1174,9 @@
         <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border border-accent-100 dark:border-accent-700">
           <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_monthly_title">Aylık Abonelik</h3>
           <p class="mt-2 text-3xl font-bold text-primary-600"><span id="price-monthly">50</span> <span id="price-symbol-monthly">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_month">/ay</span></p>
-          <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">5 analiz raporu / ay</p>
+          <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">10+3 analiz / ay</p>
           <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400">
-            <li data-i18n="price_monthly_1">✓ Ayda toplam 5 analiz raporu</li>
+            <li data-i18n="price_monthly_1">✓ Ayda 10+3 analiz</li>
             <li data-i18n="price_monthly_2">✓ Metin, PDF ve görsel yükleme</li>
             <li data-i18n="price_monthly_3">✓ Detaylı rapor + geçmiş</li>
           </ul>
@@ -1068,9 +1186,9 @@
           <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary-600 text-white text-xs font-medium" data-i18n="price_best_badge">En avantajlı</span>
           <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_yearly_title">Yıllık Abonelik</h3>
           <p class="mt-2 text-3xl font-bold text-primary-600"><span id="price-yearly">99</span> <span id="price-symbol-yearly">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span></p>
-          <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">13 + 3 hediye = toplam 16 analiz</p>
+          <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">10+3 analiz / ay</p>
           <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400">
-            <li data-i18n="price_yearly_1">✓ Yılda toplam 16 analiz (3'ü bizden hediye)</li>
+            <li data-i18n="price_yearly_1">✓ Ayda 10+3 analiz (yıllık abonelik)</li>
             <li data-i18n="price_yearly_2">✓ Metin, PDF ve görsel yükleme</li>
             <li data-i18n="price_yearly_3">✓ Detaylı rapor + geçmiş</li>
           </ul>
@@ -1078,6 +1196,112 @@
         </div>
       </div>
       <p class="mt-6 text-center text-sm text-accent-500 dark:text-accent-500 max-w-xl mx-auto" data-i18n="price_no_renewal">Pro paketleri satın aldığınız dönem boyunca geçerlidir (aylık 30 gün, yıllık 365 gün). Otomatik yenileme yoktur; süre bitince isterseniz tekrar satın alabilirsiniz.</p>
+
+      <!-- Planları karşılaştır tablosu -->
+      <h3 class="text-xl font-bold text-center text-accent-900 dark:text-white mt-16 mb-2" data-i18n="compare_title">Tüm planları karşılaştırın</h3>
+      <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-6" data-i18n="compare_subtitle">İhtiyacınıza uygun planı seçin.</p>
+      <div class="overflow-x-auto rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-sm">
+        <table class="w-full text-sm border-collapse" role="grid">
+          <thead>
+            <tr class="border-b border-accent-200 dark:border-accent-700">
+              <th class="text-left py-4 px-4 font-semibold text-accent-900 dark:text-white bg-accent-50 dark:bg-accent-900/50 rounded-tl-2xl" data-i18n="compare_feature">Özellik</th>
+              <th class="text-center py-4 px-3 font-semibold text-accent-700 dark:text-accent-300">Ücretsiz</th>
+              <th class="text-center py-4 px-3 font-semibold text-accent-700 dark:text-accent-300">Tek Analiz</th>
+              <th class="text-center py-4 px-3 font-semibold text-accent-700 dark:text-accent-300">Aylık</th>
+              <th class="text-center py-4 px-3 font-semibold text-primary-600 dark:text-primary-400 bg-primary-50/50 dark:bg-primary-900/20 rounded-tr-2xl">
+                <span class="inline-block px-2 py-0.5 rounded-full bg-primary-600 text-white text-xs font-medium mb-1" data-i18n="price_best_badge">En avantajlı</span>
+                <span class="block">Yıllık</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody class="text-accent-700 dark:text-accent-300">
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_analyses">Analiz sayısı</td>
+              <td class="py-3 px-3 text-center">1</td>
+              <td class="py-3 px-3 text-center">1</td>
+              <td class="py-3 px-3 text-center">10+3 / ay</td>
+              <td class="py-3 px-3 text-center bg-primary-50/30 dark:bg-primary-900/10">10+3 / ay</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_upload">Metin, PDF, görsel yükleme</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_report">Detaylı rapor (özet, değerler, öneriler)</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_diet">Diyet planı</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_supplements">Takviye önerileri</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_heart">Kalp sağlığı yorumu</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_history">Analiz geçmişi</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_emr_ehr">EMR/EHR uyumlu rapor</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_langs">Rapor dili</td>
+              <td class="py-3 px-3 text-center">9 dil</td>
+              <td class="py-3 px-3 text-center">9 dil</td>
+              <td class="py-3 px-3 text-center">9 dil</td>
+              <td class="py-3 px-3 text-center bg-primary-50/30 dark:bg-primary-900/10">9 dil</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_compare">İki analizi karşılaştır</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✓</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✓</td>
+            </tr>
+            <tr>
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_price">Fiyat</td>
+              <td class="py-3 px-3 text-center">0 €</td>
+              <td class="py-3 px-3 text-center"><span id="compare-price-single">13</span> €</td>
+              <td class="py-3 px-3 text-center"><span id="compare-price-monthly">50</span> €/ay</td>
+              <td class="py-3 px-3 text-center bg-primary-50/30 dark:bg-primary-900/10"><span id="compare-price-yearly">99</span> €/yıl</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
     </div>
   </section>
 
@@ -1243,6 +1467,24 @@
   <!-- Footer -->
   <footer class="py-12 px-4 border-t border-accent-200 dark:border-accent-800 bg-white dark:bg-accent-900/50">
     <div class="max-w-6xl mx-auto text-center text-accent-500 dark:text-accent-400 text-sm">
+      <div class="flex flex-wrap justify-center items-center gap-6 sm:gap-8 mb-6 pb-6 border-b border-accent-100 dark:border-accent-800" aria-label="Güven rozetleri">
+        <span class="inline-flex items-center gap-2 text-accent-600 dark:text-accent-300 text-xs font-medium">
+          <span class="w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">🔒</span>
+          <span data-i18n="footer_trust_ssl">SSL Secure</span>
+        </span>
+        <span class="inline-flex items-center gap-2 text-accent-600 dark:text-accent-300 text-xs font-medium">
+          <span class="w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">🛡️</span>
+          <span data-i18n="footer_trust_kvkk">KVKK uyumlu</span>
+        </span>
+        <span class="inline-flex items-center gap-2 text-accent-600 dark:text-accent-300 text-xs font-medium">
+          <span class="w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">✓</span>
+          <span data-i18n="footer_trust_gdpr">GDPR ready</span>
+        </span>
+        <span class="inline-flex items-center gap-2 text-accent-600 dark:text-accent-300 text-xs font-medium">
+          <span class="w-7 h-7 rounded-full bg-primary-100 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-400" aria-hidden="true">💳</span>
+          <span data-i18n="footer_trust_paytr">PayTR Secure</span>
+        </span>
+      </div>
       <p class="flex flex-wrap justify-center gap-x-4 gap-y-1">
         <a href="#terms" class="hover:text-primary-600 dark:hover:text-primary-400" data-i18n="footer_terms">Kullanım Koşulları</a>
         <a href="#privacy" class="hover:text-primary-600 dark:hover:text-primary-400" data-i18n="footer_privacy">Gizlilik</a>
@@ -1258,15 +1500,17 @@
   <div id="modal-login" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700">
       <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="modal_login">Giriş Yap</h3>
-      <form onsubmit="submitLogin(event)">
-        <input type="email" id="login-email" autocomplete="email" placeholder="E-posta" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <input type="password" id="login-password" autocomplete="current-password" placeholder="Şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+      <form onsubmit="submitLogin(event)" aria-label="Giriş formu">
+        <label for="login-email" class="sr-only">E-posta</label>
+        <input type="email" id="login-email" autocomplete="email" placeholder="E-posta" aria-describedby="login-error" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <label for="login-password" class="sr-only">Şifre</label>
+        <input type="password" id="login-password" autocomplete="current-password" placeholder="Şifre" aria-describedby="login-error" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <p class="text-right"><button type="button" onclick="closeLogin(); openForgotPassword()" class="text-sm text-primary-600 hover:underline" data-i18n="forgot_password">Şifremi unuttum</button></p>
-        <p id="login-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="login-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 mt-2" data-i18n="btn_login">Giriş</button>
       </form>
       <p class="mt-4 text-center text-sm text-accent-500 dark:text-accent-400"><span data-i18n="no_account">Hesabınız yok mu? </span><button type="button" onclick="closeLogin(); openRegister()" class="text-primary-600 font-medium hover:underline" data-i18n="nav_register">Kayıt olun</button></p>
-      <button type="button" onclick="closeLogin()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600">✕</button>
+      <button type="button" onclick="closeLogin()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Giriş penceresini kapat">✕</button>
     </div>
   </div>
 
@@ -1301,12 +1545,12 @@
           <option value="XX">Diğer</option>
         </select>
         <input type="password" id="register-password" required autocomplete="new-password" minlength="6" placeholder="Şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <p id="register-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="register-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="register_email_verify">Kayıt olunca e-posta doğrulama linki gönderilecektir.</p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="btn_register">Kayıt Ol</button>
       </form>
       <p class="mt-4 text-center text-sm text-accent-500 dark:text-accent-400"><span data-i18n="have_account">Zaten hesabınız var mı? </span><button type="button" onclick="closeRegister(); openLogin()" class="text-primary-600 font-medium hover:underline" data-i18n="nav_login">Giriş yapın</button></p>
-      <button type="button" onclick="closeRegister()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600">✕</button>
+      <button type="button" onclick="closeRegister()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Kayıt penceresini kapat">✕</button>
     </div>
   </div>
 
@@ -1317,11 +1561,11 @@
       <p class="text-sm text-accent-600 dark:text-accent-400 mb-4">E-posta adresinizi girin, size şifre sıfırlama linki gönderelim.</p>
       <form onsubmit="submitForgotPassword(event)">
         <input type="email" id="forgot-email" required placeholder="E-posta" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <p id="forgot-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="forgot-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <p id="forgot-success" class="text-primary-600 text-sm mb-2 hidden"></p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700">Gönder</button>
       </form>
-      <button type="button" onclick="closeForgotPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600">✕</button>
+      <button type="button" onclick="closeForgotPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Şifremi unuttum penceresini kapat">✕</button>
     </div>
   </div>
 
@@ -1333,11 +1577,11 @@
       <form id="form-reset-password" onsubmit="submitResetPassword(event)">
         <input type="password" id="reset-new-password" required minlength="6" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <input type="password" id="reset-confirm" required minlength="6" placeholder="Şifreyi tekrar girin" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <p id="reset-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="reset-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <p id="reset-success" class="text-primary-600 text-sm mb-2 hidden"></p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700">Şifreyi güncelle</button>
       </form>
-      <button type="button" onclick="closeResetPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600">✕</button>
+      <button type="button" onclick="closeResetPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Şifre sıfırlama penceresini kapat">✕</button>
     </div>
   </div>
 
@@ -1361,7 +1605,7 @@
           <option value="ES">İspanya</option>
           <option value="XX">Diğer</option>
         </select>
-        <p id="profile-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="profile-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="profile_save">Kaydet</button>
       </form>
       <hr class="my-4 border-accent-200 dark:border-accent-700" />
@@ -1369,13 +1613,13 @@
       <form onsubmit="submitChangePassword(event)">
         <input type="password" id="profile-current-password" placeholder="Mevcut şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
         <input type="password" id="profile-new-password" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
-        <p id="profile-password-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="profile-password-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <button type="submit" class="w-full py-2 rounded-lg bg-accent-100 dark:bg-accent-700 text-accent-900 dark:text-white font-medium hover:bg-accent-200 dark:hover:bg-accent-600" data-i18n="profile_change_password_btn">Şifreyi güncelle</button>
       </form>
       <hr class="my-4 border-accent-200 dark:border-accent-700" />
       <button type="button" onclick="downloadMyData()" class="w-full py-2 rounded-lg border border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 text-sm font-medium hover:bg-accent-50 dark:hover:bg-accent-700/50 mb-2" data-i18n="profile_export_data">Verilerimi indir (JSON)</button>
       <button type="button" onclick="openDeleteAccountConfirm()" class="w-full py-2 rounded-lg border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20" data-i18n="profile_delete_account">Hesabımı sil</button>
-      <button type="button" onclick="closeProfile()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600">✕</button>
+      <button type="button" onclick="closeProfile()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Profil penceresini kapat">✕</button>
     </div>
   </div>
   <!-- Hesap silme onay modal -->
@@ -1385,7 +1629,7 @@
       <p class="text-sm text-accent-600 dark:text-accent-400 mb-4" data-i18n="profile_delete_confirm_desc">Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.</p>
       <form onsubmit="submitDeleteAccount(event)">
         <input type="password" id="delete-account-password" placeholder="Şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
-        <p id="delete-account-error" class="text-red-600 text-sm mb-2 hidden"></p>
+        <p id="delete-account-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <div class="flex gap-2">
           <button type="button" onclick="closeDeleteAccountConfirm()" class="flex-1 py-3 rounded-lg border border-accent-300 text-accent-700 dark:text-accent-300 font-medium" data-i18n="profile_cancel">İptal</button>
           <button type="submit" class="flex-1 py-3 rounded-lg bg-red-600 text-white font-medium hover:bg-red-700" data-i18n="profile_delete_confirm_btn">Hesabı sil</button>
@@ -1663,10 +1907,10 @@
       var wrap = document.createElement('div');
       wrap.id = 'norya-pdf-wrap';
       wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#fff;color:#0f172a;padding:40px;font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;box-sizing:border-box;';
-      wrap.innerHTML = '<div style="border-bottom:3px solid #e07a5f;padding-bottom:16px;margin-bottom:24px;display:flex;align-items:center;gap:14px;">' +
-        '<div style="width:52px;height:52px;flex-shrink:0;"><svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg" width="52" height="52"><rect width="36" height="36" rx="12" fill="#e07a5f"/><path d="M10 26V10h3.2l5.6 10.4V10H22v16h-3.2L13.2 15.6V26H10z" fill="white"/><circle cx="26" cy="24" r="2.5" fill="white" opacity="0.9"/></svg></div>' +
-        '<div style="flex:1;"><div style="font-size:11px;letter-spacing:0.15em;color:#e07a5f;font-weight:700;margin-bottom:2px;">NORYA</div>' +
-        '<h1 style="font-size:22px;font-weight:700;color:#0f172a;margin:0;">' + escapeHtml(pdfTitle) + '</h1>' +
+      var logoUrl = (typeof window !== 'undefined' && window.location && window.location.origin) ? (window.location.origin + '/static/logo.png') : '/static/logo.png';
+      wrap.innerHTML = '<div style="border-bottom:3px solid #e2e8f0;padding-bottom:16px;margin-bottom:24px;display:flex;align-items:center;gap:14px;background:#fff;">' +
+        '<img src="' + logoUrl + '" alt="Norya AI" style="height:56px;width:auto;flex-shrink:0;display:block;background:#fff;" crossorigin="anonymous" />' +
+        '<div style="flex:1;"><h1 style="font-size:22px;font-weight:700;color:#0f172a;margin:0;">' + escapeHtml(pdfTitle) + '</h1>' +
         '<p style="font-size:12px;color:#64748b;margin:6px 0 0 0;">' + escapeHtml(reportDate) + '</p>' +
         '</div></div>' +
         '<div id="norya-pdf-body" style="color:#334155;">' + bodyEl.innerHTML + '</div>' +
@@ -1747,7 +1991,10 @@
       { key: 'Özet', keyRegex: /summary|özet|résumé|zusammenfassung|resumen|riepilogo|סיכום|ملخص|सारांश|περίληψη|souhrn|pregled/i, icon: '📋', titleKey: 'pdf_sec_summary', bg: 'bg-[var(--norya-brand-light)]', border: 'border-2 border-[var(--norya-brand)]' },
       { key: 'Değerler', keyRegex: /values|değerler|valori|valores|valeurs|werte|ערכים|القيم|मान|τιμές|hodnoty|vrednosti|valor|valore|valeur|wert/i, icon: '📊', titleKey: 'pdf_sec_values', bg: 'bg-navy-50 dark:bg-navy-800/40', border: 'border-navy-200 dark:border-navy-600' },
       { key: 'Olası Nedenler', keyRegex: /causes|nedenler|ursachen|causas|cause|סיבות|أسباب|कारण|αίτια|příčiny|uzroci|possibili/i, icon: '💡', titleKey: 'pdf_sec_causes', bg: 'bg-amber-50 dark:bg-amber-900/20', border: 'border-amber-200 dark:border-amber-800' },
-      { key: 'Öneriler', keyRegex: /recommendations|öneriler|empfehlung|recomendaciones|recommandations|המלצות|توصيات|सिफारिश|συστάσεις|doporučení|preporuke/i, icon: '✓', titleKey: 'pdf_sec_recommendations', bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-800' }
+      { key: 'Öneriler', keyRegex: /recommendations|öneriler|empfehlung|recomendaciones|recommandations|המלצות|توصيات|सिफारिश|συστάσεις|doporučení|preporuke/i, icon: '✓', titleKey: 'pdf_sec_recommendations', bg: 'bg-emerald-50 dark:bg-emerald-900/20', border: 'border-emerald-200 dark:border-emerald-800' },
+      { key: 'Diyet', keyRegex: /diet|diyet|alimentazione|alimentación|ernährung|plan\s*alimentaire|תזונה|حمية|आहार|δίαιτα|výživa|ishrana/i, icon: '🥗', titleKey: 'pdf_sec_diet', bg: 'bg-lime-50 dark:bg-lime-900/20', border: 'border-lime-200 dark:border-lime-800' },
+      { key: 'Takviye', keyRegex: /supplement|takviye|integratore|suplemento|ergänzung|complément|תוסף|مكمل|पूरक|συμπλήρωμα|doplněk|dodatak/i, icon: '💊', titleKey: 'pdf_sec_supplements', bg: 'bg-violet-50 dark:bg-violet-900/20', border: 'border-violet-200 dark:border-violet-800' },
+      { key: 'Kalp', keyRegex: /heart|kalp|cardio|corazón|cuore|cœur|herz|לב|قلب|स्वास्थ्य|καρδία|srdce|srce/i, icon: '❤️', titleKey: 'pdf_sec_heart', bg: 'bg-rose-50 dark:bg-rose-900/20', border: 'border-rose-200 dark:border-rose-800' }
     ];
     function getSectionConfig(sectionTitle) {
       var c = REPORT_SECTIONS.find(function(r) {
@@ -1892,27 +2139,46 @@
           '</div>';
       }).join('');
     }
-    async function copyShareLink() {
-      var t = T[getLang()] || T.tr;
-      if (!lastAnalysisId) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
-      if (lastShareToken) {
-        var url = API_BASE + '/share/' + lastShareToken;
-        try {
-          await navigator.clipboard.writeText(url);
-          toast(t.toast_link_copied || 'Paylaşım linki kopyalandı.', 'success');
-        } catch (_) { toast('Kopyalama başarısız.', 'error'); }
-        return;
-      }
+    async function getShareUrl() {
+      if (!lastAnalysisId) return null;
+      if (lastShareToken) return API_BASE + '/share/' + lastShareToken;
       try {
         var res = await fetch(API_BASE + '/analyze/share/' + lastAnalysisId, { method: 'POST', headers: { 'Authorization': 'Bearer ' + getToken() } });
         var data = await res.json().catch(function() { return {}; });
-        if (res.ok && data.token) {
-          lastShareToken = data.token;
-          var url = API_BASE + '/share/' + data.token;
+        if (res.ok && data.token) { lastShareToken = data.token; return API_BASE + '/share/' + data.token; }
+      } catch (_) {}
+      return null;
+    }
+    async function shareReport() {
+      var t = T[getLang()] || T.tr;
+      if (!lastAnalysisId) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
+      var url = await getShareUrl();
+      if (!url) { toast(t.toast_share_failed || 'Paylaşım linki oluşturulamadı.', 'error'); return; }
+      var title = (t.report_title || 'Norya Analiz Raporu').replace(/<[^>]+>/g, '');
+      var text = t.report_share_text || 'Norya ile kan tahlili raporumu paylaşıyorum.';
+      if (typeof navigator.share === 'function') {
+        try {
+          await navigator.share({ title: title, text: text, url: url });
+          toast(t.toast_shared || 'Paylaşıldı.', 'success');
+        } catch (e) {
+          if (e.name !== 'AbortError') { await copyShareLink(); }
+        }
+      } else {
+        try {
           await navigator.clipboard.writeText(url);
-          toast(t.toast_link_copied || 'Paylaşım linki kopyalandı.', 'success');
-        } else { toast(data.detail || 'Paylaşım linki oluşturulamadı.', 'error'); }
-      } catch (e) { toast('Bağlantı hatası.', 'error'); }
+          toast(t.toast_link_copied || 'Link kopyalandı. WhatsApp veya mesajla paylaşmak için yapıştırın.', 'success');
+        } catch (_) { toast('Link kopyalanamadı.', 'error'); }
+      }
+    }
+    async function copyShareLink() {
+      var t = T[getLang()] || T.tr;
+      if (!lastAnalysisId) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
+      var url = await getShareUrl();
+      if (!url) { toast(t.toast_share_failed || 'Paylaşım linki oluşturulamadı.', 'error'); return; }
+      try {
+        await navigator.clipboard.writeText(url);
+        toast(t.toast_link_copied || 'Paylaşım linki kopyalandı.', 'success');
+      } catch (_) { toast('Link kopyalanamadı. Tarayıcı iznini kontrol edin veya metni elle kopyalayın.', 'error'); }
     }
 
     const T = {
@@ -1935,6 +2201,9 @@
         hero_cta: "İlk Analizimi Ücretsiz Yap", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz genel olarak referans aralığında. Hemoglobin ve glukoz normal; doktorunuzla rutin takibi sürdürün.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik",
+        trust_badge_ssl: "256-bit SSL ile korunur", trust_badge_kvkk_gdpr: "KVKK & GDPR uyumlu", trust_badge_paytr: "PayTR ile güvenli ödeme",
+        trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
         how_title: "Norya Nasıl Çalışır?", how_desc: "Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.",
         how_1: "Kayıt Olun", how_1d: "Ücretsiz hesap oluşturun. E-posta ve şifre yeterli.",
         how_2: "Tahlil Metnini Yapıştırın", how_2d: "Sonuç kağıdındaki değerleri veya metni kutuya yapıştırın.",
@@ -1976,6 +2245,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "İç Hastalıkları Uzmanı", doctor_2_quote: "Kronik takip ettiğim hastaların tahlil sonuçlarını Norya ile açıklıyorum. Özellikle yaşlı hastalar sade dilde anlatımı çok takdir ediyor. Uygulamayı kullanmaya devam edeceğim.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Dahiliye", doctor_3_quote: "Hastalarıma «Bu raporu eve götür, Norya'da açtır» diyorum. Kontrol randevusunda zaten hazırlıklı geliyorlar. Sonuçları bu uygulama üzerinden vermeye devam edeceğim.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Genel Pratisyen", doctor_4_quote: "Üç aydır neredeyse her tahlil sonrası hastalarıma Norya çıktısı veriyorum. Artık alışkanlık oldu, memnunlar. Sürekli buradan sonuç vereceğim.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endokrinoloji", doctor_5_quote: "Diyabet ve tiroid takibinde hastalarıma Norya raporunu öneriyorum. Değerleri evde okuyup randevuya gelince daha bilinçli soru soruyorlar. Tavsiye ediyorum.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Aile Hekimi", doctor_6_quote: "Tahlil sonucu verirken «Norya'da açtır, özet çıkar» diyorum. Özellikle yaşlı hastalarım raporu anlaşılır buluyor. Kullanmaya devam edeceğim.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Dahiliye Uzmanı", doctor_7_quote: "Kontrol randevularında hastanın tahlilini Norya ile birlikte yorumluyoruz. Hem hasta hem ben zaman kazanıyoruz. Teşhis yerine geçmez ama hazırlık için çok faydalı.",
         faq_title: "Sıkça Sorulan Sorular", faq_subtitle: "Merak ettiklerinizin kısa cevapları.",
         faq_q1: "Norya tahlil sonucumu teşhis koyar mı?", faq_a1: "Hayır. Norya yalnızca eğitim amaçlı, anlaşılır açıklama sunar. Teşhis ve tedavi kararı mutlaka bir hekime bırakılmalıdır.",
         faq_q2: "Verilerim güvende mi?", faq_a2: "Evet. Verileriniz şifreli saklanır, üçüncü tarafla paylaşılmaz veya satılmaz. HIPAA, GDPR ve KVKK prensiplerine uygun çalışıyoruz.",
@@ -2029,9 +2301,10 @@
         analyze_doctor_notes_label: "Doktorunuzun notu / ek bilgi (isteğe bağlı)",
         analyze_doctor_notes_placeholder: "Örn: Doktorum B12 takviyesi verdi, bu sonuçla birlikte değerlendirin.",
         analyze_or: "— veya —", analyze_upload_btn: "PDF veya görsel (JPG, PNG) yükle",
-        report_title: "Norya Analiz Raporu", report_download: "Raporu İndir", report_for_doctor: "Doktoruma götür", report_copy_link: "Link Kopyala",
+        report_title: "Norya Analiz Raporu", report_download: "Raporu İndir", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
+        wizard_step1_title: "Dosya veya metin", wizard_step2_title: "Önizleme ve dil", wizard_step3_title: "Raporunuz hazırlanıyor", wizard_drop: "Dosyayı buraya sürükleyin veya tıklayın", wizard_back: "Geri", wizard_next: "Sonraki", wizard_preview_text: "Metin girişi", wizard_lang: "Rapor dili", wizard_step3_time: "Ortalama 20–30 saniye sürer.",
         pdf_header_title: "Kan Tahlili Analiz Raporu", pdf_footer_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya",
-        pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler",
+        pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler", pdf_sec_diet: "Diyet planı", pdf_sec_supplements: "Takviye önerileri", pdf_sec_heart: "Kalp sağlığı",
         risk_legend_green: "Normal", risk_legend_yellow: "Sınır", risk_legend_red: "Riskli",
         doctor_header: "Norya Kan Tahlili Raporu — Doktoruma iletilmek üzere hazırlanmıştır.",
         doctor_date_label: "Tarih", doctor_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar için mutlaka hekim değerlendirmesi gerekir.",
@@ -2039,8 +2312,9 @@
         toast_analyze_first: "Önce analiz yapın.", toast_pdf_fallback: "PDF oluşturulamadı; metin dosyası indirildi.",
         pricing_title: "Fiyatlandırma", pricing_eur: "Fiyatlar konumunuza göre yerel para biriminde gösterilir.", pricing_note_currency: "Fiyatlar {cur} ({sym}) cinsinde gösterilir.",
         price_single_title: "Tek Analiz", price_single_per: "tek seferlik", price_single_1: "✓ 1 analiz", price_single_2: "✓ Metin, PDF veya görsel", price_single_3: "✓ Detaylı rapor", price_btn_single: " — Tek Analiz",
-        price_monthly_title: "Aylık Abonelik", price_per_month: "/ay", price_monthly_per: "5 analiz raporu / ay", price_monthly_1: "✓ Ayda toplam 5 analiz raporu", price_monthly_2: "✓ Metin, PDF ve görsel yükleme", price_monthly_3: "✓ Detaylı rapor + geçmiş", price_btn_monthly: "/ay — Başla",
-        price_best_badge: "En avantajlı", price_yearly_title: "Yıllık Abonelik", price_per_year: "/yıl", price_yearly_per: "13 + 3 hediye = toplam 16 analiz", price_yearly_1: "✓ Yılda toplam 16 analiz (3'ü bizden hediye)", price_yearly_2: "✓ Metin, PDF ve görsel yükleme", price_yearly_3: "✓ Detaylı rapor + geçmiş", price_btn_yearly: "/yıl — Başla",
+        price_monthly_title: "Aylık Abonelik", price_per_month: "/ay", price_monthly_per: "10+3 analiz / ay", price_monthly_1: "✓ Ayda 10+3 analiz", price_monthly_2: "✓ Metin, PDF ve görsel yükleme", price_monthly_3: "✓ Detaylı rapor + geçmiş", price_btn_monthly: "/ay — Başla",
+        price_best_badge: "En avantajlı", price_yearly_title: "Yıllık Abonelik", price_per_year: "/yıl", price_yearly_per: "10+3 analiz / ay", price_yearly_1: "✓ Ayda 10+3 analiz (yıllık abonelik)", price_yearly_2: "✓ Metin, PDF ve görsel yükleme", price_yearly_3: "✓ Detaylı rapor + geçmiş", price_btn_yearly: "/yıl — Başla",
+        compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "Özellik", compare_analyses: "Analiz sayısı", compare_upload: "Metin, PDF, görsel yükleme", compare_report: "Detaylı rapor (özet, değerler, öneriler)", compare_diet: "Diyet planı", compare_supplements: "Takviye önerileri", compare_heart: "Kalp sağlığı yorumu", compare_history: "Analiz geçmişi", compare_pdf: "PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "EMR/EHR uyumlu rapor", compare_langs: "Rapor dili", compare_compare: "İki analizi karşılaştır", compare_price: "Fiyat",
         footer_desc: "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.", footer_disclaimer: "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.",
         footer_terms: "Kullanım Koşulları", footer_privacy: "Gizlilik", footer_payment: "Ödeme ve İade", footer_contact: "İletişim", back_home: "← Ana sayfa",
         terms_heading: "Kullanım Koşulları", privacy_heading: "Gizlilik Politikası", payment_heading: "Ödeme ve İade Koşulları",
@@ -2058,7 +2332,7 @@
         privacy_rights_1: "Haklarınız. Verilerinize erişim, düzeltme ve silme talebinde bulunabilirsiniz. Taleplerinizi",
         privacy_rights_2: "bölümünden iletebilirsiniz.",
         payment_intro: "Ödemeler PayTR sanal pos altyapısı ile alınır. Kart bilgileriniz bize iletilmez; işlem PayTR üzerinden güvenli şekilde tamamlanır.",
-        payment_packages: "Tek analiz ve Pro paketleri. Tek analiz satın aldığınızda hesabınıza bir analiz hakkı eklenir. Pro aylık veya yıllık paket satın aldığınızda, seçtiğiniz dönem boyunca (aylık 30 gün, yıllık 365 gün) sınırsız analiz hakkı tanınır. Otomatik yenileme yoktur; süre bitince paket sona erer.",
+        payment_packages: "Tek analiz ve Pro paketleri. Tek analiz satın aldığınızda hesabınıza bir analiz hakkı eklenir. Pro aylık (50€) veya yıllık (99€) pakette ayda 10+3 analiz hakkı tanınır. Otomatik yenileme yoktur; süre bitince paket sona erer.",
         payment_refund_1: "İade. Ödeme sonrası 14 gün içinde kullanılmayan (hiç analiz yapılmamış) paket veya tek analiz hakkı için iade talebinde bulunabilirsiniz. Kısmen kullanılmış paketlerde oransal iade uygulanmaz. İade talebinizi",
         payment_refund_2: "üzerinden iletin; geçerli talepler ödeme yönteminize göre işleme alınır.",
         payment_credit_issue: "Ödeme alındı ama hak tanınmadı. Ödemeniz banka/ödeme kuruluşu tarafından onaylandığı hâlde hesabınıza hak yansımadıysa, lütfen sipariş veya ödeme bilginizle birlikte bize yazın. En kısa sürede kontrol edip düzeltiyoruz.",
@@ -2069,7 +2343,7 @@
         history_title: "Analiz Geçmişin", history_compare_title: "İki analizi karşılaştır", history_select_analysis: "— Analiz seçin —", history_and: "ve", history_compare_btn: "Karşılaştır", history_timeline: "Zaman çizelgesi",
         history_detail_input: "Tahlil girişi:", history_detail_result: "Norya AI yorumu:", history_close: "Kapat", history_analysis_a: "Analiz A", history_analysis_b: "Analiz B",
         history_loading: "Yükleniyor...", history_empty: "Henüz analiz yok.", history_load_error: "Geçmiş yüklenemedi.", history_compare_select_two: "İki farklı analiz seçin.", history_compare_load_error: "Analizler yüklenemedi.",
-        usage_this_month: "Bu ay {kullanilan}/{limit} analiz hakkınız kullanıldı.", usage_first_free: "İlk analiz ücretsiz.", usage_limit_reached: "Aylık analiz hakkınız doldu. Önce ödeme yapın, sonra analiz yapabilirsiniz.", usage_pro_unlimited: "Pro plan: Bu ay {kullanilan} analiz kullandınız (sınırsız).", usage_extra_credits: "+ {n} ek hak", payment_btn_single: "1 Analiz Satın Al", payment_btn_pro: "Pro'ya Geç", payment_not_available: "Ödeme şu an kullanılamıyor.", payment_error: "Ödeme sayfası açılamadı.", payment_modal_title: "Güvenli ödeme (PayTR)", payment_success: "Ödemeniz alındı. Analiz yapabilirsiniz.", session_expired: "Oturumunuz sonlanmış. Lütfen tekrar giriş yapın.", test_mode_link: "Sınırsız test", test_mode_on: "Test modu – sınırsız, hak düşülmez",
+        usage_this_month: "Bu ay {kullanilan}/{limit} analiz hakkınız kullanıldı.", usage_first_free: "İlk analiz ücretsiz.", usage_limit_reached: "Aylık analiz hakkınız doldu. Önce ödeme yapın, sonra analiz yapabilirsiniz.", usage_pro_unlimited: "Pro plan: Bu ay {kullanilan}/{limit} analiz kullandınız.", usage_extra_credits: "+ {n} ek hak", payment_btn_single: "1 Analiz Satın Al", payment_btn_pro: "Pro'ya Geç", payment_not_available: "Ödeme şu an kullanılamıyor.", payment_error: "Ödeme sayfası açılamadı.", payment_modal_title: "Güvenli ödeme (PayTR)", payment_success: "Ödemeniz alındı. Analiz yapabilirsiniz.", session_expired: "Oturumunuz sonlanmış. Lütfen tekrar giriş yapın.", test_mode_link: "Sınırsız test", test_mode_on: "Test modu – sınırsız, hak düşülmez",
         checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_btn: "Güvenli ödemeye geç", checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
         guest_checkout_title: "Kayıt olmadan tek analiz", guest_checkout_desc: "E-posta adresinizi girin; ödeme sonrası aynı e-posta ile oturum açıp analiz yapabilirsiniz.", guest_checkout_name: "Ad (opsiyonel)",
         btn_processing_pdf: "PDF işleniyor...", btn_processing_analyze: "Analiz ediliyor...",
@@ -2094,6 +2368,9 @@
         hero_cta: "Get my first analysis free", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values are generally within reference range. Hemoglobin and glucose normal; continue routine follow-up with your doctor.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date",
+        trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
+        trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
         how_title: "How Norya Works", how_desc: "Three simple steps to turn your lab results into clear health insights.",
         how_1: "Sign up", how_1d: "Create a free account. Email and password only.",
         how_2: "Paste your results", how_2d: "Paste the values or text from your result sheet.",
@@ -2135,6 +2412,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Internal medicine", doctor_2_quote: "I explain my chronic patients' lab results with Norya. Older patients especially appreciate the plain-language summary. I'll keep using it.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Internal medicine", doctor_3_quote: "I tell patients to take the report home and open it in Norya. By the follow-up they're already prepared. I'll keep sharing results through this application.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "General practitioner", doctor_4_quote: "For three months I've been giving almost every patient a Norya printout after their labs. It's become routine and they're happy. I'll keep giving results this way.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endocrinology", doctor_5_quote: "I recommend the Norya report to my diabetes and thyroid patients. They read the values at home and come to the appointment with better questions. I recommend it.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Family physician", doctor_6_quote: "When I give lab results I say «open it in Norya and get the summary». Especially my elderly patients find the report easy to understand. I'll keep using it.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Internal medicine", doctor_7_quote: "At follow-up visits we interpret the patient's labs together with Norya. Both the patient and I save time. It doesn't replace diagnosis but it's very helpful for preparation.",
         faq_title: "Frequently Asked Questions", faq_subtitle: "Short answers to what you need to know.",
         faq_q1: "Does Norya diagnose my results?", faq_a1: "No. Norya only provides educational, easy-to-understand explanations. Diagnosis and treatment decisions must always be made by a doctor.",
         faq_q2: "Is my data safe?", faq_a2: "Yes. Your data is stored encrypted and is not shared or sold to third parties. We follow HIPAA, GDPR and KVKK principles.",
@@ -2188,9 +2468,10 @@
         analyze_doctor_notes_label: "Your doctor's note / extra info (optional)",
         analyze_doctor_notes_placeholder: "E.g. My doctor prescribed B12; please consider with these results.",
         analyze_or: "— or —", analyze_upload_btn: "Upload PDF or image (JPG, PNG)",
-        report_title: "Norya Analysis Report", report_download: "Download report", report_for_doctor: "Take to my doctor", report_copy_link: "Copy link",
+        report_title: "Norya Analysis Report", report_download: "Download report", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
+        wizard_step1_title: "File or text", wizard_step2_title: "Preview and language", wizard_step3_title: "Preparing your report", wizard_drop: "Drag file here or click", wizard_back: "Back", wizard_next: "Next", wizard_preview_text: "Text input", wizard_lang: "Report language", wizard_step3_time: "Usually takes 20–30 seconds.",
         pdf_header_title: "Blood Test Analysis Report", pdf_footer_disclaimer: "This report is for educational purposes only. Always consult a healthcare professional for medical decisions. — Norya",
-        pdf_sec_summary: "Test summary", pdf_sec_risk: "Risk indicators", pdf_sec_values: "Values and reference ranges", pdf_sec_causes: "Possible causes", pdf_sec_recommendations: "Recommendations",
+        pdf_sec_summary: "Test summary", pdf_sec_risk: "Risk indicators", pdf_sec_values: "Values and reference ranges", pdf_sec_causes: "Possible causes", pdf_sec_recommendations: "Recommendations", pdf_sec_diet: "Diet plan", pdf_sec_supplements: "Supplement recommendations", pdf_sec_heart: "Heart health",
         risk_legend_green: "Normal", risk_legend_yellow: "Border", risk_legend_red: "At risk",
         doctor_header: "Norya Blood Test Report — Prepared for my doctor.",
         doctor_date_label: "Date", doctor_disclaimer: "This report is for educational information only. Medical decisions require a doctor's evaluation.",
@@ -2198,8 +2479,9 @@
         toast_analyze_first: "Please run an analysis first.", toast_pdf_fallback: "PDF could not be generated; text file downloaded.",
         pricing_title: "Pricing", pricing_eur: "Prices are shown in your local currency.", pricing_note_currency: "Prices shown in {cur} ({sym}).",
         price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Text, PDF or image", price_single_3: "✓ Detailed report", price_btn_single: " — Single analysis",
-        price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "5 analysis reports / month", price_monthly_1: "✓ 5 analysis reports per month", price_monthly_2: "✓ Text, PDF and image upload", price_monthly_3: "✓ Detailed report + history", price_btn_monthly: "/mo — Get started",
-        price_best_badge: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "13 + 3 free = 16 analyses total", price_yearly_1: "✓ 16 analyses per year (3 free from us)", price_yearly_2: "✓ Text, PDF and image upload", price_yearly_3: "✓ Detailed report + history", price_btn_yearly: "/yr — Get started",
+        price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "10+3 analyses / month", price_monthly_1: "✓ 10+3 analyses per month", price_monthly_2: "✓ Text, PDF and image upload", price_monthly_3: "✓ Detailed report + history", price_btn_monthly: "/mo — Get started",
+        price_best_badge: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "10+3 analyses / month", price_yearly_1: "✓ 10+3 analyses per month (yearly plan)", price_yearly_2: "✓ Text, PDF and image upload", price_yearly_3: "✓ Detailed report + history", price_btn_yearly: "/yr — Get started",
+        compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_analyses: "Analyses", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_compare: "Compare two analyses", compare_price: "Price",
         footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.",
         footer_terms: "Terms of Use", footer_privacy: "Privacy", footer_payment: "Payment & Refunds", footer_contact: "Contact", back_home: "← Home",
         terms_heading: "Terms of Use", privacy_heading: "Privacy Policy", payment_heading: "Payment and Refund Terms",
@@ -2217,7 +2499,7 @@
         privacy_rights_1: "Your rights. You may request access, correction and deletion of your data. You can send your requests via the",
         privacy_rights_2: "section.",
         payment_intro: "Payments are taken via the PayTR payment infrastructure. Your card details are not sent to us; the transaction is completed securely through PayTR.",
-        payment_packages: "Single analysis and Pro packages. When you buy a single analysis, one analysis credit is added to your account. When you buy a Pro monthly or yearly package, you get unlimited analyses for the chosen period (30 days monthly, 365 days yearly). There is no auto-renewal; the package ends when the period ends.",
+        payment_packages: "Single analysis and Pro packages. When you buy a single analysis, one credit is added. Pro monthly (50€) or yearly (99€) gives 10+3 analyses per month. No auto-renewal; the package ends when the period ends.",
         payment_refund_1: "Refunds. You may request a refund within 14 days of payment for unused packages or single analysis (no analyses run). Proportional refunds do not apply to partially used packages. Send your refund request via",
         payment_refund_2: "; valid requests are processed according to your payment method.",
         payment_credit_issue: "Payment received but no credit. If your payment was confirmed by the bank or payment provider but no credit was added to your account, please contact us with your order or payment details. We will check and correct it as soon as possible.",
@@ -2228,7 +2510,7 @@
         history_title: "Your analysis history", history_compare_title: "Compare two analyses", history_select_analysis: "— Select analysis —", history_and: "and", history_compare_btn: "Compare", history_timeline: "Timeline",
         history_detail_input: "Lab input:", history_detail_result: "Norya AI interpretation:", history_close: "Close", history_analysis_a: "Analysis A", history_analysis_b: "Analysis B",
         history_loading: "Loading...", history_empty: "No analyses yet.", history_load_error: "Could not load history.", history_compare_select_two: "Select two different analyses.", history_compare_load_error: "Could not load analyses.",
-        usage_this_month: "This month {kullanilan}/{limit} analyses used.", usage_first_free: "First analysis free.", usage_limit_reached: "Monthly limit reached. Pay first, then run analysis.", usage_pro_unlimited: "Pro plan: {kullanilan} analyses this month (unlimited).", usage_extra_credits: "+ {n} extra", payment_btn_single: "Buy 1 analysis", payment_btn_pro: "Upgrade to Pro", payment_not_available: "Payment is not available.", payment_error: "Could not open payment page.", payment_modal_title: "Secure payment (PayTR)", payment_success: "Payment received. You can run analysis now.", session_expired: "Your session has expired. Please log in again.", test_mode_link: "Unlimited test", test_mode_on: "Test mode – unlimited, no credit used",
+        usage_this_month: "This month {kullanilan}/{limit} analyses used.", usage_first_free: "First analysis free.", usage_limit_reached: "Monthly limit reached. Pay first, then run analysis.", usage_pro_unlimited: "Pro plan: {kullanilan}/{limit} analyses this month.", usage_extra_credits: "+ {n} extra", payment_btn_single: "Buy 1 analysis", payment_btn_pro: "Upgrade to Pro", payment_not_available: "Payment is not available.", payment_error: "Could not open payment page.", payment_modal_title: "Secure payment (PayTR)", payment_success: "Payment received. You can run analysis now.", session_expired: "Your session has expired. Please log in again.", test_mode_link: "Unlimited test", test_mode_on: "Test mode – unlimited, no credit used",
         checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_btn: "Proceed to secure payment", checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
         guest_checkout_title: "Single analysis without account", guest_checkout_desc: "Enter your email; after payment you can sign in with the same email and run your analysis.", guest_checkout_name: "Name (optional)",
         btn_processing_pdf: "Processing PDF...", btn_processing_analyze: "Analyzing...",
@@ -2251,6 +2533,9 @@
         hero_cta: "Prima analisi gratis", hero_see_sample: "Vedi report esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy first",
         hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "I valori sono nella norma. Emoglobina e glucosio normali.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora",
+        trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR",
+        trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "Come funziona Norya", how_desc: "Tre semplici passi per trasformare i tuoi esami in informazioni chiare.",
         how_1: "Registrati", how_1d: "Crea un account gratuito. Solo email e password.",
         how_2: "Incolla i risultati", how_2d: "Incolla i valori o il testo dal referto.",
@@ -2287,6 +2572,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Medicina interna", doctor_2_quote: "Spiego i risultati dei pazienti cronici con Norya. I più anziani apprezzano il linguaggio semplice. Continuo a usarla.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Medicina interna", doctor_3_quote: "Dico ai pazienti di portare il referto a casa e aprirlo in Norya. Al controllo arrivano già preparati. Continuo a dare i risultati con questa applicazione.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Medico generico", doctor_4_quote: "Da tre mesi do a quasi tutti i pazienti il report Norya dopo gli esami. È diventata routine, sono soddisfatti. Continuo a dare i risultati così.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endocrinologia", doctor_5_quote: "Consiglio il report Norya ai pazienti con diabete e tiroide. Leggono i valori a casa e arrivano alla visita con domande più consapevoli. Lo consiglio.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Medico di famiglia", doctor_6_quote: "Quando do i risultati dico «aprilo in Norya e prendi il riepilogo». Soprattutto i pazienti anziani trovano il report chiaro. Continuo a usarlo.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Medicina interna", doctor_7_quote: "Alle visite di controllo interpretiamo gli esami con Norya. Risparmiamo tempo io e il paziente. Non sostituisce la diagnosi ma aiuta molto per la preparazione.",
         faq_title: "Domande frequenti", faq_subtitle: "Risposte brevi a ciò che serve sapere.",
         faq_q1: "Norya fa diagnosi?", faq_a1: "No. Norya fornisce solo spiegazioni a scopo informativo. La diagnosi spetta al medico.",
         faq_q2: "I miei dati sono al sicuro?", faq_a2: "Sì. Dati criptati, non condivisi né venduti. Rispettiamo HIPAA, GDPR e KVKK.",
@@ -2333,9 +2621,9 @@
         analyze_doctor_notes_label: "Nota del medico / informazioni aggiuntive (opzionale)",
         analyze_doctor_notes_placeholder: "Es. Il medico mi ha prescritto B12; valutare con questi risultati.",
         analyze_or: "— oppure —", analyze_upload_btn: "Carica PDF o immagine (JPG, PNG)",
-        report_title: "Report analisi Norya", report_download: "Scarica report", report_for_doctor: "Porta al medico", report_copy_link: "Copia link",
+        report_title: "Report analisi Norya", report_download: "Scarica report", report_for_doctor: "Porta al medico", report_share: "Condividi il mio report", report_share_text: "Condivido il mio report delle analisi del sangue con Norya.", report_copy_link: "Copia link", toast_shared: "Condiviso.", toast_share_failed: "Impossibile creare il link di condivisione.",
         pdf_header_title: "Report analisi del sangue", pdf_footer_disclaimer: "Questo report è a scopo informativo. Consultare sempre un medico per decisioni cliniche. — Norya",
-        pdf_sec_summary: "Riepilogo esami", pdf_sec_risk: "Indicatori di rischio", pdf_sec_values: "Valori e intervalli di riferimento", pdf_sec_causes: "Possibili cause", pdf_sec_recommendations: "Raccomandazioni",
+        pdf_sec_summary: "Riepilogo esami", pdf_sec_risk: "Indicatori di rischio", pdf_sec_values: "Valori e intervalli di riferimento", pdf_sec_causes: "Possibili cause", pdf_sec_recommendations: "Raccomandazioni", pdf_sec_diet: "Piano alimentare", pdf_sec_supplements: "Integratori consigliati", pdf_sec_heart: "Salute cardiovascolare",
         risk_legend_green: "Normale", risk_legend_yellow: "Limite", risk_legend_red: "A rischio",
         doctor_header: "Report analisi Norya — Preparato per il mio medico.",
         doctor_date_label: "Data", doctor_disclaimer: "Questo report è a scopo informativo. Le decisioni mediche richiedono la valutazione del medico.",
@@ -2396,6 +2684,9 @@
         hero_cta: "Mi primer análisis gratis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad primero",
         hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Tus valores están en rango. Hemoglobina y glucosa normales.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha",
+        trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR",
+        trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "Cómo funciona Norya", how_desc: "Tres pasos para convertir tus análisis en información clara.",
         how_1: "Regístrate", how_1d: "Crea una cuenta gratuita. Solo email y contraseña.",
         how_2: "Pega los resultados", how_2d: "Pega los valores o el texto del informe.",
@@ -2432,6 +2723,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Medicina interna", doctor_2_quote: "Explico los resultados de mis pacientes crónicos con Norya. Los mayores agradecen el lenguaje sencillo. Seguiré usándola.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Medicina interna", doctor_3_quote: "Les digo que se lleven el informe a casa y lo abran en Norya. En la revisión vienen ya preparados. Seguiré pasando resultados por esta aplicación.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Médico general", doctor_4_quote: "Llevo tres meses dando a casi todos el informe de Norya tras los análisis. Ya es costumbre, están contentos. Seguiré dando resultados por aquí.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endocrinología", doctor_5_quote: "Recomiendo el informe Norya a mis pacientes de diabetes y tiroides. Leen los valores en casa y vienen con preguntas más claras. Lo recomiendo.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Médico de familia", doctor_6_quote: "Al dar resultados digo «ábrelo en Norya y saca el resumen». Sobre todo los mayores entienden bien el informe. Sigo usándolo.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Medicina interna", doctor_7_quote: "En las revisiones interpretamos el análisis con Norya. Ahorramos tiempo ambos. No sustituye el diagnóstico pero ayuda mucho para preparar.",
         faq_title: "Preguntas frecuentes", faq_subtitle: "Respuestas breves a lo que necesitas saber.",
         faq_q1: "¿Norya diagnostica?", faq_a1: "No. Norya solo ofrece explicaciones informativas. El diagnóstico corresponde al médico.",
         faq_q2: "¿Mis datos están seguros?", faq_a2: "Sí. Datos cifrados, no compartidos ni vendidos. Cumplimos HIPAA, GDPR y KVKK.",
@@ -2478,9 +2772,9 @@
         analyze_doctor_notes_label: "Nota de tu médico / información adicional (opcional)",
         analyze_doctor_notes_placeholder: "Ej. Mi médico me recetó B12; considerar con estos resultados.",
         analyze_or: "— o —", analyze_upload_btn: "Subir PDF o imagen (JPG, PNG)",
-        report_title: "Informe de análisis Norya", report_download: "Descargar informe", report_for_doctor: "Llevar al médico", report_copy_link: "Copiar enlace",
+        report_title: "Informe de análisis Norya", report_download: "Descargar informe", report_for_doctor: "Llevar al médico", report_share: "Compartir mi informe", report_share_text: "Comparto mi informe de análisis de sangre con Norya.", report_copy_link: "Copiar enlace", toast_shared: "Compartido.", toast_share_failed: "No se pudo crear el enlace.",
         pdf_header_title: "Informe de análisis de sangre", pdf_footer_disclaimer: "Este informe es solo informativo. Consulte siempre a un profesional para decisiones médicas. — Norya",
-        pdf_sec_summary: "Resumen del análisis", pdf_sec_risk: "Señales de riesgo", pdf_sec_values: "Valores e intervalos de referencia", pdf_sec_causes: "Posibles causas", pdf_sec_recommendations: "Recomendaciones",
+        pdf_sec_summary: "Resumen del análisis", pdf_sec_risk: "Señales de riesgo", pdf_sec_values: "Valores e intervalos de referencia", pdf_sec_causes: "Posibles causas", pdf_sec_recommendations: "Recomendaciones", pdf_sec_diet: "Plan de alimentación", pdf_sec_supplements: "Suplementos recomendados", pdf_sec_heart: "Salud cardiovascular",
         risk_legend_green: "Normal", risk_legend_yellow: "Límite", risk_legend_red: "En riesgo",
         doctor_header: "Informe de análisis Norya — Preparado para mi médico.",
         doctor_date_label: "Fecha", doctor_disclaimer: "Este informe es solo informativo. Las decisiones médicas requieren evaluación del médico.",
@@ -2541,6 +2835,9 @@
         hero_cta: "Ma première analyse gratuite", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité",
         hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Vos valeurs sont dans la norme. Hémoglobine et glucose normaux.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour",
+        trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR",
+        trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "Comment fonctionne Norya", how_desc: "Trois étapes pour transformer vos analyses en informations claires.",
         how_1: "Inscrivez-vous", how_1d: "Créez un compte gratuit. Email et mot de passe uniquement.",
         how_2: "Collez les résultats", how_2d: "Collez les valeurs ou le texte du compte-rendu.",
@@ -2577,6 +2874,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Médecine interne", doctor_2_quote: "J'explique les résultats de mes patients chroniques avec Norya. Les plus âgés apprécient le langage simple. Je continue à l'utiliser.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Médecine interne", doctor_3_quote: "Je dis aux patients d'emporter le rapport et de l'ouvrir dans Norya. Au contrôle ils arrivent déjà préparés. Je continuerai à transmettre les résultats par cette application.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Médecin généraliste", doctor_4_quote: "Depuis trois mois je donne à presque tous le rapport Norya après les prises de sang. C'est devenu une habitude, ils sont contents. Je continuerai à donner les résultats comme ça.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endocrinologie", doctor_5_quote: "Je recommande le rapport Norya à mes patients diabétiques et thyroïdiens. Ils lisent les valeurs chez eux et viennent avec de meilleures questions. Je le recommande.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Médecin généraliste", doctor_6_quote: "Quand je donne les résultats je dis « ouvrez dans Norya et prenez le résumé ». Surtout les personnes âgées trouvent le rapport clair. Je continue à l'utiliser.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Médecine interne", doctor_7_quote: "En consultation on interprète les analyses avec Norya. On gagne du temps tous les deux. Ça ne remplace pas le diagnostic mais c'est très utile pour préparer.",
         faq_title: "Questions fréquentes", faq_subtitle: "Réponses courtes à l’essentiel.",
         faq_q1: "Norya pose-t-il un diagnostic ?", faq_a1: "Non. Norya fournit uniquement des explications à titre informatif. Le diagnostic relève du médecin.",
         faq_q2: "Mes données sont-elles protégées ?", faq_a2: "Oui. Données chiffrées, non partagées ni vendues. Nous respectons HIPAA, RGPD et KVKK.",
@@ -2623,9 +2923,9 @@
         analyze_doctor_notes_label: "Note de votre médecin / info complémentaire (optionnel)",
         analyze_doctor_notes_placeholder: "Ex. Mon médecin m'a prescrit B12 ; à considérer avec ces résultats.",
         analyze_or: "— ou —", analyze_upload_btn: "Télécharger PDF ou image (JPG, PNG)",
-        report_title: "Rapport d'analyse Norya", report_download: "Télécharger le rapport", report_for_doctor: "Apporter à mon médecin", report_copy_link: "Copier le lien",
+        report_title: "Rapport d'analyse Norya", report_download: "Télécharger le rapport", report_for_doctor: "Apporter à mon médecin", report_share: "Partager mon rapport", report_share_text: "Je partage mon rapport d'analyse sanguine avec Norya.", report_copy_link: "Copier le lien", toast_shared: "Partagé.", toast_share_failed: "Impossible de créer le lien.",
         pdf_header_title: "Rapport d'analyse sanguine", pdf_footer_disclaimer: "Ce rapport est à titre informatif. Consultez un professionnel pour toute décision médicale. — Norya",
-        pdf_sec_summary: "Résumé du bilan", pdf_sec_risk: "Points d'attention", pdf_sec_values: "Valeurs et références", pdf_sec_causes: "Causes possibles", pdf_sec_recommendations: "Recommandations",
+        pdf_sec_summary: "Résumé du bilan", pdf_sec_risk: "Points d'attention", pdf_sec_values: "Valeurs et références", pdf_sec_causes: "Causes possibles", pdf_sec_recommendations: "Recommandations", pdf_sec_diet: "Plan alimentaire", pdf_sec_supplements: "Compléments recommandés", pdf_sec_heart: "Santé cardiovasculaire",
         risk_legend_green: "Normal", risk_legend_yellow: "Limite", risk_legend_red: "À risque",
         doctor_header: "Rapport d'analyse Norya — Préparé pour mon médecin.",
         doctor_date_label: "Date", doctor_disclaimer: "Ce rapport est à titre informatif. Les décisions médicales nécessitent l'évaluation d'un médecin.",
@@ -2686,6 +2986,9 @@
         hero_cta: "Erste Analyse kostenlos", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "Sicher • Datenschutz",
         hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Ihre Werte im Referenzbereich. Hämoglobin und Glukose normal.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient",
+        trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR",
+        trust_badge_secure_paytr: "🔒 Sichere Zahlung – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "So funktioniert Norya", how_desc: "Drei Schritte von Ihren Laborwerten zu klaren Gesundheitsinfos.",
         how_1: "Registrieren", how_1d: "Kostenloses Konto. E-Mail und Passwort genügen.",
         how_2: "Ergebnisse einfügen", how_2d: "Werte oder Text vom Befund in das Feld einfügen.",
@@ -2722,6 +3025,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Innere Medizin", doctor_2_quote: "Ich erkläre die Laborwerte meiner chronischen Patienten mit Norya. Ältere schätzen die einfache Sprache. Ich nutze die Anwendung weiter.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Innere Medizin", doctor_3_quote: "Ich sage den Patienten, sie sollen den Befund mitnehmen und in Norya öffnen. Zur Kontrolle kommen sie schon vorbereitet. Ich werde die Ergebnisse weiter über diese Anwendung weitergeben.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Allgemeinmedizin", doctor_4_quote: "Seit drei Monaten gebe ich fast jedem Patienten den Norya-Ausdruck nach dem Labor. Ist zur Routine geworden, sie sind zufrieden. Ich gebe die Ergebnisse weiter so raus.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endokrinologie", doctor_5_quote: "Ich empfehle den Norya-Bericht bei Diabetes und Schilddrüse. Die Patienten lesen die Werte zu Hause und kommen mit besseren Fragen. Ich empfehle es.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Hausarzt", doctor_6_quote: "Bei Ergebnissen sage ich « in Norya öffnen und die Zusammenfassung holen ». Besonders ältere Patienten finden den Bericht verständlich. Ich nutze es weiter.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Innere Medizin", doctor_7_quote: "Bei Kontrollen werten wir die Werte mit Norya aus. Patient und ich sparen Zeit. Ersetzt keine Diagnose, aber zur Vorbereitung sehr hilfreich.",
         faq_title: "Häufige Fragen", faq_subtitle: "Kurze Antworten auf das Wichtigste.",
         faq_q1: "Stellt Norya Diagnosen?", faq_a1: "Nein. Norya liefert nur informierende Erklärungen. Die Diagnose obliegt dem Arzt.",
         faq_q2: "Sind meine Daten sicher?", faq_a2: "Ja. Daten werden verschlüsselt gespeichert, nicht geteilt oder verkauft. HIPAA, DSGVO und KVKK.",
@@ -2768,9 +3074,9 @@
         analyze_doctor_notes_label: "Notiz Ihres Arztes / Zusatzinfo (optional)",
         analyze_doctor_notes_placeholder: "z. B. Mein Arzt hat B12 verschrieben; bitte mit diesen Werten berücksichtigen.",
         analyze_or: "— oder —", analyze_upload_btn: "PDF oder Bild (JPG, PNG) hochladen",
-        report_title: "Norya Analysebericht", report_download: "Bericht herunterladen", report_for_doctor: "Zum Arzt mitnehmen", report_copy_link: "Link kopieren",
+        report_title: "Norya Analysebericht", report_download: "Bericht herunterladen", report_for_doctor: "Zum Arzt mitnehmen", report_share: "Bericht teilen", report_share_text: "Ich teile meinen Blutanalysebericht von Norya.", report_copy_link: "Link kopieren", toast_shared: "Geteilt.", toast_share_failed: "Link konnte nicht erstellt werden.",
         pdf_header_title: "Blutbild-Analysebericht", pdf_footer_disclaimer: "Dieser Bericht dient nur der Information. Bitte konsultieren Sie einen Arzt für medizinische Entscheidungen. — Norya",
-        pdf_sec_summary: "Testzusammenfassung", pdf_sec_risk: "Risikohinweise", pdf_sec_values: "Werte und Referenzbereiche", pdf_sec_causes: "Mögliche Ursachen", pdf_sec_recommendations: "Empfehlungen",
+        pdf_sec_summary: "Testzusammenfassung", pdf_sec_risk: "Risikohinweise", pdf_sec_values: "Werte und Referenzbereiche", pdf_sec_causes: "Mögliche Ursachen", pdf_sec_recommendations: "Empfehlungen", pdf_sec_diet: "Ernährungsplan", pdf_sec_supplements: "Nahrungsergänzungsempfehlungen", pdf_sec_heart: "Herzgesundheit",
         risk_legend_green: "Normal", risk_legend_yellow: "Grenze", risk_legend_red: "Risiko",
         doctor_header: "Norya Blutbildbericht — Für meinen Arzt erstellt.",
         doctor_date_label: "Datum", doctor_disclaimer: "Dieser Bericht dient nur der Information. Medizinische Entscheidungen erfordern die Bewertung durch einen Arzt.",
@@ -2831,6 +3137,9 @@
         hero_cta: "נתח את בדיקת הדם שלי בחינם", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות",
         hero_sample_label: "כך ייראה הדוח שלך", hero_sample_summary: "הערכים בטווח התקין. המוגלובין וגלוקוז רגילים.", hero_sample_normal: "תקין", hero_sample_border: "גבול", hero_sample_risk: "תשומת לב", hero_sample_cta: "סיכום + ערכים + המלצות + הורדת PDF.", hero_sample_btn: "קבל דוח כזה — התחל בחינם",
         trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה",
+        trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR",
+        trust_badge_secure_paytr: "🔒 תשלום מאובטח – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "איך נוריה עובדת", how_desc: "שלושה צעדים פשוטים מתוצאות המעבדה לתובנות בריאות.",
         how_1: "הירשם", how_1d: "צור חשבון חינם. אימייל וסיסמה בלבד.",
         how_2: "הדבק תוצאות", how_2d: "הדבק ערכים או טקסט מדף התוצאות.",
@@ -2867,6 +3176,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "רפואה פנימית", doctor_2_quote: "אני מסביר את תוצאות המטופלים הכרוניים עם נוריה. המבוגרים מעריכים את השפה הפשוטה. אמשיך להשתמש.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "רפואה פנימית", doctor_3_quote: "אני אומרת למטופלים לקחת את הדוח הביתה ולפתוח בנוריה. בבדיקת המעקב הם כבר מגיעים מוכנים. אמשיך להעביר תוצאות דרך האפליקציה.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "רופא כללי", doctor_4_quote: "שלושה חודשים אני נותן לכמעט כולם את ההדפסה מנוריה אחרי הבדיקות. נהפך להרגל, הם מרוצים. אמשיך לתת תוצאות ככה.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "אנדוקרינולוגיה", doctor_5_quote: "אני ממליצה על דוח נוריה לחולי סוכרת ולבלוטת התריס. הם קוראים את הערכים בבית ומגיעים עם שאלות טובות יותר. ממליצה.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "רופא משפחה", doctor_6_quote: "כשאני נותן תוצאות אני אומר «תפתח בנוריה ותקבל את הסיכום». במיוחד המטופלים המבוגרים מבינים את הדוח. אמשיך להשתמש.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "רפואה פנימית", doctor_7_quote: "בביקורי מעקב אנחנו מפרשים את הבדיקות עם נוריה. חוסכים זמן שנינו. לא מחליף אבחנה אבל עוזר להכנה.",
         faq_title: "שאלות נפוצות", faq_subtitle: "תשובות קצרות למה שצריך לדעת.",
         faq_q1: "האם נוריה מאבחנת?", faq_a1: "לא. נוריה מספקת רק הסברים לימודיים. האבחנה אצל הרופא.",
         faq_q2: "האם הנתונים שלי מוגנים?", faq_a2: "כן. נתונים מוצפנים, לא משותפים ולא נמכרים. HIPAA, GDPR, KVKK.",
@@ -2912,7 +3224,7 @@
         analyze_doctor_notes_label: "הערת הרופא / מידע נוסף (אופציונלי)",
         analyze_doctor_notes_placeholder: "למשל הרופא רשם לי B12; יש לשקול עם תוצאות אלה.",
         analyze_or: "— או —", analyze_upload_btn: "העלאת PDF או תמונה (JPG, PNG)",
-        report_title: "דוח נוריה", report_download: "הורדת דוח", report_for_doctor: "להרופא שלי", report_copy_link: "העתקת קישור",
+        report_title: "דוח נוריה", report_download: "הורדת דוח", report_for_doctor: "להרופא שלי", report_share: "שתף את הדוח שלי", report_share_text: "משתף את דוח בדיקות הדם שלי מ-Norya.", report_copy_link: "העתקת קישור", toast_shared: "שותף.", toast_share_failed: "לא ניתן ליצור קישור שיתוף.",
         pdf_header_title: "דוח ניתוח בדיקת דם", pdf_footer_disclaimer: "דוח זה להנחיה בלבד. יש להתייעץ עם רופא להחלטות רפואיות. — Norya",
         pdf_sec_summary: "סיכום הבדיקה", pdf_sec_risk: "נקודות לתשומת לב", pdf_sec_values: "ערכים ורפרנס", pdf_sec_causes: "סיבות אפשריות", pdf_sec_recommendations: "המלצות",
         risk_legend_green: "רגיל", risk_legend_yellow: "גבול", risk_legend_red: "בסיכון",
@@ -2975,6 +3287,9 @@
         hero_cta: "تحليل تحاليل دمي مجاناً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • خصوصية",
         hero_sample_label: "تقريرك سيبدو هكذا", hero_sample_summary: "قيمك ضمن النطاق المرجعي. الهيموغلوبين والغلوكوز طبيعيان.", hero_sample_normal: "طبيعي", hero_sample_border: "حدي", hero_sample_risk: "انتباه", hero_sample_cta: "ملخص + قيم + توصيات + تنزيل PDF.", hero_sample_btn: "احصل على هذا التقرير — ابدأ مجاناً",
         trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن",
+        trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR",
+        trust_badge_secure_paytr: "🔒 دفع آمن – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "كيف يعمل نوريا", how_desc: "ثلاث خطوات بسيطة لتحويل نتائجك إلى معلومات صحية واضحة.",
         how_1: "سجّل", how_1d: "أنشئ حساباً مجانياً. البريد وكلمة السر فقط.",
         how_2: "الصق النتائج", how_2d: "الصق القيم أو النص من ورقة النتائج.",
@@ -3011,6 +3326,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "طب باطني", doctor_2_quote: "أشرح نتائج مرضاي المزمنين بنوريا. كبار السن يقدرون اللغة البسيطة. سأستمر في استخدام التطبيق.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "طب باطني", doctor_3_quote: "أقول للمرضى أن يأخذوا التقرير للمنزل ويفتحوه في نوريا. في زيارة المتابعة يأتون مستعدين. سأستمر في إعطاء النتائج عبر هذا التطبيق.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "طبيب عام", doctor_4_quote: "منذ ثلاثة أشهر أعطي تقريباً كل مريض تقرير نوريا بعد التحاليل. صار عادة وهم راضون. سأستمر في إعطاء النتائج من هنا.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "الغدد الصماء", doctor_5_quote: "أنصح مرضى السكري والغدة بالتقارير من نوريا. يقرؤون القيم في البيت ويأتون بأسئلة أوضح. أنصح به.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "طبيب أسرة", doctor_6_quote: "عند إعطاء النتائج أقول «افتح في نوريا وخذ الملخص». خاصة كبار السن يفهمون التقرير. سأستمر باستخدامه.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "الباطنية", doctor_7_quote: "في المتابعة نفسّر التحاليل مع نوريا. نوفر الوقت. لا يغني عن التشخيص لكن مفيد جداً للتحضير.",
         faq_title: "الأسئلة الشائعة", faq_subtitle: "إجابات مختصرة لما تحتاج معرفته.",
         faq_q1: "هل نوريا تُشخّص؟", faq_a1: "لا. نوريا تقدم شرحاً تعليمياً فقط. التشخيص للطبيب.",
         faq_q2: "هل بياناتي آمنة؟", faq_a2: "نعم. بيانات مشفرة، لا مشاركة ولا بيع. نلتزم HIPAA وGDPR وKVKK.",
@@ -3056,7 +3374,7 @@
         analyze_doctor_notes_label: "ملاحظة الطبيب / معلومات إضافية (اختياري)",
         analyze_doctor_notes_placeholder: "مثلاً وصف الطبيب B12؛ يُرجى الأخذ بالاعتبار مع هذه النتائج.",
         analyze_or: "— أو —", analyze_upload_btn: "رفع PDF أو صورة (JPG, PNG)",
-        report_title: "تقرير تحليل نوريا", report_download: "تحميل التقرير", report_for_doctor: "أخذها لطبيبي", report_copy_link: "نسخ الرابط",
+        report_title: "تقرير تحليل نوريا", report_download: "تحميل التقرير", report_for_doctor: "أخذها لطبيبي", report_share: "مشاركة تقريري", report_share_text: "أشارك تقرير تحليل الدم من Norya.", report_copy_link: "نسخ الرابط", toast_shared: "تمت المشاركة.", toast_share_failed: "تعذر إنشاء رابط المشاركة.",
         pdf_header_title: "تقرير تحليل الدم", pdf_footer_disclaimer: "هذا التقرير لأغراض تعليمية فقط. استشر دائماً مختصاً للقرارات الطبية. — Norya",
         pdf_sec_summary: "ملخص التحليل", pdf_sec_risk: "علامات الانتباه", pdf_sec_values: "القيم والمراجع", pdf_sec_causes: "أسباب محتملة", pdf_sec_recommendations: "التوصيات",
         risk_legend_green: "طبيعي", risk_legend_yellow: "حد", risk_legend_red: "في خطر",
@@ -3119,6 +3437,9 @@
         hero_cta: "मेरी पहली विश्लेषण मुफ्त करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • गोपालन",
         hero_sample_label: "आपकी रिपोर्ट ऐसी दिखेगी", hero_sample_summary: "मान सामान्य सीमा में। हीमोग्लोबिन और ग्लूकोज सामान्य।", hero_sample_normal: "सामान्य", hero_sample_border: "सीमा", hero_sample_risk: "ध्यान", hero_sample_cta: "सारांश + मान + सुझाव + PDF डाउनलोड।", hero_sample_btn: "ऐसी रिपोर्ट पाएं — मुफ्त शुरू करें",
         trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी",
+        trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान",
+        trust_badge_secure_paytr: "🔒 सुरक्षित भुगतान – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "नोरिया कैसे काम करता है", how_desc: "लैब रिज़ल्ट को स्पष्ट स्वास्थ्य जानकारी में बदलने के तीन आसान कदम।",
         how_1: "साइन अप करें", how_1d: "मुफ्त खाता बनाएं। ईमेल और पासवर्ड काफी।",
         how_2: "रिज़ल्ट चिपकाएं", how_2d: "रिज़ल्ट शीट के मान या टेक्स्ट चिपकाएं।",
@@ -3155,6 +3476,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "आंतरिक चिकित्सा", doctor_2_quote: "क्रॉनिक मरीज़ों के रिज़ल्ट मैं नोरिया से समझाता हूं। बुजुर्ग सरल भाषा पसंद करते हैं। ऐप इस्तेमाल करता रहूंगा।",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "आंतरिक चिकित्सा", doctor_3_quote: "मैं मरीज़ों को कहती हूं रिपोर्ट घर ले जाएं और नोरिया में खोलें। फॉलो-अप में वे तैयार आते हैं। इस ऐप से नतीजे देती रहूंगी।",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "सामान्य चिकित्सक", doctor_4_quote: "तीन महीने से लगभग हर मरीज़ को लैब के बाद नोरिया की रिपोर्ट दे रहा हूं। आदत बन गई, खुश हैं। यहीं से नतीजे देता रहूंगा।",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "एंडोक्राइनोलॉजी", doctor_5_quote: "मधुमेह और थायरॉइड मरीज़ों को नोरिया रिपोर्ट सुझाती हूं। वे घर पर पढ़कर बेहतर सवालों के साथ आते हैं। सुझाव देती हूं।",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "पारिवारिक चिकित्सक", doctor_6_quote: "नतीजे देते समय कहता हूं «नोरिया में खोलो और सार लो»। खासकर बुजुर्ग मरीज़ रिपोर्ट समझते हैं। इस्तेमाल जारी रखूंगा।",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "आंतरिक चिकित्सा", doctor_7_quote: "फॉलो-अप में नोरिया से रिपोर्ट की व्याख्या करते हैं। दोनों का समय बचता है। निदान की जगह नहीं लेता लेकिन तैयारी के लिए बहुत उपयोगी।",
         faq_title: "अक्सर पूछे जाने वाले प्रश्न", faq_subtitle: "जो जानना ज़रूरी है उसके संक्षिप्त जवाब।",
         faq_q1: "क्या नोरिया निदान करता है?", faq_a1: "नहीं। नोरिया सिर्फ शैक्षिक व्याख्या देता है। निदान डॉक्टर का काम है।",
         faq_q2: "क्या मेरा डेटा सुरक्षित है?", faq_a2: "हाँ। डेटा एन्क्रिप्टेड, साझा या बेचा नहीं जाता। HIPAA, GDPR, KVKK।",
@@ -3200,7 +3524,7 @@
         analyze_doctor_notes_label: "डॉक्टर का नोट / अतिरिक्त जानकारी (वैकल्पिक)",
         analyze_doctor_notes_placeholder: "जैसे डॉक्टर ने B12 दिया; इन परिणामों के साथ ध्यान में रखें।",
         analyze_or: "— या —", analyze_upload_btn: "PDF या चित्र (JPG, PNG) अपलोड करें",
-        report_title: "नोरिया विश्लेषण रिपोर्ट", report_download: "रिपोर्ट डाउनलोड करें", report_for_doctor: "डॉक्टर के पास ले जाएं", report_copy_link: "लिंक कॉपी करें",
+        report_title: "नोरिया विश्लेषण रिपोर्ट", report_download: "रिपोर्ट डाउनलोड करें", report_for_doctor: "डॉक्टर के पास ले जाएं", report_share: "मेरी रिपोर्ट साझा करें", report_share_text: "Norya से अपनी ब्लड टेस्ट रिपोर्ट साझा कर रहा/रही हूँ.", report_copy_link: "लिंक कॉपी करें", toast_shared: "साझा किया गया.", toast_share_failed: "शेयर लिंक नहीं बन सका.",
         pdf_header_title: "रक्त परीक्षण विश्लेषण रिपोर्ट", pdf_footer_disclaimer: "यह रिपोर्ट शैक्षिक उद्देश्यों के लिए है। चिकित्सा निर्णयों के लिए विशेषज्ञ से सलाह लें। — Norya",
         pdf_sec_summary: "परीक्षण सारांश", pdf_sec_risk: "जोखिम संकेत", pdf_sec_values: "मान और संदर्भ", pdf_sec_causes: "संभावित कारण", pdf_sec_recommendations: "सिफारिशें",
         risk_legend_green: "सामान्य", risk_legend_yellow: "सीमा", risk_legend_red: "जोखिम",
@@ -3263,6 +3587,9 @@
         hero_cta: "Πρώτη ανάλυση δωρεάν", hero_see_sample: "Δείτε παράδειγμα αναφοράς", hero_how: "Πώς λειτουργεί", hero_secure: "Ασφαλές • Προστασία ιδιωτικότητας",
         hero_sample_label: "Έτσι θα φαίνεται η αναφορά σας", hero_sample_summary: "Οι τιμές σας εντός φυσιολογικών ορίων. Αιμοσφαιρίνη και γλυκόζη φυσιολογικές.", hero_sample_normal: "Φυσιολογικό", hero_sample_border: "Όριο", hero_sample_risk: "Προσοχή", hero_sample_cta: "Σύνοψη + τιμές + συμβουλές + λήψη PDF.", hero_sample_btn: "Λάβετε αυτή την αναφορά — Ξεκινήστε δωρεάν",
         trust_since: "Από το 2017", trust_satisfaction: "100% ικανοποίηση", trust_users: "100.000+ χρήστες",
+        trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR",
+        trust_badge_secure_paytr: "🔒 Ασφαλής πληρωμή – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "Πώς λειτουργεί η Norya;", how_desc: "Τρία απλά βήματα για να κατανοήσετε τα αποτελέσματά σας.",
         how_1: "Εγγραφή", how_1d: "Δημιουργήστε δωρεάν λογαριασμό.",
         how_2: "Επικολλήστε τα αποτελέσματα", how_2d: "Επικολλήστε τις τιμές ή το κείμενο από το φύλλο αποτελεσμάτων.",
@@ -3299,6 +3626,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Εσωτερική παθολογία", doctor_2_quote: "Εξηγώ τα αποτελέσματα των χρόνιων ασθενών μου με τη Norya. Οι ηλικιωμένοι εκτιμούν την απλή γλώσσα. Θα συνεχίσω να τη χρησιμοποιώ.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Εσωτερική παθολογία", doctor_3_quote: "Λέω στους ασθενείς να πάρουν το rapport σπίτι και να το ανοίξουν στη Norya. Στο follow-up έρχονται ήδη προετοιμασμένοι. Θα συνεχίσω να δίνω αποτελέσματα μέσω αυτής της εφαρμογής.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Γενικός ιατρός", doctor_4_quote: "Τρεις μήνες δίνω σχεδόν σε όλους την έκδοση Norya μετά τις αναλύσεις. Έχει γίνει συνήθεια, είναι ευχαριστημένοι. Θα συνεχίσω να δίνω αποτελέσματα έτσι.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Ενδοκρινολογία", doctor_5_quote: "Συστήνω την αναφορά Norya σε ασθενείς με διαβήτη και θυροειδή. Διαβάζουν τις τιμές στο σπίτι και έρχονται με καλύτερες ερωτήσεις. Το συστήνω.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Οικογενειακός γιατρός", doctor_6_quote: "Όταν δίνω αποτελέσματα λέω «άνοιξέ το στο Norya και πάρε την περίληψη». Ιδίως οι ηλικιωμένοι βρίσκουν την αναφορά κατανοητή. Συνεχίζω να τη χρησιμοποιώ.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Εσωτερική παθολογία", doctor_7_quote: "Στις επαναληπτικές ερμηνεύουμε τις αναλύσεις με το Norya. Κερδίζουμε χρόνο και οι δύο. Δεν αντικαθιστά τη διάγνωση αλλά βοηθά πολύ για την προετοιμασία.",
         faq_title: "Συχνές ερωτήσεις", faq_subtitle: "Σύντομες απαντήσεις.",
         faq_q1: "Η Norya διαγιγνώσκει;", faq_a1: "Όχι. Η Norya παρέχει μόνο εκπαιδευτικές εξηγήσεις. Η διάγνωση και η θεραπεία είναι του γιατρού.",
         faq_q2: "Τα δεδομένα μου είναι ασφαλή;", faq_a2: "Ναι. Κρυπτογραφημένα, δεν κοινοποιούνται. Ακολουθούμε HIPAA, GDPR και KVKK.",
@@ -3343,7 +3673,7 @@
         analyze_placeholder: "Π.χ. Αιμοσφαιρίνη: 14 g/dL, WBC: 7.2, Γλυκόζη: 95 mg/dL...",
         analyze_doctor_notes_label: "Σημείωση γιατρού (προαιρετικό)", analyze_doctor_notes_placeholder: "Π.χ. Ο γιατρός μου έδωσε B12.",
         analyze_or: "— ή —", analyze_upload_btn: "Ανέβασμα PDF ή εικόνας (JPG, PNG)",
-        report_title: "Αναφορά ανάλυσης Norya", report_download: "Λήψη αναφοράς", report_for_doctor: "Για τον γιατρό μου", report_copy_link: "Αντιγραφή συνδέσμου",
+        report_title: "Αναφορά ανάλυσης Norya", report_download: "Λήψη αναφοράς", report_for_doctor: "Για τον γιατρό μου", report_share: "Κοινή χρήση αναφοράς", report_share_text: "Μοιράζομαι την αναφορά αίματος μου από το Norya.", report_copy_link: "Αντιγραφή συνδέσμου", toast_shared: "Κοινοποιήθηκε.", toast_share_failed: "Δεν ήταν δυνατή η δημιουργία συνδέσμου.",
         pdf_header_title: "Αναφορά αιματολογικών", pdf_footer_disclaimer: "Αυτή η αναφορά είναι μόνο εκπαιδευτική. Συμβουλευτείτε πάντα επαγγελματία υγείας.",
         pdf_sec_summary: "Σύνοψη εξετάσεων", pdf_sec_risk: "Σημεία προσοχής", pdf_sec_values: "Τιμές και αναφορές", pdf_sec_causes: "Πιθανές αιτίες", pdf_sec_recommendations: "Συστάσεις",
         risk_legend_green: "Φυσιολογικό", risk_legend_yellow: "Όριο", risk_legend_red: "Σε κίνδυνο",
@@ -3405,6 +3735,9 @@
         hero_cta: "První analýza zdarma", hero_see_sample: "Zobrazit ukázkovou zprávu", hero_how: "Jak to funguje", hero_secure: "Bezpečné • Ochrana soukromí",
         hero_sample_label: "Tak bude vypadat vaše zpráva", hero_sample_summary: "Vaše hodnoty v referenčním rozsahu. Hemoglobin a glukóza v normě.", hero_sample_normal: "Normální", hero_sample_border: "Mez", hero_sample_risk: "Pozor", hero_sample_cta: "Shrnutí + hodnoty + doporučení + stažení PDF.", hero_sample_btn: "Získat tuto zprávu — Začít zdarma",
         trust_since: "Od 2017", trust_satisfaction: "100% spokojenost", trust_users: "100 000+ uživatelů",
+        trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR",
+        trust_badge_secure_paytr: "🔒 Zabezpečená platba – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "Jak funguje Norya?", how_desc: "Tři jednoduché kroky k pochopení výsledků.",
         how_1: "Registrace", how_1d: "Vytvořte si bezplatný účet.",
         how_2: "Vložte výsledky", how_2d: "Vložte hodnoty nebo text z výsledkového listu.",
@@ -3441,6 +3774,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Internista", doctor_2_quote: "Výsledky chronických pacientů vysvětluji s Norya. Starší pacienti oceňují jednoduchý jazyk. Aplikaci budu dál používat.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Internistka", doctor_3_quote: "Říkám pacientům, ať si zprávu vezmou domů a otevřou v Norya. Na kontrolu pak přijdou připravení. Budu výsledky dál předávat přes tuto aplikaci.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Všeobecný lékař", doctor_4_quote: "Už tři měsíce dávám skoro každému výtisk z Norya po odběrech. Stalo se to zvykem, jsou spokojení. Budu výsledky dál dávat tímto způsobem.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endokrinologie", doctor_5_quote: "Doporučuji report Norya u diabetu a štítné žlázy. Pacienti si přečtou hodnoty doma a přijdou s lepšími dotazy. Doporučuji.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Praktický lékař", doctor_6_quote: "Když dávám výsledky, říkám «otevřete v Norya a vezměte si shrnutí». Zvlášť starší pacienti report chápou. Budu to dál používat.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Vnitřní lékařství", doctor_7_quote: "Na kontrolách interpretujeme výsledky s Norya. Oba šetříme čas. Ne nahrazuje diagnózu, ale na přípravu je to velmi užitečné.",
         faq_title: "Časté dotazy", faq_subtitle: "Stručné odpovědi.",
         faq_q1: "Diagnostikuje Norya?", faq_a1: "Ne. Norya poskytuje pouze vzdělávací vysvětlení. Diagnózu určuje lékař.",
         faq_q2: "Jsou moje data v bezpečí?", faq_a2: "Ano. Data jsou šifrována, nesdílíme je. Dodržujeme HIPAA, GDPR a KVKK.",
@@ -3485,7 +3821,7 @@
         analyze_placeholder: "Např. Hemoglobin: 14 g/dL, WBC: 7.2, Glukóza: 95 mg/dL...",
         analyze_doctor_notes_label: "Poznámka lékaře (volitelné)", analyze_doctor_notes_placeholder: "Např. Lékař mi předepsal B12.",
         analyze_or: "— nebo —", analyze_upload_btn: "Nahrát PDF nebo obrázek (JPG, PNG)",
-        report_title: "Zpráva analýzy Norya", report_download: "Stáhnout zprávu", report_for_doctor: "K lékaři", report_copy_link: "Kopírovat odkaz",
+        report_title: "Zpráva analýzy Norya", report_download: "Stáhnout zprávu", report_for_doctor: "K lékaři", report_share: "Sdílet mou zprávu", report_share_text: "Sdílím svou zprávu z krevních testů z Norya.", report_copy_link: "Kopírovat odkaz", toast_shared: "Sdíleno.", toast_share_failed: "Nepodařilo se vytvořit odkaz.",
         pdf_header_title: "Zpráva krevního testu", pdf_footer_disclaimer: "Tato zpráva je pouze vzdělávací. Vždy se poraďte s lékařem.",
         pdf_sec_summary: "Shrnutí testu", pdf_sec_risk: "Rizikové body", pdf_sec_values: "Hodnoty a referenční rozsahy", pdf_sec_causes: "Možné příčiny", pdf_sec_recommendations: "Doporučení",
         risk_legend_green: "Normální", risk_legend_yellow: "Mez", risk_legend_red: "Riziko",
@@ -3547,6 +3883,9 @@
         hero_cta: "Prva analiza besplatno", hero_see_sample: "Pogledaj primer izveštaja", hero_how: "Kako funkcioniše", hero_secure: "Bezbedno • Privatnost",
         hero_sample_label: "Ovako će izgledati vaš izveštaj", hero_sample_summary: "Vrednosti u referentnom opsegu. Hemoglobin i glukoza normalni.", hero_sample_normal: "Normalno", hero_sample_border: "Granica", hero_sample_risk: "Pažnja", hero_sample_cta: "Rezime + vrednosti + preporuke + preuzimanje PDF.", hero_sample_btn: "Nabavite ovaj izveštaj — Počnite besplatno",
         trust_since: "Od 2017", trust_satisfaction: "100% zadovoljstvo", trust_users: "100.000+ korisnika",
+        trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR",
+        trust_badge_secure_paytr: "🔒 Sigurna plaćanja – PayTR",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         how_title: "Kako funkcioniše Norya?", how_desc: "Tri jednostavna koraka za razumevanje rezultata.",
         how_1: "Registracija", how_1d: "Napravite besplatan nalog.",
         how_2: "Nalepite rezultate", how_2d: "Nalepite vrednosti ili tekst sa listića rezultata.",
@@ -3583,6 +3922,9 @@
         doctor_2_name: "Dr. Markus B.", doctor_2_role: "Internista", doctor_2_quote: "Rezultate hroničnih pacijenata objašnjavam uz Norya. Stariji pacijenti cene jednostavan jezik. Nastaviću da koristim aplikaciju.",
         doctor_3_name: "Dr. Elena V.", doctor_3_role: "Interna medicina", doctor_3_quote: "Kažem pacijentima da ponesu izveštaj kući i otvore u Norya. Na kontrolu dođu već spremni. Nastaviću da rezultate dajem preko ove aplikacije.",
         doctor_4_name: "Dr. Can Ö.", doctor_4_role: "Opšti praktičar", doctor_4_quote: "Već tri meseca skoro svakom dajem Norya štampu posle analiza. Postalo je navika, zadovoljni su. Nastaviću da rezultate dajem ovako.",
+        doctor_5_name: "Dr. Şebnem A.", doctor_5_role: "Endokrinologija", doctor_5_quote: "Preporučujem Norya izveštaj kod dijabetesa i štitne žlezde. Pacijenti pročitaju vrednosti kod kuće i dođu s boljim pitanjima. Preporučujem.",
+        doctor_6_name: "Dr. Tolga Ş.", doctor_6_role: "Porodični lekar", doctor_6_quote: "Kad dajem rezultate kažem «otvori u Norya i uzmi rezime». Naročito stariji pacijenti razumeju izveštaj. Nastavljam da koristim.",
+        doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Interna medicina", doctor_7_quote: "Na kontrolama tumačimo analize sa Norya. Oboje štedimo vreme. Ne zamenjuje dijagnozu ali je vrlo korisno za pripremu.",
         faq_title: "Često postavljana pitanja", faq_subtitle: "Kratki odgovori.",
         faq_q1: "Da li Norya dijagnostikuje?", faq_a1: "Ne. Norya pruža samo obrazovna objašnjenja. Dijagnozu postavlja lekar.",
         faq_q2: "Da li su moji podaci bezbedni?", faq_a2: "Da. Podaci su šifrovani, ne delimo ih. Poštujemo HIPAA, GDPR i KVKK.",
@@ -3627,7 +3969,7 @@
         analyze_placeholder: "Npr. Hemoglobin: 14 g/dL, WBC: 7.2, Glukoza: 95 mg/dL...",
         analyze_doctor_notes_label: "Napomena lekara (opciono)", analyze_doctor_notes_placeholder: "Npr. Lekar mi je prepisao B12.",
         analyze_or: "— ili —", analyze_upload_btn: "Otpremite PDF ili sliku (JPG, PNG)",
-        report_title: "Izveštaj analize Norya", report_download: "Preuzmi izveštaj", report_for_doctor: "Kod lekara", report_copy_link: "Kopiraj link",
+        report_title: "Izveštaj analize Norya", report_download: "Preuzmi izveštaj", report_for_doctor: "Kod lekara", report_share: "Podeli moj izveštaj", report_share_text: "Delim svoj izveštaj analize krvi sa Norya.", report_copy_link: "Kopiraj link", toast_shared: "Podeljeno.", toast_share_failed: "Nije moguće kreirati link.",
         pdf_header_title: "Izveštaj krvnog testa", pdf_footer_disclaimer: "Ovaj izveštaj je samo obrazovni. Uvek posavetujte se sa lekarom.",
         pdf_sec_summary: "Rezime testa", pdf_sec_risk: "Znaci rizika", pdf_sec_values: "Vrednosti i referentni opseg", pdf_sec_causes: "Mogući uzroci", pdf_sec_recommendations: "Preporuke",
         risk_legend_green: "Normalno", risk_legend_yellow: "Granica", risk_legend_red: "Rizično",
@@ -3806,6 +4148,7 @@
         document.getElementById('user-phone-country').style.display = pc ? '' : 'none';
         analyzeLoginPrompt.classList.add('hidden');
         analyzeForm.classList.remove('hidden');
+        if (typeof setWizardStep === 'function') setWizardStep(1);
         if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
         loadUsage();
         if (typeof updateTestModeUI === 'function') updateTestModeUI();
@@ -3863,7 +4206,7 @@
         var text = await res.text();
         try { data = JSON.parse(text); } catch (_) { data = {}; }
       } catch (err) {
-        errEl.textContent = 'Bağlantı hatası.';
+        errEl.textContent = 'Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.';
         errEl.classList.remove('hidden');
         return;
       }
@@ -3937,7 +4280,7 @@
         var text = await res.text();
         try { data = JSON.parse(text); } catch (_) { data = {}; }
       } catch (err) {
-        errEl.textContent = 'Bağlantı hatası.';
+        errEl.textContent = 'Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.';
         errEl.classList.remove('hidden');
         return;
       }
@@ -4124,7 +4467,7 @@
         var pm = document.getElementById('payment-modal');
         if (pm) { pm.classList.remove('hidden'); pm.classList.add('flex'); }
       } catch (err) {
-        toast('Bağlantı hatası.', 'error');
+        toast('Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.', 'error');
       }
       if (btn) btn.disabled = false;
       return false;
@@ -4206,7 +4549,7 @@
           toast(data.detail || 'Giriş yapılamadı.', 'error');
         }
       } catch (err) {
-        toast('Bağlantı hatası.', 'error');
+        toast('Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.', 'error');
       }
     }
     tryGuestLoginFromHash();
@@ -4337,17 +4680,150 @@
       document.getElementById('history-detail').classList.add('hidden');
     }
 
-    function updateAnalyzeButtonState() {
-      const textEl = document.getElementById('analyze-text');
-      const fileInput = document.getElementById('analyze-pdf');
-      const btn = document.getElementById('analyze-btn');
-      if (!btn) return;
-      var text = textEl ? (textEl.value || '').trim() : '';
-      var file = fileInput && fileInput.files && fileInput.files[0];
-      var hasFile = !!(file && (file.size > 0 || file.size === undefined));
-      if (btn.getAttribute('data-loading') === 'true') return;
-      btn.disabled = !text && !hasFile;
-    }
+    var wizardCurrentStep = 1;
+      var wizardProgressInterval = null;
+      var WIZARD_MAX_FILE_SIZE = 15 * 1024 * 1024; // 15 MB
+
+      function setWizardStep(step) {
+        wizardCurrentStep = Math.max(1, Math.min(4, step));
+        var i;
+        for (i = 1; i <= 4; i++) {
+          var panel = document.getElementById('wizard-step-' + i);
+          var dot = document.getElementById('wizard-dot-' + i);
+          var line = document.getElementById('wizard-line-' + i);
+          if (panel) panel.classList.toggle('hidden', i !== wizardCurrentStep);
+          if (dot) {
+            dot.classList.remove('bg-primary-600', 'border-primary-600', 'text-white', 'bg-primary-500', 'border-primary-500');
+            dot.classList.add('border-navy-300', 'dark:border-navy-600', 'text-navy-500', 'bg-white', 'dark:bg-navy-800');
+            if (i < wizardCurrentStep) { dot.classList.add('bg-primary-500', 'border-primary-500', 'text-white'); dot.classList.remove('border-navy-300', 'text-navy-500', 'bg-white', 'dark:bg-navy-800'); }
+            if (i === wizardCurrentStep) { dot.classList.add('bg-primary-600', 'border-primary-600', 'text-white'); dot.classList.remove('border-navy-300', 'text-navy-500', 'bg-white', 'dark:bg-navy-800'); }
+          }
+          if (line) {
+            line.classList.remove('bg-primary-600', 'dark:bg-primary-500');
+            line.classList.add('bg-navy-200', 'dark:bg-navy-700');
+            if (i < wizardCurrentStep) { line.classList.add('bg-primary-600', 'dark:bg-primary-500'); line.classList.remove('bg-navy-200', 'dark:bg-navy-700'); }
+          }
+        }
+        var prevBtn = document.getElementById('wizard-btn-prev');
+        var nextBtn = document.getElementById('wizard-btn-next');
+        if (prevBtn) prevBtn.classList.toggle('hidden', wizardCurrentStep === 1);
+        if (nextBtn) {
+          nextBtn.disabled = false;
+          nextBtn.style.display = (wizardCurrentStep === 3 || wizardCurrentStep === 4) ? 'none' : '';
+          var t = T[getLang()] || T.tr;
+          nextBtn.textContent = wizardCurrentStep === 2 ? (t.analyze_btn || 'Analiz Et') : (t.wizard_next || 'Sonraki');
+          if (wizardCurrentStep === 1) nextBtn.disabled = !wizardCanProceedFrom1();
+        }
+        if (wizardCurrentStep === 2) wizardFillPreview();
+        if (wizardCurrentStep === 3) wizardStartProgress();
+        if (wizardCurrentStep === 4) wizardStopProgress();
+      }
+
+      function wizardCanProceedFrom1() {
+        var textEl = document.getElementById('analyze-text');
+        var fileInput = document.getElementById('analyze-pdf');
+        var text = textEl ? (textEl.value || '').trim() : '';
+        var file = fileInput && fileInput.files && fileInput.files[0];
+        return !!(text.length > 0 || (file && file.size > 0));
+      }
+
+      function wizardFillPreview() {
+        var fileInput = document.getElementById('analyze-pdf');
+        var textEl = document.getElementById('analyze-text');
+        var file = fileInput && fileInput.files && fileInput.files[0];
+        var text = textEl ? (textEl.value || '').trim() : '';
+        var langSelect = document.getElementById('wizard-lang');
+        if (langSelect) langSelect.value = getLang() || 'tr';
+        var nameEl = document.getElementById('wizard-preview-name');
+        var metaEl = document.getElementById('wizard-preview-meta');
+        var fileBlock = document.getElementById('wizard-preview-file');
+        var textBlock = document.getElementById('wizard-preview-text');
+        var thumb = document.getElementById('wizard-thumb');
+        if (file && file.size > 0) {
+          if (fileBlock) fileBlock.classList.remove('hidden');
+          if (textBlock) textBlock.classList.add('hidden');
+          if (nameEl) nameEl.textContent = file.name;
+          var sizeStr = file.size < 1024 ? file.size + ' B' : (file.size < 1024 * 1024 ? (file.size / 1024).toFixed(1) + ' KB' : (file.size / (1024 * 1024)).toFixed(1) + ' MB');
+          if (metaEl) metaEl.textContent = sizeStr + (file.type === 'application/pdf' ? ' • PDF' : ' • Görsel');
+          if (thumb) {
+            thumb.innerHTML = '';
+            if (file.type && file.type.indexOf('image') === 0) {
+              var img = document.createElement('img');
+              img.src = URL.createObjectURL(file);
+              img.className = 'w-full h-full object-cover rounded-xl';
+              img.alt = '';
+              thumb.appendChild(img);
+            } else { var s = document.createElement('span'); s.textContent = '📄'; s.className = 'text-2xl'; thumb.appendChild(s); }
+          }
+        } else {
+          if (fileBlock) fileBlock.classList.add('hidden');
+          if (textBlock) textBlock.classList.remove('hidden');
+          if (thumb) { thumb.innerHTML = ''; var s = document.createElement('span'); s.textContent = '📋'; s.className = 'text-2xl'; thumb.appendChild(s); }
+          var charEl = document.getElementById('wizard-preview-char');
+          if (charEl) charEl.textContent = text.length + ' karakter';
+        }
+      }
+
+      function wizardStartProgress() {
+        var bar = document.getElementById('wizard-progress-bar');
+        if (bar) bar.style.width = '0%';
+        wizardProgressInterval = setInterval(function() {
+          var bar = document.getElementById('wizard-progress-bar');
+          if (!bar) return;
+          var w = parseInt(bar.style.width || '0', 10);
+          if (w >= 90) return;
+          bar.style.width = (w + Math.random() * 8 + 4) + '%';
+        }, 400);
+      }
+
+      function wizardStopProgress() {
+        if (wizardProgressInterval) { clearInterval(wizardProgressInterval); wizardProgressInterval = null; }
+        var bar = document.getElementById('wizard-progress-bar');
+        if (bar) bar.style.width = '100%';
+      }
+
+      function wizardNext() {
+        var errEl = document.getElementById('analyze-error');
+        errEl.classList.add('hidden');
+        if (wizardCurrentStep === 1) {
+          var fileInput = document.getElementById('analyze-pdf');
+          var file = fileInput && fileInput.files && fileInput.files[0];
+          if (file && file.size > WIZARD_MAX_FILE_SIZE) {
+            errEl.textContent = 'Dosya çok büyük. En fazla 15 MB yükleyebilirsiniz.';
+            errEl.classList.remove('hidden');
+            return;
+          }
+          if (file && file.name && !/\.(pdf|jpg|jpeg|png)$/i.test(file.name)) {
+            errEl.textContent = 'Sadece PDF, JPG veya PNG yükleyebilirsiniz.';
+            errEl.classList.remove('hidden');
+            return;
+          }
+          setWizardStep(2);
+        } else if (wizardCurrentStep === 2) {
+          document.getElementById('wizard-lang').value && chooseLang(document.getElementById('wizard-lang').value);
+          setWizardStep(3);
+          window.wizardOnAnalyzeSuccess = function() { setWizardStep(4); window.wizardOnAnalyzeSuccess = null; };
+          runAnalyze();
+        }
+      }
+
+      function wizardPrev() {
+        document.getElementById('analyze-error').classList.add('hidden');
+        if (wizardCurrentStep === 4) setWizardStep(1);
+        else setWizardStep(wizardCurrentStep - 1);
+      }
+
+      function updateAnalyzeButtonState() {
+        const textEl = document.getElementById('analyze-text');
+        const fileInput = document.getElementById('analyze-pdf');
+        const btn = document.getElementById('analyze-btn');
+        var nextBtn = document.getElementById('wizard-btn-next');
+        var text = textEl ? (textEl.value || '').trim() : '';
+        var file = fileInput && fileInput.files && fileInput.files[0];
+        var hasFile = !!(file && (file.size > 0 || file.size === undefined));
+        if (btn && btn.getAttribute('data-loading') !== 'true') { btn.disabled = !text && !hasFile; }
+        if (nextBtn && wizardCurrentStep === 1) nextBtn.disabled = !text && !hasFile;
+      }
     async function runAnalyze() {
       const fileInput = document.getElementById('analyze-pdf');
       const textEl = document.getElementById('analyze-text');
@@ -4457,6 +4933,7 @@
             if (limitEl) { limitEl.textContent = msg; limitEl.classList.remove('hidden'); }
             if (paymentActions) paymentActions.classList.remove('hidden');
           }
+          if (typeof window.wizardOnAnalyzeSuccess === 'function') { setWizardStep(2); window.wizardOnAnalyzeSuccess = null; }
           return;
         }
         renderReport(data.sonuc || data.result || '');
@@ -4465,12 +4942,14 @@
         lastShareToken = null;
         if (getToken()) { loadHistory(); loadUsage(); }
         toast('Analiz tamamlandı.', 'success');
+        if (typeof window.wizardOnAnalyzeSuccess === 'function') window.wizardOnAnalyzeSuccess();
       } catch (e) {
         var t = T[getLang()] || T.tr;
         var networkMsg = (t.network_error || 'Bağlantı hatası. Lütfen tekrar deneyin.');
         errEl.textContent = networkMsg;
         errEl.classList.remove('hidden');
         toast(networkMsg, 'error');
+        if (typeof window.wizardOnAnalyzeSuccess === 'function') { setWizardStep(2); window.wizardOnAnalyzeSuccess = null; }
       } finally {
         btn.removeAttribute('data-loading');
         updateAnalyzeButtonState();
@@ -4478,9 +4957,35 @@
       }
     }
     document.getElementById('analyze-pdf').addEventListener('change', function() {
-      document.getElementById('pdf-name').textContent = this.files[0] ? this.files[0].name : '';
+      var nameEl = document.getElementById('pdf-name');
+      if (this.files[0]) {
+        nameEl.textContent = this.files[0].name;
+        var errEl = document.getElementById('analyze-error');
+        if (this.files[0].size > WIZARD_MAX_FILE_SIZE) { errEl.textContent = 'Dosya çok büyük. En fazla 15 MB.'; errEl.classList.remove('hidden'); } else { errEl.classList.add('hidden'); }
+      } else nameEl.textContent = '';
       updateAnalyzeButtonState();
     });
+    (function() {
+      var dropZone = document.getElementById('wizard-drop-zone');
+      var fileInput = document.getElementById('analyze-pdf');
+      if (dropZone && fileInput) {
+        dropZone.addEventListener('click', function(e) { if (e.target === dropZone || e.target.closest('#wizard-drop-zone')) fileInput.click(); });
+        dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('ring-2', 'ring-primary-400'); });
+        dropZone.addEventListener('dragleave', function() { dropZone.classList.remove('ring-2', 'ring-primary-400'); });
+        dropZone.addEventListener('drop', function(e) {
+          e.preventDefault();
+          dropZone.classList.remove('ring-2', 'ring-primary-400');
+          var files = e.dataTransfer && e.dataTransfer.files;
+          if (files && files[0]) {
+            fileInput.files = files;
+            document.getElementById('pdf-name').textContent = files[0].name;
+            var errEl = document.getElementById('analyze-error');
+            if (files[0].size > WIZARD_MAX_FILE_SIZE) { errEl.textContent = 'Dosya çok büyük. En fazla 15 MB.'; errEl.classList.remove('hidden'); } else { errEl.classList.add('hidden'); }
+            updateAnalyzeButtonState();
+          }
+        });
+      }
+    })();
     var analyzeTextEl = document.getElementById('analyze-text');
     if (analyzeTextEl) {
       analyzeTextEl.addEventListener('input', updateAnalyzeButtonState);
@@ -4538,7 +5043,7 @@
           errEl.classList.remove('hidden');
         }
       } catch (err) {
-        errEl.textContent = 'Bağlantı hatası.';
+        errEl.textContent = 'Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.';
         errEl.classList.remove('hidden');
       }
     }
@@ -4565,14 +5070,14 @@
           errEl.classList.remove('hidden');
         }
       } catch (err) {
-        errEl.textContent = 'Bağlantı hatası.';
+        errEl.textContent = 'Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.';
         errEl.classList.remove('hidden');
       }
     }
     async function downloadMyData() {
       try {
         var res = await fetch(API_BASE + '/analyze/export', { headers: { 'Authorization': 'Bearer ' + getToken() } });
-        if (!res.ok) { toast('Veri indirilemedi.', 'error'); return; }
+        if (!res.ok) { toast('Verileriniz indirilemedi. Lütfen tekrar deneyin.', 'error'); return; }
         var data = await res.json();
         var blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
         var a = document.createElement('a');
@@ -4581,7 +5086,7 @@
         a.click();
         URL.revokeObjectURL(a.href);
         toast('Verileriniz indirildi.', 'success');
-      } catch (e) { toast('Veri indirilemedi.', 'error'); }
+      } catch (e) { toast('Verileriniz indirilemedi. Lütfen tekrar deneyin.', 'error'); }
     }
     function openDeleteAccountConfirm() {
       document.getElementById('delete-account-password').value = '';
@@ -4616,7 +5121,7 @@
           errEl.classList.remove('hidden');
         }
       } catch (err) {
-        errEl.textContent = 'Bağlantı hatası.';
+        errEl.textContent = 'Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.';
         errEl.classList.remove('hidden');
       }
     }
@@ -4654,6 +5159,12 @@
       document.getElementById('price-single').textContent = formatPrice(p.single);
       document.getElementById('price-monthly').textContent = formatPrice(p.monthly);
       document.getElementById('price-yearly').textContent = formatPrice(p.yearly);
+      var cs = document.getElementById('compare-price-single');
+      var cm = document.getElementById('compare-price-monthly');
+      var cy = document.getElementById('compare-price-yearly');
+      if (cs) cs.textContent = formatPrice(p.single);
+      if (cm) cm.textContent = formatPrice(p.monthly);
+      if (cy) cy.textContent = formatPrice(p.yearly);
       document.getElementById('btn-single').textContent = formatPrice(p.single) + ' ' + sym;
       document.getElementById('btn-monthly').textContent = formatPrice(p.monthly) + ' ' + sym;
       document.getElementById('btn-yearly').textContent = formatPrice(p.yearly) + ' ' + sym;

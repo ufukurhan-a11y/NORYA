@@ -8,7 +8,10 @@
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center">
   <div class="w-full max-w-sm rounded-xl bg-slate-800 border border-slate-700 p-6 shadow-xl">
-    <h1 class="text-xl font-semibold text-white mb-2">Norya Admin</h1>
+    <div class="flex justify-center mb-4">
+      <img src="/static/logo.png" alt="Norya AI" class="h-14 w-auto object-contain bg-white" />
+    </div>
+    <h1 class="text-xl font-semibold text-white mb-2 text-center">Norya Admin</h1>
     <p class="text-slate-400 text-sm mb-4">ADMIN_SECRET ile giriş yapın.</p>
     {% if err %}
     <p class="text-red-400 text-sm mb-2">{% if err == 'config' %}Admin yapılandırılmamış.{% elif err == 'lockout' %}Çok fazla başarısız deneme. 15 dakika sonra tekrar deneyin.{% else %}Geçersiz şifre.{% endif %}</p>

@@ -173,7 +173,9 @@ def build_reset_email_html(lang: str, reset_link: str, expiry_hours: int = 1) ->
     footer = _reset_body_footer(lang)
     btn = _button_text(lang)
     from_name = getattr(settings, "smtp_from_name", None) or "Norya"
-    # Kurumsal kimlik: Norya renkleri, logo alanı, tek sütun
+    logo_url = (getattr(settings, "frontend_url", None) or "").strip().rstrip("/") or "https://norya.com"
+    logo_url = f"{logo_url}/static/logo.png"
+    # Kurumsal kimlik: logo + Norya renkleri, tek sütun
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head>
@@ -188,7 +190,7 @@ def build_reset_email_html(lang: str, reset_link: str, expiry_hours: int = 1) ->
         <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:480px;background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(10,25,41,0.08);overflow:hidden;">
           <tr>
             <td style="background:linear-gradient(135deg,#1a2d42 0%,#2d4a6f 50%,#0d9488 100%);padding:28px 24px;text-align:center;">
-              <div style="font-size:14px;letter-spacing:0.12em;color:rgba(255,255,255,0.9);font-weight:700;margin-bottom:4px;">NORYA</div>
+              <img src="{logo_url}" alt="Norya" style="height:56px;width:auto;max-width:200px;display:block;margin:0 auto 8px;object-fit:contain;background:#fff;" />
               <div style="font-size:18px;font-weight:600;color:#ffffff;">{from_name}</div>
             </td>
           </tr>

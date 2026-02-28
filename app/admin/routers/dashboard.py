@@ -1,5 +1,5 @@
-"""Dashboard: özet metrikler, son işlemler."""
-from datetime import datetime, timedelta
+"""Dashboard: özet metrikler, son işlemler, aylık trend grafiği."""
+from datetime import date, datetime, timedelta
 
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -17,7 +17,54 @@ from app.admin.deps import (
 )
 from app.core.config import settings
 from app.core.database import get_db
-from app.models import AnalysisJob, PaymentOrder, Presence, SecurityLog, User
+from app.models import AnalysisJob, AnalysisRecord, PaymentOrder, Presence, SecurityLog, User
+
+# Ay adları (grafik etiketleri)
+MONTH_NAMES_TR = ("Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara")
+
+
+def _month_minus(d: date, n: int) -> date:
+    """d tarihinden n ay öncesi (ayın 1'i)."""
+    y, m = d.year, d.month
+    m -= n
+    while m <= 0:
+        m += 12
+        y -= 1
+    while m > 12:
+        m -= 12
+        y += 1
+    return date(y, m, 1)
+
+
+def _last_24_months_monthly_stats(db: Session, now: datetime) -> tuple[list[str], list[int], list[float], list[int]]:
+    """Son 24 ay (eskiden yeniye) için: etiketler, analiz sayısı, satış (EUR), yeni kullanıcı."""
+    today = now.date() if hasattr(now, "date") else date(now.year, now.month, now.day)
+    labels = []
+    analyses = []
+    sales = []
+    users = []
+    for i in range(23, -1, -1):  # 23 ay önce ... bu ay
+        m_start = _month_minus(today, i)
+        m_end = _month_minus(today, i - 1)  # bir sonraki ayın 1'i (i=0 için gelecek ay)
+        dt_start = datetime(m_start.year, m_start.month, m_start.day, 0, 0, 0, 0)
+        dt_end = datetime(m_end.year, m_end.month, m_end.day, 0, 0, 0, 0)
+        labels.append(f"{MONTH_NAMES_TR[m_start.month - 1]} {m_start.year}")
+        n_analyses = db.exec(
+            select(func.count(AnalysisRecord.id)).where(AnalysisRecord.created_at >= dt_start).where(AnalysisRecord.created_at < dt_end)
+        ).one() or 0
+        analyses.append(n_analyses)
+        total_cents = db.exec(
+            select(func.sum(PaymentOrder.amount_kurus))
+            .where(PaymentOrder.status == "completed")
+            .where(PaymentOrder.created_at >= dt_start)
+            .where(PaymentOrder.created_at < dt_end)
+        ).one() or 0
+        sales.append(round((total_cents / 100), 2))
+        n_users = db.exec(
+            select(func.count(User.id)).where(User.created_at >= dt_start).where(User.created_at < dt_end)
+        ).one() or 0
+        users.append(n_users)
+    return labels, analyses, sales, users
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -138,6 +185,9 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
         for o in orders
     ]
 
+    # Son 24 ay trend (grafik için)
+    chart_labels, chart_analyses, chart_sales, chart_users = _last_24_months_monthly_stats(db, now)
+
     return templates.TemplateResponse(
         "admin/dashboard.html",
         {
@@ -149,5 +199,9 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
             "avg_analysis_time": avg_analysis_time,
             "failed_payments": failed_payments,
             "last_transactions": last_transactions,
+            "chart_labels": chart_labels,
+            "chart_analyses": chart_analyses,
+            "chart_sales": chart_sales,
+            "chart_users": chart_users,
         },
     )

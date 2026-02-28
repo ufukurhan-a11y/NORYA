@@ -8,7 +8,7 @@ from fastapi import APIRouter, Depends, Header, HTTPException, Query
 from fastapi.responses import HTMLResponse, Response
 from sqlmodel import Session, select, func
 
-from app.admin.deps import _admin_secret_constant_time_compare
+from app.admin.deps import _admin_secret_constant_time_compare, require_admin_secret_or_cookie
 from app.core.config import settings
 from app.core.database import get_db
 from app.models import AnalysisRecord, AuditLog, PaymentOrder, Presence, User
@@ -50,7 +50,7 @@ _ADMIN_HTML = """<!DOCTYPE html>
   <style>
     body { font-family: system-ui, sans-serif; margin: 0; padding: 1rem; background: #0f172a; color: #e2e8f0; }
     h1 { font-size: 1.5rem; display: flex; align-items: center; gap: 10px; }
-    .brand-logo { width: 40px; height: 40px; flex-shrink: 0; }
+    .brand-logo { width: 56px; height: auto; max-height: 56px; object-fit: contain; flex-shrink: 0; background: #fff; }
     .login-box { max-width: 320px; margin: 2rem auto; padding: 1.5rem; background: #1e293b; border-radius: 12px; border: 1px solid #334155; }
     .login-box input { width: 100%; padding: 0.5rem; margin-bottom: 0.75rem; border: 1px solid #475569; border-radius: 6px; background: #0f172a; color: #e2e8f0; }
     .login-box button { width: 100%; padding: 0.6rem; background: #e07a5f; color: white; border: none; border-radius: 6px; cursor: pointer; font-weight: 600; }
@@ -74,14 +74,14 @@ _ADMIN_HTML = """<!DOCTYPE html>
 </head>
 <body>
   <div id="login" class="login-box">
-    <h1><svg class="brand-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="36" height="36" rx="12" fill="#e07a5f"/><path d="M10 26V10h3.2l5.6 10.4V10H22v16h-3.2L13.2 15.6V26H10z" fill="white"/><circle cx="26" cy="24" r="2.5" fill="white" opacity="0.9"/></svg>Norya Admin</h1>
+    <h1><img src="/static/logo.png" alt="Norya AI" class="brand-logo" />Norya Admin</h1>
     <p>Admin şifresini girin (ADMIN_SECRET)</p>
     <input type="password" id="secret" placeholder="Admin şifresi" />
     <button type="button" onclick="enter()">Giriş</button>
     <p id="login-err" class="err" style="display:none;"></p>
   </div>
   <div id="dashboard" class="dashboard">
-    <h1><svg class="brand-logo" viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg"><rect width="36" height="36" rx="12" fill="#e07a5f"/><path d="M10 26V10h3.2l5.6 10.4V10H22v16h-3.2L13.2 15.6V26H10z" fill="white"/><circle cx="26" cy="24" r="2.5" fill="white" opacity="0.9"/></svg>Norya Admin Panel</h1>
+    <h1><img src="/static/logo.png" alt="Norya AI" class="brand-logo" />Norya Admin Panel</h1>
     <p style="color:#94a3b8;font-size:0.9rem;margin-top:0.25rem;"><a href="/health" target="_blank" class="health-link">Sistem durumu (health)</a> <span id="health-badge"></span></p>
     <div class="stats" id="stats"></div>
     <section>
@@ -317,7 +317,7 @@ def admin_analysis_pdf(
     analysis_id: int,
     lang: str = Query("tr", description="Rapor dili: tr, en, de, fr, es, it, he, ar, hi, el, cs, sr"),
     db: Session = Depends(get_db),
-    _: None = Depends(_require_admin),
+    _: None = Depends(require_admin_secret_or_cookie),
 ):
     """Admin: İlgili analizin PDF raporunu döndürür (çok dilli başlık/etiketler)."""
     rec = db.get(AnalysisRecord, analysis_id)
@@ -351,7 +351,7 @@ def admin_analysis_pdf(
 def admin_analysis_original(
     analysis_id: int,
     db: Session = Depends(get_db),
-    _: None = Depends(_require_admin),
+    _: None = Depends(require_admin_secret_or_cookie),
 ):
     """Admin: Hastanın yüklediği orijinal belgeyi döndürür (PDF/görsel). Yanında 'PDF görüntüle' ile Norya raporu açılır."""
     rec = db.get(AnalysisRecord, analysis_id)

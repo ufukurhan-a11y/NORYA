@@ -69,3 +69,19 @@ def require_admin_cookie(request: Request):
     if not verify_admin_cookie(c):
         return RedirectResponse(url="/admin/login", status_code=302)
     return None
+
+
+def require_admin_secret_or_cookie(
+    request: Request,
+    x_admin_secret: str | None = Header(None, alias="X-Admin-Secret"),
+    admin_secret: str | None = Query(None),
+):
+    """PDF/orijinal belge için: cookie (yeni panel) veya X-Admin-Secret (eski API) ile yetki."""
+    if not (settings.admin_secret or "").strip():
+        raise HTTPException(status_code=503, detail="Admin paneli yapılandırılmamış.")
+    if verify_admin_cookie(request.cookies.get(ADMIN_COOKIE)):
+        return None
+    secret = (x_admin_secret or admin_secret) or ""
+    if _admin_secret_constant_time_compare(secret, settings.admin_secret):
+        return None
+    raise HTTPException(status_code=403, detail="Yetkisiz.")

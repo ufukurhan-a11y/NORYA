@@ -1,4 +1,6 @@
 from .auth import (
+    ChangePasswordRequest,
+    DeleteAccountRequest,
     ForgotPasswordRequest,
     GuestLoginRequest,
     ResetPasswordRequest,
@@ -6,9 +8,12 @@ from .auth import (
     UserCreate,
     UserLogin,
     UserResponse,
+    UserUpdate,
 )
 
 __all__ = [
+    "ChangePasswordRequest",
+    "DeleteAccountRequest",
     "ForgotPasswordRequest",
     "GuestLoginRequest",
     "ResetPasswordRequest",
@@ -16,4 +21,5 @@ __all__ = [
     "UserCreate",
     "UserLogin",
     "UserResponse",
+    "UserUpdate",
 ]

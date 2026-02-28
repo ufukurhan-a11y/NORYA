@@ -73,6 +73,8 @@ def analyses_list(
             "created_at": r.created_at.strftime("%d.%m.%Y %H:%M") if r.created_at else "-",
             "source": r.source or "text",
             "input_preview": (r.input_text or "")[:100] + ("…" if len(r.input_text or "") > 100 else ""),
+            "result_preview": (r.result_text or "")[:150] + ("…" if len(r.result_text or "") > 150 else ""),
+            "has_original": bool(getattr(r, "original_stored_path", None)),
         }
         for r in records
     ]

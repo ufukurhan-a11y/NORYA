@@ -1,197 +1,59 @@
-# Norya – Deploy ve production
+# Norya — Yayına Hazırlık (Production Checklist)
 
-## 1. Render ile deploy
+Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri listeler.
 
-### 1.1 Repo’yu bağlama
+## Zorunlu (.env)
 
-1. [Render Dashboard](https://dashboard.render.com) → **New** → **Web Service**
-2. Repo’yu bağlayın (GitHub/GitLab); **norya** projesini seçin
-3. **Build Command:** `pip install --no-cache-dir -r requirements.txt`
-4. **Start Command:** `gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:$PORT`
-5. **Environment** sekmesinde aşağıdaki değişkenleri ekleyin
+| Değişken | Açıklama | Production |
+|----------|----------|------------|
+| `ENVIRONMENT` | `production` yapın | `production` |
+| `SECRET_KEY` | JWT ve oturum için güçlü key (`openssl rand -hex 32`) | Varsayılanı **değiştirin**; yoksa uygulama başlamaz |
+| `OPENAI_API_KEY` | Analiz için OpenAI anahtarı | Tanımlı olmalı; yoksa uygulama başlamaz |
+| `DATABASE_URL` | SQLite yerine PostgreSQL önerilir | `postgresql://...` (isteğe bağlı; SQLite da çalışır) |
+| `FRONTEND_URL` | Şifre sıfırlama / e-posta linklerinin temel adresi | `https://alandiniz.com` |
+| `CORS_ORIGINS` | İzin verilen origin’ler | `https://alandiniz.com,https://www.alandiniz.com` |
 
-### 1.2 Ortam değişkenleri (Render Dashboard > Environment)
+## Ödeme (PayTR)
 
-| Değişken | Açıklama |
-|----------|----------|
-| `OPENAI_API_KEY` | OpenAI API anahtarı (zorunlu) |
-| `SECRET_KEY` | JWT ve oturum için (örn. `openssl rand -hex 32`) |
-| `DATABASE_URL` | **Önerilen:** Render’da **PostgreSQL** ekleyin, otomatik `DATABASE_URL` verilir. Yoksa SQLite kullanılır (ephemeral disk – yeniden deploy’da silinir) |
-| `ADMIN_SECRET` | Admin paneli ve `/payment/grant` için şifre |
-| `CORS_ORIGINS` | Production: frontend origin (virgülle ayrılmış; boş = `*`) |
-| `RATE_LIMIT_PER_MINUTE` | IP başına dakikada max istek (varsayılan 30) |
-| PayTR için | `PAYTR_MERCHANT_ID`, `PAYTR_MERCHANT_KEY`, `PAYTR_MERCHANT_SALT`, `PAYTR_NOTIFICATION_URL`, `PAYTR_OK_URL`, `PAYTR_FAIL_URL` |
+| Değişken | Açıklama | Production |
+|----------|----------|------------|
+| `PAYTR_MERCHANT_ID` / `KEY` / `SALT` | PayTR panelinden | Doldurun |
+| `PAYTR_NOTIFICATION_URL` | Webhook adresi | `https://alandiniz.com/api/payment/callback` |
+| `PAYTR_OK_URL` / `PAYTR_FAIL_URL` | Ödeme sonrası yönlendirme | `https://alandiniz.com/#payment-ok` vb. |
+| `PAYTR_TEST_MODE` | Test modu | `0` (canlı ödeme için) |
 
-### 1.3 Blueprint (opsiyonel)
+## E-posta (şifre sıfırlama)
 
-Repoda `render.yaml` var. **New** → **Blueprint** ile repoyu seçerseniz servis bu dosyaya göre oluşturulur; env’leri yine Dashboard’dan ekleyin.
+| Değişken | Açıklama | Production |
+|----------|----------|------------|
+| `SMTP_HOST`, `SMTP_USER`, `SMTP_PASSWORD` | SMTP sunucusu | Doldurun; yoksa şifre sıfırlama maili gitmez |
+| `SMTP_FROM` | Gönderen adres | `noreply@alandiniz.com` |
 
-### 1.4 Notlar
+## Güvenlik (otomatik)
 
-- Render `PORT` değişkenini verir; uygulama `0.0.0.0:$PORT` dinler
-- Kalıcı veri için mutlaka **PostgreSQL** ekleyin (Render’da Create → PostgreSQL)
-- PayTR callback için `PAYTR_NOTIFICATION_URL`: `https://<servis-adiniz>.onrender.com/api/payment/callback`
+- **Production’da** (`ENVIRONMENT=production`): HSTS, CSP, X-Frame-Options, X-Content-Type-Options eklenir.
+- **Rate limit**: `RATE_LIMIT_PER_MINUTE` (varsayılan 60). Gerekirse artırın.
+- **500 hatalar**: Stack trace kullanıcıya dönmez; sadece log ve ErrorLog tablosuna yazılır.
+- **Debug endpoint**: `/debug/rate-test` sadece development’ta açık.
 
----
+## Sunucu / Hosting
 
-## 2. VPS (Ubuntu/Debian) production
+1. **HTTPS** zorunlu (PayTR ve tarayıcı güvenliği için).
+2. **Çalıştırma**: `gunicorn` ile örnek:  
+   `gunicorn app.main:app -w 4 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000`
+3. **Reverse proxy**: Nginx/Caddy ile SSL sonlandırma ve `X-Forwarded-For` / `X-Forwarded-Proto` iletin.
+4. **Veritabanı**: SQLite tek sunucu için yeterli; yük artarsa PostgreSQL’e geçin.
+5. **Yüklenen dosyalar**: `data/uploads/` dizini kalıcı olmalı (volume/persistent disk).
 
-### 2.1 Sunucuda hazırlık (tek script ile kurulum)
+## Kontrol listesi (kısa)
 
-Projeyi VPS’e alın, **proje kökünde** scripti çalıştırın (sudo gerekir):
+- [ ] `ENVIRONMENT=production`
+- [ ] `SECRET_KEY` değiştirildi (varsayılan değil)
+- [ ] `OPENAI_API_KEY` tanımlı
+- [ ] `FRONTEND_URL` ve `CORS_ORIGINS` alan adınıza göre
+- [ ] PayTR: URL’ler ve test modu kapalı (isteğe bağlı)
+- [ ] SMTP ayarlı (şifre sıfırlama için)
+- [ ] HTTPS ve reverse proxy
+- [ ] `data/uploads` kalıcı
 
-```bash
-cd /var/www
-git clone https://github.com/KULLANICI/norya.git
-cd norya
-sudo ./deploy/vps-setup.sh
-```
-
-Sadece uygulama + systemd kurulur. **Nginx + domain** ile kurmak için:
-
-```bash
-sudo ./deploy/vps-setup.sh norya.example.com
-```
-
-Script: sanal ortam (.venv), `pip install -r requirements.txt`, interaktif **.env sihirbazı** (OPENAI_API_KEY, SECRET_KEY, ADMIN_SECRET, DATABASE_URL; Enter = otomatik üretim), `.env` yoksa `.env.example`’dan kopyalar, systemd servisini yazar ve başlatır. Domain verirseniz Nginx’i de yapılandırır; SSL için `certbot --nginx -d norya.example.com` çalıştırmanız yeterli. Sonradan sadece .env güncellemek için: `./deploy/env-wizard.sh`
-
-Aşağıdaki adımlar script olmadan elle kurulum içindir.
-
-### 2.2 Sanal ortam ve bağımlılıklar
-
-```bash
-python3 -m venv .venv
-source .venv/bin/activate
-pip install --upgrade pip
-pip install -r requirements.txt
-```
-
-### 2.3 Ortam değişkenleri
-
-Proje kökünde `.env` oluşturun (veya systemd ile env dosyası kullanın):
-
-```bash
-cp .env.example .env
-nano .env   # OPENAI_API_KEY, SECRET_KEY, DATABASE_URL (postgresql://...), ADMIN_SECRET
-```
-
-Production’da `DATABASE_URL` için PostgreSQL kullanın. SQLite tek instance için çalışır ama yedekleme ve eşzamanlı yazma için PostgreSQL daha güvenli.
-
-### 2.4 Gunicorn ile çalıştırma (manuel test)
-
-```bash
-source .venv/bin/activate
-gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:8000
-# http://SUNUCU_IP:8000 ile dene
-```
-
-### 2.5 Systemd servisi
-
-Projede hazır örnek: **`deploy/norya.service.example`**. Kopyalayıp düzenleyin; `User`, `WorkingDirectory` ve `EnvironmentFile` yollarını kendi sunucunuza göre ayarlayın.
-
-```ini
-[Unit]
-Description=Norya FastAPI
-After=network.target
-
-[Service]
-User=www-data
-Group=www-data
-WorkingDirectory=/var/www/norya
-EnvironmentFile=/var/www/norya/.env
-ExecStart=/var/www/norya/.venv/bin/gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker -b 127.0.0.1:8000
-Restart=always
-RestartSec=5
-
-[Install]
-WantedBy=multi-user.target
-```
-
-- `127.0.0.1:8000`: Nginx arkasında çalışacaksa sadece localhost dinler
-- Nginx kullanmayacaksanız `-b 0.0.0.0:8000` yapıp firewall’da 8000 açın
-
-Komutlar:
-
-```bash
-sudo systemctl daemon-reload
-sudo systemctl enable norya
-sudo systemctl start norya
-sudo systemctl status norya
-```
-
-### 2.6 Nginx (reverse proxy + SSL)
-
-Nginx kurulumu: `sudo apt install nginx`. Projede hazır örnek: **`deploy/nginx-norya.conf.example`**. `server_name`’i kendi domain’inizle değiştirip `/etc/nginx/sites-available/norya` olarak kopyalayın.
-
-```nginx
-server {
-    listen 80;
-    server_name norya.example.com;
-    location / {
-        proxy_pass http://127.0.0.1:8000;
-        proxy_set_header Host $host;
-        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-        proxy_set_header X-Forwarded-Proto $scheme;
-    }
-}
-```
-
-Aktifleştirme:
-
-```bash
-sudo ln -s /etc/nginx/sites-available/norya /etc/nginx/sites-enabled/
-sudo nginx -t && sudo systemctl reload nginx
-```
-
-SSL (Let’s Encrypt):
-
-```bash
-sudo apt install certbot python3-certbot-nginx
-sudo certbot --nginx -d norya.example.com
-```
-
-### 2.7 Veritabanı yedekleme
-
-Proje kökünde çalıştırın:
-
-```bash
-chmod +x scripts/backup_db.sh
-./scripts/backup_db.sh          # Yedekler ./backups/ içine yazılır
-./scripts/backup_db.sh /yol      # İsteğe bağlı hedef dizin
-```
-
-- **SQLite:** `sqlite3 .backup` ile `backups/norya_sqlite_YYYYMMDD_HHMMSS.db` oluşturulur.
-- **PostgreSQL:** `pg_dump` ile `backups/norya_pg_YYYYMMDD_HHMMSS.sql` oluşturulur (sunucuda `pg_dump` kurulu olmalı).
-
-Yedekleri düzenli almak için cron kullanın (örnek: her gece 03:00):
-
-```cron
-0 3 * * * cd /var/www/norya && ./scripts/backup_db.sh /var/backups/norya
-```
-
-**Geri yükleme (SQLite):** `cp backups/norya_sqlite_....db norya.db` (uygulama kapalıyken).  
-**Geri yükleme (PostgreSQL):** `psql $DATABASE_URL -f backups/norya_pg_....sql`
-
-### 2.8 Özet (VPS)
-
-| Adım | Komut / dosya |
-|------|----------------|
-| Kod | `git clone` veya rsync → `/var/www/norya` |
-| Venv | `python3 -m venv .venv && source .venv/bin/activate` |
-| Bağımlılık | `pip install -r requirements.txt` |
-| Env | `.env` (SECRET_KEY, OPENAI_API_KEY, DATABASE_URL, ADMIN_SECRET) |
-| Servis | `norya.service` → systemd enable/start |
-| Dış erişim | Nginx reverse proxy → 127.0.0.1:8000, SSL: certbot |
-| Yedek | `scripts/backup_db.sh` + cron (isteğe bağlı) |
-
----
-
-## 3. Production kontrol listesi
-
-- [ ] `SECRET_KEY` güçlü ve benzersiz
-- [ ] `DATABASE_URL` production DB (Render PostgreSQL veya VPS’te PostgreSQL)
-- [ ] `OPENAI_API_KEY` geçerli
-- [ ] PayTR kullanıyorsanız: `PAYTR_*` ve callback URL’leri doğru
-- [ ] Admin: `ADMIN_SECRET` ayarlı
-- [ ] HTTPS (Render otomatik; VPS’te certbot)
-- [ ] Rate limit zaten uygulama içinde (IP bazlı). Çok worker veya birden fazla sunucu kullanıyorsanız limiti tüm instance’lar arasında paylaşmak için Redis önerilir: `.env` içinde `REDIS_URL=redis://...` tanımlayıp uygulama tarafında SlowAPI storage’ı Redis’e bağlayabilirsiniz (şu an in-memory; worker başına 60/dk).
+Bu adımlar tamamsa uygulama yayına hazırdır.

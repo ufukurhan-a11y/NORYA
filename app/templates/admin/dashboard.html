@@ -33,6 +33,29 @@
   </div>
 </div>
 
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-8">
+  <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+    <p class="text-slate-400 text-sm font-medium">AI Durumu</p>
+    <button type="button" id="ai-refresh" class="text-xs px-3 py-1.5 rounded bg-slate-600 text-slate-200 hover:bg-slate-500">Yenile</button>
+  </div>
+  <p id="ai-badge" class="text-lg font-semibold text-slate-300">Kontrol ediliyor…</p>
+  <p id="ai-detail" class="text-sm text-slate-500 mt-1"></p>
+</div>
+
+<!-- Son 24 ay trend grafiği: analiz sayısı, satış, yeni kullanıcı -->
+<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-8">
+  <h2 class="text-lg font-medium text-white mb-4">Son 24 ay trendi</h2>
+  <p class="text-slate-500 text-sm mb-4">Ay ay analiz sayısı, satış (EUR) ve yeni kullanıcı — yükseliş ve durgunluk takibi.</p>
+  <div class="h-80">
+    <canvas id="trend-chart" aria-label="Son 24 aylık trend grafiği"></canvas>
+  </div>
+  <div class="flex flex-wrap gap-4 mt-3 text-xs text-slate-400">
+    <span><span class="inline-block w-3 h-3 rounded-full bg-teal-400 mr-1"></span> Analiz sayısı</span>
+    <span><span class="inline-block w-3 h-3 rounded-full bg-amber-400 mr-1"></span> Satış (€)</span>
+    <span><span class="inline-block w-3 h-3 rounded-full bg-slate-400 mr-1"></span> Yeni kullanıcı</span>
+  </div>
+</div>
+
 <div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
   <h2 class="text-lg font-medium text-white px-4 py-3 border-b border-slate-700">Son 10 işlem</h2>
   <div class="overflow-x-auto">
@@ -64,4 +87,130 @@
     </table>
   </div>
 </div>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  // Son 12 ay trend grafiği
+  var trendCanvas = document.getElementById('trend-chart');
+  if (trendCanvas) {
+    var chartLabels = {{ chart_labels | tojson }};
+    var chartAnalyses = {{ chart_analyses | tojson }};
+    var chartSales = {{ chart_sales | tojson }};
+    var chartUsers = {{ chart_users | tojson }};
+    new Chart(trendCanvas, {
+      type: 'line',
+      data: {
+        labels: chartLabels,
+        datasets: [
+          {
+            label: 'Analiz sayısı',
+            data: chartAnalyses,
+            borderColor: 'rgb(45, 212, 191)',
+            backgroundColor: 'rgba(45, 212, 191, 0.1)',
+            fill: true,
+            tension: 0.3,
+            yAxisID: 'y'
+          },
+          {
+            label: 'Satış (€)',
+            data: chartSales,
+            borderColor: 'rgb(251, 191, 36)',
+            backgroundColor: 'rgba(251, 191, 36, 0.1)',
+            fill: true,
+            tension: 0.3,
+            yAxisID: 'y1'
+          },
+          {
+            label: 'Yeni kullanıcı',
+            data: chartUsers,
+            borderColor: 'rgb(148, 163, 184)',
+            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+            fill: true,
+            tension: 0.3,
+            yAxisID: 'y'
+          }
+        ]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        interaction: { mode: 'index', intersect: false },
+        plugins: {
+          legend: { display: false }
+        },
+        scales: {
+          y: {
+            type: 'linear',
+            position: 'left',
+            title: { display: true, text: 'Adet (analiz / kullanıcı)', color: '#94a3b8' },
+            grid: { color: 'rgba(71, 85, 105, 0.5)' },
+            ticks: { color: '#94a3b8' }
+          },
+          y1: {
+            type: 'linear',
+            position: 'right',
+            title: { display: true, text: 'Satış (€)', color: '#94a3b8' },
+            grid: { drawOnChartArea: false },
+            ticks: { color: '#94a3b8' }
+          },
+          x: {
+            grid: { color: 'rgba(71, 85, 105, 0.5)' },
+            ticks: { color: '#94a3b8', maxRotation: 45 }
+          }
+        }
+      }
+    });
+  }
+
+  var badgeEl = document.getElementById('ai-badge');
+  var detailEl = document.getElementById('ai-detail');
+  var refreshBtn = document.getElementById('ai-refresh');
+  if (!badgeEl || !detailEl) return;
+
+  function setAIState(loading, ok, msg, detail) {
+    if (loading) {
+      badgeEl.textContent = 'Kontrol ediliyor…';
+      badgeEl.className = 'text-lg font-semibold text-slate-400';
+      detailEl.textContent = '';
+      return;
+    }
+    if (ok) {
+      badgeEl.innerHTML = '🟢 Çalışıyor';
+      badgeEl.className = 'text-lg font-semibold text-green-400';
+      detailEl.textContent = detail || '';
+      detailEl.className = 'text-sm text-slate-500 mt-1';
+    } else {
+      badgeEl.innerHTML = '🔴 Sorun var';
+      badgeEl.className = 'text-lg font-semibold text-red-400';
+      detailEl.textContent = msg || 'AI erişilemedi.';
+      detailEl.className = 'text-sm text-red-300 mt-1';
+    }
+  }
+
+  function fetchAIHealth() {
+    setAIState(true);
+    fetch('/health/ai', { credentials: 'same-origin' })
+      .then(function(res) { return res.json().then(function(data) { return { res: res, data: data }; }); })
+      .then(function(r) {
+        var data = r.data;
+        var res = r.res;
+        if (res.ok && data && data.status === 'ok') {
+          var detail = data.latency_ms != null ? 'Gecikme: ' + data.latency_ms + ' ms' : '';
+          setAIState(false, true, null, detail);
+        } else {
+          var errMsg = (data && data.error) ? data.error : (data && data.detail) ? (typeof data.detail === 'string' ? data.detail : JSON.stringify(data.detail)) : 'Yanıt alınamadı (HTTP ' + (res.status || '') + ')';
+          setAIState(false, false, errMsg);
+        }
+      })
+      .catch(function(e) {
+        setAIState(false, false, 'Erişilemiyor: ' + (e.message || 'Bağlantı hatası'));
+      });
+  }
+
+  if (refreshBtn) refreshBtn.addEventListener('click', function() { fetchAIHealth(); });
+  fetchAIHealth();
+  setInterval(fetchAIHealth, 60000);
+})();
+</script>
 {% endblock %}
