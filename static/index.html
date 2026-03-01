@@ -1706,9 +1706,13 @@
     var lastAnalysisId = null;
     var lastShareToken = null;
 
-    /** Rapor ID: önce URL ?rid=, yoksa #analyze-result data-rid, yoksa lastAnalysisId. İndir butonu bu değeri kullanır. */
+    /** Rapor ID: önce URL ?rid= (veya hash içi ?rid=), yoksa #analyze-result data-rid, yoksa lastAnalysisId. İndir butonu bu değeri kullanır. */
     function getReportId() {
-      var p = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      var qs = window.location.search || '';
+      if (window.location.hash && window.location.hash.indexOf('?') !== -1) {
+        qs = window.location.hash.split('?')[1] || '';
+      }
+      var p = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(qs) : null;
       var rid = p ? p.get('rid') : null;
       if (rid) return rid;
       var el = document.getElementById('analyze-result');
