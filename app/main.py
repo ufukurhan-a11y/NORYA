@@ -279,7 +279,7 @@ async def security_headers(request: Request, call_next):
         # API + form + inline script + jsPDF/html2canvas (cdnjs) + blob images için CSP
         response.headers["Content-Security-Policy"] = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://static.cloudflareinsights.com; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
             "img-src 'self' data: blob: https:; connect-src 'self'; frame-ancestors 'self';"
         )
