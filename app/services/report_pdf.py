@@ -18,7 +18,7 @@ _ENV = Environment(loader=FileSystemLoader(str(_TEMPLATES_DIR)), autoescape=True
 PDF_LABELS: dict[str, dict[str, str]] = {
     "tr": {
         "title": "Norya Analiz Raporu",
-        "subtitle": "Kan Tahlili Analiz Raporu — Yapay Zeka Destekli Yorum",
+        "subtitle": "Kan Tahlili Analiz Raporu — Laboratuvar Sonuçları Yorumu",
         "report_date_label": "Rapor Tarihi",
         "summary_heading": "Özet",
         "biomarkers_heading": "Değerler ve referans aralıkları",
@@ -29,7 +29,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "status": "Durum",
         "possible_causes_heading": "Olası Nedenler",
         "recommendations_heading": "Öneriler",
-        "footer_note": "Bu rapor Norya yapay zeka yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.",
+        "footer_note": "Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.",
         "page_footer": "Bu rapor bilgilendirme amaçlıdır. Tıbbi karar için hekime danışın. — Norya",
         "emr_ehr_note": "EMR/EHR uyumlu — Bu rapor hastane veya hekim bilgi sistemlerine (EMR/EHR) yüklenebilir formattadır.",
         "risk_default_attention": "Değerlerinizde dikkat edilmesi gereken parametreler olabilir. Öneriler bölümünü okuyun ve gerekirse hekime danışın.",
@@ -42,7 +42,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "overall_badge_high": "Riskli",
         "overall_chart_legend": "Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor, parametrelerin referans aralığına uyumuna göre 0–100)",
         "intro_heading": "Bu rapor hakkında",
-        "intro_p1": "Bu rapor, kan tahlili sonuçlarınızın yapay zeka destekli bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri, referans aralıkları ve genel öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.",
+        "intro_p1": "Bu rapor, laboratuvar sonuçlarınızın anlaşılır bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri, referans aralıkları ve genel öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.",
         "intro_p2": "Sonuçlarınızı mutlaka bir hekim ile görüşün. Tıbbi kararlar ve tedavi planı için hekiminize danışın.",
         "how_to_read_heading": "Parametreler nasıl okunur?",
         "how_to_read_body": "Her parametre için \"Sonuç\" sütununda laboratuvar değeriniz, \"Referans aralığı\" sütununda ise o test için kabul edilen normal aralık verilir. Yeşil = Normal (aralık içinde), turuncu = Sınırda, kırmızı = Referans dışı (düşük veya yüksek). Grafikler değerin referans aralığına göre konumunu gösterir.",
@@ -50,7 +50,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_subtitle": "Kan Tahlili Özeti — Hekime iletilmek üzere hazırlanmıştır",
         "doctor_banner_text": "Bu rapor, hastanın hekimi ile paylaşması amacıyla Norya tarafından oluşturulmuştur. Eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar ve tedavi için hekim değerlendirmesi gerekir.",
         "doctor_page_footer": "Hekime iletilmek üzere hazırlanmıştır. Tıbbi karar için hekim değerlendirmesi gerekir. — Norya",
-        "doctor_footer_note": "Bu rapor Norya yapay zeka yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için hekim değerlendirmesi gerekir.",
+        "doctor_footer_note": "Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için hekim değerlendirmesi gerekir.",
     },
     "en": {
         "title": "Norya Analysis Report",

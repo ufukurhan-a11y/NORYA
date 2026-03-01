@@ -12,16 +12,16 @@
   <link rel="manifest" href="/static/manifest.json" />
   <link rel="icon" type="image/svg+xml" href="/static/icon.svg" />
   <link rel="apple-touch-icon" href="/static/icon.svg" />
-  <title>Norya — Güvenilir Yapay Zeka Kan Tahlili Analizi</title>
-  <meta name="description" content="Kan tahlili sonuçlarınızı yapay zeka ile anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
-  <meta property="og:title" content="Norya — Güvenilir Yapay Zeka Kan Tahlili Analizi" />
+  <title>Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu</title>
+  <meta name="description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
+  <meta property="og:title" content="Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu" />
   <meta property="og:description" content="Kan tahlili sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor alın. 9 dilde." />
   <meta property="og:image" content="/static/logo.png" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="tr_TR" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Norya — Kan Tahlili Analizi" />
-  <meta name="twitter:description" content="Kan tahlili sonuçlarınızı yapay zeka ile anlaşılır dilde açıklayın." />
+  <meta name="twitter:description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın." />
   <!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -99,12 +99,12 @@
     .value-bar-marker { position: absolute; top: -3px; width: 4px; height: 18px; border-radius: 2px; background: #0a1929; transform: translateX(-50%); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
     .dark .value-bar-marker { background: #e8eef4; }
     /* Safari / iOS: sayfa kaydırma ve viewport */
-    html { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; }
-    body { position: relative; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); min-height: 100vh; min-height: -webkit-fill-available; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; max-width: 100vw; }
+    html { overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; width: 100%; }
+    body { position: relative; width: 100%; max-width: 100%; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); min-height: 100vh; min-height: -webkit-fill-available; overflow-y: auto; overflow-x: hidden; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
     /* Mobil: taşmayı önle ve hero üst boşluk */
     @media (max-width: 640px) {
       img { max-width: 100%; height: auto; }
-      .gradient-hero { padding-top: calc(6rem + env(safe-area-inset-top, 0px)) !important; }
+      .gradient-hero { padding-top: calc(5rem + env(safe-area-inset-top, 0px)) !important; }
     }
     /* Özellik tablosu: mobilde yatay kaydırma her cihazda görünsün */
     #compare-table-wrap { min-width: 0; }
@@ -115,35 +115,46 @@
       body { min-height: 100dvh; }
     }
     nav { padding-left: max(0.75rem, env(safe-area-inset-left)); padding-right: max(0.75rem, env(safe-area-inset-right)); }
-    /* Mobil nav: logo + tüm butonlar tek satırda sığsın */
+    /* Mobil nav: logo büyük ve sağa kaydırılmış, kurumsal kimlik vurgusu */
     .nav-inner {
-      display: flex; align-items: center; justify-content: space-between; gap: 0.35rem;
-      min-height: 3.25rem; width: 100%; min-width: 0;
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      min-height: 4rem; width: 100%; min-width: 0;
       overflow: visible;
     }
-    @media (min-width: 640px) { .nav-inner { min-height: 4rem; gap: 0.5rem; } }
-    .nav-logo-link { flex-shrink: 0; display: flex; align-items: center; min-width: 5rem; max-width: 8.5rem; }
-    @media (min-width: 640px) { .nav-logo-link { max-width: none; min-width: 10rem; } }
+    @media (min-width: 640px) { .nav-inner { min-height: 6.5rem; gap: 0.75rem; } }
+    /* Logo: arka plan beyazlığı yok, nav ile aynı beyaz; nizami yerleşim */
+    .nav-logo-link {
+      flex-shrink: 0; display: flex; align-items: center; justify-content: flex-start;
+      min-width: 7rem; max-width: 11rem; margin-left: 0.5rem;
+      padding: 0; background: transparent;
+    }
+    .nav .nav-logo-link { background: transparent; }
+    @media (min-width: 640px) {
+      .nav-logo-link { max-width: none; min-width: 14rem; margin-left: 2rem; }
+    }
     .nav-logo-img {
       display: block !important; visibility: visible !important;
-      height: 3.25rem !important; width: auto; max-width: 100%; min-height: 2.5rem !important;
+      height: 4rem !important; width: auto; max-width: 100%; min-height: 3.25rem !important;
       object-fit: contain; object-position: left center; flex-shrink: 0; vertical-align: middle;
+      background: transparent !important;
     }
-    @media (min-width: 640px) { .nav-logo-img { height: 7rem !important; min-height: 5rem !important; } }
+    @media (min-width: 640px) {
+      .nav-logo-img { height: 6.5rem !important; min-height: 5rem !important; }
+    }
     .nav-actions {
-      display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.15rem;
+      display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.5rem;
       align-self: center; min-width: 0;
     }
     @media (min-width: 640px) { .nav-actions { gap: 1rem; } }
     .nav-actions .relative { flex-shrink: 0; display: flex; align-items: center; }
     .nav-actions button { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 1.25; }
-    #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.2rem; }
+    #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.5rem; }
     #nav-auth.hidden { display: none !important; }
     @media (max-width: 640px) {
-      .nav-actions #theme-btn { padding: 0.3rem; min-width: 2rem; min-height: 2.1rem; }
-      .nav-actions #nav-auth button { min-height: 2.1rem; padding: 0.3rem 0.45rem; font-size: 0.75rem; }
-      .nav-actions #lang-wrap button, .nav-actions #nav-menu-wrap > button { min-height: 2.1rem; padding: 0.3rem 0.4rem; font-size: 0.75rem; }
-      .nav-actions #nav-user button { min-height: 2.1rem; padding: 0.3rem 0.45rem; font-size: 0.75rem; }
+      .nav-actions #theme-btn { padding: 0.4rem; min-width: 2.25rem; min-height: 2.25rem; }
+      .nav-actions #nav-auth button { min-height: 2.25rem; padding: 0.4rem 0.6rem; font-size: 0.8rem; }
+      .nav-actions #lang-wrap button, .nav-actions #nav-menu-wrap > button { min-height: 2.25rem; padding: 0.4rem 0.55rem; font-size: 0.8rem; }
+      .nav-actions #nav-user button { min-height: 2.25rem; padding: 0.4rem 0.6rem; font-size: 0.8rem; }
     }
     @media (min-width: 641px) {
       .nav-actions #nav-auth button { min-height: 2.5rem; }
@@ -153,15 +164,17 @@
     @media (max-width: 640px) {
       #nav-menu-dropdown {
         position: fixed !important; left: max(1rem, env(safe-area-inset-left)); right: max(1rem, env(safe-area-inset-right));
-        top: calc(3.25rem + env(safe-area-inset-top, 0px)) !important; margin-top: 0;
+        top: calc(4rem + 0.5rem + env(safe-area-inset-top, 0px)) !important; margin-top: 0;
         box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 9999; max-height: 85vh; overflow-y: auto; width: auto !important; min-width: 12rem;
       }
       #lang-modal { z-index: 9999 !important; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
     }
     @media (max-width: 380px) {
-      .nav-logo-link { min-width: 4rem; max-width: 6.5rem; }
-      .nav-logo-img { height: 2.75rem !important; min-height: 2.2rem !important; }
-      .nav-actions #nav-auth button { padding: 0.25rem 0.35rem; font-size: 0.7rem; }
+      .nav-logo-link { min-width: 5rem; max-width: 8rem; margin-left: 0.25rem; }
+      .nav-logo-img { height: 3.25rem !important; min-height: 2.75rem !important; }
+      .nav-inner { min-height: 3.5rem; }
+      .nav-actions { gap: 0.35rem; }
+      .nav-actions #nav-auth button { padding: 0.35rem 0.5rem; font-size: 0.75rem; }
     }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
     @media (pointer: coarse) {
@@ -179,9 +192,9 @@
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
   <!-- Nav: mobilde logo sabit görünsün, dil/menü butonları kaymasın (safe-area + flex) -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-accent-900 border-b border-slate-200 dark:border-accent-700 shadow-sm pt-[env(safe-area-inset-top)]">
-    <div class="max-w-6xl mx-auto py-2 px-2 sm:px-4 nav-inner">
-      <a href="#" class="nav-logo-link rounded-lg overflow-hidden">
-        <img src="/static/logo.png" alt="Norya AI" class="nav-logo-img bg-white dark:bg-accent-800" width="200" height="60" />
+    <div class="max-w-7xl mx-auto py-1 sm:py-1.5 px-2 sm:px-4 nav-inner w-full">
+      <a href="#" class="nav-logo-link rounded overflow-hidden" style="background:transparent">
+        <img src="/static/logo.png" alt="Norya AI" class="nav-logo-img" width="200" height="60" style="background:transparent" />
       </a>
       <div class="nav-actions">
         <button type="button" onclick="toggleDark()" class="p-2 rounded-lg text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700" aria-label="Tema değiştir (açık/koyu)" id="theme-btn">
@@ -243,10 +256,10 @@
   </nav>
 
   <!-- Hero: premium AI health SaaS (turquoise + navy) -->
-  <section class="gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 text-white relative overflow-hidden" style="padding-top: calc(8rem + env(safe-area-inset-top, 0px));">
+  <section class="gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 text-white relative overflow-hidden" style="padding-top: calc(5rem + env(safe-area-inset-top, 0px));">
     <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 80%, rgba(13, 148, 136, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(30, 58, 95, 0.3) 0%, transparent 45%);"></div>
-    <div class="max-w-4xl mx-auto text-center relative z-10">
-      <p class="text-white/95 text-xs font-semibold mb-3 uppercase tracking-[0.2em]" data-i18n="hero_sub">Laboratuvar sonuçlarınız için güvenilir rapor</p>
+    <div class="max-w-5xl mx-auto w-full px-4 text-center relative z-10">
+      <p class="text-white/90 text-[0.65rem] sm:text-[0.7rem] font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Güvenilir kan tahlili raporu</p>
       <h1 class="text-2xl min-[480px]:text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.2] mb-4 sm:mb-5 tracking-tight px-1" data-i18n="hero_title">Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.</h1>
       <p class="text-lg text-navy-100 max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="hero_desc">Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -259,28 +272,28 @@
         <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">PayTR ile güvenli ödeme</span></li>
       </ul>
     </div>
-    <!-- Örnek rapor taslağı -->
-    <div class="max-w-2xl mx-auto mt-14 relative z-10">
-      <p class="text-center text-primary-200 text-sm font-medium mb-3" data-i18n="hero_sample_label">Alacağınız rapor böyle görünür</p>
-      <div class="rounded-3xl bg-white/10 backdrop-blur-md border border-white/20 overflow-hidden norya-card-shadow">
-        <div class="px-5 py-4 border-b border-white/20 flex items-center justify-between">
-          <span class="font-semibold text-white" data-i18n="example_report_heading">Norya Analiz Raporu</span>
-          <span class="text-xs px-3 py-1.5 rounded-xl bg-white/20 text-primary-100 font-medium" data-i18n="example_report_preview_badge">Önizleme</span>
+    <!-- Örnek rapor taslağı: cam efekti, sert beyaz yok -->
+    <div class="max-w-3xl mx-auto mt-10 sm:mt-12 relative z-10 w-full px-4">
+      <p class="text-center text-primary-200/90 text-xs font-medium mb-2" data-i18n="hero_sample_label">Alacağınız rapor böyle görünür</p>
+      <div class="rounded-2xl bg-white/[0.07] backdrop-blur-md border border-white/15 overflow-hidden shadow-lg shadow-black/10">
+        <div class="px-4 py-3 border-b border-white/10 flex items-center justify-between">
+          <span class="font-semibold text-white/95 text-sm" data-i18n="example_report_heading">Norya Analiz Raporu</span>
+          <span class="text-xs px-2.5 py-1 rounded-lg bg-white/15 text-primary-100 font-medium" data-i18n="example_report_preview_badge">Önizleme</span>
         </div>
-        <div class="p-5 space-y-4 text-left">
+        <div class="p-4 space-y-3 text-left">
           <div>
-            <p class="text-primary-200 text-xs font-semibold uppercase tracking-wide mb-1" data-i18n="example_report_summary_title">Özet</p>
-            <p class="text-white/95 text-sm leading-relaxed" data-i18n="hero_sample_summary">Değerleriniz genel olarak referans aralığında. Hemoglobin ve glukoz normal; doktorunuzla rutin takibi sürdürün.</p>
+            <p class="text-primary-200/90 text-xs font-semibold uppercase tracking-wide mb-0.5" data-i18n="example_report_summary_title">Özet</p>
+            <p class="text-white/90 text-sm leading-relaxed" data-i18n="hero_sample_summary">Değerleriniz genel olarak referans aralığında. Hemoglobin ve glukoz normal; doktorunuzla rutin takibi sürdürün.</p>
           </div>
           <div class="flex gap-2 flex-wrap">
-            <span class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-emerald-500/25 text-white border border-emerald-400/30"><span class="w-2 h-2 rounded-full bg-emerald-300 shadow-sm"></span> <span data-i18n="hero_sample_normal">Normal</span></span>
-            <span class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-amber-500/25 text-white border border-amber-400/30"><span class="w-2 h-2 rounded-full bg-amber-300 shadow-sm"></span> <span data-i18n="hero_sample_border">Sınır</span></span>
-            <span class="inline-flex items-center gap-1.5 text-xs px-3 py-1.5 rounded-xl bg-red-500/25 text-white border border-red-400/30"><span class="w-2 h-2 rounded-full bg-red-300 shadow-sm"></span> <span data-i18n="hero_sample_risk">Dikkat</span></span>
+            <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-white border border-emerald-400/25"><span class="w-1.5 h-1.5 rounded-full bg-emerald-300"></span> <span data-i18n="hero_sample_normal">Normal</span></span>
+            <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-amber-500/20 text-white border border-amber-400/25"><span class="w-1.5 h-1.5 rounded-full bg-amber-300"></span> <span data-i18n="hero_sample_border">Sınır</span></span>
+            <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-red-500/20 text-white border border-red-400/25"><span class="w-1.5 h-1.5 rounded-full bg-red-300"></span> <span data-i18n="hero_sample_risk">Dikkat</span></span>
           </div>
-          <p class="text-navy-200 text-xs" data-i18n="hero_sample_cta">Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.</p>
+          <p class="text-navy-200/90 text-xs" data-i18n="hero_sample_cta">Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.</p>
         </div>
-        <div class="px-5 py-4 bg-white/5 border-t border-white/10">
-          <button onclick="openRegister(); scrollToAnalyze();" class="w-full py-3 rounded-2xl bg-white text-navy-900 font-semibold text-sm hover:bg-primary-50 transition norya-card-shadow" data-i18n="hero_sample_btn">Böyle Rapor Al — Ücretsiz Başla</button>
+        <div class="px-4 py-3 border-t border-white/10">
+          <button onclick="openRegister(); scrollToAnalyze();" class="w-full py-2.5 rounded-xl bg-white/90 text-navy-900 font-semibold text-sm hover:bg-white transition shadow-md" data-i18n="hero_sample_btn">Böyle Rapor Al — Ücretsiz Başla</button>
         </div>
       </div>
     </div>
@@ -298,7 +311,7 @@
 
   <!-- Norya nedir / Biz kimiz -->
   <section id="hakkimizda" class="py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-10" data-i18n="about_title">Norya Nedir, Biz Kimiz?</h2>
 
       <div class="space-y-10 text-accent-700 dark:text-accent-300 text-base leading-relaxed">
@@ -321,7 +334,7 @@
 
   <!-- How it works -->
   <section id="nasil-calisir" class="py-20 px-4 bg-accent-50 dark:bg-accent-900/40">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="how_title">Norya Nasıl Çalışır?</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-12 max-w-xl mx-auto" data-i18n="how_desc">Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.</p>
       <div class="grid md:grid-cols-3 gap-8">
@@ -338,7 +351,7 @@
         <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft text-center border border-accent-100 dark:border-accent-700">
           <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 font-bold text-xl flex items-center justify-center mx-auto mb-4">3</div>
           <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_3">Açıklamayı Alın</h3>
-          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_3d">Yapay zeka saniyeler içinde anlaşılır Türkçe açıklama üretir.</p>
+          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_3d">Laboratuvar sonuçlarınız saniyeler içinde anlaşılır Türkçe özet ve yorumla sunulur.</p>
         </div>
       </div>
     </div>
@@ -346,7 +359,7 @@
 
   <!-- Before/After: tahlil kağıdı → Norya raporu (güven) -->
   <section id="once-sonra" class="py-16 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
-    <div class="max-w-6xl mx-auto">
+    <div class="max-w-7xl mx-auto w-full px-4">
       <h2 class="text-2xl sm:text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="before_after_title">Tahlil Kağıdından Norya Raporuna</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-10 max-w-xl mx-auto" data-i18n="before_after_desc">Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.</p>
       <div class="grid md:grid-cols-[1fr_auto_1fr] gap-4 md:gap-6 lg:gap-8 items-stretch">
@@ -415,7 +428,7 @@
 
   <!-- Features -->
   <section id="ozellikler" class="py-20 px-4">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-12" data-i18n="why_title">Neden Norya?</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
         <div class="flex gap-4 p-4 rounded-xl bg-primary-50/50 dark:bg-primary-900/20 border border-primary-100 dark:border-primary-800">
@@ -445,7 +458,7 @@
 
   <!-- Kimler için? -->
   <section id="kimler-icin" class="py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="who_title">Kimler İçin?</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-12 max-w-xl mx-auto" data-i18n="who_subtitle">Check-up sonrası, kronik takip veya doktora giderken — Norya herkes için.</p>
       <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
@@ -475,7 +488,7 @@
 
   <!-- Güven & Referanslar (Kantesti tarzı) -->
   <section id="guven-referanslar" class="py-20 px-4 bg-accent-50 dark:bg-accent-900/40">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto w-full px-4">
       <!-- Üst: 3 özellik -->
       <div class="grid sm:grid-cols-3 gap-6 mb-16">
         <div class="flex gap-4 items-start">
@@ -488,7 +501,7 @@
         <div class="flex gap-4 items-start">
           <span class="flex-shrink-0 w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 flex items-center justify-center text-xl font-bold">★</span>
           <div>
-            <h3 class="font-bold text-accent-900 dark:text-white text-base mb-1" data-i18n="trust_benefit_2_title">Yapay Zeka Yorumu</h3>
+            <h3 class="font-bold text-accent-900 dark:text-white text-base mb-1" data-i18n="trust_benefit_2_title">Laboratuvar Yorumu</h3>
             <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_benefit_2_desc">Özet, değerler, olası nedenler ve öneriler — tek ekranda, sade dilde.</p>
           </div>
         </div>
@@ -712,7 +725,7 @@
 
   <!-- Doktorlar: 4 kart, hastalarıma bu uygulama ile sürekli sonuç vereceğim tarzı özgün yorumlar -->
   <section id="doktorlar" class="py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto w-full px-4">
       <h2 class="text-2xl sm:text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="doctor_section_title">Doktorlar Norya'yı nasıl kullanıyor?</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm sm:text-base max-w-2xl mx-auto mb-12" data-i18n="doctor_section_subtitle">Hastalarına tahlil sonuçlarını anlaşılır şekilde iletmek için Norya'yı kullanan hekimler.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
@@ -792,7 +805,7 @@
 
   <!-- Örnek rapor çıktısı (PDF / analiz sonrası raporla aynı yapı) -->
   <section id="ornek-rapor" class="py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto w-full px-4">
       <h2 class="text-2xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="example_report_title">Rapor çıktısı örneği</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-8" data-i18n="example_report_desc">Tahlil sonrası raporunuz aşağıdaki gibi bölümler halinde gösterilir.</p>
       <div class="rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 overflow-hidden shadow-lg">
@@ -868,7 +881,7 @@
 
   <!-- Güvenlik ve Uyumluluk (HIPAA, GDPR) -->
   <section class="py-12 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto w-full px-4">
       <h2 class="text-xl font-bold text-center text-accent-900 dark:text-white mb-6" data-i18n="security_title">Güvenlik ve Veri Koruma</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-8 max-w-2xl mx-auto" data-i18n="security_desc">Sağlık verileriniz en yüksek standartlarla korunur. Norya, gizlilik ve güvenlik prensiplerine uygun çalışır.</p>
       <div class="flex flex-wrap justify-center gap-6 sm:gap-10">
@@ -920,7 +933,7 @@
 
   <!-- Parametre rehberi: Bu parametre ne? -->
   <section id="parametreler" class="py-20 px-4 bg-white dark:bg-accent-900/30">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="param_title">Bu parametre ne?</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-10" data-i18n="param_subtitle">Kan tahlilinde sık görülen parametrelerin kısa açıklamaları.</p>
       <div class="grid sm:grid-cols-2 gap-4" id="parametre-list">
@@ -955,7 +968,7 @@
 
   <!-- Tahlil öncesi rehber -->
   <section id="rehber" class="py-20 px-4 bg-accent-50 dark:bg-accent-900/40">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="guide_title">Tahlil öncesi bilmeniz gerekenler</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-10" data-i18n="guide_subtitle">Daha güvenilir sonuçlar için laboratuvara gitmeden önce dikkat edilecekler.</p>
       <ul class="space-y-4 text-accent-700 dark:text-accent-300">
@@ -971,7 +984,7 @@
 
   <!-- Şeffaflık -->
   <section id="seffaflik" class="py-20 px-4 bg-white dark:bg-accent-900/30 border-t border-accent-100 dark:border-accent-800">
-    <div class="max-w-3xl mx-auto">
+    <div class="max-w-4xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="trans_title">Şeffaflık</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-10" data-i18n="trans_subtitle">Nasıl çalışıyoruz, verileriniz nerede?</p>
       <div class="space-y-6 text-accent-700 dark:text-accent-300">
@@ -993,7 +1006,7 @@
 
   <!-- Analyze: premium upload card (turquoise + navy) -->
   <section id="analyze-section" class="py-24 px-4 bg-navy-50 dark:bg-navy-900/50">
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-4xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-navy-900 dark:text-white mb-2 tracking-tight" data-i18n="analyze_title">Kan Tahlili Sonuçlarınızı Analiz Edin</h2>
       <p class="text-center text-navy-600 dark:text-navy-300 mb-8" data-i18n="analyze_desc">Giriş yapın ve tahlil metnini aşağıya yapıştırın.</p>
       <div id="analyze-box" class="bg-white dark:bg-navy-800/90 rounded-3xl p-8 norya-card-shadow border border-navy-100 dark:border-navy-600/50 backdrop-blur">
@@ -1236,7 +1249,7 @@
 
   <!-- Fiyatlandırma (ülkeye göre yerel para birimi) -->
   <section id="fiyatlandirma" class="py-20 px-4 bg-accent-50 dark:bg-accent-900/40">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="pricing_title">Fiyatlandırma</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-10" id="pricing-note" data-i18n="pricing_eur">Fiyatlar konumunuza göre yerel para biriminde gösterilir.</p>
       <div class="grid md:grid-cols-3 gap-6">
@@ -1387,7 +1400,7 @@
 
   <!-- Sıkça Sorulan Sorular -->
   <section id="sss" class="py-20 px-4 bg-white dark:bg-accent-900/30 border-t border-accent-100 dark:border-accent-800">
-    <div class="max-w-2xl mx-auto">
+    <div class="max-w-4xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="faq_title">Sıkça Sorulan Sorular</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-10" data-i18n="faq_subtitle">Merak ettiklerinizin kısa cevapları.</p>
       <div class="space-y-2">
@@ -1432,7 +1445,7 @@
 
   <!-- Son CTA -->
   <section class="py-16 px-4 bg-primary-600 text-white">
-    <div class="max-w-3xl mx-auto text-center">
+    <div class="max-w-4xl mx-auto text-center w-full px-4">
       <h2 class="text-2xl sm:text-3xl font-bold mb-2" data-i18n="cta_title">Kan tahlilinizi anlamak hiç bu kadar kolay olmamıştı</h2>
       <p class="text-primary-100 text-sm sm:text-base mb-6" data-i18n="cta_desc">Ücretsiz hesap açın, ilk analizinizi yapın. Kredi kartı gerekmez.</p>
       <button onclick="openRegister(); document.getElementById('analyze-section').scrollIntoView({behavior:'smooth'})" class="px-8 py-4 rounded-xl bg-white text-primary-700 font-semibold hover:bg-primary-50 shadow-lg" data-i18n="cta_btn">Ücretsiz Başla</button>
@@ -1441,7 +1454,7 @@
 
   <!-- Geçmiş (zaman çizelgesi + karşılaştırma) -->
   <section id="history-section" class="py-20 px-4 hidden bg-accent-50 dark:bg-accent-900/40">
-    <div class="max-w-4xl mx-auto">
+    <div class="max-w-5xl mx-auto w-full px-4">
       <h2 class="text-2xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="history_title">Analiz Geçmişin</h2>
       <div class="mb-6 p-4 rounded-xl bg-white dark:bg-accent-800 border border-accent-200 dark:border-accent-700">
         <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="history_compare_title">İki analizi karşılaştır</h3>
@@ -1496,7 +1509,7 @@
 
   <!-- Yasal sayfalar -->
   <section id="terms" class="py-16 px-4 bg-accent-50 dark:bg-accent-900/40 border-t border-accent-200 dark:border-accent-800">
-    <div class="max-w-2xl mx-auto text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
+    <div class="max-w-4xl mx-auto w-full px-4 text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
       <a href="#" class="inline-block mb-6 text-primary-600 dark:text-primary-400 font-medium hover:underline" data-i18n="back_home">← Ana sayfa</a>
       <h2 class="text-2xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="terms_heading">Kullanım Koşulları</h2>
       <p class="mb-4" data-i18n="terms_intro">Norya hizmetini kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız. Koşullarda değişiklik yapıldığında sitede güncel metin yayımlanır; önemli değişiklikler e-posta ile duyurulabilir.</p>
@@ -1509,7 +1522,7 @@
   </section>
 
   <section id="privacy" class="py-16 px-4 bg-white dark:bg-accent-900/30 border-t border-accent-100 dark:border-accent-800">
-    <div class="max-w-2xl mx-auto text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
+    <div class="max-w-4xl mx-auto w-full px-4 text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
       <a href="#" class="inline-block mb-6 text-primary-600 dark:text-primary-400 font-medium hover:underline" data-i18n="back_home">← Ana sayfa</a>
       <h2 class="text-2xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="privacy_heading">Gizlilik Politikası</h2>
       <p class="mb-4" data-i18n="privacy_intro">Kişisel verileriniz Norya için önemlidir. Bu metin, hangi verilerin toplandığını, nasıl kullanıldığını ve saklandığını özetler. Türkiye’de 6698 sayılı KVKK ve AB’de GDPR ilkelerine uygun hareket ediyoruz.</p>
@@ -1522,7 +1535,7 @@
   </section>
 
   <section id="odeme-iade" class="py-16 px-4 bg-accent-50 dark:bg-accent-900/40 border-t border-accent-200 dark:border-accent-800">
-    <div class="max-w-2xl mx-auto text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
+    <div class="max-w-4xl mx-auto w-full px-4 text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
       <a href="#" class="inline-block mb-6 text-primary-600 dark:text-primary-400 font-medium hover:underline" data-i18n="back_home">← Ana sayfa</a>
       <h2 class="text-2xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="payment_heading">Ödeme ve İade Koşulları</h2>
       <p class="mb-4" data-i18n="payment_intro"></p>
@@ -1534,7 +1547,7 @@
   </section>
 
   <section id="iletisim" class="py-16 px-4 bg-white dark:bg-accent-900/30 border-t border-accent-100 dark:border-accent-800">
-    <div class="max-w-2xl mx-auto text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
+    <div class="max-w-4xl mx-auto w-full px-4 text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
       <a href="#" class="inline-block mb-6 text-primary-600 dark:text-primary-400 font-medium hover:underline" data-i18n="back_home">← Ana sayfa</a>
       <h2 class="text-2xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="contact_heading">İletişim</h2>
       <p class="mb-4" data-i18n="contact_intro">Sorularınız, iade talepleriniz veya “ödeme alındı ama analiz hakkı gelmedi” gibi teknik konular için bize ulaşabilirsiniz.</p>
@@ -1546,7 +1559,7 @@
 
   <!-- Footer: profesyonel, güven veren, 6 yasal sayfa linki -->
   <footer class="py-14 px-4 border-t border-accent-200 dark:border-accent-800 bg-accent-50/80 dark:bg-accent-900/40" role="contentinfo">
-    <div class="max-w-5xl mx-auto">
+    <div class="max-w-6xl mx-auto w-full px-4">
       <!-- Güven rozetleri -->
       <div class="flex flex-wrap justify-center items-center gap-6 sm:gap-8 mb-8 pb-8 border-b border-accent-200 dark:border-accent-700" aria-label="Güven ve uyumluluk">
         <span class="inline-flex items-center gap-2.5 text-accent-600 dark:text-accent-300 text-xs font-medium px-3 py-2 rounded-full bg-white dark:bg-accent-800/60 shadow-sm border border-accent-100 dark:border-accent-700">
@@ -2369,7 +2382,7 @@
         nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_profile: "Profil", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
         profile_email_verified: "E-posta doğrulandı", profile_save: "Kaydet", profile_change_password: "Şifre değiştir", profile_change_password_btn: "Şifreyi güncelle", profile_export_data: "Verilerimi indir (JSON)", profile_delete_account: "Hesabımı sil", profile_delete_confirm_title: "Hesabı sil", profile_delete_confirm_desc: "Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.", profile_cancel: "İptal", profile_delete_confirm_btn: "Hesabı sil",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
-        hero_sub: "Laboratuvar sonuçlarınız için güvenilir rapor",
+        hero_sub: "Güvenilir kan tahlili raporu",
         hero_title: "Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.",
         hero_desc: "Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.",
         hero_cta: "İlk Analizimi Ücretsiz Yap", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
@@ -2381,7 +2394,7 @@
         how_title: "Norya Nasıl Çalışır?", how_desc: "Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.",
         how_1: "Kayıt Olun", how_1d: "Ücretsiz hesap oluşturun. E-posta ve şifre yeterli.",
         how_2: "Tahlil Metnini Yapıştırın", how_2d: "Sonuç kağıdındaki değerleri veya metni kutuya yapıştırın.",
-        how_3: "Açıklamayı Alın", how_3d: "Yapay zeka saniyeler içinde anlaşılır Türkçe açıklama üretir.",
+        how_3: "Açıklamayı Alın", how_3d: "Laboratuvar sonuçlarınız saniyeler içinde anlaşılır Türkçe özet ve yorumla sunulur.",
         before_after_title: "Tahlil Kağıdından Norya Raporuna", before_after_desc: "Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.",
         before_after_before_label: "Önce — Laboratuvar çıktısı", before_after_th_test: "Test", before_after_th_result: "Sonuç", before_after_th_ref: "Referans",
         before_after_before_hint: "Kısaltmalar ve sayılar — ne anlama geldiği belirsiz.", before_after_arrow: "60 sn",
@@ -2396,7 +2409,7 @@
         who_3_title: "9 dilde rapor", who_3_desc: "Yurtdışında tahlil yaptırdıysanız, raporunuzu kendi dilinizde alın.",
         who_4_title: "Doktora götürmek için", who_4_desc: "Raporu PDF veya metin olarak indirip hekiminizle paylaşın.",
         trust_benefit_1_title: "60 Saniyede Sonuç", trust_benefit_1_desc: "Tahlil metnini yapıştırın veya yükleyin; saniyeler içinde anlaşılır rapor alın.",
-        trust_benefit_2_title: "Yapay Zeka Yorumu", trust_benefit_2_desc: "Özet, değerler, olası nedenler ve öneriler — tek ekranda, sade dilde.",
+        trust_benefit_2_title: "Laboratuvar Yorumu", trust_benefit_2_desc: "Özet, değerler, olası nedenler ve öneriler — tek ekranda, sade dilde.",
         trust_benefit_3_title: "PDF, 9 Dil, Doktora Götür", trust_benefit_3_desc: "Tıbbi jargon yok; raporu PDF indirin veya hekiminizle paylaşın. 9 dilde.",
         trust_headline: "Dünya çapında binlerce kullanıcı tarafından güveniliyor", trust_subline: "Sağlık meraklıları ve düzenli tahlil yaptıranlar neden Norya ile sonuçlarını anlamayı tercih ediyor.",
         trust_stat_rating: "Ortalama puan", trust_stat_users: "Kullanıcı", trust_stat_langs: "Dilde rapor",
@@ -2541,7 +2554,7 @@
         nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_profile: "Profile", nav_analyze: "Analyze", nav_logout: "Log out",
         profile_email_verified: "Email verified", profile_save: "Save", profile_change_password: "Change password", profile_change_password_btn: "Update password", profile_export_data: "Download my data (JSON)", profile_delete_account: "Delete my account", profile_delete_confirm_title: "Delete account", profile_delete_confirm_desc: "This cannot be undone. All your analyses and data will be deleted. Enter your password to confirm.", profile_cancel: "Cancel", profile_delete_confirm_btn: "Delete account",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
-        hero_sub: "AI-powered blood test interpretation",
+        hero_sub: "Blood test interpretation — clear reports",
         hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
         hero_desc: "Paste text or upload a photo — get a clear summary, values, and a report to take to your doctor. First analysis free.",
         hero_cta: "Get my first analysis free", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
@@ -2711,7 +2724,7 @@
         about_who_2: "Offriamo servizi in diverse lingue nel mondo. La tua privacy è importante: i dati sono usati solo per generare il tuo report personale. Per domande o supporto puoi scriverci all'indirizzo email indicato sotto.",
         about_who_3: "Il nostro obiettivo è trasformare i risultati di laboratorio in una guida chiara. La tua esperienza e i tuoi feedback ci guidano in questo percorso.",
         nav_login: "Accedi", nav_register: "Inizia gratis", nav_history: "Cronologia", nav_analyze: "Analizza", nav_logout: "Esci",
-        hero_sub: "Interpretazione analisi del sangue con IA",
+        hero_sub: "Interpretazione referti ematochimici",
         hero_title: "Comprendi i tuoi esami del sangue in 60 secondi",
         hero_desc: "Incolla i risultati delle analisi, l'IA li spiega per te. Prova gratis — nessuna carta richiesta.",
         hero_cta: "Prima analisi gratis", hero_see_sample: "Vedi report esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy first",
@@ -2865,7 +2878,7 @@
         about_who_2: "Damos servicio en varios idiomas en todo el mundo. Tu privacidad importa: los datos solo se usan para generar tu informe personal. Para preguntas o soporte escríbenos al correo indicado abajo.",
         about_who_3: "Nuestro objetivo es convertir los resultados del laboratorio en una guía clara. Tu experiencia y tus comentarios nos orientan en este camino.",
         nav_login: "Iniciar sesión", nav_register: "Empezar gratis", nav_history: "Historial", nav_analyze: "Analizar", nav_logout: "Salir",
-        hero_sub: "Interpretación de análisis de sangre con IA",
+        hero_sub: "Interpretación de análisis de sangre",
         hero_title: "Comprende tus análisis de sangre en 60 segundos",
         hero_desc: "Pega tus resultados, la IA los explica. Prueba gratis — sin tarjeta.",
         hero_cta: "Mi primer análisis gratis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad primero",
@@ -3019,7 +3032,7 @@
         about_who_2: "Nous proposons nos services en plusieurs langues dans le monde. Votre vie privée compte : les données ne servent qu'à générer votre rapport personnel. Pour toute question ou assistance, écrivez-nous à l'adresse indiquée ci-dessous.",
         about_who_3: "Notre objectif est de transformer les résultats de laboratoire en un guide clair. Votre expérience et vos retours nous guident sur ce chemin.",
         nav_login: "Connexion", nav_register: "Commencer gratuit", nav_history: "Historique", nav_analyze: "Analyser", nav_logout: "Déconnexion",
-        hero_sub: "Interprétation d'analyses sanguines par IA",
+        hero_sub: "Interprétation d'analyses sanguines",
         hero_title: "Comprenez vos analyses sanguines en 60 secondes",
         hero_desc: "Collez vos résultats, l'IA les explique. Essai gratuit — sans carte.",
         hero_cta: "Ma première analyse gratuite", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité",
@@ -3173,7 +3186,7 @@
         about_who_2: "Wir bieten unseren Service weltweit in mehreren Sprachen an. Ihr Datenschutz ist uns wichtig: Ihre Daten werden nur für Ihren persönlichen Bericht verwendet. Bei Fragen oder Support erreichen Sie uns unter der unten angegebenen E-Mail-Adresse.",
         about_who_3: "Unser Ziel ist es, Laborergebnisse in eine klare Orientierungshilfe zu verwandeln. Ihre Erfahrung und Ihr Feedback leiten uns auf diesem Weg.",
         nav_login: "Anmelden", nav_register: "Kostenlos starten", nav_history: "Verlauf", nav_analyze: "Analysieren", nav_logout: "Abmelden",
-        hero_sub: "KI-gestützte Blutbild-Auswertung",
+        hero_sub: "Blutbild-Auswertung — verständliche Berichte",
         hero_title: "Verstehen Sie Ihre Blutwerte in 60 Sekunden",
         hero_desc: "Laborwerte einfügen, die KI erklärt sie. Kostenlos testen — keine Karte nötig.",
         hero_cta: "Erste Analyse kostenlos", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "Sicher • Datenschutz",
@@ -3327,7 +3340,7 @@
         about_who_2: "אנחנו משרתים משתמשים במספר שפות ברחבי העולם. הפרטיות חשובה לנו: הנתונים משמשים רק ליצירת הדוח האישי שלך. לשאלות או תמיכה צור איתנו קשר בכתובת המייל למטה.",
         about_who_3: "המטרה שלנו היא להפוך תוצאות מעבדה למדריך ברור. החוויה והמשוב שלך מנחים אותנו בדרך.",
         nav_login: "התחברות", nav_register: "התחל בחינם", nav_history: "היסטוריה", nav_analyze: "נתח", nav_logout: "התנתק",
-        hero_sub: "פירוש בדיקות דם בעזרת בינה מלאכותית",
+        hero_sub: "פירוש בדיקות דם — דוחות ברורים",
         hero_title: "הבן את תוצאות בדיקת הדם שלך תוך 60 שניות",
         hero_desc: "הדבק את תוצאות המעבדה, הבינה המלאכותית תסביר. נסה בחינם — בלי כרטיס אשראי.",
         hero_cta: "נתח את בדיקת הדם שלי בחינם", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות",
@@ -3480,7 +3493,7 @@
         about_who_2: "نقدم الخدمة بعدة لغات حول العالم. خصوصيتك مهمة: البيانات تُستخدم فقط لتوليد تقريرك الشخصي. للأسئلة أو الدعم راسلنا على البريد أدناه.",
         about_who_3: "هدفنا تحويل نتائج المختبر إلى دليل واضح. تجربتك وملاحظاتك ترشدنا في هذا المسار.",
         nav_login: "تسجيل الدخول", nav_register: "ابدأ مجاناً", nav_history: "السجل", nav_analyze: "تحليل", nav_logout: "تسجيل الخروج",
-        hero_sub: "تفسير تحاليل الدم بالذكاء الاصطناعي",
+        hero_sub: "تفسير تحاليل الدم — تقارير واضحة",
         hero_title: "افهم نتائج تحليل الدم في 60 ثانية",
         hero_desc: "الصق نتائج المختبر، الذكاء الاصطناعي يشرحها. جرب مجاناً — بدون بطاقة.",
         hero_cta: "تحليل تحاليل دمي مجاناً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • خصوصية",
@@ -3633,7 +3646,7 @@
         about_who_2: "हम दुनिया भर में कई भाषाओं में सेवा देते हैं। आपकी गोपनीयता मायने रखती है: डेटा केवल आपकी व्यक्तिगत रिपोर्ट बनाने के लिए उपयोग होता है। प्रश्न या सहायता के लिए नीचे दिए ईमेल पर संपर्क करें।",
         about_who_3: "हमारा लक्ष्य लैब परिणामों को स्पष्ट मार्गदर्शन में बदलना है। आपका अनुभव और फीडबैक इस रास्ते में हमारी मदद करता है।",
         nav_login: "लॉग इन", nav_register: "मुफ्त शुरू करें", nav_history: "इतिहास", nav_analyze: "विश्लेषण", nav_logout: "लॉग आउट",
-        hero_sub: "AI से रक्त परीक्षण व्याख्या",
+        hero_sub: "रक्त परीक्षण व्याख्या — स्पष्ट रिपोर्ट",
         hero_title: "60 सेकंड में अपने रक्त परीक्षण परिणाम समझें",
         hero_desc: "लैब रिज़ल्ट चिपकाएं, AI समझाता है। मुफ्त आज़माएं — कार्ड ज़रूरी नहीं।",
         hero_cta: "मेरी पहली विश्लेषण मुफ्त करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • गोपालन",
@@ -3786,7 +3799,7 @@
         about_who_2: "Παρέχουμε υπηρεσία σε πολλές γλώσσες παγκοσμίως. Το απόρρητό σας μας νοιάζει· τα δεδομένα χρησιμοποιούνται μόνο για την προσωπική σας αναφορά. Για ερωτήσεις ή υποστήριξη επικοινωνήστε μαζί μας στο email παρακάτω.",
         about_who_3: "Ο στόχος μας είναι να μετατρέψουμε τα εργαστηριακά αποτελέσματα σε σαφή οδηγό. Η εμπειρία και τα σχόλιά σας μας καθοδηγούν.",
         nav_login: "Σύνδεση", nav_register: "Ξεκινήστε δωρεάν", nav_history: "Ιστορικό", nav_analyze: "Ανάλυση", nav_logout: "Αποσύνδεση",
-        hero_sub: "Ερμηνεία αιματολογικών με AI",
+        hero_sub: "Ερμηνεία αιματολογικών — σαφείς αναφορές",
         hero_title: "Κατανοήστε τα αποτελέσματα αιματολογικών σε 60 δευτερόλεπτα",
         hero_desc: "Επικολλήστε τα αποτελέσματα, η AI τα εξηγεί. Δωρεάν δοκιμή — χωρίς κάρτα.",
         hero_cta: "Πρώτη ανάλυση δωρεάν", hero_see_sample: "Δείτε παράδειγμα αναφοράς", hero_how: "Πώς λειτουργεί", hero_secure: "Ασφαλές • Προστασία ιδιωτικότητας",
@@ -3937,7 +3950,7 @@
         about_who_2: "Službu poskytujeme v několika jazycích po celém světě. Na vaše soukromí dbáme: data se používají pouze k vytvoření vaší osobní zprávy. Pro dotazy nebo podporu nás kontaktujte na e-mailu níže.",
         about_who_3: "Naším cílem je proměnit laboratorní výsledky v srozumitelný průvodce. Vaše zkušenost a zpětná vazba nás na této cestě vedou.",
         nav_login: "Přihlásit", nav_register: "Začít zdarma", nav_history: "Historie", nav_analyze: "Analyzovat", nav_logout: "Odhlásit",
-        hero_sub: "Interpretace krevních testů s AI",
+        hero_sub: "Interpretace krevních testů — srozumitelné reporty",
         hero_title: "Pochopte výsledky krevních testů za 60 sekund",
         hero_desc: "Vložte výsledky, AI je vysvětlí. Vyzkoušejte zdarma — bez karty.",
         hero_cta: "První analýza zdarma", hero_see_sample: "Zobrazit ukázkovou zprávu", hero_how: "Jak to funguje", hero_secure: "Bezpečné • Ochrana soukromí",
@@ -4088,7 +4101,7 @@
         about_who_2: "Pružamo uslugu na više jezika širom sveta. Vaša privatnost nam je važna: podaci se koriste samo za vaš lični izveštaj. Za pitanja ili podršku pišite na email ispod.",
         about_who_3: "Cilj nam je da laboratorijske rezultate pretvorimo u jasan vodič. Vaše iskustvo i povratne informacije nas vode na tom putu.",
         nav_login: "Prijava", nav_register: "Počnite besplatno", nav_history: "Istorija", nav_analyze: "Analiziraj", nav_logout: "Odjava",
-        hero_sub: "Interpretacija krvnih testova uz AI",
+        hero_sub: "Interpretacija krvnih testova — jasni izveštaji",
         hero_title: "Razumite rezultate krvnih testova za 60 sekundi",
         hero_desc: "Nalepite rezultate, AI ih objašnjava. Probajte besplatno — bez kartice.",
         hero_cta: "Prva analiza besplatno", hero_see_sample: "Pogledaj primer izveštaja", hero_how: "Kako funkcioniše", hero_secure: "Bezbedno • Privatnost",
