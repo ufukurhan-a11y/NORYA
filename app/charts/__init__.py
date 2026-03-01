@@ -1,4 +1,14 @@
 # Norya chart utilities for PDF reports
-from app.charts.range_bar import range_bar_svg, range_bar_svg_base64, simple_value_bar_svg_base64
+from app.charts.range_bar import (
+    range_bar_svg,
+    range_bar_svg_base64,
+    simple_value_bar_svg_base64,
+    overall_score_svg_base64,
+)
 
-__all__ = ["range_bar_svg", "range_bar_svg_base64", "simple_value_bar_svg_base64"]
+__all__ = [
+    "range_bar_svg",
+    "range_bar_svg_base64",
+    "simple_value_bar_svg_base64",
+    "overall_score_svg_base64",
+]

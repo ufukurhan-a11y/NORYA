@@ -60,7 +60,7 @@
     body {
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 11px;
-      line-height: 1.5;
+      line-height: 1.65;
       color: var(--norya-text);
       margin: 0;
       padding: 0;
@@ -71,7 +71,7 @@
       margin-bottom: 20px;
     }
     .brand-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .brand-logo { width: 56px; height: auto; max-height: 56px; object-fit: contain; flex-shrink: 0; background: #fff; }
+    .brand-logo { width: 100px; height: auto; max-height: 100px; object-fit: contain; flex-shrink: 0; background: #fff; }
     .brand {
       font-size: 22px;
       font-weight: 700;
@@ -114,8 +114,8 @@
       font-size: 12px;
       font-weight: 700;
       color: var(--norya-heading);
-      margin: 16px 0 8px 0;
-      padding-bottom: 4px;
+      margin: 20px 0 10px 0;
+      padding-bottom: 6px;
       border-bottom: 1px solid var(--section-border);
     }
     .chart-legend {
@@ -124,13 +124,34 @@
       margin: 0 0 10px 0;
     }
     .section-body {
-      margin-bottom: 14px;
+      margin-bottom: 18px;
       white-space: pre-wrap;
     }
+    .intro-block {
+      margin-bottom: 22px;
+      padding: 16px 18px;
+      background: var(--table-row-even);
+      border-radius: 6px;
+      border-left: 4px solid var(--norya-brand);
+      page-break-inside: avoid;
+    }
+    .intro-block p { margin: 0 0 10px 0; }
+    .intro-block p:last-child { margin-bottom: 0; }
+    .how-to-read-block {
+      margin-bottom: 22px;
+      padding: 12px 14px;
+      background: #f8fafc;
+      border-radius: 6px;
+      font-size: 10px;
+      color: var(--norya-muted);
+      line-height: 1.55;
+    }
+    .overall-chart-wrap { margin: 12px 0 20px 0; page-break-inside: avoid; }
+    .overall-chart-img { max-width: 100%; height: auto; display: block; }
     table.biomarkers {
       width: 100%;
       border-collapse: collapse;
-      margin: 10px 0 18px 0;
+      margin: 12px 0 22px 0;
       font-size: 10px;
     }
     table.biomarkers th {
@@ -159,13 +180,16 @@
     .status-high { color: var(--status-high); font-weight: 600; }
     .status-border { color: var(--status-border); font-weight: 600; }
     .footer-note {
-      margin-top: 24px;
-      padding-top: 12px;
-      border-top: 1px solid var(--section-border);
+      margin-top: 28px;
+      padding: 16px 14px;
+      background: #f8fafc;
+      border-radius: 6px;
+      border: 1px solid var(--section-border);
       font-size: 9px;
+      line-height: 1.5;
       color: var(--footer-text);
     }
-    .footer-note.emr-ehr-note { margin-top: 0.5em; font-size: 0.85em; color: var(--footer-emr); }
+    .footer-note.emr-ehr-note { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--table-border); font-size: 0.9em; color: var(--footer-emr); }
   </style>
 </head>
 <body>
@@ -189,12 +213,28 @@
   </div>
   {% endif %}
 
+  <div class="section-title" style="margin-top:0;">{{ intro_heading | default('Bu rapor hakkında', true) }}</div>
+  <div class="intro-block">
+    <p>{{ intro_p1 | default('Bu rapor, kan tahlili sonuçlarınızın yapay zeka destekli bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri ve öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.', true) }}</p>
+    <p>{{ intro_p2 | default('Sonuçlarınızı mutlaka bir hekim ile görüşün. Tıbbi kararlar için hekiminize danışın.', true) }}</p>
+  </div>
+
+  {% if overall_chart_svg_base64 %}
+  <div class="section-title">{{ overall_status_heading | default('Genel durum', true) }}</div>
+  <p class="chart-legend">{{ overall_chart_legend | default('Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor 0–100)', true) }}</p>
+  <div class="overall-chart-wrap">
+    <img class="overall-chart-img" src="data:image/svg+xml;base64,{{ overall_chart_svg_base64 }}" alt="{{ overall_status_heading | default('Genel durum', true) }} {{ overall_score }}/100" />
+  </div>
+  {% endif %}
+
   {% if summary %}
   <div class="section-title">{{ summary_heading | default('Özet', true) }}</div>
   <div class="section-body">{{ summary }}</div>
   {% endif %}
 
   {% if biomarkers %}
+  <div class="section-title">{{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}</div>
+  <div class="how-to-read-block">{{ how_to_read_body | default('Her parametre için Sonuç ve Referans aralığı verilir. Yeşil = Normal, turuncu = Sınırda, kırmızı = Referans dışı. Grafikler değerin aralığa göre konumunu gösterir.', true) }}</div>
   <div class="section-title">{{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}</div>
   <p class="chart-legend">Yeşil = Normal &nbsp;|&nbsp; Turuncu = Sınır &nbsp;|&nbsp; Kırmızı = Riskli</p>
   <table class="biomarkers">

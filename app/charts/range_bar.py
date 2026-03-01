@@ -151,6 +151,52 @@ def simple_value_bar_svg_base64(
     return base64.b64encode(svg.encode("utf-8")).decode("ascii")
 
 
+def overall_score_svg(
+    score: int,
+    status: str,
+    title: str = "Genel durum (0–100)",
+    badge_label: str | None = None,
+) -> str:
+    """
+    Genel durum grafiği: 0-100 skor, yeşil/turuncu/kırmızı bölgeler.
+    status: 'normal' | 'attention' | 'high' -> rozet rengi.
+    """
+    score = max(0, min(100, score))
+    badge_text = badge_label or {"normal": "Normal", "attention": "Sınır", "high": "Riskli"}.get(status, "Normal")
+    # 0-70 yeşil, 70-85 turuncu, 85-100 kırmızı (web ile aynı mantık)
+    w = 600
+    h = 100
+    bar_y = 50
+    bar_h = 24
+    x0, x1, x2, x3 = 60, 60 + (w - 120) * 0.70, 60 + (w - 120) * 0.85, w - 60
+    score_x = 60 + (w - 120) * (score / 100.0) if score <= 100 else w - 60
+    score_x = max(62, min(w - 62, score_x))
+    badge_color = COLOR_NORMAL if status == "normal" else (COLOR_BORDER if status == "attention" else COLOR_RISK)
+    badge_w = min(58, len(badge_text) * 8)
+    svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" style="max-width:100%;height:auto;">
+  <text x="60" y="28" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="{COLOR_MARKER_TEXT}">{_escape(title)}</text>
+  <rect x="{x0}" y="{bar_y}" width="{x1 - x0}" height="{bar_h}" rx="6" fill="{COLOR_NORMAL}"/>
+  <rect x="{x1}" y="{bar_y}" width="{x2 - x1}" height="{bar_h}" fill="{COLOR_BORDER}"/>
+  <rect x="{x2}" y="{bar_y}" width="{x3 - x2}" height="{bar_h}" rx="6" fill="{COLOR_RISK}"/>
+  <line x1="{score_x}" y1="{bar_y}" x2="{score_x}" y2="{bar_y + bar_h + 18}" stroke="{COLOR_MARKER}" stroke-width="3" stroke-linecap="round"/>
+  <text x="{score_x}" y="{bar_y + bar_h + 36}" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="{COLOR_MARKER_TEXT}" text-anchor="middle">{score}/100</text>
+  <rect x="{w - 60 - badge_w}" y="{bar_y + bar_h / 2 - 9}" width="{badge_w}" height="18" rx="9" fill="{badge_color}"/>
+  <text x="{w - 60 - badge_w / 2}" y="{bar_y + bar_h / 2 + 4}" font-family="Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#fff" text-anchor="middle">{_escape(badge_text)}</text>
+</svg>'''
+    return svg
+
+
+def overall_score_svg_base64(
+    score: int,
+    status: str,
+    title: str = "Genel durum (0–100)",
+    badge_label: str | None = None,
+) -> str:
+    """Genel durum 0–100 grafiği, base64."""
+    svg = overall_score_svg(score=score, status=status, title=title, badge_label=badge_label)
+    return base64.b64encode(svg.encode("utf-8")).decode("ascii")
+
+
 def range_bar_svg_base64(
     name: str,
     value: float,

@@ -7,7 +7,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from app.charts import range_bar_svg_base64, simple_value_bar_svg_base64
+from app.charts import overall_score_svg_base64, range_bar_svg_base64, simple_value_bar_svg_base64
 
 # Şablon dizini: app/templates (package içinden çalışırken app/templates)
 _TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
@@ -35,6 +35,17 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "risk_default_attention": "Değerlerinizde dikkat edilmesi gereken parametreler olabilir. Öneriler bölümünü okuyun ve gerekirse hekime danışın.",
         "risk_default_normal": "Tüm değerler referans aralığında. Genel özet ve öneriler aşağıdadır.",
         "risk_indicators_heading": "Risk İşaretleri",
+        "overall_status_heading": "Genel durum",
+        "overall_chart_title": "Genel durum (0–100)",
+        "overall_badge_normal": "Normal",
+        "overall_badge_attention": "Sınır",
+        "overall_badge_high": "Riskli",
+        "overall_chart_legend": "Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor, parametrelerin referans aralığına uyumuna göre 0–100)",
+        "intro_heading": "Bu rapor hakkında",
+        "intro_p1": "Bu rapor, kan tahlili sonuçlarınızın yapay zeka destekli bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri, referans aralıkları ve genel öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.",
+        "intro_p2": "Sonuçlarınızı mutlaka bir hekim ile görüşün. Tıbbi kararlar ve tedavi planı için hekiminize danışın.",
+        "how_to_read_heading": "Parametreler nasıl okunur?",
+        "how_to_read_body": "Her parametre için \"Sonuç\" sütununda laboratuvar değeriniz, \"Referans aralığı\" sütununda ise o test için kabul edilen normal aralık verilir. Yeşil = Normal (aralık içinde), turuncu = Sınırda, kırmızı = Referans dışı (düşük veya yüksek). Grafikler değerin referans aralığına göre konumunu gösterir.",
     },
     "en": {
         "title": "Norya Analysis Report",
@@ -55,6 +66,17 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "risk_default_attention": "Some values may need attention. See the recommendations section and consult a doctor if needed.",
         "risk_default_normal": "All values are within reference range. Summary and recommendations below.",
         "risk_indicators_heading": "Risk Indicators",
+        "overall_status_heading": "Overall status",
+        "overall_chart_title": "Overall status (0–100)",
+        "overall_badge_normal": "Normal",
+        "overall_badge_attention": "Borderline",
+        "overall_badge_high": "At risk",
+        "overall_chart_legend": "Green = Normal | Orange = Borderline | Red = At risk (score 0–100 by reference range fit)",
+        "intro_heading": "About this report",
+        "intro_p1": "This report is an AI-assisted preliminary interpretation of your blood test results. It includes a summary, parameter values with reference ranges, and general recommendations. It does not provide a diagnosis and is for information only.",
+        "intro_p2": "Always discuss your results with a healthcare provider. Consult your doctor for medical decisions and treatment plans.",
+        "how_to_read_heading": "How to read the parameters",
+        "how_to_read_body": "For each parameter, the \"Result\" column shows your lab value and \"Reference range\" shows the normal range for that test. Green = Normal (within range), orange = Borderline, red = Outside range (low or high). The charts show where your value sits relative to the reference range.",
     },
     "de": {
         "title": "Norya Analysebericht",
@@ -74,6 +96,16 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "emr_ehr_note": "EMR/EHR-kompatibel — Dieser Bericht kann in Klinik- oder Arztinformationssysteme hochgeladen werden.",
         "risk_default_attention": "Einige Werte erfordern möglicherweise Beachtung. Siehe Empfehlungen und ggf. Arzt konsultieren.",
         "risk_default_normal": "Alle Werte im Referenzbereich. Zusammenfassung und Empfehlungen unten.",
+        "overall_status_heading": "Gesamtstatus",
+        "overall_chart_title": "Gesamtstatus (0–100)",
+        "overall_badge_normal": "Normal",
+        "overall_badge_attention": "Grenzwertig",
+        "overall_badge_high": "Risiko",
+        "intro_heading": "Über diesen Bericht",
+        "intro_p1": "Dieser Bericht ist eine KI-gestützte Auswertung Ihrer Blutwerte mit Zusammenfassung, Parametern und Empfehlungen. Er dient nur zur Information und ersetzt keine Diagnose.",
+        "intro_p2": "Besprechen Sie Ihre Ergebnisse mit einem Arzt. Konsultieren Sie Ihren Arzt für medizinische Entscheidungen.",
+        "how_to_read_heading": "Wie liest man die Parameter?",
+        "how_to_read_body": "„Ergebnis“ zeigt Ihren Laborwert, „Referenzbereich“ den Normalbereich. Grün = Normal, Orange = Grenzwertig, Rot = Außerhalb des Bereichs. Die Grafik zeigt die Position Ihres Werts.",
     },
     "fr": {
         "title": "Rapport d'analyse Norya",
@@ -93,6 +125,16 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "emr_ehr_note": "Compatible EMR/EHR — Ce rapport peut être importé dans les systèmes d'information hospitaliers ou médicaux.",
         "risk_default_attention": "Certaines valeurs peuvent nécessiter une attention. Voir les recommandations et consulter un médecin si besoin.",
         "risk_default_normal": "Toutes les valeurs sont dans les normes. Résumé et recommandations ci-dessous.",
+        "overall_status_heading": "État général",
+        "overall_chart_title": "État général (0–100)",
+        "overall_badge_normal": "Normal",
+        "overall_badge_attention": "Limite",
+        "overall_badge_high": "Risque",
+        "intro_heading": "À propos de ce rapport",
+        "intro_p1": "Ce rapport est une interprétation préliminaire de vos résultats d'analyse sanguine. Il contient un résumé, les paramètres et des recommandations. Il est informatif et ne constitue pas un diagnostic.",
+        "intro_p2": "Consultez toujours un professionnel de santé pour vos résultats et décisions médicales.",
+        "how_to_read_heading": "Comment lire les paramètres",
+        "how_to_read_body": "« Résultat » indique votre valeur, « Intervalle de référence » la norme. Vert = Normal, orange = Limite, rouge = Hors norme. Les graphiques montrent la position par rapport à la norme.",
     },
     "es": {
         "title": "Informe de análisis Norya",
@@ -112,6 +154,16 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "emr_ehr_note": "Compatible EMR/EHR — Este informe puede cargarse en sistemas de información hospitalarios o clínicos.",
         "risk_default_attention": "Algunos valores pueden requerir atención. Véase recomendaciones y consulte a un médico si es necesario.",
         "risk_default_normal": "Todos los valores están dentro del rango de referencia. Resumen y recomendaciones a continuación.",
+        "overall_status_heading": "Estado general",
+        "overall_chart_title": "Estado general (0–100)",
+        "overall_badge_normal": "Normal",
+        "overall_badge_attention": "Límite",
+        "overall_badge_high": "Riesgo",
+        "intro_heading": "Sobre este informe",
+        "intro_p1": "Este informe es una interpretación preliminar de sus análisis de sangre. Incluye resumen, parámetros y recomendaciones. Es solo informativo y no sustituye un diagnóstico.",
+        "intro_p2": "Consulte siempre a un profesional sanitario sobre sus resultados y decisiones médicas.",
+        "how_to_read_heading": "Cómo leer los parámetros",
+        "how_to_read_body": "«Resultado» muestra su valor; «Intervalo de referencia» muestra la norma. Verde = Normal, naranja = Límite, rojo = Fuera de rango. Los gráficos muestran la posición respecto a la norma.",
     },
     "it": {
         "title": "Report di analisi Norya",
@@ -131,6 +183,16 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "emr_ehr_note": "Compatibile EMR/EHR — Questo report può essere caricato nei sistemi informativi ospedalieri o clinici.",
         "risk_default_attention": "Alcuni valori potrebbero richiedere attenzione. Vedi raccomandazioni e consulta un medico se necessario.",
         "risk_default_normal": "Tutti i valori sono nell'intervallo di riferimento. Riassunto e raccomandazioni sotto.",
+        "overall_status_heading": "Stato generale",
+        "overall_chart_title": "Stato generale (0–100)",
+        "overall_badge_normal": "Normale",
+        "overall_badge_attention": "Limite",
+        "overall_badge_high": "Rischio",
+        "intro_heading": "Informazioni su questo report",
+        "intro_p1": "Questo report è un'interpretazione preliminare dei risultati delle analisi del sangue. Include riassunto, parametri e raccomandazioni. È solo informativo e non costituisce una diagnosi.",
+        "intro_p2": "Consultare sempre un medico per i risultati e le decisioni mediche.",
+        "how_to_read_heading": "Come leggere i parametri",
+        "how_to_read_body": "«Risultato» indica il valore; «Intervallo di riferimento» indica la norma. Verde = Normale, arancione = Limite, rosso = Fuori range. I grafici mostrano la posizione rispetto alla norma.",
     },
     "he": {
         "title": "דוח ניתוח Norya",
@@ -149,6 +211,11 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "page_footer": "דוח זה למידע בלבד. יש להתייעץ עם רופא. — Norya",
         "risk_default_attention": "ייתכן שחלק מהערכים דורשים תשומת לב. ראה המלצות והתייעץ עם רופא.",
         "risk_default_normal": "כל הערכים בטווח הייחוס. סיכום והמלצות להלן.",
+        "intro_heading": "אודות הדוח",
+        "intro_p1": "דוח זה הוא פרשנות מקדימה מבוססת בינה מלאכותית של תוצאות בדיקת הדם. הוא כולל סיכום, ערכי פרמטרים והמלצות. הוא למטרות מידע בלבד ואינו מהווה אבחנה.",
+        "intro_p2": "יש לדון בתוצאות עם רופא. יש להתייעץ עם רופא לגבי החלטות רפואיות.",
+        "how_to_read_heading": "כיצד לקרוא את הפרמטרים",
+        "how_to_read_body": "„תוצאה“ מציגה את הערך; „טווח ייחוס“ מציג את הנורמה. ירוק = תקין, כתום = גבולי, אדום = מחוץ לטווח. הגרפים מציגים את מיקום הערך ביחס לטווח.",
     },
     "ar": {
         "title": "تقرير تحليل Norya",
@@ -167,6 +234,11 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "page_footer": "هذا التقرير للمعلومات فقط. استشر طبيباً. — Norya",
         "risk_default_attention": "قد تتطلب بعض القيم الانتباه. راجع التوصيات واستشر طبيباً إذا لزم الأمر.",
         "risk_default_normal": "جميع القيم ضمن النطاق المرجعي. الملخص والتوصيات أدناه.",
+        "intro_heading": "حول هذا التقرير",
+        "intro_p1": "هذا التقرير تفسير أولي بمساعدة الذكاء الاصطناعي لنتائج تحليل الدم. يتضمن ملخصاً والقيم والتوصيات. إنه للمعلومات فقط ولا يشكل تشخيصاً.",
+        "intro_p2": "استشر طبيباً دائماً بشأن نتائجك والقرارات الطبية.",
+        "how_to_read_heading": "كيف تقرأ المعاملات",
+        "how_to_read_body": "«النتيجة» تعرض قيمتك؛ «النطاق المرجعي» يعرض المعيار. أخضر = طبيعي، برتقالي = حدي، أحمر = خارج النطاق. الرسوم توضح موقع القيمة بالنسبة للنطاق.",
     },
     "hi": {
         "title": "Norya विश्लेषण रिपोर्ट",
@@ -185,6 +257,11 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "page_footer": "यह रिपोर्ट केवल सूचना के लिए है। चिकित्सक से परामर्श करें। — Norya",
         "risk_default_attention": "कुछ मानों पर ध्यान देना पड़ सकता है। सिफारिशें देखें और चिकित्सक से परामर्श करें।",
         "risk_default_normal": "सभी मान संदर्भ सीमा में हैं। सारांश और सिफारिशें नीचे।",
+        "intro_heading": "इस रिपोर्ट के बारे में",
+        "intro_p1": "यह रिपोर्ट रक्त परीक्षण परिणामों की AI-सहायक प्रारंभिक व्याख्या है। इसमें सारांश, पैरामीटर और सिफारिशें हैं। यह केवल सूचनार्थ है और निदान नहीं है।",
+        "intro_p2": "अपने परिणाम और चिकित्सा निर्णय के लिए हमेशा चिकित्सक से परामर्श लें।",
+        "how_to_read_heading": "पैरामीटर कैसे पढ़ें",
+        "how_to_read_body": "«परिणाम» आपका मान दिखाता है; «संदर्भ सीमा» मानक दिखाती है। हरा = सामान्य, नारंगी = सीमा, लाल = सीमा के बाहर। ग्राफ़ मान की स्थिति दिखाते हैं।",
     },
     "el": {
         "title": "Αναφορά ανάλυσης Norya",
@@ -203,6 +280,11 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "page_footer": "Αυτή η αναφορά είναι μόνο για πληροφόρηση. Συμβουλευτείτε γιατρό. — Norya",
         "risk_default_attention": "Ορισμένες τιμές μπορεί να απαιτούν προσοχή. Δείτε συστάσεις και συμβουλευτείτε γιατρό.",
         "risk_default_normal": "Όλες οι τιμές εντός εύρους αναφοράς. Περίληψη και συστάσεις παρακάτω.",
+        "intro_heading": "Σχετικά με αυτή την αναφορά",
+        "intro_p1": "Αυτή η αναφορά είναι προκαταρκτική ερμηνεία με AI των αποτελεσμάτων αίματος. Περιλαμβάνει περίληψη, παραμέτρους και συστάσεις. Είναι μόνο για πληροφόρηση και δεν αντικαθιστά διάγνωση.",
+        "intro_p2": "Συμβουλευτείτε πάντα γιατρό για τα αποτελέσματα και τις ιατρικές αποφάσεις.",
+        "how_to_read_heading": "Πώς να διαβάσετε τις παραμέτρους",
+        "how_to_read_body": "«Αποτέλεσμα» δείχνει την τιμή· «Εύρος αναφοράς» δείχνει το κανονικό. Πράσινο = Φυσιολογικό, πορτοκαλί = Οριακό, κόκκινο = Εκτός εύρους. Τα γραφήματα δείχνουν τη θέση της τιμής.",
     },
     "cs": {
         "title": "Norya zpráva z analýzy",
@@ -221,6 +303,11 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "page_footer": "Tato zpráva je pouze informativní. Konzultujte lékaře. — Norya",
         "risk_default_attention": "Některé hodnoty mohou vyžadovat pozornost. Viz doporučení a konzultujte lékaře.",
         "risk_default_normal": "Všechny hodnoty v referenčním rozsahu. Shrnutí a doporučení níže.",
+        "intro_heading": "O této zprávě",
+        "intro_p1": "Tato zpráva je předběžné AI vyhodnocení výsledků krevních testů. Obsahuje shrnutí, parametry a doporučení. Je pouze informativní a nenahrazuje diagnózu.",
+        "intro_p2": "Vždy konzultujte s lékařem své výsledky a lékařská rozhodnutí.",
+        "how_to_read_heading": "Jak číst parametry",
+        "how_to_read_body": "„Výsledek“ ukazuje vaši hodnotu; „Referenční rozsah“ ukazuje normu. Zelená = Normální, oranžová = Mezní, červená = Mimo rozsah. Grafy ukazují polohu hodnoty.",
     },
     "sr": {
         "title": "Norya izveštaj analize",
@@ -239,6 +326,11 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "page_footer": "Ovaj izveštaj je samo informativan. Konsultujte lekara. — Norya",
         "risk_default_attention": "Neke vrednosti mogu zahtevati pažnju. Pogledajte preporuke i konsultujte lekara.",
         "risk_default_normal": "Sve vrednosti u referentnom opsegu. Rezime i preporuke ispod.",
+        "intro_heading": "O ovom izveštaju",
+        "intro_p1": "Ovaj izveštaj je AI tumačenje rezultata krvne analize. Uključuje rezime, parametre i preporuke. Samo je informativan i ne zamenjuje dijagnozu.",
+        "intro_p2": "Uvek konsultujte lekara za rezultate i medicinske odluke.",
+        "how_to_read_heading": "Kako čitati parametre",
+        "how_to_read_body": "„Rezultat“ pokazuje vašu vrednost; „Referentni opseg“ pokazuje normu. Zeleno = Normalno, narandžasto = Granično, crveno = Van opsega. Grafici pokazuju položaj vrednosti.",
     },
 }
 
@@ -558,6 +650,21 @@ def parse_report_to_context(
             else labels["risk_default_normal"]
         )
 
+    # Genel durum skoru 0–100: normal parametre oranı; risk_level ile aynı renk mantığı (dışarıdaki yeşil/turuncu/kırmızı)
+    total = len(biomarkers)
+    normal_count = sum(1 for b in biomarkers if b.get("status") == "normal")
+    overall_score = round(100 * normal_count / total) if total else 100
+    overall_score = max(0, min(100, overall_score))
+    chart_status = risk_level if risk_level != "none" else "normal"
+    chart_title = labels.get("overall_chart_title", "Genel durum (0–100)")
+    badge_label = labels.get(f"overall_badge_{chart_status}") or {"normal": "Normal", "attention": "Sınır", "high": "Riskli"}.get(chart_status, "Normal")
+    overall_chart_svg = overall_score_svg_base64(
+        score=overall_score,
+        status=chart_status,
+        title=chart_title,
+        badge_label=badge_label,
+    )
+
     out = {
         "title": labels["title"],
         "lang": lang,
@@ -569,6 +676,8 @@ def parse_report_to_context(
         "possible_causes": data["possible_causes"],
         "recommendations": data["recommendations"],
         "raw_sections": data["raw_sections"],
+        "overall_score": overall_score,
+        "overall_chart_svg_base64": overall_chart_svg,
     }
     out.update(labels)
     return out
