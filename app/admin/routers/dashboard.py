@@ -75,13 +75,29 @@ _ai_health_cache: dict = {"ts": 0.0, "data": None}
 _AI_CACHE_TTL = 60.0
 
 
+def _ai_error_message(err: str | None) -> str:
+    """OpenAI/bağlantı hatalarını Türkçe karşılığa çevirir."""
+    if not err:
+        return "Bilinmeyen hata"
+    e = (err or "").strip().lower()
+    if "connection" in e or "connect" in e or "network" in e or "unreachable" in e:
+        return "AI servisine bağlanılamadı (ağ / firewall veya API erişimi kontrol edin)."
+    if "timeout" in e:
+        return "AI servisi yanıt vermedi (zaman aşımı)."
+    if "auth" in e or "invalid" in e or "401" in e or "403" in e:
+        return "API anahtarı geçersiz veya yetkisiz."
+    if "rate limit" in e or "429" in e:
+        return "İstek limiti aşıldı (kısa süre sonra tekrar deneyin)."
+    return (err or "Bilinmeyen hata")[:300]
+
+
 @router.get("/api/health-ai", response_class=JSONResponse)
-def admin_api_health_ai(_=Depends(require_admin_cookie)):
-    """Dashboard'daki AI Durumu kutusu bu endpoint'i çağırır (path her zaman /admin altında)."""
+def admin_api_health_ai(_=Depends(require_admin_cookie), refresh: bool = False):
+    """Dashboard'daki AI Durumu kutusu bu endpoint'i çağırır. refresh=1 ile önbellek atlanır."""
     from app.services.analyze import ping_openai
 
     now = _time.time()
-    if _ai_health_cache["data"] is not None and (now - _ai_health_cache["ts"]) < _AI_CACHE_TTL:
+    if not refresh and _ai_health_cache["data"] is not None and (now - _ai_health_cache["ts"]) < _AI_CACHE_TTL:
         return JSONResponse(_ai_health_cache["data"])
     ok, latency_ms, err = ping_openai()
     if ok:
@@ -91,7 +107,7 @@ def admin_api_health_ai(_=Depends(require_admin_cookie)):
             "status": "fail",
             "provider": "openai",
             "latency_ms": latency_ms,
-            "error": err or "Bilinmeyen hata",
+            "error": _ai_error_message(err),
         }
     _ai_health_cache["ts"] = now
     _ai_health_cache["data"] = data

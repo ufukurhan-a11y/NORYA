@@ -214,9 +214,9 @@
       }
     }
 
-    function fetchAIHealth() {
+    function fetchAIHealth(skipCache) {
       setAIState(true);
-      var url = '/admin/api/health-ai';
+      var url = '/admin/api/health-ai' + (skipCache ? '?refresh=1' : '');
       fetch(url, { method: 'GET', credentials: 'same-origin', headers: { 'Accept': 'application/json' }, redirect: 'manual' })
         .then(function(res) {
           if (res.type === 'opaqueredirect' || res.status === 302 || res.status === 301) {
@@ -238,14 +238,20 @@
           }
         })
         .catch(function(e) {
-          setAIState(false, false, 'Bağlantı hatası: ' + (e.message || String(e)));
+          var msg = (e && e.message) ? e.message : String(e);
+          if (/connection|failed to fetch|network|load/i.test(msg)) {
+            msg = 'AI durumu kontrol edilemedi (sayfa veya ağ sorunu). Raporlar ve diğer sayfalar çalışıyor olabilir.';
+          } else {
+            msg = 'Bağlantı hatası: ' + msg;
+          }
+          setAIState(false, false, msg);
         });
     }
 
     if (refreshBtn) {
-      refreshBtn.addEventListener('click', function(ev) { ev.preventDefault(); fetchAIHealth(); });
+      refreshBtn.addEventListener('click', function(ev) { ev.preventDefault(); fetchAIHealth(true); });
     }
-    fetchAIHealth();
+    fetchAIHealth(false);
     setInterval(fetchAIHealth, 60000);
   }
 

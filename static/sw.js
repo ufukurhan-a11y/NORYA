@@ -1,6 +1,6 @@
 /* Norya PWA Service Worker: cache shell + push notifications */
-const CACHE_NAME = 'norya-v1';
-const STATIC_CACHE = ['/', '/static/index.html', '/static/manifest.json', '/static/icon.svg', '/static/norya.svg', '/static/css/app.css'];
+const CACHE_NAME = 'norya-v2';
+const STATIC_CACHE = ['/', '/static/index.html', '/static/manifest.json', '/static/icons/favicon-32x32.png', '/static/icons/icon-192.png', '/static/icons/icon-512.png', '/static/css/app.css'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(
@@ -47,8 +47,8 @@ self.addEventListener('push', function (e) {
   var title = data.title || 'Norya';
   var options = {
     body: data.body || 'Raporunuz hazır.',
-    icon: '/static/icon.svg',
-    badge: '/static/icon.svg',
+    icon: '/static/icons/icon-192.png',
+    badge: '/static/icons/icon-192.png',
     tag: data.tag || 'norya-notification',
     data: data.url ? { url: data.url } : {},
     requireInteraction: !!data.requireInteraction,

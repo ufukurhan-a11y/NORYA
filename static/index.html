@@ -10,8 +10,9 @@
   <meta name="apple-mobile-web-app-title" content="Norya" />
   <meta name="mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="/static/manifest.json" />
-  <link rel="icon" type="image/svg+xml" href="/static/icon.svg" />
-  <link rel="apple-touch-icon" href="/static/icon.svg" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
   <title>Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu</title>
   <meta name="description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
   <meta property="og:title" content="Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu" />
@@ -76,6 +77,9 @@
     .gradient-hero { background: var(--norya-hero); }
     .drop-shadow-soft { box-shadow: var(--norya-shadow); }
     .norya-card-shadow { box-shadow: var(--norya-card-shadow); }
+    .trust-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+    .trust-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 25, 41, 0.08); }
+    .dark .trust-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
     #toast-container { position: fixed; bottom: 1rem; left: 1rem; right: 1rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
     @media (min-width: 640px) {
       #toast-container { left: auto; right: 1.5rem; bottom: 1.5rem; max-width: 22rem; }
@@ -115,40 +119,40 @@
       body { min-height: 100dvh; }
     }
     nav { padding-left: max(0.75rem, env(safe-area-inset-left)); padding-right: max(0.75rem, env(safe-area-inset-right)); }
-    /* Mobil nav: logo büyük ve sağa kaydırılmış, kurumsal kimlik vurgusu */
+    /* Nav: kısa bar, logo büyük, butonlar orantılı aralıklı */
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
-      min-height: 4rem; width: 100%; min-width: 0;
+      min-height: 3.25rem; width: 100%; min-width: 0;
       overflow: visible;
     }
-    @media (min-width: 640px) { .nav-inner { min-height: 6.5rem; gap: 0.75rem; } }
-    /* Logo: arka plan beyazlığı yok, nav ile aynı beyaz; nizami yerleşim */
+    @media (min-width: 640px) { .nav-inner { min-height: 5rem; gap: 0.75rem; } }
+    /* Logo: büyük, nizami; arka plan şeffaf */
     .nav-logo-link {
       flex-shrink: 0; display: flex; align-items: center; justify-content: flex-start;
-      min-width: 7rem; max-width: 11rem; margin-left: 0.5rem;
+      min-width: 5rem; max-width: 8rem; margin-left: -1.8cm;
       padding: 0; background: transparent;
     }
     .nav .nav-logo-link { background: transparent; }
     @media (min-width: 640px) {
-      .nav-logo-link { max-width: none; min-width: 14rem; margin-left: 2rem; }
+      .nav-logo-link { max-width: none; min-width: 10rem; margin-left: calc(-1.8cm); }
     }
     .nav-logo-img {
       display: block !important; visibility: visible !important;
-      height: 4rem !important; width: auto; max-width: 100%; min-height: 3.25rem !important;
+      height: 2.25rem !important; width: auto; max-width: 100%; min-height: 1.875rem !important;
       object-fit: contain; object-position: left center; flex-shrink: 0; vertical-align: middle;
       background: transparent !important;
     }
     @media (min-width: 640px) {
-      .nav-logo-img { height: 6.5rem !important; min-height: 5rem !important; }
+      .nav-logo-img { height: 3.25rem !important; min-height: 2.75rem !important; }
     }
     .nav-actions {
-      display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.5rem;
+      display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.6rem;
       align-self: center; min-width: 0;
     }
-    @media (min-width: 640px) { .nav-actions { gap: 1rem; } }
+    @media (min-width: 640px) { .nav-actions { gap: 1.25rem; } }
     .nav-actions .relative { flex-shrink: 0; display: flex; align-items: center; }
     .nav-actions button { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 1.25; }
-    #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.5rem; }
+    #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.6rem; }
     #nav-auth.hidden { display: none !important; }
     @media (max-width: 640px) {
       .nav-actions #theme-btn { padding: 0.4rem; min-width: 2.25rem; min-height: 2.25rem; }
@@ -164,16 +168,16 @@
     @media (max-width: 640px) {
       #nav-menu-dropdown {
         position: fixed !important; left: max(1rem, env(safe-area-inset-left)); right: max(1rem, env(safe-area-inset-right));
-        top: calc(4rem + 0.5rem + env(safe-area-inset-top, 0px)) !important; margin-top: 0;
+        top: calc(3.25rem + 0.5rem + env(safe-area-inset-top, 0px)) !important; margin-top: 0;
         box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 9999; max-height: 85vh; overflow-y: auto; width: auto !important; min-width: 12rem;
       }
       #lang-modal { z-index: 9999 !important; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
     }
     @media (max-width: 380px) {
-      .nav-logo-link { min-width: 5rem; max-width: 8rem; margin-left: 0.25rem; }
-      .nav-logo-img { height: 3.25rem !important; min-height: 2.75rem !important; }
-      .nav-inner { min-height: 3.5rem; }
-      .nav-actions { gap: 0.35rem; }
+      .nav-logo-link { min-width: 4rem; max-width: 6rem; margin-left: -1.8cm; }
+      .nav-logo-img { height: 1.875rem !important; min-height: 1.5rem !important; }
+      .nav-inner { min-height: 3rem; }
+      .nav-actions { gap: 0.4rem; }
       .nav-actions #nav-auth button { padding: 0.35rem 0.5rem; font-size: 0.75rem; }
     }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
@@ -191,10 +195,10 @@
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
   <!-- Nav: mobilde logo sabit görünsün, dil/menü butonları kaymasın (safe-area + flex) -->
-  <nav class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-accent-900 border-b border-slate-200 dark:border-accent-700 shadow-sm pt-[env(safe-area-inset-top)]">
-    <div class="max-w-7xl mx-auto py-1 sm:py-1.5 px-2 sm:px-4 nav-inner w-full">
+  <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-50 dark:bg-accent-900 border-b border-slate-200 dark:border-accent-700 shadow-sm pt-[env(safe-area-inset-top)]">
+    <div class="max-w-7xl mx-auto py-0.5 sm:py-1 px-2 sm:px-4 nav-inner w-full">
       <a href="#" class="nav-logo-link rounded overflow-hidden" style="background:transparent">
-        <img src="/static/logo.png" alt="Norya AI" class="nav-logo-img" width="200" height="60" style="background:transparent" />
+        <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="nav-logo-img w-auto object-contain" width="200" height="50" loading="eager" />
       </a>
       <div class="nav-actions">
         <button type="button" onclick="toggleDark()" class="p-2 rounded-lg text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700" aria-label="Tema değiştir (açık/koyu)" id="theme-btn">
@@ -232,6 +236,7 @@
             <a href="#rehber" id="nav-menu-guide" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_guide">Tahlil Rehberi</a>
             <a href="#seffaflik" id="nav-menu-transparency" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_transparency">Şeffaflık</a>
             <a href="#fiyatlandirma" id="nav-menu-pricing" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_pricing">Fiyatlandırma</a>
+            <a href="/legal/iletisim" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_contact">Bize Ulaşın</a>
             <button type="button" onclick="closeNavMenu(); requestPushAndSubscribe();" class="block w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_notifications">Bildirimleri aç</button>
             <a href="#sss" id="nav-menu-faq" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" data-i18n="nav_faq">SSS</a>
           </div>
@@ -256,10 +261,10 @@
   </nav>
 
   <!-- Hero: premium AI health SaaS (turquoise + navy) -->
-  <section class="gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 text-white relative overflow-hidden" style="padding-top: calc(5rem + env(safe-area-inset-top, 0px));">
+  <section class="gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
     <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 80%, rgba(13, 148, 136, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(30, 58, 95, 0.3) 0%, transparent 45%);"></div>
     <div class="max-w-5xl mx-auto w-full px-4 text-center relative z-10">
-      <p class="text-white/90 text-[0.65rem] sm:text-[0.7rem] font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Güvenilir kan tahlili raporu</p>
+      <p class="text-white/90 text-xs sm:text-sm font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Laboratuvar sonuçları — anlaşılır rapor</p>
       <h1 class="text-2xl min-[480px]:text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.2] mb-4 sm:mb-5 tracking-tight px-1" data-i18n="hero_title">Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.</h1>
       <p class="text-lg text-navy-100 max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="hero_desc">Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.</p>
       <div class="flex flex-col sm:flex-row gap-4 justify-center">
@@ -1560,24 +1565,48 @@
   <!-- Footer: profesyonel, güven veren, 6 yasal sayfa linki -->
   <footer class="py-14 px-4 border-t border-accent-200 dark:border-accent-800 bg-accent-50/80 dark:bg-accent-900/40" role="contentinfo">
     <div class="max-w-6xl mx-auto w-full px-4">
-      <!-- Güven rozetleri -->
-      <div class="flex flex-wrap justify-center items-center gap-6 sm:gap-8 mb-8 pb-8 border-b border-accent-200 dark:border-accent-700" aria-label="Güven ve uyumluluk">
-        <span class="inline-flex items-center gap-2.5 text-accent-600 dark:text-accent-300 text-xs font-medium px-3 py-2 rounded-full bg-white dark:bg-accent-800/60 shadow-sm border border-accent-100 dark:border-accent-700">
-          <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🔒</span>
-          <span data-i18n="footer_trust_ssl">SSL Secure</span>
-        </span>
-        <span class="inline-flex items-center gap-2.5 text-accent-600 dark:text-accent-300 text-xs font-medium px-3 py-2 rounded-full bg-white dark:bg-accent-800/60 shadow-sm border border-accent-100 dark:border-accent-700">
-          <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🛡️</span>
-          <span data-i18n="footer_trust_kvkk">KVKK uyumlu</span>
-        </span>
-        <span class="inline-flex items-center gap-2.5 text-accent-600 dark:text-accent-300 text-xs font-medium px-3 py-2 rounded-full bg-white dark:bg-accent-800/60 shadow-sm border border-accent-100 dark:border-accent-700">
-          <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">✓</span>
-          <span data-i18n="footer_trust_gdpr">GDPR ready</span>
-        </span>
-        <span class="inline-flex items-center gap-2.5 text-accent-600 dark:text-accent-300 text-xs font-medium px-3 py-2 rounded-full bg-white dark:bg-accent-800/60 shadow-sm border border-accent-100 dark:border-accent-700">
-          <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">💳</span>
-          <span data-i18n="footer_trust_paytr">PayTR Secure</span>
-        </span>
+      <!-- Güven rozetleri: grid of trust cards (SSL, KVKK, GDPR, PayTR, Cloudflare) -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8 pb-8 border-b border-accent-200 dark:border-accent-700" aria-label="Güven ve uyumluluk">
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🔒</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_ssl">SSL Secure</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_ssl_desc">Şifreli bağlantı</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🛡️</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_kvkk">KVKK uyumlu</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_kvkk_desc">Kişisel veri koruma</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">✓</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_gdpr">GDPR ready</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_gdpr_desc">AB veri koruma</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">💳</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_paytr">PayTR Secure</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_paytr_desc">Güvenli ödeme</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-2">
+            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-[30px] w-auto object-contain shrink-0" width="30" height="30" loading="lazy" />
+            <span class="font-semibold text-sm" data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
+          </div>
+          <p class="text-xs text-accent-600 dark:text-accent-400 mb-3" data-i18n="trust_cloudflare_desc">Global CDN ve DDoS koruması ile daha hızlı ve güvenli erişim.</p>
+          <ul class="text-xs text-accent-500 dark:text-accent-500 space-y-1 mt-auto" aria-hidden="true">
+            <li>• <span data-i18n="trust_cloudflare_1">Global CDN hızlandırma</span></li>
+            <li>• <span data-i18n="trust_cloudflare_2">DDoS koruması</span></li>
+            <li>• <span data-i18n="trust_cloudflare_3">Edge güvenlik duvarı</span></li>
+          </ul>
+        </div>
       </div>
       <!-- Yasal ve iletişim linkleri: her biri ayrı sayfa -->
       <nav class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-8" aria-label="Yasal sayfalar ve iletişim">
@@ -2371,7 +2400,7 @@
     const T = {
       tr: {
         nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
-        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
+        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?",
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade ve anlaşılır bir dille açıklayan bir hizmettir. Laboratuvardan elinize ulaşan sayılar ve kısaltmalar çoğu zaman anlaşılması zor olur; Norya bu sonuçları özetleyen, her değerin referans aralığına göre ne anlama geldiğini anlatan ve günlük hayatta uygulanabilir kısa öneriler sunan raporlar üretir.",
         about_what_2: "Tahlilinizi PDF, görsel veya doğrudan metin olarak yükleyebilirsiniz; raporunuz dakikalar içinde hazır olur. Norya bir teşhis aracı değildir; amacı, tahlilinizi daha iyi kavramanıza yardımcı olmak ve doktorunuzla görüşürken kendinizi daha bilinçli hissetmenizi sağlamaktır. Son karar ve tedavi her zaman bir sağlık uzmanıyla birlikte alınmalıdır.",
@@ -2382,7 +2411,7 @@
         nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_profile: "Profil", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
         profile_email_verified: "E-posta doğrulandı", profile_save: "Kaydet", profile_change_password: "Şifre değiştir", profile_change_password_btn: "Şifreyi güncelle", profile_export_data: "Verilerimi indir (JSON)", profile_delete_account: "Hesabımı sil", profile_delete_confirm_title: "Hesabı sil", profile_delete_confirm_desc: "Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.", profile_cancel: "İptal", profile_delete_confirm_btn: "Hesabı sil",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
-        hero_sub: "Güvenilir kan tahlili raporu",
+        hero_sub: "Laboratuvar sonuçları — anlaşılır rapor",
         hero_title: "Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.",
         hero_desc: "Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.",
         hero_cta: "İlk Analizimi Ücretsiz Yap", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
@@ -2391,6 +2420,8 @@
         trust_badge_ssl: "256-bit SSL ile korunur", trust_badge_kvkk_gdpr: "KVKK & GDPR uyumlu", trust_badge_paytr: "PayTR ile güvenli ödeme",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Şifreli bağlantı", footer_trust_kvkk_desc: "Kişisel veri koruma", footer_trust_gdpr_desc: "AB veri koruma", footer_trust_paytr_desc: "Güvenli ödeme",
+        trust_cloudflare_title: "Cloudflare ile korunur", trust_cloudflare_desc: "Global CDN ve DDoS koruması ile daha hızlı ve güvenli erişim.", trust_cloudflare_1: "Global CDN hızlandırma", trust_cloudflare_2: "DDoS koruması", trust_cloudflare_3: "Edge güvenlik duvarı",
         how_title: "Norya Nasıl Çalışır?", how_desc: "Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.",
         how_1: "Kayıt Olun", how_1d: "Ücretsiz hesap oluşturun. E-posta ve şifre yeterli.",
         how_2: "Tahlil Metnini Yapıştırın", how_2d: "Sonuç kağıdındaki değerleri veya metni kutuya yapıştırın.",
@@ -2543,7 +2574,7 @@
       },
       en: {
         nav_about: "About us", nav_how: "How it works", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
-        nav_features: "Features", nav_pricing: "Pricing", nav_notifications: "Enable notifications", nav_faq: "FAQ",
+        nav_features: "Features", nav_pricing: "Pricing", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?",
         about_what_1: "Norya is a service that explains your blood test results in plain language. The numbers and abbreviations from the lab are often hard to understand; Norya produces reports that summarise your results, explain what each value means in relation to reference ranges, and offer short, practical suggestions for daily life.",
         about_what_2: "You can upload your test as a PDF, image, or plain text; your report is ready within minutes. Norya is not a diagnostic tool; its aim is to help you better understand your results and feel more confident when talking to your doctor. The final decision and treatment should always be made with a healthcare professional.",
@@ -2554,7 +2585,7 @@
         nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_profile: "Profile", nav_analyze: "Analyze", nav_logout: "Log out",
         profile_email_verified: "Email verified", profile_save: "Save", profile_change_password: "Change password", profile_change_password_btn: "Update password", profile_export_data: "Download my data (JSON)", profile_delete_account: "Delete my account", profile_delete_confirm_title: "Delete account", profile_delete_confirm_desc: "This cannot be undone. All your analyses and data will be deleted. Enter your password to confirm.", profile_cancel: "Cancel", profile_delete_confirm_btn: "Delete account",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
-        hero_sub: "Blood test interpretation — clear reports",
+        hero_sub: "Lab results — clear report",
         hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
         hero_desc: "Paste text or upload a photo — get a clear summary, values, and a report to take to your doctor. First analysis free.",
         hero_cta: "Get my first analysis free", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
@@ -2563,6 +2594,8 @@
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Encrypted connection", footer_trust_kvkk_desc: "Personal data protection", footer_trust_gdpr_desc: "EU data protection", footer_trust_paytr_desc: "Secure payment",
+        trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Faster and more secure access with global CDN and DDoS protection.", trust_cloudflare_1: "Global CDN acceleration", trust_cloudflare_2: "DDoS protection", trust_cloudflare_3: "Edge firewall",
         how_title: "How Norya Works", how_desc: "Three simple steps to turn your lab results into clear health insights.",
         how_1: "Sign up", how_1d: "Create a free account. Email and password only.",
         how_2: "Paste your results", how_2d: "Paste the values or text from your result sheet.",
@@ -2715,7 +2748,7 @@
       },
       it: {
         nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
-        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
+        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?",
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
         about_what_2: "Puoi caricare l'analisi in PDF, immagine o testo; il report è pronto in pochi minuti. Norya non è uno strumento diagnostico; l'obiettivo è aiutarti a capire meglio i risultati e a sentirti più sicuro quando parli con il medico. La decisione finale e la terapia spettano sempre a un professionista sanitario.",
@@ -2724,7 +2757,7 @@
         about_who_2: "Offriamo servizi in diverse lingue nel mondo. La tua privacy è importante: i dati sono usati solo per generare il tuo report personale. Per domande o supporto puoi scriverci all'indirizzo email indicato sotto.",
         about_who_3: "Il nostro obiettivo è trasformare i risultati di laboratorio in una guida chiara. La tua esperienza e i tuoi feedback ci guidano in questo percorso.",
         nav_login: "Accedi", nav_register: "Inizia gratis", nav_history: "Cronologia", nav_analyze: "Analizza", nav_logout: "Esci",
-        hero_sub: "Interpretazione referti ematochimici",
+        hero_sub: "Risultati di laboratorio — report chiari",
         hero_title: "Comprendi i tuoi esami del sangue in 60 secondi",
         hero_desc: "Incolla i risultati delle analisi, l'IA li spiega per te. Prova gratis — nessuna carta richiesta.",
         hero_cta: "Prima analisi gratis", hero_see_sample: "Vedi report esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy first",
@@ -2733,6 +2766,8 @@
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR",
         trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Connessione crittografata", footer_trust_kvkk_desc: "Protezione dati personali", footer_trust_gdpr_desc: "Protezione dati UE", footer_trust_paytr_desc: "Pagamento sicuro",
+        trust_cloudflare_title: "Protetto da Cloudflare", trust_cloudflare_desc: "Accesso più veloce e sicuro con CDN globale e protezione DDoS.", trust_cloudflare_1: "Accelerazione CDN globale", trust_cloudflare_2: "Protezione DDoS", trust_cloudflare_3: "Firewall edge",
         how_title: "Come funziona Norya", how_desc: "Tre semplici passi per trasformare i tuoi esami in informazioni chiare.",
         how_1: "Registrati", how_1d: "Crea un account gratuito. Solo email e password.",
         how_2: "Incolla i risultati", how_2d: "Incolla i valori o il testo dal referto.",
@@ -2869,7 +2904,7 @@
       },
       es: {
         nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
-        nav_features: "Características", nav_pricing: "Precios", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
+        nav_features: "Características", nav_pricing: "Precios", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?",
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
         about_what_2: "Puedes subir el análisis en PDF, imagen o texto; el informe estará listo en minutos. Norya no es una herramienta de diagnóstico; su objetivo es ayudarte a entender mejor los resultados y a sentirte más seguro al hablar con tu médico. La decisión final y el tratamiento siempre deben ser con un profesional sanitario.",
@@ -2878,7 +2913,7 @@
         about_who_2: "Damos servicio en varios idiomas en todo el mundo. Tu privacidad importa: los datos solo se usan para generar tu informe personal. Para preguntas o soporte escríbenos al correo indicado abajo.",
         about_who_3: "Nuestro objetivo es convertir los resultados del laboratorio en una guía clara. Tu experiencia y tus comentarios nos orientan en este camino.",
         nav_login: "Iniciar sesión", nav_register: "Empezar gratis", nav_history: "Historial", nav_analyze: "Analizar", nav_logout: "Salir",
-        hero_sub: "Interpretación de análisis de sangre",
+        hero_sub: "Resultados de laboratorio — informe claro",
         hero_title: "Comprende tus análisis de sangre en 60 segundos",
         hero_desc: "Pega tus resultados, la IA los explica. Prueba gratis — sin tarjeta.",
         hero_cta: "Mi primer análisis gratis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad primero",
@@ -2887,6 +2922,8 @@
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR",
         trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Conexión cifrada", footer_trust_kvkk_desc: "Protección de datos personales", footer_trust_gdpr_desc: "Protección de datos UE", footer_trust_paytr_desc: "Pago seguro",
+        trust_cloudflare_title: "Protegido por Cloudflare", trust_cloudflare_desc: "Acceso más rápido y seguro con CDN global y protección DDoS.", trust_cloudflare_1: "Aceleración CDN global", trust_cloudflare_2: "Protección DDoS", trust_cloudflare_3: "Cortafuegos edge",
         how_title: "Cómo funciona Norya", how_desc: "Tres pasos para convertir tus análisis en información clara.",
         how_1: "Regístrate", how_1d: "Crea una cuenta gratuita. Solo email y contraseña.",
         how_2: "Pega los resultados", how_2d: "Pega los valores o el texto del informe.",
@@ -3023,7 +3060,7 @@
       },
       fr: {
         nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
-        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
+        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?",
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
         about_what_2: "Vous pouvez envoyer l'analyse en PDF, image ou texte ; le rapport est prêt en quelques minutes. Norya n'est pas un outil de diagnostic ; l'objectif est de vous aider à mieux comprendre vos résultats et à vous sentir plus à l'aise avec votre médecin. La décision finale et le traitement relèvent toujours d'un professionnel de santé.",
@@ -3032,7 +3069,7 @@
         about_who_2: "Nous proposons nos services en plusieurs langues dans le monde. Votre vie privée compte : les données ne servent qu'à générer votre rapport personnel. Pour toute question ou assistance, écrivez-nous à l'adresse indiquée ci-dessous.",
         about_who_3: "Notre objectif est de transformer les résultats de laboratoire en un guide clair. Votre expérience et vos retours nous guident sur ce chemin.",
         nav_login: "Connexion", nav_register: "Commencer gratuit", nav_history: "Historique", nav_analyze: "Analyser", nav_logout: "Déconnexion",
-        hero_sub: "Interprétation d'analyses sanguines",
+        hero_sub: "Résultats de laboratoire — rapport clair",
         hero_title: "Comprenez vos analyses sanguines en 60 secondes",
         hero_desc: "Collez vos résultats, l'IA les explique. Essai gratuit — sans carte.",
         hero_cta: "Ma première analyse gratuite", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité",
@@ -3041,6 +3078,8 @@
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR",
         trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Connexion chiffrée", footer_trust_kvkk_desc: "Protection des données", footer_trust_gdpr_desc: "Protection des données UE", footer_trust_paytr_desc: "Paiement sécurisé",
+        trust_cloudflare_title: "Protégé par Cloudflare", trust_cloudflare_desc: "Accès plus rapide et plus sûr avec CDN global et protection DDoS.", trust_cloudflare_1: "Accélération CDN mondiale", trust_cloudflare_2: "Protection DDoS", trust_cloudflare_3: "Pare-feu edge",
         how_title: "Comment fonctionne Norya", how_desc: "Trois étapes pour transformer vos analyses en informations claires.",
         how_1: "Inscrivez-vous", how_1d: "Créez un compte gratuit. Email et mot de passe uniquement.",
         how_2: "Collez les résultats", how_2d: "Collez les valeurs ou le texte du compte-rendu.",
@@ -3177,7 +3216,7 @@
       },
       de: {
         nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
-        nav_features: "Funktionen", nav_pricing: "Preise", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
+        nav_features: "Funktionen", nav_pricing: "Preise", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?",
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
         about_what_2: "Sie können die Analyse als PDF, Bild oder Text hochladen; der Bericht ist in wenigen Minuten fertig. Norya ist kein Diagnoseinstrument; das Ziel ist, Ihnen zu helfen, Ihre Ergebnisse besser zu verstehen und sich beim Arztgespräch sicherer zu fühlen. Die endgültige Entscheidung und Behandlung liegen immer beim medizinischen Fachpersonal.",
@@ -3186,7 +3225,7 @@
         about_who_2: "Wir bieten unseren Service weltweit in mehreren Sprachen an. Ihr Datenschutz ist uns wichtig: Ihre Daten werden nur für Ihren persönlichen Bericht verwendet. Bei Fragen oder Support erreichen Sie uns unter der unten angegebenen E-Mail-Adresse.",
         about_who_3: "Unser Ziel ist es, Laborergebnisse in eine klare Orientierungshilfe zu verwandeln. Ihre Erfahrung und Ihr Feedback leiten uns auf diesem Weg.",
         nav_login: "Anmelden", nav_register: "Kostenlos starten", nav_history: "Verlauf", nav_analyze: "Analysieren", nav_logout: "Abmelden",
-        hero_sub: "Blutbild-Auswertung — verständliche Berichte",
+        hero_sub: "Laborergebnisse — verständlicher Bericht",
         hero_title: "Verstehen Sie Ihre Blutwerte in 60 Sekunden",
         hero_desc: "Laborwerte einfügen, die KI erklärt sie. Kostenlos testen — keine Karte nötig.",
         hero_cta: "Erste Analyse kostenlos", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "Sicher • Datenschutz",
@@ -3195,6 +3234,8 @@
         trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR",
         trust_badge_secure_paytr: "🔒 Sichere Zahlung – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Verschlüsselte Verbindung", footer_trust_kvkk_desc: "Schutz personenbezogener Daten", footer_trust_gdpr_desc: "EU-Datenschutz", footer_trust_paytr_desc: "Sichere Zahlung",
+        trust_cloudflare_title: "Geschützt durch Cloudflare", trust_cloudflare_desc: "Schnellerer und sicherer Zugriff mit globalem CDN und DDoS-Schutz.", trust_cloudflare_1: "Globales CDN", trust_cloudflare_2: "DDoS-Schutz", trust_cloudflare_3: "Edge-Firewall",
         how_title: "So funktioniert Norya", how_desc: "Drei Schritte von Ihren Laborwerten zu klaren Gesundheitsinfos.",
         how_1: "Registrieren", how_1d: "Kostenloses Konto. E-Mail und Passwort genügen.",
         how_2: "Ergebnisse einfügen", how_2d: "Werte oder Text vom Befund in das Feld einfügen.",
@@ -3331,7 +3372,7 @@
       },
       he: {
         nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
-        nav_features: "תכונות", nav_pricing: "מחירים", nav_faq: "שאלות נפוצות",
+        nav_features: "תכונות", nav_pricing: "מחירים", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?",
         about_what_1: "נוריה הוא שירות שמסביר את תוצאות בדיקות הדם שלך בשפה ברורה. המספרים והקיצורים מהמעבדה קשים לעתים להבנה; נוריה מייצרת דוחות שמסכמים את התוצאות, מסבירים כל ערך ביחס לטווחי ההתייחסות ונותנים המלצות מעשיות.",
         about_what_2: "אפשר להעלות את הבדיקה כ-PDF, תמונה או טקסט; הדוח מוכן תוך דקות. נוריה אינו כלי אבחון; המטרה היא לעזור לך להבין טוב יותר את התוצאות ולהרגיש בטוח יותר בשיחה עם הרופא. ההחלטה והטיפול הסופיים תמיד עם איש מקצוע.",
@@ -3340,7 +3381,7 @@
         about_who_2: "אנחנו משרתים משתמשים במספר שפות ברחבי העולם. הפרטיות חשובה לנו: הנתונים משמשים רק ליצירת הדוח האישי שלך. לשאלות או תמיכה צור איתנו קשר בכתובת המייל למטה.",
         about_who_3: "המטרה שלנו היא להפוך תוצאות מעבדה למדריך ברור. החוויה והמשוב שלך מנחים אותנו בדרך.",
         nav_login: "התחברות", nav_register: "התחל בחינם", nav_history: "היסטוריה", nav_analyze: "נתח", nav_logout: "התנתק",
-        hero_sub: "פירוש בדיקות דם — דוחות ברורים",
+        hero_sub: "תוצאות מעבדה — דוח ברור",
         hero_title: "הבן את תוצאות בדיקת הדם שלך תוך 60 שניות",
         hero_desc: "הדבק את תוצאות המעבדה, הבינה המלאכותית תסביר. נסה בחינם — בלי כרטיס אשראי.",
         hero_cta: "נתח את בדיקת הדם שלי בחינם", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות",
@@ -3349,6 +3390,8 @@
         trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR",
         trust_badge_secure_paytr: "🔒 תשלום מאובטח – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "חיבור מוצפן", footer_trust_kvkk_desc: "הגנת נתונים אישיים", footer_trust_gdpr_desc: "הגנת נתונים EU", footer_trust_paytr_desc: "תשלום מאובטח",
+        trust_cloudflare_title: "מוגן על ידי Cloudflare", trust_cloudflare_desc: "גישה מהירה ובטוחה יותר עם CDN גלובלי והגנת DDoS.", trust_cloudflare_1: "תאוצת CDN גלובלית", trust_cloudflare_2: "הגנת DDoS", trust_cloudflare_3: "חומת אש edge",
         how_title: "איך נוריה עובדת", how_desc: "שלושה צעדים פשוטים מתוצאות המעבדה לתובנות בריאות.",
         how_1: "הירשם", how_1d: "צור חשבון חינם. אימייל וסיסמה בלבד.",
         how_2: "הדבק תוצאות", how_2d: "הדבק ערכים או טקסט מדף התוצאות.",
@@ -3484,7 +3527,7 @@
       },
       ar: {
         nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
-        nav_features: "المميزات", nav_pricing: "الأسعار", nav_faq: "الأسئلة الشائعة",
+        nav_features: "المميزات", nav_pricing: "الأسعار", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟",
         about_what_1: "نوريا خدمة تشرح نتائج تحاليل الدم بلغة واضحة. الأرقام والاختصارات من المختبر غالباً صعبة الفهم؛ نوريا تنتج تقارير تلخص النتائج وتشرح كل قيمة بالنسبة للمرجع وتقدم توصيات عملية.",
         about_what_2: "يمكنك رفع التحليل كـ PDF أو صورة أو نص؛ التقرير جاهز خلال دقائق. نوريا ليست أداة تشخيص؛ الهدف مساعدتك على فهم النتائج والشعور بثقة أكبر مع الطبيب. القرار والعلاج النهائيان دائماً مع المختص الصحي.",
@@ -3493,7 +3536,7 @@
         about_who_2: "نقدم الخدمة بعدة لغات حول العالم. خصوصيتك مهمة: البيانات تُستخدم فقط لتوليد تقريرك الشخصي. للأسئلة أو الدعم راسلنا على البريد أدناه.",
         about_who_3: "هدفنا تحويل نتائج المختبر إلى دليل واضح. تجربتك وملاحظاتك ترشدنا في هذا المسار.",
         nav_login: "تسجيل الدخول", nav_register: "ابدأ مجاناً", nav_history: "السجل", nav_analyze: "تحليل", nav_logout: "تسجيل الخروج",
-        hero_sub: "تفسير تحاليل الدم — تقارير واضحة",
+        hero_sub: "نتائج المختبر — تقرير واضح",
         hero_title: "افهم نتائج تحليل الدم في 60 ثانية",
         hero_desc: "الصق نتائج المختبر، الذكاء الاصطناعي يشرحها. جرب مجاناً — بدون بطاقة.",
         hero_cta: "تحليل تحاليل دمي مجاناً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • خصوصية",
@@ -3502,6 +3545,8 @@
         trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR",
         trust_badge_secure_paytr: "🔒 دفع آمن – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "اتصال مشفّر", footer_trust_kvkk_desc: "حماية البيانات الشخصية", footer_trust_gdpr_desc: "حماية بيانات الاتحاد الأوروبي", footer_trust_paytr_desc: "دفع آمن",
+        trust_cloudflare_title: "محمي بواسطة Cloudflare", trust_cloudflare_desc: "وصول أسرع وأكثر أماناً مع CDN عالمي وحماية DDoS.", trust_cloudflare_1: "تسريع CDN عالمي", trust_cloudflare_2: "حماية DDoS", trust_cloudflare_3: "جدار حماية edge",
         how_title: "كيف يعمل نوريا", how_desc: "ثلاث خطوات بسيطة لتحويل نتائجك إلى معلومات صحية واضحة.",
         how_1: "سجّل", how_1d: "أنشئ حساباً مجانياً. البريد وكلمة السر فقط.",
         how_2: "الصق النتائج", how_2d: "الصق القيم أو النص من ورقة النتائج.",
@@ -3637,7 +3682,7 @@
       },
       hi: {
         nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
-        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_faq: "FAQ",
+        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_contact: "संपर्क करें", nav_faq: "FAQ",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?",
         about_what_1: "नोरिया एक सेवा है जो रक्त परीक्षण परिणामों को सरल भाषा में समझाती है। लैब के नंबर और संक्षिप्त नाम अक्सर समझने में कठिन होते हैं; नोरिया ऐसी रिपोर्ट बनाती है जो परिणामों को संक्षेप में बताती हैं, हर मान को संदर्भ सीमा के अनुसार समझाती हैं और व्यावहारिक सुझाव देती हैं।",
         about_what_2: "आप परीक्षण को PDF, चित्र या टेक्स्ट के रूप में अपलोड कर सकते हैं; रिपोर्ट मिनटों में तैयार। नोरिया निदान उपकरण नहीं है; लक्ष्य आपको परिणाम बेहतर समझने और डॉक्टर से बात करते समय आत्मविश्वास महसूस करने में मदद करना है। अंतिम निर्णय और उपचार हमेशा स्वास्थ्य पेशेवर के साथ।",
@@ -3646,7 +3691,7 @@
         about_who_2: "हम दुनिया भर में कई भाषाओं में सेवा देते हैं। आपकी गोपनीयता मायने रखती है: डेटा केवल आपकी व्यक्तिगत रिपोर्ट बनाने के लिए उपयोग होता है। प्रश्न या सहायता के लिए नीचे दिए ईमेल पर संपर्क करें।",
         about_who_3: "हमारा लक्ष्य लैब परिणामों को स्पष्ट मार्गदर्शन में बदलना है। आपका अनुभव और फीडबैक इस रास्ते में हमारी मदद करता है।",
         nav_login: "लॉग इन", nav_register: "मुफ्त शुरू करें", nav_history: "इतिहास", nav_analyze: "विश्लेषण", nav_logout: "लॉग आउट",
-        hero_sub: "रक्त परीक्षण व्याख्या — स्पष्ट रिपोर्ट",
+        hero_sub: "लैब परिणाम — स्पष्ट रिपोर्ट",
         hero_title: "60 सेकंड में अपने रक्त परीक्षण परिणाम समझें",
         hero_desc: "लैब रिज़ल्ट चिपकाएं, AI समझाता है। मुफ्त आज़माएं — कार्ड ज़रूरी नहीं।",
         hero_cta: "मेरी पहली विश्लेषण मुफ्त करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • गोपालन",
@@ -3655,6 +3700,8 @@
         trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान",
         trust_badge_secure_paytr: "🔒 सुरक्षित भुगतान – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "एन्क्रिप्टेड कनेक्शन", footer_trust_kvkk_desc: "व्यक्तिगत डेटा सुरक्षा", footer_trust_gdpr_desc: "EU डेटा सुरक्षा", footer_trust_paytr_desc: "सुरक्षित भुगतान",
+        trust_cloudflare_title: "Cloudflare द्वारा सुरक्षित", trust_cloudflare_desc: "ग्लोबल CDN और DDoS सुरक्षा के साथ तेज़ और सुरक्षित एक्सेस।", trust_cloudflare_1: "ग्लोबल CDN त्वरण", trust_cloudflare_2: "DDoS सुरक्षा", trust_cloudflare_3: "एज फ़ायरवॉल",
         how_title: "नोरिया कैसे काम करता है", how_desc: "लैब रिज़ल्ट को स्पष्ट स्वास्थ्य जानकारी में बदलने के तीन आसान कदम।",
         how_1: "साइन अप करें", how_1d: "मुफ्त खाता बनाएं। ईमेल और पासवर्ड काफी।",
         how_2: "रिज़ल्ट चिपकाएं", how_2d: "रिज़ल्ट शीट के मान या टेक्स्ट चिपकाएं।",
@@ -3790,7 +3837,7 @@
       },
       el: {
         nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
-        nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_faq: "Συχνές ερωτήσεις",
+        nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_contact: "Επικοινωνία", nav_faq: "Συχνές ερωτήσεις",
         about_title: "Τι είναι η Norya, Ποιοι είμαστε", about_what_title: "Τι είναι η Norya;", about_who_title: "Ποιοι είμαστε;",
         about_what_1: "Η Norya είναι μια υπηρεσία που εξηγεί τα αποτελέσματα αιματολογικών σε απλή γλώσσα. Οι αριθμοί και οι συντομογραφίες από το εργαστήριο είναι συχνά δύσκολοι να γίνουν κατανοητοί· η Norya παράγει αναφορές που συνοψίζουν τα αποτελέσματα, εξηγούν κάθε τιμή σε σχέση με τα εύρη αναφοράς και δίνουν πρακτικές συμβουλές.",
         about_what_2: "Μπορείτε να ανεβάσετε την ανάλυση ως PDF, εικόνα ή κείμενο· η αναφορά είναι έτοιμη σε λεπτά. Η Norya δεν είναι διαγνωστικό εργαλείο· ο στόχος είναι να σας βοηθήσει να κατανοήσετε καλύτερα τα αποτελέσματα και να αισθανθείτε πιο σίγουροι με τον γιατρό. Η τελική απόφαση και η θεραπεία είναι πάντα με επαγγελματία υγείας.",
@@ -3799,7 +3846,7 @@
         about_who_2: "Παρέχουμε υπηρεσία σε πολλές γλώσσες παγκοσμίως. Το απόρρητό σας μας νοιάζει· τα δεδομένα χρησιμοποιούνται μόνο για την προσωπική σας αναφορά. Για ερωτήσεις ή υποστήριξη επικοινωνήστε μαζί μας στο email παρακάτω.",
         about_who_3: "Ο στόχος μας είναι να μετατρέψουμε τα εργαστηριακά αποτελέσματα σε σαφή οδηγό. Η εμπειρία και τα σχόλιά σας μας καθοδηγούν.",
         nav_login: "Σύνδεση", nav_register: "Ξεκινήστε δωρεάν", nav_history: "Ιστορικό", nav_analyze: "Ανάλυση", nav_logout: "Αποσύνδεση",
-        hero_sub: "Ερμηνεία αιματολογικών — σαφείς αναφορές",
+        hero_sub: "Αποτελέσματα εργαστηρίου — σαφής αναφορά",
         hero_title: "Κατανοήστε τα αποτελέσματα αιματολογικών σε 60 δευτερόλεπτα",
         hero_desc: "Επικολλήστε τα αποτελέσματα, η AI τα εξηγεί. Δωρεάν δοκιμή — χωρίς κάρτα.",
         hero_cta: "Πρώτη ανάλυση δωρεάν", hero_see_sample: "Δείτε παράδειγμα αναφοράς", hero_how: "Πώς λειτουργεί", hero_secure: "Ασφαλές • Προστασία ιδιωτικότητας",
@@ -3808,6 +3855,8 @@
         trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR",
         trust_badge_secure_paytr: "🔒 Ασφαλής πληρωμή – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Κρυπτογραφημένη σύνδεση", footer_trust_kvkk_desc: "Προστασία προσωπικών δεδομένων", footer_trust_gdpr_desc: "Προστασία δεδομένων ΕΕ", footer_trust_paytr_desc: "Ασφαλής πληρωμή",
+        trust_cloudflare_title: "Προστασία από Cloudflare", trust_cloudflare_desc: "Ταχύτερη και ασφαλέστερη πρόσβαση με παγκόσμιο CDN και προστασία DDoS.", trust_cloudflare_1: "Παγκόσμια επιτάχυνση CDN", trust_cloudflare_2: "Προστασία DDoS", trust_cloudflare_3: "Edge firewall",
         how_title: "Πώς λειτουργεί η Norya;", how_desc: "Τρία απλά βήματα για να κατανοήσετε τα αποτελέσματά σας.",
         how_1: "Εγγραφή", how_1d: "Δημιουργήστε δωρεάν λογαριασμό.",
         how_2: "Επικολλήστε τα αποτελέσματα", how_2d: "Επικολλήστε τις τιμές ή το κείμενο από το φύλλο αποτελεσμάτων.",
@@ -3941,7 +3990,7 @@
       },
       cs: {
         nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
-        nav_features: "Funkce", nav_pricing: "Ceny", nav_faq: "Časté dotazy",
+        nav_features: "Funkce", nav_pricing: "Ceny", nav_contact: "Kontakt", nav_faq: "Časté dotazy",
         about_title: "Co je Norya, Kdo jsme", about_what_title: "Co je Norya?", about_who_title: "Kdo jsme?",
         about_what_1: "Norya je služba, která vysvětluje výsledky krevních testů srozumitelným jazykem. Čísla a zkratky z laboratoře jsou často těžko srozumitelná; Norya vytváří zprávy, které shrnují výsledky, vysvětlují každou hodnotu vzhledem k referenčním rozsahům a nabízejí praktická doporučení.",
         about_what_2: "Analýzu můžete nahrát jako PDF, obrázek nebo text; zpráva je hotová během minut. Norya není diagnostický nástroj; cílem je pomoci vám lépe porozumět výsledkům a cítit se jistěji při rozhovoru s lékařem. Konečné rozhodnutí a léčba vždy s odborníkem.",
@@ -3950,7 +3999,7 @@
         about_who_2: "Službu poskytujeme v několika jazycích po celém světě. Na vaše soukromí dbáme: data se používají pouze k vytvoření vaší osobní zprávy. Pro dotazy nebo podporu nás kontaktujte na e-mailu níže.",
         about_who_3: "Naším cílem je proměnit laboratorní výsledky v srozumitelný průvodce. Vaše zkušenost a zpětná vazba nás na této cestě vedou.",
         nav_login: "Přihlásit", nav_register: "Začít zdarma", nav_history: "Historie", nav_analyze: "Analyzovat", nav_logout: "Odhlásit",
-        hero_sub: "Interpretace krevních testů — srozumitelné reporty",
+        hero_sub: "Laboratorní výsledky — srozumitelná zpráva",
         hero_title: "Pochopte výsledky krevních testů za 60 sekund",
         hero_desc: "Vložte výsledky, AI je vysvětlí. Vyzkoušejte zdarma — bez karty.",
         hero_cta: "První analýza zdarma", hero_see_sample: "Zobrazit ukázkovou zprávu", hero_how: "Jak to funguje", hero_secure: "Bezpečné • Ochrana soukromí",
@@ -3959,6 +4008,8 @@
         trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR",
         trust_badge_secure_paytr: "🔒 Zabezpečená platba – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Šifrované připojení", footer_trust_kvkk_desc: "Ochrana osobních údajů", footer_trust_gdpr_desc: "Ochrana údajů EU", footer_trust_paytr_desc: "Zabezpečená platba",
+        trust_cloudflare_title: "Chráněno Cloudflare", trust_cloudflare_desc: "Rychlejší a bezpečnější přístup s globálním CDN a ochranou DDoS.", trust_cloudflare_1: "Globální CDN zrychlení", trust_cloudflare_2: "Ochrana DDoS", trust_cloudflare_3: "Edge firewall",
         how_title: "Jak funguje Norya?", how_desc: "Tři jednoduché kroky k pochopení výsledků.",
         how_1: "Registrace", how_1d: "Vytvořte si bezplatný účet.",
         how_2: "Vložte výsledky", how_2d: "Vložte hodnoty nebo text z výsledkového listu.",
@@ -4092,7 +4143,7 @@
       },
       sr: {
         nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
-        nav_features: "Funkcije", nav_pricing: "Cene", nav_faq: "Često postavljana pitanja",
+        nav_features: "Funkcije", nav_pricing: "Cene", nav_contact: "Kontaktirajte nas", nav_faq: "Često postavljana pitanja",
         about_title: "Šta je Norya, Ko smo mi", about_what_title: "Šta je Norya?", about_who_title: "Ko smo mi?",
         about_what_1: "Norya je servis koji objašnjava rezultate krvnih testova jasnim jezikom. Brojevi i skraćenice iz laboratorije su često teški za razumevanje; Norya pravi izveštaje koji sumiraju rezultate, objašnjavaju svaku vrednost u odnosu na referentne opsege i daju praktične preporuke.",
         about_what_2: "Analizu možete otpremiti kao PDF, sliku ili tekst; izveštaj je spreman za nekoliko minuta. Norya nije dijagnostički alat; cilj je da vam pomogne da bolje razumete rezultate i da se osećate sigurnije kod lekara. Konačna odluka i lečenje uvek sa zdravstvenim stručnjakom.",
@@ -4101,7 +4152,7 @@
         about_who_2: "Pružamo uslugu na više jezika širom sveta. Vaša privatnost nam je važna: podaci se koriste samo za vaš lični izveštaj. Za pitanja ili podršku pišite na email ispod.",
         about_who_3: "Cilj nam je da laboratorijske rezultate pretvorimo u jasan vodič. Vaše iskustvo i povratne informacije nas vode na tom putu.",
         nav_login: "Prijava", nav_register: "Počnite besplatno", nav_history: "Istorija", nav_analyze: "Analiziraj", nav_logout: "Odjava",
-        hero_sub: "Interpretacija krvnih testova — jasni izveštaji",
+        hero_sub: "Laboratorijski rezultati — jasan izveštaj",
         hero_title: "Razumite rezultate krvnih testova za 60 sekundi",
         hero_desc: "Nalepite rezultate, AI ih objašnjava. Probajte besplatno — bez kartice.",
         hero_cta: "Prva analiza besplatno", hero_see_sample: "Pogledaj primer izveštaja", hero_how: "Kako funkcioniše", hero_secure: "Bezbedno • Privatnost",
@@ -4110,6 +4161,8 @@
         trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR",
         trust_badge_secure_paytr: "🔒 Sigurna plaćanja – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
+        footer_trust_ssl_desc: "Šifrovana konekcija", footer_trust_kvkk_desc: "Zaštita ličnih podataka", footer_trust_gdpr_desc: "Zaštita podataka EU", footer_trust_paytr_desc: "Sigurna plaćanja",
+        trust_cloudflare_title: "Zaštićeno od strane Cloudflare", trust_cloudflare_desc: "Brži i sigurniji pristup sa globalnim CDN-om i DDoS zaštitom.", trust_cloudflare_1: "Globalno CDN ubrzanje", trust_cloudflare_2: "DDoS zaštita", trust_cloudflare_3: "Edge firewall",
         how_title: "Kako funkcioniše Norya?", how_desc: "Tri jednostavna koraka za razumevanje rezultata.",
         how_1: "Registracija", how_1d: "Napravite besplatan nalog.",
         how_2: "Nalepite rezultate", how_2d: "Nalepite vrednosti ili tekst sa listića rezultata.",

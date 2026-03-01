@@ -2,6 +2,7 @@
 {% block title %}Raporlar - Norya Admin{% endblock %}
 {% block content %}
 <h1 class="text-2xl font-semibold text-white mb-4">Raporlar</h1>
+{% if error %}<p class="mb-4 text-red-400">{{ error }}</p>{% endif %}
 <form method="get" class="mb-6 flex flex-wrap gap-4 items-end">
   <label class="flex flex-col gap-1">
     <span class="text-slate-400 text-sm">Başlangıç</span>
