@@ -27,8 +27,6 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -970,6 +968,7 @@
             <p class="text-sm font-semibold text-amber-900 dark:text-amber-100" data-i18n="disclaimer_informative">Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.</p>
           </div>
 
+          <form id="analyzeForm" method="post" action="#" onsubmit="return handleAnalyzeSubmit(event)" aria-label="Analiz formu">
           <!-- 4 adımlı sihirbaz: stepper -->
           <div id="wizard-stepper" class="flex items-center justify-between mb-8">
             <div class="flex items-center flex-1">
@@ -993,11 +992,11 @@
           <div id="wizard-step-1" class="wizard-step">
             <p class="text-sm font-semibold text-navy-700 dark:text-navy-200 mb-3" data-i18n="wizard_step1_title">Dosya veya metin</p>
             <div id="wizard-drop-zone" class="border-2 border-dashed border-primary-400 dark:border-primary-500 rounded-2xl p-8 sm:p-10 text-center bg-primary-50/50 dark:bg-primary-900/20 transition hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/30 cursor-pointer">
-              <input type="file" id="analyze-pdf" accept=".pdf,.jpg,.jpeg,.png" class="hidden" />
+              <input type="file" id="analyze-pdf" accept="application/pdf,image/jpeg,image/png" class="hidden" />
               <div class="flex flex-col items-center gap-2">
                 <span class="text-4xl" aria-hidden="true">📄</span>
                 <p class="text-navy-700 dark:text-navy-200 font-medium" data-i18n="wizard_drop">Dosyayı buraya sürükleyin veya tıklayın</p>
-                <p class="text-xs text-navy-500 dark:text-navy-400" data-i18n="analyze_upload_hint">PDF, JPG veya PNG — en fazla 15 MB</p>
+                <p class="text-xs text-navy-500 dark:text-navy-400" data-i18n="analyze_upload_hint">PDF, JPG/JPEG veya PNG — en fazla 15 MB</p>
                 <span id="pdf-name" class="text-sm text-primary-600 dark:text-primary-400 font-medium mt-1"></span>
               </div>
             </div>
@@ -1062,7 +1061,7 @@
                   <p class="text-xs text-primary-100 mt-0.5" id="analyze-result-date"></p>
                 </div>
               </div>
-              <div class="flex flex-wrap gap-2">
+              <div class="hidden sm:flex flex-wrap gap-2">
                 <button type="button" onclick="downloadReportPdf()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_download">Raporu İndir</button>
                 <button type="button" onclick="downloadForDoctor()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_for_doctor">Doktoruma götür</button>
                 <button type="button" onclick="shareReport()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_share">Raporumu Paylaş</button>
@@ -1076,6 +1075,12 @@
             </div>
             <div id="analyze-result-body" class="p-6 space-y-4 bg-white/80 dark:bg-navy-800/50"></div>
             <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
+            <!-- Mobil: rapor uzun olunca altta sabit kalan PDF/Doktor butonları (masaüstüyle aynı işlev) -->
+            <div id="analyze-result-mobile-actions" class="sm:hidden sticky bottom-0 left-0 right-0 z-10 px-4 py-3 bg-gradient-to-t from-primary-600 to-primary-500 dark:from-primary-700 dark:to-primary-600 border-t border-primary-400/50 flex flex-wrap gap-2 justify-center shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
+              <button type="button" onclick="downloadReportPdf()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-white text-primary-700 font-semibold text-sm shadow-md hover:bg-primary-50 transition" data-i18n="report_download">Raporu İndir</button>
+              <button type="button" onclick="downloadForDoctor()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-white text-primary-700 font-semibold text-sm shadow-md hover:bg-primary-50 transition" data-i18n="report_for_doctor">Doktoruma götür</button>
+              <button type="button" onclick="shareReport()" class="flex-1 min-w-[100px] px-4 py-3 rounded-xl bg-white/90 text-primary-700 font-medium text-sm shadow-md hover:bg-primary-50 transition" data-i18n="report_share">Paylaş</button>
+            </div>
             </div>
           </div>
 
@@ -1083,9 +1088,10 @@
           <button type="button" id="analyze-btn" class="hidden" aria-hidden="true">Analiz Et</button>
           <div id="wizard-actions" class="mt-6 flex flex-wrap gap-3">
             <button type="button" id="wizard-btn-prev" onclick="wizardPrev()" class="px-5 py-2.5 rounded-xl border-2 border-navy-200 dark:border-navy-600 text-navy-700 dark:text-navy-200 font-medium hover:bg-navy-50 dark:hover:bg-navy-800/50 transition hidden" data-i18n="wizard_back">Geri</button>
-            <button type="button" id="wizard-btn-next" onclick="wizardNext()" class="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition flex-1 min-w-[140px]" data-i18n="wizard_next">Sonraki</button>
+            <button type="submit" id="wizard-btn-next" class="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition flex-1 min-w-[140px]" data-i18n="wizard_next">Sonraki</button>
           </div>
           <p id="analyze-error" class="mt-2 text-red-600 text-sm hidden" role="alert" aria-live="assertive"></p>
+          </form>
         </div>
       </div>
     </div>
@@ -1699,6 +1705,15 @@
     const THEME_KEY = 'norya_theme';
     var lastAnalysisId = null;
     var lastShareToken = null;
+
+    /** Rapor ID: önce URL ?rid=, yoksa #analyze-result data-rid, yoksa lastAnalysisId. İndir butonu bu değeri kullanır. */
+    function getReportId() {
+      var p = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      var rid = p ? p.get('rid') : null;
+      if (rid) return rid;
+      var el = document.getElementById('analyze-result');
+      return (el && el.dataset && el.dataset.rid) ? el.dataset.rid : (lastAnalysisId ? String(lastAnalysisId) : null);
+    }
     var deferredInstallPrompt = null;
     var A2HS_DISMISS_KEY = 'norya_a2hs_dismissed';
     var IOS_A2HS_DISMISS_KEY = 'norya_ios_a2hs_dismissed';
@@ -1922,82 +1937,80 @@
         toast('Bağlantı hatası. Lütfen tekrar deneyin.', 'error');
       }
     }
-    function downloadReportPdf() {
-      var rawEl = document.getElementById('analyze-result-raw');
-      var bodyEl = document.getElementById('analyze-result-body');
-      var dateEl = document.getElementById('analyze-result-date');
-      var lang = getLang();
-      var t = T[lang] || T.tr;
-      if (!bodyEl || !bodyEl.innerHTML) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
-      var reportDate = (dateEl && dateEl.textContent) ? dateEl.textContent : new Date().toLocaleDateString(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-      var pdfTitle = t.pdf_header_title || 'Kan Tahlili Analiz Raporu';
-      var pdfFooter = t.pdf_footer_disclaimer || 'Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya';
-      var JSPDF = window.jspdf && window.jspdf.jsPDF;
-      if (!JSPDF) { toast(t.toast_analyze_first || 'PDF kütüphanesi yüklenemedi.', 'error'); return; }
-      var wrap = document.createElement('div');
-      wrap.id = 'norya-pdf-wrap';
-      wrap.style.cssText = 'position:fixed;left:-9999px;top:0;width:794px;background:#fff;color:#0f172a;padding:40px;font-family:system-ui,-apple-system,sans-serif;font-size:14px;line-height:1.5;box-sizing:border-box;';
-      var logoUrl = (typeof window !== 'undefined' && window.location && window.location.origin) ? (window.location.origin + '/static/logo.png') : '/static/logo.png';
-      wrap.innerHTML = '<div style="border-bottom:3px solid #e2e8f0;padding-bottom:16px;margin-bottom:24px;display:flex;align-items:center;gap:14px;background:#fff;">' +
-        '<img src="' + logoUrl + '" alt="Norya AI" style="height:56px;width:auto;flex-shrink:0;display:block;background:#fff;" crossorigin="anonymous" />' +
-        '<div style="flex:1;"><h1 style="font-size:22px;font-weight:700;color:#0f172a;margin:0;">' + escapeHtml(pdfTitle) + '</h1>' +
-        '<p style="font-size:12px;color:#64748b;margin:6px 0 0 0;">' + escapeHtml(reportDate) + '</p>' +
-        '</div></div>' +
-        '<div id="norya-pdf-body" style="color:#334155;">' + bodyEl.innerHTML + '</div>' +
-        '<div style="margin-top:32px;padding-top:16px;border-top:1px solid #e2e8f0;font-size:11px;color:#64748b;">' + escapeHtml(pdfFooter) + '</div>';
-      var bodyPdf = wrap.querySelector('#norya-pdf-body');
-      if (bodyPdf) {
-        bodyPdf.querySelectorAll('.value-bar-track').forEach(function(t) { t.style.marginTop = '4px'; });
-        bodyPdf.querySelectorAll('[class]').forEach(function(el) {
-          if (el.classList.contains('bg-primary-50') || el.classList.contains('dark:bg-primary-900/20')) el.style.background = '#f0fdfa';
-          if (el.classList.contains('bg-accent-50') || el.classList.contains('dark:bg-accent-900/30')) el.style.background = '#f8fafc';
-          if (el.classList.contains('bg-amber-50') || el.classList.contains('dark:bg-amber-900/20')) el.style.background = '#fffbeb';
-          if (el.classList.contains('bg-emerald-50') || el.classList.contains('dark:bg-emerald-900/20')) el.style.background = '#ecfdf5';
-          el.style.color = '#334155';
-          el.style.borderColor = '#e2e8f0';
-        });
-        bodyPdf.querySelectorAll('h4').forEach(function(h) { h.style.color = '#0f172a'; });
+    async function downloadReportPdf() {
+      if (typeof console !== 'undefined' && console.log) console.log('[PDF] Raporu İndir tıklandı, getReportId()=', getReportId());
+      var rid = getReportId();
+      var t = T[getLang()] || T.tr;
+      var token = getToken();
+      if (!token) {
+        toast(t.toast_analyze_first || 'Rapor indirmek için giriş yapın.', 'error');
+        return;
       }
-      document.body.appendChild(wrap);
-      var el = document.getElementById('norya-pdf-wrap');
-      html2canvas(el, { scale: 2, useCORS: true, logging: false, backgroundColor: '#ffffff' }).then(function(canvas) {
-        document.body.removeChild(wrap);
-        var pdf = new JSPDF({ unit: 'px', format: 'a4', hotfixes: ['px_scaling'] });
-        var pageW = pdf.internal.pageSize.getWidth();
-        var pageH = pdf.internal.pageSize.getHeight();
-        var imgW = canvas.width;
-        var imgH = canvas.height;
-        var scale = pageW / imgW;
-        var scaledH = imgH * scale;
-        var nPages = Math.ceil(scaledH / pageH) || 1;
-        for (var p = 0; p < nPages; p++) {
-          if (p > 0) pdf.addPage();
-          var srcY = (p * pageH / scale);
-          var srcH = Math.min(pageH / scale, imgH - srcY);
-          var crop = document.createElement('canvas');
-          crop.width = imgW;
-          crop.height = Math.round(srcH);
-          var ctx = crop.getContext('2d');
-          ctx.fillStyle = '#ffffff';
-          ctx.fillRect(0, 0, crop.width, crop.height);
-          ctx.drawImage(canvas, 0, srcY, imgW, srcH, 0, 0, imgW, srcH);
-          var hOnPage = Math.min(pageH, srcH * scale);
-          pdf.addImage(crop.toDataURL('image/jpeg', 0.92), 'JPEG', 0, 0, pageW, hOnPage);
+      var historyFetchFailed = false;
+      if (!rid) {
+        try {
+          var r = await fetch(API_BASE + '/analyze/history?limit=1', { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+          if (r.ok) {
+            var list = await r.json();
+            if (list && list.length > 0 && list[0].id) {
+              rid = String(list[0].id);
+              var resultDiv = document.getElementById('analyze-result');
+              if (resultDiv) resultDiv.dataset.rid = rid;
+              lastAnalysisId = list[0].id;
+              if (window.history && window.history.replaceState) {
+                var qs = new URLSearchParams(window.location.search);
+                qs.set('rid', rid);
+                window.history.replaceState(null, '', (window.location.pathname || '/') + '?' + qs.toString());
+              }
+            }
+          } else {
+            historyFetchFailed = true;
+            if (typeof console !== 'undefined' && console.error) console.error('[PDF] History fetch not OK:', r.status, r.statusText);
+          }
+        } catch (historyErr) {
+          historyFetchFailed = true;
+          if (typeof console !== 'undefined' && console.error) console.error('[PDF] History fetch error:', historyErr);
         }
-        pdf.save('norya-rapor-' + (new Date().toISOString().slice(0,10)) + '.pdf');
-        toast(t.toast_report_pdf || 'Rapor PDF olarak indirildi.', 'success');
-      }).catch(function() {
-        var w = document.getElementById('norya-pdf-wrap');
-        if (w && w.parentNode) w.parentNode.removeChild(w);
-        var hdr = (T[getLang()] || T.tr).report_title || 'Norya Kan Tahlili Raporu';
-        var blob = new Blob([rawEl && rawEl.textContent ? hdr + '\n\n' + rawEl.textContent : ''], { type: 'text/plain;charset=utf-8' });
-        var a = document.createElement('a');
-        a.href = URL.createObjectURL(blob);
-        a.download = 'norya-rapor-' + (new Date().toISOString().slice(0,10)) + '.txt';
-        a.click();
-        URL.revokeObjectURL(a.href);
-        toast((T[getLang()] || T.tr).toast_pdf_fallback || 'PDF oluşturulamadı; metin dosyası indirildi.', 'info');
-      });
+      }
+      if (!rid) {
+        if (historyFetchFailed) {
+          toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
+        } else {
+          toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error');
+        }
+        return;
+      }
+      var tokenUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf-token';
+      if (typeof console !== 'undefined' && console.log) console.log('[PDF] Token URL:', tokenUrl);
+      try {
+        var tokenRes = await fetch(tokenUrl, { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+        if (typeof console !== 'undefined' && console.log) console.log('[PDF] Token response status:', tokenRes.status, tokenRes.statusText);
+        if (!tokenRes.ok) {
+          var errBody = await tokenRes.text();
+          var errMsg = 'Rapor indirilemedi (HTTP ' + tokenRes.status + ').';
+          try {
+            var j = JSON.parse(errBody);
+            if (j.detail) errMsg = typeof j.detail === 'string' ? j.detail : (j.detail.msg || errMsg);
+          } catch (_) {}
+          toast(errMsg, 'error');
+          return;
+        }
+        var data = await tokenRes.json();
+        var accessToken = data && data.access_token;
+        if (!accessToken) {
+          toast('Rapor linki alınamadı.', 'error');
+          return;
+        }
+        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'tr');
+        if (typeof console !== 'undefined' && console.log) console.log('[PDF] Opening PDF URL (length)', pdfUrl.length);
+        window.open(pdfUrl, '_blank');
+        toast(t.toast_report_pdf || 'Rapor PDF olarak açıldı.', 'success');
+      } catch (e) {
+        var errMsg = t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.';
+        if (e && e.message) errMsg = e.message;
+        toast(errMsg, 'error');
+        if (typeof console !== 'undefined' && console.error) console.error('[PDF] Error (token/fetch/open):', e);
+      }
     }
     function downloadForDoctor() {
       var text = document.getElementById('analyze-result-raw');
@@ -2170,10 +2183,11 @@
       }).join('');
     }
     async function getShareUrl() {
-      if (!lastAnalysisId) return null;
+      var rid = getReportId();
+      if (!rid) return null;
       if (lastShareToken) return API_BASE + '/share/' + lastShareToken;
       try {
-        var res = await fetch(API_BASE + '/analyze/share/' + lastAnalysisId, { method: 'POST', headers: { 'Authorization': 'Bearer ' + getToken() } });
+        var res = await fetch(API_BASE + '/analyze/share/' + rid, { method: 'POST', headers: { 'Authorization': 'Bearer ' + getToken() } });
         var data = await res.json().catch(function() { return {}; });
         if (res.ok && data.token) { lastShareToken = data.token; return API_BASE + '/share/' + data.token; }
       } catch (_) {}
@@ -2181,7 +2195,7 @@
     }
     async function shareReport() {
       var t = T[getLang()] || T.tr;
-      if (!lastAnalysisId) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
+      if (!getReportId()) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
       var url = await getShareUrl();
       if (!url) { toast(t.toast_share_failed || 'Paylaşım linki oluşturulamadı.', 'error'); return; }
       var title = (t.report_title || 'Norya Analiz Raporu').replace(/<[^>]+>/g, '');
@@ -2202,7 +2216,7 @@
     }
     async function copyShareLink() {
       var t = T[getLang()] || T.tr;
-      if (!lastAnalysisId) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
+      if (!getReportId()) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
       var url = await getShareUrl();
       if (!url) { toast(t.toast_share_failed || 'Paylaşım linki oluşturulamadı.', 'error'); return; }
       try {
@@ -2325,7 +2339,10 @@
         analyze_login_required: "Analiz yapmak için lütfen giriş yapın veya kayıt olun.",
         analyze_file_lost: "Dosya seçimi alınamadı. Lütfen tekrar dosyayı seçip Analiz Et'e tıklayın.",
         analyze_upload_failed: "Dosya sunucuya iletilemedi. Lütfen tekrar dosyayı seçip deneyin.",
-        analyze_file_type: "Sadece PDF, JPG veya PNG yükleyebilirsiniz.",
+        analyze_file_type: "Sadece PDF, JPG/JPEG veya PNG yükleyebilirsiniz.",
+        analyze_file_err_ext: "Sadece PDF, JPG, JPEG veya PNG dosyaları kabul edilir.",
+        analyze_file_err_mime: "Bu dosya türü kabul edilmiyor. PDF, JPG/JPEG veya PNG kullanın.",
+        analyze_file_err_heic: "HEIC formatı desteklenmiyor. Fotoğrafı JPG veya PNG olarak kaydedip tekrar yükleyin.",
         analyze_upload_hint: "Dosyayı seçin (adı görünecek), sonra aşağıdaki Analiz Et'e tıklayın.",
         session_expired: "Oturumunuz sona erdi. Lütfen tekrar giriş yapın.",
         analyze_doctor_notes_label: "Doktorunuzun notu / ek bilgi (isteğe bağlı)",
@@ -2339,7 +2356,7 @@
         doctor_header: "Norya Kan Tahlili Raporu — Doktoruma iletilmek üzere hazırlanmıştır.",
         doctor_date_label: "Tarih", doctor_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar için mutlaka hekim değerlendirmesi gerekir.",
         toast_report_pdf: "Rapor PDF olarak indirildi.", toast_doctor_downloaded: "Doktoruma götür raporu indirildi.", toast_link_copied: "Paylaşım linki kopyalandı.",
-        toast_analyze_first: "Önce analiz yapın.", toast_pdf_fallback: "PDF oluşturulamadı; metin dosyası indirildi.",
+        toast_analyze_first: "Önce analiz yapın.", toast_pdf_fallback: "PDF oluşturulamadı; metin dosyası indirildi.", toast_pdf_error: "PDF oluşturulamadı. Lütfen tekrar deneyin.",
         pricing_title: "Fiyatlandırma", pricing_eur: "Fiyatlar konumunuza göre yerel para biriminde gösterilir.", pricing_note_currency: "Fiyatlar {cur} ({sym}) cinsinde gösterilir.",
         price_single_title: "Tek Analiz", price_single_per: "tek seferlik", price_single_1: "✓ 1 analiz", price_single_2: "✓ Metin, PDF veya görsel", price_single_3: "✓ Detaylı rapor", price_btn_single: " — Tek Analiz",
         price_monthly_title: "Aylık Abonelik", price_per_month: "/ay", price_monthly_per: "10+3 analiz / ay", price_monthly_1: "✓ Ayda 10+3 analiz", price_monthly_2: "✓ Metin, PDF ve görsel yükleme", price_monthly_3: "✓ Detaylı rapor + geçmiş", price_btn_monthly: "/ay — Başla",
@@ -2495,6 +2512,9 @@
         analyze_file_lost: "File selection could not be read. Please select the file again and click Analyze.",
         analyze_upload_failed: "File could not be sent to the server. Please select the file again and try again.",
         analyze_file_type: "Only PDF, JPG or PNG files are allowed.",
+        analyze_file_err_ext: "Only PDF, JPG, JPEG or PNG files are accepted.",
+        analyze_file_err_mime: "This file type is not accepted. Use PDF, JPG/JPEG or PNG.",
+        analyze_file_err_heic: "HEIC format is not supported. Save the photo as JPG or PNG and upload again.",
         analyze_upload_hint: "Select a file (its name will appear), then click Analyze below.",
         session_expired: "Your session has expired. Please log in again.",
         analyze_doctor_notes_label: "Your doctor's note / extra info (optional)",
@@ -2508,7 +2528,7 @@
         doctor_header: "Norya Blood Test Report — Prepared for my doctor.",
         doctor_date_label: "Date", doctor_disclaimer: "This report is for educational information only. Medical decisions require a doctor's evaluation.",
         toast_report_pdf: "Report downloaded as PDF.", toast_doctor_downloaded: "Report for doctor downloaded.", toast_link_copied: "Share link copied.",
-        toast_analyze_first: "Please run an analysis first.", toast_pdf_fallback: "PDF could not be generated; text file downloaded.",
+        toast_analyze_first: "Please run an analysis first.", toast_pdf_fallback: "PDF could not be generated; text file downloaded.", toast_pdf_error: "PDF could not be generated. Please try again.",
         pricing_title: "Pricing", pricing_eur: "Prices are shown in your local currency.", pricing_note_currency: "Prices shown in {cur} ({sym}).",
         price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Text, PDF or image", price_single_3: "✓ Detailed report", price_btn_single: " — Single analysis",
         price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "10+3 analyses / month", price_monthly_1: "✓ 10+3 analyses per month", price_monthly_2: "✓ Text, PDF and image upload", price_monthly_3: "✓ Detailed report + history", price_btn_monthly: "/mo — Get started",
@@ -2662,7 +2682,7 @@
         doctor_header: "Report analisi Norya — Preparato per il mio medico.",
         doctor_date_label: "Data", doctor_disclaimer: "Questo report è a scopo informativo. Le decisioni mediche richiedono la valutazione del medico.",
         toast_report_pdf: "Report scaricato in PDF.", toast_doctor_downloaded: "Report per il medico scaricato.", toast_link_copied: "Link copiato.",
-        toast_analyze_first: "Esegui prima un'analisi.", toast_pdf_fallback: "Impossibile creare PDF; scaricato file di testo.",
+        toast_analyze_first: "Esegui prima un'analisi.", toast_pdf_fallback: "Impossibile creare PDF; scaricato file di testo.", toast_pdf_error: "Impossibile creare PDF. Riprova.",
         pricing_title: "Prezzi", pricing_eur: "I prezzi sono mostrati nella tua valuta locale.", pricing_note_currency: "Prezzi mostrati in {cur} ({sym}).",
         price_single_title: "Singola analisi", price_single_per: "una tantum", price_single_1: "✓ 1 analisi", price_single_2: "✓ Testo, PDF o immagine", price_single_3: "✓ Report dettagliato", price_btn_single: " — Singola analisi",
         price_monthly_title: "Piano mensile", price_per_month: "/mese", price_monthly_per: "5 report / mese", price_monthly_1: "✓ 5 analisi al mese", price_monthly_2: "✓ Caricamento testo, PDF e immagini", price_monthly_3: "✓ Report dettagliato + cronologia", price_btn_monthly: "/mese — Inizia",
@@ -2816,7 +2836,7 @@
         doctor_header: "Informe de análisis Norya — Preparado para mi médico.",
         doctor_date_label: "Fecha", doctor_disclaimer: "Este informe es solo informativo. Las decisiones médicas requieren evaluación del médico.",
         toast_report_pdf: "Informe descargado en PDF.", toast_doctor_downloaded: "Informe para el médico descargado.", toast_link_copied: "Enlace copiado.",
-        toast_analyze_first: "Realiza primero un análisis.", toast_pdf_fallback: "No se pudo generar PDF; se descargó archivo de texto.",
+        toast_analyze_first: "Realiza primero un análisis.", toast_pdf_fallback: "No se pudo generar PDF; se descargó archivo de texto.", toast_pdf_error: "No se pudo generar PDF. Inténtalo de nuevo.",
         pricing_title: "Precios", pricing_eur: "Los precios se muestran en tu moneda local.", pricing_note_currency: "Precios en {cur} ({sym}).",
         price_single_title: "Análisis único", price_single_per: "pago único", price_single_1: "✓ 1 análisis", price_single_2: "✓ Texto, PDF o imagen", price_single_3: "✓ Informe detallado", price_btn_single: " — Análisis único",
         price_monthly_title: "Plan mensual", price_per_month: "/mes", price_monthly_per: "5 informes / mes", price_monthly_1: "✓ 5 análisis al mes", price_monthly_2: "✓ Texto, PDF e imagen", price_monthly_3: "✓ Informe detallado + historial", price_btn_monthly: "/mes — Empezar",
@@ -2970,7 +2990,7 @@
         doctor_header: "Rapport d'analyse Norya — Préparé pour mon médecin.",
         doctor_date_label: "Date", doctor_disclaimer: "Ce rapport est à titre informatif. Les décisions médicales nécessitent l'évaluation d'un médecin.",
         toast_report_pdf: "Rapport téléchargé en PDF.", toast_doctor_downloaded: "Rapport pour le médecin téléchargé.", toast_link_copied: "Lien copié.",
-        toast_analyze_first: "Effectuez d'abord une analyse.", toast_pdf_fallback: "PDF impossible ; fichier texte téléchargé.",
+        toast_analyze_first: "Effectuez d'abord une analyse.", toast_pdf_fallback: "PDF impossible ; fichier texte téléchargé.", toast_pdf_error: "PDF impossible. Réessayez.",
         pricing_title: "Tarifs", pricing_eur: "Les prix sont affichés dans votre devise locale.", pricing_note_currency: "Prix affichés en {cur} ({sym}).",
         price_single_title: "Analyse unique", price_single_per: "paiement unique", price_single_1: "✓ 1 analyse", price_single_2: "✓ Texte, PDF ou image", price_single_3: "✓ Rapport détaillé", price_btn_single: " — Analyse unique",
         price_monthly_title: "Abonnement mensuel", price_per_month: "/mois", price_monthly_per: "5 rapports / mois", price_monthly_1: "✓ 5 analyses par mois", price_monthly_2: "✓ Texte, PDF et image", price_monthly_3: "✓ Rapport détaillé + historique", price_btn_monthly: "/mois — Commencer",
@@ -3124,7 +3144,7 @@
         doctor_header: "Norya Blutbildbericht — Für meinen Arzt erstellt.",
         doctor_date_label: "Datum", doctor_disclaimer: "Dieser Bericht dient nur der Information. Medizinische Entscheidungen erfordern die Bewertung durch einen Arzt.",
         toast_report_pdf: "Bericht als PDF heruntergeladen.", toast_doctor_downloaded: "Arztbericht heruntergeladen.", toast_link_copied: "Link kopiert.",
-        toast_analyze_first: "Bitte zuerst eine Analyse durchführen.", toast_pdf_fallback: "PDF konnte nicht erstellt werden; Textdatei heruntergeladen.",
+        toast_analyze_first: "Bitte zuerst eine Analyse durchführen.", toast_pdf_fallback: "PDF konnte nicht erstellt werden; Textdatei heruntergeladen.", toast_pdf_error: "PDF konnte nicht erstellt werden. Bitte erneut versuchen.",
         pricing_title: "Preise", pricing_eur: "Preise werden in Ihrer Landeswährung angezeigt.", pricing_note_currency: "Preise in {cur} ({sym}).",
         price_single_title: "Einzelanalyse", price_single_per: "einmalig", price_single_1: "✓ 1 Analyse", price_single_2: "✓ Text, PDF oder Bild", price_single_3: "✓ Detaillierter Bericht", price_btn_single: " — Einzelanalyse",
         price_monthly_title: "Monatsabo", price_per_month: "/Monat", price_monthly_per: "5 Berichte / Monat", price_monthly_1: "✓ 5 Analysen pro Monat", price_monthly_2: "✓ Text, PDF und Bild", price_monthly_3: "✓ Detaillierter Bericht + Verlauf", price_btn_monthly: "/Monat — Starten",
@@ -3277,7 +3297,7 @@
         doctor_header: "דוח נוריה — הוכן להעברה לרופא שלי.",
         doctor_date_label: "תאריך", doctor_disclaimer: "דוח זה להנחיה בלבד. החלטות רפואיות דורשות הערכת רופא.",
         toast_report_pdf: "הדוח הורד כ-PDF.", toast_doctor_downloaded: "דוח לרופא הורד.", toast_link_copied: "הקישור הועתק.",
-        toast_analyze_first: "בצע תחילה ניתוח.", toast_pdf_fallback: "לא ניתן ליצור PDF; הורדה כקובץ טקסט.",
+        toast_analyze_first: "בצע תחילה ניתוח.", toast_pdf_fallback: "לא ניתן ליצור PDF; הורדה כקובץ טקסט.", toast_pdf_error: "לא ניתן ליצור PDF. נסה שוב.",
         pricing_title: "מחירים", pricing_eur: "המחירים מוצגים במטבע המקומי שלך.", pricing_note_currency: "מחירים ב־{cur} ({sym}).",
         price_single_title: "ניתוח בודד", price_single_per: "חד־פעמי", price_single_1: "✓ ניתוח אחד", price_single_2: "✓ טקסט, PDF או תמונה", price_single_3: "✓ דוח מפורט", price_btn_single: " — ניתוח בודד",
         price_monthly_title: "מנוי חודשי", price_per_month: "/חודש", price_monthly_per: "5 דוחות / חודש", price_monthly_1: "✓ 5 ניתוחים בחודש", price_monthly_2: "✓ טקסט, PDF ותמונה", price_monthly_3: "✓ דוח מפורט + היסטוריה", price_btn_monthly: "/חודש — התחל",
@@ -3430,7 +3450,7 @@
         doctor_header: "تقرير تحليل نوريا — أُعدّ لإيصاله لطبيبي.",
         doctor_date_label: "التاريخ", doctor_disclaimer: "هذا التقرير لأغراض تعليمية فقط. القرارات الطبية تتطلب تقييم الطبيب.",
         toast_report_pdf: "تم تحميل التقرير كـ PDF.", toast_doctor_downloaded: "تم تحميل تقرير الطبيب.", toast_link_copied: "تم نسخ الرابط.",
-        toast_analyze_first: "قم بإجراء التحليل أولاً.", toast_pdf_fallback: "تعذّر إنشاء PDF؛ تم تحميل ملف نصي.",
+        toast_analyze_first: "قم بإجراء التحليل أولاً.", toast_pdf_fallback: "تعذّر إنشاء PDF؛ تم تحميل ملف نصي.", toast_pdf_error: "تعذّر إنشاء PDF. حاول مرة أخرى.",
         pricing_title: "الأسعار", pricing_eur: "الأسعار تُعرض بعملتك المحلية.", pricing_note_currency: "الأسعار بعملة {cur} ({sym}).",
         price_single_title: "تحليل واحد", price_single_per: "مرة واحدة", price_single_1: "✓ تحليل واحد", price_single_2: "✓ نص أو PDF أو صورة", price_single_3: "✓ تقرير مفصل", price_btn_single: " — تحليل واحد",
         price_monthly_title: "اشتراك شهري", price_per_month: "/شهر", price_monthly_per: "5 تقارير / شهر", price_monthly_1: "✓ 5 تحاليل شهرياً", price_monthly_2: "✓ نص وPDF وصورة", price_monthly_3: "✓ تقرير مفصل + السجل", price_btn_monthly: "/شهر — ابدأ",
@@ -3583,7 +3603,7 @@
         doctor_header: "नोरिया रक्त परीक्षण रिपोर्ट — मेरे डॉक्टर के लिए तैयार।",
         doctor_date_label: "तारीख", doctor_disclaimer: "यह रिपोर्ट शैक्षिक जानकारी के लिए है। चिकित्सा निर्णय के लिए डॉक्टर की समीक्षा ज़रूरी है।",
         toast_report_pdf: "रिपोर्ट PDF के रूप में डाउनलोड हुई।", toast_doctor_downloaded: "डॉक्टर के लिए रिपोर्ट डाउनलोड हुई।", toast_link_copied: "लिंक कॉपी हुआ।",
-        toast_analyze_first: "पहले विश्लेषण करें।", toast_pdf_fallback: "PDF नहीं बन सका; टेक्स्ट फ़ाइल डाउनलोड हुई।",
+        toast_analyze_first: "पहले विश्लेषण करें।", toast_pdf_fallback: "PDF नहीं बन सका; टेक्स्ट फ़ाइल डाउनलोड हुई।", toast_pdf_error: "PDF नहीं बन सका। कृपया पुनः प्रयास करें।",
         pricing_title: "मूल्य निर्धारण", pricing_eur: "कीमतें आपकी स्थानीय मुद्रा में दिखाई जाती हैं।", pricing_note_currency: "कीमतें {cur} ({sym}) में।",
         price_single_title: "एकल विश्लेषण", price_single_per: "एक बार", price_single_1: "✓ 1 विश्लेषण", price_single_2: "✓ टेक्स्ट, PDF या इमेज", price_single_3: "✓ विस्तृत रिपोर्ट", price_btn_single: " — एकल विश्लेषण",
         price_monthly_title: "मासिक प्लान", price_per_month: "/माह", price_monthly_per: "5 रिपोर्ट / माह", price_monthly_1: "✓ महीने में 5 विश्लेषण", price_monthly_2: "✓ टेक्स्ट, PDF और इमेज", price_monthly_3: "✓ विस्तृत रिपोर्ट + इतिहास", price_btn_monthly: "/माह — शुरू करें",
@@ -3734,7 +3754,7 @@
         risk_legend_green: "Φυσιολογικό", risk_legend_yellow: "Όριο", risk_legend_red: "Σε κίνδυνο",
         doctor_header: "Αναφορά Norya — Προετοιμασμένη για τον γιατρό μου.", doctor_date_label: "Ημερομηνία", doctor_disclaimer: "Η αναφορά είναι εκπαιδευτική. Η ιατρική απόφαση απαιτεί αξιολόγηση από γιατρό.",
         toast_report_pdf: "Η αναφορά λήφθηκε ως PDF.", toast_doctor_downloaded: "Αναφορά για τον γιατρό λήφθηκε.", toast_link_copied: "Ο σύνδεσμος αντιγράφηκε.",
-        toast_analyze_first: "Κάντε πρώτα ανάλυση.", toast_pdf_fallback: "Δεν δημιουργήθηκε PDF· λήφθηκε αρχείο κειμένου.",
+        toast_analyze_first: "Κάντε πρώτα ανάλυση.", toast_pdf_fallback: "Δεν δημιουργήθηκε PDF· λήφθηκε αρχείο κειμένου.", toast_pdf_error: "Δεν δημιουργήθηκε PDF. Δοκιμάστε ξανά.",
         pricing_title: "Τιμές", pricing_eur: "Οι τιμές εμφανίζονται στο νόμισμά σας.", pricing_note_currency: "Τιμές σε {cur} ({sym}).",
         price_single_title: "Μία ανάλυση", price_single_per: "μία φορά", price_single_1: "✓ 1 ανάλυση", price_single_2: "✓ Κείμενο, PDF ή εικόνα", price_single_3: "✓ Λεπτομερής αναφορά", price_btn_single: " — Μία ανάλυση",
         price_monthly_title: "Μηνιαίο πλάνο", price_per_month: "/μήνα", price_monthly_per: "5 αναφορές/μήνα", price_monthly_1: "✓ 5 αναλύσεις το μήνα", price_monthly_2: "✓ Κείμενο, PDF και εικόνα", price_monthly_3: "✓ Αναφορά + ιστορικό", price_btn_monthly: "/μήνα — Ξεκινήστε",
@@ -3885,7 +3905,7 @@
         risk_legend_green: "Normální", risk_legend_yellow: "Mez", risk_legend_red: "Riziko",
         doctor_header: "Zpráva Norya — Připraveno pro mého lékaře.", doctor_date_label: "Datum", doctor_disclaimer: "Zpráva je vzdělávací. Lékařské rozhodnutí vyžaduje posouzení lékaře.",
         toast_report_pdf: "Zpráva stažena jako PDF.", toast_doctor_downloaded: "Zpráva pro lékaře stažena.", toast_link_copied: "Odkaz zkopírován.",
-        toast_analyze_first: "Nejprve proveďte analýzu.", toast_pdf_fallback: "PDF se nepodařilo vytvořit; stažen textový soubor.",
+        toast_analyze_first: "Nejprve proveďte analýzu.", toast_pdf_fallback: "PDF se nepodařilo vytvořit; stažen textový soubor.", toast_pdf_error: "PDF se nepodařilo vytvořit. Zkuste to znovu.",
         pricing_title: "Ceny", pricing_eur: "Ceny se zobrazují ve vaší měně.", pricing_note_currency: "Ceny v {cur} ({sym}).",
         price_single_title: "Jedna analýza", price_single_per: "jednorázově", price_single_1: "✓ 1 analýza", price_single_2: "✓ Text, PDF nebo obrázek", price_single_3: "✓ Podrobná zpráva", price_btn_single: " — Jedna analýza",
         price_monthly_title: "Měsíční plán", price_per_month: "/měsíc", price_monthly_per: "5 reportů/měsíc", price_monthly_1: "✓ 5 analýz měsíčně", price_monthly_2: "✓ Text, PDF a obrázek", price_monthly_3: "✓ Zpráva + historie", price_btn_monthly: "/měsíc — Začít",
@@ -4036,7 +4056,7 @@
         risk_legend_green: "Normalno", risk_legend_yellow: "Granica", risk_legend_red: "Rizično",
         doctor_header: "Izveštaj Norya — Pripremljen za mog lekara.", doctor_date_label: "Datum", doctor_disclaimer: "Izveštaj je obrazovni. Medicinska odluka zahteva procenu lekara.",
         toast_report_pdf: "Izveštaj preuzet kao PDF.", toast_doctor_downloaded: "Izveštaj za lekara preuzet.", toast_link_copied: "Link kopiran.",
-        toast_analyze_first: "Prvo uradite analizu.", toast_pdf_fallback: "PDF nije kreiran; preuzet je tekstualni fajl.",
+        toast_analyze_first: "Prvo uradite analizu.", toast_pdf_fallback: "PDF nije kreiran; preuzet je tekstualni fajl.", toast_pdf_error: "PDF nije kreiran. Pokušajte ponovo.",
         pricing_title: "Cene", pricing_eur: "Cene su prikazane u vašoj valuti.", pricing_note_currency: "Cene u {cur} ({sym}).",
         price_single_title: "Jedna analiza", price_single_per: "jednokratno", price_single_1: "✓ 1 analiza", price_single_2: "✓ Tekst, PDF ili slika", price_single_3: "✓ Detaljan izveštaj", price_btn_single: " — Jedna analiza",
         price_monthly_title: "Mesečni plan", price_per_month: "/mesec", price_monthly_per: "5 izveštaja/mesec", price_monthly_1: "✓ 5 analiza mesečno", price_monthly_2: "✓ Tekst, PDF i slika", price_monthly_3: "✓ Izveštaj + istorija", price_btn_monthly: "/mesec — Počnite",
@@ -4217,6 +4237,22 @@
         if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
         loadUsage();
         if (typeof updateTestModeUI === 'function') updateTestModeUI();
+        var ridFromUrl = (window.location.pathname === '/report' || window.location.search.indexOf('rid=') !== -1) ? getReportId() : null;
+        if (ridFromUrl) {
+          fetch(API_BASE + '/analyze/history/' + encodeURIComponent(ridFromUrl), { headers: { 'Authorization': 'Bearer ' + getToken() } })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(data) {
+              if (data && data.result_text) {
+                renderReport(data.result_text);
+                lastAnalysisId = data.id || ridFromUrl;
+                var resultDiv = document.getElementById('analyze-result');
+                if (resultDiv) { resultDiv.classList.remove('hidden'); resultDiv.dataset.rid = String(ridFromUrl); }
+                if (typeof setWizardStep === 'function') setWizardStep(4);
+                scrollToAnalyze();
+              }
+            })
+            .catch(function() {});
+        }
       } else {
         if (heartbeatIntervalId) { clearInterval(heartbeatIntervalId); heartbeatIntervalId = null; }
         document.getElementById('analyze-usage').textContent = '';
@@ -4784,6 +4820,34 @@
         if (wizardCurrentStep === 4) wizardStopProgress();
       }
 
+      var ALLOWED_EXT = ["pdf", "jpg", "jpeg", "png"];
+      var ALLOWED_MIME = ["application/pdf", "image/jpeg", "image/png"];
+      var ALLOWED_MIME_EXTRA = ["image/jpg"];
+
+      /** Dosya doğrula: .jpg/.jpeg kabul, MIME'da image/jpeg+image/png+application/pdf. iOS'ta file.type bazen boş veya image/heic gelir; uzantıya fallback. */
+      function validateAnalyzeFile(file) {
+        if (!file || !file.name) return null;
+        var ext = file.name.split(".").pop().toLowerCase();
+        if (!ALLOWED_EXT.includes(ext)) {
+          if (ext === "heic" || ext === "heif") {
+            return { key: "analyze_file_err_heic", fallback: "HEIC formatı desteklenmiyor. Fotoğrafı JPG veya PNG olarak kaydedip tekrar yükleyin." };
+          }
+          return { key: "analyze_file_err_ext", fallback: "Sadece PDF, JPG, JPEG veya PNG dosyaları kabul edilir." };
+        }
+        var mime = (file.type || "").toLowerCase();
+        if (ALLOWED_MIME.includes(mime) || ALLOWED_MIME_EXTRA.includes(mime)) return null;
+        if (!mime || mime === "image/heic" || mime === "image/heif") {
+          return null;
+        }
+        return { key: "analyze_file_err_mime", fallback: "Bu dosya türü kabul edilmiyor. PDF, JPG/JPEG veya PNG kullanın." };
+      }
+
+      function getFileValidationMessage(err) {
+        if (!err) return "";
+        var t = (typeof T !== "undefined" && getLang) ? (T[getLang()] || T.tr) : {};
+        return (t && t[err.key]) || err.fallback;
+      }
+
       function wizardCanProceedFrom1() {
         var textEl = document.getElementById('analyze-text');
         var fileInput = document.getElementById('analyze-pdf');
@@ -4858,11 +4922,6 @@
             errEl.classList.remove('hidden');
             return;
           }
-          if (file && file.name && !/\.(pdf|jpg|jpeg|png)$/i.test(file.name)) {
-            errEl.textContent = 'Sadece PDF, JPG veya PNG yükleyebilirsiniz.';
-            errEl.classList.remove('hidden');
-            return;
-          }
           setWizardStep(2);
         } else if (wizardCurrentStep === 2) {
           document.getElementById('wizard-lang').value && chooseLang(document.getElementById('wizard-lang').value);
@@ -4876,6 +4935,12 @@
         document.getElementById('analyze-error').classList.add('hidden');
         if (wizardCurrentStep === 4) setWizardStep(1);
         else setWizardStep(wizardCurrentStep - 1);
+      }
+
+      function handleAnalyzeSubmit(event) {
+        event.preventDefault();
+        wizardNext();
+        return false;
       }
 
       function updateAnalyzeButtonState() {
@@ -4920,11 +4985,6 @@
         } else {
           errEl.textContent = t.analyze_field_required || 'Tahlil metnini yukarıdaki kutuya yapıştırın VEYA «PDF veya görsel yükle»ye tıklayıp dosya seçin; sonra Analiz Et\'e basın.';
         }
-        errEl.classList.remove('hidden');
-        return;
-      }
-      if (hasFile && (!file.name || !/\.(pdf|jpg|jpeg|png)$/i.test(file.name))) {
-        errEl.textContent = (T[getLang()] || T.tr).analyze_file_type || 'Sadece PDF, JPG veya PNG yükleyebilirsiniz.';
         errEl.classList.remove('hidden');
         return;
       }
@@ -4980,7 +5040,8 @@
             toast(msg, 'info');
             return;
           }
-          var rawMsg = (data && (data.error || data.detail)) ? (data.error || (typeof data.detail === 'string' ? data.detail : (data.detail && data.detail[0] && (data.detail[0].msg || data.detail[0].message)) || 'Analiz alınamadı.')) : (res.status >= 500 ? 'Sunucu geçici olarak yanıt vermiyor. Lütfen birkaç dakika sonra tekrar deneyin.' : (res.status === 0 || res.status === 404 ? 'Bağlantı kurulamadı. İnternet bağlantınızı ve adresi kontrol edin.' : 'Analiz alınamadı. Sunucu veya bağlantı hatası.'));
+          var serverMsg = (data && (data.error || data.detail)) ? (data.error || (typeof data.detail === 'string' ? data.detail : (data.detail && data.detail[0] && (data.detail[0].msg || data.detail[0].message)) || 'Analiz alınamadı.')) : null;
+          var rawMsg = serverMsg || (res.status === 429 ? 'Çok fazla istek. Lütfen bir dakika bekleyip tekrar deneyin.' : (res.status >= 500 ? 'Servis geçici olarak yanıt vermiyor. (Sunucu uyanıyor veya yoğun olabilir.) 15–20 saniye sonra tekrar deneyin.' : (res.status === 0 || res.status === 404 ? 'Bağlantı kurulamadı. İnternet bağlantınızı ve adresi kontrol edin.' : 'Analiz alınamadı. Sunucu veya bağlantı hatası.')));
           var t = T[getLang()] || T.tr;
           var msg = rawMsg;
           if (rawMsg && (String(rawMsg).toLowerCase().includes('field required') || String(rawMsg) === 'Field required') && !isUploadRequest) {
@@ -5006,8 +5067,15 @@
         }
         renderReport(data.sonuc || data.result || '');
         resultDiv.classList.remove('hidden');
-        lastAnalysisId = data.analiz_id || null;
+        lastAnalysisId = data.analiz_id != null ? data.analiz_id : (data.id != null ? data.id : null);
         lastShareToken = null;
+        if (lastAnalysisId) {
+          resultDiv.dataset.rid = String(lastAnalysisId);
+          var reportPath = '/report?rid=' + encodeURIComponent(lastAnalysisId);
+          if (window.history && window.history.replaceState) {
+            window.history.replaceState(null, '', reportPath);
+          }
+        }
         if (getToken()) { loadHistory(); loadUsage(); }
         toast('Analiz tamamlandı.', 'success');
         if (typeof window.wizardOnAnalyzeSuccess === 'function') window.wizardOnAnalyzeSuccess();

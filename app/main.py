@@ -18,6 +18,7 @@ _PROJ_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(_PROJ_ROOT / ".env")
 
 from fastapi import Depends, FastAPI, File, Form, HTTPException, Query, Request, UploadFile
+from fastapi.security import HTTPAuthorizationCredentials
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
@@ -33,12 +34,12 @@ from sqlmodel import Session, select
 from app.admin import admin_router as new_admin_router
 from app.api.admin import get_admin_html, router as admin_router
 from app.api.auth import router as auth_router
-from app.api.deps import get_current_user
+from app.api.deps import get_current_user, security
 from app.core.config import is_openai_configured, settings
 from app.core.database import engine, get_db, init_db
 from app.core.rate_limit import limiter
 from app.core.geo import get_country_from_ip
-from app.core.security import hash_password
+from app.core.security import create_pdf_access_token, decode_access_token, decode_pdf_access_token, hash_password
 from app.models import (  # noqa: F401
     AnalysisJob,
     AnalysisRecord,
@@ -82,7 +83,7 @@ def _cors_origins_list() -> list[str]:
 ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 MIME_MAP = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
-ALLOWED_UPLOAD_MIME_TYPES = {"application/pdf", "image/jpeg", "image/png"}
+ALLOWED_UPLOAD_MIME_TYPES = {"application/pdf", "image/jpeg", "image/jpg", "image/png"}
 
 
 def _max_upload_bytes() -> int:
@@ -275,11 +276,12 @@ async def security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
-        # API + form + inline script için makul CSP (frontend form/JS çalışsın)
+        # API + form + inline script + jsPDF/html2canvas (cdnjs) + blob images için CSP
         response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; script-src 'self' 'unsafe-inline' https://cdn.tailwindcss.com; "
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://static.cloudflareinsights.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: https:; connect-src 'self'; frame-ancestors 'self';"
+            "img-src 'self' data: blob: https:; connect-src 'self'; frame-ancestors 'self';"
         )
     return response
 
@@ -698,6 +700,20 @@ def index():
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
 
 
+@app.get("/report")
+def report_page():
+    """Rapor sayfası: /report?rid=... — aynı SPA, rid query ile rapor yüklenir."""
+    index_file = STATIC_DIR / "index.html"
+    if not index_file.is_file():
+        index_file = Path.cwd() / "static" / "index.html"
+    if index_file.is_file():
+        raw = index_file.read_text(encoding="utf-8")
+        if getattr(settings, "ga_measurement_id", ""):
+            raw = _inject_ga(raw)
+        return HTMLResponse(raw)
+    return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."}
+
+
 # Ücretsiz planda: ilk analiz ücretsiz, sonrası için ödeme gerekir (ayda 1 hak)
 AYLIK_LIMIT_UCRETSIZ = 1
 # Pro planı (50€ aylık / 99€ yıllık): ayda 10+3 = 13 analiz
@@ -908,8 +924,6 @@ async def analyze(
     try:
         report_lang = _report_lang_from_request(request, lang)
         result, usage = analyze_blood_test(text, detailed=True, doctor_notes=doctor_notes, lang=report_lang)
-        if test_mode:
-            return AnalyzeResponse(sonuc=result, analiz_id=None)
         aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes)
         if job:
             job.status = "done"
@@ -1016,21 +1030,40 @@ async def analyze_upload(
         magic_ext = ".pdf"
         expected_mime = "application/pdf"
     elif magic_type == "jpeg":
-        magic_ext = ".jpg"
+        magic_ext = (".jpg", ".jpeg")  # JPEG ve JPG aynı format (image/jpeg)
         expected_mime = "image/jpeg"
     elif magic_type == "png":
         magic_ext = ".png"
         expected_mime = "image/png"
 
-    valid = (
-        ext in ALLOWED_UPLOAD_EXTENSIONS
-        and reported_mime in ALLOWED_UPLOAD_MIME_TYPES
-        and magic_type is not None
-        and magic_ext == ext
-        and reported_mime == expected_mime
+    # Mobil: bazen dosya adı uzantısız veya farklı gelir; içerik doğruysa uzantıyı magic'e göre kabul et
+    if magic_type == "jpeg" and (ext not in ALLOWED_UPLOAD_EXTENSIONS or not ext):
+        ext = ".jpg"
+    elif magic_type == "png" and (ext not in ALLOWED_UPLOAD_EXTENSIONS or not ext):
+        ext = ".png"
+    elif magic_type == "pdf" and (ext not in ALLOWED_UPLOAD_EXTENSIONS or not ext):
+        ext = ".pdf"
+
+    ext_ok = (ext == magic_ext) if isinstance(magic_ext, str) else (ext in magic_ext)
+    if magic_type == "jpeg":
+        mime_ok = reported_mime in ("image/jpeg", "image/jpg", "")
+    else:
+        mime_ok = reported_mime == expected_mime or (reported_mime == "" and magic_type is not None)
+    # Uzantı .jpg/.jpeg ise (içerik PDF değilse) her zaman kabul — Mobil Safari/iOS
+    jpeg_always_ok = ext in (".jpg", ".jpeg") and magic_type != "pdf"
+    classic_ok = (
+        magic_type is not None
+        and ext_ok
+        and (reported_mime in ALLOWED_UPLOAD_MIME_TYPES or reported_mime == "")
+        and mime_ok
     )
+    valid = ext in ALLOWED_UPLOAD_EXTENSIONS and (classic_ok or jpeg_always_ok)
 
     if not valid:
+        log.warning(
+            "analyze/upload reject: ext=%r, reported_mime=%r, magic_type=%r",
+            ext, reported_mime, magic_type,
+        )
         # Tip uyuşmazlığı UploadLog
         try:
             ul = UploadLog(
@@ -1048,11 +1081,11 @@ async def analyze_upload(
             log.warning("UploadLog write failed for invalid type: %s", e)
         raise HTTPException(
             status_code=400,
-            detail="Sadece PDF, JPG veya PNG dosyalarını yükleyebilirsiniz.",
+            detail="Sadece PDF, JPG/JPEG veya PNG dosyalarını yükleyebilirsiniz.",
         )
     try:
         return _process_uploaded_content(
-            content, file.filename, report_lang, user.id or 0, db, request, save=not test_mode
+            content, file.filename, report_lang, user.id or 0, db, request, save=True
         )
     except HTTPException:
         raise
@@ -1072,10 +1105,10 @@ def _process_uploaded_content(
     request: Request,
     save: bool = True,
 ) -> AnalyzeResponse:
-    """Ortak: yüklenen dosya içeriğini analiz eder (görsel veya PDF). save=False ise kaydetmez (test modu)."""
+    """Ortak: yüklenen dosya içeriğini analiz eder (görsel veya PDF). Her zaman kaydeder (PDF/rapor için analiz_id döner)."""
     ext = "." + filename.lower().rsplit(".", 1)[-1] if "." in filename else ""
     if ext not in ALLOWED_UPLOAD_EXTENSIONS:
-        raise HTTPException(status_code=400, detail="Sadece PDF, JPG veya PNG yükleyebilirsiniz.")
+        raise HTTPException(status_code=400, detail="Sadece PDF, JPG/JPEG veya PNG yükleyebilirsiniz.")
     ul = None
     if save:
         ul = UploadLog(user_id=user_id, filename=filename, file_size_bytes=len(content), status="pending")
@@ -1092,8 +1125,6 @@ def _process_uploaded_content(
                 db.commit()
                 db.refresh(job)
             result, usage = analyze_blood_test_from_image(content, mime, lang=report_lang)
-            if not save:
-                return AnalyzeResponse(sonuc=result, analiz_id=None)
             input_preview = f"[Görsel: {filename}]"
             aid = _save_analysis(db, user_id, input_preview, result, "image")
             if job:
@@ -1122,8 +1153,6 @@ def _process_uploaded_content(
             db.commit()
             db.refresh(job)
         result, usage = analyze_blood_test(text, lang=report_lang)
-        if not save:
-            return AnalyzeResponse(sonuc=result, analiz_id=None)
         aid = _save_analysis(db, user_id, text[:2000], result, "pdf")
         if job:
             job.status = "done"
@@ -1326,16 +1355,50 @@ def analyze_history_toggle_favorite(
     return {"is_favorite": getattr(rec, "is_favorite", False)}
 
 
+def _get_pdf_requester_id(
+    analysis_id: int,
+    access_token: str | None = Query(None, description="Canlıda proxy Authorization keserse URL token (POST /pdf-token ile alınır)"),
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
+) -> int:
+    """Bearer veya access_token ile PDF indirme yetkisi; canlıda proxy header kesebildiği için URL token desteklenir."""
+    if access_token:
+        decoded = decode_pdf_access_token(access_token)
+        if decoded and decoded[0] == analysis_id:
+            return decoded[1]
+        raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
+    if not credentials:
+        raise HTTPException(status_code=401, detail="Giriş yapın veya geçerli indirme linki kullanın.")
+    payload = decode_access_token(credentials.credentials)
+    if not payload or "sub" not in payload:
+        raise HTTPException(status_code=401, detail="Geçersiz veya süresi dolmuş token.")
+    return int(payload["sub"])
+
+
+@app.post("/analyze/history/{analysis_id}/pdf-token")
+def get_pdf_download_token(
+    analysis_id: int,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+) -> dict:
+    """PDF indirme için 5 dakika geçerli tek kullanımlık token. Canlıda Raporu İndir bu token ile URL açar."""
+    rec = db.get(AnalysisRecord, analysis_id)
+    if not rec or rec.user_id != (user.id or 0):
+        raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
+    token = create_pdf_access_token(analysis_id, user.id or 0)
+    return {"access_token": token, "expires_in": 300}
+
+
 @app.get("/analyze/history/{analysis_id}/pdf")
 def download_analysis_pdf(
     analysis_id: int,
     lang: str = Query("tr", description="Rapor dili: tr, en, de, fr, es, it, he, ar, hi, el, cs, sr"),
-    user: User = Depends(get_current_user),
+    disposition: str = Query("inline", description="inline = tarayıcıda aç (iOS uyumu), attachment = indir"),
+    user_id: int = Depends(_get_pdf_requester_id),
     db: Session = Depends(get_db),
 ):
-    """İlgili analizin premium PDF raporunu indirir (WeasyPrint + Jinja2). Dil seçimine göre başlık/etiketler o dilde."""
+    """İlgili analizin premium PDF raporu. Bearer veya ?access_token= ile yetki (canlıda proxy için token)."""
     rec = db.get(AnalysisRecord, analysis_id)
-    if not rec or rec.user_id != (user.id or 0):
+    if not rec or rec.user_id != user_id:
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
     report_date = None
     if getattr(rec, "created_at", None):
@@ -1352,12 +1415,14 @@ def download_analysis_pdf(
             lang=report_lang,
         )
     except Exception as e:
+        log.exception("PDF build failed for analysis_id=%s: %s", analysis_id, e)
         raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
     filename = f"norya-rapor-{analysis_id}.pdf"
+    disp = "attachment" if (disposition or "").strip().lower() == "attachment" else "inline"
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",
-        headers={"Content-Disposition": f'attachment; filename="{filename}"'},
+        headers={"Content-Disposition": f'{disp}; filename="{filename}"'},
     )
 
 
