@@ -26,7 +26,7 @@
         <td class="px-4 py-2">{{ u.file_size_bytes }}</td>
         <td class="px-4 py-2"><span class="{% if u.status == 'success' %}text-green-400{% elif u.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ u.status }}</span></td>
         <td class="px-4 py-2">{{ u.duration_ms }}</td>
-        <td class="px-4 py-2 text-red-300 truncate max-w-xs">{{ u.error_message if u.error_message != '-' else '' }}</td>
+        <td class="px-4 py-2 text-red-300 break-words whitespace-pre-wrap max-w-xl" title="{{ u.error_message if u.error_message and u.error_message != '-' else '' }}">{{ u.error_message if u.error_message != '-' else '' }}</td>
       </tr>
       {% else %}
       <tr><td colspan="8" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>

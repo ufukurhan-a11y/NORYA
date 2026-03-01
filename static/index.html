@@ -1091,6 +1091,7 @@
             <button type="submit" id="wizard-btn-next" class="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition flex-1 min-w-[140px]" data-i18n="wizard_next">Sonraki</button>
           </div>
           <p id="analyze-error" class="mt-2 text-red-600 text-sm hidden" role="alert" aria-live="assertive"></p>
+          <p id="analyze-retry-wrap" class="mt-1 hidden"><button type="button" id="analyze-retry-btn" class="text-sm text-primary-600 hover:text-primary-700 hover:underline font-medium" data-i18n="retry_btn">Tekrar dene</button></p>
           </form>
         </div>
       </div>
@@ -2357,7 +2358,7 @@
         param_tsh_title: "TSH (Tiroid)", param_tsh_desc: "Tiroid bezinin çalışmasını gösterir. Hipotiroidi/hipertiroidi taramasında kullanılır.",
         param_creat_title: "Kreatinin / eGFR", param_creat_desc: "Böbrek fonksiyonunu yansıtır. Yüksek kreatinin böbrek işlevinde azalmaya işaret edebilir.",
         analyze_title: "Kan Tahlili Sonuçlarınızı Analiz Edin", analyze_desc: "Giriş yapın ve tahlil metnini aşağıya yapıştırın.",
-        analyze_prompt: "Analiz yapmak için lütfen ", analyze_prompt_or: " veya ", analyze_btn: "Analiz Et",
+        analyze_prompt: "Analiz yapmak için lütfen ", analyze_prompt_or: " veya ", analyze_btn: "Analiz Et", retry_btn: "Tekrar dene",
         analyze_placeholder: "Örn: Hemoglobin: 14 g/dL, WBC: 7.2, Glukoz: 95 mg/dL...",
         analyze_field_required: "Lütfen tahlil metnini girin veya PDF/görsel yükleyin.",
         analyze_login_required: "Analiz yapmak için lütfen giriş yapın veya kayıt olun.",
@@ -2529,7 +2530,7 @@
         param_tsh_title: "TSH (Thyroid)", param_tsh_desc: "Reflects thyroid function. Used for hypothyroidism/hyperthyroidism screening.",
         param_creat_title: "Creatinine / eGFR", param_creat_desc: "Reflects kidney function. High creatinine may indicate reduced kidney function.",
         analyze_title: "Analyze your blood test results", analyze_desc: "Log in and paste your lab text below.",
-        analyze_prompt: "To analyze, please ", analyze_prompt_or: " or ", analyze_btn: "Analyze",
+        analyze_prompt: "To analyze, please ", analyze_prompt_or: " or ", analyze_btn: "Analyze", retry_btn: "Try again",
         analyze_placeholder: "E.g. Hemoglobin: 14 g/dL, WBC: 7.2, Glucose: 95 mg/dL...",
         analyze_field_required: "Please enter your blood test text or upload a PDF/image.",
         analyze_login_required: "Please log in or register to run an analysis.",
@@ -2693,7 +2694,7 @@
         param_tsh_title: "TSH (Tiroide)", param_tsh_desc: "Riflette la funzione tiroidea. Usato per lo screening di ipotiroidismo/ipertiroidismo.",
         param_creat_title: "Creatinina / eGFR", param_creat_desc: "Riflette la funzione renale. Creatinina alta può indicare ridotta funzionalità renale.",
         analyze_title: "Analizza i tuoi esami del sangue", analyze_desc: "Accedi e incolla il testo delle analisi qui sotto.",
-        analyze_prompt: "Per analizzare, ", analyze_prompt_or: " o ", analyze_btn: "Analizza",
+        analyze_prompt: "Per analizzare, ", analyze_prompt_or: " o ", analyze_btn: "Analizza", retry_btn: "Riprova",
         analyze_placeholder: "Es. Emoglobina: 14 g/dL, WBC: 7.2, Glucosio: 95 mg/dL...",
         analyze_field_required: "Inserisci il testo delle analisi o carica un PDF/immagine.",
         analyze_doctor_notes_label: "Nota del medico / informazioni aggiuntive (opzionale)",
@@ -2847,7 +2848,7 @@
         param_tsh_title: "TSH (Tiroides)", param_tsh_desc: "Refleja la función tiroidea. Se usa en el cribado de hipo/hipertiroidismo.",
         param_creat_title: "Creatinina / eGFR", param_creat_desc: "Refleja la función renal. Creatinina alta puede indicar disminución de la función renal.",
         analyze_title: "Analiza tus análisis de sangre", analyze_desc: "Inicia sesión y pega el texto del análisis abajo.",
-        analyze_prompt: "Para analizar, ", analyze_prompt_or: " o ", analyze_btn: "Analizar",
+        analyze_prompt: "Para analizar, ", analyze_prompt_or: " o ", analyze_btn: "Analizar", retry_btn: "Reintentar",
         analyze_placeholder: "Ej. Hemoglobina: 14 g/dL, WBC: 7.2, Glucosa: 95 mg/dL...",
         analyze_field_required: "Introduce el texto del análisis o sube un PDF o imagen.",
         analyze_doctor_notes_label: "Nota de tu médico / información adicional (opcional)",
@@ -3001,7 +3002,7 @@
         param_tsh_title: "TSH (thyroïde)", param_tsh_desc: "Reflète la fonction thyroïdienne. Utilisé pour le dépistage hypo/hyperthyroïdie.",
         param_creat_title: "Créatinine / DFG", param_creat_desc: "Reflète la fonction rénale. Une créatinine élevée peut indiquer une baisse de la fonction rénale.",
         analyze_title: "Analyser vos analyses sanguines", analyze_desc: "Connectez-vous et collez le texte des analyses ci-dessous.",
-        analyze_prompt: "Pour analyser, ", analyze_prompt_or: " ou ", analyze_btn: "Analyser",
+        analyze_prompt: "Pour analyser, ", analyze_prompt_or: " ou ", analyze_btn: "Analyser", retry_btn: "Réessayer",
         analyze_placeholder: "Ex. Hémoglobine : 14 g/dL, GB : 7.2, Glucose : 95 mg/dL...",
         analyze_field_required: "Veuillez saisir le texte d'analyse ou télécharger un PDF/image.",
         analyze_doctor_notes_label: "Note de votre médecin / info complémentaire (optionnel)",
@@ -3155,7 +3156,7 @@
         param_tsh_title: "TSH (Schilddrüse)", param_tsh_desc: "Spiegelt die Schilddrüsenfunktion wider. Wird beim Hypo-/Hyperthyreose-Screening verwendet.",
         param_creat_title: "Kreatinin / eGFR", param_creat_desc: "Spiegelt die Nierenfunktion wider. Hohes Kreatinin kann auf eingeschränkte Nierenfunktion hinweisen.",
         analyze_title: "Blutbild analysieren", analyze_desc: "Anmelden und Text unten einfügen.",
-        analyze_prompt: "Zum Analysieren bitte ", analyze_prompt_or: " oder ", analyze_btn: "Analysieren",
+        analyze_prompt: "Zum Analysieren bitte ", analyze_prompt_or: " oder ", analyze_btn: "Analysieren", retry_btn: "Erneut versuchen",
         analyze_placeholder: "z. B. Hämoglobin: 14 g/dL, Leukozyten: 7.2, Glukose: 95 mg/dL...",
         analyze_field_required: "Bitte geben Sie den Testergebnis-Text ein oder laden Sie eine PDF/Datei hoch.",
         analyze_doctor_notes_label: "Notiz Ihres Arztes / Zusatzinfo (optional)",
@@ -3309,7 +3310,7 @@
         param_tsh_title: "TSH (תירואיד)", param_tsh_desc: "משקף את תפקוד בלוטת התריס. משמש לבדיקת תת/יתר פעילות תריס.",
         param_creat_title: "קריאטינין / eGFR", param_creat_desc: "משקף את תפקוד הכליות. קריאטינין גבוה עלול להצביע על ירידה בתפקוד הכליות.",
         analyze_title: "נתח את תוצאות בדיקת הדם", analyze_desc: "התחבר והדבק את טקסט הבדיקה למטה.",
-        analyze_prompt: "לניתוח, אנא ", analyze_prompt_or: " או ", analyze_btn: "נתח",
+        analyze_prompt: "לניתוח, אנא ", analyze_prompt_or: " או ", analyze_btn: "נתח", retry_btn: "נסה שוב",
         analyze_placeholder: "למשל המוגלובין: 14 g/dL, WBC: 7.2, גלוקוז: 95 mg/dL...",
         analyze_doctor_notes_label: "הערת הרופא / מידע נוסף (אופציונלי)",
         analyze_doctor_notes_placeholder: "למשל הרופא רשם לי B12; יש לשקול עם תוצאות אלה.",
@@ -3462,7 +3463,7 @@
         param_tsh_title: "TSH (الغدة الدرقية)", param_tsh_desc: "يعكس وظيفة الغدة الدرقية. يُستخدم لفحص قصور/فرط الدرقية.",
         param_creat_title: "الكرياتينين / eGFR", param_creat_desc: "يعكس وظيفة الكلى. ارتفاع الكرياتينين قد يدل على انخفاض وظيفة الكلى.",
         analyze_title: "تحليل نتائج تحليل الدم", analyze_desc: "سجّل الدخول والصق نص التحليل أدناه.",
-        analyze_prompt: "للتحليل، من فضلك ", analyze_prompt_or: " أو ", analyze_btn: "تحليل",
+        analyze_prompt: "للتحليل، من فضلك ", analyze_prompt_or: " أو ", analyze_btn: "تحليل", retry_btn: "حاول مرة أخرى",
         analyze_placeholder: "مثلاً هيموغلوبين: 14 g/dL، كريات بيض: 7.2، غلوكوز: 95 mg/dL...",
         analyze_doctor_notes_label: "ملاحظة الطبيب / معلومات إضافية (اختياري)",
         analyze_doctor_notes_placeholder: "مثلاً وصف الطبيب B12؛ يُرجى الأخذ بالاعتبار مع هذه النتائج.",
@@ -3615,7 +3616,7 @@
         param_tsh_title: "TSH (थायरॉइड)", param_tsh_desc: "थायरॉइड कार्य दर्शाता है। हाइपो/हाइपरथायरॉइड स्क्रीनिंग में उपयोग।",
         param_creat_title: "क्रिएटिनिन / eGFR", param_creat_desc: "किडनी कार्य दर्शाता है। उच्च क्रिएटिनिन किडनी कार्य में कमी का संकेत दे सकता है।",
         analyze_title: "अपने रक्त परीक्षण का विश्लेषण करें", analyze_desc: "लॉग इन करें और नीचे टेक्स्ट चिपकाएं।",
-        analyze_prompt: "विश्लेषण के लिए कृपया ", analyze_prompt_or: " या ", analyze_btn: "विश्लेषण",
+        analyze_prompt: "विश्लेषण के लिए कृपया ", analyze_prompt_or: " या ", analyze_btn: "विश्लेषण", retry_btn: "पुनः प्रयास करें",
         analyze_placeholder: "जैसे हीमोग्लोबिन: 14 g/dL, WBC: 7.2, ग्लूकोज: 95 mg/dL...",
         analyze_doctor_notes_label: "डॉक्टर का नोट / अतिरिक्त जानकारी (वैकल्पिक)",
         analyze_doctor_notes_placeholder: "जैसे डॉक्टर ने B12 दिया; इन परिणामों के साथ ध्यान में रखें।",
@@ -3768,7 +3769,7 @@
         param_tsh_title: "TSH (Θυρεοειδής)", param_tsh_desc: "Αντικατοπτρίζει τη λειτουργία του θυρεοειδή.",
         param_creat_title: "Κρεατινίνη / eGFR", param_creat_desc: "Αντικατοπτρίζει τη λειτουργία των νεφρών.",
         analyze_title: "Αναλύστε τα αιματολογικά σας", analyze_desc: "Συνδεθείτε και επικολλήστε το κείμενο παρακάτω.",
-        analyze_prompt: "Για ανάλυση ", analyze_prompt_or: " ή ", analyze_btn: "Ανάλυση",
+        analyze_prompt: "Για ανάλυση ", analyze_prompt_or: " ή ", analyze_btn: "Ανάλυση", retry_btn: "Δοκιμάστε ξανά",
         analyze_placeholder: "Π.χ. Αιμοσφαιρίνη: 14 g/dL, WBC: 7.2, Γλυκόζη: 95 mg/dL...",
         analyze_doctor_notes_label: "Σημείωση γιατρού (προαιρετικό)", analyze_doctor_notes_placeholder: "Π.χ. Ο γιατρός μου έδωσε B12.",
         analyze_or: "— ή —", analyze_upload_btn: "Ανέβασμα PDF ή εικόνας (JPG, PNG)",
@@ -3919,7 +3920,7 @@
         param_tsh_title: "TSH (štítná žláza)", param_tsh_desc: "Odráží funkci štítné žlázy.",
         param_creat_title: "Kreatinin / eGFR", param_creat_desc: "Odráží funkci ledvin.",
         analyze_title: "Analyzujte krevní testy", analyze_desc: "Přihlaste se a vložte text níže.",
-        analyze_prompt: "Pro analýzu ", analyze_prompt_or: " nebo ", analyze_btn: "Analyzovat",
+        analyze_prompt: "Pro analýzu ", analyze_prompt_or: " nebo ", analyze_btn: "Analyzovat", retry_btn: "Zkusit znovu",
         analyze_placeholder: "Např. Hemoglobin: 14 g/dL, WBC: 7.2, Glukóza: 95 mg/dL...",
         analyze_doctor_notes_label: "Poznámka lékaře (volitelné)", analyze_doctor_notes_placeholder: "Např. Lékař mi předepsal B12.",
         analyze_or: "— nebo —", analyze_upload_btn: "Nahrát PDF nebo obrázek (JPG, PNG)",
@@ -4070,7 +4071,7 @@
         param_tsh_title: "TSH (štitna žlezda)", param_tsh_desc: "Odražava funkciju štitne žlezde.",
         param_creat_title: "Kreatinin / eGFR", param_creat_desc: "Odražava funkciju bubrega.",
         analyze_title: "Analizirajte krvne testove", analyze_desc: "Prijavite se i nalepite tekst ispod.",
-        analyze_prompt: "Za analizu ", analyze_prompt_or: " ili ", analyze_btn: "Analiziraj",
+        analyze_prompt: "Za analizu ", analyze_prompt_or: " ili ", analyze_btn: "Analiziraj", retry_btn: "Pokušaj ponovo",
         analyze_placeholder: "Npr. Hemoglobin: 14 g/dL, WBC: 7.2, Glukoza: 95 mg/dL...",
         analyze_doctor_notes_label: "Napomena lekara (opciono)", analyze_doctor_notes_placeholder: "Npr. Lekar mi je prepisao B12.",
         analyze_or: "— ili —", analyze_upload_btn: "Otpremite PDF ili sliku (JPG, PNG)",
@@ -4999,6 +5000,8 @@
       const resultDiv = document.getElementById('analyze-result');
       resultDiv.classList.add('hidden');
       errEl.classList.add('hidden');
+      var retryWrap = document.getElementById('analyze-retry-wrap');
+      if (retryWrap) retryWrap.classList.add('hidden');
       if (!getToken()) {
         errEl.textContent = (T[getLang()] || T.tr).analyze_login_required || 'Analiz yapmak için lütfen giriş yapın veya kayıt olun.';
         errEl.classList.remove('hidden');
@@ -5068,7 +5071,7 @@
           if (res.status === 401 || res.status === 403) {
             clearAuth();
             updateNav();
-            var msg = res.status === 403 ? (data.detail || data.error || 'Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.') : (t.session_expired || 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
+            var msg = res.status === 403 ? (data.detail || data.error || 'Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.') : (data.detail || data.error || t.session_expired || 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.');
             errEl.textContent = msg;
             errEl.classList.remove('hidden');
             toast(msg, 'info');
@@ -5076,7 +5079,7 @@
           }
           var serverMsg = (data && (data.error || data.detail)) ? (data.error || (typeof data.detail === 'string' ? data.detail : (data.detail && data.detail[0] && (data.detail[0].msg || data.detail[0].message)) || 'Analiz alınamadı.')) : null;
           var isServerWake = (res.status === 502 || res.status === 503) && !opts.retry;
-          var rawMsg = serverMsg || (res.status === 429 ? 'Çok fazla istek. Lütfen bir dakika bekleyip tekrar deneyin.' : (res.status >= 500 ? 'Servis geçici olarak yanıt vermiyor. Sunucu uyanıyor veya yoğun olabilir; 30–60 saniye sonra tekrar deneyin.' : (res.status === 0 || res.status === 404 ? 'Bağlantı kurulamadı. İnternet bağlantınızı ve adresi kontrol edin.' : 'Analiz alınamadı. Sunucu veya bağlantı hatası.')));
+          var rawMsg = serverMsg || (res.status === 429 ? 'Çok fazla istek. Lütfen bir dakika bekleyip tekrar deneyin.' : (res.status >= 500 ? 'Sunucu geçici olarak yanıt vermiyor. 30-60 saniye veya birkaç dakika sonra tekrar deneyin.' : (res.status === 0 || res.status === 404 ? 'Bağlantı kurulamadı. İnternet bağlantınızı ve adresi kontrol edin.' : 'Analiz alınamadı. Sunucu veya bağlantı hatası.')));
           var t = T[getLang()] || T.tr;
           var msg = rawMsg;
           if (rawMsg && (String(rawMsg).toLowerCase().includes('field required') || String(rawMsg) === 'Field required') && !isUploadRequest) {
@@ -5089,9 +5092,10 @@
             msg = t.analyze_upload_failed || 'Dosya analiz edilemedi. Lütfen tekrar dosyayı seçip deneyin.';
           }
           if (isServerWake) {
-            msg = 'Sunucu uyanıyor. 35 saniye sonra otomatik tekrar denenecek.';
+            msg = 'Sunucu uyanıyor. 35 saniye sonra otomatik tekrar denenecek veya «Tekrar dene»ye tıklayın.';
             errEl.textContent = msg;
             errEl.classList.remove('hidden');
+            if (retryWrap) retryWrap.classList.remove('hidden');
             toast(msg, 'info');
             var restoreT = T[getLang()] || T.tr;
             var restoreLabel = restoreT.analyze_btn || 'Analiz Et';
@@ -5103,6 +5107,7 @@
           }
           errEl.textContent = msg;
           errEl.classList.remove('hidden');
+          if (res.status >= 500 && retryWrap) retryWrap.classList.remove('hidden');
           toast(msg, 'error');
           if (res.status === 402) {
             var limitEl = document.getElementById('analyze-limit-msg');
@@ -5152,6 +5157,14 @@
         if (this.files[0].size > WIZARD_MAX_FILE_SIZE) { errEl.textContent = 'Dosya çok büyük. En fazla 15 MB.'; errEl.classList.remove('hidden'); } else { errEl.classList.add('hidden'); }
       } else nameEl.textContent = '';
       updateAnalyzeButtonState();
+    });
+    var analyzeRetryBtn = document.getElementById('analyze-retry-btn');
+    if (analyzeRetryBtn) analyzeRetryBtn.addEventListener('click', function() {
+      var errEl = document.getElementById('analyze-error');
+      var rw = document.getElementById('analyze-retry-wrap');
+      if (errEl) errEl.classList.add('hidden');
+      if (rw) rw.classList.add('hidden');
+      runAnalyze();
     });
     (function() {
       var dropZone = document.getElementById('wizard-drop-zone');

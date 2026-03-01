@@ -59,6 +59,7 @@ from app.models import (  # noqa: F401
 )
 from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_report_pdf
+from app.services.storage import upload_report_pdf
 from app.schemas.analyze import (
     AnalysisDetail,
     AnalysisHistoryItem,
@@ -1419,6 +1420,10 @@ def download_analysis_pdf(
         raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
     filename = f"norya-rapor-{analysis_id}.pdf"
     disp = "attachment" if (disposition or "").strip().lower() == "attachment" else "inline"
+    # MinIO açıksa yükle ve presigned URL ile yönlendir; frontend MinIO'dan indirir
+    minio_url = upload_report_pdf(analysis_id, pdf_bytes, filename)
+    if minio_url:
+        return RedirectResponse(url=minio_url, status_code=302)
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",

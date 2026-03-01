@@ -65,6 +65,14 @@ class Settings(BaseSettings):
     invoice_company_email: str = ""
     invoice_eur_to_try_rate: float = 35.0  # 1 EUR = X TL (fatura tutarı TL)
 
+    # MinIO (S3 uyumlu): PDF raporları yüklenir, frontend buradan indirir
+    minio_endpoint: str = ""           # örn. minio.example.com veya 127.0.0.1:9000
+    minio_access_key: str = ""
+    minio_secret_key: str = ""
+    minio_bucket: str = "norya-pdf"   # bucket adı
+    minio_secure: bool = True         # HTTPS
+    minio_use_for_pdf: bool = False   # True ise PDF MinIO'ya yüklenir ve indirme oradan
+
     model_config = {
         "env_file": _ENV_FILE if _ENV_FILE.is_file() else ".env",
         "extra": "ignore",

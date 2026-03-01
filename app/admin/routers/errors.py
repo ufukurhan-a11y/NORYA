@@ -22,7 +22,7 @@ def errors_list(request: Request, _=Depends(require_admin_cookie), db: Session =
             "user_id": e.user_id,
             "endpoint": e.endpoint or "-",
             "method": e.method or "-",
-            "error_message": (e.error_message or "-")[:200],
+            "error_message": e.error_message or "-",
             "created_at": e.created_at.strftime("%d.%m.%Y %H:%M:%S") if e.created_at else "-",
         }
         for e in logs

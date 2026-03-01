@@ -8,11 +8,12 @@
   <script>tailwind.config = { theme: { extend: { colors: { brand: '#e07a5f' } } } }</script>
   <style>
     .sidebar-link.active { background: rgba(224, 122, 95, 0.2); color: #e07a5f; }
+    .sidebar-link { white-space: nowrap; }
   </style>
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen">
   <div class="flex">
-    <aside class="w-56 min-h-screen bg-slate-800 border-r border-slate-700 flex-shrink-0">
+    <aside class="w-60 min-h-screen bg-slate-800 border-r border-slate-700 flex-shrink-0">
       <div class="p-4 border-b border-slate-700">
         <a href="/admin/dashboard" class="font-semibold text-lg text-white flex items-center gap-2">
           <img src="/static/logo.png" alt="Norya AI" class="h-14 w-auto object-contain flex-shrink-0 bg-white" />
@@ -29,7 +30,7 @@
         <a href="/admin/payments?status_filter=completed" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-amber-200 hover:bg-slate-700 border-l-2 border-amber-500 ml-2 {% if request.url.path.startswith('/admin/payments') %}active{% endif %}" title="Tamamlanmış siparişlere girip E-arşiv fatura kes">📄 E-arşiv Fatura</a>
         <a href="/admin/coupons" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/coupons') %}active{% endif %}">İndirim Kodları</a>
         <a href="/admin/errors" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/errors') %}active{% endif %}">Hata Logları</a>
-        <a href="/admin/uploads" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/uploads') %}active{% endif %}">Upload Logları</a>
+        <a href="/admin/uploads" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/uploads') %}active{% endif %}">Dosya Upload Logları</a>
         <a href="/admin/queue" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/queue') %}active{% endif %}">Analiz Kuyruğu</a>
         <a href="/admin/security" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/security') %}active{% endif %}">Güvenlik</a>
         <a href="/admin/legacy" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-400 hover:bg-slate-700 mt-2" target="_blank">Eski panel (API)</a>

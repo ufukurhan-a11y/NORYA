@@ -23,7 +23,7 @@ def uploads_list(request: Request, _=Depends(require_admin_cookie), db: Session 
             "filename": u.filename or "-",
             "file_size_bytes": u.file_size_bytes or 0,
             "status": u.status,
-            "error_message": (u.error_message or "-")[:100],
+            "error_message": u.error_message or "-",
             "duration_ms": u.duration_ms or "-",
             "created_at": u.created_at.strftime("%d.%m.%Y %H:%M") if u.created_at else "-",
         }

@@ -33,7 +33,12 @@ def get_current_user(
 ) -> User:
     user = db.get(User, user_id)
     if not user:
-        raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
+        # Token geçerli ama kullanıcı DB'de yok (örn. geçici veritabanı sıfırlandı) → oturumu geçersiz say
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Oturumunuz sona erdi veya geçersiz. Lütfen tekrar giriş yapın.",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
     if getattr(user, "is_banned", False):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

@@ -1,20 +1,13 @@
 # Render Blueprint – Norya web servisi
-# Dashboard: https://dashboard.render.com → New → Blueprint → Bu repo'yu bağlayın
-# Ortam değişkenlerini Dashboard > Environment içinde tanımlayın (OPENAI_API_KEY, SECRET_KEY, DATABASE_URL vb.)
+# PDF (WeasyPrint) için cairo/pango gerekir → Dockerfile kullanın.
+# Dashboard'da mevcut servis "Python" ile oluşturulduysa: Settings → Build & Deploy → Environment → Docker'a geçin (veya yeni servis Blueprint ile Docker ile oluşturun).
 
 services:
   - type: web
     name: norya
-    runtime: python
-
-    buildCommand: pip install --no-cache-dir -r requirements.txt
-    startCommand: gunicorn app.main:app -w 2 -k uvicorn.workers.UvicornWorker -b 0.0.0.0:$PORT
-
-    # Render otomatik PORT verir; 0.0.0.0 dinle
-    envVars:
-      - key: PYTHON_VERSION
-        value: "3.12"
-
+    runtime: docker
+    # Dockerfile kökte: python:3.12-slim + cairo/pango (WeasyPrint)
+    # buildCommand/startCommand kullanılmaz; Dockerfile CMD çalışır. PORT Render tarafından verilir.
     # İsteğe bağlı: Render PostgreSQL eklediyseniz bağlayın
     # - key: DATABASE_URL
     #   fromDatabase:

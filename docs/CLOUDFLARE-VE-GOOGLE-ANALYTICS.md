@@ -30,6 +30,21 @@ Bu adımlardan sonra norya.com, sunucuna Cloudflare üzerinden gider; Norya uygu
 
 ---
 
+## Cloudflare — PDF ve site açılsın diye (kısa liste)
+
+Cloudflare’de **noryaai.com** → sadece bunları yap. Fazlasına gerek yok.
+
+1. **SSL/TLS** → **Full** veya **Full (strict)** seç. **Always Use HTTPS** açık olsun.
+2. **Speed** → **Rocket Loader** → **Kapalı**. (Açıksa “Raporu İndir” tıklanınca hareket etmeyebilir.)
+3. **Security** → **Security Level** → **Medium** veya **Low**. (“I’m Under Attack” kapalı olsun; yoksa giriş/PDF takılır.)
+4. **Transform Rules / Response Headers** kullanmıyorsan dokunma. Kullanıyorsan **Authorization** header’ını ve **Content-Security-Policy**’yi silmeyin / değiştirmeyin.
+
+**Tarayıcıda:** noryaai.com için **açılır pencere (pop-up) engelini kapat**. “Raporu İndir” yeni sekmede PDF açar; site “izin ver” listesinde olmalı.
+
+Bu dört madde + pop-up izni, PDF’in ve sitenin açılması için yeterli.
+
+---
+
 ## Google Analytics 4 (GA4)
 
 Norya’da GA4, **.env** üzerinden açılıyor; kod tarafı hazır.

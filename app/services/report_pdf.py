@@ -7,7 +7,7 @@ from pathlib import Path
 
 from jinja2 import Environment, FileSystemLoader
 
-from app.charts import range_bar_svg_base64
+from app.charts import range_bar_svg_base64, simple_value_bar_svg_base64
 
 # Şablon dizini: app/templates (package içinden çalışırken app/templates)
 _TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
@@ -21,7 +21,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "subtitle": "Kan Tahlili Analiz Raporu — Yapay Zeka Destekli Yorum",
         "report_date_label": "Rapor Tarihi",
         "summary_heading": "Özet",
-        "biomarkers_heading": "Biyobelirteçler ve Referans Aralıkları",
+        "biomarkers_heading": "Değerler ve referans aralıkları",
         "param": "Parametre",
         "result": "Sonuç",
         "unit": "Birim",
@@ -34,6 +34,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "emr_ehr_note": "EMR/EHR uyumlu — Bu rapor hastane veya hekim bilgi sistemlerine (EMR/EHR) yüklenebilir formattadır.",
         "risk_default_attention": "Değerlerinizde dikkat edilmesi gereken parametreler olabilir. Öneriler bölümünü okuyun ve gerekirse hekime danışın.",
         "risk_default_normal": "Tüm değerler referans aralığında. Genel özet ve öneriler aşağıdadır.",
+        "risk_indicators_heading": "Risk İşaretleri",
     },
     "en": {
         "title": "Norya Analysis Report",
@@ -53,6 +54,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "emr_ehr_note": "EMR/EHR compatible — This report can be uploaded to hospital or clinician information systems (EMR/EHR).",
         "risk_default_attention": "Some values may need attention. See the recommendations section and consult a doctor if needed.",
         "risk_default_normal": "All values are within reference range. Summary and recommendations below.",
+        "risk_indicators_heading": "Risk Indicators",
     },
     "de": {
         "title": "Norya Analysebericht",
@@ -262,35 +264,43 @@ SECTION_PATTERNS = [
 ]
 
 # Values bloğundaki satır: **Parametre adı:** değer birim. Reference: ... Normal/Low/High (sonunda nokta olabilir)
-# Not: Markdown bazen **name*:** veya **name**: şeklinde olabiliyor; *? ile kabul ediyoruz.
 BIOMARKER_LINE = re.compile(
     r"\*\*([^*]+)\*?\s*:\s*([^\n]+?)\s*\.\s*"
     r"(?:Reference:\s*([^\n]+?)\s*\.\s*)?"
     r"(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır)\s*\.?\s*$",
     re.IGNORECASE,
 )
+# Daha esnek: Reference ve/veya status ayrı satırda veya noktasız olabilir
+BIOMARKER_LINE_RELAXED = re.compile(
+    r"\*\*([^*]+)\*?\s*:\s*([^\n]+?)(?:\s*\.\s*)?"
+    r"(?:\s*Reference:\s*([^\n]+?)(?:\s*\.\s*)?)?"
+    r"(?:\s+(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır))?\s*$",
+    re.IGNORECASE,
+)
 
 
 def _is_section_header(line: str) -> bool:
-    """Satır sadece bölüm başlığı mı (Summary, Risk, Values, ...) kontrol et."""
+    """Satır sadece bölüm başlığı mı (Summary, Risk, Values, Diyet, Takviye, Kalp, ...) kontrol et."""
     if not line or not line.strip().startswith("**"):
         return False
-    # İçerik kısmı (**: sonrası) boş veya çok kısa ise bölüm başlığıdır
     stripped = line.strip()
     match = re.match(r"^\*\*([^*]+)\*\*\s*:?\s*(.*)$", stripped)
     if not match:
         return False
     title, rest = match.group(1).strip(), (match.group(2) or "").strip()
-    # Bilinen bölüm başlıkları (veya benzeri)
     known = (
         "summary", "özet", "risk indicators", "risk indicator", "dikkat edilmesi gerekenler",
         "values", "value", "değerler", "parametreler", "possible causes", "possible cause",
-        "olası nedenler", "recommendations", "recommendation", "öneriler", "recommendations",
+        "olası nedenler", "recommendations", "recommendation", "öneriler",
+        "diet plan", "diyet planı", "plan alimentaire", "supplement", "takviye", "heart", "kalp",
     )
     if title.lower() in known:
         return True
-    if any(k in title.lower() for k in ("summary", "özet", "risk", "dikkat", "value", "değer", "parametre", "cause", "neden", "recommendation", "öneri")):
-        return len(rest) < 80  # Uzun devamı varsa muhtemelen parametre satırı değil başlık
+    if any(k in title.lower() for k in ("summary", "özet", "risk", "dikkat", "value", "değer", "parametre", "cause", "neden", "recommendation", "öneri", "diet", "diyet", "supplement", "takviye", "heart", "kalp", "alimentaire")):
+        return len(rest) < 120
+    # Her **Başlık**: satırı (içerik kısa/boşsa) bölüm başlığı say — Diyet, Takviye, Kalp vb. PDF'de ayrı görünsün
+    if len(rest) < 120:
+        return True
     return False
 
 
@@ -358,7 +368,8 @@ def _normalize_status(s: str) -> str:
 
 
 def _status_label(status: str) -> str:
-    tr = {"normal": "Normal", "low": "Düşük", "high": "Yüksek", "border": "Sınırda"}
+    """Web raporu ile aynı: Normal / Sınır / Riskli (grafik ve tablo için)."""
+    tr = {"normal": "Normal", "low": "Riskli", "high": "Riskli", "border": "Sınır"}
     return tr.get(status, status)
 
 
@@ -409,51 +420,61 @@ def _value_to_float(value_str: str) -> float | None:
 
 
 def _enrich_biomarker_chart(row: dict) -> None:
-    """Biomarker satırına chart_svg_base64, display_min, display_max ekler (referans ve değer parse edilebiliyorsa)."""
+    """Biomarker satırına chart_svg_base64 ekler: referans varsa range bar, yoksa basit değer çubuğu (tüm sonuçlara grafik)."""
     ref = _parse_reference_range(row.get("reference"))
     value_float = _value_to_float(row.get("value") or "")
-    if ref is None or value_float is None:
+    if value_float is None:
         row["chart_svg_base64"] = None
         row["display_min"] = None
         row["display_max"] = None
         return
-    ref_min, ref_max = ref
-    if ref_max <= ref_min:
-        row["chart_svg_base64"] = None
-        row["display_min"] = None
-        row["display_max"] = None
-        return
-    span = ref_max - ref_min
-    padding = max(span * 0.3, span * 0.1) if span > 0 else 1.0
-    display_min = min(ref_min, value_float) - padding
-    display_max = max(ref_max, value_float) + padding
-    b64 = range_bar_svg_base64(
+    status = row.get("status") or "normal"
+    status_label = row.get("status_label")
+    if ref is not None:
+        ref_min, ref_max = ref
+        if ref_max > ref_min:
+            span = ref_max - ref_min
+            padding = max(span * 0.3, span * 0.1) if span > 0 else 1.0
+            display_min = min(ref_min, value_float) - padding
+            display_max = max(ref_max, value_float) + padding
+            b64 = range_bar_svg_base64(
+                name=row["name"],
+                value=value_float,
+                unit=row.get("unit") or "",
+                ref_min=ref_min,
+                ref_max=ref_max,
+                status=status,
+                display_min=display_min,
+                display_max=display_max,
+                status_label=status_label,
+            )
+            row["chart_svg_base64"] = b64
+            row["display_min"] = display_min
+            row["display_max"] = display_max
+            return
+    b64 = simple_value_bar_svg_base64(
         name=row["name"],
         value=value_float,
         unit=row.get("unit") or "",
-        ref_min=ref_min,
-        ref_max=ref_max,
-        status=row.get("status") or "normal",
-        display_min=display_min,
-        display_max=display_max,
+        status=status,
+        status_label=status_label,
     )
     row["chart_svg_base64"] = b64
-    row["display_min"] = display_min
-    row["display_max"] = display_max
+    row["display_min"] = None
+    row["display_max"] = None
 
 
 def parse_biomarkers(values_block: str) -> list[dict]:
-    """Values bölümünden parametre satırlarını parse et."""
+    """Values bölümünden parametre satırlarını parse et (grafik için referans + status gerekir)."""
     rows: list[dict] = []
     for line in (values_block or "").splitlines():
         line = line.strip()
         if not line or not line.startswith("**"):
             continue
-        m = BIOMARKER_LINE.search(line)
+        m = BIOMARKER_LINE.search(line) or BIOMARKER_LINE_RELAXED.search(line)
         if m:
             name = m.group(1).strip()
             value_str = (m.group(2) or "").strip()
-            # AI bazen değeri **value** bold yazar; baştaki ** ve boşluğu kaldır
             if value_str.startswith("**"):
                 value_str = value_str.lstrip("*").strip()
             reference = (m.group(3) or "").strip() or None
@@ -468,7 +489,7 @@ def parse_biomarkers(values_block: str) -> list[dict]:
                 "status_label": _status_label(status),
             })
         else:
-            simple = re.match(r"\*\*([^*]+)\*\*\s*:\s*(.+)", line)
+            simple = re.match(r"\*\*([^*]+)\*?\s*:\s*(.+)", line)
             if simple:
                 value, unit = _split_value_unit(simple.group(2))
                 rows.append({
