@@ -123,6 +123,7 @@ Bu mesaj **domain’den değil**, aşağıdakilerden biri yüzünden çıkar:
 - OpenAI timeout 30 → **90 saniye** (görsel analiz için yeterli süre).
 - Bağlantı hatasında **2. retry** (APIConnectionError’da ek deneme).
 - Frontend analiz isteği **90 sn** (metin), **120 sn** (PDF/görsel yükleme) bekliyor; zaman aşımında net mesaj.
+- **502/503 (sunucu uyanıyor):** Mesaj "30–60 saniye sonra tekrar deneyin" olarak güncellendi; 502/503’te **35 saniye sonra otomatik tekrar deneme** (tek sefer) eklendi.
 
 **Cold start’ı azaltmak:**
 
@@ -133,6 +134,20 @@ Bu mesaj **domain’den değil**, aşağıdakilerden biri yüzünden çıkar:
 
 - Rate limit alıyorsan `.env`’e ikinci anahtar ekle: `OPENAI_API_KEYS=sk-...,sk-...` (fallback kullanılır).
 - Billing açık ve kota yeterli mi kontrol et.
+
+---
+
+## Deploy "Arızalı" / exit code 1 (Gunicorn başlamıyor)
+
+Bu hata genelde **WeasyPrint** (PDF) için gerekli sistem kütüphanelerinin (cairo, pango) Render Python build’inde olmamasından kaynaklanır. Çözüm: **Docker** ile build almak.
+
+1. **Repoda:** `render.yaml` artık `runtime: docker` kullanıyor; kökteki `Dockerfile` (python:3.12-slim + cairo/pango) ile build alınır.
+2. **Mevcut servis Python ile oluşturulduysa:** Render’da runtime’ı sonradan değiştiremezsin. İki seçenek:
+   - **A)** Dashboard → NORYA → **Settings** → **Build & Deploy** bölümünde **Environment** veya **Build** ayarında **Docker** seçeneği varsa onu seç, **Save** → **Manual Deploy**.
+   - **B)** Mevcut servisi silip aynı repodan **yeni Web Service** oluştur; repo bağlandığında Render `render.yaml`’ı okuyacak. Yeni serviste `runtime: docker` ile Dockerfile kullanılır.
+3. **Yeni servis oluşturuyorsan:** Blueprint veya "New Web Service" ile repoyu bağla; `render.yaml`’daki `runtime: docker` sayesinde Dockerfile ile build alınır.
+
+Docker build başarılı olduktan sonra PDF indirme ve analiz canlıda çalışır.
 
 ---
 

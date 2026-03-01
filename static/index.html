@@ -2011,9 +2011,24 @@
           return;
         }
         var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'tr');
-        if (typeof console !== 'undefined' && console.log) console.log('[PDF] Opening PDF URL (length)', pdfUrl.length);
-        window.open(pdfUrl, '_blank');
-        toast(t.toast_report_pdf || 'Rapor PDF olarak açıldı.', 'success');
+        if (typeof console !== 'undefined' && console.log) console.log('[PDF] Fetching PDF for download');
+        var pdfRes = await fetch(pdfUrl, { credentials: 'include' });
+        if (!pdfRes.ok) {
+          toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
+          if (typeof console !== 'undefined' && console.error) console.error('[PDF] PDF fetch failed:', pdfRes.status);
+          return;
+        }
+        var pdfBlob = await pdfRes.blob();
+        var blobUrl = URL.createObjectURL(pdfBlob);
+        var a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'norya-rapor-' + rid + '.pdf';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        toast(t.toast_report_pdf || 'Rapor PDF olarak indirildi.', 'success');
       } catch (e) {
         var errMsg = t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.';
         if (e && e.message) errMsg = e.message;
@@ -4964,7 +4979,8 @@
         if (btn && btn.getAttribute('data-loading') !== 'true') { btn.disabled = !text && !hasFile; }
         if (nextBtn && wizardCurrentStep === 1) nextBtn.disabled = !text && !hasFile;
       }
-    async function runAnalyze() {
+    async function runAnalyze(opts) {
+      opts = opts || {};
       const fileInput = document.getElementById('analyze-pdf');
       const textEl = document.getElementById('analyze-text');
       var text = textEl ? (textEl.value || '').trim() : '';
@@ -5059,7 +5075,8 @@
             return;
           }
           var serverMsg = (data && (data.error || data.detail)) ? (data.error || (typeof data.detail === 'string' ? data.detail : (data.detail && data.detail[0] && (data.detail[0].msg || data.detail[0].message)) || 'Analiz alınamadı.')) : null;
-          var rawMsg = serverMsg || (res.status === 429 ? 'Çok fazla istek. Lütfen bir dakika bekleyip tekrar deneyin.' : (res.status >= 500 ? 'Servis geçici olarak yanıt vermiyor. (Sunucu uyanıyor veya yoğun olabilir.) 15–20 saniye sonra tekrar deneyin.' : (res.status === 0 || res.status === 404 ? 'Bağlantı kurulamadı. İnternet bağlantınızı ve adresi kontrol edin.' : 'Analiz alınamadı. Sunucu veya bağlantı hatası.')));
+          var isServerWake = (res.status === 502 || res.status === 503) && !opts.retry;
+          var rawMsg = serverMsg || (res.status === 429 ? 'Çok fazla istek. Lütfen bir dakika bekleyip tekrar deneyin.' : (res.status >= 500 ? 'Servis geçici olarak yanıt vermiyor. Sunucu uyanıyor veya yoğun olabilir; 30–60 saniye sonra tekrar deneyin.' : (res.status === 0 || res.status === 404 ? 'Bağlantı kurulamadı. İnternet bağlantınızı ve adresi kontrol edin.' : 'Analiz alınamadı. Sunucu veya bağlantı hatası.')));
           var t = T[getLang()] || T.tr;
           var msg = rawMsg;
           if (rawMsg && (String(rawMsg).toLowerCase().includes('field required') || String(rawMsg) === 'Field required') && !isUploadRequest) {
@@ -5070,6 +5087,19 @@
           }
           if (isUploadRequest && msg && (msg.indexOf('tahlil metnini girin') !== -1 || msg.indexOf('E-posta ve şifreyi') !== -1)) {
             msg = t.analyze_upload_failed || 'Dosya analiz edilemedi. Lütfen tekrar dosyayı seçip deneyin.';
+          }
+          if (isServerWake) {
+            msg = 'Sunucu uyanıyor. 35 saniye sonra otomatik tekrar denenecek.';
+            errEl.textContent = msg;
+            errEl.classList.remove('hidden');
+            toast(msg, 'info');
+            var restoreT = T[getLang()] || T.tr;
+            var restoreLabel = restoreT.analyze_btn || 'Analiz Et';
+            if (btn) { btn.removeAttribute('data-loading'); btn.disabled = false; btn.textContent = restoreLabel; }
+            if (nextBtn) { nextBtn.removeAttribute('data-loading'); nextBtn.disabled = false; nextBtn.textContent = (wizardCurrentStep === 2 ? restoreLabel : (restoreT.wizard_next || 'Sonraki')); }
+            updateAnalyzeButtonState();
+            setTimeout(function() { runAnalyze({ retry: true }); }, 35000);
+            return;
           }
           errEl.textContent = msg;
           errEl.classList.remove('hidden');
