@@ -8,9 +8,12 @@ from openai import APIError, APIConnectionError, AuthenticationError, OpenAI, Ra
 from app.core.config import get_openai_keys, is_openai_configured
 
 logger = logging.getLogger(__name__)
-OPENAI_TIMEOUT = 30.0
+# Render cold start + OpenAI yanıt süresi için yeterli süre (görsel analiz uzun sürebilir)
+OPENAI_TIMEOUT = 90.0
 OPENAI_RETRY_WAIT = 1.5
 OPENAI_RETRY_ONCE = (RateLimitError, APIConnectionError)
+# APIConnectionError'da 2. deneme de başarısızsa bir kez daha dene (cold start / ağ gecikmesi)
+OPENAI_RETRY_TWICE_FOR_CONNECTION = True
 
 # Anahtar başına bir istemci (çoklu anahtar fallback için)
 _openai_clients: dict[str, OpenAI] = {}
@@ -51,13 +54,22 @@ def _openai_create_with_fallback(create_fn):
 
 
 def _openai_safe_call(create_fn):
-    """OpenAI çağrısını timeout ile yapar; RateLimitError/APIConnectionError'da 1 kez 1.5 sn bekleyip tekrar dener."""
+    """OpenAI çağrısını timeout ile yapar; RateLimitError/APIConnectionError'da 1–2 kez bekleyip tekrar dener."""
     try:
         return create_fn()
     except OPENAI_RETRY_ONCE as e:
-        logger.warning("OpenAI retry after %s: %s", type(e).__name__, e)
+        logger.warning("OpenAI retry 1/2 after %s: %s", type(e).__name__, e)
         time.sleep(OPENAI_RETRY_WAIT)
-        return create_fn()
+        try:
+            return create_fn()
+        except APIConnectionError as e2:
+            if OPENAI_RETRY_TWICE_FOR_CONNECTION:
+                logger.warning("OpenAI retry 2/2 after APIConnectionError: %s", e2)
+                time.sleep(OPENAI_RETRY_WAIT + 1.0)
+                return create_fn()
+            raise
+        except RateLimitError:
+            raise
 
 
 def ping_openai() -> tuple[bool, float, str | None]:

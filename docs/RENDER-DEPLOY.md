@@ -106,3 +106,40 @@ Render, özel domain eklediğinde otomatik SSL sağlar. Cloudflare proxy açıks
 4. Settings → Custom Domains → noryaai.com ekle.
 5. Cloudflare DNS’te noryaai.com ve www’yi Render’a yönlendir.
 6. https://noryaai.com ile test et.
+
+---
+
+## Analiz "geçici olarak hata veriyor" / zaman aşımı
+
+Bu mesaj **domain’den değil**, aşağıdakilerden biri yüzünden çıkar:
+
+| Kaynak | Açıklama |
+|--------|----------|
+| **Host (Render)** | Free tier’da ~15 dk hareketsizlikten sonra servis uyur. İlk istek **cold start** tetikler; sunucu 30–60 sn uyanır, bazen ilk istek timeout’a düşer. |
+| **OpenAI (ChatGPT API)** | Ağ kesintisi, rate limit veya API’nin yavaş yanıtı. Backend 503/502 döner; kullanıcı "Servis geçici olarak yanıt vermiyor" görür. |
+
+**Yapılan iyileştirmeler (kodda):**
+
+- OpenAI timeout 30 → **90 saniye** (görsel analiz için yeterli süre).
+- Bağlantı hatasında **2. retry** (APIConnectionError’da ek deneme).
+- Frontend analiz isteği **90 sn** (metin), **120 sn** (PDF/görsel yükleme) bekliyor; zaman aşımında net mesaj.
+
+**Cold start’ı azaltmak:**
+
+- **Uptime Robot** (veya benzeri) ile 5 dk’da bir `https://noryaai.com/health` ping’le; servis uyumaz.
+- Veya Render’da **ücretli plan** (Always On); servis uyumaz.
+
+**OpenAI tarafı:**
+
+- Rate limit alıyorsan `.env`’e ikinci anahtar ekle: `OPENAI_API_KEYS=sk-...,sk-...` (fallback kullanılır).
+- Billing açık ve kota yeterli mi kontrol et.
+
+---
+
+## PDF "Raporu İndir" 500 veya hata veriyorsa
+
+1. **Server logları:** Render Dashboard → norya servisi → **Logs**. "PDF build failed" veya WeasyPrint/cairo ile ilgili satırları kontrol et.
+2. **WeasyPrint sistem kütüphaneleri:** Varsayılan Python buildpack’te cairo/pango yoksa PDF 500 döner. Çözüm: **Docker ile build**.
+   - Repo’da `Dockerfile` var (WeasyPrint için cairo/pango kurulu).
+   - Render’da: **Settings** → **Build & Deploy** → **Environment** → **Docker** seç (veya "Dockerfile" kullan). **Save** → **Manual Deploy**.
+3. **401/403:** Tarayıcıda F12 → Network → "Raporu İndir" tıkla. `pdf-token` isteğinin response status’una bak. 401 ise giriş token’ı gidmiyor; 403 ise yetki/ban. Console’da `[PDF] Token response status: ...` log’u da görünür.

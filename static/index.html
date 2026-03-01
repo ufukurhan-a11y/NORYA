@@ -5003,11 +5003,15 @@
           var uploadUrl = API_BASE + '/analyze/upload';
           var uploadHeaders = { 'Authorization': 'Bearer ' + getToken() };
           if (getTestMode()) uploadHeaders['X-Test-Mode'] = '1';
+          var acUpload = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          var timeoutIdUpload = acUpload ? setTimeout(function() { acUpload.abort(); }, 120000) : null;
           res = await fetch(uploadUrl, {
             method: 'POST',
             headers: uploadHeaders,
-            body: fd
+            body: fd,
+            signal: acUpload ? acUpload.signal : undefined
           });
+          if (timeoutIdUpload) clearTimeout(timeoutIdUpload);
           var responseText = await res.text();
           try { data = responseText ? JSON.parse(responseText) : {}; } catch (parseErr) { data = {}; }
           if (res.ok && (data.sonuc || data.result)) {
@@ -5022,11 +5026,15 @@
           fd.append('lang', lang);
           var uploadHeaders = { 'Authorization': 'Bearer ' + getToken() };
           if (getTestMode()) uploadHeaders['X-Test-Mode'] = '1';
+          var ac = typeof AbortController !== 'undefined' ? new AbortController() : null;
+          var timeoutId = ac ? setTimeout(function() { ac.abort(); }, 90000) : null;
           res = await fetch(API_BASE + '/analyze', {
             method: 'POST',
             headers: uploadHeaders,
-            body: fd
+            body: fd,
+            signal: ac ? ac.signal : undefined
           });
+          if (timeoutId) clearTimeout(timeoutId);
           var responseText = await res.text();
           try { data = responseText ? JSON.parse(responseText) : {}; } catch (e) { data = {}; }
         }
@@ -5082,9 +5090,10 @@
       } catch (e) {
         console.error('runAnalyze error', e);
         var t = T[getLang()] || T.tr;
-        errEl.textContent = (t.network_error || 'Bağlantı hatası. Lütfen tekrar deneyin.');
+        var errText = (e && e.name === 'AbortError') ? ('İstek zaman aşımına uğradı. Sunucu veya AI yanıt vermekte gecikiyor olabilir; 20–30 saniye sonra tekrar deneyin.') : (t.network_error || 'Bağlantı hatası. Lütfen tekrar deneyin.');
+        errEl.textContent = errText;
         errEl.classList.remove('hidden');
-        toast(t.network_error || 'Bağlantı hatası. Lütfen tekrar deneyin.', 'error');
+        toast(errText, 'error');
         if (typeof window.wizardOnAnalyzeSuccess === 'function') { setWizardStep(2); window.wizardOnAnalyzeSuccess = null; }
       } finally {
         var restoreT = T[getLang()] || T.tr;
