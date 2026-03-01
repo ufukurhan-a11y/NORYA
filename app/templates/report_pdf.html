@@ -3,14 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <title>{{ title or 'Norya Analiz Raporu' }}</title>
-  <!-- dir: RTL for Arabic/Hebrew -->
+  <!--
+    PDF Rapor Şablonu
+    =================
+    YENİLENMESİ GEREKEN (renkler): <style> içindeki :root değişkenleri
+    YENİLENMEMESİ GEREKEN: Aşağıdaki HTML yapısı, class isimleri, Jinja değişkenleri
+  -->
   <style>
+    /* ========== RENKLER (güncellemek için sadece bu bloku düzenle) ========== */
+    :root {
+      /* Marka */
+      --norya-brand: #e07a5f;
+      --norya-brand-border: #e07a5f;
+      /* Metin */
+      --norya-text: #334155;
+      --norya-heading: #0f172a;
+      --norya-muted: #64748b;
+      /* Sayfa altlık */
+      --page-footer-color: #64748b;
+      /* Risk bantları */
+      --risk-normal-bg: #d1fae5;
+      --risk-normal-text: #065f46;
+      --risk-normal-border: #10b981;
+      --risk-attention-bg: #fef3c7;
+      --risk-attention-text: #92400e;
+      --risk-attention-border: #f59e0b;
+      --risk-high-bg: #fee2e2;
+      --risk-high-text: #991b1b;
+      --risk-high-border: #ef4444;
+      /* Tablo */
+      --table-header-bg: #f1f5f9;
+      --table-header-text: #475569;
+      --table-border: #e2e8f0;
+      --table-row-even: #f8fafc;
+      /* Durum etiketleri */
+      --status-normal: #059669;
+      --status-low: #d97706;
+      --status-high: #dc2626;
+      --status-border: #b45309;
+      /* Bölüm / footer */
+      --section-border: #e2e8f0;
+      --footer-text: #64748b;
+      --footer-emr: #475569;
+    }
+    /* ========== Yapı (class isimleri değişmesin) ========== */
     @page {
       size: A4;
       margin: 20mm;
       @bottom-center {
         font-size: 9px;
-        color: #64748b;
+        color: var(--page-footer-color);
         content: "{{ page_footer | default('Bu rapor bilgilendirme amaçlıdır. Tıbbi karar için hekime danışın. — Norya', true) }}";
       }
     }
@@ -19,12 +61,12 @@
       font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
       font-size: 11px;
       line-height: 1.5;
-      color: #334155;
+      color: var(--norya-text);
       margin: 0;
       padding: 0;
     }
     .header {
-      border-bottom: 3px solid #e07a5f;
+      border-bottom: 3px solid var(--norya-brand-border);
       padding-bottom: 12px;
       margin-bottom: 20px;
     }
@@ -33,18 +75,18 @@
     .brand {
       font-size: 22px;
       font-weight: 700;
-      color: #e07a5f;
+      color: var(--norya-brand);
       letter-spacing: -0.02em;
     }
     .brand-sub {
       font-size: 10px;
-      color: #64748b;
+      color: var(--norya-muted);
       margin-top: 2px;
     }
     .report-meta {
       margin-top: 8px;
       font-size: 10px;
-      color: #64748b;
+      color: var(--norya-muted);
     }
     .risk-banner {
       padding: 10px 14px;
@@ -53,16 +95,28 @@
       font-size: 11px;
       font-weight: 600;
     }
-    .risk-normal { background: #d1fae5; color: #065f46; border-left: 4px solid #10b981; }
-    .risk-attention { background: #fef3c7; color: #92400e; border-left: 4px solid #f59e0b; }
-    .risk-high { background: #fee2e2; color: #991b1b; border-left: 4px solid #ef4444; }
+    .risk-normal {
+      background: var(--risk-normal-bg);
+      color: var(--risk-normal-text);
+      border-left: 4px solid var(--risk-normal-border);
+    }
+    .risk-attention {
+      background: var(--risk-attention-bg);
+      color: var(--risk-attention-text);
+      border-left: 4px solid var(--risk-attention-border);
+    }
+    .risk-high {
+      background: var(--risk-high-bg);
+      color: var(--risk-high-text);
+      border-left: 4px solid var(--risk-high-border);
+    }
     .section-title {
       font-size: 12px;
       font-weight: 700;
-      color: #0f172a;
+      color: var(--norya-heading);
       margin: 16px 0 8px 0;
       padding-bottom: 4px;
-      border-bottom: 1px solid #e2e8f0;
+      border-bottom: 1px solid var(--section-border);
     }
     .section-body {
       margin-bottom: 14px;
@@ -77,16 +131,16 @@
     table.biomarkers th {
       text-align: left;
       padding: 8px 10px;
-      background: #f1f5f9;
-      color: #475569;
+      background: var(--table-header-bg);
+      color: var(--table-header-text);
       font-weight: 600;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--table-border);
     }
     table.biomarkers td {
       padding: 8px 10px;
-      border: 1px solid #e2e8f0;
+      border: 1px solid var(--table-border);
     }
-    table.biomarkers tr:nth-child(even) { background: #f8fafc; }
+    table.biomarkers tr:nth-child(even) { background: var(--table-row-even); }
     .range-chart {
       max-width: 100%;
       height: auto;
@@ -95,17 +149,18 @@
       page-break-inside: avoid;
     }
     td.chart-cell { padding: 4px 10px 14px 10px; vertical-align: top; overflow: hidden; }
-    .status-normal { color: #059669; font-weight: 600; }
-    .status-low { color: #d97706; font-weight: 600; }
-    .status-high { color: #dc2626; font-weight: 600; }
-    .status-border { color: #b45309; font-weight: 600; }
+    .status-normal { color: var(--status-normal); font-weight: 600; }
+    .status-low { color: var(--status-low); font-weight: 600; }
+    .status-high { color: var(--status-high); font-weight: 600; }
+    .status-border { color: var(--status-border); font-weight: 600; }
     .footer-note {
       margin-top: 24px;
       padding-top: 12px;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid var(--section-border);
       font-size: 9px;
-      color: #64748b;
+      color: var(--footer-text);
     }
+    .footer-note.emr-ehr-note { margin-top: 0.5em; font-size: 0.85em; color: var(--footer-emr); }
   </style>
 </head>
 <body>
@@ -186,7 +241,7 @@
   <div class="footer-note">
     {{ footer_note | default('Bu rapor Norya yapay zeka yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.', true) }}
   </div>
-  <div class="footer-note emr-ehr-note" style="margin-top:0.5em; font-size:0.85em; color:#475569;">
+  <div class="footer-note emr-ehr-note">
     {{ emr_ehr_note | default('EMR/EHR compatible — This report can be uploaded to hospital or clinician information systems.', true) }}
   </div>
 </body>
