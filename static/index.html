@@ -1706,7 +1706,8 @@
     var lastAnalysisId = null;
     var lastShareToken = null;
 
-    /** Rapor ID: önce URL ?rid= (veya hash içi ?rid=), yoksa #analyze-result data-rid, yoksa lastAnalysisId. İndir butonu bu değeri kullanır. */
+    var LAST_RID_KEY = 'norya_last_rid';
+    /** Rapor ID: URL/hash ?rid= → #analyze-result data-rid → lastAnalysisId → sessionStorage. İndir butonu bu değeri kullanır. */
     function getReportId() {
       var qs = window.location.search || '';
       if (window.location.hash && window.location.hash.indexOf('?') !== -1) {
@@ -1716,7 +1717,10 @@
       var rid = p ? p.get('rid') : null;
       if (rid) return rid;
       var el = document.getElementById('analyze-result');
-      return (el && el.dataset && el.dataset.rid) ? el.dataset.rid : (lastAnalysisId ? String(lastAnalysisId) : null);
+      if (el && el.dataset && el.dataset.rid) return el.dataset.rid;
+      if (lastAnalysisId) return String(lastAnalysisId);
+      try { rid = sessionStorage.getItem(LAST_RID_KEY); } catch (_) {}
+      return rid || null;
     }
     var deferredInstallPrompt = null;
     var A2HS_DISMISS_KEY = 'norya_a2hs_dismissed';
@@ -1961,6 +1965,7 @@
               var resultDiv = document.getElementById('analyze-result');
               if (resultDiv) resultDiv.dataset.rid = rid;
               lastAnalysisId = list[0].id;
+              try { sessionStorage.setItem(LAST_RID_KEY, rid); } catch (_) {}
               if (window.history && window.history.replaceState) {
                 var qs = new URLSearchParams(window.location.search);
                 qs.set('rid', rid);
@@ -4249,6 +4254,7 @@
               if (data && data.result_text) {
                 renderReport(data.result_text);
                 lastAnalysisId = data.id || ridFromUrl;
+                try { sessionStorage.setItem(LAST_RID_KEY, String(ridFromUrl)); } catch (_) {}
                 var resultDiv = document.getElementById('analyze-result');
                 if (resultDiv) { resultDiv.classList.remove('hidden'); resultDiv.dataset.rid = String(ridFromUrl); }
                 if (typeof setWizardStep === 'function') setWizardStep(4);
@@ -5083,6 +5089,7 @@
         lastShareToken = null;
         if (lastAnalysisId) {
           resultDiv.dataset.rid = String(lastAnalysisId);
+          try { sessionStorage.setItem(LAST_RID_KEY, String(lastAnalysisId)); } catch (_) {}
           var reportPath = '/report?rid=' + encodeURIComponent(lastAnalysisId);
           if (window.history && window.history.replaceState) {
             window.history.replaceState(null, '', reportPath);
