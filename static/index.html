@@ -115,23 +115,36 @@
       body { min-height: 100dvh; }
     }
     nav { padding-left: max(0.75rem, env(safe-area-inset-left)); padding-right: max(0.75rem, env(safe-area-inset-right)); }
-    /* Mobil nav: logo her zaman görünsün, sağ butonlar kaymasın; mavi/seçenekler hizası sabit */
-    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 4rem; width: 100%; overflow: hidden; }
-    .nav-logo-link { flex-shrink: 0; display: flex; align-items: center; min-width: 8rem; max-width: 13rem; }
-    @media (min-width: 640px) { .nav-logo-link { max-width: none; } }
-    .nav-logo-img { display: block; height: 3.75rem; width: auto; max-width: 100%; min-height: 3rem; object-fit: contain; object-position: left center; flex-shrink: 0; vertical-align: middle; }
-    @media (min-width: 640px) { .nav-logo-img { height: 7rem; min-height: 5rem; } }
-    .nav-actions { display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.25rem; align-self: center; }
+    /* Mobil nav: logo + menü + giriş hep görünsün; taşarsa yatay kaydırma */
+    .nav-inner {
+      display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
+      min-height: 4rem; width: 100%; min-width: 0;
+      overflow-x: auto; overflow-y: hidden; -webkit-overflow-scrolling: touch;
+    }
+    .nav-inner::-webkit-scrollbar { height: 4px; }
+    .nav-logo-link { flex-shrink: 0; display: flex; align-items: center; min-width: 6rem; max-width: 10rem; }
+    @media (min-width: 640px) { .nav-logo-link { max-width: none; min-width: 8rem; } }
+    .nav-logo-img {
+      display: block !important; visibility: visible !important;
+      height: 3.5rem !important; width: auto; max-width: 100%; min-height: 2.5rem !important;
+      object-fit: contain; object-position: left center; flex-shrink: 0; vertical-align: middle;
+    }
+    @media (min-width: 640px) { .nav-logo-img { height: 6rem !important; min-height: 4rem !important; } }
+    .nav-actions {
+      display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.25rem;
+      align-self: center; min-width: 0;
+    }
     @media (min-width: 640px) { .nav-actions { gap: 1rem; } }
     .nav-actions .relative { flex-shrink: 0; display: flex; align-items: center; }
     .nav-actions button { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 1.25; }
-    .nav-actions #nav-auth { align-items: center; }
+    #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; }
+    #nav-auth.hidden { display: none !important; }
     .nav-actions #nav-auth button { min-height: 2.5rem; }
     .nav-actions #lang-wrap button,
     .nav-actions #nav-menu-wrap > button { min-height: 2.5rem; padding-top: 0.375rem; padding-bottom: 0.375rem; }
     @media (max-width: 380px) {
-      .nav-logo-link { min-width: 6rem; max-width: 9rem; }
-      .nav-logo-img { height: 2.75rem; min-height: 2.25rem; }
+      .nav-logo-link { min-width: 5rem; max-width: 8rem; }
+      .nav-logo-img { height: 2.5rem !important; min-height: 2rem !important; }
     }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
     @media (pointer: coarse) {
@@ -2455,7 +2468,7 @@
         risk_legend_green: "Normal", risk_legend_yellow: "Sınır", risk_legend_red: "Riskli",
         doctor_header: "Norya Kan Tahlili Raporu — Doktoruma iletilmek üzere hazırlanmıştır.",
         doctor_date_label: "Tarih", doctor_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar için mutlaka hekim değerlendirmesi gerekir.",
-        toast_report_pdf: "Rapor PDF olarak indirildi.", toast_doctor_downloaded: "Doktoruma götür raporu indirildi.", toast_link_copied: "Paylaşım linki kopyalandı.",
+        toast_report_pdf: "Rapor PDF olarak indirildi.", toast_doctor_downloaded: "Doktoruma götür raporu indirildi.", toast_link_copied: "Paylaşım linki kopyalandı.", toast_register_verify_sent: "E-postanıza doğrulama linki gönderildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin.",
         toast_analyze_first: "Önce analiz yapın.", toast_pdf_fallback: "PDF oluşturulamadı; metin dosyası indirildi.", toast_pdf_error: "PDF oluşturulamadı. Lütfen tekrar deneyin.",
         pricing_title: "Fiyatlandırma", pricing_eur: "Fiyatlar konumunuza göre yerel para biriminde gösterilir.", pricing_note_currency: "Fiyatlar {cur} ({sym}) cinsinde gösterilir.",
         price_single_title: "Tek Analiz", price_single_per: "tek seferlik", price_single_1: "✓ 1 analiz", price_single_2: "✓ Metin, PDF veya görsel", price_single_3: "✓ Detaylı rapor", price_btn_single: " — Tek Analiz",
@@ -2627,7 +2640,7 @@
         risk_legend_green: "Normal", risk_legend_yellow: "Border", risk_legend_red: "At risk",
         doctor_header: "Norya Blood Test Report — Prepared for my doctor.",
         doctor_date_label: "Date", doctor_disclaimer: "This report is for educational information only. Medical decisions require a doctor's evaluation.",
-        toast_report_pdf: "Report downloaded as PDF.", toast_doctor_downloaded: "Report for doctor downloaded.", toast_link_copied: "Share link copied.",
+        toast_report_pdf: "Report downloaded as PDF.", toast_doctor_downloaded: "Report for doctor downloaded.", toast_link_copied: "Share link copied.", toast_register_verify_sent: "A verification link was sent to your email. Check your inbox (and spam folder).",
         toast_analyze_first: "Please run an analysis first.", toast_pdf_fallback: "PDF could not be generated; text file downloaded.", toast_pdf_error: "PDF could not be generated. Please try again.",
         pricing_title: "Pricing", pricing_eur: "Prices are shown in your local currency.", pricing_note_currency: "Prices shown in {cur} ({sym}).",
         price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Text, PDF or image", price_single_3: "✓ Detailed report", price_btn_single: " — Single analysis",
@@ -4507,6 +4520,8 @@
         try { meData = await meRes.json(); } catch (_) {}
         setAuth(loginData.access_token, meRes.ok ? { email: meData.email, full_name: meData.full_name, phone: meData.phone, country: meData.country } : { email: email, full_name: fullName, phone: phone, country: country });
         closeRegister();
+        var t = (typeof T !== 'undefined' && T[getLang()]) ? T[getLang()] : {};
+        toast(t.toast_register_verify_sent || 'E-postanıza doğrulama linki gönderildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin.', 'success');
       } else {
         errEl.textContent = 'Kayıt tamamlandı. Giriş yapın.';
         errEl.classList.remove('hidden');
