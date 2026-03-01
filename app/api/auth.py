@@ -1,3 +1,4 @@
+import logging
 import secrets
 from datetime import datetime, timedelta
 
@@ -30,6 +31,7 @@ from app.schemas import (
 )
 
 router = APIRouter(prefix="/auth", tags=["auth"])
+log = logging.getLogger(__name__)
 _AUTH_RATE_LIMIT = f"{settings.rate_limit_per_minute}/minute"
 _REGISTER_LIMIT = f"{getattr(settings, 'rate_limit_register_per_minute', 3)}/minute;100/hour"
 
@@ -117,7 +119,10 @@ async def register(
             )
         )
         db.commit()
-        _send_verify_email(email, token_str, country or (get_country_from_ip(ip) if ip else None))
+        try:
+            _send_verify_email(email, token_str, country or (get_country_from_ip(ip) if ip else None))
+        except Exception as e:
+            log.warning("Verify email send failed (user created): %s", e)
         _audit(db, "register", user.id, ip)
         country = get_country_from_ip(ip)
         if country and not getattr(user, "country", None):
