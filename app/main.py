@@ -58,7 +58,7 @@ from app.models import (  # noqa: F401
     User,
 )
 from app.services.coupon import apply_coupon_use, validate_coupon
-from app.services.report_pdf import build_report_pdf
+from app.services.report_pdf import build_doctor_pdf, build_report_pdf
 from app.services.storage import upload_report_pdf
 from app.schemas.analyze import (
     AnalysisDetail,
@@ -380,6 +380,13 @@ if STATIC_DIR.is_dir():
                 media_type="application/javascript; charset=utf-8",
             )
     app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
+
+
+@app.get("/ping")
+def ping():
+    """Hafif keep-alive: dış ping servisleri (UptimeRobot vb.) bu URL'yi periyodik çağırarak
+    Render free tier servisin uyumasını önler. DB/OpenAI yok, sadece 200 döner."""
+    return {"status": "ok"}
 
 
 @app.get("/health")
@@ -1424,6 +1431,44 @@ def download_analysis_pdf(
     minio_url = upload_report_pdf(analysis_id, pdf_bytes, filename)
     if minio_url:
         return RedirectResponse(url=minio_url, status_code=302)
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": f'{disp}; filename="{filename}"'},
+    )
+
+
+@app.get("/analyze/history/{analysis_id}/pdf/doctor")
+def download_doctor_pdf(
+    analysis_id: int,
+    lang: str = Query("tr", description="Rapor dili: tr, en, de, fr, es, it, he, ar, hi, el, cs, sr"),
+    disposition: str = Query("inline", description="inline = tarayıcıda aç, attachment = indir"),
+    user_id: int = Depends(_get_pdf_requester_id),
+    db: Session = Depends(get_db),
+):
+    """Doktoruma götür PDF: aynı analiz içeriği, hekime özel başlık ve logolu sayfa."""
+    rec = db.get(AnalysisRecord, analysis_id)
+    if not rec or rec.user_id != user_id:
+        raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
+    report_date = None
+    if getattr(rec, "created_at", None):
+        dt = rec.created_at
+        if hasattr(dt, "strftime"):
+            report_date = dt.strftime("%d.%m.%Y %H:%M")
+        else:
+            report_date = str(dt)
+    report_lang = (lang or "tr").strip().lower()[:5]
+    try:
+        pdf_bytes = build_doctor_pdf(
+            result_text=rec.result_text or "",
+            report_date=report_date,
+            lang=report_lang,
+        )
+    except Exception as e:
+        log.exception("Doctor PDF build failed for analysis_id=%s: %s", analysis_id, e)
+        raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
+    filename = f"norya-doctor-{analysis_id}.pdf"
+    disp = "attachment" if (disposition or "").strip().lower() == "attachment" else "inline"
     return Response(
         content=pdf_bytes,
         media_type="application/pdf",

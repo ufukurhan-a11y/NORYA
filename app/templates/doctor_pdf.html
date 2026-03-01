@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="{{ lang or 'tr' }}">
+<head>
+  <meta charset="UTF-8" />
+  <title>{{ doctor_title | default('Norya — Doktoruma Götür', true) }}</title>
+  <style>
+    :root {
+      --norya-brand: #e07a5f;
+      --norya-brand-border: #e07a5f;
+      --norya-text: #334155;
+      --norya-heading: #0f172a;
+      --norya-muted: #64748b;
+      --page-footer-color: #64748b;
+      --risk-normal-bg: #d1fae5;
+      --risk-normal-text: #065f46;
+      --risk-normal-border: #10b981;
+      --risk-attention-bg: #fef3c7;
+      --risk-attention-text: #92400e;
+      --risk-attention-border: #f59e0b;
+      --risk-high-bg: #fee2e2;
+      --risk-high-text: #991b1b;
+      --risk-high-border: #ef4444;
+      --table-header-bg: #f1f5f9;
+      --table-header-text: #475569;
+      --table-border: #e2e8f0;
+      --table-row-even: #f8fafc;
+      --status-normal: #059669;
+      --status-low: #d97706;
+      --status-high: #dc2626;
+      --status-border: #b45309;
+      --section-border: #e2e8f0;
+      --footer-text: #64748b;
+      --footer-emr: #475569;
+    }
+    @page { size: A4; margin: 20mm;
+      @bottom-center { font-size: 9px; color: var(--page-footer-color);
+        content: "{{ doctor_page_footer | default('Hekime iletilmek üzere hazırlanmıştır. Tıbbi karar için hekim değerlendirmesi gerekir. — Norya', true) }}";
+      }
+    }
+    * { box-sizing: border-box; }
+    body { font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; font-size: 11px; line-height: 1.65; color: var(--norya-text); margin: 0; padding: 0; }
+    .header { border-bottom: 3px solid var(--norya-brand-border); padding-bottom: 12px; margin-bottom: 16px; }
+    .brand-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+    .brand-logo { width: 100px; height: auto; max-height: 100px; object-fit: contain; flex-shrink: 0; background: #fff; }
+    .brand { font-size: 22px; font-weight: 700; color: var(--norya-brand); letter-spacing: -0.02em; }
+    .brand-sub { font-size: 10px; color: var(--norya-muted); margin-top: 2px; }
+    .report-meta { margin-top: 8px; font-size: 10px; color: var(--norya-muted); }
+    .doctor-banner {
+      padding: 12px 16px; margin-bottom: 20px; border-radius: 6px;
+      background: #eff6ff; border-left: 4px solid #3b82f6; color: #1e40af;
+      font-size: 11px; font-weight: 600; line-height: 1.5;
+    }
+    .risk-banner { padding: 10px 14px; border-radius: 6px; margin-bottom: 18px; font-size: 11px; font-weight: 600; }
+    .risk-normal { background: var(--risk-normal-bg); color: var(--risk-normal-text); border-left: 4px solid var(--risk-normal-border); }
+    .risk-attention { background: var(--risk-attention-bg); color: var(--risk-attention-text); border-left: 4px solid var(--risk-attention-border); }
+    .risk-high { background: var(--risk-high-bg); color: var(--risk-high-text); border-left: 4px solid var(--risk-high-border); }
+    .section-title { font-size: 12px; font-weight: 700; color: var(--norya-heading); margin: 20px 0 10px 0; padding-bottom: 6px; border-bottom: 1px solid var(--section-border); }
+    .chart-legend { font-size: 10px; color: var(--norya-muted); margin: 0 0 10px 0; }
+    .section-body { margin-bottom: 18px; white-space: pre-wrap; }
+    .intro-block { margin-bottom: 22px; padding: 16px 18px; background: var(--table-row-even); border-radius: 6px; border-left: 4px solid var(--norya-brand); page-break-inside: avoid; }
+    .intro-block p { margin: 0 0 10px 0; }
+    .intro-block p:last-child { margin-bottom: 0; }
+    .how-to-read-block { margin-bottom: 22px; padding: 12px 14px; background: #f8fafc; border-radius: 6px; font-size: 10px; color: var(--norya-muted); line-height: 1.55; }
+    .overall-chart-wrap { margin: 12px 0 20px 0; page-break-inside: avoid; }
+    .overall-chart-img { max-width: 100%; height: auto; display: block; }
+    table.biomarkers { width: 100%; border-collapse: collapse; margin: 12px 0 22px 0; font-size: 10px; }
+    table.biomarkers th { text-align: left; padding: 8px 10px; background: var(--table-header-bg); color: var(--table-header-text); font-weight: 600; border: 1px solid var(--table-border); }
+    table.biomarkers td { padding: 8px 10px; border: 1px solid var(--table-border); }
+    table.biomarkers tr:nth-child(even) { background: var(--table-row-even); }
+    .range-chart { max-width: 100%; height: auto; margin-top: 6px; display: block; page-break-inside: avoid; }
+    td.chart-cell { padding: 4px 10px 14px 10px; vertical-align: top; overflow: hidden; }
+    .status-normal { color: var(--status-normal); font-weight: 600; }
+    .status-low { color: var(--status-low); font-weight: 600; }
+    .status-high { color: var(--status-high); font-weight: 600; }
+    .status-border { color: var(--status-border); font-weight: 600; }
+    .footer-note { margin-top: 28px; padding: 16px 14px; background: #f8fafc; border-radius: 6px; border: 1px solid var(--section-border); font-size: 9px; line-height: 1.5; color: var(--footer-text); }
+    .footer-note.emr-ehr-note { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--table-border); font-size: 0.9em; color: var(--footer-emr); }
+  </style>
+</head>
+<body>
+  <div class="header">
+    <div class="brand-wrap">
+      <img src="static/logo.png" alt="Norya" class="brand-logo" />
+      <span class="brand">Norya</span>
+    </div>
+    <div class="brand-sub">{{ doctor_subtitle | default('Kan Tahlili Özeti — Hekime iletilmek üzere hazırlanmıştır', true) }}</div>
+    <div class="report-meta">{{ report_date_label | default('Rapor Tarihi', true) }}: {{ report_date }}</div>
+  </div>
+
+  <div class="doctor-banner">{{ doctor_banner_text | default('Bu rapor, hastanın hekimi ile paylaşması amacıyla Norya tarafından oluşturulmuştur. Eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar ve tedavi için hekim değerlendirmesi gerekir.', true) }}</div>
+
+  {% if risk_level != 'none' %}
+  <div class="section-title" style="margin-top:0;">{{ risk_indicators_heading | default('Risk İşaretleri', true) }}</div>
+  <div class="risk-banner risk-{{ risk_level }}">{{ risk_message or risk_default_attention }}</div>
+  {% else %}
+  <div class="risk-banner risk-normal">{{ risk_message or risk_default_normal }}</div>
+  {% endif %}
+
+  <div class="section-title" style="margin-top:0;">{{ intro_heading | default('Bu rapor hakkında', true) }}</div>
+  <div class="intro-block">
+    <p>{{ intro_p1 | default('Bu rapor, kan tahlili sonuçlarının yapay zeka destekli ön değerlendirmesidir. Özet, parametre değerleri ve öneriler aşağıdadır. Teşhis yerine geçmez.', true) }}</p>
+    <p>{{ intro_p2 | default('Tıbbi kararlar için hekim değerlendirmesi gereklidir.', true) }}</p>
+  </div>
+
+  {% if overall_chart_svg_base64 %}
+  <div class="section-title">{{ overall_status_heading | default('Genel durum', true) }}</div>
+  <p class="chart-legend">{{ overall_chart_legend | default('Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor 0–100)', true) }}</p>
+  <div class="overall-chart-wrap">
+    <img class="overall-chart-img" src="data:image/svg+xml;base64,{{ overall_chart_svg_base64 }}" alt="{{ overall_status_heading | default('Genel durum', true) }} {{ overall_score }}/100" />
+  </div>
+  {% endif %}
+
+  {% if summary %}
+  <div class="section-title">{{ summary_heading | default('Özet', true) }}</div>
+  <div class="section-body">{{ summary }}</div>
+  {% endif %}
+
+  {% if biomarkers %}
+  <div class="section-title">{{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}</div>
+  <div class="how-to-read-block">{{ how_to_read_body | default('Yeşil = Normal, turuncu = Sınırda, kırmızı = Referans dışı.', true) }}</div>
+  <div class="section-title">{{ biomarkers_heading | default('Değerler ve referans aralıkları', true) }}</div>
+  <p class="chart-legend">Yeşil = Normal &nbsp;|&nbsp; Turuncu = Sınır &nbsp;|&nbsp; Kırmızı = Riskli</p>
+  <table class="biomarkers">
+    <thead>
+      <tr>
+        <th>{{ param | default('Parametre', true) }}</th>
+        <th>{{ result | default('Sonuç', true) }}</th>
+        <th>{{ unit | default('Birim', true) }}</th>
+        <th>{{ ref_range | default('Referans Aralığı', true) }}</th>
+        <th>{{ status | default('Durum', true) }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in biomarkers %}
+      <tr>
+        <td>{{ row.name }}</td>
+        <td>{{ row.value }}</td>
+        <td>{{ row.unit or '—' }}</td>
+        <td>{{ row.reference or '—' }}</td>
+        <td class="status-{{ row.status }}">{{ row.status_label }}</td>
+      </tr>
+      {% if row.chart_svg_base64 %}
+      <tr>
+        <td colspan="5" class="chart-cell">
+          <img class="range-chart" src="data:image/svg+xml;base64,{{ row.chart_svg_base64 }}" alt="{{ row.name }}" />
+        </td>
+      </tr>
+      {% endif %}
+      {% endfor %}
+    </tbody>
+  </table>
+  {% endif %}
+
+  {% if possible_causes %}
+  <div class="section-title">{{ possible_causes_heading | default('Olası Nedenler', true) }}</div>
+  <div class="section-body">{{ possible_causes }}</div>
+  {% endif %}
+
+  {% if recommendations %}
+  <div class="section-title">{{ recommendations_heading | default('Öneriler', true) }}</div>
+  <div class="section-body">{{ recommendations }}</div>
+  {% endif %}
+
+  {% if raw_sections %}
+  {% for section in raw_sections %}
+  <div class="section-title">{{ section.title }}</div>
+  <div class="section-body">{{ section.body }}</div>
+  {% endfor %}
+  {% endif %}
+
+  <div class="footer-note">
+    {{ doctor_footer_note | default('Bu rapor Norya yapay zeka yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için hekim değerlendirmesi gerekir.', true) }}
+  </div>
+  <div class="footer-note emr-ehr-note">
+    {{ emr_ehr_note | default('EMR/EHR uyumlu — Hekim veya hastane bilgi sistemine yüklenebilir.', true) }}
+  </div>
+</body>
+</html>

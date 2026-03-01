@@ -114,7 +114,21 @@
     @supports (min-height: 100dvh) {
       body { min-height: 100dvh; }
     }
-    nav { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+    nav { padding-left: max(0.75rem, env(safe-area-inset-left)); padding-right: max(0.75rem, env(safe-area-inset-right)); }
+    /* Mobil nav: logo her zaman görünsün, sağ butonlar kaymasın */
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; min-height: 4rem; width: 100%; overflow: hidden; }
+    .nav-logo-link { flex-shrink: 0; display: flex; align-items: center; min-width: 7rem; max-width: 11.25rem; }
+    @media (min-width: 640px) { .nav-logo-link { max-width: none; } }
+    .nav-logo-img { display: block; height: 3rem; width: auto; max-width: 100%; min-height: 2.5rem; object-fit: contain; object-position: left center; flex-shrink: 0; }
+    @media (min-width: 640px) { .nav-logo-img { height: 5.75rem; min-height: 4rem; } }
+    .nav-actions { display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.25rem; }
+    @media (min-width: 640px) { .nav-actions { gap: 1rem; } }
+    .nav-actions .relative { flex-shrink: 0; }
+    .nav-actions button { flex-shrink: 0; }
+    @media (max-width: 380px) {
+      .nav-logo-link { min-width: 5.5rem; max-width: 8rem; }
+      .nav-logo-img { height: 2.25rem; min-height: 2rem; }
+    }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
     @media (pointer: coarse) {
       button:not([class*="p-"]):not([class*="px-"]):not([class*="py-"]), .touch-target-min { min-height: 44px; min-width: 44px; }
@@ -129,13 +143,13 @@
   </style>
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
-  <!-- Nav -->
+  <!-- Nav: mobilde logo sabit görünsün, dil/menü butonları kaymasın (safe-area + flex) -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-accent-900 border-b border-slate-200 dark:border-accent-700 shadow-sm pt-[env(safe-area-inset-top)]">
-    <div class="max-w-6xl mx-auto px-3 sm:px-4 flex items-center justify-between py-2 h-16 sm:h-24 min-h-0 gap-2">
-      <a href="#" class="flex items-center min-h-0 min-w-0 shrink rounded-lg overflow-hidden flex-1 sm:flex-initial max-w-[180px] sm:max-w-none">
-        <img src="/static/logo.png" alt="Norya AI" class="h-12 sm:h-[92px] w-auto max-w-full sm:max-w-[500px] object-contain object-left bg-white" />
+    <div class="max-w-6xl mx-auto py-2 px-2 sm:px-4 nav-inner">
+      <a href="#" class="nav-logo-link rounded-lg overflow-hidden">
+        <img src="/static/logo.png" alt="Norya AI" class="nav-logo-img bg-white dark:bg-accent-800" width="160" height="48" />
       </a>
-      <div class="flex items-center gap-2 sm:gap-4">
+      <div class="nav-actions">
         <button type="button" onclick="toggleDark()" class="p-2 rounded-lg text-slate-700 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-700" aria-label="Tema değiştir (açık/koyu)" id="theme-btn">
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
@@ -175,9 +189,9 @@
             <a href="#sss" id="nav-menu-faq" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" data-i18n="nav_faq">SSS</a>
           </div>
         </div>
-        <span id="nav-auth">
-          <button onclick="openLogin()" class="text-slate-700 hover:text-primary-600 font-medium" data-i18n="nav_login">Giriş</button>
-          <button onclick="openRegister()" class="ml-3 px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium" data-i18n="nav_register">Ücretsiz Başla</button>
+        <span id="nav-auth" class="inline-flex items-center flex-shrink-0 gap-1 sm:gap-3">
+          <button onclick="openLogin()" class="text-slate-700 hover:text-primary-600 font-medium text-sm sm:text-base py-2 px-2 sm:px-3 rounded-lg whitespace-nowrap" data-i18n="nav_login">Giriş</button>
+          <button onclick="openRegister()" class="px-3 sm:px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium text-sm sm:text-base whitespace-nowrap" data-i18n="nav_register">Ücretsiz Başla</button>
         </span>
         <span id="nav-user" class="hidden items-center gap-2 flex-wrap">
           <span class="text-sm text-slate-700 flex flex-col items-end sm:items-start" id="user-info">
@@ -2037,22 +2051,79 @@
         if (typeof console !== 'undefined' && console.error) console.error('[PDF] Error (token/fetch/open):', e);
       }
     }
-    function downloadForDoctor() {
-      var text = document.getElementById('analyze-result-raw');
-      if (!text || !text.textContent) return;
-      var lang = getLang();
-      var t = T[lang] || T.tr;
-      var dateLabel = t.doctor_date_label || 'Tarih';
-      var doctorHeaderText = t.doctor_header || 'Norya Kan Tahlili Raporu — Doktoruma iletilmek üzere hazırlanmıştır.';
-      var dateStr = new Date().toLocaleDateString(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
-      var header = 'NORYA\n' + '══════════════════════════════════════════════════════════\n' + doctorHeaderText + '\n' + dateLabel + ': ' + dateStr + '\n\n' + (t.doctor_disclaimer || 'Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar için mutlaka hekim değerlendirmesi gerekir.') + '\n\n────────────────────────────────────────────────────────────\n\n';
-      var blob = new Blob([header + text.textContent], { type: 'text/plain;charset=utf-8' });
-      var a = document.createElement('a');
-      a.href = URL.createObjectURL(blob);
-      a.download = 'norya-doctor-' + (new Date().toISOString().slice(0,10)) + '.txt';
-      a.click();
-      URL.revokeObjectURL(a.href);
-      toast(t.toast_doctor_downloaded || 'Doktoruma götür raporu indirildi.', 'success');
+    async function downloadForDoctor() {
+      var rid = getReportId();
+      var t = T[getLang()] || T.tr;
+      var token = getToken();
+      if (!token) {
+        toast(t.toast_analyze_first || 'Rapor indirmek için giriş yapın.', 'error');
+        return;
+      }
+      var historyFetchFailed = false;
+      if (!rid) {
+        try {
+          var r = await fetch(API_BASE + '/analyze/history?limit=1', { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+          if (r.ok) {
+            var list = await r.json();
+            if (list && list.length > 0 && list[0].id) {
+              rid = String(list[0].id);
+              var resultDiv = document.getElementById('analyze-result');
+              if (resultDiv) resultDiv.dataset.rid = rid;
+              lastAnalysisId = list[0].id;
+              try { sessionStorage.setItem(LAST_RID_KEY, rid); } catch (_) {}
+              if (window.history && window.history.replaceState) {
+                var qs = new URLSearchParams(window.location.search);
+                qs.set('rid', rid);
+                window.history.replaceState(null, '', (window.location.pathname || '/') + '?' + qs.toString());
+              }
+            }
+          } else { historyFetchFailed = true; }
+        } catch (_) { historyFetchFailed = true; }
+      }
+      if (!rid) {
+        if (historyFetchFailed) {
+          toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
+        } else {
+          toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error');
+        }
+        return;
+      }
+      try {
+        var tokenRes = await fetch(API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf-token', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+        if (!tokenRes.ok) {
+          var errBody = await tokenRes.text();
+          var errMsg = 'Rapor indirilemedi (HTTP ' + tokenRes.status + ').';
+          try { var j = JSON.parse(errBody); if (j.detail) errMsg = typeof j.detail === 'string' ? j.detail : (j.detail.msg || errMsg); } catch (_) {}
+          toast(errMsg, 'error');
+          return;
+        }
+        var data = await tokenRes.json();
+        var accessToken = data && data.access_token;
+        if (!accessToken) {
+          toast('Rapor linki alınamadı.', 'error');
+          return;
+        }
+        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf/doctor?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'tr');
+        var pdfRes = await fetch(pdfUrl, { credentials: 'include' });
+        if (!pdfRes.ok) {
+          toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
+          return;
+        }
+        var pdfBlob = await pdfRes.blob();
+        var blobUrl = URL.createObjectURL(pdfBlob);
+        var a = document.createElement('a');
+        a.href = blobUrl;
+        a.download = 'norya-doctor-' + rid + '.pdf';
+        a.style.display = 'none';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(blobUrl);
+        toast(t.toast_doctor_downloaded || 'Doktoruma götür raporu indirildi.', 'success');
+      } catch (e) {
+        toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
+        if (typeof console !== 'undefined' && console.error) console.error('[Doctor PDF] Error:', e);
+      }
     }
     var REPORT_SECTIONS = [
       { key: 'Risk', keyRegex: /risk|dikkat|attention|indicateur|hinweis|señales|rischio|indicador|points\s*d'attention|atención|נקודות|انتباه|ध्यान|σημεία|rizika|znak/i, icon: '⚠️', titleKey: 'pdf_sec_risk', bg: 'bg-amber-50 dark:bg-amber-900/20', border: 'border-amber-200 dark:border-amber-800' },

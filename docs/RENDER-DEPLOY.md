@@ -127,13 +127,46 @@ Bu mesaj **domain’den değil**, aşağıdakilerden biri yüzünden çıkar:
 
 **Cold start’ı azaltmak:**
 
-- **Uptime Robot** (veya benzeri) ile 5 dk’da bir `https://noryaai.com/health` ping’le; servis uyumaz.
+- **Uptime Robot** (veya benzeri) ile 5 dk’da bir `https://noryaai.com/ping` ping’le; servis uyumaz.
 - Veya Render’da **ücretli plan** (Always On); servis uyumaz.
 
 **OpenAI tarafı:**
 
 - Rate limit alıyorsan `.env`’e ikinci anahtar ekle: `OPENAI_API_KEYS=sk-...,sk-...` (fallback kullanılır).
 - Billing açık ve kota yeterli mi kontrol et.
+
+---
+
+## Sunucuyu uyutmamak (sürekli açık — müşteri beklemesin)
+
+Render **Free** planda servis ~15 dakika hareketsiz kalınca uyur. İlk gelen kullanıcı 30–60 sn bekleyebilir (cold start). Bunu engellemek için **dışarıdan periyodik ping** atarak sunucuyu uyanık tutabilirsin. Böylece müşteri "30 saniye sonra" mesajı görmez; sayfa anında yanıt verir.
+
+### Seçenek 1: UptimeRobot (ücretsiz, önerilen)
+
+1. **https://uptimerobot.com** → Sign Up Free.
+2. Giriş yap → **Add New Monitor**.
+3. **Monitor Type:** HTTP(s).
+4. **Friendly Name:** Norya keep-alive (veya istediğin isim).
+5. **URL:** `https://noryaai.com/ping` (kendi domain'in: `https://noryaai.com` veya `https://www.noryaai.com` + `/ping`).
+6. **Monitoring Interval:** 5 dakika (veya 10 dakika; 15 dk'dan sık olmalı).
+7. **Create Monitor**.
+8. Artık UptimeRobot her 5 (veya 10) dakikada bir `/ping` adresini çağırır; Render servisi uyumaz.
+
+Not: `/ping` endpoint'i sadece `{"status":"ok"}` döner, veritabanı veya API çağrısı yapmaz; çok hafiftir.
+
+### Seçenek 2: cron-job.org (ücretsiz)
+
+1. **https://cron-job.org** → Ücretsiz hesap aç.
+2. **Create cronjob**.
+3. **Address:** `https://noryaai.com/ping`.
+4. **Schedule:** Her 10 dakikada bir (örn. "Every 10 minutes").
+5. Kaydet. Cron-job her 10 dakikada istek atar; servis uyanık kalır.
+
+### Seçenek 3: Render ücretli plan
+
+Render'da **Paid** (ücretli) Web Service seçersen servis **hiç uyumaz** (Always On). Cold start olmaz; ekstra ping kurmana gerek kalmaz. Maliyet: Render fiyat sayfasına göre aylık ücret.
+
+**Özet:** Ücretsiz kalacaksan **UptimeRobot** veya **cron-job.org** ile `https://noryaai.com/ping` adresini **en az 10 dakikada bir** (tercihen 5 dk) çağır. Müşteri tarafında bekleme/saniye mesajı pratikte kalkar.
 
 ---
 
