@@ -74,14 +74,14 @@ _ADMIN_HTML = """<!DOCTYPE html>
 </head>
 <body>
   <div id="login" class="login-box">
-    <h1><img src="/static/norya_wordmark_transparent.png" alt="Norya" class="brand-logo" />Norya Admin</h1>
+    <h1><img src="/static/norya_logo_report.png" alt="Norya" class="brand-logo" />Norya Admin</h1>
     <p>Admin şifresini girin (ADMIN_SECRET)</p>
     <input type="password" id="secret" placeholder="Admin şifresi" />
     <button type="button" onclick="enter()">Giriş</button>
     <p id="login-err" class="err" style="display:none;"></p>
   </div>
   <div id="dashboard" class="dashboard">
-    <h1><img src="/static/norya_wordmark_transparent.png" alt="Norya" class="brand-logo" />Norya Admin Panel</h1>
+    <h1><img src="/static/norya_logo_report.png" alt="Norya" class="brand-logo" />Norya Admin Panel</h1>
     <p style="color:#94a3b8;font-size:0.9rem;margin-top:0.25rem;"><a href="/health" target="_blank" class="health-link">Sistem durumu (health)</a> <span id="health-badge"></span></p>
     <div class="stats" id="stats"></div>
     <section>
