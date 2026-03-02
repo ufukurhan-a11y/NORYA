@@ -1932,12 +1932,13 @@
       <p class="text-center text-amber-600/90 dark:text-amber-400/90 text-xs mt-1 font-medium" data-i18n="disclaimer_informative">Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.</p>
       <p class="text-center text-accent-400 dark:text-accent-500 text-xs mt-2"><a href="https://cursor.com" target="_blank" rel="noopener noreferrer" class="hover:text-primary-500 transition-colors" data-i18n="made_with_cursor">Made with Cursor</a></p>
     </div>
+    <!-- WhatsApp: sayfayla birlikte aşağı yukarı kayar (fixed değil, footer içinde absolute) -->
+    <div class="w-full relative min-h-[5rem]">
+      <a href="__NORYA_WHATSAPP_URL__" __NORYA_WHATSAPP_STYLE__ target="_blank" rel="noopener noreferrer" class="absolute bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
+        <img src="/static/images/whatsapp-icon.svg" alt="" class="w-8 h-8 brightness-0 invert" width="32" height="32" />
+      </a>
+    </div>
   </footer>
-
-  <!-- WhatsApp iletişim: sabit buton, tıklanınca size mesaj açar (numara .env WHATSAPP_CONTACT) -->
-  <a href="__NORYA_WHATSAPP_URL__" __NORYA_WHATSAPP_STYLE__ target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
-    <img src="/static/images/whatsapp-icon.svg" alt="" class="w-8 h-8 brightness-0 invert" width="32" height="32" />
-  </a>
 
   <!-- Login Modal: e-posta + şifre -->
   <div id="modal-login" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
