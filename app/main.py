@@ -1416,11 +1416,16 @@ def download_analysis_pdf(
         else:
             report_date = str(dt)
     report_lang = (lang or "tr").strip().lower()[:5]
+    user = db.get(User, user_id)
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
             report_date=report_date,
             lang=report_lang,
+            report_id=analysis_id,
+            patient_name=user.full_name if user else None,
+            plan_name=user.plan if user else None,
+            source_type=rec.source if getattr(rec, "source", None) else None,
         )
     except Exception as e:
         log.exception("PDF build failed for analysis_id=%s: %s", analysis_id, e)

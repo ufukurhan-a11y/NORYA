@@ -118,7 +118,7 @@
     @supports (min-height: 100dvh) {
       body { min-height: 100dvh; }
     }
-    nav { padding-left: max(0.75rem, env(safe-area-inset-left)); padding-right: max(0.75rem, env(safe-area-inset-right)); }
+    nav { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     /* Nav: kısa bar, logo büyük, butonlar orantılı aralıklı */
     .nav-inner {
       display: flex; align-items: center; justify-content: space-between; gap: 0.5rem;
@@ -129,7 +129,7 @@
     /* Logo: büyük, nizami; arka plan şeffaf */
     .nav-logo-link {
       flex-shrink: 0; display: flex; align-items: center; justify-content: flex-start;
-      min-width: 5rem; max-width: 8rem; margin-left: -1.8cm;
+      min-width: 5rem; max-width: 8rem; margin-left: 0;
       padding: 0; background: transparent;
     }
     .nav .nav-logo-link { background: transparent; }
@@ -146,13 +146,13 @@
       .nav-logo-img { height: 3.25rem !important; min-height: 2.75rem !important; }
     }
     .nav-actions {
-      display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 0.6rem;
+      display: flex; align-items: center; flex-shrink: 0; flex-wrap: nowrap; gap: 1rem;
       align-self: center; min-width: 0;
     }
     @media (min-width: 640px) { .nav-actions { gap: 1.25rem; } }
     .nav-actions .relative { flex-shrink: 0; display: flex; align-items: center; }
     .nav-actions button { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 1.25; }
-    #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.6rem; }
+    #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.75rem; }
     #nav-auth.hidden { display: none !important; }
     @media (max-width: 640px) {
       .nav-actions #theme-btn { padding: 0.4rem; min-width: 2.25rem; min-height: 2.25rem; }
@@ -174,16 +174,19 @@
       #lang-modal { z-index: 9999 !important; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
     }
     @media (max-width: 380px) {
-      .nav-logo-link { min-width: 4rem; max-width: 6rem; margin-left: -1.8cm; }
+      .nav-logo-link { min-width: 4rem; max-width: 6rem; margin-left: 0; }
       .nav-logo-img { height: 1.875rem !important; min-height: 1.5rem !important; }
       .nav-inner { min-height: 3rem; }
-      .nav-actions { gap: 0.4rem; }
+      .nav-actions { gap: 0.75rem; }
       .nav-actions #nav-auth button { padding: 0.35rem 0.5rem; font-size: 0.75rem; }
     }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
     @media (pointer: coarse) {
       button:not([class*="p-"]):not([class*="px-"]):not([class*="py-"]), .touch-target-min { min-height: 44px; min-width: 44px; }
     }
+    /* Dil ve menü dropdown: öğeler arası aralık */
+    .lang-opt { margin: 2px 0; }
+    #nav-menu-dropdown a, #nav-menu-dropdown button { margin: 2px 0; }
     /* Erişilebilirlik: ekran okuyucu için etiket (görselde gizli) */
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     /* Kapalı modallar tıklamayı asla engellemesin (görünmez overlay riski) */
@@ -196,7 +199,7 @@
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
   <!-- Nav: mobilde logo sabit görünsün, dil/menü butonları kaymasın (safe-area + flex) -->
   <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-50 dark:bg-accent-900 border-b border-slate-200 dark:border-accent-700 shadow-sm pt-[env(safe-area-inset-top)]">
-    <div class="max-w-7xl mx-auto py-0.5 sm:py-1 px-2 sm:px-4 nav-inner w-full">
+    <div class="max-w-7xl mx-auto py-0.5 sm:py-1 px-4 sm:px-4 nav-inner w-full">
       <a href="#" class="nav-logo-link rounded overflow-hidden" style="background:transparent">
         <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="nav-logo-img w-auto object-contain" width="200" height="50" loading="eager" />
       </a>
@@ -209,19 +212,19 @@
             <span aria-hidden="true">🌐</span>
             <span id="lang-current">TR</span>
           </button>
-          <div id="lang-modal" class="hidden absolute right-0 top-full mt-1 w-48 py-1 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 z-50 max-h-[70vh] overflow-y-auto">
-            <button type="button" onclick="chooseLang('tr')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl">Türkçe</button>
-            <button type="button" onclick="chooseLang('en')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">English</button>
-            <button type="button" onclick="chooseLang('de')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Deutsch</button>
-            <button type="button" onclick="chooseLang('he')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl">עברית</button>
-            <button type="button" onclick="chooseLang('ar')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl">العربية</button>
-            <button type="button" onclick="chooseLang('hi')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">हिन्दी</button>
-            <button type="button" onclick="chooseLang('it')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Italiano</button>
-            <button type="button" onclick="chooseLang('es')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Español</button>
-            <button type="button" onclick="chooseLang('fr')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Français</button>
-            <button type="button" onclick="chooseLang('el')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Ελληνικά</button>
-            <button type="button" onclick="chooseLang('cs')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Čeština</button>
-            <button type="button" onclick="chooseLang('sr')" class="lang-opt w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl">Srpski</button>
+          <div id="lang-modal" class="hidden absolute right-0 top-full mt-2 w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 z-50 max-h-[70vh] overflow-y-auto">
+            <button type="button" onclick="chooseLang('tr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl">Türkçe</button>
+            <button type="button" onclick="chooseLang('en')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">English</button>
+            <button type="button" onclick="chooseLang('de')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Deutsch</button>
+            <button type="button" onclick="chooseLang('he')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl">עברית</button>
+            <button type="button" onclick="chooseLang('ar')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl">العربية</button>
+            <button type="button" onclick="chooseLang('hi')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">हिन्दी</button>
+            <button type="button" onclick="chooseLang('it')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Italiano</button>
+            <button type="button" onclick="chooseLang('es')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Español</button>
+            <button type="button" onclick="chooseLang('fr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Français</button>
+            <button type="button" onclick="chooseLang('el')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Ελληνικά</button>
+            <button type="button" onclick="chooseLang('cs')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Čeština</button>
+            <button type="button" onclick="chooseLang('sr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl">Srpski</button>
           </div>
         </div>
         <div class="relative" id="nav-menu-wrap">
@@ -229,16 +232,16 @@
             <span id="nav-menu-btn-label" data-i18n="nav_menu">Menü</span>
             <span aria-hidden="true">▾</span>
           </button>
-          <div id="nav-menu-dropdown" class="hidden absolute right-0 top-full mt-1 w-48 py-1 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 z-50">
-            <a href="#hakkimizda" id="nav-menu-about" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl" data-i18n="nav_about">Hakkımızda</a>
-            <a href="#nasil-calisir" id="nav-menu-how" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_how">Nasıl Çalışır</a>
-            <a href="#kimler-icin" id="nav-menu-who" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_who">Kimler İçin</a>
-            <a href="#rehber" id="nav-menu-guide" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_guide">Tahlil Rehberi</a>
-            <a href="#seffaflik" id="nav-menu-transparency" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_transparency">Şeffaflık</a>
-            <a href="#fiyatlandirma" id="nav-menu-pricing" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_pricing">Fiyatlandırma</a>
-            <a href="/legal/iletisim" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_contact">Bize Ulaşın</a>
-            <button type="button" onclick="closeNavMenu(); requestPushAndSubscribe();" class="block w-full text-left px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_notifications">Bildirimleri aç</button>
-            <a href="#sss" id="nav-menu-faq" onclick="closeNavMenu()" class="block px-3 py-2 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" data-i18n="nav_faq">SSS</a>
+          <div id="nav-menu-dropdown" class="hidden absolute right-0 top-full mt-2 w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 z-50">
+            <a href="#hakkimizda" id="nav-menu-about" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl" data-i18n="nav_about">Hakkımızda</a>
+            <a href="#nasil-calisir" id="nav-menu-how" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_how">Nasıl Çalışır</a>
+            <a href="#kimler-icin" id="nav-menu-who" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_who">Kimler İçin</a>
+            <a href="#rehber" id="nav-menu-guide" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_guide">Tahlil Rehberi</a>
+            <a href="#seffaflik" id="nav-menu-transparency" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_transparency">Şeffaflık</a>
+            <a href="#fiyatlandirma" id="nav-menu-pricing" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_pricing">Fiyatlandırma</a>
+            <a href="/legal/iletisim" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_contact">Bize Ulaşın</a>
+            <button type="button" onclick="closeNavMenu(); requestPushAndSubscribe();" class="block w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_notifications">Bildirimleri aç</button>
+            <a href="#sss" id="nav-menu-faq" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" data-i18n="nav_faq">SSS</a>
           </div>
         </div>
         <span id="nav-auth" class="inline-flex items-center flex-shrink-0 gap-1 sm:gap-3">
@@ -261,9 +264,9 @@
   </nav>
 
   <!-- Hero: premium AI health SaaS (turquoise + navy) -->
-  <section class="gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
+  <section class="gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-5 sm:px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
     <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 80%, rgba(13, 148, 136, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(30, 58, 95, 0.3) 0%, transparent 45%);"></div>
-    <div class="max-w-5xl mx-auto w-full px-4 text-center relative z-10">
+    <div class="max-w-5xl mx-auto w-full px-4 sm:px-4 text-center relative z-10">
       <p class="text-white/90 text-xs sm:text-sm font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Laboratuvar sonuçları — anlaşılır rapor</p>
       <h1 class="text-2xl min-[480px]:text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.2] mb-4 sm:mb-5 tracking-tight px-1" data-i18n="hero_title">Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.</h1>
       <p class="text-lg text-navy-100 max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="hero_desc">Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.</p>
@@ -313,6 +316,55 @@
     </p>
     <p class="text-center text-sm sm:text-base text-primary-200 dark:text-primary-100 font-semibold mt-1" data-i18n="trust_users">100.000+ kullanıcıya bu zamana kadar hizmet verdik</p>
   </div>
+
+  <!-- Güven rozetleri: sayfa ortasında müşteri görür (SSL, KVKK, GDPR, PayTR, Cloudflare) -->
+  <section id="guven-rozetleri" class="py-12 sm:py-16 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800" aria-labelledby="trust-badges-heading">
+    <div class="max-w-6xl mx-auto w-full px-4">
+      <h2 id="trust-badges-heading" class="text-xl sm:text-2xl font-bold text-center text-accent-900 dark:text-white mb-8" data-i18n="trust_badges_heading">Güvenli ve uyumlu hizmet</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6" aria-label="Güven ve uyumluluk">
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🔒</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_ssl">SSL Secure</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_ssl_desc">Şifreli bağlantı</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🛡️</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_kvkk">KVKK uyumlu</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_kvkk_desc">Kişisel veri koruma</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">✓</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_gdpr">GDPR ready</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_gdpr_desc">AB veri koruma</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">💳</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_paytr">PayTR Secure</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_paytr_desc">Güvenli ödeme</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-2">
+            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-7 w-auto max-h-8 object-contain shrink-0" width="30" height="30" loading="lazy" />
+            <span class="font-semibold text-sm" data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mb-3" data-i18n="trust_cloudflare_desc">Trafik koruması ve global CDN ile daha hızlı ve güvenli erişim.</p>
+          <ul class="text-xs text-accent-500 dark:text-accent-500 space-y-1 mt-auto" aria-hidden="true">
+            <li>• <span data-i18n="trust_cloudflare_1">DDoS koruması</span></li>
+            <li>• <span data-i18n="trust_cloudflare_2">Global CDN hızlandırma</span></li>
+            <li>• <span data-i18n="trust_cloudflare_3">Edge güvenlik</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
 
   <!-- Norya nedir / Biz kimiz -->
   <section id="hakkimizda" class="py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
@@ -1557,7 +1609,7 @@
       <h2 class="text-2xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="contact_heading">İletişim</h2>
       <p class="mb-4" data-i18n="contact_intro">Sorularınız, iade talepleriniz veya “ödeme alındı ama analiz hakkı gelmedi” gibi teknik konular için bize ulaşabilirsiniz.</p>
       <p class="mb-4"><strong data-i18n="contact_email_label">E-posta:</strong> <a href="mailto:norya.destek@gmail.com" class="text-primary-600 dark:text-primary-400 hover:underline">norya.destek@gmail.com</a></p>
-      <p class="mb-4" data-i18n="contact_note">Mümkünse hesap e-posta adresinizi ve konuyla ilgili kısa açıklamayı (sipariş no, tarih vb.) yazın. En geç 2 iş günü içinde dönüş yapıyoruz.</p>
+      <p class="mb-4" data-i18n="contact_note">Mümkünse hesap e-posta adresinizi ve konuyla ilgili kısa açıklamayı (sipariş no, tarih vb.) yazın. En geç 1 iş günü içinde dönüş yapıyoruz.</p>
       <p class="text-accent-500 dark:text-accent-500" data-i18n="contact_tagline">Norya — Kan tahlili sonuçlarınızı anlaşılır dilde açıklayan hizmet.</p>
     </div>
   </section>
@@ -1597,14 +1649,14 @@
         </div>
         <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
           <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-2">
-            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-[30px] w-auto object-contain shrink-0" width="30" height="30" loading="lazy" />
+            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-7 w-auto max-h-8 object-contain shrink-0" width="30" height="30" loading="lazy" />
             <span class="font-semibold text-sm" data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
           </div>
-          <p class="text-xs text-accent-600 dark:text-accent-400 mb-3" data-i18n="trust_cloudflare_desc">Global CDN ve DDoS koruması ile daha hızlı ve güvenli erişim.</p>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mb-3" data-i18n="trust_cloudflare_desc">Trafik koruması ve global CDN ile daha hızlı ve güvenli erişim.</p>
           <ul class="text-xs text-accent-500 dark:text-accent-500 space-y-1 mt-auto" aria-hidden="true">
-            <li>• <span data-i18n="trust_cloudflare_1">Global CDN hızlandırma</span></li>
-            <li>• <span data-i18n="trust_cloudflare_2">DDoS koruması</span></li>
-            <li>• <span data-i18n="trust_cloudflare_3">Edge güvenlik duvarı</span></li>
+            <li>• <span data-i18n="trust_cloudflare_1">DDoS koruması</span></li>
+            <li>• <span data-i18n="trust_cloudflare_2">Global CDN hızlandırma</span></li>
+            <li>• <span data-i18n="trust_cloudflare_3">Edge güvenlik</span></li>
           </ul>
         </div>
       </div>
@@ -2416,12 +2468,12 @@
         hero_desc: "Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.",
         hero_cta: "İlk Analizimi Ücretsiz Yap", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz genel olarak referans aralığında. Hemoglobin ve glukoz normal; doktorunuzla rutin takibi sürdürün.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
-        trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik",
+        trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL ile korunur", trust_badge_kvkk_gdpr: "KVKK & GDPR uyumlu", trust_badge_paytr: "PayTR ile güvenli ödeme",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Şifreli bağlantı", footer_trust_kvkk_desc: "Kişisel veri koruma", footer_trust_gdpr_desc: "AB veri koruma", footer_trust_paytr_desc: "Güvenli ödeme",
-        trust_cloudflare_title: "Cloudflare ile korunur", trust_cloudflare_desc: "Global CDN ve DDoS koruması ile daha hızlı ve güvenli erişim.", trust_cloudflare_1: "Global CDN hızlandırma", trust_cloudflare_2: "DDoS koruması", trust_cloudflare_3: "Edge güvenlik duvarı",
+        trust_cloudflare_title: "Cloudflare ile korunur", trust_cloudflare_desc: "Trafik koruması ve global CDN ile daha hızlı ve güvenli erişim.", trust_cloudflare_1: "DDoS koruması", trust_cloudflare_2: "Global CDN hızlandırma", trust_cloudflare_3: "Edge güvenlik",
         how_title: "Norya Nasıl Çalışır?", how_desc: "Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.",
         how_1: "Kayıt Olun", how_1d: "Ücretsiz hesap oluşturun. E-posta ve şifre yeterli.",
         how_2: "Tahlil Metnini Yapıştırın", how_2d: "Sonuç kağıdındaki değerleri veya metni kutuya yapıştırın.",
@@ -2541,7 +2593,7 @@
         footer_mesafeli: "Mesafeli Satış Sözleşmesi", footer_privacy: "Gizlilik Politikası", footer_refund: "İade ve İptal Politikası", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Kullanım Şartları", footer_payment: "Ödeme ve İade", footer_contact: "İletişim", back_home: "← Ana sayfa",
         terms_heading: "Kullanım Koşulları", privacy_heading: "Gizlilik Politikası", payment_heading: "Ödeme ve İade Koşulları",
-        contact_heading: "İletişim", contact_intro: "Sorularınız, iade talepleriniz veya \"ödeme alındı ama analiz hakkı gelmedi\" gibi teknik konular için bize ulaşabilirsiniz.", contact_email_label: "E-posta:", contact_note: "Mümkünse hesap e-posta adresinizi ve konuyla ilgili kısa açıklamayı (sipariş no, tarih vb.) yazın. En geç 2 iş günü içinde dönüş yapıyoruz.", contact_tagline: "Norya — Kan tahlili sonuçlarınızı anlaşılır dilde açıklayan hizmet.",
+        contact_heading: "İletişim", contact_intro: "Sorularınız, iade talepleriniz veya \"ödeme alındı ama analiz hakkı gelmedi\" gibi teknik konular için bize ulaşabilirsiniz.", contact_email_label: "E-posta:", contact_note: "Mümkünse hesap e-posta adresinizi ve konuyla ilgili kısa açıklamayı (sipariş no, tarih vb.) yazın. En geç 1 iş günü içinde dönüş yapıyoruz.", contact_tagline: "Norya — Kan tahlili sonuçlarınızı anlaşılır dilde açıklayan hizmet.",
         terms_intro: "Norya hizmetini kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız. Koşullarda değişiklik yapıldığında sitede güncel metin yayımlanır; önemli değişiklikler e-posta ile duyurulabilir.",
         terms_scope: "Hizmetin kapsamı. Norya, kan tahlili ve benzeri laboratuvar sonuçlarınızı anlaşılır bir dille özetleyen bir araç sunar. Bu araç teşhis veya tedavi önerisi değildir; yalnızca bilgilendirme amaçlıdır. Sağlıkla ilgili kararlarınızı mutlaka bir hekim veya sağlık kuruluşu ile görüşerek almanız gerekir.",
         terms_account: "Hesap ve kullanım. Kayıt sırasında verdiğiniz bilgilerin doğru olması sizin sorumluluğunuzdadır. Hesabınızı başkasıyla paylaşmamanız ve şifrenizi gizli tutmanız gerekir. Hizmeti yalnızca yasal ve kişisel kullanımınız için kullanabilirsiniz.",
@@ -2590,12 +2642,12 @@
         hero_desc: "Paste text or upload a photo — get a clear summary, values, and a report to take to your doctor. First analysis free.",
         hero_cta: "Get my first analysis free", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values are generally within reference range. Hemoglobin and glucose normal; continue routine follow-up with your doctor.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
-        trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date",
+        trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Encrypted connection", footer_trust_kvkk_desc: "Personal data protection", footer_trust_gdpr_desc: "EU data protection", footer_trust_paytr_desc: "Secure payment",
-        trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Faster and more secure access with global CDN and DDoS protection.", trust_cloudflare_1: "Global CDN acceleration", trust_cloudflare_2: "DDoS protection", trust_cloudflare_3: "Edge firewall",
+        trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Traffic protection and global CDN for faster, more secure access.", trust_cloudflare_1: "DDoS protection", trust_cloudflare_2: "Global CDN acceleration", trust_cloudflare_3: "Edge security",
         how_title: "How Norya Works", how_desc: "Three simple steps to turn your lab results into clear health insights.",
         how_1: "Sign up", how_1d: "Create a free account. Email and password only.",
         how_2: "Paste your results", how_2d: "Paste the values or text from your result sheet.",
@@ -2715,7 +2767,7 @@
         footer_mesafeli: "Distance Sales Agreement", footer_privacy: "Privacy Policy", footer_refund: "Refund & Cancellation", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Terms of Use", footer_payment: "Payment & Refunds", footer_contact: "Contact", back_home: "← Home",
         terms_heading: "Terms of Use", privacy_heading: "Privacy Policy", payment_heading: "Payment and Refund Terms",
-        contact_heading: "Contact", contact_intro: "For questions, refund requests, or technical issues (e.g. \"payment received but no analysis credit\"), please get in touch.", contact_email_label: "Email:", contact_note: "If possible, include your account email and a short description (order no., date, etc.). We aim to reply within 2 business days.", contact_tagline: "Norya — Blood test results explained in plain language.",
+        contact_heading: "Contact", contact_intro: "For questions, refund requests, or technical issues (e.g. \"payment received but no analysis credit\"), please get in touch.", contact_email_label: "Email:", contact_note: "If possible, include your account email and a short description (order no., date, etc.). We aim to reply within 1 business day.", contact_tagline: "Norya — Blood test results explained in plain language.",
         terms_intro: "By using Norya you are deemed to accept the following terms. When terms change, the current text is published on the site; material changes may be announced by email.",
         terms_scope: "Scope of service. Norya provides a tool that summarises your blood test and similar lab results in plain language. This tool is not a diagnosis or treatment recommendation; it is for information only. You must make health-related decisions in consultation with a doctor or healthcare provider.",
         terms_account: "Account and use. You are responsible for the accuracy of the information you provide when registering. You must not share your account or disclose your password. You may use the service only for lawful, personal use.",
@@ -2762,12 +2814,12 @@
         hero_desc: "Incolla i risultati delle analisi, l'IA li spiega per te. Prova gratis — nessuna carta richiesta.",
         hero_cta: "Prima analisi gratis", hero_see_sample: "Vedi report esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy first",
         hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "I valori sono nella norma. Emoglobina e glucosio normali.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
-        trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora",
+        trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR",
         trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Connessione crittografata", footer_trust_kvkk_desc: "Protezione dati personali", footer_trust_gdpr_desc: "Protezione dati UE", footer_trust_paytr_desc: "Pagamento sicuro",
-        trust_cloudflare_title: "Protetto da Cloudflare", trust_cloudflare_desc: "Accesso più veloce e sicuro con CDN globale e protezione DDoS.", trust_cloudflare_1: "Accelerazione CDN globale", trust_cloudflare_2: "Protezione DDoS", trust_cloudflare_3: "Firewall edge",
+        trust_cloudflare_title: "Protetto da Cloudflare", trust_cloudflare_desc: "Protezione del traffico e CDN globale per un accesso più veloce e sicuro.", trust_cloudflare_1: "Protezione DDoS", trust_cloudflare_2: "Accelerazione CDN globale", trust_cloudflare_3: "Sicurezza edge",
         how_title: "Come funziona Norya", how_desc: "Tre semplici passi per trasformare i tuoi esami in informazioni chiare.",
         how_1: "Registrati", how_1d: "Crea un account gratuito. Solo email e password.",
         how_2: "Incolla i risultati", how_2d: "Incolla i valori o il testo dal referto.",
@@ -2871,7 +2923,7 @@
         footer_terms: "Termini d'uso", footer_payment: "Pagamento e rimborsi", footer_contact: "Contatti", back_home: "← Home",
         compare_title: "Confronta tutti i piani", compare_subtitle: "Scegli il piano adatto a te.", compare_feature: "Funzione", compare_plan_free: "Gratis", compare_plan_single: "Singolo", compare_plan_monthly: "Mensile", compare_plan_yearly: "Annuale", compare_analyses: "Analisi", compare_analyses_per_month: "10+3 / mese", compare_upload: "Testo, PDF, immagine", compare_report: "Report dettagliato (riepilogo, valori, raccomandazioni)", compare_diet: "Piano dietetico", compare_supplements: "Integratori", compare_heart: "Salute cardiaca", compare_history: "Cronologia", compare_pdf: "PDF / Condividi / Per il medico", compare_emr_ehr: "Report EMR/EHR", compare_langs: "Lingua report", compare_langs_count: "9 lingue", compare_compare: "Confronta due analisi", compare_price: "Prezzo",
         terms_heading: "Termini d'uso", privacy_heading: "Informativa sulla privacy", payment_heading: "Pagamento e rimborsi",
-        contact_heading: "Contatti", contact_intro: "Per domande, richieste di rimborso o problemi tecnici (es. \"pagamento ricevuto ma nessun credito analisi\"), contattaci.", contact_email_label: "Email:", contact_note: "Se possibile, indica l'email del tuo account e una breve descrizione (n. ordine, data, ecc.). Rispondiamo entro 2 giorni lavorativi.", contact_tagline: "Norya — Risultati delle analisi del sangue in linguaggio chiaro.",
+        contact_heading: "Contatti", contact_intro: "Per domande, richieste di rimborso o problemi tecnici (es. \"pagamento ricevuto ma nessun credito analisi\"), contattaci.", contact_email_label: "Email:", contact_note: "Se possibile, indica l'email del tuo account e una breve descrizione (n. ordine, data, ecc.). Rispondiamo entro 1 giorno lavorativo.", contact_tagline: "Norya — Risultati delle analisi del sangue in linguaggio chiaro.",
         terms_intro: "Utilizzando Norya accetti i seguenti termini. In caso di modifiche, il testo aggiornato sarà pubblicato sul sito; cambiamenti importanti potrebbero essere comunicati via email.",
         terms_scope: "Ambito del servizio. Norya offre uno strumento che riassume i risultati delle analisi del sangue e di laboratorio in linguaggio chiaro. Non è una diagnosi né un consiglio terapeutico; è solo informativo. Le decisioni sulla salute vanno prese con un medico.",
         terms_account: "Account e utilizzo. Sei responsabile dell'accuratezza dei dati forniti in registrazione. Non condividere l'account e tieni la password riservata. Il servizio è solo per uso personale e legale.",
@@ -2918,12 +2970,12 @@
         hero_desc: "Pega tus resultados, la IA los explica. Prueba gratis — sin tarjeta.",
         hero_cta: "Mi primer análisis gratis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad primero",
         hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Tus valores están en rango. Hemoglobina y glucosa normales.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
-        trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha",
+        trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR",
         trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Conexión cifrada", footer_trust_kvkk_desc: "Protección de datos personales", footer_trust_gdpr_desc: "Protección de datos UE", footer_trust_paytr_desc: "Pago seguro",
-        trust_cloudflare_title: "Protegido por Cloudflare", trust_cloudflare_desc: "Acceso más rápido y seguro con CDN global y protección DDoS.", trust_cloudflare_1: "Aceleración CDN global", trust_cloudflare_2: "Protección DDoS", trust_cloudflare_3: "Cortafuegos edge",
+        trust_cloudflare_title: "Protegido por Cloudflare", trust_cloudflare_desc: "Protección del tráfico y CDN global para un acceso más rápido y seguro.", trust_cloudflare_1: "Protección DDoS", trust_cloudflare_2: "Aceleración CDN global", trust_cloudflare_3: "Seguridad edge",
         how_title: "Cómo funciona Norya", how_desc: "Tres pasos para convertir tus análisis en información clara.",
         how_1: "Regístrate", how_1d: "Crea una cuenta gratuita. Solo email y contraseña.",
         how_2: "Pega los resultados", how_2d: "Pega los valores o el texto del informe.",
@@ -3027,7 +3079,7 @@
         footer_terms: "Términos de uso", footer_payment: "Pago y reembolsos", footer_contact: "Contacto", back_home: "← Inicio",
         compare_title: "Comparar todos los planes", compare_subtitle: "Encuentra el plan que te convenga.", compare_feature: "Característica", compare_plan_free: "Gratis", compare_plan_single: "Único", compare_plan_monthly: "Mensual", compare_plan_yearly: "Anual", compare_analyses: "Análisis", compare_analyses_per_month: "10+3 / mes", compare_upload: "Texto, PDF, imagen", compare_report: "Informe detallado (resumen, valores, recomendaciones)", compare_diet: "Plan dietético", compare_supplements: "Suplementos", compare_heart: "Salud cardíaca", compare_history: "Historial", compare_pdf: "PDF / Compartir / Para el médico", compare_emr_ehr: "Informe EMR/EHR", compare_langs: "Idioma del informe", compare_langs_count: "9 idiomas", compare_compare: "Comparar dos análisis", compare_price: "Precio",
         terms_heading: "Términos de uso", privacy_heading: "Política de privacidad", payment_heading: "Pago y reembolsos",
-        contact_heading: "Contacto", contact_intro: "Para preguntas, solicitudes de reembolso o problemas técnicos (ej. \"pago recibido pero sin crédito de análisis\"), escríbenos.", contact_email_label: "Email:", contact_note: "Si es posible, incluye el email de tu cuenta y una breve descripción (n.º de pedido, fecha, etc.). Respondemos en un plazo de 2 días laborables.", contact_tagline: "Norya — Resultados de análisis de sangre en lenguaje claro.",
+        contact_heading: "Contacto", contact_intro: "Para preguntas, solicitudes de reembolso o problemas técnicos (ej. \"pago recibido pero sin crédito de análisis\"), escríbenos.", contact_email_label: "Email:", contact_note: "Si es posible, incluye el email de tu cuenta y una breve descripción (n.º de pedido, fecha, etc.). Respondemos en un plazo de 1 día laborable.", contact_tagline: "Norya — Resultados de análisis de sangre en lenguaje claro.",
         terms_intro: "Al usar Norya aceptas los siguientes términos. Si los términos cambian, el texto actualizado se publicará en el sitio; los cambios importantes se podrán anunciar por correo.",
         terms_scope: "Alcance del servicio. Norya ofrece una herramienta que resume tus análisis de sangre y resultados de laboratorio en lenguaje claro. No es un diagnóstico ni recomendación de tratamiento; es solo informativo. Las decisiones de salud deben tomarse con un médico.",
         terms_account: "Cuenta y uso. Eres responsable de la veracidad de los datos al registrarte. No compartas tu cuenta ni tu contraseña. El servicio es solo para uso personal y legal.",
@@ -3074,12 +3126,12 @@
         hero_desc: "Collez vos résultats, l'IA les explique. Essai gratuit — sans carte.",
         hero_cta: "Ma première analyse gratuite", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité",
         hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Vos valeurs sont dans la norme. Hémoglobine et glucose normaux.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
-        trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour",
+        trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR",
         trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Connexion chiffrée", footer_trust_kvkk_desc: "Protection des données", footer_trust_gdpr_desc: "Protection des données UE", footer_trust_paytr_desc: "Paiement sécurisé",
-        trust_cloudflare_title: "Protégé par Cloudflare", trust_cloudflare_desc: "Accès plus rapide et plus sûr avec CDN global et protection DDoS.", trust_cloudflare_1: "Accélération CDN mondiale", trust_cloudflare_2: "Protection DDoS", trust_cloudflare_3: "Pare-feu edge",
+        trust_cloudflare_title: "Protégé par Cloudflare", trust_cloudflare_desc: "Protection du trafic et CDN global pour un accès plus rapide et plus sûr.", trust_cloudflare_1: "Protection DDoS", trust_cloudflare_2: "Accélération CDN mondiale", trust_cloudflare_3: "Sécurité edge",
         how_title: "Comment fonctionne Norya", how_desc: "Trois étapes pour transformer vos analyses en informations claires.",
         how_1: "Inscrivez-vous", how_1d: "Créez un compte gratuit. Email et mot de passe uniquement.",
         how_2: "Collez les résultats", how_2d: "Collez les valeurs ou le texte du compte-rendu.",
@@ -3183,7 +3235,7 @@
         footer_terms: "Conditions d'utilisation", footer_payment: "Paiement et remboursements", footer_contact: "Contact", back_home: "← Accueil",
         compare_title: "Comparer tous les forfaits", compare_subtitle: "Trouvez le forfait qui vous convient.", compare_feature: "Fonctionnalité", compare_plan_free: "Gratuit", compare_plan_single: "Unique", compare_plan_monthly: "Mensuel", compare_plan_yearly: "Annuel", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mois", compare_upload: "Texte, PDF, image", compare_report: "Rapport détaillé (résumé, valeurs, recommandations)", compare_diet: "Régime", compare_supplements: "Compléments", compare_heart: "Santé cardiaque", compare_history: "Historique", compare_pdf: "PDF / Partager / Pour le médecin", compare_emr_ehr: "Rapport EMR/EHR", compare_langs: "Langue du rapport", compare_langs_count: "9 langues", compare_compare: "Comparer deux analyses", compare_price: "Prix",
         terms_heading: "Conditions d'utilisation", privacy_heading: "Politique de confidentialité", payment_heading: "Paiement et remboursements",
-        contact_heading: "Contact", contact_intro: "Pour toute question, demande de remboursement ou problème technique (ex. \"paiement reçu mais pas de crédit d'analyse\"), contactez-nous.", contact_email_label: "Email :", contact_note: "Si possible, indiquez l'email de votre compte et une courte description (n° de commande, date, etc.). Nous répondons sous 2 jours ouvrés.", contact_tagline: "Norya — Résultats d'analyses sanguines expliqués en langage clair.",
+        contact_heading: "Contact", contact_intro: "Pour toute question, demande de remboursement ou problème technique (ex. \"paiement reçu mais pas de crédit d'analyse\"), contactez-nous.", contact_email_label: "Email :", contact_note: "Si possible, indiquez l'email de votre compte et une courte description (n° de commande, date, etc.). Nous répondons sous 1 jour ouvré.", contact_tagline: "Norya — Résultats d'analyses sanguines expliqués en langage clair.",
         terms_intro: "En utilisant Norya vous acceptez les conditions suivantes. En cas de modification, le texte en vigueur sera publié sur le site ; les changements importants pourront être annoncés par e-mail.",
         terms_scope: "Champ du service. Norya propose un outil qui résume vos analyses sanguines et résultats de laboratoire en langage clair. Ce n'est pas un diagnostic ni une recommandation de traitement ; à titre informatif uniquement. Les décisions de santé doivent être prises avec un médecin.",
         terms_account: "Compte et utilisation. Vous êtes responsable de l'exactitude des informations fournies à l'inscription. Ne partagez pas votre compte ni votre mot de passe. Le service est réservé à un usage personnel et légal.",
@@ -3230,12 +3282,12 @@
         hero_desc: "Laborwerte einfügen, die KI erklärt sie. Kostenlos testen — keine Karte nötig.",
         hero_cta: "Erste Analyse kostenlos", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "Sicher • Datenschutz",
         hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Ihre Werte im Referenzbereich. Hämoglobin und Glukose normal.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
-        trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient",
+        trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
         trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR",
         trust_badge_secure_paytr: "🔒 Sichere Zahlung – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Verschlüsselte Verbindung", footer_trust_kvkk_desc: "Schutz personenbezogener Daten", footer_trust_gdpr_desc: "EU-Datenschutz", footer_trust_paytr_desc: "Sichere Zahlung",
-        trust_cloudflare_title: "Geschützt durch Cloudflare", trust_cloudflare_desc: "Schnellerer und sicherer Zugriff mit globalem CDN und DDoS-Schutz.", trust_cloudflare_1: "Globales CDN", trust_cloudflare_2: "DDoS-Schutz", trust_cloudflare_3: "Edge-Firewall",
+        trust_cloudflare_title: "Geschützt durch Cloudflare", trust_cloudflare_desc: "Verkehrsschutz und globales CDN für schnelleren und sichereren Zugriff.", trust_cloudflare_1: "DDoS-Schutz", trust_cloudflare_2: "Globale CDN-Beschleunigung", trust_cloudflare_3: "Edge-Sicherheit",
         how_title: "So funktioniert Norya", how_desc: "Drei Schritte von Ihren Laborwerten zu klaren Gesundheitsinfos.",
         how_1: "Registrieren", how_1d: "Kostenloses Konto. E-Mail und Passwort genügen.",
         how_2: "Ergebnisse einfügen", how_2d: "Werte oder Text vom Befund in das Feld einfügen.",
@@ -3339,7 +3391,7 @@
         footer_terms: "Nutzungsbedingungen", footer_payment: "Zahlung & Rückerstattung", footer_contact: "Kontakt", back_home: "← Start",
         compare_title: "Alle Pläne vergleichen", compare_subtitle: "Finden Sie den passenden Plan.", compare_feature: "Funktion", compare_plan_free: "Kostenlos", compare_plan_single: "Einzel", compare_plan_monthly: "Monat", compare_plan_yearly: "Jahr", compare_analyses: "Analysen", compare_analyses_per_month: "10+3 / Monat", compare_upload: "Text, PDF, Bild", compare_report: "Detaillierter Bericht (Zusammenfassung, Werte, Empfehlungen)", compare_diet: "Ernährungsplan", compare_supplements: "Nahrungsergänzung", compare_heart: "Herzgesundheit", compare_history: "Verlauf", compare_pdf: "PDF / Teilen / Für den Arzt", compare_emr_ehr: "EMR/EHR-Bericht", compare_langs: "Berichtssprache", compare_langs_count: "9 Sprachen", compare_compare: "Zwei Analysen vergleichen", compare_price: "Preis",
         terms_heading: "Nutzungsbedingungen", privacy_heading: "Datenschutzerklärung", payment_heading: "Zahlung und Rückerstattung",
-        contact_heading: "Kontakt", contact_intro: "Bei Fragen, Rückerstattungswünschen oder technischen Problemen (z. B. \"Zahlung erhalten, aber kein Analyse-Guthaben\") schreiben Sie uns.", contact_email_label: "E-Mail:", contact_note: "Bitte nennen Sie wenn möglich Ihre Konto-E-Mail und eine kurze Beschreibung (Bestellnr., Datum usw.). Wir antworten innerhalb von 2 Werktagen.", contact_tagline: "Norya — Blutwerte verständlich erklärt.",
+        contact_heading: "Kontakt", contact_intro: "Bei Fragen, Rückerstattungswünschen oder technischen Problemen (z. B. \"Zahlung erhalten, aber kein Analyse-Guthaben\") schreiben Sie uns.", contact_email_label: "E-Mail:", contact_note: "Bitte nennen Sie wenn möglich Ihre Konto-E-Mail und eine kurze Beschreibung (Bestellnr., Datum usw.). Wir antworten innerhalb von 1 Werktag.", contact_tagline: "Norya — Blutwerte verständlich erklärt.",
         terms_intro: "Durch die Nutzung von Norya akzeptieren Sie die folgenden Bedingungen. Bei Änderungen wird der aktuelle Text auf der Website veröffentlicht; wesentliche Änderungen können per E-Mail mitgeteilt werden.",
         terms_scope: "Umfang des Dienstes. Norya bietet ein Tool, das Ihre Blut- und Laborergebnisse in verständlicher Sprache zusammenfasst. Es ist keine Diagnose oder Behandlungsempfehlung; nur zur Information. Gesundheitsentscheidungen müssen mit einem Arzt getroffen werden.",
         terms_account: "Konto und Nutzung. Sie sind für die Richtigkeit der bei der Registrierung angegebenen Daten verantwortlich. Teilen Sie Ihr Konto nicht und halten Sie Ihr Passwort geheim. Der Dienst ist nur für rechtmäßige, persönliche Nutzung.",
@@ -3386,12 +3438,12 @@
         hero_desc: "הדבק את תוצאות המעבדה, הבינה המלאכותית תסביר. נסה בחינם — בלי כרטיס אשראי.",
         hero_cta: "נתח את בדיקת הדם שלי בחינם", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות",
         hero_sample_label: "כך ייראה הדוח שלך", hero_sample_summary: "הערכים בטווח התקין. המוגלובין וגלוקוז רגילים.", hero_sample_normal: "תקין", hero_sample_border: "גבול", hero_sample_risk: "תשומת לב", hero_sample_cta: "סיכום + ערכים + המלצות + הורדת PDF.", hero_sample_btn: "קבל דוח כזה — התחל בחינם",
-        trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה",
+        trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה", trust_badges_heading: "שירות מאובטח ותואם",
         trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR",
         trust_badge_secure_paytr: "🔒 תשלום מאובטח – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "חיבור מוצפן", footer_trust_kvkk_desc: "הגנת נתונים אישיים", footer_trust_gdpr_desc: "הגנת נתונים EU", footer_trust_paytr_desc: "תשלום מאובטח",
-        trust_cloudflare_title: "מוגן על ידי Cloudflare", trust_cloudflare_desc: "גישה מהירה ובטוחה יותר עם CDN גלובלי והגנת DDoS.", trust_cloudflare_1: "תאוצת CDN גלובלית", trust_cloudflare_2: "הגנת DDoS", trust_cloudflare_3: "חומת אש edge",
+        trust_cloudflare_title: "מוגן על ידי Cloudflare", trust_cloudflare_desc: "הגנת תעבורה ו-CDN גלובלי לגישה מהירה ובטוחה יותר.", trust_cloudflare_1: "הגנת DDoS", trust_cloudflare_2: "תאוצת CDN גלובלית", trust_cloudflare_3: "אבטחת edge",
         how_title: "איך נוריה עובדת", how_desc: "שלושה צעדים פשוטים מתוצאות המעבדה לתובנות בריאות.",
         how_1: "הירשם", how_1d: "צור חשבון חינם. אימייל וסיסמה בלבד.",
         how_2: "הדבק תוצאות", how_2d: "הדבק ערכים או טקסט מדף התוצאות.",
@@ -3494,7 +3546,7 @@
         footer_terms: "תנאי שימוש", footer_payment: "תשלום והחזרים", footer_contact: "צור קשר", back_home: "← בית",
         compare_title: "השווה את כל התוכניות", compare_subtitle: "מצא את התוכנית המתאימה לך.", compare_feature: "תכונה", compare_plan_free: "חינם", compare_plan_single: "בודד", compare_plan_monthly: "חודשי", compare_plan_yearly: "שנתי", compare_analyses: "ניתוחים", compare_analyses_per_month: "10+3 / חודש", compare_upload: "טקסט, PDF, תמונה", compare_report: "דוח מפורט (סיכום, ערכים, המלצות)", compare_diet: "תוכנית דיאטה", compare_supplements: "תוספים", compare_heart: "בריאות הלב", compare_history: "היסטוריה", compare_pdf: "PDF / שתף / לרופא", compare_emr_ehr: "דוח EMR/EHR", compare_langs: "שפת הדוח", compare_langs_count: "9 שפות", compare_compare: "השווה שני ניתוחים", compare_price: "מחיר",
         terms_heading: "תנאי שימוש", privacy_heading: "מדיניות פרטיות", payment_heading: "תשלום והחזרים",
-        contact_heading: "צור קשר", contact_intro: "לשאלות, בקשות להחזר או בעיות טכניות (למשל \"התשלום התקבל אך לא נוסף קרדיט ניתוח\"), צרו איתנו קשר.", contact_email_label: "אימייל:", contact_note: "אם אפשר, ציינו את אימייל החשבון ותיאור קצר (מס׳ הזמנה, תאריך וכו׳). אנו משיבים תוך יומיים עסקיים.", contact_tagline: "נוריה — תוצאות בדיקות דם מוסברות בשפה ברורה.",
+        contact_heading: "צור קשר", contact_intro: "לשאלות, בקשות להחזר או בעיות טכניות (למשל \"התשלום התקבל אך לא נוסף קרדיט ניתוח\"), צרו איתנו קשר.", contact_email_label: "אימייל:", contact_note: "אם אפשר, ציינו את אימייל החשבון ותיאור קצר (מס׳ הזמנה, תאריך וכו׳). אנו משיבים תוך יום עסקי אחד.", contact_tagline: "נוריה — תוצאות בדיקות דם מוסברות בשפה ברורה.",
         terms_intro: "בשימוש בנוריה אתה מקבל את התנאים הבאים. בעת שינוי התנאים יפורסם הטקסט המעודכן באתר; שינויים משמעותיים עשויים להימסר בדוא\"ל.",
         terms_scope: "היקף השירות. נוריה מספקת כלי שמסכם את תוצאות בדיקות הדם והמעבדה בשפה ברורה. זה לא אבחנה או המלצה לטיפול; למידע בלבד. החלטות בריאות יש לקבל עם רופא.",
         terms_account: "חשבון ושימוש. אתה אחראי לדיוק הנתונים שניתנו בהרשמה. אל תשתף את החשבון ושמור על סודיות הסיסמה. השירות לשימוש אישי וחוקי בלבד.",
@@ -3541,12 +3593,12 @@
         hero_desc: "الصق نتائج المختبر، الذكاء الاصطناعي يشرحها. جرب مجاناً — بدون بطاقة.",
         hero_cta: "تحليل تحاليل دمي مجاناً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • خصوصية",
         hero_sample_label: "تقريرك سيبدو هكذا", hero_sample_summary: "قيمك ضمن النطاق المرجعي. الهيموغلوبين والغلوكوز طبيعيان.", hero_sample_normal: "طبيعي", hero_sample_border: "حدي", hero_sample_risk: "انتباه", hero_sample_cta: "ملخص + قيم + توصيات + تنزيل PDF.", hero_sample_btn: "احصل على هذا التقرير — ابدأ مجاناً",
-        trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن",
+        trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن", trust_badges_heading: "خدمة آمنة ومتوافقة",
         trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR",
         trust_badge_secure_paytr: "🔒 دفع آمن – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "اتصال مشفّر", footer_trust_kvkk_desc: "حماية البيانات الشخصية", footer_trust_gdpr_desc: "حماية بيانات الاتحاد الأوروبي", footer_trust_paytr_desc: "دفع آمن",
-        trust_cloudflare_title: "محمي بواسطة Cloudflare", trust_cloudflare_desc: "وصول أسرع وأكثر أماناً مع CDN عالمي وحماية DDoS.", trust_cloudflare_1: "تسريع CDN عالمي", trust_cloudflare_2: "حماية DDoS", trust_cloudflare_3: "جدار حماية edge",
+        trust_cloudflare_title: "محمي بواسطة Cloudflare", trust_cloudflare_desc: "حماية الحركة وCDN عالمي لوصول أسرع وأكثر أماناً.", trust_cloudflare_1: "حماية DDoS", trust_cloudflare_2: "تسريع CDN عالمي", trust_cloudflare_3: "أمان الحافة",
         how_title: "كيف يعمل نوريا", how_desc: "ثلاث خطوات بسيطة لتحويل نتائجك إلى معلومات صحية واضحة.",
         how_1: "سجّل", how_1d: "أنشئ حساباً مجانياً. البريد وكلمة السر فقط.",
         how_2: "الصق النتائج", how_2d: "الصق القيم أو النص من ورقة النتائج.",
@@ -3649,7 +3701,7 @@
         footer_terms: "شروط الاستخدام", footer_payment: "الدفع والاسترداد", footer_contact: "اتصل", back_home: "← الرئيسية",
         compare_title: "قارن جميع الخطط", compare_subtitle: "اختر الخطة المناسبة لك.", compare_feature: "ميزة", compare_plan_free: "مجاني", compare_plan_single: "واحد", compare_plan_monthly: "شهري", compare_plan_yearly: "سنوي", compare_analyses: "التحليلات", compare_analyses_per_month: "10+3 / شهر", compare_upload: "نص، PDF، صورة", compare_report: "تقرير مفصل (ملخص، قيم، توصيات)", compare_diet: "خطة غذائية", compare_supplements: "مكملات", compare_heart: "صحة القلب", compare_history: "السجل", compare_pdf: "PDF / مشاركة / للطبيب", compare_emr_ehr: "تقرير EMR/EHR", compare_langs: "لغة التقرير", compare_langs_count: "9 لغات", compare_compare: "قارن تحليلين", compare_price: "السعر",
         terms_heading: "شروط الاستخدام", privacy_heading: "سياسة الخصوصية", payment_heading: "الدفع والاسترداد",
-        contact_heading: "اتصل بنا", contact_intro: "للأسئلة أو طلبات الاسترداد أو المشاكل التقنية (مثلاً \"تم استلام الدفع لكن لم تُضاف رصيد تحليل\")، تواصل معنا.", contact_email_label: "البريد:", contact_note: "إن أمكن، أدرج بريد الحساب ووصفاً قصيراً (رقم الطلب، التاريخ، إلخ). نرد خلال يومين عمل.", contact_tagline: "نوريا — نتائج تحاليل الدم مفسرة بلغة واضحة.",
+        contact_heading: "اتصل بنا", contact_intro: "للأسئلة أو طلبات الاسترداد أو المشاكل التقنية (مثلاً \"تم استلام الدفع لكن لم تُضاف رصيد تحليل\")، تواصل معنا.", contact_email_label: "البريد:", contact_note: "إن أمكن، أدرج بريد الحساب ووصفاً قصيراً (رقم الطلب، التاريخ، إلخ). نرد خلال يوم عمل واحد.", contact_tagline: "نوريا — نتائج تحاليل الدم مفسرة بلغة واضحة.",
         terms_intro: "باستخدام نوريا فإنك تقبل الشروط التالية. عند تغيير الشروط يُنشر النص الحالي على الموقع؛ وقد تُعلن التغييرات المهمة بالبريد.",
         terms_scope: "نطاق الخدمة. تقدم نوريا أداة تلخص نتائج تحاليل الدم والمختبر بلغة واضحة. ليست تشخيصاً ولا توصية علاجية؛ للمعلومات فقط. قرارات الصحة تتخذ مع الطبيب.",
         terms_account: "الحساب والاستخدام. أنت مسؤول عن صحة البيانات عند التسجيل. لا تشارك حسابك واحتفظ بكلمة السر. الخدمة للاستخدام الشخصي والقانوني فقط.",
@@ -3696,12 +3748,12 @@
         hero_desc: "लैब रिज़ल्ट चिपकाएं, AI समझाता है। मुफ्त आज़माएं — कार्ड ज़रूरी नहीं।",
         hero_cta: "मेरी पहली विश्लेषण मुफ्त करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • गोपालन",
         hero_sample_label: "आपकी रिपोर्ट ऐसी दिखेगी", hero_sample_summary: "मान सामान्य सीमा में। हीमोग्लोबिन और ग्लूकोज सामान्य।", hero_sample_normal: "सामान्य", hero_sample_border: "सीमा", hero_sample_risk: "ध्यान", hero_sample_cta: "सारांश + मान + सुझाव + PDF डाउनलोड।", hero_sample_btn: "ऐसी रिपोर्ट पाएं — मुफ्त शुरू करें",
-        trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी",
+        trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी", trust_badges_heading: "सुरक्षित और अनुपालन सेवा",
         trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान",
         trust_badge_secure_paytr: "🔒 सुरक्षित भुगतान – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "एन्क्रिप्टेड कनेक्शन", footer_trust_kvkk_desc: "व्यक्तिगत डेटा सुरक्षा", footer_trust_gdpr_desc: "EU डेटा सुरक्षा", footer_trust_paytr_desc: "सुरक्षित भुगतान",
-        trust_cloudflare_title: "Cloudflare द्वारा सुरक्षित", trust_cloudflare_desc: "ग्लोबल CDN और DDoS सुरक्षा के साथ तेज़ और सुरक्षित एक्सेस।", trust_cloudflare_1: "ग्लोबल CDN त्वरण", trust_cloudflare_2: "DDoS सुरक्षा", trust_cloudflare_3: "एज फ़ायरवॉल",
+        trust_cloudflare_title: "Cloudflare द्वारा सुरक्षित", trust_cloudflare_desc: "ट्रैफिक सुरक्षा और ग्लोबल CDN से तेज़, सुरक्षित एक्सेस।", trust_cloudflare_1: "DDoS सुरक्षा", trust_cloudflare_2: "ग्लोबल CDN त्वरण", trust_cloudflare_3: "एज सुरक्षा",
         how_title: "नोरिया कैसे काम करता है", how_desc: "लैब रिज़ल्ट को स्पष्ट स्वास्थ्य जानकारी में बदलने के तीन आसान कदम।",
         how_1: "साइन अप करें", how_1d: "मुफ्त खाता बनाएं। ईमेल और पासवर्ड काफी।",
         how_2: "रिज़ल्ट चिपकाएं", how_2d: "रिज़ल्ट शीट के मान या टेक्स्ट चिपकाएं।",
@@ -3804,7 +3856,7 @@
         footer_terms: "उपयोग की शर्तें", footer_payment: "भुगतान और रिफंड", footer_contact: "संपर्क", back_home: "← होम",
         compare_title: "सभी प्लान की तुलना करें", compare_subtitle: "अपने लिए सही प्लान चुनें.", compare_feature: "विशेषता", compare_plan_free: "मुफ्त", compare_plan_single: "एकल", compare_plan_monthly: "मासिक", compare_plan_yearly: "वार्षिक", compare_analyses: "विश्लेषण", compare_analyses_per_month: "10+3 / माह", compare_upload: "टेक्स्ट, PDF, छवि", compare_report: "विस्तृत रिपोर्ट (सारांश, मान, सिफारिशें)", compare_diet: "आहार योजना", compare_supplements: "सप्लीमेंट", compare_heart: "दिल का स्वास्थ्य", compare_history: "इतिहास", compare_pdf: "PDF / साझा करें / डॉक्टर के लिए", compare_emr_ehr: "EMR/EHR रिपोर्ट", compare_langs: "रिपोर्ट भाषा", compare_langs_count: "9 भाषाएँ", compare_compare: "दो विश्लेषण की तुलना करें", compare_price: "कीमत",
         terms_heading: "उपयोग की शर्तें", privacy_heading: "गोपनीयता नीति", payment_heading: "भुगतान और रिफंड",
-        contact_heading: "संपर्क", contact_intro: "प्रश्नों, रिफंड अनुरोधों या तकनीकी समस्याओं (जैसे \"भुगतान मिला लेकिन विश्लेषण क्रेडिट नहीं\") के लिए संपर्क करें।", contact_email_label: "ईमेल:", contact_note: "यदि संभव हो तो अपना खाता ईमेल और संक्षिप्त विवरण (ऑर्डर नं., तारीख आदि) भेजें। हम 2 कार्यदिवसों में जवाब देते हैं।", contact_tagline: "नोरिया — रक्त परीक्षण परिणाम सरल भाषा में।",
+        contact_heading: "संपर्क", contact_intro: "प्रश्नों, रिफंड अनुरोधों या तकनीकी समस्याओं (जैसे \"भुगतान मिला लेकिन विश्लेषण क्रेडिट नहीं\") के लिए संपर्क करें।", contact_email_label: "ईमेल:", contact_note: "यदि संभव हो तो अपना खाता ईमेल और संक्षिप्त विवरण (ऑर्डर नं., तारीख आदि) भेजें। हम 1 कार्यदिवस में जवाब देते हैं।", contact_tagline: "नोरिया — रक्त परीक्षण परिणाम सरल भाषा में।",
         terms_intro: "Norya का उपयोग करके आप निम्नलिखित शर्तों को स्वीकार करते हैं। शर्तें बदलने पर साइट पर अपडेट टेक्स्ट प्रकाशित होगा; महत्वपूर्ण बदलाव ईमेल से सूचित किए जा सकते हैं।",
         terms_scope: "सेवा का दायरा। Norya एक टूल प्रदान करता है जो आपके ब्लड और लैब परिणामों को सरल भाषा में संक्षेप में बताता है। यह निदान या उपचार सुझाव नहीं है; केवल सूचनात्मक। स्वास्थ्य निर्णय डॉक्टर के साथ लेने चाहिए।",
         terms_account: "खाता और उपयोग। रजिस्टर करते समय दिए गए डेटा की सटीकता की जिम्मेदारी आपकी है। खाता साझा न करें और पासवर्ड गोपनीय रखें। सेवा केवल कानूनी, व्यक्तिगत उपयोग के लिए।",
@@ -3851,12 +3903,12 @@
         hero_desc: "Επικολλήστε τα αποτελέσματα, η AI τα εξηγεί. Δωρεάν δοκιμή — χωρίς κάρτα.",
         hero_cta: "Πρώτη ανάλυση δωρεάν", hero_see_sample: "Δείτε παράδειγμα αναφοράς", hero_how: "Πώς λειτουργεί", hero_secure: "Ασφαλές • Προστασία ιδιωτικότητας",
         hero_sample_label: "Έτσι θα φαίνεται η αναφορά σας", hero_sample_summary: "Οι τιμές σας εντός φυσιολογικών ορίων. Αιμοσφαιρίνη και γλυκόζη φυσιολογικές.", hero_sample_normal: "Φυσιολογικό", hero_sample_border: "Όριο", hero_sample_risk: "Προσοχή", hero_sample_cta: "Σύνοψη + τιμές + συμβουλές + λήψη PDF.", hero_sample_btn: "Λάβετε αυτή την αναφορά — Ξεκινήστε δωρεάν",
-        trust_since: "Από το 2017", trust_satisfaction: "100% ικανοποίηση", trust_users: "100.000+ χρήστες",
+        trust_since: "Από το 2017", trust_satisfaction: "100% ικανοποίηση", trust_users: "100.000+ χρήστες", trust_badges_heading: "Ασφαλής και συμβατή υπηρεσία",
         trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR",
         trust_badge_secure_paytr: "🔒 Ασφαλής πληρωμή – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Κρυπτογραφημένη σύνδεση", footer_trust_kvkk_desc: "Προστασία προσωπικών δεδομένων", footer_trust_gdpr_desc: "Προστασία δεδομένων ΕΕ", footer_trust_paytr_desc: "Ασφαλής πληρωμή",
-        trust_cloudflare_title: "Προστασία από Cloudflare", trust_cloudflare_desc: "Ταχύτερη και ασφαλέστερη πρόσβαση με παγκόσμιο CDN και προστασία DDoS.", trust_cloudflare_1: "Παγκόσμια επιτάχυνση CDN", trust_cloudflare_2: "Προστασία DDoS", trust_cloudflare_3: "Edge firewall",
+        trust_cloudflare_title: "Προστασία από Cloudflare", trust_cloudflare_desc: "Προστασία κίνησης και παγκόσμιο CDN για ταχύτερη και ασφαλέστερη πρόσβαση.", trust_cloudflare_1: "Προστασία DDoS", trust_cloudflare_2: "Παγκόσμια επιτάχυνση CDN", trust_cloudflare_3: "Ασφάλεια edge",
         how_title: "Πώς λειτουργεί η Norya;", how_desc: "Τρία απλά βήματα για να κατανοήσετε τα αποτελέσματά σας.",
         how_1: "Εγγραφή", how_1d: "Δημιουργήστε δωρεάν λογαριασμό.",
         how_2: "Επικολλήστε τα αποτελέσματα", how_2d: "Επικολλήστε τις τιμές ή το κείμενο από το φύλλο αποτελεσμάτων.",
@@ -3957,7 +4009,7 @@
         footer_terms: "Όροι χρήσης", footer_payment: "Πληρωμή και επιστροφές", footer_contact: "Επικοινωνία", back_home: "← Αρχική",
         compare_title: "Σύγκριση όλων των πλάνων", compare_subtitle: "Επιλέξτε το πλάνο που σας ταιριάζει.", compare_feature: "Λειτουργία", compare_plan_free: "Δωρεάν", compare_plan_single: "Μονό", compare_plan_monthly: "Μηνιαίο", compare_plan_yearly: "Ετήσιο", compare_analyses: "Αναλύσεις", compare_analyses_per_month: "10+3 / μήνα", compare_upload: "Κείμενο, PDF, εικόνα", compare_report: "Λεπτομερής αναφορά (περίληψη, τιμές, συστάσεις)", compare_diet: "Διατροφικό πλάνο", compare_supplements: "Συμπληρώματα", compare_heart: "Υγεία καρδιάς", compare_history: "Ιστορικό", compare_pdf: "PDF / Κοινοποίηση / Για τον γιατρό", compare_emr_ehr: "Αναφορά EMR/EHR", compare_langs: "Γλώσσα αναφοράς", compare_langs_count: "9 γλώσσες", compare_compare: "Σύγκριση δύο αναλύσεων", compare_price: "Τιμή",
         terms_heading: "Όροι χρήσης", privacy_heading: "Πολιτική απορρήτου", payment_heading: "Πληρωμή και επιστροφές",
-        contact_heading: "Επικοινωνία", contact_intro: "Για ερωτήσεις, αιτήματα επιστροφής χρημάτων ή τεχνικά ζητήματα (π.χ. \"η πληρωμή ελήφθη αλλά δεν προστέθηκε πίστωση ανάλυσης\"), επικοινωνήστε μαζί μας.", contact_email_label: "Email:", contact_note: "Εάν είναι δυνατόν, συμπεριλάβετε το email του λογαριασμού σας και μια σύντομη περιγραφή (αριθμός παραγγελίας, ημερομηνία κ.λπ.). Απαντάμε εντός 2 εργάσιμων ημερών.", contact_tagline: "Norya — Αποτελέσματα αιματολογικών σε απλή γλώσσα.",
+        contact_heading: "Επικοινωνία", contact_intro: "Για ερωτήσεις, αιτήματα επιστροφής χρημάτων ή τεχνικά ζητήματα (π.χ. \"η πληρωμή ελήφθη αλλά δεν προστέθηκε πίστωση ανάλυσης\"), επικοινωνήστε μαζί μας.", contact_email_label: "Email:", contact_note: "Εάν είναι δυνατόν, συμπεριλάβετε το email του λογαριασμού σας και μια σύντομη περιγραφή (αριθμός παραγγελίας, ημερομηνία κ.λπ.). Απαντάμε εντός 1 εργάσιμης ημέρας.", contact_tagline: "Norya — Αποτελέσματα αιματολογικών σε απλή γλώσσα.",
         terms_intro: "Με τη χρήση της Norya αποδέχεστε τους όρους. Σε αλλαγές θα δημοσιευτεί το τρέχον κείμενο στο site· σημαντικές αλλαγές μπορεί να ανακοινωθούν με email.",
         terms_scope: "Πεδίο υπηρεσίας. Η Norya προσφέρει εργαλείο που συνοψίζει τα αιματολογικά και εργαστηριακά αποτελέσματα σε απλή γλώσσα. Δεν είναι διάγνωση ή θεραπευτική σύσταση· μόνο ενημερωτικό. Οι αποφάσεις υγείας με γιατρό.",
         terms_account: "Λογαριασμός και χρήση. Είστε υπεύθυνοι για την ακρίβεια των δεδομένων κατά την εγγραφή. Μην κοινοποιείτε το λογαριασμό και κρατήστε το password μυστικό. Η υπηρεσία μόνο για νόμιμη, προσωπική χρήση.",
@@ -4004,12 +4056,12 @@
         hero_desc: "Vložte výsledky, AI je vysvětlí. Vyzkoušejte zdarma — bez karty.",
         hero_cta: "První analýza zdarma", hero_see_sample: "Zobrazit ukázkovou zprávu", hero_how: "Jak to funguje", hero_secure: "Bezpečné • Ochrana soukromí",
         hero_sample_label: "Tak bude vypadat vaše zpráva", hero_sample_summary: "Vaše hodnoty v referenčním rozsahu. Hemoglobin a glukóza v normě.", hero_sample_normal: "Normální", hero_sample_border: "Mez", hero_sample_risk: "Pozor", hero_sample_cta: "Shrnutí + hodnoty + doporučení + stažení PDF.", hero_sample_btn: "Získat tuto zprávu — Začít zdarma",
-        trust_since: "Od 2017", trust_satisfaction: "100% spokojenost", trust_users: "100 000+ uživatelů",
+        trust_since: "Od 2017", trust_satisfaction: "100% spokojenost", trust_users: "100 000+ uživatelů", trust_badges_heading: "Zabezpečená a compliantní služba",
         trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR",
         trust_badge_secure_paytr: "🔒 Zabezpečená platba – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Šifrované připojení", footer_trust_kvkk_desc: "Ochrana osobních údajů", footer_trust_gdpr_desc: "Ochrana údajů EU", footer_trust_paytr_desc: "Zabezpečená platba",
-        trust_cloudflare_title: "Chráněno Cloudflare", trust_cloudflare_desc: "Rychlejší a bezpečnější přístup s globálním CDN a ochranou DDoS.", trust_cloudflare_1: "Globální CDN zrychlení", trust_cloudflare_2: "Ochrana DDoS", trust_cloudflare_3: "Edge firewall",
+        trust_cloudflare_title: "Chráněno Cloudflare", trust_cloudflare_desc: "Ochrana provozu a globální CDN pro rychlejší a bezpečnější přístup.", trust_cloudflare_1: "Ochrana DDoS", trust_cloudflare_2: "Globální CDN zrychlení", trust_cloudflare_3: "Edge zabezpečení",
         how_title: "Jak funguje Norya?", how_desc: "Tři jednoduché kroky k pochopení výsledků.",
         how_1: "Registrace", how_1d: "Vytvořte si bezplatný účet.",
         how_2: "Vložte výsledky", how_2d: "Vložte hodnoty nebo text z výsledkového listu.",
@@ -4110,7 +4162,7 @@
         footer_terms: "Podmínky užití", footer_payment: "Platba a vrácení", footer_contact: "Kontakt", back_home: "← Domů",
         compare_title: "Porovnat všechny plány", compare_subtitle: "Vyberte si vhodný plán.", compare_feature: "Funkce", compare_plan_free: "Zdarma", compare_plan_single: "Jednorázový", compare_plan_monthly: "Měsíční", compare_plan_yearly: "Roční", compare_analyses: "Analýzy", compare_analyses_per_month: "10+3 / měsíc", compare_upload: "Text, PDF, obrázek", compare_report: "Podrobná zpráva (shrnutí, hodnoty, doporučení)", compare_diet: "Jídelníček", compare_supplements: "Doplňky", compare_heart: "Zdraví srdce", compare_history: "Historie", compare_pdf: "PDF / Sdílet / Pro lékaře", compare_emr_ehr: "Zpráva EMR/EHR", compare_langs: "Jazyk zprávy", compare_langs_count: "9 jazyků", compare_compare: "Porovnat dvě analýzy", compare_price: "Cena",
         terms_heading: "Podmínky užití", privacy_heading: "Zásady ochrany osobních údajů", payment_heading: "Platba a vrácení",
-        contact_heading: "Kontakt", contact_intro: "Pro dotazy, žádosti o vrácení peněz nebo technické problémy (např. \"platba přijata, ale nebyl přidán kredit analýzy\") nás kontaktujte.", contact_email_label: "E-mail:", contact_note: "Pokud možno uveďte e-mail účtu a krátký popis (č. objednávky, datum atd.). Odpovídáme do 2 pracovních dnů.", contact_tagline: "Norya — Výsledky krevních testů srozumitelným jazykem.",
+        contact_heading: "Kontakt", contact_intro: "Pro dotazy, žádosti o vrácení peněz nebo technické problémy (např. \"platba přijata, ale nebyl přidán kredit analýzy\") nás kontaktujte.", contact_email_label: "E-mail:", contact_note: "Pokud možno uveďte e-mail účtu a krátký popis (č. objednávky, datum atd.). Odpovídáme do 1 pracovního dne.", contact_tagline: "Norya — Výsledky krevních testů srozumitelným jazykem.",
         terms_intro: "Používáním Norya přijímáte následující podmínky. Při změně podmínek bude aktuální text zveřejněn na webu; výrazné změny mohou být oznámeny e-mailem.",
         terms_scope: "Rozsah služby. Norya poskytuje nástroj, který shrnuje vaše krevní a laboratorní výsledky srozumitelným jazykem. Není to diagnóza ani doporučení léčby; pouze informativní. Rozhodnutí o zdraví konzultujte s lékařem.",
         terms_account: "Účet a použití. Jste odpovědni za správnost údajů při registraci. Účet nesdílejte a heslo udržujte v tajnosti. Služba pouze pro zákonné, osobní použití.",
@@ -4157,12 +4209,12 @@
         hero_desc: "Nalepite rezultate, AI ih objašnjava. Probajte besplatno — bez kartice.",
         hero_cta: "Prva analiza besplatno", hero_see_sample: "Pogledaj primer izveštaja", hero_how: "Kako funkcioniše", hero_secure: "Bezbedno • Privatnost",
         hero_sample_label: "Ovako će izgledati vaš izveštaj", hero_sample_summary: "Vrednosti u referentnom opsegu. Hemoglobin i glukoza normalni.", hero_sample_normal: "Normalno", hero_sample_border: "Granica", hero_sample_risk: "Pažnja", hero_sample_cta: "Rezime + vrednosti + preporuke + preuzimanje PDF.", hero_sample_btn: "Nabavite ovaj izveštaj — Počnite besplatno",
-        trust_since: "Od 2017", trust_satisfaction: "100% zadovoljstvo", trust_users: "100.000+ korisnika",
+        trust_since: "Od 2017", trust_satisfaction: "100% zadovoljstvo", trust_users: "100.000+ korisnika", trust_badges_heading: "Sigurna i usklađena usluga",
         trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR",
         trust_badge_secure_paytr: "🔒 Sigurna plaćanja – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
         footer_trust_ssl_desc: "Šifrovana konekcija", footer_trust_kvkk_desc: "Zaštita ličnih podataka", footer_trust_gdpr_desc: "Zaštita podataka EU", footer_trust_paytr_desc: "Sigurna plaćanja",
-        trust_cloudflare_title: "Zaštićeno od strane Cloudflare", trust_cloudflare_desc: "Brži i sigurniji pristup sa globalnim CDN-om i DDoS zaštitom.", trust_cloudflare_1: "Globalno CDN ubrzanje", trust_cloudflare_2: "DDoS zaštita", trust_cloudflare_3: "Edge firewall",
+        trust_cloudflare_title: "Zaštićeno od strane Cloudflare", trust_cloudflare_desc: "Zaštita saobraćaja i globalni CDN za brži i sigurniji pristup.", trust_cloudflare_1: "DDoS zaštita", trust_cloudflare_2: "Globalno CDN ubrzanje", trust_cloudflare_3: "Edge bezbednost",
         how_title: "Kako funkcioniše Norya?", how_desc: "Tri jednostavna koraka za razumevanje rezultata.",
         how_1: "Registracija", how_1d: "Napravite besplatan nalog.",
         how_2: "Nalepite rezultate", how_2d: "Nalepite vrednosti ili tekst sa listića rezultata.",
@@ -4263,7 +4315,7 @@
         footer_terms: "Uslovi korišćenja", footer_payment: "Plaćanje i povrati", footer_contact: "Kontakt", back_home: "← Početna",
         compare_title: "Uporedi sve planove", compare_subtitle: "Pronađite plan koji vam odgovara.", compare_feature: "Funkcija", compare_plan_free: "Besplatno", compare_plan_single: "Pojedinačno", compare_plan_monthly: "Mesečno", compare_plan_yearly: "Godišnje", compare_analyses: "Analize", compare_analyses_per_month: "10+3 / mesec", compare_upload: "Tekst, PDF, slika", compare_report: "Detaljan izveštaj (rezime, vrednosti, preporuke)", compare_diet: "Dijetetski plan", compare_supplements: "Suplementi", compare_heart: "Zdravlje srca", compare_history: "Istorija", compare_pdf: "PDF / Podeli / Za lekara", compare_emr_ehr: "EMR/EHR izveštaj", compare_langs: "Jezik izveštaja", compare_langs_count: "9 jezika", compare_compare: "Uporedi dve analize", compare_price: "Cena",
         terms_heading: "Uslovi korišćenja", privacy_heading: "Politika privatnosti", payment_heading: "Plaćanje i povrati",
-        contact_heading: "Kontakt", contact_intro: "Za pitanja, zahteve za povrat novca ili tehničke probleme (npr. \"plaćanje primljeno ali nije dodat kredit za analizu\") pišite nam.", contact_email_label: "Email:", contact_note: "Ako je moguće, navedite email naloga i kratak opis (br. porudžbine, datum itd.). Odgovaramo u roku od 2 radna dana.", contact_tagline: "Norya — Rezultati krvnih testova jasnim jezikom.",
+        contact_heading: "Kontakt", contact_intro: "Za pitanja, zahteve za povrat novca ili tehničke probleme (npr. \"plaćanje primljeno ali nije dodat kredit za analizu\") pišite nam.", contact_email_label: "Email:", contact_note: "Ako je moguće, navedite email naloga i kratak opis (br. porudžbine, datum itd.). Odgovaramo u roku od 1 radnog dana.", contact_tagline: "Norya — Rezultati krvnih testova jasnim jezikom.",
         terms_intro: "Korišćenjem Norye prihvatate sledeće uslove. Pri promeni uslova ažurirani tekst biće objavljen na sajtu; značajne promene mogu biti najavljene putem emaila.",
         terms_scope: "Obim usluge. Norya pruža alat koji sumira vaše krvne i laboratorijske rezultate jasnim jezikom. Nije dijagnoza niti preporuka lečenja; samo informativno. Odluke o zdravlju donesite sa lekarom.",
         terms_account: "Nalog i korišćenje. Odgovorni ste za tačnost podataka pri registraciji. Ne delite nalog i čuvajte lozinku. Usluga samo za zakonitu, ličnu upotrebu.",

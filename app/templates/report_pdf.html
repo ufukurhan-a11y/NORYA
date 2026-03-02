@@ -21,6 +21,8 @@
       --norya-muted: #64748b;
       /* Sayfa altlık */
       --page-footer-color: #64748b;
+      --disclaimer-color: #6b7280;
+      --disclaimer-sep: #e5e7eb;
       /* Risk bantları */
       --risk-normal-bg: #d1fae5;
       --risk-normal-text: #065f46;
@@ -49,11 +51,20 @@
     /* ========== Yapı (class isimleri değişmesin) ========== */
     @page {
       size: A4;
-      margin: 20mm;
-      @bottom-center {
+      margin-top: 28mm;
+      margin-bottom: 22mm;
+      margin-left: 20mm;
+      margin-right: 20mm;
+      @top-center {
+        content: element(pdf-header);
+      }
+      @bottom-left {
+        content: element(pdf-disclaimer);
+      }
+      @bottom-right {
         font-size: 9px;
         color: var(--page-footer-color);
-        content: "{{ page_footer | default('Bu rapor bilgilendirme amaçlıdır. Tıbbi karar için hekime danışın. — Norya', true) }}";
+        content: "noryaai.com";
       }
     }
     * { box-sizing: border-box; }
@@ -65,29 +76,31 @@
       margin: 0;
       padding: 0;
     }
-    .header {
-      border-bottom: 3px solid var(--norya-brand-border);
-      padding-bottom: 12px;
-      margin-bottom: 20px;
+    /* Premium header: her sayfada tekrarlanan üst bant */
+    #pdf-header {
+      position: running(pdf-header);
+      display: block;
+      width: 100%;
+      padding: 0;
+      margin: 0;
     }
-    .brand-wrap { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
-    .brand-logo { width: 100px; height: auto; max-height: 100px; object-fit: contain; flex-shrink: 0; background: #fff; }
-    .brand {
-      font-size: 22px;
-      font-weight: 700;
-      color: var(--norya-brand);
-      letter-spacing: -0.02em;
-    }
-    .brand-sub {
-      font-size: 10px;
-      color: var(--norya-muted);
-      margin-top: 2px;
-    }
-    .report-meta {
-      margin-top: 8px;
-      font-size: 10px;
-      color: var(--norya-muted);
-    }
+    .pdf-header-table { width: 100%; border-collapse: collapse; table-layout: fixed; }
+    .pdf-header-table td { vertical-align: top; padding: 0; }
+    .pdf-header-table .col-logo { width: 22%; padding-left: 0; }
+    .pdf-header-table .col-center { width: 56%; text-align: center; padding: 0 8px; }
+    .pdf-header-table .col-right { width: 22%; text-align: right; padding-right: 0; }
+    .pdf-header-logo { max-width: 200px; width: 200px; height: auto; object-fit: contain; display: block; }
+    .pdf-header-title { font-size: 19px; font-weight: 700; color: var(--norya-heading); margin: 0 0 4px 0; line-height: 1.25; }
+    .pdf-header-subtitle { font-size: 11px; color: var(--norya-muted); margin: 0; line-height: 1.35; }
+    .pdf-header-meta { font-size: 10px; color: var(--norya-muted); margin: 0; line-height: 1.5; }
+    .pdf-header-sep { border: none; border-top: 1px solid var(--section-border); margin: 10px 0 0 0; }
+    /* Bilgi bandı (ilk sayfada, header altında) */
+    .info-band { display: table; width: 100%; margin-bottom: 20px; font-size: 10px; color: var(--norya-text); border: 1px solid var(--table-border); border-radius: 4px; overflow: hidden; }
+    .info-band-col { display: table-cell; width: 50%; padding: 12px 14px; vertical-align: top; background: var(--table-row-even); border-right: 1px solid var(--table-border); }
+    .info-band-col:last-child { border-right: none; }
+    .info-band-title { font-size: 10px; font-weight: 700; color: var(--norya-heading); margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.02em; }
+    .info-band-row { margin: 4px 0; line-height: 1.45; }
+    .info-band-label { color: var(--norya-muted); }
     .risk-banner {
       padding: 10px 14px;
       border-radius: 6px;
@@ -190,16 +203,64 @@
       color: var(--footer-text);
     }
     .footer-note.emr-ehr-note { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--table-border); font-size: 0.9em; color: var(--footer-emr); }
+    /* Tıbbi uyarı: her sayfanın altında (running footer) */
+    #pdf-disclaimer {
+      position: running(pdf-disclaimer);
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding-top: 6px;
+      border-top: 1px solid var(--disclaimer-sep);
+      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 10px;
+      line-height: 1.45;
+      color: var(--disclaimer-color);
+      text-align: left;
+    }
+    #pdf-disclaimer .disclaimer-line1 { font-size: 10px; margin: 0 0 3px 0; }
+    #pdf-disclaimer .disclaimer-line2 { font-size: 8px; color: var(--disclaimer-color); margin: 0; opacity: 0.95; }
   </style>
 </head>
 <body>
-  <div class="header">
-    <div class="brand-wrap">
-      <img src="static/logo.png" alt="Norya AI" class="brand-logo" />
-      <span class="brand">Norya</span>
+  <!-- Her sayfada tekrarlanan tıbbi uyarı (WeasyPrint running footer) -->
+  <div id="pdf-disclaimer">
+    <p class="disclaimer-line1">{{ medical_disclaimer_1 | default('Bu rapor yapay zekâ destekli ön değerlendirme amaçlıdır. Tıbbi tanı veya tedavi yerine geçmez. Sağlık durumunuzla ilgili kararlar için lütfen doktorunuza başvurunuz.', true) }}</p>
+    <p class="disclaimer-line2">{{ medical_disclaimer_2 | default('Norya AI bir tıbbi teşhis sistemi değildir.', true) }}</p>
+  </div>
+  <!-- Her sayfada tekrarlanan üst bant (WeasyPrint running header) -->
+  <div id="pdf-header">
+    <table class="pdf-header-table">
+      <tr>
+        <td class="col-logo">
+          <img src="static/norya_wordmark_transparent.png" alt="Norya" class="pdf-header-logo" />
+        </td>
+        <td class="col-center">
+          <p class="pdf-header-title">{{ report_header_title | default('Kan Tahlili Analiz Raporu', true) }}</p>
+          <p class="pdf-header-subtitle">{{ report_header_subtitle | default('AI destekli ön değerlendirme • Klinik karar yerine geçmez', true) }}</p>
+        </td>
+        <td class="col-right">
+          <p class="pdf-header-meta">{{ report_date_label | default('Tarih', true) }}: {{ report_date }}</p>
+          <p class="pdf-header-meta">{{ report_id_label | default('Rapor No', true) }}: {{ report_id | default('—', true) }}</p>
+        </td>
+      </tr>
+    </table>
+    <hr class="pdf-header-sep" />
+  </div>
+
+  <!-- İlk sayfa: Kişi ve Analiz bilgi bandı -->
+  <div class="info-band">
+    <div class="info-band-col">
+      <p class="info-band-title">{{ info_patient_heading | default('Kişi', true) }}</p>
+      <p class="info-band-row"><span class="info-band-label">Ad Soyad:</span> {{ patient_name | default('—', true) }}</p>
+      <p class="info-band-row"><span class="info-band-label">Yaş:</span> {{ patient_age | default('—', true) }}</p>
+      <p class="info-band-row"><span class="info-band-label">Cinsiyet:</span> {{ patient_gender | default('—', true) }}</p>
     </div>
-    <div class="brand-sub">{{ subtitle | default('Kan Tahlili Analiz Raporu — Yapay Zeka Destekli Yorum', true) }}</div>
-    <div class="report-meta">{{ report_date_label | default('Rapor Tarihi', true) }}: {{ report_date }}</div>
+    <div class="info-band-col">
+      <p class="info-band-title">{{ info_analysis_heading | default('Analiz', true) }}</p>
+      <p class="info-band-row"><span class="info-band-label">Dil:</span> {{ lang | default('tr', true) }}</p>
+      <p class="info-band-row"><span class="info-band-label">Paket:</span> {{ plan_name | default('—', true) }}</p>
+      <p class="info-band-row"><span class="info-band-label">Kaynak:</span> {{ source_type | default('—', true) }}</p>
+    </div>
   </div>
 
   {% if risk_level != 'none' %}

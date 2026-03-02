@@ -74,14 +74,14 @@ _ADMIN_HTML = """<!DOCTYPE html>
 </head>
 <body>
   <div id="login" class="login-box">
-    <h1><img src="/static/logo.png" alt="Norya AI" class="brand-logo" />Norya Admin</h1>
+    <h1><img src="/static/norya_wordmark_transparent.png" alt="Norya" class="brand-logo" />Norya Admin</h1>
     <p>Admin şifresini girin (ADMIN_SECRET)</p>
     <input type="password" id="secret" placeholder="Admin şifresi" />
     <button type="button" onclick="enter()">Giriş</button>
     <p id="login-err" class="err" style="display:none;"></p>
   </div>
   <div id="dashboard" class="dashboard">
-    <h1><img src="/static/logo.png" alt="Norya AI" class="brand-logo" />Norya Admin Panel</h1>
+    <h1><img src="/static/norya_wordmark_transparent.png" alt="Norya" class="brand-logo" />Norya Admin Panel</h1>
     <p style="color:#94a3b8;font-size:0.9rem;margin-top:0.25rem;"><a href="/health" target="_blank" class="health-link">Sistem durumu (health)</a> <span id="health-badge"></span></p>
     <div class="stats" id="stats"></div>
     <section>
@@ -331,11 +331,16 @@ def admin_analysis_pdf(
         else:
             report_date = str(dt)
     report_lang = (lang or "tr").strip().lower()[:5]
+    user = db.get(User, rec.user_id) if rec.user_id else None
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
             report_date=report_date,
             lang=report_lang,
+            report_id=analysis_id,
+            patient_name=user.full_name if user else None,
+            plan_name=user.plan if user else None,
+            source_type=getattr(rec, "source", None) or None,
         )
     except Exception as e:
         raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
