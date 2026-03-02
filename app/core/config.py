@@ -54,6 +54,8 @@ class Settings(BaseSettings):
     vapid_private_key: str = ""  # Bildirim göndermek için (pywebpush ile kullanılır)
     # Google Analytics 4: Ölçüm kimliği (G-XXXXXXXXXX). Boşsa script eklenmez.
     ga_measurement_id: str = ""
+    # Google Ads: Dönüşüm hesabı kimliği (AW-XXXXXXXXX). Boşsa gtag'a eklenmez.
+    google_ads_conversion_id: str = ""
     # GİB e-Arşiv fatura (admin'den sipariş başına kesim)
     gib_earsiv_user: str = ""           # Vergi/TC no (10/11 hane)
     gib_earsiv_password: str = ""

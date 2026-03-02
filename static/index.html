@@ -24,14 +24,7 @@
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Norya — Kan Tahlili Analizi" />
   <meta name="twitter:description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın." />
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FLMLJH3Q0"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-1FLMLJH3Q0');
-  </script>
+  <!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->
   <link rel="stylesheet" href="/static/css/tailwind.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -281,6 +274,7 @@
             <a href="#rehber" id="nav-menu-guide" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_guide">Tahlil Rehberi</a>
             <a href="#seffaflik" id="nav-menu-transparency" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_transparency">Şeffaflık</a>
             <a href="#fiyatlandirma" id="nav-menu-pricing" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_pricing">Fiyatlandırma</a>
+            <a href="#odeme" id="nav-menu-checkout" onclick="closeNavMenu(); showCheckoutPage(); return true;" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_checkout">Ödeme</a>
             <a href="/legal/iletisim" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_contact">Bize Ulaşın</a>
             <button type="button" onclick="closeNavMenu(); requestPushAndSubscribe();" class="block w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_notifications">Bildirimleri aç</button>
             <a href="#sss" id="nav-menu-faq" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" data-i18n="nav_faq">SSS</a>
@@ -319,7 +313,7 @@
       <ul class="hero-trust-list mt-6 flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-2 text-navy-200 text-xs sm:text-sm font-medium" aria-label="Güven rozetleri">
         <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL ile korunur</span></li>
         <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡️</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR uyumlu</span></li>
-        <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">PayTR ile güvenli ödeme</span></li>
+        <li class="inline-flex items-center gap-2"><img src="/static/images/paytr-logo.svg" alt="PayTR" class="h-5 w-auto object-contain opacity-90" width="60" height="16" loading="lazy" /> <span data-i18n="trust_badge_paytr">PayTR ile güvenli ödeme</span></li>
       </ul>
     </div>
     <!-- Örnek rapor taslağı: cam efekti, sert beyaz yok (mobilde aşağıda) -->
@@ -1298,7 +1292,16 @@
   <div id="payment-modal" class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/50 p-4">
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col">
       <div class="flex items-center justify-between px-4 py-3 border-b border-accent-200 dark:border-accent-700">
-        <span class="font-semibold text-accent-900 dark:text-white" data-i18n="payment_modal_title">Güvenli ödeme (PayTR)</span>
+        <div class="flex flex-col gap-0.5">
+          <span class="font-semibold text-accent-900 dark:text-white" data-i18n="payment_modal_title">Güvenli ödeme (PayTR)</span>
+          <p class="flex items-center gap-2 text-xs text-accent-500 dark:text-accent-400">
+            <span aria-hidden="true">🔒</span><span data-i18n="footer_trust_ssl">SSL Secure</span>
+            <span class="text-accent-300 dark:text-accent-600">·</span>
+            <img src="/static/images/paytr-logo.svg" alt="PayTR" class="h-3.5 w-auto object-contain inline-block" width="42" height="12" /><span data-i18n="footer_trust_paytr">PayTR Secure</span>
+            <span class="text-accent-300 dark:text-accent-600">·</span>
+            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="" class="h-3.5 w-3.5 inline object-contain" width="14" height="14" /><span data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
+          </p>
+        </div>
         <button type="button" onclick="closePaymentModal()" class="p-2 rounded-lg hover:bg-accent-100 dark:hover:bg-accent-700 text-accent-600 dark:text-accent-400" aria-label="Kapat">✕</button>
       </div>
       <div class="flex-1 min-h-[400px] overflow-hidden">
@@ -1307,10 +1310,26 @@
     </div>
   </div>
 
-  <!-- Norya ödeme sayfası (checkout) – özgün, indirim yok -->
+  <!-- Norya ödeme sayfası (checkout) – kurumsal, PayTR / Cloudflare / SSL -->
   <section id="odeme-section" class="hidden py-16 px-4 bg-[var(--norya-bg)]">
+    <span id="odeme" class="block -mt-24 pt-24" aria-hidden="true"></span>
     <div class="max-w-xl mx-auto">
       <a href="#fiyatlandirma" onclick="document.getElementById('odeme-section').classList.add('hidden')" class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:underline mb-6" data-i18n="checkout_back">← Planı değiştir</a>
+      <!-- Kurumsal güven çubuğu: SSL, PayTR, Cloudflare -->
+      <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-6 py-4 px-4 rounded-xl bg-accent-50 dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700">
+        <span class="inline-flex items-center gap-2 text-accent-700 dark:text-accent-300 text-sm font-medium">
+          <span class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true">🔒</span>
+          <span data-i18n="footer_trust_ssl">SSL Secure</span>
+        </span>
+        <span class="inline-flex items-center gap-2 text-accent-700 dark:text-accent-300 text-sm font-medium">
+          <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center shrink-0 p-1"><img src="/static/images/paytr-logo.svg" alt="PayTR" class="w-full h-full object-contain" width="24" height="24" /></span>
+          <span data-i18n="footer_trust_paytr">PayTR Secure</span>
+        </span>
+        <span class="inline-flex items-center gap-2 text-accent-700 dark:text-accent-300 text-sm font-medium">
+          <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="" class="h-6 w-6 object-contain shrink-0" width="24" height="24" loading="lazy" />
+          <span data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
+        </span>
+      </div>
       <div class="rounded-2xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-accent-800 overflow-hidden drop-shadow-soft">
         <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-white flex items-center gap-3">
           <img src="/static/logo.png" alt="Norya AI" class="h-12 w-auto flex-shrink-0 object-contain rounded-lg bg-white/95" />
@@ -1356,6 +1375,14 @@
           <button type="button" id="checkout-pay-btn" onclick="submitCheckout()" class="mt-6 w-full py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg transition shadow-lg" data-i18n="checkout_btn">Güvenli ödemeye geç</button>
           <p class="mt-3 flex justify-center">
             <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-medium" data-i18n="trust_badge_secure_paytr">🔒 Güvenli ödeme – PayTR</span>
+          </p>
+          <p class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-accent-500 dark:text-accent-400">
+            <span class="flex items-center gap-2">
+              <img src="https://cdn.simpleicons.org/visa/1A1F71" alt="Visa" class="h-6 w-auto object-contain opacity-90" width="40" height="24" loading="lazy" />
+              <img src="https://cdn.simpleicons.org/mastercard/EB001B" alt="Mastercard" class="h-6 w-auto object-contain opacity-90" width="40" height="24" loading="lazy" />
+              <img src="https://cdn.simpleicons.org/americanexpress/2E77BC" alt="American Express" class="h-5 w-auto object-contain opacity-90" width="32" height="20" loading="lazy" />
+            </span>
+            <span data-i18n="checkout_accepted_cards">Visa, Mastercard, Amex kabul edilir</span>
           </p>
           <p class="mt-3 text-center text-xs text-accent-500" data-i18n="checkout_paytr_note">PayTR ayarlı değilse kart ödeme sayfası açılmaz; ödeme özeti ve indirim kodu burada görüntülenir.</p>
         </div>
@@ -1689,6 +1716,104 @@
     </div>
   </section>
 
+  <!-- Profil / Hesabım – kontrol paneli (premium, sekme yapısı) -->
+  <section id="profile-section" class="hidden py-12 sm:py-16 px-4 bg-[var(--norya-bg)]">
+    <span id="profil" class="block -mt-24 pt-24" aria-hidden="true"></span>
+    <div class="max-w-3xl mx-auto">
+      <a href="#" onclick="closeProfilePage(); return false;" class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:underline mb-6" data-i18n="back_home">← Ana sayfa</a>
+
+      <!-- Üst özet kartı -->
+      <div class="rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-lg shadow-accent-200/20 dark:shadow-black/20 p-6 sm:p-8 mb-8">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+          <div class="min-w-0">
+            <h1 id="profile-summary-name" class="text-xl sm:text-2xl font-bold text-accent-900 dark:text-white truncate"></h1>
+            <p id="profile-summary-email" class="text-sm text-accent-500 dark:text-accent-400 truncate mt-0.5"></p>
+            <div class="flex flex-wrap gap-3 mt-3 text-sm">
+              <span class="text-accent-500 dark:text-accent-400" data-i18n="profile_plan_label">Plan</span>: <strong id="profile-summary-plan" class="text-accent-900 dark:text-white">—</strong>
+              <span class="text-accent-500 dark:text-accent-400" data-i18n="profile_remaining">Kalan</span>: <strong id="profile-summary-remaining" class="text-accent-900 dark:text-white">—</strong>
+              <span class="text-accent-500 dark:text-accent-400" data-i18n="profile_ends">Bitiş</span>: <strong id="profile-summary-ends" class="text-accent-900 dark:text-white">—</strong>
+            </div>
+          </div>
+          <div class="shrink-0">
+            <button type="button" onclick="closeProfilePage(); openAnalyze();" class="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm shadow-md transition" data-i18n="nav_analyze">Analiz Yap</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Sekmeler (mobilde yatay kaydırma) -->
+      <div class="flex overflow-x-auto gap-1 pb-2 -mx-1 scrollbar-thin scrollbar-thumb-accent-300 dark:scrollbar-thumb-accent-600" role="tablist" aria-label="Profil bölümleri">
+        <button type="button" id="profile-tab-general" role="tab" aria-selected="true" aria-controls="profile-panel-general" onclick="switchProfileTab('general')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap bg-primary-600 text-white border-2 border-primary-600" data-i18n="profile_tab_general">Genel Bilgiler</button>
+        <button type="button" id="profile-tab-plan" role="tab" aria-selected="false" aria-controls="profile-panel-plan" onclick="switchProfileTab('plan')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap border-2 border-accent-200 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20" data-i18n="profile_tab_plan">Paket & Kullanım</button>
+        <button type="button" id="profile-tab-history" role="tab" aria-selected="false" aria-controls="profile-panel-history" onclick="switchProfileTab('history')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap border-2 border-accent-200 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20" data-i18n="profile_tab_history">Analiz Geçmişi</button>
+        <button type="button" id="profile-tab-security" role="tab" aria-selected="false" aria-controls="profile-panel-security" onclick="switchProfileTab('security')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap border-2 border-accent-200 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20" data-i18n="profile_tab_security">Güvenlik</button>
+      </div>
+
+      <!-- Panel: Genel Bilgiler -->
+      <div id="profile-panel-general" role="tabpanel" aria-labelledby="profile-tab-general" class="profile-panel rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+        <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_general">Genel Bilgiler</h2>
+        <form id="profile-page-form" onsubmit="submitProfilePage(event)">
+          <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="profile-page-name" data-i18n="placeholder_name">Ad Soyad</label>
+          <input type="text" id="profile-page-name" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500" />
+          <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="profile-page-phone" data-i18n="placeholder_phone">Telefon</label>
+          <input type="tel" id="profile-page-phone" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500" />
+          <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="profile-page-country" data-i18n="profile_country">Ülke</label>
+          <select id="profile-page-country" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500">
+            <option value="" data-i18n="placeholder_country">Ülke seçin</option>
+            <option value="TR">Türkiye</option>
+            <option value="US">ABD</option>
+            <option value="GB">Birleşik Krallık</option>
+            <option value="DE">Almanya</option>
+            <option value="FR">Fransa</option>
+            <option value="IT">İtalya</option>
+            <option value="ES">İspanya</option>
+            <option value="XX" data-i18n="country_other">Diğer</option>
+          </select>
+          <p id="profile-page-error" class="text-red-600 dark:text-red-400 text-sm mb-3 hidden" role="alert"></p>
+          <button type="submit" class="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold" data-i18n="profile_save">Kaydet</button>
+        </form>
+      </div>
+
+      <!-- Panel: Paket & Kullanım -->
+      <div id="profile-panel-plan" role="tabpanel" aria-labelledby="profile-tab-plan" class="profile-panel hidden rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+        <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_plan">Paket & Kullanım</h2>
+        <p class="text-sm text-accent-600 dark:text-accent-400 mb-2" data-i18n="profile_plan_name">Plan</p>
+        <p id="profile-plan-name" class="font-semibold text-accent-900 dark:text-white mb-4">—</p>
+        <p class="text-sm text-accent-600 dark:text-accent-400 mb-1" data-i18n="profile_usage_label">Kullanım (bu ay)</p>
+        <div class="flex justify-between text-sm mb-1">
+          <span id="profile-usage-text" class="text-accent-700 dark:text-accent-300">—</span>
+          <span id="profile-usage-fraction" class="text-accent-500 dark:text-accent-400">0 / 0</span>
+        </div>
+        <div class="h-3 rounded-full bg-accent-200 dark:bg-accent-700 overflow-hidden mb-6">
+          <div id="profile-usage-bar" class="h-full rounded-full bg-primary-500 transition-all duration-300" style="width: 0%"></div>
+        </div>
+        <a href="#fiyatlandirma" onclick="closeProfilePage(); document.getElementById('odeme-section') && document.getElementById('odeme-section').classList.add('hidden');" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition" data-i18n="profile_upgrade_cta">Paket Yükselt</a>
+      </div>
+
+      <!-- Panel: Analiz Geçmişi -->
+      <div id="profile-panel-history" role="tabpanel" aria-labelledby="profile-tab-history" class="profile-panel hidden rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+        <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_history">Analiz Geçmişi</h2>
+        <div id="profile-history-list" class="space-y-3">
+          <p class="text-accent-500 dark:text-accent-400 text-sm" data-i18n="history_loading">Yükleniyor...</p>
+        </div>
+      </div>
+
+      <!-- Panel: Güvenlik -->
+      <div id="profile-panel-security" role="tabpanel" aria-labelledby="profile-tab-security" class="profile-panel hidden rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+        <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_security">Güvenlik</h2>
+        <h3 class="text-sm font-semibold text-accent-800 dark:text-accent-200 mb-2" data-i18n="profile_change_password">Şifre değiştir</h3>
+        <form onsubmit="submitProfilePagePassword(event)">
+          <input type="password" id="profile-page-current-pw" data-i18n-placeholder="placeholder_password_current" placeholder="Mevcut şifre" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+          <input type="password" id="profile-page-new-pw" data-i18n-placeholder="placeholder_password_hint" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+          <p id="profile-page-pw-error" class="text-red-600 dark:text-red-400 text-sm mb-2 hidden" role="alert"></p>
+          <button type="submit" class="px-4 py-2 rounded-xl bg-accent-200 dark:bg-accent-700 text-accent-900 dark:text-accent-100 font-medium hover:bg-accent-300 dark:hover:bg-accent-600" data-i18n="profile_change_password_btn">Şifreyi güncelle</button>
+        </form>
+        <hr class="my-6 border-accent-200 dark:border-accent-700" />
+        <button type="button" onclick="downloadMyData()" class="w-full py-2.5 rounded-xl border border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 text-sm font-medium hover:bg-accent-50 dark:hover:bg-accent-700/50 mb-3" data-i18n="profile_export_data">Verilerimi indir (JSON)</button>
+        <button type="button" onclick="openDeleteAccountConfirm()" class="w-full py-2.5 rounded-xl border border-red-300 dark:border-red-700 text-red-600 dark:text-red-400 text-sm font-medium hover:bg-red-50 dark:hover:bg-red-900/20" data-i18n="profile_delete_account">Hesabımı sil</button>
+      </div>
+    </div>
+  </section>
+
   <!-- Yasal sayfalar -->
   <section id="terms" class="py-16 px-4 bg-accent-50 dark:bg-accent-900/40 border-t border-accent-200 dark:border-accent-800">
     <div class="max-w-4xl mx-auto w-full px-4 text-accent-700 dark:text-accent-300 text-sm leading-relaxed">
@@ -1767,7 +1892,7 @@
         </div>
         <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
           <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">💳</span>
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center shrink-0 p-1"><img src="/static/images/paytr-logo.svg" alt="PayTR" class="w-full h-full object-contain" width="24" height="24" /></span>
             <span class="font-semibold text-sm" data-i18n="footer_trust_paytr">PayTR Secure</span>
           </div>
           <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_paytr_desc">Güvenli ödeme</p>
@@ -2589,7 +2714,7 @@
     const T = {
       tr: {
         nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
-        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
+        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?",
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade ve anlaşılır bir dille açıklayan bir hizmettir. Laboratuvardan elinize ulaşan sayılar ve kısaltmalar çoğu zaman anlaşılması zor olur; Norya bu sonuçları özetleyen, her değerin referans aralığına göre ne anlama geldiğini anlatan ve günlük hayatta uygulanabilir kısa öneriler sunan raporlar üretir.",
@@ -2600,6 +2725,7 @@
         about_who_3: "Norya olarak amacımız, laboratuvar sonuçlarınızı korkulacak bir belge olmaktan çıkarıp anlaşılır bir rehbere dönüştürmektir. Sizin deneyiminiz ve geri bildirimleriniz bu yolculukta bize yön veriyor.",
         nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_profile: "Profil", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
         profile_email_verified: "E-posta doğrulandı", profile_save: "Kaydet", profile_change_password: "Şifre değiştir", profile_change_password_btn: "Şifreyi güncelle", profile_export_data: "Verilerimi indir (JSON)", profile_delete_account: "Hesabımı sil", profile_delete_confirm_title: "Hesabı sil", profile_delete_confirm_desc: "Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.", profile_cancel: "İptal", profile_delete_confirm_btn: "Hesabı sil",
+        profile_tab_general: "Genel Bilgiler", profile_tab_plan: "Paket & Kullanım", profile_tab_history: "Analiz Geçmişi", profile_tab_security: "Güvenlik", profile_plan_label: "Plan", profile_remaining: "Kalan", profile_ends: "Bitiş", profile_plan_pro: "Pro", profile_ends_monthly: "Aylık yenilenir", profile_ends_na: "—", profile_usage_label: "Kullanım (bu ay)", profile_upgrade_cta: "Paket Yükselt", profile_view_analysis: "Görüntüle", profile_unlimited: "Sınırsız", profile_country: "Ülke",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
         hero_sub: "Laboratuvar sonuçları — anlaşılır rapor",
         hero_title: "Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.",
@@ -2771,14 +2897,14 @@
         history_detail_input: "Tahlil girişi:", history_detail_result: "Norya AI yorumu:", history_close: "Kapat", history_analysis_a: "Analiz A", history_analysis_b: "Analiz B",
         history_loading: "Yükleniyor...", history_empty: "Henüz analiz yok.", history_load_error: "Geçmiş yüklenemedi.", history_compare_select_two: "İki farklı analiz seçin.", history_compare_load_error: "Analizler yüklenemedi.",
         usage_this_month: "Bu ay {kullanilan}/{limit} analiz hakkınız kullanıldı.", usage_first_free: "İlk analiz ücretsiz.", usage_limit_reached: "Aylık analiz hakkınız doldu. Önce ödeme yapın, sonra analiz yapabilirsiniz.", usage_pro_unlimited: "Pro plan: Bu ay {kullanilan}/{limit} analiz kullandınız.", usage_extra_credits: "+ {n} ek hak", payment_btn_single: "1 Analiz Satın Al", payment_btn_pro: "Pro'ya Geç", payment_not_available: "Ödeme şu an kullanılamıyor.", payment_error: "Ödeme sayfası açılamadı.", payment_modal_title: "Güvenli ödeme (PayTR)", payment_success: "Ödemeniz alındı. Analiz yapabilirsiniz.", session_expired: "Oturumunuz sonlanmış. Lütfen tekrar giriş yapın.", test_mode_link: "Sınırsız test", test_mode_on: "Test modu – sınırsız, hak düşülmez",
-        checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_btn: "Güvenli ödemeye geç", checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
+        checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_btn: "Güvenli ödemeye geç", checkout_accepted_cards: "Visa, Mastercard, Amex kabul edilir.", checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
         guest_checkout_title: "Kayıt olmadan tek analiz", guest_checkout_desc: "E-posta adresinizi girin; ödeme sonrası aynı e-posta ile oturum açıp analiz yapabilirsiniz.", guest_checkout_name: "Ad (opsiyonel)",
         btn_processing_pdf: "PDF işleniyor...", btn_processing_analyze: "Analiz ediliyor...",
         source_pdf: "PDF", source_image: "Görsel", source_text: "Metin"
       },
       en: {
         nav_about: "About us", nav_how: "How it works", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
-        nav_features: "Features", nav_pricing: "Pricing", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ",
+        nav_features: "Features", nav_pricing: "Pricing", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?",
         about_what_1: "Norya is a service that explains your blood test results in plain language. The numbers and abbreviations from the lab are often hard to understand; Norya produces reports that summarise your results, explain what each value means in relation to reference ranges, and offer short, practical suggestions for daily life.",
@@ -2789,6 +2915,7 @@
         about_who_3: "Our goal at Norya is to turn your lab results from a document to fear into a clear guide. Your experience and feedback guide us on this journey.",
         nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_profile: "Profile", nav_analyze: "Analyze", nav_logout: "Log out",
         profile_email_verified: "Email verified", profile_save: "Save", profile_change_password: "Change password", profile_change_password_btn: "Update password", profile_export_data: "Download my data (JSON)", profile_delete_account: "Delete my account", profile_delete_confirm_title: "Delete account", profile_delete_confirm_desc: "This cannot be undone. All your analyses and data will be deleted. Enter your password to confirm.", profile_cancel: "Cancel", profile_delete_confirm_btn: "Delete account",
+        profile_tab_general: "General", profile_tab_plan: "Plan & Usage", profile_tab_history: "Analysis History", profile_tab_security: "Security", profile_plan_label: "Plan", profile_remaining: "Remaining", profile_ends: "Ends", profile_plan_pro: "Pro", profile_ends_monthly: "Renews monthly", profile_ends_na: "—", profile_usage_label: "Usage (this month)", profile_upgrade_cta: "Upgrade plan", profile_view_analysis: "View", profile_unlimited: "Unlimited", profile_country: "Country",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
         hero_sub: "Lab results — clear report",
         hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
@@ -2960,14 +3087,14 @@
         history_detail_input: "Lab input:", history_detail_result: "Norya AI interpretation:", history_close: "Close", history_analysis_a: "Analysis A", history_analysis_b: "Analysis B",
         history_loading: "Loading...", history_empty: "No analyses yet.", history_load_error: "Could not load history.", history_compare_select_two: "Select two different analyses.", history_compare_load_error: "Could not load analyses.",
         usage_this_month: "This month {kullanilan}/{limit} analyses used.", usage_first_free: "First analysis free.", usage_limit_reached: "Monthly limit reached. Pay first, then run analysis.", usage_pro_unlimited: "Pro plan: {kullanilan}/{limit} analyses this month.", usage_extra_credits: "+ {n} extra", payment_btn_single: "Buy 1 analysis", payment_btn_pro: "Upgrade to Pro", payment_not_available: "Payment is not available.", payment_error: "Could not open payment page.", payment_modal_title: "Secure payment (PayTR)", payment_success: "Payment received. You can run analysis now.", session_expired: "Your session has expired. Please log in again.", test_mode_link: "Unlimited test", test_mode_on: "Test mode – unlimited, no credit used",
-        checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_btn: "Proceed to secure payment", checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
+        checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_btn: "Proceed to secure payment", checkout_accepted_cards: "Visa, Mastercard, Amex accepted.", checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
         guest_checkout_title: "Single analysis without account", guest_checkout_desc: "Enter your email; after payment you can sign in with the same email and run your analysis.", guest_checkout_name: "Name (optional)",
         btn_processing_pdf: "Processing PDF...", btn_processing_analyze: "Analyzing...",
         source_pdf: "PDF", source_image: "Image", source_text: "Text"
       },
       it: {
         nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
-        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
+        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?",
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
@@ -3089,6 +3216,7 @@
         disclaimer_informative: "Questa analisi è solo a scopo informativo. Non sostituisce una diagnosi medica.",
         footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Termini d'uso", footer_payment: "Pagamento e rimborsi", footer_contact: "Contatti", back_home: "← Home",
+        profile_tab_general: "Generale", profile_tab_plan: "Piano e utilizzo", profile_tab_history: "Cronologia analisi", profile_tab_security: "Sicurezza", profile_plan_label: "Piano", profile_remaining: "Rimanenti", profile_ends: "Fine", profile_plan_pro: "Pro", profile_ends_monthly: "Rinnovo mensile", profile_ends_na: "—", profile_usage_label: "Utilizzo (questo mese)", profile_upgrade_cta: "Passa a un piano superiore", profile_view_analysis: "Visualizza", profile_unlimited: "Illimitato", profile_country: "Paese",
         compare_title: "Confronta tutti i piani", compare_subtitle: "Scegli il piano adatto a te.", compare_feature: "Funzione", compare_plan_free: "Gratis", compare_plan_single: "Singolo", compare_plan_monthly: "Mensile", compare_plan_yearly: "Annuale", compare_analyses: "Analisi", compare_analyses_per_month: "10+3 / mese", compare_upload: "Testo, PDF, immagine", compare_report: "Report dettagliato (riepilogo, valori, raccomandazioni)", compare_diet: "Piano dietetico", compare_supplements: "Integratori", compare_heart: "Salute cardiaca", compare_history: "Cronologia", compare_pdf: "PDF / Condividi / Per il medico", compare_emr_ehr: "Report EMR/EHR", compare_langs: "Lingua report", compare_langs_count: "9 lingue", compare_compare: "Confronta due analisi", compare_price: "Prezzo",
         terms_heading: "Termini d'uso", privacy_heading: "Informativa sulla privacy", payment_heading: "Pagamento e rimborsi",
         contact_heading: "Contatti", contact_intro: "Per domande, richieste di rimborso o problemi tecnici (es. \"pagamento ricevuto ma nessun credito analisi\"), contattaci.", contact_email_label: "Email:", contact_note: "Se possibile, indica l'email del tuo account e una breve descrizione (n. ordine, data, ecc.). Rispondiamo entro 1 giorno lavorativo.", contact_tagline: "Norya — Risultati delle analisi del sangue in linguaggio chiaro.",
@@ -3128,14 +3256,14 @@
         history_detail_input: "Testo inserito:", history_detail_result: "Interpretazione Norya AI:", history_close: "Chiudi", history_analysis_a: "Analisi A", history_analysis_b: "Analisi B",
         history_loading: "Caricamento...", history_empty: "Nessuna analisi ancora.", history_load_error: "Impossibile caricare la cronologia.", history_compare_select_two: "Seleziona due analisi diverse.", history_compare_load_error: "Impossibile caricare le analisi.",
         usage_this_month: "Questo mese {kullanilan}/{limit} analisi utilizzate.", usage_limit_reached: "Limite mensile raggiunto. Passa a Pro per continuare.", usage_pro_unlimited: "Piano Pro: {kullanilan} analisi questo mese (illimitate).", payment_btn_single: "Acquista 1 analisi", payment_btn_pro: "Passa a Pro", payment_not_available: "Pagamento non disponibile.", payment_error: "Impossibile aprire la pagina di pagamento.", payment_modal_title: "Pagamento sicuro (PayTR)", payment_success: "Pagamento ricevuto. Puoi eseguire l'analisi.", session_expired: "Sessione scaduta. Accedi di nuovo.",
-        checkout_back: "← Cambia piano", checkout_title: "Riepilogo ordine", checkout_subtitle: "Norya — Analisi del sangue", checkout_plan: "Piano selezionato", checkout_total: "Totale", checkout_secure: "Il pagamento è protetto con SSL 256-bit. I dati della carta non ci vengono inviati; l'operazione è completata in sicurezza tramite PayTR.", checkout_btn: "Vai al pagamento sicuro", checkout_trust_note: "Norya offre pagamento sicuro con HTTPS e PayTR. I dati della carta sono elaborati solo dal fornitore di pagamento.",
+        checkout_back: "← Cambia piano", checkout_title: "Riepilogo ordine", checkout_subtitle: "Norya — Analisi del sangue", checkout_plan: "Piano selezionato", checkout_total: "Totale", checkout_secure: "Il pagamento è protetto con SSL 256-bit. I dati della carta non ci vengono inviati; l'operazione è completata in sicurezza tramite PayTR.", checkout_btn: "Vai al pagamento sicuro", checkout_accepted_cards: "Visa, Mastercard, Amex accettati.", checkout_trust_note: "Norya offre pagamento sicuro con HTTPS e PayTR. I dati della carta sono elaborati solo dal fornitore di pagamento.",
         guest_checkout_title: "Un'analisi senza account", guest_checkout_desc: "Inserisci l'email; dopo il pagamento potrai accedere con la stessa email ed eseguire l'analisi.", guest_checkout_name: "Nome (opzionale)",
         btn_processing_pdf: "Elaborazione PDF...", btn_processing_analyze: "Analisi in corso...",
         source_pdf: "PDF", source_image: "Immagine", source_text: "Testo"
       },
       es: {
         nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
-        nav_features: "Características", nav_pricing: "Precios", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
+        nav_features: "Características", nav_pricing: "Precios", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?",
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
@@ -3257,6 +3385,7 @@
         disclaimer_informative: "Este análisis es solo informativo. No sustituye un diagnóstico médico.",
         footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Términos de uso", footer_payment: "Pago y reembolsos", footer_contact: "Contacto", back_home: "← Inicio",
+        profile_tab_general: "General", profile_tab_plan: "Plan y uso", profile_tab_history: "Historial de análisis", profile_tab_security: "Seguridad", profile_plan_label: "Plan", profile_remaining: "Restantes", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renovación mensual", profile_ends_na: "—", profile_usage_label: "Uso (este mes)", profile_upgrade_cta: "Mejorar plan", profile_view_analysis: "Ver", profile_unlimited: "Ilimitado", profile_country: "País",
         compare_title: "Comparar todos los planes", compare_subtitle: "Encuentra el plan que te convenga.", compare_feature: "Característica", compare_plan_free: "Gratis", compare_plan_single: "Único", compare_plan_monthly: "Mensual", compare_plan_yearly: "Anual", compare_analyses: "Análisis", compare_analyses_per_month: "10+3 / mes", compare_upload: "Texto, PDF, imagen", compare_report: "Informe detallado (resumen, valores, recomendaciones)", compare_diet: "Plan dietético", compare_supplements: "Suplementos", compare_heart: "Salud cardíaca", compare_history: "Historial", compare_pdf: "PDF / Compartir / Para el médico", compare_emr_ehr: "Informe EMR/EHR", compare_langs: "Idioma del informe", compare_langs_count: "9 idiomas", compare_compare: "Comparar dos análisis", compare_price: "Precio",
         terms_heading: "Términos de uso", privacy_heading: "Política de privacidad", payment_heading: "Pago y reembolsos",
         contact_heading: "Contacto", contact_intro: "Para preguntas, solicitudes de reembolso o problemas técnicos (ej. \"pago recibido pero sin crédito de análisis\"), escríbenos.", contact_email_label: "Email:", contact_note: "Si es posible, incluye el email de tu cuenta y una breve descripción (n.º de pedido, fecha, etc.). Respondemos en un plazo de 1 día laborable.", contact_tagline: "Norya — Resultados de análisis de sangre en lenguaje claro.",
@@ -3296,14 +3425,14 @@
         history_detail_input: "Entrada del análisis:", history_detail_result: "Interpretación Norya AI:", history_close: "Cerrar", history_analysis_a: "Análisis A", history_analysis_b: "Análisis B",
         history_loading: "Cargando...", history_empty: "Aún no hay análisis.", history_load_error: "No se pudo cargar el historial.", history_compare_select_two: "Selecciona dos análisis diferentes.", history_compare_load_error: "No se pudieron cargar los análisis.",
         usage_this_month: "Este mes {kullanilan}/{limit} análisis usados.", usage_limit_reached: "Límite mensual alcanzado. Pasa a Pro para más.", usage_pro_unlimited: "Plan Pro: {kullanilan} análisis este mes (ilimitado).", payment_btn_single: "Comprar 1 análisis", payment_btn_pro: "Pasar a Pro", payment_not_available: "Pago no disponible.", payment_error: "No se pudo abrir la página de pago.", payment_modal_title: "Pago seguro (PayTR)", payment_success: "Pago recibido. Ya puedes analizar.", session_expired: "Tu sesión ha caducado. Inicia sesión de nuevo.",
-        checkout_back: "← Cambiar plan", checkout_title: "Resumen del pedido", checkout_subtitle: "Norya — Análisis de sangre", checkout_plan: "Plan seleccionado", checkout_total: "Total", checkout_secure: "Tu pago está protegido con SSL de 256 bits. Los datos de la tarjeta no se envían a nosotros; la transacción se completa de forma segura con PayTR.", checkout_btn: "Ir al pago seguro", checkout_trust_note: "Norya ofrece pago seguro con HTTPS y PayTR. Los datos de tu tarjeta los procesa solo el proveedor de pago.",
+        checkout_back: "← Cambiar plan", checkout_title: "Resumen del pedido", checkout_subtitle: "Norya — Análisis de sangre", checkout_plan: "Plan seleccionado", checkout_total: "Total", checkout_secure: "Tu pago está protegido con SSL de 256 bits. Los datos de la tarjeta no se envían a nosotros; la transacción se completa de forma segura con PayTR.", checkout_btn: "Ir al pago seguro", checkout_accepted_cards: "Visa, Mastercard, Amex aceptados.", checkout_trust_note: "Norya ofrece pago seguro con HTTPS y PayTR. Los datos de tu tarjeta los procesa solo el proveedor de pago.",
         guest_checkout_title: "Un análisis sin cuenta", guest_checkout_desc: "Introduce tu email; después del pago podrás iniciar sesión con el mismo email y realizar el análisis.", guest_checkout_name: "Nombre (opcional)",
         btn_processing_pdf: "Procesando PDF...", btn_processing_analyze: "Analizando...",
         source_pdf: "PDF", source_image: "Imagen", source_text: "Texto"
       },
       fr: {
         nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
-        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
+        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?",
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
@@ -3425,6 +3554,7 @@
         disclaimer_informative: "Cette analyse est à titre informatif uniquement. Elle ne remplace pas un diagnostic médical.",
         footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Conditions d'utilisation", footer_payment: "Paiement et remboursements", footer_contact: "Contact", back_home: "← Accueil",
+        profile_tab_general: "Général", profile_tab_plan: "Forfait et utilisation", profile_tab_history: "Historique des analyses", profile_tab_security: "Sécurité", profile_plan_label: "Forfait", profile_remaining: "Restants", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renouvellement mensuel", profile_ends_na: "—", profile_usage_label: "Utilisation (ce mois)", profile_upgrade_cta: "Améliorer le forfait", profile_view_analysis: "Voir", profile_unlimited: "Illimité", profile_country: "Pays",
         compare_title: "Comparer tous les forfaits", compare_subtitle: "Trouvez le forfait qui vous convient.", compare_feature: "Fonctionnalité", compare_plan_free: "Gratuit", compare_plan_single: "Unique", compare_plan_monthly: "Mensuel", compare_plan_yearly: "Annuel", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mois", compare_upload: "Texte, PDF, image", compare_report: "Rapport détaillé (résumé, valeurs, recommandations)", compare_diet: "Régime", compare_supplements: "Compléments", compare_heart: "Santé cardiaque", compare_history: "Historique", compare_pdf: "PDF / Partager / Pour le médecin", compare_emr_ehr: "Rapport EMR/EHR", compare_langs: "Langue du rapport", compare_langs_count: "9 langues", compare_compare: "Comparer deux analyses", compare_price: "Prix",
         terms_heading: "Conditions d'utilisation", privacy_heading: "Politique de confidentialité", payment_heading: "Paiement et remboursements",
         contact_heading: "Contact", contact_intro: "Pour toute question, demande de remboursement ou problème technique (ex. \"paiement reçu mais pas de crédit d'analyse\"), contactez-nous.", contact_email_label: "Email :", contact_note: "Si possible, indiquez l'email de votre compte et une courte description (n° de commande, date, etc.). Nous répondons sous 1 jour ouvré.", contact_tagline: "Norya — Résultats d'analyses sanguines expliqués en langage clair.",
@@ -3464,14 +3594,14 @@
         history_detail_input: "Saisie du bilan:", history_detail_result: "Interprétation Norya AI:", history_close: "Fermer", history_analysis_a: "Analyse A", history_analysis_b: "Analyse B",
         history_loading: "Chargement...", history_empty: "Aucune analyse pour l'instant.", history_load_error: "Impossible de charger l'historique.", history_compare_select_two: "Sélectionnez deux analyses différentes.", history_compare_load_error: "Impossible de charger les analyses.",
         usage_this_month: "Ce mois-ci {kullanilan}/{limit} analyses utilisées.", usage_limit_reached: "Limite atteinte. Payez d'abord, puis analysez.", usage_pro_unlimited: "Forfait Pro : {kullanilan} analyses ce mois (illimité).", usage_extra_credits: "+ {n} en plus", payment_btn_single: "Acheter 1 analyse", payment_btn_pro: "Passer à Pro", payment_not_available: "Paiement indisponible.", payment_error: "Page de paiement inaccessible.", payment_modal_title: "Paiement sécurisé (PayTR)", payment_success: "Paiement reçu. Vous pouvez lancer l'analyse.", session_expired: "Votre session a expiré. Veuillez vous reconnecter.",
-        checkout_back: "← Changer de forfait", checkout_title: "Récapitulatif", checkout_subtitle: "Norya — Analyse de sang", checkout_plan: "Forfait choisi", checkout_total: "Total", checkout_secure: "Votre paiement est protégé par SSL 256 bits. Les données de carte ne nous sont pas transmises ; la transaction est traitée de façon sécurisée par PayTR.", checkout_btn: "Aller au paiement sécurisé", checkout_trust_note: "Norya propose un paiement sécurisé via HTTPS et PayTR. Les données de carte sont traitées uniquement par le prestataire de paiement.",
+        checkout_back: "← Changer de forfait", checkout_title: "Récapitulatif", checkout_subtitle: "Norya — Analyse de sang", checkout_plan: "Forfait choisi", checkout_total: "Total", checkout_secure: "Votre paiement est protégé par SSL 256 bits. Les données de carte ne nous sont pas transmises ; la transaction est traitée de façon sécurisée par PayTR.", checkout_btn: "Aller au paiement sécurisé", checkout_accepted_cards: "Visa, Mastercard, Amex acceptés.", checkout_trust_note: "Norya propose un paiement sécurisé via HTTPS et PayTR. Les données de carte sont traitées uniquement par le prestataire de paiement.",
         guest_checkout_title: "Une analyse sans compte", guest_checkout_desc: "Entrez votre email ; après le paiement vous pourrez vous connecter avec ce même email et lancer l'analyse.", guest_checkout_name: "Nom (facultatif)",
         btn_processing_pdf: "Traitement du PDF...", btn_processing_analyze: "Analyse en cours...",
         source_pdf: "PDF", source_image: "Image", source_text: "Texte"
       },
       de: {
         nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
-        nav_features: "Funktionen", nav_pricing: "Preise", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
+        nav_features: "Funktionen", nav_pricing: "Preise", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?",
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
@@ -3593,6 +3723,7 @@
         disclaimer_informative: "Diese Analyse dient nur der Information. Sie ersetzt keine medizinische Diagnose.",
         footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Nutzungsbedingungen", footer_payment: "Zahlung & Rückerstattung", footer_contact: "Kontakt", back_home: "← Start",
+        profile_tab_general: "Allgemein", profile_tab_plan: "Paket & Nutzung", profile_tab_history: "Analyse-Verlauf", profile_tab_security: "Sicherheit", profile_plan_label: "Plan", profile_remaining: "Verbleibend", profile_ends: "Ende", profile_plan_pro: "Pro", profile_ends_monthly: "Monatliche Verlängerung", profile_ends_na: "—", profile_usage_label: "Nutzung (dieser Monat)", profile_upgrade_cta: "Plan upgraden", profile_view_analysis: "Ansehen", profile_unlimited: "Unbegrenzt", profile_country: "Land",
         compare_title: "Alle Pläne vergleichen", compare_subtitle: "Finden Sie den passenden Plan.", compare_feature: "Funktion", compare_plan_free: "Kostenlos", compare_plan_single: "Einzel", compare_plan_monthly: "Monat", compare_plan_yearly: "Jahr", compare_analyses: "Analysen", compare_analyses_per_month: "10+3 / Monat", compare_upload: "Text, PDF, Bild", compare_report: "Detaillierter Bericht (Zusammenfassung, Werte, Empfehlungen)", compare_diet: "Ernährungsplan", compare_supplements: "Nahrungsergänzung", compare_heart: "Herzgesundheit", compare_history: "Verlauf", compare_pdf: "PDF / Teilen / Für den Arzt", compare_emr_ehr: "EMR/EHR-Bericht", compare_langs: "Berichtssprache", compare_langs_count: "9 Sprachen", compare_compare: "Zwei Analysen vergleichen", compare_price: "Preis",
         terms_heading: "Nutzungsbedingungen", privacy_heading: "Datenschutzerklärung", payment_heading: "Zahlung und Rückerstattung",
         contact_heading: "Kontakt", contact_intro: "Bei Fragen, Rückerstattungswünschen oder technischen Problemen (z. B. \"Zahlung erhalten, aber kein Analyse-Guthaben\") schreiben Sie uns.", contact_email_label: "E-Mail:", contact_note: "Bitte nennen Sie wenn möglich Ihre Konto-E-Mail und eine kurze Beschreibung (Bestellnr., Datum usw.). Wir antworten innerhalb von 1 Werktag.", contact_tagline: "Norya — Blutwerte verständlich erklärt.",
@@ -3632,14 +3763,14 @@
         history_detail_input: "Eingabe:", history_detail_result: "Norya KI-Auswertung:", history_close: "Schließen", history_analysis_a: "Analyse A", history_analysis_b: "Analyse B",
         history_loading: "Laden...", history_empty: "Noch keine Analysen.", history_load_error: "Verlauf konnte nicht geladen werden.", history_compare_select_two: "Bitte zwei verschiedene Analysen wählen.", history_compare_load_error: "Analysen konnten nicht geladen werden.",
         usage_this_month: "Dieser Monat {kullanilan}/{limit} Analysen genutzt.", usage_limit_reached: "Limit erreicht. Zuerst zahlen, dann analysieren.", usage_pro_unlimited: "Pro-Plan: {kullanilan} Analysen diesen Monat (unbegrenzt).", usage_extra_credits: "+ {n} extra", payment_btn_single: "1 Analyse kaufen", payment_btn_pro: "Zu Pro wechseln", payment_not_available: "Zahlung nicht verfügbar.", payment_error: "Zahlungsseite konnte nicht geöffnet werden.", payment_modal_title: "Sichere Zahlung (PayTR)", payment_success: "Zahlung erhalten. Sie können die Analyse starten.", session_expired: "Ihre Sitzung ist abgelaufen. Bitte melden Sie sich erneut an.",
-        checkout_back: "← Plan ändern", checkout_title: "Bestellübersicht", checkout_subtitle: "Norya — Blutanalyse", checkout_plan: "Gewählter Plan", checkout_total: "Gesamtbetrag", checkout_secure: "Ihre Zahlung ist durch 256-Bit-SSL geschützt. Kartendaten werden nicht an uns übermittelt; die Transaktion wird sicher über PayTR abgewickelt.", checkout_btn: "Zur sicheren Zahlung", checkout_trust_note: "Norya bietet sichere Zahlung per HTTPS und PayTR. Kartendaten werden nur vom Zahlungsanbieter verarbeitet.",
+        checkout_back: "← Plan ändern", checkout_title: "Bestellübersicht", checkout_subtitle: "Norya — Blutanalyse", checkout_plan: "Gewählter Plan", checkout_total: "Gesamtbetrag", checkout_secure: "Ihre Zahlung ist durch 256-Bit-SSL geschützt. Kartendaten werden nicht an uns übermittelt; die Transaktion wird sicher über PayTR abgewickelt.", checkout_btn: "Zur sicheren Zahlung", checkout_accepted_cards: "Visa, Mastercard, Amex akzeptiert.", checkout_trust_note: "Norya bietet sichere Zahlung per HTTPS und PayTR. Kartendaten werden nur vom Zahlungsanbieter verarbeitet.",
         guest_checkout_title: "Einzelanalyse ohne Konto", guest_checkout_desc: "E-Mail eingeben; nach der Zahlung können Sie sich mit derselben E-Mail anmelden und die Analyse starten.", guest_checkout_name: "Name (optional)",
         btn_processing_pdf: "PDF wird verarbeitet...", btn_processing_analyze: "Analyse läuft...",
         source_pdf: "PDF", source_image: "Bild", source_text: "Text"
       },
       he: {
         nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
-        nav_features: "תכונות", nav_pricing: "מחירים", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
+        nav_features: "תכונות", nav_pricing: "מחירים", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
         a2hs_message: "הוסף את Norya למסך הבית והשתמש כמו באפליקציה.", a2hs_later: "אחר כך", a2hs_add: "הוסף", ios_a2hs_message: "הוסף למסך הבית: שתף ⎋ הוסף למסך הבית", ios_a2hs_close: "סגור",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?",
         about_what_1: "נוריה הוא שירות שמסביר את תוצאות בדיקות הדם שלך בשפה ברורה. המספרים והקיצורים מהמעבדה קשים לעתים להבנה; נוריה מייצרת דוחות שמסכמים את התוצאות, מסבירים כל ערך ביחס לטווחי ההתייחסות ונותנים המלצות מעשיות.",
@@ -3760,6 +3891,7 @@
         disclaimer_informative: "ניתוח זה למידע בלבד. אינו מחליף אבחנה רפואית.",
         footer_mesafeli: "הסכם מכר מרחוק", footer_privacy: "פרטיות", footer_refund: "החזרה וביטול", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "תנאי שימוש", footer_payment: "תשלום והחזרים", footer_contact: "צור קשר", back_home: "← בית",
+        profile_tab_general: "כללי", profile_tab_plan: "חבילה ושימוש", profile_tab_history: "היסטוריית ניתוחים", profile_tab_security: "אבטחה", profile_plan_label: "תוכנית", profile_remaining: "נותרו", profile_ends: "סיום", profile_plan_pro: "Pro", profile_ends_monthly: "חידוש חודשי", profile_ends_na: "—", profile_usage_label: "שימוש (החודש)", profile_upgrade_cta: "שדרג חבילה", profile_view_analysis: "הצג", profile_unlimited: "ללא הגבלה", profile_country: "מדינה",
         compare_title: "השווה את כל התוכניות", compare_subtitle: "מצא את התוכנית המתאימה לך.", compare_feature: "תכונה", compare_plan_free: "חינם", compare_plan_single: "בודד", compare_plan_monthly: "חודשי", compare_plan_yearly: "שנתי", compare_analyses: "ניתוחים", compare_analyses_per_month: "10+3 / חודש", compare_upload: "טקסט, PDF, תמונה", compare_report: "דוח מפורט (סיכום, ערכים, המלצות)", compare_diet: "תוכנית דיאטה", compare_supplements: "תוספים", compare_heart: "בריאות הלב", compare_history: "היסטוריה", compare_pdf: "PDF / שתף / לרופא", compare_emr_ehr: "דוח EMR/EHR", compare_langs: "שפת הדוח", compare_langs_count: "9 שפות", compare_compare: "השווה שני ניתוחים", compare_price: "מחיר",
         terms_heading: "תנאי שימוש", privacy_heading: "מדיניות פרטיות", payment_heading: "תשלום והחזרים",
         contact_heading: "צור קשר", contact_intro: "לשאלות, בקשות להחזר או בעיות טכניות (למשל \"התשלום התקבל אך לא נוסף קרדיט ניתוח\"), צרו איתנו קשר.", contact_email_label: "אימייל:", contact_note: "אם אפשר, ציינו את אימייל החשבון ותיאור קצר (מס׳ הזמנה, תאריך וכו׳). אנו משיבים תוך יום עסקי אחד.", contact_tagline: "נוריה — תוצאות בדיקות דם מוסברות בשפה ברורה.",
@@ -3799,14 +3931,14 @@
         history_detail_input: "טקסט הכניסה:", history_detail_result: "פירוש Norya AI:", history_close: "סגור", history_analysis_a: "ניתוח א׳", history_analysis_b: "ניתוח ב׳",
         history_loading: "טוען...", history_empty: "אין עדיין ניתוחים.", history_load_error: "לא ניתן לטעון היסטוריה.", history_compare_select_two: "בחר שני ניתוחים שונים.", history_compare_load_error: "לא ניתן לטעון ניתוחים.",
         usage_this_month: "החודש {kullanilan}/{limit} ניתוחים בשימוש.", usage_limit_reached: "הגעת למגבלת החודש. שדרג ל-Pro.", usage_pro_unlimited: "תוכנית Pro: {kullanilan} ניתוחים החודש (ללא הגבלה).", payment_btn_single: "קנה ניתוח אחד", payment_btn_pro: "שדרג ל-Pro", payment_not_available: "התשלום לא זמין.", payment_error: "לא ניתן לפתוח דף תשלום.", payment_modal_title: "תשלום מאובטח (PayTR)", payment_success: "התשלום התקבל. אפשר להריץ ניתוח.", session_expired: "ההתחברות פגה. התחבר שוב.",
-        checkout_back: "← החלף תוכנית", checkout_title: "סיכום הזמנה", checkout_subtitle: "Norya — ניתוח דם", checkout_plan: "תוכנית נבחרת", checkout_total: "סה״כ", checkout_secure: "התשלום מוגן ב-SSL 256 ביט. פרטי כרטיס לא מועברים אלינו; העסקה מתבצעת בצורה מאובטחת דרך PayTR.", checkout_btn: "המשך לתשלום מאובטח", checkout_trust_note: "Norya מציעה תשלום מאובטח עם HTTPS ו-PayTR. פרטי הכרטיס מעובדים רק על ידי ספק התשלום.",
+        checkout_back: "← החלף תוכנית", checkout_title: "סיכום הזמנה", checkout_subtitle: "Norya — ניתוח דם", checkout_plan: "תוכנית נבחרת", checkout_total: "סה״כ", checkout_secure: "התשלום מוגן ב-SSL 256 ביט. פרטי כרטיס לא מועברים אלינו; העסקה מתבצעת בצורה מאובטחת דרך PayTR.", checkout_btn: "המשך לתשלום מאובטח", checkout_accepted_cards: "Visa, Mastercard, Amex מתקבלים.", checkout_trust_note: "Norya מציעה תשלום מאובטח עם HTTPS ו-PayTR. פרטי הכרטיס מעובדים רק על ידי ספק התשלום.",
         guest_checkout_title: "ניתוח אחד בלי חשבון", guest_checkout_desc: "הזן אימייל; אחרי התשלום תוכל להתחבר עם אותו אימייל ולהריץ את הניתוח.", guest_checkout_name: "שם (אופציונלי)",
         btn_processing_pdf: "מעבד PDF...", btn_processing_analyze: "מנתח...",
         source_pdf: "PDF", source_image: "תמונה", source_text: "טקסט"
       },
       ar: {
         nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
-        nav_features: "المميزات", nav_pricing: "الأسعار", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
+        nav_features: "المميزات", nav_pricing: "الأسعار", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
         a2hs_message: "أضف Norya إلى الشاشة الرئيسية واستخدمها كتطبيق.", a2hs_later: "لاحقاً", a2hs_add: "إضافة", ios_a2hs_message: "إضافة إلى الشاشة الرئيسية: مشاركة ⎋ إضافة إلى الشاشة الرئيسية", ios_a2hs_close: "إغلاق",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟",
         about_what_1: "نوريا خدمة تشرح نتائج تحاليل الدم بلغة واضحة. الأرقام والاختصارات من المختبر غالباً صعبة الفهم؛ نوريا تنتج تقارير تلخص النتائج وتشرح كل قيمة بالنسبة للمرجع وتقدم توصيات عملية.",
@@ -3927,6 +4059,7 @@
         disclaimer_informative: "هذا التحليل للمعلومات فقط. لا يحل محل التشخيص الطبي.",
         footer_mesafeli: "عقد البيع عن بعد", footer_privacy: "الخصوصية", footer_refund: "الاسترداد والإلغاء", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "شروط الاستخدام", footer_payment: "الدفع والاسترداد", footer_contact: "اتصل", back_home: "← الرئيسية",
+        profile_tab_general: "عام", profile_tab_plan: "الباقة والاستخدام", profile_tab_history: "سجل التحليلات", profile_tab_security: "الأمان", profile_plan_label: "الباقة", profile_remaining: "المتبقي", profile_ends: "الانتهاء", profile_plan_pro: "Pro", profile_ends_monthly: "تجديد شهري", profile_ends_na: "—", profile_usage_label: "الاستخدام (هذا الشهر)", profile_upgrade_cta: "ترقية الباقة", profile_view_analysis: "عرض", profile_unlimited: "غير محدود", profile_country: "البلد",
         compare_title: "قارن جميع الخطط", compare_subtitle: "اختر الخطة المناسبة لك.", compare_feature: "ميزة", compare_plan_free: "مجاني", compare_plan_single: "واحد", compare_plan_monthly: "شهري", compare_plan_yearly: "سنوي", compare_analyses: "التحليلات", compare_analyses_per_month: "10+3 / شهر", compare_upload: "نص، PDF، صورة", compare_report: "تقرير مفصل (ملخص، قيم، توصيات)", compare_diet: "خطة غذائية", compare_supplements: "مكملات", compare_heart: "صحة القلب", compare_history: "السجل", compare_pdf: "PDF / مشاركة / للطبيب", compare_emr_ehr: "تقرير EMR/EHR", compare_langs: "لغة التقرير", compare_langs_count: "9 لغات", compare_compare: "قارن تحليلين", compare_price: "السعر",
         terms_heading: "شروط الاستخدام", privacy_heading: "سياسة الخصوصية", payment_heading: "الدفع والاسترداد",
         contact_heading: "اتصل بنا", contact_intro: "للأسئلة أو طلبات الاسترداد أو المشاكل التقنية (مثلاً \"تم استلام الدفع لكن لم تُضاف رصيد تحليل\")، تواصل معنا.", contact_email_label: "البريد:", contact_note: "إن أمكن، أدرج بريد الحساب ووصفاً قصيراً (رقم الطلب، التاريخ، إلخ). نرد خلال يوم عمل واحد.", contact_tagline: "نوريا — نتائج تحاليل الدم مفسرة بلغة واضحة.",
@@ -3966,14 +4099,14 @@
         history_detail_input: "نص الإدخال:", history_detail_result: "تفسير Norya AI:", history_close: "إغلاق", history_analysis_a: "تحليل أ", history_analysis_b: "تحليل ب",
         history_loading: "جاري التحميل...", history_empty: "لا توجد تحليلات بعد.", history_load_error: "تعذر تحميل السجل.", history_compare_select_two: "اختر تحليلين مختلفين.", history_compare_load_error: "تعذر تحميل التحليلات.",
         usage_this_month: "هذا الشهر {kullanilan}/{limit} تحليلات مستخدمة.", usage_limit_reached: "تم استنفاد الحد الشهري. ترقية إلى Pro للمزيد.", usage_pro_unlimited: "خطة Pro: {kullanilan} تحليلات هذا الشهر (غير محدود).", payment_btn_single: "شراء تحليل واحد", payment_btn_pro: "الترقية إلى Pro", payment_not_available: "الدفع غير متاح.", payment_error: "تعذر فتح صفحة الدفع.", payment_modal_title: "دفع آمن (PayTR)", payment_success: "تم استلام الدفع. يمكنك التحليل الآن.", session_expired: "انتهت جلستك. يرجى تسجيل الدخول مرة أخرى.",
-        checkout_back: "← تغيير الخطة", checkout_title: "ملخص الطلب", checkout_subtitle: "Norya — تحليل الدم", checkout_plan: "الخطة المختارة", checkout_total: "المجموع", checkout_secure: "دفعتك محمية بـ SSL 256 بت. لا تُرسل بيانات البطاقة إلينا؛ تتم المعاملة بشكل آمن عبر PayTR.", checkout_btn: "المتابعة للدفع الآمن", checkout_trust_note: "Norya تقدم دفعاً آمناً عبر HTTPS وPayTR. بيانات البطاقة تُعالج فقط من قبل مزود الدفع.",
+        checkout_back: "← تغيير الخطة", checkout_title: "ملخص الطلب", checkout_subtitle: "Norya — تحليل الدم", checkout_plan: "الخطة المختارة", checkout_total: "المجموع", checkout_secure: "دفعتك محمية بـ SSL 256 بت. لا تُرسل بيانات البطاقة إلينا؛ تتم المعاملة بشكل آمن عبر PayTR.", checkout_btn: "المتابعة للدفع الآمن", checkout_accepted_cards: "Visa وMastercard وAmex مقبولة.", checkout_trust_note: "Norya تقدم دفعاً آمناً عبر HTTPS وPayTR. بيانات البطاقة تُعالج فقط من قبل مزود الدفع.",
         guest_checkout_title: "تحليل واحد دون حساب", guest_checkout_desc: "أدخل بريدك؛ بعد الدفع يمكنك تسجيل الدخول بنفس البريد وتشغيل التحليل.", guest_checkout_name: "الاسم (اختياري)",
         btn_processing_pdf: "جاري معالجة PDF...", btn_processing_analyze: "جاري التحليل...",
         source_pdf: "PDF", source_image: "صورة", source_text: "نص"
       },
       hi: {
         nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
-        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_contact: "संपर्क करें", nav_faq: "FAQ",
+        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?",
         about_what_1: "नोरिया एक सेवा है जो रक्त परीक्षण परिणामों को सरल भाषा में समझाती है। लैब के नंबर और संक्षिप्त नाम अक्सर समझने में कठिन होते हैं; नोरिया ऐसी रिपोर्ट बनाती है जो परिणामों को संक्षेप में बताती हैं, हर मान को संदर्भ सीमा के अनुसार समझाती हैं और व्यावहारिक सुझाव देती हैं।",
@@ -4094,6 +4227,7 @@
         disclaimer_informative: "यह विश्लेषण केवल सूचनात्मक है। चिकित्सा निदान का विकल्प नहीं है।",
         footer_mesafeli: "दूरबिक्री समझौता", footer_privacy: "गोपनीयता", footer_refund: "रिफंड और रद्दीकरण", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "उपयोग की शर्तें", footer_payment: "भुगतान और रिफंड", footer_contact: "संपर्क", back_home: "← होम",
+        profile_tab_general: "सामान्य", profile_tab_plan: "प्लान और उपयोग", profile_tab_history: "विश्लेषण इतिहास", profile_tab_security: "सुरक्षा", profile_plan_label: "प्लान", profile_remaining: "शेष", profile_ends: "समाप्ति", profile_plan_pro: "Pro", profile_ends_monthly: "मासिक नवीनीकरण", profile_ends_na: "—", profile_usage_label: "उपयोग (इस महीने)", profile_upgrade_cta: "प्लान अपग्रेड करें", profile_view_analysis: "देखें", profile_unlimited: "असीमित", profile_country: "देश",
         compare_title: "सभी प्लान की तुलना करें", compare_subtitle: "अपने लिए सही प्लान चुनें.", compare_feature: "विशेषता", compare_plan_free: "मुफ्त", compare_plan_single: "एकल", compare_plan_monthly: "मासिक", compare_plan_yearly: "वार्षिक", compare_analyses: "विश्लेषण", compare_analyses_per_month: "10+3 / माह", compare_upload: "टेक्स्ट, PDF, छवि", compare_report: "विस्तृत रिपोर्ट (सारांश, मान, सिफारिशें)", compare_diet: "आहार योजना", compare_supplements: "सप्लीमेंट", compare_heart: "दिल का स्वास्थ्य", compare_history: "इतिहास", compare_pdf: "PDF / साझा करें / डॉक्टर के लिए", compare_emr_ehr: "EMR/EHR रिपोर्ट", compare_langs: "रिपोर्ट भाषा", compare_langs_count: "9 भाषाएँ", compare_compare: "दो विश्लेषण की तुलना करें", compare_price: "कीमत",
         terms_heading: "उपयोग की शर्तें", privacy_heading: "गोपनीयता नीति", payment_heading: "भुगतान और रिफंड",
         contact_heading: "संपर्क", contact_intro: "प्रश्नों, रिफंड अनुरोधों या तकनीकी समस्याओं (जैसे \"भुगतान मिला लेकिन विश्लेषण क्रेडिट नहीं\") के लिए संपर्क करें।", contact_email_label: "ईमेल:", contact_note: "यदि संभव हो तो अपना खाता ईमेल और संक्षिप्त विवरण (ऑर्डर नं., तारीख आदि) भेजें। हम 1 कार्यदिवस में जवाब देते हैं।", contact_tagline: "नोरिया — रक्त परीक्षण परिणाम सरल भाषा में।",
@@ -4133,14 +4267,14 @@
         history_detail_input: "इनपुट:", history_detail_result: "Norya AI व्याख्या:", history_close: "बंद करें", history_analysis_a: "विश्लेषण A", history_analysis_b: "विश्लेषण B",
         history_loading: "लोड हो रहा है...", history_empty: "अभी तक कोई विश्लेषण नहीं।", history_load_error: "इतिहास लोड नहीं हो सका।", history_compare_select_two: "दो अलग विश्लेषण चुनें।", history_compare_load_error: "विश्लेषण लोड नहीं हो सके।",
         usage_this_month: "इस महीने {kullanilan}/{limit} विश्लेषण उपयोग किए।", usage_limit_reached: "मासिक सीमा पूर्ण। अधिक के लिए Pro में अपग्रेड करें।", usage_pro_unlimited: "Pro प्लान: इस महीने {kullanilan} विश्लेषण (असीमित)।", payment_btn_single: "1 विश्लेषण खरीदें", payment_btn_pro: "Pro में अपग्रेड", payment_not_available: "भुगतान उपलब्ध नहीं।", payment_error: "भुगतान पृष्ठ नहीं खोला जा सका।", payment_modal_title: "सुरक्षित भुगतान (PayTR)", payment_success: "भुगतान प्राप्त। अब विश्लेषण चला सकते हैं।", session_expired: "सत्र समाप्त। कृपया फिर लॉग इन करें।",
-        checkout_back: "← प्लान बदलें", checkout_title: "ऑर्डर सारांश", checkout_subtitle: "Norya — रक्त परीक्षण विश्लेषण", checkout_plan: "चयनित प्लान", checkout_total: "कुल", checkout_secure: "आपका भुगतान 256-बिट SSL से सुरक्षित। कार्ड विवरण हमें नहीं भेजे जाते; लेनदेन PayTR के ज़रिए सुरक्षित रूप से पूरा होता है।", checkout_btn: "सुरक्षित भुगतान पर जाएं", checkout_trust_note: "Norya HTTPS और PayTR के ज़रिए सुरक्षित भुगतान प्रदान करता है। कार्ड विवरण केवल भुगतान प्रदाता द्वारा संसाधित होते हैं।",
+        checkout_back: "← प्लान बदलें", checkout_title: "ऑर्डर सारांश", checkout_subtitle: "Norya — रक्त परीक्षण विश्लेषण", checkout_plan: "चयनित प्लान", checkout_total: "कुल", checkout_secure: "आपका भुगतान 256-बिट SSL से सुरक्षित। कार्ड विवरण हमें नहीं भेजे जाते; लेनदेन PayTR के ज़रिए सुरक्षित रूप से पूरा होता है।", checkout_btn: "सुरक्षित भुगतान पर जाएं", checkout_accepted_cards: "Visa, Mastercard, Amex स्वीकृत।", checkout_trust_note: "Norya HTTPS और PayTR के ज़रिए सुरक्षित भुगतान प्रदान करता है। कार्ड विवरण केवल भुगतान प्रदाता द्वारा संसाधित होते हैं।",
         guest_checkout_title: "बिना अकाउंट एक विश्लेषण", guest_checkout_desc: "ईमेल दर्ज करें; भुगतान के बाद उसी ईमेल से लॉग इन कर विश्लेषण चला सकते हैं।", guest_checkout_name: "नाम (वैकल्पिक)",
         btn_processing_pdf: "PDF प्रोसेस हो रहा है...", btn_processing_analyze: "विश्लेषण हो रहा है...",
         source_pdf: "PDF", source_image: "छवि", source_text: "टेक्स्ट"
       },
       el: {
         nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
-        nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_contact: "Επικοινωνία", nav_faq: "Συχνές ερωτήσεις",
+        nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_checkout: "Πληρωμή", nav_contact: "Επικοινωνία", nav_faq: "Συχνές ερωτήσεις",
         a2hs_message: "Προσθέστε την Norya στην αρχική οθόνη και χρησιμοποιήστε την σαν εφαρμογή.", a2hs_later: "Αργότερα", a2hs_add: "Προσθήκη", ios_a2hs_message: "Προσθήκη στην αρχική: Κοινοποίηση ⎋ Προσθήκη στην αρχική οθόνη", ios_a2hs_close: "Κλείσιμο",
         about_title: "Τι είναι η Norya, Ποιοι είμαστε", about_what_title: "Τι είναι η Norya;", about_who_title: "Ποιοι είμαστε;",
         about_what_1: "Η Norya είναι μια υπηρεσία που εξηγεί τα αποτελέσματα αιματολογικών σε απλή γλώσσα. Οι αριθμοί και οι συντομογραφίες από το εργαστήριο είναι συχνά δύσκολοι να γίνουν κατανοητοί· η Norya παράγει αναφορές που συνοψίζουν τα αποτελέσματα, εξηγούν κάθε τιμή σε σχέση με τα εύρη αναφοράς και δίνουν πρακτικές συμβουλές.",
@@ -4259,6 +4393,7 @@
         disclaimer_informative: "Αυτή η ανάλυση είναι μόνο ενημερωτική. Δεν αντικαθιστά ιατρική διάγνωση.",
         footer_mesafeli: "Σύμβαση τηλεπώλησης", footer_privacy: "Απόρρητο", footer_refund: "Επιστροφή και ακύρωση", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Όροι χρήσης", footer_payment: "Πληρωμή και επιστροφές", footer_contact: "Επικοινωνία", back_home: "← Αρχική",
+        profile_tab_general: "Γενικά", profile_tab_plan: "Πλάνο και χρήση", profile_tab_history: "Ιστορικό αναλύσεων", profile_tab_security: "Ασφάλεια", profile_plan_label: "Πλάνο", profile_remaining: "Υπόλοιπο", profile_ends: "Λήξη", profile_plan_pro: "Pro", profile_ends_monthly: "Μηνιαία ανανέωση", profile_ends_na: "—", profile_usage_label: "Χρήση (αυτόν τον μήνα)", profile_upgrade_cta: "Αναβάθμιση πλάνου", profile_view_analysis: "Προβολή", profile_unlimited: "Απεριόριστα", profile_country: "Χώρα",
         compare_title: "Σύγκριση όλων των πλάνων", compare_subtitle: "Επιλέξτε το πλάνο που σας ταιριάζει.", compare_feature: "Λειτουργία", compare_plan_free: "Δωρεάν", compare_plan_single: "Μονό", compare_plan_monthly: "Μηνιαίο", compare_plan_yearly: "Ετήσιο", compare_analyses: "Αναλύσεις", compare_analyses_per_month: "10+3 / μήνα", compare_upload: "Κείμενο, PDF, εικόνα", compare_report: "Λεπτομερής αναφορά (περίληψη, τιμές, συστάσεις)", compare_diet: "Διατροφικό πλάνο", compare_supplements: "Συμπληρώματα", compare_heart: "Υγεία καρδιάς", compare_history: "Ιστορικό", compare_pdf: "PDF / Κοινοποίηση / Για τον γιατρό", compare_emr_ehr: "Αναφορά EMR/EHR", compare_langs: "Γλώσσα αναφοράς", compare_langs_count: "9 γλώσσες", compare_compare: "Σύγκριση δύο αναλύσεων", compare_price: "Τιμή",
         terms_heading: "Όροι χρήσης", privacy_heading: "Πολιτική απορρήτου", payment_heading: "Πληρωμή και επιστροφές",
         contact_heading: "Επικοινωνία", contact_intro: "Για ερωτήσεις, αιτήματα επιστροφής χρημάτων ή τεχνικά ζητήματα (π.χ. \"η πληρωμή ελήφθη αλλά δεν προστέθηκε πίστωση ανάλυσης\"), επικοινωνήστε μαζί μας.", contact_email_label: "Email:", contact_note: "Εάν είναι δυνατόν, συμπεριλάβετε το email του λογαριασμού σας και μια σύντομη περιγραφή (αριθμός παραγγελίας, ημερομηνία κ.λπ.). Απαντάμε εντός 1 εργάσιμης ημέρας.", contact_tagline: "Norya — Αποτελέσματα αιματολογικών σε απλή γλώσσα.",
@@ -4298,14 +4433,14 @@
         history_detail_input: "Κείμενο εισαγωγής:", history_detail_result: "Ερμηνεία Norya AI:", history_close: "Κλείσιμο", history_analysis_a: "Ανάλυση Α", history_analysis_b: "Ανάλυση Β",
         history_loading: "Φόρτωση...", history_empty: "Δεν υπάρχουν ακόμα αναλύσεις.", history_load_error: "Αδυναμία φόρτωσης ιστορικού.", history_compare_select_two: "Επιλέξτε δύο διαφορετικές αναλύσεις.", history_compare_load_error: "Αδυναμία φόρτωσης αναλύσεων.",
         usage_this_month: "Αυτό το μήνα {kullanilan}/{limit} αναλύσεις χρησιμοποιήθηκαν.", usage_limit_reached: "Έχετε εξαντλήσει το μηνιαίο όριο. Αναβαθμίστε σε Pro.", usage_pro_unlimited: "Πλάνο Pro: {kullanilan} αναλύσεις αυτόν τον μήνα (απεριόριστο).", payment_btn_single: "Αγορά 1 ανάλυσης", payment_btn_pro: "Αναβάθμιση σε Pro", payment_not_available: "Η πληρωμή δεν είναι διαθέσιμη.", payment_error: "Αδυναμία ανοίγματος σελίδας πληρωμής.", payment_modal_title: "Ασφαλής πληρωμή (PayTR)", payment_success: "Η πληρωμή ελήφθη. Μπορείτε να κάνετε ανάλυση.", session_expired: "Η συνεδρία έληξε. Συνδεθείτε ξανά.",
-        checkout_back: "← Αλλαγή πλάνου", checkout_title: "Σύνοψη παραγγελίας", checkout_subtitle: "Norya — Ανάλυση αίματος", checkout_plan: "Επιλεγμένο πλάνο", checkout_total: "Σύνολο", checkout_secure: "Η πληρωμή σας προστατεύεται με SSL 256-bit. Τα στοιχεία κάρτας δεν μας αποστέλλονται· η συναλλαγή ολοκληρώνεται με ασφάλεια μέσω PayTR.", checkout_btn: "Μετάβαση στην ασφαλή πληρωμή", checkout_trust_note: "Η Norya προσφέρει ασφαλή πληρωμή μέσω HTTPS και PayTR. Τα στοιχεία κάρτας επεξεργάζονται μόνο από τον πάροχο πληρωμών.",
+        checkout_back: "← Αλλαγή πλάνου", checkout_title: "Σύνοψη παραγγελίας", checkout_subtitle: "Norya — Ανάλυση αίματος", checkout_plan: "Επιλεγμένο πλάνο", checkout_total: "Σύνολο", checkout_secure: "Η πληρωμή σας προστατεύεται με SSL 256-bit. Τα στοιχεία κάρτας δεν μας αποστέλλονται· η συναλλαγή ολοκληρώνεται με ασφάλεια μέσω PayTR.", checkout_btn: "Μετάβαση στην ασφαλή πληρωμή", checkout_accepted_cards: "Visa, Mastercard, Amex αποδεκτά.", checkout_trust_note: "Η Norya προσφέρει ασφαλή πληρωμή μέσω HTTPS και PayTR. Τα στοιχεία κάρτας επεξεργάζονται μόνο από τον πάροχο πληρωμών.",
         guest_checkout_title: "Μία ανάλυση χωρίς λογαριασμό", guest_checkout_desc: "Εισάγετε το email σας· μετά την πληρωμή μπορείτε να συνδεθείτε με το ίδιο email και να τρέξετε την ανάλυση.", guest_checkout_name: "Όνομα (προαιρετικό)",
         btn_processing_pdf: "Επεξεργασία PDF...", btn_processing_analyze: "Ανάλυση σε εξέλιξη...",
         source_pdf: "PDF", source_image: "Εικόνα", source_text: "Κείμενο"
       },
       cs: {
         nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
-        nav_features: "Funkce", nav_pricing: "Ceny", nav_contact: "Kontakt", nav_faq: "Časté dotazy",
+        nav_features: "Funkce", nav_pricing: "Ceny", nav_checkout: "Platba", nav_contact: "Kontakt", nav_faq: "Časté dotazy",
         a2hs_message: "Přidejte Norya na plochu a používejte ji jako aplikaci.", a2hs_later: "Později", a2hs_add: "Přidat", ios_a2hs_message: "Přidat na plochu: Sdílet ⎋ Přidat na plochu", ios_a2hs_close: "Zavřít",
         about_title: "Co je Norya, Kdo jsme", about_what_title: "Co je Norya?", about_who_title: "Kdo jsme?",
         about_what_1: "Norya je služba, která vysvětluje výsledky krevních testů srozumitelným jazykem. Čísla a zkratky z laboratoře jsou často těžko srozumitelná; Norya vytváří zprávy, které shrnují výsledky, vysvětlují každou hodnotu vzhledem k referenčním rozsahům a nabízejí praktická doporučení.",
@@ -4424,6 +4559,7 @@
         disclaimer_informative: "Tato analýza je pouze informativní. Nenahrazuje lékařskou diagnózu.",
         footer_mesafeli: "Smlouva o dálkovém prodeji", footer_privacy: "Soukromí", footer_refund: "Vrácení a zrušení", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Podmínky užití", footer_payment: "Platba a vrácení", footer_contact: "Kontakt", back_home: "← Domů",
+        profile_tab_general: "Obecné", profile_tab_plan: "Balíček a využití", profile_tab_history: "Historie analýz", profile_tab_security: "Zabezpečení", profile_plan_label: "Plán", profile_remaining: "Zbývá", profile_ends: "Konec", profile_plan_pro: "Pro", profile_ends_monthly: "Měsíční obnova", profile_ends_na: "—", profile_usage_label: "Využití (tento měsíc)", profile_upgrade_cta: "Upgradovat plán", profile_view_analysis: "Zobrazit", profile_unlimited: "Neomezeno", profile_country: "Země",
         compare_title: "Porovnat všechny plány", compare_subtitle: "Vyberte si vhodný plán.", compare_feature: "Funkce", compare_plan_free: "Zdarma", compare_plan_single: "Jednorázový", compare_plan_monthly: "Měsíční", compare_plan_yearly: "Roční", compare_analyses: "Analýzy", compare_analyses_per_month: "10+3 / měsíc", compare_upload: "Text, PDF, obrázek", compare_report: "Podrobná zpráva (shrnutí, hodnoty, doporučení)", compare_diet: "Jídelníček", compare_supplements: "Doplňky", compare_heart: "Zdraví srdce", compare_history: "Historie", compare_pdf: "PDF / Sdílet / Pro lékaře", compare_emr_ehr: "Zpráva EMR/EHR", compare_langs: "Jazyk zprávy", compare_langs_count: "9 jazyků", compare_compare: "Porovnat dvě analýzy", compare_price: "Cena",
         terms_heading: "Podmínky užití", privacy_heading: "Zásady ochrany osobních údajů", payment_heading: "Platba a vrácení",
         contact_heading: "Kontakt", contact_intro: "Pro dotazy, žádosti o vrácení peněz nebo technické problémy (např. \"platba přijata, ale nebyl přidán kredit analýzy\") nás kontaktujte.", contact_email_label: "E-mail:", contact_note: "Pokud možno uveďte e-mail účtu a krátký popis (č. objednávky, datum atd.). Odpovídáme do 1 pracovního dne.", contact_tagline: "Norya — Výsledky krevních testů srozumitelným jazykem.",
@@ -4463,14 +4599,14 @@
         history_detail_input: "Vstupní text:", history_detail_result: "Interpretace Norya AI:", history_close: "Zavřít", history_analysis_a: "Analýza A", history_analysis_b: "Analýza B",
         history_loading: "Načítání...", history_empty: "Zatím žádné analýzy.", history_load_error: "Nelze načíst historii.", history_compare_select_two: "Vyberte dvě různé analýzy.", history_compare_load_error: "Nelze načíst analýzy.",
         usage_this_month: "Tento měsíc {kullanilan}/{limit} analýz použito.", usage_limit_reached: "Měsíční limit vyčerpán. Přejděte na Pro.", usage_pro_unlimited: "Pro plán: {kullanilan} analýz tento měsíc (neomezeno).", payment_btn_single: "Koupit 1 analýzu", payment_btn_pro: "Přejít na Pro", payment_not_available: "Platba není k dispozici.", payment_error: "Nelze otevřít stránku platby.", payment_modal_title: "Zabezpečená platba (PayTR)", payment_success: "Platba přijata. Můžete spustit analýzu.", session_expired: "Vaše relace vypršela. Přihlaste se znovu.",
-        checkout_back: "← Změnit plán", checkout_title: "Shrnutí objednávky", checkout_subtitle: "Norya — Analýza krve", checkout_plan: "Vybraný plán", checkout_total: "Celkem", checkout_secure: "Vaše platba je chráněna 256bitovým SSL. Údaje o kartě nám nejsou předávány; transakce je dokončena bezpečně přes PayTR.", checkout_btn: "Přejít k zabezpečené platbě", checkout_trust_note: "Norya nabízí zabezpečenou platbu přes HTTPS a PayTR. Údaje o kartě zpracovává pouze poskytovatel plateb.",
+        checkout_back: "← Změnit plán", checkout_title: "Shrnutí objednávky", checkout_subtitle: "Norya — Analýza krve", checkout_plan: "Vybraný plán", checkout_total: "Celkem", checkout_secure: "Vaše platba je chráněna 256bitovým SSL. Údaje o kartě nám nejsou předávány; transakce je dokončena bezpečně přes PayTR.", checkout_btn: "Přejít k zabezpečené platbě", checkout_accepted_cards: "Visa, Mastercard, Amex přijímány.", checkout_trust_note: "Norya nabízí zabezpečenou platbu přes HTTPS a PayTR. Údaje o kartě zpracovává pouze poskytovatel plateb.",
         guest_checkout_title: "Jedna analýza bez účtu", guest_checkout_desc: "Zadejte e-mail; po platbě se můžete přihlásit stejným e-mailem a spustit analýzu.", guest_checkout_name: "Jméno (volitelné)",
         btn_processing_pdf: "Zpracování PDF...", btn_processing_analyze: "Analýza...",
         source_pdf: "PDF", source_image: "Obrázek", source_text: "Text"
       },
       sr: {
         nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
-        nav_features: "Funkcije", nav_pricing: "Cene", nav_contact: "Kontaktirajte nas", nav_faq: "Često postavljana pitanja",
+        nav_features: "Funkcije", nav_pricing: "Cene", nav_checkout: "Plaćanje", nav_contact: "Kontaktirajte nas", nav_faq: "Često postavljana pitanja",
         a2hs_message: "Dodajte Norya na početni ekran i koristite je kao aplikaciju.", a2hs_later: "Kasnije", a2hs_add: "Dodaj", ios_a2hs_message: "Dodaj na početni ekran: Podeli ⎋ Dodaj na početni ekran", ios_a2hs_close: "Zatvori",
         about_title: "Šta je Norya, Ko smo mi", about_what_title: "Šta je Norya?", about_who_title: "Ko smo mi?",
         about_what_1: "Norya je servis koji objašnjava rezultate krvnih testova jasnim jezikom. Brojevi i skraćenice iz laboratorije su često teški za razumevanje; Norya pravi izveštaje koji sumiraju rezultate, objašnjavaju svaku vrednost u odnosu na referentne opsege i daju praktične preporuke.",
@@ -4589,6 +4725,7 @@
         disclaimer_informative: "Ova analiza je samo informativna. Ne zamenjuje medicinsku dijagnozu.",
         footer_mesafeli: "Ugovor o prodaji na daljinu", footer_privacy: "Privatnost", footer_refund: "Povrat i otkazivanje", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Uslovi korišćenja", footer_payment: "Plaćanje i povrati", footer_contact: "Kontakt", back_home: "← Početna",
+        profile_tab_general: "Opšte", profile_tab_plan: "Paket i korišćenje", profile_tab_history: "Istorija analiza", profile_tab_security: "Bezbednost", profile_plan_label: "Plan", profile_remaining: "Preostalo", profile_ends: "Kraj", profile_plan_pro: "Pro", profile_ends_monthly: "Mesečno obnavljanje", profile_ends_na: "—", profile_usage_label: "Korišćenje (ovaj mesec)", profile_upgrade_cta: "Nadogradi plan", profile_view_analysis: "Pogledaj", profile_unlimited: "Neograničeno", profile_country: "Zemlja",
         compare_title: "Uporedi sve planove", compare_subtitle: "Pronađite plan koji vam odgovara.", compare_feature: "Funkcija", compare_plan_free: "Besplatno", compare_plan_single: "Pojedinačno", compare_plan_monthly: "Mesečno", compare_plan_yearly: "Godišnje", compare_analyses: "Analize", compare_analyses_per_month: "10+3 / mesec", compare_upload: "Tekst, PDF, slika", compare_report: "Detaljan izveštaj (rezime, vrednosti, preporuke)", compare_diet: "Dijetetski plan", compare_supplements: "Suplementi", compare_heart: "Zdravlje srca", compare_history: "Istorija", compare_pdf: "PDF / Podeli / Za lekara", compare_emr_ehr: "EMR/EHR izveštaj", compare_langs: "Jezik izveštaja", compare_langs_count: "9 jezika", compare_compare: "Uporedi dve analize", compare_price: "Cena",
         terms_heading: "Uslovi korišćenja", privacy_heading: "Politika privatnosti", payment_heading: "Plaćanje i povrati",
         contact_heading: "Kontakt", contact_intro: "Za pitanja, zahteve za povrat novca ili tehničke probleme (npr. \"plaćanje primljeno ali nije dodat kredit za analizu\") pišite nam.", contact_email_label: "Email:", contact_note: "Ako je moguće, navedite email naloga i kratak opis (br. porudžbine, datum itd.). Odgovaramo u roku od 1 radnog dana.", contact_tagline: "Norya — Rezultati krvnih testova jasnim jezikom.",
@@ -4628,7 +4765,7 @@
         history_detail_input: "Unos:", history_detail_result: "Norya AI tumačenje:", history_close: "Zatvori", history_analysis_a: "Analiza A", history_analysis_b: "Analiza B",
         history_loading: "Učitavanje...", history_empty: "Još nema analiza.", history_load_error: "Nije moguće učitati istoriju.", history_compare_select_two: "Izaberite dve različite analize.", history_compare_load_error: "Nije moguće učitati analize.",
         usage_this_month: "Ovog meseca {kullanilan}/{limit} analiza korišćeno.", usage_limit_reached: "Mesečni limit dostignut. Nadogradite na Pro.", usage_pro_unlimited: "Pro plan: {kullanilan} analiza ovog meseca (neograničeno).", payment_btn_single: "Kupi 1 analizu", payment_btn_pro: "Nadogradi na Pro", payment_not_available: "Plaćanje nije dostupno.", payment_error: "Nije moguće otvoriti stranicu plaćanja.", payment_modal_title: "Sigurno plaćanje (PayTR)", payment_success: "Plaćanje primljeno. Možete pokrenuti analizu.", session_expired: "Vaša sesija je istekla. Prijavite se ponovo.",
-        checkout_back: "← Promeni plan", checkout_title: "Pregled porudžbine", checkout_subtitle: "Norya — Analiza krvi", checkout_plan: "Izabrani plan", checkout_total: "Ukupno", checkout_secure: "Vaše plaćanje je zaštićeno 256-bit SSL-om. Podaci o kartici nam se ne šalju; transakcija se sigurno završava putem PayTR.", checkout_btn: "Nastavi na sigurno plaćanje", checkout_trust_note: "Norya nudi sigurno plaćanje putem HTTPS i PayTR. Podatke o kartici obrađuje samo provajder plaćanja.",
+        checkout_back: "← Promeni plan", checkout_title: "Pregled porudžbine", checkout_subtitle: "Norya — Analiza krvi", checkout_plan: "Izabrani plan", checkout_total: "Ukupno", checkout_secure: "Vaše plaćanje je zaštićeno 256-bit SSL-om. Podaci o kartici nam se ne šalju; transakcija se sigurno završava putem PayTR.", checkout_btn: "Nastavi na sigurno plaćanje", checkout_accepted_cards: "Visa, Mastercard, Amex prihvaćeni.", checkout_trust_note: "Norya nudi sigurno plaćanje putem HTTPS i PayTR. Podatke o kartici obrađuje samo provajder plaćanja.",
         guest_checkout_title: "Jedna analiza bez naloga", guest_checkout_desc: "Unesite email; posle plaćanja možete se prijaviti istim emailom i pokrenuti analizu.", guest_checkout_name: "Ime (opciono)",
         btn_processing_pdf: "Obrada PDF-a...", btn_processing_analyze: "Analiziranje...",
         source_pdf: "PDF", source_image: "Slika", source_text: "Tekst"
@@ -5009,6 +5146,13 @@
     var appliedCouponCode = null;
     var checkoutBasePrice = null;
     var checkoutSymbol = '€';
+    function showCheckoutPage() {
+      var sec = document.getElementById('odeme-section');
+      if (!sec) return;
+      sec.classList.remove('hidden');
+      if (!selectedCheckoutPlan) openCheckout('single');
+      setTimeout(function() { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+    }
     function openCheckout(plan) {
       if (!plan || !['single','monthly','yearly'].includes(plan)) return;
       selectedCheckoutPlan = plan;
@@ -5208,6 +5352,13 @@
       }
     }
     tryGuestLoginFromHash();
+    if (window.location.hash === '#odeme') showCheckoutPage();
+    if (window.location.hash === '#profil') showProfilePage();
+
+    window.addEventListener('hashchange', function() {
+      if (window.location.hash === '#odeme') showCheckoutPage();
+      if (window.location.hash === '#profil') showProfilePage();
+    });
 
     function openAnalyze() {
       var el = document.getElementById('analyze-section');
@@ -5248,7 +5399,9 @@
       var srcPdf = t.source_pdf || 'PDF', srcImg = t.source_image || 'Görsel', srcTxt = t.source_text || 'Metin';
       if (!data.length) {
         listEl.innerHTML = '<p class="text-accent-500">' + (t.history_empty || 'Henüz analiz yok.') + '</p>';
-        document.getElementById('compare-a').innerHTML = document.getElementById('compare-b').innerHTML = '<option value="">' + selectPlaceholder + '</option>';
+        var compareA = document.getElementById('compare-a'), compareB = document.getElementById('compare-b');
+        if (compareA) compareA.innerHTML = '<option value="">' + selectPlaceholder + '</option>';
+        if (compareB) compareB.innerHTML = '<option value="">' + selectPlaceholder + '</option>';
         return;
       }
       historyItems = data;
@@ -5267,8 +5420,9 @@
         var d = item.created_at ? new Date(item.created_at).toLocaleDateString(locale) : '';
         return '<option value="' + item.id + '">' + d + ' (#' + item.id + ')</option>';
       }).join('');
-      document.getElementById('compare-a').innerHTML = opt;
-      document.getElementById('compare-b').innerHTML = opt;
+      var compareA = document.getElementById('compare-a'), compareB = document.getElementById('compare-b');
+      if (compareA) compareA.innerHTML = opt;
+      if (compareB) compareB.innerHTML = opt;
     }
     async function toggleHistoryFavorite(analysisId) {
       if (!getToken()) return;
@@ -5310,9 +5464,10 @@
       const res = await fetch(API_BASE + '/analyze/history/' + id, { headers: { 'Authorization': 'Bearer ' + getToken() } });
       const data = await res.json().catch(() => ({}));
       if (!res.ok) return;
-      document.getElementById('history-detail-input').textContent = data.input_text || '';
-      document.getElementById('history-detail-result').textContent = data.result_text || '';
-      document.getElementById('history-detail').classList.remove('hidden');
+      var inp = document.getElementById('history-detail-input'), resEl = document.getElementById('history-detail-result'), panel = document.getElementById('history-detail');
+      if (inp) inp.textContent = data.input_text || '';
+      if (resEl) resEl.textContent = data.result_text || '';
+      if (panel) panel.classList.remove('hidden');
     }
     async function downloadHistoryPdf() {
       if (!lastHistoryDetailId) return;
@@ -5333,7 +5488,8 @@
       }
     }
     function closeHistoryDetail() {
-      document.getElementById('history-detail').classList.add('hidden');
+      var panel = document.getElementById('history-detail');
+      if (panel) panel.classList.add('hidden');
     }
 
     var wizardCurrentStep = 1;
@@ -5724,27 +5880,172 @@
     }
 
     function openProfile() {
-      var el = document.getElementById('modal-profile');
-      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
-      var err = document.getElementById('profile-error');
-      var pwdErr = document.getElementById('profile-password-error');
-      if (err) err.classList.add('hidden');
-      if (pwdErr) pwdErr.classList.add('hidden');
-      var user = getUser();
-      document.getElementById('profile-email').textContent = user.email || '';
-      document.getElementById('profile-full-name').value = user.full_name || '';
-      document.getElementById('profile-phone').value = user.phone || '';
-      document.getElementById('profile-country').value = user.country || '';
-      document.getElementById('profile-current-password').value = '';
-      document.getElementById('profile-new-password').value = '';
-      fetch(API_BASE + '/auth/me', { headers: { 'Authorization': 'Bearer ' + getToken() } }).then(function(r) { return r.json(); }).then(function(me) {
-        document.getElementById('profile-email').textContent = me.email || '';
-        document.getElementById('profile-full-name').value = me.full_name || '';
-        document.getElementById('profile-phone').value = me.phone || '';
-        document.getElementById('profile-country').value = me.country || '';
-        var verifiedEl = document.getElementById('profile-email-verified');
-        if (verifiedEl) { verifiedEl.classList.toggle('hidden', !me.email_verified); }
-      }).catch(function() {});
+      showProfilePage();
+    }
+    function showProfilePage() {
+      var sec = document.getElementById('profile-section');
+      if (!sec) return;
+      sec.classList.remove('hidden');
+      if (window.history && window.history.replaceState) window.history.replaceState(null, '', (window.location.pathname || '/') + (window.location.search || '') + '#profil');
+      loadProfileData();
+      switchProfileTab('general');
+      setTimeout(function() { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+    }
+    function closeProfilePage() {
+      var sec = document.getElementById('profile-section');
+      if (sec) sec.classList.add('hidden');
+    }
+    function switchProfileTab(tabId) {
+      ['general','plan','history','security'].forEach(function(id) {
+        var panel = document.getElementById('profile-panel-' + id);
+        var btn = document.getElementById('profile-tab-' + id);
+        if (panel) panel.classList.toggle('hidden', id !== tabId);
+        if (btn) {
+          btn.setAttribute('aria-selected', id === tabId ? 'true' : 'false');
+          btn.classList.toggle('bg-primary-600', id === tabId);
+          btn.classList.toggle('text-white', id === tabId);
+          btn.classList.toggle('border-primary-600', id === tabId);
+          btn.classList.toggle('border-accent-200', id !== tabId);
+          btn.classList.toggle('dark:border-accent-600', id !== tabId);
+          btn.classList.toggle('text-accent-700', id !== tabId);
+          btn.classList.toggle('dark:text-accent-300', id !== tabId);
+        }
+      });
+      if (tabId === 'history') loadProfileHistory();
+    }
+    var profileMe = null;
+    var profileUsage = null;
+    async function loadProfileData() {
+      var t = T[getLang()] || T.tr;
+      var token = getToken();
+      if (!token) return;
+      try {
+        var meRes = await fetch(API_BASE + '/auth/me', { headers: { 'Authorization': 'Bearer ' + token } });
+        var usageRes = await fetch(API_BASE + '/analyze/usage', { headers: { 'Authorization': 'Bearer ' + token } });
+        profileMe = meRes.ok ? await meRes.json().catch(function() { return null; }) : null;
+        profileUsage = usageRes.ok ? await usageRes.json().catch(function() { return null; }) : null;
+      } catch (e) { profileMe = null; profileUsage = null; }
+      var planName = (profileUsage && profileUsage.plan) ? (profileUsage.plan === 'pro' ? (t.profile_plan_pro || 'Pro') : (t.compare_plan_free || 'Ücretsiz')) : '—';
+      var limit = (profileUsage && profileUsage.limit != null) ? profileUsage.limit : 0;
+      var used = (profileUsage && profileUsage.kullanilan != null) ? profileUsage.kullanilan : 0;
+      var extra = (profileUsage && profileUsage.extra_credits) ? profileUsage.extra_credits : 0;
+      var remainingNum = Math.max(0, limit - used) + (extra || 0);
+      var remaining = (limit >= 999999) ? (t.profile_unlimited || 'Sınırsız') : String(remainingNum);
+      document.getElementById('profile-summary-name').textContent = (profileMe && profileMe.full_name) ? profileMe.full_name : (profileMe && profileMe.email) ? profileMe.email : '—';
+      document.getElementById('profile-summary-email').textContent = (profileMe && profileMe.email) ? profileMe.email : '—';
+      document.getElementById('profile-summary-plan').textContent = planName;
+      document.getElementById('profile-summary-remaining').textContent = remaining;
+      document.getElementById('profile-summary-ends').textContent = (profileUsage && profileUsage.plan === 'pro') ? (t.profile_ends_monthly || 'Aylık yenilenir') : (t.profile_ends_na || '—');
+      document.getElementById('profile-plan-name').textContent = planName;
+      var pct = (limit > 0 && limit < 999999) ? Math.min(100, (used / limit) * 100) : 0;
+      document.getElementById('profile-usage-bar').style.width = pct + '%';
+      document.getElementById('profile-usage-fraction').textContent = used + ' / ' + (limit >= 999999 ? '∞' : limit);
+      var usageMsg = (profileUsage && profileUsage.first_analysis_free && used === 0) ? (t.usage_first_free || 'İlk analiz ücretsiz.') : (limit >= 999999) ? (t.usage_pro_unlimited || '').replace(/\{kullanilan\}/g, used).replace(/\{limit\}/g, '∞') : (t.usage_this_month || '').replace(/\{kullanilan\}/g, used).replace(/\{limit\}/g, limit);
+      document.getElementById('profile-usage-text').textContent = usageMsg || used + ' / ' + limit;
+      if (profileMe) {
+        document.getElementById('profile-page-name').value = profileMe.full_name || '';
+        document.getElementById('profile-page-phone').value = profileMe.phone || '';
+        document.getElementById('profile-page-country').value = profileMe.country || '';
+      }
+    }
+    async function loadProfileHistory() {
+      var t = T[getLang()] || T.tr;
+      var listEl = document.getElementById('profile-history-list');
+      if (!listEl) return;
+      listEl.innerHTML = '<p class="text-accent-500 text-sm">' + (t.history_loading || 'Yükleniyor...') + '</p>';
+      try {
+        var res = await fetch(API_BASE + '/analyze/history?limit=50', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+        var data = await res.json().catch(function() { return []; });
+        if (res.status === 401 || res.status === 403) { listEl.innerHTML = '<p class="text-accent-500 text-sm">' + (t.history_empty || 'Henüz analiz yok.') + '</p>'; return; }
+        if (!data.length) { listEl.innerHTML = '<p class="text-accent-500 text-sm">' + (t.history_empty || 'Henüz analiz yok.') + '</p>'; return; }
+        var locale = getLocale();
+        var srcPdf = t.source_pdf || 'PDF', srcImg = t.source_image || 'Görsel', srcTxt = t.source_text || 'Metin';
+        listEl.innerHTML = data.map(function(item) {
+          var date = item.created_at ? new Date(item.created_at).toLocaleDateString(locale) : '';
+          var src = item.source === 'pdf' ? srcPdf : item.source === 'image' ? srcImg : srcTxt;
+          return '<div class="flex flex-col sm:flex-row sm:items-center gap-2 p-3 rounded-xl border border-accent-200 dark:border-accent-600 bg-accent-50/50 dark:bg-accent-900/30">' +
+            '<div class="flex-1 min-w-0">' +
+            '<span class="text-xs text-accent-500">' + date + ' • ' + src + '</span>' +
+            '<p class="text-sm font-medium text-accent-900 dark:text-white truncate">' + escapeHtml(item.input_preview || '') + '</p></div>' +
+            '<div class="flex gap-2 shrink-0">' +
+            '<button type="button" onclick="profileDownloadPdf(' + item.id + ')" class="px-3 py-1.5 rounded-lg bg-primary-600 text-white text-xs font-medium hover:bg-primary-700" data-i18n="report_download">İndir</button>' +
+            '<button type="button" onclick="profileViewAnalysis(' + item.id + ')" class="px-3 py-1.5 rounded-lg border border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 text-xs font-medium hover:bg-accent-100 dark:hover:bg-accent-700" data-i18n="profile_view_analysis">Görüntüle</button></div></div>';
+        }).join('');
+      } catch (e) {
+        listEl.innerHTML = '<p class="text-red-600 text-sm">' + (t.history_load_error || 'Geçmiş yüklenemedi.') + '</p>';
+      }
+    }
+    async function profileDownloadPdf(analysisId) {
+      var lang = getLang() || 'tr';
+      var t = T[getLang()] || T.tr;
+      try {
+        var tokenRes = await fetch(API_BASE + '/analyze/history/' + analysisId + '/pdf-token', { method: 'POST', headers: { 'Authorization': 'Bearer ' + getToken() } });
+        var tokData = await tokenRes.json().catch(function() { return {}; });
+        if (!tokenRes.ok || !tokData.access_token) { toast(t.history_load_error || 'PDF indirilemedi.', 'error'); return; }
+        var pdfUrl = API_BASE + '/analyze/history/' + analysisId + '/pdf?access_token=' + encodeURIComponent(tokData.access_token) + '&lang=' + encodeURIComponent(lang);
+        var a = document.createElement('a'); a.href = pdfUrl; a.download = 'norya-rapor-' + analysisId + '.pdf'; a.target = '_blank'; a.click();
+        toast(t.report_download || 'İndirildi.', 'success');
+      } catch (e) { toast(t.history_load_error || 'PDF indirilemedi.', 'error'); }
+    }
+    function profileViewAnalysis(analysisId) {
+      closeProfilePage();
+      showHistorySection();
+      setTimeout(function() { showHistoryDetail(analysisId); }, 300);
+    }
+    async function submitProfilePage(e) {
+      e.preventDefault();
+      var errEl = document.getElementById('profile-page-error');
+      errEl.classList.add('hidden');
+      var fullName = (document.getElementById('profile-page-name').value || '').trim();
+      var phone = (document.getElementById('profile-page-phone').value || '').trim();
+      var country = (document.getElementById('profile-page-country').value || '').trim();
+      try {
+        var res = await fetch(API_BASE + '/auth/me', {
+          method: 'PATCH',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+          body: JSON.stringify({ full_name: fullName || null, phone: phone || null, country: country || null })
+        });
+        var data = await res.json().catch(function() { return {}; });
+        if (res.ok) {
+          setAuth(getToken(), { email: data.email, full_name: data.full_name, phone: data.phone, country: data.country });
+          updateNav();
+          loadProfileData();
+          toast('Profil güncellendi.', 'success');
+        } else {
+          errEl.textContent = data.detail || data.error || 'Güncelleme başarısız.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Bağlantı hatası. İnternet bağlantınızı kontrol edin.';
+        errEl.classList.remove('hidden');
+      }
+    }
+    async function submitProfilePagePassword(e) {
+      e.preventDefault();
+      var errEl = document.getElementById('profile-page-pw-error');
+      errEl.classList.add('hidden');
+      var current = (document.getElementById('profile-page-current-pw').value || '').trim();
+      var newPw = (document.getElementById('profile-page-new-pw').value || '').trim();
+      if (newPw.length < 6) { errEl.textContent = 'Yeni şifre en az 6 karakter olmalı.'; errEl.classList.remove('hidden'); return; }
+      try {
+        var res = await fetch(API_BASE + '/auth/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
+          body: JSON.stringify({ current_password: current, new_password: newPw })
+        });
+        var data = await res.json().catch(function() { return {}; });
+        if (res.ok) {
+          document.getElementById('profile-page-current-pw').value = '';
+          document.getElementById('profile-page-new-pw').value = '';
+          toast('Şifre güncellendi.', 'success');
+        } else {
+          errEl.textContent = data.detail || data.error || 'Şifre güncellenemedi.';
+          errEl.classList.remove('hidden');
+        }
+      } catch (err) {
+        errEl.textContent = 'Bağlantı hatası. İnternet bağlantınızı kontrol edin.';
+        errEl.classList.remove('hidden');
+      }
     }
     function closeProfile() {
       var el = document.getElementById('modal-profile');
@@ -5845,6 +6146,7 @@
           clearAuth();
           updateNav();
           closeProfile();
+          closeProfilePage();
           closeDeleteAccountConfirm();
           toast('Hesabınız silindi.', 'info');
         } else {

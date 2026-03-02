@@ -10,14 +10,19 @@
     .sidebar-link.active { background: rgba(224, 122, 95, 0.2); color: #e07a5f; }
     .sidebar-link { white-space: nowrap; }
   </style>
-  <!-- Google tag (gtag.js) -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FLMLJH3Q0"></script>
+  {% set ga_id = request.state.ga_measurement_id|default('G-1FLMLJH3Q0', true) %}
+  {% set aw_id = request.state.google_ads_conversion_id|default('', true) %}
+  {% if ga_id or aw_id %}
+  <!-- Google tag (gtag.js) — GA4 + Google Ads -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id or aw_id }}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
-    gtag('config', 'G-1FLMLJH3Q0');
+    {% if ga_id %}gtag('config', '{{ ga_id }}');{% endif %}
+    {% if aw_id %}gtag('config', '{{ aw_id }}');{% endif %}
   </script>
+  {% endif %}
 </head>
 <body class="bg-slate-900 text-slate-200 min-h-screen">
   <div class="flex">

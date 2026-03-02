@@ -290,6 +290,14 @@ async def security_headers(request: Request, call_next):
 
 
 @app.middleware("http")
+async def inject_tracking_ids(request: Request, call_next):
+    """Şablonlarda kullanılmak üzere GA ve Google Ads kimliklerini request.state'e yazar."""
+    request.state.ga_measurement_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
+    request.state.google_ads_conversion_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
+    return await call_next(request)
+
+
+@app.middleware("http")
 async def request_id_and_latency(request: Request, call_next):
     request.state.request_id = str(uuid.uuid4())
     start = time.perf_counter()
@@ -680,14 +688,22 @@ if getattr(settings, "environment", "development") != "production":
 
 
 def _inject_ga(html: str) -> str:
-    """GA_MEASUREMENT_ID doluysa GA4 script'ini <!-- GA_INJECT --> yerine koyar; boşsa o satırı siler."""
+    """GA_MEASUREMENT_ID ve/veya GOOGLE_ADS_CONVERSION_ID doluysa gtag script'ini <!-- GA_INJECT --> yerine koyar; ikisi de boşsa siler."""
     ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
-    inject = (
-        f'<script async src="https://www.googletagmanager.com/gtag/js?id={ga_id}"></script>\n'
-        f'  <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{ga_id}");</script>\n  '
-        if ga_id
-        else ""
-    )
+    aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
+    if not ga_id and not aw_id:
+        inject = ""
+    else:
+        first_id = ga_id or aw_id
+        configs = []
+        if ga_id:
+            configs.append(f'gtag("config","{ga_id}");')
+        if aw_id:
+            configs.append(f'gtag("config","{aw_id}");')
+        inject = (
+            f'<script async src="https://www.googletagmanager.com/gtag/js?id={first_id}"></script>\n'
+            f'  <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());{" ".join(configs)}</script>\n  '
+        )
     return html.replace("<!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->", inject)
 
 
@@ -727,7 +743,7 @@ def index():
         index_file = Path.cwd() / "static" / "index.html"
     if index_file.is_file():
         raw = index_file.read_text(encoding="utf-8")
-        if getattr(settings, "ga_measurement_id", ""):
+        if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
             raw = _inject_ga(raw)
         return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
@@ -741,7 +757,7 @@ def report_page():
         index_file = Path.cwd() / "static" / "index.html"
     if index_file.is_file():
         raw = index_file.read_text(encoding="utf-8")
-        if getattr(settings, "ga_measurement_id", ""):
+        if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
             raw = _inject_ga(raw)
         return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."}
@@ -1605,6 +1621,7 @@ def payment_get_token(
             raise HTTPException(status_code=400, detail=err)
         amount = max(1, amount - discount)
         coupon_used = code
+    currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
     order = PaymentOrder(
         merchant_oid=merchant_oid,
         user_id=user.id or 0,
@@ -1622,7 +1639,6 @@ def payment_get_token(
     user_ip = _client_ip(request)
     email = user.email or ""
     product_name = {"single": "1 Analiz", "monthly": "Pro Aylık", "yearly": "Pro Yıllık"}[body.product]
-    currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
     user_basket = base64.b64encode(
         json.dumps([[product_name, f"{amount / 100:.2f}", 1]]).encode()
     ).decode()
@@ -1711,6 +1727,7 @@ def payment_get_token_guest(
             raise HTTPException(status_code=400, detail=err)
         amount = max(1, amount - discount)
         coupon_used = code
+    currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
     order = PaymentOrder(
         merchant_oid=merchant_oid,
         user_id=user_id,
@@ -1738,7 +1755,6 @@ def payment_get_token_guest(
     merchant_salt = settings.paytr_merchant_salt
     user_ip = _client_ip(request)
     product_name = "1 Analiz"
-    currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
     user_basket = base64.b64encode(json.dumps([[product_name, f"{amount / 100:.2f}", 1]]).encode()).decode()
     no_installment = "0"
     max_installment = "0"

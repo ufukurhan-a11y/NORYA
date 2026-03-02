@@ -18,7 +18,7 @@ Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri list
 | Değişken | Açıklama | Production |
 |----------|----------|------------|
 | `PAYTR_MERCHANT_ID` / `KEY` / `SALT` | PayTR panelinden | Doldurun |
-| `PAYTR_NOTIFICATION_URL` | Webhook adresi | `https://alandiniz.com/api/payment/callback` |
+| `PAYTR_NOTIFICATION_URL` | Webhook adresi (PayTR panelinde Bildirim URL olarak girin) | `https://alandiniz.com/payment/callback` |
 | `PAYTR_OK_URL` / `PAYTR_FAIL_URL` | Ödeme sonrası yönlendirme | `https://alandiniz.com/#payment-ok` vb. |
 | `PAYTR_TEST_MODE` | Test modu | `0` (canlı ödeme için) |
 
@@ -60,5 +60,7 @@ Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri list
 **Tailwind CSS:** Ana sayfa production’da CDN yerine build edilmiş `static/css/tailwind.css` kullanır. Stil veya sınıf değişikliği yaptıysanız: `npm install && npm run build:css` çalıştırıp `static/css/tailwind.css` dosyasını commit edin.
 
 **Google Analytics (GA4):** Tag tüm sayfalarda (base template, static HTML, legal sayfalar) `<head>` içinde yüklü; CSP `script-src` ve `connect-src` ile googletagmanager / google-analytics izinli. Cloudflare cache kullanıyorsanız “Purge Everything” sonrası GA görünümü 5–15 dk gecikmeli olabilir. Realtime test için gizli sekmede site açıp 1–2 sayfa gezin.
+
+**Google Ads:** Dönüşüm takibi için `.env` içine `GOOGLE_ADS_CONVERSION_ID=AW-XXXXXXXXX` ekleyin. Aynı gtag ile GA4 + Google Ads birlikte yüklenir; ek CSP gerekmez.
 
 Bu adımlar tamamsa uygulama yayına hazırdır.
