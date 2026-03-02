@@ -57,4 +57,6 @@ Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri list
 - [ ] `data/uploads` kalıcı
 - [ ] İsteğe bağlı: `GA_MEASUREMENT_ID=G-XXX` (Google Analytics 4); Cloudflare/DNS: `docs/CLOUDFLARE-VE-GOOGLE-ANALYTICS.md`
 
+**Tailwind CSS:** Ana sayfa production’da CDN yerine build edilmiş `static/css/tailwind.css` kullanır. Stil veya sınıf değişikliği yaptıysanız: `npm install && npm run build:css` çalıştırıp `static/css/tailwind.css` dosyasını commit edin.
+
 Bu adımlar tamamsa uygulama yayına hazırdır.

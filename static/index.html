@@ -31,25 +31,10 @@
     gtag('js', new Date());
     gtag('config', 'G-1FLMLHJ3Q0');
   </script>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/tailwind.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          colors: {
-            primary: { 50: '#ecfdfb', 100: '#cffbf4', 200: '#99f6e8', 300: '#5eead9', 400: '#2dd4bf', 500: '#14b8a6', 600: '#0d9488', 700: '#0f766e', 800: '#115e59', 900: '#134e4a' },
-            navy: { 50: '#e8eef4', 100: '#c5d4e4', 200: '#9fb3ce', 300: '#7892b8', 400: '#5478a2', 500: '#3d5f8c', 600: '#2d4a6f', 700: '#1e3a5f', 800: '#0f2744', 900: '#0a1929' },
-            accent: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 300: '#cbd5e1', 400: '#94a3b8', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' },
-            blood: { 500: '#dc2626', 600: '#b91c1c' }
-          }
-        }
-      }
-    }
-  </script>
   <style>
     :root {
       --norya-bg: #ffffff;
@@ -181,6 +166,7 @@
     .nav-actions button { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 1.25; }
     #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.75rem; }
     #nav-auth.hidden { display: none !important; }
+    #nav-analyze-btn { display: inline-flex !important; min-height: 44px; }
     @media (max-width: 640px) {
       .nav-actions #theme-btn { padding: 0.5rem; min-width: 44px; min-height: 44px; }
       .nav-actions #nav-auth button { min-height: 44px; min-width: 44px; padding: 0.5rem 0.75rem; font-size: 0.875rem; }
@@ -277,6 +263,7 @@
               <button type="button" onclick="closeNavMenu(); openLogin();" class="block w-full text-left px-4 py-3 text-sm font-medium text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl min-h-[44px] flex items-center" data-i18n="nav_login">Giriş</button>
               <button type="button" onclick="closeNavMenu(); openRegister(); scrollToAnalyze();" class="block w-full text-left px-4 py-3 text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 rounded-b-xl min-h-[44px] flex items-center" data-i18n="nav_register">Ücretsiz Başla</button>
             </div>
+            <button type="button" onclick="closeNavMenu(); openAnalyze();" class="block w-full text-left px-4 py-3 text-sm font-semibold bg-primary-600 text-white hover:bg-primary-700 min-h-[44px] flex items-center rounded-xl mx-2 mb-2" data-i18n="nav_analyze">Analiz Yap</button>
             <a href="#hakkimizda" id="nav-menu-about" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl nav-menu-mobile-only-border" data-i18n="nav_about">Hakkımızda</a>
             <a href="#nasil-calisir" id="nav-menu-how" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_how">Nasıl Çalışır</a>
             <a href="#kimler-icin" id="nav-menu-who" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_who">Kimler İçin</a>
@@ -298,9 +285,9 @@
             <span id="user-email" class="text-xs text-slate-600"></span>
             <span id="user-phone-country" class="text-xs text-slate-600"></span>
           </span>
-          <button onclick="showHistorySection()" class="text-slate-700 hover:text-primary-600 font-medium hidden sm:inline" data-i18n="nav_history">Geçmiş</button>
-          <button onclick="openAnalyze()" class="px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium" data-i18n="nav_analyze">Analiz Yap</button>
-          <button onclick="openProfile()" class="text-slate-700 hover:text-primary-600 font-medium hidden sm:inline" data-i18n="nav_profile">Profil</button>
+          <button onclick="showHistorySection()" class="text-slate-700 hover:text-primary-600 font-medium hidden sm:inline-flex" data-i18n="nav_history">Geçmiş</button>
+          <button type="button" id="nav-analyze-btn" onclick="openAnalyze()" class="inline-flex items-center justify-center px-4 py-2 rounded-lg bg-primary-600 text-white hover:bg-primary-700 font-medium min-h-[44px] shrink-0" data-i18n="nav_analyze">Analiz Yap</button>
+          <button onclick="openProfile()" class="text-slate-700 hover:text-primary-600 font-medium hidden sm:inline-flex" data-i18n="nav_profile">Profil</button>
           <button onclick="logout()" class="text-slate-600 hover:text-red-600 text-sm font-medium" data-i18n="nav_logout">Çıkış</button>
         </span>
       </div>

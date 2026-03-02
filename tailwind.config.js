@@ -8,10 +8,47 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["DM Sans", "system-ui", "sans-serif"],
+        sans: ["Inter", "DM Sans", "system-ui", "sans-serif"],
         display: ["Outfit", "DM Sans", "system-ui", "sans-serif"],
       },
       colors: {
+        primary: {
+          50: "#ecfdfb",
+          100: "#cffbf4",
+          200: "#99f6e8",
+          300: "#5eead9",
+          400: "#2dd4bf",
+          500: "#14b8a6",
+          600: "#0d9488",
+          700: "#0f766e",
+          800: "#115e59",
+          900: "#134e4a",
+        },
+        navy: {
+          50: "#e8eef4",
+          100: "#c5d4e4",
+          200: "#9fb3ce",
+          300: "#7892b8",
+          400: "#5478a2",
+          500: "#3d5f8c",
+          600: "#2d4a6f",
+          700: "#1e3a5f",
+          800: "#0f2744",
+          900: "#0a1929",
+        },
+        accent: {
+          50: "#f8fafc",
+          100: "#f1f5f9",
+          200: "#e2e8f0",
+          300: "#cbd5e1",
+          400: "#94a3b8",
+          500: "#64748b",
+          600: "#475569",
+          700: "#334155",
+          800: "#1e293b",
+          900: "#0f172a",
+        },
+        blood: { 500: "#dc2626", 600: "#b91c1c" },
         norya: {
           brand: "#e07a5f",
           "brand-hover": "#c9684a",
