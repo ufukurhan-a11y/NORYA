@@ -3,13 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
-  <meta name="theme-color" content="#0a1929" media="(prefers-color-scheme: light)" />
-  <meta name="theme-color" content="#0a1929" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#0EA5A4" media="(prefers-color-scheme: light)" />
+  <meta name="theme-color" content="#0EA5A4" media="(prefers-color-scheme: dark)" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="default" />
   <meta name="apple-mobile-web-app-title" content="Norya" />
   <meta name="mobile-web-app-capable" content="yes" />
-  <link rel="manifest" href="/static/manifest.json" />
+  <link rel="manifest" href="/static/manifest.webmanifest" />
+  <link rel="icon" href="/static/favicon.ico" />
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
@@ -220,6 +221,16 @@
     #guest-checkout-modal.hidden, #payment-modal.hidden, #a2hs-banner.hidden, #ios-a2hs-banner.hidden {
       pointer-events: none !important;
     }
+    /* PWA: Ana ekrana ekle butonu (teal, pill) */
+    .a2hs-btn-primary {
+      border-radius: 999px;
+      background-color: #0EA5A4;
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.35);
+    }
+    .a2hs-btn-primary:hover {
+      background-color: #0B8B8A;
+      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.45);
+    }
   </style>
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
@@ -234,7 +245,7 @@
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
         <div class="relative" id="lang-wrap">
-          <button type="button" onclick="toggleLangModal()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-slate-700 hover:bg-slate-100 text-sm font-medium" aria-label="Dil seçin">
+          <button type="button" onclick="toggleLangModal()" class="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-slate-700 hover:bg-slate-100 text-sm font-medium" id="lang-btn" data-i18n-aria-label="aria_select_language" aria-label="Dil seçin">
             <span aria-hidden="true">🌐</span>
             <span id="lang-current">TR</span>
           </button>
@@ -338,61 +349,55 @@
     </div>
   </section>
 
-  <!-- Güven çizgisi -->
-  <div class="py-5 px-4 bg-navy-800/30 dark:bg-navy-900/50 border-y border-navy-700/50">
-    <p class="text-center text-sm sm:text-base text-white/95 font-semibold">
-      <span class="inline-flex items-center gap-1.5" data-i18n="trust_since">2017'den beri</span>
-      <span class="mx-2 text-primary-300">•</span>
-      <span class="inline-flex items-center gap-1.5" data-i18n="trust_satisfaction">%100 müşteri memnuniyeti</span>
-    </p>
-    <p class="text-center text-sm sm:text-base text-primary-200 dark:text-primary-100 font-semibold mt-1" data-i18n="trust_users">100.000+ kullanıcıya bu zamana kadar hizmet verdik</p>
-  </div>
-
-  <!-- Güven rozetleri: sayfa ortasında müşteri görür (SSL, KVKK, GDPR, PayTR, Cloudflare) -->
-  <section id="guven-rozetleri" class="py-12 sm:py-16 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800" aria-labelledby="trust-badges-heading">
+  <!-- Güven ve uyumluluk bölümü -->
+  <section id="trust-section" class="py-16 sm:py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
     <div class="max-w-6xl mx-auto w-full px-4">
-      <h2 id="trust-badges-heading" class="text-xl sm:text-2xl font-bold text-center text-accent-900 dark:text-white mb-8" data-i18n="trust_badges_heading">Güvenli ve uyumlu hizmet</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6" aria-label="Güven ve uyumluluk">
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🔒</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_ssl">SSL Secure</span>
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-accent-900 dark:text-white mb-3" data-i18n="trust_title">Güvenli ve uyumlu hizmet</h2>
+        <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400" data-i18n="trust_subtitle">
+          Veriler yalnızca rapor üretimi amacıyla işlenir. Norya tıbbi tanı koymaz; bilgilendirme amaçlı AI destekli yorum sunar.
+        </p>
+      </div>
+
+      <!-- İstatistik kartları -->
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">🌍</span>
+          <div>
+            <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_langs_title">9+ dil desteği</p>
+            <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_langs_desc">Tahlilinizi Türkçe, İngilizce ve diğer dillerde okuyabilirsiniz.</p>
           </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_ssl_desc">Şifreli bağlantı</p>
         </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🛡️</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_kvkk">KVKK uyumlu</span>
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">📄</span>
+          <div>
+            <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_input_title">Esnek girdi türleri</p>
+            <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_input_desc">Metin, PDF veya fotoğraf yükleyerek analiz alın.</p>
           </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_kvkk_desc">Kişisel veri koruma</p>
         </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">✓</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_gdpr">GDPR ready</span>
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">⏱</span>
+          <div>
+            <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_speed_title">1 dakikadan kısa sonuç</p>
+            <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_speed_desc">Çoğu rapor saniyeler içinde hazır olur.</p>
           </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_gdpr_desc">AB veri koruma</p>
         </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">💳</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_paytr">PayTR Secure</span>
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">🔒</span>
+          <div>
+            <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_ssl_title">SSL/TLS güvenli bağlantı</p>
+            <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_ssl_desc">Tarayıcı ile sunucu arasındaki iletişim şifrelenir.</p>
           </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_paytr_desc">Güvenli ödeme</p>
         </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-2">
-            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-7 w-auto max-h-8 object-contain shrink-0" width="30" height="30" loading="lazy" />
-            <span class="font-semibold text-sm" data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
-          </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mb-3" data-i18n="trust_cloudflare_desc">Trafik koruması ve global CDN ile daha hızlı ve güvenli erişim.</p>
-          <ul class="text-xs text-accent-500 dark:text-accent-500 space-y-1 mt-auto" aria-hidden="true">
-            <li>• <span data-i18n="trust_cloudflare_1">DDoS koruması</span></li>
-            <li>• <span data-i18n="trust_cloudflare_2">Global CDN hızlandırma</span></li>
-            <li>• <span data-i18n="trust_cloudflare_3">Edge güvenlik</span></li>
-          </ul>
-        </div>
+      </div>
+
+      <!-- Trust chip satırı -->
+      <div class="mt-8 flex flex-wrap justify-center gap-2 sm:gap-3">
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-primary-50 dark:bg-primary-900/40 border border-primary-100 dark:border-primary-700 text-xs font-medium text-primary-700 dark:text-primary-300" data-i18n="trust_chip_kvkk">KVKK uyumlu işleme</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-accent-50 dark:bg-accent-900/40 border border-accent-100 dark:border-accent-700 text-xs font-medium text-accent-700 dark:text-accent-200" data-i18n="trust_chip_gdpr">GDPR ready</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200" data-i18n="trust_chip_ssl">SSL/TLS ile şifreleme</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-slate-50 dark:bg-slate-800 border border-slate-200 dark:border-slate-700 text-xs font-medium text-slate-700 dark:text-slate-200" data-i18n="trust_chip_purpose">Amaçla sınırlı veri işleme</span>
+        <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-amber-50 dark:bg-amber-900/30 border border-amber-200 dark:border-amber-700 text-xs font-medium text-amber-700 dark:text-amber-200" data-i18n="trust_chip_not_medical">Tıbbi tanı aracı değildir</span>
       </div>
     </div>
   </section>
@@ -538,6 +543,30 @@
           <div>
             <h3 class="font-semibold text-accent-900 dark:text-white" data-i18n="why_priv">Gizlilik</h3>
             <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="why_privd">Verileriniz güvenli, üçüncü tarafla paylaşılmaz.</p>
+          </div>
+        </div>
+        <!-- Diyet planı -->
+        <div class="flex gap-4 p-4 rounded-xl bg-white dark:bg-accent-900/40 border border-accent-100 dark:border-accent-700">
+          <span class="text-2xl">🥗</span>
+          <div>
+            <h3 class="font-semibold text-accent-900 dark:text-white" data-i18n="feature_diet_title">Kişiselleştirilmiş diyet planı</h3>
+            <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="feature_diet_desc">Kan tahlilinizdeki eksiklik ve risklere göre yenilmesi / azaltılması gereken besinleri ve örnek günlük menüyü özetler.</p>
+          </div>
+        </div>
+        <!-- Akıllı takviye önerileri -->
+        <div class="flex gap-4 p-4 rounded-xl bg-white dark:bg-accent-900/40 border border-accent-100 dark:border-accent-700">
+          <span class="text-2xl">💊</span>
+          <div>
+            <h3 class="font-semibold text-accent-900 dark:text-white" data-i18n="feature_supp_title">Akıllı takviye önerileri</h3>
+            <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="feature_supp_desc">Değerleriniz referans dışına çıktığında, vitamin/mineral takviyeleri için hekime sorabileceğiniz seçenekler listeler.</p>
+          </div>
+        </div>
+        <!-- Gelişmiş karşılaştırma -->
+        <div class="flex gap-4 p-4 rounded-xl bg-white dark:bg-accent-900/40 border border-accent-100 dark:border-accent-700">
+          <span class="text-2xl">📈</span>
+          <div>
+            <h3 class="font-semibold text-accent-900 dark:text-white" data-i18n="feature_compare_title">Gelişmiş kan testi karşılaştırma</h3>
+            <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="feature_compare_desc">İki farklı tahlili yan yana getirip, zaman içindeki değişimi ve risk işaretlerini tek ekranda görmenizi sağlar.</p>
           </div>
         </div>
       </div>
@@ -1234,7 +1263,7 @@
           </div>
 
           <!-- Sihirbaz: Geri / Sonraki. runAnalyze() analyze-btn arar; wizard'da gizli tutuyoruz. -->
-          <button type="button" id="analyze-btn" class="hidden" aria-hidden="true">Analiz Et</button>
+          <button type="button" id="analyze-btn" class="hidden" aria-hidden="true" data-i18n="btn_analyze">Analiz Et</button>
           <div id="wizard-actions" class="mt-6 flex flex-wrap gap-3">
             <button type="button" id="wizard-btn-prev" onclick="wizardPrev()" class="px-5 py-2.5 rounded-xl border-2 border-navy-200 dark:border-navy-600 text-navy-700 dark:text-navy-200 font-medium hover:bg-navy-50 dark:hover:bg-navy-800/50 transition hidden" data-i18n="wizard_back">Geri</button>
             <button type="submit" id="wizard-btn-next" class="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition flex-1 min-w-[140px]" data-i18n="wizard_next">Sonraki</button>
@@ -1294,8 +1323,8 @@
           <p class="text-xs font-medium text-accent-500 dark:text-accent-400 mb-2" data-i18n="checkout_choose_plan">Planı değiştir</p>
           <div class="flex flex-wrap gap-2 mb-4">
             <button type="button" id="checkout-btn-single" onclick="openCheckout('single')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="single">Tek Analiz</button>
-            <button type="button" id="checkout-btn-monthly" onclick="openCheckout('monthly')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="monthly">Aylık</button>
-            <button type="button" id="checkout-btn-yearly" onclick="openCheckout('yearly')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="yearly">Yıllık</button>
+            <button type="button" id="checkout-btn-monthly" onclick="openCheckout('monthly')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="monthly" data-i18n="compare_plan_monthly">Aylık</button>
+            <button type="button" id="checkout-btn-yearly" onclick="openCheckout('yearly')" class="checkout-plan-btn px-4 py-2.5 rounded-xl text-sm font-medium border-2 border-accent-300 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/20 transition" data-plan="yearly" data-i18n="compare_plan_yearly">Yıllık</button>
           </div>
           <div class="flex justify-between items-center py-3 border-b border-accent-200 dark:border-accent-700">
             <span class="text-accent-600 dark:text-accent-400" data-i18n="checkout_plan">Seçilen plan</span>
@@ -1340,40 +1369,105 @@
     <div class="max-w-6xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="pricing_title">Fiyatlandırma</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-10" id="pricing-note" data-i18n="pricing_eur">Fiyatlar konumunuza göre yerel para biriminde gösterilir.</p>
-      <div class="grid md:grid-cols-3 gap-6">
-        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border border-accent-100 dark:border-accent-700">
-          <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_single_title">Tek Analiz</h3>
-          <p class="mt-2 text-3xl font-bold text-primary-600"><span id="price-single">13</span> <span id="price-symbol">€</span></p>
-          <p class="text-sm text-accent-500 mt-1" data-i18n="price_single_per">tek seferlik</p>
-          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400">
+      <div class="grid md:grid-cols-3 gap-6 items-stretch">
+        <!-- Aylık: En Popüler (mobilde ilk) -->
+        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border border-primary-300 dark:border-primary-700 relative flex flex-col md:scale-[1.03] md:shadow-xl md:shadow-primary-500/15">
+          <span class="absolute -top-3 left-4 px-3 py-0.5 rounded-full bg-primary-600 text-white text-xs font-semibold shadow-sm" data-i18n="price_monthly_badge">En Popüler</span>
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div>
+              <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_monthly_title">Aylık Abonelik</h3>
+              <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">5 analiz / ay</p>
+            </div>
+            <!-- AI detay seviyesi -->
+            <div class="flex flex-col items-center text-xs text-accent-500">
+              <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+                <circle cx="20" cy="20" r="17" fill="none" stroke="#E5E7EB" stroke-width="4" />
+                <circle cx="20" cy="20" r="17" fill="none" stroke="#0EA5A4" stroke-width="4" stroke-linecap="round"
+                        stroke-dasharray="107" stroke-dashoffset="21" transform="rotate(-90 20 20)" />
+                <text x="20" y="22" text-anchor="middle" font-size="10" fill="#0F172A">90</text>
+              </svg>
+              <span class="mt-1 text-[10px]" data-i18n="pricing_ai_detail">AI Detay Seviyesi</span>
+            </div>
+          </div>
+          <p class="mt-1 text-3xl font-extrabold text-primary-600 leading-tight">
+            <span class="align-top text-base mr-0.5">€</span><span id="price-monthly">50</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_month">/ay</span>
+          </p>
+          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300">
+            <span class="px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-100" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
+          </div>
+          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400 flex-1">
+            <li data-i18n="price_monthly_1">✓ Ayda 5 tam analiz</li>
+            <li data-i18n="price_monthly_2">✓ Diyet planı + takviye önerileri</li>
+            <li data-i18n="price_monthly_3">✓ Geçmiş & iki analiz karşılaştırma</li>
+            <li data-i18n="price_monthly_4">✓ PDF indir, doktorla paylaş</li>
+          </ul>
+          <button onclick="(getToken() ? openCheckout('monthly') : openRegister())" class="mt-6 w-full py-3.5 rounded-full bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition"><span id="btn-monthly">50 €</span><span data-i18n="price_btn_monthly">/ay — Başla</span></button>
+        </div>
+        <!-- Yıllık: En İyi Değer -->
+        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border border-accent-100 dark:border-accent-700 relative flex flex-col">
+          <span class="absolute -top-3 left-4 px-3 py-0.5 rounded-full bg-emerald-600 text-white text-xs font-semibold shadow-sm" data-i18n="price_best_badge_value">En İyi Değer</span>
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div>
+              <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_yearly_title">Yıllık Abonelik</h3>
+              <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">Toplam 16 analiz (13 + 3 hediye)</p>
+            </div>
+            <!-- AI detay seviyesi -->
+            <div class="flex flex-col items-center text-xs text-accent-500">
+              <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+                <circle cx="20" cy="20" r="17" fill="none" stroke="#E5E7EB" stroke-width="4" />
+                <circle cx="20" cy="20" r="17" fill="none" stroke="#0EA5A4" stroke-width="4" stroke-linecap="round"
+                        stroke-dasharray="107" stroke-dashoffset="15" transform="rotate(-90 20 20)" />
+                <text x="20" y="22" text-anchor="middle" font-size="10" fill="#0F172A">92</text>
+              </svg>
+              <span class="mt-1 text-[10px]" data-i18n="pricing_ai_detail">AI Detay Seviyesi</span>
+            </div>
+          </div>
+          <p class="mt-1 text-3xl font-extrabold text-primary-600 leading-tight">
+            <span class="align-top text-base mr-0.5">€</span><span id="price-yearly">99</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span>
+          </p>
+          <p class="mt-1 text-xs font-medium text-emerald-700 dark:text-emerald-300" data-i18n="pricing_yearly_saving">Aylığa göre 501€ tasarruf (%83)</p>
+          <p class="mt-0.5 text-[11px] text-accent-500 dark:text-accent-400" data-i18n="pricing_yearly_math">50€ x 12 = 600€ yerine 99€ (yıllık toplu ödeme).</p>
+          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300">
+            <span class="px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-100" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
+          </div>
+          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400 flex-1">
+            <li data-i18n="price_yearly_1">✓ Yılda 16 analiz (13 + 3 hediye)</li>
+            <li data-i18n="price_yearly_2">✓ Tüm premium diyet & takviye bölümleri</li>
+            <li data-i18n="price_yearly_3">✓ Geçmiş & gelişmiş karşılaştırma</li>
+            <li data-i18n="price_yearly_4">✓ Doktor randevuları için ideal</li>
+          </ul>
+          <button onclick="(getToken() ? openCheckout('yearly') : openRegister())" class="mt-6 w-full py-3.5 rounded-full border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition"><span id="btn-yearly">99 €</span><span data-i18n="price_btn_yearly">/yıl — Başla</span></button>
+        </div>
+        <!-- Tek Analiz -->
+        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border border-accent-100 dark:border-accent-700 flex flex-col">
+          <div class="flex items-start justify-between gap-3 mb-3">
+            <div>
+              <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_single_title">Tek Analiz</h3>
+              <p class="text-sm text-accent-500 mt-1" data-i18n="price_single_per">tek seferlik</p>
+            </div>
+            <!-- AI detay seviyesi -->
+            <div class="flex flex-col items-center text-xs text-accent-500">
+              <svg width="40" height="40" viewBox="0 0 40 40" aria-hidden="true">
+                <circle cx="20" cy="20" r="17" fill="none" stroke="#E5E7EB" stroke-width="4" />
+                <circle cx="20" cy="20" r="17" fill="none" stroke="#0EA5A4" stroke-width="4" stroke-linecap="round"
+                        stroke-dasharray="107" stroke-dashoffset="36" transform="rotate(-90 20 20)" />
+                <text x="20" y="22" text-anchor="middle" font-size="10" fill="#0F172A">78</text>
+              </svg>
+              <span class="mt-1 text-[10px]" data-i18n="pricing_ai_detail">AI Detay Seviyesi</span>
+            </div>
+          </div>
+          <p class="mt-1 text-3xl font-extrabold text-primary-600 leading-tight">
+            <span class="align-top text-base mr-0.5">€</span><span id="price-single">13</span>
+          </p>
+          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300">
+            <span class="px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-100" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
+          </div>
+          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400 flex-1">
             <li data-i18n="price_single_1">✓ 1 analiz</li>
-            <li data-i18n="price_single_2">✓ Metin, PDF veya görsel</li>
-            <li data-i18n="price_single_3">✓ Detaylı rapor</li>
+            <li data-i18n="price_single_2">✓ Diyet + takviye + kalp sağlığı bölümleri</li>
+            <li data-i18n="price_single_3">✓ PDF indir & paylaş</li>
           </ul>
-          <button onclick="openCheckout('single')" class="mt-6 w-full py-3 rounded-xl border-2 border-primary-600 text-primary-600 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30"><span id="btn-single">13 €</span><span data-i18n="price_btn_single"> — Tek Analiz</span></button>
-        </div>
-        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border border-accent-100 dark:border-accent-700">
-          <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_monthly_title">Aylık Abonelik</h3>
-          <p class="mt-2 text-3xl font-bold text-primary-600"><span id="price-monthly">50</span> <span id="price-symbol-monthly">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_month">/ay</span></p>
-          <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">10+3 analiz / ay</p>
-          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400">
-            <li data-i18n="price_monthly_1">✓ Ayda 10+3 analiz</li>
-            <li data-i18n="price_monthly_2">✓ Metin, PDF ve görsel yükleme</li>
-            <li data-i18n="price_monthly_3">✓ Detaylı rapor + geçmiş</li>
-          </ul>
-          <button onclick="(getToken() ? openCheckout('monthly') : openRegister())" class="mt-6 w-full py-3 rounded-xl border-2 border-primary-600 text-primary-600 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30"><span id="btn-monthly">50 €</span><span data-i18n="price_btn_monthly">/ay — Başla</span></button>
-        </div>
-        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft border-2 border-primary-500 relative">
-          <span class="absolute -top-3 left-1/2 -translate-x-1/2 px-3 py-0.5 rounded-full bg-primary-600 text-white text-xs font-medium" data-i18n="price_best_badge">En avantajlı</span>
-          <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="price_yearly_title">Yıllık Abonelik</h3>
-          <p class="mt-2 text-3xl font-bold text-primary-600"><span id="price-yearly">99</span> <span id="price-symbol-yearly">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span></p>
-          <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">10+3 analiz / ay</p>
-          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400">
-            <li data-i18n="price_yearly_1">✓ Ayda 10+3 analiz (yıllık abonelik)</li>
-            <li data-i18n="price_yearly_2">✓ Metin, PDF ve görsel yükleme</li>
-            <li data-i18n="price_yearly_3">✓ Detaylı rapor + geçmiş</li>
-          </ul>
-          <button onclick="(getToken() ? openCheckout('yearly') : openRegister())" class="mt-6 w-full py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700"><span id="btn-yearly">99 €</span><span data-i18n="price_btn_yearly">/yıl — Başla</span></button>
+          <button onclick="openCheckout('single')" class="mt-6 w-full py-3.5 rounded-full border-2 border-primary-600 text-primary-700 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition"><span id="btn-single">13 €</span><span data-i18n="price_btn_single"> — Tek Analiz</span></button>
         </div>
       </div>
       <p class="mt-6 text-center text-sm text-accent-500 dark:text-accent-500 max-w-xl mx-auto" data-i18n="price_no_renewal">Pro paketleri satın aldığınız dönem boyunca geçerlidir (aylık 30 gün, yıllık 365 gün). Otomatik yenileme yoktur; süre bitince isterseniz tekrar satın alabilirsiniz.</p>
@@ -1649,7 +1743,7 @@
   <footer class="py-14 px-4 border-t border-accent-200 dark:border-accent-800 bg-accent-50/80 dark:bg-accent-900/40" role="contentinfo">
     <div class="max-w-6xl mx-auto w-full px-4">
       <!-- Güven rozetleri: grid of trust cards (SSL, KVKK, GDPR, PayTR, Cloudflare) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 sm:gap-6 mb-8 pb-8 border-b border-accent-200 dark:border-accent-700" aria-label="Güven ve uyumluluk">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6 mb-8 pb-8 border-b border-accent-200 dark:border-accent-700" aria-label="Güven ve uyumluluk">
         <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
           <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
             <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🔒</span>
@@ -1677,6 +1771,13 @@
             <span class="font-semibold text-sm" data-i18n="footer_trust_paytr">PayTR Secure</span>
           </div>
           <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_paytr_desc">Güvenli ödeme</p>
+        </div>
+        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
+          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
+            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🏥</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_hipaa">HIPAA uyumlu</span>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_hipaa_desc">Sağlık verileriniz gizlilik ve güvenlik ilkelerine uygun işlenir.</p>
         </div>
         <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
           <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-2">
@@ -1712,10 +1813,10 @@
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700">
       <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="modal_login">Giriş Yap</h3>
       <form onsubmit="submitLogin(event)" aria-label="Giriş formu">
-        <label for="login-email" class="sr-only">E-posta</label>
-        <input type="email" id="login-email" autocomplete="email" placeholder="E-posta" aria-describedby="login-error" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <label for="login-password" class="sr-only">Şifre</label>
-        <input type="password" id="login-password" autocomplete="current-password" placeholder="Şifre" aria-describedby="login-error" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <label for="login-email" class="sr-only" data-i18n="placeholder_email">E-posta</label>
+        <input type="email" id="login-email" autocomplete="email" data-i18n-placeholder="placeholder_email" placeholder="E-posta" aria-describedby="login-error" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <label for="login-password" class="sr-only" data-i18n="placeholder_password">Şifre</label>
+        <input type="password" id="login-password" autocomplete="current-password" data-i18n-placeholder="placeholder_password" placeholder="Şifre" aria-describedby="login-error" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <p class="text-right"><button type="button" onclick="closeLogin(); openForgotPassword()" class="text-sm text-primary-600 hover:underline" data-i18n="forgot_password">Şifremi unuttum</button></p>
         <p id="login-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 mt-2" data-i18n="btn_login">Giriş</button>
@@ -1730,11 +1831,11 @@
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700 max-h-[90vh] overflow-y-auto">
       <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="modal_register">Ücretsiz Kayıt</h3>
       <form onsubmit="submitRegister(event)">
-        <input type="text" id="register-name" required autocomplete="name" placeholder="Ad Soyad" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <input type="email" id="register-email" required autocomplete="email" placeholder="E-posta" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <input type="tel" id="register-phone" required autocomplete="tel" placeholder="Telefon (ülke kodu ile, örn. +90 555 123 45 67)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="text" id="register-name" required autocomplete="name" data-i18n-placeholder="placeholder_name" placeholder="Ad Soyad" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="email" id="register-email" required autocomplete="email" data-i18n-placeholder="placeholder_email" placeholder="E-posta" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="tel" id="register-phone" required autocomplete="tel" data-i18n-placeholder="placeholder_phone" placeholder="Telefon (ülke kodu ile, örn. +90 555 123 45 67)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <select id="register-country" required class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500">
-          <option value="">Ülke seçin</option>
+          <option value="" data-i18n="placeholder_country">Ülke seçin</option>
           <option value="TR">Türkiye (+90)</option>
           <option value="US">ABD (+1)</option>
           <option value="CA">Kanada (+1)</option>
@@ -1753,9 +1854,9 @@
           <option value="IN">Hindistan (+91)</option>
           <option value="EG">Mısır (+20)</option>
           <option value="IL">İsrail (+972)</option>
-          <option value="XX">Diğer</option>
+          <option value="XX" data-i18n="country_other">Diğer</option>
         </select>
-        <input type="password" id="register-password" required autocomplete="new-password" minlength="6" placeholder="Şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="register-password" required autocomplete="new-password" minlength="6" data-i18n-placeholder="placeholder_password_hint" placeholder="Şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <p id="register-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="register_email_verify">Kayıt olunca e-posta doğrulama linki gönderilecektir.</p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="btn_register">Kayıt Ol</button>
@@ -1768,31 +1869,31 @@
   <!-- Forgot Password Modal -->
   <div id="modal-forgot" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700">
-      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4">Şifremi unuttum</h3>
-      <p class="text-sm text-accent-600 dark:text-accent-400 mb-4">E-posta adresinizi girin, size şifre sıfırlama linki gönderelim.</p>
+      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="forgot_password">Şifremi unuttum</h3>
+      <p class="text-sm text-accent-600 dark:text-accent-400 mb-4" data-i18n="forgot_desc">E-posta adresinizi girin, size şifre sıfırlama linki gönderelim.</p>
       <form onsubmit="submitForgotPassword(event)">
-        <input type="email" id="forgot-email" required placeholder="E-posta" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="email" id="forgot-email" required data-i18n-placeholder="placeholder_email" placeholder="E-posta" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <p id="forgot-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <p id="forgot-success" class="text-primary-600 text-sm mb-2 hidden"></p>
-        <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700">Gönder</button>
+        <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="forgot_btn_send">Gönder</button>
       </form>
-      <button type="button" onclick="closeForgotPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Şifremi unuttum penceresini kapat">✕</button>
+      <button type="button" onclick="closeForgotPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Close">✕</button>
     </div>
   </div>
 
   <!-- Reset Password (e-postadaki link: ?reset=TOKEN) -->
   <div id="modal-reset" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700">
-      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4">Yeni şifre belirle</h3>
-      <p class="text-sm text-accent-600 dark:text-accent-400 mb-4">E-postanıza gelen linkteki token ile yeni şifrenizi girin.</p>
+      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="reset_title">Yeni şifre belirle</h3>
+      <p class="text-sm text-accent-600 dark:text-accent-400 mb-4" data-i18n="reset_desc">E-postanıza gelen linkteki token ile yeni şifrenizi girin.</p>
       <form id="form-reset-password" onsubmit="submitResetPassword(event)">
-        <input type="password" id="reset-new-password" required minlength="6" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <input type="password" id="reset-confirm" required minlength="6" placeholder="Şifreyi tekrar girin" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="reset-new-password" required minlength="6" data-i18n-placeholder="placeholder_password_hint" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="reset-confirm" required minlength="6" data-i18n-placeholder="placeholder_password_confirm" placeholder="Şifreyi tekrar girin" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <p id="reset-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <p id="reset-success" class="text-primary-600 text-sm mb-2 hidden"></p>
-        <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700">Şifreyi güncelle</button>
+        <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="reset_btn">Şifreyi güncelle</button>
       </form>
-      <button type="button" onclick="closeResetPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Şifre sıfırlama penceresini kapat">✕</button>
+      <button type="button" onclick="closeResetPassword()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Close">✕</button>
     </div>
   </div>
 
@@ -1803,10 +1904,10 @@
       <p id="profile-email" class="text-sm text-accent-600 dark:text-accent-400 mb-2"></p>
       <p id="profile-email-verified" class="text-xs mb-4 hidden"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300" data-i18n="profile_email_verified">E-posta doğrulandı</span></p>
       <form onsubmit="submitProfile(event)">
-        <input type="text" id="profile-full-name" placeholder="Ad Soyad" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
-        <input type="tel" id="profile-phone" placeholder="Telefon (+90 555 123 45 67)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="text" id="profile-full-name" data-i18n-placeholder="placeholder_name" placeholder="Ad Soyad" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
+        <input type="tel" id="profile-phone" data-i18n-placeholder="placeholder_phone" placeholder="Telefon (+90 555 123 45 67)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <select id="profile-country" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500">
-          <option value="">Ülke seçin</option>
+          <option value="" data-i18n="placeholder_country">Ülke seçin</option>
           <option value="TR">Türkiye</option>
           <option value="US">ABD</option>
           <option value="GB">Birleşik Krallık</option>
@@ -1814,7 +1915,7 @@
           <option value="FR">Fransa</option>
           <option value="IT">İtalya</option>
           <option value="ES">İspanya</option>
-          <option value="XX">Diğer</option>
+          <option value="XX" data-i18n="country_other">Diğer</option>
         </select>
         <p id="profile-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="profile_save">Kaydet</button>
@@ -1822,8 +1923,8 @@
       <hr class="my-4 border-accent-200 dark:border-accent-700" />
       <h4 class="text-sm font-semibold text-accent-800 dark:text-accent-200 mb-2" data-i18n="profile_change_password">Şifre değiştir</h4>
       <form onsubmit="submitChangePassword(event)">
-        <input type="password" id="profile-current-password" placeholder="Mevcut şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
-        <input type="password" id="profile-new-password" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="profile-current-password" data-i18n-placeholder="placeholder_password_current" placeholder="Mevcut şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="profile-new-password" data-i18n-placeholder="placeholder_password_hint" placeholder="Yeni şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
         <p id="profile-password-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <button type="submit" class="w-full py-2 rounded-lg bg-accent-100 dark:bg-accent-700 text-accent-900 dark:text-white font-medium hover:bg-accent-200 dark:hover:bg-accent-600" data-i18n="profile_change_password_btn">Şifreyi güncelle</button>
       </form>
@@ -1839,7 +1940,7 @@
       <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-2" data-i18n="profile_delete_confirm_title">Hesabı sil</h3>
       <p class="text-sm text-accent-600 dark:text-accent-400 mb-4" data-i18n="profile_delete_confirm_desc">Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.</p>
       <form onsubmit="submitDeleteAccount(event)">
-        <input type="password" id="delete-account-password" placeholder="Şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
+        <input type="password" id="delete-account-password" data-i18n-placeholder="placeholder_password" placeholder="Şifre" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-2 focus:ring-2 focus:ring-primary-500" />
         <p id="delete-account-error" class="text-red-600 text-sm mb-2 hidden" role="alert" aria-live="assertive"></p>
         <div class="flex gap-2">
           <button type="button" onclick="closeDeleteAccountConfirm()" class="flex-1 py-3 rounded-lg border border-accent-300 text-accent-700 dark:text-accent-300 font-medium" data-i18n="profile_cancel">İptal</button>
@@ -1854,18 +1955,22 @@
   <!-- PWA: Ana ekrana ekle (Android/Chrome) -->
   <div id="a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-3 px-4 py-3 bg-slate-800 text-white shadow-lg border-t border-slate-700" style="padding-bottom: max(12px, env(safe-area-inset-bottom));">
     <div class="flex items-center gap-2 min-w-0">
-      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-norya-brand flex items-center justify-center">N</span>
+      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
+        <img src="/static/norya_logo_report.png" alt="Norya" class="w-full h-full object-contain" />
+      </span>
       <p class="text-sm truncate" data-i18n="a2hs_message">Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.</p>
     </div>
     <div class="flex items-center gap-2 flex-shrink-0">
       <button type="button" onclick="dismissA2HS()" class="text-slate-400 hover:text-white text-sm px-2" data-i18n="a2hs_later">Sonra</button>
-      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="px-4 py-2 rounded-lg bg-norya-brand hover:bg-norya-brand-hover text-white font-medium text-sm" data-i18n="a2hs_add">Ekle</button>
+      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="px-4 py-2 text-sm font-semibold text-white a2hs-btn-primary" data-i18n="a2hs_add">Ekle</button>
     </div>
   </div>
   <!-- PWA: iOS Ana ekrana ekle (Safari) -->
   <div id="ios-a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-3 px-4 py-3 bg-slate-800 text-white shadow-lg border-t border-slate-700" style="padding-bottom: max(12px, env(safe-area-inset-bottom));">
     <div class="flex items-center gap-2 min-w-0">
-      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-norya-brand flex items-center justify-center">N</span>
+      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
+        <img src="/static/norya_logo_report.png" alt="Norya" class="w-full h-full object-contain" />
+      </span>
       <p class="text-sm" data-i18n="ios_a2hs_message">Ana ekrana ekle: <strong>Paylaş</strong> <span aria-hidden="true">⎋</span> <strong>Ana Ekrana Ekle</strong></p>
     </div>
     <button type="button" onclick="dismissIOSA2HS()" class="text-slate-400 hover:text-white text-sm px-2 flex-shrink-0" data-i18n="ios_a2hs_close">Kapat</button>
@@ -2061,17 +2166,17 @@
       var newPw = (document.getElementById('reset-new-password').value || '').trim();
       var confirmPw = (document.getElementById('reset-confirm').value || '').trim();
       if (newPw.length < 6) {
-        errEl.textContent = 'Şifre en az 6 karakter olmalı.';
+        errEl.textContent = (typeof t === 'function' ? t('error_password_min') : 'Şifre en az 6 karakter olmalı.');
         errEl.classList.remove('hidden');
         return;
       }
       if (newPw !== confirmPw) {
-        errEl.textContent = 'Şifreler eşleşmiyor.';
+        errEl.textContent = (typeof t === 'function' ? t('error_password_mismatch') : 'Şifreler eşleşmiyor.');
         errEl.classList.remove('hidden');
         return;
       }
       if (!resetPasswordToken) {
-        errEl.textContent = 'Geçersiz veya süresi dolmuş link. Lütfen şifre sıfırlama talebini tekrarlayın.';
+        errEl.textContent = (typeof t === 'function' ? t('error_reset_link_invalid') : 'Geçersiz veya süresi dolmuş link. Lütfen şifre sıfırlama talebini tekrarlayın.');
         errEl.classList.remove('hidden');
         return;
       }
@@ -2504,9 +2609,9 @@
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL ile korunur", trust_badge_kvkk_gdpr: "KVKK & GDPR uyumlu", trust_badge_paytr: "PayTR ile güvenli ödeme",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Şifreli bağlantı", footer_trust_kvkk_desc: "Kişisel veri koruma", footer_trust_gdpr_desc: "AB veri koruma", footer_trust_paytr_desc: "Güvenli ödeme",
-        trust_cloudflare_title: "Cloudflare ile korunur", trust_cloudflare_desc: "Trafik koruması ve global CDN ile daha hızlı ve güvenli erişim.", trust_cloudflare_1: "DDoS koruması", trust_cloudflare_2: "Global CDN hızlandırma", trust_cloudflare_3: "Edge güvenlik",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA uyumlu",
+        footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR ile güvenli ödeme.", footer_trust_hipaa_desc: "Sağlık verileri güvenle işlenir.",
+        trust_cloudflare_title: "Cloudflare ile korunur", trust_cloudflare_desc: "Trafik koruması ve hızlı erişim.", trust_cloudflare_1: "DDoS koruması", trust_cloudflare_2: "Global CDN hızlandırma", trust_cloudflare_3: "Edge güvenlik",
         how_title: "Norya Nasıl Çalışır?", how_desc: "Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.",
         how_1: "Kayıt Olun", how_1d: "Ücretsiz hesap oluşturun. E-posta ve şifre yeterli.",
         how_2: "Tahlil Metnini Yapıştırın", how_2d: "Sonuç kağıdındaki değerleri veya metni kutuya yapıştırın.",
@@ -2517,6 +2622,9 @@
         before_after_after_label: "Sonra — Norya raporu", before_after_after_summary: "Kan sayımı ve metabolik panel genel olarak normal. Hemoglobin, glukoz ve böbrek değerleri referans aralığında. Rutin takip önerilir.",
         before_after_after_tips: "Dengeli beslenme, düzenli kontroller. Doktorunuzla paylaşın.", before_after_after_trust: "Anlaşılır dil • PDF indir • Doktora götür", before_after_footer: "Gerçek müşteri raporları aynı yapıda; kişisel verileriniz korunur.",
         why_title: "Neden Norya?", why_fast: "Anında Sonuç", why_fastd: "Dakikalar içinde anlaşılır yorum.",
+        feature_diet_title: "Kişiselleştirilmiş diyet planı", feature_diet_desc: "Kan tahlilinizdeki eksiklik ve risklere göre yenilmesi / azaltılması gereken besinleri ve örnek günlük menüyü özetler.",
+        feature_supp_title: "Akıllı takviye önerileri", feature_supp_desc: "Değerleriniz referans dışına çıktığında, vitamin/mineral takviyeleri için hekime sorabileceğiniz seçenekler listeler.",
+        feature_compare_title: "Gelişmiş kan testi karşılaştırma", feature_compare_desc: "İki farklı tahlili yan yana getirip, zaman içindeki değişimi ve risk işaretlerini tek ekranda görmenizi sağlar.",
         why_plain: "Tıbbi Dil Değil", why_plaind: "Sonuçlar sade Türkçe ile açıklanır.",
         why_priv: "Gizlilik", why_privd: "Verileriniz güvenli, üçüncü tarafla paylaşılmaz.",
         who_title: "Kimler İçin?", who_subtitle: "Check-up sonrası, kronik takip veya doktora giderken — Norya herkes için.",
@@ -2617,10 +2725,10 @@
         toast_report_pdf: "Rapor PDF olarak indirildi.", toast_doctor_downloaded: "Doktoruma götür raporu indirildi.", toast_link_copied: "Paylaşım linki kopyalandı.", toast_register_verify_sent: "E-postanıza doğrulama linki gönderildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin.",
         toast_analyze_first: "Önce analiz yapın.", toast_pdf_fallback: "PDF oluşturulamadı; metin dosyası indirildi.", toast_pdf_error: "PDF oluşturulamadı. Lütfen tekrar deneyin.",
         pricing_title: "Fiyatlandırma", pricing_eur: "Fiyatlar konumunuza göre yerel para biriminde gösterilir.", pricing_note_currency: "Fiyatlar {cur} ({sym}) cinsinde gösterilir.",
-        price_single_title: "Tek Analiz", price_single_per: "tek seferlik", price_single_1: "✓ 1 analiz", price_single_2: "✓ Metin, PDF veya görsel", price_single_3: "✓ Detaylı rapor", price_btn_single: " — Tek Analiz",
-        price_monthly_title: "Aylık Abonelik", price_per_month: "/ay", price_monthly_per: "10+3 analiz / ay", price_monthly_1: "✓ Ayda 10+3 analiz", price_monthly_2: "✓ Metin, PDF ve görsel yükleme", price_monthly_3: "✓ Detaylı rapor + geçmiş", price_btn_monthly: "/ay — Başla",
-        price_best_badge: "En avantajlı", price_yearly_title: "Yıllık Abonelik", price_per_year: "/yıl", price_yearly_per: "10+3 analiz / ay", price_yearly_1: "✓ Ayda 10+3 analiz (yıllık abonelik)", price_yearly_2: "✓ Metin, PDF ve görsel yükleme", price_yearly_3: "✓ Detaylı rapor + geçmiş", price_btn_yearly: "/yıl — Başla",
-        compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "Özellik", compare_plan_free: "Ücretsiz", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "Metin, PDF, görsel yükleme", compare_report: "Detaylı rapor (özet, değerler, öneriler)", compare_diet: "Diyet planı", compare_supplements: "Takviye önerileri", compare_heart: "Kalp sağlığı yorumu", compare_history: "Analiz geçmişi", compare_pdf: "PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "EMR/EHR uyumlu rapor", compare_langs: "Rapor dili", compare_langs_count: "9 dil", compare_compare: "İki analizi karşılaştır", compare_price: "Fiyat",
+        price_single_title: "Tek Analiz", price_single_per: "tek seferlik", price_single_1: "✓ 1 analiz", price_single_2: "✓ Diyet + takviye + kalp sağlığı bölümleri", price_single_3: "✓ PDF indir & paylaş", price_btn_single: " — Tek Analiz",
+        price_monthly_badge: "En Popüler", pricing_ai_detail: "AI Detay Seviyesi", price_monthly_title: "Aylık Abonelik", price_per_month: "/ay", price_monthly_per: "5 analiz / ay", price_monthly_1: "✓ Ayda 5 tam analiz", price_monthly_2: "✓ Diyet planı + takviye önerileri", price_monthly_3: "✓ Geçmiş & iki analiz karşılaştırma", price_monthly_4: "✓ PDF indir, doktorla paylaş", price_btn_monthly: "/ay — Başla",
+        price_best_badge: "En avantajlı", price_best_badge_value: "En İyi Değer", price_yearly_title: "Yıllık Abonelik", price_per_year: "/yıl", price_yearly_per: "Toplam 16 analiz (13 + 3 hediye)", price_yearly_1: "✓ Yılda 16 analiz (13 + 3 hediye)", price_yearly_2: "✓ Tüm premium diyet & takviye bölümleri", price_yearly_3: "✓ Geçmiş & gelişmiş karşılaştırma", price_yearly_4: "✓ Doktor randevuları için ideal", price_btn_yearly: "/yıl — Başla",
+        compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_price: "💶 Fiyat",
         footer_desc: "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.", footer_disclaimer: "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.", made_with_cursor: "Cursor ile yapıldı",
         disclaimer_informative: "Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.",
         footer_mesafeli: "Mesafeli Satış Sözleşmesi", footer_privacy: "Gizlilik Politikası", footer_refund: "İade ve İptal Politikası", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -2645,7 +2753,18 @@
         payment_refund_2: "üzerinden iletin; geçerli talepler ödeme yönteminize göre işleme alınır.",
         payment_credit_issue: "Ödeme alındı ama hak tanınmadı. Ödemeniz banka/ödeme kuruluşu tarafından onaylandığı hâlde hesabınıza hak yansımadıysa, lütfen sipariş veya ödeme bilginizle birlikte bize yazın. En kısa sürede kontrol edip düzeltiyoruz.",
         price_no_renewal: "Pro paketleri satın aldığınız dönem boyunca geçerlidir (aylık 30 gün, yıllık 365 gün). Otomatik yenileme yoktur; süre bitince isterseniz tekrar satın alabilirsiniz.",
-        modal_login: "Giriş Yap", modal_register: "Ücretsiz Kayıt", placeholder_email: "E-posta", placeholder_password: "Şifre", placeholder_name: "Ad Soyad", placeholder_password_hint: "Şifre (en az 6 karakter)",
+        pricing_yearly_saving: "Aylığa göre 501€ tasarruf (%83)",
+        pricing_yearly_math: "50€ x 12 = 600€ yerine 99€ (yıllık toplu ödeme).",
+        trust_title: "Güvenli ve uyumlu hizmet",
+        trust_subtitle: "Veriler yalnızca rapor üretimi amacıyla işlenir. Norya tıbbi tanı koymaz; bilgilendirme amaçlı AI destekli yorum sunar.",
+        trust_cards_langs_title: "9+ dil desteği", trust_cards_langs_desc: "Tahlilinizi Türkçe, İngilizce ve diğer desteklenen dillerde okuyabilirsiniz.",
+        trust_cards_input_title: "Esnek girdi türleri", trust_cards_input_desc: "Metin, PDF veya fotoğraf yükleyerek analiz alın.",
+        trust_cards_speed_title: "1 dakikadan kısa sonuç", trust_cards_speed_desc: "Sunucu uygun olduğunda çoğu rapor saniyeler içinde hazır olur.",
+        trust_cards_ssl_title: "SSL/TLS güvenli bağlantı", trust_cards_ssl_desc: "Tarayıcı ile sunucu arasındaki iletişim şifrelenir.",
+        trust_cards_cloud_title: "Cloudflare ağ koruması", trust_cards_cloud_desc: "Saldırı ve trafiğe karşı ek ağ güvenliği katmanı.",
+        trust_chip_kvkk: "KVKK uyumlu işleme", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "SSL/TLS ile şifreleme", trust_chip_purpose: "Amaçla sınırlı veri işleme", trust_chip_not_medical: "Tıbbi tanı aracı değildir",
+        modal_login: "Giriş Yap", modal_register: "Ücretsiz Kayıt", placeholder_email: "E-posta", placeholder_password: "Şifre", placeholder_name: "Ad Soyad", placeholder_password_hint: "Şifre (en az 6 karakter)", placeholder_country: "Ülke seçin", placeholder_phone: "Telefon (ülke kodu ile, örn. +90 555 123 45 67)", placeholder_password_confirm: "Şifreyi tekrar girin", placeholder_password_current: "Mevcut şifre", forgot_desc: "E-posta adresinizi girin, size şifre sıfırlama linki gönderelim.", forgot_btn_send: "Gönder", reset_title: "Yeni şifre belirle", reset_desc: "E-postanıza gelen linkteki token ile yeni şifrenizi girin.", reset_btn: "Şifreyi güncelle", wizard_char_count: "{n} karakter", btn_analyze: "Analiz Et", country_other: "Diğer",
+        aria_select_language: "Dil seçin", error_password_min: "Şifre en az 6 karakter olmalı.", error_password_mismatch: "Şifreler eşleşmiyor.", error_reset_link_invalid: "Geçersiz veya süresi dolmuş link. Lütfen şifre sıfırlama talebini tekrarlayın.", error_name_required: "Ad soyad girin.", error_email_required: "E-posta girin.", error_phone_invalid: "Geçerli bir telefon numarası girin (ülke kodu ile, örn. +905551234567).", error_country_required: "Ülke seçin.", account_suspended: "Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.", register_failed: "Kayıt başarısız.",
         btn_login: "Giriş", btn_register: "Kayıt Ol", no_account: "Hesabınız yok mu? ", have_account: "Zaten hesabınız var mı? ",
         register_email_verify: "Kayıt olunca e-posta doğrulama linki gönderilecektir.", forgot_password: "Şifremi unuttum",
         history_title: "Analiz Geçmişin", history_compare_title: "İki analizi karşılaştır", history_select_analysis: "— Analiz seçin —", history_and: "ve", history_compare_btn: "Karşılaştır", history_timeline: "Zaman çizelgesi",
@@ -2679,9 +2798,9 @@
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Encrypted connection", footer_trust_kvkk_desc: "Personal data protection", footer_trust_gdpr_desc: "EU data protection", footer_trust_paytr_desc: "Secure payment",
-        trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Traffic protection and global CDN for faster, more secure access.", trust_cloudflare_1: "DDoS protection", trust_cloudflare_2: "Global CDN acceleration", trust_cloudflare_3: "Edge security",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA aligned",
+        footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "Secure payment via PayTR.", footer_trust_hipaa_desc: "Health data handled securely.",
+        trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Traffic protection and fast access.", trust_cloudflare_1: "DDoS protection", trust_cloudflare_2: "Global CDN acceleration", trust_cloudflare_3: "Edge security",
         how_title: "How Norya Works", how_desc: "Three simple steps to turn your lab results into clear health insights.",
         how_1: "Sign up", how_1d: "Create a free account. Email and password only.",
         how_2: "Paste your results", how_2d: "Paste the values or text from your result sheet.",
@@ -2692,6 +2811,9 @@
         before_after_after_label: "After — Norya report", before_after_after_summary: "Blood count and metabolic panel generally normal. Hemoglobin, glucose and kidney values within range. Routine follow-up recommended.",
         before_after_after_tips: "Balanced diet, regular check-ups. Share with your doctor.", before_after_after_trust: "Plain language • Download PDF • Take to doctor", before_after_footer: "Real customer reports look like this; your data stays protected.",
         why_title: "Why Norya?", why_fast: "Instant results", why_fastd: "Clear interpretation in minutes.",
+        feature_diet_title: "Personalised diet plan", feature_diet_desc: "Summarises foods to eat more of / reduce and a simple daily menu based on your deficiencies and risks.",
+        feature_supp_title: "Smart supplement suggestions", feature_supp_desc: "When values are outside reference range, lists vitamins/minerals you can discuss with your doctor.",
+        feature_compare_title: "Advanced test comparison", feature_compare_desc: "Lets you compare two blood tests side by side and see how values and risk flags change over time.",
         why_plain: "Plain language", why_plaind: "Results explained in simple terms.",
         why_priv: "Privacy", why_privd: "Your data is secure, never shared with third parties.",
         who_title: "Who Is It For?", who_subtitle: "After a check-up, chronic follow-up, or before seeing your doctor — Norya is for everyone.",
@@ -2792,9 +2914,9 @@
         toast_report_pdf: "Report downloaded as PDF.", toast_doctor_downloaded: "Report for doctor downloaded.", toast_link_copied: "Share link copied.", toast_register_verify_sent: "A verification link was sent to your email. Check your inbox (and spam folder).",
         toast_analyze_first: "Please run an analysis first.", toast_pdf_fallback: "PDF could not be generated; text file downloaded.", toast_pdf_error: "PDF could not be generated. Please try again.",
         pricing_title: "Pricing", pricing_eur: "Prices are shown in your local currency.", pricing_note_currency: "Prices shown in {cur} ({sym}).",
-        price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Text, PDF or image", price_single_3: "✓ Detailed report", price_btn_single: " — Single analysis",
-        price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "10+3 analyses / month", price_monthly_1: "✓ 10+3 analyses per month", price_monthly_2: "✓ Text, PDF and image upload", price_monthly_3: "✓ Detailed report + history", price_btn_monthly: "/mo — Get started",
-        price_best_badge: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "10+3 analyses / month", price_yearly_1: "✓ 10+3 analyses per month (yearly plan)", price_yearly_2: "✓ Text, PDF and image upload", price_yearly_3: "✓ Detailed report + history", price_btn_yearly: "/yr — Get started",
+        price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Diet + supplements + heart health sections", price_single_3: "✓ Download & share PDF", price_btn_single: " — Single analysis",
+        price_monthly_badge: "Most Popular", pricing_ai_detail: "AI detail level", price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "5 analyses / month", price_monthly_1: "✓ 5 full analyses per month", price_monthly_2: "✓ Diet plan + supplement recommendations", price_monthly_3: "✓ History & compare two analyses", price_monthly_4: "✓ Download PDF, share with doctor", price_btn_monthly: "/mo — Get started",
+        price_best_badge: "Best value", price_best_badge_value: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "16 analyses total (13 + 3 free)", price_yearly_1: "✓ 16 analyses per year (13 + 3 free)", price_yearly_2: "✓ All premium diet & supplement sections", price_yearly_3: "✓ History & advanced comparison", price_yearly_4: "✓ Ideal for doctor visits", price_btn_yearly: "/yr — Get started",
         compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_price: "Price",
         footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "This analysis is for information only. It does not replace medical diagnosis.",
@@ -2820,7 +2942,18 @@
         payment_refund_2: "; valid requests are processed according to your payment method.",
         payment_credit_issue: "Payment received but no credit. If your payment was confirmed by the bank or payment provider but no credit was added to your account, please contact us with your order or payment details. We will check and correct it as soon as possible.",
         price_no_renewal: "Pro packages are valid for the period you purchased (30 days monthly, 365 days yearly). No auto-renewal; you can purchase again when the period ends.",
-        modal_login: "Log in", modal_register: "Sign up free", placeholder_email: "Email", placeholder_password: "Password", placeholder_name: "Full name", placeholder_password_hint: "Password (min 6 characters)",
+        pricing_yearly_saving: "Save €501 vs monthly (%83)",
+        pricing_yearly_math: "Instead of €50 x 12 = €600, you pay €99 once per year.",
+        trust_title: "Secure and compliant service",
+        trust_subtitle: "Your data is processed only to generate your report. Norya does not make medical diagnoses; it provides AI-assisted explanations for educational purposes.",
+        trust_cards_langs_title: "9+ language support", trust_cards_langs_desc: "Read your report in Turkish, English and other supported languages.",
+        trust_cards_input_title: "Flexible input types", trust_cards_input_desc: "Paste text, upload a PDF or a photo to start an analysis.",
+        trust_cards_speed_title: "Results in under a minute", trust_cards_speed_desc: "When servers are available, most reports are ready within seconds.",
+        trust_cards_ssl_title: "SSL/TLS secure connection", trust_cards_ssl_desc: "Traffic between your browser and our servers is encrypted.",
+        trust_cards_cloud_title: "Cloudflare network protection", trust_cards_cloud_desc: "Additional network security and performance via Cloudflare.",
+        trust_chip_kvkk: "KVKK-compliant processing", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "SSL/TLS encryption", trust_chip_purpose: "Purpose-limited data processing", trust_chip_not_medical: "Not a medical diagnosis tool",
+        modal_login: "Log in", modal_register: "Sign up free", placeholder_email: "Email", placeholder_password: "Password", placeholder_name: "Full name", placeholder_password_hint: "Password (min 6 characters)", placeholder_country: "Select country", placeholder_phone: "Phone (with country code, e.g. +90 555 123 45 67)", placeholder_password_confirm: "Confirm password", placeholder_password_current: "Current password", forgot_desc: "Enter your email and we will send you a password reset link.", forgot_btn_send: "Send", reset_title: "Set new password", reset_desc: "Enter your new password using the token from the email we sent you.", reset_btn: "Update password", wizard_char_count: "{n} characters", btn_analyze: "Analyze", country_other: "Other",
+        aria_select_language: "Select language", error_password_min: "Password must be at least 6 characters.", error_password_mismatch: "Passwords do not match.", error_reset_link_invalid: "Invalid or expired link. Please request a new password reset.", error_name_required: "Please enter your name.", error_email_required: "Please enter your email.", error_phone_invalid: "Please enter a valid phone number (with country code, e.g. +905551234567).", error_country_required: "Please select a country.", account_suspended: "Your account has been suspended. Please contact us via the contact page.", register_failed: "Registration failed.",
         btn_login: "Log in", btn_register: "Sign up", no_account: "No account? ", have_account: "Already have an account? ",
         register_email_verify: "We will send you an email verification link after sign-up.", forgot_password: "Forgot password",
         history_title: "Your analysis history", history_compare_title: "Compare two analyses", history_select_analysis: "— Select analysis —", history_and: "and", history_compare_btn: "Compare", history_timeline: "Timeline",
@@ -2852,9 +2985,9 @@
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR",
         trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Connessione crittografata", footer_trust_kvkk_desc: "Protezione dati personali", footer_trust_gdpr_desc: "Protezione dati UE", footer_trust_paytr_desc: "Pagamento sicuro",
-        trust_cloudflare_title: "Protetto da Cloudflare", trust_cloudflare_desc: "Protezione del traffico e CDN globale per un accesso più veloce e sicuro.", trust_cloudflare_1: "Protezione DDoS", trust_cloudflare_2: "Accelerazione CDN globale", trust_cloudflare_3: "Sicurezza edge",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Conforme HIPAA",
+        footer_trust_ssl_desc: "Traffico crittografato SSL/TLS.", footer_trust_kvkk_desc: "Dati personali in linea con KVKK.", footer_trust_gdpr_desc: "Conforme GDPR per UE.", footer_trust_paytr_desc: "Pagamento sicuro PayTR.", footer_trust_hipaa_desc: "Dati sanitari trattati in sicurezza.",
+        trust_cloudflare_title: "Protetto da Cloudflare", trust_cloudflare_desc: "Protezione traffico e accesso veloce.", trust_cloudflare_1: "Protezione DDoS", trust_cloudflare_2: "Accelerazione CDN globale", trust_cloudflare_3: "Sicurezza edge",
         how_title: "Come funziona Norya", how_desc: "Tre semplici passi per trasformare i tuoi esami in informazioni chiare.",
         how_1: "Registrati", how_1d: "Crea un account gratuito. Solo email e password.",
         how_2: "Incolla i risultati", how_2d: "Incolla i valori o il testo dal referto.",
@@ -2949,9 +3082,9 @@
         toast_report_pdf: "Report scaricato in PDF.", toast_doctor_downloaded: "Report per il medico scaricato.", toast_link_copied: "Link copiato.",
         toast_analyze_first: "Esegui prima un'analisi.", toast_pdf_fallback: "Impossibile creare PDF; scaricato file di testo.", toast_pdf_error: "Impossibile creare PDF. Riprova.",
         pricing_title: "Prezzi", pricing_eur: "I prezzi sono mostrati nella tua valuta locale.", pricing_note_currency: "Prezzi mostrati in {cur} ({sym}).",
-        price_single_title: "Singola analisi", price_single_per: "una tantum", price_single_1: "✓ 1 analisi", price_single_2: "✓ Testo, PDF o immagine", price_single_3: "✓ Report dettagliato", price_btn_single: " — Singola analisi",
-        price_monthly_title: "Piano mensile", price_per_month: "/mese", price_monthly_per: "5 report / mese", price_monthly_1: "✓ 5 analisi al mese", price_monthly_2: "✓ Caricamento testo, PDF e immagini", price_monthly_3: "✓ Report dettagliato + cronologia", price_btn_monthly: "/mese — Inizia",
-        price_best_badge: "Miglior rapporto qualità-prezzo", price_yearly_title: "Piano annuale", price_per_year: "/anno", price_yearly_per: "13 + 3 in omaggio = 16 analisi totali", price_yearly_1: "✓ 16 analisi all'anno (3 in regalo da noi)", price_yearly_2: "✓ Caricamento testo, PDF e immagini", price_yearly_3: "✓ Report dettagliato + cronologia", price_btn_yearly: "/anno — Inizia",
+        price_single_title: "Singola analisi", price_single_per: "una tantum", price_single_1: "✓ 1 analisi", price_single_2: "✓ Dieta + integratori + salute cardiaca", price_single_3: "✓ Scarica e condividi PDF", price_btn_single: " — Singola analisi",
+        price_monthly_badge: "Più popolare", pricing_ai_detail: "Livello dettaglio AI", price_monthly_title: "Piano mensile", price_per_month: "/mese", price_monthly_per: "5 analisi / mese", price_monthly_1: "✓ 5 analisi complete al mese", price_monthly_2: "✓ Piano dietetico + integratori", price_monthly_3: "✓ Cronologia e confronto due analisi", price_monthly_4: "✓ Scarica PDF, condividi con il medico", price_btn_monthly: "/mese — Inizia",
+        price_best_badge: "Miglior rapporto qualità-prezzo", price_best_badge_value: "Miglior valore", price_yearly_title: "Piano annuale", price_per_year: "/anno", price_yearly_per: "16 analisi totali (13 + 3 in omaggio)", price_yearly_1: "✓ 16 analisi all'anno (13 + 3 in omaggio)", price_yearly_2: "✓ Tutte le sezioni dieta e integratori premium", price_yearly_3: "✓ Cronologia e confronto avanzato", price_yearly_4: "✓ Ideale per visite dal medico", price_btn_yearly: "/anno — Inizia",
         footer_desc: "Risultati delle analisi del sangue spiegati in linguaggio chiaro.", footer_disclaimer: "Questo strumento è a scopo informativo. Consulta sempre un professionista per decisioni mediche.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Questa analisi è solo a scopo informativo. Non sostituisce una diagnosi medica.",
         footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -2977,7 +3110,18 @@
         payment_refund_2: "; le richieste valide sono elaborate in base al metodo di pagamento.",
         payment_credit_issue: "Pagamento ricevuto ma nessun credito. Se il pagamento è stato confermato ma il credito non è stato aggiunto, contattaci con ordine o dati di pagamento. Verificheremo e correggeremo al più presto.",
         price_no_renewal: "I piani Pro sono validi per il periodo acquistato (30 giorni mensili, 365 annuali). Nessun rinnovo automatico.",
-        modal_login: "Accedi", modal_register: "Registrati gratis", placeholder_email: "Email", placeholder_password: "Password", placeholder_name: "Nome completo", placeholder_password_hint: "Password (min 6 caratteri)",
+        pricing_yearly_saving: "Risparmi 501€ rispetto al mensile (83%)",
+        pricing_yearly_math: "Invece di 50€ x 12 = 600€, paghi 99€ una volta l'anno.",
+        trust_title: "Servizio sicuro e conforme",
+        trust_subtitle: "I dati sono elaborati solo per generare il report. Norya non effettua diagnosi mediche; fornisce spiegazioni assistite da IA a scopo informativo.",
+        trust_cards_langs_title: "Supporto 9+ lingue", trust_cards_langs_desc: "Leggi il report in turco, inglese e altre lingue supportate.",
+        trust_cards_input_title: "Tipi di input flessibili", trust_cards_input_desc: "Incolla testo, carica PDF o foto per avviare l'analisi.",
+        trust_cards_speed_title: "Risultati in meno di un minuto", trust_cards_speed_desc: "Quando i server sono disponibili, la maggior parte dei report è pronta in pochi secondi.",
+        trust_cards_ssl_title: "Connessione sicura SSL/TLS", trust_cards_ssl_desc: "Il traffico tra browser e server è crittografato.",
+        trust_cards_cloud_title: "Protezione di rete Cloudflare", trust_cards_cloud_desc: "Sicurezza e prestazioni aggiuntive tramite Cloudflare.",
+        trust_chip_kvkk: "Elaborazione conforme KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Crittografia SSL/TLS", trust_chip_purpose: "Elaborazione dati a scopo limitato", trust_chip_not_medical: "Non è uno strumento di diagnosi medica",
+        modal_login: "Accedi", modal_register: "Registrati gratis", placeholder_email: "Email", placeholder_password: "Password", placeholder_name: "Nome completo", placeholder_password_hint: "Password (min 6 caratteri)", placeholder_country: "Seleziona paese", placeholder_phone: "Telefono (con prefisso, es. +90 555 123 45 67)", placeholder_password_confirm: "Conferma password", placeholder_password_current: "Password attuale", forgot_desc: "Inserisci la tua email e ti invieremo un link per reimpostare la password.", forgot_btn_send: "Invia", reset_title: "Imposta nuova password", reset_desc: "Inserisci la nuova password usando il token ricevuto via email.", reset_btn: "Aggiorna password", wizard_char_count: "{n} caratteri", btn_analyze: "Analizza", country_other: "Altro",
+        aria_select_language: "Seleziona lingua", error_password_min: "La password deve avere almeno 6 caratteri.", error_password_mismatch: "Le password non coincidono.", error_reset_link_invalid: "Link non valido o scaduto. Richiedi un nuovo link per reimpostare la password.", error_name_required: "Inserisci il nome.", error_email_required: "Inserisci l'email.", error_phone_invalid: "Inserisci un numero di telefono valido (con prefisso, es. +905551234567).", error_country_required: "Seleziona un paese.", account_suspended: "Il tuo account è stato sospeso. Contattaci dalla pagina contatti.", register_failed: "Registrazione fallita.",
         btn_login: "Accedi", btn_register: "Registrati", no_account: "Non hai un account? ", have_account: "Hai già un account? ",
         register_email_verify: "Dopo la registrazione ti invieremo un link per verificare l'email.", forgot_password: "Password dimenticata",
         history_title: "Cronologia analisi", history_compare_title: "Confronta due analisi", history_select_analysis: "— Seleziona analisi —", history_and: "e", history_compare_btn: "Confronta", history_timeline: "Cronologia",
@@ -3009,9 +3153,9 @@
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR",
         trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Conexión cifrada", footer_trust_kvkk_desc: "Protección de datos personales", footer_trust_gdpr_desc: "Protección de datos UE", footer_trust_paytr_desc: "Pago seguro",
-        trust_cloudflare_title: "Protegido por Cloudflare", trust_cloudflare_desc: "Protección del tráfico y CDN global para un acceso más rápido y seguro.", trust_cloudflare_1: "Protección DDoS", trust_cloudflare_2: "Aceleración CDN global", trust_cloudflare_3: "Seguridad edge",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Alineado HIPAA",
+        footer_trust_ssl_desc: "Tráfico cifrado SSL/TLS.", footer_trust_kvkk_desc: "Datos personales según KVKK.", footer_trust_gdpr_desc: "Conforme GDPR para UE.", footer_trust_paytr_desc: "Pago seguro con PayTR.", footer_trust_hipaa_desc: "Datos de salud tratados con seguridad.",
+        trust_cloudflare_title: "Protegido por Cloudflare", trust_cloudflare_desc: "Protección de tráfico y acceso rápido.", trust_cloudflare_1: "Protección DDoS", trust_cloudflare_2: "Aceleración CDN global", trust_cloudflare_3: "Seguridad edge",
         how_title: "Cómo funciona Norya", how_desc: "Tres pasos para convertir tus análisis en información clara.",
         how_1: "Regístrate", how_1d: "Crea una cuenta gratuita. Solo email y contraseña.",
         how_2: "Pega los resultados", how_2d: "Pega los valores o el texto del informe.",
@@ -3106,9 +3250,9 @@
         toast_report_pdf: "Informe descargado en PDF.", toast_doctor_downloaded: "Informe para el médico descargado.", toast_link_copied: "Enlace copiado.",
         toast_analyze_first: "Realiza primero un análisis.", toast_pdf_fallback: "No se pudo generar PDF; se descargó archivo de texto.", toast_pdf_error: "No se pudo generar PDF. Inténtalo de nuevo.",
         pricing_title: "Precios", pricing_eur: "Los precios se muestran en tu moneda local.", pricing_note_currency: "Precios en {cur} ({sym}).",
-        price_single_title: "Análisis único", price_single_per: "pago único", price_single_1: "✓ 1 análisis", price_single_2: "✓ Texto, PDF o imagen", price_single_3: "✓ Informe detallado", price_btn_single: " — Análisis único",
-        price_monthly_title: "Plan mensual", price_per_month: "/mes", price_monthly_per: "5 informes / mes", price_monthly_1: "✓ 5 análisis al mes", price_monthly_2: "✓ Texto, PDF e imagen", price_monthly_3: "✓ Informe detallado + historial", price_btn_monthly: "/mes — Empezar",
-        price_best_badge: "Mejor relación calidad-precio", price_yearly_title: "Plan anual", price_per_year: "/año", price_yearly_per: "13 + 3 de regalo = 16 análisis total", price_yearly_1: "✓ 16 análisis al año (3 de regalo)", price_yearly_2: "✓ Texto, PDF e imagen", price_yearly_3: "✓ Informe detallado + historial", price_btn_yearly: "/año — Empezar",
+        price_single_title: "Análisis único", price_single_per: "pago único", price_single_1: "✓ 1 análisis", price_single_2: "✓ Dieta + suplementos + salud cardíaca", price_single_3: "✓ Descargar y compartir PDF", price_btn_single: " — Análisis único",
+        price_monthly_badge: "Más popular", pricing_ai_detail: "Nivel de detalle IA", price_monthly_title: "Plan mensual", price_per_month: "/mes", price_monthly_per: "5 análisis / mes", price_monthly_1: "✓ 5 análisis completos al mes", price_monthly_2: "✓ Plan dietético + suplementos", price_monthly_3: "✓ Historial y comparar dos análisis", price_monthly_4: "✓ Descargar PDF, compartir con el médico", price_btn_monthly: "/mes — Empezar",
+        price_best_badge: "Mejor relación calidad-precio", price_best_badge_value: "Mejor valor", price_yearly_title: "Plan anual", price_per_year: "/año", price_yearly_per: "16 análisis total (13 + 3 de regalo)", price_yearly_1: "✓ 16 análisis al año (13 + 3 de regalo)", price_yearly_2: "✓ Todas las secciones dieta y suplementos premium", price_yearly_3: "✓ Historial y comparación avanzada", price_yearly_4: "✓ Ideal para visitas al médico", price_btn_yearly: "/año — Empezar",
         footer_desc: "Resultados de análisis de sangre explicados en lenguaje claro.", footer_disclaimer: "Esta herramienta es informativa. Consulta siempre a un profesional para decisiones médicas.", made_with_cursor: "Hecho con Cursor",
         disclaimer_informative: "Este análisis es solo informativo. No sustituye un diagnóstico médico.",
         footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -3134,7 +3278,18 @@
         payment_refund_2: "; las solicitudes válidas se procesan según el método de pago.",
         payment_credit_issue: "Pago recibido pero sin crédito. Si el pago fue confirmado pero no se añadió el crédito, escríbenos con el pedido o datos del pago. Comprobaremos y corregiremos lo antes posible.",
         price_no_renewal: "Los planes Pro son válidos para el período comprado (30 días mensual, 365 anual). Sin renovación automática.",
-        modal_login: "Iniciar sesión", modal_register: "Registrarse gratis", placeholder_email: "Email", placeholder_password: "Contraseña", placeholder_name: "Nombre completo", placeholder_password_hint: "Contraseña (mín. 6 caracteres)",
+        pricing_yearly_saving: "Ahorra 501€ frente al mensual (83%)",
+        pricing_yearly_math: "En lugar de 50€ x 12 = 600€, pagas 99€ una sola vez al año.",
+        trust_title: "Servicio seguro y conforme",
+        trust_subtitle: "Tus datos se procesan solo para generar el informe. Norya no realiza diagnósticos médicos; ofrece explicaciones con IA con fines informativos.",
+        trust_cards_langs_title: "Soporte para 9+ idiomas", trust_cards_langs_desc: "Lee el informe en turco, inglés y otros idiomas soportados.",
+        trust_cards_input_title: "Tipos de entrada flexibles", trust_cards_input_desc: "Pega texto, sube PDF o foto para iniciar el análisis.",
+        trust_cards_speed_title: "Resultados en menos de un minuto", trust_cards_speed_desc: "Cuando los servidores están disponibles, la mayoría de informes están listos en segundos.",
+        trust_cards_ssl_title: "Conexión segura SSL/TLS", trust_cards_ssl_desc: "El tráfico entre tu navegador y nuestros servidores está cifrado.",
+        trust_cards_cloud_title: "Protección de red Cloudflare", trust_cards_cloud_desc: "Seguridad y rendimiento adicionales con Cloudflare.",
+        trust_chip_kvkk: "Procesamiento conforme KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Cifrado SSL/TLS", trust_chip_purpose: "Procesamiento con fines limitados", trust_chip_not_medical: "No es una herramienta de diagnóstico médico",
+        modal_login: "Iniciar sesión", modal_register: "Registrarse gratis", placeholder_email: "Email", placeholder_password: "Contraseña", placeholder_name: "Nombre completo", placeholder_password_hint: "Contraseña (mín. 6 caracteres)", placeholder_country: "Seleccionar país", placeholder_phone: "Teléfono (con código de país, ej. +90 555 123 45 67)", placeholder_password_confirm: "Confirmar contraseña", placeholder_password_current: "Contraseña actual", forgot_desc: "Introduce tu email y te enviaremos un enlace para restablecer la contraseña.", forgot_btn_send: "Enviar", reset_title: "Establecer nueva contraseña", reset_desc: "Introduce tu nueva contraseña usando el token del correo que te enviamos.", reset_btn: "Actualizar contraseña", wizard_char_count: "{n} caracteres", btn_analyze: "Analizar", country_other: "Otro",
+        aria_select_language: "Seleccionar idioma", error_password_min: "La contraseña debe tener al menos 6 caracteres.", error_password_mismatch: "Las contraseñas no coinciden.", error_reset_link_invalid: "Enlace no válido o caducado. Solicita uno nuevo para restablecer la contraseña.", error_name_required: "Introduce tu nombre.", error_email_required: "Introduce tu email.", error_phone_invalid: "Introduce un número de teléfono válido (con código de país, ej. +905551234567).", error_country_required: "Selecciona un país.", account_suspended: "Tu cuenta ha sido suspendida. Contáctanos en la página de contacto.", register_failed: "Registro fallido.",
         btn_login: "Entrar", btn_register: "Registrarse", no_account: "¿No tienes cuenta? ", have_account: "¿Ya tienes cuenta? ",
         register_email_verify: "Tras registrarte te enviaremos un enlace para verificar el correo.", forgot_password: "Olvidé mi contraseña",
         history_title: "Historial de análisis", history_compare_title: "Comparar dos análisis", history_select_analysis: "— Seleccionar análisis —", history_and: "y", history_compare_btn: "Comparar", history_timeline: "Línea de tiempo",
@@ -3166,9 +3321,9 @@
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR",
         trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Connexion chiffrée", footer_trust_kvkk_desc: "Protection des données", footer_trust_gdpr_desc: "Protection des données UE", footer_trust_paytr_desc: "Paiement sécurisé",
-        trust_cloudflare_title: "Protégé par Cloudflare", trust_cloudflare_desc: "Protection du trafic et CDN global pour un accès plus rapide et plus sûr.", trust_cloudflare_1: "Protection DDoS", trust_cloudflare_2: "Accélération CDN mondiale", trust_cloudflare_3: "Sécurité edge",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Conforme HIPAA",
+        footer_trust_ssl_desc: "Trafic chiffré SSL/TLS.", footer_trust_kvkk_desc: "Données personnelles conformes KVKK.", footer_trust_gdpr_desc: "Conforme RGPD pour l'UE.", footer_trust_paytr_desc: "Paiement sécurisé PayTR.", footer_trust_hipaa_desc: "Données de santé traitées en sécurité.",
+        trust_cloudflare_title: "Protégé par Cloudflare", trust_cloudflare_desc: "Protection du trafic et accès rapide.", trust_cloudflare_1: "Protection DDoS", trust_cloudflare_2: "Accélération CDN mondiale", trust_cloudflare_3: "Sécurité edge",
         how_title: "Comment fonctionne Norya", how_desc: "Trois étapes pour transformer vos analyses en informations claires.",
         how_1: "Inscrivez-vous", how_1d: "Créez un compte gratuit. Email et mot de passe uniquement.",
         how_2: "Collez les résultats", how_2d: "Collez les valeurs ou le texte du compte-rendu.",
@@ -3263,9 +3418,9 @@
         toast_report_pdf: "Rapport téléchargé en PDF.", toast_doctor_downloaded: "Rapport pour le médecin téléchargé.", toast_link_copied: "Lien copié.",
         toast_analyze_first: "Effectuez d'abord une analyse.", toast_pdf_fallback: "PDF impossible ; fichier texte téléchargé.", toast_pdf_error: "PDF impossible. Réessayez.",
         pricing_title: "Tarifs", pricing_eur: "Les prix sont affichés dans votre devise locale.", pricing_note_currency: "Prix affichés en {cur} ({sym}).",
-        price_single_title: "Analyse unique", price_single_per: "paiement unique", price_single_1: "✓ 1 analyse", price_single_2: "✓ Texte, PDF ou image", price_single_3: "✓ Rapport détaillé", price_btn_single: " — Analyse unique",
-        price_monthly_title: "Abonnement mensuel", price_per_month: "/mois", price_monthly_per: "5 rapports / mois", price_monthly_1: "✓ 5 analyses par mois", price_monthly_2: "✓ Texte, PDF et image", price_monthly_3: "✓ Rapport détaillé + historique", price_btn_monthly: "/mois — Commencer",
-        price_best_badge: "Meilleur rapport qualité-prix", price_yearly_title: "Abonnement annuel", price_per_year: "/an", price_yearly_per: "13 + 3 offerts = 16 analyses au total", price_yearly_1: "✓ 16 analyses par an (3 offertes)", price_yearly_2: "✓ Texte, PDF et image", price_yearly_3: "✓ Rapport détaillé + historique", price_btn_yearly: "/an — Commencer",
+        price_single_title: "Analyse unique", price_single_per: "paiement unique", price_single_1: "✓ 1 analyse", price_single_2: "✓ Régime + compléments + santé cardiaque", price_single_3: "✓ Télécharger et partager PDF", price_btn_single: " — Analyse unique",
+        price_monthly_badge: "Le plus populaire", pricing_ai_detail: "Niveau de détail IA", price_monthly_title: "Abonnement mensuel", price_per_month: "/mois", price_monthly_per: "5 analyses / mois", price_monthly_1: "✓ 5 analyses complètes par mois", price_monthly_2: "✓ Plan alimentaire + compléments", price_monthly_3: "✓ Historique et comparer deux analyses", price_monthly_4: "✓ Télécharger PDF, partager avec le médecin", price_btn_monthly: "/mois — Commencer",
+        price_best_badge: "Meilleur rapport qualité-prix", price_best_badge_value: "Meilleure valeur", price_yearly_title: "Abonnement annuel", price_per_year: "/an", price_yearly_per: "16 analyses au total (13 + 3 offertes)", price_yearly_1: "✓ 16 analyses par an (13 + 3 offertes)", price_yearly_2: "✓ Toutes les sections régime et compléments premium", price_yearly_3: "✓ Historique et comparaison avancée", price_yearly_4: "✓ Idéal pour les rendez-vous médicaux", price_btn_yearly: "/an — Commencer",
         footer_desc: "Résultats d'analyses sanguines expliqués en langage clair.", footer_disclaimer: "Cet outil est à titre informatif. Consultez toujours un professionnel pour les décisions médicales.", made_with_cursor: "Fait avec Cursor",
         disclaimer_informative: "Cette analyse est à titre informatif uniquement. Elle ne remplace pas un diagnostic médical.",
         footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -3291,7 +3446,18 @@
         payment_refund_2: " ; les demandes valides sont traitées selon le mode de paiement.",
         payment_credit_issue: "Paiement reçu mais pas de crédit. Si le paiement a été confirmé mais qu'aucun crédit n'a été ajouté, contactez-nous avec la commande ou les informations de paiement. Nous vérifierons et corrigerons au plus tôt.",
         price_no_renewal: "Les forfaits Pro sont valables pour la période achetée (30 jours mensuel, 365 annuel). Pas de renouvellement automatique.",
-        modal_login: "Connexion", modal_register: "Inscription gratuite", placeholder_email: "Email", placeholder_password: "Mot de passe", placeholder_name: "Nom complet", placeholder_password_hint: "Mot de passe (min. 6 caractères)",
+        pricing_yearly_saving: "501€ d'économie par rapport au mensuel (83%)",
+        pricing_yearly_math: "Au lieu de 50€ x 12 = 600€, vous payez 99€ une fois par an.",
+        trust_title: "Service sécurisé et conforme",
+        trust_subtitle: "Vos données sont traitées uniquement pour générer votre rapport. Norya ne pose pas de diagnostic médical ; il fournit des explications assistées par IA à titre informatif.",
+        trust_cards_langs_title: "Support 9+ langues", trust_cards_langs_desc: "Lisez votre rapport en turc, anglais et autres langues prises en charge.",
+        trust_cards_input_title: "Types d'entrée flexibles", trust_cards_input_desc: "Collez du texte, uploadez un PDF ou une photo pour lancer l'analyse.",
+        trust_cards_speed_title: "Résultats en moins d'une minute", trust_cards_speed_desc: "Quand les serveurs sont disponibles, la plupart des rapports sont prêts en quelques secondes.",
+        trust_cards_ssl_title: "Connexion sécurisée SSL/TLS", trust_cards_ssl_desc: "Le trafic entre votre navigateur et nos serveurs est chiffré.",
+        trust_cards_cloud_title: "Protection réseau Cloudflare", trust_cards_cloud_desc: "Sécurité et performances supplémentaires via Cloudflare.",
+        trust_chip_kvkk: "Traitement conforme KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Chiffrement SSL/TLS", trust_chip_purpose: "Traitement à finalité limitée", trust_chip_not_medical: "Ce n'est pas un outil de diagnostic médical",
+        modal_login: "Connexion", modal_register: "Inscription gratuite", placeholder_email: "Email", placeholder_password: "Mot de passe", placeholder_name: "Nom complet", placeholder_password_hint: "Mot de passe (min. 6 caractères)", placeholder_country: "Sélectionner un pays", placeholder_phone: "Téléphone (avec indicatif, ex. +90 555 123 45 67)", placeholder_password_confirm: "Confirmer le mot de passe", placeholder_password_current: "Mot de passe actuel", forgot_desc: "Entrez votre email et nous vous enverrons un lien pour réinitialiser le mot de passe.", forgot_btn_send: "Envoyer", reset_title: "Définir un nouveau mot de passe", reset_desc: "Entrez votre nouveau mot de passe en utilisant le jeton reçu par email.", reset_btn: "Mettre à jour le mot de passe", wizard_char_count: "{n} caractères", btn_analyze: "Analyser", country_other: "Autre",
+        aria_select_language: "Choisir la langue", error_password_min: "Le mot de passe doit contenir au moins 6 caractères.", error_password_mismatch: "Les mots de passe ne correspondent pas.", error_reset_link_invalid: "Lien invalide ou expiré. Demandez un nouveau lien pour réinitialiser le mot de passe.", error_name_required: "Entrez votre nom.", error_email_required: "Entrez votre email.", error_phone_invalid: "Entrez un numéro de téléphone valide (avec indicatif, ex. +905551234567).", error_country_required: "Sélectionnez un pays.", account_suspended: "Votre compte a été suspendu. Contactez-nous via la page contact.", register_failed: "Inscription échouée.",
         btn_login: "Connexion", btn_register: "S'inscrire", no_account: "Pas de compte ? ", have_account: "Déjà un compte ? ",
         register_email_verify: "Après inscription, un lien de vérification par email vous sera envoyé.", forgot_password: "Mot de passe oublié",
         history_title: "Historique des analyses", history_compare_title: "Comparer deux analyses", history_select_analysis: "— Choisir une analyse —", history_and: "et", history_compare_btn: "Comparer", history_timeline: "Chronologie",
@@ -3323,9 +3489,9 @@
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
         trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR",
         trust_badge_secure_paytr: "🔒 Sichere Zahlung – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Verschlüsselte Verbindung", footer_trust_kvkk_desc: "Schutz personenbezogener Daten", footer_trust_gdpr_desc: "EU-Datenschutz", footer_trust_paytr_desc: "Sichere Zahlung",
-        trust_cloudflare_title: "Geschützt durch Cloudflare", trust_cloudflare_desc: "Verkehrsschutz und globales CDN für schnelleren und sichereren Zugriff.", trust_cloudflare_1: "DDoS-Schutz", trust_cloudflare_2: "Globale CDN-Beschleunigung", trust_cloudflare_3: "Edge-Sicherheit",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-konform",
+        footer_trust_ssl_desc: "Verkehr SSL/TLS-verschlüsselt.", footer_trust_kvkk_desc: "Personendaten nach KVKK.", footer_trust_gdpr_desc: "DSGVO-konform für EU.", footer_trust_paytr_desc: "Sichere Zahlung per PayTR.", footer_trust_hipaa_desc: "Gesundheitsdaten sicher verarbeitet.",
+        trust_cloudflare_title: "Geschützt durch Cloudflare", trust_cloudflare_desc: "Verkehrsschutz und schneller Zugriff.", trust_cloudflare_1: "DDoS-Schutz", trust_cloudflare_2: "Globale CDN-Beschleunigung", trust_cloudflare_3: "Edge-Sicherheit",
         how_title: "So funktioniert Norya", how_desc: "Drei Schritte von Ihren Laborwerten zu klaren Gesundheitsinfos.",
         how_1: "Registrieren", how_1d: "Kostenloses Konto. E-Mail und Passwort genügen.",
         how_2: "Ergebnisse einfügen", how_2d: "Werte oder Text vom Befund in das Feld einfügen.",
@@ -3420,9 +3586,9 @@
         toast_report_pdf: "Bericht als PDF heruntergeladen.", toast_doctor_downloaded: "Arztbericht heruntergeladen.", toast_link_copied: "Link kopiert.",
         toast_analyze_first: "Bitte zuerst eine Analyse durchführen.", toast_pdf_fallback: "PDF konnte nicht erstellt werden; Textdatei heruntergeladen.", toast_pdf_error: "PDF konnte nicht erstellt werden. Bitte erneut versuchen.",
         pricing_title: "Preise", pricing_eur: "Preise werden in Ihrer Landeswährung angezeigt.", pricing_note_currency: "Preise in {cur} ({sym}).",
-        price_single_title: "Einzelanalyse", price_single_per: "einmalig", price_single_1: "✓ 1 Analyse", price_single_2: "✓ Text, PDF oder Bild", price_single_3: "✓ Detaillierter Bericht", price_btn_single: " — Einzelanalyse",
-        price_monthly_title: "Monatsabo", price_per_month: "/Monat", price_monthly_per: "5 Berichte / Monat", price_monthly_1: "✓ 5 Analysen pro Monat", price_monthly_2: "✓ Text, PDF und Bild", price_monthly_3: "✓ Detaillierter Bericht + Verlauf", price_btn_monthly: "/Monat — Starten",
-        price_best_badge: "Bester Preis", price_yearly_title: "Jahresabo", price_per_year: "/Jahr", price_yearly_per: "13 + 3 gratis = 16 Analysen gesamt", price_yearly_1: "✓ 16 Analysen pro Jahr (3 von uns geschenkt)", price_yearly_2: "✓ Text, PDF und Bild", price_yearly_3: "✓ Detaillierter Bericht + Verlauf", price_btn_yearly: "/Jahr — Starten",
+        price_single_title: "Einzelanalyse", price_single_per: "einmalig", price_single_1: "✓ 1 Analyse", price_single_2: "✓ Ernährung + Nahrungsergänzung + Herzgesundheit", price_single_3: "✓ PDF herunterladen & teilen", price_btn_single: " — Einzelanalyse",
+        price_monthly_badge: "Am beliebtesten", pricing_ai_detail: "KI-Detailstufe", price_monthly_title: "Monatsabo", price_per_month: "/Monat", price_monthly_per: "5 Analysen / Monat", price_monthly_1: "✓ 5 Vollanalysen pro Monat", price_monthly_2: "✓ Ernährungsplan + Nahrungsergänzung", price_monthly_3: "✓ Verlauf & zwei Analysen vergleichen", price_monthly_4: "✓ PDF herunterladen, mit Arzt teilen", price_btn_monthly: "/Monat — Starten",
+        price_best_badge: "Bester Preis", price_best_badge_value: "Bester Wert", price_yearly_title: "Jahresabo", price_per_year: "/Jahr", price_yearly_per: "16 Analysen gesamt (13 + 3 gratis)", price_yearly_1: "✓ 16 Analysen pro Jahr (13 + 3 gratis)", price_yearly_2: "✓ Alle Premium-Ernährung & -Nahrungsergänzung", price_yearly_3: "✓ Verlauf & erweiterter Vergleich", price_yearly_4: "✓ Ideal für Arzttermine", price_btn_yearly: "/Jahr — Starten",
         footer_desc: "Blutwerte verständlich erklärt.", footer_disclaimer: "Nur zur Information. Bitte konsultieren Sie für medizinische Entscheidungen einen Arzt.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Diese Analyse dient nur der Information. Sie ersetzt keine medizinische Diagnose.",
         footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -3448,7 +3614,18 @@
         payment_refund_2: "; berechtigte Anträge werden entsprechend Ihrer Zahlungsmethode bearbeitet.",
         payment_credit_issue: "Zahlung erhalten, aber kein Guthaben. Wenn die Zahlung bestätigt wurde, aber kein Guthaben gutgeschrieben wurde, kontaktieren Sie uns bitte mit Bestell- oder Zahlungsangaben. Wir prüfen und korrigieren schnellstmöglich.",
         price_no_renewal: "Pro-Pakete gelten für den gekauften Zeitraum (30 Tage monatlich, 365 jährlich). Keine automatische Verlängerung.",
-        modal_login: "Anmelden", modal_register: "Kostenlos registrieren", placeholder_email: "E-Mail", placeholder_password: "Passwort", placeholder_name: "Vollständiger Name", placeholder_password_hint: "Passwort (min. 6 Zeichen)",
+        pricing_yearly_saving: "501€ Ersparnis im Vergleich zum Monatsabo (83%)",
+        pricing_yearly_math: "Statt 50€ x 12 = 600€ zahlen Sie einmalig 99€ pro Jahr.",
+        trust_title: "Sicherer und konformer Service",
+        trust_subtitle: "Ihre Daten werden nur zur Erstellung Ihres Berichts verarbeitet. Norya stellt keine medizinischen Diagnosen; es bietet KI-gestützte Erklärungen zu Informationszwecken.",
+        trust_cards_langs_title: "9+ Sprachen unterstützt", trust_cards_langs_desc: "Lesen Sie Ihren Bericht auf Türkisch, Englisch und anderen unterstützten Sprachen.",
+        trust_cards_input_title: "Flexible Eingabearten", trust_cards_input_desc: "Text einfügen, PDF oder Foto hochladen, um die Analyse zu starten.",
+        trust_cards_speed_title: "Ergebnisse in unter einer Minute", trust_cards_speed_desc: "Wenn die Server verfügbar sind, sind die meisten Berichte in Sekunden fertig.",
+        trust_cards_ssl_title: "SSL/TLS sichere Verbindung", trust_cards_ssl_desc: "Der Datenverkehr zwischen Browser und Servern ist verschlüsselt.",
+        trust_cards_cloud_title: "Cloudflare Netzwerkschutz", trust_cards_cloud_desc: "Zusätzliche Sicherheit und Performance über Cloudflare.",
+        trust_chip_kvkk: "KVKK-konforme Verarbeitung", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "SSL/TLS-Verschlüsselung", trust_chip_purpose: "Zweckgebundene Datenverarbeitung", trust_chip_not_medical: "Kein medizinisches Diagnoseinstrument",
+        modal_login: "Anmelden", modal_register: "Kostenlos registrieren", placeholder_email: "E-Mail", placeholder_password: "Passwort", placeholder_name: "Vollständiger Name", placeholder_password_hint: "Passwort (min. 6 Zeichen)", placeholder_country: "Land auswählen", placeholder_phone: "Telefon (mit Ländervorwahl, z. B. +90 555 123 45 67)", placeholder_password_confirm: "Passwort bestätigen", placeholder_password_current: "Aktuelles Passwort", forgot_desc: "E-Mail eingeben, wir senden Ihnen einen Link zum Zurücksetzen des Passworts.", forgot_btn_send: "Senden", reset_title: "Neues Passwort festlegen", reset_desc: "Geben Sie Ihr neues Passwort mit dem Token aus der E-Mail ein.", reset_btn: "Passwort aktualisieren", wizard_char_count: "{n} Zeichen", btn_analyze: "Analysieren", country_other: "Sonstige",
+        aria_select_language: "Sprache wählen", error_password_min: "Das Passwort muss mindestens 6 Zeichen haben.", error_password_mismatch: "Die Passwörter stimmen nicht überein.", error_reset_link_invalid: "Ungültiger oder abgelaufener Link. Bitte fordern Sie einen neuen Link zum Zurücksetzen des Passworts an.", error_name_required: "Bitte Namen eingeben.", error_email_required: "Bitte E-Mail eingeben.", error_phone_invalid: "Bitte gültige Telefonnummer eingeben (mit Ländervorwahl, z. B. +905551234567).", error_country_required: "Bitte Land auswählen.", account_suspended: "Ihr Konto wurde gesperrt. Bitte kontaktieren Sie uns über die Kontaktseite.", register_failed: "Registrierung fehlgeschlagen.",
         btn_login: "Anmelden", btn_register: "Registrieren", no_account: "Noch kein Konto? ", have_account: "Bereits ein Konto? ",
         register_email_verify: "Nach der Anmeldung senden wir Ihnen einen E-Mail-Verifizierungslink.", forgot_password: "Passwort vergessen",
         history_title: "Ihr Analyseverlauf", history_compare_title: "Zwei Analysen vergleichen", history_select_analysis: "— Analyse wählen —", history_and: "und", history_compare_btn: "Vergleichen", history_timeline: "Zeitleiste",
@@ -3480,9 +3657,9 @@
         trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה", trust_badges_heading: "שירות מאובטח ותואם",
         trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR",
         trust_badge_secure_paytr: "🔒 תשלום מאובטח – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "חיבור מוצפן", footer_trust_kvkk_desc: "הגנת נתונים אישיים", footer_trust_gdpr_desc: "הגנת נתונים EU", footer_trust_paytr_desc: "תשלום מאובטח",
-        trust_cloudflare_title: "מוגן על ידי Cloudflare", trust_cloudflare_desc: "הגנת תעבורה ו-CDN גלובלי לגישה מהירה ובטוחה יותר.", trust_cloudflare_1: "הגנת DDoS", trust_cloudflare_2: "תאוצת CDN גלובלית", trust_cloudflare_3: "אבטחת edge",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "תואם HIPAA",
+        footer_trust_ssl_desc: "תעבורה מוצפנת SSL/TLS.", footer_trust_kvkk_desc: "נתונים אישיים לפי KVKK.", footer_trust_gdpr_desc: "תואם GDPR ל-EU.", footer_trust_paytr_desc: "תשלום מאובטח דרך PayTR.", footer_trust_hipaa_desc: "נתוני בריאות מעובדים באבטחה.",
+        trust_cloudflare_title: "מוגן על ידי Cloudflare", trust_cloudflare_desc: "הגנת תעבורה וגישה מהירה.", trust_cloudflare_1: "הגנת DDoS", trust_cloudflare_2: "תאוצת CDN גלובלית", trust_cloudflare_3: "אבטחת edge",
         how_title: "איך נוריה עובדת", how_desc: "שלושה צעדים פשוטים מתוצאות המעבדה לתובנות בריאות.",
         how_1: "הירשם", how_1d: "צור חשבון חינם. אימייל וסיסמה בלבד.",
         how_2: "הדבק תוצאות", how_2d: "הדבק ערכים או טקסט מדף התוצאות.",
@@ -3576,9 +3753,9 @@
         toast_report_pdf: "הדוח הורד כ-PDF.", toast_doctor_downloaded: "דוח לרופא הורד.", toast_link_copied: "הקישור הועתק.",
         toast_analyze_first: "בצע תחילה ניתוח.", toast_pdf_fallback: "לא ניתן ליצור PDF; הורדה כקובץ טקסט.", toast_pdf_error: "לא ניתן ליצור PDF. נסה שוב.",
         pricing_title: "מחירים", pricing_eur: "המחירים מוצגים במטבע המקומי שלך.", pricing_note_currency: "מחירים ב־{cur} ({sym}).",
-        price_single_title: "ניתוח בודד", price_single_per: "חד־פעמי", price_single_1: "✓ ניתוח אחד", price_single_2: "✓ טקסט, PDF או תמונה", price_single_3: "✓ דוח מפורט", price_btn_single: " — ניתוח בודד",
-        price_monthly_title: "מנוי חודשי", price_per_month: "/חודש", price_monthly_per: "5 דוחות / חודש", price_monthly_1: "✓ 5 ניתוחים בחודש", price_monthly_2: "✓ טקסט, PDF ותמונה", price_monthly_3: "✓ דוח מפורט + היסטוריה", price_btn_monthly: "/חודש — התחל",
-        price_best_badge: "המשתלם ביותר", price_yearly_title: "מנוי שנתי", price_per_year: "/שנה", price_yearly_per: "13 + 3 במתנה = 16 ניתוחים בסה\"כ", price_yearly_1: "✓ 16 ניתוחים בשנה (3 במתנה מאיתנו)", price_yearly_2: "✓ טקסט, PDF ותמונה", price_yearly_3: "✓ דוח מפורט + היסטוריה", price_btn_yearly: "/שנה — התחל",
+        price_single_title: "ניתוח בודד", price_single_per: "חד־פעמי", price_single_1: "✓ ניתוח אחד", price_single_2: "✓ דיאטה + תוספים + בריאות הלב", price_single_3: "✓ הורד ושתף PDF", price_btn_single: " — ניתוח בודד",
+        price_monthly_badge: "הכי פופולרי", pricing_ai_detail: "רמת פירוט בינה מלאכותית", price_monthly_title: "מנוי חודשי", price_per_month: "/חודש", price_monthly_per: "5 ניתוחים / חודש", price_monthly_1: "✓ 5 ניתוחים מלאים בחודש", price_monthly_2: "✓ תכנית דיאטה + תוספים", price_monthly_3: "✓ היסטוריה והשוואת שני ניתוחים", price_monthly_4: "✓ הורד PDF, שתף עם הרופא", price_btn_monthly: "/חודש — התחל",
+        price_best_badge: "המשתלם ביותר", price_best_badge_value: "הערך הטוב ביותר", price_yearly_title: "מנוי שנתי", price_per_year: "/שנה", price_yearly_per: "16 ניתוחים סה\"כ (13 + 3 במתנה)", price_yearly_1: "✓ 16 ניתוחים בשנה (13 + 3 במתנה)", price_yearly_2: "✓ כל סעיפי הדיאטה והתוספים הפרימיום", price_yearly_3: "✓ היסטוריה והשוואה מתקדמת", price_yearly_4: "✓ אידיאלי לביקורי רופא", price_btn_yearly: "/שנה — התחל",
         footer_desc: "תוצאות בדיקות דם מוסברות בשפה ברורה.", footer_disclaimer: "הכלי להנחיה בלבד. להחלטות רפואיות יש להתייעץ עם רופא.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "ניתוח זה למידע בלבד. אינו מחליף אבחנה רפואית.",
         footer_mesafeli: "הסכם מכר מרחוק", footer_privacy: "פרטיות", footer_refund: "החזרה וביטול", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -3604,7 +3781,18 @@
         payment_refund_2: "; בקשות תקפות מטופלות לפי אמצעי התשלום.",
         payment_credit_issue: "התשלום התקבל אך לא נוסף קרדיט. אם התשלום אושר אך לא נזקף, צור איתנו קשר עם פרטי ההזמנה או התשלום. נבדוק ונתקן בהקדם.",
         price_no_renewal: "חבילות Pro תקפות לתקופה שנרכשה (30 יום חודשי, 365 שנתי). אין חידוש אוטומטי.",
-        modal_login: "התחברות", modal_register: "הרשמה חינם", placeholder_email: "אימייל", placeholder_password: "סיסמה", placeholder_name: "שם מלא", placeholder_password_hint: "סיסמה (מינימום 6 תווים)",
+        pricing_yearly_saving: "חיסכון של ‎501€ לעומת החודשי (83%)",
+        pricing_yearly_math: "במקום ‎50€ x 12 = ‎600€, משלמים ‎99€ פעם בשנה.",
+        trust_title: "שירות מאובטח ותואם",
+        trust_subtitle: "הנתונים שלך מעובדים רק לצורך יצירת הדוח. נוריה אינה עושה אבחון רפואי; היא מספקת הסברים מבוססי בינה מלאכותית למטרות מידע.",
+        trust_cards_langs_title: "תמיכה ב-9+ שפות", trust_cards_langs_desc: "קרא את הדוח בעברית, אנגלית ושפות נתמכות נוספות.",
+        trust_cards_input_title: "סוגי קלט גמישים", trust_cards_input_desc: "הדבק טקסט, העלה PDF או תמונה כדי להתחיל ניתוח.",
+        trust_cards_speed_title: "תוצאות תוך פחות מדקה", trust_cards_speed_desc: "כשהשרתים זמינים, רוב הדוחות מוכנים תוך שניות.",
+        trust_cards_ssl_title: "חיבור מאובטח SSL/TLS", trust_cards_ssl_desc: "התעבורה בין הדפדפן לשרתים מוצפנת.",
+        trust_cards_cloud_title: "הגנת רשת Cloudflare", trust_cards_cloud_desc: "אבטחה וביצועים נוספים באמצעות Cloudflare.",
+        trust_chip_kvkk: "עיבוד תואם KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "הצפנת SSL/TLS", trust_chip_purpose: "עיבוד נתונים למטרה מוגבלת", trust_chip_not_medical: "אינו כלי לאבחון רפואי",
+        modal_login: "התחברות", modal_register: "הרשמה חינם", placeholder_email: "אימייל", placeholder_password: "סיסמה", placeholder_name: "שם מלא", placeholder_password_hint: "סיסמה (מינימום 6 תווים)", placeholder_country: "בחר מדינה", placeholder_phone: "טלפון (עם קידומת, לדוגמה +90 555 123 45 67)", placeholder_password_confirm: "אימות סיסמה", placeholder_password_current: "סיסמה נוכחית", forgot_desc: "הזן את האימייל ונשלח לך קישור לאיפוס הסיסמה.", forgot_btn_send: "שלח", reset_title: "הגדר סיסמה חדשה", reset_desc: "הזן את הסיסמה החדשה באמצעות האסימון מהאימייל ששלחנו.", reset_btn: "עדכן סיסמה", wizard_char_count: "{n} תווים", btn_analyze: "נתח", country_other: "אחר",
+        aria_select_language: "בחר שפה", error_password_min: "הסיסמה חייבת להכיל לפחות 6 תווים.", error_password_mismatch: "הסיסמאות אינן תואמות.", error_reset_link_invalid: "קישור לא תקף או שפג תוקפו. בקש קישור חדש לאיפוס הסיסמה.", error_name_required: "הזן את שמך.", error_email_required: "הזן אימייל.", error_phone_invalid: "הזן מספר טלפון תקין (עם קידומת, לדוגמה +905551234567).", error_country_required: "בחר מדינה.", account_suspended: "החשבון שלך הושעה. צור איתנו קשר דרך דף יצירת הקשר.", register_failed: "ההרשמה נכשלה.",
         btn_login: "התחבר", btn_register: "הירשם", no_account: "אין חשבון? ", have_account: "כבר יש חשבון? ",
         register_email_verify: "אחרי ההרשמה נשלח לך קישור לאימות אימייל.", forgot_password: "שכחתי סיסמה",
         history_title: "היסטוריית הניתוחים", history_compare_title: "השווה שני ניתוחים", history_select_analysis: "— בחר ניתוח —", history_and: "ו", history_compare_btn: "השווה", history_timeline: "ציר זמן",
@@ -3636,9 +3824,9 @@
         trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن", trust_badges_heading: "خدمة آمنة ومتوافقة",
         trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR",
         trust_badge_secure_paytr: "🔒 دفع آمن – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "اتصال مشفّر", footer_trust_kvkk_desc: "حماية البيانات الشخصية", footer_trust_gdpr_desc: "حماية بيانات الاتحاد الأوروبي", footer_trust_paytr_desc: "دفع آمن",
-        trust_cloudflare_title: "محمي بواسطة Cloudflare", trust_cloudflare_desc: "حماية الحركة وCDN عالمي لوصول أسرع وأكثر أماناً.", trust_cloudflare_1: "حماية DDoS", trust_cloudflare_2: "تسريع CDN عالمي", trust_cloudflare_3: "أمان الحافة",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "متوافق مع HIPAA",
+        footer_trust_ssl_desc: "المرور مشفّر SSL/TLS.", footer_trust_kvkk_desc: "البيانات الشخصية وفق KVKK.", footer_trust_gdpr_desc: "متوافق مع GDPR للاتحاد الأوروبي.", footer_trust_paytr_desc: "دفع آمن عبر PayTR.", footer_trust_hipaa_desc: "بيانات الصحة تُعالج بأمان.",
+        trust_cloudflare_title: "محمي بواسطة Cloudflare", trust_cloudflare_desc: "حماية الحركة ووصول سريع.", trust_cloudflare_1: "حماية DDoS", trust_cloudflare_2: "تسريع CDN عالمي", trust_cloudflare_3: "أمان الحافة",
         how_title: "كيف يعمل نوريا", how_desc: "ثلاث خطوات بسيطة لتحويل نتائجك إلى معلومات صحية واضحة.",
         how_1: "سجّل", how_1d: "أنشئ حساباً مجانياً. البريد وكلمة السر فقط.",
         how_2: "الصق النتائج", how_2d: "الصق القيم أو النص من ورقة النتائج.",
@@ -3732,9 +3920,9 @@
         toast_report_pdf: "تم تحميل التقرير كـ PDF.", toast_doctor_downloaded: "تم تحميل تقرير الطبيب.", toast_link_copied: "تم نسخ الرابط.",
         toast_analyze_first: "قم بإجراء التحليل أولاً.", toast_pdf_fallback: "تعذّر إنشاء PDF؛ تم تحميل ملف نصي.", toast_pdf_error: "تعذّر إنشاء PDF. حاول مرة أخرى.",
         pricing_title: "الأسعار", pricing_eur: "الأسعار تُعرض بعملتك المحلية.", pricing_note_currency: "الأسعار بعملة {cur} ({sym}).",
-        price_single_title: "تحليل واحد", price_single_per: "مرة واحدة", price_single_1: "✓ تحليل واحد", price_single_2: "✓ نص أو PDF أو صورة", price_single_3: "✓ تقرير مفصل", price_btn_single: " — تحليل واحد",
-        price_monthly_title: "اشتراك شهري", price_per_month: "/شهر", price_monthly_per: "5 تقارير / شهر", price_monthly_1: "✓ 5 تحاليل شهرياً", price_monthly_2: "✓ نص وPDF وصورة", price_monthly_3: "✓ تقرير مفصل + السجل", price_btn_monthly: "/شهر — ابدأ",
-        price_best_badge: "الأفضل قيمة", price_yearly_title: "اشتراك سنوي", price_per_year: "/سنة", price_yearly_per: "13 + 3 هدية = 16 تحليلاً إجمالاً", price_yearly_1: "✓ 16 تحليلاً سنوياً (3 هدية منا)", price_yearly_2: "✓ نص وPDF وصورة", price_yearly_3: "✓ تقرير مفصل + السجل", price_btn_yearly: "/سنة — ابدأ",
+        price_single_title: "تحليل واحد", price_single_per: "مرة واحدة", price_single_1: "✓ تحليل واحد", price_single_2: "✓ نظام غذائي + مكملات + صحة القلب", price_single_3: "✓ تنزيل ومشاركة PDF", price_btn_single: " — تحليل واحد",
+        price_monthly_badge: "الأكثر شعبية", pricing_ai_detail: "مستوى تفاصيل الذكاء الاصطناعي", price_monthly_title: "اشتراك شهري", price_per_month: "/شهر", price_monthly_per: "5 تحاليل / شهر", price_monthly_1: "✓ 5 تحاليل كاملة شهرياً", price_monthly_2: "✓ خطة غذائية + مكملات", price_monthly_3: "✓ السجل ومقارنة تحليلين", price_monthly_4: "✓ تنزيل PDF، مشاركة مع الطبيب", price_btn_monthly: "/شهر — ابدأ",
+        price_best_badge: "الأفضل قيمة", price_best_badge_value: "أفضل قيمة", price_yearly_title: "اشتراك سنوي", price_per_year: "/سنة", price_yearly_per: "16 تحليلاً إجمالاً (13 + 3 هدية)", price_yearly_1: "✓ 16 تحليلاً سنوياً (13 + 3 هدية)", price_yearly_2: "✓ كل أقسام النظام الغذائي والمكملات المميزة", price_yearly_3: "✓ السجل والمقارنة المتقدمة", price_yearly_4: "✓ مثالي لزيارات الطبيب", price_btn_yearly: "/سنة — ابدأ",
         footer_desc: "نتائج تحاليل الدم مفسرة بلغة واضحة.", footer_disclaimer: "هذه الأداة للمعلومات فقط. استشر طبيباً دائماً للقرارات الطبية.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "هذا التحليل للمعلومات فقط. لا يحل محل التشخيص الطبي.",
         footer_mesafeli: "عقد البيع عن بعد", footer_privacy: "الخصوصية", footer_refund: "الاسترداد والإلغاء", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -3760,7 +3948,18 @@
         payment_refund_2: "؛ تُمعالَج الطلبات الصالحة حسب طريقة الدفع.",
         payment_credit_issue: "تم استلام الدفع لكن لم يُضف رصيد. إن تم تأكيد الدفع ولم يُضف الرصيد، تواصل معنا مع رقم الطلب أو بيانات الدفع. نتحقق ونصحح في أقرب وقت.",
         price_no_renewal: "باقات Pro صالحة للفترة المشتراة (30 يوم شهري، 365 سنوي). لا تجديد تلقائي.",
-        modal_login: "تسجيل الدخول", modal_register: "التسجيل مجاناً", placeholder_email: "البريد الإلكتروني", placeholder_password: "كلمة السر", placeholder_name: "الاسم الكامل", placeholder_password_hint: "كلمة السر (6 أحرف على الأقل)",
+        pricing_yearly_saving: "توفير 501€ مقارنة بالشهري (83%)",
+        pricing_yearly_math: "بدلاً من ‎50€ × 12 = ‎600€، تدفع ‎99€ مرة واحدة في السنة.",
+        trust_title: "خدمة آمنة ومتوافقة",
+        trust_subtitle: "تُعالج بياناتك فقط لتوليد التقرير. نوريا لا تقوم بتشخيص طبي؛ تقدم شروحات مدعومة بالذكاء الاصطناعي لأغراض إعلامية.",
+        trust_cards_langs_title: "دعم 9+ لغات", trust_cards_langs_desc: "اقرأ التقرير بالتركية والإنجليزية واللغات المدعومة الأخرى.",
+        trust_cards_input_title: "أنواع إدخال مرنة", trust_cards_input_desc: "الصق النص أو ارفع PDF أو صورة لبدء التحليل.",
+        trust_cards_speed_title: "نتائج في أقل من دقيقة", trust_cards_speed_desc: "عند توفر الخوادم، معظم التقارير جاهزة خلال ثوانٍ.",
+        trust_cards_ssl_title: "اتصال آمن SSL/TLS", trust_cards_ssl_desc: "المرور بين المتصفح وخوادمنا مشفّر.",
+        trust_cards_cloud_title: "حماية شبكة Cloudflare", trust_cards_cloud_desc: "أمان وأداء إضافيان عبر Cloudflare.",
+        trust_chip_kvkk: "معالجة متوافقة مع KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "تشفير SSL/TLS", trust_chip_purpose: "معالجة بيانات لغرض محدود", trust_chip_not_medical: "ليست أداة تشخيص طبي",
+        modal_login: "تسجيل الدخول", modal_register: "التسجيل مجاناً", placeholder_email: "البريد الإلكتروني", placeholder_password: "كلمة السر", placeholder_name: "الاسم الكامل", placeholder_password_hint: "كلمة السر (6 أحرف على الأقل)", placeholder_country: "اختر البلد", placeholder_phone: "الهاتف (مع رمز الدولة، مثل +90 555 123 45 67)", placeholder_password_confirm: "تأكيد كلمة السر", placeholder_password_current: "كلمة السر الحالية", forgot_desc: "أدخل بريدك وسنرسل لك رابط إعادة تعيين كلمة السر.", forgot_btn_send: "إرسال", reset_title: "تعيين كلمة سر جديدة", reset_desc: "أدخل كلمة السر الجديدة باستخدام الرمز من البريد الذي أرسلناه.", reset_btn: "تحديث كلمة السر", wizard_char_count: "{n} أحرف", btn_analyze: "تحليل", country_other: "أخرى",
+        aria_select_language: "اختر اللغة", error_password_min: "كلمة السر يجب أن تكون 6 أحرف على الأقل.", error_password_mismatch: "كلمتا السر غير متطابقتين.", error_reset_link_invalid: "رابط غير صالح أو منتهي. اطلب رابطاً جديداً لإعادة تعيين كلمة السر.", error_name_required: "أدخل اسمك.", error_email_required: "أدخل بريدك.", error_phone_invalid: "أدخل رقم هاتف صحيح (مع رمز الدولة، مثل +905551234567).", error_country_required: "اختر البلد.", account_suspended: "تم تعليق حسابك. تواصل معنا عبر صفحة الاتصال.", register_failed: "فشل التسجيل.",
         btn_login: "دخول", btn_register: "تسجيل", no_account: "لا يوجد حساب؟ ", have_account: "لديك حساب؟ ",
         register_email_verify: "بعد التسجيل سنرسل لك رابط التحقق من البريد.", forgot_password: "نسيت كلمة المرور",
         history_title: "سجل التحليلات", history_compare_title: "مقارنة تحليلين", history_select_analysis: "— اختر تحليلاً —", history_and: "و", history_compare_btn: "مقارنة", history_timeline: "الجدول الزمني",
@@ -3792,9 +3991,9 @@
         trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी", trust_badges_heading: "सुरक्षित और अनुपालन सेवा",
         trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान",
         trust_badge_secure_paytr: "🔒 सुरक्षित भुगतान – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "एन्क्रिप्टेड कनेक्शन", footer_trust_kvkk_desc: "व्यक्तिगत डेटा सुरक्षा", footer_trust_gdpr_desc: "EU डेटा सुरक्षा", footer_trust_paytr_desc: "सुरक्षित भुगतान",
-        trust_cloudflare_title: "Cloudflare द्वारा सुरक्षित", trust_cloudflare_desc: "ट्रैफिक सुरक्षा और ग्लोबल CDN से तेज़, सुरक्षित एक्सेस।", trust_cloudflare_1: "DDoS सुरक्षा", trust_cloudflare_2: "ग्लोबल CDN त्वरण", trust_cloudflare_3: "एज सुरक्षा",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA अनुरूप",
+        footer_trust_ssl_desc: "ट्रैफिक SSL/TLS से एन्क्रिप्ट.", footer_trust_kvkk_desc: "व्यक्तिगत डेटा KVKK अनुरूप.", footer_trust_gdpr_desc: "EU के लिए GDPR अनुरूप.", footer_trust_paytr_desc: "PayTR से सुरक्षित भुगतान.", footer_trust_hipaa_desc: "स्वास्थ्य डेटा सुरक्षित संसाधित.",
+        trust_cloudflare_title: "Cloudflare द्वारा सुरक्षित", trust_cloudflare_desc: "ट्रैफिक सुरक्षा और तेज़ एक्सेस।", trust_cloudflare_1: "DDoS सुरक्षा", trust_cloudflare_2: "ग्लोबल CDN त्वरण", trust_cloudflare_3: "एज सुरक्षा",
         how_title: "नोरिया कैसे काम करता है", how_desc: "लैब रिज़ल्ट को स्पष्ट स्वास्थ्य जानकारी में बदलने के तीन आसान कदम।",
         how_1: "साइन अप करें", how_1d: "मुफ्त खाता बनाएं। ईमेल और पासवर्ड काफी।",
         how_2: "रिज़ल्ट चिपकाएं", how_2d: "रिज़ल्ट शीट के मान या टेक्स्ट चिपकाएं।",
@@ -3888,9 +4087,9 @@
         toast_report_pdf: "रिपोर्ट PDF के रूप में डाउनलोड हुई।", toast_doctor_downloaded: "डॉक्टर के लिए रिपोर्ट डाउनलोड हुई।", toast_link_copied: "लिंक कॉपी हुआ।",
         toast_analyze_first: "पहले विश्लेषण करें।", toast_pdf_fallback: "PDF नहीं बन सका; टेक्स्ट फ़ाइल डाउनलोड हुई।", toast_pdf_error: "PDF नहीं बन सका। कृपया पुनः प्रयास करें।",
         pricing_title: "मूल्य निर्धारण", pricing_eur: "कीमतें आपकी स्थानीय मुद्रा में दिखाई जाती हैं।", pricing_note_currency: "कीमतें {cur} ({sym}) में।",
-        price_single_title: "एकल विश्लेषण", price_single_per: "एक बार", price_single_1: "✓ 1 विश्लेषण", price_single_2: "✓ टेक्स्ट, PDF या इमेज", price_single_3: "✓ विस्तृत रिपोर्ट", price_btn_single: " — एकल विश्लेषण",
-        price_monthly_title: "मासिक प्लान", price_per_month: "/माह", price_monthly_per: "5 रिपोर्ट / माह", price_monthly_1: "✓ महीने में 5 विश्लेषण", price_monthly_2: "✓ टेक्स्ट, PDF और इमेज", price_monthly_3: "✓ विस्तृत रिपोर्ट + इतिहास", price_btn_monthly: "/माह — शुरू करें",
-        price_best_badge: "सर्वोत्तम मूल्य", price_yearly_title: "वार्षिक प्लान", price_per_year: "/वर्ष", price_yearly_per: "13 + 3 मुफ्त = कुल 16 विश्लेषण", price_yearly_1: "✓ साल में 16 विश्लेषण (3 हमारी ओर से मुफ्त)", price_yearly_2: "✓ टेक्स्ट, PDF और इमेज", price_yearly_3: "✓ विस्तृत रिपोर्ट + इतिहास", price_btn_yearly: "/वर्ष — शुरू करें",
+        price_single_title: "एकल विश्लेषण", price_single_per: "एक बार", price_single_1: "✓ 1 विश्लेषण", price_single_2: "✓ डाइट + सप्लीमेंट + हृदय स्वास्थ्य", price_single_3: "✓ PDF डाउनलोड और साझा करें", price_btn_single: " — एकल विश्लेषण",
+        price_monthly_badge: "सबसे लोकप्रिय", pricing_ai_detail: "AI विवरण स्तर", price_monthly_title: "मासिक प्लान", price_per_month: "/माह", price_monthly_per: "5 विश्लेषण / माह", price_monthly_1: "✓ महीने में 5 पूर्ण विश्लेषण", price_monthly_2: "✓ डाइट प्लान + सप्लीमेंट", price_monthly_3: "✓ इतिहास और दो विश्लेषण की तुलना", price_monthly_4: "✓ PDF डाउनलोड करें, डॉक्टर के साथ साझा करें", price_btn_monthly: "/माह — शुरू करें",
+        price_best_badge: "सर्वोत्तम मूल्य", price_best_badge_value: "सर्वोत्तम मूल्य", price_yearly_title: "वार्षिक प्लान", price_per_year: "/वर्ष", price_yearly_per: "कुल 16 विश्लेषण (13 + 3 मुफ्त)", price_yearly_1: "✓ साल में 16 विश्लेषण (13 + 3 मुफ्त)", price_yearly_2: "✓ सभी प्रीमियम डाइट और सप्लीमेंट सेक्शन", price_yearly_3: "✓ इतिहास और उन्नत तुलना", price_yearly_4: "✓ डॉक्टर विजिट के लिए आदर्श", price_btn_yearly: "/वर्ष — शुरू करें",
         footer_desc: "रक्त परीक्षण परिणाम सरल भाषा में समझाए गए।", footer_disclaimer: "यह उपकरण शैक्षिक उद्देश्य के लिए है। चिकित्सा निर्णय के लिए हमेशा डॉक्टर से सलाह लें।", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "यह विश्लेषण केवल सूचनात्मक है। चिकित्सा निदान का विकल्प नहीं है।",
         footer_mesafeli: "दूरबिक्री समझौता", footer_privacy: "गोपनीयता", footer_refund: "रिफंड और रद्दीकरण", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -3916,7 +4115,18 @@
         payment_refund_2: "के जरिए; वैध अनुरोध भुगतान विधि के अनुसार संसाधित।",
         payment_credit_issue: "भुगतान मिला लेकिन क्रेडिट नहीं मिला। यदि भुगतान पुष्ट हुआ लेकिन क्रेडिट नहीं जुड़ा तो ऑर्डर या भुगतान जानकारी के साथ संपर्क करें। जल्द जांच और सुधार करेंगे।",
         price_no_renewal: "Pro पैकेज खरीदी गई अवधि के लिए वैध (मासिक 30 दिन, वार्षिक 365)। कोई ऑटो-नवीनीकरण नहीं।",
-        modal_login: "लॉग इन", modal_register: "मुफ्त रजिस्टर", placeholder_email: "ईमेल", placeholder_password: "पासवर्ड", placeholder_name: "पूरा नाम", placeholder_password_hint: "पासवर्ड (कम से कम 6 अक्षर)",
+        pricing_yearly_saving: "मासिक की तुलना में 501€ की बचत (83%)",
+        pricing_yearly_math: "50€ x 12 = 600€ के बजाय, साल में केवल 99€ एक बार।",
+        trust_title: "सुरक्षित और अनुपालन सेवा",
+        trust_subtitle: "आपका डेटा केवल रिपोर्ट बनाने के लिए प्रोसेस होता है। नोरिया चिकित्सा निदान नहीं करता; यह सूचनात्मक उद्देश्य के लिए AI-सहायक व्याख्या प्रदान करता है।",
+        trust_cards_langs_title: "9+ भाषा समर्थन", trust_cards_langs_desc: "अपनी रिपोर्ट तुर्की, अंग्रेज़ी और अन्य समर्थित भाषाओं में पढ़ें।",
+        trust_cards_input_title: "लचीला इनपुट प्रकार", trust_cards_input_desc: "विश्लेषण शुरू करने के लिए टेक्स्ट पेस्ट करें, PDF या फोटो अपलोड करें।",
+        trust_cards_speed_title: "एक मिनट से कम में नतीजे", trust_cards_speed_desc: "जब सर्वर उपलब्ध हों, ज़्यादातर रिपोर्ट सेकंडों में तैयार।",
+        trust_cards_ssl_title: "SSL/TLS सुरक्षित कनेक्शन", trust_cards_ssl_desc: "ब्राउज़र और हमारे सर्वर के बीच ट्रैफ़िक एन्क्रिप्टेड।",
+        trust_cards_cloud_title: "Cloudflare नेटवर्क सुरक्षा", trust_cards_cloud_desc: "Cloudflare के ज़रिए अतिरिक्त सुरक्षा और परफॉर्मेंस।",
+        trust_chip_kvkk: "KVKK-अनुपालन प्रोसेसिंग", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "SSL/TLS एन्क्रिप्शन", trust_chip_purpose: "उद्देश्य-सीमित डेटा प्रोसेसिंग", trust_chip_not_medical: "चिकित्सा निदान उपकरण नहीं",
+        modal_login: "लॉग इन", modal_register: "मुफ्त रजिस्टर", placeholder_email: "ईमेल", placeholder_password: "पासवर्ड", placeholder_name: "पूरा नाम", placeholder_password_hint: "पासवर्ड (कम से कम 6 अक्षर)", placeholder_country: "देश चुनें", placeholder_phone: "फ़ोन (देश कोड के साथ, जैसे +90 555 123 45 67)", placeholder_password_confirm: "पासवर्ड की पुष्टि करें", placeholder_password_current: "वर्तमान पासवर्ड", forgot_desc: "अपना ईमेल दर्ज करें, हम आपको पासवर्ड रीसेट लिंक भेजेंगे।", forgot_btn_send: "भेजें", reset_title: "नया पासवर्ड सेट करें", reset_desc: "हमारे भेजे गए ईमेल के टोकन से अपना नया पासवर्ड दर्ज करें।", reset_btn: "पासवर्ड अपडेट करें", wizard_char_count: "{n} अक्षर", btn_analyze: "विश्लेषण", country_other: "अन्य",
+        aria_select_language: "भाषा चुनें", error_password_min: "पासवर्ड कम से कम 6 अक्षर का होना चाहिए।", error_password_mismatch: "पासवर्ड मेल नहीं खाते।", error_reset_link_invalid: "लिंक अमान्य या समाप्त। पासवर्ड रीसेट के लिए नया लिंक मांगें।", error_name_required: "कृपया अपना नाम दर्ज करें।", error_email_required: "कृपया ईमेल दर्ज करें।", error_phone_invalid: "कृपया मान्य फ़ोन नंबर दर्ज करें (देश कोड के साथ, जैसे +905551234567)।", error_country_required: "कृपया देश चुनें।", account_suspended: "आपका खाता निलंबित कर दिया गया है। संपर्क पृष्ठ के माध्यम से हमसे संपर्क करें।", register_failed: "रजिस्ट्रेशन विफल।",
         btn_login: "लॉग इन", btn_register: "रजिस्टर", no_account: "खाता नहीं है? ", have_account: "पहले से खाता है? ",
         register_email_verify: "रजिस्टर के बाद हम ईमेल सत्यापन लिंक भेजेंगे।", forgot_password: "पासवर्ड भूल गए",
         history_title: "विश्लेषण इतिहास", history_compare_title: "दो विश्लेषण की तुलना करें", history_select_analysis: "— विश्लेषण चुनें —", history_and: "और", history_compare_btn: "तुलना करें", history_timeline: "समयरेखा",
@@ -3948,9 +4158,9 @@
         trust_since: "Από το 2017", trust_satisfaction: "100% ικανοποίηση", trust_users: "100.000+ χρήστες", trust_badges_heading: "Ασφαλής και συμβατή υπηρεσία",
         trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR",
         trust_badge_secure_paytr: "🔒 Ασφαλής πληρωμή – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Κρυπτογραφημένη σύνδεση", footer_trust_kvkk_desc: "Προστασία προσωπικών δεδομένων", footer_trust_gdpr_desc: "Προστασία δεδομένων ΕΕ", footer_trust_paytr_desc: "Ασφαλής πληρωμή",
-        trust_cloudflare_title: "Προστασία από Cloudflare", trust_cloudflare_desc: "Προστασία κίνησης και παγκόσμιο CDN για ταχύτερη και ασφαλέστερη πρόσβαση.", trust_cloudflare_1: "Προστασία DDoS", trust_cloudflare_2: "Παγκόσμια επιτάχυνση CDN", trust_cloudflare_3: "Ασφάλεια edge",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Συμβατό με HIPAA",
+        footer_trust_ssl_desc: "Κυκλοφορία κρυπτογραφημένη SSL/TLS.", footer_trust_kvkk_desc: "Προσωπικά δεδομένα σύμφωνα με KVKK.", footer_trust_gdpr_desc: "Συμβατό με GDPR για ΕΕ.", footer_trust_paytr_desc: "Ασφαλής πληρωμή μέσω PayTR.", footer_trust_hipaa_desc: "Δεδομένα υγείας ασφαλή επεξεργασία.",
+        trust_cloudflare_title: "Προστασία από Cloudflare", trust_cloudflare_desc: "Προστασία κίνησης και γρήγορη πρόσβαση.", trust_cloudflare_1: "Προστασία DDoS", trust_cloudflare_2: "Παγκόσμια επιτάχυνση CDN", trust_cloudflare_3: "Ασφάλεια edge",
         how_title: "Πώς λειτουργεί η Norya;", how_desc: "Τρία απλά βήματα για να κατανοήσετε τα αποτελέσματά σας.",
         how_1: "Εγγραφή", how_1d: "Δημιουργήστε δωρεάν λογαριασμό.",
         how_2: "Επικολλήστε τα αποτελέσματα", how_2d: "Επικολλήστε τις τιμές ή το κείμενο από το φύλλο αποτελεσμάτων.",
@@ -4042,9 +4252,9 @@
         toast_report_pdf: "Η αναφορά λήφθηκε ως PDF.", toast_doctor_downloaded: "Αναφορά για τον γιατρό λήφθηκε.", toast_link_copied: "Ο σύνδεσμος αντιγράφηκε.",
         toast_analyze_first: "Κάντε πρώτα ανάλυση.", toast_pdf_fallback: "Δεν δημιουργήθηκε PDF· λήφθηκε αρχείο κειμένου.", toast_pdf_error: "Δεν δημιουργήθηκε PDF. Δοκιμάστε ξανά.",
         pricing_title: "Τιμές", pricing_eur: "Οι τιμές εμφανίζονται στο νόμισμά σας.", pricing_note_currency: "Τιμές σε {cur} ({sym}).",
-        price_single_title: "Μία ανάλυση", price_single_per: "μία φορά", price_single_1: "✓ 1 ανάλυση", price_single_2: "✓ Κείμενο, PDF ή εικόνα", price_single_3: "✓ Λεπτομερής αναφορά", price_btn_single: " — Μία ανάλυση",
-        price_monthly_title: "Μηνιαίο πλάνο", price_per_month: "/μήνα", price_monthly_per: "5 αναφορές/μήνα", price_monthly_1: "✓ 5 αναλύσεις το μήνα", price_monthly_2: "✓ Κείμενο, PDF και εικόνα", price_monthly_3: "✓ Αναφορά + ιστορικό", price_btn_monthly: "/μήνα — Ξεκινήστε",
-        price_best_badge: "Καλύτερη αξία", price_yearly_title: "Ετήσιο πλάνο", price_per_year: "/έτος", price_yearly_per: "13 + 3 δώρο = 16 αναλύσεις συνολικά", price_yearly_1: "✓ 16 αναλύσεις το χρόνο (3 δώρο απ' εμάς)", price_yearly_2: "✓ Κείμενο, PDF και εικόνα", price_yearly_3: "✓ Αναφορά + ιστορικό", price_btn_yearly: "/έτος — Ξεκινήστε",
+        price_single_title: "Μία ανάλυση", price_single_per: "μία φορά", price_single_1: "✓ 1 ανάλυση", price_single_2: "✓ Διατροφή + συμπληρώματα + καρδιακή υγεία", price_single_3: "✓ Λήψη και κοινοποίηση PDF", price_btn_single: " — Μία ανάλυση",
+        price_monthly_badge: "Δημοφιλέστερο", pricing_ai_detail: "Επίπεδο λεπτομέρειας AI", price_monthly_title: "Μηνιαίο πλάνο", price_per_month: "/μήνα", price_monthly_per: "5 αναλύσεις / μήνα", price_monthly_1: "✓ 5 πλήρεις αναλύσεις το μήνα", price_monthly_2: "✓ Σχέδιο διατροφής + συμπληρώματα", price_monthly_3: "✓ Ιστορικό και σύγκριση δύο αναλύσεων", price_monthly_4: "✓ Λήψη PDF, κοινοποίηση με τον γιατρό", price_btn_monthly: "/μήνα — Ξεκινήστε",
+        price_best_badge: "Καλύτερη αξία", price_best_badge_value: "Καλύτερη αξία", price_yearly_title: "Ετήσιο πλάνο", price_per_year: "/έτος", price_yearly_per: "16 αναλύσεις συνολικά (13 + 3 δώρο)", price_yearly_1: "✓ 16 αναλύσεις το χρόνο (13 + 3 δώρο)", price_yearly_2: "✓ Όλες οι ενότητες διατροφής και συμπληρωμάτων premium", price_yearly_3: "✓ Ιστορικό και προηγμένη σύγκριση", price_yearly_4: "✓ Ιδανικό για επισκέψεις γιατρού", price_btn_yearly: "/έτος — Ξεκινήστε",
         footer_desc: "Αποτελέσματα αιματολογικών εξηγημένα με απλή γλώσσα.", footer_disclaimer: "Εκπαιδευτικό εργαλείο. Συμβουλευτείτε πάντα επαγγελματία υγείας.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Αυτή η ανάλυση είναι μόνο ενημερωτική. Δεν αντικαθιστά ιατρική διάγνωση.",
         footer_mesafeli: "Σύμβαση τηλεπώλησης", footer_privacy: "Απόρρητο", footer_refund: "Επιστροφή και ακύρωση", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -4070,7 +4280,18 @@
         payment_refund_2: "· τα έγκυρα αιτήματα επεξεργάζονται σύμφωνα με τον τρόπο πληρωμής.",
         payment_credit_issue: "Η πληρωμή ελήφθη αλλά δεν προστέθηκε πίστωση. Αν η πληρωμή επιβεβαιώθηκε αλλά δεν προστέθηκε πίστωση, επικοινωνήστε μαζί μας με αριθμό παραγγελίας ή στοιχεία πληρωμής. Θα ελέγξουμε και θα διορθώσουμε το συντομότερο.",
         price_no_renewal: "Τα Pro πακέτα ισχύουν για την αγορασμένη περίοδο (30 ημέρες μηνιαία, 365 ετήσια). Χωρίς αυτόματη ανανέωση.",
-        modal_login: "Σύνδεση", modal_register: "Δωρεάν εγγραφή", placeholder_email: "Email", placeholder_password: "Κωδικός", placeholder_name: "Ονοματεπώνυμο", placeholder_password_hint: "Κωδικός (min 6 χαρακτήρες)",
+        pricing_yearly_saving: "501€ εξοικονόμηση σε σχέση με το μηνιαίο (83%)",
+        pricing_yearly_math: "Αντί για 50€ x 12 = 600€, πληρώνετε 99€ μία φορά το χρόνο.",
+        trust_title: "Ασφαλής και συμβατή υπηρεσία",
+        trust_subtitle: "Τα δεδομένα σας επεξεργάζονται μόνο για τη δημιουργία της αναφοράς. Η Norya δεν κάνει ιατρική διάγνωση· παρέχει επεξηγήσεις με τεχνητή νοημοσύνη για ενημερωτικούς σκοπούς.",
+        trust_cards_langs_title: "Υποστήριξη 9+ γλωσσών", trust_cards_langs_desc: "Διαβάστε την αναφορά στα τουρκικά, αγγλικά και άλλες υποστηριζόμενες γλώσσες.",
+        trust_cards_input_title: "Ευέλικτοι τύποι εισόδου", trust_cards_input_desc: "Επικολλήστε κείμενο, ανεβάστε PDF ή φωτογραφία για να ξεκινήσετε την ανάλυση.",
+        trust_cards_speed_title: "Αποτελέσματα σε λιγότερο από λεπτό", trust_cards_speed_desc: "Όταν οι διακομιστές είναι διαθέσιμοι, οι περισσότερες αναφορές είναι έτοιμες σε δευτερόλεπτα.",
+        trust_cards_ssl_title: "Ασφαλής σύνδεση SSL/TLS", trust_cards_ssl_desc: "Η κίνηση μεταξύ προγράμματος περιήγησης και διακομιστών είναι κρυπτογραφημένη.",
+        trust_cards_cloud_title: "Προστασία δικτύου Cloudflare", trust_cards_cloud_desc: "Επιπλέον ασφάλεια και απόδοση μέσω Cloudflare.",
+        trust_chip_kvkk: "Επεξεργασία σύμφωνα με KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Κρυπτογράφηση SSL/TLS", trust_chip_purpose: "Επεξεργασία δεδομένων για συγκεκριμένο σκοπό", trust_chip_not_medical: "Δεν είναι ιατρικό εργαλείο διάγνωσης",
+        modal_login: "Σύνδεση", modal_register: "Δωρεάν εγγραφή", placeholder_email: "Email", placeholder_password: "Κωδικός", placeholder_name: "Ονοματεπώνυμο", placeholder_password_hint: "Κωδικός (min 6 χαρακτήρες)", placeholder_country: "Επιλέξτε χώρα", placeholder_phone: "Τηλέφωνο (με κωδικό χώρας, π.χ. +90 555 123 45 67)", placeholder_password_confirm: "Επιβεβαίωση κωδικού", placeholder_password_current: "Τρέχων κωδικός", forgot_desc: "Εισάγετε το email σας και θα σας στείλουμε σύνδεσμο επαναφοράς κωδικού.", forgot_btn_send: "Αποστολή", reset_title: "Ορισμός νέου κωδικού", reset_desc: "Εισάγετε τον νέο κωδικό σας χρησιμοποιώντας το token από το email που σας στείλαμε.", reset_btn: "Ενημέρωση κωδικού", wizard_char_count: "{n} χαρακτήρες", btn_analyze: "Ανάλυση", country_other: "Άλλο",
+        aria_select_language: "Επιλέξτε γλώσσα", error_password_min: "Ο κωδικός πρέπει να έχει τουλάχιστον 6 χαρακτήρες.", error_password_mismatch: "Οι κωδικοί δεν ταιριάζουν.", error_reset_link_invalid: "Μη έγκυρος ή ληγμένος σύνδεσμος. Ζητήστε νέο σύνδεσμο για επαναφορά κωδικού.", error_name_required: "Εισάγετε το όνομά σας.", error_email_required: "Εισάγετε το email σας.", error_phone_invalid: "Εισάγετε έγκυρο αριθμό τηλεφώνου (με κωδικό χώρας, π.χ. +905551234567).", error_country_required: "Επιλέξτε χώρα.", account_suspended: "Ο λογαριασμός σας έχει ανασταλεί. Επικοινωνήστε μαζί μας μέσω της σελίδας επικοινωνίας.", register_failed: "Η εγγραφή απέτυχε.",
         btn_login: "Σύνδεση", btn_register: "Εγγραφή", no_account: "Δεν έχετε λογαριασμό; ", have_account: "Έχετε ήδη λογαριασμό; ",
         register_email_verify: "Μετά την εγγραφή θα σας στείλουμε σύνδεσμο επαλήθευσης email.", forgot_password: "Ξέχασα τον κωδικό",
         history_title: "Ιστορικό αναλύσεων", history_compare_title: "Σύγκριση δύο αναλύσεων", history_select_analysis: "— Επιλέξτε ανάλυση —", history_and: "και", history_compare_btn: "Σύγκριση", history_timeline: "Χρονολόγιο",
@@ -4102,9 +4323,9 @@
         trust_since: "Od 2017", trust_satisfaction: "100% spokojenost", trust_users: "100 000+ uživatelů", trust_badges_heading: "Zabezpečená a compliantní služba",
         trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR",
         trust_badge_secure_paytr: "🔒 Zabezpečená platba – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Šifrované připojení", footer_trust_kvkk_desc: "Ochrana osobních údajů", footer_trust_gdpr_desc: "Ochrana údajů EU", footer_trust_paytr_desc: "Zabezpečená platba",
-        trust_cloudflare_title: "Chráněno Cloudflare", trust_cloudflare_desc: "Ochrana provozu a globální CDN pro rychlejší a bezpečnější přístup.", trust_cloudflare_1: "Ochrana DDoS", trust_cloudflare_2: "Globální CDN zrychlení", trust_cloudflare_3: "Edge zabezpečení",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Soulad s HIPAA",
+        footer_trust_ssl_desc: "Provoz šifrován SSL/TLS.", footer_trust_kvkk_desc: "Osobní údaje dle KVKK.", footer_trust_gdpr_desc: "V souladu s GDPR pro EU.", footer_trust_paytr_desc: "Zabezpečená platba PayTR.", footer_trust_hipaa_desc: "Zdravotní údaje zpracovány bezpečně.",
+        trust_cloudflare_title: "Chráněno Cloudflare", trust_cloudflare_desc: "Ochrana provozu a rychlý přístup.", trust_cloudflare_1: "Ochrana DDoS", trust_cloudflare_2: "Globální CDN zrychlení", trust_cloudflare_3: "Edge zabezpečení",
         how_title: "Jak funguje Norya?", how_desc: "Tři jednoduché kroky k pochopení výsledků.",
         how_1: "Registrace", how_1d: "Vytvořte si bezplatný účet.",
         how_2: "Vložte výsledky", how_2d: "Vložte hodnoty nebo text z výsledkového listu.",
@@ -4196,9 +4417,9 @@
         toast_report_pdf: "Zpráva stažena jako PDF.", toast_doctor_downloaded: "Zpráva pro lékaře stažena.", toast_link_copied: "Odkaz zkopírován.",
         toast_analyze_first: "Nejprve proveďte analýzu.", toast_pdf_fallback: "PDF se nepodařilo vytvořit; stažen textový soubor.", toast_pdf_error: "PDF se nepodařilo vytvořit. Zkuste to znovu.",
         pricing_title: "Ceny", pricing_eur: "Ceny se zobrazují ve vaší měně.", pricing_note_currency: "Ceny v {cur} ({sym}).",
-        price_single_title: "Jedna analýza", price_single_per: "jednorázově", price_single_1: "✓ 1 analýza", price_single_2: "✓ Text, PDF nebo obrázek", price_single_3: "✓ Podrobná zpráva", price_btn_single: " — Jedna analýza",
-        price_monthly_title: "Měsíční plán", price_per_month: "/měsíc", price_monthly_per: "5 reportů/měsíc", price_monthly_1: "✓ 5 analýz měsíčně", price_monthly_2: "✓ Text, PDF a obrázek", price_monthly_3: "✓ Zpráva + historie", price_btn_monthly: "/měsíc — Začít",
-        price_best_badge: "Nejvýhodnější", price_yearly_title: "Roční plán", price_per_year: "/rok", price_yearly_per: "13 + 3 zdarma = 16 analýz celkem", price_yearly_1: "✓ 16 analýz ročně (3 od nás zdarma)", price_yearly_2: "✓ Text, PDF a obrázek", price_yearly_3: "✓ Zpráva + historie", price_btn_yearly: "/rok — Začít",
+        price_single_title: "Jedna analýza", price_single_per: "jednorázově", price_single_1: "✓ 1 analýza", price_single_2: "✓ Strava + doplňky + zdraví srdce", price_single_3: "✓ Stáhnout a sdílet PDF", price_btn_single: " — Jedna analýza",
+        price_monthly_badge: "Nejoblíbenější", pricing_ai_detail: "Úroveň detailu AI", price_monthly_title: "Měsíční plán", price_per_month: "/měsíc", price_monthly_per: "5 analýz / měsíc", price_monthly_1: "✓ 5 plných analýz měsíčně", price_monthly_2: "✓ Jídelníček + doplňky", price_monthly_3: "✓ Historie a porovnání dvou analýz", price_monthly_4: "✓ Stáhnout PDF, sdílet s lékařem", price_btn_monthly: "/měsíc — Začít",
+        price_best_badge: "Nejvýhodnější", price_best_badge_value: "Nejlepší hodnota", price_yearly_title: "Roční plán", price_per_year: "/rok", price_yearly_per: "16 analýz celkem (13 + 3 zdarma)", price_yearly_1: "✓ 16 analýz ročně (13 + 3 zdarma)", price_yearly_2: "✓ Všechny prémiové sekce stravy a doplňků", price_yearly_3: "✓ Historie a pokročilé porovnání", price_yearly_4: "✓ Ideální pro návštěvy u lékaře", price_btn_yearly: "/rok — Začít",
         footer_desc: "Výsledky krevních testů vysvětlené srozumitelným jazykem.", footer_disclaimer: "Vzdělávací nástroj. Vždy se poraďte s lékařem.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Tato analýza je pouze informativní. Nenahrazuje lékařskou diagnózu.",
         footer_mesafeli: "Smlouva o dálkovém prodeji", footer_privacy: "Soukromí", footer_refund: "Vrácení a zrušení", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -4224,7 +4445,18 @@
         payment_refund_2: "; platné žádosti budou zpracovány podle platební metody.",
         payment_credit_issue: "Platba byla přijata, ale nebyl přidán kredit. Pokud byla platba potvrzena, ale kredit nebyl přidán, kontaktujte nás s číslem objednávky nebo údaji o platbě. Zkontrolujeme a opravíme co nejdříve.",
         price_no_renewal: "Pro balíčky platí pro zakoupené období (30 dní měsíčně, 365 ročně). Bez automatického obnovení.",
-        modal_login: "Přihlásit", modal_register: "Registrace zdarma", placeholder_email: "E-mail", placeholder_password: "Heslo", placeholder_name: "Jméno", placeholder_password_hint: "Heslo (min. 6 znaků)",
+        pricing_yearly_saving: "Úspora 501€ oproti měsíčnímu plánu (83 %)",
+        pricing_yearly_math: "Místo 50€ x 12 = 600€ zaplatíte jednou ročně 99€.",
+        trust_title: "Bezpečná a compliantní služba",
+        trust_subtitle: "Vaše data se zpracovávají pouze pro vygenerování reportu. Norya nestanovuje lékařské diagnózy; poskytuje vysvětlení s podporou AI pro informační účely.",
+        trust_cards_langs_title: "Podpora 9+ jazyků", trust_cards_langs_desc: "Přečtěte si report v turečtině, angličtině a dalších podporovaných jazycích.",
+        trust_cards_input_title: "Flexibilní typy vstupu", trust_cards_input_desc: "Vložte text, nahrajte PDF nebo fotku a spusťte analýzu.",
+        trust_cards_speed_title: "Výsledky za méně než minutu", trust_cards_speed_desc: "Když jsou servery k dispozici, většina reportů je hotová během sekund.",
+        trust_cards_ssl_title: "Zabezpečené připojení SSL/TLS", trust_cards_ssl_desc: "Provoz mezi prohlížečem a našimi servery je šifrovaný.",
+        trust_cards_cloud_title: "Ochrana sítě Cloudflare", trust_cards_cloud_desc: "Další zabezpečení a výkon díky Cloudflare.",
+        trust_chip_kvkk: "Zpracování v souladu s KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Šifrování SSL/TLS", trust_chip_purpose: "Zpracování dat pro omezený účel", trust_chip_not_medical: "Není nástroj lékařské diagnózy",
+        modal_login: "Přihlásit", modal_register: "Registrace zdarma", placeholder_email: "E-mail", placeholder_password: "Heslo", placeholder_name: "Jméno", placeholder_password_hint: "Heslo (min. 6 znaků)", placeholder_country: "Vyberte zemi", placeholder_phone: "Telefon (s předvolbou, např. +90 555 123 45 67)", placeholder_password_confirm: "Potvrdit heslo", placeholder_password_current: "Aktuální heslo", forgot_desc: "Zadejte e-mail a pošleme vám odkaz pro obnovení hesla.", forgot_btn_send: "Odeslat", reset_title: "Nastavit nové heslo", reset_desc: "Zadejte nové heslo pomocí tokenu z e-mailu, který jsme vám poslali.", reset_btn: "Aktualizovat heslo", wizard_char_count: "{n} znaků", btn_analyze: "Analyzovat", country_other: "Jiné",
+        aria_select_language: "Vyberte jazyk", error_password_min: "Heslo musí mít alespoň 6 znaků.", error_password_mismatch: "Hesla se neshodují.", error_reset_link_invalid: "Neplatný nebo vypršený odkaz. Požádejte o nový odkaz pro obnovení hesla.", error_name_required: "Zadejte své jméno.", error_email_required: "Zadejte e-mail.", error_phone_invalid: "Zadejte platné telefonní číslo (s předvolbou, např. +905551234567).", error_country_required: "Vyberte zemi.", account_suspended: "Váš účet byl pozastaven. Kontaktujte nás přes stránku kontaktu.", register_failed: "Registrace se nezdařila.",
         btn_login: "Přihlásit", btn_register: "Registrovat", no_account: "Nemáte účet? ", have_account: "Už máte účet? ",
         register_email_verify: "Po registraci vám pošleme odkaz na ověření e-mailu.", forgot_password: "Zapomenuté heslo",
         history_title: "Historie analýz", history_compare_title: "Porovnat dvě analýzy", history_select_analysis: "— Vyberte analýzu —", history_and: "a", history_compare_btn: "Porovnat", history_timeline: "Časová osa",
@@ -4256,9 +4488,9 @@
         trust_since: "Od 2017", trust_satisfaction: "100% zadovoljstvo", trust_users: "100.000+ korisnika", trust_badges_heading: "Sigurna i usklađena usluga",
         trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR",
         trust_badge_secure_paytr: "🔒 Sigurna plaćanja – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure",
-        footer_trust_ssl_desc: "Šifrovana konekcija", footer_trust_kvkk_desc: "Zaštita ličnih podataka", footer_trust_gdpr_desc: "Zaštita podataka EU", footer_trust_paytr_desc: "Sigurna plaćanja",
-        trust_cloudflare_title: "Zaštićeno od strane Cloudflare", trust_cloudflare_desc: "Zaštita saobraćaja i globalni CDN za brži i sigurniji pristup.", trust_cloudflare_1: "DDoS zaštita", trust_cloudflare_2: "Globalno CDN ubrzanje", trust_cloudflare_3: "Edge bezbednost",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "U skladu sa HIPAA",
+        footer_trust_ssl_desc: "Saobráćaj šifrovan SSL/TLS.", footer_trust_kvkk_desc: "Lični podaci u skladu sa KVKK.", footer_trust_gdpr_desc: "U skladu sa GDPR za EU.", footer_trust_paytr_desc: "Sigurna plaćanja putem PayTR.", footer_trust_hipaa_desc: "Zdravstveni podaci sigurno obrađeni.",
+        trust_cloudflare_title: "Zaštićeno od strane Cloudflare", trust_cloudflare_desc: "Zaštita saobraćaja i brz pristup.", trust_cloudflare_1: "DDoS zaštita", trust_cloudflare_2: "Globalno CDN ubrzanje", trust_cloudflare_3: "Edge bezbednost",
         how_title: "Kako funkcioniše Norya?", how_desc: "Tri jednostavna koraka za razumevanje rezultata.",
         how_1: "Registracija", how_1d: "Napravite besplatan nalog.",
         how_2: "Nalepite rezultate", how_2d: "Nalepite vrednosti ili tekst sa listića rezultata.",
@@ -4350,9 +4582,9 @@
         toast_report_pdf: "Izveštaj preuzet kao PDF.", toast_doctor_downloaded: "Izveštaj za lekara preuzet.", toast_link_copied: "Link kopiran.",
         toast_analyze_first: "Prvo uradite analizu.", toast_pdf_fallback: "PDF nije kreiran; preuzet je tekstualni fajl.", toast_pdf_error: "PDF nije kreiran. Pokušajte ponovo.",
         pricing_title: "Cene", pricing_eur: "Cene su prikazane u vašoj valuti.", pricing_note_currency: "Cene u {cur} ({sym}).",
-        price_single_title: "Jedna analiza", price_single_per: "jednokratno", price_single_1: "✓ 1 analiza", price_single_2: "✓ Tekst, PDF ili slika", price_single_3: "✓ Detaljan izveštaj", price_btn_single: " — Jedna analiza",
-        price_monthly_title: "Mesečni plan", price_per_month: "/mesec", price_monthly_per: "5 izveštaja/mesec", price_monthly_1: "✓ 5 analiza mesečno", price_monthly_2: "✓ Tekst, PDF i slika", price_monthly_3: "✓ Izveštaj + istorija", price_btn_monthly: "/mesec — Počnite",
-        price_best_badge: "Najpovoljnije", price_yearly_title: "Godišnji plan", price_per_year: "/godinu", price_yearly_per: "13 + 3 poklon = 16 analiza ukupno", price_yearly_1: "✓ 16 analiza godišnje (3 u poklon od nas)", price_yearly_2: "✓ Tekst, PDF i slika", price_yearly_3: "✓ Izveštaj + istorija", price_btn_yearly: "/godinu — Počnite",
+        price_single_title: "Jedna analiza", price_single_per: "jednokratno", price_single_1: "✓ 1 analiza", price_single_2: "✓ Dijeta + suplementi + zdravlje srca", price_single_3: "✓ Preuzmi i podeli PDF", price_btn_single: " — Jedna analiza",
+        price_monthly_badge: "Najpopularnije", pricing_ai_detail: "Nivo detalja AI", price_monthly_title: "Mesečni plan", price_per_month: "/mesec", price_monthly_per: "5 analiza / mesec", price_monthly_1: "✓ 5 punih analiza mesečno", price_monthly_2: "✓ Dijetetski plan + suplementi", price_monthly_3: "✓ Istorija i uporedi dve analize", price_monthly_4: "✓ Preuzmi PDF, podeli sa lekarom", price_btn_monthly: "/mesec — Počnite",
+        price_best_badge: "Najpovoljnije", price_best_badge_value: "Najbolja vrednost", price_yearly_title: "Godišnji plan", price_per_year: "/godinu", price_yearly_per: "16 analiza ukupno (13 + 3 u poklon)", price_yearly_1: "✓ 16 analiza godišnje (13 + 3 u poklon)", price_yearly_2: "✓ Sve premium sekcije dijete i suplementata", price_yearly_3: "✓ Istorija i napredno upoređivanje", price_yearly_4: "✓ Idealno za posete lekaru", price_btn_yearly: "/godinu — Počnite",
         footer_desc: "Rezultati krvnih testova objašnjeni jasnim jezikom.", footer_disclaimer: "Obrazovni alat. Uvek posavetujte se sa lekarom.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Ova analiza je samo informativna. Ne zamenjuje medicinsku dijagnozu.",
         footer_mesafeli: "Ugovor o prodaji na daljinu", footer_privacy: "Privatnost", footer_refund: "Povrat i otkazivanje", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -4378,7 +4610,18 @@
         payment_refund_2: "; validni zahtevi obrađuju se prema načinu plaćanja.",
         payment_credit_issue: "Plaćanje je primljeno ali kredit nije dodat. Ako je plaćanje potvrđeno ali kredit nije dodat, kontaktirajte nas sa brojem porudžbine ili podacima o plaćanju. Proverićemo i ispraviti što pre.",
         price_no_renewal: "Pro paketi važe za kupljeni period (30 dana mesečno, 365 godišnje). Nema automatskog obnavljanja.",
-        modal_login: "Prijava", modal_register: "Besplatna registracija", placeholder_email: "Email", placeholder_password: "Lozinka", placeholder_name: "Ime", placeholder_password_hint: "Lozinka (min. 6 znakova)",
+        pricing_yearly_saving: "Ušteda 501€ u odnosu na mesečni plan (83%)",
+        pricing_yearly_math: "Umesto 50€ x 12 = 600€, plaćate 99€ jednom godišnje.",
+        trust_title: "Sigurna i usklađena usluga",
+        trust_subtitle: "Vaši podaci se obrađuju samo za generisanje izveštaja. Norya ne postavlja medicinsku dijagnozu; pruža objašnjenja uz pomoć AI u informativne svrhe.",
+        trust_cards_langs_title: "Podrška za 9+ jezika", trust_cards_langs_desc: "Čitajte izveštaj na turskom, engleskom i drugim podržanim jezicima.",
+        trust_cards_input_title: "Fleksibilni tipovi unosa", trust_cards_input_desc: "Nalepite tekst, otpremite PDF ili fotografiju da biste pokrenuli analizu.",
+        trust_cards_speed_title: "Rezultati za manje od minuta", trust_cards_speed_desc: "Kada su serveri dostupni, većina izveštaja je spremna za nekoliko sekundi.",
+        trust_cards_ssl_title: "Sigurna veza SSL/TLS", trust_cards_ssl_desc: "Saobraćaj između pregledača i naših servera je šifrovan.",
+        trust_cards_cloud_title: "Zaštita mreže Cloudflare", trust_cards_cloud_desc: "Dodatna bezbednost i performanse putem Cloudflare.",
+        trust_chip_kvkk: "Obrada u skladu sa KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Šifrovanje SSL/TLS", trust_chip_purpose: "Obrada podataka za ograničenu svrhu", trust_chip_not_medical: "Nije alat za medicinsku dijagnozu",
+        modal_login: "Prijava", modal_register: "Besplatna registracija", placeholder_email: "Email", placeholder_password: "Lozinka", placeholder_name: "Ime", placeholder_password_hint: "Lozinka (min. 6 znakova)", placeholder_country: "Izaberite državu", placeholder_phone: "Telefon (sa pozivnim brojem, npr. +90 555 123 45 67)", placeholder_password_confirm: "Potvrdite lozinku", placeholder_password_current: "Trenutna lozinka", forgot_desc: "Unesite email i poslaćemo vam link za reset lozinke.", forgot_btn_send: "Pošalji", reset_title: "Postavite novu lozinku", reset_desc: "Unesite novu lozinku koristeći token iz emaila koji smo vam poslali.", reset_btn: "Ažuriraj lozinku", wizard_char_count: "{n} znakova", btn_analyze: "Analiziraj", country_other: "Ostalo",
+        aria_select_language: "Izaberite jezik", error_password_min: "Lozinka mora imati najmanje 6 znakova.", error_password_mismatch: "Lozinke se ne poklapaju.", error_reset_link_invalid: "Nevažeća ili istekla veza. Zatražite novu vezu za reset lozinke.", error_name_required: "Unesite ime.", error_email_required: "Unesite email.", error_phone_invalid: "Unesite ispravan broj telefona (sa pozivnim brojem, npr. +905551234567).", error_country_required: "Izaberite državu.", account_suspended: "Vaš nalog je suspendovan. Kontaktirajte nas putem stranice za kontakt.", register_failed: "Registracija nije uspela.",
         btn_login: "Prijava", btn_register: "Registruj se", no_account: "Nemate nalog? ", have_account: "Već imate nalog? ",
         register_email_verify: "Posle registracije poslaćemo vam link za verifikaciju emaila.", forgot_password: "Zaboravljena lozinka",
         history_title: "Istorija analiza", history_compare_title: "Uporedi dve analize", history_select_analysis: "— Izaberite analizu —", history_and: "i", history_compare_btn: "Uporedi", history_timeline: "Vremenska linija",
@@ -4452,12 +4695,28 @@
         var key = el.getAttribute("data-i18n-placeholder");
         if (T[lang] && T[lang][key]) el.placeholder = T[lang][key];
       });
+      document.querySelectorAll("[data-i18n-aria-label]").forEach(function(el) {
+        var key = el.getAttribute("data-i18n-aria-label");
+        if (T[lang] && T[lang][key]) el.setAttribute("aria-label", T[lang][key]);
+      });
+      var charEl = document.getElementById("wizard-preview-char");
+      if (charEl && T[lang] && T[lang].wizard_char_count) {
+        var analyzeText = document.getElementById("analyze-text");
+        var n = (analyzeText && analyzeText.value) ? analyzeText.value.length : 0;
+        charEl.textContent = T[lang].wizard_char_count.replace("{n}", n);
+      }
       // Güvenlik badge'leri ve tüm çevirilerin dil değişince kesin uygulanması için kısa gecikmeyle tekrar uygula
       setTimeout(function() {
         document.querySelectorAll("[data-i18n]").forEach(function(el) {
           var key = el.getAttribute("data-i18n");
           if (T[lang] && T[lang][key]) el.textContent = T[lang][key];
         });
+        var charEl2 = document.getElementById("wizard-preview-char");
+        if (charEl2 && T[lang] && T[lang].wizard_char_count) {
+          var analyzeText2 = document.getElementById("analyze-text");
+          var n2 = (analyzeText2 && analyzeText2.value) ? analyzeText2.value.length : 0;
+          charEl2.textContent = T[lang].wizard_char_count.replace("{n}", n2);
+        }
         if (typeof loadPricing === 'function') loadPricing();
         if (getToken()) {
           if (typeof loadUsage === 'function') loadUsage();
@@ -4504,7 +4763,7 @@
           } else if (meRes.status === 403 || meRes.status === 401) {
             clearAuth();
             user = {};
-            toast(meRes.status === 403 ? 'Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.' : 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.', 'info');
+            toast(meRes.status === 403 ? (typeof t === 'function' ? t('account_suspended') : 'Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.') : (typeof t === 'function' ? t('session_expired') : 'Oturumunuz sona erdi. Lütfen tekrar giriş yapın.'), 'info');
           }
         } catch (_) {}
       }
@@ -4585,8 +4844,8 @@
       errEl.classList.add('hidden');
       var email = (document.getElementById('login-email').value || '').trim();
       var password = document.getElementById('login-password').value || '';
-      if (!email) { errEl.textContent = 'E-posta girin.'; errEl.classList.remove('hidden'); return; }
-      if (!password) { errEl.textContent = 'Şifre girin.'; errEl.classList.remove('hidden'); return; }
+      if (!email) { errEl.textContent = (typeof t === 'function' ? t('error_email_required') : 'E-posta girin.'); errEl.classList.remove('hidden'); return; }
+      if (!password) { errEl.textContent = (typeof t === 'function' ? t('placeholder_password') : 'Şifre girin.'); errEl.classList.remove('hidden'); return; }
       var body = new URLSearchParams();
       body.append('email', email);
       body.append('password', password);
@@ -4638,8 +4897,8 @@
           return 'Eksik alan var. Lütfen e-posta ve şifreyi (en az 6 karakter) tekrar kontrol edin.';
         }
         if (/email|e-posta|valid/i.test(m)) return 'Geçerli bir e-posta girin (örn: ornek@gmail.com).';
-        if (/password|şifre|6 karakter/i.test(m)) return 'Şifre en az 6 karakter olmalı.';
-        return first.msg || first.message || 'Kayıt başarısız.';
+        if (/password|şifre|6 karakter/i.test(m)) return (typeof t === 'function' ? t('error_password_min') : 'Şifre en az 6 karakter olmalı.');
+        return first.msg || first.message || (typeof t === 'function' ? t('register_failed') : 'Kayıt başarısız.');
       }
       return data.detail ? String(data.detail) : (status === 500 ? 'Bir hata oluştu. Lütfen kısa süre sonra tekrar deneyin.' : 'Kayıt başarısız.');
     }
@@ -4653,11 +4912,11 @@
       var phone = (document.getElementById('register-phone').value || '').trim().replace(/\s/g, '');
       var country = (document.getElementById('register-country').value || '').trim();
       var password = document.getElementById('register-password').value || '';
-      if (!fullName) { errEl.textContent = 'Ad soyad girin.'; errEl.classList.remove('hidden'); return; }
-      if (!email) { errEl.textContent = 'E-posta girin.'; errEl.classList.remove('hidden'); return; }
-      if (!password || password.length < 6) { errEl.textContent = 'Şifre en az 6 karakter olmalı.'; errEl.classList.remove('hidden'); return; }
-      if (!phone || phone.length < 5) { errEl.textContent = 'Geçerli bir telefon numarası girin (ülke kodu ile, örn. +905551234567).'; errEl.classList.remove('hidden'); return; }
-      if (!country || country.length !== 2) { errEl.textContent = 'Ülke seçin.'; errEl.classList.remove('hidden'); return; }
+      if (!fullName) { errEl.textContent = (typeof t === 'function' ? t('error_name_required') : 'Ad soyad girin.'); errEl.classList.remove('hidden'); return; }
+      if (!email) { errEl.textContent = (typeof t === 'function' ? t('error_email_required') : 'E-posta girin.'); errEl.classList.remove('hidden'); return; }
+      if (!password || password.length < 6) { errEl.textContent = (typeof t === 'function' ? t('error_password_min') : 'Şifre en az 6 karakter olmalı.'); errEl.classList.remove('hidden'); return; }
+      if (!phone || phone.length < 5) { errEl.textContent = (typeof t === 'function' ? t('error_phone_invalid') : 'Geçerli bir telefon numarası girin (ülke kodu ile, örn. +905551234567).'); errEl.classList.remove('hidden'); return; }
+      if (!country || country.length !== 2) { errEl.textContent = (typeof t === 'function' ? t('error_country_required') : 'Ülke seçin.'); errEl.classList.remove('hidden'); return; }
       var body = new URLSearchParams();
       body.append('full_name', fullName);
       body.append('email', email);
@@ -5185,7 +5444,7 @@
           if (textBlock) textBlock.classList.remove('hidden');
           if (thumb) { thumb.innerHTML = ''; var s = document.createElement('span'); s.textContent = '📋'; s.className = 'text-2xl'; thumb.appendChild(s); }
           var charEl = document.getElementById('wizard-preview-char');
-          if (charEl) charEl.textContent = text.length + ' karakter';
+          if (charEl) charEl.textContent = (typeof t === 'function' ? t('wizard_char_count') : (text.length + ' karakter')).replace('{n}', text.length);
         }
       }
 

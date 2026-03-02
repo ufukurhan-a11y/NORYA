@@ -83,6 +83,51 @@ uvicorn app.main:app --reload
 
 Frontend `static/index.html` tek sayfa: mor tema, hero, “Nasıl çalışır”, giriş/kayıt modalleri ve tahlil metni analiz kutusu. [Kantesti](https://www.kantesti.net/tr/) benzeri yapıdadır.
 
+## SQLite veritabanı için yedek alma
+
+Geliştirme ortamında SQLite (`norya.db`) kullanıyorsan, projede basit bir yedekleme script’i var.
+
+### Manuel yedek
+
+```bash
+cd /Users/ufukurhan/norya
+python scripts/backup_db.py
+```
+
+- Varsayılan kaynak dosya: proje kökündeki `norya.db`
+- İstersen ortam değişkeni ile değiştirebilirsin:
+
+```bash
+DB_PATH=/full/path/to/your.db python scripts/backup_db.py
+```
+
+Yedekler şu yapıda alınır:
+
+```text
+backups/YYYY/MM/norya-YYYYMMDD-HHMMSS.db
+```
+
+- Eski yedekler **ASLA silinmez**; her çağrıda yeni bir dosya oluşturulur.
+- İşlem başarılı olursa terminalde:
+
+```text
+OK: backups/2026/03/norya-20260302-142530.db
+```
+
+görürsün; hata durumunda `ERROR: ...` ve `exit code 1` döner.
+
+### (Opsiyonel) Otomatik yedek için örnekler
+
+**macOS launchd / crontab örneği (geliştirme içindir, production için kendi hosting dokümanına bak):**
+
+```bash
+# Günde bir kez saat 03:15'te yedek al
+crontab -e
+15 3 * * * cd /Users/ufukurhan/norya && /usr/bin/env DB_PATH=/Users/ufukurhan/norya/norya.db /usr/bin/env python scripts/backup_db.py >> /Users/ufukurhan/norya/backup.log 2>&1
+```
+
+Render veya başka bir PaaS kullanıyorsan, kendi scheduler/cron mekanizmasına yukarıdaki komutu benzer şekilde ekleyebilirsin; uygulama kodunda bir değişiklik yapmana gerek yok.
+
 ## Misafir ödeme (kayıt olmadan tek analiz)
 
 - **Tek analiz** kartında giriş yapmamış kullanıcılar "Tek Analiz" butonuna basınca **kayıt olmadan ödeme** modali açılır.
