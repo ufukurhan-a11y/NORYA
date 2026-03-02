@@ -327,7 +327,7 @@
         <div class="p-4 space-y-3 text-left">
           <div>
             <p class="text-primary-200/90 text-xs font-semibold uppercase tracking-wide mb-0.5" data-i18n="example_report_summary_title">Özet</p>
-            <p class="text-white/90 text-sm leading-relaxed" data-i18n="hero_sample_summary">Değerleriniz genel olarak referans aralığında. Hemoglobin ve glukoz normal; doktorunuzla rutin takibi sürdürün.</p>
+            <p class="text-white/90 text-sm leading-relaxed" data-i18n="hero_sample_summary">Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.</p>
           </div>
           <div class="flex gap-2 flex-wrap">
             <span class="inline-flex items-center gap-1.5 text-xs px-2.5 py-1 rounded-lg bg-emerald-500/20 text-white border border-emerald-400/25"><span class="w-1.5 h-1.5 rounded-full bg-emerald-300"></span> <span data-i18n="hero_sample_normal">Normal</span></span>
@@ -490,20 +490,24 @@
           <div class="p-4 space-y-3">
             <div class="rounded-xl p-3 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800">
               <p class="text-xs font-semibold text-accent-800 dark:text-accent-200 mb-1" data-i18n="example_report_summary_title">Özet</p>
-              <p class="text-accent-700 dark:text-accent-300 text-xs leading-relaxed" data-i18n="before_after_after_summary">Kan sayımı ve metabolik panel genel olarak normal. Hemoglobin, glukoz ve böbrek değerleri referans aralığında. Rutin takip önerilir.</p>
+              <p class="text-accent-700 dark:text-accent-300 text-xs leading-relaxed" data-i18n="before_after_after_summary">Kan sayımı ve metabolik panelde orta derecede sonuçlar: birçok parametre referans aralığında, bazıları sınırda. Hemoglobin, glukoz, lipidler, karaciğer ve böbrek değerleri detaylı açıklanır. Rutin takip ve doktor görüşmesi önerilir.</p>
             </div>
             <div class="rounded-xl p-3 bg-accent-50 dark:bg-accent-900/30 border border-accent-200 dark:border-accent-700">
               <p class="text-xs font-semibold text-accent-800 dark:text-accent-200 mb-2" data-i18n="example_report_values_title">Değerler</p>
               <div class="space-y-2">
-                <div class="flex justify-between items-center text-xs"><span class="text-accent-700 dark:text-accent-300">Hemoglobin</span><span class="text-emerald-600 dark:text-emerald-400 font-medium">14.2 g/dL ✓</span></div>
-                <div class="h-1.5 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-2/5 rounded-full bg-emerald-500"></div></div>
-                <div class="flex justify-between items-center text-xs"><span class="text-accent-700 dark:text-accent-300">Glukoz</span><span class="text-emerald-600 dark:text-emerald-400 font-medium">98 mg/dL ✓</span></div>
+                <div class="flex justify-between items-center text-xs"><span class="text-accent-700 dark:text-accent-300">Hemoglobin</span><span class="text-amber-600 dark:text-amber-400 font-medium">13.1 g/dL (sınır)</span></div>
+                <div class="h-1.5 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-3/5 rounded-full bg-amber-500"></div></div>
+                <div class="flex justify-between items-center text-xs"><span class="text-accent-700 dark:text-accent-300">Glukoz</span><span class="text-emerald-600 dark:text-emerald-400 font-medium">95 mg/dL ✓</span></div>
                 <div class="h-1.5 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-4/5 rounded-full bg-emerald-500"></div></div>
+                <div class="flex justify-between items-center text-xs"><span class="text-accent-700 dark:text-accent-300">LDL kolesterol</span><span class="text-amber-600 dark:text-amber-400 font-medium">128 mg/dL (orta)</span></div>
+                <div class="h-1.5 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-2/3 rounded-full bg-amber-500"></div></div>
+                <div class="flex justify-between items-center text-xs"><span class="text-accent-700 dark:text-accent-300">TSH</span><span class="text-emerald-600 dark:text-emerald-400 font-medium">2.4 mU/L ✓</span></div>
+                <div class="h-1.5 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-1/2 rounded-full bg-emerald-500"></div></div>
               </div>
             </div>
             <div class="rounded-xl p-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
               <p class="text-xs font-semibold text-accent-800 dark:text-accent-200" data-i18n="example_report_tips_title">Öneriler</p>
-              <p class="text-accent-700 dark:text-accent-300 text-xs mt-0.5" data-i18n="before_after_after_tips">Dengeli beslenme, düzenli kontroller. Doktorunuzla paylaşın.</p>
+              <p class="text-accent-700 dark:text-accent-300 text-xs mt-0.5" data-i18n="before_after_after_tips">Dengeli beslenme, düzenli kontroller. Demir ve B12 takviyesi hekime sorulabilir. Raporda daha fazla değer ve öneri yer alır. Doktorunuzla paylaşın.</p>
             </div>
             <p class="text-center text-xs text-primary-600 dark:text-primary-400 font-medium" data-i18n="before_after_after_trust">Anlaşılır dil • PDF indir • Doktora götür</p>
           </div>
@@ -1932,13 +1936,12 @@
       <p class="text-center text-amber-600/90 dark:text-amber-400/90 text-xs mt-1 font-medium" data-i18n="disclaimer_informative">Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.</p>
       <p class="text-center text-accent-400 dark:text-accent-500 text-xs mt-2"><a href="https://cursor.com" target="_blank" rel="noopener noreferrer" class="hover:text-primary-500 transition-colors" data-i18n="made_with_cursor">Made with Cursor</a></p>
     </div>
-    <!-- WhatsApp: sayfayla birlikte aşağı yukarı kayar (fixed değil, footer içinde absolute) -->
-    <div class="w-full relative min-h-[5rem]">
-      <a href="__NORYA_WHATSAPP_URL__" __NORYA_WHATSAPP_STYLE__ target="_blank" rel="noopener noreferrer" class="absolute bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
-        <img src="/static/images/whatsapp-icon.svg" alt="" class="w-8 h-8 brightness-0 invert" width="32" height="32" />
-      </a>
-    </div>
   </footer>
+
+  <!-- WhatsApp: viewport sağ alt köşede sabit (position: fixed) -->
+  <a href="__NORYA_WHATSAPP_URL__" __NORYA_WHATSAPP_STYLE__ target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
+    <img src="/static/images/whatsapp-icon.svg" alt="" class="w-8 h-8 brightness-0 invert" width="32" height="32" />
+  </a>
 
   <!-- Login Modal: e-posta + şifre -->
   <div id="modal-login" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
@@ -2738,7 +2741,7 @@
         hero_title: "Tahlil Kağıdındaki Sayılar Ne Anlama Geliyor? 60 Saniyede Öğrenin.",
         hero_desc: "Metni yapıştırın veya fotoğraf yükleyin — anlaşılır özet, değerler ve doktora götürecek raporu anında alın. İlk analiz ücretsiz.",
         hero_cta: "İlk Analizimi Ücretsiz Yap", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
-        hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz genel olarak referans aralığında. Hemoglobin ve glukoz normal; doktorunuzla rutin takibi sürdürün.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
+        hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL ile korunur", trust_badge_kvkk_gdpr: "KVKK & GDPR uyumlu", trust_badge_paytr: "PayTR ile güvenli ödeme",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
@@ -2752,8 +2755,8 @@
         before_after_title: "Tahlil Kağıdından Norya Raporuna", before_after_desc: "Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.",
         before_after_before_label: "Önce — Laboratuvar çıktısı", before_after_th_test: "Test", before_after_th_result: "Sonuç", before_after_th_ref: "Referans",
         before_after_before_hint: "Kısaltmalar ve sayılar — ne anlama geldiği belirsiz.", before_after_arrow: "60 sn",
-        before_after_after_label: "Sonra — Norya raporu", before_after_after_summary: "Kan sayımı ve metabolik panel genel olarak normal. Hemoglobin, glukoz ve böbrek değerleri referans aralığında. Rutin takip önerilir.",
-        before_after_after_tips: "Dengeli beslenme, düzenli kontroller. Doktorunuzla paylaşın.", before_after_after_trust: "Anlaşılır dil • PDF indir • Doktora götür", before_after_footer: "Gerçek müşteri raporları aynı yapıda; kişisel verileriniz korunur.",
+        before_after_after_label: "Sonra — Norya raporu", before_after_after_summary: "Kan sayımı ve metabolik panelde orta derecede sonuçlar: birçok parametre referans aralığında, bazıları sınırda. Hemoglobin, glukoz, lipidler, karaciğer ve böbrek değerleri detaylı açıklanır. Rutin takip ve doktor görüşmesi önerilir.",
+        before_after_after_tips: "Dengeli beslenme, düzenli kontroller. Demir ve B12 takviyesi hekime sorulabilir. Raporda daha fazla değer ve öneri yer alır. Doktorunuzla paylaşın.", before_after_after_trust: "Anlaşılır dil • PDF indir • Doktora götür", before_after_footer: "Gerçek müşteri raporları aynı yapıda; kişisel verileriniz korunur.",
         why_title: "Neden Norya?", why_fast: "Anında Sonuç", why_fastd: "Dakikalar içinde anlaşılır yorum.",
         feature_diet_title: "Kişiselleştirilmiş diyet planı", feature_diet_desc: "Kan tahlilinizdeki eksiklik ve risklere göre yenilmesi / azaltılması gereken besinleri ve örnek günlük menüyü özetler.",
         feature_supp_title: "Akıllı takviye önerileri", feature_supp_desc: "Değerleriniz referans dışına çıktığında, vitamin/mineral takviyeleri için hekime sorabileceğiniz seçenekler listeler.",
@@ -2928,7 +2931,7 @@
         hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
         hero_desc: "Paste text or upload a photo — get a clear summary, values, and a report to take to your doctor. First analysis free.",
         hero_cta: "Get my first analysis free", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
-        hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values are generally within reference range. Hemoglobin and glucose normal; continue routine follow-up with your doctor.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
+        hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
@@ -2942,8 +2945,8 @@
         before_after_title: "From lab sheet to Norya report", before_after_desc: "Same results — first a dense table, 60 seconds later a clear report. Our users see this transformation.",
         before_after_before_label: "Before — Lab printout", before_after_th_test: "Test", before_after_th_result: "Result", before_after_th_ref: "Reference",
         before_after_before_hint: "Abbreviations and numbers — what they mean is unclear.", before_after_arrow: "60 sec",
-        before_after_after_label: "After — Norya report", before_after_after_summary: "Blood count and metabolic panel generally normal. Hemoglobin, glucose and kidney values within range. Routine follow-up recommended.",
-        before_after_after_tips: "Balanced diet, regular check-ups. Share with your doctor.", before_after_after_trust: "Plain language • Download PDF • Take to doctor", before_after_footer: "Real customer reports look like this; your data stays protected.",
+        before_after_after_label: "After — Norya report", before_after_after_summary: "Moderate results: many parameters in reference range, some borderline. Hemoglobin, glucose, lipids, liver and kidney values explained in detail. Routine follow-up and doctor visit recommended.",
+        before_after_after_tips: "Balanced diet, regular check-ups. Iron and B12 supplements — ask your doctor. Report includes more values and recommendations. Share with your doctor.", before_after_after_trust: "Plain language • Download PDF • Take to doctor", before_after_footer: "Real customer reports look like this; your data stays protected.",
         why_title: "Why Norya?", why_fast: "Instant results", why_fastd: "Clear interpretation in minutes.",
         feature_diet_title: "Personalised diet plan", feature_diet_desc: "Summarises foods to eat more of / reduce and a simple daily menu based on your deficiencies and risks.",
         feature_supp_title: "Smart supplement suggestions", feature_supp_desc: "When values are outside reference range, lists vitamins/minerals you can discuss with your doctor.",
@@ -3115,7 +3118,7 @@
         hero_title: "Comprendi i tuoi esami del sangue in 60 secondi",
         hero_desc: "Incolla i risultati delle analisi, l'IA li spiega per te. Prova gratis — nessuna carta richiesta.",
         hero_cta: "Prima analisi gratis", hero_see_sample: "Vedi report esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy first",
-        hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "I valori sono nella norma. Emoglobina e glucosio normali.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
+        hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "Valori in grado moderato: molti parametri in range, alcuni al limite. Il report include molti valori, spiegazioni e consigli personalizzati.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR",
         trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
@@ -3284,7 +3287,7 @@
         hero_title: "Comprende tus análisis de sangre en 60 segundos",
         hero_desc: "Pega tus resultados, la IA los explica. Prueba gratis — sin tarjeta.",
         hero_cta: "Mi primer análisis gratis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad primero",
-        hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Tus valores están en rango. Hemoglobina y glucosa normales.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
+        hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Valores en nivel moderado: muchos parámetros en rango, algunos en el límite. El informe incluye muchos valores, explicaciones y recomendaciones.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR",
         trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
@@ -3453,7 +3456,7 @@
         hero_title: "Comprenez vos analyses sanguines en 60 secondes",
         hero_desc: "Collez vos résultats, l'IA les explique. Essai gratuit — sans carte.",
         hero_cta: "Ma première analyse gratuite", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité",
-        hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Vos valeurs sont dans la norme. Hémoglobine et glucose normaux.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
+        hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Valeurs à niveau modéré: beaucoup de paramètres dans la norme, certains à la limite. Le rapport inclut de nombreuses valeurs et recommandations.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR",
         trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
@@ -3622,7 +3625,7 @@
         hero_title: "Verstehen Sie Ihre Blutwerte in 60 Sekunden",
         hero_desc: "Laborwerte einfügen, die KI erklärt sie. Kostenlos testen — keine Karte nötig.",
         hero_cta: "Erste Analyse kostenlos", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "Sicher • Datenschutz",
-        hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Ihre Werte im Referenzbereich. Hämoglobin und Glukose normal.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
+        hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Werte im mittleren Bereich: viele Parameter im Referenzbereich, einige grenzwertig. Der Bericht enthält viele Werte, Erklärungen und Empfehlungen.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
         trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR",
         trust_badge_secure_paytr: "🔒 Sichere Zahlung – PayTR",
