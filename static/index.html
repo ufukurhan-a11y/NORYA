@@ -1859,6 +1859,7 @@
       <h2 class="text-2xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="contact_heading">İletişim</h2>
       <p class="mb-4" data-i18n="contact_intro">Sorularınız, iade talepleriniz veya “ödeme alındı ama analiz hakkı gelmedi” gibi teknik konular için bize ulaşabilirsiniz.</p>
       <p class="mb-4"><strong data-i18n="contact_email_label">E-posta:</strong> <a href="mailto:support@noryaai.com" class="text-primary-600 dark:text-primary-400 hover:underline">support@noryaai.com</a></p>
+      <p class="mb-4" __NORYA_WHATSAPP_STYLE__><strong data-i18n="contact_whatsapp_label">WhatsApp:</strong> <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 text-[#25D366] hover:opacity-90 font-medium" aria-label="WhatsApp ile yazın"><img src="/static/images/whatsapp-icon.svg" alt="" class="w-6 h-6 inline-block" width="24" height="24" /> <span data-i18n="contact_whatsapp_click">Bize WhatsApp ile yazın</span></a></p>
       <p class="mb-4" data-i18n="contact_note">Mümkünse hesap e-posta adresinizi ve konuyla ilgili kısa açıklamayı (sipariş no, tarih vb.) yazın. En geç 1 iş günü içinde dönüş yapıyoruz.</p>
       <p class="text-accent-500 dark:text-accent-500" data-i18n="contact_tagline">Norya — Kan tahlili sonuçlarınızı anlaşılır dilde açıklayan hizmet.</p>
     </div>
@@ -1932,6 +1933,11 @@
       <p class="text-center text-accent-400 dark:text-accent-500 text-xs mt-2"><a href="https://cursor.com" target="_blank" rel="noopener noreferrer" class="hover:text-primary-500 transition-colors" data-i18n="made_with_cursor">Made with Cursor</a></p>
     </div>
   </footer>
+
+  <!-- WhatsApp iletişim: sabit buton, tıklanınca size mesaj açar (numara .env WHATSAPP_CONTACT) -->
+  <a href="__NORYA_WHATSAPP_URL__" __NORYA_WHATSAPP_STYLE__ target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
+    <img src="/static/images/whatsapp-icon.svg" alt="" class="w-8 h-8 brightness-0 invert" width="32" height="32" />
+  </a>
 
   <!-- Login Modal: e-posta + şifre -->
   <div id="modal-login" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">

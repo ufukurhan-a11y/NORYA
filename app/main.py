@@ -8,6 +8,7 @@ import uuid
 from datetime import datetime, timedelta, timezone
 from contextlib import asynccontextmanager
 from pathlib import Path
+from urllib.parse import quote
 from urllib.request import urlopen
 from urllib.error import URLError
 
@@ -707,6 +708,23 @@ def _inject_ga(html: str) -> str:
     return html.replace("<!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->", inject)
 
 
+def _whatsapp_url_and_style() -> tuple[str, str]:
+    """WhatsApp iletişim: (href, style). Numara yoksa gizli."""
+    num = (getattr(settings, "whatsapp_contact", None) or "").strip().replace("+", "").replace(" ", "")
+    if not num or len(num) < 10:
+        return "#", ' style="display:none!important"'
+    text = quote("Merhaba, Norya hakkında soru sormak istiyorum.")
+    return f"https://wa.me/{num}?text={text}", ""
+
+
+def _inject_whatsapp(html: str) -> str:
+    """__NORYA_WHATSAPP_URL__ ve __NORYA_WHATSAPP_STYLE__ placeholder'larını doldurur."""
+    url, style = _whatsapp_url_and_style()
+    html = html.replace("__NORYA_WHATSAPP_URL__", url)
+    html = html.replace("__NORYA_WHATSAPP_STYLE__", style)
+    return html
+
+
 LEGAL_PAGES = {
     "mesafeli-satis-sozlesmesi",
     "gizlilik-politikasi",
@@ -745,6 +763,7 @@ def index():
         raw = index_file.read_text(encoding="utf-8")
         if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
             raw = _inject_ga(raw)
+        raw = _inject_whatsapp(raw)
         return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
 
@@ -759,6 +778,7 @@ def report_page():
         raw = index_file.read_text(encoding="utf-8")
         if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
             raw = _inject_ga(raw)
+        raw = _inject_whatsapp(raw)
         return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."}
 
