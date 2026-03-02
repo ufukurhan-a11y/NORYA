@@ -9,8 +9,9 @@ from app.core.config import get_openai_keys, is_openai_configured
 
 logger = logging.getLogger(__name__)
 # Render cold start + OpenAI yanıt süresi için yeterli süre (görsel analiz uzun sürebilir)
-OPENAI_TIMEOUT = 90.0
-OPENAI_RETRY_WAIT = 1.5
+OPENAI_TIMEOUT = 120.0
+OPENAI_RETRY_WAIT = 2.5
+OPENAI_RETRY_SECOND_WAIT = 5.0
 OPENAI_RETRY_ONCE = (RateLimitError, APIConnectionError)
 # APIConnectionError'da 2. deneme de başarısızsa bir kez daha dene (cold start / ağ gecikmesi)
 OPENAI_RETRY_TWICE_FOR_CONNECTION = True
@@ -65,7 +66,7 @@ def _openai_safe_call(create_fn):
         except APIConnectionError as e2:
             if OPENAI_RETRY_TWICE_FOR_CONNECTION:
                 logger.warning("OpenAI retry 2/2 after APIConnectionError: %s", e2)
-                time.sleep(OPENAI_RETRY_WAIT + 1.0)
+                time.sleep(OPENAI_RETRY_SECOND_WAIT)
                 return create_fn()
             raise
         except RateLimitError:
@@ -213,6 +214,7 @@ def analyze_blood_test(text: str, detailed: bool = True, doctor_notes: str | Non
         return _openai_safe_call(lambda: client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
+            max_tokens=8192,
         ))
 
     try:
@@ -251,10 +253,11 @@ def analyze_blood_test_from_image(image_bytes: bytes, mime_type: str, lang: str 
                     "role": "user",
                     "content": [
                         {"type": "text", "text": image_prompt},
-                        {"type": "image_url", "image_url": {"url": url, "detail": "high"}},
+                        {"type": "image_url", "image_url": {"url": url, "detail": "low"}},
                     ],
                 },
             ],
+            max_tokens=8192,
         ))
 
     try:

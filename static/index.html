@@ -4950,7 +4950,8 @@
     tryGuestLoginFromHash();
 
     function openAnalyze() {
-      document.getElementById('analyze-section').scrollIntoView({ behavior: 'smooth' });
+      var el = document.getElementById('analyze-section');
+      if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
     }
     function scrollToAnalyze() {
       setTimeout(() => document.getElementById('analyze-section').scrollIntoView({ behavior: 'smooth' }), 300);
@@ -5301,7 +5302,7 @@
           var uploadHeaders = { 'Authorization': 'Bearer ' + getToken() };
           if (getTestMode()) uploadHeaders['X-Test-Mode'] = '1';
           var acUpload = typeof AbortController !== 'undefined' ? new AbortController() : null;
-          var timeoutIdUpload = acUpload ? setTimeout(function() { acUpload.abort(); }, 120000) : null;
+          var timeoutIdUpload = acUpload ? setTimeout(function() { acUpload.abort(); }, 180000) : null;
           res = await fetch(uploadUrl, {
             method: 'POST',
             headers: uploadHeaders,
@@ -5324,7 +5325,7 @@
           var uploadHeaders = { 'Authorization': 'Bearer ' + getToken() };
           if (getTestMode()) uploadHeaders['X-Test-Mode'] = '1';
           var ac = typeof AbortController !== 'undefined' ? new AbortController() : null;
-          var timeoutId = ac ? setTimeout(function() { ac.abort(); }, 90000) : null;
+          var timeoutId = ac ? setTimeout(function() { ac.abort(); }, 120000) : null;
           res = await fetch(API_BASE + '/analyze', {
             method: 'POST',
             headers: uploadHeaders,
@@ -5404,9 +5405,10 @@
       } catch (e) {
         console.error('runAnalyze error', e);
         var t = T[getLang()] || T.tr;
-        var errText = (e && e.name === 'AbortError') ? ('İstek zaman aşımına uğradı. Sunucu veya AI yanıt vermekte gecikiyor olabilir; 20–30 saniye sonra tekrar deneyin.') : (t.network_error || 'Bağlantı hatası. Lütfen tekrar deneyin.');
+        var errText = (e && e.name === 'AbortError') ? ('İstek zaman aşımına uğradı. Sunucu veya AI yanıt vermekte gecikiyor olabilir; «Tekrar dene» ile yeniden deneyin.') : (t.network_error || 'Bağlantı hatası. Lütfen tekrar deneyin.');
         errEl.textContent = errText;
         errEl.classList.remove('hidden');
+        if (retryWrap) retryWrap.classList.remove('hidden');
         toast(errText, 'error');
         if (typeof window.wizardOnAnalyzeSuccess === 'function') { setWizardStep(2); window.wizardOnAnalyzeSuccess = null; }
       } finally {
