@@ -278,12 +278,14 @@ async def security_headers(request: Request, call_next):
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
         # API + form + inline script + cdn + Google Analytics (gtag) için CSP
-        response.headers["Content-Security-Policy"] = (
+        _csp = (
             "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com https://www.google-analytics.com; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
             "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: blob: https:; connect-src 'self' https://www.googletagmanager.com https://www.google-analytics.com; frame-ancestors 'self';"
+            "img-src 'self' data: blob: https:; "
+            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
         )
+        response.headers["Content-Security-Policy"] = _csp
     return response
 
 
@@ -645,13 +647,36 @@ def api_check():
     }
 
 
-# DEBUG ONLY: Rate limit test endpoint — production'da kapalı (kolayca silinebilir)
+# DEBUG ONLY: Rate limit + GA debug — production'da kapalı
 if getattr(settings, "environment", "development") != "production":
     @app.get("/debug/rate-test")
     @limiter.limit("5/minute")
     async def debug_rate_test(request: Request):
         """Rate limit'i test etmek için basit endpoint. Global SlowAPI limitine tabidir."""
         return {"ok": True}
+
+    @app.get("/debug/ga", response_class=HTMLResponse)
+    async def debug_ga(request: Request):
+        """GA4 Measurement ID ve CSP bilgisini gösterir (doğrulama için). Production'da 404."""
+        ga_id = (getattr(settings, "ga_measurement_id", "") or "G-1FLMLJH3Q0").strip()
+        csp = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data: blob: https:; "
+            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
+        )
+        html = f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Debug GA</title></head>
+<body style="font-family:sans-serif; padding:1.5rem; max-width:640px;">
+<h1>GA4 Debug</h1>
+<p><strong>Measurement ID:</strong> <code>{ga_id}</code></p>
+<p>Bu sayfada tag yüklü olmalı. Realtime test için gizli sekmede site açıp 1-2 sayfa gezin.</p>
+<h2>Content-Security-Policy (production)</h2>
+<pre style="background:#f0f0f0; padding:0.75rem; overflow-x:auto; font-size:0.85rem;">{csp}</pre>
+<p><a href="/">← Ana sayfa</a></p>
+</body></html>"""
+        return HTMLResponse(html)
 
 
 def _inject_ga(html: str) -> str:

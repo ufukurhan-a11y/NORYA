@@ -59,4 +59,6 @@ Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri list
 
 **Tailwind CSS:** Ana sayfa production’da CDN yerine build edilmiş `static/css/tailwind.css` kullanır. Stil veya sınıf değişikliği yaptıysanız: `npm install && npm run build:css` çalıştırıp `static/css/tailwind.css` dosyasını commit edin.
 
+**Google Analytics (GA4):** Tag tüm sayfalarda (base template, static HTML, legal sayfalar) `<head>` içinde yüklü; CSP `script-src` ve `connect-src` ile googletagmanager / google-analytics izinli. Cloudflare cache kullanıyorsanız “Purge Everything” sonrası GA görünümü 5–15 dk gecikmeli olabilir. Realtime test için gizli sekmede site açıp 1–2 sayfa gezin.
+
 Bu adımlar tamamsa uygulama yayına hazırdır.
