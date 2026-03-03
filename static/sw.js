@@ -1,6 +1,6 @@
 /* Norya PWA Service Worker: cache shell + push notifications */
-const CACHE_NAME = 'norya-v2';
-const STATIC_CACHE = ['/', '/static/index.html', '/static/manifest.json', '/static/icons/favicon-32x32.png', '/static/icons/icon-192.png', '/static/icons/icon-512.png', '/static/css/app.css'];
+const CACHE_NAME = 'norya-v3';
+const STATIC_CACHE = ['/', '/static/index.html', '/static/manifest.json', '/static/manifest.webmanifest', '/static/icons/favicon-32x32.png', '/static/icons/icon-192.png', '/static/icons/icon-512.png', '/static/css/app.css'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(

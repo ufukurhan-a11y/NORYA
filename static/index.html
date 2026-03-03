@@ -6,7 +6,7 @@
   <meta name="theme-color" content="#0EA5A4" media="(prefers-color-scheme: light)" />
   <meta name="theme-color" content="#0EA5A4" media="(prefers-color-scheme: dark)" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="default" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="Norya" />
   <meta name="mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="/static/manifest.webmanifest" />
@@ -214,15 +214,62 @@
     #guest-checkout-modal.hidden, #payment-modal.hidden, #a2hs-banner.hidden, #ios-a2hs-banner.hidden {
       pointer-events: none !important;
     }
-    /* PWA: Ana ekrana ekle butonu (teal, pill) */
-    .a2hs-btn-primary {
-      border-radius: 999px;
-      background-color: #0EA5A4;
-      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.35);
+    /* PWA: Ana ekrana ekle banner — Norya marka rengi #0EA5A4, iOS/Chrome uyumlu */
+    .install-banner {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      z-index: 9999;
+      background: #0EA5A4;
+      color: #ffffff;
+      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      -webkit-tap-highlight-color: transparent;
     }
-    .a2hs-btn-primary:hover {
-      background-color: #0B8B8A;
-      box-shadow: 0 6px 18px rgba(15, 23, 42, 0.45);
+    .install-banner button {
+      border-radius: 10px;
+      font-weight: 600;
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .install-banner .a2hs-btn-primary {
+      background: #ffffff;
+      color: #0EA5A4;
+      border: none;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+    }
+    .install-banner .a2hs-btn-primary:hover {
+      background: #f0fdfa;
+      color: #0d9488;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    }
+    /* WhatsApp FAB: mobil uyumlu — safe-area, dokunma alanı, yazı görünsün */
+    .wa-fab {
+      right: max(12px, env(safe-area-inset-right));
+      bottom: max(80px, calc(80px + env(safe-area-inset-bottom)));
+      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
+    }
+    .wa-fab-text { color: #fff; -webkit-tap-highlight-color: transparent; }
+    @media (max-width: 639px) {
+      .wa-fab { min-height: 48px; min-width: 44px; padding-left: 14px; padding-right: 18px; font-size: 0.875rem; }
+      .wa-fab:active { transform: scale(0.98); }
+    }
+    @media (min-width: 640px) {
+      .wa-fab { padding: 0; right: max(20px, env(safe-area-inset-right)); bottom: max(72px, calc(72px + env(safe-area-inset-bottom))); }
+    }
+    /* PWA çubukları: mobil safe-area, dokunma alanı, taşma yok */
+    #a2hs-banner, #ios-a2hs-banner {
+      min-height: 48px;
+      box-sizing: border-box;
+    }
+    @media (max-width: 639px) {
+      #a2hs-banner p, #ios-a2hs-banner p { font-size: 0.8125rem; line-height: 1.35; color: rgba(255,255,255,0.95); }
+      #a2hs-banner button, #ios-a2hs-banner button { min-height: 44px; min-width: 44px; padding: 10px 14px; }
     }
   </style>
 </head>
@@ -1959,9 +2006,10 @@
     </div>
   </footer>
 
-  <!-- WhatsApp: sağda, PWA çubuğunun üstünde; yüksek konumda kesilmeden görünsün -->
-  <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="fixed z-[9999] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" style="position:fixed!important;right:20px;bottom:80px;" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
-    <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="w-8 h-8 opacity-100" width="32" height="32" style="opacity:1;filter:none;" />
+  <!-- WhatsApp: mobilde yazı + ikon, masaüstünde yuvarlak ikon; renk ve konum mobil uyumlu -->
+  <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="wa-fab fixed z-[9999] flex items-center justify-center gap-2 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 min-h-[48px] py-2 pl-3 pr-4 sm:pl-0 sm:pr-0 sm:w-14 sm:h-14 sm:min-h-0 sm:py-0" style="position:fixed!important;" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
+    <img src="/static/images/whatsapp-icon-white.svg" alt="" class="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0 opacity-100" width="28" height="28" style="opacity:1;filter:none;" />
+    <span class="wa-fab-text text-sm font-semibold text-white sm:sr-only" style="color:#fff;">WhatsApp</span>
   </a>
 
   <!-- Login Modal: e-posta + şifre -->
@@ -2108,24 +2156,24 @@
 
   <div id="toast-container" aria-live="polite"></div>
 
-  <!-- PWA: Ana ekrana ekle (Android/Chrome) — ince, kompakt çubuk -->
-  <div id="a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-2 px-3 py-2 bg-slate-800/95 text-white border-t border-slate-700/80 backdrop-blur-sm" style="padding-bottom: max(8px, env(safe-area-inset-bottom));">
+  <!-- PWA: Ana ekrana ekle (Android/Chrome) — Norya rengi #0EA5A4, safe-area -->
+  <div id="a2hs-banner" class="install-banner hidden flex items-center justify-between gap-2 min-w-0">
     <div class="flex items-center gap-2 min-w-0 flex-1">
       <img src="/static/icons/icon-192.png" alt="Norya" class="flex-shrink-0 w-8 h-8 rounded-lg object-contain" />
-      <p class="text-xs truncate text-slate-200" data-i18n="a2hs_message">Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.</p>
+      <p class="text-xs truncate a2hs-text" data-i18n="a2hs_message">Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.</p>
     </div>
     <div class="flex items-center gap-1 flex-shrink-0">
-      <button type="button" onclick="dismissA2HS()" class="text-slate-400 hover:text-white text-xs py-1.5 px-2 rounded" data-i18n="a2hs_later">Sonra</button>
-      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="a2hs-btn-primary text-xs font-medium py-1.5 px-3 rounded-full text-white" data-i18n="a2hs_add">Ekle</button>
+      <button type="button" onclick="dismissA2HS()" class="a2hs-btn text-white/90 hover:text-white text-xs py-1.5 px-2 rounded" data-i18n="a2hs_later">Sonra</button>
+      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="a2hs-btn-primary text-xs font-medium py-1.5 px-3 rounded-full" data-i18n="a2hs_add">Ekle</button>
     </div>
   </div>
-  <!-- PWA: iOS Ana ekrana ekle (Safari) -->
-  <div id="ios-a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-2 px-3 py-2 bg-slate-800/95 text-white border-t border-slate-700/80 backdrop-blur-sm" style="padding-bottom: max(8px, env(safe-area-inset-bottom));">
+  <!-- PWA: iOS Ana ekrana ekle (Safari) — Norya rengi #0EA5A4 -->
+  <div id="ios-a2hs-banner" class="install-banner hidden flex items-center justify-between gap-2 min-w-0">
     <div class="flex items-center gap-2 min-w-0 flex-1">
       <img src="/static/icons/icon-192.png" alt="Norya" class="flex-shrink-0 w-8 h-8 rounded-lg object-contain" />
-      <p class="text-xs text-slate-200" data-i18n="ios_a2hs_message">Ana ekrana ekle: <strong>Paylaş</strong> <span aria-hidden="true">⎋</span> <strong>Ana Ekrana Ekle</strong></p>
+      <p class="text-xs a2hs-text" data-i18n="ios_a2hs_message">Ana ekrana ekle: <strong>Paylaş</strong> <span aria-hidden="true">⎋</span> <strong>Ana Ekrana Ekle</strong></p>
     </div>
-    <button type="button" onclick="dismissIOSA2HS()" class="text-slate-400 hover:text-white text-xs py-1.5 px-2 rounded flex-shrink-0" data-i18n="ios_a2hs_close">Kapat</button>
+    <button type="button" onclick="dismissIOSA2HS()" class="a2hs-btn text-white/90 hover:text-white text-xs py-1.5 px-2 rounded flex-shrink-0" data-i18n="ios_a2hs_close">Kapat</button>
   </div>
 
   <script>
