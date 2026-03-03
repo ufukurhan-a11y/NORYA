@@ -3815,7 +3815,7 @@
         price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Diet + nutrition info + heart health sections", price_single_3: "✓ Download & share PDF", price_btn_single: " — Single analysis",
         price_monthly_badge: "Most Popular", pricing_ai_detail: "AI detail level", price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "5 analyses / month", price_monthly_1: "✓ 5 full analyses per month", price_monthly_2: "✓ Diet plan + nutrition & lifestyle info notes", price_monthly_3: "✓ History & compare two analyses", price_monthly_4: "✓ Download PDF, share with doctor", price_btn_monthly: "/mo — Get started",
         price_best_badge: "Best value", price_best_badge_value: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "16 analyses total (13 + 3 free)", price_yearly_1: "✓ 16 analyses per year (13 + 3 free)", price_yearly_2: "✓ All premium diet & lifestyle info sections", price_yearly_3: "✓ History & advanced comparison", price_yearly_4: "✓ Ideal for doctor visits", price_btn_yearly: "/yr — Get started",
-        compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_price: "Price",
+        compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_price: "Price", compare_btn_select: "Select", compare_btn_active: "Current", compare_btn_upgrade: "Upgrade",
         footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "This analysis is for information only. It does not replace medical diagnosis.", medical_disclaimer_full: "Norya is not a medical diagnosis tool. Content provided is for information only. In emergencies or for diagnosis/treatment, consult your doctor.", doctor_cta_note: "Not a substitute for diagnosis; share results with your doctor.",
         footer_mesafeli: "Distance Sales Agreement", footer_privacy: "Privacy Policy", footer_refund: "Refund & Cancellation", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -5990,8 +5990,11 @@
           btn.textContent = t.compare_btn_active || 'Aktif';
         } else {
           btn.disabled = false;
-          var isPro = activeComparePlan === 'monthly' || activeComparePlan === 'yearly';
-          btn.textContent = (isPro && (p === 'monthly' || p === 'yearly')) ? (t.compare_btn_upgrade || 'Yükselt') : (t.compare_btn_select || 'Seç');
+          var order = { free: 0, single: 1, monthly: 2, yearly: 3 };
+          var currentLevel = order[activeComparePlan] != null ? order[activeComparePlan] : -1;
+          var cardLevel = order[p] != null ? order[p] : 0;
+          var isUpgrade = currentLevel >= 0 && cardLevel > currentLevel;
+          btn.textContent = isUpgrade ? (t.compare_btn_upgrade || 'Yükselt') : (t.compare_btn_select || 'Seç');
         }
       });
     }
@@ -7099,6 +7102,16 @@
       if (cSym3) cSym3.textContent = sym;
       var freeEl = document.getElementById('compare-price-free');
       if (freeEl) freeEl.textContent = '0 ' + sym;
+      var mFree = document.getElementById('compare-mobile-price-free');
+      var mFreeSym = document.getElementById('compare-mobile-symbol-free');
+      if (mFree) mFree.textContent = '0';
+      if (mFreeSym) mFreeSym.textContent = sym;
+      ['single','monthly','yearly'].forEach(function(k) {
+        var mPrice = document.getElementById('compare-mobile-price-' + k);
+        var mSym = document.getElementById('compare-mobile-symbol-' + k);
+        if (mPrice) mPrice.textContent = formatPrice(p[k]);
+        if (mSym) mSym.textContent = sym;
+      });
       document.getElementById('btn-single').textContent = formatPrice(p.single) + ' ' + sym;
       document.getElementById('btn-monthly').textContent = formatPrice(p.monthly) + ' ' + sym;
       document.getElementById('btn-yearly').textContent = formatPrice(p.yearly) + ' ' + sym;
