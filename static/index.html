@@ -2622,20 +2622,45 @@
       return c || REPORT_SECTIONS[1];
     }
     function parseValueBlock(block) {
+      var refMin = null, refMax = null;
       var refMatch = block.match(/(?:referans|reference|referencia|riferimento|référence|Referenz|ref)(?:\s*aralığı)?\s*:?\s*(\d+[,.]?\d*)\s*[-–]\s*(\d+[,.]?\d*)/i)
         || block.match(/(\d+[,.]?\d*)\s*[-–]\s*(\d+[,.]?\d*)\s*(g\/dL|mg\/dL|mmol\/L|U\/L)/i)
         || block.match(/(\d+[,.]?\d*)\s*[-–]\s*(\d+[,.]?\d*)/);
-      if (!refMatch) return null;
-      var refMin = parseFloat(String(refMatch[1]).replace(',', '.'));
-      var refMax = parseFloat(String(refMatch[2]).replace(',', '.'));
-      if (refMin >= refMax) return null;
-      var value = null;
+      if (refMatch) {
+        refMin = parseFloat(String(refMatch[1]).replace(',', '.'));
+        refMax = parseFloat(String(refMatch[2]).replace(',', '.'));
+        if (refMin >= refMax) return null;
+      }
+      var refOnlyMax = block.match(/(?:referans|reference|referencia|riferimento|référence|Referenz|ref)(?:\s*aralığı)?\s*:?\s*<\s*(\d+[,.]?\d*)/i);
+      var refOnlyMin = block.match(/(?:referans|reference|referencia|riferimento|référence|Referenz|ref)(?:\s*aralığı)?\s*:?\s*>\s*(\d+[,.]?\d*)/i);
+      if (refMin == null && refOnlyMax) {
+        refMin = 0;
+        refMax = parseFloat(String(refOnlyMax[1]).replace(',', '.'));
+      }
+      if (refMax == null && refOnlyMin) {
+        refMin = parseFloat(String(refOnlyMin[1]).replace(',', '.'));
+        refMax = refMin * 2;
+      }
+      if (refMin == null || refMax == null) return null;
       var unit = '';
-      var valueUnitRe = /(\d+[,.]?\d*)\s*(g\/dL|mg\/dL|mmol\/L|U\/L|µg\/dL|pg\/mL|ng\/mL|mg\/L|g\/L|mm\/hg|mL\/min)/gi;
-      var vu;
-      while ((vu = valueUnitRe.exec(block)) !== null) {
-        var n = parseFloat(vu[1].replace(',', '.'));
-        if (n !== refMin && n !== refMax) { value = n; unit = vu[2] || ''; break; }
+      var unitMatch = block.match(/(µg\/L|µg\/dL|mg\/dL|g\/dL|mmol\/L|U\/L|pg\/mL|ng\/mL|mg\/L|g\/L|mm\/hg|mL\/min)/i);
+      if (unitMatch) unit = unitMatch[1];
+      var value = null;
+      var valueDisplay = null;
+      var valuePrefixLow = block.match(/:\s*<\s*(\d+[,.]?\d*)/);
+      if (valuePrefixLow) {
+        var bound = parseFloat(String(valuePrefixLow[1]).replace(',', '.'));
+        value = bound * 0.5;
+        if (value <= 0) value = bound;
+        valueDisplay = '<' + valuePrefixLow[1];
+      }
+      if (value == null) {
+        var valueUnitRe = /(\d+[,.]?\d*)\s*(g\/dL|mg\/dL|mmol\/L|U\/L|µg\/dL|µg\/L|pg\/mL|ng\/mL|mg\/L|g\/L|mm\/hg|mL\/min)/gi;
+        var vu;
+        while ((vu = valueUnitRe.exec(block)) !== null) {
+          var n = parseFloat(vu[1].replace(',', '.'));
+          if (n !== refMin && n !== refMax) { value = n; if (!unit) unit = vu[2] || ''; break; }
+        }
       }
       if (value == null) {
         var valueMatch = block.match(/(\d+[,.]?\d*)\s*(birim|unit)?/i);
@@ -2663,7 +2688,7 @@
       else if (isHigh) status = 'high';
       else if (range > 0 && (value <= refMin + range * 0.1 || value >= refMax - range * 0.1)) status = 'border';
       else status = 'normal';
-      return { label: label, value: value, refMin: refMin, refMax: refMax, unit: unit, status: status };
+      return { label: label, value: value, valueDisplay: valueDisplay, refMin: refMin, refMax: refMax, unit: unit, status: status };
     }
     function renderRiskLegend(t) {
       var green = (t && t.risk_legend_green) || 'Normal';
@@ -2686,10 +2711,11 @@
       var pct = Math.max(0, Math.min(100, ((v - visualMin) / (visualMax - visualMin)) * 100));
       var cls = item.status === 'low' ? 'low' : item.status === 'high' ? 'high' : item.status === 'border' ? 'border' : 'normal';
       var refLabel = lo + '–' + hi + (item.unit ? ' ' + item.unit : '');
+      var valueText = (item.valueDisplay != null ? item.valueDisplay : String(item.value)) + (item.unit ? ' ' + (item.unit || '') : '');
       return '<div class="value-bar-row mb-5 last:mb-0 py-3 px-4 rounded-2xl bg-white dark:bg-navy-800/50 border border-navy-100 dark:border-navy-700">' +
         '<div class="flex flex-wrap items-center justify-between gap-2 mb-2">' +
         '<span class="font-semibold text-navy-900 dark:text-white text-sm">' + escapeHtml(item.label) + '</span>' +
-        '<span class="text-sm text-navy-600 dark:text-navy-300">' + escapeHtml(String(item.value)) + (item.unit ? ' ' + escapeHtml(item.unit) : '') + ' <span class="text-navy-500">(Ref: ' + escapeHtml(refLabel) + ')</span></span>' +
+        '<span class="text-sm text-navy-600 dark:text-navy-300">' + escapeHtml(valueText) + ' <span class="text-navy-500">(Ref: ' + escapeHtml(refLabel) + ')</span></span>' +
         '</div>' +
         '<div class="value-bar-track relative">' +
         '<div class="value-bar-fill ' + cls + '" style="width:' + pct + '%"></div>' +

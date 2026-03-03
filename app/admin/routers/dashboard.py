@@ -156,6 +156,7 @@ def admin_login_submit(
     response.set_cookie(
         key=ADMIN_COOKIE,
         value=_admin_cookie_value(),
+        path="/",
         httponly=True,
         secure=secure,
         samesite="lax",
