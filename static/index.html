@@ -26,6 +26,7 @@
   <meta name="twitter:description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın." />
   <!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->
   <link rel="stylesheet" href="/static/css/tailwind.css">
+  <link rel="stylesheet" href="/static/css/report.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1654,38 +1655,51 @@
             </div>
           </div>
 
-          <!-- Adım 4: Sonuç (mevcut bileşen) -->
+          <!-- Adım 4: Sonuç (klinik rapor formatı) -->
           <div id="wizard-step-4" class="wizard-step hidden">
-            <div id="analyze-result" class="rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-primary-50/40 dark:bg-navy-800/90 overflow-hidden shadow-xl shadow-primary-900/5 dark:shadow-black/20">
-            <div class="px-6 py-5 border-b border-primary-200 dark:border-primary-800 bg-gradient-to-r from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700 flex flex-wrap items-center justify-between gap-2">
-              <div class="flex items-center gap-3">
-                <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-20 sm:h-24 w-auto flex-shrink-0 object-contain rounded-xl p-1.5 bg-primary-200/40 dark:bg-primary-300/30 border border-primary-300/50 dark:border-primary-400/30" />
-                <div>
-                  <h3 class="font-bold text-white text-lg drop-shadow-sm" data-i18n="report_title">Norya Analiz Raporu</h3>
-                  <p class="text-xs text-primary-100 mt-0.5" id="analyze-result-date"></p>
+            <div id="analyze-result" class="report-page rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-navy-800/90 overflow-hidden shadow-xl shadow-primary-900/5 dark:shadow-black/20">
+              <header class="report-header">
+                <div class="report-brand">
+                  <img class="report-logo" src="/static/norya-logo.svg" alt="Norya" onerror="this.onerror=null; this.src='/static/norya_logo_transparent_trim.png';" />
+                  <div class="report-brand-text">
+                    <div class="report-brand-name">Norya <span class="report-brand-ai">AI</span></div>
+                    <div class="report-brand-sub" data-i18n="report_subtitle">Clinical-style analysis report</div>
+                  </div>
+                </div>
+                <div class="report-header-center">
+                  <div class="report-title" data-i18n="report_title">Analiz Raporu</div>
+                  <div class="report-subtitle" data-i18n="report_subtitle_desc">Kan tahlili sonuçlarının bilgilendirme amaçlı değerlendirmesi</div>
+                </div>
+                <div class="report-meta">
+                  <div><strong>RID:</strong> <span id="report-rid">—</span></div>
+                  <div><strong>User:</strong> <span id="report-user">—</span></div>
+                  <div><strong>Tarih:</strong> <span id="analyze-result-date">—</span></div>
+                  <div><strong>Dil:</strong> <span id="report-lang">—</span></div>
+                </div>
+              </header>
+              <div class="report-divider"></div>
+              <div class="report-actions no-print">
+                <button class="btn-secondary" type="button" onclick="downloadForDoctor()" data-i18n="report_for_doctor">🩺 Doktora Götür</button>
+                <button class="btn-secondary" type="button" onclick="shareReport()" data-i18n="report_share">🔗 Paylaş</button>
+                <button class="btn-primary" type="button" onclick="downloadReportPdf()" data-i18n="report_download">⬇️ PDF İndir</button>
+              </div>
+              <div class="alert-medical" role="alert">
+                <div class="alert-icon">⚠️</div>
+                <div class="alert-text">
+                  <strong data-i18n="disclaimer_informative">Bilgilendirme amaçlıdır.</strong> <span data-i18n="alert_medical_text">Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.</span>
                 </div>
               </div>
-              <div class="hidden sm:flex flex-wrap gap-2">
-                <button type="button" onclick="downloadReportPdf()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_download">Raporu İndir</button>
-                <button type="button" onclick="downloadForDoctor()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_for_doctor">Doktoruma götür</button>
-                <button type="button" onclick="shareReport()" class="text-xs px-4 py-2 rounded-xl bg-white/95 hover:bg-white text-primary-700 font-medium transition shadow-sm" data-i18n="report_share">Raporumu Paylaş</button>
-                <button type="button" onclick="copyShareLink()" class="text-xs px-4 py-2 rounded-xl bg-white/20 hover:bg-white/30 text-white font-medium transition border border-white/40" data-i18n="report_copy_link">Link Kopyala</button>
+              <div id="analyze-result-body" class="p-4 sm:p-6 space-y-4 bg-white dark:bg-transparent"></div>
+              <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
+              <footer class="report-footer">
+                Norya • Bilgilendirme amaçlıdır • support@noryaai.com
+              </footer>
+              <!-- Mobil: no-print aksiyonlar -->
+              <div id="analyze-result-mobile-actions" class="no-print sm:hidden sticky bottom-0 left-0 right-0 z-10 px-4 py-3 bg-white dark:bg-navy-800 border-t border-primary-200 dark:border-primary-700 flex flex-wrap gap-2 justify-center">
+                <button type="button" onclick="downloadReportPdf()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-[var(--norya-brand)] text-white font-semibold text-sm" data-i18n="report_download">Raporu İndir</button>
+                <button type="button" onclick="downloadForDoctor()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl border-2 border-[var(--norya-brand)] text-[var(--norya-brand)] font-semibold text-sm" data-i18n="report_for_doctor">Doktoruma götür</button>
+                <button type="button" onclick="shareReport()" class="flex-1 min-w-[100px] px-4 py-3 rounded-xl border-2 border-navy-200 dark:border-navy-600 font-medium text-sm" data-i18n="report_share">Paylaş</button>
               </div>
-            </div>
-            <!-- Uyarı: sonuç sayfasında görünür -->
-            <div class="px-6 py-3 border-b border-primary-200 dark:border-primary-800 bg-amber-50 dark:bg-amber-900/30 flex items-center gap-3" role="alert">
-              <span class="shrink-0 text-amber-600 dark:text-amber-400 text-base" aria-hidden="true">⚠️</span>
-              <p class="text-sm font-semibold text-amber-900 dark:text-amber-100" data-i18n="medical_disclaimer_full">Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.</p>
-            </div>
-            <p class="px-6 py-2 text-xs text-amber-800 dark:text-amber-200 bg-amber-50/80 dark:bg-amber-900/20" data-i18n="doctor_cta_note">Teşhis yerine geçmez; sonuçları hekiminizle paylaşın.</p>
-            <div id="analyze-result-body" class="p-6 space-y-4 bg-white/80 dark:bg-navy-800/50"></div>
-            <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
-            <!-- Mobil: rapor uzun olunca altta sabit kalan PDF/Doktor butonları (masaüstüyle aynı işlev) -->
-            <div id="analyze-result-mobile-actions" class="sm:hidden sticky bottom-0 left-0 right-0 z-10 px-4 py-3 bg-gradient-to-t from-primary-600 to-primary-500 dark:from-primary-700 dark:to-primary-600 border-t border-primary-400/50 flex flex-wrap gap-2 justify-center shadow-[0_-4px_12px_rgba(0,0,0,0.15)]">
-              <button type="button" onclick="downloadReportPdf()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-white text-primary-700 font-semibold text-sm shadow-md hover:bg-primary-50 transition" data-i18n="report_download">Raporu İndir</button>
-              <button type="button" onclick="downloadForDoctor()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-white text-primary-700 font-semibold text-sm shadow-md hover:bg-primary-50 transition" data-i18n="report_for_doctor">Doktoruma götür</button>
-              <button type="button" onclick="shareReport()" class="flex-1 min-w-[100px] px-4 py-3 rounded-xl bg-white/90 text-primary-700 font-medium text-sm shadow-md hover:bg-primary-50 transition" data-i18n="report_share">Paylaş</button>
-            </div>
             </div>
           </div>
 
@@ -2391,7 +2405,7 @@
         <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
           <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
             <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🏥</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_hipaa">HIPAA uyumlu</span>
+            <span class="font-semibold text-sm" data-i18n="footer_trust_hipaa">HIPAA-aligned security</span>
           </div>
           <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_hipaa_desc">Sağlık verileriniz gizlilik ve güvenlik ilkelerine uygun işlenir.</p>
         </div>
@@ -3154,7 +3168,13 @@
       var dateEl = document.getElementById('analyze-result-date');
       if (!sonuc || !rawEl || !bodyEl) return;
       rawEl.textContent = sonuc;
-      if (dateEl) dateEl.textContent = new Date().toLocaleDateString(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      var reportDateStr = new Date().toLocaleDateString(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
+      if (dateEl) dateEl.textContent = reportDateStr;
+      var rid = getReportId();
+      var reportRidEl = document.getElementById('report-rid');
+      var reportLangEl = document.getElementById('report-lang');
+      if (reportRidEl) reportRidEl.textContent = rid || '—';
+      if (reportLangEl) reportLangEl.textContent = getLang() || 'tr';
       var sections = [];
       var regex = /(\d+\.\s*)?\*\*([^*]+)\*\*:?\s*\n/g;
       var matches = [];
@@ -3199,13 +3219,10 @@
         } else {
           inner = '<div class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap">' + escapeHtml(s.content).replace(/\n/g, '<br>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') + '</div>';
         }
-        return '<div class="rounded-2xl p-5 ' + config.bg + ' border-2 ' + config.border + '">' +
-          '<div class="flex items-center gap-2 mb-3">' +
-          '<span class="text-lg">' + config.icon + '</span>' +
-          '<h4 class="font-semibold text-navy-900 dark:text-white text-sm">' + escapeHtml(displayTitle) + '</h4>' +
-          '</div>' +
-          inner +
-          '</div>';
+        return '<section class="section-card">' +
+          '<div class="section-title"><span class="dot"></span> ' + escapeHtml(displayTitle) + '</div>' +
+          '<div class="section-body">' + inner + '</div>' +
+          '</section>';
       }).join('');
     }
     async function getShareUrl() {

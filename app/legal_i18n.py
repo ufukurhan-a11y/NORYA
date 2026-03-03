@@ -246,7 +246,7 @@ KVKK_GDPR = {
     "tr": {
         "title": "KVKK, GDPR ve HIPAA Aydınlatma Metni",
         "last_updated": "Son güncelleme: Mart 2025",
-        "intro": "Norya olarak kişisel ve sağlıkla ilgili verilerinizi Türkiye'de KVKK, AB'de GDPR ve ABD'de sağlık verisi güvenliği ilkeleri (HIPAA uyumlu yaklaşım) çerçevesinde işliyoruz. Bu sayfa, her bir çerçeveye ilişkin kısa aydınlatmayı içerir.",
+        "intro": "Norya olarak kişisel ve sağlıkla ilgili verilerinizi Türkiye'de KVKK, AB'de GDPR ve ABD'de sağlık verisi güvenliği ilkeleri (HIPAA-aligned güvenlik yaklaşımı) çerçevesinde işliyoruz. Bu sayfa, her bir çerçeveye ilişkin kısa aydınlatmayı içerir.",
         "sections": [
             {"title": "1. Veri Sorumlusu", "body": "Hizmeti sunan ve verilerinizi işleyen taraf Norya'dır. İletişim: <a href=\"mailto:support@noryaai.com\" class=\"text-norya-brand hover:underline\">support@noryaai.com</a>. Taleplerinizi <a href=\"/legal/iletisim\" class=\"text-norya-brand hover:underline\">İletişim</a> sayfasından iletebilirsiniz."},
             {"title": "2. KVKK (Türkiye)", "body": "6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında veri sorumlusu Norya'dır. İşlenen veriler: kimlik ve iletişim bilgileri (ad, e-posta, telefon, ülke), hesap bilgileri (şifre hash'i, giriş kayıtları), tahlil metinleri ve üretilen raporlar (hizmetin ifası için), ödeme işlem kayıtları (kart numarası saklanmaz; PayTR kullanılır). Hukuki sebepler: sözleşmenin ifası, hukuki yükümlülük, meşru menfaat ve açık rıza. Verilerinize erişim, düzeltme, silme, işlemenin kısıtlanması ve itiraz haklarınız vardır; taleplerinizi yazılı veya e-posta ile iletebilirsiniz. Kişisel Verileri Koruma Kuruluna şikaret hakkınız saklıdır."},
