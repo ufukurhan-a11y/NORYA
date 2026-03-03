@@ -51,10 +51,7 @@
     /* ========== Yapı (class isimleri değişmesin) ========== */
     @page {
       size: A4;
-      margin-top: 28mm;
-      margin-bottom: 22mm;
-      margin-left: 20mm;
-      margin-right: 20mm;
+      margin: 16mm;
       @top-center {
         content: element(pdf-header);
       }
@@ -259,6 +256,28 @@
     }
     #pdf-disclaimer .disclaimer-line1 { font-size: 10px; margin: 0 0 3px 0; }
     #pdf-disclaimer .disclaimer-line2 { font-size: 8px; color: var(--disclaimer-color); margin: 0; opacity: 0.95; }
+    /* Clinical report layout (report-page) */
+    .report-page .report-header { display: table; width: 100%; margin-bottom: 12px; padding: 10px 0; border-bottom: 1px solid var(--section-border); }
+    .report-page .report-brand { display: table-cell; width: 1%; white-space: nowrap; vertical-align: middle; padding-right: 12px; }
+    .report-page .report-logo { max-height: 36px; width: auto; display: block; }
+    .report-page .report-brand-name { font-size: 14px; font-weight: 700; color: var(--norya-heading); }
+    .report-page .report-brand-ai { color: var(--norya-brand); }
+    .report-page .report-brand-sub { font-size: 9px; color: var(--norya-muted); }
+    .report-page .report-header-center { display: table-cell; text-align: center; vertical-align: middle; padding: 0 8px; }
+    .report-page .report-title { font-size: 15px; font-weight: 700; color: var(--norya-heading); margin: 0 0 2px 0; }
+    .report-page .report-subtitle { font-size: 10px; color: var(--norya-muted); margin: 0; }
+    .report-page .report-meta { display: table-cell; width: 1%; white-space: nowrap; text-align: right; font-size: 9px; color: var(--norya-muted); vertical-align: middle; }
+    .report-page .report-divider { height: 2px; background: var(--section-border); margin: 8px 0 12px 0; }
+    .report-page .report-actions.no-print { display: none !important; }
+    .report-page .alert-medical { margin-bottom: 14px; padding: 10px 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 0 4px 4px 0; font-size: 10px; line-height: 1.45; color: #92400e; }
+    .report-page .section-card { margin-bottom: 18px; padding: 12px 14px; border: 1px solid var(--section-border); border-radius: 6px; page-break-inside: avoid; }
+    .report-page .section-card .section-title { font-size: 12px; font-weight: 700; color: var(--norya-heading); margin: 0 0 8px 0; padding-bottom: 6px; border-bottom: 1px solid var(--section-border); }
+    .report-page .section-card .section-title .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--norya-brand); margin-right: 6px; vertical-align: middle; }
+    .report-page .section-card .section-body { font-size: 10px; line-height: 1.55; white-space: pre-wrap; }
+    .report-page .report-footer { margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--section-border); font-size: 9px; color: var(--footer-text); text-align: center; }
+    @media print {
+      .no-print { display: none !important; }
+    }
   </style>
 </head>
 <body>
@@ -284,106 +303,172 @@
     </div>
   </div>
 
-  <!-- İlk sayfa: Kişi ve Analiz bilgi bandı -->
-  <div class="info-band">
-    <div class="info-band-col">
-      <p class="info-band-title">{{ info_patient_heading | default('Kişi', true) }}</p>
-      <p class="info-band-row"><span class="info-band-label">Ad Soyad:</span> {{ patient_name | default('—', true) }}</p>
-      <p class="info-band-row"><span class="info-band-label">Yaş:</span> {{ patient_age | default('—', true) }}</p>
-      <p class="info-band-row"><span class="info-band-label">Cinsiyet:</span> {{ patient_gender | default('—', true) }}</p>
+  <div class="report-page">
+    <header class="report-header">
+      <div class="report-brand">
+        <img class="report-logo" src="static/norya_logo_transparent_trim.png" alt="Norya" />
+        <div class="report-brand-text">
+          <div class="report-brand-name">Norya <span class="report-brand-ai">AI</span></div>
+          <div class="report-brand-sub">{{ report_header_subtitle | default('Clinical-style analysis report', true) }}</div>
+        </div>
+      </div>
+      <div class="report-header-center">
+        <div class="report-title">{{ report_header_title | default('Analiz Raporu', true) }}</div>
+        <div class="report-subtitle">{{ report_header_subtitle | default('Kan tahlili sonuçlarının bilgilendirme amaçlı değerlendirmesi', true) }}</div>
+      </div>
+      <div class="report-meta">
+        <div><strong>RID:</strong> {{ report_id | default('—', true) }}</div>
+        <div><strong>User:</strong> {{ user_id | default('—', true) }}</div>
+        <div><strong>Tarih:</strong> {{ report_date }}</div>
+        <div><strong>Dil:</strong> {{ lang | default('tr', true) }}</div>
+      </div>
+    </header>
+    <div class="report-divider"></div>
+    <div class="report-actions no-print">
+      <button class="btn-secondary" type="button">Doktora Götür</button>
+      <button class="btn-secondary" type="button">Paylaş</button>
+      <button class="btn-primary" type="button">PDF İndir</button>
     </div>
-    <div class="info-band-col">
-      <p class="info-band-title">{{ info_analysis_heading | default('Analiz', true) }}</p>
-      <p class="info-band-row"><span class="info-band-label">Dil:</span> {{ lang | default('tr', true) }}</p>
-      <p class="info-band-row"><span class="info-band-label">Paket:</span> {{ plan_name | default('—', true) }}</p>
-      <p class="info-band-row"><span class="info-band-label">Kaynak:</span> {{ source_type | default('—', true) }}</p>
+    <div class="alert-medical">
+      <div class="alert-icon">⚠️</div>
+      <div class="alert-text">
+        <strong>Bilgilendirme amaçlıdır.</strong> Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.
+      </div>
     </div>
+
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ info_patient_heading | default('Kişi', true) }} / {{ info_analysis_heading | default('Analiz', true) }}</div>
+      <div class="section-body">
+        <div class="info-band" style="display:table;width:100%;margin:0;font-size:10px;border:1px solid var(--table-border);border-radius:4px;overflow:hidden;">
+          <div class="info-band-col" style="display:table-cell;width:50%;padding:10px 12px;vertical-align:top;background:var(--table-row-even);border-right:1px solid var(--table-border);">
+            <p class="info-band-title" style="font-size:10px;font-weight:700;margin:0 0 6px 0;">{{ info_patient_heading | default('Kişi', true) }}</p>
+            <p class="info-band-row" style="margin:2px 0;">{{ patient_name | default('—', true) }} · {{ patient_age | default('—', true) }} · {{ patient_gender | default('—', true) }}</p>
+          </div>
+          <div class="info-band-col" style="display:table-cell;width:50%;padding:10px 12px;vertical-align:top;border-right:none;">
+            <p class="info-band-title" style="font-size:10px;font-weight:700;margin:0 0 6px 0;">{{ info_analysis_heading | default('Analiz', true) }}</p>
+            <p class="info-band-row" style="margin:2px 0;">Dil: {{ lang | default('tr', true) }} · {{ plan_name | default('—', true) }} · {{ source_type | default('—', true) }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ risk_indicators_heading | default('Risk İşaretleri', true) }}</div>
+      <div class="section-body">
+        {% if risk_level != 'none' %}
+        <div class="risk-banner risk-{{ risk_level }}">
+          {{ risk_message or risk_default_attention }}
+        </div>
+        {% else %}
+        <div class="risk-banner risk-normal">
+          {{ risk_message or risk_default_normal }}
+        </div>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ intro_heading | default('Bu rapor hakkında', true) }}</div>
+      <div class="section-body">
+        <div class="intro-block" style="margin:0;padding:12px 14px;background:var(--table-row-even);border-radius:6px;border-left:4px solid var(--norya-brand);">
+          <p style="margin:0 0 8px 0;">{{ intro_p1 | default('Bu rapor, laboratuvar sonuçlarınızın anlaşılır bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri ve öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.', true) }}</p>
+          <p style="margin:0;">{{ intro_p2 | default('Sonuçlarınızı mutlaka bir hekim ile görüşün. Tıbbi kararlar için hekiminize danışın.', true) }}</p>
+        </div>
+      </div>
+    </section>
+
+    {% if overall_chart_svg_base64 %}
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ overall_status_heading | default('Genel durum', true) }}</div>
+      <div class="section-body">
+        <p class="chart-legend">{{ overall_chart_legend | default('Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor 0–100)', true) }}</p>
+        <div class="overall-chart-wrap">
+          <img class="overall-chart-img" src="data:image/svg+xml;base64,{{ overall_chart_svg_base64 }}" alt="{{ overall_status_heading | default('Genel durum', true) }} {{ overall_score }}/100" />
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    {% if summary %}
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ summary_heading | default('Özet', true) }}</div>
+      <div class="section-body">{{ summary }}</div>
+    </section>
+    {% endif %}
+
+    {% if biomarkers %}
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}</div>
+      <div class="section-body">
+        <div class="how-to-read-block">{{ how_to_read_body | default('Her parametre için Sonuç ve Referans aralığı verilir. Yeşil = Normal, turuncu = Sınırda, kırmızı = Referans dışı.', true) }}</div>
+      </div>
+    </section>
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}</div>
+      <div class="section-body">
+        <p class="chart-legend">Yeşil = Normal &nbsp;|&nbsp; Turuncu = Sınır &nbsp;|&nbsp; Kırmızı = Riskli</p>
+        <table class="biomarkers">
+          <thead>
+            <tr>
+              <th>{{ param | default('Parametre', true) }}</th>
+              <th>{{ result | default('Sonuç', true) }}</th>
+              <th>{{ unit | default('Birim', true) }}</th>
+              <th>{{ ref_range | default('Referans Aralığı', true) }}</th>
+              <th>{{ status | default('Durum', true) }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in biomarkers %}
+            <tr>
+              <td>{{ row.name }}</td>
+              <td>{{ row.value }}</td>
+              <td>{{ row.unit or '—' }}</td>
+              <td>{{ row.reference or '—' }}</td>
+              <td class="status-{{ row.status }}">{{ row.status_label }}</td>
+            </tr>
+            {% if row.chart_svg_base64 %}
+            <tr>
+              <td colspan="5" class="chart-cell">
+                <img class="range-chart" src="data:image/svg+xml;base64,{{ row.chart_svg_base64 }}" alt="Referans aralığı: {{ row.name }}" />
+              </td>
+            </tr>
+            {% endif %}
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </section>
+    {% endif %}
+
+    {% if possible_causes %}
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ possible_causes_heading | default('Olası Nedenler', true) }}</div>
+      <div class="section-body">{{ possible_causes }}</div>
+    </section>
+    {% endif %}
+
+    {% if recommendations %}
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ recommendations_heading | default('Öneriler', true) }}</div>
+      <div class="section-body">{{ recommendations }}</div>
+    </section>
+    {% endif %}
+
+    {% if raw_sections %}
+    {% for section in raw_sections %}
+    <section class="section-card">
+      <div class="section-title"><span class="dot"></span> {{ section.title }}</div>
+      <div class="section-body">{{ section.body }}</div>
+    </section>
+    {% endfor %}
+    {% endif %}
+
+    <footer class="report-footer">
+      Norya • Bilgilendirme amaçlıdır • support@noryaai.com
+    </footer>
   </div>
 
-  {% if risk_level != 'none' %}
-  <div class="section-title" style="margin-top:0;">{{ risk_indicators_heading | default('Risk İşaretleri', true) }}</div>
-  <div class="risk-banner risk-{{ risk_level }}">
-    {{ risk_message or risk_default_attention }}
-  </div>
-  {% else %}
-  <div class="risk-banner risk-normal">
-    {{ risk_message or risk_default_normal }}
-  </div>
-  {% endif %}
-
-  <div class="section-title" style="margin-top:0;">{{ intro_heading | default('Bu rapor hakkında', true) }}</div>
-  <div class="intro-block">
-    <p>{{ intro_p1 | default('Bu rapor, laboratuvar sonuçlarınızın anlaşılır bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri ve öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.', true) }}</p>
-    <p>{{ intro_p2 | default('Sonuçlarınızı mutlaka bir hekim ile görüşün. Tıbbi kararlar için hekiminize danışın.', true) }}</p>
-  </div>
-
-  {% if overall_chart_svg_base64 %}
-  <div class="section-title">{{ overall_status_heading | default('Genel durum', true) }}</div>
-  <p class="chart-legend">{{ overall_chart_legend | default('Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor 0–100)', true) }}</p>
-  <div class="overall-chart-wrap">
-    <img class="overall-chart-img" src="data:image/svg+xml;base64,{{ overall_chart_svg_base64 }}" alt="{{ overall_status_heading | default('Genel durum', true) }} {{ overall_score }}/100" />
-  </div>
-  {% endif %}
-
-  {% if summary %}
-  <div class="section-title">{{ summary_heading | default('Özet', true) }}</div>
-  <div class="section-body">{{ summary }}</div>
-  {% endif %}
-
-  {% if biomarkers %}
-  <div class="section-title">{{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}</div>
-  <div class="how-to-read-block">{{ how_to_read_body | default('Her parametre için Sonuç ve Referans aralığı verilir. Yeşil = Normal, turuncu = Sınırda, kırmızı = Referans dışı. Grafikler değerin aralığa göre konumunu gösterir.', true) }}</div>
-  <div class="section-title">{{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}</div>
-  <p class="chart-legend">Yeşil = Normal &nbsp;|&nbsp; Turuncu = Sınır &nbsp;|&nbsp; Kırmızı = Riskli</p>
-  <table class="biomarkers">
-    <thead>
-      <tr>
-        <th>{{ param | default('Parametre', true) }}</th>
-        <th>{{ result | default('Sonuç', true) }}</th>
-        <th>{{ unit | default('Birim', true) }}</th>
-        <th>{{ ref_range | default('Referans Aralığı', true) }}</th>
-        <th>{{ status | default('Durum', true) }}</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for row in biomarkers %}
-      <tr>
-        <td>{{ row.name }}</td>
-        <td>{{ row.value }}</td>
-        <td>{{ row.unit or '—' }}</td>
-        <td>{{ row.reference or '—' }}</td>
-        <td class="status-{{ row.status }}">{{ row.status_label }}</td>
-      </tr>
-      {% if row.chart_svg_base64 %}
-      <tr>
-        <td colspan="5" class="chart-cell">
-          <img class="range-chart" src="data:image/svg+xml;base64,{{ row.chart_svg_base64 }}" alt="Referans aralığı: {{ row.name }}" />
-        </td>
-      </tr>
-      {% endif %}
-      {% endfor %}
-    </tbody>
-  </table>
-  {% endif %}
-
-  {% if possible_causes %}
-  <div class="section-title">{{ possible_causes_heading | default('Olası Nedenler', true) }}</div>
-  <div class="section-body">{{ possible_causes }}</div>
-  {% endif %}
-
-  {% if recommendations %}
-  <div class="section-title">{{ recommendations_heading | default('Öneriler', true) }}</div>
-  <div class="section-body">{{ recommendations }}</div>
-  {% endif %}
-
-  {% if raw_sections %}
-  {% for section in raw_sections %}
-  <div class="section-title">{{ section.title }}</div>
-  <div class="section-body">{{ section.body }}</div>
-  {% endfor %}
-  {% endif %}
-
-  <div class="footer-note">
+  <div class="footer-note" style="margin-top:16px;">
     {{ footer_note | default('Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.', true) }}
   </div>
   <div class="footer-note emr-ehr-note">

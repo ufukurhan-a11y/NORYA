@@ -853,15 +853,17 @@ def build_report_pdf(
     lang: str = "tr",
     *,
     report_id: str | int | None = None,
+    user_identifier: str | None = None,
     patient_name: str | None = None,
     patient_age: str | None = None,
     patient_gender: str | None = None,
     plan_name: str | None = None,
     source_type: str | None = None,
 ) -> bytes:
-    """result_text'ten premium PDF raporu üretir. Opsiyonel: report_id, hasta bilgisi, plan, kaynak."""
+    """result_text'ten premium PDF raporu üretir. Opsiyonel: report_id, user_identifier (rapor sahibi), hasta bilgisi, plan, kaynak."""
     context = parse_report_to_context(result_text, report_date=report_date, lang=lang)
     context["report_id"] = str(report_id) if report_id is not None else "—"
+    context["user_id"] = (user_identifier or "").strip() or "—"
     context["patient_name"] = (patient_name or "").strip() or "—"
     context["patient_age"] = (patient_age or "").strip() or "—"
     context["patient_gender"] = (patient_gender or "").strip() or "—"

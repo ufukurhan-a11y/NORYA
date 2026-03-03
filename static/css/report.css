@@ -83,6 +83,47 @@
 .report-page .report-meta > div {
   white-space: nowrap;
 }
+/* Mobil: header dikey stack, dokunma hedefleri (min 44px), meta taşma yok */
+@media (max-width: 640px) {
+  .report-page .report-header {
+    flex-direction: column;
+    align-items: stretch;
+    text-align: center;
+    padding: 0.75rem 1rem;
+  }
+  .report-page .report-brand {
+    justify-content: center;
+  }
+  .report-page .report-header-center {
+    padding: 0;
+  }
+  .report-page .report-meta {
+    justify-content: center;
+  }
+  .report-page .report-meta > div {
+    white-space: normal;
+    word-break: break-word;
+  }
+  .report-page .report-actions {
+    padding: 0.625rem 1rem;
+    gap: 0.5rem;
+  }
+  .report-page .report-actions .btn-secondary,
+  .report-page .report-actions .btn-primary {
+    min-height: 44px;
+    padding: 0.625rem 1rem;
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .report-page .section-card {
+    padding: 0.875rem 1rem;
+    margin-bottom: 1rem;
+  }
+  .report-page .alert-medical {
+    padding: 0.625rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+}
 
 .report-page .report-divider {
   height: 2px;

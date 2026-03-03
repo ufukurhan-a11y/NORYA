@@ -338,6 +338,7 @@ def admin_analysis_pdf(
             report_date=report_date,
             lang=report_lang,
             report_id=analysis_id,
+            user_identifier=user.email if user else None,
             patient_name=user.full_name if user else None,
             plan_name=user.plan if user else None,
             source_type=getattr(rec, "source", None) or None,

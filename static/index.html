@@ -67,6 +67,32 @@
     .trust-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .trust-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 25, 41, 0.08); }
     .dark .trust-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
+    /* Partner logo: orijinal logo img, beyaz zemin, retina/PDF uyumlu */
+    .partner-logo {
+      width: 42px;
+      height: 42px;
+      border-radius: 12px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      background: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 6px;
+      flex-shrink: 0;
+      overflow: hidden;
+    }
+    .dark .partner-logo { background: #fff; border-color: rgba(15, 23, 42, 0.12); }
+    .partner-logo img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      display: block;
+    }
+    .partner-logo--sm { width: 20px; height: 20px; border-radius: 6px; padding: 2px; }
+    @media print {
+      .partner-logo { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+      .partner-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
+    }
     #toast-container { position: fixed; bottom: 1rem; left: 1rem; right: 1rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
     @media (min-width: 640px) {
       #toast-container { left: auto; right: 1.5rem; bottom: 1.5rem; max-width: 22rem; }
@@ -120,9 +146,63 @@
       .hero-title { font-size: 1.2rem !important; }
       .hero-desc { font-size: 0.875rem !important; }
     }
-    /* Özellik tablosu: mobilde yatay kaydırma her cihazda görünsün */
+    /* Pricing compare: desktop tablo, mobil kartlar */
+    .pricing-compare { --compare-brand: #0EA5A4; --compare-brand-hover: #0d9488; --compare-brand-light: rgba(14, 165, 164, 0.12); }
+    .compare-desktop { display: none; }
+    .compare-mobile { display: block; }
+    @media (min-width: 768px) {
+      .compare-desktop { display: block; }
+      .compare-mobile { display: none; }
+    }
+    .compare-mobile-cards { display: grid; grid-template-columns: 1fr; gap: 1rem; max-width: 24rem; margin: 0 auto; }
+    @media (min-width: 480px) { .compare-mobile-cards { grid-template-columns: repeat(2, 1fr); max-width: 32rem; } }
+    .compare-card {
+      background: var(--norya-bg);
+      border: 2px solid rgba(14, 165, 164, 0.2);
+      border-radius: 1rem;
+      padding: 1.25rem;
+      box-shadow: 0 4px 20px rgba(10, 25, 41, 0.06);
+      transition: border-color 0.2s, box-shadow 0.2s;
+      display: flex; flex-direction: column; gap: 0.75rem;
+    }
+    .dark .compare-card { background: var(--norya-card); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .compare-card:hover { border-color: rgba(14, 165, 164, 0.4); box-shadow: 0 6px 24px rgba(14, 165, 164, 0.08); }
+    .compare-card.compare-card-active { border-color: var(--compare-brand); box-shadow: 0 0 0 1px var(--compare-brand), 0 6px 24px var(--compare-brand-light); }
+    .compare-card-header { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem; margin-bottom: 0.25rem; }
+    .compare-card-badge { font-size: 0.9375rem; font-weight: 700; color: var(--norya-text); }
+    .dark .compare-card-badge { color: var(--norya-text); }
+    .compare-card-badge-best { background: var(--compare-brand); color: #fff; padding: 0.2rem 0.5rem; border-radius: 9999px; font-size: 0.75rem; font-weight: 600; }
+    .compare-card-price { font-size: 1.25rem; font-weight: 700; color: var(--compare-brand); margin: 0; }
+    .compare-card-period { font-size: 0.875rem; font-weight: 500; color: var(--norya-muted); }
+    .compare-card-highlights { list-style: none; padding: 0; margin: 0; font-size: 0.8125rem; color: var(--norya-muted); line-height: 1.45; }
+    .compare-card-highlights li { padding-left: 1rem; position: relative; }
+    .compare-card-highlights li::before { content: "✓"; position: absolute; left: 0; color: var(--compare-brand); font-weight: 700; }
+    .compare-card-features { border-top: 1px solid rgba(14, 165, 164, 0.15); padding-top: 0.75rem; }
+    .compare-card-features-title { font-size: 0.6875rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; color: var(--norya-muted); margin: 0 0 0.5rem 0; }
+    .compare-card-row { display: flex; align-items: center; gap: 0.5rem; font-size: 0.8125rem; padding: 0.25rem 0; }
+    .compare-card-row span:first-child { flex-shrink: 0; }
+    .compare-card-row span:nth-child(2) { flex: 1; color: var(--norya-text); }
+    .dark .compare-card-row span:nth-child(2) { color: var(--norya-text); }
+    .compare-card-row span:last-child { color: var(--norya-muted); font-weight: 500; }
+    .compare-card-cta {
+      margin-top: auto;
+      width: 100%;
+      padding: 0.75rem 1rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 0.75rem;
+      border: 2px solid var(--compare-brand);
+      background: var(--compare-brand);
+      color: #fff;
+      cursor: pointer;
+      transition: background 0.2s, border-color 0.2s, transform 0.1s;
+    }
+    .compare-card-cta:hover:not(:disabled) { background: var(--compare-brand-hover); border-color: var(--compare-brand-hover); }
+    .compare-card-cta:disabled { background: var(--compare-brand-light); border-color: var(--compare-brand); color: var(--compare-brand); cursor: default; opacity: 0.95; }
+    .compare-card-active .compare-card-cta:disabled { background: var(--compare-brand); color: #fff; }
+    /* Özellik tablosu: desktop'ta min-width */
     #compare-table-wrap { min-width: 0; }
-    @media (max-width: 640px) {
+    @media (max-width: 767px) {
       #compare-table-wrap { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
     }
     nav { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
@@ -622,14 +702,18 @@
             <span class="text-xs font-medium hidden sm:inline" data-i18n="trust_logo_paytr">Güvenli ödeme</span>
           </span>
           <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 shadow-sm">
-            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-6 w-6 object-contain flex-shrink-0" width="24" height="24" loading="lazy" />
+            <div class="partner-logo">
+              <img src="/static/logos/cloudflare.svg" alt="Cloudflare logo" loading="lazy" />
+            </div>
             <span class="text-xs font-medium" data-i18n="trust_logo_cloudflare">Cloudflare</span>
           </span>
           <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-[#1e3a5f] border border-accent-200 dark:border-accent-700 shadow-sm">
             <span class="text-xs font-bold text-white tracking-wide">HIPAA</span>
           </span>
           <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 shadow-sm">
-            <img src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg" alt="Google" class="h-6 w-auto object-contain flex-shrink-0" width="74" height="24" loading="lazy" />
+            <div class="partner-logo">
+              <img src="/static/logos/google.svg" alt="Google logo" loading="lazy" />
+            </div>
             <span class="text-xs font-medium">Google Cloud</span>
           </span>
         </div>
@@ -1756,7 +1840,7 @@
             <span class="text-accent-300 dark:text-accent-600">·</span>
             <img src="/static/images/paytr-logo.svg" alt="PayTR" class="h-3.5 w-auto object-contain inline-block" width="42" height="12" /><span data-i18n="footer_trust_paytr">PayTR Secure</span>
             <span class="text-accent-300 dark:text-accent-600">·</span>
-            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="" class="h-3.5 w-3.5 inline object-contain" width="14" height="14" /><span data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
+            <div class="partner-logo partner-logo--sm"><img src="/static/logos/cloudflare.svg" alt="" width="14" height="14" /></div><span data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
           </p>
         </div>
         <button type="button" onclick="closePaymentModal()" class="p-2 rounded-lg hover:bg-accent-100 dark:hover:bg-accent-700 text-accent-600 dark:text-accent-400" aria-label="Kapat">✕</button>
@@ -1783,7 +1867,9 @@
           <span data-i18n="footer_trust_paytr">PayTR Secure</span>
         </span>
         <span class="inline-flex items-center gap-2 text-accent-700 dark:text-accent-300 text-sm font-medium">
-          <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="" class="h-6 w-6 object-contain shrink-0" width="24" height="24" loading="lazy" />
+          <div class="partner-logo">
+            <img src="/static/logos/cloudflare.svg" alt="Cloudflare logo" loading="lazy" />
+          </div>
           <span data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
         </span>
       </div>
@@ -1965,9 +2051,11 @@
 
       <p class="mt-2 text-center text-xs text-accent-500 dark:text-accent-500 max-w-xl mx-auto" data-i18n="price_no_renewal">Pro paketleri satın aldığınız dönem boyunca geçerlidir (aylık 30 gün, yıllık 365 gün). Otomatik yenileme yoktur; süre bitince isterseniz tekrar satın alabilirsiniz.</p>
 
-      <!-- Planları karşılaştır tablosu (card içinde) -->
+      <!-- Planları karşılaştır: desktop tablo, mobil kartlar -->
       <h3 class="text-xl font-bold text-center text-accent-900 dark:text-white mt-16 mb-2" data-i18n="compare_title">Tüm planları karşılaştırın</h3>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-6" data-i18n="compare_subtitle">İhtiyacınıza uygun planı seçin.</p>
+      <div class="pricing-compare" id="pricing-compare">
+        <div class="compare-desktop">
       <div id="compare-table-wrap" class="w-full max-w-full mx-0">
         <div class="overflow-x-auto rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-sm" style="-webkit-overflow-scrolling: touch;">
           <table class="w-full text-sm border-collapse min-w-[580px]" role="grid">
@@ -2070,6 +2158,93 @@
             </tr>
           </tbody>
         </table>
+        </div>
+      </div>
+        </div>
+        <div class="compare-mobile">
+          <div class="compare-mobile-cards">
+            <!-- Ücretsiz -->
+            <div class="compare-card" data-plan="free" id="compare-card-free">
+              <div class="compare-card-header">
+                <span class="compare-card-badge" data-i18n="compare_plan_free">Ücretsiz</span>
+                <p class="compare-card-price"><span id="compare-mobile-price-free">0</span> <span id="compare-mobile-symbol-free">€</span></p>
+              </div>
+              <ul class="compare-card-highlights">
+                <li data-i18n="compare_upload">Metin, PDF, görsel yükleme</li>
+                <li data-i18n="compare_report">Detaylı rapor (özet, değerler, öneriler)</li>
+                <li data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</li>
+              </ul>
+              <div class="compare-card-features">
+                <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
+                <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span>1</span></div>
+                <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>—</span></div>
+                <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>—</span></div>
+              </div>
+              <button type="button" class="compare-card-cta" data-plan="free" onclick="goToCheckout('free')" data-i18n="compare_btn_select">Seç</button>
+            </div>
+            <!-- Tek Analiz -->
+            <div class="compare-card" data-plan="single" id="compare-card-single">
+              <div class="compare-card-header">
+                <span class="compare-card-badge" data-i18n="compare_plan_single">Tek Analiz</span>
+                <p class="compare-card-price"><span id="compare-mobile-price-single">13</span> <span id="compare-mobile-symbol-single">€</span></p>
+              </div>
+              <ul class="compare-card-highlights">
+                <li data-i18n="compare_upload">Metin, PDF, görsel yükleme</li>
+                <li data-i18n="compare_report">Detaylı rapor (özet, değerler, öneriler)</li>
+                <li data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</li>
+              </ul>
+              <div class="compare-card-features">
+                <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
+                <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span>1</span></div>
+                <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>—</span></div>
+                <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>—</span></div>
+              </div>
+              <button type="button" class="compare-card-cta" data-plan="single" onclick="goToCheckout('single')" data-i18n="compare_btn_select">Seç</button>
+            </div>
+            <!-- Aylık -->
+            <div class="compare-card" data-plan="monthly" id="compare-card-monthly">
+              <div class="compare-card-header">
+                <span class="compare-card-badge" data-i18n="compare_plan_monthly">Aylık</span>
+                <p class="compare-card-price"><span id="compare-mobile-price-monthly">50</span> <span id="compare-mobile-symbol-monthly">€</span><span class="compare-card-period" data-i18n="price_per_month">/ay</span></p>
+              </div>
+              <ul class="compare-card-highlights">
+                <li data-i18n="compare_analyses_per_month">10+3 / ay</li>
+                <li data-i18n="compare_history">Analiz geçmişi</li>
+                <li data-i18n="compare_compare">İki analizi karşılaştır</li>
+              </ul>
+              <div class="compare-card-features">
+                <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
+                <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span data-i18n="compare_analyses_per_month">10+3 / ay</span></div>
+                <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>✅</span></div>
+                <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>✅</span></div>
+              </div>
+              <button type="button" class="compare-card-cta" data-plan="monthly" onclick="goToCheckout('monthly')" data-i18n="compare_btn_select">Seç</button>
+            </div>
+            <!-- Yıllık -->
+            <div class="compare-card compare-card-featured" data-plan="yearly" id="compare-card-yearly">
+              <div class="compare-card-header">
+                <span class="compare-card-badge compare-card-badge-best" data-i18n="price_best_badge">En avantajlı</span>
+                <span class="compare-card-badge" data-i18n="compare_plan_yearly">Yıllık</span>
+                <p class="compare-card-price"><span id="compare-mobile-price-yearly">99</span> <span id="compare-mobile-symbol-yearly">€</span><span class="compare-card-period" data-i18n="price_per_year">/yıl</span></p>
+              </div>
+              <ul class="compare-card-highlights">
+                <li data-i18n="compare_analyses_per_month">10+3 / ay</li>
+                <li data-i18n="compare_history">Analiz geçmişi</li>
+                <li data-i18n="compare_compare">İki analizi karşılaştır</li>
+              </ul>
+              <div class="compare-card-features">
+                <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
+                <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span data-i18n="compare_analyses_per_month">10+3 / ay</span></div>
+                <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>✅</span></div>
+                <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>✅</span></div>
+              </div>
+              <button type="button" class="compare-card-cta" data-plan="yearly" onclick="goToCheckout('yearly')" data-i18n="compare_btn_select">Seç</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -2411,7 +2586,9 @@
         </div>
         <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
           <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-2">
-            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-7 w-auto max-h-8 object-contain shrink-0" width="30" height="30" loading="lazy" />
+            <div class="partner-logo">
+              <img src="/static/logos/cloudflare.svg" alt="Cloudflare logo" loading="lazy" />
+            </div>
             <span class="font-semibold text-sm" data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
           </div>
           <p class="text-xs text-accent-500 dark:text-accent-500 mb-3" data-i18n="trust_cloudflare_desc">Trafik koruması ve global CDN ile daha hızlı ve güvenli erişim.</p>
@@ -3416,7 +3593,7 @@
         analyze_doctor_notes_label: "Doktorunuzun notu / ek bilgi (isteğe bağlı)",
         analyze_doctor_notes_placeholder: "Örn: Doktorum B12 takviyesi verdi, bu sonuçla birlikte değerlendirin.",
         analyze_or: "— veya —", analyze_upload_btn: "PDF veya görsel (JPG, PNG) yükle",
-        report_title: "Norya Analiz Raporu", report_download: "Raporu İndir", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
+        report_title: "Analiz Raporu", report_subtitle: "Klinik tarzı analiz raporu", report_subtitle_desc: "Kan tahlili sonuçlarının bilgilendirme amaçlı değerlendirmesi", alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
         wizard_step1_title: "Dosya veya metin", wizard_step2_title: "Önizleme ve dil", wizard_step3_title: "Raporunuz hazırlanıyor", wizard_drop: "Dosyayı buraya sürükleyin veya tıklayın", wizard_back: "Geri", wizard_next: "Sonraki", wizard_preview_text: "Metin girişi", wizard_lang: "Rapor dili", wizard_step3_time: "Ortalama 20–30 saniye sürer.",
         pdf_header_title: "Kan Tahlili Analiz Raporu", pdf_footer_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya",
         pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler", pdf_sec_diet: "Diyet planı", pdf_sec_supplements: "Takviye önerileri", pdf_sec_heart: "Kalp sağlığı",
@@ -3429,7 +3606,7 @@
         price_single_title: "Tek Analiz", price_single_per: "tek seferlik", price_single_1: "✓ 1 analiz", price_single_2: "✓ Diyet + beslenme bilgilendirme + kalp sağlığı bölümleri", price_single_3: "✓ PDF indir & paylaş", price_btn_single: " — Tek Analiz",
         price_monthly_badge: "En Popüler", pricing_ai_detail: "AI Detay Seviyesi", price_monthly_title: "Aylık Abonelik", price_per_month: "/ay", price_monthly_per: "5 analiz / ay", price_monthly_1: "✓ Ayda 5 tam analiz", price_monthly_2: "✓ Diyet planı + beslenme / yaşam tarzı bilgilendirme notları", price_monthly_3: "✓ Geçmiş & iki analiz karşılaştırma", price_monthly_4: "✓ PDF indir, doktorla paylaş", price_btn_monthly: "/ay — Başla",
         price_best_badge: "En avantajlı", price_best_badge_value: "En İyi Değer", price_yearly_title: "Yıllık Abonelik", price_per_year: "/yıl", price_yearly_per: "Toplam 16 analiz (13 + 3 hediye)", price_yearly_1: "✓ Yılda 16 analiz (13 + 3 hediye)", price_yearly_2: "✓ Tüm premium diyet ve yaşam tarzı bilgilendirme bölümleri", price_yearly_3: "✓ Geçmiş & gelişmiş karşılaştırma", price_yearly_4: "✓ Doktor randevuları için ideal", price_btn_yearly: "/yıl — Başla",
-        compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_price: "💶 Fiyat",
+        compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_price: "💶 Fiyat", compare_btn_select: "Seç", compare_btn_active: "Aktif", compare_btn_upgrade: "Yükselt",
         footer_desc: "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.", footer_disclaimer: "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.", made_with_cursor: "Cursor ile yapıldı",
         disclaimer_informative: "Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.", medical_disclaimer_full: "Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.", doctor_cta_note: "Teşhis yerine geçmez; sonuçları hekiminizle paylaşın.",
         footer_mesafeli: "Mesafeli Satış Sözleşmesi", footer_privacy: "Gizlilik Politikası", footer_refund: "İade ve İptal Politikası", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -5796,6 +5973,33 @@
     var appliedCouponCode = null;
     var checkoutBasePrice = null;
     var checkoutSymbol = '€';
+    var activeComparePlan = null;
+    function setCompareActivePlan(plan) {
+      activeComparePlan = (plan && ['free','single','monthly','yearly'].includes(plan)) ? plan : null;
+      var container = document.getElementById('pricing-compare');
+      if (!container) return;
+      container.querySelectorAll('.compare-card').forEach(function(card) {
+        var p = card.getAttribute('data-plan');
+        var isActive = p === activeComparePlan;
+        card.classList.toggle('compare-card-active', isActive);
+        var btn = card.querySelector('.compare-card-cta');
+        if (!btn) return;
+        var t = T[getLang()] || T.tr;
+        if (isActive) {
+          btn.disabled = true;
+          btn.textContent = t.compare_btn_active || 'Aktif';
+        } else {
+          btn.disabled = false;
+          var isPro = activeComparePlan === 'monthly' || activeComparePlan === 'yearly';
+          btn.textContent = (isPro && (p === 'monthly' || p === 'yearly')) ? (t.compare_btn_upgrade || 'Yükselt') : (t.compare_btn_select || 'Seç');
+        }
+      });
+    }
+    (function initCompareFromUrl() {
+      var params = new URLSearchParams(window.location.search);
+      var plan = params.get('plan');
+      if (plan) setCompareActivePlan(plan);
+    })();
     function goToCheckout(planKey) {
       var pid = PLAN_IDS[planKey] || planKey;
       if (pid === 'free') {
@@ -6625,6 +6829,7 @@
       document.getElementById('profile-summary-remaining').textContent = remaining;
       document.getElementById('profile-summary-ends').textContent = (profileUsage && profileUsage.plan === 'pro') ? (t.profile_ends_monthly || 'Aylık yenilenir') : (t.profile_ends_na || '—');
       document.getElementById('profile-plan-name').textContent = planName;
+      setCompareActivePlan(profileUsage && profileUsage.plan ? profileUsage.plan : null);
       var pct = (limit > 0 && limit < 999999) ? Math.min(100, (used / limit) * 100) : 0;
       document.getElementById('profile-usage-bar').style.width = pct + '%';
       document.getElementById('profile-usage-fraction').textContent = used + ' / ' + (limit >= 999999 ? '∞' : limit);
