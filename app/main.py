@@ -40,6 +40,7 @@ from app.core.config import is_openai_configured, settings
 from app.core.database import engine, get_db, init_db
 from app.core.rate_limit import limiter
 from app.core.geo import get_country_from_ip
+from app.legal_i18n import get_legal_content, get_legal_ui
 from app.core.security import create_pdf_access_token, decode_access_token, decode_pdf_access_token, hash_password
 from app.models import (  # noqa: F401
     AnalysisJob,
@@ -709,10 +710,10 @@ def _inject_ga(html: str) -> str:
 
 
 def _whatsapp_url_and_style() -> tuple[str, str]:
-    """WhatsApp iletişim: (href, style). Numara yoksa gizli."""
-    num = (getattr(settings, "whatsapp_contact", None) or "").strip().replace("+", "").replace(" ", "")
+    """WhatsApp iletişim: (href, style). Numara yoksa varsayılan kullanılır, yine de gizlenmez."""
+    num = (getattr(settings, "whatsapp_contact", None) or "905071703564").strip().replace("+", "").replace(" ", "")
     if not num or len(num) < 10:
-        return "#", ' style="display:none!important"'
+        num = "905071703564"
     text = quote("Merhaba, Norya hakkında soru sormak istiyorum.")
     return f"https://wa.me/{num}?text={text}", ""
 
@@ -735,23 +736,47 @@ LEGAL_PAGES = {
 }
 
 
+def _legal_lang_from_request(request: Request) -> str:
+    """Yasal sayfa dili: önce ?lang=, yoksa Accept-Language."""
+    lang_q = request.query_params.get("lang", "").strip().lower()
+    if lang_q:
+        return lang_q[:5]
+    return _parse_accept_language(request.headers.get("accept-language"))
+
+
 @app.get("/legal/{page}", response_class=HTMLResponse)
-def legal_page(page: str):
-    """Yasal sayfalar: mesafeli-satis-sozlesmesi, gizlilik-politikasi, iade-iptal-politikasi, kvkk-gdpr, kullanim-sartlari, iletisim."""
+def legal_page(request: Request, page: str):
+    """Yasal sayfalar: müşteri diline göre (?lang= veya Accept-Language) içerik sunulur."""
     if page not in LEGAL_PAGES:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
-    path = STATIC_DIR / "legal" / f"{page}.html"
-    if not path.is_file():
-        path = Path.cwd() / "static" / "legal" / f"{page}.html"
-    if not path.is_file():
+    lang = _legal_lang_from_request(request)
+    ui = get_legal_ui(lang)
+    content = get_legal_content(page, lang)
+    if not content:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
-    return HTMLResponse(path.read_text(encoding="utf-8"))
+    if page == "iletisim":
+        return templates.TemplateResponse(
+            "legal/legal_contact.html",
+            {"request": request, "content": content, **ui},
+        )
+    return templates.TemplateResponse(
+        "legal/legal_article.html",
+        {"request": request, "content": content, **ui},
+    )
 
 
 @app.get("/iade-iptal", response_class=HTMLResponse)
 def iade_iptal_page(request: Request):
-    """PayTR uyumlu İade ve İptal Politikası sayfası. Metin app/templates/legal/iade-iptal-content.html içinde düzenlenebilir."""
-    return templates.TemplateResponse("legal/iade-iptal.html", {"request": request})
+    """İade ve İptal Politikası — müşteri diline göre (?lang= veya Accept-Language)."""
+    lang = _legal_lang_from_request(request)
+    ui = get_legal_ui(lang)
+    content = get_legal_content("iade-iptal-politikasi", lang)
+    if not content:
+        raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
+    return templates.TemplateResponse(
+        "legal/legal_article.html",
+        {"request": request, "content": content, **ui},
+    )
 
 
 @app.get("/")

@@ -18,7 +18,7 @@
   <meta name="description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
   <meta property="og:title" content="Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu" />
   <meta property="og:description" content="Kan tahlili sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor alın. 9 dilde." />
-  <meta property="og:image" content="/static/logo.png" />
+  <meta property="og:image" content="/static/norya_logo_transparent_trim.png" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="tr_TR" />
   <meta name="twitter:card" content="summary_large_image" />
@@ -275,7 +275,7 @@
             <a href="#seffaflik" id="nav-menu-transparency" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_transparency">Şeffaflık</a>
             <a href="#fiyatlandirma" id="nav-menu-pricing" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_pricing">Fiyatlandırma</a>
             <a href="#odeme" id="nav-menu-checkout" onclick="closeNavMenu(); showCheckoutPage(); return true;" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_checkout">Ödeme</a>
-            <a href="/legal/iletisim" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_contact">Bize Ulaşın</a>
+            <a href="/legal/iletisim" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 legal-lang-link" data-i18n="nav_contact">Bize Ulaşın</a>
             <button type="button" onclick="closeNavMenu(); requestPushAndSubscribe();" class="block w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" data-i18n="nav_notifications">Bildirimleri aç</button>
             <a href="#sss" id="nav-menu-faq" onclick="closeNavMenu()" class="block px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" data-i18n="nav_faq">SSS</a>
           </div>
@@ -351,34 +351,55 @@
         <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400" data-i18n="trust_subtitle">
           Veriler yalnızca rapor üretimi amacıyla işlenir. Norya tıbbi tanı koymaz; bilgilendirme amaçlı AI destekli yorum sunar.
         </p>
+        <!-- Trust logos: SSL, PayTR, Cloudflare, HIPAA, Google (no placeholders; equal-height items) -->
+        <div class="mt-6 sm:mt-8 grid grid-cols-2 sm:flex sm:flex-wrap items-stretch justify-center gap-4 sm:gap-6 text-accent-600 dark:text-accent-400">
+          <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-slate-50 dark:bg-accent-800/60 border border-slate-200 dark:border-accent-700" title="SSL/TLS">
+            <span class="text-lg" aria-hidden="true">🔒</span>
+            <span class="text-xs font-medium" data-i18n="trust_logo_ssl">SSL</span>
+          </span>
+          <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 shadow-sm">
+            <img src="/static/images/paytr-logo.svg" alt="PayTR" class="h-5 w-auto object-contain flex-shrink-0" width="56" height="16" loading="lazy" />
+            <span class="text-xs font-medium hidden sm:inline" data-i18n="trust_logo_paytr">Güvenli ödeme</span>
+          </span>
+          <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 shadow-sm">
+            <img src="https://www.vectorlogo.zone/logos/cloudflare/cloudflare-icon.svg" alt="Cloudflare" class="h-6 w-6 object-contain flex-shrink-0" width="24" height="24" loading="lazy" />
+            <span class="text-xs font-medium" data-i18n="trust_logo_cloudflare">Cloudflare</span>
+          </span>
+          <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-[#1e3a5f] border border-accent-200 dark:border-accent-700 shadow-sm">
+            <span class="text-xs font-bold text-white tracking-wide">HIPAA</span>
+          </span>
+          <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 shadow-sm">
+            <img src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg" alt="Google" class="h-6 w-auto object-contain flex-shrink-0" width="74" height="24" loading="lazy" />
+          </span>
+        </div>
       </div>
 
-      <!-- İstatistik kartları -->
-      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
-        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
-          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">🌍</span>
-          <div>
+      <!-- İstatistik kartları (4 kart, eşit yükseklik, responsive grid) -->
+      <div class="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6 justify-items-center items-stretch">
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3 h-full">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg flex-shrink-0" aria-hidden="true">🌍</span>
+          <div class="min-w-0 flex-1">
             <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_langs_title">9+ dil desteği</p>
             <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_langs_desc">Tahlilinizi Türkçe, İngilizce ve diğer dillerde okuyabilirsiniz.</p>
           </div>
         </div>
-        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
-          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">📄</span>
-          <div>
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3 h-full">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg flex-shrink-0" aria-hidden="true">📄</span>
+          <div class="min-w-0 flex-1">
             <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_input_title">Esnek girdi türleri</p>
             <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_input_desc">Metin, PDF veya fotoğraf yükleyerek analiz alın.</p>
           </div>
         </div>
-        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
-          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">⏱</span>
-          <div>
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3 h-full">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg flex-shrink-0" aria-hidden="true">⏱</span>
+          <div class="min-w-0 flex-1">
             <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_speed_title">1 dakikadan kısa sonuç</p>
             <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_speed_desc">Çoğu rapor saniyeler içinde hazır olur.</p>
           </div>
         </div>
-        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3">
-          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg" aria-hidden="true">🔒</span>
-          <div>
+        <div class="rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.08)] p-4 flex items-start gap-3 h-full">
+          <span class="w-9 h-9 rounded-xl bg-primary-50 dark:bg-primary-900/40 flex items-center justify-center text-primary-600 dark:text-primary-300 text-lg flex-shrink-0" aria-hidden="true">🔒</span>
+          <div class="min-w-0 flex-1">
             <p class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="trust_cards_ssl_title">SSL/TLS güvenli bağlantı</p>
             <p class="text-xs text-accent-600 dark:text-accent-400 mt-1" data-i18n="trust_cards_ssl_desc">Tarayıcı ile sunucu arasındaki iletişim şifrelenir.</p>
           </div>
@@ -926,7 +947,7 @@
       <div class="rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 overflow-hidden shadow-lg">
         <div class="px-5 py-4 border-b-2 border-norya-brand bg-[var(--norya-brand-light)] flex flex-wrap items-center justify-between gap-2">
           <div class="flex items-center gap-3">
-            <img src="/static/logo.png" alt="Norya AI" class="h-14 w-auto flex-shrink-0 object-contain bg-white" />
+            <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-14 w-auto flex-shrink-0 object-contain bg-white" />
             <div>
               <h3 class="font-bold text-norya-brand" data-i18n="example_report_heading">Norya Analiz Raporu</h3>
               <p class="text-xs text-navy-500 dark:text-navy-400 mt-0.5" data-i18n="example_report_date">Örnek tarih</p>
@@ -1231,7 +1252,7 @@
             <div id="analyze-result" class="rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-primary-50/40 dark:bg-navy-800/90 overflow-hidden shadow-xl shadow-primary-900/5 dark:shadow-black/20">
             <div class="px-6 py-5 border-b border-primary-200 dark:border-primary-800 bg-gradient-to-r from-primary-500 to-primary-600 dark:from-primary-600 dark:to-primary-700 flex flex-wrap items-center justify-between gap-2">
               <div class="flex items-center gap-3">
-                <img src="/static/norya_logo_report.png" alt="Norya AI" class="h-20 sm:h-24 w-auto flex-shrink-0 object-contain rounded-xl p-1.5 bg-primary-200/40 dark:bg-primary-300/30 border border-primary-300/50 dark:border-primary-400/30" />
+                <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-20 sm:h-24 w-auto flex-shrink-0 object-contain rounded-xl p-1.5 bg-primary-200/40 dark:bg-primary-300/30 border border-primary-300/50 dark:border-primary-400/30" />
                 <div>
                   <h3 class="font-bold text-white text-lg drop-shadow-sm" data-i18n="report_title">Norya Analiz Raporu</h3>
                   <p class="text-xs text-primary-100 mt-0.5" id="analyze-result-date"></p>
@@ -1336,7 +1357,7 @@
       </div>
       <div class="rounded-2xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-accent-800 overflow-hidden drop-shadow-soft">
         <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-white flex items-center gap-3">
-          <img src="/static/logo.png" alt="Norya AI" class="h-12 w-auto flex-shrink-0 object-contain rounded-lg bg-white/95" />
+          <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-12 w-auto flex-shrink-0 object-contain rounded-lg bg-white/95" />
           <div>
             <h2 class="text-xl font-bold" data-i18n="checkout_title">Ödeme özeti</h2>
             <p class="text-primary-100 text-sm mt-0.5" data-i18n="checkout_subtitle">Norya — Kan tahlili analizi</p>
@@ -1924,12 +1945,12 @@
       </div>
       <!-- Yasal ve iletişim linkleri: her biri ayrı sayfa -->
       <nav class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-8" aria-label="Yasal sayfalar ve iletişim">
-        <a href="/legal/mesafeli-satis-sozlesmesi" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors" data-i18n="footer_mesafeli">Mesafeli Satış Sözleşmesi</a>
-        <a href="/legal/gizlilik-politikasi" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors" data-i18n="footer_privacy">Gizlilik Politikası</a>
-        <a href="/iade-iptal" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors" data-i18n="footer_refund">İade ve İptal Politikası</a>
-        <a href="/legal/kvkk-gdpr" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors" data-i18n="footer_kvkk_gdpr">KVKK / GDPR</a>
-        <a href="/legal/kullanim-sartlari" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors" data-i18n="footer_terms">Kullanım Şartları</a>
-        <a href="/legal/iletisim" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors" data-i18n="footer_contact">İletişim</a>
+        <a href="/legal/mesafeli-satis-sozlesmesi" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_mesafeli">Mesafeli Satış Sözleşmesi</a>
+        <a href="/legal/gizlilik-politikasi" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_privacy">Gizlilik Politikası</a>
+        <a href="/iade-iptal" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_refund">İade ve İptal Politikası</a>
+        <a href="/legal/kvkk-gdpr" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_kvkk_gdpr">KVKK / GDPR</a>
+        <a href="/legal/kullanim-sartlari" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_terms">Kullanım Şartları</a>
+        <a href="/legal/iletisim" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_contact">İletişim</a>
       </nav>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm"><strong class="text-accent-800 dark:text-accent-200">Norya</strong> — <span data-i18n="footer_desc">Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.</span></p>
       <p class="text-center text-accent-500 dark:text-accent-500 text-xs mt-1.5" data-i18n="footer_disclaimer">Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.</p>
@@ -1938,9 +1959,9 @@
     </div>
   </footer>
 
-  <!-- WhatsApp: viewport sağ alt köşede sabit (position: fixed) -->
-  <a href="__NORYA_WHATSAPP_URL__" __NORYA_WHATSAPP_STYLE__ target="_blank" rel="noopener noreferrer" class="fixed bottom-6 right-6 z-[90] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-110 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
-    <img src="/static/images/whatsapp-icon.svg" alt="" class="w-8 h-8 brightness-0 invert" width="32" height="32" />
+  <!-- WhatsApp: sağda, PWA çubuğunun üstünde; yüksek konumda kesilmeden görünsün -->
+  <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="fixed z-[9999] w-14 h-14 rounded-full bg-[#25D366] shadow-lg flex items-center justify-center hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" style="position:fixed!important;right:20px;bottom:80px;" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
+    <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="w-8 h-8 opacity-100" width="32" height="32" style="opacity:1;filter:none;" />
   </a>
 
   <!-- Login Modal: e-posta + şifre -->
@@ -2087,28 +2108,24 @@
 
   <div id="toast-container" aria-live="polite"></div>
 
-  <!-- PWA: Ana ekrana ekle (Android/Chrome) -->
-  <div id="a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-3 px-4 py-3 bg-slate-800 text-white shadow-lg border-t border-slate-700" style="padding-bottom: max(12px, env(safe-area-inset-bottom));">
-    <div class="flex items-center gap-2 min-w-0">
-      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
-        <img src="/static/norya_logo_report.png" alt="Norya" class="w-full h-full object-contain" />
-      </span>
-      <p class="text-sm truncate" data-i18n="a2hs_message">Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.</p>
+  <!-- PWA: Ana ekrana ekle (Android/Chrome) — ince, kompakt çubuk -->
+  <div id="a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-2 px-3 py-2 bg-slate-800/95 text-white border-t border-slate-700/80 backdrop-blur-sm" style="padding-bottom: max(8px, env(safe-area-inset-bottom));">
+    <div class="flex items-center gap-2 min-w-0 flex-1">
+      <img src="/static/icons/icon-192.png" alt="Norya" class="flex-shrink-0 w-8 h-8 rounded-lg object-contain" />
+      <p class="text-xs truncate text-slate-200" data-i18n="a2hs_message">Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.</p>
     </div>
-    <div class="flex items-center gap-2 flex-shrink-0">
-      <button type="button" onclick="dismissA2HS()" class="text-slate-400 hover:text-white text-sm px-2" data-i18n="a2hs_later">Sonra</button>
-      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="px-4 py-2 text-sm font-semibold text-white a2hs-btn-primary" data-i18n="a2hs_add">Ekle</button>
+    <div class="flex items-center gap-1 flex-shrink-0">
+      <button type="button" onclick="dismissA2HS()" class="text-slate-400 hover:text-white text-xs py-1.5 px-2 rounded" data-i18n="a2hs_later">Sonra</button>
+      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="a2hs-btn-primary text-xs font-medium py-1.5 px-3 rounded-full text-white" data-i18n="a2hs_add">Ekle</button>
     </div>
   </div>
   <!-- PWA: iOS Ana ekrana ekle (Safari) -->
-  <div id="ios-a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-3 px-4 py-3 bg-slate-800 text-white shadow-lg border-t border-slate-700" style="padding-bottom: max(12px, env(safe-area-inset-bottom));">
-    <div class="flex items-center gap-2 min-w-0">
-      <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center overflow-hidden">
-        <img src="/static/norya_logo_report.png" alt="Norya" class="w-full h-full object-contain" />
-      </span>
-      <p class="text-sm" data-i18n="ios_a2hs_message">Ana ekrana ekle: <strong>Paylaş</strong> <span aria-hidden="true">⎋</span> <strong>Ana Ekrana Ekle</strong></p>
+  <div id="ios-a2hs-banner" class="fixed bottom-0 left-0 right-0 z-[90] hidden flex items-center justify-between gap-2 px-3 py-2 bg-slate-800/95 text-white border-t border-slate-700/80 backdrop-blur-sm" style="padding-bottom: max(8px, env(safe-area-inset-bottom));">
+    <div class="flex items-center gap-2 min-w-0 flex-1">
+      <img src="/static/icons/icon-192.png" alt="Norya" class="flex-shrink-0 w-8 h-8 rounded-lg object-contain" />
+      <p class="text-xs text-slate-200" data-i18n="ios_a2hs_message">Ana ekrana ekle: <strong>Paylaş</strong> <span aria-hidden="true">⎋</span> <strong>Ana Ekrana Ekle</strong></p>
     </div>
-    <button type="button" onclick="dismissIOSA2HS()" class="text-slate-400 hover:text-white text-sm px-2 flex-shrink-0" data-i18n="ios_a2hs_close">Kapat</button>
+    <button type="button" onclick="dismissIOSA2HS()" class="text-slate-400 hover:text-white text-xs py-1.5 px-2 rounded flex-shrink-0" data-i18n="ios_a2hs_close">Kapat</button>
   </div>
 
   <script>
@@ -2898,6 +2915,7 @@
         trust_cards_speed_title: "1 dakikadan kısa sonuç", trust_cards_speed_desc: "Sunucu uygun olduğunda çoğu rapor saniyeler içinde hazır olur.",
         trust_cards_ssl_title: "SSL/TLS güvenli bağlantı", trust_cards_ssl_desc: "Tarayıcı ile sunucu arasındaki iletişim şifrelenir.",
         trust_cards_cloud_title: "Cloudflare ağ koruması", trust_cards_cloud_desc: "Saldırı ve trafiğe karşı ek ağ güvenliği katmanı.",
+        trust_logo_ssl: "SSL", trust_logo_paytr: "Güvenli ödeme", trust_logo_cloudflare: "Cloudflare",
         trust_chip_kvkk: "KVKK uyumlu işleme", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "SSL/TLS ile şifreleme", trust_chip_purpose: "Amaçla sınırlı veri işleme", trust_chip_not_medical: "Tıbbi tanı aracı değildir",
         modal_login: "Giriş Yap", modal_register: "Ücretsiz Kayıt", placeholder_email: "E-posta", placeholder_password: "Şifre", placeholder_name: "Ad Soyad", placeholder_password_hint: "Şifre (en az 6 karakter)", placeholder_country: "Ülke seçin", placeholder_phone: "Telefon (ülke kodu ile, örn. +90 555 123 45 67)", placeholder_password_confirm: "Şifreyi tekrar girin", placeholder_password_current: "Mevcut şifre", forgot_desc: "E-posta adresinizi girin, size şifre sıfırlama linki gönderelim.", forgot_btn_send: "Gönder", reset_title: "Yeni şifre belirle", reset_desc: "E-postanıza gelen linkteki token ile yeni şifrenizi girin.", reset_btn: "Şifreyi güncelle", wizard_char_count: "{n} karakter", btn_analyze: "Analiz Et", country_other: "Diğer",
         aria_select_language: "Dil seçin", error_password_min: "Şifre en az 6 karakter olmalı.", error_password_mismatch: "Şifreler eşleşmiyor.", error_reset_link_invalid: "Geçersiz veya süresi dolmuş link. Lütfen şifre sıfırlama talebini tekrarlayın.", error_name_required: "Ad soyad girin.", error_email_required: "E-posta girin.", error_phone_invalid: "Geçerli bir telefon numarası girin (ülke kodu ile, örn. +905551234567).", error_country_required: "Ülke seçin.", account_suspended: "Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.", register_failed: "Kayıt başarısız.",
@@ -3088,6 +3106,7 @@
         trust_cards_speed_title: "Results in under a minute", trust_cards_speed_desc: "When servers are available, most reports are ready within seconds.",
         trust_cards_ssl_title: "SSL/TLS secure connection", trust_cards_ssl_desc: "Traffic between your browser and our servers is encrypted.",
         trust_cards_cloud_title: "Cloudflare network protection", trust_cards_cloud_desc: "Additional network security and performance via Cloudflare.",
+        trust_logo_ssl: "SSL", trust_logo_paytr: "Secure payment", trust_logo_cloudflare: "Cloudflare",
         trust_chip_kvkk: "KVKK-compliant processing", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "SSL/TLS encryption", trust_chip_purpose: "Purpose-limited data processing", trust_chip_not_medical: "Not a medical diagnosis tool",
         modal_login: "Log in", modal_register: "Sign up free", placeholder_email: "Email", placeholder_password: "Password", placeholder_name: "Full name", placeholder_password_hint: "Password (min 6 characters)", placeholder_country: "Select country", placeholder_phone: "Phone (with country code, e.g. +90 555 123 45 67)", placeholder_password_confirm: "Confirm password", placeholder_password_current: "Current password", forgot_desc: "Enter your email and we will send you a password reset link.", forgot_btn_send: "Send", reset_title: "Set new password", reset_desc: "Enter your new password using the token from the email we sent you.", reset_btn: "Update password", wizard_char_count: "{n} characters", btn_analyze: "Analyze", country_other: "Other",
         aria_select_language: "Select language", error_password_min: "Password must be at least 6 characters.", error_password_mismatch: "Passwords do not match.", error_reset_link_invalid: "Invalid or expired link. Please request a new password reset.", error_name_required: "Please enter your name.", error_email_required: "Please enter your email.", error_phone_invalid: "Please enter a valid phone number (with country code, e.g. +905551234567).", error_country_required: "Please select a country.", account_suspended: "Your account has been suspended. Please contact us via the contact page.", register_failed: "Registration failed.",
@@ -3257,6 +3276,7 @@
         trust_cards_speed_title: "Risultati in meno di un minuto", trust_cards_speed_desc: "Quando i server sono disponibili, la maggior parte dei report è pronta in pochi secondi.",
         trust_cards_ssl_title: "Connessione sicura SSL/TLS", trust_cards_ssl_desc: "Il traffico tra browser e server è crittografato.",
         trust_cards_cloud_title: "Protezione di rete Cloudflare", trust_cards_cloud_desc: "Sicurezza e prestazioni aggiuntive tramite Cloudflare.",
+        trust_logo_ssl: "SSL", trust_logo_paytr: "Pagamento sicuro",
         trust_chip_kvkk: "Elaborazione conforme KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Crittografia SSL/TLS", trust_chip_purpose: "Elaborazione dati a scopo limitato", trust_chip_not_medical: "Non è uno strumento di diagnosi medica",
         modal_login: "Accedi", modal_register: "Registrati gratis", placeholder_email: "Email", placeholder_password: "Password", placeholder_name: "Nome completo", placeholder_password_hint: "Password (min 6 caratteri)", placeholder_country: "Seleziona paese", placeholder_phone: "Telefono (con prefisso, es. +90 555 123 45 67)", placeholder_password_confirm: "Conferma password", placeholder_password_current: "Password attuale", forgot_desc: "Inserisci la tua email e ti invieremo un link per reimpostare la password.", forgot_btn_send: "Invia", reset_title: "Imposta nuova password", reset_desc: "Inserisci la nuova password usando il token ricevuto via email.", reset_btn: "Aggiorna password", wizard_char_count: "{n} caratteri", btn_analyze: "Analizza", country_other: "Altro",
         aria_select_language: "Seleziona lingua", error_password_min: "La password deve avere almeno 6 caratteri.", error_password_mismatch: "Le password non coincidono.", error_reset_link_invalid: "Link non valido o scaduto. Richiedi un nuovo link per reimpostare la password.", error_name_required: "Inserisci il nome.", error_email_required: "Inserisci l'email.", error_phone_invalid: "Inserisci un numero di telefono valido (con prefisso, es. +905551234567).", error_country_required: "Seleziona un paese.", account_suspended: "Il tuo account è stato sospeso. Contattaci dalla pagina contatti.", register_failed: "Registrazione fallita.",
@@ -3426,6 +3446,7 @@
         trust_cards_speed_title: "Resultados en menos de un minuto", trust_cards_speed_desc: "Cuando los servidores están disponibles, la mayoría de informes están listos en segundos.",
         trust_cards_ssl_title: "Conexión segura SSL/TLS", trust_cards_ssl_desc: "El tráfico entre tu navegador y nuestros servidores está cifrado.",
         trust_cards_cloud_title: "Protección de red Cloudflare", trust_cards_cloud_desc: "Seguridad y rendimiento adicionales con Cloudflare.",
+        trust_logo_ssl: "SSL", trust_logo_paytr: "Pago seguro",
         trust_chip_kvkk: "Procesamiento conforme KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Cifrado SSL/TLS", trust_chip_purpose: "Procesamiento con fines limitados", trust_chip_not_medical: "No es una herramienta de diagnóstico médico",
         modal_login: "Iniciar sesión", modal_register: "Registrarse gratis", placeholder_email: "Email", placeholder_password: "Contraseña", placeholder_name: "Nombre completo", placeholder_password_hint: "Contraseña (mín. 6 caracteres)", placeholder_country: "Seleccionar país", placeholder_phone: "Teléfono (con código de país, ej. +90 555 123 45 67)", placeholder_password_confirm: "Confirmar contraseña", placeholder_password_current: "Contraseña actual", forgot_desc: "Introduce tu email y te enviaremos un enlace para restablecer la contraseña.", forgot_btn_send: "Enviar", reset_title: "Establecer nueva contraseña", reset_desc: "Introduce tu nueva contraseña usando el token del correo que te enviamos.", reset_btn: "Actualizar contraseña", wizard_char_count: "{n} caracteres", btn_analyze: "Analizar", country_other: "Otro",
         aria_select_language: "Seleccionar idioma", error_password_min: "La contraseña debe tener al menos 6 caracteres.", error_password_mismatch: "Las contraseñas no coinciden.", error_reset_link_invalid: "Enlace no válido o caducado. Solicita uno nuevo para restablecer la contraseña.", error_name_required: "Introduce tu nombre.", error_email_required: "Introduce tu email.", error_phone_invalid: "Introduce un número de teléfono válido (con código de país, ej. +905551234567).", error_country_required: "Selecciona un país.", account_suspended: "Tu cuenta ha sido suspendida. Contáctanos en la página de contacto.", register_failed: "Registro fallido.",
@@ -3595,6 +3616,7 @@
         trust_cards_speed_title: "Résultats en moins d'une minute", trust_cards_speed_desc: "Quand les serveurs sont disponibles, la plupart des rapports sont prêts en quelques secondes.",
         trust_cards_ssl_title: "Connexion sécurisée SSL/TLS", trust_cards_ssl_desc: "Le trafic entre votre navigateur et nos serveurs est chiffré.",
         trust_cards_cloud_title: "Protection réseau Cloudflare", trust_cards_cloud_desc: "Sécurité et performances supplémentaires via Cloudflare.",
+        trust_logo_ssl: "SSL", trust_logo_paytr: "Paiement sécurisé",
         trust_chip_kvkk: "Traitement conforme KVKK", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "Chiffrement SSL/TLS", trust_chip_purpose: "Traitement à finalité limitée", trust_chip_not_medical: "Ce n'est pas un outil de diagnostic médical",
         modal_login: "Connexion", modal_register: "Inscription gratuite", placeholder_email: "Email", placeholder_password: "Mot de passe", placeholder_name: "Nom complet", placeholder_password_hint: "Mot de passe (min. 6 caractères)", placeholder_country: "Sélectionner un pays", placeholder_phone: "Téléphone (avec indicatif, ex. +90 555 123 45 67)", placeholder_password_confirm: "Confirmer le mot de passe", placeholder_password_current: "Mot de passe actuel", forgot_desc: "Entrez votre email et nous vous enverrons un lien pour réinitialiser le mot de passe.", forgot_btn_send: "Envoyer", reset_title: "Définir un nouveau mot de passe", reset_desc: "Entrez votre nouveau mot de passe en utilisant le jeton reçu par email.", reset_btn: "Mettre à jour le mot de passe", wizard_char_count: "{n} caractères", btn_analyze: "Analyser", country_other: "Autre",
         aria_select_language: "Choisir la langue", error_password_min: "Le mot de passe doit contenir au moins 6 caractères.", error_password_mismatch: "Les mots de passe ne correspondent pas.", error_reset_link_invalid: "Lien invalide ou expiré. Demandez un nouveau lien pour réinitialiser le mot de passe.", error_name_required: "Entrez votre nom.", error_email_required: "Entrez votre email.", error_phone_invalid: "Entrez un numéro de téléphone valide (avec indicatif, ex. +905551234567).", error_country_required: "Sélectionnez un pays.", account_suspended: "Votre compte a été suspendu. Contactez-nous via la page contact.", register_failed: "Inscription échouée.",
@@ -3764,6 +3786,7 @@
         trust_cards_speed_title: "Ergebnisse in unter einer Minute", trust_cards_speed_desc: "Wenn die Server verfügbar sind, sind die meisten Berichte in Sekunden fertig.",
         trust_cards_ssl_title: "SSL/TLS sichere Verbindung", trust_cards_ssl_desc: "Der Datenverkehr zwischen Browser und Servern ist verschlüsselt.",
         trust_cards_cloud_title: "Cloudflare Netzwerkschutz", trust_cards_cloud_desc: "Zusätzliche Sicherheit und Performance über Cloudflare.",
+        trust_logo_ssl: "SSL", trust_logo_paytr: "Sichere Zahlung",
         trust_chip_kvkk: "KVKK-konforme Verarbeitung", trust_chip_gdpr: "GDPR ready", trust_chip_ssl: "SSL/TLS-Verschlüsselung", trust_chip_purpose: "Zweckgebundene Datenverarbeitung", trust_chip_not_medical: "Kein medizinisches Diagnoseinstrument",
         modal_login: "Anmelden", modal_register: "Kostenlos registrieren", placeholder_email: "E-Mail", placeholder_password: "Passwort", placeholder_name: "Vollständiger Name", placeholder_password_hint: "Passwort (min. 6 Zeichen)", placeholder_country: "Land auswählen", placeholder_phone: "Telefon (mit Ländervorwahl, z. B. +90 555 123 45 67)", placeholder_password_confirm: "Passwort bestätigen", placeholder_password_current: "Aktuelles Passwort", forgot_desc: "E-Mail eingeben, wir senden Ihnen einen Link zum Zurücksetzen des Passworts.", forgot_btn_send: "Senden", reset_title: "Neues Passwort festlegen", reset_desc: "Geben Sie Ihr neues Passwort mit dem Token aus der E-Mail ein.", reset_btn: "Passwort aktualisieren", wizard_char_count: "{n} Zeichen", btn_analyze: "Analysieren", country_other: "Sonstige",
         aria_select_language: "Sprache wählen", error_password_min: "Das Passwort muss mindestens 6 Zeichen haben.", error_password_mismatch: "Die Passwörter stimmen nicht überein.", error_reset_link_invalid: "Ungültiger oder abgelaufener Link. Bitte fordern Sie einen neuen Link zum Zurücksetzen des Passworts an.", error_name_required: "Bitte Namen eingeben.", error_email_required: "Bitte E-Mail eingeben.", error_phone_invalid: "Bitte gültige Telefonnummer eingeben (mit Ländervorwahl, z. B. +905551234567).", error_country_required: "Bitte Land auswählen.", account_suspended: "Ihr Konto wurde gesperrt. Bitte kontaktieren Sie uns über die Kontaktseite.", register_failed: "Registrierung fehlgeschlagen.",
@@ -4819,11 +4842,19 @@
       var menuWrap = document.getElementById("nav-menu-wrap");
       if (menuWrap && !menuWrap.contains(e.target)) document.getElementById("nav-menu-dropdown").classList.add("hidden");
     });
+    function updateLegalLinksLang() {
+      var lang = (typeof getLang === 'function') ? getLang() : 'en';
+      document.querySelectorAll('a.legal-lang-link').forEach(function(a) {
+        var href = (a.getAttribute('href') || '').split('?')[0];
+        a.setAttribute('href', href + '?lang=' + encodeURIComponent(lang));
+      });
+    }
     function setLang(lang) {
       if (!T[lang]) lang = "en";
       localStorage.setItem(LANG_KEY, lang);
       document.documentElement.lang = lang;
       document.documentElement.dir = (lang === "ar" || lang === "he") ? "rtl" : "ltr";
+      if (typeof updateLegalLinksLang === 'function') updateLegalLinksLang();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || "EN";
       document.querySelectorAll("[data-i18n]").forEach(function(el) {

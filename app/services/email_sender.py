@@ -174,7 +174,7 @@ def build_reset_email_html(lang: str, reset_link: str, expiry_hours: int = 1) ->
     btn = _button_text(lang)
     from_name = getattr(settings, "smtp_from_name", None) or "Norya"
     logo_url = (getattr(settings, "frontend_url", None) or "").strip().rstrip("/") or "https://norya.com"
-    logo_url = f"{logo_url}/static/logo.png"
+    logo_url = f"{logo_url}/static/norya_logo_transparent_trim.png"
     # Kurumsal kimlik: logo + Norya renkleri, tek sütun
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">

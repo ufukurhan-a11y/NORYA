@@ -9,6 +9,23 @@
   <style>
     .sidebar-link.active { background: rgba(224, 122, 95, 0.2); color: #e07a5f; }
     .sidebar-link { white-space: nowrap; }
+    .wa-float{
+      position: fixed !important;
+      right: 20px;
+      bottom: 20px;
+      z-index: 9999;
+      width: 60px;
+      height: 60px;
+      border-radius: 999px;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(2,6,23,.18);
+    }
+    .wa-float:hover{ transform: translateY(-2px); }
+    .wa-icon{ display: block; width: 32px; height: 32px; object-fit: contain; }
   </style>
   {% set ga_id = request.state.ga_measurement_id|default('G-1FLMLJH3Q0', true) %}
   {% set aw_id = request.state.google_ads_conversion_id|default('', true) %}
@@ -29,7 +46,7 @@
     <aside class="w-60 min-h-screen bg-slate-800 border-r border-slate-700 flex-shrink-0">
       <div class="p-4 border-b border-slate-700">
         <a href="/admin/dashboard" class="font-semibold text-lg text-white flex items-center gap-2">
-          <img src="/static/norya_logo_report.png" alt="Norya" class="h-10 w-auto max-w-[180px] object-contain flex-shrink-0" />
+          <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-10 w-auto max-w-[180px] object-contain flex-shrink-0" />
           <span class="hidden sm:inline">Norya Admin</span>
         </a>
       </div>
@@ -53,5 +70,12 @@
       {% block content %}{% endblock %}
     </main>
   </div>
+
+  <a href="https://wa.me/905071703564?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+     target="_blank" rel="noopener"
+     class="wa-float"
+     aria-label="WhatsApp ile iletişim">
+    <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="wa-icon" width="32" height="32" />
+  </a>
 </body>
 </html>

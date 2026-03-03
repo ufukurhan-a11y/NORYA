@@ -40,6 +40,25 @@
     };
   </script>
   <link rel="stylesheet" href="/static/css/app.css" />
+  <style>
+    .wa-float{
+      position: fixed !important;
+      right: 20px;
+      bottom: 20px;
+      z-index: 9999;
+      width: 60px;
+      height: 60px;
+      border-radius: 999px;
+      background: #25D366;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      text-decoration: none;
+      box-shadow: 0 10px 30px rgba(2,6,23,.18);
+    }
+    .wa-float:hover{ transform: translateY(-2px); }
+    .wa-icon{ display: block; width: 32px; height: 32px; object-fit: contain; }
+  </style>
   {% block head %}{% endblock %}
   {% set ga_id = request.state.ga_measurement_id|default('G-1FLMLJH3Q0', true) %}
   {% set aw_id = request.state.google_ads_conversion_id|default('', true) %}
@@ -59,10 +78,7 @@
   {# Navbar #}
   <header class="sticky top-0 z-50 bg-norya-surface-elevated/95 backdrop-blur border-b border-norya-ink-subtle/20">
     <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center gap-3">
-        <img src="/static/norya.svg" alt="" class="w-10 h-10 text-norya-brand" />
-        <span class="font-display font-semibold text-xl text-norya-brand tracking-tight">Norya</span>
-      </a>
+      <a href="/" class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
       <div class="flex items-center gap-4">
         <a href="#nasil-calisir" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">Nasıl Çalışır</a>
         <a href="#guvenlik" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">Güvenlik</a>
@@ -81,20 +97,24 @@
   <footer class="border-t border-norya-ink-subtle/20 bg-norya-surface-elevated mt-auto">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex items-center gap-2">
-          <img src="/static/norya.svg" alt="" class="w-8 h-8 text-norya-brand" />
-          <span class="font-display font-semibold text-norya-brand">Norya</span>
-        </div>
+        <div class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-8 w-auto object-contain" width="160" height="40" loading="lazy" /></div>
         <p class="text-sm text-norya-ink-muted">Laboratuvar sonuçlarınızı anlaşılır dilde açıklayan bilgilendirme hizmeti. Teşhis yerine geçmez.</p>
       </div>
       <div class="mt-6 pt-6 border-t border-norya-ink-subtle/20 flex flex-wrap gap-6 text-sm text-norya-ink-muted">
-        <a href="#" class="hover:text-norya-ink">Gizlilik</a>
-        <a href="#" class="hover:text-norya-ink">Kullanım Koşulları</a>
-        <a href="#" class="hover:text-norya-ink">İletişim</a>
+        <a href="/legal/gizlilik-politikasi" class="hover:text-norya-ink">Gizlilik Politikası</a>
+        <a href="/legal/kullanim-sartlari" class="hover:text-norya-ink">Kullanım Şartları</a>
+        <a href="/legal/iletisim" class="hover:text-norya-ink">İletişim</a>
       </div>
     </div>
   </footer>
 
   {% block scripts %}{% endblock %}
+
+  <a href="https://wa.me/905071703564?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+     target="_blank" rel="noopener"
+     class="wa-float"
+     aria-label="WhatsApp ile iletişim">
+    <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="wa-icon" width="32" height="32" />
+  </a>
 </body>
 </html>

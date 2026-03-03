@@ -1,0 +1,17 @@
+{% extends "legal/base_legal.html" %}
+{% block title %}{{ content.title }} — Norya{% endblock %}
+{% block content %}
+<article class="max-w-2xl mx-auto text-accent-700 text-sm leading-relaxed">
+  <h1 class="text-2xl font-bold text-accent-900 mb-2">{{ content.title }}</h1>
+  <p class="text-accent-500 text-xs mb-6">{{ content.last_updated }}</p>
+
+  <p class="mb-6">{{ content.intro | safe }}</p>
+
+  {% for section in content.sections %}
+  <h2 class="text-lg font-bold text-accent-900 mt-8 mb-3">{{ section.title }}</h2>
+  <p class="mb-4">{{ section.body | safe }}</p>
+  {% endfor %}
+
+  <p class="text-accent-500 text-xs mt-8">{{ content.footer_note }}</p>
+</article>
+{% endblock %}

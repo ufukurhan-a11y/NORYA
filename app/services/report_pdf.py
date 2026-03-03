@@ -824,7 +824,7 @@ def render_pdf(context: dict) -> bytes:
     from weasyprint import HTML
     template = _ENV.get_template("report_pdf.html")
     html_str = template.render(**context)
-    # base_url = proje kökü (static/norya_logo_report.png çözülebilsin)
+    # base_url = proje kökü (static/norya_logo_transparent_trim.png çözülebilsin)
     html_doc = HTML(string=html_str, base_url=str(_PROJECT_ROOT))
     pdf_bytes = html_doc.write_pdf()
     return pdf_bytes

@@ -56,8 +56,8 @@ class Settings(BaseSettings):
     ga_measurement_id: str = ""
     # Google Ads: Dönüşüm hesabı kimliği (AW-XXXXXXXXX). Boşsa gtag'a eklenmez.
     google_ads_conversion_id: str = ""
-    # WhatsApp iletişim: ülke kodu + numara, boşluksuz (örn. 905551234567). Boşsa WhatsApp butonu gizlenir.
-    whatsapp_contact: str = ""
+    # WhatsApp iletişim: ülke kodu + numara, boşluksuz (örn. 905551234567). Boşsa varsayılan 905071703564 kullanılır.
+    whatsapp_contact: str = "905071703564"
     # GİB e-Arşiv fatura (admin'den sipariş başına kesim)
     gib_earsiv_user: str = ""           # Vergi/TC no (10/11 hane)
     gib_earsiv_password: str = ""

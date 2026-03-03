@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>KVKK / GDPR — Norya</title>
+  <title>KVKK / GDPR / HIPAA — Norya</title>
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" /><link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -39,20 +39,34 @@
 <body class="bg-white text-accent-800 min-h-screen flex flex-col font-sans antialiased">
   <header class="border-b border-accent-200 bg-white/95 backdrop-blur sticky top-0 z-10">
     <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="/" class="text-xl font-bold text-norya-brand hover:text-norya-brand-hover transition">Norya</a>
+      <a href="/" class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
       <a href="/" class="text-sm text-accent-600 hover:text-primary-600 font-medium">← Ana sayfa</a>
     </div>
   </header>
 
   <main class="flex-1 py-12 px-4">
     <article class="max-w-2xl mx-auto text-accent-700 text-sm leading-relaxed">
-      <h1 class="text-2xl font-bold text-accent-900 mb-6">KVKK ve GDPR Aydınlatma Metni</h1>
-      <p class="mb-4">Norya olarak kişisel verilerinizi Türkiye’de 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) ve Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) kapsamında işliyoruz.</p>
-      <p class="mb-4"><strong>Veri sorumlusu.</strong> Hizmeti sunan ve verilerinizi işleyen taraf Norya’dır. İletişim: <a href="mailto:support@noryaai.com" class="text-norya-brand hover:underline">support@noryaai.com</a>.</p>
-      <p class="mb-4"><strong>İşlenen veriler.</strong> Kimlik ve iletişim bilgileri (ad, e-posta, telefon), hesap ve işlem bilgileri (şifre hash’i, giriş kayıtları), tahlil metinleri ve üretilen raporlar (hizmetin sunulması için), ödeme ile ilgili işlem kayıtları (kart numarası bizde tutulmaz; PayTR üzerinden işlem yapılır).</p>
-      <p class="mb-4"><strong>Hukuki sebepler.</strong> Sözleşmenin ifası, hukuki yükümlülük, meşru menfaat ve açık rızanız (ör. bildirim tercihleri) kapsamında işleme yapıyoruz.</p>
-      <p class="mb-4"><strong>Haklarınız (KVKK / GDPR).</strong> Verilerinize erişim, düzeltme, silme, işlemenin kısıtlanması, taşınabilirlik ve itiraz haklarınız bulunmaktadır. AB’de ikamet ediyorsanız bir denetim otoritesine şikayette bulunma hakkınız vardır. Taleplerinizi <a href="/legal/iletisim" class="text-norya-brand hover:underline">İletişim</a> üzerinden iletebilirsiniz; yasal süreler içinde yanıtlanacaktır.</p>
-      <p class="text-accent-500 text-xs mt-8">Son güncelleme: Şubat 2025.</p>
+      <h1 class="text-2xl font-bold text-accent-900 mb-2">KVKK, GDPR ve HIPAA Aydınlatma Metni</h1>
+      <p class="text-accent-500 text-xs mb-6">Son güncelleme: Mart 2025</p>
+
+      <p class="mb-6">Norya olarak kişisel ve sağlıkla ilgili verilerinizi Türkiye’de KVKK, AB’de GDPR ve ABD’de sağlık verisi güvenliği ilkeleri (HIPAA uyumlu yaklaşım) çerçevesinde işliyoruz. Bu sayfa, her bir çerçeveye ilişkin kısa aydınlatmayı içerir.</p>
+
+      <h2 class="text-lg font-bold text-accent-900 mt-8 mb-3">1. Veri Sorumlusu</h2>
+      <p class="mb-4">Hizmeti sunan ve verilerinizi işleyen taraf Norya’dır. İletişim: <a href="mailto:support@noryaai.com" class="text-norya-brand hover:underline">support@noryaai.com</a>. Taleplerinizi <a href="/legal/iletisim" class="text-norya-brand hover:underline">İletişim</a> sayfasından iletebilirsiniz.</p>
+
+      <h2 class="text-lg font-bold text-accent-900 mt-8 mb-3">2. KVKK (Türkiye)</h2>
+      <p class="mb-4">6698 sayılı Kişisel Verilerin Korunması Kanunu kapsamında veri sorumlusu Norya’dır. İşlenen veriler: kimlik ve iletişim bilgileri (ad, e-posta, telefon, ülke), hesap bilgileri (şifre hash’i, giriş kayıtları), tahlil metinleri ve üretilen raporlar (hizmetin ifası için), ödeme işlem kayıtları (kart numarası saklanmaz; PayTR kullanılır). Hukuki sebepler: sözleşmenin ifası, hukuki yükümlülük, meşru menfaat ve açık rıza. Verilerinize erişim, düzeltme, silme, işlemenin kısıtlanması ve itiraz haklarınız vardır; taleplerinizi yazılı veya e-posta ile iletebilirsiniz. Kişisel Verileri Koruma Kuruluna şikaret hakkınız saklıdır.</p>
+
+      <h2 class="text-lg font-bold text-accent-900 mt-8 mb-3">3. GDPR (Avrupa Birliği)</h2>
+      <p class="mb-4">AB Genel Veri Koruma Tüzüğü (GDPR) kapsamında işleme faaliyetleri yukarıdaki veri kategorileri ve amaçlarla uyumludur. Yasal dayanak: sözleşme (madde 6/1/b), yasal zorunluluk (6/1/c), meşru menfaat (6/1/f) ve gerektiğinde açık rıza (6/1/a). Verileriniz AB dışına (ör. sunucu konumu) aktarılıyorsa uygun güvenceler (standart sözleşme hükümleri vb.) uygulanır. Erişim, düzeltme, silme, kısıtlama, taşınabilirlik ve itiraz haklarınız vardır; ayrıca AB üye devletindeki bir denetim otoritesine şikayette bulunabilirsiniz. Taleplerinizi <a href="/legal/iletisim" class="text-norya-brand hover:underline">İletişim</a> veya support@noryaai.com üzerinden iletebilirsiniz.</p>
+
+      <h2 class="text-lg font-bold text-accent-900 mt-8 mb-3">4. HIPAA ve Sağlık Verisi Güvenliği (ABD)</h2>
+      <p class="mb-4">Norya, ABD’de “covered entity” (sağlık kurumu) veya “business associate” olarak HIPAA kapsamında kayıtlı değildir. Hizmet, kullanıcıların kendi laboratuvar sonuçlarını yükleyip anlaşılır rapor alması için sunulur; teşhis veya tedavi hizmeti değildir. Buna rağmen sağlıkla ilgili verileri ciddiye alıyoruz: tahlil metinleri ve raporlar yalnızca hizmetin sunulması amacıyla işlenir, TLS/SSL ile şifrelenir, yetkisiz erişime karşı korunur ve üçüncü taraflarla reklam veya ticari amaçla paylaşılmaz. Verilerinizi minimum gerekli süre ve kapsamda tutuyoruz; hesap silme talebinde yasal saklama süreleri dışında silinir veya anonimleştirilir. ABD’deki kullanıcılar için bu uygulama, sağlık verisi güvenliği ve gizlilik beklentileriyle uyumlu bir yaklaşım sunar.</p>
+
+      <h2 class="text-lg font-bold text-accent-900 mt-8 mb-3">5. Ortak İlkeler</h2>
+      <p class="mb-4">Tüm bölgelerde: veri minimizasyonu (yalnızca gerekli veriler), şifreleme ve güvenli altyapı, erişim kısıtlaması, hesap silme ve talep üzerine veri düzeltme/silme. Detaylı bilgi için <a href="/legal/gizlilik-politikasi" class="text-norya-brand hover:underline">Gizlilik Politikası</a> sayfamızı inceleyebilirsiniz.</p>
+
+      <p class="text-accent-500 text-xs mt-8">Norya — Kan tahlili sonuçlarını anlaşılır dilde açıklayan hizmet.</p>
     </article>
   </main>
 
@@ -63,6 +77,7 @@
         <span class="inline-flex items-center gap-1.5">🛡️ KVKK</span>
         <span class="inline-flex items-center gap-1.5">✓ GDPR</span>
         <span class="inline-flex items-center gap-1.5">💳 PayTR</span>
+        <span class="inline-flex items-center gap-1.5">🏥 HIPAA</span>
       </div>
       <nav class="flex flex-wrap justify-center gap-x-4 gap-y-2 text-sm mb-6" aria-label="Yasal ve iletişim">
         <a href="/legal/mesafeli-satis-sozlesmesi" class="text-accent-600 hover:text-norya-brand transition">Mesafeli Satış Sözleşmesi</a>
