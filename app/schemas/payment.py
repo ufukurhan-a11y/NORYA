@@ -9,6 +9,8 @@ class CreateSessionRequest(BaseModel):
     success_url: str | None = None
     cancel_url: str | None = None
     coupon_code: str | None = None
+    consent_mesafeli: bool = False  # Mesafeli Satış Sözleşmesi kabulü (PayTR zorunlu)
+    consent_kvkk: bool = False  # Gizlilik/KVKK kabulü (PayTR zorunlu)
 
 
 class GrantPaymentRequest(BaseModel):
@@ -25,3 +27,5 @@ class GuestSessionRequest(BaseModel):
     success_url: str | None = None
     cancel_url: str | None = None
     coupon_code: str | None = None
+    consent_mesafeli: bool = False
+    consent_kvkk: bool = False

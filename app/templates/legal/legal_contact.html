@@ -58,6 +58,19 @@
     </div>
   </section>
 
+  <section class="mb-8">
+    <div class="rounded-2xl bg-white border border-accent-200 shadow-md px-6 sm:px-8 py-8 contact-card">
+      <h2 class="text-xl font-bold text-accent-900 mb-3">Şirket Bilgileri</h2>
+      <dl class="text-sm text-accent-700 space-y-1">
+        <div><dt class="font-semibold inline">Ticari Unvan:</dt> <dd class="inline">{{ company_title }}</dd></div>
+        <div><dt class="font-semibold inline">Vergi Dairesi / Vergi No:</dt> <dd class="inline">{{ company_tax_office }} / {{ company_tax_number }}</dd></div>
+        <div><dt class="font-semibold inline">Adres:</dt> <dd class="inline">{{ company_address }}</dd></div>
+        <div><dt class="font-semibold inline">E-posta:</dt> <dd class="inline">support@noryaai.com</dd></div>
+        <div><dt class="font-semibold inline">Telefon / WhatsApp:</dt> <dd class="inline">{{ company_phone }}</dd></div>
+      </dl>
+    </div>
+  </section>
+
   <section class="mb-4">
     <h2 class="text-lg font-bold text-accent-900 mb-4">{{ content.faq_title }}</h2>
     <div class="space-y-4">

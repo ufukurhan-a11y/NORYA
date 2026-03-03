@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" {% if lang in ('ar', 'he') %}dir="rtl"{% endif %}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{{ t.meta_title }}</title>
+  <meta name="description" content="{{ t.meta_description }}" />
+  <meta property="og:title" content="{{ t.meta_title }}" />
+  <meta property="og:description" content="{{ t.meta_description }}" />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0EA5A4" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: { 500: '#0EA5A4', 600: '#0d9488' },
+            accent: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root { --norya-teal: #0EA5A4; --norya-teal-hover: #0d9488; }
+    .text-norya-teal { color: var(--norya-teal); }
+    .bg-norya-teal { background-color: var(--norya-teal); }
+    .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
+    .border-norya-teal { border-color: var(--norya-teal); }
+    #toast { transition: opacity 0.2s, transform 0.2s; }
+  </style>
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/" class="flex items-center shrink-0">
+        <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="flex items-center gap-4 text-sm font-medium">
+        <a href="/" class="text-slate-600 hover:text-teal-600">{{ t.nav_home }}</a>
+        <a href="/kurumsal" class="text-teal-600">{{ t.nav_enterprise }}</a>
+        <a href="/legal/gizlilik-politikasi?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.nav_privacy }}</a>
+        <a href="/legal/kullanim-sartlari?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.nav_terms }}</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <!-- SECTION 1 — HERO -->
+    <section class="py-16 sm:py-24 px-4 bg-gradient-to-br from-teal-50 to-slate-50">
+      <div class="max-w-6xl mx-auto flex flex-col lg:flex-row items-center gap-12">
+        <div class="flex-1 text-center lg:text-left">
+          <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 leading-tight">{{ t.hero_title }}</h1>
+          <p class="text-lg text-slate-600 mb-8 max-w-xl">{{ t.hero_subtitle }}</p>
+          <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+            <a href="#demo-form" class="inline-flex items-center px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95 shadow-lg">{{ t.hero_cta_primary }}</a>
+            <a href="#features" class="inline-flex items-center px-6 py-3 rounded-xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50">{{ t.hero_cta_secondary }}</a>
+          </div>
+        </div>
+        <div class="flex-1 w-full max-w-md grid grid-cols-2 gap-3">
+          <div class="rounded-xl bg-white p-4 shadow border border-slate-100"><p class="text-2xl font-bold text-teal-600">500+</p><p class="text-xs text-slate-500">Rapor/gün</p></div>
+          <div class="rounded-xl bg-white p-4 shadow border border-slate-100"><p class="text-2xl font-bold text-teal-600">&lt;2 dk</p><p class="text-xs text-slate-500">Ort. işlem</p></div>
+          <div class="rounded-xl bg-white p-4 shadow border border-slate-100"><p class="text-2xl font-bold text-teal-600">9</p><p class="text-xs text-slate-500">Dil</p></div>
+          <div class="rounded-xl bg-white p-4 shadow border border-slate-100"><p class="text-2xl font-bold text-teal-600">KVKK</p><p class="text-xs text-slate-500">Uyumlu</p></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 2 — TRUST STRIP -->
+    <section class="py-6 px-4 bg-slate-800 text-white">
+      <div class="max-w-6xl mx-auto">
+        <p class="text-center text-sm font-medium text-slate-300 mb-4">{{ t.trust_strip }}</p>
+        <div class="flex flex-wrap justify-center gap-6 sm:gap-10">
+          <span class="inline-flex items-center gap-2">{{ t.trust_1 }}</span>
+          <span class="inline-flex items-center gap-2">{{ t.trust_2 }}</span>
+          <span class="inline-flex items-center gap-2">{{ t.trust_3 }}</span>
+          <span class="inline-flex items-center gap-2">{{ t.trust_4 }}</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 3 — 4 FEATURE CARDS -->
+    <section id="features" class="py-16 px-4">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-12">{{ t.features_title }}</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+          <div class="rounded-2xl p-6 border-2 border-slate-100 bg-white shadow-sm hover:border-teal-200 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-900 mb-2">{{ t.feature_1_title }}</h3>
+            <p class="text-sm text-slate-600">{{ t.feature_1_desc }}</p>
+          </div>
+          <div class="rounded-2xl p-6 border-2 border-slate-100 bg-white shadow-sm hover:border-teal-200 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-900 mb-2">{{ t.feature_2_title }}</h3>
+            <p class="text-sm text-slate-600">{{ t.feature_2_desc }}</p>
+          </div>
+          <div class="rounded-2xl p-6 border-2 border-slate-100 bg-white shadow-sm hover:border-teal-200 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-900 mb-2">{{ t.feature_3_title }}</h3>
+            <p class="text-sm text-slate-600">{{ t.feature_3_desc }}</p>
+          </div>
+          <div class="rounded-2xl p-6 border-2 border-slate-100 bg-white shadow-sm hover:border-teal-200 hover:shadow-md transition">
+            <h3 class="font-semibold text-slate-900 mb-2">{{ t.feature_4_title }}</h3>
+            <p class="text-sm text-slate-600">{{ t.feature_4_desc }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 4 — HOW IT WORKS -->
+    <section class="py-16 px-4 bg-slate-50">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl font-bold text-center text-slate-900 mb-10">{{ t.how_title }}</h2>
+        <div class="flex flex-col sm:flex-row justify-center gap-6 sm:gap-8">
+          <div class="flex-1 rounded-xl p-6 bg-white border border-slate-200 text-center">
+            <p class="text-lg font-semibold text-teal-600 mb-1">{{ t.how_1 }}</p>
+          </div>
+          <div class="flex-1 rounded-xl p-6 bg-white border border-slate-200 text-center">
+            <p class="text-lg font-semibold text-teal-600 mb-1">{{ t.how_2 }}</p>
+          </div>
+          <div class="flex-1 rounded-xl p-6 bg-white border border-slate-200 text-center">
+            <p class="text-lg font-semibold text-teal-600 mb-1">{{ t.how_3 }}</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SECTION 5 — SECURITY -->
+    <section class="py-16 px-4">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-center text-slate-900 mb-8">{{ t.security_title }}</h2>
+        <ul class="space-y-3 text-slate-700">
+          <li class="flex items-start gap-2">✓ {{ t.security_1 }}</li>
+          <li class="flex items-start gap-2">✓ {{ t.security_2 }}</li>
+          <li class="flex items-start gap-2">✓ {{ t.security_3 }}</li>
+          <li class="flex items-start gap-2">✓ {{ t.security_4 }}</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- SECTION 6 — DEMO FORM -->
+    <section id="demo-form" class="py-16 px-4 bg-teal-50">
+      <div class="max-w-xl mx-auto">
+        <h2 class="text-2xl font-bold text-center text-slate-900 mb-8">{{ t.form_title }}</h2>
+        <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-lg text-white text-sm font-medium shadow-lg"></div>
+        <form id="enterprise-lead-form" class="space-y-4 rounded-2xl p-6 sm:p-8 bg-white border border-slate-200 shadow-sm">
+          <div>
+            <label for="kurum_adi" class="block text-sm font-medium text-slate-700 mb-1">{{ t.form_kurum_adi }} *</label>
+            <input type="text" id="kurum_adi" name="kurum_adi" required maxlength="255" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
+          </div>
+          <div>
+            <label for="yetkili_ad" class="block text-sm font-medium text-slate-700 mb-1">{{ t.form_yetkili_ad }} *</label>
+            <input type="text" id="yetkili_ad" name="yetkili_ad" required maxlength="255" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
+          </div>
+          <div>
+            <label for="email" class="block text-sm font-medium text-slate-700 mb-1">{{ t.form_email }} *</label>
+            <input type="email" id="email" name="email" required maxlength="255" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
+          </div>
+          <div>
+            <label for="telefon" class="block text-sm font-medium text-slate-700 mb-1">{{ t.form_telefon }}</label>
+            <input type="tel" id="telefon" name="telefon" maxlength="64" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500" />
+          </div>
+          <div>
+            <label for="kurum_tipi" class="block text-sm font-medium text-slate-700 mb-1">{{ t.form_kurum_tipi }}</label>
+            <select id="kurum_tipi" name="kurum_tipi" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+              <option value="">{{ t.form_kurum_tipi_placeholder }}</option>
+              <option value="hospital">{{ t.kurum_tipi_hospital }}</option>
+              <option value="clinic">{{ t.kurum_tipi_clinic }}</option>
+              <option value="lab">{{ t.kurum_tipi_lab }}</option>
+              <option value="other">{{ t.kurum_tipi_other }}</option>
+            </select>
+          </div>
+          <div>
+            <label for="aylik_rapor" class="block text-sm font-medium text-slate-700 mb-1">{{ t.form_aylik_rapor }}</label>
+            <select id="aylik_rapor" name="aylik_rapor" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500">
+              <option value="">{{ t.form_kurum_tipi_placeholder }}</option>
+              <option value="1-500">{{ t.aylik_rapor_1 }}</option>
+              <option value="501-2000">{{ t.aylik_rapor_2 }}</option>
+              <option value="2001-10000">{{ t.aylik_rapor_3 }}</option>
+              <option value="10000+">{{ t.aylik_rapor_4 }}</option>
+            </select>
+          </div>
+          <div>
+            <label for="mesaj" class="block text-sm font-medium text-slate-700 mb-1">{{ t.form_mesaj }}</label>
+            <textarea id="mesaj" name="mesaj" rows="4" class="w-full px-4 py-2 rounded-lg border border-slate-300 focus:ring-2 focus:ring-teal-500 focus:border-teal-500"></textarea>
+          </div>
+          <div class="flex items-start gap-2">
+            <input type="checkbox" id="kvkk" name="kvkk" required class="mt-1 rounded border-slate-300 text-teal-600 focus:ring-teal-500" />
+            <label for="kvkk" class="text-sm text-slate-700">{{ t.form_kvkk }}</label>
+          </div>
+          <button type="submit" id="submit-btn" class="w-full py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95 disabled:opacity-50">
+            {{ t.form_submit }}
+          </button>
+        </form>
+      </div>
+    </section>
+
+    <!-- SECTION 7 — FAQ -->
+    <section class="py-16 px-4">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-center text-slate-900 mb-10">{{ t.faq_title }}</h2>
+        <dl class="space-y-6">
+          <div><dt class="font-semibold text-slate-900 mb-1">{{ t.faq_1_q }}</dt><dd class="text-slate-600 text-sm">{{ t.faq_1_a }}</dd></div>
+          <div><dt class="font-semibold text-slate-900 mb-1">{{ t.faq_2_q }}</dt><dd class="text-slate-600 text-sm">{{ t.faq_2_a }}</dd></div>
+          <div><dt class="font-semibold text-slate-900 mb-1">{{ t.faq_3_q }}</dt><dd class="text-slate-600 text-sm">{{ t.faq_3_a }}</dd></div>
+          <div><dt class="font-semibold text-slate-900 mb-1">{{ t.faq_4_q }}</dt><dd class="text-slate-600 text-sm">{{ t.faq_4_a }}</dd></div>
+        </dl>
+      </div>
+    </section>
+
+    <!-- SECTION 8 — FINAL CTA -->
+    <section class="py-16 px-4 bg-slate-800 text-white text-center">
+      <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl font-bold mb-3">{{ t.final_cta_title }}</h2>
+        <p class="text-slate-300 mb-6">{{ t.final_cta_sub }}</p>
+        <a href="#demo-form" class="inline-flex items-center px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">{{ t.final_cta_btn }}</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-slate-50 py-8 px-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-4 text-sm text-slate-600">
+      <a href="/" class="hover:text-teal-600">{{ t.nav_home }}</a>
+      <a href="/kurumsal" class="hover:text-teal-600">{{ t.footer_enterprise }}</a>
+      <a href="/legal/gizlilik-politikasi" class="hover:text-teal-600">{{ t.nav_privacy }}</a>
+      <a href="/legal/kullanim-sartlari" class="hover:text-teal-600">{{ t.nav_terms }}</a>
+    </div>
+    <p class="text-center text-slate-500 text-xs mt-2">{{ t.footer_desc }}</p>
+    <p class="text-center text-slate-400 text-xs mt-2">Dil / Language: <a href="/kurumsal?lang=tr" class="hover:text-teal-600">TR</a> · <a href="/kurumsal?lang=en" class="hover:text-teal-600">EN</a> · <a href="/kurumsal?lang=de" class="hover:text-teal-600">DE</a> · <a href="/kurumsal?lang=fr" class="hover:text-teal-600">FR</a> · <a href="/kurumsal?lang=es" class="hover:text-teal-600">ES</a> · <a href="/kurumsal?lang=it" class="hover:text-teal-600">IT</a></p>
+  </footer>
+
+  <script>
+    (function() {
+      var form = document.getElementById('enterprise-lead-form');
+      var toast = document.getElementById('toast');
+      var submitBtn = document.getElementById('submit-btn');
+      var successMsg = {{ t.form_success | tojson }};
+      var errorMsg = {{ t.form_error | tojson }};
+      var rateLimitMsg = {{ t.form_rate_limit | tojson }};
+
+      function showToast(msg, isError) {
+        toast.textContent = msg;
+        toast.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-lg text-white text-sm font-medium shadow-lg ' + (isError ? 'bg-red-500' : 'bg-teal-600');
+        toast.hidden = false;
+        setTimeout(function() { toast.hidden = true; }, 4000);
+      }
+
+      function setLoading(loading) {
+        submitBtn.disabled = loading;
+        submitBtn.textContent = loading ? '...' : {{ t.form_submit | tojson }};
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var kurumAdi = (document.getElementById('kurum_adi').value || '').trim();
+        var yetkiliAd = (document.getElementById('yetkili_ad').value || '').trim();
+        var email = (document.getElementById('email').value || '').trim();
+        var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!kurumAdi) { showToast('{{ t.form_kurum_adi }}', true); return; }
+        if (!yetkiliAd) { showToast('{{ t.form_yetkili_ad }}', true); return; }
+        if (!email) { showToast('{{ t.form_email }}', true); return; }
+        if (!emailRe.test(email)) { showToast('{{ t.form_email }}', true); return; }
+        if (!document.getElementById('kvkk').checked) { showToast('{{ t.form_kvkk }}', true); return; }
+
+        setLoading(true);
+        fetch('/api/enterprise-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kurum_adi: kurumAdi,
+            yetkili_ad: yetkiliAd,
+            email: email,
+            telefon: (document.getElementById('telefon').value || '').trim() || null,
+            kurum_tipi: (document.getElementById('kurum_tipi').value || '').trim() || null,
+            aylik_rapor: (document.getElementById('aylik_rapor').value || '').trim() || null,
+            mesaj: (document.getElementById('mesaj').value || '').trim() || null,
+            kvkk: true
+          })
+        })
+        .then(function(r) {
+          if (r.status === 429) { showToast(rateLimitMsg, true); return; }
+          if (!r.ok) throw new Error();
+          return r.json();
+        })
+        .then(function(data) {
+          if (data && data.ok) {
+            showToast(successMsg, false);
+            form.reset();
+          } else { showToast(errorMsg, true); }
+        })
+        .catch(function() { showToast(errorMsg, true); })
+        .finally(function() { setLoading(false); });
+      });
+    })();
+  </script>
+</body>
+</html>

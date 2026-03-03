@@ -47,6 +47,7 @@ from app.models import (  # noqa: F401
     AnalysisRecord,
     AuditLog,
     DiscountCode,
+    EnterpriseLead,
     ErrorLog,
     PaymentOrder,
     Presence,
@@ -59,6 +60,7 @@ from app.models import (  # noqa: F401
     ShareToken,
     User,
 )
+from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
 from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf
 from app.services.storage import upload_report_pdf
@@ -726,6 +728,23 @@ def _inject_whatsapp(html: str) -> str:
     return html
 
 
+def _inject_company(html: str) -> str:
+    """Şirket bilgileri placeholder'larını config'den doldurur (footer, hakkımızda)."""
+    title = (settings.company_title or settings.invoice_company_title or "PLACEHOLDER_UNVAN").strip()
+    tax_office = (settings.company_tax_office or settings.invoice_company_tax_office or "PLACEHOLDER_VD").strip()
+    tax_no = (settings.company_tax_number or settings.gib_earsiv_user or "PLACEHOLDER_VNO").strip()
+    address = (settings.company_address or settings.invoice_company_address or "PLACEHOLDER_ADRES").strip()
+    phone = (settings.company_phone or "PLACEHOLDER_TELEFON").strip()
+    if phone and phone.isdigit():
+        phone = "+90 " + phone
+    html = html.replace("__NORYA_COMPANY_TITLE__", title)
+    html = html.replace("__NORYA_COMPANY_TAX_OFFICE__", tax_office)
+    html = html.replace("__NORYA_COMPANY_TAX_NO__", tax_no)
+    html = html.replace("__NORYA_COMPANY_ADDRESS__", address)
+    html = html.replace("__NORYA_COMPANY_PHONE__", phone)
+    return html
+
+
 LEGAL_PAGES = {
     "mesafeli-satis-sozlesmesi",
     "gizlilik-politikasi",
@@ -779,6 +798,76 @@ def iade_iptal_page(request: Request):
     )
 
 
+def _enterprise_lang_from_request(request: Request) -> str:
+    """Kurumsal sayfa dili: ?lang= veya Accept-Language."""
+    lang_q = request.query_params.get("lang", "").strip().lower()
+    if lang_q and lang_q in ENTERPRISE_LANGS:
+        return lang_q
+    parsed = _parse_accept_language(request.headers.get("accept-language"))
+    return parsed if parsed in ENTERPRISE_LANGS else "tr"
+
+
+@app.get("/kurumsal", response_class=HTMLResponse)
+def kurumsal_page(request: Request):
+    """Kurumsal landing: hastane/klinik demo talebi. Çok dilli."""
+    lang = _enterprise_lang_from_request(request)
+    if lang not in ENTERPRISE_LANGS:
+        lang = "tr"
+    t = get_enterprise_ui(lang)
+    return templates.TemplateResponse(
+        "enterprise/kurumsal.html",
+        {"request": request, "lang": lang, "t": t},
+    )
+
+
+@app.post("/api/enterprise-lead")
+@limiter.limit("3/minute")
+async def api_enterprise_lead(request: Request, db: Session = Depends(get_db)):
+    """Kurumsal demo talep formu. Aynı IP ile dakikada en fazla 3 istek."""
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Geçersiz JSON.")
+    if not isinstance(body, dict):
+        raise HTTPException(status_code=400, detail="Geçersiz istek.")
+    kurum_adi = (body.get("kurum_adi") or "").strip()
+    yetkili_ad = (body.get("yetkili_ad") or "").strip()
+    email = (body.get("email") or "").strip()
+    kvkk = body.get("kvkk") is True
+    if not kurum_adi or not yetkili_ad or not email:
+        raise HTTPException(status_code=400, detail="Kurum adı, yetkili adı ve e-posta zorunludur.")
+    if "@" not in email or "." not in email.split("@")[-1]:
+        raise HTTPException(status_code=400, detail="Geçerli bir e-posta adresi girin.")
+    if not kvkk:
+        raise HTTPException(status_code=400, detail="KVKK onayı gerekli.")
+    telefon = (body.get("telefon") or "").strip() or None
+    kurum_tipi = (body.get("kurum_tipi") or "").strip() or None
+    aylik_rapor = (body.get("aylik_rapor") or "").strip() or None
+    mesaj = (body.get("mesaj") or "").strip() or None
+    ip = _client_ip(request)
+    user_agent = (request.headers.get("user-agent") or "")[:500] or None
+    try:
+        db.add(
+            EnterpriseLead(
+                kurum_adi=kurum_adi,
+                yetkili_ad=yetkili_ad,
+                email=email,
+                telefon=telefon,
+                kurum_tipi=kurum_tipi,
+                aylik_rapor=aylik_rapor,
+                mesaj=mesaj,
+                kvkk_accepted=True,
+                ip=ip,
+                user_agent=user_agent,
+            )
+        )
+        db.commit()
+    except Exception as e:
+        log.warning("EnterpriseLead save failed: %s", e)
+        raise HTTPException(status_code=500, detail="Kayıt alınamadı. Lütfen tekrar deneyin.")
+    return JSONResponse(content={"ok": True})
+
+
 @app.get("/")
 def index():
     index_file = STATIC_DIR / "index.html"
@@ -789,6 +878,7 @@ def index():
         if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
             raw = _inject_ga(raw)
         raw = _inject_whatsapp(raw)
+        raw = _inject_company(raw)
         return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
 
@@ -804,6 +894,7 @@ def report_page():
         if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
             raw = _inject_ga(raw)
         raw = _inject_whatsapp(raw)
+        raw = _inject_company(raw)
         return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."}
 
@@ -1648,6 +1739,11 @@ def payment_get_token(
     """PayTR iFrame token döner; frontend bu token ile iframe açar. Ödeme sonrası bildirim URL'ye POST gelir."""
     if not _paytr_enabled():
         raise HTTPException(status_code=503, detail="Ödeme şu an aktif değil. PayTR ayarlarını kontrol edin.")
+    if not (body.consent_mesafeli and body.consent_kvkk):
+        raise HTTPException(
+            status_code=400,
+            detail="Mesafeli Satış Sözleşmesi ve Gizlilik/KVKK politikasını kabul etmeniz gerekiyor.",
+        )
     if body.product not in ("single", "monthly", "yearly"):
         raise HTTPException(status_code=400, detail="Geçersiz ürün.")
     import base64
@@ -1677,6 +1773,7 @@ def payment_get_token(
     )
     db.add(order)
     db.commit()
+    _audit(db, "payment_consent", user.id, _client_ip(request))
 
     merchant_id = settings.paytr_merchant_id
     merchant_key = settings.paytr_merchant_key.encode() if isinstance(settings.paytr_merchant_key, str) else settings.paytr_merchant_key
@@ -1746,6 +1843,11 @@ def payment_get_token_guest(
     """Kayıt olmadan sadece tek analiz ödemesi. E-posta ile kullanıcı oluşturulur veya mevcut kullanıcıya bağlanır; ödeme sonrası guest_token ile oturum açılır."""
     if not _paytr_enabled():
         raise HTTPException(status_code=503, detail="Ödeme şu an aktif değil. PayTR ayarlarını kontrol edin.")
+    if not (body.consent_mesafeli and body.consent_kvkk):
+        raise HTTPException(
+            status_code=400,
+            detail="Mesafeli Satış Sözleşmesi ve Gizlilik/KVKK politikasını kabul etmeniz gerekiyor.",
+        )
     if body.product != "single":
         raise HTTPException(status_code=400, detail="Misafir ödeme sadece tek analiz için geçerlidir.")
     email = (body.email or "").strip().lower()
@@ -1787,6 +1889,7 @@ def payment_get_token_guest(
     guest_login = GuestLoginToken(token=guest_token, user_id=user_id, expires_at=expires_at)
     db.add(guest_login)
     db.commit()
+    _audit(db, "payment_consent", user_id, _client_ip(request))
 
     import base64
     import hmac

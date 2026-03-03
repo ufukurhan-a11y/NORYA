@@ -2,6 +2,7 @@ from .analysis import AnalysisRecord
 from .analysis_job import AnalysisJob
 from .audit import AuditLog
 from .discount import DiscountCode
+from .enterprise_lead import EnterpriseLead
 from .error_log import ErrorLog
 from .payment import PaymentOrder
 from .presence import Presence
@@ -16,6 +17,7 @@ __all__ = [
     "AnalysisJob",
     "AuditLog",
     "DiscountCode",
+    "EnterpriseLead",
     "ErrorLog",
     "PaymentOrder",
     "Presence",

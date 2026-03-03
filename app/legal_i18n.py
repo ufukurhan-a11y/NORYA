@@ -2,6 +2,8 @@
 """Yasal sayfalar için çok dilli içerik. Müşteri diline göre sayfa sunulur."""
 
 # Desteklenen diller: sitedeki dil seçenekleri. Bilinmeyen dil için "en" kullanılır.
+from app.core.config import settings
+
 LEGAL_LANGS = frozenset({"tr", "en", "de", "fr", "es", "it", "he", "ar", "hi", "el", "cs", "sr"})
 DEFAULT_LEGAL_LANG = "tr"
 FALLBACK_CONTENT_LANG = "en"  # İçerik çevirisi yoksa (sadece TR/EN var) EN kullan
@@ -299,27 +301,31 @@ MESAFELI = {
     },
 }
 
-# --- İade ve İptal ---
+# --- İade ve İptal (PayTR uyumlu: dijital hizmet, tek analiz, abonelik iptali, iade süreci, iletişim) ---
 REFUND = {
     "tr": {
         "title": "İade ve İptal Politikası",
         "last_updated": "Son güncelleme: Mart 2025",
-        "intro": "Norya üzerinden satın alınan dijital analiz hizmetleri, kullanıcının onayı ile anında ifa edilen dijital hizmet kapsamındadır. Ödemeler PayTR sanal pos altyapısı ile alınır; kart bilgileriniz Norya'da tutulmaz.",
+        "intro": "Norya üzerinden satın alınan hizmetler dijital hizmet niteliğindedir. Ödemeler PayTR sanal pos altyapısı ile alınır; kart bilgileriniz Norya sunucularında tutulmaz.",
         "sections": [
-            {"title": "1. Paketler ve Hak Tanıma", "body": "Tek analiz satın aldığınızda hesabınıza bir analiz hakkı eklenir. Pro aylık veya yıllık pakette ayda belirlenen analiz hakkı (ör. 10+3) tanınır. Otomatik yenileme yoktur; süre bitince paket sona erer. Ödeme PayTR üzerinden onaylandığında sistem otomatik olarak hesabınıza hakkı tanır."},
-            {"title": "2. Cayma ve İade Koşulları", "body": "Mesafeli sözleşmelerde 14 gün içinde cayma hakkı bulunmakla birlikte, anında ifa edilen dijital hizmetlerde bu hak kullanılmaya başlandığında sona erebilir. <strong>Hiç analiz yapılmamış</strong> ve ödeme tarihinden itibaren 14 gün içinde iletilen iade talepleri değerlendirmeye alınır. Aşağıdaki durumlarda iade mutlaka değerlendirilir: Teknik hata nedeniyle raporun oluşturulamaması; Hizmetin hiç sunulamaması; Ödeme alınmış ancak hesaba hak tanınmamış olması. İade talebinizi <a href=\"mailto:support@noryaai.com\" class=\"text-norya-brand hover:underline\">support@noryaai.com</a> veya <a href=\"/legal/iletisim\" class=\"text-norya-brand hover:underline\">İletişim</a> sayfası üzerinden sipariş numarası (merchant_oid) ile iletin. Uygun bulunan iadeler 7 iş günü içinde ödeme yapılan yönteme göre işleme alınır. Kısmen kullanılmış paketlerde oransal iade uygulanmaz. Norya, kötüye kullanım tespit edilen durumlarda iade talebini reddetme hakkını saklı tutar."},
-            {"title": "3. Ödeme Alındı Ama Hak Tanınmadı", "body": "Ödemeniz banka veya PayTR tarafından onaylandığı hâlde hesabınıza analiz hakkı veya abonelik yansımadıysa, sipariş veya ödeme bilginizle birlikte bize yazın. En geç 1 iş günü içinde kontrol edip düzeltiyoruz; gerekirse manuel hak tanıma yapılır."},
+            {"title": "a) Dijital hizmet niteliği", "body": "Norya, kan tahlili sonuçlarını anlaşılır dilde açıklayan bir dijital analiz hizmeti sunar. Satın alınan ürün (tek analiz hakkı veya aylık/yıllık abonelik paketi) 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği kapsamında \"anında ifa edilen dijital içerik\" niteliğindedir. Kullanıcı ödeme öncesi bu niteliği kabul etmiş sayılır."},
+            {"title": "b) Tek seferlik analiz (anında dijital hizmet) ve iade", "body": "Tek analiz satın alındığında hesabınıza bir analiz hakkı tanınır. Rapor üretildiği anda hizmet ifa edilmiş olur; bu nedenle rapor oluşturulduktan sonra cayma hakkı kullanılamaz. <strong>Hiç analiz yapılmamış</strong> ve ödeme tarihinden itibaren 14 gün içinde iletilen iade talepleri değerlendirmeye alınır. Teknik hata nedeniyle rapor oluşturulamadıysa veya ödeme alınmış ancak hesaba hak tanınmamışsa iade/manuel hak tanıma yapılır."},
+            {"title": "c) Abonelik iptali", "body": "Aylık veya yıllık paketlerde otomatik yenileme yoktur; süre bitince paket kendiliğinden sona erer. İptal etmek isterseniz bir sonraki dönem için yeniden ödeme yapmamanız yeterlidir. Kullanıcı panelinden aboneliğinizi görüntüleyebilirsiniz. İptal sonrası mevcut paket süreniz dolana kadar analiz hakkınız kullanılabilir; süre bittiğinde erişim sona erer."},
+            {"title": "d) Ücret iadesi süreci", "body": "Uygun bulunan iadeler, talebin onaylandığı tarihten itibaren <strong>en geç 14 iş günü</strong> içinde, ödeme yapılan yönteme (kredi kartı / banka kartı) iade edilir. İade, kartınıza veya aynı ödeme kanalına yansır; banka işlem süresi ek 1–5 iş günü sürebilir. Kısmen kullanılmış paketlerde oransal iade uygulanmaz. Kötüye kullanım tespit edilen durumlarda Norya iade talebini reddetme hakkını saklı tutar."},
+            {"title": "e) İletişim", "body": "İade ve iptal taleplerinizi sipariş numaranız (merchant_oid) ile <a href=\"mailto:support@noryaai.com\" class=\"text-norya-brand hover:underline\">support@noryaai.com</a> adresine veya <a href=\"/legal/iletisim\" class=\"text-norya-brand hover:underline\">İletişim</a> sayfasından iletebilirsiniz. En geç 1 iş günü içinde dönüş yapıyoruz."},
         ],
         "footer_note": "Norya — Kan tahlili sonuçlarını anlaşılır dilde açıklayan hizmet.",
     },
     "en": {
         "title": "Refund and Cancellation Policy",
         "last_updated": "Last updated: March 2025",
-        "intro": "Digital analysis services purchased via Norya fall within digitally supplied content performed immediately with the user's consent. Payments are taken via PayTR's payment infrastructure; your card details are not stored by Norya.",
+        "intro": "Services purchased via Norya are digital services. Payments are taken via PayTR's payment infrastructure; your card details are not stored on Norya servers.",
         "sections": [
-            {"title": "1. Packages and Grant of Rights", "body": "When you buy a single analysis, one analysis credit is added to your account. In a Pro monthly or yearly package, the monthly analysis allowance (e.g. 10+3) is granted. There is no auto-renewal; the package ends when the period ends. When payment is confirmed via PayTR, the system automatically grants the right to your account."},
-            {"title": "2. Withdrawal and Refund Conditions", "body": "Although there is a 14-day right of withdrawal in distance contracts, for digital content supplied immediately this right may end once use has started. Refund requests received within 14 days of the payment date with <strong>no analysis having been performed</strong> will be considered. Refunds will be considered in at least these cases: report could not be generated due to a technical error; service was never provided; payment was received but the account was not credited. Send your refund request with your order number (merchant_oid) to <a href=\"mailto:support@noryaai.com\" class=\"text-norya-brand hover:underline\">support@noryaai.com</a> or via our <a href=\"/legal/iletisim\" class=\"text-norya-brand hover:underline\">Contact</a> page. Approved refunds are processed within 7 business days to the original payment method. Proportional refunds are not applied for partially used packages. Norya reserves the right to refuse refund requests where abuse is detected."},
-            {"title": "3. Payment Received But Right Not Granted", "body": "If your payment was confirmed by the bank or PayTR but the analysis credit or subscription did not appear in your account, write to us with your order or payment details. We will check and correct within 1 business day; manual credit may be applied if needed."},
+            {"title": "a) Nature of the digital service", "body": "Norya provides a digital analysis service that explains blood test results in plain language. The product purchased (single analysis credit or monthly/yearly subscription package) qualifies as \"digital content supplied immediately\" under Turkish consumer law and the Distance Contracts Regulation. The user is deemed to have accepted this nature before payment."},
+            {"title": "b) Single analysis (instant digital service) and refund", "body": "When you buy a single analysis, one analysis credit is added to your account. Once the report is generated, the service is deemed performed; therefore the right of withdrawal cannot be exercised after the report has been created. Refund requests received within 14 days of the payment date with <strong>no analysis having been performed</strong> will be considered. If the report could not be generated due to a technical error, or payment was received but the account was not credited, a refund or manual credit will be applied."},
+            {"title": "c) Subscription cancellation", "body": "Monthly or yearly packages do not auto-renew; the package ends when the period ends. To cancel, simply do not pay for the next period. You can view your subscription in the user panel. After cancellation, your analysis credits remain available until the current package period ends; access then ceases."},
+            {"title": "d) Refund process", "body": "Approved refunds are processed to the original payment method (credit/debit card) within <strong>14 business days</strong> of approval. The refund will appear on your card or the same payment channel; bank processing may take an additional 1–5 business days. Proportional refunds are not applied for partially used packages. Norya reserves the right to refuse refund requests where abuse is detected."},
+            {"title": "e) Contact", "body": "Send refund and cancellation requests with your order number (merchant_oid) to <a href=\"mailto:support@noryaai.com\" class=\"text-norya-brand hover:underline\">support@noryaai.com</a> or via our <a href=\"/legal/iletisim\" class=\"text-norya-brand hover:underline\">Contact</a> page. We aim to respond within 1 business day."},
         ],
         "footer_note": "Norya — Service that explains blood test results in plain language.",
     },
@@ -387,12 +393,25 @@ def get_legal_ui(lang: str) -> dict:
     """Seçilen dil için UI metinleri ve nav linkleri."""
     use_lang = lang if lang in LEGAL_LANGS else "en"
     u = _ui(use_lang)
+    # Şirket bilgileri: ENV'den okunur, boşsa PLACEHOLDER veya fatura alanları kullanılır
+    company_title = (settings.company_title or settings.invoice_company_title or "PLACEHOLDER_UNVAN").strip()
+    company_tax_office = (settings.company_tax_office or settings.invoice_company_tax_office or "PLACEHOLDER_VD").strip()
+    company_tax_number = (settings.company_tax_number or settings.gib_earsiv_user or "PLACEHOLDER_VNO").strip()
+    company_address = (settings.company_address or settings.invoice_company_address or "PLACEHOLDER_ADRES").strip()
+    company_phone = (settings.company_phone or "PLACEHOLDER_TELEFON").strip()
+    if not company_phone.startswith("+") and company_phone.isdigit():
+        company_phone = "+90 " + company_phone
     return {
         "lang": use_lang,
         "back_to_home": u["back_to_home"],
         "nav_links": _nav_links(use_lang),
         "footer_desc": u["footer_desc"],
         "footer_disclaimer": u["footer_disclaimer"],
+        "company_title": company_title,
+        "company_tax_office": company_tax_office,
+        "company_tax_number": company_tax_number,
+        "company_address": company_address,
+        "company_phone": company_phone,
     }
 
 
