@@ -1,8 +1,16 @@
-from sqlalchemy import text
+import os
+
+from sqlalchemy import inspect, text
+from sqlalchemy.exc import OperationalError as SQLOperationalError
 from sqlalchemy.pool import StaticPool
 from sqlmodel import Session, SQLModel, create_engine
 
 from .config import settings
+
+try:
+    import fcntl
+except ImportError:
+    fcntl = None  # Windows
 
 
 def _normalized_database_url(raw_url: str) -> str:
@@ -40,8 +48,48 @@ def get_db():
         yield session
 
 
+def _init_db_tables():
+    inspector = inspect(engine)
+    for table in SQLModel.metadata.sorted_tables:
+        if inspector.has_table(table.name):
+            continue
+        try:
+            table.create(engine)
+        except SQLOperationalError as e:
+            if "already exists" not in str(e).lower() and "zaten mevcut" not in str(e).lower():
+                raise
+        except Exception as e:
+            msg = (str(e) + str(getattr(e, "__cause__", "")) + str(getattr(e, "orig", ""))).lower()
+            if "already exists" in msg or "zaten mevcut" in msg:
+                pass
+            else:
+                raise
+
+
 def init_db():
-    SQLModel.metadata.create_all(engine)
+    # Gunicorn 2 worker aynı anda init_db çalıştırıyor; dosya kilidi ile tek işlem tablo oluştursun.
+    fd = None
+    if fcntl is not None:
+        try:
+            lock_path = os.environ.get("NORYA_INIT_DB_LOCK", "/tmp/norya_init_db.lock")
+            fd = os.open(lock_path, os.O_CREAT | os.O_RDWR, 0o600)
+            fcntl.flock(fd, fcntl.LOCK_EX)
+        except OSError:
+            if fd is not None:
+                try:
+                    os.close(fd)
+                except OSError:
+                    pass
+                fd = None
+    try:
+        _init_db_tables()
+    finally:
+        if fd is not None:
+            try:
+                fcntl.flock(fd, fcntl.LOCK_UN)
+                os.close(fd)
+            except OSError:
+                pass
     # Mevcut tablolara yeni sütunlar (Yalnızca SQLite için incremental ALTER komutları)
     if DATABASE_URL.startswith("sqlite"):
         for stmt in (
