@@ -417,6 +417,7 @@
           </span>
           <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 shadow-sm">
             <img src="https://www.gstatic.com/images/branding/googlelogo/svg/googlelogo_clr_74x24px.svg" alt="Google" class="h-6 w-auto object-contain flex-shrink-0" width="74" height="24" loading="lazy" />
+            <span class="text-xs font-medium">Google Cloud</span>
           </span>
         </div>
       </div>
@@ -2212,10 +2213,9 @@
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
       deferredInstallPrompt = e;
-      if (!localStorage.getItem(A2HS_DISMISS_KEY)) {
-        var b = document.getElementById('a2hs-banner');
-        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
-      }
+      // Her zaman göster: kullanıcı daha önce kapatsa bile (Chrome/Edge/desktop)
+      var b = document.getElementById('a2hs-banner');
+      if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
     });
     function installPWA() {
       if (!deferredInstallPrompt) return;
@@ -2233,6 +2233,19 @@
       localStorage.setItem(IOS_A2HS_DISMISS_KEY, '1');
       document.getElementById('ios-a2hs-banner').classList.add('hidden');
     }
+    function maybeShowA2HSDesktopFallback() {
+      try {
+        if (deferredInstallPrompt) return; // native prompt tetiklenecek
+        var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
+        if (isStandalone) return;
+        var ua = navigator.userAgent || '';
+        var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
+        if (isMobile) return; // mobilde native/iOS banner kullanılacak
+        // Masaüstü (Chrome, Edge, Mac Safari vs.): her zaman göster
+        var b = document.getElementById('a2hs-banner');
+        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
+      } catch (_) {}
+    }
     function showIOSA2HSIfNeeded() {
       var ua = navigator.userAgent || '';
       var isIOS = /iPad|iPhone|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
@@ -2243,6 +2256,7 @@
       }
     }
     setTimeout(showIOSA2HSIfNeeded, 2000);
+    setTimeout(maybeShowA2HSDesktopFallback, 3000);
     async function requestPushAndSubscribe() {
       if (!('Notification' in window) || !('PushManager' in window)) {
         toast('Bu tarayıcı push bildirimleri desteklemiyor.', 'info');
