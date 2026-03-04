@@ -750,13 +750,14 @@ def _inject_whatsapp(html: str) -> str:
 
 
 def _inject_company(html: str) -> str:
-    """Şirket bilgileri placeholder'larını config'den doldurur (footer, hakkımızda)."""
-    title = (settings.company_title or settings.invoice_company_title or "PLACEHOLDER_UNVAN").strip()
-    tax_office = (settings.company_tax_office or settings.invoice_company_tax_office or "PLACEHOLDER_VD").strip()
-    tax_no = (settings.company_tax_number or settings.gib_earsiv_user or "PLACEHOLDER_VNO").strip()
-    address = (settings.company_address or settings.invoice_company_address or "PLACEHOLDER_ADRES").strip()
-    phone = (settings.company_phone or "PLACEHOLDER_TELEFON").strip()
-    if phone and phone.isdigit():
+    """Şirket bilgileri placeholder'larını config'den doldurur (footer, hakkımızda). Boşsa — gösterilir."""
+    _fallback = "—"
+    title = (settings.company_title or settings.invoice_company_title or "").strip() or _fallback
+    tax_office = (settings.company_tax_office or settings.invoice_company_tax_office or "").strip() or _fallback
+    tax_no = (settings.company_tax_number or settings.gib_earsiv_user or "").strip() or _fallback
+    address = (settings.company_address or settings.invoice_company_address or "").strip() or _fallback
+    phone = (settings.company_phone or "").strip() or _fallback
+    if phone and phone != _fallback and phone.isdigit():
         phone = "+90 " + phone
     html = html.replace("__NORYA_COMPANY_TITLE__", title)
     html = html.replace("__NORYA_COMPANY_TAX_OFFICE__", tax_office)
@@ -782,6 +783,31 @@ def _legal_lang_from_request(request: Request) -> str:
     if lang_q:
         return lang_q[:5]
     return _parse_accept_language(request.headers.get("accept-language"))
+
+
+@app.get("/kvkk")
+def redirect_kvkk():
+    return RedirectResponse(url="/legal/kvkk-gdpr", status_code=302)
+
+
+@app.get("/privacy-policy")
+def redirect_privacy():
+    return RedirectResponse(url="/legal/gizlilik-politikasi", status_code=302)
+
+
+@app.get("/refund-policy")
+def redirect_refund():
+    return RedirectResponse(url="/iade-iptal", status_code=302)
+
+
+@app.get("/distance-sales")
+def redirect_distance_sales():
+    return RedirectResponse(url="/legal/mesafeli-satis-sozlesmesi", status_code=302)
+
+
+@app.get("/terms")
+def redirect_terms():
+    return RedirectResponse(url="/legal/kullanim-sartlari", status_code=302)
 
 
 @app.get("/legal/{page}", response_class=HTMLResponse)

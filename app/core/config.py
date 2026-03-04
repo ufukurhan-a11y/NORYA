@@ -70,12 +70,12 @@ class Settings(BaseSettings):
     invoice_eur_to_try_rate: float = 35.0  # 1 EUR = X TL (fatura tutarı TL)
 
     # Site genelinde gösterilen şirket bilgileri (footer, iletişim vb.)
-    # ENV üzerinden özelleştirilebilir; boş bırakılırsa yukarıdaki fatura alanları veya PLACEHOLDER metinler kullanılır.
-    company_title: str = "PLACEHOLDER_UNVAN"
-    company_tax_office: str = "PLACEHOLDER_VD"
-    company_tax_number: str = "PLACEHOLDER_VNO"
-    company_address: str = "PLACEHOLDER_ADRES"
-    company_phone: str = "PLACEHOLDER_TELEFON"
+    # ENV üzerinden özelleştirilebilir; boş bırakılırsa yukarıdaki fatura alanları kullanılır veya alan boş gösterilir.
+    company_title: str = ""
+    company_tax_office: str = ""
+    company_tax_number: str = ""
+    company_address: str = ""
+    company_phone: str = ""
 
     # MinIO (S3 uyumlu): PDF raporları yüklenir, frontend buradan indirir
     minio_endpoint: str = ""           # örn. minio.example.com veya 127.0.0.1:9000

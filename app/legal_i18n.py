@@ -393,13 +393,14 @@ def get_legal_ui(lang: str) -> dict:
     """Seçilen dil için UI metinleri ve nav linkleri."""
     use_lang = lang if lang in LEGAL_LANGS else "en"
     u = _ui(use_lang)
-    # Şirket bilgileri: ENV'den okunur, boşsa PLACEHOLDER veya fatura alanları kullanılır
-    company_title = (settings.company_title or settings.invoice_company_title or "PLACEHOLDER_UNVAN").strip()
-    company_tax_office = (settings.company_tax_office or settings.invoice_company_tax_office or "PLACEHOLDER_VD").strip()
-    company_tax_number = (settings.company_tax_number or settings.gib_earsiv_user or "PLACEHOLDER_VNO").strip()
-    company_address = (settings.company_address or settings.invoice_company_address or "PLACEHOLDER_ADRES").strip()
-    company_phone = (settings.company_phone or "PLACEHOLDER_TELEFON").strip()
-    if not company_phone.startswith("+") and company_phone.isdigit():
+    # Şirket bilgileri: ENV'den okunur, boşsa fatura alanları veya — kullanılır
+    _f = "—"
+    company_title = (settings.company_title or settings.invoice_company_title or "").strip() or _f
+    company_tax_office = (settings.company_tax_office or settings.invoice_company_tax_office or "").strip() or _f
+    company_tax_number = (settings.company_tax_number or settings.gib_earsiv_user or "").strip() or _f
+    company_address = (settings.company_address or settings.invoice_company_address or "").strip() or _f
+    company_phone = (settings.company_phone or "").strip() or _f
+    if company_phone != _f and not company_phone.startswith("+") and company_phone.isdigit():
         company_phone = "+90 " + company_phone
     return {
         "lang": use_lang,

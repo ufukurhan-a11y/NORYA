@@ -976,7 +976,7 @@
       document.getElementById('hpKpi4Label').textContent = d.kpi4.label; document.getElementById('hpKpi4Value').textContent = d.kpi4.value; document.getElementById('hpKpi4Meta').textContent = d.kpi4.meta; document.getElementById('hpKpi4Meta').className = 'kpi-meta ' + d.kpi4.class;
       var list = document.getElementById('hpFindings'); list.innerHTML = ''; d.findings.forEach(function(f) { var li = document.createElement('li'); li.textContent = f; list.appendChild(li); });
       document.getElementById('hpGaugeText').textContent = d.risk;
-      var gaugePath = document.getElementById('hpGaugeFill'); if (gaugePath) { var pct = Math.min(100, d.risk); var angle = (pct / 100) * 180; var r = 40; var cx = 50; var cy = 46; var rad = (angle - 180) * Math.PI / 180; var x = cx + r * Math.cos(rad); var y = cy + r * Math.sin(rad); gaugePath.setAttribute('d', 'M 10 46 A 40 40 0 ' + (angle > 180 ? 1 : 0) + ' 1 ' + x + ' ' + y); }
+      var gaugePath = document.getElementById('hpGaugeFill'); if (gaugePath) { var pct = Math.min(100, d.risk); var angle = (pct / 100) * 180; var r = 40; var cx = 50; var cy = 46; var rad = (angle - 180) * Math.PI / 180; var x = cx + r * Math.cos(rad); var y = cy + r * Math.sin(rad); gaugePath.setAttribute('d', 'M 10 46 A 40 40 0 ' + (angle > 180 ? 1 : 0) + ' 1 ' + x + ' ' + y); var strokeColor = d.riskClass === 'status-high' ? 'rgba(239,68,68,0.9)' : d.riskClass === 'status-warn' ? 'rgba(245,158,11,0.9)' : 'rgba(34,197,94,0.9)'; gaugePath.setAttribute('stroke', strokeColor); }
       var t1 = document.getElementById('hpChart1Title'); if (t1 && d.chart1Title) t1.textContent = d.chart1Title;
       var t2 = document.getElementById('hpChart2Title'); if (t2 && d.chart2Title) t2.textContent = d.chart2Title;
       var svg1 = document.getElementById('hpBar1'); if (svg1 && d.bar1 && d.bar1Labels) { var rects = svg1.querySelectorAll('rect'); if (rects.length >= 6) { rects[1].setAttribute('width', Math.min(80, d.bar1.w1)); rects[3].setAttribute('width', Math.min(80, d.bar1.w2)); rects[5].setAttribute('width', Math.min(80, d.bar1.w3)); } var texts1 = svg1.querySelectorAll('text'); if (texts1.length >= 3) { texts1[0].textContent = d.bar1Labels[0]; texts1[1].textContent = d.bar1Labels[1]; texts1[2].textContent = d.bar1Labels[2]; } }
@@ -1739,77 +1739,108 @@
     </div>
   </section>
 
-  <!-- Örnek rapor çıktısı (PDF / analiz sonrası raporla aynı yapı) -->
-  <section id="ornek-rapor" class="landing-hidden py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
+  <!-- Örnek rapor çıktısı — Premium Health stili (renkler, gauge, risk kartları) -->
+  <section id="ornek-rapor" class="landing-hidden py-20 px-4 bg-[#f8fafc] dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
     <div class="max-w-4xl mx-auto w-full px-4">
       <h2 class="text-2xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="example_report_title">Rapor çıktısı örneği</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-8" data-i18n="example_report_desc">Tahlil sonrası raporunuz aşağıdaki gibi bölümler halinde gösterilir.</p>
-      <div class="rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 overflow-hidden shadow-lg">
-        <div class="px-5 py-4 border-b-2 border-norya-brand bg-[var(--norya-brand-light)] flex flex-wrap items-center justify-between gap-2">
+      <div class="rounded-2xl border border-[rgba(14,165,164,0.15)] dark:border-accent-700 bg-white dark:bg-accent-800 overflow-hidden shadow-[0_20px_50px_rgba(14,165,164,0.08)]">
+        <div class="px-5 py-4 border-b border-[rgba(14,165,164,0.12)] flex flex-wrap items-center justify-between gap-2 bg-white dark:bg-accent-800">
           <div class="flex items-center gap-3">
-            <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-14 w-auto flex-shrink-0 object-contain bg-white" />
+            <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-12 w-auto flex-shrink-0 object-contain" />
             <div>
-              <h3 class="font-bold text-norya-brand" data-i18n="example_report_heading">Norya Analiz Raporu</h3>
-              <p class="text-xs text-navy-500 dark:text-navy-400 mt-0.5" data-i18n="example_report_date">Örnek tarih</p>
+              <h3 class="font-bold text-[#0EA5A4]" data-i18n="example_report_heading">Norya Klinik Raporu</h3>
+              <p class="text-xs text-accent-500 dark:text-accent-400 mt-0.5" data-i18n="example_report_date">Örnek tarih</p>
             </div>
           </div>
-          <div class="flex flex-wrap gap-2">
-            <span class="text-xs px-3 py-1.5 rounded-lg bg-white/80 dark:bg-accent-700 text-norya-brand font-medium border border-norya-brand/30" data-i18n="example_report_preview_badge">Önizleme</span>
-          </div>
+          <span class="text-xs px-3 py-1.5 rounded-full bg-[#0EA5A4] text-white font-semibold" data-i18n="example_report_preview_badge">Premium Health</span>
         </div>
         <div class="p-5 space-y-4">
-          <div class="rounded-xl p-4 bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-800">
+          <div class="rounded-xl p-3 bg-amber-50/80 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 flex gap-2 items-start min-w-0">
+            <span class="text-lg flex-shrink-0">&#9888;</span>
+            <p class="text-accent-700 dark:text-accent-300 text-sm break-words" data-i18n="example_report_disclaimer">Bilgilendirme amaçlıdır. Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.</p>
+          </div>
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 sm:gap-3">
+            <div class="rounded-xl p-2.5 sm:p-3 bg-slate-50 dark:bg-accent-800/50 border-l-4 border-[rgba(245,158,11,0.9)] border border-slate-100 dark:border-accent-700 min-w-0">
+              <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase tracking-wide truncate" data-i18n="example_report_domain_cardio">Kardiyovasküler</div>
+              <div class="text-lg sm:text-xl font-bold text-accent-900 dark:text-white">42</div>
+              <div class="text-xs font-medium text-amber-700 dark:text-amber-400" data-i18n="example_report_risk_mid">Orta</div>
+            </div>
+            <div class="rounded-xl p-2.5 sm:p-3 bg-slate-50 dark:bg-accent-800/50 border-l-4 border-[rgba(34,197,94,0.9)] border border-slate-100 dark:border-accent-700 min-w-0">
+              <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase tracking-wide truncate" data-i18n="example_report_domain_metabolic">Metabolik</div>
+              <div class="text-lg sm:text-xl font-bold text-accent-900 dark:text-white">28</div>
+              <div class="text-xs font-medium text-emerald-600 dark:text-emerald-400" data-i18n="example_report_risk_low">Düşük</div>
+            </div>
+            <div class="rounded-xl p-2.5 sm:p-3 bg-slate-50 dark:bg-accent-800/50 border-l-4 border-[rgba(239,68,68,0.9)] border border-slate-100 dark:border-accent-700 min-w-0">
+              <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase tracking-wide truncate" data-i18n="example_report_domain_vitamin">Vitamin</div>
+              <div class="text-lg sm:text-xl font-bold text-accent-900 dark:text-white">67</div>
+              <div class="text-xs font-medium text-red-600 dark:text-red-400" data-i18n="example_report_risk_high">Yüksek</div>
+            </div>
+            <div class="rounded-xl p-2.5 sm:p-3 bg-slate-50 dark:bg-accent-800/50 border-l-4 border-[rgba(34,197,94,0.9)] border border-slate-100 dark:border-accent-700 min-w-0">
+              <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase tracking-wide truncate" data-i18n="example_report_domain_inflammation">Enflamasyon</div>
+              <div class="text-lg sm:text-xl font-bold text-accent-900 dark:text-white">22</div>
+              <div class="text-xs font-medium text-emerald-600 dark:text-emerald-400" data-i18n="example_report_risk_low">Düşük</div>
+            </div>
+          </div>
+          <div class="flex flex-wrap items-center gap-3 sm:gap-4 rounded-xl p-3 sm:p-4 bg-slate-50 dark:bg-accent-800/50 border border-slate-100 dark:border-accent-700 min-w-0 overflow-hidden">
+            <div class="min-w-0">
+              <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 mb-1" data-i18n="example_report_health_score_title">Genel Sağlık Skoru</div>
+              <div class="text-2xl font-bold text-[#0EA5A4]">58 <span class="text-sm font-normal text-accent-500">/ 100</span></div>
+            </div>
+            <div class="flex-1 min-w-[120px] max-w-[200px]">
+              <svg class="w-full h-auto" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                <path d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="10" stroke-linecap="round"/>
+                <path d="M10 100 A90 90 0 0 1 113 27" fill="none" stroke="rgba(245,158,11,0.9)" stroke-width="10" stroke-linecap="round"/>
+                <text x="100" y="68" text-anchor="middle" font-size="18" font-weight="700" fill="currentColor">58</text>
+              </svg>
+            </div>
+          </div>
+          <div class="rounded-xl p-4 bg-teal-50/50 dark:bg-teal-900/10 border border-[rgba(14,165,164,0.2)]">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-lg">📋</span>
+              <span class="text-lg">🧾</span>
               <h4 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="example_report_summary_title">Özet</h4>
             </div>
             <p class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap" data-i18n="example_report_summary">Genel olarak değerleriniz referans aralığına yakın. Birkaç parametre hafifçe farklılık gösterebilir; bu durumda öneriler bölümüne bakın.</p>
           </div>
           <div class="rounded-xl p-4 bg-accent-50 dark:bg-accent-900/30 border border-accent-200 dark:border-accent-700">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-lg">📊</span>
+              <span class="text-lg">🧪</span>
               <h4 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="example_report_values_title">Değerler ve referans aralıkları</h4>
             </div>
             <div class="value-bar-row mb-4 last:mb-0">
               <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
                 <span class="font-medium text-accent-900 dark:text-white text-sm" data-i18n="example_report_sample_hb">Hemoglobin (Hb)</span>
-                <span class="text-sm text-accent-600 dark:text-accent-400">14 g/dL <span class="text-accent-500 dark:text-accent-500">(<span data-i18n="example_report_sample_ref">Ref</span>: 12–16 g/dL)</span></span>
+                <span class="text-sm text-accent-600 dark:text-accent-400">14 g/dL <span class="text-accent-500">(<span data-i18n="example_report_sample_ref">Ref</span>: 12–16 g/dL)</span></span>
               </div>
-              <div class="value-bar-track relative">
-                <div class="value-bar-fill normal" style="width:50%"></div>
-                <span class="value-bar-marker" style="left:50%"></span>
-              </div>
+              <div class="h-2 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-[55%] rounded-full bg-[#0EA5A4]"></div></div>
             </div>
             <div class="value-bar-row mb-4 last:mb-0">
               <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
                 <span class="font-medium text-accent-900 dark:text-white text-sm" data-i18n="example_report_sample_glucose">Glukoz (açlık)</span>
-                <span class="text-sm text-accent-600 dark:text-accent-400">98 mg/dL <span class="text-accent-500 dark:text-accent-500">(<span data-i18n="example_report_sample_ref">Ref</span>: 70–100 mg/dL)</span></span>
+                <span class="text-sm text-accent-600 dark:text-accent-400">98 mg/dL <span class="text-accent-500">(<span data-i18n="example_report_sample_ref">Ref</span>: 70–100 mg/dL)</span></span>
               </div>
-              <div class="value-bar-track relative">
-                <div class="value-bar-fill normal" style="width:85%"></div>
-                <span class="value-bar-marker" style="left:85%"></span>
-              </div>
+              <div class="h-2 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-[85%] rounded-full bg-[#0EA5A4]"></div></div>
             </div>
             <p class="text-accent-700 dark:text-accent-300 text-sm mt-2" data-i18n="example_report_values_note">Her parametre tek tek açıklanır; referans aralığı ve normal / düşük / yüksek bilgisi verilir.</p>
           </div>
           <div class="rounded-xl p-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-lg">💡</span>
+              <span class="text-lg">🔍</span>
               <h4 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="example_report_reasons_title">Olası nedenler</h4>
             </div>
             <p class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap" data-i18n="example_report_reasons">Normal dışı değerler varsa, olası nedenler sade bir dille listelenir.</p>
           </div>
           <div class="rounded-xl p-4 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800">
             <div class="flex items-center gap-2 mb-2">
-              <span class="text-lg">✓</span>
+              <span class="text-lg">🥗</span>
               <h4 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="example_report_tips_title">Öneriler</h4>
             </div>
             <p class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap" data-i18n="example_report_tips">Beslenme, yaşam tarzı ve doktora danışma konusunda kısa, uygulanabilir öneriler.</p>
           </div>
         </div>
-        <div class="px-5 py-4 bg-primary-50 dark:bg-primary-900/20 border-t border-primary-100 dark:border-primary-800 text-center">
+        <div class="px-5 py-4 bg-teal-50/50 dark:bg-teal-900/10 border-t border-[rgba(14,165,164,0.15)] text-center">
           <p class="text-accent-700 dark:text-accent-300 text-sm mb-3" data-i18n="example_report_cta_text">Böyle bir raporu kendi tahliliniz için almak ister misiniz?</p>
-          <button onclick="openRegister(); scrollToAnalyze();" class="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 transition" data-i18n="example_report_cta_btn">Ücretsiz Başla — İlk Analiz Hediye</button>
+          <button onclick="openRegister(); scrollToAnalyze();" class="px-6 py-3 rounded-xl bg-[#0EA5A4] text-white font-semibold hover:bg-[#0d9488] transition" data-i18n="example_report_cta_btn">Ücretsiz Başla — İlk Analiz Hediye</button>
         </div>
       </div>
     </div>
@@ -2143,7 +2174,8 @@
       <div class="flex items-center justify-between px-4 py-3 border-b border-accent-200 dark:border-accent-700">
         <div class="flex flex-col gap-0.5">
           <span class="font-semibold text-accent-900 dark:text-white" data-i18n="payment_modal_title">Güvenli ödeme (PayTR)</span>
-          <p class="flex items-center gap-2 text-xs text-accent-500 dark:text-accent-400">
+          <p class="text-xs font-medium text-[#0EA5A4] dark:text-teal-400" data-i18n="payment_infrastructure">Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi</p>
+          <p class="flex flex-wrap items-center gap-2 text-xs text-accent-500 dark:text-accent-400 mt-0.5">
             <span aria-hidden="true">🔒</span><span data-i18n="footer_trust_ssl">SSL Secure</span>
             <span class="text-accent-300 dark:text-accent-600">·</span>
             <img src="/static/logos/paytr.svg" alt="PayTR" class="h-3.5 w-auto object-contain inline-block" width="42" height="12" /><span data-i18n="footer_trust_paytr">PayTR Secure</span>
@@ -2164,22 +2196,37 @@
     <span id="odeme" class="block -mt-24 pt-24" aria-hidden="true"></span>
     <div class="max-w-xl mx-auto">
       <a href="#fiyatlandirma" onclick="document.getElementById('odeme-section').classList.add('hidden')" class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:underline mb-6" data-i18n="checkout_back">← Planı değiştir</a>
-      <!-- Kurumsal güven çubuğu: SSL, PayTR, Cloudflare -->
-      <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 mb-6 py-4 px-4 rounded-xl bg-accent-50 dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700">
-        <span class="inline-flex items-center gap-2 text-accent-700 dark:text-accent-300 text-sm font-medium">
-          <span class="w-8 h-8 rounded-full bg-emerald-100 dark:bg-emerald-900/50 flex items-center justify-center text-emerald-600 dark:text-emerald-400 shrink-0" aria-hidden="true">🔒</span>
-          <span data-i18n="footer_trust_ssl">SSL Secure</span>
-        </span>
-        <span class="inline-flex items-center gap-2 text-accent-700 dark:text-accent-300 text-sm font-medium">
-          <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center shrink-0 p-1"><img src="/static/logos/paytr.svg" alt="PayTR" class="w-full h-full object-contain" width="24" height="24" /></span>
-          <span data-i18n="footer_trust_paytr">PayTR Secure</span>
-        </span>
-        <span class="inline-flex items-center gap-2 text-accent-700 dark:text-accent-300 text-sm font-medium">
-          <div class="partner-logo">
-            <img src="/static/logos/cloudflare.svg" alt="Cloudflare logo" loading="lazy" />
+      <!-- Güvenli Ödeme bölümü: metinler + rozetler -->
+      <div class="mb-6 py-5 px-4 sm:px-5 rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-200 dark:border-accent-700 shadow-sm">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400 mb-3 text-center" data-i18n="trust_secure_payment_title">Güvenli Ödeme</h3>
+        <ul class="space-y-2 mb-4 text-xs text-accent-600 dark:text-accent-400">
+          <li class="flex items-start gap-2"><span class="text-[#0EA5A4] shrink-0">•</span><span data-i18n="footer_paytr_provided">Ödeme altyapısı PayTR 3D Secure güvenli ödeme sistemi ile sağlanmaktadır.</span></li>
+          <li class="flex items-start gap-2"><span class="text-[#0EA5A4] shrink-0">•</span><span data-i18n="trust_card_pci">Kart bilgileriniz Norya sunucularında saklanmaz ve PCI DSS güvenlik standartlarına uygun şekilde işlenir.</span></li>
+          <li class="flex items-start gap-2"><span class="text-[#0EA5A4] shrink-0">•</span><span data-i18n="trust_3d_secure">Tüm ödemeler 3D Secure doğrulama sistemi ile korunmaktadır.</span></li>
+        </ul>
+        <p class="text-center text-xs text-accent-500 dark:text-accent-500 mb-4" data-i18n="trust_data_security">Kişisel verileriniz KVKK ve GDPR veri koruma standartlarına uygun olarak işlenmektedir.</p>
+        <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3">
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <span class="w-6 h-6 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center text-[#0EA5A4] shrink-0 text-sm">🔒</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_ssl_connection">SSL Secure Connection</span>
           </div>
-          <span data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
-        </span>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <span class="w-6 h-6 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center text-[#0EA5A4] shrink-0">🛡️</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_pci_dss">PCI DSS Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <span class="w-6 h-6 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center text-[#0EA5A4] shrink-0">✓</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_3d_secure">3D Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <img src="/static/logos/paytr.svg" alt="" class="w-6 h-6 object-contain shrink-0" />
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_paytr_secure">PayTR Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <img src="/static/logos/cloudflare.svg" alt="" class="w-6 h-6 object-contain shrink-0" />
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_cloudflare">Cloudflare Security Protection</span>
+          </div>
+        </div>
       </div>
       <div class="rounded-2xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-accent-800 overflow-hidden drop-shadow-soft">
         <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-white flex items-center gap-3">
@@ -2249,6 +2296,7 @@
         </div>
       </div>
       <p class="mt-4 text-center text-xs text-accent-500" data-i18n="checkout_trust_note">Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.</p>
+      <p class="mt-2 text-center text-xs font-medium text-[#0EA5A4] dark:text-teal-400" data-i18n="paytr_infrastructure_note">Ödeme altyapısı PayTR ile sağlanacaktır.</p>
     </div>
   </section>
 
@@ -2257,7 +2305,40 @@
     <div class="premium-wrap max-w-6xl mx-auto">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="pricing_title">Fiyatlandırma</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-2" id="pricing-note" data-i18n="pricing_eur">Fiyatlar konumunuza göre yerel para biriminde gösterilir.</p>
-      <p class="text-center text-sm font-medium text-amber-800 dark:text-amber-200 mb-8 max-w-xl mx-auto px-2" data-i18n="medical_disclaimer_full">Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.</p>
+      <p class="text-center text-sm font-medium text-amber-800 dark:text-amber-200 mb-4 max-w-xl mx-auto px-2" data-i18n="medical_disclaimer_full">Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.</p>
+      <p class="text-center text-xs font-medium text-[#0EA5A4] dark:text-teal-400 mb-4" data-i18n="paytr_infrastructure_note">Ödeme altyapısı PayTR ile sağlanacaktır.</p>
+      <!-- Güvenli Ödeme bölümü: fiyatlandırma sayfasında -->
+      <div class="mb-8 py-4 px-4 sm:px-5 rounded-2xl bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 max-w-3xl mx-auto">
+        <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400 mb-3 text-center" data-i18n="trust_secure_payment_title">Güvenli Ödeme</h3>
+        <ul class="space-y-1.5 mb-3 text-xs text-accent-600 dark:text-accent-400 text-center sm:text-left">
+          <li data-i18n="footer_paytr_provided">Ödeme altyapısı PayTR 3D Secure güvenli ödeme sistemi ile sağlanmaktadır.</li>
+          <li data-i18n="trust_card_pci">Kart bilgileriniz Norya sunucularında saklanmaz ve PCI DSS güvenlik standartlarına uygun şekilde işlenir.</li>
+          <li data-i18n="trust_3d_secure">Tüm ödemeler 3D Secure doğrulama sistemi ile korunmaktadır.</li>
+        </ul>
+        <p class="text-center text-xs text-accent-500 dark:text-accent-500 mb-3" data-i18n="trust_data_security">Kişisel verileriniz KVKK ve GDPR veri koruma standartlarına uygun olarak işlenmektedir.</p>
+        <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-3">
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <span class="w-6 h-6 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center text-[#0EA5A4] shrink-0 text-sm">🔒</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_ssl_connection">SSL Secure Connection</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <span class="w-6 h-6 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center text-[#0EA5A4] shrink-0">🛡️</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_pci_dss">PCI DSS Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <span class="w-6 h-6 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center text-[#0EA5A4] shrink-0">✓</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_3d_secure">3D Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <img src="/static/logos/paytr.svg" alt="" class="w-6 h-6 object-contain shrink-0" />
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_paytr_secure">PayTR Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-3 py-2 rounded-xl bg-accent-50 dark:bg-accent-700/50 border border-accent-200 dark:border-accent-600 hover:border-[#0EA5A4] hover:bg-[#0EA5A4]/5 transition-all">
+            <img src="/static/logos/cloudflare.svg" alt="" class="w-6 h-6 object-contain shrink-0" />
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300" data-i18n="trust_badge_cloudflare">Cloudflare Security Protection</span>
+          </div>
+        </div>
+      </div>
 
       <!-- Pricing cards: Gratis / Tek Analiz / Aylık / Yıllık -->
       <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4 items-stretch mb-10">
@@ -2556,9 +2637,9 @@
         </div>
       </div>
 
-      <!-- Güven satırı: PayTR + KVKK/GDPR + iade -->
+      <!-- Güven satırı: PayTR 3D Secure + KVKK/GDPR + iade -->
       <div class="mt-6 flex flex-wrap justify-center gap-3 text-xs sm:text-sm text-accent-600 dark:text-accent-300">
-        <a href="#odeme" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400"><span aria-hidden="true">🔒</span><span>3D Secure / PayTR</span></a>
+        <a href="#odeme" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400" title="Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi"><span aria-hidden="true">🔒</span><span data-i18n="payment_infrastructure_short">PayTR 3D Secure</span></a>
         <a href="/legal/mesafeli-satis-sozlesmesi" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🧾</span><span>Fatura / e-Arşiv</span></a>
         <a href="/iade-iptal" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🔁</span><span>İptal &amp; iade politikası</span></a>
         <a href="/legal/kvkk-gdpr" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🛡️</span><span>KVKK / GDPR</span></a>
@@ -2893,81 +2974,96 @@
     </div>
   </section>
 
-  <!-- Footer: profesyonel, güven veren, 6 yasal sayfa linki -->
-  <footer class="py-14 px-4 border-t border-accent-200 dark:border-accent-800 bg-accent-50/80 dark:bg-accent-900/40" role="contentinfo">
-    <div class="max-w-6xl mx-auto w-full px-4">
-      <!-- Güven rozetleri: grid of trust cards (SSL, KVKK, GDPR, PayTR, Cloudflare) -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-6 gap-4 sm:gap-6 mb-8 pb-8 border-b border-accent-200 dark:border-accent-700" aria-label="Güven ve uyumluluk">
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🔒</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_ssl">SSL Secure</span>
+  <!-- Footer: kurumsal 4 sütun, çok dilli, mobil uyumlu, PayTR uyumlu -->
+  <footer class="footer-corporate py-10 sm:py-14 px-4 sm:px-6 border-t border-[#0EA5A4]/25 bg-gradient-to-b from-white to-slate-50/80 dark:from-accent-900/60 dark:to-accent-900/40 dark:border-accent-700" role="contentinfo">
+    <div class="max-w-6xl mx-auto w-full">
+      <!-- 4 sütun: Desktop yan yana, mobil alt alta -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-10">
+        <!-- Sütun 1 – Norya + Şirket Bilgileri -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400" data-i18n="footer_col_norya">Norya</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="footer_norya_desc">Norya, kan tahlili verilerini yapay zeka destekli analiz ederek bilgilendirici sağlık raporları sunan dijital bir platformdur.</p>
+          <div class="pt-2 border-t border-accent-200 dark:border-accent-700">
+            <p class="text-xs font-semibold text-accent-800 dark:text-accent-200 mb-2" data-i18n="footer_company_info_title">Şirket Bilgileri</p>
+            <ul class="space-y-1.5 text-xs text-accent-600 dark:text-accent-400">
+              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_title_label">Ticari Unvan:</span> <span class="break-words">__NORYA_COMPANY_TITLE__</span></li>
+              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_tax_label">Vergi Dairesi / Vergi No:</span> <span class="break-words">__NORYA_COMPANY_TAX_OFFICE__ / __NORYA_COMPANY_TAX_NO__</span></li>
+              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_address_label">Adres:</span> <span class="break-words">__NORYA_COMPANY_ADDRESS__</span></li>
+              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_phone_label">Telefon:</span> <span class="break-words">__NORYA_COMPANY_PHONE__</span></li>
+              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_email_label">E-posta:</span> <a href="mailto:info@noryaai.com" class="text-[#0EA5A4] hover:underline">info@noryaai.com</a></li>
+            </ul>
           </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_ssl_desc">Şifreli bağlantı</p>
         </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🛡️</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_kvkk">KVKK uyumlu</span>
-          </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_kvkk_desc">Kişisel veri koruma</p>
+        <!-- Sütun 2 – Yasal -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400" data-i18n="footer_col_legal">Yasal</h3>
+          <nav class="flex flex-col gap-2" aria-label="Yasal sayfalar">
+            <a href="/legal/kvkk-gdpr" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_kvkk_link">KVKK</a>
+            <a href="/legal/gizlilik-politikasi" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_privacy">Gizlilik Politikası</a>
+            <a href="/legal/mesafeli-satis-sozlesmesi" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_mesafeli">Mesafeli Satış Sözleşmesi</a>
+            <a href="/iade-iptal" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_refund">İade Politikası</a>
+            <a href="/legal/kullanim-sartlari" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_terms">Kullanım Şartları</a>
+          </nav>
         </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">✓</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_gdpr">GDPR ready</span>
-          </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_gdpr_desc">AB veri koruma</p>
+        <!-- Sütun 3 – Destek -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400" data-i18n="footer_col_support">Destek</h3>
+          <nav class="flex flex-col gap-2" aria-label="Destek">
+            <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_support_center">Destek Merkezi</a>
+            <a href="#sss" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_faq">Sık Sorulan Sorular</a>
+            <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_contact">İletişim</a>
+            <a href="mailto:info@noryaai.com" class="text-sm text-[#0EA5A4] dark:text-teal-400 hover:underline">info@noryaai.com</a>
+          </nav>
         </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center shrink-0 p-1"><img src="/static/logos/paytr.svg" alt="PayTR" class="w-full h-full object-contain" width="24" height="24" /></span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_paytr">PayTR Secure</span>
+        <!-- Sütun 4 – Güvenli Ödeme (PayTR) -->
+        <div class="space-y-4">
+          <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400" data-i18n="trust_secure_payment_title">Güvenli Ödeme</h3>
+          <div class="flex items-center gap-2">
+            <img src="/static/logos/paytr.svg" alt="PayTR" class="h-8 w-auto object-contain" width="80" height="24" loading="lazy" />
+            <span class="text-sm font-semibold text-accent-700 dark:text-accent-300" data-i18n="footer_trust_paytr">PayTR Secure</span>
           </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_paytr_desc">Güvenli ödeme</p>
-        </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-1">
-            <span class="w-8 h-8 rounded-full bg-primary-100 dark:bg-primary-900/50 flex items-center justify-center text-primary-600 dark:text-primary-400 shrink-0" aria-hidden="true">🏥</span>
-            <span class="font-semibold text-sm" data-i18n="footer_trust_hipaa">HIPAA-aligned security</span>
-          </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mt-auto" data-i18n="footer_trust_hipaa_desc">Sağlık verileriniz gizlilik ve güvenlik ilkelerine uygun işlenir.</p>
-        </div>
-        <div class="trust-card p-5 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-100 dark:border-accent-700 shadow-sm min-h-[140px] flex flex-col">
-          <div class="flex items-center gap-2.5 text-accent-700 dark:text-accent-300 mb-2">
-            <div class="partner-logo">
-              <img src="/static/logos/cloudflare.svg" alt="Cloudflare logo" loading="lazy" />
-            </div>
-            <span class="font-semibold text-sm" data-i18n="trust_cloudflare_title">Cloudflare ile korunur</span>
-          </div>
-          <p class="text-xs text-accent-500 dark:text-accent-500 mb-3" data-i18n="trust_cloudflare_desc">Trafik koruması ve global CDN ile daha hızlı ve güvenli erişim.</p>
-          <ul class="text-xs text-accent-500 dark:text-accent-500 space-y-1 mt-auto" aria-hidden="true">
-            <li>• <span data-i18n="trust_cloudflare_1">DDoS koruması</span></li>
-            <li>• <span data-i18n="trust_cloudflare_2">Global CDN hızlandırma</span></li>
-            <li>• <span data-i18n="trust_cloudflare_3">Edge güvenlik</span></li>
-          </ul>
+          <p class="text-xs text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="footer_paytr_provided">Ödeme altyapısı PayTR 3D Secure güvenli ödeme sistemi ile sağlanmaktadır.</p>
+          <p class="text-xs text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="trust_card_pci">Kart bilgileriniz Norya sunucularında saklanmaz ve PCI DSS güvenlik standartlarına uygun şekilde işlenir.</p>
+          <p class="text-xs text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="trust_3d_secure">Tüm ödemeler 3D Secure doğrulama sistemi ile korunmaktadır.</p>
         </div>
       </div>
-      <!-- Yasal ve iletişim linkleri: her biri ayrı sayfa -->
-      <nav class="flex flex-wrap justify-center gap-x-5 gap-y-2 text-sm mb-8" aria-label="Yasal sayfalar ve iletişim">
-        <a href="/kurumsal" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="nav_corporate">Kurumsal</a>
-        <a href="/legal/mesafeli-satis-sozlesmesi" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_mesafeli">Mesafeli Satış Sözleşmesi</a>
-        <a href="/legal/gizlilik-politikasi" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_privacy">Gizlilik Politikası</a>
-        <a href="/iade-iptal" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_refund">İade ve İptal Politikası</a>
-        <a href="/legal/kvkk-gdpr" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_kvkk_gdpr">KVKK / GDPR</a>
-        <a href="/legal/kullanim-sartlari" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_terms">Kullanım Şartları</a>
-        <a href="/legal/iletisim" class="text-accent-600 dark:text-accent-400 hover:text-norya-brand dark:hover:text-norya-brand font-medium transition-colors legal-lang-link" data-i18n="footer_contact">İletişim</a>
-      </nav>
-      <p class="text-center text-accent-600 dark:text-accent-400 text-sm"><strong class="text-accent-800 dark:text-accent-200">Norya</strong> — <span data-i18n="footer_desc">Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.</span></p>
-      <p class="text-center text-accent-500 dark:text-accent-500 text-xs mt-1.5" data-i18n="footer_disclaimer">Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.</p>
-      <p class="text-center text-amber-600/90 dark:text-amber-400/90 text-xs mt-1 font-medium" data-i18n="disclaimer_informative">Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.</p>
-      <p class="text-center text-accent-400 dark:text-accent-500 text-xs mt-2"><a href="https://cursor.com" target="_blank" rel="noopener noreferrer" class="hover:text-primary-500 transition-colors" data-i18n="made_with_cursor">Made with Cursor</a></p>
-      <div class="mt-4 text-center text-accent-500 dark:text-accent-400 text-xs space-y-1 max-w-full break-words px-1">
-        <p><strong>Ticari Unvan:</strong> <span class="break-words">__NORYA_COMPANY_TITLE__</span></p>
-        <p><strong>Vergi Dairesi / Vergi No:</strong> __NORYA_COMPANY_TAX_OFFICE__ / __NORYA_COMPANY_TAX_NO__</p>
-        <p><strong>Adres:</strong> <span class="break-words">__NORYA_COMPANY_ADDRESS__</span></p>
-        <p><strong>E-posta:</strong> support@noryaai.com</p>
-        <p><strong>Telefon / WhatsApp:</strong> __NORYA_COMPANY_PHONE__</p>
+      <!-- Güven rozetleri: mobil alt alta, desktop yatay -->
+      <div class="trust-badges py-6 border-t border-accent-200 dark:border-accent-700">
+        <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3 sm:gap-4">
+          <div class="trust-badge flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-accent-800/80 border border-accent-200 dark:border-accent-600 shadow-sm hover:border-[#0EA5A4] hover:shadow-md hover:bg-[#0EA5A4]/5 dark:hover:bg-[#0EA5A4]/10 transition-all min-w-0" title="SSL">
+            <span class="w-8 h-8 rounded-full bg-[#0EA5A4]/15 dark:bg-[#0EA5A4]/25 flex items-center justify-center text-[#0EA5A4] shrink-0" aria-hidden="true">🔒</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300 truncate" data-i18n="trust_badge_ssl_connection">SSL Secure Connection</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-accent-800/80 border border-accent-200 dark:border-accent-600 shadow-sm hover:border-[#0EA5A4] hover:shadow-md hover:bg-[#0EA5A4]/5 dark:hover:bg-[#0EA5A4]/10 transition-all min-w-0">
+            <span class="w-8 h-8 rounded-full bg-[#0EA5A4]/15 dark:bg-[#0EA5A4]/25 flex items-center justify-center text-[#0EA5A4] shrink-0" aria-hidden="true">🛡️</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300 truncate" data-i18n="trust_badge_pci_dss">PCI DSS Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-accent-800/80 border border-accent-200 dark:border-accent-600 shadow-sm hover:border-[#0EA5A4] hover:shadow-md hover:bg-[#0EA5A4]/5 dark:hover:bg-[#0EA5A4]/10 transition-all min-w-0">
+            <span class="w-8 h-8 rounded-full bg-[#0EA5A4]/15 dark:bg-[#0EA5A4]/25 flex items-center justify-center text-[#0EA5A4] shrink-0" aria-hidden="true">✓</span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300 truncate" data-i18n="trust_badge_3d_secure">3D Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-accent-800/80 border border-accent-200 dark:border-accent-600 shadow-sm hover:border-[#0EA5A4] hover:shadow-md hover:bg-[#0EA5A4]/5 dark:hover:bg-[#0EA5A4]/10 transition-all min-w-0">
+            <span class="w-8 h-8 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center shrink-0 p-1"><img src="/static/logos/paytr.svg" alt="" class="w-full h-full object-contain" /></span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300 truncate" data-i18n="trust_badge_paytr_secure">PayTR Secure Payment</span>
+          </div>
+          <div class="trust-badge flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white dark:bg-accent-800/80 border border-accent-200 dark:border-accent-600 shadow-sm hover:border-[#0EA5A4] hover:shadow-md hover:bg-[#0EA5A4]/5 dark:hover:bg-[#0EA5A4]/10 transition-all min-w-0">
+            <span class="w-8 h-8 rounded-full bg-[#0EA5A4]/15 flex items-center justify-center shrink-0 p-1"><img src="/static/logos/cloudflare.svg" alt="" class="w-full h-full object-contain" /></span>
+            <span class="text-xs font-medium text-accent-700 dark:text-accent-300 truncate" data-i18n="trust_badge_cloudflare">Cloudflare Security Protection</span>
+          </div>
+        </div>
+      </div>
+      <!-- Veri güvenliği metni -->
+      <div class="py-4 border-t border-accent-200 dark:border-accent-700">
+        <p class="text-center text-xs text-accent-600 dark:text-accent-400 leading-relaxed max-w-2xl mx-auto" data-i18n="trust_data_security">Kişisel verileriniz KVKK ve GDPR veri koruma standartlarına uygun olarak işlenmektedir.</p>
+      </div>
+      <!-- Sağlık uyarısı -->
+      <div class="pt-6 border-t border-accent-200 dark:border-accent-700">
+        <p class="text-center text-xs text-accent-500 dark:text-accent-500 leading-relaxed max-w-3xl mx-auto" data-i18n="footer_health_disclaimer_full">Norya bir tıbbi teşhis veya tedavi hizmeti değildir. Sunulan analizler yalnızca bilgilendirme amaçlıdır. Kesin sağlık kararları için bir doktora danışınız.</p>
+      </div>
+      <!-- Copyright -->
+      <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-accent-500 dark:text-accent-500">
+        <span data-i18n="footer_copyright">© 2026 Norya. Tüm hakları saklıdır.</span>
+        <a href="https://cursor.com" target="_blank" rel="noopener noreferrer" class="hover:text-[#0EA5A4] transition-colors" data-i18n="made_with_cursor">Made with Cursor</a>
       </div>
     </div>
   </footer>
@@ -3899,7 +3995,7 @@
         trust_badge_ssl: "256-bit SSL ile korunur", trust_badge_kvkk_gdpr: "KVKK & GDPR uyumlu", trust_badge_paytr: "PayTR ile güvenli ödeme",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
-        footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR ile güvenli ödeme.", footer_trust_hipaa_desc: "Sağlık verileri güvenle işlenir.",
+        footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR 3D Secure güvenli ödeme sistemi.", payment_infrastructure: "Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Sağlık verileri güvenle işlenir.",
         infra_title: "Altyapı & Güvenlik", infra_google_title: "Google Cloud", infra_google_desc: "Güvenli altyapı ve veri işleme", footer_privacy: "Gizlilik", footer_terms: "Kullanım Koşulları",
         trust_cloudflare_title: "Cloudflare ile korunur", trust_cloudflare_desc: "Trafik koruması ve hızlı erişim.", trust_cloudflare_1: "DDoS koruması", trust_cloudflare_2: "Global CDN hızlandırma", trust_cloudflare_3: "Edge güvenlik",
         how_title: "Norya Nasıl Çalışır?", how_desc: "Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.",
@@ -3964,7 +4060,12 @@
         example_report_reasons_title: "Olası nedenler", example_report_reasons: "Normal dışı değerler varsa, olası nedenler sade bir dille listelenir.",
         example_report_tips_title: "Öneriler", example_report_tips: "Beslenme, yaşam tarzı ve doktora danışma konusunda kısa, uygulanabilir öneriler.",
         example_report_cta_text: "Böyle bir raporu kendi tahliliniz için almak ister misiniz?", example_report_cta_btn: "Ücretsiz Başla — İlk Analiz Hediye",
-        example_clinical_report_title: "Örnek Klinik Rapor", sample_report_desc: "Norya, kan tahlili sonuçlarınızı anlaşılır ve doktor seviyesinde bir rapora dönüştürür.", sample_page1_title: "Genel Sağlık", sample_page2_title: "Test Sonuçları", sample_page3_title: "AI Yorum", sample_page4_title: "Risk Skorları", sample_not_diagnosis: "Bu yorum teşhis değildir; bilgilendirme amaçlıdır. Sonuçları hekiminizle paylaşın.", example_slide_summary: "Genel sağlık özeti", example_slide_summary_text: "Değerleriniz genel olarak referans aralığına yakın. Birkaç parametre hafifçe sınırda; öneriler bölümünde detay bulabilirsiniz.", example_slide_results: "Test sonuçları", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukoz: 98 mg/dL (Ref: 70–100). Her parametre tek tek açıklanır ve referans aralığıyla karşılaştırılır.", example_slide_ai: "AI yorum", example_slide_ai_text: "Yapay zeka tahlil sonuçlarınızı yorumlar, olası nedenleri ve beslenme/yaşam tarzı önerilerini sade bir dille sunar.", example_slide_risk: "Risk skorları", example_slide_risk_text: "Parametreler normal, sınır veya dikkat olarak işaretlenir. Kalp sağlığı ve diğer risk notları raporunuzda yer alır.", example_btn_analyze: "Analiz Yap", example_btn_view_sample: "Örnek Raporu Gör",
+        example_report_disclaimer: "Bilgilendirme amaçlıdır. Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.",
+        example_report_health_score_title: "Genel Sağlık Skoru",
+        example_report_domain_cardio: "Kardiyovasküler", example_report_domain_metabolic: "Metabolik", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Enflamasyon",
+        example_report_risk_low: "Düşük", example_report_risk_mid: "Orta", example_report_risk_high: "Yüksek",
+        health_dashboard_title: "Premium Health Raporu Önizleme", health_dashboard_badge: "Premium Health",
+        example_clinical_report_title: "Örnek Klinik Rapor", sample_report_desc: "Kan tahlili sonuçlarınız skor, risk göstergesi ve trend ile klinik rapor formatında sunulur.", sample_page1_title: "Genel Sağlık", sample_page2_title: "Test Sonuçları", sample_page3_title: "AI Yorum", sample_page4_title: "Risk Skorları", sample_not_diagnosis: "Bu yorum teşhis değildir; bilgilendirme amaçlıdır. Sonuçları hekiminizle paylaşın.", example_slide_summary: "Genel sağlık özeti", example_slide_summary_text: "Değerleriniz genel olarak referans aralığına yakın. Birkaç parametre hafifçe sınırda; öneriler bölümünde detay bulabilirsiniz.", example_slide_results: "Test sonuçları", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukoz: 98 mg/dL (Ref: 70–100). Her parametre tek tek açıklanır ve referans aralığıyla karşılaştırılır.", example_slide_ai: "AI yorum", example_slide_ai_text: "Yapay zeka tahlil sonuçlarınızı yorumlar, olası nedenleri ve beslenme/yaşam tarzı önerilerini sade bir dille sunar.", example_slide_risk: "Risk skorları", example_slide_risk_text: "Parametreler normal, sınır veya dikkat olarak işaretlenir. Kalp sağlığı ve diğer risk notları raporunuzda yer alır.", example_btn_analyze: "Analiz Yap", example_btn_view_sample: "Örnek Raporu Gör",
         corporate_title: "Hastanelere ve Kurumlara Norya", corporate_subtitle: "Tahlil sonuçlarını hasta ve hekim için anlaşılır kılan kurumsal çözümler. Ücret yok; detay için bize ulaşın.",
         corporate_th_package: "Paket", corporate_th_reports: "Rapor / ay", corporate_th_features: "Özellikler", corporate_th_contact: "İletişim",
         corporate_starter_name: "Starter Klinik", corporate_starter_features: "1 klinik, 10 kullanıcı, Türkçe + İngilizce rapor, PDF",
@@ -4039,7 +4140,24 @@
         compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_price: "💶 Fiyat", compare_btn_select: "Seç", compare_btn_active: "Aktif", compare_btn_upgrade: "Yükselt",
         footer_desc: "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.", footer_disclaimer: "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.", made_with_cursor: "Cursor ile yapıldı",
         disclaimer_informative: "Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.", medical_disclaimer_full: "Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.", doctor_cta_note: "Teşhis yerine geçmez; sonuçları hekiminizle paylaşın.",
-        footer_mesafeli: "Mesafeli Satış Sözleşmesi", footer_privacy: "Gizlilik Politikası", footer_refund: "İade ve İptal Politikası", footer_kvkk_gdpr: "KVKK / GDPR",
+        footer_mesafeli: "Mesafeli Satış Sözleşmesi", footer_privacy: "Gizlilik Politikası", footer_refund: "İade Politikası", footer_refund_long: "İade ve İptal Politikası", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
+        footer_col_norya: "Norya", footer_col_legal: "Yasal", footer_col_support: "Destek", footer_col_payment: "Güvenli Ödeme",
+        footer_norya_desc: "Norya, kan tahlili verilerini yapay zeka destekli analiz ederek bilgilendirici sağlık raporları sunan dijital bir platformdur.",
+        footer_company_info_title: "Şirket Bilgileri", footer_company_title_label: "Ticari Unvan:", footer_company_tax_label: "Vergi Dairesi / Vergi No:", footer_company_address_label: "Adres:", footer_company_phone_label: "Telefon:", footer_company_email_label: "E-posta:",
+        footer_support_center: "Destek Merkezi", footer_faq: "Sık Sorulan Sorular",
+        trust_secure_payment_title: "Güvenli Ödeme",
+        trust_card_pci: "Kart bilgileriniz Norya sunucularında saklanmaz ve PCI DSS güvenlik standartlarına uygun şekilde işlenir.",
+        trust_3d_secure: "Tüm ödemeler 3D Secure doğrulama sistemi ile korunmaktadır.",
+        trust_data_security: "Kişisel verileriniz KVKK ve GDPR veri koruma standartlarına uygun olarak işlenmektedir.",
+        trust_badge_ssl_connection: "SSL Secure Connection",
+        trust_badge_pci_dss: "PCI DSS Secure Payment",
+        trust_badge_3d_secure: "3D Secure Payment",
+        trust_badge_paytr_secure: "PayTR Secure Payment",
+        trust_badge_cloudflare: "Cloudflare Security Protection",
+        footer_paytr_provided: "Ödeme altyapısı PayTR 3D Secure güvenli ödeme sistemi ile sağlanmaktadır.", footer_card_not_stored: "Kart bilgileriniz Norya sunucularında saklanmaz.",
+        footer_health_disclaimer_full: "Norya bir tıbbi teşhis veya tedavi hizmeti değildir. Sunulan analizler yalnızca bilgilendirme amaçlıdır. Kesin sağlık kararları için bir doktora danışınız.",
+        footer_copyright: "© 2026 Norya. Tüm hakları saklıdır.",
+        footer_platform_disclaimer: "Norya, kan tahlili verilerinin yapay zeka destekli analizini sunan dijital bir sağlık bilgilendirme platformudur. Norya bir tıbbi teşhis sistemi değildir.",
         footer_terms: "Kullanım Şartları", footer_payment: "Ödeme ve İade", footer_contact: "İletişim", back_home: "← Ana sayfa",
         terms_heading: "Kullanım Koşulları", privacy_heading: "Gizlilik Politikası", payment_heading: "Ödeme ve İade Koşulları",
         contact_heading: "İletişim", contact_intro: "Sorularınız, iade talepleriniz veya \"ödeme alındı ama analiz hakkı gelmedi\" gibi teknik konular için bize ulaşabilirsiniz.", contact_email_label: "E-posta:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Bize WhatsApp ile yazın", contact_note: "Mümkünse hesap e-posta adresinizi ve konuyla ilgili kısa açıklamayı (sipariş no, tarih vb.) yazın. En geç 1 iş günü içinde dönüş yapıyoruz.", contact_tagline: "Norya — Kan tahlili sonuçlarınızı anlaşılır dilde açıklayan hizmet.",
@@ -4080,7 +4198,8 @@
         history_detail_input: "Tahlil girişi:", history_detail_result: "Norya AI yorumu:", history_close: "Kapat", history_analysis_a: "Analiz A", history_analysis_b: "Analiz B",
         history_loading: "Yükleniyor...", history_empty: "Henüz analiz yok.", history_load_error: "Geçmiş yüklenemedi.", history_compare_select_two: "İki farklı analiz seçin.", history_compare_load_error: "Analizler yüklenemedi.",
         usage_this_month: "Bu ay {kullanilan}/{limit} analiz hakkınız kullanıldı.", usage_first_free: "İlk analiz ücretsiz.", usage_limit_reached: "Aylık analiz hakkınız doldu. Önce ödeme yapın, sonra analiz yapabilirsiniz.", usage_pro_unlimited: "Pro plan: Bu ay {kullanilan}/{limit} analiz kullandınız.", usage_extra_credits: "+ {n} ek hak", payment_btn_single: "1 Analiz Satın Al", payment_btn_pro: "Pro'ya Geç", payment_not_available: "Ödeme şu an kullanılamıyor.", payment_error: "Ödeme sayfası açılamadı.", payment_modal_title: "Güvenli ödeme (PayTR)", payment_success: "Ödemeniz alındı. Analiz yapabilirsiniz.", session_expired: "Oturumunuz sonlanmış. Lütfen tekrar giriş yapın.", test_mode_link: "Sınırsız test", test_mode_on: "Test modu – sınırsız, hak düşülmez",
-        checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_consent_mesafeli: "Mesafeli Satış Sözleşmesi'ni okudum ve kabul ediyorum.", checkout_consent_kvkk: "Gizlilik/KVKK politikasını okudum ve kabul ediyorum.", checkout_btn: "Güvenli ödemeye geç", checkout_accepted_cards: "Visa, Mastercard, Amex kabul edilir.", checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
+        checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_consent_mesafeli: "Mesafeli Satış Sözleşmesi'ni okudum ve kabul ediyorum.", checkout_consent_kvkk: "Gizlilik/KVKK politikasını okudum ve kabul ediyorum.", checkout_btn: "Güvenli ödemeye geç", checkout_accepted_cards: "Visa, Mastercard, Amex kabul edilir.",         checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
+        paytr_infrastructure_note: "Ödeme altyapısı PayTR ile sağlanacaktır.",
         guest_checkout_title: "Kayıt olmadan tek analiz", guest_checkout_desc: "E-posta adresinizi girin; ödeme sonrası aynı e-posta ile oturum açıp analiz yapabilirsiniz.", guest_checkout_name: "Ad (opsiyonel)",
         btn_processing_pdf: "PDF işleniyor...", btn_processing_analyze: "Analiz ediliyor...",
         source_pdf: "PDF", source_image: "Görsel", source_text: "Metin"
@@ -4111,7 +4230,7 @@
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
-        footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "Secure payment via PayTR.", footer_trust_hipaa_desc: "Health data handled securely.",
+        footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "PayTR 3D Secure payment system.", payment_infrastructure: "Payment infrastructure: PayTR 3D Secure secure payment system.", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Health data handled securely.",
         trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Traffic protection and fast access.", trust_cloudflare_1: "DDoS protection", trust_cloudflare_2: "Global CDN acceleration", trust_cloudflare_3: "Edge security",
         how_title: "How Norya Works", how_desc: "Three simple steps to turn your lab results into clear health insights.",
         how_1: "Sign up", how_1d: "Create a free account. Email and password only.",
@@ -4175,7 +4294,12 @@
         example_report_reasons_title: "Possible causes", example_report_reasons: "If any value is out of range, possible causes are listed in plain language.",
         example_report_tips_title: "Recommendations", example_report_tips: "Short, practical tips on diet, lifestyle and when to see a doctor.",
         example_report_cta_text: "Want a report like this for your own results?", example_report_cta_btn: "Start free — first analysis on us",
-        example_clinical_report_title: "Sample Clinical Report", example_slide_summary: "General health summary", example_slide_summary_text: "Your values are generally close to the reference range. A few parameters may be slightly borderline; see the recommendations section for details.", example_slide_results: "Test results", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucose: 98 mg/dL (Ref: 70–100). Each parameter is explained and compared to the reference range.", example_slide_ai: "AI interpretation", example_slide_ai_text: "AI interprets your lab results and presents possible causes and diet/lifestyle recommendations in plain language.", example_slide_risk: "Risk scores", example_slide_risk_text: "Parameters are marked as normal, borderline or attention. Heart health and other risk notes are included in your report.", example_btn_analyze: "Run analysis", example_btn_view_sample: "View sample report",
+        example_report_disclaimer: "For information only. This report does not replace medical diagnosis or treatment. Consult your doctor for health decisions.",
+        example_report_health_score_title: "Overall Health Score",
+        example_report_domain_cardio: "Cardiovascular", example_report_domain_metabolic: "Metabolic", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Inflammation",
+        example_report_risk_low: "Low", example_report_risk_mid: "Moderate", example_report_risk_high: "High",
+        health_dashboard_title: "Premium Health Report Preview", health_dashboard_badge: "Premium Health",
+        example_clinical_report_title: "Sample Clinical Report", sample_report_desc: "Your lab results are presented in clinical report format with score, risk indicator and trend.", example_slide_summary: "General health summary", example_slide_summary_text: "Your values are generally close to the reference range. A few parameters may be slightly borderline; see the recommendations section for details.", example_slide_results: "Test results", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucose: 98 mg/dL (Ref: 70–100). Each parameter is explained and compared to the reference range.", example_slide_ai: "AI interpretation", example_slide_ai_text: "AI interprets your lab results and presents possible causes and diet/lifestyle recommendations in plain language.", example_slide_risk: "Risk scores", example_slide_risk_text: "Parameters are marked as normal, borderline or attention. Heart health and other risk notes are included in your report.", example_btn_analyze: "Run analysis", example_btn_view_sample: "View sample report",
         corporate_title: "Norya for Hospitals & Organizations", corporate_subtitle: "Corporate solutions that make lab results clear for patients and physicians. No fee; contact us for details.",
         corporate_th_package: "Plan", corporate_th_reports: "Reports / month", corporate_th_features: "Features", corporate_th_contact: "Contact",
         corporate_starter_name: "Starter Clinic", corporate_starter_features: "1 clinic, 10 users, Turkish + English reports, PDF",
@@ -4250,7 +4374,24 @@
         compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_price: "Price", compare_btn_select: "Select", compare_btn_active: "Current", compare_btn_upgrade: "Upgrade",
         footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "This analysis is for information only. It does not replace medical diagnosis.", medical_disclaimer_full: "Norya is not a medical diagnosis tool. Content provided is for information only. In emergencies or for diagnosis/treatment, consult your doctor.", doctor_cta_note: "Not a substitute for diagnosis; share results with your doctor.",
-        footer_mesafeli: "Distance Sales Agreement", footer_privacy: "Privacy Policy", footer_refund: "Refund & Cancellation", footer_kvkk_gdpr: "KVKK / GDPR",
+        footer_mesafeli: "Distance Sales Agreement", footer_privacy: "Privacy Policy", footer_refund: "Refund Policy", footer_refund_long: "Refund & Cancellation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
+        footer_col_norya: "Norya", footer_col_legal: "Legal", footer_col_support: "Support", footer_col_payment: "Secure Payment",
+        footer_norya_desc: "Norya is a digital platform that provides informative health reports by analysing blood test data with AI.",
+        footer_company_info_title: "Company Information", footer_company_title_label: "Legal name:", footer_company_tax_label: "Tax office / Tax no.:", footer_company_address_label: "Address:", footer_company_phone_label: "Phone:", footer_company_email_label: "Email:",
+        footer_support_center: "Support Centre", footer_faq: "FAQ",
+        trust_secure_payment_title: "Secure Payment",
+        trust_card_pci: "Your card details are not stored on Norya servers and are processed in compliance with PCI DSS security standards.",
+        trust_3d_secure: "All payments are protected by the 3D Secure verification system.",
+        trust_data_security: "Your personal data is processed in accordance with KVKK and GDPR data protection standards.",
+        trust_badge_ssl_connection: "SSL Secure Connection",
+        trust_badge_pci_dss: "PCI DSS Secure Payment",
+        trust_badge_3d_secure: "3D Secure Payment",
+        trust_badge_paytr_secure: "PayTR Secure Payment",
+        trust_badge_cloudflare: "Cloudflare Security Protection",
+        footer_paytr_provided: "Payment infrastructure is provided by the PayTR 3D Secure payment system.", footer_card_not_stored: "Your card details are not stored on Norya servers.",
+        footer_health_disclaimer_full: "Norya is not a medical diagnosis or treatment service. The analyses provided are for information only. Consult a doctor for any definitive health decisions.",
+        footer_copyright: "© 2026 Norya. All rights reserved.",
+        footer_platform_disclaimer: "Norya is a digital health information platform offering AI-supported analysis of blood test data. Norya is not a medical diagnosis system.",
         footer_terms: "Terms of Use", footer_payment: "Payment & Refunds", footer_contact: "Contact", back_home: "← Home",
         terms_heading: "Terms of Use", privacy_heading: "Privacy Policy", payment_heading: "Payment and Refund Terms",
         contact_heading: "Contact", contact_intro: "For questions, refund requests, or technical issues (e.g. \"payment received but no analysis credit\"), please get in touch.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Message us on WhatsApp", contact_note: "If possible, include your account email and a short description (order no., date, etc.). We aim to reply within 1 business day.", contact_tagline: "Norya — Blood test results explained in plain language.",
@@ -4291,7 +4432,8 @@
         history_detail_input: "Lab input:", history_detail_result: "Norya AI interpretation:", history_close: "Close", history_analysis_a: "Analysis A", history_analysis_b: "Analysis B",
         history_loading: "Loading...", history_empty: "No analyses yet.", history_load_error: "Could not load history.", history_compare_select_two: "Select two different analyses.", history_compare_load_error: "Could not load analyses.",
         usage_this_month: "This month {kullanilan}/{limit} analyses used.", usage_first_free: "First analysis free.", usage_limit_reached: "Monthly limit reached. Pay first, then run analysis.", usage_pro_unlimited: "Pro plan: {kullanilan}/{limit} analyses this month.", usage_extra_credits: "+ {n} extra", payment_btn_single: "Buy 1 analysis", payment_btn_pro: "Upgrade to Pro", payment_not_available: "Payment is not available.", payment_error: "Could not open payment page.", payment_modal_title: "Secure payment (PayTR)", payment_success: "Payment received. You can run analysis now.", session_expired: "Your session has expired. Please log in again.", test_mode_link: "Unlimited test", test_mode_on: "Test mode – unlimited, no credit used",
-        checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_consent_mesafeli: "I have read and accept the Distance Selling Agreement.", checkout_consent_kvkk: "I have read and accept the Privacy/KVKK policy.", checkout_btn: "Proceed to secure payment", checkout_accepted_cards: "Visa, Mastercard, Amex accepted.", checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
+        checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_consent_mesafeli: "I have read and accept the Distance Selling Agreement.", checkout_consent_kvkk: "I have read and accept the Privacy/KVKK policy.", checkout_btn: "Proceed to secure payment", checkout_accepted_cards: "Visa, Mastercard, Amex accepted.",         checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
+        paytr_infrastructure_note: "Payment infrastructure is provided by PayTR.",
         guest_checkout_title: "Single analysis without account", guest_checkout_desc: "Enter your email; after payment you can sign in with the same email and run your analysis.", guest_checkout_name: "Name (optional)",
         btn_processing_pdf: "Processing PDF...", btn_processing_analyze: "Analyzing...",
         source_pdf: "PDF", source_image: "Image", source_text: "Text"
@@ -4372,6 +4514,12 @@
         example_report_sample_hb: "Emoglobina (Hb)", example_report_sample_glucose: "Glucosio (a digiuno)", example_report_sample_ref: "Ref",
         example_report_reasons_title: "Possibili cause", example_report_reasons: "Se un valore è fuori range, le possibili cause sono elencate in linguaggio semplice.",
         example_report_tips_title: "Raccomandazioni", example_report_tips: "Consigli brevi su alimentazione, stile di vita e quando consultare il medico.", example_report_cta_text: "Vuoi un report così per le tue analisi?", example_report_cta_btn: "Inizia gratis — Prima analisi in omaggio",
+        example_report_disclaimer: "Solo a scopo informativo. Questo report non sostituisce diagnosi o trattamento. Consultare il medico.",
+        example_report_health_score_title: "Punteggio salute generale",
+        example_report_domain_cardio: "Cardiovascolare", example_report_domain_metabolic: "Metabolico", example_report_domain_vitamin: "Vitamina", example_report_domain_inflammation: "Infiammazione",
+        example_report_risk_low: "Basso", example_report_risk_mid: "Moderato", example_report_risk_high: "Alto",
+        health_dashboard_title: "Anteprima report Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "I tuoi risultati sono presentati in formato report clinico con punteggio, indicatore di rischio e trend.",
         example_clinical_report_title: "Esempio di report clinico", example_slide_summary: "Riepilogo salute generale", example_slide_summary_text: "I tuoi valori sono in genere vicini all'intervallo di riferimento. Alcuni parametri leggermente al limite; vedi raccomandazioni.", example_slide_results: "Risultati dei test", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucosio: 98 mg/dL (Ref: 70–100). Ogni parametro spiegato con intervallo di riferimento.", example_slide_ai: "Commento AI", example_slide_ai_text: "L'IA interpreta i risultati e presenta cause possibili e consigli su dieta e stile di vita in linguaggio semplice.", example_slide_risk: "Punteggi di rischio", example_slide_risk_text: "Parametri segnati come normali, limite o attenzione. Salute cardiaca e altri rischi nel report.", example_btn_analyze: "Esegui analisi", example_btn_view_sample: "Vedi report di esempio",
         security_title: "Sicurezza e protezione dati", security_desc: "I tuoi dati sanitari sono protetti secondo gli standard più elevati.",
         security_hipaa: "Principi HIPAA", security_hipaa_desc: "Sicurezza dati sanitari",
@@ -4419,7 +4567,23 @@
         price_best_badge: "Miglior rapporto qualità-prezzo", price_best_badge_value: "Miglior valore", price_yearly_title: "Piano annuale", price_per_year: "/anno", price_yearly_per: "16 analisi totali (13 + 3 in omaggio)", price_yearly_1: "✓ 16 analisi all'anno (13 + 3 in omaggio)", price_yearly_2: "✓ Tutte le sezioni dieta e integratori premium", price_yearly_3: "✓ Cronologia e confronto avanzato", price_yearly_4: "✓ Ideale per visite dal medico", price_btn_yearly: "/anno — Inizia",
         footer_desc: "Risultati delle analisi del sangue spiegati in linguaggio chiaro.", footer_disclaimer: "Questo strumento è a scopo informativo. Consulta sempre un professionista per decisioni mediche.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Questa analisi è solo a scopo informativo. Non sostituisce una diagnosi medica.", medical_disclaimer_full: "Norya non è uno strumento di diagnosi medica. I contenuti sono solo informativi. In emergenze o per diagnosi/terapia consultare il medico.", doctor_cta_note: "Non sostituisce la diagnosi; condividi i risultati con il medico.",
-        footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR",
+        footer_col_norya: "Norya", footer_col_legal: "Legale", footer_col_support: "Supporto", footer_col_payment: "Pagamento sicuro",
+        footer_norya_desc: "Norya è una piattaforma digitale che fornisce report sanitari informativi analizzando i dati degli esami del sangue con l'IA.",
+        footer_company_info_title: "Informazioni aziendali", footer_company_title_label: "Ragione sociale:", footer_company_tax_label: "Ufficio / N. IVA:", footer_company_address_label: "Indirizzo:", footer_company_phone_label: "Telefono:", footer_company_email_label: "Email:",
+        footer_support_center: "Centro assistenza", footer_faq: "FAQ",
+        trust_secure_payment_title: "Pagamento sicuro",
+        trust_card_pci: "I dati della carta non sono memorizzati sui server Norya e sono trattati in conformità con gli standard PCI DSS.",
+        trust_3d_secure: "Tutti i pagamenti sono protetti dal sistema di verifica 3D Secure.",
+        trust_data_security: "I vostri dati personali sono trattati in conformità con gli standard KVKK e GDPR.",
+        trust_badge_ssl_connection: "SSL Secure Connection",
+        trust_badge_pci_dss: "PCI DSS Secure Payment",
+        trust_badge_3d_secure: "3D Secure Payment",
+        trust_badge_paytr_secure: "PayTR Secure Payment",
+        trust_badge_cloudflare: "Cloudflare Security Protection",
+        footer_paytr_provided: "L'infrastruttura di pagamento è fornita dal sistema PayTR 3D Secure.", footer_card_not_stored: "I dati della carta non sono memorizzati sui server Norya.",
+        footer_health_disclaimer_full: "Norya non è un servizio di diagnosi o trattamento medico. Le analisi fornite sono solo a scopo informativo. Consultare un medico per decisioni di salute definitive.",
+        footer_copyright: "© 2026 Norya. Tutti i diritti riservati.",
+        footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Termini d'uso", footer_payment: "Pagamento e rimborsi", footer_contact: "Contatti", back_home: "← Home",
         profile_tab_general: "Generale", profile_tab_plan: "Piano e utilizzo", profile_tab_history: "Cronologia analisi", profile_tab_security: "Sicurezza", profile_plan_label: "Piano", profile_remaining: "Rimanenti", profile_ends: "Fine", profile_plan_pro: "Pro", profile_ends_monthly: "Rinnovo mensile", profile_ends_na: "—", profile_usage_label: "Utilizzo (questo mese)", profile_upgrade_cta: "Passa a un piano superiore", profile_view_analysis: "Visualizza", profile_unlimited: "Illimitato", profile_country: "Paese",
         compare_title: "Confronta tutti i piani", compare_subtitle: "Scegli il piano adatto a te.", compare_feature: "Funzione", compare_plan_free: "Gratis", compare_plan_single: "Singolo", compare_plan_monthly: "Mensile", compare_plan_yearly: "Annuale", compare_analyses: "Analisi", compare_analyses_per_month: "10+3 / mese", compare_upload: "Testo, PDF, immagine", compare_report: "Report dettagliato (riepilogo, valori, raccomandazioni)", compare_diet: "Piano dietetico", compare_supplements: "Integratori", compare_heart: "Salute cardiaca", compare_history: "Cronologia", compare_pdf: "PDF / Condividi / Per il medico", compare_emr_ehr: "Report EMR/EHR", compare_langs: "Lingua report", compare_langs_count: "9 lingue", compare_compare: "Confronta due analisi", compare_price: "Prezzo",
@@ -4543,6 +4707,12 @@
         example_report_sample_hb: "Hemoglobina (Hb)", example_report_sample_glucose: "Glucosa (en ayunas)", example_report_sample_ref: "Ref",
         example_report_reasons_title: "Posibles causas", example_report_reasons: "Si algún valor está fuera de rango, las posibles causas se listan en lenguaje claro.",
         example_report_tips_title: "Recomendaciones", example_report_tips: "Consejos breves sobre dieta, estilo de vida y cuándo consultar al médico.", example_report_cta_text: "¿Quieres un informe así para tus propios análisis?", example_report_cta_btn: "Empieza gratis — Primera análisis de regalo",
+        example_report_disclaimer: "Solo informativo. Este informe no sustituye el diagnóstico o tratamiento. Consulte a su médico.",
+        example_report_health_score_title: "Puntuación de salud general",
+        example_report_domain_cardio: "Cardiovascular", example_report_domain_metabolic: "Metabólico", example_report_domain_vitamin: "Vitamina", example_report_domain_inflammation: "Inflamación",
+        example_report_risk_low: "Bajo", example_report_risk_mid: "Moderado", example_report_risk_high: "Alto",
+        health_dashboard_title: "Vista previa informe Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "Tus resultados se presentan en formato de informe clínico con puntuación, indicador de riesgo y tendencia.",
         example_clinical_report_title: "Ejemplo de informe clínico", example_slide_summary: "Resumen de salud general", example_slide_summary_text: "Tus valores están en general cerca del rango de referencia. Algunos parámetros ligeramente al límite; ver recomendaciones.", example_slide_results: "Resultados de análisis", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucosa: 98 mg/dL (Ref: 70–100). Cada parámetro explicado con rango de referencia.", example_slide_ai: "Comentario IA", example_slide_ai_text: "La IA interpreta tus resultados y presenta causas posibles y consejos de dieta y estilo de vida en lenguaje claro.", example_slide_risk: "Puntuaciones de riesgo", example_slide_risk_text: "Parámetros marcados como normal, límite o atención. Salud cardíaca y otros riesgos en tu informe.", example_btn_analyze: "Hacer análisis", example_btn_view_sample: "Ver informe de ejemplo",
         security_title: "Seguridad y protección de datos", security_desc: "Tus datos de salud protegidos con los más altos estándares.",
         security_hipaa: "Principios HIPAA", security_hipaa_desc: "Seguridad de datos sanitarios",
@@ -4590,7 +4760,23 @@
         price_best_badge: "Mejor relación calidad-precio", price_best_badge_value: "Mejor valor", price_yearly_title: "Plan anual", price_per_year: "/año", price_yearly_per: "16 análisis total (13 + 3 de regalo)", price_yearly_1: "✓ 16 análisis al año (13 + 3 de regalo)", price_yearly_2: "✓ Todas las secciones dieta y suplementos premium", price_yearly_3: "✓ Historial y comparación avanzada", price_yearly_4: "✓ Ideal para visitas al médico", price_btn_yearly: "/año — Empezar",
         footer_desc: "Resultados de análisis de sangre explicados en lenguaje claro.", footer_disclaimer: "Esta herramienta es informativa. Consulta siempre a un profesional para decisiones médicas.", made_with_cursor: "Hecho con Cursor",
         disclaimer_informative: "Este análisis es solo informativo. No sustituye un diagnóstico médico.", medical_disclaimer_full: "Norya no es una herramienta de diagnóstico médico. El contenido es solo informativo. En emergencias o para diagnóstico/tratamiento consulte a su médico.", doctor_cta_note: "No sustituye el diagnóstico; comparta los resultados con su médico.",
-        footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR",
+        footer_col_norya: "Norya", footer_col_legal: "Legal", footer_col_support: "Soporte", footer_col_payment: "Pago seguro",
+        footer_norya_desc: "Norya es una plataforma digital que ofrece informes de salud informativos analizando los datos de análisis de sangre con IA.",
+        footer_company_info_title: "Información de la empresa", footer_company_title_label: "Razón social:", footer_company_tax_label: "Oficina / NIF:", footer_company_address_label: "Dirección:", footer_company_phone_label: "Teléfono:", footer_company_email_label: "Email:",
+        footer_support_center: "Centro de ayuda", footer_faq: "Preguntas frecuentes",
+        trust_secure_payment_title: "Pago seguro",
+        trust_card_pci: "Los datos de su tarjeta no se almacenan en los servidores de Norya y se procesan conforme a PCI DSS.",
+        trust_3d_secure: "Todos los pagos están protegidos por el sistema de verificación 3D Secure.",
+        trust_data_security: "Sus datos personales se procesan conforme a los estándares KVKK y GDPR.",
+        trust_badge_ssl_connection: "SSL Secure Connection",
+        trust_badge_pci_dss: "PCI DSS Secure Payment",
+        trust_badge_3d_secure: "3D Secure Payment",
+        trust_badge_paytr_secure: "PayTR Secure Payment",
+        trust_badge_cloudflare: "Cloudflare Security Protection",
+        footer_paytr_provided: "La infraestructura de pago es proporcionada por el sistema PayTR 3D Secure.", footer_card_not_stored: "Los datos de su tarjeta no se almacenan en los servidores de Norya.",
+        footer_health_disclaimer_full: "Norya no es un servicio de diagnóstico o tratamiento médico. Los análisis ofrecidos son solo informativos. Consulte a un médico para decisiones de salud definitivas.",
+        footer_copyright: "© 2026 Norya. Todos los derechos reservados.",
+        footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Términos de uso", footer_payment: "Pago y reembolsos", footer_contact: "Contacto", back_home: "← Inicio",
         profile_tab_general: "General", profile_tab_plan: "Plan y uso", profile_tab_history: "Historial de análisis", profile_tab_security: "Seguridad", profile_plan_label: "Plan", profile_remaining: "Restantes", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renovación mensual", profile_ends_na: "—", profile_usage_label: "Uso (este mes)", profile_upgrade_cta: "Mejorar plan", profile_view_analysis: "Ver", profile_unlimited: "Ilimitado", profile_country: "País",
         compare_title: "Comparar todos los planes", compare_subtitle: "Encuentra el plan que te convenga.", compare_feature: "Característica", compare_plan_free: "Gratis", compare_plan_single: "Único", compare_plan_monthly: "Mensual", compare_plan_yearly: "Anual", compare_analyses: "Análisis", compare_analyses_per_month: "10+3 / mes", compare_upload: "Texto, PDF, imagen", compare_report: "Informe detallado (resumen, valores, recomendaciones)", compare_diet: "Plan dietético", compare_supplements: "Suplementos", compare_heart: "Salud cardíaca", compare_history: "Historial", compare_pdf: "PDF / Compartir / Para el médico", compare_emr_ehr: "Informe EMR/EHR", compare_langs: "Idioma del informe", compare_langs_count: "9 idiomas", compare_compare: "Comparar dos análisis", compare_price: "Precio",
@@ -4714,6 +4900,12 @@
         example_report_sample_hb: "Hémoglobine (Hb)", example_report_sample_glucose: "Glucose (à jeun)", example_report_sample_ref: "Ref",
         example_report_reasons_title: "Causes possibles", example_report_reasons: "Si une valeur est hors fourchette, les causes possibles sont listées en langage simple.",
         example_report_tips_title: "Recommandations", example_report_tips: "Conseils courts sur l'alimentation, le mode de vie et quand consulter un médecin.", example_report_cta_text: "Vous voulez un rapport comme celui-ci pour vos propres analyses?", example_report_cta_btn: "Commencer gratuitement — Première analyse offerte",
+        example_report_disclaimer: "À titre informatif uniquement. Ce rapport ne remplace pas le diagnostic ni le traitement. Consultez votre médecin.",
+        example_report_health_score_title: "Score de santé global",
+        example_report_domain_cardio: "Cardiovasculaire", example_report_domain_metabolic: "Métabolique", example_report_domain_vitamin: "Vitamine", example_report_domain_inflammation: "Inflammation",
+        example_report_risk_low: "Faible", example_report_risk_mid: "Modéré", example_report_risk_high: "Élevé",
+        health_dashboard_title: "Aperçu rapport Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "Vos résultats sont présentés en format rapport clinique avec score, indicateur de risque et tendance.",
         example_clinical_report_title: "Exemple de rapport clinique", example_slide_summary: "Résumé santé général", example_slide_summary_text: "Vos valeurs sont en général proches de la fourchette de référence. Quelques paramètres légèrement à la limite ; voir recommandations.", example_slide_results: "Résultats des analyses", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucose: 98 mg/dL (Ref: 70–100). Chaque paramètre expliqué avec fourchette de référence.", example_slide_ai: "Commentaire IA", example_slide_ai_text: "L'IA interprète vos résultats et présente causes possibles et conseils alimentation et mode de vie en langage simple.", example_slide_risk: "Scores de risque", example_slide_risk_text: "Paramètres marqués normal, limite ou attention. Santé cardiaque et autres risques dans le rapport.", example_btn_analyze: "Lancer l'analyse", example_btn_view_sample: "Voir le rapport exemple",
         security_title: "Sécurité et protection des données", security_desc: "Vos données de santé protégées selon les plus hauts standards.",
         security_hipaa: "Principes HIPAA", security_hipaa_desc: "Sécurité des données de santé",
@@ -4761,7 +4953,23 @@
         price_best_badge: "Meilleur rapport qualité-prix", price_best_badge_value: "Meilleure valeur", price_yearly_title: "Abonnement annuel", price_per_year: "/an", price_yearly_per: "16 analyses au total (13 + 3 offertes)", price_yearly_1: "✓ 16 analyses par an (13 + 3 offertes)", price_yearly_2: "✓ Toutes les sections régime et compléments premium", price_yearly_3: "✓ Historique et comparaison avancée", price_yearly_4: "✓ Idéal pour les rendez-vous médicaux", price_btn_yearly: "/an — Commencer",
         footer_desc: "Résultats d'analyses sanguines expliqués en langage clair.", footer_disclaimer: "Cet outil est à titre informatif. Consultez toujours un professionnel pour les décisions médicales.", made_with_cursor: "Fait avec Cursor",
         disclaimer_informative: "Cette analyse est à titre informatif uniquement. Elle ne remplace pas un diagnostic médical.", medical_disclaimer_full: "Norya n'est pas un outil de diagnostic médical. Le contenu est à titre informatif. En cas d'urgence ou pour diagnostic/traitement, consultez votre médecin.", doctor_cta_note: "Ne remplace pas un diagnostic ; partagez les résultats avec votre médecin.",
-        footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR",
+        footer_col_norya: "Norya", footer_col_legal: "Mentions légales", footer_col_support: "Support", footer_col_payment: "Paiement sécurisé",
+        footer_norya_desc: "Norya est une plateforme numérique qui fournit des rapports de santé en analysant les données d'analyses sanguines avec l'IA.",
+        footer_company_info_title: "Informations société", footer_company_title_label: "Raison sociale:", footer_company_tax_label: "Bureau / N° TVA:", footer_company_address_label: "Adresse:", footer_company_phone_label: "Téléphone:", footer_company_email_label: "Email:",
+        footer_support_center: "Centre d'aide", footer_faq: "FAQ",
+        trust_secure_payment_title: "Paiement sécurisé",
+        trust_card_pci: "Vos données de carte ne sont pas stockées sur les serveurs Norya et sont traitées conformément aux normes PCI DSS.",
+        trust_3d_secure: "Tous les paiements sont protégés par le système de vérification 3D Secure.",
+        trust_data_security: "Vos données personnelles sont traitées conformément aux normes KVKK et GDPR.",
+        trust_badge_ssl_connection: "SSL Secure Connection",
+        trust_badge_pci_dss: "PCI DSS Secure Payment",
+        trust_badge_3d_secure: "3D Secure Payment",
+        trust_badge_paytr_secure: "PayTR Secure Payment",
+        trust_badge_cloudflare: "Cloudflare Security Protection",
+        footer_paytr_provided: "L'infrastructure de paiement est fournie par le système PayTR 3D Secure.", footer_card_not_stored: "Vos données de carte ne sont pas stockées sur les serveurs Norya.",
+        footer_health_disclaimer_full: "Norya n'est pas un service de diagnostic ou de traitement médical. Les analyses fournies sont à titre informatif uniquement. Consultez un médecin pour toute décision de santé.",
+        footer_copyright: "© 2026 Norya. Tous droits réservés.",
+        footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Conditions d'utilisation", footer_payment: "Paiement et remboursements", footer_contact: "Contact", back_home: "← Accueil",
         profile_tab_general: "Général", profile_tab_plan: "Forfait et utilisation", profile_tab_history: "Historique des analyses", profile_tab_security: "Sécurité", profile_plan_label: "Forfait", profile_remaining: "Restants", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renouvellement mensuel", profile_ends_na: "—", profile_usage_label: "Utilisation (ce mois)", profile_upgrade_cta: "Améliorer le forfait", profile_view_analysis: "Voir", profile_unlimited: "Illimité", profile_country: "Pays",
         compare_title: "Comparer tous les forfaits", compare_subtitle: "Trouvez le forfait qui vous convient.", compare_feature: "Fonctionnalité", compare_plan_free: "Gratuit", compare_plan_single: "Unique", compare_plan_monthly: "Mensuel", compare_plan_yearly: "Annuel", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mois", compare_upload: "Texte, PDF, image", compare_report: "Rapport détaillé (résumé, valeurs, recommandations)", compare_diet: "Régime", compare_supplements: "Compléments", compare_heart: "Santé cardiaque", compare_history: "Historique", compare_pdf: "PDF / Partager / Pour le médecin", compare_emr_ehr: "Rapport EMR/EHR", compare_langs: "Langue du rapport", compare_langs_count: "9 langues", compare_compare: "Comparer deux analyses", compare_price: "Prix",
@@ -4885,6 +5093,12 @@
         example_report_sample_hb: "Hämoglobin (Hb)", example_report_sample_glucose: "Glukose (nüchtern)", example_report_sample_ref: "Ref",
         example_report_reasons_title: "Mögliche Ursachen", example_report_reasons: "Wenn ein Wert außerhalb des Bereichs liegt, werden mögliche Ursachen in einfacher Sprache aufgeführt.",
         example_report_tips_title: "Empfehlungen", example_report_tips: "Kurze Tipps zu Ernährung, Lebensstil und wann Sie einen Arzt aufsuchen sollten.", example_report_cta_text: "Möchten Sie einen solchen Bericht für Ihre eigenen Werte?", example_report_cta_btn: "Kostenlos starten — Erste Analyse geschenkt",
+        example_report_disclaimer: "Nur zur Information. Dieser Bericht ersetzt keine Diagnose oder Behandlung. Bitte Arzt konsultieren.",
+        example_report_health_score_title: "Gesundheits-Score gesamt",
+        example_report_domain_cardio: "Kardiovaskulär", example_report_domain_metabolic: "Metabolisch", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Entzündung",
+        example_report_risk_low: "Niedrig", example_report_risk_mid: "Mäßig", example_report_risk_high: "Hoch",
+        health_dashboard_title: "Premium-Health-Bericht Vorschau", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "Ihre Werte werden im klinischen Berichtsformat mit Score, Risikoindikator und Trend dargestellt.",
         example_clinical_report_title: "Beispiel Klinikbericht", example_slide_summary: "Allgemeine Gesundheitszusammenfassung", example_slide_summary_text: "Ihre Werte liegen insgesamt im Referenzbereich. Einige Parameter leicht grenzwertig; siehe Empfehlungen.", example_slide_results: "Testergebnisse", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukose: 98 mg/dL (Ref: 70–100). Jeder Parameter mit Referenzbereich erklärt.", example_slide_ai: "KI-Kommentar", example_slide_ai_text: "Die KI interpretiert Ihre Werte und gibt mögliche Ursachen sowie Ernährungs- und Lebensstilempfehlungen in einfacher Sprache.", example_slide_risk: "Risikoscores", example_slide_risk_text: "Parameter als normal, Grenze oder Achtung markiert. Herzgesundheit und weitere Risiken im Bericht.", example_btn_analyze: "Analyse starten", example_btn_view_sample: "Beispielbericht ansehen",
         security_title: "Sicherheit und Datenschutz", security_desc: "Ihre Gesundheitsdaten werden nach höchsten Standards geschützt.",
         security_hipaa: "HIPAA-Grundsätze", security_hipaa_desc: "Sicherheit von Gesundheitsdaten",
@@ -4932,7 +5146,23 @@
         price_best_badge: "Bester Preis", price_best_badge_value: "Bester Wert", price_yearly_title: "Jahresabo", price_per_year: "/Jahr", price_yearly_per: "16 Analysen gesamt (13 + 3 gratis)", price_yearly_1: "✓ 16 Analysen pro Jahr (13 + 3 gratis)", price_yearly_2: "✓ Alle Premium-Ernährung & -Nahrungsergänzung", price_yearly_3: "✓ Verlauf & erweiterter Vergleich", price_yearly_4: "✓ Ideal für Arzttermine", price_btn_yearly: "/Jahr — Starten",
         footer_desc: "Blutwerte verständlich erklärt.", footer_disclaimer: "Nur zur Information. Bitte konsultieren Sie für medizinische Entscheidungen einen Arzt.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Diese Analyse dient nur der Information. Sie ersetzt keine medizinische Diagnose.", medical_disclaimer_full: "Norya ist kein medizinisches Diagnoseinstrument. Die Inhalte sind nur zur Information. In Notfällen oder bei Diagnose/Behandlung wenden Sie sich an Ihren Arzt.", doctor_cta_note: "Ersetzt keine Diagnose; teilen Sie die Ergebnisse mit Ihrem Arzt.",
-        footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "KVKK / GDPR",
+        footer_col_norya: "Norya", footer_col_legal: "Rechtliches", footer_col_support: "Support", footer_col_payment: "Sichere Zahlung",
+        footer_norya_desc: "Norya ist eine digitale Plattform, die informative Gesundheitsberichte durch KI-Auswertung von Blutuntersuchungsdaten bereitstellt.",
+        footer_company_info_title: "Unternehmensangaben", footer_company_title_label: "Firmenname:", footer_company_tax_label: "Finanzamt / USt-ID:", footer_company_address_label: "Adresse:", footer_company_phone_label: "Telefon:", footer_company_email_label: "E-Mail:",
+        footer_support_center: "Supportzentrum", footer_faq: "FAQ",
+        trust_secure_payment_title: "Sichere Zahlung",
+        trust_card_pci: "Ihre Kartendaten werden nicht auf Norya-Servern gespeichert und entsprechen den PCI-DSS-Sicherheitsstandards.",
+        trust_3d_secure: "Alle Zahlungen sind durch das 3D-Secure-Verifizierungssystem geschützt.",
+        trust_data_security: "Ihre personenbezogenen Daten werden gemäß KVKK- und GDPR-Standards verarbeitet.",
+        trust_badge_ssl_connection: "SSL Secure Connection",
+        trust_badge_pci_dss: "PCI DSS Secure Payment",
+        trust_badge_3d_secure: "3D Secure Payment",
+        trust_badge_paytr_secure: "PayTR Secure Payment",
+        trust_badge_cloudflare: "Cloudflare Security Protection",
+        footer_paytr_provided: "Die Zahlungsinfrastruktur wird vom PayTR-3D-Secure-System bereitgestellt.", footer_card_not_stored: "Ihre Kartendaten werden nicht auf Norya-Servern gespeichert.",
+        footer_health_disclaimer_full: "Norya ist kein medizinischer Diagnose- oder Behandlungsdienst. Die angebotenen Analysen dienen nur der Information. Konsultieren Sie einen Arzt für verbindliche Gesundheitsentscheidungen.",
+        footer_copyright: "© 2026 Norya. Alle Rechte vorbehalten.",
+        footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Nutzungsbedingungen", footer_payment: "Zahlung & Rückerstattung", footer_contact: "Kontakt", back_home: "← Start",
         profile_tab_general: "Allgemein", profile_tab_plan: "Paket & Nutzung", profile_tab_history: "Analyse-Verlauf", profile_tab_security: "Sicherheit", profile_plan_label: "Plan", profile_remaining: "Verbleibend", profile_ends: "Ende", profile_plan_pro: "Pro", profile_ends_monthly: "Monatliche Verlängerung", profile_ends_na: "—", profile_usage_label: "Nutzung (dieser Monat)", profile_upgrade_cta: "Plan upgraden", profile_view_analysis: "Ansehen", profile_unlimited: "Unbegrenzt", profile_country: "Land",
         compare_title: "Alle Pläne vergleichen", compare_subtitle: "Finden Sie den passenden Plan.", compare_feature: "Funktion", compare_plan_free: "Kostenlos", compare_plan_single: "Einzel", compare_plan_monthly: "Monat", compare_plan_yearly: "Jahr", compare_analyses: "Analysen", compare_analyses_per_month: "10+3 / Monat", compare_upload: "Text, PDF, Bild", compare_report: "Detaillierter Bericht (Zusammenfassung, Werte, Empfehlungen)", compare_diet: "Ernährungsplan", compare_supplements: "Nahrungsergänzung", compare_heart: "Herzgesundheit", compare_history: "Verlauf", compare_pdf: "PDF / Teilen / Für den Arzt", compare_emr_ehr: "EMR/EHR-Bericht", compare_langs: "Berichtssprache", compare_langs_count: "9 Sprachen", compare_compare: "Zwei Analysen vergleichen", compare_price: "Preis",
@@ -5056,6 +5286,12 @@
         example_report_sample_hb: "המוגלובין (Hb)", example_report_sample_glucose: "גלוקוז (צום)", example_report_sample_ref: "ייחוס",
         example_report_reasons_title: "סיבות אפשריות", example_report_reasons: "אם ערך מחוץ לטווח, הסיבות האפשריות מפורטות בשפה פשוטה.",
         example_report_tips_title: "המלצות", example_report_tips: "טיפים קצרים על תזונה, אורח חיים ומתי לפנות לרופא.", example_report_cta_text: "רוצה דוח כזה עבור התוצאות שלך?", example_report_cta_btn: "התחל בחינם — ניתוח ראשון במתנה",
+        example_report_disclaimer: "למטרות מידע בלבד. דוח זה אינו מחליף אבחון או טיפול. יש להתייעץ עם רופא.",
+        example_report_health_score_title: "ציון בריאות כללי",
+        example_report_domain_cardio: "קרדיווסקולרי", example_report_domain_metabolic: "מטבולי", example_report_domain_vitamin: "ויטמין", example_report_domain_inflammation: "דלקת",
+        example_report_risk_low: "נמוך", example_report_risk_mid: "בינוני", example_report_risk_high: "גבוה",
+        health_dashboard_title: "תצוגת דוח Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "התוצאות שלך מוצגות בפורמט דוח קליני עם ציון, אינדיקטור סיכון ומגמה.",
         example_clinical_report_title: "דוח קליני לדוגמה", example_slide_summary: "סיכום בריאות כללי", example_slide_summary_text: "הערכים שלך בדרך כלל קרובים לטווח הייחוס. פרמטרים אחדים מעט בגבול; ראה המלצות.", example_slide_results: "תוצאות בדיקות", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). גלוקוז: 98 mg/dL (Ref: 70–100). כל פרמטר מוסבר עם טווח ייחוס.", example_slide_ai: "פרשנות AI", example_slide_ai_text: "בינה מלאכותית מפרשת את התוצאות ומציגה סיבות אפשריות והמלצות תזונה ואורח חיים.", example_slide_risk: "ציוני סיכון", example_slide_risk_text: "פרמטרים מסומנים כרגיל, גבול או תשומת לב. בריאות הלב וסיכונים נוספים בדוח.", example_btn_analyze: "הרץ ניתוח", example_btn_view_sample: "צפה בדוח לדוגמה",
         security_title: "אבטחה והגנה על נתונים", security_desc: "נתוני הבריאות שלך מוגנים לפי הסטנדרטים הגבוהים ביותר.",
         security_hipaa: "עקרונות HIPAA", security_hipaa_desc: "אבטחת נתוני בריאות",
@@ -5225,6 +5461,12 @@
         example_report_sample_hb: "الهيموغلوبين (Hb)", example_report_sample_glucose: "الغلوكوز (صائم)", example_report_sample_ref: "مرجع",
         example_report_reasons_title: "أسباب محتملة", example_report_reasons: "إن كان أي قيمة خارج المدى، تُذكر الأسباب المحتملة بلغة بسيطة.",
         example_report_tips_title: "توصيات", example_report_tips: "نصائح قصيرة عن الغذاء ونمط الحياة ومتى تراجع الطبيب.", example_report_cta_text: "هل تريد تقريراً مثل هذا لتحاليلك؟", example_report_cta_btn: "ابدأ مجاناً — أول تحليل هدية",
+        example_report_disclaimer: "للمعلومات فقط. هذا التقرير لا يحل محل التشخيص أو العلاج. استشر طبيبك.",
+        example_report_health_score_title: "درجة الصحة العامة",
+        example_report_domain_cardio: "قلبي وعائي", example_report_domain_metabolic: "أيضي", example_report_domain_vitamin: "فيتامين", example_report_domain_inflammation: "التهاب",
+        example_report_risk_low: "منخفض", example_report_risk_mid: "متوسط", example_report_risk_high: "عالي",
+        health_dashboard_title: "معاينة تقرير Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "تُعرض نتائجك بتنسيق تقرير سريري مع الدرجة ومؤشر المخاطر والاتجاه.",
         example_clinical_report_title: "تقرير سريري نموذجي", example_slide_summary: "ملخص الصحة العامة", example_slide_summary_text: "قيمك بشكل عام قريبة من المدى المرجعي. بعض المعايير عند الحد؛ انظر التوصيات.", example_slide_results: "نتائج التحاليل", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). غلوكوز: 98 mg/dL (Ref: 70–100). كل معيار موضح مع المدى المرجعي.", example_slide_ai: "تعليق الذكاء الاصطناعي", example_slide_ai_text: "الذكاء الاصطناعي يفسر النتائج ويعرض الأسباب المحتملة ونصائح التغذية ونمط الحياة.", example_slide_risk: "درجات المخاطر", example_slide_risk_text: "المعايير تُصنَّف عادي أو حد أو انتباه. صحة القلب ومخاطر أخرى في التقرير.", example_btn_analyze: "تشغيل التحليل", example_btn_view_sample: "عرض التقرير النموذجي",
         security_title: "الأمان وحماية البيانات", security_desc: "بياناتك الصحية محمية بأعلى المعايير.",
         security_hipaa: "مبادئ HIPAA", security_hipaa_desc: "أمان البيانات الصحية",
@@ -5394,6 +5636,12 @@
         example_report_sample_hb: "हीमोग्लोबिन (Hb)", example_report_sample_glucose: "ग्लूकोज (उपवास)", example_report_sample_ref: "Ref",
         example_report_reasons_title: "संभावित कारण", example_report_reasons: "अगर कोई मान सीमा से बाहर है तो संभावित कारण सरल भाषा में सूचीबद्ध होते हैं।",
         example_report_tips_title: "सिफारिशें", example_report_tips: "आहार, जीवनशैली और डॉक्टर से कब मिलें पर संक्षिप्त सुझाव।", example_report_cta_text: "अपने खुद के परिणामों के लिए ऐसी रिपोर्ट चाहिए?", example_report_cta_btn: "मुफ्त शुरू करें — पहली विश्लेषण मुफ्त",
+        example_report_disclaimer: "केवल जानकारी के लिए। यह रिपोर्ट निदान या उपचार का विकल्प नहीं। डॉक्टर से सलाह लें।",
+        example_report_health_score_title: "समग्र स्वास्थ्य स्कोर",
+        example_report_domain_cardio: "हृदय संबंधी", example_report_domain_metabolic: "चयापचय", example_report_domain_vitamin: "विटामिन", example_report_domain_inflammation: "सूजन",
+        example_report_risk_low: "कम", example_report_risk_mid: "मध्यम", example_report_risk_high: "उच्च",
+        health_dashboard_title: "Premium Health रिपोर्ट पूर्वावलोकन", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "आपके परिणाम स्कोर, जोखिम संकेतक और ट्रेंड के साथ क्लिनिकल रिपोर्ट प्रारूप में दिखाए जाते हैं।",
         example_clinical_report_title: "नमूना क्लिनिकल रिपोर्ट", example_slide_summary: "सामान्य स्वास्थ्य सारांश", example_slide_summary_text: "आपके मान सामान्यतः संदर्भ सीमा के करीब। कुछ पैरामीटर हल्के सीमा पर; सिफारिशें देखें।", example_slide_results: "टेस्ट परिणाम", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). ग्लूकोज: 98 mg/dL (Ref: 70–100). प्रत्येक पैरामीटर संदर्भ सीमा के साथ समझाया।", example_slide_ai: "AI व्याख्या", example_slide_ai_text: "AI आपके परिणामों की व्याख्या करता है और संभावित कारण तथा आहार/जीवनशैली सुझाव सरल भाषा में देता है।", example_slide_risk: "जोखिम स्कोर", example_slide_risk_text: "पैरामीटर सामान्य, सीमा या ध्यान के रूप में चिह्नित। हृदय स्वास्थ्य और अन्य जोखिम रिपोर्ट में।", example_btn_analyze: "विश्लेषण चलाएं", example_btn_view_sample: "नमूना रिपोर्ट देखें",
         security_title: "सुरक्षा और डेटा संरक्षण", security_desc: "आपके स्वास्थ्य डेटा उच्चतम मानकों से सुरक्षित।",
         security_hipaa: "HIPAA सिद्धांत", security_hipaa_desc: "स्वास्थ्य डेटा सुरक्षा",
@@ -5563,6 +5811,12 @@
         example_report_sample_hb: "Αιμοσφαιρίνη (Hb)", example_report_sample_glucose: "Γλυκόζη (νηστιμία)", example_report_sample_ref: "Αναφ.",
         example_report_reasons_title: "Πιθανές αιτίες", example_report_reasons: "Αν κάποια τιμή είναι εκτός εύρους, οι πιθανές αιτίες αναφέρονται με απλή γλώσσα.",
         example_report_tips_title: "Συμβουλές", example_report_tips: "Σύντομες συμβουλές για διατροφή, τρόπο ζωής και πότε να επισκεφτείτε τον γιατρό.", example_report_cta_text: "Θέλετε μια τέτοια αναφορά για τα δικά σας αποτελέσματα;", example_report_cta_btn: "Ξεκινήστε δωρεάν — Πρώτη ανάλυση δώρο",
+        example_report_disclaimer: "Μόνο ενημερωτικά. Αυτή η αναφορά δεν αντικαθιστά τη διάγνωση ή τη θεραπεία. Συμβουλευτείτε τον γιατρό σας.",
+        example_report_health_score_title: "Συνολικό σκορ υγείας",
+        example_report_domain_cardio: "Καρδιαγγειακό", example_report_domain_metabolic: "Μεταβολικό", example_report_domain_vitamin: "Βιταμίνη", example_report_domain_inflammation: "Φλεγμονή",
+        example_report_risk_low: "Χαμηλό", example_report_risk_mid: "Μέτριο", example_report_risk_high: "Υψηλό",
+        health_dashboard_title: "Προεπισκόπηση αναφοράς Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "Τα αποτελέσματά σας παρουσιάζονται σε κλινική μορφή με σκορ, δείκτη κινδύνου και τάση.",
         example_clinical_report_title: "Δείγμα κλινικής αναφοράς", example_slide_summary: "Γενική περίληψη υγείας", example_slide_summary_text: "Οι τιμές σας είναι γενικά κοντά στο εύρος αναφοράς. Μερικές παράμετροι ελαφρώς στο όριο· δείτε συμβουλές.", example_slide_results: "Αποτελέσματα δοκιμών", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Γλυκόζη: 98 mg/dL (Ref: 70–100). Κάθε παράμετρος εξηγείται με εύρος αναφοράς.", example_slide_ai: "Σχόλιο AI", example_slide_ai_text: "Η AI ερμηνεύει τα αποτελέσματα και παρουσιάζει πιθανές αιτίες και συμβουλές διατροφής/τρόπου ζωής.", example_slide_risk: "Βαθμολογίες κινδύνου", example_slide_risk_text: "Παράμετροι σημειώνονται ως φυσιολογικές, όριο ή προσοχή. Υγεία καρδιάς και άλλα στοιχεία στην αναφορά.", example_btn_analyze: "Εκτέλεση ανάλυσης", example_btn_view_sample: "Δείτε δείγμα αναφοράς",
         security_title: "Ασφάλεια και προστασία δεδομένων", security_desc: "Τα δεδομένα υγείας σας προστατεύονται.",
         security_hipaa: "Αρχές HIPAA", security_hipaa_desc: "Ασφάλεια δεδομένων υγείας",
@@ -5730,6 +5984,12 @@
         example_report_sample_hb: "Hemoglobin (Hb)", example_report_sample_glucose: "Glukóza (nalačno)", example_report_sample_ref: "Ref",
         example_report_reasons_title: "Možné příčiny", example_report_reasons: "Pokud je hodnota mimo rozsah, možné příčiny jsou uvedeny jednoduchým jazykem.",
         example_report_tips_title: "Doporučení", example_report_tips: "Krátké tipy pro výživu, životní styl a kdy navštívit lékaře.", example_report_cta_text: "Chcete takovou zprávu pro své vlastní výsledky?", example_report_cta_btn: "Začít zdarma — První analýza darem",
+        example_report_disclaimer: "Pouze informativní. Tato zpráva nenahrazuje diagnózu ani léčbu. Konzultujte lékaře.",
+        example_report_health_score_title: "Celkové zdravotní skóre",
+        example_report_domain_cardio: "Kardiovaskulární", example_report_domain_metabolic: "Metabolický", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Zánět",
+        example_report_risk_low: "Nízké", example_report_risk_mid: "Střední", example_report_risk_high: "Vysoké",
+        health_dashboard_title: "Náhled zprávy Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "Vaše výsledky jsou uvedeny ve formátu klinické zprávy se skóre, indikátorem rizika a trendem.",
         example_clinical_report_title: "Ukázka klinické zprávy", example_slide_summary: "Obecné zdravotní shrnutí", example_slide_summary_text: "Vaše hodnoty jsou obecně blízko referenčnímu rozsahu. Některé parametry lehce na hranici; viz doporučení.", example_slide_results: "Výsledky testů", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukóza: 98 mg/dL (Ref: 70–100). Každý parametr vysvětlen s referenčním rozsahem.", example_slide_ai: "Komentář AI", example_slide_ai_text: "AI interpretuje vaše výsledky a představuje možné příčiny a doporučení pro výživu a životní styl.", example_slide_risk: "Skóre rizika", example_slide_risk_text: "Parametry označeny jako normální, hranice nebo pozor. Zdraví srdce a další rizika ve zprávě.", example_btn_analyze: "Spustit analýzu", example_btn_view_sample: "Zobrazit ukázkovou zprávu",
         security_title: "Zabezpečení a ochrana dat", security_desc: "Vaše zdravotní data jsou chráněna.",
         security_hipaa: "Zásady HIPAA", security_hipaa_desc: "Zabezpečení zdravotních dat",
@@ -5897,6 +6157,12 @@
         example_report_sample_hb: "Hemoglobin (Hb)", example_report_sample_glucose: "Glukoza (natašte)", example_report_sample_ref: "Ref",
         example_report_reasons_title: "Mogući uzroci", example_report_reasons: "Ako je vrednost van opsega, mogući uzroci su navedeni jednostavnim jezikom.",
         example_report_tips_title: "Preporuke", example_report_tips: "Kratki saveti o ishrani, životnom stilu i kada posetiti lekara.", example_report_cta_text: "Želite ovakav izveštaj za svoje rezultate?", example_report_cta_btn: "Počnite besplatno — Prva analiza na poklon",
+        example_report_disclaimer: "Samo u informativne svrhe. Ovaj izveštaj ne zamenjuje dijagnozu ni lečenje. Konsultujte lekara.",
+        example_report_health_score_title: "Ukupni zdravstveni skor",
+        example_report_domain_cardio: "Kardiovaskularni", example_report_domain_metabolic: "Metabolički", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Upala",
+        example_report_risk_low: "Nizak", example_report_risk_mid: "Umeren", example_report_risk_high: "Visok",
+        health_dashboard_title: "Pregled izveštaja Premium Health", health_dashboard_badge: "Premium Health",
+        sample_report_desc: "Vaši rezultati su prikazani u formatu kliničkog izveštaja sa skorom, indikatorom rizika i trendom.",
         example_clinical_report_title: "Primer kliničkog izveštaja", example_slide_summary: "Opšti zdravstveni pregled", example_slide_summary_text: "Vaše vrednosti su uglavnom blizu referentnog opsega. Neki parametri blago na granici; v. preporuke.", example_slide_results: "Rezultati testova", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukoza: 98 mg/dL (Ref: 70–100). Svaki parametar objašnjen sa referentnim opsegom.", example_slide_ai: "AI komentar", example_slide_ai_text: "AI tumači vaše rezultate i predstavlja moguće uzroke i preporuke ishrane i životnog stila.", example_slide_risk: "Skorovi rizika", example_slide_risk_text: "Parametri označeni kao normalni, granica ili pažnja. Zdravlje srca i drugi rizici u izveštaju.", example_btn_analyze: "Pokreni analizu", example_btn_view_sample: "Pogledaj primer izveštaja",
         security_title: "Bezbednost i zaštita podataka", security_desc: "Vaši zdravstveni podaci su zaštićeni.",
         security_hipaa: "Principi HIPAA", security_hipaa_desc: "Bezbednost zdravstvenih podataka",
