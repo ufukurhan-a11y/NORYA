@@ -1,0 +1,147 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.seo_title or article.title }}{% endblock %}
+
+{% block head %}
+  <meta name="description" content="{{ article.seo_description or article.subtitle }}" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:title" content="{{ article.seo_title or article.title }}" />
+  <meta property="og:description" content="{{ article.seo_description or article.subtitle }}" />
+  <meta property="og:url" content="{{ canonical_url }}" />
+  <meta property="og:image" content="{{ article.cover_image }}" />
+  <meta name="robots" content="index,follow" />
+
+  {% if article_schema_json %}
+    <script type="application/ld+json">
+{{ article_schema_json|safe }}
+    </script>
+  {% endif %}
+  {% if health_schema_json %}
+    <script type="application/ld+json">
+{{ health_schema_json|safe }}
+    </script>
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  <article class="bg-norya-surface pt-8 pb-14 sm:pt-10 sm:pb-18">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid lg:grid-cols-[minmax(0,2.2fr)_minmax(0,1fr)] gap-10">
+        <div>
+          <header class="max-w-2xl">
+            <p class="inline-flex items-center gap-2 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] px-3 py-1 text-xs font-medium">
+              <span class="h-1.5 w-1.5 rounded-full bg-[#0EA5A4]"></span>
+              {{ article.category }}
+            </p>
+            <h1 class="mt-3 text-3xl sm:text-4xl font-semibold tracking-tight text-norya-ink">
+              {{ article.title }}
+            </h1>
+            <p class="mt-3 text-sm sm:text-base text-norya-ink-muted">
+              {{ article.subtitle }}
+            </p>
+            <div class="mt-4 flex flex-wrap gap-4 text-xs text-norya-ink-subtle">
+              <span>{{ article.published_at.strftime("%d.%m.%Y") }}</span>
+              <span aria-hidden="true">·</span>
+              <span>{{ article.read_minutes }} dk okuma</span>
+            </div>
+          </header>
+
+          <div class="mt-6 overflow-hidden rounded-norya-lg bg-norya-surface-elevated shadow-norya-md">
+            <img
+              src="{{ article.cover_image }}"
+              alt="{{ article.title }}"
+              loading="lazy"
+              class="h-60 sm:h-72 w-full object-cover"
+            />
+          </div>
+
+          <div class="mt-8 prose prose-sm sm:prose-base max-w-none prose-headings:text-norya-ink prose-p:text-norya-ink-muted prose-li:text-norya-ink-muted prose-a:text-[#0EA5A4]">
+            {% for section in article.sections %}
+              {% if section.level == 2 %}
+                <h2 id="{{ section.id }}" class="scroll-mt-24">{{ section.heading }}</h2>
+              {% else %}
+                <h3 id="{{ section.id }}" class="scroll-mt-24">{{ section.heading }}</h3>
+              {% endif %}
+              <div class="mt-2 text-norya-ink-muted leading-relaxed">
+                {{ section.body_html|safe }}
+              </div>
+            {% endfor %}
+          </div>
+
+          <section class="mt-10 border border-emerald-100 bg-emerald-50/60 rounded-norya-lg p-5 sm:p-6 shadow-norya">
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+              <div class="shrink-0 inline-flex h-11 w-11 items-center justify-center rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4]">
+                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none">
+                  <rect x="4" y="4" width="16" height="16" rx="5" stroke="currentColor" stroke-width="1.5" />
+                  <path d="M9 11.5h6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                  <path d="M9 15h3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" />
+                </svg>
+              </div>
+              <div class="flex-1">
+                <h2 class="text-base sm:text-lg font-semibold text-norya-ink">
+                  Kan testinizi analiz edin
+                </h2>
+                <p class="mt-1 text-sm text-norya-ink-muted">
+                  Norya, kan tahlili sonuçlarınızı anlaşılır bir dille açıklayarak olası risk alanlarını görmenize yardımcı olur.
+                  PDF veya fotoğraf yükleyerek dakikalar içinde özet rapor oluşturabilirsiniz.
+                </p>
+              </div>
+              <div class="shrink-0">
+                <a
+                  href="/analyze"
+                  class="inline-flex items-center justify-center rounded-full bg-[#0EA5A4] px-4 py-2.5 text-sm font-semibold text-white shadow-norya-brand hover:bg-emerald-600 transition"
+                >
+                  Kan testimi analiz et
+                </a>
+              </div>
+            </div>
+          </section>
+        </div>
+
+        <aside class="space-y-6 lg:pt-2">
+          <section class="rounded-norya-lg bg-white shadow-norya-md p-4 sm:p-5">
+            <h2 class="text-sm font-semibold text-norya-ink mb-3 flex items-center gap-2">
+              <span class="h-1.5 w-1.5 rounded-full bg-[#0EA5A4]"></span>
+              İçindekiler
+            </h2>
+            <nav class="space-y-1 text-sm">
+              {% for item in toc %}
+                <a
+                  href="#{{ item.id }}"
+                  class="flex items-start gap-2 rounded-md px-2 py-1.5 text-norya-ink-muted hover:text-norya-ink hover:bg-norya-surface"
+                >
+                  {% if item.level == 2 %}
+                    <span class="mt-1 h-1 w-1 rounded-full bg-norya-ink-subtle"></span>
+                  {% else %}
+                    <span class="mt-1 h-1 w-4 rounded-full bg-norya-ink-subtle/70"></span>
+                  {% endif %}
+                  <span>{{ item.label }}</span>
+                </a>
+              {% endfor %}
+            </nav>
+          </section>
+
+          {% if lang_alternates %}
+            <section class="rounded-norya-lg bg-white shadow-norya-md p-4 sm:p-5">
+              <h2 class="text-sm font-semibold text-norya-ink mb-3">
+                Diğer dillerde oku
+              </h2>
+              <div class="flex flex-wrap gap-2">
+                {% for code, item in lang_alternates.items() %}
+                  <a
+                    href="{{ item.url }}"
+                    class="inline-flex items-center rounded-full border border-norya-ink-subtle/40 px-3 py-1.5 text-xs font-medium {% if code == current_lang %}bg-norya-ink text-white border-norya-ink{% else %}text-norya-ink-muted hover:bg-norya-surface{% endif %}"
+                  >
+                    {{ item.label }}
+                  </a>
+                {% endfor %}
+              </div>
+            </section>
+          {% endif %}
+        </aside>
+      </div>
+    </div>
+  </article>
+{% endblock %}
+

@@ -63,6 +63,7 @@ from app.models import (  # noqa: F401
     User,
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
+from app.blog_i18n import BLOG_LANGS, DEFAULT_BLOG_LANG, get_article, iter_all_article_paths, list_articles_for_lang
 from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
 from app.services.storage import upload_report_pdf
@@ -867,6 +868,146 @@ def kurumsal_page(request: Request):
     )
 
 
+def _lang_label(code: str) -> str:
+    mapping = {
+        "tr": "Türkçe",
+        "en": "English",
+        "de": "Deutsch",
+        "it": "Italiano",
+        "es": "Español",
+        "fr": "Français",
+        "he": "עברית",
+        "ar": "العربية",
+        "hi": "हिन्दी",
+        "el": "Ελληνικά",
+        "cs": "Čeština",
+        "sr": "Српски",
+    }
+    return mapping.get(code, code)
+
+
+@app.get("/blog", response_class=HTMLResponse)
+def blog_root(request: Request):
+    """
+    /blog -> tarayıcı diline göre uygun /{lang}/blog adresine yönlendir.
+    """
+    lang = _parse_accept_language(request.headers.get("accept-language"))
+    if lang not in BLOG_LANGS:
+        short = (lang or "").split("-")[0]
+        lang = short if short in BLOG_LANGS else DEFAULT_BLOG_LANG
+    return RedirectResponse(url=f"/{lang}/blog", status_code=302)
+
+
+@app.get("/{lang}/blog", response_class=HTMLResponse)
+def blog_index(request: Request, lang: str):
+    """Blog ana sayfa: kart tasarımında makale listesi."""
+    lang = (lang or "").lower()[:5]
+    if lang not in BLOG_LANGS:
+        raise HTTPException(status_code=404, detail="Blog sayfası bu dilde mevcut değil.")
+    request.state.locale = lang
+    posts_raw = list_articles_for_lang(lang)
+    base_url = str(request.base_url).rstrip("/")
+    posts = []
+    for p in posts_raw:
+        posts.append(
+            {
+                **p,
+                "url": f"/{lang}/blog/{p['slug']}",
+            }
+        )
+    canonical_url = f"{base_url}/{lang}/blog"
+    seo_title = "Norya Blog — sağlık analizi ve laboratuvar sonuçları"
+    meta_description = "Norya blog, kan tahlili sonuçlarınızı ve laboratuvar raporlarını daha iyi anlamanız için hazırlanan profesyonel sağlık içerikleri sunar."
+    og_image = "/static/norya_logo_transparent_trim.png"
+    return templates.TemplateResponse(
+        "blog/index.html",
+        {
+            "request": request,
+            "posts": posts,
+            "lang": lang,
+            "seo_title": seo_title,
+            "meta_description": meta_description,
+            "canonical_url": canonical_url,
+            "og_image": og_image,
+        },
+    )
+
+
+@app.get("/{lang}/blog/{slug}", response_class=HTMLResponse)
+def blog_detail(request: Request, lang: str, slug: str):
+    """Blog detay sayfası: makale içeriği, içindekiler ve CTA."""
+    lang = (lang or "").lower()[:5]
+    if lang not in BLOG_LANGS:
+        raise HTTPException(status_code=404, detail="Blog sayfası bu dilde mevcut değil.")
+    art = get_article(lang, slug)
+    if not art:
+        raise HTTPException(status_code=404, detail="Yazı bulunamadı.")
+    request.state.locale = lang
+
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/{lang}/blog/{slug}"
+
+    # İçindekiler menüsü
+    toc = []
+    for sec in art["sections"]:
+        toc.append(
+            {
+                "id": sec.id,
+                "level": sec.level,
+                "label": sec.heading,
+            }
+        )
+
+    # Dil geçiş linkleri
+    lang_alternates: dict[str, dict] = {}
+    for code, s in art["available_langs"].items():
+        lang_alternates[code] = {
+            "url": f"/{code}/blog/{s}",
+            "label": _lang_label(code),
+        }
+
+    # Structured data (Article + HealthArticle tarzı MedicalWebPage)
+    published_iso = art["published_at"].isoformat()
+    article_schema = {
+        "@context": "https://schema.org",
+        "@type": "Article",
+        "headline": art["seo_title"] or art["title"],
+        "description": art["seo_description"] or art["subtitle"],
+        "image": art["cover_image"],
+        "articleSection": art["category"],
+        "inLanguage": lang,
+        "datePublished": published_iso,
+        "dateModified": published_iso,
+        "mainEntityOfPage": canonical_url,
+    }
+    health_schema = {
+        "@context": "https://schema.org",
+        "@type": "MedicalWebPage",
+        "name": art["title"],
+        "url": canonical_url,
+        "about": {
+            "@type": "MedicalCondition",
+            "name": "Dyslipidemia / LDL cholesterol",
+        },
+    }
+    article_schema_json = json.dumps(article_schema, ensure_ascii=False, indent=2)
+    health_schema_json = json.dumps(health_schema, ensure_ascii=False, indent=2)
+
+    return templates.TemplateResponse(
+        "blog/detail.html",
+        {
+            "request": request,
+            "article": art,
+            "canonical_url": canonical_url,
+            "toc": toc,
+            "current_lang": lang,
+            "lang_alternates": lang_alternates,
+            "article_schema_json": article_schema_json,
+            "health_schema_json": health_schema_json,
+        },
+    )
+
+
 @app.post("/api/enterprise-lead")
 @limiter.limit("3/minute")
 async def api_enterprise_lead(request: Request, db: Session = Depends(get_db)):
@@ -944,6 +1085,15 @@ def report_page():
         raw = _inject_company(raw)
         return HTMLResponse(raw)
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."}
+
+
+@app.get("/analyze", response_class=HTMLResponse)
+def analyze_landing():
+    """
+    /analyze -> SPA içindeki analiz bölümüne yönlendir.
+    Blog CTA&apos;ları bu URL&apos;yi kullanır.
+    """
+    return RedirectResponse(url="/#analyze", status_code=302)
 
 
 # Ücretsiz planda: ilk analiz ücretsiz, sonrası için ödeme gerekir (ayda 1 hak)
@@ -2314,3 +2464,38 @@ def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X
         raise HTTPException(status_code=403, detail="Yetkisiz.")
     deleted = purge_ai_cache_expired(_cache_conn)
     return {"deleted": deleted}
+
+
+@app.get("/sitemap.xml", response_class=PlainTextResponse)
+def sitemap_xml(request: Request):
+    """
+    Basit XML sitemap: ana sayfa, kurumsal, yasal sayfalar ve blog yazıları.
+    """
+    base_url = str(request.base_url).rstrip("/")
+    urls: list[str] = []
+
+    def add(loc: str):
+        urls.append(f"  <url><loc>{loc}</loc></url>")
+
+    # Statik önemli sayfalar
+    add(f"{base_url}/")
+    add(f"{base_url}/kurumsal")
+    for page in LEGAL_PAGES:
+        add(f"{base_url}/legal/{page}")
+
+    # Blog listeleri ve yazılar
+    for lang in BLOG_LANGS:
+        add(f"{base_url}/{lang}/blog")
+    for item in iter_all_article_paths():
+        loc = f"{base_url}/{item['lang']}/blog/{item['slug']}"
+        urls.append(
+            "  <url>"
+            f"<loc>{loc}</loc>"
+            f"<lastmod>{item['published_at'].isoformat()}</lastmod>"
+            "</url>"
+        )
+
+    body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+    body += "\n".join(urls)
+    body += "\n</urlset>"
+    return PlainTextResponse(content=body, media_type="application/xml")
