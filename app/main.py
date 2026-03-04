@@ -63,7 +63,7 @@ from app.models import (  # noqa: F401
     User,
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
-from app.blog_i18n import BLOG_LANGS, DEFAULT_BLOG_LANG, get_article, iter_all_article_paths, list_articles_for_lang
+from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, iter_all_article_paths, list_articles_for_lang
 from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
 from app.services.storage import upload_report_pdf
@@ -888,22 +888,16 @@ def _lang_label(code: str) -> str:
 
 @app.get("/blog", response_class=HTMLResponse)
 def blog_root(request: Request):
-    """
-    /blog -> tarayıcı diline göre uygun /{lang}/blog adresine yönlendir.
-    """
-    lang = _parse_accept_language(request.headers.get("accept-language"))
-    if lang not in BLOG_LANGS:
-        short = (lang or "").split("-")[0]
-        lang = short if short in BLOG_LANGS else DEFAULT_BLOG_LANG
-    return RedirectResponse(url=f"/{lang}/blog", status_code=302)
+    """/blog -> varsayılan İngilizce /en/blog; kullanıcıyı zorla yönlendirme."""
+    return RedirectResponse(url="/en/blog", status_code=302)
 
 
 @app.get("/{lang}/blog", response_class=HTMLResponse)
 def blog_index(request: Request, lang: str):
-    """Blog ana sayfa: kart tasarımında makale listesi."""
-    lang = (lang or "").lower()[:5]
-    if lang not in BLOG_LANGS:
-        raise HTTPException(status_code=404, detail="Blog sayfası bu dilde mevcut değil.")
+    """Blog ana sayfa: premium liste, sadece en/de/fr/it."""
+    lang = (lang or "").lower()[:2]
+    if lang not in BLOG_LANGS_PREMIUM:
+        raise HTTPException(status_code=404, detail="Blog not available in this language.")
     request.state.locale = lang
     posts_raw = list_articles_for_lang(lang)
     base_url = str(request.base_url).rstrip("/")
@@ -915,83 +909,76 @@ def blog_index(request: Request, lang: str):
                 "url": f"/{lang}/blog/{p['slug']}",
             }
         )
+    categories = list({p["category"] for p in posts if p.get("category")})
+    categories.sort()
     canonical_url = f"{base_url}/{lang}/blog"
-    seo_title = "Norya Blog — sağlık analizi ve laboratuvar sonuçları"
-    meta_description = "Norya blog, kan tahlili sonuçlarınızı ve laboratuvar raporlarını daha iyi anlamanız için hazırlanan profesyonel sağlık içerikleri sunar."
-    og_image = "/static/norya_logo_transparent_trim.png"
+    ui = BLOG_UI.get(lang, BLOG_UI["en"])
+    seo_title = ui.get("seo_title", "Norya Blog")
+    meta_description = ui.get("meta_description", "")
+    og_image = base_url + "/static/norya_logo_transparent_trim.png"
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/blog"} for code in BLOG_LANGS_PREMIUM]
     return templates.TemplateResponse(
         "blog/index.html",
         {
             "request": request,
             "posts": posts,
+            "categories": categories,
             "lang": lang,
+            "blog_ui": ui,
             "seo_title": seo_title,
             "meta_description": meta_description,
             "canonical_url": canonical_url,
             "og_image": og_image,
+            "hreflang_alternates": hreflang_alternates,
+            "premium_langs": BLOG_LANGS_PREMIUM,
         },
     )
 
 
 @app.get("/{lang}/blog/{slug}", response_class=HTMLResponse)
 def blog_detail(request: Request, lang: str, slug: str):
-    """Blog detay sayfası: makale içeriği, içindekiler ve CTA."""
-    lang = (lang or "").lower()[:5]
-    if lang not in BLOG_LANGS:
-        raise HTTPException(status_code=404, detail="Blog sayfası bu dilde mevcut değil.")
+    """Blog detay: makale içeriği, CTA; sadece en/de/fr/it."""
+    lang = (lang or "").lower()[:2]
+    if lang not in BLOG_LANGS_PREMIUM:
+        raise HTTPException(status_code=404, detail="Blog not available in this language.")
     art = get_article(lang, slug)
     if not art:
-        raise HTTPException(status_code=404, detail="Yazı bulunamadı.")
+        raise HTTPException(status_code=404, detail="Article not found.")
     request.state.locale = lang
 
     base_url = str(request.base_url).rstrip("/")
     canonical_url = f"{base_url}/{lang}/blog/{slug}"
+    cover_absolute = art["cover_image"] if art["cover_image"].startswith("http") else f"{base_url}{art['cover_image']}"
 
-    # İçindekiler menüsü
     toc = []
     for sec in art["sections"]:
-        toc.append(
-            {
-                "id": sec.id,
-                "level": sec.level,
-                "label": sec.heading,
-            }
-        )
+        toc.append({"id": sec.id, "level": sec.level, "label": sec.heading})
 
-    # Dil geçiş linkleri
     lang_alternates: dict[str, dict] = {}
     for code, s in art["available_langs"].items():
-        lang_alternates[code] = {
-            "url": f"/{code}/blog/{s}",
-            "label": _lang_label(code),
-        }
+        if code in BLOG_LANGS_PREMIUM:
+            lang_alternates[code] = {"url": f"{base_url}/{code}/blog/{s}", "label": _lang_label(code)}
 
-    # Structured data (Article + HealthArticle tarzı MedicalWebPage)
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/blog/{art['available_langs'][code]}"} for code in BLOG_LANGS_PREMIUM if code in art["available_langs"]]
+
     published_iso = art["published_at"].isoformat()
-    article_schema = {
+    blog_posting_schema = {
         "@context": "https://schema.org",
-        "@type": "Article",
+        "@type": "BlogPosting",
         "headline": art["seo_title"] or art["title"],
         "description": art["seo_description"] or art["subtitle"],
-        "image": art["cover_image"],
+        "image": cover_absolute,
         "articleSection": art["category"],
         "inLanguage": lang,
         "datePublished": published_iso,
         "dateModified": published_iso,
-        "mainEntityOfPage": canonical_url,
-    }
-    health_schema = {
-        "@context": "https://schema.org",
-        "@type": "MedicalWebPage",
-        "name": art["title"],
+        "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
         "url": canonical_url,
-        "about": {
-            "@type": "MedicalCondition",
-            "name": "Dyslipidemia / LDL cholesterol",
-        },
+        "author": {"@type": "Organization", "name": "Norya"},
     }
-    article_schema_json = json.dumps(article_schema, ensure_ascii=False, indent=2)
-    health_schema_json = json.dumps(health_schema, ensure_ascii=False, indent=2)
+    article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
+
+    blog_ui = BLOG_UI.get(lang, BLOG_UI["en"])
 
     return templates.TemplateResponse(
         "blog/detail.html",
@@ -999,11 +986,14 @@ def blog_detail(request: Request, lang: str, slug: str):
             "request": request,
             "article": art,
             "canonical_url": canonical_url,
+            "cover_absolute": cover_absolute,
             "toc": toc,
             "current_lang": lang,
             "lang_alternates": lang_alternates,
+            "hreflang_alternates": hreflang_alternates,
             "article_schema_json": article_schema_json,
-            "health_schema_json": health_schema_json,
+            "blog_ui": blog_ui,
+            "premium_langs": BLOG_LANGS_PREMIUM,
         },
     )
 
@@ -1094,6 +1084,32 @@ def analyze_landing():
     Blog CTA&apos;ları bu URL&apos;yi kullanır.
     """
     return RedirectResponse(url="/#analyze", status_code=302)
+
+
+@app.get("/pricing", response_class=HTMLResponse)
+def pricing_landing(request: Request):
+    """
+    /pricing -> SPA fiyatlandırma/ödeme bölümüne yönlendir.
+    from=report ile gelirse doğrudan ödeme sayfasına (#odeme), yoksa fiyatlandırma (#fiyatlandirma).
+    """
+    query = request.url.query
+    from_report = query and "from=report" in (query.lower() if isinstance(query, str) else "")
+    if from_report:
+        target = "/?" + query + "#odeme" if query else "/#odeme"
+    else:
+        target = "/?" + query + "#fiyatlandirma" if query else "/#fiyatlandirma"
+    return RedirectResponse(url=target, status_code=302)
+
+
+@app.get("/odeme", response_class=HTMLResponse)
+def odeme_landing(request: Request):
+    """
+    /odeme -> SPA ödeme (checkout) sayfasına doğrudan yönlendir.
+    Eksiklikleri görmek için ödeme sayfasını doğrudan açmak için kullanılır.
+    """
+    query = request.url.query
+    target = "/?" + query + "#odeme" if query else "/#odeme"
+    return RedirectResponse(url=target, status_code=302)
 
 
 # Ücretsiz planda: ilk analiz ücretsiz, sonrası için ödeme gerekir (ayda 1 hak)
@@ -2483,17 +2499,18 @@ def sitemap_xml(request: Request):
     for page in LEGAL_PAGES:
         add(f"{base_url}/legal/{page}")
 
-    # Blog listeleri ve yazılar
-    for lang in BLOG_LANGS:
+    # Blog listeleri ve yazılar (sadece premium diller: en, de, fr, it)
+    for lang in BLOG_LANGS_PREMIUM:
         add(f"{base_url}/{lang}/blog")
     for item in iter_all_article_paths():
-        loc = f"{base_url}/{item['lang']}/blog/{item['slug']}"
-        urls.append(
-            "  <url>"
-            f"<loc>{loc}</loc>"
-            f"<lastmod>{item['published_at'].isoformat()}</lastmod>"
-            "</url>"
-        )
+        if item["lang"] in BLOG_LANGS_PREMIUM:
+            loc = f"{base_url}/{item['lang']}/blog/{item['slug']}"
+            urls.append(
+                "  <url>"
+                f"<loc>{loc}</loc>"
+                f"<lastmod>{item['published_at'].isoformat()}</lastmod>"
+                "</url>"
+            )
 
     body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
     body += "\n".join(urls)

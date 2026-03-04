@@ -7,7 +7,89 @@ from typing import Dict, List
 
 # Blog'un desteklediği diller (mevcut sistemle uyumlu)
 BLOG_LANGS = frozenset({"tr", "en", "de", "it", "es", "fr", "he", "ar", "hi", "el", "cs", "sr"})
-DEFAULT_BLOG_LANG = "tr"
+# Premium blog: sadece bu dillerde route açılır; varsayılan İngilizce
+BLOG_LANGS_PREMIUM = ("en", "de", "fr", "it")
+DEFAULT_BLOG_LANG = "en"
+
+# Blog arayüzü çevirileri (liste sayfası, detay CTA, vb.) — en, de, fr, it
+BLOG_UI = {
+    "en": {
+        "hero_badge": "Health insights",
+        "hero_title": "Norya Blog",
+        "hero_desc": "Clear, evidence-based content to help you understand your lab results and biomarkers.",
+        "search_placeholder": "Search articles…",
+        "category_all": "All",
+        "read_article": "Read article",
+        "read_min": "min read",
+        "cta_title": "Understand your blood test more clearly",
+        "cta_text": "Use Norya to turn biomarker values into a more structured and easier-to-read health summary.",
+        "cta_button": "Start analysis",
+        "toc_title": "On this page",
+        "other_languages": "Other languages",
+        "back_to_blog": "Back to blog",
+        "home_link": "Norya",
+        "seo_title": "Norya Blog — Health analysis and lab results",
+        "meta_description": "Evidence-based articles to help you understand blood tests, biomarkers and lab reports.",
+        "no_results": "No articles match your search.",
+    },
+    "de": {
+        "hero_badge": "Gesundheitswissen",
+        "hero_title": "Norya Blog",
+        "hero_desc": "Klare, evidenzbasierte Inhalte, die Ihnen helfen, Laborergebnisse und Biomarker besser zu verstehen.",
+        "search_placeholder": "Artikel suchen…",
+        "category_all": "Alle",
+        "read_article": "Artikel lesen",
+        "read_min": "Min. Lesezeit",
+        "cta_title": "Ihr Blutbild klarer verstehen",
+        "cta_text": "Mit Norya werden Ihre Biomarker-Werte in eine strukturierte, gut lesbare Gesundheitszusammenfassung übersetzt.",
+        "cta_button": "Analyse starten",
+        "toc_title": "Auf dieser Seite",
+        "other_languages": "Andere Sprachen",
+        "back_to_blog": "Zurück zum Blog",
+        "home_link": "Norya",
+        "seo_title": "Norya Blog — Gesundheitsanalyse und Laborergebnisse",
+        "meta_description": "Evidenzbasierte Artikel zu Blutwerten, Biomarkern und Laborbefunden.",
+        "no_results": "Keine Artikel entsprechen Ihrer Suche.",
+    },
+    "fr": {
+        "hero_badge": "Santé & analyses",
+        "hero_title": "Blog Norya",
+        "hero_desc": "Des contenus clairs et fondés sur les preuves pour mieux comprendre vos résultats de laboratoire et biomarqueurs.",
+        "search_placeholder": "Rechercher un article…",
+        "category_all": "Tout",
+        "read_article": "Lire l'article",
+        "read_min": "min de lecture",
+        "cta_title": "Comprenez mieux votre bilan sanguin",
+        "cta_text": "Avec Norya, transformez vos valeurs de biomarqueurs en un résumé de santé structuré et lisible.",
+        "cta_button": "Lancer l'analyse",
+        "toc_title": "Sur cette page",
+        "other_languages": "Autres langues",
+        "back_to_blog": "Retour au blog",
+        "home_link": "Norya",
+        "seo_title": "Blog Norya — Analyses santé et résultats de laboratoire",
+        "meta_description": "Articles fondés sur les preuves pour comprendre bilans sanguins, biomarqueurs et comptes-rendus de laboratoire.",
+        "no_results": "Aucun article ne correspond à votre recherche.",
+    },
+    "it": {
+        "hero_badge": "Salute e analisi",
+        "hero_title": "Blog Norya",
+        "hero_desc": "Contenuti chiari e basati su evidenze per capire meglio i tuoi risultati di laboratorio e i biomarcatori.",
+        "search_placeholder": "Cerca articoli…",
+        "category_all": "Tutti",
+        "read_article": "Leggi l'articolo",
+        "read_min": "min di lettura",
+        "cta_title": "Comprendi meglio le tue analisi del sangue",
+        "cta_text": "Con Norya trasformi i valori dei biomarcatori in un riepilogo di salute strutturato e facile da leggere.",
+        "cta_button": "Avvia analisi",
+        "toc_title": "In questa pagina",
+        "other_languages": "Altre lingue",
+        "back_to_blog": "Torna al blog",
+        "home_link": "Norya",
+        "seo_title": "Blog Norya — Analisi della salute e risultati di laboratorio",
+        "meta_description": "Articoli basati su evidenze per capire esami del sangue, biomarcatori e referti di laboratorio.",
+        "no_results": "Nessun articolo corrisponde alla ricerca.",
+    },
+}
 
 
 @dataclass(frozen=True)

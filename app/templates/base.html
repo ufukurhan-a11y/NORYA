@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ request and request.state and getattr(request.state, 'locale', None) or 'tr' }}">
+<html lang="{{ (request.state.locale if request and request.state else none)|default('tr') }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />

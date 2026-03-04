@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}Blog{% endblock %}
+{% block title %}{{ blog_ui.hero_title }}{% endblock %}
 
 {% block head %}
   <meta name="description" content="{{ meta_description }}" />
@@ -11,73 +11,139 @@
   <meta property="og:url" content="{{ canonical_url }}" />
   <meta property="og:image" content="{{ og_image }}" />
   <meta name="robots" content="index,follow" />
+  {% for alt in hreflang_alternates %}
+  <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
+  {% endfor %}
+  {% for alt in hreflang_alternates %}{% if alt.lang == 'en' %}
+  <link rel="alternate" hreflang="x-default" href="{{ alt.url }}" />
+  {% endif %}{% endfor %}
+  <style>
+    .blog-hero { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
+    .blog-card { background: #ffffff; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 1rem; box-shadow: 0 4px 24px rgba(15, 23, 41, 0.06); transition: box-shadow 0.2s ease, border-color 0.2s ease; }
+    .blog-card:hover { box-shadow: 0 12px 40px rgba(15, 23, 41, 0.08); border-color: rgba(14, 165, 164, 0.15); }
+    .blog-search { background: #ffffff; border: 1px solid rgba(15, 23, 42, 0.08); border-radius: 0.75rem; box-shadow: 0 2px 8px rgba(15, 23, 41, 0.04); }
+    .blog-search:focus-within { border-color: rgba(14, 165, 164, 0.4); box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.08); }
+    .blog-pill { border-radius: 9999px; border: 1px solid rgba(15, 23, 42, 0.1); background: #ffffff; transition: background 0.2s, border-color 0.2s; }
+    .blog-pill:hover, .blog-pill.active { background: rgba(14, 165, 164, 0.08); border-color: rgba(14, 165, 164, 0.25); color: #0d9488; }
+    .blog-badge { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #0d9488; background: rgba(14, 165, 164, 0.1); border-radius: 9999px; padding: 0.25rem 0.625rem; }
+    .blog-lang-link { border-radius: 0.5rem; padding: 0.375rem 0.625rem; font-size: 0.8125rem; font-weight: 500; color: #64748b; text-decoration: none; transition: background 0.2s, color 0.2s; }
+    .blog-lang-link:hover { background: rgba(14, 165, 164, 0.08); color: #0d9488; }
+    .blog-lang-link.current { background: rgba(14, 165, 164, 0.12); color: #0f766e; }
+    @media (max-width: 640px) {
+      .blog-hero { padding-top: 1.5rem; padding-bottom: 2rem; }
+      .blog-card { margin-left: -0.5rem; margin-right: -0.5rem; max-width: calc(100% + 1rem); }
+    }
+  </style>
 {% endblock %}
 
 {% block content %}
-  <section class="bg-norya-surface pt-10 pb-14 sm:pt-12 sm:pb-16">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <header class="max-w-3xl">
-        <p class="inline-flex items-center gap-2 rounded-full border border-norya-ink-subtle/30 bg-white/60 px-3 py-1 text-xs font-medium text-norya-ink-subtle shadow-norya">
-          <span class="inline-flex h-1.5 w-1.5 rounded-full bg-[#0EA5A4]"></span>
-          Sağlık analizi için derinlemesine içerikler
-        </p>
-        <h1 class="mt-4 text-3xl sm:text-4xl font-semibold text-norya-ink tracking-tight">
-          Norya Blog — sağlık verilerinizi anlamanıza yardımcı profesyonel içerikler
-        </h1>
-        <p class="mt-3 text-sm sm:text-base text-norya-ink-muted">
-          Kan tahlili sonuçlarınızı, kardiyovasküler riskinizi ve laboratuvar raporlarındaki terimleri daha iyi anlamanız için
-          hekim odaklı, sadeleştirilmiş makaleler.
-        </p>
-      </header>
+  <div class="blog-hero pt-12 pb-10 sm:pt-16 sm:pb-14 px-4 sm:px-6">
+    <div class="max-w-4xl mx-auto">
+      <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+        <a href="/" class="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">{{ blog_ui.home_link|default('Norya') }}</a>
+        <nav class="flex flex-wrap items-center gap-1" aria-label="Language">
+          {% for code in premium_langs %}
+          <a href="/{{ code }}/blog" class="blog-lang-link {% if code == lang %}current{% endif %}">{{ code|upper }}</a>
+          {% endfor %}
+        </nav>
+      </div>
+      <p class="blog-badge inline-block mb-4">{{ blog_ui.hero_badge }}</p>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 tracking-tight leading-tight">
+        {{ blog_ui.hero_title }}
+      </h1>
+      <p class="mt-4 text-lg sm:text-xl text-slate-600 max-w-2xl leading-relaxed">
+        {{ blog_ui.hero_desc }}
+      </p>
 
-      <div class="mt-8 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-        {% for post in posts %}
-          <article class="flex flex-col overflow-hidden rounded-norya-lg bg-white shadow-norya-md hover:shadow-norya-lg transition-shadow">
-            <a href="{{ post.url }}" class="block relative overflow-hidden">
-              <img
-                src="{{ post.cover_image }}"
-                alt="{{ post.title }}"
-                loading="lazy"
-                class="h-44 w-full object-cover transform transition-transform duration-300 hover:scale-[1.03]"
-              />
-              <div class="absolute inset-0 bg-gradient-to-t from-black/35 via-black/5 to-transparent"></div>
-              <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-xs text-white/90">
-                <span class="inline-flex items-center gap-1 rounded-full bg-black/45 px-2 py-1">
-                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-300"></span>
-                  {{ post.category }}
-                </span>
-                <span class="inline-flex items-center gap-1 bg-black/40 px-2 py-1 rounded-full">
-                  <svg class="h-3 w-3" viewBox="0 0 20 20" fill="none">
-                    <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.4" />
-                    <path d="M10 5v5l3 2" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" />
-                  </svg>
-                  {{ post.read_minutes }} dk
-                </span>
-              </div>
-            </a>
-            <div class="flex-1 p-4 sm:p-5 flex flex-col">
-              <div class="flex items-center justify-between text-[11px] text-norya-ink-subtle mb-1.5">
-                <span>{{ post.published_at.strftime("%d.%m.%Y") }}</span>
-              </div>
-              <h2 class="text-base sm:text-lg font-semibold text-norya-ink leading-snug">
-                <a href="{{ post.url }}" class="hover:text-[#0EA5A4] transition-colors">
-                  {{ post.title }}
-                </a>
-              </h2>
-              <p class="mt-2 text-sm text-norya-ink-muted line-clamp-3">
-                {{ post.excerpt }}
-              </p>
-              <div class="mt-3 pt-3 border-t border-norya-ink-subtle/15 flex items-center justify-between text-xs">
-                <a href="{{ post.url }}" class="inline-flex items-center gap-1.5 text-[#0EA5A4] font-medium hover:text-emerald-700">
-                  Devamını oku
-                  <span aria-hidden="true">→</span>
-                </a>
-              </div>
-            </div>
-          </article>
-        {% endfor %}
+      <div class="mt-10 sm:mt-12">
+        <label for="blog-search" class="sr-only">{{ blog_ui.search_placeholder }}</label>
+        <div class="blog-search flex items-center gap-3 px-4 py-3 sm:py-3.5 max-w-xl">
+          <svg class="h-5 w-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+          </svg>
+          <input type="search" id="blog-search" class="flex-1 min-w-0 bg-transparent border-0 text-slate-900 placeholder-slate-400 focus:ring-0 text-sm sm:text-base" placeholder="{{ blog_ui.search_placeholder }}" autocomplete="off" />
+        </div>
+
+        <div class="flex flex-wrap items-center gap-2 mt-6" role="tablist" aria-label="Categories">
+          <button type="button" class="blog-pill active px-4 py-2 text-sm font-medium text-slate-700" data-category="">{{ blog_ui.category_all }}</button>
+          {% for cat in categories %}
+          <button type="button" class="blog-pill px-4 py-2 text-sm font-medium text-slate-600" data-category="{{ cat }}">{{ cat }}</button>
+          {% endfor %}
+        </div>
       </div>
     </div>
-  </section>
-{% endblock %}
+  </div>
 
+  <section class="py-12 sm:py-16 px-4 sm:px-6 bg-[#fafbfc]" aria-label="Articles">
+    <div class="max-w-5xl mx-auto">
+      <ul class="grid gap-8 sm:gap-10 md:grid-cols-2 list-none p-0 m-0" id="blog-list">
+        {% for post in posts %}
+        <li class="blog-card overflow-hidden flex flex-col" data-title="{{ post.title|lower }}" data-excerpt="{{ post.excerpt|lower }}" data-category="{{ post.category }}">
+          <a href="{{ post.url }}" class="block relative overflow-hidden aspect-[16/10] bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t-[1rem]">
+            <img src="{{ post.cover_image }}" alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.02]" />
+            <span class="absolute top-3 left-3 blog-badge">{{ post.category }}</span>
+            <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+              {{ post.read_minutes }} {{ blog_ui.read_min }}
+            </span>
+          </a>
+          <div class="flex-1 flex flex-col p-5 sm:p-6">
+            <time class="text-xs font-medium text-slate-500" datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime("%d %b %Y") }}</time>
+            <h2 class="mt-2 text-xl sm:text-2xl font-semibold text-slate-900 leading-snug">
+              <a href="{{ post.url }}" class="hover:text-teal-700 transition-colors focus:outline-none focus:underline">{{ post.title }}</a>
+            </h2>
+            <p class="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed line-clamp-3">{{ post.excerpt }}</p>
+            <div class="mt-4 pt-4 border-t border-slate-100">
+              <a href="{{ post.url }}" class="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors">
+                {{ blog_ui.read_article }}
+                <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+              </a>
+            </div>
+          </div>
+        </li>
+        {% endfor %}
+      </ul>
+      <p class="mt-8 text-center text-sm text-slate-500 hidden" id="blog-no-results" aria-live="polite">{{ blog_ui.no_results|default('No articles match your search.') }}</p>
+    </div>
+  </section>
+
+  <script>
+  (function() {
+    var search = document.getElementById('blog-search');
+    var pills = document.querySelectorAll('.blog-pill[data-category]');
+    var allPills = document.querySelectorAll('.blog-pill');
+    var list = document.getElementById('blog-list');
+    var noResults = document.getElementById('blog-no-results');
+    var cards = list ? list.querySelectorAll('.blog-card') : [];
+
+    function filter() {
+      var q = (search && search.value) ? search.value.trim().toLowerCase() : '';
+      var cat = '';
+      allPills.forEach(function(p) {
+        if (p.classList.contains('active')) cat = (p.getAttribute('data-category') || '').toLowerCase();
+      });
+      var shown = 0;
+      cards.forEach(function(card) {
+        var title = (card.getAttribute('data-title') || '');
+        var excerpt = (card.getAttribute('data-excerpt') || '');
+        var cardCat = (card.getAttribute('data-category') || '').toLowerCase();
+        var matchSearch = !q || title.indexOf(q) !== -1 || excerpt.indexOf(q) !== -1;
+        var matchCat = !cat || cardCat === cat;
+        var show = matchSearch && matchCat;
+        card.style.display = show ? '' : 'none';
+        if (show) shown++;
+      });
+      if (noResults) noResults.classList.toggle('hidden', shown > 0);
+    }
+
+    if (search) search.addEventListener('input', filter);
+    allPills.forEach(function(p) {
+      p.addEventListener('click', function() {
+        allPills.forEach(function(x) { x.classList.remove('active'); });
+        p.classList.add('active');
+        filter();
+      });
+    });
+  })();
+  </script>
+{% endblock %}
