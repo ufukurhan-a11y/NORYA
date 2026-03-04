@@ -22,6 +22,45 @@
 {{ health_schema_json|safe }}
     </script>
   {% endif %}
+  <style>
+    /* Ultra premium: tanım, örnek, resim kutuları — stealth tarzı */
+    .prose .blog-definition {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      background: #f8fafc;
+      border-left: 3px solid #0EA5A4;
+      border-radius: 0 8px 8px 0;
+      font-size: 0.9375rem;
+      line-height: 1.55;
+      color: #475569;
+    }
+    .prose .blog-definition strong { color: #0f172a; }
+    .prose .blog-example {
+      margin: 1.25rem 0;
+      padding: 1rem 1.25rem;
+      background: #f0fdfa;
+      border: 1px solid #99f6e4;
+      border-radius: 10px;
+      font-size: 0.9375rem;
+      line-height: 1.55;
+      color: #134e4a;
+    }
+    .prose .blog-example strong { color: #0f766e; }
+    .prose .blog-figure {
+      margin: 1.5rem 0;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(14,23,41,0.08);
+    }
+    .prose .blog-figure img { width: 100%; height: auto; display: block; }
+    .prose .blog-figure figcaption {
+      padding: 0.75rem 1rem;
+      font-size: 0.8125rem;
+      color: #64748b;
+      background: #f8fafc;
+      border-top: 1px solid #e2e8f0;
+    }
+  </style>
 {% endblock %}
 
 {% block content %}

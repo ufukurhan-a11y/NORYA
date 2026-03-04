@@ -299,8 +299,253 @@ Bleibt der Wert über Jahre erhöht, fördert dies Ablagerungen in den Arterien 
 _LDL_ARTICLE = _article_ldl()
 
 
+def _article_kan_tahlili_nasil_okunur() -> Article:
+    """Kan tahlili nasıl okunur — ultra premium: tanım kutuları, örnekler, stealth tarzı."""
+    published = date(2025, 3, 4)
+    cover = "/static/images/blog/ldl-cholesterol-hero.png"  # Özelleştir: kan-tahlili-nasil-okunur.png eklenince değiştir
+
+    return Article(
+        id="kan-tahlili-nasil-okunur",
+        published_at=published,
+        read_minutes=8,
+        cover_image=cover,
+        category={
+            "tr": "Rehber",
+            "en": "Guide",
+            "de": "Leitfaden",
+            "it": "Guida",
+            "es": "Guía",
+            "fr": "Guide",
+            "he": "מדריך",
+            "ar": "دليل",
+            "hi": "गाइड",
+            "el": "Οδηγός",
+            "cs": "Průvodce",
+            "sr": "Водич",
+        },
+        slugs={
+            "tr": "kan-tahlili-nasil-okunur",
+            "en": "how-to-read-blood-test-results",
+            "de": "blutwerte-lesen",
+            "it": "come-leggere-esami-del-sangue",
+            "es": "como-leer-analisis-sangre",
+            "fr": "lire-resultats-prise-de-sang",
+            "he": "how-to-read-blood-test",
+            "ar": "how-to-read-blood-test",
+            "hi": "blood-test-kaise-padhe",
+            "el": "how-to-read-blood-test",
+            "cs": "jak-cist-vysledky-krve",
+            "sr": "kako-citati-krvnu-analizu",
+        },
+        titles={
+            "tr": "Kan tahlili nasıl okunur? Adım adım rehber",
+            "en": "How to read a blood test report: step-by-step guide",
+            "de": "Blutbefund lesen: Schritt-für-Schritt",
+            "it": "Come leggere gli esami del sangue",
+            "es": "Cómo leer un análisis de sangre",
+            "fr": "Comment lire une prise de sang",
+            "he": "איך לקרוא תוצאות בדיקת דם",
+            "ar": "كيف تقرأ تحليل الدم",
+            "hi": "ब्लड टेस्ट रिपोर्ट कैसे पढ़ें",
+            "el": "Πώς να διαβάσετε τα αποτελέσματα αίματος",
+            "cs": "Jak číst výsledky krevního testu",
+            "sr": "Како читати крвну анализу",
+        },
+        subtitles={
+            "tr": "Tahlil sonucu kâğıdındaki terimleri, referans aralıklarını ve değerlerin ne anlama geldiğini sade bir dille açıklıyoruz.",
+            "en": "A clear guide to the terms, reference ranges and numbers you see on your lab report.",
+            "de": "Verständliche Erklärung von Begriffen, Referenzbereichen und Werten im Laborbefund.",
+            "it": "Guida chiara a termini, intervalli di riferimento e valori sul referto.",
+            "es": "Guía clara de términos, rangos de referencia y valores en el informe.",
+            "fr": "Guide clair des termes, fourchettes de référence et valeurs sur le résultat.",
+            "he": "הסבר ברור על המונחים, טווחי הנורמה והמספרים בתוצאות הבדיקה.",
+            "ar": "دليل واضح للمصطلحات ونطاقات المرجع والقيم في التقرير.",
+            "hi": "रिपोर्ट में दिखने वाले शब्दों, रेफरेंस रेंज और संख्याओं की सरल व्याख्या।",
+            "el": "Ξεκάθαρος οδηγός για τους όρους, τα διαστήματα αναφοράς και τις τιμές στην ανακοίνωση.",
+            "cs": "Přehled pojmů, referenčních rozmezí a hodnot na laboratorním protokolu.",
+            "sr": "Јасан водич кроз појмове, референтне вредности и бројеве на извештају.",
+        },
+        excerpts={
+            "tr": "Referans aralığı, birimler ve sonuç kâğıdındaki sütunlar: tahlilinizi doğru yorumlamak için bilmeniz gerekenler.",
+            "en": "Reference ranges, units and columns on your report: what you need to interpret your blood test correctly.",
+            "de": "Referenzbereiche, Einheiten und Spalten im Befund – das Wichtigste für die Einordnung Ihrer Werte.",
+            "it": "Intervalli di riferimento, unità e colonne del referto: cosa serve per leggere bene le analisi.",
+            "es": "Rangos de referencia, unidades y columnas del informe: lo esencial para interpretar tu análisis.",
+            "fr": "Fourchettes de référence, unités et colonnes du résultat : l’essentiel pour interpréter votre bilan.",
+            "he": "טווחי נורמה, יחידות ועמודות בדף התוצאות – מה שצריך כדי להבין את הבדיקה.",
+            "ar": "نطاقات المرجع والوحدات والأعمدة في التقرير: ما تحتاج معرفته لفهم التحليل.",
+            "hi": "रेफरेंस रेंज, यूनिट और रिपोर्ट के कॉलम: ब्लड टेस्ट समझने के लिए जरूरी बातें।",
+            "el": "Διαστήματα αναφοράς, μονάδες και στήλες στην ανακοίνωση: ό,τι χρειάζεστε για να ερμηνεύσετε τη διαζήτηση.",
+            "cs": "Referenční rozmezí, jednotky a sloupce na protokolu: co potřebujete k interpretaci výsledků.",
+            "sr": "Референтни опсези, јединице и колоне у извештају: све што треба да протумачите анализу.",
+        },
+        seo_titles={
+            "tr": "Kan Tahlili Nasıl Okunur? Referans Aralığı ve Değerler Rehberi",
+            "en": "How to Read a Blood Test Report | Reference Range & Values Guide",
+            "de": "Blutbefund lesen: Referenzbereich und Werte verstehen",
+            "it": "Come leggere gli esami del sangue | Guida valori e riferimenti",
+            "es": "Cómo leer un análisis de sangre | Guía de valores y referencia",
+            "fr": "Comment lire une prise de sang | Guide des valeurs et références",
+            "he": "איך לקרוא תוצאות בדיקת דם | מדריך טווחי נורמה",
+            "ar": "كيف تقرأ تحليل الدم | دليل القيم ونطاق المرجع",
+            "hi": "ब्लड टेस्ट रिपोर्ट कैसे पढ़ें | रेफरेंस रेंज गाइड",
+            "el": "Πώς να διαβάσετε τα εξεταστικά αίματος | Οδηγός τιμών",
+            "cs": "Jak číst krevní výsledky | Referenční rozmezí a hodnoty",
+            "sr": "Како читати крвну анализу | Водич референтних вредности",
+        },
+        seo_descriptions={
+            "tr": "Kan tahlili sonucu kâğıdında referans aralığı, birimler ve değerlerin anlamı. Adım adım, sade dilde rehber.",
+            "en": "What reference range, units and values on your blood test report mean. A step-by-step, plain-language guide.",
+            "de": "Was Referenzbereich, Einheiten und Werte im Blutbefund bedeuten. Schritt-für-Schritt, verständlich.",
+            "it": "Cosa significano intervallo di riferimento, unità e valori sul referto. Guida passo passo in linguaggio semplice.",
+            "es": "Qué significan rango de referencia, unidades y valores en el análisis. Guía paso a paso en lenguaje claro.",
+            "fr": "Fourchette de référence, unités et valeurs sur la prise de sang : explications. Guide pas à pas en langage simple.",
+            "he": "מה משמעות טווח הנורמה, היחידות והערכים בתוצאות הבדיקה. מדריך שלב-אחר-שלב בשפה פשוטה.",
+            "ar": "معنى نطاق المرجع والوحدات والقيم في تحليل الدم. دليل خطوة بخطوة بلغة واضحة.",
+            "hi": "ब्लड टेस्ट रिपोर्ट में रेफरेंस रेंज, यूनिट और वैल्यू का मतलब। सरल भाषा में स्टेप-बाय-स्टेप गाइड।",
+            "el": "Τι σημαίνουν το διάστημα αναφοράς, οι μονάδες και οι τιμές στο αποτέλεσμα. Οδηγός βήμα-βήμα με απλή γλώσσα.",
+            "cs": "Co znamená referenční rozmezí, jednotky a hodnoty na protokolu. Přehledný krok-za-krokem průvodce.",
+            "sr": "Шта значи референтни опсег, јединице и вредности на анализи. Водич корак-по-корак јасним језиком.",
+        },
+        sections_by_lang={
+            "tr": [
+                Section(
+                    id="tahlil-sonucu-nedir",
+                    level=2,
+                    heading="Kan tahlili sonucu nedir?",
+                    body_html="""
+<p>Kan tahlili (laboratuvar testi), kandaki belirli maddelerin miktarını veya varlığını ölçer. Sonuç kâğıdında her parametre için
+bir <strong>sayı</strong>, çoğu zaman bir <strong>birim</strong> (ör. mg/dL, mmol/L) ve sıklıkla bir <strong>referans aralığı</strong> yer alır.</p>
+<div class="blog-definition">
+  <p><strong>Kan tahlili:</strong> Alınan kan örneğinin laboratuvarda incelenmesiyle elde edilen; şeker, kolesterol, vitamin, mineral,
+  enzim veya hormon gibi değerlerin sayısal sonuçlarını gösteren rapor. Teşhis koymak için tek başına yeterli değildir;
+  hekimin klinik değerlendirmesiyle birlikte yorumlanır.</p>
+</div>
+<p>Bu yazıda, sonuç kâğıdını okurken karşınıza çıkan terimleri ve sayıları nasıl anlayacağınızı adım adım ele alıyoruz.</p>
+""",
+                ),
+                Section(
+                    id="referans-araligi",
+                    level=2,
+                    heading="Referans aralığı ne anlama gelir?",
+                    body_html="""
+<p>Referans aralığı (normal aralık), sağlıklı bir popülasyonda o parametre için kabul edilen alt ve üst sınırlardır. Sonuç bu
+aralığın <strong>içindeyse</strong> çoğu kılavuzda “normal sınırlarda” kabul edilir; <strong>dışındaysa</strong> düşük veya yüksek olarak işaretlenebilir.</p>
+<div class="blog-definition">
+  <p><strong>Referans aralığı:</strong> Laboratuvarın veya kılavuzların, “sağlıklı” kabul edilen bir grupta yapılan ölçümlere dayanarak
+  belirlediği alt ve üst sınırlar. Örneğin “LDL 70–130 mg/dL” yazıyorsa, bu aralık o laboratuvar için kullanılan referans değerleridir.</p>
+</div>
+<div class="blog-example">
+  <p><strong>Örnek:</strong> Sonuç kâğıdında <strong>Hemoglobin: 14,2 g/dL</strong> ve yanında <strong>Referans: 12–16 g/dL</strong> görüyorsanız,
+  14,2 bu aralığın içinde olduğu için değer “normal sınırlarda” kabul edilir. 10 g/dL yazsaydı, referansın altında kalırdı ve
+  “düşük” olarak yorumlanırdı.</p>
+</div>
+<p>Referans aralıkları laboratuvardan laboratuvara, cinsiyet ve yaş gruplarına göre hafifçe değişebilir. Bu yüzden her zaman
+kâğıtta yazan aralığa göre yorum yapılır.</p>
+""",
+                ),
+                Section(
+                    id="sonuc-kagidinda-neler-var",
+                    level=2,
+                    heading="Sonuç kâğıdında neler bulunur?",
+                    body_html="""
+<p>Tipik bir kan tahlili sonuç sayfasında şu sütunlar yer alır:</p>
+<ul>
+  <li><strong>Parametre adı</strong>: Ölçülen değerin adı (örn. LDL kolesterol, Açlık glukozu, Hemoglobin).</li>
+  <li><strong>Sonuç / Değer</strong>: Sizin ölçümünüz (sayı + birim).</li>
+  <li><strong>Referans aralığı</strong>: O laboratuvar için kullanılan normal alt–üst sınırlar.</li>
+  <li><strong>Birim</strong>: mg/dL, mmol/L, g/dL, U/L vb. Değeri doğru yorumlamak için birime bakmak gerekir.</li>
+</ul>
+<p>Bazı laboratuvarlar “Normal / Düşük / Yüksek” gibi bir etiket de ekler. Bu etiket, sonucun referans aralığına göre otomatik
+üretilir; ancak sizin için “hedef” değer risk faktörlerinize göre farklı olabileceği için, nihai yorumu hekiminizle yapmanız önemlidir.</p>
+""",
+                ),
+                Section(
+                    id="yuksek-dusuk-deger",
+                    level=2,
+                    heading="Değer yüksek veya düşük çıkarsa",
+                    body_html="""
+<p>Bir değer referans aralığının <strong>dışında</strong> çıktığında, bu mutlaka “hastalık” anlamına gelmez. Geçici enfeksiyon, açlık süresi,
+kullanılan ilaçlar veya laboratuvar tekniği gibi faktörler sonucu etkileyebilir. Hekiminiz, sizin öykünüz ve diğer tetkiklerle birlikte
+bu sonucun anlamını değerlendirir; gerekirse tekrar test veya ek inceleme önerebilir.</p>
+<p>Bu rehber, tahlil kâğıdındaki terimleri ve sayıları <strong>daha iyi anlamanız</strong> için hazırlanmıştır. Teşhis veya tedavi kararı yerine
+geçmez; tüm sağlık kararlarında hekiminize danışınız.</p>
+""",
+                ),
+            ],
+            "en": [
+                Section(
+                    id="what-is-result",
+                    level=2,
+                    heading="What is a blood test result?",
+                    body_html="""
+<p>A blood test (lab test) measures the amount or presence of specific substances in your blood. On the report you will see
+a <strong>value</strong>, often a <strong>unit</strong> (e.g. mg/dL, mmol/L) and usually a <strong>reference range</strong> for each parameter.</p>
+<div class="blog-definition">
+  <p><strong>Blood test:</strong> A report showing numeric results for things like glucose, cholesterol, vitamins, minerals, enzymes or
+  hormones, based on analysis of a blood sample in the lab. It is not enough on its own to make a diagnosis; it is interpreted
+  together with your doctor&apos;s clinical assessment.</p>
+</div>
+<p>In this guide we explain step by step how to understand the terms and numbers you see on your result sheet.</p>
+""",
+                ),
+                Section(
+                    id="reference-range",
+                    level=2,
+                    heading="What does reference range mean?",
+                    body_html="""
+<p>The reference range (normal range) is the lower and upper limit considered acceptable for that parameter in a healthy
+population. If your result is <strong>within</strong> this range it is usually labelled &quot;normal&quot;; if <strong>outside</strong>, it may be marked low or high.</p>
+<div class="blog-definition">
+  <p><strong>Reference range:</strong> The lower and upper limits set by the lab or guidelines based on measurements in a group
+  considered &quot;healthy&quot;. For example, if it says &quot;LDL 70–130 mg/dL&quot;, that interval is the reference used by that lab.</p>
+</div>
+<div class="blog-example">
+  <p><strong>Example:</strong> If you see <strong>Hemoglobin: 14.2 g/dL</strong> with <strong>Reference: 12–16 g/dL</strong>, 14.2 is inside the range,
+  so the value is considered &quot;normal&quot;. If it were 10 g/dL it would be below the reference and interpreted as &quot;low&quot;.</p>
+</div>
+<p>Reference ranges can vary slightly between labs and by age or sex. Always interpret using the range printed on your sheet.</p>
+""",
+                ),
+                Section(
+                    id="whats-on-the-sheet",
+                    level=2,
+                    heading="What appears on the result sheet?",
+                    body_html="""
+<p>A typical blood test report includes columns such as:</p>
+<ul>
+  <li><strong>Parameter name</strong>: What was measured (e.g. LDL cholesterol, Fasting glucose, Hemoglobin).</li>
+  <li><strong>Result / Value</strong>: Your measurement (number + unit).</li>
+  <li><strong>Reference range</strong>: The lab&apos;s normal lower and upper limits.</li>
+  <li><strong>Unit</strong>: mg/dL, mmol/L, g/dL, U/L, etc. You need the unit to interpret the value correctly.</li>
+</ul>
+<p>Some labs add a label like &quot;Normal / Low / High&quot;. This is derived from the reference range; your personal &quot;target&quot; may
+depend on risk factors, so the final interpretation should be done with your doctor.</p>
+""",
+                ),
+                Section(
+                    id="high-or-low",
+                    level=2,
+                    heading="When a value is high or low",
+                    body_html="""
+<p>A value outside the reference range does not automatically mean &quot;disease&quot;. Temporary infection, fasting time, medications
+or lab technique can affect results. Your doctor will put the result in context with your history and other tests, and may suggest
+repeat testing or further investigation.</p>
+<p>This guide is for <strong>understanding</strong> the terms and numbers on your report. It does not replace diagnosis or treatment decisions;
+always consult your doctor for health decisions.</p>
+""",
+                ),
+            ],
+        },
+    )
+
+
+_KAN_TAHLILI_ARTICLE = _article_kan_tahlili_nasil_okunur()
+
+
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
+    _KAN_TAHLILI_ARTICLE,
 ]
 
 
