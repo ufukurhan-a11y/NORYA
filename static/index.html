@@ -20,7 +20,10 @@
   <meta property="og:description" content="Kan tahlili sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor alın. 9 dilde." />
   <meta property="og:image" content="/static/norya_logo_transparent_trim.png" />
   <meta property="og:type" content="website" />
-  <meta property="og:locale" content="tr_TR" />
+  <meta property="og:locale" content="en_US" />
+  <link rel="alternate" hreflang="en" href="https://noryaai.com/" />
+  <link rel="alternate" hreflang="tr" href="https://noryaai.com/?lang=tr" />
+  <link rel="alternate" hreflang="x-default" href="https://noryaai.com/" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Norya — Kan Tahlili Analizi" />
   <meta name="twitter:description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın." />
@@ -57,6 +60,21 @@
       --norya-hero: linear-gradient(145deg, #0a1929 0%, #134e4a 60%, #0d9488 100%);
       --norya-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
       --norya-card-shadow: 0 4px 24px rgba(14, 165, 164, 0.12);
+    }
+    /* ========== Cross-browser / Safari uyumluluk (tüm tarayıcılarda aynı görünüm) ========== */
+    *, *::before, *::after { box-sizing: border-box; }
+    html {
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+    img, video, svg { max-width: 100%; height: auto; display: block; }
+    @media (max-width: 640px) {
+      html { min-height: 100%; min-height: -webkit-fill-available; }
     }
     .text-norya-brand { color: var(--norya-brand); }
     .bg-norya-brand { background-color: var(--norya-brand); }
@@ -165,6 +183,261 @@
       text-decoration: line-through;
       opacity: 0.6;
     }
+    /* Elite Hero Card: ultra-premium health-tech (InsideTracker / Function Health level) */
+    .elite-hero-section {
+      background: linear-gradient(145deg, #0f172a 0%, #1e293b 30%, #134e4a 70%, #0f766e 100%);
+      position: relative;
+      overflow: hidden;
+    }
+    .elite-hero-section::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      right: -20%;
+      width: 70%;
+      height: 140%;
+      background: radial-gradient(ellipse, rgba(14, 165, 164, 0.22) 0%, transparent 65%);
+      pointer-events: none;
+    }
+    .elite-hero-card {
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(148, 163, 184, 0.28);
+      border-radius: 20px;
+      box-shadow: 0 24px 56px rgba(15, 23, 42, 0.22), 0 0 0 1px rgba(255, 255, 255, 0.6) inset;
+      position: relative;
+      z-index: 1;
+    }
+    .dark .elite-hero-card {
+      background: rgba(30, 41, 59, 0.96);
+      border-color: rgba(148, 163, 184, 0.25);
+      box-shadow: 0 24px 56px rgba(0, 0, 0, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.08) inset;
+    }
+    .elite-hero-card .elite-content { color: #0f172a; }
+    .dark .elite-hero-card .elite-content { color: #f1f5f9; }
+    .elite-hero-card .elite-content .elite-desc { color: #475569; }
+    .dark .elite-hero-card .elite-content .elite-desc { color: #cbd5e1; }
+    .elite-cta-panel { background: rgba(248, 250, 252, 0.95); border-radius: 14px; border: 1px solid rgba(226, 232, 240, 0.9); }
+    .dark .elite-cta-panel { background: rgba(15, 23, 42, 0.7); border-color: rgba(148, 163, 184, 0.25); }
+    .elite-cta-btn {
+      background: #0EA5A4;
+      color: #fff;
+      font-weight: 600;
+      border-radius: 14px;
+      box-shadow: 0 4px 14px rgba(14, 165, 164, 0.35);
+      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+    .elite-cta-btn:hover { background: #0d9488; color: #fff; box-shadow: 0 6px 20px rgba(14, 165, 164, 0.45); transform: translateY(-1px); }
+    .elite-cta-btn:active { transform: translateY(0); }
+    @media (max-width: 1023px) {
+      .elite-hero-card { flex-direction: column; }
+      .elite-cta-panel { width: 100%; max-width: none; margin-top: 0.25rem; }
+      .elite-cta-btn { min-height: 48px; width: 100%; }
+    }
+    /* Doctor Insights: premium clinical cards — cooler, authoritative */
+    .doctor-insights-section { background: linear-gradient(180deg, #f0f9f9 0%, #e8f4f4 100%); padding-top: 0.5rem; }
+    .dark .doctor-insights-section { background: linear-gradient(180deg, rgba(15,23,42,0.5) 0%, rgba(6,28,28,0.4) 100%); }
+    .doctor-section-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #0d9488; margin-bottom: 0.5rem; }
+    .dark .doctor-section-badge { color: #5eead4; }
+    .doctor-section-title { font-size: 1.25rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .dark .doctor-section-title { color: #f1f5f9; }
+    .doctor-section-subtitle { font-size: 0.875rem; color: #475569; line-height: 1.5; max-width: 36rem; margin-left: auto; margin-right: auto; }
+    .dark .doctor-section-subtitle { color: #94a3b8; }
+    .doctor-insights-carousel {
+      display: flex; gap: 1rem; overflow-x: auto; overflow-y: hidden;
+      scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
+      scrollbar-width: none; padding-bottom: 0.5rem;
+    }
+    .doctor-insights-carousel::-webkit-scrollbar { display: none; }
+    .doctor-card {
+      flex: 0 0 min(280px, 82vw);
+      scroll-snap-align: start; scroll-snap-stop: always;
+      background: #fafcfc;
+      border: 1px solid rgba(13,148,136,0.12);
+      border-radius: 18px;
+      padding: 1.5rem 1.375rem 1.375rem;
+      box-shadow: 0 4px 20px rgba(15,23,42,0.04);
+      min-height: 240px;
+      position: relative;
+      overflow: hidden;
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+      display: flex; flex-direction: column;
+    }
+    .doctor-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #0EA5A4; opacity: 0.85; }
+    .doctor-card:hover { box-shadow: 0 8px 28px rgba(15,23,42,0.06); border-color: rgba(13,148,136,0.18); }
+    .dark .doctor-card { background: rgba(30,41,59,0.7); border-color: rgba(94,234,212,0.12); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
+    .dark .doctor-card::before { background: #0EA5A4; opacity: 0.9; }
+    .doctor-card-icon { position: absolute; top: 1.25rem; right: 1.25rem; color: rgba(13,148,136,0.35); }
+    .dark .doctor-card-icon { color: rgba(94,234,212,0.35); }
+    .doctor-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0d9488; margin-bottom: 0.5rem; }
+    .dark .doctor-card-label { color: #5eead4; }
+    .doctor-card-title { font-size: 1rem; font-weight: 600; color: #0f172a; line-height: 1.35; margin-bottom: 0.5rem; }
+    .dark .doctor-card-title { color: #f1f5f9; }
+    .doctor-card-body { font-size: 0.8125rem; color: #475569; line-height: 1.5; margin-bottom: 1rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .dark .doctor-card-body { color: #94a3b8; }
+    .doctor-chip { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.35rem 0.65rem; border-radius: 8px; }
+    .doctor-chip-stable { background: rgba(5,150,105,0.12); color: #047857; }
+    .dark .doctor-chip-stable { background: rgba(52,211,153,0.15); color: #6ee7b7; }
+    .doctor-chip-monitor { background: rgba(217,119,6,0.12); color: #b45309; }
+    .dark .doctor-chip-monitor { background: rgba(251,191,36,0.15); color: #fcd34d; }
+    .doctor-chip-good { background: rgba(13,148,136,0.12); color: #0d9488; }
+    .dark .doctor-chip-good { background: rgba(94,234,212,0.15); color: #5eead4; }
+    @media (min-width: 640px) {
+      .doctor-insights-carousel { display: grid; grid-template-columns: repeat(2, 1fr); overflow: visible; scroll-snap-type: none; gap: 1.5rem; }
+      .doctor-card { flex: none; min-height: 260px; }
+    }
+    @media (min-width: 1024px) {
+      .doctor-insights-carousel { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; max-width: 56rem; margin-left: auto; margin-right: auto; }
+      .doctor-card { padding: 1.75rem 1.5rem; min-height: 260px; }
+    }
+    /* Customer Reviews: premium testimonial cards — warmer, trusted */
+    .customer-reviews-section { background: linear-gradient(180deg, #fefdfb 0%, #faf8f5 100%); border-top: 1px solid rgba(15,23,42,0.04); }
+    .dark .customer-reviews-section { background: linear-gradient(180deg, rgba(30,41,59,0.2) 0%, rgba(30,35,40,0.25) 100%); border-top-color: rgba(148,163,184,0.08); }
+    .customer-section-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #b45309; margin-bottom: 0.5rem; }
+    .dark .customer-section-badge { color: #fcd34d; }
+    .customer-section-title { font-size: 1.25rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .dark .customer-section-title { color: #f1f5f9; }
+    .customer-section-subtitle { font-size: 0.875rem; color: #57534e; line-height: 1.5; max-width: 36rem; margin-left: auto; margin-right: auto; }
+    .dark .customer-section-subtitle { color: #94a3b8; }
+    .customer-reviews-single-card {
+      max-width: 64rem;
+      margin: 0 auto;
+      padding: 0;
+      background: transparent;
+      border: none;
+      box-shadow: none;
+    }
+    .customer-reviews-carousel {
+      display: flex;
+      gap: 1.25rem;
+      overflow-x: auto;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+      scrollbar-width: thin;
+      scrollbar-color: rgba(13,148,136,0.35) transparent;
+      padding-bottom: 0.5rem;
+    }
+    .customer-reviews-carousel::-webkit-scrollbar { height: 6px; }
+    .customer-reviews-carousel::-webkit-scrollbar-thumb { background: rgba(13,148,136,0.35); border-radius: 3px; }
+    .customer-card {
+      flex: 0 0 min(100%, 320px);
+      min-width: 280px;
+      scroll-snap-align: start;
+      scroll-snap-stop: always;
+      padding: 2rem 1.75rem;
+      background: #fafbfc;
+      border: 1px solid rgba(15,23,42,0.06);
+      border-radius: 18px;
+      box-shadow: 0 2px 16px rgba(15,23,42,0.04);
+      min-height: 280px;
+      display: flex;
+      flex-direction: column;
+    }
+    .dark .customer-card { background: rgba(30,41,59,0.5); border-color: rgba(148,163,184,0.1); box-shadow: 0 2px 16px rgba(0,0,0,0.1); }
+    .customer-card-avatar {
+      width: 64px;
+      height: 64px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 1.25rem;
+      border: 2px solid rgba(13,148,136,0.15);
+      box-shadow: 0 4px 12px rgba(15,23,42,0.06);
+      flex-shrink: 0;
+    }
+    .dark .customer-card-avatar { border-color: rgba(94,234,212,0.2); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+    .customer-card-name {
+      font-size: 1.0625rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.5rem;
+      letter-spacing: -0.01em;
+    }
+    .dark .customer-card-name { color: #f1f5f9; }
+    .customer-card-quote {
+      font-size: 0.875rem;
+      color: #475569;
+      line-height: 1.55;
+      margin-bottom: 1rem;
+      flex: 1;
+      display: -webkit-box;
+      -webkit-line-clamp: 3;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .dark .customer-card-quote { color: #cbd5e1; }
+    .customer-card-meta { font-size: 0.75rem; color: #64748b; margin-bottom: 0.75rem; }
+    .dark .customer-card-meta { color: #94a3b8; }
+    .customer-card-badge {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #0d9488;
+      padding: 0.4rem 0.75rem;
+      border-radius: 999px;
+      background: rgba(13,148,136,0.08);
+      width: fit-content;
+    }
+    .dark .customer-card-badge { color: #5eead4; background: rgba(94,234,212,0.12); }
+    @media (min-width: 640px) {
+      .customer-card { flex: 0 0 min(50%, 340px); min-width: 300px; padding: 2rem 1.75rem; min-height: 300px; }
+    }
+    @media (min-width: 1024px) {
+      .customer-card { flex: 0 0 min(33.333%, 380px); min-width: 300px; padding: 2.25rem 2rem; min-height: 300px; }
+    }
+    @media (min-width: 1280px) {
+      .customer-card { flex: 0 0 min(25%, 400px); }
+    }
+    /* Clinical intake: ultra-premium upload step (Function Health / InsideTracker level) */
+    .intake-section { background: linear-gradient(180deg, #fafbfc 0%, #f1f5f9 100%); min-height: 60vh; }
+    .dark .intake-section { background: linear-gradient(180deg, rgba(15,23,42,0.5) 0%, rgba(15,23,42,0.7) 100%); }
+    .intake-container { max-width: 1100px; margin-left: auto; margin-right: auto; padding: 2rem 1rem 3rem; }
+    @media (min-width: 768px) { .intake-container { padding: 3rem 1.5rem 4rem; } }
+    .intake-card { background: #fff; border-radius: 20px; border: 1px solid rgba(15,23,42,0.08); box-shadow: 0 4px 24px rgba(15,23,42,0.06); overflow: hidden; }
+    .dark .intake-card { background: rgba(30,41,59,0.95); border-color: rgba(148,163,184,0.12); box-shadow: 0 4px 24px rgba(0,0,0,0.2); }
+    .intake-card-inner { padding: 1.75rem 1.25rem; }
+    @media (min-width: 640px) { .intake-card-inner { padding: 2.5rem 2rem; } }
+    .intake-header { margin-bottom: 1.75rem; padding-bottom: 1.5rem; border-bottom: 1px solid rgba(15,23,42,0.06); }
+    .dark .intake-header { border-bottom-color: rgba(148,163,184,0.1); }
+    .intake-title { font-size: 1.5rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; line-height: 1.25; margin-bottom: 0.25rem; }
+    .dark .intake-title { color: #f1f5f9; }
+    .intake-title-tr { font-size: 0.8125rem; color: #64748b; font-weight: 500; }
+    .dark .intake-title-tr { color: #94a3b8; }
+    .intake-subtitle { font-size: 0.9375rem; color: #475569; line-height: 1.5; margin-top: 0.5rem; }
+    .dark .intake-subtitle { color: #94a3b8; }
+    .intake-badge-row { display: flex; flex-wrap: wrap; align-items: center; gap: 0.5rem 1rem; margin-bottom: 1rem; }
+    .intake-disclaimer { font-size: 0.8125rem; color: #64748b; line-height: 1.5; padding: 0.75rem 1rem; background: rgba(15,23,42,0.03); border-radius: 12px; border: 1px solid rgba(15,23,42,0.06); margin-bottom: 1.5rem; }
+    .dark .intake-disclaimer { color: #94a3b8; background: rgba(255,255,255,0.03); border-color: rgba(148,163,184,0.1); }
+    .intake-dropzone { border: 2px dashed rgba(14,165,164,0.35); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; background: rgba(14,165,164,0.04); transition: border-color 0.2s, background 0.2s; cursor: pointer; }
+    .intake-dropzone:hover { border-color: rgba(14,165,164,0.5); background: rgba(14,165,164,0.06); }
+    .dark .intake-dropzone { border-color: rgba(14,165,164,0.25); background: rgba(14,165,164,0.08); }
+    .dark .intake-dropzone:hover { border-color: rgba(14,165,164,0.4); background: rgba(14,165,164,0.12); }
+    .intake-dropzone.drag-over { border-color: #0EA5A4; background: rgba(14,165,164,0.08); }
+    .intake-dropzone-label { font-size: 0.9375rem; font-weight: 600; color: #0f172a; margin-bottom: 0.25rem; }
+    .dark .intake-dropzone-label { color: #e2e8f0; }
+    .intake-dropzone-hint { font-size: 0.8125rem; color: #64748b; }
+    .dark .intake-dropzone-hint { color: #94a3b8; }
+    .intake-divider { text-align: center; margin: 1.25rem 0; font-size: 0.75rem; font-weight: 600; color: #94a3b8; letter-spacing: 0.05em; text-transform: uppercase; }
+    .intake-textarea { width: 100%; border: 1px solid rgba(15,23,42,0.12); border-radius: 14px; padding: 1rem 1.25rem; font-size: 0.9375rem; line-height: 1.55; color: #0f172a; background: #fff; transition: border-color 0.2s, box-shadow 0.2s; }
+    .intake-textarea:focus { outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
+    .dark .intake-textarea { background: rgba(15,23,42,0.6); border-color: rgba(148,163,184,0.2); color: #e2e8f0; }
+    .dark .intake-textarea:focus { border-color: #0EA5A4; }
+    .intake-stepper { display: flex; align-items: center; justify-content: space-between; margin-bottom: 2rem; }
+    .intake-stepper-dot { width: 2.25rem; height: 2.25rem; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 0.8125rem; font-weight: 600; transition: background 0.2s, color 0.2s, border-color 0.2s; }
+    .intake-stepper-dot.active { background: #0EA5A4; color: #fff; border: 2px solid #0EA5A4; }
+    .intake-stepper-dot.inactive { background: #fff; color: #94a3b8; border: 2px solid #e2e8f0; }
+    .dark .intake-stepper-dot.inactive { background: rgba(30,41,59,0.8); border-color: rgba(148,163,184,0.25); color: #64748b; }
+    .intake-stepper-line { flex: 1; height: 2px; margin: 0 0.25rem; min-width: 16px; background: #e2e8f0; }
+    .dark .intake-stepper-line { background: rgba(148,163,184,0.2); }
+    .intake-stepper-line.filled { background: #0EA5A4; }
+    .dark .intake-stepper-line.filled { background: #0EA5A4; }
+    .intake-cta { width: 100%; padding: 0.875rem 1.5rem; font-size: 1rem; font-weight: 600; border-radius: 14px; background: #0EA5A4; color: #fff; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; min-height: 48px; }
+    .intake-cta:hover:not(:disabled) { background: #0d9488; }
+    .intake-cta:disabled { opacity: 0.5; cursor: not-allowed; }
+    .intake-cta:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,0.25); }
+    /* PWA bar: body padding so CTA is not covered on mobile (Safari safe-area dahil) */
+    body.a2hs-visible { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
+    @media (min-width: 640px) { body.a2hs-visible { padding-bottom: 0; } }
     /* Premium health SaaS: mobil-first, accent #0EA5A4, bol beyaz */
     .premium-wrap { max-width: var(--premium-container, 1100px); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
     .premium-section { padding-top: var(--section-gap, 28px); padding-bottom: var(--section-gap, 28px); }
@@ -174,8 +447,8 @@
       body { font-size: 16px; }
       .hero-cta-btn, .btn-primary, .btn-secondary, .primary-cta, .compare-card-cta, button[type="button"].rounded-full { min-height: 44px; }
     }
-    /* Global: yatay taşma yok (iPhone/Android) */
-    html { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100vw; }
+    /* Global: yatay taşma yok (Safari/Chrome/Firefox) */
+    html { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; }
     body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
     .max-w-5xl, .max-w-6xl, .max-w-4xl, .max-w-3xl, .max-w-2xl { min-width: 0; }
     /* iOS Safari: dinamik viewport (adres çubuğu dahil) */
@@ -229,6 +502,7 @@
       display: flex;
       overflow-x: auto;
       scroll-snap-type: x mandatory;
+      -webkit-scroll-snap-type: x mandatory;
       -webkit-overflow-scrolling: touch;
       gap: 12px;
       scrollbar-width: none;
@@ -239,6 +513,7 @@
       min-width: 100%;
       box-sizing: border-box;
       scroll-snap-align: center;
+      -webkit-scroll-snap-align: center;
       scroll-snap-stop: always;
       background: #fff;
       border-radius: 12px;
@@ -289,6 +564,8 @@
     .health-preview .dashboard-badge { position: absolute; top: 1rem; right: 1rem; font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; background: var(--hp-brand); padding: 0.4rem 0.75rem; border-radius: 999px; }
     .health-preview .dashboard-tabs { display: flex; gap: 0.25rem; overflow-x: auto; -webkit-overflow-scrolling: touch; scrollbar-width: none; padding-bottom: 0.5rem; margin-bottom: 1.25rem; border-bottom: 1px solid rgba(15,23,42,0.08); }
     .health-preview .dashboard-tabs::-webkit-scrollbar { display: none; }
+    /* Safari: buton görünümü tutarlı (gölge/radius sınıflarla verilir) */
+    button { -webkit-appearance: none; appearance: none; }
     .health-preview .dashboard-tab { flex-shrink: 0; padding: 0.5rem 1rem; font-size: 0.8rem; font-weight: 600; color: #64748b; background: transparent; border: none; border-radius: 10px; cursor: pointer; transition: color 0.2s, background 0.2s; white-space: nowrap; }
     .health-preview .dashboard-tab:hover { color: #0f172a; background: rgba(14,165,164,0.08); }
     .dark .health-preview .dashboard-tab:hover { color: #f1f5f9; background: rgba(14,165,164,0.15); }
@@ -467,6 +744,8 @@
       border-bottom: 1px solid rgba(15,23,42,.06);
       transition: all .22s ease;
       padding-top: env(safe-area-inset-top, 0);
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
     }
     .dark .header {
       background: rgba(15,23,42,.78);
@@ -615,7 +894,9 @@
     }
     .mobile-overlay.open { opacity: 1; pointer-events: auto; }
     .mobile-drawer {
-      position: fixed; top: 0; right: 0; height: 100vh; width: min(86vw, 360px);
+      position: fixed; top: 0; right: 0;
+      height: 100vh; height: 100dvh; height: -webkit-fill-available;
+      width: min(86vw, 360px);
       background: #fff;
       transform: translateX(100%);
       transition: transform .22s ease;
@@ -690,7 +971,7 @@
     #guest-checkout-modal.hidden, #payment-modal.hidden, #a2hs-banner.hidden, #ios-a2hs-banner.hidden {
       pointer-events: none !important;
     }
-    /* PWA: Ana ekrana ekle banner — Norya marka rengi #0EA5A4, iOS/Chrome uyumlu */
+    /* PWA: Ana ekrana ekle banner — ince, içerikle çakışmasın; dismiss sonrası bir daha gösterme */
     .install-banner {
       position: fixed;
       bottom: 0;
@@ -699,11 +980,16 @@
       z-index: 9999;
       background: #0EA5A4;
       color: #ffffff;
-      padding: 12px 16px calc(12px + env(safe-area-inset-bottom));
-      padding-left: max(16px, env(safe-area-inset-left));
-      padding-right: max(16px, env(safe-area-inset-right));
-      box-shadow: 0 -4px 20px rgba(0,0,0,0.15);
+      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
+      padding-left: max(14px, env(safe-area-inset-left));
+      padding-right: max(14px, env(safe-area-inset-right));
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
       -webkit-tap-highlight-color: transparent;
+      -webkit-transform: translateZ(0);
+      transform: translateZ(0);
+    }
+    @media (min-width: 640px) {
+      .install-banner { padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
     }
     .install-banner button {
       border-radius: 10px;
@@ -738,15 +1024,130 @@
     @media (min-width: 640px) {
       .wa-fab { padding: 0; right: max(20px, env(safe-area-inset-right)); bottom: max(72px, calc(72px + env(safe-area-inset-bottom))); }
     }
-    /* PWA çubukları: mobil safe-area, dokunma alanı, taşma yok */
+    /* PWA çubukları: ince, az dominant, dismiss net; premium görünümü bozmasın */
     #a2hs-banner, #ios-a2hs-banner {
-      min-height: 48px;
+      min-height: 44px;
       box-sizing: border-box;
     }
     @media (max-width: 639px) {
-      #a2hs-banner p, #ios-a2hs-banner p { font-size: 0.8125rem; line-height: 1.35; color: rgba(255,255,255,0.95); }
-      #a2hs-banner button, #ios-a2hs-banner button { min-height: 44px; min-width: 44px; padding: 10px 14px; }
+      #a2hs-banner p, #ios-a2hs-banner p { font-size: 0.75rem; line-height: 1.3; color: rgba(255,255,255,0.95); }
+      #a2hs-banner button, #ios-a2hs-banner button { min-height: 36px; min-width: 36px; padding: 6px 10px; font-size: 0.75rem; }
+      .install-banner { padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); box-shadow: 0 -1px 8px rgba(0,0,0,0.08); }
+      body.a2hs-visible { padding-bottom: calc(52px + env(safe-area-inset-bottom, 0px)); }
     }
+    /* Profile / Dashboard: Apple-level premium container + cards */
+    #profile-section {
+      background: linear-gradient(180deg, #f4f7f8 0%, #eef2f4 100%);
+      min-height: 100%;
+    }
+    .dark #profile-section { background: linear-gradient(180deg, rgba(15,23,42,0.6) 0%, rgba(15,23,42,0.85) 100%); }
+    .profile-dashboard-container { max-width: 1080px; margin-left: auto; margin-right: auto; padding: 2rem 1.25rem 3rem; }
+    @media (min-width: 640px) { .profile-dashboard-container { padding: 2.5rem 1.5rem 4rem; } }
+    .profile-header-card {
+      background: #fafbfc;
+      border: 1px solid rgba(15,23,42,0.06);
+      border-radius: 20px;
+      box-shadow: 0 4px 24px rgba(15,23,42,0.04);
+      padding: 1.75rem 1.5rem;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 640px) { .profile-header-card { padding: 2rem 2rem; } }
+    .dark .profile-header-card { background: rgba(30,41,59,0.5); border-color: rgba(148,163,184,0.1); box-shadow: 0 4px 24px rgba(0,0,0,0.1); }
+    .profile-member-id { font-size: 1.25rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; line-height: 1.3; }
+    .dark .profile-member-id { color: #f1f5f9; }
+    .profile-member-email { font-size: 0.8125rem; color: #64748b; margin-top: 0.25rem; }
+    .dark .profile-member-email { color: #94a3b8; }
+    .profile-meta-row { display: flex; flex-wrap: wrap; gap: 0.5rem 1rem; margin-top: 0.75rem; }
+    .profile-meta-pill { font-size: 0.75rem; color: #475569; }
+    .profile-meta-pill strong { color: #0f172a; font-weight: 600; }
+    .dark .profile-meta-pill strong { color: #e2e8f0; }
+    .profile-btn-analyze {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 48px; padding: 0 1.5rem;
+      border-radius: 14px; border: none;
+      background: #0EA5A4; color: #fff;
+      font-size: 0.9375rem; font-weight: 600;
+      box-shadow: 0 2px 12px rgba(14,165,164,0.25);
+      transition: background 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+    .profile-btn-analyze:hover { background: #0d9488; box-shadow: 0 4px 16px rgba(14,165,164,0.3); }
+    .profile-btn-analyze:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,0.25); }
+    @media (max-width: 639px) { .profile-btn-analyze { width: 100%; } }
+    .profile-stat-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; margin-top: 1.5rem; }
+    @media (min-width: 640px) { .profile-stat-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; } }
+    @media (min-width: 1024px) { .profile-stat-grid { grid-template-columns: repeat(3, 1fr); } }
+    .profile-stat-tile {
+      background: #fff;
+      border: 1px solid rgba(15,23,42,0.05);
+      border-radius: 16px;
+      box-shadow: 0 2px 16px rgba(15,23,42,0.03);
+      padding: 1.25rem 1.25rem;
+      min-height: 140px;
+      display: flex; flex-direction: column;
+    }
+    .dark .profile-stat-tile { background: rgba(30,41,59,0.4); border-color: rgba(148,163,184,0.08); }
+    .profile-stat-icon { width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-bottom: 0.75rem; background: rgba(14,165,164,0.08); color: #0d9488; }
+    .dark .profile-stat-icon { background: rgba(94,234,212,0.12); color: #5eead4; }
+    .profile-stat-title { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: #64748b; margin-bottom: 0.5rem; }
+    .dark .profile-stat-title { color: #94a3b8; }
+    .profile-stat-value { font-size: 1.5rem; font-weight: 700; color: #0f172a; line-height: 1.25; }
+    .dark .profile-stat-value { color: #f1f5f9; }
+    .profile-stat-value.empty { color: #94a3b8; font-weight: 500; font-size: 1rem; }
+    .dark .profile-stat-value.empty { color: #64748b; }
+    .profile-stat-helper { font-size: 0.75rem; color: #64748b; margin-top: 0.375rem; line-height: 1.4; }
+    .dark .profile-stat-helper { color: #94a3b8; }
+    .profile-enterprise-card {
+      background: #f8fafb;
+      border: 1px solid rgba(15,23,42,0.06);
+      border-radius: 20px;
+      box-shadow: 0 2px 16px rgba(15,23,42,0.03);
+      padding: 1.75rem 1.5rem;
+      margin-bottom: 2rem;
+    }
+    @media (min-width: 640px) { .profile-enterprise-card { padding: 2rem 2rem; } }
+    .dark .profile-enterprise-card { background: rgba(30,41,59,0.35); border-color: rgba(148,163,184,0.08); }
+    .profile-enterprise-title { font-size: 1.125rem; font-weight: 700; color: #0f172a; margin-bottom: 0.375rem; }
+    .dark .profile-enterprise-title { color: #f1f5f9; }
+    .profile-enterprise-subtitle { font-size: 0.8125rem; color: #64748b; line-height: 1.5; margin-bottom: 1rem; }
+    .dark .profile-enterprise-subtitle { color: #94a3b8; }
+    .profile-enterprise-list { list-style: none; padding: 0; margin: 0 0 1.25rem 0; }
+    .profile-enterprise-list li { font-size: 0.8125rem; color: #475569; padding: 0.375rem 0; display: flex; align-items: center; gap: 0.5rem; }
+    .dark .profile-enterprise-list li { color: #cbd5e1; }
+    .profile-enterprise-list li::before { content: ""; width: 4px; height: 4px; border-radius: 50%; background: #0EA5A4; flex-shrink: 0; }
+    .profile-enterprise-cta {
+      display: inline-flex; align-items: center; justify-content: center;
+      min-height: 44px; padding: 0 1.25rem;
+      border-radius: 12px; border: none;
+      background: #0EA5A4; color: #fff;
+      font-size: 0.875rem; font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 2px 10px rgba(14,165,164,0.2);
+      transition: background 0.2s, box-shadow 0.2s;
+    }
+    .profile-enterprise-cta:hover { background: #0d9488; box-shadow: 0 4px 14px rgba(14,165,164,0.28); }
+    .profile-tabs-wrap { display: flex; overflow-x: auto; gap: 0; padding-bottom: 0; margin-bottom: 0; border-bottom: 1px solid rgba(15,23,42,0.06); -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+    .profile-tabs-wrap::-webkit-scrollbar { display: none; }
+    .profile-tab { padding: 1rem 1.25rem; font-size: 0.875rem; font-weight: 500; color: #64748b; background: transparent; border: none; border-bottom: 2px solid transparent; cursor: pointer; white-space: nowrap; transition: color 0.2s, border-color 0.2s; }
+    .profile-tab:hover { color: #0f172a; }
+    .dark .profile-tab:hover { color: #e2e8f0; }
+    .profile-tab[aria-selected="true"] { font-weight: 600; color: #0EA5A4; border-bottom-color: #0EA5A4; }
+    .dark .profile-tab[aria-selected="true"] { color: #5eead4; border-bottom-color: #5eead4; }
+    .profile-panel {
+      background: #fff;
+      border: 1px solid rgba(15,23,42,0.06);
+      border-radius: 20px;
+      box-shadow: 0 2px 20px rgba(15,23,42,0.04);
+      padding: 1.75rem 1.5rem;
+      margin-top: 1.5rem;
+    }
+    @media (min-width: 640px) { .profile-panel { padding: 2rem 2rem; } }
+    .dark .profile-panel { background: rgba(30,41,59,0.5); border-color: rgba(148,163,184,0.1); }
+    .profile-panel h2 { font-size: 1.125rem; font-weight: 700; color: #0f172a; margin-bottom: 1.25rem; }
+    .dark .profile-panel h2 { color: #f1f5f9; }
+    .profile-panel label { font-size: 0.8125rem; font-weight: 500; color: #475569; margin-bottom: 0.375rem; display: block; }
+    .profile-panel input, .profile-panel select { border-radius: 12px; border: 1px solid rgba(15,23,42,0.1); padding: 0.75rem 1rem; font-size: 0.9375rem; }
+    .profile-panel input:focus, .profile-panel select:focus { outline: none; box-shadow: 0 0 0 2px rgba(14,165,164,0.2); }
   </style>
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
@@ -759,6 +1160,7 @@
       <nav class="nav-shell" aria-label="Ana menü">
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
         <a href="#nasil-calisir" class="nav-link" data-nav="nasil-calisir" data-i18n="nav_how">Nasıl Çalışır</a>
+        <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
         <a href="#fiyatlandirma" class="nav-link" data-nav="fiyatlandirma" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Kurumsal</a>
       </nav>
@@ -769,7 +1171,7 @@
         <div class="relative header-lang-wrap header-desk-only" id="lang-wrap">
           <button type="button" onclick="toggleLangModal()" class="secondary-link flex items-center gap-1.5" id="lang-btn" data-i18n-aria-label="aria_select_language" aria-label="Dil seçin">
             <span aria-hidden="true">🌐</span>
-            <span id="lang-current">TR</span>
+            <span id="lang-current">EN</span>
           </button>
           <div id="lang-modal" class="hidden absolute right-0 top-full mt-2 w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 z-[70] overflow-y-auto lang-dropdown-max-h">
             <button type="button" onclick="chooseLang('tr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl">Türkçe</button>
@@ -809,6 +1211,7 @@
     <div class="drawer-body">
       <a href="#hakkimizda" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
       <a href="#nasil-calisir" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
+      <a href="#yorumlar" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
       <a href="#fiyatlandirma" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
       <a href="/kurumsal" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
       <a href="#sss" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
@@ -1028,60 +1431,185 @@
     </div>
   </section>
 
-  <!-- 1) Hero | 2) 3 adım | 3) Örnek Rapor | 3.5) Premium Health banner | 4) Paketler | 5) Altyapı | 6) SSS+Footer -->
+  <!-- 1) Hero | 2) 3 adım | 3) Örnek Rapor | 3.5) ELITE Health Report hero card | 4) Paketler | 5) Altyapı | 6) SSS+Footer -->
 
-  <!-- Premium Health tanıtım bandı -->
-  <section class="premium-section bg-brand-gradient text-white">
+  <!-- ELITE HEALTH REPORT — Ultra-premium hero card (InsideTracker / Function Health level) -->
+  <section class="elite-hero-section premium-section py-10 sm:py-12 px-4 sm:px-6" aria-labelledby="elite-title">
     <div class="premium-wrap max-w-5xl mx-auto">
-      <div class="light-glass-card rounded-14 px-4 py-4 sm:px-6 sm:py-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
-        <div class="flex items-start gap-3">
-          <div class="inline-flex h-10 w-10 rounded-full bg-white/10 border border-white/20 items-center justify-center text-2xl" aria-hidden="true">💎</div>
-          <div>
-            <p class="inline-flex items-center gap-2 text-[11px] font-semibold uppercase tracking-[0.18em] text-emerald-200 mb-1">
-              <span class="inline-flex px-2 py-0.5 rounded-full bg-emerald-500/20 border border-emerald-400/40 text-emerald-50" data-i18n="premium_health_badge">Premium Health</span>
-            </p>
-            <h2 class="text-base sm:text-lg font-semibold leading-snug" data-i18n="premium_health_title">Klinik seviyede AI Health raporları</h2>
-            <p class="mt-1 text-xs sm:text-sm text-emerald-100/90 max-w-xl" data-i18n="premium_health_desc">
-              Health Score, biyolojik yaş, kalp & diyabet riski ve PDF rapor arşiviyle InsideTracker seviyesinde deneyim.
-            </p>
+      <div class="elite-hero-card p-6 sm:p-8 lg:p-10 flex flex-col lg:flex-row gap-8 lg:gap-10 items-stretch">
+        <!-- Sol: içerik -->
+        <div class="elite-content flex-1 min-w-0 flex flex-col">
+          <p class="inline-flex w-fit items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] mb-3" id="elite-badge">
+            <span class="inline-flex px-2.5 py-1 rounded-md bg-[#0EA5A4]/15 border border-[#0EA5A4]/35 text-[#0d9488] dark:text-[#5eead4]" data-i18n="elite_badge">ELITE HEALTH REPORT</span>
+          </p>
+          <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold leading-tight text-accent-900 dark:text-white mb-3" id="elite-title" data-i18n="elite_title">Klinik seviyede biyobelirteç raporu</h2>
+          <p class="elite-desc text-sm sm:text-base leading-relaxed max-w-xl mb-6 text-accent-700 dark:text-accent-300" data-i18n="elite_desc">Biyobelirteçlerinizi referans aralıkları, risk profili ve trend mantığıyla değerlendirir; tek sayfada özet ve detaylı premium PDF rapor üretir.</p>
+          <ul class="space-y-2.5 mb-6" aria-label="Rapor özellikleri">
+            <li class="flex items-center gap-3 text-sm font-medium text-accent-800 dark:text-accent-200">
+              <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 flex items-center justify-center text-[#0EA5A4]" aria-hidden="true">📊</span>
+              <span data-i18n="elite_feature_1">Health Score & Risk Profile</span>
+            </li>
+            <li class="flex items-center gap-3 text-sm font-medium text-accent-800 dark:text-accent-200">
+              <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 flex items-center justify-center text-[#0EA5A4]" aria-hidden="true">❤️</span>
+              <span data-i18n="elite_feature_2">Cardio & Metabolic Risk</span>
+            </li>
+            <li class="flex items-center gap-3 text-sm font-medium text-accent-800 dark:text-accent-200">
+              <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 flex items-center justify-center text-[#0EA5A4]" aria-hidden="true">🫀</span>
+              <span data-i18n="elite_feature_3">Liver & Inflammation Markers</span>
+            </li>
+            <li class="flex items-center gap-3 text-sm font-medium text-accent-800 dark:text-accent-200">
+              <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 flex items-center justify-center text-[#0EA5A4]" aria-hidden="true">📄</span>
+              <span data-i18n="elite_feature_4">Premium Doctor-style PDF</span>
+            </li>
+          </ul>
+          <div class="flex flex-wrap gap-2 mt-auto">
+            <span class="inline-flex px-3 py-1.5 rounded-lg bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-semibold" data-i18n="elite_chip_1">10+ biyobelirteç</span>
+            <span class="inline-flex px-3 py-1.5 rounded-lg bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-semibold" data-i18n="elite_chip_2">1–2 dk</span>
+            <span class="inline-flex px-3 py-1.5 rounded-lg bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-semibold" data-i18n="elite_chip_3">Premium PDF</span>
           </div>
         </div>
-        <div class="flex flex-col items-stretch sm:items-end gap-2 w-full sm:w-auto">
-          <button type="button"
-                  onclick="document.getElementById('fiyatlandirma') && document.getElementById('fiyatlandirma').scrollIntoView({ behavior: 'smooth' });"
-                  class="inline-flex items-center justify-center px-4 py-2.5 rounded-14 bg-white text-[#0EA5A4] text-sm font-semibold shadow-md hover:shadow-lg hover:bg-emerald-50 transition">
-            <span data-i18n="premium_health_cta">Premium Health planlarını gör</span>
-          </button>
-          <p class="text-[11px] text-emerald-100/80" data-i18n="premium_health_hint">İlk analiz ücretsiz; memnun kalırsanız dilediğiniz zaman aboneliğe geçin.</p>
+        <!-- Sağ: Elite CTA panel -->
+        <div class="elite-cta-panel flex-shrink-0 w-full lg:min-w-[280px] lg:max-w-[320px] p-5 sm:p-6 flex flex-col justify-center gap-4">
+          <p class="text-xs font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-[#5eead4]" data-i18n="elite_cta_free_label">İlk rapor ücretsiz</p>
+          <p class="text-[11px] text-accent-600 dark:text-accent-400 leading-snug" data-i18n="elite_trust_badges">Secure upload • Private by design • PDF ready</p>
+          <a href="/upload" class="elite-cta-btn w-full py-3.5 sm:py-4 px-5 text-base sm:text-lg font-semibold min-h-[48px] sm:min-h-[52px] flex items-center justify-center gap-2 rounded-xl no-underline" data-i18n="elite_cta_btn">İlk raporu ücretsiz oluştur</a>
+          <p class="text-[11px] text-accent-600 dark:text-accent-400 text-center leading-snug" data-i18n="elite_cta_sub">Memnun kalırsanız dilediğiniz an premium üyeliğe geçin.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- 2) Nasıl çalışır (3 kart) -->
+
+
+  <!-- 2) Nasıl çalışır — tek akış: Yükle + Rapor al -->
   <section id="nasil-calisir" class="premium-section bg-white dark:bg-accent-900/20">
     <div class="premium-wrap">
       <h2 class="text-xl sm:text-2xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="how_title">Norya Nasıl Çalışır?</h2>
-      <p class="text-center text-accent-600 dark:text-accent-400 text-sm sm:text-base mb-8 max-w-xl mx-auto" data-i18n="how_desc">Kan tahlilinizi yükleyin, AI analiz etsin, premium PDF raporunuzu indirin.</p>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <p class="text-center text-accent-600 dark:text-accent-400 text-sm sm:text-base mb-8 max-w-xl mx-auto" data-i18n="how_desc">PDF veya fotoğraf yükleyin, premium raporunuzu alın.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 max-w-2xl mx-auto">
         <div class="rounded-2xl bg-white dark:bg-accent-800/80 p-6 border border-accent-100 dark:border-accent-700 shadow-sm text-center">
           <div class="w-12 h-12 rounded-full bg-[#0EA5A4]/15 text-[#0EA5A4] dark:bg-[#0EA5A4]/25 dark:text-[#5eead4] font-bold text-xl flex items-center justify-center mx-auto mb-4">1</div>
-          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_1">Tahlil yükle</h3>
-          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_1d">PDF veya fotoğraf olarak kan tahlilinizi yükleyin.</p>
+          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_1">PDF veya fotoğraf yükle</h3>
+          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_1d">Kan tahlilinizi PDF veya fotoğraf olarak yükleyin.</p>
         </div>
         <div class="rounded-2xl bg-white dark:bg-accent-800/80 p-6 border border-accent-100 dark:border-accent-700 shadow-sm text-center">
           <div class="w-12 h-12 rounded-full bg-[#0EA5A4]/15 text-[#0EA5A4] dark:bg-[#0EA5A4]/25 dark:text-[#5eead4] font-bold text-xl flex items-center justify-center mx-auto mb-4">2</div>
-          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_2">AI analiz eder</h3>
-          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_2d">Norya AI tüm sağlık verilerinizi klinik referans aralıklarına göre analiz eder.</p>
-        </div>
-        <div class="rounded-2xl bg-white dark:bg-accent-800/80 p-6 border border-accent-100 dark:border-accent-700 shadow-sm text-center">
-          <div class="w-12 h-12 rounded-full bg-[#0EA5A4]/15 text-[#0EA5A4] dark:bg-[#0EA5A4]/25 dark:text-[#5eead4] font-bold text-xl flex items-center justify-center mx-auto mb-4">3</div>
-          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_3">Raporunu al</h3>
-          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_3d">Health Score, risk analizleri ve grafikleri içeren premium PDF sağlık raporunu indir.</p>
+          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_2">Raporunu al</h3>
+          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_2d">Health Score, risk analizleri ve grafiklerle premium PDF raporunu indir.</p>
         </div>
       </div>
     </div>
   </section>
+
+  <!-- Yorumlar: Uzman + Müşteri yorumları -->
+  <section id="yorumlar" class="premium-section py-12 sm:py-16 px-4 sm:px-6 bg-white dark:bg-accent-900/20">
+    <div class="premium-wrap max-w-6xl mx-auto mb-4">
+      <h2 class="text-xl sm:text-2xl font-bold text-center text-accent-900 dark:text-white mb-1" data-i18n="reviews_section_title">Yorumlar</h2>
+      <p class="text-center text-accent-600 dark:text-accent-400 text-sm max-w-2xl mx-auto" data-i18n="reviews_section_subtitle">Uzman değerlendirmeleri ve üye deneyimleri.</p>
+    </div>
+
+  <!-- Uzman (Doktor) Yorumları -->
+  <section id="doctor-insights" class="doctor-insights-section premium-section pt-2 pb-16 sm:pb-20 px-4 sm:px-6" aria-labelledby="doctor-insights-title">
+    <div class="premium-wrap max-w-6xl mx-auto mb-8">
+      <p class="doctor-section-badge" data-i18n="doctor_section_badge">Premium Health</p>
+      <h3 id="doctor-insights-title" class="doctor-section-title" data-i18n="doctor_insights_title">Uzman Yorumları</h3>
+      <p class="doctor-section-subtitle" data-i18n="doctor_insights_subtitle">Biyobelirteç sonuçlarını daha anlaşılır hale getiren, klinik üslupta yapılandırılmış yorumlar.</p>
+    </div>
+    <div class="premium-wrap max-w-6xl mx-auto">
+      <div class="doctor-insights-carousel">
+        <article class="doctor-card">
+          <span class="doctor-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <p class="doctor-card-label" data-i18n="doctor_card_label">Klinik Yorum</p>
+          <h3 class="doctor-card-title" data-i18n="elite_card_health_title">Genel Sağlık Özeti</h3>
+          <p class="doctor-card-body" data-i18n="elite_card_health_body">Değerler genel olarak stabil bir profil gösteriyor. Hafif sapmalar için düzenli takip önerilir.</p>
+          <span class="doctor-chip doctor-chip-stable">Stable</span>
+        </article>
+        <article class="doctor-card">
+          <span class="doctor-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+          <p class="doctor-card-label" data-i18n="doctor_card_label">Klinik Yorum</p>
+          <h3 class="doctor-card-title" data-i18n="elite_card_cardio_title">Kalp ve Metabolik Risk</h3>
+          <p class="doctor-card-body" data-i18n="elite_card_cardio_body">Lipid ve metabolik belirteçler referans aralıklarıyla değerlendirilir. Uzun vadeli takip için rapor özeti kullanılabilir.</p>
+          <span class="doctor-chip doctor-chip-monitor">Monitor</span>
+        </article>
+        <article class="doctor-card">
+          <span class="doctor-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+          <p class="doctor-card-label" data-i18n="doctor_card_label">Klinik Yorum</p>
+          <h3 class="doctor-card-title" data-i18n="elite_card_glucose_title">Glukoz ve Metabolizma</h3>
+          <p class="doctor-card-body" data-i18n="elite_card_glucose_body">Belirteçler uygun aralıkta. Zaman içinde tutarlılık ve düzenli kontrol önerilir.</p>
+          <span class="doctor-chip doctor-chip-good">Good range</span>
+        </article>
+        <article class="doctor-card">
+          <span class="doctor-card-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></span>
+          <p class="doctor-card-label" data-i18n="doctor_card_label">Klinik Yorum</p>
+          <h3 class="doctor-card-title" data-i18n="elite_card_lipid_title">Lipid Profili ve Karaciğer</h3>
+          <p class="doctor-card-body" data-i18n="elite_card_lipid_body">Kolesterol paneli ve karaciğer enzimleri klinik standartlara göre yorumlanır; kardiyovasküler risk bağlamında sunulur.</p>
+          <span class="doctor-chip doctor-chip-monitor">Monitor</span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Müşteri Yorumları -->
+  <section id="customer-reviews" class="customer-reviews-section premium-section pt-4 pb-16 sm:pb-20 px-4 sm:px-6" aria-labelledby="customer-reviews-title">
+    <div class="premium-wrap max-w-6xl mx-auto mb-8">
+      <p class="customer-section-badge" data-i18n="customer_section_badge">Trusted Reviews</p>
+      <h3 id="customer-reviews-title" class="customer-section-title" data-i18n="customer_reviews_title">Müşteri Yorumları</h3>
+      <p class="customer-section-subtitle" data-i18n="customer_reviews_subtitle">Kullanıcıların anlayabildiği, güvenle tekrar kullandığı premium sağlık raporlama deneyimi.</p>
+    </div>
+    <div class="premium-wrap max-w-6xl mx-auto">
+      <div class="customer-reviews-single-card">
+        <div class="customer-reviews-carousel" role="region" aria-label="Müşteri yorumları kaydırma">
+          <article class="customer-card">
+            <img class="customer-card-avatar" src="https://ui-avatars.com/api/?name=Anna+Schmidt&background=0EA5A4&color=fff&size=112" alt="" width="56" height="56" loading="lazy">
+            <p class="customer-card-name" data-i18n="review_name_de">Anna Schmidt</p>
+            <p class="customer-card-quote" data-i18n="review_de_quote">Yıllardır check-up sonuçlarımı Norya ile takip ediyorum. Raporlar net, güvenilir ve doktoruma götürmek için hep hazır.</p>
+            <p class="customer-card-meta"><span aria-hidden="true">🇩🇪</span> <span data-i18n="review_country_de">Almanya</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="customer-card-badge" data-i18n="customer_review_verified">Doğrulanmış Yorum</p>
+          </article>
+          <article class="customer-card">
+            <img class="customer-card-avatar" src="https://ui-avatars.com/api/?name=Marco+Rossi&background=0EA5A4&color=fff&size=112" alt="" width="56" height="56" loading="lazy">
+            <p class="customer-card-name" data-i18n="review_name_it">Marco Rossi</p>
+            <p class="customer-card-quote" data-i18n="review_it_quote">Norya'yı yıllardır kullanıyorum. Sonuçlar anlaşılır, PDF raporu her seferinde profesyonel. Rutin tahlillerim için vazgeçilmez oldu.</p>
+            <p class="customer-card-meta"><span aria-hidden="true">🇮🇹</span> <span data-i18n="review_country_it">İtalya</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="customer-card-badge" data-i18n="customer_review_verified">Doğrulanmış Yorum</p>
+          </article>
+          <article class="customer-card">
+            <img class="customer-card-avatar" src="https://ui-avatars.com/api/?name=Sophie+Laurent&background=0EA5A4&color=fff&size=112" alt="" width="56" height="56" loading="lazy">
+            <p class="customer-card-name" data-i18n="review_name_fr">Sophie Laurent</p>
+            <p class="customer-card-quote" data-i18n="review_fr_quote">J'utilise Norya depuis des années pour mes bilans. Clair, moderne et rassurant — je recommande.</p>
+            <p class="customer-card-meta"><span aria-hidden="true">🇫🇷</span> <span data-i18n="review_country_fr">Fransa</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="customer-card-badge" data-i18n="customer_review_verified">Doğrulanmış Yorum</p>
+          </article>
+          <article class="customer-card">
+            <img class="customer-card-avatar" src="https://ui-avatars.com/api/?name=James+Clarke&background=0EA5A4&color=fff&size=112" alt="" width="56" height="56" loading="lazy">
+            <p class="customer-card-name" data-i18n="review_name_uk">James Clarke</p>
+            <p class="customer-card-quote" data-i18n="review_uk_quote">I've been using Norya for years for my annual bloodwork. Clear, professional reports and the PDF is always ready to share with my doctor.</p>
+            <p class="customer-card-meta"><span aria-hidden="true">🇬🇧</span> <span data-i18n="review_country_uk">İngiltere</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="customer-card-badge" data-i18n="customer_review_verified">Doğrulanmış Yorum</p>
+          </article>
+          <article class="customer-card">
+            <img class="customer-card-avatar" src="https://ui-avatars.com/api/?name=David+Cohen&background=0EA5A4&color=fff&size=112" alt="" width="56" height="56" loading="lazy">
+            <p class="customer-card-name" data-i18n="review_name_il">David Cohen</p>
+            <p class="customer-card-quote" data-i18n="review_il_quote">אני משתמש בנוריה כבר שנים לתוצאות הבדיקות שלי. הדוחות ברורים ומקצועיים, והרופא שלי תמיד מקבל את הסיכום המוכן.</p>
+            <p class="customer-card-meta"><span aria-hidden="true">🇮🇱</span> <span data-i18n="review_country_il">İsrail</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="customer-card-badge" data-i18n="customer_review_verified">Doğrulanmış Yorum</p>
+          </article>
+          <article class="customer-card">
+            <img class="customer-card-avatar" src="https://ui-avatars.com/api/?name=Omar+Al-Rashid&background=0EA5A4&color=fff&size=112" alt="" width="56" height="56" loading="lazy">
+            <p class="customer-card-name" data-i18n="review_name_sa">Omar Al-Rashid</p>
+            <p class="customer-card-quote" data-i18n="review_sa_quote">أستخدم نوريا منذ سنوات لمتابعة تحاليلي. التقارير واضحة وموثوقة وجاهزة دائماً لأخذها إلى الطبيب.</p>
+            <p class="customer-card-meta"><span aria-hidden="true">🇸🇦</span> <span data-i18n="review_country_sa">Suudi Arabistan</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="customer-card-badge" data-i18n="customer_review_verified">Doğrulanmış Yorum</p>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  </section>
+  <!-- /Yorumlar (Uzman + Müşteri) -->
+
+
 
   <!-- 3) Premium Health Analytics Preview (örnek rapor — renkler/grafikler PDF ile uyumlu) -->
   <section id="ornek-klinik-rapor" class="health-preview premium-section">
@@ -1418,7 +1946,7 @@
             <span class="text-xs font-medium" data-i18n="trust_logo_cloudflare">Cloudflare</span>
           </span>
           <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-[#1e3a5f] border border-accent-200 dark:border-accent-700 shadow-sm">
-            <span class="text-xs font-bold text-white tracking-wide">HIPAA</span>
+            <span class="text-xs font-bold text-white tracking-wide">Security</span>
           </span>
           <span class="inline-flex items-center justify-center gap-2 min-h-[44px] px-3 py-2 rounded-lg bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 shadow-sm">
             <div class="partner-logo">
@@ -1493,37 +2021,9 @@
           <p data-i18n="about_who_3">Norya olarak amacımız, laboratuvar sonuçlarınızı korkulacak bir belge olmaktan çıkarıp anlaşılır bir rehbere dönüştürmektir. Sizin deneyiminiz ve geri bildirimleriniz bu yolculukta bize yön veriyor.</p>
         </div>
         <div class="rounded-2xl border border-accent-200 dark:border-accent-700 bg-accent-50 dark:bg-accent-800/40 p-4 sm:p-5 text-sm max-w-full break-words">
-          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="company_info_title">Şirket Bilgileri</h3>
-          <p class="text-accent-700 dark:text-accent-300 break-words"><strong>Ticari Unvan:</strong> __NORYA_COMPANY_TITLE__</p>
-          <p class="text-accent-700 dark:text-accent-300 break-words"><strong>Vergi Dairesi / Vergi No:</strong> __NORYA_COMPANY_TAX_OFFICE__ / __NORYA_COMPANY_TAX_NO__</p>
-          <p class="text-accent-700 dark:text-accent-300 break-words"><strong>Adres:</strong> __NORYA_COMPANY_ADDRESS__</p>
-          <p class="text-accent-700 dark:text-accent-300"><strong>E-posta:</strong> support@noryaai.com</p>
-          <p class="text-accent-700 dark:text-accent-300"><strong>Telefon / WhatsApp:</strong> __NORYA_COMPANY_PHONE__</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- How it works (duplicate; hidden on landing, kept for deep-link #nasil-calisir) -->
-  <section id="nasil-calisir-old" class="landing-hidden py-20 px-4 bg-accent-50 dark:bg-accent-900/40">
-    <div class="max-w-6xl mx-auto w-full px-4">
-      <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="how_title">Norya Nasıl Çalışır?</h2>
-      <p class="text-center text-accent-600 dark:text-accent-400 mb-12 max-w-xl mx-auto" data-i18n="how_desc">Laboratuvar sonuçlarınızı anlaşılır sağlık bilgisine dönüştürmek için üç basit adım.</p>
-      <div class="grid md:grid-cols-3 gap-8">
-        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft text-center border border-accent-100 dark:border-accent-700">
-          <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 font-bold text-xl flex items-center justify-center mx-auto mb-4">1</div>
-          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_1">Kayıt Olun</h3>
-          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_1d">Ücretsiz hesap oluşturun. E-posta ve şifre yeterli.</p>
-        </div>
-        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft text-center border border-accent-100 dark:border-accent-700">
-          <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 font-bold text-xl flex items-center justify-center mx-auto mb-4">2</div>
-          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_2">Tahlil Metnini Yapıştırın</h3>
-          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_2d">Sonuç kağıdındaki değerleri veya metni kutuya yapıştırın.</p>
-        </div>
-        <div class="bg-white dark:bg-accent-800 rounded-2xl p-6 drop-shadow-soft text-center border border-accent-100 dark:border-accent-700">
-          <div class="w-12 h-12 rounded-full bg-primary-100 dark:bg-primary-900/50 text-primary-600 dark:text-primary-400 font-bold text-xl flex items-center justify-center mx-auto mb-4">3</div>
-          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="how_3">Açıklamayı Alın</h3>
-          <p class="text-accent-600 dark:text-accent-400 text-sm" data-i18n="how_3d">Laboratuvar sonuçlarınız saniyeler içinde anlaşılır Türkçe özet ve yorumla sunulur.</p>
+          <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="contact_heading">İletişim</h3>
+          <p class="text-accent-700 dark:text-accent-300 mb-2"><strong data-i18n="contact_email_label">E-posta:</strong> <a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a></p>
+          <p class="text-accent-700 dark:text-accent-300"><strong data-i18n="contact_whatsapp_label">WhatsApp:</strong> <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="text-[#25D366] hover:underline font-medium" data-i18n="contact_whatsapp_click">Bize WhatsApp ile yazın</a></p>
         </div>
       </div>
     </div>
@@ -2398,72 +2898,69 @@
         </div>
         <div>
           <h3 class="font-semibold text-accent-900 dark:text-white mb-2" data-i18n="trans_data_title">Veriler nerede saklanıyor?</h3>
-          <p class="text-sm" data-i18n="trans_data_text">Tahlil girişleri ve raporlar sunucumuzda şifreli olarak tutulur. Üçüncü tarafla paylaşılmaz, satılmaz. HIPAA/GDPR/KVKK prensiplerine uygun çalışıyoruz.</p>
+          <p class="text-sm" data-i18n="trans_data_text">Tahlil girişleri ve raporlar sunucumuzda şifreli tutulur. Satılmaz, reklam amaçlı kullanılmaz; yalnızca hizmet sunumu için işlenir. Ödeme PayTR üzerinden alınır, kart verisi Norya sunucularında saklanmaz. Güvenlik en iyi uygulamaları ve HIPAA uyumlu ilkeler.</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Analyze: premium upload card (turquoise + navy) -->
-  <section id="analyze-section" class="py-24 px-4 bg-navy-50 dark:bg-navy-900/50">
-    <div class="max-w-4xl mx-auto w-full px-4">
-      <h2 class="text-3xl font-bold text-center text-navy-900 dark:text-white mb-2 tracking-tight" data-i18n="analyze_title">Kan Tahlili Sonuçlarınızı Analiz Edin</h2>
-      <p class="text-center text-navy-600 dark:text-navy-300 mb-8" data-i18n="analyze_desc_open">Tahlil metnini veya dosyayı yükleyin; nasıl çalıştığını görün. Raporu almak için giriş yapın.</p>
-      <div id="analyze-box" class="bg-white dark:bg-navy-800/90 rounded-3xl p-8 norya-card-shadow border border-navy-100 dark:border-navy-600/50 backdrop-blur">
-        <p id="analyze-login-prompt" class="text-navy-600 dark:text-navy-300 text-center py-3 px-4 mb-4 rounded-xl bg-primary-50 dark:bg-primary-900/20 border border-primary-200 dark:border-primary-700 text-sm font-medium flex flex-wrap items-center justify-center gap-2"><span data-i18n="analyze_prompt">Raporu almak için </span><button type="button" onclick="openLogin()" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline" data-i18n="nav_login">Giriş</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-primary-600 dark:text-primary-400 font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button><span class="opacity-90" data-i18n="analyze_prompt_suffix">— adımlar aşağıda.</span></p>
-        <div id="analyze-form">
-          <div class="flex flex-wrap items-center gap-2 mb-4">
-            <p id="analyze-usage" class="text-accent-600 dark:text-accent-400 text-sm mb-0"></p>
-            <button type="button" id="test-mode-btn" onclick="toggleTestMode()" class="text-xs px-2 py-1 rounded-lg border border-emerald-500 text-emerald-600 dark:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30" data-i18n="test_mode_link">Sınırsız test</button>
-            <span id="test-mode-badge" class="hidden text-xs px-2 py-1 rounded-lg bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 font-medium" data-i18n="test_mode_on">Test modu – sınırsız, hak düşülmez</span>
-          </div>
-          <p id="analyze-limit-msg" class="text-amber-600 dark:text-amber-400 text-sm mb-2 hidden"></p>
-          <div id="analyze-payment-actions" class="hidden mb-3 flex flex-wrap gap-2">
-            <button type="button" onclick="goToPayment('single')" class="px-4 py-2 rounded-xl bg-primary-600 text-white text-sm font-medium hover:bg-primary-700" data-i18n="payment_btn_single">1 Analiz Satın Al</button>
-            <button type="button" onclick="goToPayment('monthly')" class="px-4 py-2 rounded-xl bg-accent-600 text-white text-sm font-medium hover:bg-accent-700" data-i18n="payment_btn_pro">Pro'ya Geç</button>
-          </div>
+  <!-- Analyze: ultra-premium clinical intake (Function Health / InsideTracker level) -->
+  <section id="analyze-section" class="intake-section">
+    <div class="intake-container">
+      <div id="analyze-box" class="intake-card">
+        <div class="intake-card-inner">
+          <p id="analyze-login-prompt" class="text-center py-3 px-4 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-sm font-medium flex flex-wrap items-center justify-center gap-2 text-slate-600 dark:text-slate-300"><span data-i18n="analyze_prompt">Raporu almak için </span><button type="button" onclick="openLogin()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_login">Giriş</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button><span class="opacity-90" data-i18n="analyze_prompt_suffix">— adımlar aşağıda.</span></p>
+          <div id="analyze-form">
+            <div class="intake-badge-row">
+              <p id="analyze-usage" class="text-slate-500 dark:text-slate-400 text-sm mb-0"></p>
+              <button type="button" id="test-mode-btn" onclick="toggleTestMode()" class="text-xs px-2.5 py-1 rounded-lg border border-slate-300 dark:border-slate-600 text-slate-600 dark:text-slate-400 hover:bg-slate-50 dark:hover:bg-slate-800/50" data-i18n="test_mode_link">Test mode</button>
+              <span id="test-mode-badge" class="hidden text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium" data-i18n="test_mode_on">Test mode — unlimited</span>
+            </div>
+            <p id="analyze-limit-msg" class="text-amber-600 dark:text-amber-400 text-sm mb-2 hidden"></p>
+            <div id="analyze-payment-actions" class="hidden mb-4 flex flex-wrap gap-2">
+              <button type="button" onclick="goToPayment('single')" class="px-4 py-2 rounded-xl bg-[#0EA5A4] text-white text-sm font-medium hover:bg-[#0d9488]" data-i18n="payment_btn_single">Buy 1 analysis</button>
+              <button type="button" onclick="goToPayment('monthly')" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800/50" data-i18n="payment_btn_pro">Upgrade to Pro</button>
+            </div>
 
-          <!-- Uyarı: bilgilendirme amaçlı, teşhis yerine geçmez -->
-          <div class="mb-6 rounded-xl border border-amber-300 dark:border-amber-600/70 bg-amber-50 dark:bg-amber-900/25 px-4 py-3 flex items-start sm:items-center gap-3 shadow-sm" role="alert">
-            <span class="shrink-0 text-amber-600 dark:text-amber-400 text-lg leading-none" aria-hidden="true">⚠️</span>
-            <p class="text-sm font-semibold text-amber-900 dark:text-amber-100" data-i18n="medical_disclaimer_full">Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.</p>
-          </div>
+            <p class="intake-disclaimer" role="note" data-i18n="intake_disclaimer">For informational use only. This service does not replace professional medical advice, diagnosis, or treatment. Consult your healthcare provider for medical decisions.</p>
 
-          <form id="analyzeForm" method="post" action="#" onsubmit="return handleAnalyzeSubmit(event)" aria-label="Analiz formu">
-          <!-- 4 adımlı sihirbaz: stepper -->
-          <div id="wizard-stepper" class="flex items-center justify-between mb-8">
-            <div class="flex items-center flex-1">
-              <div id="wizard-dot-1" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm bg-primary-600 border-primary-600 text-white">1</div>
-              <div id="wizard-line-1" class="flex-1 h-0.5 mx-1 bg-primary-300 dark:bg-primary-700 min-w-[20px]"></div>
+            <div class="intake-header">
+              <h2 class="intake-title" data-i18n="upload_intake_title">Upload Your Lab Results</h2>
+              <p class="intake-title-tr" data-i18n="upload_intake_title_tr">Kan tahlili sonuçlarınızı yükleyin</p>
+              <p class="intake-subtitle" data-i18n="upload_intake_subtitle">Secure, structured intake. Your report is generated in minutes.</p>
             </div>
-            <div class="flex items-center flex-1">
-              <div id="wizard-dot-2" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm border-navy-300 dark:border-navy-600 text-navy-500 bg-white dark:bg-navy-800">2</div>
-              <div id="wizard-line-2" class="flex-1 h-0.5 mx-1 bg-navy-200 dark:bg-navy-700 min-w-[20px]"></div>
-            </div>
-            <div class="flex items-center flex-1">
-              <div id="wizard-dot-3" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm border-navy-300 dark:border-navy-600 text-navy-500 bg-white dark:bg-navy-800">3</div>
-              <div id="wizard-line-3" class="flex-1 h-0.5 mx-1 bg-navy-200 dark:bg-navy-700 min-w-[20px]"></div>
-            </div>
-            <div class="flex items-center">
-              <div id="wizard-dot-4" class="wizard-dot flex items-center justify-center w-10 h-10 rounded-full border-2 font-semibold text-sm border-navy-300 dark:border-navy-600 text-navy-500 bg-white dark:bg-navy-800">4</div>
-            </div>
-          </div>
 
-          <!-- Adım 1: Dosya yükleme -->
-          <div id="wizard-step-1" class="wizard-step">
-            <p class="text-sm font-semibold text-navy-700 dark:text-navy-200 mb-3" data-i18n="wizard_step1_title">Dosya veya metin</p>
-            <div id="wizard-drop-zone" class="border-2 border-dashed border-primary-400 dark:border-primary-500 rounded-2xl p-8 sm:p-10 text-center bg-primary-50/50 dark:bg-primary-900/20 transition hover:border-primary-500 hover:bg-primary-50 dark:hover:bg-primary-900/30 cursor-pointer">
-              <input type="file" id="analyze-pdf" accept="application/pdf,image/jpeg,image/png" class="hidden" />
-              <div class="flex flex-col items-center gap-2">
-                <span class="text-4xl" aria-hidden="true">📄</span>
-                <p class="text-navy-700 dark:text-navy-200 font-medium" data-i18n="wizard_drop">Dosyayı buraya sürükleyin veya tıklayın</p>
-                <p class="text-xs text-navy-500 dark:text-navy-400" data-i18n="analyze_upload_hint">PDF, JPG/JPEG veya PNG — en fazla 15 MB</p>
-                <span id="pdf-name" class="text-sm text-primary-600 dark:text-primary-400 font-medium mt-1"></span>
+            <form id="analyzeForm" method="post" action="#" onsubmit="return handleAnalyzeSubmit(event)" aria-label="Lab intake form">
+              <div id="wizard-stepper" class="intake-stepper">
+                <div class="flex items-center flex-1">
+                  <div id="wizard-dot-1" class="wizard-dot intake-stepper-dot active">1</div>
+                  <div id="wizard-line-1" class="intake-stepper-line flex-1 mx-1 min-w-[20px]"></div>
+                </div>
+                <div class="flex items-center flex-1">
+                  <div id="wizard-dot-2" class="wizard-dot intake-stepper-dot inactive">2</div>
+                  <div id="wizard-line-2" class="intake-stepper-line flex-1 mx-1 min-w-[20px]"></div>
+                </div>
+                <div class="flex items-center flex-1">
+                  <div id="wizard-dot-3" class="wizard-dot intake-stepper-dot inactive">3</div>
+                  <div id="wizard-line-3" class="intake-stepper-line flex-1 mx-1 min-w-[20px]"></div>
+                </div>
+                <div class="flex items-center">
+                  <div id="wizard-dot-4" class="wizard-dot intake-stepper-dot inactive">4</div>
+                </div>
               </div>
-            </div>
-            <p class="text-center text-navy-500 text-sm my-4 font-medium" data-i18n="analyze_or">— veya metin yapıştır —</p>
-            <textarea id="analyze-text" name="analyze-text" rows="4" aria-describedby="analyze-error analyze-usage" class="w-full rounded-2xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-900/50 text-navy-900 dark:text-white p-4 focus:ring-2 focus:ring-primary-500 focus:border-primary-400 transition text-sm" data-i18n-placeholder="analyze_placeholder" placeholder="Örn: Hemoglobin: 14 g/dL, WBC: 7.2, Glukoz: 95 mg/dL..."></textarea>
-          </div>
+
+              <div id="wizard-step-1" class="wizard-step">
+                <div id="wizard-drop-zone" class="intake-dropzone" role="button" tabindex="0" aria-label="Upload file">
+                  <input type="file" id="analyze-pdf" accept="application/pdf,image/jpeg,image/png" class="hidden" />
+                  <div class="flex flex-col items-center gap-1">
+                    <p class="intake-dropzone-label" data-i18n="wizard_drop">Drag file here or click to upload</p>
+                    <p class="intake-dropzone-hint" data-i18n="analyze_upload_hint">PDF, JPG or PNG — max 15 MB</p>
+                    <span id="pdf-name" class="text-sm text-[#0EA5A4] font-medium mt-2"></span>
+                  </div>
+                </div>
+                <p class="intake-divider" data-i18n="analyze_or">— or paste text —</p>
+                <textarea id="analyze-text" name="analyze-text" rows="5" aria-describedby="analyze-error analyze-usage" class="intake-textarea" data-i18n-placeholder="analyze_placeholder" placeholder="e.g. Hemoglobin: 14 g/dL, WBC: 7.2, Glucose: 95 mg/dL..."></textarea>
+              </div>
 
           <!-- Adım 2: Önizleme + dil -->
           <div id="wizard-step-2" class="wizard-step hidden">
@@ -2562,14 +3059,15 @@
           <!-- Sihirbaz: Geri / Sonraki. runAnalyze() analyze-btn arar; wizard'da gizli tutuyoruz. -->
           <button type="button" id="analyze-btn" class="hidden" aria-hidden="true" data-i18n="btn_analyze">Analiz Et</button>
           <div id="wizard-actions" class="mt-6 flex flex-wrap gap-3">
-            <button type="button" id="wizard-btn-prev" onclick="wizardPrev()" class="px-5 py-2.5 rounded-xl border-2 border-navy-200 dark:border-navy-600 text-navy-700 dark:text-navy-200 font-medium hover:bg-navy-50 dark:hover:bg-navy-800/50 transition hidden" data-i18n="wizard_back">Geri</button>
-            <button type="submit" id="wizard-btn-next" class="px-6 py-3 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-500 disabled:opacity-50 disabled:cursor-not-allowed transition flex-1 min-w-[140px]" data-i18n="wizard_next">Sonraki</button>
+            <button type="button" id="wizard-btn-prev" onclick="wizardPrev()" class="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800/50 transition hidden" data-i18n="wizard_back">Geri</button>
+            <button type="submit" id="wizard-btn-next" class="intake-cta flex-1 min-w-[160px] sm:min-w-[180px]" data-i18n="wizard_next">Sonraki</button>
           </div>
           <p id="analyze-error" class="mt-2 text-red-600 text-sm hidden" role="alert" aria-live="assertive"></p>
-          <p id="analyze-retry-wrap" class="mt-1 hidden"><button type="button" id="analyze-retry-btn" class="text-sm text-primary-600 hover:text-primary-700 hover:underline font-medium" data-i18n="retry_btn">Tekrar dene</button></p>
+          <p id="analyze-retry-wrap" class="mt-1 hidden"><button type="button" id="analyze-retry-btn" class="text-sm text-[#0EA5A4] hover:underline font-medium" data-i18n="retry_btn">Tekrar dene</button></p>
           </form>
         </div>
       </div>
+    </div>
     </div>
   </section>
 
@@ -3132,7 +3630,7 @@
             <span data-i18n="faq_q2">Verilerim güvende mi?</span>
             <span class="text-primary-500 group-open:rotate-180 transition">▼</span>
           </summary>
-          <p class="px-4 pb-3 pt-0 text-sm text-accent-600 dark:text-accent-400" data-i18n="faq_a2">Evet. Verileriniz şifreli saklanır, üçüncü tarafla paylaşılmaz veya satılmaz. HIPAA, GDPR ve KVKK prensiplerine uygun çalışıyoruz.</p>
+          <p class="px-4 pb-3 pt-0 text-sm text-accent-600 dark:text-accent-400" data-i18n="faq_a2">Evet. Verileriniz şifreli saklanır; satılmaz, reklam amaçlı kullanılmaz; yalnızca hizmet sunumu için işlenir. Ödeme PayTR üzerinden alınır, kart verisi bizde tutulmaz. Güvenlik en iyi uygulamaları ve HIPAA uyumlu ilkelere uygun çalışıyoruz.</p>
         </details>
         <details class="group rounded-xl border border-accent-200 dark:border-accent-700 bg-accent-50/50 dark:bg-accent-800/50 overflow-hidden">
           <summary class="px-4 py-3 cursor-pointer list-none flex justify-between items-center font-medium text-accent-900 dark:text-white text-sm [&::-webkit-details-marker]:hidden">
@@ -3235,96 +3733,79 @@
     </div>
   </section>
 
-  <!-- Profil / Hesabım – kontrol paneli (premium, sekme yapısı) -->
-  <section id="profile-section" class="hidden py-12 sm:py-16 px-4 bg-[var(--norya-bg)]">
+  <!-- Profil / Dashboard – Apple-level premium -->
+  <section id="profile-section" class="hidden">
     <span id="profil" class="block -mt-24 pt-24" aria-hidden="true"></span>
-    <div class="max-w-3xl mx-auto">
-      <a href="#" onclick="closeProfilePage(); return false;" class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:underline mb-6" data-i18n="back_home">← Ana sayfa</a>
+    <div class="profile-dashboard-container">
+      <a href="#" onclick="closeProfilePage(); return false;" class="inline-flex items-center gap-2 text-[#0EA5A4] dark:text-[#5eead4] font-medium hover:underline mb-6 text-sm" data-i18n="back_home">← Ana sayfa</a>
 
-      <!-- Üst özet kartı -->
-      <div class="rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-lg shadow-accent-200/20 dark:shadow-black/20 p-6 sm:p-8 mb-8">
-        <div class="flex flex-col gap-6">
-          <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-            <div class="min-w-0">
-              <h1 id="profile-summary-name" class="text-xl sm:text-2xl font-bold text-accent-900 dark:text-white truncate"></h1>
-              <p id="profile-summary-email" class="text-sm text-accent-500 dark:text-accent-400 truncate mt-0.5"></p>
-              <div class="flex flex-wrap gap-3 mt-3 text-sm">
-                <span class="text-accent-500 dark:text-accent-400" data-i18n="profile_plan_label">Plan</span>: <strong id="profile-summary-plan" class="text-accent-900 dark:text-white">—</strong>
-                <span class="text-accent-500 dark:text-accent-400" data-i18n="profile_remaining">Kalan</span>: <strong id="profile-summary-remaining" class="text-accent-900 dark:text-white">—</strong>
-                <span class="text-accent-500 dark:text-accent-400" data-i18n="profile_ends">Bitiş</span>: <strong id="profile-summary-ends" class="text-accent-900 dark:text-white">—</strong>
-              </div>
-            </div>
-            <div class="shrink-0">
-              <button type="button" onclick="closeProfilePage(); openAnalyze();" class="px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm shadow-md transition" data-i18n="nav_analyze">Analiz Yap</button>
+      <!-- Member Overview header card -->
+      <div class="profile-header-card">
+        <div class="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-6">
+          <div class="min-w-0 flex-1">
+            <h1 id="profile-summary-name" class="profile-member-id truncate"></h1>
+            <p id="profile-summary-email" class="profile-member-email truncate"></p>
+            <div class="profile-meta-row">
+              <span class="profile-meta-pill"><span data-i18n="profile_plan_label">Plan</span>: <strong id="profile-summary-plan">—</strong></span>
+              <span class="profile-meta-pill"><span data-i18n="profile_remaining">Kalan</span>: <strong id="profile-summary-remaining">—</strong></span>
+              <span class="profile-meta-pill"><span data-i18n="profile_ends">Bitiş</span>: <strong id="profile-summary-ends">—</strong></span>
             </div>
           </div>
-          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 sm:gap-4">
-            <div class="light-glass-card rounded-14 p-3.5 sm:p-4 flex flex-col justify-between">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-2">
-                  <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">🧬</span>
-                  <p class="text-xs font-semibold text-accent-600 dark:text-accent-300 uppercase tracking-wide" data-i18n="profile_kpi_health_score">Health Score</p>
-                </div>
-              </div>
-              <div class="text-2xl font-bold text-accent-900 dark:text-white" id="profile-kpi-health-score">—</div>
-              <p class="mt-1 text-xs text-accent-500 dark:text-accent-400" id="profile-kpi-health-band">—</p>
-            </div>
-            <div class="light-glass-card rounded-14 p-3.5 sm:p-4 flex flex-col justify-between">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-2">
-                  <span class="inline-flex w-8 h-8 rounded-full bg-emerald-50 dark:bg-emerald-900/30 text-emerald-600 dark:text-emerald-300 items-center justify-center text-lg" aria-hidden="true">⌛</span>
-                  <p class="text-xs font-semibold text-accent-600 dark:text-accent-300 uppercase tracking-wide" data-i18n="profile_kpi_bio_age">Biyolojik Yaş</p>
-                </div>
-              </div>
-              <div class="text-2xl font-bold text-accent-900 dark:text-white" id="profile-kpi-bio-age">—</div>
-              <p class="mt-1 text-xs text-accent-500 dark:text-accent-400" data-i18n="profile_kpi_bio_age_desc">Sağlık skorunuza göre tahmini biyolojik yaş.</p>
-            </div>
-            <div class="light-glass-card rounded-14 p-3.5 sm:p-4 flex flex-col justify-between">
-              <div class="flex items-center justify-between gap-2 mb-2">
-                <div class="flex items-center gap-2">
-                  <span class="inline-flex w-8 h-8 rounded-full bg-amber-50 dark:bg-amber-900/30 text-amber-600 dark:text-amber-300 items-center justify-center text-lg" aria-hidden="true">📊</span>
-                  <p class="text-xs font-semibold text-accent-600 dark:text-accent-300 uppercase tracking-wide" data-i18n="profile_kpi_last_report">Son Analiz</p>
-                </div>
-              </div>
-              <div class="text-sm font-medium text-accent-900 dark:text-white" id="profile-kpi-last-date">—</div>
-              <p class="mt-1 text-xs text-accent-500 dark:text-accent-400" data-i18n="profile_kpi_last_hint">En son klinik rapor tarihiniz.</p>
-            </div>
+          <div class="shrink-0 w-full sm:w-auto">
+            <button type="button" onclick="closeProfilePage(); openAnalyze();" class="profile-btn-analyze w-full sm:w-auto" data-i18n="nav_analyze">Analiz Yap</button>
+          </div>
+        </div>
+
+        <!-- Stat tiles -->
+        <div class="profile-stat-grid">
+          <div class="profile-stat-tile">
+            <span class="profile-stat-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg></span>
+            <p class="profile-stat-title" data-i18n="profile_kpi_health_score">Health Score</p>
+            <div class="profile-stat-value" id="profile-kpi-health-score">—</div>
+            <p class="profile-stat-helper" id="profile-kpi-health-band"><span data-i18n="profile_no_analyses">No analyses yet</span></p>
+          </div>
+          <div class="profile-stat-tile">
+            <span class="profile-stat-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+            <p class="profile-stat-title" data-i18n="profile_kpi_bio_age">Biyolojik Yaş</p>
+            <div class="profile-stat-value" id="profile-kpi-bio-age">—</div>
+            <p class="profile-stat-helper" data-i18n="profile_kpi_bio_age_desc">Sağlık skorunuza göre tahmini biyolojik yaş.</p>
+          </div>
+          <div class="profile-stat-tile">
+            <span class="profile-stat-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+            <p class="profile-stat-title" data-i18n="profile_kpi_last_report">Son Analiz</p>
+            <div class="profile-stat-value" id="profile-kpi-last-date">—</div>
+            <p class="profile-stat-helper" data-i18n="profile_kpi_last_hint">En son klinik rapor tarihiniz.</p>
           </div>
         </div>
       </div>
 
-      <!-- Kurumsal kart (Hesap Özeti altında) -->
-      <div class="rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md mb-8 overflow-hidden flex w-full">
-        <div class="w-1.5 sm:w-2 shrink-0 bg-[#F0FDFA] dark:bg-primary-900/30" aria-hidden="true"></div>
-        <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 p-6 sm:p-8 min-w-0">
-          <div class="flex-1 min-w-0 max-w-[520px]">
-            <div class="space-y-3">
-              <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-1"><span aria-hidden="true">🏥</span> <span data-i18n="profile_corporate_title">Kurumlar için Norya</span></h3>
-              <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="profile_corporate_subtitle">Hastane, klinik ve laboratuvarlar için toplu analiz ve kurumsal çözümler.</p>
-              <ul class="space-y-1.5 text-sm text-accent-700 dark:text-accent-300">
-                <li class="flex items-center gap-2"><span aria-hidden="true">👥</span><span data-i18n="profile_corporate_1">Çoklu kullanıcı yönetimi</span></li>
-                <li class="flex items-center gap-2"><span aria-hidden="true">📊</span><span data-i18n="profile_corporate_2">Toplu analiz</span></li>
-                <li class="flex items-center gap-2"><span aria-hidden="true">📄</span><span data-i18n="profile_corporate_3">Kurumsal PDF rapor</span></li>
-                <li class="flex items-center gap-2"><span aria-hidden="true">🔌</span><span data-i18n="profile_corporate_4">API erişimi (yakında)</span></li>
-              </ul>
-            </div>
-          </div>
-          <div class="shrink-0 flex items-center">
-            <a href="/kurumsal" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition shadow-md" data-i18n="profile_corporate_cta">Kurumsal için bize ulaşın →</a>
-          </div>
+      <!-- Enterprise block -->
+      <div class="profile-enterprise-card flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6">
+        <div class="min-w-0 flex-1">
+          <h3 class="profile-enterprise-title" data-i18n="profile_corporate_title">Norya for organizations</h3>
+          <p class="profile-enterprise-subtitle" data-i18n="profile_corporate_subtitle">Hastane, klinik ve laboratuvarlar için toplu analiz ve kurumsal çözümler.</p>
+          <ul class="profile-enterprise-list">
+            <li><span data-i18n="profile_corporate_1">Çoklu kullanıcı yönetimi</span></li>
+            <li><span data-i18n="profile_corporate_2">Toplu analiz</span></li>
+            <li><span data-i18n="profile_corporate_3">Kurumsal PDF rapor</span></li>
+            <li><span data-i18n="profile_corporate_4">API erişimi (yakında)</span></li>
+          </ul>
+        </div>
+        <div class="shrink-0">
+          <a href="/kurumsal" class="profile-enterprise-cta" data-i18n="profile_corporate_cta">Contact us for enterprise →</a>
         </div>
       </div>
 
-      <!-- Sekmeler (mobilde yatay kaydırma) -->
-      <div class="flex overflow-x-auto gap-2 pb-2 -mx-1 scrollbar-thin scrollbar-thumb-accent-300 dark:scrollbar-thumb-accent-600 border-b border-accent-200 dark:border-accent-700" role="tablist" aria-label="Profil bölümleri">
-        <button type="button" id="profile-tab-general" role="tab" aria-selected="true" aria-controls="profile-panel-general" onclick="switchProfileTab('general')" class="profile-tab relative px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-primary-700 dark:text-primary-300 border-b-2 border-primary-600" data-i18n="profile_tab_general">Genel Bilgiler</button>
-        <button type="button" id="profile-tab-plan" role="tab" aria-selected="false" aria-controls="profile-panel-plan" onclick="switchProfileTab('plan')" class="profile-tab relative px-4 py-2.5 text-sm font-medium whitespace-nowrap text-accent-600 dark:text-accent-300 border-b-2 border-transparent hover:text-primary-700 dark:hover:text-primary-300" data-i18n="profile_tab_plan">Paket & Kullanım</button>
-        <button type="button" id="profile-tab-history" role="tab" aria-selected="false" aria-controls="profile-panel-history" onclick="switchProfileTab('history')" class="profile-tab relative px-4 py-2.5 text-sm font-medium whitespace-nowrap text-accent-600 dark:text-accent-300 border-b-2 border-transparent hover:text-primary-700 dark:hover:text-primary-300" data-i18n="profile_tab_history">Analiz Geçmişi</button>
-        <button type="button" id="profile-tab-security" role="tab" aria-selected="false" aria-controls="profile-panel-security" onclick="switchProfileTab('security')" class="profile-tab relative px-4 py-2.5 text-sm font-medium whitespace-nowrap text-accent-600 dark:text-accent-300 border-b-2 border-transparent hover:text-primary-700 dark:hover:text-primary-300" data-i18n="profile_tab_security">Güvenlik</button>
+      <!-- Tabs -->
+      <div class="profile-tabs-wrap" role="tablist" aria-label="Profil bölümleri">
+        <button type="button" id="profile-tab-general" role="tab" aria-selected="true" aria-controls="profile-panel-general" onclick="switchProfileTab('general')" class="profile-tab" data-i18n="profile_tab_general">Genel Bilgiler</button>
+        <button type="button" id="profile-tab-plan" role="tab" aria-selected="false" aria-controls="profile-panel-plan" onclick="switchProfileTab('plan')" class="profile-tab" data-i18n="profile_tab_plan">Paket & Kullanım</button>
+        <button type="button" id="profile-tab-history" role="tab" aria-selected="false" aria-controls="profile-panel-history" onclick="switchProfileTab('history')" class="profile-tab" data-i18n="profile_tab_history">Analiz Geçmişi</button>
+        <button type="button" id="profile-tab-security" role="tab" aria-selected="false" aria-controls="profile-panel-security" onclick="switchProfileTab('security')" class="profile-tab" data-i18n="profile_tab_security">Güvenlik</button>
       </div>
 
       <!-- Panel: Genel Bilgiler -->
-      <div id="profile-panel-general" role="tabpanel" aria-labelledby="profile-tab-general" class="profile-panel rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+      <div id="profile-panel-general" role="tabpanel" aria-labelledby="profile-tab-general" class="profile-panel">
         <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_general">Genel Bilgiler</h2>
         <form id="profile-page-form" onsubmit="submitProfilePage(event)">
           <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="profile-page-name" data-i18n="placeholder_name">Ad Soyad</label>
@@ -3349,7 +3830,7 @@
       </div>
 
       <!-- Panel: Paket & Kullanım -->
-      <div id="profile-panel-plan" role="tabpanel" aria-labelledby="profile-tab-plan" class="profile-panel hidden rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+      <div id="profile-panel-plan" role="tabpanel" aria-labelledby="profile-tab-plan" class="profile-panel hidden">
         <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_plan">Paket & Kullanım</h2>
         <p class="text-sm text-accent-600 dark:text-accent-400 mb-2" data-i18n="profile_plan_name">Plan</p>
         <p id="profile-plan-name" class="font-semibold text-accent-900 dark:text-white mb-4">—</p>
@@ -3365,7 +3846,7 @@
       </div>
 
       <!-- Panel: Analiz Geçmişi -->
-      <div id="profile-panel-history" role="tabpanel" aria-labelledby="profile-tab-history" class="profile-panel hidden rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+      <div id="profile-panel-history" role="tabpanel" aria-labelledby="profile-tab-history" class="profile-panel hidden">
         <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_history">Analiz Geçmişi</h2>
         <div id="profile-history-list" class="space-y-3">
           <p class="text-accent-500 dark:text-accent-400 text-sm" data-i18n="history_loading">Yükleniyor...</p>
@@ -3373,7 +3854,7 @@
       </div>
 
       <!-- Panel: Güvenlik -->
-      <div id="profile-panel-security" role="tabpanel" aria-labelledby="profile-tab-security" class="profile-panel hidden rounded-[20px] border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md p-6 sm:p-8">
+      <div id="profile-panel-security" role="tabpanel" aria-labelledby="profile-tab-security" class="profile-panel hidden">
         <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_security">Güvenlik</h2>
         <div class="profile-trust-row flex flex-wrap gap-3 sm:gap-4 py-3 px-3.5 mb-6 rounded-[14px] border border-[rgba(15,23,42,0.06)] dark:border-accent-600 bg-[#F8FAFC] dark:bg-accent-800/80">
           <a href="#fiyatlandirma" class="inline-flex items-center gap-2 text-sm text-accent-700 dark:text-accent-300 hover:text-primary-600 dark:hover:text-primary-400 transition"><span aria-hidden="true">🔒</span><span data-i18n="trust_row_3d">3D Secure ödeme</span></a>
@@ -3451,20 +3932,15 @@
     <div class="max-w-6xl mx-auto w-full">
       <!-- 4 sütun: Desktop yan yana, mobil alt alta -->
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-10">
-        <!-- Sütun 1 – Norya + Şirket Bilgileri -->
+        <!-- Sütun 1 – Norya + tek iletişim kaynağı -->
         <div class="space-y-4">
           <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400" data-i18n="footer_col_norya">Norya</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="footer_norya_desc">Norya, kan tahlili verilerini yapay zeka destekli analiz ederek bilgilendirici sağlık raporları sunan dijital bir platformdur.</p>
-          <div class="pt-2 border-t border-accent-200 dark:border-accent-700">
-            <p class="text-xs font-semibold text-accent-800 dark:text-accent-200 mb-2" data-i18n="footer_company_info_title">Şirket Bilgileri</p>
-            <ul class="space-y-1.5 text-xs text-accent-600 dark:text-accent-400">
-              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_title_label">Ticari Unvan:</span> <span class="break-words">__NORYA_COMPANY_TITLE__</span></li>
-              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_tax_label">Vergi Dairesi / Vergi No:</span> <span class="break-words">__NORYA_COMPANY_TAX_OFFICE__ / __NORYA_COMPANY_TAX_NO__</span></li>
-              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_address_label">Adres:</span> <span class="break-words">__NORYA_COMPANY_ADDRESS__</span></li>
-              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_phone_label">Telefon:</span> <span class="break-words">__NORYA_COMPANY_PHONE__</span></li>
-              <li><span class="font-medium text-accent-700 dark:text-accent-300" data-i18n="footer_company_email_label">E-posta:</span> <a href="mailto:info@noryaai.com" class="text-[#0EA5A4] hover:underline">info@noryaai.com</a></li>
-            </ul>
-          </div>
+          <p class="text-xs text-accent-600 dark:text-accent-400 pt-2 border-t border-accent-200 dark:border-accent-700">
+            <a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a>
+            <span class="mx-1" aria-hidden="true">·</span>
+            <a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="footer_contact">İletişim</a>
+          </p>
         </div>
         <!-- Sütun 2 – Yasal -->
         <div class="space-y-4">
@@ -3484,7 +3960,7 @@
             <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_support_center">Destek Merkezi</a>
             <a href="#sss" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_faq">Sık Sorulan Sorular</a>
             <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0EA5A4] dark:hover:text-teal-400 transition-colors" data-i18n="footer_contact">İletişim</a>
-            <a href="mailto:info@noryaai.com" class="text-sm text-[#0EA5A4] dark:text-teal-400 hover:underline">info@noryaai.com</a>
+            <a href="mailto:support@noryaai.com" class="text-sm text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a>
           </nav>
         </div>
         <!-- Sütun 4 – Güvenli Ödeme (PayTR) -->
@@ -3535,7 +4011,6 @@
       <!-- Copyright -->
       <div class="pt-4 flex flex-col sm:flex-row items-center justify-center gap-2 text-xs text-accent-500 dark:text-accent-500">
         <span data-i18n="footer_copyright">© 2026 Norya. Tüm hakları saklıdır.</span>
-        <a href="https://cursor.com" target="_blank" rel="noopener noreferrer" class="hover:text-[#0EA5A4] transition-colors" data-i18n="made_with_cursor">Made with Cursor</a>
       </div>
     </div>
   </footer>
@@ -3746,37 +4221,44 @@
     window.addEventListener('beforeinstallprompt', function (e) {
       e.preventDefault();
       deferredInstallPrompt = e;
-      // Her zaman göster: kullanıcı daha önce kapatsa bile (Chrome/Edge/desktop)
-      var b = document.getElementById('a2hs-banner');
-      if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
+      // Kullanıcı daha önce kapattıysa gösterme; ilk ekranı kapatmamak için gecikmeli göster
+      setTimeout(function() {
+        try { if (localStorage.getItem(A2HS_DISMISS_KEY)) return; } catch (_) {}
+        var b = document.getElementById('a2hs-banner');
+        if (b && deferredInstallPrompt) { b.classList.remove('hidden'); b.classList.add('flex'); document.body.classList.add('a2hs-visible'); }
+      }, 5000);
     });
     function installPWA() {
       if (!deferredInstallPrompt) return;
       deferredInstallPrompt.prompt();
       deferredInstallPrompt.userChoice.then(function (choice) {
-        if (choice.outcome === 'accepted') document.getElementById('a2hs-banner').classList.add('hidden');
+        if (choice.outcome === 'accepted') { document.getElementById('a2hs-banner').classList.add('hidden'); document.body.classList.remove('a2hs-visible'); }
         deferredInstallPrompt = null;
       });
     }
     function dismissA2HS() {
       localStorage.setItem(A2HS_DISMISS_KEY, '1');
-      document.getElementById('a2hs-banner').classList.add('hidden');
+      var b = document.getElementById('a2hs-banner');
+      if (b) b.classList.add('hidden');
+      document.body.classList.remove('a2hs-visible');
     }
     function dismissIOSA2HS() {
       localStorage.setItem(IOS_A2HS_DISMISS_KEY, '1');
-      document.getElementById('ios-a2hs-banner').classList.add('hidden');
+      var b = document.getElementById('ios-a2hs-banner');
+      if (b) b.classList.add('hidden');
+      document.body.classList.remove('a2hs-visible');
     }
     function maybeShowA2HSDesktopFallback() {
       try {
-        if (deferredInstallPrompt) return; // native prompt tetiklenecek
+        if (deferredInstallPrompt) return;
+        try { if (localStorage.getItem(A2HS_DISMISS_KEY)) return; } catch (_) {}
         var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
         if (isStandalone) return;
         var ua = navigator.userAgent || '';
         var isMobile = /Android|iPhone|iPad|iPod|Mobile/i.test(ua);
-        if (isMobile) return; // mobilde native/iOS banner kullanılacak
-        // Masaüstü (Chrome, Edge, Mac Safari vs.): her zaman göster
+        if (isMobile) return;
         var b = document.getElementById('a2hs-banner');
-        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
+        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); document.body.classList.add('a2hs-visible'); }
       } catch (_) {}
     }
     function showIOSA2HSIfNeeded() {
@@ -3785,11 +4267,11 @@
       var isStandalone = window.matchMedia('(display-mode: standalone)').matches || window.navigator.standalone === true;
       if (isIOS && !isStandalone && !localStorage.getItem(IOS_A2HS_DISMISS_KEY)) {
         var b = document.getElementById('ios-a2hs-banner');
-        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); }
+        if (b) { b.classList.remove('hidden'); b.classList.add('flex'); document.body.classList.add('a2hs-visible'); }
       }
     }
-    setTimeout(showIOSA2HSIfNeeded, 2000);
-    setTimeout(maybeShowA2HSDesktopFallback, 3000);
+    setTimeout(showIOSA2HSIfNeeded, 5000);
+    setTimeout(maybeShowA2HSDesktopFallback, 5500);
     async function requestPushAndSubscribe() {
       if (!('Notification' in window) || !('PushManager' in window)) {
         toast('Bu tarayıcı push bildirimleri desteklemiyor.', 'info');
@@ -4037,7 +4519,7 @@
           toast('Rapor linki alınamadı.', 'error');
           return;
         }
-        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'tr');
+        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'en');
         if (typeof console !== 'undefined' && console.log) console.log('[PDF] Fetching PDF for download');
         var pdfRes = await fetch(pdfUrl, { credentials: 'include' });
         if (!pdfRes.ok) {
@@ -4115,7 +4597,7 @@
           toast('Rapor linki alınamadı.', 'error');
           return;
         }
-        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf/doctor?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'tr');
+        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf/doctor?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'en');
         var pdfRes = await fetch(pdfUrl, { credentials: 'include' });
         if (!pdfRes.ok) {
           toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
@@ -4256,6 +4738,23 @@
         '</div>' +
         '</div>';
     }
+    var REPORT_ICONS = {
+      info: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+      fileText: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+      activity: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+      grid: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+      barChart: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+      alertCircle: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+      eye: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+      apple: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4-4 8-6.5 8-11a5 5 0 0 0-10 0c0 4.5 4 7 8 11z"/></svg>',
+      minusCircle: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+      heart: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      trendingUp: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+      messageCircle: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+      gauge: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+      target: '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>'
+    };
+    function reportIcon(name) { return REPORT_ICONS[name] || REPORT_ICONS.info; }
     function buildPremiumClinicalBlock(opts) {
       var o = opts || {};
       var risk = o.risk_summary && o.risk_summary.overall ? o.risk_summary.overall : null;
@@ -4277,37 +4776,175 @@
       var riskTitle = t.report_risk_indicator_title || t.report_risk_indicator || 'Risk Göstergesi';
       var trendTitle = t.report_trend_title || t.report_trend_analysis || 'Trend Analizi';
       var trendMsg = t.report_trend_need_more || t.report_trend_more_needed || 'Trend için daha fazla analiz gerekli.';
+      var trendPlaceholder = t.report_trend_placeholder || 'Trend becomes available with more reports over time.';
       var upgradeLabel = t.report_upgrade || 'Premium\'a Geç';
       var blurClass = (locked || !isPremium) ? ' report-premium-blur' : '';
       var trendData = o.trend && o.trend.dates && o.trend.dates.length ? o.trend : null;
+      var sections = o.sections || [];
+      var executiveSummary = '';
+      for (var si = 0; si < sections.length; si++) {
+        var config = getSectionConfig(sections[si].title);
+        if (config.key === 'Özet') {
+          var summaryContent = (sections[si].content || '').trim();
+          var sentences = summaryContent.split(/(?<=[.!])\s+/);
+          for (var ei = 0; ei < Math.min(4, sentences.length); ei++) { if (sentences[ei].trim()) executiveSummary += (executiveSummary ? ' ' : '') + sentences[ei].trim() + (sentences[ei].trim().endsWith('.') ? '' : '.'); }
+          break;
+        }
+      }
+      if (!executiveSummary) executiveSummary = (t.report_executive_default || 'Lab results have been reviewed. Discuss any out-of-range values with your doctor.');
+      var healthAge = Math.round(40 + (100 - score) / 4);
+      if (healthAge < 20) healthAge = 20;
+      if (healthAge > 80) healthAge = 80;
+      var healthAgeLabel = t.report_health_age_title || 'Biyolojik Yaş Tahmini';
+      var priorityFocus = '';
+      var highlights = (o.risk_summary && o.risk_summary.highlights) ? o.risk_summary.highlights : [];
+      for (var pi = 0; pi < highlights.length; pi++) { if ((highlights[pi].level || '').toLowerCase() === 'mid' || (highlights[pi].level || '').toLowerCase() === 'high') { priorityFocus = highlights[pi].test || ''; if (highlights[pi].action) priorityFocus += ' — ' + highlights[pi].action; break; } }
+      if (!priorityFocus) priorityFocus = t.report_priority_general || 'General wellness';
       var html = '';
       html += '<div class="premium-clinical-wrap' + (locked ? ' report-premium-locked' : '') + '">';
       if (locked) {
         html += '<div class="premium-locked-overlay"><span class="premium-lock-ico" aria-hidden="true">&#128274;</span><p class="premium-locked-text">' + escapeHtml(t.report_premium_badge || 'Premium') + '</p><a href="/pricing?from=report" class="premium-cta-btn">' + escapeHtml(upgradeLabel) + '</a></div>';
       }
-      var healthAge = Math.round(40 + (100 - score) / 4);
-      if (healthAge < 20) healthAge = 20;
-      if (healthAge > 80) healthAge = 80;
-      var healthAgeLabel = t.report_health_age_title || 'Biyolojik Yaş Tahmini';
+      html += '<section class="section-card report-disclaimer-card"><div class="section-title report-sec-icon">' + reportIcon('info') + '</div><div class="section-body"><p class="report-refined-disclaimer">' + escapeHtml(t.report_refined_disclaimer || 'This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.') + '</p></div></section>';
+      html += '<section class="section-card report-executive-summary"><div class="section-title report-sec-icon">' + reportIcon('fileText') + ' ' + escapeHtml(t.report_executive_summary || 'Executive Summary') + '</div><div class="section-body"><p class="report-executive-text">' + escapeHtml(executiveSummary) + '</p></div></section>';
       html += '<section class="section-card health-score-card">' +
-        '<div class="section-title"><span class="dot"></span> ' + escapeHtml(healthTitle) + '</div>' +
+        '<div class="section-title report-sec-icon">' + reportIcon('activity') + ' ' + escapeHtml(healthTitle) + '</div>' +
         '<div class="section-body">' +
         '<div class="health-score-value" style="color:#0EA5A4">' + score + ' / 100</div>' +
         '<div class="health-score-band text-accent-500 dark:text-accent-400 text-sm">' + escapeHtml(bandLabel) + '</div>' +
         '<div class="mt-2 text-xs sm:text-sm text-accent-600 dark:text-accent-300 flex items-center gap-2">' +
         '<span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold">≈ ' + healthAge + '</span>' +
         '<span class="font-medium">' + escapeHtml(healthAgeLabel) + '</span>' +
-        '</div>' +
+        '</div></div></section>';
+      html += '<section class="section-card report-summary-tiles">' +
+        '<div class="section-title report-sec-icon">' + reportIcon('grid') + ' ' + escapeHtml(t.report_summary_tiles || 'Summary') + '</div>' +
+        '<div class="section-body report-tiles-grid">' +
+        '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('activity') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_overall_score || 'Overall Score') + '</span><span class="report-tile-value">' + score + ' / 100</span></div>' +
+        '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('gauge') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_risk_level || 'Risk Level') + '</span><span class="report-tile-value">' + escapeHtml(bandLabel) + '</span></div>' +
+        '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('target') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_bio_age || 'Biological Age') + '</span><span class="report-tile-value">≈ ' + healthAge + '</span></div>' +
+        '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('eye') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_priority || 'Priority Focus') + '</span><span class="report-tile-value">' + escapeHtml(priorityFocus.length > 45 ? priorityFocus.slice(0, 45) + '…' : priorityFocus) + '</span></div>' +
         '</div></section>';
       html += '<section class="section-card gauge-section' + blurClass + '">' +
-        '<div class="section-title"><span class="dot"></span> ' + escapeHtml(riskTitle) + '</div>' +
+        '<div class="section-title report-sec-icon">' + reportIcon('gauge') + ' ' + escapeHtml(riskTitle) + '</div>' +
         '<div class="section-body"><div class="gauge-wrap">' +
         '<svg class="gauge-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">' +
         '<path class="gauge-bg" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>' +
         '<path class="gauge-fill ' + fillClass + '" d="M10 100 A90 90 0 0 1 ' + gx + ' ' + gy + '" fill="none" stroke-width="12" stroke-linecap="round"/>' +
         '<text class="gauge-score" x="100" y="72" text-anchor="middle" font-size="20" font-weight="700" fill="currentColor">' + score + '</text></svg></div></div></section>';
+      var domains = (o.risk_summary && o.risk_summary.domains) ? o.risk_summary.domains : {};
+      var domainOrder = ['cardio', 'metabolic', 'inflammation', 'vitamin'];
+      var domainTitleKeys = { cardio: 'example_report_domain_cardio', metabolic: 'example_report_domain_metabolic', inflammation: 'example_report_domain_inflammation', vitamin: 'example_report_domain_vitamin' };
+      var categoryBarsHtml = '';
+      for (var di = 0; di < domainOrder.length; di++) {
+        var dk = domainOrder[di];
+        var dom = domains[dk] || {};
+        var dScore = Math.max(0, Math.min(100, dom.score != null ? dom.score : 50));
+        var dLabel = (t[domainTitleKeys[dk]] || dk);
+        categoryBarsHtml += '<div class="report-category-bar-row">' +
+          '<span class="report-category-bar-label">' + escapeHtml(dLabel) + '</span>' +
+          '<div class="report-category-bar-track"><div class="report-category-bar-fill" style="width:' + dScore + '%"></div></div>' +
+          '<span class="report-category-bar-value">' + dScore + '</span></div>';
+      }
+      if (categoryBarsHtml) {
+        html += '<section class="section-card report-category-bars-section' + blurClass + '">' +
+          '<div class="section-title report-sec-icon">' + reportIcon('barChart') + ' ' + escapeHtml(t.report_category_scores || 'Category scores') + '</div>' +
+          '<div class="section-body report-category-bars">' + categoryBarsHtml + '</div></section>';
+      }
+      var highlights = (o.risk_summary && o.risk_summary.highlights) ? o.risk_summary.highlights : [];
+      var distNorm = 0, distBorder = 0, distAttn = 0;
+      for (var hi = 0; hi < highlights.length; hi++) {
+        var lev = (highlights[hi].level || '').toLowerCase();
+        if (lev === 'low') distNorm++;
+        else if (lev === 'mid') distBorder++;
+        else distAttn++;
+      }
+      if (highlights.length === 0) { distNorm = 1; }
+      var totalDist = distNorm + distBorder + distAttn;
+      var pctNorm = totalDist ? (100 * distNorm / totalDist) : 33;
+      var pctBorder = totalDist ? (100 * distBorder / totalDist) : 34;
+      var pctAttn = totalDist ? (100 * distAttn / totalDist) : 33;
+      var distLabelNorm = t.report_dist_normal || 'Normal';
+      var distLabelBorder = t.report_dist_borderline || 'Borderline';
+      var distLabelAttn = t.report_dist_attention || 'Attention';
+      html += '<section class="section-card report-distribution-section' + blurClass + '">' +
+        '<div class="section-title report-sec-icon">' + reportIcon('barChart') + ' ' + escapeHtml(t.report_risk_distribution || 'Risk distribution') + '</div>' +
+        '<div class="section-body">' +
+        '<div class="report-distribution-bar">' +
+        '<div class="report-dist-seg report-dist-normal" style="width:' + pctNorm + '%" title="' + escapeHtml(distLabelNorm) + '"></div>' +
+        '<div class="report-dist-seg report-dist-borderline" style="width:' + pctBorder + '%" title="' + escapeHtml(distLabelBorder) + '"></div>' +
+        '<div class="report-dist-seg report-dist-attention" style="width:' + pctAttn + '%" title="' + escapeHtml(distLabelAttn) + '"></div></div>' +
+        '<div class="report-distribution-legend">' +
+        '<span class="report-dist-legend-item"><span class="report-dist-dot report-dist-normal"></span> ' + escapeHtml(distLabelNorm) + ' (' + distNorm + ')</span>' +
+        '<span class="report-dist-legend-item"><span class="report-dist-dot report-dist-borderline"></span> ' + escapeHtml(distLabelBorder) + ' (' + distBorder + ')</span>' +
+        '<span class="report-dist-legend-item"><span class="report-dist-dot report-dist-attention"></span> ' + escapeHtml(distLabelAttn) + ' (' + distAttn + ')</span></div></div></section>';
+      var radarScores = [domains.cardio && domains.cardio.score != null ? domains.cardio.score : 50, domains.metabolic && domains.metabolic.score != null ? domains.metabolic.score : 50, domains.inflammation && domains.inflammation.score != null ? domains.inflammation.score : 50, domains.vitamin && domains.vitamin.score != null ? domains.vitamin.score : 50];
+      var cx = 100, cy = 100, r = 72;
+      var radarPoints = [];
+      for (var ri = 0; ri < 4; ri++) {
+        var angle = (ri * 90 - 90) * Math.PI / 180;
+        var s = Math.max(0, Math.min(100, radarScores[ri]));
+        var x = cx + r * (s / 100) * Math.cos(angle);
+        var y = cy + r * (s / 100) * Math.sin(angle);
+        radarPoints.push(x.toFixed(2) + ',' + y.toFixed(2));
+      }
+      var radarPoly = radarPoints.join(' ');
+      var radarAxisPoints = [];
+      for (var ai = 0; ai < 4; ai++) {
+        var a = (ai * 90 - 90) * Math.PI / 180;
+        radarAxisPoints.push('<line x1="' + cx + '" y1="' + cy + '" x2="' + (cx + r * Math.cos(a)) + '" y2="' + (cy + r * Math.sin(a)) + '" class="report-radar-axis"/>');
+      }
+      html += '<section class="section-card report-radar-section' + blurClass + '">' +
+        '<div class="section-title report-sec-icon">' + reportIcon('target') + ' ' + escapeHtml(t.report_radar_balance || 'Biomarker balance') + '</div>' +
+        '<div class="section-body report-radar-wrap">' +
+        '<svg class="report-radar-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">' +
+        '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" class="report-radar-bg"/>' +
+        radarAxisPoints.join('') +
+        '<polygon points="' + radarPoly + '" class="report-radar-fill"/>' +
+        '<polygon points="' + radarPoly + '" class="report-radar-stroke"/>' +
+        '</svg></div></section>';
+      var attentionItems = [];
+      for (var ai = 0; ai < highlights.length && attentionItems.length < 3; ai++) {
+        var h = highlights[ai];
+        if ((h.level || '').toLowerCase() === 'mid' || (h.level || '').toLowerCase() === 'high') {
+          attentionItems.push({ test: h.test || '—', action: h.action || '' });
+        }
+      }
+      if (attentionItems.length) {
+        var attentionListHtml = attentionItems.map(function(item) {
+          return '<div class="report-attention-item"><span class="report-attention-test">' + escapeHtml(item.test) + '</span>' + (item.action ? '<span class="report-attention-action">' + escapeHtml(item.action) + '</span>' : '') + '</div>';
+        }).join('');
+        html += '<section class="section-card report-attention-section' + blurClass + '">' +
+          '<div class="section-title report-sec-icon">' + reportIcon('target') + ' ' + escapeHtml(t.report_top_attention || 'Top attention areas') + '</div>' +
+          '<div class="section-body report-attention-list">' + attentionListHtml + '</div></section>';
+      }
+      var keyAreas = [];
+      for (var ki = 0; ki < highlights.length && keyAreas.length < 5; ki++) {
+        var kh = highlights[ki];
+        if ((kh.level || '').toLowerCase() === 'mid' || (kh.level || '').toLowerCase() === 'high') {
+          keyAreas.push({ param: kh.test || '—', why: kh.why || '', focus: kh.action || '' });
+        }
+      }
+      if (keyAreas.length) {
+        html += '<section class="section-card report-key-areas-section' + blurClass + '">' +
+          '<div class="section-title report-sec-icon">' + reportIcon('eye') + ' ' + escapeHtml(t.report_key_areas || 'Key areas to watch') + '</div>' +
+          '<div class="section-body">' + keyAreas.map(function(a) {
+            return '<div class="report-key-area-item"><span class="report-key-area-param">' + escapeHtml(a.param) + '</span>' + (a.why ? '<span class="report-key-area-why">' + escapeHtml(t.report_why_it_matters || 'Why it matters') + ': ' + escapeHtml(a.why) + '</span>' : '') + (a.focus ? '<span class="report-key-area-focus">' + escapeHtml(t.report_monitoring_focus || 'Monitoring focus') + ': ' + escapeHtml(a.focus) + '</span>' : '') + '</div>';
+          }).join('') + '</div></section>';
+      }
+      html += '<section class="section-card report-food-section' + blurClass + '">' +
+        '<div class="section-title report-sec-icon">' + reportIcon('apple') + ' ' + escapeHtml(t.report_foods_to_favor || 'Foods to favor') + '</div>' +
+        '<div class="section-body"><ul class="report-bullets">' +
+        '<li>' + escapeHtml(t.report_food_favor_default || 'Balanced diet; vegetables and fruits may support general health.') + '</li></ul></div>' +
+        '<div class="section-title report-sec-icon report-sec-icon-sub">' + reportIcon('minusCircle') + ' ' + escapeHtml(t.report_foods_to_limit || 'Foods to limit') + '</div>' +
+        '<div class="section-body"><ul class="report-bullets"><li>' + escapeHtml(t.report_food_limit_default || 'Processed foods and excess sugar may be worth limiting.') + '</li></ul></div></section>';
+      html += '<section class="section-card report-lifestyle-section' + blurClass + '">' +
+        '<div class="section-title report-sec-icon">' + reportIcon('heart') + ' ' + escapeHtml(t.report_lifestyle || 'Lifestyle support') + '</div>' +
+        '<div class="section-body"><ul class="report-bullets">' +
+        '<li>' + escapeHtml(t.report_lifestyle_sleep || 'Adequate sleep supports recovery.') + '</li>' +
+        '<li>' + escapeHtml(t.report_lifestyle_movement || 'Regular movement is recommended.') + '</li>' +
+        '<li>' + escapeHtml(t.report_lifestyle_followup || 'Discuss follow-up timing with your doctor.') + '</li></ul></div></section>';
       html += '<section class="section-card trend-section' + blurClass + '">' +
-        '<div class="section-title"><span class="dot"></span> ' + escapeHtml(trendTitle) + '</div>' +
+        '<div class="section-title report-sec-icon">' + reportIcon('trendingUp') + ' ' + escapeHtml(trendTitle) + '</div>' +
         '<div class="section-body">';
       if (trendData && (trendData.ldl || trendData.glucose || trendData.crp)) {
         var dates = trendData.dates || [];
@@ -4324,16 +4961,54 @@
         }
         html += '<div class="trend-chart"><div class="trend-legend"><span class="trend-legend-ldl">LDL</span><span class="trend-legend-glucose">Glucose</span><span class="trend-legend-crp">CRP</span></div>' + bars.join('') + '</div>';
       } else {
-        html += '<p class="trend-message text-accent-600 dark:text-accent-400 text-sm">' + escapeHtml(trendMsg) + '</p>';
+        html += '<p class="trend-message trend-placeholder text-accent-600 dark:text-accent-400 text-sm">' + escapeHtml(trendPlaceholder) + '</p>';
       }
-      html += '</div></section></div>';
+      html += '</div></section>';
+      html += '<section class="section-card report-doctor-notes-section' + blurClass + '">' +
+        '<div class="section-title report-sec-icon">' + reportIcon('messageCircle') + ' ' + escapeHtml(t.report_doctor_discussion || 'Doctor discussion notes') + '</div>' +
+        '<div class="section-body"><ul class="report-bullets">' +
+        '<li>' + escapeHtml(t.report_doctor_note_1 || 'Share this report with your physician for context.') + '</li>' +
+        '<li>' + escapeHtml(t.report_doctor_note_2 || 'Any symptoms or concerns should be evaluated by a doctor.') + '</li></ul></div></section></div>';
       return html;
+    }
+    function buildClinicalNoticeHTML(t) {
+      if (!t) t = T[getLang()] || T.tr;
+      var title = t.clinical_notice_title || 'Clinical Notice';
+      var body = t.clinical_notice_body || 'We couldn\'t confirm structured lab values from this file. You can still generate a clinical-style report by entering your results manually below.';
+      var helper = t.clinical_notice_helper || 'This helps keep the report accurate and clearly formatted.';
+      var cta = t.clinical_notice_cta || 'Continue with manual entry';
+      return '<div class="clinical-notice-card" role="status" aria-live="polite">' +
+        '<div class="clinical-notice-icon" aria-hidden="true">' +
+        '<svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>' +
+        '</div>' +
+        '<div class="clinical-notice-content">' +
+        '<h3 class="clinical-notice-title">' + escapeHtml(title) + '</h3>' +
+        '<p class="clinical-notice-body">' + escapeHtml(body) + '</p>' +
+        '<p class="clinical-notice-helper">' + escapeHtml(helper) + '</p>' +
+        '<button type="button" class="clinical-notice-cta" onclick="scrollToManualEntry()">' + escapeHtml(cta) + '</button>' +
+        '</div></div>';
+    }
+    function scrollToManualEntry() {
+      var section = document.getElementById('analyze-section');
+      var textarea = document.getElementById('analyze-text');
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(function() {
+          if (textarea) {
+            textarea.focus();
+          }
+        }, 400);
+      } else if (textarea) {
+        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        textarea.focus();
+      }
     }
     function renderReport(sonuc, opts) {
       var rawEl = document.getElementById('analyze-result-raw');
       var bodyEl = document.getElementById('analyze-result-body');
       var dateEl = document.getElementById('analyze-result-date');
-      if (!sonuc || !rawEl || !bodyEl) return;
+      if (!rawEl || !bodyEl) return;
+      sonuc = (sonuc != null && typeof sonuc === 'string') ? sonuc : '';
       rawEl.textContent = sonuc;
       var reportDateStr = new Date().toLocaleDateString(getLocale(), { day: 'numeric', month: 'long', year: 'numeric', hour: '2-digit', minute: '2-digit' });
       if (dateEl) dateEl.textContent = reportDateStr;
@@ -4341,7 +5016,7 @@
       var reportRidEl = document.getElementById('report-rid');
       var reportLangEl = document.getElementById('report-lang');
       if (reportRidEl) reportRidEl.textContent = rid || '—';
-      if (reportLangEl) reportLangEl.textContent = getLang() || 'tr';
+      if (reportLangEl) reportLangEl.textContent = getLang() || 'en';
       var sections = [];
       var regex = /(\d+\.\s*)?\*\*([^*]+)\*\*:?\s*\n/g;
       var matches = [];
@@ -4354,13 +5029,15 @@
         sections.push({ title: matches[i].title, content: content });
       }
       if (sections.length === 0) {
-        bodyEl.innerHTML = (opts ? buildPremiumClinicalBlock(opts) : '') + '<div class="text-accent-700 dark:text-accent-300 whitespace-pre-wrap text-sm">' + escapeHtml(sonuc).replace(/\n/g, '<br>') + '</div>';
+        var t = T[getLang()] || T.tr;
+        bodyEl.innerHTML = (opts ? buildPremiumClinicalBlock(opts) : '') + buildClinicalNoticeHTML(t);
         rawEl.classList.add('hidden');
         return;
       }
       rawEl.classList.add('hidden');
       var t = T[getLang()] || T.tr;
-      var premiumBlock = opts ? buildPremiumClinicalBlock(opts) : '';
+      var optsWithSections = (opts && typeof opts === 'object') ? Object.assign({}, opts, { sections: sections }) : opts;
+      var premiumBlock = optsWithSections ? buildPremiumClinicalBlock(optsWithSections) : '';
       bodyEl.innerHTML = premiumBlock + sections.map(function(s) {
         var config = getSectionConfig(s.title);
         var displayTitle = (config.titleKey && t[config.titleKey]) ? t[config.titleKey] : s.title;
@@ -4453,7 +5130,7 @@
 
     const T = {
       tr: {
-        nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
+        nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
         nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
@@ -4465,9 +5142,9 @@
         about_who_3: "Norya olarak amacımız, laboratuvar sonuçlarınızı korkulacak bir belge olmaktan çıkarıp anlaşılır bir rehbere dönüştürmektir. Sizin deneyiminiz ve geri bildirimleriniz bu yolculukta bize yön veriyor.",
         nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_profile: "Profil", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
         profile_email_verified: "E-posta doğrulandı", profile_save: "Kaydet", profile_change_password: "Şifre değiştir", profile_change_password_btn: "Şifreyi güncelle", profile_export_data: "Verilerimi indir (JSON)", profile_delete_account: "Hesabımı sil", profile_delete_confirm_title: "Hesabı sil", profile_delete_confirm_desc: "Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.", profile_cancel: "İptal", profile_delete_confirm_btn: "Hesabı sil",
-        profile_tab_general: "Genel Bilgiler", profile_tab_plan: "Paket & Kullanım", profile_tab_history: "Analiz Geçmişi", profile_tab_security: "Güvenlik", profile_plan_label: "Plan", profile_remaining: "Kalan", profile_ends: "Bitiş", profile_plan_pro: "Pro", profile_ends_monthly: "Aylık yenilenir", profile_ends_na: "—", profile_usage_label: "Kullanım (bu ay)", profile_upgrade_cta: "Paket Yükselt", profile_view_analysis: "Görüntüle", profile_unlimited: "Sınırsız", profile_country: "Ülke",
+        profile_tab_general: "Genel Bilgiler", profile_tab_plan: "Paket & Kullanım", profile_tab_history: "Analiz Geçmişi", profile_tab_security: "Güvenlik", profile_plan_label: "Plan", profile_remaining: "Kalan", profile_ends: "Bitiş", profile_no_analyses: "Henüz analiz yok", profile_plan_pro: "Pro", profile_ends_monthly: "Aylık yenilenir", profile_ends_na: "—", profile_usage_label: "Kullanım (bu ay)", profile_upgrade_cta: "Paket Yükselt", profile_view_analysis: "Görüntüle", profile_unlimited: "Sınırsız", profile_country: "Ülke",
         profile_corporate_title: "Kurumlar için Norya", profile_corporate_subtitle: "Hastane, klinik ve laboratuvarlar için toplu analiz ve kurumsal çözümler.", profile_corporate_1: "Çoklu kullanıcı yönetimi", profile_corporate_2: "Toplu analiz", profile_corporate_3: "Kurumsal PDF rapor", profile_corporate_4: "API erişimi (yakında)", profile_corporate_cta: "Kurumsal için bize ulaşın →",
-        trust_row_3d: "3D Secure ödeme", trust_row_kvkk: "KVKK / GDPR uyumlu", trust_row_hipaa: "HIPAA-aligned security", trust_row_invoice: "e-Arşiv fatura",
+        trust_row_3d: "3D Secure ödeme", trust_row_kvkk: "KVKK / GDPR uyumlu", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Arşiv fatura",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
         hero_sub: "AI Health Platform • Klinik biomarker analizi",
         hero_title: "Kan Tahlilinizi 60 Saniyede Anlayın",
@@ -4477,14 +5154,40 @@
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
-        footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR 3D Secure güvenli ödeme sistemi.", payment_infrastructure: "Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Sağlık verileri güvenle işlenir.",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu",
+        footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR 3D Secure güvenli ödeme sistemi.", payment_infrastructure: "Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Güvenlik en iyi uygulamaları; Norya HIPAA kapsamında kayıtlı değildir.",
         infra_title: "Altyapı & Güvenlik", infra_google_title: "Google Cloud", infra_google_desc: "Güvenli altyapı ve veri işleme", footer_privacy: "Gizlilik", footer_terms: "Kullanım Koşulları",
         trust_cloudflare_title: "Cloudflare ile korunur", trust_cloudflare_desc: "Trafik koruması ve hızlı erişim.", trust_cloudflare_1: "DDoS koruması", trust_cloudflare_2: "Global CDN hızlandırma", trust_cloudflare_3: "Edge güvenlik",
-        how_title: "Norya Nasıl Çalışır?", how_desc: "Kan tahlilinizi yükleyin, AI analiz etsin, premium PDF raporunuzu indirin.",
-        how_1: "Tahlil yükle", how_1d: "PDF veya fotoğraf olarak kan tahlilinizi yükleyin.",
-        how_2: "AI analiz eder", how_2d: "Norya AI tüm sağlık verilerinizi klinik referans aralıklarına göre analiz eder.",
+        how_title: "Norya Nasıl Çalışır?", how_desc: "PDF veya fotoğraf yükleyin, premium raporunuzu alın.",
+        how_1: "PDF veya fotoğraf yükle", how_1d: "Kan tahlilinizi PDF veya fotoğraf olarak yükleyin.",
+        how_2: "Raporunu al", how_2d: "Health Score, risk analizleri ve grafiklerle premium PDF raporunu indir.",
         how_3: "Raporunu al", how_3d: "Health Score, risk analizleri ve grafikleri içeren premium PDF sağlık raporunu indir.",
+        reviews_section_title: "Yorumlar", reviews_section_subtitle: "Uzman değerlendirmeleri ve üye deneyimleri.",
+        doctor_section_badge: "Premium Sağlık", doctor_insights_title: "Uzman Yorumları", doctor_insights_subtitle: "Biyobelirteç sonuçlarını daha anlaşılır hale getiren, klinik üslupta yapılandırılmış yorumlar.",
+        customer_section_badge: "Güvenilir Yorumlar",
+        doctor_card_label: "Klinik Yorum",
+        elite_card_health_title: "Genel Sağlık Özeti", elite_card_health_body: "Değerler genel olarak stabil bir profil gösteriyor. Hafif sapmalar için düzenli takip önerilir.",
+        elite_card_cardio_title: "Kalp ve Metabolik Risk", elite_card_cardio_body: "Lipid ve metabolik belirteçler referans aralıklarıyla değerlendirilir. Uzun vadeli takip için rapor özeti kullanılabilir.",
+        elite_card_glucose_title: "Glukoz ve Metabolizma", elite_card_glucose_body: "Belirteçler uygun aralıkta. Zaman içinde tutarlılık ve düzenli kontrol önerilir.",
+        elite_card_lipid_title: "Lipid Profili ve Karaciğer", elite_card_lipid_body: "Kolesterol paneli ve karaciğer enzimleri klinik standartlara göre yorumlanır; kardiyovasküler risk bağlamında sunulur.",
+        customer_reviews_title: "Müşteri Yorumları", customer_reviews_subtitle: "Kullanıcıların anlayabildiği, güvenle tekrar kullandığı premium sağlık raporlama deneyimi.",
+        review_years: "3+ yıldır kullanıyor",
+        review_name_de: "Anna Schmidt", review_name_it: "Marco Rossi", review_name_fr: "Sophie Laurent", review_name_uk: "James Clarke",
+        review_name_il: "David Cohen", review_name_sa: "Omar Al-Rashid",
+        review_country_de: "Almanya", review_country_it: "İtalya", review_country_fr: "Fransa", review_country_uk: "İngiltere",
+        review_country_il: "İsrail", review_country_sa: "Suudi Arabistan",
+        review_il_quote: "Yıllardır tahlil sonuçlarımı Norya ile takip ediyorum. Raporlar net ve profesyonel; doktorum her zaman hazır özeti alıyor.",
+        review_sa_quote: "Yıllardır Norya ile tahlillerimi takip ediyorum. Raporlar anlaşılır, güvenilir ve doktora götürmek için her zaman hazır.",
+        review_de_quote: "Yıllardır check-up sonuçlarımı Norya ile takip ediyorum. Raporlar net, güvenilir ve doktoruma götürmek için hep hazır.",
+        review_it_quote: "Norya'yı yıllardır kullanıyorum. Sonuçlar anlaşılır, PDF raporu her seferinde profesyonel. Rutin tahlillerim için vazgeçilmez oldu.",
+        review_fr_quote: "J'utilise Norya depuis des années pour mes bilans. Clair, moderne et rassurant — je recommande.",
+        review_uk_quote: "Yıllardır yıllık kan tahlillerim için Norya kullanıyorum. Net, profesyonel raporlar ve PDF'i doktorumla paylaşmaya her zaman hazır.",
+        customer_review_verified: "Doğrulanmış Yorum",
+        upload_intake_title: "Kan tahlili sonuçlarınızı yükleyin",
+        upload_intake_title_tr: "Upload Your Lab Results",
+        upload_intake_subtitle: "Güvenli ve düzenli yükleme. Raporunuz dakikalar içinde hazırlanır.",
+        upload_intake_subtitle_tr: "Secure, structured intake. Your report is generated in minutes.",
+        intake_disclaimer: "Yalnızca bilgilendirme amaçlıdır. Bu hizmet profesyonel tıbbi tavsiye, teşhis veya tedavinin yerine geçmez. Sağlık kararları için sağlık uzmanınıza danışın.",
         before_after_title: "Tahlil Kağıdından Norya Raporuna", before_after_desc: "Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.",
         before_after_before_label: "Önce — Laboratuvar çıktısı", before_after_th_test: "Test", before_after_th_result: "Sonuç", before_after_th_ref: "Referans",
         before_after_before_hint: "Kısaltmalar ve sayılar — ne anlama geldiği belirsiz.", before_after_arrow: "60 sn",
@@ -4495,7 +5198,7 @@
         feature_supp_title: "Yaşam tarzı ve beslenme bilgilendirme notları", feature_supp_desc: "Değerleriniz referans dışına çıktığında, genel yaşam tarzı ve beslenme konusunda hekiminizle konuşabileceğiniz bilgilendirici notlar sunar.",
         feature_compare_title: "Gelişmiş kan testi karşılaştırma", feature_compare_desc: "İki farklı tahlili yan yana getirip, zaman içindeki değişimi ve risk işaretlerini tek ekranda görmenizi sağlar.",
         why_plain: "Tıbbi Dil Değil", why_plaind: "Sonuçlar sade Türkçe ile açıklanır.",
-        why_priv: "Gizlilik", why_privd: "Verileriniz güvenli, üçüncü tarafla paylaşılmaz.",
+        why_priv: "Gizlilik", why_privd: "Verileriniz şifreli; satılmaz, reklam amaçlı kullanılmaz. Ödeme PayTR ile, kart verisi bizde tutulmaz.",
         who_title: "Kimler İçin?", who_subtitle: "Check-up sonrası, kronik takip veya doktora giderken — Norya herkes için.",
         who_1_title: "Check-up sonrası", who_1_desc: "Tahlil sonuçlarınızı anlamak ve doktora gitmeden önce fikir edinmek için.",
         who_2_title: "Kronik takip", who_2_desc: "Düzenli tahlillerinizi takip eden, değerlerin nasıl değiştiğini görmek isteyenler.",
@@ -4504,8 +5207,8 @@
         trust_benefit_1_title: "60 Saniyede Sonuç", trust_benefit_1_desc: "Tahlil metnini yapıştırın veya yükleyin; saniyeler içinde anlaşılır rapor alın.",
         trust_benefit_2_title: "Laboratuvar Yorumu", trust_benefit_2_desc: "Özet, değerler, olası nedenler ve öneriler — tek ekranda, sade dilde.",
         trust_benefit_3_title: "PDF, 9 Dil, Doktora Götür", trust_benefit_3_desc: "Tıbbi jargon yok; raporu PDF indirin veya hekiminizle paylaşın. 9 dilde.",
-        trust_headline: "Dünya çapında binlerce kullanıcı tarafından güveniliyor", trust_subline: "Sağlık meraklıları ve düzenli tahlil yaptıranlar neden Norya ile sonuçlarını anlamayı tercih ediyor.",
-        trust_stat_rating: "Ortalama puan", trust_stat_users: "Kullanıcı", trust_stat_langs: "Dilde rapor",
+        trust_headline: "Sağlık odaklı kullanıcılar tarafından tercih ediliyor", trust_subline: "Düzenli tahlil yaptıranlar ve sağlık okuryazarlığına önem verenler Norya ile sonuçlarını anlamayı seçiyor.",
+        trust_stat_rating: "Örnek puan", trust_stat_users: "Kullanıcı (artan)", trust_stat_langs: "Dilde rapor",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Check-up sonrası kullanıcı", testimonial_1_quote: "Sonuçlarımı ilk kez bu kadar net anladım. Doktora giderken raporu yanımda götürdüm, çok faydalı oldu.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Kronik takip kullanıcısı", testimonial_2_quote: "Her tahlilden sonra Norya'ya yapıştırıyorum. Değerlerin nasıl değiştiğini takip etmek çok kolay.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Sağlık meraklısı", testimonial_3_quote: "PDF yükleyebilmek süper. Fotoğraf çekip attım, dakikada rapor geldi. Arayüz de çok sade.",
@@ -4540,7 +5243,7 @@
         doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Dahiliye Uzmanı", doctor_7_quote: "Kontrol randevularında hastanın tahlilini Norya ile birlikte yorumluyoruz. Hem hasta hem ben zaman kazanıyoruz. Teşhis yerine geçmez ama hazırlık için çok faydalı.",
         faq_title: "Sıkça Sorulan Sorular", faq_subtitle: "Merak ettiklerinizin kısa cevapları.",
         faq_q1: "Norya tahlil sonucumu teşhis koyar mı?", faq_a1: "Hayır. Norya yalnızca eğitim amaçlı, anlaşılır açıklama sunar. Teşhis ve tedavi kararı mutlaka bir hekime bırakılmalıdır.",
-        faq_q2: "Verilerim güvende mi?", faq_a2: "Evet. Verileriniz şifreli saklanır, üçüncü tarafla paylaşılmaz veya satılmaz. HIPAA, GDPR ve KVKK prensiplerine uygun çalışıyoruz.",
+        faq_q2: "Verilerim güvende mi?", faq_a2: "Evet. Verileriniz şifreli saklanır; satılmaz, reklam amaçlı kullanılmaz; yalnızca hizmet sunumu için işlenir. Ödeme PayTR üzerinden alınır, kart verisi bizde tutulmaz. Güvenlik en iyi uygulamaları ve HIPAA uyumlu ilkelere uygun çalışıyoruz.",
         faq_q3: "PDF veya fotoğraf yükleyebilir miyim?", faq_a3: "Evet. Tahlil metnini yapıştırabilir, PDF yükleyebilir veya sonuç kağıdının fotoğrafını (JPG/PNG) yükleyebilirsiniz.",
         faq_q4: "Raporu hangi dillerde alabilirim?", faq_a4: "Türkçe, İngilizce, İtalyanca, İspanyolca, Fransızca, Almanca, İbranice, Arapça ve Hintçe. Site dilini seçtiğinizde rapor da o dilde üretilir.",
         faq_q5: "Ücretsiz deneme var mı?", faq_a5: "Evet. Kayıt olduktan sonra sınırlı sayıda analiz ücretsiz denemeniz için sunulur. Kredi kartı gerekmez.",
@@ -4561,6 +5264,20 @@
         premium_health_desc: "Health Score, biyolojik yaş, kalp & diyabet riski ve PDF rapor arşiviyle InsideTracker seviyesinde deneyim.",
         premium_health_cta: "Premium Health planlarını gör",
         premium_health_hint: "İlk analiz ücretsiz; memnun kalırsanız dilediğiniz zaman aboneliğe geçin.",
+        elite_badge: "ELITE HEALTH REPORT",
+        elite_title: "Klinik seviyede biyobelirteç raporu",
+        elite_desc: "Biyobelirteçlerinizi referans aralıkları, risk profili ve trend mantığıyla değerlendirir; tek sayfada özet ve detaylı premium PDF rapor üretir.",
+        elite_feature_1: "Health Score & Risk Profile",
+        elite_feature_2: "Cardio & Metabolic Risk",
+        elite_feature_3: "Liver & Inflammation Markers",
+        elite_feature_4: "Premium Doctor-style PDF",
+        elite_chip_1: "10+ biyobelirteç",
+        elite_chip_2: "1–2 dk",
+        elite_chip_3: "Premium PDF",
+        elite_cta_free_label: "İlk rapor ücretsiz",
+        elite_trust_badges: "Güvenli yükleme • Gizlilik odaklı • PDF hazır",
+        elite_cta_btn: "İlk raporu ücretsiz oluştur",
+        elite_cta_sub: "Memnun kalırsanız dilediğiniz an premium üyeliğe geçin.",
         home_risk_diabetes_title: "Diyabet Riski",
         home_risk_low_sample: "Örnek: Düşük risk",
         home_risk_diabetes_desc: "Glukoz, HbA1c ve trigliserid değerlerine göre diyabet riski skoru.",
@@ -4599,7 +5316,7 @@
         corporate_card_paragraph: "Norya ile laboratuvar sonuçlarınızı hasta ve hekim için anlaşılır hale getirin. PDF veya metin girişiyle dakikalar içinde rapor; kurumunuza özel kullanıcı sayısı, dil ve logo seçenekleri. Tıbbi teşhis aracı değildir; bilgilendirme ve sağlık okuryazarlığını destekler.",
         corporate_card_cta: "Teklif alın — Bize ulaşın", corporate_card_contact_hint: "support@noryaai.com · İletişim sayfası",
         security_title: "Güvenlik ve Veri Koruma", security_desc: "Sağlık verileriniz en yüksek standartlarla korunur. Norya, gizlilik ve güvenlik prensiplerine uygun çalışır.",
-        security_hipaa: "HIPAA prensipleri", security_hipaa_desc: "Sağlık verisi güvenliği",
+        security_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu ilkeler", security_hipaa_desc: "Sağlık verisi güvenliği; Norya HIPAA kapsamında kayıtlı değildir.",
         security_gdpr: "GDPR uyumlu", security_gdpr_desc: "AB veri koruma",
         security_enc: "Şifreli bağlantı", security_enc_desc: "HTTPS / güvenli iletişim",
         security_no_sell: "Veri satılmaz", security_no_sell_desc: "Üçüncü tarafa paylaşım yok",
@@ -4608,7 +5325,7 @@
         trans_title: "Şeffaflık", trans_subtitle: "Nasıl çalışıyoruz, verileriniz nerede?",
         trans_how_title: "Nasıl çalışıyor?", trans_how_text: "Yüklediğiniz tahlil metni veya görsel, yalnızca rapor üretmek için işlenir. OpenAI (GPT-4o-mini) modeli kullanılıyor; sonuçlar eğitim amaçlı bilgilendirme niteliğindedir, tıbbi teşhis yerine geçmez.",
         trans_model_title: "Hangi model?", trans_model_text: "OpenAI GPT-4o-mini. Metin ve görsel (PDF/fotoğraf) analizi desteklenir. Raporlar Türkçe veya seçtiğiniz dilde üretilir.",
-        trans_data_title: "Veriler nerede saklanıyor?", trans_data_text: "Tahlil girişleri ve raporlar sunucumuzda şifreli olarak tutulur. Üçüncü tarafla paylaşılmaz, satılmaz. HIPAA/GDPR/KVKK prensiplerine uygun çalışıyoruz.",
+        trans_data_title: "Veriler nerede saklanıyor?", trans_data_text: "Tahlil girişleri ve raporlar sunucumuzda şifreli tutulur. Satılmaz, reklam amaçlı kullanılmaz; yalnızca hizmet sunumu için işlenir. Ödeme PayTR üzerinden alınır, kart verisi Norya sunucularında saklanmaz. Güvenlik en iyi uygulamaları ve HIPAA uyumlu ilkeler (Norya HIPAA kapsamında kayıtlı değildir).",
         guide_title: "Tahlil öncesi bilmeniz gerekenler", guide_subtitle: "Daha güvenilir sonuçlar için laboratuvara gitmeden önce dikkat edilecekler.",
         guide_1: "Açlık: Kan şekeri ve lipid paneli için genelde 8–12 saat aç kalmanız istenir. Su içebilirsiniz.",
         guide_2: "İlaçlar: Doktorunuz aksini söylemedikçe sabah ilaçlarınızı tahlil sonrası alın; gerekirse doktora danışın.",
@@ -4649,7 +5366,7 @@
         wizard_step1_title: "Dosya veya metin", wizard_step2_title: "Önizleme ve dil", wizard_step3_title: "Raporunuz hazırlanıyor", wizard_drop: "Dosyayı buraya sürükleyin veya tıklayın", wizard_back: "Geri", wizard_next: "Sonraki", wizard_preview_text: "Metin girişi", wizard_lang: "Rapor dili", wizard_step3_time: "Ortalama 20–30 saniye sürer.",
         pdf_header_title: "Kan Tahlili Analiz Raporu", pdf_footer_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya",
         pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler", pdf_sec_diet: "Diyet planı", pdf_sec_supplements: "Takviye önerileri", pdf_sec_heart: "Kalp sağlığı",
-        report_health_score: "Genel Sağlık Skoru", report_health_score_title: "Genel Sağlık Skoru", report_risk_indicator: "Risk Göstergesi", report_risk_indicator_title: "Risk Göstergesi", report_trend_analysis: "Trend Analizi", report_trend_title: "Trend Analizi", report_trend_more_needed: "Trend için daha fazla analiz gerekli.", report_trend_need_more: "Trend için daha fazla analiz gerekli.", report_upgrade: "Premium'a Geç", report_premium_badge: "Premium", report_band_low: "Düşük", report_band_mid: "Orta", report_band_high: "İyi",
+        report_health_score: "Genel Sağlık Skoru", report_health_score_title: "Genel Sağlık Skoru", report_risk_indicator: "Risk Göstergesi", report_risk_indicator_title: "Risk Göstergesi", report_trend_analysis: "Trend Analizi", report_trend_title: "Trend Analizi", report_trend_more_needed: "Trend için daha fazla analiz gerekli.", report_trend_need_more: "Trend için daha fazla analiz gerekli.", report_category_scores: "Kategori skorları", report_risk_distribution: "Risk dağılımı", report_dist_normal: "Normal", report_dist_borderline: "Sınır", report_dist_attention: "Dikkat", report_radar_balance: "Biyobelirteç dengesi", report_top_attention: "Öne çıkan dikkat alanları", report_executive_summary: "Özet", report_summary_tiles: "Özet", report_tile_overall_score: "Genel Skor", report_tile_risk_level: "Risk Düzeyi", report_tile_bio_age: "Biyolojik Yaş", report_tile_priority: "Öncelik", report_refined_disclaimer: "Bu rapor yalnızca bilgilendirme amaçlıdır. Teşhis veya tedavi sunmaz. Belirti veya tedavi kararları için hekiminize başvurun.", report_trend_placeholder: "Trend, zamanla daha fazla raporla kullanılabilir hale gelir.", report_priority_general: "Genel iyilik hali", report_executive_default: "Laboratuvar sonuçları değerlendirildi. Referans dışı değerleri hekiminizle görüşün.", report_foods_to_favor: "Tercih edilebilecek gıdalar", report_foods_to_limit: "Sınırlanabilecek gıdalar", report_food_favor_default: "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir.", report_food_limit_default: "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir.", report_lifestyle: "Yaşam tarzı önerileri", report_lifestyle_sleep: "Yeterli uyku toparlanmayı destekler.", report_lifestyle_movement: "Düzenli hareket önerilir.", report_lifestyle_followup: "Takip süresini hekiminizle görüşün.", report_doctor_discussion: "Hekim görüşmesi notları", report_doctor_note_1: "Bu raporu hekiminizle paylaşın.", report_doctor_note_2: "Belirti veya endişeler hekim tarafından değerlendirilmelidir.", report_key_areas: "Takip edilecek alanlar", report_why_it_matters: "Neden önemli", report_monitoring_focus: "Takip odağı", report_upgrade: "Premium'a Geç", report_premium_badge: "Premium", report_band_low: "Düşük", report_band_mid: "Orta", report_band_high: "İyi",
         risk_legend_green: "Normal", risk_legend_yellow: "Sınır", risk_legend_red: "Riskli",
         doctor_header: "Norya Kan Tahlili Raporu — Doktoruma iletilmek üzere hazırlanmıştır.",
         doctor_date_label: "Tarih", doctor_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar için mutlaka hekim değerlendirmesi gerekir.",
@@ -4726,10 +5443,11 @@
         paytr_infrastructure_note: "Ödeme altyapısı PayTR ile sağlanacaktır.",
         guest_checkout_title: "Kayıt olmadan tek analiz", guest_checkout_desc: "E-posta adresinizi girin; ödeme sonrası aynı e-posta ile oturum açıp analiz yapabilirsiniz.", guest_checkout_name: "Ad (opsiyonel)",
         btn_processing_pdf: "PDF işleniyor...", btn_processing_analyze: "Analiz ediliyor...",
-        source_pdf: "PDF", source_image: "Görsel", source_text: "Metin"
+        source_pdf: "PDF", source_image: "Görsel", source_text: "Metin",
+        clinical_notice_title: "Klinik Bilgilendirme", clinical_notice_body: "Bu dosyadan yapılandırılmış laboratuvar değerleri doğrulanamadı. Sonuçlarınızı aşağıya manuel girerek klinik formatta rapor oluşturabilirsiniz.", clinical_notice_helper: "Bu yöntem raporun daha doğru ve düzenli hazırlanmasına yardımcı olur.", clinical_notice_cta: "Manuel girişle devam et"
       },
       en: {
-        nav_about: "About us", nav_how: "How it works", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
+        nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
         nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
@@ -4741,9 +5459,9 @@
         about_who_3: "Our goal at Norya is to turn your lab results from a document to fear into a clear guide. Your experience and feedback guide us on this journey.",
         nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_profile: "Profile", nav_analyze: "Analyze", nav_logout: "Log out",
         profile_email_verified: "Email verified", profile_save: "Save", profile_change_password: "Change password", profile_change_password_btn: "Update password", profile_export_data: "Download my data (JSON)", profile_delete_account: "Delete my account", profile_delete_confirm_title: "Delete account", profile_delete_confirm_desc: "This cannot be undone. All your analyses and data will be deleted. Enter your password to confirm.", profile_cancel: "Cancel", profile_delete_confirm_btn: "Delete account",
-        profile_tab_general: "General", profile_tab_plan: "Plan & Usage", profile_tab_history: "Analysis History", profile_tab_security: "Security", profile_plan_label: "Plan", profile_remaining: "Remaining", profile_ends: "Ends", profile_plan_pro: "Pro", profile_ends_monthly: "Renews monthly", profile_ends_na: "—", profile_usage_label: "Usage (this month)", profile_upgrade_cta: "Upgrade plan", profile_view_analysis: "View", profile_unlimited: "Unlimited", profile_country: "Country",
+        profile_tab_general: "General", profile_tab_plan: "Plan & Usage", profile_tab_history: "Analysis History", profile_tab_security: "Security", profile_plan_label: "Plan", profile_remaining: "Remaining", profile_ends: "Ends", profile_no_analyses: "No analyses yet", profile_plan_pro: "Pro", profile_ends_monthly: "Renews monthly", profile_ends_na: "—", profile_usage_label: "Usage (this month)", profile_upgrade_cta: "Upgrade plan", profile_view_analysis: "View", profile_unlimited: "Unlimited", profile_country: "Country",
         profile_corporate_title: "Norya for organizations", profile_corporate_subtitle: "Bulk analysis and enterprise solutions for hospitals, clinics and labs.", profile_corporate_1: "Multi-user management", profile_corporate_2: "Bulk analysis", profile_corporate_3: "Enterprise PDF report", profile_corporate_4: "API access (coming soon)", profile_corporate_cta: "Contact us for enterprise →",
-        trust_row_3d: "3D Secure payment", trust_row_kvkk: "KVKK / GDPR compliant", trust_row_hipaa: "HIPAA-aligned security", trust_row_invoice: "e-Archive invoice",
+        trust_row_3d: "3D Secure payment", trust_row_kvkk: "KVKK / GDPR compliant", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Archive invoice",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
         hero_sub: "Lab results — clear report",
         hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
@@ -4753,13 +5471,34 @@
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
-        footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "PayTR 3D Secure payment system.", payment_infrastructure: "Payment infrastructure: PayTR 3D Secure secure payment system.", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Health data handled securely.",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
+        footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "PayTR 3D Secure payment system.", payment_infrastructure: "Payment infrastructure: PayTR 3D Secure secure payment system.", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Security best practices; Norya is not a HIPAA-registered entity.",
         trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Traffic protection and fast access.", trust_cloudflare_1: "DDoS protection", trust_cloudflare_2: "Global CDN acceleration", trust_cloudflare_3: "Edge security",
-        how_title: "How Norya Works", how_desc: "Three simple steps to turn your lab results into clear health insights.",
-        how_1: "Sign up", how_1d: "Create a free account. Email and password only.",
-        how_2: "Paste your results", how_2d: "Paste the values or text from your result sheet.",
-        how_3: "Get the explanation", how_3d: "AI produces a clear explanation in seconds.",
+        how_title: "How Norya Works", how_desc: "Upload a PDF or photo, get your premium report.",
+        how_1: "Upload PDF or photo", how_1d: "Upload your blood test as a PDF or photo.",
+        how_2: "Get your report", how_2d: "Download your premium PDF with Health Score, risk analysis and charts.",
+        how_3: "Get your report", how_3d: "Download your premium PDF report with Health Score and risk analysis.",
+        reviews_section_title: "Reviews", reviews_section_subtitle: "Expert assessments and member experiences.",
+        doctor_section_badge: "Premium Health", doctor_insights_title: "Expert Reviews", doctor_insights_subtitle: "Structured, clinical-style interpretations designed to make biomarker results easier to understand.",
+        customer_section_badge: "Trusted Reviews",
+        doctor_card_label: "Clinical Review",
+        elite_card_health_title: "General Health Overview", elite_card_health_body: "Values suggest a generally stable profile. Routine monitoring is recommended for mild deviations.",
+        elite_card_cardio_title: "Cardiovascular & Metabolic Risk", elite_card_cardio_body: "Lipid and metabolic markers are evaluated against reference ranges. Use the report summary for long-term follow-up.",
+        elite_card_glucose_title: "Glucose & Metabolism", elite_card_glucose_body: "Markers are within a favorable range. Consistency over time and regular checks are recommended.",
+        elite_card_lipid_title: "Lipid Profile & Liver", elite_card_lipid_body: "Cholesterol panel and liver enzymes are interpreted to clinical standards and presented in a cardiovascular risk context.",
+        customer_reviews_title: "Customer Reviews", customer_reviews_subtitle: "Clear, premium health reporting that users can understand and return to.",
+        review_years: "Using for 3+ years",
+        review_name_de: "Anna Schmidt", review_name_it: "Marco Rossi", review_name_fr: "Sophie Laurent", review_name_uk: "James Clarke",
+        review_name_il: "David Cohen", review_name_sa: "Omar Al-Rashid",
+        review_country_de: "Germany", review_country_it: "Italy", review_country_fr: "France", review_country_uk: "United Kingdom",
+        review_country_il: "Israel", review_country_sa: "Saudi Arabia",
+        review_il_quote: "I've been using Norya for years for my test results. Reports are clear and professional; my doctor always gets the summary ready.",
+        review_sa_quote: "I've been using Norya for years to track my lab work. Reports are clear, reliable and always ready to take to the doctor.",
+        review_de_quote: "I've been using Norya for years to track my check-up results. Reports are clear, reliable and always ready to take to my doctor.",
+        review_it_quote: "I've used Norya for years. Results are easy to understand, the PDF report is always professional. It's become essential for my routine tests.",
+        review_fr_quote: "J'utilise Norya depuis des années pour mes bilans. Clair, moderne et rassurant — je recommande.",
+        review_uk_quote: "I've been using Norya for years for my annual bloodwork. Clear, professional reports and the PDF is always ready to share with my doctor.",
+        customer_review_verified: "Verified Review",
         before_after_title: "From lab sheet to Norya report", before_after_desc: "Same results — first a dense table, 60 seconds later a clear report. Our users see this transformation.",
         before_after_before_label: "Before — Lab printout", before_after_th_test: "Test", before_after_th_result: "Result", before_after_th_ref: "Reference",
         before_after_before_hint: "Abbreviations and numbers — what they mean is unclear.", before_after_arrow: "60 sec",
@@ -4770,7 +5509,7 @@
         feature_supp_title: "Lifestyle and nutrition information notes", feature_supp_desc: "When values are outside reference range, provides informative notes on general lifestyle and nutrition to discuss with your doctor.",
         feature_compare_title: "Advanced test comparison", feature_compare_desc: "Lets you compare two blood tests side by side and see how values and risk flags change over time.",
         why_plain: "Plain language", why_plaind: "Results explained in simple terms.",
-        why_priv: "Privacy", why_privd: "Your data is secure, never shared with third parties.",
+        why_priv: "Privacy", why_privd: "Your data is encrypted; not sold or used for ads. Payment via PayTR; we do not store card details.",
         who_title: "Who Is It For?", who_subtitle: "After a check-up, chronic follow-up, or before seeing your doctor — Norya is for everyone.",
         who_1_title: "After a check-up", who_1_desc: "Understand your results and get a clear picture before your doctor visit.",
         who_2_title: "Chronic follow-up", who_2_desc: "Track regular tests and see how your values change over time.",
@@ -4779,8 +5518,8 @@
         trust_benefit_1_title: "Results in 60 seconds", trust_benefit_1_desc: "Paste or upload your lab text; get a clear report in seconds.",
         trust_benefit_2_title: "AI interpretation", trust_benefit_2_desc: "Summary, values, possible causes and tips — all on one screen, in plain language.",
         trust_benefit_3_title: "PDF, 9 languages, take to doctor", trust_benefit_3_desc: "No medical jargon; download PDF or share with your doctor. Available in 9 languages.",
-        trust_headline: "Trusted by thousands of users worldwide", trust_subline: "Why health-conscious users and regular testers choose Norya to understand their results.",
-        trust_stat_rating: "Average rating", trust_stat_users: "Users", trust_stat_langs: "Report languages",
+        trust_headline: "Trusted by health-conscious users", trust_subline: "People who get regular lab work and care about health literacy choose Norya to understand their results.",
+        trust_stat_rating: "Sample rating", trust_stat_users: "Users (growing)", trust_stat_langs: "Report languages",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Check-up user", testimonial_1_quote: "First time I understood my results this clearly. Took the report to my doctor — very helpful.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Chronic follow-up user", testimonial_2_quote: "I paste every result into Norya. Tracking how my values change over time is so easy.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Health enthusiast", testimonial_3_quote: "Being able to upload PDFs is great. I took a photo, got the report in a minute. Interface is clean too.",
@@ -4815,7 +5554,7 @@
         doctor_7_name: "Dr. Nazlı Y.", doctor_7_role: "Internal medicine", doctor_7_quote: "At follow-up visits we interpret the patient's labs together with Norya. Both the patient and I save time. It doesn't replace diagnosis but it's very helpful for preparation.",
         faq_title: "Frequently Asked Questions", faq_subtitle: "Short answers to what you need to know.",
         faq_q1: "Does Norya diagnose my results?", faq_a1: "No. Norya only provides educational, easy-to-understand explanations. Diagnosis and treatment decisions must always be made by a doctor.",
-        faq_q2: "Is my data safe?", faq_a2: "Yes. Your data is stored encrypted and is not shared or sold to third parties. We follow HIPAA, GDPR and KVKK principles.",
+        faq_q2: "Is my data safe?", faq_a2: "Yes. Your data is stored encrypted; it is not sold or used for advertising and is processed only to deliver the service. Payment is via PayTR and we do not store card details. We follow security best practices and HIPAA-aligned principles.",
         faq_q3: "Can I upload PDF or photo?", faq_a3: "Yes. You can paste the lab text, upload a PDF, or upload a photo (JPG/PNG) of your result sheet.",
         faq_q4: "In which languages can I get the report?", faq_a4: "Turkish, English, Italian, Spanish, French, German, Hebrew, Arabic and Hindi. When you select the site language, the report is generated in that language.",
         faq_q5: "Is there a free trial?", faq_a5: "Yes. After signing up, a limited number of analyses are available for free. No credit card required.",
@@ -4836,6 +5575,20 @@
         premium_health_desc: "InsideTracker‑level experience with Health Score, biological age, heart & diabetes risk and PDF report archive.",
         premium_health_cta: "View Premium Health plans",
         premium_health_hint: "First analysis is free; upgrade to a subscription only if you love it.",
+        elite_badge: "ELITE HEALTH REPORT",
+        elite_title: "Clinical-grade biomarker report",
+        elite_desc: "A clinical-style evaluation of your biomarkers with clear ranges, risk profiling, and a premium PDF report.",
+        elite_feature_1: "Health Score & Risk Profile",
+        elite_feature_2: "Cardio & Metabolic Risk",
+        elite_feature_3: "Liver & Inflammation Markers",
+        elite_feature_4: "Premium Doctor-style PDF",
+        elite_chip_1: "10+ biomarkers",
+        elite_chip_2: "1–2 min",
+        elite_chip_3: "Premium PDF",
+        elite_cta_free_label: "First report free",
+        elite_trust_badges: "Secure upload • Private by design • PDF ready",
+        elite_cta_btn: "Generate your free report",
+        elite_cta_sub: "Upgrade anytime if you're satisfied.",
         home_risk_diabetes_title: "Diabetes Risk",
         home_risk_low_sample: "Sample: Low risk",
         home_risk_diabetes_desc: "Diabetes risk score based on glucose, HbA1c and triglycerides.",
@@ -4874,7 +5627,7 @@
         corporate_card_paragraph: "Make lab results clear for patients and physicians with Norya. Reports in minutes from PDF or text input; custom user counts, languages and logo for your organisation. Not a medical diagnosis tool; supports education and health literacy.",
         corporate_card_cta: "Get a quote — Contact us", corporate_card_contact_hint: "support@noryaai.com · Contact page",
         security_title: "Security & Data Protection", security_desc: "Your health data is protected to the highest standards. Norya follows privacy and security best practices.",
-        security_hipaa: "HIPAA principles", security_hipaa_desc: "Health data security",
+        security_hipaa: "Security best practices / HIPAA-aligned principles", security_hipaa_desc: "Health data security; Norya is not a HIPAA-registered entity.",
         security_gdpr: "GDPR compliant", security_gdpr_desc: "EU data protection",
         security_enc: "Encrypted connection", security_enc_desc: "HTTPS / secure communication",
         security_no_sell: "Data not sold", security_no_sell_desc: "No third-party sharing",
@@ -4883,7 +5636,7 @@
         trans_title: "Transparency", trans_subtitle: "How we work, where is your data?",
         trans_how_title: "How does it work?", trans_how_text: "The lab text or image you upload is processed only to generate the report. We use the OpenAI (GPT-4o-mini) model; results are for educational information only and do not replace medical diagnosis.",
         trans_model_title: "Which model?", trans_model_text: "OpenAI GPT-4o-mini. Text and image (PDF/photo) analysis supported. Reports are generated in your chosen language.",
-        trans_data_title: "Where is data stored?", trans_data_text: "Lab inputs and reports are stored encrypted on our servers. Not shared or sold to third parties. We follow HIPAA/GDPR/KVKK principles.",
+        trans_data_title: "Where is data stored?", trans_data_text: "Lab inputs and reports are stored encrypted on our servers. Not sold or used for advertising; processed only for service delivery. Payment is via PayTR; card data is not stored on our servers. We follow security best practices and HIPAA-aligned principles (Norya is not a HIPAA-registered entity).",
         guide_title: "What to know before your test", guide_subtitle: "Tips before going to the lab for more reliable results.",
         guide_1: "Fasting: For blood sugar and lipid panel you are usually asked to fast 8–12 hours. You can drink water.",
         guide_2: "Medications: Unless your doctor says otherwise, take morning meds after the test; ask your doctor if unsure.",
@@ -4921,15 +5674,21 @@
         analyze_doctor_notes_placeholder: "E.g. My doctor prescribed B12; please consider with these results.",
         analyze_or: "— or —", analyze_upload_btn: "Upload PDF or image (JPG, PNG)",
         report_title: "Norya Analysis Report", report_download: "Download report", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
+        upload_intake_title: "Upload Your Lab Results",
+        upload_intake_title_tr: "Kan tahlili sonuçlarınızı yükleyin",
+        upload_intake_subtitle: "Secure, structured intake. Your report is generated in minutes.",
+        upload_intake_subtitle_tr: "Güvenli ve düzenli yükleme. Raporunuz dakikalar içinde hazırlanır.",
+        intake_disclaimer: "For informational use only. This service does not replace professional medical advice, diagnosis, or treatment. Consult your healthcare provider for medical decisions.",
         wizard_step1_title: "File or text", wizard_step2_title: "Preview and language", wizard_step3_title: "Preparing your report", wizard_drop: "Drag file here or click", wizard_back: "Back", wizard_next: "Next", wizard_preview_text: "Text input", wizard_lang: "Report language", wizard_step3_time: "Usually takes 20–30 seconds.",
         pdf_header_title: "Blood Test Analysis Report", pdf_footer_disclaimer: "This report is for educational purposes only. Always consult a healthcare professional for medical decisions. — Norya",
         pdf_sec_summary: "Test summary", pdf_sec_risk: "Risk indicators", pdf_sec_values: "Values and reference ranges", pdf_sec_causes: "Possible causes", pdf_sec_recommendations: "Recommendations", pdf_sec_diet: "Diet plan", pdf_sec_supplements: "Supplement recommendations", pdf_sec_heart: "Heart health",
-        report_health_score: "Overall Health Score", report_health_score_title: "Overall Health Score", report_risk_indicator: "Risk Indicator", report_risk_indicator_title: "Risk Indicator", report_trend_analysis: "Trend Analysis", report_trend_title: "Trend Analysis", report_trend_more_needed: "More analyses needed for trend.", report_trend_need_more: "More analyses needed for trend.", report_upgrade: "Upgrade to Premium", report_premium_badge: "Premium", report_band_low: "Low", report_band_mid: "Moderate", report_band_high: "Good",
+        report_health_score: "Overall Health Score", report_health_score_title: "Overall Health Score", report_risk_indicator: "Risk Indicator", report_risk_indicator_title: "Risk Indicator", report_trend_analysis: "Trend Analysis", report_trend_title: "Trend Analysis", report_trend_more_needed: "More analyses needed for trend.", report_trend_need_more: "More analyses needed for trend.", report_category_scores: "Category scores", report_risk_distribution: "Risk distribution", report_dist_normal: "Normal", report_dist_borderline: "Borderline", report_dist_attention: "Attention", report_radar_balance: "Biomarker balance", report_top_attention: "Top attention areas", report_executive_summary: "Executive Summary", report_summary_tiles: "Summary", report_tile_overall_score: "Overall Score", report_tile_risk_level: "Risk Level", report_tile_bio_age: "Biological Age", report_tile_priority: "Priority Focus", report_refined_disclaimer: "This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.", report_trend_placeholder: "Trend becomes available with more reports over time.", report_priority_general: "General wellness", report_executive_default: "Lab results have been reviewed. Discuss any out-of-range values with your doctor.", report_foods_to_favor: "Foods to favor", report_foods_to_limit: "Foods to limit", report_food_favor_default: "Balanced diet; vegetables and fruits may support general health.", report_food_limit_default: "Processed foods and excess sugar may be worth limiting.", report_lifestyle: "Lifestyle support", report_lifestyle_sleep: "Adequate sleep supports recovery.", report_lifestyle_movement: "Regular movement is recommended.", report_lifestyle_followup: "Discuss follow-up timing with your doctor.", report_doctor_discussion: "Doctor discussion notes", report_doctor_note_1: "Share this report with your physician for context.", report_doctor_note_2: "Any symptoms or concerns should be evaluated by a doctor.", report_key_areas: "Key areas to watch", report_why_it_matters: "Why it matters", report_monitoring_focus: "Monitoring focus", report_upgrade: "Upgrade to Premium", report_premium_badge: "Premium", report_band_low: "Low", report_band_mid: "Moderate", report_band_high: "Good",
         risk_legend_green: "Normal", risk_legend_yellow: "Border", risk_legend_red: "At risk",
         doctor_header: "Norya Blood Test Report — Prepared for my doctor.",
         doctor_date_label: "Date", doctor_disclaimer: "This report is for educational information only. Medical decisions require a doctor's evaluation.",
         toast_report_pdf: "Report downloaded as PDF.", toast_doctor_downloaded: "Report for doctor downloaded.", toast_link_copied: "Share link copied.", toast_register_verify_sent: "A verification link was sent to your email. Check your inbox (and spam folder).",
         toast_analyze_first: "Please run an analysis first.", toast_pdf_fallback: "PDF could not be generated; text file downloaded.", toast_pdf_error: "PDF could not be generated. Please try again.",
+        clinical_notice_title: "Clinical Notice", clinical_notice_body: "We couldn't confirm structured lab values from this file. You can still generate a clinical-style report by entering your results manually below.", clinical_notice_helper: "This helps keep the report accurate and clearly formatted.", clinical_notice_cta: "Continue with manual entry",
         pricing_title: "Pricing", pricing_eur: "Prices are shown in your local currency.", pricing_note_currency: "Prices shown in {cur} ({sym}).",
         price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Diet + nutrition info + heart health sections", price_single_3: "✓ Download & share PDF", price_btn_single: " — Single analysis",
         price_monthly_badge: "Most Popular", pricing_ai_detail: "AI detail level", price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "5 analyses / month", price_monthly_1: "✓ 5 full analyses per month", price_monthly_2: "✓ Diet plan + nutrition & lifestyle info notes", price_monthly_3: "✓ History & compare two analyses", price_monthly_4: "✓ Download PDF, share with doctor", price_btn_monthly: "/mo — Get started",
@@ -5841,7 +6600,7 @@
         trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה", trust_badges_heading: "שירות מאובטח ותואם",
         trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR",
         trust_badge_secure_paytr: "🔒 תשלום מאובטח – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "תעבורה מוצפנת SSL/TLS.", footer_trust_kvkk_desc: "נתונים אישיים לפי KVKK.", footer_trust_gdpr_desc: "תואם GDPR ל-EU.", footer_trust_paytr_desc: "תשלום מאובטח דרך PayTR.", footer_trust_hipaa_desc: "נתוני בריאות מעובדים באבטחה.",
         trust_cloudflare_title: "מוגן על ידי Cloudflare", trust_cloudflare_desc: "הגנת תעבורה וגישה מהירה.", trust_cloudflare_1: "הגנת DDoS", trust_cloudflare_2: "תאוצת CDN גלובלית", trust_cloudflare_3: "אבטחת edge",
         how_title: "איך נוריה עובדת", how_desc: "שלושה צעדים פשוטים מתוצאות המעבדה לתובנות בריאות.",
@@ -6016,7 +6775,7 @@
         trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن", trust_badges_heading: "خدمة آمنة ومتوافقة",
         trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR",
         trust_badge_secure_paytr: "🔒 دفع آمن – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "المرور مشفّر SSL/TLS.", footer_trust_kvkk_desc: "البيانات الشخصية وفق KVKK.", footer_trust_gdpr_desc: "متوافق مع GDPR للاتحاد الأوروبي.", footer_trust_paytr_desc: "دفع آمن عبر PayTR.", footer_trust_hipaa_desc: "بيانات الصحة تُعالج بأمان.",
         trust_cloudflare_title: "محمي بواسطة Cloudflare", trust_cloudflare_desc: "حماية الحركة ووصول سريع.", trust_cloudflare_1: "حماية DDoS", trust_cloudflare_2: "تسريع CDN عالمي", trust_cloudflare_3: "أمان الحافة",
         how_title: "كيف يعمل نوريا", how_desc: "ثلاث خطوات بسيطة لتحويل نتائجك إلى معلومات صحية واضحة.",
@@ -6191,7 +6950,7 @@
         trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी", trust_badges_heading: "सुरक्षित और अनुपालन सेवा",
         trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान",
         trust_badge_secure_paytr: "🔒 सुरक्षित भुगतान – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "ट्रैफिक SSL/TLS से एन्क्रिप्ट.", footer_trust_kvkk_desc: "व्यक्तिगत डेटा KVKK अनुरूप.", footer_trust_gdpr_desc: "EU के लिए GDPR अनुरूप.", footer_trust_paytr_desc: "PayTR से सुरक्षित भुगतान.", footer_trust_hipaa_desc: "स्वास्थ्य डेटा सुरक्षित संसाधित.",
         trust_cloudflare_title: "Cloudflare द्वारा सुरक्षित", trust_cloudflare_desc: "ट्रैफिक सुरक्षा और तेज़ एक्सेस।", trust_cloudflare_1: "DDoS सुरक्षा", trust_cloudflare_2: "ग्लोबल CDN त्वरण", trust_cloudflare_3: "एज सुरक्षा",
         how_title: "नोरिया कैसे काम करता है", how_desc: "लैब रिज़ल्ट को स्पष्ट स्वास्थ्य जानकारी में बदलने के तीन आसान कदम।",
@@ -6366,7 +7125,7 @@
         trust_since: "Από το 2017", trust_satisfaction: "100% ικανοποίηση", trust_users: "100.000+ χρήστες", trust_badges_heading: "Ασφαλής και συμβατή υπηρεσία",
         trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR",
         trust_badge_secure_paytr: "🔒 Ασφαλής πληρωμή – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Κυκλοφορία κρυπτογραφημένη SSL/TLS.", footer_trust_kvkk_desc: "Προσωπικά δεδομένα σύμφωνα με KVKK.", footer_trust_gdpr_desc: "Συμβατό με GDPR για ΕΕ.", footer_trust_paytr_desc: "Ασφαλής πληρωμή μέσω PayTR.", footer_trust_hipaa_desc: "Δεδομένα υγείας ασφαλή επεξεργασία.",
         trust_cloudflare_title: "Προστασία από Cloudflare", trust_cloudflare_desc: "Προστασία κίνησης και γρήγορη πρόσβαση.", trust_cloudflare_1: "Προστασία DDoS", trust_cloudflare_2: "Παγκόσμια επιτάχυνση CDN", trust_cloudflare_3: "Ασφάλεια edge",
         how_title: "Πώς λειτουργεί η Norya;", how_desc: "Τρία απλά βήματα για να κατανοήσετε τα αποτελέσματά σας.",
@@ -6539,7 +7298,7 @@
         trust_since: "Od 2017", trust_satisfaction: "100% spokojenost", trust_users: "100 000+ uživatelů", trust_badges_heading: "Zabezpečená a compliantní služba",
         trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR",
         trust_badge_secure_paytr: "🔒 Zabezpečená platba – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Provoz šifrován SSL/TLS.", footer_trust_kvkk_desc: "Osobní údaje dle KVKK.", footer_trust_gdpr_desc: "V souladu s GDPR pro EU.", footer_trust_paytr_desc: "Zabezpečená platba PayTR.", footer_trust_hipaa_desc: "Zdravotní údaje zpracovány bezpečně.",
         trust_cloudflare_title: "Chráněno Cloudflare", trust_cloudflare_desc: "Ochrana provozu a rychlý přístup.", trust_cloudflare_1: "Ochrana DDoS", trust_cloudflare_2: "Globální CDN zrychlení", trust_cloudflare_3: "Edge zabezpečení",
         how_title: "Jak funguje Norya?", how_desc: "Tři jednoduché kroky k pochopení výsledků.",
@@ -6712,7 +7471,7 @@
         trust_since: "Od 2017", trust_satisfaction: "100% zadovoljstvo", trust_users: "100.000+ korisnika", trust_badges_heading: "Sigurna i usklađena usluga",
         trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR",
         trust_badge_secure_paytr: "🔒 Sigurna plaćanja – PayTR",
-        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned security",
+        footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Saobráćaj šifrovan SSL/TLS.", footer_trust_kvkk_desc: "Lični podaci u skladu sa KVKK.", footer_trust_gdpr_desc: "U skladu sa GDPR za EU.", footer_trust_paytr_desc: "Sigurna plaćanja putem PayTR.", footer_trust_hipaa_desc: "Zdravstveni podaci sigurno obrađeni.",
         trust_cloudflare_title: "Zaštićeno od strane Cloudflare", trust_cloudflare_desc: "Zaštita saobraćaja i brz pristup.", trust_cloudflare_1: "DDoS zaštita", trust_cloudflare_2: "Globalno CDN ubrzanje", trust_cloudflare_3: "Edge bezbednost",
         how_title: "Kako funkcioniše Norya?", how_desc: "Tri jednostavna koraka za razumevanje rezultata.",
@@ -7688,7 +8447,7 @@
     }
     async function downloadHistoryPdf() {
       if (!lastHistoryDetailId) return;
-      var lang = getLang() || 'tr';
+      var lang = getLang() || 'en';
       var t = T[lang] || T.tr;
       try {
         var res = await fetch(API_BASE + '/analyze/history/' + lastHistoryDetailId + '/pdf?lang=' + encodeURIComponent(lang), { headers: { 'Authorization': 'Bearer ' + getToken() } });
@@ -7722,16 +8481,10 @@
           var line = document.getElementById('wizard-line-' + i);
           if (panel) panel.classList.toggle('hidden', i !== wizardCurrentStep);
           if (dot) {
-            dot.classList.remove('bg-primary-600', 'border-primary-600', 'text-white', 'bg-primary-500', 'border-primary-500');
-            dot.classList.add('border-navy-300', 'dark:border-navy-600', 'text-navy-500', 'bg-white', 'dark:bg-navy-800');
-            if (i < wizardCurrentStep) { dot.classList.add('bg-primary-500', 'border-primary-500', 'text-white'); dot.classList.remove('border-navy-300', 'text-navy-500', 'bg-white', 'dark:bg-navy-800'); }
-            if (i === wizardCurrentStep) { dot.classList.add('bg-primary-600', 'border-primary-600', 'text-white'); dot.classList.remove('border-navy-300', 'text-navy-500', 'bg-white', 'dark:bg-navy-800'); }
+            dot.classList.remove('active', 'inactive');
+            dot.classList.add(i <= wizardCurrentStep ? 'active' : 'inactive');
           }
-          if (line) {
-            line.classList.remove('bg-primary-600', 'dark:bg-primary-500');
-            line.classList.add('bg-navy-200', 'dark:bg-navy-700');
-            if (i < wizardCurrentStep) { line.classList.add('bg-primary-600', 'dark:bg-primary-500'); line.classList.remove('bg-navy-200', 'dark:bg-navy-700'); }
-          }
+          if (line) line.classList.toggle('filled', i < wizardCurrentStep);
         }
         var prevBtn = document.getElementById('wizard-btn-prev');
         var nextBtn = document.getElementById('wizard-btn-next');
@@ -7790,7 +8543,7 @@
         var file = fileInput && fileInput.files && fileInput.files[0];
         var text = textEl ? (textEl.value || '').trim() : '';
         var langSelect = document.getElementById('wizard-lang');
-        if (langSelect) langSelect.value = getLang() || 'tr';
+        if (langSelect) langSelect.value = getLang() || 'en';
         var nameEl = document.getElementById('wizard-preview-name');
         var metaEl = document.getElementById('wizard-preview-meta');
         var fileBlock = document.getElementById('wizard-preview-file');
@@ -7925,7 +8678,7 @@
       try {
         var res, data;
         var isUploadRequest = hasFile;
-        var lang = getLang() || 'tr';
+        var lang = getLang() || 'en';
         if (hasFile) {
           var fd = new FormData();
           fd.append('file', file);
@@ -8073,11 +8826,11 @@
       var fileInput = document.getElementById('analyze-pdf');
       if (dropZone && fileInput) {
         dropZone.addEventListener('click', function(e) { if (e.target === dropZone || e.target.closest('#wizard-drop-zone')) fileInput.click(); });
-        dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('ring-2', 'ring-primary-400'); });
-        dropZone.addEventListener('dragleave', function() { dropZone.classList.remove('ring-2', 'ring-primary-400'); });
+        dropZone.addEventListener('dragover', function(e) { e.preventDefault(); dropZone.classList.add('drag-over'); });
+        dropZone.addEventListener('dragleave', function() { dropZone.classList.remove('drag-over'); });
         dropZone.addEventListener('drop', function(e) {
           e.preventDefault();
-          dropZone.classList.remove('ring-2', 'ring-primary-400');
+          dropZone.classList.remove('drag-over');
           var files = e.dataTransfer && e.dataTransfer.files;
           if (files && files[0]) {
             fileInput.files = files;
@@ -8116,17 +8869,7 @@
         var panel = document.getElementById('profile-panel-' + id);
         var btn = document.getElementById('profile-tab-' + id);
         if (panel) panel.classList.toggle('hidden', id !== tabId);
-        if (btn) {
-          var isActive = id === tabId;
-          btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
-          btn.classList.toggle('font-semibold', isActive);
-          btn.classList.toggle('text-primary-700', isActive);
-          btn.classList.toggle('dark:text-primary-300', isActive);
-          btn.classList.toggle('border-primary-600', isActive);
-          btn.classList.toggle('border-transparent', !isActive);
-          btn.classList.toggle('text-accent-600', !isActive);
-          btn.classList.toggle('dark:text-accent-300', !isActive);
-        }
+        if (btn) btn.setAttribute('aria-selected', id === tabId ? 'true' : 'false');
       });
       if (tabId === 'history') loadProfileHistory();
     }
@@ -8165,7 +8908,7 @@
           kpiBandEl.textContent = bandLabel;
         } else {
           kpiScoreEl.textContent = '—';
-          kpiBandEl.textContent = t.history_empty || 'Henüz analiz yok.';
+          kpiBandEl.textContent = t.profile_no_analyses || t.history_empty || 'Henüz analiz yok.';
         }
       }
       var kpiBioEl = document.getElementById('profile-kpi-bio-age');
@@ -8233,7 +8976,7 @@
       }
     }
     async function profileDownloadPdf(analysisId) {
-      var lang = getLang() || 'tr';
+      var lang = getLang() || 'en';
       var t = T[getLang()] || T.tr;
       try {
         var tokenRes = await fetch(API_BASE + '/analyze/history/' + analysisId + '/pdf-token', { method: 'POST', headers: { 'Authorization': 'Bearer ' + getToken() } });

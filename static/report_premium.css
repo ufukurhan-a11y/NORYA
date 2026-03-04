@@ -160,10 +160,116 @@ footer.pdf-footer {
   margin-bottom: 8px;
 }
 
+.sec-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  flex-shrink: 0;
+  color: var(--ink);
+}
+.sec-icon-wrap svg {
+  width: 20px;
+  height: 20px;
+  stroke: currentColor;
+}
+
 .sec-icon {
   font-size: 1.1em;
   line-height: 1;
 }
+
+.refined-disclaimer {
+  margin: 0;
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.45;
+}
+
+.executive-summary-text {
+  margin: 0;
+  font-size: 12.5px;
+  line-height: 1.5;
+  color: var(--ink);
+}
+
+.summary-tiles-section .summary-tiles {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 520px) {
+  .summary-tiles-section .summary-tiles {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+.summary-tile {
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 10px 12px;
+  background: #fafbfc;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.summary-tile .tile-icon {
+  display: inline-flex;
+  width: 20px;
+  height: 20px;
+  margin-bottom: 4px;
+  color: var(--brand);
+}
+.summary-tile .tile-icon svg { width: 18px; height: 18px; }
+.summary-tile .tile-label {
+  font-size: 10.5px;
+  color: var(--muted);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.summary-tile .tile-value {
+  font-size: 13px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+.biomarker-highlights-section .biomarker-group {
+  margin-bottom: 12px;
+}
+.biomarker-highlights-section .biomarker-group:last-child { margin-bottom: 0; }
+.biomarker-group-name {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--muted);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+.biomarker-group-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.5;
+}
+.biomarker-group-list .bm-name { font-weight: 600; }
+.biomarker-group-list .bm-value { color: var(--ink); }
+.biomarker-group-list .bm-ref { color: var(--muted); font-size: 11px; }
+.biomarker-group-list .bm-status { font-size: 11px; margin-left: 4px; }
+
+.key-areas-list { list-style: none; padding: 0; margin: 0; }
+.key-area-item {
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  font-size: 12px;
+}
+.key-area-item:last-child { border-bottom: none; }
+.key-area-param { font-weight: 700; color: var(--ink); display: block; margin-bottom: 2px; }
+.key-area-why, .key-area-focus { display: block; color: var(--muted); font-size: 11.5px; margin-top: 2px; }
+
+.sec-title-sub { margin-top: 14px; margin-bottom: 6px; }
+
+.trend-placeholder { color: var(--muted); font-style: italic; }
 
 .dot {
   width: 10px;
@@ -350,6 +456,129 @@ footer.pdf-footer {
 .gauge-svg .gauge-score {
   fill: var(--ink);
   font-family: inherit;
+}
+
+/* Category score bars */
+.category-bars-section .category-bars {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.category-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 12px;
+}
+.category-bar-label {
+  min-width: 90px;
+  color: var(--ink);
+  font-weight: 600;
+}
+.category-bar-track {
+  flex: 1;
+  height: 8px;
+  background: #e2e8f0;
+  border-radius: 4px;
+  overflow: hidden;
+  max-width: 160px;
+}
+.category-bar-fill {
+  height: 100%;
+  background: var(--brand);
+  border-radius: 4px;
+  opacity: 0.88;
+}
+.category-bar-value {
+  min-width: 24px;
+  text-align: right;
+  font-weight: 700;
+  color: var(--brand);
+  font-size: 12px;
+}
+
+/* Risk distribution bar */
+.distribution-section .distribution-bar {
+  display: flex;
+  height: 12px;
+  border-radius: 6px;
+  overflow: hidden;
+  background: #e2e8f0;
+  margin-bottom: 6px;
+}
+.dist-seg {
+  min-width: 2px;
+}
+.dist-normal {
+  background: #94a3b8;
+}
+.dist-borderline {
+  background: rgba(245, 158, 11, 0.85);
+}
+.dist-attention {
+  background: var(--brand);
+  opacity: 0.9;
+}
+.distribution-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 14px;
+  font-size: 11px;
+  color: var(--muted);
+}
+.dist-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+.dist-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+.dist-dot.dist-normal { background: #94a3b8; }
+.dist-dot.dist-borderline { background: #f59e0b; }
+.dist-dot.dist-attention { background: var(--brand); }
+
+/* Radar chart */
+.radar-section .radar-wrap {
+  display: flex;
+  justify-content: center;
+  padding: 8px 0;
+}
+.radar-wrap .report-radar-svg {
+  width: 100%;
+  max-width: 200px;
+  height: auto;
+  display: block;
+}
+
+/* Top attention areas */
+.attention-section .attention-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.attention-item {
+  font-size: 12px;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px;
+}
+.attention-item:last-child {
+  border-bottom: none;
+}
+.attention-test {
+  font-weight: 700;
+  color: var(--ink);
+}
+.attention-action {
+  color: var(--muted);
+  font-size: 11px;
 }
 
 /* Trend analizi */

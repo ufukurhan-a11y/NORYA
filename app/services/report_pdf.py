@@ -128,6 +128,38 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_disclaimer_title": "Bilgilendirme amaçlıdır.",
         "report_disclaimer_text": "Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.",
         "report_trend_locked": "Trend analizi abonelik ile açılır.",
+        "report_category_scores": "Kategori skorları",
+        "report_risk_distribution": "Risk dağılımı",
+        "report_radar_balance": "Biyobelirteç dengesi",
+        "report_top_attention": "Öne çıkan dikkat alanları",
+        "report_dist_normal": "Normal",
+        "report_dist_borderline": "Sınır",
+        "report_dist_attention": "Dikkat",
+        "report_executive_summary": "Özet",
+        "report_summary_tiles": "Özet",
+        "report_biomarker_highlights": "Biyobelirteç Özeti",
+        "report_risk_indicators": "Risk Göstergeleri",
+        "report_key_areas": "Takip Edilecek Alanlar",
+        "report_foods_to_favor": "Tercih Edilebilecek Gıdalar",
+        "report_foods_to_limit": "Sınırlanabilecek Gıdalar",
+        "report_lifestyle": "Yaşam Tarzı Önerileri",
+        "report_doctor_discussion": "Hekim Görüşmesi Notları",
+        "report_tile_overall_score": "Genel Skor",
+        "report_tile_risk_level": "Risk Düzeyi",
+        "report_tile_bio_age": "Biyolojik Yaş",
+        "report_tile_priority": "Öncelik",
+        "report_priority_general": "Genel iyilik hali",
+        "report_food_favor_default": "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir.",
+        "report_food_limit_default": "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir.",
+        "report_lifestyle_sleep": "Yeterli uyku toparlanmayı destekler.",
+        "report_lifestyle_movement": "Düzenli hareket önerilir.",
+        "report_lifestyle_followup": "Takip süresini hekiminizle görüşün.",
+        "report_doctor_note_1": "Bu raporu hekiminizle paylaşın.",
+        "report_doctor_note_2": "Belirti veya endişeler hekim tarafından değerlendirilmelidir.",
+        "report_refined_disclaimer": "Bu rapor yalnızca bilgilendirme amaçlıdır. Teşhis veya tedavi sunmaz. Belirti veya tedavi kararları için hekiminize başvurun.",
+        "report_trend_placeholder": "Trend, zamanla daha fazla raporla kullanılabilir hale gelir.",
+        "report_why_it_matters": "Neden önemli",
+        "report_monitoring_focus": "Takip odağı",
         "report_domain_cardio": "Kardiyovasküler",
         "report_domain_metabolic": "Metabolik",
         "report_domain_vitamin": "Vitamin",
@@ -219,6 +251,38 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_disclaimer_title": "For information only.",
         "report_disclaimer_text": "This report does not replace medical diagnosis or treatment. Consult your doctor for health decisions.",
         "report_trend_locked": "Trend analysis is available with subscription.",
+        "report_category_scores": "Category scores",
+        "report_risk_distribution": "Risk distribution",
+        "report_radar_balance": "Biomarker balance",
+        "report_top_attention": "Top attention areas",
+        "report_dist_normal": "Normal",
+        "report_dist_borderline": "Borderline",
+        "report_dist_attention": "Attention",
+        "report_executive_summary": "Executive Summary",
+        "report_summary_tiles": "Summary",
+        "report_biomarker_highlights": "Biomarker Highlights",
+        "report_risk_indicators": "Risk Indicators",
+        "report_key_areas": "Key Areas to Watch",
+        "report_foods_to_favor": "Foods to Favor",
+        "report_foods_to_limit": "Foods to Limit",
+        "report_lifestyle": "Lifestyle Support",
+        "report_doctor_discussion": "Doctor Discussion Notes",
+        "report_tile_overall_score": "Overall Score",
+        "report_tile_risk_level": "Risk Level",
+        "report_tile_bio_age": "Biological Age",
+        "report_tile_priority": "Priority Focus",
+        "report_priority_general": "General wellness",
+        "report_food_favor_default": "Balanced diet; vegetables and fruits may support general health.",
+        "report_food_limit_default": "Processed foods and excess sugar may be worth limiting.",
+        "report_lifestyle_sleep": "Adequate sleep supports recovery.",
+        "report_lifestyle_movement": "Regular movement is recommended.",
+        "report_lifestyle_followup": "Discuss follow-up timing with your doctor.",
+        "report_doctor_note_1": "Share this report with your physician for context.",
+        "report_doctor_note_2": "Any symptoms or concerns should be evaluated by a doctor.",
+        "report_refined_disclaimer": "This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.",
+        "report_trend_placeholder": "Trend becomes available with more reports over time.",
+        "report_why_it_matters": "Why it matters",
+        "report_monitoring_focus": "Monitoring focus",
         "report_domain_cardio": "Cardiovascular",
         "report_domain_metabolic": "Metabolic",
         "report_domain_vitamin": "Vitamin",
@@ -1276,6 +1340,56 @@ def _trend_svg(trend_data: dict) -> str:
     return "\n".join(out)
 
 
+# Outline icons (Feather-style, 24x24, stroke only) for report sections — web + PDF
+REPORT_ICONS: dict[str, str] = {
+    "file-text": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>',
+    "activity": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>',
+    "grid": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>',
+    "bar-chart-2": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>',
+    "alert-circle": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>',
+    "eye": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+    "apple": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c4-4 8-6.5 8-11a5 5 0 0 0-10 0c0 4.5 4 7 8 11z"/><path d="M12 11c0-2 1.5-4 4-4"/></svg>',
+    "minus-circle": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="8" y1="12" x2="16" y2="12"/></svg>',
+    "heart": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+    "trending-up": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>',
+    "message-circle": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 11.5a8.38 8.38 0 0 1-.9 3.8 8.5 8.5 0 0 1-7.6 4.7 8.38 8.38 0 0 1-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 0 1-.9-3.8 8.5 8.5 0 0 1 4.7-7.6 8.38 8.38 0 0 1 3.8-.9h.5a8.48 8.48 0 0 1 8 8v.5z"/></svg>',
+    "info": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>',
+    "gauge": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>',
+    "target": '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>',
+}
+
+
+def _report_icon(name: str) -> str:
+    """Return inline SVG for report section icon (safe for HTML/PDF)."""
+    return REPORT_ICONS.get(name, REPORT_ICONS["info"])
+
+
+def _radar_svg(domains: dict) -> str:
+    """Four-axis radar chart from domain scores (cardio, metabolic, inflammation, vitamin). viewBox 0 0 200 200."""
+    order = ("cardio", "metabolic", "inflammation", "vitamin")
+    scores = [max(0, min(100, (domains.get(d) or {}).get("score", 50))) for d in order]
+    cx, cy, r = 100.0, 100.0, 72.0
+    points = []
+    for i, s in enumerate(scores):
+        angle = (i * 90 - 90) * math.pi / 180
+        x = cx + r * (s / 100.0) * math.cos(angle)
+        y = cy + r * (s / 100.0) * math.sin(angle)
+        points.append(f"{x:.2f},{y:.2f}")
+    poly = " ".join(points)
+    axes = []
+    for i in range(4):
+        a = (i * 90 - 90) * math.pi / 180
+        x2 = cx + r * math.cos(a)
+        y2 = cy + r * math.sin(a)
+        axes.append(f'<line x1="{cx}" y1="{cy}" x2="{x2}" y2="{y2}" class="report-radar-axis" stroke="#cbd5e1" stroke-width="1"/>')
+    return f'''<svg class="report-radar-svg" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+  <circle cx="{cx}" cy="{cy}" r="{r}" fill="none" stroke="#e2e8f0" stroke-width="1"/>
+  {"".join(axes)}
+  <polygon points="{poly}" fill="rgba(14,165,164,0.12)" stroke="none"/>
+  <polygon points="{poly}" fill="none" stroke="#0EA5A4" stroke-width="1.5"/>
+</svg>'''
+
+
 def _biomarkers_to_lab_values(biomarkers: list[dict]) -> list[dict]:
     """PDF'den parse edilen biomarkers → risk_engine.compute_risk beklediği lab_values (name, value, ref_low, ref_high)."""
     canonical = {
@@ -1353,6 +1467,193 @@ def _build_premium_context(
             {"name": labels.get(name_keys[i], name_keys[i]), "score": overall_score, "label": label, "level": level}
             for i in range(4)
         ]
+
+    # Risk distribution and top attention from risk_summary.highlights (when available)
+    risk_distribution = {"normal": 0, "borderline": 0, "attention": 0}
+    top_attention: list[dict] = []
+    radar_svg = ""
+    if lab_values:
+        try:
+            risk_summary = compute_risk(lab_values)
+            domains = risk_summary.get("domains") or {}
+            highlights = risk_summary.get("highlights") or []
+            for h in highlights:
+                lev = (h.get("level") or "").lower()
+                if lev == "low":
+                    risk_distribution["normal"] += 1
+                elif lev == "mid":
+                    risk_distribution["borderline"] += 1
+                else:
+                    risk_distribution["attention"] += 1
+            if not highlights:
+                risk_distribution["normal"] = 1
+            for h in highlights:
+                if len(top_attention) >= 5:
+                    break
+                lev = (h.get("level") or "").lower()
+                if lev in ("mid", "high"):
+                    top_attention.append({"test": h.get("test") or "—", "action": h.get("action") or ""})
+            radar_svg = _radar_svg(domains)
+        except Exception:
+            pass
+    if not radar_svg and risk_cards:
+        domains_fallback = {dk: {"score": c.get("score", 50)} for dk, c in zip(("cardio", "metabolic", "inflammation", "vitamin"), risk_cards)}
+        radar_svg = _radar_svg(domains_fallback)
+    total_dist = risk_distribution["normal"] + risk_distribution["borderline"] + risk_distribution["attention"]
+    if total_dist == 0:
+        total_dist = 1
+    dist_pct = {
+        "normal_pct": 100 * risk_distribution["normal"] / total_dist,
+        "borderline_pct": 100 * risk_distribution["borderline"] / total_dist,
+        "attention_pct": 100 * risk_distribution["attention"] / total_dist,
+    }
+    top_attention = top_attention[:3]
+
+    _labels = _pdf_labels(lang)
+    _fallback_en = PDF_LABELS.get("en", {})
+
+    def _t_early(key: str, default: str = "") -> str:
+        return (_labels.get(key) or _fallback_en.get(key) or default)
+
+    # Biomarker category mapping for grouped highlights (Metabolic, Cardiovascular, Liver, Inflammation, Iron/Nutrients, Vitamins)
+    BIOMARKER_GROUP: dict[str, tuple[str, ...]] = {
+        "Metabolic": ("Glucose", "HbA1c", "Creatinine", "eGFR"),
+        "Cardiovascular": ("LDL", "HDL", "Triglycerides", "Total cholesterol", "CRP", "Homocysteine"),
+        "Liver": ("ALT", "AST", "GGT"),
+        "Inflammation": ("CRP", "Homocysteine"),
+        "Iron/Nutrients": ("Ferritin", "Iron", "Hb", "Hemoglobin"),
+        "Vitamins": ("Vitamin D", "B12", "Folate"),
+    }
+    biomarker_highlights: dict[str, list[dict]] = {k: [] for k in BIOMARKER_GROUP}
+    for row in (base_context.get("biomarkers") or []):
+        name = (row.get("name") or "").strip()
+        if not name:
+            continue
+        for group, params in BIOMARKER_GROUP.items():
+            if any(p.lower() in name.lower() or name.lower() in p.lower() for p in params):
+                biomarker_highlights[group].append({
+                    "name": name,
+                    "value": row.get("value") or "—",
+                    "unit": row.get("unit"),
+                    "ref": row.get("reference"),
+                    "status": row.get("status_label") or "—",
+                })
+                break
+
+    # Executive summary: first 2–4 sentences from summary
+    summary_txt = (base_context.get("summary") or "").strip()
+    executive_sentences = [
+        s.strip() + ("." if s.strip() and not s.strip().endswith(".") else "")
+        for s in re.split(r"(?<=[.!])\s+", summary_txt) if s.strip()
+    ][:4]
+    executive_summary = " ".join(executive_sentences) if executive_sentences else (
+        "Lab results have been reviewed. Discuss any out-of-range values with your doctor." if lang != "tr"
+        else "Laboratuvar sonuçları değerlendirildi. Referans dışı değerleri hekiminizle görüşün."
+    )
+    executive_summary = _strip_ai_from_text(executive_summary)
+
+    # Summary tiles: Overall Score, Risk Level, Biological Age, Priority Focus
+    health_age = 40
+    try:
+        health_age = int(round(40 + (100 - overall_score) / 4.0))
+    except Exception:
+        pass
+    health_age = max(20, min(80, health_age))
+    risk_level_label = _t_early("report_band_low", "Low") if overall_score <= 33 else (_t_early("report_band_mid", "Moderate") if overall_score <= 66 else _t_early("report_band_high", "Good"))
+    priority_focus = ""
+    if lab_values:
+        try:
+            rs = compute_risk(lab_values)
+            hl = (rs.get("highlights") or [])
+            for h in hl:
+                if (h.get("level") or "").lower() in ("mid", "high"):
+                    priority_focus = (h.get("test") or "") + (" — " + (h.get("action") or "")) if h.get("action") else (h.get("test") or "")
+                    break
+        except Exception:
+            pass
+    if not priority_focus:
+        priority_focus = _t_early("report_priority_general", "General wellness") if lang != "tr" else "Genel iyilik hali"
+    summary_tiles = [
+        {"label": _t_early("report_tile_overall_score", "Overall Score"), "value": str(overall_score) + " / 100", "icon": "activity"},
+        {"label": _t_early("report_tile_risk_level", "Risk Level"), "value": risk_level_label, "icon": "gauge"},
+        {"label": _t_early("report_tile_bio_age", "Biological Age"), "value": "≈ " + str(health_age), "icon": "target"},
+        {"label": _t_early("report_tile_priority", "Priority Focus"), "value": priority_focus[:50] + ("…" if len(priority_focus) > 50 else ""), "icon": "eye"},
+    ]
+
+    # Key areas to watch (2–5 items: parameter, why_it_matters, monitoring_focus)
+    key_areas_to_watch: list[dict] = []
+    if lab_values:
+        try:
+            rs = compute_risk(lab_values)
+            for h in (rs.get("highlights") or []):
+                if len(key_areas_to_watch) >= 5:
+                    break
+                if (h.get("level") or "").lower() in ("mid", "high"):
+                    key_areas_to_watch.append({
+                        "parameter": h.get("test") or "—",
+                        "why_it_matters": _strip_ai_from_text(h.get("why") or ""),
+                        "monitoring_focus": _strip_ai_from_text(h.get("action") or ""),
+                    })
+        except Exception:
+            pass
+
+    # Foods to favor / limit (safe language: "may support" / "may be worth limiting")
+    rec_txt_pre = (base_context.get("recommendations") or "").strip().lower()
+    foods_to_favor: list[str] = []
+    foods_to_limit: list[str] = []
+    for line in (base_context.get("recommendations") or "").splitlines():
+        line = line.strip().lstrip("-•* ")
+        if not line:
+            continue
+        line_clean = _strip_ai_from_text(line)
+        if not line_clean:
+            continue
+        low = line_clean.lower()
+        if any(x in low for x in ("favor", "eat more", "increase", "yenilmesi", "tüketilmesi", "önerilir", "tercih", "sebze", "vegetable", "fruit", "meyve", "fiber", "lif", "omega", "balık", "fish")):
+            if len(foods_to_favor) < 6:
+                foods_to_favor.append(line_clean)
+        elif any(x in low for x in ("limit", "avoid", "reduce", "az tüket", "kaçının", "kısıtla", "sugar", "şeker", "salt", "tuz", "processed", "işlenmiş", "alcohol", "alkol")):
+            if len(foods_to_limit) < 6:
+                foods_to_limit.append(line_clean)
+    if not foods_to_favor:
+        foods_to_favor = [_t_early("report_food_favor_default", "Balanced diet; vegetables and fruits may support general health.") if lang != "tr" else "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir."]
+    if not foods_to_limit:
+        foods_to_limit = [_t_early("report_food_limit_default", "Processed foods and excess sugar may be worth limiting.") if lang != "tr" else "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir."]
+
+    # Lifestyle suggestions (sleep, movement, hydration, stress, follow-up)
+    lifestyle_suggestions: list[str] = []
+    lifestyle_keywords = ("sleep", "uyku", "exercise", "hareket", "hydration", "sıvı", "water", "su", "stress", "stres", "follow", "takip", "kontrol", "repeat", "recheck")
+    for line in (base_context.get("recommendations") or "").splitlines():
+        line = line.strip().lstrip("-•* ")
+        if not line or len(lifestyle_suggestions) >= 6:
+            continue
+        line_clean = _strip_ai_from_text(line)
+        if any(k in line_clean.lower() for k in lifestyle_keywords):
+            lifestyle_suggestions.append(line_clean)
+    if not lifestyle_suggestions:
+        lifestyle_suggestions = [
+            _t_early("report_lifestyle_sleep", "Adequate sleep supports recovery.") if lang != "tr" else "Yeterli uyku toparlanmayı destekler.",
+            _t_early("report_lifestyle_movement", "Regular movement is recommended.") if lang != "tr" else "Düzenli hareket önerilir.",
+            _t_early("report_lifestyle_followup", "Discuss follow-up timing with your doctor.") if lang != "tr" else "Takip süresini hekiminizle görüşün.",
+        ]
+
+    # Doctor discussion notes (2–4 neutral points)
+    doctor_discussion_notes: list[str] = []
+    if summary_txt:
+        for s in re.split(r"(?<=[.!])\s+", summary_txt):
+            s = s.strip()
+            if s and len(s) > 25 and len(doctor_discussion_notes) < 4:
+                doctor_discussion_notes.append(_strip_ai_from_text(s))
+    if len(doctor_discussion_notes) < 2:
+        doctor_discussion_notes.append(_t_early("report_doctor_note_1", "Share this report with your physician for context.") if lang != "tr" else "Bu raporu hekiminizle paylaşın.")
+        doctor_discussion_notes.append(_t_early("report_doctor_note_2", "Any symptoms or concerns should be evaluated by a doctor.") if lang != "tr" else "Belirti veya endişeler hekim tarafından değerlendirilmelidir.")
+    doctor_discussion_notes = doctor_discussion_notes[:4]
+
+    # Refined disclaimer (informational only, consult physician)
+    refined_disclaimer = _t_early("report_refined_disclaimer", "This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.")
+
+    # Trend placeholder when no history
+    trend_placeholder_text = _t_early("report_trend_placeholder", "Trend becomes available with more reports over time.")
 
     # Bulgular: risk_indicators satırları veya summary cümleleri (3–6 madde)
     risk_txt = (base_context.get("risk_message") or base_context.get("risk_indicators") or "").strip()
@@ -1493,17 +1794,6 @@ def _build_premium_context(
     trend_message = _t("report_trend_need_more", "More analyses needed for trend.")
     trend_locked_label = _t("report_trend_locked", "Trend analysis is available with subscription.")
 
-    # Health age (biological age estimate) from overall_score (educational only)
-    # Baseline 40 yaş; skor düştükçe sağlık yaşı artar (20–80 aralığına sıkıştırılır).
-    try:
-        health_age = int(round(40 + (100 - overall_score) / 4.0))
-    except Exception:
-        health_age = 40
-    if health_age < 20:
-        health_age = 20
-    if health_age > 80:
-        health_age = 80
-
     return {
         "rid": report_id,
         "trend_locked": trend_locked,
@@ -1563,6 +1853,43 @@ def _build_premium_context(
         "trend_bars": trend_bars,
         "trend_svg": trend_svg,
         "trend_message": trend_message,
+        "risk_distribution": risk_distribution,
+        "dist_pct": dist_pct,
+        "top_attention": top_attention,
+        "radar_svg": radar_svg,
+        "label_report_category_scores": _t("report_category_scores", "Category scores"),
+        "label_report_risk_distribution": _t("report_risk_distribution", "Risk distribution"),
+        "label_report_radar_balance": _t("report_radar_balance", "Biomarker balance"),
+        "label_report_top_attention": _t("report_top_attention", "Top attention areas"),
+        "label_dist_normal": _t("report_dist_normal", "Normal"),
+        "label_dist_borderline": _t("report_dist_borderline", "Borderline"),
+        "label_dist_attention": _t("report_dist_attention", "Attention"),
+        "executive_summary": executive_summary,
+        "summary_tiles": summary_tiles,
+        "biomarker_highlights": biomarker_highlights,
+        "key_areas_to_watch": key_areas_to_watch,
+        "foods_to_favor": foods_to_favor,
+        "foods_to_limit": foods_to_limit,
+        "lifestyle_suggestions": lifestyle_suggestions,
+        "doctor_discussion_notes": doctor_discussion_notes,
+        "refined_disclaimer": refined_disclaimer,
+        "trend_placeholder_text": trend_placeholder_text,
+        "report_icons": REPORT_ICONS,
+        "label_report_executive_summary": _t("report_executive_summary", "Executive Summary"),
+        "label_report_summary_tiles": _t("report_summary_tiles", "Summary"),
+        "label_report_biomarker_highlights": _t("report_biomarker_highlights", "Biomarker Highlights"),
+        "label_report_risk_indicators": _t("report_risk_indicators", "Risk Indicators"),
+        "label_report_key_areas": _t("report_key_areas", "Key Areas to Watch"),
+        "label_report_foods_to_favor": _t("report_foods_to_favor", "Foods to Favor"),
+        "label_report_foods_to_limit": _t("report_foods_to_limit", "Foods to Limit"),
+        "label_report_lifestyle": _t("report_lifestyle", "Lifestyle Support"),
+        "label_report_doctor_discussion": _t("report_doctor_discussion", "Doctor Discussion Notes"),
+        "label_report_tile_overall_score": _t("report_tile_overall_score", "Overall Score"),
+        "label_report_tile_risk_level": _t("report_tile_risk_level", "Risk Level"),
+        "label_report_tile_bio_age": _t("report_tile_bio_age", "Biological Age"),
+        "label_report_tile_priority": _t("report_tile_priority", "Priority Focus"),
+        "label_why_it_matters": _t("report_why_it_matters", "Why it matters"),
+        "label_monitoring_focus": _t("report_monitoring_focus", "Monitoring focus"),
     }
 
 
