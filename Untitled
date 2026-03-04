@@ -1,0 +1,191 @@
+HEDEF: OpenAI maliyetini düşürmek için DB tabanlı cache sistemi ekle. Aynı analiz girdisi (normalize lab değerleri + dil + plan + model) gelirse OpenAI çağrısı yapma, DB’den sonucu döndür.
+
+TEKNİK:
+- FastAPI projesi var.
+- SQLite kullanıyorsak norya.db içine ai_cache tablosu aç.
+- TTL: 30 gün (expires_at). Süresi dolan cache silinsin.
+- Cache key: SHA256(hash) = stable json(labs_norm + lang + plan + model + sex + age_band + prompt_version)
+- Prompt değişince prompt_version artırıp eski cache’leri otomatik geçersiz kılacağız.
+
+YAPILACAKLAR (DOSYA DOSYA):
+
+1) app/cache_utils.py oluştur:
+--- CODE START ---
+import hashlib, json
+from datetime import datetime, timedelta, timezone
+from typing import Any, Optional
+
+UTC = timezone.utc
+
+def stable_dumps(obj: Any) -> str:
+    return json.dumps(obj, ensure_ascii=False, separators=(",", ":"), sort_keys=True)
+
+def make_cache_key(*, labs_norm: dict, lang: str, plan: str, model: str,
+                   sex: str | None = None, age_band: str | None = None,
+                   prompt_version: int = 1) -> str:
+    payload = {
+        "labs": labs_norm,
+        "lang": lang,
+        "plan": plan,
+        "model": model,
+        "sex": sex,
+        "age_band": age_band,
+        "v": prompt_version,
+    }
+    raw = stable_dumps(payload).encode("utf-8")
+    return hashlib.sha256(raw).hexdigest()
+
+def now_iso() -> str:
+    return datetime.now(UTC).isoformat()
+
+def expires_iso(days: int) -> str:
+    return (datetime.now(UTC) + timedelta(days=days)).isoformat()
+
+def is_expired(expires_at: Optional[str]) -> bool:
+    if not expires_at:
+        return False
+    return datetime.fromisoformat(expires_at) <= datetime.now(UTC)
+--- CODE END ---
+
+2) app/cache_db.py oluştur (SQLite):
+--- CODE START ---
+import sqlite3, json
+from typing import Optional, Any, Dict
+from .cache_utils import is_expired
+
+def get_conn(db_path: str = "norya.db") -> sqlite3.Connection:
+    conn = sqlite3.connect(db_path, check_same_thread=False)
+    conn.row_factory = sqlite3.Row
+    return conn
+
+def init_cache(conn: sqlite3.Connection) -> None:
+    conn.execute("""
+    CREATE TABLE IF NOT EXISTS ai_cache (
+      cache_key TEXT PRIMARY KEY,
+      created_at TEXT NOT NULL,
+      expires_at TEXT,
+      model TEXT NOT NULL,
+      input_summary TEXT NOT NULL,
+      response_json TEXT NOT NULL
+    );
+    """)
+    conn.execute("CREATE INDEX IF NOT EXISTS idx_ai_cache_expires ON ai_cache(expires_at);")
+    conn.commit()
+
+def cache_get(conn: sqlite3.Connection, cache_key: str) -> Optional[Dict[str, Any]]:
+    row = conn.execute("SELECT * FROM ai_cache WHERE cache_key = ?", (cache_key,)).fetchone()
+    if not row:
+        return None
+    if is_expired(row["expires_at"]):
+        conn.execute("DELETE FROM ai_cache WHERE cache_key = ?", (cache_key,))
+        conn.commit()
+        return None
+    return json.loads(row["response_json"])
+
+def cache_set(conn: sqlite3.Connection, *, cache_key: str, created_at: str, expires_at: str | None,
+              model: str, input_summary: dict, response_obj: dict) -> None:
+    conn.execute("""
+      INSERT OR REPLACE INTO ai_cache (cache_key, created_at, expires_at, model, input_summary, response_json)
+      VALUES (?, ?, ?, ?, ?, ?)
+    """, (
+        cache_key,
+        created_at,
+        expires_at,
+        model,
+        json.dumps(input_summary, ensure_ascii=False),
+        json.dumps(response_obj, ensure_ascii=False),
+    ))
+    conn.commit()
+--- CODE END ---
+
+3) app/main.py (veya analyze endpoint’in olduğu dosya) içine entegre et:
+- Uygulama başında conn oluştur, init_cache çağır.
+- /analyze içinde önce cache kontrol et; varsa cached:true ile dön.
+- Yoksa OpenAI çağır, sonucu cache_set ile yaz.
+
+Örnek entegrasyon (senin endpoint isimlerin farklıysa uyarlayacaksın):
+--- CODE START ---
+from fastapi import FastAPI, HTTPException
+from app.cache_db import get_conn, init_cache, cache_get, cache_set
+from app.cache_utils import make_cache_key, now_iso, expires_iso
+
+app = FastAPI()
+
+DB_PATH = "norya.db"
+OPENAI_MODEL = "gpt-4.1-mini"   # sende hangi modelse onu yaz
+PROMPT_VERSION = 1             # prompt değişince +1
+
+conn = get_conn(DB_PATH)
+init_cache(conn)
+
+def call_openai_for_analysis(*, labs_norm: dict, lang: str, plan: str) -> dict:
+    # TODO: burada SENİN mevcut OpenAI çağrı fonksiyonunu kullan
+    # return {...}
+    raise NotImplementedError
+
+@app.post("/analyze")
+def analyze(payload: dict):
+    labs_norm = payload.get("labs_norm")
+    if not isinstance(labs_norm, dict) or not labs_norm:
+        raise HTTPException(status_code=400, detail="labs_norm required (dict)")
+
+    lang = payload.get("lang", "tr")
+    plan = payload.get("plan", "basic")
+    sex = payload.get("sex")
+    age_band = payload.get("age_band")
+
+    cache_key = make_cache_key(
+        labs_norm=labs_norm,
+        lang=lang,
+        plan=plan,
+        model=OPENAI_MODEL,
+        sex=sex,
+        age_band=age_band,
+        prompt_version=PROMPT_VERSION,
+    )
+
+    cached = cache_get(conn, cache_key)
+    if cached is not None:
+        return {"cached": True, "cache_key": cache_key, "result": cached}
+
+    result = call_openai_for_analysis(labs_norm=labs_norm, lang=lang, plan=plan)
+
+    cache_set(
+        conn,
+        cache_key=cache_key,
+        created_at=now_iso(),
+        expires_at=expires_iso(days=30),
+        model=OPENAI_MODEL,
+        input_summary={"lang": lang, "plan": plan, "labs_count": len(labs_norm)},
+        response_obj=result,
+    )
+
+    return {"cached": False, "cache_key": cache_key, "result": result}
+--- CODE END ---
+
+4) Temizlik endpoint’i (opsiyonel ama iyi):
+/admin/cache/purge-expired -> expires_at geçmiş kayıtları silsin.
+--- CODE START ---
+from datetime import datetime, timezone
+
+@app.post("/admin/cache/purge-expired")
+def purge_expired():
+    now = datetime.now(timezone.utc).isoformat()
+    cur = conn.execute("DELETE FROM ai_cache WHERE expires_at IS NOT NULL AND expires_at <= ?", (now,))
+    conn.commit()
+    return {"deleted": cur.rowcount}
+--- CODE END ---
+
+5) Test:
+- Aynı payload ile /analyze’i 2 kez çağır.
+- 2. çağrıda {"cached": true} dönmeli ve OpenAI çağrısı yapılmamalı.
+- Log’a “CACHE HIT” / “CACHE MISS” yaz (print veya logger).
+
+6) Güvenlik notu:
+- response_json içine kullanıcı PII koyma (mail, ad vb). Sadece analiz sonucu.
+
+Uygula ve bana:
+- Hangi dosyalara ekledin,
+- /analyze 2 kez çağrınca cached:true dönüyor mu,
+- DB’de ai_cache tablosu oluştu mu
+raporla.

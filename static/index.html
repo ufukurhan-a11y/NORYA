@@ -67,6 +67,24 @@
     .gradient-hero { background: var(--norya-hero); }
     .drop-shadow-soft { box-shadow: var(--norya-shadow); }
     .norya-card-shadow { box-shadow: var(--norya-card-shadow); }
+    .bg-brand-gradient { background: linear-gradient(135deg, #0EA5A4 0%, #0f766e 100%); }
+    .glass-card {
+      background: rgba(15, 23, 42, 0.55);
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.45);
+      box-shadow: 0 18px 45px rgba(15, 23, 42, 0.45);
+      backdrop-filter: blur(22px);
+      -webkit-backdrop-filter: blur(22px);
+    }
+    .light-glass-card {
+      background: rgba(255, 255, 255, 0.82);
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.3);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+    }
+    .rounded-14 { border-radius: 14px; }
     .trust-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .trust-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 25, 41, 0.08); }
     .dark .trust-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
@@ -798,6 +816,57 @@
         <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡️</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR uyumlu</span></li>
         <li class="inline-flex items-center gap-2"><img src="/static/logos/paytr.svg" alt="PayTR" class="h-5 w-auto object-contain opacity-90" width="60" height="16" loading="lazy" /> <span data-i18n="trust_badge_paytr">PayTR ile güvenli ödeme</span></li>
       </ul>
+    </div>
+  </section>
+
+  <!-- Hero altı: Premium AI özellik kartları -->
+  <section class="premium-section bg-[var(--norya-bg)]">
+    <div class="premium-wrap">
+      <div class="max-w-3xl mx-auto text-center mb-6 sm:mb-8">
+        <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-accent-900 dark:text-white mb-2" data-i18n="home_premium_features_title">AI Destekli Sağlık Analizi</h2>
+        <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300" data-i18n="home_premium_features_desc">Kan tahlili sonuçlarınızı yükleyin ve sağlık risklerinizi öğrenin.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">🧬</span>
+              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_health_score_title">Health Score</h3>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_health_score_desc">Genel sağlık puanınızı görün.</p>
+        </article>
+
+        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">🩸</span>
+              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_diabetes_title">Diyabet Riski Analizi</h3>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_diabetes_desc">Glucose ve HbA1c değerlerinden risk hesaplanır.</p>
+        </article>
+
+        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">❤️</span>
+              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_heart_title">Kalp Sağlığı Analizi</h3>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_heart_desc">LDL, HDL ve kolesterol analiz edilir.</p>
+        </article>
+
+        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
+          <div class="flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">📊</span>
+              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_charts_title">Akıllı Sağlık Grafikleri</h3>
+            </div>
+          </div>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_charts_desc">Tüm sağlık değerlerini grafiklerle takip edin.</p>
+        </article>
+      </div>
     </div>
   </section>
 
@@ -1903,31 +1972,62 @@
     <div class="max-w-5xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="param_title">Bu parametre ne?</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-10" data-i18n="param_subtitle">Kan tahlilinde sık görülen parametrelerin kısa açıklamaları.</p>
-      <div class="grid sm:grid-cols-2 gap-4" id="parametre-list">
-        <div class="p-4 rounded-xl bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700">
-          <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_hb_title">Hemoglobin (Hb)</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_hb_desc">Kırmızı kan hücrelerinde oksijen taşıyan protein. Düşüklüğü kansızlık (anemi) gösterebilir.</p>
-        </div>
-        <div class="p-4 rounded-xl bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700">
-          <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_wbc_title">WBC (Lökosit)</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_wbc_desc">Beyaz kan hücresi sayısı. Enfeksiyon veya iltihap durumunda yükselebilir.</p>
-        </div>
-        <div class="p-4 rounded-xl bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700">
-          <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_glucose_title">Glukoz (Kan şekeri)</h3>
+      <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4" id="parametre-list">
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_glucose_title">Glukoz (Kan şekeri)</h3>
+            <span aria-hidden="true" class="text-base">🩸</span>
+          </div>
           <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_glucose_desc">Kandaki şeker düzeyi. Açlık glukozu diyabet taramasında kullanılır.</p>
         </div>
-        <div class="p-4 rounded-xl bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700">
-          <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_chol_title">Kolesterol (Total, LDL, HDL)</h3>
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_hba1c_title">HbA1c</h3>
+            <span aria-hidden="true" class="text-base">📈</span>
+          </div>
+          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_hba1c_desc">Son 2–3 aylık ortalama kan şekeri düzeyini gösteren parametre; diyabet kontrolünde kullanılır.</p>
+        </div>
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_chol_title">Kolesterol (Total, LDL, HDL)</h3>
+            <span aria-hidden="true" class="text-base">❤️</span>
+          </div>
           <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_chol_desc">Kan yağları. LDL "kötü", HDL "iyi" kolesterol olarak bilinir; kalp-damar riski değerlendirmesinde kullanılır.</p>
         </div>
-        <div class="p-4 rounded-xl bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700">
-          <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_tsh_title">TSH (Tiroid)</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_tsh_desc">Tiroid bezinin çalışmasını gösterir. Hipotiroidi/hipertiroidi taramasında kullanılır.</p>
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_vitd_title">Vitamin D</h3>
+            <span aria-hidden="true" class="text-base">☀️</span>
+          </div>
+          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_vitd_desc">Kemik sağlığı, bağışıklık ve kas fonksiyonu için önemli yağda çözünen vitamin.</p>
         </div>
-
-        <div class="p-4 rounded-xl bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700">
-          <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_creat_title">Kreatinin / eGFR</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_creat_desc">Böbrek fonksiyonunu yansıtır. Yüksek kreatinin böbrek işlevinde azalmaya işaret edebilir.</p>
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_iron_title">Demir / Ferritin</h3>
+            <span aria-hidden="true" class="text-base">🧲</span>
+          </div>
+          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_iron_desc">Kandaki demir depolarını ve anemi riskini değerlendirmede kullanılır.</p>
+        </div>
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_liver_title">ALT / AST</h3>
+            <span aria-hidden="true" class="text-base">🫀</span>
+          </div>
+          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_liver_desc">Karaciğer enzimleri; yüksekliği karaciğer hücre hasarını gösterebilir.</p>
+        </div>
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_trig_title">Triglyceride</h3>
+            <span aria-hidden="true" class="text-base">🧪</span>
+          </div>
+          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_trig_desc">Kandaki yağ (trigliserid) düzeyi; yüksekliği kalp-damar ve metabolik riskle ilişkilidir.</p>
+        </div>
+        <div class="light-glass-card rounded-14 p-4 border border-accent-100/80 dark:border-accent-700/80 flex flex-col gap-1">
+          <div class="flex items-center justify-between gap-2">
+            <h3 class="font-semibold text-primary-600 dark:text-primary-400" data-i18n="param_crp_title">CRP</h3>
+            <span aria-hidden="true" class="text-base">🔥</span>
+          </div>
+          <p class="text-sm text-accent-600 dark:text-accent-400 mt-1" data-i18n="param_crp_desc">C-reaktif protein; vücuttaki iltihap ve bazı enfeksiyon durumlarında yükselir.</p>
         </div>
       </div>
     </div>
@@ -2823,11 +2923,11 @@
       <!-- Kurumsal kart (Hesap Özeti altında) -->
       <div class="rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-md mb-8 overflow-hidden flex w-full">
         <div class="w-1.5 sm:w-2 shrink-0 bg-[#F0FDFA] dark:bg-primary-900/30" aria-hidden="true"></div>
-        <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 p-6 sm:p-8 min-w-0">
-          <div class="flex-1 min-w-0">
-            <div>
+        <div class="flex-1 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5 p-6 sm:p-8 min-w-0">
+          <div class="flex-1 min-w-0 max-w-[520px]">
+            <div class="space-y-3">
               <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-1"><span aria-hidden="true">🏥</span> <span data-i18n="profile_corporate_title">Kurumlar için Norya</span></h3>
-              <p class="text-sm text-accent-600 dark:text-accent-400 mb-4" data-i18n="profile_corporate_subtitle">Hastane, klinik ve laboratuvarlar için toplu analiz ve kurumsal çözümler.</p>
+              <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="profile_corporate_subtitle">Hastane, klinik ve laboratuvarlar için toplu analiz ve kurumsal çözümler.</p>
               <ul class="space-y-1.5 text-sm text-accent-700 dark:text-accent-300">
                 <li class="flex items-center gap-2"><span aria-hidden="true">👥</span><span data-i18n="profile_corporate_1">Çoklu kullanıcı yönetimi</span></li>
                 <li class="flex items-center gap-2"><span aria-hidden="true">📊</span><span data-i18n="profile_corporate_2">Toplu analiz</span></li>
@@ -2836,18 +2936,18 @@
               </ul>
             </div>
           </div>
-          <div class="shrink-0 w-full sm:w-auto">
-            <a href="/kurumsal" class="inline-flex items-center justify-center sm:justify-start gap-2 px-5 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition w-full sm:w-auto" data-i18n="profile_corporate_cta">Kurumsal için bize ulaşın →</a>
+          <div class="shrink-0 flex items-center">
+            <a href="/kurumsal" class="inline-flex items-center justify-center gap-2 px-5 py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition shadow-md" data-i18n="profile_corporate_cta">Kurumsal için bize ulaşın →</a>
           </div>
         </div>
       </div>
 
       <!-- Sekmeler (mobilde yatay kaydırma) -->
-      <div class="flex overflow-x-auto gap-1 pb-2 -mx-1 scrollbar-thin scrollbar-thumb-accent-300 dark:scrollbar-thumb-accent-600" role="tablist" aria-label="Profil bölümleri">
-        <button type="button" id="profile-tab-general" role="tab" aria-selected="true" aria-controls="profile-panel-general" onclick="switchProfileTab('general')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap bg-primary-600 text-white border-2 border-primary-600" data-i18n="profile_tab_general">Genel Bilgiler</button>
-        <button type="button" id="profile-tab-plan" role="tab" aria-selected="false" aria-controls="profile-panel-plan" onclick="switchProfileTab('plan')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap border-2 border-accent-200 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20" data-i18n="profile_tab_plan">Paket & Kullanım</button>
-        <button type="button" id="profile-tab-history" role="tab" aria-selected="false" aria-controls="profile-panel-history" onclick="switchProfileTab('history')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap border-2 border-accent-200 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20" data-i18n="profile_tab_history">Analiz Geçmişi</button>
-        <button type="button" id="profile-tab-security" role="tab" aria-selected="false" aria-controls="profile-panel-security" onclick="switchProfileTab('security')" class="profile-tab px-4 py-2.5 rounded-xl text-sm font-medium whitespace-nowrap border-2 border-accent-200 dark:border-accent-600 text-accent-700 dark:text-accent-300 hover:border-primary-400 hover:bg-primary-50 dark:hover:bg-primary-900/20" data-i18n="profile_tab_security">Güvenlik</button>
+      <div class="flex overflow-x-auto gap-2 pb-2 -mx-1 scrollbar-thin scrollbar-thumb-accent-300 dark:scrollbar-thumb-accent-600 border-b border-accent-200 dark:border-accent-700" role="tablist" aria-label="Profil bölümleri">
+        <button type="button" id="profile-tab-general" role="tab" aria-selected="true" aria-controls="profile-panel-general" onclick="switchProfileTab('general')" class="profile-tab relative px-4 py-2.5 text-sm font-semibold whitespace-nowrap text-primary-700 dark:text-primary-300 border-b-2 border-primary-600" data-i18n="profile_tab_general">Genel Bilgiler</button>
+        <button type="button" id="profile-tab-plan" role="tab" aria-selected="false" aria-controls="profile-panel-plan" onclick="switchProfileTab('plan')" class="profile-tab relative px-4 py-2.5 text-sm font-medium whitespace-nowrap text-accent-600 dark:text-accent-300 border-b-2 border-transparent hover:text-primary-700 dark:hover:text-primary-300" data-i18n="profile_tab_plan">Paket & Kullanım</button>
+        <button type="button" id="profile-tab-history" role="tab" aria-selected="false" aria-controls="profile-panel-history" onclick="switchProfileTab('history')" class="profile-tab relative px-4 py-2.5 text-sm font-medium whitespace-nowrap text-accent-600 dark:text-accent-300 border-b-2 border-transparent hover:text-primary-700 dark:hover:text-primary-300" data-i18n="profile_tab_history">Analiz Geçmişi</button>
+        <button type="button" id="profile-tab-security" role="tab" aria-selected="false" aria-controls="profile-panel-security" onclick="switchProfileTab('security')" class="profile-tab relative px-4 py-2.5 text-sm font-medium whitespace-nowrap text-accent-600 dark:text-accent-300 border-b-2 border-transparent hover:text-primary-700 dark:hover:text-primary-300" data-i18n="profile_tab_security">Güvenlik</button>
       </div>
 
       <!-- Panel: Genel Bilgiler -->
@@ -2855,11 +2955,11 @@
         <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_general">Genel Bilgiler</h2>
         <form id="profile-page-form" onsubmit="submitProfilePage(event)">
           <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="profile-page-name" data-i18n="placeholder_name">Ad Soyad</label>
-          <input type="text" id="profile-page-name" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500" />
+          <input type="text" id="profile-page-name" class="w-full rounded-[12px] border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:shadow-md transition-shadow" />
           <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="profile-page-phone" data-i18n="placeholder_phone">Telefon</label>
-          <input type="tel" id="profile-page-phone" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500" />
+          <input type="tel" id="profile-page-phone" class="w-full rounded-[12px] border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:shadow-md transition-shadow" />
           <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="profile-page-country" data-i18n="profile_country">Ülke</label>
-          <select id="profile-page-country" class="w-full rounded-xl border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500">
+          <select id="profile-page-country" class="w-full rounded-[12px] border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-4 focus:ring-2 focus:ring-primary-500 focus:outline-none focus:shadow-md transition-shadow">
             <option value="" data-i18n="placeholder_country">Ülke seçin</option>
             <option value="TR">Türkiye</option>
             <option value="US">ABD</option>
@@ -4029,6 +4129,16 @@
         testimonial_5_name: "Hans K.", testimonial_5_role: "Düzenli tahlil yaptıran", testimonial_5_quote: "Almanca rapor istedim, dakikalar içinde hazırdı. Referans aralıkları çok net açıklanmış.",
         testimonial_6_name: "Fatma K.", testimonial_6_role: "Aile hekimine götüren", testimonial_6_quote: "Hem kendi hem çocuğumun tahlilini yükledim. Doktor randevusuna hazırlıklı gittim.",
         testimonial_7_name: "James L.", testimonial_7_role: "Sporcu, düzenli kontrol", testimonial_7_quote: "Her antrenman dönemi sonrası kan değerlerimi Norya ile takip ediyorum. Öneriler bölümü çok işe yarıyor.",
+        home_premium_features_title: "AI Destekli Sağlık Analizi",
+        home_premium_features_desc: "Kan tahlili sonuçlarınızı yükleyin ve sağlık risklerinizi öğrenin.",
+        home_premium_feature_health_score_title: "Health Score",
+        home_premium_feature_health_score_desc: "Genel sağlık puanınızı görün.",
+        home_premium_feature_diabetes_title: "Diyabet Riski Analizi",
+        home_premium_feature_diabetes_desc: "Glucose ve HbA1c değerlerinden risk hesaplanır.",
+        home_premium_feature_heart_title: "Kalp Sağlığı Analizi",
+        home_premium_feature_heart_desc: "LDL, HDL ve kolesterol analiz edilir.",
+        home_premium_feature_charts_title: "Akıllı Sağlık Grafikleri",
+        home_premium_feature_charts_desc: "Tüm sağlık değerlerini grafiklerle takip edin.",
         testimonial_8_name: "Sofia M.", testimonial_8_role: "İspanya'dan kullanıcı", testimonial_8_quote: "İspanyolca rapor mükemmeldi. Aylardır her doktor randevusundan önce kullanıyorum.",
         testimonial_9_name: "Ali V.", testimonial_9_role: "Diyabet takibi", testimonial_9_quote: "Üç ayda bir tahlil yaptırıyorum. Norya ile HbA1c ve glukoz yorumunu hep buradan alıyorum.",
         testimonial_10_name: "Marie D.", testimonial_10_role: "Fransa'dan kullanıcı", testimonial_10_quote: "Fransızca rapor çok anlaşılır. PDF'i doktoruma indirdim, çok pratik.",
@@ -4104,6 +4214,12 @@
         param_wbc_title: "WBC (Lökosit)", param_wbc_desc: "Beyaz kan hücresi sayısı. Enfeksiyon veya iltihap durumunda yükselebilir.",
         param_glucose_title: "Glukoz (Kan şekeri)", param_glucose_desc: "Kandaki şeker düzeyi. Açlık glukozu diyabet taramasında kullanılır.",
         param_chol_title: "Kolesterol (Total, LDL, HDL)", param_chol_desc: "Kan yağları. LDL \"kötü\", HDL \"iyi\" kolesterol olarak bilinir; kalp-damar riski değerlendirmesinde kullanılır.",
+        param_hba1c_title: "HbA1c", param_hba1c_desc: "Son 2–3 aylık ortalama kan şekeri düzeyini gösteren değer; diyabet tanı ve takibinde kullanılır.",
+        param_vitd_title: "Vitamin D", param_vitd_desc: "Kemik sağlığı, bağışıklık ve kas fonksiyonu için önemli olan yağda çözünen vitamin.",
+        param_iron_title: "Demir / Ferritin", param_iron_desc: "Vücuttaki demir depolarını ve kansızlık (anemi) riskini değerlendirmede kullanılır.",
+        param_liver_title: "ALT / AST", param_liver_desc: "Karaciğer enzimleri; yüksekliği karaciğer hücre hasarı veya iltihabı gösterebilir.",
+        param_trig_title: "Triglyceride", param_trig_desc: "Kandaki trigliserid düzeyi; yüksekliği kalp-damar ve metabolik sendrom riskini artırabilir.",
+        param_crp_title: "CRP", param_crp_desc: "C-reaktif protein; vücuttaki akut veya kronik iltihap ve bazı enfeksiyon durumlarında yükselir.",
         param_tsh_title: "TSH (Tiroid)", param_tsh_desc: "Tiroid bezinin çalışmasını gösterir. Hipotiroidi/hipertiroidi taramasında kullanılır.",
         param_creat_title: "Kreatinin / eGFR", param_creat_desc: "Böbrek fonksiyonunu yansıtır. Yüksek kreatinin böbrek işlevinde azalmaya işaret edebilir.",
         analyze_title: "Kan Tahlili Sonuçlarınızı Analiz Edin", analyze_desc: "Giriş yapın ve tahlil metnini aşağıya yapıştırın.", analyze_desc_open: "Tahlil metnini veya dosyayı yükleyin; nasıl çalıştığını görün. Raporu almak için giriş yapın.",
@@ -4263,6 +4379,16 @@
         testimonial_5_name: "Hans K.", testimonial_5_role: "Regular lab user", testimonial_5_quote: "Asked for German report, ready in minutes. Reference ranges explained very clearly.",
         testimonial_6_name: "Fatma K.", testimonial_6_role: "Takes reports to GP", testimonial_6_quote: "Uploaded both my and my child's results. Went to the doctor appointment well prepared.",
         testimonial_7_name: "James L.", testimonial_7_role: "Athlete, regular check-ups", testimonial_7_quote: "I track my blood values with Norya after every training block. The recommendations section is very useful.",
+        home_premium_features_title: "AI-Powered Health Analysis",
+        home_premium_features_desc: "Upload your blood test results and see your health risks.",
+        home_premium_feature_health_score_title: "Health Score",
+        home_premium_feature_health_score_desc: "See your overall health score at a glance.",
+        home_premium_feature_diabetes_title: "Diabetes Risk Analysis",
+        home_premium_feature_diabetes_desc: "Calculates risk from your glucose and HbA1c values.",
+        home_premium_feature_heart_title: "Heart Health Analysis",
+        home_premium_feature_heart_desc: "Analyses LDL, HDL and cholesterol profile.",
+        home_premium_feature_charts_title: "Smart Health Charts",
+        home_premium_feature_charts_desc: "Track all key values over time with clear charts.",
         testimonial_8_name: "Sofia M.", testimonial_8_role: "User from Spain", testimonial_8_quote: "Informe en español perfecto. Lo uso antes de cada visita al médico desde hace meses.",
         testimonial_9_name: "Ali V.", testimonial_9_role: "Diabetes follow-up", testimonial_9_quote: "I get labs every three months. I always get HbA1c and glucose interpretation from Norya.",
         testimonial_10_name: "Marie D.", testimonial_10_role: "User from France", testimonial_10_quote: "Rapport en français clair. J'ai téléchargé le PDF pour mon médecin, très pratique.",
@@ -4338,6 +4464,12 @@
         param_wbc_title: "WBC (White blood cells)", param_wbc_desc: "White blood cell count. May rise with infection or inflammation.",
         param_glucose_title: "Glucose (Blood sugar)", param_glucose_desc: "Blood sugar level. Fasting glucose is used for diabetes screening.",
         param_chol_title: "Cholesterol (Total, LDL, HDL)", param_chol_desc: "Blood lipids. LDL is \"bad\" and HDL \"good\" cholesterol; used in cardiovascular risk assessment.",
+        param_hba1c_title: "HbA1c", param_hba1c_desc: "Reflects average blood sugar level over the last 2–3 months; used in diabetes diagnosis and follow-up.",
+        param_vitd_title: "Vitamin D", param_vitd_desc: "Fat-soluble vitamin important for bone health, immunity and muscle function.",
+        param_iron_title: "Iron / Ferritin", param_iron_desc: "Shows iron stores and helps assess anaemia risk.",
+        param_liver_title: "ALT / AST", param_liver_desc: "Liver enzymes; elevated levels may indicate liver cell injury or inflammation.",
+        param_trig_title: "Triglycerides", param_trig_desc: "Blood triglyceride level; high values are linked to cardiovascular and metabolic syndrome risk.",
+        param_crp_title: "CRP", param_crp_desc: "C-reactive protein; rises in acute or chronic inflammation and certain infections.",
         param_tsh_title: "TSH (Thyroid)", param_tsh_desc: "Reflects thyroid function. Used for hypothyroidism/hyperthyroidism screening.",
         param_creat_title: "Creatinine / eGFR", param_creat_desc: "Reflects kidney function. High creatinine may indicate reduced kidney function.",
         analyze_title: "Analyze your blood test results", analyze_desc: "Log in and paste your lab text below.", analyze_desc_open: "Upload your lab text or file and see how it works. Log in to get your report.",
@@ -4484,6 +4616,16 @@
         testimonial_5_name: "Hans K.", testimonial_5_role: "Esami periodici", testimonial_5_quote: "Report in tedesco, pronto in minuti. Intervalli di riferimento spiegati chiaramente.",
         testimonial_6_name: "Fatma K.", testimonial_6_role: "Porta al medico", testimonial_6_quote: "Ho caricato le analisi mie e di mio figlio. Andata dal medico preparata.",
         testimonial_7_name: "James L.", testimonial_7_role: "Sportivo, controlli regolari", testimonial_7_quote: "Seguo i valori del sangue con Norya dopo ogni ciclo di allenamento. La sezione raccomandazioni è utile.",
+        home_premium_features_title: "Analisi della salute con AI",
+        home_premium_features_desc: "Carica i risultati delle analisi del sangue e scopri i tuoi rischi.",
+        home_premium_feature_health_score_title: "Health Score",
+        home_premium_feature_health_score_desc: "Visualizza il tuo punteggio di salute generale.",
+        home_premium_feature_diabetes_title: "Analisi del rischio diabete",
+        home_premium_feature_diabetes_desc: "Calcola il rischio da valori di glucosio e HbA1c.",
+        home_premium_feature_heart_title: "Analisi salute cardiaca",
+        home_premium_feature_heart_desc: "Analizza LDL, HDL e profilo colesterolo.",
+        home_premium_feature_charts_title: "Grafici di salute intelligenti",
+        home_premium_feature_charts_desc: "Monitora tutti i valori principali con grafici chiari.",
         testimonial_8_name: "Sofia M.", testimonial_8_role: "Utente dalla Spagna", testimonial_8_quote: "Informe en español perfecto. Lo uso antes de cada visita al médico desde hace meses.",
         testimonial_9_name: "Ali V.", testimonial_9_role: "Follow-up diabete", testimonial_9_quote: "Faccio analisi ogni tre mesi. Uso sempre Norya per HbA1c e glucosio.",
         testimonial_10_name: "Marie D.", testimonial_10_role: "Utente dalla Francia", testimonial_10_quote: "Rapport en français clair. J'ai téléchargé le PDF pour mon médecin, très pratique.",
@@ -4543,6 +4685,12 @@
         param_wbc_title: "Globuli bianchi (WBC)", param_wbc_desc: "Conteggio dei globuli bianchi. Può aumentare in caso di infezione o infiammazione.",
         param_glucose_title: "Glucosio (Glicemia)", param_glucose_desc: "Livello di zucchero nel sangue. Il glucosio a digiuno si usa per lo screening del diabete.",
         param_chol_title: "Colesterolo (Totale, LDL, HDL)", param_chol_desc: "Lipidi nel sangue. LDL è il colesterolo \"cattivo\", HDL \"buono\"; usato per valutare il rischio cardiovascolare.",
+        param_hba1c_title: "HbA1c", param_hba1c_desc: "Mostra la glicemia media degli ultimi 2–3 mesi; usato per diagnosi e follow-up del diabete.",
+        param_vitd_title: "Vitamina D", param_vitd_desc: "Vitamina liposolubile importante per ossa, immunità e muscoli.",
+        param_iron_title: "Ferro / Ferritina", param_iron_desc: "Indica le riserve di ferro e aiuta a valutare il rischio di anemia.",
+        param_liver_title: "ALT / AST", param_liver_desc: "Enzimi epatici; valori elevati possono indicare danno o infiammazione epatica.",
+        param_trig_title: "Trigliceridi", param_trig_desc: "Livello di trigliceridi nel sangue; valori alti sono legati a rischio cardiovascolare e sindrome metabolica.",
+        param_crp_title: "CRP", param_crp_desc: "Proteina C-reattiva; aumenta in caso di infiammazione acuta o cronica e alcune infezioni.",
         param_tsh_title: "TSH (Tiroide)", param_tsh_desc: "Riflette la funzione tiroidea. Usato per lo screening di ipotiroidismo/ipertiroidismo.",
         param_creat_title: "Creatinina / eGFR", param_creat_desc: "Riflette la funzione renale. Creatinina alta può indicare ridotta funzionalità renale.",
         analyze_title: "Analizza i tuoi esami del sangue", analyze_desc: "Accedi e incolla il testo delle analisi qui sotto.",
@@ -4677,6 +4825,16 @@
         testimonial_5_name: "Hans K.", testimonial_5_role: "Analíticas regulares", testimonial_5_quote: "Pedí informe en alemán, listo en minutos. Los rangos de referencia muy claros.",
         testimonial_6_name: "Fatma K.", testimonial_6_role: "Lleva informes al médico", testimonial_6_quote: "Subí mis resultados y los de mi hijo. Fui a la cita preparada.",
         testimonial_7_name: "James L.", testimonial_7_role: "Deportista, controles regulares", testimonial_7_quote: "Sigo mis valores en sangre con Norya tras cada bloque de entrenamiento. La sección de recomendaciones muy útil.",
+        home_premium_features_title: "Análisis de salud con IA",
+        home_premium_features_desc: "Sube tus análisis de sangre y descubre tus riesgos de salud.",
+        home_premium_feature_health_score_title: "Health Score",
+        home_premium_feature_health_score_desc: "Consulta tu puntuación global de salud de un vistazo.",
+        home_premium_feature_diabetes_title: "Análisis de riesgo de diabetes",
+        home_premium_feature_diabetes_desc: "Calcula el riesgo a partir de glucosa y HbA1c.",
+        home_premium_feature_heart_title: "Análisis de salud cardiaca",
+        home_premium_feature_heart_desc: "Analiza LDL, HDL y perfil de colesterol.",
+        home_premium_feature_charts_title: "Gráficos de salud inteligentes",
+        home_premium_feature_charts_desc: "Sigue todos los valores clave a lo largo del tiempo con gráficos claros.",
         testimonial_8_name: "Sofia M.", testimonial_8_role: "Usuario desde España", testimonial_8_quote: "Informe en español perfecto. Lo uso antes de cada visita al médico desde hace meses.",
         testimonial_9_name: "Ali V.", testimonial_9_role: "Seguimiento diabetes", testimonial_9_quote: "Me hago análisis cada tres meses. Siempre uso Norya para HbA1c y glucosa.",
         testimonial_10_name: "Marie D.", testimonial_10_role: "Usuario desde Francia", testimonial_10_quote: "Rapport en français clair. J'ai téléchargé le PDF pour mon médecin, très pratique.",
@@ -4736,6 +4894,12 @@
         param_wbc_title: "Leucocitos (WBC)", param_wbc_desc: "Recuento de glóbulos blancos. Puede subir en infección o inflamación.",
         param_glucose_title: "Glucosa (Azúcar en sangre)", param_glucose_desc: "Nivel de azúcar en sangre. La glucosa en ayunas se usa en el cribado de diabetes.",
         param_chol_title: "Colesterol (Total, LDL, HDL)", param_chol_desc: "Grasas en sangre. LDL es el colesterol \"malo\", HDL \"bueno\"; se usa en la evaluación del riesgo cardiovascular.",
+        param_hba1c_title: "HbA1c", param_hba1c_desc: "Refleja la glucemia media de los últimos 2–3 meses; se usa en diagnóstico y seguimiento de diabetes.",
+        param_vitd_title: "Vitamina D", param_vitd_desc: "Vitamina liposoluble importante para la salud ósea, la inmunidad y la función muscular.",
+        param_iron_title: "Hierro / Ferritina", param_iron_desc: "Muestra los depósitos de hierro y ayuda a evaluar el riesgo de anemia.",
+        param_liver_title: "ALT / AST", param_liver_desc: "Enzimas hepáticas; valores altos pueden indicar daño o inflamación del hígado.",
+        param_trig_title: "Triglicéridos", param_trig_desc: "Nivel de triglicéridos en sangre; valores altos se relacionan con riesgo cardiovascular y síndrome metabólico.",
+        param_crp_title: "CRP", param_crp_desc: "Proteína C reactiva; se eleva en inflamación aguda o crónica y algunas infecciones.",
         param_tsh_title: "TSH (Tiroides)", param_tsh_desc: "Refleja la función tiroidea. Se usa en el cribado de hipo/hipertiroidismo.",
         param_creat_title: "Creatinina / eGFR", param_creat_desc: "Refleja la función renal. Creatinina alta puede indicar disminución de la función renal.",
         analyze_title: "Analiza tus análisis de sangre", analyze_desc: "Inicia sesión y pega el texto del análisis abajo.",
@@ -4870,6 +5034,16 @@
         testimonial_5_name: "Hans K.", testimonial_5_role: "Bilans réguliers", testimonial_5_quote: "Rapport en allemand demandé, prêt en minutes. Les intervalles de référence bien expliqués.",
         testimonial_6_name: "Fatma K.", testimonial_6_role: "Apporte les rapports au médecin", testimonial_6_quote: "J'ai uploadé mes résultats et ceux de mon enfant. Consultation en étant bien préparée.",
         testimonial_7_name: "James L.", testimonial_7_role: "Sportif, contrôles réguliers", testimonial_7_quote: "Je suis mes bilans avec Norya après chaque cycle d'entraînement. La section recommandations très utile.",
+        home_premium_features_title: "Analyse de santé assistée par IA",
+        home_premium_features_desc: "Importez vos analyses sanguines et découvrez vos risques de santé.",
+        home_premium_feature_health_score_title: "Health Score",
+        home_premium_feature_health_score_desc: "Visualisez d'un coup d'œil votre score global de santé.",
+        home_premium_feature_diabetes_title: "Analyse du risque de diabète",
+        home_premium_feature_diabetes_desc: "Calcule le risque à partir du glucose et de l'HbA1c.",
+        home_premium_feature_heart_title: "Analyse de la santé cardiaque",
+        home_premium_feature_heart_desc: "Analyse LDL, HDL et profil cholestérol.",
+        home_premium_feature_charts_title: "Graphiques de santé intelligents",
+        home_premium_feature_charts_desc: "Suivez tous les paramètres clés dans le temps avec des graphiques clairs.",
         testimonial_8_name: "Sofia M.", testimonial_8_role: "Utilisatrice d'Espagne", testimonial_8_quote: "Informe en español perfecto. Lo uso antes de cada visita al médico desde hace meses.",
         testimonial_9_name: "Ali V.", testimonial_9_role: "Suivi diabète", testimonial_9_quote: "Bilans tous les trois mois. J'utilise toujours Norya pour HbA1c et glucose.",
         testimonial_10_name: "Marie D.", testimonial_10_role: "Utilisatrice de France", testimonial_10_quote: "Rapport en français clair. J'ai téléchargé le PDF pour mon médecin, très pratique.",
@@ -4929,6 +5103,12 @@
         param_wbc_title: "Leucocytes (globules blancs)", param_wbc_desc: "Nombre de globules blancs. Peut augmenter en cas d'infection ou d'inflammation.",
         param_glucose_title: "Glucose (glycémie)", param_glucose_desc: "Taux de sucre dans le sang. La glycémie à jeun sert au dépistage du diabète.",
         param_chol_title: "Cholestérol (Total, LDL, HDL)", param_chol_desc: "Lipides sanguins. LDL = « mauvais », HDL = « bon » cholestérol ; utilisé pour l'évaluation du risque cardiovasculaire.",
+        param_hba1c_title: "HbA1c", param_hba1c_desc: "Reflète la glycémie moyenne des 2–3 derniers mois ; utilisé pour le diagnostic et le suivi du diabète.",
+        param_vitd_title: "Vitamine D", param_vitd_desc: "Vitamine liposoluble importante pour la santé osseuse, l'immunité et la fonction musculaire.",
+        param_iron_title: "Fer / Ferritine", param_iron_desc: "Indique les réserves de fer et aide à évaluer le risque d'anémie.",
+        param_liver_title: "ALT / AST", param_liver_desc: "Enzymes hépatiques ; des valeurs élevées peuvent indiquer une atteinte ou une inflammation du foie.",
+        param_trig_title: "Triglycérides", param_trig_desc: "Taux de triglycérides sanguins ; des valeurs élevées sont liées au risque cardiovasculaire et au syndrome métabolique.",
+        param_crp_title: "CRP", param_crp_desc: "Protéine C-réactive ; augmente en cas d'inflammation aiguë ou chronique et de certaines infections.",
         param_tsh_title: "TSH (thyroïde)", param_tsh_desc: "Reflète la fonction thyroïdienne. Utilisé pour le dépistage hypo/hyperthyroïdie.",
         param_creat_title: "Créatinine / DFG", param_creat_desc: "Reflète la fonction rénale. Une créatinine élevée peut indiquer une baisse de la fonction rénale.",
         analyze_title: "Analyser vos analyses sanguines", analyze_desc: "Connectez-vous et collez le texte des analyses ci-dessous.",
@@ -7505,14 +7685,15 @@
         var btn = document.getElementById('profile-tab-' + id);
         if (panel) panel.classList.toggle('hidden', id !== tabId);
         if (btn) {
-          btn.setAttribute('aria-selected', id === tabId ? 'true' : 'false');
-          btn.classList.toggle('bg-primary-600', id === tabId);
-          btn.classList.toggle('text-white', id === tabId);
-          btn.classList.toggle('border-primary-600', id === tabId);
-          btn.classList.toggle('border-accent-200', id !== tabId);
-          btn.classList.toggle('dark:border-accent-600', id !== tabId);
-          btn.classList.toggle('text-accent-700', id !== tabId);
-          btn.classList.toggle('dark:text-accent-300', id !== tabId);
+          var isActive = id === tabId;
+          btn.setAttribute('aria-selected', isActive ? 'true' : 'false');
+          btn.classList.toggle('font-semibold', isActive);
+          btn.classList.toggle('text-primary-700', isActive);
+          btn.classList.toggle('dark:text-primary-300', isActive);
+          btn.classList.toggle('border-primary-600', isActive);
+          btn.classList.toggle('border-transparent', !isActive);
+          btn.classList.toggle('text-accent-600', !isActive);
+          btn.classList.toggle('dark:text-accent-300', !isActive);
         }
       });
       if (tabId === 'history') loadProfileHistory();
