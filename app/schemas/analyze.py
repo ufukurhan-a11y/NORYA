@@ -9,10 +9,31 @@ class AnalyzeRequest(BaseModel):
     lang: str | None = None  # Rapor dili: tr, en, it, es, fr, de, he, ar, hi (yoksa Türkçe)
 
 
+class HealthScoreSchema(BaseModel):
+    score: int  # 0-100
+    level: str  # low | mid | high
+
+
+class UiHintsSchema(BaseModel):
+    locked: bool  # True = free/basic, premium alanlar blur + CTA
+
+
+class PdfInfoSchema(BaseModel):
+    template: str  # "premium" | "basic"
+    available: bool = True
+
+
 class AnalyzeResponse(BaseModel):
     sonuc: str
     notu: str = "Norya AI yorumladı."
     analiz_id: int | None = None
+    cached: bool | None = None  # True ise yanıt ai_cache'den döndü (OpenAI çağrılmadı)
+    premium: bool = False  # premiumPdf: plan in (single, monthly, yearly) → gauge+score+PDF açık; trend sadece monthly/yearly
+    risk_summary: dict | None = None  # overall, domains (cardio/metabolic/inflammation/vitamin)
+    health_score: HealthScoreSchema | None = None  # score + level
+    trend: dict | None = None  # { dates, ldl, glucose, crp } veya null
+    ui_hints: UiHintsSchema | None = None  # locked -> blur + Upgrade CTA
+    pdf: PdfInfoSchema | None = None  # template: premium|basic, available
 
 
 class UploadJsonRequest(BaseModel):

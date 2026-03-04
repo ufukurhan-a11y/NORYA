@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="{{ lang }}" dir="{{ 'rtl' if lang in ['ar','he'] else 'ltr' }}">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="{{ css_url }}" />
+  <title>{{ label_report_page_title }}</title>
+</head>
+<body>
+  <header class="pdf-header" id="page-header">
+    <div class="pdf-header-inner">
+      <div class="badge">PREMIUM</div>
+      <div class="h-left">
+        <img class="logo" src="{{ logo_url }}" alt="Norya" />
+        <div class="brand">
+          <div class="brand-name">Norya</div>
+          <div class="brand-sub">{{ label_report_brand_sub }}</div>
+        </div>
+      </div>
+      <div class="h-mid">
+        <div class="doc-title">{{ label_report_doc_title }}</div>
+        <div class="doc-sub">{{ label_report_doc_sub }}</div>
+      </div>
+      <div class="h-right">
+        <div><span class="k">{{ label_report_rid }}:</span> {{ rid }}</div>
+        <div><span class="k">{{ label_report_user }}:</span> {{ user_id }}</div>
+        <div><span class="k">{{ label_report_date }}:</span> {{ report_datetime }}</div>
+        <div><span class="k">{{ label_report_lang }}:</span> {{ lang|upper }}</div>
+      </div>
+    </div>
+  </header>
+
+  <div class="header-divider"></div>
+
+  <main class="pdf-page">
+    <section class="card alert">
+      <div class="alert-ico">&#9888;</div>
+      <div class="alert-txt">
+        <b>{{ label_report_disclaimer_title }}</b> {{ label_report_disclaimer_text }}
+      </div>
+    </section>
+
+    <section class="card health-score-card">
+      <div class="sec-title"><span class="sec-icon">🧾</span> {{ label_report_health_score }}</div>
+      <div class="health-score-value">{{ overall_score }} / 100</div>
+      <div class="health-score-band">{{ health_score_band_label }}</div>
+    </section>
+
+    <section class="card gauge-section">
+      <div class="sec-title"><span class="sec-icon">🎛️</span> {{ label_report_risk_indicator }}</div>
+      <div class="gauge-wrap">
+        {{ gauge_svg | safe }}
+      </div>
+    </section>
+
+    <section class="card trend-section">
+      <div class="sec-title"><span class="sec-icon">📈</span> {{ label_report_trend_analysis }}</div>
+      {% if trend_locked %}
+      <div class="trend-locked">
+        <p class="trend-message">{{ label_report_trend_locked }}</p>
+      </div>
+      {% elif trend_has_data and trend_svg %}
+      <div class="trend-chart">{{ trend_svg | safe }}</div>
+      {% elif trend_has_data and trend_bars %}
+      <div class="trend-chart">
+        {% for bar in trend_bars %}
+        <div class="trend-bar-wrap"><span class="trend-bar-date">{{ bar.date }}</span><div class="trend-bar ldl" style="width:{{ bar.ldl_pct }}%"></div><div class="trend-bar glucose" style="width:{{ bar.glucose_pct }}%"></div><div class="trend-bar crp" style="width:{{ bar.crp_pct }}%"></div></div>
+        {% endfor %}
+      </div>
+      {% else %}
+      <p class="trend-message">{{ trend_message }}</p>
+      {% endif %}
+    </section>
+
+    <section class="card">
+      <div class="sec-title"><span class="sec-icon">🧩</span> {{ label_report_risk_summary }}</div>
+      <div class="risk-grid">
+        {% for item in risk_cards %}
+        <div class="risk-card {{ item.level }}">
+          <div class="risk-name">{{ item.name }}</div>
+          <div class="risk-score">{{ item.score }}/100</div>
+          <div class="risk-level">{{ item.label }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="sec-title"><span class="sec-icon">📌</span> {{ label_report_findings_highlight }}</div>
+      <ul class="bullets">
+        {% for f in findings %}
+        <li>{{ f }}</li>
+        {% endfor %}
+      </ul>
+    </section>
+
+    <section class="card avoid-break">
+      <div class="sec-title"><span class="sec-icon">🧪</span> {{ label_report_test_results }}</div>
+      <table class="lab-table">
+        <thead>
+          <tr>
+            <th>{{ label_report_test }}</th><th>{{ label_report_result }}</th><th>{{ label_report_reference }}</th><th>{{ label_report_status }}</th>
+          </tr>
+        </thead>
+        <tbody>
+        {% for row in lab_rows %}
+          <tr>
+            <td>{{ row.name }}</td>
+            <td class="num">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</td>
+            <td class="ref">{{ row.ref or '—' }}</td>
+            <td class="st">{{ row.status }}</td>
+          </tr>
+        {% endfor %}
+        </tbody>
+      </table>
+    </section>
+
+    <section class="card">
+      <div class="sec-title"><span class="sec-icon">🩺</span> {{ label_report_clinical_notes }}</div>
+
+      <div class="note-block">
+        <div class="note-h"><span class="sec-icon">🧾</span> {{ label_report_summary }}</div>
+        <ul class="bullets">
+          {% for x in ai_summary %}<li>{{ x }}</li>{% endfor %}
+        </ul>
+      </div>
+
+      <div class="note-block">
+        <div class="note-h"><span class="sec-icon">📌</span> {{ label_report_findings }}</div>
+        <ul class="bullets">
+          {% for x in ai_findings %}<li>{{ x }}</li>{% endfor %}
+        </ul>
+      </div>
+
+      <div class="note-block">
+        <div class="note-h"><span class="sec-icon">🔍</span> {{ label_report_causes }}</div>
+        <ul class="bullets">
+          {% for x in ai_causes %}<li>{{ x }}</li>{% endfor %}
+        </ul>
+      </div>
+
+      <div class="note-block">
+        <div class="note-h"><span class="sec-icon">🥗</span> {{ label_report_recommendations }}</div>
+        <ul class="bullets">
+          {% for x in ai_recos %}<li>{{ x }}</li>{% endfor %}
+        </ul>
+      </div>
+
+      <div class="note-block">
+        <div class="note-h"><span class="sec-icon">📅</span> {{ label_report_followup }}</div>
+        <ul class="bullets">
+          {% for x in ai_followup %}<li>{{ x }}</li>{% endfor %}
+        </ul>
+      </div>
+
+      <div class="note-block">
+        <div class="note-h"><span class="sec-icon">👨‍⚕️</span> {{ label_report_doctor_note }}</div>
+        <div class="note-p">{{ doctor_note }}</div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="pdf-footer">
+    {{ label_report_footer }}
+  </footer>
+</body>
+</html>

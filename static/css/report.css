@@ -1,4 +1,4 @@
-/* Clinical-style report page — only active inside .report-page */
+/* Clinical-style report page — mobile-first, only active inside .report-page */
 .report-page {
   --report-border: #e2e8f0;
   --report-muted: #64748b;
@@ -12,6 +12,222 @@
   --risk-high-bg: #fee2e2;
   --risk-high-text: #991b1b;
   --risk-high-border: #ef4444;
+  font-size: 14px;
+}
+.report-page .section-body,
+.report-page .section-title,
+.report-page .alert-medical .alert-text { font-size: 14px; }
+@media (min-width: 640px) {
+  .report-page .section-body { font-size: 0.875rem; }
+  .report-page .section-title { font-size: 0.9375rem; }
+}
+
+/* Mobil-first: padding azaltılmış, font min 14px */
+.report-page #analyze-result-body {
+  padding: 0.75rem 1rem;
+  font-size: 14px;
+}
+@media (min-width: 640px) {
+  .report-page #analyze-result-body {
+    padding: 1rem 1.5rem;
+  }
+}
+
+/* KPI kartları: mobilde 2x2 grid */
+.report-page .report-kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.report-page .report-kpi-grid .kpi-card {
+  min-height: 44px;
+  font-size: 14px;
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  border: 1px solid var(--report-border);
+  background: #fff;
+}
+.dark .report-page .report-kpi-grid .kpi-card {
+  background: rgba(30, 41, 59, 0.5);
+  border-color: rgba(226, 232, 240, 0.15);
+}
+@media (min-width: 640px) {
+  .report-page .report-kpi-grid {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+}
+
+/* Grafikler: mobilde alt alta */
+.report-page .report-charts {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-bottom: 1rem;
+}
+.report-page .report-charts .chart-item {
+  min-height: 44px;
+  font-size: 14px;
+  padding: 0.75rem;
+}
+@media (min-width: 640px) {
+  .report-page .report-charts {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 1rem;
+  }
+}
+
+/* Premium klinik: Genel Sağlık Skoru, Risk Gauge, Trend — mobilde gauge üstte trend altta */
+.report-page .health-score-card .health-score-value {
+  font-size: 1.75rem;
+  font-weight: 800;
+  line-height: 1.2;
+}
+.report-page .health-score-card .health-score-band {
+  margin-top: 0.25rem;
+}
+.report-page .gauge-section .gauge-wrap {
+  max-width: 220px;
+  margin: 0.5rem 0;
+}
+.report-page .gauge-svg {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.report-page .gauge-svg .gauge-bg {
+  stroke: #e5e7eb;
+}
+.report-page .gauge-svg .gauge-fill.low {
+  stroke: #22c55e;
+}
+.report-page .gauge-svg .gauge-fill.mid {
+  stroke: #f59e0b;
+}
+.report-page .gauge-svg .gauge-fill.high {
+  stroke: #ef4444;
+}
+.report-page .gauge-svg .gauge-score {
+  fill: currentColor;
+  font-family: inherit;
+}
+.report-page .trend-section .trend-message {
+  margin: 0.25rem 0 0;
+}
+/* Premium clinical wrapper: locked overlay + CTA */
+.report-page .premium-clinical-wrap {
+  position: relative;
+}
+.report-page .report-premium-locked .premium-locked-overlay {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  background: rgba(255, 255, 255, 0.75);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+.dark .report-page .report-premium-locked .premium-locked-overlay {
+  background: rgba(15, 23, 42, 0.8);
+}
+.report-page .premium-lock-ico {
+  font-size: 2rem;
+  opacity: 0.8;
+}
+.report-page .premium-locked-text {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--report-heading);
+}
+.dark .report-page .premium-locked-text { color: #e2e8f0; }
+.report-page .premium-cta-btn {
+  display: inline-block;
+  padding: 0.5rem 1rem;
+  border-radius: 0.5rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: #0EA5A4;
+  color: #fff;
+  text-decoration: none;
+}
+.report-page .premium-cta-btn:hover {
+  background: #0d9493;
+  color: #fff;
+}
+
+/* Trend bar chart */
+.report-page .trend-chart { margin-top: 0.5rem; }
+.report-page .trend-legend {
+  display: flex;
+  gap: 1rem;
+  font-size: 0.75rem;
+  color: var(--report-muted);
+  margin-bottom: 0.5rem;
+}
+.report-page .trend-bar-row {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin: 0.35rem 0;
+  font-size: 0.8125rem;
+}
+.report-page .trend-bar-date {
+  min-width: 4.5rem;
+  color: var(--report-muted);
+}
+.report-page .trend-bars {
+  display: flex;
+  gap: 4px;
+  flex: 1;
+  max-width: 200px;
+}
+.report-page .trend-bar {
+  height: 12px;
+  min-width: 4px;
+  border-radius: 4px;
+}
+.report-page .trend-bar.ldl { background: #3b82f6; }
+.report-page .trend-bar.glucose { background: #0EA5A4; }
+.report-page .trend-bar.crp { background: #f59e0b; }
+
+/* Free plan: gauge ve trend blur */
+.report-page .report-premium-blur {
+  filter: blur(6px);
+  pointer-events: none;
+  user-select: none;
+}
+
+/* Value bar satırları (değer kartları): mobilde 2 sütun grid isteğe bağlı; font min 14px */
+.report-page .value-bar-row {
+  font-size: 14px;
+  padding: 0.625rem 0.75rem !important;
+  min-height: 44px;
+}
+.report-page .value-bar-row .text-sm { font-size: 14px !important; }
+
+/* Slider kartları: swipe ile çalışır */
+.report-page .report-slider {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x mandatory;
+  scroll-behavior: smooth;
+  touch-action: pan-x;
+  display: flex;
+  gap: 0.75rem;
+  padding: 0.5rem 0;
+  margin: 0 -0.5rem;
+}
+.report-page .report-slider .report-slide {
+  flex: 0 0 min(85%, 320px);
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
 }
 
 .report-page .report-header {
@@ -116,12 +332,20 @@
     min-width: 0;
   }
   .report-page .section-card {
-    padding: 0.875rem 1rem;
-    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    margin-bottom: 0.75rem;
+  }
+  .report-page .section-title {
+    font-size: 14px;
   }
   .report-page .alert-medical {
     padding: 0.625rem 1rem;
     margin-bottom: 0.75rem;
+    font-size: 14px;
+  }
+  .report-page .risk-legend {
+    font-size: 14px;
+    padding: 0.5rem 0.75rem;
   }
 }
 

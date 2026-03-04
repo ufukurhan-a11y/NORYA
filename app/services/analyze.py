@@ -1,11 +1,14 @@
 import base64
 import logging
+import re
 import time
 
 from fastapi import HTTPException
 from openai import APIError, APIConnectionError, AuthenticationError, OpenAI, RateLimitError
 
 from app.core.config import get_openai_keys, is_openai_configured
+from app.services.lab_parser import parse_lab_text
+from app.services.risk_engine import compute_risk
 
 logger = logging.getLogger(__name__)
 # Render cold start + OpenAI yanıt süresi için yeterli süre (görsel analiz uzun sürebilir)
@@ -176,6 +179,182 @@ Never say a value is "within" or "normal" when it is outside the reference. Neve
 
 Explain medical terms in parentheses if needed. Use Markdown bold (**text**) for section titles only."""
 
+# AŞAMA-2: OpenAI sadece yorum (kısa, madde madde); uzun paragraf yok
+AI_EXPLANATION_PROMPT = """Verilen labs_norm (normalize tahlil metni) ve risk_summary (kural tabanlı risk özeti) ile kısa yorum yaz.
+
+Kurallar:
+- Sadece madde madde yaz. Uzun paragraf yazma.
+- Bölümler: (1) Özet — 3-5 madde; (2) Olası nedenler — varsa kısa maddeler; (3) Öneriler — 4-7 uygulanabilir madde.
+- Dil: Tüm yanıtı SADECE hedef dilde yaz (başlıklar dahil).
+- Teşhis önerisi veya kesin ifade kullanma. Bilgilendirme amaçlı olduğunu vurgula."""
+
+
+def ai_generate_explanation(
+    risk_summary: dict,
+    labs_norm: dict,
+    lang: str | None,
+    plan: str,
+    doctor_notes: str | None = None,
+) -> tuple[str, dict | None]:
+    """
+    Modele sadece labs_norm + risk_summary + plan + lang verir.
+    Returns: (explanation_text, usage_dict). explanation = kısa, madde madde özet/neden/öneriler.
+    """
+    import json
+    lang_instruction = _language_instruction(lang)
+    # Token tasarrufu: labs metnini kısalt
+    lab_text = (labs_norm.get("t") or "")[:1500]
+    lab_note = (labs_norm.get("dn") or "")[:300] if labs_norm.get("dn") else ""
+    payload = {
+        "labs_norm_preview": lab_text,
+        "doctor_notes": lab_note or None,
+        "risk_summary": risk_summary,
+        "plan": plan,
+    }
+    prompt = (
+        lang_instruction + "\n\n" + AI_EXPLANATION_PROMPT + "\n\n"
+        "Input (JSON):\n" + json.dumps(payload, ensure_ascii=False, indent=0)
+    )
+
+    def _create(client: OpenAI):
+        return _openai_safe_call(lambda: client.chat.completions.create(
+            model="gpt-4o-mini",
+            messages=[{"role": "user", "content": prompt}],
+            max_tokens=1024,
+        ))
+
+    try:
+        response = _openai_create_with_fallback(_create)
+        content = (response.choices[0].message.content or "").strip()
+        usage = None
+        if getattr(response, "usage", None):
+            u = response.usage
+            usage = {"prompt_tokens": getattr(u, "prompt_tokens", 0) or 0, "completion_tokens": getattr(u, "completion_tokens", 0) or 0}
+        return content, usage
+    except (AuthenticationError, RateLimitError, APIConnectionError, APIError) as e:
+        logger.exception("OpenAI API error in ai_generate_explanation: %s", e)
+        _raise_openai_http_error(e)
+    except Exception as e:
+        logger.exception("Unexpected error in ai_generate_explanation: %s", e)
+        _raise_openai_http_error(e)
+
+
+def _value_status(value: float, ref_low: float | None, ref_high: float | None) -> str:
+    if ref_low is not None and value < ref_low:
+        return "low"
+    if ref_high is not None and value > ref_high:
+        return "high"
+    return "normal"
+
+
+def build_tables(lab_values: list[dict]) -> list[dict]:
+    """Lab değerlerinden tablo satırları: name, value, ref, status (normal/low/high)."""
+    from app.services.risk_engine import REF_RANGES
+    rows = []
+    for lab in lab_values:
+        name = lab.get("name")
+        if not name:
+            continue
+        ref_low, ref_high = lab.get("ref_low"), lab.get("ref_high")
+        if ref_low is None and ref_high is None:
+            ref_low, ref_high = REF_RANGES.get(name, (None, None))
+        st = _value_status(lab["value"], ref_low, ref_high)
+        ref_str = ""
+        if ref_low is not None and ref_high is not None:
+            ref_str = f"{ref_low}-{ref_high}"
+        elif ref_high is not None:
+            ref_str = f"<{ref_high}"
+        elif ref_low is not None:
+            ref_str = f">{ref_low}"
+        rows.append({
+            "name": name,
+            "value": lab["value"],
+            "unit": lab.get("unit"),
+            "ref": ref_str,
+            "status": st,
+        })
+    return rows
+
+
+# Sabit uyarı (AI'ya yükleme yok)
+DISCLAIMER_TR = "Bu yorum teşhis değildir; bilgilendirme amaçlıdır. Sonuçları hekiminizle paylaşın."
+DISCLAIMER_BY_LANG: dict[str, str] = {
+    "tr": DISCLAIMER_TR,
+    "en": "This interpretation is not a diagnosis; it is for information only. Share results with your doctor.",
+    "it": "Questo commento non è una diagnosi; è solo informativo. Condividi i risultati con il tuo medico.",
+    "es": "Esta interpretación no es un diagnóstico; es solo informativa. Comparta los resultados con su médico.",
+    "fr": "Ce commentaire n'est pas un diagnostic; il est à titre informatif. Partagez les résultats avec votre médecin.",
+    "de": "Diese Auswertung ist keine Diagnose; sie dient nur der Information. Teilen Sie die Ergebnisse Ihrem Arzt mit.",
+}
+
+
+def format_report_to_markdown(
+    risk_summary: dict,
+    explanation: str,
+    tables: list[dict],
+    meta: dict,
+) -> str:
+    """Rapor payload'ından sonuc (markdown) üretir; teşhis değildir uyarısı eklenir."""
+    lang = meta.get("lang") or "tr"
+    disclaimer = DISCLAIMER_BY_LANG.get(lang, DISCLAIMER_TR)
+    titles = {
+        "tr": ("Risk özeti", "Yorum", "Değerler", "Uyarı"),
+        "en": ("Risk summary", "Interpretation", "Values", "Disclaimer"),
+    }
+    risk_label, interp_label, values_label, warn_label = titles.get(lang, titles["en"])
+    overall = risk_summary.get("overall") or {}
+    domains = risk_summary.get("domains") or {}
+    lines = [
+        f"## {risk_label}",
+        f"- **Overall:** {overall.get('level', '')} (skor: {overall.get('score', 0)})",
+    ]
+    for dk, dv in domains.items():
+        lines.append(f"- **{dk}:** {dv.get('level', '')} (skor: {dv.get('score', 0)}) — {', '.join(dv.get('reasons', []) or ['—'])}")
+    lines.append("")
+    lines.append(f"## {interp_label}")
+    lines.append(explanation)
+    lines.append("")
+    lines.append(f"## {values_label}")
+    for row in tables[:30]:
+        ref = row.get("ref") or "—"
+        st = row.get("status") or "normal"
+        unit = (row.get("unit") or "")
+        lines.append(f"- **{row.get('name')}:** {row.get('value')} {unit} (Ref: {ref}) — {st}")
+    lines.append("")
+    lines.append(f"## {warn_label}")
+    lines.append(disclaimer)
+    return "\n".join(lines)
+
+
+def analyze_blood_test(
+    text: str,
+    detailed: bool = True,
+    doctor_notes: str | None = None,
+    lang: str | None = None,
+    plan: str = "free",
+    labs_norm: dict | None = None,
+) -> tuple[dict, dict | None]:
+    """
+    İki aşamalı analiz: (1) Risk Engine -> risk_summary, (2) OpenAI -> explanation.
+    Returns: (report_payload, usage). report_payload = { risk_summary, explanation, tables, meta, sonuc }.
+    """
+    lab_values = parse_lab_text(text)
+    risk_summary = compute_risk(lab_values)
+    if labs_norm is None:
+        labs_norm = {"t": " ".join(text.split()).strip(), "dn": (doctor_notes or "").strip() or None}
+    explanation, usage = ai_generate_explanation(risk_summary, labs_norm, lang, plan, doctor_notes)
+    tables = build_tables(lab_values)
+    meta = {"lang": lang or "tr", "plan": plan}
+    sonuc = format_report_to_markdown(risk_summary, explanation, tables, meta)
+    report_payload = {
+        "risk_summary": risk_summary,
+        "explanation": explanation,
+        "tables": tables,
+        "meta": meta,
+        "sonuc": sonuc,
+    }
+    return report_payload, usage
+
 
 def _raise_openai_http_error(exc: Exception) -> None:
     """OpenAI hatalarını uygun HTTP istisnalarına çevirir. (401 kullanıcı oturumu ile karışmasın diye API hatası 503.)"""
@@ -203,34 +382,14 @@ def _raise_openai_http_error(exc: Exception) -> None:
 
 
 def analyze_blood_test(text: str, detailed: bool = True, doctor_notes: str | None = None, lang: str | None = None) -> tuple[str, dict | None]:
-    lang_instruction = _language_instruction(lang)
-    if not detailed:
-        prompt = lang_instruction + "\n\nExplain this blood test in short, simple terms:\n" + text
-    else:
-        prompt = lang_instruction + "\n\n" + DETAILED_PROMPT_BASE + "\n\nLab data:\n" + text
-        if doctor_notes and doctor_notes.strip():
-            prompt += "\n\nPatient's extra note (doctor comment or additional info): " + doctor_notes.strip() + "\nTake this into account when interpreting."
-    def _create(client: OpenAI):
-        return _openai_safe_call(lambda: client.chat.completions.create(
-            model="gpt-4o-mini",
-            messages=[{"role": "user", "content": prompt}],
-            max_tokens=8192,
-        ))
-
-    try:
-        response = _openai_create_with_fallback(_create)
-        content = response.choices[0].message.content or ""
-        usage = None
-        if getattr(response, "usage", None):
-            u = response.usage
-            usage = {"prompt_tokens": getattr(u, "prompt_tokens", 0) or 0, "completion_tokens": getattr(u, "completion_tokens", 0) or 0}
-        return content, usage
-    except (AuthenticationError, RateLimitError, APIConnectionError, APIError) as e:
-        logger.exception("OpenAI API error in analyze_blood_test: %s", e)
-        _raise_openai_http_error(e)
-    except Exception as e:
-        logger.exception("Unexpected error in analyze_blood_test: %s", e)
-        _raise_openai_http_error(e)
+    """
+    İki aşamalı analiz: (1) Risk Engine ile risk skorları, (2) OpenAI'ye sadece risk özeti gönderilir; kısa özet + öneriler.
+    """
+    lab_values = parse_lab_text(text)
+    risk_summary = compute_risk(lab_values)
+    summary, recommendations, usage = get_ai_interpretation(risk_summary, lang=lang, doctor_notes=doctor_notes)
+    report = build_two_stage_report(risk_summary, summary, recommendations, lang)
+    return report, usage
 
 
 def analyze_blood_test_from_image(image_bytes: bytes, mime_type: str, lang: str | None = None) -> tuple[str, dict | None]:

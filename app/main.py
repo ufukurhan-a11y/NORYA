@@ -18,7 +18,7 @@ from dotenv import load_dotenv
 _PROJ_ROOT = Path(__file__).resolve().parent.parent
 load_dotenv(_PROJ_ROOT / ".env")
 
-from fastapi import Depends, FastAPI, File, Form, HTTPException, Query, Request, UploadFile
+from fastapi import Depends, FastAPI, File, Form, Header, HTTPException, Query, Request, UploadFile
 from fastapi.security import HTTPAuthorizationCredentials
 from fastapi.exceptions import RequestValidationError
 from fastapi.middleware.cors import CORSMiddleware
@@ -36,6 +36,8 @@ from app.admin import admin_router as new_admin_router
 from app.api.admin import get_admin_html, router as admin_router
 from app.api.auth import router as auth_router
 from app.api.deps import get_current_user, security
+from app.cache_db import cache_get, cache_set, get_conn as get_cache_conn, init_cache as init_ai_cache, purge_expired as purge_ai_cache_expired
+from app.cache_utils import expires_iso, make_cache_key, now_iso
 from app.core.config import is_openai_configured, settings
 from app.core.database import engine, get_db, init_db
 from app.core.rate_limit import limiter
@@ -62,12 +64,15 @@ from app.models import (  # noqa: F401
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
 from app.services.coupon import apply_coupon_use, validate_coupon
-from app.services.report_pdf import build_doctor_pdf, build_report_pdf
+from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
 from app.services.storage import upload_report_pdf
 from app.schemas.analyze import (
     AnalysisDetail,
     AnalysisHistoryItem,
     AnalyzeResponse,
+    HealthScoreSchema,
+    PdfInfoSchema,
+    UiHintsSchema,
     UploadJsonRequest,
 )
 from app.schemas.payment import CreateSessionRequest, GrantPaymentRequest, GuestSessionRequest
@@ -159,6 +164,22 @@ app = FastAPI(
     lifespan=lifespan,
 )
 app.state.limiter = limiter
+
+# AI response cache: aynı analiz girdisi (normalize metin + dil + plan + model) tekrar gelirse OpenAI çağrılmaz
+AI_CACHE_TTL_DAYS = 30
+AI_CACHE_PROMPT_VERSION = 3  # 3 = risk_summary + explanation + tables; cache'de risk_summary dahil
+OPENAI_ANALYZE_MODEL = "gpt-4o-mini"
+# Şimdilik ücretsiz kullanıcı da premium grafikleri ve PDF'i görsün (test için; sonra False yapın)
+PREMIUM_VISIBLE_FOR_FREE = True
+_cache_db_path = str(_PROJ_ROOT / "norya.db")
+if getattr(settings, "database_url", "").startswith("sqlite:///"):
+    _p = settings.database_url.replace("sqlite:///", "", 1).strip()
+    if _p.startswith("./"):
+        _cache_db_path = str(_PROJ_ROOT / _p[2:].lstrip("./"))
+    else:
+        _cache_db_path = _p
+_cache_conn = get_cache_conn(_cache_db_path)
+init_ai_cache(_cache_conn)
 
 
 def _error_response(request: Request, status_code: int, detail: str) -> JSONResponse:
@@ -1020,6 +1041,30 @@ def _save_analysis(
     return rec.id or 0
 
 
+def _get_trend_for_user(
+    db: Session,
+    user_id: int,
+    exclude_analysis_id: int | None = None,
+) -> dict | None:
+    """Son 3 analizi (exclude_analysis_id hariç) çekip LDL/Glucose/CRP trend verisi döndürür."""
+    stmt = (
+        select(AnalysisRecord)
+        .where(AnalysisRecord.user_id == user_id)
+        .order_by(AnalysisRecord.id.desc())
+        .limit(4)
+    )
+    rows = list(db.exec(stmt).all())
+    entries: list[tuple[str, str]] = []
+    for r in rows:
+        if r.id == exclude_analysis_id:
+            continue
+        if len(entries) >= 3:
+            break
+        date_str = r.created_at.strftime("%d.%m.%Y") if getattr(r, "created_at", None) else ""
+        entries.append((date_str, r.result_text or ""))
+    return extract_trend_from_results(entries) if entries else None
+
+
 def _attach_original_file(
     db: Session,
     analysis_id: int,
@@ -1086,8 +1131,8 @@ async def analyze(
         lang = form.get("lang") or None
     if not text:
         raise HTTPException(status_code=400, detail="Lütfen tahlil metnini girin veya PDF/görsel yükleyin.")
+    plan = getattr(user, "plan", "free") or "free"
     if not test_mode:
-        plan = getattr(user, "plan", "free") or "free"
         limit = _aylik_limit(plan)
         kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
         ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
@@ -1108,7 +1153,59 @@ async def analyze(
     t0 = time.perf_counter()
     try:
         report_lang = _report_lang_from_request(request, lang)
-        result, usage = analyze_blood_test(text, detailed=True, doctor_notes=doctor_notes, lang=report_lang)
+        # Cache key: normalize metin + dil + plan + model + doctor_notes + prompt_version (PII yok)
+        labs_norm = {
+            "t": " ".join(text.split()).strip(),
+            "dn": (doctor_notes or "").strip() or None,
+        }
+        cache_key = make_cache_key(
+            labs_norm=labs_norm,
+            lang=report_lang,
+            plan=plan,
+            model=OPENAI_ANALYZE_MODEL,
+            prompt_version=AI_CACHE_PROMPT_VERSION,
+        )
+        cached = cache_get(_cache_conn, cache_key)
+        if cached is not None:
+            log.info("CACHE HIT key=%s", cache_key[:16])
+            result = cached["sonuc"]
+            aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes)
+            if job:
+                job.status = "done"
+                job.analysis_record_id = aid
+                job.duration_ms = int((time.perf_counter() - t0) * 1000)
+                db.add(job)
+                db.commit()
+            _audit(db, "analyze", user.id, _client_ip(request))
+            return _build_analyze_response(
+                result, aid, cached.get("risk_summary"), plan, user.id or 0, db, cached=True
+            )
+        log.info("CACHE MISS key=%s", cache_key[:16])
+        report_payload, usage = analyze_blood_test(
+            text,
+            detailed=True,
+            doctor_notes=doctor_notes,
+            lang=report_lang,
+            plan=plan,
+            labs_norm=labs_norm,
+        )
+        result = report_payload["sonuc"]
+        cache_set(
+            _cache_conn,
+            cache_key=cache_key,
+            created_at=now_iso(),
+            expires_at=expires_iso(AI_CACHE_TTL_DAYS),
+            model=OPENAI_ANALYZE_MODEL,
+            input_summary={"lang": report_lang, "plan": plan, "labs_count": len(labs_norm.get("t", ""))},
+            response_obj={
+                "sonuc": result,
+                "usage": usage or {},
+                "risk_summary": report_payload["risk_summary"],
+                "explanation": report_payload["explanation"],
+                "tables": report_payload["tables"],
+                "meta": report_payload["meta"],
+            },
+        )
         aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes)
         if job:
             job.status = "done"
@@ -1120,7 +1217,9 @@ async def analyze(
             db.add(job)
             db.commit()
         _audit(db, "analyze", user.id, _client_ip(request))
-        return AnalyzeResponse(sonuc=result, analiz_id=aid)
+        return _build_analyze_response(
+            result, aid, report_payload.get("risk_summary"), plan, user.id or 0, db, cached=False
+        )
     except ValueError as e:
         if job:
             job.status = "failed"
@@ -1270,7 +1369,8 @@ async def analyze_upload(
         )
     try:
         return _process_uploaded_content(
-            content, file.filename, report_lang, user.id or 0, db, request, save=True
+            content, file.filename, report_lang, user.id or 0, db, request, save=True,
+            plan=getattr(user, "plan", None) or "free",
         )
     except HTTPException:
         raise
@@ -1281,6 +1381,34 @@ async def analyze_upload(
         raise HTTPException(status_code=400, detail=f"Dosya işlenemedi: {str(e)[:80]}")
 
 
+def _build_analyze_response(
+    result: str,
+    aid: int | None,
+    risk_summary: dict | None,
+    plan: str,
+    user_id: int,
+    db: Session,
+    cached: bool = False,
+) -> AnalyzeResponse:
+    """Ortak: premiumPdf = single|monthly|yearly|pro (gauge+score+PDF), premiumTrend = monthly|yearly|pro (trend açık). PREMIUM_VISIBLE_FOR_FREE=True ise free de görür."""
+    premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
+    premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
+    overall = (risk_summary or {}).get("overall") or {}
+    health_score = HealthScoreSchema(score=overall.get("score", 0), level=overall.get("level", "mid")) if risk_summary else None
+    trend = _get_trend_for_user(db, user_id, exclude_analysis_id=aid) if premium_trend and user_id else None
+    return AnalyzeResponse(
+        sonuc=result,
+        analiz_id=aid,
+        cached=cached,
+        premium=premium_pdf,
+        risk_summary=risk_summary,
+        health_score=health_score,
+        trend=trend,
+        ui_hints=UiHintsSchema(locked=not premium_pdf),
+        pdf=PdfInfoSchema(template="premium" if premium_pdf else "basic", available=True),
+    )
+
+
 def _process_uploaded_content(
     content: bytes,
     filename: str,
@@ -1289,6 +1417,7 @@ def _process_uploaded_content(
     db: Session,
     request: Request,
     save: bool = True,
+    plan: str | None = None,
 ) -> AnalyzeResponse:
     """Ortak: yüklenen dosya içeriğini analiz eder (görsel veya PDF). Her zaman kaydeder (PDF/rapor için analiz_id döner)."""
     ext = "." + filename.lower().rsplit(".", 1)[-1] if "." in filename else ""
@@ -1327,8 +1456,9 @@ def _process_uploaded_content(
                 ul.duration_ms = int((time.perf_counter() - t0) * 1000)
                 db.add(ul)
                 db.commit()
-            _audit(db, "analyze", user_id, _client_ip(request))
-            return AnalyzeResponse(sonuc=result, analiz_id=aid)
+        _audit(db, "analyze", user_id, _client_ip(request))
+        plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
+        return _build_analyze_response(result, aid, None, plan, user_id, db, cached=False)
         text = extract_text_from_pdf(content)
         if "çıkarılamadı" in text:
             raise HTTPException(status_code=400, detail="PDF'den metin okunamadı. Farklı bir dosya deneyin.")
@@ -1337,7 +1467,9 @@ def _process_uploaded_content(
             db.add(job)
             db.commit()
             db.refresh(job)
-        result, usage = analyze_blood_test(text, lang=report_lang)
+        labs_norm = {"t": " ".join(text.split()).strip(), "dn": None}
+        report_payload, usage = analyze_blood_test(text, lang=report_lang, plan="free", labs_norm=labs_norm)
+        result = report_payload["sonuc"]
         aid = _save_analysis(db, user_id, text[:2000], result, "pdf")
         if job:
             job.status = "done"
@@ -1355,7 +1487,8 @@ def _process_uploaded_content(
             db.add(ul)
             db.commit()
         _audit(db, "analyze", user_id, _client_ip(request))
-        return AnalyzeResponse(sonuc=result, analiz_id=aid)
+        plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
+        return _build_analyze_response(result, aid, report_payload.get("risk_summary"), plan, user_id, db, cached=False)
     except Exception as e:
         if ul:
             ul.status = "failed"
@@ -1407,7 +1540,8 @@ async def analyze_upload_json(
         raise HTTPException(status_code=400, detail="Dosya boş.")
     report_lang = _report_lang_from_request(request, body.lang)
     return _process_uploaded_content(
-        content, body.filename or "upload", report_lang, user.id or 0, db, request, save=not test_mode
+        content, body.filename or "upload", report_lang, user.id or 0, db, request, save=not test_mode,
+        plan=getattr(user, "plan", None) or "free",
     )
 
 
@@ -1594,6 +1728,10 @@ def download_analysis_pdf(
             report_date = str(dt)
     report_lang = (lang or "tr").strip().lower()[:5]
     user = db.get(User, user_id)
+    plan = getattr(user, "plan", None) or "free"
+    premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
+    premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
+    trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
@@ -1602,8 +1740,9 @@ def download_analysis_pdf(
             report_id=analysis_id,
             user_identifier=user.email if user else None,
             patient_name=user.full_name if user else None,
-            plan_name=user.plan if user else None,
+            plan_name="premium" if premium_pdf else (user.plan if user else None),
             source_type=rec.source if getattr(rec, "source", None) else None,
+            trend_data=trend_data,
         )
     except Exception as e:
         log.exception("PDF build failed for analysis_id=%s: %s", analysis_id, e)
@@ -1629,7 +1768,7 @@ def download_doctor_pdf(
     user_id: int = Depends(_get_pdf_requester_id),
     db: Session = Depends(get_db),
 ):
-    """Doktoruma götür PDF: aynı analiz içeriği, hekime özel başlık ve logolu sayfa."""
+    """Doktoruma götür PDF: premiumPdf true ise premium klinik rapor, değilse hekime özel basit şablon."""
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec or rec.user_id != user_id:
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
@@ -1641,12 +1780,30 @@ def download_doctor_pdf(
         else:
             report_date = str(dt)
     report_lang = (lang or "tr").strip().lower()[:5]
+    user = db.get(User, user_id)
+    plan = getattr(user, "plan", None) or "free"
+    premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
+    premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
+    trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     try:
-        pdf_bytes = build_doctor_pdf(
-            result_text=rec.result_text or "",
-            report_date=report_date,
-            lang=report_lang,
-        )
+        if premium_pdf:
+            pdf_bytes = build_report_pdf(
+                result_text=rec.result_text or "",
+                report_date=report_date,
+                lang=report_lang,
+                report_id=analysis_id,
+                user_identifier=user.email if user else None,
+                patient_name=user.full_name if user else None,
+                plan_name="premium" if premium_pdf else (user.plan if user else None),
+                source_type=rec.source if getattr(rec, "source", None) else None,
+                trend_data=trend_data,
+            )
+        else:
+            pdf_bytes = build_doctor_pdf(
+                result_text=rec.result_text or "",
+                report_date=report_date,
+                lang=report_lang,
+            )
     except Exception as e:
         log.exception("Doctor PDF build failed for analysis_id=%s: %s", analysis_id, e)
         raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
@@ -2122,3 +2279,12 @@ def payment_grant(body: GrantPaymentRequest, db: Session = Depends(get_db)):
     _audit(db, f"payment_grant_{order.product}", order.user_id, body.merchant_oid[:64])
     db.commit()
     return {"ok": True, "message": "Hak tanındı."}
+
+
+@app.post("/admin/cache/purge-expired")
+def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X-Admin-Secret")):
+    """Süresi dolan ai_cache kayıtlarını siler. X-Admin-Secret header gerekir."""
+    if not settings.admin_secret or x_admin_secret != settings.admin_secret:
+        raise HTTPException(status_code=403, detail="Yetkisiz.")
+    deleted = purge_ai_cache_expired(_cache_conn)
+    return {"deleted": deleted}

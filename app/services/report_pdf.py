@@ -1,6 +1,7 @@
 """
 Premium tıbbi PDF raporu: result_text (AI çıktısı) → parse → Jinja2 → WeasyPrint → PDF bytes.
 """
+import math
 import re
 from datetime import datetime, timezone
 from pathlib import Path
@@ -8,6 +9,32 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from app.charts import overall_score_svg_base64, range_bar_svg_base64, simple_value_bar_svg_base64
+from app.services.risk_engine import compute_risk
+
+
+def _gauge_arc_end(score: int) -> tuple[float, float]:
+    """Yarım daire gauge: score 0-100 → arc bitiş noktası (viewBox 0 0 200 100, merkez 100,100, r=90)."""
+    score = max(0, min(100, score))
+    # 0 → (10,100), 100 → (190,100). Açı: 180° - 180*(score/100)
+    angle_rad = math.pi * (1 - score / 100.0)
+    x = 100 - 90 * math.cos(angle_rad)
+    y = 100 - 90 * math.sin(angle_rad)
+    return (round(x, 2), round(y, 2))
+
+
+def _gauge_svg(score: int, fill_class: str) -> str:
+    """Yarım daire risk gauge SVG: stroke-dasharray ile fill (score 0-100 → angle 0..180)."""
+    score = max(0, min(100, score))
+    # Yarı çember uzunluğu: π * r = π * 90
+    arc_len = math.pi * 90
+    dash_len = arc_len * (score / 100.0)
+    # Görünen kısım = dash_len; dashoffset = arc_len - dash_len ile path başından itibaren doldur
+    offset = arc_len - dash_len
+    return f'''<svg class="gauge-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">
+  <path class="gauge-bg" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>
+  <path class="gauge-fill {fill_class}" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke-width="12" stroke-linecap="round" stroke-dasharray="{dash_len:.2f} {arc_len * 2:.2f}" stroke-dashoffset="0"/>
+  <text class="gauge-score" x="100" y="72" text-anchor="middle" font-size="20" font-weight="700">{score}</text>
+</svg>'''
 
 # Şablon dizini: app/templates (package içinden çalışırken app/templates)
 _TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
@@ -59,6 +86,52 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "footer_disclaimer": "Bu rapor bilgilendirme amaçlıdır. Doktorunuza danışın.",
         "medical_disclaimer_1": "Bu rapor yapay zekâ destekli ön değerlendirme amaçlıdır. Tıbbi tanı veya tedavi yerine geçmez. Sağlık durumunuzla ilgili kararlar için lütfen doktorunuza başvurunuz.",
         "medical_disclaimer_2": "Norya AI bir tıbbi teşhis sistemi değildir.",
+        "report_summary": "Özet",
+        "report_findings": "Bulgular",
+        "report_recommendations": "Öneriler",
+        "report_causes": "Olası Nedenler",
+        "report_followup": "Takip Planı",
+        "report_doctor_note": "Doktora Not",
+        "report_clinical_notes": "Klinik Notlar",
+        "report_risk_summary": "Risk Özeti",
+        "report_health_score": "Genel Sağlık Skoru",
+        "report_risk_indicator": "Risk Göstergesi",
+        "report_trend_analysis": "Trend Analizi",
+        "report_trend_more_needed": "Trend için daha fazla analiz gerekli.",
+        "report_band_low": "Düşük",
+        "report_band_mid": "Orta",
+        "report_band_high": "İyi",
+        "report_findings_highlight": "Öne Çıkan Bulgular",
+        "report_test_results": "Test Sonuçları",
+        "report_test": "Test",
+        "report_result": "Sonuç",
+        "report_reference": "Referans",
+        "report_status": "Durum",
+        "report_alert_title": "Bilgilendirme amaçlıdır.",
+        "report_alert_body": "Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.",
+        "report_footer": "Norya • Bilgilendirme amaçlıdır • support@noryaai.com",
+        "report_brand_sub": "Ön Değerlendirme Raporu",
+        "report_doc_title": "Kan Tahlili Analiz Raporu",
+        "report_doc_sub": "Bilgilendirme amaçlı klinik rapor formatı",
+        "report_rid_label": "Rapor No",
+        "report_user_label": "Kullanıcı",
+        "report_date_label_short": "Tarih",
+        "report_lang_label": "Dil",
+        "report_page_title": "Norya Klinik Rapor",
+        "report_share_note": "Bu raporu hekiminizle paylaşabilir, gerekli görülürse ek değerlendirme planlayabilirsiniz.",
+        "report_health_score_title": "Genel Sağlık Skoru",
+        "report_risk_indicator_title": "Risk Göstergesi",
+        "report_trend_title": "Trend Analizi",
+        "report_trend_need_more": "Trend için daha fazla analiz gerekli.",
+        "report_upgrade": "Premium'a Geç",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "Bilgilendirme amaçlıdır.",
+        "report_disclaimer_text": "Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.",
+        "report_trend_locked": "Trend analizi abonelik ile açılır.",
+        "report_domain_cardio": "Kardiyovasküler",
+        "report_domain_metabolic": "Metabolik",
+        "report_domain_vitamin": "Vitamin",
+        "report_domain_inflammation": "Enflamasyon",
     },
     "en": {
         "title": "Norya Analysis Report",
@@ -103,6 +176,52 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "footer_disclaimer": "This report is for information only. Consult your doctor.",
         "medical_disclaimer_1": "This report is for AI-assisted preliminary assessment only. It does not replace medical diagnosis or treatment. Please consult your doctor for decisions regarding your health.",
         "medical_disclaimer_2": "Norya AI is not a medical diagnosis system.",
+        "report_summary": "Summary",
+        "report_findings": "Findings",
+        "report_recommendations": "Recommendations",
+        "report_causes": "Possible Causes",
+        "report_followup": "Follow-up Plan",
+        "report_doctor_note": "Note for Doctor",
+        "report_clinical_notes": "Clinical Notes",
+        "report_risk_summary": "Risk Summary",
+        "report_health_score": "Overall Health Score",
+        "report_risk_indicator": "Risk Indicator",
+        "report_trend_analysis": "Trend Analysis",
+        "report_trend_more_needed": "More analyses needed for trend.",
+        "report_band_low": "Low",
+        "report_band_mid": "Moderate",
+        "report_band_high": "Good",
+        "report_findings_highlight": "Key Findings",
+        "report_test_results": "Test Results",
+        "report_test": "Test",
+        "report_result": "Result",
+        "report_reference": "Reference",
+        "report_status": "Status",
+        "report_alert_title": "For information only.",
+        "report_alert_body": "This report does not replace medical diagnosis or treatment. Consult your doctor for health decisions.",
+        "report_footer": "Norya • For information only • support@noryaai.com",
+        "report_brand_sub": "Clinical Report",
+        "report_doc_title": "Blood Test Analysis Report",
+        "report_doc_sub": "Information-only clinical report format",
+        "report_rid_label": "Report No",
+        "report_user_label": "User",
+        "report_date_label_short": "Date",
+        "report_lang_label": "Language",
+        "report_page_title": "Norya Clinical Report",
+        "report_share_note": "You can share this report with your doctor and plan further evaluation if needed.",
+        "report_health_score_title": "Overall Health Score",
+        "report_risk_indicator_title": "Risk Indicator",
+        "report_trend_title": "Trend Analysis",
+        "report_trend_need_more": "More analyses needed for trend.",
+        "report_upgrade": "Upgrade to Premium",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "For information only.",
+        "report_disclaimer_text": "This report does not replace medical diagnosis or treatment. Consult your doctor for health decisions.",
+        "report_trend_locked": "Trend analysis is available with subscription.",
+        "report_domain_cardio": "Cardiovascular",
+        "report_domain_metabolic": "Metabolic",
+        "report_domain_vitamin": "Vitamin",
+        "report_domain_inflammation": "Inflammation",
     },
     "de": {
         "title": "Norya Analysebericht",
@@ -140,6 +259,52 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "Dieser Bericht wurde von Norya erstellt. Er ersetzt keine Diagnose oder Behandlung. Ärztliche Bewertung erforderlich.",
         "medical_disclaimer_1": "Dieser Bericht ist eine KI-gestützte, vorläufige Einschätzung. Er ersetzt keine medizinische Diagnose oder Behandlung. Für Entscheidungen zu Ihrer Gesundheit wenden Sie sich bitte an Ihren Arzt.",
         "medical_disclaimer_2": "Norya AI ist kein medizinisches Diagnosesystem.",
+        "report_summary": "Zusammenfassung",
+        "report_findings": "Befunde",
+        "report_recommendations": "Empfehlungen",
+        "report_causes": "Mögliche Ursachen",
+        "report_followup": "Verlaufskontrolle",
+        "report_doctor_note": "Notiz für den Arzt",
+        "report_clinical_notes": "Klinische Notizen",
+        "report_risk_summary": "Risikoübersicht",
+        "report_health_score": "Gesundheitspunktzahl",
+        "report_risk_indicator": "Risikoanzeige",
+        "report_trend_analysis": "Trendanalyse",
+        "report_trend_more_needed": "Für den Trend sind weitere Analysen nötig.",
+        "report_band_low": "Niedrig",
+        "report_band_mid": "Mittel",
+        "report_band_high": "Gut",
+        "report_findings_highlight": "Wichtige Befunde",
+        "report_test_results": "Testergebnisse",
+        "report_test": "Test",
+        "report_result": "Ergebnis",
+        "report_reference": "Referenz",
+        "report_status": "Status",
+        "report_alert_title": "Nur zur Information.",
+        "report_alert_body": "Dieser Bericht ersetzt keine Diagnose oder Behandlung. Konsultieren Sie Ihren Arzt.",
+        "report_footer": "Norya • Nur zur Information • support@noryaai.com",
+        "report_brand_sub": "Klinischer Bericht",
+        "report_doc_title": "Blutbild-Analysebericht",
+        "report_doc_sub": "Informationsorientiertes klinisches Berichtsformat",
+        "report_rid_label": "Bericht-Nr",
+        "report_user_label": "Benutzer",
+        "report_date_label_short": "Datum",
+        "report_lang_label": "Sprache",
+        "report_page_title": "Norya Klinischer Bericht",
+        "report_share_note": "Sie können diesen Bericht mit Ihrem Arzt teilen und bei Bedarf weitere Untersuchungen planen.",
+        "report_health_score_title": "Gesundheitspunktzahl",
+        "report_risk_indicator_title": "Risikoanzeige",
+        "report_trend_title": "Trendanalyse",
+        "report_trend_need_more": "Für den Trend sind weitere Analysen nötig.",
+        "report_upgrade": "Auf Premium wechseln",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "Nur zur Information.",
+        "report_disclaimer_text": "Dieser Bericht ersetzt keine Diagnose oder Behandlung. Konsultieren Sie Ihren Arzt.",
+        "report_trend_locked": "Trendanalyse mit Abonnement verfügbar.",
+        "report_domain_cardio": "Kardiovaskulär",
+        "report_domain_metabolic": "Stoffwechsel",
+        "report_domain_vitamin": "Vitamin",
+        "report_domain_inflammation": "Entzündung",
     },
     "fr": {
         "title": "Rapport d'analyse Norya",
@@ -177,6 +342,52 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "Ce rapport a été généré par Norya. Il ne remplace pas un diagnostic ou un traitement. Évaluation médicale requise.",
         "medical_disclaimer_1": "Ce rapport est une évaluation préliminaire assistée par IA. Il ne remplace pas un diagnostic ou un traitement médical. Pour toute décision concernant votre santé, consultez votre médecin.",
         "medical_disclaimer_2": "Norya AI n'est pas un système de diagnostic médical.",
+        "report_summary": "Résumé",
+        "report_findings": "Constatations",
+        "report_recommendations": "Recommandations",
+        "report_causes": "Causes possibles",
+        "report_followup": "Suivi",
+        "report_doctor_note": "Note pour le médecin",
+        "report_clinical_notes": "Notes cliniques",
+        "report_risk_summary": "Résumé des risques",
+        "report_health_score": "Score de santé général",
+        "report_risk_indicator": "Indicateur de risque",
+        "report_trend_analysis": "Analyse de tendance",
+        "report_trend_more_needed": "Plus d'analyses nécessaires pour la tendance.",
+        "report_band_low": "Faible",
+        "report_band_mid": "Modéré",
+        "report_band_high": "Bon",
+        "report_findings_highlight": "Constats principaux",
+        "report_test_results": "Résultats des analyses",
+        "report_test": "Test",
+        "report_result": "Résultat",
+        "report_reference": "Référence",
+        "report_status": "Statut",
+        "report_alert_title": "À titre informatif uniquement.",
+        "report_alert_body": "Ce rapport ne remplace pas un diagnostic ou un traitement. Consultez votre médecin.",
+        "report_footer": "Norya • À titre informatif • support@noryaai.com",
+        "report_brand_sub": "Rapport clinique",
+        "report_doc_title": "Rapport d'analyse sanguine",
+        "report_doc_sub": "Format de rapport clinique à titre informatif",
+        "report_rid_label": "N° rapport",
+        "report_user_label": "Utilisateur",
+        "report_date_label_short": "Date",
+        "report_lang_label": "Langue",
+        "report_page_title": "Rapport clinique Norya",
+        "report_share_note": "Vous pouvez partager ce rapport avec votre médecin et planifier un suivi si nécessaire.",
+        "report_health_score_title": "Score de santé général",
+        "report_risk_indicator_title": "Indicateur de risque",
+        "report_trend_title": "Analyse de tendance",
+        "report_trend_need_more": "Plus d'analyses nécessaires pour la tendance.",
+        "report_upgrade": "Passer à Premium",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "À titre informatif uniquement.",
+        "report_disclaimer_text": "Ce rapport ne remplace pas un diagnostic ou un traitement. Consultez votre médecin.",
+        "report_trend_locked": "L'analyse de tendance est disponible avec l'abonnement.",
+        "report_domain_cardio": "Cardiovasculaire",
+        "report_domain_metabolic": "Métabolique",
+        "report_domain_vitamin": "Vitamine",
+        "report_domain_inflammation": "Inflammation",
     },
     "es": {
         "title": "Informe de análisis Norya",
@@ -214,6 +425,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "Este informe fue generado por Norya. No sustituye diagnóstico ni tratamiento. Se requiere evaluación médica.",
         "medical_disclaimer_1": "Este informe es una evaluación preliminar asistida por IA. No sustituye un diagnóstico ni un tratamiento médico. Para decisiones sobre su salud, consulte siempre a su médico.",
         "medical_disclaimer_2": "Norya AI no es un sistema de diagnóstico médico.",
+        "report_health_score_title": "Puntuación de salud general",
+        "report_risk_indicator_title": "Indicador de riesgo",
+        "report_trend_title": "Análisis de tendencia",
+        "report_trend_need_more": "Se necesitan más análisis para la tendencia.",
+        "report_upgrade": "Pasar a Premium",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "Solo informativo.",
+        "report_disclaimer_text": "Este informe no sustituye el diagnóstico o tratamiento. Consulte a su médico.",
+        "report_trend_locked": "El análisis de tendencias está disponible con la suscripción.",
+        "report_domain_cardio": "Cardiovascular",
+        "report_domain_metabolic": "Metabólico",
+        "report_domain_vitamin": "Vitamina",
+        "report_domain_inflammation": "Inflamación",
     },
     "it": {
         "title": "Report di analisi Norya",
@@ -251,6 +475,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "Questo report è stato generato da Norya. Non sostituisce diagnosi o trattamento. Valutazione medica richiesta.",
         "medical_disclaimer_1": "Questo report è una valutazione preliminare assistita dall'IA. Non sostituisce una diagnosi o un trattamento medico. Per le decisioni sulla tua salute, consulta il tuo medico.",
         "medical_disclaimer_2": "Norya AI non è un sistema di diagnosi medica.",
+        "report_health_score_title": "Punteggio salute generale",
+        "report_risk_indicator_title": "Indicatore di rischio",
+        "report_trend_title": "Analisi di tendenza",
+        "report_trend_need_more": "Sono necessarie più analisi per la tendenza.",
+        "report_upgrade": "Passa a Premium",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "Solo a scopo informativo.",
+        "report_disclaimer_text": "Questo report non sostituisce diagnosi o trattamento. Consultare il medico.",
+        "report_trend_locked": "L'analisi di tendenza è disponibile con l'abbonamento.",
+        "report_domain_cardio": "Cardiovascolare",
+        "report_domain_metabolic": "Metabolico",
+        "report_domain_vitamin": "Vitamina",
+        "report_domain_inflammation": "Infiammazione",
     },
     "he": {
         "title": "דוח ניתוח Norya",
@@ -287,6 +524,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "דוח זה נוצר על ידי Norya. אינו מחליף אבחנה או טיפול. נדרשת הערכת רופא.",
         "medical_disclaimer_1": "דוח זה הוא הערכה מקדימה המבוססת על בינה מלאכותית. הוא אינו מחליף אבחנה או טיפול רפואי. להחלטות לגבי בריאותך, התייעץ עם הרופא שלך.",
         "medical_disclaimer_2": "Norya AI אינו מערכת לאבחון רפואי.",
+        "report_health_score_title": "ציון בריאות כללי",
+        "report_risk_indicator_title": "מדד סיכון",
+        "report_trend_title": "ניתוח מגמה",
+        "report_trend_need_more": "נדרשות בדיקות נוספות למגמה.",
+        "report_upgrade": "שדרוג לפרימיום",
+        "report_premium_badge": "פרימיום",
+        "report_disclaimer_title": "למטרות מידע בלבד.",
+        "report_disclaimer_text": "דוח זה אינו מחליף אבחנה או טיפול. יש להתייעץ עם רופא.",
+        "report_trend_locked": "ניתוח מגמה זמין במנוי.",
+        "report_domain_cardio": "קרדיווסקולרי",
+        "report_domain_metabolic": "מטבולי",
+        "report_domain_vitamin": "ויטמין",
+        "report_domain_inflammation": "דלקת",
     },
     "ar": {
         "title": "تقرير تحليل Norya",
@@ -323,6 +573,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "تم إنشاء هذا التقرير بواسطة Norya. لا يحل محل التشخيص أو العلاج. تقييم الطبيب مطلوب.",
         "medical_disclaimer_1": "هذا التقرير تقييم أولي بمساعدة الذكاء الاصطناعي. لا يحل محل التشخيص أو العلاج الطبي. لاتخاذ قرارات تتعلق بصحتك، استشر طبيبك.",
         "medical_disclaimer_2": "Norya AI ليست نظاماً للتشخيص الطبي.",
+        "report_health_score_title": "درجة الصحة العامة",
+        "report_risk_indicator_title": "مؤشر المخاطر",
+        "report_trend_title": "تحليل الاتجاه",
+        "report_trend_need_more": "المزيد من التحليلات مطلوبة للاتجاه.",
+        "report_upgrade": "الترقية إلى بريميوم",
+        "report_premium_badge": "بريميوم",
+        "report_disclaimer_title": "للمعلومات فقط.",
+        "report_disclaimer_text": "هذا التقرير لا يحل محل التشخيص أو العلاج. استشر طبيبك.",
+        "report_trend_locked": "تحليل الاتجاه متاح مع الاشتراك.",
+        "report_domain_cardio": "قلبي وعائي",
+        "report_domain_metabolic": "أيضي",
+        "report_domain_vitamin": "فيتامين",
+        "report_domain_inflammation": "التهاب",
     },
     "hi": {
         "title": "Norya विश्लेषण रिपोर्ट",
@@ -359,6 +622,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "यह रिपोर्ट Norya द्वारा बनाई गई। निदान या उपचार का विकल्प नहीं। चिकित्सक मूल्यांकन आवश्यक।",
         "medical_disclaimer_1": "यह रिपोर्ट AI-सहायक प्रारंभिक मूल्यांकन है। यह किसी भी चिकित्सीय निदान या उपचार का स्थानापन्न नहीं है। अपने स्वास्थ्य से जुड़े निर्णयों के लिए हमेशा अपने डॉक्टर से परामर्श करें।",
         "medical_disclaimer_2": "Norya AI कोई चिकित्सीय निदान प्रणाली नहीं है।",
+        "report_health_score_title": "समग्र स्वास्थ्य स्कोर",
+        "report_risk_indicator_title": "जोखिम संकेतक",
+        "report_trend_title": "ट्रेंड विश्लेषण",
+        "report_trend_need_more": "ट्रेंड के लिए और विश्लेषण आवश्यक।",
+        "report_upgrade": "प्रीमियम में अपग्रेड करें",
+        "report_premium_badge": "प्रीमियम",
+        "report_disclaimer_title": "केवल सूचना के लिए।",
+        "report_disclaimer_text": "यह रिपोर्ट निदान या उपचार का विकल्प नहीं है। डॉक्टर से सलाह लें।",
+        "report_trend_locked": "ट्रेंड विश्लेषण सदस्यता के साथ उपलब्ध है।",
+        "report_domain_cardio": "हृदय संबंधी",
+        "report_domain_metabolic": "चयापचय",
+        "report_domain_vitamin": "विटामिन",
+        "report_domain_inflammation": "सूजन",
     },
     "el": {
         "title": "Αναφορά ανάλυσης Norya",
@@ -395,6 +671,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "Αυτή η αναφορά δημιουργήθηκε από το Norya. Δεν αντικαθιστά διάγνωση ή θεραπεία. Απαιτείται αξιολόγηση από γιατρό.",
         "medical_disclaimer_1": "Αυτή η αναφορά είναι προκαταρκτική εκτίμηση με τη βοήθεια AI. Δεν αντικαθιστά ιατρική διάγνωση ή θεραπεία. Για αποφάσεις σχετικά με την υγεία σας, συμβουλευτείτε τον γιατρό σας.",
         "medical_disclaimer_2": "Το Norya AI δεν είναι σύστημα ιατρικής διάγνωσης.",
+        "report_health_score_title": "Γενική βαθμολογία υγείας",
+        "report_risk_indicator_title": "Δείκτης κινδύνου",
+        "report_trend_title": "Ανάλυση τάσης",
+        "report_trend_need_more": "Απαιτούνται περισσότερες αναλύσεις για την τάση.",
+        "report_upgrade": "Αναβάθμιση σε Premium",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "Μόνο για ενημέρωση.",
+        "report_disclaimer_text": "Αυτή η αναφορά δεν αντικαθιστά τη διάγνωση ή τη θεραπεία. Συμβουλευτείτε το γιατρό σας.",
+        "report_trend_locked": "Η ανάλυση τάσης διατίθεται με συνδρομή.",
+        "report_domain_cardio": "Καρδιαγγειακό",
+        "report_domain_metabolic": "Μεταβολικό",
+        "report_domain_vitamin": "Βιταμίνη",
+        "report_domain_inflammation": "Φλεγμονή",
     },
     "cs": {
         "title": "Norya zpráva z analýzy",
@@ -431,6 +720,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "Tuto zprávu vygeneroval Norya. Nenahrazuje diagnózu ani léčbu. Vyžaduje se posouzení lékařem.",
         "medical_disclaimer_1": "Tato zpráva je předběžné vyhodnocení s pomocí AI. Nenahrazuje lékařskou diagnózu ani léčbu. Pro rozhodnutí o svém zdraví se poraďte se svým lékařem.",
         "medical_disclaimer_2": "Norya AI není systém lékařské diagnostiky.",
+        "report_health_score_title": "Celkové skóre zdraví",
+        "report_risk_indicator_title": "Ukazatel rizika",
+        "report_trend_title": "Trendová analýza",
+        "report_trend_need_more": "Pro trend je zapotřebí více analýz.",
+        "report_upgrade": "Přejít na Premium",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "Pouze pro informaci.",
+        "report_disclaimer_text": "Tato zpráva nenahrazuje diagnózu ani léčbu. Konzultujte s lékařem.",
+        "report_trend_locked": "Analýza trendu je k dispozici s předplatným.",
+        "report_domain_cardio": "Kardiovaskulární",
+        "report_domain_metabolic": "Metabolický",
+        "report_domain_vitamin": "Vitamin",
+        "report_domain_inflammation": "Zánět",
     },
     "sr": {
         "title": "Norya izveštaj analize",
@@ -467,6 +769,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_footer_note": "Ovaj izveštaj je generisao Norya. Ne zamenjuje dijagnozu ili lečenje. Potrebna procena lekara.",
         "medical_disclaimer_1": "Ovaj izveštaj je preliminarna procena uz pomoć AI. Ne zamenjuje medicinsku dijagnozu ili lečenje. Za odluke o svom zdravlju konsultujte lekara.",
         "medical_disclaimer_2": "Norya AI nije sistem za medicinsku dijagnostiku.",
+        "report_health_score_title": "Opšte zdravstveno stanje",
+        "report_risk_indicator_title": "Pokazatelj rizika",
+        "report_trend_title": "Analiza trenda",
+        "report_trend_need_more": "Potrebne su dodatne analize za trend.",
+        "report_upgrade": "Nadogradnja na Premium",
+        "report_premium_badge": "Premium",
+        "report_disclaimer_title": "Samo u informativne svrhe.",
+        "report_disclaimer_text": "Ovaj izveštaj ne zamenjuje dijagnozu ili lečenje. Posavetujte se sa lekarom.",
+        "report_trend_locked": "Analiza trenda dostupna je uz pretplatu.",
+        "report_domain_cardio": "Kardiovaskularni",
+        "report_domain_metabolic": "Metabolički",
+        "report_domain_vitamin": "Vitamin",
+        "report_domain_inflammation": "Upala",
     },
 }
 
@@ -474,6 +789,27 @@ PDF_LABELS: dict[str, dict[str, str]] = {
 def _pdf_labels(lang: str) -> dict[str, str]:
     """Rapor diline göre PDF etiketleri; bilinmeyen dil için İngilizce."""
     return PDF_LABELS.get(lang, PDF_LABELS.get("en", PDF_LABELS["tr"]))
+
+
+def _strip_ai_from_text(text: str) -> str:
+    """PDF'de AI/yapay zeka/model kelimeleri görünmesin (bilgilendirme amaçlı metin)."""
+    if not text or not text.strip():
+        return text
+    patterns = [
+        r"\bAI\b",
+        r"\bA\.I\.\b",
+        r"\byapay\s+zeka\b",
+        r"\byapay\s+zekâ\b",
+        r"\bYapay\s+[Zz]eka\b",
+        r"\bmodel\s+(ile|tarafından|destekli)\b",
+        r"\bAI[- ]assisted\b",
+        r"\bAI[- ]destekli\b",
+        r"\bartificial\s+intelligence\b",
+    ]
+    out = text
+    for p in patterns:
+        out = re.sub(p, " ", out, flags=re.IGNORECASE)
+    return re.sub(r"\s+", " ", out).strip()
 
 
 # Bölüm başlıkları (Türkçe / İngilizce / yaygın varyantlar)
@@ -508,7 +844,8 @@ BIOMARKER_LINE_RELAXED = re.compile(
 
 
 def _is_section_header(line: str) -> bool:
-    """Satır sadece bölüm başlığı mı (Summary, Risk, Values, Diyet, Takviye, Kalp, ...) kontrol et."""
+    """Satır sadece bölüm başlığı mı (Summary, Risk, Values, Diyet, Takviye, Kalp, ...) kontrol et.
+    **Parametre adı:** değer. Reference: ... Normal. gibi Values içindeki satırları bölüm başlığı sayma."""
     if not line or not line.strip().startswith("**"):
         return False
     stripped = line.strip()
@@ -516,6 +853,11 @@ def _is_section_header(line: str) -> bool:
     if not match:
         return False
     title, rest = match.group(1).strip(), (match.group(2) or "").strip()
+    # Values bölümündeki parametre satırı: "14.2 g/dL. Reference: 12-16 g/dL. Normal" — bölüm başlığı DEĞİL
+    if re.search(r"Reference\s*:\s*|Ref\s*:\s*", rest, re.IGNORECASE) or re.search(
+        r"\b(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır)\s*\.?\s*$", rest, re.IGNORECASE
+    ):
+        return False
     known = (
         "summary", "özet", "risk indicators", "risk indicator", "dikkat edilmesi gerekenler",
         "values", "value", "değerler", "parametreler", "possible causes", "possible cause",
@@ -526,7 +868,7 @@ def _is_section_header(line: str) -> bool:
         return True
     if any(k in title.lower() for k in ("summary", "özet", "risk", "dikkat", "value", "değer", "parametre", "cause", "neden", "recommendation", "öneri", "diet", "diyet", "supplement", "takviye", "heart", "kalp", "alimentaire")):
         return len(rest) < 120
-    # Her **Başlık**: satırı (içerik kısa/boşsa) bölüm başlığı say — Diyet, Takviye, Kalp vb. PDF'de ayrı görünsün
+    # Diyet, Takviye, Kalp gibi kısa başlıklar (parametre satırı değilse)
     if len(rest) < 120:
         return True
     return False
@@ -731,6 +1073,69 @@ def parse_biomarkers(values_block: str) -> list[dict]:
     return rows
 
 
+def _values_section_from_result_text(result_text: str) -> str:
+    """result_text'ten 'values' bölümünü döndürür (trend için)."""
+    sections_list = _split_sections(result_text or "")
+    for title, body in sections_list:
+        key = _map_section_key(title)
+        if key == "values":
+            return body
+    return ""
+
+
+def _extract_numeric_value(v: str) -> float | None:
+    """'120', '14.2', '—' -> 120.0, 14.2, None."""
+    if not v or v == "—" or v == "-":
+        return None
+    s = (v or "").strip().replace(",", ".")
+    try:
+        return float(re.sub(r"[^\d.]", "", s) or 0)
+    except (ValueError, TypeError):
+        return None
+
+
+def extract_trend_from_results(entries: list[tuple[str, str]]) -> dict | None:
+    """
+    Son N analiz (date_str, result_text) listesinden LDL, Glucose, CRP trend verisi çıkarır.
+    Returns: { "dates": [d1,d2,d3], "ldl": [v1,v2,v3], "glucose": [...], "crp": [...] } veya None.
+    """
+    if not entries:
+        return None
+    dates: list[str] = []
+    ldl_list: list[float | None] = []
+    glucose_list: list[float | None] = []
+    crp_list: list[float | None] = []
+    name_aliases = {
+        "ldl": ("ldl", "ldl kolesterol", "ldl-c"),
+        "glucose": ("glucose", "glukoz", "glikoz", "kan şekeri", "blood glucose", "fasting glucose"),
+        "crp": ("crp", "c-reaktif", "c reactive", "hs-crp", "crp (yüksek duyarlı)"),
+    }
+    for date_str, result_text in entries[:3]:
+        values_block = _values_section_from_result_text(result_text)
+        biomarkers = parse_biomarkers(values_block)
+        by_key: dict[str, float | None] = {}
+        for row in biomarkers:
+            name = (row.get("name") or "").strip().lower()
+            val = _extract_numeric_value(str(row.get("value") or ""))
+            for key, aliases in name_aliases.items():
+                if any(a in name for a in aliases):
+                    by_key[key] = val
+                    break
+        dates.append(date_str)
+        ldl_list.append(by_key.get("ldl"))
+        glucose_list.append(by_key.get("glucose"))
+        crp_list.append(by_key.get("crp"))
+    has_any = any(ldl_list) or any(glucose_list) or any(crp_list)
+    if not has_any:
+        return None
+    return {
+        "dates": dates,
+        "ldl": ldl_list,
+        "glucose": glucose_list,
+        "crp": crp_list,
+    }
+
+
 def parse_report_to_context(
     result_text: str,
     report_date: str | None = None,
@@ -830,6 +1235,331 @@ def render_pdf(context: dict) -> bytes:
     return pdf_bytes
 
 
+# Premium plan: klinik rapor şablonu (AI kelimesi yok, kurumsal görünüm)
+
+
+def _trend_svg(trend_data: dict) -> str:
+    """Trend verisi (dates, ldl, glucose, crp) ile mini bar chart SVG. 3 tarih, her satırda 3 bar (LDL/Glucose/CRP)."""
+    dates = trend_data.get("dates") or []
+    ldl = trend_data.get("ldl") or []
+    glucose = trend_data.get("glucose") or []
+    crp = trend_data.get("crp") or []
+    n = min(3, len(dates))
+    if n == 0:
+        return ""
+    all_vals = [v for v in (ldl + glucose + crp) if v is not None and not (isinstance(v, float) and (v != v))]
+    max_val = max(all_vals) if all_vals else 1
+    if max_val <= 0:
+        max_val = 1
+    w, h = 240, 58
+    bar_h = 10
+    gap = 4
+    row_h = bar_h + gap
+    bar_max_w = 45
+    x0 = 58
+    out: list[str] = [
+        f'<svg class="trend-svg" viewBox="0 0 {w} {h}" xmlns="http://www.w3.org/2000/svg">',
+    ]
+    for i in range(n):
+        y = 8 + i * row_h
+        date_str = (dates[i] or "")[:10]
+        out.append(f'<text x="0" y="{y + bar_h - 2}" font-size="9" fill="#64748b">{date_str}</text>')
+        ldl_w = (ldl[i] or 0) / max_val * bar_max_w if i < len(ldl) and ldl[i] is not None else 0
+        glu_w = (glucose[i] or 0) / max_val * bar_max_w if i < len(glucose) and glucose[i] is not None else 0
+        crp_w = (crp[i] or 0) / max_val * bar_max_w if i < len(crp) and crp[i] is not None else 0
+        out.append(f'<rect x="{x0}" y="{y}" width="{max(2, ldl_w)}" height="{bar_h}" rx="2" fill="#3b82f6"/>')
+        out.append(f'<rect x="{x0 + bar_max_w + 2}" y="{y}" width="{max(2, glu_w)}" height="{bar_h}" rx="2" fill="#0EA5A4"/>')
+        out.append(f'<rect x="{x0 + (bar_max_w + 2) * 2}" y="{y}" width="{max(2, crp_w)}" height="{bar_h}" rx="2" fill="#f59e0b"/>')
+    out.append("</svg>")
+    return "\n".join(out)
+
+
+def _biomarkers_to_lab_values(biomarkers: list[dict]) -> list[dict]:
+    """PDF'den parse edilen biomarkers → risk_engine.compute_risk beklediği lab_values (name, value, ref_low, ref_high)."""
+    canonical = {
+        "ldl": "LDL", "ldl kolesterol": "LDL", "ldl-c": "LDL", "hdl": "HDL", "trigliserid": "Triglycerides",
+        "triglycerides": "Triglycerides", "tg": "Triglycerides", "total kolesterol": "Total cholesterol",
+        "glukoz": "Glucose", "glucose": "Glucose", "açlık glukoz": "Glucose", "hba1c": "HbA1c", "crp": "CRP",
+        "c-reaktif": "CRP", "homosistein": "Homocysteine", "alt": "ALT", "ast": "AST", "ggt": "GGT",
+        "kreatinin": "Creatinine", "creatinine": "Creatinine", "egfr": "eGFR", "vitamin d": "Vitamin D",
+        "d vitamini": "Vitamin D", "b12": "B12", "folat": "Folate", "ferritin": "Ferritin", "demir": "Iron",
+        "iron": "Iron", "hb": "Hb", "hemoglobin": "Hb", "tsh": "TSH",
+    }
+    out: list[dict] = []
+    for row in biomarkers:
+        name_raw = (row.get("name") or "").strip()
+        if not name_raw:
+            continue
+        key = name_raw.lower()
+        param = next((canonical[alias] for alias in canonical if alias in key or key in alias), name_raw)
+        val = _value_to_float(str(row.get("value") or ""))
+        if val is None:
+            continue
+        ref = _parse_reference_range(row.get("reference"))
+        ref_low, ref_high = (ref[0], ref[1]) if ref else (None, None)
+        out.append({"name": param, "value": val, "ref_low": ref_low, "ref_high": ref_high})
+    return out
+
+
+def _build_premium_context(
+    base_context: dict,
+    report_id: str,
+    report_date: str,
+    user_id: str,
+    lang: str,
+    trend_data: dict | None = None,
+    trend_locked: bool = False,
+) -> dict:
+    """Parse edilmiş context'ten premium template için risk_cards, findings, lab_rows, clinical_notes, recommendations üretir."""
+    risk_level = base_context.get("risk_level") or "normal"
+    overall_score = base_context.get("overall_score") or 100
+    biomarkers = base_context.get("biomarkers") or []
+    # Domain skorları: biomarkers'tan risk_engine ile hesapla (gerçekçi skorlar)
+    risk_cards: list[dict] = []
+    lab_values = _biomarkers_to_lab_values(biomarkers)
+    if lab_values:
+        try:
+            risk_summary = compute_risk(lab_values)
+            overall = risk_summary.get("overall") or {}
+            overall_score = overall.get("score", overall_score)
+            domains = risk_summary.get("domains") or {}
+            domain_order = ("cardio", "metabolic", "vitamin", "inflammation")
+            level_map = {"low": "low", "mid": "mid", "high": "high"}
+            label_map = {"low": "Normal", "mid": "Sınır", "high": "Riskli"} if lang == "tr" else {"low": "Normal", "mid": "Borderline", "high": "At risk"}
+            labels = _pdf_labels(lang)
+            name_keys = ("report_domain_cardio", "report_domain_metabolic", "report_domain_vitamin", "report_domain_inflammation")
+            for i, dk in enumerate(domain_order):
+                d = domains.get(dk, {})
+                score = d.get("score", 50)
+                lev = level_map.get(d.get("level", "mid"), "mid")
+                risk_cards.append({
+                    "name": labels.get(name_keys[i], name_keys[i]),
+                    "score": score,
+                    "label": label_map.get(lev, "Normal"),
+                    "level": lev,
+                })
+        except Exception:
+            pass
+    if not risk_cards:
+        level_map = {"normal": "low", "attention": "mid", "high": "high", "none": "low"}
+        level = level_map.get(risk_level, "low")
+        label_map = {"normal": "Normal", "attention": "Sınır", "high": "Riskli", "none": "Normal"} if lang == "tr" else {"normal": "Normal", "attention": "Borderline", "high": "At risk", "none": "Normal"}
+        label = label_map.get(risk_level, "Normal")
+        labels = _pdf_labels(lang)
+        name_keys = ("report_domain_cardio", "report_domain_metabolic", "report_domain_vitamin", "report_domain_inflammation")
+        risk_cards = [
+            {"name": labels.get(name_keys[i], name_keys[i]), "score": overall_score, "label": label, "level": level}
+            for i in range(4)
+        ]
+
+    # Bulgular: risk_indicators satırları veya summary cümleleri (3–6 madde)
+    risk_txt = (base_context.get("risk_message") or base_context.get("risk_indicators") or "").strip()
+    findings: list[str] = []
+    if risk_txt:
+        for line in risk_txt.splitlines():
+            line = line.strip().lstrip("-•* ")
+            if line and len(findings) < 6:
+                findings.append(line)
+    if len(findings) < 3 and base_context.get("summary"):
+        summary = (base_context["summary"] or "").strip()
+        for part in re.split(r"[.!]\s+", summary):
+            part = part.strip()
+            if part and len(part) > 20 and len(findings) < 6:
+                findings.append(part + ("." if not part.endswith(".") else ""))
+    if not findings:
+        findings = [
+            "Laboratuvar sonuçları değerlendirildi." if lang == "tr" else "Lab results have been reviewed.",
+        ]
+    findings = [_strip_ai_from_text(s) for s in findings if s]
+
+    # Test tablosu: biomarkers -> lab_rows
+    biomarkers = base_context.get("biomarkers") or []
+    lab_rows = [
+        {
+            "name": row.get("name") or "—",
+            "value": row.get("value") or "—",
+            "unit": row.get("unit"),
+            "ref": row.get("reference"),
+            "status": row.get("status_label") or "—",
+        }
+        for row in biomarkers
+    ]
+
+    # Klinik notlar: possible_causes maddeleri
+    possible = (base_context.get("possible_causes") or "").strip()
+    clinical_notes: list[str] = []
+    for line in possible.splitlines():
+        line = line.strip().lstrip("-•* ")
+        if line:
+            clinical_notes.append(line)
+    if not clinical_notes:
+        clinical_notes = [
+            "Özet ve öneriler bölümüne bakınız." if lang == "tr" else "See summary and recommendations.",
+        ]
+
+    # Öneriler: recommendations maddeleri
+    rec_txt = (base_context.get("recommendations") or "").strip()
+    recommendations: list[str] = []
+    for line in rec_txt.splitlines():
+        line = line.strip().lstrip("-•* ")
+        if line:
+            recommendations.append(line)
+    if not recommendations:
+        recommendations = [
+            "Sonuçları hekiminizle paylaşınız." if lang == "tr" else "Share results with your doctor.",
+        ]
+
+    # Klinik Notlar: tüm yorum içeriği başlık başlık (AI kelimesi yok)
+    summary_txt = (base_context.get("summary") or "").strip()
+    ai_summary: list[str] = []
+    for part in re.split(r"(?<=[.!])\s+", summary_txt):
+        part = part.strip()
+        if part:
+            ai_summary.append(part)
+    if not ai_summary and summary_txt:
+        ai_summary = [summary_txt]
+    ai_summary = [_strip_ai_from_text(s) for s in ai_summary if s]
+
+    ai_findings = [_strip_ai_from_text(s) for s in findings[:12] if s]
+
+    possible_txt = (base_context.get("possible_causes") or "").strip()
+    ai_causes = []
+    for line in possible_txt.splitlines():
+        line = line.strip().lstrip("-•* ")
+        if line:
+            ai_causes.append(_strip_ai_from_text(line))
+
+    recos_all = recommendations[:20]
+    followup_keywords = ("takip", "kontrol", "tekrar", "ay içinde", "hafta", "follow-up", "repeat", "recheck")
+    ai_recos = []
+    ai_followup = []
+    for line in recos_all:
+        line_clean = _strip_ai_from_text(line)
+        if not line_clean:
+            continue
+        low = line_clean.lower()
+        if any(k in low for k in followup_keywords):
+            ai_followup.append(line_clean)
+        else:
+            ai_recos.append(line_clean)
+    if not ai_recos and recos_all:
+        ai_recos = recos_all
+    if not ai_followup and lang == "tr":
+        ai_followup = ["Gerekirse hekiminiz takip süresini belirleyebilir."]
+    elif not ai_followup:
+        ai_followup = ["Your doctor can recommend a follow-up schedule if needed."]
+
+    labels = _pdf_labels(lang)
+    fallback_en = PDF_LABELS.get("en", {})
+
+    def _t(key: str, default: str = "") -> str:
+        return (labels.get(key) or fallback_en.get(key) or default)
+
+    doctor_note = _strip_ai_from_text(
+        _t("report_share_note", "You can share this report with your doctor and plan further evaluation if needed.")
+    )
+
+    # Sağlık skoru bandı: 0-33 düşük, 34-66 orta, 67-100 iyi (renk: low=green, mid=orange, high=red)
+    if overall_score <= 33:
+        band_key = "report_band_low"
+    elif overall_score <= 66:
+        band_key = "report_band_mid"
+    else:
+        band_key = "report_band_high"
+    health_score_band_label = _t(band_key, "Moderate")
+    gauge_fill_class = "low" if overall_score <= 33 else ("mid" if overall_score <= 66 else "high")
+    gauge_svg = _gauge_svg(overall_score, gauge_fill_class)
+
+    # Trend: trend_data varsa SVG + bars; yoksa mesaj
+    trend_has_data = bool(trend_data and (trend_data.get("dates") or trend_data.get("ldl") or trend_data.get("glucose") or trend_data.get("crp")))
+    trend_bars: list = []
+    trend_svg = _trend_svg(trend_data) if trend_data else ""
+    if trend_has_data and trend_data:
+        dates = trend_data.get("dates") or []
+        ldl = trend_data.get("ldl") or []
+        glucose = trend_data.get("glucose") or []
+        crp = trend_data.get("crp") or []
+        all_vals = [v for v in (ldl + glucose + crp) if v is not None]
+        max_val = max(all_vals) if all_vals else 1
+        if max_val <= 0:
+            max_val = 1
+        for i in range(min(3, len(dates))):
+            ldl_pct = (100 * (ldl[i] or 0) / max_val) if i < len(ldl) and ldl[i] is not None else 0
+            glu_pct = (100 * (glucose[i] or 0) / max_val) if i < len(glucose) and glucose[i] is not None else 0
+            crp_pct = (100 * (crp[i] or 0) / max_val) if i < len(crp) and crp[i] is not None else 0
+            trend_bars.append({"date": dates[i] or "", "ldl_pct": min(100, ldl_pct), "glucose_pct": min(100, glu_pct), "crp_pct": min(100, crp_pct)})
+    trend_message = _t("report_trend_need_more", "More analyses needed for trend.")
+    trend_locked_label = _t("report_trend_locked", "Trend analysis is available with subscription.")
+
+    return {
+        "rid": report_id,
+        "trend_locked": trend_locked,
+        "label_report_trend_locked": trend_locked_label,
+        "overall_score": overall_score,
+        "report_datetime": report_date,
+        "lang": lang,
+        "user_id": user_id,
+        "logo_url": "static/norya_logo_transparent_trim.png",
+        "css_url": "static/report_premium.css",
+        "risk_cards": risk_cards,
+        "findings": findings[:6],
+        "lab_rows": lab_rows,
+        "clinical_notes": clinical_notes[:12],
+        "recommendations": recommendations[:10],
+        "ai_summary": ai_summary,
+        "ai_findings": ai_findings,
+        "ai_causes": ai_causes,
+        "ai_recos": ai_recos,
+        "ai_followup": ai_followup,
+        "doctor_note": doctor_note,
+        "label_report_summary": _t("report_summary", "Summary"),
+        "label_report_findings": _t("report_findings", "Findings"),
+        "label_report_recommendations": _t("report_recommendations", "Recommendations"),
+        "label_report_causes": _t("report_causes", "Possible Causes"),
+        "label_report_followup": _t("report_followup", "Follow-up Plan"),
+        "label_report_doctor_note": _t("report_doctor_note", "Note for Doctor"),
+        "label_report_clinical_notes": _t("report_clinical_notes", "Clinical Notes"),
+        "label_report_risk_summary": _t("report_risk_summary", "Risk Summary"),
+        "label_report_findings_highlight": _t("report_findings_highlight", "Key Findings"),
+        "label_report_test_results": _t("report_test_results", "Test Results"),
+        "label_report_test": _t("report_test", "Test"),
+        "label_report_result": _t("report_result", "Result"),
+        "label_report_reference": _t("report_reference", "Reference"),
+        "label_report_status": _t("report_status", "Status"),
+        "label_report_alert_title": _t("report_alert_title", "For information only."),
+        "label_report_alert_body": _t("report_alert_body", "This report does not replace medical diagnosis or treatment. Consult your doctor."),
+        "label_report_disclaimer_title": _t("report_disclaimer_title", "For information only."),
+        "label_report_disclaimer_text": _t("report_disclaimer_text", "This report does not replace medical diagnosis or treatment. Consult your doctor."),
+        "label_report_footer": _t("report_footer", "Norya • For information only • support@noryaai.com"),
+        "label_report_brand_sub": _t("report_brand_sub", "Clinical Report"),
+        "label_report_doc_title": _t("report_doc_title", "Blood Test Analysis Report"),
+        "label_report_doc_sub": _t("report_doc_sub", "Information-only clinical report format"),
+        "label_report_rid": _t("report_rid_label", "Report No"),
+        "label_report_user": _t("report_user_label", "User"),
+        "label_report_date": _t("report_date_label_short", "Date"),
+        "label_report_lang": _t("report_lang_label", "Language"),
+        "label_report_page_title": _t("report_page_title", "Norya Clinical Report"),
+        "label_report_health_score": _t("report_health_score", "Overall Health Score"),
+        "label_report_risk_indicator": _t("report_risk_indicator", "Risk Indicator"),
+        "label_report_trend_analysis": _t("report_trend_analysis", "Trend Analysis"),
+        "health_score_band_label": health_score_band_label,
+        "gauge_svg": gauge_svg,
+        "trend_has_data": trend_has_data,
+        "trend_bars": trend_bars,
+        "trend_svg": trend_svg,
+        "trend_message": trend_message,
+    }
+
+
+def render_premium_pdf(context: dict) -> bytes:
+    """Premium klinik rapor şablonu ile PDF üretir (WeasyPrint, running header/footer)."""
+    from weasyprint import HTML
+    template = _ENV.get_template("report_premium.html")
+    html_str = template.render(**context)
+    html_doc = HTML(string=html_str, base_url=str(_PROJECT_ROOT))
+    return html_doc.write_pdf()
+
+
 def render_doctor_pdf(context: dict) -> bytes:
     """Doktoruma götür şablonu ile PDF üretir (logo, hekime özel başlık ve uyarı metni)."""
     from weasyprint import HTML
@@ -859,11 +1589,34 @@ def build_report_pdf(
     patient_gender: str | None = None,
     plan_name: str | None = None,
     source_type: str | None = None,
+    trend_data: dict | None = None,
 ) -> bytes:
-    """result_text'ten premium PDF raporu üretir. Opsiyonel: report_id, user_identifier (rapor sahibi), hasta bilgisi, plan, kaynak."""
-    context = parse_report_to_context(result_text, report_date=report_date, lang=lang)
-    context["report_id"] = str(report_id) if report_id is not None else "—"
-    context["user_id"] = (user_identifier or "").strip() or "—"
+    """result_text'ten PDF raporu üretir. premium plan ise report_premium.html, değilse report_pdf.html kullanılır."""
+    base_context = parse_report_to_context(result_text, report_date=report_date, lang=lang)
+    report_date_str = base_context.get("report_date") or report_date or datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M")
+    rid = str(report_id) if report_id is not None else "—"
+    user_id_str = (user_identifier or "").strip() or "—"
+    plan = (plan_name or "").strip().lower()
+    # premiumPdf: single, monthly, yearly, pro → premium şablon; premiumTrend: monthly, yearly, pro
+    use_premium = plan == "premium" or plan in ("single", "monthly", "yearly", "pro")
+    premium_trend = plan in ("monthly", "yearly", "pro")
+    trend_locked = not premium_trend
+
+    if use_premium:
+        premium_ctx = _build_premium_context(
+            base_context,
+            report_id=rid,
+            report_date=report_date_str,
+            user_id=user_id_str,
+            lang=lang,
+            trend_data=trend_data,
+            trend_locked=trend_locked,
+        )
+        return render_premium_pdf(premium_ctx)
+
+    context = base_context
+    context["report_id"] = rid
+    context["user_id"] = user_id_str
     context["patient_name"] = (patient_name or "").strip() or "—"
     context["patient_age"] = (patient_age or "").strip() or "—"
     context["patient_gender"] = (patient_gender or "").strip() or "—"
