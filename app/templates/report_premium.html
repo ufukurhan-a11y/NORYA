@@ -44,6 +44,12 @@
       <div class="sec-title"><span class="sec-icon">🧾</span> {{ label_report_health_score }}</div>
       <div class="health-score-value">{{ overall_score }} / 100</div>
       <div class="health-score-band">{{ health_score_band_label }}</div>
+      {% if health_age %}
+      <div class="health-age-note">
+        <span class="health-age-label">{{ label_report_health_age }}</span>
+        <span class="health-age-value">≈ {{ health_age }}</span>
+      </div>
+      {% endif %}
     </section>
 
     <section class="card gauge-section">

@@ -132,6 +132,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Metabolik",
         "report_domain_vitamin": "Vitamin",
         "report_domain_inflammation": "Enflamasyon",
+        "report_health_age_title": "Biyolojik Yaş Tahmini",
     },
     "en": {
         "title": "Norya Analysis Report",
@@ -222,6 +223,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Metabolic",
         "report_domain_vitamin": "Vitamin",
         "report_domain_inflammation": "Inflammation",
+        "report_health_age_title": "Biological age estimate",
     },
     "de": {
         "title": "Norya Analysebericht",
@@ -1491,6 +1493,17 @@ def _build_premium_context(
     trend_message = _t("report_trend_need_more", "More analyses needed for trend.")
     trend_locked_label = _t("report_trend_locked", "Trend analysis is available with subscription.")
 
+    # Health age (biological age estimate) from overall_score (educational only)
+    # Baseline 40 yaş; skor düştükçe sağlık yaşı artar (20–80 aralığına sıkıştırılır).
+    try:
+        health_age = int(round(40 + (100 - overall_score) / 4.0))
+    except Exception:
+        health_age = 40
+    if health_age < 20:
+        health_age = 20
+    if health_age > 80:
+        health_age = 80
+
     return {
         "rid": report_id,
         "trend_locked": trend_locked,
@@ -1542,6 +1555,8 @@ def _build_premium_context(
         "label_report_health_score": _t("report_health_score", "Overall Health Score"),
         "label_report_risk_indicator": _t("report_risk_indicator", "Risk Indicator"),
         "label_report_trend_analysis": _t("report_trend_analysis", "Trend Analysis"),
+        "label_report_health_age": _t("report_health_age_title", "Biological age estimate"),
+        "health_age": health_age,
         "health_score_band_label": health_score_band_label,
         "gauge_svg": gauge_svg,
         "trend_has_data": trend_has_data,
