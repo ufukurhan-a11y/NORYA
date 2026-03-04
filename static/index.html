@@ -48,6 +48,10 @@
       --accent: #0EA5A4;
       --premium-container: 1100px;
       --section-gap: 28px;
+      --stickyBarHeight: 0px;
+      --pricing-card-radius: 18px;
+      --pricing-card-padding-desk: 22px;
+      --pricing-card-padding-mobile: 18px;
     }
     .dark {
       --norya-bg: #0f1729;
@@ -132,9 +136,10 @@
       .partner-logo { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
       .partner-logo img { max-width: 100%; max-height: 100%; object-fit: contain; }
     }
-    #toast-container { position: fixed; bottom: 1rem; left: 1rem; right: 1rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
+    /* Toast: sağ üstte veya ekranın alt çubuklarının (WhatsApp, PWA) üstünde görünsün */
+    #toast-container { position: fixed; bottom: 5rem; left: 1rem; right: 1rem; z-index: 9999; display: flex; flex-direction: column; gap: 0.5rem; pointer-events: none; }
     @media (min-width: 640px) {
-      #toast-container { left: auto; right: 1.5rem; bottom: 1.5rem; max-width: 22rem; }
+      #toast-container { left: auto; right: 1.5rem; bottom: 6rem; max-width: 22rem; }
     }
     .toast { padding: 0.75rem 1.25rem; border-radius: 0.75rem; font-size: 0.875rem; font-weight: 500; box-shadow: 0 10px 40px rgba(0,0,0,0.15); pointer-events: auto; animation: toast-in 0.25s ease; }
     .toast.success { background: #0d9488; color: #fff; }
@@ -154,30 +159,182 @@
     .risk-legend span.risk-red { background: linear-gradient(135deg, #b91c1c, #ef4444); box-shadow: 0 2px 8px rgba(239, 68, 68, 0.35); }
     .value-bar-marker { position: absolute; top: -3px; width: 4px; height: 18px; border-radius: 2px; background: #0a1929; transform: translateX(-50%); box-shadow: 0 1px 3px rgba(0,0,0,0.2); }
     .dark .value-bar-marker { background: #e8eef4; }
-    /* Pricing cards */
+    /* ========== Premium 4-card pricing (cross-browser, no overflow) ========== */
+    /* Sticky bar safe area: pricing section never covered by fixed bottom bar */
+    #fiyatlandirma {
+      padding-bottom: calc(var(--stickyBarHeight, 0px) + 24px + env(safe-area-inset-bottom, 0px));
+    }
+    @media (min-width: 768px) {
+      #fiyatlandirma { padding-bottom: calc(var(--stickyBarHeight, 0px) + 32px); }
+    }
+    .pricing-container {
+      max-width: 1240px;
+      margin: 0 auto;
+      padding-inline: 16px;
+      min-width: 0;
+    }
+    @media (min-width: 768px) {
+      .pricing-container { padding-inline: 24px; }
+    }
+    @media (min-width: 1024px) {
+      .pricing-container { padding-inline: 32px; }
+    }
+    .pricing-grid {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 20px;
+      align-items: stretch;
+      min-width: 0;
+    }
+    @media (max-width: 1199px) {
+      .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (max-width: 767px) {
+      .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
+    }
     .pricing-card {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      height: 100%;
-      border-radius: 14px;
-      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.06);
-      background: rgba(255, 255, 255, 0.9);
-      backdrop-filter: blur(18px);
-      -webkit-backdrop-filter: blur(18px);
+      min-width: 0;
+      width: 100%;
+      box-sizing: border-box;
+      border-radius: var(--pricing-card-radius);
+      padding: var(--pricing-card-padding-mobile);
+      background: #fff;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 4px 20px rgba(15, 23, 42, 0.06);
+      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+    }
+    @media (min-width: 768px) {
+      .pricing-card { padding: var(--pricing-card-padding-desk); }
     }
     .dark .pricing-card {
-      background: rgba(15, 23, 42, 0.9);
-      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.4);
+      background: rgba(15, 23, 42, 0.95);
+      border-color: rgba(148, 163, 184, 0.2);
+      box-shadow: 0 8px 28px rgba(0, 0, 0, 0.25);
+    }
+    .pricing-card * {
+      min-width: 0;
+    }
+    .pricing-card p,
+    .pricing-card li {
+      overflow-wrap: anywhere;
+      word-break: normal;
     }
     .pricing-card .cta-button {
       margin-top: auto;
+      width: 100%;
+      min-height: 48px;
+      border-radius: 14px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      overflow-wrap: anywhere;
+      text-align: center;
     }
-    .pricing-card.popular {
-      transform: scale(1.05);
+    @media (max-width: 639px) {
+      .pricing-card .cta-button { min-height: 44px; }
+    }
+    .pricing-card:hover {
+      box-shadow: 0 12px 32px rgba(15, 23, 42, 0.1);
+    }
+    .dark .pricing-card:hover {
+      box-shadow: 0 12px 36px rgba(0, 0, 0, 0.35);
+    }
+    .pricing-card:active {
+      box-shadow: 0 2px 12px rgba(15, 23, 42, 0.08);
+    }
+    .pricing-card--featured {
       border-width: 2px;
-      border-color: #0EA5A4;
-      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+      border-color: rgba(14, 165, 164, 0.45);
+      box-shadow: 0 8px 28px rgba(14, 165, 164, 0.12);
+    }
+    .dark .pricing-card--featured {
+      border-color: rgba(45, 212, 191, 0.4);
+      box-shadow: 0 8px 28px rgba(14, 165, 164, 0.15);
+    }
+    .pricing-card--featured:hover {
+      box-shadow: 0 14px 36px rgba(14, 165, 164, 0.18);
+    }
+    .pricing-card--featured:active {
+      box-shadow: 0 6px 20px rgba(14, 165, 164, 0.12);
+    }
+    .pricing-card--free {
+      border-color: rgba(148, 163, 184, 0.2);
+    }
+    .pricing-badge {
+      display: inline-flex;
+      align-items: center;
+      padding: 4px 10px;
+      border-radius: 9999px;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+    }
+    .pricing-badge--popular {
+      background: #0EA5A4;
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(14, 165, 164, 0.3);
+    }
+    [dir="rtl"] .pricing-badge { left: auto; right: 1.25rem; }
+    @media (min-width: 640px) { [dir="rtl"] .pricing-badge { right: 1.5rem; } }
+    .pricing-value-callout {
+      background: rgba(16, 185, 129, 0.1);
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      border-radius: 12px;
+      padding: 10px 14px;
+      margin-top: 8px;
+    }
+    .dark .pricing-value-callout {
+      background: rgba(16, 185, 129, 0.12);
+      border-color: rgba(16, 185, 129, 0.3);
+    }
+    .pricing-value-callout .pricing-value-line {
+      font-size: 0.8125rem;
+      line-height: 1.4;
+      color: #047857;
+      font-weight: 600;
+    }
+    .dark .pricing-value-callout .pricing-value-line {
+      color: #34d399;
+    }
+    .pricing-value-callout .pricing-value-sub {
+      font-size: 0.75rem;
+      color: #059669;
+      margin-top: 2px;
+    }
+    .dark .pricing-value-callout .pricing-value-sub {
+      color: #6ee7b7;
+    }
+    .pricing-card .pricing-title {
+      font-size: clamp(18px, 2vw, 22px);
+      font-weight: 700;
+      line-height: 1.25;
+    }
+    .pricing-card .pricing-price {
+      font-size: clamp(28px, 3vw, 40px);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+    .pricing-card ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    .pricing-card ul li {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      font-size: 0.875rem;
+      line-height: 1.4;
+    }
+    .pricing-card ul li span:first-child {
+      flex-shrink: 0;
     }
     .old-price {
       text-decoration: line-through;
@@ -3230,8 +3387,8 @@
   </section>
 
   <!-- 4) Paketler -->
-  <section id="fiyatlandirma" class="premium-section py-12 sm:py-16 px-4 bg-accent-50/50 dark:bg-accent-900/30">
-    <div class="premium-wrap max-w-6xl mx-auto">
+  <section id="fiyatlandirma" class="premium-section py-12 sm:py-16 bg-accent-50/50 dark:bg-accent-900/30 overflow-x-hidden">
+    <div class="pricing-container">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="pricing_title">Fiyatlandırma</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-2" id="pricing-note" data-i18n="pricing_eur">Fiyatlar konumunuza göre yerel para biriminde gösterilir.</p>
       <p class="text-center text-sm font-medium text-amber-800 dark:text-amber-200 mb-4 max-w-xl mx-auto px-2" data-i18n="medical_disclaimer_full">Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.</p>
@@ -3270,106 +3427,95 @@
       </div>
 
       <!-- Pricing cards: Gratis / Tek Analiz / Aylık / Yıllık -->
-      <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4 items-stretch mb-10">
+      <div class="pricing-grid mb-10">
         <!-- Gratis (Free / Trial) -->
-        <div class="pricing-card bg-white dark:bg-accent-800 rounded-[14px] p-6 border border-accent-100 dark:border-accent-700 shadow-sm flex flex-col min-w-0 overflow-hidden">
-          <div class="flex items-start justify-between gap-3 mb-3">
-            <div>
-              <h3 class="font-bold text-lg text-accent-900 dark:text-white" data-i18n="compare_plan_free">Ücretsiz Deneme</h3>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold">🎁 <span>Deneme</span></span>
-            </div>
+        <div class="pricing-card pricing-card--free">
+          <div class="mb-4">
+            <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="compare_plan_free">Ücretsiz Deneme</h3>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold mt-2">🎁 <span data-i18n="pricing_badge_trial">Deneme</span></span>
           </div>
-          <p class="mt-2 text-3xl font-extrabold text-accent-900 dark:text-white leading-tight">
+          <p class="pricing-price text-accent-900 dark:text-white mt-2">
             <span class="align-top text-base mr-0.5">€</span><span>0</span>
           </p>
           <p class="mt-1 text-xs text-accent-500 dark:text-accent-400" data-i18n="usage_first_free">İlk analiz ücretsiz.</p>
-          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-300 flex-1">
-            <li class="flex items-start gap-2"><span aria-hidden="true">✅</span><span data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">📄</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🧠</span><span data-i18n="trust_cards_speed_desc">Sunucu uygun olduğunda çoğu rapor saniyeler içinde hazır olur.</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🌍</span><span data-i18n="compare_langs">Rapor dili</span></li>
+          <ul class="mt-5 flex-1">
+            <li><span aria-hidden="true">✅</span><span data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span></li>
+            <li><span aria-hidden="true">📄</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
+            <li><span aria-hidden="true">🧠</span><span data-i18n="trust_cards_speed_desc">Sunucu uygun olduğunda çoğu rapor saniyeler içinde hazır olur.</span></li>
+            <li><span aria-hidden="true">🌍</span><span data-i18n="compare_langs">Rapor dili</span></li>
           </ul>
-          <button type="button" onclick="goToCheckout('free')" class="cta-button mt-6 w-full py-3.5 rounded-full border border-accent-200 dark:border-accent-600 text-accent-900 dark:text-white font-semibold hover:bg-accent-50 dark:hover:bg-accent-800/80 transition text-sm">Ücretsiz Başla</button>
+          <button type="button" onclick="goToCheckout('free')" class="cta-button mt-6 border border-accent-200 dark:border-accent-600 text-accent-900 dark:text-white font-semibold hover:bg-accent-50 dark:hover:bg-accent-700/30 transition text-sm" data-i18n="price_btn_free">Ücretsiz Başla</button>
         </div>
 
         <!-- Tek Analiz (Singolo) -->
-        <div class="pricing-card bg-white dark:bg-accent-800 rounded-[14px] p-6 border border-accent-100 dark:border-accent-700 shadow-sm flex flex-col min-w-0 overflow-hidden">
-          <div class="flex items-start justify-between gap-3 mb-3 min-w-0">
-            <div class="min-w-0">
-              <h3 class="font-bold text-lg text-accent-900 dark:text-white truncate" data-i18n="price_single_title">Tek Analiz</h3>
-              <p class="text-sm text-accent-500 mt-1" data-i18n="price_single_per">tek seferlik</p>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-semibold">⚡ <span>Hızlı</span></span>
-            </div>
+        <div class="pricing-card">
+          <div class="mb-4 min-w-0">
+            <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_single_title">Tek Analiz</h3>
+            <p class="text-sm text-accent-500 mt-1" data-i18n="price_single_per">tek seferlik</p>
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-semibold mt-2">⚡ <span data-i18n="price_badge_fast">Hızlı</span></span>
           </div>
-          <p class="mt-1 text-3xl font-extrabold text-primary-600 leading-tight">
+          <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
             <span class="align-top text-base mr-0.5">€</span><span id="price-single">13</span>
           </p>
-          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300">
-            <span class="px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-100" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
+          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
+            <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
           </div>
-          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400 flex-1">
-            <li class="flex items-start gap-2"><span aria-hidden="true">✅</span><span data-i18n="price_single_1">✓ 1 analiz</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">📊</span><span data-i18n="price_single_3">✓ PDF indir & paylaş</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🧠</span><span data-i18n="compare_report">Detaylı rapor (özet, değerler, öneriler)</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🏥</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
+          <ul class="mt-5 flex-1">
+            <li><span aria-hidden="true">✅</span><span data-i18n="price_single_1">✓ 1 analiz</span></li>
+            <li><span aria-hidden="true">📊</span><span data-i18n="price_single_3">✓ PDF indir & paylaş</span></li>
+            <li><span aria-hidden="true">🧠</span><span data-i18n="compare_report">Detaylı rapor (özet, değerler, öneriler)</span></li>
+            <li><span aria-hidden="true">🏥</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
           </ul>
-          <button type="button" onclick="goToCheckout('single')" class="cta-button mt-6 w-full py-3.5 rounded-full border-2 border-primary-600 text-primary-700 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-single">13 €</span> <span>Tek Analizi Satın Al</span></button>
+          <button type="button" onclick="goToCheckout('single')" class="cta-button mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-single">13 €</span> <span data-i18n="price_btn_single_label">Tek Analizi Satın Al</span></button>
         </div>
 
         <!-- Aylık: En Popüler (Mensile) -->
-        <div class="pricing-card popular bg-white/80 dark:bg-accent-800/95 rounded-[14px] p-6 border border-primary-300 dark:border-primary-700 relative flex flex-col shadow-md shadow-primary-500/15 min-w-0 overflow-hidden backdrop-blur">
-          <span class="absolute -top-3 left-4 px-3 py-0.5 rounded-full bg-primary-600 text-white text-xs font-semibold shadow-sm" data-i18n="price_monthly_badge">En Popüler</span>
-          <div class="flex items-start justify-between gap-3 mb-3 min-w-0">
-            <div class="min-w-0">
-              <h3 class="font-bold text-lg text-accent-900 dark:text-white truncate" data-i18n="price_monthly_title">Aylık Abonelik</h3>
-              <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">5 analiz / ay</p>
-              <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-orange-50 dark:bg-orange-900/40 text-orange-700 dark:text-orange-300 text-xs font-semibold">🔥 <span>En Popüler</span></span>
-            </div>
+        <div class="pricing-card pricing-card--featured relative pt-8">
+          <span class="pricing-badge pricing-badge--popular absolute top-4 left-5 sm:left-6" data-i18n="price_monthly_badge">En Popüler</span>
+          <div class="mb-4 min-w-0">
+            <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_monthly_title">Aylık Abonelik</h3>
+            <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">5 analiz / ay</p>
           </div>
-          <p class="mt-1 text-3xl font-extrabold text-primary-600 leading-tight">
+          <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
             <span class="align-top text-base mr-0.5">€</span><span id="price-monthly">50</span><span id="price-symbol-monthly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_month">/ay</span>
           </p>
-          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300">
-            <span class="px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-100" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
+          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
+            <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
           </div>
-          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400 flex-1">
-            <li class="flex items-start gap-2"><span aria-hidden="true">✅</span><span data-i18n="price_monthly_1">✓ Ayda 5 analiz</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🍽️</span><span data-i18n="price_monthly_2">✓ Diyet ve yaşam tarzı önerileri</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🕒</span><span data-i18n="price_monthly_3">✓ Geçmiş analiz karşılaştırma</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">📄</span><span data-i18n="price_monthly_4">✓ Premium PDF rapor</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">📊</span><span data-i18n="pricing_health_charts">✓ Sağlık grafikleri</span></li>
+          <ul class="mt-5 flex-1">
+            <li><span aria-hidden="true">✅</span><span data-i18n="price_monthly_1">✓ Ayda 5 analiz</span></li>
+            <li><span aria-hidden="true">🍽️</span><span data-i18n="price_monthly_2">✓ Diyet ve yaşam tarzı önerileri</span></li>
+            <li><span aria-hidden="true">🕒</span><span data-i18n="price_monthly_3">✓ Geçmiş analiz karşılaştırma</span></li>
+            <li><span aria-hidden="true">📄</span><span data-i18n="price_monthly_4">✓ Premium PDF rapor</span></li>
+            <li><span aria-hidden="true">📊</span><span data-i18n="pricing_health_charts">✓ Sağlık grafikleri</span></li>
           </ul>
-          <p class="mt-2 text-xs text-accent-500 dark:text-accent-400" data-i18n="pricing_monthly_most_chosen">Kullanıcıların çoğu bu planı seçiyor.</p>
-          <button type="button" onclick="goToCheckout('monthly')" class="cta-button mt-4 w-full py-3.5 rounded-full bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span>Aylık Planı Başlat</span></button>
+          <p class="mt-3 text-xs text-accent-500 dark:text-accent-400" data-i18n="pricing_monthly_most_chosen">Kullanıcıların çoğu bu planı seçiyor.</p>
+          <button type="button" onclick="goToCheckout('monthly')" class="cta-button mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span data-i18n="price_btn_monthly_label">Aylık Planı Başlat</span></button>
         </div>
 
         <!-- Yıllık: En Karlı (Annual) -->
-        <div class="pricing-card bg-white/90 dark:bg-accent-800 rounded-[14px] p-6 border border-accent-100 dark:border-accent-700 flex flex-col shadow-sm min-w-0 overflow-hidden">
-          <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold mb-1 min-w-0">💎 <span class="truncate" data-i18n="pricing_yearly_saving">Aylığa göre 501 € tasarruf (%83)</span></span>
-          <div class="flex items-start justify-between gap-3 mb-3 min-w-0">
-            <div class="min-w-0">
-              <h3 class="font-bold text-lg text-accent-900 dark:text-white truncate" data-i18n="price_yearly_title">Yıllık Abonelik</h3>
-              <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">Toplam 16 analiz (13 + 3 hediye)</p>
-            </div>
+        <div class="pricing-card">
+          <div class="mb-4 min-w-0">
+            <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_yearly_title">Yıllık Abonelik</h3>
+            <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">Toplam 16 analiz (13 + 3 hediye)</p>
           </div>
-          <p class="mt-1 text-3xl font-extrabold text-primary-600 leading-tight">
+          <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
             <span class="align-top text-base mr-0.5">€</span><span id="price-yearly">99</span><span id="price-symbol-yearly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span>
           </p>
-          <div class="mt-1 text-xs text-accent-600 dark:text-accent-300">
-            <span class="old-price mr-1">600 €</span><span>değerinde analiz</span><br />
-            <span class="font-semibold text-primary-700 dark:text-primary-300">Sadece 99 €</span>
+          <div class="pricing-value-callout">
+            <p class="pricing-value-line">💎 <span data-i18n="pricing_yearly_saving">Aylığa göre 501 € tasarruf (%83)</span></p>
+            <p class="pricing-value-sub"><span class="old-price">600 €</span> <span data-i18n="pricing_yearly_value_mid">değerinde analiz — Sadece</span> <strong><span id="yearly-only-amount">99</span> €</strong></p>
           </div>
-          <span class="mt-1 inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-[11px] font-semibold">%83 tasarruf</span>
-          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300">
-            <span class="px-2 py-0.5 rounded-full bg-primary-50 text-primary-700 border border-primary-100" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
+          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
+            <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
           </div>
-          <ul class="mt-4 space-y-2 text-sm text-accent-600 dark:text-accent-400 flex-1">
-            <li class="flex items-start gap-2"><span aria-hidden="true">✅</span><span data-i18n="price_yearly_1">✓ Yılda 16 analiz (13 + 3 hediye)</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🍽️</span><span data-i18n="price_yearly_2">✓ Tüm premium diyet ve yaşam tarzı bilgilendirme bölümleri</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🕒</span><span data-i18n="price_yearly_3">✓ Geçmiş & gelişmiş karşılaştırma</span></li>
-            <li class="flex items-start gap-2"><span aria-hidden="true">🏥</span><span data-i18n="price_yearly_4">✓ Doktor randevuları için ideal</span></li>
+          <ul class="mt-5 flex-1">
+            <li><span aria-hidden="true">✅</span><span data-i18n="price_yearly_1">✓ Yılda 16 analiz (13 + 3 hediye)</span></li>
+            <li><span aria-hidden="true">🍽️</span><span data-i18n="price_yearly_2">✓ Tüm premium diyet ve yaşam tarzı bilgilendirme bölümleri</span></li>
+            <li><span aria-hidden="true">🕒</span><span data-i18n="price_yearly_3">✓ Geçmiş & gelişmiş karşılaştırma</span></li>
+            <li><span aria-hidden="true">🏥</span><span data-i18n="price_yearly_4">✓ Doktor randevuları için ideal</span></li>
           </ul>
-          <button type="button" onclick="goToCheckout('yearly')" class="cta-button mt-6 w-full py-3.5 rounded-full border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-yearly">99 €</span> <span>Yıllık Tasarrufu Al</span></button>
+          <button type="button" onclick="goToCheckout('yearly')" class="cta-button mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-yearly">99 €</span> <span data-i18n="price_btn_yearly_label">Yıllık Tasarrufu Al</span></button>
         </div>
       </div>
 
@@ -4316,7 +4462,8 @@
       el.className = 'toast ' + type;
       el.textContent = msg;
       c.appendChild(el);
-      setTimeout(function() { el.remove(); }, 4000);
+      var duration = (type === 'error') ? 8000 : 4000;
+      setTimeout(function() { el.remove(); }, duration);
     }
     function toggleDark() {
       var html = document.documentElement;
@@ -5423,6 +5570,7 @@
         price_no_renewal: "Pro paketleri satın aldığınız dönem boyunca geçerlidir (aylık 30 gün, yıllık 365 gün). Otomatik yenileme yoktur; süre bitince isterseniz tekrar satın alabilirsiniz.",
         pricing_yearly_saving: "Aylığa göre 501 € tasarruf (%83)",
         pricing_yearly_math: "50€ x 12 = 600€ yerine 99€ (yıllık toplu ödeme).",
+        pricing_badge_trial: "Deneme", price_btn_free: "Ücretsiz Başla", price_badge_fast: "Hızlı", price_btn_single_label: "Tek Analizi Satın Al", price_btn_monthly_label: "Aylık Planı Başlat", pricing_yearly_value_mid: "değerinde analiz — Sadece", price_btn_yearly_label: "Yıllık Tasarrufu Al",
         trust_title: "Güvenli ve uyumlu hizmet",
         trust_subtitle: "Veriler yalnızca rapor üretimi amacıyla işlenir. Norya tıbbi tanı koymaz; bilgilendirme amaçlı AI destekli yorum sunar.",
         trust_cards_langs_title: "9+ dil desteği", trust_cards_langs_desc: "Tahlilinizi Türkçe, İngilizce ve diğer desteklenen dillerde okuyabilirsiniz.",
@@ -5695,6 +5843,7 @@
         price_monthly_badge: "Most Popular", pricing_ai_detail: "Clinical detail level", price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "5 analyses / month", price_monthly_1: "✓ 5 full analyses per month", price_monthly_2: "✓ Diet plan + nutrition & lifestyle info notes", price_monthly_3: "✓ History & compare two analyses", price_monthly_4: "✓ Download PDF, share with doctor", price_btn_monthly: "/mo — Get started",
         price_best_badge: "Best value", price_best_badge_value: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "16 analyses total (13 + 3 free)", price_yearly_1: "✓ 16 analyses per year (13 + 3 free)", price_yearly_2: "✓ All premium diet & lifestyle info sections", price_yearly_3: "✓ History & advanced comparison", price_yearly_4: "✓ Ideal for doctor visits", price_btn_yearly: "/yr — Get started",
         compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_price: "Price", compare_btn_select: "Select", compare_btn_active: "Current", compare_btn_upgrade: "Upgrade",
+        pricing_health_charts: "✓ Health charts", pricing_monthly_most_chosen: "Most users choose this plan.",
         footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "This analysis is for information only. It does not replace medical diagnosis.", medical_disclaimer_full: "Norya is not a medical diagnosis tool. Content provided is for information only. In emergencies or for diagnosis/treatment, consult your doctor.", doctor_cta_note: "Not a substitute for diagnosis; share results with your doctor.",
         footer_mesafeli: "Distance Sales Agreement", footer_privacy: "Privacy Policy", footer_refund: "Refund Policy", footer_refund_long: "Refund & Cancellation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
@@ -5741,6 +5890,7 @@
         price_no_renewal: "Pro packages are valid for the period you purchased (30 days monthly, 365 days yearly). No auto-renewal; you can purchase again when the period ends.",
         pricing_yearly_saving: "Save €501 vs monthly (%83)",
         pricing_yearly_math: "Instead of €50 x 12 = €600, you pay €99 once per year.",
+        pricing_badge_trial: "Trial", price_btn_free: "Get started free", price_badge_fast: "Quick", price_btn_single_label: "Buy single analysis", price_btn_monthly_label: "Start monthly plan", pricing_yearly_value_mid: "worth — Only", price_btn_yearly_label: "Get yearly savings",
         trust_title: "Secure and compliant service",
         trust_subtitle: "Your data is processed only to generate your report. Norya does not make medical diagnoses; it provides AI-assisted explanations for educational purposes.",
         trust_cards_langs_title: "9+ language support", trust_cards_langs_desc: "Read your report in Turkish, English and other supported languages.",
@@ -5928,7 +6078,8 @@
         footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Termini d'uso", footer_payment: "Pagamento e rimborsi", footer_contact: "Contatti", back_home: "← Home",
         profile_tab_general: "Generale", profile_tab_plan: "Piano e utilizzo", profile_tab_history: "Cronologia analisi", profile_tab_security: "Sicurezza", profile_plan_label: "Piano", profile_remaining: "Rimanenti", profile_ends: "Fine", profile_plan_pro: "Pro", profile_ends_monthly: "Rinnovo mensile", profile_ends_na: "—", profile_usage_label: "Utilizzo (questo mese)", profile_upgrade_cta: "Passa a un piano superiore", profile_view_analysis: "Visualizza", profile_unlimited: "Illimitato", profile_country: "Paese",
-        compare_title: "Confronta tutti i piani", compare_subtitle: "Scegli il piano adatto a te.", compare_feature: "Funzione", compare_plan_free: "Gratis", compare_plan_single: "Singolo", compare_plan_monthly: "Mensile", compare_plan_yearly: "Annuale", compare_analyses: "Analisi", compare_analyses_per_month: "10+3 / mese", compare_upload: "Testo, PDF, immagine", compare_report: "Report dettagliato (riepilogo, valori, raccomandazioni)", compare_diet: "Piano dietetico", compare_supplements: "Integratori", compare_heart: "Salute cardiaca", compare_history: "Cronologia", compare_pdf: "PDF / Condividi / Per il medico", compare_emr_ehr: "Report EMR/EHR", compare_langs: "Lingua report", compare_langs_count: "9 lingue", compare_compare: "Confronta due analisi", compare_price: "Prezzo",
+        compare_title: "Confronta tutti i piani", compare_subtitle: "Scegli il piano adatto a te.", compare_feature: "Funzione", compare_plan_free: "Gratis", compare_plan_single: "Singolo", compare_plan_monthly: "Mensile", compare_plan_yearly: "Annuale", compare_analyses: "Analisi", compare_analyses_per_month: "10+3 / mese", compare_upload: "Testo, PDF, immagine", compare_report: "Report dettagliato (riepilogo, valori, raccomandazioni)", compare_diet: "Piano dietetico", compare_supplements: "Integratori", compare_heart: "Salute cardiaca", compare_history: "Cronologia", compare_pdf: "PDF / Condividi / Per il medico", compare_emr_ehr: "Report EMR/EHR", compare_langs: "Lingua report", compare_langs_count: "9 lingue", compare_compare: "Confronta due analisi", compare_price: "Prezzo", compare_btn_select: "Seleziona", compare_btn_active: "Attivo", compare_btn_upgrade: "Passa a",
+        usage_first_free: "Prima analisi gratis.", pricing_input_types: "Input: Testo • PDF • Foto", trust_cards_speed_desc: "Quando i server sono disponibili, la maggior parte dei report è pronta in secondi.", pricing_health_charts: "✓ Grafici salute", pricing_monthly_most_chosen: "La maggior parte degli utenti sceglie questo piano.",
         terms_heading: "Termini d'uso", privacy_heading: "Informativa sulla privacy", payment_heading: "Pagamento e rimborsi",
         contact_heading: "Contatti", contact_intro: "Per domande, richieste di rimborso o problemi tecnici (es. \"pagamento ricevuto ma nessun credito analisi\"), contattaci.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Scrivici su WhatsApp", contact_note: "Se possibile, indica l'email del tuo account e una breve descrizione (n. ordine, data, ecc.). Rispondiamo entro 1 giorno lavorativo.", contact_tagline: "Norya — Risultati delle analisi del sangue in linguaggio chiaro.",
         terms_intro: "Utilizzando Norya accetti i seguenti termini. In caso di modifiche, il testo aggiornato sarà pubblicato sul sito; cambiamenti importanti potrebbero essere comunicati via email.",
@@ -5951,6 +6102,7 @@
         price_no_renewal: "I piani Pro sono validi per il periodo acquistato (30 giorni mensili, 365 annuali). Nessun rinnovo automatico.",
         pricing_yearly_saving: "Risparmi 501€ rispetto al mensile (83%)",
         pricing_yearly_math: "Invece di 50€ x 12 = 600€, paghi 99€ una volta l'anno.",
+        pricing_badge_trial: "Prova", price_btn_free: "Inizia gratis", price_badge_fast: "Veloce", price_btn_single_label: "Acquista analisi singola", price_btn_monthly_label: "Avvia piano mensile", pricing_yearly_value_mid: "valore — Solo", price_btn_yearly_label: "Scegli annuale",
         trust_title: "Servizio sicuro e conforme",
         trust_subtitle: "I dati sono elaborati solo per generare il report. Norya non effettua diagnosi mediche; fornisce spiegazioni assistite da IA a scopo informativo.",
         trust_cards_langs_title: "Supporto 9+ lingue", trust_cards_langs_desc: "Leggi il report in turco, inglese e altre lingue supportate.",
@@ -6137,7 +6289,8 @@
         footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Términos de uso", footer_payment: "Pago y reembolsos", footer_contact: "Contacto", back_home: "← Inicio",
         profile_tab_general: "General", profile_tab_plan: "Plan y uso", profile_tab_history: "Historial de análisis", profile_tab_security: "Seguridad", profile_plan_label: "Plan", profile_remaining: "Restantes", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renovación mensual", profile_ends_na: "—", profile_usage_label: "Uso (este mes)", profile_upgrade_cta: "Mejorar plan", profile_view_analysis: "Ver", profile_unlimited: "Ilimitado", profile_country: "País",
-        compare_title: "Comparar todos los planes", compare_subtitle: "Encuentra el plan que te convenga.", compare_feature: "Característica", compare_plan_free: "Gratis", compare_plan_single: "Único", compare_plan_monthly: "Mensual", compare_plan_yearly: "Anual", compare_analyses: "Análisis", compare_analyses_per_month: "10+3 / mes", compare_upload: "Texto, PDF, imagen", compare_report: "Informe detallado (resumen, valores, recomendaciones)", compare_diet: "Plan dietético", compare_supplements: "Suplementos", compare_heart: "Salud cardíaca", compare_history: "Historial", compare_pdf: "PDF / Compartir / Para el médico", compare_emr_ehr: "Informe EMR/EHR", compare_langs: "Idioma del informe", compare_langs_count: "9 idiomas", compare_compare: "Comparar dos análisis", compare_price: "Precio",
+        compare_title: "Comparar todos los planes", compare_subtitle: "Encuentra el plan que te convenga.", compare_feature: "Característica", compare_plan_free: "Gratis", compare_plan_single: "Único", compare_plan_monthly: "Mensual", compare_plan_yearly: "Anual", compare_analyses: "Análisis", compare_analyses_per_month: "10+3 / mes", compare_upload: "Texto, PDF, imagen", compare_report: "Informe detallado (resumen, valores, recomendaciones)", compare_diet: "Plan dietético", compare_supplements: "Suplementos", compare_heart: "Salud cardíaca", compare_history: "Historial", compare_pdf: "PDF / Compartir / Para el médico", compare_emr_ehr: "Informe EMR/EHR", compare_langs: "Idioma del informe", compare_langs_count: "9 idiomas", compare_compare: "Comparar dos análisis", compare_price: "Precio", compare_btn_select: "Seleccionar", compare_btn_active: "Actual", compare_btn_upgrade: "Mejorar",
+        usage_first_free: "Primera análisis gratis.", pricing_input_types: "Entrada: Texto • PDF • Foto", trust_cards_speed_desc: "Cuando los servidores están disponibles, la mayoría de los informes están listos en segundos.", pricing_health_charts: "✓ Gráficos de salud", pricing_monthly_most_chosen: "La mayoría de usuarios elige este plan.",
         terms_heading: "Términos de uso", privacy_heading: "Política de privacidad", payment_heading: "Pago y reembolsos",
         contact_heading: "Contacto", contact_intro: "Para preguntas, solicitudes de reembolso o problemas técnicos (ej. \"pago recibido pero sin crédito de análisis\"), escríbenos.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Escríbenos por WhatsApp", contact_note: "Si es posible, incluye el email de tu cuenta y una breve descripción (n.º de pedido, fecha, etc.). Respondemos en un plazo de 1 día laborable.", contact_tagline: "Norya — Resultados de análisis de sangre en lenguaje claro.",
         terms_intro: "Al usar Norya aceptas los siguientes términos. Si los términos cambian, el texto actualizado se publicará en el sitio; los cambios importantes se podrán anunciar por correo.",
@@ -6160,6 +6313,7 @@
         price_no_renewal: "Los planes Pro son válidos para el período comprado (30 días mensual, 365 anual). Sin renovación automática.",
         pricing_yearly_saving: "Ahorra 501€ frente al mensual (83%)",
         pricing_yearly_math: "En lugar de 50€ x 12 = 600€, pagas 99€ una sola vez al año.",
+        pricing_badge_trial: "Prueba", price_btn_free: "Empezar gratis", price_badge_fast: "Rápido", price_btn_single_label: "Comprar análisis único", price_btn_monthly_label: "Comenzar plan mensual", pricing_yearly_value_mid: "valor — Solo", price_btn_yearly_label: "Elegir anual",
         trust_title: "Servicio seguro y conforme",
         trust_subtitle: "Tus datos se procesan solo para generar el informe. Norya no realiza diagnósticos médicos; ofrece explicaciones con IA con fines informativos.",
         trust_cards_langs_title: "Soporte para 9+ idiomas", trust_cards_langs_desc: "Lee el informe en turco, inglés y otros idiomas soportados.",
@@ -6346,7 +6500,8 @@
         footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Conditions d'utilisation", footer_payment: "Paiement et remboursements", footer_contact: "Contact", back_home: "← Accueil",
         profile_tab_general: "Général", profile_tab_plan: "Forfait et utilisation", profile_tab_history: "Historique des analyses", profile_tab_security: "Sécurité", profile_plan_label: "Forfait", profile_remaining: "Restants", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renouvellement mensuel", profile_ends_na: "—", profile_usage_label: "Utilisation (ce mois)", profile_upgrade_cta: "Améliorer le forfait", profile_view_analysis: "Voir", profile_unlimited: "Illimité", profile_country: "Pays",
-        compare_title: "Comparer tous les forfaits", compare_subtitle: "Trouvez le forfait qui vous convient.", compare_feature: "Fonctionnalité", compare_plan_free: "Gratuit", compare_plan_single: "Unique", compare_plan_monthly: "Mensuel", compare_plan_yearly: "Annuel", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mois", compare_upload: "Texte, PDF, image", compare_report: "Rapport détaillé (résumé, valeurs, recommandations)", compare_diet: "Régime", compare_supplements: "Compléments", compare_heart: "Santé cardiaque", compare_history: "Historique", compare_pdf: "PDF / Partager / Pour le médecin", compare_emr_ehr: "Rapport EMR/EHR", compare_langs: "Langue du rapport", compare_langs_count: "9 langues", compare_compare: "Comparer deux analyses", compare_price: "Prix",
+        compare_title: "Comparer tous les forfaits", compare_subtitle: "Trouvez le forfait qui vous convient.", compare_feature: "Fonctionnalité", compare_plan_free: "Gratuit", compare_plan_single: "Unique", compare_plan_monthly: "Mensuel", compare_plan_yearly: "Annuel", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mois", compare_upload: "Texte, PDF, image", compare_report: "Rapport détaillé (résumé, valeurs, recommandations)", compare_diet: "Régime", compare_supplements: "Compléments", compare_heart: "Santé cardiaque", compare_history: "Historique", compare_pdf: "PDF / Partager / Pour le médecin", compare_emr_ehr: "Rapport EMR/EHR", compare_langs: "Langue du rapport", compare_langs_count: "9 langues", compare_compare: "Comparer deux analyses", compare_price: "Prix", compare_btn_select: "Choisir", compare_btn_active: "Actuel", compare_btn_upgrade: "Améliorer",
+        usage_first_free: "Première analyse gratuite.", pricing_input_types: "Entrée : Texte • PDF • Photo", trust_cards_speed_desc: "Lorsque les serveurs sont disponibles, la plupart des rapports sont prêts en quelques secondes.", pricing_health_charts: "✓ Graphiques santé", pricing_monthly_most_chosen: "La plupart des utilisateurs choisissent ce forfait.",
         terms_heading: "Conditions d'utilisation", privacy_heading: "Politique de confidentialité", payment_heading: "Paiement et remboursements",
         contact_heading: "Contact", contact_intro: "Pour toute question, demande de remboursement ou problème technique (ex. \"paiement reçu mais pas de crédit d'analyse\"), contactez-nous.", contact_email_label: "Email :", contact_whatsapp_label: "WhatsApp :", contact_whatsapp_click: "Écrivez-nous sur WhatsApp", contact_note: "Si possible, indiquez l'email de votre compte et une courte description (n° de commande, date, etc.). Nous répondons sous 1 jour ouvré.", contact_tagline: "Norya — Résultats d'analyses sanguines expliqués en langage clair.",
         terms_intro: "En utilisant Norya vous acceptez les conditions suivantes. En cas de modification, le texte en vigueur sera publié sur le site ; les changements importants pourront être annoncés par e-mail.",
@@ -6369,6 +6524,7 @@
         price_no_renewal: "Les forfaits Pro sont valables pour la période achetée (30 jours mensuel, 365 annuel). Pas de renouvellement automatique.",
         pricing_yearly_saving: "501€ d'économie par rapport au mensuel (83%)",
         pricing_yearly_math: "Au lieu de 50€ x 12 = 600€, vous payez 99€ une fois par an.",
+        pricing_badge_trial: "Essai", price_btn_free: "Commencer gratuitement", price_badge_fast: "Rapide", price_btn_single_label: "Acheter une analyse", price_btn_monthly_label: "Démarrer l'abonnement mensuel", pricing_yearly_value_mid: "valeur — Seulement", price_btn_yearly_label: "Choisir l'annuel",
         trust_title: "Service sécurisé et conforme",
         trust_subtitle: "Vos données sont traitées uniquement pour générer votre rapport. Norya ne pose pas de diagnostic médical ; il fournit des explications assistées par IA à titre informatif.",
         trust_cards_langs_title: "Support 9+ langues", trust_cards_langs_desc: "Lisez votre rapport en turc, anglais et autres langues prises en charge.",
@@ -6539,7 +6695,8 @@
         footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Nutzungsbedingungen", footer_payment: "Zahlung & Rückerstattung", footer_contact: "Kontakt", back_home: "← Start",
         profile_tab_general: "Allgemein", profile_tab_plan: "Paket & Nutzung", profile_tab_history: "Analyse-Verlauf", profile_tab_security: "Sicherheit", profile_plan_label: "Plan", profile_remaining: "Verbleibend", profile_ends: "Ende", profile_plan_pro: "Pro", profile_ends_monthly: "Monatliche Verlängerung", profile_ends_na: "—", profile_usage_label: "Nutzung (dieser Monat)", profile_upgrade_cta: "Plan upgraden", profile_view_analysis: "Ansehen", profile_unlimited: "Unbegrenzt", profile_country: "Land",
-        compare_title: "Alle Pläne vergleichen", compare_subtitle: "Finden Sie den passenden Plan.", compare_feature: "Funktion", compare_plan_free: "Kostenlos", compare_plan_single: "Einzel", compare_plan_monthly: "Monat", compare_plan_yearly: "Jahr", compare_analyses: "Analysen", compare_analyses_per_month: "10+3 / Monat", compare_upload: "Text, PDF, Bild", compare_report: "Detaillierter Bericht (Zusammenfassung, Werte, Empfehlungen)", compare_diet: "Ernährungsplan", compare_supplements: "Nahrungsergänzung", compare_heart: "Herzgesundheit", compare_history: "Verlauf", compare_pdf: "PDF / Teilen / Für den Arzt", compare_emr_ehr: "EMR/EHR-Bericht", compare_langs: "Berichtssprache", compare_langs_count: "9 Sprachen", compare_compare: "Zwei Analysen vergleichen", compare_price: "Preis",
+        compare_title: "Alle Pläne vergleichen", compare_subtitle: "Finden Sie den passenden Plan.", compare_feature: "Funktion", compare_plan_free: "Kostenlos", compare_plan_single: "Einzel", compare_plan_monthly: "Monat", compare_plan_yearly: "Jahr", compare_analyses: "Analysen", compare_analyses_per_month: "10+3 / Monat", compare_upload: "Text, PDF, Bild", compare_report: "Detaillierter Bericht (Zusammenfassung, Werte, Empfehlungen)", compare_diet: "Ernährungsplan", compare_supplements: "Nahrungsergänzung", compare_heart: "Herzgesundheit", compare_history: "Verlauf", compare_pdf: "PDF / Teilen / Für den Arzt", compare_emr_ehr: "EMR/EHR-Bericht", compare_langs: "Berichtssprache", compare_langs_count: "9 Sprachen", compare_compare: "Zwei Analysen vergleichen", compare_price: "Preis", compare_btn_select: "Wählen", compare_btn_active: "Aktiv", compare_btn_upgrade: "Upgrade",
+        usage_first_free: "Erste Analyse gratis.", pricing_input_types: "Eingabe: Text • PDF • Foto", trust_cards_speed_desc: "Wenn die Server verfügbar sind, sind die meisten Berichte in Sekunden fertig.", pricing_health_charts: "✓ Gesundheitsgrafiken", pricing_monthly_most_chosen: "Die meisten Nutzer wählen diesen Plan.",
         terms_heading: "Nutzungsbedingungen", privacy_heading: "Datenschutzerklärung", payment_heading: "Zahlung und Rückerstattung",
         contact_heading: "Kontakt", contact_intro: "Bei Fragen, Rückerstattungswünschen oder technischen Problemen (z. B. \"Zahlung erhalten, aber kein Analyse-Guthaben\") schreiben Sie uns.", contact_email_label: "E-Mail:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Schreiben Sie uns per WhatsApp", contact_note: "Bitte nennen Sie wenn möglich Ihre Konto-E-Mail und eine kurze Beschreibung (Bestellnr., Datum usw.). Wir antworten innerhalb von 1 Werktag.", contact_tagline: "Norya — Blutwerte verständlich erklärt.",
         terms_intro: "Durch die Nutzung von Norya akzeptieren Sie die folgenden Bedingungen. Bei Änderungen wird der aktuelle Text auf der Website veröffentlicht; wesentliche Änderungen können per E-Mail mitgeteilt werden.",
@@ -6562,6 +6719,7 @@
         price_no_renewal: "Pro-Pakete gelten für den gekauften Zeitraum (30 Tage monatlich, 365 jährlich). Keine automatische Verlängerung.",
         pricing_yearly_saving: "501€ Ersparnis im Vergleich zum Monatsabo (83%)",
         pricing_yearly_math: "Statt 50€ x 12 = 600€ zahlen Sie einmalig 99€ pro Jahr.",
+        pricing_badge_trial: "Test", price_btn_free: "Kostenlos starten", price_badge_fast: "Schnell", price_btn_single_label: "Einzelanalyse kaufen", price_btn_monthly_label: "Monatsplan starten", pricing_yearly_value_mid: "Wert — Nur", price_btn_yearly_label: "Jahresersparnis sichern",
         trust_title: "Sicherer und konformer Service",
         trust_subtitle: "Ihre Daten werden nur zur Erstellung Ihres Berichts verarbeitet. Norya stellt keine medizinischen Diagnosen; es bietet KI-gestützte Erklärungen zu Informationszwecken.",
         trust_cards_langs_title: "9+ Sprachen unterstützt", trust_cards_langs_desc: "Lesen Sie Ihren Bericht auf Türkisch, Englisch und anderen unterstützten Sprachen.",
@@ -6715,7 +6873,8 @@
         footer_mesafeli: "הסכם מכר מרחוק", footer_privacy: "פרטיות", footer_refund: "החזרה וביטול", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "תנאי שימוש", footer_payment: "תשלום והחזרים", footer_contact: "צור קשר", back_home: "← בית",
         profile_tab_general: "כללי", profile_tab_plan: "חבילה ושימוש", profile_tab_history: "היסטוריית ניתוחים", profile_tab_security: "אבטחה", profile_plan_label: "תוכנית", profile_remaining: "נותרו", profile_ends: "סיום", profile_plan_pro: "Pro", profile_ends_monthly: "חידוש חודשי", profile_ends_na: "—", profile_usage_label: "שימוש (החודש)", profile_upgrade_cta: "שדרג חבילה", profile_view_analysis: "הצג", profile_unlimited: "ללא הגבלה", profile_country: "מדינה",
-        compare_title: "השווה את כל התוכניות", compare_subtitle: "מצא את התוכנית המתאימה לך.", compare_feature: "תכונה", compare_plan_free: "חינם", compare_plan_single: "בודד", compare_plan_monthly: "חודשי", compare_plan_yearly: "שנתי", compare_analyses: "ניתוחים", compare_analyses_per_month: "10+3 / חודש", compare_upload: "טקסט, PDF, תמונה", compare_report: "דוח מפורט (סיכום, ערכים, המלצות)", compare_diet: "תוכנית דיאטה", compare_supplements: "תוספים", compare_heart: "בריאות הלב", compare_history: "היסטוריה", compare_pdf: "PDF / שתף / לרופא", compare_emr_ehr: "דוח EMR/EHR", compare_langs: "שפת הדוח", compare_langs_count: "9 שפות", compare_compare: "השווה שני ניתוחים", compare_price: "מחיר",
+        compare_title: "השווה את כל התוכניות", compare_subtitle: "מצא את התוכנית המתאימה לך.", compare_feature: "תכונה", compare_plan_free: "חינם", compare_plan_single: "בודד", compare_plan_monthly: "חודשי", compare_plan_yearly: "שנתי", compare_analyses: "ניתוחים", compare_analyses_per_month: "10+3 / חודש", compare_upload: "טקסט, PDF, תמונה", compare_report: "דוח מפורט (סיכום, ערכים, המלצות)", compare_diet: "תוכנית דיאטה", compare_supplements: "תוספים", compare_heart: "בריאות הלב", compare_history: "היסטוריה", compare_pdf: "PDF / שתף / לרופא", compare_emr_ehr: "דוח EMR/EHR", compare_langs: "שפת הדוח", compare_langs_count: "9 שפות", compare_compare: "השווה שני ניתוחים", compare_price: "מחיר", compare_btn_select: "בחר", compare_btn_active: "נוכחי", compare_btn_upgrade: "שדרג",
+        usage_first_free: "ניתוח ראשון בחינם.", pricing_input_types: "קלט: טקסט • PDF • תמונה", trust_cards_speed_desc: "כשהשרתים זמינים, רוב הדוחות מוכנים תוך שניות.", pricing_health_charts: "✓ גרפי בריאות", pricing_monthly_most_chosen: "רוב המשתמשים בוחרים בתוכנית זו.",
         terms_heading: "תנאי שימוש", privacy_heading: "מדיניות פרטיות", payment_heading: "תשלום והחזרים",
         contact_heading: "צור קשר", contact_intro: "לשאלות, בקשות להחזר או בעיות טכניות (למשל \"התשלום התקבל אך לא נוסף קרדיט ניתוח\"), צרו איתנו קשר.", contact_email_label: "אימייל:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "כתבו לנו בוואטסאפ", contact_note: "אם אפשר, ציינו את אימייל החשבון ותיאור קצר (מס׳ הזמנה, תאריך וכו׳). אנו משיבים תוך יום עסקי אחד.", contact_tagline: "נוריה — תוצאות בדיקות דם מוסברות בשפה ברורה.",
         terms_intro: "בשימוש בנוריה אתה מקבל את התנאים הבאים. בעת שינוי התנאים יפורסם הטקסט המעודכן באתר; שינויים משמעותיים עשויים להימסר בדוא\"ל.",
@@ -6738,6 +6897,7 @@
         price_no_renewal: "חבילות Pro תקפות לתקופה שנרכשה (30 יום חודשי, 365 שנתי). אין חידוש אוטומטי.",
         pricing_yearly_saving: "חיסכון של ‎501€ לעומת החודשי (83%)",
         pricing_yearly_math: "במקום ‎50€ x 12 = ‎600€, משלמים ‎99€ פעם בשנה.",
+        pricing_badge_trial: "ניסיון", price_btn_free: "התחל בחינם", price_badge_fast: "מהיר", price_btn_single_label: "רכוש ניתוח בודד", price_btn_monthly_label: "התחל מנוי חודשי", pricing_yearly_value_mid: "שווי — רק", price_btn_yearly_label: "בחר חיסכון שנתי",
         trust_title: "שירות מאובטח ותואם",
         trust_subtitle: "הנתונים שלך מעובדים רק לצורך יצירת הדוח. נוריה אינה עושה אבחון רפואי; היא מספקת הסברים מבוססי בינה מלאכותית למטרות מידע.",
         trust_cards_langs_title: "תמיכה ב-9+ שפות", trust_cards_langs_desc: "קרא את הדוח בעברית, אנגלית ושפות נתמכות נוספות.",
@@ -6890,7 +7050,8 @@
         footer_mesafeli: "عقد البيع عن بعد", footer_privacy: "الخصوصية", footer_refund: "الاسترداد والإلغاء", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "شروط الاستخدام", footer_payment: "الدفع والاسترداد", footer_contact: "اتصل", back_home: "← الرئيسية",
         profile_tab_general: "عام", profile_tab_plan: "الباقة والاستخدام", profile_tab_history: "سجل التحليلات", profile_tab_security: "الأمان", profile_plan_label: "الباقة", profile_remaining: "المتبقي", profile_ends: "الانتهاء", profile_plan_pro: "Pro", profile_ends_monthly: "تجديد شهري", profile_ends_na: "—", profile_usage_label: "الاستخدام (هذا الشهر)", profile_upgrade_cta: "ترقية الباقة", profile_view_analysis: "عرض", profile_unlimited: "غير محدود", profile_country: "البلد",
-        compare_title: "قارن جميع الخطط", compare_subtitle: "اختر الخطة المناسبة لك.", compare_feature: "ميزة", compare_plan_free: "مجاني", compare_plan_single: "واحد", compare_plan_monthly: "شهري", compare_plan_yearly: "سنوي", compare_analyses: "التحليلات", compare_analyses_per_month: "10+3 / شهر", compare_upload: "نص، PDF، صورة", compare_report: "تقرير مفصل (ملخص، قيم، توصيات)", compare_diet: "خطة غذائية", compare_supplements: "مكملات", compare_heart: "صحة القلب", compare_history: "السجل", compare_pdf: "PDF / مشاركة / للطبيب", compare_emr_ehr: "تقرير EMR/EHR", compare_langs: "لغة التقرير", compare_langs_count: "9 لغات", compare_compare: "قارن تحليلين", compare_price: "السعر",
+        compare_title: "قارن جميع الخطط", compare_subtitle: "اختر الخطة المناسبة لك.", compare_feature: "ميزة", compare_plan_free: "مجاني", compare_plan_single: "واحد", compare_plan_monthly: "شهري", compare_plan_yearly: "سنوي", compare_analyses: "التحليلات", compare_analyses_per_month: "10+3 / شهر", compare_upload: "نص، PDF، صورة", compare_report: "تقرير مفصل (ملخص، قيم، توصيات)", compare_diet: "خطة غذائية", compare_supplements: "مكملات", compare_heart: "صحة القلب", compare_history: "السجل", compare_pdf: "PDF / مشاركة / للطبيب", compare_emr_ehr: "تقرير EMR/EHR", compare_langs: "لغة التقرير", compare_langs_count: "9 لغات", compare_compare: "قارن تحليلين", compare_price: "السعر", compare_btn_select: "اختر", compare_btn_active: "الحالي", compare_btn_upgrade: "ترقية",
+        usage_first_free: "أول تحليل مجاني.", pricing_input_types: "الإدخال: نص • PDF • صورة", trust_cards_speed_desc: "عند توفر الخوادم، معظم التقارير جاهزة خلال ثوانٍ.", pricing_health_charts: "✓ رسوم صحية", pricing_monthly_most_chosen: "معظم المستخدمين يختارون هذه الخطة.",
         terms_heading: "شروط الاستخدام", privacy_heading: "سياسة الخصوصية", payment_heading: "الدفع والاسترداد",
         contact_heading: "اتصل بنا", contact_intro: "للأسئلة أو طلبات الاسترداد أو المشاكل التقنية (مثلاً \"تم استلام الدفع لكن لم تُضاف رصيد تحليل\")، تواصل معنا.", contact_email_label: "البريد:", contact_whatsapp_label: "واتساب:", contact_whatsapp_click: "راسلنا على واتساب", contact_note: "إن أمكن، أدرج بريد الحساب ووصفاً قصيراً (رقم الطلب، التاريخ، إلخ). نرد خلال يوم عمل واحد.", contact_tagline: "نوريا — نتائج تحاليل الدم مفسرة بلغة واضحة.",
         terms_intro: "باستخدام نوريا فإنك تقبل الشروط التالية. عند تغيير الشروط يُنشر النص الحالي على الموقع؛ وقد تُعلن التغييرات المهمة بالبريد.",
@@ -6913,6 +7074,7 @@
         price_no_renewal: "باقات Pro صالحة للفترة المشتراة (30 يوم شهري، 365 سنوي). لا تجديد تلقائي.",
         pricing_yearly_saving: "توفير 501€ مقارنة بالشهري (83%)",
         pricing_yearly_math: "بدلاً من ‎50€ × 12 = ‎600€، تدفع ‎99€ مرة واحدة في السنة.",
+        pricing_badge_trial: "تجربة", price_btn_free: "ابدأ مجاناً", price_badge_fast: "سريع", price_btn_single_label: "شراء تحليل واحد", price_btn_monthly_label: "بدء الاشتراك الشهري", pricing_yearly_value_mid: "قيمة — فقط", price_btn_yearly_label: "اختر التوفير السنوي",
         trust_title: "خدمة آمنة ومتوافقة",
         trust_subtitle: "تُعالج بياناتك فقط لتوليد التقرير. نوريا لا تقوم بتشخيص طبي؛ تقدم شروحات مدعومة بالذكاء الاصطناعي لأغراض إعلامية.",
         trust_cards_langs_title: "دعم 9+ لغات", trust_cards_langs_desc: "اقرأ التقرير بالتركية والإنجليزية واللغات المدعومة الأخرى.",
@@ -7065,7 +7227,8 @@
         footer_mesafeli: "दूरबिक्री समझौता", footer_privacy: "गोपनीयता", footer_refund: "रिफंड और रद्दीकरण", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "उपयोग की शर्तें", footer_payment: "भुगतान और रिफंड", footer_contact: "संपर्क", back_home: "← होम",
         profile_tab_general: "सामान्य", profile_tab_plan: "प्लान और उपयोग", profile_tab_history: "विश्लेषण इतिहास", profile_tab_security: "सुरक्षा", profile_plan_label: "प्लान", profile_remaining: "शेष", profile_ends: "समाप्ति", profile_plan_pro: "Pro", profile_ends_monthly: "मासिक नवीनीकरण", profile_ends_na: "—", profile_usage_label: "उपयोग (इस महीने)", profile_upgrade_cta: "प्लान अपग्रेड करें", profile_view_analysis: "देखें", profile_unlimited: "असीमित", profile_country: "देश",
-        compare_title: "सभी प्लान की तुलना करें", compare_subtitle: "अपने लिए सही प्लान चुनें.", compare_feature: "विशेषता", compare_plan_free: "मुफ्त", compare_plan_single: "एकल", compare_plan_monthly: "मासिक", compare_plan_yearly: "वार्षिक", compare_analyses: "विश्लेषण", compare_analyses_per_month: "10+3 / माह", compare_upload: "टेक्स्ट, PDF, छवि", compare_report: "विस्तृत रिपोर्ट (सारांश, मान, सिफारिशें)", compare_diet: "आहार योजना", compare_supplements: "सप्लीमेंट", compare_heart: "दिल का स्वास्थ्य", compare_history: "इतिहास", compare_pdf: "PDF / साझा करें / डॉक्टर के लिए", compare_emr_ehr: "EMR/EHR रिपोर्ट", compare_langs: "रिपोर्ट भाषा", compare_langs_count: "9 भाषाएँ", compare_compare: "दो विश्लेषण की तुलना करें", compare_price: "कीमत",
+        compare_title: "सभी प्लान की तुलना करें", compare_subtitle: "अपने लिए सही प्लान चुनें.", compare_feature: "विशेषता", compare_plan_free: "मुफ्त", compare_plan_single: "एकल", compare_plan_monthly: "मासिक", compare_plan_yearly: "वार्षिक", compare_analyses: "विश्लेषण", compare_analyses_per_month: "10+3 / माह", compare_upload: "टेक्स्ट, PDF, छवि", compare_report: "विस्तृत रिपोर्ट (सारांश, मान, सिफारिशें)", compare_diet: "आहार योजना", compare_supplements: "सप्लीमेंट", compare_heart: "दिल का स्वास्थ्य", compare_history: "इतिहास", compare_pdf: "PDF / साझा करें / डॉक्टर के लिए", compare_emr_ehr: "EMR/EHR रिपोर्ट", compare_langs: "रिपोर्ट भाषा", compare_langs_count: "9 भाषाएँ", compare_compare: "दो विश्लेषण की तुलना करें", compare_price: "कीमत", compare_btn_select: "चुनें", compare_btn_active: "वर्तमान", compare_btn_upgrade: "अपग्रेड",
+        usage_first_free: "पहला विश्लेषण मुफ्त.", pricing_input_types: "इनपुट: टेक्स्ट • PDF • फोटो", trust_cards_speed_desc: "सर्वर उपलब्ध होने पर अधिकांश रिपोर्ट सेकंडों में तैयार.", pricing_health_charts: "✓ स्वास्थ्य चार्ट", pricing_monthly_most_chosen: "ज़्यादातर उपयोगकर्ता यह प्लान चुनते हैं.",
         terms_heading: "उपयोग की शर्तें", privacy_heading: "गोपनीयता नीति", payment_heading: "भुगतान और रिफंड",
         contact_heading: "संपर्क", contact_intro: "प्रश्नों, रिफंड अनुरोधों या तकनीकी समस्याओं (जैसे \"भुगतान मिला लेकिन विश्लेषण क्रेडिट नहीं\") के लिए संपर्क करें।", contact_email_label: "ईमेल:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "WhatsApp पर मैसेज करें", contact_note: "यदि संभव हो तो अपना खाता ईमेल और संक्षिप्त विवरण (ऑर्डर नं., तारीख आदि) भेजें। हम 1 कार्यदिवस में जवाब देते हैं।", contact_tagline: "नोरिया — रक्त परीक्षण परिणाम सरल भाषा में।",
         terms_intro: "Norya का उपयोग करके आप निम्नलिखित शर्तों को स्वीकार करते हैं। शर्तें बदलने पर साइट पर अपडेट टेक्स्ट प्रकाशित होगा; महत्वपूर्ण बदलाव ईमेल से सूचित किए जा सकते हैं।",
@@ -7088,6 +7251,7 @@
         price_no_renewal: "Pro पैकेज खरीदी गई अवधि के लिए वैध (मासिक 30 दिन, वार्षिक 365)। कोई ऑटो-नवीनीकरण नहीं।",
         pricing_yearly_saving: "मासिक की तुलना में 501€ की बचत (83%)",
         pricing_yearly_math: "50€ x 12 = 600€ के बजाय, साल में केवल 99€ एक बार।",
+        pricing_badge_trial: "ट्रायल", price_btn_free: "मुफ्त शुरू करें", price_badge_fast: "त्वरित", price_btn_single_label: "एकल विश्लेषण खरीदें", price_btn_monthly_label: "मासिक प्लान शुरू करें", pricing_yearly_value_mid: "मूल्य — केवल", price_btn_yearly_label: "वार्षिक बचत चुनें",
         trust_title: "सुरक्षित और अनुपालन सेवा",
         trust_subtitle: "आपका डेटा केवल रिपोर्ट बनाने के लिए प्रोसेस होता है। नोरिया चिकित्सा निदान नहीं करता; यह सूचनात्मक उद्देश्य के लिए AI-सहायक व्याख्या प्रदान करता है।",
         trust_cards_langs_title: "9+ भाषा समर्थन", trust_cards_langs_desc: "अपनी रिपोर्ट तुर्की, अंग्रेज़ी और अन्य समर्थित भाषाओं में पढ़ें।",
@@ -7238,7 +7402,8 @@
         footer_mesafeli: "Σύμβαση τηλεπώλησης", footer_privacy: "Απόρρητο", footer_refund: "Επιστροφή και ακύρωση", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Όροι χρήσης", footer_payment: "Πληρωμή και επιστροφές", footer_contact: "Επικοινωνία", back_home: "← Αρχική",
         profile_tab_general: "Γενικά", profile_tab_plan: "Πλάνο και χρήση", profile_tab_history: "Ιστορικό αναλύσεων", profile_tab_security: "Ασφάλεια", profile_plan_label: "Πλάνο", profile_remaining: "Υπόλοιπο", profile_ends: "Λήξη", profile_plan_pro: "Pro", profile_ends_monthly: "Μηνιαία ανανέωση", profile_ends_na: "—", profile_usage_label: "Χρήση (αυτόν τον μήνα)", profile_upgrade_cta: "Αναβάθμιση πλάνου", profile_view_analysis: "Προβολή", profile_unlimited: "Απεριόριστα", profile_country: "Χώρα",
-        compare_title: "Σύγκριση όλων των πλάνων", compare_subtitle: "Επιλέξτε το πλάνο που σας ταιριάζει.", compare_feature: "Λειτουργία", compare_plan_free: "Δωρεάν", compare_plan_single: "Μονό", compare_plan_monthly: "Μηνιαίο", compare_plan_yearly: "Ετήσιο", compare_analyses: "Αναλύσεις", compare_analyses_per_month: "10+3 / μήνα", compare_upload: "Κείμενο, PDF, εικόνα", compare_report: "Λεπτομερής αναφορά (περίληψη, τιμές, συστάσεις)", compare_diet: "Διατροφικό πλάνο", compare_supplements: "Συμπληρώματα", compare_heart: "Υγεία καρδιάς", compare_history: "Ιστορικό", compare_pdf: "PDF / Κοινοποίηση / Για τον γιατρό", compare_emr_ehr: "Αναφορά EMR/EHR", compare_langs: "Γλώσσα αναφοράς", compare_langs_count: "9 γλώσσες", compare_compare: "Σύγκριση δύο αναλύσεων", compare_price: "Τιμή",
+        compare_title: "Σύγκριση όλων των πλάνων", compare_subtitle: "Επιλέξτε το πλάνο που σας ταιριάζει.", compare_feature: "Λειτουργία", compare_plan_free: "Δωρεάν", compare_plan_single: "Μονό", compare_plan_monthly: "Μηνιαίο", compare_plan_yearly: "Ετήσιο", compare_analyses: "Αναλύσεις", compare_analyses_per_month: "10+3 / μήνα", compare_upload: "Κείμενο, PDF, εικόνα", compare_report: "Λεπτομερής αναφορά (περίληψη, τιμές, συστάσεις)", compare_diet: "Διατροφικό πλάνο", compare_supplements: "Συμπληρώματα", compare_heart: "Υγεία καρδιάς", compare_history: "Ιστορικό", compare_pdf: "PDF / Κοινοποίηση / Για τον γιατρό", compare_emr_ehr: "Αναφορά EMR/EHR", compare_langs: "Γλώσσα αναφοράς", compare_langs_count: "9 γλώσσες", compare_compare: "Σύγκριση δύο αναλύσεων", compare_price: "Τιμή", compare_btn_select: "Επιλογή", compare_btn_active: "Τρέχον", compare_btn_upgrade: "Αναβάθμιση",
+        usage_first_free: "Πρώτη ανάλυση δωρεάν.", pricing_input_types: "Είσοδος: Κείμενο • PDF • Φωτογραφία", trust_cards_speed_desc: "Όταν οι διακομιστές είναι διαθέσιμοι, οι περισσότερες αναφορές είναι έτοιμες σε δευτερόλεπτα.", pricing_health_charts: "✓ Γραφήματα υγείας", pricing_monthly_most_chosen: "Οι περισσότεροι χρήστες επιλέγουν αυτό το πλάνο.",
         terms_heading: "Όροι χρήσης", privacy_heading: "Πολιτική απορρήτου", payment_heading: "Πληρωμή και επιστροφές",
         contact_heading: "Επικοινωνία", contact_intro: "Για ερωτήσεις, αιτήματα επιστροφής χρημάτων ή τεχνικά ζητήματα (π.χ. \"η πληρωμή ελήφθη αλλά δεν προστέθηκε πίστωση ανάλυσης\"), επικοινωνήστε μαζί μας.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Στείλτε μας μήνυμα στο WhatsApp", contact_note: "Εάν είναι δυνατόν, συμπεριλάβετε το email του λογαριασμού σας και μια σύντομη περιγραφή (αριθμός παραγγελίας, ημερομηνία κ.λπ.). Απαντάμε εντός 1 εργάσιμης ημέρας.", contact_tagline: "Norya — Αποτελέσματα αιματολογικών σε απλή γλώσσα.",
         terms_intro: "Με τη χρήση της Norya αποδέχεστε τους όρους. Σε αλλαγές θα δημοσιευτεί το τρέχον κείμενο στο site· σημαντικές αλλαγές μπορεί να ανακοινωθούν με email.",
@@ -7261,6 +7426,7 @@
         price_no_renewal: "Τα Pro πακέτα ισχύουν για την αγορασμένη περίοδο (30 ημέρες μηνιαία, 365 ετήσια). Χωρίς αυτόματη ανανέωση.",
         pricing_yearly_saving: "501€ εξοικονόμηση σε σχέση με το μηνιαίο (83%)",
         pricing_yearly_math: "Αντί για 50€ x 12 = 600€, πληρώνετε 99€ μία φορά το χρόνο.",
+        pricing_badge_trial: "Δοκιμή", price_btn_free: "Ξεκινήστε δωρεάν", price_badge_fast: "Γρήγορο", price_btn_single_label: "Αγοράστε μία ανάλυση", price_btn_monthly_label: "Ξεκινήστε μηνιαίο πλάνο", pricing_yearly_value_mid: "αξία — Μόνο", price_btn_yearly_label: "Ετήσια εξοικονόμηση",
         trust_title: "Ασφαλής και συμβατή υπηρεσία",
         trust_subtitle: "Τα δεδομένα σας επεξεργάζονται μόνο για τη δημιουργία της αναφοράς. Η Norya δεν κάνει ιατρική διάγνωση· παρέχει επεξηγήσεις με τεχνητή νοημοσύνη για ενημερωτικούς σκοπούς.",
         trust_cards_langs_title: "Υποστήριξη 9+ γλωσσών", trust_cards_langs_desc: "Διαβάστε την αναφορά στα τουρκικά, αγγλικά και άλλες υποστηριζόμενες γλώσσες.",
@@ -7411,7 +7577,8 @@
         footer_mesafeli: "Smlouva o dálkovém prodeji", footer_privacy: "Soukromí", footer_refund: "Vrácení a zrušení", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Podmínky užití", footer_payment: "Platba a vrácení", footer_contact: "Kontakt", back_home: "← Domů",
         profile_tab_general: "Obecné", profile_tab_plan: "Balíček a využití", profile_tab_history: "Historie analýz", profile_tab_security: "Zabezpečení", profile_plan_label: "Plán", profile_remaining: "Zbývá", profile_ends: "Konec", profile_plan_pro: "Pro", profile_ends_monthly: "Měsíční obnova", profile_ends_na: "—", profile_usage_label: "Využití (tento měsíc)", profile_upgrade_cta: "Upgradovat plán", profile_view_analysis: "Zobrazit", profile_unlimited: "Neomezeno", profile_country: "Země",
-        compare_title: "Porovnat všechny plány", compare_subtitle: "Vyberte si vhodný plán.", compare_feature: "Funkce", compare_plan_free: "Zdarma", compare_plan_single: "Jednorázový", compare_plan_monthly: "Měsíční", compare_plan_yearly: "Roční", compare_analyses: "Analýzy", compare_analyses_per_month: "10+3 / měsíc", compare_upload: "Text, PDF, obrázek", compare_report: "Podrobná zpráva (shrnutí, hodnoty, doporučení)", compare_diet: "Jídelníček", compare_supplements: "Doplňky", compare_heart: "Zdraví srdce", compare_history: "Historie", compare_pdf: "PDF / Sdílet / Pro lékaře", compare_emr_ehr: "Zpráva EMR/EHR", compare_langs: "Jazyk zprávy", compare_langs_count: "9 jazyků", compare_compare: "Porovnat dvě analýzy", compare_price: "Cena",
+        compare_title: "Porovnat všechny plány", compare_subtitle: "Vyberte si vhodný plán.", compare_feature: "Funkce", compare_plan_free: "Zdarma", compare_plan_single: "Jednorázový", compare_plan_monthly: "Měsíční", compare_plan_yearly: "Roční", compare_analyses: "Analýzy", compare_analyses_per_month: "10+3 / měsíc", compare_upload: "Text, PDF, obrázek", compare_report: "Podrobná zpráva (shrnutí, hodnoty, doporučení)", compare_diet: "Jídelníček", compare_supplements: "Doplňky", compare_heart: "Zdraví srdce", compare_history: "Historie", compare_pdf: "PDF / Sdílet / Pro lékaře", compare_emr_ehr: "Zpráva EMR/EHR", compare_langs: "Jazyk zprávy", compare_langs_count: "9 jazyků", compare_compare: "Porovnat dvě analýzy", compare_price: "Cena", compare_btn_select: "Vybrat", compare_btn_active: "Aktivní", compare_btn_upgrade: "Upgradovat",
+        usage_first_free: "První analýza zdarma.", pricing_input_types: "Vstup: Text • PDF • Foto", trust_cards_speed_desc: "Když jsou servery k dispozici, většina reportů je hotová během sekund.", pricing_health_charts: "✓ Grafy zdraví", pricing_monthly_most_chosen: "Většina uživatelů volí tento plán.",
         terms_heading: "Podmínky užití", privacy_heading: "Zásady ochrany osobních údajů", payment_heading: "Platba a vrácení",
         contact_heading: "Kontakt", contact_intro: "Pro dotazy, žádosti o vrácení peněz nebo technické problémy (např. \"platba přijata, ale nebyl přidán kredit analýzy\") nás kontaktujte.", contact_email_label: "E-mail:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Napište nám na WhatsApp", contact_note: "Pokud možno uveďte e-mail účtu a krátký popis (č. objednávky, datum atd.). Odpovídáme do 1 pracovního dne.", contact_tagline: "Norya — Výsledky krevních testů srozumitelným jazykem.",
         terms_intro: "Používáním Norya přijímáte následující podmínky. Při změně podmínek bude aktuální text zveřejněn na webu; výrazné změny mohou být oznámeny e-mailem.",
@@ -7434,6 +7601,7 @@
         price_no_renewal: "Pro balíčky platí pro zakoupené období (30 dní měsíčně, 365 ročně). Bez automatického obnovení.",
         pricing_yearly_saving: "Úspora 501€ oproti měsíčnímu plánu (83 %)",
         pricing_yearly_math: "Místo 50€ x 12 = 600€ zaplatíte jednou ročně 99€.",
+        pricing_badge_trial: "Zkušební", price_btn_free: "Začít zdarma", price_badge_fast: "Rychlé", price_btn_single_label: "Koupit jednu analýzu", price_btn_monthly_label: "Spustit měsíční plán", pricing_yearly_value_mid: "hodnota — Jen", price_btn_yearly_label: "Roční úspora",
         trust_title: "Bezpečná a compliantní služba",
         trust_subtitle: "Vaše data se zpracovávají pouze pro vygenerování reportu. Norya nestanovuje lékařské diagnózy; poskytuje vysvětlení s podporou AI pro informační účely.",
         trust_cards_langs_title: "Podpora 9+ jazyků", trust_cards_langs_desc: "Přečtěte si report v turečtině, angličtině a dalších podporovaných jazycích.",
@@ -7584,7 +7752,8 @@
         footer_mesafeli: "Ugovor o prodaji na daljinu", footer_privacy: "Privatnost", footer_refund: "Povrat i otkazivanje", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Uslovi korišćenja", footer_payment: "Plaćanje i povrati", footer_contact: "Kontakt", back_home: "← Početna",
         profile_tab_general: "Opšte", profile_tab_plan: "Paket i korišćenje", profile_tab_history: "Istorija analiza", profile_tab_security: "Bezbednost", profile_plan_label: "Plan", profile_remaining: "Preostalo", profile_ends: "Kraj", profile_plan_pro: "Pro", profile_ends_monthly: "Mesečno obnavljanje", profile_ends_na: "—", profile_usage_label: "Korišćenje (ovaj mesec)", profile_upgrade_cta: "Nadogradi plan", profile_view_analysis: "Pogledaj", profile_unlimited: "Neograničeno", profile_country: "Zemlja",
-        compare_title: "Uporedi sve planove", compare_subtitle: "Pronađite plan koji vam odgovara.", compare_feature: "Funkcija", compare_plan_free: "Besplatno", compare_plan_single: "Pojedinačno", compare_plan_monthly: "Mesečno", compare_plan_yearly: "Godišnje", compare_analyses: "Analize", compare_analyses_per_month: "10+3 / mesec", compare_upload: "Tekst, PDF, slika", compare_report: "Detaljan izveštaj (rezime, vrednosti, preporuke)", compare_diet: "Dijetetski plan", compare_supplements: "Suplementi", compare_heart: "Zdravlje srca", compare_history: "Istorija", compare_pdf: "PDF / Podeli / Za lekara", compare_emr_ehr: "EMR/EHR izveštaj", compare_langs: "Jezik izveštaja", compare_langs_count: "9 jezika", compare_compare: "Uporedi dve analize", compare_price: "Cena",
+        compare_title: "Uporedi sve planove", compare_subtitle: "Pronađite plan koji vam odgovara.", compare_feature: "Funkcija", compare_plan_free: "Besplatno", compare_plan_single: "Pojedinačno", compare_plan_monthly: "Mesečno", compare_plan_yearly: "Godišnje", compare_analyses: "Analize", compare_analyses_per_month: "10+3 / mesec", compare_upload: "Tekst, PDF, slika", compare_report: "Detaljan izveštaj (rezime, vrednosti, preporuke)", compare_diet: "Dijetetski plan", compare_supplements: "Suplementi", compare_heart: "Zdravlje srca", compare_history: "Istorija", compare_pdf: "PDF / Podeli / Za lekara", compare_emr_ehr: "EMR/EHR izveštaj", compare_langs: "Jezik izveštaja", compare_langs_count: "9 jezika", compare_compare: "Uporedi dve analize", compare_price: "Cena", compare_btn_select: "Izaberi", compare_btn_active: "Aktivno", compare_btn_upgrade: "Nadogradi",
+        usage_first_free: "Prva analiza besplatna.", pricing_input_types: "Unos: Tekst • PDF • Slika", trust_cards_speed_desc: "Kada su serveri dostupni, većina izveštaja je spremna za sekunde.", pricing_health_charts: "✓ Grafikon zdravlja", pricing_monthly_most_chosen: "Većina korisnika bira ovaj plan.",
         terms_heading: "Uslovi korišćenja", privacy_heading: "Politika privatnosti", payment_heading: "Plaćanje i povrati",
         contact_heading: "Kontakt", contact_intro: "Za pitanja, zahteve za povrat novca ili tehničke probleme (npr. \"plaćanje primljeno ali nije dodat kredit za analizu\") pišite nam.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Pišite nam na WhatsApp", contact_note: "Ako je moguće, navedite email naloga i kratak opis (br. porudžbine, datum itd.). Odgovaramo u roku od 1 radnog dana.", contact_tagline: "Norya — Rezultati krvnih testova jasnim jezikom.",
         terms_intro: "Korišćenjem Norye prihvatate sledeće uslove. Pri promeni uslova ažurirani tekst biće objavljen na sajtu; značajne promene mogu biti najavljene putem emaila.",
@@ -7607,6 +7776,7 @@
         price_no_renewal: "Pro paketi važe za kupljeni period (30 dana mesečno, 365 godišnje). Nema automatskog obnavljanja.",
         pricing_yearly_saving: "Ušteda 501€ u odnosu na mesečni plan (83%)",
         pricing_yearly_math: "Umesto 50€ x 12 = 600€, plaćate 99€ jednom godišnje.",
+        pricing_badge_trial: "Probni", price_btn_free: "Počni besplatno", price_badge_fast: "Brzo", price_btn_single_label: "Kupi jednu analizu", price_btn_monthly_label: "Pokreni mesečni plan", pricing_yearly_value_mid: "vrednost — Samo", price_btn_yearly_label: "Godišnja ušteda",
         trust_title: "Sigurna i usklađena usluga",
         trust_subtitle: "Vaši podaci se obrađuju samo za generisanje izveštaja. Norya ne postavlja medicinsku dijagnozu; pruža objašnjenja uz pomoć AI u informativne svrhe.",
         trust_cards_langs_title: "Podrška za 9+ jezika", trust_cards_langs_desc: "Čitajte izveštaj na turskom, engleskom i drugim podržanim jezicima.",
@@ -8266,12 +8436,16 @@
       if (res.status === 401) {
         localStorage.removeItem(TOKEN_KEY);
         if (typeof updateNav === 'function') updateNav();
-        toast(t.session_expired || 'Oturumunuz sonlanmış. Lütfen tekrar giriş yapın.', 'error');
+        var msg401 = t.session_expired || 'Oturumunuz sonlanmış. Lütfen tekrar giriş yapın.';
+        toast(msg401, 'error');
+        console.error('[Norya ödeme]', msg401);
         var odemeSec = document.getElementById('odeme-section'); if (odemeSec) odemeSec.classList.add('hidden');
         return;
       }
       if (!res.ok) {
-        toast(data.detail || t.payment_not_available || 'Ödeme şu an kullanılamıyor.', 'error');
+        var errMsg = (typeof data.detail === 'string' ? data.detail : (data.error || JSON.stringify(data))) || t.payment_not_available || 'Ödeme şu an kullanılamıyor.';
+        toast(errMsg, 'error');
+        console.error('[Norya ödeme]', res.status, data);
         return;
       }
       if (data.iframe_url) {
@@ -8279,7 +8453,9 @@
         var pm = document.getElementById('payment-modal');
         if (pm) { pm.classList.remove('hidden'); pm.classList.add('flex'); }
       } else {
-        toast(t.payment_error || 'Ödeme sayfası açılamadı.', 'error');
+        var errOpen = t.payment_error || 'Ödeme sayfası açılamadı.';
+        toast(errOpen, 'error');
+        console.error('[Norya ödeme]', errOpen, data);
       }
     }
     function closePaymentModal() {
@@ -9196,6 +9372,8 @@
       document.getElementById('price-single').textContent = formatPrice(p.single);
       document.getElementById('price-monthly').textContent = formatPrice(p.monthly);
       document.getElementById('price-yearly').textContent = formatPrice(p.yearly);
+      var yearlyOnly = document.getElementById('yearly-only-amount');
+      if (yearlyOnly) yearlyOnly.textContent = formatPrice(p.yearly);
       var cs = document.getElementById('compare-price-single');
       var cm = document.getElementById('compare-price-monthly');
       var cy = document.getElementById('compare-price-yearly');
