@@ -161,6 +161,10 @@
           </div>
           <span aria-hidden="true" class="hidden sm:inline">·</span>
           <time datetime="{{ article.published_at.isoformat() }}">{{ article.published_at.strftime("%d %b %Y") }}</time>
+          {% if article.last_updated %}
+          <span aria-hidden="true" class="hidden sm:inline">·</span>
+          <span class="text-slate-500">{{ blog_ui.last_updated|default('Last updated') }} <time datetime="{{ article.last_updated.isoformat() }}">{{ article.last_updated.strftime("%d %b %Y") }}</time></span>
+          {% endif %}
         </div>
 
         <button type="button" id="blog-toc-toggle" class="blog-toc-toggle mt-5 lg:hidden">
