@@ -2675,6 +2675,215 @@ def _hba1c_sections_fr() -> List[Section]:
 _HBA1C_ARTICLE = _article_hba1c()
 
 
+def _article_tsh() -> Article:
+    """TSH (thyroid): what it is, high/low meaning, Free T4/T3, Hashimoto/Graves, when to see a doctor. en, de, it, fr."""
+    published = date(2026, 3, 5)
+    cover = "/static/images/blog/tsh-hero.png"
+    cover_alt_text = {
+        "en": "TSH thyroid test and monitoring dashboard — NoryaAI",
+        "de": "TSH thyroid test and monitoring dashboard — NoryaAI",
+        "it": "TSH thyroid test and monitoring dashboard — NoryaAI",
+        "fr": "TSH thyroid test and monitoring dashboard — NoryaAI",
+    }
+    faq_qa = {
+        "en": [
+            {"question": "Why might my TSH be high with normal Free T4?", "answer": "This pattern can suggest subclinical hypothyroidism—the pituitary is raising TSH to keep thyroid hormone in range. It may be monitored or treated depending on your age, symptoms, and antibody status. Your clinician will interpret and advise."},
+            {"question": "Can stress affect TSH?", "answer": "Acute illness, stress, or fasting can sometimes temporarily alter TSH. Results are best interpreted in context; your doctor may suggest repeating the test when you are stable if the result was borderline."},
+            {"question": "Do I need to fast for a TSH test?", "answer": "Fasting is usually not required for TSH alone. If the same sample is used for other tests (e.g. lipids, glucose), your lab may ask you to fast. Follow the instructions given for your blood draw."},
+            {"question": "How often should TSH be rechecked?", "answer": "Frequency depends on your situation—new diagnosis, medication adjustment, or stable treatment. Your doctor will recommend when to recheck (e.g. every 6–12 weeks after a change, or less often when stable)."},
+            {"question": "What about TSH in pregnancy?", "answer": "Pregnancy-specific reference ranges for TSH are often used; targets can be stricter in the first trimester. If you are pregnant or planning pregnancy, your obstetrician or endocrinologist will guide testing and targets."},
+            {"question": "Does biotin interfere with TSH results?", "answer": "High-dose biotin can interfere with some immunoassay methods and falsely lower TSH (or affect Free T4/Free T3). If you take biotin, tell your doctor and consider stopping it several days before thyroid blood tests, as advised by your lab or clinician."},
+            {"question": "What is subclinical hypothyroidism or hyperthyroidism?", "answer": "Subclinical hypothyroidism usually means high TSH with Free T4 still in the normal range. Subclinical hyperthyroidism means low TSH with Free T4/Free T3 in the normal range. Whether to treat is a clinical decision based on your levels, symptoms, and risk factors."},
+            {"question": "Can iodine supplements help?", "answer": "Iodine is needed for thyroid hormone production, but excess can worsen some thyroid conditions (e.g. trigger or worsen hyperthyroidism). Do not take iodine supplements without medical advice; your clinician can advise based on your diet and thyroid status."},
+        ],
+        "de": [
+            {"question": "Warum ist mein TSH hoch bei normalem freiem T4?", "answer": "Das kann auf eine subklinische Hypothyreose hindeuten—die Hypophyse erhöht das TSH, um die Schilddrüsenhormone im Normbereich zu halten. Je nach Alter, Symptomen und Antikörperstatus wird überwacht oder behandelt. Ihr Arzt interpretiert und berät."},
+            {"question": "Kann Stress das TSH beeinflussen?", "answer": "Akute Erkrankung, Stress oder Fasten können TSH vorübergehend verändern. Die Bewertung erfolgt im Kontext; bei Grenzwerten kann der Arzt eine Wiederholung in stabiler Phase empfehlen."},
+            {"question": "Muss ich für TSH nüchtern sein?", "answer": "Für TSH allein ist Nüchternheit meist nicht nötig. Wird dasselbe Blut für andere Tests (z. B. Fette, Glukose) verwendet, kann das Labor Nüchternheit verlangen. Folgen Sie den Anweisungen."},
+            {"question": "Wie oft soll TSH kontrolliert werden?", "answer": "Abhängig von Situation—Neudiagnose, Medikamentenanpassung oder stabile Therapie. Ihr Arzt empfiehlt den Kontrollzeitpunkt (z. B. alle 6–12 Wochen nach Änderung oder seltener bei Stabilität)."},
+            {"question": "TSH in der Schwangerschaft?", "answer": "In der Schwangerschaft gelten oft eigene Referenzbereiche; die Ziele können im ersten Trimenon strenger sein. Bei bestehender oder geplanter Schwangerschaft berät Sie Ihr Gynäkologe oder Endokrinologe."},
+            {"question": "Stört Biotin die TSH-Werte?", "answer": "Hochdosiertes Biotin kann manche Immunassays stören und TSH (oder fT4/fT3) fälschlich senken. Bei Biotin-Einnahme den Arzt informieren und ggf. einige Tage vor der Blutentnahme absetzen, wie Labor oder Arzt empfehlen."},
+            {"question": "Was ist subklinische Hypo- oder Hyperthyreose?", "answer": "Subklinische Hypothyreose: TSH erhöht, fT4 noch normal. Subklinische Hyperthyreose: TSH erniedrigt, fT4/fT3 normal. Ob behandelt wird, entscheidet der Arzt anhand von Werten, Symptomen und Risiken."},
+            {"question": "Helfen Jodpräparate?", "answer": "Jod wird für die Schilddrüsenhormonbildung benötigt; Überschuss kann manche Schilddrüsenerkrankungen verschlechtern. Jod nicht ohne ärztlichen Rat einnehmen—Ihr Arzt berät je nach Ernährung und Befund."},
+        ],
+        "it": [
+            {"question": "Perché il TSH è alto con FT4 normale?", "answer": "Può indicare ipotiroidismo subclinico: l'ipofisi aumenta il TSH per mantenere gli ormoni tiroidei nella norma. Si può monitorare o trattare in base a età, sintomi e anticorpi. Il medico interpreta e consiglia."},
+            {"question": "Lo stress può influire sul TSH?", "answer": "Malattia acuta, stress o digiuno a volte alterano temporaneamente il TSH. I risultati vanno interpretati nel contesto; il medico può suggerire di ripetere il test in condizioni stabili se il valore è borderline."},
+            {"question": "Devo essere a digiuno per il TSH?", "answer": "Per il TSH da solo di solito non serve il digiuno. Se il prelievo è usato anche per altri esami (lipidi, glucosio), il laboratorio può richiedere il digiuno. Seguire le istruzioni."},
+            {"question": "Quanto spesso ripetere il TSH?", "answer": "Dipende dalla situazione: nuova diagnosi, modifica della terapia o trattamento stabile. Il medico indicherà quando ripetere (es. ogni 6–12 settimane dopo una modifica, o meno spesso se stabile)."},
+            {"question": "TSH in gravidanza?", "answer": "In gravidanza si usano spesso intervalli di riferimento specifici; i target possono essere più stringenti nel primo trimestre. In gravidanza o programmazione, ginecologo o endocrinologo guideranno i controlli."},
+            {"question": "La biotina interferisce con il TSH?", "answer": "Alte dosi di biotina possono interferire con alcuni metodi e abbassare falsamente il TSH (o alterare fT4/fT3). Se assumi biotina, dillo al medico e valuta di sospenderla alcuni giorni prima del prelievo, come consigliato."},
+            {"question": "Cos'è l'ipotiroidismo o ipertiroidismo subclinico?", "answer": "Ipotiroidismo subclinico: TSH alto con fT4 ancora nella norma. Ipertiroidismo subclinico: TSH basso con fT4/fT3 nella norma. Se trattare è una decisione clinica in base a livelli, sintomi e fattori di rischio."},
+            {"question": "Gli integratori di iodio aiutano?", "answer": "Lo iodio serve per la produzione ormonale tiroidea, ma l'eccesso può peggiorare alcune patologie (es. scatenare o peggiorare ipertiroidismo). Non assumere iodio senza parere medico."},
+        ],
+        "fr": [
+            {"question": "Pourquoi mon TSH est élevé avec une T4 libre normale ?", "answer": "Cela peut évoquer une hypothyroïdie fruste : l'hypophyse augmente le TSH pour maintenir les hormones dans la norme. Surveillance ou traitement selon âge, symptômes et anticorps. Votre médecin interprète et conseille."},
+            {"question": "Le stress peut-il affecter le TSH ?", "answer": "Une maladie aiguë, le stress ou le jeûne peuvent parfois modifier temporairement le TSH. Les résultats sont interprétés en contexte ; le médecin peut proposer de répéter le dosage en période stable si le résultat est limite."},
+            {"question": "Faut-il être à jeun pour le TSH ?", "answer": "Le jeûne n'est en général pas requis pour le TSH seul. Si le prélèvement sert aussi à d'autres dosages (lipides, glucose), le laboratoire peut demander le jeûne. Suivre les consignes."},
+            {"question": "À quelle fréquence refaire le TSH ?", "answer": "Cela dépend de la situation : nouveau diagnostic, adaptation du traitement ou traitement stable. Votre médecin indiquera quand refaire le dosage (ex. toutes les 6–12 semaines après un changement, ou moins souvent si stable)."},
+            {"question": "Et le TSH en grossesse ?", "answer": "En grossesse, des fourchettes de référence spécifiques sont souvent utilisées ; les cibles peuvent être plus strictes au premier trimestre. En cas de grossesse ou projet, votre gynécologue ou endocrinologue guidera les dosages."},
+            {"question": "La biotine interfère-t-elle avec le TSH ?", "answer": "Les fortes doses de biotine peuvent fausser certains dosages immunologiques et abaisser à tort le TSH (ou modifier T4/T3 libres). Si vous prenez de la biotine, prévenez votre médecin et envisagez de l'arrêter quelques jours avant le prélèvement, selon les conseils du laboratoire ou du médecin."},
+            {"question": "Qu'est-ce que l'hypo- ou l'hyperthyroïdie fruste ?", "answer": "Hypothyroïdie fruste : TSH élevé avec T4 libre encore normale. Hyperthyroïdie fruste : TSH bas avec T4/T3 libres normales. La décision de traiter est clinique, selon les valeurs, symptômes et facteurs de risque."},
+            {"question": "Les compléments d'iode peuvent-ils aider ?", "answer": "L'iode est nécessaire à la production d'hormones thyroïdiennes, mais l'excès peut aggraver certaines affections (ex. déclencher ou aggraver une hyperthyroïdie). Ne pas prendre d'iode sans avis médical."},
+        ],
+    }
+    return Article(
+        id="tsh-what-it-means",
+        published_at=published,
+        last_updated=published,
+        read_minutes=12,
+        cover_image=cover,
+        cover_alt=cover_alt_text,
+        faq_schema_qa=faq_qa,
+        category={
+            "en": "Thyroid & Hormones",
+            "de": "Schilddrüse & Hormone",
+            "it": "Tiroide e ormoni",
+            "fr": "Thyroïde et hormones",
+        },
+        slugs={"en": "tsh-what-it-means", "de": "tsh-what-it-means", "it": "tsh-what-it-means", "fr": "tsh-what-it-means"},
+        titles={
+            "en": "TSH Explained: How to Interpret High vs Low Thyroid Results",
+            "de": "TSH verstehen: Hohe vs. niedrige Werte richtig deuten",
+            "it": "TSH: come interpretare valori alti o bassi",
+            "fr": "TSH : interpréter un taux élevé ou bas",
+        },
+        subtitles={
+            "en": "What TSH is, how it relates to Free T4 and Free T3, typical patterns, symptoms, causes, and when to follow up with a clinician.",
+            "de": "Was TSH ist, Zusammenhang mit freiem T4 und T3, typische Muster, Symptome, Ursachen und wann Sie zum Arzt sollten.",
+            "it": "Cosa è il TSH, rapporto con FT4 e FT3, pattern tipici, sintomi, cause e quando rivolgersi al medico.",
+            "fr": "Ce qu'est le TSH, lien avec T4 et T3 libres, schémas typiques, symptômes, causes et quand consulter.",
+        },
+        excerpts={
+            "en": "TSH reflects the pituitary signal to the thyroid. High or low TSH, together with Free T4 and Free T3, helps clinicians assess thyroid function. Interpretation and next steps are for your doctor.",
+            "de": "TSH spiegelt das Hypophysen-Signal an die Schilddrüse. Hohes oder niedriges TSH zusammen mit fT4/fT3 hilft bei der Beurteilung. Die Einordnung übernimmt Ihr Arzt.",
+            "it": "Il TSH riflette il segnale ipofisario alla tiroide. TSH alto o basso con FT4/FT3 aiuta a valutare la funzione tiroidea. L'interpretazione spetta al medico.",
+            "fr": "Le TSH reflète le signal hypophysaire vers la thyroïde. Un TSH élevé ou bas avec T4/T3 libres aide à évaluer la fonction thyroïdienne. L'interprétation relève du médecin.",
+        },
+        seo_titles={
+            "en": "TSH Explained: How to Interpret High vs Low Thyroid Results | NoryaAI",
+            "de": "TSH verstehen: Hohe vs. niedrige Werte richtig deuten | NoryaAI",
+            "it": "TSH: come interpretare valori alti o bassi | NoryaAI",
+            "fr": "TSH : interpréter un taux élevé ou bas | NoryaAI",
+        },
+        seo_descriptions={
+            "en": "Understand TSH: what it is, link to Free T4 and Free T3, typical ranges, symptoms, Hashimoto/Graves, and when to see a clinician. Informational only.",
+            "de": "TSH verstehen: Bedeutung, Zusammenhang mit fT4/fT3, typische Bereiche, Symptome und wann zum Arzt. Nur zur Information.",
+            "it": "Capire il TSH: cos'è, rapporto con FT4/FT3, intervalli tipici, sintomi e quando rivolgersi al medico. Solo informativo.",
+            "fr": "Comprendre le TSH : ce qu'il mesure, lien avec T4/T3 libres, seuils typiques, symptômes et quand consulter. À titre informatif.",
+        },
+        sections_by_lang={
+            "en": _tsh_sections_en(),
+            "de": _tsh_sections_de(),
+            "it": _tsh_sections_it(),
+            "fr": _tsh_sections_fr(),
+        },
+    )
+
+
+def _tsh_sections_en() -> List[Section]:
+    return [
+        Section(id="what-tsh-is", level=2, heading="What TSH is",
+            body_html="<p>TSH (thyroid-stimulating hormone) is produced by the <strong>pituitary gland</strong> and acts as the main \"signal\" to the thyroid to make and release thyroid hormones (T4 and T3). When thyroid hormone levels are low, the pituitary releases more TSH; when high, TSH falls. <strong>TSH reflects the brain's attempt to keep thyroid hormone in the right range</strong>. It is one of the most common blood tests for thyroid function. Interpretation and diagnosis are for your clinician.</p>"),
+        Section(id="tsh-free-t4-free-t3", level=2, heading="TSH + Free T4 + Free T3 together",
+            body_html="<p>TSH is usually interpreted with <strong>Free T4 (FT4)</strong> and often <strong>Free T3 (FT3)</strong>. Typical patterns: <strong>High TSH + low FT4</strong> → primary hypothyroidism. <strong>Low TSH + high FT4/FT3</strong> → hyperthyroidism. <strong>High TSH, FT4 normal</strong> → subclinical hypothyroidism; <strong>Low TSH, FT4/FT3 normal</strong> → subclinical hyperthyroidism or non-thyroid illness. Borderline results should be discussed with your doctor.</p>"),
+        Section(id="typical-ranges", level=2, heading="Typical reference ranges",
+            body_html="<p>Reference ranges <strong>vary by laboratory and method</strong>. Many labs use TSH around 0.4–4.0 mU/L. <strong>In pregnancy</strong>, different (often stricter) TSH targets are used—your obstetrician or endocrinologist will advise. Do not self-interpret.</p>"),
+        Section(id="symptoms", level=2, heading="Symptoms (non-specific)",
+            body_html="<p>Possible <strong>hypothyroid</strong> symptoms: fatigue, weight gain, cold intolerance, constipation, dry skin. Possible <strong>hyperthyroid</strong> symptoms: palpitations, weight loss, heat intolerance, tremor, anxiety. All non-specific; discuss with your doctor.</p>"),
+        Section(id="common-causes", level=2, heading="Common causes",
+            body_html="<p>Common causes: <strong>Hashimoto's</strong> (autoimmune hypothyroidism), <strong>Graves'</strong> (autoimmune hyperthyroidism), <strong>thyroiditis</strong>, iodine deficiency or excess, <strong>medications</strong> (e.g. amiodarone, lithium), recent severe illness. Your doctor will consider history, antibodies (TPOAb, TgAb, TRAb), and sometimes imaging.</p>"),
+        Section(id="when-to-contact", level=2, heading="When to contact a clinician",
+            body_html="<p>See a doctor if: <strong>TSH very abnormal</strong> or changing quickly; <strong>pregnancy</strong> with thyroid concerns; <strong>heart symptoms</strong>; severe fatigue; <strong>rapid weight change</strong> or neck swelling (goiter); or known thyroid disease with changed symptoms. This article does not replace clinical assessment.</p>"),
+        Section(id="next-tests", level=2, heading="Next tests a clinician may consider",
+            body_html="<p>Your doctor may order: <strong>TPOAb, TgAb</strong> (Hashimoto's), <strong>TRAb</strong> (Graves'), <strong>thyroid ultrasound</strong>, repeat TSH/FT4/FT3, or ferritin/B12/vitamin D if relevant. Which tests are needed is a clinical decision.</p>"),
+        Section(id="practical-tips", level=2, heading="Practical tips",
+            body_html="<p><strong>Medication timing</strong>: If you take thyroid hormone (e.g. levothyroxine), take it as prescribed. Blood draws are often before the morning dose. <strong>Do not</strong> change or stop your dose on your own—any adjustment should be clinician-directed.</p>"),
+        Section(id="faq", level=2, heading="Frequently asked questions",
+            body_html="<p>See FAQ above; interpretation is for your clinician.</p>"),
+        Section(id="disclaimer", level=2, heading="Medical disclaimer",
+            body_html="<p><strong>This content is for information only and does not constitute medical advice, diagnosis, or treatment.</strong> Always discuss your results and symptoms with a qualified healthcare provider.</p>"),
+    ]
+
+
+def _tsh_sections_de() -> List[Section]:
+    return [
+        Section(id="what-tsh-is", level=2, heading="Was ist TSH?",
+            body_html="<p>TSH wird von der <strong>Hypophyse</strong> gebildet und ist das zentrale „Signal“ an die Schilddrüse. Bei niedrigen Schilddrüsenhormonen steigt das TSH, bei hohen sinkt es. Die Einordnung obliegt dem Arzt.</p>"),
+        Section(id="tsh-free-t4-free-t3", level=2, heading="TSH + freies T4 + freies T3",
+            body_html="<p>Typische Muster: <strong>Hohes TSH + niedriges fT4</strong> → primäre Hypothyreose. <strong>Niedriges TSH + hohes fT4/fT3</strong> → Hyperthyreose. Grenzwerte mit dem Arzt besprechen.</p>"),
+        Section(id="typical-ranges", level=2, heading="Typische Referenzbereiche",
+            body_html="<p>Referenzbereiche variieren je nach Labor. In der Schwangerschaft gelten oft strengere Ziele. Immer mit dem Arzt besprechen.</p>"),
+        Section(id="symptoms", level=2, heading="Symptome (unspezifisch)",
+            body_html="<p>Unterfunktion: Müdigkeit, Gewichtszunahme, Kälteempfinden. Überfunktion: Herzrasen, Gewichtsverlust, Hitzeintoleranz, Zittern. Alle unspezifisch.</p>"),
+        Section(id="common-causes", level=2, heading="Häufige Ursachen",
+            body_html="<p>Hashimoto, Morbus Basedow/Graves, Thyreoiditis, Jod, Medikamente (Amiodaron, Lithium), schwere Erkrankung. Der Arzt berücksichtigt Antikörper und ggf. Bildgebung.</p>"),
+        Section(id="when-to-contact", level=2, heading="Wann zum Arzt",
+            body_html="<p>Bei stark abweichendem TSH, Schwangerschaft, Herzbeschwerden, starker Müdigkeit, schneller Gewichtsänderung oder Schwellung am Hals.</p>"),
+        Section(id="next-tests", level=2, heading="Mögliche weitere Tests",
+            body_html="<p>TPOAb, TgAb, TRAb, Schilddrüsen-Sonografie, Kontrolle TSH/fT4/fT3, ggf. Ferritin/B12/Vitamin D. Klinische Entscheidung.</p>"),
+        Section(id="practical-tips", level=2, heading="Praktische Hinweise",
+            body_html="<p>Schilddrüsenhormon wie verordnet einnehmen; Dosis nicht eigenmächtig ändern.</p>"),
+        Section(id="faq", level=2, heading="Häufige Fragen",
+            body_html="<p>Siehe FAQ oben.</p>"),
+        Section(id="disclaimer", level=2, heading="Hinweis",
+            body_html="<p><strong>Nur zur Information; ersetzt keine medizinische Beratung.</strong> Immer mit dem Arzt besprechen.</p>"),
+    ]
+
+
+def _tsh_sections_it() -> List[Section]:
+    return [
+        Section(id="what-tsh-is", level=2, heading="Cos'è il TSH",
+            body_html="<p>Il TSH è prodotto dall'ipofisi e rappresenta il principale „segnale“ alla tiroide. L'interpretazione spetta al medico.</p>"),
+        Section(id="tsh-free-t4-free-t3", level=2, heading="TSH + FT4 + FT3 insieme",
+            body_html="<p>TSH alto + FT4 basso → ipotiroidismo primario. TSH basso + FT4/FT3 alti → ipertiroidismo. Valori borderline da discutere con il medico.</p>"),
+        Section(id="typical-ranges", level=2, heading="Intervalli tipici",
+            body_html="<p>I range variano per laboratorio. In gravidanza target più stringenti. Interpretazione con il medico.</p>"),
+        Section(id="symptoms", level=2, heading="Sintomi (aspecifici)",
+            body_html="<p>Ipo: affaticamento, aumento di peso, freddo. Iper: palpitazioni, dimagrimento, tremore, ansia. Tutti aspecifici.</p>"),
+        Section(id="common-causes", level=2, heading="Cause comuni",
+            body_html="<p>Hashimoto, Graves, tiroidite, iodio, farmaci (amiodarone, litio). Il medico considera anticorpi e imaging.</p>"),
+        Section(id="when-to-contact", level=2, heading="Quando rivolgersi al medico",
+            body_html="<p>TSH molto alterato, gravidanza, sintomi cardiaci, forte affaticamento, rapido cambio di peso o gonfiore al collo.</p>"),
+        Section(id="next-tests", level=2, heading="Possibili esami",
+            body_html="<p>TPOAb, TgAb, TRAb, ecografia tiroidea, ripetizione TSH/FT4/FT3. Scelta clinica.</p>"),
+        Section(id="practical-tips", level=2, heading="Consigli pratici",
+            body_html="<p>Ormone tiroideo come prescritto; non modificare la dose da soli.</p>"),
+        Section(id="faq", level=2, heading="Domande frequenti",
+            body_html="<p>Vedi FAQ sopra.</p>"),
+        Section(id="disclaimer", level=2, heading="Disclaimer medico",
+            body_html="<p><strong>Solo informativo; non costituisce consulenza medica.</strong> Discutere con il medico.</p>"),
+    ]
+
+
+def _tsh_sections_fr() -> List[Section]:
+    return [
+        Section(id="what-tsh-is", level=2, heading="Ce qu'est le TSH",
+            body_html="<p>La TSH est sécrétée par l'hypophyse et constitue le principal « signal » vers la thyroïde. L'interprétation relève du médecin.</p>"),
+        Section(id="tsh-free-t4-free-t3", level=2, heading="TSH + T4 libre + T3 libre",
+            body_html="<p>TSH élevée + T4 libre basse → hypothyroïdie primaire. TSH basse + T4/T3 libres élevées → hyperthyroïdie. Valeurs limites à discuter avec le médecin.</p>"),
+        Section(id="typical-ranges", level=2, heading="Fourchettes typiques",
+            body_html="<p>Les fourchettes varient selon le laboratoire. En grossesse, cibles plus strictes. Interprétation avec le médecin.</p>"),
+        Section(id="symptoms", level=2, heading="Symptômes (non spécifiques)",
+            body_html="<p>Hypo : fatigue, prise de poids, frilosité. Hyper : palpitations, perte de poids, tremblements, anxiété. Tous non spécifiques.</p>"),
+        Section(id="common-causes", level=2, heading="Causes fréquentes",
+            body_html="<p>Hashimoto, Basedow/Graves, thyroïdite, iode, médicaments (amiodarone, lithium). Le médecin considère anticorps et imagerie.</p>"),
+        Section(id="when-to-contact", level=2, heading="Quand consulter",
+            body_html="<p>TSH très anormale, grossesse, symptômes cardiaques, forte fatigue, changement de poids rapide ou gonflement du cou.</p>"),
+        Section(id="next-tests", level=2, heading="Examens possibles",
+            body_html="<p>TPOAb, TgAb, TRAb, échographie thyroïdienne, répétition TSH/T4/T3 libres. Choix clinique.</p>"),
+        Section(id="practical-tips", level=2, heading="Conseils pratiques",
+            body_html="<p>Hormone thyroïdienne comme prescrit ; ne pas modifier la dose soi-même.</p>"),
+        Section(id="faq", level=2, heading="Questions fréquentes",
+            body_html="<p>Voir FAQ ci-dessus.</p>"),
+        Section(id="disclaimer", level=2, heading="Avertissement médical",
+            body_html="<p><strong>À titre informatif uniquement ; ne constitue pas un avis médical.</strong> Toujours discuter avec le médecin.</p>"),
+    ]
+
+
+_TSH_ARTICLE = _article_tsh()
+
+
 def _ldl_hdl_sections_en() -> List[Section]:
     return [
         Section(
@@ -3023,6 +3232,7 @@ ARTICLES: List[Article] = [
     _VITAMIN_D_ARTICLE,
     _VITAMIN_B12_ARTICLE,
     _HBA1C_ARTICLE,
+    _TSH_ARTICLE,
 ]
 
 
