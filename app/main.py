@@ -403,6 +403,21 @@ def admin_redirect():
 app.include_router(admin_router)  # Eski API paneli: /admin/stats, /admin/analyses, vb.
 
 
+# Ana sayfa (/) en başta kaydedilsin; GET ve POST desteklensin, 405 önlensin
+@app.get("/")
+@app.get("")
+def index():
+    """Ana sayfa: tarayıcı GET ile açıldığında index.html döner."""
+    return _index_response()
+
+
+@app.post("/")
+@app.post("")
+def index_post():
+    """Ana sayfa POST: form veya yönlendirme bazen POST gönderir; 405 yerine aynı sayfayı döndür."""
+    return _index_response()
+
+
 @app.get("/yonetim", response_class=HTMLResponse)
 @app.get("/yonetim/", response_class=HTMLResponse)
 def admin_yonetim():
@@ -1080,8 +1095,8 @@ async def api_enterprise_lead(request: Request, db: Session = Depends(get_db)):
     return JSONResponse(content={"ok": True})
 
 
-@app.get("/")
-def index():
+def _index_response():
+    """Ana sayfa içeriği: static/index.html veya fallback JSON. GET ve POST / için ortak."""
     index_file = STATIC_DIR / "index.html"
     if not index_file.is_file():
         index_file = Path.cwd() / "static" / "index.html"
@@ -2661,12 +2676,8 @@ async def _paytr_callback_handle(request: Request, db: Session):
 
 
 @app.get("/payment/success", response_class=HTMLResponse)
-def payment_success_page(
-    request: Request,
-    merchant_oid: str | None = Query(None),
-    db: Session = Depends(get_db),
-):
-    """Başarılı ödeme sonrası sayfa. merchant_oid ile sipariş durumu gösterilebilir."""
+def payment_success_page(request: Request):
+    """Başarılı ödeme sonrası sayfa. DB'ye ihtiyaç yok; her zaman HTML döner."""
     base = request.base_url.rstrip("/")
     html = f"""<!DOCTYPE html>
 <html lang="tr">
