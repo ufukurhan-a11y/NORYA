@@ -66,9 +66,11 @@
       --norya-card-shadow: 0 4px 24px rgba(14, 165, 164, 0.12);
     }
     /* ========== Cross-browser / Safari uyumluluk (tüm tarayıcılarda aynı görünüm) ========== */
-    /* Global overflow fix: mobilde yatay taşma yok, hero tam genişlik */
-    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    /* Global overflow fix: mobilde yatay taşma yok, sağdaki dikey şerit kalkar */
+    html { width: 100%; max-width: 100%; overflow-x: hidden; overflow-y: auto; }
+    body { width: 100%; max-width: 100%; min-width: 0; overflow-x: hidden; overflow-y: auto; }
     #root, main { width: 100%; max-width: 100%; overflow-x: clip; }
+    body > header, body > section { max-width: 100%; overflow-x: clip; }
     *, *::before, *::after { box-sizing: border-box; }
     html {
       -webkit-text-size-adjust: 100%;
@@ -90,9 +92,11 @@
     .report-btn-outline { border: 2px solid var(--norya-brand); color: var(--norya-brand); background: transparent; }
     .report-btn-outline:hover { background: var(--norya-brand); color: #fff; }
     .gradient-hero { background: var(--norya-hero); }
-    /* Hero: gradient section seviyesinde, tam genişlik (mobilde sağda beyaz şerit yok) */
+    /* Hero: gradient section seviyesinde, tam genişlik (mobilde sağda şerit yok) */
     .hero {
       width: 100%;
+      max-width: 100%;
+      overflow-x: clip;
       background: radial-gradient(1200px 600px at 30% 20%, rgba(14,165,164,.35), transparent 60%),
                   linear-gradient(135deg, #062a33 0%, #0b5f63 55%, #0EA5A4 100%);
     }
@@ -1441,13 +1445,17 @@
 
     .elite-header__inner{
       max-width: 1200px;
+      width: 100%;
       margin: 0 auto;
       padding: 12px 14px;
+      padding-left: max(14px, env(safe-area-inset-left));
+      padding-right: max(14px, env(safe-area-inset-right));
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 10px;
       min-width: 0;
+      overflow: hidden;
     }
 
     /* Nav */
@@ -1550,14 +1558,27 @@
       justify-content:center;
     }
 
-    /* ===== Mobil taşma çözümü: CTA taşmasın ===== */
-    @media (max-width: 768px){
-      /* Linkler çoksa taşmaması için 2’den fazlasını gizle */
-      .elite-cta-btn{ max-width: 52vw; padding: 0 12px; }
+    /* ===== Mobil taşma çözümü: header/CTA taşmasın, sağdaki dikey şerit yok ===== */
+    .elite-brand {
+      flex-shrink: 1;
+      min-width: 0;
+      display: flex;
+      align-items: center;
     }
-
+    .elite-brand .logo {
+      width: auto;
+      height: 28px;
+      max-width: 100%;
+      object-fit: contain;
+    }
+    @media (max-width: 768px){
+      .elite-brand .logo { height: 24px; max-width: 140px; }
+      .elite-cta-btn{ max-width: 52vw; padding: 0 12px; }
+      .right-zone { min-width: 0; flex-shrink: 0; overflow: hidden; }
+    }
     @media (max-width: 420px){
-      .elite-header__inner{ padding: 8px 10px; gap: 8px; }
+      .elite-header__inner{ padding: 8px 10px; padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); gap: 8px; }
+      .elite-brand .logo { height: 22px; max-width: 110px; }
       .elite-cta-btn{ max-width: 50vw; height: 42px; padding: 9px 11px; font-size: 14px; }
     }
 
