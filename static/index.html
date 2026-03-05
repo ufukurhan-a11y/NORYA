@@ -66,6 +66,9 @@
       --norya-card-shadow: 0 4px 24px rgba(14, 165, 164, 0.12);
     }
     /* ========== Cross-browser / Safari uyumluluk (tüm tarayıcılarda aynı görünüm) ========== */
+    /* Global overflow fix: mobilde yatay taşma yok, hero tam genişlik */
+    html, body { width: 100%; max-width: 100%; overflow-x: hidden; }
+    #root, main { width: 100%; max-width: 100%; overflow-x: clip; }
     *, *::before, *::after { box-sizing: border-box; }
     html {
       -webkit-text-size-adjust: 100%;
@@ -87,6 +90,17 @@
     .report-btn-outline { border: 2px solid var(--norya-brand); color: var(--norya-brand); background: transparent; }
     .report-btn-outline:hover { background: var(--norya-brand); color: #fff; }
     .gradient-hero { background: var(--norya-hero); }
+    /* Hero: gradient section seviyesinde, tam genişlik (mobilde sağda beyaz şerit yok) */
+    .hero {
+      width: 100%;
+      background: radial-gradient(1200px 600px at 30% 20%, rgba(14,165,164,.35), transparent 60%),
+                  linear-gradient(135deg, #062a33 0%, #0b5f63 55%, #0EA5A4 100%);
+    }
+    .hero-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 56px 16px;
+    }
     .drop-shadow-soft { box-shadow: var(--norya-shadow); }
     .norya-card-shadow { box-shadow: var(--norya-card-shadow); }
     .bg-brand-gradient { background: linear-gradient(135deg, #0EA5A4 0%, #0f766e 100%); }
@@ -1181,17 +1195,21 @@
       color: #0d9488;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    /* WhatsApp FAB: safe-area uyumlu, içerik kapatmasın, z-index header/drawer altında */
+    /* WhatsApp FAB: safe-area uyumlu, yatay taşma yok, mobilde sadece ikon */
     .wa-fab {
       position: fixed;
       right: 14px;
       bottom: calc(14px + env(safe-area-inset-bottom));
       z-index: 40;
+      max-width: calc(100% - 24px);
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
     }
     .wa-fab-text { color: #fff; -webkit-tap-highlight-color: transparent; }
+    @media (max-width: 420px) {
+      .wa-fab .wa-fab-text { display: none; }
+    }
     @media (max-width: 639px) {
       .wa-fab {
         min-height: 48px; min-width: 44px; padding-left: 14px; padding-right: 18px; font-size: 0.875rem;
@@ -1213,6 +1231,7 @@
         right: 12px;
         bottom: calc(12px + env(safe-area-inset-bottom));
         transform: scale(0.92);
+        max-width: calc(100% - 24px);
       }
     }
     @media (min-width: 640px) {
@@ -1786,10 +1805,10 @@
     </div>
   </aside>
 
-  <!-- Hero: premium clinical biomarker (turquoise + navy) -->
-  <section class="gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
-    <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 20% 80%, rgba(13, 148, 136, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(30, 58, 95, 0.3) 0%, transparent 45%);"></div>
-    <div class="max-w-5xl mx-auto w-full px-3 sm:px-4 text-center relative z-10 hero-inner">
+  <!-- Hero: premium clinical biomarker (turquoise + navy); gradient section'ta, tam genişlik -->
+  <section class="hero gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
+    <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 20% 80%, rgba(13, 148, 136, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(30, 58, 95, 0.3) 0%, transparent 45%);"></div>
+    <div class="hero-inner max-w-5xl mx-auto w-full px-3 sm:px-4 text-center relative z-10">
       <p class="text-white/90 text-xs sm:text-sm font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Clinical Biomarker Platform</p>
       <h1 class="hero-title text-2xl min-[480px]:text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.2] mb-4 sm:mb-5 tracking-tight px-1" data-i18n="hero_title">Kan Tahlilinizi 60 Saniyede Anlayın</h1>
       <p class="hero-desc text-lg text-navy-100 max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="hero_desc">
@@ -9829,6 +9848,23 @@
     }
     applyPricing(DEFAULT_PRICING);
     loadPricing();
+
+    /* Debug: yatay taşma yapan elementleri bulmak için ?debug=overflow ile açın */
+    (function() {
+      if (typeof window === 'undefined' || !window.location.search.includes('debug=overflow')) return;
+      function runOverflowCheck() {
+        var vw = document.documentElement.clientWidth;
+        var offenders = [];
+        document.querySelectorAll('body *').forEach(function(el) {
+          var r = el.getBoundingClientRect();
+          if (r.right > vw + 1) offenders.push({ el: el, tag: el.tagName, className: el.className || '', right: r.right, vw: vw });
+        });
+        console.log('OFFENDERS (horizontal overflow):', offenders);
+        if (offenders.length) console.log('İlk 1-2 element genelde suçlu. İncele:', offenders.slice(0, 2));
+      }
+      if (document.readyState === 'loading') window.addEventListener('load', runOverflowCheck);
+      else runOverflowCheck();
+    })();
   </script>
 </body>
 </html>

@@ -23,7 +23,20 @@ else
 fi
 
 echo "Sunucu başlatılıyor:"
-echo "  Ana sayfa: http://127.0.0.1:$PORT"
-echo "  Admin:     http://127.0.0.1:$PORT/admin"
+echo "  Bilgisayardan: http://127.0.0.1:$PORT"
+# macOS: Wi-Fi genelde en0; Linux: eth0 veya wlan0
+if [ "$(uname)" = "Darwin" ]; then
+  LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null)
+fi
+if [ -z "$LOCAL_IP" ]; then
+  LOCAL_IP=$(ifconfig 2>/dev/null | grep "inet " | grep -v 127.0.0.1 | awk '{print $2}' | head -1)
+fi
+if [ -n "$LOCAL_IP" ]; then
+  echo "  Telefondan:    http://$LOCAL_IP:$PORT"
+  echo "                 (telefon aynı Wi-Fi'de; bağlanmazsa Mac Güvenlik Duvarı'nı kontrol edin)"
+else
+  echo "  Telefondan:    http://<BILGISAYAR-IP>:$PORT  (Sistem Ayarları > Wi-Fi > Detaylar > IP)"
+fi
 echo ""
-$EXEC -m uvicorn app.main:app --reload --host 127.0.0.1 --port $PORT
+# 0.0.0.0 = ağdaki diğer cihazlar (telefon vb.) bağlanabilsin
+$EXEC -m uvicorn app.main:app --reload --host 0.0.0.0 --port $PORT
