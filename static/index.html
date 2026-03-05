@@ -1305,6 +1305,227 @@
     .profile-panel label { font-size: 0.8125rem; font-weight: 500; color: #475569; margin-bottom: 0.375rem; display: block; }
     .profile-panel input, .profile-panel select { border-radius: 12px; border: 1px solid rgba(15,23,42,0.1); padding: 0.75rem 1rem; font-size: 0.9375rem; }
     .profile-panel input:focus, .profile-panel select:focus { outline: none; box-shadow: 0 0 0 2px rgba(14,165,164,0.2); }
+
+    /* ===== Norya Premium Elite Landing + Pricing ===== */
+    :root{
+      --brand:#0EA5A4;
+      --brand2:#087E7D;
+      --ink:#07131A;
+      --ink2: rgba(7,19,26,.72);
+      --glass: rgba(255,255,255,.72);
+      --glass2: rgba(255,255,255,.58);
+      --shadow: 0 18px 60px rgba(7,19,26,.14);
+      --shadow2: 0 10px 30px rgba(7,19,26,.10);
+      --radius: 22px;
+      --pill: 999px;
+      --ring: 0 0 0 4px rgba(14,165,164,.18);
+    }
+
+    /* Genel tipografi */
+    body{
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      text-rendering: geometricPrecision;
+    }
+    h1,h2,h3{ letter-spacing:-0.6px; }
+    p{ color: var(--ink2); }
+
+    /* ===== HERO BUTONLAR (Elite) ===== */
+    .hero-primary-btn{
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      color:#fff;
+      border: 1px solid rgba(14,165,164,.45);
+      border-radius: var(--pill);
+      height: 54px;
+      font-weight: 900;
+    }
+    .hero-primary-btn:focus{ outline:none; box-shadow: var(--ring); }
+
+    .hero-secondary-btn{
+      background: rgba(255,255,255,.50);
+      border: 1px solid rgba(255,255,255,.45);
+      border-radius: var(--pill);
+      height: 54px;
+      font-weight: 900;
+    }
+    .hero-secondary-btn:focus{ outline:none; box-shadow: var(--ring); }
+
+    /* Güven rozetleri chip */
+    .trust-chips{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+      justify-content:center;
+      margin-top: 12px;
+    }
+    .trust-chips .chip{
+      padding: 7px 10px;
+      border-radius: var(--pill);
+      background: rgba(255,255,255,.46);
+      border: 1px solid rgba(255,255,255,.40);
+      font-size: 12px;
+      font-weight: 900;
+      color: rgba(7,19,26,.78);
+    }
+
+    /* ===== PRICING GRID ===== */
+    .pricing-elite-grid{
+      display:grid;
+      gap:18px;
+      align-items:stretch;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+    }
+
+    /* ===== PRICING CARD (Elite Glass) ===== */
+    .pricing-elite-card{
+      position:relative;
+      border-radius: var(--radius);
+      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      border: 1px solid rgba(7,19,26,.08);
+      box-shadow: var(--shadow2);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      overflow:hidden;
+      padding: 20px 18px 16px;
+      display:flex;
+      flex-direction:column;
+      min-height: 560px;
+      transition: transform .22s ease, box-shadow .22s ease, border-color .22s ease;
+    }
+    .pricing-elite-card::before{
+      content:"";
+      position:absolute;
+      inset:-40% -40% auto -40%;
+      height: 180px;
+      background: radial-gradient(circle at 30% 30%, rgba(14,165,164,.22), rgba(255,255,255,0) 65%);
+      pointer-events:none;
+    }
+    @media (hover:hover){
+      .pricing-elite-card:hover{
+        transform: translateY(-4px);
+        box-shadow: var(--shadow);
+        border-color: rgba(14,165,164,.22);
+      }
+    }
+
+    /* Header */
+    .elite-card-header{
+      padding-top: 46px; /* badge alanı */
+      margin-bottom: 10px;
+    }
+    .elite-card-header h3{
+      margin: 0 0 6px 0;
+      font-size: 22px;
+      line-height: 1.12;
+    }
+    .elite-card-header .subtext,
+    .elite-card-header .desc{
+      font-size: 14px;
+      line-height: 1.35;
+      color: var(--ink2);
+    }
+
+    /* Price */
+    .pricing-elite-card .price{
+      font-size: 40px;
+      font-weight: 900;
+      letter-spacing: -1px;
+      margin: 10px 0 12px;
+      color: var(--ink);
+    }
+
+    /* Feature list */
+    .elite-feature-list{
+      list-style:none;
+      padding: 0;
+      margin: 10px 0 14px;
+      display:flex;
+      flex-direction:column;
+      gap:10px;
+    }
+    .elite-feature-list li{
+      display:flex;
+      gap:10px;
+      align-items:flex-start;
+      font-size: 14px;
+      line-height: 1.35;
+      color: rgba(7,19,26,.86);
+    }
+
+    /* CTA */
+    .elite-cta{
+      margin-top:auto;
+      height: 50px;
+      border-radius: var(--pill);
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-decoration:none;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+      border: 1px solid rgba(7,19,26,.10);
+      background: rgba(255,255,255,.62);
+      color: rgba(7,19,26,.92);
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+    }
+    .elite-cta:focus{ outline:none; box-shadow: var(--ring); }
+    @media (hover:hover){
+      .elite-cta:hover{
+        transform: translateY(-1px);
+        box-shadow: 0 10px 24px rgba(7,19,26,.12);
+        background: rgba(255,255,255,.82);
+      }
+    }
+
+    /* Featured */
+    .pricing-elite-card.is-featured{
+      border-color: rgba(14,165,164,.35);
+      box-shadow: 0 24px 80px rgba(14,165,164,.16);
+    }
+    .pricing-elite-card.is-featured .elite-cta{
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      border-color: rgba(14,165,164,.45);
+      color:#fff;
+    }
+
+    /* Badges */
+    .elite-badge{
+      position:absolute;
+      top: 14px;
+      left: 14px;
+      padding: 7px 11px;
+      border-radius: var(--pill);
+      font-size: 12px;
+      font-weight: 900;
+      border: 1px solid rgba(255,255,255,.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      box-shadow: 0 10px 24px rgba(7,19,26,.10);
+      color: rgba(7,19,26,.86);
+      pointer-events:none;
+    }
+    .elite-badge.popular{
+      background: rgba(14,165,164,.16);
+      border-color: rgba(14,165,164,.28);
+    }
+    .elite-badge.saving{
+      background: rgba(255,255,255,.72);
+      border-color: rgba(7,19,26,.10);
+    }
+
+    /* Responsive */
+    @media (max-width: 1100px){
+      .pricing-elite-grid{ grid-template-columns: repeat(2, minmax(0,1fr)); }
+      .pricing-elite-card{ min-height: 580px; }
+    }
+    @media (max-width: 640px){
+      .pricing-elite-grid{ grid-template-columns: 1fr; }
+      .pricing-elite-card{ min-height: unset; padding: 18px 14px 14px; }
+      .elite-card-header{ padding-top: 48px; }
+      .pricing-elite-card .price{ font-size: 36px; }
+      .elite-cta{ height: 52px; }
+    }
+
   </style>
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
@@ -1399,13 +1620,13 @@
         Laboratuvar sonuçlarınızı yükleyin — yapılandırılmış kan tahlili yorumu ve klinik tarzı premium özet raporu alın.
       </p>
       <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center hero-cta-wrap">
-        <button onclick="openRegister(); scrollToAnalyze();" class="hero-cta-btn px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-navy-900 font-semibold hover:bg-primary-50 norya-card-shadow inline-flex items-center justify-center gap-2 transition hover:scale-[1.02] min-h-[44px]" data-i18n="hero_cta">Analizi Başlat</button>
-        <a href="#ornek-rapor" class="min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 font-medium transition" data-i18n="hero_see_sample">Örnek Raporu Gör</a>
+        <button onclick="openRegister(); scrollToAnalyze();" class="hero-cta-btn hero-primary-btn px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-navy-900 font-semibold hover:bg-primary-50 norya-card-shadow inline-flex items-center justify-center gap-2 transition hover:scale-[1.02] min-h-[44px]" data-i18n="hero_cta">Analizi Başlat</button>
+        <a href="#ornek-rapor" class="hero-secondary-btn min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 font-medium transition" data-i18n="hero_see_sample">Örnek Raporu Gör</a>
       </div>
-      <ul class="hero-trust-list mt-6 flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-2 text-navy-200 text-xs sm:text-sm font-medium" aria-label="Güven rozetleri">
-        <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL</span></li>
-        <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR</span></li>
-        <li class="inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">PayTR güvenli ödeme</span></li>
+      <ul class="hero-trust-list trust-chips mt-6 flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-2 text-navy-200 text-xs sm:text-sm font-medium" aria-label="Güven rozetleri">
+        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL</span></li>
+        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR</span></li>
+        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">PayTR güvenli ödeme</span></li>
       </ul>
     </div>
   </section>
@@ -3427,10 +3648,10 @@
       </div>
 
       <!-- Pricing cards: Gratis / Tek Analiz / Aylık / Yıllık -->
-      <div class="pricing-grid mb-10">
+      <div class="pricing-grid pricing-elite-grid mb-10">
         <!-- Gratis (Free / Trial) -->
-        <div class="pricing-card pricing-card--free">
-          <div class="mb-4">
+        <div class="pricing-card pricing-elite-card pricing-card--free">
+          <div class="elite-card-header mb-4">
             <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="compare_plan_free">Ücretsiz Deneme</h3>
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold mt-2">🎁 <span data-i18n="pricing_badge_trial">Deneme</span></span>
           </div>
@@ -3438,18 +3659,18 @@
             <span class="align-top text-base mr-0.5">€</span><span>0</span>
           </p>
           <p class="mt-1 text-xs text-accent-500 dark:text-accent-400" data-i18n="usage_first_free">İlk analiz ücretsiz.</p>
-          <ul class="mt-5 flex-1">
+          <ul class="elite-feature-list mt-5 flex-1">
             <li><span aria-hidden="true">✅</span><span data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span></li>
             <li><span aria-hidden="true">📄</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
             <li><span aria-hidden="true">🧠</span><span data-i18n="trust_cards_speed_desc">Sunucu uygun olduğunda çoğu rapor saniyeler içinde hazır olur.</span></li>
             <li><span aria-hidden="true">🌍</span><span data-i18n="compare_langs">Rapor dili</span></li>
           </ul>
-          <button type="button" onclick="goToCheckout('free')" class="cta-button mt-6 border border-accent-200 dark:border-accent-600 text-accent-900 dark:text-white font-semibold hover:bg-accent-50 dark:hover:bg-accent-700/30 transition text-sm" data-i18n="price_btn_free">Ücretsiz Başla</button>
+          <button type="button" onclick="goToCheckout('free')" class="cta-button elite-cta mt-6 border border-accent-200 dark:border-accent-600 text-accent-900 dark:text-white font-semibold hover:bg-accent-50 dark:hover:bg-accent-700/30 transition text-sm" data-i18n="price_btn_free">Ücretsiz Başla</button>
         </div>
 
         <!-- Tek Analiz (Singolo) -->
-        <div class="pricing-card">
-          <div class="mb-4 min-w-0">
+        <div class="pricing-card pricing-elite-card">
+          <div class="elite-card-header mb-4 min-w-0">
             <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_single_title">Tek Analiz</h3>
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_single_per">tek seferlik</p>
             <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-semibold mt-2">⚡ <span data-i18n="price_badge_fast">Hızlı</span></span>
@@ -3460,19 +3681,19 @@
           <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
             <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
           </div>
-          <ul class="mt-5 flex-1">
+          <ul class="elite-feature-list mt-5 flex-1">
             <li><span aria-hidden="true">✅</span><span data-i18n="price_single_1">✓ 1 analiz</span></li>
             <li><span aria-hidden="true">📊</span><span data-i18n="price_single_3">✓ PDF indir & paylaş</span></li>
             <li><span aria-hidden="true">🧠</span><span data-i18n="compare_report">Detaylı rapor (özet, değerler, öneriler)</span></li>
             <li><span aria-hidden="true">🏥</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
           </ul>
-          <button type="button" onclick="goToCheckout('single')" class="cta-button mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-single">13 €</span> <span data-i18n="price_btn_single_label">Tek Analizi Satın Al</span></button>
+          <button type="button" onclick="goToCheckout('single')" class="cta-button elite-cta mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-single">13 €</span> <span data-i18n="price_btn_single_label">Tek Analizi Satın Al</span></button>
         </div>
 
         <!-- Aylık: En Popüler (Mensile) -->
-        <div class="pricing-card pricing-card--featured relative pt-8">
-          <span class="pricing-badge pricing-badge--popular absolute top-4 left-5 sm:left-6" data-i18n="price_monthly_badge">En Popüler</span>
-          <div class="mb-4 min-w-0">
+        <div class="pricing-card pricing-elite-card pricing-card--featured is-featured relative pt-8">
+          <span class="pricing-badge pricing-badge--popular elite-badge popular absolute top-4 left-5 sm:left-6" data-i18n="price_monthly_badge">En Popüler</span>
+          <div class="elite-card-header mb-4 min-w-0">
             <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_monthly_title">Aylık Abonelik</h3>
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">5 analiz / ay</p>
           </div>
@@ -3482,7 +3703,7 @@
           <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
             <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
           </div>
-          <ul class="mt-5 flex-1">
+          <ul class="elite-feature-list mt-5 flex-1">
             <li><span aria-hidden="true">✅</span><span data-i18n="price_monthly_1">✓ Ayda 5 analiz</span></li>
             <li><span aria-hidden="true">🍽️</span><span data-i18n="price_monthly_2">✓ Diyet ve yaşam tarzı önerileri</span></li>
             <li><span aria-hidden="true">🕒</span><span data-i18n="price_monthly_3">✓ Geçmiş analiz karşılaştırma</span></li>
@@ -3490,12 +3711,13 @@
             <li><span aria-hidden="true">📊</span><span data-i18n="pricing_health_charts">✓ Sağlık grafikleri</span></li>
           </ul>
           <p class="mt-3 text-xs text-accent-500 dark:text-accent-400" data-i18n="pricing_monthly_most_chosen">Kullanıcıların çoğu bu planı seçiyor.</p>
-          <button type="button" onclick="goToCheckout('monthly')" class="cta-button mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span data-i18n="price_btn_monthly_label">Aylık Planı Başlat</span></button>
+          <button type="button" onclick="goToCheckout('monthly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span data-i18n="price_btn_monthly_label">Aylık Planı Başlat</span></button>
         </div>
 
         <!-- Yıllık: En Karlı (Annual) -->
-        <div class="pricing-card">
-          <div class="mb-4 min-w-0">
+        <div class="pricing-card pricing-elite-card">
+          <span class="elite-badge saving"><span data-i18n="pricing_yearly_saving">Aylığa göre 501 € tasarruf (%83)</span></span>
+          <div class="elite-card-header mb-4 min-w-0">
             <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_yearly_title">Yıllık Abonelik</h3>
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">Toplam 16 analiz (13 + 3 hediye)</p>
           </div>
@@ -3503,19 +3725,19 @@
             <span class="align-top text-base mr-0.5">€</span><span id="price-yearly">99</span><span id="price-symbol-yearly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span>
           </p>
           <div class="pricing-value-callout">
-            <p class="pricing-value-line">💎 <span data-i18n="pricing_yearly_saving">Aylığa göre 501 € tasarruf (%83)</span></p>
+            <p class="pricing-value-line">💎 <span data-i18n="pricing_yearly_value_midline">Yıllık planda maksimum tasarruf</span></p>
             <p class="pricing-value-sub"><span class="old-price">600 €</span> <span data-i18n="pricing_yearly_value_mid">değerinde analiz — Sadece</span> <strong><span id="yearly-only-amount">99</span> €</strong></p>
           </div>
           <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
             <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
           </div>
-          <ul class="mt-5 flex-1">
+          <ul class="elite-feature-list mt-5 flex-1">
             <li><span aria-hidden="true">✅</span><span data-i18n="price_yearly_1">✓ Yılda 16 analiz (13 + 3 hediye)</span></li>
             <li><span aria-hidden="true">🍽️</span><span data-i18n="price_yearly_2">✓ Tüm premium diyet ve yaşam tarzı bilgilendirme bölümleri</span></li>
             <li><span aria-hidden="true">🕒</span><span data-i18n="price_yearly_3">✓ Geçmiş & gelişmiş karşılaştırma</span></li>
             <li><span aria-hidden="true">🏥</span><span data-i18n="price_yearly_4">✓ Doktor randevuları için ideal</span></li>
           </ul>
-          <button type="button" onclick="goToCheckout('yearly')" class="cta-button mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-yearly">99 €</span> <span data-i18n="price_btn_yearly_label">Yıllık Tasarrufu Al</span></button>
+          <button type="button" onclick="goToCheckout('yearly')" class="cta-button elite-cta mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-yearly">99 €</span> <span data-i18n="price_btn_yearly_label">Yıllık Tasarrufu Al</span></button>
         </div>
       </div>
 
