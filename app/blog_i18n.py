@@ -2675,8 +2675,348 @@ def _hba1c_sections_fr() -> List[Section]:
 _HBA1C_ARTICLE = _article_hba1c()
 
 
+def _ldl_hdl_sections_en() -> List[Section]:
+    return [
+        Section(
+            id="what-ldl-hdl-are",
+            level=2,
+            heading="What LDL and HDL are",
+            body_html="""
+<p>LDL (low-density lipoprotein) and HDL (high-density lipoprotein) are lipoproteins that carry cholesterol in the blood. <strong>LDL</strong> delivers cholesterol to tissues; in excess it can contribute to plaque in artery walls. <strong>HDL</strong> helps remove cholesterol from tissues and carries it back to the liver. In routine lipid panels, LDL is often labelled “bad” and HDL “good” cholesterol—useful shorthand, but interpretation depends on your full profile and risk factors. This overview is for information only; it does not replace a clinical assessment.</p>
+""",
+        ),
+        Section(
+            id="full-lipid-panel",
+            level=2,
+            heading="The full lipid panel: Total, LDL, HDL, Triglycerides",
+            body_html="""
+<p>A standard lipid panel usually includes:</p>
+<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">
+  <thead><tr class="bg-slate-50"><th class="border border-slate-200 px-3 py-2 text-left">Marker</th><th class="border border-slate-200 px-3 py-2 text-left">What it reflects</th></tr></thead>
+  <tbody>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>Total cholesterol</strong></td><td class="border border-slate-200 px-3 py-2">Sum of cholesterol in all lipoproteins (LDL + HDL + VLDL and other fractions).</td></tr>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>LDL cholesterol</strong></td><td class="border border-slate-200 px-3 py-2">Main carrier of cholesterol into tissues; primary target for risk reduction in many guidelines.</td></tr>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>HDL cholesterol</strong></td><td class="border border-slate-200 px-3 py-2">Carries cholesterol from tissues to the liver; higher levels are generally associated with lower cardiovascular risk.</td></tr>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>Triglycerides (TG)</strong></td><td class="border border-slate-200 px-3 py-2">Fats in the blood; high levels can increase cardiovascular and pancreatitis risk; often measured fasting.</td></tr>
+  </tbody>
+</table>
+<p>LDL may be reported as calculated (e.g. Friedewald) or directly measured. Your clinician interprets these values in context.</p>
+""",
+        ),
+        Section(
+            id="non-hdl-cholesterol",
+            level=2,
+            heading="Non-HDL cholesterol explained",
+            body_html="""
+<p><strong>Non-HDL cholesterol</strong> is total cholesterol minus HDL (Non-HDL = Total − HDL). It includes LDL and all other atherogenic lipoproteins (e.g. VLDL, remnant particles). Guidelines often use it as a secondary or alternative target because it captures risk from non-LDL particles and does not depend on fasting. Your doctor may use either LDL or non-HDL (or both) to guide decisions; targets depend on your risk profile.</p>
+""",
+        ),
+        Section(
+            id="typical-targets",
+            level=2,
+            heading="Typical targets and reference ranges",
+            body_html="""
+<p>Targets and reference ranges <strong>vary by lab and guideline</strong> and depend on your cardiovascular risk (age, sex, smoking, blood pressure, diabetes, family history, etc.). The following are for general context only; your clinician sets your individual goals.</p>
+<ul>
+  <li><strong>HDL</strong>: Higher is generally better. Sex-specific cut-offs may apply (e.g. &gt;40 mg/dL men, &gt;50 mg/dL women in some guidelines). Very high HDL can sometimes be genetic and does not always mean lower risk.</li>
+  <li><strong>LDL</strong>: Lower targets for higher-risk patients (e.g. &lt;100, &lt;70, or &lt;55 mg/dL depending on risk). No single “normal” applies to everyone.</li>
+  <li><strong>Triglycerides</strong>: Fasting &lt;150 mg/dL is often used as “normal”; higher tiers (e.g. 150–199, 200–499, ≥500 mg/dL) may prompt lifestyle or medical follow-up. Non-fasting cut-offs differ; follow your lab’s and doctor’s guidance.</li>
+</ul>
+""",
+        ),
+        Section(
+            id="what-raises-ldl-tg",
+            level=2,
+            heading="What can raise LDL or triglycerides or lower HDL",
+            body_html="""
+<p>Many factors influence lipid levels:</p>
+<ul>
+  <li><strong>Diet</strong>: Saturated and trans fats can raise LDL; excess calories and refined carbs can raise TG; very low fat may lower HDL.</li>
+  <li><strong>Genetics</strong>: Familial hypercholesterolaemia and other inherited patterns can raise LDL or TG regardless of diet.</li>
+  <li><strong>Medical conditions</strong>: Hypothyroidism, diabetes, kidney disease, obesity, and liver disease can affect lipids.</li>
+  <li><strong>Alcohol</strong>: Moderate intake may raise HDL; excess can raise TG.</li>
+  <li><strong>Medications</strong>: Some drugs (e.g. steroids, certain blood pressure or HIV drugs) can raise LDL or TG or lower HDL.</li>
+  <li><strong>Inactivity</strong>: Sedentary lifestyle can lower HDL and contribute to higher TG.</li>
+</ul>
+<p>Your doctor can help identify relevant factors and next steps.</p>
+""",
+        ),
+        Section(
+            id="when-to-follow-up",
+            level=2,
+            heading="When to follow up with a clinician",
+            body_html="""
+<p>See a doctor or nurse for interpretation and next steps if:</p>
+<ul>
+  <li>Your <strong>LDL is very high</strong> or above the target suggested for your risk.</li>
+  <li><strong>Triglycerides are very high</strong> (e.g. ≥500 mg/dL), which can increase pancreatitis risk.</li>
+  <li>You have a <strong>family history of early heart disease</strong> or very high cholesterol.</li>
+  <li>You have <strong>symptoms</strong> that could relate to heart or vascular disease (e.g. chest pain, shortness of breath).</li>
+  <li>You have <strong>diabetes</strong>, <strong>high blood pressure</strong>, or other cardiovascular risk factors and need a lipid management plan.</li>
+</ul>
+<p>This article is for information only; it does not replace a clinical assessment.</p>
+""",
+        ),
+        Section(
+            id="next-tests-clinician",
+            level=2,
+            heading="Next tests a clinician may consider",
+            body_html="""
+<p>Depending on your results and risk, your doctor may consider:</p>
+<ul>
+  <li><strong>ApoB</strong>: Reflects the number of atherogenic particles; sometimes used alongside or instead of LDL.</li>
+  <li><strong>Lp(a)</strong>: Genetically determined; high levels increase cardiovascular risk; one-time measurement often sufficient.</li>
+  <li><strong>hs-CRP</strong>: Marker of inflammation; may be used in risk assessment.</li>
+  <li><strong>HbA1c</strong>: To screen for or monitor diabetes.</li>
+  <li><strong>TSH</strong>: To check thyroid function if lipids are abnormal.</li>
+  <li><strong>Liver and kidney function</strong>: If medication or secondary causes are being considered.</li>
+  <li><strong>Risk calculators</strong>: To estimate 10-year cardiovascular risk and guide targets.</li>
+</ul>
+<p>Which tests are ordered is a clinical decision made with you by your doctor.</p>
+""",
+        ),
+        Section(
+            id="practical-lifestyle",
+            level=2,
+            heading="Practical lifestyle overview",
+            body_html="""
+<p>General measures that often support healthy lipid levels (not a substitute for medical advice; no “cure” claims):</p>
+<ul>
+  <li><strong>Fibre</strong>: Adequate fibre from vegetables, fruits, and whole grains.</li>
+  <li><strong>Unsaturated fats</strong>: Prefer sources such as olive oil, nuts, and oily fish; limit saturated and trans fats.</li>
+  <li><strong>Activity</strong>: Regular physical activity can help raise HDL and lower TG; follow your doctor’s recommendations.</li>
+  <li><strong>Weight</strong>: If your doctor has recommended weight management, gradual changes are usually more sustainable.</li>
+  <li><strong>Smoking cessation</strong>: Improves HDL and overall cardiovascular risk.</li>
+  <li><strong>Sleep</strong>: Adequate sleep supports general metabolic health.</li>
+</ul>
+""",
+        ),
+        Section(
+            id="faq",
+            level=2,
+            heading="Frequently asked questions",
+            body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">Is high HDL always good?</h3>
+<p>Generally higher HDL is associated with lower cardiovascular risk, but very high HDL can be genetic and not always protective. Some drugs that raise HDL have not been shown to reduce events. Your clinician interprets your level in context.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Why is my LDL high even with a good diet?</h3>
+<p>Genetics (e.g. familial hypercholesterolaemia), hypothyroidism, diabetes, kidney disease, or certain medications can raise LDL despite a healthy diet. Your doctor can help identify causes and options.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Do I need to fast for a lipid panel?</h3>
+<p>For LDL and total cholesterol, fasting (often 9–12 hours) is traditionally used; non-fasting panels are accepted in some guidelines. Triglycerides are most comparable when fasting. Follow your lab’s instructions.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">What is non-HDL cholesterol?</h3>
+<p>Non-HDL is total cholesterol minus HDL. It includes LDL and other atherogenic particles and is often used as an alternative or additional target in guidelines.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">How fast can lipids change?</h3>
+<p>Lifestyle changes can shift lipids within weeks to months; medication effects vary. Your doctor will advise on when to recheck.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Triglycerides vs LDL—what’s the difference?</h3>
+<p>LDL is the main cholesterol-carrying particle targeted for cardiovascular risk; triglycerides are a different type of blood fat. Both can be elevated and both matter for risk; management may address both.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">ApoB vs LDL—which matters?</h3>
+<p>ApoB reflects the number of atherogenic particles; LDL cholesterol reflects the cholesterol in those particles. Guidelines may use one or both; your clinician can explain how they apply to you.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Should I get Lp(a) tested?</h3>
+<p>Lp(a) is a genetically determined risk factor. Testing can be useful in people with family history of early heart disease or unclear risk. Your doctor can recommend whether and when to test.</p>
+""",
+        ),
+        Section(
+            id="disclaimer",
+            level=2,
+            heading="Medical disclaimer",
+            body_html="""
+<p><strong>This content is for information only and does not constitute medical advice, diagnosis, or treatment.</strong> Always discuss your results and any symptoms with a qualified healthcare provider. Do not start or change diet, exercise, or medication based solely on this article. If you have concerns about your health, seek professional medical care.</p>
+""",
+        ),
+    ]
+
+
+def _ldl_hdl_sections_de() -> List[Section]:
+    return [
+        Section(id="what-ldl-hdl-are", level=2, heading="Was LDL und HDL sind",
+            body_html="<p>LDL (Low-Density Lipoprotein) und HDL (High-Density Lipoprotein) transportieren Cholesterin im Blut. <strong>LDL</strong> bringt Cholesterin in die Gewebe; im Übermaß kann es zur Ablagerung in Gefäßwänden beitragen. <strong>HDL</strong> transportiert Cholesterin aus den Geweben zurück zur Leber. Im Laborbericht wird LDL oft als „schlechtes“, HDL als „gutes“ Cholesterin bezeichnet—die Bewertung hängt vom Gesamtprofil und Ihren Risikofaktoren ab. Dieser Überblick dient nur der Information; er ersetzt keine ärztliche Beurteilung.</p>"),
+        Section(id="full-lipid-panel", level=2, heading="Das vollständige Lipidprofil: Gesamt-, LDL-, HDL-Cholesterin, Triglyceride",
+            body_html="<p>Ein Standard-Lipidprofil umfasst in der Regel: <strong>Gesamtcholesterin</strong> (Summe aus allen Lipoproteinen), <strong>LDL-Cholesterin</strong> (Hauptzielwert in vielen Leitlinien), <strong>HDL-Cholesterin</strong> (höhere Werte oft mit geringerem kardiovaskulärem Risiko verbunden), <strong>Triglyceride</strong> (Blutfette; hohe Werte können Risiko erhöhen; oft nüchtern gemessen). LDL kann berechnet (z. B. Friedewald) oder direkt gemessen werden. Die Bewertung übernimmt Ihr Arzt.</p>"),
+        Section(id="non-hdl-cholesterol", level=2, heading="Non-HDL-Cholesterin erklärt",
+            body_html="<p><strong>Non-HDL-Cholesterin</strong> = Gesamtcholesterin minus HDL. Es umfasst LDL und andere atherogene Lipoproteine (z. B. VLDL). In Leitlinien wird es oft als alternatives Ziel verwendet, da es unabhängig von der Nüchternheit ist. Ihr Arzt kann LDL und/oder Non-HDL zur Steuerung nutzen.</p>"),
+        Section(id="typical-targets", level=2, heading="Typische Zielwerte und Referenzbereiche",
+            body_html="<p>Zielwerte <strong>variieren je nach Labor und Leitlinie</strong> und hängen von Ihrem kardiovaskulären Risiko ab. <strong>HDL</strong>: Höher ist in der Regel besser (geschlechtsspezifische Grenzen möglich). <strong>LDL</strong>: Niedrigere Ziele bei höherem Risiko (z. B. &lt;100, &lt;70 oder &lt;55 mg/dL). <strong>Triglyceride</strong>: Nüchtern oft &lt;150 mg/dL als Orientierung; höhere Stufen können Nachsorge erfordern. Ihr Arzt legt Ihre individuellen Ziele fest.</p>"),
+        Section(id="what-raises-ldl-tg", level=2, heading="Was LDL/Triglyceride erhöhen oder HDL senken kann",
+            body_html="<p>Ernährung (gesättigte/Transfette, Überschuss an Kalorien/Kohlenhydraten), <strong>Genetik</strong> (z. B. familiäre Hypercholesterinämie), <strong>Erkrankungen</strong> (Schilddrüsenunterfunktion, Diabetes, Nieren- oder Lebererkrankung), <strong>Alkohol</strong>, <strong>Medikamente</strong>, <strong>Bewegungsmangel</strong>. Ihr Arzt kann relevante Faktoren einordnen.</p>"),
+        Section(id="when-to-follow-up", level=2, heading="Wann Sie zum Arzt sollten",
+            body_html="<p>Bitte zum Arzt, wenn: LDL deutlich erhöht oder über Ihrem Zielwert, <strong>Triglyceride sehr hoch</strong> (z. B. ≥500 mg/dL), <strong>familiäre Belastung</strong> mit früher Herzerkrankung, <strong>Symptome</strong> (z. B. Brustschmerzen, Atemnot), <strong>Diabetes</strong>, <strong>Bluthochdruck</strong> oder andere Risikofaktoren. Dieser Artikel ersetzt keine klinische Beurteilung.</p>"),
+        Section(id="next-tests-clinician", level=2, heading="Weitere Tests, die der Arzt erwägen kann",
+            body_html="<p>Je nach Befund: <strong>ApoB</strong>, <strong>Lp(a)</strong>, <strong>hs-CRP</strong>, <strong>HbA1c</strong>, <strong>TSH</strong>, Leber-/Nierenwerte, <strong>Risikorechner</strong>. Die Auswahl trifft der Arzt mit Ihnen.</p>"),
+        Section(id="practical-lifestyle", level=2, heading="Praktischer Lebensstil-Überblick",
+            body_html="<p>Allgemeine Maßnahmen (kein Ersatz für ärztlichen Rat): Ballaststoffe, ungesättigte Fette (Olivenöl, Nüsse, Fisch), <strong>Bewegung</strong>, ggf. Gewichtsmanagement, <strong>Raucherentwöhnung</strong>, ausreichend Schlaf.</p>"),
+        Section(id="faq", level=2, heading="Häufige Fragen",
+            body_html="<p>Siehe Abschnitt FAQ; die Bewertung Ihrer Werte erfolgt durch den Arzt.</p>"),
+        Section(id="disclaimer", level=2, heading="Hinweis",
+            body_html="<p><strong>Dieser Inhalt dient nur der Information und ersetzt keine medizinische Beratung, Diagnose oder Behandlung.</strong> Besprechen Sie Ergebnisse und Beschwerden immer mit einem Arzt.</p>"),
+    ]
+
+
+def _ldl_hdl_sections_it() -> List[Section]:
+    return [
+        Section(id="what-ldl-hdl-are", level=2, heading="Cosa sono LDL e HDL",
+            body_html="<p>LDL (lipoproteina a bassa densità) e HDL (lipoproteina ad alta densità) trasportano il colesterolo nel sangue. <strong>LDL</strong> porta il colesterolo ai tessuti; in eccesso può contribuire alla placca nelle arterie. <strong>HDL</strong> aiuta a rimuovere il colesterolo dai tessuti. Nel referto LDL è spesso definito colesterolo „cattivo“ e HDL „buono“—la valutazione dipende dal profilo completo e dai fattori di rischio. Solo a scopo informativo; non sostituisce la valutazione clinica.</p>"),
+        Section(id="full-lipid-panel", level=2, heading="Il profilo lipidico completo: Totale, LDL, HDL, Trigliceridi",
+            body_html="<p>Un profilo lipidico standard include: <strong>Colesterolo totale</strong>, <strong>LDL</strong> (obiettivo principale in molte linee guida), <strong>HDL</strong> (valori più alti spesso associati a minor rischio cardiovascolare), <strong>Trigliceridi</strong> (grassi nel sangue; alti valori possono aumentare il rischio; spesso a digiuno). L'interpretazione spetta al medico.</p>"),
+        Section(id="non-hdl-cholesterol", level=2, heading="Colesterolo non-HDL spiegato",
+            body_html="<p><strong>Non-HDL</strong> = colesterolo totale meno HDL. Include LDL e altre lipoproteine aterogene. Usato in alcune linee guida come obiettivo alternativo. Il medico può usare LDL e/o non-HDL.</p>"),
+        Section(id="typical-targets", level=2, heading="Obiettivi e intervalli di riferimento tipici",
+            body_html="<p>Gli obiettivi <strong>variano per laboratorio e linee guida</strong> e dipendono dal rischio cardiovascolare. <strong>HDL</strong>: più alto in genere meglio. <strong>LDL</strong>: target più bassi per pazienti a rischio più alto. <strong>Trigliceridi</strong>: a digiuno spesso &lt;150 mg/dL come riferimento. Il medico definisce i vostri obiettivi.</p>"),
+        Section(id="what-raises-ldl-tg", level=2, heading="Cosa può aumentare LDL/TG o abbassare HDL",
+            body_html="<p>Dieta (grassi saturi/trans, eccesso di calorie/carboidrati), <strong>genetica</strong>, <strong>ipotiroidismo</strong>, <strong>diabete</strong>, <strong>alcol</strong>, <strong>farmaci</strong>, <strong>sedentarietà</strong>. Il medico può identificare i fattori rilevanti.</p>"),
+        Section(id="when-to-follow-up", level=2, heading="Quando rivolgersi al medico",
+            body_html="<p>Consultare il medico se: LDL molto alto o sopra il target, <strong>trigliceridi molto alti</strong> (es. ≥500 mg/dL), <strong>storia familiare</strong> di malattia cardiaca precoce, <strong>sintomi</strong>, <strong>diabete</strong> o <strong>ipertensione</strong>. Questo articolo non sostituisce la valutazione clinica.</p>"),
+        Section(id="next-tests-clinician", level=2, heading="Altri esami che il medico può considerare",
+            body_html="<p>A seconda del quadro: <strong>ApoB</strong>, <strong>Lp(a)</strong>, <strong>hs-CRP</strong>, <strong>HbA1c</strong>, <strong>TSH</strong>, funzione epatica/renale, <strong>calcolatori di rischio</strong>. La scelta è clinica.</p>"),
+        Section(id="practical-lifestyle", level=2, heading="Stile di vita in pratica",
+            body_html="<p>Fibre, grassi insaturi, attività fisica, eventuale gestione del peso, <strong>smettere di fumare</strong>, sonno adeguato. Nessun consiglio al posto del medico.</p>"),
+        Section(id="faq", level=2, heading="Domande frequenti",
+            body_html="<p>Vedi sezione FAQ; l'interpretazione spetta al medico.</p>"),
+        Section(id="disclaimer", level=2, heading="Disclaimer medico",
+            body_html="<p><strong>Questo contenuto è solo informativo e non costituisce consulenza, diagnosi o trattamento medico.</strong> Discutere sempre i risultati con un operatore sanitario.</p>"),
+    ]
+
+
+def _ldl_hdl_sections_fr() -> List[Section]:
+    return [
+        Section(id="what-ldl-hdl-are", level=2, heading="Ce que sont le LDL et le HDL",
+            body_html="<p>Le LDL (lipoproteine de basse densité) et le HDL (lipoproteines de haute densité) transportent le cholestérol dans le sang. Le <strong>LDL</strong> apporte le cholestérol aux tissus ; en excès il peut contribuer à la plaque dans les artères. Le <strong>HDL</strong> aide à ramener le cholestérol vers le foie. Sur le bilan, le LDL est souvent qualifié de « mauvais » et le HDL de « bon » cholestérol—l’interprétation dépend du profil complet et des facteurs de risque. À titre informatif uniquement ; ne remplace pas une évaluation clinique.</p>"),
+        Section(id="full-lipid-panel", level=2, heading="Le bilan lipidique complet : Total, LDL, HDL, Triglycérides",
+            body_html="<p>Un bilan lipidique standard inclut : <strong>Cholestérol total</strong>, <strong>LDL</strong> (cible principale dans nombre de recommandations), <strong>HDL</strong> (niveaux plus élevés souvent associés à un risque cardiovasculaire moindre), <strong>Triglycérides</strong> (graisses sanguines ; des niveaux élevés peuvent augmenter le risque ; souvent à jeun). L’interprétation relève du médecin.</p>"),
+        Section(id="non-hdl-cholesterol", level=2, heading="Le cholestérol non-HDL expliqué",
+            body_html="<p>Le <strong>non-HDL</strong> = cholestérol total moins HDL. Il inclut le LDL et les autres lipoproteines athérogènes. Utilisé dans certaines recommandations comme cible alternative. Le médecin peut utiliser le LDL et/ou le non-HDL.</p>"),
+        Section(id="typical-targets", level=2, heading="Objectifs et valeurs de référence typiques",
+            body_html="<p>Les objectifs <strong>varient selon le laboratoire et les recommandations</strong> et dépendent du risque cardiovasculaire. <strong>HDL</strong> : plus élevé en général mieux. <strong>LDL</strong> : objectifs plus bas pour les patients à plus haut risque. <strong>Triglycérides</strong> : à jeun souvent &lt;150 mg/dL comme référence. Le médecin fixe vos objectifs.</p>"),
+        Section(id="what-raises-ldl-tg", level=2, heading="Ce qui peut augmenter LDL/TG ou baisser le HDL",
+            body_html="<p>Alimentation (graisses saturées/trans, excès de calories/glucides), <strong>génétique</strong>, <strong>hypothyroïdie</strong>, <strong>diabète</strong>, <strong>alcool</strong>, <strong>médicaments</strong>, <strong>sédentarité</strong>. Le médecin peut identifier les facteurs en cause.</p>"),
+        Section(id="when-to-follow-up", level=2, heading="Quand consulter",
+            body_html="<p>Consulter si : LDL très élevé ou au-dessus de la cible, <strong>triglycérides très élevés</strong> (ex. ≥500 mg/dL), <strong>antécédents familiaux</strong> de maladie cardiaque précoce, <strong>symptômes</strong>, <strong>diabète</strong> ou <strong>hypertension</strong>. Cet article ne remplace pas une évaluation clinique.</p>"),
+        Section(id="next-tests-clinician", level=2, heading="Autres examens que le médecin peut envisager",
+            body_html="<p>Selon le cas : <strong>ApoB</strong>, <strong>Lp(a)</strong>, <strong>hs-CRP</strong>, <strong>HbA1c</strong>, <strong>TSH</strong>, fonction hépatique/rénale, <strong>calculateurs de risque</strong>. Le choix est clinique.</p>"),
+        Section(id="practical-lifestyle", level=2, heading="Mode de vie en pratique",
+            body_html="<p>Fibres, graisses insaturées, activité physique, gestion du poids si indiquée, <strong>arrêt du tabac</strong>, sommeil suffisant. À titre informatif ; pas en remplacement de l’avis médical.</p>"),
+        Section(id="faq", level=2, heading="Questions fréquentes",
+            body_html="<p>Voir section FAQ ; l’interprétation relève du médecin.</p>"),
+        Section(id="disclaimer", level=2, heading="Avertissement médical",
+            body_html="<p><strong>Ce contenu est à titre informatif uniquement et ne constitue pas un avis, diagnostic ou traitement médical.</strong> Toujours discuter des résultats avec un professionnel de santé.</p>"),
+    ]
+
+
+def _article_ldl_vs_hdl() -> Article:
+    """LDL vs HDL: lipid panel interpretation. en, de, it, fr. Premium; no TR."""
+    published = date(2026, 3, 5)
+    cover = "/static/images/blog/ldl-hdl-hero.png"
+    cover_alt_text = {
+        "en": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
+        "de": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
+        "it": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
+        "fr": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
+    }
+    faq_qa = {
+        "en": [
+            {"question": "Is high HDL always good?", "answer": "Generally higher HDL is associated with lower cardiovascular risk, but very high HDL can be genetic and not always protective. Your clinician interprets your level in context."},
+            {"question": "Why is my LDL high even with a good diet?", "answer": "Genetics (e.g. familial hypercholesterolaemia), hypothyroidism, diabetes, kidney disease, or certain medications can raise LDL despite a healthy diet. Your doctor can help identify causes and options."},
+            {"question": "Do I need to fast for a lipid panel?", "answer": "For LDL and total cholesterol, fasting (often 9–12 hours) is traditionally used; non-fasting panels are accepted in some guidelines. Triglycerides are most comparable when fasting. Follow your lab's instructions."},
+            {"question": "What is non-HDL cholesterol?", "answer": "Non-HDL is total cholesterol minus HDL. It includes LDL and other atherogenic particles and is often used as an alternative or additional target in guidelines."},
+            {"question": "How fast can lipids change?", "answer": "Lifestyle changes can shift lipids within weeks to months; medication effects vary. Your doctor will advise on when to recheck."},
+            {"question": "Triglycerides vs LDL—what's the difference?", "answer": "LDL is the main cholesterol-carrying particle targeted for cardiovascular risk; triglycerides are a different type of blood fat. Both can be elevated and both matter for risk; management may address both."},
+            {"question": "ApoB vs LDL—which matters?", "answer": "ApoB reflects the number of atherogenic particles; LDL cholesterol reflects the cholesterol in those particles. Guidelines may use one or both; your clinician can explain how they apply to you."},
+            {"question": "Should I get Lp(a) tested?", "answer": "Lp(a) is a genetically determined risk factor. Testing can be useful in people with family history of early heart disease or unclear risk. Your doctor can recommend whether and when to test."},
+        ],
+        "de": [
+            {"question": "Ist hohes HDL immer gut?", "answer": "Höheres HDL ist oft mit geringerem kardiovaskulärem Risiko verbunden; sehr hohes HDL kann genetisch bedingt sein und nicht immer schützend. Die Einordnung übernimmt Ihr Arzt."},
+            {"question": "Warum ist mein LDL trotz guter Ernährung hoch?", "answer": "Genetik (z. B. familiäre Hypercholesterinämie), Schilddrüsenunterfunktion, Diabetes, Nierenerkrankung oder bestimmte Medikamente können LDL erhöhen. Ihr Arzt kann Ursachen und Optionen klären."},
+            {"question": "Muss ich für das Lipidprofil nüchtern sein?", "answer": "Für LDL und Gesamtcholesterin wird traditionell nüchtern (oft 9–12 h) gemessen; manche Leitlinien erlauben Nicht-Nüchtern-Profil. Triglyceride sind nüchtern am besten vergleichbar. Folgen Sie den Laboranweisungen."},
+            {"question": "Was ist Non-HDL-Cholesterin?", "answer": "Non-HDL = Gesamtcholesterin minus HDL. Es umfasst LDL und andere atherogene Partikel und wird in Leitlinien oft als alternatives Ziel verwendet."},
+            {"question": "Wie schnell können sich die Lipide ändern?", "answer": "Lebensstiländerungen können Lipide innerhalb von Wochen bis Monaten beeinflussen; Medikamenteneffekte variieren. Ihr Arzt empfiehlt, wann kontrolliert werden soll."},
+            {"question": "Triglyceride vs. LDL—was ist der Unterschied?", "answer": "LDL ist die Hauptzielgröße für das kardiovaskuläre Risiko; Triglyceride sind eine andere Art von Blutfett. Beide können erhöht sein und beide sind für das Risiko relevant."},
+            {"question": "ApoB vs. LDL—was zählt?", "answer": "ApoB spiegelt die Anzahl atherogener Partikel wider, LDL-Cholesterin den Cholesteringehalt. Leitlinien können eines oder beides nutzen; Ihr Arzt erläutert die Bedeutung für Sie."},
+            {"question": "Soll ich Lp(a) testen lassen?", "answer": "Lp(a) ist ein genetisch bedingter Risikofaktor. Ein Test kann bei familiärer Belastung oder unklarem Risiko sinnvoll sein. Ihr Arzt empfiehlt, ob und wann getestet werden soll."},
+        ],
+        "it": [
+            {"question": "L'HDL alto è sempre buono?", "answer": "In genere un HDL più alto è associato a minor rischio cardiovascolare; un HDL molto alto può essere genetico e non sempre protettivo. L'interpretazione spetta al medico."},
+            {"question": "Perché ho l'LDL alto nonostante una buona dieta?", "answer": "Genetica (es. ipercolesterolemia familiare), ipotiroidismo, diabete, malattia renale o alcuni farmaci possono aumentare l'LDL. Il medico può aiutare a identificare cause e opzioni."},
+            {"question": "Devo essere a digiuno per il profilo lipidico?", "answer": "Per LDL e colesterolo totale si usa tradizionalmente il digiuno (9–12 ore); alcune linee guida accettano il prelievo non a digiuno. I trigliceridi sono più confrontabili a digiuno. Seguire le istruzioni del laboratorio."},
+            {"question": "Cos'è il colesterolo non-HDL?", "answer": "Il non-HDL è il colesterolo totale meno l'HDL. Include LDL e altre particelle aterogene ed è spesso usato come obiettivo alternativo nelle linee guida."},
+            {"question": "Quanto velocemente possono cambiare i lipidi?", "answer": "Le modifiche dello stile di vita possono influire sui lipidi in settimane o mesi; l'effetto dei farmaci varia. Il medico consiglierà quando ripetere gli esami."},
+            {"question": "Trigliceridi vs LDL—qual è la differenza?", "answer": "LDL è la principale particella portatrice di colesterolo target per il rischio cardiovascolare; i trigliceridi sono un altro tipo di grasso nel sangue. Entrambi possono essere elevati e contano per il rischio."},
+            {"question": "ApoB vs LDL—cosa conta?", "answer": "L'ApoB riflette il numero di particelle aterogene; il colesterolo LDL riflette il colesterolo in quelle particelle. Le linee guida possono usare uno o entrambi; il medico può spiegare come si applicano a voi."},
+            {"question": "Dovrei fare il test per Lp(a)?", "answer": "Lp(a) è un fattore di rischio genetico. Il test può essere utile in caso di familiarità per malattia cardiaca precoce o rischio non chiaro. Il medico può raccomandare se e quando testare."},
+        ],
+        "fr": [
+            {"question": "Un HDL élevé est-il toujours bon ?", "answer": "En général un HDL plus élevé est associé à un risque cardiovasculaire moindre ; un HDL très élevé peut être génétique et pas toujours protecteur. L'interprétation relève du médecin."},
+            {"question": "Pourquoi mon LDL est-il élevé malgré une bonne alimentation ?", "answer": "La génétique (ex. hypercholestérolémie familiale), l'hypothyroïdie, le diabète, une maladie rénale ou certains médicaments peuvent augmenter le LDL. Votre médecin peut aider à identifier les causes et options."},
+            {"question": "Faut-il être à jeun pour le bilan lipidique ?", "answer": "Pour le LDL et le cholestérol total, le jeûne (souvent 9–12 h) est traditionnellement utilisé ; certains protocoles acceptent le prélèvement non à jeun. Les triglycérides sont plus comparables à jeun. Suivez les consignes du laboratoire."},
+            {"question": "Qu'est-ce que le cholestérol non-HDL ?", "answer": "Le non-HDL = cholestérol total moins HDL. Il inclut le LDL et les autres particules athérogènes et est souvent utilisé comme objectif alternatif dans les recommandations."},
+            {"question": "À quelle vitesse les lipides peuvent-ils changer ?", "answer": "Les changements d'hygiène de vie peuvent modifier les lipides en quelques semaines à mois ; l'effet des médicaments varie. Votre médecin indiquera quand refaire un contrôle."},
+            {"question": "Triglycérides vs LDL—quelle différence ?", "answer": "Le LDL est la principale cible pour le risque cardiovasculaire ; les triglycérides sont un autre type de graisse sanguine. Les deux peuvent être élevés et comptent pour le risque."},
+            {"question": "ApoB vs LDL—lequel compte ?", "answer": "L'ApoB reflète le nombre de particules athérogènes ; le cholestérol LDL reflète le cholestérol dans ces particules. Les recommandations peuvent utiliser l'un ou les deux ; votre médecin peut expliquer comment ils s'appliquent à vous."},
+            {"question": "Faut-il faire doser le Lp(a) ?", "answer": "Le Lp(a) est un facteur de risque génétique. Le dosage peut être utile en cas d'antécédents familiaux de maladie cardiaque précoce ou de risque peu clair. Votre médecin peut recommander si et quand doser."},
+        ],
+    }
+    return Article(
+        id="ldl-vs-hdl-what-it-means",
+        published_at=published,
+        last_updated=published,
+        read_minutes=10,
+        cover_image=cover,
+        cover_alt=cover_alt_text,
+        faq_schema_qa=faq_qa,
+        category={
+            "en": "Heart Health & Lipids",
+            "de": "Herzgesundheit & Lipide",
+            "it": "Salute cardiaca e lipidi",
+            "fr": "Santé cardiaque et lipides",
+        },
+        slugs={
+            "en": "ldl-vs-hdl-what-it-means",
+            "de": "ldl-vs-hdl-what-it-means",
+            "it": "ldl-vs-hdl-what-it-means",
+            "fr": "ldl-vs-hdl-what-it-means",
+        },
+        titles={
+            "en": "LDL vs HDL Cholesterol: How to Read Your Lipid Panel",
+            "de": "LDL vs HDL: Lipidprofil richtig verstehen",
+            "it": "LDL e HDL: come leggere il profilo lipidico",
+            "fr": "LDL et HDL : comprendre votre bilan lipidique",
+        },
+        subtitles={
+            "en": "What LDL and HDL mean, how to interpret your lipid panel, non-HDL and targets, and when to follow up with a clinician.",
+            "de": "Was LDL und HDL bedeuten, wie Sie Ihr Lipidprofil einordnen, Non-HDL und Zielwerte, wann Sie zum Arzt sollten.",
+            "it": "Cosa significano LDL e HDL, come interpretare il profilo lipidico, non-HDL e obiettivi, quando rivolgersi al medico.",
+            "fr": "Ce que signifient LDL et HDL, comment interpréter votre bilan lipidique, non-HDL et objectifs, quand consulter.",
+        },
+        excerpts={
+            "en": "Understand LDL vs HDL, the full lipid panel, non-HDL cholesterol, typical targets, and when to see a doctor. Informational only.",
+            "de": "LDL vs. HDL verstehen, vollständiges Lipidprofil, Non-HDL, typische Ziele und wann zum Arzt. Nur zur Information.",
+            "it": "Capire LDL vs HDL, profilo lipidico completo, colesterolo non-HDL, obiettivi tipici e quando rivolgersi al medico. Solo informativo.",
+            "fr": "Comprendre LDL vs HDL, bilan lipidique complet, cholestérol non-HDL, objectifs typiques et quand consulter. À titre informatif uniquement.",
+        },
+        seo_titles={
+            "en": "LDL vs HDL Cholesterol: How to Read Your Lipid Panel | NoryaAI",
+            "de": "LDL vs HDL: Lipidprofil richtig verstehen | NoryaAI",
+            "it": "LDL e HDL: come leggere il profilo lipidico | NoryaAI",
+            "fr": "LDL et HDL : comprendre votre bilan lipidique | NoryaAI",
+        },
+        seo_descriptions={
+            "en": "LDL vs HDL explained: how to read your lipid panel, what non-HDL means, typical targets, and when to follow up with a clinician. Informational only.",
+            "de": "LDL vs. HDL: Lipidprofil verstehen, Non-HDL-Cholesterin, typische Zielwerte und wann Sie zum Arzt sollten. Nur zur Information, keine Diagnose.",
+            "it": "LDL e HDL: come leggere il profilo lipidico, colesterolo non-HDL, obiettivi tipici e quando rivolgersi al medico. Solo informativo.",
+            "fr": "LDL et HDL : comment lire votre bilan lipidique, cholestérol non-HDL, objectifs typiques et quand consulter. À titre informatif uniquement.",
+        },
+        sections_by_lang={
+            "en": _ldl_hdl_sections_en(),
+            "de": _ldl_hdl_sections_de(),
+            "it": _ldl_hdl_sections_it(),
+            "fr": _ldl_hdl_sections_fr(),
+        },
+    )
+
+
+_LDL_HDL_ARTICLE = _article_ldl_vs_hdl()
+
+
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
+    _LDL_HDL_ARTICLE,
     _KAN_TAHLILI_ARTICLE,
     _FERRITIN_ARTICLE,
     _CRP_ARTICLE,
