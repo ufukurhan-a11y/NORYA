@@ -756,6 +756,7 @@ _KAN_TAHLILI_ARTICLE = _article_kan_tahlili_nasil_okunur()
 def _article_ferritin() -> Article:
     """Ferritin: low/high meaning, reference ranges, when to see a doctor."""
     published = date(2026, 3, 5)
+    updated = date(2026, 3, 5)
     cover = "/static/images/blog/ferritin-hero.png"
     return Article(
         id="ferritin-what-it-means",
@@ -763,16 +764,16 @@ def _article_ferritin() -> Article:
         read_minutes=10,
         cover_image=cover,
         category={
-            "en": "Biomarkers",
-            "de": "Biomarker",
-            "it": "Biomarcatori",
-            "fr": "Biomarqueurs",
+            "en": "Iron & Anemia",
+            "de": "Eisen & Anämie",
+            "it": "Ferro e anemia",
+            "fr": "Fer et anémie",
         },
         slugs={
             "en": "ferritin-what-it-means",
-            "de": "ferritin-verstehen",
-            "it": "ferritina-cosa-significa",
-            "fr": "ferritine-taux-bas-eleves",
+            "de": "ferritin-what-it-means",
+            "it": "ferritin-what-it-means",
+            "fr": "ferritin-what-it-means",
         },
         titles={
             "en": "Ferritin Explained: What Low or High Levels Mean (and What to Do Next)",
@@ -799,10 +800,10 @@ def _article_ferritin() -> Article:
             "fr": "Ferritine : taux bas ou élevé, fourchettes de référence et suites",
         },
         seo_descriptions={
-            "en": "Understand ferritin and iron stores. What low or high ferritin means, common causes, reference ranges, when to see a doctor, and what to do next.",
-            "de": "Ferritin und Eisenspeicher verstehen. Bedeutung niedriger/hoher Werte, Ursachen, Referenzbereich, wann zum Arzt und was Sie tun können.",
-            "it": "Capire ferritina e riserve di ferro. Cosa significano valori bassi o alti, cause comuni, intervalli di riferimento, quando rivolgersi al medico.",
-            "fr": "Comprendre la ferritine et les réserves en fer. Taux bas ou élevé, causes fréquentes, fourchettes de référence, quand consulter et quoi faire.",
+            "en": "Understand ferritin and iron stores. What low or high ferritin means, common causes, reference ranges, when to see a doctor, and what to do next. Informational.",
+            "de": "Ferritin und Eisenspeicher verstehen. Bedeutung niedriger/hoher Werte, Ursachen, Referenzbereich, wann zum Arzt und was Sie tun können. Nur zur Information.",
+            "it": "Capire ferritina e riserve di ferro. Cosa significano valori bassi o alti, cause comuni, intervalli di riferimento, quando rivolgersi al medico. Solo informativo.",
+            "fr": "Comprendre la ferritine et les réserves en fer. Taux bas ou élevé, causes fréquentes, fourchettes de référence, quand consulter et quoi faire. À titre informatif.",
         },
         sections_by_lang={
             "en": [
@@ -1194,6 +1195,13 @@ def _article_ferritin() -> Article:
                 ),
             ],
         },
+        cover_alt={
+            "en": "Ferritin blood test and lab dashboard — NoryaAI",
+            "de": "Ferritin blood test and lab dashboard — NoryaAI",
+            "it": "Ferritin blood test and lab dashboard — NoryaAI",
+            "fr": "Ferritin blood test and lab dashboard — NoryaAI",
+        },
+        last_updated=updated,
     )
 
 
@@ -2070,12 +2078,288 @@ def _article_vitamin_d() -> Article:
 _VITAMIN_D_ARTICLE = _article_vitamin_d()
 
 
+def _article_vitamin_b12() -> Article:
+    """Vitamin B12: low levels, symptoms, causes, next steps. en, de, it, fr. Clinical/corporate tone; no diagnosis; inform + direct to doctor."""
+    published = date(2026, 3, 5)
+    cover = "/static/images/blog/vitamin-b12-hero.png"
+    cover_alt_text = {
+        "en": "Vitamin B12 blood test and status dashboard — NoryaAI",
+        "de": "Vitamin-B12-Bluttest und Status-Dashboard — NoryaAI",
+        "it": "Esame vitamina B12 e dashboard stato — NoryaAI",
+        "fr": "Dosage vitamine B12 et tableau de bord statut — NoryaAI",
+    }
+    return Article(
+        id="vitamin-b12-what-it-means",
+        published_at=published,
+        last_updated=published,
+        read_minutes=11,
+        cover_image=cover,
+        cover_alt=cover_alt_text,
+        category={
+            "en": "Vitamins & Minerals",
+            "de": "Vitamine & Mineralstoffe",
+            "it": "Vitamine e minerali",
+            "fr": "Vitamines et minéraux",
+        },
+        slugs={
+            "en": "vitamin-b12-what-it-means",
+            "de": "vitamin-b12-what-it-means",
+            "it": "vitamin-b12-what-it-means",
+            "fr": "vitamin-b12-what-it-means",
+        },
+        titles={
+            "en": "Vitamin B12 Explained: Low Levels, Symptoms, Causes, and Next Steps",
+            "de": "Vitamin B12 verstehen: Niedrige Werte, Symptome und nächste Schritte",
+            "it": "Vitamina B12: valori bassi, sintomi, cause e cosa fare",
+            "fr": "Vitamine B12 : taux bas, symptômes, causes et étapes suivantes",
+        },
+        subtitles={
+            "en": "A clear guide to vitamin B12: what it does, typical ranges, common causes of low levels, symptoms and when to see a doctor, and how it is managed.",
+            "de": "Überblick über Vitamin B12: Funktion, Referenzbereiche, Ursachen für niedrige Werte, Symptome und wann Sie zum Arzt sollten.",
+            "it": "Guida chiara sulla vitamina B12: a cosa serve, intervalli tipici, cause di valori bassi, sintomi e quando rivolgersi al medico.",
+            "fr": "Guide clair sur la vitamine B12 : rôle, fourchettes typiques, causes de taux bas, symptômes et quand consulter.",
+        },
+        excerpts={
+            "en": "Vitamin B12 supports nerves, red blood cells and DNA. Low levels can have many causes; interpretation and next steps are for a clinician.",
+            "de": "Vitamin B12 ist wichtig für Nerven, rote Blutkörperchen und DNA. Niedrige Werte können viele Ursachen haben; die Einordnung übernimmt der Arzt.",
+            "it": "La vitamina B12 sostiene nervi, globuli rossi e DNA. Valori bassi possono avere molte cause; l’interpretazione spetta al medico.",
+            "fr": "La vitamine B12 soutient les nerfs, les globules rouges et l’ADN. Un taux bas peut avoir plusieurs causes ; l’interprétation relève du médecin.",
+        },
+        seo_titles={
+            "en": "Vitamin B12 Explained: Low Levels, Symptoms, Causes, and Next Steps",
+            "de": "Vitamin B12 verstehen: Niedrige Werte, Symptome und nächste Schritte",
+            "it": "Vitamina B12: valori bassi, sintomi, cause e cosa fare",
+            "fr": "Vitamine B12 : taux bas, symptômes, causes et étapes suivantes",
+        },
+        seo_descriptions={
+            "en": "Understand vitamin B12: what it does, typical ranges, causes of low B12, symptoms and when to see a doctor. Informational only — not medical advice.",
+            "de": "Vitamin B12 verstehen: Funktion, Referenzbereiche, Ursachen für niedrige Werte, wann zum Arzt. Nur zur Information.",
+            "it": "Capire la vitamina B12: a cosa serve, intervalli tipici, cause di carenza, quando rivolgersi al medico. Solo informativo.",
+            "fr": "Comprendre la vitamine B12 : rôle, fourchettes, causes de taux bas, quand consulter. À titre informatif uniquement.",
+        },
+        sections_by_lang={
+            "en": _b12_sections_en(),
+            "de": _b12_sections_de(),
+            "it": _b12_sections_it(),
+            "fr": _b12_sections_fr(),
+        },
+    )
+
+
+def _b12_sections_en() -> List[Section]:
+    return [
+        Section(
+            id="what-b12-does",
+            level=2,
+            heading="What Vitamin B12 does",
+            body_html="""
+<p>Vitamin B12 (cobalamin) is essential for <strong>nerve function</strong>, <strong>red blood cell formation</strong>, and <strong>DNA synthesis</strong>. The body cannot make it; it must come from diet or, in some cases, supplements or injections prescribed by a clinician. Low B12 can lead to anaemia and, if prolonged, to neurological symptoms. This article is for information only and does not replace a medical assessment.</p>
+""",
+        ),
+        Section(
+            id="typical-ranges",
+            level=2,
+            heading="Typical ranges and “borderline”",
+            body_html="""
+<p>Reference ranges <strong>vary by laboratory and method</strong>. Always use the range on your own report. Many labs use approximate ranges in the hundreds of pg/mL (or pmol/L in some countries); values below the lab’s lower limit may be reported as low or deficient, while values just above it are sometimes called “borderline”. There is no single universal cut-off; interpretation depends on your history, other tests, and your doctor’s judgment. Do not self-diagnose based on a number alone.</p>
+""",
+        ),
+        Section(
+            id="causes-low",
+            level=2,
+            heading="Common causes of low B12",
+            body_html="""
+<p><strong>Diet</strong>: Strict vegan or vegetarian diets without fortified foods or B12 supplements can lead to low intake. <strong>Absorption</strong>: Pernicious anaemia (autoimmune condition affecting intrinsic factor), coeliac disease, Crohn’s disease, or surgery that removes or bypasses part of the stomach or small intestine can reduce absorption. <strong>Medications</strong>: Long-term use of metformin or proton-pump inhibitors (PPIs) may contribute to low B12 in some people. <strong>Age</strong>: Absorption can decrease with age. More than one factor may apply. A clinician can help identify the most relevant causes for you.</p>
+""",
+        ),
+        Section(
+            id="symptoms",
+            level=2,
+            heading="Symptoms and when to see a clinician",
+            body_html="""
+<p>Signs that are sometimes associated with low B12 include fatigue, weakness, pale skin, and breathlessness. These are <strong>non-specific</strong>—they can have many other causes. <strong>Neurological red flags</strong> that warrant prompt medical attention include: numbness or tingling in hands or feet, balance or walking problems, memory or concentration difficulties, and mood changes. <strong>Symptoms alone do not establish a diagnosis</strong>; they must be interpreted together with blood tests and clinical history by a doctor. If you have such symptoms or a low or borderline B12 result, see a clinician for proper evaluation.</p>
+""",
+        ),
+        Section(
+            id="related-tests",
+            level=2,
+            heading="Related and confirmatory tests",
+            body_html="""
+<p>Your doctor may order additional tests to clarify B12 status or rule out other causes of symptoms. These can include: <strong>full blood count (CBC)</strong> and <strong>MCV</strong> (mean cell volume—often elevated in B12 deficiency); <strong>folate</strong> (low folate can mimic or coexist with B12 deficiency); <strong>methylmalonic acid (MMA)</strong> and <strong>homocysteine</strong> (often elevated when B12 is functionally low). Which tests are needed is a clinical decision made by your doctor.</p>
+""",
+        ),
+        Section(
+            id="treatment-overview",
+            level=2,
+            heading="Treatment overview",
+            body_html="""
+<p>Management is determined by your doctor based on cause and severity. <strong>Dietary sources</strong> of B12 include meat, fish, eggs, dairy, and fortified plant-based foods. For deficiency, clinicians often recommend <strong>oral B12 or B12 injections</strong>; the choice and dose depend on absorption, severity, and clinical guidelines. <strong>Recheck timing</strong> is often around 8–12 weeks after starting treatment, but your doctor will advise on the right interval and target for you. Do not self-prescribe high-dose B12 without medical guidance.</p>
+""",
+        ),
+        Section(
+            id="practical-tips",
+            level=2,
+            heading="Practical tips",
+            body_html="""
+<p>If your doctor recommends more B12 from diet, include reliable sources (animal products or fortified foods) as appropriate for your diet. If supplements or injections are prescribed, take them as directed and attend follow-up tests so your doctor can confirm that levels are improving. Adherence to the agreed plan helps ensure a reliable response.</p>
+""",
+        ),
+        Section(
+            id="faq",
+            level=2,
+            heading="Frequently asked questions",
+            body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">Can B12 be low with normal haemoglobin?</h3>
+<p>Yes. B12 deficiency can develop before anaemia appears. Some people have low or borderline B12 with a normal full blood count; others have anaemia (often with raised MCV). Your doctor will interpret your results in context.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">How fast do symptoms improve?</h3>
+<p>Improvement depends on cause, severity, and treatment. Some people notice more energy within weeks; neurological symptoms may take longer to improve and in some cases may not fully resolve. Follow your doctor’s plan and report any ongoing symptoms.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Is high B12 a problem?</h3>
+<p>Very high B12 levels are uncommon from diet alone and can sometimes be linked to certain conditions or supplements. Interpretation of high B12 is for your doctor, who can consider your history and other tests.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Do I need to stop metformin or PPIs?</h3>
+<p>Do not stop prescribed medications on your own. If you take metformin or PPIs long-term, your doctor may check B12 periodically or recommend supplementation. Any change in medication should be decided by your clinician.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Can I get enough B12 on a vegan diet?</h3>
+<p>Yes, with fortified foods (e.g. plant milks, breakfast cereals) or a B12 supplement. Many vegans take a reliable B12 supplement as recommended by a doctor or dietitian to avoid deficiency.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Is B12 tested fasting?</h3>
+<p>Fasting is usually not required for B12 alone, but your lab may request it if the sample is used for other tests. Follow the instructions given for your blood draw.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Can I interpret my result myself?</h3>
+<p>Your result should be interpreted in context (diet, medications, symptoms, other tests). Your doctor can say whether your level is appropriate for you and whether you need treatment or further tests.</p>
+""",
+        ),
+        Section(
+            id="disclaimer",
+            level=2,
+            heading="Medical disclaimer",
+            body_html="""
+<p><strong>This content is for information only and does not constitute medical advice or diagnosis.</strong> Always discuss your results and symptoms with a doctor. Do not start or change supplements or treatment based solely on this article. If you have concerns about your health, seek professional medical care.</p>
+""",
+        ),
+    ]
+
+
+def _b12_sections_de() -> List[Section]:
+    return [
+        Section(id="what-b12-does", level=2, heading="Was Vitamin B12 bewirkt",
+            body_html="""<p>Vitamin B12 (Cobalamin) ist wichtig für <strong>Nervenfunktion</strong>, <strong>Bildung roter Blutkörperchen</strong> und <strong>DNA-Synthese</strong>. Der Körper kann es nicht selbst herstellen; es muss über die Ernährung oder ggf. vom Arzt verordnete Präparate/Spritzen zugeführt werden. Ein Mangel kann zu Anämie und bei längerer Dauer zu neurologischen Beschwerden führen. Dieser Artikel dient nur der Information und ersetzt keine ärztliche Abklärung.</p>"""),
+        Section(id="typical-ranges", level=2, heading="Typische Referenzbereiche und „Grenzbereich“",
+            body_html="""<p>Referenzbereiche <strong>unterscheiden sich je nach Labor und Methode</strong>. Orientieren Sie sich am Befund. Viele Labore nutzen Bereiche im Bereich von hunderten pg/mL (bzw. pmol/L); Werte unterhalb des Referenzbereichs gelten als niedrig oder mangelhaft, Werte knapp darüber oft als „Grenzbereich“. Die Bewertung hängt von Anamnese, weiteren Werten und der Einschätzung des Arztes ab. Bitte nicht selbst diagnostizieren.</p>"""),
+        Section(id="causes-low", level=2, heading="Häufige Ursachen für niedriges B12",
+            body_html="""<p><strong>Ernährung</strong>: Strenge vegane/vegetarische Kost ohne angereicherte Lebensmittel oder B12-Supplemente kann zu geringer Zufuhr führen. <strong>Resorption</strong>: Perniziöse Anämie, Zöliakie, Morbus Crohn oder Magen-Darm-Operationen können die Aufnahme mindern. <strong>Medikamente</strong>: Langzeitanwendung von Metformin oder Protonenpumpenhemmern (PPI) kann bei manchen Personen zu niedrigem B12 beitragen. <strong>Alter</strong>: Die Resorption kann im Alter abnehmen. Die Einordnung übernimmt der Arzt.</p>"""),
+        Section(id="symptoms", level=2, heading="Symptome und wann zum Arzt",
+            body_html="""<p>Mögliche Zeichen bei niedrigem B12: Müdigkeit, Schwäche, blasse Haut, Atemnot – alles <strong>unspezifisch</strong>. <strong>Neurologische Warnzeichen</strong>, die zeitnah abgeklärt werden sollten: Kribbeln oder Taubheit in Händen/Füßen, Gang- oder Gleichgewichtsstörungen, Gedächtnis- oder Konzentrationsprobleme, Stimmungsschwankungen. Die Bewertung erfolgt durch den Arzt anhand von Labor und Anamnese. Bei solchen Beschwerden oder niedrigem/grenzwertigem B12-Befund bitte zum Arzt.</p>"""),
+        Section(id="related-tests", level=2, heading="Ergänzende und Bestätigungstests",
+            body_html="""<p>Der Arzt kann u. a. veranlassen: <strong>Blutbild (CBC)</strong> und <strong>MCV</strong> (oft bei B12-Mangel erhöht), <strong>Folsäure</strong>, <strong>Methylmalonsäure (MMA)</strong> und <strong>Homocystein</strong>. Welche Tests nötig sind, entscheidet der Arzt.</p>"""),
+        Section(id="treatment-overview", level=2, heading="Behandlung – Überblick",
+            body_html="""<p>Die Therapie legt der Arzt anhand von Ursache und Schwere fest. <strong>Ernährung</strong>: Fleisch, Fisch, Eier, Milch, angereicherte Lebensmittel. Bei Mangel oft <strong>orales B12 oder B12-Spritzen</strong>; Dosis und Form nach Leitlinie und Resorption. <strong>Kontrolle</strong> oft nach etwa 8–12 Wochen – der Arzt gibt den genauen Zeitpunkt vor. Bitte keine hochdosierte Selbstmedikation.</p>"""),
+        Section(id="practical-tips", level=2, heading="Praktische Hinweise",
+            body_html="""<p>Bei Empfehlung zu mehr B12 über die Ernährung: zuverlässige Quellen einplanen. Bei verordneten Präparaten oder Spritzen: Einnahme wie verordnet und Kontrolltermine einhalten, damit der Arzt den Verlauf prüfen kann.</p>"""),
+        Section(id="faq", level=2, heading="Häufige Fragen",
+            body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">Kann B12 niedrig sein bei normalem Hb?</h3>
+<p>Ja. Ein B12-Mangel kann entstehen, bevor eine Anämie sichtbar wird. Die Einordnung erfolgt durch den Arzt.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Wie schnell bessern sich die Symptome?</h3>
+<p>Das hängt von Ursache, Schwere und Therapie ab. Manche merken binnen Wochen mehr Energie; neurologische Beschwerden können länger brauchen. Dem Therapieplan folgen und anhaltende Symptome melden.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Ist hohes B12 ein Problem?</h3>
+<p>Sehr hohe B12-Werte sind durch Ernährung allein selten und können mit bestimmten Erkrankungen oder Präparaten zusammenhängen. Die Bewertung übernimmt der Arzt.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Muss ich Metformin oder PPI absetzen?</h3>
+<p>Verordnete Medikamente nicht eigenmächtig absetzen. Bei längerer Einnahme kann der Arzt B12 kontrollieren oder Supplementation empfehlen.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Reicht B12 bei veganer Ernährung?</h3>
+<p>Mit angereicherten Lebensmitteln oder einem B12-Präparat ja. Viele Veganer nehmen ein zuverlässiges B12-Supplement nach Empfehlung von Arzt oder Ernährungsberatung.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Wird B12 nüchtern gemessen?</h3>
+<p>Für B12 allein meist nicht nötig; das Labor kann Nüchternheit für ein Gesamtprofil verlangen.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Kann ich meinen Wert selbst einordnen?</h3>
+<p>Die Einordnung erfolgt im Kontext (Ernährung, Medikamente, Symptome). Ihr Arzt kann beurteilen, ob Ihr Wert für Sie passend ist.</p>
+"""),
+        Section(id="disclaimer", level=2, heading="Hinweis",
+            body_html="""<p><strong>Dieser Inhalt dient nur der Information und ersetzt keine medizinische Beratung oder Diagnose.</strong> Besprechen Sie Ergebnisse und Beschwerden immer mit einem Arzt.</p>"""),
+    ]
+
+
+def _b12_sections_it() -> List[Section]:
+    return [
+        Section(id="what-b12-does", level=2, heading="A cosa serve la vitamina B12",
+            body_html="""<p>La vitamina B12 (cobalamina) è essenziale per <strong>la funzione nervosa</strong>, <strong>la formazione dei globuli rossi</strong> e <strong>la sintesi del DNA</strong>. L’organismo non la produce; deve assumerla con la dieta o, se indicato, con integratori o iniezioni prescritti dal medico. Una carenza può portare ad anemia e, se prolungata, a sintomi neurologici. Questo articolo è solo informativo e non sostituisce una valutazione medica.</p>"""),
+        Section(id="typical-ranges", level=2, heading="Intervalli tipici e „borderline“",
+            body_html="""<p>Gli intervalli di riferimento <strong>variano da laboratorio a laboratorio</strong>. Usate sempre quello sul referto. Molti laboratori usano intervalli approssimativi (centinaia di pg/mL o pmol/L); valori sotto il limite possono essere indicati come bassi o carenti, valori appena sopra come „borderline“. L’interpretazione dipende dalla storia clinica, da altri esami e dal medico. Non autodiagnosticare in base al solo numero.</p>"""),
+        Section(id="causes-low", level=2, heading="Cause comuni di B12 bassa",
+            body_html="""<p><strong>Dieta</strong>: Diete vegane/vegetariane strette senza alimenti fortificati o integratori B12 possono portare a bassa assunzione. <strong>Assorbimento</strong>: Anemia perniciosa, celiachia, morbo di Crohn o chirurgia gastrica/intestinale possono ridurre l’assorbimento. <strong>Farmaci</strong>: Uso prolungato di metformina o inibitori della pompa protonica (PPI) può contribuire a B12 bassa in alcuni. <strong>Età</strong>: L’assorbimento può ridursi con l’età. Il medico aiuta a individuare le cause rilevanti.</p>"""),
+        Section(id="symptoms", level=2, heading="Sintomi e quando rivolgersi al medico",
+            body_html="""<p>Sintomi a volte associati a B12 bassa: stanchezza, debolezza, pallore, fiato corto – tutti <strong>aspecifici</strong>. <strong>Segnali neurologici</strong> da far valutare subito: formicolio o intorpidimento a mani/piedi, problemi di equilibrio o deambulazione, memoria o concentrazione, umore. La diagnosi non si fa solo con i sintomi; servono esami e anamnesi. In caso di tali sintomi o risultato basso/borderline, rivolgersi al medico.</p>"""),
+        Section(id="related-tests", level=2, heading="Esami correlati e di conferma",
+            body_html="""<p>Il medico può prescrivere: <strong>emocromo (CBC)</strong> e <strong>MCV</strong> (spesso elevato in carenza di B12), <strong>folati</strong>, <strong>acido metilmalonico (MMA)</strong> e <strong>omocisteina</strong>. Quali esami servono è una decisione clinica.</p>"""),
+        Section(id="treatment-overview", level=2, heading="Trattamento – panoramica",
+            body_html="""<p>La gestione è decisa dal medico in base a causa e gravità. <strong>Fonti alimentari</strong>: carne, pesce, uova, latticini, alimenti fortificati. In carenza spesso <strong>B12 orale o iniettabile</strong>; dose e via secondo linee guida e assorbimento. <strong>Controllo</strong> spesso dopo 8–12 settimane – il medico indicherà tempi e obiettivi. Non assumere alte dosi di B12 senza indicazione medica.</p>"""),
+        Section(id="practical-tips", level=2, heading="Consigli pratici",
+            body_html="""<p>Se il medico consiglia più B12 dalla dieta: includere fonti affidabili. Se sono prescritti integratori o iniezioni: assumerli come indicato e rispettare i controlli per verificare il miglioramento.</p>"""),
+        Section(id="faq", level=2, heading="Domande frequenti",
+            body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">La B12 può essere bassa con emoglobina normale?</h3>
+<p>Sì. La carenza di B12 può precedere l’anemia. L’interpretazione spetta al medico.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Quanto velocemente migliorano i sintomi?</h3>
+<p>Dipende da causa, gravità e terapia. Qualcuno nota più energia in settimane; i sintomi neurologici possono richiedere più tempo. Seguire il piano del medico e segnalare sintomi persistenti.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">La B12 alta è un problema?</h3>
+<p>Valori molto alti sono rari con la sola dieta e possono essere legati ad alcune condizioni o integratori. La valutazione spetta al medico.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Devo sospendere metformina o PPI?</h3>
+<p>Non sospendere i farmaci prescritti di propria iniziativa. In caso di uso prolungato il medico può controllare la B12 o consigliare integrazione.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Si può avere abbastanza B12 con dieta vegana?</h3>
+<p>Sì, con alimenti fortificati o un integratore B12. Molti vegani assumono un integratore B12 affidabile su consiglio del medico o del dietista.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">La B12 si misura a digiuno?</h3>
+<p>Per la sola B12 di solito no; il laboratorio può richiedere il digiuno per un pannello più ampio.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Posso interpretare il risultato da solo?</h3>
+<p>Il risultato va interpretato nel contesto (dieta, farmaci, sintomi). Il medico può dire se il livello è adeguato per voi.</p>
+"""),
+        Section(id="disclaimer", level=2, heading="Nota",
+            body_html="""<p><strong>Questo contenuto è solo informativo e non costituisce consulenza o diagnosi medica.</strong> Discutete sempre risultati e sintomi con un medico.</p>"""),
+    ]
+
+
+def _b12_sections_fr() -> List[Section]:
+    return [
+        Section(id="what-b12-does", level=2, heading="À quoi sert la vitamine B12",
+            body_html="""<p>La vitamine B12 (cobalamine) est essentielle pour <strong>le fonctionnement des nerfs</strong>, <strong>la formation des globules rouges</strong> et <strong>la synthèse de l’ADN</strong>. L’organisme ne la produit pas ; elle doit venir de l’alimentation ou, si besoin, de compléments ou injections prescrits par un médecin. Une carence peut entraîner une anémie et, si elle dure, des symptômes neurologiques. Cet article est à titre informatif uniquement et ne remplace pas un avis médical.</p>"""),
+        Section(id="typical-ranges", level=2, heading="Fourchettes typiques et « limite »",
+            body_html="""<p>Les fourchettes de référence <strong>varient selon le laboratoire et la méthode</strong>. Utilisez toujours celle de votre résultat. Beaucoup de laboratoires utilisent des fourchettes approximatives (centaines de pg/mL ou pmol/L) ; les valeurs en dessous peuvent être qualifiées de basses ou carence, juste au-dessus de « limite ». L’interprétation dépend de votre histoire, d’autres examens et du médecin. Ne pas s’autodiagnostiquer sur un seul chiffre.</p>"""),
+        Section(id="causes-low", level=2, heading="Causes fréquentes d’un taux bas de B12",
+            body_html="""<p><strong>Alimentation</strong> : Régimes vegan/végétarien stricts sans aliments enrichis ou compléments B12 peuvent entraîner une faible ingestion. <strong>Absorption</strong> : Anémie de Biermer, maladie cœliaque, Crohn ou chirurgie gastrique/intestinale peuvent réduire l’absorption. <strong>Médicaments</strong> : Prise prolongée de metformine ou inhibiteurs de la pompe à protons (IPP) peut contribuer à un taux bas chez certains. <strong>Âge</strong> : L’absorption peut diminuer avec l’âge. Le médecin aide à identifier les causes pertinentes.</p>"""),
+        Section(id="symptoms", level=2, heading="Symptômes et quand consulter",
+            body_html="""<p>Signes parfois associés à un taux bas : fatigue, faiblesse, pâleur, essoufflement – <strong>non spécifiques</strong>. <strong>Signaux neurologiques</strong> à faire évaluer rapidement : fourmillements ou engourdissement mains/pieds, problèmes d’équilibre ou de marche, mémoire ou concentration, humeur. Les symptômes seuls ne permettent pas le diagnostic ; ils doivent être interprétés avec les examens et l’histoire par un médecin. En cas de tels symptômes ou résultat bas/limite, consulter un médecin.</p>"""),
+        Section(id="related-tests", level=2, heading="Examens complémentaires et de confirmation",
+            body_html="""<p>Le médecin peut prescrire : <strong>numération (CBC)</strong> et <strong>VGM</strong> (souvent élevé en carence B12), <strong>folates</strong>, <strong>acide méthylmalonique (MMA)</strong> et <strong>homocystéine</strong>. Le choix des examens est une décision médicale.</p>"""),
+        Section(id="treatment-overview", level=2, heading="Traitement – aperçu",
+            body_html="""<p>La prise en charge est décidée par le médecin selon la cause et la sévérité. <strong>Sources alimentaires</strong> : viande, poisson, œufs, laitages, aliments enrichis. En carence, souvent <strong>B12 orale ou en injection</strong> ; dose et voie selon recommandations et absorption. <strong>Contrôle</strong> souvent vers 8–12 semaines – le médecin indiquera le moment et l’objectif. Ne pas prendre de fortes doses de B12 sans avis médical.</p>"""),
+        Section(id="practical-tips", level=2, heading="Conseils pratiques",
+            body_html="""<p>Si le médecin recommande plus de B12 par l’alimentation : inclure des sources fiables. Si des compléments ou injections sont prescrits : les prendre comme indiqué et respecter les contrôles pour vérifier l’évolution.</p>"""),
+        Section(id="faq", level=2, heading="Questions fréquentes",
+            body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">La B12 peut-elle être basse avec une hémoglobine normale ?</h3>
+<p>Oui. La carence en B12 peut précéder l’anémie. L’interprétation relève du médecin.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">À quelle vitesse les symptômes s’améliorent-ils ?</h3>
+<p>Cela dépend de la cause, de la sévérité et du traitement. Certains sentent plus d’énergie en quelques semaines ; les symptômes neurologiques peuvent mettre plus de temps. Suivre le plan du médecin et signaler les symptômes persistants.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Un taux élevé de B12 est-il un problème ?</h3>
+<p>Des taux très élevés sont rares avec la seule alimentation et peuvent être liés à certaines pathologies ou compléments. L’interprétation relève du médecin.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Faut-il arrêter la metformine ou les IPP ?</h3>
+<p>Ne pas arrêter les médicaments prescrits de sa propre initiative. En cas de prise prolongée, le médecin peut contrôler la B12 ou recommander une supplémentation.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Peut-on avoir assez de B12 en vegan ?</h3>
+<p>Oui, avec des aliments enrichis ou un complément B12. Beaucoup de vegans prennent un complément B12 fiable sur conseil du médecin ou du diététicien.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">La B12 se dose-t-elle à jeun ?</h3>
+<p>Pour la B12 seule, en général non ; le laboratoire peut demander le jeûne pour un bilan plus large.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Puis-je interpréter mon résultat moi-même ?</h3>
+<p>Le résultat doit être interprété dans le contexte (alimentation, médicaments, symptômes). Votre médecin peut dire si le taux vous convient.</p>
+"""),
+        Section(id="disclaimer", level=2, heading="Avertissement",
+            body_html="""<p><strong>Ce contenu est à titre informatif uniquement et ne constitue pas un avis médical ni un diagnostic.</strong> Discutez toujours de vos résultats et symptômes avec un médecin.</p>"""),
+    ]
+
+
+_VITAMIN_B12_ARTICLE = _article_vitamin_b12()
+
+
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
     _KAN_TAHLILI_ARTICLE,
     _FERRITIN_ARTICLE,
     _CRP_ARTICLE,
     _VITAMIN_D_ARTICLE,
+    _VITAMIN_B12_ARTICLE,
 ]
 
 
@@ -2096,6 +2380,9 @@ def list_articles_for_lang(lang: str) -> List[dict]:
     for art in ARTICLES:
         if lang not in art.slugs:
             continue
+        cover_alt = None
+        if getattr(art, "cover_alt", None) and isinstance(art.cover_alt, dict):
+            cover_alt = art.cover_alt.get(lang) or art.cover_alt.get(DEFAULT_BLOG_LANG)
         items.append(
             {
                 "id": art.id,
@@ -2104,6 +2391,7 @@ def list_articles_for_lang(lang: str) -> List[dict]:
                 "excerpt": art.excerpts.get(lang, art.excerpts.get(DEFAULT_BLOG_LANG, "")),
                 "category": art.category.get(lang, art.category.get(DEFAULT_BLOG_LANG, "")),
                 "cover_image": art.cover_image,
+                "cover_alt": cover_alt,
                 "read_minutes": art.read_minutes,
                 "published_at": art.published_at,
             }
