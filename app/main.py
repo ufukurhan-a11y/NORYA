@@ -132,6 +132,7 @@ if not STATIC_DIR.is_dir():
 
 # Jinja2: yasal sayfalar (örn. /iade-iptal) app/templates kullanır
 templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
+templates.env.globals["getattr"] = getattr
 
 
 @asynccontextmanager
@@ -970,6 +971,7 @@ def blog_detail(request: Request, lang: str, slug: str):
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/blog/{art['available_langs'][code]}"} for code in BLOG_LANGS_PREMIUM if code in art["available_langs"]]
 
     published_iso = art["published_at"].isoformat()
+    modified_iso = art.get("last_updated") and art["last_updated"].isoformat() or published_iso
     blog_posting_schema = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -979,7 +981,7 @@ def blog_detail(request: Request, lang: str, slug: str):
         "articleSection": art["category"],
         "inLanguage": lang,
         "datePublished": published_iso,
-        "dateModified": published_iso,
+        "dateModified": modified_iso,
         "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
         "url": canonical_url,
         "author": {"@type": "Organization", "name": BRAND_NAME},

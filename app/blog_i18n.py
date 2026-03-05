@@ -141,6 +141,7 @@ class Article:
     sections_by_lang: Dict[str, List[Section]]  # lang -> bölümler
     cover_alt: Optional[Dict[str, str]] = None  # lang -> alt text for cover image
     last_updated: Optional[date] = None  # display "Last updated"; if None, use published_at
+    faq_schema_qa: Optional[Dict[str, List[Dict[str, str]]]] = None  # lang -> [{"question", "answer"}] for FAQ schema
 
 
 def _article_ldl() -> Article:
