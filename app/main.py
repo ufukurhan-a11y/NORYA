@@ -64,6 +64,7 @@ from app.models import (  # noqa: F401
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
 from app.base_i18n import get_base_ui
+from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, validate_coupon
@@ -135,9 +136,32 @@ templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
 templates.env.globals["getattr"] = getattr
 
 
+def _seed_default_coupon():
+    """INDIRIM20 kuponu yoksa oluşturur (%20 indirim, tüm planlar)."""
+    try:
+        from app.core.database import engine
+        with Session(engine) as session:
+            existing = session.exec(select(DiscountCode).where(DiscountCode.code == "INDIRIM20")).first()
+            if not existing:
+                coupon = DiscountCode(
+                    code="INDIRIM20",
+                    discount_type="percent",
+                    discount_value=20,
+                    valid_from=None,
+                    valid_until=None,
+                    products=None,
+                )
+                session.add(coupon)
+                session.commit()
+                log.info("Varsayılan kupon INDIRIM20 oluşturuldu (%20 indirim).")
+    except Exception as e:
+        log.warning("INDIRIM20 seed atlandı (ilk kupon doğrulamasında oluşturulacak): %s", e)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    _seed_default_coupon()
     key_ok = is_openai_configured()
     if key_ok:
         log.info("OPENAI_API_KEY: ok (sk-... ile yüklendi)")
@@ -694,10 +718,12 @@ async def push_subscribe(
 
 @app.get("/api-check")
 def api_check():
-    """OpenAI anahtarı yüklü mü kontrol et (anahtar gösterilmez)."""
+    """OpenAI ve PayTR ayarları yüklü mü kontrol et (anahtarlar gösterilmez)."""
     key_ok = is_openai_configured()
+    paytr_ok = _paytr_enabled()
     return {
         "openai_ayarli": key_ok,
+        "paytr_ayarli": paytr_ok,
         "mesaj": "Anahtar tanımlı (sk-...)." if key_ok else "OPENAI_API_KEY .env'de eksik veya geçersiz (sk- ile başlamalı, boşluksuz).",
     }
 
@@ -2108,6 +2134,27 @@ def _paytr_amount(product: str) -> int:
     return 300
 
 
+def _paytr_amount_and_currency(amount_eur_cents: int) -> tuple[int, str]:
+    """PayTR'ye gönderilecek tutar ve para birimi. EUR hesabı yoksa TL (kuruş) kullanır."""
+    rate = float(getattr(settings, "paytr_eur_to_try_rate", 0) or 0)
+    if rate > 0:
+        # EUR → TL: amount_eur_cents/100 * rate = TL; kuruş = TL * 100
+        amount_try_kurus = int(round((amount_eur_cents / 100.0) * rate * 100))
+        return (max(1, amount_try_kurus), "TL")
+    currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
+    return (amount_eur_cents, currency)
+
+
+def _paytr_reason_to_detail(reason: str | None) -> str:
+    """PayTR 'reason' metnini kullanıcıya gösterilecek Türkçe mesaja çevirir."""
+    if not reason:
+        return "PayTR token alınamadı."
+    r = (reason or "").strip().lower()
+    if "magaza" in r or "mağaza" in r or "mağaza aktif" in r or "store" in r and "active" in r:
+        return "Ödeme sistemi şu an kullanılamıyor. PayTR panelinde mağazanın aktif olduğunu ve entegrasyon bilgilerinin (Mağaza No, Parola, Gizli Anahtar) doğru girildiğini kontrol edin."
+    return reason
+
+
 # Plan kodları (GET /pay?plan= ve POST /paytr/init)
 PAYTR_PLAN_CODES = {
     "single_13eur": ("single", 1300),
@@ -2164,7 +2211,7 @@ def paytr_init(
         )
 
     user_id = user.id or 0
-    merchant_oid = f"norya_{uuid.uuid4().hex[:16]}"
+    merchant_oid = "norya" + uuid.uuid4().hex[:20]
     currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
 
     order = PaymentOrder(
@@ -2182,12 +2229,13 @@ def paytr_init(
         log.exception("PayTR init: order insert failed")
         raise HTTPException(status_code=500, detail="Sipariş oluşturulamadı.")
 
+    paytr_amount, paytr_currency = _paytr_amount_and_currency(amount)
     user_ip = _client_ip(request)
     email = user.email or "customer@norya.ai"
     product_name = {"single": "1 Analiz", "monthly": "Pro Aylık", "yearly": "Pro Yıllık"}.get(product, product)
     log.info(
         "PAYTR_INIT: merchant_oid=%s plan_code=%s amount=%s currency=%s user_ip=%s",
-        merchant_oid, body.plan_code, amount, currency, user_ip,
+        merchant_oid, body.plan_code, paytr_amount, paytr_currency, user_ip,
     )
 
     import base64
@@ -2199,13 +2247,14 @@ def paytr_init(
     merchant_id = settings.paytr_merchant_id
     merchant_key = settings.paytr_merchant_key.encode() if isinstance(settings.paytr_merchant_key, str) else settings.paytr_merchant_key
     merchant_salt = settings.paytr_merchant_salt
+    basket_amount_str = f"{paytr_amount / 100:.2f}" if paytr_currency == "TL" else f"{amount / 100:.2f}"
     user_basket = base64.b64encode(
-        json.dumps([[f"Norya Plan: {body.plan_code}", f"{amount / 100:.2f}", 1]]).encode()
+        json.dumps([[f"Norya Plan: {body.plan_code}", basket_amount_str, 1]]).encode()
     ).decode()
     no_installment = "0"
     max_installment = "0"
     test_mode = getattr(settings, "paytr_test_mode", "0") or "0"
-    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{amount}{user_basket}{no_installment}{max_installment}{currency}{test_mode}"
+    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{paytr_amount}{user_basket}{no_installment}{max_installment}{paytr_currency}{test_mode}"
     paytr_token = base64.b64encode(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
@@ -2219,7 +2268,7 @@ def paytr_init(
         "user_ip": user_ip,
         "merchant_oid": merchant_oid,
         "email": email,
-        "payment_amount": amount,
+        "payment_amount": paytr_amount,
         "paytr_token": paytr_token,
         "user_basket": user_basket,
         "debug_on": "0",
@@ -2227,11 +2276,11 @@ def paytr_init(
         "max_installment": max_installment,
         "user_name": ((body.name or user.full_name or "").strip() or "Müşteri")[:60],
         "user_address": "Norya ödeme",
-        "user_phone": "",
+        "user_phone": (getattr(user, "phone", None) or "").strip() or "05551234567",
         "merchant_ok_url": ok_url,
         "merchant_fail_url": fail_url,
         "timeout_limit": "30",
-        "currency": currency,
+        "currency": paytr_currency,
         "test_mode": test_mode,
     }
     try:
@@ -2256,21 +2305,47 @@ def paytr_init(
         order.admin_note = "init_failed"
         db.add(order)
         db.commit()
-        raise HTTPException(status_code=400, detail=result.get("reason", "PayTR token alınamadı."))
+        raise HTTPException(status_code=400, detail=_paytr_reason_to_detail(result.get("reason")))
 
     token = result.get("token", "")
     return {"status": "ok", "token": token, "merchant_oid": merchant_oid}
+
+
+@app.get("/api/orders/status")
+def order_status(
+    merchant_oid: str = Query(..., description="Sipariş merchant_oid"),
+    db: Session = Depends(get_db),
+):
+    """Ödeme durumu: pending, completed, failed. Checkout sekmesinde 'Ödeme tamamlandı' için kullanılır."""
+    if not (merchant_oid or merchant_oid.strip()):
+        raise HTTPException(status_code=400, detail="merchant_oid gerekli.")
+    stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == merchant_oid.strip())
+    order = db.exec(stmt).first()
+    if not order:
+        return {"status": "not_found", "merchant_oid": merchant_oid}
+    return {"status": order.status or "pending", "merchant_oid": order.merchant_oid}
 
 
 @app.get("/pay", response_class=HTMLResponse)
 def pay_page(
     request: Request,
     plan: str = Query("single_13eur", description="Plan: single_13eur, monthly_50eur, yearly_99eur"),
+    lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
 ):
-    """Ödeme sayfası: plan seçili; /paytr/init ile token alınıp PayTR iFrame gösterilir."""
+    """Ödeme sayfası: plan seçili; /paytr/init ile token alınıp PayTR iFrame gösterilir. Tüm dillerde ve mobil uyumlu."""
     plan_code = (plan or "single_13eur").strip().lower()
     if plan_code not in PAYTR_PLAN_CODES:
         plan_code = "single_13eur"
+    lang = (lang or "tr").lower()[:2]
+    if lang not in ("tr", "en", "de", "fr", "it", "es"):
+        lang = "tr"
+    t = get_pay_ui(lang)
+    plan_display = get_plan_display_name(plan_code, lang)
+    benefits = get_plan_benefits(plan_code, lang)
+    base_url = str(request.base_url).rstrip("/")
+    prices = {"single_13eur": "13", "monthly_50eur": "50", "yearly_99eur": "99"}
+    benefits_monthly = get_plan_benefits("monthly_50eur", lang)
+    benefits_yearly = get_plan_benefits("yearly_99eur", lang)
     return templates.TemplateResponse(
         "pay.html",
         {
@@ -2278,9 +2353,41 @@ def pay_page(
             "brand": BRAND_NAME,
             "plan_code": plan_code,
             "plan_code_js": json.dumps(plan_code),
+            "lang": lang,
+            "t": t,
+            "t_js": json.dumps(t),
+            "plan_display": plan_display,
+            "base_url": base_url,
+            "prices": prices,
+            "prices_js": json.dumps(prices),
+            "benefits": benefits,
+            "benefits_js": json.dumps(benefits),
+            "benefits_monthly_js": json.dumps(benefits_monthly),
+            "benefits_yearly_js": json.dumps(benefits_yearly),
         },
     )
 
+
+def _ensure_indirim20_coupon(db: Session) -> None:
+    """INDIRIM20 kuponu yoksa oluşturur (canlıda seed atlanmışsa ilk istekte oluşur)."""
+    existing = db.exec(select(DiscountCode).where(DiscountCode.code == "INDIRIM20")).first()
+    if not existing:
+        try:
+            coupon = DiscountCode(
+                code="INDIRIM20",
+                discount_type="percent",
+                discount_value=20,
+                valid_from=None,
+                valid_until=None,
+                products=None,
+            )
+            db.add(coupon)
+            db.commit()
+            log.info("INDIRIM20 kuponu api/coupon/validate ile oluşturuldu.")
+        except Exception as e:
+            db.rollback()
+            if "unique" not in str(e).lower() and "duplicate" not in str(e).lower():
+                log.warning("INDIRIM20 oluşturulamadı: %s", e)
 
 @app.get("/api/coupon/validate")
 def coupon_validate(
@@ -2293,6 +2400,9 @@ def coupon_validate(
         raise HTTPException(status_code=400, detail="Geçersiz ürün.")
     base = _paytr_amount(product)
     discount, err = validate_coupon(db, code, product, base)
+    if err and (code or "").strip().upper() == "INDIRIM20":
+        _ensure_indirim20_coupon(db)
+        discount, err = validate_coupon(db, code, product, base)
     if err:
         return {"valid": False, "reason": err}
     return {
@@ -2326,7 +2436,7 @@ def payment_get_token(
     from urllib.parse import urlencode
     from urllib.request import urlopen, Request as UrlRequest
 
-    merchant_oid = f"norya_{user.id}_{int(datetime.now(timezone.utc).timestamp())}_{secrets.token_hex(4)}"
+    merchant_oid = f"norya{user.id}{int(datetime.now(timezone.utc).timestamp())}{secrets.token_hex(4)}"
     amount = _paytr_amount(body.product)
     coupon_used: str | None = None
     if body.coupon_code and (code := (body.coupon_code or "").strip()):
@@ -2348,20 +2458,22 @@ def payment_get_token(
     db.commit()
     _audit(db, "payment_consent", user.id, _client_ip(request))
 
+    paytr_amount, paytr_currency = _paytr_amount_and_currency(amount)
     merchant_id = settings.paytr_merchant_id
     merchant_key = settings.paytr_merchant_key.encode() if isinstance(settings.paytr_merchant_key, str) else settings.paytr_merchant_key
     merchant_salt = settings.paytr_merchant_salt
     user_ip = _client_ip(request)
     email = user.email or ""
     product_name = {"single": "1 Analiz", "monthly": "Pro Aylık", "yearly": "Pro Yıllık"}[body.product]
+    basket_amount_str = f"{paytr_amount / 100:.2f}" if paytr_currency == "TL" else f"{amount / 100:.2f}"
     user_basket = base64.b64encode(
-        json.dumps([[product_name, f"{amount / 100:.2f}", 1]]).encode()
+        json.dumps([[product_name, basket_amount_str, 1]]).encode()
     ).decode()
     no_installment = "0"
     max_installment = "0"
     test_mode = getattr(settings, "paytr_test_mode", "0") or "0"
 
-    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{amount}{user_basket}{no_installment}{max_installment}{currency}{test_mode}"
+    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{paytr_amount}{user_basket}{no_installment}{max_installment}{paytr_currency}{test_mode}"
     paytr_token = base64.b64encode(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
@@ -2374,7 +2486,7 @@ def payment_get_token(
         "user_ip": user_ip,
         "merchant_oid": merchant_oid,
         "email": email,
-        "payment_amount": amount,
+        "payment_amount": paytr_amount,
         "paytr_token": paytr_token,
         "user_basket": user_basket,
         "debug_on": "0",
@@ -2382,11 +2494,11 @@ def payment_get_token(
         "max_installment": max_installment,
         "user_name": (user.full_name or "")[:60],
         "user_address": "Norya ödeme",
-        "user_phone": "",
+        "user_phone": (getattr(user, "phone", None) or "").strip() or "05551234567",
         "merchant_ok_url": ok_url,
         "merchant_fail_url": fail_url,
         "timeout_limit": "30",
-        "currency": currency,
+        "currency": paytr_currency,
         "test_mode": test_mode,
     }
     try:
@@ -2402,7 +2514,7 @@ def payment_get_token(
         raise HTTPException(status_code=502, detail=f"PayTR bağlantı hatası: {str(e)[:80]}")
 
     if result.get("status") != "success":
-        raise HTTPException(status_code=400, detail=result.get("reason", "PayTR token alınamadı."))
+        raise HTTPException(status_code=400, detail=_paytr_reason_to_detail(result.get("reason")))
     token = result.get("token", "")
     return {"token": token, "iframe_url": f"https://www.paytr.com/odeme/guvenli/{token}", "merchant_oid": merchant_oid}
 
@@ -2438,7 +2550,7 @@ def payment_get_token_guest(
         db.commit()
         db.refresh(user)
     user_id = user.id or 0
-    merchant_oid = f"norya_guest_{user_id}_{int(datetime.now(timezone.utc).timestamp())}_{secrets.token_hex(4)}"
+    merchant_oid = f"noryag{user_id}{int(datetime.now(timezone.utc).timestamp())}{secrets.token_hex(4)}"
     amount = _paytr_amount("single")
     coupon_used: str | None = None
     if body.coupon_code and (code := (body.coupon_code or "").strip()):
@@ -2464,6 +2576,7 @@ def payment_get_token_guest(
     db.commit()
     _audit(db, "payment_consent", user_id, _client_ip(request))
 
+    paytr_amount, paytr_currency = _paytr_amount_and_currency(amount)
     import base64
     import hmac
     import hashlib
@@ -2476,11 +2589,12 @@ def payment_get_token_guest(
     merchant_salt = settings.paytr_merchant_salt
     user_ip = _client_ip(request)
     product_name = "1 Analiz"
-    user_basket = base64.b64encode(json.dumps([[product_name, f"{amount / 100:.2f}", 1]]).encode()).decode()
+    basket_amount_str = f"{paytr_amount / 100:.2f}" if paytr_currency == "TL" else f"{amount / 100:.2f}"
+    user_basket = base64.b64encode(json.dumps([[product_name, basket_amount_str, 1]]).encode()).decode()
     no_installment = "0"
     max_installment = "0"
     test_mode = getattr(settings, "paytr_test_mode", "0") or "0"
-    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{amount}{user_basket}{no_installment}{max_installment}{currency}{test_mode}"
+    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{paytr_amount}{user_basket}{no_installment}{max_installment}{paytr_currency}{test_mode}"
     paytr_token = base64.b64encode(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
@@ -2499,7 +2613,7 @@ def payment_get_token_guest(
         "user_ip": user_ip,
         "merchant_oid": merchant_oid,
         "email": email,
-        "payment_amount": amount,
+        "payment_amount": paytr_amount,
         "paytr_token": paytr_token,
         "user_basket": user_basket,
         "debug_on": "0",
@@ -2507,11 +2621,11 @@ def payment_get_token_guest(
         "max_installment": max_installment,
         "user_name": ((body.full_name or "").strip() or "")[:60],
         "user_address": "Norya ödeme",
-        "user_phone": "",
+        "user_phone": "05551234567",
         "merchant_ok_url": merchant_ok_url,
         "merchant_fail_url": merchant_fail_url,
         "timeout_limit": "30",
-        "currency": currency,
+        "currency": paytr_currency,
         "test_mode": test_mode,
     }
     try:
@@ -2526,7 +2640,7 @@ def payment_get_token_guest(
     except Exception as e:
         raise HTTPException(status_code=502, detail=f"PayTR bağlantı hatası: {str(e)[:80]}")
     if result.get("status") != "success":
-        raise HTTPException(status_code=400, detail=result.get("reason", "PayTR token alınamadı."))
+        raise HTTPException(status_code=400, detail=_paytr_reason_to_detail(result.get("reason")))
     token = result.get("token", "")
     return {"iframe_url": f"https://www.paytr.com/odeme/guvenli/{token}", "merchant_oid": merchant_oid}
 
@@ -2676,27 +2790,39 @@ async def _paytr_callback_handle(request: Request, db: Session):
 
 
 @app.get("/payment/success", response_class=HTMLResponse)
-def payment_success_page(request: Request):
-    """Başarılı ödeme sonrası sayfa. DB'ye ihtiyaç yok; her zaman HTML döner."""
+def payment_success_page(
+    request: Request,
+    lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+):
+    """Başarılı ödeme sonrası sayfa. Tüm dillerde ve mobil uyumlu."""
     base = request.base_url.rstrip("/")
+    lang = (lang or "tr").lower()[:2]
+    if lang not in ("tr", "en", "de", "fr", "it", "es"):
+        lang = "tr"
+    t = get_pay_ui(lang)
+    title = t["success_title"]
+    msg = t["success_message"]
+    btn_text = t["success_btn"]
     html = f"""<!DOCTYPE html>
-<html lang="tr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ödeme alındı – {BRAND_NAME}</title>
+<html lang="{lang}">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
+<title>{title} – {BRAND_NAME}</title>
 <style>
-  body {{ font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }}
-  .card {{ background: #1e293b; border-radius: 12px; padding: 32px; max-width: 420px; text-align: center; }}
-  h1 {{ color: #0EA5A4; font-size: 1.5rem; margin-bottom: 8px; }}
-  p {{ color: #94a3b8; margin-bottom: 24px; }}
-  a {{ display: inline-block; background: #0EA5A4; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
-  a:hover {{ background: #0d9488; }}
+  body {{ font-family: system-ui, sans-serif; margin: 0; padding: max(16px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); background: linear-gradient(165deg, #0c1222 0%, #0f172a 50%); color: #e2e8f0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }}
+  .card {{ background: linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.98)); border: 1px solid rgba(14,165,164,0.2); border-radius: 20px; padding: clamp(24px, 5vw, 40px); max-width: 420px; width: 100%; margin: 0 16px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); }}
+  .ok {{ width: 56px; height: 56px; margin: 0 auto 20px; background: linear-gradient(135deg, #0EA5A4, #14b8a6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 0 30px rgba(14,165,164,0.35); }}
+  h1 {{ color: #f1f5f9; font-size: clamp(1.25rem, 4vw, 1.5rem); margin-bottom: 10px; font-weight: 700; }}
+  p {{ color: #94a3b8; margin-bottom: 28px; font-size: clamp(0.9rem, 2.5vw, 0.95rem); line-height: 1.5; }}
+  a {{ display: inline-block; background: linear-gradient(135deg, #0EA5A4, #0d9488); color: #fff; padding: 14px 28px; min-height: 48px; line-height: 20px; border-radius: 12px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 14px rgba(14,165,164,0.35); transition: transform 0.15s, box-shadow 0.15s; touch-action: manipulation; }}
+  a:hover {{ transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14,165,164,0.4); }}
 </style>
 </head>
 <body>
   <div class="card">
-    <h1>Ödeme alındı</h1>
-    <p>Raporunuz hazırlanıyor. Hesabınızdan analiz sayfasına gidebilirsiniz.</p>
-    <a href="{base}/#analyze">Hesabıma git</a>
+    <div class="ok">✓</div>
+    <h1>{title}</h1>
+    <p>{msg}</p>
+    <a href="{base}/#analyze">{btn_text}</a>
   </div>
 </body>
 </html>"""
@@ -2704,28 +2830,44 @@ def payment_success_page(request: Request):
 
 
 @app.get("/payment/failed", response_class=HTMLResponse)
-def payment_failed_page(request: Request):
-    """Ödeme tamamlanamadı sayfası; tekrar dene butonu /pay'e gider."""
+def payment_failed_page(
+    request: Request,
+    lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+):
+    """Ödeme tamamlanamadı sayfası. Tüm dillerde ve mobil uyumlu."""
     base = request.base_url.rstrip("/")
+    lang = (lang or "tr").lower()[:2]
+    if lang not in ("tr", "en", "de", "fr", "it", "es"):
+        lang = "tr"
+    t = get_pay_ui(lang)
+    title = t["failed_title"]
+    msg = t["failed_message"]
+    retry_text = t["failed_retry"]
+    pricing_text = t["failed_pricing"]
     html = f"""<!DOCTYPE html>
-<html lang="tr">
-<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Ödeme tamamlanamadı – {BRAND_NAME}</title>
+<html lang="{lang}">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
+<title>{title} – {BRAND_NAME}</title>
 <style>
-  body {{ font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }}
-  .card {{ background: #1e293b; border-radius: 12px; padding: 32px; max-width: 420px; text-align: center; }}
-  h1 {{ color: #f87171; font-size: 1.5rem; margin-bottom: 8px; }}
-  p {{ color: #94a3b8; margin-bottom: 24px; }}
-  a {{ display: inline-block; background: #0EA5A4; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 4px; }}
-  a:hover {{ background: #0d9488; }}
+  body {{ font-family: system-ui, sans-serif; margin: 0; padding: max(16px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); background: linear-gradient(165deg, #0c1222 0%, #0f172a 50%); color: #e2e8f0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }}
+  .card {{ background: linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.98)); border: 1px solid rgba(248,113,113,0.2); border-radius: 20px; padding: clamp(24px, 5vw, 40px); max-width: 420px; width: 100%; margin: 0 16px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); }}
+  h1 {{ color: #fca5a5; font-size: clamp(1.25rem, 4vw, 1.5rem); margin-bottom: 10px; font-weight: 700; }}
+  p {{ color: #94a3b8; margin-bottom: 28px; font-size: clamp(0.9rem, 2.5vw, 0.95rem); line-height: 1.5; }}
+  .btns {{ display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }}
+  a {{ display: inline-block; background: linear-gradient(135deg, #0EA5A4, #0d9488); color: #fff; padding: 14px 24px; min-height: 48px; line-height: 20px; border-radius: 12px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 14px rgba(14,165,164,0.35); transition: transform 0.15s; touch-action: manipulation; }}
+  a:hover {{ transform: translateY(-2px); }}
+  a.secondary {{ background: transparent; border: 2px solid #475569; color: #94a3b8; box-shadow: none; }}
+  a.secondary:hover {{ border-color: #0EA5A4; color: #0EA5A4; }}
 </style>
 </head>
 <body>
   <div class="card">
-    <h1>Ödeme tamamlanamadı</h1>
-    <p>İşlem iptal edildi veya bir hata oluştu. Tekrar deneyebilirsiniz.</p>
-    <a href="{base}/pay?plan=single_13eur">Tekrar dene</a>
-    <a href="{base}/#pricing">Fiyatlandırma</a>
+    <h1>{title}</h1>
+    <p>{msg}</p>
+    <div class="btns">
+      <a href="{base}/pay?plan=single_13eur&lang={lang}">{retry_text}</a>
+      <a href="{base}/#pricing" class="secondary">{pricing_text}</a>
+    </div>
   </div>
 </body>
 </html>"""
