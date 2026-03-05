@@ -1312,13 +1312,14 @@
       --brand2:#087E7D;
       --ink:#07131A;
       --ink2: rgba(7,19,26,.72);
-      --glass: rgba(255,255,255,.72);
-      --glass2: rgba(255,255,255,.58);
+      --glass: rgba(255,255,255,.70);
+      --glass2: rgba(255,255,255,.52);
       --shadow: 0 18px 60px rgba(7,19,26,.14);
       --shadow2: 0 10px 30px rgba(7,19,26,.10);
       --radius: 22px;
       --pill: 999px;
       --ring: 0 0 0 4px rgba(14,165,164,.18);
+      --stroke: rgba(7,19,26,.10);
     }
 
     /* Genel tipografi */
@@ -1366,6 +1367,142 @@
       font-size: 12px;
       font-weight: 900;
       color: rgba(7,19,26,.78);
+    }
+
+    /* ===== Ultra Premium Header (ONLY NAV) ===== */
+    .elite-header{
+      position: sticky;
+      top: 0;
+      z-index: 9998;
+      padding-top: env(safe-area-inset-top);
+      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(7,19,26,.08);
+    }
+
+    .elite-header__inner{
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 14px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap: 12px;
+    }
+
+    /* Nav */
+    .elite-nav{
+      display:flex;
+      align-items:center;
+      gap: 12px;
+      min-width: 0;
+    }
+    .elite-nav a{
+      text-decoration:none;
+      color: rgba(7,19,26,.78);
+      font-weight: 800;
+      font-size: 14px;
+      letter-spacing: -0.2px;
+      padding: 8px 10px;
+      border-radius: 999px;
+    }
+    @media (hover:hover){
+      .elite-nav a:hover{ background: rgba(14,165,164,.10); }
+    }
+
+    /* ===== Ultra Premium “Analiz Yap” CTA ===== */
+    .elite-cta-btn{
+      position: relative;
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      gap: 10px;
+      height: 44px;
+      padding: 0 14px;
+      border-radius: 999px;
+      font-weight: 900;
+      letter-spacing: -0.2px;
+      color: #fff;
+      border: 1px solid rgba(14,165,164,.42);
+      background: linear-gradient(135deg, var(--brand), var(--brand2));
+      box-shadow: 0 14px 34px rgba(14,165,164,.26);
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    /* Shine efekti (elite) */
+    .elite-cta-btn::before{
+      content:"";
+      position:absolute;
+      inset: 0;
+      border-radius: 999px;
+      background: linear-gradient(120deg,
+        rgba(255,255,255,0) 0%,
+        rgba(255,255,255,.22) 35%,
+        rgba(255,255,255,0) 70%);
+      transform: translateX(-65%);
+      opacity: .75;
+      pointer-events:none;
+    }
+    @media (hover:hover){
+      .elite-cta-btn:hover::before{ transform: translateX(65%); transition: transform .7s ease; }
+      .elite-cta-btn:hover{ transform: translateY(-1px); transition: transform .18s ease; }
+    }
+
+    .elite-cta-btn:focus{
+      outline:none;
+      box-shadow: var(--ring), 0 14px 34px rgba(14,165,164,.26);
+    }
+
+    /* CTA ikon (sağ ok) */
+    .elite-cta-btn .cta-icon{
+      width: 18px;
+      height: 18px;
+      display:inline-block;
+      border-radius: 999px;
+      background: rgba(255,255,255,.18);
+      border: 1px solid rgba(255,255,255,.22);
+      position: relative;
+    }
+    .elite-cta-btn .cta-icon::after{
+      content:"→";
+      position:absolute;
+      inset:0;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-weight: 900;
+      line-height: 1;
+      transform: translateY(-1px);
+    }
+
+    /* Hamburger varsa */
+    .elite-menu-btn{
+      height: 44px;
+      width: 44px;
+      border-radius: 14px;
+      border: 1px solid var(--stroke);
+      background: rgba(255,255,255,.55);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+    }
+
+    /* ===== Mobil taşma çözümü ===== */
+    @media (max-width: 520px){
+      /* Linkler çoksa taşmaması için 2’den fazlasını gizle */
+      .elite-nav a:nth-child(n+3){ display:none; }
+
+      .elite-header__inner{ padding: 10px 12px; gap: 10px; }
+      .elite-cta-btn{ height: 42px; padding: 0 12px; font-size: 14px; }
+    }
+
+    /* Çok küçük ekranlarda CTA yazısı kısalsın (opsiyonel) */
+    @media (max-width: 380px){
+      .elite-cta-btn{ padding: 0 10px; }
     }
 
     /* ===== PRICING GRID ===== */
@@ -1530,12 +1667,12 @@
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
   <!-- Enterprise glass header: sticky + compact on scroll + pill nav + premium CTA -->
-  <header id="main-header" class="header">
-    <div class="header-inner">
-      <a href="#" class="flex items-center shrink-0" aria-label="Norya Ana Sayfa">
+  <header id="main-header" class="header elite-header">
+    <div class="header-inner elite-header__inner">
+      <a href="#" class="flex items-center shrink-0 elite-brand" aria-label="Norya Ana Sayfa">
         <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="logo" width="200" height="50" loading="eager" />
       </a>
-      <nav class="nav-shell" aria-label="Ana menü">
+      <nav class="nav-shell elite-nav" aria-label="Ana menü">
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
         <a href="#nasil-calisir" class="nav-link" data-nav="nasil-calisir" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
@@ -1572,11 +1709,11 @@
         </span>
         <span id="nav-user" class="hidden items-center gap-2 flex-wrap header-desk-only">
           <button type="button" onclick="openProfile()" class="secondary-link" data-i18n="nav_profile">Profil</button>
-          <button type="button" onclick="openAnalyze()" class="primary-cta" id="nav-analyze-btn" data-i18n="nav_analyze">Analiz Yap <span class="arrow" aria-hidden="true">→</span></button>
+          <button type="button" onclick="openAnalyze()" class="primary-cta elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></button>
           <button type="button" onclick="logout()" class="secondary-link" data-i18n="nav_logout">Çıkış</button>
         </span>
-        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="arrow" aria-hidden="true">→</span></a>
-        <button type="button" class="hamburger" onclick="openMobileDrawer()" aria-label="Menü" id="hamburger-btn"><span aria-hidden="true">☰</span></button>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
+        <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menü" id="hamburger-btn"><span aria-hidden="true">☰</span></button>
       </div>
     </div>
   </header>
@@ -8690,7 +8827,8 @@
       if (e.data === 'norya_payment_ok') {
         closePaymentModal();
         if (typeof loadUsage === 'function') loadUsage();
-        toast(T[getLang()]?.payment_success || 'Ödemeniz alındı. Analiz yapabilirsiniz.', 'success');
+        var tObj = T[getLang()] || T.tr || {};
+        toast(tObj.payment_success || 'Ödemeniz alındı. Analiz yapabilirsiniz.', 'success');
         if (window.location.hash !== '#analyze') window.location.hash = 'analyze';
       }
     });
@@ -8721,7 +8859,8 @@
           }
           updateNav();
           if (typeof loadUsage === 'function') loadUsage();
-          toast(T[getLang()]?.payment_success || 'Ödemeniz alındı. Analiz yapabilirsiniz.', 'success');
+        var tObj2 = T[getLang()] || T.tr || {};
+        toast(tObj2.payment_success || 'Ödemeniz alındı. Analiz yapabilirsiniz.', 'success');
         } else {
           toast(data.detail || 'Giriş yapılamadı.', 'error');
         }

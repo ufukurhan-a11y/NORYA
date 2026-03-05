@@ -23,29 +23,114 @@
   <script type="application/ld+json">{{ article_schema_json|safe }}</script>
   {% endif %}
   <style>
-    .prose .blog-definition { margin: 1.25rem 0; padding: 1rem 1.25rem; background: #f8fafc; border-left: 3px solid #0d9488; border-radius: 0 8px 8px 0; font-size: 0.9375rem; line-height: 1.55; color: #475569; }
+    .prose .blog-definition { margin: 1.25rem 0; padding: 1rem 1.25rem; background: #f8fafc; border-left: 3px solid #0d9488; border-radius: 0 8px 8px 0; font-size: 0.9375rem; line-height: 1.7; color: #475569; }
     .prose .blog-definition strong { color: #0f172a; }
-    .prose .blog-example { margin: 1.25rem 0; padding: 1rem 1.25rem; background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 10px; font-size: 0.9375rem; line-height: 1.55; color: #134e4a; }
+    .prose .blog-example { margin: 1.25rem 0; padding: 1rem 1.25rem; background: #f0fdfa; border: 1px solid #99f6e4; border-radius: 10px; font-size: 0.9375rem; line-height: 1.7; color: #134e4a; }
     .prose .blog-example strong { color: #0f766e; }
     .prose .blog-figure { margin: 1.5rem 0; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(14,23,41,0.08); }
     .prose .blog-figure img { width: 100%; height: auto; display: block; }
     .prose .blog-figure figcaption { padding: 0.75rem 1rem; font-size: 0.8125rem; color: #64748b; background: #f8fafc; border-top: 1px solid #e2e8f0; }
-    .blog-detail-hero { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
+    .blog-detail-hero {
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 164, 0.08) 0, transparent 55%),
+        linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    }
     .blog-cta-card { background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 100%); border: 1px solid rgba(14, 165, 164, 0.2); border-radius: 1rem; box-shadow: 0 8px 32px rgba(14, 165, 164, 0.08); }
     .blog-sidebar-card { background: #ffffff; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 1rem; box-shadow: 0 4px 24px rgba(15, 23, 41, 0.06); }
     .blog-toc-link { border-radius: 0.5rem; transition: background 0.15s, color 0.15s; }
     .blog-toc-link:hover { background: rgba(14, 165, 164, 0.08); color: #0d9488; }
-    .blog-lang-pill { border-radius: 0.5rem; padding: 0.375rem 0.75rem; font-size: 0.8125rem; font-weight: 500; text-decoration: none; transition: background 0.2s, color 0.2s; border: 1px solid rgba(15, 23, 42, 0.1); color: #475569; }
-    .blog-lang-pill:hover { background: rgba(14, 165, 164, 0.08); color: #0d9488; border-color: rgba(14, 165, 164, 0.2); }
-    .blog-lang-pill.current { background: rgba(14, 165, 164, 0.12); color: #0f766e; border-color: rgba(14, 165, 164, 0.3); }
-    @media (max-width: 1023px) { .blog-detail-hero .prose { max-width: 100%; } }
+    .blog-toc-link.is-active {
+      background: rgba(14, 165, 164, 0.12);
+      color: #0f766e;
+      font-weight: 600;
+    }
+    .blog-toc-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      border-radius: 9999px;
+      border: 1px solid rgba(148, 163, 184, 0.7);
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #475569;
+      background: #ffffff;
+    }
+    .blog-toc-toggle:focus-visible {
+      outline: 2px solid rgba(14, 165, 164, 0.9);
+      outline-offset: 2px;
+    }
+    .blog-toc-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+    }
+    .blog-toc-drawer[data-open="true"] { display: block; }
+    .blog-toc-drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .blog-toc-drawer-panel {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      border-radius: 1.5rem 1.5rem 0 0;
+      background: #ffffff;
+      box-shadow: 0 -18px 45px rgba(15, 23, 42, 0.32);
+      padding: 1.25rem 1.25rem 1.75rem;
+      max-height: 70vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.2s ease-out;
+    }
+    .blog-toc-drawer[data-open="true"] .blog-toc-drawer-panel {
+      transform: translateY(0);
+    }
+    .blog-trust-strip {
+      border-radius: 9999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: linear-gradient(135deg, #f8fafc 0%, #e2f3f3 100%);
+      padding: 0.6rem 1rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.85rem;
+      font-size: 0.8125rem;
+      color: #475569;
+    }
+    @media (max-width: 1023px) {
+      .blog-detail-hero .prose { max-width: 100%; }
+    }
+    @media (min-width: 1024px) {
+      .blog-toc-desktop {
+        position: sticky;
+        top: 5.5rem;
+      }
+    }
   </style>
 {% endblock %}
 
 {% block content %}
   <article class="blog-detail-hero pt-8 pb-6 sm:pt-10 sm:pb-8 px-4 sm:px-6">
     <div class="max-w-5xl mx-auto">
-      <div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+      <nav class="mb-3 text-xs sm:text-sm text-slate-500" aria-label="{{ blog_ui.breadcrumb_aria|default('Breadcrumb') }}">
+        <ol class="flex flex-wrap items-center gap-1 sm:gap-1.5">
+          <li>
+            <a href="/" class="hover:text-slate-700 transition-colors">{{ blog_ui.home_link|default("Norya") }}</a>
+          </li>
+          <li aria-hidden="true" class="text-slate-400">/</li>
+          <li>
+            <a href="/{{ current_lang }}/blog" class="hover:text-slate-700 transition-colors">{{ blog_ui.hero_title }}</a>
+          </li>
+          <li aria-hidden="true" class="text-slate-400 hidden sm:inline">/</li>
+          <li class="truncate max-w-[9rem] sm:max-w-xs text-slate-600" aria-current="page">
+            {{ article.title }}
+          </li>
+        </ol>
+      </nav>
+
+      <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
         <a href="/{{ current_lang }}/blog" class="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">{{ blog_ui.back_to_blog }}</a>
         <nav class="flex flex-wrap items-center gap-1" aria-label="Language">
           {% for code, item in lang_alternates.items() %}
@@ -65,11 +150,25 @@
         <p class="mt-4 text-lg sm:text-xl text-slate-600 leading-relaxed">
           {{ article.subtitle }}
         </p>
-        <div class="mt-6 flex flex-wrap gap-4 text-sm text-slate-500">
+        <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-slate-500">
+          <div class="inline-flex items-center gap-2">
+            <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/60 border border-slate-200 text-slate-500">
+              <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+            </span>
+            <span>{{ article.read_minutes }} {{ blog_ui.read_min }}</span>
+          </div>
+          <span aria-hidden="true" class="hidden sm:inline">·</span>
           <time datetime="{{ article.published_at.isoformat() }}">{{ article.published_at.strftime("%d %b %Y") }}</time>
-          <span aria-hidden="true">·</span>
-          <span>{{ article.read_minutes }} {{ blog_ui.read_min }}</span>
         </div>
+
+        <button type="button" id="blog-toc-toggle" class="blog-toc-toggle mt-5 lg:hidden">
+          <svg class="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M4 6h16M4 12h10M4 18h6" />
+          </svg>
+          <span>{{ blog_ui.toc_title }}</span>
+        </button>
       </header>
     </div>
   </article>
@@ -78,7 +177,24 @@
     <div class="grid lg:grid-cols-[1fr_280px] gap-12 lg:gap-16">
       <div class="min-w-0">
         <div class="overflow-hidden rounded-2xl bg-white border border-slate-200/60 shadow-sm mb-10">
-          <img src="{{ article.cover_image }}" alt="" loading="eager" class="w-full aspect-[16/10] sm:aspect-[2/1] object-cover" />
+          {% if article.cover_image %}
+          <div class="relative w-full aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-2xl">
+            <img src="{{ article.cover_image }}" alt="{{ article.cover_alt or article.title }}" loading="lazy" class="w-full h-full object-cover" />
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/16 via-slate-900/0 to-slate-900/0"></div>
+          </div>
+          {% else %}
+          <div class="relative w-full aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-2xl bg-gradient-to-br from-teal-500/18 via-cyan-400/12 to-slate-50">
+            <div class="absolute inset-0 opacity-[0.18] [background-image:radial-gradient(circle_at_1px_1px,#0f172a24_1px,transparent_0)] [background-size:20px_20px]"></div>
+            <div class="relative flex h-full w-full items-center justify-center">
+              <div class="flex h-20 w-20 items-center justify-center rounded-3xl bg-white/85 shadow-xl shadow-teal-500/30">
+                <span class="text-3xl font-semibold tracking-tight text-slate-900">N</span>
+              </div>
+            </div>
+            <span class="absolute left-4 top-4 rounded-full bg-white/80 px-3 py-1 text-xs font-semibold text-teal-700 shadow-sm">
+              {{ article.category }}
+            </span>
+          </div>
+          {% endif %}
         </div>
 
         <div class="prose prose-slate prose-lg max-w-none prose-headings:font-semibold prose-headings:text-slate-900 prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline">
@@ -115,7 +231,7 @@
       </div>
 
       <aside class="space-y-6 lg:pt-2">
-        <nav class="blog-sidebar-card p-5" aria-label="{{ blog_ui.toc_title }}">
+        <nav class="blog-sidebar-card blog-toc-desktop p-5" aria-label="{{ blog_ui.toc_title }}">
           <h2 class="text-sm font-semibold text-slate-900 mb-4 flex items-center gap-2">
             <span class="h-1.5 w-1.5 rounded-full bg-teal-500"></span>
             {{ blog_ui.toc_title }}
@@ -144,4 +260,136 @@
       </aside>
     </div>
   </div>
+  <div class="px-4 sm:px-6 pb-10">
+    <div class="max-w-5xl mx-auto border-t border-slate-100 pt-8 mt-2">
+      {% if related_posts %}
+      <section aria-label="{{ blog_ui.related_label|default('Related articles') }}" class="mb-10">
+        <div class="flex items-center justify-between gap-3 mb-4">
+          <h2 class="text-sm font-semibold tracking-wide text-slate-900 uppercase">{{ blog_ui.related_label|default("Benzer Yazılar") }}</h2>
+        </div>
+        <div class="grid gap-6 sm:grid-cols-3">
+          {% for post in related_posts %}
+          <article class="blog-sidebar-card overflow-hidden flex flex-col">
+            <a href="{{ post.url }}" class="block relative overflow-hidden aspect-[16/9] bg-slate-100">
+              <img src="{{ post.cover_image }}" alt="{{ post.cover_alt or post.title }}" loading="lazy" class="w-full h-full object-cover" />
+            </a>
+            <div class="p-4">
+              <p class="text-xs font-medium text-teal-700 uppercase tracking-wide">{{ post.category }}</p>
+              <h3 class="mt-2 text-sm font-semibold text-slate-900 leading-snug">
+                <a href="{{ post.url }}" class="hover:text-teal-700 transition-colors">{{ post.title }}</a>
+              </h3>
+            </div>
+          </article>
+          {% endfor %}
+        </div>
+      </section>
+      {% endif %}
+
+      <section class="mt-6 mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-6 sm:px-7 sm:py-7 shadow-sm">
+        <div class="flex flex-col sm:flex-row sm:items-center gap-5">
+          <div class="flex-1">
+            <h2 class="text-lg sm:text-xl font-semibold text-slate-900">
+              {{ blog_ui.end_cta_title|default("Sonucunuzu yükleyin, net bir rapor alın") }}
+            </h2>
+            <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
+              {{ blog_ui.end_cta_text|default("Laboratuvar sonuçlarınızı güvenli şekilde yükleyin, tıbbi terimleri sade bir dilde görün ve önemli noktaları dakikalar içinde anlayın.") }}
+            </p>
+          </div>
+          <div class="flex-shrink-0">
+            <a href="/upload" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-teal-500/30 hover:from-teal-600 hover:to-emerald-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+              {{ blog_ui.end_cta_button|default("Kan tahlilini analiz et") }}
+            </a>
+          </div>
+        </div>
+      </section>
+
+      <div class="flex justify-center">
+        <div class="blog-trust-strip">
+          <span>Privacy-first</span>
+          <span aria-hidden="true">•</span>
+          <span>Secure processing</span>
+          <span aria-hidden="true">•</span>
+          <span>Designed for clarity</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="blog-toc-drawer" class="blog-toc-drawer lg:hidden" aria-hidden="true">
+    <button type="button" class="blog-toc-drawer-backdrop" data-close-toc="true" aria-label="{{ blog_ui.close_toc_drawer|default('Close table of contents') }}"></button>
+    <div class="blog-toc-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="blog-toc-drawer-title">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <h2 id="blog-toc-drawer-title" class="text-sm font-semibold text-slate-900">
+          {{ blog_ui.toc_title }}
+        </h2>
+        <button type="button" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 hover:text-slate-700 hover:border-slate-300 w-8 h-8" data-close-toc="true">
+          <span class="sr-only">{{ blog_ui.close_toc_drawer|default("Close table of contents") }}</span>
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <ul class="space-y-1 list-none p-0 m-0">
+        {% for item in toc %}
+        <li>
+          <a href="#{{ item.id }}" class="blog-toc-link block px-3 py-2 text-sm text-slate-600 {% if item.level == 3 %}pl-5{% endif %}">
+            {{ item.label }}
+          </a>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+
+  <script>
+  (function() {
+    var headingSelector = '[id^="section-"], h2[id], h3[id]';
+    var headingNodes = document.querySelectorAll(headingSelector);
+    var tocLinks = document.querySelectorAll('.blog-toc-link[href^="#"]');
+    var tocToggle = document.getElementById('blog-toc-toggle');
+    var tocDrawer = document.getElementById('blog-toc-drawer');
+    var tocDrawerCloseButtons = tocDrawer ? tocDrawer.querySelectorAll('[data-close-toc="true"]') : [];
+
+    if ('IntersectionObserver' in window && headingNodes.length && tocLinks.length) {
+      var activeId = null;
+      var observer = new IntersectionObserver(function(entries) {
+        entries.forEach(function(entry) {
+          if (!entry.isIntersecting) return;
+          var id = entry.target.getAttribute('id');
+          if (!id) return;
+          activeId = id;
+          tocLinks.forEach(function(link) {
+            var href = link.getAttribute('href') || '';
+            if (href === '#' + id) {
+              link.classList.add('is-active');
+            } else {
+              link.classList.remove('is-active');
+            }
+          });
+        });
+      }, { rootMargin: '-40% 0px -55% 0px', threshold: 0.1 });
+
+      headingNodes.forEach(function(node) { observer.observe(node); });
+    }
+
+    if (tocToggle && tocDrawer) {
+      tocToggle.addEventListener('click', function() {
+        tocDrawer.setAttribute('data-open', 'true');
+        tocDrawer.setAttribute('aria-hidden', 'false');
+      });
+      tocDrawerCloseButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          tocDrawer.setAttribute('data-open', 'false');
+          tocDrawer.setAttribute('aria-hidden', 'true');
+        });
+      });
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && tocDrawer.getAttribute('data-open') === 'true') {
+          tocDrawer.setAttribute('data-open', 'false');
+          tocDrawer.setAttribute('aria-hidden', 'true');
+        }
+      });
+    }
+  })();
+  </script>
 {% endblock %}

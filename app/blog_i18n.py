@@ -384,7 +384,7 @@ _LDL_ARTICLE = _article_ldl()
 def _article_kan_tahlili_nasil_okunur() -> Article:
     """Kan tahlili nasıl okunur — ultra premium: tanım kutuları, örnekler, stealth tarzı."""
     published = date(2025, 3, 4)
-    cover = "/static/images/blog/ldl-cholesterol-hero.png"  # Özelleştir: kan-tahlili-nasil-okunur.png eklenince değiştir
+    cover = "/static/images/blog/how-to-read-blood-test-results.png"
 
     return Article(
         id="kan-tahlili-nasil-okunur",
@@ -421,7 +421,7 @@ def _article_kan_tahlili_nasil_okunur() -> Article:
         },
         titles={
             "tr": "Kan tahlili nasıl okunur? Adım adım rehber",
-            "en": "How to read a blood test report: step-by-step guide",
+            "en": "How to Read a Blood Test Report",
             "de": "Blutbefund lesen: Schritt-für-Schritt",
             "it": "Come leggere gli esami del sangue",
             "es": "Cómo leer un análisis de sangre",
@@ -435,7 +435,7 @@ def _article_kan_tahlili_nasil_okunur() -> Article:
         },
         subtitles={
             "tr": "Tahlil sonucu kâğıdındaki terimleri, referans aralıklarını ve değerlerin ne anlama geldiğini sade bir dille açıklıyoruz.",
-            "en": "A clear guide to the terms, reference ranges and numbers you see on your lab report.",
+            "en": "A step-by-step guide to understanding values, units, and reference ranges.",
             "de": "Verständliche Erklärung von Begriffen, Referenzbereichen und Werten im Laborbefund.",
             "it": "Guida chiara a termini, intervalli di riferimento e valori sul referto.",
             "es": "Guía clara de términos, rangos de referencia y valores en el informe.",
@@ -449,7 +449,7 @@ def _article_kan_tahlili_nasil_okunur() -> Article:
         },
         excerpts={
             "tr": "Referans aralığı, birimler ve sonuç kâğıdındaki sütunlar: tahlilinizi doğru yorumlamak için bilmeniz gerekenler.",
-            "en": "Reference ranges, units and columns on your report: what you need to interpret your blood test correctly.",
+            "en": "Blood test reports can look confusing at first—numbers, abbreviations, and reference ranges everywhere. This guide explains what you’re seeing, how to interpret high/low flags, and what to check before you worry.",
             "de": "Referenzbereiche, Einheiten und Spalten im Befund – das Wichtigste für die Einordnung Ihrer Werte.",
             "it": "Intervalli di riferimento, unità e colonne del referto: cosa serve per leggere bene le analisi.",
             "es": "Rangos de referencia, unidades y columnas del informe: lo esencial para interpretar tu análisis.",
@@ -463,7 +463,7 @@ def _article_kan_tahlili_nasil_okunur() -> Article:
         },
         seo_titles={
             "tr": "Kan Tahlili Nasıl Okunur? Referans Aralığı ve Değerler Rehberi",
-            "en": "How to Read a Blood Test Report | Reference Range & Values Guide",
+            "en": "How to Read Blood Test Results (Step-by-Step) | NoryaAl",
             "de": "Blutbefund lesen: Referenzbereich und Werte verstehen",
             "it": "Come leggere gli esami del sangue | Guida valori e riferimenti",
             "es": "Cómo leer un análisis de sangre | Guía de valores y referencia",
@@ -477,7 +477,7 @@ def _article_kan_tahlili_nasil_okunur() -> Article:
         },
         seo_descriptions={
             "tr": "Kan tahlili sonucu kâğıdında referans aralığı, birimler ve değerlerin anlamı. Adım adım, sade dilde rehber.",
-            "en": "What reference range, units and values on your blood test report mean. A step-by-step, plain-language guide.",
+            "en": "Learn how to read a blood test report: values, units, reference ranges, high/low flags, and common panels like CBC and lipids. A clear, step-by-step guide.",
             "de": "Was Referenzbereich, Einheiten und Werte im Blutbefund bedeuten. Schritt-für-Schritt, verständlich.",
             "it": "Cosa significano intervallo di riferimento, unità e valori sul referto. Guida passo passo in linguaggio semplice.",
             "es": "Qué significan rango de referencia, unidades y valores en el análisis. Guía paso a paso en lenguaje claro.",
@@ -557,64 +557,165 @@ geçmez; tüm sağlık kararlarında hekiminize danışınız.</p>
             ],
             "en": [
                 Section(
-                    id="what-is-result",
+                    id="safety-note",
                     level=2,
-                    heading="What is a blood test result?",
+                    heading="Before you start: safety note",
                     body_html="""
-<p>A blood test (lab test) measures the amount or presence of specific substances in your blood. On the report you will see
-a <strong>value</strong>, often a <strong>unit</strong> (e.g. mg/dL, mmol/L) and usually a <strong>reference range</strong> for each parameter.</p>
-<div class="blog-definition">
-  <p><strong>Blood test:</strong> A report showing numeric results for things like glucose, cholesterol, vitamins, minerals, enzymes or
-  hormones, based on analysis of a blood sample in the lab. It is not enough on its own to make a diagnosis; it is interpreted
-  together with your doctor&apos;s clinical assessment.</p>
-</div>
-<p>In this guide we explain step by step how to understand the terms and numbers you see on your result sheet.</p>
+<section>
+  <p><strong>Important:</strong> This guide is educational and does not replace medical advice. If you have severe symptoms, very abnormal values, or concerns, contact a clinician.</p>
+</section>
 """,
                 ),
                 Section(
-                    id="reference-range",
+                    id="what-is-report",
                     level=2,
-                    heading="What does reference range mean?",
+                    heading="What is a blood test report?",
                     body_html="""
-<p>The reference range (normal range) is the lower and upper limit considered acceptable for that parameter in a healthy
-population. If your result is <strong>within</strong> this range it is usually labelled &quot;normal&quot;; if <strong>outside</strong>, it may be marked low or high.</p>
-<div class="blog-definition">
-  <p><strong>Reference range:</strong> The lower and upper limits set by the lab or guidelines based on measurements in a group
-  considered &quot;healthy&quot;. For example, if it says &quot;LDL 70–130 mg/dL&quot;, that interval is the reference used by that lab.</p>
-</div>
-<div class="blog-example">
-  <p><strong>Example:</strong> If you see <strong>Hemoglobin: 14.2 g/dL</strong> with <strong>Reference: 12–16 g/dL</strong>, 14.2 is inside the range,
-  so the value is considered &quot;normal&quot;. If it were 10 g/dL it would be below the reference and interpreted as &quot;low&quot;.</p>
-</div>
-<p>Reference ranges can vary slightly between labs and by age or sex. Always interpret using the range printed on your sheet.</p>
+<section>
+  <p>A blood test report (lab report) lists measurements from your blood sample. Each line usually includes: a <strong>test name</strong>, your <strong>value</strong>, the <strong>unit</strong>, and a <strong>reference range</strong> (sometimes called “normal range”).</p>
+  <p>Different labs may use different methods and ranges, so always interpret results <strong>with the lab’s own reference range</strong>.</p>
+</section>
 """,
                 ),
                 Section(
-                    id="whats-on-the-sheet",
+                    id="step-1-context",
                     level=2,
-                    heading="What appears on the result sheet?",
+                    heading="Step 1 — Start with the context",
                     body_html="""
-<p>A typical blood test report includes columns such as:</p>
-<ul>
-  <li><strong>Parameter name</strong>: What was measured (e.g. LDL cholesterol, Fasting glucose, Hemoglobin).</li>
-  <li><strong>Result / Value</strong>: Your measurement (number + unit).</li>
-  <li><strong>Reference range</strong>: The lab&apos;s normal lower and upper limits.</li>
-  <li><strong>Unit</strong>: mg/dL, mmol/L, g/dL, U/L, etc. You need the unit to interpret the value correctly.</li>
-</ul>
-<p>Some labs add a label like &quot;Normal / Low / High&quot;. This is derived from the reference range; your personal &quot;target&quot; may
-depend on risk factors, so the final interpretation should be done with your doctor.</p>
+<section>
+  <ul>
+    <li><strong>Why was the test ordered?</strong> Screening, symptoms, follow-up, medication monitoring?</li>
+    <li><strong>Were you fasting?</strong> Lipids and glucose-related tests may be affected.</li>
+    <li><strong>Recent illness, exercise, alcohol, supplements?</strong> These can shift values.</li>
+    <li><strong>Timing matters:</strong> A single result is a snapshot—trends are often more meaningful.</li>
+  </ul>
+</section>
 """,
                 ),
                 Section(
-                    id="high-or-low",
+                    id="step-2-four-things",
                     level=2,
-                    heading="When a value is high or low",
+                    heading="Step 2 — Understand the four things on each line",
                     body_html="""
-<p>A value outside the reference range does not automatically mean &quot;disease&quot;. Temporary infection, fasting time, medications
-or lab technique can affect results. Your doctor will put the result in context with your history and other tests, and may suggest
-repeat testing or further investigation.</p>
-<p>This guide is for <strong>understanding</strong> the terms and numbers on your report. It does not replace diagnosis or treatment decisions;
-always consult your doctor for health decisions.</p>
+<section>
+  <ol>
+    <li><strong>Test name:</strong> what was measured (e.g., Hemoglobin, ALT, Ferritin).</li>
+    <li><strong>Your value:</strong> the number reported.</li>
+    <li><strong>Unit:</strong> how it’s measured (e.g., mg/dL, mmol/L, U/L).</li>
+    <li><strong>Reference range:</strong> expected range for a population under lab conditions.</li>
+  </ol>
+  <blockquote>
+    <p><strong>Pro tip:</strong> Being slightly outside the range doesn’t automatically mean disease. It can reflect hydration, recent activity, timing, or lab variation.</p>
+  </blockquote>
+</section>
+""",
+                ),
+                Section(
+                    id="step-3-reference-range",
+                    level=2,
+                    heading="Step 3 — What does “reference range” actually mean?",
+                    body_html="""
+<section>
+  <p>A reference range is often built so that most healthy people fall inside it (commonly around 95%). That means some healthy people will naturally fall slightly below or above.</p>
+  <p>Reference ranges also vary by <strong>age</strong>, <strong>sex</strong>, pregnancy status, altitude, and lab method.</p>
+</section>
+""",
+                ),
+                Section(
+                    id="step-4-flags",
+                    level=2,
+                    heading="Step 4 — High / Low flags: when to pay attention",
+                    body_html="""
+<section>
+  <p>Reports may show flags like <strong>H</strong> (high) or <strong>L</strong> (low). Use these flags as a signal to look closer, not a diagnosis.</p>
+  <ul>
+    <li><strong>Mild:</strong> close to the range — often re-check or consider context.</li>
+    <li><strong>Moderate:</strong> clearly out of range — consider repeat plus clinical correlation.</li>
+    <li><strong>Severe:</strong> far out of range — follow lab or clinician instructions promptly.</li>
+  </ul>
+</section>
+""",
+                ),
+                Section(
+                    id="step-5-panels",
+                    level=2,
+                    heading="Step 5 — Learn the common panels first",
+                    body_html="""
+<section>
+  <h3>Complete Blood Count (CBC)</h3>
+  <p>CBC describes blood cells and oxygen-carrying capacity. Common items include:</p>
+  <ul>
+    <li><strong>WBC:</strong> white blood cells (immune response)</li>
+    <li><strong>RBC / HGB / HCT:</strong> red cells and oxygen transport</li>
+    <li><strong>PLT:</strong> platelets (clotting)</li>
+    <li><strong>MCV / MCH / MCHC / RDW:</strong> red cell size and hemoglobin patterns</li>
+  </ul>
+
+  <h3>Basic metabolic / chemistry</h3>
+  <ul>
+    <li><strong>Glucose:</strong> blood sugar</li>
+    <li><strong>Creatinine / eGFR:</strong> kidney function indicators</li>
+    <li><strong>Sodium / Potassium:</strong> electrolytes</li>
+  </ul>
+
+  <h3>Liver enzymes</h3>
+  <ul>
+    <li><strong>ALT / AST:</strong> liver cell stress or injury markers (non-specific)</li>
+    <li><strong>ALP / GGT / Bilirubin:</strong> bile flow and related pathways</li>
+  </ul>
+
+  <h3>Lipids</h3>
+  <ul>
+    <li><strong>Total Cholesterol, LDL, HDL, Triglycerides</strong></li>
+    <li>Interpret in the context of risk factors and fasting status.</li>
+  </ul>
+</section>
+""",
+                ),
+                Section(
+                    id="step-6-units",
+                    level=2,
+                    heading="Step 6 — Units and conversions",
+                    body_html="""
+<section>
+  <p>Some results appear in different units depending on the country or lab (for example, glucose in mg/dL versus mmol/L). If you compare results between reports, confirm units match before assuming there is a change.</p>
+</section>
+""",
+                ),
+                Section(
+                    id="step-7-trends",
+                    level=2,
+                    heading="Step 7 — Trends beat single numbers",
+                    body_html="""
+<section>
+  <p>If you have multiple tests over time, look for:</p>
+  <ul>
+    <li><strong>Direction:</strong> improving, stable, or worsening</li>
+    <li><strong>Speed:</strong> sudden shifts usually matter more</li>
+    <li><strong>Consistency:</strong> repeat abnormal results are more significant than a one-off outlier</li>
+  </ul>
+</section>
+""",
+                ),
+                Section(
+                    id="when-to-seek-help",
+                    level=2,
+                    heading="When to seek medical advice urgently",
+                    body_html="""
+<section>
+  <p>Seek urgent care if you have severe symptoms such as chest pain, fainting, shortness of breath, or confusion, or if your lab result is marked as critical and the lab or clinic advises immediate action.</p>
+</section>
+""",
+                ),
+                Section(
+                    id="try-clearer-report",
+                    level=2,
+                    heading="Try a clearer report view",
+                    body_html="""
+<section>
+  <p>If you want a more structured overview, you can upload your lab PDF and get a clean, readable summary with key terms and reference ranges.</p>
+  <p><a href="/analyze">Analyze your blood test →</a></p>
+</section>
 """,
                 ),
             ],

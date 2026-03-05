@@ -14,21 +14,162 @@
   {% for alt in hreflang_alternates %}
   <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
   {% endfor %}
-  {% for alt in hreflang_alternates %}{% if alt.lang == 'en' %}
+{% for alt in hreflang_alternates %}{% if alt.lang == 'en' %}
   <link rel="alternate" hreflang="x-default" href="{{ alt.url }}" />
-  {% endif %}{% endfor %}
+{% endif %}{% endfor %}
   <style>
-    .blog-hero { background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%); }
-    .blog-card { background: #ffffff; border: 1px solid rgba(15, 23, 42, 0.06); border-radius: 1rem; box-shadow: 0 4px 24px rgba(15, 23, 41, 0.06); transition: box-shadow 0.2s ease, border-color 0.2s ease; }
-    .blog-card:hover { box-shadow: 0 12px 40px rgba(15, 23, 41, 0.08); border-color: rgba(14, 165, 164, 0.15); }
-    .blog-search { background: #ffffff; border: 1px solid rgba(15, 23, 42, 0.08); border-radius: 0.75rem; box-shadow: 0 2px 8px rgba(15, 23, 41, 0.04); }
-    .blog-search:focus-within { border-color: rgba(14, 165, 164, 0.4); box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.08); }
-    .blog-pill { border-radius: 9999px; border: 1px solid rgba(15, 23, 42, 0.1); background: #ffffff; transition: background 0.2s, border-color 0.2s; }
-    .blog-pill:hover, .blog-pill.active { background: rgba(14, 165, 164, 0.08); border-color: rgba(14, 165, 164, 0.25); color: #0d9488; }
-    .blog-badge { font-size: 0.6875rem; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; color: #0d9488; background: rgba(14, 165, 164, 0.1); border-radius: 9999px; padding: 0.25rem 0.625rem; }
-    .blog-lang-link { border-radius: 0.5rem; padding: 0.375rem 0.625rem; font-size: 0.8125rem; font-weight: 500; color: #64748b; text-decoration: none; transition: background 0.2s, color 0.2s; }
-    .blog-lang-link:hover { background: rgba(14, 165, 164, 0.08); color: #0d9488; }
-    .blog-lang-link.current { background: rgba(14, 165, 164, 0.12); color: #0f766e; }
+    :root {
+      --blog-primary: #0EA5A4;
+      --blog-primary-soft: rgba(14, 165, 164, 0.08);
+      --blog-primary-soft-strong: rgba(14, 165, 164, 0.16);
+      --blog-primary-border: rgba(14, 165, 164, 0.25);
+      --blog-bg: #f8fafc;
+      --blog-surface: #ffffff;
+      --blog-surface-subtle: #f9fafb;
+      --blog-text: #0f172a;
+      --blog-text-muted: #64748b;
+      --blog-max-width: 72rem;
+    }
+    .blog-hero {
+      background:
+        radial-gradient(circle at top left, rgba(14, 165, 164, 0.08) 0, transparent 55%),
+        linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
+    }
+    .blog-card {
+      background: var(--blog-surface);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      border-radius: 1rem;
+      box-shadow: 0 4px 24px rgba(15, 23, 41, 0.06);
+      transition: box-shadow 0.2s ease, border-color 0.2s ease, transform 0.2s ease;
+      transform: translateY(0);
+    }
+    .blog-card:hover {
+      box-shadow: 0 14px 40px rgba(15, 23, 41, 0.12);
+      border-color: var(--blog-primary-border);
+      transform: translateY(-2px);
+    }
+    .blog-card-featured {
+      border-width: 2px;
+      border-color: rgba(14, 165, 164, 0.25);
+      box-shadow: 0 18px 50px rgba(15, 23, 41, 0.12);
+    }
+    .blog-search-shell {
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      margin-top: 1.75rem;
+    }
+    @media (min-width: 640px) {
+      .blog-search-shell { top: 1rem; }
+    }
+    .blog-search {
+      background: #ffffff;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      border-radius: 0.75rem;
+      box-shadow: 0 2px 8px rgba(15, 23, 41, 0.04);
+    }
+    .blog-search:focus-within {
+      border-color: rgba(14, 165, 164, 0.4);
+      box-shadow: 0 0 0 3px rgba(14, 165, 164, 0.12);
+    }
+    .blog-pill {
+      border-radius: 9999px;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      background: #ffffff;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease;
+    }
+    .blog-pill:hover,
+    .blog-pill.active {
+      background: var(--blog-primary-soft);
+      border-color: var(--blog-primary-border);
+      color: #0d9488;
+    }
+    .blog-badge {
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #0d9488;
+      background: rgba(14, 165, 164, 0.1);
+      border-radius: 9999px;
+      padding: 0.25rem 0.625rem;
+    }
+    .blog-lang-link {
+      border-radius: 0.5rem;
+      padding: 0.375rem 0.625rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #64748b;
+      text-decoration: none;
+      transition: background 0.2s, color 0.2s;
+    }
+    .blog-lang-link:hover {
+      background: rgba(14, 165, 164, 0.08);
+      color: #0d9488;
+    }
+    .blog-lang-link.current {
+      background: rgba(14, 165, 164, 0.12);
+      color: #0f766e;
+    }
+    .blog-category-scroll {
+      display: flex;
+      flex-wrap: nowrap;
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+      gap: 0.5rem;
+      padding-bottom: 0.25rem;
+    }
+    .blog-category-scroll::-webkit-scrollbar { display: none; }
+    .blog-tag-filter-button {
+      border-radius: 9999px;
+      border: 1px dashed rgba(148, 163, 184, 0.9);
+      background: #ffffff;
+      padding: 0.5rem 0.9rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: #475569;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
+    }
+    .blog-tag-filter-button:hover {
+      background: rgba(15, 23, 42, 0.02);
+      border-color: rgba(148, 163, 184, 1);
+      transform: translateY(-1px);
+    }
+    .blog-tag-filter-button:focus-visible {
+      outline: 2px solid rgba(14, 165, 164, 0.9);
+      outline-offset: 2px;
+    }
+    .blog-tag-drawer {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+    }
+    .blog-tag-drawer[data-open="true"] { display: block; }
+    .blog-tag-drawer-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.45);
+    }
+    .blog-tag-drawer-panel {
+      position: absolute;
+      inset-inline: 0;
+      bottom: 0;
+      border-radius: 1.5rem 1.5rem 0 0;
+      background: #ffffff;
+      box-shadow: 0 -18px 45px rgba(15, 23, 42, 0.32);
+      padding: 1.25rem 1.25rem 1.75rem;
+      max-height: 75vh;
+      overflow-y: auto;
+      transform: translateY(100%);
+      transition: transform 0.2s ease-out;
+    }
+    .blog-tag-drawer[data-open="true"] .blog-tag-drawer-panel {
+      transform: translateY(0);
+    }
     @media (max-width: 640px) {
       .blog-hero { padding-top: 1.5rem; padding-bottom: 2rem; }
       .blog-card { margin-left: -0.5rem; margin-right: -0.5rem; max-width: calc(100% + 1rem); }
@@ -38,49 +179,168 @@
 
 {% block content %}
   <div class="blog-hero pt-12 pb-10 sm:pt-16 sm:pb-14 px-4 sm:px-6">
-    <div class="max-w-4xl mx-auto">
-      <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
+    <div class="max-w-6xl mx-auto lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10">
+      <div class="mb-10 lg:mb-0">
+        <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
         <a href="/" class="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">{{ blog_ui.home_link|default('Norya') }}</a>
         <nav class="flex flex-wrap items-center gap-1" aria-label="Language">
           {% for code in premium_langs %}
           <a href="/{{ code }}/blog" class="blog-lang-link {% if code == lang %}current{% endif %}">{{ code|upper }}</a>
           {% endfor %}
         </nav>
-      </div>
-      <p class="blog-badge inline-block mb-4">{{ blog_ui.hero_badge }}</p>
-      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 tracking-tight leading-tight">
-        {{ blog_ui.hero_title }}
-      </h1>
-      <p class="mt-4 text-lg sm:text-xl text-slate-600 max-w-2xl leading-relaxed">
-        {{ blog_ui.hero_desc }}
-      </p>
+        </div>
+        <p class="blog-badge inline-block mb-4">{{ blog_ui.hero_badge }}</p>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 tracking-tight leading-tight">
+          {{ blog_ui.hero_title }}
+        </h1>
+        <p class="mt-4 text-lg sm:text-xl text-slate-600 max-w-2xl leading-relaxed">
+          {{ blog_ui.hero_desc }}
+        </p>
 
-      <div class="mt-10 sm:mt-12">
-        <label for="blog-search" class="sr-only">{{ blog_ui.search_placeholder }}</label>
-        <div class="blog-search flex items-center gap-3 px-4 py-3 sm:py-3.5 max-w-xl">
-          <svg class="h-5 w-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
-          </svg>
-          <input type="search" id="blog-search" class="flex-1 min-w-0 bg-transparent border-0 text-slate-900 placeholder-slate-400 focus:ring-0 text-sm sm:text-base" placeholder="{{ blog_ui.search_placeholder }}" autocomplete="off" />
+        <div class="mt-7 sm:mt-8 flex flex-wrap items-center gap-4">
+          <a href="/upload" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-teal-500/30 hover:from-teal-600 hover:to-emerald-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+            {{ blog_ui.hero_cta_primary|default("Kan tahlilini analiz et") }}
+          </a>
+          <p class="text-xs sm:text-sm text-slate-500">
+            {{ blog_ui.hero_cta_caption|default("Privacy-first, clear reports in minutes.") }}
+          </p>
         </div>
 
-        <div class="flex flex-wrap items-center gap-2 mt-6" role="tablist" aria-label="Categories">
-          <button type="button" class="blog-pill active px-4 py-2 text-sm font-medium text-slate-700" data-category="">{{ blog_ui.category_all }}</button>
-          {% for cat in categories %}
-          <button type="button" class="blog-pill px-4 py-2 text-sm font-medium text-slate-600" data-category="{{ cat }}">{{ cat }}</button>
-          {% endfor %}
+        <div class="blog-search-shell max-w-xl">
+          <label for="blog-search" class="sr-only">{{ blog_ui.search_placeholder }}</label>
+          <div class="blog-search flex items-center gap-3 px-4 py-3 sm:py-3.5 mt-6">
+            <svg class="h-5 w-5 text-slate-400 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-5.197-5.197m0 0A7.5 7.5 0 105.196 5.196a7.5 7.5 0 0010.607 10.607z" />
+            </svg>
+            <input type="search" id="blog-search" class="flex-1 min-w-0 bg-transparent border-0 text-slate-900 placeholder-slate-400 focus:ring-0 text-sm sm:text-base" placeholder="{{ blog_ui.search_placeholder }}" autocomplete="off" />
+          </div>
+
+          <div class="mt-4 flex items-center justify-between gap-3">
+            <div class="blog-category-scroll" role="tablist" aria-label="Categories">
+              <button type="button" class="blog-pill active px-4 py-2 text-sm font-medium text-slate-700 whitespace-nowrap" data-category="">{{ blog_ui.category_all }}</button>
+              {% for cat in categories %}
+              <button type="button" class="blog-pill px-4 py-2 text-sm font-medium text-slate-600 whitespace-nowrap" data-category="{{ cat }}">{{ cat }}</button>
+              {% endfor %}
+            </div>
+            {% if tags %}
+            <button type="button" id="blog-tag-filter-toggle" class="blog-tag-filter-button sm:hidden">
+              <svg class="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7h18M7 12h10M10 17h4" />
+              </svg>
+              <span>{{ blog_ui.filter_tags_label|default("Etiketler") }}</span>
+            </button>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+      <div class="hidden lg:block">
+        <div class="relative max-w-md mx-auto">
+          <div class="absolute -inset-6 rounded-3xl bg-teal-500/10 blur-2xl"></div>
+          <div class="relative overflow-hidden rounded-3xl border border-white/70 shadow-xl shadow-slate-900/5 bg-white">
+            <img src="/static/images/blog/blog-hero.png" alt="People reviewing a clear health report together with a doctor" loading="lazy" class="w-full h-full object-cover" />
+          </div>
         </div>
       </div>
     </div>
   </div>
 
+  {% if tags %}
+  <div id="blog-tag-drawer" class="blog-tag-drawer sm:hidden" aria-hidden="true">
+    <button type="button" class="blog-tag-drawer-backdrop" data-close-tag-drawer="true" aria-label="{{ blog_ui.close_filter_drawer|default('Close tag filter') }}"></button>
+    <div class="blog-tag-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="blog-tag-drawer-title">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <h2 id="blog-tag-drawer-title" class="text-sm font-semibold text-slate-900">
+          {{ blog_ui.filter_tags_title|default("Etiket filtrele") }}
+        </h2>
+        <button type="button" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 hover:text-slate-700 hover:border-slate-300 w-8 h-8" data-close-tag-drawer="true">
+          <span class="sr-only">{{ blog_ui.close_filter_drawer|default("Close tag filter") }}</span>
+          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        {% for tag in tags %}
+        <button type="button" class="blog-pill px-3 py-1.5 text-xs font-medium text-slate-600" data-tag="{{ tag.slug }}">{{ tag.name }}</button>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+  {% endif %}
+
   <section class="py-12 sm:py-16 px-4 sm:px-6 bg-[#fafbfc]" aria-label="Articles">
     <div class="max-w-5xl mx-auto">
-      <ul class="grid gap-8 sm:gap-10 md:grid-cols-2 list-none p-0 m-0" id="blog-list">
-        {% for post in posts %}
+      {% if posts %}
+      {% set featured = posts[0] %}
+      <article class="blog-card blog-card-featured overflow-hidden mb-10 grid gap-0 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
+        <a href="{{ featured.url }}" class="relative block bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+          <div class="aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-t-[1rem] md:rounded-tr-none md:rounded-l-[1rem]">
+            {% if featured.cover_image %}
+            <img src="{{ featured.cover_image }}" alt="{{ featured.cover_alt|default(featured.title) }}" loading="eager" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/12 via-slate-900/0 to-slate-900/0"></div>
+            {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">
+              <div class="absolute inset-0 opacity-[0.18] [background-image:radial-gradient(circle_at_1px_1px,#0f172a24_1px,transparent_0)] [background-size:20px_20px]"></div>
+              <div class="relative flex h-full w-full items-center justify-center">
+                <div class="flex h-16 w-16 items-center justify-center rounded-2xl bg-white/80 shadow-lg shadow-teal-500/25">
+                  <span class="text-2xl font-semibold tracking-tight text-slate-900">N</span>
+                </div>
+              </div>
+            </div>
+            {% endif %}
+          </div>
+          <span class="absolute top-3 left-3 blog-badge">{{ featured.category }}</span>
+          <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white">
+            <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            {{ featured.read_minutes }} {{ blog_ui.read_min }}
+          </span>
+        </a>
+        <div class="p-6 sm:p-7 lg:p-8 flex flex-col justify-center">
+          <p class="text-xs font-semibold tracking-[0.18em] uppercase text-teal-700 mb-2">
+            {{ blog_ui.featured_label|default("Featured insight") }}
+          </p>
+          <time class="text-xs font-medium text-slate-500" datetime="{{ featured.published_at.isoformat() }}">{{ featured.published_at.strftime("%d %b %Y") }}</time>
+          <h2 class="mt-3 text-2xl sm:text-3xl font-semibold text-slate-900 leading-tight">
+            <a href="{{ featured.url }}" class="hover:text-teal-700 transition-colors focus:outline-none focus:underline">{{ featured.title }}</a>
+          </h2>
+          <p class="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed line-clamp-3">
+            {{ featured.excerpt }}
+          </p>
+          <div class="mt-5 flex flex-wrap items-center gap-3 text-sm text-slate-500">
+            <span class="inline-flex items-center gap-1.5 rounded-full bg-slate-50 px-3 py-1">
+              <svg class="h-3.5 w-3.5 text-slate-400" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 6v6l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+              </svg>
+              <span>{{ featured.read_minutes }} {{ blog_ui.read_min }}</span>
+            </span>
+          </div>
+          <div class="mt-5">
+            <a href="{{ featured.url }}" class="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors">
+              {{ blog_ui.read_article }}
+              <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+            </a>
+          </div>
+        </div>
+      </article>
+      {% endif %}
+
+      <ul class="grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" id="blog-list">
+        {% for post in posts[1:] %}
         <li class="blog-card overflow-hidden flex flex-col" data-title="{{ post.title|lower }}" data-excerpt="{{ post.excerpt|lower }}" data-category="{{ post.category }}">
           <a href="{{ post.url }}" class="block relative overflow-hidden aspect-[16/10] bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t-[1rem]">
-            <img src="{{ post.cover_image }}" alt="" loading="lazy" class="w-full h-full object-cover transition-transform duration-300 hover:scale-[1.02]" />
+            {% if post.cover_image %}
+            <img src="{{ post.cover_image }}" alt="{{ post.cover_alt|default(post.title) }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/10 via-slate-900/0 to-slate-900/0"></div>
+            {% else %}
+            <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">
+              <div class="absolute inset-0 opacity-[0.18] [background-image:radial-gradient(circle_at_1px_1px,#0f172a24_1px,transparent_0)] [background-size:20px_20px]"></div>
+              <div class="relative flex h-full w-full items-center justify-center">
+                <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-white/80 shadow-md shadow-teal-500/20">
+                  <span class="text-lg font-semibold tracking-tight text-slate-900">N</span>
+                </div>
+              </div>
+            </div>
+            {% endif %}
             <span class="absolute top-3 left-3 blog-badge">{{ post.category }}</span>
             <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white">
               <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
@@ -89,10 +349,10 @@
           </a>
           <div class="flex-1 flex flex-col p-5 sm:p-6">
             <time class="text-xs font-medium text-slate-500" datetime="{{ post.published_at.isoformat() }}">{{ post.published_at.strftime("%d %b %Y") }}</time>
-            <h2 class="mt-2 text-xl sm:text-2xl font-semibold text-slate-900 leading-snug">
+            <h2 class="mt-2 text-lg sm:text-xl font-semibold text-slate-900 leading-snug">
               <a href="{{ post.url }}" class="hover:text-teal-700 transition-colors focus:outline-none focus:underline">{{ post.title }}</a>
             </h2>
-            <p class="mt-3 text-sm sm:text-base text-slate-600 leading-relaxed line-clamp-3">{{ post.excerpt }}</p>
+            <p class="mt-3 text-sm text-slate-600 leading-relaxed line-clamp-3">{{ post.excerpt }}</p>
             <div class="mt-4 pt-4 border-t border-slate-100">
               <a href="{{ post.url }}" class="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700 transition-colors">
                 {{ blog_ui.read_article }}
@@ -115,6 +375,11 @@
     var list = document.getElementById('blog-list');
     var noResults = document.getElementById('blog-no-results');
     var cards = list ? list.querySelectorAll('.blog-card') : [];
+    var tagDrawer = document.getElementById('blog-tag-drawer');
+    var tagDrawerToggle = document.getElementById('blog-tag-filter-toggle');
+    var tagDrawerCloseButtons = tagDrawer ? tagDrawer.querySelectorAll('[data-close-tag-drawer="true"]') : [];
+    var tagButtons = tagDrawer ? tagDrawer.querySelectorAll('[data-tag]') : [];
+    var searchDebounceTimer = null;
 
     function filter() {
       var q = (search && search.value) ? search.value.trim().toLowerCase() : '';
@@ -136,7 +401,12 @@
       if (noResults) noResults.classList.toggle('hidden', shown > 0);
     }
 
-    if (search) search.addEventListener('input', filter);
+    if (search) {
+      search.addEventListener('input', function() {
+        if (searchDebounceTimer) window.clearTimeout(searchDebounceTimer);
+        searchDebounceTimer = window.setTimeout(filter, 220);
+      });
+    }
     allPills.forEach(function(p) {
       p.addEventListener('click', function() {
         allPills.forEach(function(x) { x.classList.remove('active'); });
@@ -144,6 +414,40 @@
         filter();
       });
     });
+
+    if (tagDrawer && tagDrawerToggle) {
+      tagDrawerToggle.addEventListener('click', function() {
+        tagDrawer.setAttribute('data-open', 'true');
+        tagDrawer.setAttribute('aria-hidden', 'false');
+      });
+      tagDrawerCloseButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          tagDrawer.setAttribute('data-open', 'false');
+          tagDrawer.setAttribute('aria-hidden', 'true');
+        });
+      });
+      document.addEventListener('keydown', function(event) {
+        if (event.key === 'Escape' && tagDrawer.getAttribute('data-open') === 'true') {
+          tagDrawer.setAttribute('data-open', 'false');
+          tagDrawer.setAttribute('aria-hidden', 'true');
+        }
+      });
+      tagButtons.forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var tag = btn.getAttribute('data-tag');
+          var ev;
+          try {
+            ev = new CustomEvent('norya:blogTagSelected', { detail: { tag: tag } });
+          } catch (e) {
+            ev = document.createEvent('CustomEvent');
+            ev.initCustomEvent('norya:blogTagSelected', true, true, { tag: tag });
+          }
+          document.dispatchEvent(ev);
+          tagDrawer.setAttribute('data-open', 'false');
+          tagDrawer.setAttribute('aria-hidden', 'true');
+        });
+      });
+    }
   })();
   </script>
 {% endblock %}

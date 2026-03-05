@@ -164,6 +164,9 @@ app = FastAPI(
     description="Kan tahlili açıklama SaaS API",
     lifespan=lifespan,
 )
+
+# Statik dosyalar: proje kökünde /static klasöründen servis edilir
+app.mount("/static", StaticFiles(directory="static"), name="static")
 app.state.limiter = limiter
 
 # AI response cache: aynı analiz girdisi (normalize metin + dil + plan + model) tekrar gelirse OpenAI çağrılmaz
