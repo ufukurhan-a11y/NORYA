@@ -6,7 +6,8 @@ PayTR ödeme bildirimi (callback) endpoint'leri ve hash/imza doğrulaması.
 
 | URL | Açıklama |
 |-----|----------|
-| `POST /payment/callback` | PayTR bildirim URL'i (panelde bu adresi tanımlayın) |
+| `POST /paytr/callback` | PayTR bildirim URL'i (panelde **Bildirim URL** olarak `https://noryaai.com/paytr/callback` kullanılabilir) |
+| `POST /payment/callback` | Alias; aynı işlem |
 | `POST /api/paytr/webhook` | Alias; aynı işlem |
 
 PayTR, ödeme sonucunu **form-urlencoded** POST ile bu adrese gönderir.

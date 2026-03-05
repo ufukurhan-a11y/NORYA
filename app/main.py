@@ -2472,6 +2472,12 @@ async def payment_callback(request: Request, db: Session = Depends(get_db)):
     return await _paytr_callback_handle(request, db)
 
 
+@app.post("/paytr/callback")
+async def paytr_callback(request: Request, db: Session = Depends(get_db)):
+    """PayTR bildirim URL (alias): panelde Bildirim URL olarak https://noryaai.com/paytr/callback kullanılıyorsa bu route kullanılır."""
+    return await _paytr_callback_handle(request, db)
+
+
 @app.post("/api/paytr/webhook")
 async def paytr_webhook(request: Request, db: Session = Depends(get_db)):
     """PayTR webhook (alias): aynı işlem, PayTR panelinde bu URL de kullanılabilir."""
@@ -2529,7 +2535,9 @@ def robots_txt():
 def sitemap_xml(request: Request):
     """
     XML sitemap: ana sayfa, kurumsal, yasal, blog listeleri ve tüm blog yazıları.
-    lastmod = updatedAt, changefreq=weekly, priority uygun.
+    - /en/blog, /de/blog, /it/blog, /fr/blog index sayfaları (ve BLOG_LANGS_PREMIUM) dahil.
+    - Tüm blog post URL'leri (tüm diller) otomatik eklenir.
+    - lastmod = makale updatedAt (last_updated), yoksa published_at.
     """
     base_url = str(request.base_url).rstrip("/")
     urls: list[str] = []
@@ -2547,15 +2555,14 @@ def sitemap_xml(request: Request):
     for page in LEGAL_PAGES:
         add(f"{base_url}/legal/{page}", priority="0.5", lastmod=today)
 
-    # Blog listeleri (en, de, it, fr)
+    # Blog listeleri: /en/blog, /de/blog, /it/blog, /fr/blog dahil (BLOG_LANGS_PREMIUM)
     for lang in BLOG_LANGS_PREMIUM:
         add(f"{base_url}/{lang}/blog", priority="0.8", lastmod=today)
-    # Blog yazıları: lastmod = post updatedAt
+    # Blog yazıları (tüm diller): lastmod = updatedAt (last_updated) veya published_at
     for item in iter_all_article_paths():
-        if item["lang"] in BLOG_LANGS_PREMIUM:
-            loc = f"{base_url}/{item['lang']}/blog/{item['slug']}"
-            lastmod = (item.get("last_updated") or item["published_at"]).isoformat()
-            add(loc, priority="0.7", lastmod=lastmod)
+        loc = f"{base_url}/{item['lang']}/blog/{item['slug']}"
+        lastmod = (item.get("last_updated") or item["published_at"]).isoformat()
+        add(loc, priority="0.7", lastmod=lastmod)
 
     body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
     body += "\n".join(urls)

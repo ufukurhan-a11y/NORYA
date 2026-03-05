@@ -18,7 +18,7 @@ Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri list
 | Değişken | Açıklama | Production |
 |----------|----------|------------|
 | `PAYTR_MERCHANT_ID` / `KEY` / `SALT` | PayTR panelinden | Doldurun |
-| `PAYTR_NOTIFICATION_URL` | Webhook adresi (PayTR panelinde Bildirim URL olarak girin) | `https://alandiniz.com/payment/callback` |
+| `PAYTR_NOTIFICATION_URL` | Webhook adresi (PayTR panelinde Bildirim URL olarak girin) | `https://noryaai.com/paytr/callback` veya `.../payment/callback` |
 | `PAYTR_OK_URL` / `PAYTR_FAIL_URL` | Ödeme sonrası yönlendirme | `https://alandiniz.com/#payment-ok` vb. |
 | `PAYTR_TEST_MODE` | Test modu | `0` (canlı ödeme için) |
 
@@ -62,5 +62,9 @@ Bu dosya canlıya (production) geçmeden önce kontrol edilmesi gerekenleri list
 **Google Analytics (GA4):** Tag tüm sayfalarda (base template, static HTML, legal sayfalar) `<head>` içinde yüklü; CSP `script-src` ve `connect-src` ile googletagmanager / google-analytics izinli. Cloudflare cache kullanıyorsanız “Purge Everything” sonrası GA görünümü 5–15 dk gecikmeli olabilir. Realtime test için gizli sekmede site açıp 1–2 sayfa gezin.
 
 **Google Ads:** Dönüşüm takibi için `.env` içine `GOOGLE_ADS_CONVERSION_ID=AW-XXXXXXXXX` ekleyin. Aynı gtag ile GA4 + Google Ads birlikte yüklenir; ek CSP gerekmez.
+
+**Sitemap doğrulama (deploy sonrası):** `sitemap.xml` içinde tüm `/blog` URL'lerinin yer aldığından emin olun:
+- `https://noryaai.com/sitemap.xml` açıp `/en/blog`, `/de/blog`, `/it/blog`, `/fr/blog` index sayfaları ve tüm dildeki blog post URL'lerini kontrol edin.
+- Yerel test: `pytest tests/test_sitemap.py -v` — robots.txt Sitemap satırı, blog index sayfaları ve blog post URL'leri + lastmod alanı doğrulanır.
 
 Bu adımlar tamamsa uygulama yayına hazırdır.
