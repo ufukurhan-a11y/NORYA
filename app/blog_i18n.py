@@ -2354,6 +2354,327 @@ def _b12_sections_fr() -> List[Section]:
 _VITAMIN_B12_ARTICLE = _article_vitamin_b12()
 
 
+def _article_hba1c() -> Article:
+    """HbA1c: what it measures, prediabetes/diabetes ranges, eAG, confounders, when to see a doctor. en, de, it, fr."""
+    published = date(2026, 3, 5)
+    cover = "/static/images/blog/hba1c-hero.png"
+    cover_alt_text = {
+        "en": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
+        "de": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
+        "it": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
+        "fr": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
+    }
+    faq_qa = {
+        "en": [
+            {"question": "How fast can HbA1c change?", "answer": "HbA1c reflects average glucose over about 2–3 months. Meaningful change usually takes at least several weeks of sustained difference in blood sugar. Your clinician can advise when to repeat the test."},
+            {"question": "Is an HbA1c of 5.8% bad?", "answer": "5.8% falls in the prediabetes range (5.7–6.4%). It does not mean you have diabetes, but it suggests higher risk and that lifestyle measures and possibly repeat testing or further assessment may be recommended. Interpretation is for your doctor."},
+            {"question": "Why might my HbA1c be high but fasting glucose normal?", "answer": "HbA1c reflects 2–3 months of glucose; fasting glucose is a single snapshot. Post-meal or overnight glucose can be elevated while fasting stays normal. Certain conditions (e.g. anemia, hemoglobin variants) can also affect HbA1c. Your doctor can help explain your pattern."},
+            {"question": "What about anemia and HbA1c?", "answer": "Iron deficiency, B12 or folate deficiency, and other causes of anemia can skew HbA1c (often lowering it). Hemoglobin variants can also affect results. If you have known or suspected anemia, your clinician will take this into account when interpreting HbA1c."},
+            {"question": "Do I need to fast for HbA1c?", "answer": "HbA1c can usually be measured non-fasting. If the same blood draw is used for fasting glucose or lipids, your lab will ask you to fast; follow the instructions given for your test."},
+            {"question": "What is a normal HbA1c?", "answer": "In general guidelines, below 5.7% is often considered in the normal (non-diabetic) range. Exact cut-offs and reference ranges vary by lab and guideline; your clinician interprets your result in context."},
+        ],
+        "de": [
+            {"question": "Wie schnell kann sich der HbA1c ändern?", "answer": "Der HbA1c spiegelt den durchschnittlichen Glukosewert über etwa 2–3 Monate wider. Eine merkliche Änderung dauert in der Regel mindestens mehrere Wochen. Ihr Arzt legt den Zeitpunkt der Kontrolle fest."},
+            {"question": "Ist ein HbA1c von 5,8 % schlecht?", "answer": "5,8 % liegt im Prädiabetes-Bereich (5,7–6,4 %). Das bedeutet nicht zwingend Diabetes, weist aber auf ein höheres Risiko hin; Lebensstilmaßnahmen und ggf. Kontrollen können sinnvoll sein. Die Einordnung übernimmt Ihr Arzt."},
+            {"question": "Warum ist mein HbA1c hoch, der Nüchternzucker aber normal?", "answer": "HbA1c erfasst 2–3 Monate Glukose; Nüchternzucker ist eine Momentaufnahme. Nach dem Essen oder nachts kann der Zucker erhöht sein. Auch Anämie oder Hämoglobinvarianten können den HbA1c beeinflussen. Ihr Arzt kann Ihr Muster erklären."},
+            {"question": "Was ist mit Anämie und HbA1c?", "answer": "Eisenmangel, B12- oder Folsäuremangel und andere Ursachen einer Anämie können den HbA1c verfälschen (oft nach unten). Hämoglobinvarianten ebenfalls. Bei bekannter oder vermuteter Anämie berücksichtigt Ihr Arzt dies bei der Bewertung."},
+            {"question": "Muss ich für HbA1c nüchtern sein?", "answer": "HbA1c kann in der Regel nicht nüchtern gemessen werden. Wird dasselbe Blut für Nüchternglukose oder Fette verwendet, verlangt das Labor Nüchternheit; folgen Sie den Anweisungen."},
+            {"question": "Was ist ein normaler HbA1c?", "answer": "Nach gängigen Leitlinien gilt oft unter 5,7 % als Normalbereich. Grenzwerte und Referenzbereiche variieren je nach Labor und Leitlinie; Ihr Arzt interpretiert Ihren Wert im Kontext."},
+        ],
+        "it": [
+            {"question": "Quanto velocemente può cambiare l'HbA1c?", "answer": "L'HbA1c riflette la glicemia media in circa 2–3 mesi. Un cambiamento significativo richiede di solito almeno diverse settimane. Il medico consiglierà quando ripetere l'esame."},
+            {"question": "Un HbA1c del 5,8% è preoccupante?", "answer": "Il 5,8% rientra nell'intervallo del prediabete (5,7–6,4%). Non significa diabete, ma indica un rischio maggiore; stile di vita e eventuali controlli possono essere consigliati. L'interpretazione spetta al medico."},
+            {"question": "Perché l'HbA1c è alto ma la glicemia a digiuno normale?", "answer": "L'HbA1c riflette 2–3 mesi di glucosio; la glicemia a digiuno è un singolo valore. Il glucosio dopo i pasti o notturno può essere alto. Anemia o varianti dell'emoglobina possono alterare l'HbA1c. Il medico può spiegare il quadro."},
+            {"question": "E l'anemia e l'HbA1c?", "answer": "Carenza di ferro, B12 o folati e altre cause di anemia possono alterare l'HbA1c (spesso abbassandolo). Anche varianti dell'emoglobina. In caso di anemia nota o sospetta, il medico ne terrà conto nell'interpretazione."},
+            {"question": "Devo essere a digiuno per l'HbA1c?", "answer": "L'HbA1c di solito si può misurare non a digiuno. Se il prelievo è usato anche per glicemia a digiuno o lipidi, il laboratorio richiederà il digiuno; seguite le istruzioni."},
+            {"question": "Qual è un HbA1c normale?", "answer": "In linee guida generali, sotto 5,7% è spesso considerato nella norma. I limiti variano per laboratorio e linee guida; il medico interpreta il risultato nel contesto."},
+        ],
+        "fr": [
+            {"question": "À quelle vitesse l'HbA1c peut-il changer ?", "answer": "L'HbA1c reflète la glycémie moyenne sur environ 2–3 mois. Un changement significatif prend généralement au moins plusieurs semaines. Votre médecin indiquera quand répéter le dosage."},
+            {"question": "Un HbA1c à 5,8 % est-il mauvais ?", "answer": "5,8 % se situe dans la zone prédiabète (5,7–6,4 %). Ce n'est pas un diabète, mais cela suggère un risque accru ; mesures hygiéno-diététiques et éventuellement contrôles peuvent être recommandés. L'interprétation relève du médecin."},
+            {"question": "Pourquoi mon HbA1c est élevé mais ma glycémie à jeun normale ?", "answer": "L'HbA1c reflète 2–3 mois de glucose ; la glycémie à jeun est un instantané. La glycémie post-prandiale ou nocturne peut être élevée. Anémie ou variants d'hémoglobine peuvent aussi fausser l'HbA1c. Votre médecin peut expliquer votre profil."},
+            {"question": "Et l'anémie et l'HbA1c ?", "answer": "Carence en fer, B12 ou folates et autres causes d'anémie peuvent fausser l'HbA1c (souvent à la baisse). Les variants d'hémoglobine aussi. En cas d'anémie connue ou suspectée, le médecin en tiendra compte."},
+            {"question": "Faut-il être à jeun pour l'HbA1c ?", "answer": "L'HbA1c peut en général être dosé sans être à jeun. Si le prélèvement sert aussi à la glycémie à jeun ou aux lipides, le laboratoire demandera le jeûne ; suivez les consignes."},
+            {"question": "Quel est un HbA1c normal ?", "answer": "En général, en dessous de 5,7 % est souvent considéré comme normal. Les seuils varient selon le laboratoire et les recommandations ; votre médecin interprète le résultat dans le contexte."},
+        ],
+    }
+    return Article(
+        id="hba1c-what-it-means",
+        published_at=published,
+        last_updated=published,
+        read_minutes=11,
+        cover_image=cover,
+        cover_alt=cover_alt_text,
+        faq_schema_qa=faq_qa,
+        category={
+            "en": "Diabetes & Metabolic Health",
+            "de": "Diabetes & Stoffwechselgesundheit",
+            "it": "Diabete e salute metabolica",
+            "fr": "Diabète et santé métabolique",
+        },
+        slugs={
+            "en": "hba1c-what-it-means",
+            "de": "hba1c-what-it-means",
+            "it": "hba1c-what-it-means",
+            "fr": "hba1c-what-it-means",
+        },
+        titles={
+            "en": "HbA1c Explained: How to Interpret Prediabetes and Diabetes Ranges",
+            "de": "HbA1c verstehen: Prädiabetes- und Diabetes-Bereiche richtig deuten",
+            "it": "HbA1c: come interpretare prediabete e diabete",
+            "fr": "HbA1c : interpréter les seuils de prédiabète et de diabète",
+        },
+        subtitles={
+            "en": "What HbA1c measures, typical diagnostic ranges, eAG, factors that can skew results, and when to follow up with a clinician.",
+            "de": "Was HbA1c misst, typische Grenzbereiche, eAG, störende Faktoren und wann Sie zum Arzt sollten.",
+            "it": "Cosa misura l'HbA1c, intervalli diagnostici tipici, eAG, fattori che possono alterare il risultato e quando rivolgersi al medico.",
+            "fr": "Ce que mesure l'HbA1c, seuils diagnostiques typiques, eAG, facteurs pouvant fausser le résultat et quand consulter.",
+        },
+        excerpts={
+            "en": "HbA1c reflects average blood glucose over about 2–3 months. Understanding typical ranges and confounders helps you discuss results with your doctor.",
+            "de": "HbA1c spiegelt den durchschnittlichen Blutzucker über etwa 2–3 Monate wider. Typische Bereiche und Störfaktoren helfen beim Arztgespräch.",
+            "it": "L'HbA1c riflette la glicemia media in circa 2–3 mesi. Conoscere gli intervalli tipici e i fattori confondenti aiuta a parlarne con il medico.",
+            "fr": "L'HbA1c reflète la glycémie moyenne sur environ 2–3 mois. Comprendre les seuils typiques et les facteurs de confusion aide à en parler avec le médecin.",
+        },
+        seo_titles={
+            "en": "HbA1c Explained: How to Interpret Prediabetes and Diabetes Ranges | NoryaAI",
+            "de": "HbA1c verstehen: Prädiabetes- und Diabetes-Bereiche | NoryaAI",
+            "it": "HbA1c: come interpretare prediabete e diabete | NoryaAI",
+            "fr": "HbA1c : interpréter les seuils de prédiabète et de diabète | NoryaAI",
+        },
+        seo_descriptions={
+            "en": "Understand HbA1c: what it measures, typical prediabetes and diabetes ranges, eAG, what can skew results, and when to see a clinician. Informational only.",
+            "de": "HbA1c verstehen: was er misst, typische Grenzbereiche, eAG, Störfaktoren und wann zum Arzt. Nur zur Information.",
+            "it": "Capire l'HbA1c: cosa misura, intervalli tipici, eAG, fattori confondenti e quando rivolgersi al medico. Solo informativo.",
+            "fr": "Comprendre l'HbA1c : ce qu'il mesure, seuils typiques, eAG, facteurs de confusion et quand consulter. À titre informatif uniquement.",
+        },
+        sections_by_lang={
+            "en": _hba1c_sections_en(),
+            "de": _hba1c_sections_de(),
+            "it": _hba1c_sections_it(),
+            "fr": _hba1c_sections_fr(),
+        },
+    )
+
+
+def _hba1c_sections_en() -> List[Section]:
+    return [
+        Section(
+            id="what-hba1c-measures",
+            level=2,
+            heading="What HbA1c measures",
+            body_html="""
+<p>HbA1c (glycated haemoglobin A1c) is a form of haemoglobin that has glucose attached to it. It reflects your <strong>average blood glucose over roughly 2–3 months</strong>, because red blood cells live about that long. The more glucose in your blood over that period, the higher the proportion of haemoglobin that becomes glycated. Laboratories report HbA1c as a percentage (e.g. 5.6%) or in mmol/mol in some countries. This test is widely used to screen for and monitor diabetes and prediabetes, and to guide treatment. It does not replace a clinical diagnosis; interpretation and any treatment decisions are made by your doctor.</p>
+""",
+        ),
+        Section(
+            id="typical-diagnostic-ranges",
+            level=2,
+            heading="Typical diagnostic ranges",
+            body_html="""
+<p>Reference and diagnostic cut-offs <strong>vary by laboratory and guideline</strong>. The following are commonly used for context only; your lab and clinician use the criteria that apply to your situation. In many guidelines:</p>
+<ul>
+  <li><strong>Normal</strong>: below 5.7% (often &lt;5.7%).</li>
+  <li><strong>Prediabetes</strong>: 5.7–6.4%.</li>
+  <li><strong>Diabetes</strong>: 6.5% or above (≥6.5%).</li>
+</ul>
+<p>These ranges are for general information. The final classification (normal, prediabetes, or diabetes) is a <strong>clinical and laboratory decision</strong> made by your doctor using your result, your history, and sometimes repeat or additional tests. Do not self-diagnose; discuss your result with a clinician.</p>
+""",
+        ),
+        Section(
+            id="hba1c-vs-fasting-vs-ogtt",
+            level=2,
+            heading="HbA1c vs fasting glucose vs OGTT",
+            body_html="""
+<p>Different tests give different information:</p>
+<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">
+  <thead><tr class="bg-slate-50"><th class="border border-slate-200 px-3 py-2 text-left">Test</th><th class="border border-slate-200 px-3 py-2 text-left">What it reflects</th></tr></thead>
+  <tbody>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>HbA1c</strong></td><td class="border border-slate-200 px-3 py-2">Average glucose over ~2–3 months; no fasting needed for HbA1c itself.</td></tr>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>Fasting glucose</strong></td><td class="border border-slate-200 px-3 py-2">Blood sugar at a single time after fasting (often 8+ hours).</td></tr>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>OGTT (oral glucose tolerance)</strong></td><td class="border border-slate-200 px-3 py-2">Glucose before and after a standard glucose drink; used in some diagnostic and pregnancy protocols.</td></tr>
+  </tbody>
+</table>
+<p>Your doctor may use one or more of these, depending on the clinical situation and local guidelines.</p>
+""",
+        ),
+        Section(
+            id="estimated-average-glucose",
+            level=2,
+            heading="Estimated Average Glucose (eAG)",
+            body_html="""
+<p>Some labs or reports show an <strong>Estimated Average Glucose (eAG)</strong> next to your HbA1c. This is a calculated estimate of what your average blood glucose might have been (e.g. in mg/dL or mmol/L) over the period that HbA1c reflects. It is <strong>not a precise measurement</strong> and is meant only to help you relate the percentage to everyday glucose units. Do not use it as the sole basis for treatment; your clinician will interpret your actual HbA1c and other results in context.</p>
+""",
+        ),
+        Section(
+            id="what-can-skew-hba1c",
+            level=2,
+            heading="What can skew HbA1c",
+            body_html="""
+<p>Several conditions can make HbA1c less reliable or harder to interpret:</p>
+<ul>
+  <li><strong>Anaemia / iron deficiency</strong>: Can alter red cell turnover and haemoglobin, affecting HbA1c.</li>
+  <li><strong>Haemoglobin variants</strong>: Some genetic variants (e.g. sickle cell trait, thalassaemia) can interfere with certain HbA1c methods.</li>
+  <li><strong>Pregnancy</strong>: Guidelines may prefer other tests (e.g. fasting glucose, OGTT) for screening or diagnosis in pregnancy.</li>
+  <li><strong>Kidney disease</strong>: Can affect red cell life span and haemoglobin; interpretation may need adjustment.</li>
+  <li><strong>Recent blood loss or transfusion</strong>: Can change the mix of red cells and thus HbA1c.</li>
+  <li><strong>Other</strong>: Severe liver disease, some medications, or recent major illness can sometimes influence results.</li>
+</ul>
+<p>If any of these apply to you, your clinician will take them into account when interpreting your HbA1c.</p>
+""",
+        ),
+        Section(
+            id="when-to-follow-up",
+            level=2,
+            heading="When to follow up with a clinician",
+            body_html="""
+<p>You should see a doctor or nurse for interpretation and next steps if:</p>
+<ul>
+  <li>Your <strong>HbA1c is 6.5% or above</strong> (or in a range your lab flags as diabetes).</li>
+  <li>Your HbA1c has <strong>risen quickly</strong> or is in the prediabetes range and you have risk factors or symptoms.</li>
+  <li>You have <strong>symptoms</strong> such as unusual thirst, frequent urination, unexplained weight loss, fatigue, or blurred vision.</li>
+  <li>You are <strong>pregnant</strong> or planning pregnancy and have questions about glucose or diabetes screening.</li>
+  <li>You have conditions that can skew HbA1c (e.g. anaemia, haemoglobin variant) and need guidance on which tests to use.</li>
+</ul>
+<p>This article is for information only; it does not replace a clinical assessment. Always discuss your results and symptoms with a healthcare provider.</p>
+""",
+        ),
+        Section(
+            id="next-steps-clinician",
+            level=2,
+            heading="Next steps a clinician may consider",
+            body_html="""
+<p>Depending on your result and history, your doctor may:</p>
+<ul>
+  <li>Repeat the HbA1c or order <strong>fasting glucose</strong> or an <strong>OGTT</strong> to confirm or clarify.</li>
+  <li>Check <strong>lipids</strong>, <strong>kidney function</strong> (e.g. creatinine, eGFR), and <strong>urine albumin</strong> as part of cardiovascular and kidney risk assessment.</li>
+  <li>Monitor <strong>blood pressure</strong> and advise on lifestyle (diet, activity, weight, sleep) and, if needed, medication.</li>
+</ul>
+<p>Which tests and treatments are chosen is a clinical decision made with you by your doctor.</p>
+""",
+        ),
+        Section(
+            id="practical-lifestyle",
+            level=2,
+            heading="Practical lifestyle overview",
+            body_html="""
+<p>General principles that often support metabolic health (and are not a substitute for medical advice):</p>
+<ul>
+  <li><strong>Diet</strong>: Balanced meals, plenty of vegetables and fibre, limited added sugars and highly processed foods; portion awareness. No specific “diabetes diet” is required for everyone—your doctor or dietitian can tailor advice.</li>
+  <li><strong>Activity</strong>: Regular physical activity (e.g. 150 minutes per week of moderate exercise, or as advised for you) can help improve glucose and overall health.</li>
+  <li><strong>Sleep</strong>: Adequate, regular sleep supports metabolism and well-being.</li>
+  <li><strong>Weight</strong>: If your doctor has recommended weight management, gradual, sustained changes are usually more effective than short-term diets. This is general guidance only; no medication or supplement is recommended here—your clinician will advise on any treatment.</li>
+</ul>
+""",
+        ),
+        Section(
+            id="faq",
+            level=2,
+            heading="Frequently asked questions",
+            body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">How fast can HbA1c change?</h3>
+<p>HbA1c reflects average glucose over about 2–3 months. Meaningful change usually takes at least several weeks of sustained difference in blood sugar. Your clinician can advise when to repeat the test.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Is an HbA1c of 5.8% bad?</h3>
+<p>5.8% falls in the prediabetes range (5.7–6.4%). It does not mean you have diabetes, but it suggests higher risk and that lifestyle measures and possibly repeat testing or further assessment may be recommended. Interpretation is for your doctor.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Why might my HbA1c be high but fasting glucose normal?</h3>
+<p>HbA1c reflects 2–3 months of glucose; fasting glucose is a single snapshot. Post-meal or overnight glucose can be elevated while fasting stays normal. Certain conditions (e.g. anemia, hemoglobin variants) can also affect HbA1c. Your doctor can help explain your pattern.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">What about anemia and HbA1c?</h3>
+<p>Iron deficiency, B12 or folate deficiency, and other causes of anemia can skew HbA1c (often lowering it). Hemoglobin variants can also affect results. If you have known or suspected anemia, your clinician will take this into account when interpreting HbA1c.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Do I need to fast for HbA1c?</h3>
+<p>HbA1c can usually be measured non-fasting. If the same blood draw is used for fasting glucose or lipids, your lab will ask you to fast; follow the instructions given for your test.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">What is a normal HbA1c?</h3>
+<p>In general guidelines, below 5.7% is often considered in the normal (non-diabetic) range. Exact cut-offs and reference ranges vary by lab and guideline; your clinician interprets your result in context.</p>
+""",
+        ),
+        Section(
+            id="disclaimer",
+            level=2,
+            heading="Medical disclaimer",
+            body_html="""
+<p><strong>This content is for information only and does not constitute medical advice, diagnosis, or treatment.</strong> Always discuss your results and any symptoms with a qualified healthcare provider. Do not start or change diet, exercise, or medication based solely on this article. If you have concerns about your health, seek professional medical care.</p>
+""",
+        ),
+    ]
+
+
+def _hba1c_sections_de() -> List[Section]:
+    return [
+        Section(id="what-hba1c-measures", level=2, heading="Was HbA1c misst",
+            body_html="<p>HbA1c (glykiertes Hämoglobin A1c) ist Hämoglobin mit gebundenem Glukose. Es spiegelt Ihren <strong>durchschnittlichen Blutzucker über etwa 2–3 Monate</strong> wider. Je mehr Glukose in dieser Zeit im Blut, desto höher der Anteil glykierter Hämoglobine. Labore geben HbA1c oft in % (z. B. 5,6 %) oder in mmol/mol an. Der Test dient u. a. zum Screening und zur Verlaufskontrolle bei Diabetes und Prädiabetes. Die Bewertung und Therapieentscheidung obliegt dem Arzt.</p>"),
+        Section(id="typical-diagnostic-ranges", level=2, heading="Typische Grenzbereiche",
+            body_html="<p>Referenz- und Grenzwerte <strong>variieren je nach Labor und Leitlinie</strong>. Zur groben Orientierung (nur Kontext): <strong>Normal</strong> oft &lt;5,7 %; <strong>Prädiabetes</strong> 5,7–6,4 %; <strong>Diabetes</strong> ≥6,5 %. Die Einordnung (Normal, Prädiabetes, Diabetes) ist eine <strong>klinisch-labormedizinische Entscheidung</strong> durch Ihren Arzt. Bitte nicht selbst diagnostizieren.</p>"),
+        Section(id="hba1c-vs-fasting-vs-ogtt", level=2, heading="HbA1c vs. Nüchternglukose vs. oGTT",
+            body_html="<p><strong>HbA1c</strong>: Durchschnitt über ~2–3 Monate; für den HbA1c selbst meist kein Nüchtern nötig. <strong>Nüchternglukose</strong>: Einzelwert nach Fasten (z. B. 8+ Stunden). <strong>oGTT</strong>: Glukose vor und nach Trinklösung; u. a. in Diagnostik und Schwangerschaft. Welche Tests der Arzt anordnet, hängt von der Situation und den Leitlinien ab.</p>"),
+        Section(id="estimated-average-glucose", level=2, heading="Geschätzte durchschnittliche Glukose (eAG)",
+            body_html="<p>Manche Berichte zeigen einen <strong>eAG</strong> (geschätzte durchschnittliche Glukose) neben dem HbA1c. Das ist eine <strong>Schätzung</strong>, kein exakter Wert, und dient nur der Veranschaulichung (z. B. in mg/dL). Die Interpretation von HbA1c und weiteren Werten übernimmt Ihr Arzt.</p>"),
+        Section(id="what-can-skew-hba1c", level=2, heading="Was den HbA1c verfälschen kann",
+            body_html="<p>U. a.: <strong>Anämie/Eisenmangel</strong>, <strong>Hämoglobinvarianten</strong>, <strong>Schwangerschaft</strong> (oft andere Tests bevorzugt), <strong>Nierenerkrankung</strong>, <strong>kürzlicher Blutverlust oder Transfusion</strong>, schwere Lebererkrankung oder bestimmte Medikamente. Bei Zutreffen berücksichtigt Ihr Arzt dies bei der Bewertung.</p>"),
+        Section(id="when-to-follow-up", level=2, heading="Wann Sie zum Arzt sollten",
+            body_html="<p>Bitte zum Arzt, wenn: HbA1c <strong>≥6,5 %</strong> (oder als Diabetes eingestuft), <strong>schneller Anstieg</strong> oder Prädiabetes mit Risikofaktoren/Symptomen, <strong>Symptome</strong> wie starker Durst, häufiges Wasserlassen, Gewichtsverlust, Müdigkeit, Sehstörungen, <strong>Schwangerschaft</strong> oder geplante Schwangerschaft, oder bekannte Störfaktoren (z. B. Anämie). Dieser Artikel ersetzt keine ärztliche Bewertung.</p>"),
+        Section(id="next-steps-clinician", level=2, heading="Mögliche nächste Schritte",
+            body_html="<p>Der Arzt kann z. B. HbA1c wiederholen, <strong>Nüchternglukose</strong> oder <strong>oGTT</strong> veranlassen, <strong>Lipide</strong>, <strong>Nierenfunktion</strong> (z. B. Kreatinin, eGFR), <strong>Urin-Albumin</strong> und <strong>Blutdruck</strong> prüfen sowie zu Lebensstil (Ernährung, Bewegung, Gewicht, Schlaf) und ggf. Medikation beraten. Die Auswahl trifft der Arzt mit Ihnen.</p>"),
+        Section(id="practical-lifestyle", level=2, heading="Praktischer Lebensstil-Überblick",
+            body_html="<p>Allgemeine Prinzipien (kein Ersatz für ärztlichen Rat): <strong>Ernährung</strong>: ausgewogen, viel Gemüse und Ballaststoffe, wenig zugesetzter Zucker und stark verarbeitete Lebensmittel. <strong>Bewegung</strong>: z. B. 150 Min./Woche moderate Aktivität. <strong>Schlaf</strong>: ausreichend und regelmäßig. <strong>Gewicht</strong>: falls vom Arzt empfohlen, eher langfristige, stetige Änderungen. Keine Medikamenten- oder Supplementempfehlung hier—Ihr Arzt berät.</p>"),
+        Section(id="faq", level=2, heading="Häufige Fragen",
+            body_html="<p>Siehe Abschnitt „Häufige Fragen“ oben; die Bewertung Ihres Wertes erfolgt durch den Arzt.</p>"),
+        Section(id="disclaimer", level=2, heading="Hinweis",
+            body_html="<p><strong>Dieser Inhalt dient nur der Information und ersetzt keine medizinische Beratung, Diagnose oder Behandlung.</strong> Besprechen Sie Ergebnisse und Beschwerden immer mit einem Arzt. Keine Änderung von Ernährung, Bewegung oder Medikation nur aufgrund dieses Artikels.</p>"),
+    ]
+
+
+def _hba1c_sections_it() -> List[Section]:
+    return [
+        Section(id="what-hba1c-measures", level=2, heading="Cosa misura l'HbA1c",
+            body_html="<p>L'HbA1c (emoglobina glicata A1c) riflette la <strong>glicemia media in circa 2–3 mesi</strong>. Più glucosio nel sangue in quel periodo, più emoglobina glicata. I laboratori riportano l'HbA1c in % o in mmol/mol. Si usa per screening e monitoraggio di diabete e prediabete. L'interpretazione e le decisioni terapeutiche spettano al medico.</p>"),
+        Section(id="typical-diagnostic-ranges", level=2, heading="Intervalli diagnostici tipici",
+            body_html="<p>I limiti <strong>variano per laboratorio e linee guida</strong>. In generale: <strong>Normale</strong> &lt;5,7%; <strong>Prediabete</strong> 5,7–6,4%; <strong>Diabete</strong> ≥6,5%. La classificazione è una <strong>decisione clinica e di laboratorio</strong> del medico. Non autodiagnosticarsi.</p>"),
+        Section(id="hba1c-vs-fasting-vs-ogtt", level=2, heading="HbA1c vs glicemia a digiuno vs OGTT",
+            body_html="<p><strong>HbA1c</strong>: media su ~2–3 mesi; di solito non serve digiuno. <strong>Glicemia a digiuno</strong>: valore singolo dopo digiuno. <strong>OGTT</strong>: glucosio prima e dopo bevanda standard; usato in gravidanza e in alcuni protocolli. Il medico sceglie i test in base alla situazione.</p>"),
+        Section(id="estimated-average-glucose", level=2, heading="Glucosio medio stimato (eAG)",
+            body_html="<p>Alcuni referti mostrano l'<strong>eAG</strong> (glucosio medio stimato) accanto all'HbA1c. È una <strong>stima</strong>, non una misura precisa, per orientarsi (es. in mg/dL). L'interpretazione spetta al medico.</p>"),
+        Section(id="what-can-skew-hba1c", level=2, heading="Cosa può alterare l'HbA1c",
+            body_html="<p>Anemia/carenza di ferro, varianti dell'emoglobina, gravidanza (spesso si preferiscono altri test), malattia renale, recente perdita di sangue o trasfusione, grave malattia epatica o alcuni farmaci. Il medico ne terrà conto.</p>"),
+        Section(id="when-to-follow-up", level=2, heading="Quando rivolgersi al medico",
+            body_html="<p>Consultare il medico se: HbA1c <strong>≥6,5%</strong>, <strong>aumento rapido</strong> o prediabete con fattori di rischio/sintomi, <strong>sintomi</strong> (sete, minzione frequente, perdita di peso, affaticamento, vista offuscata), <strong>gravidanza</strong> o condizioni che alterano l'HbA1c. Questo articolo non sostituisce la valutazione clinica.</p>"),
+        Section(id="next-steps-clinician", level=2, heading="Prossimi passi che il medico può considerare",
+            body_html="<p>Il medico può ripetere l'HbA1c, richiedere <strong>glicemia a digiuno</strong> o <strong>OGTT</strong>, controllare <strong>lipidi</strong>, <strong>funzione renale</strong>, <strong>albumina urinaria</strong> e <strong>pressione</strong>, e consigliare stile di vita (dieta, attività, sonno, peso) e eventuale terapia. La scelta è clinica.</p>"),
+        Section(id="practical-lifestyle", level=2, heading="Stile di vita in pratica",
+            body_html="<p>Principi generali (non sostituiscono il parere medico): <strong>Dieta</strong>: equilibrata, verdure e fibre, poco zucchero aggiunto. <strong>Attività</strong>: es. 150 min/settimana di attività moderata. <strong>Sonno</strong>: adeguato. <strong>Peso</strong>: se consigliato dal medico, modifiche graduali. Nessun farmaco o integratore consigliato qui—il medico indicherà eventuali cure.</p>"),
+        Section(id="faq", level=2, heading="Domande frequenti",
+            body_html="<p>Vedi sezione Domande frequenti sopra; l'interpretazione del valore spetta al medico.</p>"),
+        Section(id="disclaimer", level=2, heading="Disclaimer medico",
+            body_html="<p><strong>Questo contenuto è solo informativo e non costituisce consulenza, diagnosi o trattamento medico.</strong> Discutere sempre risultati e sintomi con un operatore sanitario. Non modificare dieta, esercizio o farmaci solo in base a questo articolo.</p>"),
+    ]
+
+
+def _hba1c_sections_fr() -> List[Section]:
+    return [
+        Section(id="what-hba1c-measures", level=2, heading="Ce que mesure l'HbA1c",
+            body_html="<p>L'HbA1c (hémoglobine glyquée A1c) reflète la <strong>glycémie moyenne sur environ 2–3 mois</strong>. Plus de glucose dans le sang sur cette période, plus la proportion d'hémoglobine glyquée. Les laboratoires rapportent l'HbA1c en % ou en mmol/mol. Utilisé pour le dépistage et le suivi du diabète et du prédiabète. L'interprétation et les décisions thérapeutiques relèvent du médecin.</p>"),
+        Section(id="typical-diagnostic-ranges", level=2, heading="Seuils diagnostiques typiques",
+            body_html="<p>Les seuils <strong>varient selon le laboratoire et les recommandations</strong>. En général : <strong>Normal</strong> &lt;5,7 % ; <strong>Prédiabète</strong> 5,7–6,4 % ; <strong>Diabète</strong> ≥6,5 %. La classification est une <strong>décision clinique et biologique</strong> du médecin. Ne pas s'auto-diagnostiquer.</p>"),
+        Section(id="hba1c-vs-fasting-vs-ogtt", level=2, heading="HbA1c vs glycémie à jeun vs HGPO",
+            body_html="<p><strong>HbA1c</strong> : moyenne sur ~2–3 mois ; en général pas besoin d'être à jeun pour l'HbA1c seul. <strong>Glycémie à jeun</strong> : valeur unique après jeûne. <strong>HGPO</strong> : glucose avant et après boisson standard ; utilisé en grossesse et dans certains protocoles. Le médecin choisit les examens selon la situation.</p>"),
+        Section(id="estimated-average-glucose", level=2, heading="Glycémie moyenne estimée (eAG)",
+            body_html="<p>Certains comptes-rendus affichent l'<strong>eAG</strong> (glycémie moyenne estimée) à côté de l'HbA1c. C'est une <strong>estimation</strong>, pas une mesure précise, pour illustrer (ex. en mg/dL). L'interprétation relève du médecin.</p>"),
+        Section(id="what-can-skew-hba1c", level=2, heading="Ce qui peut fausser l'HbA1c",
+            body_html="<p>Anémie/carence en fer, variants d'hémoglobine, grossesse (souvent d'autres tests préférés), maladie rénale, perte de sang ou transfusion récente, maladie hépatique sévère ou certains médicaments. Le médecin en tiendra compte.</p>"),
+        Section(id="when-to-follow-up", level=2, heading="Quand consulter",
+            body_html="<p>Consulter si : HbA1c <strong>≥6,5 %</strong>, <strong>augmentation rapide</strong> ou prédiabète avec facteurs de risque/symptômes, <strong>symptômes</strong> (soif, urines fréquentes, perte de poids, fatigue, vue floue), <strong>grossesse</strong> ou facteurs pouvant fausser l'HbA1c. Cet article ne remplace pas une évaluation clinique.</p>"),
+        Section(id="next-steps-clinician", level=2, heading="Prochaines étapes possibles",
+            body_html="<p>Le médecin peut répéter l'HbA1c, prescrire <strong>glycémie à jeun</strong> ou <strong>HGPO</strong>, contrôler <strong>lipides</strong>, <strong>fonction rénale</strong>, <strong>albumine urinaire</strong> et <strong>tension</strong>, et conseiller le mode de vie (alimentation, activité, sommeil, poids) et éventuellement un traitement. Le choix est clinique.</p>"),
+        Section(id="practical-lifestyle", level=2, heading="Mode de vie en pratique",
+            body_html="<p>Principes généraux (ne remplacent pas l'avis médical) : <strong>Alimentation</strong> : équilibrée, légumes et fibres, peu de sucres ajoutés. <strong>Activité</strong> : ex. 150 min/semaine d'activité modérée. <strong>Sommeil</strong> : suffisant. <strong>Poids</strong> : si le médecin le recommande, changements progressifs. Aucun médicament ou complément recommandé ici—le médecin indiquera les traitements.</p>"),
+        Section(id="faq", level=2, heading="Questions fréquentes",
+            body_html="<p>Voir section Questions fréquentes ci-dessus ; l'interprétation du résultat relève du médecin.</p>"),
+        Section(id="disclaimer", level=2, heading="Avertissement médical",
+            body_html="<p><strong>Ce contenu est à titre informatif uniquement et ne constitue pas un avis, diagnostic ou traitement médical.</strong> Toujours discuter des résultats et symptômes avec un professionnel de santé. Ne pas modifier alimentation, exercice ou médicaments uniquement sur la base de cet article.</p>"),
+    ]
+
+
+_HBA1C_ARTICLE = _article_hba1c()
+
+
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
     _KAN_TAHLILI_ARTICLE,
@@ -2361,6 +2682,7 @@ ARTICLES: List[Article] = [
     _CRP_ARTICLE,
     _VITAMIN_D_ARTICLE,
     _VITAMIN_B12_ARTICLE,
+    _HBA1C_ARTICLE,
 ]
 
 
@@ -2412,6 +2734,9 @@ def get_article(lang: str, slug: str) -> dict | None:
             if getattr(art, "cover_alt", None) and isinstance(art.cover_alt, dict):
                 cover_alt = art.cover_alt.get(lang) or art.cover_alt.get(DEFAULT_BLOG_LANG)
             last_updated = getattr(art, "last_updated", None) or art.published_at
+            faq_schema_qa = None
+            if getattr(art, "faq_schema_qa", None) and isinstance(art.faq_schema_qa, dict):
+                faq_schema_qa = art.faq_schema_qa.get(lang) or art.faq_schema_qa.get(DEFAULT_BLOG_LANG)
             return {
                 "id": art.id,
                 "lang": lang,
@@ -2431,6 +2756,7 @@ def get_article(lang: str, slug: str) -> dict | None:
                 "available_langs": {
                     l: art.slugs[l] for l in art.slugs.keys() if l in BLOG_LANGS
                 },
+                "faq_schema_qa": faq_schema_qa,
             }
     return None
 

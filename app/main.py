@@ -987,6 +987,18 @@ def blog_detail(request: Request, lang: str, slug: str):
         "author": {"@type": "Organization", "name": BRAND_NAME},
     }
     article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
+    faq_schema_json = None
+    faq_qa = art.get("faq_schema_qa")
+    if faq_qa and isinstance(faq_qa, list):
+        faq_schema = {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            "mainEntity": [
+                {"@type": "Question", "name": item.get("question", ""), "acceptedAnswer": {"@type": "Answer", "text": item.get("answer", "")}}
+                for item in faq_qa
+            ],
+        }
+        faq_schema_json = json.dumps(faq_schema, ensure_ascii=False, indent=2)
 
     blog_ui = BLOG_UI.get(lang, BLOG_UI["en"])
     base_ui = get_base_ui(lang)
@@ -1003,6 +1015,7 @@ def blog_detail(request: Request, lang: str, slug: str):
             "lang_alternates": lang_alternates,
             "hreflang_alternates": hreflang_alternates,
             "article_schema_json": article_schema_json,
+            "faq_schema_json": faq_schema_json,
             "blog_ui": blog_ui,
             "base_ui": base_ui,
             "brand_name": BRAND_NAME,

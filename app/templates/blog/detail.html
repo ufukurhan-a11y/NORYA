@@ -22,6 +22,9 @@
   {% if article_schema_json %}
   <script type="application/ld+json">{{ article_schema_json|safe }}</script>
   {% endif %}
+  {% if faq_schema_json %}
+  <script type="application/ld+json">{{ faq_schema_json|safe }}</script>
+  {% endif %}
   <style>
     .prose .blog-definition { margin: 1.25rem 0; padding: 1rem 1.25rem; background: #f8fafc; border-left: 3px solid #0d9488; border-radius: 0 8px 8px 0; font-size: 0.9375rem; line-height: 1.7; color: #475569; }
     .prose .blog-definition strong { color: #0f172a; }
