@@ -4,6 +4,7 @@ from dataclasses import dataclass
 from datetime import date
 from typing import Dict, List, Optional
 
+from app.core.config import BRAND_NAME
 
 # Blog'un desteklediği diller (mevcut sistemle uyumlu)
 BLOG_LANGS = frozenset({"tr", "en", "de", "it", "es", "fr", "he", "ar", "hi", "el", "cs", "sr"})
@@ -15,83 +16,95 @@ DEFAULT_BLOG_LANG = "en"
 BLOG_UI = {
     "en": {
         "hero_badge": "Health insights",
-        "hero_title": "Norya Blog",
+        "hero_title": f"{BRAND_NAME} Blog",
         "hero_desc": "Clear, evidence-based content to help you understand your lab results and biomarkers.",
         "search_placeholder": "Search articles…",
         "category_all": "All",
         "read_article": "Read article",
         "read_min": "min read",
         "cta_title": "Understand your blood test more clearly",
-        "cta_text": "Use Norya to turn biomarker values into a more structured and easier-to-read health summary.",
+        "cta_text": f"Use {BRAND_NAME} to turn biomarker values into a more structured and easier-to-read health summary.",
         "cta_button": "Start analysis",
         "toc_title": "On this page",
         "other_languages": "Other languages",
         "back_to_blog": "Back to blog",
-        "home_link": "Norya",
-        "seo_title": "Norya Blog — Health analysis and lab results",
+        "home_link": BRAND_NAME,
+        "seo_title": f"{BRAND_NAME} Blog — Health analysis and lab results",
         "meta_description": "Evidence-based articles to help you understand blood tests, biomarkers and lab reports.",
         "no_results": "No articles match your search.",
         "last_updated": "Last updated",
+        "hero_cta_primary": "Analyze your blood test",
+        "end_cta_title": "Upload your results, get a clear report",
+        "end_cta_button": "Analyze blood test",
     },
     "de": {
         "hero_badge": "Gesundheitswissen",
-        "hero_title": "Norya Blog",
+        "hero_title": f"{BRAND_NAME} Blog",
         "hero_desc": "Klare, evidenzbasierte Inhalte, die Ihnen helfen, Laborergebnisse und Biomarker besser zu verstehen.",
         "search_placeholder": "Artikel suchen…",
         "category_all": "Alle",
         "read_article": "Artikel lesen",
         "read_min": "Min. Lesezeit",
         "cta_title": "Ihr Blutbild klarer verstehen",
-        "cta_text": "Mit Norya werden Ihre Biomarker-Werte in eine strukturierte, gut lesbare Gesundheitszusammenfassung übersetzt.",
+        "cta_text": f"Mit {BRAND_NAME} werden Ihre Biomarker-Werte in eine strukturierte, gut lesbare Gesundheitszusammenfassung übersetzt.",
         "cta_button": "Analyse starten",
         "toc_title": "Auf dieser Seite",
         "other_languages": "Andere Sprachen",
         "back_to_blog": "Zurück zum Blog",
-        "home_link": "Norya",
-        "seo_title": "Norya Blog — Gesundheitsanalyse und Laborergebnisse",
+        "home_link": BRAND_NAME,
+        "seo_title": f"{BRAND_NAME} Blog — Gesundheitsanalyse und Laborergebnisse",
         "meta_description": "Evidenzbasierte Artikel zu Blutwerten, Biomarkern und Laborbefunden.",
         "no_results": "Keine Artikel entsprechen Ihrer Suche.",
         "last_updated": "Zuletzt aktualisiert",
+        "hero_cta_primary": "Blutwerte analysieren",
+        "end_cta_title": "Laden Sie Ihre Ergebnisse hoch, erhalten Sie einen klaren Bericht",
+        "end_cta_button": "Blutanalyse starten",
     },
     "fr": {
         "hero_badge": "Santé & analyses",
-        "hero_title": "Blog Norya",
+        "hero_title": f"Blog {BRAND_NAME}",
         "hero_desc": "Des contenus clairs et fondés sur les preuves pour mieux comprendre vos résultats de laboratoire et biomarqueurs.",
         "search_placeholder": "Rechercher un article…",
         "category_all": "Tout",
         "read_article": "Lire l'article",
         "read_min": "min de lecture",
         "cta_title": "Comprenez mieux votre bilan sanguin",
-        "cta_text": "Avec Norya, transformez vos valeurs de biomarqueurs en un résumé de santé structuré et lisible.",
+        "cta_text": f"Avec {BRAND_NAME}, transformez vos valeurs de biomarqueurs en un résumé de santé structuré et lisible.",
         "cta_button": "Lancer l'analyse",
         "toc_title": "Sur cette page",
         "other_languages": "Autres langues",
         "back_to_blog": "Retour au blog",
-        "home_link": "Norya",
-        "seo_title": "Blog Norya — Analyses santé et résultats de laboratoire",
+        "home_link": BRAND_NAME,
+        "seo_title": f"Blog {BRAND_NAME} — Analyses santé et résultats de laboratoire",
         "meta_description": "Articles fondés sur les preuves pour comprendre bilans sanguins, biomarqueurs et comptes-rendus de laboratoire.",
         "no_results": "Aucun article ne correspond à votre recherche.",
         "last_updated": "Dernière mise à jour",
+        "hero_cta_primary": "Analyser votre bilan sanguin",
+        "end_cta_title": "Téléchargez vos résultats, obtenez un rapport clair",
+        "end_cta_button": "Analyser le bilan sanguin",
     },
     "it": {
         "hero_badge": "Salute e analisi",
-        "hero_title": "Blog Norya",
+        "hero_title": f"Blog {BRAND_NAME}",
         "hero_desc": "Contenuti chiari e basati su evidenze per capire meglio i tuoi risultati di laboratorio e i biomarcatori.",
         "search_placeholder": "Cerca articoli…",
         "category_all": "Tutti",
         "read_article": "Leggi l'articolo",
         "read_min": "min di lettura",
         "cta_title": "Comprendi meglio le tue analisi del sangue",
-        "cta_text": "Con Norya trasformi i valori dei biomarcatori in un riepilogo di salute strutturato e facile da leggere.",
+        "cta_text": f"Con {BRAND_NAME} trasformi i valori dei biomarcatori in un riepilogo di salute strutturato e facile da leggere.",
         "cta_button": "Avvia analisi",
         "toc_title": "In questa pagina",
         "other_languages": "Altre lingue",
         "back_to_blog": "Torna al blog",
-        "home_link": "Norya",
-        "seo_title": "Blog Norya — Analisi della salute e risultati di laboratorio",
+        "home_link": BRAND_NAME,
+        "seo_title": f"Blog {BRAND_NAME} — Analisi della salute e risultati di laboratorio",
         "meta_description": "Articoli basati su evidenze per capire esami del sangue, biomarcatori e referti di laboratorio.",
         "no_results": "Nessun articolo corrisponde alla ricerca.",
         "last_updated": "Ultimo aggiornamento",
+        "hero_cta_primary": "Analizza le tue analisi del sangue",
+        "end_cta_title": "Carica i risultati, ottieni un report chiaro",
+        "end_cta_button": "Analizza le analisi del sangue",
     },
 }
 
@@ -469,7 +482,7 @@ def _article_kan_tahlili_nasil_okunur() -> Article:
         },
         seo_titles={
             "tr": "Kan Tahlili Nasıl Okunur? Referans Aralığı ve Değerler Rehberi",
-            "en": "How to Read Blood Test Results (Step-by-Step) | NoryaAl",
+            "en": "How to Read Blood Test Results (Step-by-Step) | NoryaAI",
             "de": "Blutbefund lesen: Referenzbereich und Werte verstehen",
             "it": "Come leggere gli esami del sangue | Guida valori e riferimenti",
             "es": "Cómo leer un análisis de sangre | Guía de valores y referencia",
@@ -1634,11 +1647,427 @@ def _article_crp() -> Article:
 _CRP_ARTICLE = _article_crp()
 
 
+def _article_vitamin_d() -> Article:
+    """Vitamin D (25(OH)D): low/high meaning, ranges, causes, when to see a doctor, safe supplementation. en, de, it, fr."""
+    published = date(2026, 3, 5)
+    cover = "/static/images/blog/vitamin-d-hero.png"
+    cover_alt_text = {
+        "en": "Vitamin D blood test and status dashboard — NoryaAI",
+        "de": "Vitamin-D-Bluttest und Status-Dashboard — NoryaAI",
+        "it": "Esame vitamina D e dashboard stato — NoryaAI",
+        "fr": "Dosage vitamine D et tableau de bord statut — NoryaAI",
+    }
+    return Article(
+        id="vitamin-d-what-it-means",
+        published_at=published,
+        last_updated=published,
+        read_minutes=12,
+        cover_image=cover,
+        cover_alt=cover_alt_text,
+        category={
+            "en": "Vitamins & Minerals",
+            "de": "Vitamine & Mineralstoffe",
+            "it": "Vitamine e minerali",
+            "fr": "Vitamines et minéraux",
+        },
+        slugs={
+            "en": "vitamin-d-what-it-means",
+            "de": "vitamin-d-what-it-means",
+            "it": "vitamin-d-what-it-means",
+            "fr": "vitamin-d-what-it-means",
+        },
+        titles={
+            "en": "Vitamin D Explained: Interpreting Low and High 25(OH)D Results",
+            "de": "Vitamin D verstehen: Niedrige und hohe 25(OH)D-Werte",
+            "it": "Vitamina D: come interpretare valori bassi o alti di 25(OH)D",
+            "fr": "Vitamine D : interpréter un taux bas ou élevé de 25(OH)D",
+        },
+        subtitles={
+            "en": "A clear guide to vitamin D, 25(OH)D ranges, causes of low or high levels, when to see a doctor, and safe supplementation principles.",
+            "de": "Überblick über Vitamin D, 25(OH)D-Referenzbereiche, Ursachen für niedrige oder hohe Werte und wann Sie zum Arzt sollten.",
+            "it": "Guida chiara su vitamina D, intervalli 25(OH)D, cause di valori bassi o alti e quando rivolgersi al medico.",
+            "fr": "Guide clair sur la vitamine D, fourchettes 25(OH)D, causes de taux bas ou élevés et quand consulter.",
+        },
+        excerpts={
+            "en": "Vitamin D status is usually assessed by 25(OH)D. Low or high results have many possible causes; interpretation should be done with a clinician.",
+            "de": "Der Vitamin-D-Status wird meist über 25(OH)D beurteilt. Niedrige oder hohe Werte können viele Ursachen haben; die Einordnung erfolgt mit dem Arzt.",
+            "it": "Lo stato della vitamina D si valuta con il 25(OH)D. Valori bassi o alti possono avere molte cause; l’interpretazione va fatta con il medico.",
+            "fr": "Le statut en vitamine D est évalué par le 25(OH)D. Un taux bas ou élevé peut avoir de nombreuses causes ; l’interprétation se fait avec un médecin.",
+        },
+        seo_titles={
+            "en": "Vitamin D Explained: Interpreting Low and High 25(OH)D Results",
+            "de": "Vitamin D verstehen: Niedrige und hohe 25(OH)D-Werte",
+            "it": "Vitamina D: come interpretare valori bassi o alti di 25(OH)D",
+            "fr": "Vitamine D : interpréter un taux bas ou élevé de 25(OH)D",
+        },
+        seo_descriptions={
+            "en": "Understand vitamin D and 25(OH)D: typical ranges, causes of low or high levels, when to see a doctor, and safe supplement use. Informational only.",
+            "de": "Vitamin D und 25(OH)D verstehen: Referenzbereiche, Ursachen für niedrige/hohe Werte, wann zum Arzt. Nur zur Information.",
+            "it": "Capire vitamina D e 25(OH)D: intervalli tipici, cause di valori bassi o alti, quando rivolgersi al medico. Solo informativo.",
+            "fr": "Comprendre la vitamine D et le 25(OH)D : fourchettes, causes de taux bas ou élevés, quand consulter. À titre informatif uniquement.",
+        },
+        sections_by_lang={
+            "en": [
+                Section(
+                    id="what-is-vitamin-d",
+                    level=2,
+                    heading="What is vitamin D?",
+                    body_html="""
+<p>Vitamin D is a fat-soluble vitamin that helps regulate calcium and phosphate and supports bone health, muscle function, and immune modulation. It comes in two main forms: <strong>D2</strong> (ergocalciferol, from plants/fungi) and <strong>D3</strong> (cholecalciferol, from sunlight on skin and from animal sources or supplements). Both can be measured indirectly; the form that best reflects your body’s supply is <strong>25-hydroxyvitamin D, or 25(OH)D</strong>. Laboratories typically report total 25(OH)D (D2 + D3), which is why lab results refer to “25(OH)D” or “vitamin D level”—this is the standard marker used to assess deficiency, sufficiency, or excess.</p>
+""",
+                ),
+                Section(
+                    id="typical-ranges",
+                    level=2,
+                    heading="Typical ranges",
+                    body_html="""
+<p>Reference ranges <strong>vary by laboratory and method</strong>. Always use the range on your own report. The following are approximate, for context only (in ng/mL; multiply by 2.5 for nmol/L):</p>
+<ul>
+  <li><strong>Deficiency</strong>: often &lt;20 ng/mL (≈50 nmol/L).</li>
+  <li><strong>Insufficiency</strong>: often 20–29 ng/mL.</li>
+  <li><strong>Sufficient</strong>: commonly ~30–50 ng/mL for the general population.</li>
+  <li><strong>Potentially high</strong>: &gt;50–60 ng/mL depending on context; not always harmful but worth discussing with a doctor.</li>
+  <li><strong>Toxicity concern</strong>: often cited above ~100 ng/mL (hypercalcemia risk); assessment and any intervention are for a clinician to decide.</li>
+</ul>
+<p>Your doctor will interpret your result in light of your age, health conditions, and any supplements or medications.</p>
+""",
+                ),
+                Section(
+                    id="causes-low",
+                    level=2,
+                    heading="Causes of low vitamin D",
+                    body_html="""
+<p>Common reasons for low 25(OH)D include: <strong>low sun exposure</strong> (latitude, season, clothing, sunscreen, indoor lifestyle); <strong>darker skin pigmentation</strong> (more melanin reduces vitamin D synthesis in skin); <strong>winter months</strong> in higher latitudes; <strong>obesity</strong> (vitamin D can be sequestered in adipose tissue); <strong>malabsorption</strong> (e.g. coeliac disease, Crohn’s, gastric surgery); <strong>liver or kidney disease</strong> (altered metabolism of vitamin D); and <strong>certain medications</strong> that affect absorption or metabolism. More than one factor can apply. A clinician can help identify the most relevant causes for you.</p>
+""",
+                ),
+                Section(
+                    id="symptoms-signs",
+                    level=2,
+                    heading="Symptoms and signs",
+                    body_html="""
+<p>Signs that are sometimes associated with low vitamin D include fatigue, bone or muscle pain, weakness, frequent infections, and low mood. These are <strong>non-specific</strong>—they can have many other causes. <strong>Symptoms alone do not establish a diagnosis</strong>; they must be interpreted together with blood tests and clinical history by a doctor. Do not self-diagnose deficiency based only on how you feel.</p>
+""",
+                ),
+                Section(
+                    id="when-high",
+                    level=2,
+                    heading="When vitamin D is high",
+                    body_html="""
+<p>Elevated 25(OH)D is often due to <strong>supplement overuse or dosing errors</strong>. Very high levels increase the risk of <strong>hypercalcemia</strong> (high blood calcium), which can affect the heart, kidneys, and nerves. Red flags that warrant prompt medical attention include: nausea, excessive thirst, frequent urination, confusion, or kidney stones. If your level is high or you take high-dose vitamin D, discuss with a clinician; do not stop or change supplements without medical advice.</p>
+""",
+                ),
+                Section(
+                    id="next-labs",
+                    level=2,
+                    heading="Next labs a clinician may check",
+                    body_html="""
+<p>Depending on your result and history, your doctor may order additional tests to clarify status or rule out complications. These can include: <strong>calcium</strong> (total and/or ionized), <strong>parathyroid hormone (PTH)</strong>, <strong>phosphate</strong>, <strong>magnesium</strong>, <strong>alkaline phosphatase (ALP)</strong>, and <strong>kidney function</strong> (e.g. creatinine, eGFR). Which tests are needed is a clinical decision made by your doctor.</p>
+""",
+                ),
+                Section(
+                    id="practical-guidance",
+                    level=2,
+                    heading="Practical guidance",
+                    body_html="""
+<p><strong>Sunlight</strong>: sensible, limited exposure (without burning) can help the body make vitamin D; duration and safety depend on skin type, location, and season—your doctor can advise. <strong>Diet</strong>: fatty fish, fortified dairy or plant milks, egg yolk, and some fortified foods provide vitamin D but often not enough to correct deficiency alone. <strong>Supplements</strong>: if your doctor recommends supplementation, use the dose they suggest. Avoid mega-doses without clinical supervision. Rechecking 25(OH)D after 8–12 weeks is often used to see if the level has improved; your doctor will advise on timing and target. Do not self-prescribe high doses; excess can be harmful.</p>
+""",
+                ),
+                Section(
+                    id="faq",
+                    level=2,
+                    heading="Frequently asked questions",
+                    body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">How fast does vitamin D increase?</h3>
+<p>With appropriate supplementation or improved sun exposure, 25(OH)D can begin to rise within several weeks; meaningful change often takes 8–12 weeks. Your doctor can suggest when to recheck.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Can I take vitamin D3 daily?</h3>
+<p>Many people take a daily maintenance dose recommended by their doctor. The right dose depends on your baseline level, diet, sun exposure, and health; do not exceed amounts advised by a clinician.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Does vitamin D help immunity?</h3>
+<p>Vitamin D is involved in immune regulation. Adequate levels may support normal immune function, but supplementation is not a substitute for a balanced diet, sleep, or medical care when you are ill. Evidence is nuanced; your doctor can advise for your situation.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">What about magnesium or vitamin K2?</h3>
+<p>Magnesium is involved in vitamin D metabolism; some people have low magnesium. Vitamin K2 is sometimes discussed in relation to bone and cardiovascular health. Neither is a universal “must take” with vitamin D; balance and individual needs matter. Discuss with your doctor before adding supplements.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Is 25(OH)D tested fasting?</h3>
+<p>Fasting is usually not required for 25(OH)D alone, but your lab may request it if the sample is used for a panel that includes glucose or lipids. Follow the instructions given for your blood draw.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Can I interpret my result myself?</h3>
+<p>Your result should be interpreted in context (age, health, medications, diet). Your doctor can say whether your level is appropriate for you and whether you need treatment or further tests.</p>
+""",
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Disclaimer",
+                    body_html="""
+<p><strong>This content is for information only and does not constitute medical advice or diagnosis.</strong> Always discuss your results and symptoms with a doctor. Do not start or change supplements or treatment based solely on this article. If you have concerns about your health, seek professional medical care.</p>
+""",
+                ),
+            ],
+            "de": [
+                Section(
+                    id="what-is-vitamin-d",
+                    level=2,
+                    heading="Was ist Vitamin D?",
+                    body_html="""
+<p>Vitamin D ist ein fettlösliches Vitamin, das bei der Regulation von Kalzium und Phosphat sowie bei Knochen- und Muskelfunktion und Immunmodulation eine Rolle spielt. Es kommt vor allem als <strong>D2</strong> (Ergocalciferol, pflanzlich) und <strong>D3</strong> (Cholecalciferol, durch Sonne und tierische Quellen/Supplemente) vor. Der beste Indikator für die Versorgung ist <strong>25-Hydroxyvitamin D, 25(OH)D</strong>. Labore messen in der Regel Gesamt-25(OH)D (D2 + D3) – das ist der übliche Marker für Mangel, ausreichende Versorgung oder Überschuss.</p>
+""",
+                ),
+                Section(
+                    id="typical-ranges",
+                    level=2,
+                    heading="Typische Referenzbereiche",
+                    body_html="""
+<p>Referenzbereiche <strong>unterscheiden sich je nach Labor und Methode</strong>. Orientieren Sie sich am Befund. Zur groben Einordnung (ng/mL; ×2,5 für nmol/L): <strong>Mangel</strong> oft &lt;20; <strong>Insuffizienz</strong> 20–29; <strong>ausreichend</strong> oft ~30–50; <strong>erhöht</strong> &gt;50–60 (kontextabhängig); <strong>Toxizitätsrisiko</strong> oft ab ~100 ng/mL. Die Bewertung übernimmt Ihr Arzt.</p>
+""",
+                ),
+                Section(
+                    id="causes-low",
+                    level=2,
+                    heading="Ursachen für niedriges Vitamin D",
+                    body_html="""
+<p>Häufige Ursachen: wenig Sonnenexposition, dunklere Hautpigmentierung, Winter in nördlichen Breiten, Adipositas, Malabsorption (z. B. Zöliakie, Morbus Crohn), Leber- oder Nierenerkrankung, bestimmte Medikamente. Mehrere Faktoren können zusammenspielen. Der Arzt hilft bei der Einordnung.</p>
+""",
+                ),
+                Section(
+                    id="symptoms-signs",
+                    level=2,
+                    heading="Symptome und Zeichen",
+                    body_html="""
+<p>Mögliche Zeichen bei niedrigem Vitamin D: Müdigkeit, Knochen- oder Muskelschmerzen, Infektanfälligkeit, gedrückte Stimmung. Diese sind <strong>unspezifisch</strong> und allein keine Diagnose. Die Bewertung erfolgt durch den Arzt anhand von Labor und Anamnese.</p>
+""",
+                ),
+                Section(
+                    id="when-high",
+                    level=2,
+                    heading="Wenn Vitamin D erhöht ist",
+                    body_html="""
+<p>Hohe Werte entstehen oft durch <strong>übermäßige oder falsche Supplementation</strong>. Sehr hohe Spiegel erhöhen das Risiko für <strong>Hyperkalzämie</strong>. Warnzeichen: Übelkeit, starker Durst, häufiges Wasserlassen, Verwirrtheit, Nierensteine. Bei hohem Spiegel oder hochdosierter Einnahme den Arzt konsultieren.</p>
+""",
+                ),
+                Section(
+                    id="next-labs",
+                    level=2,
+                    heading="Weitere Laborwerte",
+                    body_html="""
+<p>Der Arzt kann je nach Befund u. a. Kalzium, Parathormon (PTH), Phosphat, Magnesium, alkalische Phosphatase (AP) und Nierenfunktion veranlassen. Die Auswahl ist eine klinische Entscheidung.</p>
+""",
+                ),
+                Section(
+                    id="practical-guidance",
+                    level=2,
+                    heading="Praktische Hinweise",
+                    body_html="""
+<p><strong>Sonne</strong>: maßvolle, kurze Exposition (ohne Sonnenbrand) kann die Bildung von Vitamin D fördern. <strong>Ernährung</strong>: fettreicher Fisch, angereicherte Milch, Eigelb. <strong>Supplemente</strong>: nur in der vom Arzt empfohlenen Dosis; keine Mega-Dosen ohne Aufsicht. Kontrolle von 25(OH)D nach 8–12 Wochen ist üblich. Bitte nicht in Eigenregie hochdosieren.</p>
+""",
+                ),
+                Section(
+                    id="faq",
+                    level=2,
+                    heading="Häufige Fragen",
+                    body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">Wie schnell steigt Vitamin D?</h3>
+<p>Bei angepasster Supplementation oder mehr Sonne kann 25(OH)D innerhalb von Wochen ansteigen; oft sind 8–12 Wochen nötig. Der Arzt legt den Kontrollzeitpunkt fest.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Kann ich D3 täglich einnehmen?</h3>
+<p>Viele nehmen eine vom Arzt empfohlene Erhaltungsdosis. Die Dosis hängt von Ausgangswert, Ernährung und Gesundheit ab.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Stärkt Vitamin D die Abwehr?</h3>
+<p>Vitamin D ist an der Immunregulation beteiligt. Ausreichende Spiegel können die normale Abwehr unterstützen; Supplemente ersetzen keine ausgewogene Ernährung oder ärztliche Behandlung.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Was ist mit Magnesium oder Vitamin K2?</h3>
+<p>Magnesium ist am Vitamin-D-Stoffwechsel beteiligt; K2 wird teils im Zusammenhang mit Knochen/Kreislauf diskutiert. Beides ist nicht pauschal „Pflicht“; Besprechen Sie mit dem Arzt.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Wird 25(OH)D nüchtern gemessen?</h3>
+<p>Für 25(OH)D allein meist nicht nötig; das Labor kann Nüchternheit für ein Gesamtprofil verlangen.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Kann ich meinen Wert selbst einordnen?</h3>
+<p>Die Einordnung erfolgt im Kontext (Alter, Gesundheit, Medikamente). Ihr Arzt kann beurteilen, ob Ihr Wert für Sie passend ist.</p>
+""",
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Hinweis",
+                    body_html="""
+<p><strong>Dieser Inhalt dient nur der Information und ersetzt keine medizinische Beratung oder Diagnose.</strong> Besprechen Sie Ergebnisse und Beschwerden immer mit einem Arzt. Setzen Sie keine Präparate oder Therapie nur aufgrund dieses Artikels ein.</p>
+""",
+                ),
+            ],
+            "it": [
+                Section(
+                    id="what-is-vitamin-d",
+                    level=2,
+                    heading="Cos’è la vitamina D?",
+                    body_html="""
+<p>La vitamina D è una vitamina liposolubile che aiuta a regolare calcio e fosfato e sostiene ossa, muscoli e sistema immunitario. Esiste come <strong>D2</strong> (ergocalciferolo, da fonti vegetali) e <strong>D3</strong> (colecalciferolo, da sole e fonti animali/integratori). Il marker che riflette meglio la disponibilità nell’organismo è il <strong>25-idrossivitamina D, 25(OH)D</strong>. I laboratori riportano in genere il 25(OH)D totale (D2 + D3), usato per valutare carenza, sufficienza o eccesso.</p>
+""",
+                ),
+                Section(
+                    id="typical-ranges",
+                    level=2,
+                    heading="Intervalli tipici",
+                    body_html="""
+<p>Gli intervalli di riferimento <strong>variano da laboratorio a laboratorio</strong>. Usate sempre quello sul referto. In modo orientativo (ng/mL; ×2,5 per nmol/L): <strong>carenza</strong> spesso &lt;20; <strong>insufficienza</strong> 20–29; <strong>sufficiente</strong> ~30–50; <strong>potenzialmente alto</strong> &gt;50–60; <strong>rischio tossicità</strong> spesso sopra ~100 ng/mL. L’interpretazione spetta al medico.</p>
+""",
+                ),
+                Section(
+                    id="causes-low",
+                    level=2,
+                    heading="Cause di vitamina D bassa",
+                    body_html="""
+<p>Cause comuni: poca esposizione al sole, pelle scura, stagione invernale, obesità, malassorbimento (celiachia, Crohn, chirurgia gastrica), malattie epatiche o renali, alcuni farmaci. Il medico aiuta a individuare le cause rilevanti.</p>
+""",
+                ),
+                Section(
+                    id="symptoms-signs",
+                    level=2,
+                    heading="Sintomi e segni",
+                    body_html="""
+<p>Sintomi a volte associati a carenza: stanchezza, dolori ossei o muscolari, infezioni frequenti, umore basso. Sono <strong>aspecifici</strong>; da soli non consentono la diagnosi. Vanno interpretati dal medico con gli esami e la storia clinica.</p>
+""",
+                ),
+                Section(
+                    id="when-high",
+                    level=2,
+                    heading="Quando la vitamina D è alta",
+                    body_html="""
+<p>Valori elevati spesso da <strong>eccesso di integratori o dosaggi errati</strong>. Livelli molto alti aumentano il rischio di <strong>ipercalcemia</strong>. Segnali d’allarme: nausea, sete eccessiva, minzione frequente, confusione, calcoli renali. In caso di valori alti o assunzione di dosi elevate, consultare il medico.</p>
+""",
+                ),
+                Section(
+                    id="next-labs",
+                    level=2,
+                    heading="Altri esami che il medico può richiedere",
+                    body_html="""
+<p>In base al risultato e alla storia, il medico può prescrivere calcio, PTH, fosfato, magnesio, fosfatasi alcalina, funzionalità renale. La scelta è clinica.</p>
+""",
+                ),
+                Section(
+                    id="practical-guidance",
+                    level=2,
+                    heading="Consigli pratici",
+                    body_html="""
+<p><strong>Sole</strong>: un’esposizione sensata e limitata (senza scottature) può favorire la produzione di vitamina D. <strong>Dieta</strong>: pesce grasso, latticini fortificati, tuorlo. <strong>Integratori</strong>: solo nella dose consigliata dal medico; evitare megadosi senza supervisione. Il controllo del 25(OH)D dopo 8–12 settimane è comune. Non assumere dosi elevate di iniziativa propria.</p>
+""",
+                ),
+                Section(
+                    id="faq",
+                    level=2,
+                    heading="Domande frequenti",
+                    body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">Quanto velocemente aumenta la vitamina D?</h3>
+<p>Con integrazione adeguata o più sole, il 25(OH)D può iniziare a salire in alcune settimane; spesso servono 8–12 settimane. Il medico indica quando ripetere l’esame.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Posso prendere la D3 ogni giorno?</h3>
+<p>Molte persone assumono una dose di mantenimento consigliata dal medico. La dose giusta dipende dal livello basale e dalla salute; non superare le quantità indicate.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">La vitamina D aiuta le difese immunitarie?</h3>
+<p>La vitamina D è coinvolta nella regolazione immunitaria. Livelli adeguati possono sostenere la funzione immunitaria; gli integratori non sostituiscono dieta equilibrata o cure mediche.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">E il magnesio o la vitamina K2?</h3>
+<p>Il magnesio partecipa al metabolismo della vitamina D; la K2 è a volte discussa per ossa e salute cardiovascolare. Nessuno è obbligatorio in modo universale; parlatene con il medico.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Il 25(OH)D si misura a digiuno?</h3>
+<p>Per il solo 25(OH)D di solito non è necessario; il laboratorio può richiedere il digiuno per un pannello più ampio.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Posso interpretare il risultato da solo?</h3>
+<p>Il risultato va interpretato nel contesto (età, salute, farmaci). Il medico può dire se il livello è adeguato per voi.</p>
+""",
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Nota",
+                    body_html="""
+<p><strong>Questo contenuto è solo informativo e non costituisce consulenza o diagnosi medica.</strong> Discutete sempre risultati e sintomi con un medico. Non iniziare o modificare integratori o cure solo in base a questo articolo.</p>
+""",
+                ),
+            ],
+            "fr": [
+                Section(
+                    id="what-is-vitamin-d",
+                    level=2,
+                    heading="Qu’est-ce que la vitamine D ?",
+                    body_html="""
+<p>La vitamine D est une vitamine liposoluble qui aide à réguler le calcium et le phosphate et soutient les os, les muscles et l’immunité. Elle existe sous forme <strong>D2</strong> (ergocalciférol, végétale) et <strong>D3</strong> (cholécalciférol, soleil et sources animales/compléments). Le meilleur reflet des réserves est le <strong>25-hydroxyvitamine D, 25(OH)D</strong>. Les laboratoires dosent en général le 25(OH)D total (D2 + D3), utilisé pour évaluer carence, suffisance ou excès.</p>
+""",
+                ),
+                Section(
+                    id="typical-ranges",
+                    level=2,
+                    heading="Fourchettes typiques",
+                    body_html="""
+<p>Les fourchettes de référence <strong>varient selon le laboratoire</strong>. Utilisez toujours celle de votre résultat. À titre indicatif (ng/mL ; ×2,5 pour nmol/L) : <strong>carence</strong> souvent &lt;20 ; <strong>insuffisance</strong> 20–29 ; <strong>suffisant</strong> ~30–50 ; <strong>potentiellement élevé</strong> &gt;50–60 ; <strong>risque de toxicité</strong> souvent au-dessus de ~100 ng/mL. L’interprétation relève du médecin.</p>
+""",
+                ),
+                Section(
+                    id="causes-low",
+                    level=2,
+                    heading="Causes d’un taux bas",
+                    body_html="""
+<p>Causes fréquentes : peu d’exposition au soleil, peau foncée, hiver sous nos latitudes, obésité, malabsorption (maladie cœliaque, Crohn, chirurgie gastrique), atteinte hépatique ou rénale, certains médicaments. Le médecin aide à identifier les causes pertinentes.</p>
+""",
+                ),
+                Section(
+                    id="symptoms-signs",
+                    level=2,
+                    heading="Symptômes et signes",
+                    body_html="""
+<p>Signes parfois associés à un taux bas : fatigue, douleurs osseuses ou musculaires, infections fréquentes, moral bas. Ils sont <strong>non spécifiques</strong> ; à eux seuls ils ne permettent pas le diagnostic. Ils doivent être interprétés par un médecin avec les examens et l’histoire clinique.</p>
+""",
+                ),
+                Section(
+                    id="when-high",
+                    level=2,
+                    heading="Quand la vitamine D est élevée",
+                    body_html="""
+<p>Un taux élevé vient souvent d’un <strong>surdosage ou d’erreurs de prise</strong>. Des niveaux très élevés augmentent le risque d’<strong>hypercalcémie</strong>. Signes d’alerte : nausées, soif excessive, urines fréquentes, confusion, calculs rénaux. En cas de taux élevé ou de prise à forte dose, consulter un médecin.</p>
+""",
+                ),
+                Section(
+                    id="next-labs",
+                    level=2,
+                    heading="Autres examens possibles",
+                    body_html="""
+<p>Selon le résultat et l’histoire, le médecin peut prescrire calcium, PTH, phosphate, magnésium, phosphatases alcalines, fonction rénale. Le choix est médical.</p>
+""",
+                ),
+                Section(
+                    id="practical-guidance",
+                    level=2,
+                    heading="Conseils pratiques",
+                    body_html="""
+<p><strong>Soleil</strong> : une exposition raisonnable et limitée (sans coup de soleil) peut aider à fabriquer de la vitamine D. <strong>Alimentation</strong> : poissons gras, laitages enrichis, jaune d’œuf. <strong>Compléments</strong> : uniquement à la dose conseillée par le médecin ; éviter les mégadoses sans suivi. Contrôler le 25(OH)D après 8–12 semaines est courant. Ne pas prendre de fortes doses en automédication.</p>
+""",
+                ),
+                Section(
+                    id="faq",
+                    level=2,
+                    heading="Questions fréquentes",
+                    body_html="""
+<h3 class="text-base font-semibold mt-4 mb-1">À quelle vitesse la vitamine D augmente-t-elle ?</h3>
+<p>Avec une supplémentation adaptée ou plus de soleil, le 25(OH)D peut commencer à monter en quelques semaines ; un changement net prend souvent 8–12 semaines. Le médecin indiquera quand contrôler.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Puis-je prendre de la D3 tous les jours ?</h3>
+<p>Beaucoup de personnes prennent une dose d’entretien conseillée par le médecin. La dose dépend du taux de départ et de l’état de santé.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">La vitamine D aide-t-elle l’immunité ?</h3>
+<p>La vitamine D est impliquée dans la régulation immunitaire. Un taux suffisant peut soutenir la fonction immunitaire ; les compléments ne remplacent pas une alimentation équilibrée ni un avis médical.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Et le magnésium ou la vitamine K2 ?</h3>
+<p>Le magnésium intervient dans le métabolisme de la vitamine D ; la K2 est parfois évoquée pour les os et le cœur. Ni l’un ni l’autre n’est systématiquement « obligatoire » ; en parler au médecin.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Le 25(OH)D se dose-t-il à jeun ?</h3>
+<p>Pour le 25(OH)D seul, le jeûne n’est en général pas requis ; le laboratoire peut le demander pour un bilan plus large.</p>
+<h3 class="text-base font-semibold mt-4 mb-1">Puis-je interpréter mon résultat moi-même ?</h3>
+<p>Le résultat doit être interprété dans le contexte (âge, santé, médicaments). Votre médecin peut dire si le taux vous convient.</p>
+""",
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Avertissement",
+                    body_html="""
+<p><strong>Ce contenu est à titre informatif uniquement et ne constitue pas un avis médical ni un diagnostic.</strong> Discutez toujours de vos résultats et symptômes avec un médecin. Ne commencez ni ne modifiez un complément ou un traitement sur la seule base de cet article.</p>
+""",
+                ),
+            ],
+        },
+    )
+
+
+_VITAMIN_D_ARTICLE = _article_vitamin_d()
+
+
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
     _KAN_TAHLILI_ARTICLE,
     _FERRITIN_ARTICLE,
     _CRP_ARTICLE,
+    _VITAMIN_D_ARTICLE,
 ]
 
 
