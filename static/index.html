@@ -71,6 +71,9 @@
     body { width: 100%; max-width: 100%; min-width: 0; overflow-x: hidden; overflow-y: auto; }
     #root, main { width: 100%; max-width: 100%; overflow-x: clip; }
     body > header, body > section { max-width: 100%; overflow-x: clip; }
+    @media (max-width: 1024px) {
+      html, body { overflow-x: hidden !important; max-width: 100% !important; }
+    }
     *, *::before, *::after { box-sizing: border-box; }
     html {
       -webkit-text-size-adjust: 100%;
@@ -854,10 +857,12 @@
     .compare-card-cta:hover:not(:disabled) { background: var(--compare-brand-hover); border-color: var(--compare-brand-hover); }
     .compare-card-cta:disabled { background: var(--compare-brand-light); border-color: var(--compare-brand); color: var(--compare-brand); cursor: default; opacity: 0.95; }
     .compare-card-active .compare-card-cta:disabled { background: var(--compare-brand); color: #fff; }
-    /* Özellik tablosu: desktop'ta min-width */
-    #compare-table-wrap { min-width: 0; }
+    /* Özellik tablosu: mobilde taşma yok, tablo yatay kayar */
+    #compare-table-wrap { min-width: 0; max-width: 100%; }
+    #compare-table-wrap > div { max-width: 100%; }
+    .pricing-compare, .compare-desktop { max-width: 100%; overflow-x: clip; }
     @media (max-width: 767px) {
-      #compare-table-wrap { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; }
+      #compare-table-wrap { display: block !important; overflow-x: auto !important; -webkit-overflow-scrolling: touch; max-width: 100%; }
     }
     nav { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     /* Nav: kısa bar, logo büyük, butonlar orantılı aralıklı */
@@ -3964,8 +3969,8 @@
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-6" data-i18n="compare_subtitle">İhtiyacınıza uygun planı seçin.</p>
       <div class="pricing-compare" id="pricing-compare">
         <div class="compare-desktop">
-      <div id="compare-table-wrap" class="w-full max-w-full mx-0">
-        <div class="overflow-x-auto rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-sm" style="-webkit-overflow-scrolling: touch;">
+      <div id="compare-table-wrap" class="w-full max-w-full mx-0 overflow-hidden">
+        <div class="overflow-x-auto max-w-full rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800 shadow-sm" style="-webkit-overflow-scrolling: touch;">
           <table class="w-full text-sm border-collapse min-w-[580px]" role="grid">
           <thead>
             <tr class="border-b border-accent-200 dark:border-accent-700">
