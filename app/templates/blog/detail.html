@@ -186,7 +186,7 @@
         <div class="overflow-hidden rounded-2xl bg-white border border-slate-200/60 shadow-sm mb-10">
           {% if article.cover_image %}
           <div class="relative w-full aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-2xl">
-            <img src="{{ article.cover_image }}" alt="{{ article.cover_alt or article.title }}" loading="lazy" class="w-full h-full object-cover" />
+            <img src="{{ article.cover_image }}" alt="{{ article.cover_alt or article.title }}" loading="lazy" width="1200" height="630" sizes="(max-width: 768px) 100vw, 1200px" class="w-full h-full object-cover" />
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/16 via-slate-900/0 to-slate-900/0"></div>
             <div class="pointer-events-none absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1.5 rounded-md bg-white/90 px-2 py-1 shadow-sm" aria-hidden="true">
               <span class="text-slate-700 font-semibold text-xs tracking-tight">N</span>
@@ -276,9 +276,9 @@
       {% if related_posts %}
       <section aria-label="{{ blog_ui.related_label|default('Related articles') }}" class="mb-10">
         <div class="flex items-center justify-between gap-3 mb-4">
-          <h2 class="text-sm font-semibold tracking-wide text-slate-900 uppercase">{{ blog_ui.related_label|default("Benzer Yazılar") }}</h2>
+          <h2 class="text-sm font-semibold tracking-wide text-slate-900 uppercase">{{ blog_ui.related_label|default("Related articles") }}</h2>
         </div>
-        <div class="grid gap-6 sm:grid-cols-3">
+        <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {% for post in related_posts %}
           <article class="blog-sidebar-card overflow-hidden flex flex-col">
             <a href="{{ post.url }}" class="block relative overflow-hidden aspect-[16/9] bg-slate-100">

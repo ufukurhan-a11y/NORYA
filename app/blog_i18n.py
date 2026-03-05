@@ -38,6 +38,7 @@ BLOG_UI = {
         "end_cta_title": "Upload your results, get a clear report",
         "end_cta_text": "Upload your lab results securely, see medical terms in plain language and understand key points in minutes.",
         "end_cta_button": "Analyze blood test",
+        "related_label": "Related articles",
     },
     "de": {
         "hero_badge": "Gesundheitswissen",
@@ -63,6 +64,7 @@ BLOG_UI = {
         "end_cta_title": "Laden Sie Ihre Ergebnisse hoch, erhalten Sie einen klaren Bericht",
         "end_cta_text": "Laden Sie Ihre Laborergebnisse sicher hoch, sehen Sie medizinische Begriffe in verständlicher Sprache und erfassen Sie die wichtigsten Punkte in Minuten.",
         "end_cta_button": "Blutanalyse starten",
+        "related_label": "Ähnliche Artikel",
     },
     "fr": {
         "hero_badge": "Santé & analyses",
@@ -88,6 +90,7 @@ BLOG_UI = {
         "end_cta_title": "Téléchargez vos résultats, obtenez un rapport clair",
         "end_cta_text": "Téléchargez vos résultats d'analyses en toute sécurité, consultez les termes médicaux en langage clair et comprenez l'essentiel en quelques minutes.",
         "end_cta_button": "Analyser le bilan sanguin",
+        "related_label": "Articles similaires",
     },
     "it": {
         "hero_badge": "Salute e analisi",
@@ -113,6 +116,7 @@ BLOG_UI = {
         "end_cta_title": "Carica i risultati, ottieni un report chiaro",
         "end_cta_text": "Carica i tuoi referti in modo sicuro, leggi i termini medici in linguaggio semplice e comprendi i punti chiave in pochi minuti.",
         "end_cta_button": "Analizza le analisi del sangue",
+        "related_label": "Articoli correlati",
     },
 }
 
@@ -3640,8 +3644,9 @@ def get_article(lang: str, slug: str) -> dict | None:
 
 
 def iter_all_article_paths():
-    """Sitemap için tüm dil+slug kombinasyonlarını döner."""
+    """Sitemap için tüm dil+slug kombinasyonlarını döner (last_updated = updatedAt)."""
     for art in ARTICLES:
+        last_updated = getattr(art, "last_updated", None) or art.published_at
         for lang, slug in art.slugs.items():
             if lang not in BLOG_LANGS:
                 continue
@@ -3649,5 +3654,34 @@ def iter_all_article_paths():
                 "lang": lang,
                 "slug": slug,
                 "published_at": art.published_at,
+                "last_updated": last_updated,
             }
+
+
+def get_related_articles(lang: str, current_article_id: str, base_url: str, limit: int = 4) -> List[dict]:
+    """Aynı dilde, aynı kategori öncelikli en fazla `limit` makale döner (mevcut hariç). İç linkleme için."""
+    lang = _normalize_lang(lang)
+    if lang not in BLOG_LANGS_PREMIUM:
+        return []
+    posts = list_articles_for_lang(lang)
+    current = next((p for p in posts if p["id"] == current_article_id), None)
+    if not current:
+        return []
+    cat = current.get("category") or ""
+    same_cat = [p for p in posts if p["id"] != current_article_id and (p.get("category") or "") == cat]
+    other = [p for p in posts if p["id"] != current_article_id and (p.get("category") or "") != cat]
+    chosen = (same_cat + other)[:limit]
+    base_url = base_url.rstrip("/")
+    result = []
+    for p in chosen:
+        cover = p.get("cover_image") or ""
+        cover_abs = cover if cover.startswith("http") else f"{base_url}{cover}"
+        result.append({
+            "url": f"{base_url}/{lang}/blog/{p['slug']}",
+            "title": p.get("title") or "",
+            "cover_image": cover_abs,
+            "cover_alt": p.get("cover_alt") or p.get("title") or "",
+            "category": p.get("category") or "",
+        })
+    return result
 

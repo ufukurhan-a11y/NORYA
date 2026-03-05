@@ -64,7 +64,7 @@ from app.models import (  # noqa: F401
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
 from app.base_i18n import get_base_ui
-from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, iter_all_article_paths, list_articles_for_lang
+from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
@@ -972,6 +972,7 @@ def blog_detail(request: Request, lang: str, slug: str):
 
     published_iso = art["published_at"].isoformat()
     modified_iso = art.get("last_updated") and art["last_updated"].isoformat() or published_iso
+    logo_url = f"{base_url}/static/logo.png"
     blog_posting_schema = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -985,6 +986,11 @@ def blog_detail(request: Request, lang: str, slug: str):
         "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
         "url": canonical_url,
         "author": {"@type": "Organization", "name": BRAND_NAME},
+        "publisher": {
+            "@type": "Organization",
+            "name": BRAND_NAME,
+            "logo": {"@type": "ImageObject", "url": logo_url},
+        },
     }
     article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
     faq_schema_json = None
@@ -1002,6 +1008,7 @@ def blog_detail(request: Request, lang: str, slug: str):
 
     blog_ui = BLOG_UI.get(lang, BLOG_UI["en"])
     base_ui = get_base_ui(lang)
+    related_posts = get_related_articles(lang, art["id"], base_url, limit=4)
 
     return templates.TemplateResponse(
         "blog/detail.html",
@@ -1020,6 +1027,7 @@ def blog_detail(request: Request, lang: str, slug: str):
             "base_ui": base_ui,
             "brand_name": BRAND_NAME,
             "premium_langs": BLOG_LANGS_PREMIUM,
+            "related_posts": related_posts,
         },
     )
 
@@ -2508,37 +2516,48 @@ def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X
     return {"deleted": deleted}
 
 
+@app.get("/robots.txt", response_class=PlainTextResponse)
+def robots_txt():
+    """SEO: Allow all, sitemap canonical URL."""
+    return PlainTextResponse(
+        "User-agent: *\nAllow: /\n\nSitemap: https://noryaai.com/sitemap.xml\n",
+        media_type="text/plain",
+    )
+
+
 @app.get("/sitemap.xml", response_class=PlainTextResponse)
 def sitemap_xml(request: Request):
     """
-    Basit XML sitemap: ana sayfa, kurumsal, yasal sayfalar ve blog yazıları.
+    XML sitemap: ana sayfa, kurumsal, yasal, blog listeleri ve tüm blog yazıları.
+    lastmod = updatedAt, changefreq=weekly, priority uygun.
     """
     base_url = str(request.base_url).rstrip("/")
     urls: list[str] = []
 
-    def add(loc: str):
-        urls.append(f"  <url><loc>{loc}</loc></url>")
+    def add(loc: str, priority: str = "0.8", changefreq: str = "weekly", lastmod: str | None = None):
+        last = f"<lastmod>{lastmod}</lastmod>" if lastmod else ""
+        urls.append(f"  <url><loc>{loc}</loc>{last}<changefreq>{changefreq}</changefreq><priority>{priority}</priority></url>")
 
-    # Statik önemli sayfalar
-    add(f"{base_url}/")
-    add(f"{base_url}/kurumsal")
+    from datetime import date
+    today = date.today().isoformat()
+
+    # Ana sayfa
+    add(f"{base_url}/", priority="0.9", lastmod=today)
+    add(f"{base_url}/kurumsal", lastmod=today)
     for page in LEGAL_PAGES:
-        add(f"{base_url}/legal/{page}")
+        add(f"{base_url}/legal/{page}", priority="0.5", lastmod=today)
 
-    # Blog listeleri ve yazılar (sadece premium diller: en, de, fr, it)
+    # Blog listeleri (en, de, it, fr)
     for lang in BLOG_LANGS_PREMIUM:
-        add(f"{base_url}/{lang}/blog")
+        add(f"{base_url}/{lang}/blog", priority="0.8", lastmod=today)
+    # Blog yazıları: lastmod = post updatedAt
     for item in iter_all_article_paths():
         if item["lang"] in BLOG_LANGS_PREMIUM:
             loc = f"{base_url}/{item['lang']}/blog/{item['slug']}"
-            urls.append(
-                "  <url>"
-                f"<loc>{loc}</loc>"
-                f"<lastmod>{item['published_at'].isoformat()}</lastmod>"
-                "</url>"
-            )
+            lastmod = (item.get("last_updated") or item["published_at"]).isoformat()
+            add(loc, priority="0.7", lastmod=lastmod)
 
-    body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" "<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
+    body = "<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n<urlset xmlns=\"http://www.sitemaps.org/schemas/sitemap/0.9\">\n"
     body += "\n".join(urls)
     body += "\n</urlset>"
     return PlainTextResponse(content=body, media_type="application/xml")
