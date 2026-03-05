@@ -1197,16 +1197,16 @@ def _article_crp() -> Article:
         cover_image=cover,
         cover_alt=cover_alt_text,
         category={
-            "en": "Biomarkers",
-            "de": "Biomarker",
-            "it": "Biomarcatori",
-            "fr": "Biomarqueurs",
+            "en": "Inflammation / Biomarkers",
+            "de": "Entzündung / Biomarker",
+            "it": "Infiammazione / Biomarcatori",
+            "fr": "Inflammation / Biomarqueurs",
         },
         slugs={
             "en": "crp-what-it-means",
-            "de": "crp-verstehen",
-            "it": "crp-cosa-significa",
-            "fr": "crp-taux-eleve",
+            "de": "crp-what-it-means",
+            "it": "crp-what-it-means",
+            "fr": "crp-what-it-means",
         },
         titles={
             "en": "CRP Explained: What Elevated Levels Can Mean (and When to Follow Up)",
