@@ -35,6 +35,15 @@
         radial-gradient(circle at top left, rgba(14, 165, 164, 0.08) 0, transparent 55%),
         linear-gradient(180deg, #f8fafc 0%, #f1f5f9 100%);
     }
+    /* Hero/card images: responsive, mobilde clamp 220–320px */
+    .blog-hero-img-wrap img, .blog-card-cover img { width: 100%; max-width: 100%; height: auto; object-fit: cover; display: block; }
+    @media (max-width: 767px) {
+      .blog-hero-img-wrap { height: clamp(220px, 50vw, 320px); overflow: hidden; border-radius: 1rem; }
+      .blog-hero-img-wrap img { width: 100%; height: 100%; object-fit: cover; }
+      .blog-card-cover { height: clamp(220px, 45vw, 320px); overflow: hidden; }
+      .blog-card-cover img { width: 100%; height: 100%; object-fit: cover; }
+    }
+    .blog-hero-title { font-size: clamp(1.75rem, 4vw, 2.75rem); line-height: 1.2; }
     .blog-card {
       background: var(--blog-surface);
       border: 1px solid rgba(15, 23, 42, 0.06);
@@ -190,7 +199,7 @@
         </nav>
         </div>
         <p class="blog-badge inline-block mb-4">{{ blog_ui.hero_badge }}</p>
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-semibold text-slate-900 tracking-tight leading-tight">
+        <h1 class="blog-hero-title font-semibold text-slate-900 tracking-tight">
           {{ blog_ui.hero_title }}
         </h1>
         <p class="mt-4 text-lg sm:text-xl text-slate-600 max-w-2xl leading-relaxed">
@@ -236,8 +245,8 @@
       <div class="hidden lg:block">
         <div class="relative max-w-md mx-auto">
           <div class="absolute -inset-6 rounded-3xl bg-teal-500/10 blur-2xl"></div>
-          <div class="relative overflow-hidden rounded-3xl border border-white/70 shadow-xl shadow-slate-900/5 bg-white">
-            <img src="/static/images/blog/blog-hero.png" alt="People reviewing a clear health report together with a doctor" loading="lazy" class="w-full h-full object-cover" />
+          <div class="blog-hero-img-wrap relative overflow-hidden rounded-3xl border border-white/70 shadow-xl shadow-slate-900/5 bg-white">
+            <img src="/static/images/blog/blog-hero.png" alt="People reviewing a clear health report together with a doctor" loading="lazy" />
           </div>
         </div>
       </div>
@@ -274,9 +283,9 @@
       {% set featured = posts[0] %}
       <article class="blog-card blog-card-featured overflow-hidden mb-10 grid gap-0 md:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]">
         <a href="{{ featured.url }}" class="relative block bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
-          <div class="aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-t-[1rem] md:rounded-tr-none md:rounded-l-[1rem]">
+          <div class="blog-card-cover aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-t-[1rem] md:rounded-tr-none md:rounded-l-[1rem]">
             {% if featured.cover_image %}
-            <img src="{{ featured.cover_image }}" alt="{{ featured.cover_alt|default(featured.title) }}" loading="eager" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            <img src="{{ featured.cover_image }}" alt="{{ featured.cover_alt|default(featured.title) }}" loading="eager" class="transition-transform duration-200 hover:scale-[1.02]" />
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/12 via-slate-900/0 to-slate-900/0"></div>
             {% else %}
             <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">
@@ -327,9 +336,9 @@
       <ul class="grid gap-8 sm:gap-10 md:grid-cols-2 lg:grid-cols-3 list-none p-0 m-0" id="blog-list">
         {% for post in posts[1:] %}
         <li class="blog-card overflow-hidden flex flex-col" data-title="{{ post.title|lower }}" data-excerpt="{{ post.excerpt|lower }}" data-category="{{ post.category }}">
-          <a href="{{ post.url }}" class="block relative overflow-hidden aspect-[16/10] bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t-[1rem]">
+          <a href="{{ post.url }}" class="blog-card-cover block relative overflow-hidden aspect-[16/10] bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t-[1rem]">
             {% if post.cover_image %}
-            <img src="{{ post.cover_image }}" alt="{{ post.cover_alt|default(post.title) }}" loading="lazy" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            <img src="{{ post.cover_image }}" alt="{{ post.cover_alt|default(post.title) }}" loading="lazy" class="transition-transform duration-200 hover:scale-[1.02]" />
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/10 via-slate-900/0 to-slate-900/0"></div>
             {% else %}
             <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">

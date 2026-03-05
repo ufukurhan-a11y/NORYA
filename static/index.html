@@ -66,13 +66,35 @@
       --norya-card-shadow: 0 4px 24px rgba(14, 165, 164, 0.12);
     }
     /* ========== Cross-browser / Safari uyumluluk (tüm tarayıcılarda aynı görünüm) ========== */
-    /* Global overflow fix: mobilde yatay taşma yok, sağdaki dikey şerit kalkar */
-    html { width: 100%; max-width: 100%; overflow-x: hidden; overflow-y: auto; }
-    body { width: 100%; max-width: 100%; min-width: 0; overflow-x: hidden; overflow-y: auto; }
+    /* Global overflow fix: mobilde yatay taşma ve sağdaki beyaz şerit tamamen kalkar (tüm cihazlar) */
+    html {
+      width: 100%;
+      max-width: 100%;
+      overflow-x: clip;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+    body {
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      overflow-x: clip;
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
+    }
     #root, main { width: 100%; max-width: 100%; overflow-x: clip; }
-    body > header, body > section { max-width: 100%; overflow-x: clip; }
+    body > header, body > section, body > aside, body > footer, body > div {
+      max-width: 100%;
+      overflow-x: clip;
+      min-width: 0;
+    }
     @media (max-width: 1024px) {
-      html, body { overflow-x: hidden !important; max-width: 100% !important; }
+      html, body { overflow-x: clip !important; max-width: 100% !important; }
+      body { touch-action: pan-y; }
+    }
+    @media (max-width: 640px) {
+      html, body { overflow-x: clip !important; }
+      body { overflow-wrap: break-word; }
     }
     *, *::before, *::after { box-sizing: border-box; }
     html {
@@ -196,6 +218,8 @@
     /* Sticky bar safe area: pricing section never covered by fixed bottom bar */
     #fiyatlandirma {
       padding-bottom: calc(var(--stickyBarHeight, 0px) + 24px + env(safe-area-inset-bottom, 0px));
+      overflow-x: clip;
+      max-width: 100%;
     }
     @media (min-width: 768px) {
       #fiyatlandirma { padding-bottom: calc(var(--stickyBarHeight, 0px) + 32px); }
@@ -424,7 +448,7 @@
       .elite-cta-btn { min-height: 48px; width: 100%; }
     }
     /* Doctor Insights: premium clinical cards — cooler, authoritative */
-    .doctor-insights-section { background: linear-gradient(180deg, #f0f9f9 0%, #e8f4f4 100%); padding-top: 0.5rem; }
+    .doctor-insights-section { background: linear-gradient(180deg, #f0f9f9 0%, #e8f4f4 100%); padding-top: 0.5rem; overflow-x: clip; max-width: 100%; }
     .dark .doctor-insights-section { background: linear-gradient(180deg, rgba(15,23,42,0.5) 0%, rgba(6,28,28,0.4) 100%); }
     .doctor-section-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #0d9488; margin-bottom: 0.5rem; }
     .dark .doctor-section-badge { color: #5eead4; }
@@ -436,6 +460,7 @@
       display: flex; gap: 1rem; overflow-x: auto; overflow-y: hidden;
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
       scrollbar-width: none; padding-bottom: 0.5rem;
+      max-width: 100%;
     }
     .doctor-insights-carousel::-webkit-scrollbar { display: none; }
     .doctor-card {
@@ -480,7 +505,7 @@
       .doctor-card { padding: 1.75rem 1.5rem; min-height: 260px; }
     }
     /* Customer Reviews: premium testimonial cards — warmer, trusted */
-    .customer-reviews-section { background: linear-gradient(180deg, #fefdfb 0%, #faf8f5 100%); border-top: 1px solid rgba(15,23,42,0.04); }
+    .customer-reviews-section { background: linear-gradient(180deg, #fefdfb 0%, #faf8f5 100%); border-top: 1px solid rgba(15,23,42,0.04); overflow-x: clip; max-width: 100%; }
     .dark .customer-reviews-section { background: linear-gradient(180deg, rgba(30,41,59,0.2) 0%, rgba(30,35,40,0.25) 100%); border-top-color: rgba(148,163,184,0.08); }
     .customer-section-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.14em; text-transform: uppercase; color: #b45309; margin-bottom: 0.5rem; }
     .dark .customer-section-badge { color: #fcd34d; }
@@ -489,12 +514,13 @@
     .customer-section-subtitle { font-size: 0.875rem; color: #57534e; line-height: 1.5; max-width: 36rem; margin-left: auto; margin-right: auto; }
     .dark .customer-section-subtitle { color: #94a3b8; }
     .customer-reviews-single-card {
-      max-width: 64rem;
+      max-width: min(64rem, 100%);
       margin: 0 auto;
       padding: 0;
       background: transparent;
       border: none;
       box-shadow: none;
+      overflow-x: auto;
     }
     .customer-reviews-carousel {
       display: flex;
@@ -505,12 +531,13 @@
       scrollbar-width: thin;
       scrollbar-color: rgba(13,148,136,0.35) transparent;
       padding-bottom: 0.5rem;
+      max-width: 100%;
     }
     .customer-reviews-carousel::-webkit-scrollbar { height: 6px; }
     .customer-reviews-carousel::-webkit-scrollbar-thumb { background: rgba(13,148,136,0.35); border-radius: 3px; }
     .customer-card {
       flex: 0 0 min(100%, 320px);
-      min-width: 280px;
+      min-width: min(280px, 85vw);
       scroll-snap-align: start;
       scroll-snap-stop: always;
       padding: 2rem 1.75rem;
@@ -579,7 +606,7 @@
       .customer-card { flex: 0 0 min(25%, 400px); }
     }
     /* Clinical intake: ultra-premium upload step (Function Health / InsideTracker level) */
-    .intake-section { background: linear-gradient(180deg, #fafbfc 0%, #f1f5f9 100%); min-height: 60vh; }
+    .intake-section { background: linear-gradient(180deg, #fafbfc 0%, #f1f5f9 100%); min-height: 60vh; overflow-x: clip; max-width: 100%; }
     .dark .intake-section { background: linear-gradient(180deg, rgba(15,23,42,0.5) 0%, rgba(15,23,42,0.7) 100%); }
     .intake-container { max-width: 1100px; margin-left: auto; margin-right: auto; padding: 2rem 1rem 3rem; }
     @media (min-width: 768px) { .intake-container { padding: 3rem 1.5rem 4rem; } }
@@ -629,7 +656,7 @@
     body.a2hs-visible { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
     @media (min-width: 640px) { body.a2hs-visible { padding-bottom: 0; } }
     /* Premium health SaaS: mobil-first, accent #0EA5A4, bol beyaz */
-    .premium-wrap { max-width: var(--premium-container, 1100px); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+    .premium-wrap { max-width: var(--premium-container, 1100px); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; overflow-x: clip; min-width: 0; }
     .premium-section { padding-top: var(--section-gap, 28px); padding-bottom: var(--section-gap, 28px); }
     @media (min-width: 640px) { .premium-section { padding-top: 32px; padding-bottom: 32px; } }
     .landing-hidden { display: none !important; }
@@ -637,9 +664,9 @@
       body { font-size: 16px; }
       .hero-cta-btn, .btn-primary, .btn-secondary, .primary-cta, .compare-card-cta, button[type="button"].rounded-full { min-height: 44px; }
     }
-    /* Global: yatay taşma yok (Safari/Chrome/Firefox) */
-    html { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; }
-    body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
+    /* Global: yatay taşma yok (Safari/Chrome/Firefox) — clip ile sağdaki beyaz şerit kalkar */
+    html { overflow-x: clip; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; }
+    body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); overflow-x: clip; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
     .max-w-5xl, .max-w-6xl, .max-w-4xl, .max-w-3xl, .max-w-2xl { min-width: 0; }
     /* iOS Safari: dinamik viewport (adres çubuğu dahil) */
     @supports (min-height: 100dvh) {
@@ -3829,7 +3856,7 @@
   </section>
 
   <!-- 4) Paketler -->
-  <section id="fiyatlandirma" class="premium-section py-12 sm:py-16 bg-accent-50/50 dark:bg-accent-900/30 overflow-x-hidden">
+  <section id="fiyatlandirma" class="premium-section py-12 sm:py-16 bg-accent-50/50 dark:bg-accent-900/30">
     <div class="pricing-container">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="pricing_title">Fiyatlandırma</h2>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-2" id="pricing-note" data-i18n="pricing_eur">Fiyatlar konumunuza göre yerel para biriminde gösterilir.</p>
