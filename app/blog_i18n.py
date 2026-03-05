@@ -3223,6 +3223,333 @@ def _article_ldl_vs_hdl() -> Article:
 _LDL_HDL_ARTICLE = _article_ldl_vs_hdl()
 
 
+def _article_creatinine_egfr() -> Article:
+    """Creatinine & eGFR: kidney function results, categories, confounders, when to follow up. en, de, it, fr."""
+    published = date(2026, 3, 5)
+    cover = "/static/images/blog/creatinine-egfr-hero.png"
+    cover_alt_text = {
+        "en": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
+        "de": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
+        "it": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
+        "fr": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
+    }
+    faq_qa = {
+        "en": [
+            {"question": "Can eGFR improve?", "answer": "eGFR can sometimes improve with treatment of reversible causes (e.g. dehydration, certain medications), good blood pressure and diabetes control, and lifestyle measures. How much it can improve depends on the cause and your situation. Your clinician will interpret your results and advise on follow-up."},
+            {"question": "Do I need fasting for creatinine or eGFR?", "answer": "Fasting is usually not required for creatinine or eGFR. If the same blood draw is used for glucose or lipids, your lab may ask you to fast. Follow the instructions given for your test."},
+            {"question": "Why is my creatinine high after a workout?", "answer": "Intense or prolonged exercise can temporarily raise creatinine because it is a byproduct of muscle metabolism. Dehydration can also raise it. If your level is only slightly high and you were dehydrated or had recent heavy exercise, your doctor may suggest repeating the test after rest and adequate hydration."},
+            {"question": "What is urine ACR?", "answer": "Urine ACR (albumin-to-creatinine ratio) measures albumin in a urine sample relative to creatinine. It is used to detect kidney damage (e.g. diabetic kidney disease) and is often part of kidney and cardiovascular risk assessment. Your clinician can explain whether this test is appropriate for you."},
+            {"question": "Does creatine supplement affect my labs?", "answer": "Creatine supplements can increase blood creatinine levels because creatine is converted to creatinine in the body. This may not reflect true kidney dysfunction. If you take creatine, tell your doctor so they can interpret your results in context; they may suggest temporarily stopping the supplement before a repeat test."},
+            {"question": "What eGFR level is concerning?", "answer": "Guidelines often flag eGFR below 60 as potentially indicating reduced kidney function; below 30 is moderate to severe, and below 15 is in the kidney failure range and needs urgent medical care. Exact interpretation depends on your age, other markers, and clinical context. Your doctor will explain what your result means for you."},
+            {"question": "How often should kidney function be rechecked?", "answer": "Frequency depends on your situation—e.g. known kidney disease, diabetes, hypertension, or medication that affects the kidneys. Your doctor will recommend how often to recheck (e.g. every 3–12 months or more often if adjusting treatment)."},
+            {"question": "What about age and eGFR?", "answer": "eGFR formulas often include age; older adults may have lower eGFR that is still considered acceptable in the absence of other kidney damage. A single number must be interpreted with your age, other tests (e.g. urine ACR), and clinical picture. Your clinician will explain what is appropriate for you."},
+        ],
+        "de": [
+            {"question": "Kann sich der eGFR verbessern?", "answer": "Der eGFR kann sich bei behandelbaren Ursachen (z. B. Dehydratation, bestimmte Medikamente), gut eingestelltem Blutdruck und Diabetes sowie Lebensstilmaßnahmen manchmal verbessern. Das Ausmaß hängt von der Ursache ab. Ihr Arzt interpretiert die Werte und empfiehlt die Kontrolle."},
+            {"question": "Muss ich für Kreatinin/eGFR nüchtern sein?", "answer": "Für Kreatinin und eGFR ist in der Regel kein Nüchtern nötig. Wird dasselbe Blut für Glukose oder Fette verwendet, kann das Labor Nüchternheit verlangen. Folgen Sie den Anweisungen."},
+            {"question": "Warum ist mein Kreatinin nach dem Training hoch?", "answer": "Intensiver oder längerer Sport kann Kreatinin vorübergehend erhöhen (Stoffwechselprodukt der Muskeln). Auch Dehydratation kann den Wert anheben. Bei nur leicht erhöhtem Wert und kürzlicher Anstrengung/Flüssigkeitsmangel kann der Arzt eine Wiederholung nach Erholung und ausreichend Trinken empfehlen."},
+            {"question": "Was ist der Urin-ACR?", "answer": "Der Urin-ACR (Albumin-Kreatinin-Quotient) misst Albumin im Urin relativ zu Kreatinin. Er dient zur Erkennung von Nierenschäden (z. B. diabetische Nephropathie) und ist oft Teil der Nieren- und kardiovaskulären Risikobewertung. Ihr Arzt kann sagen, ob der Test für Sie sinnvoll ist."},
+            {"question": "Beeinflusst Kreatin-Supplement meine Werte?", "answer": "Kreatin-Supplemente können das Blutkreatinin erhöhen, da Kreatin im Körper zu Kreatinin umgebaut wird. Das muss keine echte Nierenfunktionsstörung bedeuten. Wenn Sie Kreatin einnehmen, sagen Sie es dem Arzt; ggf. wird eine Wiederholung nach Absetzen empfohlen."},
+            {"question": "Ab welchem eGFR-Wert wird es bedenklich?", "answer": "Leitlinien sehen oft eGFR unter 60 als Hinweis auf eingeschränkte Nierenfunktion; unter 30 als mittel bis schwer, unter 15 im Bereich Nierenversagen mit dringender ärztlicher Betreuung. Die Einordnung hängt von Alter, weiteren Befunden und Kontext ab. Ihr Arzt erklärt Ihre Werte."},
+            {"question": "Wie oft soll die Nierenfunktion kontrolliert werden?", "answer": "Die Häufigkeit hängt von Ihrer Situation ab (z. B. bekannte Nierenerkrankung, Diabetes, Bluthochdruck, nierenschädliche Medikamente). Ihr Arzt empfiehlt den Kontrollrhythmus (z. B. alle 3–12 Monate)."},
+            {"question": "Was bedeutet das Alter für den eGFR?", "answer": "eGFR-Formeln berücksichtigen oft das Alter; bei Älteren kann ein niedrigerer eGFR noch akzeptabel sein, wenn keine anderen Nierenschäden vorliegen. Die Bewertung erfolgt mit Alter, weiteren Tests (z. B. Urin-ACR) und Klinik. Ihr Arzt erläutert das für Sie."},
+        ],
+        "it": [
+            {"question": "L'eGFR può migliorare?", "answer": "L'eGFR a volte può migliorare con il trattamento di cause reversibili (es. disidratazione, alcuni farmaci), buon controllo di pressione e diabete e stile di vita. Quanto migliora dipende dalla causa. Il medico interpreterà i risultati e consiglierà i controlli."},
+            {"question": "Devo essere a digiuno per creatinina o eGFR?", "answer": "Per creatinina ed eGFR di solito non serve il digiuno. Se il prelievo è usato anche per glicemia o lipidi, il laboratorio può richiedere il digiuno. Seguite le istruzioni del laboratorio."},
+            {"question": "Perché la creatinina è alta dopo l'allenamento?", "answer": "Esercizio intenso o prolungato può aumentare temporaneamente la creatinina (è un prodotto del metabolismo muscolare). Anche la disidratazione può alzarla. Se il valore è solo lievemente alto e eri disidratato o hai fatto sforzo recente, il medico può consigliare di ripetere il test dopo riposo e idratazione."},
+            {"question": "Cos'è l'ACR urinario?", "answer": "L'ACR urinario (rapporto albumina/creatinina) misura l'albumina nelle urine rispetto alla creatinina. Si usa per rilevare danno renale (es. nefropatia diabetica) ed è spesso parte della valutazione del rischio renale e cardiovascolare. Il medico può spiegare se il test è indicato per voi."},
+            {"question": "Gli integratori di creatina influenzano gli esami?", "answer": "Gli integratori di creatina possono aumentare la creatinina nel sangue perché la creatina viene convertita in creatinina nell'organismo. Questo può non riflettere una vera disfunzione renale. Se assumete creatina, ditelo al medico; potrebbe suggerire di sospenderla prima di un controllo."},
+            {"question": "Quale valore di eGFR è preoccupante?", "answer": "Le linee guida spesso considerano eGFR sotto 60 come possibile riduzione della funzione renale; sotto 30 da moderata a severa, sotto 15 in ambito di insufficienza renale con necessità di cure urgenti. L'interpretazione dipende da età, altri marker e contesto. Il medico spiegherà il vostro risultato."},
+            {"question": "Con quale frequenza controllare la funzione renale?", "answer": "La frequenza dipende dalla situazione (es. malattia renale nota, diabete, ipertensione, farmaci che influenzano i reni). Il medico consiglierà quando ripetere gli esami (es. ogni 3–12 mesi)."},
+            {"question": "Che ruolo ha l'età nell'eGFR?", "answer": "Le formule eGFR spesso includono l'età; negli anziani un eGFR più basso può essere ancora accettabile in assenza di altri danni renali. Il singolo valore va interpretato con età, altri esami (es. ACR urinario) e quadro clinico. Il medico spiegherà cosa è appropriato per voi."},
+        ],
+        "fr": [
+            {"question": "L'eGFR peut-il s'améliorer ?", "answer": "L'eGFR peut parfois s'améliorer avec le traitement de causes réversibles (déshydratation, certains médicaments), un bon contrôle tensionnel et du diabète, et des mesures d'hygiène de vie. L'ampleur dépend de la cause. Votre médecin interprétera les résultats et conseillera le suivi."},
+            {"question": "Faut-il être à jeun pour la créatinine ou l'eGFR ?", "answer": "Le jeûne n'est en général pas nécessaire pour la créatinine ou l'eGFR. Si le prélèvement sert aussi à la glycémie ou aux lipides, le laboratoire peut demander le jeûne. Suivez les consignes du laboratoire."},
+            {"question": "Pourquoi ma créatinine est-elle élevée après l'entraînement ?", "answer": "Un exercice intense ou prolongé peut augmenter temporairement la créatinine (produit du métabolisme musculaire). La déshydratation aussi. Si le taux est légèrement élevé et que vous étiez déshydraté ou avez beaucoup sollicité vos muscles, le médecin peut proposer de répéter le dosage après repos et réhydratation."},
+            {"question": "Qu'est-ce que l'ACR urinaire ?", "answer": "L'ACR urinaire (rapport albumine/créatinine) mesure l'albumine dans les urines par rapport à la créatinine. Il sert à détecter un atteinte rénale (ex. néphropathie diabétique) et fait souvent partie du bilan rénal et cardiovasculaire. Votre médecin peut indiquer si ce dosage est pertinent pour vous."},
+            {"question": "La créatine en complément affecte-t-elle mes analyses ?", "answer": "Les compléments de créatine peuvent augmenter la créatinine sanguine car la créatine est convertie en créatinine dans l'organisme. Cela ne reflète pas forcément une vraie atteinte rénale. Si vous prenez de la créatine, indiquez-le à votre médecin ; il pourra proposer d'arrêter temporairement avant un nouveau dosage."},
+            {"question": "À partir de quel eGFR faut-il s'inquiéter ?", "answer": "Les recommandations considèrent souvent un eGFR inférieur à 60 comme possible réduction de la fonction rénale ; en dessous de 30 comme modérée à sévère, en dessous de 15 comme insuffisance rénale nécessitant une prise en charge urgente. L'interprétation dépend de l'âge, d'autres marqueurs et du contexte. Votre médecin vous expliquera votre résultat."},
+            {"question": "À quelle fréquence contrôler la fonction rénale ?", "answer": "La fréquence dépend de votre situation (maladie rénale connue, diabète, hypertension, médicaments néphrotoxiques). Votre médecin recommandera la fréquence des contrôles (ex. tous les 3–12 mois)."},
+            {"question": "Qu'en est-il de l'âge et de l'eGFR ?", "answer": "Les formules d'eGFR incluent souvent l'âge ; chez les personnes âgées, un eGFR plus bas peut rester acceptable en l'absence d'autres atteintes rénales. Le chiffre doit être interprété avec l'âge, d'autres examens (ex. ACR urinaire) et le tableau clinique. Votre médecin vous expliquera ce qui est adapté à votre cas."},
+        ],
+    }
+    return Article(
+        id="creatinine-egfr-what-it-means",
+        published_at=published,
+        last_updated=published,
+        read_minutes=10,
+        cover_image=cover,
+        cover_alt=cover_alt_text,
+        faq_schema_qa=faq_qa,
+        category={
+            "en": "Kidney & Metabolic Health",
+            "de": "Nieren- & Stoffwechselgesundheit",
+            "it": "Reni e salute metabolica",
+            "fr": "Reins et santé métabolique",
+        },
+        slugs={
+            "en": "creatinine-egfr-what-it-means",
+            "de": "creatinine-egfr-what-it-means",
+            "it": "creatinine-egfr-what-it-means",
+            "fr": "creatinine-egfr-what-it-means",
+        },
+        titles={
+            "en": "Creatinine & eGFR Explained: Reading Kidney Function Results",
+            "de": "Kreatinin & eGFR verstehen: Nierenwerte richtig deuten",
+            "it": "Creatinina ed eGFR: come interpretare la funzione renale",
+            "fr": "Créatinine et eGFR : comprendre la fonction rénale",
+        },
+        subtitles={
+            "en": "What creatinine and eGFR mean, typical categories, what can affect results without kidney disease, and when to follow up with a clinician.",
+            "de": "Was Kreatinin und eGFR bedeuten, typische Kategorien, Störfaktoren und wann Sie zum Arzt sollten.",
+            "it": "Cosa significano creatinina ed eGFR, categorie tipiche, fattori confondenti e quando rivolgersi al medico.",
+            "fr": "Ce que signifient créatinine et eGFR, catégories typiques, facteurs de confusion et quand consulter.",
+        },
+        excerpts={
+            "en": "Creatinine and eGFR reflect kidney function. Understanding typical ranges and what can affect results helps you discuss them with your doctor.",
+            "de": "Kreatinin und eGFR spiegeln die Nierenfunktion wider. Typische Bereiche und Störfaktoren helfen beim Arztgespräch.",
+            "it": "Creatinina ed eGFR riflettono la funzione renale. Conoscere gli intervalli tipici e i fattori confondenti aiuta a parlarne con il medico.",
+            "fr": "Créatinine et eGFR reflètent la fonction rénale. Comprendre les seuils typiques et les facteurs de confusion aide à en parler avec le médecin.",
+        },
+        seo_titles={
+            "en": "Creatinine & eGFR Explained: Reading Kidney Function Results | NoryaAI",
+            "de": "Kreatinin & eGFR verstehen: Nierenwerte richtig deuten | NoryaAI",
+            "it": "Creatinina ed eGFR: come interpretare la funzione renale | NoryaAI",
+            "fr": "Créatinine et eGFR : comprendre la fonction rénale | NoryaAI",
+        },
+        seo_descriptions={
+            "en": "Understand creatinine and eGFR: what they mean, typical kidney function categories, what can affect results, and when to follow up. Informational only.",
+            "de": "Kreatinin und eGFR verstehen: Bedeutung, typische Kategorien, Störfaktoren und wann zum Arzt. Nur zur Information.",
+            "it": "Capire creatinina ed eGFR: significato, categorie tipiche, fattori confondenti e quando rivolgersi al medico. Solo informativo.",
+            "fr": "Comprendre créatinine et eGFR : signification, catégories typiques, facteurs de confusion et quand consulter. À titre informatif uniquement.",
+        },
+        sections_by_lang={
+            "en": _creatinine_egfr_sections_en(),
+            "de": _creatinine_egfr_sections_de(),
+            "it": _creatinine_egfr_sections_it(),
+            "fr": _creatinine_egfr_sections_fr(),
+        },
+    )
+
+
+def _creatinine_egfr_sections_en() -> List[Section]:
+    return [
+        Section(
+            id="what-creatinine-is",
+            level=2,
+            heading="What creatinine is and why it’s measured",
+            body_html="""
+<p>Creatinine is a waste product produced by your <strong>muscles</strong> as part of normal metabolism. It is released into the blood and filtered out by the kidneys. When kidney function is reduced, creatinine tends to rise in the blood because it is cleared less efficiently. Laboratories measure blood creatinine to help assess kidney function. The result is often reported in mg/dL or µmol/L. Creatinine alone does not tell the full story—body size, muscle mass, age, and sex can affect the level. That is why clinicians often use <strong>eGFR</strong> (estimated glomerular filtration rate), which adjusts for these factors.</p>
+""",
+        ),
+        Section(
+            id="what-egfr-means",
+            level=2,
+            heading="What eGFR means and why it can be more informative",
+            body_html="""
+<p><strong>eGFR</strong> (estimated glomerular filtration rate) is a calculated value that estimates how well your kidneys are filtering blood. It is usually derived from your creatinine level, age, and sex (and sometimes race, depending on the formula used). eGFR is often reported in mL/min/1.73 m². Because it accounts for age and body factors, it can be <strong>more informative than creatinine alone</strong> when assessing kidney function. A falling eGFR over time may suggest worsening kidney function and often prompts further tests. eGFR is an <strong>estimate</strong>; your clinician will interpret it together with other results (e.g. urine tests, imaging) and your medical history.</p>
+""",
+        ),
+        Section(
+            id="creatinine-vs-egfr-vs-bun",
+            level=2,
+            heading="Creatinine vs eGFR vs BUN",
+            body_html="""
+<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">
+  <thead><tr class="bg-slate-50"><th class="border border-slate-200 px-3 py-2 text-left">Marker</th><th class="border border-slate-200 px-3 py-2 text-left">What it reflects</th></tr></thead>
+  <tbody>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>Creatinine</strong></td><td class="border border-slate-200 px-3 py-2">Waste product from muscle metabolism; cleared by kidneys. High level can indicate reduced kidney clearance.</td></tr>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>eGFR</strong></td><td class="border border-slate-200 px-3 py-2">Estimated filtration rate (often from creatinine, age, sex). Lower value = less kidney filtering capacity.</td></tr>
+    <tr><td class="border border-slate-200 px-3 py-2"><strong>BUN</strong></td><td class="border border-slate-200 px-3 py-2">Blood urea nitrogen; influenced by protein intake, hydration, and kidney function. Often used together with creatinine.</td></tr>
+  </tbody>
+</table>
+<p>Your doctor interprets these together in the context of your health and other tests.</p>
+""",
+        ),
+        Section(
+            id="egfr-categories",
+            level=2,
+            heading="Typical eGFR categories",
+            body_html="""
+<p>Reference ranges and categories <strong>vary by laboratory and guideline</strong>. The following is a rough guide for context only; your clinician will interpret your result in your situation. In many guidelines:</p>
+<ul>
+  <li><strong>≥90</strong>: Normal or near-normal (if no other markers of kidney damage).</li>
+  <li><strong>60–89</strong>: Mildly decreased; context matters (e.g. age, other tests).</li>
+  <li><strong>45–59</strong>: Mild to moderate decrease.</li>
+  <li><strong>30–44</strong>: Moderate decrease.</li>
+  <li><strong>15–29</strong>: Severe decrease.</li>
+  <li><strong>&lt;15</strong>: Kidney failure range; urgent medical care is needed.</li>
+</ul>
+<p>These categories are for general information. The meaning of your result depends on your age, other kidney markers (e.g. urine albumin), and clinical context. Do not self-diagnose; discuss your results with a clinician.</p>
+""",
+        ),
+        Section(
+            id="what-can-change-without-kidney-disease",
+            level=2,
+            heading="What can change creatinine or eGFR without “true” kidney disease",
+            body_html="""
+<p>Several factors can raise creatinine or lower eGFR temporarily or without indicating lasting kidney damage:</p>
+<ul>
+  <li><strong>Dehydration</strong>: Less fluid can concentrate blood and raise creatinine.</li>
+  <li><strong>High muscle mass</strong>: More muscle can produce more creatinine.</li>
+  <li><strong>Intense or prolonged exercise</strong>: Can temporarily raise creatinine.</li>
+  <li><strong>High-protein diet or creatine supplements</strong>: Can increase creatinine levels.</li>
+  <li><strong>Certain medications</strong>: Some drugs affect kidney function or creatinine; your doctor will consider these.</li>
+  <li><strong>Lab variation</strong>: Slight differences between labs or between draws can occur.</li>
+</ul>
+<p>If your result is borderline or only slightly outside the reference range, your clinician may suggest repeating the test (e.g. after rest and hydration) or ordering additional tests to clarify.</p>
+""",
+        ),
+        Section(
+            id="signs-need-medical-attention",
+            level=2,
+            heading="Signs that need prompt medical attention",
+            body_html="""
+<p>Seek medical care promptly if you have:</p>
+<ul>
+  <li><strong>Swelling</strong> (especially of legs, feet, or face).</li>
+  <li><strong>Shortness of breath</strong> or difficulty breathing.</li>
+  <li><strong>Very low urine output</strong> or no urination.</li>
+  <li><strong>Confusion</strong> or severe drowsiness.</li>
+  <li><strong>Persistent vomiting</strong> or inability to keep fluids down.</li>
+  <li><strong>Severe weakness</strong> or fatigue.</li>
+  <li><strong>Chest pain</strong> or pressure.</li>
+</ul>
+<p>These can be signs of serious kidney or other medical problems. This list is not complete; if you are worried, contact a healthcare provider.</p>
+""",
+        ),
+        Section(
+            id="next-tests-clinicians-use",
+            level=2,
+            heading="Next tests clinicians often use to confirm kidney status",
+            body_html="""
+<p>Depending on your result and history, your doctor may order:</p>
+<ul>
+  <li><strong>Urine ACR</strong> (albumin-to-creatinine ratio) to look for kidney damage.</li>
+  <li><strong>Urinalysis</strong> for blood, protein, or other abnormalities.</li>
+  <li><strong>Repeat creatinine and eGFR</strong> to see if the result is stable.</li>
+  <li><strong>Electrolytes</strong> (e.g. potassium, sodium) if kidney function is a concern.</li>
+  <li><strong>Blood pressure</strong> measurement and monitoring.</li>
+  <li><strong>Glucose or HbA1c</strong> if diabetes is relevant.</li>
+  <li><strong>Ultrasound or other imaging</strong> of the kidneys when indicated.</li>
+</ul>
+<p>Which tests are chosen is a clinical decision made with you by your doctor.</p>
+""",
+        ),
+        Section(
+            id="practical-kidney-friendly-habits",
+            level=2,
+            heading="Practical kidney-friendly habits",
+            body_html="""
+<p>General measures that often support kidney health (and are not a substitute for medical advice or treatment):</p>
+<ul>
+  <li><strong>Hydration</strong>: Adequate fluid intake, unless your doctor has restricted it for a medical reason.</li>
+  <li><strong>Blood pressure and diabetes control</strong>: Important for long-term kidney health; follow your doctor’s plan.</li>
+  <li><strong>Avoid NSAID overuse</strong>: Non-steroidal anti-inflammatory drugs can affect the kidneys; use only as directed and discuss with your doctor if you have kidney concerns.</li>
+  <li><strong>Salt moderation</strong>: In line with general heart and kidney health advice; your clinician can advise on your target.</li>
+  <li><strong>Protein intake</strong>: If you have known kidney disease, your doctor or dietitian may give specific guidance on protein; do not change diet solely based on this article.</li>
+</ul>
+""",
+        ),
+        Section(
+            id="faq",
+            level=2,
+            heading="Frequently asked questions",
+            body_html="""
+<p>See the FAQ entries in this article; your clinician will interpret your individual results and advise on follow-up.</p>
+""",
+        ),
+        Section(
+            id="disclaimer",
+            level=2,
+            heading="Medical disclaimer",
+            body_html="""
+<p><strong>This content is for information only and does not constitute medical advice, diagnosis, or treatment.</strong> Always discuss your results and any symptoms with a qualified healthcare provider. Do not start or change diet, exercise, or medication based solely on this article. If you have concerns about your health, seek professional medical care.</p>
+""",
+        ),
+    ]
+
+
+def _creatinine_egfr_sections_de() -> List[Section]:
+    return [
+        Section(id="what-creatinine-is", level=2, heading="Was Kreatinin ist und warum es gemessen wird",
+            body_html="<p>Kreatinin ist ein <strong>Abbauprodukt der Muskeln</strong> und wird über die Nieren ausgeschieden. Bei eingeschränkter Nierenfunktion steigt der Kreatininwert im Blut. Labore messen das Blutkreatinin zur Beurteilung der Nierenfunktion (oft in mg/dL oder µmol/L). Kreatinin allein reicht nicht—Körpergröße, Muskelmasse, Alter und Geschlecht beeinflussen den Wert. Daher nutzen Ärzte oft den <strong>eGFR</strong> (geschätzter glomerulärer Filtrationswert), der diese Faktoren berücksichtigt.</p>"),
+        Section(id="what-egfr-means", level=2, heading="Was der eGFR bedeutet und warum er aussagekräftiger sein kann",
+            body_html="<p>Der <strong>eGFR</strong> (geschätzter glomerulärer Filtrationswert) schätzt, wie gut die Nieren das Blut filtern. Er wird meist aus Kreatinin, Alter und Geschlecht berechnet (Formel abhängig). Der eGFR wird oft in mL/min/1,73 m² angegeben. Da er Alter und Körperfaktoren einbezieht, ist er oft <strong>aussagekräftiger als Kreatinin allein</strong>. Ein sinkender eGFR kann auf eine Verschlechterung hindeuten. Der eGFR ist eine <strong>Schätzung</strong>; Ihr Arzt interpretiert ihn zusammen mit anderen Befunden (z. B. Urin, Bildgebung) und Ihrer Anamnese.</p>"),
+        Section(id="creatinine-vs-egfr-vs-bun", level=2, heading="Kreatinin vs. eGFR vs. BUN",
+            body_html="<p><strong>Kreatinin</strong>: Abbauprodukt der Muskeln; wird von den Nieren ausgeschieden. Erhöhung kann auf verminderte Nierenfunktion hinweisen. <strong>eGFR</strong>: Geschätzte Filtrationsrate (meist aus Kreatinin, Alter, Geschlecht). Niedrigerer Wert = geringere Filtrationsleistung. <strong>BUN</strong> (Harnstoff-Stickstoff): Von Eiweißzufuhr, Flüssigkeit und Nierenfunktion beeinflusst; wird oft zusammen mit Kreatinin beurteilt. Ihr Arzt wertet die Werte im Kontext aus.</p>"),
+        Section(id="egfr-categories", level=2, heading="Typische eGFR-Kategorien",
+            body_html="<p>Referenzbereiche <strong>variieren je nach Labor und Leitlinie</strong>. Grobe Orientierung: <strong>≥90</strong> oft normal/nah-normal; <strong>60–89</strong> leicht vermindert (Kontext wichtig); <strong>45–59</strong> leicht bis mäßig; <strong>30–44</strong> mäßig; <strong>15–29</strong> stark vermindert; <strong>&lt;15</strong> Nierenversagen—dringend ärztliche Betreuung. Die Einordnung Ihres Wertes erfolgt durch den Arzt unter Berücksichtigung von Alter, weiteren Nierenmarkern (z. B. Urin-Albumin) und Klinik.</p>"),
+        Section(id="what-can-change-without-kidney-disease", level=2, heading="Was Kreatinin/eGFR ohne „echte“ Nierenerkrankung verändern kann",
+            body_html="<p>U. a.: <strong>Dehydratation</strong>, <strong>hohe Muskelmasse</strong>, <strong>intensiver Sport</strong>, <strong>viel Eiweiß/Kreatin-Supplemente</strong>, <strong>bestimmte Medikamente</strong>, <strong>Laborabweichungen</strong>. Bei Grenzwerten kann der Arzt eine Wiederholung (z. B. nach Erholung und Trinken) oder weitere Tests empfehlen.</p>"),
+        Section(id="signs-need-medical-attention", level=2, heading="Zeichen, die rasche ärztliche Abklärung erfordern",
+            body_html="<p>Bitte zeitnah zum Arzt bei: <strong>Ödemen</strong> (Beine, Füße, Gesicht), <strong>Kurzatmigkeit</strong>, <strong>sehr wenig Urin</strong>, <strong>Verwirrtheit</strong> oder starke Müdigkeit, <strong>anhaltendem Erbrechen</strong>, <strong>starker Schwäche</strong>, <strong>Brustschmerzen</strong>. Diese Liste ist nicht vollständig; bei Sorgen einen Arzt kontaktieren.</p>"),
+        Section(id="next-tests-clinicians-use", level=2, heading="Weitere Tests, die der Arzt oft veranlasst",
+            body_html="<p>Je nach Befund: <strong>Urin-ACR</strong> (Albumin-Kreatinin-Quotient), <strong>Urinanalyse</strong>, <strong>Wiederholung Kreatinin/eGFR</strong>, <strong>Elektrolyte</strong> (K, Na), <strong>Blutdruck</strong>, <strong>Glukose/HbA1c</strong>, <strong>Sonographie</strong> der Nieren. Die Auswahl trifft der Arzt mit Ihnen.</p>"),
+        Section(id="practical-kidney-friendly-habits", level=2, heading="Praktische nierenfreundliche Gewohnheiten",
+            body_html="<p>Allgemeine Hinweise (kein Ersatz für ärztlichen Rat): <strong>Flüssigkeit</strong> ausreichend, sofern nicht vom Arzt eingeschränkt. <strong>Blutdruck und Diabetes</strong> gut einstellen. <strong>NSAR</strong> nicht übermäßig; bei Nierenfragen mit dem Arzt besprechen. <strong>Salz</strong> in Maßen. <strong>Eiweiß</strong>: Bei bekannter Nierenerkrankung kann der Arzt/die Diätberatung gezielte Empfehlungen geben.</p>"),
+        Section(id="faq", level=2, heading="Häufige Fragen",
+            body_html="<p>Siehe FAQ in diesem Artikel; die Bewertung Ihrer Werte erfolgt durch den Arzt.</p>"),
+        Section(id="disclaimer", level=2, heading="Hinweis",
+            body_html="<p><strong>Dieser Inhalt dient nur der Information und ersetzt keine medizinische Beratung, Diagnose oder Behandlung.</strong> Besprechen Sie Ergebnisse und Beschwerden immer mit einem Arzt. Keine Änderung von Ernährung, Bewegung oder Medikation nur aufgrund dieses Artikels.</p>"),
+    ]
+
+
+def _creatinine_egfr_sections_it() -> List[Section]:
+    return [
+        Section(id="what-creatinine-is", level=2, heading="Cos'è la creatinina e perché si misura",
+            body_html="<p>La creatinina è un <strong>prodotto di scarto del metabolismo muscolare</strong>, eliminata dai reni. Se la funzione renale è ridotta, la creatinina nel sangue tende ad aumentare. I laboratori la misurano per valutare la funzione renale (spesso in mg/dL o µmol/L). La creatinina da sola non basta—corporatura, massa muscolare, età e sesso la influenzano. Per questo si usa spesso l'<strong>eGFR</strong> (filtrato glomerulare stimato), che tiene conto di questi fattori.</p>"),
+        Section(id="what-egfr-means", level=2, heading="Cosa significa l'eGFR e perché può essere più informativo",
+            body_html="<p>L'<strong>eGFR</strong> (filtrato glomerulare stimato) stima quanto bene i reni filtrano il sangue. Si calcola di solito da creatinina, età e sesso. Si esprime spesso in mL/min/1,73 m². Considerando età e fattori corporei, può essere <strong>più informativo della sola creatinina</strong>. Un eGFR in calo può indicare peggioramento. L'eGFR è una <strong>stima</strong>; il medico lo interpreta con altri esami (es. urina, imaging) e la storia clinica.</p>"),
+        Section(id="creatinine-vs-egfr-vs-bun", level=2, heading="Creatinina vs eGFR vs BUN",
+            body_html="<p><strong>Creatinina</strong>: prodotto di scarto muscolare; eliminata dai reni. Valore alto può indicare ridotta clearance renale. <strong>eGFR</strong>: velocità di filtrazione stimata; valore più basso = minore capacità filtrante. <strong>BUN</strong> (azoto ureico): influenzato da proteine, idratazione e funzione renale; spesso valutato con la creatinina. Il medico interpreta il tutto nel contesto.</p>"),
+        Section(id="egfr-categories", level=2, heading="Categorie eGFR tipiche",
+            body_html="<p>Gli intervalli <strong>variano per laboratorio e linee guida</strong>. Orientativamente: <strong>≥90</strong> normale o quasi; <strong>60–89</strong> lieve riduzione (conto il contesto); <strong>45–59</strong> lieve-moderata; <strong>30–44</strong> moderata; <strong>15–29</strong> severa; <strong>&lt;15</strong> insufficienza renale—cure urgenti. L'interpretazione del vostro valore spetta al medico (età, altri marker, quadro clinico).</p>"),
+        Section(id="what-can-change-without-kidney-disease", level=2, heading="Cosa può alterare creatinina/eGFR senza malattia renale “vera”",
+            body_html="<p>Es.: <strong>disidratazione</strong>, <strong>massa muscolare alta</strong>, <strong>esercizio intenso</strong>, <strong>dieta iperproteica o integratori di creatina</strong>, <strong>alcuni farmaci</strong>, <strong>variazione di laboratorio</strong>. In caso di valori al limite il medico può consigliare ripetizione (es. dopo riposo e idratazione) o altri esami.</p>"),
+        Section(id="signs-need-medical-attention", level=2, heading="Segni che richiedono attenzione medica tempestiva",
+            body_html="<p>Rivolgersi al medico in caso di: <strong>gonfiore</strong> (gambe, piedi, viso), <strong>mancanza di respiro</strong>, <strong>scarsa emissione di urina</strong>, <strong>confusione</strong> o sonnolenza marcata, <strong>vomito persistente</strong>, <strong>debolezza grave</strong>, <strong>dolore al petto</strong>. Lista non esaustiva; in caso di dubbi contattare il medico.</p>"),
+        Section(id="next-tests-clinicians-use", level=2, heading="Altri esami che il medico può richiedere",
+            body_html="<p>A seconda del risultato: <strong>ACR urinario</strong>, <strong>esame delle urine</strong>, <strong>ripetizione creatinina/eGFR</strong>, <strong>elettroliti</strong> (K, Na), <strong>pressione</strong>, <strong>glicemia/HbA1c</strong>, <strong>ecografia</strong> renale. La scelta è clinica.</p>"),
+        Section(id="practical-kidney-friendly-habits", level=2, heading="Abitudini pratiche a sostegno dei reni",
+            body_html="<p>Indicazioni generali (non sostituiscono il parere medico): <strong>idratazione</strong> adeguata salvo diversa indicazione. <strong>Controllo pressione e diabete</strong>. <strong>Evitare abuso di FANS</strong>; in caso di problemi renali parlarne con il medico. <strong>Sale</strong> con moderazione. <strong>Proteine</strong>: in caso di malattia renale nota, il medico/dietista può dare indicazioni specifiche.</p>"),
+        Section(id="faq", level=2, heading="Domande frequenti",
+            body_html="<p>Vedi le FAQ in questo articolo; l'interpretazione dei vostri valori spetta al medico.</p>"),
+        Section(id="disclaimer", level=2, heading="Disclaimer medico",
+            body_html="<p><strong>Questo contenuto è solo informativo e non costituisce consulenza, diagnosi o trattamento medico.</strong> Discutere sempre risultati e sintomi con un operatore sanitario. Non modificare dieta, esercizio o farmaci solo in base a questo articolo.</p>"),
+    ]
+
+
+def _creatinine_egfr_sections_fr() -> List[Section]:
+    return [
+        Section(id="what-creatinine-is", level=2, heading="Ce qu'est la créatinine et pourquoi on la dose",
+            body_html="<p>La créatinine est un <strong>produit de dégradation du métabolisme musculaire</strong>, éliminée par les reins. Quand la fonction rénale baisse, la créatinine sanguine tend à augmenter. Les laboratoires la dosent pour évaluer la fonction rénale (souvent en mg/dL ou µmol/L). La créatinine seule ne suffit pas—taille, masse musculaire, âge et sexe l'influencent. C'est pourquoi on utilise souvent l'<strong>eGFR</strong> (débit de filtration glomérulaire estimé), qui tient compte de ces facteurs.</p>"),
+        Section(id="what-egfr-means", level=2, heading="Ce que signifie l'eGFR et pourquoi il peut être plus informatif",
+            body_html="<p>L'<strong>eGFR</strong> (débit de filtration glomérulaire estimé) estime la capacité des reins à filtrer le sang. Il est calculé à partir de la créatinine, de l'âge et du sexe. Il est souvent exprimé en mL/min/1,73 m². En tenant compte de l'âge et du corps, il peut être <strong>plus informatif que la créatinine seule</strong>. Une baisse de l'eGFR peut suggérer une aggravation. L'eGFR est une <strong>estimation</strong> ; le médecin l'interprète avec les autres résultats (urines, imagerie) et l'histoire clinique.</p>"),
+        Section(id="creatinine-vs-egfr-vs-bun", level=2, heading="Créatinine vs eGFR vs BUN",
+            body_html="<p><strong>Créatinine</strong> : déchet du métabolisme musculaire ; éliminée par les reins. Un taux élevé peut indiquer une baisse de la fonction rénale. <strong>eGFR</strong> : débit de filtration estimé ; valeur basse = moins de capacité de filtration. <strong>BUN</strong> (urée sanguine) : influencé par les protéines, l'hydratation et la fonction rénale ; souvent interprété avec la créatinine. Le médecin fait la synthèse dans votre contexte.</p>"),
+        Section(id="egfr-categories", level=2, heading="Catégories d'eGFR typiques",
+            body_html="<p>Les seuils <strong>varient selon le laboratoire et les recommandations</strong>. À titre indicatif : <strong>≥90</strong> normal ou proche ; <strong>60–89</strong> légèrement diminué (contexte important) ; <strong>45–59</strong> légère à modérée ; <strong>30–44</strong> modérée ; <strong>15–29</strong> sévère ; <strong>&lt;15</strong> insuffisance rénale—prise en charge urgente. L'interprétation de votre résultat relève du médecin (âge, autres marqueurs, tableau clinique).</p>"),
+        Section(id="what-can-change-without-kidney-disease", level=2, heading="Ce qui peut modifier créatinine ou eGFR sans « vraie » maladie rénale",
+            body_html="<p>Ex. : <strong>déshydratation</strong>, <strong>forte masse musculaire</strong>, <strong>exercice intense</strong>, <strong>régime hyperprotéiné ou compléments de créatine</strong>, <strong>certains médicaments</strong>, <strong>variation entre laboratoires</strong>. En cas de valeur limite, le médecin peut proposer de répéter le dosage (après repos et réhydratation) ou d'autres examens.</p>"),
+        Section(id="signs-need-medical-attention", level=2, heading="Signes qui nécessitent une consultation rapide",
+            body_html="<p>Consulter en cas de : <strong>œdèmes</strong> (jambes, pieds, visage), <strong>essoufflement</strong>, <strong>très peu d'urines</strong>, <strong>confusion</strong> ou somnolence importante, <strong>vomissements persistants</strong>, <strong>faiblesse sévère</strong>, <strong>douleur thoracique</strong>. Liste non exhaustive ; en cas d'inquiétude, contacter un professionnel de santé.</p>"),
+        Section(id="next-tests-clinicians-use", level=2, heading="Examens que le médecin peut prescrire",
+            body_html="<p>Selon le résultat : <strong>ACR urinaire</strong>, <strong>analyse d'urines</strong>, <strong>répétition créatinine/eGFR</strong>, <strong>électrolytes</strong> (K, Na), <strong>tension</strong>, <strong>glycémie/HbA1c</strong>, <strong>échographie</strong> rénale. Le choix est clinique.</p>"),
+        Section(id="practical-kidney-friendly-habits", level=2, heading="Habitudes pratiques pour les reins",
+            body_html="<p>Recommandations générales (ne remplacent pas l'avis médical) : <strong>hydratation</strong> suffisante sauf contre-indication. <strong>Contrôle tension et diabète</strong>. <strong>Éviter l'abus d'AINS</strong> ; en cas de souci rénal en parler au médecin. <strong>Sel</strong> avec modération. <strong>Protéines</strong> : en cas de maladie rénale connue, le médecin/diététicien peut donner des conseils ciblés.</p>"),
+        Section(id="faq", level=2, heading="Questions fréquentes",
+            body_html="<p>Voir les FAQ dans cet article ; l'interprétation de vos résultats relève du médecin.</p>"),
+        Section(id="disclaimer", level=2, heading="Avertissement médical",
+            body_html="<p><strong>Ce contenu est à titre informatif uniquement et ne constitue pas un avis, diagnostic ou traitement médical.</strong> Toujours discuter des résultats et symptômes avec un professionnel de santé. Ne pas modifier alimentation, exercice ou médicaments uniquement sur la base de cet article.</p>"),
+    ]
+
+
+_CREATININE_EGFR_ARTICLE = _article_creatinine_egfr()
+
+
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
     _LDL_HDL_ARTICLE,
@@ -3233,6 +3560,7 @@ ARTICLES: List[Article] = [
     _VITAMIN_B12_ARTICLE,
     _HBA1C_ARTICLE,
     _TSH_ARTICLE,
+    _CREATININE_EGFR_ARTICLE,
 ]
 
 
