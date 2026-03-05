@@ -148,6 +148,8 @@ Bu mesaj **güvenlik** değil, **PayTR’nin yapılandırılmamış olması** an
 
 Test için `PAYTR_TEST_MODE=1` ekleyebilirsiniz. Canlıya geçince `0` yapın.
 
+**Ödeme sayfası:** `GET /pay?plan=single_13eur` (veya `monthly_50eur`, `yearly_99eur`) — iFrame token için `POST /paytr/init` kullanılır. PayTR panelde **Bildirim URL:** `https://noryaai.com/paytr/callback`. Başarı/iptal: `GET /payment/success`, `GET /payment/failed`. Detay: `docs/PAYTR_WEBHOOK.md`.
+
 ## Norton / güvenlik rozeti nasıl alınır?
 
 Kantesti gibi sitelerde gördüğünüz **"Norton Secured"** rozetleri ticari güvenlik hizmetidir. Norya şu an bu rozeti kullanmıyor; ödeme sayfasında **256-bit SSL** ve **PayTR** ifadeleri kullanılıyor. İleride eklemek için DigiCert (digicert.com) veya benzeri sağlayıcılardan SSL/site doğrulama hizmeti satın alınır (yıllık ücretli). Norya için zorunlu değildir; HTTPS ve PayTR yeterlidir.

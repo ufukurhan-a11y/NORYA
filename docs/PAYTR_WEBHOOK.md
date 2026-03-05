@@ -38,8 +38,8 @@ Callback'in çalışması ve **hash doğrulaması** için aşağıdakiler zorunl
    - Sonuç Base64 encode edilir.
 3. Gelen `hash` ile hesaplanan değer **eşleşmezse**:
    - `SecurityLog` tablosuna `event='paytr_invalid_hash'` yazılır (ip, endpoint, detail).
-   - Yanıt: **400** + metin `PAYTR notification failed: bad hash`.
-4. Hash **doğruysa** idempotent ödeme akışına geçilir (Sprint-1).
+   - Yanıt: **200** + metin `OK` (PayTR tekrar denemesin diye her zaman OK dönülür).
+4. Hash **doğruysa** idempotent ödeme akışına geçilir.
 
 ---
 
@@ -113,21 +113,32 @@ curl -X POST http://127.0.0.1:8000/payment/callback \
 
 Beklenen:
 
-- Yanıt: **400** ve body: `PAYTR notification failed: bad hash`.
-- `SecurityLog` tablosunda `event='paytr_invalid_hash'` kaydı oluşur (Admin → Güvenlik panelinden veya DB'den kontrol edebilirsin).
+- `SecurityLog` tablosunda `event='paytr_invalid_hash'` kaydı oluşur; yanıt her zaman **200 OK** (PayTR tekrar denemesin).
 
-### 4. Eksik key/salt (400)
+### 4. Eksik key/salt
 
 - Geçici olarak `.env`'de `PAYTR_MERCHANT_KEY` veya `PAYTR_MERCHANT_SALT`'ı boşaltıp uygulamayı yeniden başlat.
-- Herhangi bir payload ile callback çağır.
+- Herhangi bir payload ile callback çağır: yanıt **200 OK**, logda missing key/salt kaydı düşer.
 
-Beklenen: **400** (`PAYTR notification failed: misconfiguration`) ve gerekirse `paytr_invalid_hash` / missing key-salt ile ilgili bir log kaydı.
+---
+
+## Deploy sonrası test (curl)
+
+```bash
+# Başarı sayfası
+curl -i https://noryaai.com/payment/success
+
+# Başarısız sayfa
+curl -i https://noryaai.com/payment/failed
+
+# Callback (hash yanlış olsa bile 200 OK dönmeli; fraud loglanır)
+curl -i -X POST https://noryaai.com/paytr/callback -d "merchant_oid=test&status=success&total_amount=100&hash=x"
+```
 
 ---
 
 ## Özet
 
-- Hash **doğrulanmadan** ödeme işlenmez.
-- `merchant_key` ve `merchant_salt` **env'den** okunur.
-- Hash **yanlışsa**: `SecurityLog` → `paytr_invalid_hash`, yanıt **400**.
-- Hash **doğruysa**: Sprint-1 idempotent akışı (is_processed, processed_at, kullanıcı hakları) uygulanır.
+- Callback **her zaman** `200` + body `OK` döner (PayTR tekrar denemesi önlenir).
+- Hash **yanlışsa**: `SecurityLog` → `paytr_invalid_hash`, sipariş güncellenmez.
+- Hash **doğruysa**: idempotent akış (is_processed, paid_at, kullanıcı hakları) uygulanır.

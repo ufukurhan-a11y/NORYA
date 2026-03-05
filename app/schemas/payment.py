@@ -29,3 +29,11 @@ class GuestSessionRequest(BaseModel):
     coupon_code: str | None = None
     consent_mesafeli: bool = False
     consent_kvkk: bool = False
+
+
+class PaytrInitRequest(BaseModel):
+    """PayTR iFrame başlatma: plan_code ile paket seçimi, opsiyonel user_id/email/name."""
+    plan_code: str  # single_13eur | monthly_50eur | yearly_99eur
+    user_id: int | None = None
+    email: str | None = None
+    name: str | None = None

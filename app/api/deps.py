@@ -45,3 +45,23 @@ def get_current_user(
             detail="Hesabınız askıya alındı. Sorularınız için iletişim sayfasından bize ulaşın.",
         )
     return user
+
+
+def get_current_user_optional(
+    credentials: HTTPAuthorizationCredentials | None = Depends(security),
+    db: Session = Depends(get_db),
+) -> User | None:
+    """Giriş yapılmışsa User döner, yoksa None. PayTR init gibi opsiyonel auth endpoint'leri için."""
+    if not credentials:
+        return None
+    try:
+        payload = decode_access_token(credentials.credentials)
+        if not payload or "sub" not in payload:
+            return None
+        user_id = int(payload["sub"])
+        user = db.get(User, user_id)
+        if user and getattr(user, "is_banned", False):
+            return None
+        return user
+    except Exception:
+        return None

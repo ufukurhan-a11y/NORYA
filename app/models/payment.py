@@ -20,6 +20,11 @@ class PaymentOrder(SQLModel, table=True):
     coupon_code_used: str | None = Field(default=None, max_length=64)
     created_at: datetime | None = Field(default_factory=datetime.utcnow)
     admin_note: str | None = None  # İade / not (admin panelinden)
+    # PayTR callback’ten gelen ham değerler (gözlemlenebilirlik)
+    paid_at: datetime | None = None
+    paytr_payment_amount: str | None = None
+    paytr_status: str | None = None
+    raw_callback_json: str | None = None  # JSON string (log için)
     # E-arşiv fatura (GİB)
     invoice_ettn: str | None = Field(default=None, index=True)   # GİB'deki fatura ETTN
     invoice_gib_no: str | None = Field(default=None)            # GİB belge numarası (GIB2025...)

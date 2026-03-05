@@ -118,6 +118,10 @@ def init_db():
             "ALTER TABLE paymentorder ADD COLUMN admin_note TEXT",
             "ALTER TABLE paymentorder ADD COLUMN invoice_ettn TEXT",
             "ALTER TABLE paymentorder ADD COLUMN invoice_gib_no TEXT",
+            "ALTER TABLE paymentorder ADD COLUMN paid_at DATETIME",
+            "ALTER TABLE paymentorder ADD COLUMN paytr_payment_amount TEXT",
+            "ALTER TABLE paymentorder ADD COLUMN paytr_status TEXT",
+            "ALTER TABLE paymentorder ADD COLUMN raw_callback_json TEXT",
             "ALTER TABLE analysis_jobs ADD COLUMN prompt_tokens INTEGER",
             "ALTER TABLE analysis_jobs ADD COLUMN completion_tokens INTEGER",
         ):

@@ -35,7 +35,7 @@ from sqlmodel import Session, select
 from app.admin import admin_router as new_admin_router
 from app.api.admin import get_admin_html, router as admin_router
 from app.api.auth import router as auth_router
-from app.api.deps import get_current_user, security
+from app.api.deps import get_current_user, get_current_user_optional, security
 from app.cache_db import cache_get, cache_set, get_conn as get_cache_conn, init_cache as init_ai_cache, purge_expired as purge_ai_cache_expired
 from app.cache_utils import expires_iso, make_cache_key, now_iso
 from app.core.config import is_openai_configured, settings
@@ -78,7 +78,7 @@ from app.schemas.analyze import (
     UiHintsSchema,
     UploadJsonRequest,
 )
-from app.schemas.payment import CreateSessionRequest, GrantPaymentRequest, GuestSessionRequest
+from app.schemas.payment import CreateSessionRequest, GrantPaymentRequest, GuestSessionRequest, PaytrInitRequest
 from app.services.analyze import analyze_blood_test, analyze_blood_test_from_image
 from app.services.pdf_extract import extract_text_from_pdf
 from app.logging import setup_logging
@@ -2093,6 +2093,180 @@ def _paytr_amount(product: str) -> int:
     return 300
 
 
+# Plan kodları (GET /pay?plan= ve POST /paytr/init)
+PAYTR_PLAN_CODES = {
+    "single_13eur": ("single", 1300),
+    "monthly_50eur": ("monthly", 5000),
+    "yearly_99eur": ("yearly", 9900),
+}
+
+
+def _plan_code_to_product_amount(plan_code: str) -> tuple[str, int]:
+    """plan_code -> (product, amount_cent). Geçersizse ValueError."""
+    t = PAYTR_PLAN_CODES.get((plan_code or "").strip().lower())
+    if not t:
+        raise ValueError("Geçersiz plan_code. Desteklenen: single_13eur, monthly_50eur, yearly_99eur")
+    return t[0], t[1]
+
+
+@app.post("/paytr/init")
+def paytr_init(
+    body: PaytrInitRequest,
+    request: Request,
+    current_user: User | None = Depends(get_current_user_optional),
+    db: Session = Depends(get_db),
+):
+    """
+    PayTR iFrame token üretir; sipariş açar. plan_code ile paket seçilir.
+    Giriş yoksa email ile kullanıcı bulunur/oluşturulur. Dönüş: { status, token, merchant_oid }.
+    """
+    if not _paytr_enabled():
+        raise HTTPException(status_code=503, detail="Ödeme şu an aktif değil. PayTR ayarlarını kontrol edin.")
+    try:
+        product, amount = _plan_code_to_product_amount(body.plan_code)
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+
+    user: User | None = current_user
+    if not user and (body.email or "").strip():
+        email = (body.email or "").strip().lower()
+        if "@" in email:
+            stmt = select(User).where(User.email == email)
+            user = db.exec(stmt).first()
+            if not user:
+                user = User(
+                    email=email,
+                    hashed_password=hash_password("guest_" + secrets.token_hex(32)),
+                    full_name=(body.name or "").strip()[:200] or "",
+                )
+                db.add(user)
+                db.commit()
+                db.refresh(user)
+    if not user:
+        raise HTTPException(
+            status_code=400,
+            detail="Giriş yapın veya geçerli bir e-posta girin (email alanı zorunlu).",
+        )
+
+    user_id = user.id or 0
+    merchant_oid = f"norya_{uuid.uuid4().hex[:16]}"
+    currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
+
+    order = PaymentOrder(
+        merchant_oid=merchant_oid,
+        user_id=user_id,
+        product=product,
+        amount_kurus=amount,
+        currency=currency,
+        status="pending",
+    )
+    db.add(order)
+    try:
+        db.commit()
+    except Exception as e:
+        log.exception("PayTR init: order insert failed")
+        raise HTTPException(status_code=500, detail="Sipariş oluşturulamadı.")
+
+    user_ip = _client_ip(request)
+    email = user.email or "customer@norya.ai"
+    product_name = {"single": "1 Analiz", "monthly": "Pro Aylık", "yearly": "Pro Yıllık"}.get(product, product)
+    log.info(
+        "PAYTR_INIT: merchant_oid=%s plan_code=%s amount=%s currency=%s user_ip=%s",
+        merchant_oid, body.plan_code, amount, currency, user_ip,
+    )
+
+    import base64
+    import hmac
+    import hashlib
+    from urllib.parse import urlencode
+    from urllib.request import urlopen, Request as UrlRequest
+
+    merchant_id = settings.paytr_merchant_id
+    merchant_key = settings.paytr_merchant_key.encode() if isinstance(settings.paytr_merchant_key, str) else settings.paytr_merchant_key
+    merchant_salt = settings.paytr_merchant_salt
+    user_basket = base64.b64encode(
+        json.dumps([[f"Norya Plan: {body.plan_code}", f"{amount / 100:.2f}", 1]]).encode()
+    ).decode()
+    no_installment = "0"
+    max_installment = "0"
+    test_mode = getattr(settings, "paytr_test_mode", "0") or "0"
+    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{amount}{user_basket}{no_installment}{max_installment}{currency}{test_mode}"
+    paytr_token = base64.b64encode(
+        hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
+    ).decode()
+
+    base_url = (request.base_url.rstrip("/") + "/").rstrip("/")
+    ok_url = (getattr(settings, "paytr_ok_url", "") or "").strip() or f"{base_url}payment/success"
+    fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{base_url}payment/failed"
+
+    post_vals = {
+        "merchant_id": merchant_id,
+        "user_ip": user_ip,
+        "merchant_oid": merchant_oid,
+        "email": email,
+        "payment_amount": amount,
+        "paytr_token": paytr_token,
+        "user_basket": user_basket,
+        "debug_on": "0",
+        "no_installment": no_installment,
+        "max_installment": max_installment,
+        "user_name": ((body.name or user.full_name or "").strip() or "Müşteri")[:60],
+        "user_address": "Norya ödeme",
+        "user_phone": "",
+        "merchant_ok_url": ok_url,
+        "merchant_fail_url": fail_url,
+        "timeout_limit": "30",
+        "currency": currency,
+        "test_mode": test_mode,
+    }
+    try:
+        req = UrlRequest(
+            "https://www.paytr.com/odeme/api/get-token",
+            data=urlencode(post_vals).encode(),
+            method="POST",
+            headers={"Content-Type": "application/x-www-form-urlencoded"},
+        )
+        with urlopen(req, timeout=20) as resp:
+            result = json.loads(resp.read().decode())
+    except Exception as e:
+        order.status = "failed"
+        order.admin_note = "init_failed"
+        db.add(order)
+        db.commit()
+        log.warning("PAYTR_INIT: PayTR get-token failed merchant_oid=%s err=%s", merchant_oid, str(e)[:100])
+        raise HTTPException(status_code=502, detail=f"PayTR bağlantı hatası: {str(e)[:80]}")
+
+    if result.get("status") != "success":
+        order.status = "failed"
+        order.admin_note = "init_failed"
+        db.add(order)
+        db.commit()
+        raise HTTPException(status_code=400, detail=result.get("reason", "PayTR token alınamadı."))
+
+    token = result.get("token", "")
+    return {"status": "ok", "token": token, "merchant_oid": merchant_oid}
+
+
+@app.get("/pay", response_class=HTMLResponse)
+def pay_page(
+    request: Request,
+    plan: str = Query("single_13eur", description="Plan: single_13eur, monthly_50eur, yearly_99eur"),
+):
+    """Ödeme sayfası: plan seçili; /paytr/init ile token alınıp PayTR iFrame gösterilir."""
+    plan_code = (plan or "single_13eur").strip().lower()
+    if plan_code not in PAYTR_PLAN_CODES:
+        plan_code = "single_13eur"
+    return templates.TemplateResponse(
+        "pay.html",
+        {
+            "request": request,
+            "brand": BRAND_NAME,
+            "plan_code": plan_code,
+            "plan_code_js": json.dumps(plan_code),
+        },
+    )
+
+
 @app.get("/api/coupon/validate")
 def coupon_validate(
     code: str,
@@ -2343,59 +2517,71 @@ def payment_get_token_guest(
 
 
 async def _paytr_callback_handle(request: Request, db: Session):
-    """PayTR bildirim işlemi. /payment/callback ve /api/paytr/webhook tarafından kullanılır."""
+    """PayTR bildirim işlemi. Her zaman 200 OK dönülür (PayTR tekrar denemesin)."""
     form = await request.form()
     post = {k: (form.get(k) or "") for k in form}
     merchant_oid = post.get("merchant_oid", "")
     status = post.get("status", "")
     total_amount = post.get("total_amount", "")
+    payment_amount = post.get("payment_amount", "")
     paytr_hash = post.get("hash", "")
-     # PayTR dokümanına göre payment_id veya benzeri bir transaction_id alanı olabilir; ikisini de deneriz.
     transaction_id = post.get("payment_id") or post.get("transaction_id") or ""
+
+    # Gözlemlenebilirlik: callback gelen tüm key'ler ve kritik alanlar loglanır
+    log.info(
+        "PAYTR_CALLBACK: merchant_oid=%s status=%s total_amount=%s payment_amount=%s keys=%s",
+        merchant_oid, status, total_amount, payment_amount, list(post.keys()),
+    )
 
     if not merchant_oid or not status or not total_amount or not paytr_hash:
         return PlainTextResponse("OK", status_code=200)
 
-    # Hash/imza doğrulaması: merchant_key ve merchant_salt env'den okunur
     merchant_key = (settings.paytr_merchant_key or "").strip()
     merchant_salt = (settings.paytr_merchant_salt or "").strip()
+    hash_ok = False
+    if merchant_key and merchant_salt:
+        import base64
+        import hmac
+        import hashlib
+        key_bytes = merchant_key.encode() if isinstance(merchant_key, str) else merchant_key
+        hash_str = f"{merchant_oid}{merchant_salt}{status}{total_amount}"
+        our_hash = base64.b64encode(
+            hmac.new(key_bytes, hash_str.encode(), hashlib.sha256).digest()
+        ).decode()
+        hash_ok = our_hash == paytr_hash
+
+    log.info("PAYTR_CALLBACK: merchant_oid=%s status=%s total_amount=%s payment_amount=%s hash_ok=%s", merchant_oid, status, total_amount, payment_amount, hash_ok)
+
     if not merchant_key or not merchant_salt:
-        log.warning("PayTR callback: PAYTR_MERCHANT_KEY veya PAYTR_MERCHANT_SALT eksik, hash doğrulanamıyor.")
+        log.warning("PayTR callback: PAYTR_MERCHANT_KEY veya PAYTR_MERCHANT_SALT eksik.")
         try:
             db.add(
                 SecurityLog(
                     event="paytr_invalid_hash",
                     ip=_client_ip(request),
-                    endpoint="/payment/callback",
+                    endpoint="/paytr/callback",
                     detail="missing_merchant_key_or_salt",
                 )
             )
             db.commit()
         except Exception as e:
             log.warning("SecurityLog write failed: %s", e)
-        return PlainTextResponse("PAYTR notification failed: misconfiguration", status_code=400)
-    import base64
-    import hmac
-    import hashlib
-    key_bytes = merchant_key.encode() if isinstance(merchant_key, str) else merchant_key
-    hash_str = f"{merchant_oid}{merchant_salt}{status}{total_amount}"
-    our_hash = base64.b64encode(
-        hmac.new(key_bytes, hash_str.encode(), hashlib.sha256).digest()
-    ).decode()
-    if our_hash != paytr_hash:
+        return PlainTextResponse("OK", status_code=200)
+
+    if not hash_ok:
         try:
             db.add(
                 SecurityLog(
                     event="paytr_invalid_hash",
                     ip=_client_ip(request),
-                    endpoint="/payment/callback",
+                    endpoint="/paytr/callback",
                     detail=f"merchant_oid={merchant_oid} status={status} total_amount={total_amount}",
                 )
             )
             db.commit()
         except Exception as e:
             log.warning("SecurityLog write failed: %s", e)
-        return PlainTextResponse("PAYTR notification failed: bad hash", status_code=400)
+        return PlainTextResponse("OK", status_code=200)
 
     # Önce transaction_id (varsa), yoksa merchant_oid ile siparişi bul
     order = None
@@ -2430,6 +2616,14 @@ async def _paytr_callback_handle(request: Request, db: Session):
         return PlainTextResponse("OK", status_code=200)
 
     try:
+        raw_json = json.dumps({k: str(v) for k, v in post.items()})[:4000]
+        if hasattr(order, "raw_callback_json"):
+            order.raw_callback_json = raw_json
+        if hasattr(order, "paytr_status"):
+            order.paytr_status = status
+        if hasattr(order, "paytr_payment_amount"):
+            order.paytr_payment_amount = str(payment_amount) if payment_amount else None
+
         if status == "success":
             user = db.get(User, order.user_id)
             if user:
@@ -2440,17 +2634,17 @@ async def _paytr_callback_handle(request: Request, db: Session):
                     user.plan = "pro"
                     db.add(user)
                 _audit(db, f"payment_{order.product}", order.user_id, None)
-            # Ödeme başarıyla işlendi
             order.status = "completed"
             order.is_processed = True
             order.processed_at = datetime.now(timezone.utc)
+            if hasattr(order, "paid_at"):
+                order.paid_at = datetime.now(timezone.utc)
             if transaction_id and not order.paytr_transaction_id:
                 order.paytr_transaction_id = transaction_id
             db.add(order)
             if getattr(order, "coupon_code_used", None):
                 apply_coupon_use(db, order.coupon_code_used)
         else:
-            # Başarısız / iptal: durum failed, ancak is_processed False kalsın
             order.status = "failed"
             if transaction_id and not order.paytr_transaction_id:
                 order.paytr_transaction_id = transaction_id
@@ -2464,6 +2658,67 @@ async def _paytr_callback_handle(request: Request, db: Session):
             pass
         return PlainTextResponse("OK", status_code=200)
     return PlainTextResponse("OK", status_code=200)
+
+
+@app.get("/payment/success", response_class=HTMLResponse)
+def payment_success_page(
+    request: Request,
+    merchant_oid: str | None = Query(None),
+    db: Session = Depends(get_db),
+):
+    """Başarılı ödeme sonrası sayfa. merchant_oid ile sipariş durumu gösterilebilir."""
+    base = request.base_url.rstrip("/")
+    html = f"""<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ödeme alındı – {BRAND_NAME}</title>
+<style>
+  body {{ font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }}
+  .card {{ background: #1e293b; border-radius: 12px; padding: 32px; max-width: 420px; text-align: center; }}
+  h1 {{ color: #0EA5A4; font-size: 1.5rem; margin-bottom: 8px; }}
+  p {{ color: #94a3b8; margin-bottom: 24px; }}
+  a {{ display: inline-block; background: #0EA5A4; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; }}
+  a:hover {{ background: #0d9488; }}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Ödeme alındı</h1>
+    <p>Raporunuz hazırlanıyor. Hesabınızdan analiz sayfasına gidebilirsiniz.</p>
+    <a href="{base}/#analyze">Hesabıma git</a>
+  </div>
+</body>
+</html>"""
+    return HTMLResponse(html)
+
+
+@app.get("/payment/failed", response_class=HTMLResponse)
+def payment_failed_page(request: Request):
+    """Ödeme tamamlanamadı sayfası; tekrar dene butonu /pay'e gider."""
+    base = request.base_url.rstrip("/")
+    html = f"""<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ödeme tamamlanamadı – {BRAND_NAME}</title>
+<style>
+  body {{ font-family: system-ui, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; min-height: 100vh; display: flex; align-items: center; justify-content: center; }}
+  .card {{ background: #1e293b; border-radius: 12px; padding: 32px; max-width: 420px; text-align: center; }}
+  h1 {{ color: #f87171; font-size: 1.5rem; margin-bottom: 8px; }}
+  p {{ color: #94a3b8; margin-bottom: 24px; }}
+  a {{ display: inline-block; background: #0EA5A4; color: #fff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 600; margin: 4px; }}
+  a:hover {{ background: #0d9488; }}
+</style>
+</head>
+<body>
+  <div class="card">
+    <h1>Ödeme tamamlanamadı</h1>
+    <p>İşlem iptal edildi veya bir hata oluştu. Tekrar deneyebilirsiniz.</p>
+    <a href="{base}/pay?plan=single_13eur">Tekrar dene</a>
+    <a href="{base}/#pricing">Fiyatlandırma</a>
+  </div>
+</body>
+</html>"""
+    return HTMLResponse(html)
 
 
 @app.post("/payment/callback")

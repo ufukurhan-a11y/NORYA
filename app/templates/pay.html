@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ödeme – {{ brand }}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
+    .container { max-width: 560px; margin: 0 auto; }
+    h1 { color: #0EA5A4; font-size: 1.5rem; margin-bottom: 8px; }
+    .sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 24px; }
+    .card { background: #1e293b; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
+    label { display: block; margin-bottom: 4px; font-size: 0.875rem; color: #94a3b8; }
+    input { width: 100%; padding: 10px 12px; border: 1px solid #334155; border-radius: 8px; background: #0f172a; color: #e2e8f0; margin-bottom: 16px; }
+    .btn { background: #0EA5A4; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1rem; }
+    .btn:hover { background: #0d9488; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    #iframe-wrap { display: none; margin-top: 24px; border-radius: 12px; overflow: hidden; background: #0f172a; min-height: 480px; }
+    #paytr-iframe { width: 100%; height: 520px; border: 0; }
+    .err { color: #f87171; font-size: 0.875rem; margin-top: 8px; }
+    .plan-badge { display: inline-block; background: #0EA5A4; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.875rem; margin-bottom: 16px; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>{{ brand }} – Güvenli ödeme</h1>
+    <p class="sub">PayTR 3D Secure ile ödeme</p>
+    <div class="card">
+      <span class="plan-badge" id="plan-badge">{{ plan_code }}</span>
+      <div id="form-wrap">
+        <label for="email">E-posta (opsiyonel)</label>
+        <input type="email" id="email" placeholder="ornek@email.com" autocomplete="email">
+        <label for="name">Ad (opsiyonel)</label>
+        <input type="text" id="name" placeholder="Adınız" autocomplete="name">
+        <button type="button" class="btn" id="btn-start">Ödemeye geç</button>
+        <p class="err" id="err" style="display:none;"></p>
+      </div>
+      <div id="iframe-wrap">
+        <iframe id="paytr-iframe" src="" title="PayTR ödeme"></iframe>
+      </div>
+    </div>
+  </div>
+  <script>
+    (function() {
+      var planCode = {{ plan_code_js | safe }};
+      var formWrap = document.getElementById('form-wrap');
+      var iframeWrap = document.getElementById('iframe-wrap');
+      var iframe = document.getElementById('paytr-iframe');
+      var btn = document.getElementById('btn-start');
+      var errEl = document.getElementById('err');
+      function showErr(msg) { errEl.textContent = msg || ''; errEl.style.display = msg ? 'block' : 'none'; }
+      btn.addEventListener('click', function() {
+        showErr('');
+        btn.disabled = true;
+        btn.textContent = 'Yükleniyor...';
+        fetch('/paytr/init', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            plan_code: planCode,
+            email: document.getElementById('email').value.trim() || null,
+            name: document.getElementById('name').value.trim() || null
+          })
+        }).then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
+          .then(function(_r) {
+            if (_r.ok && _r.data.token) {
+              formWrap.style.display = 'none';
+              iframeWrap.style.display = 'block';
+              iframe.src = 'https://www.paytr.com/odeme/guvenli/' + _r.data.token;
+            } else {
+              btn.disabled = false;
+              btn.textContent = 'Ödemeye geç';
+              showErr(_r.data.detail || _r.data.reason || 'Token alınamadı.');
+            }
+          }).catch(function(e) {
+            btn.disabled = false;
+            btn.textContent = 'Ödemeye geç';
+            showErr('Bağlantı hatası. Tekrar deneyin.');
+          });
+      });
+    })();
+  </script>
+</body>
+</html>
