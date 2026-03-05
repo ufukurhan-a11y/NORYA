@@ -117,7 +117,7 @@
       <nav class="mb-3 text-xs sm:text-sm text-slate-500" aria-label="{{ blog_ui.breadcrumb_aria|default('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-1 sm:gap-1.5">
           <li>
-            <a href="/" class="hover:text-slate-700 transition-colors">{{ blog_ui.home_link|default("Norya") }}</a>
+            <a href="/" class="hover:text-slate-700 transition-colors">{{ blog_ui.home_link|default(brand_name|default("NoryaAI")) }}</a>
           </li>
           <li aria-hidden="true" class="text-slate-400">/</li>
           <li>
@@ -293,15 +293,15 @@
         <div class="flex flex-col sm:flex-row sm:items-center gap-5">
           <div class="flex-1">
             <h2 class="text-lg sm:text-xl font-semibold text-slate-900">
-              {{ blog_ui.end_cta_title|default("Sonucunuzu yükleyin, net bir rapor alın") }}
+              {{ blog_ui.end_cta_title }}
             </h2>
             <p class="mt-2 text-sm sm:text-base text-slate-600 leading-relaxed">
-              {{ blog_ui.end_cta_text|default("Laboratuvar sonuçlarınızı güvenli şekilde yükleyin, tıbbi terimleri sade bir dilde görün ve önemli noktaları dakikalar içinde anlayın.") }}
+              {{ blog_ui.end_cta_text|default(blog_ui.cta_text) }}
             </p>
           </div>
           <div class="flex-shrink-0">
             <a href="/upload" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-teal-500/30 hover:from-teal-600 hover:to-emerald-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
-              {{ blog_ui.end_cta_button|default("Kan tahlilini analiz et") }}
+              {{ blog_ui.end_cta_button }}
             </a>
           </div>
         </div>

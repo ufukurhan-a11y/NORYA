@@ -63,7 +63,9 @@ from app.models import (  # noqa: F401
     User,
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
+from app.base_i18n import get_base_ui
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, iter_all_article_paths, list_articles_for_lang
+from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
 from app.services.storage import upload_report_pdf
@@ -916,10 +918,11 @@ def blog_index(request: Request, lang: str):
     categories.sort()
     canonical_url = f"{base_url}/{lang}/blog"
     ui = BLOG_UI.get(lang, BLOG_UI["en"])
-    seo_title = ui.get("seo_title", "Norya Blog")
+    seo_title = ui.get("seo_title", f"{BRAND_NAME} Blog")
     meta_description = ui.get("meta_description", "")
-    og_image = base_url + "/static/norya_logo_transparent_trim.png"
+    og_image = base_url + "/static/images/blog/how-to-read-blood-test-results.png"
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/blog"} for code in BLOG_LANGS_PREMIUM]
+    base_ui = get_base_ui(lang)
     return templates.TemplateResponse(
         "blog/index.html",
         {
@@ -928,6 +931,8 @@ def blog_index(request: Request, lang: str):
             "categories": categories,
             "lang": lang,
             "blog_ui": ui,
+            "base_ui": base_ui,
+            "brand_name": BRAND_NAME,
             "seo_title": seo_title,
             "meta_description": meta_description,
             "canonical_url": canonical_url,
@@ -977,11 +982,12 @@ def blog_detail(request: Request, lang: str, slug: str):
         "dateModified": published_iso,
         "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
         "url": canonical_url,
-        "author": {"@type": "Organization", "name": "Norya"},
+        "author": {"@type": "Organization", "name": BRAND_NAME},
     }
     article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
 
     blog_ui = BLOG_UI.get(lang, BLOG_UI["en"])
+    base_ui = get_base_ui(lang)
 
     return templates.TemplateResponse(
         "blog/detail.html",
@@ -996,6 +1002,8 @@ def blog_detail(request: Request, lang: str, slug: str):
             "hreflang_alternates": hreflang_alternates,
             "article_schema_json": article_schema_json,
             "blog_ui": blog_ui,
+            "base_ui": base_ui,
+            "brand_name": BRAND_NAME,
             "premium_langs": BLOG_LANGS_PREMIUM,
         },
     )

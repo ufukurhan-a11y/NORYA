@@ -1,16 +1,19 @@
+{% set _locale = (request.state.locale if request and request.state and getattr(request.state, 'locale', none) else none) or 'en' %}
+{% set _base_ui = base_ui|default({}) %}
+{% set _brand = brand_name|default('NoryaAI') %}
 <!DOCTYPE html>
-<html lang="{{ (request.state.locale if request and request.state else none)|default('tr') }}">
+<html lang="{{ _locale }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="theme-color" content="#0EA5A4" />
-  <title>{% block title %}Norya{% endblock %} — Güvenilir Yapay Zeka Kan Tahlili Analizi</title>
+  <title>{% block title %}{{ _brand }}{% endblock %} {{ _base_ui.title_suffix|default('— Reliable AI blood test analysis') }}</title>
   <link rel="manifest" href="/static/manifest.json" />
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Norya" />
+  <meta name="apple-mobile-web-app-title" content="{{ _brand }}" />
   <link rel="apple-touch-icon" href="/static/icons/icon-192.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -97,46 +100,46 @@
   {% endif %}
 </head>
 <body class="font-sans text-norya-ink bg-norya-surface antialiased min-h-screen flex flex-col">
-  {# Navbar: logo solda, mobilde hamburger + CTA sağda; linkler drawer'da #}
+  {# Navbar: locale from request.state.locale (blog sets en/de/fr/it); base_ui for labels #}
   <header class="site-header sticky top-0 z-50 bg-norya-surface-elevated/95 backdrop-blur border-b border-norya-ink-subtle/20">
     <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center shrink-0 min-w-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
+      <a href="/" class="flex items-center shrink-0 min-w-0"><img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
       <div class="nav-right flex items-center gap-2 sm:gap-4 min-w-0">
-        <a href="#nasil-calisir" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">Nasıl Çalışır</a>
-        <a href="#guvenlik" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">Güvenlik</a>
+        <a href="#nasil-calisir" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">{{ _base_ui.nav_how|default('How it works') }}</a>
+        <a href="#guvenlik" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">{{ _base_ui.nav_security|default('Security') }}</a>
         {% block nav_actions %}
-        <a href="/" class="nav-cta inline-flex items-center justify-center px-4 py-2 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">Analiz Yap</a>
+        <a href="/" class="nav-cta inline-flex items-center justify-center px-4 py-2 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
         {% endblock %}
-        <button type="button" onclick="toggleBaseDrawer()" class="sm:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-norya-ink-subtle/30 bg-white/80 shrink-0" aria-label="Menü">☰</button>
+        <button type="button" onclick="toggleBaseDrawer()" class="sm:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-norya-ink-subtle/30 bg-white/80 shrink-0" aria-label="{{ _base_ui.nav_menu|default('Menu') }}">☰</button>
       </div>
     </nav>
   </header>
   <div id="base-drawer-backdrop" class="mobile-drawer-backdrop" onclick="toggleBaseDrawer()" aria-hidden="true"></div>
-  <aside id="base-drawer" class="mobile-drawer" role="dialog" aria-label="Menü" aria-modal="true">
+  <aside id="base-drawer" class="mobile-drawer" role="dialog" aria-label="{{ _base_ui.nav_menu|default('Menu') }}" aria-modal="true">
     <div class="flex items-center justify-between mb-4">
-      <span class="font-semibold text-norya-ink">Menü</span>
-      <button type="button" onclick="toggleBaseDrawer()" class="w-9 h-9 rounded-lg border border-norya-ink-subtle/30 flex items-center justify-center" aria-label="Kapat">✕</button>
+      <span class="font-semibold text-norya-ink">{{ _base_ui.nav_menu|default('Menu') }}</span>
+      <button type="button" onclick="toggleBaseDrawer()" class="w-9 h-9 rounded-lg border border-norya-ink-subtle/30 flex items-center justify-center" aria-label="{{ _base_ui.nav_close|default('Close') }}">✕</button>
     </div>
-    <a href="#nasil-calisir" onclick="toggleBaseDrawer()">Nasıl Çalışır</a>
-    <a href="#guvenlik" onclick="toggleBaseDrawer()">Güvenlik</a>
-    <a href="/" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mt-2">Analiz Yap</a>
+    <a href="#nasil-calisir" onclick="toggleBaseDrawer()">{{ _base_ui.nav_how|default('How it works') }}</a>
+    <a href="#guvenlik" onclick="toggleBaseDrawer()">{{ _base_ui.nav_security|default('Security') }}</a>
+    <a href="/" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mt-2">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
   </aside>
 
   <main class="flex-1">
     {% block content %}{% endblock %}
   </main>
 
-  {# Footer #}
+  {# Footer: locale-aware tagline and link labels #}
   <footer class="border-t border-norya-ink-subtle/20 bg-norya-surface-elevated mt-auto">
     <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
       <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-8 w-auto object-contain" width="160" height="40" loading="lazy" /></div>
-        <p class="text-sm text-norya-ink-muted">Laboratuvar sonuçlarınızı anlaşılır dilde açıklayan bilgilendirme hizmeti. Teşhis yerine geçmez.</p>
+        <div class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 w-auto object-contain" width="160" height="40" loading="lazy" /></div>
+        <p class="text-sm text-norya-ink-muted">{{ _base_ui.footer_tagline|default('Lab results explained in plain language. Not a substitute for medical advice.') }}</p>
       </div>
       <div class="mt-6 pt-6 border-t border-norya-ink-subtle/20 flex flex-wrap gap-6 text-sm text-norya-ink-muted">
-        <a href="/legal/gizlilik-politikasi" class="hover:text-norya-ink">Gizlilik Politikası</a>
-        <a href="/legal/kullanim-sartlari" class="hover:text-norya-ink">Kullanım Şartları</a>
-        <a href="/legal/iletisim" class="hover:text-norya-ink">İletişim</a>
+        <a href="/legal/gizlilik-politikasi" class="hover:text-norya-ink">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
+        <a href="/legal/kullanim-sartlari" class="hover:text-norya-ink">{{ _base_ui.footer_terms|default('Terms of Use') }}</a>
+        <a href="/legal/iletisim" class="hover:text-norya-ink">{{ _base_ui.footer_contact|default('Contact') }}</a>
       </div>
     </div>
   </footer>

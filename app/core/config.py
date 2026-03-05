@@ -3,6 +3,9 @@ from pathlib import Path
 from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
+# Marka adı: tüm sitede tek kaynak (title, OG, footer, schema). "NoryaAl" typo önlenir.
+BRAND_NAME = "NoryaAI"
+
 # .env proje kökünde (norya/): app/core/config.py -> app/core -> app -> norya
 _ROOT = Path(__file__).resolve().parent.parent.parent
 _ENV_FILE = _ROOT / ".env"

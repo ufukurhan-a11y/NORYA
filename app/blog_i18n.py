@@ -34,7 +34,9 @@ BLOG_UI = {
         "no_results": "No articles match your search.",
         "last_updated": "Last updated",
         "hero_cta_primary": "Analyze your blood test",
+        "hero_cta_caption": "Privacy-first, clear reports in minutes.",
         "end_cta_title": "Upload your results, get a clear report",
+        "end_cta_text": "Upload your lab results securely, see medical terms in plain language and understand key points in minutes.",
         "end_cta_button": "Analyze blood test",
     },
     "de": {
@@ -57,7 +59,9 @@ BLOG_UI = {
         "no_results": "Keine Artikel entsprechen Ihrer Suche.",
         "last_updated": "Zuletzt aktualisiert",
         "hero_cta_primary": "Blutwerte analysieren",
+        "hero_cta_caption": "Datenschutz zuerst, klare Berichte in Minuten.",
         "end_cta_title": "Laden Sie Ihre Ergebnisse hoch, erhalten Sie einen klaren Bericht",
+        "end_cta_text": "Laden Sie Ihre Laborergebnisse sicher hoch, sehen Sie medizinische Begriffe in verständlicher Sprache und erfassen Sie die wichtigsten Punkte in Minuten.",
         "end_cta_button": "Blutanalyse starten",
     },
     "fr": {
@@ -80,7 +84,9 @@ BLOG_UI = {
         "no_results": "Aucun article ne correspond à votre recherche.",
         "last_updated": "Dernière mise à jour",
         "hero_cta_primary": "Analyser votre bilan sanguin",
+        "hero_cta_caption": "Confidentialité d'abord, rapports clairs en quelques minutes.",
         "end_cta_title": "Téléchargez vos résultats, obtenez un rapport clair",
+        "end_cta_text": "Téléchargez vos résultats d'analyses en toute sécurité, consultez les termes médicaux en langage clair et comprenez l'essentiel en quelques minutes.",
         "end_cta_button": "Analyser le bilan sanguin",
     },
     "it": {
@@ -103,7 +109,9 @@ BLOG_UI = {
         "no_results": "Nessun articolo corrisponde alla ricerca.",
         "last_updated": "Ultimo aggiornamento",
         "hero_cta_primary": "Analizza le tue analisi del sangue",
+        "hero_cta_caption": "Privacy prima di tutto, report chiari in pochi minuti.",
         "end_cta_title": "Carica i risultati, ottieni un report chiaro",
+        "end_cta_text": "Carica i tuoi referti in modo sicuro, leggi i termini medici in linguaggio semplice e comprendi i punti chiave in pochi minuti.",
         "end_cta_button": "Analizza le analisi del sangue",
     },
 }
