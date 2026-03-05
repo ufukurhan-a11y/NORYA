@@ -46,13 +46,27 @@
   </script>
   <link rel="stylesheet" href="/static/css/app.css" />
   <style>
-    .wa-float{
+    /* Header: taşma yok, mobilde CTA + hamburger */
+    header.site-header { width: 100%; overflow-x: clip; }
+    header.site-header nav { min-width: 0; display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; }
+    header.site-header .nav-right { display: flex; align-items: center; gap: 0.5rem; min-width: 0; }
+    header.site-header .nav-cta { max-width: 46vw; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+    @media (max-width: 768px) { header.site-header .nav-cta { max-width: 52vw; } }
+    @media (max-width: 420px) { header.site-header .nav-cta { max-width: 50vw; font-size: 0.875rem; padding: 0.5rem 0.75rem; } header.site-header nav { padding-left: 0.75rem; padding-right: 0.75rem; } }
+    /* Mobil drawer */
+    .mobile-drawer-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,.35); z-index: 60; opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+    .mobile-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
+    .mobile-drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(86vw, 360px); background: #fff; z-index: 61; box-shadow: -20px 0 60px rgba(0,0,0,.18); padding: 16px; transform: translateX(100%); transition: transform .22s ease; padding-top: env(safe-area-inset-top); }
+    .mobile-drawer.open { transform: translateX(0); }
+    .mobile-drawer a { display: block; padding: 14px 12px; border-radius: 14px; font-weight: 650; color: #0b1b1f; text-decoration: none; }
+    .mobile-drawer a:hover { background: rgba(14,165,164,.08); }
+    /* WhatsApp FAB: safe-area, içerik kapatmasın, z-index header altında */
+    .wa-float, .whatsapp-fab {
       position: fixed !important;
-      right: 20px;
-      bottom: 20px;
-      z-index: 9999;
-      width: 60px;
-      height: 60px;
+      right: 14px;
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      z-index: 40 !important;
+      width: 56px; height: 56px;
       border-radius: 999px;
       background: #25D366;
       display: flex;
@@ -61,8 +75,11 @@
       text-decoration: none;
       box-shadow: 0 10px 30px rgba(2,6,23,.18);
     }
-    .wa-float:hover{ transform: translateY(-2px); }
-    .wa-icon{ display: block; width: 32px; height: 32px; object-fit: contain; }
+    .wa-float:hover, .whatsapp-fab:hover { transform: translateY(-2px); }
+    .wa-icon { display: block; width: 32px; height: 32px; object-fit: contain; }
+    @media (max-width: 420px) {
+      .wa-float, .whatsapp-fab { right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); transform: scale(0.92); }
+    }
   </style>
   {% block head %}{% endblock %}
   {% set ga_id = request.state.ga_measurement_id|default('G-1FLMLJH3Q0', true) %}
@@ -80,19 +97,30 @@
   {% endif %}
 </head>
 <body class="font-sans text-norya-ink bg-norya-surface antialiased min-h-screen flex flex-col">
-  {# Navbar #}
-  <header class="sticky top-0 z-50 bg-norya-surface-elevated/95 backdrop-blur border-b border-norya-ink-subtle/20">
+  {# Navbar: logo solda, mobilde hamburger + CTA sağda; linkler drawer'da #}
+  <header class="site-header sticky top-0 z-50 bg-norya-surface-elevated/95 backdrop-blur border-b border-norya-ink-subtle/20">
     <nav class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-      <a href="/" class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
-      <div class="flex items-center gap-4">
+      <a href="/" class="flex items-center shrink-0 min-w-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
+      <div class="nav-right flex items-center gap-2 sm:gap-4 min-w-0">
         <a href="#nasil-calisir" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">Nasıl Çalışır</a>
         <a href="#guvenlik" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink hidden sm:inline">Güvenlik</a>
         {% block nav_actions %}
-        <a href="/" class="inline-flex items-center justify-center px-4 py-2 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">Analiz Yap</a>
+        <a href="/" class="nav-cta inline-flex items-center justify-center px-4 py-2 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">Analiz Yap</a>
         {% endblock %}
+        <button type="button" onclick="toggleBaseDrawer()" class="sm:hidden flex items-center justify-center w-10 h-10 rounded-xl border border-norya-ink-subtle/30 bg-white/80 shrink-0" aria-label="Menü">☰</button>
       </div>
     </nav>
   </header>
+  <div id="base-drawer-backdrop" class="mobile-drawer-backdrop" onclick="toggleBaseDrawer()" aria-hidden="true"></div>
+  <aside id="base-drawer" class="mobile-drawer" role="dialog" aria-label="Menü" aria-modal="true">
+    <div class="flex items-center justify-between mb-4">
+      <span class="font-semibold text-norya-ink">Menü</span>
+      <button type="button" onclick="toggleBaseDrawer()" class="w-9 h-9 rounded-lg border border-norya-ink-subtle/30 flex items-center justify-center" aria-label="Kapat">✕</button>
+    </div>
+    <a href="#nasil-calisir" onclick="toggleBaseDrawer()">Nasıl Çalışır</a>
+    <a href="#guvenlik" onclick="toggleBaseDrawer()">Güvenlik</a>
+    <a href="/" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mt-2">Analiz Yap</a>
+  </aside>
 
   <main class="flex-1">
     {% block content %}{% endblock %}
@@ -114,6 +142,17 @@
   </footer>
 
   {% block scripts %}{% endblock %}
+
+  <script>
+    function toggleBaseDrawer() {
+      var back = document.getElementById('base-drawer-backdrop');
+      var drawer = document.getElementById('base-drawer');
+      if (!back || !drawer) return;
+      back.classList.toggle('open');
+      drawer.classList.toggle('open');
+      document.body.style.overflow = drawer.classList.contains('open') ? 'hidden' : '';
+    }
+  </script>
 
   <a href="https://wa.me/905071703564?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
      target="_blank" rel="noopener"

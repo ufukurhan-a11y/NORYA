@@ -907,6 +907,8 @@
     /* ========== Enterprise glass header (sticky + compact + pill nav + premium CTA) ========== */
     .header {
       position: sticky; top: 0; z-index: 50;
+      width: 100%;
+      overflow-x: clip;
       background: rgba(255,255,255,.78);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -935,6 +937,7 @@
       padding: 16px 20px;
       display: flex; align-items: center; justify-content: space-between; gap: 12px;
       transition: padding .22s ease;
+      min-width: 0;
     }
     .header.compact .header-inner { padding: 10px 20px; }
     .header .logo {
@@ -1027,7 +1030,7 @@
     }
     .primary-cta .arrow { margin-left: 10px; opacity: .9; }
     .right-zone {
-      display: flex; align-items: center; gap: 8px; flex-shrink: 0;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 0;
     }
     .hamburger {
       display: none;
@@ -1178,10 +1181,12 @@
       color: #0d9488;
       box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
-    /* WhatsApp FAB: mobil uyumlu — safe-area, dokunma alanı, taşma yok, premium */
+    /* WhatsApp FAB: safe-area uyumlu, içerik kapatmasın, z-index header/drawer altında */
     .wa-fab {
-      right: max(16px, env(safe-area-inset-right));
-      bottom: max(88px, calc(88px + env(safe-area-inset-bottom)));
+      position: fixed;
+      right: 14px;
+      bottom: calc(14px + env(safe-area-inset-bottom));
+      z-index: 40;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
@@ -1190,21 +1195,28 @@
     @media (max-width: 639px) {
       .wa-fab {
         min-height: 48px; min-width: 44px; padding-left: 14px; padding-right: 18px; font-size: 0.875rem;
-        right: max(16px, env(safe-area-inset-right));
-        bottom: max(88px, calc(88px + env(safe-area-inset-bottom)));
+        right: max(14px, env(safe-area-inset-right));
+        bottom: calc(14px + env(safe-area-inset-bottom));
       }
       .wa-fab:active { transform: scale(0.98); }
-      /* Mobil: FAB içeriği taşırmasın — sayfa sağ ve altında rezerve alan (premium) */
+      /* Mobil: FAB altında rezerve alan — içerik kapatılmasın */
       body {
-        padding-right: calc(100px + env(safe-area-inset-right, 0px));
-        padding-bottom: calc(160px + env(safe-area-inset-bottom, 0px));
+        padding-right: calc(72px + env(safe-area-inset-right, 0px));
+        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
       }
       body.a2hs-visible {
-        padding-bottom: calc(204px + env(safe-area-inset-bottom, 0px));
+        padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
+      }
+    }
+    @media (max-width: 420px) {
+      .wa-fab {
+        right: 12px;
+        bottom: calc(12px + env(safe-area-inset-bottom));
+        transform: scale(0.92);
       }
     }
     @media (min-width: 640px) {
-      .wa-fab { padding: 0; right: max(24px, env(safe-area-inset-right)); bottom: max(80px, calc(80px + env(safe-area-inset-bottom))); }
+      .wa-fab { padding: 0; right: max(24px, env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); }
     }
     /* PWA çubukları: ince, az dominant, dismiss net; premium görünümü bozmasın */
     #a2hs-banner, #ios-a2hs-banner {
@@ -1398,7 +1410,9 @@
     .elite-header{
       position: sticky;
       top: 0;
-      z-index: 9998;
+      z-index: 50;
+      width: 100%;
+      overflow-x: clip;
       padding-top: env(safe-area-inset-top);
       background: linear-gradient(180deg, var(--glass), var(--glass2));
       backdrop-filter: blur(16px);
@@ -1410,10 +1424,11 @@
       max-width: 1200px;
       margin: 0 auto;
       padding: 12px 14px;
-      display:flex;
-      align-items:center;
-      justify-content:space-between;
-      gap: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+      min-width: 0;
     }
 
     /* Nav */
@@ -1516,18 +1531,15 @@
       justify-content:center;
     }
 
-    /* ===== Mobil taşma çözümü ===== */
-    @media (max-width: 520px){
+    /* ===== Mobil taşma çözümü: CTA taşmasın ===== */
+    @media (max-width: 768px){
       /* Linkler çoksa taşmaması için 2’den fazlasını gizle */
-      .elite-nav a:nth-child(n+3){ display:none; }
-
-      .elite-header__inner{ padding: 10px 12px; gap: 10px; }
-      .elite-cta-btn{ height: 42px; padding: 0 12px; font-size: 14px; }
+      .elite-cta-btn{ max-width: 52vw; padding: 0 12px; }
     }
 
-    /* Çok küçük ekranlarda CTA yazısı kısalsın (opsiyonel) */
-    @media (max-width: 380px){
-      .elite-cta-btn{ padding: 0 10px; }
+    @media (max-width: 420px){
+      .elite-header__inner{ padding: 8px 10px; gap: 8px; }
+      .elite-cta-btn{ max-width: 50vw; height: 42px; padding: 9px 11px; font-size: 14px; }
     }
 
     /* ===== PRICING GRID ===== */
@@ -1703,6 +1715,7 @@
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
         <a href="#fiyatlandirma" class="nav-link" data-nav="fiyatlandirma" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Kurumsal</a>
+        <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="right-zone">
         <button type="button" onclick="toggleDark()" class="secondary-link header-desk-only" aria-label="Tema değiştir" id="theme-btn">
@@ -1754,6 +1767,7 @@
       <a href="#yorumlar" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
       <a href="#fiyatlandirma" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
       <a href="/kurumsal" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
+      <a href="/blog" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
       <a href="#sss" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
       <a href="/legal/iletisim" class="drawer-link legal-lang-link" onclick="closeMobileDrawer()" data-i18n="nav_contact">Bize Ulaşın</a>
       <div class="pt-2 mt-2 border-t border-accent-200 dark:border-accent-700">
@@ -4189,6 +4203,7 @@
   <footer class="premium-section py-10 px-4 bg-accent-100/50 dark:bg-accent-900/50 border-t border-accent-200 dark:border-accent-800">
     <div class="premium-wrap">
       <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 text-sm text-accent-600 dark:text-accent-400">
+        <a href="/blog" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium" data-i18n="nav_blog">Blog</a>
         <a href="/legal/gizlilik-politikasi" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium legal-lang-link" data-i18n="footer_privacy">Gizlilik</a>
         <a href="/legal/mesafeli-satis-sozlesmesi" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium legal-lang-link" data-i18n="footer_terms">Kullanım Koşulları</a>
         <a href="/legal/iletisim" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium" data-i18n="nav_contact">Destek / İletişim</a>
@@ -4544,7 +4559,7 @@
   </footer>
 
   <!-- WhatsApp: mobilde yazı + ikon, masaüstünde yuvarlak ikon; renk ve konum mobil uyumlu -->
-  <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="wa-fab fixed z-[9999] flex items-center justify-center gap-2 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 min-h-[48px] py-2 pl-3 pr-4 sm:pl-0 sm:pr-0 sm:w-14 sm:h-14 sm:min-h-0 sm:py-0" style="position:fixed!important;" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
+  <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="wa-fab flex items-center justify-center gap-2 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 min-h-[48px] py-2 pl-3 pr-4 sm:pl-0 sm:pr-0 sm:w-14 sm:h-14 sm:min-h-0 sm:py-0" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
     <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0 opacity-100" width="28" height="28" style="opacity:1;filter:none;" />
     <span class="wa-fab-text text-sm font-semibold text-white sm:sr-only" style="color:#fff;">WhatsApp</span>
   </a>
@@ -5660,7 +5675,7 @@
     const T = {
       tr: {
         nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
-        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
+        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade bir dille özetleyen ve referans aralıklarına göre yorumlayan bir hizmettir. Sayılar ve kısaltmalar yerine anlaşılır raporlar ve günlük hayata uyarlanabilir kısa öneriler sunuyoruz.",
@@ -5981,7 +5996,7 @@
       },
       en: {
         nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
-        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ",
+        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
         about_what_1: "Norya explains your blood test results in plain language and interprets them against reference ranges. Instead of numbers and abbreviations, you get clear reports and practical, day-to-day suggestions.",
@@ -6300,7 +6315,7 @@
       },
       it: {
         nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
-        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
+        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?", company_info_title: "Informazioni aziendali",
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
@@ -6511,7 +6526,7 @@
       },
       es: {
         nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
-        nav_features: "Características", nav_pricing: "Precios", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
+        nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?", company_info_title: "Información de la empresa",
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
@@ -6722,7 +6737,7 @@
       },
       fr: {
         nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
-        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
+        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?", company_info_title: "Informations sur l'entreprise",
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
@@ -6933,7 +6948,7 @@
       },
       de: {
         nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
-        nav_features: "Funktionen", nav_pricing: "Preise", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
+        nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?", company_info_title: "Unternehmensinformationen",
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
@@ -7128,7 +7143,7 @@
       },
       he: {
         nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
-        nav_features: "תכונות", nav_pricing: "מחירים", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
+        nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
         a2hs_message: "הוסף את Norya למסך הבית והשתמש כמו באפליקציה.", a2hs_later: "אחר כך", a2hs_add: "הוסף", ios_a2hs_message: "הוסף למסך הבית: שתף ⎋ הוסף למסך הבית", ios_a2hs_close: "סגור",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?", company_info_title: "פרטי החברה",
         about_what_1: "נוריה הוא שירות שמסביר את תוצאות בדיקות הדם שלך בשפה ברורה. המספרים והקיצורים מהמעבדה קשים לעתים להבנה; נוריה מייצרת דוחות שמסכמים את התוצאות, מסבירים כל ערך ביחס לטווחי ההתייחסות ונותנים המלצות מעשיות.",
@@ -7305,7 +7320,7 @@
       },
       ar: {
         nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
-        nav_features: "المميزات", nav_pricing: "الأسعار", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
+        nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
         a2hs_message: "أضف Norya إلى الشاشة الرئيسية واستخدمها كتطبيق.", a2hs_later: "لاحقاً", a2hs_add: "إضافة", ios_a2hs_message: "إضافة إلى الشاشة الرئيسية: مشاركة ⎋ إضافة إلى الشاشة الرئيسية", ios_a2hs_close: "إغلاق",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟", company_info_title: "معلومات الشركة",
         about_what_1: "نوريا خدمة تشرح نتائج تحاليل الدم بلغة واضحة. الأرقام والاختصارات من المختبر غالباً صعبة الفهم؛ نوريا تنتج تقارير تلخص النتائج وتشرح كل قيمة بالنسبة للمرجع وتقدم توصيات عملية.",
@@ -7482,7 +7497,7 @@
       },
       hi: {
         nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
-        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ",
+        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?", company_info_title: "कंपनी की जानकारी",
         about_what_1: "नोरिया एक सेवा है जो रक्त परीक्षण परिणामों को सरल भाषा में समझाती है। लैब के नंबर और संक्षिप्त नाम अक्सर समझने में कठिन होते हैं; नोरिया ऐसी रिपोर्ट बनाती है जो परिणामों को संक्षेप में बताती हैं, हर मान को संदर्भ सीमा के अनुसार समझाती हैं और व्यावहारिक सुझाव देती हैं।",
@@ -7659,7 +7674,7 @@
       },
       el: {
         nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
-        nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_checkout: "Πληρωμή", nav_contact: "Επικοινωνία", nav_faq: "Συχνές ερωτήσεις",
+        nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_blog: "Ιστολόγιο", nav_checkout: "Πληρωμή", nav_contact: "Επικοινωνία", nav_faq: "Συχνές ερωτήσεις",
         a2hs_message: "Προσθέστε την Norya στην αρχική οθόνη και χρησιμοποιήστε την σαν εφαρμογή.", a2hs_later: "Αργότερα", a2hs_add: "Προσθήκη", ios_a2hs_message: "Προσθήκη στην αρχική: Κοινοποίηση ⎋ Προσθήκη στην αρχική οθόνη", ios_a2hs_close: "Κλείσιμο",
         about_title: "Τι είναι η Norya, Ποιοι είμαστε", about_what_title: "Τι είναι η Norya;", about_who_title: "Ποιοι είμαστε;", company_info_title: "Στοιχεία εταιρείας",
         about_what_1: "Η Norya είναι μια υπηρεσία που εξηγεί τα αποτελέσματα αιματολογικών σε απλή γλώσσα. Οι αριθμοί και οι συντομογραφίες από το εργαστήριο είναι συχνά δύσκολοι να γίνουν κατανοητοί· η Norya παράγει αναφορές που συνοψίζουν τα αποτελέσματα, εξηγούν κάθε τιμή σε σχέση με τα εύρη αναφοράς και δίνουν πρακτικές συμβουλές.",
@@ -7834,7 +7849,7 @@
       },
       cs: {
         nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
-        nav_features: "Funkce", nav_pricing: "Ceny", nav_checkout: "Platba", nav_contact: "Kontakt", nav_faq: "Časté dotazy",
+        nav_features: "Funkce", nav_pricing: "Ceny", nav_blog: "Blog", nav_checkout: "Platba", nav_contact: "Kontakt", nav_faq: "Časté dotazy",
         a2hs_message: "Přidejte Norya na plochu a používejte ji jako aplikaci.", a2hs_later: "Později", a2hs_add: "Přidat", ios_a2hs_message: "Přidat na plochu: Sdílet ⎋ Přidat na plochu", ios_a2hs_close: "Zavřít",
         about_title: "Co je Norya, Kdo jsme", about_what_title: "Co je Norya?", about_who_title: "Kdo jsme?", company_info_title: "Informace o společnosti",
         about_what_1: "Norya je služba, která vysvětluje výsledky krevních testů srozumitelným jazykem. Čísla a zkratky z laboratoře jsou často těžko srozumitelná; Norya vytváří zprávy, které shrnují výsledky, vysvětlují každou hodnotu vzhledem k referenčním rozsahům a nabízejí praktická doporučení.",
@@ -8009,7 +8024,7 @@
       },
       sr: {
         nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
-        nav_features: "Funkcije", nav_pricing: "Cene", nav_checkout: "Plaćanje", nav_contact: "Kontaktirajte nas", nav_faq: "Često postavljana pitanja",
+        nav_features: "Funkcije", nav_pricing: "Cene", nav_blog: "Blog", nav_checkout: "Plaćanje", nav_contact: "Kontaktirajte nas", nav_faq: "Često postavljana pitanja",
         a2hs_message: "Dodajte Norya na početni ekran i koristite je kao aplikaciju.", a2hs_later: "Kasnije", a2hs_add: "Dodaj", ios_a2hs_message: "Dodaj na početni ekran: Podeli ⎋ Dodaj na početni ekran", ios_a2hs_close: "Zatvori",
         about_title: "Šta je Norya, Ko smo mi", about_what_title: "Šta je Norya?", about_who_title: "Ko smo mi?", company_info_title: "Podaci o kompaniji",
         about_what_1: "Norya je servis koji objašnjava rezultate krvnih testova jasnim jezikom. Brojevi i skraćenice iz laboratorije su često teški za razumevanje; Norya pravi izveštaje koji sumiraju rezultate, objašnjavaju svaku vrednost u odnosu na referentne opsege i daju praktične preporuke.",
