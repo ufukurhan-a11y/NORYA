@@ -1281,24 +1281,18 @@
     @media (max-width: 768px) {
       .header-right-zone { gap: 0; flex-shrink: 0; }
     }
-    /* Logo + brand text: premium mobile left block */
-    .header-logo-link { flex: 0 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; text-decoration: none; }
-    .header-logo-link .logo { max-width: 100%; height: auto; object-fit: contain; flex-shrink: 0; }
-    .header-brand-text {
-      display: none;
-      font-weight: 700; font-size: 1rem; letter-spacing: -0.02em;
-      color: rgba(15,23,42,.9); white-space: nowrap;
+    /* Header logo: tek marka, taşma yok, premium hover */
+    .logo { display: flex; align-items: center; text-decoration: none; }
+    .logo img {
+      max-width: 100%;
+      height: auto;
+      object-fit: contain;
+      flex-shrink: 0;
+      transition: opacity 0.2s ease;
     }
-    .dark .header-brand-text { color: rgba(255,255,255,.92); }
-    @media (max-width: 1023px) {
-      .header-brand-text { display: inline-block; }
-    }
+    .logo:hover img { opacity: 0.85; }
     @media (max-width: 767px) {
-      .header .logo { height: 22px !important; max-height: 28px; }
-      .header-brand-text { font-size: 0.9375rem; }
-    }
-    @media (max-width: 360px) {
-      .header-brand-text { font-size: 0.875rem; }
+      .header .logo img { height: 22px !important; max-height: 28px; width: auto !important; }
     }
     /* Mobile CTA: never in header — only hamburger on mobile; CTA lives in drawer */
     .header-mobile-cta {
@@ -1898,23 +1892,23 @@
       display: flex;
       align-items: center;
     }
-    .elite-brand .logo {
+    .elite-brand.logo img {
       width: auto;
       height: 22px;
       max-width: 100%;
       object-fit: contain;
     }
     @media (min-width: 360px) {
-      .elite-brand .logo { height: 24px; max-width: 120px; }
+      .elite-brand.logo img { height: 24px; max-width: 120px; }
     }
     @media (min-width: 390px) {
-      .elite-brand .logo { max-width: 140px; }
+      .elite-brand.logo img { max-width: 140px; }
     }
     @media (min-width: 768px) {
-      .elite-brand .logo { height: 26px; max-width: 180px; }
+      .elite-brand.logo img { height: 26px; max-width: 180px; }
     }
     @media (min-width: 1200px) {
-      .elite-brand .logo { height: 28px; max-width: 100%; }
+      .elite-brand.logo img { height: 28px; max-width: 100%; }
     }
     .right-zone .elite-cta-btn { flex-shrink: 0; min-width: 0; max-width: none; }
     @media (max-width: 1199px) {
@@ -2108,9 +2102,8 @@
   <!-- Enterprise glass header: sticky + compact on scroll + pill nav + premium CTA -->
   <header id="main-header" class="header elite-header">
     <div class="header-inner elite-header__inner">
-      <a href="#" class="header-logo-link flex items-center gap-1.5 shrink-0 min-w-0 elite-brand" aria-label="Norya Ana Sayfa">
-        <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="logo" width="200" height="50" loading="eager" />
-        <span class="header-brand-text" aria-hidden="true">NoryaAI</span>
+      <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="Norya Ana Sayfa">
+        <img src="/static/logo.svg" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
       </a>
       <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
