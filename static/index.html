@@ -296,11 +296,16 @@
       align-items: stretch;
       min-width: 0;
     }
+    .pricing-grid--three {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
     @media (max-width: 1199px) {
       .pricing-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .pricing-grid--three { grid-template-columns: repeat(2, minmax(0, 1fr)); }
     }
     @media (max-width: 767px) {
       .pricing-grid { grid-template-columns: 1fr; gap: 16px; }
+      .pricing-grid--three { grid-template-columns: 1fr; }
     }
     .pricing-card {
       display: flex;
@@ -952,6 +957,28 @@
     .compare-card-cta:hover:not(:disabled) { background: var(--compare-brand-hover); border-color: var(--compare-brand-hover); }
     .compare-card-cta:disabled { background: var(--compare-brand-light); border-color: var(--compare-brand); color: var(--compare-brand); cursor: default; opacity: 0.95; }
     .compare-card-active .compare-card-cta:disabled { background: var(--compare-brand); color: #fff; }
+    /* Report: parametre kartları — normal / borderline / elevated renk sistemi (Norya health-tech) */
+    .report-biomarker-card { border-radius: 12px; padding: 1rem 1.25rem; border: 1px solid rgba(15,23,42,0.08); background: #fafcfc; transition: border-color 0.2s, box-shadow 0.2s; min-width: 0; }
+    .dark .report-biomarker-card { background: rgba(30,41,59,0.5); border-color: rgba(255,255,255,0.06); }
+    .report-biomarker-card--normal { border-left: 4px solid #0EA5A4; }
+    .dark .report-biomarker-card--normal { border-left-color: rgba(94,234,212,0.8); }
+    .report-biomarker-card--border { border-left: 4px solid #d97706; }
+    .dark .report-biomarker-card--border { border-left-color: #f59e0b; }
+    .report-biomarker-card--risk { border-left: 4px solid #dc2626; }
+    .dark .report-biomarker-card--risk { border-left-color: #f87171; }
+    .report-biomarker-grid { display: grid; gap: 1rem; grid-template-columns: 1fr; min-width: 0; }
+    @media (min-width: 640px) { .report-biomarker-grid { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 1024px) { .report-biomarker-grid.report-biomarker-grid--multi { grid-template-columns: repeat(2, 1fr); } }
+    .report-badge { font-size: 0.6875rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; padding: 0.25rem 0.5rem; border-radius: 6px; }
+    .report-badge--optimal { background: rgba(14,165,164,0.12); color: #0d9488; }
+    .dark .report-badge--optimal { background: rgba(94,234,212,0.15); color: #5eead4; }
+    .report-badge--border { background: rgba(217,119,6,0.12); color: #b45309; }
+    .dark .report-badge--border { background: rgba(251,191,36,0.15); color: #fcd34d; }
+    .report-badge--high, .report-badge--low { background: rgba(220,38,38,0.1); color: #b91c1c; }
+    .dark .report-badge--high, .dark .report-badge--low { background: rgba(248,113,113,0.15); color: #fca5a5; }
+    .report-legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; vertical-align: middle; }
+    .report-premium-gate-cta { display: inline-block; margin-top: 0.75rem; padding: 0.5rem 1rem; border-radius: 10px; background: #0EA5A4; color: #fff; font-weight: 600; font-size: 0.875rem; text-decoration: none; transition: background 0.2s, transform 0.1s; }
+    .report-premium-gate-cta:hover { background: #0d9488; color: #fff; transform: translateY(-1px); }
     /* Özellik tablosu: mobilde taşma yok, tablo yatay kayar */
     #compare-table-wrap { min-width: 0; max-width: 100%; }
     #compare-table-wrap > div { max-width: 100%; }
@@ -4430,50 +4457,29 @@
         </div>
       </div>
 
-      <!-- Pricing cards: Gratis / Tek Analiz / Aylık / Yıllık -->
-      <div class="pricing-grid pricing-elite-grid mb-10">
-        <!-- Gratis (Free / Trial) -->
-        <div class="pricing-card pricing-elite-card pricing-card--free">
-          <div class="elite-card-header mb-4">
-            <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="compare_plan_free">Ücretsiz Deneme</h3>
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300 text-xs font-semibold mt-2">🎁 <span data-i18n="pricing_badge_trial">Deneme</span></span>
-          </div>
-          <p class="pricing-price text-accent-900 dark:text-white mt-2">
-            <span class="align-top text-base mr-0.5">€</span><span>0</span>
-          </p>
-          <p class="mt-1 text-xs text-accent-500 dark:text-accent-400" data-i18n="usage_first_free">İlk analiz ücretsiz.</p>
-          <ul class="elite-feature-list mt-5 flex-1">
-            <li><span aria-hidden="true">✅</span><span data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span></li>
-            <li><span aria-hidden="true">📄</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
-            <li><span aria-hidden="true">🧠</span><span data-i18n="trust_cards_speed_desc">Sunucu uygun olduğunda çoğu rapor saniyeler içinde hazır olur.</span></li>
-            <li><span aria-hidden="true">🌍</span><span data-i18n="compare_langs">Rapor dili</span></li>
-          </ul>
-          <button type="button" onclick="goToCheckout('free')" class="cta-button elite-cta mt-6 border border-accent-200 dark:border-accent-600 text-accent-900 dark:text-white font-semibold hover:bg-accent-50 dark:hover:bg-accent-700/30 transition text-sm" data-i18n="price_btn_free">Ücretsiz Başla</button>
-        </div>
-
-        <!-- Tek Analiz (Singolo) -->
+      <!-- 3 plan: Tek Analiz · Orta (Aylık) · Yıllık — premium health-tech SaaS -->
+      <div class="pricing-grid pricing-elite-grid pricing-grid--three mb-10">
+        <!-- 1) Tek Analiz -->
         <div class="pricing-card pricing-elite-card">
           <div class="elite-card-header mb-4 min-w-0">
             <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_single_title">Tek Analiz</h3>
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_single_per">tek seferlik</p>
-            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-amber-50 dark:bg-amber-900/40 text-amber-700 dark:text-amber-300 text-xs font-semibold mt-2">⚡ <span data-i18n="price_badge_fast">Hızlı</span></span>
           </div>
           <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
             <span class="align-top text-base mr-0.5">€</span><span id="price-single">13</span>
           </p>
-          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
-            <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
-          </div>
           <ul class="elite-feature-list mt-5 flex-1">
-            <li><span aria-hidden="true">✅</span><span data-i18n="price_single_1">✓ 1 analiz</span></li>
-            <li><span aria-hidden="true">📊</span><span data-i18n="price_single_3">✓ PDF indir & paylaş</span></li>
-            <li><span aria-hidden="true">🧠</span><span data-i18n="compare_report">Detaylı rapor (özet, değerler, öneriler)</span></li>
-            <li><span aria-hidden="true">🏥</span><span data-i18n="compare_pdf">PDF indir / Paylaş / Doktora götür</span></li>
+            <li><span aria-hidden="true">📄</span><span data-i18n="plan_single_1">Tek yükleme, tek rapor</span></li>
+            <li><span aria-hidden="true">📊</span><span data-i18n="plan_single_2">Genel sağlık skoru</span></li>
+            <li><span aria-hidden="true">🧪</span><span data-i18n="plan_single_3">Temel biyobelirteç özeti</span></li>
+            <li><span aria-hidden="true">📋</span><span data-i18n="plan_single_4">Kısa klinik yorum</span></li>
+            <li><span aria-hidden="true">💡</span><span data-i18n="plan_single_5">Sınırlı öneriler</span></li>
+            <li><span aria-hidden="true">📑</span><span data-i18n="plan_single_6">Standart PDF rapor</span></li>
           </ul>
           <button type="button" onclick="goToCheckout('single')" class="cta-button elite-cta mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-single">13 €</span> <span data-i18n="price_btn_single_label">Tek Analizi Satın Al</span></button>
         </div>
 
-        <!-- Aylık: En Popüler (Mensile) -->
+        <!-- 2) Orta Paket (Aylık) -->
         <div class="pricing-card pricing-elite-card pricing-card--featured is-featured relative pt-8">
           <span class="pricing-badge pricing-badge--popular elite-badge popular absolute top-4 left-5 sm:left-6" data-i18n="price_monthly_badge">En Popüler</span>
           <div class="elite-card-header mb-4 min-w-0">
@@ -4483,23 +4489,22 @@
           <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
             <span class="align-top text-base mr-0.5">€</span><span id="price-monthly">50</span><span id="price-symbol-monthly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_month">/ay</span>
           </p>
-          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
-            <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
-          </div>
           <ul class="elite-feature-list mt-5 flex-1">
-            <li><span aria-hidden="true">✅</span><span data-i18n="price_monthly_1">✓ Ayda 5 analiz</span></li>
-            <li><span aria-hidden="true">🍽️</span><span data-i18n="price_monthly_2">✓ Diyet ve yaşam tarzı önerileri</span></li>
-            <li><span aria-hidden="true">🕒</span><span data-i18n="price_monthly_3">✓ Geçmiş analiz karşılaştırma</span></li>
-            <li><span aria-hidden="true">📄</span><span data-i18n="price_monthly_4">✓ Premium PDF rapor</span></li>
-            <li><span aria-hidden="true">📊</span><span data-i18n="pricing_health_charts">✓ Sağlık grafikleri</span></li>
+            <li><span aria-hidden="true">✅</span><span data-i18n="plan_monthly_1">Aylık analiz hakkı</span></li>
+            <li><span aria-hidden="true">📊</span><span data-i18n="plan_monthly_2">Gelişmiş biyobelirteç kartları</span></li>
+            <li><span aria-hidden="true">🩸</span><span data-i18n="plan_monthly_3">CBC temel paneli</span></li>
+            <li><span aria-hidden="true">🩺</span><span data-i18n="plan_monthly_4">Glukoz / metabolik özet</span></li>
+            <li><span aria-hidden="true">💧</span><span data-i18n="plan_monthly_5">Su tüketim planı</span></li>
+            <li><span aria-hidden="true">🏃</span><span data-i18n="plan_monthly_6">3 günlük yaşam tarzı önerileri</span></li>
+            <li><span aria-hidden="true">📑</span><span data-i18n="plan_monthly_7">Gelişmiş PDF raporu</span></li>
           </ul>
           <p class="mt-3 text-xs text-accent-500 dark:text-accent-400" data-i18n="pricing_monthly_most_chosen">Kullanıcıların çoğu bu planı seçiyor.</p>
           <button type="button" onclick="goToCheckout('monthly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span data-i18n="price_btn_monthly_label">Aylık Planı Başlat</span></button>
         </div>
 
-        <!-- Yıllık: En Karlı (Annual) -->
-        <div class="pricing-card pricing-elite-card">
-          <span class="elite-badge saving"><span data-i18n="pricing_yearly_saving">Aylığa göre 501 € tasarruf (%83)</span></span>
+        <!-- 3) Yıllık — Best Value -->
+        <div class="pricing-card pricing-elite-card relative pt-8">
+          <span class="pricing-badge elite-badge saving absolute top-4 right-5 sm:right-6" data-i18n="price_best_badge_value">En İyi Değer</span>
           <div class="elite-card-header mb-4 min-w-0">
             <h3 class="pricing-title text-accent-900 dark:text-white" data-i18n="price_yearly_title">Yıllık Abonelik</h3>
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">Toplam 16 analiz (13 + 3 hediye)</p>
@@ -4507,18 +4512,18 @@
           <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
             <span class="align-top text-base mr-0.5">€</span><span id="price-yearly">99</span><span id="price-symbol-yearly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span>
           </p>
-          <div class="pricing-value-callout">
+          <div class="pricing-value-callout mt-2">
             <p class="pricing-value-line">💎 <span data-i18n="pricing_yearly_value_midline">Yıllık planda maksimum tasarruf</span></p>
-            <p class="pricing-value-sub"><span class="old-price">600 €</span> <span data-i18n="pricing_yearly_value_mid">değerinde analiz — Sadece</span> <strong><span id="yearly-only-amount">99</span> €</strong></p>
-          </div>
-          <div class="mt-3 flex flex-wrap gap-1 text-xs text-accent-600 dark:text-accent-300 min-w-0">
-            <span class="px-2 py-0.5 rounded-full bg-primary-50 dark:bg-primary-900/30 text-primary-700 dark:text-primary-300 border border-primary-100 dark:border-primary-800" data-i18n="pricing_input_types">Girdi: Metin • PDF • Fotoğraf</span>
           </div>
           <ul class="elite-feature-list mt-5 flex-1">
-            <li><span aria-hidden="true">✅</span><span data-i18n="price_yearly_1">✓ Yılda 16 analiz (13 + 3 hediye)</span></li>
-            <li><span aria-hidden="true">🍽️</span><span data-i18n="price_yearly_2">✓ Tüm premium diyet ve yaşam tarzı bilgilendirme bölümleri</span></li>
-            <li><span aria-hidden="true">🕒</span><span data-i18n="price_yearly_3">✓ Geçmiş & gelişmiş karşılaştırma</span></li>
-            <li><span aria-hidden="true">🏥</span><span data-i18n="price_yearly_4">✓ Doktor randevuları için ideal</span></li>
+            <li><span aria-hidden="true">✅</span><span data-i18n="plan_yearly_1">Tüm premium analiz modülleri</span></li>
+            <li><span aria-hidden="true">🩸</span><span data-i18n="plan_yearly_2">Tam CBC + diferansiyel değerlendirme</span></li>
+            <li><span aria-hidden="true">📋</span><span data-i18n="plan_yearly_3">Uzun klinik yorumlar</span></li>
+            <li><span aria-hidden="true">🍽️</span><span data-i18n="plan_yearly_4">1 haftalık beslenme planı</span></li>
+            <li><span aria-hidden="true">💧</span><span data-i18n="plan_yearly_5">Kişiselleştirilmiş su ve yaşam tarzı planı</span></li>
+            <li><span aria-hidden="true">📈</span><span data-i18n="plan_yearly_6">Premium grafikler ve risk bölümleri</span></li>
+            <li><span aria-hidden="true">📑</span><span data-i18n="plan_yearly_7">En kapsamlı klinik PDF</span></li>
+            <li><span aria-hidden="true">⭐</span><span data-i18n="plan_yearly_8">Öncelikli yeni özellik erişimi</span></li>
           </ul>
           <button type="button" onclick="goToCheckout('yearly')" class="cta-button elite-cta mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-yearly">99 €</span> <span data-i18n="price_btn_yearly_label">Yıllık Tasarrufu Al</span></button>
         </div>
@@ -6160,6 +6165,7 @@
       var score = (healthScore && typeof healthScore.score === 'number') ? Math.max(0, Math.min(100, healthScore.score)) : (risk && typeof risk.score === 'number' ? Math.max(0, Math.min(100, risk.score)) : (risk ? 70 : 0));
       var plan = o.plan || (typeof window.__lastUsagePlan !== 'undefined' ? window.__lastUsagePlan : 'free');
       var isPremium = o.premium === true || (o.ui_hints && o.ui_hints.locked === false) || (plan && (plan === 'pro' || plan === 'monthly' || plan === 'yearly' || plan === 'premium' || plan === 'single'));
+      var isGateUnlocked = (plan === 'monthly' || plan === 'yearly');
       var highlights = (o.risk_summary && o.risk_summary.highlights) ? o.risk_summary.highlights : [];
       var domains = (o.risk_summary && o.risk_summary.domains) ? o.risk_summary.domains : {};
       var trendData = o.trend && o.trend.dates && o.trend.dates.length ? o.trend : null;
@@ -6319,16 +6325,16 @@
         }
         html += '</div>';
       }
-      var blurClass = !isPremium ? ' report-premium-blur' : '';
-      html += '<div id="report-premium-risk" class="report-premium-gate' + (isPremium ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
+      var blurClass = !isGateUnlocked ? ' report-premium-blur' : '';
+      html += '<div id="report-premium-risk" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</h3><ul class="report-bullets"><li>May indicate cardiovascular or metabolic factors. Discuss with your clinician.</li><li>Lifestyle and diet may support overall wellness.</li></ul></div>';
-      if (!isPremium) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_hematology || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
-      html += '<div id="report-premium-nextsteps" class="report-premium-gate' + (isPremium ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
+      html += '<div id="report-premium-nextsteps" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</h3><ul class="report-bullets"><li>Nutrition: Balanced diet; discuss any deficiencies with your doctor.</li><li>Sleep: Adequate rest supports recovery.</li><li>Movement: Regular physical activity is recommended.</li><li>Follow-up: Discuss retest timing with your clinician.</li></ul></div>';
-      if (!isPremium) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_weekly_plan || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
-      html += '<div id="report-premium-trends" class="report-premium-gate' + (isPremium ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
+      html += '<div id="report-premium-trends" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</h3>';
       if (trendData && (trendData.ldl || trendData.glucose || trendData.crp)) {
         var dates = trendData.dates || [];
@@ -6346,7 +6352,7 @@
         html += '</div>';
       } else html += '<p class="trend-placeholder text-sm">' + escapeHtml(t.report_trend_need_more || 'Trend becomes available with more reports over time.') + '</p>';
       html += '</div>';
-      if (!isPremium) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_detail || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
       return html;
     }
@@ -6891,6 +6897,10 @@
         price_single_title: "Tek Analiz", price_single_per: "tek seferlik", price_single_1: "✓ 1 analiz", price_single_2: "✓ PDF rapor", price_single_3: "✓ Yapılandırılmış yorum ve doktorla paylaş", price_btn_single: " — Tek Analiz",
         price_monthly_badge: "En Popüler", pricing_ai_detail: "Klinik detay seviyesi", price_monthly_title: "Aylık Abonelik", price_per_month: "/ay", price_monthly_per: "5 analiz / ay", price_monthly_1: "✓ Ayda 5 analiz", price_monthly_2: "✓ Diyet ve yaşam tarzı önerileri", price_monthly_3: "✓ Geçmiş analiz karşılaştırma", price_monthly_4: "✓ Premium PDF rapor", price_btn_monthly: "/ay — Başla",
         price_best_badge: "En avantajlı", price_best_badge_value: "En İyi Değer", price_yearly_title: "Yıllık Abonelik", price_per_year: "/yıl", price_yearly_per: "Toplam 16 analiz (13 + 3 hediye)", price_yearly_1: "✓ Yılda 16 analiz", price_yearly_2: "✓ Tüm premium özellikler", price_yearly_3: "✓ Gelişmiş karşılaştırma", price_yearly_4: "✓ Doktor görüşmeleri için ideal", price_btn_yearly: "/yıl — Başla",
+        plan_single_1: "Tek yükleme, tek rapor", plan_single_2: "Genel sağlık skoru", plan_single_3: "Temel biyobelirteç özeti", plan_single_4: "Kısa klinik yorum", plan_single_5: "Sınırlı öneriler", plan_single_6: "Standart PDF rapor",
+        plan_monthly_1: "Aylık analiz hakkı", plan_monthly_2: "Gelişmiş biyobelirteç kartları", plan_monthly_3: "CBC temel paneli", plan_monthly_4: "Glukoz / metabolik özet", plan_monthly_5: "Su tüketim planı", plan_monthly_6: "3 günlük yaşam tarzı önerileri", plan_monthly_7: "Gelişmiş PDF raporu",
+        plan_yearly_1: "Tüm premium analiz modülleri", plan_yearly_2: "Tam CBC + diferansiyel değerlendirme", plan_yearly_3: "Uzun klinik yorumlar", plan_yearly_4: "1 haftalık beslenme planı", plan_yearly_5: "Kişiselleştirilmiş su ve yaşam tarzı planı", plan_yearly_6: "Premium grafikler ve risk bölümleri", plan_yearly_7: "En kapsamlı klinik PDF", plan_yearly_8: "Öncelikli yeni özellik erişimi",
+        upgrade_cta_detail: "Daha detaylı yorumları açın", upgrade_cta_hematology: "Tam hematoloji kartlarını görüntüleyin", upgrade_cta_weekly_plan: "Kişiselleştirilmiş haftalık planı açın", upgrade_cta_pdf: "Gelişmiş klinik PDF'e yükseltin", upgrade_cta_insights: "Daha kapsamlı sağlık içgörüleri için planınızı yükseltin",
         compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz Deneme", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_price: "💶 Fiyat", compare_btn_select: "Seç", compare_btn_active: "Aktif", compare_btn_upgrade: "Yükselt",
         pricing_health_charts: "✓ Sağlık grafikleri",
         pricing_monthly_most_chosen: "Kullanıcıların çoğu bu planı seçiyor.",
@@ -7247,6 +7257,10 @@
         price_single_title: "Single analysis", price_single_per: "one-time", price_single_1: "✓ 1 analysis", price_single_2: "✓ Diet + nutrition info + heart health sections", price_single_3: "✓ Download & share PDF", price_btn_single: " — Single analysis",
         price_monthly_badge: "Most Popular", pricing_ai_detail: "Clinical detail level", price_monthly_title: "Monthly plan", price_per_month: "/mo", price_monthly_per: "5 analyses / month", price_monthly_1: "✓ 5 full analyses per month", price_monthly_2: "✓ Diet plan + nutrition & lifestyle info notes", price_monthly_3: "✓ History & compare two analyses", price_monthly_4: "✓ Download PDF, share with doctor", price_btn_monthly: "/mo — Get started",
         price_best_badge: "Best value", price_best_badge_value: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "16 analyses total (13 + 3 free)", price_yearly_1: "✓ 16 analyses per year (13 + 3 free)", price_yearly_2: "✓ All premium diet & lifestyle info sections", price_yearly_3: "✓ History & advanced comparison", price_yearly_4: "✓ Ideal for doctor visits", price_btn_yearly: "/yr — Get started",
+        plan_single_1: "Single upload, single report", plan_single_2: "Overall health score", plan_single_3: "Basic biomarker summary", plan_single_4: "Short clinical interpretation", plan_single_5: "Limited recommendations", plan_single_6: "Standard PDF report",
+        plan_monthly_1: "Monthly analysis allowance", plan_monthly_2: "Advanced biomarker cards", plan_monthly_3: "CBC basic panel", plan_monthly_4: "Glucose / metabolic summary", plan_monthly_5: "Water intake plan", plan_monthly_6: "3-day lifestyle recommendations", plan_monthly_7: "Advanced PDF report",
+        plan_yearly_1: "All premium analysis modules", plan_yearly_2: "Full CBC + differential evaluation", plan_yearly_3: "Extended clinical interpretation", plan_yearly_4: "1-week nutrition plan", plan_yearly_5: "Personalised hydration & lifestyle plan", plan_yearly_6: "Premium charts and risk sections", plan_yearly_7: "Most comprehensive clinical PDF", plan_yearly_8: "Priority access to new features",
+        upgrade_cta_detail: "Unlock more detailed interpretations", upgrade_cta_hematology: "View full haematology cards", upgrade_cta_weekly_plan: "Unlock your personalised weekly plan", upgrade_cta_pdf: "Upgrade to advanced clinical PDF", upgrade_cta_insights: "Upgrade your plan for deeper health insights",
         compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_price: "Price", compare_btn_select: "Select", compare_btn_active: "Current", compare_btn_upgrade: "Upgrade",
         pricing_health_charts: "✓ Health charts", pricing_monthly_most_chosen: "Most users choose this plan.",
         footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "Made with Cursor",
@@ -7477,6 +7491,10 @@
         price_single_title: "Singola analisi", price_single_per: "una tantum", price_single_1: "✓ 1 analisi", price_single_2: "✓ Dieta + integratori + salute cardiaca", price_single_3: "✓ Scarica e condividi PDF", price_btn_single: " — Singola analisi",
         price_monthly_badge: "Più popolare", pricing_ai_detail: "Livello dettaglio AI", price_monthly_title: "Piano mensile", price_per_month: "/mese", price_monthly_per: "5 analisi / mese", price_monthly_1: "✓ 5 analisi complete al mese", price_monthly_2: "✓ Piano dietetico + integratori", price_monthly_3: "✓ Cronologia e confronto due analisi", price_monthly_4: "✓ Scarica PDF, condividi con il medico", price_btn_monthly: "/mese — Inizia",
         price_best_badge: "Miglior rapporto qualità-prezzo", price_best_badge_value: "Miglior valore", price_yearly_title: "Piano annuale", price_per_year: "/anno", price_yearly_per: "16 analisi totali (13 + 3 in omaggio)", price_yearly_1: "✓ 16 analisi all'anno (13 + 3 in omaggio)", price_yearly_2: "✓ Tutte le sezioni dieta e integratori premium", price_yearly_3: "✓ Cronologia e confronto avanzato", price_yearly_4: "✓ Ideale per visite dal medico", price_btn_yearly: "/anno — Inizia",
+        plan_single_1: "Un caricamento, un report", plan_single_2: "Punteggio salute generale", plan_single_3: "Riepilogo biomarcatori base", plan_single_4: "Breve commento clinico", plan_single_5: "Raccomandazioni limitate", plan_single_6: "Report PDF standard",
+        plan_monthly_1: "Analisi mensili incluse", plan_monthly_2: "Schede biomarcatori avanzate", plan_monthly_3: "Pannello CBC base", plan_monthly_4: "Riepilogo glucosio/metabolico", plan_monthly_5: "Piano idratazione", plan_monthly_6: "Raccomandazioni stile di vita 3 giorni", plan_monthly_7: "Report PDF avanzato",
+        plan_yearly_1: "Tutti i moduli analisi premium", plan_yearly_2: "CBC completo + differenziale", plan_yearly_3: "Commenti clinici estesi", plan_yearly_4: "Piano alimentare 1 settimana", plan_yearly_5: "Piano idratazione e stile di vita personalizzato", plan_yearly_6: "Grafici e sezioni rischio premium", plan_yearly_7: "PDF clinico più completo", plan_yearly_8: "Accesso prioritario alle nuove funzioni",
+        upgrade_cta_detail: "Sblocca interpretazioni più dettagliate", upgrade_cta_hematology: "Visualizza schede ematologia complete", upgrade_cta_weekly_plan: "Sblocca il piano settimanale personalizzato", upgrade_cta_pdf: "Passa al PDF clinico avanzato", upgrade_cta_insights: "Passa a un piano superiore per insight più completi",
         footer_desc: "Risultati delle analisi del sangue spiegati in linguaggio chiaro.", footer_disclaimer: "Questo strumento è a scopo informativo. Consulta sempre un professionista per decisioni mediche.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Questa analisi è solo a scopo informativo. Non sostituisce una diagnosi medica.", medical_disclaimer_full: "Norya non è uno strumento di diagnosi medica. I contenuti sono solo informativi. In emergenze o per diagnosi/terapia consultare il medico.", doctor_cta_note: "Non sostituisce la diagnosi; condividi i risultati con il medico.",
         footer_col_norya: "Norya", footer_col_legal: "Legale", footer_col_support: "Supporto", footer_col_payment: "Pagamento sicuro",
@@ -7703,6 +7721,10 @@
         price_single_title: "Análisis único", price_single_per: "pago único", price_single_1: "✓ 1 análisis", price_single_2: "✓ Dieta + suplementos + salud cardíaca", price_single_3: "✓ Descargar y compartir PDF", price_btn_single: " — Análisis único",
         price_monthly_badge: "Más popular", pricing_ai_detail: "Nivel de detalle IA", price_monthly_title: "Plan mensual", price_per_month: "/mes", price_monthly_per: "5 análisis / mes", price_monthly_1: "✓ 5 análisis completos al mes", price_monthly_2: "✓ Plan dietético + suplementos", price_monthly_3: "✓ Historial y comparar dos análisis", price_monthly_4: "✓ Descargar PDF, compartir con el médico", price_btn_monthly: "/mes — Empezar",
         price_best_badge: "Mejor relación calidad-precio", price_best_badge_value: "Mejor valor", price_yearly_title: "Plan anual", price_per_year: "/año", price_yearly_per: "16 análisis total (13 + 3 de regalo)", price_yearly_1: "✓ 16 análisis al año (13 + 3 de regalo)", price_yearly_2: "✓ Todas las secciones dieta y suplementos premium", price_yearly_3: "✓ Historial y comparación avanzada", price_yearly_4: "✓ Ideal para visitas al médico", price_btn_yearly: "/año — Empezar",
+        plan_single_1: "Una carga, un informe", plan_single_2: "Puntuación de salud general", plan_single_3: "Resumen básico de biomarcadores", plan_single_4: "Comentario clínico breve", plan_single_5: "Recomendaciones limitadas", plan_single_6: "Informe PDF estándar",
+        plan_monthly_1: "Análisis mensuales incluidos", plan_monthly_2: "Tarjetas de biomarcadores avanzadas", plan_monthly_3: "Panel CBC básico", plan_monthly_4: "Resumen glucosa/metabólico", plan_monthly_5: "Plan de hidratación", plan_monthly_6: "Recomendaciones de estilo de vida 3 días", plan_monthly_7: "Informe PDF avanzado",
+        plan_yearly_1: "Todos los módulos de análisis premium", plan_yearly_2: "CBC completo + diferencial", plan_yearly_3: "Comentarios clínicos extensos", plan_yearly_4: "Plan de alimentación 1 semana", plan_yearly_5: "Plan de hidratación y estilo de vida personalizado", plan_yearly_6: "Gráficos y secciones de riesgo premium", plan_yearly_7: "PDF clínico más completo", plan_yearly_8: "Acceso prioritario a nuevas funciones",
+        upgrade_cta_detail: "Desbloquea interpretaciones más detalladas", upgrade_cta_hematology: "Ver tarjetas de hematología completas", upgrade_cta_weekly_plan: "Desbloquea tu plan semanal personalizado", upgrade_cta_pdf: "Actualiza al PDF clínico avanzado", upgrade_cta_insights: "Actualiza tu plan para más información de salud",
         footer_desc: "Resultados de análisis de sangre explicados en lenguaje claro.", footer_disclaimer: "Esta herramienta es informativa. Consulta siempre a un profesional para decisiones médicas.", made_with_cursor: "Hecho con Cursor",
         disclaimer_informative: "Este análisis es solo informativo. No sustituye un diagnóstico médico.", medical_disclaimer_full: "Norya no es una herramienta de diagnóstico médico. El contenido es solo informativo. En emergencias o para diagnóstico/tratamiento consulte a su médico.", doctor_cta_note: "No sustituye el diagnóstico; comparta los resultados con su médico.",
         footer_col_norya: "Norya", footer_col_legal: "Legal", footer_col_support: "Soporte", footer_col_payment: "Pago seguro",
@@ -7929,6 +7951,10 @@
         price_single_title: "Analyse unique", price_single_per: "paiement unique", price_single_1: "✓ 1 analyse", price_single_2: "✓ Régime + compléments + santé cardiaque", price_single_3: "✓ Télécharger et partager PDF", price_btn_single: " — Analyse unique",
         price_monthly_badge: "Le plus populaire", pricing_ai_detail: "Niveau de détail IA", price_monthly_title: "Abonnement mensuel", price_per_month: "/mois", price_monthly_per: "5 analyses / mois", price_monthly_1: "✓ 5 analyses complètes par mois", price_monthly_2: "✓ Plan alimentaire + compléments", price_monthly_3: "✓ Historique et comparer deux analyses", price_monthly_4: "✓ Télécharger PDF, partager avec le médecin", price_btn_monthly: "/mois — Commencer",
         price_best_badge: "Meilleur rapport qualité-prix", price_best_badge_value: "Meilleure valeur", price_yearly_title: "Abonnement annuel", price_per_year: "/an", price_yearly_per: "16 analyses au total (13 + 3 offertes)", price_yearly_1: "✓ 16 analyses par an (13 + 3 offertes)", price_yearly_2: "✓ Toutes les sections régime et compléments premium", price_yearly_3: "✓ Historique et comparaison avancée", price_yearly_4: "✓ Idéal pour les rendez-vous médicaux", price_btn_yearly: "/an — Commencer",
+        plan_single_1: "Un envoi, un rapport", plan_single_2: "Score de santé global", plan_single_3: "Résumé des biomarqueurs de base", plan_single_4: "Court commentaire clinique", plan_single_5: "Recommandations limitées", plan_single_6: "Rapport PDF standard",
+        plan_monthly_1: "Analyses mensuelles incluses", plan_monthly_2: "Cartes biomarqueurs avancées", plan_monthly_3: "Panneau CBC de base", plan_monthly_4: "Résumé glucose/métabolique", plan_monthly_5: "Plan d'hydratation", plan_monthly_6: "Recommandations mode de vie 3 jours", plan_monthly_7: "Rapport PDF avancé",
+        plan_yearly_1: "Tous les modules d'analyse premium", plan_yearly_2: "CBC complet + différentiel", plan_yearly_3: "Commentaires cliniques détaillés", plan_yearly_4: "Plan nutritionnel 1 semaine", plan_yearly_5: "Plan hydratation et style de vie personnalisé", plan_yearly_6: "Graphiques et sections risque premium", plan_yearly_7: "PDF clinique le plus complet", plan_yearly_8: "Accès prioritaire aux nouvelles fonctionnalités",
+        upgrade_cta_detail: "Débloquez les interprétations détaillées", upgrade_cta_hematology: "Voir les cartes hématologie complètes", upgrade_cta_weekly_plan: "Débloquez votre plan hebdomadaire personnalisé", upgrade_cta_pdf: "Passez au PDF clinique avancé", upgrade_cta_insights: "Passez à un forfait supérieur pour plus d'aperçus",
         footer_desc: "Résultats d'analyses sanguines expliqués en langage clair.", footer_disclaimer: "Cet outil est à titre informatif. Consultez toujours un professionnel pour les décisions médicales.", made_with_cursor: "Fait avec Cursor",
         disclaimer_informative: "Cette analyse est à titre informatif uniquement. Elle ne remplace pas un diagnostic médical.", medical_disclaimer_full: "Norya n'est pas un outil de diagnostic médical. Le contenu est à titre informatif. En cas d'urgence ou pour diagnostic/traitement, consultez votre médecin.", doctor_cta_note: "Ne remplace pas un diagnostic ; partagez les résultats avec votre médecin.",
         footer_col_norya: "Norya", footer_col_legal: "Mentions légales", footer_col_support: "Support", footer_col_payment: "Paiement sécurisé",
@@ -8139,6 +8165,10 @@
         price_single_title: "Einzelanalyse", price_single_per: "einmalig", price_single_1: "✓ 1 Analyse", price_single_2: "✓ Ernährung + Nahrungsergänzung + Herzgesundheit", price_single_3: "✓ PDF herunterladen & teilen", price_btn_single: " — Einzelanalyse",
         price_monthly_badge: "Am beliebtesten", pricing_ai_detail: "KI-Detailstufe", price_monthly_title: "Monatsabo", price_per_month: "/Monat", price_monthly_per: "5 Analysen / Monat", price_monthly_1: "✓ 5 Vollanalysen pro Monat", price_monthly_2: "✓ Ernährungsplan + Nahrungsergänzung", price_monthly_3: "✓ Verlauf & zwei Analysen vergleichen", price_monthly_4: "✓ PDF herunterladen, mit Arzt teilen", price_btn_monthly: "/Monat — Starten",
         price_best_badge: "Bester Preis", price_best_badge_value: "Bester Wert", price_yearly_title: "Jahresabo", price_per_year: "/Jahr", price_yearly_per: "16 Analysen gesamt (13 + 3 gratis)", price_yearly_1: "✓ 16 Analysen pro Jahr (13 + 3 gratis)", price_yearly_2: "✓ Alle Premium-Ernährung & -Nahrungsergänzung", price_yearly_3: "✓ Verlauf & erweiterter Vergleich", price_yearly_4: "✓ Ideal für Arzttermine", price_btn_yearly: "/Jahr — Starten",
+        plan_single_1: "Ein Upload, ein Bericht", plan_single_2: "Gesundheits-Score", plan_single_3: "Grundlegende Biomarker-Zusammenfassung", plan_single_4: "Kurze klinische Bewertung", plan_single_5: "Begrenzte Empfehlungen", plan_single_6: "Standard-PDF-Bericht",
+        plan_monthly_1: "Monatliche Analysen inklusive", plan_monthly_2: "Erweiterte Biomarker-Karten", plan_monthly_3: "Basis CBC-Panel", plan_monthly_4: "Glukose-/Stoffwechsel-Zusammenfassung", plan_monthly_5: "Trinkplan", plan_monthly_6: "3-Tage-Lifestyle-Empfehlungen", plan_monthly_7: "Erweiterter PDF-Bericht",
+        plan_yearly_1: "Alle Premium-Analysemodule", plan_yearly_2: "Vollständiges CBC + Differential", plan_yearly_3: "Ausführliche klinische Bewertungen", plan_yearly_4: "1-Wochen-Ernährungsplan", plan_yearly_5: "Personalisierter Hydratations- und Lifestyle-Plan", plan_yearly_6: "Premium-Grafiken und Risikobereiche", plan_yearly_7: "Umfassendster klinischer PDF", plan_yearly_8: "Prioritätszugang zu neuen Funktionen",
+        upgrade_cta_detail: "Detailliertere Auswertungen freischalten", upgrade_cta_hematology: "Vollständige Hämatologie-Karten anzeigen", upgrade_cta_weekly_plan: "Personalisierte Wochenplan freischalten", upgrade_cta_pdf: "Auf erweiterten klinischen PDF upgraden", upgrade_cta_insights: "Plan upgraden für tiefere Gesundheitseinblicke",
         footer_desc: "Blutwerte verständlich erklärt.", footer_disclaimer: "Nur zur Information. Bitte konsultieren Sie für medizinische Entscheidungen einen Arzt.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Diese Analyse dient nur der Information. Sie ersetzt keine medizinische Diagnose.", medical_disclaimer_full: "Norya ist kein medizinisches Diagnoseinstrument. Die Inhalte sind nur zur Information. In Notfällen oder bei Diagnose/Behandlung wenden Sie sich an Ihren Arzt.", doctor_cta_note: "Ersetzt keine Diagnose; teilen Sie die Ergebnisse mit Ihrem Arzt.",
         footer_col_norya: "Norya", footer_col_legal: "Rechtliches", footer_col_support: "Support", footer_col_payment: "Sichere Zahlung",
@@ -9950,7 +9980,7 @@
       checkoutBasePrice = price;
       checkoutSymbol = symbol || '€';
       document.getElementById('checkout-plan-name').textContent = planNames[plan];
-      var featureKeys = { single: ['price_single_1', 'price_single_2', 'price_single_3'], monthly: ['price_monthly_1', 'price_monthly_2', 'price_monthly_3'], yearly: ['price_yearly_1', 'price_yearly_2', 'price_yearly_3'] }[plan] || [];
+      var featureKeys = { single: ['plan_single_1', 'plan_single_2', 'plan_single_3', 'plan_single_4', 'plan_single_5', 'plan_single_6'], monthly: ['plan_monthly_1', 'plan_monthly_2', 'plan_monthly_3', 'plan_monthly_4', 'plan_monthly_5', 'plan_monthly_6', 'plan_monthly_7'], yearly: ['plan_yearly_1', 'plan_yearly_2', 'plan_yearly_3', 'plan_yearly_4', 'plan_yearly_5', 'plan_yearly_6', 'plan_yearly_7', 'plan_yearly_8'] }[plan] || [];
       var listEl = document.getElementById('checkout-plan-features-list');
       if (listEl) {
         listEl.innerHTML = featureKeys.map(function(k) { var s = (t[k] || '').replace(/^✓\s*/, ''); return s ? '<li class="flex items-center gap-2"><span class="text-primary-500 font-medium">✓</span><span>' + s + '</span></li>' : ''; }).filter(Boolean).join('') || '<li>—</li>';
