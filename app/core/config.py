@@ -1,5 +1,6 @@
 from pathlib import Path
 
+from dotenv import load_dotenv
 from pydantic import field_validator
 from pydantic_settings import BaseSettings
 
@@ -9,6 +10,8 @@ BRAND_NAME = "NoryaAI"
 # .env proje kökünde (norya/): app/core/config.py -> app/core -> app -> norya
 _ROOT = Path(__file__).resolve().parent.parent.parent
 _ENV_FILE = _ROOT / ".env"
+# Config import edilir edilmez .env yüklensin (uvicorn cwd farklı olsa bile)
+load_dotenv(_ENV_FILE, override=True)
 
 # OpenAI anahtarının geçerli sayılması için (başında boşluk vb. olmaması)
 OPENAI_KEY_PREFIX = "sk-"
@@ -33,7 +36,8 @@ class Settings(BaseSettings):
     paytr_notification_url: str = ""   # Bildirim URL (PayTR buraya POST yapar), örn. https://siteniz.com/api/payment/callback
     paytr_ok_url: str = ""             # Başarılı ödeme sonrası müşteri yönlendirilecek
     paytr_fail_url: str = ""           # Hata/iptal sonrası yönlendirilecek
-    paytr_currency: str = "EUR"        # Tahsilat para birimi: EUR (PayTR TL destekler; EUR için Stripe vb. kullanın)
+    paytr_currency: str = "EUR"        # Fiyat listesi para birimi (EUR); PayTR'ye TL göndermek için paytr_eur_to_try_rate kullanın
+    paytr_eur_to_try_rate: float = 35.0  # EUR → TL kuru (örn. 35 = 1 EUR). >0 ise PayTR'ye TL ile ödeme gönderilir (mağazada EUR hesabı yoksa)
     paytr_amount_single: int = 1300   # Tek analiz (euro cent), 1300 = 13,00 €
     paytr_amount_monthly: int = 5000   # Aylık Pro (euro cent), 5000 = 50,00 €
     paytr_amount_yearly: int = 9900   # Yıllık Pro (euro cent), 9900 = 99,00 €

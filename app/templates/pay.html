@@ -1,85 +1,427 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="{{ lang }}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ödeme – {{ brand }}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F7FAFA">
+  <title>{{ t.pay_title }} – {{ brand }}</title>
   <style>
-    * { box-sizing: border-box; }
-    body { font-family: system-ui, -apple-system, sans-serif; margin: 0; padding: 24px; background: #0f172a; color: #e2e8f0; min-height: 100vh; }
-    .container { max-width: 560px; margin: 0 auto; }
-    h1 { color: #0EA5A4; font-size: 1.5rem; margin-bottom: 8px; }
-    .sub { color: #94a3b8; font-size: 0.9rem; margin-bottom: 24px; }
-    .card { background: #1e293b; border-radius: 12px; padding: 24px; margin-bottom: 16px; }
-    label { display: block; margin-bottom: 4px; font-size: 0.875rem; color: #94a3b8; }
-    input { width: 100%; padding: 10px 12px; border: 1px solid #334155; border-radius: 8px; background: #0f172a; color: #e2e8f0; margin-bottom: 16px; }
-    .btn { background: #0EA5A4; color: #fff; border: none; padding: 12px 24px; border-radius: 8px; font-weight: 600; cursor: pointer; width: 100%; font-size: 1rem; }
-    .btn:hover { background: #0d9488; }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    #iframe-wrap { display: none; margin-top: 24px; border-radius: 12px; overflow: hidden; background: #0f172a; min-height: 480px; }
-    #paytr-iframe { width: 100%; height: 520px; border: 0; }
-    .err { color: #f87171; font-size: 0.875rem; margin-top: 8px; }
-    .plan-badge { display: inline-block; background: #0EA5A4; color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.875rem; margin-bottom: 16px; }
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
+      background: linear-gradient(180deg, #F7FAFA 0%, #FFFFFF 35%);
+      color: #1a1a2e;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding-bottom: 100px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .trust-bar{
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid rgba(14,165,164,0.12);
+      padding: 10px 16px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 16px 24px;
+    }
+    .trust-bar span{ display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #64748b; }
+    .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; }
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 16px; }
+    .header{ display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
+    .header a{ display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .header img{ height: 36px; width: auto; }
+    .header small{ font-size: 12px; color: #0EA5A4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .grid{ display: grid; gap: 24px; }
+    @media (min-width: 900px){ .grid{ grid-template-columns: 1fr 380px; align-items: start; } }
+    .card{
+      background: #fff;
+      border-radius: 18px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+      padding: 24px;
+      margin-bottom: 0;
+    }
+    .card h3{ font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
+    .pills{ display: flex; background: #f1f5f9; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 20px; }
+    .pills button{
+      flex: 1;
+      padding: 12px 14px;
+      border: none;
+      border-radius: 10px;
+      font-size: 13px; font-weight: 600;
+      background: transparent;
+      color: #475569;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .pills button:hover{ background: rgba(14,165,164,0.1); color: #0d9488; }
+    .pills button:focus-visible{ outline: 2px solid #0EA5A4; outline-offset: 2px; }
+    .pills button.active{ background: #0EA5A4; color: #fff; box-shadow: 0 2px 8px rgba(14,165,164,0.35); }
+    .plan-badges{ display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .plan-badges span{ font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 8px; }
+    .badge-popular{ background: #0EA5A4; color: #fff; }
+    .badge-save{ background: #ecfdf5; color: #059669; }
+    .benefits{ list-style: none; margin-bottom: 20px; }
+    .benefits li{ display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; color: #334155; }
+    .benefits li svg{ width: 18px; height: 18px; flex-shrink: 0; color: #0EA5A4; }
+    .price-row{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; padding: 16px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
+    .price-row .total-label{ font-size: 14px; color: #64748b; font-weight: 500; }
+    .price-row .total-value{ font-size: 28px; font-weight: 700; color: #0EA5A4; }
+    .price-note{ font-size: 12px; color: #94a3b8; margin-bottom: 16px; line-height: 1.5; }
+    .coupon-row{ display: flex; gap: 8px; margin-bottom: 16px; }
+    .coupon-row input{ flex: 1; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; }
+    .coupon-row input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
+    .coupon-row button{ padding: 12px 18px; border: none; border-radius: 10px; background: #e2e8f0; color: #475569; font-weight: 600; font-size: 14px; cursor: pointer; }
+    .coupon-row button:hover{ background: #cbd5e1; }
+    .coupon-msg{ font-size: 13px; margin-top: 6px; min-height: 20px; }
+    .coupon-msg.ok{ color: #059669; }
+    .coupon-msg.err{ color: #dc2626; }
+    .cta-main{
+      width: 100%;
+      padding: 16px 24px;
+      min-height: 52px;
+      border: none;
+      border-radius: 12px;
+      background: #0EA5A4;
+      color: #fff;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.15s, box-shadow 0.15s;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+    }
+    .cta-main:hover:not(:disabled){ transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,164,0.35); }
+    .cta-main:focus-visible{ outline: 2px solid #0EA5A4; outline-offset: 2px; }
+    .cta-main:disabled{ opacity: 0.8; cursor: not-allowed; }
+    .cta-main .spinner{ width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+    .support-link{ display: block; text-align: center; margin-top: 14px; font-size: 13px; color: #64748b; text-decoration: none; }
+    .support-link:hover{ color: #0EA5A4; }
+    .toggle-row{ margin-top: 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; }
+    .toggle-row input{ width: 18px; height: 18px; accent-color: #0EA5A4; }
+    .status-card{ margin-top: 20px; padding: 20px; background: #f0fdfa; border: 1px solid rgba(14,165,164,0.25); border-radius: 14px; display: none; }
+    .status-card.visible{ display: block; }
+    .status-card h4{ font-size: 15px; color: #0f766e; margin-bottom: 6px; }
+    .status-card p{ font-size: 13px; color: #115e59; margin-bottom: 12px; line-height: 1.5; }
+    .status-card a{ color: #0EA5A4; font-weight: 600; font-size: 13px; }
+    .status-card .btn-done{ margin-top: 10px; padding: 10px 18px; border-radius: 10px; border: 1px solid #0EA5A4; background: transparent; color: #0EA5A4; font-weight: 600; cursor: pointer; font-size: 13px; }
+    .status-card .btn-done:hover{ background: rgba(14,165,164,0.08); }
+    .right-col .card{ margin-bottom: 20px; }
+    .right-col .card ul{ list-style: none; }
+    .right-col .card li{ display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 13px; color: #475569; line-height: 1.4; }
+    .right-col .card li svg{ width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: #0EA5A4; }
+    .testimonials p{ font-size: 13px; color: #475569; line-height: 1.5; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
+    .testimonials p:last-child{ border-bottom: none; }
+    .testimonials .stars{ color: #fbbf24; font-size: 12px; margin-bottom: 4px; }
+    .accordion{ border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+    .accordion summary{ padding: 14px 16px; font-weight: 600; font-size: 14px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
+    .accordion summary::-webkit-details-marker{ display: none; }
+    .accordion summary::after{ content: '+'; font-size: 18px; color: #64748b; }
+    .accordion details[open] summary::after{ content: '−'; }
+    .accordion .acc-body{ padding: 12px 16px; font-size: 13px; color: #64748b; line-height: 1.5; border-top: 1px solid #e2e8f0; }
+    .modal-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal-overlay.visible{ display: flex; }
+    .modal{ background: #fff; border-radius: 18px; padding: 28px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+    .modal h3{ font-size: 18px; margin-bottom: 10px; }
+    .modal p{ font-size: 14px; color: #64748b; margin-bottom: 18px; line-height: 1.5; }
+    .modal a{ display: inline-block; padding: 14px 24px; background: #0EA5A4; color: #fff; border-radius: 12px; font-weight: 600; text-decoration: none; }
+    .modal a:hover{ background: #0d9488; }
+    .footer{ text-align: center; padding: 24px 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; margin-top: 32px; }
+    .footer a{ color: #64748b; text-decoration: none; margin: 0 8px; }
+    .footer a:hover{ color: #0EA5A4; }
+    @media (max-width: 899px){
+      .right-col{ order: 2; }
+      .right-col .card{ margin-bottom: 12px; }
+      .accordion-wrap{ margin-top: 16px; }
+      .accordion details{ margin-bottom: 8px; }
+    }
+    .sticky-bar{ display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e2e8f0; padding: 14px 16px; padding-bottom: max(14px, env(safe-area-inset-bottom)); z-index: 50; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
+    @media (max-width: 899px){ .sticky-bar{ display: flex; align-items: center; justify-content: space-between; gap: 16px; } .sticky-bar .price{ font-size: 18px; font-weight: 700; color: #0EA5A4; } .sticky-bar .cta-main{ min-height: 48px; padding: 14px 20px; } body{ padding-bottom: 80px; } }
+    .form-card.has-status .cta-wrap{ display: none; }
+    .form-card.has-status .coupon-row{ display: none; }
+    .form-card.has-status .opt-fields{ display: none; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <h1>{{ brand }} – Güvenli ödeme</h1>
-    <p class="sub">PayTR 3D Secure ile ödeme</p>
-    <div class="card">
-      <span class="plan-badge" id="plan-badge">{{ plan_code }}</span>
-      <div id="form-wrap">
-        <label for="email">E-posta (opsiyonel)</label>
-        <input type="email" id="email" placeholder="ornek@email.com" autocomplete="email">
-        <label for="name">Ad (opsiyonel)</label>
-        <input type="text" id="name" placeholder="Adınız" autocomplete="name">
-        <button type="button" class="btn" id="btn-start">Ödemeye geç</button>
-        <p class="err" id="err" style="display:none;"></p>
+  <div class="trust-bar" role="region" aria-label="Güvenlik">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_paytr }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_cloudflare }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_ssl }}</span>
+  </div>
+  <div class="wrap">
+    <header class="header">
+      <a href="{{ base_url }}/" aria-label="{{ brand }}"><img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="" width="140" height="36">{{ brand }}</a>
+      <small>{{ t.secure_checkout }}</small>
+    </header>
+
+    <main class="grid">
+      <div class="form-card" id="form-card">
+        <div class="card">
+          <h3>{{ t.selected_plan }}</h3>
+          <div class="pills" role="group" aria-label="Plan seçimi">
+            <button type="button" class="pill {% if plan_code == 'single_13eur' %}active{% endif %}" data-plan="single_13eur" aria-pressed="{{ 'true' if plan_code == 'single_13eur' else 'false' }}">{{ t.plan_single }}</button>
+            <button type="button" class="pill {% if plan_code == 'monthly_50eur' %}active{% endif %}" data-plan="monthly_50eur" aria-pressed="{{ 'true' if plan_code == 'monthly_50eur' else 'false' }}">{{ t.plan_monthly }}</button>
+            <button type="button" class="pill {% if plan_code == 'yearly_99eur' %}active{% endif %}" data-plan="yearly_99eur" aria-pressed="{{ 'true' if plan_code == 'yearly_99eur' else 'false' }}">{{ t.plan_yearly }}</button>
+          </div>
+          <div class="plan-badges" id="plan-badges">
+            {% if 'yearly' in plan_code %}<span class="badge-save">{{ t.save_pct }}</span>{% endif %}
+            {% if 'monthly' in plan_code %}<span class="badge-popular">{{ t.most_popular }}</span>{% endif %}
+          </div>
+          <ul class="benefits" id="benefits-list">
+            {% for b in benefits %}
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ b }}</li>
+            {% endfor %}
+          </ul>
+          <div class="price-row">
+            <span class="total-label">{{ t.total }}</span>
+            <span class="total-value" id="total-price">{{ prices[plan_code] }} €</span>
+          </div>
+          <p class="price-note">{{ t.kdv_dahil }} · {{ t.cancel_anytime }} · {{ t.active_after_payment }}</p>
+          <div class="coupon-row">
+            <input type="text" id="coupon-input" placeholder="{{ t.coupon_placeholder }}" maxlength="64" aria-label="{{ t.coupon_placeholder }}">
+            <button type="button" id="coupon-apply" aria-label="{{ t.coupon_apply }}">{{ t.coupon_apply }}</button>
+          </div>
+          <p class="coupon-msg" id="coupon-msg" aria-live="polite"></p>
+          <div class="opt-fields" style="margin-bottom:16px;">
+            <label for="email" style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;">{{ t.pay_email_label }}</label>
+            <input type="email" id="email" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;margin-bottom:10px;">
+            <label for="name" style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;">{{ t.pay_name_label }}</label>
+            <input type="text" id="name" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;">
+          </div>
+          <div class="cta-wrap">
+            <button type="button" class="cta-main" id="cta-main" aria-label="{{ t.pay_btn }}">
+              <span class="btn-text">{{ t.pay_btn }}</span>
+            </button>
+            <a href="mailto:support@noryaai.com" class="support-link">{{ t.support_link }}</a>
+            <label class="toggle-row"><input type="checkbox" id="same-page-toggle" aria-label="{{ t.same_page_toggle }}"> {{ t.same_page_toggle }}</label>
+          </div>
+          <div class="status-card" id="status-card">
+            <h4>{{ t.status_card_title }}</h4>
+            <p>{{ t.status_card_desc }}</p>
+            <a href="#" id="open-payment-again" target="_blank" rel="noopener noreferrer">{{ t.open_payment_again }}</a>
+            <button type="button" class="btn-done" id="payment-done-btn">{{ t.payment_done_btn }}</button>
+          </div>
+        </div>
       </div>
-      <div id="iframe-wrap">
-        <iframe id="paytr-iframe" src="" title="PayTR ödeme"></iframe>
-      </div>
+
+      <aside class="right-col">
+        <div class="card">
+          <h3>{{ t.trust_card_title }}</h3>
+          <ul>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_1 }}</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_2 }}</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_3 }}</li>
+            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_4 }}</li>
+          </ul>
+        </div>
+        <div class="card testimonials">
+          <h3>{{ t.reviews_heading }}</h3>
+          <p class="stars">★★★★★</p>
+          <p>{{ t.testimonial_1 }}</p>
+          <p class="stars">★★★★★</p>
+          <p>{{ t.testimonial_2 }}</p>
+          <p class="stars">★★★★★</p>
+          <p>{{ t.testimonial_3 }}</p>
+        </div>
+        <div class="card accordion-wrap">
+          <h3>{{ t.faq_heading }}</h3>
+          <div class="accordion">
+            <details><summary>{{ t.faq_1_q }}</summary><div class="acc-body">{{ t.faq_1_a }}</div></details>
+            <details><summary>{{ t.faq_2_q }}</summary><div class="acc-body">{{ t.faq_2_a }}</div></details>
+            <details><summary>{{ t.faq_3_q }}</summary><div class="acc-body">{{ t.faq_3_a }}</div></details>
+          </div>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      © {{ brand }} · <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a>
+    </footer>
+  </div>
+
+  <div class="sticky-bar" id="sticky-bar">
+    <span class="price" id="sticky-price">{{ prices[plan_code] }} €</span>
+    <button type="button" class="cta-main" id="sticky-cta" aria-label="{{ t.pay_btn }}">{{ t.pay_btn }}</button>
+  </div>
+
+  <div class="modal-overlay" id="popup-modal" role="dialog" aria-modal="true" aria-labelledby="popup-modal-title">
+    <div class="modal">
+      <h3 id="popup-modal-title">{{ t.popup_blocked_title }}</h3>
+      <p>{{ t.popup_blocked_message }}</p>
+      <a href="#" id="popup-open-link" target="_blank" rel="noopener noreferrer">{{ t.popup_blocked_click }}</a>
     </div>
   </div>
+
   <script>
-    (function() {
-      var planCode = {{ plan_code_js | safe }};
-      var formWrap = document.getElementById('form-wrap');
-      var iframeWrap = document.getElementById('iframe-wrap');
-      var iframe = document.getElementById('paytr-iframe');
-      var btn = document.getElementById('btn-start');
-      var errEl = document.getElementById('err');
-      function showErr(msg) { errEl.textContent = msg || ''; errEl.style.display = msg ? 'block' : 'none'; }
-      btn.addEventListener('click', function() {
-        showErr('');
-        btn.disabled = true;
-        btn.textContent = 'Yükleniyor...';
-        fetch('/paytr/init', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            plan_code: planCode,
-            email: document.getElementById('email').value.trim() || null,
-            name: document.getElementById('name').value.trim() || null
-          })
-        }).then(function(r) { return r.json().then(function(d) { return { ok: r.ok, data: d }; }); })
-          .then(function(_r) {
-            if (_r.ok && _r.data.token) {
-              formWrap.style.display = 'none';
-              iframeWrap.style.display = 'block';
-              iframe.src = 'https://www.paytr.com/odeme/guvenli/' + _r.data.token;
-            } else {
-              btn.disabled = false;
-              btn.textContent = 'Ödemeye geç';
-              showErr(_r.data.detail || _r.data.reason || 'Token alınamadı.');
-            }
-          }).catch(function(e) {
-            btn.disabled = false;
-            btn.textContent = 'Ödemeye geç';
-            showErr('Bağlantı hatası. Tekrar deneyin.');
-          });
+(function(){
+  var planCode = {{ plan_code_js | safe }};
+  var prices = {{ prices_js | safe }};
+  var benefitsByPlan = {
+    single_13eur: {{ benefits_js | safe }},
+    monthly_50eur: {{ benefits_monthly_js | safe }},
+    yearly_99eur: {{ benefits_yearly_js | safe }}
+  };
+  var t = {{ t_js | safe }};
+  var baseUrl = {{ base_url | tojson }};
+
+  function setPlan(pc) {
+    planCode = pc;
+    document.querySelectorAll('.pill').forEach(function(btn){
+      var isActive = btn.getAttribute('data-plan') === pc;
+      btn.classList.toggle('active', isActive);
+      btn.setAttribute('aria-pressed', isActive);
+    });
+    var priceEl = document.getElementById('total-price');
+    var stickyPrice = document.getElementById('sticky-price');
+    if (priceEl) priceEl.textContent = (prices[pc] || '') + ' €';
+    if (stickyPrice) stickyPrice.textContent = (prices[pc] || '') + ' €';
+    var badges = document.getElementById('plan-badges');
+    if (badges) {
+      badges.innerHTML = '';
+      if (pc.indexOf('yearly') !== -1) { var s = document.createElement('span'); s.className = 'badge-save'; s.textContent = t.save_pct || '83% save'; badges.appendChild(s); }
+      if (pc.indexOf('monthly') !== -1) { var s = document.createElement('span'); s.className = 'badge-popular'; s.textContent = t.most_popular || 'Most popular'; badges.appendChild(s); }
+    }
+    var list = document.getElementById('benefits-list');
+    if (list && benefitsByPlan[pc]) {
+      list.innerHTML = benefitsByPlan[pc].map(function(b){ return '<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + b + '</li>'; }).join('');
+    }
+  }
+
+  document.querySelectorAll('.pill').forEach(function(btn){
+    btn.addEventListener('click', function(){ setPlan(btn.getAttribute('data-plan')); });
+  });
+
+  var couponInput = document.getElementById('coupon-input');
+  var couponApply = document.getElementById('coupon-apply');
+  var couponMsg = document.getElementById('coupon-msg');
+  var appliedCoupon = null;
+
+  function productFromPlan(pc) {
+    if ((pc || '').indexOf('single') !== -1) return 'single';
+    if ((pc || '').indexOf('monthly') !== -1) return 'monthly';
+    return 'yearly';
+  }
+
+  if (couponApply) couponApply.addEventListener('click', function(){
+    var code = (couponInput && couponInput.value.trim()) || '';
+    couponMsg.textContent = '';
+    couponMsg.className = 'coupon-msg';
+    if (!code) return;
+    fetch(baseUrl + '/api/coupon/validate?code=' + encodeURIComponent(code) + '&product=' + encodeURIComponent(productFromPlan(planCode)))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.discount !== undefined && data.final_amount !== undefined) {
+          appliedCoupon = code;
+          couponMsg.textContent = (t.coupon_success || 'Discount applied.');
+          couponMsg.className = 'coupon-msg ok';
+        } else {
+          couponMsg.textContent = (t.coupon_invalid || 'Invalid code.');
+          couponMsg.className = 'coupon-msg err';
+        }
+      })
+      .catch(function(){ couponMsg.textContent = (t.coupon_invalid || 'Invalid code.'); couponMsg.className = 'coupon-msg err'; });
+  });
+
+  var ctaMain = document.getElementById('cta-main');
+  var stickyCta = document.getElementById('sticky-cta');
+  var statusCard = document.getElementById('status-card');
+  var openAgainLink = document.getElementById('open-payment-again');
+  var paymentDoneBtn = document.getElementById('payment-done-btn');
+  var popupModal = document.getElementById('popup-modal');
+  var popupOpenLink = document.getElementById('popup-open-link');
+  var formCard = document.getElementById('form-card');
+  var samePageToggle = document.getElementById('same-page-toggle');
+
+  function setLoading(loading) {
+    var btnText = ctaMain && ctaMain.querySelector('.btn-text');
+    if (ctaMain) {
+      ctaMain.disabled = loading;
+      if (loading) {
+        if (!ctaMain.querySelector('.spinner')) { var s = document.createElement('span'); s.className = 'spinner'; s.setAttribute('aria-hidden','true'); ctaMain.insertBefore(s, ctaMain.firstChild); }
+        if (btnText) btnText.textContent = (t.cta_loading || 'Opening…');
+      } else {
+        var sp = ctaMain.querySelector('.spinner'); if (sp) sp.remove();
+        if (btnText) btnText.textContent = t.pay_btn;
+      }
+    }
+    if (stickyCta) { stickyCta.disabled = loading; stickyCta.textContent = loading ? (t.cta_loading || '…') : t.pay_btn; }
+  }
+
+  function openPaymentWindow(url) {
+    var w = window.open(url, '_blank', 'noopener,noreferrer');
+    if (!w || w.closed) {
+      popupModal.classList.add('visible');
+      if (popupOpenLink) popupOpenLink.href = url;
+    } else {
+      statusCard.classList.add('visible');
+      if (openAgainLink) openAgainLink.href = url;
+      formCard.classList.add('has-status');
+    }
+  }
+
+  function doCheckout(useSamePage) {
+    setLoading(true);
+    fetch(baseUrl + '/paytr/init', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        plan_code: planCode,
+        email: (document.getElementById('email') && document.getElementById('email').value.trim()) || null,
+        name: (document.getElementById('name') && document.getElementById('name').value.trim()) || null
+      })
+    })
+    .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, data: d }; }); })
+    .then(function(res){
+      setLoading(false);
+      if (res.ok && res.data.token) {
+        var url = 'https://www.paytr.com/odeme/guvenli/' + res.data.token;
+        if (res.data.merchant_oid) window._lastMerchantOid = res.data.merchant_oid;
+        if (useSamePage) {
+          window.location.href = url;
+          return;
+        }
+        openPaymentWindow(url);
+      } else {
+        var msg = (res.data && (res.data.detail || res.data.reason)) || t.pay_error_connection || 'Error';
+        if (typeof alert !== 'undefined') alert(msg); else couponMsg.textContent = msg; couponMsg.className = 'coupon-msg err';
+      }
+    })
+    .catch(function(){
+      setLoading(false);
+      var msg = t.pay_error_connection || 'Connection error.';
+      if (typeof alert !== 'undefined') alert(msg); else { couponMsg.textContent = msg; couponMsg.className = 'coupon-msg err'; }
+    });
+  }
+
+  function onCtaClick() {
+    var useSame = samePageToggle && samePageToggle.checked;
+    doCheckout(useSame);
+  }
+
+  if (ctaMain) ctaMain.addEventListener('click', onCtaClick);
+  if (stickyCta) stickyCta.addEventListener('click', onCtaClick);
+
+  if (paymentDoneBtn) paymentDoneBtn.addEventListener('click', function(){
+    var oid = window._lastMerchantOid;
+    if (!oid) return;
+    fetch(baseUrl + '/api/orders/status?merchant_oid=' + encodeURIComponent(oid))
+      .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, d: d }; }).catch(function(){ return { ok: false, d: null }; }); })
+      .then(function(o){
+        var d = o.d;
+        if (o.ok && d && (d.status === 'paid' || d.status === 'completed' || d.is_premium_active)) {
+          window.location.href = baseUrl + '/payment/success?merchant_oid=' + encodeURIComponent(oid) + '&lang=' + (document.documentElement.lang || 'tr');
+        } else if (typeof alert !== 'undefined') alert(d && d.status === 'failed' ? 'Ödeme tamamlanamadı.' : (!o.ok ? 'Sipariş bulunamadı.' : 'Ödeme henüz tamamlanmadı.'));
       });
-    })();
+  });
+
+  popupModal.addEventListener('click', function(e){ if (e.target === popupModal) popupModal.classList.remove('visible'); });
+})();
   </script>
 </body>
 </html>
