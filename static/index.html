@@ -86,6 +86,10 @@
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
+    body > .header, body > section, body > aside, body > footer, body > div, .premium-wrap, .hero-inner {
+      min-width: 0;
+      max-width: 100%;
+    }
     #root, main { width: 100%; max-width: 100%; overflow-x: hidden; min-width: 0; }
     body > header, body > section, body > aside, body > footer, body > div {
       max-width: 100%;
@@ -102,8 +106,9 @@
       body > header, body > section, body > aside, body > footer, body > div { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .header { width: 100% !important; max-width: 100% !important; min-width: 0 !important; overflow-x: hidden !important; }
       .header-inner { width: 100% !important; max-width: 100% !important; min-width: 0 !important; padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
-      .header .right-zone, .header .nav-actions { min-width: 0 !important; max-width: 100% !important; }
+      .header .header-right-zone, .header .right-zone, .header .nav-actions { min-width: 0 !important; max-width: 100% !important; }
       .header .elite-cta-btn, .header .primary-cta, .header .secondary-link, .header button { max-width: 100% !important; }
+      .header .header-mobile-cta { max-width: none !important; width: auto !important; flex-shrink: 0; }
       .hero, .gradient-hero, .premium-wrap, .premium-section, .trust-global-section, .features-grid-section { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .hero-inner { width: 100% !important; max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
       .hero-cta-wrap { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
@@ -1023,8 +1028,9 @@
     }
     /* ========== Enterprise glass header (sticky + compact + pill nav + premium CTA) ========== */
     .header {
-      position: sticky; top: 0; z-index: 200;
+      position: sticky; top: 0; z-index: 1001;
       width: 100%;
+      max-width: 100%;
       overflow-x: clip;
       overflow-y: visible;
       background: rgba(255,255,255,.78);
@@ -1052,29 +1058,28 @@
     }
     .header-inner {
       max-width: 1240px; margin: 0 auto;
-      padding: 10px 12px;
-      padding-left: max(12px, env(safe-area-inset-left));
-      padding-right: max(12px, env(safe-area-inset-right));
-      display: flex; align-items: center; justify-content: space-between; gap: 8px;
+      padding: 12px 16px;
+      padding-left: max(16px, env(safe-area-inset-left));
+      padding-right: max(16px, env(safe-area-inset-right));
+      display: flex; align-items: center; justify-content: space-between; gap: 10px;
       flex-wrap: nowrap;
       min-width: 0;
-      overflow: hidden;
+      width: 100%;
+      overflow: visible;
       transition: padding .22s ease;
-    }
-    @media (min-width: 375px) {
-      .header-inner { padding: 12px 14px; padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); gap: 10px; }
+      box-sizing: border-box;
     }
     @media (min-width: 768px) {
-      .header-inner { padding: 14px 18px; gap: 12px; }
+      .header-inner { padding: 14px 18px; padding-left: max(18px, env(safe-area-inset-left)); padding-right: max(18px, env(safe-area-inset-right)); gap: 12px; }
     }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .header-inner { padding: 16px 20px; gap: 12px; }
     }
-    .header.compact .header-inner { padding: 10px 14px; }
+    .header.compact .header-inner { padding: 10px 16px; }
     @media (min-width: 768px) {
       .header.compact .header-inner { padding: 10px 18px; }
     }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .header.compact .header-inner { padding: 10px 20px; }
     }
     .header .logo {
@@ -1084,11 +1089,11 @@
     @media (min-width: 768px) {
       .header .logo { height: 26px; }
     }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .header .logo { height: 28px; }
     }
     .header.compact .logo { height: 22px; }
-    /* Mobile-first: nav only on desktop (>= 1200px) */
+    /* Nav only on desktop (>= 1024px); mobile/tablet use hamburger */
     .nav-shell {
       display: none;
       background: rgba(15,23,42,.04);
@@ -1098,7 +1103,7 @@
       gap: 2px;
       flex-shrink: 0;
     }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .nav-shell { display: flex; }
     }
     .dark .nav-shell {
@@ -1177,19 +1182,52 @@
       box-shadow: 0 0 0 4px rgba(14,165,164,.18), 0 18px 36px rgba(14,165,164,.32);
     }
     .primary-cta .arrow { margin-left: 10px; opacity: .9; }
-    .right-zone {
+    .right-zone, .header-right-zone {
       display: flex; align-items: center; gap: 8px; flex-shrink: 1; min-width: 0;
-      overflow: hidden;
+      overflow: visible;
     }
-    /* Tablet: Giriş/Ücretsiz Başla header'da sıkışmasın — sadece CTA + dil + hamburger */
-    @media (min-width: 768px) and (max-width: 1023px) {
-      .header #nav-auth { display: none !important; }
+    /* Logo: never overflow on mobile */
+    .header-logo-link { flex: 0 1 auto; min-width: 0; }
+    .header-logo-link .logo { max-width: 100%; height: auto; object-fit: contain; }
+    @media (max-width: 767px) {
+      .header .logo { height: 22px !important; max-height: 28px; }
     }
-    /* Hamburger: visible below 1200px only */
+    /* Mobile-only CTA: single "Analiz Yap" in header bar (< 768px) */
+    .header-mobile-cta {
+      display: inline-flex !important;
+      align-items: center; justify-content: center;
+      min-height: 42px; padding: 0 14px;
+      border-radius: 999px;
+      font-weight: 700; white-space: nowrap;
+      flex-shrink: 0;
+      background: #0EA5A4 !important;
+      color: #fff !important;
+      border: 1px solid rgba(255,255,255,.35);
+      box-shadow: 0 8px 20px rgba(14,165,164,.3);
+      text-decoration: none;
+      font-size: 0.9375rem;
+      -webkit-tap-highlight-color: transparent;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .header-mobile-cta:hover { background: #0d9488 !important; transform: translateY(-1px); box-shadow: 0 10px 24px rgba(14,165,164,.35); }
+    .header-mobile-cta:active { transform: translateY(0); }
+    .header-mobile-cta:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,.35); }
+    @media (max-width: 767px) {
+      .header-mobile-cta { max-width: none; width: auto; }
+    }
+    @media (min-width: 1024px) {
+      .header-mobile-cta { display: none !important; }
+    }
+    /* Desktop-only CTA: hide on mobile/tablet so only one CTA shows */
+    .header-cta-desktop { display: none !important; }
+    @media (min-width: 1024px) {
+      .header-cta-desktop { display: inline-flex !important; }
+    }
+    /* Hamburger: visible below 1024px */
     .hamburger {
       display: flex;
-      width: 44px; height: 44px;
-      min-width: 44px; min-height: 44px;
+      width: 42px; height: 42px;
+      min-width: 42px; min-height: 42px;
       border-radius: 12px;
       align-items: center; justify-content: center;
       background: rgba(15,23,42,.05);
@@ -1197,26 +1235,22 @@
       cursor: pointer;
       color: rgba(15,23,42,.78);
       flex-shrink: 0;
+      -webkit-tap-highlight-color: transparent;
     }
+    .hamburger:focus { outline: none; box-shadow: 0 0 0 2px rgba(14,165,164,.4); }
     .dark .hamburger { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.78); }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .hamburger { display: none !important; }
     }
-    /* CTA in header: visible from 768px (tablet + desktop); mobile uses drawer only */
+    /* CTA in header (desktop): visible from 1024px */
     .header-cta-inline {
       display: none;
     }
-    @media (min-width: 768px) {
+    @media (min-width: 1024px) {
       .header-cta-inline { display: inline-flex; }
     }
-    @media (max-width: 767px) {
-      .primary-cta.header-cta-inline { padding: 8px 12px; font-size: 0.8125rem; border-radius: 10px; }
-    }
-    @media (min-width: 768px) and (max-width: 1199px) {
-      .primary-cta.header-cta-inline {
-        padding: 10px 14px; font-size: 0.875rem; border-radius: 12px;
-        box-shadow: 0 8px 18px rgba(14,165,164,.25);
-      }
+    @media (min-width: 1024px) and (max-width: 1199px) {
+      .primary-cta.header-cta-inline { padding: 10px 14px; font-size: 0.875rem; border-radius: 12px; }
     }
     .mobile-overlay {
       position: fixed; inset: 0;
@@ -1225,17 +1259,18 @@
       -webkit-backdrop-filter: blur(4px);
       opacity: 0; pointer-events: none;
       transition: opacity .18s ease;
-      z-index: 60;
+      z-index: 1002;
     }
     .mobile-overlay.open { opacity: 1; pointer-events: auto; }
     .mobile-drawer {
       position: fixed; top: 0; right: 0;
       height: 100vh; height: 100dvh; height: -webkit-fill-available;
       width: min(86vw, 360px);
+      max-width: 100%;
       background: #fff;
       transform: translateX(100%);
       transition: transform .22s ease;
-      z-index: 61;
+      z-index: 1003;
       border-left: 1px solid rgba(15,23,42,.06);
       box-shadow: -20px 0 40px rgba(15,23,42,.12);
       display: flex; flex-direction: column;
@@ -1311,22 +1346,19 @@
       color: rgba(15,23,42,.7);
     }
     .dark .drawer-close { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
-    /* Theme, lang, auth: only on desktop (>= 1200px); below that they live in drawer */
+    /* Theme, lang, auth, nav links: only on desktop (>= 1024px); below that they live in drawer */
     .header-desktop-only { display: none !important; }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .header-desktop-only { display: flex !important; }
     }
     .header-desktop-only.inline-items { display: none !important; }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
       .header-desktop-only.inline-items { display: inline-flex !important; }
     }
-    @media (min-width: 768px) {
-      .header.user-logged-in .header-cta-guest-only { display: none !important; }
-      #nav-user:not(.hidden) { display: inline-flex !important; align-items: center; gap: 0.5rem; }
-    }
+    .header.user-logged-in .header-cta-guest-only { display: none !important; }
     #nav-user.hidden { display: none !important; }
-    #nav-user .header-desktop-only { display: none !important; }
-    @media (min-width: 1200px) {
+    @media (min-width: 1024px) {
+      #nav-user:not(.hidden) { display: inline-flex !important; align-items: center; gap: 0.5rem; }
       #nav-user .header-desktop-only { display: inline-flex !important; }
     }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
@@ -1336,8 +1368,14 @@
     /* Dil dropdown: iOS Safari için dvh */
     .lang-dropdown-max-h { max-height: 70vh; }
     @supports (height: 100dvh) { .lang-dropdown-max-h { max-height: 70dvh; } }
-    /* Dil ve menü dropdown: öğeler arası aralık */
-    .lang-opt { margin: 2px 0; }
+    /* Dil dropdown: tıklanabilir item — cursor, hover, active, selected */
+    .lang-opt { margin: 2px 0; cursor: pointer; width: 100%; min-height: 44px; display: flex; align-items: center; padding: 0.5rem 1rem; border: none; background: transparent; font: inherit; color: inherit; text-align: left; transition: background 0.15s ease; -webkit-tap-highlight-color: transparent; pointer-events: auto; }
+    .lang-opt:hover { background: rgba(14, 165, 164, 0.08); }
+    .lang-opt:active { background: rgba(14, 165, 164, 0.15); }
+    .lang-opt.lang-opt-selected { background: rgba(14, 165, 164, 0.12); font-weight: 600; }
+    .dark .lang-opt:hover { background: rgba(14, 165, 164, 0.12); }
+    .dark .lang-opt:active { background: rgba(14, 165, 164, 0.2); }
+    .dark .lang-opt.lang-opt-selected { background: rgba(14, 165, 164, 0.18); }
     #nav-menu-dropdown a, #nav-menu-dropdown button { margin: 2px 0; }
     .nav-menu-mobile-only { display: none; }
     @media (max-width: 640px) {
@@ -1584,8 +1622,9 @@
     .elite-header{
       position: sticky;
       top: 0;
-      z-index: 200;
+      z-index: 1001;
       width: 100%;
+      max-width: 100%;
       overflow-x: clip;
       padding-top: env(safe-area-inset-top);
       background: rgba(255,255,255,.82);
@@ -1916,10 +1955,10 @@
   <!-- Enterprise glass header: sticky + compact on scroll + pill nav + premium CTA -->
   <header id="main-header" class="header elite-header">
     <div class="header-inner elite-header__inner">
-      <a href="#" class="flex items-center shrink-0 elite-brand" aria-label="Norya Ana Sayfa">
+      <a href="#" class="header-logo-link flex items-center shrink-0 elite-brand" aria-label="Norya Ana Sayfa">
         <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="logo" width="200" height="50" loading="eager" />
       </a>
-      <nav class="nav-shell elite-nav" aria-label="Ana menü">
+      <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
         <a href="#nasil-calisir" class="nav-link" data-nav="nasil-calisir" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
@@ -1927,7 +1966,7 @@
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Kurumsal</a>
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
-      <div class="right-zone">
+      <div class="header-right-zone">
         <button type="button" onclick="toggleDark()" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
@@ -1936,32 +1975,29 @@
             <span aria-hidden="true">🌐</span>
             <span id="lang-current">EN</span>
           </button>
-          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h" style="right: 0; top: 0;">
-            <button type="button" data-lang="tr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl" onclick="window.chooseLang&&window.chooseLang('tr')">Türkçe</button>
-            <button type="button" data-lang="en" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('en')">English</button>
-            <button type="button" data-lang="de" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('de')">Deutsch</button>
-            <button type="button" data-lang="he" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl" onclick="window.chooseLang&&window.chooseLang('he')">עברית</button>
-            <button type="button" data-lang="ar" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl" onclick="window.chooseLang&&window.chooseLang('ar')">العربية</button>
-            <button type="button" data-lang="hi" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('hi')">हिन्दी</button>
-            <button type="button" data-lang="it" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('it')">Italiano</button>
-            <button type="button" data-lang="es" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('es')">Español</button>
-            <button type="button" data-lang="fr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('fr')">Français</button>
-            <button type="button" data-lang="el" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('el')">Ελληνικά</button>
-            <button type="button" data-lang="cs" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('cs')">Čeština</button>
-            <button type="button" data-lang="sr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" onclick="window.chooseLang&&window.chooseLang('sr')">Srpski</button>
+          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h" style="right: 0; top: 0; pointer-events: auto;">
+            <button type="button" data-lang="en" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl" onclick="window.switchLocale&amp;&amp;window.switchLocale('en')">English</button>
+            <button type="button" data-lang="de" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('de')">Deutsch</button>
+            <button type="button" data-lang="it" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('it')">Italiano</button>
+            <button type="button" data-lang="fr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('fr')">Français</button>
+            <button type="button" data-lang="es" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('es')">Español</button>
+            <button type="button" data-lang="tr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('tr')">Türkçe</button>
+            <button type="button" data-lang="ar" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl" onclick="window.switchLocale&amp;&amp;window.switchLocale('ar')">العربية</button>
+            <button type="button" data-lang="hi" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('hi')">हिन्दी</button>
+            <button type="button" data-lang="he" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" dir="rtl" onclick="window.switchLocale&amp;&amp;window.switchLocale('he')">עברית</button>
           </div>
-          <script>!function(){var m=document.getElementById("lang-modal");if(m){function pickLang(e){var t=e.target;while(t&&t!==m){if(t.classList&&t.classList.contains("lang-opt")){var l=t.getAttribute("data-lang");if(l&&window.chooseLang){e.preventDefault();e.stopPropagation();window.chooseLang(l);}return;}t=t.parentElement;} }m.addEventListener("click",pickLang,true);m.addEventListener("touchend",pickLang,true);}}();</script>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
           <button type="button" onclick="openLogin()" class="secondary-link" data-i18n="nav_login">Giriş</button>
           <button type="button" onclick="openRegister()" class="secondary-link" data-i18n="nav_register">Ücretsiz Başla</button>
         </span>
-        <span id="nav-user" class="hidden items-center gap-2">
+        <span id="nav-user" class="hidden items-center gap-2 header-desktop-only">
           <button type="button" onclick="openProfile()" class="secondary-link header-desktop-only" data-i18n="nav_profile">Profil</button>
-          <button type="button" onclick="openAnalyze()" class="primary-cta header-cta-inline elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></button>
+          <button type="button" onclick="openAnalyze()" class="primary-cta header-cta-inline header-cta-desktop elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></button>
           <button type="button" onclick="logout()" class="secondary-link header-desktop-only" data-i18n="nav_logout">Çıkış</button>
         </span>
-        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
         <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" id="hamburger-btn"><span aria-hidden="true">☰</span></button>
       </div>
     </div>
@@ -1973,15 +2009,6 @@
       <button type="button" class="drawer-close" onclick="closeMobileDrawer()" aria-label="Menüyü kapat" id="drawer-close-btn">✕</button>
     </div>
     <div class="drawer-body">
-      <a href="#analyze-section" onclick="closeMobileDrawer(); openAnalyze(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
-      <a href="#hakkimizda" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
-      <a href="#nasil-calisir" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
-      <a href="#yorumlar" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
-      <a href="#fiyatlandirma" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
-      <a href="/kurumsal" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
-      <a href="/blog" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
-      <a href="#sss" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
-      <a href="/legal/iletisim" class="drawer-link legal-lang-link" onclick="closeMobileDrawer()" data-i18n="nav_contact">Bize Ulaşın</a>
       <div class="drawer-section">
         <button type="button" onclick="closeMobileDrawer(); toggleLangModal();" class="drawer-link w-full text-left" data-i18n="aria_select_language">Dil seçin</button>
         <button type="button" onclick="closeMobileDrawer(); toggleDark();" class="drawer-link w-full text-left" id="drawer-theme-btn">Tema (Açık/Koyu)</button>
@@ -1992,9 +2019,17 @@
       </div>
       <div id="drawer-user-wrap" class="drawer-section hidden flex flex-col gap-2">
         <button type="button" onclick="closeMobileDrawer(); openProfile();" class="drawer-link w-full text-left" data-i18n="nav_profile">Profil</button>
-        <button type="button" onclick="closeMobileDrawer(); openAnalyze();" class="drawer-link w-full text-left font-semibold bg-[#0EA5A4] text-white hover:bg-[#0d9488] border-0" data-i18n="nav_analyze">Analiz Yap</button>
         <button type="button" onclick="closeMobileDrawer(); logout();" class="drawer-link w-full text-left" data-i18n="nav_logout">Çıkış</button>
       </div>
+      <a href="#analyze-section" onclick="closeMobileDrawer(); openAnalyze(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
+      <a href="#hakkimizda" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
+      <a href="#nasil-calisir" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
+      <a href="#yorumlar" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
+      <a href="#fiyatlandirma" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
+      <a href="/kurumsal" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
+      <a href="/blog" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
+      <a href="#sss" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
+      <a href="/legal/iletisim" class="drawer-link legal-lang-link" onclick="closeMobileDrawer()" data-i18n="nav_contact">Bize Ulaşın</a>
       <p class="drawer-trust-meta" data-i18n="drawer_trust_meta">KVKK & GDPR · 256-bit SSL · Güvenli Ödeme</p>
     </div>
   </aside>
@@ -9069,8 +9104,34 @@
       }
     };
 
+    var SUPPORTED_LOCALES = ['en','de','it','fr','es','tr','ar','hi','he'];
     var LANG_LABELS = { tr: "TR", en: "EN", de: "DE", he: "HE", ar: "AR", hi: "HI", it: "IT", es: "ES", fr: "FR", el: "EL", cs: "CS", sr: "SR" };
     function getLang() { return localStorage.getItem(LANG_KEY) || "en"; }
+    function getEffectivePath() {
+      var pathname = window.location.pathname || '/';
+      var segments = pathname.split('/').filter(Boolean);
+      if (segments.length > 0 && SUPPORTED_LOCALES.indexOf(segments[0]) !== -1) {
+        segments.shift();
+        return '/' + segments.join('/');
+      }
+      return pathname;
+    }
+    function switchLocale(nextLocale) {
+      if (!nextLocale || typeof nextLocale !== 'string') return;
+      nextLocale = String(nextLocale).toLowerCase().trim();
+      if (SUPPORTED_LOCALES.indexOf(nextLocale) === -1) nextLocale = 'en';
+      var currentPath = window.location.pathname || '/';
+      var segments = currentPath.split('/').filter(Boolean);
+      if (segments.length > 0 && SUPPORTED_LOCALES.indexOf(segments[0]) !== -1) {
+        segments[0] = nextLocale;
+      } else {
+        segments.unshift(nextLocale);
+      }
+      var newPath = '/' + segments.join('/');
+      var hash = window.location.hash || '';
+      var search = window.location.search || '';
+      window.location.href = newPath + search + hash;
+    }
     function getTestMode() { return localStorage.getItem(TEST_MODE_KEY) === '1'; }
     function setTestMode(on) { localStorage.setItem(TEST_MODE_KEY, on ? '1' : ''); updateTestModeUI(); }
     function toggleTestMode() { setTestMode(!getTestMode()); }
@@ -9089,7 +9150,7 @@
       var wrap = document.getElementById("lang-wrap");
       var isNowHidden = m.classList.toggle("hidden");
       if (!isNowHidden) {
-        var isNarrow = !wrap || wrap.offsetParent === null || window.innerWidth < 1200;
+        var isNarrow = !wrap || wrap.offsetParent === null || window.innerWidth < 1024;
         if (isNarrow) {
           document.body.appendChild(m);
           m.classList.add("lang-modal-fixed");
@@ -9147,8 +9208,9 @@
     }
     window.chooseLang = chooseLang;
     window.setLang = setLang;
+    window.switchLocale = switchLocale;
     function toggleNavMenu() {
-      if (window.innerWidth < 1200) openMobileDrawer();
+      if (window.innerWidth < 1024) openMobileDrawer();
     }
     function closeNavMenu() {
       closeMobileDrawer();
@@ -9196,14 +9258,17 @@
     }
     document.addEventListener("click", function(e) {
       var wrap = document.getElementById("lang-wrap");
-      if (!wrap) return;
-      var opt = e.target && e.target.closest && e.target.closest(".lang-opt");
-      if (opt && wrap.contains(opt)) {
-        var lang = opt.getAttribute("data-lang");
-        if (lang && typeof chooseLang === "function") { e.preventDefault(); chooseLang(lang); return; }
-      }
       var lm = document.getElementById("lang-modal");
-      var clickedOutside = !wrap.contains(e.target) && (!lm || !lm.contains(e.target));
+      var opt = e.target && e.target.closest && e.target.closest(".lang-opt");
+      if (opt && typeof window.switchLocale === "function") {
+        var inWrap = wrap && wrap.contains(opt);
+        var inModal = lm && lm.contains(opt);
+        if (inWrap || inModal) {
+          var lang = opt.getAttribute("data-lang");
+          if (lang) { e.preventDefault(); e.stopPropagation(); window.switchLocale(lang); return; }
+        }
+      }
+      var clickedOutside = (!wrap || !wrap.contains(e.target)) && (!lm || !lm.contains(e.target));
       if (clickedOutside && lm) {
         lm.classList.add("hidden");
         if (wrap && !wrap.contains(lm)) wrap.appendChild(lm);
@@ -9221,7 +9286,7 @@
     (function() {
       function setActiveNav() {
         var hash = (window.location.hash || '').replace('#', '') || 'hakkimizda';
-        if (window.location.pathname === '/kurumsal' || (window.location.pathname + window.location.search).indexOf('kurumsal') !== -1) hash = 'kurumsal';
+        if (getEffectivePath() === '/kurumsal' || (window.location.pathname + window.location.search).indexOf('kurumsal') !== -1) hash = 'kurumsal';
         document.querySelectorAll('.nav-link[data-nav]').forEach(function(a) {
           var aHash = (a.getAttribute('href') || '').split('?')[0].replace('#', '').replace(/^\/kurumsal.*/, 'kurumsal');
           if (aHash === hash || a.getAttribute('data-nav') === hash) a.classList.add('active');
@@ -9268,6 +9333,9 @@
       if (typeof updateLegalLinksLang === 'function') updateLegalLinksLang();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
+      document.querySelectorAll(".lang-opt").forEach(function(btn) {
+        btn.classList.toggle("lang-opt-selected", btn.getAttribute("data-lang") === lang);
+      });
       document.querySelectorAll("[data-i18n]").forEach(function(el) {
         var key = (el.getAttribute("data-i18n") || "").trim();
         var text = getTranslation(lang, key);
@@ -10778,6 +10846,14 @@
 
     updateNav();
     (function applyInitialLang() {
+      var pathname = window.location.pathname || '/';
+      var segments = pathname.split('/').filter(Boolean);
+      var pathLang = segments.length > 0 && SUPPORTED_LOCALES.indexOf(segments[0]) !== -1 ? segments[0] : null;
+      if (pathLang && typeof T !== 'undefined' && T[pathLang]) {
+        localStorage.setItem(LANG_KEY, pathLang);
+        setLang(pathLang);
+        return;
+      }
       var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
       var urlLang = params && params.get('lang') ? params.get('lang').toLowerCase().trim() : null;
       if (urlLang && typeof T !== 'undefined' && T[urlLang]) {

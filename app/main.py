@@ -3106,6 +3106,26 @@ def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X
     return {"deleted": deleted}
 
 
+# Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
+SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he"})
+
+
+@app.get("/{lang}", response_class=HTMLResponse)
+def index_with_locale(lang: str):
+    """Locale prefix tek segment: /en, /tr → SPA."""
+    if lang.lower() in SUPPORTED_LOCALES:
+        return _index_response()
+    raise HTTPException(status_code=404, detail="Not Found")
+
+
+@app.get("/{lang}/{path:path}", response_class=HTMLResponse)
+def index_with_locale_path(lang: str, path: str):
+    """Locale prefix + path: /en/pricing, /de/report → SPA (blog hariç; /{lang}/blog ayrı route)."""
+    if lang.lower() in SUPPORTED_LOCALES:
+        return _index_response()
+    raise HTTPException(status_code=404, detail="Not Found")
+
+
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt():
     """SEO: Allow all, sitemap canonical URL."""
