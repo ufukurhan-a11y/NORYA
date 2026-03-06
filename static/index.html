@@ -119,6 +119,10 @@
       text-size-adjust: 100%;
       -webkit-tap-highlight-color: transparent;
     }
+    /* iOS: input/select focus zoom engellemek için 16px+ font (opsiyonel) */
+    @media (max-width: 640px) {
+      input, select, textarea { font-size: 16px !important; }
+    }
     body {
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
@@ -139,6 +143,7 @@
       width: 100%;
       max-width: 100%;
       overflow-x: clip;
+      overflow-y: visible;
       position: relative;
       z-index: 0;
       background: radial-gradient(1200px 600px at 30% 20%, rgba(14,165,164,.35), transparent 60%),
@@ -146,8 +151,11 @@
     }
     .hero-inner {
       max-width: 1100px;
+      width: 100%;
       margin: 0 auto;
       padding: 56px 16px;
+      min-width: 0;
+      box-sizing: border-box;
     }
     .drop-shadow-soft { box-shadow: var(--norya-shadow); }
     .norya-card-shadow { box-shadow: var(--norya-card-shadow); }
@@ -189,9 +197,11 @@
     .trust-bar-pill { white-space: nowrap; }
     @media (max-width: 640px) { .trust-bar-pill { white-space: normal; } }
     /* Global standartlar — Health Score altında, özel blok, ultra premium / elit */
+    .trust-global-section { overflow-x: clip; max-width: 100%; }
     .trust-global-section .premium-wrap { max-width: 100%; }
-    .trust-global-pill { white-space: nowrap; }
+    .trust-global-pill { white-space: nowrap; min-width: 0; }
     @media (max-width: 640px) { .trust-global-pill { white-space: normal; } }
+    @media (max-width: 480px) { .trust-global-section { padding-left: 1rem; padding-right: 1rem; } }
     .features-grid-section .premium-wrap { overflow-x: clip; min-width: 0; }
     .feature-card { min-width: 0; }
     .cta-primary-btn:focus-visible, .cta-secondary-btn:focus-visible { outline: none; }
@@ -256,9 +266,12 @@
     }
     .pricing-container {
       max-width: 1240px;
+      width: 100%;
       margin: 0 auto;
       padding-inline: 16px;
       min-width: 0;
+      overflow-x: clip;
+      box-sizing: border-box;
     }
     @media (min-width: 768px) {
       .pricing-container { padding-inline: 24px; }
@@ -427,17 +440,19 @@
       text-decoration: line-through;
       opacity: 0.6;
     }
-    /* Elite Hero Card: ultra-premium health-tech (InsideTracker / Function Health level) */
+    /* Elite Hero Card: ultra-premium health-tech (InsideTracker / Function Health level) — sağ taşma yok */
     .elite-hero-section {
       background: linear-gradient(145deg, #0f172a 0%, #1e293b 30%, #134e4a 70%, #0f766e 100%);
       position: relative;
       overflow: hidden;
+      overflow-x: clip;
+      max-width: 100%;
     }
     .elite-hero-section::before {
       content: '';
       position: absolute;
       top: -50%;
-      right: -20%;
+      right: 0;
       width: 70%;
       height: 140%;
       background: radial-gradient(ellipse, rgba(14, 165, 164, 0.22) 0%, transparent 65%);
@@ -684,9 +699,13 @@
     .intake-cta:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,0.25); }
     /* PWA banner kaldırıldı — body padding artık gerekmiyor */
     /* Premium health SaaS: mobil-first, accent #0EA5A4, bol beyaz */
-    .premium-wrap { max-width: var(--premium-container, 1100px); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; overflow-x: clip; min-width: 0; }
+    .premium-wrap { max-width: var(--premium-container, 1100px); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; overflow-x: clip; min-width: 0; box-sizing: border-box; }
+    @media (max-width: 360px) { .premium-wrap { padding-left: 0.75rem; padding-right: 0.75rem; } }
+    @media (min-width: 768px) { .premium-wrap { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { .premium-wrap { padding-left: 2rem; padding-right: 2rem; } }
     .premium-section { padding-top: var(--section-gap, 28px); padding-bottom: var(--section-gap, 28px); }
     @media (min-width: 640px) { .premium-section { padding-top: 32px; padding-bottom: 32px; } }
+    @media (min-width: 768px) { .premium-section { padding-top: 36px; padding-bottom: 36px; } }
     .landing-hidden { display: none !important; }
     @media (max-width: 639px) {
       body { font-size: 16px; }
@@ -694,8 +713,10 @@
     }
     /* Global: yatay taşma yok — mobilde tam ekran, sağda beyaz şerit kalmasın */
     html { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; box-sizing: border-box; }
-    body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
+    body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left, 0); padding-right: env(safe-area-inset-right, 0); padding-bottom: env(safe-area-inset-bottom, 0); overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
     .max-w-5xl, .max-w-6xl, .max-w-4xl, .max-w-3xl, .max-w-2xl { min-width: 0; }
+    /* Tüm section/container taşma koruması */
+    section, .premium-wrap, .pricing-container, .hero-inner { box-sizing: border-box; }
     /* iOS Safari: dinamik viewport (adres çubuğu dahil) */
     @supports (min-height: 100dvh) {
       body { min-height: 100dvh; }
@@ -711,17 +732,26 @@
     /* Hero: 768px altı — CTA above the fold, daha az padding, küçük başlık */
     @media (max-width: 767px) {
       .gradient-hero { padding-top: calc(3.5rem + env(safe-area-inset-top, 0px)) !important; padding-bottom: 1.5rem !important; }
-      .hero-inner { padding-top: 0.5rem !important; }
+      .hero-inner { padding-top: 0.5rem !important; padding-left: 1rem !important; padding-right: 1rem !important; }
       .hero-title { font-size: 1.35rem !important; line-height: 1.3 !important; margin-bottom: 0.75rem !important; }
       .hero-desc { font-size: 0.9375rem !important; margin-bottom: 1rem !important; }
-      .hero-cta-wrap { margin-bottom: 0 !important; }
+      .hero-cta-wrap { margin-bottom: 0 !important; gap: 0.75rem !important; }
       .hero-trust-list { margin-top: 1rem !important; }
       .hero-sample-block { margin-top: 1.5rem !important; }
-      .hero-cta-btn { min-height: 44px; padding: 0.75rem 1.25rem !important; font-size: 0.9375rem !important; }
+      .hero-cta-btn { min-height: 44px; padding: 0.75rem 1.25rem !important; font-size: 0.9375rem !important; width: 100%; max-width: 100%; box-sizing: border-box; }
+      .hero-secondary-btn { width: 100%; max-width: 100%; box-sizing: border-box; }
+    }
+    @media (max-width: 480px) {
+      .hero-title { font-size: 1.25rem !important; }
+      .hero-desc { font-size: 0.875rem !important; }
     }
     @media (max-width: 390px) {
-      .hero-title { font-size: 1.2rem !important; }
-      .hero-desc { font-size: 0.875rem !important; }
+      .hero-title { font-size: 1.15rem !important; }
+      .hero-desc { font-size: 0.8125rem !important; }
+    }
+    @media (max-width: 360px) {
+      .hero-inner { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+      .hero-title { font-size: 1.05rem !important; }
     }
     /* Örnek Klinik Rapor (sample-report): tek kart, slider, dots, mobil swipe */
     .sample-report { --sample-brand: #0EA5A4; padding: 2.5rem 1rem 3rem; background: var(--accent-50, #f8fafc); }
@@ -1022,14 +1052,17 @@
     }
     .header-inner {
       max-width: 1240px; margin: 0 auto;
-      padding: 12px 14px;
-      padding-left: max(14px, env(safe-area-inset-left));
-      padding-right: max(14px, env(safe-area-inset-right));
-      display: flex; align-items: center; justify-content: space-between; gap: 10px;
+      padding: 10px 12px;
+      padding-left: max(12px, env(safe-area-inset-left));
+      padding-right: max(12px, env(safe-area-inset-right));
+      display: flex; align-items: center; justify-content: space-between; gap: 8px;
       flex-wrap: nowrap;
       min-width: 0;
       overflow: hidden;
       transition: padding .22s ease;
+    }
+    @media (min-width: 375px) {
+      .header-inner { padding: 12px 14px; padding-left: max(14px, env(safe-area-inset-left)); padding-right: max(14px, env(safe-area-inset-right)); gap: 10px; }
     }
     @media (min-width: 768px) {
       .header-inner { padding: 14px 18px; gap: 12px; }
@@ -1145,7 +1178,12 @@
     }
     .primary-cta .arrow { margin-left: 10px; opacity: .9; }
     .right-zone {
-      display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 0;
+      display: flex; align-items: center; gap: 8px; flex-shrink: 1; min-width: 0;
+      overflow: hidden;
+    }
+    /* Tablet: Giriş/Ücretsiz Başla header'da sıkışmasın — sadece CTA + dil + hamburger */
+    @media (min-width: 768px) and (max-width: 1023px) {
+      .header #nav-auth { display: none !important; }
     }
     /* Hamburger: visible below 1200px only */
     .hamburger {
@@ -1321,41 +1359,40 @@
     /* WhatsApp FAB: safe-area uyumlu, yatay taşma yok, mobilde sadece ikon */
     .wa-fab {
       position: fixed;
-      right: 14px;
-      bottom: calc(14px + env(safe-area-inset-bottom));
+      left: auto;
+      right: max(12px, env(safe-area-inset-right, 0));
+      bottom: max(12px, env(safe-area-inset-bottom, 0));
       z-index: 40;
-      max-width: calc(100% - 24px);
+      max-width: 56px;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
+      transform: none;
     }
     .wa-fab-text { color: #fff; -webkit-tap-highlight-color: transparent; }
     @media (max-width: 420px) {
       .wa-fab .wa-fab-text { display: none; }
+      .wa-fab {
+        min-width: 44px; max-width: 52px; padding: 0;
+        right: max(10px, env(safe-area-inset-right, 0));
+        bottom: max(10px, env(safe-area-inset-bottom, 0));
+      }
     }
     @media (max-width: 639px) {
       .wa-fab {
-        min-height: 48px; min-width: 44px; padding-left: 14px; padding-right: 18px; font-size: 0.875rem;
-        right: max(14px, env(safe-area-inset-right));
-        bottom: calc(14px + env(safe-area-inset-bottom));
+        min-height: 48px; min-width: 44px; padding-left: 12px; padding-right: 14px; font-size: 0.8125rem;
+        right: max(12px, env(safe-area-inset-right, 0));
+        bottom: max(12px, env(safe-area-inset-bottom, 0));
+        max-width: 160px;
       }
       .wa-fab:active { transform: scale(0.98); }
-      /* Mobil: FAB altında rezerve alan — içerik kapatılmasın */
-      body {
-        padding-right: calc(72px + env(safe-area-inset-right, 0px));
-        padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
-      }
+      body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0)); }
     }
-    @media (max-width: 420px) {
-      .wa-fab {
-        right: 12px;
-        bottom: calc(12px + env(safe-area-inset-bottom));
-        transform: scale(0.92);
-        max-width: calc(100% - 24px);
-      }
+    @media (min-width: 421px) and (max-width: 639px) {
+      .wa-fab { max-width: 160px; }
     }
     @media (min-width: 640px) {
-      .wa-fab { padding: 0; right: max(24px, env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); }
+      .wa-fab { padding: 0; right: max(20px, env(safe-area-inset-right, 0)); bottom: max(14px, env(safe-area-inset-bottom, 0)); max-width: 56px; }
     }
     /* Profile / Dashboard: Apple-level premium container + cards */
     #profile-section {
@@ -1516,22 +1553,31 @@
     }
     .hero-secondary-btn:focus{ outline:none; box-shadow: var(--ring); }
 
-    /* Güven rozetleri chip */
+    /* Güven rozetleri chip — wrap, taşma yok */
     .trust-chips{
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      justify-content:center;
+      display: flex;
+      gap: 8px 12px;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
       margin-top: 12px;
+      max-width: 100%;
+      min-width: 0;
     }
     .trust-chips .chip{
-      padding: 7px 10px;
+      padding: 6px 10px;
       border-radius: var(--pill);
       background: rgba(255,255,255,.46);
       border: 1px solid rgba(255,255,255,.40);
-      font-size: 12px;
-      font-weight: 900;
+      font-size: 11px;
+      font-weight: 700;
       color: rgba(7,19,26,.78);
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    @media (max-width: 480px) {
+      .trust-chips { gap: 6px 10px; }
+      .trust-chips .chip { font-size: 10px; padding: 5px 8px; }
     }
 
     /* ===== Ultra Premium Header (ONLY NAV) ===== */
@@ -1561,6 +1607,10 @@
       margin: 0 auto;
       min-width: 0;
       overflow: hidden;
+      box-sizing: border-box;
+    }
+    @media (max-width: 1023px) {
+      .elite-header__inner { padding-left: max(12px, env(safe-area-inset-left)); padding-right: max(12px, env(safe-area-inset-right)); }
     }
 
     /* Nav visibility by breakpoint in .nav-shell */
@@ -1663,7 +1713,7 @@
       justify-content:center;
     }
 
-    /* Logo and right zone: no overflow */
+    /* Logo and right zone: no overflow — mobile-first premium */
     .elite-brand {
       flex-shrink: 0;
       min-width: 0;
@@ -1672,9 +1722,15 @@
     }
     .elite-brand .logo {
       width: auto;
-      height: 24px;
-      max-width: 140px;
+      height: 22px;
+      max-width: 100%;
       object-fit: contain;
+    }
+    @media (min-width: 360px) {
+      .elite-brand .logo { height: 24px; max-width: 120px; }
+    }
+    @media (min-width: 390px) {
+      .elite-brand .logo { max-width: 140px; }
     }
     @media (min-width: 768px) {
       .elite-brand .logo { height: 26px; max-width: 180px; }
@@ -1682,12 +1738,15 @@
     @media (min-width: 1200px) {
       .elite-brand .logo { height: 28px; max-width: 100%; }
     }
-    .right-zone .elite-cta-btn { flex-shrink: 0; max-width: none; }
+    .right-zone .elite-cta-btn { flex-shrink: 0; min-width: 0; max-width: none; }
+    @media (max-width: 1199px) {
+      .right-zone .elite-cta-btn { max-width: 100%; padding: 0 12px; font-size: 0.8125rem; white-space: nowrap; }
+    }
     @media (max-width: 767px) {
-      .right-zone .elite-cta-btn { max-width: 48vw; padding: 0 10px; font-size: 0.8125rem; }
+      .right-zone .elite-cta-btn { padding: 0 10px; font-size: 0.75rem; }
     }
     @media (max-width: 390px) {
-      .elite-brand .logo { max-width: 110px; height: 22px; }
+      .elite-brand .logo { max-width: 100px; height: 20px; }
     }
 
     /* ===== PRICING GRID ===== */
@@ -1707,7 +1766,8 @@
       box-shadow: var(--shadow2);
       backdrop-filter: blur(14px);
       -webkit-backdrop-filter: blur(14px);
-      overflow:hidden;
+      overflow: hidden;
+      overflow-x: clip;
       padding: 20px 18px 16px;
       display:flex;
       flex-direction:column;
@@ -1717,7 +1777,9 @@
     .pricing-elite-card::before{
       content:"";
       position:absolute;
-      inset:-40% -40% auto -40%;
+      top: -40%;
+      left: -40%;
+      right: 0;
       height: 180px;
       background: radial-gradient(circle at 30% 30%, rgba(14,165,164,.22), rgba(255,255,255,0) 65%);
       pointer-events:none;
@@ -1875,19 +1937,20 @@
             <span id="lang-current">EN</span>
           </button>
           <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h" style="right: 0; top: 0;">
-            <button type="button" onclick="chooseLang('tr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl">Türkçe</button>
-            <button type="button" onclick="chooseLang('en')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">English</button>
-            <button type="button" onclick="chooseLang('de')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Deutsch</button>
-            <button type="button" onclick="chooseLang('he')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl">עברית</button>
-            <button type="button" onclick="chooseLang('ar')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl">العربية</button>
-            <button type="button" onclick="chooseLang('hi')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">हिन्दी</button>
-            <button type="button" onclick="chooseLang('it')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Italiano</button>
-            <button type="button" onclick="chooseLang('es')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Español</button>
-            <button type="button" onclick="chooseLang('fr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Français</button>
-            <button type="button" onclick="chooseLang('el')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Ελληνικά</button>
-            <button type="button" onclick="chooseLang('cs')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Čeština</button>
-            <button type="button" onclick="chooseLang('sr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl">Srpski</button>
+            <button type="button" data-lang="tr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl" onclick="window.chooseLang&&window.chooseLang('tr')">Türkçe</button>
+            <button type="button" data-lang="en" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('en')">English</button>
+            <button type="button" data-lang="de" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('de')">Deutsch</button>
+            <button type="button" data-lang="he" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl" onclick="window.chooseLang&&window.chooseLang('he')">עברית</button>
+            <button type="button" data-lang="ar" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl" onclick="window.chooseLang&&window.chooseLang('ar')">العربية</button>
+            <button type="button" data-lang="hi" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('hi')">हिन्दी</button>
+            <button type="button" data-lang="it" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('it')">Italiano</button>
+            <button type="button" data-lang="es" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('es')">Español</button>
+            <button type="button" data-lang="fr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('fr')">Français</button>
+            <button type="button" data-lang="el" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('el')">Ελληνικά</button>
+            <button type="button" data-lang="cs" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.chooseLang&&window.chooseLang('cs')">Čeština</button>
+            <button type="button" data-lang="sr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" onclick="window.chooseLang&&window.chooseLang('sr')">Srpski</button>
           </div>
+          <script>!function(){var m=document.getElementById("lang-modal");if(m){function pickLang(e){var t=e.target;while(t&&t!==m){if(t.classList&&t.classList.contains("lang-opt")){var l=t.getAttribute("data-lang");if(l&&window.chooseLang){e.preventDefault();e.stopPropagation();window.chooseLang(l);}return;}t=t.parentElement;} }m.addEventListener("click",pickLang,true);m.addEventListener("touchend",pickLang,true);}}();</script>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
           <button type="button" onclick="openLogin()" class="secondary-link" data-i18n="nav_login">Giriş</button>
@@ -9023,30 +9086,67 @@
     function toggleLangModal() {
       var m = document.getElementById("lang-modal");
       var btn = document.getElementById("lang-btn");
+      var wrap = document.getElementById("lang-wrap");
       var isNowHidden = m.classList.toggle("hidden");
-      if (!isNowHidden && btn) {
-        var r = btn.getBoundingClientRect();
-        var w = 208;
-        m.style.top = (r.bottom + 8) + "px";
-        var left = r.right - w;
-        if (left < 8) left = 8;
-        m.style.left = left + "px";
-        m.style.right = "auto";
-      } else if (isNowHidden) {
-        m.style.top = "";
+      if (!isNowHidden) {
+        var isNarrow = !wrap || wrap.offsetParent === null || window.innerWidth < 1200;
+        if (isNarrow) {
+          document.body.appendChild(m);
+          m.classList.add("lang-modal-fixed");
+          m.style.position = "fixed";
+          m.style.left = "50%";
+          m.style.right = "auto";
+          m.style.top = "50%";
+          m.style.transform = "translate(-50%, -50%)";
+          m.style.maxHeight = "70vh";
+        } else if (btn) {
+          if (wrap && !wrap.contains(m)) wrap.appendChild(m);
+          var r = btn.getBoundingClientRect();
+          var w = 208;
+          m.style.top = (r.bottom + 8) + "px";
+          var left = r.right - w;
+          if (left < 8) left = 8;
+          m.style.left = left + "px";
+          m.style.right = "auto";
+        }
+      } else {
+        m.classList.remove("lang-modal-fixed");
+        m.style.position = "";
         m.style.left = "";
         m.style.right = "";
+        m.style.top = "";
+        m.style.transform = "";
+        m.style.maxHeight = "";
+        if (wrap && !wrap.contains(m)) wrap.appendChild(m);
       }
     }
     function chooseLang(lang) {
       if (!lang || typeof lang !== 'string') return;
-      lang = lang.toLowerCase().trim();
-      if (typeof T !== 'undefined' && !T[lang]) lang = 'en';
-      document.getElementById("lang-modal").classList.add("hidden");
+      lang = String(lang).toLowerCase().trim();
+      if (typeof T === 'undefined') return;
+      if (!T[lang]) lang = 'en';
+      var modal = document.getElementById("lang-modal");
+      if (modal) {
+        modal.classList.add("hidden");
+        var wrap = document.getElementById("lang-wrap");
+        if (wrap && !wrap.contains(modal)) wrap.appendChild(modal);
+      }
+      localStorage.setItem(LANG_KEY, lang);
+      var base = window.location.pathname || '/';
+      var qs = window.location.search || '';
+      var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(qs) : null;
+      if (params) {
+        params.set('lang', lang);
+        var newUrl = base + '?' + params.toString() + (window.location.hash || '');
+        try { window.history.replaceState({ lang: lang }, '', newUrl); } catch (_) {}
+      }
       setLang(lang);
       setTimeout(function() { setLang(lang); }, 0);
       setTimeout(function() { setLang(lang); }, 100);
+      requestAnimationFrame(function() { setLang(lang); });
     }
+    window.chooseLang = chooseLang;
+    window.setLang = setLang;
     function toggleNavMenu() {
       if (window.innerWidth < 1200) openMobileDrawer();
     }
@@ -9096,7 +9196,18 @@
     }
     document.addEventListener("click", function(e) {
       var wrap = document.getElementById("lang-wrap");
-      if (wrap && !wrap.contains(e.target)) { var lm = document.getElementById("lang-modal"); if (lm) lm.classList.add("hidden"); }
+      if (!wrap) return;
+      var opt = e.target && e.target.closest && e.target.closest(".lang-opt");
+      if (opt && wrap.contains(opt)) {
+        var lang = opt.getAttribute("data-lang");
+        if (lang && typeof chooseLang === "function") { e.preventDefault(); chooseLang(lang); return; }
+      }
+      var lm = document.getElementById("lang-modal");
+      var clickedOutside = !wrap.contains(e.target) && (!lm || !lm.contains(e.target));
+      if (clickedOutside && lm) {
+        lm.classList.add("hidden");
+        if (wrap && !wrap.contains(lm)) wrap.appendChild(lm);
+      }
     });
     (function() {
       var header = document.getElementById('main-header');
@@ -9137,15 +9248,12 @@
     }
     function applyTranslationToElement(el, text) {
       if (!text) return;
-      if (el.childNodes.length > 1) {
-        var firstText = null;
-        for (var i = 0; i < el.childNodes.length; i++) {
-          if (el.childNodes[i].nodeType === 3) { firstText = el.childNodes[i]; break; }
-        }
-        if (firstText) firstText.nodeValue = text;
-        else el.textContent = text;
-      } else if (el.firstChild && el.firstChild.nodeType === 3) {
-        el.firstChild.nodeValue = text;
+      var firstText = null;
+      for (var i = 0; i < el.childNodes.length; i++) {
+        if (el.childNodes[i].nodeType === 3) { firstText = el.childNodes[i]; break; }
+      }
+      if (firstText) {
+        firstText.nodeValue = text;
       } else {
         el.textContent = text;
       }
@@ -9190,6 +9298,13 @@
         var n = (analyzeText && analyzeText.value) ? analyzeText.value.length : 0;
         charEl.textContent = wizardCount.replace("{n}", String(n));
       }
+      var reportHeroTitle = document.getElementById("report-hero-title");
+      var reportHeroSub = document.getElementById("report-hero-sub");
+      if (reportHeroTitle) reportHeroTitle.textContent = getTranslation(lang, "report_hero_title") || reportHeroTitle.textContent;
+      if (reportHeroSub) reportHeroSub.textContent = getTranslation(lang, "report_hero_sub") || reportHeroSub.textContent;
+      try {
+        if (typeof window.dispatchEvent === "function") window.dispatchEvent(new CustomEvent("norya:lang-changed", { detail: { lang: lang } }));
+      } catch (_) {}
       setTimeout(function() {
         document.querySelectorAll("[data-i18n]").forEach(function(el) {
           var key = (el.getAttribute("data-i18n") || "").trim();
@@ -10670,13 +10785,15 @@
         setLang(urlLang);
         return;
       }
-      if (!localStorage.getItem(LANG_KEY)) {
+      var stored = localStorage.getItem(LANG_KEY);
+      if (!stored) {
         fetch(API_BASE + "/api/locale").then(function(r) { return r.json(); }).then(function(d) {
           var lang = (d.suggested && typeof T !== 'undefined' && T[d.suggested]) ? d.suggested : "en";
+          localStorage.setItem(LANG_KEY, lang);
           setLang(lang);
-        }).catch(function() { setLang("tr"); });
+        }).catch(function() { localStorage.setItem(LANG_KEY, "tr"); setLang("tr"); });
       } else {
-        setLang(getLang());
+        setLang(stored);
       }
     })();
     applyTheme();
