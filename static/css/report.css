@@ -97,13 +97,31 @@
   margin-top: 0.25rem;
 }
 .report-page .gauge-section .gauge-wrap {
-  max-width: 220px;
-  margin: 0.5rem 0;
+  max-width: 120px;
+  margin: 0.35rem 0;
+  filter: drop-shadow(0 2px 6px rgba(0, 0, 0, 0.05));
+}
+.report-page .gauge-section--compact .gauge-wrap {
+  max-width: 64px;
+  max-height: 40px;
+  margin: 0.25rem auto;
+}
+.report-page .gauge-section--compact .gauge-svg {
+  width: 100%;
+  height: auto;
+  max-height: 40px;
 }
 .report-page .gauge-svg {
   width: 100%;
   height: auto;
   display: block;
+}
+.report-page .gauge-section .gauge-score {
+  font-size: 14px;
+  font-weight: 800;
+}
+.report-page .gauge-section--compact .gauge-score {
+  font-size: 11px;
 }
 .report-page .gauge-svg .gauge-bg {
   stroke: #e5e7eb;
@@ -350,24 +368,49 @@
   flex-shrink: 0;
   color: #0EA5A4;
 }
+/* PDF tarzı parametre kartları — analiz sonucunda her değer ayrı kart */
 .report-page .report-biomarker-grid--multi {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 0.75rem;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 0.875rem;
 }
-@media (max-width: 768px) {
+@media (min-width: 640px) {
   .report-page .report-biomarker-grid--multi {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+  }
+}
+@media (min-width: 1024px) {
+  .report-page .report-biomarker-grid--multi {
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
   }
 }
 @media (max-width: 480px) {
   .report-page .report-biomarker-grid--multi {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
   }
 }
-.report-page .report-biomarker-card--normal { border-left: 4px solid #22c55e; }
-.report-page .report-biomarker-card--border { border-left: 4px solid #eab308; }
-.report-page .report-biomarker-card--risk { border-left: 4px solid #ef4444; }
+.report-page .report-biomarker-card {
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  padding: 1rem 1.1rem;
+  background: #fff;
+  min-height: 0;
+}
+.dark .report-page .report-biomarker-card {
+  background: rgba(30, 41, 59, 0.6);
+  border-color: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+}
+.report-page .report-biomarker-card--normal { border-left: 4px solid #22c55e; background: rgba(34, 197, 94, 0.04); }
+.report-page .report-biomarker-card--border { border-left: 4px solid #eab308; background: rgba(234, 179, 8, 0.05); }
+.report-page .report-biomarker-card--risk { border-left: 4px solid #ef4444; background: rgba(239, 68, 68, 0.04); }
+.dark .report-page .report-biomarker-card--normal { background: rgba(34, 197, 94, 0.08); }
+.dark .report-page .report-biomarker-card--border { background: rgba(234, 179, 8, 0.08); }
+.dark .report-page .report-biomarker-card--risk { background: rgba(239, 68, 68, 0.08); }
 
 /* Category score bars */
 .report-page .report-category-bars-section .report-category-bars { display: flex; flex-direction: column; gap: 0.65rem; }
@@ -772,6 +815,111 @@
   .report-page { --report-section-gap: 40px; }
 }
 
+/* Rapor sayfası: her zaman görünen aksiyon bloğu (İndir + Doktoruma götür) */
+.report-actions-inline {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem;
+}
+.report-actions-inline .report-action-btn--primary.report-action-btn--locked {
+  background: #94a3b8;
+  cursor: not-allowed;
+  opacity: 0.9;
+}
+
+/* Raporumu indir — analiz sonucu ekranında EN ÜSTTE, mutlaka görünsün */
+.report-download-cta {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  background: rgba(14, 165, 164, 0.06);
+  display: flex !important;
+  visibility: visible !important;
+}
+.report-download-cta--prominent {
+  padding: 1.25rem 1.5rem;
+  background: rgba(14, 165, 164, 0.12);
+  border-bottom: 2px solid rgba(14, 165, 164, 0.25);
+}
+.dark .report-download-cta {
+  border-bottom-color: rgba(255, 255, 255, 0.06);
+  background: rgba(14, 165, 164, 0.08);
+}
+.dark .report-download-cta--prominent {
+  background: rgba(14, 165, 164, 0.15);
+  border-bottom-color: rgba(14, 165, 164, 0.3);
+}
+.report-download-cta-inner {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.75rem 1rem;
+  max-width: 100%;
+  width: 100%;
+}
+.report-download-cta-label {
+  font-size: 0.875rem;
+  font-weight: 600;
+  color: var(--report-heading, #0f172a);
+  width: 100%;
+  margin-bottom: 0.25rem;
+}
+.dark .report-download-cta-label { color: #e2e8f0; }
+.report-download-cta-btns {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem;
+}
+.report-download-main-btn {
+  padding: 0.5rem 1.25rem;
+  border-radius: 10px;
+  font-size: 0.9375rem;
+  font-weight: 600;
+  background: #0EA5A4;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  transition: filter 0.2s;
+}
+.report-download-main-btn--large {
+  padding: 0.75rem 1.75rem;
+  font-size: 1rem;
+  min-height: 48px;
+  min-width: 180px;
+}
+.report-download-main-btn:hover { filter: brightness(1.08); }
+.report-download-main-btn.report-download-main-btn--locked {
+  background: #94a3b8;
+  cursor: pointer;
+  opacity: 0.9;
+}
+.report-download-secondary-btn {
+  padding: 0.5rem 1rem;
+  border-radius: 10px;
+  font-size: 0.875rem;
+  font-weight: 600;
+  background: transparent;
+  color: #0EA5A4;
+  border: 2px solid #0EA5A4;
+  cursor: pointer;
+  transition: background 0.2s, filter 0.2s;
+}
+.report-download-secondary-btn:hover { background: rgba(14, 165, 164, 0.08); filter: brightness(1.05); }
+.dark .report-download-secondary-btn { color: #2dd4bf; border-color: #2dd4bf; }
+.dark .report-download-secondary-btn:hover { background: rgba(45, 212, 191, 0.12); }
+.report-download-link {
+  font-size: 0.8125rem;
+  color: #0EA5A4;
+  text-decoration: underline;
+  margin-left: auto;
+}
+.report-download-link:hover { text-decoration: none; }
+.dark .report-download-link { color: #2dd4bf; }
+.report-download-link.report-download-link--locked {
+  color: #64748b;
+}
+
 /* 1) Sticky report bar */
 .report-sticky-bar {
   position: sticky;
@@ -953,11 +1101,11 @@
   .report-hero-sub { font-size: 0.9375rem; }
 }
 
-/* 3) Score summary card — premium elite (number + label like competitor) */
+/* 3) Score summary card — kompakt, yeşil gauge küçük */
 .report-score-summary {
   display: flex;
   flex-direction: column;
-  gap: 1.25rem;
+  gap: 0.25rem;
   padding: 0;
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.06);
@@ -974,12 +1122,12 @@
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 0;
-  background: linear-gradient(180deg, rgba(14, 165, 164, 0.06) 0%, transparent 100%);
-  padding: 1rem 1.25rem;
+  background: linear-gradient(180deg, rgba(14, 165, 164, 0.04) 0%, transparent 100%);
+  padding: 0.75rem 1rem;
   border-bottom: 1px solid rgba(0, 0, 0, 0.06);
 }
 .dark .report-score-stats--elite {
-  background: linear-gradient(180deg, rgba(14, 165, 164, 0.08) 0%, transparent 100%);
+  background: linear-gradient(180deg, rgba(14, 165, 164, 0.06) 0%, transparent 100%);
   border-bottom-color: rgba(255, 255, 255, 0.06);
 }
 @media (min-width: 480px) {
@@ -1050,14 +1198,36 @@
 .report-score-stat--unknown .report-score-stat-value { color: #64748b; }
 .dark .report-score-stat--unknown .report-score-stat-value { color: #94a3b8; }
 .report-score-radial {
-  width: 120px;
-  height: 120px;
-  margin: 0.75rem auto 1.25rem;
+  width: 44px;
+  height: 44px;
+  margin: 0.35rem auto 0.5rem;
   flex-shrink: 0;
-  padding: 0 1rem;
+  padding: 0 0.25rem;
+  filter: drop-shadow(0 1px 4px rgba(0, 0, 0, 0.05));
+}
+.report-score-radial .gauge-svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.report-score-radial .gauge-bg,
+.report-score-radial .gauge-fill {
+  stroke-width: 4;
+}
+.report-score-radial .gauge-score {
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: -0.02em;
 }
 @media (min-width: 640px) {
-  .report-score-radial { width: 140px; height: 140px; margin: 1rem auto 1.5rem; }
+  .report-score-radial {
+    width: 52px;
+    height: 52px;
+    margin: 0.35rem auto 0.5rem;
+  }
+  .report-score-radial .gauge-score {
+    font-size: 13px;
+  }
 }
 
 /* 4) Attention needed block — premium elite (white card, info icon, Detaylara git) */
@@ -1102,6 +1272,87 @@
   background: rgba(45, 212, 191, 0.2);
   color: #2dd4bf;
 }
+/* Dikkat Gerekli — renkli kartlar (teker teker) */
+.report-attention-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 0.75rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+@media (min-width: 480px) {
+  .report-attention-cards-grid { grid-template-columns: repeat(2, 1fr); }
+}
+@media (min-width: 768px) {
+  .report-attention-cards-grid { grid-template-columns: repeat(3, 1fr); }
+}
+.report-attention-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  padding: 1rem 1.25rem;
+  border-radius: 14px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  text-decoration: none;
+  color: inherit;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+}
+.report-attention-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.08);
+}
+.report-attention-card--high {
+  border-left: 4px solid #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+.dark .report-attention-card--high {
+  background: rgba(239, 68, 68, 0.12);
+  border-color: rgba(239, 68, 68, 0.25);
+}
+.report-attention-card--low {
+  border-left: 4px solid #eab308;
+  background: rgba(234, 179, 8, 0.06);
+}
+.dark .report-attention-card--low {
+  background: rgba(234, 179, 8, 0.1);
+  border-color: rgba(234, 179, 8, 0.2);
+}
+.report-attention-card-param {
+  font-weight: 700;
+  font-size: 0.9375rem;
+  color: var(--report-heading);
+}
+.dark .report-attention-card-param { color: #e2e8f0; }
+.report-attention-card-badge {
+  display: inline-block;
+  align-self: flex-start;
+  padding: 0.2rem 0.5rem;
+  border-radius: 8px;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.report-attention-card--high .report-attention-card-badge { background: #fee2e2; color: #991b1b; }
+.report-attention-card--low .report-attention-card-badge { background: #fef3c7; color: #92400e; }
+.dark .report-attention-card--high .report-attention-card-badge { background: rgba(239, 68, 68, 0.35); color: #fca5a5; }
+.dark .report-attention-card--low .report-attention-card-badge { background: rgba(234, 179, 8, 0.3); color: #fcd34d; }
+.report-attention-card-value {
+  font-size: 0.8125rem;
+  color: var(--report-muted);
+  font-weight: 500;
+}
+.dark .report-attention-card-value { color: #94a3b8; }
+.report-attention-card-link {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #0EA5A4;
+  margin-top: 0.25rem;
+}
+.report-attention-card-link:hover { text-decoration: underline; }
+.dark .report-attention-card-link { color: #2dd4bf; }
 .report-attention-list {
   list-style: none;
   margin: 0;
@@ -1229,6 +1480,44 @@
   transition: width 0.3s ease;
 }
 .dark .report-category-card-bar-fill { background: #2dd4bf; }
+.report-category-card--normal { border-left: 4px solid #22c55e; background: linear-gradient(to right, rgba(34, 197, 94, 0.06), transparent); }
+.report-category-card--border { border-left: 4px solid #eab308; background: linear-gradient(to right, rgba(234, 179, 8, 0.08), transparent); }
+.report-category-card--risk { border-left: 4px solid #ef4444; background: linear-gradient(to right, rgba(239, 68, 68, 0.08), transparent); }
+.dark .report-category-card--normal { border-left-color: #4ade80; }
+.dark .report-category-card--border { border-left-color: #facc15; }
+.dark .report-category-card--risk { border-left-color: #f87171; }
+.report-category-card-recommendation { font-size: 0.75rem; color: var(--report-muted); margin: 0.5rem 0 0; line-height: 1.4; }
+.dark .report-category-card-recommendation { color: #94a3b8; }
+
+/* Domain cards (Kardiyovasküler, Metabolik, Vitamin, Enflamasyon) — renkli kart + öneri */
+.report-page .report-domain-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (min-width: 640px) { .report-page .report-domain-cards { grid-template-columns: repeat(4, 1fr); } }
+.report-page .report-domain-card {
+  padding: 1rem 1.1rem; border-radius: 14px; border: 1px solid rgba(0,0,0,0.06);
+  box-shadow: 0 2px 12px rgba(10,25,41,0.04);
+}
+.dark .report-page .report-domain-card { border-color: rgba(255,255,255,0.06); }
+.report-page .report-domain-card--normal { border-left: 4px solid #22c55e; background: linear-gradient(to right, rgba(34, 197, 94, 0.07), transparent); }
+.report-page .report-domain-card--border { border-left: 4px solid #eab308; background: linear-gradient(to right, rgba(234, 179, 8, 0.08), transparent); }
+.report-page .report-domain-card--risk { border-left: 4px solid #ef4444; background: linear-gradient(to right, rgba(239, 68, 68, 0.08), transparent); }
+.dark .report-page .report-domain-card--normal { border-left-color: #4ade80; }
+.dark .report-page .report-domain-card--border { border-left-color: #facc15; }
+.dark .report-page .report-domain-card--risk { border-left-color: #f87171; }
+.report-page .report-domain-card-header { display: flex; align-items: center; gap: 0.5rem; margin-bottom: 0.5rem; }
+.report-page .report-domain-card-header .report-sec-icon { flex-shrink: 0; }
+.report-page .report-domain-card-title { font-weight: 700; font-size: 0.875rem; color: var(--report-heading); flex: 1; }
+.report-page .report-domain-card-score { font-weight: 800; font-size: 0.9375rem; color: #0EA5A4; }
+.report-page .report-domain-card-bar { height: 6px; background: rgba(14,165,164,0.12); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
+.report-page .report-domain-card-bar-fill { height: 100%; border-radius: 4px; background: #0EA5A4; transition: width 0.3s ease; }
+.report-page .report-domain-card-recommendation { font-size: 0.75rem; color: var(--report-muted); margin: 0; line-height: 1.4; }
+.dark .report-page .report-domain-card-recommendation { color: #94a3b8; }
+
+/* Parametre kategorisi bölümleri (Hemogram, Karaciğer, vb.) — renkli kenarlık + öneri */
+.report-page .report-category-section--normal { border-left: 4px solid #22c55e; padding-left: 1rem; margin-left: 0; background: linear-gradient(to right, rgba(34, 197, 94, 0.05), transparent); border-radius: 0 12px 12px 0; padding: 1rem 1rem 1rem 1.25rem; }
+.report-page .report-category-section--border { border-left: 4px solid #eab308; padding-left: 1rem; background: linear-gradient(to right, rgba(234, 179, 8, 0.06), transparent); border-radius: 0 12px 12px 0; padding: 1rem 1rem 1rem 1.25rem; }
+.report-page .report-category-section--risk { border-left: 4px solid #ef4444; padding-left: 1rem; background: linear-gradient(to right, rgba(239, 68, 68, 0.06), transparent); border-radius: 0 12px 12px 0; padding: 1rem 1rem 1rem 1.25rem; }
+.report-page .report-category-section-recommendation { font-size: 0.8125rem; color: var(--report-muted); margin: 0 0 0.75rem; line-height: 1.4; }
+.dark .report-page .report-category-section-recommendation { color: #94a3b8; }
 
 /* 6) Biomarker / parameter grid — premium elite clinician-style */
 .report-params-title {
@@ -1283,6 +1572,22 @@
   color: var(--report-heading);
 }
 .dark .report-biomarker-card-name { color: #e2e8f0; }
+.report-biomarker-card-score {
+  font-size: 0.875rem;
+  color: var(--report-muted);
+  margin-bottom: 0.5rem;
+}
+.report-biomarker-card-score strong {
+  color: var(--report-heading);
+  font-weight: 800;
+}
+.report-biomarker-card--normal .report-biomarker-card-score strong { color: #15803d; }
+.report-biomarker-card--border .report-biomarker-card-score strong { color: #a16207; }
+.report-biomarker-card--risk .report-biomarker-card-score strong { color: #b91c1c; }
+.dark .report-biomarker-card-score { color: #94a3b8; }
+.dark .report-biomarker-card--normal .report-biomarker-card-score strong { color: #4ade80; }
+.dark .report-biomarker-card--border .report-biomarker-card-score strong { color: #fcd34d; }
+.dark .report-biomarker-card--risk .report-biomarker-card-score strong { color: #f87171; }
 .report-biomarker-card-value {
   font-size: 1.375rem;
   font-weight: 800;
@@ -1300,12 +1605,26 @@
 .dark .report-biomarker-card-ref { color: #94a3b8; }
 .report-biomarker-card-bar-wrap {
   position: relative;
-  height: 8px;
-  background: rgba(14, 165, 164, 0.1);
-  border-radius: 4px;
+  height: 10px;
+  background: rgba(0, 0, 0, 0.06);
+  border-radius: 5px;
   overflow: visible;
   margin-bottom: 0.75rem;
 }
+.report-biomarker-card-bar-fill {
+  position: absolute;
+  left: 0;
+  top: 0;
+  height: 100%;
+  max-width: 100%;
+  border-radius: 5px;
+  transition: width 0.3s ease;
+  z-index: 1;
+}
+.report-biomarker-card-bar-marker { z-index: 2; }
+.report-biomarker-card--normal .report-biomarker-card-bar-fill { background: rgba(34, 197, 94, 0.5); }
+.report-biomarker-card--border .report-biomarker-card-bar-fill { background: rgba(234, 179, 8, 0.5); }
+.report-biomarker-card--risk .report-biomarker-card-bar-fill { background: rgba(239, 68, 68, 0.5); }
 .report-biomarker-card-bar-marker {
   position: absolute;
   top: 0;

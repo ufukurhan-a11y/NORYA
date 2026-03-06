@@ -41,6 +41,48 @@ _TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
 _PROJECT_ROOT = _TEMPLATES_DIR.parent.parent  # norya/ (static/logo.png burada)
 _ENV = Environment(loader=FileSystemLoader(str(_TEMPLATES_DIR)), autoescape=True)
 
+# Yaygın parametreler için varsayılan referans aralıkları (kan şekeri, lipid vb.) — raporda ref yoksa kullanılır
+DEFAULT_REF_RANGES: dict[str, str] = {
+    "glucose": "70–100 mg/dL",
+    "glukoz": "70–100 mg/dL",
+    "açlık glukoz": "70–100 mg/dL",
+    "fasting glucose": "70–100 mg/dL",
+    "hba1c": "%5.7–6.4 (prediabetes), &lt;5.7% normal",
+    "hb a1c": "%5.7–6.4 (prediabetes), &lt;5.7% normal",
+    "ldl": "&lt;100 mg/dL optimal",
+    "hdl": "&gt;40 mg/dL (M), &gt;50 mg/dL (F)",
+    "triglyceride": "&lt;150 mg/dL",
+    "trigliserid": "&lt;150 mg/dL",
+    "cholesterol": "&lt;200 mg/dL",
+    "kolesterol": "&lt;200 mg/dL",
+    "crp": "&lt;3 mg/L",
+    "c-reaktif": "&lt;3 mg/L",
+    "alt": "7–56 U/L",
+    "ast": "10–40 U/L",
+    "creatinine": "0.7–1.3 mg/dL (M), 0.6–1.1 (F)",
+    "kreatinin": "0.7–1.3 mg/dL (M), 0.6–1.1 (F)",
+    "urea": "15–40 mg/dL",
+    "üre": "15–40 mg/dL",
+    "egfr": "&gt;90 mL/min/1.73 m²",
+    "ferritin": "12–150 ng/mL (F), 12–300 (M)",
+    "demir": "60–170 µg/dL",
+    "iron": "60–170 µg/dL",
+    "tsh": "0.4–4.0 mIU/L",
+    "ft3": "2.3–4.2 pg/mL",
+    "ft4": "0.8–1.8 ng/dL",
+    "vitamin d": "30–100 ng/mL",
+    "d vitamini": "30–100 ng/mL",
+    "b12": "200–900 pg/mL",
+    "wbc": "4.5–11.0 K/µL",
+    "rbc": "4.5–5.5 M/µL (M), 4.0–5.0 (F)",
+    "hgb": "13.5–17.5 g/dL (M), 12.0–15.5 (F)",
+    "hemoglobin": "13.5–17.5 g/dL (M), 12.0–15.5 (F)",
+    "hct": "38.8–50% (M), 34.9–44.5% (F)",
+    "plt": "150–400 K/µL",
+    "mcv": "80–100 fL",
+    "rdw": "11.5–14.5%",
+}
+
 # PDF şablonu çok dilli etiketler (rapor dili: TR/EN/DE/FR/ES/IT vb.)
 PDF_LABELS: dict[str, dict[str, str]] = {
     "tr": {
@@ -106,6 +148,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_test": "Test",
         "report_result": "Sonuç",
         "report_reference": "Referans",
+        "report_common_refs": "Yaygın referans aralıkları (bilgi)",
         "report_status": "Durum",
         "report_alert_title": "Bilgilendirme amaçlıdır.",
         "report_alert_body": "Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.",
@@ -250,6 +293,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_test": "Test",
         "report_result": "Result",
         "report_reference": "Reference",
+        "report_common_refs": "Common reference ranges (info)",
         "report_status": "Status",
         "report_alert_title": "For information only.",
         "report_alert_body": "This report does not replace medical diagnosis or treatment. Consult your doctor for health decisions.",
@@ -1566,6 +1610,14 @@ def _build_premium_context(
         "Iron/Nutrients": ("Ferritin", "Iron", "Hb", "Hemoglobin"),
         "Vitamins": ("Vitamin D", "B12", "Folate"),
     }
+    def _status_class_early(s: str) -> str:
+        s = (s or "").strip().lower()
+        if s == "normal":
+            return "normal"
+        if s in ("border", "mid", "sınır", "borderline"):
+            return "border"
+        return "risk"
+
     biomarker_highlights: dict[str, list[dict]] = {k: [] for k in BIOMARKER_GROUP}
     for row in (base_context.get("biomarkers") or []):
         name = (row.get("name") or "").strip()
@@ -1579,6 +1631,7 @@ def _build_premium_context(
                     "unit": row.get("unit"),
                     "ref": row.get("reference"),
                     "status": row.get("status_label") or "—",
+                    "status_class": _status_class_early(row.get("status") or "normal"),
                 })
                 break
 
@@ -1639,7 +1692,21 @@ def _build_premium_context(
         except Exception:
             pass
 
-    # Foods to favor / limit (safe language: "may support" / "may be worth limiting")
+    # Helper: madde satırlarını metinden çıkar (-, *, •, 1. 2. vb. veya kısa satırlar)
+    def _bullet_lines(body: str, max_items: int = 10) -> list[str]:
+        out: list[str] = []
+        for line in (body or "").splitlines():
+            s = line.strip().lstrip("-•*0123456789.) ")
+            if not s or len(s) < 3:
+                continue
+            clean = _strip_ai_from_text(s)
+            if not clean or len(clean) > 250:
+                continue
+            if clean not in out and len(out) < max_items:
+                out.append(clean)
+        return out
+
+    # Foods to favor / limit: önce recommendations, sonra raw_sections (Diyet, Yenilmesi/Kaçınılması gerekenler vb.)
     rec_txt_pre = (base_context.get("recommendations") or "").strip().lower()
     foods_to_favor: list[str] = []
     foods_to_limit: list[str] = []
@@ -1652,15 +1719,72 @@ def _build_premium_context(
             continue
         low = line_clean.lower()
         if any(x in low for x in ("favor", "eat more", "increase", "yenilmesi", "tüketilmesi", "önerilir", "tercih", "sebze", "vegetable", "fruit", "meyve", "fiber", "lif", "omega", "balık", "fish", "include", "tüket", "ye ")):
-            if len(foods_to_favor) < 10:
+            if len(foods_to_favor) < 10 and line_clean not in foods_to_favor:
                 foods_to_favor.append(line_clean)
         elif any(x in low for x in ("limit", "avoid", "reduce", "az tüket", "kaçının", "kısıtla", "sugar", "şeker", "salt", "tuz", "processed", "işlenmiş", "alcohol", "alkol", "yenilmemesi", "yemeyin")):
-            if len(foods_to_limit) < 10:
+            if len(foods_to_limit) < 10 and line_clean not in foods_to_limit:
                 foods_to_limit.append(line_clean)
+
+    # raw_sections içinden diyet başlıklarını tara (Yenilmesi gerekenler, Foods to eat, Diyet, Beslenme vb.)
+    favor_titles = ("yenilmesi gereken", "tercih edilebilecek", "foods to eat", "foods to include", "önerilen gıda", "eat more", "include", "diyet", "beslenme", "diet plan", "yemek", "tüketilmesi")
+    avoid_titles = ("yenilmemesi", "kaçınılması", "sınırlanabilecek", "foods to avoid", "foods to limit", "avoid", "limit", "kısıtla", "yemeyin")
+    for raw in base_context.get("raw_sections") or []:
+        title = (raw.get("title") or "").strip().lower()
+        body = (raw.get("body") or "").strip()
+        if not body:
+            continue
+        if any(t in title for t in favor_titles):
+            for item in _bullet_lines(body, 10):
+                if item not in foods_to_favor and len(foods_to_favor) < 10:
+                    foods_to_favor.append(item)
+        elif any(t in title for t in avoid_titles):
+            for item in _bullet_lines(body, 10):
+                if item not in foods_to_limit and len(foods_to_limit) < 10:
+                    foods_to_limit.append(item)
+
+    # Varsayılan: tek satır yerine anlamlı madde listesi (PDF’te diyet bölümü her zaman dolu görünsün)
+    default_favor_tr = [
+        "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir.",
+        "Sebze ve meyve (lif ve vitaminler).",
+        "Tam tahıllar, baklagiller.",
+        "Yağlı balık (omega-3).",
+        "Yeterli sıvı tüketimi.",
+    ]
+    default_favor_en = [
+        "Balanced diet; vegetables and fruits may support general health.",
+        "Vegetables and fruits (fibre and vitamins).",
+        "Whole grains, legumes.",
+        "Oily fish (omega-3).",
+        "Adequate fluid intake.",
+    ]
+    default_limit_tr = [
+        "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir.",
+        "İşlenmiş atıştırmalıklar, hazır ürünler.",
+        "Eklenen şeker ve tatlılar (ölçülü).",
+        "Aşırı tuz ve doymuş yağ.",
+        "Alkol (ölçülü tüketim).",
+    ]
+    default_limit_en = [
+        "Processed foods and excess sugar may be worth limiting.",
+        "Processed snacks and ready-made products.",
+        "Added sugar and sweets (in moderation).",
+        "Excess salt and saturated fat.",
+        "Alcohol (moderate consumption).",
+    ]
     if not foods_to_favor:
-        foods_to_favor = [_t_early("report_food_favor_default", "Balanced diet; vegetables and fruits may support general health.") if lang != "tr" else "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir."]
+        foods_to_favor = default_favor_tr if lang == "tr" else default_favor_en
+    elif len(foods_to_favor) == 1 and _strip_ai_from_text(foods_to_favor[0]).lower() in (
+        "dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir.",
+        "balanced diet; vegetables and fruits may support general health.",
+    ):
+        foods_to_favor = default_favor_tr if lang == "tr" else default_favor_en
     if not foods_to_limit:
-        foods_to_limit = [_t_early("report_food_limit_default", "Processed foods and excess sugar may be worth limiting.") if lang != "tr" else "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir."]
+        foods_to_limit = default_limit_tr if lang == "tr" else default_limit_en
+    elif len(foods_to_limit) == 1 and _strip_ai_from_text(foods_to_limit[0]).lower() in (
+        "işlenmiş gıdalar ve aşırı şeker sınırlanabilir.",
+        "processed foods and excess sugar may be worth limiting.",
+    ):
+        foods_to_limit = default_limit_tr if lang == "tr" else default_limit_en
 
     # Lifestyle suggestions (sleep, movement, hydration, stress, follow-up)
     lifestyle_suggestions: list[str] = []
@@ -1792,6 +1916,37 @@ def _build_premium_context(
         ]
     findings = [_strip_ai_from_text(s) for s in findings if s]
 
+    # Bulguları renkli kart olarak: metinden "X:** Düşük/Normal/Sınır" çıkar → status_class
+    def _finding_status_class(text: str) -> str:
+        t = (text or "").strip().lower()
+        if "normal" in t or "referans" in t and "içinde" in t:
+            return "normal"
+        if "sınır" in t or "borderline" in t or "sınırda" in t:
+            return "border"
+        if "düşük" in t or "yüksek" in t or "risk" in t or "low" in t or "high" in t or "dikkat" in t:
+            return "risk"
+        return "normal"
+
+    findings_cards: list[dict] = []
+    for f in findings[:8]:
+        f_clean = (f or "").strip()
+        if not f_clean:
+            continue
+        # "Alüminyum:** Düşük seviyede." veya "Parametre: Normal"
+        name_part = ""
+        for sep in ("**:", ":**", ":"):
+            if sep in f_clean:
+                parts = f_clean.split(sep, 1)
+                name_part = (parts[0] or "").strip().strip("*").strip()
+                break
+        if not name_part:
+            name_part = f_clean[:40] + ("…" if len(f_clean) > 40 else "")
+        findings_cards.append({
+            "name": name_part,
+            "text": f_clean,
+            "status_class": _finding_status_class(f_clean),
+        })
+
     # Test tablosu: biomarkers -> lab_rows + kategorize (hemogram, biyokimya grupları)
     biomarkers = base_context.get("biomarkers") or []
     def _status_class(s: str) -> str:
@@ -1801,19 +1956,34 @@ def _build_premium_context(
         if s in ("border", "mid", "sınır", "borderline"):
             return "border"
         return "risk"  # low, high, riskli
+
+    def _default_ref_for_biomarker(name: str) -> str | None:
+        n = (name or "").strip().lower()
+        for key, ref in DEFAULT_REF_RANGES.items():
+            if key in n or n in key:
+                return ref
+        return None
+
     lab_rows = []
     for row in biomarkers:
         raw_status = (row.get("status") or "normal").strip().lower()
         status_class = _status_class(raw_status)
+        ref = row.get("reference") or _default_ref_for_biomarker(row.get("name") or "")
         lab_rows.append({
             "name": row.get("name") or "—",
             "value": row.get("value") or "—",
             "unit": row.get("unit"),
-            "ref": row.get("reference"),
+            "ref": ref,
             "status": row.get("status_label") or "—",
             "status_class": status_class,
         })
-    # Kategori eşlemesi: hemogram (WBC,RBC,HGB,HCT,PLT,MCV,RDW), CRP, glukoz, lipidler, karaciğer, böbrek, demir, tiroid
+    # Kan şekeri (Glukoz/HbA1c) raporda var mı?
+    _glucose_keywords = ("glucose", "glukoz", "açlık glukoz", "fasting glucose", "hba1c", "hb a1c", "kan şekeri", "blood sugar")
+    has_glucose = any(
+        any(kw in (r.get("name") or "").strip().lower() for kw in _glucose_keywords)
+        for r in lab_rows
+    )
+    # Kategori eşlemesi: hemogram (WBC,RBC,HGB,HCT,PLT,MCV,RDW), CRP, glukoz, lipidler, karaciğer, böbrek, demir, tiroid hemogram (WBC,RBC,HGB,HCT,PLT,MCV,RDW), CRP, glukoz, lipidler, karaciğer, böbrek, demir, tiroid
     _cat_order = (
         ("hemogram", "report_cat_hemogram", "bar-chart-2", ("wbc", "rbc", "hgb", "hct", "plt", "mcv", "rdw", "leukocyte", "lökosit", "erythrocyte", "eritrosit", "hemoglobin", "hematocrit", "platelet", "trombosit", "hemogram")),
         ("crp", "report_cat_crp", "alert-circle", ("crp", "c-reactive", "c reaktif", "enflamasyon")),
@@ -1850,12 +2020,20 @@ def _build_premium_context(
             continue
         attention_do: list[str] = []
         attention_avoid: list[str] = []
+        has_risk = any(r.get("status_class") == "risk" for r in rows_in_cat)
+        has_border = any(r.get("status_class") == "border" for r in rows_in_cat)
+        category_status = "risk" if has_risk else ("border" if has_border else "normal")
         for r in rows_in_cat:
             rname = (r.get("name") or "").strip().lower()
             if r.get("status_class") in ("border", "risk") and rname:
                 hint = highlights_by_test.get(rname, {}).get("action") or ""
                 if hint and hint not in attention_do:
                     attention_do.append(hint)
+        recommendation_summary = (attention_do[0][:120] + "…" if attention_do and len(attention_do[0]) > 120 else (attention_do[0] if attention_do else "")) or (
+            _t_early("report_cat_recommend_ok", "Values in range. Regular follow-up recommended.") if category_status == "normal"
+            else _t_early("report_cat_recommend_mid", "Discuss with your doctor for follow-up and lifestyle advice.") if category_status == "border"
+            else _t_early("report_cat_recommend_risk", "Discuss with your doctor.")
+        )
         lab_categories.append({
             "id": cid,
             "label": _t_early(label_key, cid),
@@ -1863,6 +2041,8 @@ def _build_premium_context(
             "rows": rows_in_cat,
             "attention_do": attention_do[:3],
             "attention_avoid": attention_avoid[:2],
+            "category_status": category_status,
+            "recommendation_summary": recommendation_summary,
         })
 
     # Klinik notlar: possible_causes maddeleri
@@ -1971,6 +2151,13 @@ def _build_premium_context(
     trend_message = _t("report_trend_need_more", "More analyses needed for trend.")
     trend_locked_label = _t("report_trend_locked", "Trend analysis is available with subscription.")
 
+    # Logo: WeasyPrint için mutlak yol (PDF'te Norya ikonu her zaman görünsün)
+    _logo_path = _PROJECT_ROOT / "static" / "norya_logo_transparent_trim.png"
+    logo_url = _logo_path.as_uri() if _logo_path.exists() else "static/norya_logo_transparent_trim.png"
+    label_glucose_yes = _t("report_glucose_in_report_yes", "Blood sugar (Glucose/HbA1c): In report") if lang != "tr" else "Kan şekeri (Glukoz/HbA1c): Raporda var"
+    label_glucose_no = _t("report_glucose_in_report_no", "Blood sugar (Glucose/HbA1c): Not in report") if lang != "tr" else "Kan şekeri (Glukoz/HbA1c): Raporda yok"
+    label_glucose_in_report = label_glucose_yes if has_glucose else label_glucose_no
+
     return {
         "rid": report_id,
         "trend_locked": trend_locked,
@@ -1979,10 +2166,13 @@ def _build_premium_context(
         "report_datetime": report_date,
         "lang": lang,
         "user_id": user_id,
-        "logo_url": "static/norya_logo_transparent_trim.png",
+        "logo_url": logo_url,
         "css_url": "static/report_premium.css",
+        "has_glucose": has_glucose,
+        "label_glucose_in_report": label_glucose_in_report,
         "risk_cards": risk_cards,
         "findings": findings[:6],
+        "findings_cards": findings_cards,
         "lab_rows": lab_rows,
         "lab_categories": lab_categories,
         "clinical_notes": clinical_notes[:12],
@@ -2073,6 +2263,15 @@ def _build_premium_context(
         "label_report_hydration_heading": _t("report_hydration_heading", "Hydration"),
         "label_report_attention_do": _t("report_attention_do", "What to pay attention to"),
         "label_report_attention_avoid": _t("report_attention_avoid", "What to avoid"),
+        "label_report_common_refs": _t("report_common_refs", "Common reference ranges (info)"),
+        "common_refs": [
+            {"name": "Glucose (fasting)" if lang != "tr" else "Glukoz (açlık)", "ref": "70–100 mg/dL"},
+            {"name": "HbA1c", "ref": "<5.7% normal"},
+            {"name": "LDL cholesterol", "ref": "<100 mg/dL" if lang != "tr" else "<100 mg/dL optimal"},
+            {"name": "HDL cholesterol", "ref": ">40 mg/dL (M), >50 (F)"},
+            {"name": "CRP", "ref": "<3 mg/L"},
+            {"name": "ALT", "ref": "7–56 U/L"},
+        ],
         "label_report_doctor_discussion": _t("report_doctor_discussion", "Doctor Discussion Notes"),
         "label_report_tile_overall_score": _t("report_tile_overall_score", "Overall Score"),
         "label_report_tile_risk_level": _t("report_tile_risk_level", "Risk Level"),

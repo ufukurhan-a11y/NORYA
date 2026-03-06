@@ -11,7 +11,7 @@
     <div class="pdf-header-inner">
       <div class="badge">PREMIUM</div>
       <div class="h-left">
-        <img class="logo" src="{{ logo_url }}" alt="Norya" />
+        <img class="logo pdf-header-logo" src="{{ logo_url }}" alt="Norya" />
         <div class="brand">
           <div class="brand-name">Norya</div>
           <div class="brand-sub">{{ label_report_brand_sub }}</div>
@@ -51,6 +51,7 @@
         <span class="health-age-label">{{ label_report_health_age }}</span>
         <span class="health-age-value">≈ {{ health_age }}</span>
       </div>
+      <div class="report-meta-line glucose-in-report"><span class="report-meta-label">{% if lang == 'tr' %}Kan şekeri (Glukoz/HbA1c):{% else %}Blood sugar (Glucose/HbA1c):{% endif %}</span> <span class="report-meta-value">{% if has_glucose %}{% if lang == 'tr' %}Raporda var{% else %}In report{% endif %}{% else %}{% if lang == 'tr' %}Raporda yok{% else %}Not in report{% endif %}{% endif %}</span></div>
     </section>
 
     <section class="card summary-tiles-section">
@@ -69,28 +70,52 @@
     {% if biomarker_highlights %}
     <section class="card biomarker-highlights-section">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('bar-chart-2', '')|safe }}</span>{% endif %} {{ label_report_biomarker_highlights }}</div>
+      <p class="lab-legend-inline">
+        <span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}
+        <span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}
+        <span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}
+      </p>
       {% for group_name, rows in biomarker_highlights.items() %}
       {% if rows %}
       <div class="biomarker-group">
         <div class="biomarker-group-name">{{ group_name }}</div>
-        <ul class="biomarker-group-list">
+        <div class="lab-cards-grid lab-cards-grid--multi">
           {% for r in rows %}
-          <li><span class="bm-name">{{ r.name }}</span> <span class="bm-value">{{ r.value }}{% if r.unit %} {{ r.unit }}{% endif %}</span> <span class="bm-ref">({{ r.ref or '—' }})</span> <span class="bm-status">{{ r.status }}</span></li>
+          <div class="lab-card lab-card--{{ r.status_class|default('normal') }}">
+            <div class="lab-card-name">{{ r.name }}</div>
+            <div class="lab-card-value">{{ r.value }}{% if r.unit %} {{ r.unit }}{% endif %}</div>
+            <div class="lab-card-ref">{{ label_report_reference }}: {{ r.ref or '—' }}</div>
+            <div class="lab-card-status">{{ r.status }}</div>
+          </div>
           {% endfor %}
-        </ul>
+        </div>
       </div>
       {% endif %}
       {% endfor %}
     </section>
     {% endif %}
 
-    <section class="card">
+    <section class="card findings-cards-section">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('alert-circle', '')|safe }}</span>{% endif %} {{ label_report_risk_indicators }}</div>
-      <ul class="bullets">
-        {% for f in findings %}
-        <li>{{ f }}</li>
+      <p class="lab-legend-inline">
+        <span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}
+        <span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}
+        <span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}
+      </p>
+      {% if findings_cards %}
+      <div class="findings-cards-grid">
+        {% for fc in findings_cards %}
+        <div class="lab-card lab-card--{{ fc.status_class }}">
+          <div class="lab-card-name">{{ fc.name }}</div>
+          <div class="lab-card-status">{{ fc.text }}</div>
+        </div>
         {% endfor %}
+      </div>
+      {% else %}
+      <ul class="bullets">
+        {% for f in findings %}<li>{{ f }}</li>{% endfor %}
       </ul>
+      {% endif %}
     </section>
 
     {% if key_areas_to_watch %}
@@ -252,11 +277,14 @@
         <span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}
       </p>
     {% for cat in lab_categories %}
-    <section class="card lab-category-section avoid-break {% if loop.first %}lab-category-section--first{% endif %}">
+    <section class="card lab-category-section lab-category-section--{{ cat.category_status|default('normal') }} avoid-break {% if loop.first %}lab-category-section--first{% endif %}">
       <div class="sec-title lab-category-title">
         {% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get(cat.icon, '')|safe }}</span>{% endif %}
         {{ cat.label }}
       </div>
+      {% if cat.recommendation_summary %}
+      <p class="lab-category-recommendation">{{ cat.recommendation_summary }}</p>
+      {% endif %}
       {% if cat.attention_do %}
       <div class="lab-category-attention">
         <span class="lab-attention-label">{{ label_report_attention_do }}:</span>
@@ -292,6 +320,20 @@
     {% endif %}
     </section>
 
+    {% if common_refs %}
+    <section class="card common-refs-section">
+      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('info', '')|safe }}</span>{% endif %} {{ label_report_common_refs }}</div>
+      <div class="common-refs-grid">
+        {% for r in common_refs %}
+        <div class="common-ref-item">
+          <span class="common-ref-name">{{ r.name }}</span>
+          <span class="common-ref-value">{{ r.ref }}</span>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
     <section class="card">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('file-text', '')|safe }}</span>{% endif %} {{ label_report_clinical_notes }}</div>
       <div class="note-block">
@@ -322,7 +364,8 @@
   </main>
 
   <footer class="pdf-footer">
-    {{ label_report_footer }}
+    <img class="pdf-footer-logo" src="{{ logo_url }}" alt="Norya" />
+    <span class="pdf-footer-text">{{ label_report_footer }}</span>
   </footer>
 </body>
 </html>

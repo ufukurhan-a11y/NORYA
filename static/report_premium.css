@@ -6,7 +6,9 @@
 }
 
 @page {
-  margin: 16mm;
+  size: A4;
+  margin: 18mm 16mm 20mm 16mm;
+  padding: 0;
   @top-center {
     content: element(header);
   }
@@ -15,12 +17,26 @@
   }
 }
 
+html {
+  box-sizing: border-box;
+}
+*, *::before, *::after {
+  box-sizing: inherit;
+}
+
 html, body {
   background: #fff;
   color: var(--ink);
   font-family: system-ui, -apple-system, "Inter", "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 12px;
   line-height: 1.4;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  max-width: 100%;
+  text-align: left;
+  overflow-x: hidden;
+  box-sizing: border-box;
 }
 
 [dir="rtl"] {
@@ -67,10 +83,13 @@ footer.pdf-footer {
   min-width: 220px;
 }
 
-.logo {
-  width: 38px;
-  height: 38px;
+.logo, .pdf-header-logo {
+  width: 52px;
+  height: 52px;
+  min-width: 52px;
+  min-height: 52px;
   object-fit: contain;
+  display: block;
 }
 
 .brand-name {
@@ -137,8 +156,14 @@ footer.pdf-footer {
   margin: 10px 2px 0;
 }
 
-.pdf-page {
+main.pdf-page {
   margin-top: 12px;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: hidden;
+  display: block;
+  box-sizing: border-box;
+  padding: 0;
 }
 
 .card {
@@ -149,6 +174,11 @@ footer.pdf-footer {
   box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
   break-inside: avoid;
   page-break-inside: avoid;
+  width: 100%;
+  max-width: 100%;
+  display: block;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
 .sec-title {
@@ -235,9 +265,12 @@ footer.pdf-footer {
 }
 
 .biomarker-highlights-section .biomarker-group {
-  margin-bottom: 12px;
+  margin-bottom: 14px;
 }
 .biomarker-highlights-section .biomarker-group:last-child { margin-bottom: 0; }
+.biomarker-group .lab-cards-grid {
+  margin-top: 8px;
+}
 .biomarker-group-name {
   font-size: 11.5px;
   font-weight: 800;
@@ -347,6 +380,8 @@ footer.pdf-footer {
   font-size: 12.5px;
   color: rgba(15, 23, 42, 0.86);
   line-height: 1.5;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .bullets li {
@@ -413,14 +448,37 @@ footer.pdf-footer {
 .lab-category-section {
   margin-top: 14px;
   page-break-inside: avoid;
+  border-radius: 12px;
+  padding: 12px 14px;
+  border-left-width: 4px;
+  border-left-style: solid;
+}
+.lab-category-section--normal {
+  border-left-color: #22c55e;
+  background: linear-gradient(to right, rgba(34, 197, 94, 0.06), transparent);
+}
+.lab-category-section--border {
+  border-left-color: #eab308;
+  background: linear-gradient(to right, rgba(234, 179, 8, 0.08), transparent);
+}
+.lab-category-section--risk {
+  border-left-color: #ef4444;
+  background: linear-gradient(to right, rgba(239, 68, 68, 0.08), transparent);
 }
 .lab-category-section--first {
   page-break-before: always;
 }
 .lab-category-section .lab-category-title {
-  margin-bottom: 8px;
+  margin-bottom: 6px;
   padding-bottom: 6px;
   border-bottom: 1px solid var(--border);
+}
+.lab-category-recommendation {
+  font-size: 11px;
+  color: var(--muted);
+  line-height: 1.4;
+  margin: 0 0 10px 0;
+  padding: 0;
 }
 .lab-category-attention {
   font-size: 10.5px;
@@ -437,6 +495,15 @@ footer.pdf-footer {
   margin-bottom: 4px;
 }
 
+.lab-results-wrap {
+  width: 100%;
+  display: block;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.lab-results-wrap .lab-category-section {
+  margin-top: 12px;
+}
 .lab-cards-section .sec-title { margin-bottom: 6px; }
 .lab-cards-grid,
 .lab-cards-grid--multi {
@@ -505,6 +572,11 @@ footer.pdf-footer {
 .lab-card--risk .lab-card-status { color: #b91c1c; }
 
 /* Beslenme: Yenilmesi / Yenilmemesi Gerekenler — klinik ultra premium */
+.food-guidance-section.food-guidance-clinical {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  width: 100%;
+}
 .food-guidance-clinical {
   display: flex;
   flex-direction: column;
@@ -517,6 +589,7 @@ footer.pdf-footer {
   break-inside: avoid;
   page-break-inside: avoid;
   box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+  width: 100%;
 }
 .food-to-eat {
   border-left: 5px solid #22c55e;
@@ -553,6 +626,8 @@ footer.pdf-footer {
   font-size: 12px;
   line-height: 1.55;
   color: rgba(15, 23, 42, 0.88);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 .food-clinical-list li {
   margin: 6px 0;
@@ -607,6 +682,83 @@ footer.pdf-footer {
   font-size: 10.5px;
   color: rgba(15, 23, 42, 0.55);
   text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.pdf-footer-logo {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  object-fit: contain;
+  vertical-align: middle;
+  display: inline-block;
+}
+.pdf-footer-text {
+  vertical-align: middle;
+}
+
+/* Bulgu kartları grid — renge göre (yeşil/sarı/kırmızı) */
+.findings-cards-section .lab-legend-inline {
+  margin-bottom: 12px;
+}
+.findings-cards-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+@media (max-width: 500px) {
+  .findings-cards-grid {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 360px) {
+  .findings-cards-grid {
+    grid-template-columns: 1fr;
+  }
+}
+.findings-cards-grid .lab-card {
+  min-height: 0;
+}
+.findings-cards-grid .lab-card-status {
+  font-size: 10px;
+  font-weight: 600;
+  margin-top: 4px;
+  line-height: 1.35;
+}
+
+/* Yaygın referans aralıkları — kan şekeri, lipid vb. (global bilgi) */
+.common-refs-section {
+  break-inside: avoid;
+}
+.common-refs-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px 16px;
+  margin-top: 10px;
+}
+.common-ref-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 8px;
+  padding: 6px 10px;
+  background: rgba(14, 165, 164, 0.06);
+  border-radius: 8px;
+  border-left: 3px solid var(--brand);
+  font-size: 11px;
+}
+.common-ref-name {
+  font-weight: 700;
+  color: var(--ink);
+}
+.common-ref-value {
+  color: var(--muted);
+  font-weight: 600;
+  text-align: right;
 }
 
 /* Genel Sağlık Skoru kartı */
@@ -621,6 +773,23 @@ footer.pdf-footer {
   color: var(--muted);
   margin-top: 4px;
 }
+.health-score-card .health-age-note {
+  margin-top: 10px;
+  padding-top: 8px;
+  border-top: 1px solid var(--border);
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+}
+.health-score-card .health-age-label { color: var(--muted); margin-right: 6px; }
+.health-score-card .health-age-value { color: var(--brand); }
+.report-meta-line.glucose-in-report {
+  margin-top: 8px;
+  font-size: 11.5px;
+  color: var(--muted);
+}
+.report-meta-line .report-meta-label { font-weight: 600; }
+.report-meta-line .report-meta-value { font-weight: 700; color: var(--ink); }
 
 /* Risk gauge (yarım daire) */
 .gauge-section .gauge-wrap {

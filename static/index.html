@@ -66,35 +66,49 @@
       --norya-card-shadow: 0 4px 24px rgba(14, 165, 164, 0.12);
     }
     /* ========== Cross-browser / Safari uyumluluk (tüm tarayıcılarda aynı görünüm) ========== */
-    /* Global overflow fix: mobilde yatay taşma ve sağdaki beyaz şerit tamamen kalkar (tüm cihazlar) */
+    /* Mobil: tam ekran, sağda beyaz şerit yok, butonlar taşmasın */
     html {
       width: 100%;
       max-width: 100%;
-      overflow-x: clip;
+      overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
+      background: var(--norya-bg, #f8fafc);
     }
     body {
       width: 100%;
       max-width: 100%;
       min-width: 0;
-      overflow-x: clip;
+      overflow-x: hidden;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
-    #root, main { width: 100%; max-width: 100%; overflow-x: clip; }
+    #root, main { width: 100%; max-width: 100%; overflow-x: hidden; min-width: 0; }
     body > header, body > section, body > aside, body > footer, body > div {
       max-width: 100%;
-      overflow-x: clip;
+      overflow-x: hidden;
       min-width: 0;
     }
     @media (max-width: 1024px) {
-      html, body { overflow-x: clip !important; max-width: 100% !important; }
+      html, body { overflow-x: hidden !important; max-width: 100% !important; width: 100% !important; }
       body { touch-action: pan-y; }
     }
     @media (max-width: 640px) {
-      html, body { overflow-x: clip !important; }
-      body { overflow-wrap: break-word; }
+      html { overflow-x: hidden !important; width: 100% !important; max-width: 100% !important; }
+      body { overflow-x: hidden !important; overflow-wrap: break-word; width: 100% !important; max-width: 100% !important; }
+      body > header, body > section, body > aside, body > footer, body > div { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+      .header { width: 100% !important; max-width: 100% !important; min-width: 0 !important; overflow-x: hidden !important; }
+      .header-inner { width: 100% !important; max-width: 100% !important; min-width: 0 !important; padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
+      .header .right-zone, .header .nav-actions { min-width: 0 !important; max-width: 100% !important; }
+      .header .elite-cta-btn, .header .primary-cta, .header .secondary-link, .header button { max-width: 100% !important; }
+      .hero, .gradient-hero, .premium-wrap, .premium-section, .trust-global-section, .features-grid-section { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+      .hero-inner { width: 100% !important; max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
+      .hero-cta-wrap { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+      .hero-cta-wrap .hero-cta-btn, .hero-cta-wrap button, .hero-cta-wrap a { max-width: 100% !important; min-width: 0 !important; width: 100% !important; }
+      .hero-trust-list { max-width: 100% !important; flex-wrap: wrap !important; }
+      .primary-cta, .elite-cta-btn, .hero-primary-btn, .hero-secondary-btn, button.primary-cta, a.primary-cta { max-width: 100% !important; box-sizing: border-box !important; }
+      .trust-chips, .trust-chips .chip { min-width: 0 !important; max-width: 100% !important; }
+      section.hero.gradient-hero { padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
     }
     *, *::before, *::after { box-sizing: border-box; }
     html {
@@ -116,12 +130,14 @@
     .border-norya-brand { border-color: var(--norya-brand); }
     .report-btn-outline { border: 2px solid var(--norya-brand); color: var(--norya-brand); background: transparent; }
     .report-btn-outline:hover { background: var(--norya-brand); color: #fff; }
-    .gradient-hero { background: var(--norya-hero); }
-    /* Hero: gradient section seviyesinde, tam genişlik (mobilde sağda şerit yok) */
+    .gradient-hero { background: var(--norya-hero); position: relative; z-index: 0; }
+    /* Hero: gradient section seviyesinde, tam genişlik (mobilde sağda şerit yok); z-index 0 ki header/dil menüsü üstte kalsın */
     .hero {
       width: 100%;
       max-width: 100%;
       overflow-x: clip;
+      position: relative;
+      z-index: 0;
       background: radial-gradient(1200px 600px at 30% 20%, rgba(14,165,164,.35), transparent 60%),
                   linear-gradient(135deg, #062a33 0%, #0b5f63 55%, #0EA5A4 100%);
     }
@@ -169,6 +185,10 @@
     .trust-bar-section .premium-wrap { max-width: 100%; }
     .trust-bar-pill { white-space: nowrap; }
     @media (max-width: 640px) { .trust-bar-pill { white-space: normal; } }
+    /* Global standartlar — Health Score altında, özel blok, ultra premium / elit */
+    .trust-global-section .premium-wrap { max-width: 100%; }
+    .trust-global-pill { white-space: nowrap; }
+    @media (max-width: 640px) { .trust-global-pill { white-space: normal; } }
     .features-grid-section .premium-wrap { overflow-x: clip; min-width: 0; }
     .feature-card { min-width: 0; }
     .cta-primary-btn:focus-visible, .cta-secondary-btn:focus-visible { outline: none; }
@@ -659,9 +679,7 @@
     .intake-cta:hover:not(:disabled) { background: #0d9488; }
     .intake-cta:disabled { opacity: 0.5; cursor: not-allowed; }
     .intake-cta:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,0.25); }
-    /* PWA bar: body padding so CTA is not covered on mobile (Safari safe-area dahil) */
-    body.a2hs-visible { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px)); }
-    @media (min-width: 640px) { body.a2hs-visible { padding-bottom: 0; } }
+    /* PWA banner kaldırıldı — body padding artık gerekmiyor */
     /* Premium health SaaS: mobil-first, accent #0EA5A4, bol beyaz */
     .premium-wrap { max-width: var(--premium-container, 1100px); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; overflow-x: clip; min-width: 0; }
     .premium-section { padding-top: var(--section-gap, 28px); padding-bottom: var(--section-gap, 28px); }
@@ -671,9 +689,9 @@
       body { font-size: 16px; }
       .hero-cta-btn, .btn-primary, .btn-secondary, .primary-cta, .compare-card-cta, button[type="button"].rounded-full { min-height: 44px; }
     }
-    /* Global: yatay taşma yok (Safari/Chrome/Firefox) — clip ile sağdaki beyaz şerit kalkar */
-    html { overflow-x: clip; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; }
-    body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); overflow-x: clip; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
+    /* Global: yatay taşma yok — mobilde tam ekran, sağda beyaz şerit kalmasın */
+    html { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; box-sizing: border-box; }
+    body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left); padding-right: env(safe-area-inset-right); padding-bottom: env(safe-area-inset-bottom); overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
     .max-w-5xl, .max-w-6xl, .max-w-4xl, .max-w-3xl, .max-w-2xl { min-width: 0; }
     /* iOS Safari: dinamik viewport (adres çubuğu dahil) */
     @supports (min-height: 100dvh) {
@@ -945,6 +963,15 @@
       .nav-actions #nav-auth button { min-height: 2.5rem; }
       .nav-actions #lang-wrap button, .nav-actions #nav-menu-wrap > button { min-height: 2.5rem; padding-top: 0.375rem; padding-bottom: 0.375rem; }
     }
+    /* Dil dropdown: hero/rengin üstünde görünsün (açılınca rengin altına kaymasın) */
+    #lang-wrap { position: relative; z-index: 201; }
+    /* Dil dropdown: her zaman en üstte görünsün (hero/rengin altına kaymasın) — fixed + çok yüksek z-index */
+    #lang-modal {
+      z-index: 99999 !important;
+      position: fixed !important;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.25);
+      margin-top: 0;
+    }
     /* Mobilde menü ve dil dropdown sabit pozisyon + yüksek z-index; arkaya gitmesin */
     @media (max-width: 640px) {
       #nav-menu-dropdown {
@@ -952,7 +979,7 @@
         top: calc(3.25rem + 0.5rem + env(safe-area-inset-top, 0px)) !important; margin-top: 0;
         box-shadow: 0 10px 40px rgba(0,0,0,0.2); z-index: 9999; max-height: min(85vh, 85dvh); overflow-y: auto; width: auto !important; min-width: 12rem;
       }
-      #lang-modal { z-index: 9999 !important; box-shadow: 0 10px 40px rgba(0,0,0,0.2); }
+      #lang-modal { z-index: 99999 !important; box-shadow: 0 10px 40px rgba(0,0,0,0.25); }
     }
     @media (max-width: 380px) {
       .nav-logo-link { min-width: 4rem; max-width: 6rem; margin-left: 0; }
@@ -963,9 +990,10 @@
     }
     /* ========== Enterprise glass header (sticky + compact + pill nav + premium CTA) ========== */
     .header {
-      position: sticky; top: 0; z-index: 50;
+      position: sticky; top: 0; z-index: 200;
       width: 100%;
       overflow-x: clip;
+      overflow-y: visible;
       background: rgba(255,255,255,.78);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -1197,46 +1225,8 @@
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     /* Kapalı modallar tıklamayı asla engellemesin (görünmez overlay riski) */
     #modal-login.hidden, #modal-register.hidden, #modal-forgot.hidden, #modal-reset.hidden,
-    #guest-checkout-modal.hidden, #payment-modal.hidden, #a2hs-banner.hidden, #ios-a2hs-banner.hidden {
+    #guest-checkout-modal.hidden, #payment-modal.hidden {
       pointer-events: none !important;
-    }
-    /* PWA: Ana ekrana ekle banner — ince, içerikle çakışmasın; dismiss sonrası bir daha gösterme */
-    .install-banner {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      z-index: 9999;
-      background: #0EA5A4;
-      color: #ffffff;
-      padding: 10px 14px calc(10px + env(safe-area-inset-bottom));
-      padding-left: max(14px, env(safe-area-inset-left));
-      padding-right: max(14px, env(safe-area-inset-right));
-      box-shadow: 0 -2px 12px rgba(0,0,0,0.12);
-      -webkit-tap-highlight-color: transparent;
-      -webkit-transform: translateZ(0);
-      transform: translateZ(0);
-    }
-    @media (min-width: 640px) {
-      .install-banner { padding: 12px 16px calc(12px + env(safe-area-inset-bottom)); padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); box-shadow: 0 -4px 20px rgba(0,0,0,0.15); }
-    }
-    .install-banner button {
-      border-radius: 10px;
-      font-weight: 600;
-      -webkit-tap-highlight-color: transparent;
-      touch-action: manipulation;
-    }
-    .install-banner .a2hs-btn-primary {
-      background: #ffffff;
-      color: #0EA5A4;
-      border: none;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-    }
-    .install-banner .a2hs-btn-primary:hover {
-      background: #f0fdfa;
-      color: #0d9488;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
     }
     /* WhatsApp FAB: safe-area uyumlu, yatay taşma yok, mobilde sadece ikon */
     .wa-fab {
@@ -1265,9 +1255,6 @@
         padding-right: calc(72px + env(safe-area-inset-right, 0px));
         padding-bottom: calc(72px + env(safe-area-inset-bottom, 0px));
       }
-      body.a2hs-visible {
-        padding-bottom: calc(120px + env(safe-area-inset-bottom, 0px));
-      }
     }
     @media (max-width: 420px) {
       .wa-fab {
@@ -1279,17 +1266,6 @@
     }
     @media (min-width: 640px) {
       .wa-fab { padding: 0; right: max(24px, env(safe-area-inset-right)); bottom: calc(14px + env(safe-area-inset-bottom)); }
-    }
-    /* PWA çubukları: ince, az dominant, dismiss net; premium görünümü bozmasın */
-    #a2hs-banner, #ios-a2hs-banner {
-      min-height: 44px;
-      box-sizing: border-box;
-    }
-    @media (max-width: 639px) {
-      #a2hs-banner p, #ios-a2hs-banner p { font-size: 0.75rem; line-height: 1.3; color: rgba(255,255,255,0.95); }
-      #a2hs-banner button, #ios-a2hs-banner button { min-height: 36px; min-width: 36px; padding: 6px 10px; font-size: 0.75rem; }
-      .install-banner { padding: 8px 12px calc(8px + env(safe-area-inset-bottom)); box-shadow: 0 -1px 8px rgba(0,0,0,0.08); }
-      body.a2hs-visible { padding-bottom: calc(204px + env(safe-area-inset-bottom, 0px)); }
     }
     /* Profile / Dashboard: Apple-level premium container + cards */
     #profile-section {
@@ -1805,7 +1781,7 @@
             <span aria-hidden="true">🌐</span>
             <span id="lang-current">EN</span>
           </button>
-          <div id="lang-modal" class="hidden absolute right-0 top-full mt-2 w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 z-[70] overflow-y-auto lang-dropdown-max-h">
+          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h" style="right: 0; top: 0;">
             <button type="button" onclick="chooseLang('tr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl">Türkçe</button>
             <button type="button" onclick="chooseLang('en')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">English</button>
             <button type="button" onclick="chooseLang('de')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30">Deutsch</button>
@@ -1886,65 +1862,49 @@
     </div>
   </section>
 
-  <!-- Trust Bar: mini rozetler (hero altı) -->
-  <section class="trust-bar-section bg-[var(--norya-bg)] border-b border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 py-4 sm:py-5 overflow-x-hidden">
-    <div class="premium-wrap">
-      <div class="flex flex-wrap justify-center items-center gap-x-4 sm:gap-x-6 gap-y-3 text-[13px] sm:text-sm text-accent-700 dark:text-accent-300">
-        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none" aria-label="Medical-grade insights">
-          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
-          <span data-i18n="trust_bar_medical">Medical-grade insights</span>
-        </span>
-        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
-          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          <span data-i18n="trust_bar_3d">3D Secure Payments</span>
-        </span>
-        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
-          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          <span data-i18n="trust_bar_doctor_reports">Doctor-style Reports</span>
-        </span>
-        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
-          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-          <span data-i18n="trust_bar_analyses">50,000+ analyses generated</span>
-        </span>
-        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
-          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span data-i18n="trust_bar_cloudflare">Cloudflare Security</span>
-        </span>
-      </div>
-    </div>
-  </section>
-
   <!-- Health Score kartı — premium, mobilde taşma yok -->
   <section class="premium-section health-score-section bg-[var(--norya-bg)] pt-8 sm:pt-10 pb-8 sm:pb-10">
     <div class="premium-wrap">
       <div class="max-w-md mx-auto px-1">
         <article class="light-glass-card rounded-2xl p-6 sm:p-8 flex flex-col gap-5 text-center health-score-card shadow-lg border border-white/60 dark:border-accent-700/40">
-          <div class="text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-accent-500 dark:text-accent-400">
-            Health Score
-          </div>
+          <div class="text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-accent-500 dark:text-accent-400" data-i18n="health_score_card_title">Health Score</div>
           <div class="flex flex-col items-center gap-2">
             <div class="text-4xl sm:text-5xl font-bold text-accent-900 dark:text-white tracking-tight tabular-nums">
               82 <span class="text-lg sm:text-xl font-semibold text-accent-500 dark:text-accent-400">/ 100</span>
             </div>
-            <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 leading-relaxed max-w-xs mx-auto">
-              Genel sağlık durumunuz iyi seviyede.
-            </p>
+            <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 leading-relaxed max-w-xs mx-auto" data-i18n="health_score_card_desc">Genel sağlık durumunuz iyi seviyede.</p>
           </div>
           <div class="mt-1 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-5 text-[11px] sm:text-xs text-accent-500 dark:text-accent-400">
-            <div class="inline-flex items-center gap-2">
-              <span class="inline-flex w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.25)] flex-shrink-0"></span>
-              <span>90–100 arası • yeşil</span>
-            </div>
-            <div class="inline-flex items-center gap-2">
-              <span class="inline-flex w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_0_4px_rgba(245,158,11,0.25)] flex-shrink-0"></span>
-              <span>70–89 arası • sarı</span>
-            </div>
-            <div class="inline-flex items-center gap-2">
-              <span class="inline-flex w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_0_4px_rgba(244,63,94,0.25)] flex-shrink-0"></span>
-              <span>0–69 arası • kırmızı</span>
-            </div>
+            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.25)] flex-shrink-0"></span><span data-i18n="health_score_legend_green">90–100 arası • yeşil</span></div>
+            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_0_4px_rgba(245,158,11,0.25)] flex-shrink-0"></span><span data-i18n="health_score_legend_yellow">70–89 arası • sarı</span></div>
+            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_0_4px_rgba(244,63,94,0.25)] flex-shrink-0"></span><span data-i18n="health_score_legend_red">0–69 arası • kırmızı</span></div>
           </div>
         </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Global standartlar & güvenlik — özel blok, ultra premium / doktor-hastane elit (kalp ritmi ikonları yok) -->
+  <section id="trust-global" class="trust-global-section bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800/50 py-6 sm:py-8 overflow-x-hidden">
+    <div class="premium-wrap">
+      <p class="text-center text-[11px] sm:text-xs font-semibold tracking-[0.15em] uppercase text-accent-500 dark:text-accent-400 mb-4" data-i18n="trust_global_label">Global standards & security</p>
+      <div class="flex flex-wrap justify-center items-center gap-x-3 sm:gap-x-5 gap-y-2.5 text-[12px] sm:text-[13px] text-accent-600 dark:text-accent-400">
+        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50" aria-label="Clinical reports">
+          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="trust_bar_doctor_reports">Doctor-style Reports</span>
+        </span>
+        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50">
+          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span data-i18n="trust_bar_3d">3D Secure Payments</span>
+        </span>
+        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50">
+          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          <span data-i18n="trust_global_labs">Global lab units</span>
+        </span>
+        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50">
+          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span data-i18n="trust_bar_cloudflare">Cloudflare Security</span>
+        </span>
       </div>
     </div>
   </section>
@@ -3788,7 +3748,7 @@
 
           <!-- Adım 4: Sonuç (ultra premium doctor-grade report UI) -->
           <div id="wizard-step-4" class="wizard-step hidden">
-            <div id="analyze-result" class="report-page rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-navy-800/90 overflow-hidden shadow-xl shadow-primary-900/5 dark:shadow-black/20">
+            <div id="analyze-result" class="report-page rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-navy-800/90 shadow-xl shadow-primary-900/5 dark:shadow-black/20">
               <!-- 1) Sticky report bar -->
               <div id="report-sticky-bar" class="report-sticky-bar no-print">
                 <div class="report-sticky-bar-left">
@@ -3808,6 +3768,15 @@
                   <a href="/pricing?from=report" id="report-bar-upgrade-btn" class="btn-report-upgrade no-print" data-i18n="report_upgrade_btn">Upgrade</a>
                 </div>
               </div>
+              <!-- Raporumu indir — SONUÇ EKRANINDA EN ÜSTTE, MUTLAKA GÖRÜNSÜN -->
+              <div id="report-download-cta" class="report-download-cta report-download-cta--prominent no-print" style="display: flex !important; visibility: visible !important;">
+                <div class="report-download-cta-inner">
+                  <span class="report-download-cta-label" data-i18n="report_download_cta_label">Raporunuzu indirin</span>
+                  <button type="button" onclick="downloadReportPdf()" id="report-download-main-btn" class="report-download-main-btn report-download-main-btn--large" data-i18n="report_download">Raporu İndir</button>
+                  <button type="button" onclick="downloadForDoctor()" class="report-download-secondary-btn" data-i18n="report_for_doctor">Doktoruma götür</button>
+                  <a href="#" id="report-download-link" class="report-download-link" data-i18n="report_download_link">Raporumu indir (PDF)</a>
+                </div>
+              </div>
               <!-- 2) Hero — premium elite (badge when free) -->
               <div class="report-hero">
                 <div class="report-hero-inner">
@@ -3820,6 +3789,12 @@
                 </div>
               </div>
               <div class="p-4 sm:p-6">
+                <!-- Her zaman görünen rapor aksiyonları: İndir + Doktoruma götür -->
+                <div id="report-actions-inline" class="report-actions-inline no-print flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-6 p-4 rounded-2xl bg-[#0EA5A4]/08 dark:bg-[#0EA5A4]/12 border border-[#0EA5A4]/20">
+                  <button type="button" onclick="downloadReportPdf()" id="report-inline-pdf-btn" class="report-action-btn report-action-btn--primary min-h-[44px] px-5 py-2.5 rounded-xl bg-[#0EA5A4] text-white font-semibold text-sm hover:bg-[#0d9488] transition shadow-sm" data-i18n="report_download">Raporu İndir</button>
+                  <button type="button" onclick="downloadForDoctor()" class="report-action-btn report-action-btn--outline min-h-[44px] px-5 py-2.5 rounded-xl border-2 border-[#0EA5A4] text-[#0EA5A4] font-semibold text-sm hover:bg-[#0EA5A4]/10 transition" data-i18n="report_for_doctor">Doktoruma götür</button>
+                  <button type="button" onclick="shareReport()" class="report-action-btn report-action-btn--secondary min-h-[44px] px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-medium text-sm hover:bg-slate-50 dark:hover:bg-slate-800/50 transition" data-i18n="report_share">Paylaş</button>
+                </div>
                 <div class="alert-medical no-print" role="alert">
                   <div class="alert-icon">⚠️</div>
                   <div class="alert-text">
@@ -4960,26 +4935,6 @@
 
   <div id="toast-container" aria-live="polite"></div>
 
-  <!-- PWA: Ana ekrana ekle (Android/Chrome) — Norya rengi #0EA5A4, safe-area -->
-  <div id="a2hs-banner" class="install-banner hidden flex items-center justify-between gap-2 min-w-0">
-    <div class="flex items-center gap-2 min-w-0 flex-1">
-      <img src="/static/icons/icon-192.png" alt="Norya" class="flex-shrink-0 w-8 h-8 rounded-lg object-contain" />
-      <p class="text-xs truncate a2hs-text" data-i18n="a2hs_message">Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.</p>
-    </div>
-    <div class="flex items-center gap-1 flex-shrink-0">
-      <button type="button" onclick="dismissA2HS()" class="a2hs-btn text-white/90 hover:text-white text-xs py-1.5 px-2 rounded" data-i18n="a2hs_later">Sonra</button>
-      <button type="button" id="a2hs-install-btn" onclick="installPWA()" class="a2hs-btn-primary text-xs font-medium py-1.5 px-3 rounded-full" data-i18n="a2hs_add">Ekle</button>
-    </div>
-  </div>
-  <!-- PWA: iOS Ana ekrana ekle (Safari) — Norya rengi #0EA5A4 -->
-  <div id="ios-a2hs-banner" class="install-banner hidden flex items-center justify-between gap-2 min-w-0">
-    <div class="flex items-center gap-2 min-w-0 flex-1">
-      <img src="/static/icons/icon-192.png" alt="Norya" class="flex-shrink-0 w-8 h-8 rounded-lg object-contain" />
-      <p class="text-xs a2hs-text" data-i18n="ios_a2hs_message">Ana ekrana ekle: <strong>Paylaş</strong> <span aria-hidden="true">⎋</span> <strong>Ana Ekrana Ekle</strong></p>
-    </div>
-    <button type="button" onclick="dismissIOSA2HS()" class="a2hs-btn text-white/90 hover:text-white text-xs py-1.5 px-2 rounded flex-shrink-0" data-i18n="ios_a2hs_close">Kapat</button>
-  </div>
-
   <script>
     const API_BASE = window.location.origin;
     const TOKEN_KEY = 'norya_token';
@@ -5620,33 +5575,47 @@
         '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('target') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_bio_age || 'Biological Age') + '</span><span class="report-tile-value">≈ ' + healthAge + '</span></div>' +
         '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('eye') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_priority || 'Priority Focus') + '</span><span class="report-tile-value">' + escapeHtml(priorityFocus.length > 45 ? priorityFocus.slice(0, 45) + '…' : priorityFocus) + '</span></div>' +
         '</div></section>';
-      html += '<section class="section-card gauge-section' + blurClass + '">' +
+      html += '<section class="section-card gauge-section gauge-section--compact' + blurClass + '">' +
         '<div class="section-title report-sec-icon">' + reportIcon('gauge') + ' ' + escapeHtml(riskTitle) + '</div>' +
         '<div class="section-body"><div class="gauge-wrap">' +
         '<svg class="gauge-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg">' +
-        '<path class="gauge-bg" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/>' +
-        '<path class="gauge-fill ' + fillClass + '" d="M10 100 A90 90 0 0 1 ' + gx + ' ' + gy + '" fill="none" stroke-width="12" stroke-linecap="round"/>' +
-        '<text class="gauge-score" x="100" y="72" text-anchor="middle" font-size="20" font-weight="700" fill="currentColor">' + score + '</text></svg></div></div></section>';
+        '<path class="gauge-bg" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="5" stroke-linecap="round"/>' +
+        '<path class="gauge-fill ' + fillClass + '" d="M10 100 A90 90 0 0 1 ' + gx + ' ' + gy + '" fill="none" stroke-width="5" stroke-linecap="round"/>' +
+        '<text class="gauge-score" x="100" y="72" text-anchor="middle" font-size="12" font-weight="700" fill="currentColor">' + score + '</text></svg></div></div></section>';
       var domains = (o.risk_summary && o.risk_summary.domains) ? o.risk_summary.domains : {};
+      var highlights = (o.risk_summary && o.risk_summary.highlights) ? o.risk_summary.highlights : [];
       var domainOrder = ['cardio', 'metabolic', 'inflammation', 'vitamin'];
       var domainTitleKeys = { cardio: 'example_report_domain_cardio', metabolic: 'example_report_domain_metabolic', inflammation: 'example_report_domain_inflammation', vitamin: 'example_report_domain_vitamin' };
-      var categoryBarsHtml = '';
+      var domainToKeywords = { cardio: ['ldl','hdl','cholesterol','kolesterol','triglyceride','kalp'], metabolic: ['glucose','glukoz','hba1c','insulin','metabolik'], inflammation: ['crp','c-reactive','enflamasyon','hs-crp'], vitamin: ['vitamin','d vitamini','b12','folat','demir','ferritin'] };
+      function getRecommendationForDomain(domainKey) {
+        for (var hi = 0; hi < highlights.length; hi++) {
+          var h = highlights[hi];
+          var test = (h.test || '').toLowerCase();
+          var kws = domainToKeywords[domainKey] || [];
+          for (var k = 0; k < kws.length; k++) if (test.indexOf(kws[k]) !== -1 && h.action) return h.action;
+        }
+        return null;
+      }
+      var categoryCardsHtml = '';
       for (var di = 0; di < domainOrder.length; di++) {
         var dk = domainOrder[di];
         var dom = domains[dk] || {};
         var dScore = Math.max(0, Math.min(100, dom.score != null ? dom.score : 50));
+        var dLevel = (dom.level || '').toLowerCase();
+        var cardClass = (dLevel === 'high' || dScore < 40) ? 'report-domain-card--risk' : (dLevel === 'mid' || dScore < 70) ? 'report-domain-card--border' : 'report-domain-card--normal';
         var dLabel = (t[domainTitleKeys[dk]] || dk);
-        categoryBarsHtml += '<div class="report-category-bar-row">' +
-          '<span class="report-category-bar-label">' + escapeHtml(dLabel) + '</span>' +
-          '<div class="report-category-bar-track"><div class="report-category-bar-fill" style="width:' + dScore + '%"></div></div>' +
-          '<span class="report-category-bar-value">' + dScore + '</span></div>';
+        var rec = getRecommendationForDomain(dk);
+        var recText = rec || (dScore >= 70 ? (t.report_cat_recommend_ok || 'Değerler uygun aralıkta. Düzenli takip önerilir.') : (dScore >= 40 ? (t.report_cat_recommend_mid || 'Takip ve yaşam tarzı önerileri için hekiminizle görüşün.') : (t.report_cat_recommend_risk || 'Hekiminizle görüşmeniz önerilir.')));
+        categoryCardsHtml += '<div class="report-domain-card ' + cardClass + '">' +
+          '<div class="report-domain-card-header">' + reportIcon('barChart2') + '<span class="report-domain-card-title">' + escapeHtml(dLabel) + '</span><span class="report-domain-card-score">' + dScore + '</span></div>' +
+          '<div class="report-domain-card-bar"><div class="report-domain-card-bar-fill" style="width:' + dScore + '%"></div></div>' +
+          '<p class="report-domain-card-recommendation">' + escapeHtml(recText) + '</p></div>';
       }
-      if (categoryBarsHtml) {
-        html += '<section class="section-card report-category-bars-section' + blurClass + '">' +
+      if (categoryCardsHtml) {
+        html += '<section class="section-card report-domain-cards-section' + blurClass + '">' +
           '<div class="section-title report-sec-icon">' + reportIcon('barChart') + ' ' + escapeHtml(t.report_category_scores || 'Category scores') + '</div>' +
-          '<div class="section-body report-category-bars">' + categoryBarsHtml + '</div></section>';
+          '<div class="section-body report-domain-cards">' + categoryCardsHtml + '</div></section>';
       }
-      var highlights = (o.risk_summary && o.risk_summary.highlights) ? o.risk_summary.highlights : [];
       var distNorm = 0, distBorder = 0, distAttn = 0;
       for (var hi = 0; hi < highlights.length; hi++) {
         var lev = (highlights[hi].level || '').toLowerCase();
@@ -5840,27 +5809,37 @@
       html += '<div class="report-score-stat report-score-stat--critical"><span class="report-score-stat-value">' + critical + '</span><span class="report-score-stat-label">' + escapeHtml(t.report_critical || 'Critical') + '</span></div>';
       html += '<div class="report-score-stat report-score-stat--unknown"><span class="report-score-stat-value">' + unknown + '</span><span class="report-score-stat-label">' + escapeHtml(t.report_unknown || 'Unknown') + '</span></div>';
       html += '</div>';
-      html += '<div class="report-score-radial"><svg class="gauge-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><path class="gauge-bg" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/><path class="gauge-fill ' + fillClass + '" d="M10 100 A90 90 0 0 1 ' + gx + ' ' + gy + '" fill="none" stroke-width="12" stroke-linecap="round"/><text class="gauge-score" x="100" y="72" text-anchor="middle" font-size="24" font-weight="700" fill="currentColor">' + score + '</text></svg></div>';
+      html += '<div class="report-score-radial"><svg class="gauge-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><path class="gauge-bg" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="5" stroke-linecap="round"/><path class="gauge-fill ' + fillClass + '" d="M10 100 A90 90 0 0 1 ' + gx + ' ' + gy + '" fill="none" stroke-width="5" stroke-linecap="round"/><text class="gauge-score" x="100" y="72" text-anchor="middle" font-size="14" font-weight="700" fill="currentColor">' + score + '</text></svg></div>';
       html += '</div>';
       if (attentionItems.length > 0) {
-        html += '<div id="report-attention-block" class="report-attention-block report-section-anchor"><h2 class="report-attention-block-title"><span class="report-attention-info-icon" aria-hidden="true">&#9432;</span> ' + escapeHtml(t.report_attention_title || 'Attention Needed') + '</h2><ul class="report-attention-list">';
+        html += '<div id="report-attention-block" class="report-attention-block report-section-anchor"><h2 class="report-attention-block-title"><span class="report-attention-info-icon" aria-hidden="true">&#9432;</span> ' + escapeHtml(t.report_attention_title || 'Attention Needed') + '</h2><div class="report-attention-cards-grid">';
         for (var a = 0; a < attentionItems.length; a++) {
           var it = attentionItems[a];
-          var badgeClass = (it.flag === 'High' || it.flag === 'Attention') ? 'report-attention-badge--high' : 'report-attention-badge--low';
+          var cardType = (it.flag === 'High' || it.flag === 'Attention') ? 'high' : 'low';
           var valStr = (it.value ? it.value + ' ' : '') + (it.unit || '');
-          html += '<li class="report-attention-item"><span class="report-attention-param">' + escapeHtml(it.name) + '</span><span class="report-attention-badge ' + badgeClass + '">' + escapeHtml(it.flag) + '</span>' + (valStr ? '<span>' + escapeHtml(valStr.trim()) + '</span>' : '') + '<a href="#report-params" class="report-attention-link">' + escapeHtml(t.report_view_details || 'View details') + '</a></li>';
+          html += '<a href="#report-params" class="report-attention-card report-attention-card--' + cardType + '">';
+          html += '<span class="report-attention-card-param">' + escapeHtml(it.name) + '</span>';
+          html += '<span class="report-attention-card-badge">' + escapeHtml(it.flag) + '</span>';
+          if (valStr) html += '<span class="report-attention-card-value">' + escapeHtml(valStr.trim()) + '</span>';
+          html += '<span class="report-attention-card-link">' + escapeHtml(t.report_view_details || 'View details') + ' →</span></a>';
         }
-        html += '</ul></div>';
+        html += '</div></div>';
       }
       var catTitles = { blood: t.report_category_blood || 'Blood Count', metabolic: t.report_category_metabolic || 'Metabolic', vitamins: t.report_category_vitamins || 'Vitamins & Minerals', inflammation: t.report_category_inflammation || 'Inflammation' };
       var catOrder = ['blood', 'metabolic', 'vitamins', 'inflammation'];
+      var catToDomain = { blood: 'cardio', metabolic: 'metabolic', vitamins: 'vitamin', inflammation: 'inflammation' };
       html += '<h2 class="report-category-summary-title">' + escapeHtml(t.report_category_summary || 'Category Summary') + '</h2><p class="report-category-summary-desc">' + escapeHtml(t.report_category_summary_desc || 'Your results summarized by category.') + '</p>';
       html += '<div class="report-category-cards">';
       for (var c = 0; c < catOrder.length; c++) {
         var dk = catOrder[c];
-        var dom = domains[dk] || {};
+        var domKey = catToDomain[dk] || dk;
+        var dom = domains[domKey] || {};
         var dScore = Math.max(0, Math.min(100, dom.score != null ? dom.score : 50));
-        html += '<a href="#report-params" class="report-category-card"><span class="report-category-card-icon">' + reportIcon('grid') + '</span><span class="report-category-card-title">' + escapeHtml(catTitles[dk]) + '</span><span class="report-category-card-meta">' + dScore + '% optimal</span><div class="report-category-card-bar"><div class="report-category-card-bar-fill" style="width:' + dScore + '%"></div></div></a>';
+        var dLevel = (dom.level || '').toLowerCase();
+        var cardColorClass = (dLevel === 'high' || dScore < 40) ? 'report-category-card--risk' : (dLevel === 'mid' || dScore < 70) ? 'report-category-card--border' : 'report-category-card--normal';
+        var rec = getRecommendationForDomain(domKey);
+        var recLine = rec || (dScore >= 70 ? (t.report_cat_recommend_ok || 'Değerler uygun.') : (dScore >= 40 ? (t.report_cat_recommend_mid || 'Hekiminizle görüşün.') : (t.report_cat_recommend_risk || 'Hekiminizle görüşmeniz önerilir.')));
+        html += '<a href="#report-params" class="report-category-card ' + cardColorClass + '"><span class="report-category-card-icon">' + reportIcon('grid') + '</span><span class="report-category-card-title">' + escapeHtml(catTitles[dk]) + '</span><span class="report-category-card-meta">' + dScore + '%</span><div class="report-category-card-bar"><div class="report-category-card-bar-fill" style="width:' + dScore + '%"></div></div><p class="report-category-card-recommendation">' + escapeHtml(recLine) + '</p></a>';
       }
       html += '</div>';
       var catOrder = ['hemogram', 'crp', 'glucose', 'lipids', 'liver', 'kidney', 'iron', 'thyroid', 'other'];
@@ -5887,11 +5866,18 @@
       }
       html += '<p class="report-legend-inline"><span class="report-legend-dot report-badge--optimal"></span> ' + escapeHtml(t.report_dist_normal || 'Normal') + ' <span class="report-legend-dot report-badge--border"></span> ' + escapeHtml(t.report_dist_borderline || 'Sınır') + ' <span class="report-legend-dot report-badge--high"></span> ' + escapeHtml(t.report_dist_attention || 'Dikkat') + '</p>';
       html += '<h2 id="report-params" class="report-params-title report-section-anchor">' + escapeHtml(t.report_params_title || 'Parameters') + '</h2>';
+      var catRecommendations = { hemogram: t.report_cat_recommend_hemogram || 'Kan sayımı değerleriniz. Referans dışı sonuçlarda hekiminizle görüşün.', crp: t.report_cat_recommend_crp || 'Enflamasyon belirteci. Yükseklikte hekime danışın.', glucose: t.report_cat_recommend_glucose || 'Kan şekeri ve metabolizma. Diyabet takibi için hekim önerisi alın.', lipids: t.report_cat_recommend_lipids || 'Kolesterol ve lipid paneli. Kalp sağlığı için düzenli takip.', liver: t.report_cat_recommend_liver || 'Karaciğer enzimleri. Yükseklikte hekim değerlendirmesi önerilir.', kidney: t.report_cat_recommend_kidney || 'Böbrek fonksiyonu. eGFR ve kreatinin takibi.', iron: t.report_cat_recommend_iron || 'Demir ve ferritin. Eksiklikte beslenme veya takviye hekimle konuşulmalı.', thyroid: t.report_cat_recommend_thyroid || 'Tiroid paneli. TSH/FT4 sonuçları hekim yorumu gerektirir.', other: t.report_cat_recommend_other || 'Diğer parametreler. Hekiminizle paylaşın.' };
       for (var ci = 0; ci < catOrder.length; ci++) {
         var cid = catOrder[ci];
         var items = byCat[cid];
         if (!items || !items.length) continue;
-        html += '<section class="report-category-section"><div class="report-category-section-title">' + reportIcon(catIcons[cid]) + ' ' + escapeHtml(catLabels[cid]) + '</div><div class="report-biomarker-grid report-biomarker-grid--multi">';
+        var worstStatus = 'normal';
+        for (var wi = 0; wi < items.length; wi++) {
+          if (items[wi].status === 'low' || items[wi].status === 'high') { worstStatus = 'risk'; break; }
+          if (items[wi].status === 'border') worstStatus = 'border';
+        }
+        var sectionCardClass = 'report-category-section report-category-section--' + worstStatus;
+        html += '<section class="' + sectionCardClass + '"><div class="report-category-section-title">' + reportIcon(catIcons[cid]) + ' ' + escapeHtml(catLabels[cid]) + '</div><p class="report-category-section-recommendation">' + escapeHtml(catRecommendations[cid] || catRecommendations.other) + '</p><div class="report-biomarker-grid report-biomarker-grid--multi">';
         for (var p = 0; p < items.length; p++) {
           var it = items[p];
           var v = it.value;
@@ -5902,30 +5888,40 @@
           var visualMax = Math.max(hi, v) + (range * 0.05);
           if (visualMax <= visualMin) visualMax = visualMin + 1;
           var pct = Math.max(0, Math.min(100, ((v - visualMin) / (visualMax - visualMin)) * 100));
+          var score100 = (it.status === 'low' || it.status === 'high') ? 40 : (it.status === 'border' ? 65 : 100);
           var badgeCls = it.status === 'low' ? 'report-badge--low' : it.status === 'high' ? 'report-badge--high' : it.status === 'border' ? 'report-badge--border' : 'report-badge--optimal';
           var badgeText = it.status === 'low' ? 'Low' : it.status === 'high' ? 'High' : it.status === 'border' ? 'Borderline' : 'Optimal';
           var valueText = (it.valueDisplay != null ? it.valueDisplay : String(it.value)) + (it.unit ? ' ' + it.unit : '');
           var refLabel = (lo != null && hi != null) ? (lo + '–' + hi + (it.unit ? ' ' + it.unit : '')) : (it.refLabel || '—');
+          var scoreLabel = (t.report_score_out_of || 'Skor') + ' ';
           html += '<div class="report-biomarker-card report-biomarker-card--' + (it.status === 'low' || it.status === 'high' ? 'risk' : it.status === 'border' ? 'border' : 'normal') + '"><div class="report-biomarker-card-header"><span class="report-biomarker-card-name">' + escapeHtml(it.label) + '</span><span class="report-badge ' + badgeCls + '">' + escapeHtml(badgeText) + '</span></div>';
+          html += '<div class="report-biomarker-card-score">' + escapeHtml(scoreLabel) + '<strong>' + score100 + '</strong> / 100</div>';
           html += '<div class="report-biomarker-card-value">' + escapeHtml(valueText) + '</div><div class="report-biomarker-card-ref">' + escapeHtml(t.report_ref_range || 'Ref') + ': ' + escapeHtml(refLabel) + '</div>';
-          html += '<div class="report-biomarker-card-bar-wrap"><div class="report-biomarker-card-bar-marker" style="left:' + pct + '%;position:absolute;margin-left:-2px"></div></div>';
+          html += '<div class="report-biomarker-card-bar-wrap"><div class="report-biomarker-card-bar-fill" style="width:' + score100 + '%"></div><div class="report-biomarker-card-bar-marker" style="left:' + pct + '%;position:absolute;margin-left:-2px"></div></div>';
           html += '<p class="report-biomarker-card-desc">' + escapeHtml(it.status === 'high' ? '— Takip gerekebilir. Hekiminizle görüşün.' : it.status === 'low' ? '— Beslenme veya yaşam tarzı ile ilişkili olabilir. Hekiminizle görüşün.' : '— Referans aralığında.') + '</p></div>';
         }
         html += '</div></section>';
       }
       if (Object.keys(byCat).length === 0 && parsedValues && parsedValues.length) {
-        html += '<div class="report-biomarker-grid">';
+        html += '<div class="report-biomarker-grid report-biomarker-grid--multi">';
         for (var p = 0; p < parsedValues.length; p++) {
           var it = parsedValues[p];
           var v = it.value, lo = it.refMin, hi = it.refMax, range = hi - lo;
           var visualMin = Math.min(lo, v) - (range * 0.05), visualMax = Math.max(hi, v) + (range * 0.05);
           if (visualMax <= visualMin) visualMax = visualMin + 1;
           var pct = Math.max(0, Math.min(100, ((v - visualMin) / (visualMax - visualMin)) * 100));
+          var score100 = (it.status === 'low' || it.status === 'high') ? 40 : (it.status === 'border' ? 65 : 100);
           var badgeCls = it.status === 'low' ? 'report-badge--low' : it.status === 'high' ? 'report-badge--high' : it.status === 'border' ? 'report-badge--border' : 'report-badge--optimal';
           var badgeText = it.status === 'low' ? 'Low' : it.status === 'high' ? 'High' : it.status === 'border' ? 'Borderline' : 'Optimal';
           var valueText = (it.valueDisplay != null ? it.valueDisplay : String(it.value)) + (it.unit ? ' ' + it.unit : '');
           var refLabel = (lo != null && hi != null) ? (lo + '–' + hi + (it.unit ? ' ' + it.unit : '')) : (it.refLabel || '—');
-          html += '<div class="report-biomarker-card"><div class="report-biomarker-card-header"><span class="report-biomarker-card-name">' + escapeHtml(it.label) + '</span><span class="report-badge ' + badgeCls + '">' + escapeHtml(badgeText) + '</span></div><div class="report-biomarker-card-value">' + escapeHtml(valueText) + '</div><div class="report-biomarker-card-ref">' + escapeHtml(t.report_ref_range || 'Ref') + ': ' + escapeHtml(refLabel) + '</div><div class="report-biomarker-card-bar-wrap"><div class="report-biomarker-card-bar-marker" style="left:' + pct + '%;position:absolute;margin-left:-2px"></div></div><p class="report-biomarker-card-desc">' + escapeHtml(it.label + ' — within reference range.') + '</p></div>';
+          var scoreLabel = (t.report_score_out_of || 'Skor') + ' ';
+          var cardClass = 'report-biomarker-card report-biomarker-card--' + (it.status === 'low' || it.status === 'high' ? 'risk' : it.status === 'border' ? 'border' : 'normal');
+          html += '<div class="' + cardClass + '"><div class="report-biomarker-card-header"><span class="report-biomarker-card-name">' + escapeHtml(it.label) + '</span><span class="report-badge ' + badgeCls + '">' + escapeHtml(badgeText) + '</span></div>';
+          html += '<div class="report-biomarker-card-score">' + escapeHtml(scoreLabel) + '<strong>' + score100 + '</strong> / 100</div>';
+          html += '<div class="report-biomarker-card-value">' + escapeHtml(valueText) + '</div><div class="report-biomarker-card-ref">' + escapeHtml(t.report_ref_range || 'Ref') + ': ' + escapeHtml(refLabel) + '</div>';
+          html += '<div class="report-biomarker-card-bar-wrap"><div class="report-biomarker-card-bar-fill" style="width:' + score100 + '%"></div><div class="report-biomarker-card-bar-marker" style="left:' + pct + '%;position:absolute;margin-left:-2px"></div></div>';
+          html += '<p class="report-biomarker-card-desc">' + escapeHtml(it.status === 'high' ? '— Takip gerekebilir. Hekiminizle görüşün.' : it.status === 'low' ? '— Beslenme veya yaşam tarzı ile ilişkili olabilir. Hekiminizle görüşün.' : '— Referans aralığında.') + '</p></div>';
         }
         html += '</div>';
       }
@@ -6024,6 +6020,21 @@
       if (doctorBtn) doctorBtn.textContent = t.report_for_doctor || 'Doktoruma götür';
       var shareBtn = document.getElementById('report-bar-share-btn');
       if (shareBtn) shareBtn.textContent = t.report_share || 'Paylaş';
+      var inlinePdfBtn = document.getElementById('report-inline-pdf-btn');
+      if (inlinePdfBtn) {
+        inlinePdfBtn.textContent = t.report_download || 'Raporu İndir';
+        if (isPremium) { inlinePdfBtn.onclick = function() { downloadReportPdf(); }; inlinePdfBtn.classList.remove('report-action-btn--locked'); } else { inlinePdfBtn.onclick = function() { window.location.href = '/pricing?from=report'; }; inlinePdfBtn.classList.add('report-action-btn--locked'); }
+      }
+      var mainDownloadBtn = document.getElementById('report-download-main-btn');
+      if (mainDownloadBtn) {
+        mainDownloadBtn.textContent = t.report_download || 'Raporu İndir';
+        if (isPremium) { mainDownloadBtn.onclick = function() { downloadReportPdf(); }; mainDownloadBtn.classList.remove('report-download-main-btn--locked'); } else { mainDownloadBtn.onclick = function() { window.location.href = '/pricing?from=report'; }; mainDownloadBtn.classList.add('report-download-main-btn--locked'); }
+      }
+      var downloadLink = document.getElementById('report-download-link');
+      if (downloadLink) {
+        downloadLink.textContent = t.report_download_link || 'Raporumu indir (PDF)';
+        if (isPremium) { downloadLink.href = '#'; downloadLink.onclick = function(e) { e.preventDefault(); downloadReportPdf(); }; downloadLink.classList.remove('report-download-link--locked'); } else { downloadLink.href = '/pricing?from=report'; downloadLink.onclick = null; downloadLink.classList.add('report-download-link--locked'); }
+      }
       var upgradeSection = document.getElementById('report-upgrade-section');
       if (upgradeSection) upgradeSection.style.display = isPremium ? 'none' : 'block';
       var heroPremiumBadge = document.getElementById('report-hero-premium-badge');
@@ -6227,7 +6238,7 @@
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme",
-        trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik",
+        trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", health_score_card_title: "Health Score", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
         features_heading: "Güvenilir sağlık içgörüleri, gerçek hayat için tasarlandı.",
         features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
         feature_1_title: "Anında, yapılandırılmış analiz", feature_1_desc: "Yaygın biyobelirteçlerin net açıklamaları ve ne anlama gelebilecekleri — dakikalar içinde.",
@@ -6467,10 +6478,10 @@
         report_attention_title: "Dikkat Gerekli", report_view_details: "Detaylara git",
         report_category_summary: "Kategori Özeti", report_category_summary_desc: "Sonuçlarınız kategorilere göre özetlendi.",
         report_category_blood: "Kan Sayımı", report_category_metabolic: "Metabolik", report_category_vitamins: "Vitaminler ve Mineraller", report_category_inflammation: "İnflamasyon",
-        report_params_title: "Parametreler", report_ref_range: "Ref", report_risk_factors: "Risk Faktörleri", report_next_steps: "Sonuç ve Sonraki Adımlar", report_trends: "Trendler",
+        report_params_title: "Parametreler", report_ref_range: "Ref", report_score_out_of: "Skor", report_risk_factors: "Risk Faktörleri", report_next_steps: "Sonuç ve Sonraki Adımlar", report_trends: "Trendler",
         report_unlock_full: "Tam raporu aç", report_unlock_desc: "PDF indirme, detaylı içgörüler, trend takibi ve kişiselleştirilmiş sonraki adımlara erişin.", report_unlock_pdf: "PDF indirme", report_unlock_insights: "Detaylı içgörüler", report_unlock_trends: "Trend takibi",
         report_flexible_cancel: "Esnek iptal.", report_upgrade_now: "Şimdi yükselt", report_upgrade_btn: "Yükselt",
-        alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
+        alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_download_cta_label: "Raporunuzu indirin", report_download_link: "Raporumu indir (PDF)", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
         wizard_step1_title: "Dosya veya metin", wizard_step2_title: "Önizleme ve dil", wizard_step3_title: "Raporunuz hazırlanıyor", wizard_drop: "Dosyayı buraya sürükleyin veya tıklayın", wizard_back: "Geri", wizard_next: "Sonraki", wizard_preview_text: "Metin girişi", wizard_lang: "Rapor dili", wizard_step3_time: "Ortalama 20–30 saniye sürer.",
         pdf_header_title: "Kan Tahlili Analiz Raporu", pdf_footer_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya",
         pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler", pdf_sec_diet: "Diyet planı", pdf_sec_supplements: "Takviye önerileri", pdf_sec_heart: "Kalp sağlığı",
@@ -6582,7 +6593,7 @@
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
-        trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security",
+        trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
         features_heading: "Trusted health insights, designed for real life.",
         features_sub: "Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.",
         feature_1_title: "Instant, structured analysis", feature_1_desc: "Clear explanations of common biomarkers and what they may indicate — in minutes.",
@@ -6808,7 +6819,7 @@
         analyze_doctor_notes_label: "Your doctor's note / extra info (optional)",
         analyze_doctor_notes_placeholder: "E.g. My doctor prescribed B12; please consider with these results.",
         analyze_or: "— or —", analyze_upload_btn: "Upload PDF or image (JPG, PNG)",
-        report_title: "Norya Analysis Report", report_download: "Download report", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
+        report_title: "Norya Analysis Report", report_download: "Download report", report_download_cta_label: "Download your report", report_download_link: "Download my report (PDF)", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
         report_bar_title: "Report", report_pill_secure: "Secure • Encrypted", report_pill_3d: "3D Secure Payments", report_pill_global: "Global lab units", report_pill_pdf: "Shareable PDF",
         report_hero_title: "Your Health Report", report_hero_sub: "A structured, clinician-style summary of your lab results.",
         report_demo_badge: "Upgrade for full report", report_upgrade_elite_label: "Unlock full report",
@@ -6816,7 +6827,7 @@
         report_attention_title: "Attention Needed", report_view_details: "View details",
         report_category_summary: "Category Summary", report_category_summary_desc: "Your results summarized by category.",
         report_category_blood: "Blood Count", report_category_metabolic: "Metabolic", report_category_vitamins: "Vitamins & Minerals", report_category_inflammation: "Inflammation",
-        report_params_title: "Parameters", report_ref_range: "Ref", report_risk_factors: "Risk Factors", report_next_steps: "Next Steps", report_trends: "Trends",
+        report_params_title: "Parameters", report_ref_range: "Ref", report_score_out_of: "Score", report_risk_factors: "Risk Factors", report_next_steps: "Next Steps", report_trends: "Trends",
         report_unlock_full: "Unlock the full report", report_unlock_desc: "Get PDF download, deep insights, trend tracking and personalized next steps.", report_unlock_pdf: "PDF download", report_unlock_insights: "Deep insights", report_unlock_trends: "Trend tracking",
         report_flexible_cancel: "Flexible cancellation.", report_upgrade_now: "Upgrade now", report_upgrade_btn: "Upgrade",
         upload_intake_title: "Upload Your Lab Results",
@@ -8872,7 +8883,21 @@
     function getLocale() { var lang = getLang(); return LOCALE_MAP[lang] || 'en-US'; }
     function toggleLangModal() {
       var m = document.getElementById("lang-modal");
-      m.classList.toggle("hidden");
+      var btn = document.getElementById("lang-btn");
+      var isNowHidden = m.classList.toggle("hidden");
+      if (!isNowHidden && btn) {
+        var r = btn.getBoundingClientRect();
+        var w = 208;
+        m.style.top = (r.bottom + 8) + "px";
+        var left = r.right - w;
+        if (left < 8) left = 8;
+        m.style.left = left + "px";
+        m.style.right = "auto";
+      } else if (isNowHidden) {
+        m.style.top = "";
+        m.style.left = "";
+        m.style.right = "";
+      }
     }
     function chooseLang(lang) {
       setLang(lang);
@@ -10053,6 +10078,10 @@
         if (getToken()) { loadHistory(); loadUsage(); }
         toast('Analiz tamamlandı.', 'success');
         if (typeof window.wizardOnAnalyzeSuccess === 'function') window.wizardOnAnalyzeSuccess();
+        setTimeout(function() {
+          var cta = document.getElementById('report-download-cta');
+          if (cta && cta.scrollIntoView) cta.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }, 300);
       } catch (e) {
         console.error('runAnalyze error', e);
         var t = T[getLang()] || T.tr;
