@@ -2402,44 +2402,17 @@ def pay_page(
     )
 
 
-def _ensure_indirim20_coupon(db: Session) -> None:
-    """INDIRIM20 kuponu yoksa oluşturur (canlıda seed atlanmışsa ilk istekte oluşur)."""
-    existing = db.exec(select(DiscountCode).where(DiscountCode.code == "INDIRIM20")).first()
-    if not existing:
-        try:
-            from app.core.database import engine
-            with Session(engine) as session:
-                again = session.exec(select(DiscountCode).where(DiscountCode.code == "INDIRIM20")).first()
-                if not again:
-                    coupon = DiscountCode(
-                        code="INDIRIM20",
-                        discount_type="percent",
-                        discount_value=20,
-                        valid_from=None,
-                        valid_until=None,
-                        products=None,
-                    )
-                    session.add(coupon)
-                    session.commit()
-                    log.info("INDIRIM20 kuponu api/coupon/validate ile oluşturuldu.")
-        except Exception as e:
-            if "unique" not in str(e).lower() and "duplicate" not in str(e).lower():
-                log.warning("INDIRIM20 oluşturulamadı: %s", e)
-
 @app.get("/api/coupon/validate")
 def coupon_validate(
     code: str,
     product: str,
     db: Session = Depends(get_db),
 ):
-    """İndirim kodunu doğrular; geçerliyse indirim tutarı ve son fiyat döner."""
+    """İndirim kodunu doğrular; geçerliyse indirim tutarı ve son fiyat döner. INDIRIM20 startup seed ile oluşturulur."""
     if product not in ("single", "monthly", "yearly"):
         raise HTTPException(status_code=400, detail="Geçersiz ürün.")
     base = _paytr_amount(product)
     discount, err = validate_coupon(db, code, product, base)
-    if err and (code or "").strip().upper() == "INDIRIM20":
-        _ensure_indirim20_coupon(db)
-        discount, err = validate_coupon(db, code, product, base)
     if err:
         return {"valid": False, "reason": err}
     return {
