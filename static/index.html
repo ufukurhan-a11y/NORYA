@@ -1147,28 +1147,38 @@
     .right-zone {
       display: flex; align-items: center; gap: 8px; flex-shrink: 0; min-width: 0;
     }
+    /* Hamburger: visible below 1200px only */
     .hamburger {
-      display: none;
-      width: 34px; height: 34px;
-      border-radius: 10px;
+      display: flex;
+      width: 44px; height: 44px;
+      min-width: 44px; min-height: 44px;
+      border-radius: 12px;
       align-items: center; justify-content: center;
       background: rgba(15,23,42,.05);
-      border: none;
+      border: 1px solid rgba(15,23,42,.08);
       cursor: pointer;
       color: rgba(15,23,42,.78);
+      flex-shrink: 0;
     }
-    .dark .hamburger { background: rgba(255,255,255,.08); color: rgba(255,255,255,.78); }
-    @media (max-width: 860px) {
-      .nav-shell { display: none !important; }
-      .header-inner { padding: 12px 14px; }
-      .header .logo { height: 24px; }
-      .header.compact .logo { height: 22px; }
-      .primary-cta {
-        padding: 8px 12px; font-size: 13px; border-radius: 10px;
+    .dark .hamburger { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.78); }
+    @media (min-width: 1200px) {
+      .hamburger { display: none !important; }
+    }
+    /* CTA in header: visible from 768px (tablet + desktop); mobile uses drawer only */
+    .header-cta-inline {
+      display: none;
+    }
+    @media (min-width: 768px) {
+      .header-cta-inline { display: inline-flex; }
+    }
+    @media (max-width: 767px) {
+      .primary-cta.header-cta-inline { padding: 8px 12px; font-size: 0.8125rem; border-radius: 10px; }
+    }
+    @media (min-width: 768px) and (max-width: 1199px) {
+      .primary-cta.header-cta-inline {
+        padding: 10px 14px; font-size: 0.875rem; border-radius: 12px;
         box-shadow: 0 8px 18px rgba(14,165,164,.25);
       }
-      .hamburger { display: flex !important; }
-      .right-zone .header-lang-wrap { margin-right: 0; }
     }
     .mobile-overlay {
       position: fixed; inset: 0;
@@ -1196,17 +1206,45 @@
     .dark .mobile-drawer { background: #1e293b; border-left-color: rgba(255,255,255,.06); }
     .mobile-drawer.open { transform: translateX(0); }
     .drawer-head {
-      padding: 14px 14px;
+      padding: 16px 16px;
       display: flex; align-items: center; justify-content: space-between;
       border-bottom: 1px solid rgba(15,23,42,.06);
+      flex-shrink: 0;
     }
     .dark .drawer-head { border-bottom-color: rgba(255,255,255,.06); }
-    .drawer-body { padding: 12px 14px; display: flex; flex-direction: column; gap: 6px; overflow-y: auto; }
+    .drawer-body {
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      flex: 1;
+      min-height: 0;
+    }
+    .drawer-cta-primary {
+      display: block;
+      width: 100%;
+      padding: 14px 18px;
+      margin-bottom: 12px;
+      border-radius: 14px;
+      font-weight: 600;
+      font-size: 1rem;
+      text-align: center;
+      background: linear-gradient(135deg, #0EA5A4, #0B8F8E);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,.25);
+      box-shadow: 0 8px 20px rgba(14,165,164,.25);
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .drawer-cta-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(14,165,164,.35); }
+    .drawer-cta-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,.3); }
     .drawer-link {
-      padding: 12px 12px;
+      padding: 12px 14px;
       border-radius: 12px;
       color: rgba(15,23,42,.9);
-      font-weight: 550;
+      font-weight: 500;
       background: rgba(15,23,42,.03);
       text-decoration: none;
       font-size: 0.9375rem;
@@ -1215,6 +1253,16 @@
     .dark .drawer-link { color: rgba(255,255,255,.9); background: rgba(255,255,255,.04); }
     .drawer-link:hover { background: rgba(15,23,42,.06); }
     .dark .drawer-link:hover { background: rgba(255,255,255,.08); }
+    .drawer-section { margin-top: 8px; padding-top: 12px; border-top: 1px solid rgba(15,23,42,.06); }
+    .dark .drawer-section { border-top-color: rgba(255,255,255,.06); }
+    .drawer-trust-meta {
+      margin-top: auto;
+      padding-top: 16px;
+      font-size: 0.75rem;
+      color: rgba(15,23,42,.55);
+      line-height: 1.4;
+    }
+    .dark .drawer-trust-meta { color: rgba(255,255,255,.5); }
     .drawer-close {
       width: 34px; height: 34px;
       border-radius: 10px;
@@ -1225,11 +1273,23 @@
       color: rgba(15,23,42,.7);
     }
     .dark .drawer-close { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
-    @media (max-width: 860px) {
-      .header-desk-only { display: none !important; }
+    /* Theme, lang, auth: only on desktop (>= 1200px); below that they live in drawer */
+    .header-desktop-only { display: none !important; }
+    @media (min-width: 1200px) {
+      .header-desktop-only { display: flex !important; }
     }
-    @media (min-width: 861px) {
+    .header-desktop-only.inline-items { display: none !important; }
+    @media (min-width: 1200px) {
+      .header-desktop-only.inline-items { display: inline-flex !important; }
+    }
+    @media (min-width: 768px) {
       .header.user-logged-in .header-cta-guest-only { display: none !important; }
+      #nav-user:not(.hidden) { display: inline-flex !important; align-items: center; gap: 0.5rem; }
+    }
+    #nav-user.hidden { display: none !important; }
+    #nav-user .header-desktop-only { display: none !important; }
+    @media (min-width: 1200px) {
+      #nav-user .header-desktop-only { display: inline-flex !important; }
     }
     /* Dokunmatik hedefler: en az 44px (iOS/Android önerisi) */
     @media (pointer: coarse) {
@@ -1478,36 +1538,36 @@
     .elite-header{
       position: sticky;
       top: 0;
-      z-index: 50;
+      z-index: 200;
       width: 100%;
       overflow-x: clip;
       padding-top: env(safe-area-inset-top);
-      background: linear-gradient(180deg, var(--glass), var(--glass2));
+      background: rgba(255,255,255,.82);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(7,19,26,.08);
+      border-bottom: 1px solid rgba(15,23,42,.08);
+      transition: background .22s ease, box-shadow .22s ease;
     }
+    .dark .elite-header { background: rgba(15,23,42,.85); border-bottom-color: rgba(255,255,255,.06); }
+    .elite-header.compact {
+      background: rgba(255,255,255,.92);
+      box-shadow: 0 8px 24px rgba(15,23,42,.06);
+    }
+    .dark .elite-header.compact { background: rgba(15,23,42,.92); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
 
     .elite-header__inner{
-      max-width: 1200px;
+      max-width: 1240px;
       width: 100%;
       margin: 0 auto;
-      padding: 12px 14px;
-      padding-left: max(14px, env(safe-area-inset-left));
-      padding-right: max(14px, env(safe-area-inset-right));
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      gap: 10px;
       min-width: 0;
       overflow: hidden;
     }
 
-    /* Nav */
+    /* Nav visibility by breakpoint in .nav-shell */
     .elite-nav{
-      display:flex;
-      align-items:center;
-      gap: 12px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
       min-width: 0;
     }
     .elite-nav a{
@@ -1603,28 +1663,31 @@
       justify-content:center;
     }
 
-    /* ===== Mobil taşma çözümü: header/CTA taşmasın, sağdaki dikey şerit yok ===== */
+    /* Logo and right zone: no overflow */
     .elite-brand {
-      flex-shrink: 1;
+      flex-shrink: 0;
       min-width: 0;
       display: flex;
       align-items: center;
     }
     .elite-brand .logo {
       width: auto;
-      height: 28px;
-      max-width: 100%;
+      height: 24px;
+      max-width: 140px;
       object-fit: contain;
     }
-    @media (max-width: 768px){
-      .elite-brand .logo { height: 24px; max-width: 140px; }
-      .elite-cta-btn{ max-width: 52vw; padding: 0 12px; }
-      .right-zone { min-width: 0; flex-shrink: 0; overflow: hidden; }
+    @media (min-width: 768px) {
+      .elite-brand .logo { height: 26px; max-width: 180px; }
     }
-    @media (max-width: 420px){
-      .elite-header__inner{ padding: 8px 10px; padding-left: max(10px, env(safe-area-inset-left)); padding-right: max(10px, env(safe-area-inset-right)); gap: 8px; }
-      .elite-brand .logo { height: 22px; max-width: 110px; }
-      .elite-cta-btn{ max-width: 50vw; height: 42px; padding: 9px 11px; font-size: 14px; }
+    @media (min-width: 1200px) {
+      .elite-brand .logo { height: 28px; max-width: 100%; }
+    }
+    .right-zone .elite-cta-btn { flex-shrink: 0; max-width: none; }
+    @media (max-width: 767px) {
+      .right-zone .elite-cta-btn { max-width: 48vw; padding: 0 10px; font-size: 0.8125rem; }
+    }
+    @media (max-width: 390px) {
+      .elite-brand .logo { max-width: 110px; height: 22px; }
     }
 
     /* ===== PRICING GRID ===== */
@@ -1803,10 +1866,10 @@
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="right-zone">
-        <button type="button" onclick="toggleDark()" class="secondary-link header-desk-only" aria-label="Tema değiştir" id="theme-btn">
+        <button type="button" onclick="toggleDark()" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
-        <div class="relative header-lang-wrap header-desk-only" id="lang-wrap">
+        <div class="relative header-lang-wrap header-desktop-only" id="lang-wrap">
           <button type="button" onclick="toggleLangModal()" class="secondary-link flex items-center gap-1.5" id="lang-btn" data-i18n-aria-label="aria_select_language" aria-label="Dil seçin">
             <span aria-hidden="true">🌐</span>
             <span id="lang-current">EN</span>
@@ -1826,27 +1889,28 @@
             <button type="button" onclick="chooseLang('sr')" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl">Srpski</button>
           </div>
         </div>
-        <span id="nav-auth" class="inline-flex items-center flex-shrink-0 gap-1 sm:gap-2 header-desk-only">
+        <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
           <button type="button" onclick="openLogin()" class="secondary-link" data-i18n="nav_login">Giriş</button>
           <button type="button" onclick="openRegister()" class="secondary-link" data-i18n="nav_register">Ücretsiz Başla</button>
         </span>
-        <span id="nav-user" class="hidden items-center gap-2 flex-wrap header-desk-only">
-          <button type="button" onclick="openProfile()" class="secondary-link" data-i18n="nav_profile">Profil</button>
-          <button type="button" onclick="openAnalyze()" class="primary-cta elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></button>
-          <button type="button" onclick="logout()" class="secondary-link" data-i18n="nav_logout">Çıkış</button>
+        <span id="nav-user" class="hidden items-center gap-2">
+          <button type="button" onclick="openProfile()" class="secondary-link header-desktop-only" data-i18n="nav_profile">Profil</button>
+          <button type="button" onclick="openAnalyze()" class="primary-cta header-cta-inline elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></button>
+          <button type="button" onclick="logout()" class="secondary-link header-desktop-only" data-i18n="nav_logout">Çıkış</button>
         </span>
-        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
-        <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menü" id="hamburger-btn"><span aria-hidden="true">☰</span></button>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
+        <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" id="hamburger-btn"><span aria-hidden="true">☰</span></button>
       </div>
     </div>
   </header>
   <div id="mobile-overlay" class="mobile-overlay" onclick="closeMobileDrawer()" aria-hidden="true"></div>
-  <aside id="mobile-drawer" class="mobile-drawer" role="dialog" aria-label="Menü" aria-modal="true">
+  <aside id="mobile-drawer" class="mobile-drawer" role="dialog" aria-label="Menü" aria-modal="true" tabindex="-1">
     <div class="drawer-head">
       <span class="font-semibold text-accent-900 dark:text-white" data-i18n="nav_menu">Menü</span>
-      <button type="button" class="drawer-close" onclick="closeMobileDrawer()" aria-label="Kapat">✕</button>
+      <button type="button" class="drawer-close" onclick="closeMobileDrawer()" aria-label="Menüyü kapat" id="drawer-close-btn">✕</button>
     </div>
     <div class="drawer-body">
+      <a href="#analyze-section" onclick="closeMobileDrawer(); openAnalyze(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
       <a href="#hakkimizda" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
       <a href="#nasil-calisir" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
       <a href="#yorumlar" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
@@ -1855,19 +1919,20 @@
       <a href="/blog" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
       <a href="#sss" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
       <a href="/legal/iletisim" class="drawer-link legal-lang-link" onclick="closeMobileDrawer()" data-i18n="nav_contact">Bize Ulaşın</a>
-      <div class="pt-2 mt-2 border-t border-accent-200 dark:border-accent-700">
+      <div class="drawer-section">
         <button type="button" onclick="closeMobileDrawer(); toggleLangModal();" class="drawer-link w-full text-left" data-i18n="aria_select_language">Dil seçin</button>
         <button type="button" onclick="closeMobileDrawer(); toggleDark();" class="drawer-link w-full text-left" id="drawer-theme-btn">Tema (Açık/Koyu)</button>
       </div>
-      <div id="drawer-auth-wrap" class="pt-2 mt-2 border-t border-accent-200 dark:border-accent-700 flex flex-col gap-2">
+      <div id="drawer-auth-wrap" class="drawer-section flex flex-col gap-2">
         <button type="button" onclick="closeMobileDrawer(); openLogin();" class="drawer-link w-full text-left" data-i18n="nav_login">Giriş</button>
-        <button type="button" onclick="closeMobileDrawer(); openRegister(); scrollToAnalyze();" class="drawer-link w-full text-left font-semibold bg-primary-600 text-white hover:bg-primary-700 border-0" data-i18n="nav_register">Ücretsiz Başla</button>
+        <button type="button" onclick="closeMobileDrawer(); openRegister(); scrollToAnalyze();" class="drawer-link w-full text-left font-semibold bg-[#0EA5A4] text-white hover:bg-[#0d9488] border-0" data-i18n="nav_register">Ücretsiz Başla</button>
       </div>
-      <div id="drawer-user-wrap" class="hidden pt-2 mt-2 border-t border-accent-200 dark:border-accent-700 flex flex-col gap-2">
+      <div id="drawer-user-wrap" class="drawer-section hidden flex flex-col gap-2">
         <button type="button" onclick="closeMobileDrawer(); openProfile();" class="drawer-link w-full text-left" data-i18n="nav_profile">Profil</button>
-        <button type="button" onclick="closeMobileDrawer(); openAnalyze();" class="drawer-link w-full text-left font-semibold bg-primary-600 text-white hover:bg-primary-700 border-0" data-i18n="nav_analyze">Analiz Yap</button>
+        <button type="button" onclick="closeMobileDrawer(); openAnalyze();" class="drawer-link w-full text-left font-semibold bg-[#0EA5A4] text-white hover:bg-[#0d9488] border-0" data-i18n="nav_analyze">Analiz Yap</button>
         <button type="button" onclick="closeMobileDrawer(); logout();" class="drawer-link w-full text-left" data-i18n="nav_logout">Çıkış</button>
       </div>
+      <p class="drawer-trust-meta" data-i18n="drawer_trust_meta">KVKK & GDPR · 256-bit SSL · Güvenli Ödeme</p>
     </div>
   </aside>
 
@@ -6286,7 +6351,7 @@
     const T = {
       tr: {
         nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
-        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS",
+        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade bir dille özetleyen ve referans aralıklarına göre yorumlayan bir hizmettir. Sayılar ve kısaltmalar yerine anlaşılır raporlar ve günlük hayata uyarlanabilir kısa öneriler sunuyoruz.",
@@ -6643,7 +6708,7 @@
       },
       en: {
         nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
-        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ",
+        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
         about_what_1: "Norya explains your blood test results in plain language and interprets them against reference ranges. Instead of numbers and abbreviations, you get clear reports and practical, day-to-day suggestions.",
@@ -6997,7 +7062,7 @@
       },
       it: {
         nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
-        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ",
+        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?", company_info_title: "Informazioni aziendali",
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
@@ -7223,7 +7288,7 @@
       },
       es: {
         nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
-        nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ",
+        nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?", company_info_title: "Información de la empresa",
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
@@ -7449,7 +7514,7 @@
       },
       fr: {
         nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
-        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ",
+        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?", company_info_title: "Informations sur l'entreprise",
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
@@ -7675,7 +7740,7 @@
       },
       de: {
         nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
-        nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ",
+        nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?", company_info_title: "Unternehmensinformationen",
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
@@ -8239,7 +8304,7 @@
       },
       hi: {
         nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
-        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ",
+        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?", company_info_title: "कंपनी की जानकारी",
         about_what_1: "नोरिया एक सेवा है जो रक्त परीक्षण परिणामों को सरल भाषा में समझाती है। लैब के नंबर और संक्षिप्त नाम अक्सर समझने में कठिन होते हैं; नोरिया ऐसी रिपोर्ट बनाती है जो परिणामों को संक्षेप में बताती हैं, हर मान को संदर्भ सीमा के अनुसार समझाती हैं और व्यावहारिक सुझाव देती हैं।",
@@ -8983,7 +9048,7 @@
       setTimeout(function() { setLang(lang); }, 100);
     }
     function toggleNavMenu() {
-      if (window.innerWidth <= 860) openMobileDrawer();
+      if (window.innerWidth < 1200) openMobileDrawer();
     }
     function closeNavMenu() {
       closeMobileDrawer();
@@ -8992,9 +9057,15 @@
       var overlay = document.getElementById('mobile-overlay');
       var drawer = document.getElementById('mobile-drawer');
       if (overlay) overlay.classList.add('open');
-      if (drawer) drawer.classList.add('open');
-      document.body.style.overflow = 'hidden';
-      document.addEventListener('keydown', onDrawerEscape);
+      if (drawer) {
+        drawer.classList.add('open');
+        document.body.style.overflow = 'hidden';
+        document.body.setAttribute('data-drawer-open', 'true');
+        var closeBtn = document.getElementById('drawer-close-btn');
+        if (closeBtn) closeBtn.focus();
+        else drawer.focus();
+        document.addEventListener('keydown', onDrawerKeydown);
+      }
     }
     function closeMobileDrawer() {
       var overlay = document.getElementById('mobile-overlay');
@@ -9002,10 +9073,26 @@
       if (overlay) overlay.classList.remove('open');
       if (drawer) drawer.classList.remove('open');
       document.body.style.overflow = '';
-      document.removeEventListener('keydown', onDrawerEscape);
+      document.body.removeAttribute('data-drawer-open');
+      document.removeEventListener('keydown', onDrawerKeydown);
+      var hamburger = document.getElementById('hamburger-btn');
+      if (hamburger) hamburger.focus();
     }
-    function onDrawerEscape(e) {
-      if (e.key === 'Escape') closeMobileDrawer();
+    function onDrawerKeydown(e) {
+      if (e.key === 'Escape') { closeMobileDrawer(); return; }
+      var drawer = document.getElementById('mobile-drawer');
+      if (!drawer || !drawer.classList.contains('open')) return;
+      var focusables = drawer.querySelectorAll('a[href], button:not([disabled]), [tabindex]:not([tabindex="-1"])');
+      if (focusables.length === 0) return;
+      var first = focusables[0];
+      var last = focusables[focusables.length - 1];
+      if (e.key === 'Tab') {
+        if (e.shiftKey) {
+          if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+        } else {
+          if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+        }
+      }
     }
     document.addEventListener("click", function(e) {
       var wrap = document.getElementById("lang-wrap");

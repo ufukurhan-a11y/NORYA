@@ -1146,7 +1146,10 @@ def _index_response():
             raw = _inject_ga(raw)
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
-        return HTMLResponse(raw)
+        return HTMLResponse(
+            raw,
+            headers={"Cache-Control": "public, max-age=0, must-revalidate"},
+        )
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
 
 
@@ -1162,7 +1165,10 @@ def report_page():
             raw = _inject_ga(raw)
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
-        return HTMLResponse(raw)
+        return HTMLResponse(
+            raw,
+            headers={"Cache-Control": "public, max-age=0, must-revalidate"},
+        )
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."}
 
 
