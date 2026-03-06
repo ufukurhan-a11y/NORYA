@@ -2262,6 +2262,14 @@ def paytr_init(
     base_url = (request.base_url.rstrip("/") + "/").rstrip("/")
     ok_url = (getattr(settings, "paytr_ok_url", "") or "").strip() or f"{base_url}payment/success"
     fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{base_url}payment/failed"
+    if "?" not in ok_url:
+        ok_url = f"{ok_url}?merchant_oid={merchant_oid}"
+    else:
+        ok_url = f"{ok_url}&merchant_oid={merchant_oid}"
+    if "?" not in fail_url:
+        fail_url = f"{fail_url}?merchant_oid={merchant_oid}"
+    else:
+        fail_url = f"{fail_url}&merchant_oid={merchant_oid}"
 
     post_vals = {
         "merchant_id": merchant_id,
@@ -2311,19 +2319,45 @@ def paytr_init(
     return {"status": "ok", "token": token, "merchant_oid": merchant_oid}
 
 
+def _validate_merchant_oid(merchant_oid: str) -> str:
+    """Validate merchant_oid format; return stripped. Raises 400 if invalid."""
+    oid = (merchant_oid or "").strip()
+    if not oid or len(oid) < 10 or len(oid) > 128:
+        raise HTTPException(status_code=400, detail="Geçersiz merchant_oid.")
+    if not all(c.isalnum() or c in "-_" for c in oid):
+        raise HTTPException(status_code=400, detail="Geçersiz merchant_oid formatı.")
+    return oid
+
+
 @app.get("/api/orders/status")
 def order_status(
+    request: Request,
     merchant_oid: str = Query(..., description="Sipariş merchant_oid"),
     db: Session = Depends(get_db),
 ):
-    """Ödeme durumu: pending, completed, failed. Checkout sekmesinde 'Ödeme tamamlandı' için kullanılır."""
-    if not (merchant_oid or merchant_oid.strip()):
-        raise HTTPException(status_code=400, detail="merchant_oid gerekli.")
-    stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == merchant_oid.strip())
+    """Ödeme durumu: pending, paid, failed. Premium kilit açma ve success sayfası polling için.
+    Response: merchant_oid, status (pending|paid|failed), is_premium_active, active_until?, plan_code?."""
+    oid = _validate_merchant_oid(merchant_oid)
+    stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == oid)
     order = db.exec(stmt).first()
     if not order:
-        return {"status": "not_found", "merchant_oid": merchant_oid}
-    return {"status": order.status or "pending", "merchant_oid": order.merchant_oid}
+        raise HTTPException(status_code=404, detail="Sipariş bulunamadı.")
+    # Map backend "completed" -> "paid" for frontend contract
+    status = order.status or "pending"
+    status_out = "paid" if status == "completed" else status
+    is_premium = status == "completed"
+    plan_code = order.product if is_premium else None  # "single" | "monthly" | "yearly"
+    resp = {
+        "merchant_oid": order.merchant_oid,
+        "status": status_out,
+        "is_premium_active": is_premium,
+        "plan_code": plan_code,
+    }
+    # active_until not stored for now; optional for future subscription end
+    response = JSONResponse(content=resp)
+    response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+    response.headers["Pragma"] = "no-cache"
+    return response
 
 
 @app.get("/pay", response_class=HTMLResponse)
@@ -2373,19 +2407,22 @@ def _ensure_indirim20_coupon(db: Session) -> None:
     existing = db.exec(select(DiscountCode).where(DiscountCode.code == "INDIRIM20")).first()
     if not existing:
         try:
-            coupon = DiscountCode(
-                code="INDIRIM20",
-                discount_type="percent",
-                discount_value=20,
-                valid_from=None,
-                valid_until=None,
-                products=None,
-            )
-            db.add(coupon)
-            db.commit()
-            log.info("INDIRIM20 kuponu api/coupon/validate ile oluşturuldu.")
+            from app.core.database import engine
+            with Session(engine) as session:
+                again = session.exec(select(DiscountCode).where(DiscountCode.code == "INDIRIM20")).first()
+                if not again:
+                    coupon = DiscountCode(
+                        code="INDIRIM20",
+                        discount_type="percent",
+                        discount_value=20,
+                        valid_from=None,
+                        valid_until=None,
+                        products=None,
+                    )
+                    session.add(coupon)
+                    session.commit()
+                    log.info("INDIRIM20 kuponu api/coupon/validate ile oluşturuldu.")
         except Exception as e:
-            db.rollback()
             if "unique" not in str(e).lower() and "duplicate" not in str(e).lower():
                 log.warning("INDIRIM20 oluşturulamadı: %s", e)
 
@@ -2793,9 +2830,11 @@ async def _paytr_callback_handle(request: Request, db: Session):
 def payment_success_page(
     request: Request,
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+    merchant_oid: str = Query("", description="Sipariş merchant_oid (PayTR yönlendirmesinde eklenir)"),
 ):
-    """Başarılı ödeme sonrası sayfa. Tüm dillerde ve mobil uyumlu."""
+    """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir."""
     base = request.base_url.rstrip("/")
+    api_base = base
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
         lang = "tr"
@@ -2803,7 +2842,16 @@ def payment_success_page(
     title = t["success_title"]
     msg = t["success_message"]
     btn_text = t["success_btn"]
-    html = f"""<!DOCTYPE html>
+    updating = t.get("success_updating", "Hesabınız güncelleniyor…")
+    premium_active = t.get("success_premium_active", "Premium aktif")
+    pending_bank = t.get("success_pending_bank", "İşlem bankanızdan onay bekliyor olabilir.")
+    failed_short = t.get("success_payment_failed_short", "Ödeme tamamlanamadı.")
+    btn_report = t.get("success_btn_report", "Rapor sayfasına git")
+    check_done_btn = t.get("success_check_done_btn", "Ödeme tamamlandı mı?")
+    retry_text = t.get("failed_retry", "Tekrar dene")
+
+    if not (merchant_oid and merchant_oid.strip()):
+        html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
 <title>{title} – {BRAND_NAME}</title>
@@ -2824,6 +2872,121 @@ def payment_success_page(
     <p>{msg}</p>
     <a href="{base}/#analyze">{btn_text}</a>
   </div>
+</body>
+</html>"""
+        return HTMLResponse(html)
+
+    oid = merchant_oid.strip()
+    report_url = f"{base}/report"
+    html = f"""<!DOCTYPE html>
+<html lang="{lang}">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
+<title>{title} – {BRAND_NAME}</title>
+<style>
+  body {{ font-family: system-ui, sans-serif; margin: 0; padding: max(16px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); background: linear-gradient(165deg, #0c1222 0%, #0f172a 50%); color: #e2e8f0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }}
+  .card {{ background: linear-gradient(180deg, rgba(30,41,59,0.95), rgba(15,23,42,0.98)); border: 1px solid rgba(14,165,164,0.2); border-radius: 20px; padding: clamp(24px, 5vw, 40px); max-width: 420px; width: 100%; margin: 0 16px; text-align: center; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.35); }}
+  .ok {{ width: 56px; height: 56px; margin: 0 auto 20px; background: linear-gradient(135deg, #0EA5A4, #14b8a6); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 28px; box-shadow: 0 0 30px rgba(14,165,164,0.35); }}
+  .spinner {{ width: 40px; height: 40px; margin: 0 auto 16px; border: 3px solid rgba(14,165,164,0.3); border-top-color: #0EA5A4; border-radius: 50%; animation: spin 0.8s linear infinite; }}
+  @keyframes spin {{ to {{ transform: rotate(360deg); }} }}
+  h1 {{ color: #f1f5f9; font-size: clamp(1.25rem, 4vw, 1.5rem); margin-bottom: 10px; font-weight: 700; }}
+  #statusMsg {{ color: #94a3b8; margin-bottom: 28px; font-size: clamp(0.9rem, 2.5vw, 0.95rem); line-height: 1.5; }}
+  .btns {{ display: flex; flex-wrap: wrap; gap: 12px; justify-content: center; }}
+  a, .btn {{ display: inline-block; background: linear-gradient(135deg, #0EA5A4, #0d9488); color: #fff; padding: 14px 28px; min-height: 48px; line-height: 20px; border-radius: 12px; text-decoration: none; font-weight: 600; box-shadow: 0 4px 14px rgba(14,165,164,0.35); transition: transform 0.15s; touch-action: manipulation; cursor: pointer; border: none; font-size: 1rem; }}
+  a:hover, .btn:hover {{ transform: translateY(-2px); color: #fff; }}
+  a.secondary {{ background: transparent; border: 2px solid #475569; color: #94a3b8; box-shadow: none; }}
+  a.secondary:hover {{ border-color: #0EA5A4; color: #0EA5A4; }}
+  .premium-done {{ color: #34d399; font-weight: 700; }}
+</style>
+</head>
+<body>
+  <div class="card">
+    <div id="iconWrap" class="ok">✓</div>
+    <div id="spinnerWrap" class="spinner" style="display:none;"></div>
+    <h1 id="titleEl">{title}</h1>
+    <p id="statusMsg">{updating}</p>
+    <div id="btnWrap" class="btns" style="display:none;">
+      <a id="btnReport" href="{report_url}">{btn_report}</a>
+      <a id="btnRetry" class="secondary" href="{base}/pay?plan=single_13eur&lang={lang}" style="display:none;">{retry_text}</a>
+    </div>
+    <p style="margin-top:16px;"><button type="button" class="btn secondary" id="checkDoneBtn" style="background:transparent;border:2px solid rgba(14,165,164,0.5);color:#94a3b8;">{check_done_btn}</button></p>
+  </div>
+  <script>
+(function(){{
+  var apiBase = {json.dumps(api_base)};
+  var oid = {json.dumps(oid)};
+  var reportUrl = {json.dumps(report_url)};
+  var updating = {json.dumps(updating)};
+  var premiumActive = {json.dumps(premium_active)};
+  var pendingBank = {json.dumps(pending_bank)};
+  var failedShort = {json.dumps(failed_short)};
+  var start = Date.now();
+  var timeoutTotal = 90000;
+  var intervalFast = 2000;
+  var intervalSlow = 5000;
+  var fastUntil = 30000;
+  var pollTimer = null;
+  var redirectTimer = null;
+
+  function showSpinner(show) {{
+    document.getElementById("spinnerWrap").style.display = show ? "block" : "none";
+    document.getElementById("iconWrap").style.display = show ? "none" : "flex";
+  }}
+  function setStatus(msg, isPremium) {{
+    var el = document.getElementById("statusMsg");
+    if (el) el.textContent = msg;
+    if (isPremium) el && el.classList.add("premium-done");
+  }}
+  function showButtons(showReport, showRetry) {{
+    var wrap = document.getElementById("btnWrap");
+    var btnReport = document.getElementById("btnReport");
+    var btnRetry = document.getElementById("btnRetry");
+    if (wrap) wrap.style.display = "flex";
+    if (btnReport) btnReport.style.display = showReport ? "inline-block" : "none";
+    if (btnRetry) btnRetry.style.display = showRetry ? "inline-block" : "none";
+  }}
+  function stopPolling() {{
+    if (pollTimer) {{ clearTimeout(pollTimer); pollTimer = null; }}
+  }}
+  function doPoll() {{
+    var timeoutMsg = {json.dumps(t.get("success_timeout", "Zaman aşımı"))};
+    if (Date.now() - start > timeoutTotal) {{ showSpinner(false); setStatus(updating + " (" + timeoutMsg + ")"); showButtons(true, false); return; }}
+    fetch(apiBase + "/api/orders/status?merchant_oid=" + encodeURIComponent(oid))
+      .then(function(r) {{ return r.status === 404 ? null : r.json(); }})
+      .then(function(d) {{
+        if (!d) {{ setStatus(updating); return; }}
+        if (d.status === "paid" || d.is_premium_active) {{
+          stopPolling();
+          showSpinner(false);
+          setStatus(premiumActive + " ✓", true);
+          showButtons(true, false);
+          redirectTimer = setTimeout(function() {{ window.location.href = reportUrl; }}, 1000);
+          return;
+        }}
+        if (d.status === "failed") {{
+          stopPolling();
+          showSpinner(false);
+          setStatus(failedShort);
+          showButtons(false, true);
+          return;
+        }}
+        setStatus(pendingBank);
+      }})
+      .catch(function() {{ setStatus(updating); }});
+  }}
+  function scheduleNext() {{
+    if (Date.now() - start > timeoutTotal) return;
+    var interval = (Date.now() - start) < fastUntil ? intervalFast : intervalSlow;
+    pollTimer = setTimeout(function() {{ doPoll(); scheduleNext(); }}, interval);
+  }}
+  document.getElementById("checkDoneBtn").addEventListener("click", function() {{
+    doPoll();
+    if (pollTimer) {{ clearTimeout(pollTimer); scheduleNext(); }}
+  }});
+  showSpinner(true);
+  doPoll();
+  scheduleNext();
+}})();
+  </script>
 </body>
 </html>"""
     return HTMLResponse(html)

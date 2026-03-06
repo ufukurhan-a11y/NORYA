@@ -165,6 +165,13 @@
     .trust-card { transition: transform 0.2s ease, box-shadow 0.2s ease; }
     .trust-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(10, 25, 41, 0.08); }
     .dark .trust-card:hover { box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2); }
+    /* Trust Bar + Feature Cards + CTA: mobil taşma yok, premium görünüm */
+    .trust-bar-section .premium-wrap { max-width: 100%; }
+    .trust-bar-pill { white-space: nowrap; }
+    @media (max-width: 640px) { .trust-bar-pill { white-space: normal; } }
+    .features-grid-section .premium-wrap { overflow-x: clip; min-width: 0; }
+    .feature-card { min-width: 0; }
+    .cta-primary-btn:focus-visible, .cta-secondary-btn:focus-visible { outline: none; }
     /* Partner logo: orijinal logo img, beyaz zemin, retina/PDF uyumlu */
     .partner-logo {
       width: 42px;
@@ -1879,6 +1886,34 @@
     </div>
   </section>
 
+  <!-- Trust Bar: mini rozetler (hero altı) -->
+  <section class="trust-bar-section bg-[var(--norya-bg)] border-b border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 py-4 sm:py-5 overflow-x-hidden">
+    <div class="premium-wrap">
+      <div class="flex flex-wrap justify-center items-center gap-x-4 sm:gap-x-6 gap-y-3 text-[13px] sm:text-sm text-accent-700 dark:text-accent-300">
+        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none" aria-label="Medical-grade insights">
+          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+          <span data-i18n="trust_bar_medical">Medical-grade insights</span>
+        </span>
+        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
+          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
+          <span data-i18n="trust_bar_3d">3D Secure Payments</span>
+        </span>
+        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
+          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+          <span data-i18n="trust_bar_doctor_reports">Doctor-style Reports</span>
+        </span>
+        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
+          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <span data-i18n="trust_bar_analyses">50,000+ analyses generated</span>
+        </span>
+        <span class="trust-bar-pill inline-flex items-center gap-2 px-3.5 py-2 rounded-full bg-white dark:bg-accent-800/80 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/50 shadow-[0_2px_8px_rgba(10,25,41,0.06)] dark:shadow-none">
+          <svg class="w-4 h-4 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          <span data-i18n="trust_bar_cloudflare">Cloudflare Security</span>
+        </span>
+      </div>
+    </div>
+  </section>
+
   <!-- Health Score kartı — premium, mobilde taşma yok -->
   <section class="premium-section health-score-section bg-[var(--norya-bg)] pt-8 sm:pt-10 pb-8 sm:pb-10">
     <div class="premium-wrap">
@@ -1914,53 +1949,85 @@
     </div>
   </section>
 
-  <!-- Hero altı: Premium klinik özellik kartları -->
-  <section class="premium-section bg-[var(--norya-bg)]">
+  <!-- Özellik Kartları: Trusted health insights (6 kart) -->
+  <section id="ozellikler" class="premium-section features-grid-section bg-[var(--norya-bg)]">
     <div class="premium-wrap">
-      <div class="max-w-3xl mx-auto text-center mb-6 sm:mb-8">
-        <h2 class="text-xl sm:text-2xl font-bold tracking-tight text-accent-900 dark:text-white mb-2" data-i18n="home_premium_features_title">Klinik Sağlık Analizi</h2>
-        <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300" data-i18n="home_premium_features_desc">Kan tahlili sonuçlarınızı yükleyin ve sağlık risklerinizi öğrenin.</p>
+      <div class="max-w-3xl mx-auto text-center mb-10 sm:mb-12">
+        <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-accent-900 dark:text-white mb-3 leading-tight" data-i18n="features_heading">Trusted health insights, designed for real life.</h2>
+        <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 leading-relaxed" data-i18n="features_sub">Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.</p>
       </div>
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">🧬</span>
-              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_health_score_title">Health Score</h3>
-            </div>
-          </div>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_health_score_desc">Genel sağlık puanınızı görün.</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
+        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
+          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_1_title">Instant, structured analysis</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_1_desc">Clear explanations of common biomarkers and what they may indicate — in minutes.</p>
         </article>
+        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
+          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_2_title">Clinical-style report format</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_2_desc">Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.</p>
+        </article>
+        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
+          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_3_title">Global lab compatibility</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_3_desc">Supports many lab formats and units — designed for international users.</p>
+        </article>
+        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
+          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_4_title">Privacy & security by design</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_4_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
+        </article>
+        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
+          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_5_title">Trends & comparisons</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_5_desc">Track changes over time and compare past results with one dashboard.</p>
+        </article>
+        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
+          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_6_title">Actionable next steps</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_6_desc">Practical lifestyle and nutrition tips tailored to your markers.</p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">🩸</span>
-              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_diabetes_title">Diyabet Riski Analizi</h3>
-            </div>
-          </div>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_diabetes_desc">Glucose ve HbA1c değerlerinden risk hesaplanır.</p>
-        </article>
+  <!-- How It Works (3 adım) -->
+  <section class="premium-section how-it-works-section bg-white dark:bg-accent-900/20 py-10 sm:py-14 overflow-x-hidden">
+    <div class="premium-wrap">
+      <h2 class="text-xl sm:text-2xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="how_section_title">How it works</h2>
+      <p class="text-center text-accent-600 dark:text-accent-400 text-sm sm:text-base mb-10 max-w-xl mx-auto" data-i18n="how_section_desc">Three simple steps to your structured report.</p>
+      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8 max-w-4xl mx-auto">
+        <div class="how-step flex flex-col sm:items-center text-center">
+          <div class="w-12 h-12 rounded-full bg-[#0EA5A4]/15 dark:bg-[#0EA5A4]/25 text-[#0EA5A4] font-bold text-lg flex items-center justify-center mx-auto mb-4 flex-shrink-0">1</div>
+          <h3 class="font-semibold text-accent-900 dark:text-white mb-1.5 text-base" data-i18n="how_step_1_title">Upload your lab results</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="how_step_1_desc">PDF or image — we accept common lab formats.</p>
+        </div>
+        <div class="how-step flex flex-col sm:items-center text-center">
+          <div class="w-12 h-12 rounded-full bg-[#0EA5A4]/15 dark:bg-[#0EA5A4]/25 text-[#0EA5A4] font-bold text-lg flex items-center justify-center mx-auto mb-4 flex-shrink-0">2</div>
+          <h3 class="font-semibold text-accent-900 dark:text-white mb-1.5 text-base" data-i18n="how_step_2_title">We generate a structured report</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="how_step_2_desc">Clear ranges, flags, summaries and recommendations.</p>
+        </div>
+        <div class="how-step flex flex-col sm:items-center text-center">
+          <div class="w-12 h-12 rounded-full bg-[#0EA5A4]/15 dark:bg-[#0EA5A4]/25 text-[#0EA5A4] font-bold text-lg flex items-center justify-center mx-auto mb-4 flex-shrink-0">3</div>
+          <h3 class="font-semibold text-accent-900 dark:text-white mb-1.5 text-base" data-i18n="how_step_3_title">Save, compare, and follow recommendations</h3>
+          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="how_step_3_desc">Download PDF, track trends, and act on next steps.</p>
+        </div>
+      </div>
+    </div>
+  </section>
 
-        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">❤️</span>
-              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_heart_title">Kalp Sağlığı Analizi</h3>
-            </div>
-          </div>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_heart_desc">LDL, HDL ve kolesterol analiz edilir.</p>
-        </article>
-
-        <article class="light-glass-card rounded-14 p-4 sm:p-5 flex flex-col gap-2 hover:-translate-y-0.5 hover:shadow-lg transition-transform shadow-sm">
-          <div class="flex items-center justify-between gap-2">
-            <div class="flex items-center gap-2">
-              <span class="inline-flex w-8 h-8 rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] items-center justify-center text-lg" aria-hidden="true">📊</span>
-              <h3 class="text-sm font-semibold text-accent-900 dark:text-white" data-i18n="home_premium_feature_charts_title">Akıllı Sağlık Grafikleri</h3>
-            </div>
-          </div>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300" data-i18n="home_premium_feature_charts_desc">Tüm sağlık değerlerinizi grafiklerle takip edin.</p>
-        </article>
+  <!-- CTA: Ready to see your report? -->
+  <section class="premium-section cta-features-section bg-[var(--norya-bg)] py-10 sm:py-14 overflow-x-hidden">
+    <div class="premium-wrap">
+      <div class="max-w-4xl mx-auto flex flex-col sm:flex-row sm:items-center sm:justify-between gap-6 sm:gap-8 rounded-2xl bg-white dark:bg-accent-800/60 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_24px_rgba(10,25,41,0.08)] dark:shadow-none p-6 sm:p-8">
+        <div class="flex-1">
+          <h2 class="text-lg sm:text-xl font-bold text-accent-900 dark:text-white mb-1" data-i18n="cta_features_heading">Ready to see your report?</h2>
+          <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="cta_features_sub">Upload your lab results and get a clear, structured report in minutes.</p>
+        </div>
+        <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-shrink-0">
+          <button type="button" onclick="openRegister(); scrollToAnalyze();" class="cta-primary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] bg-[#0EA5A4] hover:bg-[#0d9488] text-white font-semibold text-sm sm:text-base shadow-[0_4px_14px_rgba(14,165,164,0.35)] hover:shadow-[0_6px_20px_rgba(14,165,164,0.4)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_start_analysis">Start analysis</button>
+          <a href="#fiyatlandirma" class="cta-secondary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] border-2 border-[#0EA5A4] text-[#0EA5A4] hover:bg-[#0EA5A4]/10 dark:hover:bg-[#0EA5A4]/20 font-semibold text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_view_pricing">View pricing</a>
+        </div>
       </div>
     </div>
   </section>
@@ -3541,9 +3608,22 @@
               <span id="test-mode-badge" class="hidden text-xs px-2.5 py-1 rounded-lg bg-slate-100 dark:bg-slate-700 text-slate-700 dark:text-slate-300 font-medium" data-i18n="test_mode_on">Test mode — unlimited</span>
             </div>
             <p id="analyze-limit-msg" class="text-amber-600 dark:text-amber-400 text-sm mb-2 hidden"></p>
-            <div id="analyze-payment-actions" class="hidden mb-4 flex flex-wrap gap-2">
-              <button type="button" onclick="goToPayment('single')" class="px-4 py-2 rounded-xl bg-[#0EA5A4] text-white text-sm font-medium hover:bg-[#0d9488]" data-i18n="payment_btn_single">Buy 1 analysis</button>
-              <button type="button" onclick="goToPayment('monthly')" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800/50" data-i18n="payment_btn_pro">Upgrade to Pro</button>
+            <div id="analyze-payment-actions" class="hidden mb-4">
+              <p class="text-xs text-slate-500 dark:text-slate-400 mb-2" data-i18n="checkout_consent_required">Ödeme için aşağıdaki sözleşmeleri kabul etmeniz gerekiyor:</p>
+              <div class="flex flex-col gap-2 mb-3">
+                <label class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300 cursor-pointer">
+                  <input type="checkbox" id="analyze-consent-mesafeli" class="mt-1 rounded border-accent-300 dark:border-accent-600 text-primary-600 focus:ring-primary-500" />
+                  <span><span data-i18n="checkout_consent_mesafeli">Mesafeli Satış Sözleşmesi'ni okudum ve kabul ediyorum.</span> <a href="/legal/mesafeli-satis-sozlesmesi" target="_blank" rel="noopener noreferrer" class="text-[#0EA5A4] hover:underline">→</a></span>
+                </label>
+                <label class="flex items-start gap-2 text-sm text-slate-600 dark:text-slate-300 cursor-pointer">
+                  <input type="checkbox" id="analyze-consent-kvkk" class="mt-1 rounded border-accent-300 dark:border-accent-600 text-primary-600 focus:ring-primary-500" />
+                  <span><span data-i18n="checkout_consent_kvkk">Gizlilik/KVKK politikasını okudum ve kabul ediyorum.</span> <a href="/legal/gizlilik-politikasi" target="_blank" rel="noopener noreferrer" class="text-[#0EA5A4] hover:underline">→</a></span>
+                </label>
+              </div>
+              <div class="flex flex-wrap gap-2">
+                <button type="button" onclick="goToPayment('single')" class="px-4 py-2 rounded-xl bg-[#0EA5A4] text-white text-sm font-medium hover:bg-[#0d9488]" data-i18n="payment_btn_single">Buy 1 analysis</button>
+                <button type="button" onclick="goToPayment('monthly')" class="px-4 py-2 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 text-sm font-medium hover:bg-slate-50 dark:hover:bg-slate-800/50" data-i18n="payment_btn_pro">Upgrade to Pro</button>
+              </div>
             </div>
 
             <p class="intake-disclaimer" role="note" data-i18n="intake_disclaimer">For informational use only. This service does not replace professional medical advice, diagnosis, or treatment. Consult your healthcare provider for medical decisions.</p>
@@ -3632,45 +3712,60 @@
             </div>
           </div>
 
-          <!-- Adım 4: Sonuç (klinik rapor formatı) -->
+          <!-- Adım 4: Sonuç (ultra premium doctor-grade report UI) -->
           <div id="wizard-step-4" class="wizard-step hidden">
             <div id="analyze-result" class="report-page rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-navy-800/90 overflow-hidden shadow-xl shadow-primary-900/5 dark:shadow-black/20">
-              <header class="report-header">
-                <div class="report-brand">
-                  <img class="report-logo" src="/static/norya-logo.svg" alt="Norya" onerror="this.onerror=null; this.src='/static/norya_logo_transparent_trim.png';" />
-                  <div class="report-brand-text">
-                    <div class="report-brand-name">Norya <span class="report-brand-ai">AI</span></div>
-                    <div class="report-brand-sub" data-i18n="report_subtitle">Clinical-style analysis report</div>
+              <!-- 1) Sticky report bar -->
+              <div id="report-sticky-bar" class="report-sticky-bar no-print">
+                <div class="report-sticky-bar-left">
+                  <img id="report-bar-logo" class="report-sticky-bar-logo" src="/static/norya-logo.svg" alt="Norya" onerror="this.onerror=null; this.src='/static/norya_logo_transparent_trim.png';" />
+                  <span id="report-bar-title" class="report-sticky-bar-title" data-i18n="report_bar_title">Report</span>
+                </div>
+                <div class="report-sticky-bar-pills">
+                  <span class="report-sticky-bar-pill" data-i18n="report_pill_secure">Secure • Encrypted</span>
+                  <span class="report-sticky-bar-pill" data-i18n="report_pill_3d">3D Secure Payments</span>
+                  <span class="report-sticky-bar-pill" data-i18n="report_pill_global">Global lab units</span>
+                  <span class="report-sticky-bar-pill" data-i18n="report_pill_pdf">Shareable PDF</span>
+                </div>
+                <div class="report-sticky-bar-actions">
+                  <button type="button" id="report-bar-pdf-btn" class="btn-report-pdf" onclick="downloadReportPdf()" data-i18n="report_download">Download PDF</button>
+                  <a href="/pricing?from=report" id="report-bar-upgrade-btn" class="btn-report-upgrade no-print" data-i18n="report_upgrade_btn">Upgrade</a>
+                </div>
+              </div>
+              <!-- 2) Hero -->
+              <div class="report-hero">
+                <div class="report-hero-inner">
+                  <h1 id="report-hero-title" class="report-hero-title" data-i18n="report_hero_title">Your Health Report</h1>
+                  <p id="report-hero-sub" class="report-hero-sub" data-i18n="report_hero_sub">A structured, clinician-style summary of your lab results.</p>
+                </div>
+              </div>
+              <div class="p-4 sm:p-6">
+                <div class="alert-medical no-print" role="alert">
+                  <div class="alert-icon">⚠️</div>
+                  <div class="alert-text">
+                    <strong data-i18n="disclaimer_informative">Bilgilendirme amaçlıdır.</strong> <span data-i18n="alert_medical_text">Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.</span>
                   </div>
                 </div>
-                <div class="report-header-center">
-                  <div class="report-title" data-i18n="report_title">Analiz Raporu</div>
-                  <div class="report-subtitle" data-i18n="report_subtitle_desc">Kan tahlili sonuçlarının bilgilendirme amaçlı değerlendirmesi</div>
-                </div>
-                <div class="report-meta">
-                  <div><strong>RID:</strong> <span id="report-rid">—</span></div>
-                  <div><strong>User:</strong> <span id="report-user">—</span></div>
-                  <div><strong>Tarih:</strong> <span id="analyze-result-date">—</span></div>
-                  <div><strong>Dil:</strong> <span id="report-lang">—</span></div>
-                </div>
-              </header>
-              <div class="report-divider"></div>
-              <div class="report-actions no-print">
-                <button class="btn-secondary" type="button" onclick="downloadForDoctor()" data-i18n="report_for_doctor">🩺 Doktora Götür</button>
-                <button class="btn-secondary" type="button" onclick="shareReport()" data-i18n="report_share">🔗 Paylaş</button>
-                <button class="btn-primary" type="button" onclick="downloadReportPdf()" data-i18n="report_download">⬇️ PDF İndir</button>
+                <div id="analyze-result-body" class="space-y-4 bg-transparent"></div>
+                <!-- Upgrade section (visible when free) -->
+                <section id="report-upgrade-section" class="report-upgrade-section no-print">
+                  <h2 id="report-upgrade-title" class="report-upgrade-section-title" data-i18n="report_unlock_full">Unlock the full report</h2>
+                  <p id="report-upgrade-desc" class="report-upgrade-section-desc" data-i18n="report_unlock_desc">Get PDF download, deep insights, trend tracking and personalized next steps.</p>
+                  <ul id="report-upgrade-list" class="report-upgrade-list">
+                    <li>📄 <span data-i18n="report_unlock_pdf">PDF download</span></li>
+                    <li>📊 <span data-i18n="report_unlock_insights">Deep insights</span></li>
+                    <li>📈 <span data-i18n="report_unlock_trends">Trend tracking</span></li>
+                  </ul>
+                  <p id="report-upgrade-guarantee" class="report-upgrade-guarantee" data-i18n="report_flexible_cancel">Flexible cancellation</p>
+                  <a href="/pricing?from=report" id="report-upgrade-cta" class="report-upgrade-btn" data-i18n="report_upgrade_now">Upgrade now</a>
+                </section>
+                <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
               </div>
-              <div class="alert-medical" role="alert">
-                <div class="alert-icon">⚠️</div>
-                <div class="alert-text">
-                  <strong data-i18n="disclaimer_informative">Bilgilendirme amaçlıdır.</strong> <span data-i18n="alert_medical_text">Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.</span>
-                </div>
-              </div>
-              <div id="analyze-result-body" class="p-4 sm:p-6 space-y-4 bg-white dark:bg-transparent"></div>
-              <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
               <footer class="report-footer">
-                Norya • Bilgilendirme amaçlıdır • support@noryaai.com
+                Norya • <span data-i18n="disclaimer_informative">Bilgilendirme amaçlıdır</span> • support@noryaai.com
               </footer>
+              <!-- Floating upgrade CTA (shown when free, hidden when premium) -->
+              <button type="button" id="report-floating-upgrade" class="report-floating-upgrade report-floating-upgrade--hidden no-print" onclick="window.location.href='/pricing?from=report'" data-i18n="report_upgrade_btn">Upgrade</button>
               <!-- Mobil: no-print aksiyonlar -->
               <div id="analyze-result-mobile-actions" class="no-print sm:hidden sticky bottom-0 left-0 right-0 z-10 px-4 py-3 bg-white dark:bg-navy-800 border-t border-primary-200 dark:border-primary-700 flex flex-wrap gap-2 justify-center">
                 <button type="button" onclick="downloadReportPdf()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-[var(--norya-brand)] text-white font-semibold text-sm" data-i18n="report_download">Raporu İndir</button>
@@ -3746,13 +3841,13 @@
     </div>
   </div>
 
-  <!-- Norya ödeme sayfası (checkout) – kurumsal, PayTR / Cloudflare / SSL -->
-  <section id="odeme-section" class="hidden py-16 px-4 bg-[var(--norya-bg)]">
+  <!-- Norya ödeme sayfası (checkout) – premium, PayTR / Cloudflare / SSL -->
+  <section id="odeme-section" class="hidden py-16 px-4 pb-28 sm:pb-24 bg-gradient-to-b from-accent-50/80 to-[var(--norya-bg)] dark:from-accent-900/40 dark:to-[var(--norya-bg)]">
     <span id="odeme" class="block -mt-24 pt-24" aria-hidden="true"></span>
     <div class="max-w-xl mx-auto">
-      <a href="#fiyatlandirma" onclick="document.getElementById('odeme-section').classList.add('hidden')" class="inline-flex items-center gap-2 text-primary-600 dark:text-primary-400 font-medium hover:underline mb-6" data-i18n="checkout_back">← Planı değiştir</a>
-      <!-- Güvenli Ödeme bölümü: metinler + rozetler -->
-      <div class="mb-6 py-5 px-4 sm:px-5 rounded-2xl bg-white dark:bg-accent-800/70 border border-accent-200 dark:border-accent-700 shadow-sm">
+      <a href="#fiyatlandirma" onclick="document.getElementById('odeme-section').classList.add('hidden')" class="inline-flex items-center gap-2 text-[#0EA5A4] dark:text-teal-400 font-semibold hover:underline mb-6 text-sm" data-i18n="checkout_back">← Planı değiştir</a>
+      <!-- Güvenli Ödeme bölümü: premium rozetler -->
+      <div class="mb-6 py-5 px-4 sm:px-5 rounded-2xl bg-white/90 dark:bg-accent-800/80 border border-accent-200/80 dark:border-accent-600/50 shadow-lg shadow-accent-900/5">
         <h3 class="text-sm font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-400 mb-3 text-center" data-i18n="trust_secure_payment_title">Güvenli Ödeme</h3>
         <ul class="space-y-2 mb-4 text-xs text-accent-600 dark:text-accent-400">
           <li class="flex items-start gap-2"><span class="text-[#0EA5A4] shrink-0">•</span><span data-i18n="footer_paytr_provided">Ödeme altyapısı PayTR 3D Secure güvenli ödeme sistemi ile sağlanmaktadır.</span></li>
@@ -3783,12 +3878,12 @@
           </div>
         </div>
       </div>
-      <div class="rounded-2xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-accent-800 overflow-hidden drop-shadow-soft">
-        <div class="bg-gradient-to-r from-primary-600 to-primary-700 px-6 py-4 text-white flex items-center gap-3 min-w-0 overflow-hidden">
-          <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-12 w-auto flex-shrink-0 object-contain rounded-lg bg-white/95" width="48" height="48" />
+      <div class="rounded-2xl border border-[#0EA5A4]/25 dark:border-teal-500/20 bg-white dark:bg-accent-800/95 overflow-hidden shadow-xl shadow-accent-900/10 ring-1 ring-black/5 dark:ring-white/5">
+        <div class="bg-gradient-to-r from-[#0EA5A4] via-[#0d9488] to-[#0f766e] px-6 py-5 text-white flex items-center gap-3 min-w-0 overflow-hidden">
+          <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-12 w-auto flex-shrink-0 object-contain rounded-xl bg-white/95 shadow-md" width="48" height="48" />
           <div class="min-w-0">
-            <h2 class="text-xl font-bold truncate" data-i18n="checkout_title">Ödeme özeti</h2>
-            <p class="text-primary-100 text-sm mt-0.5 truncate" data-i18n="checkout_subtitle">Norya — Kan tahlili analizi</p>
+            <h2 class="text-xl font-bold truncate tracking-tight" data-i18n="checkout_title">Ödeme özeti</h2>
+            <p class="text-white/90 text-sm mt-0.5 truncate" data-i18n="checkout_subtitle">Norya — Kan tahlili analizi</p>
           </div>
         </div>
         <div class="p-6">
@@ -3808,9 +3903,9 @@
               <li>—</li>
             </ul>
           </div>
-          <div class="flex justify-between items-center py-3 border-b border-accent-200 dark:border-accent-700">
-            <span class="text-accent-600 dark:text-accent-400" data-i18n="checkout_total">Toplam</span>
-            <span id="checkout-total" class="text-2xl font-bold text-primary-600">—</span>
+          <div class="flex justify-between items-center py-4 border-b border-accent-200 dark:border-accent-700 bg-accent-50/50 dark:bg-accent-800/30 -mx-6 px-6 rounded-lg">
+            <span class="text-accent-600 dark:text-accent-400 font-medium" data-i18n="checkout_total">Toplam</span>
+            <span id="checkout-total" class="text-2xl font-bold bg-gradient-to-r from-[#0EA5A4] to-[#0d9488] bg-clip-text text-transparent">—</span>
           </div>
           <div id="checkout-coupon-row" class="py-3 border-b border-accent-200 dark:border-accent-700">
             <label class="block text-sm font-medium text-accent-700 dark:text-accent-300 mb-1" for="checkout-coupon-input" data-i18n="checkout_coupon">İndirim kodu</label>
@@ -3835,9 +3930,11 @@
               <span><span data-i18n="checkout_consent_kvkk">Gizlilik/KVKK politikasını okudum ve kabul ediyorum.</span> <a href="/legal/gizlilik-politikasi" target="_blank" rel="noopener noreferrer" class="text-primary-600 dark:text-primary-400 hover:underline">→</a></span>
             </label>
           </div>
-          <button type="button" id="checkout-pay-btn" onclick="submitCheckout()" disabled class="mt-6 w-full py-4 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-lg transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="checkout_btn">Güvenli ödemeye geç</button>
-          <p class="mt-3 flex justify-center">
-            <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-emerald-50 dark:bg-emerald-900/30 border border-emerald-200 dark:border-emerald-800 text-emerald-700 dark:text-emerald-300 text-xs font-medium" data-i18n="trust_badge_secure_paytr">🔒 Güvenli ödeme – PayTR</span>
+          <div class="mt-6 pt-2" id="checkout-pay-btn-wrap">
+            <button type="button" id="checkout-pay-btn" onclick="submitCheckout()" disabled class="w-full py-4 rounded-xl bg-gradient-to-r from-[#0EA5A4] to-[#0d9488] hover:from-[#0d9488] hover:to-[#0f766e] text-white font-semibold text-lg transition-all shadow-lg shadow-[#0EA5A4]/25 hover:shadow-[#0EA5A4]/35 hover:-translate-y-0.5 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 disabled:shadow-none focus:ring-4 focus:ring-[#0EA5A4]/40 focus:outline-none" data-i18n="checkout_btn">Güvenli ödemeye geç</button>
+          </div>
+          <p class="mt-4 flex justify-center">
+            <span class="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl bg-emerald-50/80 dark:bg-emerald-900/20 border border-emerald-200/80 dark:border-emerald-800/50 text-emerald-700 dark:text-emerald-300 text-xs font-semibold" data-i18n="trust_badge_secure_paytr">🔒 Güvenli ödeme – PayTR</span>
           </p>
           <p class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-accent-500 dark:text-accent-400">
             <span class="flex items-center gap-2">
@@ -5587,6 +5684,123 @@
         '<li>' + escapeHtml(t.report_doctor_note_2 || 'Any symptoms or concerns should be evaluated by a doctor.') + '</li></ul></div></section></div>';
       return html;
     }
+    function buildDoctorGradeReportBody(opts, sections, parsedValues) {
+      var o = opts || {};
+      var t = T[getLang()] || T.tr;
+      var risk = o.risk_summary && o.risk_summary.overall ? o.risk_summary.overall : null;
+      var healthScore = o.health_score || null;
+      var score = (healthScore && typeof healthScore.score === 'number') ? Math.max(0, Math.min(100, healthScore.score)) : (risk && typeof risk.score === 'number' ? Math.max(0, Math.min(100, risk.score)) : (risk ? 70 : 0));
+      var plan = o.plan || (typeof window.__lastUsagePlan !== 'undefined' ? window.__lastUsagePlan : 'free');
+      var isPremium = o.premium === true || (o.ui_hints && o.ui_hints.locked === false) || (plan && (plan === 'pro' || plan === 'monthly' || plan === 'yearly' || plan === 'premium' || plan === 'single'));
+      var highlights = (o.risk_summary && o.risk_summary.highlights) ? o.risk_summary.highlights : [];
+      var domains = (o.risk_summary && o.risk_summary.domains) ? o.risk_summary.domains : {};
+      var trendData = o.trend && o.trend.dates && o.trend.dates.length ? o.trend : null;
+      var optimal = 0, needsAttention = 0, critical = 0, unknown = 0;
+      var attentionItems = [];
+      if (parsedValues && parsedValues.length) {
+        for (var i = 0; i < parsedValues.length; i++) {
+          var st = (parsedValues[i].status || '').toLowerCase();
+          if (st === 'normal') optimal++;
+          else if (st === 'border') needsAttention++;
+          else if (st === 'high' || st === 'low') { needsAttention++; attentionItems.push({ name: parsedValues[i].label, value: parsedValues[i].valueDisplay != null ? parsedValues[i].valueDisplay : String(parsedValues[i].value), unit: parsedValues[i].unit || '', flag: st === 'high' ? 'High' : 'Low' }); }
+          else unknown++;
+        }
+      }
+      if (attentionItems.length === 0 && highlights.length) {
+        for (var h = 0; h < highlights.length && attentionItems.length < 8; h++) {
+          var lev = (highlights[h].level || '').toLowerCase();
+          if (lev === 'mid' || lev === 'high') attentionItems.push({ name: highlights[h].test || '—', value: '', unit: '', flag: lev === 'high' ? 'High' : 'Attention' });
+        }
+      }
+      if (optimal === 0 && needsAttention === 0 && critical === 0 && unknown === 0 && parsedValues && parsedValues.length) unknown = parsedValues.length;
+      var angleRad = Math.PI * (1 - score / 100);
+      var gx = (100 - 90 * Math.cos(angleRad)).toFixed(2);
+      var gy = (100 - 90 * Math.sin(angleRad)).toFixed(2);
+      var fillClass = score <= 33 ? 'low' : (score <= 66 ? 'mid' : 'high');
+      var html = '';
+      html += '<div id="report-score-summary" class="report-score-summary report-section-anchor">';
+      html += '<div class="report-score-radial"><svg class="gauge-svg" viewBox="0 0 200 100" xmlns="http://www.w3.org/2000/svg"><path class="gauge-bg" d="M10 100 A90 90 0 0 1 190 100" fill="none" stroke="#e5e7eb" stroke-width="12" stroke-linecap="round"/><path class="gauge-fill ' + fillClass + '" d="M10 100 A90 90 0 0 1 ' + gx + ' ' + gy + '" fill="none" stroke-width="12" stroke-linecap="round"/><text class="gauge-score" x="100" y="72" text-anchor="middle" font-size="24" font-weight="700" fill="currentColor">' + score + '</text></svg></div>';
+      html += '<div class="report-score-stats">';
+      html += '<div class="report-score-stat report-score-stat--optimal"><span class="report-score-stat-value">' + optimal + '</span><span class="report-score-stat-label">' + escapeHtml(t.report_optimal || 'Optimal') + '</span></div>';
+      html += '<div class="report-score-stat report-score-stat--attention"><span class="report-score-stat-value">' + needsAttention + '</span><span class="report-score-stat-label">' + escapeHtml(t.report_needs_attention || 'Needs attention') + '</span></div>';
+      html += '<div class="report-score-stat report-score-stat--critical"><span class="report-score-stat-value">' + critical + '</span><span class="report-score-stat-label">' + escapeHtml(t.report_critical || 'Critical') + '</span></div>';
+      html += '<div class="report-score-stat report-score-stat--unknown"><span class="report-score-stat-value">' + unknown + '</span><span class="report-score-stat-label">' + escapeHtml(t.report_unknown || 'Unknown') + '</span></div>';
+      html += '</div></div>';
+      if (attentionItems.length > 0) {
+        html += '<div id="report-attention-block" class="report-attention-block report-section-anchor"><h2 class="report-attention-block-title">' + reportIcon('alertCircle') + ' ' + escapeHtml(t.report_attention_title || 'Attention Needed') + '</h2><ul class="report-attention-list">';
+        for (var a = 0; a < attentionItems.length; a++) {
+          var it = attentionItems[a];
+          var badgeClass = (it.flag === 'High' || it.flag === 'Attention') ? 'report-attention-badge--high' : 'report-attention-badge--low';
+          var valStr = (it.value ? it.value + ' ' : '') + (it.unit || '');
+          html += '<li class="report-attention-item"><span class="report-attention-param">' + escapeHtml(it.name) + '</span><span class="report-attention-badge ' + badgeClass + '">' + escapeHtml(it.flag) + '</span>' + (valStr ? '<span>' + escapeHtml(valStr.trim()) + '</span>' : '') + '<a href="#report-params" class="report-attention-link">' + escapeHtml(t.report_view_details || 'View details') + '</a></li>';
+        }
+        html += '</ul></div>';
+      }
+      var catTitles = { blood: t.report_category_blood || 'Blood Count', metabolic: t.report_category_metabolic || 'Metabolic', vitamins: t.report_category_vitamins || 'Vitamins & Minerals', inflammation: t.report_category_inflammation || 'Inflammation' };
+      var catOrder = ['blood', 'metabolic', 'vitamins', 'inflammation'];
+      html += '<h2 class="report-category-summary-title">' + escapeHtml(t.report_category_summary || 'Category Summary') + '</h2><p class="report-category-summary-desc">' + escapeHtml(t.report_category_summary_desc || 'Your results summarized by category.') + '</p>';
+      html += '<div class="report-category-cards">';
+      for (var c = 0; c < catOrder.length; c++) {
+        var dk = catOrder[c];
+        var dom = domains[dk] || {};
+        var dScore = Math.max(0, Math.min(100, dom.score != null ? dom.score : 50));
+        html += '<a href="#report-params" class="report-category-card"><span class="report-category-card-icon">' + reportIcon('grid') + '</span><span class="report-category-card-title">' + escapeHtml(catTitles[dk]) + '</span><span class="report-category-card-meta">' + dScore + '% optimal</span><div class="report-category-card-bar"><div class="report-category-card-bar-fill" style="width:' + dScore + '%"></div></div></a>';
+      }
+      html += '</div>';
+      html += '<h2 id="report-params" class="report-params-title report-section-anchor">' + escapeHtml(t.report_params_title || 'Parameters') + '</h2><div class="report-biomarker-grid">';
+      if (parsedValues && parsedValues.length) {
+        for (var p = 0; p < parsedValues.length; p++) {
+          var it = parsedValues[p];
+          var v = it.value;
+          var lo = it.refMin;
+          var hi = it.refMax;
+          var range = hi - lo;
+          var visualMin = Math.min(lo, v) - (range * 0.05);
+          var visualMax = Math.max(hi, v) + (range * 0.05);
+          if (visualMax <= visualMin) visualMax = visualMin + 1;
+          var pct = Math.max(0, Math.min(100, ((v - visualMin) / (visualMax - visualMin)) * 100));
+          var badgeCls = it.status === 'low' ? 'report-badge--low' : it.status === 'high' ? 'report-badge--high' : it.status === 'border' ? 'report-badge--border' : 'report-badge--optimal';
+          var badgeText = it.status === 'low' ? 'Low' : it.status === 'high' ? 'High' : it.status === 'border' ? 'Borderline' : 'Optimal';
+          var valueText = (it.valueDisplay != null ? it.valueDisplay : String(it.value)) + (it.unit ? ' ' + it.unit : '');
+          var refLabel = lo + '–' + hi + (it.unit ? ' ' + it.unit : '');
+          html += '<div class="report-biomarker-card"><div class="report-biomarker-card-header"><span class="report-biomarker-card-name">' + escapeHtml(it.label) + '</span><span class="report-badge ' + badgeCls + '">' + escapeHtml(badgeText) + '</span></div>';
+          html += '<div class="report-biomarker-card-value">' + escapeHtml(valueText) + '</div><div class="report-biomarker-card-ref">' + escapeHtml(t.report_ref_range || 'Ref') + ': ' + escapeHtml(refLabel) + '</div>';
+          html += '<div class="report-biomarker-card-bar-wrap"><div class="report-biomarker-card-bar-marker" style="left:' + pct + '%;position:absolute;margin-left:-2px"></div></div>';
+          html += '<p class="report-biomarker-card-desc">' + escapeHtml(it.label + ' ' + (it.status === 'high' ? '— may indicate follow-up. Discuss with your clinician.' : it.status === 'low' ? '— may be associated with diet or lifestyle. Discuss with your clinician.' : '— within reference range.')) + '</p></div>';
+        }
+      }
+      html += '</div>';
+      var blurClass = !isPremium ? ' report-premium-blur' : '';
+      html += '<div id="report-premium-risk" class="report-premium-gate' + (isPremium ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
+      html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</h3><ul class="report-bullets"><li>May indicate cardiovascular or metabolic factors. Discuss with your clinician.</li><li>Lifestyle and diet may support overall wellness.</li></ul></div>';
+      if (!isPremium) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      html += '</div>';
+      html += '<div id="report-premium-nextsteps" class="report-premium-gate' + (isPremium ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
+      html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</h3><ul class="report-bullets"><li>Nutrition: Balanced diet; discuss any deficiencies with your doctor.</li><li>Sleep: Adequate rest supports recovery.</li><li>Movement: Regular physical activity is recommended.</li><li>Follow-up: Discuss retest timing with your clinician.</li></ul></div>';
+      if (!isPremium) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      html += '</div>';
+      html += '<div id="report-premium-trends" class="report-premium-gate' + (isPremium ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
+      html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</h3>';
+      if (trendData && (trendData.ldl || trendData.glucose || trendData.crp)) {
+        var dates = trendData.dates || [];
+        var ldl = trendData.ldl || [];
+        var glucose = trendData.glucose || [];
+        var crp = trendData.crp || [];
+        var maxVal = Math.max.apply(null, [].concat(ldl, glucose, crp).filter(function(n) { return n != null && !isNaN(n); })) || 1;
+        html += '<div class="trend-chart"><div class="trend-legend"><span>LDL</span><span>Glucose</span><span>CRP</span></div>';
+        for (var ti = 0; ti < 3; ti++) {
+          var pctL = (ldl[ti] != null && !isNaN(ldl[ti])) ? Math.min(100, (ldl[ti] / maxVal) * 100) : 0;
+          var pctG = (glucose[ti] != null && !isNaN(glucose[ti])) ? Math.min(100, (glucose[ti] / maxVal) * 100) : 0;
+          var pctC = (crp[ti] != null && !isNaN(crp[ti])) ? Math.min(100, (crp[ti] / maxVal) * 100) : 0;
+          html += '<div class="trend-bar-row"><span class="trend-bar-date">' + escapeHtml(dates[ti] || '') + '</span><div class="trend-bars"><div class="trend-bar ldl" style="width:' + pctL + '%"></div><div class="trend-bar glucose" style="width:' + pctG + '%"></div><div class="trend-bar crp" style="width:' + pctC + '%"></div></div></div>';
+        }
+        html += '</div>';
+      } else html += '<p class="trend-placeholder text-sm">' + escapeHtml(t.report_trend_need_more || 'Trend becomes available with more reports over time.') + '</p>';
+      html += '</div>';
+      if (!isPremium) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      html += '</div>';
+      return html;
+    }
     function buildClinicalNoticeHTML(t) {
       if (!t) t = T[getLang()] || T.tr;
       var title = t.clinical_notice_title || 'Clinical Notice';
@@ -5633,6 +5847,28 @@
       var reportLangEl = document.getElementById('report-lang');
       if (reportRidEl) reportRidEl.textContent = rid || '—';
       if (reportLangEl) reportLangEl.textContent = getLang() || 'en';
+      var t = T[getLang()] || T.tr;
+      var heroTitle = document.getElementById('report-hero-title');
+      var heroSub = document.getElementById('report-hero-sub');
+      if (heroTitle) heroTitle.textContent = t.report_hero_title || 'Your Health Report';
+      if (heroSub) heroSub.textContent = t.report_hero_sub || 'A structured, clinician-style summary of your lab results.';
+      var barTitle = document.getElementById('report-bar-title');
+      if (barTitle) barTitle.textContent = t.report_bar_title || 'Report';
+      var plan = opts && opts.plan ? opts.plan : (typeof window.__lastUsagePlan !== 'undefined' ? window.__lastUsagePlan : 'free');
+      var isPremium = opts && (opts.premium === true || (opts.ui_hints && opts.ui_hints.locked === false)) || (plan && (plan === 'pro' || plan === 'monthly' || plan === 'yearly' || plan === 'premium' || plan === 'single'));
+      var pdfBtn = document.getElementById('report-bar-pdf-btn');
+      if (pdfBtn) {
+        pdfBtn.textContent = t.report_download || 'Download PDF';
+        if (isPremium) { pdfBtn.classList.remove('btn-report-pdf--locked'); pdfBtn.onclick = function() { downloadReportPdf(); }; } else { pdfBtn.classList.add('btn-report-pdf--locked'); pdfBtn.onclick = function() { window.location.href = '/pricing?from=report'; }; }
+      }
+      var upgradeSection = document.getElementById('report-upgrade-section');
+      if (upgradeSection) upgradeSection.style.display = isPremium ? 'none' : 'block';
+      var floatingUpgrade = document.getElementById('report-floating-upgrade');
+      if (floatingUpgrade) {
+        if (isPremium) floatingUpgrade.classList.add('report-floating-upgrade--hidden'); else { floatingUpgrade.classList.remove('report-floating-upgrade--hidden'); floatingUpgrade.textContent = t.report_upgrade_btn || 'Upgrade'; }
+      }
+      var barUpgradeBtn = document.getElementById('report-bar-upgrade-btn');
+      if (barUpgradeBtn) barUpgradeBtn.style.display = isPremium ? 'none' : '';
       var sections = [];
       var regex = /(\d+\.\s*)?\*\*([^*]+)\*\*:?\s*\n/g;
       var matches = [];
@@ -5645,47 +5881,102 @@
         sections.push({ title: matches[i].title, content: content });
       }
       if (sections.length === 0) {
-        var t = T[getLang()] || T.tr;
-        bodyEl.innerHTML = (opts ? buildPremiumClinicalBlock(opts) : '') + buildClinicalNoticeHTML(t);
+        bodyEl.innerHTML = (opts ? buildDoctorGradeReportBody(Object.assign({}, opts, { sections: [] }), [], []) : '') + buildClinicalNoticeHTML(t);
         rawEl.classList.add('hidden');
+        initReportStickyBar();
+        var mo = new URLSearchParams(window.location.search).get('merchant_oid');
+        if (mo && !isPremium && getReportId()) startOrderStatusPollingForUnlock(mo);
         return;
       }
       rawEl.classList.add('hidden');
-      var t = T[getLang()] || T.tr;
-      var optsWithSections = (opts && typeof opts === 'object') ? Object.assign({}, opts, { sections: sections }) : opts;
-      var premiumBlock = optsWithSections ? buildPremiumClinicalBlock(optsWithSections) : '';
-      bodyEl.innerHTML = premiumBlock + sections.map(function(s) {
-        var config = getSectionConfig(s.title);
-        var displayTitle = (config.titleKey && t[config.titleKey]) ? t[config.titleKey] : s.title;
-        var inner = '';
+      var parsedValues = [];
+      for (var si = 0; si < sections.length; si++) {
+        var config = getSectionConfig(sections[si].title);
         if (config.key === 'Değerler') {
-          inner += renderRiskLegend(t);
-          var rest = [];
-          var lines = s.content.split(/\n/);
-          for (var i = 0; i < lines.length; i++) {
-            var line = lines[i].trim();
+          var lines = sections[si].content.split(/\n/);
+          for (var li = 0; li < lines.length; li++) {
+            var line = lines[li].trim();
             if (!line) continue;
             var parsed = parseValueBlock(line);
-            if (parsed) {
-              inner += renderValueBar(parsed);
-            } else {
-              rest.push(lines[i]);
-            }
+            if (parsed) parsedValues.push(parsed);
           }
-          if (rest.length) {
-            var restHtml = rest.join('\n').trim();
-            if (restHtml) inner += '<div class="mt-4 pt-4 border-t border-accent-200 dark:border-accent-600 text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap">' + escapeHtml(restHtml).replace(/\n/g, '<br>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') + '</div>';
-          }
-          if (!inner) inner = '<div class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap">' + escapeHtml(s.content).replace(/\n/g, '<br>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') + '</div>';
-        } else {
-          inner = '<div class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap">' + escapeHtml(s.content).replace(/\n/g, '<br>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') + '</div>';
+          break;
         }
-        return '<section class="section-card">' +
-          '<div class="section-title"><span class="dot"></span> ' + escapeHtml(displayTitle) + '</div>' +
-          '<div class="section-body">' + inner + '</div>' +
-          '</section>';
+      }
+      var optsWithSections = (opts && typeof opts === 'object') ? Object.assign({}, opts, { sections: sections }) : opts;
+      var doctorGradeHtml = buildDoctorGradeReportBody(optsWithSections, sections, parsedValues);
+      var otherSections = sections.filter(function(s) { return getSectionConfig(s.title).key !== 'Değerler'; });
+      var otherHtml = otherSections.map(function(s) {
+        var config = getSectionConfig(s.title);
+        var displayTitle = (config.titleKey && t[config.titleKey]) ? t[config.titleKey] : s.title;
+        var inner = '<div class="text-accent-700 dark:text-accent-300 text-sm whitespace-pre-wrap">' + escapeHtml(s.content).replace(/\n/g, '<br>').replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>') + '</div>';
+        return '<section class="section-card report-section-anchor">' + '<div class="section-title"><span class="dot"></span> ' + escapeHtml(displayTitle) + '</div>' + '<div class="section-body">' + inner + '</div></section>';
       }).join('');
+      bodyEl.innerHTML = doctorGradeHtml + otherHtml;
       initReportSlider(bodyEl);
+      initReportStickyBar();
+      var mo = new URLSearchParams(window.location.search).get('merchant_oid');
+      if (mo && !isPremium && getReportId()) startOrderStatusPollingForUnlock(mo);
+    }
+    var _orderStatusPollingTimer = null;
+    var _orderStatusPollingStart = 0;
+    function startOrderStatusPollingForUnlock(merchant_oid) {
+      if (_orderStatusPollingTimer) return;
+      _orderStatusPollingStart = Date.now();
+      var timeoutTotal = 45000;
+      var intervalFast = 2000;
+      var intervalSlow = 5000;
+      var fastUntil = 30000;
+      function stop() { if (_orderStatusPollingTimer) { clearTimeout(_orderStatusPollingTimer); _orderStatusPollingTimer = null; } }
+      function poll() {
+        if (Date.now() - _orderStatusPollingStart > timeoutTotal) { stop(); return; }
+        fetch(API_BASE + '/api/orders/status?merchant_oid=' + encodeURIComponent(merchant_oid))
+          .then(function(r) { return r.status === 404 ? null : r.json(); })
+          .then(function(d) {
+            if (!d || (d.status !== 'paid' && !d.is_premium_active)) return;
+            stop();
+            if (typeof window.__lastUsagePlan !== 'undefined') window.__lastUsagePlan = d.plan_code || 'pro';
+            var rid = getReportId();
+            if (!rid) { if (typeof toast === 'function') toast('Premium aktif.', 'success'); return; }
+            var token = getToken();
+            if (!token) { if (typeof toast === 'function') toast('Premium aktif.', 'success'); return; }
+            fetch(API_BASE + '/analyze/usage', { headers: { 'Authorization': 'Bearer ' + token } })
+              .then(function(r) { return r.ok ? r.json() : null; })
+              .then(function(usage) {
+                if (usage && usage.plan) try { window.__lastUsagePlan = usage.plan; } catch (_) {}
+                fetch(API_BASE + '/analyze/history/' + encodeURIComponent(rid), { headers: { 'Authorization': 'Bearer ' + token } })
+                  .then(function(r) { return r.ok ? r.json() : null; })
+                  .then(function(data) {
+                    if (data && data.result_text) {
+                      renderReport(data.result_text, { risk_summary: null, health_score: null, trend: null, premium: true, ui_hints: { locked: false }, plan: (d.plan_code || 'pro'), sections: null });
+                      if (typeof toast === 'function') toast('Premium açıldı.', 'success');
+                    }
+                  });
+              });
+          })
+          .catch(function() {});
+      }
+      poll();
+      function schedule() {
+        if (Date.now() - _orderStatusPollingStart > timeoutTotal) return;
+        var interval = (Date.now() - _orderStatusPollingStart) < fastUntil ? intervalFast : intervalSlow;
+        _orderStatusPollingTimer = setTimeout(function() { poll(); schedule(); }, interval);
+      }
+      schedule();
+    }
+    function initReportStickyBar() {
+      var bar = document.getElementById('report-sticky-bar');
+      if (!bar || bar.dataset.inited) return;
+      bar.dataset.inited = '1';
+      var floating = document.getElementById('report-floating-upgrade');
+      function onScroll() {
+        if (window.scrollY > 60) bar.classList.add('report-sticky-bar--compact'); else bar.classList.remove('report-sticky-bar--compact');
+        if (floating && !floating.classList.contains('report-floating-upgrade--hidden')) {
+          if (window.scrollY > 400) floating.style.opacity = '1'; else floating.style.opacity = '0.85';
+        }
+      }
+      window.addEventListener('scroll', onScroll, { passive: true });
+      onScroll();
     }
     function initReportSlider(container) {
       if (!container) return;
@@ -5769,6 +6060,21 @@
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme",
+        trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik",
+        features_heading: "Güvenilir sağlık içgörüleri, gerçek hayat için tasarlandı.",
+        features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
+        feature_1_title: "Anında, yapılandırılmış analiz", feature_1_desc: "Yaygın biyobelirteçlerin net açıklamaları ve ne anlama gelebilecekleri — dakikalar içinde.",
+        feature_2_title: "Klinik tarzı rapor formatı", feature_2_desc: "Doktor dostu düzen: referans aralıkları, işaretler, özetler ve takip önerileri.",
+        feature_3_title: "Küresel laboratuvar uyumluluğu", feature_3_desc: "Birçok laboratuvar formatı ve birimini destekler — uluslararası kullanıcılar için tasarlandı.",
+        feature_4_title: "Gizlilik ve güvenlik tasarımda", feature_4_desc: "İletimde şifreli, sıkı erişim kontrolleri ve veri minimizasyonu. GDPR’ye hazır yaklaşım.",
+        feature_5_title: "Trendler ve karşılaştırmalar", feature_5_desc: "Zaman içindeki değişimleri takip edin ve geçmiş sonuçları tek bir panelde karşılaştırın.",
+        feature_6_title: "Uygulanabilir sonraki adımlar", feature_6_desc: "Belirteçlerinize özel pratik yaşam tarzı ve beslenme ipuçları.",
+        how_section_title: "Nasıl çalışır", how_section_desc: "Yapılandırılmış raporunuza üç basit adım.",
+        how_step_1_title: "Laboratuvar sonuçlarınızı yükleyin", how_step_1_desc: "PDF veya görsel — yaygın laboratuvar formatlarını kabul ediyoruz.",
+        how_step_2_title: "Yapılandırılmış rapor oluşturuyoruz", how_step_2_desc: "Net aralıklar, işaretler, özetler ve öneriler.",
+        how_step_3_title: "Kaydedin, karşılaştırın ve önerileri uygulayın", how_step_3_desc: "PDF indirin, trendleri takip edin ve sonraki adımlara geçin.",
+        cta_features_heading: "Raporunuzu görmeye hazır mısınız?", cta_features_sub: "Laboratuvar sonuçlarınızı yükleyin, dakikalar içinde net, yapılandırılmış rapor alın.",
+        cta_start_analysis: "Analizi başlat", cta_view_pricing: "Fiyatlandırmayı gör",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu",
         footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR 3D Secure güvenli ödeme sistemi.", payment_infrastructure: "Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Güvenlik en iyi uygulamaları; Norya HIPAA kapsamında kayıtlı değildir.",
@@ -5978,7 +6284,17 @@
         analyze_doctor_notes_label: "Doktorunuzun notu / ek bilgi (isteğe bağlı)",
         analyze_doctor_notes_placeholder: "Örn: Doktorum B12 takviyesi verdi, bu sonuçla birlikte değerlendirin.",
         analyze_or: "— veya —", analyze_upload_btn: "PDF veya görsel (JPG, PNG) yükle",
-        report_title: "Analiz Raporu", report_subtitle: "Klinik tarzı analiz raporu", report_subtitle_desc: "Kan tahlili sonuçlarının bilgilendirme amaçlı değerlendirmesi", alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
+        report_title: "Analiz Raporu", report_subtitle: "Klinik tarzı analiz raporu", report_subtitle_desc: "Kan tahlili sonuçlarının bilgilendirme amaçlı değerlendirmesi",
+        report_bar_title: "Rapor", report_pill_secure: "Güvenli • Şifreli", report_pill_3d: "3D Secure Ödeme", report_pill_global: "Global lab birimleri", report_pill_pdf: "Paylaşılabilir PDF",
+        report_hero_title: "Sağlık Raporunuz", report_hero_sub: "Laboratuvar sonuçlarınızın klinisyen tarzı yapılandırılmış özeti.",
+        report_score_summary: "Sağlık Skoru Özeti", report_optimal: "Optimal", report_needs_attention: "Dikkat gerekli", report_critical: "Kritik", report_unknown: "Bilinmiyor / Aralık yok",
+        report_attention_title: "Dikkat Gerekli", report_view_details: "Detaylara git",
+        report_category_summary: "Kategori Özeti", report_category_summary_desc: "Sonuçlarınız kategorilere göre özetlendi.",
+        report_category_blood: "Kan Sayımı", report_category_metabolic: "Metabolik", report_category_vitamins: "Vitaminler ve Mineraller", report_category_inflammation: "İnflamasyon",
+        report_params_title: "Parametreler", report_ref_range: "Ref", report_risk_factors: "Risk Faktörleri", report_next_steps: "Sonuç ve Sonraki Adımlar", report_trends: "Trendler",
+        report_unlock_full: "Tam raporu aç", report_unlock_desc: "PDF indirme, detaylı içgörüler, trend takibi ve kişiselleştirilmiş sonraki adımlara erişin.", report_unlock_pdf: "PDF indirme", report_unlock_insights: "Detaylı içgörüler", report_unlock_trends: "Trend takibi",
+        report_flexible_cancel: "Esnek iptal.", report_upgrade_now: "Şimdi yükselt", report_upgrade_btn: "Yükselt",
+        alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
         wizard_step1_title: "Dosya veya metin", wizard_step2_title: "Önizleme ve dil", wizard_step3_title: "Raporunuz hazırlanıyor", wizard_drop: "Dosyayı buraya sürükleyin veya tıklayın", wizard_back: "Geri", wizard_next: "Sonraki", wizard_preview_text: "Metin girişi", wizard_lang: "Rapor dili", wizard_step3_time: "Ortalama 20–30 saniye sürer.",
         pdf_header_title: "Kan Tahlili Analiz Raporu", pdf_footer_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya",
         pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler", pdf_sec_diet: "Diyet planı", pdf_sec_supplements: "Takviye önerileri", pdf_sec_heart: "Kalp sağlığı",
@@ -6059,7 +6375,7 @@
         history_detail_input: "Tahlil girişi:", history_detail_result: "Norya yorumu:", history_close: "Kapat", history_analysis_a: "Analiz A", history_analysis_b: "Analiz B",
         history_loading: "Yükleniyor...", history_empty: "Henüz analiz yok.", history_load_error: "Geçmiş yüklenemedi.", history_compare_select_two: "İki farklı analiz seçin.", history_compare_load_error: "Analizler yüklenemedi.",
         usage_this_month: "Bu ay {kullanilan}/{limit} analiz hakkınız kullanıldı.", usage_first_free: "İlk analiz ücretsiz.", usage_limit_reached: "Aylık analiz hakkınız doldu. Önce ödeme yapın, sonra analiz yapabilirsiniz.", usage_pro_unlimited: "Pro plan: Bu ay {kullanilan}/{limit} analiz kullandınız.", usage_extra_credits: "+ {n} ek hak", payment_btn_single: "1 Analiz Satın Al", payment_btn_pro: "Pro'ya Geç", payment_not_available: "Ödeme şu an kullanılamıyor.", payment_error: "Ödeme sayfası açılamadı.", payment_modal_title: "Güvenli ödeme (PayTR)", payment_success: "Ödemeniz alındı. Analiz yapabilirsiniz.", session_expired: "Oturumunuz sonlanmış. Lütfen tekrar giriş yapın.", test_mode_link: "Sınırsız test", test_mode_on: "Test modu – sınırsız, hak düşülmez",
-        checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_consent_mesafeli: "Mesafeli Satış Sözleşmesi'ni okudum ve kabul ediyorum.", checkout_consent_kvkk: "Gizlilik/KVKK politikasını okudum ve kabul ediyorum.", checkout_btn: "Güvenli ödemeye geç", checkout_accepted_cards: "Visa, Mastercard, Amex kabul edilir.",         checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
+        checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_consent_required: "Ödeme için aşağıdaki sözleşmeleri kabul etmeniz gerekiyor:", checkout_consent_mesafeli: "Mesafeli Satış Sözleşmesi'ni okudum ve kabul ediyorum.", checkout_consent_kvkk: "Gizlilik/KVKK politikasını okudum ve kabul ediyorum.", checkout_btn: "Güvenli ödemeye geç", checkout_accepted_cards: "Visa, Mastercard, Amex kabul edilir.",         checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
         paytr_infrastructure_note: "Ödeme altyapısı PayTR ile sağlanacaktır.",
         guest_checkout_title: "Kayıt olmadan tek analiz", guest_checkout_desc: "E-posta adresinizi girin; ödeme sonrası aynı e-posta ile oturum açıp analiz yapabilirsiniz.", guest_checkout_name: "Ad (opsiyonel)",
         btn_processing_pdf: "PDF işleniyor...", btn_processing_analyze: "Analiz ediliyor...",
@@ -6090,6 +6406,21 @@
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
+        trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security",
+        features_heading: "Trusted health insights, designed for real life.",
+        features_sub: "Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.",
+        feature_1_title: "Instant, structured analysis", feature_1_desc: "Clear explanations of common biomarkers and what they may indicate — in minutes.",
+        feature_2_title: "Clinical-style report format", feature_2_desc: "Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.",
+        feature_3_title: "Global lab compatibility", feature_3_desc: "Supports many lab formats and units — designed for international users.",
+        feature_4_title: "Privacy & security by design", feature_4_desc: "Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.",
+        feature_5_title: "Trends & comparisons", feature_5_desc: "Track changes over time and compare past results with one dashboard.",
+        feature_6_title: "Actionable next steps", feature_6_desc: "Practical lifestyle and nutrition tips tailored to your markers.",
+        how_section_title: "How it works", how_section_desc: "Three simple steps to your structured report.",
+        how_step_1_title: "Upload your lab results", how_step_1_desc: "PDF or image — we accept common lab formats.",
+        how_step_2_title: "We generate a structured report", how_step_2_desc: "Clear ranges, flags, summaries and recommendations.",
+        how_step_3_title: "Save, compare, and follow recommendations", how_step_3_desc: "Download PDF, track trends, and act on next steps.",
+        cta_features_heading: "Ready to see your report?", cta_features_sub: "Upload your lab results and get a clear, structured report in minutes.",
+        cta_start_analysis: "Start analysis", cta_view_pricing: "View pricing",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "PayTR 3D Secure payment system.", payment_infrastructure: "Payment infrastructure: PayTR 3D Secure secure payment system.", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Security best practices; Norya is not a HIPAA-registered entity.",
@@ -6294,6 +6625,15 @@
         analyze_doctor_notes_placeholder: "E.g. My doctor prescribed B12; please consider with these results.",
         analyze_or: "— or —", analyze_upload_btn: "Upload PDF or image (JPG, PNG)",
         report_title: "Norya Analysis Report", report_download: "Download report", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
+        report_bar_title: "Report", report_pill_secure: "Secure • Encrypted", report_pill_3d: "3D Secure Payments", report_pill_global: "Global lab units", report_pill_pdf: "Shareable PDF",
+        report_hero_title: "Your Health Report", report_hero_sub: "A structured, clinician-style summary of your lab results.",
+        report_score_summary: "Health Score Summary", report_optimal: "Optimal", report_needs_attention: "Needs attention", report_critical: "Critical", report_unknown: "Unknown / No range",
+        report_attention_title: "Attention Needed", report_view_details: "View details",
+        report_category_summary: "Category Summary", report_category_summary_desc: "Your results summarized by category.",
+        report_category_blood: "Blood Count", report_category_metabolic: "Metabolic", report_category_vitamins: "Vitamins & Minerals", report_category_inflammation: "Inflammation",
+        report_params_title: "Parameters", report_ref_range: "Ref", report_risk_factors: "Risk Factors", report_next_steps: "Next Steps", report_trends: "Trends",
+        report_unlock_full: "Unlock the full report", report_unlock_desc: "Get PDF download, deep insights, trend tracking and personalized next steps.", report_unlock_pdf: "PDF download", report_unlock_insights: "Deep insights", report_unlock_trends: "Trend tracking",
+        report_flexible_cancel: "Flexible cancellation.", report_upgrade_now: "Upgrade now", report_upgrade_btn: "Upgrade",
         upload_intake_title: "Upload Your Lab Results",
         upload_intake_title_tr: "Kan tahlili sonuçlarınızı yükleyin",
         upload_intake_subtitle: "Secure, structured intake. Your report is generated in minutes.",
@@ -6379,7 +6719,7 @@
         history_detail_input: "Lab input:", history_detail_result: "Norya AI interpretation:", history_close: "Close", history_analysis_a: "Analysis A", history_analysis_b: "Analysis B",
         history_loading: "Loading...", history_empty: "No analyses yet.", history_load_error: "Could not load history.", history_compare_select_two: "Select two different analyses.", history_compare_load_error: "Could not load analyses.",
         usage_this_month: "This month {kullanilan}/{limit} analyses used.", usage_first_free: "First analysis free.", usage_limit_reached: "Monthly limit reached. Pay first, then run analysis.", usage_pro_unlimited: "Pro plan: {kullanilan}/{limit} analyses this month.", usage_extra_credits: "+ {n} extra", payment_btn_single: "Buy 1 analysis", payment_btn_pro: "Upgrade to Pro", payment_not_available: "Payment is not available.", payment_error: "Could not open payment page.", payment_modal_title: "Secure payment (PayTR)", payment_success: "Payment received. You can run analysis now.", session_expired: "Your session has expired. Please log in again.", test_mode_link: "Unlimited test", test_mode_on: "Test mode – unlimited, no credit used",
-        checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_consent_mesafeli: "I have read and accept the Distance Selling Agreement.", checkout_consent_kvkk: "I have read and accept the Privacy/KVKK policy.", checkout_btn: "Proceed to secure payment", checkout_accepted_cards: "Visa, Mastercard, Amex accepted.",         checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
+        checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_consent_required: "You must accept the following to proceed to payment:", checkout_consent_mesafeli: "I have read and accept the Distance Selling Agreement.", checkout_consent_kvkk: "I have read and accept the Privacy/KVKK policy.", checkout_btn: "Proceed to secure payment", checkout_accepted_cards: "Visa, Mastercard, Amex accepted.",         checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
         paytr_infrastructure_note: "Payment infrastructure is provided by PayTR.",
         guest_checkout_title: "Single analysis without account", guest_checkout_desc: "Enter your email; after payment you can sign in with the same email and run your analysis.", guest_checkout_name: "Name (optional)",
         btn_processing_pdf: "Processing PDF...", btn_processing_analyze: "Analyzing...",
@@ -6404,6 +6744,21 @@
         hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "Valori in grado moderato: molti parametri in range, alcuni al limite. Il report include molti valori, spiegazioni e consigli personalizzati.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR",
+        trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare",
+        features_heading: "Approfondimenti sulla salute affidabili, pensati per la vita reale.",
+        features_sub: "Carica i risultati delle analisi e ottieni un report chiaro e strutturato con trend, segnali di rischio e prossimi passi concreti.",
+        feature_1_title: "Analisi strutturata istantanea", feature_1_desc: "Spiegazioni chiare dei biomarcatori comuni e di cosa possono indicare — in pochi minuti.",
+        feature_2_title: "Formato report in stile clinico", feature_2_desc: "Layout adatto al medico: intervalli, flag, riepiloghi e suggerimenti di follow-up.",
+        feature_3_title: "Compatibilità lab globali", feature_3_desc: "Supporta molti formati e unità di laboratorio — pensato per utenti internazionali.",
+        feature_4_title: "Privacy e sicurezza by design", feature_4_desc: "Crittografia in transito, controlli di accesso rigorosi e minimizzazione dei dati. Approccio GDPR-ready.",
+        feature_5_title: "Trend e confronti", feature_5_desc: "Segui i cambiamenti nel tempo e confronta i risultati passati in una sola dashboard.",
+        feature_6_title: "Prossimi passi concreti", feature_6_desc: "Consigli pratici su stile di vita e nutrizione adattati ai tuoi marker.",
+        how_section_title: "Come funziona", how_section_desc: "Tre semplici passi per il tuo report strutturato.",
+        how_step_1_title: "Carica i risultati delle analisi", how_step_1_desc: "PDF o immagine — accettiamo i formati lab più comuni.",
+        how_step_2_title: "Generiamo un report strutturato", how_step_2_desc: "Intervalli chiari, flag, riepiloghi e raccomandazioni.",
+        how_step_3_title: "Salva, confronta e segui le raccomandazioni", how_step_3_desc: "Scarica il PDF, segui i trend e agisci sui prossimi passi.",
+        cta_features_heading: "Pronto a vedere il tuo report?", cta_features_sub: "Carica i risultati delle analisi e ottieni un report chiaro e strutturato in pochi minuti.",
+        cta_start_analysis: "Avvia analisi", cta_view_pricing: "Vedi prezzi",
         trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Sicurezza allineata HIPAA",
         footer_trust_ssl_desc: "Traffico crittografato SSL/TLS.", footer_trust_kvkk_desc: "Dati personali in linea con KVKK.", footer_trust_gdpr_desc: "Conforme GDPR per UE.", footer_trust_paytr_desc: "Pagamento sicuro PayTR.", footer_trust_hipaa_desc: "Dati sanitari trattati in sicurezza.",
@@ -6615,6 +6970,21 @@
         hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Valores en nivel moderado: muchos parámetros en rango, algunos en el límite. El informe incluye muchos valores, explicaciones y recomendaciones.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR",
+        trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare",
+        features_heading: "Información de salud fiable, diseñada para la vida real.",
+        features_sub: "Sube tus resultados de laboratorio y obtén un informe claro y estructurado con tendencias, señales de riesgo y próximos pasos.",
+        feature_1_title: "Análisis estructurado al instante", feature_1_desc: "Explicaciones claras de biomarcadores habituales y qué pueden indicar — en minutos.",
+        feature_2_title: "Formato de informe estilo clínico", feature_2_desc: "Diseño amigable para el médico: rangos, señales, resúmenes y sugerencias de seguimiento.",
+        feature_3_title: "Compatibilidad con laboratorios globales", feature_3_desc: "Soporta muchos formatos y unidades de laboratorio — pensado para usuarios internacionales.",
+        feature_4_title: "Privacidad y seguridad desde el diseño", feature_4_desc: "Cifrado en tránsito, controles de acceso estrictos y minimización de datos. Enfoque listo para GDPR.",
+        feature_5_title: "Tendencias y comparaciones", feature_5_desc: "Sigue los cambios en el tiempo y compara resultados pasados en un solo panel.",
+        feature_6_title: "Próximos pasos concretos", feature_6_desc: "Consejos prácticos de estilo de vida y nutrición adaptados a tus marcadores.",
+        how_section_title: "Cómo funciona", how_section_desc: "Tres pasos sencillos hasta tu informe estructurado.",
+        how_step_1_title: "Sube tus resultados de laboratorio", how_step_1_desc: "PDF o imagen — aceptamos formatos de laboratorio habituales.",
+        how_step_2_title: "Generamos un informe estructurado", how_step_2_desc: "Rangos claros, señales, resúmenes y recomendaciones.",
+        how_step_3_title: "Guarda, compara y sigue las recomendaciones", how_step_3_desc: "Descarga el PDF, sigue las tendencias y actúa en los próximos pasos.",
+        cta_features_heading: "¿Listo para ver tu informe?", cta_features_sub: "Sube tus resultados de laboratorio y obtén un informe claro y estructurado en minutos.",
+        cta_start_analysis: "Iniciar análisis", cta_view_pricing: "Ver precios",
         trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Seguridad alineada HIPAA",
         footer_trust_ssl_desc: "Tráfico cifrado SSL/TLS.", footer_trust_kvkk_desc: "Datos personales según KVKK.", footer_trust_gdpr_desc: "Conforme GDPR para UE.", footer_trust_paytr_desc: "Pago seguro con PayTR.", footer_trust_hipaa_desc: "Datos de salud tratados con seguridad.",
@@ -6826,6 +7196,21 @@
         hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Valeurs à niveau modéré: beaucoup de paramètres dans la norme, certains à la limite. Le rapport inclut de nombreuses valeurs et recommandations.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR",
+        trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare",
+        features_heading: "Des informations santé de confiance, conçues pour la vie réelle.",
+        features_sub: "Téléchargez vos résultats d'analyses et obtenez un rapport clair et structuré avec tendances, alertes et prochaines étapes.",
+        feature_1_title: "Analyse structurée instantanée", feature_1_desc: "Explications claires des biomarqueurs courants et de ce qu'ils peuvent indiquer — en quelques minutes.",
+        feature_2_title: "Format de rapport style clinique", feature_2_desc: "Présentation adaptée au médecin : plages, indicateurs, résumés et suggestions de suivi.",
+        feature_3_title: "Compatibilité laboratoires internationaux", feature_3_desc: "Prend en charge de nombreux formats et unités — conçu pour les utilisateurs internationaux.",
+        feature_4_title: "Confidentialité et sécurité dès la conception", feature_4_desc: "Chiffrement en transit, contrôles d'accès stricts et minimisation des données. Approche prête RGPD.",
+        feature_5_title: "Tendances et comparaisons", feature_5_desc: "Suivez l'évolution dans le temps et comparez les résultats passés sur un même tableau de bord.",
+        feature_6_title: "Prochaines étapes concrètes", feature_6_desc: "Conseils pratiques lifestyle et nutrition adaptés à vos marqueurs.",
+        how_section_title: "Comment ça marche", how_section_desc: "Trois étapes simples pour votre rapport structuré.",
+        how_step_1_title: "Téléchargez vos résultats d'analyses", how_step_1_desc: "PDF ou image — nous acceptons les formats labo courants.",
+        how_step_2_title: "Nous générons un rapport structuré", how_step_2_desc: "Plages claires, indicateurs, résumés et recommandations.",
+        how_step_3_title: "Enregistrez, comparez et suivez les recommandations", how_step_3_desc: "Téléchargez le PDF, suivez les tendances et agissez sur les prochaines étapes.",
+        cta_features_heading: "Prêt à voir votre rapport ?", cta_features_sub: "Téléchargez vos résultats et obtenez un rapport clair et structuré en quelques minutes.",
+        cta_start_analysis: "Démarrer l'analyse", cta_view_pricing: "Voir les tarifs",
         trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Sicurezza allineata HIPAA",
         footer_trust_ssl_desc: "Trafic chiffré SSL/TLS.", footer_trust_kvkk_desc: "Données personnelles conformes KVKK.", footer_trust_gdpr_desc: "Conforme RGPD pour l'UE.", footer_trust_paytr_desc: "Paiement sécurisé PayTR.", footer_trust_hipaa_desc: "Données de santé traitées en sécurité.",
@@ -7037,6 +7422,21 @@
         hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Werte im mittleren Bereich: viele Parameter im Referenzbereich, einige grenzwertig. Der Bericht enthält viele Werte, Erklärungen und Empfehlungen.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
         trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR",
+        trust_bar_medical: "Medizinische Einblicke", trust_bar_3d: "3D-Secure-Zahlungen", trust_bar_doctor_reports: "Arzt-Style-Berichte", trust_bar_analyses: "50.000+ Analysen erstellt", trust_bar_cloudflare: "Cloudflare-Sicherheit",
+        features_heading: "Vertrauenswürdige Gesundheitseinblicke, für den Alltag konzipiert.",
+        features_sub: "Laden Sie Ihre Laborergebnisse hoch und erhalten Sie einen klaren, strukturierten Bericht mit Trends, Risikohinweisen und umsetzbaren nächsten Schritten.",
+        feature_1_title: "Sofortige, strukturierte Auswertung", feature_1_desc: "Klare Erklärungen gängiger Biomarker und was sie bedeuten können — in Minuten.",
+        feature_2_title: "Klinisches Berichtsformat", feature_2_desc: "Arztfreundliches Layout: Referenzbereiche, Markierungen, Zusammenfassungen und Follow-up-Vorschläge.",
+        feature_3_title: "Globale Labor-Kompatibilität", feature_3_desc: "Unterstützt viele Laborformate und -einheiten — für internationale Nutzer konzipiert.",
+        feature_4_title: "Datenschutz und Sicherheit by Design", feature_4_desc: "Verschlüsselt in der Übertragung, strenge Zugriffskontrollen und Datenminimierung. GDPR-ready.",
+        feature_5_title: "Trends und Vergleiche", feature_5_desc: "Verfolgen Sie Veränderungen über die Zeit und vergleichen Sie frühere Ergebnisse in einer Übersicht.",
+        feature_6_title: "Umsetzbare nächste Schritte", feature_6_desc: "Praktische Tipps zu Lebensstil und Ernährung, abgestimmt auf Ihre Marker.",
+        how_section_title: "So funktioniert's", how_section_desc: "Drei einfache Schritte zu Ihrem strukturierten Bericht.",
+        how_step_1_title: "Laborergebnisse hochladen", how_step_1_desc: "PDF oder Bild — wir akzeptieren gängige Laborformate.",
+        how_step_2_title: "Wir erstellen einen strukturierten Bericht", how_step_2_desc: "Klare Bereiche, Markierungen, Zusammenfassungen und Empfehlungen.",
+        how_step_3_title: "Speichern, vergleichen und Empfehlungen umsetzen", how_step_3_desc: "PDF herunterladen, Trends verfolgen und nächste Schritte angehen.",
+        cta_features_heading: "Bereit für Ihren Bericht?", cta_features_sub: "Laden Sie Ihre Laborergebnisse hoch und erhalten Sie in Minuten einen klaren, strukturierten Bericht.",
+        cta_start_analysis: "Analyse starten", cta_view_pricing: "Preise ansehen",
         trust_badge_secure_paytr: "🔒 Sichere Zahlung – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned Sicherheit",
         footer_trust_ssl_desc: "Verkehr SSL/TLS-verschlüsselt.", footer_trust_kvkk_desc: "Personendaten nach KVKK.", footer_trust_gdpr_desc: "DSGVO-konform für EU.", footer_trust_paytr_desc: "Sichere Zahlung per PayTR.", footer_trust_hipaa_desc: "Gesundheitsdaten sicher verarbeitet.",
@@ -8744,7 +9144,11 @@
       sec.classList.remove('hidden');
       if (!selectedCheckoutPlan) openCheckout('single');
       toggleCheckoutPayBtn();
-      setTimeout(function() { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
+      setTimeout(function() {
+        var payBtn = document.getElementById('checkout-pay-btn');
+        if (payBtn) payBtn.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        else sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }, 120);
     }
     function openCheckout(plan) {
       if (!plan || !['single','monthly','yearly'].includes(plan)) return;
@@ -8872,7 +9276,16 @@
           })
         });
         var data = await res.json().catch(function() { return {}; });
-        if (!res.ok) { toast(data.detail || 'Ödeme başlatılamadı.', 'error'); if (btn) btn.disabled = false; return false; }
+        if (!res.ok) {
+          var gErr = (typeof data.detail === 'string' ? data.detail : (data.error || 'Ödeme başlatılamadı.')) || 'Ödeme başlatılamadı.';
+          var gErrL = (gErr || '').toLowerCase();
+          if (gErrL.indexOf('magaza') !== -1 || gErrL.indexOf('mağaza') !== -1 || (gErrL.indexOf('gecersiz') !== -1 && gErrL.indexOf('istek') !== -1)) {
+            gErr = 'Ödeme sistemi şu an kullanılamıyor. PayTR panelinde mağazanın aktif olduğunu ve entegrasyon bilgilerinin (Mağaza No, Parola, Gizli Anahtar) doğru girildiğini kontrol edin.';
+          }
+          toast(gErr, 'error');
+          if (btn) btn.disabled = false;
+          return false;
+        }
         closeGuestCheckoutModal();
         document.getElementById('payment-iframe').src = data.iframe_url || '';
         var pm = document.getElementById('payment-modal');
@@ -8891,6 +9304,14 @@
       var cancelUrl = base + '#pricing';
       var c1 = document.getElementById('checkout-consent-mesafeli');
       var c2 = document.getElementById('checkout-consent-kvkk');
+      var a1 = document.getElementById('analyze-consent-mesafeli');
+      var a2 = document.getElementById('analyze-consent-kvkk');
+      var consentMesafeli = !!(c1 && c1.checked) || !!(a1 && a1.checked);
+      var consentKvkk = !!(c2 && c2.checked) || !!(a2 && a2.checked);
+      if (!consentMesafeli || !consentKvkk) {
+        toast(t.checkout_consent_required || 'Mesafeli Satış Sözleşmesi ve Gizlilik/KVKK politikasını kabul etmeniz gerekiyor.', 'error');
+        return;
+      }
       var res = await fetch(API_BASE + '/payment/get-token', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getToken() },
@@ -8899,8 +9320,8 @@
           success_url: successUrl,
           cancel_url: cancelUrl,
           coupon_code: appliedCouponCode || null,
-          consent_mesafeli: !!(c1 && c1.checked),
-          consent_kvkk: !!(c2 && c2.checked)
+          consent_mesafeli: consentMesafeli,
+          consent_kvkk: consentKvkk
         })
       });
       var data = await res.json().catch(() => ({}));
@@ -8915,7 +9336,14 @@
       }
       if (!res.ok) {
         var errMsg = (typeof data.detail === 'string' ? data.detail : (data.error || JSON.stringify(data))) || t.payment_not_available || 'Ödeme şu an kullanılamıyor.';
-        toast(errMsg, 'error');
+        var errLower = (errMsg || '').toLowerCase();
+        if (errLower.indexOf('magaza') !== -1 || errLower.indexOf('mağaza') !== -1 || (errLower.indexOf('gecersiz') !== -1 && errLower.indexOf('istek') !== -1)) {
+          errMsg = 'Ödeme sistemi şu an kullanılamıyor. PayTR panelinde mağazanın aktif olduğunu ve entegrasyon bilgilerinin (Mağaza No, Parola, Gizli Anahtar) doğru girildiğini kontrol edin.';
+        }
+        if (!window._lastPaymentToast || window._lastPaymentToast.msg !== errMsg || Date.now() - window._lastPaymentToast.ts > 2000) {
+          toast(errMsg, 'error');
+          window._lastPaymentToast = { msg: errMsg, ts: Date.now() };
+        }
         console.error('[Norya ödeme]', res.status, data);
         return;
       }
