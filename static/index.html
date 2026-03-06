@@ -1003,13 +1003,32 @@
     }
     /* Dil dropdown: hero/rengin üstünde görünsün (açılınca rengin altına kaymasın) */
     #lang-wrap { position: relative; z-index: 201; }
-    /* Dil dropdown: her zaman en üstte görünsün (hero/rengin altına kaymasın) — fixed + çok yüksek z-index */
-    #lang-modal {
-      z-index: 99999 !important;
+    /* Dil dropdown: tıklanabilir; overlay/pointer engeli olmasın */
+    #lang-modal.lang-dropdown-panel {
+      z-index: 2147483647 !important;
       position: fixed !important;
       box-shadow: 0 10px 40px rgba(0,0,0,0.25);
       margin-top: 0;
+      pointer-events: auto !important;
+      isolation: isolate;
     }
+    #lang-modal .lang-opt {
+      cursor: pointer !important;
+      pointer-events: auto !important;
+      width: 100% !important;
+      display: flex !important;
+      align-items: center !important;
+      text-align: left !important;
+      min-height: 44px;
+      padding: 0.5rem 1rem;
+      border: none;
+      background: transparent;
+      font: inherit;
+      color: rgb(30 41 59);
+      -webkit-tap-highlight-color: transparent;
+    }
+    .dark #lang-modal .lang-opt { color: rgba(226,232,240,0.9); }
+    #lang-modal .lang-opt[dir="rtl"] { text-align: right !important; }
     /* Mobilde menü ve dil dropdown sabit pozisyon + yüksek z-index; arkaya gitmesin */
     @media (max-width: 640px) {
       #nav-menu-dropdown {
@@ -1183,14 +1202,30 @@
     }
     .primary-cta .arrow { margin-left: 10px; opacity: .9; }
     .right-zone, .header-right-zone {
-      display: flex; align-items: center; gap: 8px; flex-shrink: 1; min-width: 0;
+      display: flex; align-items: center; gap: 6px; flex-shrink: 0; min-width: 0;
       overflow: visible;
     }
-    /* Logo: never overflow on mobile */
-    .header-logo-link { flex: 0 1 auto; min-width: 0; }
-    .header-logo-link .logo { max-width: 100%; height: auto; object-fit: contain; }
+    @media (max-width: 1023px) {
+      .header-right-zone { gap: 8px; flex-shrink: 0; }
+    }
+    /* Logo + brand text: premium mobile left block */
+    .header-logo-link { flex: 0 1 auto; min-width: 0; display: flex; align-items: center; gap: 6px; text-decoration: none; }
+    .header-logo-link .logo { max-width: 100%; height: auto; object-fit: contain; flex-shrink: 0; }
+    .header-brand-text {
+      display: none;
+      font-weight: 700; font-size: 1rem; letter-spacing: -0.02em;
+      color: rgba(15,23,42,.9); white-space: nowrap;
+    }
+    .dark .header-brand-text { color: rgba(255,255,255,.92); }
+    @media (max-width: 1023px) {
+      .header-brand-text { display: inline-block; }
+    }
     @media (max-width: 767px) {
       .header .logo { height: 22px !important; max-height: 28px; }
+      .header-brand-text { font-size: 0.9375rem; }
+    }
+    @media (max-width: 360px) {
+      .header-brand-text { font-size: 0.875rem; }
     }
     /* Mobile-only CTA: single "Analiz Yap" in header bar (< 768px) */
     .header-mobile-cta {
@@ -1368,8 +1403,7 @@
     /* Dil dropdown: iOS Safari için dvh */
     .lang-dropdown-max-h { max-height: 70vh; }
     @supports (height: 100dvh) { .lang-dropdown-max-h { max-height: 70dvh; } }
-    /* Dil dropdown: tıklanabilir item — cursor, hover, active, selected */
-    .lang-opt { margin: 2px 0; cursor: pointer; width: 100%; min-height: 44px; display: flex; align-items: center; padding: 0.5rem 1rem; border: none; background: transparent; font: inherit; color: inherit; text-align: left; transition: background 0.15s ease; -webkit-tap-highlight-color: transparent; pointer-events: auto; }
+    .lang-opt { margin: 2px 0; }
     .lang-opt:hover { background: rgba(14, 165, 164, 0.08); }
     .lang-opt:active { background: rgba(14, 165, 164, 0.15); }
     .lang-opt.lang-opt-selected { background: rgba(14, 165, 164, 0.12); font-weight: 600; }
@@ -1952,11 +1986,26 @@
   </style>
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
+  <script>
+  (function(){
+    var SUPPORTED = ['en','de','it','fr','es','tr','ar','hi','he'];
+    window.__noryaLangGo = function(locale) {
+      console.log('[norya] switching to', locale);
+      var path = window.location.pathname || '/';
+      var segments = path.split('/').filter(Boolean);
+      if (segments.length && SUPPORTED.indexOf(segments[0]) >= 0) segments[0] = locale;
+      else segments.unshift(locale);
+      var newPath = '/' + segments.join('/');
+      window.location.assign(newPath);
+    };
+  })();
+  </script>
   <!-- Enterprise glass header: sticky + compact on scroll + pill nav + premium CTA -->
   <header id="main-header" class="header elite-header">
     <div class="header-inner elite-header__inner">
-      <a href="#" class="header-logo-link flex items-center shrink-0 elite-brand" aria-label="Norya Ana Sayfa">
+      <a href="#" class="header-logo-link flex items-center gap-1.5 shrink-0 min-w-0 elite-brand" aria-label="Norya Ana Sayfa">
         <img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="logo" width="200" height="50" loading="eager" />
+        <span class="header-brand-text" aria-hidden="true">NoryaAI</span>
       </a>
       <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
@@ -1975,16 +2024,16 @@
             <span aria-hidden="true">🌐</span>
             <span id="lang-current">EN</span>
           </button>
-          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h" style="right: 0; top: 0; pointer-events: auto;">
-            <button type="button" data-lang="en" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-t-xl" onclick="window.switchLocale&amp;&amp;window.switchLocale('en')">English</button>
-            <button type="button" data-lang="de" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('de')">Deutsch</button>
-            <button type="button" data-lang="it" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('it')">Italiano</button>
-            <button type="button" data-lang="fr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('fr')">Français</button>
-            <button type="button" data-lang="es" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('es')">Español</button>
-            <button type="button" data-lang="tr" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('tr')">Türkçe</button>
-            <button type="button" data-lang="ar" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" dir="rtl" onclick="window.switchLocale&amp;&amp;window.switchLocale('ar')">العربية</button>
-            <button type="button" data-lang="hi" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30" onclick="window.switchLocale&amp;&amp;window.switchLocale('hi')">हिन्दी</button>
-            <button type="button" data-lang="he" class="lang-opt w-full text-left px-4 py-2.5 text-sm text-accent-700 dark:text-accent-200 hover:bg-primary-50 dark:hover:bg-primary-900/30 rounded-b-xl" dir="rtl" onclick="window.switchLocale&amp;&amp;window.switchLocale('he')">עברית</button>
+          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h lang-dropdown-panel" style="right: 0; top: 0;">
+            <button type="button" data-lang="en" class="lang-opt rounded-t-xl" onclick="console.log('switching to en'); window.__noryaLangGo('en')">English</button>
+            <button type="button" data-lang="de" class="lang-opt" onclick="console.log('switching to de'); window.__noryaLangGo('de')">Deutsch</button>
+            <button type="button" data-lang="it" class="lang-opt" onclick="console.log('switching to it'); window.__noryaLangGo('it')">Italiano</button>
+            <button type="button" data-lang="fr" class="lang-opt" onclick="console.log('switching to fr'); window.__noryaLangGo('fr')">Français</button>
+            <button type="button" data-lang="es" class="lang-opt" onclick="console.log('switching to es'); window.__noryaLangGo('es')">Español</button>
+            <button type="button" data-lang="tr" class="lang-opt" onclick="console.log('switching to tr'); window.__noryaLangGo('tr')">Türkçe</button>
+            <button type="button" data-lang="ar" class="lang-opt" dir="rtl" onclick="console.log('switching to ar'); window.__noryaLangGo('ar')">العربية</button>
+            <button type="button" data-lang="hi" class="lang-opt" onclick="console.log('switching to hi'); window.__noryaLangGo('hi')">हिन्दी</button>
+            <button type="button" data-lang="he" class="lang-opt rounded-b-xl" dir="rtl" onclick="console.log('switching to he'); window.__noryaLangGo('he')">עברית</button>
           </div>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
@@ -1998,7 +2047,9 @@
         </span>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
-        <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" id="hamburger-btn"><span aria-hidden="true">☰</span></button>
+        <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" id="hamburger-btn">
+          <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        </button>
       </div>
     </div>
   </header>
@@ -9150,25 +9201,26 @@
       var wrap = document.getElementById("lang-wrap");
       var isNowHidden = m.classList.toggle("hidden");
       if (!isNowHidden) {
-        var isNarrow = !wrap || wrap.offsetParent === null || window.innerWidth < 1024;
-        if (isNarrow) {
-          document.body.appendChild(m);
-          m.classList.add("lang-modal-fixed");
-          m.style.position = "fixed";
+        document.body.appendChild(m);
+        m.classList.add("lang-modal-fixed");
+        m.style.position = "fixed";
+        m.style.maxHeight = "70vh";
+        m.style.pointerEvents = "auto";
+        if (btn) {
+          var r = btn.getBoundingClientRect();
+          var w = 208;
+          var left = r.right - w;
+          if (left < 8) left = 8;
+          if (left + w > window.innerWidth - 8) left = window.innerWidth - w - 8;
+          m.style.left = left + "px";
+          m.style.right = "auto";
+          m.style.top = (r.bottom + 8) + "px";
+          m.style.transform = "none";
+        } else {
           m.style.left = "50%";
           m.style.right = "auto";
           m.style.top = "50%";
           m.style.transform = "translate(-50%, -50%)";
-          m.style.maxHeight = "70vh";
-        } else if (btn) {
-          if (wrap && !wrap.contains(m)) wrap.appendChild(m);
-          var r = btn.getBoundingClientRect();
-          var w = 208;
-          m.style.top = (r.bottom + 8) + "px";
-          var left = r.right - w;
-          if (left < 8) left = 8;
-          m.style.left = left + "px";
-          m.style.right = "auto";
         }
       } else {
         m.classList.remove("lang-modal-fixed");
@@ -9178,6 +9230,7 @@
         m.style.top = "";
         m.style.transform = "";
         m.style.maxHeight = "";
+        m.style.pointerEvents = "";
         if (wrap && !wrap.contains(m)) wrap.appendChild(m);
       }
     }
@@ -9259,15 +9312,6 @@
     document.addEventListener("click", function(e) {
       var wrap = document.getElementById("lang-wrap");
       var lm = document.getElementById("lang-modal");
-      var opt = e.target && e.target.closest && e.target.closest(".lang-opt");
-      if (opt && typeof window.switchLocale === "function") {
-        var inWrap = wrap && wrap.contains(opt);
-        var inModal = lm && lm.contains(opt);
-        if (inWrap || inModal) {
-          var lang = opt.getAttribute("data-lang");
-          if (lang) { e.preventDefault(); e.stopPropagation(); window.switchLocale(lang); return; }
-        }
-      }
       var clickedOutside = (!wrap || !wrap.contains(e.target)) && (!lm || !lm.contains(e.target));
       if (clickedOutside && lm) {
         lm.classList.add("hidden");
