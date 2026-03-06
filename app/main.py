@@ -3107,7 +3107,7 @@ def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X
 
 
 # Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
-SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he"})
+SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he", "el", "sr"})
 
 
 @app.get("/{lang}", response_class=HTMLResponse)

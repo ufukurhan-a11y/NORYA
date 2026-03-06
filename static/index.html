@@ -100,6 +100,10 @@
       html, body { overflow-x: hidden !important; max-width: 100% !important; width: 100% !important; }
       body { touch-action: pan-y; }
     }
+    @media (max-width: 767px) {
+      .header { overflow-x: clip !important; }
+      .header-inner { overflow-x: clip !important; }
+    }
     @media (max-width: 640px) {
       html { overflow-x: hidden !important; width: 100% !important; max-width: 100% !important; }
       body { overflow-x: hidden !important; overflow-wrap: break-word; width: 100% !important; max-width: 100% !important; }
@@ -108,7 +112,6 @@
       .header-inner { width: 100% !important; max-width: 100% !important; min-width: 0 !important; padding-left: 12px !important; padding-right: 12px !important; padding-left: max(12px, env(safe-area-inset-left)) !important; padding-right: max(12px, env(safe-area-inset-right)) !important; box-sizing: border-box !important; flex-wrap: nowrap !important; }
       .header .header-right-zone, .header .right-zone, .header .nav-actions { min-width: 0 !important; max-width: none !important; flex-shrink: 0 !important; }
       .header .elite-cta-btn, .header .primary-cta, .header .secondary-link, .header button { max-width: 100% !important; }
-      .header .header-mobile-cta { max-width: none !important; width: auto !important; flex-shrink: 0 !important; }
       .header .hamburger { flex-shrink: 0 !important; }
       .hero, .gradient-hero, .premium-wrap, .premium-section, .trust-global-section, .features-grid-section { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .hero-inner { width: 100% !important; max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
@@ -1149,7 +1152,8 @@
       min-width: 0;
       width: 100%;
       max-width: 100%;
-      overflow: visible;
+      overflow-x: clip;
+      overflow-y: visible;
       transition: padding .22s ease;
       box-sizing: border-box;
     }
@@ -1295,63 +1299,39 @@
     @media (max-width: 360px) {
       .header-brand-text { font-size: 0.875rem; }
     }
-    /* Mobile/tablet CTA: single "Analiz Yap" in header bar (< 1024px), never clipped */
+    /* Mobile CTA: never in header — only hamburger on mobile; CTA lives in drawer */
     .header-mobile-cta {
-      display: inline-flex !important;
-      align-items: center; justify-content: center;
-      min-height: 40px; padding: 0 12px;
-      border-radius: 999px;
-      font-weight: 700; white-space: nowrap;
-      flex-shrink: 0;
-      background: #0EA5A4 !important;
-      color: #fff !important;
-      border: 1px solid rgba(255,255,255,.35);
-      box-shadow: 0 6px 16px rgba(14,165,164,.28);
-      text-decoration: none;
-      font-size: 0.875rem;
-      -webkit-tap-highlight-color: transparent;
-      transition: transform .2s ease, box-shadow .2s ease;
-    }
-    @media (min-width: 768px) {
-      .header-mobile-cta { min-height: 42px; padding: 0 14px; font-size: 0.9375rem; box-shadow: 0 8px 20px rgba(14,165,164,.3); }
-    }
-    .header-mobile-cta:hover { background: #0d9488 !important; transform: translateY(-1px); box-shadow: 0 10px 24px rgba(14,165,164,.35); }
-    .header-mobile-cta:active { transform: translateY(0); }
-    .header-mobile-cta:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,.35); }
-    @media (max-width: 767px) {
-      .header-mobile-cta { max-width: none; width: auto; }
-    }
-    @media (min-width: 1024px) {
-      .header-mobile-cta { display: none !important; }
+      display: none !important;
     }
     /* Desktop-only CTA: hide on mobile/tablet so only one CTA shows */
     .header-cta-desktop { display: none !important; }
     @media (min-width: 1024px) {
       .header-cta-desktop { display: inline-flex !important; }
     }
-    /* Hamburger: premium icon, visible below 1024px */
+    /* Hamburger: single mobile control, premium style, 44px touch target */
     .hamburger {
       display: flex;
-      width: 40px; height: 40px;
-      min-width: 40px; min-height: 40px;
-      border-radius: 10px;
+      width: 44px; height: 44px;
+      min-width: 44px; min-height: 44px;
+      border-radius: 12px;
       align-items: center; justify-content: center;
       background: rgba(15,23,42,.06);
-      border: 1px solid rgba(15,23,42,.08);
+      border: 1px solid rgba(15,23,42,.1);
       cursor: pointer;
       color: rgba(15,23,42,.85);
       flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
-      transition: background .2s ease, border-color .2s ease, transform .18s ease;
+      transition: background .2s ease, border-color .2s ease, transform .18s ease, box-shadow .2s ease;
+      box-shadow: 0 2px 8px rgba(15,23,42,.06);
     }
-    .hamburger:hover { background: rgba(15,23,42,.1); }
+    .hamburger:hover { background: rgba(15,23,42,.1); box-shadow: 0 4px 12px rgba(15,23,42,.08); }
     .hamburger:active { transform: scale(0.96); }
     .hamburger:focus { outline: none; box-shadow: 0 0 0 2px rgba(14,165,164,.35); }
     .hamburger-icon { width: 22px; height: 22px; flex-shrink: 0; }
-    .dark .hamburger { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.1); color: rgba(255,255,255,.88); }
+    .dark .hamburger { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.88); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
     .dark .hamburger:hover { background: rgba(255,255,255,.12); }
     @media (min-width: 768px) {
-      .hamburger { width: 42px; height: 42px; min-width: 42px; min-height: 42px; border-radius: 12px; }
+      .hamburger { width: 44px; height: 44px; min-width: 44px; min-height: 44px; border-radius: 12px; }
       .hamburger-icon { width: 24px; height: 24px; }
     }
     @media (min-width: 1024px) {
@@ -1437,11 +1417,28 @@
       text-decoration: none;
       font-size: 0.9375rem;
       transition: background .16s ease;
+      display: flex;
+      align-items: center;
+      min-height: 44px;
+      box-sizing: border-box;
     }
+    .drawer-link--tap { min-height: 48px; padding: 14px 16px; -webkit-tap-highlight-color: transparent; }
+    .drawer-link--primary { font-weight: 600; }
+    .drawer-link--cta {
+      background: linear-gradient(135deg, #0EA5A4, #0B8F8E) !important;
+      color: #fff !important;
+      font-weight: 600;
+      border: none;
+      justify-content: center;
+      min-height: 48px;
+    }
+    .drawer-link--cta:hover { background: #0d9488 !important; opacity: 0.95; }
     .dark .drawer-link { color: rgba(255,255,255,.9); background: rgba(255,255,255,.04); }
     .drawer-link:hover { background: rgba(15,23,42,.06); }
     .dark .drawer-link:hover { background: rgba(255,255,255,.08); }
     .drawer-section { margin-top: 8px; padding-top: 12px; border-top: 1px solid rgba(15,23,42,.06); }
+    .drawer-section--nav { display: flex; flex-direction: column; gap: 4px; }
+    .drawer-section--footer { margin-top: auto; padding-top: 16px; }
     .dark .drawer-section { border-top-color: rgba(255,255,255,.06); }
     .drawer-trust-meta {
       margin-top: auto;
@@ -1520,19 +1517,19 @@
       .wa-fab .wa-fab-text { display: none; }
       .wa-fab {
         min-width: 44px; max-width: 52px; padding: 0;
-        right: max(10px, env(safe-area-inset-right, 0));
-        bottom: max(10px, env(safe-area-inset-bottom, 0));
+        right: max(14px, env(safe-area-inset-right, 0));
+        bottom: max(20px, env(safe-area-inset-bottom, 0));
       }
     }
     @media (max-width: 639px) {
       .wa-fab {
         min-height: 48px; min-width: 44px; padding-left: 12px; padding-right: 14px; font-size: 0.8125rem;
-        right: max(12px, env(safe-area-inset-right, 0));
-        bottom: max(12px, env(safe-area-inset-bottom, 0));
+        right: max(16px, env(safe-area-inset-right, 0));
+        bottom: max(24px, env(safe-area-inset-bottom, 0));
         max-width: 160px;
       }
       .wa-fab:active { transform: scale(0.98); }
-      body { padding-bottom: calc(64px + env(safe-area-inset-bottom, 0)); }
+      body { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)); }
     }
     @media (min-width: 421px) and (max-width: 639px) {
       .wa-fab { max-width: 160px; }
@@ -2062,7 +2059,7 @@
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
   <script>
   (function(){
-    var SUPPORTED = ['en','de','it','fr','es','tr','ar','hi','he'];
+    var SUPPORTED = ['en','de','it','fr','es','tr','ar','hi','he','el','sr'];
     window.__noryaLangGo = function(locale) {
       console.log('[norya] switching to', locale);
       var path = window.location.pathname || '/';
@@ -2108,7 +2105,9 @@
             <button type="button" role="option" data-lang="tr" class="lang-opt" aria-selected="false" onclick="console.log('switching to tr'); window.__noryaLangGo('tr')">Türkçe</button>
             <button type="button" role="option" data-lang="ar" class="lang-opt" dir="rtl" aria-selected="false" onclick="console.log('switching to ar'); window.__noryaLangGo('ar')">العربية</button>
             <button type="button" role="option" data-lang="hi" class="lang-opt" aria-selected="false" onclick="console.log('switching to hi'); window.__noryaLangGo('hi')">हिन्दी</button>
-            <button type="button" role="option" data-lang="he" class="lang-opt rounded-b-xl" dir="rtl" aria-selected="false" onclick="console.log('switching to he'); window.__noryaLangGo('he')">עברית</button>
+            <button type="button" role="option" data-lang="he" class="lang-opt" dir="rtl" aria-selected="false" onclick="console.log('switching to he'); window.__noryaLangGo('he')">עברית</button>
+            <button type="button" role="option" data-lang="el" class="lang-opt" aria-selected="false" onclick="console.log('switching to el'); window.__noryaLangGo('el')">Ελληνικά</button>
+            <button type="button" role="option" data-lang="sr" class="lang-opt rounded-b-xl" aria-selected="false" onclick="console.log('switching to sr'); window.__noryaLangGo('sr')">Srpski</button>
           </div>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
@@ -2121,7 +2120,7 @@
           <button type="button" onclick="logout()" class="secondary-link header-desktop-only" data-i18n="nav_logout">Çıkış</button>
         </span>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
-        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analiz Yap</a>
         <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" id="hamburger-btn">
           <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
         </button>
@@ -2135,28 +2134,33 @@
       <button type="button" class="drawer-close" onclick="closeMobileDrawer()" aria-label="Menüyü kapat" id="drawer-close-btn">✕</button>
     </div>
     <div class="drawer-body">
-      <div class="drawer-section">
-        <button type="button" onclick="closeMobileDrawer(); toggleLangModal();" class="drawer-link w-full text-left" data-i18n="aria_select_language">Dil seçin</button>
-        <button type="button" onclick="closeMobileDrawer(); toggleDark();" class="drawer-link w-full text-left" id="drawer-theme-btn">Tema (Açık/Koyu)</button>
-      </div>
+      <!-- 1) Ana Sayfa · 2) Giriş · 3) Ücretsiz Başla · 4) Örnek Rapor · 5) Diller -->
+      <a href="#" class="drawer-link drawer-link--primary" onclick="closeMobileDrawer(); window.scrollTo({top:0,behavior:'smooth'}); return false;" data-i18n="nav_home">Ana Sayfa</a>
       <div id="drawer-auth-wrap" class="drawer-section flex flex-col gap-2">
-        <button type="button" onclick="closeMobileDrawer(); openLogin();" class="drawer-link w-full text-left" data-i18n="nav_login">Giriş</button>
-        <button type="button" onclick="closeMobileDrawer(); openRegister(); scrollToAnalyze();" class="drawer-link w-full text-left font-semibold bg-[#0EA5A4] text-white hover:bg-[#0d9488] border-0" data-i18n="nav_register">Ücretsiz Başla</button>
+        <button type="button" onclick="closeMobileDrawer(); openLogin();" class="drawer-link drawer-link--tap" data-i18n="nav_login">Giriş</button>
+        <button type="button" onclick="closeMobileDrawer(); openRegister(); scrollToAnalyze();" class="drawer-link drawer-link--cta" data-i18n="nav_register">Ücretsiz Başla</button>
       </div>
       <div id="drawer-user-wrap" class="drawer-section hidden flex flex-col gap-2">
-        <button type="button" onclick="closeMobileDrawer(); openProfile();" class="drawer-link w-full text-left" data-i18n="nav_profile">Profil</button>
-        <button type="button" onclick="closeMobileDrawer(); logout();" class="drawer-link w-full text-left" data-i18n="nav_logout">Çıkış</button>
+        <button type="button" onclick="closeMobileDrawer(); openProfile();" class="drawer-link drawer-link--tap" data-i18n="nav_profile">Profil</button>
+        <button type="button" onclick="closeMobileDrawer(); logout();" class="drawer-link drawer-link--tap" data-i18n="nav_logout">Çıkış</button>
       </div>
-      <a href="#analyze-section" onclick="closeMobileDrawer(); openAnalyze(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
-      <a href="#hakkimizda" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
-      <a href="#nasil-calisir" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
-      <a href="#yorumlar" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
-      <a href="#fiyatlandirma" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
-      <a href="/kurumsal" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
-      <a href="/blog" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
-      <a href="#sss" class="drawer-link" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
-      <a href="/legal/iletisim" class="drawer-link legal-lang-link" onclick="closeMobileDrawer()" data-i18n="nav_contact">Bize Ulaşın</a>
-      <p class="drawer-trust-meta" data-i18n="drawer_trust_meta">KVKK & GDPR · 256-bit SSL · Güvenli Ödeme</p>
+      <a href="#ornek-rapor" class="drawer-link drawer-link--primary" onclick="closeMobileDrawer()" data-i18n="hero_see_sample">Örnek Rapor</a>
+      <button type="button" onclick="closeMobileDrawer(); toggleLangModal();" class="drawer-link drawer-link--primary w-full text-left" data-i18n="nav_languages">Diller</button>
+      <div class="drawer-section drawer-section--nav">
+        <a href="#analyze-section" onclick="closeMobileDrawer(); openAnalyze(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
+        <a href="#hakkimizda" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
+        <a href="#nasil-calisir" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
+        <a href="#yorumlar" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
+        <a href="#fiyatlandirma" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
+        <a href="/kurumsal" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
+        <a href="/blog" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
+        <a href="#sss" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
+        <a href="/legal/iletisim" class="drawer-link drawer-link--tap legal-lang-link" onclick="closeMobileDrawer()" data-i18n="nav_contact">Bize Ulaşın</a>
+      </div>
+      <div class="drawer-section drawer-section--footer">
+        <button type="button" onclick="closeMobileDrawer(); toggleDark();" class="drawer-link drawer-link--tap w-full text-left" id="drawer-theme-btn">Tema (Açık/Koyu)</button>
+        <p class="drawer-trust-meta" data-i18n="drawer_trust_meta">KVKK & GDPR · 256-bit SSL · Güvenli Ödeme</p>
+      </div>
     </div>
   </aside>
 
@@ -6574,7 +6578,7 @@
 
     const T = {
       tr: {
-        nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
+        nav_home: "Ana Sayfa", nav_languages: "Diller", nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
         nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
@@ -6931,7 +6935,7 @@
         clinical_notice_title: "Klinik Bilgilendirme", clinical_notice_body: "Bu dosyadan yapılandırılmış laboratuvar değerleri doğrulanamadı. Sonuçlarınızı aşağıya manuel girerek klinik formatta rapor oluşturabilirsiniz.", clinical_notice_helper: "Bu yöntem raporun daha doğru ve düzenli hazırlanmasına yardımcı olur.", clinical_notice_cta: "Manuel girişle devam et"
       },
       en: {
-        nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
+        nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
         nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
@@ -7285,7 +7289,7 @@
         source_pdf: "PDF", source_image: "Image", source_text: "Text"
       },
       it: {
-        nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
+        nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
         nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?", company_info_title: "Informazioni aziendali",
@@ -7511,7 +7515,7 @@
         source_pdf: "PDF", source_image: "Immagine", source_text: "Testo"
       },
       es: {
-        nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
+        nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
         nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?", company_info_title: "Información de la empresa",
@@ -7737,7 +7741,7 @@
         source_pdf: "PDF", source_image: "Imagen", source_text: "Texto"
       },
       fr: {
-        nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
+        nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
         nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?", company_info_title: "Informations sur l'entreprise",
@@ -7963,7 +7967,7 @@
         source_pdf: "PDF", source_image: "Image", source_text: "Texte"
       },
       de: {
-        nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
+        nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
         nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?", company_info_title: "Unternehmensinformationen",
@@ -8173,7 +8177,7 @@
         source_pdf: "PDF", source_image: "Bild", source_text: "Text"
       },
       he: {
-        nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
+        nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
         nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
         a2hs_message: "הוסף את Norya למסך הבית והשתמש כמו באפליקציה.", a2hs_later: "אחר כך", a2hs_add: "הוסף", ios_a2hs_message: "הוסף למסך הבית: שתף ⎋ הוסף למסך הבית", ios_a2hs_close: "סגור",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?", company_info_title: "פרטי החברה",
@@ -8350,7 +8354,7 @@
         source_pdf: "PDF", source_image: "תמונה", source_text: "טקסט"
       },
       ar: {
-        nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
+        nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
         nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
         a2hs_message: "أضف Norya إلى الشاشة الرئيسية واستخدمها كتطبيق.", a2hs_later: "لاحقاً", a2hs_add: "إضافة", ios_a2hs_message: "إضافة إلى الشاشة الرئيسية: مشاركة ⎋ إضافة إلى الشاشة الرئيسية", ios_a2hs_close: "إغلاق",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟", company_info_title: "معلومات الشركة",
@@ -8527,7 +8531,7 @@
         source_pdf: "PDF", source_image: "صورة", source_text: "نص"
       },
       hi: {
-        nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
+        nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
         nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?", company_info_title: "कंपनी की जानकारी",
@@ -8704,7 +8708,7 @@
         source_pdf: "PDF", source_image: "छवि", source_text: "टेक्स्ट"
       },
       el: {
-        nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
+        nav_home: "Αρχική", nav_languages: "Γλώσσες", nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
         nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_blog: "Ιστολόγιο", nav_checkout: "Πληρωμή", nav_contact: "Επικοινωνία", nav_faq: "Συχνές ερωτήσεις",
         a2hs_message: "Προσθέστε την Norya στην αρχική οθόνη και χρησιμοποιήστε την σαν εφαρμογή.", a2hs_later: "Αργότερα", a2hs_add: "Προσθήκη", ios_a2hs_message: "Προσθήκη στην αρχική: Κοινοποίηση ⎋ Προσθήκη στην αρχική οθόνη", ios_a2hs_close: "Κλείσιμο",
         about_title: "Τι είναι η Norya, Ποιοι είμαστε", about_what_title: "Τι είναι η Norya;", about_who_title: "Ποιοι είμαστε;", company_info_title: "Στοιχεία εταιρείας",
@@ -8879,7 +8883,7 @@
         source_pdf: "PDF", source_image: "Εικόνα", source_text: "Κείμενο"
       },
       cs: {
-        nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
+        nav_home: "Domů", nav_languages: "Jazyky", nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
         nav_features: "Funkce", nav_pricing: "Ceny", nav_blog: "Blog", nav_checkout: "Platba", nav_contact: "Kontakt", nav_faq: "Časté dotazy",
         a2hs_message: "Přidejte Norya na plochu a používejte ji jako aplikaci.", a2hs_later: "Později", a2hs_add: "Přidat", ios_a2hs_message: "Přidat na plochu: Sdílet ⎋ Přidat na plochu", ios_a2hs_close: "Zavřít",
         about_title: "Co je Norya, Kdo jsme", about_what_title: "Co je Norya?", about_who_title: "Kdo jsme?", company_info_title: "Informace o společnosti",
@@ -9054,7 +9058,7 @@
         source_pdf: "PDF", source_image: "Obrázek", source_text: "Text"
       },
       sr: {
-        nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
+        nav_home: "Početna", nav_languages: "Jezici", nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
         nav_features: "Funkcije", nav_pricing: "Cene", nav_blog: "Blog", nav_checkout: "Plaćanje", nav_contact: "Kontaktirajte nas", nav_faq: "Često postavljana pitanja",
         a2hs_message: "Dodajte Norya na početni ekran i koristite je kao aplikaciju.", a2hs_later: "Kasnije", a2hs_add: "Dodaj", ios_a2hs_message: "Dodaj na početni ekran: Podeli ⎋ Dodaj na početni ekran", ios_a2hs_close: "Zatvori",
         about_title: "Šta je Norya, Ko smo mi", about_what_title: "Šta je Norya?", about_who_title: "Ko smo mi?", company_info_title: "Podaci o kompaniji",
@@ -9230,7 +9234,7 @@
       }
     };
 
-    var SUPPORTED_LOCALES = ['en','de','it','fr','es','tr','ar','hi','he'];
+    var SUPPORTED_LOCALES = ['en','de','it','fr','es','tr','ar','hi','he','el','sr'];
     var LANG_LABELS = { tr: "TR", en: "EN", de: "DE", he: "HE", ar: "AR", hi: "HI", it: "IT", es: "ES", fr: "FR", el: "EL", cs: "CS", sr: "SR" };
     function getLang() { return localStorage.getItem(LANG_KEY) || "en"; }
     function getEffectivePath() {
