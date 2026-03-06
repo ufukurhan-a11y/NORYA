@@ -100,9 +100,10 @@
       html, body { overflow-x: hidden !important; max-width: 100% !important; width: 100% !important; }
       body { touch-action: pan-y; }
     }
+    /* 768px altı: mobil header taşmasın, sadece logo + hamburger */
     @media (max-width: 767px) {
-      .header { overflow-x: clip !important; }
-      .header-inner { overflow-x: clip !important; }
+      .header { overflow-x: hidden !important; }
+      .header-inner { overflow-x: hidden !important; justify-content: space-between; align-items: center; }
     }
     @media (max-width: 640px) {
       html { overflow-x: hidden !important; width: 100% !important; max-width: 100% !important; }
@@ -721,8 +722,8 @@
       .hero-cta-btn, .btn-primary, .btn-secondary, .primary-cta, .compare-card-cta, button[type="button"].rounded-full { min-height: 44px; }
     }
     /* Global: yatay taşma yok — mobilde tam ekran, sağda beyaz şerit kalmasın */
-    html { overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; box-sizing: border-box; }
-    body { position: relative; width: 100%; max-width: 100%; min-width: 0; padding-left: env(safe-area-inset-left, 0); padding-right: env(safe-area-inset-right, 0); padding-bottom: env(safe-area-inset-bottom, 0); overflow-x: hidden; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
+    html { overflow-x: hidden !important; overflow-y: auto; -webkit-overflow-scrolling: touch; width: 100%; max-width: 100%; box-sizing: border-box; }
+    body { position: relative; width: 100%; max-width: 100% !important; min-width: 0; padding-left: env(safe-area-inset-left, 0); padding-right: env(safe-area-inset-right, 0); padding-bottom: env(safe-area-inset-bottom, 0); overflow-x: hidden !important; overflow-y: auto; -webkit-overflow-scrolling: touch; box-sizing: border-box; }
     .max-w-5xl, .max-w-6xl, .max-w-4xl, .max-w-3xl, .max-w-2xl { min-width: 0; }
     /* Tüm section/container taşma koruması */
     section, .premium-wrap, .pricing-container, .hero-inner { box-sizing: border-box; }
@@ -1117,7 +1118,7 @@
       position: sticky; top: 0; z-index: 1001;
       width: 100%;
       max-width: 100%;
-      overflow-x: clip;
+      overflow-x: hidden;
       overflow-y: visible;
       background: rgba(255,255,255,.78);
       backdrop-filter: blur(10px);
@@ -1184,7 +1185,7 @@
       .header .logo { height: 28px; }
     }
     .header.compact .logo { height: 22px; }
-    /* Nav only on desktop (>= 1024px); mobile/tablet use hamburger */
+    /* Nav only on desktop (>= 769px); 768px ve altında sadece hamburger */
     .nav-shell {
       display: none;
       background: rgba(15,23,42,.04);
@@ -1194,7 +1195,7 @@
       gap: 2px;
       flex-shrink: 0;
     }
-    @media (min-width: 1024px) {
+    @media (min-width: 769px) {
       .nav-shell { display: flex; }
     }
     .dark .nav-shell {
@@ -1305,55 +1306,93 @@
     }
     /* Desktop-only CTA: hide on mobile/tablet so only one CTA shows */
     .header-cta-desktop { display: none !important; }
-    @media (min-width: 1024px) {
+    @media (min-width: 769px) {
       .header-cta-desktop { display: inline-flex !important; }
     }
-    /* Hamburger: single mobile control, premium style, 44px touch target */
+    /* Hamburger: premium round glass (46–48px), turkuaz border, cam efekti */
     .hamburger {
       display: flex;
-      width: 44px; height: 44px;
-      min-width: 44px; min-height: 44px;
-      border-radius: 12px;
+      width: 48px; height: 48px;
+      min-width: 48px; min-height: 48px;
+      border-radius: 50%;
       align-items: center; justify-content: center;
-      background: rgba(15,23,42,.06);
-      border: 1px solid rgba(15,23,42,.1);
+      background: rgba(255,255,255,.58);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid #0EA5A4;
       cursor: pointer;
-      color: rgba(15,23,42,.85);
+      color: rgba(15,23,42,.9);
       flex-shrink: 0;
       -webkit-tap-highlight-color: transparent;
-      transition: background .2s ease, border-color .2s ease, transform .18s ease, box-shadow .2s ease;
-      box-shadow: 0 2px 8px rgba(15,23,42,.06);
+      transition: background .2s ease, transform .18s ease, box-shadow .2s ease;
+      box-shadow: 0 4px 20px rgba(14,165,164,.18), 0 0 0 1px rgba(255,255,255,.2) inset;
     }
-    .hamburger:hover { background: rgba(15,23,42,.1); box-shadow: 0 4px 12px rgba(15,23,42,.08); }
+    .hamburger:hover { background: rgba(255,255,255,.75); box-shadow: 0 6px 24px rgba(14,165,164,.22); }
     .hamburger:active { transform: scale(0.96); }
-    .hamburger:focus { outline: none; box-shadow: 0 0 0 2px rgba(14,165,164,.35); }
-    .hamburger-icon { width: 22px; height: 22px; flex-shrink: 0; }
-    .dark .hamburger { background: rgba(255,255,255,.08); border-color: rgba(255,255,255,.12); color: rgba(255,255,255,.88); box-shadow: 0 2px 8px rgba(0,0,0,.15); }
-    .dark .hamburger:hover { background: rgba(255,255,255,.12); }
-    @media (min-width: 768px) {
-      .hamburger { width: 44px; height: 44px; min-width: 44px; min-height: 44px; border-radius: 12px; }
-      .hamburger-icon { width: 24px; height: 24px; }
+    .hamburger:focus { outline: none; box-shadow: 0 0 0 2px rgba(14,165,164,.35), 0 4px 20px rgba(14,165,164,.18); }
+    .hamburger-inner {
+      position: relative;
+      width: 22px;
+      height: 14px;
+      flex-shrink: 0;
+      pointer-events: none;
     }
-    @media (min-width: 1024px) {
+    .hamburger-line {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      height: 2px;
+      background: currentColor;
+      border-radius: 1px;
+      transform-origin: center;
+      -webkit-transform-origin: center;
+      transition: transform 0.3s ease, opacity 0.25s ease;
+      -webkit-transition: transform 0.3s ease, opacity 0.25s ease;
+    }
+    .hamburger-line--top { top: 0; }
+    .hamburger-line--mid { top: 50%; margin-top: -1px; }
+    .hamburger-line--bottom { bottom: 0; }
+    .hamburger.active .hamburger-line--top {
+      transform: translateY(6px) rotate(45deg);
+    }
+    .hamburger.active .hamburger-line--mid {
+      opacity: 0;
+      transform: scaleX(0.6);
+    }
+    .hamburger.active .hamburger-line--bottom {
+      transform: translateY(-6px) rotate(-45deg);
+    }
+    .dark .hamburger {
+      background: rgba(255,255,255,.12);
+      border-color: rgba(14,165,164,.6);
+      color: rgba(255,255,255,.92);
+      box-shadow: 0 4px 20px rgba(0,0,0,.2);
+    }
+    .dark .hamburger:hover { background: rgba(255,255,255,.18); box-shadow: 0 6px 24px rgba(14,165,164,.25); }
+    @media (min-width: 768px) {
+      .hamburger { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
+    }
+    @media (min-width: 769px) {
       .hamburger { display: none !important; }
     }
-    /* CTA in header (desktop): visible from 1024px */
+    /* CTA in header (desktop): 769px ve üzeri */
     .header-cta-inline {
       display: none;
     }
-    @media (min-width: 1024px) {
+    @media (min-width: 769px) {
       .header-cta-inline { display: inline-flex; }
     }
-    @media (min-width: 1024px) and (max-width: 1199px) {
+    @media (min-width: 769px) and (max-width: 1199px) {
       .primary-cta.header-cta-inline { padding: 10px 14px; font-size: 0.875rem; border-radius: 12px; }
     }
     .mobile-overlay {
       position: fixed; inset: 0;
-      background: rgba(15,23,42,.4);
-      backdrop-filter: blur(6px);
-      -webkit-backdrop-filter: blur(6px);
-      opacity: 0; pointer-events: none;
-      transition: opacity .25s ease;
+      background: rgba(8, 15, 25, 0.28);
+      backdrop-filter: blur(4px);
+      -webkit-backdrop-filter: blur(4px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s ease;
       z-index: 1002;
     }
     .mobile-overlay.open { opacity: 1; pointer-events: auto; }
@@ -1409,7 +1448,7 @@
     .drawer-cta-primary:hover { transform: translateY(-1px); box-shadow: 0 10px 24px rgba(14,165,164,.35); }
     .drawer-cta-primary:focus-visible { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,.3); }
     .drawer-link {
-      padding: 12px 14px;
+      padding: 14px 18px;
       border-radius: 12px;
       color: rgba(15,23,42,.9);
       font-weight: 500;
@@ -1422,7 +1461,7 @@
       min-height: 44px;
       box-sizing: border-box;
     }
-    .drawer-link--tap { min-height: 48px; padding: 14px 16px; -webkit-tap-highlight-color: transparent; }
+    .drawer-link--tap { min-height: 48px; padding: 16px 18px; -webkit-tap-highlight-color: transparent; }
     .drawer-link--primary { font-weight: 600; }
     .drawer-link--cta {
       background: linear-gradient(135deg, #0EA5A4, #0B8F8E) !important;
@@ -1458,18 +1497,18 @@
       color: rgba(15,23,42,.7);
     }
     .dark .drawer-close { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
-    /* Theme, lang, auth, nav links: only on desktop (>= 1024px); below that they live in drawer */
+    /* 768px ve altı: sadece logo + hamburger; Giriş/Ücretsiz Başla/dil/CTA drawer'da */
     .header-desktop-only { display: none !important; }
-    @media (min-width: 1024px) {
+    @media (min-width: 769px) {
       .header-desktop-only { display: flex !important; }
     }
     .header-desktop-only.inline-items { display: none !important; }
-    @media (min-width: 1024px) {
+    @media (min-width: 769px) {
       .header-desktop-only.inline-items { display: inline-flex !important; }
     }
     .header.user-logged-in .header-cta-guest-only { display: none !important; }
     #nav-user.hidden { display: none !important; }
-    @media (min-width: 1024px) {
+    @media (min-width: 769px) {
       #nav-user:not(.hidden) { display: inline-flex !important; align-items: center; gap: 0.5rem; }
       #nav-user .header-desktop-only { display: inline-flex !important; }
     }
@@ -1843,18 +1882,11 @@
       transform: translateY(-1px);
     }
 
-    /* Hamburger varsa */
-    .elite-menu-btn{
-      height: 44px;
-      width: 44px;
-      border-radius: 14px;
-      border: 1px solid var(--stroke);
-      background: rgba(255,255,255,.55);
-      backdrop-filter: blur(12px);
-      -webkit-backdrop-filter: blur(12px);
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+    /* Hamburger: premium round glass — .hamburger holds full style; this only ensures flex when used elsewhere */
+    .elite-menu-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
     }
 
     /* Logo and right zone: no overflow — mobile-first premium */
@@ -2121,8 +2153,12 @@
         </span>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analiz Yap</a>
-        <button type="button" class="hamburger elite-menu-btn" onclick="openMobileDrawer()" aria-label="Menüyü aç" id="hamburger-btn">
-          <svg class="hamburger-icon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+        <button type="button" class="hamburger elite-menu-btn" onclick="toggleMobileDrawer()" aria-label="Menüyü aç" aria-expanded="false" id="hamburger-btn">
+          <span class="hamburger-inner" aria-hidden="true">
+            <span class="hamburger-line hamburger-line--top"></span>
+            <span class="hamburger-line hamburger-line--mid"></span>
+            <span class="hamburger-line hamburger-line--bottom"></span>
+          </span>
         </button>
       </div>
     </div>
@@ -9346,35 +9382,66 @@
     window.setLang = setLang;
     window.switchLocale = switchLocale;
     function toggleNavMenu() {
-      if (window.innerWidth < 1024) openMobileDrawer();
+      if (window.innerWidth <= 768) openMobileDrawer();
     }
     function closeNavMenu() {
       closeMobileDrawer();
     }
+    function toggleMobileDrawer() {
+      var drawer = document.getElementById('mobile-drawer');
+      if (drawer && drawer.classList.contains('open')) closeMobileDrawer();
+      else openMobileDrawer();
+    }
     function openMobileDrawer() {
       var overlay = document.getElementById('mobile-overlay');
       var drawer = document.getElementById('mobile-drawer');
+      var hamburger = document.getElementById('hamburger-btn');
       if (overlay) overlay.classList.add('open');
       if (drawer) {
         drawer.classList.add('open');
+        var scrollY = window.scrollY || window.pageYOffset;
         document.body.style.overflow = 'hidden';
+        document.body.style.position = 'fixed';
+        document.body.style.top = '-' + scrollY + 'px';
+        document.body.style.left = '0';
+        document.body.style.right = '0';
+        document.body.style.width = '100%';
         document.body.setAttribute('data-drawer-open', 'true');
+        document.body.setAttribute('data-drawer-scroll-y', String(scrollY));
+        document.addEventListener('keydown', onDrawerKeydown);
         var closeBtn = document.getElementById('drawer-close-btn');
         if (closeBtn) closeBtn.focus();
         else drawer.focus();
-        document.addEventListener('keydown', onDrawerKeydown);
+      }
+      if (hamburger) {
+        hamburger.classList.add('active');
+        hamburger.setAttribute('aria-expanded', 'true');
+        hamburger.setAttribute('aria-label', 'Menüyü kapat');
       }
     }
     function closeMobileDrawer() {
       var overlay = document.getElementById('mobile-overlay');
       var drawer = document.getElementById('mobile-drawer');
+      var hamburger = document.getElementById('hamburger-btn');
       if (overlay) overlay.classList.remove('open');
       if (drawer) drawer.classList.remove('open');
+      var scrollY = document.body.getAttribute('data-drawer-scroll-y');
       document.body.style.overflow = '';
+      document.body.style.position = '';
+      document.body.style.top = '';
+      document.body.style.left = '';
+      document.body.style.right = '';
+      document.body.style.width = '';
       document.body.removeAttribute('data-drawer-open');
+      document.body.removeAttribute('data-drawer-scroll-y');
+      if (scrollY !== null && scrollY !== '') window.scrollTo(0, parseInt(scrollY, 10));
       document.removeEventListener('keydown', onDrawerKeydown);
-      var hamburger = document.getElementById('hamburger-btn');
-      if (hamburger) hamburger.focus();
+      if (hamburger) {
+        hamburger.classList.remove('active');
+        hamburger.setAttribute('aria-expanded', 'false');
+        hamburger.setAttribute('aria-label', 'Menüyü aç');
+        hamburger.focus();
+      }
     }
     function onDrawerKeydown(e) {
       if (e.key === 'Escape') { closeMobileDrawer(); return; }

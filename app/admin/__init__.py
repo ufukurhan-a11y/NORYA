@@ -3,6 +3,7 @@ from fastapi import APIRouter
 
 from app.admin.routers import (
     analyses,
+    billing_links,
     coupons,
     dashboard,
     errors,
@@ -28,3 +29,4 @@ admin_router.include_router(errors.router, prefix="/errors", tags=["admin-errors
 admin_router.include_router(uploads.router, prefix="/uploads", tags=["admin-uploads"])
 admin_router.include_router(queue.router, prefix="/queue", tags=["admin-queue"])
 admin_router.include_router(security.router, prefix="/security", tags=["admin-security"])
+admin_router.include_router(billing_links.router, prefix="/billing-links", tags=["admin-billing"])

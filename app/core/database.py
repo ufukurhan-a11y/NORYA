@@ -122,6 +122,8 @@ def init_db():
             "ALTER TABLE paymentorder ADD COLUMN paytr_payment_amount TEXT",
             "ALTER TABLE paymentorder ADD COLUMN paytr_status TEXT",
             "ALTER TABLE paymentorder ADD COLUMN raw_callback_json TEXT",
+            "ALTER TABLE paymentorder ADD COLUMN refunded_at DATETIME",
+            "ALTER TABLE paymentorder ADD COLUMN refund_amount_kurus INTEGER",
             "ALTER TABLE analysis_jobs ADD COLUMN prompt_tokens INTEGER",
             "ALTER TABLE analysis_jobs ADD COLUMN completion_tokens INTEGER",
         ):

@@ -1,0 +1,52 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Faturalar & Giderler - Norya Admin{% endblock %}
+{% block content %}
+<h1 class="text-2xl font-semibold text-white mb-2">Faturalar & Gider Linkleri</h1>
+<p class="text-slate-400 text-sm mb-6">Tüm abonelik ve fatura sayfalarına tek yerden erişin. Muhasebeciye vermek için her ay faturaları indirip tek klasörde toplayabilirsiniz.</p>
+
+<div class="mb-6 p-4 rounded-xl bg-slate-800/80 border border-slate-600 text-slate-300 text-sm">
+  <p class="font-medium text-slate-200 mb-1">Aylık toplama önerisi</p>
+  <p>Her servise tıklayıp fatura/ödeme geçmişini indirin; <strong>Faturalar/2025-03</strong> gibi tek klasörde toplayıp zip’leyerek muhasebeciye verebilirsiniz.</p>
+</div>
+
+<div class="grid gap-4 sm:grid-cols-1 md:grid-cols-2">
+  {% for link in links %}
+  <a href="{{ link.url }}" target="_blank" rel="noopener noreferrer"
+     class="block p-5 rounded-xl bg-slate-800 border border-slate-700 hover:border-brand hover:bg-slate-700/50 transition">
+    <div class="flex items-start gap-3">
+      <span class="text-2xl" aria-hidden="true">{{ link.icon }}</span>
+      <div class="flex-1 min-w-0">
+        <h2 class="font-semibold text-white mb-1">{{ link.name }}</h2>
+        <p class="text-slate-400 text-sm">{{ link.description }}</p>
+        <p class="text-brand text-sm mt-2">Fatura sayfasına git →</p>
+      </div>
+    </div>
+  </a>
+  {% endfor %}
+</div>
+
+<div class="mt-8 pt-6 border-t border-slate-700">
+  <h2 class="text-lg font-semibold text-slate-200 mb-3">Aylık checklist (muhasebeciye vermek için)</h2>
+  <ul class="text-slate-400 text-sm space-y-2">
+    <li>☐ PayTR — Panelden işlem/rapor export</li>
+    <li>☐ Render — Billing → Invoices → PDF indir</li>
+    <li>☐ Cursor — E-posta faturası veya Settings</li>
+    <li>☐ OpenAI — Billing → Invoices / Usage → PDF</li>
+    <li>☐ Cloudflare — Billing → Invoices → İndir</li>
+    <li>☐ Google (Ads) — Fatura varsa indir</li>
+    <li>☐ GİB e-Arşiv — Gerekirse rapor / döküm</li>
+    <li>☐ Domain — Alan adı yenileme faturası (yıllık)</li>
+    <li>☐ E-posta servisi — SMTP kullandığınız yer (SendGrid, Resend vb.)</li>
+  </ul>
+</div>
+
+<div class="mt-8 pt-6 border-t border-slate-700">
+  <h2 class="text-lg font-semibold text-slate-200 mb-3">Başka neler olabilir?</h2>
+  <p class="text-slate-400 text-sm mb-3">Aklınıza gelirse ekleyebileceğiniz yaygın servisler:</p>
+  <ul class="text-slate-400 text-sm space-y-1.5">
+    {% for hint in other_hints %}
+    <li>• {{ hint }}</li>
+    {% endfor %}
+  </ul>
+</div>
+{% endblock %}

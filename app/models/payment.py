@@ -28,3 +28,6 @@ class PaymentOrder(SQLModel, table=True):
     # E-arşiv fatura (GİB)
     invoice_ettn: str | None = Field(default=None, index=True)   # GİB'deki fatura ETTN
     invoice_gib_no: str | None = Field(default=None)            # GİB belge numarası (GIB2025...)
+    # PayTR iade takibi
+    refunded_at: datetime | None = None                         # İlk iade tarihi (tam veya kısmi)
+    refund_amount_kurus: int | None = None                      # Toplam iade edilen tutar (EUR cent)
