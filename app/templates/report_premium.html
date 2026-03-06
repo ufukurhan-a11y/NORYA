@@ -47,12 +47,10 @@
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('activity', '')|safe }}</span>{% endif %} {{ label_report_health_score }}</div>
       <div class="health-score-value">{{ overall_score }} / 100</div>
       <div class="health-score-band">{{ health_score_band_label }}</div>
-      {% if health_age %}
       <div class="health-age-note">
         <span class="health-age-label">{{ label_report_health_age }}</span>
         <span class="health-age-value">≈ {{ health_age }}</span>
       </div>
-      {% endif %}
     </section>
 
     <section class="card summary-tiles-section">
@@ -110,22 +108,46 @@
     </section>
     {% endif %}
 
-    <section class="card food-guidance-section">
-      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('apple', '')|safe }}</span>{% endif %} {{ label_report_foods_to_favor }}</div>
-      <ul class="bullets">
-        {% for x in foods_to_favor %}<li>{{ x }}</li>{% endfor %}
-      </ul>
-      <div class="sec-title sec-title-sub">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('minus-circle', '')|safe }}</span>{% endif %} {{ label_report_foods_to_limit }}</div>
-      <ul class="bullets">
-        {% for x in foods_to_limit %}<li>{{ x }}</li>{% endfor %}
-      </ul>
+    <section class="card food-guidance-section food-guidance-clinical">
+      <div class="food-clinical-block food-to-eat">
+        <div class="food-clinical-header food-to-eat-header">
+          <span class="sec-icon-wrap">{% if report_icons %}{{ report_icons.get('apple', '')|safe }}{% endif %}</span>
+          <h3 class="food-clinical-title">{{ label_report_foods_eat_heading }}</h3>
+        </div>
+        <p class="food-clinical-desc">{{ label_report_foods_to_favor }}</p>
+        <ul class="food-clinical-list">
+          {% for x in foods_to_favor %}<li>{{ x }}</li>{% endfor %}
+        </ul>
+      </div>
+      <div class="food-clinical-block food-to-avoid">
+        <div class="food-clinical-header food-to-avoid-header">
+          <span class="sec-icon-wrap">{% if report_icons %}{{ report_icons.get('minus-circle', '')|safe }}{% endif %}</span>
+          <h3 class="food-clinical-title">{{ label_report_foods_avoid_heading }}</h3>
+        </div>
+        <p class="food-clinical-desc">{{ label_report_foods_to_limit }}</p>
+        <ul class="food-clinical-list">
+          {% for x in foods_to_limit %}<li>{{ x }}</li>{% endfor %}
+        </ul>
+      </div>
     </section>
 
-    <section class="card lifestyle-section">
-      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('heart', '')|safe }}</span>{% endif %} {{ label_report_lifestyle }}</div>
-      <ul class="bullets">
-        {% for x in lifestyle_suggestions %}<li>{{ x }}</li>{% endfor %}
-      </ul>
+    <section class="card lifestyle-blocks-section">
+      <div class="lifestyle-block lifestyle-movement">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('activity', '')|safe }}</span>{% endif %} {{ label_report_movement_heading }}</div>
+        <ul class="bullets">{% for x in movement_tips %}<li>{{ x }}</li>{% endfor %}</ul>
+      </div>
+      <div class="lifestyle-block lifestyle-stress">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('heart', '')|safe }}</span>{% endif %} {{ label_report_stress_heading }}</div>
+        <ul class="bullets">{% for x in stress_tips %}<li>{{ x }}</li>{% endfor %}</ul>
+      </div>
+      <div class="lifestyle-block lifestyle-sleep">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('target', '')|safe }}</span>{% endif %} {{ label_report_sleep_heading }}</div>
+        <ul class="bullets">{% for x in sleep_tips %}<li>{{ x }}</li>{% endfor %}</ul>
+      </div>
+      <div class="lifestyle-block lifestyle-hydration">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('info', '')|safe }}</span>{% endif %} {{ label_report_hydration_heading }}</div>
+        <ul class="bullets">{% for x in hydration_tips %}<li>{{ x }}</li>{% endfor %}</ul>
+      </div>
     </section>
 
     <section class="card gauge-section">
@@ -222,25 +244,52 @@
       </ul>
     </section>
 
-    <section class="card avoid-break">
+    <section class="card lab-results-wrap">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('bar-chart-2', '')|safe }}</span>{% endif %} {{ label_report_test_results }}</div>
-      <table class="lab-table">
-        <thead>
-          <tr>
-            <th>{{ label_report_test }}</th><th>{{ label_report_result }}</th><th>{{ label_report_reference }}</th><th>{{ label_report_status }}</th>
-          </tr>
-        </thead>
-        <tbody>
-        {% for row in lab_rows %}
-          <tr>
-            <td>{{ row.name }}</td>
-            <td class="num">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</td>
-            <td class="ref">{{ row.ref or '—' }}</td>
-            <td class="st">{{ row.status }}</td>
-          </tr>
+      <p class="lab-legend-inline">
+        <span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}
+        <span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}
+        <span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}
+      </p>
+    {% for cat in lab_categories %}
+    <section class="card lab-category-section avoid-break {% if loop.first %}lab-category-section--first{% endif %}">
+      <div class="sec-title lab-category-title">
+        {% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get(cat.icon, '')|safe }}</span>{% endif %}
+        {{ cat.label }}
+      </div>
+      {% if cat.attention_do %}
+      <div class="lab-category-attention">
+        <span class="lab-attention-label">{{ label_report_attention_do }}:</span>
+        <ul class="bullets">{% for tip in cat.attention_do %}<li>{{ tip }}</li>{% endfor %}</ul>
+      </div>
+      {% endif %}
+      <div class="lab-cards-grid lab-cards-grid--multi">
+        {% for row in cat.rows %}
+        <div class="lab-card lab-card--{{ row.status_class }}">
+          <div class="lab-card-name">{{ row.name }}</div>
+          <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
+          <div class="lab-card-ref">{{ label_report_reference }}: {{ row.ref or '—' }}</div>
+          <div class="lab-card-status">{{ row.status }}</div>
+        </div>
         {% endfor %}
-        </tbody>
-      </table>
+      </div>
+    </section>
+    {% endfor %}
+    {% if not lab_categories and lab_rows %}
+    <section class="card avoid-break lab-cards-section">
+      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('bar-chart-2', '')|safe }}</span>{% endif %} {{ label_report_test_results }}</div>
+      <div class="lab-cards-grid lab-cards-grid--multi">
+        {% for row in lab_rows %}
+        <div class="lab-card lab-card--{{ row.status_class }}">
+          <div class="lab-card-name">{{ row.name }}</div>
+          <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
+          <div class="lab-card-ref">{{ label_report_reference }}: {{ row.ref or '—' }}</div>
+          <div class="lab-card-status">{{ row.status }}</div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
     </section>
 
     <section class="card">

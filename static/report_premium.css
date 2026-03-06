@@ -388,6 +388,197 @@ footer.pdf-footer {
   font-weight: 900;
 }
 
+/* Kan değerleri kart grid — yeşil (iyi), sarı (orta), kırmızı (riskli) */
+.lab-legend-inline {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin: 0 0 14px 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px 16px;
+  align-items: center;
+}
+.lab-legend-dot {
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 6px;
+  margin-right: 4px;
+  vertical-align: middle;
+}
+.lab-legend-dot.lab-card--normal { background: #22c55e; }
+.lab-legend-dot.lab-card--border { background: #eab308; }
+.lab-legend-dot.lab-card--risk { background: #ef4444; }
+
+.lab-category-section {
+  margin-top: 14px;
+  page-break-inside: avoid;
+}
+.lab-category-section--first {
+  page-break-before: always;
+}
+.lab-category-section .lab-category-title {
+  margin-bottom: 8px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--border);
+}
+.lab-category-attention {
+  font-size: 10.5px;
+  color: var(--ink);
+  margin-bottom: 10px;
+  padding: 8px 10px;
+  background: rgba(14, 165, 164, 0.06);
+  border-radius: 8px;
+  border-left: 3px solid var(--brand);
+}
+.lab-attention-label {
+  font-weight: 700;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.lab-cards-section .sec-title { margin-bottom: 6px; }
+.lab-cards-grid,
+.lab-cards-grid--multi {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+@media (max-width: 680px) {
+  .lab-cards-grid,
+  .lab-cards-grid--multi {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+@media (max-width: 400px) {
+  .lab-cards-grid,
+  .lab-cards-grid--multi {
+    grid-template-columns: 1fr;
+  }
+}
+.lab-card {
+  border-radius: 12px;
+  padding: 10px 12px;
+  border: 1px solid var(--border);
+  break-inside: avoid;
+  page-break-inside: avoid;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+.lab-card--normal {
+  border-left: 4px solid #22c55e;
+  background: rgba(34, 197, 94, 0.06);
+}
+.lab-card--border {
+  border-left: 4px solid #eab308;
+  background: rgba(234, 179, 8, 0.08);
+}
+.lab-card--risk {
+  border-left: 4px solid #ef4444;
+  background: rgba(239, 68, 68, 0.06);
+}
+.lab-card-name {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink);
+  margin-bottom: 4px;
+  text-transform: uppercase;
+  letter-spacing: 0.02em;
+}
+.lab-card-value {
+  font-size: 14px;
+  font-weight: 900;
+  color: var(--ink);
+  margin-bottom: 2px;
+}
+.lab-card-ref {
+  font-size: 10px;
+  color: var(--muted);
+  margin-bottom: 2px;
+}
+.lab-card-status {
+  font-size: 10.5px;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.lab-card--normal .lab-card-status { color: #15803d; }
+.lab-card--border .lab-card-status { color: #a16207; }
+.lab-card--risk .lab-card-status { color: #b91c1c; }
+
+/* Beslenme: Yenilmesi / Yenilmemesi Gerekenler — klinik ultra premium */
+.food-guidance-clinical {
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+.food-clinical-block {
+  border-radius: 14px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
+  break-inside: avoid;
+  page-break-inside: avoid;
+  box-shadow: 0 4px 14px rgba(15, 23, 42, 0.06);
+}
+.food-to-eat {
+  border-left: 5px solid #22c55e;
+  background: rgba(34, 197, 94, 0.05);
+}
+.food-to-avoid {
+  border-left: 5px solid #ef4444;
+  background: rgba(239, 68, 68, 0.04);
+}
+.food-clinical-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 6px;
+}
+.food-to-eat-header .sec-icon-wrap { color: #22c55e; }
+.food-to-avoid-header .sec-icon-wrap { color: #ef4444; }
+.food-clinical-title {
+  font-size: 13px;
+  font-weight: 950;
+  color: var(--ink);
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+.food-clinical-desc {
+  font-size: 10.5px;
+  color: var(--muted);
+  margin: 0 0 10px 0;
+  line-height: 1.4;
+}
+.food-clinical-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 12px;
+  line-height: 1.55;
+  color: rgba(15, 23, 42, 0.88);
+}
+.food-clinical-list li {
+  margin: 6px 0;
+}
+
+/* Sonuç odaklı yaşam tarzı: hareket, stres, uyku, sıvı */
+.lifestyle-blocks-section {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 12px;
+}
+.lifestyle-block {
+  border-radius: 12px;
+  padding: 12px 14px;
+  border: 1px solid var(--border);
+  break-inside: avoid;
+  page-break-inside: avoid;
+  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+}
+.lifestyle-movement { border-left: 4px solid #0EA5A4; background: rgba(14, 165, 164, 0.05); }
+.lifestyle-stress { border-left: 4px solid #8b5cf6; background: rgba(139, 92, 246, 0.05); }
+.lifestyle-sleep { border-left: 4px solid #6366f1; background: rgba(99, 102, 241, 0.05); }
+.lifestyle-hydration { border-left: 4px solid #0ea5e9; background: rgba(14, 165, 233, 0.05); }
+.lifestyle-block .sec-title { margin-bottom: 6px; }
+.lifestyle-block .bullets { margin: 0; padding-left: 16px; font-size: 11.5px; line-height: 1.5; }
+
 .share-note {
   margin-top: 10px;
   font-size: 11.5px;

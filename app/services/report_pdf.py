@@ -142,6 +142,8 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_key_areas": "Takip Edilecek Alanlar",
         "report_foods_to_favor": "Tercih Edilebilecek Gıdalar",
         "report_foods_to_limit": "Sınırlanabilecek Gıdalar",
+        "report_foods_eat_heading": "Yenilmesi Gerekenler",
+        "report_foods_avoid_heading": "Yenilmemesi Gerekenler",
         "report_lifestyle": "Yaşam Tarzı Önerileri",
         "report_doctor_discussion": "Hekim Görüşmesi Notları",
         "report_tile_overall_score": "Genel Skor",
@@ -154,6 +156,10 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_lifestyle_sleep": "Yeterli uyku toparlanmayı destekler.",
         "report_lifestyle_movement": "Düzenli hareket önerilir.",
         "report_lifestyle_followup": "Takip süresini hekiminizle görüşün.",
+        "report_movement_default": "Haftada en az 150 dakika orta tempolu hareket (yürüyüş, yüzme, bisiklet) önerilir.",
+        "report_stress_default": "Stres azaltma: nefes egzersizleri, kısa molalar, düzenli uyku.",
+        "report_sleep_default": "Günde 7–8 saat uyku; uyku hijyenine dikkat edin.",
+        "report_hydration_default": "Günde yaklaşık 1,5–2 litre sıvı tüketimi önerilir.",
         "report_doctor_note_1": "Bu raporu hekiminizle paylaşın.",
         "report_doctor_note_2": "Belirti veya endişeler hekim tarafından değerlendirilmelidir.",
         "report_refined_disclaimer": "Bu rapor yalnızca bilgilendirme amaçlıdır. Teşhis veya tedavi sunmaz. Belirti veya tedavi kararları için hekiminize başvurun.",
@@ -165,6 +171,21 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_vitamin": "Vitamin",
         "report_domain_inflammation": "Enflamasyon",
         "report_health_age_title": "Biyolojik Yaş Tahmini",
+        "report_movement_heading": "Hareket ve Egzersiz",
+        "report_stress_heading": "Stres Yönetimi",
+        "report_sleep_heading": "Uyku ve Dinlenme",
+        "report_hydration_heading": "Sıvı Tüketimi",
+        "report_cat_hemogram": "Hemogram",
+        "report_cat_crp": "CRP (Enflamasyon)",
+        "report_cat_glucose": "Glukoz",
+        "report_cat_lipids": "Lipidler (LDL / HDL / Trigliserid)",
+        "report_cat_liver": "Karaciğer (ALT / AST)",
+        "report_cat_kidney": "Böbrek (Üre / Kreatinin)",
+        "report_cat_iron": "Demir / Ferritin",
+        "report_cat_thyroid": "Tiroid (TSH / FT3 / FT4)",
+        "report_cat_other": "Diğer Değerler",
+        "report_attention_do": "Neye dikkat etmeli",
+        "report_attention_avoid": "Neye dikkat etmemeli",
     },
     "en": {
         "title": "Norya Analysis Report",
@@ -265,6 +286,23 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_key_areas": "Key Areas to Watch",
         "report_foods_to_favor": "Foods to Favor",
         "report_foods_to_limit": "Foods to Limit",
+        "report_foods_eat_heading": "Foods to Include",
+        "report_foods_avoid_heading": "Foods to Avoid",
+        "report_movement_heading": "Movement & Exercise",
+        "report_stress_heading": "Stress Management",
+        "report_sleep_heading": "Sleep & Rest",
+        "report_hydration_heading": "Hydration",
+        "report_cat_hemogram": "Hemogram",
+        "report_cat_crp": "CRP (Inflammation)",
+        "report_cat_glucose": "Glucose",
+        "report_cat_lipids": "Lipids (LDL / HDL / Triglycerides)",
+        "report_cat_liver": "Liver (ALT / AST)",
+        "report_cat_kidney": "Kidney (Urea / Creatinine)",
+        "report_cat_iron": "Iron / Ferritin",
+        "report_cat_thyroid": "Thyroid (TSH / FT3 / FT4)",
+        "report_cat_other": "Other Values",
+        "report_attention_do": "What to pay attention to",
+        "report_attention_avoid": "What to avoid",
         "report_lifestyle": "Lifestyle Support",
         "report_doctor_discussion": "Doctor Discussion Notes",
         "report_tile_overall_score": "Overall Score",
@@ -274,6 +312,10 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_priority_general": "General wellness",
         "report_food_favor_default": "Balanced diet; vegetables and fruits may support general health.",
         "report_food_limit_default": "Processed foods and excess sugar may be worth limiting.",
+        "report_movement_default": "At least 150 minutes of moderate activity per week (walking, swimming, cycling) is recommended.",
+        "report_stress_default": "Stress reduction: breathing exercises, short breaks, regular sleep.",
+        "report_sleep_default": "7–8 hours of sleep per night; pay attention to sleep hygiene.",
+        "report_hydration_default": "About 1.5–2 litres of fluid per day is recommended.",
         "report_lifestyle_sleep": "Adequate sleep supports recovery.",
         "report_lifestyle_movement": "Regular movement is recommended.",
         "report_lifestyle_followup": "Discuss follow-up timing with your doctor.",
@@ -1609,11 +1651,11 @@ def _build_premium_context(
         if not line_clean:
             continue
         low = line_clean.lower()
-        if any(x in low for x in ("favor", "eat more", "increase", "yenilmesi", "tüketilmesi", "önerilir", "tercih", "sebze", "vegetable", "fruit", "meyve", "fiber", "lif", "omega", "balık", "fish")):
-            if len(foods_to_favor) < 6:
+        if any(x in low for x in ("favor", "eat more", "increase", "yenilmesi", "tüketilmesi", "önerilir", "tercih", "sebze", "vegetable", "fruit", "meyve", "fiber", "lif", "omega", "balık", "fish", "include", "tüket", "ye ")):
+            if len(foods_to_favor) < 10:
                 foods_to_favor.append(line_clean)
-        elif any(x in low for x in ("limit", "avoid", "reduce", "az tüket", "kaçının", "kısıtla", "sugar", "şeker", "salt", "tuz", "processed", "işlenmiş", "alcohol", "alkol")):
-            if len(foods_to_limit) < 6:
+        elif any(x in low for x in ("limit", "avoid", "reduce", "az tüket", "kaçının", "kısıtla", "sugar", "şeker", "salt", "tuz", "processed", "işlenmiş", "alcohol", "alkol", "yenilmemesi", "yemeyin")):
+            if len(foods_to_limit) < 10:
                 foods_to_limit.append(line_clean)
     if not foods_to_favor:
         foods_to_favor = [_t_early("report_food_favor_default", "Balanced diet; vegetables and fruits may support general health.") if lang != "tr" else "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir."]
@@ -1636,6 +1678,81 @@ def _build_premium_context(
             _t_early("report_lifestyle_movement", "Regular movement is recommended.") if lang != "tr" else "Düzenli hareket önerilir.",
             _t_early("report_lifestyle_followup", "Discuss follow-up timing with your doctor.") if lang != "tr" else "Takip süresini hekiminizle görüşün.",
         ]
+
+    # Sonuç odaklı: hareket, stres, uyku, sıvı (öneri metninden + lab_values ile zenginleştirme)
+    rec_lines = (base_context.get("recommendations") or "").splitlines()
+    movement_tips: list[str] = []
+    stress_tips: list[str] = []
+    sleep_tips: list[str] = []
+    hydration_tips: list[str] = []
+    move_kw = ("exercise", "egzersiz", "hareket", "yürüyüş", "walk", "spor", "yüzme", "bisiklet", "cardio", "movement", "activity")
+    stress_kw = ("stress", "stres", "rahatlama", "relax", "nefes", "breathing", "meditation", "meditasyon")
+    sleep_kw = ("sleep", "uyku", "dinlenme", "rest", "uyumak")
+    hydration_kw = ("water", "su", "sıvı", "hydration", "hidrasyon", "sıvı tüket", "içme")
+    for line in rec_lines:
+        line = line.strip().lstrip("-•* ")
+        if not line:
+            continue
+        line_clean = _strip_ai_from_text(line)
+        if not line_clean:
+            continue
+        low = line_clean.lower()
+        if any(k in low for k in move_kw) and len(movement_tips) < 5:
+            movement_tips.append(line_clean)
+        elif any(k in low for k in stress_kw) and len(stress_tips) < 5:
+            stress_tips.append(line_clean)
+        elif any(k in low for k in sleep_kw) and len(sleep_tips) < 5:
+            sleep_tips.append(line_clean)
+        elif any(k in low for k in hydration_kw) and len(hydration_tips) < 5:
+            hydration_tips.append(line_clean)
+    # Sonuç odaklı ek öneriler (lab_values / risk_summary)
+    if lab_values:
+        try:
+            rs = compute_risk(lab_values)
+            domains = rs.get("domains") or {}
+            highlights = rs.get("highlights") or []
+            names_lower = [str(v.get("name", "")).lower() for v in lab_values]
+            # Kardiyo / lipid risk → hareket
+            if domains.get("cardio", {}).get("level") in ("mid", "high") or any(n in " ".join(names_lower) for n in ("ldl", "hdl", "triglyceride", "kolesterol")):
+                tip = _t_early("report_movement_default", "At least 150 minutes of moderate activity per week (walking, swimming, cycling) is recommended.") if lang != "tr" else "Haftada en az 150 dakika orta tempolu hareket (yürüyüş, yüzme, bisiklet) önerilir."
+                if tip not in movement_tips and len(movement_tips) < 5:
+                    movement_tips.append(tip)
+            # D vitamini düşük → açık hava
+            if any("vitamin d" in n or "d vitamini" in n for n in names_lower):
+                for row in lab_values:
+                    if "vitamin" in str(row.get("name", "")).lower() and row.get("value") is not None:
+                        try:
+                            val = float(str(row["value"]).replace(",", "."))
+                            if val < 30:  # ng/mL düşük kabul
+                                tip = "D vitamini için günde 15–20 dakika güneş ve açık havada yürüyüş düşünülebilir." if lang == "tr" else "Consider 15–20 minutes of sunlight and outdoor walking for vitamin D."
+                                if tip not in movement_tips and len(movement_tips) < 5:
+                                    movement_tips.append(tip)
+                                break
+                        except (ValueError, TypeError):
+                            pass
+            # CRP / enflamasyon → stres ve uyku
+            if domains.get("inflammation", {}).get("level") in ("mid", "high") or any("crp" in n for n in names_lower):
+                tip_s = _t_early("report_stress_default", "Stress reduction: breathing exercises, short breaks, regular sleep.") if lang != "tr" else "Stres azaltma: nefes egzersizleri, kısa molalar, düzenli uyku."
+                if tip_s not in stress_tips and len(stress_tips) < 5:
+                    stress_tips.append(tip_s)
+                tip_sl = _t_early("report_sleep_default", "7–8 hours of sleep per night; pay attention to sleep hygiene.") if lang != "tr" else "Günde 7–8 saat uyku; uyku hijyenine dikkat edin."
+                if tip_sl not in sleep_tips and len(sleep_tips) < 5:
+                    sleep_tips.append(tip_sl)
+            # Böbrek / kreatinin / eGFR → sıvı
+            if any(n in " ".join(names_lower) for n in ("creatinine", "kreatinin", "egfr", "bun")):
+                tip = _t_early("report_hydration_default", "About 1.5–2 litres of fluid per day is recommended.") if lang != "tr" else "Günde yaklaşık 1,5–2 litre sıvı tüketimi önerilir."
+                if tip not in hydration_tips and len(hydration_tips) < 5:
+                    hydration_tips.append(tip)
+        except Exception:
+            pass
+    if not movement_tips:
+        movement_tips = [_t_early("report_movement_default", "At least 150 minutes of moderate activity per week (walking, swimming, cycling) is recommended.") if lang != "tr" else "Haftada en az 150 dakika orta tempolu hareket (yürüyüş, yüzme, bisiklet) önerilir."]
+    if not stress_tips:
+        stress_tips = [_t_early("report_stress_default", "Stress reduction: breathing exercises, short breaks, regular sleep.") if lang != "tr" else "Stres azaltma: nefes egzersizleri, kısa molalar, düzenli uyku."]
+    if not sleep_tips:
+        sleep_tips = [_t_early("report_sleep_default", "7–8 hours of sleep per night; pay attention to sleep hygiene.") if lang != "tr" else "Günde 7–8 saat uyku; uyku hijyenine dikkat edin."]
+    if not hydration_tips:
+        hydration_tips = [_t_early("report_hydration_default", "About 1.5–2 litres of fluid per day is recommended.") if lang != "tr" else "Günde yaklaşık 1,5–2 litre sıvı tüketimi önerilir."]
 
     # Doctor discussion notes (2–4 neutral points)
     doctor_discussion_notes: list[str] = []
@@ -1675,18 +1792,78 @@ def _build_premium_context(
         ]
     findings = [_strip_ai_from_text(s) for s in findings if s]
 
-    # Test tablosu: biomarkers -> lab_rows
+    # Test tablosu: biomarkers -> lab_rows + kategorize (hemogram, biyokimya grupları)
     biomarkers = base_context.get("biomarkers") or []
-    lab_rows = [
-        {
+    def _status_class(s: str) -> str:
+        s = (s or "").strip().lower()
+        if s == "normal":
+            return "normal"
+        if s in ("border", "mid", "sınır", "borderline"):
+            return "border"
+        return "risk"  # low, high, riskli
+    lab_rows = []
+    for row in biomarkers:
+        raw_status = (row.get("status") or "normal").strip().lower()
+        status_class = _status_class(raw_status)
+        lab_rows.append({
             "name": row.get("name") or "—",
             "value": row.get("value") or "—",
             "unit": row.get("unit"),
             "ref": row.get("reference"),
             "status": row.get("status_label") or "—",
-        }
-        for row in biomarkers
-    ]
+            "status_class": status_class,
+        })
+    # Kategori eşlemesi: hemogram (WBC,RBC,HGB,HCT,PLT,MCV,RDW), CRP, glukoz, lipidler, karaciğer, böbrek, demir, tiroid
+    _cat_order = (
+        ("hemogram", "report_cat_hemogram", "bar-chart-2", ("wbc", "rbc", "hgb", "hct", "plt", "mcv", "rdw", "leukocyte", "lökosit", "erythrocyte", "eritrosit", "hemoglobin", "hematocrit", "platelet", "trombosit", "hemogram")),
+        ("crp", "report_cat_crp", "alert-circle", ("crp", "c-reactive", "c reaktif", "enflamasyon")),
+        ("glucose", "report_cat_glucose", "activity", ("glucose", "glukoz", "açlık", "fasting", "hba1c", "hb a1c")),
+        ("lipids", "report_cat_lipids", "heart", ("ldl", "hdl", "triglyceride", "trigliserid", "cholesterol", "kolesterol", "lipid")),
+        ("liver", "report_cat_liver", "bar-chart-2", ("alt", "ast", "ggt", "sgot", "sgpt", "karaciğer", "liver")),
+        ("kidney", "report_cat_kidney", "info", ("urea", "üre", "creatinine", "kreatinin", "egfr", "bun", "böbrek", "kidney")),
+        ("iron", "report_cat_iron", "activity", ("iron", "demir", "ferritin")),
+        ("thyroid", "report_cat_thyroid", "gauge", ("tsh", "ft3", "ft4", "t3", "t4", "thyroid", "tiroid")),
+        ("other", "report_cat_other", "grid", ()),
+    )
+    def _biomarker_category(name: str) -> str:
+        n = (name or "").strip().lower()
+        for cid, _lk, _ik, kws in _cat_order:
+            if cid == "other":
+                return "other"
+            if any(kw in n or n in kw for kw in kws):
+                return cid
+        return "other"
+    highlights_by_test: dict = {}
+    if lab_values:
+        try:
+            rs = compute_risk(lab_values)
+            for h in (rs.get("highlights") or []):
+                tname = (h.get("test") or "").strip().lower()
+                if tname:
+                    highlights_by_test[tname] = {"action": h.get("action") or "", "level": (h.get("level") or "").lower()}
+        except Exception:
+            pass
+    lab_categories: list[dict] = []
+    for cid, label_key, icon_key, kws in _cat_order:
+        rows_in_cat = [r for r in lab_rows if _biomarker_category(r["name"]) == cid]
+        if not rows_in_cat:
+            continue
+        attention_do: list[str] = []
+        attention_avoid: list[str] = []
+        for r in rows_in_cat:
+            rname = (r.get("name") or "").strip().lower()
+            if r.get("status_class") in ("border", "risk") and rname:
+                hint = highlights_by_test.get(rname, {}).get("action") or ""
+                if hint and hint not in attention_do:
+                    attention_do.append(hint)
+        lab_categories.append({
+            "id": cid,
+            "label": _t_early(label_key, cid),
+            "icon": icon_key,
+            "rows": rows_in_cat,
+            "attention_do": attention_do[:3],
+            "attention_avoid": attention_avoid[:2],
+        })
 
     # Klinik notlar: possible_causes maddeleri
     possible = (base_context.get("possible_causes") or "").strip()
@@ -1807,6 +1984,7 @@ def _build_premium_context(
         "risk_cards": risk_cards,
         "findings": findings[:6],
         "lab_rows": lab_rows,
+        "lab_categories": lab_categories,
         "clinical_notes": clinical_notes[:12],
         "recommendations": recommendations[:10],
         "ai_summary": ai_summary,
@@ -1871,6 +2049,10 @@ def _build_premium_context(
         "foods_to_favor": foods_to_favor,
         "foods_to_limit": foods_to_limit,
         "lifestyle_suggestions": lifestyle_suggestions,
+        "movement_tips": movement_tips,
+        "stress_tips": stress_tips,
+        "sleep_tips": sleep_tips,
+        "hydration_tips": hydration_tips,
         "doctor_discussion_notes": doctor_discussion_notes,
         "refined_disclaimer": refined_disclaimer,
         "trend_placeholder_text": trend_placeholder_text,
@@ -1882,7 +2064,15 @@ def _build_premium_context(
         "label_report_key_areas": _t("report_key_areas", "Key Areas to Watch"),
         "label_report_foods_to_favor": _t("report_foods_to_favor", "Foods to Favor"),
         "label_report_foods_to_limit": _t("report_foods_to_limit", "Foods to Limit"),
+        "label_report_foods_eat_heading": _t("report_foods_eat_heading", "Foods to Include"),
+        "label_report_foods_avoid_heading": _t("report_foods_avoid_heading", "Foods to Avoid"),
         "label_report_lifestyle": _t("report_lifestyle", "Lifestyle Support"),
+        "label_report_movement_heading": _t("report_movement_heading", "Movement & Exercise"),
+        "label_report_stress_heading": _t("report_stress_heading", "Stress Management"),
+        "label_report_sleep_heading": _t("report_sleep_heading", "Sleep & Rest"),
+        "label_report_hydration_heading": _t("report_hydration_heading", "Hydration"),
+        "label_report_attention_do": _t("report_attention_do", "What to pay attention to"),
+        "label_report_attention_avoid": _t("report_attention_avoid", "What to avoid"),
         "label_report_doctor_discussion": _t("report_doctor_discussion", "Doctor Discussion Notes"),
         "label_report_tile_overall_score": _t("report_tile_overall_score", "Overall Score"),
         "label_report_tile_risk_level": _t("report_tile_risk_level", "Risk Level"),

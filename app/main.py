@@ -427,12 +427,26 @@ def admin_redirect():
 app.include_router(admin_router)  # Eski API paneli: /admin/stats, /admin/analyses, vb.
 
 
-# Ana sayfa (/) en başta kaydedilsin; GET ve POST desteklensin, 405 önlensin
+# Ana sayfa (/) en başta kaydedilsin; GET, HEAD, OPTIONS, POST desteklensin, 405 önlensin
 @app.get("/")
 @app.get("")
 def index():
     """Ana sayfa: tarayıcı GET ile açıldığında index.html döner."""
     return _index_response()
+
+
+@app.head("/")
+@app.head("")
+def index_head():
+    """HEAD / : CDN/proxy health check; aynı yanıt başlıkları, gövde yok."""
+    return Response(status_code=200)
+
+
+@app.options("/")
+@app.options("")
+def index_options():
+    """OPTIONS / : CORS preflight; 200 döndür, Method Not Allowed önlenir."""
+    return Response(status_code=200)
 
 
 @app.post("/")
