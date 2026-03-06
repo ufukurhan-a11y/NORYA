@@ -76,13 +76,17 @@ class Settings(BaseSettings):
     invoice_company_email: str = ""
     invoice_eur_to_try_rate: float = 35.0  # 1 EUR = X TL (fatura tutarı TL)
 
-    # Site genelinde gösterilen şirket bilgileri (footer, iletişim vb.)
-    # ENV üzerinden özelleştirilebilir; boş bırakılırsa yukarıdaki fatura alanları kullanılır veya alan boş gösterilir.
-    company_title: str = ""
-    company_tax_office: str = ""
-    company_tax_number: str = ""
-    company_address: str = ""
-    company_phone: str = ""
+    # Site genelinde gösterilen şirket bilgileri (footer, iletişim, PayTR uyumluluk)
+    # ENV üzerinden özelleştirilebilir; boş bırakılırsa aşağıdaki varsayılanlar kullanılır.
+    company_title: str = "NoryaAI"
+    company_authorized_person: str = "Ufuk Urhan"
+    company_tax_office: str = "Banaz"
+    company_tax_number: str = "8940311420"
+    company_address: str = "31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4, Banaz/Uşak, Türkiye"
+    company_phone: str = "+90 507 170 35 64"
+    company_support_email: str = "support@noryaai.com"
+    company_contact_email: str = "info@noryaai.com"
+    company_country: str = "Türkiye"
 
     # MinIO (S3 uyumlu): PDF raporları yüklenir, frontend buradan indirir
     minio_endpoint: str = ""           # örn. minio.example.com veya 127.0.0.1:9000

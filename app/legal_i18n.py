@@ -393,15 +393,22 @@ def get_legal_ui(lang: str) -> dict:
     """Seçilen dil için UI metinleri ve nav linkleri."""
     use_lang = lang if lang in LEGAL_LANGS else "en"
     u = _ui(use_lang)
-    # Şirket bilgileri: ENV'den okunur, boşsa fatura alanları veya — kullanılır
+    # Şirket bilgileri: ENV'den okunur, boşsa config varsayılanları veya — kullanılır
     _f = "—"
     company_title = (settings.company_title or settings.invoice_company_title or "").strip() or _f
+    company_authorized_person = (settings.company_authorized_person or "").strip() or _f
     company_tax_office = (settings.company_tax_office or settings.invoice_company_tax_office or "").strip() or _f
     company_tax_number = (settings.company_tax_number or settings.gib_earsiv_user or "").strip() or _f
     company_address = (settings.company_address or settings.invoice_company_address or "").strip() or _f
     company_phone = (settings.company_phone or "").strip() or _f
-    if company_phone != _f and not company_phone.startswith("+") and company_phone.isdigit():
-        company_phone = "+90 " + company_phone
+    if company_phone != _f and not company_phone.startswith("+") and company_phone.replace(" ", "").replace("-", "").isdigit():
+        company_phone = "+90 " + company_phone.lstrip("0")
+    company_support_email = (settings.company_support_email or "").strip() or "support@noryaai.com"
+    company_contact_email = (settings.company_contact_email or "").strip() or "info@noryaai.com"
+    company_country = (settings.company_country or "").strip() or "Türkiye"
+    # WhatsApp link için sadece rakamlar (örn. 905071703564)
+    _phone_digits = "".join(c for c in (company_phone or "") if c.isdigit())
+    company_phone_wa = _phone_digits if len(_phone_digits) >= 10 else "905071703564"
     return {
         "lang": use_lang,
         "back_to_home": u["back_to_home"],
@@ -409,10 +416,15 @@ def get_legal_ui(lang: str) -> dict:
         "footer_desc": u["footer_desc"],
         "footer_disclaimer": u["footer_disclaimer"],
         "company_title": company_title,
+        "company_authorized_person": company_authorized_person,
         "company_tax_office": company_tax_office,
         "company_tax_number": company_tax_number,
         "company_address": company_address,
         "company_phone": company_phone,
+        "company_support_email": company_support_email,
+        "company_contact_email": company_contact_email,
+        "company_country": company_country,
+        "company_phone_wa": company_phone_wa,
     }
 
 

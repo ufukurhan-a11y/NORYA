@@ -55,6 +55,9 @@
     gtag('js', new Date());
     gtag('config', 'G-1FLMLJH3Q0');
   </script>
+  <script type="application/ld+json">
+  {"@context":"https://schema.org","@type":"Organization","name":"NoryaAI","email":"support@noryaai.com","telephone":"+90 507 170 35 64","address":{"@type":"PostalAddress","streetAddress":"31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4","addressLocality":"Banaz","addressRegion":"Uşak","addressCountry":"TR"},"areaServed":{"@type":"Country","name":"Türkiye"}}
+  </script>
 </head>
 <body class="bg-white text-accent-800 min-h-screen flex flex-col font-sans antialiased">
   <header class="border-b border-accent-200 bg-white/95 backdrop-blur sticky top-0 z-10">
@@ -70,6 +73,14 @@
 
   <footer class="border-t border-accent-200 bg-accent-50 py-10 px-4 mt-auto">
     <div class="max-w-4xl mx-auto">
+      <h3 class="text-sm font-bold uppercase tracking-wider text-accent-700 mb-3">İletişim ve Şirket Bilgileri</h3>
+      <div class="text-sm text-accent-700 space-y-1.5 mb-6 max-w-full break-words">
+        <p><strong>NoryaAI</strong> · {{ company_authorized_person }}</p>
+        <p>{{ company_tax_office }} Vergi Dairesi / {{ company_tax_number }}</p>
+        <p><a href="tel:{{ company_phone_wa }}" class="text-norya-brand hover:underline">{{ company_phone }}</a></p>
+        <p><a href="mailto:{{ company_support_email }}" class="text-norya-brand hover:underline">{{ company_support_email }}</a> · <a href="mailto:{{ company_contact_email }}" class="text-norya-brand hover:underline">{{ company_contact_email }}</a></p>
+        <p class="leading-relaxed">{{ company_address }}</p>
+      </div>
       <div class="flex flex-wrap justify-center gap-4 sm:gap-6 mb-6 text-xs font-medium text-accent-600">
         <span class="inline-flex items-center gap-1.5">🔒 SSL</span>
         <span class="inline-flex items-center gap-1.5">🛡️ KVKK</span>
@@ -81,19 +92,12 @@
         <a href="{{ link.url }}?lang={{ lang }}" class="text-accent-600 hover:text-norya-brand transition">{{ link.label }}</a>
         {% endfor %}
       </nav>
-      <p class="text-center text-accent-500 text-sm"><strong class="text-accent-700">Norya</strong> — {{ footer_desc }}</p>
+      <p class="text-center text-accent-500 text-sm"><strong class="text-accent-700">NoryaAI</strong> — {{ footer_desc }}</p>
       <p class="text-center text-accent-400 text-xs mt-1">{{ footer_disclaimer }}</p>
-      <div class="mt-4 text-center text-accent-500 text-xs space-y-1 max-w-full break-words">
-        <p><strong>Ticari Unvan:</strong> <span class="break-words">{{ company_title }}</span></p>
-        <p><strong>Vergi Dairesi / Vergi No:</strong> {{ company_tax_office }} / {{ company_tax_number }}</p>
-        <p><strong>Adres:</strong> <span class="break-words">{{ company_address }}</span></p>
-        <p><strong>E-posta:</strong> support@noryaai.com</p>
-        <p><strong>Telefon / WhatsApp:</strong> {{ company_phone }}</p>
-      </div>
     </div>
   </footer>
 
-  <a href="https://wa.me/905071703564?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+  <a href="https://wa.me/{{ company_phone_wa }}?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
      target="_blank" rel="noopener"
      class="wa-float"
      aria-label="WhatsApp ile iletişim">
