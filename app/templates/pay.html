@@ -194,6 +194,8 @@
             <label for="name" style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;">{{ t.pay_name_label }}</label>
             <input type="text" id="name" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;">
           </div>
+          <!-- PayTR: sanal pos ile ödeme alan sayfada satıcı iletişim bilgileri açıkça görünsün -->
+          <p class="merchant-contact" style="font-size:12px;color:#475569;margin-bottom:12px;padding-top:8px;border-top:1px solid #e2e8f0;"><strong>{{ t.merchant_contact_title }}</strong>: <a href="mailto:support@noryaai.com" style="color:#0EA5A4;text-decoration:none;">support@noryaai.com</a> · <a href="{{ base_url }}/legal/iletisim" style="color:#0EA5A4;text-decoration:none;">{{ t.merchant_contact_page }}</a></p>
           <div class="cta-wrap">
             <button type="button" class="cta-main" id="cta-main" aria-label="{{ t.pay_btn }}">
               <span class="btn-text">{{ t.pay_btn }}</span>

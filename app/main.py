@@ -1538,6 +1538,26 @@ async def analyze_upload(
     db: Session = Depends(get_db),
 ):
     """Dosya yükleme: multipart/form-data, alan adı 'file' (zorunlu), 'lang' (opsiyonel)."""
+    try:
+        return await _analyze_upload_impl(request, file, lang, user, db)
+    except HTTPException:
+        raise
+    except Exception as e:
+        log.exception("analyze/upload top-level error: %s", e)
+        return JSONResponse(
+            status_code=500,
+            content={"error": "Analiz sırasında hata oluştu.", "detail": str(e)[:200]},
+        )
+
+
+async def _analyze_upload_impl(
+    request: Request,
+    file: UploadFile,
+    lang: str,
+    user: User,
+    db: Session,
+) -> AnalyzeResponse:
+    """analyze_upload iç mantığı (try/except dışında)."""
     log.info("analyze/upload: filename=%s", getattr(file, "filename", ""))
     test_mode = _is_test_mode(request)
     if not test_mode:
@@ -1609,7 +1629,7 @@ async def analyze_upload(
     elif magic_type == "pdf" and (ext not in ALLOWED_UPLOAD_EXTENSIONS or not ext):
         ext = ".pdf"
 
-    ext_ok = (ext == magic_ext) if isinstance(magic_ext, str) else (ext in magic_ext)
+    ext_ok = (ext == magic_ext) if isinstance(magic_ext, str) else ((ext in magic_ext) if magic_ext is not None else False)
     if magic_type == "jpeg":
         mime_ok = reported_mime in ("image/jpeg", "image/jpg", "")
     else:
@@ -1737,9 +1757,9 @@ def _process_uploaded_content(
                 ul.duration_ms = int((time.perf_counter() - t0) * 1000)
                 db.add(ul)
                 db.commit()
-        _audit(db, "analyze", user_id, _client_ip(request))
-        plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
-        return _build_analyze_response(result, aid, None, plan, user_id, db, cached=False)
+            _audit(db, "analyze", user_id, _client_ip(request))
+            plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
+            return _build_analyze_response(result, aid, None, plan, user_id, db, cached=False)
         text = extract_text_from_pdf(content)
         if "çıkarılamadı" in text:
             raise HTTPException(status_code=400, detail="PDF'den metin okunamadı. Farklı bir dosya deneyin.")
