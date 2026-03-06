@@ -1083,6 +1083,16 @@
       right: auto;
       left: 1rem;
     }
+    #lang-modal .lang-opt:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(14,165,164,0.5); }
+    .dark #lang-modal .lang-opt:focus-visible { box-shadow: inset 0 0 0 2px rgba(14,165,164,0.6); }
+    /* Dil trigger butonu: globe + kod + ok; açıkken vurgu */
+    .lang-trigger-btn { min-height: 2.5rem; padding: 0.4rem 0.6rem; border-radius: 10px; transition: background 0.2s ease; }
+    .lang-trigger-btn:hover { background: rgba(14,165,164,0.08); }
+    .lang-trigger-btn.lang-open { background: rgba(14,165,164,0.1); }
+    .lang-trigger-icon { font-size: 1rem; line-height: 1; }
+    .lang-trigger-code { font-weight: 600; font-size: 0.8125rem; letter-spacing: 0.02em; min-width: 1.5em; }
+    .lang-trigger-chevron { font-size: 0.5rem; opacity: 0.7; transition: transform 0.2s ease; }
+    .lang-trigger-btn.lang-open .lang-trigger-chevron { transform: rotate(180deg); }
     /* Mobilde menü ve dil dropdown sabit pozisyon + yüksek z-index; arkaya gitmesin */
     @media (max-width: 640px) {
       #nav-menu-dropdown {
@@ -1473,13 +1483,7 @@
     /* Dil dropdown: iOS Safari için dvh */
     .lang-dropdown-max-h { max-height: 70vh; }
     @supports (height: 100dvh) { .lang-dropdown-max-h { max-height: 70dvh; } }
-    .lang-opt { margin: 2px 0; }
-    .lang-opt:hover { background: rgba(14, 165, 164, 0.08); }
-    .lang-opt:active { background: rgba(14, 165, 164, 0.15); }
-    .lang-opt.lang-opt-selected { background: rgba(14, 165, 164, 0.12); font-weight: 600; }
-    .dark .lang-opt:hover { background: rgba(14, 165, 164, 0.12); }
-    .dark .lang-opt:active { background: rgba(14, 165, 164, 0.2); }
-    .dark .lang-opt.lang-opt-selected { background: rgba(14, 165, 164, 0.18); }
+    .lang-opt { margin: 0; }
     #nav-menu-dropdown a, #nav-menu-dropdown button { margin: 2px 0; }
     .nav-menu-mobile-only { display: none; }
     @media (max-width: 640px) {
@@ -2090,20 +2094,21 @@
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
         <div class="relative header-lang-wrap header-desktop-only" id="lang-wrap">
-          <button type="button" onclick="toggleLangModal()" class="secondary-link flex items-center gap-1.5" id="lang-btn" data-i18n-aria-label="aria_select_language" aria-label="Dil seçin">
-            <span aria-hidden="true">🌐</span>
-            <span id="lang-current">EN</span>
+          <button type="button" onclick="toggleLangModal()" class="secondary-link lang-trigger-btn flex items-center gap-2" id="lang-btn" data-i18n-aria-label="aria_select_language" aria-label="Dil seçin" aria-expanded="false" aria-haspopup="listbox">
+            <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
+            <span id="lang-current" class="lang-trigger-code">EN</span>
+            <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
           </button>
-          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h lang-dropdown-panel" style="right: 0; top: 0;">
-            <button type="button" data-lang="en" class="lang-opt rounded-t-xl" onclick="console.log('switching to en'); window.__noryaLangGo('en')">English</button>
-            <button type="button" data-lang="de" class="lang-opt" onclick="console.log('switching to de'); window.__noryaLangGo('de')">Deutsch</button>
-            <button type="button" data-lang="it" class="lang-opt" onclick="console.log('switching to it'); window.__noryaLangGo('it')">Italiano</button>
-            <button type="button" data-lang="fr" class="lang-opt" onclick="console.log('switching to fr'); window.__noryaLangGo('fr')">Français</button>
-            <button type="button" data-lang="es" class="lang-opt" onclick="console.log('switching to es'); window.__noryaLangGo('es')">Español</button>
-            <button type="button" data-lang="tr" class="lang-opt" onclick="console.log('switching to tr'); window.__noryaLangGo('tr')">Türkçe</button>
-            <button type="button" data-lang="ar" class="lang-opt" dir="rtl" onclick="console.log('switching to ar'); window.__noryaLangGo('ar')">العربية</button>
-            <button type="button" data-lang="hi" class="lang-opt" onclick="console.log('switching to hi'); window.__noryaLangGo('hi')">हिन्दी</button>
-            <button type="button" data-lang="he" class="lang-opt rounded-b-xl" dir="rtl" onclick="console.log('switching to he'); window.__noryaLangGo('he')">עברית</button>
+          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h lang-dropdown-panel" style="right: 0; top: 0;" role="listbox" aria-label="Dil seçin">
+            <button type="button" role="option" data-lang="en" class="lang-opt rounded-t-xl" aria-selected="false" onclick="console.log('switching to en'); window.__noryaLangGo('en')">English</button>
+            <button type="button" role="option" data-lang="de" class="lang-opt" aria-selected="false" onclick="console.log('switching to de'); window.__noryaLangGo('de')">Deutsch</button>
+            <button type="button" role="option" data-lang="it" class="lang-opt" aria-selected="false" onclick="console.log('switching to it'); window.__noryaLangGo('it')">Italiano</button>
+            <button type="button" role="option" data-lang="fr" class="lang-opt" aria-selected="false" onclick="console.log('switching to fr'); window.__noryaLangGo('fr')">Français</button>
+            <button type="button" role="option" data-lang="es" class="lang-opt" aria-selected="false" onclick="console.log('switching to es'); window.__noryaLangGo('es')">Español</button>
+            <button type="button" role="option" data-lang="tr" class="lang-opt" aria-selected="false" onclick="console.log('switching to tr'); window.__noryaLangGo('tr')">Türkçe</button>
+            <button type="button" role="option" data-lang="ar" class="lang-opt" dir="rtl" aria-selected="false" onclick="console.log('switching to ar'); window.__noryaLangGo('ar')">العربية</button>
+            <button type="button" role="option" data-lang="hi" class="lang-opt" aria-selected="false" onclick="console.log('switching to hi'); window.__noryaLangGo('hi')">हिन्दी</button>
+            <button type="button" role="option" data-lang="he" class="lang-opt rounded-b-xl" dir="rtl" aria-selected="false" onclick="console.log('switching to he'); window.__noryaLangGo('he')">עברית</button>
           </div>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
@@ -9270,6 +9275,10 @@
       var btn = document.getElementById("lang-btn");
       var wrap = document.getElementById("lang-wrap");
       var isNowHidden = m.classList.toggle("hidden");
+      if (btn) {
+        btn.setAttribute("aria-expanded", isNowHidden ? "false" : "true");
+        btn.classList.toggle("lang-open", !isNowHidden);
+      }
       if (!isNowHidden) {
         document.body.appendChild(m);
         m.classList.add("lang-modal-fixed");
@@ -9385,6 +9394,8 @@
       var clickedOutside = (!wrap || !wrap.contains(e.target)) && (!lm || !lm.contains(e.target));
       if (clickedOutside && lm) {
         lm.classList.add("hidden");
+        var langBtn = document.getElementById("lang-btn");
+        if (langBtn) { langBtn.setAttribute("aria-expanded", "false"); langBtn.classList.remove("lang-open"); }
         if (wrap && !wrap.contains(lm)) wrap.appendChild(lm);
       }
     });
@@ -9447,8 +9458,10 @@
       if (typeof updateLegalLinksLang === 'function') updateLegalLinksLang();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
-      document.querySelectorAll(".lang-opt").forEach(function(btn) {
-        btn.classList.toggle("lang-opt-selected", btn.getAttribute("data-lang") === lang);
+      document.querySelectorAll(".lang-opt").forEach(function(opt) {
+        var isSelected = opt.getAttribute("data-lang") === lang;
+        opt.classList.toggle("lang-opt-selected", isSelected);
+        opt.setAttribute("aria-selected", isSelected ? "true" : "false");
       });
       document.querySelectorAll("[data-i18n]").forEach(function(el) {
         var key = (el.getAttribute("data-i18n") || "").trim();
