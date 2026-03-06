@@ -6478,6 +6478,8 @@
         report_attention_title: "Dikkat Gerekli", report_view_details: "Detaylara git",
         report_category_summary: "Kategori Özeti", report_category_summary_desc: "Sonuçlarınız kategorilere göre özetlendi.",
         report_category_blood: "Kan Sayımı", report_category_metabolic: "Metabolik", report_category_vitamins: "Vitaminler ve Mineraller", report_category_inflammation: "İnflamasyon",
+        report_cat_recommend_ok: "Değerler uygun aralıkta. Düzenli takip önerilir.", report_cat_recommend_mid: "Takip ve yaşam tarzı önerileri için hekiminizle görüşün.", report_cat_recommend_risk: "Hekiminizle görüşmeniz önerilir.",
+        report_cat_recommend_hemogram: "Kan sayımı değerleriniz. Referans dışı sonuçlarda hekiminizle görüşün.", report_cat_recommend_crp: "Enflamasyon belirteci. Yükseklikte hekime danışın.", report_cat_recommend_glucose: "Kan şekeri ve metabolizma. Diyabet takibi için hekim önerisi alın.", report_cat_recommend_lipids: "Kolesterol ve lipid paneli. Kalp sağlığı için düzenli takip.", report_cat_recommend_liver: "Karaciğer enzimleri. Yükseklikte hekim değerlendirmesi önerilir.", report_cat_recommend_kidney: "Böbrek fonksiyonu. eGFR ve kreatinin takibi.", report_cat_recommend_iron: "Demir ve ferritin. Eksiklikte beslenme veya takviye hekimle konuşulmalı.", report_cat_recommend_thyroid: "Tiroid paneli. TSH/FT4 sonuçları hekim yorumu gerektirir.", report_cat_recommend_other: "Diğer parametreler. Hekiminizle paylaşın.",
         report_params_title: "Parametreler", report_ref_range: "Ref", report_score_out_of: "Skor", report_risk_factors: "Risk Faktörleri", report_next_steps: "Sonuç ve Sonraki Adımlar", report_trends: "Trendler",
         report_unlock_full: "Tam raporu aç", report_unlock_desc: "PDF indirme, detaylı içgörüler, trend takibi ve kişiselleştirilmiş sonraki adımlara erişin.", report_unlock_pdf: "PDF indirme", report_unlock_insights: "Detaylı içgörüler", report_unlock_trends: "Trend takibi",
         report_flexible_cancel: "Esnek iptal.", report_upgrade_now: "Şimdi yükselt", report_upgrade_btn: "Yükselt",
@@ -6827,6 +6829,8 @@
         report_attention_title: "Attention Needed", report_view_details: "View details",
         report_category_summary: "Category Summary", report_category_summary_desc: "Your results summarized by category.",
         report_category_blood: "Blood Count", report_category_metabolic: "Metabolic", report_category_vitamins: "Vitamins & Minerals", report_category_inflammation: "Inflammation",
+        report_cat_recommend_ok: "Values in range. Regular follow-up recommended.", report_cat_recommend_mid: "Discuss with your doctor for follow-up and lifestyle advice.", report_cat_recommend_risk: "Discuss with your doctor.",
+        report_cat_recommend_hemogram: "Blood count results. Discuss out-of-range values with your doctor.", report_cat_recommend_crp: "Inflammation marker. Consult your doctor if elevated.", report_cat_recommend_glucose: "Blood sugar and metabolism. Get clinician advice for diabetes follow-up.", report_cat_recommend_lipids: "Cholesterol and lipid panel. Regular follow-up for heart health.", report_cat_recommend_liver: "Liver enzymes. Doctor evaluation recommended if elevated.", report_cat_recommend_kidney: "Kidney function. eGFR and creatinine follow-up.", report_cat_recommend_iron: "Iron and ferritin. Discuss diet or supplements with your doctor if low.", report_cat_recommend_thyroid: "Thyroid panel. TSH/FT4 results require clinician interpretation.", report_cat_recommend_other: "Other parameters. Share with your doctor.",
         report_params_title: "Parameters", report_ref_range: "Ref", report_score_out_of: "Score", report_risk_factors: "Risk Factors", report_next_steps: "Next Steps", report_trends: "Trends",
         report_unlock_full: "Unlock the full report", report_unlock_desc: "Get PDF download, deep insights, trend tracking and personalized next steps.", report_unlock_pdf: "PDF download", report_unlock_insights: "Deep insights", report_unlock_trends: "Trend tracking",
         report_flexible_cancel: "Flexible cancellation.", report_upgrade_now: "Upgrade now", report_upgrade_btn: "Upgrade",
@@ -8900,10 +8904,13 @@
       }
     }
     function chooseLang(lang) {
-      setLang(lang);
+      if (!lang || typeof lang !== 'string') return;
+      lang = lang.toLowerCase().trim();
+      if (typeof T !== 'undefined' && !T[lang]) lang = 'en';
       document.getElementById("lang-modal").classList.add("hidden");
-      // Dil seçimi sonrası menü metinlerinin güncellenmesini garanti et (özellikle TR→diğer dil)
+      setLang(lang);
       setTimeout(function() { setLang(lang); }, 0);
+      setTimeout(function() { setLang(lang); }, 100);
     }
     function toggleNavMenu() {
       if (window.innerWidth <= 860) openMobileDrawer();
@@ -8963,50 +8970,87 @@
         a.setAttribute('href', href + '?lang=' + encodeURIComponent(lang));
       });
     }
+    function getTranslation(lang, key) {
+      if (typeof T === 'undefined' || !key) return '';
+      key = String(key).trim();
+      var t = T[lang];
+      if (t && t[key]) return t[key];
+      if (T.en && T.en[key]) return T.en[key];
+      return '';
+    }
+    function applyTranslationToElement(el, text) {
+      if (!text) return;
+      if (el.childNodes.length > 1) {
+        var firstText = null;
+        for (var i = 0; i < el.childNodes.length; i++) {
+          if (el.childNodes[i].nodeType === 3) { firstText = el.childNodes[i]; break; }
+        }
+        if (firstText) firstText.nodeValue = text;
+        else el.textContent = text;
+      } else if (el.firstChild && el.firstChild.nodeType === 3) {
+        el.firstChild.nodeValue = text;
+      } else {
+        el.textContent = text;
+      }
+    }
     function setLang(lang) {
+      if (typeof T === 'undefined') return;
       if (!T[lang]) lang = "en";
       localStorage.setItem(LANG_KEY, lang);
       document.documentElement.lang = lang;
+      document.documentElement.setAttribute('lang', lang);
       document.documentElement.dir = (lang === "ar" || lang === "he") ? "rtl" : "ltr";
       if (typeof updateLegalLinksLang === 'function') updateLegalLinksLang();
       var cur = document.getElementById("lang-current");
-      if (cur) cur.textContent = LANG_LABELS[lang] || "EN";
+      if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
       document.querySelectorAll("[data-i18n]").forEach(function(el) {
-        var key = el.getAttribute("data-i18n");
-        if (T[lang] && T[lang][key]) el.textContent = T[lang][key];
+        var key = (el.getAttribute("data-i18n") || "").trim();
+        var text = getTranslation(lang, key);
+        if (text) applyTranslationToElement(el, text);
       });
       var drawer = document.getElementById("mobile-drawer");
       if (drawer) {
         drawer.querySelectorAll("[data-i18n]").forEach(function(el) {
-          var key = el.getAttribute("data-i18n");
-          if (T[lang] && T[lang][key]) { el.textContent = T[lang][key]; }
+          var key = (el.getAttribute("data-i18n") || "").trim();
+          var text = getTranslation(lang, key);
+          if (text) applyTranslationToElement(el, text);
         });
       }
       document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
-        var key = el.getAttribute("data-i18n-placeholder");
-        if (T[lang] && T[lang][key]) el.placeholder = T[lang][key];
+        var key = (el.getAttribute("data-i18n-placeholder") || "").trim();
+        var text = getTranslation(lang, key);
+        if (text) el.placeholder = text;
       });
       document.querySelectorAll("[data-i18n-aria-label]").forEach(function(el) {
-        var key = el.getAttribute("data-i18n-aria-label");
-        if (T[lang] && T[lang][key]) el.setAttribute("aria-label", T[lang][key]);
+        var key = (el.getAttribute("data-i18n-aria-label") || "").trim();
+        var text = getTranslation(lang, key);
+        if (text) el.setAttribute("aria-label", text);
       });
       var charEl = document.getElementById("wizard-preview-char");
-      if (charEl && T[lang] && T[lang].wizard_char_count) {
+      var wizardCount = getTranslation(lang, 'wizard_char_count');
+      if (charEl && wizardCount) {
         var analyzeText = document.getElementById("analyze-text");
         var n = (analyzeText && analyzeText.value) ? analyzeText.value.length : 0;
-        charEl.textContent = T[lang].wizard_char_count.replace("{n}", n);
+        charEl.textContent = wizardCount.replace("{n}", String(n));
       }
-      // Güvenlik badge'leri ve tüm çevirilerin dil değişince kesin uygulanması için kısa gecikmeyle tekrar uygula
       setTimeout(function() {
         document.querySelectorAll("[data-i18n]").forEach(function(el) {
-          var key = el.getAttribute("data-i18n");
-          if (T[lang] && T[lang][key]) el.textContent = T[lang][key];
+          var key = (el.getAttribute("data-i18n") || "").trim();
+          var text = getTranslation(lang, key);
+          if (text) applyTranslationToElement(el, text);
         });
+        if (drawer) {
+          drawer.querySelectorAll("[data-i18n]").forEach(function(el) {
+            var key = (el.getAttribute("data-i18n") || "").trim();
+            var text = getTranslation(lang, key);
+            if (text) applyTranslationToElement(el, text);
+          });
+        }
         var charEl2 = document.getElementById("wizard-preview-char");
-        if (charEl2 && T[lang] && T[lang].wizard_char_count) {
+        if (charEl2 && wizardCount) {
           var analyzeText2 = document.getElementById("analyze-text");
           var n2 = (analyzeText2 && analyzeText2.value) ? analyzeText2.value.length : 0;
-          charEl2.textContent = T[lang].wizard_char_count.replace("{n}", n2);
+          charEl2.textContent = wizardCount.replace("{n}", String(n2));
         }
         if (typeof loadPricing === 'function') loadPricing();
         if (getToken()) {
@@ -10459,14 +10503,23 @@
     }
 
     updateNav();
-    if (!localStorage.getItem(LANG_KEY)) {
-      fetch(API_BASE + "/api/locale").then(function(r) { return r.json(); }).then(function(d) {
-        var lang = (d.suggested && T[d.suggested]) ? d.suggested : "en";
-        setLang(lang);
-      }).catch(function() { setLang("tr"); });
-    } else {
-      setLang(getLang());
-    }
+    (function applyInitialLang() {
+      var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      var urlLang = params && params.get('lang') ? params.get('lang').toLowerCase().trim() : null;
+      if (urlLang && typeof T !== 'undefined' && T[urlLang]) {
+        localStorage.setItem(LANG_KEY, urlLang);
+        setLang(urlLang);
+        return;
+      }
+      if (!localStorage.getItem(LANG_KEY)) {
+        fetch(API_BASE + "/api/locale").then(function(r) { return r.json(); }).then(function(d) {
+          var lang = (d.suggested && typeof T !== 'undefined' && T[d.suggested]) ? d.suggested : "en";
+          setLang(lang);
+        }).catch(function() { setLang("tr"); });
+      } else {
+        setLang(getLang());
+      }
+    })();
     applyTheme();
     checkResetTokenInUrl();
     checkVerifyEmailInUrl();
