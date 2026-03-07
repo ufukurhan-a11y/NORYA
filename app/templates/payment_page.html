@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#F9FAFB">
+  <title>{{ t.pay_title }} – {{ brand }}</title>
+  <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
+  <style>
+    *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{-webkit-text-size-adjust:100%;overflow-x:clip;}
+    body{
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
+      background: #F9FAFB;
+      color: #1a1a2e;
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding-bottom: 60px;
+      -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
+    }
+    .trust-strip{
+      background: #fff;
+      border-bottom: 1px solid #E5E7EB;
+      padding: 12px 20px;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px 20px;
+    }
+    .trust-strip span{
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 11px;
+      font-weight: 600;
+      color: #475569;
+      letter-spacing: 0.02em;
+    }
+    .trust-strip svg{ width: 14px; height: 14px; flex-shrink: 0; color: #0EA5A4; }
+    .trust-strip .trust-logo{ width: 14px; height: 14px; object-fit: contain; }
+
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
+    .header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 24px 0 20px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header a{ display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .header img{ height: 36px; width: auto; }
+    .header-badge{ font-size: 11px; color: #0EA5A4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
+    .grid{ display: grid; gap: 24px; }
+    @media (min-width: 900px){ .grid{ grid-template-columns: 1fr 320px; align-items: start; gap: 32px; } }
+    .left-col{ min-width: 0; }
+    .right-col{ min-width: 0; }
+    @media (min-width: 900px){ .right-col{ position: sticky; top: 20px; } }
+
+    /* Plan cards: mobile first, annual on top on small screens */
+    .plans-row{
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+    @media (min-width: 640px){ .plans-row{ flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; } }
+    @media (min-width: 900px){ .plans-row{ flex-wrap: nowrap; justify-content: stretch; } }
+
+    .plan-card{
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+      padding: 24px 20px;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      position: relative;
+      flex: 1;
+      min-width: 0;
+    }
+    .plan-card:hover{ transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.06); border-color: #D1D5DB; }
+    .plan-card.selected{ border-color: #0EA5A4; box-shadow: 0 0 0 2px rgba(14,165,164,0.2), 0 8px 24px rgba(14,165,164,0.12); }
+    .plan-card.annual{ border-color: #0EA5A4; border-width: 1px; }
+    .plan-card.annual.selected{ box-shadow: 0 0 0 2px rgba(14,165,164,0.25), 0 8px 24px rgba(14,165,164,0.12); }
+    .plan-card .best-value{
+      position: absolute;
+      top: -1px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 10px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      background: linear-gradient(135deg, #0EA5A4, #0891B2);
+      color: #fff;
+      padding: 6px 14px;
+      border-radius: 0 0 12px 12px;
+      box-shadow: 0 2px 8px rgba(14,165,164,0.3);
+    }
+    .plan-card h3{ font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+    .plan-card .price{ font-size: 28px; font-weight: 800; color: #0EA5A4; line-height: 1.1; }
+    .plan-card .price .currency{ font-size: 16px; font-weight: 600; opacity: 0.9; margin-left: 2px; }
+    .plan-card .price-desc{ font-size: 12px; color: #64748b; margin-top: 4px; }
+    .plan-card ul{ list-style: none; margin-top: 16px; }
+    .plan-card ul li{ font-size: 13px; color: #475569; padding: 6px 0; display: flex; align-items: center; gap: 8px; }
+    .plan-card ul li svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; }
+
+    /* Mobile: annual first */
+    @media (max-width: 639px){
+      .plans-row .plan-card.annual{ order: -1; }
+    }
+
+    .form-section{
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+      padding: 28px 24px;
+      margin-top: 24px;
+    }
+    .form-section h3{ font-size: 14px; font-weight: 700; color: #64748b; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .form-group{ margin-bottom: 14px; }
+    .form-group label{ display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+    .input{
+      width: 100%;
+      min-height: 48px;
+      padding: 12px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      color: #1a1a2e;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      box-sizing: border-box;
+    }
+    .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
+    .input.err{ border-color: #dc2626; }
+    .coupon-row{ display: flex; gap: 10px; }
+    .coupon-row .input{ flex: 1; min-width: 0; }
+    .btn-secondary{
+      min-height: 48px;
+      padding: 0 18px;
+      border: none;
+      border-radius: 12px;
+      background: #f1f5f9;
+      color: #475569;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-secondary:hover{ background: #e2e8f0; color: #334155; }
+    .coupon-msg{ font-size: 13px; margin-top: 6px; min-height: 20px; }
+    .coupon-msg.ok{ color: #059669; }
+    .coupon-msg.err{ color: #dc2626; }
+
+    .payment-methods{
+      margin-top: 22px;
+      padding-top: 18px;
+      border-top: 1px solid #E5E7EB;
+      background: transparent;
+      min-width: 0;
+    }
+    .payment-methods .pm-title{
+      font-size: 11px;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
+      margin-bottom: 12px;
+    }
+    .payment-methods .pm-logos-wrap{
+      display: inline-block;
+      max-width: 100%;
+      min-width: 0;
+      padding: 14px 18px;
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      overflow: hidden;
+    }
+    .payment-methods .pm-logos{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 18px;
+      min-width: 0;
+    }
+    .payment-methods .pm-logos img{
+      height: 20px;
+      width: auto;
+      max-width: 100%;
+      min-width: 0;
+      object-fit: contain;
+      object-position: center;
+      opacity: 0.96;
+      transition: opacity 0.15s ease;
+      flex-shrink: 0;
+    }
+    .payment-methods .pm-logos img:hover{ opacity: 1; }
+    .payment-methods .pm-trust{
+      font-size: 12px;
+      line-height: 1.55;
+      color: #64748B;
+      margin-top: 12px;
+      margin-bottom: 0;
+    }
+    @media (min-width: 380px){ .payment-methods .pm-trust{ font-size: 13px; } }
+    @media (max-width: 360px){
+      .payment-methods .pm-logos img{ height: 18px; }
+      .payment-methods .pm-logos-wrap{ padding: 12px 14px; }
+      .payment-methods .pm-logos{ gap: 14px; }
+    }
+
+    .cta-wrap{ margin-top: 20px; }
+    .cta-main{
+      width: 100%;
+      padding: 18px 28px;
+      min-height: 56px;
+      border: none;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #0EA5A4 0%, #0d9488 100%);
+      color: #fff;
+      font-size: 17px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      box-shadow: 0 4px 14px rgba(14,165,164,0.35);
+    }
+    .cta-main:hover:not(:disabled){ transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,164,0.4); }
+    .cta-main:disabled{ opacity: 0.85; cursor: not-allowed; }
+    .cta-main .spinner{ width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    @keyframes spin{ to{ transform: rotate(360deg); } }
+
+    .iframe-section{ margin-top: 24px; display: none; }
+    .iframe-section.visible{ display: block; }
+    .iframe-wrapper{
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+      overflow: hidden;
+      min-height: 420px;
+      position: relative;
+    }
+    .iframe-skeleton{
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
+      background-size: 200% 100%;
+      animation: skeleton 1.2s ease-in-out infinite;
+    }
+    .iframe-skeleton.hidden{ display: none; }
+    @keyframes skeleton{ 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
+    .paytr-iframe{
+      width: 100%;
+      min-height: 420px;
+      border: none;
+      display: block;
+    }
+
+    .summary-card{
+      background: #fff;
+      border-radius: 20px;
+      border: 1px solid #E5E7EB;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+      padding: 24px;
+    }
+    .summary-card h3{ font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .summary-plan{ font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
+    .summary-total{ font-size: 24px; font-weight: 800; color: #0EA5A4; }
+    .summary-total .currency{ font-size: 14px; font-weight: 600; margin-left: 4px; }
+    .summary-note{ font-size: 12px; color: #64748b; margin-top: 12px; line-height: 1.5; }
+    .summary-empty{ font-size: 14px; color: #94a3b8; }
+
+    .error-msg{ font-size: 14px; color: #dc2626; margin-top: 12px; padding: 12px; background: #fef2f2; border-radius: 10px; display: none; }
+    .error-msg.visible{ display: block; }
+
+    .footer{ text-align: center; padding: 24px 16px; font-size: 12px; color: #94a3b8; }
+    .footer a{ color: #64748b; text-decoration: none; }
+    .footer a:hover{ color: #0EA5A4; }
+  </style>
+</head>
+<body>
+  <div class="trust-strip" role="region" aria-label="Security">
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d }} Protected</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>PayTR Certified</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit SSL Encryption</span>
+    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="14" height="14" class="trust-logo" loading="lazy" />Cloudflare Security</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_badge_hipaa }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_badge_gdpr }} Compliant</span>
+  </div>
+
+  <div class="wrap">
+    <header class="header">
+      <a href="{{ base_url }}/" aria-label="{{ brand }}">
+        <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="" width="140" height="36">
+      </a>
+      <span class="header-badge">{{ t.secure_checkout }}</span>
+    </header>
+
+    <main class="grid">
+      <div class="left-col">
+        <section class="plans-row" id="plans-row" role="group" aria-label="{{ t.selected_plan }}">
+          {% for p in plans %}
+          <div class="plan-card {% if p.best_value %}annual{% endif %}" data-plan="{{ p.code }}" data-price="{{ p.price }}" data-price-cents="{{ p.price_cents }}" data-label="{{ p.label }}" role="button" tabindex="0">
+            {% if p.best_value %}<span class="best-value">{{ t.best_value_badge }}</span>{% endif %}
+            <h3>{{ p.label }}</h3>
+            <div class="price">{{ p.price }}<span class="currency">€</span></div>
+            <p class="price-desc">{% if p.product == 'single' %}{{ t.price_once }}{% elif p.product == 'monthly' %}{{ t.price_month }}{% else %}{{ t.price_year }}{% endif %}</p>
+            <ul>
+              {% for b in p.benefits[:4] %}
+              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ b }}</li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endfor %}
+        </section>
+
+        <div class="form-section" id="form-section">
+          <h3>{{ t.selected_plan }}</h3>
+          <div class="form-group">
+            <label for="coupon-input">{{ t.coupon_placeholder }}</label>
+            <div class="coupon-row">
+              <input type="text" id="coupon-input" class="input" placeholder="{{ t.coupon_placeholder }}" maxlength="64">
+              <button type="button" id="coupon-apply" class="btn-secondary">{{ t.coupon_apply }}</button>
+            </div>
+            <p class="coupon-msg" id="coupon-msg" aria-live="polite"></p>
+          </div>
+          {% if not user_logged_in %}
+          <div class="form-group">
+            <label for="email">{{ t.pay_email_label }} <span style="color:#dc2626;">*</span></label>
+            <input type="email" id="email" class="input" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" value="{{ user_email }}">
+          </div>
+          {% endif %}
+          <div class="form-group">
+            <label for="name">{{ t.pay_name_label }}</label>
+            <input type="text" id="name" class="input" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" value="{{ user_name }}">
+          </div>
+          <p class="error-msg" id="error-msg"></p>
+          <div class="payment-methods" role="region" aria-label="{{ t.accepted_payment_methods }}">
+            <p class="pm-title">{{ t.accepted_payment_methods }}</p>
+            <div class="pm-logos-wrap">
+              <div class="pm-logos">
+                <img src="/static/assets/visa.png" alt="Visa" width="60" height="20" loading="lazy" decoding="async" />
+                <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
+              </div>
+            </div>
+            <p class="pm-trust">{{ t.pm_trust_line }}</p>
+          </div>
+          <div class="cta-wrap">
+            <button type="button" class="cta-main" id="pay-now-btn" disabled aria-label="{{ t.pay_btn }}">
+              <span class="btn-text">{{ t.pay_btn }}</span>
+            </button>
+          </div>
+        </div>
+
+        <div class="iframe-section" id="iframe-section">
+          <div class="iframe-wrapper">
+            <div class="iframe-skeleton" id="iframe-skeleton"></div>
+            <iframe id="paytr-iframe" class="paytr-iframe" title="PayTR secure payment form" style="visibility:hidden;"></iframe>
+          </div>
+        </div>
+      </div>
+
+      <aside class="right-col">
+        <div class="summary-card">
+          <h3>{{ t.payment_summary }}</h3>
+          <p class="summary-plan summary-empty" id="summary-plan">{{ t.selected_plan }} —</p>
+          <p class="summary-total" id="summary-total">—<span class="currency">€</span></p>
+          <p class="summary-note">{{ t.no_extra_fees }}</p>
+          <p class="summary-note">{{ t.pay_processed_secure }}</p>
+        </div>
+      </aside>
+    </main>
+
+    <footer class="footer">
+      <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a>
+    </footer>
+  </div>
+
+  <script>
+(function(){
+  var t = {{ t_js }};
+  var plans = {{ plans_js }};
+  var userLoggedIn = {{ 'true' if user_logged_in else 'false' }};
+  var baseUrl = {{ base_url_js }};
+  var initUrl = baseUrl + '/paytr/init';
+  var selectedPlan = null;
+  var paymentInProgress = false;
+
+  var plansRow = document.getElementById('plans-row');
+  var formSection = document.getElementById('form-section');
+  var payNowBtn = document.getElementById('pay-now-btn');
+  var btnText = payNowBtn && payNowBtn.querySelector('.btn-text');
+  var iframeSection = document.getElementById('iframe-section');
+  var iframeSkeleton = document.getElementById('iframe-skeleton');
+  var paytrIframe = document.getElementById('paytr-iframe');
+  var summaryPlan = document.getElementById('summary-plan');
+  var summaryTotal = document.getElementById('summary-total');
+  var emailInput = document.getElementById('email');
+  var nameInput = document.getElementById('name');
+  var couponInput = document.getElementById('coupon-input');
+  var couponMsg = document.getElementById('coupon-msg');
+  var errorMsg = document.getElementById('error-msg');
+
+  function getSelectedCard() { return plansRow && plansRow.querySelector('.plan-card.selected'); }
+  function updateSummary() {
+    if (!summaryPlan || !summaryTotal) return;
+    if (!selectedPlan) {
+      summaryPlan.textContent = t.selected_plan + ' —';
+      summaryPlan.classList.add('summary-empty');
+      summaryTotal.innerHTML = '—<span class="currency">€</span>';
+      return;
+    }
+    var p = plans.find(function(x){ return x.code === selectedPlan; });
+    if (!p) return;
+    summaryPlan.textContent = p.label;
+    summaryPlan.classList.remove('summary-empty');
+    summaryTotal.innerHTML = p.price + '<span class="currency">€</span>';
+  }
+
+  function showError(msg) {
+    if (!errorMsg) return;
+    errorMsg.textContent = msg || t.pay_error_connection || 'Payment could not be processed.';
+    errorMsg.classList.add('visible');
+  }
+  function hideError() {
+    if (errorMsg) { errorMsg.classList.remove('visible'); errorMsg.textContent = ''; }
+  }
+
+  function setPayNowEnabled(enabled) {
+    if (!payNowBtn) return;
+    payNowBtn.disabled = !enabled;
+  }
+
+  function setButtonLoading(loading) {
+    if (!payNowBtn || !btnText) return;
+    if (loading) {
+      payNowBtn.disabled = true;
+      payNowBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text">' + (t.cta_loading || 'Processing…') + '</span>';
+    } else {
+      var label = t.pay_btn || 'Pay Now';
+      payNowBtn.innerHTML = '<span class="btn-text">' + label + '</span>';
+      payNowBtn.disabled = !selectedPlan;
+    }
+  }
+
+  function clearIframe() {
+    if (iframeSection) iframeSection.classList.remove('visible');
+    if (paytrIframe) { paytrIframe.src = ''; paytrIframe.style.visibility = 'hidden'; }
+    if (iframeSkeleton) { iframeSkeleton.classList.remove('hidden'); }
+    paymentInProgress = false;
+    setButtonLoading(false);
+  }
+
+  plansRow && plansRow.addEventListener('click', function(e) {
+    var card = e.target.closest('.plan-card');
+    if (!card || paymentInProgress) return;
+    var plan = card.getAttribute('data-plan');
+    if (!plan) return;
+    var prev = getSelectedCard();
+    if (prev) prev.classList.remove('selected');
+    card.classList.add('selected');
+    selectedPlan = plan;
+    updateSummary();
+    setPayNowEnabled(true);
+    hideError();
+    clearIframe();
+  });
+
+  plansRow && plansRow.addEventListener('keydown', function(e) {
+    if (e.key !== 'Enter' && e.key !== ' ') return;
+    var card = e.target.closest('.plan-card');
+    if (card) card.click();
+  });
+
+  document.getElementById('coupon-apply') && document.getElementById('coupon-apply').addEventListener('click', function() {
+    var code = couponInput ? couponInput.value.trim() : '';
+    if (!code) { if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; } return; }
+    if (!selectedPlan) { if (couponMsg) { couponMsg.textContent = 'Select a plan first.'; couponMsg.className = 'coupon-msg err'; } return; }
+    if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; }
+    fetch(baseUrl + '/api/coupon/validate?plan_code=' + encodeURIComponent(selectedPlan) + '&code=' + encodeURIComponent(code), { credentials: 'include' })
+      .then(function(r){ return r.json(); })
+      .then(function(d){
+        if (couponMsg) {
+          couponMsg.textContent = d.valid ? (t.coupon_success || 'Coupon applied.') : (d.reason || t.coupon_invalid || 'Invalid coupon.');
+          couponMsg.className = 'coupon-msg ' + (d.valid ? 'ok' : 'err');
+        }
+      })
+      .catch(function(){ if (couponMsg) { couponMsg.textContent = t.coupon_invalid || 'Invalid coupon.'; couponMsg.className = 'coupon-msg err'; } });
+  });
+
+  payNowBtn && payNowBtn.addEventListener('click', function() {
+    if (!selectedPlan || paymentInProgress) return;
+    var email = userLoggedIn ? (emailInput ? emailInput.value : '') : (emailInput ? emailInput.value.trim() : '');
+    if (!userLoggedIn && (!email || email.indexOf('@') < 0)) {
+      showError(t.pay_email_label ? 'Please enter a valid email.' : 'Geçerli bir e-posta girin.');
+      if (emailInput) { emailInput.focus(); emailInput.classList.add('err'); }
+      return;
+    }
+    if (emailInput) emailInput.classList.remove('err');
+    hideError();
+    paymentInProgress = true;
+    setButtonLoading(true);
+
+    var name = nameInput ? nameInput.value.trim() : '';
+    var coupon = couponInput ? couponInput.value.trim() : '';
+    var payload = { plan_code: selectedPlan, email: email || undefined, name: name || undefined, coupon_code: coupon || undefined };
+
+    fetch(initUrl, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      credentials: 'include',
+      body: JSON.stringify(payload)
+    })
+    .then(function(r) {
+      if (!r.ok) {
+        return r.json().then(function(d){
+          var msg = d.detail;
+          if (Array.isArray(msg)) msg = msg.map(function(x){ return x.msg || x; }).join(' ');
+          else if (typeof msg !== 'string') msg = 'Payment could not be processed.';
+          throw new Error(msg);
+        }).catch(function(e){ if (e instanceof Error) throw e; throw new Error('Payment could not be processed.'); });
+      }
+      return r.json();
+    })
+    .then(function(data) {
+      var token = data.token;
+      if (!token) throw new Error('No token');
+      var url = 'https://www.paytr.com/odeme/guvenli/' + token;
+      if (iframeSection) iframeSection.classList.add('visible');
+      if (paytrIframe) {
+        paytrIframe.onload = function() {
+          if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
+          paytrIframe.style.visibility = 'visible';
+        };
+        paytrIframe.src = url;
+      } else if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
+    })
+    .catch(function(err) {
+      paymentInProgress = false;
+      setButtonLoading(false);
+      showError(err && err.message ? err.message : (t.pay_error_connection || 'Payment could not be processed.'));
+    });
+  });
+
+  if (paytrIframe && !paytrIframe.onload) {
+    paytrIframe.onload = function() {
+      if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
+      paytrIframe.style.visibility = 'visible';
+    };
+  }
+
+  updateSummary();
+})();
+  </script>
+</body>
+</html>

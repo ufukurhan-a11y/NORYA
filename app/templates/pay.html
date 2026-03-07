@@ -16,7 +16,7 @@
     html{ -webkit-text-size-adjust: 100%; }
     body{
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
-      background: linear-gradient(180deg, #eef2f6 0%, #e2e8f0 100%);
+      background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 35%, #eef2f6 100%);
       color: #1a1a2e;
       min-height: 100vh;
       min-height: 100dvh;
@@ -37,7 +37,21 @@
     }
     .trust-bar span{ display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.02em; }
     .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; opacity: 0.9; }
-    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
+    .trust-bar .trust-bar-logo{ width: 16px; height: 16px; flex-shrink: 0; object-fit: contain; }
+    .trust-badges{
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 16px;
+      max-width: 1100px; margin: 0 auto; padding: 14px 24px 18px;
+      background: rgba(255,255,255,0.6); border-bottom: 1px solid rgba(0,0,0,0.05);
+    }
+    .trust-badges .trust-badge{
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.02em;
+    }
+    .trust-badges .trust-badge svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; opacity: 0.9; }
+    @media (min-width: 640px){
+      .trust-badges{ grid-template-columns: repeat(4, 1fr); justify-items: center; gap: 12px; padding: 12px 24px 16px; }
+    }
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
     .header{
       display: flex;
       align-items: center;
@@ -185,6 +199,7 @@
       transition: border-color 0.2s, box-shadow 0.2s;
       -webkit-appearance: none;
       appearance: none;
+      box-sizing: border-box;
     }
     .input::placeholder{ color: #94a3b8; }
     .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
@@ -231,6 +246,14 @@
 
     /* —— Ana CTA: fiyat ile görsel bütün, premium hover —— */
     .price-cta-highlight .cta-wrap{ margin-top: 0; margin-bottom: 0; }
+    .payment-methods{ margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06); min-width: 0; }
+    .payment-methods .pm-title{ font-size: 11px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 12px; }
+    .payment-methods .pm-logos-wrap{ display: inline-block; max-width: 100%; min-width: 0; padding: 14px 18px; background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+    .payment-methods .pm-logos{ display: flex; flex-wrap: wrap; align-items: center; gap: 18px; min-width: 0; }
+    .payment-methods .pm-logos img{ height: 20px; width: auto; max-width: 100%; min-width: 0; object-fit: contain; object-position: center; opacity: 0.96; transition: opacity 0.15s ease; flex-shrink: 0; }
+    .payment-methods .pm-logos img:hover{ opacity: 1; }
+    .payment-methods .pm-trust{ font-size: 12px; line-height: 1.55; color: #64748B; margin-top: 12px; margin-bottom: 0; }
+    @media (max-width: 360px){ .payment-methods .pm-logos img{ height: 18px; } .payment-methods .pm-logos-wrap{ padding: 12px 14px; } .payment-methods .pm-logos{ gap: 14px; } }
     .cta-wrap{ margin-top: 22px; }
     .cta-main{
       width: 100%;
@@ -256,6 +279,7 @@
     .cta-main:disabled{ opacity: 0.88; cursor: not-allowed; box-shadow: none; }
     .cta-main .spinner{ width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin{ to{ transform: rotate(360deg); } }
+    .pay-processed-secure{ font-size: 12px; color: #64748b; margin-bottom: 14px; line-height: 1.5; }
     .cta-trust-note{ font-size: 12px; color: #64748b; text-align: center; margin-top: 12px; line-height: 1.5; }
     .support-link{ display: block; text-align: center; margin-top: 10px; font-size: 13px; color: #64748b; text-decoration: none; }
     .support-link:hover{ color: #0EA5A4; }
@@ -320,6 +344,7 @@
       flex-shrink: 0;
     }
     .trust-mini-card .tc-icon svg{ width: 24px; height: 24px; color: #0EA5A4; }
+    .trust-mini-card .tc-icon img.tc-icon-logo{ width: 28px; height: 28px; object-fit: contain; }
     .trust-mini-card .tc-title{ font-size: 15px; font-weight: 800; color: #1a1a2e; margin-bottom: 10px; letter-spacing: -0.02em; line-height: 1.3; }
     .trust-mini-card .tc-desc{ font-size: 13px; color: #64748b; line-height: 1.5; flex: 1; }
     .trust-mini-card .tc-desc a{ color: #0EA5A4; text-decoration: none; font-weight: 500; }
@@ -339,6 +364,10 @@
     .testimonials-card .stars{ color: #c4b61d; font-size: 12px; margin-bottom: 4px; }
     .testimonials-card .corporate-line{ font-size: 11px; color: #94a3b8; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.06); line-height: 1.5; }
 
+    .pay-social-proof{ background: #fff; border-radius: 16px; border: 1px solid rgba(0,0,0,0.055); box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05); padding: 18px 20px; margin-bottom: 18px; }
+    .pay-social-proof .pay-social-item{ font-size: 12px; color: #64748b; line-height: 1.5; margin: 0 0 8px; display: flex; align-items: flex-start; gap: 8px; }
+    .pay-social-proof .pay-social-item:last-child{ margin-bottom: 0; }
+    .pay-social-proof .pay-social-item::before{ content: ''; display: inline-block; width: 4px; height: 4px; border-radius: 50%; background: #0EA5A4; opacity: 0.6; flex-shrink: 0; margin-top: 6px; }
     .trust-mini-card.accordion-wrap{ padding: 24px; min-height: auto; }
     .trust-mini-card.accordion-wrap .card-title{ margin-bottom: 14px; }
     .accordion{ border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; overflow: hidden; }
@@ -348,15 +377,23 @@
     .accordion details[open] summary::after{ content: '−'; }
     .accordion .acc-body{ padding: 14px 16px; font-size: 13px; color: #64748b; line-height: 1.52; border-top: 1px solid rgba(0,0,0,0.06); }
 
-    .footer{ text-align: center; padding: 28px 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid rgba(0,0,0,0.06); margin-top: 32px; }
-    .footer a{ color: #64748b; text-decoration: none; margin: 0 8px; }
+    .footer{ text-align: center; padding: 24px 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid rgba(0,0,0,0.06); margin-top: 32px; }
+    .footer a{ color: #64748b; text-decoration: none; }
     .footer a:hover{ color: #0EA5A4; }
-    .footer-merchant{ margin-bottom: 10px; font-size: 11px; color: #64748b; line-height: 1.5; }
+    .footer-links{ display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 4px 8px; margin-bottom: 8px; }
+    .footer-dot{ opacity: 0.6; margin: 0 2px; }
+    .footer-support{ margin-bottom: 6px; font-size: 13px; }
+    .footer-support a{ font-weight: 500; }
+    .footer-copy{ font-size: 11px; color: #94a3b8; margin: 0; }
 
     @media (max-width: 919px){
       .trust-bar{ padding: 10px 16px; gap: 8px 18px; }
       .trust-bar span{ font-size: 10px; }
       .trust-bar svg{ width: 14px; height: 14px; }
+      .trust-bar .trust-bar-logo{ width: 14px; height: 14px; }
+      .trust-badges{ padding: 12px 16px 14px; }
+      .trust-badges .trust-badge{ font-size: 10px; }
+      .wrap{ padding: 0 16px; }
       .checkout-inner{ padding: 24px 20px 30px; }
       .checkout-divider{ margin: 0 20px; }
       .right-col{ order: 2; }
@@ -367,8 +404,9 @@
       .price-block .total-value .currency{ font-size: 22px; }
       .cta-main{ min-height: 58px; font-size: 17px; }
       .trust-mini-card{ min-height: 0; padding: 20px; }
+      .pay-social-proof{ padding: 14px 16px; }
     }
-    @media (max-width: 380px){ .plan-segment{ flex-wrap: wrap; } }
+    @media (max-width: 380px){ .plan-segment{ flex-wrap: wrap; } .wrap{ padding: 0 12px; } }
     .sticky-bar{
       display: none;
       position: fixed;
@@ -399,12 +437,19 @@
   </style>
 </head>
 <body>
-  <div class="trust-bar" role="region" aria-label="Güvenlik">
+  <div class="trust-bar" role="region" aria-label="Security">
     <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d }}</span>
     <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_paytr }}</span>
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_cloudflare }}</span>
+    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="16" height="16" class="trust-bar-logo" loading="lazy" />{{ t.trust_cloudflare }}</span>
     <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_ssl }}</span>
     <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_card_no_storage }}</span>
+  </div>
+
+  <div class="trust-badges" role="region" aria-label="Trust">
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_badge_hipaa }}</span>
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_badge_gdpr }}</span>
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_badge_secure_checkout }}</span>
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4a2 2 0 00-4 0v16"/><path d="M6 20v-4a2 2 0 014 0v4"/></svg>{{ t.trust_badge_encrypted }}</span>
   </div>
 
   <div class="wrap">
@@ -449,12 +494,12 @@
               <section class="checkout-section price-cta-highlight">
                 <div class="campaign-block" id="campaign-block" aria-hidden="true" style="display:none;">
                   <div class="campaign-inner">
-                    <span class="campaign-tag">Aktif kampanya</span>
+                    <span class="campaign-tag">{{ t.campaign_active }}</span>
                     <div class="campaign-code" id="campaign-code"></div>
                     <div class="campaign-label" id="campaign-label"></div>
                     <p class="campaign-note" id="campaign-note"></p>
                     <button type="button" class="btn-secondary campaign-apply-btn" id="campaign-apply-btn" style="display:none;">Uygula</button>
-                    <p class="campaign-applied" id="campaign-applied" style="display:none;"><span class="campaign-applied-icon" aria-hidden="true">✓</span> İndirim uygulandı</p>
+                    <p class="campaign-applied" id="campaign-applied" style="display:none;"><span class="campaign-applied-icon" aria-hidden="true">✓</span> {{ t.campaign_discount_applied }}</p>
                   </div>
                 </div>
                 <div class="price-block">
@@ -467,6 +512,17 @@
                   <div class="total-value" id="total-price">{{ prices[plan_code] }}<span class="currency">€</span></div>
                   <p class="price-desc" id="price-desc">{% if plan_code == 'single_13eur' %}{{ t.price_once }}{% elif 'monthly' in plan_code %}{{ t.price_month }}{% else %}{{ t.price_year }}{% endif %}</p>
                   <p class="price-note">{{ t.kdv_dahil }}<span>·</span>{{ t.cancel_anytime }}<span>·</span>{{ t.active_after_payment }}</p>
+                </div>
+                <p class="pay-processed-secure">{{ t.pay_processed_secure }}</p>
+                <div class="payment-methods" role="region" aria-label="{{ t.accepted_payment_methods }}">
+                  <p class="pm-title">{{ t.accepted_payment_methods }}</p>
+                  <div class="pm-logos-wrap">
+                    <div class="pm-logos">
+                      <img src="/static/assets/visa.png" alt="Visa" width="60" height="20" loading="lazy" decoding="async" />
+                      <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
+                    </div>
+                  </div>
+                  <p class="pm-trust">{{ t.pm_trust_line }}</p>
                 </div>
                 <div class="cta-wrap">
                   <button type="button" class="cta-main" id="cta-main" aria-label="{{ t.pay_btn }}">
@@ -523,8 +579,13 @@
       </div>
 
       <aside class="right-col">
+        <div class="pay-social-proof">
+          <p class="pay-social-item">{{ t.pay_social_used }}</p>
+          <p class="pay-social-item">{{ t.pay_social_professional }}</p>
+          <p class="pay-social-item">{{ t.pay_social_multilang }}</p>
+        </div>
         <div class="trust-mini-card">
-          <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <div class="tc-icon"><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="Cloudflare" width="28" height="28" class="tc-icon-logo" loading="lazy" /></div>
           <h3 class="tc-title">{{ t.trust_card_title }}</h3>
           <p class="tc-desc">{{ t.trust_secure_desc }}</p>
         </div>
@@ -560,10 +621,17 @@
     </main>
 
     <footer class="footer">
-      <div class="footer-merchant">
-        <strong>NoryaAI</strong> · Ufuk Urhan · Banaz V.D. / 8940311420 · <a href="tel:+905071703564">+90 507 170 35 64</a> · <a href="mailto:support@noryaai.com">support@noryaai.com</a> · <a href="mailto:info@noryaai.com">info@noryaai.com</a> · 31 Ağustos Mah. Tomurcuk Aysaş Müh. No:2 İç Kapı No:4, Banaz/Uşak, Türkiye
+      <div class="footer-links">
+        <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a>
+        <span class="footer-dot">·</span>
+        <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a>
+        <span class="footer-dot">·</span>
+        <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a>
+        <span class="footer-dot">·</span>
+        <a href="{{ base_url }}/legal/iletisim">{{ t.merchant_contact_page }}</a>
       </div>
-      © {{ brand }} · <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a> · <a href="{{ base_url }}/iade-talebi">{{ t.refund_request_link }}</a> · <a href="{{ base_url }}/legal/iletisim">{{ t.merchant_contact_page }}</a>
+      <p class="footer-support"><a href="mailto:support@noryaai.com">support@noryaai.com</a></p>
+      <p class="footer-copy">© {{ brand }}</p>
     </footer>
   </div>
 
@@ -764,8 +832,10 @@
   var popupOpenLink = document.getElementById('popup-open-link');
   var formCard = document.getElementById('form-card');
   var samePageToggle = document.getElementById('same-page-toggle');
+  var paymentInProgress = false;
 
   function setLoading(loading) {
+    paymentInProgress = loading;
     var btnText = ctaMain && ctaMain.querySelector('.btn-text');
     if (ctaMain) {
       ctaMain.disabled = loading;
@@ -828,6 +898,7 @@
   }
 
   function onCtaClick() {
+    if (paymentInProgress) return;
     var useSame = samePageToggle && samePageToggle.checked;
     doCheckout(useSame);
   }

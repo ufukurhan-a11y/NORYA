@@ -2697,6 +2697,48 @@ def pay_page(
     )
 
 
+@app.get("/payment", response_class=HTMLResponse)
+def payment_page_premium(
+    request: Request,
+    lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+    current_user: User | None = Depends(get_current_user_optional),
+):
+    """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kart alanları sayfa içinde PayTR iframe ile."""
+    lang = (lang or "tr").lower()[:2]
+    if lang not in ("tr", "en", "de", "fr", "it", "es"):
+        lang = "tr"
+    t = get_pay_ui(lang)
+    base_url = str(request.base_url).rstrip("/")
+    plans = [
+        {"code": "single_13eur", "price": "13", "price_cents": 1300, "label_key": "plan_single", "product": "single"},
+        {"code": "monthly_50eur", "price": "50", "price_cents": 5000, "label_key": "plan_monthly", "product": "monthly"},
+        {"code": "yearly_99eur", "price": "99", "price_cents": 9900, "label_key": "plan_yearly", "product": "yearly", "best_value": True},
+    ]
+    for p in plans:
+        p["label"] = t.get(p["label_key"], p["code"])
+        p["benefits"] = get_plan_benefits(p["product"], lang)
+    user_logged_in = current_user is not None
+    user_email = (current_user.email or "").strip() if current_user else ""
+    user_name = (getattr(current_user, "full_name", None) or "").strip() if current_user else ""
+    return templates.TemplateResponse(
+        "payment_page.html",
+        {
+            "request": request,
+            "brand": BRAND_NAME,
+            "lang": lang,
+            "t": t,
+            "t_js": json.dumps(t),
+            "base_url": base_url,
+            "plans": plans,
+            "plans_js": json.dumps(plans),
+            "base_url_js": json.dumps(base_url),
+            "user_logged_in": user_logged_in,
+            "user_email": user_email,
+            "user_name": user_name,
+        },
+    )
+
+
 @app.get("/api/coupon/validate")
 def coupon_validate(
     code: str,
