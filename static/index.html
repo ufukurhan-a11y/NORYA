@@ -1563,43 +1563,41 @@
     #guest-checkout-modal.hidden, #payment-modal.hidden {
       pointer-events: none !important;
     }
-    /* WhatsApp FAB: safe-area uyumlu, yatay taşma yok, mobilde sadece ikon */
+    /* WhatsApp FAB: her zaman sadece ikon (kesilme yok), safe-area uyumlu */
     .wa-fab {
       position: fixed;
       left: auto;
       right: max(12px, env(safe-area-inset-right, 0));
       bottom: max(12px, env(safe-area-inset-bottom, 0));
       z-index: 40;
-      max-width: 56px;
+      width: 56px;
+      height: 56px;
+      min-width: 48px;
+      min-height: 48px;
+      padding: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
       box-shadow: 0 4px 20px rgba(37, 211, 102, 0.35);
       transform: none;
     }
-    .wa-fab-text { color: #fff; -webkit-tap-highlight-color: transparent; }
-    @media (max-width: 420px) {
-      .wa-fab .wa-fab-text { display: none; }
-      .wa-fab {
-        min-width: 44px; max-width: 52px; padding: 0;
-        right: max(14px, env(safe-area-inset-right, 0));
-        bottom: max(20px, env(safe-area-inset-bottom, 0));
-      }
-    }
+    .wa-fab .wa-fab-text { display: none !important; }
     @media (max-width: 639px) {
       .wa-fab {
-        min-height: 48px; min-width: 44px; padding-left: 12px; padding-right: 14px; font-size: 0.8125rem;
         right: max(16px, env(safe-area-inset-right, 0));
         bottom: max(24px, env(safe-area-inset-bottom, 0));
-        max-width: 160px;
+        width: 52px;
+        height: 52px;
+        min-width: 48px;
+        min-height: 48px;
       }
       .wa-fab:active { transform: scale(0.98); }
       body { padding-bottom: calc(80px + env(safe-area-inset-bottom, 0)); }
     }
-    @media (min-width: 421px) and (max-width: 639px) {
-      .wa-fab { max-width: 160px; }
-    }
     @media (min-width: 640px) {
-      .wa-fab { padding: 0; right: max(20px, env(safe-area-inset-right, 0)); bottom: max(14px, env(safe-area-inset-bottom, 0)); max-width: 56px; }
+      .wa-fab { right: max(20px, env(safe-area-inset-right, 0)); bottom: max(14px, env(safe-area-inset-bottom, 0)); width: 56px; height: 56px; }
     }
     /* Profile / Dashboard: Apple-level premium container + cards */
     #profile-section {
@@ -2138,7 +2136,7 @@
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
         <a href="#nasil-calisir" class="nav-link" data-nav="nasil-calisir" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
-        <a href="#fiyatlandirma" class="nav-link" data-nav="fiyatlandirma" data-i18n="nav_pricing">Fiyatlandırma</a>
+        <a href="/pay" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Kurumsal</a>
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
@@ -2211,7 +2209,7 @@
         <a href="#hakkimizda" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
         <a href="#nasil-calisir" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
-        <a href="#fiyatlandirma" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
+        <a href="/pay" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
         <a href="/blog" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
         <a href="#sss" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
@@ -2374,7 +2372,7 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-shrink-0">
           <button type="button" onclick="openRegister(); scrollToAnalyze();" class="cta-primary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] bg-[#0EA5A4] hover:bg-[#0d9488] text-white font-semibold text-sm sm:text-base shadow-[0_4px_14px_rgba(14,165,164,0.35)] hover:shadow-[0_6px_20px_rgba(14,165,164,0.4)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_start_analysis">Start analysis</button>
-          <a href="#fiyatlandirma" class="cta-secondary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] border-2 border-[#0EA5A4] text-[#0EA5A4] hover:bg-[#0EA5A4]/10 dark:hover:bg-[#0EA5A4]/20 font-semibold text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_view_pricing">View pricing</a>
+          <a href="/pay" class="cta-secondary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] border-2 border-[#0EA5A4] text-[#0EA5A4] hover:bg-[#0EA5A4]/10 dark:hover:bg-[#0EA5A4]/20 font-semibold text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_view_pricing">View pricing</a>
         </div>
       </div>
     </div>
@@ -4156,20 +4154,19 @@
                   <span class="report-sticky-bar-pill" data-i18n="report_pill_pdf">Shareable PDF</span>
                 </div>
                 <div class="report-sticky-bar-actions">
-                  <button type="button" id="report-bar-pdf-btn" class="btn-report-pdf" onclick="downloadReportPdf()" data-i18n="report_download">Raporu İndir</button>
+                  <button type="button" id="report-bar-pdf-btn" class="btn-report-pdf" onclick="downloadReportPdf()" data-report-download-pdf data-i18n="report_download">Raporu İndir</button>
                   <button type="button" id="report-bar-doctor-btn" class="btn-report-doctor" onclick="downloadForDoctor()" data-i18n="report_for_doctor">Doktoruma götür</button>
                   <button type="button" id="report-bar-share-btn" class="btn-report-share no-print" onclick="shareReport()" data-i18n="report_share">Paylaş</button>
                   <a href="#" id="report-bar-pro-view-link" class="btn-report-pro-view no-print" onclick="openReportAsPro(); return false;" data-i18n="report_open_as_pro">Pro görünümünde aç</a>
-                  <a href="/pricing?from=report" id="report-bar-upgrade-btn" class="btn-report-upgrade no-print" data-i18n="report_upgrade_btn">Upgrade</a>
+                  <a href="/pay?from=report" id="report-bar-upgrade-btn" class="btn-report-upgrade no-print" data-i18n="report_upgrade_btn">Upgrade</a>
                 </div>
               </div>
               <!-- Raporumu indir — SONUÇ EKRANINDA EN ÜSTTE, MUTLAKA GÖRÜNSÜN -->
               <div id="report-download-cta" class="report-download-cta report-download-cta--prominent no-print" style="display: flex !important; visibility: visible !important;">
                 <div class="report-download-cta-inner">
                   <span class="report-download-cta-label" data-i18n="report_download_cta_label">Raporunuzu indirin</span>
-                  <button type="button" onclick="downloadReportPdf()" id="report-download-main-btn" class="report-download-main-btn report-download-main-btn--large" data-i18n="report_download">Raporu İndir</button>
+                  <button type="button" onclick="downloadReportPdf()" id="report-download-main-btn" class="report-download-main-btn report-download-main-btn--large" data-report-download-pdf data-i18n="report_download">Raporu İndir</button>
                   <button type="button" onclick="downloadForDoctor()" class="report-download-secondary-btn" data-i18n="report_for_doctor">Doktoruma götür</button>
-                  <a href="#" id="report-download-link" class="report-download-link" data-i18n="report_download_link">Raporumu indir (PDF)</a>
                 </div>
               </div>
               <!-- 2) Hero — premium elite (badge when free) -->
@@ -4186,7 +4183,7 @@
               <div class="p-4 sm:p-6">
                 <!-- Her zaman görünen rapor aksiyonları: İndir + Doktoruma götür -->
                 <div id="report-actions-inline" class="report-actions-inline no-print flex flex-wrap items-center justify-center sm:justify-start gap-3 mb-6 p-4 rounded-2xl bg-[#0EA5A4]/08 dark:bg-[#0EA5A4]/12 border border-[#0EA5A4]/20">
-                  <button type="button" onclick="downloadReportPdf()" id="report-inline-pdf-btn" class="report-action-btn report-action-btn--primary min-h-[44px] px-5 py-2.5 rounded-xl bg-[#0EA5A4] text-white font-semibold text-sm hover:bg-[#0d9488] transition shadow-sm" data-i18n="report_download">Raporu İndir</button>
+                  <button type="button" onclick="downloadReportPdf()" id="report-inline-pdf-btn" class="report-action-btn report-action-btn--primary min-h-[44px] px-5 py-2.5 rounded-xl bg-[#0EA5A4] text-white font-semibold text-sm hover:bg-[#0d9488] transition shadow-sm" data-report-download-pdf data-i18n="report_download">Raporu İndir</button>
                   <button type="button" onclick="downloadForDoctor()" class="report-action-btn report-action-btn--outline min-h-[44px] px-5 py-2.5 rounded-xl border-2 border-[#0EA5A4] text-[#0EA5A4] font-semibold text-sm hover:bg-[#0EA5A4]/10 transition" data-i18n="report_for_doctor">Doktoruma götür</button>
                   <button type="button" onclick="shareReport()" class="report-action-btn report-action-btn--secondary min-h-[44px] px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-medium text-sm hover:bg-slate-50 dark:hover:bg-slate-800/50 transition" data-i18n="report_share">Paylaş</button>
                 </div>
@@ -4209,7 +4206,7 @@
                       <li><span class="report-upgrade-check" aria-hidden="true">✓</span> <span data-i18n="report_unlock_trends">Trend tracking</span></li>
                     </ul>
                     <p id="report-upgrade-guarantee" class="report-upgrade-guarantee" data-i18n="report_flexible_cancel">Flexible cancellation</p>
-                    <a href="/pricing?from=report" id="report-upgrade-cta" class="report-upgrade-btn report-upgrade-btn--elite" data-i18n="report_upgrade_now">Upgrade now</a>
+                    <a href="/pay?from=report" id="report-upgrade-cta" class="report-upgrade-btn report-upgrade-btn--elite" data-i18n="report_upgrade_now">Upgrade now</a>
                   </div>
                 </section>
                 <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
@@ -4218,10 +4215,10 @@
                 Norya • <span data-i18n="disclaimer_informative">Bilgilendirme amaçlıdır</span> • support@noryaai.com
               </footer>
               <!-- Floating upgrade CTA (shown when free, hidden when premium) -->
-              <button type="button" id="report-floating-upgrade" class="report-floating-upgrade report-floating-upgrade--hidden no-print" onclick="window.location.href='/pricing?from=report'" data-i18n="report_upgrade_btn">Upgrade</button>
+              <button type="button" id="report-floating-upgrade" class="report-floating-upgrade report-floating-upgrade--hidden no-print" onclick="window.location.href='/pay?from=report'" data-i18n="report_upgrade_btn">Upgrade</button>
               <!-- Mobil: no-print aksiyonlar -->
               <div id="analyze-result-mobile-actions" class="no-print sm:hidden sticky bottom-0 left-0 right-0 z-10 px-4 py-3 bg-white dark:bg-navy-800 border-t border-primary-200 dark:border-primary-700 flex flex-wrap gap-2 justify-center">
-                <button type="button" onclick="downloadReportPdf()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-[var(--norya-brand)] text-white font-semibold text-sm" data-i18n="report_download">Raporu İndir</button>
+                <button type="button" onclick="downloadReportPdf()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-[var(--norya-brand)] text-white font-semibold text-sm" data-report-download-pdf data-i18n="report_download">Raporu İndir</button>
                 <button type="button" onclick="downloadForDoctor()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl border-2 border-[var(--norya-brand)] text-[var(--norya-brand)] font-semibold text-sm" data-i18n="report_for_doctor">Doktoruma götür</button>
                 <button type="button" onclick="shareReport()" class="flex-1 min-w-[100px] px-4 py-3 rounded-xl border-2 border-navy-200 dark:border-navy-600 font-medium text-sm" data-i18n="report_share">Paylaş</button>
               </div>
@@ -5051,7 +5048,7 @@
         <div class="h-3 rounded-full bg-accent-200 dark:bg-accent-700 overflow-hidden mb-6">
           <div id="profile-usage-bar" class="h-full rounded-full bg-primary-500 transition-all duration-300" style="width: 0%"></div>
         </div>
-        <a href="#fiyatlandirma" onclick="closeProfilePage(); document.getElementById('odeme-section') && document.getElementById('odeme-section').classList.add('hidden');" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition" data-i18n="profile_upgrade_cta">Paket Yükselt</a>
+        <a href="/pay" onclick="closeProfilePage();" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition" data-i18n="profile_upgrade_cta">Paket Yükselt</a>
       </div>
 
       <!-- Panel: Analiz Geçmişi -->
@@ -5229,9 +5226,9 @@
   </footer>
 
   <!-- WhatsApp: mobilde yazı + ikon, masaüstünde yuvarlak ikon; renk ve konum mobil uyumlu -->
-  <a href="https://wa.me/905071703564?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum" target="_blank" rel="noopener noreferrer" class="wa-fab flex items-center justify-center gap-2 rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2 min-h-[48px] py-2 pl-3 pr-4 sm:pl-0 sm:pr-0 sm:w-14 sm:h-14 sm:min-h-0 sm:py-0" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
-    <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="w-7 h-7 sm:w-8 sm:h-8 flex-shrink-0 opacity-100" width="28" height="28" style="opacity:1;filter:none;" />
-    <span class="wa-fab-text text-sm font-semibold text-white sm:sr-only" style="color:#fff;">WhatsApp</span>
+  <a href="https://wa.me/905071703564?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum" target="_blank" rel="noopener noreferrer" class="wa-fab rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
+    <img src="/static/images/whatsapp-icon-white.svg" alt="" class="w-8 h-8 flex-shrink-0 opacity-100" width="32" height="32" style="opacity:1;filter:none;" />
+    <span class="wa-fab-text sr-only">WhatsApp</span>
   </a>
 
   <!-- Login Modal: e-posta + şifre -->
@@ -5658,15 +5655,54 @@
         toast('Bağlantı hatası. Lütfen tekrar deneyin.', 'error');
       }
     }
-    async function downloadReportPdf() {
-      if (typeof console !== 'undefined' && console.log) console.log('[PDF] Raporu İndir tıklandı, getReportId()=', getReportId());
-      var rid = getReportId();
+    var reportDownloadState = { isDownloading: false, activeDownloadKey: null, lastTriggerAt: 0 };
+    var REPORT_DOWNLOAD_DEBOUNCE_MS = 1800;
+
+    function setReportDownloadLoading(loading) {
+      reportDownloadState.isDownloading = loading;
+      if (!loading) reportDownloadState.activeDownloadKey = null;
+      var btns = document.querySelectorAll('[data-report-download-pdf]');
       var t = T[getLang()] || T.tr;
+      var labelNormal = t.report_download || 'Raporu İndir';
+      var labelLoading = t.report_download_loading || 'PDF hazırlanıyor...';
+      for (var i = 0; i < btns.length; i++) {
+        var btn = btns[i];
+        if (loading) {
+          btn.setAttribute('aria-busy', 'true');
+          btn.disabled = true;
+          btn.classList.add('report-download-loading');
+          btn.dataset.reportDownloadOriginalText = (btn.textContent || '').trim();
+          var spinner = btn.querySelector('.report-download-spinner');
+          if (!spinner) {
+            spinner = document.createElement('span');
+            spinner.className = 'report-download-spinner';
+            spinner.setAttribute('aria-hidden', 'true');
+          }
+          btn.textContent = '';
+          btn.appendChild(spinner);
+          btn.appendChild(document.createTextNode(' ' + labelLoading));
+        } else {
+          btn.removeAttribute('aria-busy');
+          btn.disabled = false;
+          btn.classList.remove('report-download-loading');
+          var sp = btn.querySelector('.report-download-spinner');
+          if (sp) sp.remove();
+          btn.textContent = btn.dataset.reportDownloadOriginalText || labelNormal;
+        }
+      }
+    }
+
+    async function downloadReportPdf() {
+      var t = T[getLang()] || T.tr;
+      if (reportDownloadState.isDownloading) return;
+      var now = Date.now();
+      if (now - reportDownloadState.lastTriggerAt < REPORT_DOWNLOAD_DEBOUNCE_MS) return;
       var token = getToken();
       if (!token) {
         toast(t.toast_analyze_first || 'Rapor indirmek için giriş yapın.', 'error');
         return;
       }
+      var rid = getReportId();
       var historyFetchFailed = false;
       if (!rid) {
         try {
@@ -5685,57 +5721,52 @@
                 window.history.replaceState(null, '', (window.location.pathname || '/') + '?' + qs.toString());
               }
             }
-          } else {
-            historyFetchFailed = true;
-            if (typeof console !== 'undefined' && console.error) console.error('[PDF] History fetch not OK:', r.status, r.statusText);
-          }
-        } catch (historyErr) {
-          historyFetchFailed = true;
-          if (typeof console !== 'undefined' && console.error) console.error('[PDF] History fetch error:', historyErr);
-        }
+          } else { historyFetchFailed = true; }
+        } catch (_) { historyFetchFailed = true; }
       }
       if (!rid) {
         if (historyFetchFailed) {
-          toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
+          toast(t.toast_pdf_error || 'PDF indirilemedi, lütfen tekrar deneyin.', 'error');
         } else {
           toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error');
         }
         return;
       }
-      var tokenUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf-token';
-      if (typeof console !== 'undefined' && console.log) console.log('[PDF] Token URL:', tokenUrl);
+      var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+      var plan = (params && (params.get('plan') || '')).trim() || 'default';
+      var downloadKey = 'pdf_' + rid + '_' + plan;
+      if (reportDownloadState.activeDownloadKey === downloadKey) return;
+      reportDownloadState.isDownloading = true;
+      reportDownloadState.activeDownloadKey = downloadKey;
+      reportDownloadState.lastTriggerAt = Date.now();
+      setReportDownloadLoading(true);
+      var blobUrl = null;
       try {
+        var tokenUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf-token';
         var tokenRes = await fetch(tokenUrl, { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
-        if (typeof console !== 'undefined' && console.log) console.log('[PDF] Token response status:', tokenRes.status, tokenRes.statusText);
         if (!tokenRes.ok) {
           var errBody = await tokenRes.text();
-          var errMsg = 'Rapor indirilemedi (HTTP ' + tokenRes.status + ').';
-          try {
-            var j = JSON.parse(errBody);
-            if (j.detail) errMsg = typeof j.detail === 'string' ? j.detail : (j.detail.msg || errMsg);
-          } catch (_) {}
+          var errMsg = t.toast_pdf_error || 'PDF indirilemedi, lütfen tekrar deneyin.';
+          try { var j = JSON.parse(errBody); if (j.detail) errMsg = typeof j.detail === 'string' ? j.detail : (j.detail.msg || errMsg); } catch (_) {}
           toast(errMsg, 'error');
           return;
         }
         var data = await tokenRes.json();
         var accessToken = data && data.access_token;
         if (!accessToken) {
-          toast('Rapor linki alınamadı.', 'error');
+          toast(t.toast_pdf_error || 'PDF indirilemedi, lütfen tekrar deneyin.', 'error');
           return;
         }
         var q = 'access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'en');
-        var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
         if (params && (params.get('plan') === 'monthly' || params.get('plan') === 'yearly')) q += '&scope=pro';
         var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf?' + q;
-        if (typeof console !== 'undefined' && console.log) console.log('[PDF] Fetching PDF for download');
         var pdfRes = await fetch(pdfUrl, { credentials: 'include' });
         if (!pdfRes.ok) {
-          toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
-          if (typeof console !== 'undefined' && console.error) console.error('[PDF] PDF fetch failed:', pdfRes.status);
+          toast(t.toast_pdf_error || 'PDF indirilemedi, lütfen tekrar deneyin.', 'error');
           return;
         }
         var pdfBlob = await pdfRes.blob();
-        var blobUrl = URL.createObjectURL(pdfBlob);
+        blobUrl = URL.createObjectURL(pdfBlob);
         var a = document.createElement('a');
         a.href = blobUrl;
         a.download = 'norya-rapor-' + rid + '.pdf';
@@ -5743,13 +5774,13 @@
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
-        URL.revokeObjectURL(blobUrl);
         toast(t.toast_report_pdf || 'Rapor PDF olarak indirildi.', 'success');
       } catch (e) {
-        var errMsg = t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.';
-        if (e && e.message) errMsg = e.message;
-        toast(errMsg, 'error');
-        if (typeof console !== 'undefined' && console.error) console.error('[PDF] Error (token/fetch/open):', e);
+        toast(t.toast_pdf_error || 'PDF indirilemedi, lütfen tekrar deneyin.', 'error');
+        if (typeof console !== 'undefined' && console.error) console.error('[PDF] Error:', e);
+      } finally {
+        if (blobUrl) try { URL.revokeObjectURL(blobUrl); } catch (_) {}
+        setReportDownloadLoading(false);
       }
     }
     async function downloadForDoctor() {
@@ -6010,7 +6041,7 @@
       var html = '';
       html += '<div class="premium-clinical-wrap' + (locked ? ' report-premium-locked' : '') + '">';
       if (locked) {
-        html += '<div class="premium-locked-overlay"><span class="premium-lock-ico" aria-hidden="true">&#128274;</span><p class="premium-locked-text">' + escapeHtml(t.report_premium_badge || 'Premium') + '</p><a href="/pricing?from=report" class="premium-cta-btn">' + escapeHtml(upgradeLabel) + '</a></div>';
+        html += '<div class="premium-locked-overlay"><span class="premium-lock-ico" aria-hidden="true">&#128274;</span><p class="premium-locked-text">' + escapeHtml(t.report_premium_badge || 'Premium') + '</p><a href="/pay?from=report" class="premium-cta-btn">' + escapeHtml(upgradeLabel) + '</a></div>';
       }
       html += '<section class="section-card report-disclaimer-card"><div class="section-title report-sec-icon">' + reportIcon('info') + '</div><div class="section-body"><p class="report-refined-disclaimer">' + escapeHtml(t.report_refined_disclaimer || 'This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.') + '</p></div></section>';
       html += '<section class="section-card report-executive-summary"><div class="section-title report-sec-icon">' + reportIcon('fileText') + ' ' + escapeHtml(t.report_executive_summary || 'Executive Summary') + '</div><div class="section-body"><p class="report-executive-text">' + escapeHtml(executiveSummary) + '</p></div></section>';
@@ -6411,11 +6442,11 @@
       var blurClass = !isGateUnlocked ? ' report-premium-blur' : '';
       html += '<div id="report-premium-risk" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</h3><ul class="report-bullets"><li>May indicate cardiovascular or metabolic factors. Discuss with your clinician.</li><li>Lifestyle and diet may support overall wellness.</li></ul></div>';
-      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_hematology || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</span><a href="/pay?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_hematology || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
       html += '<div id="report-premium-nextsteps" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</h3><ul class="report-bullets"><li>Nutrition: Balanced diet; discuss any deficiencies with your doctor.</li><li>Sleep: Adequate rest supports recovery.</li><li>Movement: Regular physical activity is recommended.</li><li>Follow-up: Discuss retest timing with your clinician.</li></ul></div>';
-      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_weekly_plan || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</span><a href="/pay?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_weekly_plan || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
       html += '<div id="report-premium-trends" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</h3>';
@@ -6435,7 +6466,7 @@
         html += '</div>';
       } else html += '<p class="trend-placeholder text-sm">' + escapeHtml(t.report_trend_need_more || 'Trend becomes available with more reports over time.') + '</p>';
       html += '</div>';
-      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/pricing?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_detail || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/pay?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_detail || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
       return html;
     }
@@ -6497,7 +6528,8 @@
       var pdfBtn = document.getElementById('report-bar-pdf-btn');
       if (pdfBtn) {
         pdfBtn.textContent = t.report_download || 'Raporu İndir';
-        if (isPremium) { pdfBtn.classList.remove('btn-report-pdf--locked'); pdfBtn.onclick = function() { downloadReportPdf(); }; } else { pdfBtn.classList.add('btn-report-pdf--locked'); pdfBtn.onclick = function() { window.location.href = '/pricing?from=report'; }; }
+        pdfBtn.dataset.reportDownloadOriginalText = t.report_download || 'Raporu İndir';
+        if (isPremium) { pdfBtn.classList.remove('btn-report-pdf--locked'); pdfBtn.onclick = function() { downloadReportPdf(); }; } else { pdfBtn.classList.add('btn-report-pdf--locked'); pdfBtn.onclick = function() { window.location.href = '/pay?from=report'; }; }
       }
       var doctorBtn = document.getElementById('report-bar-doctor-btn');
       if (doctorBtn) doctorBtn.textContent = t.report_for_doctor || 'Doktoruma götür';
@@ -6506,17 +6538,14 @@
       var inlinePdfBtn = document.getElementById('report-inline-pdf-btn');
       if (inlinePdfBtn) {
         inlinePdfBtn.textContent = t.report_download || 'Raporu İndir';
-        if (isPremium) { inlinePdfBtn.onclick = function() { downloadReportPdf(); }; inlinePdfBtn.classList.remove('report-action-btn--locked'); } else { inlinePdfBtn.onclick = function() { window.location.href = '/pricing?from=report'; }; inlinePdfBtn.classList.add('report-action-btn--locked'); }
+        inlinePdfBtn.dataset.reportDownloadOriginalText = t.report_download || 'Raporu İndir';
+        if (isPremium) { inlinePdfBtn.onclick = function() { downloadReportPdf(); }; inlinePdfBtn.classList.remove('report-action-btn--locked'); } else { inlinePdfBtn.onclick = function() { window.location.href = '/pay?from=report'; }; inlinePdfBtn.classList.add('report-action-btn--locked'); }
       }
       var mainDownloadBtn = document.getElementById('report-download-main-btn');
       if (mainDownloadBtn) {
         mainDownloadBtn.textContent = t.report_download || 'Raporu İndir';
-        if (isPremium) { mainDownloadBtn.onclick = function() { downloadReportPdf(); }; mainDownloadBtn.classList.remove('report-download-main-btn--locked'); } else { mainDownloadBtn.onclick = function() { window.location.href = '/pricing?from=report'; }; mainDownloadBtn.classList.add('report-download-main-btn--locked'); }
-      }
-      var downloadLink = document.getElementById('report-download-link');
-      if (downloadLink) {
-        downloadLink.textContent = t.report_download_link || 'Raporumu indir (PDF)';
-        if (isPremium) { downloadLink.href = '#'; downloadLink.onclick = function(e) { e.preventDefault(); downloadReportPdf(); }; downloadLink.classList.remove('report-download-link--locked'); } else { downloadLink.href = '/pricing?from=report'; downloadLink.onclick = null; downloadLink.classList.add('report-download-link--locked'); }
+        mainDownloadBtn.dataset.reportDownloadOriginalText = t.report_download || 'Raporu İndir';
+        if (isPremium) { mainDownloadBtn.onclick = function() { downloadReportPdf(); }; mainDownloadBtn.classList.remove('report-download-main-btn--locked'); } else { mainDownloadBtn.onclick = function() { window.location.href = '/pay?from=report'; }; mainDownloadBtn.classList.add('report-download-main-btn--locked'); }
       }
       var reportLimitedPreview = opts && opts.ui_hints && opts.ui_hints.report_limited_preview === true;
       var upgradeSection = document.getElementById('report-upgrade-section');
@@ -6969,7 +6998,7 @@
         report_params_title: "Parametreler", report_ref_range: "Ref", report_score_out_of: "Skor", report_risk_factors: "Risk Faktörleri", report_next_steps: "Sonuç ve Sonraki Adımlar", report_trends: "Trendler",
         report_unlock_full: "Tam raporu aç", report_unlock_full_subscribe: "Hepsini görmek için aylık veya yıllık abonelik alın", report_unlock_desc: "PDF indirme, detaylı içgörüler, trend takibi ve kişiselleştirilmiş sonraki adımlara erişin.", report_unlock_pdf: "PDF indirme", report_unlock_insights: "Detaylı içgörüler", report_unlock_trends: "Trend takibi",
         report_flexible_cancel: "Esnek iptal.", report_upgrade_now: "Şimdi yükselt", report_upgrade_btn: "Yükselt",
-        alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_download_cta_label: "Raporunuzu indirin", report_download_link: "Raporumu indir (PDF)", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_open_as_pro: "Pro görünümünde aç", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
+        alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_download_cta_label: "Raporunuzu indirin", report_download_loading: "PDF hazırlanıyor...", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_open_as_pro: "Pro görünümünde aç", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
         wizard_step1_title: "Dosya veya metin", wizard_step2_title: "Önizleme ve dil", wizard_step3_title: "Raporunuz hazırlanıyor", wizard_drop: "Dosyayı buraya sürükleyin veya tıklayın", wizard_back: "Geri", wizard_next: "Sonraki", wizard_preview_text: "Metin girişi", wizard_lang: "Rapor dili", wizard_step3_time: "Ortalama 20–30 saniye sürer.",
         pdf_header_title: "Kan Tahlili Analiz Raporu", pdf_footer_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya",
         pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler", pdf_sec_diet: "Diyet planı", pdf_sec_supplements: "Takviye önerileri", pdf_sec_heart: "Kalp sağlığı",
@@ -7313,7 +7342,7 @@
         analyze_doctor_notes_label: "Your doctor's note / extra info (optional)",
         analyze_doctor_notes_placeholder: "E.g. My doctor prescribed B12; please consider with these results.",
         analyze_or: "— or —", analyze_upload_btn: "Upload PDF or image (JPG, PNG)",
-        report_title: "Norya Analysis Report", report_download: "Download report", report_download_cta_label: "Download your report", report_download_link: "Download my report (PDF)", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_open_as_pro: "Open as Pro view", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
+        report_title: "Norya Analysis Report", report_download: "Download report", report_download_cta_label: "Download your report", report_download_loading: "Preparing PDF...", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_open_as_pro: "Open as Pro view", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
         report_bar_title: "Report", report_pill_secure: "Secure • Encrypted", report_pill_3d: "3D Secure Payments", report_pill_global: "Global lab units", report_pill_pdf: "Shareable PDF",
         report_hero_title: "Your Health Report", report_hero_sub: "A structured, clinician-style summary of your lab results.",
         report_demo_badge: "Upgrade for full report", report_upgrade_elite_label: "Unlock full report",
@@ -10039,6 +10068,7 @@
       var plan = params.get('plan');
       if (plan) setCompareActivePlan(plan);
     })();
+    var PAY_PLAN_CODES = { single: 'single_13eur', monthly: 'monthly_50eur', yearly: 'yearly_99eur' };
     function goToCheckout(planKey) {
       var pid = PLAN_IDS[planKey] || planKey;
       if (pid === 'free') {
@@ -10047,7 +10077,11 @@
         return;
       }
       if (!['single','monthly','yearly'].includes(pid)) return;
-      openCheckout(pid);
+      var planCode = PAY_PLAN_CODES[pid];
+      var lang = typeof getLang === 'function' ? getLang() : '';
+      var qs = 'plan=' + encodeURIComponent(planCode);
+      if (lang && lang !== 'tr') qs += '&lang=' + encodeURIComponent(lang);
+      window.location.href = '/pay?' + qs;
     }
     function showCheckoutPage() {
       var sec = document.getElementById('odeme-section');

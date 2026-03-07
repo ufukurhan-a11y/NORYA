@@ -955,6 +955,39 @@
   color: #64748b;
 }
 
+/* Report PDF download: loading state — tek indirme, duplicate koruma */
+[data-report-download-pdf].report-download-loading,
+.report-download-main-btn.report-download-loading,
+.btn-report-pdf.report-download-loading,
+.report-action-btn.report-download-loading {
+  pointer-events: none;
+  cursor: wait;
+  opacity: 0.85;
+  min-width: 8.5rem;
+}
+.report-download-main-btn--large.report-download-loading {
+  min-width: 11rem;
+}
+[data-report-download-pdf].report-download-loading:hover,
+.report-download-main-btn.report-download-loading:hover,
+.btn-report-pdf.report-download-loading:hover {
+  filter: none;
+}
+.report-download-loading .report-download-spinner {
+  display: inline-block;
+  width: 1em;
+  height: 1em;
+  margin-right: 0.5em;
+  vertical-align: -0.15em;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: report-download-spin 0.7s linear infinite;
+}
+@keyframes report-download-spin {
+  to { transform: rotate(360deg); }
+}
+
 /* 1) Sticky report bar */
 .report-sticky-bar {
   position: sticky;
@@ -1935,10 +1968,10 @@
   background: #fff;
 }
 
-/* 9) Floating upgrade CTA */
+/* 9) Floating upgrade CTA — WhatsApp FAB'ın üstünde, çakışmasın diye yukarıda */
 .report-floating-upgrade {
   position: fixed;
-  bottom: 1.5rem;
+  bottom: 5rem;
   right: 1.5rem;
   z-index: 40;
   display: flex;
@@ -1964,7 +1997,7 @@
 .report-floating-upgrade.report-floating-upgrade--hidden { display: none; }
 @media (max-width: 767px) {
   .report-floating-upgrade {
-    bottom: 1rem;
+    bottom: 4.25rem;
     right: 1rem;
     padding: 0.625rem 1rem;
     font-size: 0.875rem;

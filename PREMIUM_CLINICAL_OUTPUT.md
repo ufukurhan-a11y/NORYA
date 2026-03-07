@@ -73,10 +73,10 @@
   - **premiumPdf** = plan in ("single", "monthly", "yearly") → Premium PDF şablonu, gauge + health score PDF’de ve UI’da açık.
   - **premiumTrend** = plan in ("monthly", "yearly") → Trend verisi ve trend grafiği sadece bu planlarda açık.
   - **premiumUI** = premiumPdf → Gauge + health score UI’da kilitli değil; trend sadece premiumTrend’de açık.
-  - **Free plan:** Locked overlay + "Premium'a Geç" → `/pricing?from=report`.
+  - **Free plan:** Locked overlay + "Premium'a Geç" → `/pay?from=report`.
 - **Risk engine:** `overall_score` ağırlıklı ortalama; `overall_level`: 0-33 low, 34-66 mid, 67-100 high. Domain skorları 0-100.
 - **Trend:** Premium kullanıcı için son 3 analiz (mevcut hariç) çekilir; `dates`, `ldl`, `glucose`, `crp` doldurulur. Yoksa `trend: null` ve metin: "Trend için daha fazla analiz gerekli."
-- **Frontend:** Premium ise skor kartı, gauge ve trend tam görünür. Free ise aynı alanlar blur + kilit overlay + "Premium'a Geç" → `/pricing?from=report`.
+- **Frontend:** Premium ise skor kartı, gauge ve trend tam görünür. Free ise aynı alanlar blur + kilit overlay + "Premium'a Geç" → `/pay?from=report`.
 - **PDF:** Premium plan için `report_premium.html` (Sağlık Skoru, Risk Göstergesi, Trend Analizi); gauge stroke-dasharray; trend mini bar SVG. Basic için `report_pdf.html`. Header/footer running element, break-inside: avoid, tüm başlıklar i18n.
 - **RTL:** ` report_premium.html` ve `report_premium.css` içinde `dir="{{ 'rtl' if lang in ['ar','he'] else 'ltr' }}"` ve `[dir="rtl"]` mevcut.
 - **i18n:** İstenen key’ler TR/EN/DE/FR/ES/IT/AR/HE/HI/EL/CS/SR için PDF_LABELS ve (TR/EN için) frontend T’ye eklendi.
