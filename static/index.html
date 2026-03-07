@@ -189,14 +189,30 @@
       -webkit-backdrop-filter: blur(18px);
     }
     .rounded-14 { border-radius: 14px; }
-    /* Health Score kartı: premium, taşma yok */
+    /* Health Score kartı: premium, kurumsal (trust-global ile aynı dil) */
     .health-score-section .premium-wrap { padding-left: 1rem; padding-right: 1rem; }
     .health-score-card {
+      position: relative;
+      overflow: hidden;
       border-radius: 18px;
-      box-shadow: 0 20px 48px rgba(15, 23, 42, 0.08), 0 4px 16px rgba(14, 165, 164, 0.06);
+      border: 1px solid rgba(15,23,42,0.06);
+      background: linear-gradient(180deg, rgba(14,165,164,0.05) 0%, rgba(255,255,255,0.98) 18%);
+      box-shadow: 0 4px 16px rgba(15, 23, 42, 0.06), 0 2px 8px rgba(14, 165, 164, 0.04);
+    }
+    .health-score-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: #0EA5A4;
+      opacity: 0.9;
     }
     .dark .health-score-card {
-      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.2), 0 0 0 1px rgba(255, 255, 255, 0.06);
+      border-color: rgba(255,255,255,0.08);
+      background: linear-gradient(180deg, rgba(14,165,164,0.08) 0%, rgba(30,41,59,0.5) 18%);
+      box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
     }
     @media (max-width: 639px) {
       .health-score-section { padding-bottom: 1.5rem; }
@@ -208,14 +224,59 @@
     .trust-bar-section .premium-wrap { max-width: 100%; }
     .trust-bar-pill { white-space: nowrap; }
     @media (max-width: 640px) { .trust-bar-pill { white-space: normal; } }
-    /* Global standartlar — Health Score altında, özel blok, ultra premium / elit */
+    /* Global standartlar — premium kartlar, HIPAA tarzı renkli / kurumsal (feature-card ile aynı dil) */
     .trust-global-section { overflow-x: clip; max-width: 100%; }
     .trust-global-section .premium-wrap { max-width: 100%; }
-    .trust-global-pill { white-space: nowrap; min-width: 0; }
-    @media (max-width: 640px) { .trust-global-pill { white-space: normal; } }
+    .trust-global-wrap { max-width: 64rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
+    .trust-global-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
+    @media (min-width: 640px) { .trust-global-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; } }
+    @media (min-width: 1024px) { .trust-global-grid { grid-template-columns: repeat(5, 1fr); gap: 1.25rem; } }
+    .trust-global-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 100%; padding: 1.375rem 1.125rem; padding-top: 1.5rem; border-radius: 18px; border: 1px solid rgba(15,23,42,0.07); box-shadow: 0 2px 8px rgba(10,25,41,0.04); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; overflow: hidden; }
+    .trust-global-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #0EA5A4; opacity: 0.9; }
+    @media (hover: hover) { .trust-global-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(10,25,41,0.08); border-color: rgba(14,165,164,0.25); } }
+    @media (hover: hover) { .dark .trust-global-card:hover { border-color: rgba(14,165,164,0.35); box-shadow: 0 8px 24px rgba(0,0,0,0.15); } }
+    .trust-global-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.06) 0%, rgba(255,255,255,0.98) 20%); }
+    .trust-global-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.06) 0%, rgba(255,255,255,0.98) 20%); }
+    .trust-global-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.06) 0%, rgba(255,255,255,0.98) 20%); }
+    .trust-global-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.06) 0%, rgba(255,255,255,0.98) 20%); }
+    .dark .trust-global-card { border-color: rgba(255,255,255,0.08); box-shadow: none; }
+    .dark .trust-global-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.1) 0%, rgba(30,41,59,0.6) 20%); }
+    .dark .trust-global-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.1) 0%, rgba(30,41,59,0.6) 20%); }
+    .dark .trust-global-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.1) 0%, rgba(30,41,59,0.6) 20%); }
+    .dark .trust-global-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.1) 0%, rgba(30,41,59,0.6) 20%); }
+    .trust-global-icon-badge { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; margin-bottom: 0.75rem; border-radius: 12px; background: rgba(14,165,164,0.14); color: #0f172a; font-size: 1.25rem; line-height: 1; }
+    .trust-global-icon-badge svg { width: 1.25rem; height: 1.25rem; }
+    .dark .trust-global-icon-badge { background: rgba(14,165,164,0.22); color: #e2e8f0; }
+    .trust-global-title { font-size: 0.875rem; font-weight: 600; line-height: 1.35; color: #0f172a; margin: 0; }
+    .dark .trust-global-title { color: #f1f5f9; }
     @media (max-width: 480px) { .trust-global-section { padding-left: 1rem; padding-right: 1rem; } }
     .features-grid-section .premium-wrap { overflow-x: clip; min-width: 0; }
-    .feature-card { min-width: 0; }
+    /* Premium feature cards: kurumsal hastane + health-tech */
+    .features-grid-section .grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+    @media (min-width: 768px) { .features-grid-section .grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
+    @media (min-width: 1024px) { .features-grid-section .grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
+    .feature-card { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 100%; padding: 1.5rem 1.25rem; padding-top: 1.625rem; border-radius: 18px; border: 1px solid rgba(15,23,42,0.07); box-shadow: 0 2px 8px rgba(10,25,41,0.04); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; overflow: hidden; }
+    .feature-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #0EA5A4; opacity: 0.9; }
+    @media (hover: hover) { .feature-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(10,25,41,0.08); border-color: rgba(14,165,164,0.25); } }
+    @media (hover: hover) { .dark .feature-card:hover { border-color: rgba(14,165,164,0.35); box-shadow: 0 8px 24px rgba(0,0,0,0.15); } }
+    .feature-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.04) 0%, rgba(255,255,255,0.98) 18%); }
+    .feature-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.04) 0%, rgba(255,255,255,0.98) 18%); }
+    .feature-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.04) 0%, rgba(255,255,255,0.98) 18%); }
+    .feature-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.04) 0%, rgba(255,255,255,0.98) 18%); }
+    .dark .feature-card { border-color: rgba(255,255,255,0.08); box-shadow: none; }
+    .dark .feature-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.08) 0%, rgba(30,41,59,0.6) 18%); }
+    .dark .feature-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.08) 0%, rgba(30,41,59,0.6) 18%); }
+    .dark .feature-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.08) 0%, rgba(30,41,59,0.6) 18%); }
+    .dark .feature-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.08) 0%, rgba(30,41,59,0.6) 18%); }
+    .feature-card-icon-badge { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; margin-bottom: 1rem; border-radius: 12px; background: rgba(14,165,164,0.12); color: #0f172a; }
+    .feature-card-icon-badge svg { width: 1.375rem; height: 1.375rem; }
+    .dark .feature-card-icon-badge { background: rgba(14,165,164,0.2); color: #e2e8f0; }
+    .feature-card-title { font-size: 1rem; font-weight: 600; line-height: 1.35; color: #0f172a; margin: 0 0 0.5rem 0; }
+    @media (min-width: 640px) { .feature-card-title { font-size: 1.0625rem; } }
+    .dark .feature-card-title { color: #f1f5f9; }
+    .feature-card-desc { font-size: 0.8125rem; line-height: 1.5; color: #475569; margin: 0; flex-grow: 1; }
+    @media (min-width: 640px) { .feature-card-desc { font-size: 0.875rem; } }
+    .dark .feature-card-desc { color: #94a3b8; }
     .cta-primary-btn:focus-visible, .cta-secondary-btn:focus-visible { outline: none; }
     /* Partner logo: orijinal logo img, beyaz zemin, retina/PDF uyumlu */
     .partner-logo {
@@ -2248,7 +2309,7 @@
   <section class="premium-section health-score-section bg-[var(--norya-bg)] pt-8 sm:pt-10 pb-8 sm:pb-10">
     <div class="premium-wrap">
       <div class="max-w-md mx-auto px-1">
-        <article class="light-glass-card rounded-2xl p-6 sm:p-8 flex flex-col gap-5 text-center health-score-card shadow-lg border border-white/60 dark:border-accent-700/40">
+        <article class="rounded-2xl p-6 sm:p-8 flex flex-col gap-5 text-center health-score-card">
           <div class="text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-accent-500 dark:text-accent-400" data-i18n="health_score_card_title">Health Score</div>
           <div class="flex flex-col items-center gap-2">
             <div class="text-4xl sm:text-5xl font-bold text-accent-900 dark:text-white tracking-tight tabular-nums">
@@ -2266,31 +2327,31 @@
     </div>
   </section>
 
-  <!-- Global standartlar & güvenlik — özel blok, ultra premium / doktor-hastane elit (kalp ritmi ikonları yok) -->
-  <section id="trust-global" class="trust-global-section bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800/50 py-6 sm:py-8 overflow-x-hidden">
-    <div class="premium-wrap">
-      <p class="text-center text-[11px] sm:text-xs font-semibold tracking-[0.15em] uppercase text-accent-500 dark:text-accent-400 mb-4" data-i18n="trust_global_label">Global standards & security</p>
-      <div class="flex flex-wrap justify-center items-center gap-x-3 sm:gap-x-5 gap-y-2.5 text-[12px] sm:text-[13px] text-accent-600 dark:text-accent-400">
-        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50" aria-label="Clinical reports">
-          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
-          <span data-i18n="trust_bar_doctor_reports">Doctor-style Reports</span>
-        </span>
-        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50">
-          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><line x1="2" y1="10" x2="22" y2="10"/></svg>
-          <span data-i18n="trust_bar_3d">3D Secure Payments</span>
-        </span>
-        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50">
-          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          <span data-i18n="trust_global_labs">Global lab units</span>
-        </span>
-        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50">
-          <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          <span data-i18n="trust_bar_cloudflare">Cloudflare Security</span>
-        </span>
-        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50" aria-label="QR verification">
-          <span class="text-base leading-none" aria-hidden="true">📱</span>
-          <span data-i18n="trust_bar_qr">QR rapor doğrulama</span>
-        </span>
+  <!-- Global standartlar & güvenlik — premium renkli kartlar, HIPAA tarzı emoji/ikon rozetleri -->
+  <section id="trust-global" class="trust-global-section bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800/50 py-8 sm:py-10 overflow-x-hidden">
+    <div class="premium-wrap trust-global-wrap">
+      <p class="text-center text-[11px] sm:text-xs font-semibold tracking-[0.15em] uppercase text-accent-500 dark:text-accent-400 mb-6" data-i18n="trust_global_label">Global standards & security</p>
+      <div class="trust-global-grid">
+        <article class="trust-global-card trust-global-card--aqua">
+          <span class="trust-global-icon-badge" aria-hidden="true" title="Rapor">📄</span>
+          <h3 class="trust-global-title" data-i18n="trust_bar_doctor_reports">Doctor-style Reports</h3>
+        </article>
+        <article class="trust-global-card trust-global-card--blue">
+          <span class="trust-global-icon-badge" aria-hidden="true" title="Ödeme">💳</span>
+          <h3 class="trust-global-title" data-i18n="trust_bar_3d">3D Secure Payments</h3>
+        </article>
+        <article class="trust-global-card trust-global-card--mint">
+          <span class="trust-global-icon-badge" aria-hidden="true" title="Global">🌐</span>
+          <h3 class="trust-global-title" data-i18n="trust_global_labs">Global lab units</h3>
+        </article>
+        <article class="trust-global-card trust-global-card--slate">
+          <span class="trust-global-icon-badge" aria-hidden="true" title="Güvenlik">🛡️</span>
+          <h3 class="trust-global-title" data-i18n="trust_bar_cloudflare">Cloudflare Security</h3>
+        </article>
+        <article class="trust-global-card trust-global-card--aqua">
+          <span class="trust-global-icon-badge" aria-hidden="true" title="QR doğrulama">📋</span>
+          <h3 class="trust-global-title" data-i18n="trust_bar_qr">QR report verification</h3>
+        </article>
       </div>
     </div>
   </section>
@@ -2303,35 +2364,35 @@
         <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 leading-relaxed" data-i18n="features_sub">Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
-        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
-          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
-          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_1_title">Instant, structured analysis</h3>
-          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_1_desc">Clear explanations of common biomarkers and what they may indicate — in minutes.</p>
+        <article class="feature-card feature-card--aqua">
+          <span class="feature-card-icon-badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg></span>
+          <h3 class="feature-card-title" data-i18n="feature_1_title">Instant, structured analysis</h3>
+          <p class="feature-card-desc" data-i18n="feature_1_desc">Clear explanations of common biomarkers and what they may indicate — in minutes.</p>
         </article>
-        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
-          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
-          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_2_title">Clinical-style report format</h3>
-          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_2_desc">Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.</p>
+        <article class="feature-card feature-card--blue">
+          <span class="feature-card-icon-badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg></span>
+          <h3 class="feature-card-title" data-i18n="feature_2_title">Clinical-style report format</h3>
+          <p class="feature-card-desc" data-i18n="feature_2_desc">Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.</p>
         </article>
-        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
-          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
-          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_3_title">Global lab compatibility</h3>
-          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_3_desc">Supports many lab formats and units — designed for international users.</p>
+        <article class="feature-card feature-card--mint">
+          <span class="feature-card-icon-badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg></span>
+          <h3 class="feature-card-title" data-i18n="feature_3_title">Global lab compatibility</h3>
+          <p class="feature-card-desc" data-i18n="feature_3_desc">Supports many lab formats and units — designed for international users.</p>
         </article>
-        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
-          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
-          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_4_title">Privacy & security by design</h3>
-          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_4_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
+        <article class="feature-card feature-card--slate">
+          <span class="feature-card-icon-badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></span>
+          <h3 class="feature-card-title" data-i18n="feature_4_title">Privacy & security by design</h3>
+          <p class="feature-card-desc" data-i18n="feature_4_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
         </article>
-        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
-          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
-          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_5_title">Trends & comparisons</h3>
-          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_5_desc">Track changes over time and compare past results with one dashboard.</p>
+        <article class="feature-card feature-card--aqua">
+          <span class="feature-card-icon-badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></span>
+          <h3 class="feature-card-title" data-i18n="feature_5_title">Trends & comparisons</h3>
+          <p class="feature-card-desc" data-i18n="feature_5_desc">Track changes over time and compare past results with one dashboard.</p>
         </article>
-        <article class="feature-card flex flex-col h-full bg-white dark:bg-accent-800/60 rounded-[16px] sm:rounded-[20px] p-5 sm:p-6 border border-[rgba(0,0,0,0.06)] dark:border-accent-700/40 shadow-[0_4px_20px_rgba(10,25,41,0.06)] dark:shadow-none transition-all duration-200 hover:-translate-y-0.5 hover:shadow-[0_8px_28px_rgba(10,25,41,0.1)] dark:hover:shadow-[0_8px_28px_rgba(0,0,0,0.2)]">
-          <span class="inline-flex w-7 h-7 sm:w-[28px] sm:h-[28px] text-[#0EA5A4] mb-4 flex-shrink-0" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
-          <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2 leading-snug" data-i18n="feature_6_title">Actionable next steps</h3>
-          <p class="text-[13px] sm:text-sm text-accent-600 dark:text-accent-400 leading-relaxed flex-grow" data-i18n="feature_6_desc">Practical lifestyle and nutrition tips tailored to your markers.</p>
+        <article class="feature-card feature-card--blue">
+          <span class="feature-card-icon-badge" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg></span>
+          <h3 class="feature-card-title" data-i18n="feature_6_title">Actionable next steps</h3>
+          <p class="feature-card-desc" data-i18n="feature_6_desc">Practical lifestyle and nutrition tips tailored to your markers.</p>
         </article>
       </div>
     </div>
