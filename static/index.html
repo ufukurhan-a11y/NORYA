@@ -10,9 +10,11 @@
   <meta name="apple-mobile-web-app-title" content="Norya" />
   <meta name="mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="/static/manifest.webmanifest" />
-  <link rel="icon" href="/static/favicon.ico" />
+  <!-- Tarayıcı sekmesi ve mobil: Norya N ikonu (turkuaz/mavi N) -->
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
   <title>Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu</title>
   <meta name="description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
@@ -2130,7 +2132,7 @@
   <header id="main-header" class="header elite-header">
     <div class="header-inner elite-header__inner">
       <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="Norya Ana Sayfa">
-        <img src="/static/logo.svg" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
+        <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-8 w-auto" width="32" height="32" loading="eager" />
       </a>
       <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
@@ -2239,6 +2241,7 @@
         <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL</span></li>
         <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR</span></li>
         <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">PayTR güvenli ödeme</span></li>
+        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">📱</span> <span data-i18n="trust_badge_qr">QR ile rapor doğrulama</span></li>
       </ul>
     </div>
   </section>
@@ -2285,6 +2288,10 @@
         <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50">
           <svg class="w-3.5 h-3.5 flex-shrink-0 text-[#0EA5A4]" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           <span data-i18n="trust_bar_cloudflare">Cloudflare Security</span>
+        </span>
+        <span class="trust-global-pill inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-accent-50 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50" aria-label="QR verification">
+          <span class="text-base leading-none" aria-hidden="true">📱</span>
+          <span data-i18n="trust_bar_qr">QR rapor doğrulama</span>
         </span>
       </div>
     </div>
@@ -2492,6 +2499,10 @@
             <li class="flex items-center gap-3 text-sm font-medium text-accent-800 dark:text-accent-200">
               <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 flex items-center justify-center text-[#0EA5A4]" aria-hidden="true">📄</span>
               <span data-i18n="elite_feature_4">Premium Doctor-style PDF</span>
+            </li>
+            <li class="flex items-center gap-3 text-sm font-medium text-accent-800 dark:text-accent-200">
+              <span class="flex-shrink-0 w-8 h-8 rounded-lg bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 flex items-center justify-center text-[#0EA5A4]" aria-hidden="true">📱</span>
+              <span data-i18n="elite_feature_qr">QR ile rapor doğrulama & orijinallik</span>
             </li>
           </ul>
           <div class="flex flex-wrap gap-2 mt-auto">
@@ -2838,6 +2849,7 @@
         <li class="inline-flex items-center gap-2"><span class="inline-flex w-2 h-2 rounded-full bg-[#0EA5A4]" aria-hidden="true"></span><span data-i18n="trust_block_1">Çok dilli erişim için tasarlandı</span></li>
         <li class="inline-flex items-center gap-2"><span class="inline-flex w-2 h-2 rounded-full bg-[#0EA5A4]" aria-hidden="true"></span><span data-i18n="trust_block_2">Yapılandırılmış rapor ve doktor dostu çıktı</span></li>
         <li class="inline-flex items-center gap-2"><span class="inline-flex w-2 h-2 rounded-full bg-[#0EA5A4]" aria-hidden="true"></span><span data-i18n="trust_block_3">Güvenli, gizlilik odaklı, şifreli iletişim</span></li>
+        <li class="inline-flex items-center gap-2"><span aria-hidden="true">📱</span><span data-i18n="trust_block_qr">QR ile rapor doğrulama ve orijinallik</span></li>
       </ul>
     </div>
   </section>
@@ -4147,6 +4159,7 @@
                   <button type="button" id="report-bar-pdf-btn" class="btn-report-pdf" onclick="downloadReportPdf()" data-i18n="report_download">Raporu İndir</button>
                   <button type="button" id="report-bar-doctor-btn" class="btn-report-doctor" onclick="downloadForDoctor()" data-i18n="report_for_doctor">Doktoruma götür</button>
                   <button type="button" id="report-bar-share-btn" class="btn-report-share no-print" onclick="shareReport()" data-i18n="report_share">Paylaş</button>
+                  <a href="#" id="report-bar-pro-view-link" class="btn-report-pro-view no-print" onclick="openReportAsPro(); return false;" data-i18n="report_open_as_pro">Pro görünümünde aç</a>
                   <a href="/pricing?from=report" id="report-bar-upgrade-btn" class="btn-report-upgrade no-print" data-i18n="report_upgrade_btn">Upgrade</a>
                 </div>
               </div>
@@ -4524,6 +4537,8 @@
             <li><span aria-hidden="true">📈</span><span data-i18n="plan_yearly_6">Premium grafikler ve risk bölümleri</span></li>
             <li><span aria-hidden="true">📑</span><span data-i18n="plan_yearly_7">En kapsamlı klinik PDF</span></li>
             <li><span aria-hidden="true">⭐</span><span data-i18n="plan_yearly_8">Öncelikli yeni özellik erişimi</span></li>
+            <li><span aria-hidden="true">💊</span><span data-i18n="plan_yearly_9">Takviye önerileri</span></li>
+            <li><span aria-hidden="true">❤️</span><span data-i18n="plan_yearly_10">Kalp sağlığı yorumu</span></li>
           </ul>
           <button type="button" onclick="goToCheckout('yearly')" class="cta-button elite-cta mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-yearly">99 €</span> <span data-i18n="price_btn_yearly_label">Yıllık Tasarrufu Al</span></button>
         </div>
@@ -4582,16 +4597,16 @@
             </tr>
             <tr class="border-b border-accent-100 dark:border-accent-700/50">
               <td class="py-3 px-4 font-medium text-accent-900 dark:text-white"><span aria-hidden="true" class="mr-1">💊</span><span data-i18n="compare_supplements">Takviye: bilgilendirici notlar</span></td>
-              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
-              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
-              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
               <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✅</td>
             </tr>
             <tr class="border-b border-accent-100 dark:border-accent-700/50">
               <td class="py-3 px-4 font-medium text-accent-900 dark:text-white"><span aria-hidden="true" class="mr-1">❤️</span><span data-i18n="compare_heart">Kalp sağlığı: genel risk notları</span></td>
-              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
-              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
-              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
               <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✅</td>
             </tr>
             <tr class="border-b border-accent-100 dark:border-accent-700/50">
@@ -4629,6 +4644,27 @@
               <td class="py-3 px-3 text-center text-emerald-600">✅</td>
               <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✅</td>
             </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white"><span aria-hidden="true" class="mr-1">📱</span><span data-i18n="compare_qr">QR ile rapor doğrulama</span></td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
+              <td class="py-3 px-3 text-center text-emerald-600">✅</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✅</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white"><span aria-hidden="true" class="mr-1">🎁</span><span data-i18n="compare_yearly_benefit">Yıllık özel: 2 ay bedava</span></td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✅</td>
+            </tr>
+            <tr class="border-b border-accent-100 dark:border-accent-700/50">
+              <td class="py-3 px-4 font-medium text-accent-900 dark:text-white"><span aria-hidden="true" class="mr-1">⭐</span><span data-i18n="compare_priority_support">Öncelikli destek (yıllıkta)</span></td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-accent-400">—</td>
+              <td class="py-3 px-3 text-center text-emerald-600 bg-primary-50/30 dark:bg-primary-900/10">✅</td>
+            </tr>
             <tr>
               <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_price">Fiyat</td>
               <td class="py-3 px-3 text-center"><span id="compare-price-free">0 €</span><br><button type="button" onclick="goToCheckout('free')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50">Seç</button></td>
@@ -4658,8 +4694,11 @@
                 <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
                 <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span>1</span></div>
                 <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>💊</span><span data-i18n="compare_supplements">Takviye önerileri</span><span>—</span></div>
+                <div class="compare-card-row"><span>❤️</span><span data-i18n="compare_heart">Kalp sağlığı yorumu</span><span>—</span></div>
                 <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>—</span></div>
                 <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>—</span></div>
+                <div class="compare-card-row"><span>📱</span><span data-i18n="compare_qr">QR ile rapor doğrulama</span><span>—</span></div>
               </div>
               <button type="button" class="compare-card-cta" data-plan="free" onclick="goToCheckout('free')" data-i18n="compare_btn_select">Seç</button>
             </div>
@@ -4678,8 +4717,11 @@
                 <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
                 <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span>1</span></div>
                 <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>💊</span><span data-i18n="compare_supplements">Takviye önerileri</span><span>—</span></div>
+                <div class="compare-card-row"><span>❤️</span><span data-i18n="compare_heart">Kalp sağlığı yorumu</span><span>—</span></div>
                 <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>—</span></div>
                 <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>—</span></div>
+                <div class="compare-card-row"><span>📱</span><span data-i18n="compare_qr">QR ile rapor doğrulama</span><span>✅</span></div>
               </div>
               <button type="button" class="compare-card-cta" data-plan="single" onclick="goToCheckout('single')" data-i18n="compare_btn_select">Seç</button>
             </div>
@@ -4693,13 +4735,17 @@
                 <li data-i18n="compare_analyses_per_month">10+3 / ay</li>
                 <li data-i18n="compare_history">Analiz geçmişi</li>
                 <li data-i18n="compare_compare">İki analizi karşılaştır</li>
+                <li data-i18n="compare_qr">QR ile rapor doğrulama</li>
               </ul>
               <div class="compare-card-features">
                 <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
                 <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span data-i18n="compare_analyses_per_month">10+3 / ay</span></div>
                 <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>💊</span><span data-i18n="compare_supplements">Takviye önerileri</span><span>—</span></div>
+                <div class="compare-card-row"><span>❤️</span><span data-i18n="compare_heart">Kalp sağlığı yorumu</span><span>—</span></div>
                 <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>✅</span></div>
                 <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>✅</span></div>
+                <div class="compare-card-row"><span>📱</span><span data-i18n="compare_qr">QR ile rapor doğrulama</span><span>✅</span></div>
               </div>
               <button type="button" class="compare-card-cta" data-plan="monthly" onclick="goToCheckout('monthly')" data-i18n="compare_btn_select">Seç</button>
             </div>
@@ -4714,13 +4760,21 @@
                 <li data-i18n="compare_analyses_per_month">10+3 / ay</li>
                 <li data-i18n="compare_history">Analiz geçmişi</li>
                 <li data-i18n="compare_compare">İki analizi karşılaştır</li>
+                <li data-i18n="compare_qr">QR ile rapor doğrulama</li>
+                <li data-i18n="compare_yearly_benefit">Yıllık özel: 2 ay bedava</li>
+                <li data-i18n="compare_priority_support">Öncelikli destek (yıllıkta)</li>
               </ul>
               <div class="compare-card-features">
                 <p class="compare-card-features-title" data-i18n="compare_feature">Özellik</p>
                 <div class="compare-card-row"><span>🧪</span><span data-i18n="compare_analyses">Analiz sayısı</span><span data-i18n="compare_analyses_per_month">10+3 / ay</span></div>
                 <div class="compare-card-row"><span>🍽️</span><span data-i18n="compare_diet">Diyet planı</span><span>✅</span></div>
+                <div class="compare-card-row"><span>💊</span><span data-i18n="compare_supplements">Takviye önerileri</span><span>✅</span></div>
+                <div class="compare-card-row"><span>❤️</span><span data-i18n="compare_heart">Kalp sağlığı yorumu</span><span>✅</span></div>
                 <div class="compare-card-row"><span>🕒</span><span data-i18n="compare_history">Analiz geçmişi</span><span>✅</span></div>
                 <div class="compare-card-row"><span>🔁</span><span data-i18n="compare_compare">İki analizi karşılaştır</span><span>✅</span></div>
+                <div class="compare-card-row"><span>📱</span><span data-i18n="compare_qr">QR ile rapor doğrulama</span><span>✅</span></div>
+                <div class="compare-card-row"><span>🎁</span><span data-i18n="compare_yearly_benefit">Yıllık özel: 2 ay bedava</span><span>✅</span></div>
+                <div class="compare-card-row"><span>⭐</span><span data-i18n="compare_priority_support">Öncelikli destek (yıllıkta)</span><span>✅</span></div>
               </div>
               <button type="button" class="compare-card-cta" data-plan="yearly" onclick="goToCheckout('yearly')" data-i18n="compare_btn_select">Seç</button>
             </div>
@@ -5350,6 +5404,16 @@
       try { rid = sessionStorage.getItem(LAST_RID_KEY); } catch (_) {}
       return rid || null;
     }
+    function openReportAsPro() {
+      var rid = getReportId();
+      if (!rid) {
+        if (typeof toast === 'function') toast(T[getLang()].toast_analyze_first || 'Önce bir rapor açın.', 'error');
+        return;
+      }
+      var path = (window.location.pathname || '/report').replace(/\/$/, '') || '/report';
+      var base = path.indexOf('/report') !== -1 ? path : '/report';
+      window.location.href = base + '?rid=' + encodeURIComponent(rid) + '&plan=monthly';
+    }
     var deferredInstallPrompt = null;
     var A2HS_DISMISS_KEY = 'norya_a2hs_dismissed';
     var IOS_A2HS_DISMISS_KEY = 'norya_ios_a2hs_dismissed';
@@ -5659,7 +5723,10 @@
           toast('Rapor linki alınamadı.', 'error');
           return;
         }
-        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf?access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'en');
+        var q = 'access_token=' + encodeURIComponent(accessToken) + '&lang=' + encodeURIComponent(getLang() || 'en');
+        var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
+        if (params && (params.get('plan') === 'monthly' || params.get('plan') === 'yearly')) q += '&scope=pro';
+        var pdfUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf?' + q;
         if (typeof console !== 'undefined' && console.log) console.log('[PDF] Fetching PDF for download');
         var pdfRes = await fetch(pdfUrl, { credentials: 'include' });
         if (!pdfRes.ok) {
@@ -5964,6 +6031,14 @@
         '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('target') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_bio_age || 'Biological Age') + '</span><span class="report-tile-value">≈ ' + healthAge + '</span></div>' +
         '<div class="report-tile"><span class="report-tile-ico">' + reportIcon('eye') + '</span><span class="report-tile-label">' + escapeHtml(t.report_tile_priority || 'Priority Focus') + '</span><span class="report-tile-value">' + escapeHtml(priorityFocus.length > 45 ? priorityFocus.slice(0, 45) + '…' : priorityFocus) + '</span></div>' +
         '</div></section>';
+      var reportLimitedPreview = o.ui_hints && o.ui_hints.report_limited_preview === true;
+      if (reportLimitedPreview) {
+        var unlockLabel = (t.report_unlock_full_subscribe || 'Hepsini görmek için aylık veya yıllık abonelik alın');
+        html += '<section class="section-card report-limited-gate"><a href="/pay?from=report" class="report-limited-gate-link">' +
+          '<span class="report-limited-gate-chevron" aria-hidden="true">▼</span>' +
+          '<span class="report-limited-gate-text">' + escapeHtml(unlockLabel) + '</span></a></section></div>';
+        return html;
+      }
       html += '<section class="section-card gauge-section gauge-section--compact' + blurClass + '">' +
         '<div class="section-title report-sec-icon">' + reportIcon('gauge') + ' ' + escapeHtml(riskTitle) + '</div>' +
         '<div class="section-body"><div class="gauge-wrap">' +
@@ -6165,6 +6240,7 @@
       var score = (healthScore && typeof healthScore.score === 'number') ? Math.max(0, Math.min(100, healthScore.score)) : (risk && typeof risk.score === 'number' ? Math.max(0, Math.min(100, risk.score)) : (risk ? 70 : 0));
       var plan = o.plan || (typeof window.__lastUsagePlan !== 'undefined' ? window.__lastUsagePlan : 'free');
       var isPremium = o.premium === true || (o.ui_hints && o.ui_hints.locked === false) || (plan && (plan === 'pro' || plan === 'monthly' || plan === 'yearly' || plan === 'premium' || plan === 'single'));
+      var reportLimitedPreview = o.ui_hints && o.ui_hints.report_limited_preview === true;
       var isGateUnlocked = (plan === 'monthly' || plan === 'yearly');
       var highlights = (o.risk_summary && o.risk_summary.highlights) ? o.risk_summary.highlights : [];
       var domains = (o.risk_summary && o.risk_summary.domains) ? o.risk_summary.domains : {};
@@ -6214,6 +6290,13 @@
           html += '<span class="report-attention-card-link">' + escapeHtml(t.report_view_details || 'View details') + ' →</span></a>';
         }
         html += '</div></div>';
+      }
+      if (reportLimitedPreview) {
+        var unlockLabel = (t.report_unlock_full_subscribe || 'Hepsini görmek için aylık veya yıllık abonelik alın');
+        html += '<section class="section-card report-limited-gate"><a href="/pay?from=report" class="report-limited-gate-link">' +
+          '<span class="report-limited-gate-chevron" aria-hidden="true">▼</span>' +
+          '<span class="report-limited-gate-text">' + escapeHtml(unlockLabel) + '</span></a></section>';
+        return html;
       }
       var catTitles = { blood: t.report_category_blood || 'Blood Count', metabolic: t.report_category_metabolic || 'Metabolic', vitamins: t.report_category_vitamins || 'Vitamins & Minerals', inflammation: t.report_category_inflammation || 'Inflammation' };
       var catOrder = ['blood', 'metabolic', 'vitamins', 'inflammation'];
@@ -6435,18 +6518,19 @@
         downloadLink.textContent = t.report_download_link || 'Raporumu indir (PDF)';
         if (isPremium) { downloadLink.href = '#'; downloadLink.onclick = function(e) { e.preventDefault(); downloadReportPdf(); }; downloadLink.classList.remove('report-download-link--locked'); } else { downloadLink.href = '/pricing?from=report'; downloadLink.onclick = null; downloadLink.classList.add('report-download-link--locked'); }
       }
+      var reportLimitedPreview = opts && opts.ui_hints && opts.ui_hints.report_limited_preview === true;
       var upgradeSection = document.getElementById('report-upgrade-section');
-      if (upgradeSection) upgradeSection.style.display = isPremium ? 'none' : 'block';
+      if (upgradeSection) upgradeSection.style.display = (isPremium && !reportLimitedPreview) ? 'none' : 'block';
       var heroPremiumBadge = document.getElementById('report-hero-premium-badge');
       var heroDemoBadge = document.getElementById('report-hero-demo-badge');
-      if (heroPremiumBadge) { heroPremiumBadge.classList.toggle('hidden', !isPremium); }
-      if (heroDemoBadge) { heroDemoBadge.classList.toggle('hidden', isPremium); }
+      if (heroPremiumBadge) { heroPremiumBadge.classList.toggle('hidden', !isPremium || reportLimitedPreview); }
+      if (heroDemoBadge) { heroDemoBadge.classList.toggle('hidden', isPremium && !reportLimitedPreview); }
       var floatingUpgrade = document.getElementById('report-floating-upgrade');
       if (floatingUpgrade) {
-        if (isPremium) floatingUpgrade.classList.add('report-floating-upgrade--hidden'); else { floatingUpgrade.classList.remove('report-floating-upgrade--hidden'); floatingUpgrade.textContent = t.report_upgrade_btn || 'Upgrade'; }
+        if (isPremium && !reportLimitedPreview) floatingUpgrade.classList.add('report-floating-upgrade--hidden'); else { floatingUpgrade.classList.remove('report-floating-upgrade--hidden'); floatingUpgrade.textContent = t.report_upgrade_btn || 'Upgrade'; floatingUpgrade.onclick = function() { window.location.href = '/pay?from=report'; }; }
       }
       var barUpgradeBtn = document.getElementById('report-bar-upgrade-btn');
-      if (barUpgradeBtn) barUpgradeBtn.style.display = isPremium ? 'none' : '';
+      if (barUpgradeBtn) barUpgradeBtn.style.display = (isPremium && !reportLimitedPreview) ? 'none' : '';
       var sections = [];
       var regex = /(\d+\.\s*)?\*\*([^*]+)\*\*:?\s*\n/g;
       var matches = [];
@@ -6631,14 +6715,15 @@
         profile_corporate_title: "Kurumlar için Norya", profile_corporate_subtitle: "Hastane, klinik ve laboratuvarlar için toplu analiz ve kurumsal çözümler.", profile_corporate_1: "Çoklu kullanıcı yönetimi", profile_corporate_2: "Toplu analiz", profile_corporate_3: "Kurumsal PDF rapor", profile_corporate_4: "API erişimi (yakında)", profile_corporate_cta: "Kurumsal için bize ulaşın →",
         trust_row_3d: "3D Secure ödeme", trust_row_kvkk: "KVKK / GDPR uyumlu", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Arşiv fatura",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
+        history_login_required: "Geçmişi görmek için giriş yapın.", history_session_expired: "Oturum süreniz dolmuş olabilir. Çıkış yapıp tekrar giriş yapın.",
         hero_sub: "Clinical Biomarker Platform",
         hero_title: "Kan Tahlilinizi 60 Saniyede Anlayın",
         hero_desc: "Laboratuvar sonuçlarınızı yükleyin — yapılandırılmış kan tahlili yorumu ve klinik tarzı premium özet raporu alın.",
         hero_cta: "Analizi Başlat", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
-        trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme",
-        trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", health_score_card_title: "Health Score", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
+        trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme", trust_badge_qr: "QR ile rapor doğrulama",
+        trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_bar_qr: "QR rapor doğrulama", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", health_score_card_title: "Health Score", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
         features_heading: "Güvenilir sağlık içgörüleri, gerçek hayat için tasarlandı.",
         features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
         feature_1_title: "Anında, yapılandırılmış analiz", feature_1_desc: "Yaygın biyobelirteçlerin net açıklamaları ve ne anlama gelebilecekleri — dakikalar içinde.",
@@ -6779,6 +6864,7 @@
         elite_feature_2: "Cardio & Metabolic Risk",
         elite_feature_3: "Liver & Inflammation Markers",
         elite_feature_4: "Premium Doctor-style PDF",
+        elite_feature_qr: "QR ile rapor doğrulama & orijinallik",
         elite_chip_1: "10+ biyobelirteç",
         elite_chip_2: "1–2 dk",
         elite_chip_3: "Premium PDF",
@@ -6881,9 +6967,9 @@
         report_cat_recommend_ok: "Değerler uygun aralıkta. Düzenli takip önerilir.", report_cat_recommend_mid: "Takip ve yaşam tarzı önerileri için hekiminizle görüşün.", report_cat_recommend_risk: "Hekiminizle görüşmeniz önerilir.",
         report_cat_recommend_hemogram: "Kan sayımı değerleriniz. Referans dışı sonuçlarda hekiminizle görüşün.", report_cat_recommend_crp: "Enflamasyon belirteci. Yükseklikte hekime danışın.", report_cat_recommend_glucose: "Kan şekeri ve metabolizma. Diyabet takibi için hekim önerisi alın.", report_cat_recommend_lipids: "Kolesterol ve lipid paneli. Kalp sağlığı için düzenli takip.", report_cat_recommend_liver: "Karaciğer enzimleri. Yükseklikte hekim değerlendirmesi önerilir.", report_cat_recommend_kidney: "Böbrek fonksiyonu. eGFR ve kreatinin takibi.", report_cat_recommend_iron: "Demir ve ferritin. Eksiklikte beslenme veya takviye hekimle konuşulmalı.", report_cat_recommend_thyroid: "Tiroid paneli. TSH/FT4 sonuçları hekim yorumu gerektirir.", report_cat_recommend_other: "Diğer parametreler. Hekiminizle paylaşın.",
         report_params_title: "Parametreler", report_ref_range: "Ref", report_score_out_of: "Skor", report_risk_factors: "Risk Faktörleri", report_next_steps: "Sonuç ve Sonraki Adımlar", report_trends: "Trendler",
-        report_unlock_full: "Tam raporu aç", report_unlock_desc: "PDF indirme, detaylı içgörüler, trend takibi ve kişiselleştirilmiş sonraki adımlara erişin.", report_unlock_pdf: "PDF indirme", report_unlock_insights: "Detaylı içgörüler", report_unlock_trends: "Trend takibi",
+        report_unlock_full: "Tam raporu aç", report_unlock_full_subscribe: "Hepsini görmek için aylık veya yıllık abonelik alın", report_unlock_desc: "PDF indirme, detaylı içgörüler, trend takibi ve kişiselleştirilmiş sonraki adımlara erişin.", report_unlock_pdf: "PDF indirme", report_unlock_insights: "Detaylı içgörüler", report_unlock_trends: "Trend takibi",
         report_flexible_cancel: "Esnek iptal.", report_upgrade_now: "Şimdi yükselt", report_upgrade_btn: "Yükselt",
-        alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_download_cta_label: "Raporunuzu indirin", report_download_link: "Raporumu indir (PDF)", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
+        alert_medical_text: "Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.", report_download: "Raporu İndir", report_download_cta_label: "Raporunuzu indirin", report_download_link: "Raporumu indir (PDF)", report_for_doctor: "Doktoruma götür", report_share: "Raporumu Paylaş", report_open_as_pro: "Pro görünümünde aç", report_share_text: "Norya ile kan tahlili raporumu paylaşıyorum.", report_copy_link: "Link Kopyala", toast_shared: "Paylaşıldı.", toast_share_failed: "Paylaşım linki oluşturulamadı.",
         wizard_step1_title: "Dosya veya metin", wizard_step2_title: "Önizleme ve dil", wizard_step3_title: "Raporunuz hazırlanıyor", wizard_drop: "Dosyayı buraya sürükleyin veya tıklayın", wizard_back: "Geri", wizard_next: "Sonraki", wizard_preview_text: "Metin girişi", wizard_lang: "Rapor dili", wizard_step3_time: "Ortalama 20–30 saniye sürer.",
         pdf_header_title: "Kan Tahlili Analiz Raporu", pdf_footer_disclaimer: "Bu rapor eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın. — Norya",
         pdf_sec_summary: "Test özeti", pdf_sec_risk: "Risk işaretleri", pdf_sec_values: "Değerler ve referans aralıkları", pdf_sec_causes: "Olası nedenler", pdf_sec_recommendations: "Öneriler", pdf_sec_diet: "Diyet planı", pdf_sec_supplements: "Takviye önerileri", pdf_sec_heart: "Kalp sağlığı",
@@ -6899,9 +6985,9 @@
         price_best_badge: "En avantajlı", price_best_badge_value: "En İyi Değer", price_yearly_title: "Yıllık Abonelik", price_per_year: "/yıl", price_yearly_per: "Toplam 16 analiz (13 + 3 hediye)", price_yearly_1: "✓ Yılda 16 analiz", price_yearly_2: "✓ Tüm premium özellikler", price_yearly_3: "✓ Gelişmiş karşılaştırma", price_yearly_4: "✓ Doktor görüşmeleri için ideal", price_btn_yearly: "/yıl — Başla",
         plan_single_1: "Tek yükleme, tek rapor", plan_single_2: "Genel sağlık skoru", plan_single_3: "Temel biyobelirteç özeti", plan_single_4: "Kısa klinik yorum", plan_single_5: "Sınırlı öneriler", plan_single_6: "Standart PDF rapor",
         plan_monthly_1: "Aylık analiz hakkı", plan_monthly_2: "Gelişmiş biyobelirteç kartları", plan_monthly_3: "CBC temel paneli", plan_monthly_4: "Glukoz / metabolik özet", plan_monthly_5: "Su tüketim planı", plan_monthly_6: "3 günlük yaşam tarzı önerileri", plan_monthly_7: "Gelişmiş PDF raporu",
-        plan_yearly_1: "Tüm premium analiz modülleri", plan_yearly_2: "Tam CBC + diferansiyel değerlendirme", plan_yearly_3: "Uzun klinik yorumlar", plan_yearly_4: "1 haftalık beslenme planı", plan_yearly_5: "Kişiselleştirilmiş su ve yaşam tarzı planı", plan_yearly_6: "Premium grafikler ve risk bölümleri", plan_yearly_7: "En kapsamlı klinik PDF", plan_yearly_8: "Öncelikli yeni özellik erişimi",
+        plan_yearly_1: "Tüm premium analiz modülleri", plan_yearly_2: "Tam CBC + diferansiyel değerlendirme", plan_yearly_3: "Uzun klinik yorumlar", plan_yearly_4: "1 haftalık beslenme planı", plan_yearly_5: "Kişiselleştirilmiş su ve yaşam tarzı planı", plan_yearly_6: "Premium grafikler ve risk bölümleri", plan_yearly_7: "En kapsamlı klinik PDF", plan_yearly_8: "Öncelikli yeni özellik erişimi", plan_yearly_9: "Takviye önerileri", plan_yearly_10: "Kalp sağlığı yorumu",
         upgrade_cta_detail: "Daha detaylı yorumları açın", upgrade_cta_hematology: "Tam hematoloji kartlarını görüntüleyin", upgrade_cta_weekly_plan: "Kişiselleştirilmiş haftalık planı açın", upgrade_cta_pdf: "Gelişmiş klinik PDF'e yükseltin", upgrade_cta_insights: "Daha kapsamlı sağlık içgörüleri için planınızı yükseltin",
-        compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz Deneme", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_price: "💶 Fiyat", compare_btn_select: "Seç", compare_btn_active: "Aktif", compare_btn_upgrade: "Yükselt",
+        compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz Deneme", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_qr: "QR ile rapor doğrulama", compare_yearly_benefit: "Yıllık özel: 2 ay bedava", compare_priority_support: "Öncelikli destek (yıllıkta)", compare_price: "💶 Fiyat", compare_btn_select: "Seç", compare_btn_active: "Aktif", compare_btn_upgrade: "Yükselt",
         pricing_health_charts: "✓ Sağlık grafikleri",
         pricing_monthly_most_chosen: "Kullanıcıların çoğu bu planı seçiyor.",
         footer_desc: "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.", footer_disclaimer: "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.", made_with_cursor: "Cursor ile yapıldı",
@@ -6909,7 +6995,7 @@
         footer_mesafeli: "Mesafeli Satış Sözleşmesi", footer_privacy: "Gizlilik Politikası", footer_refund: "İade Politikası", footer_refund_long: "İade ve İptal Politikası", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_col_norya: "Norya", footer_col_legal: "Yasal", footer_col_support: "Destek", footer_col_payment: "Güvenli Ödeme",
         footer_norya_desc: "Norya, kan tahlili sonuçlarınızı yapılandırılmış analiz ve klinik tarzı raporlarla sunan bir biyobelirteç platformudur.",
-        trust_block_label: "Güven ve tasarım", trust_block_title: "Net ve güvenilir kan tahlili yorumu", trust_block_1: "Çok dilli erişim için tasarlandı", trust_block_2: "Yapılandırılmış rapor ve doktor dostu çıktı", trust_block_3: "Güvenli, gizlilik odaklı, şifreli iletişim",
+        trust_block_label: "Güven ve tasarım", trust_block_title: "Net ve güvenilir kan tahlili yorumu", trust_block_1: "Çok dilli erişim için tasarlandı", trust_block_2: "Yapılandırılmış rapor ve doktor dostu çıktı", trust_block_3: "Güvenli, gizlilik odaklı, şifreli iletişim", trust_block_qr: "QR ile rapor doğrulama ve orijinallik",
         global_platform_title: "Çok dilli sağlık analiz platformu", global_platform_desc: "Laboratuvar sonuçlarınızı yapılandırılmış rapor ve net özetle sunan biyobelirteç platformu.", global_platform_langs: "12 dil desteği",
         trust_card_report_title: "Doktor Dostu Rapor", trust_card_report_desc: "Klinik formatta yapılandırılmış açıklamalar ve PDF çıktı.", trust_secure_infra: "Şifreli iletişim ve güvenli altyapı.", trust_kvkk_gdpr_desc: "Gizlilik odaklı tasarım; veri koruma prensipleri.", trust_clinical_ref: "Klinik referans aralıklarına göre değerlendirilmiş sonuçlar.",
         footer_company_info_title: "Şirket Bilgileri", footer_company_title_label: "Ticari Unvan:", footer_company_tax_label: "Vergi Dairesi / Vergi No:", footer_company_address_label: "Adres:", footer_company_phone_label: "Telefon:", footer_company_email_label: "E-posta:",
@@ -6992,14 +7078,15 @@
         profile_corporate_title: "Norya for organizations", profile_corporate_subtitle: "Bulk analysis and enterprise solutions for hospitals, clinics and labs.", profile_corporate_1: "Multi-user management", profile_corporate_2: "Bulk analysis", profile_corporate_3: "Enterprise PDF report", profile_corporate_4: "API access (coming soon)", profile_corporate_cta: "Contact us for enterprise →",
         trust_row_3d: "3D Secure payment", trust_row_kvkk: "KVKK / GDPR compliant", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Archive invoice",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
+        history_login_required: "Please log in to see history.", history_session_expired: "Your session may have expired. Try logging out and back in.",
         hero_sub: "Clinical Biomarker Platform",
         hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
         hero_desc: "Upload your lab results — get structured blood test interpretation and a clinical-style premium summary report.",
         hero_cta: "Get my first analysis free", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
-        trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR",
-        trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
+        trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR", trust_badge_qr: "QR report verification",
+        trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_bar_qr: "QR report verification", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
         features_heading: "Trusted health insights, designed for real life.",
         features_sub: "Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.",
         feature_1_title: "Instant, structured analysis", feature_1_desc: "Clear explanations of common biomarkers and what they may indicate — in minutes.",
@@ -7134,6 +7221,7 @@
         elite_feature_2: "Cardio & Metabolic Risk",
         elite_feature_3: "Liver & Inflammation Markers",
         elite_feature_4: "Premium Doctor-style PDF",
+        elite_feature_qr: "QR report verification & authenticity",
         elite_chip_1: "10+ biomarkers",
         elite_chip_2: "1–2 min",
         elite_chip_3: "Premium PDF",
@@ -7225,7 +7313,7 @@
         analyze_doctor_notes_label: "Your doctor's note / extra info (optional)",
         analyze_doctor_notes_placeholder: "E.g. My doctor prescribed B12; please consider with these results.",
         analyze_or: "— or —", analyze_upload_btn: "Upload PDF or image (JPG, PNG)",
-        report_title: "Norya Analysis Report", report_download: "Download report", report_download_cta_label: "Download your report", report_download_link: "Download my report (PDF)", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
+        report_title: "Norya Analysis Report", report_download: "Download report", report_download_cta_label: "Download your report", report_download_link: "Download my report (PDF)", report_for_doctor: "Take to my doctor", report_share: "Share my report", report_open_as_pro: "Open as Pro view", report_share_text: "Sharing my blood test report from Norya.", report_copy_link: "Copy link", toast_shared: "Shared.", toast_share_failed: "Could not create share link.",
         report_bar_title: "Report", report_pill_secure: "Secure • Encrypted", report_pill_3d: "3D Secure Payments", report_pill_global: "Global lab units", report_pill_pdf: "Shareable PDF",
         report_hero_title: "Your Health Report", report_hero_sub: "A structured, clinician-style summary of your lab results.",
         report_demo_badge: "Upgrade for full report", report_upgrade_elite_label: "Unlock full report",
@@ -7236,7 +7324,7 @@
         report_cat_recommend_ok: "Values in range. Regular follow-up recommended.", report_cat_recommend_mid: "Discuss with your doctor for follow-up and lifestyle advice.", report_cat_recommend_risk: "Discuss with your doctor.",
         report_cat_recommend_hemogram: "Blood count results. Discuss out-of-range values with your doctor.", report_cat_recommend_crp: "Inflammation marker. Consult your doctor if elevated.", report_cat_recommend_glucose: "Blood sugar and metabolism. Get clinician advice for diabetes follow-up.", report_cat_recommend_lipids: "Cholesterol and lipid panel. Regular follow-up for heart health.", report_cat_recommend_liver: "Liver enzymes. Doctor evaluation recommended if elevated.", report_cat_recommend_kidney: "Kidney function. eGFR and creatinine follow-up.", report_cat_recommend_iron: "Iron and ferritin. Discuss diet or supplements with your doctor if low.", report_cat_recommend_thyroid: "Thyroid panel. TSH/FT4 results require clinician interpretation.", report_cat_recommend_other: "Other parameters. Share with your doctor.",
         report_params_title: "Parameters", report_ref_range: "Ref", report_score_out_of: "Score", report_risk_factors: "Risk Factors", report_next_steps: "Next Steps", report_trends: "Trends",
-        report_unlock_full: "Unlock the full report", report_unlock_desc: "Get PDF download, deep insights, trend tracking and personalized next steps.", report_unlock_pdf: "PDF download", report_unlock_insights: "Deep insights", report_unlock_trends: "Trend tracking",
+        report_unlock_full: "Unlock the full report", report_unlock_full_subscribe: "Get monthly or yearly subscription to see the full report", report_unlock_desc: "Get PDF download, deep insights, trend tracking and personalized next steps.", report_unlock_pdf: "PDF download", report_unlock_insights: "Deep insights", report_unlock_trends: "Trend tracking",
         report_flexible_cancel: "Flexible cancellation.", report_upgrade_now: "Upgrade now", report_upgrade_btn: "Upgrade",
         upload_intake_title: "Upload Your Lab Results",
         upload_intake_title_tr: "Kan tahlili sonuçlarınızı yükleyin",
@@ -7259,16 +7347,16 @@
         price_best_badge: "Best value", price_best_badge_value: "Best value", price_yearly_title: "Yearly plan", price_per_year: "/yr", price_yearly_per: "16 analyses total (13 + 3 free)", price_yearly_1: "✓ 16 analyses per year (13 + 3 free)", price_yearly_2: "✓ All premium diet & lifestyle info sections", price_yearly_3: "✓ History & advanced comparison", price_yearly_4: "✓ Ideal for doctor visits", price_btn_yearly: "/yr — Get started",
         plan_single_1: "Single upload, single report", plan_single_2: "Overall health score", plan_single_3: "Basic biomarker summary", plan_single_4: "Short clinical interpretation", plan_single_5: "Limited recommendations", plan_single_6: "Standard PDF report",
         plan_monthly_1: "Monthly analysis allowance", plan_monthly_2: "Advanced biomarker cards", plan_monthly_3: "CBC basic panel", plan_monthly_4: "Glucose / metabolic summary", plan_monthly_5: "Water intake plan", plan_monthly_6: "3-day lifestyle recommendations", plan_monthly_7: "Advanced PDF report",
-        plan_yearly_1: "All premium analysis modules", plan_yearly_2: "Full CBC + differential evaluation", plan_yearly_3: "Extended clinical interpretation", plan_yearly_4: "1-week nutrition plan", plan_yearly_5: "Personalised hydration & lifestyle plan", plan_yearly_6: "Premium charts and risk sections", plan_yearly_7: "Most comprehensive clinical PDF", plan_yearly_8: "Priority access to new features",
+        plan_yearly_1: "All premium analysis modules", plan_yearly_2: "Full CBC + differential evaluation", plan_yearly_3: "Extended clinical interpretation", plan_yearly_4: "1-week nutrition plan", plan_yearly_5: "Personalised hydration & lifestyle plan", plan_yearly_6: "Premium charts and risk sections", plan_yearly_7: "Most comprehensive clinical PDF", plan_yearly_8: "Priority access to new features", plan_yearly_9: "Supplement recommendations", plan_yearly_10: "Heart health commentary",
         upgrade_cta_detail: "Unlock more detailed interpretations", upgrade_cta_hematology: "View full haematology cards", upgrade_cta_weekly_plan: "Unlock your personalised weekly plan", upgrade_cta_pdf: "Upgrade to advanced clinical PDF", upgrade_cta_insights: "Upgrade your plan for deeper health insights",
-        compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_price: "Price", compare_btn_select: "Select", compare_btn_active: "Current", compare_btn_upgrade: "Upgrade",
+        compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_qr: "QR report verification", compare_yearly_benefit: "Yearly: 2 months free", compare_priority_support: "Priority support (yearly)", compare_price: "Price", compare_btn_select: "Select", compare_btn_active: "Current", compare_btn_upgrade: "Upgrade",
         pricing_health_charts: "✓ Health charts", pricing_monthly_most_chosen: "Most users choose this plan.",
         footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "This analysis is for information only. It does not replace medical diagnosis.", medical_disclaimer_full: "Norya is not a medical diagnosis tool. Content provided is for information only. In emergencies or for diagnosis/treatment, consult your doctor.", doctor_cta_note: "Not a substitute for diagnosis; share results with your doctor.",
         footer_mesafeli: "Distance Sales Agreement", footer_privacy: "Privacy Policy", footer_refund: "Refund Policy", footer_refund_long: "Refund & Cancellation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_col_norya: "Norya", footer_col_legal: "Legal", footer_col_support: "Support", footer_col_payment: "Secure Payment",
         footer_norya_desc: "Norya is a biomarker platform that delivers your blood test results through structured analysis and clinical-style reporting.",
-        trust_block_label: "Trust & design", trust_block_title: "Clear, reliable blood test interpretation", trust_block_1: "Designed for multilingual health access", trust_block_2: "Structured report and doctor-friendly output", trust_block_3: "Secure, privacy-first, encrypted transmission",
+        trust_block_label: "Trust & design", trust_block_title: "Clear, reliable blood test interpretation", trust_block_1: "Designed for multilingual health access", trust_block_2: "Structured report and doctor-friendly output", trust_block_3: "Secure, privacy-first, encrypted transmission", trust_block_qr: "QR report verification & authenticity",
         global_platform_title: "Multilingual health analysis platform", global_platform_desc: "Biomarker platform that turns your lab results into structured reports and clear summaries.", global_platform_langs: "12 languages supported",
         trust_card_report_title: "Doctor-friendly report", trust_card_report_desc: "Structured explanations in clinical format and PDF output.", trust_secure_infra: "Encrypted transmission and secure infrastructure.", trust_kvkk_gdpr_desc: "Privacy-first design; data protection principles.", trust_clinical_ref: "Results evaluated against clinical reference ranges.",
         footer_company_info_title: "Company Information", footer_company_title_label: "Legal name:", footer_company_tax_label: "Tax office / Tax no.:", footer_company_address_label: "Address:", footer_company_phone_label: "Phone:", footer_company_email_label: "Email:",
@@ -7351,8 +7439,8 @@
         hero_cta: "Prima analisi gratis", hero_see_sample: "Vedi report esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy first",
         hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "Valori in grado moderato: molti parametri in range, alcuni al limite. Il report include molti valori, spiegazioni e consigli personalizzati.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
-        trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR",
-        trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare",
+        trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR", trust_badge_qr: "Verifica report con QR",
+        trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare", trust_bar_qr: "Verifica report con QR",
         features_heading: "Approfondimenti sulla salute affidabili, pensati per la vita reale.",
         features_sub: "Carica i risultati delle analisi e ottieni un report chiaro e strutturato con trend, segnali di rischio e prossimi passi concreti.",
         feature_1_title: "Analisi strutturata istantanea", feature_1_desc: "Spiegazioni chiare dei biomarcatori comuni e di cosa possono indicare — in pochi minuti.",
@@ -7479,7 +7567,7 @@
         analyze_doctor_notes_label: "Nota del medico / informazioni aggiuntive (opzionale)",
         analyze_doctor_notes_placeholder: "Es. Il medico mi ha prescritto B12; valutare con questi risultati.",
         analyze_or: "— oppure —", analyze_upload_btn: "Carica PDF o immagine (JPG, PNG)",
-        report_title: "Report analisi Norya", report_download: "Scarica report", report_for_doctor: "Porta al medico", report_share: "Condividi il mio report", report_share_text: "Condivido il mio report delle analisi del sangue con Norya.", report_copy_link: "Copia link", toast_shared: "Condiviso.", toast_share_failed: "Impossibile creare il link di condivisione.",
+        report_title: "Report analisi Norya", report_download: "Scarica report", report_for_doctor: "Porta al medico", report_share: "Condividi il mio report", report_share_text: "Condivido il mio report delle analisi del sangue con Norya.", report_copy_link: "Copia link", report_unlock_full_subscribe: "Abbonati mensilmente o annualmente per vedere il report completo.", toast_shared: "Condiviso.", toast_share_failed: "Impossibile creare il link di condivisione.",
         pdf_header_title: "Report analisi del sangue", pdf_footer_disclaimer: "Questo report è a scopo informativo. Consultare sempre un medico per decisioni cliniche. — Norya",
         pdf_sec_summary: "Riepilogo esami", pdf_sec_risk: "Indicatori di rischio", pdf_sec_values: "Valori e intervalli di riferimento", pdf_sec_causes: "Possibili cause", pdf_sec_recommendations: "Raccomandazioni", pdf_sec_diet: "Piano alimentare", pdf_sec_supplements: "Integratori consigliati", pdf_sec_heart: "Salute cardiovascolare",
         risk_legend_green: "Normale", risk_legend_yellow: "Limite", risk_legend_red: "A rischio",
@@ -7493,7 +7581,7 @@
         price_best_badge: "Miglior rapporto qualità-prezzo", price_best_badge_value: "Miglior valore", price_yearly_title: "Piano annuale", price_per_year: "/anno", price_yearly_per: "16 analisi totali (13 + 3 in omaggio)", price_yearly_1: "✓ 16 analisi all'anno (13 + 3 in omaggio)", price_yearly_2: "✓ Tutte le sezioni dieta e integratori premium", price_yearly_3: "✓ Cronologia e confronto avanzato", price_yearly_4: "✓ Ideale per visite dal medico", price_btn_yearly: "/anno — Inizia",
         plan_single_1: "Un caricamento, un report", plan_single_2: "Punteggio salute generale", plan_single_3: "Riepilogo biomarcatori base", plan_single_4: "Breve commento clinico", plan_single_5: "Raccomandazioni limitate", plan_single_6: "Report PDF standard",
         plan_monthly_1: "Analisi mensili incluse", plan_monthly_2: "Schede biomarcatori avanzate", plan_monthly_3: "Pannello CBC base", plan_monthly_4: "Riepilogo glucosio/metabolico", plan_monthly_5: "Piano idratazione", plan_monthly_6: "Raccomandazioni stile di vita 3 giorni", plan_monthly_7: "Report PDF avanzato",
-        plan_yearly_1: "Tutti i moduli analisi premium", plan_yearly_2: "CBC completo + differenziale", plan_yearly_3: "Commenti clinici estesi", plan_yearly_4: "Piano alimentare 1 settimana", plan_yearly_5: "Piano idratazione e stile di vita personalizzato", plan_yearly_6: "Grafici e sezioni rischio premium", plan_yearly_7: "PDF clinico più completo", plan_yearly_8: "Accesso prioritario alle nuove funzioni",
+        plan_yearly_1: "Tutti i moduli analisi premium", plan_yearly_2: "CBC completo + differenziale", plan_yearly_3: "Commenti clinici estesi", plan_yearly_4: "Piano alimentare 1 settimana", plan_yearly_5: "Piano idratazione e stile di vita personalizzato", plan_yearly_6: "Grafici e sezioni rischio premium", plan_yearly_7: "PDF clinico più completo", plan_yearly_8: "Accesso prioritario alle nuove funzioni", plan_yearly_9: "Integratori consigliati", plan_yearly_10: "Commento salute cardiaca",
         upgrade_cta_detail: "Sblocca interpretazioni più dettagliate", upgrade_cta_hematology: "Visualizza schede ematologia complete", upgrade_cta_weekly_plan: "Sblocca il piano settimanale personalizzato", upgrade_cta_pdf: "Passa al PDF clinico avanzato", upgrade_cta_insights: "Passa a un piano superiore per insight più completi",
         footer_desc: "Risultati delle analisi del sangue spiegati in linguaggio chiaro.", footer_disclaimer: "Questo strumento è a scopo informativo. Consulta sempre un professionista per decisioni mediche.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Questa analisi è solo a scopo informativo. Non sostituisce una diagnosi medica.", medical_disclaimer_full: "Norya non è uno strumento di diagnosi medica. I contenuti sono solo informativi. In emergenze o per diagnosi/terapia consultare il medico.", doctor_cta_note: "Non sostituisce la diagnosi; condividi i risultati con il medico.",
@@ -7516,7 +7604,7 @@
         footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Termini d'uso", footer_payment: "Pagamento e rimborsi", footer_contact: "Contatti", back_home: "← Home",
         profile_tab_general: "Generale", profile_tab_plan: "Piano e utilizzo", profile_tab_history: "Cronologia analisi", profile_tab_security: "Sicurezza", profile_plan_label: "Piano", profile_remaining: "Rimanenti", profile_ends: "Fine", profile_plan_pro: "Pro", profile_ends_monthly: "Rinnovo mensile", profile_ends_na: "—", profile_usage_label: "Utilizzo (questo mese)", profile_upgrade_cta: "Passa a un piano superiore", profile_view_analysis: "Visualizza", profile_unlimited: "Illimitato", profile_country: "Paese",
-        compare_title: "Confronta tutti i piani", compare_subtitle: "Scegli il piano adatto a te.", compare_feature: "Funzione", compare_plan_free: "Gratis", compare_plan_single: "Singolo", compare_plan_monthly: "Mensile", compare_plan_yearly: "Annuale", compare_analyses: "Analisi", compare_analyses_per_month: "10+3 / mese", compare_upload: "Testo, PDF, immagine", compare_report: "Report dettagliato (riepilogo, valori, raccomandazioni)", compare_diet: "Piano dietetico", compare_supplements: "Integratori", compare_heart: "Salute cardiaca", compare_history: "Cronologia", compare_pdf: "PDF / Condividi / Per il medico", compare_emr_ehr: "Report EMR/EHR", compare_langs: "Lingua report", compare_langs_count: "9 lingue", compare_compare: "Confronta due analisi", compare_price: "Prezzo", compare_btn_select: "Seleziona", compare_btn_active: "Attivo", compare_btn_upgrade: "Passa a",
+        compare_title: "Confronta tutti i piani", compare_subtitle: "Scegli il piano adatto a te.", compare_feature: "Funzione", compare_plan_free: "Gratis", compare_plan_single: "Singolo", compare_plan_monthly: "Mensile", compare_plan_yearly: "Annuale", compare_analyses: "Analisi", compare_analyses_per_month: "10+3 / mese", compare_upload: "Testo, PDF, immagine", compare_report: "Report dettagliato (riepilogo, valori, raccomandazioni)", compare_diet: "Piano dietetico", compare_supplements: "Integratori", compare_heart: "Salute cardiaca", compare_history: "Cronologia", compare_pdf: "PDF / Condividi / Per il medico", compare_emr_ehr: "Report EMR/EHR", compare_langs: "Lingua report", compare_langs_count: "9 lingue", compare_compare: "Confronta due analisi", compare_qr: "Verifica report con QR", compare_yearly_benefit: "Annuale: 2 mesi gratis", compare_priority_support: "Supporto prioritario (annuale)", compare_price: "Prezzo", compare_btn_select: "Seleziona", compare_btn_active: "Attivo", compare_btn_upgrade: "Passa a",
         usage_first_free: "Prima analisi gratis.", pricing_input_types: "Input: Testo • PDF • Foto", trust_cards_speed_desc: "Quando i server sono disponibili, la maggior parte dei report è pronta in secondi.", pricing_health_charts: "✓ Grafici salute", pricing_monthly_most_chosen: "La maggior parte degli utenti sceglie questo piano.",
         terms_heading: "Termini d'uso", privacy_heading: "Informativa sulla privacy", payment_heading: "Pagamento e rimborsi",
         contact_heading: "Contatti", contact_intro: "Per domande, richieste di rimborso o problemi tecnici (es. \"pagamento ricevuto ma nessun credito analisi\"), contattaci.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Scrivici su WhatsApp", contact_note: "Se possibile, indica l'email del tuo account e una breve descrizione (n. ordine, data, ecc.). Rispondiamo entro 1 giorno lavorativo.", contact_tagline: "Norya — Risultati delle analisi del sangue in linguaggio chiaro.", merchant_contact_title: "Informazioni di contatto esercente", merchant_contact_page: "Pagina contatti", merchant_contact_title: "Informazioni di contatto esercente", merchant_contact_page: "Pagina contatti",
@@ -7581,8 +7669,8 @@
         hero_cta: "Mi primer análisis gratis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad primero",
         hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Valores en nivel moderado: muchos parámetros en rango, algunos en el límite. El informe incluye muchos valores, explicaciones y recomendaciones.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
-        trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR",
-        trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare",
+        trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR", trust_badge_qr: "Verificación de informe por QR",
+        trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare", trust_bar_qr: "Verificación de informe por QR",
         features_heading: "Información de salud fiable, diseñada para la vida real.",
         features_sub: "Sube tus resultados de laboratorio y obtén un informe claro y estructurado con tendencias, señales de riesgo y próximos pasos.",
         feature_1_title: "Análisis estructurado al instante", feature_1_desc: "Explicaciones claras de biomarcadores habituales y qué pueden indicar — en minutos.",
@@ -7709,7 +7797,7 @@
         analyze_doctor_notes_label: "Nota de tu médico / información adicional (opcional)",
         analyze_doctor_notes_placeholder: "Ej. Mi médico me recetó B12; considerar con estos resultados.",
         analyze_or: "— o —", analyze_upload_btn: "Subir PDF o imagen (JPG, PNG)",
-        report_title: "Informe de análisis Norya", report_download: "Descargar informe", report_for_doctor: "Llevar al médico", report_share: "Compartir mi informe", report_share_text: "Comparto mi informe de análisis de sangre con Norya.", report_copy_link: "Copiar enlace", toast_shared: "Compartido.", toast_share_failed: "No se pudo crear el enlace.",
+        report_title: "Informe de análisis Norya", report_download: "Descargar informe", report_for_doctor: "Llevar al médico", report_share: "Compartir mi informe", report_share_text: "Comparto mi informe de análisis de sangre con Norya.", report_copy_link: "Copiar enlace", report_unlock_full_subscribe: "Suscríbete mensual o anualmente para ver el informe completo.", toast_shared: "Compartido.", toast_share_failed: "No se pudo crear el enlace.",
         pdf_header_title: "Informe de análisis de sangre", pdf_footer_disclaimer: "Este informe es solo informativo. Consulte siempre a un profesional para decisiones médicas. — Norya",
         pdf_sec_summary: "Resumen del análisis", pdf_sec_risk: "Señales de riesgo", pdf_sec_values: "Valores e intervalos de referencia", pdf_sec_causes: "Posibles causas", pdf_sec_recommendations: "Recomendaciones", pdf_sec_diet: "Plan de alimentación", pdf_sec_supplements: "Suplementos recomendados", pdf_sec_heart: "Salud cardiovascular",
         risk_legend_green: "Normal", risk_legend_yellow: "Límite", risk_legend_red: "En riesgo",
@@ -7723,7 +7811,7 @@
         price_best_badge: "Mejor relación calidad-precio", price_best_badge_value: "Mejor valor", price_yearly_title: "Plan anual", price_per_year: "/año", price_yearly_per: "16 análisis total (13 + 3 de regalo)", price_yearly_1: "✓ 16 análisis al año (13 + 3 de regalo)", price_yearly_2: "✓ Todas las secciones dieta y suplementos premium", price_yearly_3: "✓ Historial y comparación avanzada", price_yearly_4: "✓ Ideal para visitas al médico", price_btn_yearly: "/año — Empezar",
         plan_single_1: "Una carga, un informe", plan_single_2: "Puntuación de salud general", plan_single_3: "Resumen básico de biomarcadores", plan_single_4: "Comentario clínico breve", plan_single_5: "Recomendaciones limitadas", plan_single_6: "Informe PDF estándar",
         plan_monthly_1: "Análisis mensuales incluidos", plan_monthly_2: "Tarjetas de biomarcadores avanzadas", plan_monthly_3: "Panel CBC básico", plan_monthly_4: "Resumen glucosa/metabólico", plan_monthly_5: "Plan de hidratación", plan_monthly_6: "Recomendaciones de estilo de vida 3 días", plan_monthly_7: "Informe PDF avanzado",
-        plan_yearly_1: "Todos los módulos de análisis premium", plan_yearly_2: "CBC completo + diferencial", plan_yearly_3: "Comentarios clínicos extensos", plan_yearly_4: "Plan de alimentación 1 semana", plan_yearly_5: "Plan de hidratación y estilo de vida personalizado", plan_yearly_6: "Gráficos y secciones de riesgo premium", plan_yearly_7: "PDF clínico más completo", plan_yearly_8: "Acceso prioritario a nuevas funciones",
+        plan_yearly_1: "Todos los módulos de análisis premium", plan_yearly_2: "CBC completo + diferencial", plan_yearly_3: "Comentarios clínicos extensos", plan_yearly_4: "Plan de alimentación 1 semana", plan_yearly_5: "Plan de hidratación y estilo de vida personalizado", plan_yearly_6: "Gráficos y secciones de riesgo premium", plan_yearly_7: "PDF clínico más completo", plan_yearly_8: "Acceso prioritario a nuevas funciones", plan_yearly_9: "Recomendaciones de suplementos", plan_yearly_10: "Comentario salud cardíaca",
         upgrade_cta_detail: "Desbloquea interpretaciones más detalladas", upgrade_cta_hematology: "Ver tarjetas de hematología completas", upgrade_cta_weekly_plan: "Desbloquea tu plan semanal personalizado", upgrade_cta_pdf: "Actualiza al PDF clínico avanzado", upgrade_cta_insights: "Actualiza tu plan para más información de salud",
         footer_desc: "Resultados de análisis de sangre explicados en lenguaje claro.", footer_disclaimer: "Esta herramienta es informativa. Consulta siempre a un profesional para decisiones médicas.", made_with_cursor: "Hecho con Cursor",
         disclaimer_informative: "Este análisis es solo informativo. No sustituye un diagnóstico médico.", medical_disclaimer_full: "Norya no es una herramienta de diagnóstico médico. El contenido es solo informativo. En emergencias o para diagnóstico/tratamiento consulte a su médico.", doctor_cta_note: "No sustituye el diagnóstico; comparta los resultados con su médico.",
@@ -7746,7 +7834,7 @@
         footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Términos de uso", footer_payment: "Pago y reembolsos", footer_contact: "Contacto", back_home: "← Inicio",
         profile_tab_general: "General", profile_tab_plan: "Plan y uso", profile_tab_history: "Historial de análisis", profile_tab_security: "Seguridad", profile_plan_label: "Plan", profile_remaining: "Restantes", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renovación mensual", profile_ends_na: "—", profile_usage_label: "Uso (este mes)", profile_upgrade_cta: "Mejorar plan", profile_view_analysis: "Ver", profile_unlimited: "Ilimitado", profile_country: "País",
-        compare_title: "Comparar todos los planes", compare_subtitle: "Encuentra el plan que te convenga.", compare_feature: "Característica", compare_plan_free: "Gratis", compare_plan_single: "Único", compare_plan_monthly: "Mensual", compare_plan_yearly: "Anual", compare_analyses: "Análisis", compare_analyses_per_month: "10+3 / mes", compare_upload: "Texto, PDF, imagen", compare_report: "Informe detallado (resumen, valores, recomendaciones)", compare_diet: "Plan dietético", compare_supplements: "Suplementos", compare_heart: "Salud cardíaca", compare_history: "Historial", compare_pdf: "PDF / Compartir / Para el médico", compare_emr_ehr: "Informe EMR/EHR", compare_langs: "Idioma del informe", compare_langs_count: "9 idiomas", compare_compare: "Comparar dos análisis", compare_price: "Precio", compare_btn_select: "Seleccionar", compare_btn_active: "Actual", compare_btn_upgrade: "Mejorar",
+        compare_title: "Comparar todos los planes", compare_subtitle: "Encuentra el plan que te convenga.", compare_feature: "Característica", compare_plan_free: "Gratis", compare_plan_single: "Único", compare_plan_monthly: "Mensual", compare_plan_yearly: "Anual", compare_analyses: "Análisis", compare_analyses_per_month: "10+3 / mes", compare_upload: "Texto, PDF, imagen", compare_report: "Informe detallado (resumen, valores, recomendaciones)", compare_diet: "Plan dietético", compare_supplements: "Suplementos", compare_heart: "Salud cardíaca", compare_history: "Historial", compare_pdf: "PDF / Compartir / Para el médico", compare_emr_ehr: "Informe EMR/EHR", compare_langs: "Idioma del informe", compare_langs_count: "9 idiomas", compare_compare: "Comparar dos análisis", compare_qr: "Verificación de informe con QR", compare_yearly_benefit: "Anual: 2 meses gratis", compare_priority_support: "Soporte prioritario (anual)", compare_price: "Precio", compare_btn_select: "Seleccionar", compare_btn_active: "Actual", compare_btn_upgrade: "Mejorar",
         usage_first_free: "Primera análisis gratis.", pricing_input_types: "Entrada: Texto • PDF • Foto", trust_cards_speed_desc: "Cuando los servidores están disponibles, la mayoría de los informes están listos en segundos.", pricing_health_charts: "✓ Gráficos de salud", pricing_monthly_most_chosen: "La mayoría de usuarios elige este plan.",
         terms_heading: "Términos de uso", privacy_heading: "Política de privacidad", payment_heading: "Pago y reembolsos",
         contact_heading: "Contacto", contact_intro: "Para preguntas, solicitudes de reembolso o problemas técnicos (ej. \"pago recibido pero sin crédito de análisis\"), escríbenos.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Escríbenos por WhatsApp", contact_note: "Si es posible, incluye el email de tu cuenta y una breve descripción (n.º de pedido, fecha, etc.). Respondemos en un plazo de 1 día laborable.", contact_tagline: "Norya — Resultados de análisis de sangre en lenguaje claro.", merchant_contact_title: "Datos de contacto del comercio", merchant_contact_page: "Página de contacto", merchant_contact_title: "Datos de contacto del comercio", merchant_contact_page: "Página de contacto",
@@ -7811,8 +7899,8 @@
         hero_cta: "Ma première analyse gratuite", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité",
         hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Valeurs à niveau modéré: beaucoup de paramètres dans la norme, certains à la limite. Le rapport inclut de nombreuses valeurs et recommandations.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
-        trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR",
-        trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare",
+        trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR", trust_badge_qr: "Vérification du rapport par QR",
+        trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare", trust_bar_qr: "Vérification du rapport par QR",
         features_heading: "Des informations santé de confiance, conçues pour la vie réelle.",
         features_sub: "Téléchargez vos résultats d'analyses et obtenez un rapport clair et structuré avec tendances, alertes et prochaines étapes.",
         feature_1_title: "Analyse structurée instantanée", feature_1_desc: "Explications claires des biomarqueurs courants et de ce qu'ils peuvent indiquer — en quelques minutes.",
@@ -7939,7 +8027,7 @@
         analyze_doctor_notes_label: "Note de votre médecin / info complémentaire (optionnel)",
         analyze_doctor_notes_placeholder: "Ex. Mon médecin m'a prescrit B12 ; à considérer avec ces résultats.",
         analyze_or: "— ou —", analyze_upload_btn: "Télécharger PDF ou image (JPG, PNG)",
-        report_title: "Rapport d'analyse Norya", report_download: "Télécharger le rapport", report_for_doctor: "Apporter à mon médecin", report_share: "Partager mon rapport", report_share_text: "Je partage mon rapport d'analyse sanguine avec Norya.", report_copy_link: "Copier le lien", toast_shared: "Partagé.", toast_share_failed: "Impossible de créer le lien.",
+        report_title: "Rapport d'analyse Norya", report_download: "Télécharger le rapport", report_for_doctor: "Apporter à mon médecin", report_share: "Partager mon rapport", report_share_text: "Je partage mon rapport d'analyse sanguine avec Norya.", report_copy_link: "Copier le lien", report_unlock_full_subscribe: "Abonnez-vous mensuellement ou annuellement pour voir le rapport complet.", toast_shared: "Partagé.", toast_share_failed: "Impossible de créer le lien.",
         pdf_header_title: "Rapport d'analyse sanguine", pdf_footer_disclaimer: "Ce rapport est à titre informatif. Consultez un professionnel pour toute décision médicale. — Norya",
         pdf_sec_summary: "Résumé du bilan", pdf_sec_risk: "Points d'attention", pdf_sec_values: "Valeurs et références", pdf_sec_causes: "Causes possibles", pdf_sec_recommendations: "Recommandations", pdf_sec_diet: "Plan alimentaire", pdf_sec_supplements: "Compléments recommandés", pdf_sec_heart: "Santé cardiovasculaire",
         risk_legend_green: "Normal", risk_legend_yellow: "Limite", risk_legend_red: "À risque",
@@ -7953,7 +8041,7 @@
         price_best_badge: "Meilleur rapport qualité-prix", price_best_badge_value: "Meilleure valeur", price_yearly_title: "Abonnement annuel", price_per_year: "/an", price_yearly_per: "16 analyses au total (13 + 3 offertes)", price_yearly_1: "✓ 16 analyses par an (13 + 3 offertes)", price_yearly_2: "✓ Toutes les sections régime et compléments premium", price_yearly_3: "✓ Historique et comparaison avancée", price_yearly_4: "✓ Idéal pour les rendez-vous médicaux", price_btn_yearly: "/an — Commencer",
         plan_single_1: "Un envoi, un rapport", plan_single_2: "Score de santé global", plan_single_3: "Résumé des biomarqueurs de base", plan_single_4: "Court commentaire clinique", plan_single_5: "Recommandations limitées", plan_single_6: "Rapport PDF standard",
         plan_monthly_1: "Analyses mensuelles incluses", plan_monthly_2: "Cartes biomarqueurs avancées", plan_monthly_3: "Panneau CBC de base", plan_monthly_4: "Résumé glucose/métabolique", plan_monthly_5: "Plan d'hydratation", plan_monthly_6: "Recommandations mode de vie 3 jours", plan_monthly_7: "Rapport PDF avancé",
-        plan_yearly_1: "Tous les modules d'analyse premium", plan_yearly_2: "CBC complet + différentiel", plan_yearly_3: "Commentaires cliniques détaillés", plan_yearly_4: "Plan nutritionnel 1 semaine", plan_yearly_5: "Plan hydratation et style de vie personnalisé", plan_yearly_6: "Graphiques et sections risque premium", plan_yearly_7: "PDF clinique le plus complet", plan_yearly_8: "Accès prioritaire aux nouvelles fonctionnalités",
+        plan_yearly_1: "Tous les modules d'analyse premium", plan_yearly_2: "CBC complet + différentiel", plan_yearly_3: "Commentaires cliniques détaillés", plan_yearly_4: "Plan nutritionnel 1 semaine", plan_yearly_5: "Plan hydratation et style de vie personnalisé", plan_yearly_6: "Graphiques et sections risque premium", plan_yearly_7: "PDF clinique le plus complet", plan_yearly_8: "Accès prioritaire aux nouvelles fonctionnalités", plan_yearly_9: "Recommandations compléments", plan_yearly_10: "Commentaire santé cardiaque",
         upgrade_cta_detail: "Débloquez les interprétations détaillées", upgrade_cta_hematology: "Voir les cartes hématologie complètes", upgrade_cta_weekly_plan: "Débloquez votre plan hebdomadaire personnalisé", upgrade_cta_pdf: "Passez au PDF clinique avancé", upgrade_cta_insights: "Passez à un forfait supérieur pour plus d'aperçus",
         footer_desc: "Résultats d'analyses sanguines expliqués en langage clair.", footer_disclaimer: "Cet outil est à titre informatif. Consultez toujours un professionnel pour les décisions médicales.", made_with_cursor: "Fait avec Cursor",
         disclaimer_informative: "Cette analyse est à titre informatif uniquement. Elle ne remplace pas un diagnostic médical.", medical_disclaimer_full: "Norya n'est pas un outil de diagnostic médical. Le contenu est à titre informatif. En cas d'urgence ou pour diagnostic/traitement, consultez votre médecin.", doctor_cta_note: "Ne remplace pas un diagnostic ; partagez les résultats avec votre médecin.",
@@ -7976,7 +8064,7 @@
         footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Conditions d'utilisation", footer_payment: "Paiement et remboursements", footer_contact: "Contact", back_home: "← Accueil",
         profile_tab_general: "Général", profile_tab_plan: "Forfait et utilisation", profile_tab_history: "Historique des analyses", profile_tab_security: "Sécurité", profile_plan_label: "Forfait", profile_remaining: "Restants", profile_ends: "Fin", profile_plan_pro: "Pro", profile_ends_monthly: "Renouvellement mensuel", profile_ends_na: "—", profile_usage_label: "Utilisation (ce mois)", profile_upgrade_cta: "Améliorer le forfait", profile_view_analysis: "Voir", profile_unlimited: "Illimité", profile_country: "Pays",
-        compare_title: "Comparer tous les forfaits", compare_subtitle: "Trouvez le forfait qui vous convient.", compare_feature: "Fonctionnalité", compare_plan_free: "Gratuit", compare_plan_single: "Unique", compare_plan_monthly: "Mensuel", compare_plan_yearly: "Annuel", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mois", compare_upload: "Texte, PDF, image", compare_report: "Rapport détaillé (résumé, valeurs, recommandations)", compare_diet: "Régime", compare_supplements: "Compléments", compare_heart: "Santé cardiaque", compare_history: "Historique", compare_pdf: "PDF / Partager / Pour le médecin", compare_emr_ehr: "Rapport EMR/EHR", compare_langs: "Langue du rapport", compare_langs_count: "9 langues", compare_compare: "Comparer deux analyses", compare_price: "Prix", compare_btn_select: "Choisir", compare_btn_active: "Actuel", compare_btn_upgrade: "Améliorer",
+        compare_title: "Comparer tous les forfaits", compare_subtitle: "Trouvez le forfait qui vous convient.", compare_feature: "Fonctionnalité", compare_plan_free: "Gratuit", compare_plan_single: "Unique", compare_plan_monthly: "Mensuel", compare_plan_yearly: "Annuel", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mois", compare_upload: "Texte, PDF, image", compare_report: "Rapport détaillé (résumé, valeurs, recommandations)", compare_diet: "Régime", compare_supplements: "Compléments", compare_heart: "Santé cardiaque", compare_history: "Historique", compare_pdf: "PDF / Partager / Pour le médecin", compare_emr_ehr: "Rapport EMR/EHR", compare_langs: "Langue du rapport", compare_langs_count: "9 langues", compare_compare: "Comparer deux analyses", compare_qr: "Vérification du rapport par QR", compare_yearly_benefit: "Annuel : 2 mois offerts", compare_priority_support: "Support prioritaire (annuel)", compare_price: "Prix", compare_btn_select: "Choisir", compare_btn_active: "Actuel", compare_btn_upgrade: "Améliorer",
         usage_first_free: "Première analyse gratuite.", pricing_input_types: "Entrée : Texte • PDF • Photo", trust_cards_speed_desc: "Lorsque les serveurs sont disponibles, la plupart des rapports sont prêts en quelques secondes.", pricing_health_charts: "✓ Graphiques santé", pricing_monthly_most_chosen: "La plupart des utilisateurs choisissent ce forfait.",
         terms_heading: "Conditions d'utilisation", privacy_heading: "Politique de confidentialité", payment_heading: "Paiement et remboursements",
         contact_heading: "Contact", contact_intro: "Pour toute question, demande de remboursement ou problème technique (ex. \"paiement reçu mais pas de crédit d'analyse\"), contactez-nous.", contact_email_label: "Email :", contact_whatsapp_label: "WhatsApp :", contact_whatsapp_click: "Écrivez-nous sur WhatsApp", contact_note: "Si possible, indiquez l'email de votre compte et une courte description (n° de commande, date, etc.). Nous répondons sous 1 jour ouvré.", contact_tagline: "Norya — Résultats d'analyses sanguines expliqués en langage clair.", merchant_contact_title: "Coordonnées du marchand", merchant_contact_page: "Page contact", merchant_contact_title: "Coordonnées du marchand", merchant_contact_page: "Page contact",
@@ -8041,8 +8129,8 @@
         hero_cta: "Erste Analyse kostenlos", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "Sicher • Datenschutz",
         hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Werte im mittleren Bereich: viele Parameter im Referenzbereich, einige grenzwertig. Der Bericht enthält viele Werte, Erklärungen und Empfehlungen.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
-        trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR",
-        trust_bar_medical: "Medizinische Einblicke", trust_bar_3d: "3D-Secure-Zahlungen", trust_bar_doctor_reports: "Arzt-Style-Berichte", trust_bar_analyses: "50.000+ Analysen erstellt", trust_bar_cloudflare: "Cloudflare-Sicherheit",
+        trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR", trust_badge_qr: "QR-Berichtsprüfung",
+        trust_bar_medical: "Medizinische Einblicke", trust_bar_3d: "3D-Secure-Zahlungen", trust_bar_doctor_reports: "Arzt-Style-Berichte", trust_bar_analyses: "50.000+ Analysen erstellt", trust_bar_cloudflare: "Cloudflare-Sicherheit", trust_bar_qr: "QR-Berichtsprüfung",
         features_heading: "Vertrauenswürdige Gesundheitseinblicke, für den Alltag konzipiert.",
         features_sub: "Laden Sie Ihre Laborergebnisse hoch und erhalten Sie einen klaren, strukturierten Bericht mit Trends, Risikohinweisen und umsetzbaren nächsten Schritten.",
         feature_1_title: "Sofortige, strukturierte Auswertung", feature_1_desc: "Klare Erklärungen gängiger Biomarker und was sie bedeuten können — in Minuten.",
@@ -8153,7 +8241,7 @@
         analyze_doctor_notes_label: "Notiz Ihres Arztes / Zusatzinfo (optional)",
         analyze_doctor_notes_placeholder: "z. B. Mein Arzt hat B12 verschrieben; bitte mit diesen Werten berücksichtigen.",
         analyze_or: "— oder —", analyze_upload_btn: "PDF oder Bild (JPG, PNG) hochladen",
-        report_title: "Norya Analysebericht", report_download: "Bericht herunterladen", report_for_doctor: "Zum Arzt mitnehmen", report_share: "Bericht teilen", report_share_text: "Ich teile meinen Blutanalysebericht von Norya.", report_copy_link: "Link kopieren", toast_shared: "Geteilt.", toast_share_failed: "Link konnte nicht erstellt werden.",
+        report_title: "Norya Analysebericht", report_download: "Bericht herunterladen", report_for_doctor: "Zum Arzt mitnehmen", report_share: "Bericht teilen", report_share_text: "Ich teile meinen Blutanalysebericht von Norya.", report_copy_link: "Link kopieren", report_unlock_full_subscribe: "Monats- oder Jahresabo abschließen, um den vollständigen Bericht zu sehen.", toast_shared: "Geteilt.", toast_share_failed: "Link konnte nicht erstellt werden.",
         pdf_header_title: "Blutbild-Analysebericht", pdf_footer_disclaimer: "Dieser Bericht dient nur der Information. Bitte konsultieren Sie einen Arzt für medizinische Entscheidungen. — Norya",
         pdf_sec_summary: "Testzusammenfassung", pdf_sec_risk: "Risikohinweise", pdf_sec_values: "Werte und Referenzbereiche", pdf_sec_causes: "Mögliche Ursachen", pdf_sec_recommendations: "Empfehlungen", pdf_sec_diet: "Ernährungsplan", pdf_sec_supplements: "Nahrungsergänzungsempfehlungen", pdf_sec_heart: "Herzgesundheit",
         risk_legend_green: "Normal", risk_legend_yellow: "Grenze", risk_legend_red: "Risiko",
@@ -8167,7 +8255,7 @@
         price_best_badge: "Bester Preis", price_best_badge_value: "Bester Wert", price_yearly_title: "Jahresabo", price_per_year: "/Jahr", price_yearly_per: "16 Analysen gesamt (13 + 3 gratis)", price_yearly_1: "✓ 16 Analysen pro Jahr (13 + 3 gratis)", price_yearly_2: "✓ Alle Premium-Ernährung & -Nahrungsergänzung", price_yearly_3: "✓ Verlauf & erweiterter Vergleich", price_yearly_4: "✓ Ideal für Arzttermine", price_btn_yearly: "/Jahr — Starten",
         plan_single_1: "Ein Upload, ein Bericht", plan_single_2: "Gesundheits-Score", plan_single_3: "Grundlegende Biomarker-Zusammenfassung", plan_single_4: "Kurze klinische Bewertung", plan_single_5: "Begrenzte Empfehlungen", plan_single_6: "Standard-PDF-Bericht",
         plan_monthly_1: "Monatliche Analysen inklusive", plan_monthly_2: "Erweiterte Biomarker-Karten", plan_monthly_3: "Basis CBC-Panel", plan_monthly_4: "Glukose-/Stoffwechsel-Zusammenfassung", plan_monthly_5: "Trinkplan", plan_monthly_6: "3-Tage-Lifestyle-Empfehlungen", plan_monthly_7: "Erweiterter PDF-Bericht",
-        plan_yearly_1: "Alle Premium-Analysemodule", plan_yearly_2: "Vollständiges CBC + Differential", plan_yearly_3: "Ausführliche klinische Bewertungen", plan_yearly_4: "1-Wochen-Ernährungsplan", plan_yearly_5: "Personalisierter Hydratations- und Lifestyle-Plan", plan_yearly_6: "Premium-Grafiken und Risikobereiche", plan_yearly_7: "Umfassendster klinischer PDF", plan_yearly_8: "Prioritätszugang zu neuen Funktionen",
+        plan_yearly_1: "Alle Premium-Analysemodule", plan_yearly_2: "Vollständiges CBC + Differential", plan_yearly_3: "Ausführliche klinische Bewertungen", plan_yearly_4: "1-Wochen-Ernährungsplan", plan_yearly_5: "Personalisierter Hydratations- und Lifestyle-Plan", plan_yearly_6: "Premium-Grafiken und Risikobereiche", plan_yearly_7: "Umfassendster klinischer PDF", plan_yearly_8: "Prioritätszugang zu neuen Funktionen", plan_yearly_9: "Nahrungsergänzungs-Empfehlungen", plan_yearly_10: "Herzgesundheit-Kommentar",
         upgrade_cta_detail: "Detailliertere Auswertungen freischalten", upgrade_cta_hematology: "Vollständige Hämatologie-Karten anzeigen", upgrade_cta_weekly_plan: "Personalisierte Wochenplan freischalten", upgrade_cta_pdf: "Auf erweiterten klinischen PDF upgraden", upgrade_cta_insights: "Plan upgraden für tiefere Gesundheitseinblicke",
         footer_desc: "Blutwerte verständlich erklärt.", footer_disclaimer: "Nur zur Information. Bitte konsultieren Sie für medizinische Entscheidungen einen Arzt.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "Diese Analyse dient nur der Information. Sie ersetzt keine medizinische Diagnose.", medical_disclaimer_full: "Norya ist kein medizinisches Diagnoseinstrument. Die Inhalte sind nur zur Information. In Notfällen oder bei Diagnose/Behandlung wenden Sie sich an Ihren Arzt.", doctor_cta_note: "Ersetzt keine Diagnose; teilen Sie die Ergebnisse mit Ihrem Arzt.",
@@ -8190,7 +8278,7 @@
         footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Nutzungsbedingungen", footer_payment: "Zahlung & Rückerstattung", footer_contact: "Kontakt", back_home: "← Start",
         profile_tab_general: "Allgemein", profile_tab_plan: "Paket & Nutzung", profile_tab_history: "Analyse-Verlauf", profile_tab_security: "Sicherheit", profile_plan_label: "Plan", profile_remaining: "Verbleibend", profile_ends: "Ende", profile_plan_pro: "Pro", profile_ends_monthly: "Monatliche Verlängerung", profile_ends_na: "—", profile_usage_label: "Nutzung (dieser Monat)", profile_upgrade_cta: "Plan upgraden", profile_view_analysis: "Ansehen", profile_unlimited: "Unbegrenzt", profile_country: "Land",
-        compare_title: "Alle Pläne vergleichen", compare_subtitle: "Finden Sie den passenden Plan.", compare_feature: "Funktion", compare_plan_free: "Kostenlos", compare_plan_single: "Einzel", compare_plan_monthly: "Monat", compare_plan_yearly: "Jahr", compare_analyses: "Analysen", compare_analyses_per_month: "10+3 / Monat", compare_upload: "Text, PDF, Bild", compare_report: "Detaillierter Bericht (Zusammenfassung, Werte, Empfehlungen)", compare_diet: "Ernährungsplan", compare_supplements: "Nahrungsergänzung", compare_heart: "Herzgesundheit", compare_history: "Verlauf", compare_pdf: "PDF / Teilen / Für den Arzt", compare_emr_ehr: "EMR/EHR-Bericht", compare_langs: "Berichtssprache", compare_langs_count: "9 Sprachen", compare_compare: "Zwei Analysen vergleichen", compare_price: "Preis", compare_btn_select: "Wählen", compare_btn_active: "Aktiv", compare_btn_upgrade: "Upgrade",
+        compare_title: "Alle Pläne vergleichen", compare_subtitle: "Finden Sie den passenden Plan.", compare_feature: "Funktion", compare_plan_free: "Kostenlos", compare_plan_single: "Einzel", compare_plan_monthly: "Monat", compare_plan_yearly: "Jahr", compare_analyses: "Analysen", compare_analyses_per_month: "10+3 / Monat", compare_upload: "Text, PDF, Bild", compare_report: "Detaillierter Bericht (Zusammenfassung, Werte, Empfehlungen)", compare_diet: "Ernährungsplan", compare_supplements: "Nahrungsergänzung", compare_heart: "Herzgesundheit", compare_history: "Verlauf", compare_pdf: "PDF / Teilen / Für den Arzt", compare_emr_ehr: "EMR/EHR-Bericht", compare_langs: "Berichtssprache", compare_langs_count: "9 Sprachen", compare_compare: "Zwei Analysen vergleichen", compare_qr: "QR-Berichtsprüfung", compare_yearly_benefit: "Jahresabo: 2 Monate gratis", compare_priority_support: "Prioritäts-Support (Jahresabo)", compare_price: "Preis", compare_btn_select: "Wählen", compare_btn_active: "Aktiv", compare_btn_upgrade: "Upgrade",
         usage_first_free: "Erste Analyse gratis.", pricing_input_types: "Eingabe: Text • PDF • Foto", trust_cards_speed_desc: "Wenn die Server verfügbar sind, sind die meisten Berichte in Sekunden fertig.", pricing_health_charts: "✓ Gesundheitsgrafiken", pricing_monthly_most_chosen: "Die meisten Nutzer wählen diesen Plan.",
         terms_heading: "Nutzungsbedingungen", privacy_heading: "Datenschutzerklärung", payment_heading: "Zahlung und Rückerstattung",
         contact_heading: "Kontakt", contact_intro: "Bei Fragen, Rückerstattungswünschen oder technischen Problemen (z. B. \"Zahlung erhalten, aber kein Analyse-Guthaben\") schreiben Sie uns.", contact_email_label: "E-Mail:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Schreiben Sie uns per WhatsApp", contact_note: "Bitte nennen Sie wenn möglich Ihre Konto-E-Mail und eine kurze Beschreibung (Bestellnr., Datum usw.). Wir antworten innerhalb von 1 Werktag.", contact_tagline: "Norya — Blutwerte verständlich erklärt.", merchant_contact_title: "Händler-Kontaktdaten", merchant_contact_page: "Kontaktseite", merchant_contact_title: "Händler-Kontaktdaten", merchant_contact_page: "Kontaktseite",
@@ -8255,7 +8343,7 @@
         hero_cta: "נתח את בדיקת הדם שלי בחינם", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות",
         hero_sample_label: "כך ייראה הדוח שלך", hero_sample_summary: "הערכים בטווח התקין. המוגלובין וגלוקוז רגילים.", hero_sample_normal: "תקין", hero_sample_border: "גבול", hero_sample_risk: "תשומת לב", hero_sample_cta: "סיכום + ערכים + המלצות + הורדת PDF.", hero_sample_btn: "קבל דוח כזה — התחל בחינם",
         trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה", trust_badges_heading: "שירות מאובטח ותואם",
-        trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR",
+        trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR", trust_badge_qr: "אימות דוח עם QR", trust_bar_qr: "אימות דוח עם QR",
         trust_badge_secure_paytr: "🔒 תשלום מאובטח – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "תעבורה מוצפנת SSL/TLS.", footer_trust_kvkk_desc: "נתונים אישיים לפי KVKK.", footer_trust_gdpr_desc: "תואם GDPR ל-EU.", footer_trust_paytr_desc: "תשלום מאובטח דרך PayTR.", footer_trust_hipaa_desc: "נתוני בריאות מעובדים באבטחה.",
@@ -8351,7 +8439,7 @@
         analyze_doctor_notes_label: "הערת הרופא / מידע נוסף (אופציונלי)",
         analyze_doctor_notes_placeholder: "למשל הרופא רשם לי B12; יש לשקול עם תוצאות אלה.",
         analyze_or: "— או —", analyze_upload_btn: "העלאת PDF או תמונה (JPG, PNG)",
-        report_title: "דוח נוריה", report_download: "הורדת דוח", report_for_doctor: "להרופא שלי", report_share: "שתף את הדוח שלי", report_share_text: "משתף את דוח בדיקות הדם שלי מ-Norya.", report_copy_link: "העתקת קישור", toast_shared: "שותף.", toast_share_failed: "לא ניתן ליצור קישור שיתוף.",
+        report_title: "דוח נוריה", report_download: "הורדת דוח", report_for_doctor: "להרופא שלי", report_share: "שתף את הדוח שלי", report_share_text: "משתף את דוח בדיקות הדם שלי מ-Norya.", report_copy_link: "העתקת קישור", report_unlock_full_subscribe: "הירשם לחודשי או שנתי כדי לראות את הדוח המלא.", toast_shared: "שותף.", toast_share_failed: "לא ניתן ליצור קישור שיתוף.",
         pdf_header_title: "דוח ניתוח בדיקת דם", pdf_footer_disclaimer: "דוח זה להנחיה בלבד. יש להתייעץ עם רופא להחלטות רפואיות. — Norya",
         pdf_sec_summary: "סיכום הבדיקה", pdf_sec_risk: "נקודות לתשומת לב", pdf_sec_values: "ערכים ורפרנס", pdf_sec_causes: "סיבות אפשריות", pdf_sec_recommendations: "המלצות",
         risk_legend_green: "רגיל", risk_legend_yellow: "גבול", risk_legend_red: "בסיכון",
@@ -8368,7 +8456,7 @@
         footer_mesafeli: "הסכם מכר מרחוק", footer_privacy: "פרטיות", footer_refund: "החזרה וביטול", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "תנאי שימוש", footer_payment: "תשלום והחזרים", footer_contact: "צור קשר", back_home: "← בית",
         profile_tab_general: "כללי", profile_tab_plan: "חבילה ושימוש", profile_tab_history: "היסטוריית ניתוחים", profile_tab_security: "אבטחה", profile_plan_label: "תוכנית", profile_remaining: "נותרו", profile_ends: "סיום", profile_plan_pro: "Pro", profile_ends_monthly: "חידוש חודשי", profile_ends_na: "—", profile_usage_label: "שימוש (החודש)", profile_upgrade_cta: "שדרג חבילה", profile_view_analysis: "הצג", profile_unlimited: "ללא הגבלה", profile_country: "מדינה",
-        compare_title: "השווה את כל התוכניות", compare_subtitle: "מצא את התוכנית המתאימה לך.", compare_feature: "תכונה", compare_plan_free: "חינם", compare_plan_single: "בודד", compare_plan_monthly: "חודשי", compare_plan_yearly: "שנתי", compare_analyses: "ניתוחים", compare_analyses_per_month: "10+3 / חודש", compare_upload: "טקסט, PDF, תמונה", compare_report: "דוח מפורט (סיכום, ערכים, המלצות)", compare_diet: "תוכנית דיאטה", compare_supplements: "תוספים", compare_heart: "בריאות הלב", compare_history: "היסטוריה", compare_pdf: "PDF / שתף / לרופא", compare_emr_ehr: "דוח EMR/EHR", compare_langs: "שפת הדוח", compare_langs_count: "9 שפות", compare_compare: "השווה שני ניתוחים", compare_price: "מחיר", compare_btn_select: "בחר", compare_btn_active: "נוכחי", compare_btn_upgrade: "שדרג",
+        compare_title: "השווה את כל התוכניות", compare_subtitle: "מצא את התוכנית המתאימה לך.", compare_feature: "תכונה", compare_plan_free: "חינם", compare_plan_single: "בודד", compare_plan_monthly: "חודשי", compare_plan_yearly: "שנתי", compare_analyses: "ניתוחים", compare_analyses_per_month: "10+3 / חודש", compare_upload: "טקסט, PDF, תמונה", compare_report: "דוח מפורט (סיכום, ערכים, המלצות)", compare_diet: "תוכנית דיאטה", compare_supplements: "תוספים", compare_heart: "בריאות הלב", compare_history: "היסטוריה", compare_pdf: "PDF / שתף / לרופא", compare_emr_ehr: "דוח EMR/EHR", compare_langs: "שפת הדוח", compare_langs_count: "9 שפות", compare_compare: "השווה שני ניתוחים", compare_qr: "אימות דוח עם QR", compare_yearly_benefit: "שנתי: 2 חודשים חינם", compare_priority_support: "תמיכה מועדפת (שנתי)", compare_price: "מחיר", compare_btn_select: "בחר", compare_btn_active: "נוכחי", compare_btn_upgrade: "שדרג",
         usage_first_free: "ניתוח ראשון בחינם.", pricing_input_types: "קלט: טקסט • PDF • תמונה", trust_cards_speed_desc: "כשהשרתים זמינים, רוב הדוחות מוכנים תוך שניות.", pricing_health_charts: "✓ גרפי בריאות", pricing_monthly_most_chosen: "רוב המשתמשים בוחרים בתוכנית זו.",
         terms_heading: "תנאי שימוש", privacy_heading: "מדיניות פרטיות", payment_heading: "תשלום והחזרים",
         contact_heading: "צור קשר", contact_intro: "לשאלות, בקשות להחזר או בעיות טכניות (למשל \"התשלום התקבל אך לא נוסף קרדיט ניתוח\"), צרו איתנו קשר.", contact_email_label: "אימייל:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "כתבו לנו בוואטסאפ", contact_note: "אם אפשר, ציינו את אימייל החשבון ותיאור קצר (מס׳ הזמנה, תאריך וכו׳). אנו משיבים תוך יום עסקי אחד.", contact_tagline: "נוריה — תוצאות בדיקות דם מוסברות בשפה ברורה.", merchant_contact_title: "פרטי יצירת קשר של הסוחר", merchant_contact_page: "דף יצירת קשר", merchant_contact_title: "פרטי יצירת קשר של הסוחר", merchant_contact_page: "דף יצירת קשר",
@@ -8432,7 +8520,7 @@
         hero_cta: "تحليل تحاليل دمي مجاناً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • خصوصية",
         hero_sample_label: "تقريرك سيبدو هكذا", hero_sample_summary: "قيمك ضمن النطاق المرجعي. الهيموغلوبين والغلوكوز طبيعيان.", hero_sample_normal: "طبيعي", hero_sample_border: "حدي", hero_sample_risk: "انتباه", hero_sample_cta: "ملخص + قيم + توصيات + تنزيل PDF.", hero_sample_btn: "احصل على هذا التقرير — ابدأ مجاناً",
         trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن", trust_badges_heading: "خدمة آمنة ومتوافقة",
-        trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR",
+        trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR", trust_badge_qr: "التحقق من التقرير برمز QR", trust_bar_qr: "التحقق من التقرير برمز QR",
         trust_badge_secure_paytr: "🔒 دفع آمن – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "المرور مشفّر SSL/TLS.", footer_trust_kvkk_desc: "البيانات الشخصية وفق KVKK.", footer_trust_gdpr_desc: "متوافق مع GDPR للاتحاد الأوروبي.", footer_trust_paytr_desc: "دفع آمن عبر PayTR.", footer_trust_hipaa_desc: "بيانات الصحة تُعالج بأمان.",
@@ -8528,7 +8616,7 @@
         analyze_doctor_notes_label: "ملاحظة الطبيب / معلومات إضافية (اختياري)",
         analyze_doctor_notes_placeholder: "مثلاً وصف الطبيب B12؛ يُرجى الأخذ بالاعتبار مع هذه النتائج.",
         analyze_or: "— أو —", analyze_upload_btn: "رفع PDF أو صورة (JPG, PNG)",
-        report_title: "تقرير تحليل نوريا", report_download: "تحميل التقرير", report_for_doctor: "أخذها لطبيبي", report_share: "مشاركة تقريري", report_share_text: "أشارك تقرير تحليل الدم من Norya.", report_copy_link: "نسخ الرابط", toast_shared: "تمت المشاركة.", toast_share_failed: "تعذر إنشاء رابط المشاركة.",
+        report_title: "تقرير تحليل نوريا", report_download: "تحميل التقرير", report_for_doctor: "أخذها لطبيبي", report_share: "مشاركة تقريري", report_share_text: "أشارك تقرير تحليل الدم من Norya.", report_copy_link: "نسخ الرابط", report_unlock_full_subscribe: "اشترك شهرياً أو سنوياً لرؤية التقرير الكامل.", toast_shared: "تمت المشاركة.", toast_share_failed: "تعذر إنشاء رابط المشاركة.",
         pdf_header_title: "تقرير تحليل الدم", pdf_footer_disclaimer: "هذا التقرير لأغراض تعليمية فقط. استشر دائماً مختصاً للقرارات الطبية. — Norya",
         pdf_sec_summary: "ملخص التحليل", pdf_sec_risk: "علامات الانتباه", pdf_sec_values: "القيم والمراجع", pdf_sec_causes: "أسباب محتملة", pdf_sec_recommendations: "التوصيات",
         risk_legend_green: "طبيعي", risk_legend_yellow: "حد", risk_legend_red: "في خطر",
@@ -8545,7 +8633,7 @@
         footer_mesafeli: "عقد البيع عن بعد", footer_privacy: "الخصوصية", footer_refund: "الاسترداد والإلغاء", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "شروط الاستخدام", footer_payment: "الدفع والاسترداد", footer_contact: "اتصل", back_home: "← الرئيسية",
         profile_tab_general: "عام", profile_tab_plan: "الباقة والاستخدام", profile_tab_history: "سجل التحليلات", profile_tab_security: "الأمان", profile_plan_label: "الباقة", profile_remaining: "المتبقي", profile_ends: "الانتهاء", profile_plan_pro: "Pro", profile_ends_monthly: "تجديد شهري", profile_ends_na: "—", profile_usage_label: "الاستخدام (هذا الشهر)", profile_upgrade_cta: "ترقية الباقة", profile_view_analysis: "عرض", profile_unlimited: "غير محدود", profile_country: "البلد",
-        compare_title: "قارن جميع الخطط", compare_subtitle: "اختر الخطة المناسبة لك.", compare_feature: "ميزة", compare_plan_free: "مجاني", compare_plan_single: "واحد", compare_plan_monthly: "شهري", compare_plan_yearly: "سنوي", compare_analyses: "التحليلات", compare_analyses_per_month: "10+3 / شهر", compare_upload: "نص، PDF، صورة", compare_report: "تقرير مفصل (ملخص، قيم، توصيات)", compare_diet: "خطة غذائية", compare_supplements: "مكملات", compare_heart: "صحة القلب", compare_history: "السجل", compare_pdf: "PDF / مشاركة / للطبيب", compare_emr_ehr: "تقرير EMR/EHR", compare_langs: "لغة التقرير", compare_langs_count: "9 لغات", compare_compare: "قارن تحليلين", compare_price: "السعر", compare_btn_select: "اختر", compare_btn_active: "الحالي", compare_btn_upgrade: "ترقية",
+        compare_title: "قارن جميع الخطط", compare_subtitle: "اختر الخطة المناسبة لك.", compare_feature: "ميزة", compare_plan_free: "مجاني", compare_plan_single: "واحد", compare_plan_monthly: "شهري", compare_plan_yearly: "سنوي", compare_analyses: "التحليلات", compare_analyses_per_month: "10+3 / شهر", compare_upload: "نص، PDF، صورة", compare_report: "تقرير مفصل (ملخص، قيم، توصيات)", compare_diet: "خطة غذائية", compare_supplements: "مكملات", compare_heart: "صحة القلب", compare_history: "السجل", compare_pdf: "PDF / مشاركة / للطبيب", compare_emr_ehr: "تقرير EMR/EHR", compare_langs: "لغة التقرير", compare_langs_count: "9 لغات", compare_compare: "قارن تحليلين", compare_qr: "التحقق من التقرير بـ QR", compare_yearly_benefit: "سنوي: شهران مجاناً", compare_priority_support: "دعم أولوية (سنوي)", compare_price: "السعر", compare_btn_select: "اختر", compare_btn_active: "الحالي", compare_btn_upgrade: "ترقية",
         usage_first_free: "أول تحليل مجاني.", pricing_input_types: "الإدخال: نص • PDF • صورة", trust_cards_speed_desc: "عند توفر الخوادم، معظم التقارير جاهزة خلال ثوانٍ.", pricing_health_charts: "✓ رسوم صحية", pricing_monthly_most_chosen: "معظم المستخدمين يختارون هذه الخطة.",
         terms_heading: "شروط الاستخدام", privacy_heading: "سياسة الخصوصية", payment_heading: "الدفع والاسترداد",
         contact_heading: "اتصل بنا", contact_intro: "للأسئلة أو طلبات الاسترداد أو المشاكل التقنية (مثلاً \"تم استلام الدفع لكن لم تُضاف رصيد تحليل\")، تواصل معنا.", contact_email_label: "البريد:", contact_whatsapp_label: "واتساب:", contact_whatsapp_click: "راسلنا على واتساب", contact_note: "إن أمكن، أدرج بريد الحساب ووصفاً قصيراً (رقم الطلب، التاريخ، إلخ). نرد خلال يوم عمل واحد.", contact_tagline: "نوريا — نتائج تحاليل الدم مفسرة بلغة واضحة.", merchant_contact_title: "معلومات اتصال التاجر", merchant_contact_page: "صفحة الاتصال", merchant_contact_title: "معلومات اتصال التاجر", merchant_contact_page: "صفحة الاتصال",
@@ -8609,7 +8697,7 @@
         hero_cta: "मेरी पहली विश्लेषण मुफ्त करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • गोपालन",
         hero_sample_label: "आपकी रिपोर्ट ऐसी दिखेगी", hero_sample_summary: "मान सामान्य सीमा में। हीमोग्लोबिन और ग्लूकोज सामान्य।", hero_sample_normal: "सामान्य", hero_sample_border: "सीमा", hero_sample_risk: "ध्यान", hero_sample_cta: "सारांश + मान + सुझाव + PDF डाउनलोड।", hero_sample_btn: "ऐसी रिपोर्ट पाएं — मुफ्त शुरू करें",
         trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी", trust_badges_heading: "सुरक्षित और अनुपालन सेवा",
-        trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान",
+        trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान", trust_badge_qr: "QR से रिपोर्ट सत्यापन", trust_bar_qr: "QR से रिपोर्ट सत्यापन",
         trust_badge_secure_paytr: "🔒 सुरक्षित भुगतान – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "ट्रैफिक SSL/TLS से एन्क्रिप्ट.", footer_trust_kvkk_desc: "व्यक्तिगत डेटा KVKK अनुरूप.", footer_trust_gdpr_desc: "EU के लिए GDPR अनुरूप.", footer_trust_paytr_desc: "PayTR से सुरक्षित भुगतान.", footer_trust_hipaa_desc: "स्वास्थ्य डेटा सुरक्षित संसाधित.",
@@ -8705,7 +8793,7 @@
         analyze_doctor_notes_label: "डॉक्टर का नोट / अतिरिक्त जानकारी (वैकल्पिक)",
         analyze_doctor_notes_placeholder: "जैसे डॉक्टर ने B12 दिया; इन परिणामों के साथ ध्यान में रखें।",
         analyze_or: "— या —", analyze_upload_btn: "PDF या चित्र (JPG, PNG) अपलोड करें",
-        report_title: "नोरिया विश्लेषण रिपोर्ट", report_download: "रिपोर्ट डाउनलोड करें", report_for_doctor: "डॉक्टर के पास ले जाएं", report_share: "मेरी रिपोर्ट साझा करें", report_share_text: "Norya से अपनी ब्लड टेस्ट रिपोर्ट साझा कर रहा/रही हूँ.", report_copy_link: "लिंक कॉपी करें", toast_shared: "साझा किया गया.", toast_share_failed: "शेयर लिंक नहीं बन सका.",
+        report_title: "नोरिया विश्लेषण रिपोर्ट", report_download: "रिपोर्ट डाउनलोड करें", report_for_doctor: "डॉक्टर के पास ले जाएं", report_share: "मेरी रिपोर्ट साझा करें", report_share_text: "Norya से अपनी ब्लड टेस्ट रिपोर्ट साझा कर रहा/रही हूँ.", report_copy_link: "लिंक कॉपी करें", report_unlock_full_subscribe: "पूरी रिपोर्ट देखने के लिए मासिक या वार्षिक सदस्यता लें।", toast_shared: "साझा किया गया.", toast_share_failed: "शेयर लिंक नहीं बन सका.",
         pdf_header_title: "रक्त परीक्षण विश्लेषण रिपोर्ट", pdf_footer_disclaimer: "यह रिपोर्ट शैक्षिक उद्देश्यों के लिए है। चिकित्सा निर्णयों के लिए विशेषज्ञ से सलाह लें। — Norya",
         pdf_sec_summary: "परीक्षण सारांश", pdf_sec_risk: "जोखिम संकेत", pdf_sec_values: "मान और संदर्भ", pdf_sec_causes: "संभावित कारण", pdf_sec_recommendations: "सिफारिशें",
         risk_legend_green: "सामान्य", risk_legend_yellow: "सीमा", risk_legend_red: "जोखिम",
@@ -8722,7 +8810,7 @@
         footer_mesafeli: "दूरबिक्री समझौता", footer_privacy: "गोपनीयता", footer_refund: "रिफंड और रद्दीकरण", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "उपयोग की शर्तें", footer_payment: "भुगतान और रिफंड", footer_contact: "संपर्क", back_home: "← होम",
         profile_tab_general: "सामान्य", profile_tab_plan: "प्लान और उपयोग", profile_tab_history: "विश्लेषण इतिहास", profile_tab_security: "सुरक्षा", profile_plan_label: "प्लान", profile_remaining: "शेष", profile_ends: "समाप्ति", profile_plan_pro: "Pro", profile_ends_monthly: "मासिक नवीनीकरण", profile_ends_na: "—", profile_usage_label: "उपयोग (इस महीने)", profile_upgrade_cta: "प्लान अपग्रेड करें", profile_view_analysis: "देखें", profile_unlimited: "असीमित", profile_country: "देश",
-        compare_title: "सभी प्लान की तुलना करें", compare_subtitle: "अपने लिए सही प्लान चुनें.", compare_feature: "विशेषता", compare_plan_free: "मुफ्त", compare_plan_single: "एकल", compare_plan_monthly: "मासिक", compare_plan_yearly: "वार्षिक", compare_analyses: "विश्लेषण", compare_analyses_per_month: "10+3 / माह", compare_upload: "टेक्स्ट, PDF, छवि", compare_report: "विस्तृत रिपोर्ट (सारांश, मान, सिफारिशें)", compare_diet: "आहार योजना", compare_supplements: "सप्लीमेंट", compare_heart: "दिल का स्वास्थ्य", compare_history: "इतिहास", compare_pdf: "PDF / साझा करें / डॉक्टर के लिए", compare_emr_ehr: "EMR/EHR रिपोर्ट", compare_langs: "रिपोर्ट भाषा", compare_langs_count: "9 भाषाएँ", compare_compare: "दो विश्लेषण की तुलना करें", compare_price: "कीमत", compare_btn_select: "चुनें", compare_btn_active: "वर्तमान", compare_btn_upgrade: "अपग्रेड",
+        compare_title: "सभी प्लान की तुलना करें", compare_subtitle: "अपने लिए सही प्लान चुनें.", compare_feature: "विशेषता", compare_plan_free: "मुफ्त", compare_plan_single: "एकल", compare_plan_monthly: "मासिक", compare_plan_yearly: "वार्षिक", compare_analyses: "विश्लेषण", compare_analyses_per_month: "10+3 / माह", compare_upload: "टेक्स्ट, PDF, छवि", compare_report: "विस्तृत रिपोर्ट (सारांश, मान, सिफारिशें)", compare_diet: "आहार योजना", compare_supplements: "सप्लीमेंट", compare_heart: "दिल का स्वास्थ्य", compare_history: "इतिहास", compare_pdf: "PDF / साझा करें / डॉक्टर के लिए", compare_emr_ehr: "EMR/EHR रिपोर्ट", compare_langs: "रिपोर्ट भाषा", compare_langs_count: "9 भाषाएँ", compare_compare: "दो विश्लेषण की तुलना करें", compare_qr: "QR रिपोर्ट सत्यापन", compare_yearly_benefit: "वार्षिक: 2 महीने मुफ्त", compare_priority_support: "प्राथमिकता सहायता (वार्षिक)", compare_price: "कीमत", compare_btn_select: "चुनें", compare_btn_active: "वर्तमान", compare_btn_upgrade: "अपग्रेड",
         usage_first_free: "पहला विश्लेषण मुफ्त.", pricing_input_types: "इनपुट: टेक्स्ट • PDF • फोटो", trust_cards_speed_desc: "सर्वर उपलब्ध होने पर अधिकांश रिपोर्ट सेकंडों में तैयार.", pricing_health_charts: "✓ स्वास्थ्य चार्ट", pricing_monthly_most_chosen: "ज़्यादातर उपयोगकर्ता यह प्लान चुनते हैं.",
         terms_heading: "उपयोग की शर्तें", privacy_heading: "गोपनीयता नीति", payment_heading: "भुगतान और रिफंड",
         contact_heading: "संपर्क", contact_intro: "प्रश्नों, रिफंड अनुरोधों या तकनीकी समस्याओं (जैसे \"भुगतान मिला लेकिन विश्लेषण क्रेडिट नहीं\") के लिए संपर्क करें।", contact_email_label: "ईमेल:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "WhatsApp पर मैसेज करें", contact_note: "यदि संभव हो तो अपना खाता ईमेल और संक्षिप्त विवरण (ऑर्डर नं., तारीख आदि) भेजें। हम 1 कार्यदिवस में जवाब देते हैं।", contact_tagline: "नोरिया — रक्त परीक्षण परिणाम सरल भाषा में।", merchant_contact_title: "विक्रेता संपर्क जानकारी", merchant_contact_page: "संपर्क पृष्ठ", merchant_contact_title: "विक्रेता संपर्क जानकारी", merchant_contact_page: "संपर्क पृष्ठ",
@@ -8786,7 +8874,7 @@
         hero_cta: "Πρώτη ανάλυση δωρεάν", hero_see_sample: "Δείτε παράδειγμα αναφοράς", hero_how: "Πώς λειτουργεί", hero_secure: "Ασφαλές • Προστασία ιδιωτικότητας",
         hero_sample_label: "Έτσι θα φαίνεται η αναφορά σας", hero_sample_summary: "Οι τιμές σας εντός φυσιολογικών ορίων. Αιμοσφαιρίνη και γλυκόζη φυσιολογικές.", hero_sample_normal: "Φυσιολογικό", hero_sample_border: "Όριο", hero_sample_risk: "Προσοχή", hero_sample_cta: "Σύνοψη + τιμές + συμβουλές + λήψη PDF.", hero_sample_btn: "Λάβετε αυτή την αναφορά — Ξεκινήστε δωρεάν",
         trust_since: "Από το 2017", trust_satisfaction: "100% ικανοποίηση", trust_users: "100.000+ χρήστες", trust_badges_heading: "Ασφαλής και συμβατή υπηρεσία",
-        trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR",
+        trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR", trust_badge_qr: "Επαλήθευση αναφοράς με QR", trust_bar_qr: "Επαλήθευση αναφοράς με QR",
         trust_badge_secure_paytr: "🔒 Ασφαλής πληρωμή – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Κυκλοφορία κρυπτογραφημένη SSL/TLS.", footer_trust_kvkk_desc: "Προσωπικά δεδομένα σύμφωνα με KVKK.", footer_trust_gdpr_desc: "Συμβατό με GDPR για ΕΕ.", footer_trust_paytr_desc: "Ασφαλής πληρωμή μέσω PayTR.", footer_trust_hipaa_desc: "Δεδομένα υγείας ασφαλή επεξεργασία.",
@@ -8881,7 +8969,7 @@
         analyze_placeholder: "Π.χ. Αιμοσφαιρίνη: 14 g/dL, WBC: 7.2, Γλυκόζη: 95 mg/dL...",
         analyze_doctor_notes_label: "Σημείωση γιατρού (προαιρετικό)", analyze_doctor_notes_placeholder: "Π.χ. Ο γιατρός μου έδωσε B12.",
         analyze_or: "— ή —", analyze_upload_btn: "Ανέβασμα PDF ή εικόνας (JPG, PNG)",
-        report_title: "Αναφορά ανάλυσης Norya", report_download: "Λήψη αναφοράς", report_for_doctor: "Για τον γιατρό μου", report_share: "Κοινή χρήση αναφοράς", report_share_text: "Μοιράζομαι την αναφορά αίματος μου από το Norya.", report_copy_link: "Αντιγραφή συνδέσμου", toast_shared: "Κοινοποιήθηκε.", toast_share_failed: "Δεν ήταν δυνατή η δημιουργία συνδέσμου.",
+        report_title: "Αναφορά ανάλυσης Norya", report_download: "Λήψη αναφοράς", report_for_doctor: "Για τον γιατρό μου", report_share: "Κοινή χρήση αναφοράς", report_share_text: "Μοιράζομαι την αναφορά αίματος μου από το Norya.", report_copy_link: "Αντιγραφή συνδέσμου", report_unlock_full_subscribe: "Εγγραφείτε μηνιαία ή ετήσια για να δείτε την πλήρη αναφορά.", toast_shared: "Κοινοποιήθηκε.", toast_share_failed: "Δεν ήταν δυνατή η δημιουργία συνδέσμου.",
         pdf_header_title: "Αναφορά αιματολογικών", pdf_footer_disclaimer: "Αυτή η αναφορά είναι μόνο εκπαιδευτική. Συμβουλευτείτε πάντα επαγγελματία υγείας.",
         pdf_sec_summary: "Σύνοψη εξετάσεων", pdf_sec_risk: "Σημεία προσοχής", pdf_sec_values: "Τιμές και αναφορές", pdf_sec_causes: "Πιθανές αιτίες", pdf_sec_recommendations: "Συστάσεις",
         risk_legend_green: "Φυσιολογικό", risk_legend_yellow: "Όριο", risk_legend_red: "Σε κίνδυνο",
@@ -8897,7 +8985,7 @@
         footer_mesafeli: "Σύμβαση τηλεπώλησης", footer_privacy: "Απόρρητο", footer_refund: "Επιστροφή και ακύρωση", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Όροι χρήσης", footer_payment: "Πληρωμή και επιστροφές", footer_contact: "Επικοινωνία", back_home: "← Αρχική",
         profile_tab_general: "Γενικά", profile_tab_plan: "Πλάνο και χρήση", profile_tab_history: "Ιστορικό αναλύσεων", profile_tab_security: "Ασφάλεια", profile_plan_label: "Πλάνο", profile_remaining: "Υπόλοιπο", profile_ends: "Λήξη", profile_plan_pro: "Pro", profile_ends_monthly: "Μηνιαία ανανέωση", profile_ends_na: "—", profile_usage_label: "Χρήση (αυτόν τον μήνα)", profile_upgrade_cta: "Αναβάθμιση πλάνου", profile_view_analysis: "Προβολή", profile_unlimited: "Απεριόριστα", profile_country: "Χώρα",
-        compare_title: "Σύγκριση όλων των πλάνων", compare_subtitle: "Επιλέξτε το πλάνο που σας ταιριάζει.", compare_feature: "Λειτουργία", compare_plan_free: "Δωρεάν", compare_plan_single: "Μονό", compare_plan_monthly: "Μηνιαίο", compare_plan_yearly: "Ετήσιο", compare_analyses: "Αναλύσεις", compare_analyses_per_month: "10+3 / μήνα", compare_upload: "Κείμενο, PDF, εικόνα", compare_report: "Λεπτομερής αναφορά (περίληψη, τιμές, συστάσεις)", compare_diet: "Διατροφικό πλάνο", compare_supplements: "Συμπληρώματα", compare_heart: "Υγεία καρδιάς", compare_history: "Ιστορικό", compare_pdf: "PDF / Κοινοποίηση / Για τον γιατρό", compare_emr_ehr: "Αναφορά EMR/EHR", compare_langs: "Γλώσσα αναφοράς", compare_langs_count: "9 γλώσσες", compare_compare: "Σύγκριση δύο αναλύσεων", compare_price: "Τιμή", compare_btn_select: "Επιλογή", compare_btn_active: "Τρέχον", compare_btn_upgrade: "Αναβάθμιση",
+        compare_title: "Σύγκριση όλων των πλάνων", compare_subtitle: "Επιλέξτε το πλάνο που σας ταιριάζει.", compare_feature: "Λειτουργία", compare_plan_free: "Δωρεάν", compare_plan_single: "Μονό", compare_plan_monthly: "Μηνιαίο", compare_plan_yearly: "Ετήσιο", compare_analyses: "Αναλύσεις", compare_analyses_per_month: "10+3 / μήνα", compare_upload: "Κείμενο, PDF, εικόνα", compare_report: "Λεπτομερής αναφορά (περίληψη, τιμές, συστάσεις)", compare_diet: "Διατροφικό πλάνο", compare_supplements: "Συμπληρώματα", compare_heart: "Υγεία καρδιάς", compare_history: "Ιστορικό", compare_pdf: "PDF / Κοινοποίηση / Για τον γιατρό", compare_emr_ehr: "Αναφορά EMR/EHR", compare_langs: "Γλώσσα αναφοράς", compare_langs_count: "9 γλώσσες", compare_compare: "Σύγκριση δύο αναλύσεων", compare_qr: "Επαλήθευση αναφοράς με QR", compare_yearly_benefit: "Ετήσιο: 2 μήνες δωρεάν", compare_priority_support: "Προτεραιότητα υποστήριξης (ετήσιο)", compare_price: "Τιμή", compare_btn_select: "Επιλογή", compare_btn_active: "Τρέχον", compare_btn_upgrade: "Αναβάθμιση",
         usage_first_free: "Πρώτη ανάλυση δωρεάν.", pricing_input_types: "Είσοδος: Κείμενο • PDF • Φωτογραφία", trust_cards_speed_desc: "Όταν οι διακομιστές είναι διαθέσιμοι, οι περισσότερες αναφορές είναι έτοιμες σε δευτερόλεπτα.", pricing_health_charts: "✓ Γραφήματα υγείας", pricing_monthly_most_chosen: "Οι περισσότεροι χρήστες επιλέγουν αυτό το πλάνο.",
         terms_heading: "Όροι χρήσης", privacy_heading: "Πολιτική απορρήτου", payment_heading: "Πληρωμή και επιστροφές",
         contact_heading: "Επικοινωνία", contact_intro: "Για ερωτήσεις, αιτήματα επιστροφής χρημάτων ή τεχνικά ζητήματα (π.χ. \"η πληρωμή ελήφθη αλλά δεν προστέθηκε πίστωση ανάλυσης\"), επικοινωνήστε μαζί μας.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Στείλτε μας μήνυμα στο WhatsApp", contact_note: "Εάν είναι δυνατόν, συμπεριλάβετε το email του λογαριασμού σας και μια σύντομη περιγραφή (αριθμός παραγγελίας, ημερομηνία κ.λπ.). Απαντάμε εντός 1 εργάσιμης ημέρας.", contact_tagline: "Norya — Αποτελέσματα αιματολογικών σε απλή γλώσσα.", merchant_contact_title: "Στοιχεία επικοινωνίας πωλητή", merchant_contact_page: "Σελίδα επικοινωνίας", merchant_contact_title: "Στοιχεία επικοινωνίας πωλητή", merchant_contact_page: "Σελίδα επικοινωνίας",
@@ -8961,7 +9049,7 @@
         hero_cta: "První analýza zdarma", hero_see_sample: "Zobrazit ukázkovou zprávu", hero_how: "Jak to funguje", hero_secure: "Bezpečné • Ochrana soukromí",
         hero_sample_label: "Tak bude vypadat vaše zpráva", hero_sample_summary: "Vaše hodnoty v referenčním rozsahu. Hemoglobin a glukóza v normě.", hero_sample_normal: "Normální", hero_sample_border: "Mez", hero_sample_risk: "Pozor", hero_sample_cta: "Shrnutí + hodnoty + doporučení + stažení PDF.", hero_sample_btn: "Získat tuto zprávu — Začít zdarma",
         trust_since: "Od 2017", trust_satisfaction: "100% spokojenost", trust_users: "100 000+ uživatelů", trust_badges_heading: "Zabezpečená a compliantní služba",
-        trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR",
+        trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR", trust_badge_qr: "Ověření reportu pomocí QR", trust_bar_qr: "Ověření reportu pomocí QR",
         trust_badge_secure_paytr: "🔒 Zabezpečená platba – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Provoz šifrován SSL/TLS.", footer_trust_kvkk_desc: "Osobní údaje dle KVKK.", footer_trust_gdpr_desc: "V souladu s GDPR pro EU.", footer_trust_paytr_desc: "Zabezpečená platba PayTR.", footer_trust_hipaa_desc: "Zdravotní údaje zpracovány bezpečně.",
@@ -9056,7 +9144,7 @@
         analyze_placeholder: "Např. Hemoglobin: 14 g/dL, WBC: 7.2, Glukóza: 95 mg/dL...",
         analyze_doctor_notes_label: "Poznámka lékaře (volitelné)", analyze_doctor_notes_placeholder: "Např. Lékař mi předepsal B12.",
         analyze_or: "— nebo —", analyze_upload_btn: "Nahrát PDF nebo obrázek (JPG, PNG)",
-        report_title: "Zpráva analýzy Norya", report_download: "Stáhnout zprávu", report_for_doctor: "K lékaři", report_share: "Sdílet mou zprávu", report_share_text: "Sdílím svou zprávu z krevních testů z Norya.", report_copy_link: "Kopírovat odkaz", toast_shared: "Sdíleno.", toast_share_failed: "Nepodařilo se vytvořit odkaz.",
+        report_title: "Zpráva analýzy Norya", report_download: "Stáhnout zprávu", report_for_doctor: "K lékaři", report_share: "Sdílet mou zprávu", report_share_text: "Sdílím svou zprávu z krevních testů z Norya.", report_copy_link: "Kopírovat odkaz", report_unlock_full_subscribe: "Předplaťte si měsíčně nebo ročně a uvidíte celou zprávu.", toast_shared: "Sdíleno.", toast_share_failed: "Nepodařilo se vytvořit odkaz.",
         pdf_header_title: "Zpráva krevního testu", pdf_footer_disclaimer: "Tato zpráva je pouze vzdělávací. Vždy se poraďte s lékařem.",
         pdf_sec_summary: "Shrnutí testu", pdf_sec_risk: "Rizikové body", pdf_sec_values: "Hodnoty a referenční rozsahy", pdf_sec_causes: "Možné příčiny", pdf_sec_recommendations: "Doporučení",
         risk_legend_green: "Normální", risk_legend_yellow: "Mez", risk_legend_red: "Riziko",
@@ -9072,7 +9160,7 @@
         footer_mesafeli: "Smlouva o dálkovém prodeji", footer_privacy: "Soukromí", footer_refund: "Vrácení a zrušení", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Podmínky užití", footer_payment: "Platba a vrácení", footer_contact: "Kontakt", back_home: "← Domů",
         profile_tab_general: "Obecné", profile_tab_plan: "Balíček a využití", profile_tab_history: "Historie analýz", profile_tab_security: "Zabezpečení", profile_plan_label: "Plán", profile_remaining: "Zbývá", profile_ends: "Konec", profile_plan_pro: "Pro", profile_ends_monthly: "Měsíční obnova", profile_ends_na: "—", profile_usage_label: "Využití (tento měsíc)", profile_upgrade_cta: "Upgradovat plán", profile_view_analysis: "Zobrazit", profile_unlimited: "Neomezeno", profile_country: "Země",
-        compare_title: "Porovnat všechny plány", compare_subtitle: "Vyberte si vhodný plán.", compare_feature: "Funkce", compare_plan_free: "Zdarma", compare_plan_single: "Jednorázový", compare_plan_monthly: "Měsíční", compare_plan_yearly: "Roční", compare_analyses: "Analýzy", compare_analyses_per_month: "10+3 / měsíc", compare_upload: "Text, PDF, obrázek", compare_report: "Podrobná zpráva (shrnutí, hodnoty, doporučení)", compare_diet: "Jídelníček", compare_supplements: "Doplňky", compare_heart: "Zdraví srdce", compare_history: "Historie", compare_pdf: "PDF / Sdílet / Pro lékaře", compare_emr_ehr: "Zpráva EMR/EHR", compare_langs: "Jazyk zprávy", compare_langs_count: "9 jazyků", compare_compare: "Porovnat dvě analýzy", compare_price: "Cena", compare_btn_select: "Vybrat", compare_btn_active: "Aktivní", compare_btn_upgrade: "Upgradovat",
+        compare_title: "Porovnat všechny plány", compare_subtitle: "Vyberte si vhodný plán.", compare_feature: "Funkce", compare_plan_free: "Zdarma", compare_plan_single: "Jednorázový", compare_plan_monthly: "Měsíční", compare_plan_yearly: "Roční", compare_analyses: "Analýzy", compare_analyses_per_month: "10+3 / měsíc", compare_upload: "Text, PDF, obrázek", compare_report: "Podrobná zpráva (shrnutí, hodnoty, doporučení)", compare_diet: "Jídelníček", compare_supplements: "Doplňky", compare_heart: "Zdraví srdce", compare_history: "Historie", compare_pdf: "PDF / Sdílet / Pro lékaře", compare_emr_ehr: "Zpráva EMR/EHR", compare_langs: "Jazyk zprávy", compare_langs_count: "9 jazyků", compare_compare: "Porovnat dvě analýzy", compare_qr: "Ověření reportu QR", compare_yearly_benefit: "Roční: 2 měsíce zdarma", compare_priority_support: "Prioritní podpora (roční)", compare_price: "Cena", compare_btn_select: "Vybrat", compare_btn_active: "Aktivní", compare_btn_upgrade: "Upgradovat",
         usage_first_free: "První analýza zdarma.", pricing_input_types: "Vstup: Text • PDF • Foto", trust_cards_speed_desc: "Když jsou servery k dispozici, většina reportů je hotová během sekund.", pricing_health_charts: "✓ Grafy zdraví", pricing_monthly_most_chosen: "Většina uživatelů volí tento plán.",
         terms_heading: "Podmínky užití", privacy_heading: "Zásady ochrany osobních údajů", payment_heading: "Platba a vrácení",
         contact_heading: "Kontakt", contact_intro: "Pro dotazy, žádosti o vrácení peněz nebo technické problémy (např. \"platba přijata, ale nebyl přidán kredit analýzy\") nás kontaktujte.", contact_email_label: "E-mail:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Napište nám na WhatsApp", contact_note: "Pokud možno uveďte e-mail účtu a krátký popis (č. objednávky, datum atd.). Odpovídáme do 1 pracovního dne.", contact_tagline: "Norya — Výsledky krevních testů srozumitelným jazykem.", merchant_contact_title: "Kontaktní údaje prodejce", merchant_contact_page: "Kontaktní stránka", merchant_contact_title: "Kontaktní údaje prodejce", merchant_contact_page: "Kontaktní stránka",
@@ -9136,7 +9224,7 @@
         hero_cta: "Prva analiza besplatno", hero_see_sample: "Pogledaj primer izveštaja", hero_how: "Kako funkcioniše", hero_secure: "Bezbedno • Privatnost",
         hero_sample_label: "Ovako će izgledati vaš izveštaj", hero_sample_summary: "Vrednosti u referentnom opsegu. Hemoglobin i glukoza normalni.", hero_sample_normal: "Normalno", hero_sample_border: "Granica", hero_sample_risk: "Pažnja", hero_sample_cta: "Rezime + vrednosti + preporuke + preuzimanje PDF.", hero_sample_btn: "Nabavite ovaj izveštaj — Počnite besplatno",
         trust_since: "Od 2017", trust_satisfaction: "100% zadovoljstvo", trust_users: "100.000+ korisnika", trust_badges_heading: "Sigurna i usklađena usluga",
-        trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR",
+        trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR", trust_badge_qr: "Verifikacija izveštaja QR kodom", trust_bar_qr: "Verifikacija izveštaja QR kodom",
         trust_badge_secure_paytr: "🔒 Sigurna plaćanja – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Saobráćaj šifrovan SSL/TLS.", footer_trust_kvkk_desc: "Lični podaci u skladu sa KVKK.", footer_trust_gdpr_desc: "U skladu sa GDPR za EU.", footer_trust_paytr_desc: "Sigurna plaćanja putem PayTR.", footer_trust_hipaa_desc: "Zdravstveni podaci sigurno obrađeni.",
@@ -9231,7 +9319,7 @@
         analyze_placeholder: "Npr. Hemoglobin: 14 g/dL, WBC: 7.2, Glukoza: 95 mg/dL...",
         analyze_doctor_notes_label: "Napomena lekara (opciono)", analyze_doctor_notes_placeholder: "Npr. Lekar mi je prepisao B12.",
         analyze_or: "— ili —", analyze_upload_btn: "Otpremite PDF ili sliku (JPG, PNG)",
-        report_title: "Izveštaj analize Norya", report_download: "Preuzmi izveštaj", report_for_doctor: "Kod lekara", report_share: "Podeli moj izveštaj", report_share_text: "Delim svoj izveštaj analize krvi sa Norya.", report_copy_link: "Kopiraj link", toast_shared: "Podeljeno.", toast_share_failed: "Nije moguće kreirati link.",
+        report_title: "Izveštaj analize Norya", report_download: "Preuzmi izveštaj", report_for_doctor: "Kod lekara", report_share: "Podeli moj izveštaj", report_share_text: "Delim svoj izveštaj analize krvi sa Norya.", report_copy_link: "Kopiraj link", report_unlock_full_subscribe: "Pretplatite se mesečno ili godišnje da biste videli ceo izveštaj.", toast_shared: "Podeljeno.", toast_share_failed: "Nije moguće kreirati link.",
         pdf_header_title: "Izveštaj krvnog testa", pdf_footer_disclaimer: "Ovaj izveštaj je samo obrazovni. Uvek posavetujte se sa lekarom.",
         pdf_sec_summary: "Rezime testa", pdf_sec_risk: "Znaci rizika", pdf_sec_values: "Vrednosti i referentni opseg", pdf_sec_causes: "Mogući uzroci", pdf_sec_recommendations: "Preporuke",
         risk_legend_green: "Normalno", risk_legend_yellow: "Granica", risk_legend_red: "Rizično",
@@ -9247,7 +9335,7 @@
         footer_mesafeli: "Ugovor o prodaji na daljinu", footer_privacy: "Privatnost", footer_refund: "Povrat i otkazivanje", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Uslovi korišćenja", footer_payment: "Plaćanje i povrati", footer_contact: "Kontakt", back_home: "← Početna",
         profile_tab_general: "Opšte", profile_tab_plan: "Paket i korišćenje", profile_tab_history: "Istorija analiza", profile_tab_security: "Bezbednost", profile_plan_label: "Plan", profile_remaining: "Preostalo", profile_ends: "Kraj", profile_plan_pro: "Pro", profile_ends_monthly: "Mesečno obnavljanje", profile_ends_na: "—", profile_usage_label: "Korišćenje (ovaj mesec)", profile_upgrade_cta: "Nadogradi plan", profile_view_analysis: "Pogledaj", profile_unlimited: "Neograničeno", profile_country: "Zemlja",
-        compare_title: "Uporedi sve planove", compare_subtitle: "Pronađite plan koji vam odgovara.", compare_feature: "Funkcija", compare_plan_free: "Besplatno", compare_plan_single: "Pojedinačno", compare_plan_monthly: "Mesečno", compare_plan_yearly: "Godišnje", compare_analyses: "Analize", compare_analyses_per_month: "10+3 / mesec", compare_upload: "Tekst, PDF, slika", compare_report: "Detaljan izveštaj (rezime, vrednosti, preporuke)", compare_diet: "Dijetetski plan", compare_supplements: "Suplementi", compare_heart: "Zdravlje srca", compare_history: "Istorija", compare_pdf: "PDF / Podeli / Za lekara", compare_emr_ehr: "EMR/EHR izveštaj", compare_langs: "Jezik izveštaja", compare_langs_count: "9 jezika", compare_compare: "Uporedi dve analize", compare_price: "Cena", compare_btn_select: "Izaberi", compare_btn_active: "Aktivno", compare_btn_upgrade: "Nadogradi",
+        compare_title: "Uporedi sve planove", compare_subtitle: "Pronađite plan koji vam odgovara.", compare_feature: "Funkcija", compare_plan_free: "Besplatno", compare_plan_single: "Pojedinačno", compare_plan_monthly: "Mesečno", compare_plan_yearly: "Godišnje", compare_analyses: "Analize", compare_analyses_per_month: "10+3 / mesec", compare_upload: "Tekst, PDF, slika", compare_report: "Detaljan izveštaj (rezime, vrednosti, preporuke)", compare_diet: "Dijetetski plan", compare_supplements: "Suplementi", compare_heart: "Zdravlje srca", compare_history: "Istorija", compare_pdf: "PDF / Podeli / Za lekara", compare_emr_ehr: "EMR/EHR izveštaj", compare_langs: "Jezik izveštaja", compare_langs_count: "9 jezika", compare_compare: "Uporedi dve analize", compare_qr: "Verifikacija izveštaja QR", compare_yearly_benefit: "Godišnje: 2 meseca besplatno", compare_priority_support: "Prioritetna podrška (godišnje)", compare_price: "Cena", compare_btn_select: "Izaberi", compare_btn_active: "Aktivno", compare_btn_upgrade: "Nadogradi",
         usage_first_free: "Prva analiza besplatna.", pricing_input_types: "Unos: Tekst • PDF • Slika", trust_cards_speed_desc: "Kada su serveri dostupni, većina izveštaja je spremna za sekunde.", pricing_health_charts: "✓ Grafikon zdravlja", pricing_monthly_most_chosen: "Većina korisnika bira ovaj plan.",
         terms_heading: "Uslovi korišćenja", privacy_heading: "Politika privatnosti", payment_heading: "Plaćanje i povrati",
         contact_heading: "Kontakt", contact_intro: "Za pitanja, zahteve za povrat novca ili tehničke probleme (npr. \"plaćanje primljeno ali nije dodat kredit za analizu\") pišite nam.", contact_email_label: "Email:", contact_whatsapp_label: "WhatsApp:", contact_whatsapp_click: "Pišite nam na WhatsApp", contact_note: "Ako je moguće, navedite email naloga i kratak opis (br. porudžbine, datum itd.). Odgovaramo u roku od 1 radnog dana.", contact_tagline: "Norya — Rezultati krvnih testova jasnim jezikom.", merchant_contact_title: "Kontakt podaci prodavca", merchant_contact_page: "Kontakt stranica", merchant_contact_title: "Kontakt podaci prodavca", merchant_contact_page: "Kontakt stranica",
@@ -9689,11 +9777,17 @@
         if (typeof updateTestModeUI === 'function') updateTestModeUI();
         var ridFromUrl = (window.location.pathname === '/report' || window.location.search.indexOf('rid=') !== -1) ? getReportId() : null;
         if (ridFromUrl) {
+          var qsPlan = (typeof URLSearchParams !== 'undefined' && window.location.search) ? new URLSearchParams(window.location.search).get('plan') : null;
+          var overridePlan = (qsPlan === 'monthly' || qsPlan === 'yearly') ? qsPlan : null;
           fetch(API_BASE + '/analyze/history/' + encodeURIComponent(ridFromUrl), { headers: { 'Authorization': 'Bearer ' + getToken() } })
             .then(function(r) { return r.ok ? r.json() : null; })
             .then(function(data) {
               if (data && data.result_text) {
-                var optsFromHistory = { risk_summary: null, health_score: null, trend: null, premium: false, ui_hints: { locked: true }, plan: (typeof window.__lastUsagePlan !== 'undefined' ? window.__lastUsagePlan : 'free') };
+                var planFromApi = (data.plan === 'monthly' || data.plan === 'yearly') ? data.plan : (typeof window.__lastUsagePlan !== 'undefined' ? window.__lastUsagePlan : 'free');
+                var planForRender = overridePlan || planFromApi;
+                var isPro = (planForRender === 'monthly' || planForRender === 'yearly') || (data.premium === true);
+                var reportLimitedPreview = (planForRender === 'single' || planForRender === 'monthly');
+                var optsFromHistory = { risk_summary: data.risk_summary || null, health_score: data.health_score || null, trend: data.trend || null, premium: isPro, ui_hints: data.ui_hints || { locked: !isPro, report_limited_preview: reportLimitedPreview }, plan: planForRender };
                 renderReport(data.result_text, optsFromHistory);
                 lastAnalysisId = data.id || ridFromUrl;
                 try { sessionStorage.setItem(LAST_RID_KEY, String(ridFromUrl)); } catch (_) {}
@@ -9980,7 +10074,7 @@
       checkoutBasePrice = price;
       checkoutSymbol = symbol || '€';
       document.getElementById('checkout-plan-name').textContent = planNames[plan];
-      var featureKeys = { single: ['plan_single_1', 'plan_single_2', 'plan_single_3', 'plan_single_4', 'plan_single_5', 'plan_single_6'], monthly: ['plan_monthly_1', 'plan_monthly_2', 'plan_monthly_3', 'plan_monthly_4', 'plan_monthly_5', 'plan_monthly_6', 'plan_monthly_7'], yearly: ['plan_yearly_1', 'plan_yearly_2', 'plan_yearly_3', 'plan_yearly_4', 'plan_yearly_5', 'plan_yearly_6', 'plan_yearly_7', 'plan_yearly_8'] }[plan] || [];
+      var featureKeys = { single: ['plan_single_1', 'plan_single_2', 'plan_single_3', 'plan_single_4', 'plan_single_5', 'plan_single_6'], monthly: ['plan_monthly_1', 'plan_monthly_2', 'plan_monthly_3', 'plan_monthly_4', 'plan_monthly_5', 'plan_monthly_6', 'plan_monthly_7'], yearly: ['plan_yearly_1', 'plan_yearly_2', 'plan_yearly_3', 'plan_yearly_4', 'plan_yearly_5', 'plan_yearly_6', 'plan_yearly_7', 'plan_yearly_8', 'plan_yearly_9', 'plan_yearly_10'] }[plan] || [];
       var listEl = document.getElementById('checkout-plan-features-list');
       if (listEl) {
         listEl.innerHTML = featureKeys.map(function(k) { var s = (t[k] || '').replace(/^✓\s*/, ''); return s ? '<li class="flex items-center gap-2"><span class="text-primary-500 font-medium">✓</span><span>' + s + '</span></li>' : ''; }).filter(Boolean).join('') || '<li>—</li>';
@@ -10762,6 +10856,7 @@
       if (window.history && window.history.replaceState) window.history.replaceState(null, '', (window.location.pathname || '/') + (window.location.search || '') + '#profil');
       loadProfileData();
       switchProfileTab('general');
+      loadProfileHistory();
       setTimeout(function() { sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 80);
     }
     function closeProfilePage() {
@@ -10856,11 +10951,23 @@
       var t = T[getLang()] || T.tr;
       var listEl = document.getElementById('profile-history-list');
       if (!listEl) return;
+      var token = getToken();
+      if (!token) {
+        listEl.innerHTML = '<p class="text-amber-600 dark:text-amber-400 text-sm">' + (t.history_login_required || 'Geçmişi görmek için giriş yapın.') + '</p>';
+        return;
+      }
       listEl.innerHTML = '<p class="text-accent-500 text-sm">' + (t.history_loading || 'Yükleniyor...') + '</p>';
       try {
-        var res = await fetch(API_BASE + '/analyze/history?limit=50', { headers: { 'Authorization': 'Bearer ' + getToken() } });
+        var res = await fetch(API_BASE + '/analyze/history?limit=50', { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
         var data = await res.json().catch(function() { return []; });
-        if (res.status === 401 || res.status === 403) { listEl.innerHTML = '<p class="text-accent-500 text-sm">' + (t.history_empty || 'Henüz analiz yok.') + '</p>'; return; }
+        if (res.status === 401 || res.status === 403) {
+          listEl.innerHTML = '<p class="text-amber-600 dark:text-amber-400 text-sm">' + (t.history_session_expired || 'Oturum süreniz dolmuş olabilir. Çıkış yapıp tekrar giriş yapın.') + '</p>';
+          return;
+        }
+        if (!res.ok) {
+          listEl.innerHTML = '<p class="text-red-600 dark:text-red-400 text-sm">' + (t.history_load_error || 'Geçmiş yüklenemedi.') + ' (HTTP ' + res.status + ')</p>';
+          return;
+        }
         if (!data.length) { listEl.innerHTML = '<p class="text-accent-500 text-sm">' + (t.history_empty || 'Henüz analiz yok.') + '</p>'; return; }
         var locale = getLocale();
         var srcPdf = t.source_pdf || 'PDF', srcImg = t.source_image || 'Görsel', srcTxt = t.source_text || 'Metin';

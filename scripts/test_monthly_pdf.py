@@ -1,23 +1,23 @@
 #!/usr/bin/env python3
 """
-Premium PDF çıktısını görmek için test scripti.
+Aylık abonelik (monthly) PDF çıktısını kontrol etmek için test scripti.
+Premium şablon + trend + doğrulama kodu ile rapor üretir.
 
 Çalıştırma (proje kökünden):
-  .venv/bin/python scripts/test_premium_pdf.py
-  # veya uv kuruluysa: uv run python scripts/test_premium_pdf.py
+  .venv/bin/python scripts/test_monthly_pdf.py
+  # veya: uv run python scripts/test_monthly_pdf.py
 
-Oluşan dosya: test_premium_report.pdf (proje kökünde)
-Açmak: open test_premium_report.pdf
+Oluşan dosya: test_monthly_report.pdf (proje kökünde)
+Açmak: open test_monthly_report.pdf
 """
 import sys
+import os
 from pathlib import Path
 
-# Proje kökünü path'e ekle (app import için)
 ROOT = Path(__file__).resolve().parent.parent
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
-# Örnek rapor metni: parse_report_to_context'in beklediği **Başlık** bölümleri
 SAMPLE_RESULT_TEXT = """
 **Özet**:
 Genel durum iyi. Bazı parametreler referans sınırında. Beslenme ve hareket önerilir.
@@ -39,7 +39,6 @@ LDL ve glukoz takip edilmeli.
 - Düzenli kontrole devam edin. Doktorunuzla paylaşın.
 """
 
-# Trend verisi (premium PDF'de mini bar chart için)
 SAMPLE_TREND_DATA = {
     "dates": ["01.01.2025", "15.01.2025", "01.02.2025"],
     "ldl": [128, 122, 118],
@@ -49,49 +48,41 @@ SAMPLE_TREND_DATA = {
 
 
 def main():
-    import argparse
-    import os
     from app.services.report_verification import _qr_png_base64
     from app.services.report_pdf import build_report_pdf
 
-    parser = argparse.ArgumentParser(description="Premium test PDF (QR dahil)")
-    parser.add_argument("--base-url", default=None, help="Doğrulama linki için base URL (örn. http://127.0.0.1:8000 veya http://192.168.1.5:8000). Yoksa VERIFY_BASE_URL env, yoksa http://127.0.0.1:8000")
-    args = parser.parse_args()
-
-    base_url = (args.base_url or os.environ.get("VERIFY_BASE_URL") or "http://127.0.0.1:8000").strip().rstrip("/")
-    report_id = "test-report-uuid-12345678"
-    token = "mock"
+    base_url = (os.environ.get("VERIFY_BASE_URL") or "http://127.0.0.1:8000").strip().rstrip("/")
+    report_id = "test-monthly-uuid-87654321"
+    token = "mock-monthly"
     verification_url = f"{base_url}/verify/{report_id}?token={token}"
 
-    out_path = ROOT / "test_premium_report.pdf"
     qr_b64 = _qr_png_base64(verification_url)
     if not qr_b64:
-        print("Uyarı: QR görseli üretilemedi (qrcode kurulu mu?). Doğrulama kodu yine de eklenecek.")
+        print("Uyarı: QR görseli üretilemedi (qrcode kurulu mu?).")
     verification_info = {
         "report_id": report_id,
-        "verification_code": "ABC12XYZ",
+        "verification_code": "MONTH99",
         "verification_url": verification_url,
         "qr_image_base64": qr_b64 or "",
     }
 
-    print(f"Premium PDF oluşturuluyor (QR → {verification_url})...")
+    out_path = ROOT / "test_monthly_report.pdf"
+    print("Aylık abonelik (monthly) PDF oluşturuluyor...")
     pdf_bytes = build_report_pdf(
         result_text=SAMPLE_RESULT_TEXT,
-        report_date="03.03.2025 14:00",
+        report_date="07.03.2026 14:00",
         lang="tr",
-        report_id="TEST-001",
-        user_identifier="test@norya.com",
-        patient_name="Test Kullanıcı",
-        plan_name="premium",
+        report_id="MONTHLY-TEST-001",
+        user_identifier="test-monthly@norya.com",
+        patient_name="Test Aylık Kullanıcı",
+        plan_name="monthly",
         source_type="text",
         trend_data=SAMPLE_TREND_DATA,
         verification_info=verification_info,
     )
     out_path.write_bytes(pdf_bytes)
     print(f"PDF yazıldı: {out_path}")
-    print("Açmak için: open test_premium_report.pdf  (macOS) veya xdg-open test_premium_report.pdf (Linux)")
-    if "127.0.0.1" in base_url:
-        print("Not: QR şu an localhost'a gidiyor. Telefondan okutacaksanız aynı ağda --base-url http://BILGISAYAR_IP:8000 ile tekrar çalıştırın.")
+    print("Açmak için: open test_monthly_report.pdf")
     return 0
 
 

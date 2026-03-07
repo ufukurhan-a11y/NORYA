@@ -1,0 +1,39 @@
+---
+description: Norya sayfalarında favicon ve apple-touch-icon kullanımı — tüm HTML şablonları ve yeni sayfalarda aynı ikon seti kullanılır.
+globs: app/templates/**/*.html, static/**/*.html, **/templates/**/*.html
+alwaysApply: false
+---
+
+# Favicon ve tarayıcı ikonu (Norya)
+
+Tüm Norya sayfalarında tarayıcı sekmesi ve mobil ikon için **tek ve aynı ikon seti** kullanılır. Chrome ve diğer tarayıcılarda Norya “N” ikonu (turkuaz/mavi) görünmeli.
+
+## Kullanılacak ikon seti
+
+Yeni veya güncellenen her HTML sayfasında / head bölümünde aşağıdaki blok kullanılmalı (başka favicon linki eklenmemeli):
+
+```html
+<!-- Tarayıcı sekmesi: Norya N ikonu -->
+<link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+```
+
+## Dosya yolları
+
+- Favicon 32x32: `/static/icons/favicon-32x32.png`
+- Favicon 16x16: `/static/icons/favicon-16x16.png`
+- Apple touch icon: `/static/icons/apple-touch-icon.png`
+
+## Uygulanan yerler
+
+- `app/templates/legal/base_legal.html` (iade talebi, iade-iptal, yasal sayfalar)
+- `app/templates/base.html`
+- `app/templates/enterprise/kurumsal.html`
+- `app/templates/legal/iade-iptal.html`
+- `static/index.html`
+- `static/legal/*.html` (gizlilik, kvkk-gdpr, iade-iptal-politikasi, iletisim, kullanim-sartlari, mesafeli-satis-sozlesmesi)
+
+Yeni bir HTML şablonu veya statik sayfa eklendiğinde head içinde **bu aynı favicon blokunu** kullan; `norya_logo_transparent_trim.png` veya başka tek bir PNG’yi favicon/icon olarak kullanma.

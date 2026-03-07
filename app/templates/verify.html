@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="{{ language or 'en' }}" dir="ltr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{{ labels.title }} — {{ labels.brand }}</title>
+  <style>
+    :root { --brand: #0EA5A4; --ink: #0F172A; --muted: #64748b; --border: #e2e8f0; --valid: #059669; --invalid: #dc2626; }
+    * { box-sizing: border-box; }
+    body { margin: 0; font-family: system-ui, -apple-system, 'Segoe UI', Roboto, Arial, sans-serif; font-size: 16px; line-height: 1.5; color: var(--ink); background: linear-gradient(180deg, #f8fafc 0%, #fff 100%); min-height: 100vh; padding: 24px 16px; }
+    .wrap { max-width: 480px; margin: 0 auto; }
+    .card { background: #fff; border-radius: 16px; box-shadow: 0 4px 24px rgba(15, 23, 42, 0.08); border: 1px solid var(--border); padding: 28px 24px; margin-bottom: 20px; }
+    .brand-row { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .brand-logo { width: 44px; height: 44px; object-fit: contain; }
+    .brand-name { font-size: 22px; font-weight: 800; color: var(--ink); }
+    .brand-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+    .status-badge { display: inline-block; padding: 8px 16px; border-radius: 999px; font-weight: 700; font-size: 14px; margin-bottom: 20px; }
+    .status-badge.valid { background: rgba(5, 150, 105, 0.12); color: var(--valid); border: 1px solid rgba(5, 150, 105, 0.3); }
+    .status-badge.invalid { background: rgba(220, 38, 38, 0.08); color: var(--invalid); border: 1px solid rgba(220, 38, 38, 0.25); }
+    .row { display: flex; justify-content: space-between; align-items: baseline; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 14px; }
+    .row:last-child { border-bottom: none; }
+    .row .k { color: var(--muted); margin-right: 8px; }
+    .row .v { font-weight: 600; color: var(--ink); word-break: break-all; }
+    .disclaimer { font-size: 12px; color: var(--muted); margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); line-height: 1.5; }
+    .authentic-desc { font-size: 13px; color: var(--valid); font-weight: 600; margin: 0 0 16px 0; line-height: 1.45; }
+    .invalid-msg { color: var(--muted); font-size: 14px; margin-top: 12px; }
+    .summary-row { margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border); }
+    @media (max-width: 480px) { .card { padding: 20px 16px; } body { padding: 16px 12px; } }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="brand-row">
+        <img class="brand-logo" src="/static/norya_logo_transparent_trim.png" alt="{{ labels.brand }}" />
+        <div>
+          <div class="brand-name">{{ labels.brand }}</div>
+          <div class="brand-sub">{{ labels.brand_sub }}</div>
+        </div>
+      </div>
+
+      {% if valid %}
+      <div class="status-badge valid">{{ labels.valid }}</div>
+      {% if labels.get('authentic_title') %}
+      <p class="authentic-desc">{{ labels.authentic_title }} — {{ labels.get('authentic_desc', '') }}</p>
+      {% endif %}
+      <div class="row"><span class="k">{{ labels.report_id }}</span><span class="v">{{ report_id }}</span></div>
+      <div class="row"><span class="k">{{ labels.created_at }}</span><span class="v">{{ created_at }}</span></div>
+      <div class="row"><span class="k">{{ labels.language }}</span><span class="v">{{ language | upper }}</span></div>
+      <div class="row"><span class="k">{{ labels.package_type }}</span><span class="v">{{ package_type }}</span></div>
+      <div class="row"><span class="k">{{ labels.verification_code }}</span><span class="v">{{ verification_code }}</span></div>
+      {% if summary_score is not none or (summary_critical_count is not none and summary_critical_count > 0) %}
+      <div class="summary-row">
+        {% if summary_score is not none %}
+        <div class="row"><span class="k">{{ labels.summary_score }}</span><span class="v">{{ summary_score }} / 100</span></div>
+        {% endif %}
+        {% if summary_critical_count is not none and summary_critical_count > 0 %}
+        <div class="row"><span class="k">{{ labels.critical_count }}</span><span class="v">{{ summary_critical_count }}</span></div>
+        {% endif %}
+      </div>
+      {% endif %}
+      <p class="disclaimer">{{ labels.disclaimer }}</p>
+      {% else %}
+      <div class="status-badge invalid">{{ labels.invalid }}</div>
+      <p class="invalid-msg">{{ labels.invalid_message }}</p>
+      <p class="disclaimer">{{ labels.disclaimer }}</p>
+      {% endif %}
+    </div>
+  </div>
+</body>
+</html>

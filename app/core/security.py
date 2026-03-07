@@ -1,3 +1,5 @@
+import hashlib
+import hmac
 from datetime import datetime, timedelta
 
 import bcrypt
@@ -57,3 +59,23 @@ def decode_pdf_access_token(token: str) -> tuple[int, int] | None:
         return (int(aid), int(uid))
     except (JWTError, TypeError, ValueError):
         return None
+
+
+# Rapor doğrulama (QR): tahmin edilemez signed token; DB'de token saklanmaz, doğrulama HMAC ile yapılır.
+def create_report_verification_token(report_id: str, verification_code: str) -> str:
+    """report_id + verification_code ile imzalı token üretir. QR URL'de kullanılır."""
+    raw = f"{report_id}:{verification_code}"
+    sig = hmac.new(
+        (settings.secret_key or "norya-report-verify").encode("utf-8"),
+        raw.encode("utf-8"),
+        hashlib.sha256,
+    ).hexdigest()
+    return sig
+
+
+def verify_report_verification_token(report_id: str, verification_code: str, token: str) -> bool:
+    """URL'den gelen token'ın report_id + verification_code ile eşleşip eşleşmediğini kontrol eder."""
+    if not report_id or not verification_code or not token:
+        return False
+    expected = create_report_verification_token(report_id, verification_code)
+    return hmac.compare_digest(expected, token)

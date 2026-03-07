@@ -1,6 +1,7 @@
 """
 Premium tıbbi PDF raporu: result_text (AI çıktısı) → parse → Jinja2 → WeasyPrint → PDF bytes.
 """
+import base64
 import math
 import re
 from datetime import datetime, timezone
@@ -40,6 +41,32 @@ def _gauge_svg(score: int, fill_class: str) -> str:
 _TEMPLATES_DIR = Path(__file__).resolve().parent.parent / "templates"
 _PROJECT_ROOT = _TEMPLATES_DIR.parent.parent  # norya/ (static/logo.png burada)
 _ENV = Environment(loader=FileSystemLoader(str(_TEMPLATES_DIR)), autoescape=True)
+
+# Rapor ikonu: Tüm PDF raporlarında kullanılan tek ikon (Norya N ikonu — dikkat çekecek kadar, çok büyük değil)
+_REPORT_ICON_PATH = _PROJECT_ROOT / "static" / "norya_report_icon.png"
+_LOGO_BASE64_CACHE: str | None = None
+
+
+def _logo_base64() -> str:
+    """Rapor header'ında kullanılan Norya ikonunu base64 döndürür (WeasyPrint uyumlu). Öncelik: norya_report_icon.png."""
+    global _LOGO_BASE64_CACHE
+    if _LOGO_BASE64_CACHE is not None:
+        return _LOGO_BASE64_CACHE
+    for candidate in (
+        _REPORT_ICON_PATH,
+        _PROJECT_ROOT / "static" / "norya_report_icon.png",
+        Path.cwd() / "static" / "norya_report_icon.png",
+        _PROJECT_ROOT / "static" / "norya_logo_transparent_trim.png",
+        Path.cwd() / "static" / "norya_logo_transparent_trim.png",
+    ):
+        try:
+            if candidate and getattr(candidate, "exists", None) and candidate.exists():
+                _LOGO_BASE64_CACHE = base64.b64encode(candidate.read_bytes()).decode("ascii")
+                return _LOGO_BASE64_CACHE
+        except Exception:
+            continue
+    _LOGO_BASE64_CACHE = ""
+    return _LOGO_BASE64_CACHE
 
 # Yaygın parametreler için varsayılan referans aralıkları (kan şekeri, lipid vb.) — raporda ref yoksa kullanılır
 DEFAULT_REF_RANGES: dict[str, str] = {
@@ -98,38 +125,39 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "status": "Durum",
         "possible_causes_heading": "Olası Nedenler",
         "recommendations_heading": "Öneriler",
-        "footer_note": "Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.",
+        "footer_note": "Norya ile oluşturulmuştur. Teşhis yerine geçmez; hekiminize danışın.",
         "page_footer": "Bu rapor bilgilendirme amaçlıdır. Tıbbi karar için hekime danışın. — Norya",
         "emr_ehr_note": "EMR/EHR uyumlu — Bu rapor hastane veya hekim bilgi sistemlerine (EMR/EHR) yüklenebilir formattadır.",
-        "risk_default_attention": "Değerlerinizde dikkat edilmesi gereken parametreler olabilir. Öneriler bölümünü okuyun ve gerekirse hekime danışın.",
-        "risk_default_normal": "Tüm değerler referans aralığında. Genel özet ve öneriler aşağıdadır.",
+        "risk_default_attention": "Dikkat edilmesi gereken parametreler olabilir; önerileri okuyup hekiminizle paylaşın.",
+        "risk_default_normal": "Değerler referans aralığında. Özet ve öneriler aşağıda.",
         "risk_indicators_heading": "Risk İşaretleri",
-        "report_cat_recommend_ok": "Değerler uygun aralıkta. Düzenli takip önerilir.",
-        "report_cat_recommend_mid": "Takip ve yaşam tarzı için hekiminizle görüşün.",
-        "report_cat_recommend_risk": "Hekiminizle görüşmeniz önerilir.",
+        "report_cat_recommend_ok": "Değerler uygun aralıkta. Sağlığınızı korumak için düzenli takip ve yaşam tarzı önerilerine uymanız yararlı olabilir.",
+        "report_cat_recommend_mid": "Takip ve yaşam tarzı (beslenme, hareket) için hekiminizle görüşmeniz önerilir.",
+        "report_cat_recommend_risk": "Bu parametreler için hekiminizle görüşmeniz ve gerekirse ek tetkik planlamanız önerilir.",
         "overall_status_heading": "Genel durum",
         "overall_chart_title": "Genel durum (0–100)",
         "overall_badge_normal": "Normal",
         "overall_badge_attention": "Sınır",
         "overall_badge_high": "Riskli",
-        "overall_chart_legend": "Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor, parametrelerin referans aralığına uyumuna göre 0–100)",
+        "overall_chart_legend": "Yeşil = Normal · Turuncu = Sınır · Kırmızı = Riskli (skor 0–100)",
         "intro_heading": "Bu rapor hakkında",
-        "intro_p1": "Bu rapor, laboratuvar sonuçlarınızın anlaşılır bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri, referans aralıkları ve genel öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.",
-        "intro_p2": "Sonuçlarınızı mutlaka bir hekim ile görüşün. Tıbbi kararlar ve tedavi planı için hekiminize danışın.",
+        "intro_p1": "Bu rapor, laboratuvar sonuçlarınızın anlaşılır bir ön değerlendirmesidir ve yalnızca bilgilendirme amaçlıdır. Aşağıda özet, parametre değerleri, referans aralıkları ve genel öneriler yer alır. Rapor teşhis koymaz; tıbbi karar yerine geçmez. Sonuçlarınızı mutlaka bir hekim ile görüşmeniz önerilir. Tıbbi kararlar ve tedavi planı için hekiminize danışın.",
+        "intro_p2": "Norya, kan tahlili sonuçlarınızı sade dilde yorumlamanıza yardımcı olan bir araçtır. Elde ettiğiniz özet ve öneriler genel sağlık farkındalığınızı artırmak içindir. Herhangi bir parametre referans dışındaysa veya endişeniz varsa hekiminize başvurun. Düzenli takip ve yaşam tarzı önerileri hekiminizle birlikte planlanmalıdır. Bu rapor, hekim muayenesi veya tanı yerine kullanılmamalıdır.",
         "how_to_read_heading": "Parametreler nasıl okunur?",
-        "how_to_read_body": "Her parametre için \"Sonuç\" sütununda laboratuvar değeriniz, \"Referans aralığı\" sütununda ise o test için kabul edilen normal aralık verilir. Yeşil = Normal (aralık içinde), turuncu = Sınırda, kırmızı = Referans dışı (düşük veya yüksek). Grafikler değerin referans aralığına göre konumunu gösterir.",
+        "how_to_read_body": "Her parametre için \"Sonuç\" satırında laboratuvar değeriniz, \"Ref\" satırında ise o test için kabul edilen referans aralığı verilir. Yeşil renk, değerin referans aralığında (normal) olduğunu gösterir. Turuncu, sınırda veya takip gerektiren durumu ifade eder. Kırmızı, referans dışı (düşük veya yüksek) ve hekim değerlendirmesi önerilen durumu gösterir. Tüm sonuçları hekiminizle paylaşarak birlikte yorumlamanız önemlidir.",
         "doctor_title": "Norya — Doktoruma Götür",
         "doctor_subtitle": "Kan Tahlili Özeti — Hekime iletilmek üzere hazırlanmıştır",
         "doctor_banner_text": "Bu rapor, hastanın hekimi ile paylaşması amacıyla Norya tarafından oluşturulmuştur. Eğitim amaçlı bilgilendirme niteliğindedir. Tıbbi karar ve tedavi için hekim değerlendirmesi gerekir.",
         "doctor_page_footer": "Hekime iletilmek üzere hazırlanmıştır. Tıbbi karar için hekim değerlendirmesi gerekir. — Norya",
         "doctor_footer_note": "Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için hekim değerlendirmesi gerekir.",
         "report_header_title": "Kan Tahlili Analiz Raporu",
-        "report_header_subtitle": "AI destekli ön değerlendirme • Klinik karar yerine geçmez",
+        "report_header_subtitle": "Yapay zeka destekli ön değerlendirme",
+        "report_header_subtitle_short": "Klinik karar yerine geçmez",
         "report_id_label": "Rapor No",
         "info_patient_heading": "Kişi",
         "info_analysis_heading": "Analiz",
         "footer_disclaimer": "Bu rapor bilgilendirme amaçlıdır. Doktorunuza danışın.",
-        "medical_disclaimer_1": "Bu rapor yapay zekâ destekli ön değerlendirme amaçlıdır. Tıbbi tanı veya tedavi yerine geçmez. Sağlık durumunuzla ilgili kararlar için lütfen doktorunuza başvurunuz.",
+        "medical_disclaimer_1": "Bu rapor bilgilendirme amaçlıdır; teşhis veya tedavi yerine geçmez. Sağlık kararları için hekiminize başvurun.",
         "medical_disclaimer_2": "Norya AI bir tıbbi teşhis sistemi değildir.",
         "report_summary": "Özet",
         "report_findings": "Bulgular",
@@ -158,13 +186,16 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_footer": "Norya • Bilgilendirme amaçlıdır • support@noryaai.com",
         "report_brand_sub": "Ön Değerlendirme Raporu",
         "report_doc_title": "Kan Tahlili Analiz Raporu",
-        "report_doc_sub": "Bilgilendirme amaçlı klinik rapor formatı",
+        "report_doc_sub": "Sağlık durumunuzun ön değerlendirmesi; teşhis yerine geçmez, bilgilendirme amaçlıdır.",
         "report_rid_label": "Rapor No",
         "report_user_label": "Kullanıcı",
         "report_date_label_short": "Tarih",
         "report_lang_label": "Dil",
+        "report_verify_code": "Doğrulama",
+        "report_verification_title": "Rapor Doğrulama",
+        "report_verification_scan_hint": "Orijinallik için QR ile tarayın veya kodu doğrulama sayfasında girin.",
         "report_page_title": "Norya Klinik Rapor",
-        "report_share_note": "Bu raporu hekiminizle paylaşabilir, gerekli görülürse ek değerlendirme planlayabilirsiniz.",
+        "report_share_note": "Bu raporu hekiminizle paylaşabilir, gerekli görülürse ek tetkik veya takip planı birlikte oluşturabilirsiniz.",
         "report_health_score_title": "Genel Sağlık Skoru",
         "report_risk_indicator_title": "Risk Göstergesi",
         "report_trend_title": "Trend Analizi",
@@ -172,20 +203,20 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_upgrade": "Premium'a Geç",
         "report_premium_badge": "Premium",
         "report_disclaimer_title": "Bilgilendirme amaçlıdır.",
-        "report_disclaimer_text": "Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.",
+        "report_disclaimer_text": "Teşhis veya tedavi yerine geçmez; sağlık kararları için hekiminize başvurun.",
         "report_trend_locked": "Trend analizi abonelik ile açılır.",
         "report_category_scores": "Kategori skorları",
         "report_risk_distribution": "Risk dağılımı",
         "report_radar_balance": "Biyobelirteç dengesi",
         "report_top_attention": "Öne çıkan dikkat alanları",
-        "report_dist_normal": "Normal",
-        "report_dist_borderline": "Sınır",
-        "report_dist_attention": "Dikkat",
-        "report_executive_summary": "Özet",
-        "report_summary_tiles": "Özet",
-        "report_biomarker_highlights": "Biyobelirteç Özeti",
-        "report_risk_indicators": "Risk Göstergeleri",
-        "report_key_areas": "Takip Edilecek Alanlar",
+        "report_dist_normal": "Normal (referans aralığında)",
+        "report_dist_borderline": "Sınırda (takip önerilir)",
+        "report_dist_attention": "Dikkat (hekim değerlendirmesi önerilir)",
+        "report_executive_summary": "Genel Sağlık Özeti — Laboratuvar sonuçlarınızın kısa değerlendirmesi",
+        "report_summary_tiles": "Özet — Skor ve risk düzeyi",
+        "report_biomarker_highlights": "Biyobelirteç Özeti — Öne çıkan kan değerleri",
+        "report_risk_indicators": "Risk Göstergeleri — Takip edilmesi önerilen parametreler",
+        "report_key_areas": "Takip Edilecek Alanlar — Sağlık açısından öncelikli konular",
         "report_foods_to_favor": "Tercih Edilebilecek Gıdalar",
         "report_foods_to_limit": "Sınırlanabilecek Gıdalar",
         "report_foods_eat_heading": "Yenilmesi Gerekenler",
@@ -196,19 +227,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_tile_risk_level": "Risk Düzeyi",
         "report_tile_bio_age": "Biyolojik Yaş",
         "report_tile_priority": "Öncelik",
-        "report_priority_general": "Genel iyilik hali",
-        "report_food_favor_default": "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir.",
-        "report_food_limit_default": "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir.",
-        "report_lifestyle_sleep": "Yeterli uyku toparlanmayı destekler.",
-        "report_lifestyle_movement": "Düzenli hareket önerilir.",
-        "report_lifestyle_followup": "Takip süresini hekiminizle görüşün.",
-        "report_movement_default": "Haftada en az 150 dakika orta tempolu hareket (yürüyüş, yüzme, bisiklet) önerilir.",
-        "report_stress_default": "Stres azaltma: nefes egzersizleri, kısa molalar, düzenli uyku.",
-        "report_sleep_default": "Günde 7–8 saat uyku; uyku hijyenine dikkat edin.",
-        "report_hydration_default": "Günde yaklaşık 1,5–2 litre sıvı tüketimi önerilir.",
-        "report_doctor_note_1": "Bu raporu hekiminizle paylaşın.",
-        "report_doctor_note_2": "Belirti veya endişeler hekim tarafından değerlendirilmelidir.",
-        "report_refined_disclaimer": "Bu rapor yalnızca bilgilendirme amaçlıdır. Teşhis veya tedavi sunmaz. Belirti veya tedavi kararları için hekiminize başvurun.",
+        "report_priority_general": "Genel iyilik hali ve düzenli takip",
+        "report_food_favor_default": "Dengeli beslenme; sebze ve meyveler lif ve vitaminlerle genel sağlığı destekleyebilir. Tam tahıllar ve baklagiller de kalp ve sindirim sağlığı için faydalıdır.",
+        "report_food_limit_default": "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir; bu tür besinler kan şekeri ve kilo dengesini olumsuz etkileyebilir.",
+        "report_lifestyle_sleep": "Yeterli uyku (günde 7–8 saat) hem toparlanmayı hem de bağışıklık ve ruh halini destekler.",
+        "report_lifestyle_movement": "Düzenli hareket kalp damar sağlığı, kan şekeri dengesi ve genel iyilik hali için önerilir.",
+        "report_lifestyle_followup": "Takip süresini ve gerekirse tekrarlanan tahlilleri hekiminizle görüşün.",
+        "report_movement_default": "Haftada en az 150 dakika orta tempolu hareket (yürüyüş, yüzme, bisiklet) kalp sağlığı ve kilo yönetimi için önerilir.",
+        "report_stress_default": "Stres azaltma: nefes egzersizleri, kısa molalar ve düzenli uyku hem ruh hem beden sağlığını destekler.",
+        "report_sleep_default": "Günde 7–8 saat uyku önerilir; uyku hijyenine (karanlık oda, düzenli saat) dikkat edin.",
+        "report_hydration_default": "Günde yaklaşık 1,5–2 litre sıvı tüketimi böbrek fonksiyonları ve genel metabolizma için önerilir.",
+        "report_doctor_note_1": "Bu raporu hekiminizle paylaşarak laboratuvar sonuçlarınızı birlikte yorumlayabilirsiniz.",
+        "report_doctor_note_2": "Belirti, şikâyet veya endişeleriniz varsa mutlaka hekim tarafından değerlendirilmelidir.",
+        "report_refined_disclaimer": "Bu rapor yalnızca bilgilendirme amaçlıdır; teşhis veya tedavi sunmaz. Sağlık durumunuzla ilgili kararlar ve tedavi seçenekleri için hekiminize başvurun.",
         "report_trend_placeholder": "Trend, zamanla daha fazla raporla kullanılabilir hale gelir.",
         "report_why_it_matters": "Neden önemli",
         "report_monitoring_focus": "Takip odağı",
@@ -249,12 +280,12 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "footer_note": "This report was generated by Norya AI interpretation. It is not a diagnosis or treatment. Always consult a healthcare professional for medical decisions.",
         "page_footer": "This report is for information only. Consult a doctor for medical decisions. — Norya",
         "emr_ehr_note": "EMR/EHR compatible — This report can be uploaded to hospital or clinician information systems (EMR/EHR).",
-        "risk_default_attention": "Some values may need attention. See the recommendations section and consult a doctor if needed.",
-        "risk_default_normal": "All values are within reference range. Summary and recommendations below.",
+        "risk_default_attention": "Some values may need attention; read the recommendations and share your results with your doctor.",
+        "risk_default_normal": "All values are within reference range. Summary and health recommendations below; regular follow-up is a good habit.",
         "risk_indicators_heading": "Risk Indicators",
-        "report_cat_recommend_ok": "Values in range. Regular follow-up recommended.",
-        "report_cat_recommend_mid": "Discuss with your doctor for follow-up and lifestyle advice.",
-        "report_cat_recommend_risk": "Discuss with your doctor.",
+        "report_cat_recommend_ok": "Values are in a healthy range. Following lifestyle advice and regular check-ups can help you stay well.",
+        "report_cat_recommend_mid": "Discuss follow-up and lifestyle (diet, activity) with your doctor.",
+        "report_cat_recommend_risk": "Discuss these parameters with your doctor and consider further tests if needed.",
         "overall_status_heading": "Overall status",
         "overall_chart_title": "Overall status (0–100)",
         "overall_badge_normal": "Normal",
@@ -272,7 +303,8 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "doctor_page_footer": "Prepared for sharing with your doctor. Medical decisions require physician evaluation. — Norya",
         "doctor_footer_note": "This report was generated by Norya AI. It does not replace diagnosis or treatment. Medical decisions require physician evaluation.",
         "report_header_title": "Blood Test Analysis Report",
-        "report_header_subtitle": "AI-assisted preliminary assessment • Does not replace clinical decision",
+        "report_header_subtitle": "AI-assisted preliminary assessment",
+        "report_header_subtitle_short": "Does not replace clinical decision",
         "report_id_label": "Report No.",
         "info_patient_heading": "Patient",
         "info_analysis_heading": "Analysis",
@@ -306,13 +338,16 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_footer": "Norya • For information only • support@noryaai.com",
         "report_brand_sub": "Clinical Report",
         "report_doc_title": "Blood Test Analysis Report",
-        "report_doc_sub": "Information-only clinical report format",
+        "report_doc_sub": "A preliminary view of your health status; it does not replace a diagnosis and is for information only.",
         "report_rid_label": "Report No",
         "report_user_label": "User",
         "report_date_label_short": "Date",
         "report_lang_label": "Language",
+        "report_verify_code": "Verification",
+        "report_verification_title": "Report Verification",
+        "report_verification_scan_hint": "Scan QR or enter the code on the verification page to confirm authenticity.",
         "report_page_title": "Norya Clinical Report",
-        "report_share_note": "You can share this report with your doctor and plan further evaluation if needed.",
+        "report_share_note": "You can share this report with your doctor and plan further tests or follow-up together if needed.",
         "report_health_score_title": "Overall Health Score",
         "report_risk_indicator_title": "Risk Indicator",
         "report_trend_title": "Trend Analysis",
@@ -326,14 +361,14 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_distribution": "Risk distribution",
         "report_radar_balance": "Biomarker balance",
         "report_top_attention": "Top attention areas",
-        "report_dist_normal": "Normal",
-        "report_dist_borderline": "Borderline",
-        "report_dist_attention": "Attention",
-        "report_executive_summary": "Executive Summary",
-        "report_summary_tiles": "Summary",
-        "report_biomarker_highlights": "Biomarker Highlights",
-        "report_risk_indicators": "Risk Indicators",
-        "report_key_areas": "Key Areas to Watch",
+        "report_dist_normal": "Normal (within reference range)",
+        "report_dist_borderline": "Borderline (follow-up recommended)",
+        "report_dist_attention": "Attention (physician evaluation recommended)",
+        "report_executive_summary": "Health Summary — A brief interpretation of your lab results",
+        "report_summary_tiles": "Summary — Score and risk level",
+        "report_biomarker_highlights": "Biomarker Highlights — Key blood values",
+        "report_risk_indicators": "Risk Indicators — Parameters worth monitoring",
+        "report_key_areas": "Key Areas to Watch — Health priorities",
         "report_foods_to_favor": "Foods to Favor",
         "report_foods_to_limit": "Foods to Limit",
         "report_foods_eat_heading": "Foods to Include",
@@ -359,19 +394,19 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_tile_risk_level": "Risk Level",
         "report_tile_bio_age": "Biological Age",
         "report_tile_priority": "Priority Focus",
-        "report_priority_general": "General wellness",
-        "report_food_favor_default": "Balanced diet; vegetables and fruits may support general health.",
-        "report_food_limit_default": "Processed foods and excess sugar may be worth limiting.",
-        "report_movement_default": "At least 150 minutes of moderate activity per week (walking, swimming, cycling) is recommended.",
-        "report_stress_default": "Stress reduction: breathing exercises, short breaks, regular sleep.",
-        "report_sleep_default": "7–8 hours of sleep per night; pay attention to sleep hygiene.",
-        "report_hydration_default": "About 1.5–2 litres of fluid per day is recommended.",
-        "report_lifestyle_sleep": "Adequate sleep supports recovery.",
-        "report_lifestyle_movement": "Regular movement is recommended.",
-        "report_lifestyle_followup": "Discuss follow-up timing with your doctor.",
-        "report_doctor_note_1": "Share this report with your physician for context.",
-        "report_doctor_note_2": "Any symptoms or concerns should be evaluated by a doctor.",
-        "report_refined_disclaimer": "This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.",
+        "report_priority_general": "General wellness and regular follow-up",
+        "report_food_favor_default": "Balanced diet; vegetables and fruits provide fibre and vitamins that support general health. Whole grains and legumes are also beneficial for heart and digestive health.",
+        "report_food_limit_default": "Processed foods and excess sugar may be worth limiting; they can affect blood sugar and weight balance.",
+        "report_movement_default": "At least 150 minutes of moderate activity per week (walking, swimming, cycling) is recommended for heart health and weight management.",
+        "report_stress_default": "Stress reduction: breathing exercises, short breaks and regular sleep support both mental and physical health.",
+        "report_sleep_default": "7–8 hours of sleep per night is recommended; pay attention to sleep hygiene (dark room, consistent schedule).",
+        "report_hydration_default": "About 1.5–2 litres of fluid per day is recommended for kidney function and metabolism.",
+        "report_lifestyle_sleep": "Adequate sleep (7–8 hours) supports recovery, immunity and mood.",
+        "report_lifestyle_movement": "Regular movement is recommended for cardiovascular health, blood sugar balance and general wellness.",
+        "report_lifestyle_followup": "Discuss follow-up timing and any repeat tests with your doctor.",
+        "report_doctor_note_1": "Share this report with your doctor so you can interpret your lab results together.",
+        "report_doctor_note_2": "Any symptoms, concerns or questions should be evaluated by a physician.",
+        "report_refined_disclaimer": "This report is for informational use only; it does not provide a diagnosis or treatment. For decisions about your health and treatment options, consult your doctor.",
         "report_trend_placeholder": "Trend becomes available with more reports over time.",
         "report_why_it_matters": "Why it matters",
         "report_monitoring_focus": "Monitoring focus",
@@ -448,6 +483,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_user_label": "Benutzer",
         "report_date_label_short": "Datum",
         "report_lang_label": "Sprache",
+        "report_verify_code": "Verifizierung",
         "report_page_title": "Norya Klinischer Bericht",
         "report_share_note": "Sie können diesen Bericht mit Ihrem Arzt teilen und bei Bedarf weitere Untersuchungen planen.",
         "report_health_score_title": "Gesundheitspunktzahl",
@@ -531,6 +567,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_user_label": "Utilisateur",
         "report_date_label_short": "Date",
         "report_lang_label": "Langue",
+        "report_verify_code": "Vérification",
         "report_page_title": "Rapport clinique Norya",
         "report_share_note": "Vous pouvez partager ce rapport avec votre médecin et planifier un suivi si nécessaire.",
         "report_health_score_title": "Score de santé général",
@@ -979,6 +1016,13 @@ SECTION_PATTERNS = [
     (r"\*\*Values?\*\*", "values"),
     (r"\*\*Değerler\*\*", "values"),
     (r"\*\*Parametreler\*\*", "values"),
+    (r"\*\*Test sonuçları?\*\*", "values"),
+    (r"\*\*Sonuçlar\*\*", "values"),
+    (r"\*\*Lab results?\*\*", "values"),
+    (r"\*\*Laboratuvar sonuçları?\*\*", "values"),
+    (r"\*\*Laboratory results?\*\*", "values"),
+    (r"\*\*Kan değerleri\*\*", "values"),
+    (r"\*\*Blood (test )?results?\*\*", "values"),
     (r"\*\*Possible causes?\*\*", "possible_causes"),
     (r"\*\*Olası nedenler\*\*", "possible_causes"),
     (r"\*\*Recommendations?\*\*", "recommendations"),
@@ -1070,7 +1114,7 @@ def _map_section_key(title: str) -> str | None:
         return "summary"
     if "risk" in title_lower or "dikkat" in title_lower:
         return "risk_indicators"
-    if "value" in title_lower or "değer" in title_lower or "parametre" in title_lower:
+    if any(x in title_lower for x in ("value", "değer", "parametre", "sonuç", "result", "lab", "laboratuvar", "test sonuç", "kan değer")):
         return "values"
     if "cause" in title_lower or "neden" in title_lower:
         return "possible_causes"
@@ -1193,12 +1237,19 @@ def _enrich_biomarker_chart(row: dict) -> None:
 
 
 def parse_biomarkers(values_block: str) -> list[dict]:
-    """Values bölümünden parametre satırlarını parse et (grafik için referans + status gerekir)."""
+    """Values bölümünden parametre satırlarını parse et. Tüm **Parametre:** değer satırları ve benzeri formatlar alınır."""
     rows: list[dict] = []
-    for line in (values_block or "").splitlines():
-        line = line.strip()
-        if not line or not line.startswith("**"):
+    seen_names: set[str] = set()
+    for raw_line in (values_block or "").splitlines():
+        line = raw_line.strip()
+        if not line:
             continue
+        # Madde işareti veya tire ile başlayan satırları da oku ( - **LDL**: ... veya • **LDL**: ... )
+        if line.startswith("-") or line.startswith("•") or line.startswith("*"):
+            line = line.lstrip("-•*").strip()
+        if not line:
+            continue
+        # Önce **Parametre:** değer. Reference: ... Normal/Low/High formatı
         m = BIOMARKER_LINE.search(line) or BIOMARKER_LINE_RELAXED.search(line)
         if m:
             name = m.group(1).strip()
@@ -1208,25 +1259,62 @@ def parse_biomarkers(values_block: str) -> list[dict]:
             reference = (m.group(3) or "").strip() or None
             status = _normalize_status(m.group(4) or "")
             value, unit = _split_value_unit(value_str)
-            rows.append({
-                "name": name,
-                "value": value,
-                "unit": unit,
-                "reference": reference,
-                "status": status,
-                "status_label": _status_label(status),
-            })
-        else:
-            simple = re.match(r"\*\*([^*]+)\*?\s*:\s*(.+)", line)
-            if simple:
-                value, unit = _split_value_unit(simple.group(2))
+            key = name.lower()
+            if key not in seen_names:
+                seen_names.add(key)
                 rows.append({
-                    "name": simple.group(1).strip(),
+                    "name": name,
+                    "value": value,
+                    "unit": unit,
+                    "reference": reference,
+                    "status": status,
+                    "status_label": _status_label(status),
+                })
+            continue
+        # **Parametre:** değer (reference/status yok)
+        simple = re.match(r"\*\*([^*]+)\*?\s*:\s*(.+)", line)
+        if simple:
+            name = simple.group(1).strip()
+            value, unit = _split_value_unit(simple.group(2))
+            key = name.lower()
+            if key not in seen_names:
+                seen_names.add(key)
+                rows.append({
+                    "name": name,
                     "value": value,
                     "unit": unit,
                     "reference": None,
                     "status": "normal",
                     "status_label": "—",
+                })
+            continue
+        # Parametre adı: değer birim (yıldızsız satır; Reference: veya Normal/Düşük/Yüksek varsa status çıkar)
+        plain = re.match(r"^([A-Za-z0-9ığüşöçİĞÜŞÖÇ\s\-/]+)\s*:\s*(.+)", line)
+        if plain:
+            name = plain.group(1).strip()
+            if len(name) < 2 or len(name) > 80:
+                continue
+            rest = plain.group(2).strip()
+            ref_match = re.search(r"\b(?:Reference|Ref\.?)\s*:\s*([^.]+?)(?:\.\s*(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır))?\s*\.?\s*$", rest, re.IGNORECASE)
+            reference = None
+            status = "normal"
+            value_str = rest
+            if ref_match:
+                reference = ref_match.group(1).strip() or None
+                if ref_match.lastindex >= 2 and ref_match.group(2):
+                    status = _normalize_status(ref_match.group(2))
+                value_str = rest[: ref_match.start()].strip().rstrip(".,")
+            value, unit = _split_value_unit(value_str)
+            key = name.lower()
+            if key not in seen_names:
+                seen_names.add(key)
+                rows.append({
+                    "name": name,
+                    "value": value,
+                    "unit": unit,
+                    "reference": reference,
+                    "status": status,
+                    "status_label": _status_label(status),
                 })
     return rows
 
@@ -1294,6 +1382,30 @@ def extract_trend_from_results(entries: list[tuple[str, str]]) -> dict | None:
     }
 
 
+def _shorten_causes_to_few_words(text: str, min_words: int = 3, max_words: int = 5) -> str:
+    """Her satırı en az min_words, en fazla max_words kelime olacak şekilde kısalt (standart PDF: 3-4 kelime)."""
+    if not (text or "").strip():
+        return text or ""
+    lines: list[str] = []
+    for line in (text or "").strip().splitlines():
+        line = line.strip()
+        if not line:
+            continue
+        # Madde işaretini kaldır: - veya * ile başlayan
+        if line.startswith("-") or line.startswith("*") or line.startswith("•"):
+            line = line.lstrip("-*•").strip()
+        words = line.split()
+        if not words:
+            continue
+        # En az min_words, en fazla max_words kelime (tercihen 3-4 kelime)
+        n = min(max_words, len(words))
+        if n < min_words and len(words) >= min_words:
+            n = min_words
+        short = " ".join(words[:n])
+        lines.append(short)
+    return "\n".join(lines) if lines else (text or "").strip()
+
+
 def parse_report_to_context(
     result_text: str,
     report_date: str | None = None,
@@ -1320,6 +1432,22 @@ def parse_report_to_context(
             data["raw_sections"].append({"title": title, "body": body})
 
     biomarkers = parse_biomarkers(data["values"])
+    # Değerler bölümü boşsa veya az parametre varsa, diğer bölümlerde (raw_sections) parametre satırlarını ara
+    if len(biomarkers) < 3 and data["raw_sections"]:
+        seen = {(r.get("name") or "").strip().lower() for r in biomarkers}
+        for raw in data["raw_sections"]:
+            body = (raw.get("body") or "").strip()
+            if not body or len(body) < 20:
+                continue
+            title_lower = (raw.get("title") or "").strip().lower()
+            if not any(x in title_lower for x in ("değer", "value", "parametre", "sonuç", "result", "lab", "test")):
+                continue
+            extra = parse_biomarkers(body)
+            for row in extra:
+                key = (row.get("name") or "").strip().lower()
+                if key and key not in seen:
+                    seen.add(key)
+                    biomarkers.append(row)
     for row in biomarkers:
         _enrich_biomarker_chart(row)
     risk_level = "none"
@@ -1362,7 +1490,12 @@ def parse_report_to_context(
         status=chart_status,
         title=chart_title,
         badge_label=badge_label,
+        include_title=False,  # Şablonda zaten "Genel durum" + legend var; SVG sadece bar
     )
+
+    # Standart PDF: olası nedenler ve öneriler her satır en az 3, en fazla 5 kelime
+    possible_causes_short = _shorten_causes_to_few_words(data["possible_causes"], min_words=3, max_words=5)
+    recommendations_short = _shorten_causes_to_few_words(data["recommendations"], min_words=3, max_words=5)
 
     out = {
         "title": labels["title"],
@@ -1372,8 +1505,8 @@ def parse_report_to_context(
         "risk_level": risk_level,
         "risk_message": risk_message,
         "biomarkers": biomarkers,
-        "possible_causes": data["possible_causes"],
-        "recommendations": data["recommendations"],
+        "possible_causes": possible_causes_short,
+        "recommendations": recommendations_short,
         "raw_sections": data["raw_sections"],
         "overall_score": overall_score,
         "overall_chart_svg_base64": overall_chart_svg,
@@ -1385,9 +1518,10 @@ def parse_report_to_context(
 def render_pdf(context: dict) -> bytes:
     """Jinja2 şablonunu render edip WeasyPrint ile PDF üretir (lazy import: WeasyPrint sistem kütüphaneleri sunucu başlarken gerekmez)."""
     from weasyprint import HTML
+    context = dict(context)
+    context["logo_base64"] = _logo_base64()
     template = _ENV.get_template("report_pdf.html")
     html_str = template.render(**context)
-    # base_url = proje kökü (static/norya_logo_transparent_trim.png çözülebilsin)
     html_doc = HTML(string=html_str, base_url=str(_PROJECT_ROOT))
     pdf_bytes = html_doc.write_pdf()
     return pdf_bytes
@@ -1599,7 +1733,7 @@ def _build_premium_context(
         "borderline_pct": 100 * risk_distribution["borderline"] / total_dist,
         "attention_pct": 100 * risk_distribution["attention"] / total_dist,
     }
-    top_attention = top_attention[:3]
+    top_attention = top_attention[:10]
 
     _labels = _pdf_labels(lang)
     _fallback_en = PDF_LABELS.get("en", {})
@@ -1646,10 +1780,10 @@ def _build_premium_context(
     executive_sentences = [
         s.strip() + ("." if s.strip() and not s.strip().endswith(".") else "")
         for s in re.split(r"(?<=[.!])\s+", summary_txt) if s.strip()
-    ][:4]
+    ][:8]
     executive_summary = " ".join(executive_sentences) if executive_sentences else (
-        "Lab results have been reviewed. Discuss any out-of-range values with your doctor." if lang != "tr"
-        else "Laboratuvar sonuçları değerlendirildi. Referans dışı değerleri hekiminizle görüşün."
+        "Your lab results have been reviewed. Values within the reference range support general health; any out-of-range parameters should be discussed with your doctor for follow-up or further tests." if lang != "tr"
+        else "Laboratuvar sonuçlarınız değerlendirildi. Referans aralığındaki değerler genel sağlık açısından olumludur; referans dışı parametreleri hekiminizle görüşerek takip veya ek tetkik planlayabilirsiniz."
     )
     executive_summary = _strip_ai_from_text(executive_summary)
 
@@ -1750,47 +1884,45 @@ def _build_premium_context(
 
     # Varsayılan: tek satır yerine anlamlı madde listesi (PDF’te diyet bölümü her zaman dolu görünsün)
     default_favor_tr = [
-        "Dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir.",
-        "Sebze ve meyve (lif ve vitaminler).",
-        "Tam tahıllar, baklagiller.",
-        "Yağlı balık (omega-3).",
-        "Yeterli sıvı tüketimi.",
+        "Dengeli beslenme; sebze ve meyveler lif ve vitaminlerle genel sağlığı destekleyebilir.",
+        "Sebze ve meyve: lif, vitamin ve antioksidan alımı için günde birkaç porsiyon önerilir.",
+        "Tam tahıllar ve baklagiller: kan şekeri dengesi ve kalp sağlığı için faydalıdır.",
+        "Yağlı balık (omega-3): haftada 1–2 porsiyon kalp ve beyin sağlığını destekleyebilir.",
+        "Yeterli sıvı tüketimi: böbrek ve metabolizma için günde yaklaşık 1,5–2 litre önerilir.",
     ]
     default_favor_en = [
-        "Balanced diet; vegetables and fruits may support general health.",
-        "Vegetables and fruits (fibre and vitamins).",
-        "Whole grains, legumes.",
-        "Oily fish (omega-3).",
-        "Adequate fluid intake.",
+        "Balanced diet; vegetables and fruits provide fibre and vitamins that support general health.",
+        "Vegetables and fruits: several servings per day are recommended for fibre, vitamins and antioxidants.",
+        "Whole grains and legumes support blood sugar balance and heart health.",
+        "Oily fish (omega-3): one to two portions per week may support heart and brain health.",
+        "Adequate fluid intake: about 1.5–2 litres per day is recommended for kidney function and metabolism.",
     ]
     default_limit_tr = [
-        "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir.",
-        "İşlenmiş atıştırmalıklar, hazır ürünler.",
-        "Eklenen şeker ve tatlılar (ölçülü).",
-        "Aşırı tuz ve doymuş yağ.",
-        "Alkol (ölçülü tüketim).",
+        "İşlenmiş gıdalar ve aşırı şeker sınırlanabilir; kan şekeri ve kilo dengesi için faydalıdır.",
+        "İşlenmiş atıştırmalıklar ve hazır ürünler yerine taze veya az işlenmiş seçenekler tercih edilebilir.",
+        "Eklenen şeker ve tatlılar ölçülü tüketilmeli; diş ve metabolizma sağlığı için önemlidir.",
+        "Aşırı tuz ve doymuş yağ tansiyon ve kalp damar sağlığı açısından sınırlanabilir.",
+        "Alkol ölçülü tüketilmeli; karaciğer ve genel sağlık için önerilen sınırlar aşılmamalıdır.",
     ]
     default_limit_en = [
-        "Processed foods and excess sugar may be worth limiting.",
-        "Processed snacks and ready-made products.",
-        "Added sugar and sweets (in moderation).",
-        "Excess salt and saturated fat.",
-        "Alcohol (moderate consumption).",
+        "Processed foods and excess sugar are worth limiting for blood sugar and weight balance.",
+        "Prefer fresh or minimally processed options over processed snacks and ready-made products.",
+        "Added sugar and sweets in moderation; important for dental and metabolic health.",
+        "Excess salt and saturated fat may be limited for blood pressure and cardiovascular health.",
+        "Alcohol in moderation; recommended limits should not be exceeded for liver and general health.",
     ]
     if not foods_to_favor:
         foods_to_favor = default_favor_tr if lang == "tr" else default_favor_en
-    elif len(foods_to_favor) == 1 and _strip_ai_from_text(foods_to_favor[0]).lower() in (
-        "dengeli beslenme; sebze ve meyveler genel sağlığı destekleyebilir.",
-        "balanced diet; vegetables and fruits may support general health.",
-    ):
-        foods_to_favor = default_favor_tr if lang == "tr" else default_favor_en
+    elif len(foods_to_favor) == 1:
+        _low = _strip_ai_from_text(foods_to_favor[0]).lower()
+        if "dengeli beslenme" in _low or "balanced diet" in _low:
+            foods_to_favor = default_favor_tr if lang == "tr" else default_favor_en
     if not foods_to_limit:
         foods_to_limit = default_limit_tr if lang == "tr" else default_limit_en
-    elif len(foods_to_limit) == 1 and _strip_ai_from_text(foods_to_limit[0]).lower() in (
-        "işlenmiş gıdalar ve aşırı şeker sınırlanabilir.",
-        "processed foods and excess sugar may be worth limiting.",
-    ):
-        foods_to_limit = default_limit_tr if lang == "tr" else default_limit_en
+    elif len(foods_to_limit) == 1:
+        _low = _strip_ai_from_text(foods_to_limit[0]).lower()
+        if "işlenmiş gıdalar" in _low or "processed foods" in _low:
+            foods_to_limit = default_limit_tr if lang == "tr" else default_limit_en
 
     # Lifestyle suggestions (sleep, movement, hydration, stress, follow-up)
     lifestyle_suggestions: list[str] = []
@@ -1894,7 +2026,7 @@ def _build_premium_context(
     if len(doctor_discussion_notes) < 2:
         doctor_discussion_notes.append(_t_early("report_doctor_note_1", "Share this report with your physician for context.") if lang != "tr" else "Bu raporu hekiminizle paylaşın.")
         doctor_discussion_notes.append(_t_early("report_doctor_note_2", "Any symptoms or concerns should be evaluated by a doctor.") if lang != "tr" else "Belirti veya endişeler hekim tarafından değerlendirilmelidir.")
-    doctor_discussion_notes = doctor_discussion_notes[:4]
+    doctor_discussion_notes = doctor_discussion_notes[:12]
 
     # Refined disclaimer (informational only, consult physician)
     refined_disclaimer = _t_early("report_refined_disclaimer", "This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.")
@@ -1934,7 +2066,7 @@ def _build_premium_context(
         return "normal"
 
     findings_cards: list[dict] = []
-    for f in findings[:8]:
+    for f in findings[:24]:
         f_clean = (f or "").strip()
         if not f_clean:
             continue
@@ -2045,8 +2177,8 @@ def _build_premium_context(
             "label": _t_early(label_key, cid),
             "icon": icon_key,
             "rows": rows_in_cat,
-            "attention_do": attention_do[:3],
-            "attention_avoid": attention_avoid[:2],
+        "attention_do": attention_do[:5],
+        "attention_avoid": attention_avoid[:4],
             "category_status": category_status,
             "recommendation_summary": recommendation_summary,
         })
@@ -2086,7 +2218,7 @@ def _build_premium_context(
         ai_summary = [summary_txt]
     ai_summary = [_strip_ai_from_text(s) for s in ai_summary if s]
 
-    ai_findings = [_strip_ai_from_text(s) for s in findings[:12] if s]
+    ai_findings = [_strip_ai_from_text(s) for s in findings[:30] if s]
 
     possible_txt = (base_context.get("possible_causes") or "").strip()
     ai_causes = []
@@ -2095,7 +2227,7 @@ def _build_premium_context(
         if line:
             ai_causes.append(_strip_ai_from_text(line))
 
-    recos_all = recommendations[:20]
+    recos_all = recommendations[:50]
     followup_keywords = ("takip", "kontrol", "tekrar", "ay içinde", "hafta", "follow-up", "repeat", "recheck")
     ai_recos = []
     ai_followup = []
@@ -2157,9 +2289,11 @@ def _build_premium_context(
     trend_message = _t("report_trend_need_more", "More analyses needed for trend.")
     trend_locked_label = _t("report_trend_locked", "Trend analysis is available with subscription.")
 
-    # Logo: WeasyPrint için mutlak yol (PDF'te Norya ikonu her zaman görünsün)
-    _logo_path = _PROJECT_ROOT / "static" / "norya_logo_transparent_trim.png"
-    logo_url = _logo_path.as_uri() if _logo_path.exists() else "static/norya_logo_transparent_trim.png"
+    # Logo ve CSS: WeasyPrint için mutlak file:// URL (rapor ikonu: norya_report_icon.png)
+    _logo_path = _PROJECT_ROOT / "static" / "norya_report_icon.png"
+    logo_url = _logo_path.as_uri() if _logo_path.exists() else "static/norya_report_icon.png"
+    _css_path = _PROJECT_ROOT / "static" / "report_premium.css"
+    css_url = _css_path.as_uri() if _css_path.exists() else "static/report_premium.css"
     label_glucose_yes = _t("report_glucose_in_report_yes", "Blood sugar (Glucose/HbA1c): In report") if lang != "tr" else "Kan şekeri (Glukoz/HbA1c): Raporda var"
     label_glucose_no = _t("report_glucose_in_report_no", "Blood sugar (Glucose/HbA1c): Not in report") if lang != "tr" else "Kan şekeri (Glukoz/HbA1c): Raporda yok"
     label_glucose_in_report = label_glucose_yes if has_glucose else label_glucose_no
@@ -2173,16 +2307,16 @@ def _build_premium_context(
         "lang": lang,
         "user_id": user_id,
         "logo_url": logo_url,
-        "css_url": "static/report_premium.css",
+        "css_url": css_url,
         "has_glucose": has_glucose,
         "label_glucose_in_report": label_glucose_in_report,
         "risk_cards": risk_cards,
-        "findings": findings[:6],
+        "findings": findings[:30],
         "findings_cards": findings_cards,
         "lab_rows": lab_rows,
         "lab_categories": lab_categories,
-        "clinical_notes": clinical_notes[:12],
-        "recommendations": recommendations[:10],
+        "clinical_notes": clinical_notes[:30],
+        "recommendations": recommendations[:30],
         "ai_summary": ai_summary,
         "ai_findings": ai_findings,
         "ai_causes": ai_causes,
@@ -2215,6 +2349,9 @@ def _build_premium_context(
         "label_report_user": _t("report_user_label", "User"),
         "label_report_date": _t("report_date_label_short", "Date"),
         "label_report_lang": _t("report_lang_label", "Language"),
+        "label_verify_code": _t("report_verify_code", "Verification"),
+        "label_report_verification_title": _t("report_verification_title", "Report Verification"),
+        "label_report_verification_scan_hint": _t("report_verification_scan_hint", "Scan QR or enter the code on the verification page to confirm authenticity."),
         "label_report_page_title": _t("report_page_title", "Norya Clinical Report"),
         "label_report_health_score": _t("report_health_score", "Overall Health Score"),
         "label_report_risk_indicator": _t("report_risk_indicator", "Risk Indicator"),
@@ -2291,6 +2428,8 @@ def _build_premium_context(
 def render_premium_pdf(context: dict) -> bytes:
     """Premium klinik rapor şablonu ile PDF üretir (WeasyPrint, running header/footer)."""
     from weasyprint import HTML
+    context = dict(context)
+    context["logo_base64"] = _logo_base64()
     template = _ENV.get_template("report_premium.html")
     html_str = template.render(**context)
     html_doc = HTML(string=html_str, base_url=str(_PROJECT_ROOT))
@@ -2300,6 +2439,8 @@ def render_premium_pdf(context: dict) -> bytes:
 def render_doctor_pdf(context: dict) -> bytes:
     """Doktoruma götür şablonu ile PDF üretir (logo, hekime özel başlık ve uyarı metni)."""
     from weasyprint import HTML
+    context = dict(context)
+    context["logo_base64"] = _logo_base64()
     template = _ENV.get_template("doctor_pdf.html")
     html_str = template.render(**context)
     html_doc = HTML(string=html_str, base_url=str(_PROJECT_ROOT))
@@ -2327,11 +2468,15 @@ def build_report_pdf(
     plan_name: str | None = None,
     source_type: str | None = None,
     trend_data: dict | None = None,
+    verification_info: dict | None = None,
 ) -> bytes:
-    """result_text'ten PDF raporu üretir. premium plan ise report_premium.html, değilse report_pdf.html kullanılır."""
+    """result_text'ten PDF raporu üretir. premium plan ise report_premium.html, değilse report_pdf.html kullanılır.
+    verification_info (aylık/yıllık pakette): report_id, verification_code, verification_url, qr_image_base64."""
     base_context = parse_report_to_context(result_text, report_date=report_date, lang=lang)
     report_date_str = base_context.get("report_date") or report_date or datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M")
     rid = str(report_id) if report_id is not None else "—"
+    if verification_info and verification_info.get("report_id"):
+        rid = str(verification_info["report_id"])
     user_id_str = (user_identifier or "").strip() or "—"
     plan = (plan_name or "").strip().lower()
     # premiumPdf: single, monthly, yearly, pro → premium şablon; premiumTrend: monthly, yearly, pro
@@ -2349,6 +2494,16 @@ def build_report_pdf(
             trend_data=trend_data,
             trend_locked=trend_locked,
         )
+        if verification_info:
+            premium_ctx["show_qr_verification"] = True
+            premium_ctx["verification_url"] = verification_info.get("verification_url") or ""
+            premium_ctx["verification_code"] = verification_info.get("verification_code") or ""
+            premium_ctx["qr_image_base64"] = verification_info.get("qr_image_base64") or ""
+        else:
+            premium_ctx["show_qr_verification"] = False
+            premium_ctx["verification_url"] = ""
+            premium_ctx["verification_code"] = ""
+            premium_ctx["qr_image_base64"] = ""
         return render_premium_pdf(premium_ctx)
 
     context = base_context

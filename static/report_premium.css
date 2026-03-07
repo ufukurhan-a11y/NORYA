@@ -7,13 +7,18 @@
 
 @page {
   size: A4;
-  margin: 18mm 16mm 20mm 16mm;
+  margin: 26mm 16mm 22mm 16mm;
   padding: 0;
   @top-center {
     content: element(header);
   }
   @bottom-center {
     content: element(footer);
+  }
+  @bottom-right {
+    font-size: 9px;
+    color: rgba(15, 23, 42, 0.55);
+    content: "Sayfa " counter(page) " / " counter(pages);
   }
 }
 
@@ -29,7 +34,7 @@ html, body {
   color: var(--ink);
   font-family: system-ui, -apple-system, "Inter", "Segoe UI", Roboto, Arial, sans-serif;
   font-size: 12px;
-  line-height: 1.4;
+  line-height: 1.45;
   margin: 0;
   padding: 0;
   width: 100%;
@@ -37,6 +42,8 @@ html, body {
   text-align: left;
   overflow-x: hidden;
   box-sizing: border-box;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 [dir="rtl"] {
@@ -56,80 +63,121 @@ footer.pdf-footer {
   position: running(footer);
 }
 
+/* Header'da her sayfada sadece doğrulama kodu (QR görseli 1. sayfadaki kutuda) */
+.h-verify-code-every-page {
+  font-size: 9px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-top: 2px;
+}
+
+.h-verify-code-every-page .k {
+  color: rgba(15, 23, 42, 0.7);
+  font-weight: 800;
+}
+
+/* Premium hastane raporu: tablo ile sabit header, tüm sayfalarda nizami (kayma yok) */
 .pdf-header {
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 12px 14px;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  border-bottom: 2px solid var(--border);
+  border-radius: 0;
+  padding: 8px 12px 10px;
+  display: block;
   background: #fff;
+  min-height: 0;
+  box-sizing: border-box;
 }
 
 .pdf-header-inner {
-  position: relative;
-  display: flex;
-  align-items: flex-start;
-  justify-content: space-between;
-  gap: 12px;
+  display: table;
+  table-layout: fixed;
   width: 100%;
+  border-collapse: collapse;
+  box-sizing: border-box;
 }
 
 .h-left {
+  display: table-cell;
+  width: 30%;
+  vertical-align: middle;
+  padding-right: 8px;
+}
+
+.h-left-inner {
   display: flex;
-  gap: 10px;
   align-items: center;
-  min-width: 220px;
+  gap: 8px;
+  flex-wrap: nowrap;
 }
 
 .logo, .pdf-header-logo {
-  width: 52px;
-  height: 52px;
-  min-width: 52px;
-  min-height: 52px;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  max-width: 44px;
+  max-height: 44px;
   object-fit: contain;
   display: block;
+  flex-shrink: 0;
+}
+
+/* Raporlarda tek ikon: dikkat çekecek kadar, çok büyük değil */
+.pdf-header-logo--report {
+  width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
 }
 
 .brand-name {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 900;
   color: var(--ink);
-  line-height: 1.1;
+  line-height: 1.15;
+  margin: 0;
 }
 
 .brand-sub {
-  font-size: 11.5px;
+  font-size: 10px;
   color: var(--muted);
-  margin-top: 2px;
+  margin: 0;
+  line-height: 1.25;
 }
 
 .h-mid {
-  flex: 1;
+  display: table-cell;
+  width: 44%;
   text-align: center;
-  padding-top: 2px;
+  vertical-align: middle;
+  padding: 0 8px;
 }
 
 .doc-title {
-  font-size: 16px;
+  font-size: 14px;
   font-weight: 950;
   color: var(--ink);
   letter-spacing: 0.2px;
+  margin: 0;
 }
 
 .doc-sub {
-  font-size: 11.5px;
+  font-size: 10px;
   color: var(--muted);
-  margin-top: 2px;
+  margin: 0;
+  line-height: 1.25;
 }
 
 .h-right {
-  min-width: 220px;
-  font-size: 11.5px;
+  display: table-cell;
+  width: 26%;
+  font-size: 9.5px;
   color: var(--muted);
-  line-height: 1.4;
+  line-height: 1.35;
   text-align: right;
+  vertical-align: middle;
+  padding-left: 8px;
 }
 
 .h-right .k {
@@ -137,23 +185,108 @@ footer.pdf-footer {
   font-weight: 900;
 }
 
+.h-right-verify {
+  margin-top: 2px;
+  font-size: 9px;
+}
+
+.h-qr-wrap {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.pdf-qr {
+  width: 56px;
+  height: 56px;
+  min-width: 56px;
+  min-height: 56px;
+  object-fit: contain;
+  display: block;
+}
+
 .badge {
-  position: absolute;
-  top: 10px;
-  right: 12px;
+  flex-shrink: 0;
+  align-self: center;
+  margin-left: 8px;
   background: rgba(14, 165, 164, 0.12);
   border: 1px solid rgba(14, 165, 164, 0.26);
-  padding: 5px 10px;
+  padding: 3px 8px;
   border-radius: 999px;
-  font-size: 11px;
-  font-weight: 950;
+  font-size: 9px;
+  font-weight: 800;
   color: rgba(15, 23, 42, 0.86);
+  letter-spacing: 0.05em;
 }
 
 .header-divider {
   height: 1px;
   background: rgba(15, 23, 42, 0.1);
   margin: 10px 2px 0;
+}
+
+/* Rapor doğrulama kutusu: ilk sayfada, özet kartlarından sonra, sağda */
+.verification-box {
+  margin-top: 14px;
+  margin-left: auto;
+  max-width: 280px;
+  break-inside: avoid;
+}
+
+.verification-box-inner {
+  border: 1px solid rgba(14, 165, 164, 0.28);
+  border-radius: 12px;
+  background: rgba(14, 165, 164, 0.04);
+  padding: 12px 14px;
+}
+
+.verification-box-title {
+  font-size: 11px;
+  font-weight: 800;
+  color: var(--ink);
+  letter-spacing: 0.3px;
+  margin-bottom: 10px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid rgba(14, 165, 164, 0.18);
+}
+
+.verification-box-content {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.verification-qr {
+  width: 80px;
+  height: 80px;
+  min-width: 80px;
+  min-height: 80px;
+  object-fit: contain;
+  display: block;
+}
+
+.verification-meta {
+  flex: 1;
+  min-width: 0;
+}
+
+.verification-code-line {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--ink);
+  margin-bottom: 6px;
+}
+
+.verification-code-line .k {
+  color: rgba(15, 23, 42, 0.7);
+  font-weight: 800;
+}
+
+.verification-scan-hint {
+  font-size: 9.5px;
+  color: var(--muted);
+  line-height: 1.35;
 }
 
 main.pdf-page {
@@ -166,12 +299,54 @@ main.pdf-page {
   padding: 0;
 }
 
+/* Yan yana satırlar: özet+skor, gauge+kategori — bütünlük korunsun */
+.report-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+  margin-top: 10px;
+  width: 100%;
+  break-inside: avoid;
+  page-break-inside: avoid;
+}
+.report-row .card {
+  margin-top: 0;
+  min-width: 0;
+  overflow-wrap: break-word;
+  word-break: break-word;
+}
+.report-row--summary-score .executive-summary { order: 1; }
+.report-row--summary-score .health-score-card { order: 2; }
+.report-row--gauge-bars .gauge-section { order: 1; }
+.report-row--gauge-bars .category-bars-section { order: 2; }
+.report-row--dist-radar .distribution-section { order: 1; }
+.report-row--dist-radar .radar-section { order: 2; }
+
+/* Bölüm aralıkları ve sayfa kırılımı — hastane raporu düzeni */
+main.pdf-page > .card:first-of-type { margin-top: 0; }
+main.pdf-page > .report-row + .card,
+main.pdf-page > .card + .report-row,
+main.pdf-page > .card + .card { margin-top: 14px; }
+/* İçerik yoğun bölümler (Biyobelirteç, Test Sonuçları) yeni sayfada başlasın; tablolar yarım kesilmesin */
+.report-section--content {
+  page-break-before: always;
+  break-before: page;
+}
+.biomarker-highlights-section .biomarker-group {
+  break-inside: avoid;
+  page-break-inside: avoid;
+  margin-bottom: 12px;
+}
+.biomarker-highlights-section .biomarker-group:last-child {
+  margin-bottom: 0;
+}
+
 .card {
   border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 12px 14px;
+  border-radius: 12px;
+  padding: 14px 16px;
   margin-top: 10px;
-  box-shadow: 0 10px 26px rgba(15, 23, 42, 0.05);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
   break-inside: avoid;
   page-break-inside: avoid;
   width: 100%;
@@ -179,6 +354,8 @@ main.pdf-page {
   display: block;
   box-sizing: border-box;
   overflow: hidden;
+  margin-left: 0;
+  margin-right: 0;
 }
 
 .sec-title {
@@ -186,8 +363,13 @@ main.pdf-page {
   align-items: center;
   gap: 8px;
   font-weight: 950;
-  font-size: 13.5px;
-  margin-bottom: 8px;
+  font-size: 13px;
+  margin-bottom: 10px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--border);
+  min-height: 28px;
+  line-height: 1.25;
+  color: var(--ink);
 }
 
 .sec-icon-wrap {
@@ -196,13 +378,21 @@ main.pdf-page {
   justify-content: center;
   width: 22px;
   height: 22px;
+  min-width: 22px;
+  min-height: 22px;
   flex-shrink: 0;
   color: var(--ink);
+  vertical-align: middle;
+  line-height: 0;
 }
 .sec-icon-wrap svg {
   width: 20px;
   height: 20px;
+  min-width: 20px;
+  min-height: 20px;
   stroke: currentColor;
+  display: block;
+  vertical-align: middle;
 }
 
 .sec-icon {
@@ -212,22 +402,27 @@ main.pdf-page {
 
 .refined-disclaimer {
   margin: 0;
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--muted);
   line-height: 1.45;
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .executive-summary-text {
   margin: 0;
-  font-size: 12.5px;
+  font-size: 12px;
   line-height: 1.5;
   color: var(--ink);
+  overflow-wrap: break-word;
+  word-break: break-word;
 }
 
 .summary-tiles-section .summary-tiles {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+  margin-top: 4px;
 }
 @media (max-width: 520px) {
   .summary-tiles-section .summary-tiles {
@@ -241,15 +436,26 @@ main.pdf-page {
   background: #fafbfc;
   break-inside: avoid;
   page-break-inside: avoid;
+  min-width: 0;
 }
 .summary-tile .tile-icon {
   display: inline-flex;
-  width: 20px;
-  height: 20px;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  height: 22px;
+  min-width: 22px;
+  min-height: 22px;
   margin-bottom: 4px;
   color: var(--brand);
+  flex-shrink: 0;
+  line-height: 0;
 }
-.summary-tile .tile-icon svg { width: 18px; height: 18px; }
+.summary-tile .tile-icon svg {
+  width: 18px;
+  height: 18px;
+  display: block;
+}
 .summary-tile .tile-label {
   font-size: 10.5px;
   color: var(--muted);
@@ -315,7 +521,11 @@ main.pdf-page {
   background: rgba(245, 158, 11, 0.08);
   border-color: rgba(245, 158, 11, 0.22);
   display: flex;
+  align-items: flex-start;
   gap: 10px;
+}
+.alert .sec-icon-wrap {
+  margin-top: 2px;
 }
 
 .alert-ico {
@@ -334,9 +544,10 @@ main.pdf-page {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   gap: 10px;
+  margin-top: 6px;
 }
-
 .risk-card {
+  min-width: 0;
   border: 1px solid var(--border);
   border-radius: 14px;
   padding: 10px;
@@ -377,7 +588,7 @@ main.pdf-page {
 .bullets {
   margin: 0;
   padding-left: 18px;
-  font-size: 12.5px;
+  font-size: 12px;
   color: rgba(15, 23, 42, 0.86);
   line-height: 1.5;
   overflow-wrap: break-word;
@@ -385,7 +596,7 @@ main.pdf-page {
 }
 
 .bullets li {
-  margin: 6px 0;
+  margin: 5px 0;
 }
 
 .lab-table {
@@ -423,22 +634,72 @@ main.pdf-page {
   font-weight: 900;
 }
 
-/* Kan değerleri kart grid — yeşil (iyi), sarı (orta), kırmızı (riskli) */
+/* Tek göstergeler çubuğu: kurumsal, raporda bir kez (header altında). Section ile hizalı, taşmayan. */
+.report-legend-strip {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 10px 18px;
+  padding: 6px 12px 8px;
+  margin: 0 0 10px 0;
+  max-width: 100%;
+  box-sizing: border-box;
+  background: #f8fafc;
+  border-bottom: 1px solid var(--border);
+  font-size: 10px;
+  color: var(--muted);
+  page-break-inside: avoid;
+  overflow: hidden;
+}
+.report-legend-strip .report-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.report-legend-strip .lab-legend-dot {
+  margin-right: 0;
+  flex-shrink: 0;
+}
+
+/* Kan değerleri / bulgu legend: section container içine hizalı, taşmayan */
+.lab-legend-wrap {
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0 0 10px 0;
+  padding: 4px 0 0 0;
+  page-break-inside: avoid;
+  overflow: hidden;
+}
 .lab-legend-inline {
   font-size: 10.5px;
   color: var(--muted);
-  margin: 0 0 14px 0;
+  margin: 0;
+  padding: 0;
   display: flex;
   flex-wrap: wrap;
-  gap: 10px 16px;
   align-items: center;
+  justify-content: flex-start;
+  gap: 10px 16px;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+.lab-legend-inline .lab-legend-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  white-space: nowrap;
+  flex-shrink: 0;
 }
 .lab-legend-dot {
   display: inline-block;
   width: 10px;
   height: 10px;
   border-radius: 6px;
-  margin-right: 4px;
+  margin-right: 0;
+  flex-shrink: 0;
   vertical-align: middle;
 }
 .lab-legend-dot.lab-card--normal { background: #22c55e; }
@@ -448,10 +709,13 @@ main.pdf-page {
 .lab-category-section {
   margin-top: 14px;
   page-break-inside: avoid;
-  border-radius: 12px;
-  padding: 12px 14px;
+  break-inside: avoid;
+  border-radius: 10px;
+  padding: 14px 16px;
+  border: 1px solid var(--border);
   border-left-width: 4px;
   border-left-style: solid;
+  background: #fafbfc;
 }
 .lab-category-section--normal {
   border-left-color: #22c55e;
@@ -466,7 +730,7 @@ main.pdf-page {
   background: linear-gradient(to right, rgba(239, 68, 68, 0.08), transparent);
 }
 .lab-category-section--first {
-  page-break-before: always;
+  margin-top: 0;
 }
 .lab-category-section .lab-category-title {
   margin-bottom: 6px;
@@ -505,11 +769,21 @@ main.pdf-page {
   margin-top: 12px;
 }
 .lab-cards-section .sec-title { margin-bottom: 6px; }
+/* Sonuç kartları: nizami 3 sütun grid, yan yana hizalı */
 .lab-cards-grid,
 .lab-cards-grid--multi {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  margin-top: 10px;
+  width: 100%;
+}
+.lab-cards-grid .lab-card,
+.lab-cards-grid--multi .lab-card {
+  min-width: 0;
+  margin: 0;
+  display: block;
+  box-sizing: border-box;
 }
 @media (max-width: 680px) {
   .lab-cards-grid,
@@ -524,12 +798,15 @@ main.pdf-page {
   }
 }
 .lab-card {
-  border-radius: 12px;
-  padding: 10px 12px;
+  border-radius: 10px;
+  padding: 12px 14px;
   border: 1px solid var(--border);
   break-inside: avoid;
   page-break-inside: avoid;
-  box-shadow: 0 2px 8px rgba(15, 23, 42, 0.04);
+  box-shadow: 0 1px 3px rgba(15, 23, 42, 0.05);
+  overflow-wrap: break-word;
+  word-break: break-word;
+  min-width: 0;
 }
 .lab-card--normal {
   border-left: 4px solid #22c55e;
@@ -550,22 +827,28 @@ main.pdf-page {
   margin-bottom: 4px;
   text-transform: uppercase;
   letter-spacing: 0.02em;
+  line-height: 1.3;
+  overflow-wrap: break-word;
 }
 .lab-card-value {
   font-size: 14px;
   font-weight: 900;
   color: var(--ink);
   margin-bottom: 2px;
+  line-height: 1.3;
 }
 .lab-card-ref {
   font-size: 10px;
   color: var(--muted);
   margin-bottom: 2px;
+  line-height: 1.35;
+  overflow-wrap: break-word;
 }
 .lab-card-status {
   font-size: 10.5px;
   font-weight: 700;
   margin-top: 2px;
+  line-height: 1.3;
 }
 .lab-card--normal .lab-card-status { color: #15803d; }
 .lab-card--border .lab-card-status { color: #a16207; }
@@ -581,6 +864,14 @@ main.pdf-page {
   display: flex;
   flex-direction: column;
   gap: 18px;
+}
+.food-guidance-row.food-guidance-clinical {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 14px;
+}
+.food-guidance-row .food-clinical-block {
+  min-width: 0;
 }
 .food-clinical-block {
   border-radius: 14px;
@@ -604,6 +895,7 @@ main.pdf-page {
   align-items: center;
   gap: 8px;
   margin-bottom: 6px;
+  min-height: 28px;
 }
 .food-to-eat-header .sec-icon-wrap { color: #22c55e; }
 .food-to-avoid-header .sec-icon-wrap { color: #ef4444; }
@@ -669,6 +961,12 @@ main.pdf-page {
   font-size: 12.5px;
   color: rgba(15, 23, 42, 0.9);
   margin-bottom: 6px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.note-h .sec-icon-wrap {
+  flex-shrink: 0;
 }
 
 .note-p {
@@ -678,8 +976,10 @@ main.pdf-page {
 }
 
 .pdf-footer {
-  margin-top: 10px;
-  font-size: 10.5px;
+  position: running(footer);
+  margin: 0;
+  padding: 6px 0 0 0;
+  font-size: 9.5px;
   color: rgba(15, 23, 42, 0.55);
   text-align: center;
   display: flex;
@@ -687,12 +987,13 @@ main.pdf-page {
   justify-content: center;
   gap: 10px;
   flex-wrap: wrap;
+  border-top: 1px solid rgba(15, 23, 42, 0.08);
 }
 .pdf-footer-logo {
-  width: 32px;
-  height: 32px;
-  min-width: 32px;
-  min-height: 32px;
+  width: 28px;
+  height: 28px;
+  min-width: 28px;
+  min-height: 28px;
   object-fit: contain;
   vertical-align: middle;
   display: inline-block;
@@ -700,15 +1001,31 @@ main.pdf-page {
 .pdf-footer-text {
   vertical-align: middle;
 }
+.pdf-footer-rid {
+  font-weight: 600;
+  color: rgba(15, 23, 42, 0.65);
+}
+.pdf-footer-verify {
+  font-size: 9px;
+  color: var(--brand);
+  font-weight: 600;
+}
 
-/* Bulgu kartları grid — renge göre (yeşil/sarı/kırmızı) */
-.findings-cards-section .lab-legend-inline {
+/* Bulgu kartları grid — renge göre (yeşil/sarı/kırmızı). Legend strip zaten üstte tek; bu sadece varsa inline legend için. */
+.findings-cards-section .lab-legend-wrap {
   margin-bottom: 12px;
+}
+.findings-cards-section .lab-legend-inline {
+  margin: 0;
 }
 .findings-cards-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
+  margin-top: 8px;
+}
+.findings-cards-grid .lab-card {
+  min-width: 0;
 }
 @media (max-width: 500px) {
   .findings-cards-grid {

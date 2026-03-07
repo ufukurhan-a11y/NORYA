@@ -156,30 +156,32 @@ def overall_score_svg(
     status: str,
     title: str = "Genel durum (0–100)",
     badge_label: str | None = None,
+    include_title: bool = True,
 ) -> str:
     """
     Genel durum grafiği: 0-100 skor, yeşil/turuncu/kırmızı bölgeler.
     status: 'normal' | 'attention' | 'high' -> rozet rengi.
+    include_title=False: PDF'te şablon zaten başlık veriyor, SVG içinde tekrar etmesin.
     """
     score = max(0, min(100, score))
     badge_text = badge_label or {"normal": "Normal", "attention": "Sınır", "high": "Riskli"}.get(status, "Normal")
     # 0-70 yeşil, 70-85 turuncu, 85-100 kırmızı (web ile aynı mantık)
     w = 600
     h = 100
-    bar_y = 50
-    bar_h = 24
+    bar_y = 38
+    bar_h = 22
     x0, x1, x2, x3 = 60, 60 + (w - 120) * 0.70, 60 + (w - 120) * 0.85, w - 60
     score_x = 60 + (w - 120) * (score / 100.0) if score <= 100 else w - 60
     score_x = max(62, min(w - 62, score_x))
     badge_color = COLOR_NORMAL if status == "normal" else (COLOR_BORDER if status == "attention" else COLOR_RISK)
     badge_w = min(58, len(badge_text) * 8)
+    title_line = f'  <text x="60" y="22" font-family="Helvetica,Arial,sans-serif" font-size="13" font-weight="700" fill="{COLOR_MARKER_TEXT}">{_escape(title)}</text>\n' if include_title else ""
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {w} {h}" width="{w}" height="{h}" style="max-width:100%;height:auto;">
-  <text x="60" y="28" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="{COLOR_MARKER_TEXT}">{_escape(title)}</text>
-  <rect x="{x0}" y="{bar_y}" width="{x1 - x0}" height="{bar_h}" rx="6" fill="{COLOR_NORMAL}"/>
+{title_line}  <rect x="{x0}" y="{bar_y}" width="{x1 - x0}" height="{bar_h}" rx="6" fill="{COLOR_NORMAL}"/>
   <rect x="{x1}" y="{bar_y}" width="{x2 - x1}" height="{bar_h}" fill="{COLOR_BORDER}"/>
   <rect x="{x2}" y="{bar_y}" width="{x3 - x2}" height="{bar_h}" rx="6" fill="{COLOR_RISK}"/>
-  <line x1="{score_x}" y1="{bar_y}" x2="{score_x}" y2="{bar_y + bar_h + 18}" stroke="{COLOR_MARKER}" stroke-width="3" stroke-linecap="round"/>
-  <text x="{score_x}" y="{bar_y + bar_h + 36}" font-family="Helvetica,Arial,sans-serif" font-size="14" font-weight="700" fill="{COLOR_MARKER_TEXT}" text-anchor="middle">{score}/100</text>
+  <line x1="{score_x}" y1="{bar_y}" x2="{score_x}" y2="{bar_y + bar_h + 14}" stroke="{COLOR_MARKER}" stroke-width="2.5" stroke-linecap="round"/>
+  <text x="{score_x}" y="{bar_y + bar_h + 32}" font-family="Helvetica,Arial,sans-serif" font-size="12" font-weight="700" fill="{COLOR_MARKER_TEXT}" text-anchor="middle">{score}/100</text>
   <rect x="{w - 60 - badge_w}" y="{bar_y + bar_h / 2 - 9}" width="{badge_w}" height="18" rx="9" fill="{badge_color}"/>
   <text x="{w - 60 - badge_w / 2}" y="{bar_y + bar_h / 2 + 4}" font-family="Helvetica,Arial,sans-serif" font-size="11" font-weight="600" fill="#fff" text-anchor="middle">{_escape(badge_text)}</text>
 </svg>'''
@@ -191,9 +193,10 @@ def overall_score_svg_base64(
     status: str,
     title: str = "Genel durum (0–100)",
     badge_label: str | None = None,
+    include_title: bool = True,
 ) -> str:
     """Genel durum 0–100 grafiği, base64."""
-    svg = overall_score_svg(score=score, status=status, title=title, badge_label=badge_label)
+    svg = overall_score_svg(score=score, status=status, title=title, badge_label=badge_label, include_title=include_title)
     return base64.b64encode(svg.encode("utf-8")).decode("ascii")
 
 

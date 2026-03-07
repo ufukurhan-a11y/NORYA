@@ -6,6 +6,7 @@ from .enterprise_lead import EnterpriseLead
 from .error_log import ErrorLog
 from .payment import PaymentOrder
 from .presence import Presence
+from .report_verification import ReportVerification
 from .security_log import SecurityLog
 from .tokens import EmailVerifyToken, GuestLoginToken, PasswordResetToken, ShareToken
 from .push_subscription import PushSubscription
@@ -21,6 +22,7 @@ __all__ = [
     "ErrorLog",
     "PaymentOrder",
     "Presence",
+    "ReportVerification",
     "SecurityLog",
     "UploadLog",
     "EmailVerifyToken",

@@ -16,6 +16,7 @@ class HealthScoreSchema(BaseModel):
 
 class UiHintsSchema(BaseModel):
     locked: bool  # True = free/basic, premium alanlar blur + CTA
+    report_limited_preview: bool = False  # True = tek analiz/aylık: sadece önizleme + "hepsini görmek için aylık/yıllık alın" kapısı
 
 
 class PdfInfoSchema(BaseModel):

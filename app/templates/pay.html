@@ -3,127 +3,360 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#F7FAFA">
+  <meta name="theme-color" content="#F8FAFA">
   <title>{{ t.pay_title }} – {{ brand }}</title>
+  <!-- Tarayıcı sekmesi: Norya N ikonu -->
+  <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+    html{ -webkit-text-size-adjust: 100%; }
     body{
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
-      background: linear-gradient(180deg, #F7FAFA 0%, #FFFFFF 35%);
+      background: #f1f5f9;
       color: #1a1a2e;
       min-height: 100vh;
       min-height: 100dvh;
       padding-bottom: 100px;
       -webkit-tap-highlight-color: transparent;
+      overflow-x: hidden;
     }
     .trust-bar{
-      background: rgba(255,255,255,0.95);
-      border-bottom: 1px solid rgba(14,165,164,0.12);
+      background: #fff;
+      border-bottom: 1px solid #e2e8f0;
       padding: 10px 16px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 16px 24px;
+      gap: 12px 20px;
     }
-    .trust-bar span{ display: inline-flex; align-items: center; gap: 6px; font-size: 12px; font-weight: 500; color: #64748b; }
-    .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; }
-    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 16px; }
-    .header{ display: flex; align-items: center; justify-content: space-between; padding: 20px 0; }
-    .header a{ display: flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
+    .trust-bar span{ display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: #64748b; }
+    .trust-bar svg{ width: 14px; height: 14px; flex-shrink: 0; color: #0EA5A4; }
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    .header{
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 0 16px;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .header-brand{ display: flex; flex-direction: column; gap: 2px; }
+    .header a{ display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
     .header img{ height: 36px; width: auto; }
-    .header small{ font-size: 12px; color: #0EA5A4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .brand-tagline{ font-size: 12px; color: #64748b; font-weight: 500; }
+    .header-badge{ font-size: 11px; color: #0EA5A4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+
     .grid{ display: grid; gap: 24px; }
-    @media (min-width: 900px){ .grid{ grid-template-columns: 1fr 380px; align-items: start; } }
-    .card{
+    @media (min-width: 920px){ .grid{ grid-template-columns: 1fr 320px; align-items: start; gap: 28px; } }
+    .left-col{ min-width: 0; }
+    .right-col{ min-width: 0; }
+    @media (min-width: 920px){ .right-col{ position: sticky; top: 20px; } }
+
+    /* —— Ana checkout kartı: derinlik, premium gölge —— */
+    .checkout-card{
       background: #fff;
-      border-radius: 18px;
+      border-radius: 20px;
       border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 4px 24px rgba(0,0,0,0.06);
-      padding: 24px;
-      margin-bottom: 0;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+      padding: 0;
+      overflow: hidden;
     }
-    .card h3{ font-size: 14px; font-weight: 600; color: #64748b; margin-bottom: 12px; text-transform: uppercase; letter-spacing: 0.04em; }
-    .pills{ display: flex; background: #f1f5f9; border-radius: 12px; padding: 4px; gap: 4px; margin-bottom: 20px; }
-    .pills button{
+    .checkout-inner{ padding: 28px 28px 32px; }
+    .checkout-section{ margin-bottom: 0; }
+    .checkout-divider{
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, #e2e8f0 8%, #e2e8f0 92%, transparent 100%);
+      margin: 0 28px;
+    }
+    .card-title{
+      font-size: 11px;
+      font-weight: 600;
+      color: #64748b;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+    }
+
+    /* —— Plan seçimi: seçili kart etkisi, glow —— */
+    .plan-segment{
+      display: flex;
+      background: #e2e8f0;
+      border-radius: 14px;
+      padding: 6px;
+      gap: 6px;
+      margin-bottom: 12px;
+    }
+    .plan-segment button{
       flex: 1;
-      padding: 12px 14px;
+      min-width: 0;
+      padding: 14px 10px;
       border: none;
       border-radius: 10px;
-      font-size: 13px; font-weight: 600;
+      font-size: 13px;
+      font-weight: 600;
       background: transparent;
       color: #475569;
       cursor: pointer;
-      transition: all 0.2s;
+      transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
+      border: 2px solid transparent;
     }
-    .pills button:hover{ background: rgba(14,165,164,0.1); color: #0d9488; }
-    .pills button:focus-visible{ outline: 2px solid #0EA5A4; outline-offset: 2px; }
-    .pills button.active{ background: #0EA5A4; color: #fff; box-shadow: 0 2px 8px rgba(14,165,164,0.35); }
-    .plan-badges{ display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    .plan-badges span{ font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 8px; }
+    .plan-segment button:hover{ background: rgba(255,255,255,0.9); color: #0d9488; }
+    .plan-segment button:focus-visible{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 2px rgba(14,165,164,0.25); }
+    .plan-segment button.active{
+      background: #0EA5A4;
+      color: #fff;
+      border-color: rgba(255,255,255,0.4);
+      box-shadow: 0 0 0 1px rgba(14,165,164,0.2), 0 6px 20px rgba(14,165,164,0.3);
+    }
+    .plan-badges{ display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
+    .plan-badges span{ font-size: 10px; font-weight: 700; padding: 6px 12px; border-radius: 8px; letter-spacing: 0.03em; text-transform: uppercase; }
+    .badge-start{ background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
     .badge-popular{ background: #0EA5A4; color: #fff; }
-    .badge-save{ background: #ecfdf5; color: #059669; }
-    .benefits{ list-style: none; margin-bottom: 20px; }
-    .benefits li{ display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 14px; color: #334155; }
-    .benefits li svg{ width: 18px; height: 18px; flex-shrink: 0; color: #0EA5A4; }
-    .price-row{ display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; padding: 16px 0; border-top: 1px solid #f1f5f9; border-bottom: 1px solid #f1f5f9; }
-    .price-row .total-label{ font-size: 14px; color: #64748b; font-weight: 500; }
-    .price-row .total-value{ font-size: 28px; font-weight: 700; color: #0EA5A4; }
-    .price-note{ font-size: 12px; color: #94a3b8; margin-bottom: 16px; line-height: 1.5; }
-    .coupon-row{ display: flex; gap: 8px; margin-bottom: 16px; }
-    .coupon-row input{ flex: 1; padding: 12px 14px; border: 1px solid #e2e8f0; border-radius: 10px; font-size: 14px; }
-    .coupon-row input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
-    .coupon-row button{ padding: 12px 18px; border: none; border-radius: 10px; background: #e2e8f0; color: #475569; font-weight: 600; font-size: 14px; cursor: pointer; }
-    .coupon-row button:hover{ background: #cbd5e1; }
+    .badge-save{ background: #ecfdf5; color: #059669; border: 1px solid rgba(5,150,105,0.2); }
+    .badge-best{ background: #f0fdfa; color: #0f766e; border: 1px solid rgba(14,165,164,0.35); }
+
+    /* —— Neler dahil: rafine liste —— */
+    .benefits-list{ list-style: none; margin-bottom: 18px; }
+    .benefits-list li{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 9px 0;
+      font-size: 14px;
+      color: #334155;
+      line-height: 1.4;
+    }
+    .benefits-list li svg{
+      width: 18px; height: 18px; flex-shrink: 0; color: #0EA5A4;
+      padding: 3px; border-radius: 6px; background: rgba(14,165,164,0.08);
+    }
+
+    /* —— Fiyat + CTA: vitrin highlight bölümü —— */
+    .price-cta-highlight{
+      background: linear-gradient(180deg, #f8fafb 0%, #fff 100%);
+      border-radius: 16px;
+      padding: 24px 24px 28px;
+      margin: 0 -4px;
+      border: 1px solid rgba(14,165,164,0.08);
+    }
+    .price-block{
+      padding: 0 0 20px;
+      margin: 0;
+    }
+    .price-micro-badges{ display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .price-micro-badge{
+      font-size: 10px; font-weight: 600; padding: 5px 10px; border-radius: 6px;
+      background: rgba(14,165,164,0.08); color: #0f766e; border: 1px solid rgba(14,165,164,0.15);
+      letter-spacing: 0.02em;
+    }
+    .price-block .total-label{ font-size: 11px; color: #64748b; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .price-block .total-value{
+      font-size: 46px;
+      font-weight: 800;
+      color: #0EA5A4;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+    }
+    .price-block .total-value .currency{ font-size: 26px; font-weight: 700; opacity: 0.92; margin-left: 3px; }
+    .price-block .price-desc{ font-size: 13px; color: #64748b; margin-top: 6px; font-weight: 500; }
+    .price-block .price-note{ font-size: 12px; color: #94a3b8; margin-top: 10px; line-height: 1.5; }
+    .price-block .price-note span{ margin: 0 5px; }
+
+    /* —— Form: kupon + inputlar premium —— */
+    .form-group{ margin-bottom: 14px; }
+    .form-group label{ display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+    .input{
+      width: 100%;
+      max-width: 100%;
+      min-height: 48px;
+      padding: 12px 16px;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      font-size: 16px;
+      color: #1a1a2e;
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    .input::placeholder{ color: #94a3b8; }
+    .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
+    .input.err{ border-color: #dc2626; }
+    .coupon-row{ display: flex; gap: 10px; margin-bottom: 4px; }
+    .coupon-row .input{ flex: 1; min-width: 0; }
+    .btn-secondary{
+      min-height: 48px;
+      padding: 0 20px;
+      border: none;
+      border-radius: 12px;
+      background: #e2e8f0;
+      color: #475569;
+      font-weight: 600;
+      font-size: 14px;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+    .btn-secondary:hover{ background: #cbd5e1; }
     .coupon-msg{ font-size: 13px; margin-top: 6px; min-height: 20px; }
     .coupon-msg.ok{ color: #059669; }
     .coupon-msg.err{ color: #dc2626; }
+
+    /* —— Ana CTA: tek aksiyon, çok baskın —— */
+    .price-cta-highlight .cta-wrap{ margin-top: 0; margin-bottom: 0; }
+    .cta-wrap{ margin-top: 20px; }
     .cta-main{
       width: 100%;
-      padding: 16px 24px;
-      min-height: 52px;
+      padding: 20px 28px;
+      min-height: 62px;
       border: none;
-      border-radius: 12px;
+      border-radius: 16px;
       background: #0EA5A4;
       color: #fff;
-      font-size: 16px;
-      font-weight: 600;
+      font-size: 18px;
+      font-weight: 700;
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.15s;
+      transition: transform 0.15s, box-shadow 0.2s, background 0.15s;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
+      box-shadow: 0 6px 20px rgba(14,165,164,0.35);
     }
-    .cta-main:hover:not(:disabled){ transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,164,0.35); }
+    .cta-main:hover:not(:disabled){ background: #0d9488; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(14,165,164,0.42); }
     .cta-main:focus-visible{ outline: 2px solid #0EA5A4; outline-offset: 2px; }
-    .cta-main:disabled{ opacity: 0.8; cursor: not-allowed; }
-    .cta-main .spinner{ width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    .cta-main:active:not(:disabled){ transform: translateY(0); }
+    .cta-main:disabled{ opacity: 0.88; cursor: not-allowed; box-shadow: none; }
+    .cta-main .spinner{ width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin{ to{ transform: rotate(360deg); } }
-    .support-link{ display: block; text-align: center; margin-top: 14px; font-size: 13px; color: #64748b; text-decoration: none; }
+    .cta-trust-note{ font-size: 12px; color: #64748b; text-align: center; margin-top: 12px; line-height: 1.5; }
+    .support-link{ display: block; text-align: center; margin-top: 10px; font-size: 13px; color: #64748b; text-decoration: none; }
     .support-link:hover{ color: #0EA5A4; }
     .toggle-row{ margin-top: 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; }
-    .toggle-row input{ width: 18px; height: 18px; accent-color: #0EA5A4; }
-    .status-card{ margin-top: 20px; padding: 20px; background: #f0fdfa; border: 1px solid rgba(14,165,164,0.25); border-radius: 14px; display: none; }
+    .toggle-row input{ width: 18px; height: 18px; accent-color: #0EA5A4; flex-shrink: 0; }
+
+    .micro-trust{ margin-top: 18px; padding-top: 14px; border-top: 1px solid #e2e8f0; }
+    .micro-trust p{ font-size: 11px; color: #94a3b8; line-height: 1.5; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
+    .micro-trust p::before{ content: ''; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: #0EA5A4; opacity: 0.6; flex-shrink: 0; }
+    .micro-trust p:last-child{ margin-bottom: 0; }
+
+    .merchant-contact{ margin-top: 18px; padding-top: 14px; border-top: 1px solid #e2e8f0; }
+    .merchant-contact p{ font-size: 12px; color: #475569; margin: 4px 0; }
+    .merchant-contact a{ color: #0EA5A4; text-decoration: none; }
+    .merchant-contact a:hover{ text-decoration: underline; }
+
+    .status-card{
+      margin: 20px 28px 28px;
+      padding: 20px;
+      background: #f0fdfa;
+      border: 1px solid rgba(14,165,164,0.25);
+      border-radius: 14px;
+      display: none;
+    }
     .status-card.visible{ display: block; }
     .status-card h4{ font-size: 15px; color: #0f766e; margin-bottom: 6px; }
     .status-card p{ font-size: 13px; color: #115e59; margin-bottom: 12px; line-height: 1.5; }
     .status-card a{ color: #0EA5A4; font-weight: 600; font-size: 13px; }
     .status-card .btn-done{ margin-top: 10px; padding: 10px 18px; border-radius: 10px; border: 1px solid #0EA5A4; background: transparent; color: #0EA5A4; font-weight: 600; cursor: pointer; font-size: 13px; }
     .status-card .btn-done:hover{ background: rgba(14,165,164,0.08); }
-    .right-col .card{ margin-bottom: 20px; }
-    .right-col .card ul{ list-style: none; }
-    .right-col .card li{ display: flex; align-items: flex-start; gap: 8px; padding: 8px 0; font-size: 13px; color: #475569; line-height: 1.4; }
-    .right-col .card li svg{ width: 16px; height: 16px; flex-shrink: 0; margin-top: 2px; color: #0EA5A4; }
-    .testimonials p{ font-size: 13px; color: #475569; line-height: 1.5; padding: 10px 0; border-bottom: 1px solid #f1f5f9; }
-    .testimonials p:last-child{ border-bottom: none; }
-    .testimonials .stars{ color: #fbbf24; font-size: 12px; margin-bottom: 4px; }
+
+    .form-card.has-status .cta-wrap{ display: none; }
+    .form-card.has-status .coupon-row{ display: none; }
+    .form-card.has-status .opt-fields{ display: none; }
+    .form-card.has-status .micro-trust{ display: none; }
+
+    /* —— Sağ kolon: premium güven kartları —— */
+    .trust-mini-card{
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+    .trust-mini-card:last-child{ margin-bottom: 0; }
+    .trust-mini-card .tc-icon{
+      width: 44px;
+      height: 44px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%);
+      border: 1px solid rgba(14,165,164,0.18);
+      box-shadow: 0 2px 8px rgba(14,165,164,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+    .trust-mini-card .tc-icon svg{ width: 22px; height: 22px; color: #0EA5A4; }
+    .trust-mini-card .tc-title{ font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; letter-spacing: -0.01em; }
+    .trust-mini-card .tc-desc{ font-size: 12px; color: #64748b; line-height: 1.48; }
+    .trust-mini-card .tc-desc a{ color: #0EA5A4; text-decoration: none; }
+    .trust-mini-card .tc-desc a:hover{ text-decoration: underline; }
+
+    .testimonials-card{
+      background: #fff;
+      border-radius: 16px;
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
+      padding: 22px;
+      margin-bottom: 16px;
+    }
+    .testimonials-card .card-title{ margin-bottom: 12px; }
+    .testimonials-card p{ font-size: 13px; color: #475569; line-height: 1.5; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+    .testimonials-card p:last-of-type{ border-bottom: none; }
+    .testimonials-card .stars{ color: #c4b61d; font-size: 11px; margin-bottom: 2px; }
+    .testimonials-card .corporate-line{ font-size: 11px; color: #94a3b8; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; line-height: 1.5; }
+
+    .trust-mini-card.accordion-wrap{ padding: 20px; }
+    .trust-mini-card.accordion-wrap .card-title{ margin-bottom: 12px; }
     .accordion{ border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
     .accordion summary{ padding: 14px 16px; font-weight: 600; font-size: 14px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
     .accordion summary::-webkit-details-marker{ display: none; }
     .accordion summary::after{ content: '+'; font-size: 18px; color: #64748b; }
     .accordion details[open] summary::after{ content: '−'; }
     .accordion .acc-body{ padding: 12px 16px; font-size: 13px; color: #64748b; line-height: 1.5; border-top: 1px solid #e2e8f0; }
+
+    .footer{ text-align: center; padding: 24px 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; margin-top: 28px; }
+    .footer a{ color: #64748b; text-decoration: none; margin: 0 8px; }
+    .footer a:hover{ color: #0EA5A4; }
+    .footer-merchant{ margin-bottom: 10px; font-size: 11px; color: #64748b; line-height: 1.5; }
+
+    @media (max-width: 919px){
+      .checkout-inner{ padding: 22px 20px 28px; }
+      .checkout-divider{ margin: 0 20px; }
+      .right-col{ order: 2; }
+      .plan-segment{ flex-wrap: nowrap; overflow: hidden; }
+      .plan-segment button{ min-width: 0; font-size: 12px; padding: 12px 8px; }
+      .price-cta-highlight{ padding: 20px 20px 24px; margin: 0; }
+      .price-block .total-value{ font-size: 40px; }
+      .price-block .total-value .currency{ font-size: 22px; }
+      .cta-main{ min-height: 58px; font-size: 17px; }
+    }
+    @media (max-width: 380px){ .plan-segment{ flex-wrap: wrap; } }
+    .sticky-bar{
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: #fff;
+      border-top: 1px solid #e2e8f0;
+      padding: 14px 16px;
+      padding-bottom: max(14px, env(safe-area-inset-bottom));
+      z-index: 50;
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+    }
+    @media (max-width: 919px){
+      .sticky-bar{ display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .sticky-bar .price{ font-size: 20px; font-weight: 800; color: #0EA5A4; }
+      .sticky-bar .cta-main{ min-height: 52px; padding: 14px 20px; flex: 1; min-width: 0; font-size: 15px; font-weight: 700; }
+      body{ padding-bottom: 88px; }
+    }
+
     .modal-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
     .modal-overlay.visible{ display: flex; }
     .modal{ background: #fff; border-radius: 18px; padding: 28px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
@@ -131,20 +364,6 @@
     .modal p{ font-size: 14px; color: #64748b; margin-bottom: 18px; line-height: 1.5; }
     .modal a{ display: inline-block; padding: 14px 24px; background: #0EA5A4; color: #fff; border-radius: 12px; font-weight: 600; text-decoration: none; }
     .modal a:hover{ background: #0d9488; }
-    .footer{ text-align: center; padding: 24px 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid #f1f5f9; margin-top: 32px; }
-    .footer a{ color: #64748b; text-decoration: none; margin: 0 8px; }
-    .footer a:hover{ color: #0EA5A4; }
-    @media (max-width: 899px){
-      .right-col{ order: 2; }
-      .right-col .card{ margin-bottom: 12px; }
-      .accordion-wrap{ margin-top: 16px; }
-      .accordion details{ margin-bottom: 8px; }
-    }
-    .sticky-bar{ display: none; position: fixed; bottom: 0; left: 0; right: 0; background: #fff; border-top: 1px solid #e2e8f0; padding: 14px 16px; padding-bottom: max(14px, env(safe-area-inset-bottom)); z-index: 50; box-shadow: 0 -4px 20px rgba(0,0,0,0.08); }
-    @media (max-width: 899px){ .sticky-bar{ display: flex; align-items: center; justify-content: space-between; gap: 16px; } .sticky-bar .price{ font-size: 18px; font-weight: 700; color: #0EA5A4; } .sticky-bar .cta-main{ min-height: 48px; padding: 14px 20px; } body{ padding-bottom: 80px; } }
-    .form-card.has-status .cta-wrap{ display: none; }
-    .form-card.has-status .coupon-row{ display: none; }
-    .form-card.has-status .opt-fields{ display: none; }
   </style>
 </head>
 <body>
@@ -153,92 +372,143 @@
     <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_paytr }}</span>
     <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_cloudflare }}</span>
     <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_ssl }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_card_no_storage }}</span>
   </div>
+
   <div class="wrap">
     <header class="header">
-      <a href="{{ base_url }}/" aria-label="{{ brand }}"><img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="" width="140" height="36">{{ brand }}</a>
-      <small>{{ t.secure_checkout }}</small>
+      <div class="header-brand">
+        <a href="{{ base_url }}/" aria-label="{{ brand }}">
+          <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="" width="140" height="36">{{ brand }}
+        </a>
+        <span class="brand-tagline">{{ t.brand_trust_line }}</span>
+      </div>
+      <span class="header-badge">{{ t.secure_checkout }}</span>
     </header>
 
     <main class="grid">
-      <div class="form-card" id="form-card">
-        <div class="card">
-          <h3>{{ t.selected_plan }}</h3>
-          <div class="pills" role="group" aria-label="Plan seçimi">
-            <button type="button" class="pill {% if plan_code == 'single_13eur' %}active{% endif %}" data-plan="single_13eur" aria-pressed="{{ 'true' if plan_code == 'single_13eur' else 'false' }}">{{ t.plan_single }}</button>
-            <button type="button" class="pill {% if plan_code == 'monthly_50eur' %}active{% endif %}" data-plan="monthly_50eur" aria-pressed="{{ 'true' if plan_code == 'monthly_50eur' else 'false' }}">{{ t.plan_monthly }}</button>
-            <button type="button" class="pill {% if plan_code == 'yearly_99eur' %}active{% endif %}" data-plan="yearly_99eur" aria-pressed="{{ 'true' if plan_code == 'yearly_99eur' else 'false' }}">{{ t.plan_yearly }}</button>
-          </div>
-          <div class="plan-badges" id="plan-badges">
-            {% if 'yearly' in plan_code %}<span class="badge-save">{{ t.save_pct }}</span>{% endif %}
-            {% if 'monthly' in plan_code %}<span class="badge-popular">{{ t.most_popular }}</span>{% endif %}
-          </div>
-          <ul class="benefits" id="benefits-list">
-            {% for b in benefits %}
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ b }}</li>
-            {% endfor %}
-          </ul>
-          <div class="price-row">
-            <span class="total-label">{{ t.total }}</span>
-            <span class="total-value" id="total-price">{{ prices[plan_code] }} €</span>
-          </div>
-          <p class="price-note">{{ t.kdv_dahil }} · {{ t.cancel_anytime }} · {{ t.active_after_payment }}</p>
-          <div class="coupon-row">
-            <input type="text" id="coupon-input" placeholder="{{ t.coupon_placeholder }}" maxlength="64" aria-label="{{ t.coupon_placeholder }}">
-            <button type="button" id="coupon-apply" aria-label="{{ t.coupon_apply }}">{{ t.coupon_apply }}</button>
-          </div>
-          <p class="coupon-msg" id="coupon-msg" aria-live="polite"></p>
-          <div class="opt-fields" style="margin-bottom:16px;">
-            <label for="email" style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;">{{ t.pay_email_label }}</label>
-            <input type="email" id="email" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;margin-bottom:10px;">
-            <label for="name" style="display:block;font-size:12px;color:#64748b;margin-bottom:4px;">{{ t.pay_name_label }}</label>
-            <input type="text" id="name" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" style="width:100%;padding:10px 12px;border:1px solid #e2e8f0;border-radius:10px;font-size:14px;">
-          </div>
-          <!-- PayTR: ödeme/destek/iletişim için mini kurumsal bilgi kartı -->
-          <div class="merchant-contact" style="margin-bottom:12px;padding-top:12px;border-top:1px solid #e2e8f0;">
-            <p style="font-size:13px;color:#334155;font-weight:600;margin-bottom:8px;">Ödeme, destek ve iletişim için bizimle iletişime geçebilirsiniz.</p>
-            <p style="font-size:12px;color:#475569;margin:4px 0;"><a href="mailto:support@noryaai.com" style="color:#0EA5A4;text-decoration:none;">support@noryaai.com</a></p>
-            <p style="font-size:12px;color:#475569;margin:4px 0;"><a href="tel:+905071703564" style="color:#0EA5A4;text-decoration:none;">+90 507 170 35 64</a></p>
-            <p style="font-size:12px;color:#475569;margin:4px 0;">Banaz/Uşak, Türkiye</p>
-            <p style="font-size:11px;color:#64748b;margin-top:6px;"><a href="{{ base_url }}/legal/iletisim" style="color:#0EA5A4;text-decoration:none;">{{ t.merchant_contact_page }}</a></p>
-          </div>
-          <div class="cta-wrap">
-            <button type="button" class="cta-main" id="cta-main" aria-label="{{ t.pay_btn }}">
-              <span class="btn-text">{{ t.pay_btn }}</span>
-            </button>
-            <a href="mailto:support@noryaai.com" class="support-link">{{ t.support_link }}</a>
-            <label class="toggle-row"><input type="checkbox" id="same-page-toggle" aria-label="{{ t.same_page_toggle }}"> {{ t.same_page_toggle }}</label>
-          </div>
-          <div class="status-card" id="status-card">
-            <h4>{{ t.status_card_title }}</h4>
-            <p>{{ t.status_card_desc }}</p>
-            <a href="#" id="open-payment-again" target="_blank" rel="noopener noreferrer">{{ t.open_payment_again }}</a>
-            <button type="button" class="btn-done" id="payment-done-btn">{{ t.payment_done_btn }}</button>
+      <div class="left-col">
+        <div class="form-card" id="form-card">
+          <div class="checkout-card">
+            <div class="checkout-inner">
+              <section class="checkout-section">
+                <h2 class="card-title" id="plan-section-label">{{ t.selected_plan }}</h2>
+                <div class="plan-segment" role="group" aria-labelledby="plan-section-label">
+                  <button type="button" class="pill {% if plan_code == 'single_13eur' %}active{% endif %}" data-plan="single_13eur" aria-pressed="{{ 'true' if plan_code == 'single_13eur' else 'false' }}">{{ t.plan_single }}</button>
+                  <button type="button" class="pill {% if plan_code == 'monthly_50eur' %}active{% endif %}" data-plan="monthly_50eur" aria-pressed="{{ 'true' if plan_code == 'monthly_50eur' else 'false' }}">{{ t.plan_monthly }}</button>
+                  <button type="button" class="pill {% if plan_code == 'yearly_99eur' %}active{% endif %}" data-plan="yearly_99eur" aria-pressed="{{ 'true' if plan_code == 'yearly_99eur' else 'false' }}">{{ t.plan_yearly }}</button>
+                </div>
+                <div class="plan-badges" id="plan-badges">
+                  {% if plan_code == 'single_13eur' %}<span class="badge-start">{{ t.badge_start }}</span>{% endif %}
+                  {% if 'yearly' in plan_code %}<span class="badge-best">{{ t.best_value_badge }}</span><span class="badge-save">{{ t.save_pct }}</span>{% endif %}
+                  {% if 'monthly' in plan_code and plan_code != 'yearly_99eur' %}<span class="badge-popular">{{ t.most_popular }}</span>{% endif %}
+                </div>
+
+                <p class="card-title" style="margin-top:16px;margin-bottom:8px;">{{ t.benefits_heading }}</p>
+                <ul class="benefits-list" id="benefits-list">
+                  {% for b in benefits %}
+                  <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ b }}</li>
+                  {% endfor %}
+                </ul>
+              </section>
+
+              <div class="checkout-divider"></div>
+
+              <section class="checkout-section price-cta-highlight">
+                <div class="price-block">
+                  <div class="price-micro-badges">
+                    <span class="price-micro-badge">{{ t.price_badge_secure }}</span>
+                    <span class="price-micro-badge">{{ t.price_badge_instant }}</span>
+                  </div>
+                  <div class="total-label">{{ t.total }}</div>
+                  <div class="total-value" id="total-price">{{ prices[plan_code] }}<span class="currency">€</span></div>
+                  <p class="price-desc" id="price-desc">{% if plan_code == 'single_13eur' %}{{ t.price_once }}{% elif 'monthly' in plan_code %}{{ t.price_month }}{% else %}{{ t.price_year }}{% endif %}</p>
+                  <p class="price-note">{{ t.kdv_dahil }}<span>·</span>{{ t.cancel_anytime }}<span>·</span>{{ t.active_after_payment }}</p>
+                </div>
+                <div class="cta-wrap">
+                  <button type="button" class="cta-main" id="cta-main" aria-label="{{ t.pay_btn }}">
+                    <span class="btn-text">{{ t.pay_btn }}</span>
+                  </button>
+                  <p class="cta-trust-note">{{ t.cta_trust_note }}</p>
+                </div>
+              </section>
+
+              <div class="checkout-divider"></div>
+
+              <section class="checkout-section opt-fields">
+                <div class="form-group">
+                  <label for="coupon-input">{{ t.coupon_placeholder }}</label>
+                  <div class="coupon-row">
+                    <input type="text" id="coupon-input" class="input" placeholder="{{ t.coupon_placeholder }}" maxlength="64" aria-label="{{ t.coupon_placeholder }}">
+                    <button type="button" id="coupon-apply" class="btn-secondary" aria-label="{{ t.coupon_apply }}">{{ t.coupon_apply }}</button>
+                  </div>
+                  <p class="coupon-msg" id="coupon-msg" aria-live="polite"></p>
+                </div>
+                <div class="form-group">
+                  <label for="email">{{ t.pay_email_label }}</label>
+                  <input type="email" id="email" class="input" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" aria-label="{{ t.pay_email_label }}">
+                </div>
+                <div class="form-group">
+                  <label for="name">{{ t.pay_name_label }}</label>
+                  <input type="text" id="name" class="input" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" aria-label="{{ t.pay_name_label }}">
+                </div>
+                <a href="mailto:support@noryaai.com" class="support-link">{{ t.support_link }}</a>
+                <label class="toggle-row"><input type="checkbox" id="same-page-toggle" aria-label="{{ t.same_page_toggle }}"> {{ t.same_page_toggle }}</label>
+              </section>
+
+              <div class="micro-trust">
+                <p>{{ t.micro_trust_1 }}</p>
+                <p>{{ t.micro_trust_2 }}</p>
+                <p>{{ t.micro_trust_3 }}</p>
+              </div>
+
+              <div class="merchant-contact">
+                <p><strong>{{ t.merchant_contact_title }}</strong></p>
+                <p><a href="mailto:support@noryaai.com">support@noryaai.com</a></p>
+                <p><a href="tel:+905071703564">+90 507 170 35 64</a></p>
+                <p>Banaz/Uşak, Türkiye</p>
+                <p><a href="{{ base_url }}/legal/iletisim">{{ t.merchant_contact_page }}</a></p>
+              </div>
+            </div>
+
+            <div class="status-card" id="status-card">
+              <h4>{{ t.status_card_title }}</h4>
+              <p>{{ t.status_card_desc }}</p>
+              <a href="#" id="open-payment-again" target="_blank" rel="noopener noreferrer">{{ t.open_payment_again }}</a>
+              <button type="button" class="btn-done" id="payment-done-btn">{{ t.payment_done_btn }}</button>
+            </div>
           </div>
         </div>
       </div>
 
       <aside class="right-col">
-        <div class="card">
-          <h3>{{ t.trust_card_title }}</h3>
-          <ul>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_1 }}</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_2 }}</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_3 }}</li>
-            <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ t.trust_4 }}</li>
-          </ul>
+        <div class="trust-mini-card">
+          <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <h3 class="tc-title">{{ t.trust_card_title }}</h3>
+          <p class="tc-desc">{{ t.trust_secure_desc }}</p>
         </div>
-        <div class="card testimonials">
-          <h3>{{ t.reviews_heading }}</h3>
+        <div class="trust-mini-card">
+          <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2"/></svg></div>
+          <h3 class="tc-title">{{ t.why_norya_title }}</h3>
+          <p class="tc-desc">{{ t.why_norya_short_desc }}</p>
+        </div>
+        <div class="trust-mini-card">
+          <div class="tc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div>
+          <h3 class="tc-title">{{ t.support_refund_title }}</h3>
+          <p class="tc-desc">{{ t.support_refund_short_desc }} <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a></p>
+        </div>
+        <div class="testimonials-card">
+          <h3 class="card-title">{{ t.reviews_heading }}</h3>
           <p class="stars">★★★★★</p>
           <p>{{ t.testimonial_1 }}</p>
           <p class="stars">★★★★★</p>
           <p>{{ t.testimonial_2 }}</p>
           <p class="stars">★★★★★</p>
           <p>{{ t.testimonial_3 }}</p>
+          <p class="corporate-line">{{ t.corporate_trust_line }}</p>
         </div>
-        <div class="card accordion-wrap">
-          <h3>{{ t.faq_heading }}</h3>
+        <div class="trust-mini-card accordion-wrap">
+          <h3 class="card-title">{{ t.faq_heading }}</h3>
           <div class="accordion">
             <details><summary>{{ t.faq_1_q }}</summary><div class="acc-body">{{ t.faq_1_a }}</div></details>
             <details><summary>{{ t.faq_2_q }}</summary><div class="acc-body">{{ t.faq_2_a }}</div></details>
@@ -249,10 +519,10 @@
     </main>
 
     <footer class="footer">
-      <div style="margin-bottom:10px;font-size:12px;color:#475569;">
-        <strong>NoryaAI</strong> · Ufuk Urhan · Banaz V.D. / 8940311420 · <a href="tel:+905071703564" style="color:#0EA5A4;">+90 507 170 35 64</a> · <a href="mailto:support@noryaai.com" style="color:#0EA5A4;">support@noryaai.com</a> · <a href="mailto:info@noryaai.com" style="color:#0EA5A4;">info@noryaai.com</a> · 31 Ağustos Mah. Tomurcuk Aysaş Müh. No:2 İç Kapı No:4, Banaz/Uşak, Türkiye
+      <div class="footer-merchant">
+        <strong>NoryaAI</strong> · Ufuk Urhan · Banaz V.D. / 8940311420 · <a href="tel:+905071703564">+90 507 170 35 64</a> · <a href="mailto:support@noryaai.com">support@noryaai.com</a> · <a href="mailto:info@noryaai.com">info@noryaai.com</a> · 31 Ağustos Mah. Tomurcuk Aysaş Müh. No:2 İç Kapı No:4, Banaz/Uşak, Türkiye
       </div>
-      © {{ brand }} · <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a> · <a href="{{ base_url }}/legal/iletisim">{{ t.merchant_contact_page }}</a>
+      © {{ brand }} · <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a> · <a href="{{ base_url }}/iade-talebi">{{ t.refund_request_link }}</a> · <a href="{{ base_url }}/legal/iletisim">{{ t.merchant_contact_page }}</a>
     </footer>
   </div>
 
@@ -290,13 +560,27 @@
     });
     var priceEl = document.getElementById('total-price');
     var stickyPrice = document.getElementById('sticky-price');
-    if (priceEl) priceEl.textContent = (prices[pc] || '') + ' €';
+    if (priceEl) priceEl.innerHTML = (prices[pc] || '') + '<span class="currency">€</span>';
     if (stickyPrice) stickyPrice.textContent = (prices[pc] || '') + ' €';
+    var priceDesc = document.getElementById('price-desc');
+    if (priceDesc) {
+      if (pc.indexOf('single') !== -1) priceDesc.textContent = t.price_once || 'One-time';
+      else if (pc.indexOf('monthly') !== -1) priceDesc.textContent = t.price_month || 'Per month';
+      else priceDesc.textContent = t.price_year || 'Yearly';
+    }
     var badges = document.getElementById('plan-badges');
     if (badges) {
       badges.innerHTML = '';
-      if (pc.indexOf('yearly') !== -1) { var s = document.createElement('span'); s.className = 'badge-save'; s.textContent = t.save_pct || '83% save'; badges.appendChild(s); }
-      if (pc.indexOf('monthly') !== -1) { var s = document.createElement('span'); s.className = 'badge-popular'; s.textContent = t.most_popular || 'Most popular'; badges.appendChild(s); }
+      if (pc.indexOf('single') !== -1) {
+        var s0 = document.createElement('span'); s0.className = 'badge-start'; s0.textContent = t.badge_start || 'Başlangıç'; badges.appendChild(s0);
+      }
+      if (pc.indexOf('yearly') !== -1) {
+        var s1 = document.createElement('span'); s1.className = 'badge-best'; s1.textContent = t.best_value_badge || 'En avantajlı'; badges.appendChild(s1);
+        var s2 = document.createElement('span'); s2.className = 'badge-save'; s2.textContent = t.save_pct || '83% save'; badges.appendChild(s2);
+      }
+      if (pc.indexOf('monthly') !== -1 && pc.indexOf('yearly') === -1) {
+        var s = document.createElement('span'); s.className = 'badge-popular'; s.textContent = t.most_popular || 'Most popular'; badges.appendChild(s);
+      }
     }
     var list = document.getElementById('benefits-list');
     if (list && benefitsByPlan[pc]) {
@@ -327,7 +611,7 @@
     fetch(baseUrl + '/api/coupon/validate?code=' + encodeURIComponent(code) + '&product=' + encodeURIComponent(productFromPlan(planCode)))
       .then(function(r){ return r.json(); })
       .then(function(data){
-        if (data.discount !== undefined && data.final_amount !== undefined) {
+        if ((data.discount_cents !== undefined || data.discount !== undefined) && (data.final_amount_cents !== undefined || data.final_amount !== undefined)) {
           appliedCoupon = code;
           couponMsg.textContent = (t.coupon_success || 'Discount applied.');
           couponMsg.className = 'coupon-msg ok';

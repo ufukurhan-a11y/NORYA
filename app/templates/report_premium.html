@@ -5,16 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="stylesheet" href="{{ css_url }}" />
   <title>{{ label_report_page_title }}</title>
+  <!-- Kritik yedek stiller: harici CSS yüklenmezse içerik yine görünsün -->
+  <style>
+    body { color: #0F172A; background: #fff; font-family: system-ui, Helvetica, Arial, sans-serif; font-size: 12px; line-height: 1.45; margin: 0; padding: 0; overflow-wrap: break-word; word-break: break-word; }
+    main.pdf-page { display: block; margin-top: 12px; padding: 0; }
+    .card { display: block; margin: 10px 0; padding: 14px 16px; border: 1px solid rgba(15,23,42,0.08); border-radius: 12px; break-inside: avoid; }
+    .sec-title { font-weight: 700; font-size: 13px; margin-bottom: 8px; color: #0F172A; }
+    .pdf-header { display: block; padding: 8px 12px 10px; }
+    .pdf-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 10px; width: 100%; }
+    .lab-cards-grid, .lab-cards-grid--multi { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; margin-top: 8px; }
+    .lab-cards-grid .lab-card, .lab-cards-grid--multi .lab-card { padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(15,23,42,0.08); break-inside: avoid; box-sizing: border-box; }
+    .lab-card-name { font-size: 11px; font-weight: 700; margin-bottom: 4px; }
+    .lab-card-value { font-size: 14px; font-weight: 800; margin-bottom: 2px; }
+    .lab-card-ref { font-size: 10px; color: #64748b; margin-bottom: 4px; }
+    .lab-card-status { font-size: 10px; font-weight: 700; }
+  </style>
 </head>
 <body>
   <header class="pdf-header" id="page-header">
     <div class="pdf-header-inner">
-      <div class="badge">PREMIUM</div>
       <div class="h-left">
-        <img class="logo pdf-header-logo" src="{{ logo_url }}" alt="Norya" />
-        <div class="brand">
-          <div class="brand-name">Norya</div>
-          <div class="brand-sub">{{ label_report_brand_sub }}</div>
+        <div class="h-left-inner">
+          {% if logo_base64 %}
+          <img class="logo pdf-header-logo pdf-header-logo--report" src="data:image/png;base64,{{ logo_base64 }}" alt="Norya" />
+          {% endif %}
+          <div class="brand">
+            <div class="brand-name">Norya</div>
+            <div class="brand-sub">{{ label_report_brand_sub }}</div>
+          </div>
+          <span class="badge">PREMIUM</span>
         </div>
       </div>
       <div class="h-mid">
@@ -26,34 +45,48 @@
         <div><span class="k">{{ label_report_user }}:</span> {{ user_id }}</div>
         <div><span class="k">{{ label_report_date }}:</span> {{ report_datetime }}</div>
         <div><span class="k">{{ label_report_lang }}:</span> {{ lang|upper }}</div>
+        {% if show_qr_verification and verification_code %}
+        <div class="h-verify-code-every-page"><span class="k">{{ label_verify_code | default('Doğrulama', true) }}:</span> {{ verification_code }}</div>
+        {% endif %}
       </div>
     </div>
   </header>
 
   <div class="header-divider"></div>
 
+  <!-- Tek göstergeler çubuğu: kurumsal, tüm sayfalarda tekrarsız -->
+  <div class="report-legend-strip" role="doc-noteref" aria-label="Rapor göstergesi">
+    <span class="report-legend-item"><span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}</span>
+    <span class="report-legend-item"><span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}</span>
+    <span class="report-legend-item"><span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}</span>
+  </div>
+
   <main class="pdf-page">
+    <!-- Üst satır: Uyarı tam genişlik -->
     <section class="card alert">
       <div class="sec-icon-wrap">{% if report_icons %}{{ report_icons.get('info', '')|safe }}{% endif %}</div>
       <div class="alert-txt"><p class="refined-disclaimer">{{ refined_disclaimer }}</p></div>
     </section>
 
-    <section class="card executive-summary">
-      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('file-text', '')|safe }}</span>{% endif %} {{ label_report_executive_summary }}</div>
-      <p class="executive-summary-text">{{ executive_summary }}</p>
-    </section>
+    <!-- İlk satır: Özet + Skor kartı yan yana -->
+    <div class="report-row report-row--summary-score">
+      <section class="card executive-summary">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('file-text', '')|safe }}</span>{% endif %} {{ label_report_executive_summary }}</div>
+        <p class="executive-summary-text">{{ executive_summary }}</p>
+      </section>
+      <section class="card health-score-card">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('activity', '')|safe }}</span>{% endif %} {{ label_report_health_score }}</div>
+        <div class="health-score-value">{{ overall_score }} / 100</div>
+        <div class="health-score-band">{{ health_score_band_label }}</div>
+        <div class="health-age-note">
+          <span class="health-age-label">{{ label_report_health_age }}</span>
+          <span class="health-age-value">≈ {{ health_age }}</span>
+        </div>
+        <div class="report-meta-line glucose-in-report"><span class="report-meta-label">{% if lang == 'tr' %}Kan şekeri (Glukoz/HbA1c):{% else %}Blood sugar (Glucose/HbA1c):{% endif %}</span> <span class="report-meta-value">{% if has_glucose %}{% if lang == 'tr' %}Raporda var{% else %}In report{% endif %}{% else %}{% if lang == 'tr' %}Raporda yok{% else %}Not in report{% endif %}{% endif %}</span></div>
+      </section>
+    </div>
 
-    <section class="card health-score-card">
-      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('activity', '')|safe }}</span>{% endif %} {{ label_report_health_score }}</div>
-      <div class="health-score-value">{{ overall_score }} / 100</div>
-      <div class="health-score-band">{{ health_score_band_label }}</div>
-      <div class="health-age-note">
-        <span class="health-age-label">{{ label_report_health_age }}</span>
-        <span class="health-age-value">≈ {{ health_age }}</span>
-      </div>
-      <div class="report-meta-line glucose-in-report"><span class="report-meta-label">{% if lang == 'tr' %}Kan şekeri (Glukoz/HbA1c):{% else %}Blood sugar (Glucose/HbA1c):{% endif %}</span> <span class="report-meta-value">{% if has_glucose %}{% if lang == 'tr' %}Raporda var{% else %}In report{% endif %}{% else %}{% if lang == 'tr' %}Raporda yok{% else %}Not in report{% endif %}{% endif %}</span></div>
-    </section>
-
+    <!-- Özet kartları: 4’lü nizami grid -->
     <section class="card summary-tiles-section">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('grid', '')|safe }}</span>{% endif %} {{ label_report_summary_tiles }}</div>
       <div class="summary-tiles">
@@ -67,14 +100,26 @@
       </div>
     </section>
 
+    {% if show_qr_verification and verification_code %}
+    <section class="verification-box" aria-label="{{ label_report_verification_title | default('Rapor Doğrulama', true) }}">
+      <div class="verification-box-inner">
+        <div class="verification-box-title">{{ label_report_verification_title | default('Rapor Doğrulama', true) }}</div>
+        <div class="verification-box-content">
+          {% if qr_image_base64 %}
+          <img class="verification-qr" src="data:image/png;base64,{{ qr_image_base64 }}" alt="QR Doğrula" width="80" height="80" />
+          {% endif %}
+          <div class="verification-meta">
+            <div class="verification-code-line"><span class="k">{{ label_verify_code | default('Doğrulama', true) }}:</span> {{ verification_code }}</div>
+            <div class="verification-scan-hint">{{ label_report_verification_scan_hint | default('Orijinallik için QR ile tarayın veya kodu doğrulama sayfasında girin.', true) }}</div>
+          </div>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
     {% if biomarker_highlights %}
-    <section class="card biomarker-highlights-section">
+    <section class="card biomarker-highlights-section report-section--content">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('bar-chart-2', '')|safe }}</span>{% endif %} {{ label_report_biomarker_highlights }}</div>
-      <p class="lab-legend-inline">
-        <span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}
-        <span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}
-        <span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}
-      </p>
       {% for group_name, rows in biomarker_highlights.items() %}
       {% if rows %}
       <div class="biomarker-group">
@@ -97,11 +142,6 @@
 
     <section class="card findings-cards-section">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('alert-circle', '')|safe }}</span>{% endif %} {{ label_report_risk_indicators }}</div>
-      <p class="lab-legend-inline">
-        <span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}
-        <span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}
-        <span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}
-      </p>
       {% if findings_cards %}
       <div class="findings-cards-grid">
         {% for fc in findings_cards %}
@@ -133,7 +173,8 @@
     </section>
     {% endif %}
 
-    <section class="card food-guidance-section food-guidance-clinical">
+    <!-- Beslenme: iki blok yan yana -->
+    <section class="card food-guidance-section food-guidance-clinical food-guidance-row">
       <div class="food-clinical-block food-to-eat">
         <div class="food-clinical-header food-to-eat-header">
           <span class="sec-icon-wrap">{% if report_icons %}{{ report_icons.get('apple', '')|safe }}{% endif %}</span>
@@ -175,24 +216,48 @@
       </div>
     </section>
 
-    <section class="card gauge-section">
-      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('gauge', '')|safe }}</span>{% endif %} {{ label_report_risk_indicator }}</div>
-      <div class="gauge-wrap">{{ gauge_svg | safe }}</div>
-    </section>
-
-    <section class="card category-bars-section">
-      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('bar-chart-2', '')|safe }}</span>{% endif %} {{ label_report_category_scores }}</div>
-      <div class="category-bars">
-        {% for item in risk_cards %}
-        <div class="category-bar-row">
-          <span class="category-bar-label">{{ item.name }}</span>
-          <div class="category-bar-track"><div class="category-bar-fill" style="width:{{ item.score }}%"></div></div>
-          <span class="category-bar-value">{{ item.score }}</span>
+    <!-- Gauge + Kategori skorları yan yana -->
+    <div class="report-row report-row--gauge-bars">
+      <section class="card gauge-section">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('gauge', '')|safe }}</span>{% endif %} {{ label_report_risk_indicator }}</div>
+        <div class="gauge-wrap">{{ gauge_svg | safe }}</div>
+      </section>
+      <section class="card category-bars-section">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('bar-chart-2', '')|safe }}</span>{% endif %} {{ label_report_category_scores }}</div>
+        <div class="category-bars">
+          {% for item in risk_cards %}
+          <div class="category-bar-row">
+            <span class="category-bar-label">{{ item.name }}</span>
+            <div class="category-bar-track"><div class="category-bar-fill" style="width:{{ item.score }}%"></div></div>
+            <span class="category-bar-value">{{ item.score }}</span>
+          </div>
+          {% endfor %}
         </div>
-        {% endfor %}
-      </div>
-    </section>
+      </section>
+    </div>
 
+    {% if radar_svg %}
+    <!-- Dağılım + Radar yan yana -->
+    <div class="report-row report-row--dist-radar">
+      <section class="card distribution-section">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('activity', '')|safe }}</span>{% endif %} {{ label_report_risk_distribution }}</div>
+        <div class="distribution-bar">
+          <div class="dist-seg dist-normal" style="width:{{ dist_pct.normal_pct }}%"></div>
+          <div class="dist-seg dist-borderline" style="width:{{ dist_pct.borderline_pct }}%"></div>
+          <div class="dist-seg dist-attention" style="width:{{ dist_pct.attention_pct }}%"></div>
+        </div>
+        <div class="distribution-legend">
+          <span class="dist-legend-item"><span class="dist-dot dist-normal"></span> {{ label_dist_normal }} ({{ risk_distribution.normal }})</span>
+          <span class="dist-legend-item"><span class="dist-dot dist-borderline"></span> {{ label_dist_borderline }} ({{ risk_distribution.borderline }})</span>
+          <span class="dist-legend-item"><span class="dist-dot dist-attention"></span> {{ label_dist_attention }} ({{ risk_distribution.attention }})</span>
+        </div>
+      </section>
+      <section class="card radar-section">
+        <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('target', '')|safe }}</span>{% endif %} {{ label_report_radar_balance }}</div>
+        <div class="radar-wrap">{{ radar_svg | safe }}</div>
+      </section>
+    </div>
+    {% else %}
     <section class="card distribution-section">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('activity', '')|safe }}</span>{% endif %} {{ label_report_risk_distribution }}</div>
       <div class="distribution-bar">
@@ -205,12 +270,6 @@
         <span class="dist-legend-item"><span class="dist-dot dist-borderline"></span> {{ label_dist_borderline }} ({{ risk_distribution.borderline }})</span>
         <span class="dist-legend-item"><span class="dist-dot dist-attention"></span> {{ label_dist_attention }} ({{ risk_distribution.attention }})</span>
       </div>
-    </section>
-
-    {% if radar_svg %}
-    <section class="card radar-section">
-      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('target', '')|safe }}</span>{% endif %} {{ label_report_radar_balance }}</div>
-      <div class="radar-wrap">{{ radar_svg | safe }}</div>
     </section>
     {% endif %}
 
@@ -271,11 +330,6 @@
 
     <section class="card lab-results-wrap">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('bar-chart-2', '')|safe }}</span>{% endif %} {{ label_report_test_results }}</div>
-      <p class="lab-legend-inline">
-        <span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}
-        <span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}
-        <span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}
-      </p>
     {% for cat in lab_categories %}
     <section class="card lab-category-section lab-category-section--{{ cat.category_status|default('normal') }} avoid-break {% if loop.first %}lab-category-section--first{% endif %}">
       <div class="sec-title lab-category-title">
@@ -363,9 +417,17 @@
     </section>
   </main>
 
-  <footer class="pdf-footer">
+  <footer class="pdf-footer" id="pdf-footer">
+    {% if logo_base64 %}
+    <img class="pdf-footer-logo" src="data:image/png;base64,{{ logo_base64 }}" alt="Norya" />
+    {% else %}
     <img class="pdf-footer-logo" src="{{ logo_url }}" alt="Norya" />
+    {% endif %}
     <span class="pdf-footer-text">{{ label_report_footer }}</span>
+    <span class="pdf-footer-rid">Rapor No: {{ rid }}</span>
+    {% if show_qr_verification and verification_code %}
+    <span class="pdf-footer-verify">Doğrulama: {{ verification_code }}</span>
+    {% endif %}
   </footer>
 </body>
 </html>

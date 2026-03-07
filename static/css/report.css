@@ -274,6 +274,41 @@
   color: #fff;
 }
 
+/* Limited preview gate (tek analiz / aylık): tıklanabilir kapı + chevron */
+.report-page .report-limited-gate {
+  margin-top: 1rem;
+  padding: 1rem 1.25rem;
+  border: 2px dashed rgba(14, 165, 164, 0.4);
+  border-radius: 12px;
+  background: rgba(14, 165, 164, 0.06);
+  text-align: center;
+}
+.dark .report-page .report-limited-gate {
+  border-color: rgba(45, 212, 191, 0.35);
+  background: rgba(14, 165, 164, 0.08);
+}
+.report-page .report-limited-gate-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  color: #0EA5A4;
+  font-weight: 600;
+  font-size: 0.9375rem;
+  text-decoration: none;
+  transition: color 0.2s, transform 0.1s;
+}
+.dark .report-page .report-limited-gate-link { color: #2dd4bf; }
+.report-page .report-limited-gate-link:hover {
+  color: #0d9488;
+  transform: translateY(-1px);
+}
+.dark .report-page .report-limited-gate-link:hover { color: #5eead4; }
+.report-page .report-limited-gate-chevron {
+  font-size: 0.75rem;
+  opacity: 0.9;
+}
+
 /* Report section icons (outline, monochrome) */
 .report-page .report-sec-icon { display: inline-flex; align-items: center; gap: 0.5rem; }
 .report-page .report-sec-icon svg { width: 20px; height: 20px; flex-shrink: 0; stroke: currentColor; color: #0d9488; }

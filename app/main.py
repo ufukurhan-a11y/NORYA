@@ -43,7 +43,13 @@ from app.core.database import engine, get_db, init_db
 from app.core.rate_limit import limiter
 from app.core.geo import get_country_from_ip
 from app.legal_i18n import get_legal_content, get_legal_ui
-from app.core.security import create_pdf_access_token, decode_access_token, decode_pdf_access_token, hash_password
+from app.core.security import (
+    create_pdf_access_token,
+    decode_access_token,
+    decode_pdf_access_token,
+    hash_password,
+    verify_report_verification_token,
+)
 from app.models import (  # noqa: F401
     AnalysisJob,
     AnalysisRecord,
@@ -53,6 +59,7 @@ from app.models import (  # noqa: F401
     ErrorLog,
     PaymentOrder,
     Presence,
+    ReportVerification,
     PushSubscription,
     SecurityLog,
     UploadLog,
@@ -69,6 +76,7 @@ from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, validate_coupon
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
+from app.services.report_verification import get_or_create_verification
 from app.services.storage import upload_report_pdf
 from app.schemas.analyze import (
     AnalysisDetail,
@@ -907,6 +915,111 @@ def iade_iptal_page(request: Request):
     )
 
 
+REFUND_LANGS = ("tr", "en", "de", "fr", "it", "es")
+
+
+def _refund_lang_from_request(request: Request) -> str:
+    """İade talebi dili: önce ?lang=, yoksa tarayıcı Accept-Language."""
+    lang_q = request.query_params.get("lang", "").strip().lower()[:2]
+    if lang_q and lang_q in REFUND_LANGS:
+        return lang_q
+    browser = _parse_accept_language(request.headers.get("accept-language"))
+    return browser if browser in REFUND_LANGS else "en"
+
+
+@app.get("/iade-talebi", response_class=HTMLResponse)
+def refund_request_page(
+    request: Request,
+    lang: str = Query(None, description="Language override; else from browser"),
+    success: str | None = Query(None),
+    error: str | None = Query(None),
+):
+    """İade talep formu: dil tarayıcıdan otomatik (?lang= ile override)."""
+    lang = _refund_lang_from_request(request)
+    t = get_pay_ui(lang)
+    ui = get_legal_ui(lang)
+    return templates.TemplateResponse(
+        "legal/refund_request.html",
+        {
+            "request": request,
+            "t": t,
+            "lang": lang,
+            "success": success == "1",
+            "error": error,
+            "merchant_oid": None,
+            "email": None,
+            "reason": None,
+            **ui,
+        },
+    )
+
+
+@app.post("/iade-talebi", response_class=HTMLResponse)
+def refund_request_submit(
+    request: Request,
+    merchant_oid: str = Form(""),
+    email: str = Form(""),
+    reason: str = Form(""),
+    lang: str = Form("tr"),
+    db: Session = Depends(get_db),
+):
+    """İade talebini kaydeder: sipariş admin_note'a eklenir, admin panelden PayTR iade yapılabilir."""
+    lang = (lang or "tr").strip().lower()[:2]
+    if lang not in ("tr", "en", "de", "fr", "it", "es"):
+        lang = "tr"
+    t = get_pay_ui(lang)
+    ui = get_legal_ui(lang)
+
+    merchant_oid = (merchant_oid or "").strip()
+    email = (email or "").strip()
+    reason = (reason or "").strip()[:500]
+
+    if not merchant_oid or not email:
+        return templates.TemplateResponse(
+            "legal/refund_request.html",
+            {
+                "request": request,
+                "t": t,
+                "lang": lang,
+                "success": False,
+                "error": t.get("refund_request_error_invalid", "Sipariş numarası ve e-posta zorunludur."),
+                "merchant_oid": merchant_oid or None,
+                "email": email or None,
+                "reason": reason or None,
+                **ui,
+            },
+        )
+
+    order = db.exec(select(PaymentOrder).where(PaymentOrder.merchant_oid == merchant_oid)).first()
+    if not order or order.status != "completed":
+        return templates.TemplateResponse(
+            "legal/refund_request.html",
+            {
+                "request": request,
+                "t": t,
+                "lang": lang,
+                "success": False,
+                "error": t.get("refund_request_error_order_not_found", "Tamamlanmış sipariş bulunamadı."),
+                "merchant_oid": merchant_oid,
+                "email": email,
+                "reason": reason or None,
+                **ui,
+            },
+        )
+
+    note_line = f"\n[İade talebi {datetime.now(timezone.utc).strftime('%Y-%m-%d %H:%M')} UTC] e-posta: {email}"
+    if reason:
+        note_line += f" | gerekçe: {reason[:200]}"
+    order.admin_note = (order.admin_note or "") + note_line
+    db.add(order)
+    db.commit()
+
+    return RedirectResponse(
+        url=f"/iade-talebi?lang={lang}&success=1",
+        status_code=302,
+    )
+
+
 def _enterprise_lang_from_request(request: Request) -> str:
     """Kurumsal sayfa dili: ?lang= veya Accept-Language."""
     lang_q = request.query_params.get("lang", "").strip().lower()
@@ -1697,9 +1810,11 @@ def _build_analyze_response(
     db: Session,
     cached: bool = False,
 ) -> AnalyzeResponse:
-    """Ortak: premiumPdf = single|monthly|yearly|pro (gauge+score+PDF), premiumTrend = monthly|yearly|pro (trend açık). PREMIUM_VISIBLE_FOR_FREE=True ise free de görür."""
+    """Ortak: premiumPdf = single|monthly|yearly|pro (gauge+score+PDF), premiumTrend = monthly|yearly|pro (trend açık). PREMIUM_VISIBLE_FOR_FREE=True ise free de görür. Tek analiz ve aylıkta rapor ekranında sadece önizleme + kapı (hepsini görmek için aylık/yıllık)."""
     premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
     premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
+    # Tek analiz ve aylık: ekranda tam rapor gösterme; önizleme + "Hepsini görmek için aylık veya yıllık abonelik alın" kapısı. Yıllık/pro = tam rapor.
+    report_limited_preview = plan in ("free", "single", "monthly")
     overall = (risk_summary or {}).get("overall") or {}
     health_score = HealthScoreSchema(score=overall.get("score", 0), level=overall.get("level", "mid")) if risk_summary else None
     trend = _get_trend_for_user(db, user_id, exclude_analysis_id=aid) if premium_trend and user_id else None
@@ -1711,7 +1826,7 @@ def _build_analyze_response(
         risk_summary=risk_summary,
         health_score=health_score,
         trend=trend,
-        ui_hints=UiHintsSchema(locked=not premium_pdf),
+        ui_hints=UiHintsSchema(locked=not premium_pdf, report_limited_preview=report_limited_preview),
         pdf=PdfInfoSchema(template="premium" if premium_pdf else "basic", available=True),
     )
 
@@ -2016,13 +2131,15 @@ def get_pdf_download_token(
 
 @app.get("/analyze/history/{analysis_id}/pdf")
 def download_analysis_pdf(
+    request: Request,
     analysis_id: int,
     lang: str = Query("tr", description="Rapor dili: tr, en, de, fr, es, it, he, ar, hi, el, cs, sr"),
     disposition: str = Query("inline", description="inline = tarayıcıda aç (iOS uyumu), attachment = indir"),
+    scope: str = Query(None, description="pro = Pro görünümü kapsamında PDF (risk, trend, tam içerik)"),
     user_id: int = Depends(_get_pdf_requester_id),
     db: Session = Depends(get_db),
 ):
-    """İlgili analizin premium PDF raporu. Bearer veya ?access_token= ile yetki (canlıda proxy için token)."""
+    """İlgili analizin premium PDF raporu. Bearer veya ?access_token= ile yetki (canlıda proxy için token). scope=pro ile Pro kapsamlı PDF."""
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec or rec.user_id != user_id:
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
@@ -2036,9 +2153,15 @@ def download_analysis_pdf(
     report_lang = (lang or "tr").strip().lower()[:5]
     user = db.get(User, user_id)
     plan = getattr(user, "plan", None) or "free"
-    premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
-    premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
+    use_pro_scope = (scope or "").strip().lower() == "pro"
+    premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
+    premium_trend = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
+    # QR doğrulama linki backend'de (/verify/...), bu yüzden backend adresi kullanılmalı (frontend_url değil)
+    verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
+    verification_info = None
+    if plan in ("single", "monthly", "yearly"):
+        verification_info = get_or_create_verification(db, analysis_id, user_id, plan, report_lang, verify_base_url)
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
@@ -2050,6 +2173,7 @@ def download_analysis_pdf(
             plan_name="premium" if premium_pdf else (user.plan if user else None),
             source_type=rec.source if getattr(rec, "source", None) else None,
             trend_data=trend_data,
+            verification_info=verification_info,
         )
     except Exception as e:
         log.exception("PDF build failed for analysis_id=%s: %s", analysis_id, e)
@@ -2069,6 +2193,7 @@ def download_analysis_pdf(
 
 @app.get("/analyze/history/{analysis_id}/pdf/doctor")
 def download_doctor_pdf(
+    request: Request,
     analysis_id: int,
     lang: str = Query("tr", description="Rapor dili: tr, en, de, fr, es, it, he, ar, hi, el, cs, sr"),
     disposition: str = Query("inline", description="inline = tarayıcıda aç, attachment = indir"),
@@ -2092,6 +2217,8 @@ def download_doctor_pdf(
     premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
     premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
+    verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
+    verification_info = get_or_create_verification(db, analysis_id, user_id, plan, report_lang, verify_base_url) if plan in ("single", "monthly", "yearly") else None
     try:
         if premium_pdf:
             pdf_bytes = build_report_pdf(
@@ -2104,6 +2231,7 @@ def download_doctor_pdf(
                 plan_name="premium" if premium_pdf else (user.plan if user else None),
                 source_type=rec.source if getattr(rec, "source", None) else None,
                 trend_data=trend_data,
+                verification_info=verification_info,
             )
         else:
             pdf_bytes = build_doctor_pdf(
@@ -2398,6 +2526,105 @@ def order_status(
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
     response.headers["Pragma"] = "no-cache"
     return response
+
+
+# Rapor doğrulama sayfası (QR ile açılır): /verify/{report_id}?token=...
+VERIFY_LABELS: dict[str, dict[str, str]] = {
+    "tr": {
+        "title": "Rapor Doğrulama",
+        "valid": "Geçerli",
+        "invalid": "Geçersiz",
+        "authentic_title": "Orijinal ve doğrulanmış rapor",
+        "authentic_desc": "Bu rapor Norya tarafından üretilmiş orijinal rapordur. QR kod ile doğruluğu ve orijinalliği teyit edilmiştir.",
+        "report_id": "Rapor No",
+        "created_at": "Oluşturulma Tarihi",
+        "language": "Dil",
+        "package_type": "Paket Tipi",
+        "verification_code": "Doğrulama Kodu",
+        "disclaimer": "Bu sayfa rapor doğrulama amaçlıdır. Hassas sağlık verisi paylaşılmaz.",
+        "summary_score": "Genel Skor",
+        "critical_count": "Kritik Bulgu",
+        "invalid_message": "Bu rapor doğrulanamadı. Linkin doğru olduğundan veya raporun hâlâ geçerli olduğundan emin olun.",
+        "brand": "Norya",
+        "brand_sub": "Kan Tahlili Analiz Raporu Doğrulama",
+    },
+    "en": {
+        "title": "Report Verification",
+        "valid": "Valid",
+        "invalid": "Invalid",
+        "authentic_title": "Authentic and verified report",
+        "authentic_desc": "This report is an original Norya report. Its authenticity and originality have been confirmed via QR code verification.",
+        "report_id": "Report ID",
+        "created_at": "Created",
+        "language": "Language",
+        "package_type": "Package",
+        "verification_code": "Verification Code",
+        "disclaimer": "This page is for report verification only. No sensitive health data is shared.",
+        "summary_score": "Overall Score",
+        "critical_count": "Critical Findings",
+        "invalid_message": "This report could not be verified. Please check that the link is correct and the report is still valid.",
+        "brand": "Norya",
+        "brand_sub": "Blood Test Report Verification",
+    },
+}
+
+
+@app.get("/verify/{report_id}", response_class=HTMLResponse)
+def verify_report_page(
+    request: Request,
+    report_id: str,
+    token: str | None = Query(None, description="Signed verification token from QR"),
+    db: Session = Depends(get_db),
+):
+    """QR ile açılan premium doğrulama sayfası. Geçerli/geçersiz durumu ve sınırlı özet gösterilir."""
+    from app.services.report_pdf import parse_report_to_context
+
+    lang = (request.query_params.get("lang") or request.headers.get("accept-language", "en")[:2] or "en").lower()
+    if lang not in VERIFY_LABELS:
+        lang = "en"
+    labels = VERIFY_LABELS.get(lang, VERIFY_LABELS["en"])
+
+    rec = db.exec(select(ReportVerification).where(ReportVerification.report_id == report_id)).first()
+    valid = False
+    created_at_str = ""
+    package_type_display = ""
+    verification_code = ""
+    summary_score: int | None = None
+    summary_critical_count: int | None = None
+
+    if rec and rec.is_active and token:
+        if verify_report_verification_token(rec.report_id, rec.verification_code, token):
+            valid = True
+            created_at_str = rec.created_at.strftime("%d.%m.%Y %H:%M") if hasattr(rec.created_at, "strftime") else str(rec.created_at)
+            package_type_display = {"single": "Tek Analiz" if lang == "tr" else "Single Analysis", "monthly": "Aylık Abonelik" if lang == "tr" else "Monthly", "yearly": "Yıllık Abonelik" if lang == "tr" else "Yearly"}.get(rec.package_type, rec.package_type)
+            verification_code = rec.verification_code or ""
+            analysis_rec = db.get(AnalysisRecord, rec.analysis_id)
+            if analysis_rec and getattr(analysis_rec, "result_text", None):
+                try:
+                    ctx = parse_report_to_context(analysis_rec.result_text or "", lang=rec.language or "tr")
+                    summary_score = ctx.get("overall_score")
+                    if summary_score is None:
+                        summary_score = 100
+                    findings = ctx.get("findings") or []
+                    summary_critical_count = len([f for f in findings if f])
+                except Exception:
+                    pass
+
+    return templates.TemplateResponse(
+        "verify.html",
+        {
+            "request": request,
+            "valid": valid,
+            "report_id": report_id,
+            "created_at": created_at_str,
+            "language": (rec.language if rec and valid else None) or lang,
+            "package_type": package_type_display,
+            "verification_code": verification_code,
+            "labels": labels,
+            "summary_score": summary_score,
+            "summary_critical_count": summary_critical_count,
+        },
+    )
 
 
 @app.get("/pay", response_class=HTMLResponse)

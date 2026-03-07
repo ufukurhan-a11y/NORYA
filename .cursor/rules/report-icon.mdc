@@ -1,0 +1,27 @@
+---
+description: PDF raporlarında (standart ve pro) kullanılan tek header ikonu. Tüm raporlarda aynı ikon, başka logo/ikon eklenmez.
+globs: app/templates/report_pdf.html, app/templates/report_premium.html, app/services/report_pdf.py, static/report_premium.css
+alwaysApply: false
+---
+
+# Rapor ikonu (PDF — Standart ve Pro)
+
+Tüm PDF raporlarında (standart `report_pdf.html` ve pro `report_premium.html`) header’da **tek ve aynı ikon** kullanılır: Norya “N” ikonu (mavi gradient, yuvarlatılmış kare, ortada N harfi ve nokta).
+
+## Kullanılacak dosya
+
+- **Dosya:** `static/norya_report_icon.png`
+- **Kod:** `app/services/report_pdf.py` içinde `_logo_base64()` bu dosyayı öncelikli okur; `_REPORT_ICON_PATH` = `static/norya_report_icon.png`.
+- Premium context’te `logo_url` da aynı ikona işaret eder.
+
+## Görünüm kuralları
+
+- **Boyut:** Dikkat çekecek kadar, çok büyük olmasın. Header’da **32×32 px** (`pdf-header-logo--report` sınıfı).
+- **Yer:** Header solunda, “Norya” metninin hemen solunda; başka logo/ikon eklenmez.
+- Standart şablonda: `report_pdf.html` — `pdf-header-logo-cell` içinde `img.pdf-header-logo.pdf-header-logo--report`.
+- Pro şablonda: `report_premium.html` — `h-left-inner` içinde aynı `img` + `pdf-header-logo--report`.
+- Pro CSS: `static/report_premium.css` içinde `.pdf-header-logo--report` 32×32 px.
+
+## Değiştirme
+
+Rapor ikonunu değiştirmek için `static/norya_report_icon.png` dosyasını yenisiyle değiştirin; kodda yol aynı kalır.

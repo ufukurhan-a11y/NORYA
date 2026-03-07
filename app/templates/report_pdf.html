@@ -3,55 +3,56 @@
 <head>
   <meta charset="UTF-8" />
   <title>{{ title or 'Norya Analiz Raporu' }}</title>
-  <!--
-    PDF Rapor Şablonu
-    =================
-    YENİLENMESİ GEREKEN (renkler): <style> içindeki :root değişkenleri
-    YENİLENMEMESİ GEREKEN: Aşağıdaki HTML yapısı, class isimleri, Jinja değişkenleri
-  -->
   <style>
-    /* ========== RENKLER (güncellemek için sadece bu bloku düzenle) ========== */
+    /* ========== Norya marka kimliği: #0EA5A4 — premium klinik rapor ========== */
     :root {
-      /* Marka */
-      --norya-brand: #e07a5f;
-      --norya-brand-border: #e07a5f;
-      /* Metin */
+      --norya-brand: #0EA5A4;
+      --norya-brand-light: rgba(14, 165, 164, 0.08);
+      --norya-brand-border: rgba(14, 165, 164, 0.25);
       --norya-text: #334155;
       --norya-heading: #0f172a;
       --norya-muted: #64748b;
-      /* Sayfa altlık */
       --page-footer-color: #64748b;
-      --disclaimer-color: #6b7280;
-      --disclaimer-sep: #e5e7eb;
-      /* Risk bantları */
-      --risk-normal-bg: #d1fae5;
+      --disclaimer-color: #64748b;
+      --disclaimer-sep: #e2e8f0;
+      --risk-normal-bg: #ecfdf5;
       --risk-normal-text: #065f46;
       --risk-normal-border: #10b981;
-      --risk-attention-bg: #fef3c7;
+      --risk-attention-bg: #fffbeb;
       --risk-attention-text: #92400e;
       --risk-attention-border: #f59e0b;
-      --risk-high-bg: #fee2e2;
+      --risk-high-bg: #fef2f2;
       --risk-high-text: #991b1b;
       --risk-high-border: #ef4444;
-      /* Tablo */
-      --table-header-bg: #f1f5f9;
+      --table-header-bg: #f8fafc;
       --table-header-text: #475569;
       --table-border: #e2e8f0;
       --table-row-even: #f8fafc;
-      /* Durum etiketleri */
       --status-normal: #059669;
       --status-low: #d97706;
       --status-high: #dc2626;
       --status-border: #b45309;
-      /* Bölüm / footer */
       --section-border: #e2e8f0;
       --footer-text: #64748b;
       --footer-emr: #475569;
+      --card-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
+      --card-radius: 8px;
     }
-    /* ========== Yapı (class isimleri değişmesin) ========== */
+    * { box-sizing: border-box; }
+    body {
+      font-family: system-ui, -apple-system, 'Helvetica Neue', Helvetica, Arial, sans-serif;
+      font-size: 12px;
+      line-height: 1.45;
+      color: var(--norya-text);
+      margin: 0;
+      padding: 0;
+      overflow-wrap: break-word;
+      word-break: break-word;
+    }
+    /* Pro/Premium ile aynı sayfa düzeni */
     @page {
       size: A4;
-      margin: 16mm;
+      margin: 26mm 16mm 22mm 16mm;
       @top-center {
         content: element(pdf-header);
       }
@@ -61,148 +62,400 @@
       @bottom-right {
         font-size: 9px;
         color: var(--page-footer-color);
-        content: "noryaai.com";
+        content: "Sayfa " counter(page) " / " counter(pages) " · noryaai.com";
       }
     }
-    * { box-sizing: border-box; }
-    body {
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 11px;
-      line-height: 1.65;
-      color: var(--norya-text);
-      margin: 0;
-      padding: 0;
-    }
-    /* Premium header: her sayfada tekrarlanan, sabit yükseklikte üst bant (72px) */
+    /* ========== Header: Pro ile aynı düzen (tablo, padding, logo ve font boyutları) ========== */
     #pdf-header {
       position: running(pdf-header);
       display: block;
       width: 100%;
-      height: 72px;
-      margin: 8px 0 16px 0;
-      padding: 0 0 12px 0;
-      border-bottom: 1px solid var(--section-border);
-      background: #ffffff;
+      padding: 8px 12px 10px;
+      margin: 0;
+      border-bottom: 2px solid var(--section-border);
+      background: #fff;
+      box-sizing: border-box;
+      word-break: normal;
+      overflow-wrap: normal;
     }
     .pdf-header-inner {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: space-between;
-      gap: 16px;
+      display: table;
+      table-layout: fixed;
       width: 100%;
+      border-collapse: collapse;
+      box-sizing: border-box;
     }
-    .pdf-header-logo-wrap {
+    .pdf-header-left {
+      display: table-cell;
+      width: 30%;
+      min-width: 100px;
+      vertical-align: middle;
+      padding-right: 8px;
+    }
+    .pdf-header-left-inner {
       display: flex;
       align-items: center;
-      justify-content: flex-start;
+      gap: 8px;
+      flex-wrap: nowrap;
+    }
+    .pdf-header-logo-cell {
+      flex-shrink: 0;
+    }
+    .pdf-header-brand-cell {
+      min-width: 11em;
+      word-break: normal;
+      overflow-wrap: normal;
     }
     .pdf-header-logo {
-      max-height: 48px;
-      width: auto;
       object-fit: contain;
       display: block;
     }
+    .pdf-header-logo--report {
+      width: 32px;
+      height: 32px;
+      min-width: 32px;
+      min-height: 32px;
+      max-width: 32px;
+      max-height: 32px;
+    }
+    .pdf-header-brand-name {
+      font-size: 14px;
+      font-weight: 900;
+      color: var(--norya-heading);
+      line-height: 1.15;
+      margin: 0;
+    }
+    .pdf-header-brand-sub {
+      font-size: 10px;
+      color: var(--norya-muted);
+      margin: 0;
+      line-height: 1.25;
+      word-break: normal;
+      overflow-wrap: normal;
+      white-space: normal;
+    }
     .pdf-header-center {
-      flex: 1 1 auto;
-      text-align: left;
+      display: table-cell;
+      width: 44%;
+      text-align: center;
+      vertical-align: middle;
       padding: 0 8px;
     }
-    .pdf-header-right {
-      flex: 0 0 auto;
-      text-align: right;
-    }
     .pdf-header-title {
-      font-size: 17px;
-      font-weight: 700;
+      font-size: 14px;
+      font-weight: 950;
       color: var(--norya-heading);
-      margin: 0 0 2px 0;
-      line-height: 1.3;
+      letter-spacing: 0.02em;
+      margin: 0;
+      line-height: 1.2;
     }
     .pdf-header-subtitle {
       font-size: 10px;
       color: var(--norya-muted);
       margin: 0;
-      line-height: 1.35;
+      line-height: 1.25;
     }
-    .pdf-header-meta {
+    .pdf-header-right {
+      display: table-cell;
+      width: 26%;
+      text-align: right;
+      vertical-align: middle;
+      font-size: 9.5px;
+      color: var(--norya-muted);
+      line-height: 1.35;
+      padding-left: 8px;
+    }
+    .pdf-header-meta { margin: 0; display: block; }
+    .header-divider {
+      height: 1px;
+      background: rgba(15, 23, 42, 0.1);
+      margin: 10px 2px 0;
+    }
+    /* Pro ile aynı: header altında tek legend strip */
+    .report-legend-strip {
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-start;
+      gap: 10px 18px;
+      padding: 6px 12px 8px;
+      margin: 0 0 10px 0;
+      max-width: 100%;
+      box-sizing: border-box;
+      background: #f8fafc;
+      border-bottom: 1px solid var(--section-border);
       font-size: 10px;
       color: var(--norya-muted);
-      margin: 0;
-      line-height: 1.4;
+      page-break-inside: avoid;
+      overflow: hidden;
     }
-    /* Bilgi bandı (ilk sayfada, header altında) */
-    .info-band { display: table; width: 100%; margin-bottom: 20px; font-size: 10px; color: var(--norya-text); border: 1px solid var(--table-border); border-radius: 4px; overflow: hidden; }
-    .info-band-col { display: table-cell; width: 50%; padding: 12px 14px; vertical-align: top; background: var(--table-row-even); border-right: 1px solid var(--table-border); }
-    .info-band-col:last-child { border-right: none; }
-    .info-band-title { font-size: 10px; font-weight: 700; color: var(--norya-heading); margin: 0 0 8px 0; text-transform: uppercase; letter-spacing: 0.02em; }
-    .info-band-row { margin: 4px 0; line-height: 1.45; }
-    .info-band-label { color: var(--norya-muted); }
-    .risk-banner {
-      padding: 10px 14px;
+    .report-legend-strip .report-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .report-legend-strip .lab-legend-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .report-legend-strip .lab-legend-dot.lab-card--normal { background: #22c55e; }
+    .report-legend-strip .lab-legend-dot.lab-card--border { background: #eab308; }
+    .report-legend-strip .lab-legend-dot.lab-card--risk { background: #ef4444; }
+    /* ========== Footer (running): uyarı metni ========== */
+    #pdf-disclaimer {
+      position: running(pdf-disclaimer);
+      display: block;
+      width: 100%;
+      margin: 0;
+      padding-top: 4px;
+      border-top: 1px solid var(--disclaimer-sep);
+      font-size: 7.5px;
+      line-height: 1.35;
+      color: var(--disclaimer-color);
+      text-align: left;
+    }
+    /* ========== Ana içerik alanı (Pro ile aynı üst boşluk) ========== */
+    .report-body {
+      margin-top: 12px;
+      padding: 0;
+      max-width: 100%;
+      overflow-x: hidden;
+      box-sizing: border-box;
+    }
+    .info-band {
+      display: table;
+      width: 100%;
+      margin-bottom: 8px;
+      font-size: 9px;
+      color: var(--norya-text);
+      border: 1px solid var(--table-border);
       border-radius: 6px;
-      margin-bottom: 18px;
+      overflow: hidden;
+      background: var(--table-row-even);
+    }
+    .info-band-col {
+      display: table-cell;
+      width: 50%;
+      padding: 6px 10px;
+      vertical-align: top;
+      border-right: 1px solid var(--table-border);
+    }
+    .info-band-col:last-child { border-right: none; }
+    .info-band-title {
+      font-size: 8.5px;
+      font-weight: 700;
+      color: var(--norya-heading);
+      margin: 0 0 2px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+    .info-band-row { margin: 0; line-height: 1.35; }
+    .section-title {
+      display: flex;
+      align-items: center;
+      gap: 6px;
       font-size: 11px;
+      font-weight: 700;
+      color: var(--norya-heading);
+      margin: 10px 0 6px 0;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--norya-brand);
+      min-height: 1.3em;
+    }
+    .section-title:first-of-type { margin-top: 0; }
+    .section-title-tight { margin-top: 6px; margin-bottom: 4px; }
+    .section-body-tight { margin-bottom: 4px; }
+    .section-summary-wrap { page-break-inside: avoid; page-break-after: avoid; }
+    .section-causes-recommendations { page-break-before: always; page-break-inside: avoid; }
+    .section-causes-recommendations .section-title { margin-top: 0; }
+    .section-compact .section-title { margin: 6px 0 4px 0; }
+    .section-body { margin-bottom: 6px; white-space: pre-wrap; max-width: 100%; box-sizing: border-box; }
+    .section-body-compact { margin-bottom: 4px; font-size: 9px; line-height: 1.35; white-space: pre-wrap; }
+    .risk-banner {
+      padding: 8px 10px;
+      border-radius: 6px;
+      margin-bottom: 8px;
+      font-size: 10px;
       font-weight: 600;
+      line-height: 1.35;
     }
     .risk-normal {
       background: var(--risk-normal-bg);
       color: var(--risk-normal-text);
-      border-left: 4px solid var(--risk-normal-border);
     }
     .risk-attention {
       background: var(--risk-attention-bg);
       color: var(--risk-attention-text);
-      border-left: 4px solid var(--risk-attention-border);
     }
     .risk-high {
       background: var(--risk-high-bg);
       color: var(--risk-high-text);
-      border-left: 4px solid var(--risk-high-border);
-    }
-    .section-title {
-      font-size: 12px;
-      font-weight: 700;
-      color: var(--norya-heading);
-      margin: 20px 0 10px 0;
-      padding-bottom: 6px;
-      border-bottom: 1px solid var(--section-border);
-    }
-    .chart-legend {
-      font-size: 10px;
-      color: var(--norya-muted);
-      margin: 0 0 10px 0;
-    }
-    .section-body {
-      margin-bottom: 18px;
-      white-space: pre-wrap;
     }
     .intro-block {
-      margin-bottom: 22px;
-      padding: 16px 18px;
-      background: var(--table-row-even);
+      margin-bottom: 8px;
+      padding: 8px 10px;
+      background: var(--norya-brand-light);
       border-radius: 6px;
-      border-left: 4px solid var(--norya-brand);
       page-break-inside: avoid;
     }
-    .intro-block p { margin: 0 0 10px 0; }
+    .intro-block-tight { margin-bottom: 4px; padding: 6px 10px; }
+    .intro-block p { margin: 0 0 4px 0; font-size: 9.5px; line-height: 1.35; }
+    .intro-block-tight p { margin: 0 0 2px 0; }
+    .intro-block-tight p:last-child { margin-bottom: 0; }
     .intro-block p:last-child { margin-bottom: 0; }
     .how-to-read-block {
-      margin-bottom: 22px;
-      padding: 12px 14px;
-      background: #f8fafc;
+      margin-bottom: 8px;
+      padding: 6px 10px;
+      background: var(--table-row-even);
       border-radius: 6px;
-      font-size: 10px;
+      font-size: 9px;
       color: var(--norya-muted);
-      line-height: 1.55;
+      line-height: 1.4;
+      border: 1px solid var(--table-border);
     }
-    .overall-chart-wrap { margin: 12px 0 20px 0; page-break-inside: avoid; }
-    .overall-chart-img { max-width: 100%; height: auto; display: block; }
+    .chart-legend {
+      font-size: 9px;
+      color: var(--norya-muted);
+      margin: 0 0 6px 0;
+    }
+    .overall-status-wrap {
+      padding: 8px 10px 10px 12px;
+      border-radius: 6px;
+      margin-bottom: 6px;
+      page-break-inside: avoid;
+    }
+    .overall-status-wrap.overall-status--normal { background: #f0fdf4; }
+    .overall-status-wrap.overall-status--attention { background: #fffbeb; }
+    .overall-status-wrap.overall-status--high { background: #fef2f2; }
+    .overall-chart-wrap { margin: 4px 0 0 0; page-break-inside: avoid; }
+    .overall-chart-img { width: 100%; height: 90px; display: block; object-fit: contain; object-position: center center; }
+    /* ========== Biyobelirteç kartları (Pro ile aynı düzen) ========== */
+    .biomarker-cards { display: block; width: 100%; }
+    .lab-cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 4px 6px;
+      margin-top: 4px;
+      width: 100%;
+    }
+    .lab-card {
+      page-break-inside: avoid;
+      break-inside: avoid;
+      border-radius: 6px;
+      padding: 5px 7px;
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      min-height: 0;
+      box-sizing: border-box;
+    }
+    .lab-card--normal {
+      border-left: 3px solid #22c55e;
+      background: rgba(34, 197, 94, 0.06);
+    }
+    .lab-card--border,
+    .lab-card--low,
+    .lab-card--high {
+      border-left: 3px solid #eab308;
+      background: rgba(234, 179, 8, 0.08);
+    }
+    .lab-card--high { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.06); }
+    .lab-card-name {
+      font-size: 8px;
+      font-weight: 700;
+      color: var(--norya-heading);
+      margin-bottom: 1px;
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+    }
+    .lab-card-value {
+      font-size: 10px;
+      font-weight: 800;
+      color: var(--norya-heading);
+      margin-bottom: 0;
+      line-height: 1.2;
+    }
+    .lab-card-ref {
+      font-size: 7.5px;
+      color: var(--norya-muted);
+      margin-bottom: 0;
+      line-height: 1.25;
+    }
+    .lab-card-status {
+      font-size: 8px;
+      font-weight: 700;
+      margin-top: 0;
+      line-height: 1.2;
+    }
+    .lab-card--normal .lab-card-status { color: #15803d; }
+    .lab-card--border .lab-card-status,
+    .lab-card--low .lab-card-status { color: #a16207; }
+    .lab-card--high .lab-card-status { color: #b91c1c; }
+    /* Legend: section ile aynı hizada, taşmayan, tek satır veya kontrollü wrap */
+    .lab-legend-wrap {
+      box-sizing: border-box;
+      max-width: 100%;
+      margin: 0 0 10px 0;
+      padding: 4px 0 0 0;
+      page-break-inside: avoid;
+      overflow: hidden;
+    }
+    .lab-legend-inline {
+      font-size: 9.5px;
+      color: var(--norya-muted);
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: flex-start;
+      gap: 10px 16px;
+      max-width: 100%;
+      box-sizing: border-box;
+    }
+    .lab-legend-item {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      white-space: nowrap;
+      flex-shrink: 0;
+    }
+    .lab-legend-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      vertical-align: middle;
+    }
+    .lab-legend-dot.lab-card--normal { background: #22c55e; }
+    .lab-legend-dot.lab-card--border { background: #eab308; }
+    .lab-legend-dot.lab-card--risk { background: #ef4444; }
+    .range-chart-wrap {
+      margin-top: 8px;
+      page-break-inside: avoid;
+    }
+    .range-chart-fullwidth {
+      grid-column: 1 / -1;
+    }
+    .range-chart {
+      max-width: 100%;
+      height: auto;
+      display: block;
+    }
+    /* Tablo fallback (çok parametre varsa) */
     table.biomarkers {
       width: 100%;
       border-collapse: collapse;
-      margin: 12px 0 22px 0;
+      margin: 12px 0 16px 0;
       font-size: 10px;
+      border-radius: var(--card-radius);
+      overflow: hidden;
+      border: 1px solid var(--table-border);
     }
     table.biomarkers th {
       text-align: left;
@@ -210,269 +463,227 @@
       background: var(--table-header-bg);
       color: var(--table-header-text);
       font-weight: 600;
-      border: 1px solid var(--table-border);
+      border-bottom: 1px solid var(--table-border);
+      font-size: 9.5px;
     }
     table.biomarkers td {
       padding: 8px 10px;
-      border: 1px solid var(--table-border);
+      border-bottom: 1px solid var(--table-border);
     }
     table.biomarkers tr:nth-child(even) { background: var(--table-row-even); }
-    .range-chart {
-      max-width: 100%;
-      height: auto;
-      margin-top: 6px;
-      display: block;
-      page-break-inside: avoid;
-    }
-    td.chart-cell { padding: 4px 10px 14px 10px; vertical-align: top; overflow: hidden; }
+    td.chart-cell { padding: 6px 10px 12px 10px; vertical-align: top; }
     .status-normal { color: var(--status-normal); font-weight: 600; }
     .status-low { color: var(--status-low); font-weight: 600; }
     .status-high { color: var(--status-high); font-weight: 600; }
     .status-border { color: var(--status-border); font-weight: 600; }
+    /* Uyarı kutusu = bilgilendirme amaçlı */
+    .alert-clinical {
+      margin-bottom: 8px;
+      padding: 8px 10px;
+      background: #fffbeb;
+      border-radius: 6px;
+      font-size: 9.5px;
+      line-height: 1.4;
+      color: #92400e;
+      page-break-inside: avoid;
+    }
     .footer-note {
-      margin-top: 28px;
-      padding: 16px 14px;
-      background: #f8fafc;
+      margin-top: 10px;
+      padding: 8px 10px;
+      background: var(--table-row-even);
       border-radius: 6px;
       border: 1px solid var(--section-border);
-      font-size: 9px;
-      line-height: 1.5;
+      font-size: 8px;
+      line-height: 1.4;
       color: var(--footer-text);
+      page-break-inside: avoid;
     }
-    .footer-note.emr-ehr-note { margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--table-border); font-size: 0.9em; color: var(--footer-emr); }
-    /* Tıbbi uyarı: her sayfanın altında (running footer) */
-    #pdf-disclaimer {
-      position: running(pdf-disclaimer);
-      display: block;
-      width: 100%;
-      margin: 0;
+    .footer-note.emr-ehr-note {
+      margin-top: 6px;
       padding-top: 6px;
-      border-top: 1px solid var(--disclaimer-sep);
-      font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-      font-size: 10px;
-      line-height: 1.45;
-      color: var(--disclaimer-color);
-      text-align: left;
+      border-top: 1px dashed var(--table-border);
+      font-size: 0.95em;
+      color: var(--footer-emr);
     }
-    #pdf-disclaimer .disclaimer-line1 { font-size: 10px; margin: 0 0 3px 0; }
-    #pdf-disclaimer .disclaimer-line2 { font-size: 8px; color: var(--disclaimer-color); margin: 0; opacity: 0.95; }
-    /* Clinical report layout (report-page) */
-    .report-page .report-header { display: table; width: 100%; margin-bottom: 12px; padding: 10px 0; border-bottom: 1px solid var(--section-border); }
-    .report-page .report-brand { display: table-cell; width: 1%; white-space: nowrap; vertical-align: middle; padding-right: 12px; }
-    .report-page .report-logo { max-height: 36px; width: auto; display: block; }
-    .report-page .report-brand-name { font-size: 14px; font-weight: 700; color: var(--norya-heading); }
-    .report-page .report-brand-ai { color: var(--norya-brand); }
-    .report-page .report-brand-sub { font-size: 9px; color: var(--norya-muted); }
-    .report-page .report-header-center { display: table-cell; text-align: center; vertical-align: middle; padding: 0 8px; }
-    .report-page .report-title { font-size: 15px; font-weight: 700; color: var(--norya-heading); margin: 0 0 2px 0; }
-    .report-page .report-subtitle { font-size: 10px; color: var(--norya-muted); margin: 0; }
-    .report-page .report-meta { display: table-cell; width: 1%; white-space: nowrap; text-align: right; font-size: 9px; color: var(--norya-muted); vertical-align: middle; }
-    .report-page .report-divider { height: 2px; background: var(--section-border); margin: 8px 0 12px 0; }
-    .report-page .report-actions.no-print { display: none !important; }
-    .report-page .alert-medical { margin-bottom: 14px; padding: 10px 12px; background: #fef3c7; border-left: 4px solid #f59e0b; border-radius: 0 4px 4px 0; font-size: 10px; line-height: 1.45; color: #92400e; }
-    .report-page .section-card { margin-bottom: 18px; padding: 12px 14px; border: 1px solid var(--section-border); border-radius: 6px; page-break-inside: avoid; }
-    .report-page .section-card .section-title { font-size: 12px; font-weight: 700; color: var(--norya-heading); margin: 0 0 8px 0; padding-bottom: 6px; border-bottom: 1px solid var(--section-border); }
-    .report-page .section-card .section-title .dot { display: inline-block; width: 5px; height: 5px; border-radius: 50%; background: var(--norya-brand); margin-right: 6px; vertical-align: middle; }
-    .report-page .section-card .section-body { font-size: 10px; line-height: 1.55; white-space: pre-wrap; }
-    .report-page .report-footer { margin-top: 20px; padding-top: 12px; border-top: 1px solid var(--section-border); font-size: 9px; color: var(--footer-text); text-align: center; }
-    @media print {
-      .no-print { display: none !important; }
+    .report-end-footer {
+      margin-top: 10px;
+      padding-top: 8px;
+      border-top: 1px solid var(--section-border);
+      font-size: 8px;
+      color: var(--footer-text);
+      text-align: center;
     }
   </style>
 </head>
 <body>
-  <!-- Her sayfada tekrarlanan tıbbi uyarı (WeasyPrint running footer) -->
+  <!-- Running footer: tıbbi uyarı (her sayfa altı) -->
   <div id="pdf-disclaimer">
-    <p class="disclaimer-line1">{{ medical_disclaimer_1 | default('Bu rapor yapay zekâ destekli ön değerlendirme amaçlıdır. Tıbbi tanı veya tedavi yerine geçmez. Sağlık durumunuzla ilgili kararlar için lütfen doktorunuza başvurunuz.', true) }}</p>
-    <p class="disclaimer-line2">{{ medical_disclaimer_2 | default('Norya AI bir tıbbi teşhis sistemi değildir.', true) }}</p>
+    {{ medical_disclaimer_1 | default('Bu rapor bilgilendirme amaçlı klinik formattadır. Tıbbi tanı veya tedavi yerine geçmez. Sağlık kararları için lütfen doktorunuza başvurunuz.', true) }} — Norya
   </div>
-  <!-- Her sayfada tekrarlanan üst bant (WeasyPrint running header) -->
+  <!-- Running header: Tablo ile sabit, premium gibi nizami -->
   <div id="pdf-header">
     <div class="pdf-header-inner">
-      <div class="pdf-header-logo-wrap">
-        <img src="static/norya_logo_transparent_trim.png" alt="Norya AI" class="pdf-header-logo" />
+      <div class="pdf-header-left">
+        <div class="pdf-header-left-inner">
+          <div class="pdf-header-logo-cell">
+            {% if logo_base64 %}
+            <img src="data:image/png;base64,{{ logo_base64 }}" alt="Norya" class="pdf-header-logo pdf-header-logo--report" />
+            {% endif %}
+          </div>
+          <div class="pdf-header-brand-cell">
+            <div class="pdf-header-brand-name">Norya</div>
+            <div class="pdf-header-brand-sub">{{ report_header_subtitle | default('Yapay zeka destekli ön değerlendirme', true) }}</div>
+          </div>
+        </div>
       </div>
       <div class="pdf-header-center">
-        <p class="pdf-header-title">{{ report_header_title | default('Kan Tahlili Analiz Raporu', true) }}</p>
-        <p class="pdf-header-subtitle">{{ report_header_subtitle | default('AI destekli ön değerlendirme • Klinik karar yerine geçmez', true) }}</p>
+        <div class="pdf-header-title">{{ report_header_title | default('Kan Tahlili Analiz Raporu', true) }}</div>
+        <div class="pdf-header-subtitle">{{ report_header_subtitle_short | default('Klinik karar yerine geçmez', true) }}</div>
       </div>
       <div class="pdf-header-right">
-        <p class="pdf-header-meta">{{ report_date_label | default('Tarih', true) }}: {{ report_date }}</p>
-        <p class="pdf-header-meta">{{ report_id_label | default('Rapor No', true) }}: {{ report_id | default('—', true) }}</p>
+        <span class="pdf-header-meta">{{ report_date_label | default('Tarih', true) }}: {{ report_date }}</span>
+        <span class="pdf-header-meta">{{ report_id_label | default('Rapor No', true) }}: {{ report_id | default('—', true) }}</span>
+        <span class="pdf-header-meta">Dil: {{ lang | default('tr', true) | upper }}</span>
       </div>
     </div>
   </div>
 
-  <div class="report-page">
-    <header class="report-header">
-      <div class="report-brand">
-        <img class="report-logo" src="static/norya_logo_transparent_trim.png" alt="Norya" />
-        <div class="report-brand-text">
-          <div class="report-brand-name">Norya <span class="report-brand-ai">AI</span></div>
-          <div class="report-brand-sub">{{ report_header_subtitle | default('Clinical-style analysis report', true) }}</div>
-        </div>
-      </div>
-      <div class="report-header-center">
-        <div class="report-title">{{ report_header_title | default('Analiz Raporu', true) }}</div>
-        <div class="report-subtitle">{{ report_header_subtitle | default('Kan tahlili sonuçlarının bilgilendirme amaçlı değerlendirmesi', true) }}</div>
-      </div>
-      <div class="report-meta">
-        <div><strong>RID:</strong> {{ report_id | default('—', true) }}</div>
-        <div><strong>User:</strong> {{ user_id | default('—', true) }}</div>
-        <div><strong>Tarih:</strong> {{ report_date }}</div>
-        <div><strong>Dil:</strong> {{ lang | default('tr', true) }}</div>
-      </div>
-    </header>
-    <div class="report-divider"></div>
-    <div class="report-actions no-print">
-      <button class="btn-secondary" type="button">Doktora Götür</button>
-      <button class="btn-secondary" type="button">Paylaş</button>
-      <button class="btn-primary" type="button">PDF İndir</button>
-    </div>
-    <div class="alert-medical">
-      <div class="alert-icon">⚠️</div>
-      <div class="alert-text">
-        <strong>Bilgilendirme amaçlıdır.</strong> Bu rapor tıbbi teşhis/tedavi yerine geçmez. Şikayetiniz varsa veya değerleriniz riskli görünüyorsa doktorunuza başvurun.
-      </div>
+  <div class="header-divider"></div>
+  <div class="report-legend-strip" role="doc-noteref" aria-label="Durum göstergesi">
+    <span class="report-legend-item"><span class="lab-legend-dot lab-card--normal"></span>{{ report_dist_normal | default('Normal', true) }}</span>
+    <span class="report-legend-item"><span class="lab-legend-dot lab-card--border"></span>{{ report_dist_borderline | default('Sınır', true) }}</span>
+    <span class="report-legend-item"><span class="lab-legend-dot lab-card--risk"></span>{{ report_dist_attention | default('Dikkat', true) }}</span>
+  </div>
+
+  <div class="report-body">
+    <div class="alert-clinical">
+      <strong>{{ report_disclaimer_title | default('Bilgilendirme amaçlıdır.', true) }}</strong> {{ report_disclaimer_text | default('Teşhis veya tedavi yerine geçmez; hekiminize başvurun.', true) }}
     </div>
 
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ info_patient_heading | default('Kişi', true) }} / {{ info_analysis_heading | default('Analiz', true) }}</div>
+    <section>
+      <div class="section-title">{{ info_patient_heading | default('Kişi', true) }} / {{ info_analysis_heading | default('Analiz', true) }}</div>
       <div class="section-body">
-        <div class="info-band" style="display:table;width:100%;margin:0;font-size:10px;border:1px solid var(--table-border);border-radius:4px;overflow:hidden;">
-          <div class="info-band-col" style="display:table-cell;width:50%;padding:10px 12px;vertical-align:top;background:var(--table-row-even);border-right:1px solid var(--table-border);">
-            <p class="info-band-title" style="font-size:10px;font-weight:700;margin:0 0 6px 0;">{{ info_patient_heading | default('Kişi', true) }}</p>
-            <p class="info-band-row" style="margin:2px 0;">{{ patient_name | default('—', true) }} · {{ patient_age | default('—', true) }} · {{ patient_gender | default('—', true) }}</p>
+        <div class="info-band">
+          <div class="info-band-col">
+            <p class="info-band-title">{{ info_patient_heading | default('Kişi', true) }}</p>
+            <p class="info-band-row">{{ patient_name | default('—', true) }} · {{ patient_age | default('—', true) }} · {{ patient_gender | default('—', true) }}</p>
           </div>
-          <div class="info-band-col" style="display:table-cell;width:50%;padding:10px 12px;vertical-align:top;border-right:none;">
-            <p class="info-band-title" style="font-size:10px;font-weight:700;margin:0 0 6px 0;">{{ info_analysis_heading | default('Analiz', true) }}</p>
-            <p class="info-band-row" style="margin:2px 0;">Dil: {{ lang | default('tr', true) }} · {{ plan_name | default('—', true) }} · {{ source_type | default('—', true) }}</p>
+          <div class="info-band-col">
+            <p class="info-band-title">{{ info_analysis_heading | default('Analiz', true) }}</p>
+            <p class="info-band-row">Dil: {{ lang | default('tr', true) }} · {{ plan_name | default('—', true) }} · {{ source_type | default('—', true) }}</p>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ risk_indicators_heading | default('Risk İşaretleri', true) }}</div>
+    <section>
+      <div class="section-title">{{ risk_indicators_heading | default('Risk İşaretleri', true) }}</div>
       <div class="section-body">
         {% if risk_level != 'none' %}
-        <div class="risk-banner risk-{{ risk_level }}">
-          {{ risk_message or risk_default_attention }}
-        </div>
+        <div class="risk-banner risk-{{ risk_level }}">{{ risk_message or risk_default_attention }}</div>
         {% else %}
-        <div class="risk-banner risk-normal">
-          {{ risk_message or risk_default_normal }}
-        </div>
+        <div class="risk-banner risk-normal">{{ risk_message or risk_default_normal }}</div>
         {% endif %}
       </div>
     </section>
 
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ intro_heading | default('Bu rapor hakkında', true) }}</div>
-      <div class="section-body">
-        <div class="intro-block" style="margin:0;padding:12px 14px;background:var(--table-row-even);border-radius:6px;border-left:4px solid var(--norya-brand);">
-          <p style="margin:0 0 8px 0;">{{ intro_p1 | default('Bu rapor, laboratuvar sonuçlarınızın anlaşılır bir ön değerlendirmesidir. Aşağıda özet, parametre değerleri ve öneriler yer almaktadır. Rapor teşhis koymaz; yalnızca bilgilendirme amaçlıdır.', true) }}</p>
-          <p style="margin:0;">{{ intro_p2 | default('Sonuçlarınızı mutlaka bir hekim ile görüşün. Tıbbi kararlar için hekiminize danışın.', true) }}</p>
+    <section>
+      <div class="section-title section-title-tight">{{ intro_heading | default('Bu rapor hakkında', true) }}</div>
+      <div class="section-body section-body-tight">
+        <div class="intro-block intro-block-tight">
+          <p>{{ intro_p1 | default('Bu rapor laboratuvar sonuçlarınızın ön değerlendirmesidir; yalnızca bilgilendirme amaçlıdır.', true) }}</p>
+          <p>{{ intro_p2 | default('Sonuçlarınızı hekiminizle görüşün; tıbbi kararlar için hekime danışın.', true) }}</p>
         </div>
       </div>
     </section>
 
     {% if overall_chart_svg_base64 %}
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ overall_status_heading | default('Genel durum', true) }}</div>
-      <div class="section-body">
-        <p class="chart-legend">{{ overall_chart_legend | default('Yeşil = Normal | Turuncu = Sınır | Kırmızı = Riskli (skor 0–100)', true) }}</p>
-        <div class="overall-chart-wrap">
-          <img class="overall-chart-img" src="data:image/svg+xml;base64,{{ overall_chart_svg_base64 }}" alt="{{ overall_status_heading | default('Genel durum', true) }} {{ overall_score }}/100" />
+    <section class="section-overall">
+      <div class="section-title section-title-tight">{{ overall_status_heading | default('Genel durum', true) }}</div>
+      <div class="section-body section-body-tight">
+        <div class="overall-status-wrap overall-status--{{ risk_level if risk_level in ('normal','attention','high') else 'normal' }}">
+          <p class="chart-legend">{{ overall_chart_legend | default('Yeşil = Normal · Turuncu = Sınır · Kırmızı = Riskli (skor 0–100)', true) }}</p>
+          <div class="overall-chart-wrap">
+            <img class="overall-chart-img" src="data:image/svg+xml;base64,{{ overall_chart_svg_base64 }}" alt="{{ overall_status_heading | default('Genel durum', true) }} {{ overall_score }}/100" />
+          </div>
         </div>
       </div>
     </section>
     {% endif %}
 
     {% if summary %}
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ summary_heading | default('Özet', true) }}</div>
-      <div class="section-body">{{ summary }}</div>
+    <section class="section-summary-wrap">
+      <div class="section-title section-title-tight">{{ summary_heading | default('Özet', true) }}</div>
+      <div class="section-body section-body-tight">{{ summary }}</div>
     </section>
     {% endif %}
 
     {% if biomarkers %}
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}</div>
+    <section>
+      <div class="section-title">{{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}</div>
       <div class="section-body">
         <div class="how-to-read-block">{{ how_to_read_body | default('Her parametre için Sonuç ve Referans aralığı verilir. Yeşil = Normal, turuncu = Sınırda, kırmızı = Referans dışı.', true) }}</div>
       </div>
     </section>
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}</div>
+    <section>
+      <div class="section-title">{{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}</div>
       <div class="section-body">
-        <p class="chart-legend">Yeşil = Normal &nbsp;|&nbsp; Turuncu = Sınır &nbsp;|&nbsp; Kırmızı = Riskli</p>
-        <table class="biomarkers">
-          <thead>
-            <tr>
-              <th>{{ param | default('Parametre', true) }}</th>
-              <th>{{ result | default('Sonuç', true) }}</th>
-              <th>{{ unit | default('Birim', true) }}</th>
-              <th>{{ ref_range | default('Referans Aralığı', true) }}</th>
-              <th>{{ status | default('Durum', true) }}</th>
-            </tr>
-          </thead>
-          <tbody>
+        <div class="biomarker-cards">
+          <div class="lab-cards-grid">
             {% for row in biomarkers %}
-            <tr>
-              <td>{{ row.name }}</td>
-              <td>{{ row.value }}</td>
-              <td>{{ row.unit or '—' }}</td>
-              <td>{{ row.reference or '—' }}</td>
-              <td class="status-{{ row.status }}">{{ row.status_label }}</td>
-            </tr>
+            <div class="lab-card lab-card--{{ 'risk' if row.status == 'high' or row.status == 'low' else ('border' if row.status == 'border' else 'normal') }}">
+              <div class="lab-card-name">{{ row.name or '—' }}</div>
+              <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
+              <div class="lab-card-ref">Ref: {{ row.reference or '—' }}</div>
+              <div class="lab-card-status">{{ row.status_label or '—' }}</div>
+            </div>
             {% if row.chart_svg_base64 %}
-            <tr>
-              <td colspan="5" class="chart-cell">
-                <img class="range-chart" src="data:image/svg+xml;base64,{{ row.chart_svg_base64 }}" alt="Referans aralığı: {{ row.name }}" />
-              </td>
-            </tr>
+            <div class="range-chart-wrap range-chart-fullwidth">
+              <img class="range-chart" src="data:image/svg+xml;base64,{{ row.chart_svg_base64 }}" alt="Referans: {{ row.name }}" />
+            </div>
             {% endif %}
             {% endfor %}
-          </tbody>
-        </table>
+          </div>
+        </div>
       </div>
     </section>
     {% endif %}
 
+    {% if possible_causes or recommendations %}
+    <div class="section-causes-recommendations">
     {% if possible_causes %}
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ possible_causes_heading | default('Olası Nedenler', true) }}</div>
-      <div class="section-body">{{ possible_causes }}</div>
+    <section class="section-compact">
+      <div class="section-title">{{ possible_causes_heading | default('Olası Nedenler', true) }}</div>
+      <div class="section-body section-body-compact">{{ possible_causes }}</div>
     </section>
     {% endif %}
-
     {% if recommendations %}
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ recommendations_heading | default('Öneriler', true) }}</div>
-      <div class="section-body">{{ recommendations }}</div>
+    <section class="section-compact">
+      <div class="section-title">{{ recommendations_heading | default('Öneriler', true) }}</div>
+      <div class="section-body section-body-compact">{{ recommendations }}</div>
     </section>
+    {% endif %}
+    </div>
     {% endif %}
 
     {% if raw_sections %}
     {% for section in raw_sections %}
-    <section class="section-card">
-      <div class="section-title"><span class="dot"></span> {{ section.title }}</div>
+    <section>
+      <div class="section-title">{{ section.title }}</div>
       <div class="section-body">{{ section.body }}</div>
     </section>
     {% endfor %}
     {% endif %}
 
-    <footer class="report-footer">
-      Norya • Bilgilendirme amaçlıdır • support@noryaai.com
-    </footer>
-  </div>
-
-  <div class="footer-note" style="margin-top:16px;">
-    {{ footer_note | default('Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.', true) }}
-  </div>
-  <div class="footer-note emr-ehr-note">
-    {{ emr_ehr_note | default('EMR/EHR compatible — This report can be uploaded to hospital or clinician information systems.', true) }}
+    <div class="report-end-footer">
+      Norya · Bilgilendirme amaçlı klinik rapor · support@noryaai.com
+    </div>
+    <div class="footer-note">
+      {{ footer_note | default('Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.', true) }}
+    </div>
+    <div class="footer-note emr-ehr-note">
+      {{ emr_ehr_note | default('EMR/EHR uyumlu — Bu rapor hastane veya hekim bilgi sistemlerine yüklenebilir formattadır.', true) }}
+    </div>
   </div>
 </body>
 </html>

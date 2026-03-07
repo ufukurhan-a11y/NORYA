@@ -5,8 +5,8 @@
   <title>{{ doctor_title | default('Norya — Doktoruma Götür', true) }}</title>
   <style>
     :root {
-      --norya-brand: #e07a5f;
-      --norya-brand-border: #e07a5f;
+      --norya-brand: #0EA5A4;
+      --norya-brand-border: #0EA5A4;
       --norya-text: #334155;
       --norya-heading: #0f172a;
       --norya-muted: #64748b;
@@ -32,9 +32,18 @@
       --footer-text: #64748b;
       --footer-emr: #475569;
     }
-    @page { size: A4; margin: 20mm;
-      @bottom-center { font-size: 9px; color: var(--page-footer-color);
+    @page {
+      size: A4;
+      margin: 18mm 16mm 20mm 16mm;
+      @bottom-center {
+        font-size: 9px;
+        color: var(--page-footer-color);
         content: "{{ doctor_page_footer | default('Hekime iletilmek üzere hazırlanmıştır. Tıbbi karar için hekim değerlendirmesi gerekir. — Norya', true) }}";
+      }
+      @bottom-right {
+        font-size: 9px;
+        color: var(--page-footer-color);
+        content: "Sayfa " counter(page) " / " counter(pages);
       }
     }
     * { box-sizing: border-box; }
@@ -108,7 +117,11 @@
 <body>
   <div class="header">
     <div class="pdf-header-logo-wrap">
-      <img src="static/norya_logo_transparent_trim.png" alt="Norya AI" class="pdf-header-logo" />
+      {% if logo_base64 %}
+      <img src="data:image/png;base64,{{ logo_base64 }}" alt="Norya" class="pdf-header-logo" />
+      {% else %}
+      <img src="static/norya_logo_transparent_trim.png" alt="Norya" class="pdf-header-logo" />
+      {% endif %}
     </div>
     <div class="brand-sub">{{ doctor_subtitle | default('Kan Tahlili Özeti — Hekime iletilmek üzere hazırlanmıştır', true) }}</div>
     <div class="report-meta">{{ report_date_label | default('Rapor Tarihi', true) }}: {{ report_date }}</div>

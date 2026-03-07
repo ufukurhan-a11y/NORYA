@@ -56,6 +56,8 @@ class Settings(BaseSettings):
     smtp_use_tls: bool = True
     # Şifre sıfırlama linkindeki site adresi (e-postadaki buton linki)
     frontend_url: str = "http://127.0.0.1:8000"
+    # QR doğrulama linki için backend adresi. Boşsa PDF isteğinin geldiği host kullanılır. Örn: https://api.norya.com
+    backend_public_url: str = ""
     # PWA push bildirimleri (opsiyonel): VAPID public key (base64url). Boşsa push aboneliği alınmaz.
     vapid_public_key: str = ""
     vapid_private_key: str = ""  # Bildirim göndermek için (pywebpush ile kullanılır)
