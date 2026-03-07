@@ -246,38 +246,108 @@
     .dark .trust-global-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.1) 0%, rgba(30,41,59,0.6) 20%); }
     .trust-global-icon-badge { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; margin-bottom: 0.75rem; border-radius: 12px; background: rgba(14,165,164,0.14); color: #0f172a; font-size: 1.25rem; line-height: 1; }
     .trust-global-icon-badge svg { width: 1.25rem; height: 1.25rem; }
+    .trust-global-icon-badge img { width: 1.25rem; height: 1.25rem; object-fit: contain; display: block; }
     .dark .trust-global-icon-badge { background: rgba(14,165,164,0.22); color: #e2e8f0; }
     .trust-global-title { font-size: 0.875rem; font-weight: 600; line-height: 1.35; color: #0f172a; margin: 0; }
     .dark .trust-global-title { color: #f1f5f9; }
     @media (max-width: 480px) { .trust-global-section { padding-left: 1rem; padding-right: 1rem; } }
     .features-grid-section .premium-wrap { overflow-x: clip; min-width: 0; }
-    /* Premium feature cards: kurumsal hastane + health-tech */
-    .features-grid-section .grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; }
+    /* Feature cards: global health-tech enterprise — premium, klinik, sakin */
+    .features-grid-section {
+      background: linear-gradient(180deg, #ffffff 0%, #fcfdfd 40%, #f8fcfc 100%);
+    }
+    .dark .features-grid-section { background: linear-gradient(180deg, rgba(15,23,42,0.5) 0%, rgba(15,23,42,0.6) 100%); }
+    .features-grid-section .grid { display: grid; grid-template-columns: 1fr; gap: 1.25rem; align-items: stretch; }
     @media (min-width: 768px) { .features-grid-section .grid { grid-template-columns: repeat(2, 1fr); gap: 1.5rem; } }
     @media (min-width: 1024px) { .features-grid-section .grid { grid-template-columns: repeat(3, 1fr); gap: 1.5rem; } }
-    .feature-card { position: relative; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 100%; padding: 1.5rem 1.25rem; padding-top: 1.625rem; border-radius: 18px; border: 1px solid rgba(15,23,42,0.07); box-shadow: 0 2px 8px rgba(10,25,41,0.04); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; overflow: hidden; }
-    .feature-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #0EA5A4; opacity: 0.9; }
-    @media (hover: hover) { .feature-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(10,25,41,0.08); border-color: rgba(14,165,164,0.25); } }
-    @media (hover: hover) { .dark .feature-card:hover { border-color: rgba(14,165,164,0.35); box-shadow: 0 8px 24px rgba(0,0,0,0.15); } }
-    .feature-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.04) 0%, rgba(255,255,255,0.98) 18%); }
-    .feature-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.04) 0%, rgba(255,255,255,0.98) 18%); }
-    .feature-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.04) 0%, rgba(255,255,255,0.98) 18%); }
-    .feature-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.04) 0%, rgba(255,255,255,0.98) 18%); }
-    .dark .feature-card { border-color: rgba(255,255,255,0.08); box-shadow: none; }
-    .dark .feature-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.08) 0%, rgba(30,41,59,0.6) 18%); }
-    .dark .feature-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.08) 0%, rgba(30,41,59,0.6) 18%); }
-    .dark .feature-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.08) 0%, rgba(30,41,59,0.6) 18%); }
-    .dark .feature-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.08) 0%, rgba(30,41,59,0.6) 18%); }
-    .feature-card-icon-badge { display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; margin-bottom: 1rem; border-radius: 12px; background: rgba(14,165,164,0.12); color: #0f172a; }
-    .feature-card-icon-badge svg { width: 1.375rem; height: 1.375rem; }
-    .dark .feature-card-icon-badge { background: rgba(14,165,164,0.2); color: #e2e8f0; }
-    .feature-card-title { font-size: 1rem; font-weight: 600; line-height: 1.35; color: #0f172a; margin: 0 0 0.5rem 0; }
-    @media (min-width: 640px) { .feature-card-title { font-size: 1.0625rem; } }
+    .feature-card {
+      position: relative; min-width: 0; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 100%;
+      padding: 1.625rem 1.375rem; padding-top: 1.75rem;
+      border-radius: 22px;
+      border: 1px solid rgba(15,23,42,0.06);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.6) inset, 0 2px 12px rgba(10,25,41,0.03), 0 6px 24px rgba(10,25,41,0.04);
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+      overflow: hidden;
+    }
+    .feature-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, rgba(14,165,164,0.5) 0%, #0EA5A4 50%, rgba(14,165,164,0.6) 100%);
+      opacity: 0.95;
+    }
+    @media (hover: hover) {
+      .feature-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 1px 0 rgba(255,255,255,0.7) inset, 0 8px 24px rgba(10,25,41,0.06), 0 16px 40px rgba(14,165,164,0.06);
+        border-color: rgba(14,165,164,0.2);
+      }
+    }
+    .dark .feature-card {
+      border-color: rgba(255,255,255,0.06);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.03) inset, 0 4px 20px rgba(0,0,0,0.12);
+    }
+    @media (hover: hover) { .dark .feature-card:hover { border-color: rgba(14,165,164,0.28); box-shadow: 0 8px 32px rgba(0,0,0,0.2), 0 0 0 1px rgba(14,165,164,0.06); } }
+    .feature-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.03) 0%, rgba(255,255,255,0.99) 20%); }
+    .feature-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.03) 0%, rgba(255,255,255,0.99) 20%); }
+    .feature-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.03) 0%, rgba(255,255,255,0.99) 20%); }
+    .feature-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.03) 0%, rgba(255,255,255,0.99) 20%); }
+    .dark .feature-card--aqua { background: linear-gradient(180deg, rgba(14,165,164,0.06) 0%, rgba(30,41,59,0.65) 20%); }
+    .dark .feature-card--blue { background: linear-gradient(180deg, rgba(59,130,246,0.06) 0%, rgba(30,41,59,0.65) 20%); }
+    .dark .feature-card--mint { background: linear-gradient(180deg, rgba(52,211,153,0.06) 0%, rgba(30,41,59,0.65) 20%); }
+    .dark .feature-card--slate { background: linear-gradient(180deg, rgba(100,116,139,0.06) 0%, rgba(30,41,59,0.65) 20%); }
+    .feature-card-icon-badge {
+      display: inline-flex; align-items: center; justify-content: center; width: 2.75rem; height: 2.75rem; flex-shrink: 0; margin-bottom: 1rem;
+      border-radius: 12px; background: rgba(14,165,164,0.08);
+      box-shadow: 0 1px 2px rgba(14,165,164,0.06) inset;
+      color: #0f172a;
+    }
+    .feature-card-icon-badge svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.5; }
+    .dark .feature-card-icon-badge { background: rgba(14,165,164,0.14); box-shadow: 0 1px 2px rgba(0,0,0,0.15) inset; color: #e2e8f0; }
+    .feature-card-title {
+      font-size: 1.0625rem; font-weight: 600; line-height: 1.4; color: #0f172a; margin: 0 0 0.5rem 0;
+    }
+    @media (min-width: 640px) { .feature-card-title { font-size: 1.125rem; font-weight: 600; } }
     .dark .feature-card-title { color: #f1f5f9; }
-    .feature-card-desc { font-size: 0.8125rem; line-height: 1.5; color: #475569; margin: 0; flex-grow: 1; }
+    .feature-card-desc { font-size: 0.8125rem; line-height: 1.55; color: #475569; margin: 0; flex-grow: 1; }
     @media (min-width: 640px) { .feature-card-desc { font-size: 0.875rem; } }
     .dark .feature-card-desc { color: #94a3b8; }
+    .features-trust-line { font-size: 0.6875rem; line-height: 1.5; color: #64748b; text-align: center; max-width: 28rem; margin: 1.75rem auto 0; letter-spacing: 0.01em; }
+    .dark .features-trust-line { color: #94a3b8; }
     .cta-primary-btn:focus-visible, .cta-secondary-btn:focus-visible { outline: none; }
+    /* Enterprise Infrastructure & Security — minimal, Stripe-style trust */
+    .enterprise-infra-section {
+      background: linear-gradient(180deg, #fafbfc 0%, #f6f8fa 100%);
+      padding: 3rem 1rem 3.5rem; overflow-x: clip; max-width: 100%;
+    }
+    .dark .enterprise-infra-section { background: linear-gradient(180deg, rgba(15,23,42,0.4) 0%, rgba(15,23,42,0.5) 100%); }
+    .enterprise-infra-section .enterprise-infra-inner { max-width: 40rem; margin: 0 auto; text-align: center; }
+    .enterprise-infra-label {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #64748b;
+      margin-bottom: 0.75rem; display: block;
+    }
+    .dark .enterprise-infra-label { color: #94a3b8; }
+    .enterprise-infra-title {
+      font-size: 1.125rem; font-weight: 600; color: #0f172a; letter-spacing: -0.01em; margin-bottom: 0.375rem;
+    }
+    @media (min-width: 640px) { .enterprise-infra-title { font-size: 1.25rem; } }
+    .dark .enterprise-infra-title { color: #f1f5f9; }
+    .enterprise-infra-subtitle { font-size: 0.8125rem; color: #64748b; line-height: 1.5; margin-bottom: 1.75rem; }
+    .dark .enterprise-infra-subtitle { color: #94a3b8; }
+    .enterprise-infra-logos {
+      display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 2rem 3rem;
+      margin-bottom: 1.25rem;
+    }
+    .enterprise-infra-logos img {
+      max-height: 32px; width: auto; height: auto; object-fit: contain;
+      opacity: 0.7; filter: grayscale(1); transition: opacity 0.2s ease, filter 0.2s ease;
+      pointer-events: none; user-select: none;
+    }
+    .enterprise-infra-logos img:hover { opacity: 1; filter: grayscale(0.8); }
+    .dark .enterprise-infra-logos img { opacity: 0.65; }
+    .dark .enterprise-infra-logos img:hover { opacity: 0.9; filter: grayscale(0.6); }
+    .enterprise-infra-tagline { font-size: 0.75rem; color: #64748b; line-height: 1.5; margin-bottom: 1rem; }
+    .dark .enterprise-infra-tagline { color: #94a3b8; }
+    .enterprise-infra-legal { font-size: 10px; color: #94a3b8; line-height: 1.4; }
+    .dark .enterprise-infra-legal { color: #64748b; }
     /* Partner logo: orijinal logo img, beyaz zemin, retina/PDF uyumlu */
     .partner-logo {
       width: 42px;
@@ -570,62 +640,115 @@
       .elite-cta-panel { width: 100%; max-width: none; margin-top: 0.25rem; }
       .elite-cta-btn { min-height: 48px; width: 100%; }
     }
-    /* Doctor Insights: premium clinical cards — cooler, authoritative */
-    .doctor-insights-section { background: linear-gradient(180deg, #f0f9f9 0%, #e8f4f4 100%); padding-top: 0.5rem; overflow-x: clip; max-width: 100%; }
-    .dark .doctor-insights-section { background: linear-gradient(180deg, rgba(15,23,42,0.5) 0%, rgba(6,28,28,0.4) 100%); }
-    .doctor-section-badge { font-size: 10px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: #0d9488; margin-bottom: 0.5rem; }
+    /* Doctor Insights: ultra-premium health-tech clinical cards */
+    .doctor-insights-section {
+      background: linear-gradient(180deg, #f8fcfc 0%, #f0f9f9 35%, #e8f6f6 100%);
+      background-image: radial-gradient(ellipse 120% 80% at 50% -20%, rgba(14,165,164,0.04) 0%, transparent 55%);
+      padding-top: 1rem; overflow-x: clip; max-width: 100%;
+    }
+    .dark .doctor-insights-section {
+      background: linear-gradient(180deg, rgba(15,23,42,0.6) 0%, rgba(6,28,28,0.5) 100%);
+      background-image: radial-gradient(ellipse 100% 60% at 50% -10%, rgba(14,165,164,0.06) 0%, transparent 50%);
+    }
+    .doctor-insights-section .doctor-header { text-align: center; margin-bottom: 2rem; }
+    .doctor-section-badge {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.2em; text-transform: uppercase; color: #0d9488;
+      margin-bottom: 0.5rem; display: block;
+    }
     .dark .doctor-section-badge { color: #5eead4; }
-    .doctor-section-title { font-size: 1.25rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; margin-bottom: 0.5rem; }
+    .doctor-section-title {
+      font-size: 1.375rem; font-weight: 700; color: #0f172a; letter-spacing: -0.02em; line-height: 1.3;
+      margin-bottom: 0.5rem;
+    }
+    @media (min-width: 640px) { .doctor-section-title { font-size: 1.5rem; } }
     .dark .doctor-section-title { color: #f1f5f9; }
-    .doctor-section-subtitle { font-size: 0.875rem; color: #475569; line-height: 1.5; max-width: 36rem; margin-left: auto; margin-right: auto; }
+    .doctor-section-subtitle {
+      font-size: 0.9375rem; color: #475569; line-height: 1.55; max-width: 38rem; margin-left: auto; margin-right: auto;
+    }
     .dark .doctor-section-subtitle { color: #94a3b8; }
     .doctor-insights-carousel {
-      display: flex; gap: 1rem; overflow-x: auto; overflow-y: hidden;
+      display: flex; gap: 1.25rem; overflow-x: auto; overflow-y: hidden;
       scroll-snap-type: x mandatory; -webkit-overflow-scrolling: touch;
-      scrollbar-width: none; padding-bottom: 0.5rem;
-      max-width: 100%;
+      scrollbar-width: none; padding-bottom: 0.5rem; max-width: 100%;
     }
     .doctor-insights-carousel::-webkit-scrollbar { display: none; }
     .doctor-card {
-      flex: 0 0 min(280px, 82vw);
-      scroll-snap-align: start; scroll-snap-stop: always;
-      background: #fafcfc;
-      border: 1px solid rgba(13,148,136,0.12);
-      border-radius: 18px;
-      padding: 1.5rem 1.375rem 1.375rem;
-      box-shadow: 0 4px 20px rgba(15,23,42,0.04);
-      min-height: 240px;
-      position: relative;
-      overflow: hidden;
-      transition: box-shadow 0.2s ease, border-color 0.2s ease;
+      flex: 0 0 min(300px, 85vw); scroll-snap-align: start; scroll-snap-stop: always;
+      background: linear-gradient(180deg, rgba(255,255,255,0.95) 0%, rgba(252,253,253,0.98) 100%);
+      border: 1px solid rgba(15,23,42,0.06);
+      border-radius: 22px;
+      padding: 1.75rem 1.5rem 1.5rem;
+      box-shadow: 0 2px 0 rgba(255,255,255,0.8) inset, 0 4px 16px rgba(15,23,42,0.04), 0 8px 32px rgba(15,23,42,0.03);
+      min-height: 260px;
+      position: relative; overflow: hidden;
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
       display: flex; flex-direction: column;
     }
-    .doctor-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 2px; background: #0EA5A4; opacity: 0.85; }
-    .doctor-card:hover { box-shadow: 0 8px 28px rgba(15,23,42,0.06); border-color: rgba(13,148,136,0.18); }
-    .dark .doctor-card { background: rgba(30,41,59,0.7); border-color: rgba(94,234,212,0.12); box-shadow: 0 4px 20px rgba(0,0,0,0.15); }
-    .dark .doctor-card::before { background: #0EA5A4; opacity: 0.9; }
-    .doctor-card-icon { position: absolute; top: 1.25rem; right: 1.25rem; color: rgba(13,148,136,0.35); }
-    .dark .doctor-card-icon { color: rgba(94,234,212,0.35); }
-    .doctor-card-label { font-size: 10px; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; color: #0d9488; margin-bottom: 0.5rem; }
+    .doctor-card::before {
+      content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+      background: linear-gradient(90deg, rgba(14,165,164,0.7) 0%, #0EA5A4 50%, rgba(14,165,164,0.85) 100%);
+      opacity: 0.95;
+    }
+    @media (hover: hover) {
+      .doctor-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 2px 0 rgba(255,255,255,0.9) inset, 0 12px 32px rgba(15,23,42,0.06), 0 16px 48px rgba(14,165,164,0.06);
+        border-color: rgba(14,165,164,0.2);
+      }
+    }
+    .dark .doctor-card {
+      background: linear-gradient(180deg, rgba(30,41,59,0.85) 0%, rgba(30,41,59,0.75) 100%);
+      border-color: rgba(255,255,255,0.06);
+      box-shadow: 0 2px 0 rgba(255,255,255,0.03) inset, 0 8px 24px rgba(0,0,0,0.2);
+    }
+    @media (hover: hover) { .dark .doctor-card:hover { border-color: rgba(14,165,164,0.3); box-shadow: 0 12px 40px rgba(0,0,0,0.25), 0 0 0 1px rgba(14,165,164,0.08); } }
+    .doctor-card-icon {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      width: 2.25rem; height: 2.25rem; display: flex; align-items: center; justify-content: center;
+      border-radius: 10px; background: rgba(14,165,164,0.08); color: #0d9488;
+    }
+    .doctor-card-icon svg { width: 1.125rem; height: 1.125rem; }
+    .dark .doctor-card-icon { background: rgba(14,165,164,0.15); color: #5eead4; }
+    .doctor-card-label {
+      font-size: 10px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #0d9488;
+      margin-bottom: 0.625rem;
+    }
     .dark .doctor-card-label { color: #5eead4; }
-    .doctor-card-title { font-size: 1rem; font-weight: 600; color: #0f172a; line-height: 1.35; margin-bottom: 0.5rem; }
+    .doctor-card-title {
+      font-size: 1.0625rem; font-weight: 600; color: #0f172a; line-height: 1.4; margin-bottom: 0.5rem;
+    }
+    @media (min-width: 640px) { .doctor-card-title { font-size: 1.125rem; } }
     .dark .doctor-card-title { color: #f1f5f9; }
-    .doctor-card-body { font-size: 0.8125rem; color: #475569; line-height: 1.5; margin-bottom: 1rem; flex: 1; display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden; }
+    .doctor-card-body {
+      font-size: 0.8125rem; color: #334155; line-height: 1.6; margin-bottom: 1.125rem; flex: 1;
+      display: -webkit-box; -webkit-line-clamp: 4; -webkit-box-orient: vertical; overflow: hidden;
+    }
+    @media (min-width: 640px) { .doctor-card-body { font-size: 0.875rem; } }
     .dark .doctor-card-body { color: #94a3b8; }
-    .doctor-chip { display: inline-block; font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; padding: 0.35rem 0.65rem; border-radius: 8px; }
-    .doctor-chip-stable { background: rgba(5,150,105,0.12); color: #047857; }
-    .dark .doctor-chip-stable { background: rgba(52,211,153,0.15); color: #6ee7b7; }
-    .doctor-chip-monitor { background: rgba(217,119,6,0.12); color: #b45309; }
-    .dark .doctor-chip-monitor { background: rgba(251,191,36,0.15); color: #fcd34d; }
-    .doctor-chip-good { background: rgba(13,148,136,0.12); color: #0d9488; }
-    .dark .doctor-chip-good { background: rgba(94,234,212,0.15); color: #5eead4; }
+    .doctor-chip {
+      display: inline-flex; align-items: center; gap: 0.4rem;
+      font-size: 10px; font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase;
+      padding: 0.4rem 0.75rem; border-radius: 9999px; border: 1px solid transparent;
+    }
+    .doctor-chip-stable {
+      background: rgba(5,150,105,0.08); color: #047857; border-color: rgba(5,150,105,0.15);
+    }
+    .dark .doctor-chip-stable { background: rgba(52,211,153,0.12); color: #6ee7b7; border-color: rgba(52,211,153,0.2); }
+    .doctor-chip-monitor {
+      background: rgba(180,83,9,0.08); color: #b45309; border-color: rgba(217,119,6,0.12);
+    }
+    .dark .doctor-chip-monitor { background: rgba(251,191,36,0.12); color: #fcd34d; border-color: rgba(251,191,36,0.2); }
+    .doctor-chip-good {
+      background: rgba(13,148,136,0.08); color: #0d9488; border-color: rgba(13,148,136,0.15);
+    }
+    .dark .doctor-chip-good { background: rgba(94,234,212,0.12); color: #5eead4; border-color: rgba(94,234,212,0.2); }
     @media (min-width: 640px) {
       .doctor-insights-carousel { display: grid; grid-template-columns: repeat(2, 1fr); overflow: visible; scroll-snap-type: none; gap: 1.5rem; }
-      .doctor-card { flex: none; min-height: 260px; }
+      .doctor-card { flex: none; min-height: 280px; }
     }
     @media (min-width: 1024px) {
       .doctor-insights-carousel { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; max-width: 56rem; margin-left: auto; margin-right: auto; }
-      .doctor-card { padding: 1.75rem 1.5rem; min-height: 260px; }
+      .doctor-card { padding: 1.875rem 1.625rem 1.625rem; min-height: 280px; }
     }
     /* Customer Reviews: premium testimonial cards — warmer, trusted */
     .customer-reviews-section { background: linear-gradient(180deg, #fefdfb 0%, #faf8f5 100%); border-top: 1px solid rgba(15,23,42,0.04); overflow-x: clip; max-width: 100%; }
@@ -2197,7 +2320,7 @@
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
         <a href="#nasil-calisir" class="nav-link" data-nav="nasil-calisir" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
-        <a href="/pay" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Fiyatlandırma</a>
+        <a href="/payment" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Kurumsal</a>
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
@@ -2270,7 +2393,7 @@
         <a href="#hakkimizda" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
         <a href="#nasil-calisir" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
-        <a href="/pay" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
+        <a href="/payment" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
         <a href="/blog" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_blog">Blog</a>
         <a href="#sss" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_faq">SSS</a>
@@ -2345,7 +2468,7 @@
           <h3 class="trust-global-title" data-i18n="trust_global_labs">Global lab units</h3>
         </article>
         <article class="trust-global-card trust-global-card--slate">
-          <span class="trust-global-icon-badge" aria-hidden="true" title="Güvenlik">🛡️</span>
+          <span class="trust-global-icon-badge" aria-hidden="true" title="Cloudflare"><img src="/static/logos/cloudflare.svg" alt="" width="20" height="20" loading="lazy" /></span>
           <h3 class="trust-global-title" data-i18n="trust_bar_cloudflare">Cloudflare Security</h3>
         </article>
         <article class="trust-global-card trust-global-card--aqua">
@@ -2357,7 +2480,7 @@
   </section>
 
   <!-- Özellik Kartları: Trusted health insights (6 kart) -->
-  <section id="ozellikler" class="premium-section features-grid-section bg-[var(--norya-bg)]">
+  <section id="ozellikler" class="premium-section features-grid-section">
     <div class="premium-wrap">
       <div class="max-w-3xl mx-auto text-center mb-10 sm:mb-12">
         <h2 class="text-xl sm:text-2xl lg:text-3xl font-bold tracking-tight text-accent-900 dark:text-white mb-3 leading-tight" data-i18n="features_heading">Trusted health insights, designed for real life.</h2>
@@ -2395,6 +2518,22 @@
           <p class="feature-card-desc" data-i18n="feature_6_desc">Practical lifestyle and nutrition tips tailored to your markers.</p>
         </article>
       </div>
+      <p class="features-trust-line" data-i18n="features_trust_line">Enterprise-grade security, encrypted communication and GDPR-aligned architecture.</p>
+    </div>
+  </section>
+
+  <!-- Enterprise Infrastructure & Security — minimal, kurumsal güven -->
+  <section id="enterprise-infra" class="enterprise-infra-section premium-section" aria-labelledby="enterprise-infra-title">
+    <div class="enterprise-infra-inner premium-wrap">
+      <span class="enterprise-infra-label" data-i18n="enterprise_infra_label">Trusted Infrastructure</span>
+      <h2 id="enterprise-infra-title" class="enterprise-infra-title" data-i18n="enterprise_infra_title">Enterprise Infrastructure & Security</h2>
+      <p class="enterprise-infra-subtitle" data-i18n="enterprise_infra_subtitle">Powered by globally trusted cloud and security providers.</p>
+      <div class="enterprise-infra-logos" aria-hidden="true">
+        <img src="/static/logos/google.svg" alt="Google Cloud" width="120" height="32" loading="lazy" />
+        <img src="/static/logos/cloudflare.svg" alt="Cloudflare" width="120" height="32" loading="lazy" />
+      </div>
+      <p class="enterprise-infra-tagline" data-i18n="enterprise_infra_tagline">Secure global delivery via Cloudflare CDN and Google Cloud infrastructure.</p>
+      <p class="enterprise-infra-legal" data-i18n="enterprise_infra_legal">Logos are property of their respective owners.</p>
     </div>
   </section>
 
@@ -2433,7 +2572,7 @@
         </div>
         <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 flex-shrink-0">
           <button type="button" onclick="openRegister(); scrollToAnalyze();" class="cta-primary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] bg-[#0EA5A4] hover:bg-[#0d9488] text-white font-semibold text-sm sm:text-base shadow-[0_4px_14px_rgba(14,165,164,0.35)] hover:shadow-[0_6px_20px_rgba(14,165,164,0.4)] transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_start_analysis">Start analysis</button>
-          <a href="/pay" class="cta-secondary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] border-2 border-[#0EA5A4] text-[#0EA5A4] hover:bg-[#0EA5A4]/10 dark:hover:bg-[#0EA5A4]/20 font-semibold text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_view_pricing">View pricing</a>
+          <a href="/payment" class="cta-secondary-btn inline-flex items-center justify-center min-h-[44px] sm:min-h-[48px] px-6 sm:px-8 py-3 rounded-[14px] sm:rounded-[16px] border-2 border-[#0EA5A4] text-[#0EA5A4] hover:bg-[#0EA5A4]/10 dark:hover:bg-[#0EA5A4]/20 font-semibold text-sm sm:text-base transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#0EA5A4] focus:ring-offset-2" data-i18n="cta_view_pricing">View pricing</a>
         </div>
       </div>
     </div>
@@ -2615,11 +2754,11 @@
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm max-w-2xl mx-auto" data-i18n="reviews_section_subtitle">Uzman değerlendirmeleri ve üye deneyimleri.</p>
     </div>
 
-  <!-- Uzman (Doktor) Yorumları -->
-  <section id="doctor-insights" class="doctor-insights-section premium-section pt-2 pb-16 sm:pb-20 px-4 sm:px-6" aria-labelledby="doctor-insights-title">
-    <div class="premium-wrap max-w-6xl mx-auto mb-8">
+  <!-- Uzman (Doktor) Yorumları — ultra-premium clinical review / insights -->
+  <section id="doctor-insights" class="doctor-insights-section premium-section pt-4 sm:pt-6 pb-16 sm:pb-20 px-4 sm:px-6" aria-labelledby="doctor-insights-title">
+    <div class="premium-wrap max-w-6xl mx-auto doctor-header">
       <p class="doctor-section-badge" data-i18n="doctor_section_badge">Premium Health</p>
-      <h3 id="doctor-insights-title" class="doctor-section-title" data-i18n="doctor_insights_title">Uzman Yorumları</h3>
+      <h2 id="doctor-insights-title" class="doctor-section-title" data-i18n="doctor_insights_title">Uzman Yorumları</h2>
       <p class="doctor-section-subtitle" data-i18n="doctor_insights_subtitle">Biyobelirteç sonuçlarını daha anlaşılır hale getiren, klinik üslupta yapılandırılmış yorumlar.</p>
     </div>
     <div class="premium-wrap max-w-6xl mx-auto">
@@ -4219,7 +4358,7 @@
                   <button type="button" id="report-bar-doctor-btn" class="btn-report-doctor" onclick="downloadForDoctor()" data-i18n="report_for_doctor">Doktoruma götür</button>
                   <button type="button" id="report-bar-share-btn" class="btn-report-share no-print" onclick="shareReport()" data-i18n="report_share">Paylaş</button>
                   <a href="#" id="report-bar-pro-view-link" class="btn-report-pro-view no-print" onclick="openReportAsPro(); return false;" data-i18n="report_open_as_pro">Pro görünümünde aç</a>
-                  <a href="/pay?from=report" id="report-bar-upgrade-btn" class="btn-report-upgrade no-print" data-i18n="report_upgrade_btn">Upgrade</a>
+                  <a href="/payment?from=report" id="report-bar-upgrade-btn" class="btn-report-upgrade no-print" data-i18n="report_upgrade_btn">Upgrade</a>
                 </div>
               </div>
               <!-- Raporumu indir — SONUÇ EKRANINDA EN ÜSTTE, MUTLAKA GÖRÜNSÜN -->
@@ -4267,7 +4406,7 @@
                       <li><span class="report-upgrade-check" aria-hidden="true">✓</span> <span data-i18n="report_unlock_trends">Trend tracking</span></li>
                     </ul>
                     <p id="report-upgrade-guarantee" class="report-upgrade-guarantee" data-i18n="report_flexible_cancel">Flexible cancellation</p>
-                    <a href="/pay?from=report" id="report-upgrade-cta" class="report-upgrade-btn report-upgrade-btn--elite" data-i18n="report_upgrade_now">Upgrade now</a>
+                    <a href="/payment?from=report" id="report-upgrade-cta" class="report-upgrade-btn report-upgrade-btn--elite" data-i18n="report_upgrade_now">Upgrade now</a>
                   </div>
                 </section>
                 <div id="analyze-result-raw" class="hidden p-6 text-navy-700 dark:text-navy-300 whitespace-pre-wrap text-sm border-t border-primary-100 dark:border-primary-900 bg-white/80 dark:bg-navy-800/50"></div>
@@ -4276,7 +4415,7 @@
                 Norya • <span data-i18n="disclaimer_informative">Bilgilendirme amaçlıdır</span> • support@noryaai.com
               </footer>
               <!-- Floating upgrade CTA (shown when free, hidden when premium) -->
-              <button type="button" id="report-floating-upgrade" class="report-floating-upgrade report-floating-upgrade--hidden no-print" onclick="window.location.href='/pay?from=report'" data-i18n="report_upgrade_btn">Upgrade</button>
+              <button type="button" id="report-floating-upgrade" class="report-floating-upgrade report-floating-upgrade--hidden no-print" onclick="window.location.href='/payment?from=report'" data-i18n="report_upgrade_btn">Upgrade</button>
               <!-- Mobil: no-print aksiyonlar -->
               <div id="analyze-result-mobile-actions" class="no-print sm:hidden sticky bottom-0 left-0 right-0 z-10 px-4 py-3 bg-white dark:bg-navy-800 border-t border-primary-200 dark:border-primary-700 flex flex-wrap gap-2 justify-center">
                 <button type="button" onclick="downloadReportPdf()" class="flex-1 min-w-[120px] px-4 py-3 rounded-xl bg-[var(--norya-brand)] text-white font-semibold text-sm" data-report-download-pdf data-i18n="report_download">Raporu İndir</button>
@@ -5109,7 +5248,7 @@
         <div class="h-3 rounded-full bg-accent-200 dark:bg-accent-700 overflow-hidden mb-6">
           <div id="profile-usage-bar" class="h-full rounded-full bg-primary-500 transition-all duration-300" style="width: 0%"></div>
         </div>
-        <a href="/pay" onclick="closeProfilePage();" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition" data-i18n="profile_upgrade_cta">Paket Yükselt</a>
+        <a href="/payment" onclick="closeProfilePage();" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold text-sm transition" data-i18n="profile_upgrade_cta">Paket Yükselt</a>
       </div>
 
       <!-- Panel: Analiz Geçmişi -->
@@ -6102,7 +6241,7 @@
       var html = '';
       html += '<div class="premium-clinical-wrap' + (locked ? ' report-premium-locked' : '') + '">';
       if (locked) {
-        html += '<div class="premium-locked-overlay"><span class="premium-lock-ico" aria-hidden="true">&#128274;</span><p class="premium-locked-text">' + escapeHtml(t.report_premium_badge || 'Premium') + '</p><a href="/pay?from=report" class="premium-cta-btn">' + escapeHtml(upgradeLabel) + '</a></div>';
+        html += '<div class="premium-locked-overlay"><span class="premium-lock-ico" aria-hidden="true">&#128274;</span><p class="premium-locked-text">' + escapeHtml(t.report_premium_badge || 'Premium') + '</p><a href="/payment?from=report" class="premium-cta-btn">' + escapeHtml(upgradeLabel) + '</a></div>';
       }
       html += '<section class="section-card report-disclaimer-card"><div class="section-title report-sec-icon">' + reportIcon('info') + '</div><div class="section-body"><p class="report-refined-disclaimer">' + escapeHtml(t.report_refined_disclaimer || 'This report is for informational use only. It does not provide a diagnosis or treatment. For symptoms or treatment decisions, consult your physician.') + '</p></div></section>';
       html += '<section class="section-card report-executive-summary"><div class="section-title report-sec-icon">' + reportIcon('fileText') + ' ' + escapeHtml(t.report_executive_summary || 'Executive Summary') + '</div><div class="section-body"><p class="report-executive-text">' + escapeHtml(executiveSummary) + '</p></div></section>';
@@ -6126,7 +6265,7 @@
       var reportLimitedPreview = o.ui_hints && o.ui_hints.report_limited_preview === true;
       if (reportLimitedPreview) {
         var unlockLabel = (t.report_unlock_full_subscribe || 'Hepsini görmek için aylık veya yıllık abonelik alın');
-        html += '<section class="section-card report-limited-gate"><a href="/pay?from=report" class="report-limited-gate-link">' +
+        html += '<section class="section-card report-limited-gate"><a href="/payment?from=report" class="report-limited-gate-link">' +
           '<span class="report-limited-gate-chevron" aria-hidden="true">▼</span>' +
           '<span class="report-limited-gate-text">' + escapeHtml(unlockLabel) + '</span></a></section></div>';
         return html;
@@ -6385,7 +6524,7 @@
       }
       if (reportLimitedPreview) {
         var unlockLabel = (t.report_unlock_full_subscribe || 'Hepsini görmek için aylık veya yıllık abonelik alın');
-        html += '<section class="section-card report-limited-gate"><a href="/pay?from=report" class="report-limited-gate-link">' +
+        html += '<section class="section-card report-limited-gate"><a href="/payment?from=report" class="report-limited-gate-link">' +
           '<span class="report-limited-gate-chevron" aria-hidden="true">▼</span>' +
           '<span class="report-limited-gate-text">' + escapeHtml(unlockLabel) + '</span></a></section>';
         return html;
@@ -6503,11 +6642,11 @@
       var blurClass = !isGateUnlocked ? ' report-premium-blur' : '';
       html += '<div id="report-premium-risk" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</h3><ul class="report-bullets"><li>May indicate cardiovascular or metabolic factors. Discuss with your clinician.</li><li>Lifestyle and diet may support overall wellness.</li></ul></div>';
-      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</span><a href="/pay?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_hematology || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_risk_factors || 'Risk Factors') + '</span><a href="/payment?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_hematology || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
       html += '<div id="report-premium-nextsteps" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</h3><ul class="report-bullets"><li>Nutrition: Balanced diet; discuss any deficiencies with your doctor.</li><li>Sleep: Adequate rest supports recovery.</li><li>Movement: Regular physical activity is recommended.</li><li>Follow-up: Discuss retest timing with your clinician.</li></ul></div>';
-      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</span><a href="/pay?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_weekly_plan || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_next_steps || 'Next Steps') + '</span><a href="/payment?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_weekly_plan || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
       html += '<div id="report-premium-trends" class="report-premium-gate' + (isGateUnlocked ? ' report-premium-gate--unlocked' : '') + '"><div class="report-premium-gate-content">';
       html += '<h3 class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</h3>';
@@ -6527,7 +6666,7 @@
         html += '</div>';
       } else html += '<p class="trend-placeholder text-sm">' + escapeHtml(t.report_trend_need_more || 'Trend becomes available with more reports over time.') + '</p>';
       html += '</div>';
-      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/pay?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_detail || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
+      if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/payment?from=report" class="report-premium-gate-cta">' + escapeHtml(t.upgrade_cta_detail || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
       return html;
     }
@@ -6590,7 +6729,7 @@
       if (pdfBtn) {
         pdfBtn.textContent = t.report_download || 'Raporu İndir';
         pdfBtn.dataset.reportDownloadOriginalText = t.report_download || 'Raporu İndir';
-        if (isPremium) { pdfBtn.classList.remove('btn-report-pdf--locked'); pdfBtn.onclick = function() { downloadReportPdf(); }; } else { pdfBtn.classList.add('btn-report-pdf--locked'); pdfBtn.onclick = function() { window.location.href = '/pay?from=report'; }; }
+        if (isPremium) { pdfBtn.classList.remove('btn-report-pdf--locked'); pdfBtn.onclick = function() { downloadReportPdf(); }; } else { pdfBtn.classList.add('btn-report-pdf--locked'); pdfBtn.onclick = function() { window.location.href = '/payment?from=report'; }; }
       }
       var doctorBtn = document.getElementById('report-bar-doctor-btn');
       if (doctorBtn) doctorBtn.textContent = t.report_for_doctor || 'Doktoruma götür';
@@ -6600,13 +6739,13 @@
       if (inlinePdfBtn) {
         inlinePdfBtn.textContent = t.report_download || 'Raporu İndir';
         inlinePdfBtn.dataset.reportDownloadOriginalText = t.report_download || 'Raporu İndir';
-        if (isPremium) { inlinePdfBtn.onclick = function() { downloadReportPdf(); }; inlinePdfBtn.classList.remove('report-action-btn--locked'); } else { inlinePdfBtn.onclick = function() { window.location.href = '/pay?from=report'; }; inlinePdfBtn.classList.add('report-action-btn--locked'); }
+        if (isPremium) { inlinePdfBtn.onclick = function() { downloadReportPdf(); }; inlinePdfBtn.classList.remove('report-action-btn--locked'); } else { inlinePdfBtn.onclick = function() { window.location.href = '/payment?from=report'; }; inlinePdfBtn.classList.add('report-action-btn--locked'); }
       }
       var mainDownloadBtn = document.getElementById('report-download-main-btn');
       if (mainDownloadBtn) {
         mainDownloadBtn.textContent = t.report_download || 'Raporu İndir';
         mainDownloadBtn.dataset.reportDownloadOriginalText = t.report_download || 'Raporu İndir';
-        if (isPremium) { mainDownloadBtn.onclick = function() { downloadReportPdf(); }; mainDownloadBtn.classList.remove('report-download-main-btn--locked'); } else { mainDownloadBtn.onclick = function() { window.location.href = '/pay?from=report'; }; mainDownloadBtn.classList.add('report-download-main-btn--locked'); }
+        if (isPremium) { mainDownloadBtn.onclick = function() { downloadReportPdf(); }; mainDownloadBtn.classList.remove('report-download-main-btn--locked'); } else { mainDownloadBtn.onclick = function() { window.location.href = '/payment?from=report'; }; mainDownloadBtn.classList.add('report-download-main-btn--locked'); }
       }
       var reportLimitedPreview = opts && opts.ui_hints && opts.ui_hints.report_limited_preview === true;
       var upgradeSection = document.getElementById('report-upgrade-section');
@@ -6617,7 +6756,7 @@
       if (heroDemoBadge) { heroDemoBadge.classList.toggle('hidden', isPremium && !reportLimitedPreview); }
       var floatingUpgrade = document.getElementById('report-floating-upgrade');
       if (floatingUpgrade) {
-        if (isPremium && !reportLimitedPreview) floatingUpgrade.classList.add('report-floating-upgrade--hidden'); else { floatingUpgrade.classList.remove('report-floating-upgrade--hidden'); floatingUpgrade.textContent = t.report_upgrade_btn || 'Upgrade'; floatingUpgrade.onclick = function() { window.location.href = '/pay?from=report'; }; }
+        if (isPremium && !reportLimitedPreview) floatingUpgrade.classList.add('report-floating-upgrade--hidden'); else { floatingUpgrade.classList.remove('report-floating-upgrade--hidden'); floatingUpgrade.textContent = t.report_upgrade_btn || 'Upgrade'; floatingUpgrade.onclick = function() { window.location.href = '/payment?from=report'; }; }
       }
       var barUpgradeBtn = document.getElementById('report-bar-upgrade-btn');
       if (barUpgradeBtn) barUpgradeBtn.style.display = (isPremium && !reportLimitedPreview) ? 'none' : '';
@@ -6816,6 +6955,8 @@
         trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_bar_qr: "QR rapor doğrulama", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", health_score_card_title: "Health Score", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
         features_heading: "Güvenilir sağlık içgörüleri, gerçek hayat için tasarlandı.",
         features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
+        features_trust_line: "Kurumsal düzey güvenlik, şifreli iletişim ve GDPR uyumlu mimari.",
+        enterprise_infra_label: "Güvenilir Altyapı", enterprise_infra_title: "Kurumsal Altyapı ve Güvenlik", enterprise_infra_subtitle: "Küresel güvenilen bulut ve güvenlik sağlayıcıları ile desteklenmektedir.", enterprise_infra_tagline: "Cloudflare CDN ve Google Cloud altyapısı ile güvenli küresel teslimat.", enterprise_infra_legal: "Logolar ilgili marka sahiplerinin mülkiyetindedir.",
         feature_1_title: "Anında, yapılandırılmış analiz", feature_1_desc: "Yaygın biyobelirteçlerin net açıklamaları ve ne anlama gelebilecekleri — dakikalar içinde.",
         feature_2_title: "Klinik tarzı rapor formatı", feature_2_desc: "Doktor dostu düzen: referans aralıkları, işaretler, özetler ve takip önerileri.",
         feature_3_title: "Küresel laboratuvar uyumluluğu", feature_3_desc: "Birçok laboratuvar formatı ve birimini destekler — uluslararası kullanıcılar için tasarlandı.",
@@ -7179,6 +7320,8 @@
         trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_bar_qr: "QR report verification", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
         features_heading: "Trusted health insights, designed for real life.",
         features_sub: "Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.",
+        features_trust_line: "Enterprise-grade security, encrypted communication and GDPR-aligned architecture.",
+        enterprise_infra_label: "Trusted Infrastructure", enterprise_infra_title: "Enterprise Infrastructure & Security", enterprise_infra_subtitle: "Powered by globally trusted cloud and security providers.", enterprise_infra_tagline: "Secure global delivery via Cloudflare CDN and Google Cloud infrastructure.", enterprise_infra_legal: "Logos are property of their respective owners.",
         feature_1_title: "Instant, structured analysis", feature_1_desc: "Clear explanations of common biomarkers and what they may indicate — in minutes.",
         feature_2_title: "Clinical-style report format", feature_2_desc: "Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.",
         feature_3_title: "Global lab compatibility", feature_3_desc: "Supports many lab formats and units — designed for international users.",
@@ -7533,6 +7676,8 @@
         trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare", trust_bar_qr: "Verifica report con QR",
         features_heading: "Approfondimenti sulla salute affidabili, pensati per la vita reale.",
         features_sub: "Carica i risultati delle analisi e ottieni un report chiaro e strutturato con trend, segnali di rischio e prossimi passi concreti.",
+        features_trust_line: "Sicurezza di livello enterprise, comunicazione crittografata e architettura conforme al GDPR.",
+        enterprise_infra_label: "Infrastruttura affidabile", enterprise_infra_title: "Infrastruttura e sicurezza enterprise", enterprise_infra_subtitle: "Supportato da provider cloud e di sicurezza di fiducia a livello globale.", enterprise_infra_tagline: "Consegna globale sicura tramite CDN Cloudflare e infrastruttura Google Cloud.", enterprise_infra_legal: "I loghi sono proprietà dei rispettivi titolari.",
         feature_1_title: "Analisi strutturata istantanea", feature_1_desc: "Spiegazioni chiare dei biomarcatori comuni e di cosa possono indicare — in pochi minuti.",
         feature_2_title: "Formato report in stile clinico", feature_2_desc: "Layout adatto al medico: intervalli, flag, riepiloghi e suggerimenti di follow-up.",
         feature_3_title: "Compatibilità lab globali", feature_3_desc: "Supporta molti formati e unità di laboratorio — pensato per utenti internazionali.",
@@ -7763,6 +7908,8 @@
         trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare", trust_bar_qr: "Verificación de informe por QR",
         features_heading: "Información de salud fiable, diseñada para la vida real.",
         features_sub: "Sube tus resultados de laboratorio y obtén un informe claro y estructurado con tendencias, señales de riesgo y próximos pasos.",
+        features_trust_line: "Seguridad de nivel enterprise, comunicación cifrada y arquitectura alineada con el GDPR.",
+        enterprise_infra_label: "Infraestructura de confianza", enterprise_infra_title: "Infraestructura y seguridad empresarial", enterprise_infra_subtitle: "Impulsado por proveedores de nube y seguridad de confianza global.", enterprise_infra_tagline: "Entrega global segura mediante CDN de Cloudflare e infraestructura de Google Cloud.", enterprise_infra_legal: "Los logotipos son propiedad de sus respectivos titulares.",
         feature_1_title: "Análisis estructurado al instante", feature_1_desc: "Explicaciones claras de biomarcadores habituales y qué pueden indicar — en minutos.",
         feature_2_title: "Formato de informe estilo clínico", feature_2_desc: "Diseño amigable para el médico: rangos, señales, resúmenes y sugerencias de seguimiento.",
         feature_3_title: "Compatibilidad con laboratorios globales", feature_3_desc: "Soporta muchos formatos y unidades de laboratorio — pensado para usuarios internacionales.",
@@ -7993,6 +8140,8 @@
         trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare", trust_bar_qr: "Vérification du rapport par QR",
         features_heading: "Des informations santé de confiance, conçues pour la vie réelle.",
         features_sub: "Téléchargez vos résultats d'analyses et obtenez un rapport clair et structuré avec tendances, alertes et prochaines étapes.",
+        features_trust_line: "Sécurité niveau enterprise, communication chiffrée et architecture conforme au RGPD.",
+        enterprise_infra_label: "Infrastructure de confiance", enterprise_infra_title: "Infrastructure et sécurité enterprise", enterprise_infra_subtitle: "Propulsé par des fournisseurs cloud et de sécurité de confiance mondiale.", enterprise_infra_tagline: "Livraison mondiale sécurisée via CDN Cloudflare et infrastructure Google Cloud.", enterprise_infra_legal: "Les logos sont la propriété de leurs propriétaires respectifs.",
         feature_1_title: "Analyse structurée instantanée", feature_1_desc: "Explications claires des biomarqueurs courants et de ce qu'ils peuvent indiquer — en quelques minutes.",
         feature_2_title: "Format de rapport style clinique", feature_2_desc: "Présentation adaptée au médecin : plages, indicateurs, résumés et suggestions de suivi.",
         feature_3_title: "Compatibilité laboratoires internationaux", feature_3_desc: "Prend en charge de nombreux formats et unités — conçu pour les utilisateurs internationaux.",
@@ -8223,6 +8372,8 @@
         trust_bar_medical: "Medizinische Einblicke", trust_bar_3d: "3D-Secure-Zahlungen", trust_bar_doctor_reports: "Arzt-Style-Berichte", trust_bar_analyses: "50.000+ Analysen erstellt", trust_bar_cloudflare: "Cloudflare-Sicherheit", trust_bar_qr: "QR-Berichtsprüfung",
         features_heading: "Vertrauenswürdige Gesundheitseinblicke, für den Alltag konzipiert.",
         features_sub: "Laden Sie Ihre Laborergebnisse hoch und erhalten Sie einen klaren, strukturierten Bericht mit Trends, Risikohinweisen und umsetzbaren nächsten Schritten.",
+        features_trust_line: "Sicherheit auf Unternehmensniveau, verschlüsselte Kommunikation und DSGVO-konforme Architektur.",
+        enterprise_infra_label: "Vertrauenswürdige Infrastruktur", enterprise_infra_title: "Enterprise-Infrastruktur & Sicherheit", enterprise_infra_subtitle: "Unterstützt von global vertrauenswürdigen Cloud- und Sicherheitsanbietern.", enterprise_infra_tagline: "Sichere globale Bereitstellung über Cloudflare CDN und Google-Cloud-Infrastruktur.", enterprise_infra_legal: "Logos sind Eigentum der jeweiligen Rechteinhaber.",
         feature_1_title: "Sofortige, strukturierte Auswertung", feature_1_desc: "Klare Erklärungen gängiger Biomarker und was sie bedeuten können — in Minuten.",
         feature_2_title: "Klinisches Berichtsformat", feature_2_desc: "Arztfreundliches Layout: Referenzbereiche, Markierungen, Zusammenfassungen und Follow-up-Vorschläge.",
         feature_3_title: "Globale Labor-Kompatibilität", feature_3_desc: "Unterstützt viele Laborformate und -einheiten — für internationale Nutzer konzipiert.",
@@ -10142,7 +10293,7 @@
       var lang = typeof getLang === 'function' ? getLang() : '';
       var qs = 'plan=' + encodeURIComponent(planCode);
       if (lang && lang !== 'tr') qs += '&lang=' + encodeURIComponent(lang);
-      window.location.href = '/pay?' + qs;
+      window.location.href = '/payment?' + qs;
     }
     function showCheckoutPage() {
       var sec = document.getElementById('odeme-section');

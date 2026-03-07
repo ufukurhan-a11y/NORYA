@@ -1302,11 +1302,11 @@ def analyze_landing():
 @app.get("/pricing", response_class=HTMLResponse)
 def pricing_landing(request: Request):
     """
-    /pricing -> Doğrudan ödeme sayfasına (/pay) yönlendir.
-    Plan seçimi ve PayTR ödeme /pay sayfasında yapılır.
+    /pricing -> Premium ödeme sayfasına (/payment) yönlendir.
+    Plan seçimi ve PayTR iFrame /payment sayfasında yapılır.
     """
     query = request.url.query
-    target = "/pay" + ("?" + query if query else "")
+    target = "/payment" + ("?" + query if query else "")
     return RedirectResponse(url=target, status_code=302)
 
 
@@ -3239,7 +3239,7 @@ def payment_success_page(
     <p id="statusMsg">{updating}</p>
     <div id="btnWrap" class="btns" style="display:none;">
       <a id="btnReport" href="{report_url}">{btn_report}</a>
-      <a id="btnRetry" class="secondary" href="{base}/pay?plan=single_13eur&lang={lang}" style="display:none;">{retry_text}</a>
+      <a id="btnRetry" class="secondary" href="{base}/payment?lang={lang}" style="display:none;">{retry_text}</a>
     </div>
     <p style="margin-top:16px;"><button type="button" class="btn secondary" id="checkDoneBtn" style="background:transparent;border:2px solid rgba(14,165,164,0.5);color:#94a3b8;">{check_done_btn}</button></p>
   </div>
@@ -3361,7 +3361,7 @@ def payment_failed_page(
     <h1>{title}</h1>
     <p>{msg}</p>
     <div class="btns">
-      <a href="{base}/pay?plan=single_13eur&lang={lang}">{retry_text}</a>
+      <a href="{base}/payment?lang={lang}">{retry_text}</a>
       <a href="{base}/#pricing" class="secondary">{pricing_text}</a>
     </div>
   </div>
