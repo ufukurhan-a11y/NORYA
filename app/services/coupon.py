@@ -1,4 +1,4 @@
-"""İndirim kuponu doğrulama ve indirim hesaplama."""
+"""İndirim kuponu doğrulama ve indirim hesaplama; checkout için aktif kampanya."""
 from datetime import date, datetime, timezone
 
 from sqlmodel import Session, select
@@ -49,6 +49,9 @@ def validate_coupon(
     if not coupon:
         return 0, "Geçersiz indirim kodu."
 
+    if getattr(coupon, "is_active", True) is False:
+        return 0, "Bu indirim kodu şu an aktif değil."
+
     today = date.today()
     if coupon.valid_from and today < coupon.valid_from:
         return 0, "Bu indirim kodu henüz geçerli değil."
@@ -90,3 +93,69 @@ def apply_coupon_use(db: Session, code: str) -> None:
         coupon.use_count = (coupon.use_count or 0) + 1
         db.add(coupon)
         db.commit()
+
+
+def get_active_campaign_for_checkout(
+    db: Session,
+    plan_code: str,
+) -> dict | None:
+    """
+    Seçilen plan için checkout’ta gösterilecek aktif kampanyayı döner.
+    plan_code: single_13eur | monthly_50eur | yearly_99eur -> product: single | monthly | yearly.
+    Dönen kampanya: is_active=True, auto_show_on_checkout=True, tarih geçerli, products içinde plan.
+    """
+    t = _PLAN_CODE_MAP.get((plan_code or "").strip().lower())
+    if not t:
+        return None
+    product, base_amount = t[0], t[1]
+    today = date.today()
+    stmt = (
+        select(DiscountCode)
+        .where(
+            DiscountCode.code.isnot(None),
+            getattr(DiscountCode, "is_active", True).is_(True),
+            getattr(DiscountCode, "auto_show_on_checkout", False).is_(True),
+        )
+    )
+    for coupon in db.exec(stmt).all():
+        if coupon.valid_from and today < coupon.valid_from:
+            continue
+        if coupon.valid_until and today > coupon.valid_until:
+            continue
+        days_ok = _parse_days_of_month(coupon.valid_days_of_month)
+        if days_ok is not None and today.day not in days_ok:
+            continue
+        if coupon.max_uses is not None and (coupon.use_count or 0) >= coupon.max_uses:
+            continue
+        if coupon.products:
+            allowed = [p.strip().lower() for p in coupon.products.split(",") if p.strip()]
+            if allowed and product.lower() not in allowed:
+                continue
+        discount_cents, _ = validate_coupon(db, coupon.code, product, base_amount)
+        if discount_cents <= 0:
+            continue
+        # Etiket her zaman güncel discount_value ile hesaplanır; admin'de değer değişince sayfada da güncellenir
+        return {
+            "code": coupon.code,
+            "discount_type": coupon.discount_type,
+            "discount_value": coupon.discount_value,
+            "discount_cents": discount_cents,
+            "display_label": _default_display_label(coupon),
+            "display_note": (coupon.display_note or "").strip() or None,
+            "auto_apply": getattr(coupon, "auto_apply", False),
+        }
+    return None
+
+
+# Plan kodları (pay sayfası / paytr/init ile uyumlu)
+_PLAN_CODE_MAP = {
+    "single_13eur": ("single", 1300),
+    "monthly_50eur": ("monthly", 5000),
+    "yearly_99eur": ("yearly", 9900),
+}
+
+
+def _default_display_label(coupon: DiscountCode) -> str:
+    if coupon.discount_type == "percent":
+        return f"%{coupon.discount_value} indirim"
+    return f"{coupon.discount_value // 100}€ indirim"

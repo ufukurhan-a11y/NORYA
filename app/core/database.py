@@ -126,6 +126,11 @@ def init_db():
             "ALTER TABLE paymentorder ADD COLUMN refund_amount_kurus INTEGER",
             "ALTER TABLE analysis_jobs ADD COLUMN prompt_tokens INTEGER",
             "ALTER TABLE analysis_jobs ADD COLUMN completion_tokens INTEGER",
+            "ALTER TABLE discountcode ADD COLUMN is_active BOOLEAN DEFAULT 1",
+            "ALTER TABLE discountcode ADD COLUMN auto_show_on_checkout BOOLEAN DEFAULT 0",
+            "ALTER TABLE discountcode ADD COLUMN auto_apply BOOLEAN DEFAULT 0",
+            "ALTER TABLE discountcode ADD COLUMN display_label VARCHAR(120)",
+            "ALTER TABLE discountcode ADD COLUMN display_note VARCHAR(256)",
         ):
             try:
                 with engine.connect() as conn:

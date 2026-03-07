@@ -16,7 +16,7 @@
     html{ -webkit-text-size-adjust: 100%; }
     body{
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
-      background: #f1f5f9;
+      background: linear-gradient(180deg, #eef2f6 0%, #e2e8f0 100%);
       color: #1a1a2e;
       min-height: 100vh;
       min-height: 100dvh;
@@ -26,22 +26,23 @@
     }
     .trust-bar{
       background: #fff;
-      border-bottom: 1px solid #e2e8f0;
-      padding: 10px 16px;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      padding: 12px 20px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 12px 20px;
+      gap: 10px 24px;
+      -webkit-align-items: center;
     }
-    .trust-bar span{ display: inline-flex; align-items: center; gap: 6px; font-size: 11px; font-weight: 500; color: #64748b; }
-    .trust-bar svg{ width: 14px; height: 14px; flex-shrink: 0; color: #0EA5A4; }
-    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 20px; width: 100%; }
+    .trust-bar span{ display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.02em; }
+    .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; opacity: 0.9; }
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; }
     .header{
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 20px 0 16px;
+      padding: 24px 0 20px;
       flex-wrap: wrap;
       gap: 12px;
     }
@@ -51,35 +52,35 @@
     .brand-tagline{ font-size: 12px; color: #64748b; font-weight: 500; }
     .header-badge{ font-size: 11px; color: #0EA5A4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
 
-    .grid{ display: grid; gap: 24px; }
-    @media (min-width: 920px){ .grid{ grid-template-columns: 1fr 320px; align-items: start; gap: 28px; } }
+    .grid{ display: grid; gap: 28px; }
+    @media (min-width: 920px){ .grid{ grid-template-columns: 1fr 340px; align-items: start; gap: 32px; } }
     .left-col{ min-width: 0; }
     .right-col{ min-width: 0; }
     @media (min-width: 920px){ .right-col{ position: sticky; top: 20px; } }
 
-    /* —— Ana checkout kartı: derinlik, premium gölge —— */
+    /* —— Ana checkout kartı: premium derinlik, rafine yüzey —— */
     .checkout-card{
       background: #fff;
       border-radius: 20px;
-      border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 8px 32px rgba(0,0,0,0.08), 0 0 0 1px rgba(0,0,0,0.04);
+      border: 1px solid rgba(0,0,0,0.055);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 12px 40px rgba(0,0,0,0.06), 0 0 0 1px rgba(255,255,255,0.6) inset;
       padding: 0;
       overflow: hidden;
     }
-    .checkout-inner{ padding: 28px 28px 32px; }
+    .checkout-inner{ padding: 30px 30px 34px; }
     .checkout-section{ margin-bottom: 0; }
     .checkout-divider{
       height: 1px;
-      background: linear-gradient(90deg, transparent 0%, #e2e8f0 8%, #e2e8f0 92%, transparent 100%);
-      margin: 0 28px;
+      background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.06) 6%, rgba(0,0,0,0.06) 94%, transparent 100%);
+      margin: 0 30px;
     }
     .card-title{
       font-size: 11px;
-      font-weight: 600;
+      font-weight: 700;
       color: #64748b;
       margin-bottom: 12px;
       text-transform: uppercase;
-      letter-spacing: 0.06em;
+      letter-spacing: 0.07em;
     }
 
     /* —— Plan seçimi: seçili kart etkisi, glow —— */
@@ -105,56 +106,57 @@
       transition: background 0.2s, color 0.2s, box-shadow 0.2s, border 0.2s;
       border: 2px solid transparent;
     }
-    .plan-segment button:hover{ background: rgba(255,255,255,0.9); color: #0d9488; }
-    .plan-segment button:focus-visible{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 2px rgba(14,165,164,0.25); }
+    .plan-segment button:hover{ background: rgba(255,255,255,0.95); color: #0d9488; }
+    .plan-segment button:focus-visible{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.2); }
     .plan-segment button.active{
       background: #0EA5A4;
       color: #fff;
-      border-color: rgba(255,255,255,0.4);
-      box-shadow: 0 0 0 1px rgba(14,165,164,0.2), 0 6px 20px rgba(14,165,164,0.3);
+      border-color: rgba(255,255,255,0.35);
+      box-shadow: 0 0 0 1px rgba(14,165,164,0.15), 0 8px 24px rgba(14,165,164,0.28);
     }
     .plan-badges{ display: flex; gap: 8px; margin-bottom: 18px; flex-wrap: wrap; }
-    .plan-badges span{ font-size: 10px; font-weight: 700; padding: 6px 12px; border-radius: 8px; letter-spacing: 0.03em; text-transform: uppercase; }
-    .badge-start{ background: #f8fafc; color: #475569; border: 1px solid #e2e8f0; }
-    .badge-popular{ background: #0EA5A4; color: #fff; }
+    .plan-badges span{ font-size: 10px; font-weight: 700; padding: 6px 12px; border-radius: 10px; letter-spacing: 0.04em; text-transform: uppercase; }
+    .badge-start{ background: #f8fafc; color: #475569; border: 1px solid rgba(0,0,0,0.06); }
+    .badge-popular{ background: linear-gradient(135deg, #0EA5A4 0%, #0d9488 100%); color: #fff; border: none; box-shadow: 0 2px 8px rgba(14,165,164,0.25); }
     .badge-save{ background: #ecfdf5; color: #059669; border: 1px solid rgba(5,150,105,0.2); }
-    .badge-best{ background: #f0fdfa; color: #0f766e; border: 1px solid rgba(14,165,164,0.35); }
+    .badge-best{ background: #f0fdfa; color: #0f766e; border: 1px solid rgba(14,165,164,0.3); }
 
     /* —— Neler dahil: rafine liste —— */
-    .benefits-list{ list-style: none; margin-bottom: 18px; }
+    .benefits-list{ list-style: none; margin-bottom: 20px; }
     .benefits-list li{
       display: flex;
       align-items: center;
       gap: 12px;
-      padding: 9px 0;
+      padding: 10px 0;
       font-size: 14px;
       color: #334155;
-      line-height: 1.4;
+      line-height: 1.45;
     }
     .benefits-list li svg{
       width: 18px; height: 18px; flex-shrink: 0; color: #0EA5A4;
-      padding: 3px; border-radius: 6px; background: rgba(14,165,164,0.08);
+      padding: 4px; border-radius: 8px; background: rgba(14,165,164,0.08);
     }
 
-    /* —— Fiyat + CTA: vitrin highlight bölümü —— */
+    /* —— Fiyat + CTA: premium highlight panel (tek bütün) —— */
     .price-cta-highlight{
-      background: linear-gradient(180deg, #f8fafb 0%, #fff 100%);
+      background: linear-gradient(180deg, #f0fdfa 0%, #f8fcfb 50%, #fff 100%);
       border-radius: 16px;
-      padding: 24px 24px 28px;
-      margin: 0 -4px;
-      border: 1px solid rgba(14,165,164,0.08);
+      padding: 26px 26px 30px;
+      margin: 0 -2px;
+      border: 1px solid rgba(14,165,164,0.1);
+      box-shadow: 0 1px 0 rgba(255,255,255,0.8) inset;
     }
     .price-block{
-      padding: 0 0 20px;
+      padding: 0 0 22px;
       margin: 0;
     }
-    .price-micro-badges{ display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .price-micro-badges{ display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
     .price-micro-badge{
-      font-size: 10px; font-weight: 600; padding: 5px 10px; border-radius: 6px;
-      background: rgba(14,165,164,0.08); color: #0f766e; border: 1px solid rgba(14,165,164,0.15);
-      letter-spacing: 0.02em;
+      font-size: 10px; font-weight: 600; padding: 6px 11px; border-radius: 8px;
+      background: rgba(14,165,164,0.08); color: #0f766e; border: 1px solid rgba(14,165,164,0.12);
+      letter-spacing: 0.03em;
     }
-    .price-block .total-label{ font-size: 11px; color: #64748b; font-weight: 700; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .price-block .total-label{ font-size: 11px; color: #64748b; font-weight: 700; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.07em; }
     .price-block .total-value{
       font-size: 46px;
       font-weight: 800;
@@ -163,9 +165,9 @@
       line-height: 1.1;
     }
     .price-block .total-value .currency{ font-size: 26px; font-weight: 700; opacity: 0.92; margin-left: 3px; }
-    .price-block .price-desc{ font-size: 13px; color: #64748b; margin-top: 6px; font-weight: 500; }
-    .price-block .price-note{ font-size: 12px; color: #94a3b8; margin-top: 10px; line-height: 1.5; }
-    .price-block .price-note span{ margin: 0 5px; }
+    .price-block .price-desc{ font-size: 13px; color: #64748b; margin-top: 8px; font-weight: 500; }
+    .price-block .price-note{ font-size: 12px; color: #94a3b8; margin-top: 12px; line-height: 1.55; }
+    .price-block .price-note span{ margin: 0 6px; opacity: 0.7; }
 
     /* —— Form: kupon + inputlar premium —— */
     .form-group{ margin-bottom: 14px; }
@@ -185,7 +187,7 @@
       appearance: none;
     }
     .input::placeholder{ color: #94a3b8; }
-    .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
+    .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
     .input.err{ border-color: #dc2626; }
     .coupon-row{ display: flex; gap: 10px; margin-bottom: 4px; }
     .coupon-row .input{ flex: 1; min-width: 0; }
@@ -194,42 +196,63 @@
       padding: 0 20px;
       border: none;
       border-radius: 12px;
-      background: #e2e8f0;
+      background: #f1f5f9;
       color: #475569;
       font-weight: 600;
       font-size: 14px;
       cursor: pointer;
       white-space: nowrap;
+      transition: background 0.2s, color 0.2s;
     }
-    .btn-secondary:hover{ background: #cbd5e1; }
+    .btn-secondary:hover{ background: #e2e8f0; color: #334155; }
+    .btn-secondary:focus-visible{ outline: none; box-shadow: 0 0 0 2px rgba(14,165,164,0.25); }
     .coupon-msg{ font-size: 13px; margin-top: 6px; min-height: 20px; }
     .coupon-msg.ok{ color: #059669; }
     .coupon-msg.err{ color: #dc2626; }
 
-    /* —— Ana CTA: tek aksiyon, çok baskın —— */
+    /* Kampanya: premium, Norya renkleri, agresif indirim hissi yok */
+    .campaign-block{
+      background: rgba(14,165,164,0.06);
+      border: 1px solid rgba(14,165,164,0.14);
+      border-radius: 14px;
+      padding: 16px 18px;
+      margin-bottom: 20px;
+    }
+    .campaign-inner{ display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
+    .campaign-tag{ font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #0f766e; }
+    .campaign-code{ font-size: 15px; font-weight: 700; color: #0d9488; font-family: ui-monospace, monospace; }
+    .campaign-label{ font-size: 14px; font-weight: 600; color: #334155; }
+    .campaign-note{ font-size: 12px; color: #64748b; margin: 4px 0 0; width: 100%; }
+    .campaign-apply-btn{ margin-top: 4px; }
+    .campaign-applied{ display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #059669; margin-top: 8px; }
+    .campaign-applied-icon{ width: 20px; height: 20px; border-radius: 50%; background: rgba(5,150,105,0.15); color: #059669; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+    .price-original-wrap{ margin-bottom: 6px; }
+    .price-original{ font-size: 18px; font-weight: 600; color: #94a3b8; text-decoration: line-through; }
+
+    /* —— Ana CTA: fiyat ile görsel bütün, premium hover —— */
     .price-cta-highlight .cta-wrap{ margin-top: 0; margin-bottom: 0; }
-    .cta-wrap{ margin-top: 20px; }
+    .cta-wrap{ margin-top: 22px; }
     .cta-main{
       width: 100%;
       padding: 20px 28px;
       min-height: 62px;
       border: none;
-      border-radius: 16px;
-      background: #0EA5A4;
+      border-radius: 14px;
+      background: linear-gradient(180deg, #0EA5A4 0%, #0d9488 100%);
       color: #fff;
       font-size: 18px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.15s, box-shadow 0.2s, background 0.15s;
+      transition: transform 0.2s ease, box-shadow 0.2s ease, background 0.2s ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 6px 20px rgba(14,165,164,0.35);
+      box-shadow: 0 4px 14px rgba(14,165,164,0.35), 0 1px 0 rgba(255,255,255,0.2) inset;
     }
-    .cta-main:hover:not(:disabled){ background: #0d9488; transform: translateY(-2px); box-shadow: 0 10px 28px rgba(14,165,164,0.42); }
-    .cta-main:focus-visible{ outline: 2px solid #0EA5A4; outline-offset: 2px; }
-    .cta-main:active:not(:disabled){ transform: translateY(0); }
+    .cta-main:hover:not(:disabled){ background: linear-gradient(180deg, #0d9488 0%, #0f766e 100%); transform: translateY(-1px); box-shadow: 0 8px 24px rgba(14,165,164,0.4), 0 1px 0 rgba(255,255,255,0.15) inset; }
+    .cta-main:focus-visible{ outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,0.35), 0 4px 14px rgba(14,165,164,0.35); }
+    .cta-main:active:not(:disabled){ transform: translateY(0); box-shadow: 0 2px 10px rgba(14,165,164,0.3); }
     .cta-main:disabled{ opacity: 0.88; cursor: not-allowed; box-shadow: none; }
     .cta-main .spinner{ width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
     @keyframes spin{ to{ transform: rotate(360deg); } }
@@ -239,23 +262,24 @@
     .toggle-row{ margin-top: 12px; display: flex; align-items: center; gap: 8px; font-size: 13px; color: #64748b; }
     .toggle-row input{ width: 18px; height: 18px; accent-color: #0EA5A4; flex-shrink: 0; }
 
-    .micro-trust{ margin-top: 18px; padding-top: 14px; border-top: 1px solid #e2e8f0; }
-    .micro-trust p{ font-size: 11px; color: #94a3b8; line-height: 1.5; margin-bottom: 4px; display: flex; align-items: center; gap: 6px; }
-    .micro-trust p::before{ content: ''; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: #0EA5A4; opacity: 0.6; flex-shrink: 0; }
+    .micro-trust{ margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06); }
+    .micro-trust p{ font-size: 11px; color: #94a3b8; line-height: 1.52; margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+    .micro-trust p::before{ content: ''; display: inline-block; width: 3px; height: 3px; border-radius: 50%; background: #0EA5A4; opacity: 0.5; flex-shrink: 0; }
     .micro-trust p:last-child{ margin-bottom: 0; }
 
-    .merchant-contact{ margin-top: 18px; padding-top: 14px; border-top: 1px solid #e2e8f0; }
-    .merchant-contact p{ font-size: 12px; color: #475569; margin: 4px 0; }
-    .merchant-contact a{ color: #0EA5A4; text-decoration: none; }
-    .merchant-contact a:hover{ text-decoration: underline; }
+    .merchant-contact{ margin-top: 20px; padding-top: 16px; border-top: 1px solid rgba(0,0,0,0.06); }
+    .merchant-contact .merchant-whatsapp{ display: inline-flex; align-items: center; justify-content: center; text-decoration: none; transition: transform 0.2s, opacity 0.2s; }
+    .merchant-contact .merchant-whatsapp:hover{ transform: scale(1.08); opacity: 0.9; }
+    .merchant-contact .merchant-whatsapp svg{ display: block; }
 
     .status-card{
-      margin: 20px 28px 28px;
-      padding: 20px;
-      background: #f0fdfa;
-      border: 1px solid rgba(14,165,164,0.25);
-      border-radius: 14px;
+      margin: 24px 30px 30px;
+      padding: 22px;
+      background: linear-gradient(180deg, #f0fdfa 0%, #ecfdf5 100%);
+      border: 1px solid rgba(14,165,164,0.2);
+      border-radius: 16px;
       display: none;
+      box-shadow: 0 2px 12px rgba(14,165,164,0.08);
     }
     .status-card.visible{ display: block; }
     .status-card h4{ font-size: 15px; color: #0f766e; margin-bottom: 6px; }
@@ -269,72 +293,80 @@
     .form-card.has-status .opt-fields{ display: none; }
     .form-card.has-status .micro-trust{ display: none; }
 
-    /* —— Sağ kolon: premium güven kartları —— */
+    /* —— Sağ kolon: lüks trust kartları, dengeli yükseklik —— */
     .trust-mini-card{
       background: #fff;
       border-radius: 16px;
-      border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      padding: 22px;
-      margin-bottom: 16px;
+      border: 1px solid rgba(0,0,0,0.055);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.5) inset;
+      padding: 24px;
+      margin-bottom: 18px;
+      min-height: 140px;
+      display: flex;
+      flex-direction: column;
     }
     .trust-mini-card:last-child{ margin-bottom: 0; }
     .trust-mini-card .tc-icon{
-      width: 44px;
-      height: 44px;
+      width: 48px;
+      height: 48px;
       border-radius: 12px;
-      background: linear-gradient(135deg, #f0fdfa 0%, #e6fffa 100%);
-      border: 1px solid rgba(14,165,164,0.18);
-      box-shadow: 0 2px 8px rgba(14,165,164,0.08);
+      background: linear-gradient(145deg, #f0fdfa 0%, #ccfbf1 100%);
+      border: 1px solid rgba(14,165,164,0.15);
+      box-shadow: 0 2px 6px rgba(14,165,164,0.08);
       display: flex;
       align-items: center;
       justify-content: center;
-      margin-bottom: 14px;
+      margin-bottom: 16px;
+      flex-shrink: 0;
     }
-    .trust-mini-card .tc-icon svg{ width: 22px; height: 22px; color: #0EA5A4; }
-    .trust-mini-card .tc-title{ font-size: 14px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; letter-spacing: -0.01em; }
-    .trust-mini-card .tc-desc{ font-size: 12px; color: #64748b; line-height: 1.48; }
-    .trust-mini-card .tc-desc a{ color: #0EA5A4; text-decoration: none; }
+    .trust-mini-card .tc-icon svg{ width: 24px; height: 24px; color: #0EA5A4; }
+    .trust-mini-card .tc-title{ font-size: 15px; font-weight: 800; color: #1a1a2e; margin-bottom: 10px; letter-spacing: -0.02em; line-height: 1.3; }
+    .trust-mini-card .tc-desc{ font-size: 13px; color: #64748b; line-height: 1.5; flex: 1; }
+    .trust-mini-card .tc-desc a{ color: #0EA5A4; text-decoration: none; font-weight: 500; }
     .trust-mini-card .tc-desc a:hover{ text-decoration: underline; }
 
     .testimonials-card{
       background: #fff;
       border-radius: 16px;
-      border: 1px solid rgba(0,0,0,0.06);
-      box-shadow: 0 4px 16px rgba(0,0,0,0.06);
-      padding: 22px;
-      margin-bottom: 16px;
+      border: 1px solid rgba(0,0,0,0.055);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05);
+      padding: 24px;
+      margin-bottom: 18px;
     }
-    .testimonials-card .card-title{ margin-bottom: 12px; }
-    .testimonials-card p{ font-size: 13px; color: #475569; line-height: 1.5; padding: 8px 0; border-bottom: 1px solid #f1f5f9; }
+    .testimonials-card .card-title{ margin-bottom: 14px; }
+    .testimonials-card p{ font-size: 13px; color: #475569; line-height: 1.52; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.05); }
     .testimonials-card p:last-of-type{ border-bottom: none; }
-    .testimonials-card .stars{ color: #c4b61d; font-size: 11px; margin-bottom: 2px; }
-    .testimonials-card .corporate-line{ font-size: 11px; color: #94a3b8; margin-top: 12px; padding-top: 12px; border-top: 1px solid #f1f5f9; line-height: 1.5; }
+    .testimonials-card .stars{ color: #c4b61d; font-size: 12px; margin-bottom: 4px; }
+    .testimonials-card .corporate-line{ font-size: 11px; color: #94a3b8; margin-top: 14px; padding-top: 14px; border-top: 1px solid rgba(0,0,0,0.06); line-height: 1.5; }
 
-    .trust-mini-card.accordion-wrap{ padding: 20px; }
-    .trust-mini-card.accordion-wrap .card-title{ margin-bottom: 12px; }
-    .accordion{ border: 1px solid #e2e8f0; border-radius: 12px; overflow: hidden; }
+    .trust-mini-card.accordion-wrap{ padding: 24px; min-height: auto; }
+    .trust-mini-card.accordion-wrap .card-title{ margin-bottom: 14px; }
+    .accordion{ border: 1px solid rgba(0,0,0,0.06); border-radius: 12px; overflow: hidden; }
     .accordion summary{ padding: 14px 16px; font-weight: 600; font-size: 14px; cursor: pointer; list-style: none; display: flex; justify-content: space-between; align-items: center; background: #fafafa; }
     .accordion summary::-webkit-details-marker{ display: none; }
     .accordion summary::after{ content: '+'; font-size: 18px; color: #64748b; }
     .accordion details[open] summary::after{ content: '−'; }
-    .accordion .acc-body{ padding: 12px 16px; font-size: 13px; color: #64748b; line-height: 1.5; border-top: 1px solid #e2e8f0; }
+    .accordion .acc-body{ padding: 14px 16px; font-size: 13px; color: #64748b; line-height: 1.52; border-top: 1px solid rgba(0,0,0,0.06); }
 
-    .footer{ text-align: center; padding: 24px 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid #e2e8f0; margin-top: 28px; }
+    .footer{ text-align: center; padding: 28px 16px; font-size: 12px; color: #94a3b8; border-top: 1px solid rgba(0,0,0,0.06); margin-top: 32px; }
     .footer a{ color: #64748b; text-decoration: none; margin: 0 8px; }
     .footer a:hover{ color: #0EA5A4; }
     .footer-merchant{ margin-bottom: 10px; font-size: 11px; color: #64748b; line-height: 1.5; }
 
     @media (max-width: 919px){
-      .checkout-inner{ padding: 22px 20px 28px; }
+      .trust-bar{ padding: 10px 16px; gap: 8px 18px; }
+      .trust-bar span{ font-size: 10px; }
+      .trust-bar svg{ width: 14px; height: 14px; }
+      .checkout-inner{ padding: 24px 20px 30px; }
       .checkout-divider{ margin: 0 20px; }
       .right-col{ order: 2; }
       .plan-segment{ flex-wrap: nowrap; overflow: hidden; }
       .plan-segment button{ min-width: 0; font-size: 12px; padding: 12px 8px; }
-      .price-cta-highlight{ padding: 20px 20px 24px; margin: 0; }
+      .price-cta-highlight{ padding: 22px 20px 26px; margin: 0; }
       .price-block .total-value{ font-size: 40px; }
       .price-block .total-value .currency{ font-size: 22px; }
       .cta-main{ min-height: 58px; font-size: 17px; }
+      .trust-mini-card{ min-height: 0; padding: 20px; }
     }
     @media (max-width: 380px){ .plan-segment{ flex-wrap: wrap; } }
     .sticky-bar{
@@ -344,11 +376,11 @@
       left: 0;
       right: 0;
       background: #fff;
-      border-top: 1px solid #e2e8f0;
+      border-top: 1px solid rgba(0,0,0,0.06);
       padding: 14px 16px;
       padding-bottom: max(14px, env(safe-area-inset-bottom));
       z-index: 50;
-      box-shadow: 0 -4px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 -2px 12px rgba(0,0,0,0.06), 0 -1px 0 rgba(0,0,0,0.04);
     }
     @media (max-width: 919px){
       .sticky-bar{ display: flex; align-items: center; justify-content: space-between; gap: 16px; }
@@ -357,12 +389,12 @@
       body{ padding-bottom: 88px; }
     }
 
-    .modal-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; }
+    .modal-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
     .modal-overlay.visible{ display: flex; }
-    .modal{ background: #fff; border-radius: 18px; padding: 28px; max-width: 400px; width: 100%; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
-    .modal h3{ font-size: 18px; margin-bottom: 10px; }
-    .modal p{ font-size: 14px; color: #64748b; margin-bottom: 18px; line-height: 1.5; }
-    .modal a{ display: inline-block; padding: 14px 24px; background: #0EA5A4; color: #fff; border-radius: 12px; font-weight: 600; text-decoration: none; }
+    .modal{ background: #fff; border-radius: 18px; padding: 28px; max-width: 400px; width: 100%; box-shadow: 0 20px 48px -12px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); }
+    .modal h3{ font-size: 18px; font-weight: 700; margin-bottom: 10px; }
+    .modal p{ font-size: 14px; color: #64748b; margin-bottom: 18px; line-height: 1.52; }
+    .modal a{ display: inline-block; padding: 14px 24px; background: #0EA5A4; color: #fff; border-radius: 12px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
     .modal a:hover{ background: #0d9488; }
   </style>
 </head>
@@ -415,12 +447,23 @@
               <div class="checkout-divider"></div>
 
               <section class="checkout-section price-cta-highlight">
+                <div class="campaign-block" id="campaign-block" aria-hidden="true" style="display:none;">
+                  <div class="campaign-inner">
+                    <span class="campaign-tag">Aktif kampanya</span>
+                    <div class="campaign-code" id="campaign-code"></div>
+                    <div class="campaign-label" id="campaign-label"></div>
+                    <p class="campaign-note" id="campaign-note"></p>
+                    <button type="button" class="btn-secondary campaign-apply-btn" id="campaign-apply-btn" style="display:none;">Uygula</button>
+                    <p class="campaign-applied" id="campaign-applied" style="display:none;"><span class="campaign-applied-icon" aria-hidden="true">✓</span> İndirim uygulandı</p>
+                  </div>
+                </div>
                 <div class="price-block">
                   <div class="price-micro-badges">
                     <span class="price-micro-badge">{{ t.price_badge_secure }}</span>
                     <span class="price-micro-badge">{{ t.price_badge_instant }}</span>
                   </div>
-                  <div class="total-label">{{ t.total }}</div>
+                  <div class="price-original-wrap" id="price-original-wrap" style="display:none;"><span class="price-original" id="price-original"></span></div>
+                  <div class="total-label" id="total-label">{{ t.total }}</div>
                   <div class="total-value" id="total-price">{{ prices[plan_code] }}<span class="currency">€</span></div>
                   <p class="price-desc" id="price-desc">{% if plan_code == 'single_13eur' %}{{ t.price_once }}{% elif 'monthly' in plan_code %}{{ t.price_month }}{% else %}{{ t.price_year }}{% endif %}</p>
                   <p class="price-note">{{ t.kdv_dahil }}<span>·</span>{{ t.cancel_anytime }}<span>·</span>{{ t.active_after_payment }}</p>
@@ -463,11 +506,9 @@
               </div>
 
               <div class="merchant-contact">
-                <p><strong>{{ t.merchant_contact_title }}</strong></p>
-                <p><a href="mailto:support@noryaai.com">support@noryaai.com</a></p>
-                <p><a href="tel:+905071703564">+90 507 170 35 64</a></p>
-                <p>Banaz/Uşak, Türkiye</p>
-                <p><a href="{{ base_url }}/legal/iletisim">{{ t.merchant_contact_page }}</a></p>
+                <a href="https://wa.me/905071703564" target="_blank" rel="noopener noreferrer" class="merchant-whatsapp" aria-label="WhatsApp ile iletişim">
+                  <svg viewBox="0 0 24 24" width="40" height="40" fill="#25D366" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+                </a>
               </div>
             </div>
 
@@ -543,6 +584,7 @@
 (function(){
   var planCode = {{ plan_code_js | safe }};
   var prices = {{ prices_js | safe }};
+  var pricesCents = {{ prices_cents_js | safe }};
   var benefitsByPlan = {
     single_13eur: {{ benefits_js | safe }},
     monthly_50eur: {{ benefits_monthly_js | safe }},
@@ -551,17 +593,43 @@
   var t = {{ t_js | safe }};
   var baseUrl = {{ base_url | tojson }};
 
+  var currentCampaign = null;
+  var appliedCoupon = null;
+  var appliedFinalCents = null;
+
+  function updatePriceDisplay() {
+    var priceEl = document.getElementById('total-price');
+    var stickyPrice = document.getElementById('sticky-price');
+    var originalWrap = document.getElementById('price-original-wrap');
+    var originalEl = document.getElementById('price-original');
+    var totalLabel = document.getElementById('total-label');
+    var displayPrice = prices[planCode] || '';
+    var displayCents = pricesCents && pricesCents[planCode];
+    if (appliedCoupon && appliedFinalCents != null && displayCents) {
+      var originalStr = (displayCents / 100).toFixed(2);
+      var finalStr = (appliedFinalCents / 100).toFixed(2);
+      if (originalWrap) { originalWrap.style.display = 'block'; originalWrap.setAttribute('aria-hidden', 'false'); }
+      if (originalEl) originalEl.textContent = originalStr + ' €';
+      if (totalLabel) totalLabel.textContent = (t.pay_final_amount || 'Ödenecek tutar');
+      if (priceEl) priceEl.innerHTML = finalStr + '<span class="currency">€</span>';
+      if (stickyPrice) stickyPrice.textContent = finalStr + ' €';
+    } else {
+      if (originalWrap) { originalWrap.style.display = 'none'; originalWrap.setAttribute('aria-hidden', 'true'); }
+      if (totalLabel) totalLabel.textContent = t.total || 'Toplam';
+      if (priceEl) priceEl.innerHTML = displayPrice + '<span class="currency">€</span>';
+      if (stickyPrice) stickyPrice.textContent = displayPrice + ' €';
+    }
+  }
+
   function setPlan(pc) {
     planCode = pc;
+    appliedCoupon = null;
+    appliedFinalCents = null;
     document.querySelectorAll('.pill').forEach(function(btn){
       var isActive = btn.getAttribute('data-plan') === pc;
       btn.classList.toggle('active', isActive);
       btn.setAttribute('aria-pressed', isActive);
     });
-    var priceEl = document.getElementById('total-price');
-    var stickyPrice = document.getElementById('sticky-price');
-    if (priceEl) priceEl.innerHTML = (prices[pc] || '') + '<span class="currency">€</span>';
-    if (stickyPrice) stickyPrice.textContent = (prices[pc] || '') + ' €';
     var priceDesc = document.getElementById('price-desc');
     if (priceDesc) {
       if (pc.indexOf('single') !== -1) priceDesc.textContent = t.price_once || 'One-time';
@@ -586,6 +654,75 @@
     if (list && benefitsByPlan[pc]) {
       list.innerHTML = benefitsByPlan[pc].map(function(b){ return '<li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>' + b + '</li>'; }).join('');
     }
+    updatePriceDisplay();
+    fetchCampaignForPlan(pc);
+  }
+
+  function fetchCampaignForPlan(pc) {
+    var block = document.getElementById('campaign-block');
+    var codeEl = document.getElementById('campaign-code');
+    var labelEl = document.getElementById('campaign-label');
+    var noteEl = document.getElementById('campaign-note');
+    var applyBtn = document.getElementById('campaign-apply-btn');
+    var appliedEl = document.getElementById('campaign-applied');
+    if (!block) return;
+    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(pc))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.active && data.campaign) {
+          currentCampaign = data.campaign;
+          block.style.display = 'block';
+          block.setAttribute('aria-hidden', 'false');
+          if (codeEl) codeEl.textContent = currentCampaign.code || '';
+          if (labelEl) labelEl.textContent = currentCampaign.display_label || ('%' + (currentCampaign.discount_value || 0) + ' indirim');
+          if (noteEl) { noteEl.textContent = currentCampaign.display_note || ''; noteEl.style.display = currentCampaign.display_note ? 'block' : 'none'; }
+          if (applyBtn) applyBtn.style.display = currentCampaign.auto_apply ? 'none' : 'inline-flex';
+          if (appliedEl) appliedEl.style.display = 'none';
+          if (couponInput) couponInput.value = currentCampaign.code || '';
+          if (currentCampaign.auto_apply) applyCoupon(currentCampaign.code);
+        } else {
+          currentCampaign = null;
+          block.style.display = 'none';
+          block.setAttribute('aria-hidden', 'true');
+        }
+      })
+      .catch(function(){ currentCampaign = null; if (block) block.style.display = 'none'; });
+  }
+
+  function applyCoupon(code) {
+    if (!code || !code.trim()) return;
+    couponMsg.textContent = '';
+    couponMsg.className = 'coupon-msg';
+    fetch(baseUrl + '/api/coupon/validate?code=' + encodeURIComponent(code.trim()) + '&plan_code=' + encodeURIComponent(planCode))
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        if (data.valid && data.final_amount_cents != null) {
+          appliedCoupon = code.trim();
+          appliedFinalCents = data.final_amount_cents;
+          couponMsg.textContent = (t.coupon_success || 'İndirim uygulandı.');
+          couponMsg.className = 'coupon-msg ok';
+          updatePriceDisplay();
+          var applyBtn = document.getElementById('campaign-apply-btn');
+          var appliedEl = document.getElementById('campaign-applied');
+          if (applyBtn) applyBtn.style.display = 'none';
+          if (appliedEl) appliedEl.style.display = 'inline-flex';
+        } else {
+          appliedCoupon = null;
+          appliedFinalCents = null;
+          couponMsg.textContent = (data.reason || t.coupon_invalid || 'Geçersiz kod.');
+          couponMsg.className = 'coupon-msg err';
+          updatePriceDisplay();
+          var appliedEl = document.getElementById('campaign-applied');
+          if (appliedEl) appliedEl.style.display = 'none';
+        }
+      })
+      .catch(function(){
+        appliedCoupon = null;
+        appliedFinalCents = null;
+        couponMsg.textContent = (t.coupon_invalid || 'Bağlantı hatası.');
+        couponMsg.className = 'coupon-msg err';
+        updatePriceDisplay();
+      });
   }
 
   document.querySelectorAll('.pill').forEach(function(btn){
@@ -595,7 +732,6 @@
   var couponInput = document.getElementById('coupon-input');
   var couponApply = document.getElementById('coupon-apply');
   var couponMsg = document.getElementById('coupon-msg');
-  var appliedCoupon = null;
 
   function productFromPlan(pc) {
     if ((pc || '').indexOf('single') !== -1) return 'single';
@@ -608,20 +744,16 @@
     couponMsg.textContent = '';
     couponMsg.className = 'coupon-msg';
     if (!code) return;
-    fetch(baseUrl + '/api/coupon/validate?code=' + encodeURIComponent(code) + '&product=' + encodeURIComponent(productFromPlan(planCode)))
-      .then(function(r){ return r.json(); })
-      .then(function(data){
-        if ((data.discount_cents !== undefined || data.discount !== undefined) && (data.final_amount_cents !== undefined || data.final_amount !== undefined)) {
-          appliedCoupon = code;
-          couponMsg.textContent = (t.coupon_success || 'Discount applied.');
-          couponMsg.className = 'coupon-msg ok';
-        } else {
-          couponMsg.textContent = (t.coupon_invalid || 'Invalid code.');
-          couponMsg.className = 'coupon-msg err';
-        }
-      })
-      .catch(function(){ couponMsg.textContent = (t.coupon_invalid || 'Invalid code.'); couponMsg.className = 'coupon-msg err'; });
+    applyCoupon(code);
   });
+
+  var campaignApplyBtn = document.getElementById('campaign-apply-btn');
+  if (campaignApplyBtn) campaignApplyBtn.addEventListener('click', function(){
+    if (currentCampaign && currentCampaign.code) applyCoupon(currentCampaign.code);
+  });
+
+  updatePriceDisplay();
+  fetchCampaignForPlan(planCode);
 
   var ctaMain = document.getElementById('cta-main');
   var stickyCta = document.getElementById('sticky-cta');
@@ -668,7 +800,8 @@
       body: JSON.stringify({
         plan_code: planCode,
         email: (document.getElementById('email') && document.getElementById('email').value.trim()) || null,
-        name: (document.getElementById('name') && document.getElementById('name').value.trim()) || null
+        name: (document.getElementById('name') && document.getElementById('name').value.trim()) || null,
+        coupon_code: appliedCoupon || null
       })
     })
     .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, data: d }; }); })

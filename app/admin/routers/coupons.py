@@ -34,6 +34,11 @@ def coupons_list(
             "max_uses": r.max_uses,
             "use_count": r.use_count or 0,
             "products": r.products or "",
+            "is_active": getattr(r, "is_active", True),
+            "auto_show_on_checkout": getattr(r, "auto_show_on_checkout", False),
+            "auto_apply": getattr(r, "auto_apply", False),
+            "display_label": getattr(r, "display_label", None) or "",
+            "display_note": getattr(r, "display_note", None) or "",
             "created_at": r.created_at.strftime("%d.%m.%Y %H:%M") if r.created_at else "-",
         }
         for r in rows
@@ -44,11 +49,34 @@ def coupons_list(
     )
 
 
+def _coupon_form_context(request: Request, coupon: DiscountCode | None, is_edit: bool, error: str | None = None) -> dict:
+    """Kampanya alanları şablonda getattr gerektirmesin diye view'dan geçirilir."""
+    out = {
+        "request": request,
+        "coupon": coupon,
+        "is_edit": is_edit,
+        "error": error,
+    }
+    if coupon:
+        out["coupon_is_active"] = getattr(coupon, "is_active", True)
+        out["coupon_auto_show_on_checkout"] = getattr(coupon, "auto_show_on_checkout", False)
+        out["coupon_auto_apply"] = getattr(coupon, "auto_apply", False)
+        out["coupon_display_label"] = getattr(coupon, "display_label", None) or ""
+        out["coupon_display_note"] = getattr(coupon, "display_note", None) or ""
+    else:
+        out["coupon_is_active"] = True
+        out["coupon_auto_show_on_checkout"] = False
+        out["coupon_auto_apply"] = False
+        out["coupon_display_label"] = ""
+        out["coupon_display_note"] = ""
+    return out
+
+
 @router.get("/new", response_class=HTMLResponse)
 def coupon_new_form(request: Request, _=Depends(require_admin_cookie)):
     return templates.TemplateResponse(
         "admin/coupon_form.html",
-        {"request": request, "coupon": None, "is_edit": False},
+        _coupon_form_context(request, None, False),
     )
 
 
@@ -65,18 +93,26 @@ def coupon_create(
     valid_days_of_month: str | None = Form(None),
     max_uses: int | None = Form(None),
     products: str | None = Form(None),
+    is_active: str | None = Form(None),
+    auto_show_on_checkout: str | None = Form(None),
+    auto_apply: str | None = Form(None),
+    display_label: str | None = Form(None),
+    display_note: str | None = Form(None),
 ):
+    def _form_bool(v: str | None) -> bool:
+        return (v or "").strip().lower() in ("on", "true", "1", "yes")
+
     code_clean = (code or "").strip().upper()
     if not code_clean:
         return templates.TemplateResponse(
             "admin/coupon_form.html",
-            {"request": request, "coupon": None, "is_edit": False, "error": "Kod boş olamaz."},
+            _coupon_form_context(request, None, False, "Kod boş olamaz."),
         )
     existing = db.exec(select(DiscountCode).where(DiscountCode.code == code_clean)).first()
     if existing:
         return templates.TemplateResponse(
             "admin/coupon_form.html",
-            {"request": request, "coupon": None, "is_edit": False, "error": "Bu kod zaten var."},
+            _coupon_form_context(request, None, False, "Bu kod zaten var."),
         )
     valid_from_d = None
     if valid_from and valid_from.strip():
@@ -99,6 +135,11 @@ def coupon_create(
         valid_days_of_month=(valid_days_of_month or "").strip() or None,
         max_uses=max_uses if max_uses is not None and max_uses > 0 else None,
         products=(products or "").strip() or None,
+        is_active=_form_bool(is_active),
+        auto_show_on_checkout=_form_bool(auto_show_on_checkout),
+        auto_apply=_form_bool(auto_apply),
+        display_label=(display_label or "").strip() or None,
+        display_note=(display_note or "").strip() or None,
     )
     db.add(coupon)
     db.commit()
@@ -117,11 +158,7 @@ def coupon_edit_form(
         return RedirectResponse(url="/admin/coupons", status_code=302)
     return templates.TemplateResponse(
         "admin/coupon_form.html",
-        {
-            "request": request,
-            "coupon": coupon,
-            "is_edit": True,
-        },
+        _coupon_form_context(request, coupon, True),
     )
 
 
@@ -139,7 +176,15 @@ def coupon_update(
     valid_days_of_month: str | None = Form(None),
     max_uses: int | None = Form(None),
     products: str | None = Form(None),
+    is_active: str | None = Form(None),
+    auto_show_on_checkout: str | None = Form(None),
+    auto_apply: str | None = Form(None),
+    display_label: str | None = Form(None),
+    display_note: str | None = Form(None),
 ):
+    def _form_bool(v: str | None) -> bool:
+        return (v or "").strip().lower() in ("on", "true", "1", "yes")
+
     coupon = db.get(DiscountCode, coupon_id)
     if not coupon:
         return RedirectResponse(url="/admin/coupons", status_code=302)
@@ -147,13 +192,13 @@ def coupon_update(
     if not code_clean:
         return templates.TemplateResponse(
             "admin/coupon_form.html",
-            {"request": request, "coupon": coupon, "is_edit": True, "error": "Kod boş olamaz."},
+            _coupon_form_context(request, coupon, True, "Kod boş olamaz."),
         )
     existing = db.exec(select(DiscountCode).where(DiscountCode.code == code_clean, DiscountCode.id != coupon_id)).first()
     if existing:
         return templates.TemplateResponse(
             "admin/coupon_form.html",
-            {"request": request, "coupon": coupon, "is_edit": True, "error": "Bu kod başka bir kuponda kullanılıyor."},
+            _coupon_form_context(request, coupon, True, "Bu kod başka bir kuponda kullanılıyor."),
         )
     valid_from_d = None
     if valid_from and valid_from.strip():
@@ -175,6 +220,11 @@ def coupon_update(
     coupon.valid_days_of_month = (valid_days_of_month or "").strip() or None
     coupon.max_uses = max_uses if max_uses is not None and max_uses > 0 else None
     coupon.products = (products or "").strip() or None
+    coupon.is_active = _form_bool(is_active)
+    coupon.auto_show_on_checkout = _form_bool(auto_show_on_checkout)
+    coupon.auto_apply = _form_bool(auto_apply)
+    coupon.display_label = (display_label or "").strip() or None
+    coupon.display_note = (display_note or "").strip() or None
     db.add(coupon)
     db.commit()
     return RedirectResponse(url="/admin/coupons", status_code=302)

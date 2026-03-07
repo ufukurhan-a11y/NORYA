@@ -74,7 +74,7 @@ from app.base_i18n import get_base_ui
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
-from app.services.coupon import apply_coupon_use, validate_coupon
+from app.services.coupon import apply_coupon_use, get_active_campaign_for_checkout, validate_coupon
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
 from app.services.report_verification import get_or_create_verification
 from app.services.storage import upload_report_pdf
@@ -106,6 +106,11 @@ ALLOWED_UPLOAD_EXTENSIONS = {".pdf", ".jpg", ".jpeg", ".png"}
 IMAGE_EXTENSIONS = {".jpg", ".jpeg", ".png"}
 MIME_MAP = {".jpg": "image/jpeg", ".jpeg": "image/jpeg", ".png": "image/png"}
 ALLOWED_UPLOAD_MIME_TYPES = {"application/pdf", "image/jpeg", "image/jpg", "image/png"}
+
+# Kısa süreli PDF cache: aynı rapor için tekrarlayan isteklerde yeniden üretim engellenir (TTL 2 dk)
+_pdf_cache: dict[tuple, tuple[bytes, float]] = {}
+_pdf_cache_lock = threading.Lock()
+_PDF_CACHE_TTL_SEC = 120
 
 
 def _max_upload_bytes() -> int:
@@ -1297,15 +1302,11 @@ def analyze_landing():
 @app.get("/pricing", response_class=HTMLResponse)
 def pricing_landing(request: Request):
     """
-    /pricing -> SPA fiyatlandırma/ödeme bölümüne yönlendir.
-    from=report ile gelirse doğrudan ödeme sayfasına (#odeme), yoksa fiyatlandırma (#fiyatlandirma).
+    /pricing -> Doğrudan ödeme sayfasına (/pay) yönlendir.
+    Plan seçimi ve PayTR ödeme /pay sayfasında yapılır.
     """
     query = request.url.query
-    from_report = query and "from=report" in (query.lower() if isinstance(query, str) else "")
-    if from_report:
-        target = "/?" + query + "#odeme" if query else "/#odeme"
-    else:
-        target = "/?" + query + "#fiyatlandirma" if query else "/#fiyatlandirma"
+    target = "/pay" + ("?" + query if query else "")
     return RedirectResponse(url=target, status_code=302)
 
 
@@ -2156,8 +2157,22 @@ def download_analysis_pdf(
     use_pro_scope = (scope or "").strip().lower() == "pro"
     premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
     premium_trend = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
+    cache_key = (analysis_id, report_lang, "pro" if use_pro_scope else "std", plan or "free")
+    now_ts = time.time()
+    with _pdf_cache_lock:
+        if cache_key in _pdf_cache:
+            cached_bytes, cached_at = _pdf_cache[cache_key]
+            if now_ts - cached_at < _PDF_CACHE_TTL_SEC:
+                filename = f"norya-rapor-{analysis_id}.pdf"
+                disp = "attachment" if (disposition or "").strip().lower() == "attachment" else "inline"
+                return Response(
+                    content=cached_bytes,
+                    media_type="application/pdf",
+                    headers={"Content-Disposition": f'{disp}; filename="{filename}"'},
+                )
+            else:
+                del _pdf_cache[cache_key]
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
-    # QR doğrulama linki backend'de (/verify/...), bu yüzden backend adresi kullanılmalı (frontend_url değil)
     verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
     verification_info = None
     if plan in ("single", "monthly", "yearly"):
@@ -2178,6 +2193,8 @@ def download_analysis_pdf(
     except Exception as e:
         log.exception("PDF build failed for analysis_id=%s: %s", analysis_id, e)
         raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
+    with _pdf_cache_lock:
+        _pdf_cache[cache_key] = (pdf_bytes, time.time())
     filename = f"norya-rapor-{analysis_id}.pdf"
     disp = "attachment" if (disposition or "").strip().lower() == "attachment" else "inline"
     # MinIO açıksa yükle ve presigned URL ile yönlendir; frontend MinIO'dan indirir
@@ -2357,6 +2374,14 @@ def paytr_init(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+    coupon_used: str | None = None
+    if body.coupon_code and (code := (body.coupon_code or "").strip()):
+        discount, err = validate_coupon(db, code, product, amount)
+        if err:
+            raise HTTPException(status_code=400, detail=err)
+        amount = max(1, amount - discount)
+        coupon_used = code
+
     user: User | None = current_user
     if not user and (body.email or "").strip():
         email = (body.email or "").strip().lower()
@@ -2389,6 +2414,7 @@ def paytr_init(
         amount_kurus=amount,
         currency=currency,
         status="pending",
+        coupon_code_used=coupon_used,
     )
     db.add(order)
     try:
@@ -2645,6 +2671,7 @@ def pay_page(
     benefits = get_plan_benefits(plan_code, lang)
     base_url = str(request.base_url).rstrip("/")
     prices = {"single_13eur": "13", "monthly_50eur": "50", "yearly_99eur": "99"}
+    prices_cents = {"single_13eur": 1300, "monthly_50eur": 5000, "yearly_99eur": 9900}
     benefits_monthly = get_plan_benefits("monthly_50eur", lang)
     benefits_yearly = get_plan_benefits("yearly_99eur", lang)
     return templates.TemplateResponse(
@@ -2661,6 +2688,7 @@ def pay_page(
             "base_url": base_url,
             "prices": prices,
             "prices_js": json.dumps(prices),
+            "prices_cents_js": json.dumps(prices_cents),
             "benefits": benefits,
             "benefits_js": json.dumps(benefits),
             "benefits_monthly_js": json.dumps(benefits_monthly),
@@ -2672,13 +2700,20 @@ def pay_page(
 @app.get("/api/coupon/validate")
 def coupon_validate(
     code: str,
-    product: str,
+    product: str | None = None,
+    plan_code: str | None = None,
     db: Session = Depends(get_db),
 ):
-    """İndirim kodunu doğrular; geçerliyse indirim tutarı ve son fiyat döner. INDIRIM20 startup seed ile oluşturulur."""
-    if product not in ("single", "monthly", "yearly"):
-        raise HTTPException(status_code=400, detail="Geçersiz ürün.")
-    base = _paytr_amount(product)
+    """İndirim kodunu doğrular; geçerliyse indirim tutarı ve son fiyat döner. plan_code verilirse tutar onunla uyumlu hesaplanır."""
+    if plan_code:
+        try:
+            product, base = _plan_code_to_product_amount(plan_code)
+        except ValueError:
+            raise HTTPException(status_code=400, detail="Geçersiz plan_code.")
+    elif product and product in ("single", "monthly", "yearly"):
+        base = _paytr_amount(product)
+    else:
+        raise HTTPException(status_code=400, detail="product veya plan_code gerekli.")
     discount, err = validate_coupon(db, code, product, base)
     if err:
         return {"valid": False, "reason": err}
@@ -2687,6 +2722,22 @@ def coupon_validate(
         "discount_cents": discount,
         "final_amount_cents": max(1, base - discount),
     }
+
+
+@app.get("/api/campaigns/active")
+def campaigns_active(
+    plan_code: str,
+    db: Session = Depends(get_db),
+):
+    """Seçilen plan için checkout’ta gösterilecek aktif kampanyayı döner (varsa)."""
+    try:
+        campaign = get_active_campaign_for_checkout(db, plan_code)
+    except Exception as e:
+        log.warning("campaigns/active failed for plan_code=%s: %s", plan_code, e)
+        return {"active": False, "campaign": None}
+    if not campaign:
+        return {"active": False, "campaign": None}
+    return {"active": True, "campaign": campaign}
 
 
 @app.post("/payment/get-token")
