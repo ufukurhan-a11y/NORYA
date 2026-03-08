@@ -2718,6 +2718,7 @@ def pay_page(
     request: Request,
     plan: str = Query("single_13eur", description="Plan: single_13eur, monthly_50eur, yearly_99eur"),
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+    db: Session = Depends(get_db),
 ):
     """Ödeme sayfası: plan seçili; /paytr/init ile token alınıp PayTR iFrame gösterilir. Tüm dillerde ve mobil uyumlu."""
     plan_code = (plan or "single_13eur").strip().lower()
@@ -2734,6 +2735,20 @@ def pay_page(
     prices_cents = {"single_13eur": 1404, "monthly_50eur": 5400, "yearly_99eur": 10692}
     benefits_monthly = get_plan_benefits("monthly_50eur", lang)
     benefits_yearly = get_plan_benefits("yearly_99eur", lang)
+    # Bar’da kampanya görünsün: önce seçilen plan, yoksa herhangi bir planda aktif kampanya (featured)
+    campaign_raw = None
+    try:
+        campaign_raw = get_active_campaign_for_checkout(db, plan_code)
+        if campaign_raw is None:
+            for fallback_plan in ("yearly_99eur", "monthly_50eur", "single_13eur"):
+                if fallback_plan == plan_code:
+                    continue
+                campaign_raw = get_active_campaign_for_checkout(db, fallback_plan)
+                if campaign_raw is not None:
+                    break
+    except Exception as e:
+        log.warning("pay_page campaign fetch failed: %s", e)
+    campaign_config = _payment_campaign_config(campaign_raw, t)
     return templates.TemplateResponse(
         "pay.html",
         {
@@ -2753,6 +2768,8 @@ def pay_page(
             "benefits_js": json.dumps(benefits),
             "benefits_monthly_js": json.dumps(benefits_monthly),
             "benefits_yearly_js": json.dumps(benefits_yearly),
+            "campaign_config": campaign_config,
+            "campaign_js": json.dumps(campaign_config),
         },
     )
 

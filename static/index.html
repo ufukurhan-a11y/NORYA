@@ -2314,6 +2314,9 @@
     #promo-strip-fixed a { color: #fff; text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
     #promo-strip-fixed a:hover { opacity: 0.9; }
     .dark #promo-strip-fixed { background: linear-gradient(135deg, rgba(45,212,191,0.95) 0%, rgba(20,184,166,0.98) 100%); }
+    /* Promo bar: mobilde taşma olmasın */
+    #promo-strip-home, #promo-strip-fixed { word-wrap: break-word; overflow-wrap: break-word; box-sizing: border-box; max-width: 100%; }
+    #promo-strip-home p, #promo-strip-fixed span { word-wrap: break-word; overflow-wrap: break-word; }
 
   </style>
 </head>
@@ -2321,7 +2324,7 @@
   <!-- Kaydırırken görünen sabit indirim şeridi (kampanya aktifse) -->
   <div id="promo-strip-fixed" aria-hidden="true" style="display:none;">
     <span id="promo-strip-fixed-text"></span>
-    <a href="/payment" id="promo-strip-fixed-link">Ödeme sayfasında uygula</a>
+    <a href="/payment" id="promo-strip-fixed-link" data-i18n="promo_strip_cta"></a>
   </div>
   <script>
   (function(){
@@ -4749,7 +4752,7 @@
   <div id="promo-strip-home" class="hidden py-3 px-4 text-center bg-[#0EA5A4]/10 dark:bg-teal-500/10 border-y border-[#0EA5A4]/20 dark:border-teal-500/20">
     <p class="text-sm font-medium text-accent-800 dark:text-accent-200">
       <span id="promo-strip-text"></span>
-      <a href="/payment" class="ml-1 font-semibold text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="promo_strip_cta">Ödeme sayfasında uygula</a>
+      <a href="/payment" id="promo-strip-home-link" class="ml-1 font-semibold text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="promo_strip_cta"></a>
     </p>
   </div>
 
@@ -7086,6 +7089,7 @@
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme", trust_badge_qr: "QR ile rapor doğrulama",
+        promo_strip_cta: "Ödeme sayfasında uygula", promo_strip_code_label: "Kod", promo_strip_discount_pct: "%{percent} kış indirimi",
         trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_bar_qr: "QR rapor doğrulama", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", health_score_card_title: "Health Score", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
         features_heading: "Güvenilir sağlık içgörüleri, gerçek hayat için tasarlandı.",
         features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
@@ -7451,6 +7455,7 @@
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR", trust_badge_qr: "QR report verification",
+        promo_strip_cta: "Apply on the payment page", promo_strip_code_label: "Code", promo_strip_discount_pct: "{percent}% winter discount",
         trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_bar_qr: "QR report verification", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
         features_heading: "Trusted health insights, designed for real life.",
         features_sub: "Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.",
@@ -7807,6 +7812,7 @@
         hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "Valori in grado moderato: molti parametri in range, alcuni al limite. Il report include molti valori, spiegazioni e consigli personalizzati.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR", trust_badge_qr: "Verifica report con QR",
+        promo_strip_cta: "Applica nella pagina di pagamento", promo_strip_code_label: "Codice", promo_strip_discount_pct: "{percent}% sconto invernale",
         trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare", trust_bar_qr: "Verifica report con QR",
         features_heading: "Approfondimenti sulla salute affidabili, pensati per la vita reale.",
         features_sub: "Carica i risultati delle analisi e ottieni un report chiaro e strutturato con trend, segnali di rischio e prossimi passi concreti.",
@@ -8039,6 +8045,7 @@
         hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Valores en nivel moderado: muchos parámetros en rango, algunos en el límite. El informe incluye muchos valores, explicaciones y recomendaciones.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR", trust_badge_qr: "Verificación de informe por QR",
+        promo_strip_cta: "Aplicar en la página de pago", promo_strip_code_label: "Código", promo_strip_discount_pct: "{percent}% descuento de invierno",
         trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare", trust_bar_qr: "Verificación de informe por QR",
         features_heading: "Información de salud fiable, diseñada para la vida real.",
         features_sub: "Sube tus resultados de laboratorio y obtén un informe claro y estructurado con tendencias, señales de riesgo y próximos pasos.",
@@ -8271,6 +8278,7 @@
         hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Valeurs à niveau modéré: beaucoup de paramètres dans la norme, certains à la limite. Le rapport inclut de nombreuses valeurs et recommandations.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR", trust_badge_qr: "Vérification du rapport par QR",
+        promo_strip_cta: "Appliquer sur la page de paiement", promo_strip_code_label: "Code", promo_strip_discount_pct: "{percent}% de réduction hiver",
         trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare", trust_bar_qr: "Vérification du rapport par QR",
         features_heading: "Des informations santé de confiance, conçues pour la vie réelle.",
         features_sub: "Téléchargez vos résultats d'analyses et obtenez un rapport clair et structuré avec tendances, alertes et prochaines étapes.",
@@ -8503,6 +8511,7 @@
         hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Werte im mittleren Bereich: viele Parameter im Referenzbereich, einige grenzwertig. Der Bericht enthält viele Werte, Erklärungen und Empfehlungen.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
         trust_badge_ssl: "256-bit SSL geschützt", trust_badge_kvkk_gdpr: "KVKK & GDPR konform", trust_badge_paytr: "Sichere Zahlung mit PayTR", trust_badge_qr: "QR-Berichtsprüfung",
+        promo_strip_cta: "Auf der Zahlungsseite anwenden", promo_strip_code_label: "Code", promo_strip_discount_pct: "{percent}% Winterrabatt",
         trust_bar_medical: "Medizinische Einblicke", trust_bar_3d: "3D-Secure-Zahlungen", trust_bar_doctor_reports: "Arzt-Style-Berichte", trust_bar_analyses: "50.000+ Analysen erstellt", trust_bar_cloudflare: "Cloudflare-Sicherheit", trust_bar_qr: "QR-Berichtsprüfung",
         features_heading: "Vertrauenswürdige Gesundheitseinblicke, für den Alltag konzipiert.",
         features_sub: "Laden Sie Ihre Laborergebnisse hoch und erhalten Sie einen klaren, strukturierten Bericht mit Trends, Risikohinweisen und umsetzbaren nächsten Schritten.",
@@ -10045,6 +10054,7 @@
         var text = getTranslation(lang, key);
         if (text) el.setAttribute("aria-label", text);
       });
+      if (typeof window.updatePromoStripText === 'function') window.updatePromoStripText(lang);
       var charEl = document.getElementById("wizard-preview-char");
       var wizardCount = getTranslation(lang, 'wizard_char_count');
       if (charEl && wizardCount) {
@@ -11711,37 +11721,57 @@
       else runOverflowCheck();
     })();
 
-    // Aktif indirim kampanyası: admin kuponu varsa anasayfada göster + kaydırırken sabit şerit
+    // Aktif indirim kampanyası: admin kuponu varsa anasayfada göster (i18n ile tek dil)
     (function() {
       var strip = document.getElementById('promo-strip-home');
       var textEl = document.getElementById('promo-strip-text');
       var fixedStrip = document.getElementById('promo-strip-fixed');
       var fixedText = document.getElementById('promo-strip-fixed-text');
       var fixedLink = document.getElementById('promo-strip-fixed-link');
-      var ctaText = (document.querySelector('[data-i18n="promo_strip_cta"]') && document.querySelector('[data-i18n="promo_strip_cta"]').textContent) || 'Ödeme sayfasında uygula';
-      var lang = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
+      var homeLink = document.getElementById('promo-strip-home-link');
+      function getPromoLang() { return (typeof getLang === 'function' ? getLang() : (document.documentElement.getAttribute('lang') || 'tr')).slice(0, 2); }
+      function getPromoT(lang) { return (typeof T !== 'undefined' && T[lang]) ? T[lang] : (typeof T !== 'undefined' && T.tr) ? T.tr : {}; }
+      function buildPromoLine(campaign, lang) {
+        var t = getPromoT(lang);
+        var pct = (campaign && campaign.discountValue != null) ? String(campaign.discountValue) : '35';
+        var discountLabel = (t.promo_strip_discount_pct || '').replace(/\{percent\}/g, pct) || (lang === 'tr' ? '%' + pct + ' kış indirimi' : pct + '% winter discount');
+        var codeLabel = t.promo_strip_code_label || (lang === 'tr' ? 'Kod' : 'Code');
+        var code = (campaign && campaign.promoCode) ? campaign.promoCode : 'WINTER35';
+        return discountLabel + ' — ' + codeLabel + ': ' + code + '. ';
+      }
+      function applyPromoStrip(campaign, lang) {
+        if (!campaign || !campaign.promoCode) return;
+        var t = getPromoT(lang);
+        var line = buildPromoLine(campaign, lang);
+        var ctaText = t.promo_strip_cta || (lang === 'tr' ? 'Ödeme sayfasında uygula' : 'Apply on the payment page');
+        if (strip && textEl) { textEl.textContent = line; strip.classList.remove('hidden'); }
+        if (homeLink) homeLink.textContent = ctaText;
+        if (fixedStrip && fixedText && fixedLink) {
+          fixedText.textContent = line;
+          fixedLink.textContent = ctaText;
+          fixedStrip.style.display = 'block';
+          fixedStrip.setAttribute('aria-hidden', 'false');
+          if (!fixedStrip._scrollBound) {
+            var onScroll = function() {
+              if (window.scrollY > 80) fixedStrip.classList.add('promo-strip-fixed-visible');
+              else fixedStrip.classList.remove('promo-strip-fixed-visible');
+            };
+            window.addEventListener('scroll', onScroll, { passive: true });
+            onScroll();
+            fixedStrip._scrollBound = true;
+          }
+        }
+      }
+      window.updatePromoStripText = function(lang) {
+        if (window.__lastCampaign && window.__lastCampaign.promoCode) applyPromoStrip(window.__lastCampaign, (lang || getPromoLang()));
+      };
+      var lang = getPromoLang();
       fetch('/api/campaigns/featured?lang=' + encodeURIComponent(lang), { credentials: 'include' })
         .then(function(r) { return r.json(); })
         .then(function(data) {
           if (data.active && data.campaign && data.campaign.promoCode) {
-            var msg = data.campaign.campaignTitle || ('%' + (data.campaign.discountValue || 0) + ' indirim');
-            var line = msg + ' — Kod: ' + data.campaign.promoCode + '. ';
-            if (strip && textEl) {
-              textEl.textContent = line;
-              strip.classList.remove('hidden');
-            }
-            if (fixedStrip && fixedText && fixedLink) {
-              fixedText.textContent = line;
-              fixedLink.textContent = ctaText;
-              fixedStrip.style.display = 'block';
-              fixedStrip.setAttribute('aria-hidden', 'false');
-              var onScroll = function() {
-                if (window.scrollY > 80) fixedStrip.classList.add('promo-strip-fixed-visible');
-                else fixedStrip.classList.remove('promo-strip-fixed-visible');
-              };
-              window.addEventListener('scroll', onScroll, { passive: true });
-              onScroll();
-            }
+            window.__lastCampaign = data.campaign;
+            applyPromoStrip(data.campaign, lang);
           }
         })
         .catch(function() {});

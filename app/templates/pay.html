@@ -64,6 +64,78 @@
     @media (min-width: 640px){
       .trust-badges{ grid-template-columns: repeat(4, 1fr); justify-items: center; gap: 12px; padding: 12px 24px 16px; }
     }
+
+    /* Winter bar: anasayfa ile aynı renkler (#0EA5A4/10, fixed bar gradient) */
+    #promo-strip-pay{
+      display: block;
+      padding: 12px 16px;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: rgba(14, 165, 164, 0.1);
+      border-top: 1px solid rgba(14, 165, 164, 0.2);
+      border-bottom: 1px solid rgba(14, 165, 164, 0.2);
+      color: #0f766e;
+      line-height: 1.45;
+    }
+    #promo-strip-pay.promo-strip-active{
+      background: rgba(14, 165, 164, 0.15);
+      border-top-color: rgba(14, 165, 164, 0.3);
+      border-bottom-color: rgba(14, 165, 164, 0.3);
+      color: #0c5a5a;
+    }
+    #promo-strip-pay .promo-strip-code{ font-weight: 700; letter-spacing: 0.05em; color: #0d9488; background: rgba(14,165,164,0.12); padding: 2px 8px; border-radius: 6px; }
+    #promo-strip-pay.promo-strip-active .promo-strip-code{ color: #0f766e; background: rgba(14,165,164,0.2); }
+    .offer-strip{
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 14px 28px;
+      padding: 16px 28px;
+      min-height: 56px;
+      background: linear-gradient(135deg, rgba(14,165,164,0.95) 0%, rgba(13,148,136,0.98) 100%);
+      border-top: 2px solid rgba(13,148,136,0.6);
+      border-bottom: 2px solid rgba(13,148,136,0.6);
+      box-shadow: 0 4px 12px rgba(14,165,164,0.25);
+    }
+    .offer-strip-snowflake{ width: 20px; height: 20px; flex-shrink: 0; color: #fff; opacity: 0.95; }
+    .offer-strip-badge{
+      font-size: 11px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      color: #fff;
+      background: rgba(0,0,0,0.2);
+      padding: 8px 14px;
+      border-radius: 8px;
+      border: 1px solid rgba(255,255,255,0.3);
+    }
+    .offer-strip-text{ font-size: 0.9375rem; font-weight: 500; color: #fff; line-height: 1.45; text-align: center; }
+    .offer-strip-pill{
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      color: #0f766e;
+      background: #fff;
+      padding: 8px 16px;
+      border-radius: 9999px;
+      border: 1px solid rgba(255,255,255,0.5);
+      white-space: nowrap;
+    }
+    .offer-strip-neutral .offer-strip-badge{ background: rgba(0,0,0,0.15); border-color: rgba(255,255,255,0.3); }
+    @media (max-width: 768px){
+      #promo-strip-pay{ padding: 12px 14px; font-size: 0.8125rem; }
+      .offer-strip{ padding: 12px 14px; gap: 10px 16px; min-height: 48px; }
+      .offer-strip-text{ font-size: 0.8125rem; }
+      .offer-strip-badge{ font-size: 10px; padding: 6px 10px; }
+      .offer-strip-pill{ font-size: 11px; padding: 6px 12px; }
+    }
+    @media (max-width: 480px){
+      .offer-strip{ padding: 10px 12px; gap: 8px 12px; min-height: 44px; flex-direction: column; }
+      .offer-strip-text{ font-size: 0.75rem; }
+    }
+
     .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
     @media (max-width: 767px){ .wrap{ padding: 0 18px; } }
     @media (max-width: 480px){ .wrap{ padding: 0 16px; } }
@@ -489,6 +561,23 @@
     <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4a2 2 0 00-4 0v16"/><path d="M6 20v-4a2 2 0 014 0v4"/></svg>{{ t.trust_badge_encrypted }}</span>
   </div>
 
+  <!-- Winter bar: kampanya şeridi + teal offer strip (payment_page ile aynı) -->
+  <div id="promo-strip-pay" class="{% if campaign_config.campaignActive %}promo-strip-active{% endif %}" role="region" aria-label="{{ t.promo_strip_aria }}">
+    <p id="promo-strip-pay-text" class="promo-strip-p" style="margin:0;">
+      {% if campaign_config.campaignActive and campaign_config.promoCode %}
+      {{ (t.promo_strip_discount_template|default('%{percent}% indirim'))|replace('%{percent}', (campaign_config.discountValue|string)) }} — {{ t.promo_code_label }}: <span class="promo-strip-code">{{ campaign_config.promoCode }}</span>. {{ t.promo_strip_apply_here }}
+      {% else %}
+      {{ t.campaign_neutral_desc }}
+      {% endif %}
+    </p>
+  </div>
+  <div class="offer-strip {% if not campaign_config.campaignActive %}offer-strip-neutral{% endif %}" id="offer-strip-pay" role="region" aria-label="{{ t.promo_strip_aria }}" data-campaign-active="{{ 'true' if campaign_config.campaignActive else 'false' }}">
+    <svg class="offer-strip-snowflake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M5.5 5.5l13 13M5.5 18.5l13-13"/></svg>
+    <span class="offer-strip-badge" id="offer-strip-badge-pay">{% if campaign_config.campaignActive %}{{ campaign_config.campaignBadge }}{% else %}{{ t.campaign_no_active_badge }}{% endif %}</span>
+    <span class="offer-strip-text" id="offer-strip-text-pay">{% if campaign_config.campaignActive %}{% if campaign_config.campaignTitle and campaign_config.campaignTitle|lower == 'winter' %}{{ t.offer_winter_label }}{% else %}{{ campaign_config.campaignTitle }}{% endif %}{% else %}{{ t.campaign_neutral_text }}{% endif %}</span>
+    {% if campaign_config.campaignActive %}<span class="offer-strip-pill" id="offer-strip-pill-pay">{{ t.offer_best_savings_pill }}</span>{% endif %}
+  </div>
+
   <div class="wrap">
     <header class="header">
       <div class="header-brand">
@@ -764,6 +853,39 @@ document.addEventListener('DOMContentLoaded', function(){
     fetchCampaignForPlan(pc);
   }
 
+  function updateWinterBar(cfg) {
+    if (!cfg) cfg = { campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', promoCode: '', discountValue: 0 };
+    var active = !!cfg.campaignActive;
+    var promoStrip = document.getElementById('promo-strip-pay');
+    var promoText = document.getElementById('promo-strip-pay-text');
+    var offerStrip = document.getElementById('offer-strip-pay');
+    var offerBadge = document.getElementById('offer-strip-badge-pay');
+    var offerText = document.getElementById('offer-strip-text-pay');
+    var offerPill = document.getElementById('offer-strip-pill-pay');
+    if (promoStrip) promoStrip.classList.toggle('promo-strip-active', active);
+    if (promoText) {
+      if (active && cfg.promoCode) {
+        var discountTpl = (t.promo_strip_discount_template || '%{percent}% indirim');
+        var title = (cfg.discountValue != null) ? discountTpl.replace(/%\{percent\}/g, String(cfg.discountValue)) : (cfg.campaignTitle || '');
+        var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        promoText.innerHTML = title + ' — ' + (t.promo_code_label || 'Kod') + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + (t.promo_strip_apply_here || '');
+      } else promoText.textContent = t.campaign_neutral_desc || '';
+    }
+    if (offerStrip) { offerStrip.classList.toggle('offer-strip-neutral', !active); offerStrip.setAttribute('data-campaign-active', active ? 'true' : 'false'); }
+    if (offerBadge) offerBadge.textContent = active ? (cfg.campaignBadge || t.offer_limited_badge) : (t.campaign_no_active_badge || 'Teklif');
+    if (offerText) offerText.textContent = active ? (cfg.campaignTitle && cfg.campaignTitle.toLowerCase() === 'winter' ? (t.offer_winter_label || 'Kış Kampanyası') : (cfg.campaignTitle || '')) : (t.campaign_neutral_text || '');
+    if (active) {
+      if (offerPill) { offerPill.textContent = t.offer_best_savings_pill || 'En iyi tasarruf'; offerPill.style.display = ''; }
+      else if (offerStrip) {
+        var pill = document.createElement('span');
+        pill.className = 'offer-strip-pill';
+        pill.id = 'offer-strip-pill-pay';
+        pill.textContent = t.offer_best_savings_pill || 'En iyi tasarruf';
+        offerStrip.appendChild(pill);
+      }
+    } else if (offerPill) offerPill.style.display = 'none';
+  }
+
   function fetchCampaignForPlan(pc) {
     var block = document.getElementById('campaign-block');
     var codeEl = document.getElementById('campaign-code');
@@ -771,28 +893,31 @@ document.addEventListener('DOMContentLoaded', function(){
     var noteEl = document.getElementById('campaign-note');
     var applyBtn = document.getElementById('campaign-apply-btn');
     var appliedEl = document.getElementById('campaign-applied');
-    if (!block) return;
-    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(pc))
+    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(pc) + '&lang=' + encodeURIComponent((document.documentElement.getAttribute('lang') || 'tr').slice(0, 2)))
       .then(function(r){ return r.json(); })
       .then(function(data){
-        if (data.active && data.campaign) {
-          currentCampaign = data.campaign;
-          block.style.display = 'block';
-          block.setAttribute('aria-hidden', 'false');
-          if (codeEl) codeEl.textContent = currentCampaign.code || '';
-          if (labelEl) labelEl.textContent = currentCampaign.display_label || ('%' + (currentCampaign.discount_value || 0) + ' indirim');
-          if (noteEl) { noteEl.textContent = currentCampaign.display_note || ''; noteEl.style.display = currentCampaign.display_note ? 'block' : 'none'; }
-          if (applyBtn) applyBtn.style.display = currentCampaign.auto_apply ? 'none' : 'inline-flex';
-          if (appliedEl) appliedEl.style.display = 'none';
-          if (couponInput) couponInput.value = currentCampaign.code || '';
-          if (currentCampaign.auto_apply) applyCoupon(currentCampaign.code);
-        } else {
-          currentCampaign = null;
-          block.style.display = 'none';
-          block.setAttribute('aria-hidden', 'true');
+        var cfg = (data.active && data.campaign) ? data.campaign : { campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', promoCode: '', discountValue: 0 };
+        updateWinterBar(cfg);
+        if (block) {
+          if (data.active && data.campaign) {
+            currentCampaign = data.campaign;
+            block.style.display = 'block';
+            block.setAttribute('aria-hidden', 'false');
+            if (codeEl) codeEl.textContent = currentCampaign.promoCode || currentCampaign.code || '';
+            if (labelEl) labelEl.textContent = currentCampaign.campaignTitle || ('%' + (currentCampaign.discountValue || 0) + ' indirim');
+            if (noteEl) { noteEl.textContent = currentCampaign.campaignMessage || ''; noteEl.style.display = (currentCampaign.campaignMessage || '') ? 'block' : 'none'; }
+            if (applyBtn) applyBtn.style.display = currentCampaign.autoApply ? 'none' : 'inline-flex';
+            if (appliedEl) appliedEl.style.display = 'none';
+            if (couponInput) couponInput.value = currentCampaign.promoCode || currentCampaign.code || '';
+            if (currentCampaign.autoApply) applyCoupon(currentCampaign.promoCode || currentCampaign.code);
+          } else {
+            currentCampaign = null;
+            block.style.display = 'none';
+            block.setAttribute('aria-hidden', 'true');
+          }
         }
       })
-      .catch(function(){ currentCampaign = null; if (block) block.style.display = 'none'; });
+      .catch(function(){ currentCampaign = null; updateWinterBar(null); if (block) block.style.display = 'none'; });
   }
 
   function applyCoupon(code) {

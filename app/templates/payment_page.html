@@ -101,52 +101,73 @@
       --shadow-btn-glow: 0 0 0 1px rgba(14,165,164,0.08), 0 4px 14px rgba(14,165,164,0.28);
       --shadow-btn-glow-hover: 0 0 0 1px rgba(14,165,164,0.12), 0 6px 20px rgba(14,165,164,0.35);
     }
-    /* Kış barı: güven rozetleri — biraz daha büyük, sayfayla kayar */
+    /* Üst trust badge bar: /pay sayfası ile aynı görünüm (beyaz şerit, turkuaz ikon, gri metin) */
     .trust-bar{
-      background: linear-gradient(180deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
-      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+      background: #fff;
+      border-bottom: 1px solid rgba(0,0,0,0.06);
       padding: 12px 20px;
       min-height: 44px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 10px 28px;
+      gap: 10px 24px;
+      position: relative;
+      z-index: 2;
     }
     .trust-bar span{
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
       font-size: 11px;
-      font-weight: var(--font-label);
-      color: #1e40af;
-      letter-spacing: var(--ls-wide);
+      font-weight: 600;
+      color: #475569;
+      letter-spacing: 0.02em;
     }
-    .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; color: #2563eb; opacity: 0.95; stroke-width: var(--icon-stroke); }
-    .trust-bar .trust-logo{ width: 16px; height: 16px; object-fit: contain; opacity: 0.9; }
+    .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; opacity: 0.9; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .trust-bar .trust-bar-logo{ width: 16px; height: 16px; flex-shrink: 0; object-fit: contain; }
 
-    /* Kampanya barı: beyaz değil – net turkuaz şerit */
+    /* İkinci satır: /pay ile aynı trust-badges (HIPAA, GDPR, Secure Checkout, Encrypted) */
+    .trust-badges{
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 16px;
+      max-width: 1200px; margin: 0 auto; padding: 14px 24px 18px;
+      background: rgba(255,255,255,0.6); border-bottom: 1px solid rgba(0,0,0,0.05);
+      position: relative; z-index: 2;
+    }
+    .trust-badges .trust-badge{
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.02em;
+    }
+    .trust-badges .trust-badge svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; opacity: 0.9; }
+    @media (min-width: 640px){
+      .trust-badges{ grid-template-columns: repeat(4, 1fr); justify-items: center; gap: 12px; padding: 12px 24px 16px; }
+    }
+
+    /* Kampanya barı: anasayfa / pay.html ile aynı (turkuaz gradient + gölge) */
     .offer-strip{
       display: flex;
+      position: relative;
+      z-index: 2;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
       gap: 14px 28px;
       padding: 16px 28px;
       min-height: 56px;
-      background: linear-gradient(90deg, #14b8a6 0%, #0d9488 50%, #14b8a6 100%) !important;
-      border-top: 2px solid #0f766e;
-      border-bottom: 2px solid #0f766e;
-      transition: background 0.3s ease, border-color 0.3s ease;
-      box-shadow: 0 2px 12px rgba(13, 148, 136, 0.4);
+      background: linear-gradient(135deg, rgba(14,165,164,0.95) 0%, rgba(13,148,136,0.98) 100%);
+      border-top: 2px solid rgba(13,148,136,0.6);
+      border-bottom: 2px solid rgba(13,148,136,0.6);
+      box-shadow: 0 4px 12px rgba(14,165,164,0.25);
     }
     .offer-strip.single-selected{
-      background: linear-gradient(90deg, #2dd4bf 0%, #14b8a6 50%, #2dd4bf 100%) !important;
-      border-bottom-color: #0f766e;
+      background: linear-gradient(135deg, rgba(14,165,164,0.95) 0%, rgba(13,148,136,0.98) 100%);
+      border-top-color: rgba(13,148,136,0.6);
+      border-bottom-color: rgba(13,148,136,0.6);
     }
     .offer-strip.yearly-selected{
-      background: linear-gradient(90deg, #0d9488 0%, #0f766e 50%, #0d9488 100%) !important;
-      border-bottom-color: #115e59;
+      background: linear-gradient(135deg, rgba(14,165,164,0.95) 0%, rgba(13,148,136,0.98) 100%);
+      border-top-color: rgba(13,148,136,0.6);
+      border-bottom-color: rgba(13,148,136,0.6);
     }
     .offer-strip-snowflake{
       width: 20px; height: 20px; flex-shrink: 0;
@@ -190,13 +211,14 @@
     }
     .offer-strip.single-selected .offer-strip-pill{ color: #0d9488; border-color: rgba(255,255,255,0.4); background: #fff; }
     .offer-strip.yearly-selected .offer-strip-pill{ color: #0f766e; background: #fff; border-color: rgba(255,255,255,0.5); }
-    .offer-strip-neutral{ background: linear-gradient(90deg, #14b8a6 0%, #0d9488 50%, #14b8a6 100%) !important; border-top: 2px solid #0f766e; border-bottom: 2px solid #0f766e; }
-    .offer-strip-neutral .offer-strip-badge{ color: #fff; background: rgba(0,0,0,0.15); border-color: rgba(255,255,255,0.3); }
+    .offer-strip-neutral .offer-strip-badge{ background: rgba(0,0,0,0.15); border-color: rgba(255,255,255,0.3); }
     .offer-strip-neutral .offer-strip-text{ color: #fff; }
 
     /* Anasayfadaki ile birebir aynı bar: promo-strip-home stili (açık turkuaz, koyu yazı) */
     #promo-strip-payment {
       display: block !important;
+      position: relative;
+      z-index: 2;
       padding: 12px 16px;
       text-align: center;
       font-size: 0.875rem;
@@ -211,7 +233,7 @@
       background: rgba(14, 165, 164, 0.15) !important;
       border-top-color: rgba(14, 165, 164, 0.3) !important;
       border-bottom-color: rgba(14, 165, 164, 0.3) !important;
-      color: #0c4a6e;
+      color: #0c5a5a;
     }
     #promo-strip-payment .promo-strip-code { font-weight: 700; letter-spacing: 0.05em; color: #0d9488; background: rgba(14,165,164,0.12); padding: 2px 8px; border-radius: 6px; }
     #promo-strip-payment.promo-strip-active .promo-strip-code { color: #0f766e; background: rgba(14,165,164,0.2); }
@@ -293,9 +315,9 @@
     @media (min-width: 1024px){ .summary-sidebar{ position: sticky; top: 24px; } }
 
     /* Hero content: refined vertical rhythm */
-    .hero-brand{ display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .hero-brand{ display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
     .hero-brand img{ height: 32px; width: auto; }
-    .hero-badge{ font-size: 10px; font-weight: 600; color: #0EA5A4; letter-spacing: var(--ls-label); text-transform: uppercase; }
+    .hero-brand-tagline{ font-size: 12px; font-weight: 500; color: var(--text-secondary, #475569); line-height: 1.4; max-width: 280px; }
     .hero-title{
       font-size: 1.875rem;
       font-weight: var(--font-display);
@@ -361,6 +383,65 @@
     .social-proof{ display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 32px; margin-bottom: 40px; padding: 24px 0; border-top: 1px solid var(--divider-subtle); border-bottom: 1px solid var(--divider-subtle); }
     .social-proof-item{ display: inline-flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: var(--font-body); color: var(--text-secondary); }
     .social-proof-item svg{ width: var(--icon-md); height: var(--icon-md); flex-shrink: 0; color: #0EA5A4; stroke-width: var(--icon-stroke); }
+
+    /* Sosyal kanıt sayıları: premium kartlar (200.000+, 98%, 50+) */
+    .payment-stats{
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+      margin-bottom: 36px;
+      align-items: stretch;
+    }
+    .payment-stat-card{
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      padding: 24px 16px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.055);
+      border-radius: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.5) inset;
+      transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration-fast) ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .payment-stat-card::before{
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, rgba(14,165,164,0.4) 0%, rgba(13,148,136,0.5) 100%);
+      border-radius: 16px 16px 0 0;
+    }
+    .payment-stat-card:hover{
+      transform: translateY(-2px);
+      border-color: rgba(14,165,164,0.2);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.06), 0 0 0 1px rgba(255,255,255,0.7) inset, 0 0 20px rgba(14,165,164,0.06);
+    }
+    .payment-stat-number{
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: #0d9488;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      margin-bottom: 4px;
+    }
+    .payment-stat-label{
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      text-transform: uppercase;
+    }
+    @media (max-width: 600px){
+      .payment-stats{ grid-template-columns: 1fr; gap: 12px; margin-bottom: 28px; }
+      .payment-stat-card{ padding: 20px 16px; }
+      .payment-stat-number{ font-size: 1.375rem; }
+    }
 
     /* Why Norya: aynı premium kart ritmi */
     .why-norya{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 36px; align-items: stretch; }
@@ -444,6 +525,39 @@
       .reassurance-card-icon-wrap svg{ width: 20px; height: 20px; }
       .reassurance-card-title{ font-size: 0.8125rem; margin-bottom: 4px; min-height: 2.4em; }
       .reassurance-card-desc{ font-size: 0.6875rem; min-height: 2em; overflow-wrap: break-word; }
+    }
+
+    /* QR doğrulama kartı: sonuçlarınızı QR kod ile doğrulayın */
+    .qr-verify-card{
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 28px;
+      padding: 18px 22px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.055);
+      border-radius: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.5) inset;
+      transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease);
+    }
+    .qr-verify-card:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 12px 28px rgba(0,0,0,0.06), 0 0 0 1px rgba(255,255,255,0.7) inset;
+    }
+    .qr-verify-card-icon{
+      width: 48px; height: 48px; flex-shrink: 0;
+      border-radius: 12px;
+      background: linear-gradient(145deg, #f0fdfa 0%, #ccfbf1 100%);
+      border: 1px solid rgba(14,165,164,0.18);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .qr-verify-card-icon svg{ width: 26px; height: 26px; color: #0d9488; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .qr-verify-card-text{ font-size: 1rem; font-weight: 700; color: #1a1a2e; letter-spacing: -0.02em; line-height: 1.35; margin: 0; }
+    @media (max-width: 639px){
+      .qr-verify-card{ padding: 14px 18px; gap: 14px; margin-bottom: 24px; }
+      .qr-verify-card-icon{ width: 44px; height: 44px; }
+      .qr-verify-card-icon svg{ width: 22px; height: 22px; }
+      .qr-verify-card-text{ font-size: 0.9375rem; }
     }
 
     /* Plan cards: floating feel, shadow-led depth */
@@ -775,6 +889,30 @@
     }
 
     /* CTA alanı: summary kartının ana aksiyonu — premium, güven veren */
+    /* İade güvencesi: CTA üstü, güven veren tek satır */
+    .refund-guarantee-strip{
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      padding: 14px 16px;
+      background: linear-gradient(180deg, rgba(240,253,250,0.7) 0%, rgba(255,255,255,0.8) 100%);
+      border: 1px solid rgba(14,165,164,0.15);
+      border-radius: var(--radius-md);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+    }
+    .refund-guarantee-strip-icon{
+      width: 40px; height: 40px; flex-shrink: 0;
+      border-radius: 10px;
+      background: linear-gradient(145deg, #f0fdfa 0%, #ccfbf1 100%);
+      border: 1px solid rgba(14,165,164,0.2);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .refund-guarantee-strip-icon svg{ width: 20px; height: 20px; color: #0d9488; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .refund-guarantee-strip-text{ flex: 1; min-width: 0; }
+    .refund-guarantee-strip-title{ font-size: 0.8125rem; font-weight: 700; color: #1a1a2e; margin: 0 0 2px; line-height: 1.3; }
+    .refund-guarantee-strip-desc{ font-size: 0.6875rem; color: var(--text-secondary); margin: 0; line-height: 1.4; }
+
     .cta-wrap{
       margin-top: 20px;
       margin-bottom: 4px;
@@ -789,6 +927,21 @@
       letter-spacing: 0.03em;
       text-align: center;
     }
+    .cta-below-trust{
+      margin-top: 12px;
+      padding: 12px 14px;
+      background: linear-gradient(180deg, rgba(248,252,252,0.9) 0%, rgba(255,255,255,0.95) 100%);
+      border: 1px solid rgba(14,165,164,0.12);
+      border-radius: var(--radius-md);
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+    }
+    .cta-below-trust svg{ width: 14px; height: 14px; flex-shrink: 0; color: #0d9488; margin-top: 1px; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .cta-main{
       width: 100%;
       padding: 20px 28px;
@@ -1573,8 +1726,12 @@
     .payment-contact-whatsapp svg{ display: block; width: 36px; height: 36px; }
 
     .footer{ text-align: center; padding: 24px 16px; font-size: 0.75rem; color: var(--text-placeholder); }
+    .footer p{ margin: 0 0 10px; }
+    .footer p:last-child{ margin-bottom: 0; }
     .footer a{ color: var(--text-muted); text-decoration: none; }
     .footer a:hover{ color: #0EA5A4; }
+    .footer-enterprise{ font-size: 0.8125rem; color: var(--text-secondary); margin-bottom: 12px !important; }
+    .footer-enterprise a{ font-weight: 600; color: #0EA5A4; }
 
     /* ========== Mobile: premium checkout (single column, no overflow, Safari-safe) ========== */
     @media (max-width: 1023px){
@@ -1586,8 +1743,10 @@
       .hero-metric{ backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
       .why-norya-item{ backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
       .plan-card{ backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
-      .trust-bar{ padding: 8px 12px; gap: 6px 16px; }
+      .trust-bar{ padding: 8px 12px; gap: 6px 14px; }
       .trust-bar span{ font-size: 9px; }
+      .trust-bar svg, .trust-bar .trust-bar-logo{ width: 14px; height: 14px; }
+      .trust-badges{ padding: 12px 16px 14px; grid-template-columns: 1fr; }
       .offer-strip{ padding: 10px 16px; gap: 8px 16px; }
       .offer-strip-text{ font-size: 12px; line-height: 1.35; }
       .offer-strip-badge{ font-size: 9px; padding: 4px 8px; }
@@ -1600,7 +1759,7 @@
       .summary-sidebar{ order: 2; width: 100%; min-width: 0; margin-top: 8px; }
       .hero-brand{ margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
       .hero-brand img{ height: 28px; }
-      .hero-badge{ font-size: 10px; }
+      .hero-brand-tagline{ font-size: 11px; max-width: 100%; }
       .hero-title{ font-size: 1.5rem; margin-bottom: 8px; line-height: 1.28; }
       .hero-subtitle{ font-size: 0.875rem; margin-bottom: 20px; }
       .hero-metrics{ grid-template-columns: repeat(2, 1fr); gap: 10px 12px; margin-bottom: 24px; }
@@ -1681,8 +1840,14 @@
       .payment-methods .pm-logos img{ height: 20px; }
       .summary-reassurance{ grid-template-columns: 1fr; padding: 14px 16px; margin-bottom: 14px; gap: 8px; }
       .summary-reassurance-item{ font-size: 0.625rem; }
+      .refund-guarantee-strip{ padding: 12px 14px; gap: 10px; margin-bottom: 14px; }
+      .refund-guarantee-strip-icon{ width: 36px; height: 36px; }
+      .refund-guarantee-strip-icon svg{ width: 18px; height: 18px; }
+      .refund-guarantee-strip-title{ font-size: 0.75rem; }
+      .refund-guarantee-strip-desc{ font-size: 0.625rem; }
       .cta-wrap{ margin-top: 18px; margin-bottom: 2px; }
       .cta-trust-line{ font-size: 0.625rem; margin-top: 12px; }
+      .cta-below-trust{ font-size: 0.625rem; padding: 10px 12px; margin-top: 10px; }
       .cta-main.cta-summary{ min-height: 56px; padding: 18px 24px; font-size: 1.0625rem; }
       .summary-trust-block{ margin-top: 16px; padding-top: 16px; }
       .summary-trust-block p{ font-size: 0.625rem; }
@@ -1713,21 +1878,30 @@
   </style>
 </head>
 <body>
+  <!-- Üst trust bar: /pay ile aynı (1. satır: 3D, PayTR, Cloudflare, SSL, kart bilgisi) -->
   <div class="trust-bar" role="region" aria-label="{{ t.aria_security }}">
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d_protected }}</span>
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_paytr_certified }}</span>
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_ssl_encryption }}</span>
-    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="12" height="12" class="trust-logo" loading="lazy" />{{ t.trust_cloudflare_security }}</span>
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_badge_hipaa }}</span>
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_gdpr_aligned }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_paytr }}</span>
+    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="16" height="16" class="trust-bar-logo" loading="lazy" />{{ t.trust_cloudflare }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_ssl }}</span>
+    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_card_no_storage }}</span>
   </div>
 
+  <!-- İkinci satır: HIPAA, GDPR, Secure Checkout, Encrypted (tüm dillerde çeviri) -->
+  <div class="trust-badges" role="region" aria-label="{{ t.aria_trust }}">
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_badge_hipaa }}</span>
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_badge_gdpr }}</span>
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_badge_secure_checkout }}</span>
+    <span class="trust-badge"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true"><path d="M12 20V10"/><path d="M18 20V4a2 2 0 00-4 0v16"/><path d="M6 20v-4a2 2 0 014 0v4"/></svg>{{ t.trust_badge_encrypted }}</span>
+  </div>
+
+  <!-- Kampanya şeridi: "%{percent}% kış indirimi — İndirim kodu: WINTER35. Kodu aşağıdaki alana girin." (dile göre) -->
   <!-- Anasayfadaki ile aynı indirim şeridi: kampanya varsa kod gösterilir, yoksa kupon alanına yönlendirilir -->
   <div id="promo-strip-payment" class="{% if campaign_config.campaignActive %}promo-strip-active{% endif %}" role="region" aria-label="{{ t.promo_strip_aria }}">
     <p id="promo-strip-payment-text" class="promo-strip-p" style="margin:0;">
       {% if campaign_config.campaignActive and campaign_config.promoCode %}
-      {{ campaign_config.campaignTitle or (campaign_config.discountValue ~ '% indirim') }} — {{ t.promo_code_label }}: <span class="promo-strip-code">{{ campaign_config.promoCode }}</span>. {{ t.promo_strip_apply_here }}
-    {% else %}
+      {{ (t.promo_strip_discount_template|default('%{percent}% indirim'))|replace('%{percent}', (campaign_config.discountValue|string)) }} — {{ t.promo_code_label }}: <span class="promo-strip-code">{{ campaign_config.promoCode }}</span>. {{ t.promo_strip_apply_here }}
+      {% else %}
       {{ t.campaign_neutral_desc }}
       {% endif %}
     </p>
@@ -1748,7 +1922,7 @@
             <a href="{{ base_url }}/" aria-label="{{ brand }}">
               <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="{{ brand }}" width="140" height="32">
             </a>
-            <span class="hero-badge">{{ t.hero_badge_secure_ai }}</span>
+            <span class="hero-brand-tagline">{{ t.brand_trust_line }}</span>
           </div>
           <h1 class="hero-title">{{ t.hero_choose_title }}</h1>
           <p class="hero-subtitle">{{ t.hero_subtitle }}</p>
@@ -1779,6 +1953,20 @@
           <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>{{ t.social_trusted }}</span>
           <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.social_secure_ai }}</span>
           <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.social_fast_private }}</span>
+        </div>
+        <div class="payment-stats" role="region" aria-label="{{ t.aria_trust }}">
+          <div class="payment-stat-card">
+            <span class="payment-stat-number">{{ t.stat_200k_number }}</span>
+            <span class="payment-stat-label">{{ t.stat_200k_label }}</span>
+          </div>
+          <div class="payment-stat-card">
+            <span class="payment-stat-number">{{ t.stat_satisfaction_number }}</span>
+            <span class="payment-stat-label">{{ t.stat_satisfaction_label }}</span>
+          </div>
+          <div class="payment-stat-card">
+            <span class="payment-stat-number">{{ t.stat_countries_number }}</span>
+            <span class="payment-stat-label">{{ t.stat_countries_label }}</span>
+          </div>
         </div>
         <div class="why-norya" role="region" aria-label="{{ t.aria_why_choose }}">
           <div class="why-norya-item">
@@ -1818,6 +2006,12 @@
             <span class="reassurance-card-title">{{ t.reassurance_instant_pdf }}</span>
             <p class="reassurance-card-desc">{{ t.reassurance_instant_pdf_desc }}</p>
           </div>
+        </div>
+        <div class="qr-verify-card" role="region" aria-label="{{ t.qr_verify_card }}">
+          <div class="qr-verify-card-icon">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M3 14h7v7H3z"/><path d="M14 14h3v3h-3z"/><path d="M18 14h3v3h-3z"/></svg>
+          </div>
+          <p class="qr-verify-card-text">{{ t.qr_verify_card }}</p>
         </div>
         <section class="plans-row" id="plans-row" role="group" aria-label="{{ t.selected_plan }}">
           {% for p in plans %}
@@ -1944,11 +2138,24 @@
               <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_card_secure }}</span>
               <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>{{ t.summary_trust_pdf_instant }}</span>
             </div>
+            <div class="refund-guarantee-strip" role="region" aria-label="{{ t.reassurance_refund }}">
+              <div class="refund-guarantee-strip-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
+              </div>
+              <div class="refund-guarantee-strip-text">
+                <p class="refund-guarantee-strip-title">{{ t.refund_card_title }}</p>
+                <p class="refund-guarantee-strip-desc">{{ t.refund_card_text }}</p>
+              </div>
+            </div>
             <div class="cta-wrap">
               <button type="button" class="cta-main cta-summary" id="pay-now-btn" disabled aria-label="{{ t.pay_btn }}">
                 <span class="btn-text" id="pay-now-btn-text">{{ t.cta_start_monthly }}</span>
               </button>
               <p class="cta-trust-line" aria-hidden="true">{{ t.cta_trust_secure }} · {{ t.cta_trust_instant }} · {{ t.cta_trust_digital }}</p>
+              <p class="cta-below-trust" role="region" aria-label="{{ t.aria_security }}">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <span>{{ t.cta_below_trust }}</span>
+              </p>
             </div>
             <div class="summary-trust-block" role="region" aria-label="{{ t.aria_security }}">
               <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_secure }}</p>
@@ -2125,7 +2332,8 @@
       </a>
     </div>
     <footer class="footer">
-      <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a>
+      <p class="footer-enterprise"><span>{{ t.payment_enterprise_line }}</span> <a href="{{ base_url }}/kurumsal">{{ t.payment_enterprise_link }}</a></p>
+      <p><a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a></p>
     </footer>
   </div>
 
@@ -2297,17 +2505,18 @@ document.addEventListener('DOMContentLoaded', function(){
     if (summarySavingsTitle) summarySavingsTitle.textContent = active ? (cfg.campaignTitle && cfg.campaignTitle.toLowerCase() === 'winter' ? t.offer_winter_label : (cfg.campaignTitle || '')) : t.campaign_active;
     if (summarySavingsDesc) summarySavingsDesc.textContent = active ? (cfg.campaignMessage || '') : t.campaign_neutral_desc;
     if (promoStripPayment) promoStripPayment.classList.toggle('promo-strip-active', active);
-    if (promoStripPaymentText) {
-      if (active && cfg.promoCode) {
-        var promoLabel = t.promo_code_label;
-        var promoApplyHere = t.promo_strip_apply_here;
-        var promoTitle = cfg.campaignTitle || (cfg.discountValue ? (cfg.discountValue + '% indirim') : '');
-        var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-        promoStripPaymentText.innerHTML = promoTitle + ' — ' + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
-      } else {
-        promoStripPaymentText.textContent = t.campaign_neutral_desc;
-      }
-    }
+        if (promoStripPaymentText) {
+          if (active && cfg.promoCode) {
+            var promoLabel = t.promo_code_label;
+            var promoApplyHere = t.promo_strip_apply_here;
+            var discountTpl = (t.promo_strip_discount_template || '%{percent}% indirim');
+            var promoTitle = (cfg.discountValue != null) ? discountTpl.replace(/%\{percent\}/g, String(cfg.discountValue)) : (cfg.campaignTitle || '');
+            var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            promoStripPaymentText.innerHTML = promoTitle + ' — ' + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
+          } else {
+            promoStripPaymentText.textContent = t.campaign_neutral_desc;
+          }
+        }
     campaignConfig = cfg;
     if (cfg.autoApply && cfg.promoCode && selectedPlan && couponInput) {
       couponInput.value = cfg.promoCode;
@@ -2369,7 +2578,8 @@ document.addEventListener('DOMContentLoaded', function(){
           if (active && cfg.promoCode) {
             var promoLabel = t.promo_code_label;
             var promoApplyHere = t.promo_strip_apply_here;
-            var promoTitle = cfg.campaignTitle || (cfg.discountValue && t.discount_suffix ? (cfg.discountValue + '% ' + t.discount_suffix) : '');
+            var discountTpl = (t.promo_strip_discount_template || '%{percent}% indirim');
+            var promoTitle = (cfg.discountValue != null) ? discountTpl.replace(/%\{percent\}/g, String(cfg.discountValue)) : (cfg.campaignTitle || '');
             var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
             promoStripPaymentText.innerHTML = promoTitle + ' — ' + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
           } else {
