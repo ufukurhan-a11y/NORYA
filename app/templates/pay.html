@@ -11,6 +11,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
+  <link rel="canonical" href="{{ base_url }}/pay" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{ -webkit-text-size-adjust: 100%; }
@@ -649,6 +650,7 @@
   </div>
 
   <script>
+document.addEventListener('DOMContentLoaded', function(){
 (function(){
   var planCode = {{ plan_code_js | safe }};
   var prices = {{ prices_js | safe }};
@@ -853,12 +855,12 @@
   function openPaymentWindow(url) {
     var w = window.open(url, '_blank', 'noopener,noreferrer');
     if (!w || w.closed) {
-      popupModal.classList.add('visible');
+      if (popupModal) popupModal.classList.add('visible');
       if (popupOpenLink) popupOpenLink.href = url;
     } else {
-      statusCard.classList.add('visible');
+      if (statusCard) statusCard.classList.add('visible');
       if (openAgainLink) openAgainLink.href = url;
-      formCard.classList.add('has-status');
+      if (formCard) formCard.classList.add('has-status');
     }
   }
 
@@ -906,7 +908,7 @@
   if (ctaMain) ctaMain.addEventListener('click', onCtaClick);
   if (stickyCta) stickyCta.addEventListener('click', onCtaClick);
 
-  if (paymentDoneBtn) paymentDoneBtn.addEventListener('click', function(){
+  if (paymentDoneBtn) paymentDoneBtn.addEventListener('click', function() {
     var oid = window._lastMerchantOid;
     if (!oid) return;
     fetch(baseUrl + '/api/orders/status?merchant_oid=' + encodeURIComponent(oid))
@@ -919,8 +921,9 @@
       });
   });
 
-  popupModal.addEventListener('click', function(e){ if (e.target === popupModal) popupModal.classList.remove('visible'); });
+  if (popupModal) popupModal.addEventListener('click', function(e){ if (e.target === popupModal) popupModal.classList.remove('visible'); });
 })();
+});
   </script>
 </body>
 </html>

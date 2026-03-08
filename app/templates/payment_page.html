@@ -3,140 +3,531 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#F9FAFB">
+  <meta name="theme-color" content="#f4f7fa">
   <title>{{ t.pay_title }} – {{ brand }}</title>
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
+  <link rel="canonical" href="{{ base_url }}/payment" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{-webkit-text-size-adjust:100%;overflow-x:clip;}
+    html{-webkit-text-size-adjust:100%;overflow-x:clip;width:100%;}
     body{
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
-      background: #F9FAFB;
-      color: #1a1a2e;
+      background: #f8fafc;
+      color: var(--text-body, #1e293b);
+      font-size: 16px;
+      line-height: 1.5;
       min-height: 100vh;
       min-height: 100dvh;
+      min-height: -webkit-fill-available;
       padding-bottom: 60px;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
+      width: 100%;
     }
-    .trust-strip{
-      background: #fff;
-      border-bottom: 1px solid #E5E7EB;
-      padding: 12px 20px;
+    body::before{
+      content: '';
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 120% 80% at 50% -20%, rgba(14,165,164,0.04) 0%, transparent 50%),
+        radial-gradient(ellipse 80% 50% at 80% 20%, rgba(14,165,164,0.025) 0%, transparent 45%),
+        linear-gradient(165deg, #fafbfd 0%, #f6f8fb 30%, #f2f6f9 60%, #eef4f8 100%);
+    }
+    /* Design system: typography, radius, motion, dividers, icons */
+    :root{
+      --text-heading: #0f172a;
+      --text-subheading: #1e293b;
+      --text-body: #334155;
+      --text-secondary: #475569;
+      --text-muted: #64748b;
+      --text-placeholder: #94a3b8;
+      --font-heading: 800;
+      --font-title: 700;
+      --font-body: 500;
+      --font-label: 600;
+      --ls-tight: -0.03em;
+      --ls-normal: 0;
+      --ls-wide: 0.04em;
+      --ls-label: 0.08em;
+      --ls-tiny: 0.1em;
+      /* Radius scale */
+      --radius-sm: 8px;
+      --radius-md: 12px;
+      --radius-lg: 16px;
+      --radius-xl: 20px;
+      --radius-2xl: 24px;
+      --radius-full: 9999px;
+      /* Motion: short, smooth, premium */
+      --ease: cubic-bezier(0.25, 0.1, 0.25, 1);
+      --ease-out: cubic-bezier(0.2, 0, 0, 1);
+      --duration-fast: 0.18s;
+      --duration: 0.22s;
+      --duration-slow: 0.28s;
+      /* Dividers: refined, not harsh */
+      --divider: rgba(0,0,0,0.04);
+      --divider-strong: rgba(0,0,0,0.06);
+      /* Icon system */
+      --icon-sm: 14px;
+      --icon-md: 16px;
+      --icon-lg: 18px;
+      --icon-stroke: 2;
+      /* Card/panel surface */
+      --shadow-card: 0 2px 8px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.03);
+      --shadow-card-hover: 0 4px 16px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.04);
+      --shadow-btn-glow: 0 0 0 1px rgba(14,165,164,0.08), 0 4px 14px rgba(14,165,164,0.28);
+      --shadow-btn-glow-hover: 0 0 0 1px rgba(14,165,164,0.12), 0 6px 20px rgba(14,165,164,0.35);
+    }
+    /* Trust bar: single row, minimal — design system */
+    .trust-bar{
+      background: rgba(250,251,252,0.98);
+      border-bottom: 1px solid var(--divider);
+      padding: 8px 16px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 10px 20px;
+      gap: 8px 24px;
     }
-    .trust-strip span{
+    .trust-bar span{
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      font-weight: 600;
-      color: #475569;
-      letter-spacing: 0.02em;
+      gap: 5px;
+      font-size: 10px;
+      font-weight: var(--font-label);
+      color: var(--text-muted);
+      letter-spacing: var(--ls-wide);
     }
-    .trust-strip svg{ width: 14px; height: 14px; flex-shrink: 0; color: #0EA5A4; }
-    .trust-strip .trust-logo{ width: 14px; height: 14px; object-fit: contain; }
+    .trust-bar svg{ width: var(--icon-sm); height: var(--icon-sm); flex-shrink: 0; color: #0EA5A4; opacity: 0.9; stroke-width: var(--icon-stroke); }
+    .trust-bar .trust-logo{ width: var(--icon-sm); height: var(--icon-sm); object-fit: contain; opacity: 0.85; }
 
-    .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
-    .header{
+    /* Offer strip: premium campaign feel, not cheap */
+    .offer-strip{
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 24px 0 20px;
+      justify-content: center;
       flex-wrap: wrap;
-      gap: 12px;
+      gap: 12px 24px;
+      padding: 12px 24px;
+      background: linear-gradient(90deg, #f1f5f9 0%, #e8f4f4 35%, #e2f0ef 70%, #e8f4f4 100%);
+      border-bottom: 1px solid rgba(14,165,164,0.12);
+      transition: background 0.3s ease, border-color 0.3s ease;
     }
-    .header a{ display: inline-flex; align-items: center; gap: 10px; text-decoration: none; color: inherit; }
-    .header img{ height: 36px; width: auto; }
-    .header-badge{ font-size: 11px; color: #0EA5A4; font-weight: 600; text-transform: uppercase; letter-spacing: 0.05em; }
+    .offer-strip.single-selected{
+      background: #f8fafc;
+      border-bottom-color: #e2e8f0;
+      opacity: 0.92;
+    }
+    .offer-strip.yearly-selected{
+      background: linear-gradient(90deg, #e8f4f4 0%, rgba(14,165,164,0.08) 50%, #e2f0ef 100%);
+      border-bottom-color: rgba(14,165,164,0.22);
+    }
+    .offer-strip-badge{
+      font-size: 10px;
+      font-weight: 700;
+      letter-spacing: var(--ls-label);
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      background: #fff;
+      padding: 5px 10px;
+      border-radius: var(--radius-sm);
+      border: 1px solid #e2e8f0;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04);
+    }
+    .offer-strip.single-selected .offer-strip-badge{ color: var(--text-placeholder); border-color: #e2e8f0; }
+    .offer-strip.yearly-selected .offer-strip-badge{ color: #0e7c7b; border-color: rgba(14,165,164,0.25); background: rgba(255,255,255,0.9); }
+    .offer-strip-text{
+      font-size: 0.8125rem;
+      font-weight: var(--font-body);
+      color: var(--text-body);
+      line-height: 1.45;
+      text-align: center;
+    }
+    .offer-strip.single-selected .offer-strip-text{ color: var(--text-muted); }
+    .offer-strip.yearly-selected .offer-strip-text{ color: var(--text-subheading); font-weight: var(--font-label); }
+    .offer-strip-pill{
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: #0e7c7b;
+      background: rgba(255,255,255,0.95);
+      padding: 6px 14px;
+      border-radius: 9999px;
+      border: 1px solid rgba(14,165,164,0.25);
+      white-space: nowrap;
+    }
+    .offer-strip.single-selected .offer-strip-pill{ color: var(--text-muted); border-color: #e2e8f0; }
+    .offer-strip.yearly-selected .offer-strip-pill{ color: #fff; background: rgba(14,165,164,0.85); border-color: rgba(14,165,164,0.4); }
+    .offer-strip-neutral{ background: #f8fafc; border-bottom-color: var(--divider); }
+    .offer-strip-neutral .offer-strip-badge{ color: var(--text-muted); }
+    .offer-strip-neutral .offer-strip-text{ color: var(--text-secondary); }
 
-    .grid{ display: grid; gap: 24px; }
-    @media (min-width: 900px){ .grid{ grid-template-columns: 1fr 320px; align-items: start; gap: 32px; } }
-    .left-col{ min-width: 0; }
-    .right-col{ min-width: 0; }
-    @media (min-width: 900px){ .right-col{ position: sticky; top: 20px; } }
+    .summary-savings-neutral .summary-savings-icon{ opacity: 0.5; color: var(--text-muted); }
+    .summary-savings-neutral .summary-savings-title{ color: var(--text-muted); }
+    .summary-savings-neutral .summary-savings-desc{ color: var(--text-secondary); }
 
-    /* Plan cards: mobile first, annual on top on small screens */
+    .wrap{ max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; position: relative; z-index: 1; }
+    @media (min-width: 768px){ .wrap{ padding: 0 32px; } }
+
+    /* Hero + checkout grid: premium spacing, subtle depth */
+    .checkout-hero{ display: grid; gap: 44px; padding: 44px 0 52px; }
+    @media (min-width: 1024px){ .checkout-hero{ grid-template-columns: 1fr 360px; align-items: start; gap: 52px 60px; padding: 52px 0 64px; } }
+    .hero-left{ min-width: 0; position: relative; }
+    .hero-left::before{
+      content: '';
+      position: absolute;
+      top: -32px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 100%;
+      max-width: 560px;
+      height: 380px;
+      background: radial-gradient(ellipse 70% 55% at 50% -8%, rgba(14,165,164,0.06) 0%, rgba(14,165,164,0.02) 40%, transparent 65%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-left::after{
+      content: '';
+      position: absolute;
+      top: 60px;
+      left: -10%;
+      width: 60%;
+      height: 240px;
+      background: radial-gradient(ellipse 100% 100% at 0% 30%, rgba(255,255,255,0.6) 0%, transparent 60%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    .hero-left > *{ position: relative; z-index: 1; }
+
+    /* Hero heading: luxury layer behind title area */
+    .hero-heading{
+      position: relative;
+      margin-bottom: 36px;
+    }
+    .hero-heading::before{
+      content: '';
+      position: absolute;
+      top: -20px;
+      left: -24px;
+      right: -24px;
+      bottom: -16px;
+      background: radial-gradient(ellipse 90% 70% at 50% 30%, rgba(14,165,164,0.035) 0%, rgba(255,255,255,0.4) 40%, transparent 70%);
+      border-radius: var(--radius-2xl);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .summary-sidebar{ min-width: 0; }
+    @media (min-width: 1024px){ .summary-sidebar{ position: sticky; top: 24px; } }
+
+    /* Hero content: refined vertical rhythm */
+    .hero-brand{ display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+    .hero-brand img{ height: 32px; width: auto; }
+    .hero-badge{ font-size: 10px; font-weight: 700; color: #0EA5A4; letter-spacing: var(--ls-label); text-transform: uppercase; }
+    .hero-title{
+      font-size: 1.875rem;
+      font-weight: var(--font-heading);
+      color: var(--text-heading);
+      line-height: 1.22;
+      margin-bottom: 16px;
+      letter-spacing: var(--ls-tight);
+      text-shadow: 0 0 1px rgba(255,255,255,0.8);
+    }
+    @media (min-width: 640px){ .hero-title{ font-size: 2.25rem; letter-spacing: -0.04em; margin-bottom: 18px; } }
+    .hero-subtitle{
+      font-size: 1rem;
+      font-weight: var(--font-body);
+      color: var(--text-secondary);
+      line-height: 1.55;
+      margin-bottom: 0;
+      max-width: 480px;
+    }
+    .hero-metrics{ display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px 18px; margin-bottom: 40px; }
+    @media (min-width: 480px){ .hero-metrics{ grid-template-columns: repeat(4, 1fr); gap: 16px 20px; } }
+    .hero-metric{
+      background: rgba(255,255,255,0.92);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,0,0,0.04);
+      border-radius: var(--radius-lg);
+      padding: 16px 18px;
+      font-size: 0.75rem;
+      font-weight: var(--font-label);
+      color: var(--text-secondary);
+      letter-spacing: 0.02em;
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 12px rgba(0,0,0,0.04), 0 0 0 1px rgba(255,255,255,0.6) inset;
+      transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration-fast) ease;
+    }
+    .hero-metric:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.03), 0 8px 24px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.8) inset;
+      border-color: rgba(0,0,0,0.06);
+    }
+    .hero-metric svg{ width: var(--icon-md); height: var(--icon-md); margin: 0 auto 8px; display: block; color: #0EA5A4; stroke-width: var(--icon-stroke); opacity: 0.95; }
+
+    /* Icon set: outline only, consistent stroke */
+    .icon-outline{ stroke-width: var(--icon-stroke); stroke-linecap: round; stroke-linejoin: round; fill: none; }
+
+    /* Social proof: premium spacing and dividers */
+    .social-proof{ display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 18px 32px; margin-bottom: 40px; padding: 24px 0; border-top: 1px solid rgba(0,0,0,0.04); border-bottom: 1px solid rgba(0,0,0,0.04); }
+    .social-proof-item{ display: inline-flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: var(--font-body); color: var(--text-secondary); }
+    .social-proof-item svg{ width: var(--icon-md); height: var(--icon-md); flex-shrink: 0; color: #0EA5A4; stroke-width: var(--icon-stroke); }
+
+    /* Why Norya: refined cards, premium shadow + border */
+    .why-norya{ display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; margin-bottom: 44px; }
+    .why-norya-item{
+      background: rgba(255,255,255,0.94);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(0,0,0,0.04);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px;
+      font-size: 0.8125rem;
+      font-weight: var(--font-label);
+      color: var(--text-secondary);
+      text-align: center;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 14px rgba(0,0,0,0.04), 0 0 0 1px rgba(255,255,255,0.5) inset;
+      transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration-fast) ease;
+    }
+    .why-norya-item:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.03), 0 10px 28px rgba(0,0,0,0.06), 0 0 0 1px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.8) inset;
+      border-color: rgba(0,0,0,0.06);
+    }
+    .why-norya-item svg{ width: var(--icon-lg); height: var(--icon-lg); margin: 0 auto 10px; display: block; color: #0EA5A4; stroke-width: var(--icon-stroke); opacity: 0.95; }
+    @media (max-width: 600px){ .why-norya{ grid-template-columns: 1fr; margin-bottom: 36px; } }
+
+    /* Mini güven satırı: hero altı, plan kartları üstü — premium pill/badge */
+    .reassurance-row{
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 10px 14px;
+      margin-bottom: 32px;
+      padding: 14px 0;
+    }
+    .reassurance-pill{
+      display: inline-flex;
+      align-items: center;
+      padding: 8px 16px;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--text-secondary);
+      background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: 9999px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.03), 0 0 0 1px rgba(255,255,255,0.5) inset;
+      white-space: nowrap;
+    }
+    @media (max-width: 639px){
+      .reassurance-row{ margin-bottom: 24px; padding: 12px 0; gap: 8px 12px; }
+      .reassurance-pill{ font-size: 0.625rem; padding: 6px 12px; }
+    }
+
+    /* Plan cards: floating feel, shadow-led depth */
     .plans-row{
       display: flex;
       flex-direction: column;
-      gap: 16px;
+      gap: 24px;
+      align-items: stretch;
     }
-    @media (min-width: 640px){ .plans-row{ flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 20px; } }
-    @media (min-width: 900px){ .plans-row{ flex-wrap: nowrap; justify-content: stretch; } }
+    @media (min-width: 640px){ .plans-row{ flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 28px; } }
+    @media (min-width: 960px){ .plans-row{ flex-wrap: nowrap; justify-content: stretch; gap: 28px; } }
 
     .plan-card{
-      background: #fff;
-      border-radius: 20px;
-      border: 1px solid #E5E7EB;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
-      padding: 24px 20px;
+      display: flex;
+      flex-direction: column;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--radius-2xl);
+      border: 1px solid var(--divider-strong);
+      box-shadow: var(--shadow-card), 0 24px 56px rgba(0,0,0,0.04);
+      padding: 26px 24px 28px;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+      transition: transform var(--duration) var(--ease), box-shadow var(--duration) var(--ease), border-color var(--duration-fast) ease;
       position: relative;
       flex: 1;
       min-width: 0;
+      min-height: 400px;
+      z-index: 1;
     }
-    .plan-card:hover{ transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06), 0 12px 32px rgba(0,0,0,0.06); border-color: #D1D5DB; }
-    .plan-card.selected{ border-color: #0EA5A4; box-shadow: 0 0 0 2px rgba(14,165,164,0.2), 0 8px 24px rgba(14,165,164,0.12); }
-    .plan-card.annual{ border-color: #0EA5A4; border-width: 1px; }
-    .plan-card.annual.selected{ box-shadow: 0 0 0 2px rgba(14,165,164,0.25), 0 8px 24px rgba(14,165,164,0.12); }
-    .plan-card .best-value{
-      position: absolute;
-      top: -1px;
-      left: 50%;
-      transform: translateX(-50%);
-      font-size: 10px;
+    .plan-card:focus{ outline: none; }
+    .plan-card:focus-visible{ outline: 2px solid #0EA5A4; outline-offset: 2px; }
+    .plan-card:hover{
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-card-hover), 0 24px 56px rgba(0,0,0,0.05);
+      border-color: var(--divider-strong);
+    }
+    .plan-card.selected{
+      border-color: rgba(14,165,164,0.28);
+      box-shadow: 0 0 0 2px rgba(14,165,164,0.18), 0 8px 32px rgba(14,165,164,0.06), 0 24px 56px rgba(0,0,0,0.06);
+      background: linear-gradient(180deg, rgba(14,165,164,0.03) 0%, rgba(255,255,255,0.98) 100%);
+      transition: border-color 0.2s ease, box-shadow 0.25s ease;
+    }
+    /* Yearly: most valuable package, more premium than monthly */
+    .plan-card.annual{
+      background: linear-gradient(180deg, rgba(14,165,164,0.06) 0%, rgba(14,165,164,0.02) 22%, rgba(255,255,255,0.98) 100%);
+      border-color: rgba(14,165,164,0.14);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.03), 0 8px 32px rgba(14,165,164,0.05), 0 24px 56px rgba(0,0,0,0.04);
+    }
+    .plan-card.annual:hover{ border-color: rgba(14,165,164,0.22); box-shadow: var(--shadow-card-hover), 0 24px 56px rgba(14,165,164,0.05); }
+    .plan-card.annual.selected{
+      border-color: rgba(14,165,164,0.35);
+      box-shadow: 0 0 0 2px rgba(14,165,164,0.2), 0 8px 32px rgba(14,165,164,0.08), 0 24px 56px rgba(0,0,0,0.06);
+      background: linear-gradient(180deg, rgba(14,165,164,0.05) 0%, rgba(14,165,164,0.02) 25%, rgba(255,255,255,0.98) 100%);
+    }
+    .plan-card-head{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 2px;
+    }
+    /* Badge: above title, in flow (no overlap) */
+    .plan-card .card-badge{
+      display: inline-block;
+      align-self: flex-start;
+      font-size: 9px;
       font-weight: 700;
+      letter-spacing: var(--ls-label);
       text-transform: uppercase;
-      letter-spacing: 0.05em;
-      background: linear-gradient(135deg, #0EA5A4, #0891B2);
       color: #fff;
-      padding: 6px 14px;
-      border-radius: 0 0 12px 12px;
-      box-shadow: 0 2px 8px rgba(14,165,164,0.3);
+      padding: 6px 12px;
+      border-radius: var(--radius-full);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      line-height: 1.2;
     }
-    .plan-card h3{ font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
-    .plan-card .price{ font-size: 28px; font-weight: 800; color: #0EA5A4; line-height: 1.1; }
-    .plan-card .price .currency{ font-size: 16px; font-weight: 600; opacity: 0.9; margin-left: 2px; }
-    .plan-card .price-desc{ font-size: 12px; color: #64748b; margin-top: 4px; }
-    .plan-card ul{ list-style: none; margin-top: 16px; }
-    .plan-card ul li{ font-size: 13px; color: #475569; padding: 6px 0; display: flex; align-items: center; gap: 8px; }
-    .plan-card ul li svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; }
+    .plan-card .card-badge.most-popular{ background: linear-gradient(135deg, #0EA5A4 0%, #0d9488 100%); box-shadow: 0 2px 10px rgba(14,165,164,0.25); }
+    .plan-card .card-badge.best-value{ background: linear-gradient(135deg, #0b8a8a 0%, #0e7498 100%); box-shadow: 0 2px 12px rgba(14,165,164,0.3); }
+    .plan-card .card-badge.one-time{ background: linear-gradient(135deg, #64748b 0%, #475569 100%); }
+    /* Card typography: title → desc → price rhythm */
+    .plan-card-title{
+      font-size: 1.125rem;
+      font-weight: var(--font-heading);
+      color: var(--text-heading);
+      margin: 0 0 6px 0;
+      letter-spacing: var(--ls-tight);
+      line-height: 1.3;
+    }
+    .plan-card-desc{
+      font-size: 0.8125rem;
+      font-weight: var(--font-body);
+      color: var(--text-muted);
+      line-height: 1.5;
+      margin-bottom: 22px;
+      min-height: 2.85em;
+    }
+    .plan-card-price-wrap{ margin-bottom: 22px; }
+    .plan-card-price{
+      display: inline-flex;
+      align-items: baseline;
+      flex-wrap: wrap;
+      gap: 2px 6px;
+      font-size: 2.375rem;
+      font-weight: var(--font-heading);
+      color: #0EA5A4;
+      line-height: 1.1;
+      letter-spacing: -0.04em;
+      font-variant-numeric: tabular-nums;
+    }
+    .plan-card-price .price-num{ font-variant-numeric: tabular-nums; }
+    .plan-card-price .currency{ font-size: 1.1875rem; font-weight: 700; opacity: 0.95; letter-spacing: -0.02em; }
+    .plan-card-price .price-period{ font-size: 0.9375rem; font-weight: var(--font-label); color: var(--text-muted); letter-spacing: 0.01em; }
+    /* Features: body text */
+    .plan-card-features{ list-style: none; padding: 0; margin: 0; flex: 1; min-height: 0; display: flex; flex-direction: column; gap: 2px; }
+    .plan-card-features li{
+      font-size: 0.8125rem;
+      font-weight: var(--font-body);
+      color: var(--text-body);
+      padding: 8px 0;
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      line-height: 1.45;
+    }
+    .plan-card-features li svg{ width: var(--icon-lg); height: var(--icon-lg); flex-shrink: 0; color: #0EA5A4; margin-top: 1px; stroke-width: var(--icon-stroke); }
+    .plan-card-features li .benefit-text{ flex: 1; min-width: 0; }
+    /* CTA: anchored at bottom, consistent size */
+    .plan-card-cta{
+      width: 100%;
+      margin-top: auto;
+      min-height: 52px;
+      padding: 16px 20px;
+      border-radius: var(--radius-lg);
+      font-size: 0.9375rem;
+      font-weight: var(--font-label);
+      cursor: pointer;
+      transition: transform var(--duration-fast) var(--ease), background var(--duration-fast) ease, border-color var(--duration-fast) ease, box-shadow var(--duration) var(--ease);
+      border: 2px solid rgba(0,0,0,0.08);
+      background: #f8fafc;
+      color: var(--text-body);
+      outline: none;
+      pointer-events: auto;
+    }
+    .plan-card-cta:hover{ transform: translateY(-1px); background: #f1f5f9; border-color: rgba(0,0,0,0.12); color: var(--text-body); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+    .plan-card-cta:focus-visible{ box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0EA5A4; }
+    .plan-card.selected .plan-card-cta{
+      border: 2px solid #0EA5A4;
+      background: rgba(14,165,164,0.09);
+      color: #0d9488;
+      box-shadow: 0 2px 12px rgba(14,165,164,0.15);
+    }
+    .plan-card.selected .plan-card-cta:hover{ transform: translateY(-2px); box-shadow: 0 4px 16px rgba(14,165,164,0.2); }
+    .plan-card.popular .plan-card-cta{
+      background: linear-gradient(180deg, #0EA5A4 0%, #0d9488 100%);
+      color: #fff;
+      border: 2px solid transparent;
+      box-shadow: 0 2px 12px rgba(14,165,164,0.28);
+    }
+    .plan-card.popular .plan-card-cta:hover{ filter: brightness(1.05); box-shadow: 0 4px 16px rgba(14,165,164,0.35); }
+    .plan-card.popular.selected .plan-card-cta{
+      border-color: rgba(255,255,255,0.5);
+      box-shadow: 0 0 0 2px rgba(14,165,164,0.3), 0 2px 12px rgba(14,165,164,0.3);
+    }
+    .plan-card.annual .plan-card-cta{
+      border: 2px solid #0EA5A4;
+      color: #0EA5A4;
+      background: #fff;
+    }
+    .plan-card.annual .plan-card-cta:hover{ background: rgba(14,165,164,0.06); box-shadow: 0 4px 12px rgba(14,165,164,0.12); }
+    .plan-card.annual.selected .plan-card-cta{
+      border-width: 2px;
+      background: rgba(14,165,164,0.1);
+      color: #0d9488;
+      box-shadow: 0 2px 12px rgba(14,165,164,0.18);
+    }
 
-    /* Mobile: annual first */
-    @media (max-width: 639px){
-      .plans-row .plan-card.annual{ order: -1; }
-    }
+    @media (max-width: 639px){ .plans-row .plan-card.annual{ order: -1; } }
 
     .form-section{
       background: #fff;
-      border-radius: 20px;
-      border: 1px solid #E5E7EB;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--divider-strong);
+      box-shadow: var(--shadow-card);
       padding: 28px 24px;
       margin-top: 24px;
     }
-    .form-section h3{ font-size: 14px; font-weight: 700; color: #64748b; margin-bottom: 16px; text-transform: uppercase; letter-spacing: 0.06em; }
+    .form-section.form-in-summary{ margin-top: 24px; padding: 0; border: none; box-shadow: none; background: transparent; border-radius: 0; border-top: 1px solid rgba(0,0,0,0.05); padding-top: 24px; }
+    .form-section h3{ font-size: 0.6875rem; font-weight: 700; color: var(--text-muted); margin-bottom: 16px; text-transform: uppercase; letter-spacing: var(--ls-label); }
     .form-group{ margin-bottom: 14px; }
-    .form-group label{ display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 6px; }
+    .form-group label{ display: block; font-size: 0.75rem; font-weight: var(--font-label); color: var(--text-secondary); margin-bottom: 6px; letter-spacing: 0.02em; }
     .input{
       width: 100%;
       min-height: 48px;
       padding: 12px 16px;
       border: 1px solid #e2e8f0;
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       font-size: 16px;
-      color: #1a1a2e;
+      color: var(--text-heading);
       background: #fff;
-      transition: border-color 0.2s, box-shadow 0.2s;
+      transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) var(--ease);
       box-sizing: border-box;
     }
     .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
@@ -147,32 +538,30 @@
       min-height: 48px;
       padding: 0 18px;
       border: none;
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       background: #f1f5f9;
-      color: #475569;
-      font-weight: 600;
-      font-size: 14px;
+      color: var(--text-secondary);
+      font-weight: var(--font-label);
+      font-size: 0.875rem;
       cursor: pointer;
       white-space: nowrap;
+      transition: background var(--duration-fast) var(--ease), color var(--duration-fast) ease, box-shadow var(--duration-fast) var(--ease);
     }
-    .btn-secondary:hover{ background: #e2e8f0; color: #334155; }
-    .coupon-msg{ font-size: 13px; margin-top: 6px; min-height: 20px; }
-    .coupon-msg.ok{ color: #059669; }
-    .coupon-msg.err{ color: #dc2626; }
+    .btn-secondary:hover{ background: #e2e8f0; color: var(--text-body); box-shadow: 0 2px 8px rgba(0,0,0,0.04); }
 
     .payment-methods{
       margin-top: 22px;
       padding-top: 18px;
-      border-top: 1px solid #E5E7EB;
+      border-top: 1px solid var(--divider);
       background: transparent;
       min-width: 0;
     }
     .payment-methods .pm-title{
-      font-size: 11px;
+      font-size: 0.6875rem;
       font-weight: 700;
-      color: #64748b;
+      color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.07em;
+      letter-spacing: var(--ls-label);
       margin-bottom: 12px;
     }
     .payment-methods .pm-logos-wrap{
@@ -182,7 +571,7 @@
       padding: 14px 18px;
       background: #f8fafc;
       border: 1px solid #e2e8f0;
-      border-radius: 12px;
+      border-radius: var(--radius-md);
       overflow: hidden;
     }
     .payment-methods .pm-logos{
@@ -218,37 +607,40 @@
       .payment-methods .pm-logos{ gap: 14px; }
     }
 
-    .cta-wrap{ margin-top: 20px; }
+    .cta-trust-line{ font-size: 0.75rem; font-weight: var(--font-body); color: var(--text-muted); margin: 0 0 6px; line-height: 1.45; }
+    .cta-wrap{ margin-top: 12px; }
     .cta-main{
       width: 100%;
       padding: 18px 28px;
       min-height: 56px;
       border: none;
-      border-radius: 14px;
+      border-radius: var(--radius-lg);
       background: linear-gradient(180deg, #0EA5A4 0%, #0d9488 100%);
       color: #fff;
       font-size: 17px;
       font-weight: 700;
       cursor: pointer;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration) var(--ease), opacity var(--duration-fast) ease;
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: 0 4px 14px rgba(14,165,164,0.35);
+      box-shadow: var(--shadow-btn-glow);
     }
-    .cta-main:hover:not(:disabled){ transform: translateY(-1px); box-shadow: 0 6px 20px rgba(14,165,164,0.4); }
+    .cta-main:hover:not(:disabled){ transform: translateY(-1px); box-shadow: var(--shadow-btn-glow-hover); }
     .cta-main:disabled{ opacity: 0.85; cursor: not-allowed; }
     .cta-main .spinner{ width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    .cta-main.cta-summary{ min-height: 56px; padding: 18px 24px; font-size: 1.0625rem; font-weight: 700; border-radius: var(--radius-lg); }
+    .form-in-summary .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
     .iframe-section{ margin-top: 24px; display: none; }
     .iframe-section.visible{ display: block; }
     .iframe-wrapper{
       background: #fff;
-      border-radius: 20px;
-      border: 1px solid #E5E7EB;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
+      border-radius: var(--radius-xl);
+      border: 1px solid var(--divider-strong);
+      box-shadow: var(--shadow-card);
       overflow: hidden;
       min-height: 420px;
       position: relative;
@@ -269,137 +661,602 @@
       display: block;
     }
 
+    /* ——— Sipariş özeti: premium white card, conversion-focused ——— */
     .summary-card{
       background: #fff;
-      border-radius: 20px;
-      border: 1px solid #E5E7EB;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.05), 0 8px 24px rgba(0,0,0,0.04);
-      padding: 24px;
+      border-radius: var(--radius-2xl);
+      border: 1px solid rgba(0,0,0,0.06);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 8px 24px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.6) inset;
+      padding: 32px 28px 28px;
+      transition: box-shadow var(--duration) var(--ease);
     }
-    .summary-card h3{ font-size: 12px; font-weight: 700; color: #64748b; margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.06em; }
-    .summary-plan{ font-size: 16px; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; }
-    .summary-total{ font-size: 24px; font-weight: 800; color: #0EA5A4; }
-    .summary-total .currency{ font-size: 14px; font-weight: 600; margin-left: 4px; }
-    .summary-note{ font-size: 12px; color: #64748b; margin-top: 12px; line-height: 1.5; }
-    .summary-empty{ font-size: 14px; color: #94a3b8; }
+    .summary-card:hover{ box-shadow: 0 2px 6px rgba(0,0,0,0.03), 0 12px 32px rgba(0,0,0,0.06), 0 0 0 1px rgba(255,255,255,0.8) inset; }
+    @media (min-width: 1024px){
+      .summary-sidebar{ top: 20px; }
+      .summary-card:hover{ box-shadow: 0 4px 12px rgba(0,0,0,0.04), 0 20px 48px rgba(0,0,0,0.07), 0 0 0 1px rgba(255,255,255,0.8) inset; }
+    }
+    .summary-card-heading{
+      font-size: 1.25rem;
+      font-weight: var(--font-heading);
+      color: var(--text-heading);
+      margin-bottom: 4px;
+      letter-spacing: var(--ls-tight);
+      line-height: 1.28;
+    }
+    .summary-card-subtitle{
+      font-size: 0.8125rem;
+      font-weight: var(--font-body);
+      color: var(--text-secondary);
+      margin-bottom: 26px;
+      line-height: 1.45;
+    }
 
-    .error-msg{ font-size: 14px; color: #dc2626; margin-top: 12px; padding: 12px; background: #fef2f2; border-radius: 10px; display: none; }
+    .summary-divider{
+      height: 1px;
+      background: linear-gradient(90deg, transparent 0%, rgba(0,0,0,0.05) 8%, rgba(0,0,0,0.05) 92%, transparent 100%);
+      margin: 0 0 22px;
+    }
+
+    .summary-block{ margin-bottom: 24px; }
+    .summary-block:last-of-type{ margin-bottom: 0; }
+
+    /* Seçilen plan: premium blok */
+    .summary-plan-block{
+      background: linear-gradient(180deg, rgba(248,251,252,0.7) 0%, rgba(255,255,255,0.5) 100%);
+      border: 1px solid rgba(0,0,0,0.04);
+      border-radius: var(--radius-lg);
+      padding: 18px 20px 20px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 0 0 1px rgba(255,255,255,0.5) inset;
+    }
+    .summary-block-label{
+      display: block;
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 10px;
+    }
+    .summary-plan-name{ font-size: 1.0625rem; font-weight: var(--font-title); color: var(--text-heading); margin-bottom: 4px; line-height: 1.3; }
+    .summary-plan-name.summary-empty{ color: var(--text-placeholder); font-weight: var(--font-body); }
+    .summary-billing{ font-size: 0.8125rem; font-weight: var(--font-body); color: var(--text-secondary); margin-top: 0; }
+    .summary-quantity-wrap{ margin-top: 14px; }
+    .summary-quantity-wrap .label{ display: block; font-size: 0.6875rem; font-weight: 700; color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+    .quantity-options{ display: flex; flex-wrap: wrap; gap: 8px; }
+    .quantity-btn{
+      display: inline-flex; align-items: center; justify-content: center;
+      min-width: 44px; padding: 8px 14px; border-radius: var(--radius-lg);
+      font-size: 0.8125rem; font-weight: 600; color: var(--text-body);
+      background: #f8fafc; border: 1px solid rgba(0,0,0,0.08);
+      cursor: pointer; transition: background 0.2s, border-color 0.2s, color 0.2s;
+    }
+    .quantity-btn:hover{ background: #f1f5f9; border-color: rgba(14,165,164,0.25); }
+    .quantity-btn.active{ background: rgba(14,165,164,0.1); border-color: #0EA5A4; color: #0d9488; }
+
+    .summary-row{ display: flex; justify-content: space-between; align-items: baseline; font-size: 0.875rem; padding: 10px 0; border-bottom: 1px solid rgba(0,0,0,0.04); gap: 16px; }
+    .summary-row:last-child{ border-bottom: none; }
+    .summary-row .label{ color: var(--text-muted); font-weight: var(--font-body); flex-shrink: 0; }
+    .summary-row .value{ font-weight: var(--font-label); color: var(--text-heading); text-align: right; min-width: 0; }
+
+    /* Toplam ödenecek: belirgin, conversion odaklı */
+    .summary-total-block{
+      margin-top: 20px;
+      margin-bottom: 26px;
+      padding: 22px 24px 24px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(135deg, rgba(14,165,164,0.08) 0%, rgba(14,165,164,0.03) 100%);
+      border: 1px solid rgba(14,165,164,0.12);
+      box-shadow: 0 2px 8px rgba(14,165,164,0.06), 0 0 0 1px rgba(255,255,255,0.4) inset;
+    }
+    .summary-total-label{
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 8px;
+    }
+    .summary-total{ font-size: 2rem; font-weight: var(--font-heading); color: #0d9488; line-height: 1.1; letter-spacing: -0.02em; transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease); font-variant-numeric: tabular-nums; }
+    .summary-total .currency{ font-size: 1.125rem; font-weight: 700; margin-left: 4px; opacity: 0.95; }
+    .summary-plan-name{ transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease); }
+    .summary-billing{ transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease); }
+    .summary-block .value{ transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease); }
+    .summary-card .summary-block,
+    .summary-card .summary-total-block{ transition: opacity var(--duration) var(--ease); }
+    .summary-card.summary-updating .summary-block,
+    .summary-card.summary-updating .summary-total-block{ opacity: 0.72; }
+
+    /* Kampanya / bilgi kartı: kaliteli info card */
+    .summary-savings{
+      margin-bottom: 24px;
+      padding: 18px 20px;
+      border-radius: var(--radius-lg);
+      background: linear-gradient(180deg, rgba(248,251,252,0.9) 0%, rgba(255,255,255,0.6) 100%);
+      border: 1px solid rgba(14,165,164,0.1);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 4px 14px rgba(14,165,164,0.04), 0 0 0 1px rgba(255,255,255,0.5) inset;
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+      text-align: left;
+    }
+    .summary-savings-neutral{
+      background: linear-gradient(180deg, rgba(248,250,252,0.9) 0%, rgba(255,255,255,0.6) 100%);
+      border-color: rgba(0,0,0,0.06);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.02), 0 0 0 1px rgba(255,255,255,0.5) inset;
+    }
+    .summary-savings-icon{
+      width: var(--icon-lg);
+      height: var(--icon-lg);
+      flex-shrink: 0;
+      margin-top: 2px;
+      color: #0EA5A4;
+      opacity: 0.9;
+      stroke-width: var(--icon-stroke);
+    }
+    .summary-savings-content{ min-width: 0; }
+    .summary-savings-title{
+      font-size: 0.75rem;
+      font-weight: var(--font-label);
+      color: var(--text-heading);
+      letter-spacing: 0.02em;
+      margin-bottom: 6px;
+      line-height: 1.3;
+    }
+    .summary-savings-desc{
+      font-size: 0.8125rem;
+      font-weight: var(--font-body);
+      color: var(--text-secondary);
+      line-height: 1.5;
+      margin: 0;
+    }
+    .summary-savings-desc + .summary-savings-desc{ margin-top: 6px; }
+
+    /* Planınızla dahil: hizalı, premium */
+    .summary-included{
+      background: linear-gradient(180deg, rgba(248,251,252,0.6) 0%, rgba(255,255,255,0.4) 100%);
+      border: 1px solid rgba(0,0,0,0.04);
+      border-radius: var(--radius-lg);
+      padding: 20px 22px 22px;
+      margin-bottom: 24px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 0 0 1px rgba(255,255,255,0.5) inset;
+    }
+    .summary-included-title{
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 14px;
+    }
+    .summary-included ul{ list-style: none; padding: 0; margin: 0; }
+    .summary-included li{ font-size: 0.8125rem; font-weight: var(--font-body); color: var(--text-body); padding: 10px 0; display: flex; align-items: center; gap: 12px; line-height: 1.4; border-bottom: 1px solid rgba(0,0,0,0.03); }
+    .summary-included li:last-child{ border-bottom: none; padding-bottom: 0; }
+    .summary-included li svg{ width: var(--icon-lg); height: var(--icon-lg); flex-shrink: 0; color: #0EA5A4; margin: 0; stroke-width: var(--icon-stroke); }
+    .summary-included li .included-text{ flex: 1; min-width: 0; }
+    #summary-discount-row{ display: none; }
+    #summary-discount-row.visible{ display: flex; }
+    #summary-discount-row .value{ color: #059669; font-weight: var(--font-label); }
+
+    .summary-coupon-wrap{ margin-bottom: 22px; }
+    .summary-coupon-wrap .form-group{ margin-bottom: 0; }
+    .summary-coupon-wrap .promo-label{
+      font-size: 0.6875rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: var(--ls-label);
+      margin-bottom: 8px;
+      display: block;
+    }
+    .summary-coupon-row{ display: flex; gap: 10px; margin-top: 0; }
+    .summary-coupon-row .input{
+      flex: 1;
+      min-width: 0;
+      min-height: 44px;
+      border-radius: var(--radius-md);
+      padding: 10px 14px;
+      font-size: 0.875rem;
+      border: 1px solid var(--divider);
+      background: #fff;
+      color: var(--text-heading);
+      transition: border-color var(--duration-fast) ease, box-shadow var(--duration-fast) var(--ease), background var(--duration-fast) ease;
+    }
+    .summary-coupon-row .input::placeholder{ color: var(--text-placeholder); }
+    .summary-coupon-row .input:hover{ border-color: var(--divider-strong); }
+    .summary-coupon-row .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.1); background: #fff; }
+    .summary-coupon-row .input.has-success{ border-color: rgba(5,150,105,0.35); background: rgba(5,150,105,0.03); }
+    .summary-coupon-row .input.has-error{ border-color: rgba(180,83,9,0.4); background: rgba(254,243,199,0.3); }
+    .summary-coupon-row .btn-apply{
+      min-height: 44px;
+      padding: 0 18px;
+      border-radius: var(--radius-md);
+      font-size: 0.8125rem;
+      font-weight: var(--font-label);
+      background: #f8fafc;
+      color: var(--text-secondary);
+      border: 1px solid var(--divider);
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease), border-color var(--duration-fast) ease, color var(--duration-fast) ease, box-shadow var(--duration-fast) var(--ease);
+      white-space: nowrap;
+    }
+    .summary-coupon-row .btn-apply:hover{ background: #f1f5f9; border-color: var(--divider-strong); color: var(--text-body); }
+    .summary-coupon-row .btn-apply:focus-visible{ outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0EA5A4; }
+    .summary-coupon-row .btn-apply:active{ transform: scale(0.98); }
+
+    .coupon-msg{
+      font-size: 0.75rem;
+      margin-top: 8px;
+      min-height: 20px;
+      line-height: 1.4;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: opacity var(--duration-fast) ease;
+    }
+    .coupon-msg.ok{
+      color: #059669;
+      font-weight: var(--font-body);
+    }
+    .coupon-msg.ok svg{ width: 14px; height: 14px; flex-shrink: 0; stroke-width: 2.5; }
+    .coupon-msg.err{
+      color: #b45309;
+      font-weight: var(--font-body);
+    }
+    .coupon-msg.err svg{ width: 14px; height: 14px; flex-shrink: 0; stroke-width: 2; opacity: 0.9; }
+
+    .summary-coupon-wrap.applied .summary-coupon-row .input{ border-color: rgba(5,150,105,0.35); background: rgba(5,150,105,0.03); }
+    .summary-trust-block{
+      margin-top: 22px;
+      padding-top: 20px;
+      border-top: 1px solid rgba(0,0,0,0.05);
+    }
+    .summary-trust-block p{ font-size: 0.75rem; font-weight: var(--font-body); color: var(--text-secondary); line-height: 1.5; margin: 8px 0; display: flex; align-items: center; gap: 10px; }
+    .summary-trust-block p:first-of-type{ margin-top: 0; }
+    .summary-trust-block p:last-of-type{ margin-bottom: 0; }
+    .summary-trust-block svg{ width: var(--icon-md); height: var(--icon-md); flex-shrink: 0; color: #0EA5A4; stroke-width: var(--icon-stroke); opacity: 0.9; }
+    .summary-trust-block .trust-dot{ margin: 0 6px; color: #cbd5e1; font-weight: 700; }
+
+    /* Payment reassurance below summary card: premium monochrome */
+    .payment-reassurance{ margin-top: 20px; padding: 16px 20px; background: rgba(248,250,252,0.8); border: 1px solid var(--divider); border-radius: var(--radius-lg); box-shadow: 0 1px 4px rgba(0,0,0,0.02); }
+    .payment-reassurance-label{
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: var(--ls-label);
+      margin-bottom: 10px;
+    }
+    .payment-reassurance-logos{ display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+    .payment-reassurance-logos img{ height: 20px; width: auto; opacity: 0.7; filter: grayscale(0.15); }
+    .payment-reassurance-logos .lock{ display: inline-flex; align-items: center; gap: 6px; font-size: 0.6875rem; font-weight: var(--font-label); color: var(--text-muted); }
+    .payment-reassurance-logos .lock svg{ width: var(--icon-sm); height: var(--icon-sm); color: #0EA5A4; stroke-width: var(--icon-stroke); }
+
+    .error-msg{ font-size: 14px; color: #dc2626; margin-top: 12px; padding: 12px; background: #fef2f2; border-radius: var(--radius-md); display: none; }
     .error-msg.visible{ display: block; }
 
-    .footer{ text-align: center; padding: 24px 16px; font-size: 12px; color: #94a3b8; }
-    .footer a{ color: #64748b; text-decoration: none; }
+    .pro-disclaimer{ text-align: center; font-size: 0.75rem; font-weight: var(--font-body); color: var(--text-muted); line-height: 1.5; max-width: 560px; margin: 20px auto 0; padding: 0 16px; }
+    .footer{ text-align: center; padding: 24px 16px; font-size: 0.75rem; color: var(--text-placeholder); }
+    .footer a{ color: var(--text-muted); text-decoration: none; }
     .footer a:hover{ color: #0EA5A4; }
+
+    /* ========== Mobile: premium checkout (single column, no overflow, Safari-safe) ========== */
+    @media (max-width: 1023px){
+      .summary-sidebar{ position: static; }
+    }
+    @media (max-width: 767px){
+      body{ padding-bottom: calc(48px + env(safe-area-inset-bottom, 0px)); -webkit-overflow-scrolling: touch; }
+      .wrap{ padding: 0 18px; max-width: 100%; }
+      .hero-metric{ backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
+      .why-norya-item{ backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
+      .plan-card{ backdrop-filter: none; -webkit-backdrop-filter: none; background: #fff; }
+      .trust-bar{ padding: 8px 12px; gap: 6px 16px; }
+      .trust-bar span{ font-size: 9px; }
+      .offer-strip{ padding: 10px 16px; gap: 8px 16px; }
+      .offer-strip-text{ font-size: 12px; line-height: 1.35; }
+      .offer-strip-badge{ font-size: 9px; padding: 4px 8px; }
+      .offer-strip-pill{ font-size: 10px; padding: 5px 12px; }
+      .checkout-hero{ grid-template-columns: 1fr; gap: 0; padding: 24px 0 32px; }
+      .hero-left{ order: 1; width: 100%; min-width: 0; }
+      .hero-left::after{ opacity: 0.5; }
+      .hero-heading{ margin-bottom: 28px; }
+      .hero-heading::before{ left: -16px; right: -16px; top: -12px; bottom: -12px; }
+      .summary-sidebar{ order: 2; width: 100%; min-width: 0; margin-top: 8px; }
+      .hero-brand{ margin-bottom: 14px; flex-wrap: wrap; gap: 8px; }
+      .hero-brand img{ height: 28px; }
+      .hero-badge{ font-size: 10px; }
+      .hero-title{ font-size: 1.5rem; margin-bottom: 8px; line-height: 1.28; }
+      .hero-subtitle{ font-size: 0.875rem; margin-bottom: 20px; }
+      .hero-metrics{ grid-template-columns: repeat(2, 1fr); gap: 8px 12px; margin-bottom: 20px; }
+      .hero-metric{ padding: 10px 12px; font-size: 11px; }
+      .hero-metric svg{ width: var(--icon-sm); height: var(--icon-sm); margin-bottom: 4px; }
+      .social-proof{ gap: 12px 16px; margin-bottom: 20px; padding: 12px 0; }
+      .social-proof-item{ font-size: 11px; gap: 6px; }
+      .social-proof-item svg{ width: var(--icon-sm); height: var(--icon-sm); }
+      .why-norya{ grid-template-columns: 1fr; gap: 10px; margin-bottom: 22px; }
+      .why-norya-item{ padding: 12px 14px; font-size: 11px; }
+      .why-norya-item svg{ width: var(--icon-md); height: var(--icon-md); margin-bottom: 6px; }
+      .plans-row{ flex-direction: column; gap: 16px; width: 100%; min-width: 0; }
+      .plan-card{
+        min-height: 0;
+        padding: 20px 18px;
+        border-radius: var(--radius-xl);
+        flex: none;
+        width: 100%;
+        max-width: 100%;
+        min-width: 0;
+        overflow: hidden;
+      }
+      .plan-card .card-badge{ font-size: 9px; padding: 5px 10px; max-width: 120px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+      .plan-card-title{ font-size: 1rem; margin: 0 0 4px 0; word-break: break-word; }
+      .plan-card-desc{ font-size: 0.75rem; margin-bottom: 16px; min-height: 0; }
+      .plan-card-price-wrap{ margin-bottom: 16px; }
+      .plan-card-price{ font-size: 1.75rem; letter-spacing: -0.02em; }
+      .plan-card-price .currency{ font-size: 1rem; }
+      .plan-card-price .price-period{ font-size: 0.8125rem; }
+      .plan-card-features li{ font-size: 0.75rem; padding: 5px 0; gap: 8px; }
+      .plan-card-features li svg{ width: var(--icon-md); height: var(--icon-md); flex-shrink: 0; }
+      .plan-card-features li .benefit-text{ min-width: 0; word-break: break-word; }
+      .plan-card-cta{
+        margin-top: 20px;
+        min-height: 50px;
+        padding: 14px 12px;
+        font-size: 0.875rem;
+        white-space: normal;
+        text-align: center;
+        line-height: 1.3;
+      }
+      .summary-card{ padding: 24px 20px 22px; border-radius: var(--radius-xl); }
+      .summary-card-heading{ font-size: 1rem; margin-bottom: 4px; }
+      .summary-card-subtitle{ font-size: 0.75rem; margin-bottom: 20px; }
+      .summary-divider{ margin-bottom: 18px; }
+      .summary-block{ margin-bottom: 18px; }
+      .summary-plan-block{ padding: 14px 16px 16px; margin-bottom: 18px; }
+      .summary-row{ font-size: 0.8125rem; padding: 6px 0; }
+      .summary-plan-name{ font-size: 0.9375rem; }
+      .summary-billing{ font-size: 0.75rem; }
+      .summary-total-block{ margin-top: 16px; margin-bottom: 22px; padding: 18px 20px 20px; }
+      .summary-total{ font-size: 1.625rem; }
+      .summary-total .currency{ font-size: 0.9375rem; }
+      .summary-savings{ padding: 14px 16px; margin-bottom: 20px; gap: 12px; }
+      .summary-savings-title{ font-size: 0.6875rem; margin-bottom: 4px; }
+      .summary-savings-desc{ font-size: 0.75rem; }
+      .summary-included{ padding: 14px 16px; margin-bottom: 20px; border-radius: var(--radius-md); }
+      .summary-included-title{ margin-bottom: 10px; }
+      .summary-included li{ font-size: 0.75rem; padding: 4px 0; }
+      .summary-coupon-wrap{ margin-bottom: 16px; }
+      .summary-coupon-row{ flex-direction: column; gap: 10px; margin-top: 6px; }
+      .summary-coupon-row .input{ width: 100%; min-height: 48px; }
+      .summary-coupon-row .btn-apply{ width: 100%; min-height: 48px; white-space: normal; }
+      .form-in-summary .form-group{ margin-bottom: 14px; }
+      .form-in-summary .input{ min-height: 48px; font-size: 16px; }
+      .payment-methods{ margin-top: 18px; padding-top: 16px; }
+      .payment-methods .pm-logos-wrap{ padding: 12px 14px; }
+      .payment-methods .pm-logos img{ height: 18px; }
+      .cta-wrap{ margin-top: 16px; }
+      .cta-main.cta-summary{ min-height: 52px; padding: 16px 20px; font-size: 1rem; }
+      .summary-trust-block{ margin-top: 16px; padding-top: 16px; }
+      .summary-trust-block p{ font-size: 0.6875rem; }
+      .payment-reassurance{ margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-lg); }
+      .payment-reassurance-label{ margin-bottom: 8px; }
+      .payment-reassurance-logos{ gap: 12px; }
+      .payment-reassurance-logos img{ height: 18px; }
+      .pro-disclaimer{ padding: 0 8px; margin-top: 16px; font-size: 11px; }
+      .footer{ padding: 20px 12px; font-size: 11px; }
+      .iframe-wrapper{ border-radius: var(--radius-lg); min-height: 380px; }
+      .paytr-iframe{ min-height: 380px; }
+    }
+    @media (max-width: 480px){
+      .wrap{ padding: 0 16px; }
+      .hero-title{ font-size: 1.375rem; }
+      .plan-card-price{ font-size: 1.5rem; }
+      .plan-card-price .currency{ font-size: 0.9375rem; }
+      .summary-total{ font-size: 1.375rem; }
+      .summary-total .currency{ font-size: 0.875rem; }
+    }
   </style>
 </head>
 <body>
-  <div class="trust-strip" role="region" aria-label="Security">
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d }} Protected</span>
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>PayTR Certified</span>
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit SSL Encryption</span>
-    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="14" height="14" class="trust-logo" loading="lazy" />Cloudflare Security</span>
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_badge_hipaa }}</span>
-    <span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_badge_gdpr }} Compliant</span>
+  <div class="trust-bar" role="region" aria-label="Security">
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d }} Protected</span>
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>PayTR Certified</span>
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit SSL Encryption</span>
+    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="12" height="12" class="trust-logo" loading="lazy" />Cloudflare Security</span>
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_badge_hipaa }}</span>
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_badge_gdpr }} Aligned</span>
+  </div>
+
+  <div class="offer-strip {% if not campaign_config.campaignActive %}offer-strip-neutral{% endif %}" id="offer-strip" role="region" aria-label="Offer" data-campaign-active="{{ 'true' if campaign_config.campaignActive else 'false' }}">
+    <span class="offer-strip-badge" id="offer-strip-badge">{% if campaign_config.campaignActive %}{{ campaign_config.campaignBadge }}{% else %}{{ t.get('campaign_no_active_badge', 'Offer') }}{% endif %}</span>
+    <span class="offer-strip-text" id="offer-strip-text">{% if campaign_config.campaignActive %}{{ campaign_config.campaignTitle }}{% else %}{{ t.get('campaign_neutral_text', 'Choose a plan to see available offers.') }}{% endif %}</span>
+    {% if campaign_config.campaignActive %}<span class="offer-strip-pill" id="offer-strip-pill">{{ t.get('offer_best_savings_pill', 'Best savings') }}</span>{% endif %}
   </div>
 
   <div class="wrap">
-    <header class="header">
-      <a href="{{ base_url }}/" aria-label="{{ brand }}">
-        <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="" width="140" height="36">
-      </a>
-      <span class="header-badge">{{ t.secure_checkout }}</span>
-    </header>
-
-    <main class="grid">
-      <div class="left-col">
+    <main class="checkout-hero">
+      <div class="hero-left">
+        <div class="hero-heading">
+          <div class="hero-brand">
+            <a href="{{ base_url }}/" aria-label="{{ brand }}">
+              <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="{{ brand }}" width="140" height="32">
+            </a>
+            <span class="hero-badge">{{ t.get('hero_badge_secure_ai', 'Secure AI Health Analysis') }}</span>
+          </div>
+          <h1 class="hero-title">{{ t.get('hero_choose_title', 'Choose the right plan for your health insights') }}</h1>
+          <p class="hero-subtitle">{{ t.get('hero_choose_subtitle', 'Secure payment, instant access, AI-powered blood test interpretation.') }}</p>
+        </div>
+        <div class="hero-metrics">
+          <div class="hero-metric"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>{{ t.get('hero_metric_instant', 'Instant Access') }}</div>
+          <div class="hero-metric"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>{{ t.get('hero_metric_ai', 'AI-Powered') }}</div>
+          <div class="hero-metric"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.get('hero_metric_secure', 'Secure Checkout') }}</div>
+          <div class="hero-metric"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>{{ t.get('hero_metric_pdf', 'PDF Reports') }}</div>
+        </div>
+        <div class="social-proof" role="region" aria-label="Trust">
+          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>{{ t.get('social_trusted', 'Trusted by health-conscious users') }}</span>
+          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.get('social_secure_ai', 'Secure AI reporting') }}</span>
+          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.get('social_fast_private', 'Fast and private results') }}</span>
+        </div>
+        <div class="why-norya" role="region" aria-label="Why choose us">
+          <div class="why-norya-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.get('why_privacy', 'Privacy-first') }}</div>
+          <div class="why-norya-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>{{ t.get('why_medical_report', 'Medical-style reporting') }}</div>
+          <div class="why-norya-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg>{{ t.get('why_instant_delivery', 'Instant digital delivery') }}</div>
+        </div>
+        <div class="reassurance-row" role="region" aria-label="{{ t.get('reassurance_aria', 'Trust & compliance') }}">
+          <span class="reassurance-pill">{{ t.trust_badge_hipaa }}</span>
+          <span class="reassurance-pill">{{ t.trust_badge_gdpr }}</span>
+          <span class="reassurance-pill">{{ t.get('reassurance_secure_ai', 'Secure AI Analysis') }}</span>
+          <span class="reassurance-pill">{{ t.get('reassurance_instant_pdf', 'Instant PDF Report') }}</span>
+        </div>
         <section class="plans-row" id="plans-row" role="group" aria-label="{{ t.selected_plan }}">
           {% for p in plans %}
-          <div class="plan-card {% if p.best_value %}annual{% endif %}" data-plan="{{ p.code }}" data-price="{{ p.price }}" data-price-cents="{{ p.price_cents }}" data-label="{{ p.label }}" role="button" tabindex="0">
-            {% if p.best_value %}<span class="best-value">{{ t.best_value_badge }}</span>{% endif %}
-            <h3>{{ p.label }}</h3>
-            <div class="price">{{ p.price }}<span class="currency">€</span></div>
-            <p class="price-desc">{% if p.product == 'single' %}{{ t.price_once }}{% elif p.product == 'monthly' %}{{ t.price_month }}{% else %}{{ t.price_year }}{% endif %}</p>
-            <ul>
-              {% for b in p.benefits[:4] %}
-              <li><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 6L9 17l-5-5"/></svg>{{ b }}</li>
+          <div class="plan-card {% if p.best_value %}annual{% endif %} {% if p.product == 'monthly' %}popular{% endif %} {% if default_plan and p.code == default_plan.code %}selected{% endif %}" data-plan="{{ p.code }}" data-price="{{ p.price }}" data-price-cents="{{ p.price_cents }}" data-label="{{ p.label }}" role="button" tabindex="0">
+            <div class="plan-card-head">
+              {% if p.product == 'single' %}<span class="card-badge one-time">{{ t.price_once }}</span>{% endif %}
+              {% if p.product == 'monthly' %}<span class="card-badge most-popular">{{ t.get('most_popular_badge', 'Most Popular') }}</span>{% endif %}
+              {% if p.best_value %}<span class="card-badge best-value">{{ t.best_value_badge }}</span>{% endif %}
+              <h3 class="plan-card-title">{% if p.product == 'single' %}{{ t.get('plan_card_single', p.label) }}{% elif p.product == 'monthly' %}{{ t.get('plan_card_monthly', p.label) }}{% else %}{{ t.get('plan_card_yearly', p.label) }}{% endif %}</h3>
+            </div>
+            <p class="plan-card-desc">{% if p.product == 'single' %}{{ t.get('plan_desc_single', '') }}{% elif p.product == 'monthly' %}{{ t.get('plan_desc_monthly', '') }}{% else %}{{ t.get('plan_desc_yearly', '') }}{% endif %}</p>
+            <div class="plan-card-price-wrap">
+              <div class="plan-card-price"><span class="price-num">{{ p.price|replace('.', ',') }}</span><span class="currency">€</span>{% if p.product == 'monthly' %}<span class="price-period">/{{ t.get('per_month_short', 'mo') }}</span>{% elif p.product == 'yearly' %}<span class="price-period">/{{ t.get('per_year_short', 'yr') }}</span>{% endif %}</div>
+            </div>
+            <ul class="plan-card-features">
+              {% for b in p.benefits %}
+              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="benefit-text">{{ b }}</span></li>
               {% endfor %}
             </ul>
+            <button type="button" class="plan-card-cta" data-plan="{{ p.code }}" aria-label="{% if p.product == 'single' %}{{ t.get('cta_single', t.pay_btn) }}{% elif p.product == 'monthly' %}{{ t.get('cta_monthly', t.pay_btn) }}{% else %}{{ t.get('cta_yearly', t.pay_btn) }}{% endif %}">{{ p.price|replace('.', ',') }} € — {% if p.product == 'single' %}{{ t.get('cta_single', 'Get analysis') }}{% elif p.product == 'monthly' %}{{ t.get('cta_monthly', 'Start monthly') }}{% else %}{{ t.get('cta_yearly', 'Save yearly') }}{% endif %}</button>
           </div>
           {% endfor %}
         </section>
-
-        <div class="form-section" id="form-section">
-          <h3>{{ t.selected_plan }}</h3>
-          <div class="form-group">
-            <label for="coupon-input">{{ t.coupon_placeholder }}</label>
-            <div class="coupon-row">
-              <input type="text" id="coupon-input" class="input" placeholder="{{ t.coupon_placeholder }}" maxlength="64">
-              <button type="button" id="coupon-apply" class="btn-secondary">{{ t.coupon_apply }}</button>
-            </div>
-            <p class="coupon-msg" id="coupon-msg" aria-live="polite"></p>
-          </div>
-          {% if not user_logged_in %}
-          <div class="form-group">
-            <label for="email">{{ t.pay_email_label }} <span style="color:#dc2626;">*</span></label>
-            <input type="email" id="email" class="input" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" value="{{ user_email }}">
-          </div>
-          {% endif %}
-          <div class="form-group">
-            <label for="name">{{ t.pay_name_label }}</label>
-            <input type="text" id="name" class="input" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" value="{{ user_name }}">
-          </div>
-          <p class="error-msg" id="error-msg"></p>
-          <div class="payment-methods" role="region" aria-label="{{ t.accepted_payment_methods }}">
-            <p class="pm-title">{{ t.accepted_payment_methods }}</p>
-            <div class="pm-logos-wrap">
-              <div class="pm-logos">
-                <img src="/static/assets/visa.png" alt="Visa" width="60" height="20" loading="lazy" decoding="async" />
-                <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
-              </div>
-            </div>
-            <p class="pm-trust">{{ t.pm_trust_line }}</p>
-          </div>
-          <div class="cta-wrap">
-            <button type="button" class="cta-main" id="pay-now-btn" disabled aria-label="{{ t.pay_btn }}">
-              <span class="btn-text">{{ t.pay_btn }}</span>
-            </button>
-          </div>
-        </div>
-
-        <div class="iframe-section" id="iframe-section">
-          <div class="iframe-wrapper">
-            <div class="iframe-skeleton" id="iframe-skeleton"></div>
-            <iframe id="paytr-iframe" class="paytr-iframe" title="PayTR secure payment form" style="visibility:hidden;"></iframe>
-          </div>
-        </div>
       </div>
 
-      <aside class="right-col">
-        <div class="summary-card">
-          <h3>{{ t.payment_summary }}</h3>
-          <p class="summary-plan summary-empty" id="summary-plan">{{ t.selected_plan }} —</p>
-          <p class="summary-total" id="summary-total">—<span class="currency">€</span></p>
-          <p class="summary-note">{{ t.no_extra_fees }}</p>
-          <p class="summary-note">{{ t.pay_processed_secure }}</p>
+      <aside class="summary-sidebar">
+        <div class="summary-card" id="summary-card">
+          <h2 class="summary-card-heading">{{ t.get('order_summary_heading', 'Order Summary') }}</h2>
+          <p class="summary-card-subtitle">{{ t.get('order_summary_subtitle', 'Your secure checkout overview') }}</p>
+
+          <div class="summary-block summary-plan-block">
+            <span class="summary-block-label">{{ t.get('summary_selected_plan', 'Selected Plan') }}</span>
+            <p class="summary-plan-name {% if not default_plan %}summary-empty{% endif %}" id="summary-plan">{% if default_plan %}{{ default_plan.display_label | default(default_plan.label, true) }}{% else %}—{% endif %}</p>
+            <p class="summary-billing" id="summary-billing">{% if default_plan %}{% if default_plan.product == 'single' %}{{ t.price_once }}{% elif default_plan.product == 'monthly' %}{{ t.price_month }}{% else %}{{ t.get('price_year_subtitle', t.price_year) }}{% endif %}{% else %}—{% endif %}</p>
+            <div class="summary-quantity-wrap" id="summary-quantity-wrap" style="display: none;">
+              <span class="label">{{ t.get('quantity_label', 'Adet / Süre') }}</span>
+              <div class="quantity-options" id="quantity-options" role="group" aria-label="{{ t.get('quantity_label', 'Adet / Süre') }}"></div>
+            </div>
+          </div>
+
+          <div class="summary-divider" aria-hidden="true"></div>
+
+          <div class="summary-block">
+            <div class="summary-row"><span class="label">{{ t.get('summary_base_price', 'Base Price') }}</span><span class="value" id="summary-price">{% if default_plan %}{{ default_plan.price|replace('.', ',') }} €{% else %}—{% endif %}</span></div>
+            <div class="summary-row" id="summary-discount-row"><span class="label">{{ t.get('summary_discount', 'Discount') }}</span><span class="value" id="summary-discount-value">-0 €</span></div>
+          </div>
+
+          <div class="summary-total-block">
+            <p class="summary-total-label">{{ t.get('summary_total_today', 'Total Today') }}</p>
+            <p class="summary-total" id="summary-total">{% if default_plan %}{{ default_plan.price|replace('.', ',') }}<span class="currency">€</span>{% else %}—<span class="currency">€</span>{% endif %}</p>
+          </div>
+
+          <div class="summary-savings {% if not campaign_config.campaignActive %}summary-savings-neutral{% endif %}" id="summary-savings" role="region" aria-label="Offer" data-campaign-active="{{ 'true' if campaign_config.campaignActive else 'false' }}">
+            <svg class="summary-savings-icon icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/></svg>
+            <div class="summary-savings-content">
+              <p class="summary-savings-title" id="summary-savings-title">{% if campaign_config.campaignActive %}{{ campaign_config.campaignTitle }}{% else %}{{ t.get('campaign_active', 'Promo code available') }}{% endif %}</p>
+              <p class="summary-savings-desc" id="summary-savings-desc">{% if campaign_config.campaignActive %}{{ campaign_config.campaignMessage }}{% else %}{{ t.get('campaign_neutral_desc', 'Enter a promo code above if you have one.') }}{% endif %}</p>
+            </div>
+          </div>
+
+          <div class="summary-included">
+            <p class="summary-included-title">{{ t.get('summary_included_title', 'Included with your plan') }}</p>
+            <ul>
+              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.get('summary_included_instant', 'Instant access') }}</span></li>
+              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.get('summary_included_secure', 'Secure payment') }}</span></li>
+              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.get('summary_included_pdf', 'PDF reporting') }}</span></li>
+            </ul>
+          </div>
+
+          <div class="form-section form-in-summary" id="form-section">
+            <input type="hidden" name="plan_code" id="plan-code-input" value="{{ default_plan.code if default_plan else '' }}" aria-hidden="true">
+            <div class="summary-coupon-wrap form-group" id="summary-coupon-wrap">
+              <label for="coupon-input" class="promo-label">{{ t.get('promo_code_label', 'Promo code') }}</label>
+              <div class="summary-coupon-row">
+                <input type="text" id="coupon-input" class="input" placeholder="{{ t.get('promo_code_placeholder', 'Enter code') }}" maxlength="64" autocomplete="off">
+                <button type="button" id="coupon-apply" class="btn-apply">{{ t.get('coupon_apply', t.coupon_apply) }}</button>
+              </div>
+              <p class="coupon-msg" id="coupon-msg" aria-live="polite" role="status"></p>
+            </div>
+            {% if not user_logged_in %}
+            <div class="form-group">
+              <label for="email">{{ t.pay_email_label }} <span style="color:#dc2626;">*</span></label>
+              <input type="email" id="email" class="input" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" value="{{ user_email }}">
+            </div>
+            {% endif %}
+            <div class="form-group">
+              <label for="name">{{ t.pay_name_label }}</label>
+              <input type="text" id="name" class="input" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" value="{{ user_name }}">
+            </div>
+            <p class="error-msg" id="error-msg"></p>
+            <div class="payment-methods" role="region" aria-label="{{ t.accepted_payment_methods }}">
+              <p class="pm-title">{{ t.accepted_payment_methods }}</p>
+              <div class="pm-logos-wrap">
+                <div class="pm-logos">
+                  <img src="/static/assets/visa.png" alt="Visa" width="60" height="20" loading="lazy" decoding="async" />
+                  <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
+                </div>
+              </div>
+            </div>
+            <div class="cta-wrap">
+              <button type="button" class="cta-main cta-summary" id="pay-now-btn" disabled aria-label="{{ t.pay_btn }}">
+                <span class="btn-text" id="pay-now-btn-text">{{ t.get('cta_start_monthly', 'Start Monthly Plan') }}</span>
+              </button>
+            </div>
+            <div class="summary-trust-block" role="region" aria-label="Security">
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.get('summary_trust_secure', t.get('trust_processed_paytr', 'Güvenli ödeme altyapısı')) }}</p>
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.get('summary_trust_tax', t.get('trust_taxes_no_fees', 'Vergi dahil')) }}</p>
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.get('summary_trust_instant', t.get('trust_instant_access', 'Ödeme sonrası anında erişim')) }}</p>
+            </div>
+          </div>
+        </div>
+        <div class="payment-reassurance" role="region" aria-label="Payment security">
+          <p class="payment-reassurance-label">{{ t.get('payment_reassurance', 'Secure payment') }}</p>
+          <div class="payment-reassurance-logos">
+            <img src="/static/assets/visa.png" alt="Visa" width="48" height="20" loading="lazy" decoding="async" />
+            <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
+            <span class="lock"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>3D Secure</span>
+          </div>
         </div>
       </aside>
     </main>
 
+    <div class="iframe-section" id="iframe-section">
+      <div class="iframe-wrapper">
+        <div class="iframe-skeleton" id="iframe-skeleton"></div>
+        <iframe id="paytr-iframe" class="paytr-iframe" title="PayTR secure payment form" style="visibility:hidden;"></iframe>
+      </div>
+    </div>
+
+    {% if t.get('pro_disclaimer') %}<p class="pro-disclaimer">{{ t.pro_disclaimer }}</p>{% endif %}
     <footer class="footer">
       <a href="{{ base_url }}/legal/mesafeli-satis-sozlesmesi">{{ t.footer_terms }}</a> · <a href="{{ base_url }}/legal/gizlilik-politikasi">{{ t.footer_privacy }}</a> · <a href="{{ base_url }}/iade-iptal">{{ t.footer_refund }}</a>
     </footer>
   </div>
 
   <script>
+document.addEventListener('DOMContentLoaded', function(){
 (function(){
-  var t = {{ t_js }};
-  var plans = {{ plans_js }};
+  var t = {{ t_js | safe }};
+  var plans = {{ plans_js | safe }};
+  var campaignConfig = {{ campaign_js | safe }};
   var userLoggedIn = {{ 'true' if user_logged_in else 'false' }};
-  var baseUrl = {{ base_url_js }};
+  var baseUrl = {{ base_url_js | safe }};
   var initUrl = baseUrl + '/paytr/init';
   var selectedPlan = null;
+  var selectedQuantity = 1;
   var paymentInProgress = false;
 
   var plansRow = document.getElementById('plans-row');
+  var summaryQuantityWrap = document.getElementById('summary-quantity-wrap');
+  var quantityOptionsEl = document.getElementById('quantity-options');
   var formSection = document.getElementById('form-section');
   var payNowBtn = document.getElementById('pay-now-btn');
   var btnText = payNowBtn && payNowBtn.querySelector('.btn-text');
@@ -408,26 +1265,178 @@
   var paytrIframe = document.getElementById('paytr-iframe');
   var summaryPlan = document.getElementById('summary-plan');
   var summaryTotal = document.getElementById('summary-total');
+  var summaryPrice = document.getElementById('summary-price');
+  var summaryBilling = document.getElementById('summary-billing');
+  var summaryDiscountRow = document.getElementById('summary-discount-row');
+  var summaryDiscountValue = document.getElementById('summary-discount-value');
+  var summaryCard = document.getElementById('summary-card');
+  var offerStrip = document.getElementById('offer-strip');
+  var offerStripBadge = document.getElementById('offer-strip-badge');
+  var offerStripText = document.getElementById('offer-strip-text');
+  var offerStripPill = document.getElementById('offer-strip-pill');
+  var summarySavings = document.getElementById('summary-savings');
+  var summarySavingsTitle = document.getElementById('summary-savings-title');
+  var summarySavingsDesc = document.getElementById('summary-savings-desc');
   var emailInput = document.getElementById('email');
   var nameInput = document.getElementById('name');
   var couponInput = document.getElementById('coupon-input');
   var couponMsg = document.getElementById('coupon-msg');
+  var summaryCouponWrap = document.getElementById('summary-coupon-wrap');
   var errorMsg = document.getElementById('error-msg');
+  var planCodeInput = document.getElementById('plan-code-input');
+
+  var iconCheck = '<svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 6L9 17l-5-5"/></svg>';
+  var iconAlert = '<svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 8v4"/><path d="M12 16h.01"/></svg>';
+
+  var planConfig = (plans || []).map(function(p) {
+    var priceStr = typeof p.price === 'string' ? p.price : String(p.price);
+    var billingLabel = p.product === 'single' ? (t.price_once || 'One-time') : p.product === 'monthly' ? (t.price_month || 'Per month') : (t.price_year_subtitle || t.price_year || 'Per year');
+    var ctaText = p.product === 'single' ? (t.cta_start_single || t.pay_btn || 'Pay Now') : p.product === 'monthly' ? (t.cta_start_monthly || t.pay_btn || 'Pay Now') : (t.cta_start_yearly || t.pay_btn || 'Pay Now');
+    return {
+      id: p.code,
+      planCode: p.code,
+      name: p.display_label != null ? p.display_label : p.label,
+      billingLabel: billingLabel,
+      price: priceStr,
+      discount: '0',
+      total: priceStr,
+      ctaText: ctaText,
+      product: p.product,
+      benefits: p.benefits
+    };
+  });
+
+  function getPlan(planCode) {
+    if (!planCode) return null;
+    for (var i = 0; i < planConfig.length; i++) { if (planConfig[i].planCode === planCode) return planConfig[i]; }
+    return null;
+  }
+
+  function getQuantityOptions(product) {
+    if (product === 'single') return [{ v: 1, label: t.quantity_1_analysis || '1 analiz' }, { v: 2, label: t.quantity_2_analyses || '2 analiz' }, { v: 3, label: t.quantity_3_analyses || '3 analiz' }];
+    if (product === 'monthly') return [{ v: 1, label: t.quantity_1_month || '1 ay' }, { v: 3, label: t.quantity_3_months || '3 ay' }, { v: 6, label: t.quantity_6_months || '6 ay' }];
+    if (product === 'yearly') return [{ v: 1, label: t.quantity_1_year || '1 yıl' }, { v: 2, label: t.quantity_2_years || '2 yıl' }];
+    return [{ v: 1, label: '1' }];
+  }
+
+  function renderQuantityOptions() {
+    if (!quantityOptionsEl) return;
+    var plan = getPlan(selectedPlan);
+    if (!plan) { summaryQuantityWrap && (summaryQuantityWrap.style.display = 'none'); return; }
+    var opts = getQuantityOptions(plan.product);
+    var firstVal = opts[0] && opts[0].v;
+    if (opts.indexOf(opts.find(function(o){ return o.v === selectedQuantity; })) < 0) selectedQuantity = firstVal;
+    summaryQuantityWrap && (summaryQuantityWrap.style.display = 'block');
+    quantityOptionsEl.innerHTML = '';
+    opts.forEach(function(o) {
+      var btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'quantity-btn' + (o.v === selectedQuantity ? ' active' : '');
+      btn.setAttribute('data-quantity', String(o.v));
+      btn.textContent = o.label;
+      quantityOptionsEl.appendChild(btn);
+    });
+  }
+
+  function bindQuantityClicks() {
+    if (!quantityOptionsEl) return;
+    quantityOptionsEl.addEventListener('click', function(e) {
+      var btn = e.target.closest('.quantity-btn');
+      if (!btn || paymentInProgress) return;
+      var q = parseInt(btn.getAttribute('data-quantity'), 10);
+      if (!isNaN(q) && q >= 1) { selectedQuantity = q; renderQuantityOptions(); updateSummary(); }
+    });
+  }
+
+  var defaultPlanCode = planConfig.length ? (function() {
+    for (var i = 0; i < planConfig.length; i++) { if (planConfig[i].product === 'yearly') return planConfig[i].planCode; }
+    return planConfig[0].planCode;
+  })() : null;
 
   function getSelectedCard() { return plansRow && plansRow.querySelector('.plan-card.selected'); }
+
+  function updateCampaignUI(cfg) {
+    if (!cfg) cfg = { campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', discountType: '', discountValue: 0, applicablePlans: '', promoCode: '' };
+    var active = !!cfg.campaignActive;
+    if (offerStrip) {
+      offerStrip.classList.toggle('offer-strip-neutral', !active);
+      offerStrip.setAttribute('data-campaign-active', active ? 'true' : 'false');
+    }
+    if (offerStripBadge) offerStripBadge.textContent = active ? (cfg.campaignBadge || t.offer_limited_badge || 'Limited Offer') : (t.campaign_no_active_badge || 'Offer');
+    if (offerStripText) offerStripText.textContent = active ? (cfg.campaignTitle || '') : (t.campaign_neutral_text || 'Choose a plan to see available offers.');
+    if (offerStripPill) {
+      if (active) { offerStripPill.textContent = t.offer_best_savings_pill || 'Best savings'; offerStripPill.style.display = ''; }
+      else offerStripPill.style.display = 'none';
+    } else if (active && offerStrip) {
+      var pill = document.createElement('span');
+      pill.className = 'offer-strip-pill';
+      pill.id = 'offer-strip-pill';
+      pill.textContent = t.offer_best_savings_pill || 'Best savings';
+      offerStrip.appendChild(pill);
+    }
+    if (summarySavings) {
+      summarySavings.classList.toggle('summary-savings-neutral', !active);
+      summarySavings.setAttribute('data-campaign-active', active ? 'true' : 'false');
+    }
+    if (summarySavingsTitle) summarySavingsTitle.textContent = active ? (cfg.campaignTitle || '') : (t.campaign_active || 'Promo code available');
+    if (summarySavingsDesc) summarySavingsDesc.textContent = active ? (cfg.campaignMessage || '') : (t.campaign_neutral_desc || 'Enter a promo code above if you have one.');
+    campaignConfig = cfg;
+  }
+
+  function fetchCampaignForPlan(planCode, done) {
+    if (!planCode) { if (done) done({ campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', discountType: '', discountValue: 0, applicablePlans: '', promoCode: '' }); return; }
+    var lang = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
+    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(planCode) + '&lang=' + encodeURIComponent(lang), { credentials: 'include' })
+      .then(function(r){ return r.json(); })
+      .then(function(data){ if (done) done(data.campaign || {}); })
+      .catch(function(){ if (done) done({ campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', discountType: '', discountValue: 0, applicablePlans: '', promoCode: '' }); });
+  }
+
   function updateSummary() {
     if (!summaryPlan || !summaryTotal) return;
-    if (!selectedPlan) {
-      summaryPlan.textContent = t.selected_plan + ' —';
-      summaryPlan.classList.add('summary-empty');
-      summaryTotal.innerHTML = '—<span class="currency">€</span>';
-      return;
+    if (summaryCard) summaryCard.classList.add('summary-updating');
+    var plan = getPlan(selectedPlan);
+    if (planCodeInput) planCodeInput.value = selectedPlan || '';
+    function applyUpdate() {
+      if (!selectedPlan || !plan) {
+        summaryPlan.textContent = '—';
+        summaryPlan.classList.add('summary-empty');
+        summaryTotal.innerHTML = '—<span class="currency">€</span>';
+        if (summaryPrice) summaryPrice.textContent = '—';
+        if (summaryBilling) summaryBilling.textContent = '—';
+        if (summaryDiscountRow) summaryDiscountRow.classList.remove('visible');
+        if (summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
+        if (payNowBtn) {
+          var btnSpan = payNowBtn.querySelector('.btn-text');
+          if (btnSpan) btnSpan.textContent = t.pay_btn || 'Pay Now';
+        }
+        if (offerStrip) offerStrip.classList.remove('yearly-selected', 'single-selected');
+      } else {
+        var planName = (plan.name != null && plan.name !== '') ? plan.name : (plan.planCode || selectedPlan);
+        summaryPlan.textContent = planName;
+        summaryPlan.classList.remove('summary-empty');
+        var unitNum = parseFloat(String(plan.price || plan.total || '0').replace(',', '.')) || 0;
+        var totalNum = unitNum * (selectedQuantity || 1);
+        var priceDisplay = totalNum.toFixed(2).replace('.', ',');
+        var unitDisplay = unitNum.toFixed(2).replace('.', ',');
+        summaryTotal.innerHTML = priceDisplay + '<span class="currency">€</span>';
+        if (summaryPrice) summaryPrice.textContent = selectedQuantity > 1 ? (unitDisplay + ' € × ' + selectedQuantity + ' = ' + priceDisplay + ' €') : (unitDisplay + ' €');
+        if (summaryBilling) summaryBilling.textContent = plan.billingLabel || '—';
+        if (summaryDiscountRow) summaryDiscountRow.classList.remove('visible');
+        if (summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
+        if (payNowBtn) {
+          var btnSpan = payNowBtn.querySelector('.btn-text');
+          if (btnSpan) btnSpan.textContent = plan.ctaText || t.pay_btn || 'Pay Now';
+        }
+        if (offerStrip) {
+          offerStrip.classList.remove('yearly-selected', 'single-selected');
+          if (plan.product === 'yearly') offerStrip.classList.add('yearly-selected');
+          else if (plan.product === 'single') offerStrip.classList.add('single-selected');
+        }
+      }
+      if (summaryCard) summaryCard.classList.remove('summary-updating');
     }
-    var p = plans.find(function(x){ return x.code === selectedPlan; });
-    if (!p) return;
-    summaryPlan.textContent = p.label;
-    summaryPlan.classList.remove('summary-empty');
-    summaryTotal.innerHTML = p.price + '<span class="currency">€</span>';
+    requestAnimationFrame(function(){ requestAnimationFrame(applyUpdate); });
   }
 
   function showError(msg) {
@@ -445,13 +1454,14 @@
   }
 
   function setButtonLoading(loading) {
-    if (!payNowBtn || !btnText) return;
+    if (!payNowBtn) return;
     if (loading) {
       payNowBtn.disabled = true;
-      payNowBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text">' + (t.cta_loading || 'Processing…') + '</span>';
+      payNowBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text" id="pay-now-btn-text">' + (t.cta_loading || 'Processing…') + '</span>';
     } else {
-      var label = t.pay_btn || 'Pay Now';
-      payNowBtn.innerHTML = '<span class="btn-text">' + label + '</span>';
+      var plan = getPlan(selectedPlan);
+      var label = plan ? plan.ctaText : (t.pay_btn || 'Pay Now');
+      payNowBtn.innerHTML = '<span class="btn-text" id="pay-now-btn-text">' + label + '</span>';
       payNowBtn.disabled = !selectedPlan;
     }
   }
@@ -464,45 +1474,96 @@
     setButtonLoading(false);
   }
 
-  plansRow && plansRow.addEventListener('click', function(e) {
-    var card = e.target.closest('.plan-card');
-    if (!card || paymentInProgress) return;
-    var plan = card.getAttribute('data-plan');
-    if (!plan) return;
+  function selectCardByPlan(planCode) {
+    if (!planCode || !plansRow || paymentInProgress) return;
+    var card = plansRow.querySelector('.plan-card[data-plan="' + String(planCode).replace(/"/g, '') + '"]');
+    if (!card) return;
     var prev = getSelectedCard();
     if (prev) prev.classList.remove('selected');
     card.classList.add('selected');
-    selectedPlan = plan;
+    selectedPlan = planCode;
+    selectedQuantity = 1;
+    renderQuantityOptions();
     updateSummary();
+    fetchCampaignForPlan(planCode, updateCampaignUI);
     setPayNowEnabled(true);
     hideError();
     clearIframe();
+  }
+  plansRow && plansRow.addEventListener('click', function(e) {
+    if (paymentInProgress) return;
+    var card = e.target.closest('.plan-card');
+    var plan = card ? card.getAttribute('data-plan') : null;
+    if (!plan && e.target.closest('.plan-card-cta')) {
+      var btn = e.target.closest('.plan-card-cta');
+      plan = btn ? btn.getAttribute('data-plan') : null;
+      card = btn ? btn.closest('.plan-card') : null;
+    }
+    if (!plan || !card) return;
+    e.preventDefault();
+    e.stopPropagation();
+    selectCardByPlan(plan);
   });
 
   plansRow && plansRow.addEventListener('keydown', function(e) {
     if (e.key !== 'Enter' && e.key !== ' ') return;
-    var card = e.target.closest('.plan-card');
-    if (card) card.click();
+    var card = (e.target && e.target.closest('.plan-card')) || (document.activeElement && document.activeElement.closest('.plan-card'));
+    if (!card) return;
+    e.preventDefault();
+    selectCardByPlan(card.getAttribute('data-plan'));
   });
+
+  function selectPlanByCode(planCode) { selectCardByPlan(planCode); }
+  if (defaultPlanCode) selectPlanByCode(defaultPlanCode);
+  renderQuantityOptions();
+  bindQuantityClicks();
 
   document.getElementById('coupon-apply') && document.getElementById('coupon-apply').addEventListener('click', function() {
     var code = couponInput ? couponInput.value.trim() : '';
-    if (!code) { if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; } return; }
-    if (!selectedPlan) { if (couponMsg) { couponMsg.textContent = 'Select a plan first.'; couponMsg.className = 'coupon-msg err'; } return; }
-    if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; }
+    function clearPromoState(hideDiscount) {
+      if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; couponMsg.innerHTML = ''; }
+      if (couponInput) { couponInput.classList.remove('has-success', 'has-error'); }
+      if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
+      if (hideDiscount && summaryDiscountRow) summaryDiscountRow.classList.remove('visible');
+      if (hideDiscount && summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
+    }
+    if (!code) { clearPromoState(true); return; }
+    if (!selectedPlan) {
+      if (couponMsg) {
+        couponMsg.innerHTML = iconAlert + (t.get('coupon_select_plan_first', 'Please select a plan first.'));
+        couponMsg.className = 'coupon-msg err';
+      }
+      if (couponInput) { couponInput.classList.remove('has-success'); couponInput.classList.add('has-error'); }
+      if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
+      return;
+    }
+    clearPromoState(false);
     fetch(baseUrl + '/api/coupon/validate?plan_code=' + encodeURIComponent(selectedPlan) + '&code=' + encodeURIComponent(code), { credentials: 'include' })
       .then(function(r){ return r.json(); })
       .then(function(d){
-        if (couponMsg) {
-          couponMsg.textContent = d.valid ? (t.coupon_success || 'Coupon applied.') : (d.reason || t.coupon_invalid || 'Invalid coupon.');
-          couponMsg.className = 'coupon-msg ' + (d.valid ? 'ok' : 'err');
+        if (d.valid) {
+          if (couponMsg) { couponMsg.innerHTML = iconCheck + (d.message || t.coupon_success || 'Applied.'); couponMsg.className = 'coupon-msg ok'; }
+          if (couponInput) { couponInput.classList.remove('has-error'); couponInput.classList.add('has-success'); }
+          if (summaryCouponWrap) summaryCouponWrap.classList.add('applied'); }
+        if (summaryDiscountRow) summaryDiscountRow.classList.toggle('visible', !!d.valid);
+        if (summaryDiscountValue && d.valid) summaryDiscountValue.textContent = (d.discount_formatted != null ? d.discount_formatted : (d.discount != null ? '-' + d.discount + ' €' : '—'));
+        if (!d.valid && couponMsg) {
+          couponMsg.innerHTML = iconAlert + (d.reason || t.get('coupon_invalid_refined', 'This code isn’t valid for your selection.'));
+          couponMsg.className = 'coupon-msg err';
+          if (couponInput) { couponInput.classList.remove('has-success'); couponInput.classList.add('has-error'); }
+          if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
         }
       })
-      .catch(function(){ if (couponMsg) { couponMsg.textContent = t.coupon_invalid || 'Invalid coupon.'; couponMsg.className = 'coupon-msg err'; } });
+      .catch(function(){
+        if (couponMsg) { couponMsg.innerHTML = iconAlert + (t.get('coupon_invalid_refined', 'This code isn’t valid for your selection.')); couponMsg.className = 'coupon-msg err'; }
+        if (couponInput) { couponInput.classList.remove('has-success'); couponInput.classList.add('has-error'); }
+        if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
+      });
   });
 
   payNowBtn && payNowBtn.addEventListener('click', function() {
     if (!selectedPlan || paymentInProgress) return;
+    if (!getPlan(selectedPlan)) return;
     var email = userLoggedIn ? (emailInput ? emailInput.value : '') : (emailInput ? emailInput.value.trim() : '');
     if (!userLoggedIn && (!email || email.indexOf('@') < 0)) {
       showError(t.pay_email_label ? 'Please enter a valid email.' : 'Geçerli bir e-posta girin.');
@@ -516,7 +1577,8 @@
 
     var name = nameInput ? nameInput.value.trim() : '';
     var coupon = couponInput ? couponInput.value.trim() : '';
-    var payload = { plan_code: selectedPlan, email: email || undefined, name: name || undefined, coupon_code: coupon || undefined };
+    var payload = { plan_code: selectedPlan, quantity: selectedQuantity || 1, email: email || undefined, name: name || undefined, coupon_code: coupon || undefined };
+    if (planCodeInput) planCodeInput.value = selectedPlan;
 
     fetch(initUrl, {
       method: 'POST',
@@ -564,6 +1626,7 @@
 
   updateSummary();
 })();
+});
   </script>
 </body>
 </html>

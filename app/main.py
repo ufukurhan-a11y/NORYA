@@ -415,6 +415,10 @@ class ForceHTTPSRedirectMiddleware:
             await self.app(scope, receive, send)
             return
         host = (h.get(b"x-forwarded-host") or h.get(b"host") or b"").decode("utf-8", errors="ignore").strip()
+        # Local geliştirme: localhost / 127.0.0.1 için HTTPS yönlendirme yapma (yerelde SSL yok)
+        if not host or host.startswith("127.0.0.1") or host.startswith("localhost") or host == "[::1]":
+            await self.app(scope, receive, send)
+            return
         if not host:
             host = scope.get("server") and f"{scope['server'][0]}:{scope['server'][1]}" or "localhost"
         path = (scope.get("path") or "/").strip() or "/"
@@ -443,9 +447,9 @@ app.include_router(admin_router)  # Eski API paneli: /admin/stats, /admin/analys
 # Ana sayfa (/) en başta kaydedilsin; GET, HEAD, OPTIONS, POST desteklensin, 405 önlensin
 @app.get("/")
 @app.get("")
-def index():
+def index(request: Request):
     """Ana sayfa: tarayıcı GET ile açıldığında index.html döner."""
-    return _index_response()
+    return _index_response(request)
 
 
 @app.head("/")
@@ -464,9 +468,9 @@ def index_options():
 
 @app.post("/")
 @app.post("")
-def index_post():
+def index_post(request: Request):
     """Ana sayfa POST: form veya yönlendirme bazen POST gönderir; 405 yerine aynı sayfayı döndür."""
-    return _index_response()
+    return _index_response(request)
 
 
 @app.get("/yonetim", response_class=HTMLResponse)
@@ -567,7 +571,7 @@ COUNTRY_TO_CURRENCY = {
     "IN": "INR", "RU": "RUB", "CH": "CHF", "PL": "PLN", "MA": "MAD", "DZ": "DZD", "TN": "TND",
     "GR": "EUR", "CY": "EUR", "CZ": "CZK", "RS": "RSD", "BA": "BAM", "ME": "EUR",
 }
-EUR_BASE = {"single": 13, "monthly": 50, "yearly": 99}
+EUR_BASE = {"single": 14.04, "monthly": 54, "yearly": 106.92}
 # Varsayılan kurlar (API yanıt vermezse kullanılır)
 EUR_RATES_FALLBACK = {
     "EUR": 1.0, "USD": 1.08, "GBP": 0.85, "TRY": 34.5, "SAR": 4.05, "AED": 3.97, "QAR": 3.94,
@@ -860,6 +864,18 @@ def _legal_lang_from_request(request: Request) -> str:
     return _parse_accept_language(request.headers.get("accept-language"))
 
 
+PAYMENT_LANGS = ("tr", "en", "de", "fr", "it", "es")
+
+
+def _payment_lang_from_request(request: Request) -> str:
+    """Ödeme sayfası dili: müşteri hangi dilden girdiyse ona göre. Önce ?lang=, yoksa Accept-Language."""
+    lang_q = (request.query_params.get("lang") or "").strip().lower()[:2]
+    if lang_q in PAYMENT_LANGS:
+        return lang_q
+    browser = _parse_accept_language(request.headers.get("accept-language"))
+    return browser if browser in PAYMENT_LANGS else "tr"
+
+
 @app.get("/kvkk")
 def redirect_kvkk():
     return RedirectResponse(url="/legal/kvkk-gdpr", status_code=302)
@@ -895,14 +911,16 @@ def legal_page(request: Request, page: str):
     content = get_legal_content(page, lang)
     if not content:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/legal/{page}"
     if page == "iletisim":
         return templates.TemplateResponse(
             "legal/legal_contact.html",
-            {"request": request, "content": content, **ui},
+            {"request": request, "content": content, "canonical_url": canonical_url, **ui},
         )
     return templates.TemplateResponse(
         "legal/legal_article.html",
-        {"request": request, "content": content, **ui},
+        {"request": request, "content": content, "canonical_url": canonical_url, **ui},
     )
 
 
@@ -914,9 +932,10 @@ def iade_iptal_page(request: Request):
     content = get_legal_content("iade-iptal-politikasi", lang)
     if not content:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
+    base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
         "legal/legal_article.html",
-        {"request": request, "content": content, **ui},
+        {"request": request, "content": content, "canonical_url": f"{base_url}/iade-iptal", **ui},
     )
 
 
@@ -943,6 +962,7 @@ def refund_request_page(
     lang = _refund_lang_from_request(request)
     t = get_pay_ui(lang)
     ui = get_legal_ui(lang)
+    base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
         "legal/refund_request.html",
         {
@@ -954,6 +974,7 @@ def refund_request_page(
             "merchant_oid": None,
             "email": None,
             "reason": None,
+            "canonical_url": f"{base_url}/iade-talebi",
             **ui,
         },
     )
@@ -979,6 +1000,8 @@ def refund_request_submit(
     email = (email or "").strip()
     reason = (reason or "").strip()[:500]
 
+    base_url = str(request.base_url).rstrip("/")
+    canonical = f"{base_url}/iade-talebi"
     if not merchant_oid or not email:
         return templates.TemplateResponse(
             "legal/refund_request.html",
@@ -991,6 +1014,7 @@ def refund_request_submit(
                 "merchant_oid": merchant_oid or None,
                 "email": email or None,
                 "reason": reason or None,
+                "canonical_url": canonical,
                 **ui,
             },
         )
@@ -1008,6 +1032,7 @@ def refund_request_submit(
                 "merchant_oid": merchant_oid,
                 "email": email,
                 "reason": reason or None,
+                "canonical_url": canonical,
                 **ui,
             },
         )
@@ -1041,9 +1066,10 @@ def kurumsal_page(request: Request):
     if lang not in ENTERPRISE_LANGS:
         lang = "tr"
     t = get_enterprise_ui(lang)
+    base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
         "enterprise/kurumsal.html",
-        {"request": request, "lang": lang, "t": t},
+        {"request": request, "lang": lang, "t": t, "canonical_url": f"{base_url}/kurumsal"},
     )
 
 
@@ -1253,8 +1279,16 @@ async def api_enterprise_lead(request: Request, db: Session = Depends(get_db)):
     return JSONResponse(content={"ok": True})
 
 
-def _index_response():
-    """Ana sayfa içeriği: static/index.html veya fallback JSON. GET ve POST / için ortak."""
+def _inject_canonical(raw: str, canonical_url: str) -> str:
+    """HTML içinde </head> öncesine canonical link ekler (SEO)."""
+    tag = f'<link rel="canonical" href="{canonical_url}" />'
+    if "</head>" in raw and tag not in raw:
+        raw = raw.replace("</head>", tag + "\n  </head>", 1)
+    return raw
+
+
+def _index_response(request: Request | None = None):
+    """Ana sayfa içeriği: static/index.html veya fallback JSON. GET ve POST / için ortak. request verilirse canonical enjekte edilir."""
     index_file = STATIC_DIR / "index.html"
     if not index_file.is_file():
         index_file = Path.cwd() / "static" / "index.html"
@@ -1264,6 +1298,10 @@ def _index_response():
             raw = _inject_ga(raw)
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
+        if request is not None:
+            base_url = str(request.base_url).rstrip("/")
+            canonical_url = base_url + request.url.path
+            raw = _inject_canonical(raw, canonical_url)
         return HTMLResponse(
             raw,
             headers={"Cache-Control": "public, max-age=0, must-revalidate"},
@@ -1272,7 +1310,7 @@ def _index_response():
 
 
 @app.get("/report")
-def report_page():
+def report_page(request: Request):
     """Rapor sayfası: /report?rid=... — aynı SPA, rid query ile rapor yüklenir."""
     index_file = STATIC_DIR / "index.html"
     if not index_file.is_file():
@@ -1283,6 +1321,8 @@ def report_page():
             raw = _inject_ga(raw)
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
+        base_url = str(request.base_url).rstrip("/")
+        raw = _inject_canonical(raw, f"{base_url}/report")
         return HTMLResponse(
             raw,
             headers={"Cache-Control": "public, max-age=0, must-revalidate"},
@@ -2311,11 +2351,11 @@ def _paytr_enabled() -> bool:
 
 def _paytr_amount(product: str) -> int:
     if product == "single":
-        return int(getattr(settings, "paytr_amount_single", 300) or 300)
+        return int(getattr(settings, "paytr_amount_single", 1404) or 1404)
     if product == "monthly":
-        return int(getattr(settings, "paytr_amount_monthly", 5000) or 5000)
+        return int(getattr(settings, "paytr_amount_monthly", 5400) or 5400)
     if product == "yearly":
-        return int(getattr(settings, "paytr_amount_yearly", 9900) or 9900)
+        return int(getattr(settings, "paytr_amount_yearly", 10692) or 10692)
     return 300
 
 
@@ -2342,9 +2382,9 @@ def _paytr_reason_to_detail(reason: str | None) -> str:
 
 # Plan kodları (GET /pay?plan= ve POST /paytr/init)
 PAYTR_PLAN_CODES = {
-    "single_13eur": ("single", 1300),
-    "monthly_50eur": ("monthly", 5000),
-    "yearly_99eur": ("yearly", 9900),
+    "single_13eur": ("single", 1404),
+    "monthly_50eur": ("monthly", 5400),
+    "yearly_99eur": ("yearly", 10692),
 }
 
 
@@ -2374,6 +2414,14 @@ def paytr_init(
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
+    quantity = max(1, min(int(getattr(body, "quantity", 1) or 1), 10))
+    if product == "single":
+        quantity = max(1, min(quantity, 10))
+    elif product == "monthly":
+        quantity = max(1, min(quantity, 6))
+    else:
+        quantity = max(1, min(quantity, 3))
+
     coupon_used: str | None = None
     if body.coupon_code and (code := (body.coupon_code or "").strip()):
         discount, err = validate_coupon(db, code, product, amount)
@@ -2381,6 +2429,8 @@ def paytr_init(
             raise HTTPException(status_code=400, detail=err)
         amount = max(1, amount - discount)
         coupon_used = code
+
+    total_amount = amount * quantity
 
     user: User | None = current_user
     if not user and (body.email or "").strip():
@@ -2411,10 +2461,11 @@ def paytr_init(
         merchant_oid=merchant_oid,
         user_id=user_id,
         product=product,
-        amount_kurus=amount,
+        amount_kurus=total_amount,
         currency=currency,
         status="pending",
         coupon_code_used=coupon_used,
+        quantity=quantity,
     )
     db.add(order)
     try:
@@ -2423,13 +2474,13 @@ def paytr_init(
         log.exception("PayTR init: order insert failed")
         raise HTTPException(status_code=500, detail="Sipariş oluşturulamadı.")
 
-    paytr_amount, paytr_currency = _paytr_amount_and_currency(amount)
+    paytr_amount, paytr_currency = _paytr_amount_and_currency(total_amount)
     user_ip = _client_ip(request)
     email = user.email or "customer@norya.ai"
     product_name = {"single": "1 Analiz", "monthly": "Pro Aylık", "yearly": "Pro Yıllık"}.get(product, product)
     log.info(
-        "PAYTR_INIT: merchant_oid=%s plan_code=%s amount=%s currency=%s user_ip=%s",
-        merchant_oid, body.plan_code, paytr_amount, paytr_currency, user_ip,
+        "PAYTR_INIT: merchant_oid=%s plan_code=%s quantity=%s amount=%s currency=%s user_ip=%s",
+        merchant_oid, body.plan_code, quantity, paytr_amount, paytr_currency, user_ip,
     )
 
     import base64
@@ -2441,9 +2492,9 @@ def paytr_init(
     merchant_id = settings.paytr_merchant_id
     merchant_key = settings.paytr_merchant_key.encode() if isinstance(settings.paytr_merchant_key, str) else settings.paytr_merchant_key
     merchant_salt = settings.paytr_merchant_salt
-    basket_amount_str = f"{paytr_amount / 100:.2f}" if paytr_currency == "TL" else f"{amount / 100:.2f}"
+    basket_amount_str = f"{paytr_amount / 100:.2f}" if paytr_currency == "TL" else f"{total_amount / 100:.2f}"
     user_basket = base64.b64encode(
-        json.dumps([[f"Norya Plan: {body.plan_code}", basket_amount_str, 1]]).encode()
+        json.dumps([[f"Norya Plan: {body.plan_code} x{quantity}", basket_amount_str, 1]]).encode()
     ).decode()
     no_installment = "0"
     max_installment = "0"
@@ -2636,6 +2687,7 @@ def verify_report_page(
                 except Exception:
                     pass
 
+    base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
         "verify.html",
         {
@@ -2649,6 +2701,7 @@ def verify_report_page(
             "labels": labels,
             "summary_score": summary_score,
             "summary_critical_count": summary_critical_count,
+            "canonical_url": f"{base_url}/verify/{report_id}",
         },
     )
 
@@ -2670,8 +2723,8 @@ def pay_page(
     plan_display = get_plan_display_name(plan_code, lang)
     benefits = get_plan_benefits(plan_code, lang)
     base_url = str(request.base_url).rstrip("/")
-    prices = {"single_13eur": "13", "monthly_50eur": "50", "yearly_99eur": "99"}
-    prices_cents = {"single_13eur": 1300, "monthly_50eur": 5000, "yearly_99eur": 9900}
+    prices = {"single_13eur": "14.04", "monthly_50eur": "54", "yearly_99eur": "106.92"}
+    prices_cents = {"single_13eur": 1404, "monthly_50eur": 5400, "yearly_99eur": 10692}
     benefits_monthly = get_plan_benefits("monthly_50eur", lang)
     benefits_yearly = get_plan_benefits("yearly_99eur", lang)
     return templates.TemplateResponse(
@@ -2697,29 +2750,63 @@ def pay_page(
     )
 
 
+def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
+    """Build frontend campaign config from admin campaign data. Extensible shape."""
+    if not campaign:
+        return {
+            "campaignActive": False,
+            "campaignTitle": "",
+            "campaignMessage": "",
+            "campaignBadge": "",
+            "discountType": "",
+            "discountValue": 0,
+            "applicablePlans": "",
+            "promoCode": "",
+        }
+    return {
+        "campaignActive": True,
+        "campaignTitle": (campaign.get("display_label") or "").strip() or t.get("offer_annual_text", "Annual plan includes 15 extra analyses + 2 bonus months value."),
+        "campaignMessage": (campaign.get("display_note") or "").strip() or t.get("offer_best_savings_pill", "Best savings"),
+        "campaignBadge": t.get("offer_limited_badge", "Limited Offer"),
+        "discountType": campaign.get("discount_type") or "percent",
+        "discountValue": campaign.get("discount_value") or 0,
+        "applicablePlans": (campaign.get("products") or "").strip() or "",
+        "promoCode": (campaign.get("code") or "").strip() or "",
+    }
+
+
 @app.get("/payment", response_class=HTMLResponse)
 def payment_page_premium(
     request: Request,
-    lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+    lang: str | None = Query(None, description="Dil override; yoksa tarayıcı diline göre otomatik"),
     current_user: User | None = Depends(get_current_user_optional),
+    db: Session = Depends(get_db),
 ):
-    """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kart alanları sayfa içinde PayTR iframe ile."""
-    lang = (lang or "tr").lower()[:2]
-    if lang not in ("tr", "en", "de", "fr", "it", "es"):
-        lang = "tr"
+    """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kampanya admin’deki aktif kampanyaya bağlı."""
+    lang = _payment_lang_from_request(request)
     t = get_pay_ui(lang)
     base_url = str(request.base_url).rstrip("/")
     plans = [
-        {"code": "single_13eur", "price": "13", "price_cents": 1300, "label_key": "plan_single", "product": "single"},
-        {"code": "monthly_50eur", "price": "50", "price_cents": 5000, "label_key": "plan_monthly", "product": "monthly"},
-        {"code": "yearly_99eur", "price": "99", "price_cents": 9900, "label_key": "plan_yearly", "product": "yearly", "best_value": True},
+        {"code": "single_13eur", "price": "14.04", "price_cents": 1404, "label_key": "plan_single", "product": "single"},
+        {"code": "monthly_50eur", "price": "54", "price_cents": 5400, "label_key": "plan_monthly", "product": "monthly"},
+        {"code": "yearly_99eur", "price": "106.92", "price_cents": 10692, "label_key": "plan_yearly", "product": "yearly", "best_value": True},
     ]
+    _card_label_keys = {"single": "plan_card_single", "monthly": "plan_card_monthly", "yearly": "plan_card_yearly"}
     for p in plans:
         p["label"] = t.get(p["label_key"], p["code"])
+        p["display_label"] = t.get(_card_label_keys.get(p["product"], p["label_key"]), p["label"])
         p["benefits"] = get_plan_benefits(p["product"], lang)
     user_logged_in = current_user is not None
     user_email = (current_user.email or "").strip() if current_user else ""
     user_name = (getattr(current_user, "full_name", None) or "").strip() if current_user else ""
+    default_plan = next((p for p in plans if p.get("product") == "yearly"), plans[0] if plans else None)
+    campaign_raw = None
+    if default_plan:
+        try:
+            campaign_raw = get_active_campaign_for_checkout(db, default_plan["code"])
+        except Exception as e:
+            log.warning("payment_page campaign fetch failed: %s", e)
+    campaign_config = _payment_campaign_config(campaign_raw, t)
     return templates.TemplateResponse(
         "payment_page.html",
         {
@@ -2732,6 +2819,9 @@ def payment_page_premium(
             "plans": plans,
             "plans_js": json.dumps(plans),
             "base_url_js": json.dumps(base_url),
+            "default_plan": default_plan,
+            "campaign_config": campaign_config,
+            "campaign_js": json.dumps(campaign_config),
             "user_logged_in": user_logged_in,
             "user_email": user_email,
             "user_name": user_name,
@@ -2769,17 +2859,18 @@ def coupon_validate(
 @app.get("/api/campaigns/active")
 def campaigns_active(
     plan_code: str,
+    lang: str = Query("tr", description="Language for campaign labels"),
     db: Session = Depends(get_db),
 ):
-    """Seçilen plan için checkout’ta gösterilecek aktif kampanyayı döner (varsa)."""
+    """Seçilen plan için checkout’ta gösterilecek aktif kampanyayı döner. Aynı campaign_config yapısı."""
     try:
-        campaign = get_active_campaign_for_checkout(db, plan_code)
+        campaign_raw = get_active_campaign_for_checkout(db, plan_code)
     except Exception as e:
         log.warning("campaigns/active failed for plan_code=%s: %s", plan_code, e)
-        return {"active": False, "campaign": None}
-    if not campaign:
-        return {"active": False, "campaign": None}
-    return {"active": True, "campaign": campaign}
+        return {"active": False, "campaign": _payment_campaign_config(None, get_pay_ui(lang or "tr"))}
+    t = get_pay_ui((lang or "tr").lower()[:2])
+    campaign_config = _payment_campaign_config(campaign_raw, t)
+    return {"active": campaign_config["campaignActive"], "campaign": campaign_config}
 
 
 @app.post("/payment/get-token")
@@ -3126,8 +3217,9 @@ async def _paytr_callback_handle(request: Request, db: Session):
         if status == "success":
             user = db.get(User, order.user_id)
             if user:
+                qty = getattr(order, "quantity", 1) or 1
                 if order.product == "single":
-                    user.extra_credits = (getattr(user, "extra_credits", 0) or 0) + 1
+                    user.extra_credits = (getattr(user, "extra_credits", 0) or 0) + qty
                     db.add(user)
                 elif order.product in ("monthly", "yearly"):
                     user.plan = "pro"
@@ -3402,8 +3494,9 @@ def payment_grant(body: GrantPaymentRequest, db: Session = Depends(get_db)):
     user = db.get(User, order.user_id)
     if not user:
         raise HTTPException(status_code=404, detail="Kullanıcı bulunamadı.")
+    qty = getattr(order, "quantity", 1) or 1
     if order.product == "single":
-        user.extra_credits = (getattr(user, "extra_credits", 0) or 0) + 1
+        user.extra_credits = (getattr(user, "extra_credits", 0) or 0) + qty
         db.add(user)
     elif order.product in ("monthly", "yearly"):
         user.plan = "pro"
@@ -3431,26 +3524,32 @@ SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "
 
 
 @app.get("/{lang}", response_class=HTMLResponse)
-def index_with_locale(lang: str):
+def index_with_locale(request: Request, lang: str):
     """Locale prefix tek segment: /en, /tr → SPA."""
     if lang.lower() in SUPPORTED_LOCALES:
-        return _index_response()
+        return _index_response(request)
     raise HTTPException(status_code=404, detail="Not Found")
 
 
 @app.get("/{lang}/{path:path}", response_class=HTMLResponse)
-def index_with_locale_path(lang: str, path: str):
+def index_with_locale_path(request: Request, lang: str, path: str):
     """Locale prefix + path: /en/pricing, /de/report → SPA (blog hariç; /{lang}/blog ayrı route)."""
     if lang.lower() in SUPPORTED_LOCALES:
-        return _index_response()
+        return _index_response(request)
     raise HTTPException(status_code=404, detail="Not Found")
 
 
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt():
-    """SEO: Allow all, sitemap canonical URL."""
+    """SEO: Allow all; Disallow admin ve 401 dönen path'ler; sitemap canonical URL."""
     return PlainTextResponse(
-        "User-agent: *\nAllow: /\n\nSitemap: https://noryaai.com/sitemap.xml\n",
+        "User-agent: *\n"
+        "Allow: /\n"
+        "Disallow: /admin/\n"
+        "Disallow: /analyze/history\n"
+        "Disallow: /analyze/usage\n"
+        "Disallow: /analyze/export\n"
+        "\nSitemap: https://noryaai.com/sitemap.xml\n",
         media_type="text/plain",
     )
 

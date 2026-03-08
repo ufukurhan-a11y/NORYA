@@ -4,6 +4,7 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ labels.title }} — {{ labels.brand }}</title>
+  {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
   <style>
     :root { --brand: #0EA5A4; --ink: #0F172A; --muted: #64748b; --border: #e2e8f0; --valid: #059669; --invalid: #dc2626; }
     * { box-sizing: border-box; }
