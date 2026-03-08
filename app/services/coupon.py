@@ -140,18 +140,19 @@ def get_active_campaign_for_checkout(
             "discount_type": coupon.discount_type,
             "discount_value": coupon.discount_value,
             "discount_cents": discount_cents,
-            "display_label": _default_display_label(coupon),
+            "display_label": (coupon.display_label or "").strip() or _default_display_label(coupon),
             "display_note": (coupon.display_note or "").strip() or None,
             "auto_apply": getattr(coupon, "auto_apply", False),
+            "products": (coupon.products or "").strip() or "",
         }
     return None
 
 
 # Plan kodları (pay sayfası / paytr/init ile uyumlu)
 _PLAN_CODE_MAP = {
-    "single_13eur": ("single", 1300),
-    "monthly_50eur": ("monthly", 5000),
-    "yearly_99eur": ("yearly", 9900),
+    "single_13eur": ("single", 1404),
+    "monthly_50eur": ("monthly", 5400),
+    "yearly_99eur": ("yearly", 10692),
 }
 
 

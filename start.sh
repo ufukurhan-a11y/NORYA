@@ -24,6 +24,7 @@ fi
 
 echo "Sunucu başlatılıyor:"
 echo "  Bilgisayardan: http://127.0.0.1:$PORT"
+echo "  Admin:         http://127.0.0.1:$PORT/admin"
 # macOS: Wi-Fi genelde en0; Linux: eth0 veya wlan0
 if [ "$(uname)" = "Darwin" ]; then
   LOCAL_IP=$(ipconfig getifaddr en0 2>/dev/null || ipconfig getifaddr en1 2>/dev/null)

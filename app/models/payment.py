@@ -11,6 +11,7 @@ class PaymentOrder(SQLModel, table=True):
     user_id: int
     product: str  # "single" | "monthly" | "yearly"
     amount_kurus: int  # Tutar en küçük birimde: EUR için cent (13,00 € = 1300)
+    quantity: int = 1  # Tek analiz: adet; Aylık: ay; Yıllık: yıl (ödeme = birim_fiyat × quantity)
     currency: str = "EUR"  # Para birimi (tahsilat EUR)
     status: str = "pending"  # pending | completed | failed
     paytr_transaction_id: str | None = Field(default=None, index=True)

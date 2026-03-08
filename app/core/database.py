@@ -131,6 +131,7 @@ def init_db():
             "ALTER TABLE discountcode ADD COLUMN auto_apply BOOLEAN DEFAULT 0",
             "ALTER TABLE discountcode ADD COLUMN display_label VARCHAR(120)",
             "ALTER TABLE discountcode ADD COLUMN display_note VARCHAR(256)",
+            "ALTER TABLE paymentorder ADD COLUMN quantity INTEGER DEFAULT 1",
         ):
             try:
                 with engine.connect() as conn:

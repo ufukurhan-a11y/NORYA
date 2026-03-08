@@ -2762,6 +2762,7 @@ def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
             "discountValue": 0,
             "applicablePlans": "",
             "promoCode": "",
+            "autoApply": False,
         }
     return {
         "campaignActive": True,
@@ -2772,6 +2773,7 @@ def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
         "discountValue": campaign.get("discount_value") or 0,
         "applicablePlans": (campaign.get("products") or "").strip() or "",
         "promoCode": (campaign.get("code") or "").strip() or "",
+        "autoApply": campaign.get("auto_apply", False),
     }
 
 
@@ -2849,9 +2851,12 @@ def coupon_validate(
     discount, err = validate_coupon(db, code, product, base)
     if err:
         return {"valid": False, "reason": err}
+    discount_euro = discount / 100.0
     return {
         "valid": True,
         "discount_cents": discount,
+        "discount": round(discount_euro, 2),
+        "discount_formatted": f"-{discount_euro:.2f} €",
         "final_amount_cents": max(1, base - discount),
     }
 
@@ -2871,6 +2876,24 @@ def campaigns_active(
     t = get_pay_ui((lang or "tr").lower()[:2])
     campaign_config = _payment_campaign_config(campaign_raw, t)
     return {"active": campaign_config["campaignActive"], "campaign": campaign_config}
+
+
+@app.get("/api/campaigns/featured")
+def campaigns_featured(
+    lang: str = Query("tr", description="Language for campaign labels"),
+    db: Session = Depends(get_db),
+):
+    """Anasayfa / odeme linki icin tek bir aktif kampanya doner (yillik plan oncelikli). Kampanya yoksa active: false."""
+    t = get_pay_ui((lang or "tr").lower()[:2])
+    for plan_code in ("yearly_99eur", "monthly_50eur", "single_13eur"):
+        try:
+            campaign_raw = get_active_campaign_for_checkout(db, plan_code)
+            if campaign_raw:
+                cfg = _payment_campaign_config(campaign_raw, t)
+                return {"active": True, "campaign": cfg}
+        except Exception:
+            continue
+    return {"active": False, "campaign": _payment_campaign_config(None, t)}
 
 
 @app.post("/payment/get-token")

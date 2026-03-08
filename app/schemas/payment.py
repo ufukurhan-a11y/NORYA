@@ -32,8 +32,9 @@ class GuestSessionRequest(BaseModel):
 
 
 class PaytrInitRequest(BaseModel):
-    """PayTR iFrame başlatma: plan_code ile paket seçimi, opsiyonel kupon."""
+    """PayTR iFrame başlatma: plan_code ile paket seçimi, opsiyonel kupon, adet/süre çarpanı."""
     plan_code: str  # single_13eur | monthly_50eur | yearly_99eur
+    quantity: int = 1  # Tek analiz: adet (1-10); Aylık: ay (1-6); Yıllık: yıl (1-3)
     user_id: int | None = None
     email: str | None = None
     name: str | None = None

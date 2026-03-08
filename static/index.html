@@ -1744,7 +1744,7 @@
     .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
     /* Kapalı modallar tıklamayı asla engellemesin (görünmez overlay riski) */
     #modal-login.hidden, #modal-register.hidden, #modal-forgot.hidden, #modal-reset.hidden,
-    #guest-checkout-modal.hidden, #payment-modal.hidden {
+    #guest-checkout-modal.hidden, #payment-modal.hidden, #sample-report-modal.hidden {
       pointer-events: none !important;
     }
     /* WhatsApp FAB: her zaman sadece ikon (kesilme yok), safe-area uyumlu */
@@ -2292,10 +2292,37 @@
       .pricing-elite-card .price{ font-size: 36px; }
       .elite-cta{ height: 52px; }
     }
+    /* Sabit indirim şeridi: kaydırırken herkes görsün */
+    #promo-strip-fixed {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: 10px 16px;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: linear-gradient(135deg, rgba(14,165,164,0.95) 0%, rgba(13,148,136,0.98) 100%);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(14,165,164,0.25);
+      transform: translateY(-100%);
+      transition: transform 0.3s ease;
+      pointer-events: none;
+    }
+    #promo-strip-fixed.promo-strip-fixed-visible { transform: translateY(0); pointer-events: auto; }
+    #promo-strip-fixed a { color: #fff; text-decoration: underline; text-underline-offset: 3px; font-weight: 600; }
+    #promo-strip-fixed a:hover { opacity: 0.9; }
+    .dark #promo-strip-fixed { background: linear-gradient(135deg, rgba(45,212,191,0.95) 0%, rgba(20,184,166,0.98) 100%); }
 
   </style>
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
+  <!-- Kaydırırken görünen sabit indirim şeridi (kampanya aktifse) -->
+  <div id="promo-strip-fixed" aria-hidden="true" style="display:none;">
+    <span id="promo-strip-fixed-text"></span>
+    <a href="/payment" id="promo-strip-fixed-link">Ödeme sayfasında uygula</a>
+  </div>
   <script>
   (function(){
     var SUPPORTED = ['en','de','it','fr','es','tr','ar','hi','he','el','sr'];
@@ -3892,56 +3919,56 @@
         <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="sample_cards_sub">Tahlil sonrası raporunuzda göreceğiniz başlıklar — doktor gözünde, premium formatta.</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
-        <a href="#ornek-rapor" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="javascript:void(0)" role="button" data-sample="glucose" onclick="openSampleReportModal('glucose'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 p-2.5 text-[#0EA5A4]" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
             </span>
-            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#0EA5A4] px-2.5 py-1 rounded-full bg-[#0EA5A4]/10" data-i18n="sample_card_badge_glucose">Raporunda</span>
+            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-[#0b8a89] dark:text-[#14b8a6] px-2.5 py-1 rounded-full bg-[#0EA5A4]/15 dark:bg-[#0EA5A4]/25 border border-[#0EA5A4]/30" data-i18n="sample_card_badge_glucose">Raporunda</span>
           </div>
           <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="sample_card_glucose_title">Şeker seviyesi</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_glucose_desc">Açlık glukoz ve HbA1c tek ekranda; diyabet riski özeti ve referans aralıkları.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="#ornek-rapor" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="javascript:void(0)" role="button" data-sample="bio" onclick="openSampleReportModal('bio'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-violet-500/10 dark:bg-violet-500/20 p-2.5 text-violet-600 dark:text-violet-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
             </span>
-            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-violet-600 dark:text-violet-400 px-2.5 py-1 rounded-full bg-violet-500/10" data-i18n="sample_card_badge_bio">Raporunda</span>
+            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-violet-700 dark:text-violet-300 px-2.5 py-1 rounded-full bg-violet-500/20 dark:bg-violet-500/30 border border-violet-500/40" data-i18n="sample_card_badge_bio">Raporunda</span>
           </div>
           <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="sample_card_bio_title">Biyolojik yaş</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_bio_desc">Tahmini biyolojik yaş ve genel sağlık skoru — yaşınıza göre vücut durumu özeti.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="#ornek-rapor" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="javascript:void(0)" role="button" data-sample="cardio" onclick="openSampleReportModal('cardio'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-rose-500/10 dark:bg-rose-500/20 p-2.5 text-rose-600 dark:text-rose-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
             </span>
-            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-rose-600 dark:text-rose-400 px-2.5 py-1 rounded-full bg-rose-500/10" data-i18n="sample_card_badge_cardio">Raporunda</span>
+            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-rose-700 dark:text-rose-300 px-2.5 py-1 rounded-full bg-rose-500/20 dark:bg-rose-500/30 border border-rose-500/40" data-i18n="sample_card_badge_cardio">Raporunda</span>
           </div>
           <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="sample_card_cardio_title">Kardiyovasküler risk</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_cardio_desc">LDL, HDL, trigliserid; kalp sağlığı özeti ve referans aralıklarıyla birlikte.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="#ornek-rapor" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="javascript:void(0)" role="button" data-sample="vitamin" onclick="openSampleReportModal('vitamin'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-amber-500/10 dark:bg-amber-500/20 p-2.5 text-amber-600 dark:text-amber-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
             </span>
-            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-amber-600 dark:text-amber-400 px-2.5 py-1 rounded-full bg-amber-500/10" data-i18n="sample_card_badge_vitamin">Raporunda</span>
+            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-amber-700 dark:text-amber-300 px-2.5 py-1 rounded-full bg-amber-500/20 dark:bg-amber-500/30 border border-amber-500/40" data-i18n="sample_card_badge_vitamin">Raporunda</span>
           </div>
           <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="sample_card_vitamin_title">Vitamin & mineral</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_vitamin_desc">D vitamini, B12, demir, ferritin — eksiklik riski ve referans aralıkları.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="#ornek-rapor" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="javascript:void(0)" role="button" data-sample="attention" onclick="openSampleReportModal('attention'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 p-2.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
             </span>
-            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-emerald-600 dark:text-emerald-400 px-2.5 py-1 rounded-full bg-emerald-500/10" data-i18n="sample_card_badge_attention">Raporunda</span>
+            <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300 px-2.5 py-1 rounded-full bg-emerald-500/20 dark:bg-emerald-500/30 border border-emerald-500/40" data-i18n="sample_card_badge_attention">Raporunda</span>
           </div>
           <h3 class="text-base sm:text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="sample_card_attention_title">Dikkat gerektiren değerler</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_attention_desc">Öne çıkan parametreler ve hekiminizle paylaşmanız gereken başlıklar — tek bakışta.</p>
@@ -4060,6 +4087,105 @@
       </div>
     </div>
   </section>
+
+  <!-- Örnek rapor modal — kartlardan "Rapor örneğini gör" tıklanınca açılır -->
+  <div id="sample-report-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50" role="dialog" aria-modal="true" aria-labelledby="sample-report-modal-title">
+    <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-accent-200 dark:border-accent-700" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between px-5 py-4 border-b border-accent-200 dark:border-accent-700 flex-shrink-0">
+        <h2 id="sample-report-modal-title" class="text-lg font-bold text-accent-900 dark:text-white" data-i18n="example_report_title">Rapor çıktısı örneği</h2>
+        <button type="button" onclick="closeSampleReportModal()" class="p-2 rounded-lg text-accent-500 hover:bg-accent-100 dark:hover:bg-accent-700 transition" aria-label="Kapat">✕</button>
+      </div>
+      <div class="p-5 overflow-y-auto flex-1 min-h-0">
+        <!-- Şeker seviyesi -->
+        <div id="sample-report-panel-glucose" class="sample-report-panel hidden">
+          <div class="rounded-xl p-4 bg-slate-50 dark:bg-accent-800/50 border border-slate-100 dark:border-accent-700 space-y-3">
+            <h3 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="sample_card_glucose_title">Şeker seviyesi</h3>
+            <div class="value-bar-row">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                <span class="font-medium text-accent-900 dark:text-white text-sm" data-i18n="example_report_sample_glucose">Glukoz (açlık)</span>
+                <span class="text-sm text-accent-600 dark:text-accent-400">98 mg/dL <span class="text-accent-500">(Ref: 70–100)</span></span>
+              </div>
+              <div class="h-2 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-[85%] rounded-full bg-[#0EA5A4]"></div></div>
+            </div>
+            <div class="value-bar-row">
+              <div class="flex flex-wrap items-center justify-between gap-2 mb-1">
+                <span class="font-medium text-accent-900 dark:text-white text-sm">HbA1c</span>
+                <span class="text-sm text-accent-600 dark:text-accent-400">5,4% <span class="text-accent-500">(Ref: &lt;5,7)</span></span>
+              </div>
+              <div class="h-2 rounded-full bg-accent-200 dark:bg-accent-600 overflow-hidden"><div class="h-full w-[70%] rounded-full bg-[#0EA5A4]"></div></div>
+            </div>
+            <p class="text-accent-600 dark:text-accent-400 text-xs mt-2" data-i18n="sample_card_glucose_desc">Açlık glukoz ve HbA1c tek ekranda; diyabet riski özeti ve referans aralıkları.</p>
+          </div>
+        </div>
+        <!-- Biyolojik yaş -->
+        <div id="sample-report-panel-bio" class="sample-report-panel hidden">
+          <div class="rounded-xl p-4 bg-slate-50 dark:bg-accent-800/50 border border-slate-100 dark:border-accent-700 space-y-3">
+            <h3 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="sample_card_bio_title">Biyolojik yaş</h3>
+            <div class="flex flex-wrap items-center gap-4">
+              <div>
+                <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase">Tahmini biyolojik yaş</div>
+                <div class="text-2xl font-bold text-[#0EA5A4]">38 <span class="text-sm font-normal text-accent-500">yaş</span></div>
+              </div>
+              <div>
+                <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase">Genel sağlık skoru</div>
+                <div class="text-2xl font-bold text-accent-900 dark:text-white">72 <span class="text-sm font-normal text-accent-500">/ 100</span></div>
+              </div>
+            </div>
+            <p class="text-accent-600 dark:text-accent-400 text-xs" data-i18n="sample_card_bio_desc">Tahmini biyolojik yaş ve genel sağlık skoru — yaşınıza göre vücut durumu özeti.</p>
+          </div>
+        </div>
+        <!-- Kardiyovasküler risk -->
+        <div id="sample-report-panel-cardio" class="sample-report-panel hidden">
+          <div class="rounded-xl p-4 bg-slate-50 dark:bg-accent-800/50 border border-slate-100 dark:border-accent-700 space-y-3">
+            <h3 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="sample_card_cardio_title">Kardiyovasküler risk</h3>
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-2">
+              <div class="rounded-lg p-2.5 border-l-4 border-amber-500 bg-amber-50/50 dark:bg-amber-900/10">
+                <div class="text-xs text-accent-500 dark:text-accent-400">LDL</div>
+                <div class="font-bold text-accent-900 dark:text-white">142 mg/dL <span class="text-xs font-normal">(Ref: &lt;100)</span></div>
+              </div>
+              <div class="rounded-lg p-2.5 border-l-4 border-emerald-500 bg-emerald-50/50 dark:bg-emerald-900/10">
+                <div class="text-xs text-accent-500 dark:text-accent-400">HDL</div>
+                <div class="font-bold text-accent-900 dark:text-white">52 mg/dL <span class="text-xs font-normal">(Ref: &gt;40)</span></div>
+              </div>
+              <div class="rounded-lg p-2.5 border-l-4 border-[#0EA5A4] bg-teal-50/50 dark:bg-teal-900/10">
+                <div class="text-xs text-accent-500 dark:text-accent-400">Trigliserid</div>
+                <div class="font-bold text-accent-900 dark:text-white">118 mg/dL <span class="text-xs font-normal">(Ref: &lt;150)</span></div>
+              </div>
+            </div>
+            <p class="text-accent-600 dark:text-accent-400 text-xs" data-i18n="sample_card_cardio_desc">LDL, HDL, trigliserid; kalp sağlığı özeti ve referans aralıklarıyla birlikte.</p>
+          </div>
+        </div>
+        <!-- Vitamin & mineral -->
+        <div id="sample-report-panel-vitamin" class="sample-report-panel hidden">
+          <div class="rounded-xl p-4 bg-slate-50 dark:bg-accent-800/50 border border-slate-100 dark:border-accent-700 space-y-3">
+            <h3 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="sample_card_vitamin_title">Vitamin & mineral</h3>
+            <div class="space-y-2">
+              <div class="flex justify-between text-sm"><span class="text-accent-700 dark:text-accent-300">D vitamini</span><span>28 ng/mL (Ref: 30–100)</span></div>
+              <div class="flex justify-between text-sm"><span class="text-accent-700 dark:text-accent-300">B12</span><span>412 pg/mL (Ref: 200–900)</span></div>
+              <div class="flex justify-between text-sm"><span class="text-accent-700 dark:text-accent-300">Demir</span><span>85 µg/dL (Ref: 60–170)</span></div>
+              <div class="flex justify-between text-sm"><span class="text-accent-700 dark:text-accent-300">Ferritin</span><span>65 ng/mL (Ref: 15–150)</span></div>
+            </div>
+            <p class="text-accent-600 dark:text-accent-400 text-xs" data-i18n="sample_card_vitamin_desc">D vitamini, B12, demir, ferritin — eksiklik riski ve referans aralıkları.</p>
+          </div>
+        </div>
+        <!-- Dikkat gerektiren değerler -->
+        <div id="sample-report-panel-attention" class="sample-report-panel hidden">
+          <div class="rounded-xl p-4 bg-slate-50 dark:bg-accent-800/50 border border-slate-100 dark:border-accent-700 space-y-3">
+            <h3 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="sample_card_attention_title">Dikkat gerektiren değerler</h3>
+            <ul class="space-y-2 text-sm text-accent-700 dark:text-accent-300">
+              <li class="flex items-start gap-2"><span class="text-amber-500">●</span> LDL kolesterol — hedefe göre takip önerilir</li>
+              <li class="flex items-start gap-2"><span class="text-amber-500">●</span> D vitamini — hafif düşük, takviye doktorla görüşülebilir</li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500">●</span> Diğer parametreler referans aralığında</li>
+            </ul>
+            <p class="text-accent-600 dark:text-accent-400 text-xs" data-i18n="sample_card_attention_desc">Öne çıkan parametreler ve hekiminizle paylaşmanız gereken başlıklar — tek bakışta.</p>
+          </div>
+        </div>
+      </div>
+      <div class="px-5 py-4 border-t border-accent-200 dark:border-accent-700 flex-shrink-0">
+        <button type="button" onclick="closeSampleReportModal(); openRegister(); scrollToAnalyze();" class="w-full py-3 rounded-xl bg-[#0EA5A4] text-white font-semibold hover:bg-[#0d9488] transition" data-i18n="example_report_cta_btn">Ücretsiz Başla — İlk Analiz Hediye</button>
+      </div>
+    </div>
+  </div>
 
   <!-- Güvenlik ve Uyumluluk (HIPAA, GDPR) -->
   <section class="landing-hidden py-12 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
@@ -4618,6 +4744,14 @@
       <p class="mt-2 text-center text-xs font-medium text-[#0EA5A4] dark:text-teal-400" data-i18n="paytr_infrastructure_note">Ödeme altyapısı PayTR ile sağlanacaktır.</p>
     </div>
   </section>
+
+  <!-- Aktif indirim kampanyası: admin’de oluşturulan kupon varsa anasayfada gösterilir -->
+  <div id="promo-strip-home" class="hidden py-3 px-4 text-center bg-[#0EA5A4]/10 dark:bg-teal-500/10 border-y border-[#0EA5A4]/20 dark:border-teal-500/20">
+    <p class="text-sm font-medium text-accent-800 dark:text-accent-200">
+      <span id="promo-strip-text"></span>
+      <a href="/payment" class="ml-1 font-semibold text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="promo_strip_cta">Ödeme sayfasında uygula</a>
+    </p>
+  </div>
 
   <!-- 4) Paketler -->
   <section id="fiyatlandirma" class="premium-section py-12 sm:py-16 bg-accent-50/50 dark:bg-accent-900/30">
@@ -10077,6 +10211,32 @@
       if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
     }
 
+    function openSampleReportModal(key) {
+      var modal = document.getElementById('sample-report-modal');
+      if (!modal) return;
+      document.querySelectorAll('.sample-report-panel').forEach(function(panel) {
+        panel.classList.add('hidden');
+      });
+      var panel = document.getElementById('sample-report-panel-' + key);
+      if (panel) panel.classList.remove('hidden');
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden';
+      function closeOnBackdrop(e) {
+        if (e.target === modal) { closeSampleReportModal(); modal.removeEventListener('click', closeOnBackdrop); document.removeEventListener('keydown', closeOnEscape); }
+      }
+      function closeOnEscape(e) {
+        if (e.key === 'Escape') { closeSampleReportModal(); modal.removeEventListener('click', closeOnBackdrop); document.removeEventListener('keydown', closeOnEscape); }
+      }
+      modal.addEventListener('click', closeOnBackdrop);
+      document.addEventListener('keydown', closeOnEscape);
+    }
+    function closeSampleReportModal() {
+      var modal = document.getElementById('sample-report-modal');
+      if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
+      document.body.style.overflow = '';
+    }
+
     async function submitLogin(e) {
       e.preventDefault();
       var errEl = document.getElementById('login-error');
@@ -10572,7 +10732,15 @@
     window.addEventListener('hashchange', function() {
       if (window.location.hash === '#odeme') showCheckoutPage();
       if (window.location.hash === '#profil') showProfilePage();
+      if (window.location.hash === '#ornek-rapor') {
+        var sec = document.getElementById('ornek-rapor');
+        if (sec) { sec.classList.remove('landing-hidden'); sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      }
     });
+    if (window.location.hash === '#ornek-rapor') {
+      var sec = document.getElementById('ornek-rapor');
+      if (sec) sec.classList.remove('landing-hidden');
+    }
 
     function openAnalyze() {
       var el = document.getElementById('analyze-section');
@@ -11541,6 +11709,42 @@
       }
       if (document.readyState === 'loading') window.addEventListener('load', runOverflowCheck);
       else runOverflowCheck();
+    })();
+
+    // Aktif indirim kampanyası: admin kuponu varsa anasayfada göster + kaydırırken sabit şerit
+    (function() {
+      var strip = document.getElementById('promo-strip-home');
+      var textEl = document.getElementById('promo-strip-text');
+      var fixedStrip = document.getElementById('promo-strip-fixed');
+      var fixedText = document.getElementById('promo-strip-fixed-text');
+      var fixedLink = document.getElementById('promo-strip-fixed-link');
+      var ctaText = (document.querySelector('[data-i18n="promo_strip_cta"]') && document.querySelector('[data-i18n="promo_strip_cta"]').textContent) || 'Ödeme sayfasında uygula';
+      var lang = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
+      fetch('/api/campaigns/featured?lang=' + encodeURIComponent(lang), { credentials: 'include' })
+        .then(function(r) { return r.json(); })
+        .then(function(data) {
+          if (data.active && data.campaign && data.campaign.promoCode) {
+            var msg = data.campaign.campaignTitle || ('%' + (data.campaign.discountValue || 0) + ' indirim');
+            var line = msg + ' — Kod: ' + data.campaign.promoCode + '. ';
+            if (strip && textEl) {
+              textEl.textContent = line;
+              strip.classList.remove('hidden');
+            }
+            if (fixedStrip && fixedText && fixedLink) {
+              fixedText.textContent = line;
+              fixedLink.textContent = ctaText;
+              fixedStrip.style.display = 'block';
+              fixedStrip.setAttribute('aria-hidden', 'false');
+              var onScroll = function() {
+                if (window.scrollY > 80) fixedStrip.classList.add('promo-strip-fixed-visible');
+                else fixedStrip.classList.remove('promo-strip-fixed-visible');
+              };
+              window.addEventListener('scroll', onScroll, { passive: true });
+              onScroll();
+            }
+          }
+        })
+        .catch(function() {});
     })();
   </script>
 </body>
