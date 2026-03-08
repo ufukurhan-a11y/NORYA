@@ -2,8 +2,9 @@
 <html lang="{{ lang }}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
   <meta name="theme-color" content="#F8FAFA">
+  <meta name="format-detection" content="telephone=no">
   <title>{{ t.pay_title }} – {{ brand }}</title>
   <!-- Tarayıcı sekmesi: Norya N ikonu -->
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
@@ -14,14 +15,15 @@
   <link rel="canonical" href="{{ base_url }}/pay" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{ -webkit-text-size-adjust: 100%; }
+    html{ -webkit-text-size-adjust: 100%; text-size-adjust: 100%; overflow-x: clip; width: 100%; }
     body{
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
       background: linear-gradient(180deg, #f8fafc 0%, #f1f5f9 35%, #eef2f6 100%);
       color: #1a1a2e;
       min-height: 100vh;
       min-height: 100dvh;
-      padding-bottom: 100px;
+      min-height: -webkit-fill-available;
+      padding-bottom: max(100px, env(safe-area-inset-bottom));
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
     }
@@ -39,6 +41,16 @@
     .trust-bar span{ display: inline-flex; align-items: center; gap: 8px; font-size: 11px; font-weight: 600; color: #475569; letter-spacing: 0.02em; }
     .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; color: #0EA5A4; opacity: 0.9; }
     .trust-bar .trust-bar-logo{ width: 16px; height: 16px; flex-shrink: 0; object-fit: contain; }
+    @media (max-width: 768px){
+      .trust-bar{ padding: 10px 14px; gap: 8px 20px; min-height: 44px; }
+      .trust-bar span{ font-size: 10px; }
+      .trust-bar svg, .trust-bar .trust-bar-logo{ width: 14px; height: 14px; }
+    }
+    @media (max-width: 480px){
+      .trust-bar{ padding: 8px 12px; gap: 6px 14px; }
+      .trust-bar span{ font-size: 9px; }
+      .trust-badges{ padding: 12px 16px 14px; grid-template-columns: 1fr; }
+    }
     .trust-badges{
       display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px 16px;
       max-width: 1100px; margin: 0 auto; padding: 14px 24px 18px;
@@ -53,6 +65,8 @@
       .trust-badges{ grid-template-columns: repeat(4, 1fr); justify-items: center; gap: 12px; padding: 12px 24px 16px; }
     }
     .wrap{ max-width: 1100px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; }
+    @media (max-width: 767px){ .wrap{ padding: 0 18px; } }
+    @media (max-width: 480px){ .wrap{ padding: 0 16px; } }
     .header{
       display: flex;
       align-items: center;
@@ -206,7 +220,12 @@
     .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
     .input.err{ border-color: #dc2626; }
     .coupon-row{ display: flex; gap: 10px; margin-bottom: 4px; }
-    .coupon-row .input{ flex: 1; min-width: 0; }
+    .coupon-row .input{ flex: 1; min-width: 0; min-height: 44px; font-size: 16px; }
+    @media (max-width: 480px){
+      .coupon-row{ flex-direction: column; gap: 8px; }
+      .coupon-row .input{ width: 100%; }
+      .coupon-apply{ width: 100%; min-height: 44px; }
+    }
     .btn-secondary{
       min-height: 48px;
       padding: 0 20px;
@@ -226,19 +245,31 @@
     .coupon-msg.ok{ color: #059669; }
     .coupon-msg.err{ color: #dc2626; }
 
-    /* Kampanya: premium, Norya renkleri, agresif indirim hissi yok */
+    /* Kampanya barı: beyaz değil – net turkuaz şerit */
     .campaign-block{
-      background: rgba(14,165,164,0.06);
-      border: 1px solid rgba(14,165,164,0.14);
+      background: linear-gradient(135deg, #14b8a6 0%, #0d9488 50%, #14b8a6 100%) !important;
+      border: 2px solid #0f766e !important;
       border-radius: 14px;
       padding: 16px 18px;
       margin-bottom: 20px;
+      box-shadow: 0 2px 10px rgba(13,148,136,0.35);
     }
     .campaign-inner{ display: flex; flex-wrap: wrap; align-items: center; gap: 10px 16px; }
-    .campaign-tag{ font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #0f766e; }
-    .campaign-code{ font-size: 15px; font-weight: 700; color: #0d9488; font-family: ui-monospace, monospace; }
-    .campaign-label{ font-size: 14px; font-weight: 600; color: #334155; }
-    .campaign-note{ font-size: 12px; color: #64748b; margin: 4px 0 0; width: 100%; }
+    .campaign-tag{ font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: #fff; }
+    .campaign-code{ font-size: 15px; font-weight: 700; color: #fff; font-family: ui-monospace, monospace; background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 8px; }
+    .campaign-label{ font-size: 14px; font-weight: 600; color: #fff; }
+    .campaign-note{ font-size: 12px; color: rgba(255,255,255,0.9); margin: 4px 0 0; width: 100%; word-break: break-word; overflow-wrap: break-word; }
+    @media (max-width: 768px){
+      .campaign-block{ padding: 14px 16px; margin-bottom: 16px; }
+      .campaign-tag{ font-size: 9px; }
+      .campaign-code{ font-size: 14px; }
+      .campaign-label{ font-size: 13px; }
+    }
+    @media (max-width: 480px){
+      .campaign-block{ padding: 12px 14px; }
+      .campaign-inner{ gap: 8px 12px; }
+      .campaign-code{ font-size: 13px; }
+    }
     .campaign-apply-btn{ margin-top: 4px; }
     .campaign-applied{ display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #059669; margin-top: 8px; }
     .campaign-applied-icon{ width: 20px; height: 20px; border-radius: 50%; background: rgba(5,150,105,0.15); color: #059669; display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
@@ -422,15 +453,20 @@
       box-shadow: 0 -2px 12px rgba(0,0,0,0.06), 0 -1px 0 rgba(0,0,0,0.04);
     }
     @media (max-width: 919px){
-      .sticky-bar{ display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+      .sticky-bar{ display: flex; align-items: center; justify-content: space-between; gap: 16px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); padding-bottom: max(14px, env(safe-area-inset-bottom)); }
       .sticky-bar .price{ font-size: 20px; font-weight: 800; color: #0EA5A4; }
-      .sticky-bar .cta-main{ min-height: 52px; padding: 14px 20px; flex: 1; min-width: 0; font-size: 15px; font-weight: 700; }
-      body{ padding-bottom: 88px; }
+      .sticky-bar .cta-main{ min-height: 52px; min-width: 44px; padding: 14px 20px; flex: 1; font-size: 15px; font-weight: 700; }
+      body{ padding-bottom: max(88px, env(safe-area-inset-bottom)); }
     }
 
     .modal-overlay{ position: fixed; inset: 0; background: rgba(0,0,0,0.45); display: none; align-items: center; justify-content: center; z-index: 100; padding: 20px; -webkit-backdrop-filter: blur(4px); backdrop-filter: blur(4px); }
     .modal-overlay.visible{ display: flex; }
     .modal{ background: #fff; border-radius: 18px; padding: 28px; max-width: 400px; width: 100%; box-shadow: 0 20px 48px -12px rgba(0,0,0,0.2), 0 0 0 1px rgba(0,0,0,0.04); }
+    input[type="email"], input[type="text"]{ font-size: 16px; min-height: 44px; -webkit-appearance: none; appearance: none; }
+    .cta-main{ min-height: 48px; }
+    @supports (padding: max(0px, 1px)){
+      body{ padding-bottom: max(100px, env(safe-area-inset-bottom)); }
+    }
     .modal h3{ font-size: 18px; font-weight: 700; margin-bottom: 10px; }
     .modal p{ font-size: 14px; color: #64748b; margin-bottom: 18px; line-height: 1.52; }
     .modal a{ display: inline-block; padding: 14px 24px; background: #0EA5A4; color: #fff; border-radius: 12px; font-weight: 600; text-decoration: none; transition: background 0.2s; }
@@ -866,14 +902,16 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function doCheckout(useSamePage) {
     setLoading(true);
+    var couponToSend = (couponInput && couponInput.value.trim()) || appliedCoupon || null;
     fetch(baseUrl + '/paytr/init', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         plan_code: planCode,
+        quantity: 1,
         email: (document.getElementById('email') && document.getElementById('email').value.trim()) || null,
         name: (document.getElementById('name') && document.getElementById('name').value.trim()) || null,
-        coupon_code: appliedCoupon || null
+        coupon_code: couponToSend
       })
     })
     .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, data: d }; }); })

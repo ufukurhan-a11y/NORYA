@@ -150,7 +150,7 @@ templates.env.globals["getattr"] = getattr
 
 
 def _seed_default_coupon():
-    """INDIRIM20 kuponu yoksa oluşturur (%20 indirim, tüm planlar)."""
+    """INDIRIM20 kuponu yoksa oluşturur (%20 indirim, tüm planlar). Render/Production'da bar görünsün diye auto_show_on_checkout=True."""
     try:
         from app.core.database import engine
         with Session(engine) as session:
@@ -163,10 +163,17 @@ def _seed_default_coupon():
                     valid_from=None,
                     valid_until=None,
                     products=None,
+                    is_active=True,
+                    auto_show_on_checkout=True,
                 )
                 session.add(coupon)
                 session.commit()
-                log.info("Varsayılan kupon INDIRIM20 oluşturuldu (%20 indirim).")
+                log.info("Varsayılan kupon INDIRIM20 oluşturuldu (%20 indirim, checkout bar açık).")
+            elif getattr(existing, "auto_show_on_checkout", False) is False:
+                existing.auto_show_on_checkout = True
+                session.add(existing)
+                session.commit()
+                log.info("INDIRIM20 checkout bar açıldı (auto_show_on_checkout=True).")
     except Exception as e:
         log.warning("INDIRIM20 seed atlandı (ilk kupon doğrulamasında oluşturulacak): %s", e)
 

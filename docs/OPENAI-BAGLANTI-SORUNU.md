@@ -41,3 +41,4 @@ Dashboard’daki **AI Durumu** kutusu sonucu **60 saniye** önbelleklenir. Geçi
 ## 6. Admin raporları
 
 **Raporlar** sayfası (tarih aralığı, CSV indir) OpenAI’e bağlı **değildir**. Bağlantı hatası sadece **AI Durumu** kutusunu ve **kan tahlili analizi** özelliğini etkiler. Rapor almak için Admin → Raporlar’ı kullanmaya devam edebilirsiniz.
+g

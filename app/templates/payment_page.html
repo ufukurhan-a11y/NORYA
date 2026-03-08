@@ -2,8 +2,9 @@
 <html lang="{{ lang }}">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
   <meta name="theme-color" content="#f4f7fa">
+  <meta name="format-detection" content="telephone=no">
   <title>{{ t.pay_title }} – {{ brand }}</title>
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
@@ -12,7 +13,7 @@
   <link rel="canonical" href="{{ base_url }}/payment" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{-webkit-text-size-adjust:100%;overflow-x:clip;width:100%;}
+    html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:clip;width:100%;}
     body{
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', system-ui, 'Inter', sans-serif;
       background: #f8fafc;
@@ -22,7 +23,8 @@
       min-height: 100vh;
       min-height: 100dvh;
       min-height: -webkit-fill-available;
-      padding-bottom: 60px;
+      padding-bottom: max(60px, env(safe-area-inset-bottom));
+      -webkit-tap-highlight-color: transparent;
       -webkit-tap-highlight-color: transparent;
       overflow-x: hidden;
       width: 100%;
@@ -99,97 +101,145 @@
       --shadow-btn-glow: 0 0 0 1px rgba(14,165,164,0.08), 0 4px 14px rgba(14,165,164,0.28);
       --shadow-btn-glow-hover: 0 0 0 1px rgba(14,165,164,0.12), 0 6px 20px rgba(14,165,164,0.35);
     }
-    /* Trust bar: single row, minimal — design system (koyu bar, sayfayla kayar) */
+    /* Kış barı: güven rozetleri — biraz daha büyük, sayfayla kayar */
     .trust-bar{
-      background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
-      padding: 8px 16px;
+      background: linear-gradient(180deg, #dbeafe 0%, #bfdbfe 50%, #93c5fd 100%);
+      border-bottom: 1px solid rgba(59, 130, 246, 0.2);
+      padding: 12px 20px;
+      min-height: 44px;
       display: flex;
       flex-wrap: wrap;
       align-items: center;
       justify-content: center;
-      gap: 8px 24px;
+      gap: 10px 28px;
     }
     .trust-bar span{
       display: inline-flex;
       align-items: center;
-      gap: 5px;
-      font-size: 10px;
+      gap: 6px;
+      font-size: 11px;
       font-weight: var(--font-label);
-      color: #475569;
+      color: #1e40af;
       letter-spacing: var(--ls-wide);
     }
-    .trust-bar svg{ width: var(--icon-sm); height: var(--icon-sm); flex-shrink: 0; color: #0EA5A4; opacity: 0.9; stroke-width: var(--icon-stroke); }
-    .trust-bar .trust-logo{ width: var(--icon-sm); height: var(--icon-sm); object-fit: contain; opacity: 0.85; }
+    .trust-bar svg{ width: 16px; height: 16px; flex-shrink: 0; color: #2563eb; opacity: 0.95; stroke-width: var(--icon-stroke); }
+    .trust-bar .trust-logo{ width: 16px; height: 16px; object-fit: contain; opacity: 0.9; }
 
-    /* Offer strip: premium campaign feel — sayfayla birlikte kayar (sticky yok) */
+    /* Kampanya barı: beyaz değil – net turkuaz şerit */
     .offer-strip{
       display: flex;
       align-items: center;
       justify-content: center;
       flex-wrap: wrap;
-      gap: 12px 24px;
-      padding: 12px 24px;
-      background: linear-gradient(90deg, #cbd5e1 0%, #b8d4d2 35%, #a8cac8 70%, #b8d4d2 100%);
-      border-bottom: 1px solid rgba(0,0,0,0.08);
+      gap: 14px 28px;
+      padding: 16px 28px;
+      min-height: 56px;
+      background: linear-gradient(90deg, #14b8a6 0%, #0d9488 50%, #14b8a6 100%) !important;
+      border-top: 2px solid #0f766e;
+      border-bottom: 2px solid #0f766e;
       transition: background 0.3s ease, border-color 0.3s ease;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+      box-shadow: 0 2px 12px rgba(13, 148, 136, 0.4);
     }
     .offer-strip.single-selected{
-      background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%);
-      border-bottom-color: rgba(0,0,0,0.08);
+      background: linear-gradient(90deg, #2dd4bf 0%, #14b8a6 50%, #2dd4bf 100%) !important;
+      border-bottom-color: #0f766e;
     }
     .offer-strip.yearly-selected{
-      background: linear-gradient(90deg, #b8d4d2 0%, rgba(14,165,164,0.2) 50%, #a8cac8 100%);
-      border-bottom-color: rgba(14,165,164,0.35);
+      background: linear-gradient(90deg, #0d9488 0%, #0f766e 50%, #0d9488 100%) !important;
+      border-bottom-color: #115e59;
     }
+    .offer-strip-snowflake{
+      width: 20px; height: 20px; flex-shrink: 0;
+      color: #fff;
+      opacity: 0.95;
+    }
+    .offer-strip.yearly-selected .offer-strip-snowflake{ color: #fff; }
     .offer-strip-badge{
-      font-size: 10px;
+      font-size: 11px;
       font-weight: var(--font-label);
       letter-spacing: var(--ls-label);
       text-transform: uppercase;
-      color: var(--text-secondary);
-      background: linear-gradient(180deg, #fff 0%, #fcfdfd 100%);
-      padding: 6px 12px;
+      color: #fff;
+      background: rgba(0,0,0,0.2);
+      padding: 8px 14px;
       border-radius: var(--radius-sm);
-      border: 1px solid var(--border-card);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 0 0 1px rgba(255,255,255,0.7) inset;
+      border: 1px solid rgba(255,255,255,0.3);
       transition: border-color var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease);
     }
-    .offer-strip.single-selected .offer-strip-badge{ color: var(--text-placeholder); border-color: var(--border-card); }
-    .offer-strip.yearly-selected .offer-strip-badge{ color: #0e7c7b; border-color: rgba(14,165,164,0.25); background: rgba(255,255,255,0.9); }
+    .offer-strip.single-selected .offer-strip-badge{ color: #fff; border-color: rgba(255,255,255,0.35); }
+    .offer-strip.yearly-selected .offer-strip-badge{ color: #fff; border-color: rgba(255,255,255,0.4); background: rgba(0,0,0,0.2); }
     .offer-strip-text{
-      font-size: 0.8125rem;
+      font-size: 0.9375rem;
       font-weight: var(--font-body);
-      color: var(--text-body);
+      color: #fff;
       line-height: 1.45;
       text-align: center;
     }
-    .offer-strip.single-selected .offer-strip-text{ color: var(--text-muted); }
-    .offer-strip.yearly-selected .offer-strip-text{ color: var(--text-subheading); font-weight: var(--font-label); }
+    .offer-strip.single-selected .offer-strip-text{ color: #fff; }
+    .offer-strip.yearly-selected .offer-strip-text{ color: #fff; font-weight: var(--font-label); }
     .offer-strip-pill{
-      font-size: 11px;
+      font-size: 12px;
       font-weight: var(--font-label);
       letter-spacing: 0.04em;
-      color: #0e7c7b;
-      background: rgba(255,255,255,0.95);
-      padding: 6px 14px;
+      color: #0f766e;
+      background: #fff;
+      padding: 8px 16px;
       border-radius: 9999px;
-      border: 1px solid rgba(14,165,164,0.25);
+      border: 1px solid rgba(255,255,255,0.5);
       white-space: nowrap;
     }
-    .offer-strip.single-selected .offer-strip-pill{ color: var(--text-muted); border-color: var(--border-card); }
-    .offer-strip.yearly-selected .offer-strip-pill{ color: #fff; background: rgba(14,165,164,0.85); border-color: rgba(14,165,164,0.4); }
-    .offer-strip-neutral{ background: linear-gradient(180deg, #e2e8f0 0%, #cbd5e1 100%); border-bottom-color: rgba(0,0,0,0.08); }
-    .offer-strip-neutral .offer-strip-badge{ color: var(--text-muted); }
-    .offer-strip-neutral .offer-strip-text{ color: var(--text-secondary); }
+    .offer-strip.single-selected .offer-strip-pill{ color: #0d9488; border-color: rgba(255,255,255,0.4); background: #fff; }
+    .offer-strip.yearly-selected .offer-strip-pill{ color: #0f766e; background: #fff; border-color: rgba(255,255,255,0.5); }
+    .offer-strip-neutral{ background: linear-gradient(90deg, #14b8a6 0%, #0d9488 50%, #14b8a6 100%) !important; border-top: 2px solid #0f766e; border-bottom: 2px solid #0f766e; }
+    .offer-strip-neutral .offer-strip-badge{ color: #fff; background: rgba(0,0,0,0.15); border-color: rgba(255,255,255,0.3); }
+    .offer-strip-neutral .offer-strip-text{ color: #fff; }
 
-    .summary-savings-neutral .summary-savings-icon{ opacity: 0.5; color: var(--text-muted); }
-    .summary-savings-neutral .summary-savings-title{ color: var(--text-muted); }
-    .summary-savings-neutral .summary-savings-desc{ color: var(--text-secondary); }
+    /* Anasayfadaki ile birebir aynı bar: promo-strip-home stili (açık turkuaz, koyu yazı) */
+    #promo-strip-payment {
+      display: block !important;
+      padding: 12px 16px;
+      text-align: center;
+      font-size: 0.875rem;
+      font-weight: 500;
+      background: rgba(14, 165, 164, 0.1) !important;
+      border-top: 1px solid rgba(14, 165, 164, 0.2) !important;
+      border-bottom: 1px solid rgba(14, 165, 164, 0.2) !important;
+      color: #0f766e;
+      line-height: 1.45;
+    }
+    #promo-strip-payment.promo-strip-active {
+      background: rgba(14, 165, 164, 0.15) !important;
+      border-top-color: rgba(14, 165, 164, 0.3) !important;
+      border-bottom-color: rgba(14, 165, 164, 0.3) !important;
+      color: #0c4a6e;
+    }
+    #promo-strip-payment .promo-strip-code { font-weight: 700; letter-spacing: 0.05em; color: #0d9488; background: rgba(14,165,164,0.12); padding: 2px 8px; border-radius: 6px; }
+    #promo-strip-payment.promo-strip-active .promo-strip-code { color: #0f766e; background: rgba(14,165,164,0.2); }
+    #promo-strip-payment a { color: #0EA5A4; font-weight: 600; text-decoration: underline; text-underline-offset: 3px; }
+    #promo-strip-payment a:hover { opacity: 0.9; }
+    /* Mobil / tablet: indirim barları aynı görünsün, taşma olmasın */
+    @media (max-width: 1023px){
+      #promo-strip-payment{ padding: 12px 14px; font-size: 0.8125rem; word-wrap: break-word; overflow-wrap: break-word; }
+      #promo-strip-payment .promo-strip-p{ margin: 0; word-break: break-word; }
+      .offer-strip{ padding: 12px 14px; gap: 10px 16px; min-height: 48px; }
+      .offer-strip-text{ font-size: 0.8125rem; }
+      .offer-strip-badge{ font-size: 10px; padding: 6px 10px; }
+      .offer-strip-pill{ font-size: 11px; padding: 6px 12px; white-space: normal; text-align: center; }
+    }
+    @media (max-width: 480px){
+      #promo-strip-payment{ padding: 10px 12px; font-size: 0.75rem; }
+      .offer-strip{ padding: 10px 12px; gap: 8px 12px; min-height: 44px; flex-direction: column; }
+      .offer-strip-text{ font-size: 0.75rem; }
+    }
+
+    .summary-savings-neutral .summary-savings-icon{ opacity: 0.95; color: #fff !important; }
+    .summary-savings-neutral .summary-savings-title{ color: #fff !important; }
+    .summary-savings-neutral .summary-savings-desc{ color: rgba(255,255,255,0.9) !important; }
 
     .wrap{ max-width: 1200px; margin: 0 auto; padding: 0 24px; width: 100%; box-sizing: border-box; position: relative; z-index: 1; }
     @media (min-width: 768px){ .wrap{ padding: 0 32px; } }
+    @media (max-width: 767px){ .wrap{ padding: 0 18px; } }
+    @media (max-width: 480px){ .wrap{ padding: 0 16px; } }
 
     /* Hero + checkout grid: premium spacing, subtle depth */
     .checkout-hero{ display: grid; gap: 44px; padding: 44px 0 52px; }
@@ -661,92 +711,120 @@
     .btn-secondary:hover{ background: #e2e8f0; color: var(--text-body); box-shadow: 0 2px 6px rgba(0,0,0,0.03); }
     .btn-secondary:focus-visible{ outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(14,165,164,0.35); }
 
+    /* Ödeme yöntemleri: summary ile bütünleşik, güven oluşturan bileşen */
     .payment-methods{
-      margin-top: 22px;
+      margin-top: 20px;
       padding-top: 18px;
-      border-top: 1px solid var(--divider);
-      background: transparent;
+      border-top: 1px solid var(--divider-subtle);
       min-width: 0;
     }
     .payment-methods .pm-title{
-      font-size: 0.6875rem;
-      font-weight: var(--font-label);
+      font-size: 0.625rem;
+      font-weight: 600;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: var(--ls-label);
+      letter-spacing: 0.08em;
       margin-bottom: 12px;
-      line-height: 1.3;
+      line-height: 1.35;
     }
-    .payment-methods .pm-logos-wrap{
-      display: inline-block;
-      max-width: 100%;
-      min-width: 0;
-      padding: 16px 20px;
-      background: linear-gradient(180deg, #fafbfc 0%, #f6f8fa 100%);
+    .payment-methods .pm-inner{
+      padding: 18px 20px 20px;
+      background: linear-gradient(180deg, rgba(248,252,252,0.5) 0%, rgba(255,255,255,0.6) 100%);
       border: 1px solid var(--border-card);
       border-radius: var(--radius-lg);
-      overflow: hidden;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 0 0 1px rgba(255,255,255,0.6) inset;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
     .payment-methods .pm-logos{
       display: flex;
       flex-wrap: wrap;
       align-items: center;
-      gap: 18px;
+      gap: 20px 24px;
       min-width: 0;
     }
     .payment-methods .pm-logos img{
-      height: 20px;
+      height: 22px;
       width: auto;
-      max-width: 100%;
+      max-width: none;
       min-width: 0;
       object-fit: contain;
-      object-position: center;
-      opacity: 0.96;
-      transition: opacity 0.15s ease;
+      object-position: left center;
+      opacity: 0.92;
       flex-shrink: 0;
     }
-    .payment-methods .pm-logos img:hover{ opacity: 1; }
-    .payment-methods .pm-trust{
-      font-size: 12px;
-      line-height: 1.55;
-      color: #64748B;
-      margin-top: 12px;
-      margin-bottom: 0;
+    .payment-methods .pm-trust-line{
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      line-height: 1.5;
+      letter-spacing: 0.02em;
+      margin: 14px 0 0;
+      display: flex;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 6px 8px;
     }
-    @media (min-width: 380px){ .payment-methods .pm-trust{ font-size: 13px; } }
+    .payment-methods .pm-trust-dot{
+      color: var(--divider-subtle);
+      font-weight: 600;
+    }
     @media (max-width: 360px){
-      .payment-methods .pm-logos img{ height: 18px; }
-      .payment-methods .pm-logos-wrap{ padding: 12px 14px; }
-      .payment-methods .pm-logos{ gap: 14px; }
+      .payment-methods .pm-inner{ padding: 14px 16px 16px; }
+      .payment-methods .pm-logos img{ height: 20px; }
+      .payment-methods .pm-logos{ gap: 16px; }
+      .payment-methods .pm-trust-line{ font-size: 0.625rem; margin-top: 12px; }
     }
 
-    .cta-trust-line{ font-size: 0.75rem; font-weight: var(--font-body); color: var(--text-muted); margin: 0 0 6px; line-height: 1.45; }
-    .cta-wrap{ margin-top: 12px; }
+    /* CTA alanı: summary kartının ana aksiyonu — premium, güven veren */
+    .cta-wrap{
+      margin-top: 20px;
+      margin-bottom: 4px;
+      padding: 4px 0 0;
+    }
+    .cta-trust-line{
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-muted);
+      margin: 14px 0 0;
+      line-height: 1.4;
+      letter-spacing: 0.03em;
+      text-align: center;
+    }
     .cta-main{
       width: 100%;
-      padding: 18px 28px;
-      min-height: 56px;
+      padding: 20px 28px;
+      min-height: 60px;
       border: none;
-      border-radius: var(--radius-lg);
-      background: linear-gradient(180deg, #0EA5A4 0%, #0d9488 100%);
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, #0faca9 0%, #0d9488 50%, #0b8278 100%);
       color: #fff;
-      font-size: 1.0625rem;
-      font-weight: var(--font-heading);
+      font-size: 1.125rem;
+      font-weight: 700;
       letter-spacing: 0.02em;
       cursor: pointer;
-      transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration) var(--ease), opacity var(--duration-fast) ease;
+      transition: transform var(--duration-fast) var(--ease), box-shadow var(--duration) var(--ease), opacity var(--duration-fast) ease, background var(--duration-fast) var(--ease);
       display: inline-flex;
       align-items: center;
       justify-content: center;
       gap: 10px;
-      box-shadow: var(--shadow-btn-glow);
+      box-shadow: 0 0 0 1px rgba(13,148,136,0.2), 0 4px 14px rgba(14,165,164,0.32), 0 2px 6px rgba(0,0,0,0.06);
     }
-    .cta-main:hover:not(:disabled){ transform: translateY(-1px); box-shadow: var(--shadow-btn-glow-hover); }
-    .cta-main:focus-visible{ outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(14,165,164,0.45); transition: box-shadow var(--duration-fast) var(--ease); }
-    .cta-main:disabled{ opacity: 0.85; cursor: not-allowed; }
-    .cta-main .spinner{ width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
-    .cta-main.cta-summary{ min-height: 56px; padding: 18px 24px; font-size: 1.0625rem; font-weight: var(--font-heading); letter-spacing: 0.02em; border-radius: var(--radius-lg); }
+    .cta-main:hover:not(:disabled){
+      transform: translateY(-2px);
+      box-shadow: 0 0 0 1px rgba(13,148,136,0.25), 0 8px 24px rgba(14,165,164,0.38), 0 4px 10px rgba(0,0,0,0.08);
+      background: linear-gradient(180deg, #14b8a6 0%, #0d9488 50%, #0f766e 100%);
+    }
+    .cta-main:active:not(:disabled){
+      transform: translateY(0);
+      box-shadow: 0 0 0 1px rgba(13,148,136,0.2), 0 2px 8px rgba(14,165,164,0.28);
+    }
+    .cta-main:focus-visible{
+      outline: none;
+      box-shadow: 0 0 0 3px #fff, 0 0 0 6px rgba(14,165,164,0.5);
+      transition: box-shadow var(--duration-fast) var(--ease);
+    }
+    .cta-main:disabled{ opacity: 0.78; cursor: not-allowed; transform: none; }
+    .cta-main .spinner{ width: 22px; height: 22px; border: 2px solid rgba(255,255,255,0.4); border-top-color: #fff; border-radius: 50%; animation: spin 0.7s linear infinite; }
+    .cta-main.cta-summary{ min-height: 60px; padding: 20px 28px; font-size: 1.125rem; font-weight: 700; letter-spacing: 0.02em; border-radius: var(--radius-xl); }
     .form-in-summary .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
@@ -791,25 +869,36 @@
       .summary-sidebar{ top: 20px; }
       .summary-card:hover{ box-shadow: var(--shadow-elevated); }
     }
-    /* Editorial header: başlık + alt satır */
+    /* Header: başlık + alt metin + mini güven satırı — net hiyerarşi, premium tipografi */
+    .summary-card-header{
+      margin-bottom: 28px;
+      padding-bottom: 26px;
+      border-bottom: 1px solid var(--border-card);
+    }
     .summary-card-heading{
-      font-size: 1.375rem;
-      font-weight: var(--font-heading);
+      font-size: 1.5rem;
+      font-weight: 700;
       color: var(--text-heading);
-      margin-bottom: 8px;
-      letter-spacing: var(--ls-tight);
-      line-height: 1.22;
+      margin: 0 0 10px;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
     }
     .summary-card-subtitle{
-      font-size: 0.8125rem;
+      font-size: 0.875rem;
       font-weight: var(--font-body);
+      color: var(--text-secondary);
+      margin: 0 0 14px;
+      line-height: 1.45;
+      letter-spacing: 0.01em;
+    }
+    .summary-header-trust-line{
+      font-size: 0.6875rem;
+      font-weight: 600;
       color: var(--text-muted);
-      margin-bottom: 0;
-      padding-bottom: 26px;
-      line-height: 1.5;
-      letter-spacing: 0.02em;
-      border-bottom: 1px solid var(--border-card);
-      margin-bottom: 26px;
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin: 0;
+      line-height: 1.4;
     }
 
     .summary-divider{
@@ -821,17 +910,57 @@
     .summary-block{ margin-bottom: 24px; }
     .summary-block:last-of-type{ margin-bottom: 0; }
 
-    /* Seçilen plan: premium blok */
+    /* Seçilen plan: premium blok — güven veren, net hiyerarşi */
     .summary-plan-block{
-      background: linear-gradient(180deg, rgba(248,252,252,0.8) 0%, rgba(255,255,255,0.6) 100%);
+      background: linear-gradient(180deg, rgba(248,252,252,0.9) 0%, rgba(255,255,255,0.7) 100%);
       border: 1px solid var(--border-card);
       border-radius: var(--radius-xl);
-      padding: 20px 22px 22px;
+      padding: 24px 24px 26px;
       margin-bottom: 24px;
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 0 0 1px rgba(255,255,255,0.7) inset;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.03), 0 4px 16px rgba(0,0,0,0.04), 0 0 0 1px rgba(255,255,255,0.8) inset;
       transition: box-shadow var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease);
     }
-    .summary-block-label{
+    .summary-plan-block .summary-block-label{
+      display: block;
+      font-size: 0.625rem;
+      font-weight: var(--font-label);
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      margin-bottom: 12px;
+      line-height: 1.35;
+    }
+    .summary-plan-name{
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-heading);
+      margin: 0 0 8px;
+      line-height: 1.22;
+      letter-spacing: -0.02em;
+    }
+    .summary-plan-name.summary-empty{ color: var(--text-placeholder); font-weight: var(--font-body); }
+    .summary-plan-value{
+      font-size: 0.8125rem;
+      font-weight: var(--font-body);
+      color: var(--text-secondary);
+      margin: 0 0 12px;
+      line-height: 1.4;
+      letter-spacing: 0.01em;
+    }
+    .summary-billing{
+      font-size: 0.8125rem;
+      font-weight: var(--font-body);
+      color: var(--text-muted);
+      margin: 0;
+      line-height: var(--lh-caption);
+      letter-spacing: 0.01em;
+    }
+    .summary-quantity-wrap{
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--divider-subtle);
+    }
+    .summary-quantity-label{
       display: block;
       font-size: 0.625rem;
       font-weight: var(--font-label);
@@ -841,11 +970,34 @@
       margin-bottom: 10px;
       line-height: 1.35;
     }
-    .summary-plan-name{ font-size: 1.125rem; font-weight: var(--font-heading); color: var(--text-heading); margin-bottom: 4px; line-height: var(--lh-heading); letter-spacing: var(--ls-tight); }
-    .summary-plan-name.summary-empty{ color: var(--text-placeholder); font-weight: var(--font-body); }
-    .summary-billing{ font-size: 0.8125rem; font-weight: var(--font-body); color: var(--text-secondary); margin-top: 0; line-height: var(--lh-caption); letter-spacing: 0.01em; }
-    .summary-quantity-wrap{ margin-top: 14px; }
     .summary-quantity-wrap .label{ display: block; font-size: 0.625rem; font-weight: var(--font-label); color: var(--text-muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 8px; line-height: 1.35; }
+    /* Segmented control: premium pill group */
+    .quantity-options.quantity-segmented{
+      display: inline-flex;
+      flex-wrap: wrap;
+      gap: 0;
+      background: rgba(255,255,255,0.8);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      padding: 3px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04) inset;
+    }
+    .quantity-options.quantity-segmented .quantity-btn{
+      min-width: 0;
+      padding: 10px 18px;
+      border-radius: calc(var(--radius-lg) - 2px);
+      border: none;
+      background: transparent;
+      box-shadow: none;
+      font-size: 0.8125rem;
+      font-weight: 600;
+    }
+    .quantity-options.quantity-segmented .quantity-btn:hover{ background: rgba(14,165,164,0.06); }
+    .quantity-options.quantity-segmented .quantity-btn.active{
+      background: #fff;
+      color: #0d9488;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+    }
 
     /* Bu planla neler açılır: mini premium checklist */
     .summary-plan-opens{
@@ -897,105 +1049,128 @@
     .quantity-btn:focus-visible{ outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px rgba(14,165,164,0.35); }
     .quantity-btn.active{ background: rgba(14,165,164,0.08); border-color: rgba(14,165,164,0.3); color: #0d9488; box-shadow: 0 1px 2px rgba(14,165,164,0.08), 0 0 0 1px rgba(255,255,255,0.6) inset; transition: background var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease); }
 
-    /* Fiyat satırları: ikincil, net hiyerarşi */
-    .summary-row{
+    /* Fiyat + Bugün ödenecek: tek premium info card, net hiyerarşi */
+    .summary-price-card{
+      margin-bottom: 28px;
+      border-radius: var(--radius-xl);
+      background: linear-gradient(180deg, rgba(248,252,252,0.95) 0%, rgba(241,245,249,0.6) 100%);
+      border: 1px solid var(--border-card);
+      box-shadow: 0 1px 3px rgba(0,0,0,0.04), 0 4px 12px rgba(0,0,0,0.03), 0 0 0 1px rgba(255,255,255,0.8) inset;
+      overflow: hidden;
+    }
+    .summary-price-card .summary-rows-block{
+      margin-bottom: 0;
+      padding: 20px 24px 18px;
+    }
+    .summary-price-card .summary-row{
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       font-size: 0.8125rem;
-      padding: 14px 0;
-      border-bottom: 1px solid var(--divider-subtle);
+      padding: 12px 0;
       gap: 16px;
       line-height: 1.4;
+      border-bottom: 1px solid var(--divider-subtle);
     }
-    .summary-row:last-child{ border-bottom: none; }
-    .summary-row .label{
-      font-size: 0.8125rem;
+    .summary-price-card .summary-row:last-child{ border-bottom: none; }
+    .summary-price-card .summary-row .label{
+      font-size: 0.6875rem;
       color: var(--text-muted);
-      font-weight: var(--font-body);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.07em;
       flex-shrink: 0;
-      letter-spacing: 0.01em;
     }
-    .summary-row .value{
-      font-size: 0.875rem;
-      font-weight: var(--font-label);
+    .summary-price-card .summary-row .value{
+      font-size: 0.9375rem;
+      font-weight: 600;
       color: var(--text-heading);
       text-align: right;
       min-width: 0;
       letter-spacing: 0.02em;
       font-variant-numeric: tabular-nums;
     }
+    .summary-price-card .summary-row-discount.visible .value-discount{
+      color: #047857;
+      font-weight: 600;
+    }
 
-    /* Bugün ödenecek: ana odak, güçlü ayrışan blok */
-    .summary-total-block{
-      margin-top: 24px;
-      margin-bottom: 28px;
-      padding: 26px 28px 28px;
-      border-radius: var(--radius-xl);
-      background: linear-gradient(165deg, rgba(14,165,164,0.08) 0%, rgba(14,165,164,0.03) 100%);
-      border: 1px solid rgba(14,165,164,0.14);
-      box-shadow: 0 2px 8px rgba(14,165,164,0.06), 0 0 0 1px rgba(255,255,255,0.7) inset;
+    /* Bugün ödenecek: summary'nin en dikkat çekici alanı */
+    .summary-price-card .summary-total-block{
+      margin: 0;
+      padding: 24px 24px 26px;
+      background: linear-gradient(165deg, rgba(14,165,164,0.1) 0%, rgba(14,165,164,0.04) 50%, rgba(255,255,255,0.9) 100%);
+      border-top: 1px solid rgba(14,165,164,0.12);
+      box-shadow: 0 -1px 0 rgba(255,255,255,0.6) inset;
     }
     .summary-total-label{
       font-size: 0.625rem;
-      font-weight: var(--font-label);
+      font-weight: 700;
       color: var(--text-muted);
       text-transform: uppercase;
-      letter-spacing: 0.09em;
-      margin-bottom: 12px;
+      letter-spacing: 0.1em;
+      margin-bottom: 10px;
       line-height: 1.35;
     }
     .summary-total{
-      font-size: 2.25rem;
-      font-weight: var(--font-display);
+      font-size: 2.375rem;
+      font-weight: 800;
       color: #0d9488;
-      line-height: 1.1;
-      letter-spacing: -0.032em;
+      line-height: 1.08;
+      letter-spacing: -0.04em;
       transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease);
       font-variant-numeric: tabular-nums;
     }
-    .summary-total .currency{ font-size: 1.25rem; font-weight: 600; margin-left: 6px; letter-spacing: -0.02em; opacity: 0.95; }
+    .summary-total .currency{ font-size: 1.375rem; font-weight: 700; margin-left: 4px; letter-spacing: -0.02em; opacity: 0.95; }
+    .summary-total-note{
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin: 12px 0 0;
+      line-height: 1.4;
+      min-height: 1.4em;
+    }
+    .summary-total-note:empty{ display: none; }
     .summary-plan-name{ transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease); }
     .summary-billing{ transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease); }
     .summary-block .value{ transition: opacity var(--duration) var(--ease), color var(--duration) var(--ease); }
     .summary-card .summary-block,
-    .summary-card .summary-total-block{ transition: opacity var(--duration) var(--ease); }
-    .summary-card.summary-updating .summary-block,
-    .summary-card.summary-updating .summary-total-block{ opacity: 0.72; }
+    .summary-card .summary-total-block,
+    .summary-card .summary-price-card{ transition: opacity var(--duration) var(--ease); }
+    .summary-card.summary-updating .summary-price-card{ opacity: 0.72; }
 
-    /* Kampanya / bilgi kartı: kaliteli info card */
+    /* Kampanya barı: beyaz/açık değil – net turkuaz (ikinci blok, öncekini ezmesin) */
     .summary-savings{
       margin-bottom: 24px;
-      padding: 20px 22px;
+      padding: 18px 22px;
       border-radius: var(--radius-xl);
-      background: linear-gradient(180deg, rgba(248,252,252,0.9) 0%, rgba(255,255,255,0.65) 100%);
-      border: 1px solid rgba(14,165,164,0.08);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 4px 12px rgba(14,165,164,0.03), 0 0 0 1px rgba(255,255,255,0.7) inset;
+      background: linear-gradient(135deg, #14b8a6 0%, #0d9488 40%, #14b8a6 100%) !important;
+      border: 2px solid #0f766e !important;
+      box-shadow: 0 2px 10px rgba(13,148,136,0.4);
       transition: box-shadow var(--duration-fast) var(--ease), border-color var(--duration-fast) var(--ease);
       display: flex;
-      gap: 16px;
+      gap: 14px;
       align-items: flex-start;
       text-align: left;
     }
     .summary-savings-neutral{
-      background: linear-gradient(180deg, rgba(248,250,252,0.9) 0%, rgba(255,255,255,0.65) 100%);
-      border: 1px solid var(--border-card);
-      box-shadow: 0 1px 2px rgba(0,0,0,0.02), 0 0 0 1px rgba(255,255,255,0.7) inset;
+      background: linear-gradient(135deg, #2dd4bf 0%, #14b8a6 100%) !important;
+      border: 2px solid #0d9488 !important;
+      box-shadow: 0 2px 8px rgba(14,165,164,0.3);
     }
     .summary-savings-icon{
       width: var(--icon-lg);
       height: var(--icon-lg);
       flex-shrink: 0;
       margin-top: 2px;
-      color: #0EA5A4;
-      opacity: 0.9;
+      color: #fff !important;
+      opacity: 0.95;
       stroke-width: var(--icon-stroke);
     }
     .summary-savings-content{ min-width: 0; }
     .summary-savings-title{
       font-size: 0.75rem;
       font-weight: var(--font-label);
-      color: var(--text-heading);
+      color: #fff !important;
       letter-spacing: 0.02em;
       margin-bottom: 6px;
       line-height: var(--lh-tight);
@@ -1003,12 +1178,20 @@
     .summary-savings-desc{
       font-size: 0.8125rem;
       font-weight: var(--font-body);
-      color: var(--text-secondary);
+      color: rgba(255,255,255,0.95) !important;
       line-height: var(--lh-body);
       margin: 0;
       letter-spacing: 0.01em;
     }
     .summary-savings-desc + .summary-savings-desc{ margin-top: 6px; }
+    @media (max-width: 768px){
+      .summary-savings{ padding: 16px 14px; gap: 12px; }
+      .summary-savings-title{ font-size: 0.6875rem; word-break: break-word; }
+      .summary-savings-desc{ font-size: 0.75rem; word-break: break-word; overflow-wrap: break-word; }
+    }
+    @media (max-width: 480px){
+      .summary-savings{ padding: 14px 12px; }
+    }
 
     /* Planınızla dahil: editorial liste, kaliteli hizalama */
     .summary-included{
@@ -1055,7 +1238,6 @@
     .summary-included li .included-text{ flex: 1; min-width: 0; }
     #summary-discount-row{ display: none; }
     #summary-discount-row.visible{ display: flex; }
-    #summary-discount-row .value{ color: #059669; font-weight: var(--font-label); }
 
     .summary-coupon-wrap{ margin-bottom: 22px; }
     .summary-coupon-wrap .form-group{ margin-bottom: 0; }
@@ -1127,16 +1309,49 @@
     .coupon-msg.err svg{ width: 14px; height: 14px; flex-shrink: 0; stroke-width: 2; opacity: 0.9; }
 
     .summary-coupon-wrap.applied .summary-coupon-row .input{ border-color: rgba(5,150,105,0.35); background: rgba(5,150,105,0.03); }
-    .summary-trust-block{
-      margin-top: 24px;
-      padding-top: 22px;
-      border-top: 1px solid var(--border-card);
+    /* Güven katmanı: CTA hemen üstü — mini badges, sade, premium */
+    .summary-reassurance{
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 16px;
+      margin-bottom: 18px;
+      padding: 16px 18px;
+      background: linear-gradient(180deg, rgba(248,252,252,0.6) 0%, rgba(255,255,255,0.5) 100%);
+      border: 1px solid var(--border-card);
+      border-radius: var(--radius-lg);
+      box-shadow: 0 1px 2px rgba(0,0,0,0.02);
     }
-    .summary-trust-block p{ font-size: 0.75rem; font-weight: var(--font-body); color: var(--text-secondary); line-height: 1.5; margin: 10px 0; display: flex; align-items: center; gap: 12px; letter-spacing: 0.01em; }
+    .summary-reassurance-item{
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.6875rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      line-height: 1.35;
+      letter-spacing: 0.02em;
+    }
+    .summary-reassurance-item svg{
+      width: 14px;
+      height: 14px;
+      flex-shrink: 0;
+      color: #0d9488;
+      stroke-width: 2.2;
+      opacity: 0.92;
+    }
+    @media (min-width: 380px){
+      .summary-reassurance{ grid-template-columns: repeat(3, 1fr); }
+    }
+
+    .summary-trust-block{
+      margin-top: 20px;
+      padding-top: 18px;
+      border-top: 1px solid var(--divider-subtle);
+    }
+    .summary-trust-block p{ font-size: 0.6875rem; font-weight: 500; color: var(--text-muted); line-height: 1.45; margin: 8px 0; display: flex; align-items: center; gap: 10px; letter-spacing: 0.02em; }
     .summary-trust-block p:first-of-type{ margin-top: 0; }
     .summary-trust-block p:last-of-type{ margin-bottom: 0; }
-    .summary-trust-block svg{ width: var(--icon-md); height: var(--icon-md); flex-shrink: 0; color: #0EA5A4; stroke-width: var(--icon-stroke); opacity: 0.9; }
-    .summary-trust-block .trust-dot{ margin: 0 6px; color: #cbd5e1; font-weight: 600; }
+    .summary-trust-block svg{ width: 12px; height: 12px; flex-shrink: 0; color: #0d9488; stroke-width: 2.2; opacity: 0.85; }
 
     /* Payment reassurance below summary card: premium monochrome */
     .payment-reassurance{
@@ -1438,14 +1653,17 @@
       .summary-card-subtitle{ font-size: 0.75rem; padding-bottom: 20px; margin-bottom: 22px; }
       .summary-divider{ margin-bottom: 18px; }
       .summary-block{ margin-bottom: 18px; }
-      .summary-plan-block{ padding: 14px 16px 16px; margin-bottom: 18px; }
+      .summary-plan-block{ padding: 20px 20px 22px; margin-bottom: 18px; }
       .summary-row{ font-size: 0.75rem; padding: 10px 0; }
       .summary-row .value{ font-size: 0.8125rem; }
-      .summary-plan-name{ font-size: 0.9375rem; }
+      .summary-plan-name{ font-size: 1.0625rem; }
+      .summary-plan-value{ font-size: 0.75rem; margin-bottom: 10px; }
       .summary-billing{ font-size: 0.75rem; }
-      .summary-total-block{ margin-top: 20px; margin-bottom: 24px; padding: 22px 22px 24px; }
-      .summary-total{ font-size: 1.75rem; }
-      .summary-total .currency{ font-size: 1rem; }
+      .quantity-options.quantity-segmented .quantity-btn{ padding: 8px 14px; font-size: 0.75rem; }
+      .summary-price-card .summary-rows-block{ padding: 16px 20px 14px; }
+      .summary-price-card .summary-total-block{ padding: 20px 20px 22px; }
+      .summary-total{ font-size: 1.875rem; }
+      .summary-total .currency{ font-size: 1.125rem; }
       .summary-savings{ padding: 14px 16px; margin-bottom: 20px; gap: 12px; }
       .summary-savings-title{ font-size: 0.6875rem; margin-bottom: 4px; }
       .summary-savings-desc{ font-size: 0.75rem; }
@@ -1454,17 +1672,20 @@
       .summary-included li{ font-size: 0.75rem; padding: 10px 0; gap: 12px; }
       .summary-coupon-wrap{ margin-bottom: 16px; }
       .summary-coupon-row{ flex-direction: column; gap: 10px; margin-top: 6px; }
-      .summary-coupon-row .input{ width: 100%; min-height: 48px; }
-      .summary-coupon-row .btn-apply{ width: 100%; min-height: 48px; white-space: normal; }
+      .summary-coupon-row .input{ width: 100%; min-height: 48px; font-size: 16px; }
+      .summary-coupon-row .btn-apply{ width: 100%; min-height: 48px; white-space: normal; min-width: 0; }
       .form-in-summary .form-group{ margin-bottom: 14px; }
-      .form-in-summary .input{ min-height: 48px; font-size: 16px; }
+      .form-in-summary .input{ min-height: 48px; font-size: 16px; -webkit-appearance: none; appearance: none; }
       .payment-methods{ margin-top: 18px; padding-top: 16px; }
-      .payment-methods .pm-logos-wrap{ padding: 12px 14px; }
-      .payment-methods .pm-logos img{ height: 18px; }
-      .cta-wrap{ margin-top: 16px; }
-      .cta-main.cta-summary{ min-height: 52px; padding: 16px 20px; font-size: 1rem; }
+      .payment-methods .pm-inner{ padding: 14px 16px 16px; }
+      .payment-methods .pm-logos img{ height: 20px; }
+      .summary-reassurance{ grid-template-columns: 1fr; padding: 14px 16px; margin-bottom: 14px; gap: 8px; }
+      .summary-reassurance-item{ font-size: 0.625rem; }
+      .cta-wrap{ margin-top: 18px; margin-bottom: 2px; }
+      .cta-trust-line{ font-size: 0.625rem; margin-top: 12px; }
+      .cta-main.cta-summary{ min-height: 56px; padding: 18px 24px; font-size: 1.0625rem; }
       .summary-trust-block{ margin-top: 16px; padding-top: 16px; }
-      .summary-trust-block p{ font-size: 0.6875rem; }
+      .summary-trust-block p{ font-size: 0.625rem; }
       .payment-reassurance{ margin-top: 16px; padding: 14px 16px; border-radius: var(--radius-lg); }
       .payment-reassurance-label{ margin-bottom: 8px; }
       .payment-reassurance-logos{ gap: 12px; }
@@ -1482,22 +1703,41 @@
       .summary-total{ font-size: 1.375rem; }
       .summary-total .currency{ font-size: 0.875rem; }
     }
+    /* Tarayıcı tutarlılığı: iOS Safari, Chrome, Firefox */
+    @supports (padding: max(0px, 1px)){
+      body{ padding-bottom: max(60px, env(safe-area-inset-bottom)); }
+    }
+    .trust-bar{ -webkit-user-select: none; user-select: none; }
+    #promo-strip-payment, .offer-strip{ -webkit-user-select: none; user-select: none; }
+    input, button, .plan-card, .quantity-btn{ -webkit-tap-highlight-color: transparent; tap-highlight-color: transparent; }
   </style>
 </head>
 <body>
-  <div class="trust-bar" role="region" aria-label="Security">
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d }} Protected</span>
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>PayTR Certified</span>
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>256-bit SSL Encryption</span>
-    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="12" height="12" class="trust-logo" loading="lazy" />Cloudflare Security</span>
+  <div class="trust-bar" role="region" aria-label="{{ t.aria_security }}">
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.trust_3d_protected }}</span>
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_paytr_certified }}</span>
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_ssl_encryption }}</span>
+    <span><img src="{{ base_url }}/static/logos/cloudflare.svg" alt="" width="12" height="12" class="trust-logo" loading="lazy" />{{ t.trust_cloudflare_security }}</span>
     <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z"/></svg>{{ t.trust_badge_hipaa }}</span>
-    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_badge_gdpr }} Aligned</span>
+    <span><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg>{{ t.trust_gdpr_aligned }}</span>
   </div>
 
-  <div class="offer-strip {% if not campaign_config.campaignActive %}offer-strip-neutral{% endif %}" id="offer-strip" role="region" aria-label="Offer" data-campaign-active="{{ 'true' if campaign_config.campaignActive else 'false' }}">
-    <span class="offer-strip-badge" id="offer-strip-badge">{% if campaign_config.campaignActive %}{{ campaign_config.campaignBadge }}{% else %}{{ t.get('campaign_no_active_badge', 'Offer') }}{% endif %}</span>
-    <span class="offer-strip-text" id="offer-strip-text">{% if campaign_config.campaignActive %}{{ campaign_config.campaignTitle }}{% else %}{{ t.get('campaign_neutral_text', 'Choose a plan to see available offers.') }}{% endif %}</span>
-    {% if campaign_config.campaignActive %}<span class="offer-strip-pill" id="offer-strip-pill">{{ t.get('offer_best_savings_pill', 'Best savings') }}</span>{% endif %}
+  <!-- Anasayfadaki ile aynı indirim şeridi: kampanya varsa kod gösterilir, yoksa kupon alanına yönlendirilir -->
+  <div id="promo-strip-payment" class="{% if campaign_config.campaignActive %}promo-strip-active{% endif %}" role="region" aria-label="{{ t.promo_strip_aria }}">
+    <p id="promo-strip-payment-text" class="promo-strip-p" style="margin:0;">
+      {% if campaign_config.campaignActive and campaign_config.promoCode %}
+      {{ campaign_config.campaignTitle or (campaign_config.discountValue ~ '% indirim') }} — {{ t.promo_code_label }}: <span class="promo-strip-code">{{ campaign_config.promoCode }}</span>. {{ t.promo_strip_apply_here }}
+    {% else %}
+      {{ t.campaign_neutral_desc }}
+      {% endif %}
+    </p>
+  </div>
+
+  <div class="offer-strip {% if not campaign_config.campaignActive %}offer-strip-neutral{% endif %}" id="offer-strip" role="region" aria-label="{{ t.aria_offer }}" data-campaign-active="{{ 'true' if campaign_config.campaignActive else 'false' }}">
+    <svg class="offer-strip-snowflake" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2v20M2 12h20M5.5 5.5l13 13M5.5 18.5l13-13"/></svg>
+    <span class="offer-strip-badge" id="offer-strip-badge">{% if campaign_config.campaignActive %}{{ campaign_config.campaignBadge }}{% else %}{{ t.campaign_no_active_badge }}{% endif %}</span>
+    <span class="offer-strip-text" id="offer-strip-text">{% if campaign_config.campaignActive %}{% if campaign_config.campaignTitle and campaign_config.campaignTitle|lower == 'winter' %}{{ t.offer_winter_label }}{% else %}{{ campaign_config.campaignTitle }}{% endif %}{% else %}{{ t.campaign_neutral_text }}{% endif %}</span>
+    {% if campaign_config.campaignActive %}<span class="offer-strip-pill" id="offer-strip-pill">{{ t.offer_best_savings_pill }}</span>{% endif %}
   </div>
 
   <div class="wrap">
@@ -1508,75 +1748,75 @@
             <a href="{{ base_url }}/" aria-label="{{ brand }}">
               <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="{{ brand }}" width="140" height="32">
             </a>
-            <span class="hero-badge">{{ t.get('hero_badge_secure_ai', 'Secure AI Health Analysis') }}</span>
+            <span class="hero-badge">{{ t.hero_badge_secure_ai }}</span>
           </div>
-          <h1 class="hero-title">{{ t.get('hero_choose_title', 'Choose the right plan for your health insights') }}</h1>
-          <p class="hero-subtitle">{{ t.get('hero_subtitle', 'Secure, clinically structured AI blood test insights with instant access after payment.') }}</p>
+          <h1 class="hero-title">{{ t.hero_choose_title }}</h1>
+          <p class="hero-subtitle">{{ t.hero_subtitle }}</p>
         </div>
         <div class="hero-metrics">
           <div class="hero-metric">
             <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-            <span class="hero-metric-title">{{ t.get('hero_metric_instant', 'Instant Access') }}</span>
-            <p class="hero-metric-desc">{{ t.get('hero_metric_instant_desc', 'Analysis and report access open instantly after payment.') }}</p>
+            <span class="hero-metric-title">{{ t.hero_metric_instant }}</span>
+            <p class="hero-metric-desc">{{ t.hero_metric_instant_desc }}</p>
           </div>
           <div class="hero-metric">
             <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div>
-            <span class="hero-metric-title">{{ t.get('hero_metric_ai', 'AI-Powered') }}</span>
-            <p class="hero-metric-desc">{{ t.get('hero_metric_ai_desc', 'Blood test data is interpreted with AI-powered analysis.') }}</p>
+            <span class="hero-metric-title">{{ t.hero_metric_ai }}</span>
+            <p class="hero-metric-desc">{{ t.hero_metric_ai_desc }}</p>
           </div>
           <div class="hero-metric">
             <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-            <span class="hero-metric-title">{{ t.get('hero_metric_secure', 'Secure Checkout') }}</span>
-            <p class="hero-metric-desc">{{ t.get('hero_metric_secure_desc', 'Payment is processed with secure protection and verification.') }}</p>
+            <span class="hero-metric-title">{{ t.hero_metric_secure }}</span>
+            <p class="hero-metric-desc">{{ t.hero_metric_secure_desc }}</p>
           </div>
           <div class="hero-metric">
             <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
-            <span class="hero-metric-title">{{ t.get('hero_metric_pdf', 'PDF Reports') }}</span>
-            <p class="hero-metric-desc">{{ t.get('hero_metric_pdf_desc', 'Results are downloadable, structured, and presented in clinical style.') }}</p>
+            <span class="hero-metric-title">{{ t.hero_metric_pdf }}</span>
+            <p class="hero-metric-desc">{{ t.hero_metric_pdf_desc }}</p>
           </div>
         </div>
-        <div class="social-proof" role="region" aria-label="Trust">
-          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>{{ t.get('social_trusted', 'Trusted by health-conscious users') }}</span>
-          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.get('social_secure_ai', 'Secure AI reporting') }}</span>
-          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.get('social_fast_private', 'Fast and private results') }}</span>
+        <div class="social-proof" role="region" aria-label="{{ t.aria_trust }}">
+          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>{{ t.social_trusted }}</span>
+          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.social_secure_ai }}</span>
+          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.social_fast_private }}</span>
         </div>
-        <div class="why-norya" role="region" aria-label="Why choose us">
+        <div class="why-norya" role="region" aria-label="{{ t.aria_why_choose }}">
           <div class="why-norya-item">
             <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
-            <span class="why-norya-title">{{ t.get('why_privacy', 'Privacy-first') }}</span>
-            <p class="why-norya-desc">{{ t.get('why_privacy_desc', 'Your data encrypted, HIPAA & GDPR compliant') }}</p>
+            <span class="why-norya-title">{{ t.why_privacy }}</span>
+            <p class="why-norya-desc">{{ t.why_privacy_desc }}</p>
           </div>
           <div class="why-norya-item">
             <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
-            <span class="why-norya-title">{{ t.get('why_medical_report', 'Medical-style reporting') }}</span>
-            <p class="why-norya-desc">{{ t.get('why_medical_report_desc', 'Clinical-style reporting and evidence-based recommendations') }}</p>
+            <span class="why-norya-title">{{ t.why_medical_report }}</span>
+            <p class="why-norya-desc">{{ t.why_medical_report_desc }}</p>
           </div>
           <div class="why-norya-item">
             <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
-            <span class="why-norya-title">{{ t.get('why_instant_delivery', 'Instant digital delivery') }}</span>
-            <p class="why-norya-desc">{{ t.get('why_instant_delivery_desc', 'Instant access right after payment confirmation') }}</p>
+            <span class="why-norya-title">{{ t.why_instant_delivery }}</span>
+            <p class="why-norya-desc">{{ t.why_instant_delivery_desc }}</p>
           </div>
         </div>
-        <div class="reassurance-cards" role="region" aria-label="{{ t.get('reassurance_aria', 'Trust & compliance') }}">
+        <div class="reassurance-cards" role="region" aria-label="{{ t.reassurance_aria }}">
           <div class="reassurance-card">
             <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
             <span class="reassurance-card-title">{{ t.trust_badge_hipaa }}</span>
-            <p class="reassurance-card-desc">{{ t.get('reassurance_hipaa_desc', 'Your health data is protected to industry standards.') }}</p>
+            <p class="reassurance-card-desc">{{ t.reassurance_hipaa_desc }}</p>
           </div>
           <div class="reassurance-card">
             <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
             <span class="reassurance-card-title">{{ t.trust_badge_gdpr }}</span>
-            <p class="reassurance-card-desc">{{ t.get('reassurance_gdpr_desc', 'Your personal data is processed in line with regulations.') }}</p>
+            <p class="reassurance-card-desc">{{ t.reassurance_gdpr_desc }}</p>
           </div>
           <div class="reassurance-card">
             <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-            <span class="reassurance-card-title">{{ t.get('reassurance_secure_ai', 'Secure AI Analysis') }}</span>
-            <p class="reassurance-card-desc">{{ t.get('reassurance_secure_ai_desc', 'AI analysis is delivered on a secure infrastructure.') }}</p>
+            <span class="reassurance-card-title">{{ t.reassurance_secure_ai }}</span>
+            <p class="reassurance-card-desc">{{ t.reassurance_secure_ai_desc }}</p>
           </div>
           <div class="reassurance-card">
             <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
-            <span class="reassurance-card-title">{{ t.get('reassurance_instant_pdf', 'Instant PDF Report') }}</span>
-            <p class="reassurance-card-desc">{{ t.get('reassurance_instant_pdf_desc', 'Your report is available to download right after payment.') }}</p>
+            <span class="reassurance-card-title">{{ t.reassurance_instant_pdf }}</span>
+            <p class="reassurance-card-desc">{{ t.reassurance_instant_pdf_desc }}</p>
           </div>
         </div>
         <section class="plans-row" id="plans-row" role="group" aria-label="{{ t.selected_plan }}">
@@ -1584,20 +1824,20 @@
           <div class="plan-card {% if p.best_value %}annual{% endif %} {% if p.product == 'monthly' %}popular{% endif %} {% if default_plan and p.code == default_plan.code %}selected{% endif %}" data-plan="{{ p.code }}" data-price="{{ p.price }}" data-price-cents="{{ p.price_cents }}" data-label="{{ p.label }}" role="button" tabindex="0">
             <div class="plan-card-head">
               {% if p.product == 'single' %}<span class="card-badge one-time">{{ t.price_once }}</span>{% endif %}
-              {% if p.product == 'monthly' %}<span class="card-badge most-popular">{{ t.get('most_popular_badge', 'Most Popular') }}</span>{% endif %}
+              {% if p.product == 'monthly' %}<span class="card-badge most-popular">{{ t.most_popular_badge }}</span>{% endif %}
               {% if p.best_value %}<span class="card-badge best-value">{{ t.best_value_badge }}</span>{% endif %}
-              <h3 class="plan-card-title">{% if p.product == 'single' %}{{ t.get('plan_card_single', p.label) }}{% elif p.product == 'monthly' %}{{ t.get('plan_card_monthly', p.label) }}{% else %}{{ t.get('plan_card_yearly', p.label) }}{% endif %}</h3>
+              <h3 class="plan-card-title">{% if p.product == 'single' %}{{ t.plan_card_single }}{% elif p.product == 'monthly' %}{{ t.plan_card_monthly }}{% else %}{{ t.plan_card_yearly }}{% endif %}</h3>
             </div>
-            <p class="plan-card-desc">{% if p.product == 'single' %}{{ t.get('plan_desc_single', '') }}{% elif p.product == 'monthly' %}{{ t.get('plan_desc_monthly', '') }}{% else %}{{ t.get('plan_desc_yearly', '') }}{% endif %}</p>
+            <p class="plan-card-desc">{% if p.product == 'single' %}{{ t.plan_desc_single }}{% elif p.product == 'monthly' %}{{ t.plan_desc_monthly }}{% else %}{{ t.plan_desc_yearly }}{% endif %}</p>
             <div class="plan-card-price-wrap">
-              <div class="plan-card-price"><span class="price-num">{{ p.price|replace('.', ',') }}</span><span class="currency">€</span>{% if p.product == 'monthly' %}<span class="price-period">/{{ t.get('per_month_short', 'mo') }}</span>{% elif p.product == 'yearly' %}<span class="price-period">/{{ t.get('per_year_short', 'yr') }}</span>{% endif %}</div>
+              <div class="plan-card-price"><span class="price-num">{{ p.price|replace('.', ',') }}</span><span class="currency">€</span>{% if p.product == 'monthly' %}<span class="price-period">/{{ t.per_month_short }}</span>{% elif p.product == 'yearly' %}<span class="price-period">/{{ t.per_year_short }}</span>{% endif %}</div>
             </div>
             <ul class="plan-card-features">
               {% for b in p.benefits %}
               <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="benefit-text">{{ b }}</span></li>
               {% endfor %}
             </ul>
-            <button type="button" class="plan-card-cta" data-plan="{{ p.code }}" aria-label="{% if p.product == 'single' %}{{ t.get('cta_single', t.pay_btn) }}{% elif p.product == 'monthly' %}{{ t.get('cta_monthly', t.pay_btn) }}{% else %}{{ t.get('cta_yearly', t.pay_btn) }}{% endif %}">{{ p.price|replace('.', ',') }} € — {% if p.product == 'single' %}{{ t.get('cta_single', 'Get analysis') }}{% elif p.product == 'monthly' %}{{ t.get('cta_monthly', 'Start monthly') }}{% else %}{{ t.get('cta_yearly', 'Save yearly') }}{% endif %}</button>
+            <button type="button" class="plan-card-cta" data-plan="{{ p.code }}" aria-label="{% if p.product == 'single' %}{{ t.cta_single }}{% elif p.product == 'monthly' %}{{ t.cta_monthly }}{% else %}{{ t.cta_yearly }}{% endif %}">{{ p.price|replace('.', ',') }} € — {% if p.product == 'single' %}{{ t.cta_single }}{% elif p.product == 'monthly' %}{{ t.cta_monthly }}{% else %}{{ t.cta_yearly }}{% endif %}</button>
           </div>
           {% endfor %}
         </section>
@@ -1605,22 +1845,26 @@
 
       <aside class="summary-sidebar">
         <div class="summary-card" id="summary-card">
-          <h2 class="summary-card-heading">{{ t.get('order_summary_heading', 'Order Summary') }}</h2>
-          <p class="summary-card-subtitle">{{ t.get('order_summary_subtitle', 'Your secure checkout overview') }}</p>
+          <header class="summary-card-header">
+            <h2 class="summary-card-heading">{{ t.order_summary_heading }}</h2>
+            <p class="summary-card-subtitle">{{ t.order_summary_subtitle }}</p>
+            <p class="summary-header-trust-line" aria-hidden="true">{{ t.summary_header_trust_line }}</p>
+          </header>
 
           <div class="summary-block summary-plan-block">
-            <span class="summary-block-label">{{ t.get('summary_selected_plan', 'Selected Plan') }}</span>
-            <p class="summary-plan-name {% if not default_plan %}summary-empty{% endif %}" id="summary-plan">{% if default_plan %}{{ default_plan.display_label | default(default_plan.label, true) }}{% else %}—{% endif %}</p>
-            <p class="summary-billing" id="summary-billing">{% if default_plan %}{% if default_plan.product == 'single' %}{{ t.price_once }}{% elif default_plan.product == 'monthly' %}{{ t.price_month }}{% else %}{{ t.get('price_year_subtitle', t.price_year) }}{% endif %}{% else %}—{% endif %}</p>
+            <span class="summary-block-label">{{ t.summary_selected_plan }}</span>
+            <h3 class="summary-plan-name {% if not default_plan %}summary-empty{% endif %}" id="summary-plan">{% if default_plan %}{{ default_plan.display_label | default(default_plan.label, true) }}{% else %}—{% endif %}</h3>
+            <p class="summary-plan-value" id="summary-plan-value" aria-hidden="true"></p>
+            <p class="summary-billing" id="summary-billing">{% if default_plan %}{% if default_plan.product == 'single' %}{{ t.price_once }}{% elif default_plan.product == 'monthly' %}{{ t.price_month }}{% else %}{{ t.price_year_subtitle }}{% endif %}{% else %}—{% endif %}</p>
             <div class="summary-quantity-wrap" id="summary-quantity-wrap" style="display: none;">
-              <span class="label">{{ t.get('quantity_label', 'Adet / Süre') }}</span>
-              <div class="quantity-options" id="quantity-options" role="group" aria-label="{{ t.get('quantity_label', 'Adet / Süre') }}"></div>
+              <span class="summary-quantity-label">{{ t.quantity_label }}</span>
+              <div class="quantity-options quantity-segmented" id="quantity-options" role="group" aria-label="{{ t.quantity_label }}"></div>
             </div>
           </div>
 
-          <div class="summary-plan-opens" id="summary-plan-opens" role="region" aria-label="{{ t.get('plan_opens_title', 'What\'s included with this plan') }}">
-            <p class="summary-plan-opens-title">{{ t.get('plan_opens_title', "What's included with this plan") }}</p>
-            <ul class="summary-plan-opens-list" id="summary-plan-opens-list" aria-label="{{ t.get('plan_opens_title', 'What\'s included with this plan') }}">
+          <div class="summary-plan-opens" id="summary-plan-opens" role="region" aria-label="{{ t.plan_opens_title }}">
+            <p class="summary-plan-opens-title">{{ t.plan_opens_title }}</p>
+            <ul class="summary-plan-opens-list" id="summary-plan-opens-list" aria-label="{{ t.plan_opens_title }}">
               {% if default_plan %}
               {% for b in default_plan.benefits %}
               <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span>{{ b }}</span></li>
@@ -1629,42 +1873,45 @@
             </ul>
           </div>
 
-          <div class="summary-divider" aria-hidden="true"></div>
-
-          <div class="summary-block">
-            <div class="summary-row"><span class="label">{{ t.get('summary_base_price', 'Base Price') }}</span><span class="value" id="summary-price">{% if default_plan %}{{ default_plan.price|replace('.', ',') }} €{% else %}—{% endif %}</span></div>
-            <div class="summary-row" id="summary-discount-row"><span class="label">{{ t.get('summary_discount', 'Discount') }}</span><span class="value" id="summary-discount-value">-0 €</span></div>
-          </div>
-
-          <div class="summary-total-block">
-            <p class="summary-total-label">{{ t.get('summary_total_today', 'Total Today') }}</p>
-            <p class="summary-total" id="summary-total">{% if default_plan %}{{ default_plan.price|replace('.', ',') }}<span class="currency">€</span>{% else %}—<span class="currency">€</span>{% endif %}</p>
-          </div>
-
-          <div class="summary-savings {% if not campaign_config.campaignActive %}summary-savings-neutral{% endif %}" id="summary-savings" role="region" aria-label="Offer" data-campaign-active="{{ 'true' if campaign_config.campaignActive else 'false' }}">
+          <!-- İndirim barı: planın hemen altında, fiyattan önce – her zaman görünsün -->
+          <div class="summary-savings {% if not campaign_config.campaignActive %}summary-savings-neutral{% endif %}" id="summary-savings" role="region" aria-label="{{ t.aria_offer }}" data-campaign-active="{{ 'true' if campaign_config.campaignActive else 'false' }}">
             <svg class="summary-savings-icon icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 2L15 8L22 9L17 14L18 21L12 18L6 21L7 14L2 9L9 8L12 2Z"/></svg>
             <div class="summary-savings-content">
-              <p class="summary-savings-title" id="summary-savings-title">{% if campaign_config.campaignActive %}{{ campaign_config.campaignTitle }}{% else %}{{ t.get('campaign_active', 'Promo code available') }}{% endif %}</p>
-              <p class="summary-savings-desc" id="summary-savings-desc">{% if campaign_config.campaignActive %}{{ campaign_config.campaignMessage }}{% else %}{{ t.get('campaign_neutral_desc', 'Enter a promo code above if you have one.') }}{% endif %}</p>
+              <p class="summary-savings-title" id="summary-savings-title">{% if campaign_config.campaignActive %}{% if campaign_config.campaignTitle and campaign_config.campaignTitle|lower == 'winter' %}{{ t.offer_winter_label }}{% else %}{{ campaign_config.campaignTitle }}{% endif %}{% else %}{{ t.campaign_active }}{% endif %}</p>
+              <p class="summary-savings-desc" id="summary-savings-desc">{% if campaign_config.campaignActive %}{{ campaign_config.campaignMessage }}{% else %}{{ t.campaign_neutral_desc }}{% endif %}</p>
+            </div>
+          </div>
+
+          <div class="summary-divider" aria-hidden="true"></div>
+
+          <div class="summary-price-card">
+            <div class="summary-block summary-rows-block">
+              <div class="summary-row summary-row-base"><span class="label">{{ t.summary_base_price }}</span><span class="value" id="summary-price">{% if default_plan %}{{ default_plan.price|replace('.', ',') }} €{% else %}—{% endif %}</span></div>
+              <div class="summary-row summary-row-discount" id="summary-discount-row"><span class="label">{{ t.summary_discount }}</span><span class="value value-discount" id="summary-discount-value">-0 €</span></div>
+            </div>
+            <div class="summary-total-block">
+              <p class="summary-total-label">{{ t.summary_total_today }}</p>
+              <p class="summary-total" id="summary-total">{% if default_plan %}{{ default_plan.price|replace('.', ',') }}<span class="currency">€</span>{% else %}—<span class="currency">€</span>{% endif %}</p>
+              <p class="summary-total-note" id="summary-total-note" aria-live="polite"></p>
             </div>
           </div>
 
           <div class="summary-included">
-            <p class="summary-included-title">{{ t.get('summary_included_title', 'Included with your plan') }}</p>
+            <p class="summary-included-title">{{ t.summary_included_title }}</p>
             <ul>
-              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.get('summary_included_instant', 'Instant access') }}</span></li>
-              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.get('summary_included_secure', 'Secure payment') }}</span></li>
-              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.get('summary_included_pdf', 'PDF reporting') }}</span></li>
+              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.summary_included_instant }}</span></li>
+              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.summary_included_secure }}</span></li>
+              <li><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg><span class="included-text">{{ t.summary_included_pdf }}</span></li>
             </ul>
           </div>
 
           <div class="form-section form-in-summary" id="form-section">
             <input type="hidden" name="plan_code" id="plan-code-input" value="{{ default_plan.code if default_plan else '' }}" aria-hidden="true">
             <div class="summary-coupon-wrap form-group" id="summary-coupon-wrap">
-              <label for="coupon-input" class="promo-label">{{ t.get('promo_code_label', 'Promo code') }}</label>
+              <label for="coupon-input" class="promo-label">{{ t.promo_code_label }}</label>
               <div class="summary-coupon-row">
-                <input type="text" id="coupon-input" class="input" placeholder="{{ t.get('promo_code_placeholder', 'Enter code') }}" maxlength="64" autocomplete="off">
-                <button type="button" id="coupon-apply" class="btn-apply">{{ t.get('coupon_apply', t.coupon_apply) }}</button>
+                <input type="text" id="coupon-input" class="input" placeholder="{{ t.promo_code_placeholder }}" maxlength="64" autocomplete="off">
+                <button type="button" id="coupon-apply" class="btn-apply">{{ t.coupon_apply }}</button>
               </div>
               <p class="coupon-msg" id="coupon-msg" aria-live="polite" role="status"></p>
             </div>
@@ -1681,171 +1928,184 @@
             <p class="error-msg" id="error-msg"></p>
             <div class="payment-methods" role="region" aria-label="{{ t.accepted_payment_methods }}">
               <p class="pm-title">{{ t.accepted_payment_methods }}</p>
-              <div class="pm-logos-wrap">
-                <div class="pm-logos">
-                  <img src="/static/assets/visa.png" alt="Visa" width="60" height="20" loading="lazy" decoding="async" />
-                  <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
+              <div class="pm-inner">
+                <div class="pm-logos" aria-hidden="true">
+                  <img src="/static/assets/visa.png" alt="Visa" width="60" height="24" loading="lazy" decoding="async" />
+                  <img src="/static/brand/mastercard.svg" alt="Mastercard" width="40" height="24" loading="lazy" decoding="async" />
                 </div>
+                <p class="pm-trust-line"><span>{{ t.pm_trust_secure_verified }}</span><span class="pm-trust-dot" aria-hidden="true">·</span><span>{{ t.pm_trust_3d_supported }}</span></p>
               </div>
+            </div>
+            <div class="summary-reassurance" role="region" aria-label="{{ t.aria_security }}">
+              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_secure }}</span>
+              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_tax }}</span>
+              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.summary_trust_instant }}</span>
+              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_no_hidden_fees }}</span>
+              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_card_secure }}</span>
+              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>{{ t.summary_trust_pdf_instant }}</span>
             </div>
             <div class="cta-wrap">
               <button type="button" class="cta-main cta-summary" id="pay-now-btn" disabled aria-label="{{ t.pay_btn }}">
-                <span class="btn-text" id="pay-now-btn-text">{{ t.get('cta_start_monthly', 'Start Monthly Plan') }}</span>
+                <span class="btn-text" id="pay-now-btn-text">{{ t.cta_start_monthly }}</span>
               </button>
+              <p class="cta-trust-line" aria-hidden="true">{{ t.cta_trust_secure }} · {{ t.cta_trust_instant }} · {{ t.cta_trust_digital }}</p>
             </div>
-            <div class="summary-trust-block" role="region" aria-label="Security">
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.get('summary_trust_secure', t.get('trust_processed_paytr', 'Güvenli ödeme altyapısı')) }}</p>
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.get('summary_trust_tax', t.get('trust_taxes_no_fees', 'Vergi dahil')) }}</p>
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.get('summary_trust_instant', t.get('trust_instant_access', 'Ödeme sonrası anında erişim')) }}</p>
+            <div class="summary-trust-block" role="region" aria-label="{{ t.aria_security }}">
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_secure }}</p>
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_tax }}</p>
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.summary_trust_instant }}</p>
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_no_hidden_fees }}</p>
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_card_secure }}</p>
+              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>{{ t.summary_trust_pdf_instant }}</p>
             </div>
           </div>
         </div>
-        <div class="payment-reassurance" role="region" aria-label="Payment security">
-          <p class="payment-reassurance-label">{{ t.get('payment_reassurance', 'Secure payment') }}</p>
+        <div class="payment-reassurance" role="region" aria-label="{{ t.aria_payment_security }}">
+          <p class="payment-reassurance-label">{{ t.payment_reassurance }}</p>
           <div class="payment-reassurance-logos">
             <img src="/static/assets/visa.png" alt="Visa" width="48" height="20" loading="lazy" decoding="async" />
             <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
-            <span class="lock"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>3D Secure</span>
+            <span class="lock"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_3d }}</span>
           </div>
         </div>
       </aside>
     </main>
 
-    <section class="payment-testimonials" role="region" aria-label="{{ t.get('testimonials_heading', 'What users say') }}">
-      <h2 class="payment-testimonials-heading">{{ t.get('testimonials_heading', 'What users say') }}</h2>
+    <section class="payment-testimonials" role="region" aria-label="{{ t.testimonials_heading }}">
+      <h2 class="payment-testimonials-heading">{{ t.testimonials_heading }}</h2>
       <div class="payment-testimonials-grid">
         <div class="payment-testimonial-card">
           <span class="payment-testimonial-flag" aria-hidden="true">🇩🇪</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_1_text', 'Report was clear and arrived quickly.') }}"</p>
+          <p class="payment-testimonial-text">"{{ t.testimonial_1_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_1_name', 'M. K.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_1_country', 'Germany') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_1_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_1_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card">
           <span class="payment-testimonial-flag" aria-hidden="true">🇬🇧</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_2_text', 'Spot-on suggestions for ferritin interpretation.') }}"</p>
+          <p class="payment-testimonial-text">"{{ t.testimonial_2_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_2_name', 'S. A.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_2_country', 'UK') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_2_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_2_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card">
           <span class="payment-testimonial-flag" aria-hidden="true">🇮🇹</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_3_text', 'I track my results regularly with the subscription.') }}"</p>
+          <p class="payment-testimonial-text">"{{ t.testimonial_3_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_3_name', 'L. P.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_3_country', 'Italy') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_3_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_3_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card payment-testimonial-doctor">
           <span class="payment-testimonial-flag" aria-hidden="true">🇫🇷</span>
-          <span class="payment-testimonial-role">{{ t.get('testimonial_doctor_badge', 'Doctor') }}</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_4_text', 'I find the report very useful in general practice; I recommend it to my patients.') }}"</p>
+          <span class="payment-testimonial-role">{{ t.testimonial_doctor_badge }}</span>
+          <p class="payment-testimonial-text">"{{ t.testimonial_4_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_4_name', 'Dr. L. M.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_4_country', 'France') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_4_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_4_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card payment-testimonial-doctor">
           <span class="payment-testimonial-flag" aria-hidden="true">🇪🇸</span>
-          <span class="payment-testimonial-role">{{ t.get('testimonial_doctor_badge', 'Doctor') }}</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_5_text', 'I use it for clinical decision support. The summary and scores are clear.') }}"</p>
+          <span class="payment-testimonial-role">{{ t.testimonial_doctor_badge }}</span>
+          <p class="payment-testimonial-text">"{{ t.testimonial_5_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_5_name', 'Dr. R. S.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_5_country', 'Spain') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_5_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_5_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card payment-testimonial-doctor">
           <span class="payment-testimonial-flag" aria-hidden="true">🇹🇷</span>
-          <span class="payment-testimonial-role">{{ t.get('testimonial_doctor_badge', 'Doctor') }}</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_6_text', 'I confidently refer patients for blood test summaries. The clinical format fits my practice well.') }}"</p>
+          <span class="payment-testimonial-role">{{ t.testimonial_doctor_badge }}</span>
+          <p class="payment-testimonial-text">"{{ t.testimonial_6_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_6_name', 'Dr. A. K.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_6_country', 'Turkey') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_6_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_6_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card payment-testimonial-doctor">
           <span class="payment-testimonial-flag" aria-hidden="true">🇳🇱</span>
-          <span class="payment-testimonial-role">{{ t.get('testimonial_doctor_badge', 'Doctor') }}</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_7_text', 'Helpful in patient consultations. The biomarker summary is especially clear.') }}"</p>
+          <span class="payment-testimonial-role">{{ t.testimonial_doctor_badge }}</span>
+          <p class="payment-testimonial-text">"{{ t.testimonial_7_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_7_name', 'Dr. E. V.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_7_country', 'Netherlands') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_7_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_7_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card payment-testimonial-doctor">
           <span class="payment-testimonial-flag" aria-hidden="true">🇩🇪</span>
-          <span class="payment-testimonial-role">{{ t.get('testimonial_doctor_badge', 'Doctor') }}</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_8_text', 'I use the reports for internal medicine follow-up. Well suited for regular monitoring.') }}"</p>
+          <span class="payment-testimonial-role">{{ t.testimonial_doctor_badge }}</span>
+          <p class="payment-testimonial-text">"{{ t.testimonial_8_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_8_name', 'Dr. M. T.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_8_country', 'Germany') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_8_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_8_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card">
           <span class="payment-testimonial-flag" aria-hidden="true">🇮🇳</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_9_text', 'Report was very clear, received the same day.') }}"</p>
+          <p class="payment-testimonial-text">"{{ t.testimonial_9_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_9_name', 'P. S.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_9_country', 'India') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_9_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_9_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card">
           <span class="payment-testimonial-flag" aria-hidden="true">🇬🇧</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_10_text', 'Helped me understand my vitamin levels.') }}"</p>
+          <p class="payment-testimonial-text">"{{ t.testimonial_10_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_10_name', 'J. M.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_10_country', 'UK') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_10_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_10_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card payment-testimonial-doctor">
           <span class="payment-testimonial-flag" aria-hidden="true">🇮🇳</span>
-          <span class="payment-testimonial-role">{{ t.get('testimonial_doctor_badge', 'Doctor') }}</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_11_text', 'I confidently recommend it to patients for blood report summaries in practice.') }}"</p>
+          <span class="payment-testimonial-role">{{ t.testimonial_doctor_badge }}</span>
+          <p class="payment-testimonial-text">"{{ t.testimonial_11_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_11_name', 'Dr. S. P.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_11_country', 'India') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_11_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_11_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
         <div class="payment-testimonial-card payment-testimonial-doctor">
           <span class="payment-testimonial-flag" aria-hidden="true">🇮🇱</span>
-          <span class="payment-testimonial-role">{{ t.get('testimonial_doctor_badge', 'Doctor') }}</span>
-          <p class="payment-testimonial-text">"{{ t.get('testimonial_12_text', 'I use it for clinical decision support and patient follow-up. Summary is clear.') }}"</p>
+          <span class="payment-testimonial-role">{{ t.testimonial_doctor_badge }}</span>
+          <p class="payment-testimonial-text">"{{ t.testimonial_12_text }}"</p>
           <div class="payment-testimonial-meta">
-            <span class="payment-testimonial-name">{{ t.get('testimonial_12_name', 'Dr. Y. B.') }}</span>
-            <span class="payment-testimonial-country">{{ t.get('testimonial_12_country', 'Israel') }}</span>
-            <span class="payment-testimonial-verified">{{ t.get('testimonial_verified', 'Verified purchase') }}</span>
+            <span class="payment-testimonial-name">{{ t.testimonial_12_name }}</span>
+            <span class="payment-testimonial-country">{{ t.testimonial_12_country }}</span>
+            <span class="payment-testimonial-verified">{{ t.testimonial_verified }}</span>
           </div>
         </div>
       </div>
     </section>
 
-    <section class="payment-faq" role="region" aria-label="{{ t.get('faq_title', 'Quick answers') }}">
-      <h2 class="payment-faq-heading">{{ t.get('faq_title', 'Quick answers') }}</h2>
+    <section class="payment-faq" role="region" aria-label="{{ t.faq_title }}">
+      <h2 class="payment-faq-heading">{{ t.faq_title }}</h2>
       <div class="payment-faq-grid">
         <div class="payment-faq-card">
-          <p class="payment-faq-q">{{ t.get('faq_access_q', 'When does access open after payment?') }}</p>
-          <p class="payment-faq-a">{{ t.get('faq_access_a', 'As soon as payment is confirmed, access is granted instantly; your report and PDF are available immediately.') }}</p>
+          <p class="payment-faq-q">{{ t.faq_access_q }}</p>
+          <p class="payment-faq-a">{{ t.faq_access_a }}</p>
         </div>
         <div class="payment-faq-card">
-          <p class="payment-faq-q">{{ t.get('faq_secure_q', 'Is payment secure?') }}</p>
-          <p class="payment-faq-a">{{ t.get('faq_secure_a', 'Yes. Payments are processed via PayTR with encryption and 3D Secure; we do not store your card details.') }}</p>
+          <p class="payment-faq-q">{{ t.faq_secure_q }}</p>
+          <p class="payment-faq-a">{{ t.faq_secure_a }}</p>
         </div>
         <div class="payment-faq-card">
-          <p class="payment-faq-q">{{ t.get('faq_pdf_q', 'Can I download the report as PDF?') }}</p>
-          <p class="payment-faq-a">{{ t.get('faq_pdf_a', 'Yes. A PDF summary is generated for each analysis; you can download it from your account with one click.') }}</p>
+          <p class="payment-faq-q">{{ t.faq_pdf_q }}</p>
+          <p class="payment-faq-a">{{ t.faq_pdf_a }}</p>
         </div>
       </div>
     </section>
@@ -1857,10 +2117,10 @@
       </div>
     </div>
 
-    {% if t.get('pro_disclaimer') %}<p class="pro-disclaimer">{{ t.pro_disclaimer }}</p>{% endif %}
-    <div class="payment-contact" role="region" aria-label="{{ t.get('contact_support', 'Contact & support') }}">
+    {% if t.pro_disclaimer %}<p class="pro-disclaimer">{{ t.pro_disclaimer }}</p>{% endif %}
+    <div class="payment-contact" role="region" aria-label="{{ t.contact_support }}">
       <p><a href="mailto:support@noryaai.com">support@noryaai.com</a></p>
-      <a href="https://wa.me/905071703564" target="_blank" rel="noopener noreferrer" class="payment-contact-whatsapp" aria-label="WhatsApp ile iletişim">
+      <a href="https://wa.me/905071703564" target="_blank" rel="noopener noreferrer" class="payment-contact-whatsapp" aria-label="{{ t.contact_support }}">
         <svg viewBox="0 0 24 24" fill="#25D366" aria-hidden="true"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
       </a>
     </div>
@@ -1892,11 +2152,13 @@ document.addEventListener('DOMContentLoaded', function(){
   var iframeSkeleton = document.getElementById('iframe-skeleton');
   var paytrIframe = document.getElementById('paytr-iframe');
   var summaryPlan = document.getElementById('summary-plan');
+  var summaryPlanValue = document.getElementById('summary-plan-value');
   var summaryTotal = document.getElementById('summary-total');
   var summaryPrice = document.getElementById('summary-price');
   var summaryBilling = document.getElementById('summary-billing');
   var summaryDiscountRow = document.getElementById('summary-discount-row');
   var summaryDiscountValue = document.getElementById('summary-discount-value');
+  var summaryTotalNote = document.getElementById('summary-total-note');
   var summaryCard = document.getElementById('summary-card');
   var summaryPlanOpens = document.getElementById('summary-plan-opens');
   var summaryPlanOpensList = document.getElementById('summary-plan-opens-list');
@@ -1904,6 +2166,8 @@ document.addEventListener('DOMContentLoaded', function(){
   var offerStripBadge = document.getElementById('offer-strip-badge');
   var offerStripText = document.getElementById('offer-strip-text');
   var offerStripPill = document.getElementById('offer-strip-pill');
+  var promoStripPayment = document.getElementById('promo-strip-payment');
+  var promoStripPaymentText = document.getElementById('promo-strip-payment-text');
   var summarySavings = document.getElementById('summary-savings');
   var summarySavingsTitle = document.getElementById('summary-savings-title');
   var summarySavingsDesc = document.getElementById('summary-savings-desc');
@@ -1920,8 +2184,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
   var planConfig = (plans || []).map(function(p) {
     var priceStr = typeof p.price === 'string' ? p.price : String(p.price);
-    var billingLabel = p.product === 'single' ? (t.price_once || 'One-time') : p.product === 'monthly' ? (t.price_month || 'Per month') : (t.price_year_subtitle || t.price_year || 'Per year');
-    var ctaText = p.product === 'single' ? (t.cta_start_single || t.pay_btn || 'Pay Now') : p.product === 'monthly' ? (t.cta_start_monthly || t.pay_btn || 'Pay Now') : (t.cta_start_yearly || t.pay_btn || 'Pay Now');
+    var billingLabel = p.product === 'single' ? t.price_once : p.product === 'monthly' ? t.price_month : (t.price_year_subtitle || t.price_year);
+    var ctaText = p.product === 'single' ? (t.cta_start_single || t.pay_btn) : p.product === 'monthly' ? (t.cta_start_monthly || t.pay_btn) : (t.cta_start_yearly || t.pay_btn);
     return {
       id: p.code,
       planCode: p.code,
@@ -1943,10 +2207,32 @@ document.addEventListener('DOMContentLoaded', function(){
   }
 
   function getQuantityOptions(product) {
-    if (product === 'single') return [{ v: 1, label: t.quantity_1_analysis || '1 analiz' }, { v: 2, label: t.quantity_2_analyses || '2 analiz' }, { v: 3, label: t.quantity_3_analyses || '3 analiz' }];
-    if (product === 'monthly') return [{ v: 1, label: t.quantity_1_month || '1 ay' }, { v: 3, label: t.quantity_3_months || '3 ay' }, { v: 6, label: t.quantity_6_months || '6 ay' }];
-    if (product === 'yearly') return [{ v: 1, label: t.quantity_1_year || '1 yıl' }, { v: 2, label: t.quantity_2_years || '2 yıl' }];
-    return [{ v: 1, label: '1' }];
+    if (product === 'single') return [{ v: 1, label: t.quantity_1_analysis }, { v: 2, label: t.quantity_2_analyses }, { v: 3, label: t.quantity_3_analyses }];
+    if (product === 'monthly') return [{ v: 1, label: t.quantity_1_month }, { v: 3, label: t.quantity_3_months }, { v: 6, label: t.quantity_6_months }];
+    if (product === 'yearly') return [{ v: 1, label: t.quantity_1_year }, { v: 2, label: t.quantity_2_years }];
+    return [{ v: 1, label: t.quantity_1_analysis }];
+  }
+
+  function getPlanValueLine(plan, qty) {
+    if (!plan || !plan.product) return '';
+    var q = qty || 1;
+    if (plan.product === 'single') {
+      var opts = getQuantityOptions('single');
+      var o = opts.find(function(x){ return x.v === q; });
+      return o ? o.label : t.quantity_1_analysis;
+    }
+    if (plan.product === 'monthly') {
+      var perMonth = t.summary_value_monthly_per_month;
+      var mOpts = getQuantityOptions('monthly');
+      var mO = mOpts.find(function(x){ return x.v === q; });
+      return mO ? (perMonth + ' · ' + mO.label) : perMonth;
+    }
+    if (plan.product === 'yearly') {
+      if (q === 1) return t.summary_value_yearly_1y || '';
+      if (q === 2) return t.summary_value_yearly_2y || '';
+      return t.summary_value_yearly_1y || '';
+    }
+    return '';
   }
 
   function renderQuantityOptions() {
@@ -1992,24 +2278,36 @@ document.addEventListener('DOMContentLoaded', function(){
       offerStrip.classList.toggle('offer-strip-neutral', !active);
       offerStrip.setAttribute('data-campaign-active', active ? 'true' : 'false');
     }
-    if (offerStripBadge) offerStripBadge.textContent = active ? (cfg.campaignBadge || t.offer_limited_badge || 'Limited Offer') : (t.campaign_no_active_badge || 'Offer');
-    if (offerStripText) offerStripText.textContent = active ? (cfg.campaignTitle || '') : (t.campaign_neutral_text || 'Choose a plan to see available offers.');
+    if (offerStripBadge) offerStripBadge.textContent = active ? (cfg.campaignBadge || t.offer_limited_badge) : t.campaign_no_active_badge;
+    if (offerStripText) offerStripText.textContent = active ? (cfg.campaignTitle && cfg.campaignTitle.toLowerCase() === 'winter' ? t.offer_winter_label : (cfg.campaignTitle || '')) : t.campaign_neutral_text;
     if (offerStripPill) {
-      if (active) { offerStripPill.textContent = t.offer_best_savings_pill || 'Best savings'; offerStripPill.style.display = ''; }
+      if (active) { offerStripPill.textContent = t.offer_best_savings_pill; offerStripPill.style.display = ''; }
       else offerStripPill.style.display = 'none';
     } else if (active && offerStrip) {
       var pill = document.createElement('span');
       pill.className = 'offer-strip-pill';
       pill.id = 'offer-strip-pill';
-      pill.textContent = t.offer_best_savings_pill || 'Best savings';
+      pill.textContent = t.offer_best_savings_pill;
       offerStrip.appendChild(pill);
     }
     if (summarySavings) {
       summarySavings.classList.toggle('summary-savings-neutral', !active);
       summarySavings.setAttribute('data-campaign-active', active ? 'true' : 'false');
     }
-    if (summarySavingsTitle) summarySavingsTitle.textContent = active ? (cfg.campaignTitle || '') : (t.campaign_active || 'Promo code available');
-    if (summarySavingsDesc) summarySavingsDesc.textContent = active ? (cfg.campaignMessage || '') : (t.campaign_neutral_desc || 'Enter a promo code above if you have one.');
+    if (summarySavingsTitle) summarySavingsTitle.textContent = active ? (cfg.campaignTitle && cfg.campaignTitle.toLowerCase() === 'winter' ? t.offer_winter_label : (cfg.campaignTitle || '')) : t.campaign_active;
+    if (summarySavingsDesc) summarySavingsDesc.textContent = active ? (cfg.campaignMessage || '') : t.campaign_neutral_desc;
+    if (promoStripPayment) promoStripPayment.classList.toggle('promo-strip-active', active);
+    if (promoStripPaymentText) {
+      if (active && cfg.promoCode) {
+        var promoLabel = t.promo_code_label;
+        var promoApplyHere = t.promo_strip_apply_here;
+        var promoTitle = cfg.campaignTitle || (cfg.discountValue ? (cfg.discountValue + '% indirim') : '');
+        var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+        promoStripPaymentText.innerHTML = promoTitle + ' — ' + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
+      } else {
+        promoStripPaymentText.textContent = t.campaign_neutral_desc;
+      }
+    }
     campaignConfig = cfg;
     if (cfg.autoApply && cfg.promoCode && selectedPlan && couponInput) {
       couponInput.value = cfg.promoCode;
@@ -2022,16 +2320,29 @@ document.addEventListener('DOMContentLoaded', function(){
     if (couponMsg) { couponMsg.textContent = ''; couponMsg.className = 'coupon-msg'; couponMsg.innerHTML = ''; }
     if (summaryDiscountRow) summaryDiscountRow.classList.remove('visible');
     if (summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
+    if (summaryTotalNote) summaryTotalNote.textContent = '';
     if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
     fetch(baseUrl + '/api/coupon/validate?plan_code=' + encodeURIComponent(selectedPlan) + '&code=' + encodeURIComponent(code), { credentials: 'include' })
       .then(function(r){ return r.json(); })
       .then(function(d){
         if (d.valid) {
-          if (couponMsg) { couponMsg.innerHTML = iconCheck + (d.message || t.coupon_success || 'Applied.'); couponMsg.className = 'coupon-msg ok'; }
+          if (couponMsg) { couponMsg.innerHTML = iconCheck + (d.message || t.coupon_success); couponMsg.className = 'coupon-msg ok'; }
           if (couponInput) { couponInput.classList.remove('has-error'); couponInput.classList.add('has-success'); }
-          if (summaryCouponWrap) summaryCouponWrap.classList.add('applied'); }
+          if (summaryCouponWrap) summaryCouponWrap.classList.add('applied');
+          if (summaryTotal && d.final_amount_cents != null) {
+            var q = selectedQuantity || 1;
+            var totalCents = d.final_amount_cents * q;
+            var display = (totalCents / 100).toFixed(2).replace('.', ',');
+            summaryTotal.innerHTML = display + '<span class="currency">€</span>';
+          }
+          if (summaryPrice && d.final_amount_cents != null) {
+            var unitDisplay = (d.final_amount_cents / 100).toFixed(2).replace('.', ',');
+            summaryPrice.textContent = (selectedQuantity && selectedQuantity > 1) ? (unitDisplay + ' € × ' + selectedQuantity + ' = ' + (d.final_amount_cents * (selectedQuantity || 1) / 100).toFixed(2).replace('.', ',') + ' €') : (unitDisplay + ' €');
+          }
+        }
         if (summaryDiscountRow) summaryDiscountRow.classList.toggle('visible', !!d.valid);
         if (summaryDiscountValue && d.valid) summaryDiscountValue.textContent = (d.discount_formatted != null ? d.discount_formatted : (d.discount != null ? '-' + d.discount + ' €' : '—'));
+        if (summaryTotalNote) summaryTotalNote.textContent = d.valid ? (t.campaign_discount_applied || '') : '';
       })
       .catch(function(){});
   }
@@ -2045,6 +2356,30 @@ document.addEventListener('DOMContentLoaded', function(){
       .catch(function(){ if (done) done({ campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', discountType: '', discountValue: 0, applicablePlans: '', promoCode: '', autoApply: false }); });
   }
 
+  /** Anasayfadaki gibi ana bar: /api/campaigns/featured ile herhangi bir aktif kampanyayı göster (yıllık/aylık/tek fark etmez). */
+  function loadFeaturedCampaignForStrip() {
+    var lang = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
+    fetch(baseUrl + '/api/campaigns/featured?lang=' + encodeURIComponent(lang), { credentials: 'include' })
+      .then(function(r){ return r.json(); })
+      .then(function(data){
+        var active = !!(data && data.active && data.campaign);
+        var cfg = (data && data.campaign) ? data.campaign : {};
+        if (promoStripPayment) promoStripPayment.classList.toggle('promo-strip-active', active);
+        if (promoStripPaymentText) {
+          if (active && cfg.promoCode) {
+            var promoLabel = t.promo_code_label;
+            var promoApplyHere = t.promo_strip_apply_here;
+            var promoTitle = cfg.campaignTitle || (cfg.discountValue && t.discount_suffix ? (cfg.discountValue + '% ' + t.discount_suffix) : '');
+            var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+            promoStripPaymentText.innerHTML = promoTitle + ' — ' + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
+          } else {
+            promoStripPaymentText.textContent = t.campaign_neutral_desc;
+          }
+        }
+      })
+      .catch(function(){});
+  }
+
   function updateSummary() {
     if (!summaryPlan || !summaryTotal) return;
     if (summaryCard) summaryCard.classList.add('summary-updating');
@@ -2054,14 +2389,16 @@ document.addEventListener('DOMContentLoaded', function(){
       if (!selectedPlan || !plan) {
         summaryPlan.textContent = '—';
         summaryPlan.classList.add('summary-empty');
+        if (summaryPlanValue) summaryPlanValue.textContent = '';
         summaryTotal.innerHTML = '—<span class="currency">€</span>';
         if (summaryPrice) summaryPrice.textContent = '—';
         if (summaryBilling) summaryBilling.textContent = '—';
         if (summaryDiscountRow) summaryDiscountRow.classList.remove('visible');
         if (summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
+        if (summaryTotalNote) summaryTotalNote.textContent = '';
         if (payNowBtn) {
           var btnSpan = payNowBtn.querySelector('.btn-text');
-          if (btnSpan) btnSpan.textContent = t.pay_btn || 'Pay Now';
+          if (btnSpan) btnSpan.textContent = t.pay_btn;
         }
         if (offerStrip) offerStrip.classList.remove('yearly-selected', 'single-selected');
         if (summaryPlanOpens) summaryPlanOpens.classList.add('empty');
@@ -2070,6 +2407,7 @@ document.addEventListener('DOMContentLoaded', function(){
         var planName = (plan.name != null && plan.name !== '') ? plan.name : (plan.planCode || selectedPlan);
         summaryPlan.textContent = planName;
         summaryPlan.classList.remove('summary-empty');
+        if (summaryPlanValue) summaryPlanValue.textContent = getPlanValueLine(plan, selectedQuantity);
         var unitNum = parseFloat(String(plan.price || plan.total || '0').replace(',', '.')) || 0;
         var totalNum = unitNum * (selectedQuantity || 1);
         var priceDisplay = totalNum.toFixed(2).replace('.', ',');
@@ -2081,7 +2419,7 @@ document.addEventListener('DOMContentLoaded', function(){
         if (summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
         if (payNowBtn) {
           var btnSpan = payNowBtn.querySelector('.btn-text');
-          if (btnSpan) btnSpan.textContent = plan.ctaText || t.pay_btn || 'Pay Now';
+          if (btnSpan) btnSpan.textContent = plan.ctaText || t.pay_btn;
         }
         if (offerStrip) {
           offerStrip.classList.remove('yearly-selected', 'single-selected');
@@ -2093,6 +2431,7 @@ document.addEventListener('DOMContentLoaded', function(){
           var checkSvg = '<svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6L9 17l-5-5"/></svg>';
           summaryPlanOpensList.innerHTML = plan.benefits.map(function(b){ return '<li>' + checkSvg + '<span>' + (b || '').replace(/</g, '&lt;').replace(/>/g, '&gt;') + '</span></li>'; }).join('');
         }
+        if (summaryTotalNote) summaryTotalNote.textContent = (summaryDiscountRow && summaryDiscountRow.classList.contains('visible')) ? (t.campaign_discount_applied || '') : '';
       }
       if (summaryCard) summaryCard.classList.remove('summary-updating');
     }
@@ -2101,7 +2440,7 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function showError(msg) {
     if (!errorMsg) return;
-    errorMsg.textContent = msg || t.pay_error_connection || 'Payment could not be processed.';
+    errorMsg.textContent = msg || t.pay_error_short || t.pay_error_connection;
     errorMsg.classList.add('visible');
   }
   function hideError() {
@@ -2117,10 +2456,10 @@ document.addEventListener('DOMContentLoaded', function(){
     if (!payNowBtn) return;
     if (loading) {
       payNowBtn.disabled = true;
-      payNowBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text" id="pay-now-btn-text">' + (t.cta_loading || 'Processing…') + '</span>';
+      payNowBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text" id="pay-now-btn-text">' + t.cta_loading + '</span>';
     } else {
       var plan = getPlan(selectedPlan);
-      var label = plan ? plan.ctaText : (t.pay_btn || 'Pay Now');
+      var label = plan ? plan.ctaText : t.pay_btn;
       payNowBtn.innerHTML = '<span class="btn-text" id="pay-now-btn-text">' + label + '</span>';
       payNowBtn.disabled = !selectedPlan;
     }
@@ -2175,6 +2514,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
   function selectPlanByCode(planCode) { selectCardByPlan(planCode); }
   if (defaultPlanCode) selectPlanByCode(defaultPlanCode);
+  /** Ana bar: anasayfadaki gibi featured kampanyayı göster (canlıda indirim hep görünsün). */
+  loadFeaturedCampaignForStrip();
   renderQuantityOptions();
   bindQuantityClicks();
 
@@ -2186,11 +2527,12 @@ document.addEventListener('DOMContentLoaded', function(){
       if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
       if (hideDiscount && summaryDiscountRow) summaryDiscountRow.classList.remove('visible');
       if (hideDiscount && summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
+      if (hideDiscount && summaryTotalNote) summaryTotalNote.textContent = '';
     }
     if (!code) { clearPromoState(true); return; }
     if (!selectedPlan) {
       if (couponMsg) {
-        couponMsg.innerHTML = iconAlert + (t.get('coupon_select_plan_first', 'Please select a plan first.'));
+        couponMsg.innerHTML = iconAlert + (t.coupon_select_plan_first || t.campaign_neutral_desc);
         couponMsg.className = 'coupon-msg err';
       }
       if (couponInput) { couponInput.classList.remove('has-success'); couponInput.classList.add('has-error'); }
@@ -2202,20 +2544,34 @@ document.addEventListener('DOMContentLoaded', function(){
       .then(function(r){ return r.json(); })
       .then(function(d){
         if (d.valid) {
-          if (couponMsg) { couponMsg.innerHTML = iconCheck + (d.message || t.coupon_success || 'Applied.'); couponMsg.className = 'coupon-msg ok'; }
+          if (couponMsg) { couponMsg.innerHTML = iconCheck + (d.message || t.coupon_success); couponMsg.className = 'coupon-msg ok'; }
           if (couponInput) { couponInput.classList.remove('has-error'); couponInput.classList.add('has-success'); }
-          if (summaryCouponWrap) summaryCouponWrap.classList.add('applied'); }
+          if (summaryCouponWrap) summaryCouponWrap.classList.add('applied');
+          if (summaryTotal && d.final_amount_cents != null) {
+            var q = selectedQuantity || 1;
+            var totalCents = d.final_amount_cents * q;
+            var display = (totalCents / 100).toFixed(2).replace('.', ',');
+            summaryTotal.innerHTML = display + '<span class="currency">€</span>';
+          }
+          if (summaryPrice && d.final_amount_cents != null) {
+            var unitDisplay = (d.final_amount_cents / 100).toFixed(2).replace('.', ',');
+            summaryPrice.textContent = (selectedQuantity && selectedQuantity > 1) ? (unitDisplay + ' € × ' + selectedQuantity + ' = ' + (d.final_amount_cents * (selectedQuantity || 1) / 100).toFixed(2).replace('.', ',') + ' €') : (unitDisplay + ' €');
+          }
+        }
         if (summaryDiscountRow) summaryDiscountRow.classList.toggle('visible', !!d.valid);
         if (summaryDiscountValue && d.valid) summaryDiscountValue.textContent = (d.discount_formatted != null ? d.discount_formatted : (d.discount != null ? '-' + d.discount + ' €' : '—'));
         if (!d.valid && couponMsg) {
-          couponMsg.innerHTML = iconAlert + (d.reason || t.get('coupon_invalid_refined', 'This code isn’t valid for your selection.'));
+          couponMsg.innerHTML = iconAlert + (d.reason || t.coupon_invalid_refined);
           couponMsg.className = 'coupon-msg err';
           if (couponInput) { couponInput.classList.remove('has-success'); couponInput.classList.add('has-error'); }
           if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
         }
       })
       .catch(function(){
-        if (couponMsg) { couponMsg.innerHTML = iconAlert + (t.get('coupon_invalid_refined', 'This code isn’t valid for your selection.')); couponMsg.className = 'coupon-msg err'; }
+        if (couponMsg) { couponMsg.innerHTML = iconAlert + t.coupon_invalid_refined; couponMsg.className = 'coupon-msg err'; }
+        if (summaryDiscountRow) summaryDiscountRow.classList.remove('visible');
+        if (summaryDiscountValue) summaryDiscountValue.textContent = '-0 €';
+        if (summaryTotalNote) summaryTotalNote.textContent = '';
         if (couponInput) { couponInput.classList.remove('has-success'); couponInput.classList.add('has-error'); }
         if (summaryCouponWrap) summaryCouponWrap.classList.remove('applied');
       });
@@ -2251,9 +2607,9 @@ document.addEventListener('DOMContentLoaded', function(){
         return r.json().then(function(d){
           var msg = d.detail;
           if (Array.isArray(msg)) msg = msg.map(function(x){ return x.msg || x; }).join(' ');
-          else if (typeof msg !== 'string') msg = 'Payment could not be processed.';
+          else if (typeof msg !== 'string') msg = t.pay_error_short || t.pay_error_connection;
           throw new Error(msg);
-        }).catch(function(e){ if (e instanceof Error) throw e; throw new Error('Payment could not be processed.'); });
+        }).catch(function(e){ if (e instanceof Error) throw e; throw new Error(t.pay_error_short || t.pay_error_connection); });
       }
       return r.json();
     })
@@ -2273,7 +2629,7 @@ document.addEventListener('DOMContentLoaded', function(){
     .catch(function(err) {
       paymentInProgress = false;
       setButtonLoading(false);
-      showError(err && err.message ? err.message : (t.pay_error_connection || 'Payment could not be processed.'));
+      showError(err && err.message ? err.message : (t.pay_error_short || t.pay_error_connection));
     });
   });
 
