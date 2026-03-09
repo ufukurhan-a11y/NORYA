@@ -11799,7 +11799,7 @@
         if (window.__lastCampaign && window.__lastCampaign.promoCode) applyPromoStrip(window.__lastCampaign, (lang || getPromoLang()));
       };
       var lang = getPromoLang();
-      fetch('/api/campaigns/featured?lang=' + encodeURIComponent(lang), { credentials: 'include' })
+      fetch('/api/campaigns/featured?lang=' + encodeURIComponent(lang), { credentials: 'include', cache: 'no-store' })
         .then(function(r) { return r.json(); })
         .then(function(data) {
           if (data.active && data.campaign && data.campaign.promoCode) {

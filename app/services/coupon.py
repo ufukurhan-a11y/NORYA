@@ -117,6 +117,7 @@ def get_active_campaign_for_checkout(
             getattr(DiscountCode, "is_active", True).is_(True),
             getattr(DiscountCode, "auto_show_on_checkout", False).is_(True),
         )
+        .order_by(DiscountCode.id.desc())
     )
     for coupon in db.exec(stmt).all():
         if coupon.valid_from and today < coupon.valid_from:

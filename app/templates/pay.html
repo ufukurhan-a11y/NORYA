@@ -893,7 +893,7 @@ document.addEventListener('DOMContentLoaded', function(){
     var noteEl = document.getElementById('campaign-note');
     var applyBtn = document.getElementById('campaign-apply-btn');
     var appliedEl = document.getElementById('campaign-applied');
-    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(pc) + '&lang=' + encodeURIComponent((document.documentElement.getAttribute('lang') || 'tr').slice(0, 2)))
+    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(pc) + '&lang=' + encodeURIComponent((document.documentElement.getAttribute('lang') || 'tr').slice(0, 2)), { cache: 'no-store' })
       .then(function(r){ return r.json(); })
       .then(function(data){
         var cfg = (data.active && data.campaign) ? data.campaign : { campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', promoCode: '', discountValue: 0 };

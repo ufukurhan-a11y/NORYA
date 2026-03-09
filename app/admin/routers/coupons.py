@@ -43,10 +43,12 @@ def coupons_list(
         }
         for r in rows
     ]
-    return templates.TemplateResponse(
+    resp = templates.TemplateResponse(
         "admin/coupons_list.html",
         {"request": request, "coupons": items},
     )
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
 
 
 def _coupon_form_context(request: Request, coupon: DiscountCode | None, is_edit: bool, error: str | None = None) -> dict:
@@ -156,10 +158,12 @@ def coupon_edit_form(
     coupon = db.get(DiscountCode, coupon_id)
     if not coupon:
         return RedirectResponse(url="/admin/coupons", status_code=302)
-    return templates.TemplateResponse(
+    resp = templates.TemplateResponse(
         "admin/coupon_form.html",
         _coupon_form_context(request, coupon, True),
     )
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
 
 
 @router.post("/{coupon_id:int}/edit")

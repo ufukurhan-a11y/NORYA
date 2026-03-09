@@ -1314,7 +1314,7 @@ def _index_response(request: Request | None = None):
             raw = _inject_canonical(raw, canonical_url)
         return HTMLResponse(
             raw,
-            headers={"Cache-Control": "public, max-age=0, must-revalidate"},
+            headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
         )
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
 
@@ -2808,7 +2808,7 @@ def pay_page(
     except Exception as e:
         log.warning("pay_page campaign fetch failed: %s", e)
     campaign_config = _payment_campaign_config(campaign_raw, t)
-    return templates.TemplateResponse(
+    resp = templates.TemplateResponse(
         "pay.html",
         {
             "request": request,
@@ -2831,6 +2831,8 @@ def pay_page(
             "campaign_js": json.dumps(campaign_config),
         },
     )
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
 
 
 def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
@@ -2892,7 +2894,7 @@ def payment_page_premium(
         except Exception as e:
             log.warning("payment_page campaign fetch failed: %s", e)
     campaign_config = _payment_campaign_config(campaign_raw, t)
-    return templates.TemplateResponse(
+    resp = templates.TemplateResponse(
         "payment_page.html",
         {
             "request": request,
@@ -2912,6 +2914,8 @@ def payment_page_premium(
             "user_name": user_name,
         },
     )
+    resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
+    return resp
 
 
 @app.get("/api/coupon/validate")
@@ -2944,6 +2948,10 @@ def coupon_validate(
     }
 
 
+# Kampanya API'leri: canlıda indirim güncellenince hemen görünsün diye önbelleklenmez
+_CAMPAIGN_NO_CACHE_HEADERS = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"}
+
+
 @app.get("/api/campaigns/active")
 def campaigns_active(
     plan_code: str,
@@ -2955,10 +2963,14 @@ def campaigns_active(
         campaign_raw = get_active_campaign_for_checkout(db, plan_code)
     except Exception as e:
         log.warning("campaigns/active failed for plan_code=%s: %s", plan_code, e)
-        return {"active": False, "campaign": _payment_campaign_config(None, get_pay_ui(lang or "tr"))}
+        out = {"active": False, "campaign": _payment_campaign_config(None, get_pay_ui(lang or "tr"))}
+        return JSONResponse(content=out, headers=_CAMPAIGN_NO_CACHE_HEADERS)
     t = get_pay_ui((lang or "tr").lower()[:2])
     campaign_config = _payment_campaign_config(campaign_raw, t)
-    return {"active": campaign_config["campaignActive"], "campaign": campaign_config}
+    return JSONResponse(
+        content={"active": campaign_config["campaignActive"], "campaign": campaign_config},
+        headers=_CAMPAIGN_NO_CACHE_HEADERS,
+    )
 
 
 @app.get("/api/campaigns/featured")
@@ -2973,10 +2985,16 @@ def campaigns_featured(
             campaign_raw = get_active_campaign_for_checkout(db, plan_code)
             if campaign_raw:
                 cfg = _payment_campaign_config(campaign_raw, t)
-                return {"active": True, "campaign": cfg}
+                return JSONResponse(
+                    content={"active": True, "campaign": cfg},
+                    headers=_CAMPAIGN_NO_CACHE_HEADERS,
+                )
         except Exception:
             continue
-    return {"active": False, "campaign": _payment_campaign_config(None, t)}
+    return JSONResponse(
+        content={"active": False, "campaign": _payment_campaign_config(None, t)},
+        headers=_CAMPAIGN_NO_CACHE_HEADERS,
+    )
 
 
 @app.post("/payment/get-token")
