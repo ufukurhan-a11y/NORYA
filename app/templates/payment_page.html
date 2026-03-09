@@ -2652,6 +2652,7 @@ document.addEventListener('DOMContentLoaded', function(){
     if (!errorMsg) return;
     errorMsg.textContent = msg || t.pay_error_short || t.pay_error_connection;
     errorMsg.classList.add('visible');
+    errorMsg.scrollIntoView({ behavior: 'smooth', block: 'center' });
   }
   function hideError() {
     if (errorMsg) { errorMsg.classList.remove('visible'); errorMsg.textContent = ''; }
@@ -2814,12 +2815,19 @@ document.addEventListener('DOMContentLoaded', function(){
     })
     .then(function(r) {
       if (!r.ok) {
-        return r.json().then(function(d){
-          var msg = d.detail;
-          if (Array.isArray(msg)) msg = msg.map(function(x){ return x.msg || x; }).join(' ');
-          else if (typeof msg !== 'string') msg = t.pay_error_short || t.pay_error_connection;
+        return r.text().then(function(text){
+          var msg = t.pay_error_short || t.pay_error_connection;
+          try {
+            var d = JSON.parse(text);
+            var detail = d.detail;
+            if (Array.isArray(detail)) msg = detail.map(function(x){ return x.msg != null ? x.msg : x; }).join(' ');
+            else if (typeof detail === 'string' && detail) msg = detail;
+          } catch (_) {
+            if (r.status === 503) msg = (t.pay_error_not_available || 'Ödeme şu an aktif değil. PayTR ayarlarını kontrol edin.');
+            else if (r.status >= 500) msg = (t.pay_error_connection || msg);
+          }
           throw new Error(msg);
-        }).catch(function(e){ if (e instanceof Error) throw e; throw new Error(t.pay_error_short || t.pay_error_connection); });
+        });
       }
       return r.json();
     })
@@ -2827,7 +2835,10 @@ document.addEventListener('DOMContentLoaded', function(){
       var token = data.token;
       if (!token) throw new Error('No token');
       var url = 'https://www.paytr.com/odeme/guvenli/' + token;
-      if (iframeSection) iframeSection.classList.add('visible');
+      if (iframeSection) {
+        iframeSection.classList.add('visible');
+        iframeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
       if (paytrIframe) {
         paytrIframe.onload = function() {
           if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
