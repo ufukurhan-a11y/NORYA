@@ -2523,7 +2523,10 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     from urllib.parse import urlencode
     from urllib.request import urlopen, Request as UrlRequest
 
-    merchant_id = (settings.paytr_merchant_id or "").strip()
+    raw_mid = (settings.paytr_merchant_id or "").strip()
+    merchant_id = raw_mid.replace("Value:", "").strip() if raw_mid else ""
+    if not merchant_id:
+        raise HTTPException(status_code=500, detail="PayTR merchant_id yapılandırılmadı. Ortam değişkeninde sadece mağaza numarası olmalı (örn. 677898).")
     merchant_key = settings.paytr_merchant_key
     if isinstance(merchant_key, str):
         merchant_key = merchant_key.strip().encode("utf-8")
@@ -2605,7 +2608,13 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         db.add(order)
         db.commit()
         detail = _paytr_reason_to_detail(reason)
-        raise HTTPException(status_code=400, detail=detail)
+        if not (detail or "").strip():
+            detail = (
+                "PayTR ödeme sayfası açılamadı. "
+                "PayTR panelinde mağaza no, parola ve gizli anahtar doğru mu kontrol edin; "
+                "sorun sürerse destek@noryaai.com ile iletişime geçin."
+            )
+        raise HTTPException(status_code=400, detail=detail.strip())
 
     token = result.get("token", "")
     return {"status": "ok", "token": token, "merchant_oid": merchant_oid}
@@ -3549,9 +3558,10 @@ def payment_failed_page(
     return HTMLResponse(html)
 
 
+# --- PayTR callback (Bildirim URL): public, auth yok; POST ile PayTR sunucusu bildirim gönderir; başarıda plain text "OK" döner. ---
 @app.get("/paytr/callback")
 def paytr_callback_get():
-    """Tarayıcıda açıldığında: Bu URL sadece PayTR sunucusunun POST isteği içindir."""
+    """Tarayıcıda GET ile açıldığında 404 vermemek için: Bu URL sadece PayTR'nin POST isteği içindir."""
     return PlainTextResponse(
         "PayTR bildirim URL'i. Bu adres yalnızca PayTR sunucusu tarafından POST ile kullanılır.",
         status_code=200,
@@ -3560,19 +3570,25 @@ def paytr_callback_get():
 
 @app.post("/payment/callback")
 async def payment_callback(request: Request, db: Session = Depends(get_db)):
-    """PayTR bildirim URL: ödeme sonucu POST ile gelir."""
+    """PayTR bildirim URL: ödeme sonucu POST ile gelir. Public, auth yok. Başarılı işlemde plain text OK."""
     return await _paytr_callback_handle(request, db)
 
 
 @app.post("/paytr/callback")
 async def paytr_callback(request: Request, db: Session = Depends(get_db)):
-    """PayTR bildirim URL (alias): panelde Bildirim URL olarak https://noryaai.com/paytr/callback kullanılıyorsa bu route kullanılır."""
+    """PayTR bildirim URL (alias): panelde Bildirim URL https://noryaai.com/paytr/callback ise bu route kullanılır. Public, auth yok."""
+    return await _paytr_callback_handle(request, db)
+
+
+@app.post("/api/payment/callback")
+async def api_payment_callback(request: Request, db: Session = Depends(get_db)):
+    """PayTR bildirim URL (alias): /api/payment/callback kullanılıyorsa (örn. Render doc). Public, auth yok."""
     return await _paytr_callback_handle(request, db)
 
 
 @app.post("/api/paytr/webhook")
 async def paytr_webhook(request: Request, db: Session = Depends(get_db)):
-    """PayTR webhook (alias): aynı işlem, PayTR panelinde bu URL de kullanılabilir."""
+    """PayTR webhook (alias): aynı işlem. Public, auth yok."""
     return await _paytr_callback_handle(request, db)
 
 

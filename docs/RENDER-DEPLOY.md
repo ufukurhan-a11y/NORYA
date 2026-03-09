@@ -43,7 +43,7 @@ Aynı sayfada **Environment** / **Environment Variables** bölümüne git. **Add
 | `DATABASE_URL` | Boş bırakırsan SQLite kullanır (Render’da kalıcı değil). Kalıcı için Render PostgreSQL ekleyip connection string yapıştır. | İsteğe bağlı |
 | `SMTP_HOST` / `SMTP_USER` / `SMTP_PASSWORD` / `SMTP_FROM` | E-posta (şifre sıfırlama) için | İsteğe bağlı |
 | `PAYTR_MERCHANT_ID` / `PAYTR_MERCHANT_KEY` / `PAYTR_MERCHANT_SALT` | PayTR bilgilerin | Ödeme için |
-| `PAYTR_NOTIFICATION_URL` | `https://noryaai.com/api/payment/callback` | Ödeme için |
+| `PAYTR_NOTIFICATION_URL` | PayTR panelde **Bildirim URL** olarak girin: `https://noryaai.com/paytr/callback` veya `https://noryaai.com/api/payment/callback` (ikisi de çalışır) | Ödeme için |
 | `PAYTR_OK_URL` | `https://noryaai.com/#payment-ok` | Ödeme için |
 | `PAYTR_FAIL_URL` | `https://noryaai.com/#pricing` | Ödeme için |
 

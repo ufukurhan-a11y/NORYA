@@ -2831,6 +2831,9 @@ document.addEventListener('DOMContentLoaded', function(){
             if (r.status === 503) msg = (t.pay_error_not_available || 'Ödeme şu an aktif değil. PayTR ayarlarını kontrol edin.');
             else if (r.status >= 500) msg = (t.pay_error_connection || msg);
           }
+          if (msg === (t.pay_error_short || t.pay_error_connection) && r.status >= 400) {
+            msg = msg + ' (Hata kodu: ' + r.status + '. Sorun sürerse destek@noryaai.com ile iletişime geçin.)';
+          }
           throw new Error(msg);
         });
       }
