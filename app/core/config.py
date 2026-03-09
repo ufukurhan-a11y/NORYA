@@ -42,6 +42,7 @@ class Settings(BaseSettings):
     paytr_amount_monthly: int = 5400   # Aylık Pro (euro cent), 5400 = 54,00 €
     paytr_amount_yearly: int = 10692   # Yıllık Pro (euro cent), 10692 = 106,92 €
     paytr_test_mode: str = "0"         # Test için 1
+    paytr_debug: bool = False          # True ise get-token'da debug_on=1; PayTR detaylı hata döner (sadece test için)
     admin_secret: str = ""             # Manuel hak tanıma (destek): POST /payment/grant için
     upload_max_mb: int = 10            # /analyze/upload için max dosya boyutu (MB)
     environment: str = "development"   # production: admin cookie Secure=True

@@ -145,7 +145,7 @@
 
     /* Kampanya barı: anasayfa / pay.html ile aynı (turkuaz gradient + gölge) */
     .offer-strip{
-      display: flex;
+      display: flex !important;
       position: relative;
       z-index: 2;
       align-items: center;
@@ -158,6 +158,8 @@
       border-top: 2px solid rgba(13,148,136,0.6);
       border-bottom: 2px solid rgba(13,148,136,0.6);
       box-shadow: 0 4px 12px rgba(14,165,164,0.25);
+      visibility: visible !important;
+      overflow: visible;
     }
     .offer-strip.single-selected{
       background: linear-gradient(135deg, rgba(14,165,164,0.95) 0%, rgba(13,148,136,0.98) 100%);
@@ -219,6 +221,7 @@
       display: block !important;
       position: relative;
       z-index: 2;
+      min-height: 44px;
       padding: 12px 16px;
       text-align: center;
       font-size: 0.875rem;
@@ -228,6 +231,8 @@
       border-bottom: 1px solid rgba(14, 165, 164, 0.2) !important;
       color: #0f766e;
       line-height: 1.45;
+      visibility: visible !important;
+      overflow: visible;
     }
     #promo-strip-payment.promo-strip-active {
       background: rgba(14, 165, 164, 0.15) !important;

@@ -1432,9 +1432,16 @@ def _use_analysis_credit(db: Session, user: User, limit: int, kullanilan: int) -
 
 
 def _client_ip(request: Request) -> str:
+    """Müşteri IP'si; PayTR için proxy başlıkları öncelikli (Cloudflare, Render)."""
+    cf = request.headers.get("cf-connecting-ip")
+    if cf and cf.strip():
+        return cf.strip()
     xff = request.headers.get("x-forwarded-for")
     if xff:
         return xff.split(",")[0].strip()
+    xri = request.headers.get("x-real-ip")
+    if xri and xri.strip():
+        return xri.strip()
     return request.client.host if request.client else ""
 
 
@@ -2383,10 +2390,14 @@ def _paytr_amount_and_currency(amount_eur_cents: int) -> tuple[int, str]:
 def _paytr_reason_to_detail(reason: str | None) -> str:
     """PayTR 'reason' metnini kullanıcıya gösterilecek Türkçe mesaja çevirir."""
     if not reason:
-        return "PayTR token alınamadı."
+        return "PayTR token alınamadı. Lütfen sayfayı yenileyip tekrar deneyin; sorun sürerse destek@noryaai.com ile iletişime geçin."
     r = (reason or "").strip().lower()
-    if "magaza" in r or "mağaza" in r or "mağaza aktif" in r or "store" in r and "active" in r:
+    if "magaza" in r or "mağaza" in r or "mağaza aktif" in r or ("store" in r and "active" in r):
         return "Ödeme sistemi şu an kullanılamıyor. PayTR panelinde mağazanın aktif olduğunu ve entegrasyon bilgilerinin (Mağaza No, Parola, Gizli Anahtar) doğru girildiğini kontrol edin."
+    if "paytr_token" in r or "gecersiz" in r and "token" in r or "hash" in r:
+        return "Ödeme bağlantısı doğrulanamadı. Lütfen sayfayı yenileyip tekrar deneyin; sorun sürerse destek@noryaai.com ile iletişime geçin."
+    if "user_ip" in r or "ip" in r and ("gecersiz" in r or "invalid" in r):
+        return "Ödeme alınamadı (IP doğrulama). Lütfen VPN kullanmıyorsanız sayfayı yenileyip tekrar deneyin veya destek@noryaai.com ile iletişime geçin."
     return reason
 
 
@@ -2528,6 +2539,7 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     no_installment = "0"
     max_installment = "0"
     test_mode = getattr(settings, "paytr_test_mode", "0") or "0"
+    debug_on = "1" if getattr(settings, "paytr_debug", False) else "0"
     hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{paytr_amount}{user_basket}{no_installment}{max_installment}{paytr_currency}{test_mode}"
     paytr_token = base64.b64encode(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
@@ -2553,7 +2565,7 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         "payment_amount": paytr_amount,
         "paytr_token": paytr_token,
         "user_basket": user_basket,
-        "debug_on": "0",
+        "debug_on": debug_on,
         "no_installment": no_installment,
         "max_installment": max_installment,
         "user_name": ((body.name or user.full_name or "").strip() or "Müşteri")[:60],
@@ -2583,11 +2595,17 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         raise HTTPException(status_code=502, detail=f"PayTR bağlantı hatası: {str(e)[:80]}")
 
     if result.get("status") != "success":
+        reason = result.get("reason") or ""
+        log.warning(
+            "PAYTR_INIT: get-token failed merchant_oid=%s reason=%s full=%s",
+            merchant_oid, reason, result,
+        )
         order.status = "failed"
         order.admin_note = "init_failed"
         db.add(order)
         db.commit()
-        raise HTTPException(status_code=400, detail=_paytr_reason_to_detail(result.get("reason")))
+        detail = _paytr_reason_to_detail(reason)
+        raise HTTPException(status_code=400, detail=detail)
 
     token = result.get("token", "")
     return {"status": "ok", "token": token, "merchant_oid": merchant_oid}
@@ -3529,6 +3547,15 @@ def payment_failed_page(
 </body>
 </html>"""
     return HTMLResponse(html)
+
+
+@app.get("/paytr/callback")
+def paytr_callback_get():
+    """Tarayıcıda açıldığında: Bu URL sadece PayTR sunucusunun POST isteği içindir."""
+    return PlainTextResponse(
+        "PayTR bildirim URL'i. Bu adres yalnızca PayTR sunucusu tarafından POST ile kullanılır.",
+        status_code=200,
+    )
 
 
 @app.post("/payment/callback")
