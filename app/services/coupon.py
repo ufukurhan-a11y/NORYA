@@ -131,8 +131,12 @@ def get_active_campaign_for_checkout(
         products_raw = (coupon.products or "").strip().lower()
         if products_raw and products_raw != "none":
             allowed = [p.strip().lower() for p in coupon.products.split(",") if p.strip() and p.strip().lower() != "none"]
-            if allowed and product.lower() not in allowed:
-                continue
+            if allowed:
+                plan_code_lower = (plan_code or "").strip().lower()
+                product_lower = product.lower()
+                # Ürünler alanında "yearly" veya "yearly_99eur" yazılmış olabilir; ikisini de kabul et
+                if product_lower not in allowed and plan_code_lower not in allowed:
+                    continue
         discount_cents, _ = validate_coupon(db, coupon.code, product, base_amount)
         if discount_cents <= 0:
             continue

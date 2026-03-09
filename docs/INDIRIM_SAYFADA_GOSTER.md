@@ -15,7 +15,8 @@ Admin’den eklediğiniz indirim, ödeme sayfasında **kampanya şeridi** ve **i
 ## 2. Ürünler (products)
 
 - **Boş bırakırsanız:** İndirim **tüm planlarda** (Tek analiz, Aylık, Yıllık) kampanya olarak listelenir.
-- **Dolu (örn. `yearly`):** Sadece o plan seçiliyken kampanya gösterilir.  
+- **Dolu (örn. `yearly` veya `yearly_99eur`):** Sadece o plan seçiliyken kampanya gösterilir.  
+  Hem ürün adı (`yearly`, `monthly`, `single`) hem plan kodu (`yearly_99eur`, `monthly_50eur`, `single_13eur`) yazılabilir.  
   Ödeme sayfası varsayılan olarak yıllık planla açılıyorsa, sadece `single` yazdıysanız yıllıkta kampanya görünmez.
 
 İndirimin tüm planlarda görünmesini istiyorsanız **Ürünler** alanını boş bırakın.
