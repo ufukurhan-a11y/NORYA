@@ -65,8 +65,9 @@ def validate_coupon(
     if coupon.max_uses is not None and coupon.use_count >= coupon.max_uses:
         return 0, "Bu indirim kodunun kullanım limiti dolmuş."
 
-    if coupon.products:
-        allowed = [p.strip().lower() for p in coupon.products.split(",") if p.strip()]
+    products_raw = (coupon.products or "").strip().lower()
+    if products_raw and products_raw != "none":
+        allowed = [p.strip().lower() for p in coupon.products.split(",") if p.strip() and p.strip().lower() != "none"]
         if allowed and product.lower() not in allowed:
             return 0, "Bu indirim kodu seçilen ürün için geçerli değil."
 
@@ -127,8 +128,9 @@ def get_active_campaign_for_checkout(
             continue
         if coupon.max_uses is not None and (coupon.use_count or 0) >= coupon.max_uses:
             continue
-        if coupon.products:
-            allowed = [p.strip().lower() for p in coupon.products.split(",") if p.strip()]
+        products_raw = (coupon.products or "").strip().lower()
+        if products_raw and products_raw != "none":
+            allowed = [p.strip().lower() for p in coupon.products.split(",") if p.strip() and p.strip().lower() != "none"]
             if allowed and product.lower() not in allowed:
                 continue
         discount_cents, _ = validate_coupon(db, coupon.code, product, base_amount)

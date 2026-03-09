@@ -2420,6 +2420,19 @@ def paytr_init(
     if not _paytr_enabled():
         raise HTTPException(status_code=503, detail="Ödeme şu an aktif değil. PayTR ayarlarını kontrol edin.")
     try:
+        return _paytr_init_impl(body, request, current_user, db)
+    except HTTPException:
+        raise
+    except Exception as e:
+        log.exception("PayTR init failed")
+        raise HTTPException(
+            status_code=500,
+            detail=f"Ödeme başlatılamadı: {str(e)[:150]}",
+        )
+
+
+def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: User | None, db: Session):
+    try:
         product, amount = _plan_code_to_product_amount(body.plan_code)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
@@ -2499,9 +2512,15 @@ def paytr_init(
     from urllib.parse import urlencode
     from urllib.request import urlopen, Request as UrlRequest
 
-    merchant_id = settings.paytr_merchant_id
-    merchant_key = settings.paytr_merchant_key.encode() if isinstance(settings.paytr_merchant_key, str) else settings.paytr_merchant_key
-    merchant_salt = settings.paytr_merchant_salt
+    merchant_id = (settings.paytr_merchant_id or "").strip()
+    merchant_key = settings.paytr_merchant_key
+    if isinstance(merchant_key, str):
+        merchant_key = merchant_key.strip().encode("utf-8")
+    elif not isinstance(merchant_key, bytes):
+        merchant_key = str(merchant_key).encode("utf-8")
+    merchant_salt = (settings.paytr_merchant_salt or "").strip()
+    if not merchant_salt:
+        raise HTTPException(status_code=500, detail="PayTR merchant_salt yapılandırılmadı.")
     basket_amount_str = f"{paytr_amount / 100:.2f}" if paytr_currency == "TL" else f"{total_amount / 100:.2f}"
     user_basket = base64.b64encode(
         json.dumps([[f"Norya Plan: {body.plan_code} x{quantity}", basket_amount_str, 1]]).encode()
