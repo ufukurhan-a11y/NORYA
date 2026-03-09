@@ -119,10 +119,15 @@ async def register(
             )
         )
         db.commit()
-        try:
-            _send_verify_email(email, token_str, country or (get_country_from_ip(ip) if ip else None))
-        except Exception as e:
-            log.warning("Verify email send failed (user created): %s", e)
+        from app.services.email_sender import is_mail_configured
+
+        verify_email_sent = False
+        if is_mail_configured():
+            try:
+                _send_verify_email(email, token_str, country or (get_country_from_ip(ip) if ip else None))
+                verify_email_sent = True
+            except Exception as e:
+                log.warning("Verify email send failed (user created): %s", e)
         _audit(db, "register", user.id, ip)
         country = get_country_from_ip(ip)
         if country and not getattr(user, "country", None):
@@ -137,6 +142,7 @@ async def register(
             phone=getattr(user, "phone", None),
             country=getattr(user, "country", None),
             email_verified=bool(getattr(user, "email_verified_at", None)),
+            verify_email_sent=verify_email_sent,
         )
     except HTTPException:
         raise
@@ -317,10 +323,12 @@ def forgot_password(
     body: ForgotPasswordRequest,
     db: Session = Depends(get_db),
 ):
+    from app.services.email_sender import country_to_lang, is_mail_configured
+
     stmt = select(User).where(User.email == body.email)
     user = db.exec(stmt).first()
     if not user:
-        return {"message": "Bu e-posta kayıtlıysa şifre sıfırlama linki gönderildi."}
+        return {"message": "Bu e-posta kayıtlıysa şifre sıfırlama linki gönderildi.", "mail_sent": True}
     token_str = secrets.token_urlsafe(32)
     expiry_hours = 1
     db.add(
@@ -331,11 +339,12 @@ def forgot_password(
         )
     )
     db.commit()
-    from app.services.email_sender import country_to_lang
-
     lang = country_to_lang(getattr(user, "country", None))
-    _send_reset_email(body.email, token_str, lang, expiry_hours)
-    return {"message": "E-posta adresinize şifre sıfırlama linki gönderildi."}
+    mail_sent = False
+    if is_mail_configured():
+        _send_reset_email(body.email, token_str, lang, expiry_hours)
+        mail_sent = True
+    return {"message": "E-posta adresinize şifre sıfırlama linki gönderildi.", "mail_sent": mail_sent}
 
 
 @router.get("/verify-email")

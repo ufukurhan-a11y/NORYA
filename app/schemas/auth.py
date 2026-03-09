@@ -27,6 +27,7 @@ class UserResponse(BaseModel):
     phone: str | None = None
     country: str | None = None
     email_verified: bool = False
+    verify_email_sent: bool | None = None  # Sadece register cevabında: e-posta doğrulama linki gönderildi mi?
 
 
 class UserUpdate(BaseModel):
