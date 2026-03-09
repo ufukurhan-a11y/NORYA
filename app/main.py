@@ -2436,9 +2436,12 @@ def paytr_init(
         raise
     except Exception as e:
         log.exception("PayTR init failed")
+        msg = (str(e) or "").strip()[:200]
+        if not msg:
+            msg = "Beklenmeyen sunucu hatası. Terminal veya Render loglarında 'PayTR init failed' arayın."
         raise HTTPException(
             status_code=500,
-            detail=f"Ödeme başlatılamadı: {str(e)[:150]}",
+            detail=f"Ödeme başlatılamadı: {msg} (.env içinde PAYTR_MERCHANT_ID, PAYTR_MERCHANT_KEY, PAYTR_MERCHANT_SALT dolu mu kontrol edin.)",
         )
 
 
@@ -2527,14 +2530,20 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     merchant_id = raw_mid.replace("Value:", "").strip() if raw_mid else ""
     if not merchant_id:
         raise HTTPException(status_code=500, detail="PayTR merchant_id yapılandırılmadı. Ortam değişkeninde sadece mağaza numarası olmalı (örn. 677898).")
-    merchant_key = settings.paytr_merchant_key
-    if isinstance(merchant_key, str):
-        merchant_key = merchant_key.strip().encode("utf-8")
-    elif not isinstance(merchant_key, bytes):
-        merchant_key = str(merchant_key).encode("utf-8")
+    raw_key = getattr(settings, "paytr_merchant_key", None)
+    if not raw_key:
+        raise HTTPException(status_code=500, detail="PayTR merchant_key (parola) yapılandırılmadı. .env dosyasında PAYTR_MERCHANT_KEY dolu olmalı.")
+    if isinstance(raw_key, str):
+        merchant_key = raw_key.strip().encode("utf-8")
+    elif isinstance(raw_key, bytes):
+        merchant_key = raw_key
+    else:
+        merchant_key = str(raw_key).strip().encode("utf-8")
+    if not merchant_key:
+        raise HTTPException(status_code=500, detail="PayTR merchant_key boş olamaz.")
     merchant_salt = (settings.paytr_merchant_salt or "").strip()
     if not merchant_salt:
-        raise HTTPException(status_code=500, detail="PayTR merchant_salt yapılandırılmadı.")
+        raise HTTPException(status_code=500, detail="PayTR merchant_salt (gizli anahtar) yapılandırılmadı.")
     basket_amount_str = f"{paytr_amount / 100:.2f}" if paytr_currency == "TL" else f"{total_amount / 100:.2f}"
     user_basket = base64.b64encode(
         json.dumps([[f"Norya Plan: {body.plan_code} x{quantity}", basket_amount_str, 1]]).encode()
@@ -2543,12 +2552,13 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     max_installment = "0"
     test_mode = getattr(settings, "paytr_test_mode", "0") or "0"
     debug_on = "1" if getattr(settings, "paytr_debug", False) else "0"
-    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{paytr_amount}{user_basket}{no_installment}{max_installment}{paytr_currency}{test_mode}"
+    paytr_amount_int = int(paytr_amount)
+    hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{paytr_amount_int}{user_basket}{no_installment}{max_installment}{paytr_currency}{test_mode}"
     paytr_token = base64.b64encode(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
 
-    base_url = (request.base_url.rstrip("/") + "/").rstrip("/")
+    base_url = (str(request.base_url).rstrip("/") + "/").rstrip("/")
     ok_url = (getattr(settings, "paytr_ok_url", "") or "").strip() or f"{base_url}payment/success"
     fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{base_url}payment/failed"
     if "?" not in ok_url:
@@ -2565,7 +2575,7 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         "user_ip": user_ip,
         "merchant_oid": merchant_oid,
         "email": email,
-        "payment_amount": paytr_amount,
+        "payment_amount": paytr_amount_int,
         "paytr_token": paytr_token,
         "user_basket": user_basket,
         "debug_on": debug_on,
@@ -3155,7 +3165,7 @@ def payment_get_token_guest(
     paytr_token = base64.b64encode(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
-    base_url = (request.base_url.rstrip("/") + "/").rstrip("/")
+    base_url = (str(request.base_url).rstrip("/") + "/").rstrip("/")
     if body.success_url:
         parts = body.success_url.split("#", 1)
         success_base = parts[0].rstrip("/") or base_url
@@ -3354,7 +3364,7 @@ def payment_success_page(
     merchant_oid: str = Query("", description="Sipariş merchant_oid (PayTR yönlendirmesinde eklenir)"),
 ):
     """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir."""
-    base = request.base_url.rstrip("/")
+    base = str(request.base_url).rstrip("/")
     api_base = base
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
@@ -3519,7 +3529,7 @@ def payment_failed_page(
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
 ):
     """Ödeme tamamlanamadı sayfası. Tüm dillerde ve mobil uyumlu."""
-    base = request.base_url.rstrip("/")
+    base = str(request.base_url).rstrip("/")
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
         lang = "tr"
