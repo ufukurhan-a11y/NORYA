@@ -875,10 +875,13 @@ PAYMENT_LANGS = ("tr", "en", "de", "fr", "it", "es")
 
 
 def _payment_lang_from_request(request: Request) -> str:
-    """Ödeme sayfası dili: müşteri hangi dilden girdiyse ona göre. Önce ?lang=, yoksa Accept-Language."""
+    """Ödeme sayfası dili: sitede seçilen dil (cookie) veya ?lang= veya tarayıcı dili."""
     lang_q = (request.query_params.get("lang") or "").strip().lower()[:2]
     if lang_q in PAYMENT_LANGS:
         return lang_q
+    lang_cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+    if lang_cookie in PAYMENT_LANGS:
+        return lang_cookie
     browser = _parse_accept_language(request.headers.get("accept-language"))
     return browser if browser in PAYMENT_LANGS else "tr"
 

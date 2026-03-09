@@ -7089,7 +7089,7 @@
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme", trust_badge_qr: "QR ile rapor doğrulama",
-        promo_strip_cta: "Ödeme sayfasında uygula", promo_strip_code_label: "Kod", promo_strip_discount_pct: "%{percent} kış indirimi",
+        promo_strip_cta: "Ödeme sayfasında uygula", promo_strip_code_label: "İndirim kodu", promo_strip_discount_pct: "{percent}% kış indirimi",
         trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_bar_qr: "QR rapor doğrulama", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", health_score_card_title: "Health Score", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
         features_heading: "Güvenilir sağlık içgörüleri, gerçek hayat için tasarlandı.",
         features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
@@ -7455,7 +7455,7 @@
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR", trust_badge_qr: "QR report verification",
-        promo_strip_cta: "Apply on the payment page", promo_strip_code_label: "Code", promo_strip_discount_pct: "{percent}% winter discount",
+        promo_strip_cta: "Apply on the payment page", promo_strip_code_label: "Discount code", promo_strip_discount_pct: "{percent}% winter discount",
         trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_bar_qr: "QR report verification", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
         features_heading: "Trusted health insights, designed for real life.",
         features_sub: "Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.",
@@ -9996,6 +9996,22 @@
         a.setAttribute('href', href + '?lang=' + encodeURIComponent(lang));
       });
     }
+    function updatePaymentLinksLang() {
+      var lang = (typeof getLang === 'function') ? getLang() : 'en';
+      document.querySelectorAll('a[href*="/payment"]').forEach(function(a) {
+        var href = a.getAttribute('href') || '';
+        if (href.indexOf('/payment') === -1) return;
+        try {
+          var path = href.split('?')[0];
+          var qs = href.indexOf('?') >= 0 ? href.slice(href.indexOf('?') + 1) : '';
+          var params = new URLSearchParams(qs);
+          params.set('lang', lang);
+          a.setAttribute('href', path + '?' + params.toString());
+        } catch (_) {
+          a.setAttribute('href', (href.split('?')[0] || '/payment') + '?lang=' + encodeURIComponent(lang));
+        }
+      });
+    }
     function getTranslation(lang, key) {
       if (typeof T === 'undefined' || !key) return '';
       key = String(key).trim();
@@ -10020,10 +10036,12 @@
       if (typeof T === 'undefined') return;
       if (!T[lang]) lang = "en";
       localStorage.setItem(LANG_KEY, lang);
+      try { document.cookie = "norya_lang=" + encodeURIComponent(lang) + "; path=/; max-age=31536000; samesite=lax"; } catch (_) {}
       document.documentElement.lang = lang;
       document.documentElement.setAttribute('lang', lang);
       document.documentElement.dir = (lang === "ar" || lang === "he") ? "rtl" : "ltr";
       if (typeof updateLegalLinksLang === 'function') updateLegalLinksLang();
+      if (typeof updatePaymentLinksLang === 'function') updatePaymentLinksLang();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
       document.querySelectorAll(".lang-opt").forEach(function(opt) {
@@ -11730,12 +11748,16 @@
       var fixedLink = document.getElementById('promo-strip-fixed-link');
       var homeLink = document.getElementById('promo-strip-home-link');
       function getPromoLang() { return (typeof getLang === 'function' ? getLang() : (document.documentElement.getAttribute('lang') || 'tr')).slice(0, 2); }
-      function getPromoT(lang) { return (typeof T !== 'undefined' && T[lang]) ? T[lang] : (typeof T !== 'undefined' && T.tr) ? T.tr : {}; }
+      function getPromoT(lang) {
+        if (typeof T === 'undefined') return {};
+        var l = (lang || getPromoLang()).slice(0, 2);
+        return T[l] || T.en || T.tr || {};
+      }
       function buildPromoLine(campaign, lang) {
         var t = getPromoT(lang);
         var pct = (campaign && campaign.discountValue != null) ? String(campaign.discountValue) : '35';
-        var discountLabel = (t.promo_strip_discount_pct || '').replace(/\{percent\}/g, pct) || (lang === 'tr' ? '%' + pct + ' kış indirimi' : pct + '% winter discount');
-        var codeLabel = t.promo_strip_code_label || (lang === 'tr' ? 'Kod' : 'Code');
+        var discountLabel = (t.promo_strip_discount_pct || '').replace(/\{percent\}/g, pct).replace(/%\{percent\}/g, pct) || (lang === 'tr' ? pct + '% kış indirimi' : pct + '% winter discount');
+        var codeLabel = t.promo_strip_code_label || (lang === 'tr' ? 'İndirim kodu' : 'Discount code');
         var code = (campaign && campaign.promoCode) ? campaign.promoCode : 'WINTER35';
         return discountLabel + ' — ' + codeLabel + ': ' + code + '. ';
       }
@@ -11771,7 +11793,7 @@
         .then(function(data) {
           if (data.active && data.campaign && data.campaign.promoCode) {
             window.__lastCampaign = data.campaign;
-            applyPromoStrip(data.campaign, lang);
+            applyPromoStrip(data.campaign, getPromoLang());
           }
         })
         .catch(function() {});
