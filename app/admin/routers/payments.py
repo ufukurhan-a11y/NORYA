@@ -50,9 +50,15 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
         }
         for o in orders
     ]
+    # PayTR panelde girilmesi gereken bildirim URL (canonical domain)
+    base = (request.base_url or "").rstrip("/")
+    if "localhost" in base or "127.0.0.1" in base:
+        paytr_callback_url = "https://noryaai.com/paytr/callback"
+    else:
+        paytr_callback_url = f"{base}/paytr/callback"
     return templates.TemplateResponse(
         "admin/payments_list.html",
-        {"request": request, "payments": rows, "status_filter": status_filter or ""},
+        {"request": request, "payments": rows, "status_filter": status_filter or "", "paytr_callback_url": paytr_callback_url},
     )
 
 

@@ -13,7 +13,18 @@
   <p class="text-xs text-amber-200/80 mt-2">Sadece <strong>tamamlanmış</strong> (completed) siparişlerde fatura kesilebilir.</p>
 </div>
 
-<p class="text-slate-400 text-sm mb-4">Ödemeler (EUR). Webhook: <code class="bg-slate-700 px-1 rounded">/payment/callback</code></p>
+<p class="text-slate-400 text-sm mb-4">Ödemeler (EUR). PayTR panelde <strong>Bildirim URL</strong> = <code class="bg-slate-700 px-1 rounded">{{ paytr_callback_url|default('https://noryaai.com/paytr/callback') }}</code></p>
+{% if not payments %}
+<div class="mb-4 p-4 rounded-xl bg-slate-800/80 border border-slate-600 text-slate-300 text-sm">
+  <p class="font-semibold text-amber-400 mb-2">Ödeme listede görünmüyorsa kontrol edin:</p>
+  <ul class="list-disc list-inside space-y-1">
+    <li><strong>PayTR panel</strong> → Mağaza ayarları → <strong>Bildirim URL</strong> = <code class="text-xs">{{ paytr_callback_url|default('https://noryaai.com/paytr/callback') }}</code></li>
+    <li>Test kartı kullandıysanız: panelde <strong>Test modu</strong> açık, .env’de <code>PAYTR_TEST_MODE=1</code> (canlıda 0)</li>
+    <li>Ödemeyi siteden (Güvenli ödemeye geç) başlattıysanız sipariş oluşur; PayTR ödeme sonrası bu URL’ye POST atar — ulaşmazsa kayıt güncellenmez.</li>
+    <li>Sunucu loglarında <code>PAYTR_CALLBACK</code> veya <code>unknown_order</code> arayın (Render Logs / Events).</li>
+  </ul>
+</div>
+{% endif %}
 <div class="flex gap-2 mb-4">
   <a href="/admin/payments" class="px-3 py-1.5 rounded {% if not status_filter %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Tümü</a>
   <a href="/admin/payments?status_filter=completed" class="px-3 py-1.5 rounded {% if status_filter == 'completed' %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Başarılı</a>
