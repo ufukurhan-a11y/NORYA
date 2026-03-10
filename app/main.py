@@ -2357,13 +2357,32 @@ def get_shared_analysis(token: str, db: Session = Depends(get_db)):
     }
 
 
-# ---------- Ödeme: PayTR (Türkiye sanal pos), önce öde sonra analiz ----------
+# ---------- Ödeme: PayTR (Türkiye sanal pos), tam sayfa yönlendirme (iframe yok) ----------
 def _paytr_enabled() -> bool:
     return bool(
         getattr(settings, "paytr_merchant_id", None)
         and getattr(settings, "paytr_merchant_key", None)
         and getattr(settings, "paytr_merchant_salt", None)
     )
+
+
+def _paytr_canonical_base(request: Request) -> str:
+    """PayTR success/fail/callback URL'leri için tek canonical domain (www/non-www uyumlu)."""
+    base = (getattr(settings, "frontend_url", "") or "").strip().rstrip("/")
+    if not base:
+        base = str(request.base_url).rstrip("/")
+    # Tek domain: www.noryaai.com ve noryaai.com -> https://noryaai.com
+    try:
+        from urllib.parse import urlparse
+        p = urlparse(base)
+        host = (p.netloc or "").lower()
+        if host.startswith("www."):
+            host = host[4:]
+        if host in ("noryaai.com", "noryaai.com.tr"):
+            base = f"{p.scheme or 'https'}://{host}"
+        return base.rstrip("/")
+    except Exception:
+        return base.rstrip("/")
 
 
 def _paytr_amount(product: str) -> int:
@@ -2550,7 +2569,9 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     ).decode()
     no_installment = "0"
     max_installment = "0"
-    test_mode = getattr(settings, "paytr_test_mode", "0") or "0"
+    # Canlıda test modu kapalı olmalı
+    _env = (getattr(settings, "environment", "") or "").strip().lower()
+    test_mode = "0" if _env == "production" else (getattr(settings, "paytr_test_mode", "0") or "0")
     debug_on = "1" if getattr(settings, "paytr_debug", False) else "0"
     paytr_amount_int = int(paytr_amount)
     hash_str = f"{merchant_id}{user_ip}{merchant_oid}{email}{paytr_amount_int}{user_basket}{no_installment}{max_installment}{paytr_currency}{test_mode}"
@@ -2558,9 +2579,8 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
 
-    # Canlı modda proxy arkasında request.base_url yanlış olabilir; PayTR doğru callback istiyor.
-    _public_base = (getattr(settings, "frontend_url", "") or "").strip().rstrip("/")
-    _base = _public_base or str(request.base_url).rstrip("/")
+    # Tek canonical domain (noryaai.com / www.noryaai.com uyumlu); success/fail URL'leri
+    _base = _paytr_canonical_base(request)
     ok_url = (getattr(settings, "paytr_ok_url", "") or "").strip() or f"{_base}/payment/success"
     fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{_base}/payment/failed"
     if "?" not in ok_url:
@@ -2571,6 +2591,8 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         fail_url = f"{fail_url}?merchant_oid={merchant_oid}"
     else:
         fail_url = f"{fail_url}&merchant_oid={merchant_oid}"
+
+    log.info("PAYTR_INIT: merchant_ok_url=%s merchant_fail_url=%s", ok_url[:80], fail_url[:80])
 
     post_vals = {
         "merchant_id": merchant_id,
@@ -2606,7 +2628,7 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         order.admin_note = "init_failed"
         db.add(order)
         db.commit()
-        log.warning("PAYTR_INIT: PayTR get-token failed merchant_oid=%s err=%s", merchant_oid, str(e)[:100])
+        log.warning("PAYTR_INIT: get-token request failed merchant_oid=%s err=%s", merchant_oid, str(e)[:100])
         raise HTTPException(status_code=502, detail=f"PayTR bağlantı hatası: {str(e)[:80]}")
 
     if result.get("status") != "success":
@@ -2626,10 +2648,13 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
                 "PayTR panelinde mağaza no, parola ve gizli anahtar doğru mu kontrol edin; "
                 "sorun sürerse destek@noryaai.com ile iletişime geçin."
             )
+        if reason and ("PayTR:" not in detail and "paytr" not in detail.lower()):
+            detail = f"{detail.strip()} (PayTR yanıtı: {reason})"
         raise HTTPException(status_code=400, detail=detail.strip())
 
     token = result.get("token", "")
-    return {"status": "ok", "token": token, "merchant_oid": merchant_oid}
+    redirect_url = f"https://www.paytr.com/odeme/guvenli/{token}"
+    return {"status": "ok", "token": token, "redirect_url": redirect_url, "merchant_oid": merchant_oid}
 
 
 def _validate_merchant_oid(merchant_oid: str) -> str:
@@ -2878,9 +2903,8 @@ def payment_page_premium(
     """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kampanya admin’deki aktif kampanyaya bağlı."""
     lang = _payment_lang_from_request(request)
     t = get_pay_ui(lang)
-    # Proxy/Render'da request.base_url yanlış dönebilir; statik ve API istekleri için public URL kullan.
-    _public = (getattr(settings, "frontend_url", "") or "").strip().rstrip("/")
-    base_url = _public or str(request.base_url).rstrip("/")
+    # Tek canonical domain (statik ve API istekleri)
+    base_url = _paytr_canonical_base(request)
     plans = [
         {"code": "single_13eur", "price": "14.04", "price_cents": 1404, "label_key": "plan_single", "product": "single"},
         {"code": "monthly_50eur", "price": "54", "price_cents": 5400, "label_key": "plan_monthly", "product": "monthly"},
@@ -3394,7 +3418,7 @@ def payment_success_page(
     merchant_oid: str = Query("", description="Sipariş merchant_oid (PayTR yönlendirmesinde eklenir)"),
 ):
     """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir."""
-    base = str(request.base_url).rstrip("/")
+    base = _paytr_canonical_base(request)
     api_base = base
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
@@ -3559,7 +3583,7 @@ def payment_failed_page(
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
 ):
     """Ödeme tamamlanamadı sayfası. Tüm dillerde ve mobil uyumlu."""
-    base = str(request.base_url).rstrip("/")
+    base = _paytr_canonical_base(request)
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
         lang = "tr"
