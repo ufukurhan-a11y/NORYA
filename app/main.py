@@ -2579,20 +2579,22 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
 
-    # Tek canonical domain (noryaai.com / www.noryaai.com uyumlu); success/fail URL'leri
+    # Dil: ödeme sayfasından gelen veya istekten; success/fail ve PayTR sayfası bu dilde
+    _lang_raw = (getattr(body, "lang", None) or "").strip().lower()[:2]
+    # PayTR yalnızca tr/en destekler; Kanada vb. uluslararası müşteriler için en kullan
+    paytr_lang = _lang_raw if _lang_raw in ("tr", "en") else "en"
+    return_lang = _lang_raw if _lang_raw in PAYMENT_LANGS else _payment_lang_from_request(request)
+
+    # Tek canonical domain; success/fail URL'lerine merchant_oid ve lang ekle (dönüşte aynı dil)
     _base = _paytr_canonical_base(request)
     ok_url = (getattr(settings, "paytr_ok_url", "") or "").strip() or f"{_base}/payment/success"
     fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{_base}/payment/failed"
-    if "?" not in ok_url:
-        ok_url = f"{ok_url}?merchant_oid={merchant_oid}"
-    else:
-        ok_url = f"{ok_url}&merchant_oid={merchant_oid}"
-    if "?" not in fail_url:
-        fail_url = f"{fail_url}?merchant_oid={merchant_oid}"
-    else:
-        fail_url = f"{fail_url}&merchant_oid={merchant_oid}"
+    sep_ok = "?" if "?" not in ok_url else "&"
+    ok_url = f"{ok_url}{sep_ok}merchant_oid={merchant_oid}&lang={return_lang}"
+    sep_fail = "?" if "?" not in fail_url else "&"
+    fail_url = f"{fail_url}{sep_fail}merchant_oid={merchant_oid}&lang={return_lang}"
 
-    log.info("PAYTR_INIT: merchant_ok_url=%s merchant_fail_url=%s", ok_url[:80], fail_url[:80])
+    log.info("PAYTR_INIT: merchant_ok_url=%s merchant_fail_url=%s lang=%s", ok_url[:80], fail_url[:80], return_lang)
 
     post_vals = {
         "merchant_id": merchant_id,
@@ -2613,6 +2615,7 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         "timeout_limit": "30",
         "currency": paytr_currency,
         "test_mode": test_mode,
+        "lang": paytr_lang,
     }
     try:
         req = UrlRequest(

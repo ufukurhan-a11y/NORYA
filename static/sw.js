@@ -21,8 +21,15 @@ self.addEventListener('activate', function (e) {
 self.addEventListener('fetch', function (e) {
   var u = new URL(e.request.url);
   if (u.origin !== location.origin) return;
-  if (u.pathname.startsWith('/api/') || u.pathname.startsWith('/auth/') || u.pathname.startsWith('/analyze')) {
-    e.respondWith(fetch(e.request).catch(function () { return caches.match(e.request); }));
+  /* Ödeme ve API: her zaman ağa git, cache ile yanıt verme (undefined Response hatası önlenir) */
+  if (u.pathname.startsWith('/paytr/') || u.pathname.startsWith('/api/') || u.pathname.startsWith('/auth/') || u.pathname.startsWith('/analyze')) {
+    e.respondWith(
+      fetch(e.request).catch(function () {
+        return caches.match(e.request).then(function (c) {
+          return c || new Response(JSON.stringify({ error: 'network' }), { status: 502, headers: { 'Content-Type': 'application/json' } });
+        });
+      })
+    );
     return;
   }
   if (u.pathname === '/' || u.pathname === '/static/index.html' || u.pathname.startsWith('/static/')) {

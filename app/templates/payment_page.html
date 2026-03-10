@@ -2773,7 +2773,8 @@ document.addEventListener('DOMContentLoaded', function(){
 
     var name = nameInput ? nameInput.value.trim() : '';
     var coupon = couponInput ? couponInput.value.trim() : '';
-    var payload = { plan_code: selectedPlan, quantity: selectedQuantity || 1, email: email || undefined, name: name || undefined, coupon_code: coupon || undefined };
+    var pageLang = (document.documentElement.getAttribute('lang') || 'tr').toLowerCase().slice(0, 2);
+    var payload = { plan_code: selectedPlan, quantity: selectedQuantity || 1, email: email || undefined, name: name || undefined, coupon_code: coupon || undefined, lang: pageLang };
     if (planCodeInput) planCodeInput.value = selectedPlan;
 
     var timeoutMs = 25000;

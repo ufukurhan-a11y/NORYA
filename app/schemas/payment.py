@@ -32,10 +32,11 @@ class GuestSessionRequest(BaseModel):
 
 
 class PaytrInitRequest(BaseModel):
-    """PayTR iFrame başlatma: plan_code ile paket seçimi, opsiyonel kupon, adet/süre çarpanı."""
+    """PayTR tam sayfa ödeme başlatma: plan_code, opsiyonel kupon, dil (success/fail ve PayTR sayfası)."""
     plan_code: str  # single_13eur | monthly_50eur | yearly_99eur
     quantity: int = 1  # Tek analiz: adet (1-10); Aylık: ay (1-6); Yıllık: yıl (1-3)
     user_id: int | None = None
     email: str | None = None
     name: str | None = None
     coupon_code: str | None = None  # Ödeme sayfasında uygulanan kupon; backend doğrular.
+    lang: str | None = None  # Ödeme sayfası dili; success/fail ve PayTR ekranı bu dilde (tr, en vb.)
