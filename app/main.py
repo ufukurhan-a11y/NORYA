@@ -1553,7 +1553,9 @@ def _attach_original_file(
 
 
 def _is_test_mode(request: Request) -> bool:
-    """Sınırsız test modu: X-Test-Mode: 1 header'ı veya ?test=1 query."""
+    """Sınırsız test modu: canlıda kapalı; development'ta X-Test-Mode: 1 veya ?test=1 ile açılır."""
+    if (getattr(settings, "environment", "") or "").strip().lower() == "production":
+        return False
     return (
         request.headers.get("X-Test-Mode") == "1"
         or request.query_params.get("test") == "1"

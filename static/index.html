@@ -5725,6 +5725,8 @@
     const LANG_KEY = 'norya_lang';
     const TEST_MODE_KEY = 'norya_test_mode';
     const THEME_KEY = 'norya_theme';
+    /** Canlı ortam: test modu butonu ve rozet gösterilmez, hak düşülür. */
+    function isProduction() { var h = window.location.hostname || ''; return h === 'noryaai.com' || h === 'www.noryaai.com'; }
     var lastAnalysisId = null;
     var lastShareToken = null;
 
@@ -9807,13 +9809,19 @@
       var search = window.location.search || '';
       window.location.href = newPath + search + hash;
     }
-    function getTestMode() { return localStorage.getItem(TEST_MODE_KEY) === '1'; }
-    function setTestMode(on) { localStorage.setItem(TEST_MODE_KEY, on ? '1' : ''); updateTestModeUI(); }
+    function getTestMode() { if (isProduction()) return false; return localStorage.getItem(TEST_MODE_KEY) === '1'; }
+    function setTestMode(on) { if (isProduction()) return; localStorage.setItem(TEST_MODE_KEY, on ? '1' : ''); updateTestModeUI(); }
     function toggleTestMode() { setTestMode(!getTestMode()); }
     function updateTestModeUI() {
-      var on = getTestMode();
       var btn = document.getElementById('test-mode-btn');
       var badge = document.getElementById('test-mode-badge');
+      if (isProduction()) {
+        try { localStorage.removeItem(TEST_MODE_KEY); } catch (_) {}
+        if (btn) btn.classList.add('hidden');
+        if (badge) badge.classList.add('hidden');
+        return;
+      }
+      var on = getTestMode();
       if (btn) btn.classList.toggle('hidden', on);
       if (badge) badge.classList.toggle('hidden', !on);
     }
