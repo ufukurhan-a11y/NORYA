@@ -1253,6 +1253,7 @@
       line-height: 1.4;
       color: rgb(30 41 59);
       -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
       transition: background 0.2s ease;
       position: relative;
     }
@@ -1729,6 +1730,9 @@
     .lang-dropdown-max-h { max-height: 70vh; }
     @supports (height: 100dvh) { .lang-dropdown-max-h { max-height: 70dvh; } }
     .lang-opt { margin: 0; }
+    @media (max-width: 768px) {
+      #lang-modal .lang-opt { min-height: 48px; padding: 12px 16px; font-size: 1rem; display: flex; align-items: center; }
+    }
     #nav-menu-dropdown a, #nav-menu-dropdown button { margin: 2px 0; }
     .nav-menu-mobile-only { display: none; }
     @media (max-width: 640px) {
@@ -2365,17 +2369,17 @@
             <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
           </button>
           <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h lang-dropdown-panel" style="right: 0; top: 0;" role="listbox" aria-label="Dil seçin">
-            <button type="button" role="option" data-lang="en" class="lang-opt rounded-t-xl" aria-selected="false" onclick="console.log('switching to en'); window.__noryaLangGo('en')">English</button>
-            <button type="button" role="option" data-lang="de" class="lang-opt" aria-selected="false" onclick="console.log('switching to de'); window.__noryaLangGo('de')">Deutsch</button>
-            <button type="button" role="option" data-lang="it" class="lang-opt" aria-selected="false" onclick="console.log('switching to it'); window.__noryaLangGo('it')">Italiano</button>
-            <button type="button" role="option" data-lang="fr" class="lang-opt" aria-selected="false" onclick="console.log('switching to fr'); window.__noryaLangGo('fr')">Français</button>
-            <button type="button" role="option" data-lang="es" class="lang-opt" aria-selected="false" onclick="console.log('switching to es'); window.__noryaLangGo('es')">Español</button>
-            <button type="button" role="option" data-lang="tr" class="lang-opt" aria-selected="false" onclick="console.log('switching to tr'); window.__noryaLangGo('tr')">Türkçe</button>
-            <button type="button" role="option" data-lang="ar" class="lang-opt" dir="rtl" aria-selected="false" onclick="console.log('switching to ar'); window.__noryaLangGo('ar')">العربية</button>
-            <button type="button" role="option" data-lang="hi" class="lang-opt" aria-selected="false" onclick="console.log('switching to hi'); window.__noryaLangGo('hi')">हिन्दी</button>
-            <button type="button" role="option" data-lang="he" class="lang-opt" dir="rtl" aria-selected="false" onclick="console.log('switching to he'); window.__noryaLangGo('he')">עברית</button>
-            <button type="button" role="option" data-lang="el" class="lang-opt" aria-selected="false" onclick="console.log('switching to el'); window.__noryaLangGo('el')">Ελληνικά</button>
-            <button type="button" role="option" data-lang="sr" class="lang-opt rounded-b-xl" aria-selected="false" onclick="console.log('switching to sr'); window.__noryaLangGo('sr')">Srpski</button>
+            <button type="button" role="option" data-lang="en" class="lang-opt rounded-t-xl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('en'); else window.__noryaLangGo('en');">English</button>
+            <button type="button" role="option" data-lang="de" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('de'); else window.__noryaLangGo('de');">Deutsch</button>
+            <button type="button" role="option" data-lang="it" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('it'); else window.__noryaLangGo('it');">Italiano</button>
+            <button type="button" role="option" data-lang="fr" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('fr'); else window.__noryaLangGo('fr');">Français</button>
+            <button type="button" role="option" data-lang="es" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('es'); else window.__noryaLangGo('es');">Español</button>
+            <button type="button" role="option" data-lang="tr" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('tr'); else window.__noryaLangGo('tr');">Türkçe</button>
+            <button type="button" role="option" data-lang="ar" class="lang-opt" dir="rtl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('ar'); else window.__noryaLangGo('ar');">العربية</button>
+            <button type="button" role="option" data-lang="hi" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('hi'); else window.__noryaLangGo('hi');">हिन्दी</button>
+            <button type="button" role="option" data-lang="he" class="lang-opt" dir="rtl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('he'); else window.__noryaLangGo('he');">עברית</button>
+            <button type="button" role="option" data-lang="el" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('el'); else window.__noryaLangGo('el');">Ελληνικά</button>
+            <button type="button" role="option" data-lang="sr" class="lang-opt rounded-b-xl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('sr'); else window.__noryaLangGo('sr');">Srpski</button>
           </div>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
@@ -9829,8 +9833,9 @@
         m.style.position = "fixed";
         m.style.maxHeight = "70vh";
         m.style.pointerEvents = "auto";
-        if (btn) {
-          var r = btn.getBoundingClientRect();
+        var r = btn ? btn.getBoundingClientRect() : { width: 0, height: 0, right: 0, bottom: 0 };
+        var triggerVisible = r && r.width > 0 && r.height > 0;
+        if (btn && triggerVisible) {
           var w = 208;
           var left = r.right - w;
           if (left < 8) left = 8;
@@ -9840,6 +9845,7 @@
           m.style.top = (r.bottom + 8) + "px";
           m.style.transform = "none";
         } else {
+          /* Mobil: drawer'dan açıldığında buton gizli (header-desktop-only), modalı ekran ortasında göster */
           m.style.left = "50%";
           m.style.right = "auto";
           m.style.top = "50%";
@@ -11766,8 +11772,10 @@
       }
       function buildPromoLine(campaign, lang) {
         var t = getPromoT(lang);
-        var pct = (campaign && campaign.discountValue != null) ? String(campaign.discountValue) : '35';
-        var discountLabel = (t.promo_strip_discount_pct || '').replace(/\{percent\}/g, pct).replace(/%\{percent\}/g, pct) || (lang === 'tr' ? pct + '% kış indirimi' : pct + '% winter discount');
+        var discountVal = (campaign && (campaign.discountValue != null && campaign.discountValue !== '')) ? campaign.discountValue : (campaign && campaign.discount_value != null ? campaign.discount_value : null);
+        var isPercent = !campaign || (campaign.discountType || 'percent') === 'percent';
+        var pct = (discountVal != null && isPercent) ? String(discountVal) : (campaign && campaign.campaignTitle ? '' : '35');
+        var discountLabel = pct !== '' ? ((t.promo_strip_discount_pct || '').replace(/\{percent\}/g, pct).replace(/%\{percent\}/g, pct) || (lang === 'tr' ? pct + '% kış indirimi' : pct + '% winter discount')) : ((campaign && campaign.campaignTitle) || (lang === 'tr' ? 'İndirim' : 'Discount'));
         var codeLabel = t.promo_strip_code_label || (lang === 'tr' ? 'İndirim kodu' : 'Discount code');
         var code = (campaign && campaign.promoCode) ? campaign.promoCode : 'WINTER35';
         return discountLabel + ' — ' + codeLabel + ': ' + code + '. ';
