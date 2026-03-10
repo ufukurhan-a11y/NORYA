@@ -2564,7 +2564,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function fetchCampaignForPlan(planCode, done) {
     if (!planCode) { if (done) done({ campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', discountType: '', discountValue: 0, applicablePlans: '', promoCode: '', autoApply: false }); return; }
     var lang = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
-    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(planCode) + '&lang=' + encodeURIComponent(lang), { credentials: 'include', cache: 'no-store' })
+    fetch(baseUrl + '/api/campaigns/active?plan_code=' + encodeURIComponent(planCode) + '&lang=' + encodeURIComponent(lang) + '&_=' + (window.performance && window.performance.now ? Math.floor(performance.now()) : Date.now()), { credentials: 'include', cache: 'no-store' })
       .then(function(r){ return r.json(); })
       .then(function(data){ if (done) done(data.campaign || {}); })
       .catch(function(){ if (done) done({ campaignActive: false, campaignTitle: '', campaignMessage: '', campaignBadge: '', discountType: '', discountValue: 0, applicablePlans: '', promoCode: '', autoApply: false }); });
@@ -2573,7 +2573,7 @@ document.addEventListener('DOMContentLoaded', function(){
   /** Anasayfadaki gibi ana bar: /api/campaigns/featured ile herhangi bir aktif kampanyayı göster (yıllık/aylık/tek fark etmez). */
   function loadFeaturedCampaignForStrip() {
     var lang = (document.documentElement.getAttribute('lang') || 'tr').slice(0, 2);
-    fetch(baseUrl + '/api/campaigns/featured?lang=' + encodeURIComponent(lang), { credentials: 'include', cache: 'no-store' })
+    fetch(baseUrl + '/api/campaigns/featured?lang=' + encodeURIComponent(lang) + '&_=' + (window.performance && window.performance.now ? Math.floor(performance.now()) : Date.now()), { credentials: 'include', cache: 'no-store' })
       .then(function(r){ return r.json(); })
       .then(function(data){
         var active = !!(data && data.active && data.campaign);

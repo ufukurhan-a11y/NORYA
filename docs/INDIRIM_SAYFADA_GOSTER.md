@@ -39,6 +39,28 @@ Admin’den eklediğiniz indirim, ödeme sayfasında **kampanya şeridi** ve **i
 
 ---
 
+## Canlıda hâlâ görünmüyorsa
+
+1. **Kampanyayı canlı admin’den ekleyin**  
+   Yerel (localhost) değil, **https://noryaai.com/admin** → İndirim kodları → yeni/düzenle. Canlı veritabanı (Render’daki DB) ayrıdır.
+
+2. **“Ödeme sayfasında kampanya olarak göster”** kutusu işaretli mi?  
+   İşaretli değilse kampanya şeridi hiç çıkmaz.
+
+3. **Tarayıcı önbelleği**  
+   Sayfayı **sıkı yenile** (Ctrl+Shift+R / Cmd+Shift+R) veya gizli pencerede açın.
+
+4. **API’yi doğrudan test edin**  
+   Tarayıcıda açın:  
+   `https://noryaai.com/api/campaigns/featured?lang=tr&_=1`  
+   Yanıtta `"active": true` ve `"campaign": { ... }` görüyorsanız kampanya sunucuda var demektir; sorun önbellek veya frontend.  
+   `"active": false` ise canlı veritabanında uygun (aktif + ödeme sayfasında göster) kampanya yok; admin’de ayarları kontrol edin.
+
+5. **Deploy**  
+   Son kod değişiklikleri (cache-busting, no-cache header) deploy edildi mi? Render’da son deploy’u kontrol edin.
+
+---
+
 ## Hızlı kontrol listesi
 
 | Kontrol | Açıklama |

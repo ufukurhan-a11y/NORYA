@@ -2949,7 +2949,11 @@ def coupon_validate(
 
 
 # Kampanya API'leri: canlıda indirim güncellenince hemen görünsün diye önbelleklenmez
-_CAMPAIGN_NO_CACHE_HEADERS = {"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"}
+_CAMPAIGN_NO_CACHE_HEADERS = {
+    "Cache-Control": "no-cache, no-store, must-revalidate",
+    "Pragma": "no-cache",
+    "Expires": "0",
+}
 
 
 @app.get("/api/campaigns/active")
