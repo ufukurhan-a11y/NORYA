@@ -986,33 +986,6 @@
     .form-in-summary .input:focus{ outline: none; border-color: #0EA5A4; box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
     @keyframes spin{ to{ transform: rotate(360deg); } }
 
-    .iframe-section{ margin-top: 24px; display: none; }
-    .iframe-section.visible{ display: block; }
-    .iframe-wrapper{
-      background: #fff;
-      border-radius: var(--radius-xl);
-      border: 1px solid var(--border-card);
-      box-shadow: var(--shadow-card);
-      overflow: hidden;
-      min-height: 420px;
-      position: relative;
-    }
-    .iframe-skeleton{
-      position: absolute;
-      inset: 0;
-      background: linear-gradient(90deg, #f1f5f9 25%, #e2e8f0 50%, #f1f5f9 75%);
-      background-size: 200% 100%;
-      animation: skeleton 1.2s ease-in-out infinite;
-    }
-    .iframe-skeleton.hidden{ display: none; }
-    @keyframes skeleton{ 0%{ background-position: 200% 0; } 100%{ background-position: -200% 0; } }
-    .paytr-iframe{
-      width: 100%;
-      min-height: 420px;
-      border: none;
-      display: block;
-    }
-
     /* ——— Sipariş özeti: premium white card, editorial, secure checkout ——— */
     .summary-card{
       background: linear-gradient(180deg, #fff 0%, #fcfdfd 100%);
@@ -1862,8 +1835,6 @@
       .payment-reassurance-logos img{ height: 18px; }
       .pro-disclaimer{ padding: 0 8px; margin-top: 16px; font-size: 11px; }
       .footer{ padding: 20px 12px; font-size: 11px; }
-      .iframe-wrapper{ border-radius: var(--radius-lg); min-height: 380px; }
-      .paytr-iframe{ min-height: 380px; }
     }
     @media (max-width: 480px){
       .wrap{ padding: 0 16px; }
@@ -2131,6 +2102,7 @@
                 <div class="pm-logos" aria-hidden="true">
                   <img src="/static/assets/visa.png" alt="Visa" width="60" height="24" loading="lazy" decoding="async" />
                   <img src="/static/brand/mastercard.svg" alt="Mastercard" width="40" height="24" loading="lazy" decoding="async" />
+                  <img src="/static/logos/paytr.svg" alt="PayTR" width="40" height="24" loading="lazy" decoding="async" class="pm-logo-paytr" />
                 </div>
                 <p class="pm-trust-line"><span>{{ t.pm_trust_secure_verified }}</span><span class="pm-trust-dot" aria-hidden="true">·</span><span>{{ t.pm_trust_3d_supported }}</span></p>
               </div>
@@ -2177,6 +2149,7 @@
           <div class="payment-reassurance-logos">
             <img src="/static/assets/visa.png" alt="Visa" width="48" height="20" loading="lazy" decoding="async" />
             <img src="/static/brand/mastercard.svg" alt="Mastercard" width="36" height="20" loading="lazy" decoding="async" />
+            <img src="/static/logos/paytr.svg" alt="PayTR" width="36" height="20" loading="lazy" decoding="async" class="payment-reassurance-paytr" />
             <span class="lock"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.trust_3d }}</span>
           </div>
         </div>
@@ -2322,13 +2295,6 @@
       </div>
     </section>
 
-    <div class="iframe-section" id="iframe-section">
-      <div class="iframe-wrapper">
-        <div class="iframe-skeleton" id="iframe-skeleton"></div>
-        <iframe id="paytr-iframe" class="paytr-iframe" title="PayTR secure payment form" style="visibility:hidden;"></iframe>
-      </div>
-    </div>
-
     {% if t.pro_disclaimer %}<p class="pro-disclaimer">{{ t.pro_disclaimer }}</p>{% endif %}
     <div class="payment-contact" role="region" aria-label="{{ t.contact_support }}">
       <p><a href="mailto:support@noryaai.com">support@noryaai.com</a></p>
@@ -2361,9 +2327,6 @@ document.addEventListener('DOMContentLoaded', function(){
   var formSection = document.getElementById('form-section');
   var payNowBtn = document.getElementById('pay-now-btn');
   var btnText = payNowBtn && payNowBtn.querySelector('.btn-text');
-  var iframeSection = document.getElementById('iframe-section');
-  var iframeSkeleton = document.getElementById('iframe-skeleton');
-  var paytrIframe = document.getElementById('paytr-iframe');
   var summaryPlan = document.getElementById('summary-plan');
   var summaryPlanValue = document.getElementById('summary-plan-value');
   var summaryTotal = document.getElementById('summary-total');
@@ -2685,10 +2648,7 @@ document.addEventListener('DOMContentLoaded', function(){
     }
   }
 
-  function clearIframe() {
-    if (iframeSection) iframeSection.classList.remove('visible');
-    if (paytrIframe) { paytrIframe.src = ''; paytrIframe.style.visibility = 'hidden'; }
-    if (iframeSkeleton) { iframeSkeleton.classList.remove('hidden'); }
+  function resetPaymentButton() {
     paymentInProgress = false;
     setButtonLoading(false);
   }
@@ -2707,7 +2667,7 @@ document.addEventListener('DOMContentLoaded', function(){
     fetchCampaignForPlan(planCode, updateCampaignUI);
     setPayNowEnabled(true);
     hideError();
-    clearIframe();
+    resetPaymentButton();
   }
   plansRow && plansRow.addEventListener('click', function(e) {
     if (paymentInProgress) return;
@@ -2833,6 +2793,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if (timeoutId) clearTimeout(timeoutId);
       if (!r.ok) {
         return r.text().then(function(text){
+          if (typeof console !== 'undefined' && console.error) console.error('PayTR init HTTP', r.status, text.slice(0, 500));
           var msg = t.pay_error_short || t.pay_error_connection;
           try {
             var d = JSON.parse(text);
@@ -2842,6 +2803,7 @@ document.addEventListener('DOMContentLoaded', function(){
           } catch (_) {
             if (r.status === 503) msg = (t.pay_error_not_available || 'Ödeme şu an aktif değil. PayTR ayarlarını kontrol edin.');
             else if (r.status >= 500) msg = (t.pay_error_connection || msg);
+            else if (r.status >= 400) msg = 'Ödeme başlatılamadı (HTTP ' + r.status + '). F12 > Console sekmesinde sunucu yanıtını görebilirsiniz; destek@noryaai.com ile paylaşın.';
           }
           if (msg === (t.pay_error_short || t.pay_error_connection) && r.status >= 400) {
             msg = msg + ' (Hata kodu: ' + r.status + '. Sorun sürerse destek@noryaai.com ile iletişime geçin.)';
@@ -2853,20 +2815,9 @@ document.addEventListener('DOMContentLoaded', function(){
     })
     .then(function(data) {
       if (timeoutId) clearTimeout(timeoutId);
-      var token = data.token;
-      if (!token) throw new Error('No token');
-      var url = 'https://www.paytr.com/odeme/guvenli/' + token;
-      if (iframeSection) {
-        iframeSection.classList.add('visible');
-        iframeSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
-      }
-      if (paytrIframe) {
-        paytrIframe.onload = function() {
-          if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
-          paytrIframe.style.visibility = 'visible';
-        };
-        paytrIframe.src = url;
-      } else if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
+      var url = data.redirect_url || ('https://www.paytr.com/odeme/guvenli/' + (data.token || ''));
+      if (!data.token) throw new Error('Ödeme sayfası adresi alınamadı.');
+      window.location.href = url;
     })
     .catch(function(err) {
       if (timeoutId) clearTimeout(timeoutId);
@@ -2876,13 +2827,6 @@ document.addEventListener('DOMContentLoaded', function(){
       showError(msg);
     });
   });
-
-  if (paytrIframe && !paytrIframe.onload) {
-    paytrIframe.onload = function() {
-      if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
-      paytrIframe.style.visibility = 'visible';
-    };
-  }
 
   updateSummary();
 })();
