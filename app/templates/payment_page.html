@@ -1905,7 +1905,7 @@
   <div id="promo-strip-payment" class="{% if campaign_config.campaignActive %}promo-strip-active{% endif %}" role="region" aria-label="{{ t.promo_strip_aria }}">
     <p id="promo-strip-payment-text" class="promo-strip-p" style="margin:0;">
       {% if campaign_config.campaignActive and campaign_config.promoCode %}
-      {{ (t.promo_strip_discount_template|default('%{percent}% indirim'))|replace('%{percent}', (campaign_config.discountValue|string)) }} — {{ t.promo_code_label }}: <span class="promo-strip-code">{{ campaign_config.promoCode }}</span>. {{ t.promo_strip_apply_here }}
+      {% if campaign_config.discountType == 'percent' and (campaign_config.discountValue or campaign_config.discountValue == 0) %}{{ (t.promo_strip_discount_template|default('%{percent}% indirim'))|replace('%{percent}', (campaign_config.discountValue|string)) }}{% else %}{{ campaign_config.campaignTitle or '' }}{% endif %}{% if campaign_config.campaignTitle or (campaign_config.discountType == 'percent' and (campaign_config.discountValue or campaign_config.discountValue == 0)) %} — {% endif %}{{ t.promo_code_label }}: <span class="promo-strip-code">{{ campaign_config.promoCode }}</span>. {{ t.promo_strip_apply_here }}
       {% else %}
       {{ t.campaign_neutral_desc }}
       {% endif %}
@@ -2515,9 +2515,11 @@ document.addEventListener('DOMContentLoaded', function(){
             var promoLabel = t.promo_code_label;
             var promoApplyHere = t.promo_strip_apply_here;
             var discountTpl = (t.promo_strip_discount_template || '%{percent}% indirim');
-            var promoTitle = (cfg.discountValue != null) ? discountTpl.replace(/%\{percent\}/g, String(cfg.discountValue)) : (cfg.campaignTitle || '');
+            var discountVal = (cfg.discountValue != null && cfg.discountValue !== '') ? cfg.discountValue : (cfg.discount_value != null ? cfg.discount_value : null);
+            var isPercent = (cfg.discountType || 'percent') === 'percent';
+            var promoTitle = (discountVal != null && isPercent) ? discountTpl.replace(/%\{percent\}/g, String(discountVal)) : (cfg.campaignTitle || (discountVal != null ? discountVal + '% indirim' : ''));
             var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-            promoStripPaymentText.innerHTML = promoTitle + ' — ' + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
+            promoStripPaymentText.innerHTML = (promoTitle ? promoTitle + ' — ' : '') + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
           } else {
             promoStripPaymentText.textContent = t.campaign_neutral_desc;
           }
@@ -2584,9 +2586,11 @@ document.addEventListener('DOMContentLoaded', function(){
             var promoLabel = t.promo_code_label;
             var promoApplyHere = t.promo_strip_apply_here;
             var discountTpl = (t.promo_strip_discount_template || '%{percent}% indirim');
-            var promoTitle = (cfg.discountValue != null) ? discountTpl.replace(/%\{percent\}/g, String(cfg.discountValue)) : (cfg.campaignTitle || '');
+            var discountVal = (cfg.discountValue != null && cfg.discountValue !== '') ? cfg.discountValue : (cfg.discount_value != null ? cfg.discount_value : null);
+            var isPercent = (cfg.discountType || 'percent') === 'percent';
+            var promoTitle = (discountVal != null && isPercent) ? discountTpl.replace(/%\{percent\}/g, String(discountVal)) : (cfg.campaignTitle || (discountVal != null ? discountVal + '% indirim' : ''));
             var codeEscaped = (cfg.promoCode + '').replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
-            promoStripPaymentText.innerHTML = promoTitle + ' — ' + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
+            promoStripPaymentText.innerHTML = (promoTitle ? promoTitle + ' — ' : '') + promoLabel + ': <span class="promo-strip-code">' + codeEscaped + '</span>. ' + promoApplyHere;
           } else {
             promoStripPaymentText.textContent = t.campaign_neutral_desc;
           }
@@ -2812,13 +2816,21 @@ document.addEventListener('DOMContentLoaded', function(){
     var payload = { plan_code: selectedPlan, quantity: selectedQuantity || 1, email: email || undefined, name: name || undefined, coupon_code: coupon || undefined };
     if (planCodeInput) planCodeInput.value = selectedPlan;
 
+    var timeoutMs = 25000;
+    var aborter = typeof AbortController !== 'undefined' ? new AbortController() : null;
+    var timeoutId = aborter ? window.setTimeout(function() {
+      aborter.abort();
+    }, timeoutMs) : null;
+
     fetch(initUrl, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       credentials: 'include',
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      signal: aborter ? aborter.signal : undefined
     })
     .then(function(r) {
+      if (timeoutId) clearTimeout(timeoutId);
       if (!r.ok) {
         return r.text().then(function(text){
           var msg = t.pay_error_short || t.pay_error_connection;
@@ -2840,6 +2852,7 @@ document.addEventListener('DOMContentLoaded', function(){
       return r.json();
     })
     .then(function(data) {
+      if (timeoutId) clearTimeout(timeoutId);
       var token = data.token;
       if (!token) throw new Error('No token');
       var url = 'https://www.paytr.com/odeme/guvenli/' + token;
@@ -2856,9 +2869,11 @@ document.addEventListener('DOMContentLoaded', function(){
       } else if (iframeSkeleton) iframeSkeleton.classList.add('hidden');
     })
     .catch(function(err) {
+      if (timeoutId) clearTimeout(timeoutId);
       paymentInProgress = false;
       setButtonLoading(false);
-      showError(err && err.message ? err.message : (t.pay_error_short || t.pay_error_connection));
+      var msg = (err && err.name === 'AbortError') ? (t.pay_error_timeout || t.pay_error_connection) : (err && err.message ? err.message : (t.pay_error_short || t.pay_error_connection));
+      showError(msg);
     });
   });
 

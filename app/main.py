@@ -2558,9 +2558,11 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
 
-    base_url = (str(request.base_url).rstrip("/") + "/").rstrip("/")
-    ok_url = (getattr(settings, "paytr_ok_url", "") or "").strip() or f"{base_url}payment/success"
-    fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{base_url}payment/failed"
+    # Canlı modda proxy arkasında request.base_url yanlış olabilir; PayTR doğru callback istiyor.
+    _public_base = (getattr(settings, "frontend_url", "") or "").strip().rstrip("/")
+    _base = _public_base or str(request.base_url).rstrip("/")
+    ok_url = (getattr(settings, "paytr_ok_url", "") or "").strip() or f"{_base}/payment/success"
+    fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{_base}/payment/failed"
     if "?" not in ok_url:
         ok_url = f"{ok_url}?merchant_oid={merchant_oid}"
     else:
@@ -2836,7 +2838,8 @@ def pay_page(
 
 
 def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
-    """Build frontend campaign config from admin campaign data. Extensible shape."""
+    """Build frontend campaign config from admin campaign data. Extensible shape.
+    discountValue her zaman int döner ki bar/ödeme sayfasında indirim oranı görünsün."""
     if not campaign:
         return {
             "campaignActive": False,
@@ -2849,13 +2852,16 @@ def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
             "promoCode": "",
             "autoApply": False,
         }
+    raw_value = campaign.get("discount_value")
+    discount_value_int = int(raw_value) if raw_value is not None else 0
+    display_label = (campaign.get("display_label") or "").strip()
     return {
         "campaignActive": True,
-        "campaignTitle": (campaign.get("display_label") or "").strip() or t.get("offer_annual_text", "Annual plan includes 15 extra analyses + 2 bonus months value."),
+        "campaignTitle": display_label or t.get("offer_annual_text", "Annual plan includes 15 extra analyses + 2 bonus months value."),
         "campaignMessage": (campaign.get("display_note") or "").strip() or t.get("offer_best_savings_pill", "Best savings"),
         "campaignBadge": t.get("offer_limited_badge", "Limited Offer"),
         "discountType": campaign.get("discount_type") or "percent",
-        "discountValue": campaign.get("discount_value") or 0,
+        "discountValue": discount_value_int,
         "applicablePlans": (campaign.get("products") or "").strip() or "",
         "promoCode": (campaign.get("code") or "").strip() or "",
         "autoApply": campaign.get("auto_apply", False),
@@ -2872,7 +2878,9 @@ def payment_page_premium(
     """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kampanya admin’deki aktif kampanyaya bağlı."""
     lang = _payment_lang_from_request(request)
     t = get_pay_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    # Proxy/Render'da request.base_url yanlış dönebilir; statik ve API istekleri için public URL kullan.
+    _public = (getattr(settings, "frontend_url", "") or "").strip().rstrip("/")
+    base_url = _public or str(request.base_url).rstrip("/")
     plans = [
         {"code": "single_13eur", "price": "14.04", "price_cents": 1404, "label_key": "plan_single", "product": "single"},
         {"code": "monthly_50eur", "price": "54", "price_cents": 5400, "label_key": "plan_monthly", "product": "monthly"},
