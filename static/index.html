@@ -9971,6 +9971,8 @@
       }
     }
     document.addEventListener("click", function(e) {
+      var drawer = document.getElementById("mobile-drawer");
+      if (drawer && drawer.contains(e.target)) return;
       var wrap = document.getElementById("lang-wrap");
       var lm = document.getElementById("lang-modal");
       var clickedOutside = (!wrap || !wrap.contains(e.target)) && (!lm || !lm.contains(e.target));
