@@ -381,17 +381,6 @@ def _raise_openai_http_error(exc: Exception) -> None:
     raise HTTPException(status_code=500, detail="Beklenmeyen sunucu hatası.") from exc
 
 
-def analyze_blood_test(text: str, detailed: bool = True, doctor_notes: str | None = None, lang: str | None = None) -> tuple[str, dict | None]:
-    """
-    İki aşamalı analiz: (1) Risk Engine ile risk skorları, (2) OpenAI'ye sadece risk özeti gönderilir; kısa özet + öneriler.
-    """
-    lab_values = parse_lab_text(text)
-    risk_summary = compute_risk(lab_values)
-    summary, recommendations, usage = get_ai_interpretation(risk_summary, lang=lang, doctor_notes=doctor_notes)
-    report = build_two_stage_report(risk_summary, summary, recommendations, lang)
-    return report, usage
-
-
 def analyze_blood_test_from_image(image_bytes: bytes, mime_type: str, lang: str | None = None) -> tuple[str, dict | None]:
     """Görsel (JPG/PNG) tahlil fotoğrafından doğrudan rapor üretir (OpenAI Vision)."""
     lang_instruction = _language_instruction(lang)
