@@ -2324,6 +2324,20 @@
     /* Promo bar: mobilde taşma olmasın */
     #promo-strip-home, #promo-strip-fixed { word-wrap: break-word; overflow-wrap: break-word; box-sizing: border-box; max-width: 100%; }
     #promo-strip-home p, #promo-strip-fixed span { word-wrap: break-word; overflow-wrap: break-word; }
+    /* Sticky CTA bar: kaydırınca altta Fiyatları Gör / Satın Al */
+    #sticky-cta-bar {
+      position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
+      padding: 12px 16px; text-align: center;
+      background: linear-gradient(180deg, rgba(14,165,164,0.98) 0%, rgba(13,148,136,0.99) 100%);
+      box-shadow: 0 -4px 20px rgba(14,165,164,0.3);
+      transform: translateY(100%); transition: transform 0.3s ease;
+      pointer-events: none;
+    }
+    #sticky-cta-bar.sticky-cta-visible { transform: translateY(0); pointer-events: auto; }
+    #sticky-cta-bar a { display: inline-block; padding: 10px 24px; background: #fff; color: #0d9488; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    #sticky-cta-bar a:hover { background: #f0fdfa; }
+    .dark #sticky-cta-bar { background: linear-gradient(180deg, rgba(45,212,191,0.95) 0%, rgba(20,184,166,0.98) 100%); }
+    .dark #sticky-cta-bar a { color: #0f766e; }
 
   </style>
 </head>
@@ -2332,6 +2346,9 @@
   <div id="promo-strip-fixed" aria-hidden="true" style="display:none;">
     <span id="promo-strip-fixed-text"></span>
     <a href="/payment" id="promo-strip-fixed-link" data-i18n="promo_strip_cta"></a>
+  </div>
+  <div id="sticky-cta-bar" class="no-print" aria-hidden="true">
+    <a href="/payment" id="sticky-cta-link" data-i18n="cta_sticky_pricing">Fiyatları Gör — Satın Al</a>
   </div>
   <script>
   (function(){
@@ -2453,8 +2470,9 @@
       <p class="hero-desc text-lg text-navy-100 max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="hero_desc">
         Laboratuvar sonuçlarınızı yükleyin — yapılandırılmış kan tahlili yorumu ve klinik tarzı premium özet raporu alın.
       </p>
-      <div class="flex flex-col sm:flex-row gap-3 sm:gap-4 justify-center hero-cta-wrap">
+      <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center hero-cta-wrap">
         <button onclick="openRegister(); scrollToAnalyze();" class="hero-cta-btn hero-primary-btn px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-navy-900 font-semibold hover:bg-primary-50 norya-card-shadow inline-flex items-center justify-center gap-2 transition hover:scale-[1.02] min-h-[44px]" data-i18n="hero_cta">Analizi Başlat</button>
+        <a href="/payment?plan=yearly_99eur" id="hero-cta-buy" class="hero-cta-btn min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/80 text-white hover:bg-white/15 font-semibold transition" data-i18n="cta_buy_now">Hemen Al — Yıllık Plan</a>
         <a href="#ornek-rapor" class="hero-secondary-btn min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 font-medium transition" data-i18n="hero_see_sample">Örnek Raporu Gör</a>
       </div>
       <ul class="hero-trust-list trust-chips mt-6 flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-2 text-navy-200 text-xs sm:text-sm font-medium" aria-label="Güven rozetleri">
@@ -4769,6 +4787,7 @@
   <section id="fiyatlandirma" class="premium-section py-12 sm:py-16 bg-accent-50/50 dark:bg-accent-900/30">
     <div class="pricing-container">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="pricing_title">Fiyatlandırma</h2>
+      <p id="pricing-campaign-badge" class="hidden text-center text-sm font-semibold text-amber-700 dark:text-amber-300 mb-2"></p>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-2" id="pricing-note" data-i18n="pricing_eur">Fiyatlar konumunuza göre yerel para biriminde gösterilir.</p>
       <p class="text-center text-sm font-medium text-amber-800 dark:text-amber-200 mb-4 max-w-xl mx-auto px-2" data-i18n="medical_disclaimer_full">Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.</p>
       <p class="text-center text-xs font-medium text-[#0EA5A4] dark:text-teal-400 mb-4" data-i18n="paytr_infrastructure_note">Ödeme altyapısı PayTR ile sağlanacaktır.</p>
@@ -4855,7 +4874,7 @@
             <li><span aria-hidden="true">📑</span><span data-i18n="plan_monthly_7">Gelişmiş PDF raporu</span></li>
           </ul>
           <p class="mt-3 text-xs text-accent-500 dark:text-accent-400" data-i18n="pricing_monthly_most_chosen">Kullanıcıların çoğu bu planı seçiyor.</p>
-          <button type="button" onclick="goToCheckout('monthly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span data-i18n="price_btn_monthly_label">Aylık Planı Başlat</span></button>
+          <button type="button" onclick="goToCheckout('monthly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span data-i18n="price_btn_monthly_cta">Aylık Planı Başlat — Hemen satın al</span></button>
         </div>
 
         <!-- 3) Yıllık — Best Value -->
@@ -7124,7 +7143,7 @@
         how_step_2_title: "Yapılandırılmış rapor oluşturuyoruz", how_step_2_desc: "Net aralıklar, işaretler, özetler ve öneriler.",
         how_step_3_title: "Kaydedin, karşılaştırın ve önerileri uygulayın", how_step_3_desc: "PDF indirin, trendleri takip edin ve sonraki adımlara geçin.",
         cta_features_heading: "Raporunuzu görmeye hazır mısınız?", cta_features_sub: "Laboratuvar sonuçlarınızı yükleyin, dakikalar içinde net, yapılandırılmış rapor alın.",
-        cta_start_analysis: "Analizi başlat", cta_view_pricing: "Fiyatlandırmayı gör",
+        cta_start_analysis: "Analizi başlat", cta_view_pricing: "Fiyatlandırmayı gör", cta_buy_now: "Hemen Al — Yıllık Plan", cta_sticky_pricing: "Fiyatları Gör — Satın Al",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu",
         footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR 3D Secure güvenli ödeme sistemi.", payment_infrastructure: "Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Güvenlik en iyi uygulamaları; Norya HIPAA kapsamında kayıtlı değildir.",
@@ -7423,7 +7442,7 @@
         price_no_renewal: "Pro paketleri satın aldığınız dönem boyunca geçerlidir (aylık 30 gün, yıllık 365 gün). Otomatik yenileme yoktur; süre bitince isterseniz tekrar satın alabilirsiniz.",
         pricing_yearly_saving: "Aylığa göre 501 € tasarruf (%83)",
         pricing_yearly_math: "50€ x 12 = 600€ yerine 99€ (yıllık toplu ödeme).",
-        pricing_badge_trial: "Deneme", price_btn_free: "Ücretsiz Başla", price_badge_fast: "Hızlı", price_btn_single_label: "Tek Analizi Satın Al", price_btn_monthly_label: "Aylık Planı Başlat", pricing_yearly_value_mid: "değerinde analiz — Sadece", price_btn_yearly_label: "Yıllık Tasarrufu Al",
+        pricing_badge_trial: "Deneme", price_btn_free: "Ücretsiz Başla", price_badge_fast: "Hızlı", price_btn_single_label: "Tek Analizi Satın Al", price_btn_monthly_label: "Aylık Planı Başlat", price_btn_monthly_cta: "Aylık Planı Başlat — Hemen satın al", pricing_yearly_value_mid: "değerinde analiz — Sadece", price_btn_yearly_label: "Yıllık Tasarrufu Al",
         trust_title: "Güvenli ve uyumlu hizmet",
         trust_subtitle: "Veriler yalnızca rapor üretimi amacıyla işlenir. Norya tıbbi tanı koymaz; bilgilendirme amaçlı AI destekli yorum sunar.",
         trust_cards_langs_title: "9+ dil desteği", trust_cards_langs_desc: "Tahlilinizi Türkçe, İngilizce ve diğer desteklenen dillerde okuyabilirsiniz.",
@@ -7490,7 +7509,7 @@
         how_step_2_title: "We generate a structured report", how_step_2_desc: "Clear ranges, flags, summaries and recommendations.",
         how_step_3_title: "Save, compare, and follow recommendations", how_step_3_desc: "Download PDF, track trends, and act on next steps.",
         cta_features_heading: "Ready to see your report?", cta_features_sub: "Upload your lab results and get a clear, structured report in minutes.",
-        cta_start_analysis: "Start analysis", cta_view_pricing: "View pricing",
+        cta_start_analysis: "Start analysis", cta_view_pricing: "View pricing", cta_buy_now: "Buy now — Yearly plan", cta_sticky_pricing: "View pricing — Buy now",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "PayTR 3D Secure payment system.", payment_infrastructure: "Payment infrastructure: PayTR 3D Secure secure payment system.", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Security best practices; Norya is not a HIPAA-registered entity.",
@@ -7787,7 +7806,7 @@
         price_no_renewal: "Pro packages are valid for the period you purchased (30 days monthly, 365 days yearly). No auto-renewal; you can purchase again when the period ends.",
         pricing_yearly_saving: "Save €501 vs monthly (%83)",
         pricing_yearly_math: "Instead of €50 x 12 = €600, you pay €99 once per year.",
-        pricing_badge_trial: "Trial", price_btn_free: "Get started free", price_badge_fast: "Quick", price_btn_single_label: "Buy single analysis", price_btn_monthly_label: "Start monthly plan", pricing_yearly_value_mid: "worth — Only", price_btn_yearly_label: "Get yearly savings",
+        pricing_badge_trial: "Trial", price_btn_free: "Get started free", price_badge_fast: "Quick", price_btn_single_label: "Buy single analysis", price_btn_monthly_label: "Start monthly plan", price_btn_monthly_cta: "Start monthly plan — Buy now", pricing_yearly_value_mid: "worth — Only", price_btn_yearly_label: "Get yearly savings",
         trust_title: "Secure and compliant service",
         trust_subtitle: "Your data is processed only to generate your report. Norya does not make medical diagnoses; it provides AI-assisted explanations for educational purposes.",
         trust_cards_langs_title: "9+ language support", trust_cards_langs_desc: "Read your report in Turkish, English and other supported languages.",
@@ -7847,7 +7866,7 @@
         how_step_2_title: "Generiamo un report strutturato", how_step_2_desc: "Intervalli chiari, flag, riepiloghi e raccomandazioni.",
         how_step_3_title: "Salva, confronta e segui le raccomandazioni", how_step_3_desc: "Scarica il PDF, segui i trend e agisci sui prossimi passi.",
         cta_features_heading: "Pronto a vedere il tuo report?", cta_features_sub: "Carica i risultati delle analisi e ottieni un report chiaro e strutturato in pochi minuti.",
-        cta_start_analysis: "Avvia analisi", cta_view_pricing: "Vedi prezzi",
+        cta_start_analysis: "Avvia analisi", cta_view_pricing: "Vedi prezzi", cta_buy_now: "Acquista ora — Piano annuale", cta_sticky_pricing: "Vedi prezzi — Acquista",
         trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Sicurezza allineata HIPAA",
         footer_trust_ssl_desc: "Traffico crittografato SSL/TLS.", footer_trust_kvkk_desc: "Dati personali in linea con KVKK.", footer_trust_gdpr_desc: "Conforme GDPR per UE.", footer_trust_paytr_desc: "Pagamento sicuro PayTR.", footer_trust_hipaa_desc: "Dati sanitari trattati in sicurezza.",
@@ -8021,7 +8040,7 @@
         price_no_renewal: "I piani Pro sono validi per il periodo acquistato (30 giorni mensili, 365 annuali). Nessun rinnovo automatico.",
         pricing_yearly_saving: "Risparmi 501€ rispetto al mensile (83%)",
         pricing_yearly_math: "Invece di 50€ x 12 = 600€, paghi 99€ una volta l'anno.",
-        pricing_badge_trial: "Prova", price_btn_free: "Inizia gratis", price_badge_fast: "Veloce", price_btn_single_label: "Acquista analisi singola", price_btn_monthly_label: "Avvia piano mensile", pricing_yearly_value_mid: "valore — Solo", price_btn_yearly_label: "Scegli annuale",
+        pricing_badge_trial: "Prova", price_btn_free: "Inizia gratis", price_badge_fast: "Veloce", price_btn_single_label: "Acquista analisi singola", price_btn_monthly_label: "Avvia piano mensile", price_btn_monthly_cta: "Avvia piano mensile — Acquista ora", pricing_yearly_value_mid: "valore — Solo", price_btn_yearly_label: "Scegli annuale",
         trust_title: "Servizio sicuro e conforme",
         trust_subtitle: "I dati sono elaborati solo per generare il report. Norya non effettua diagnosi mediche; fornisce spiegazioni assistite da IA a scopo informativo.",
         trust_cards_langs_title: "Supporto 9+ lingue", trust_cards_langs_desc: "Leggi il report in turco, inglese e altre lingue supportate.",
@@ -8080,7 +8099,7 @@
         how_step_2_title: "Generamos un informe estructurado", how_step_2_desc: "Rangos claros, señales, resúmenes y recomendaciones.",
         how_step_3_title: "Guarda, compara y sigue las recomendaciones", how_step_3_desc: "Descarga el PDF, sigue las tendencias y actúa en los próximos pasos.",
         cta_features_heading: "¿Listo para ver tu informe?", cta_features_sub: "Sube tus resultados de laboratorio y obtén un informe claro y estructurado en minutos.",
-        cta_start_analysis: "Iniciar análisis", cta_view_pricing: "Ver precios",
+        cta_start_analysis: "Iniciar análisis", cta_view_pricing: "Ver precios", cta_buy_now: "Comprar ahora — Plan anual", cta_sticky_pricing: "Ver precios — Comprar",
         trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Seguridad alineada HIPAA",
         footer_trust_ssl_desc: "Tráfico cifrado SSL/TLS.", footer_trust_kvkk_desc: "Datos personales según KVKK.", footer_trust_gdpr_desc: "Conforme GDPR para UE.", footer_trust_paytr_desc: "Pago seguro con PayTR.", footer_trust_hipaa_desc: "Datos de salud tratados con seguridad.",
@@ -8254,7 +8273,7 @@
         price_no_renewal: "Los planes Pro son válidos para el período comprado (30 días mensual, 365 anual). Sin renovación automática.",
         pricing_yearly_saving: "Ahorra 501€ frente al mensual (83%)",
         pricing_yearly_math: "En lugar de 50€ x 12 = 600€, pagas 99€ una sola vez al año.",
-        pricing_badge_trial: "Prueba", price_btn_free: "Empezar gratis", price_badge_fast: "Rápido", price_btn_single_label: "Comprar análisis único", price_btn_monthly_label: "Comenzar plan mensual", pricing_yearly_value_mid: "valor — Solo", price_btn_yearly_label: "Elegir anual",
+        pricing_badge_trial: "Prueba", price_btn_free: "Empezar gratis", price_badge_fast: "Rápido", price_btn_single_label: "Comprar análisis único", price_btn_monthly_label: "Comenzar plan mensual", price_btn_monthly_cta: "Comenzar plan mensual — Comprar ahora", pricing_yearly_value_mid: "valor — Solo", price_btn_yearly_label: "Elegir anual",
         trust_title: "Servicio seguro y conforme",
         trust_subtitle: "Tus datos se procesan solo para generar el informe. Norya no realiza diagnósticos médicos; ofrece explicaciones con IA con fines informativos.",
         trust_cards_langs_title: "Soporte para 9+ idiomas", trust_cards_langs_desc: "Lee el informe en turco, inglés y otros idiomas soportados.",
@@ -8313,7 +8332,7 @@
         how_step_2_title: "Nous générons un rapport structuré", how_step_2_desc: "Plages claires, indicateurs, résumés et recommandations.",
         how_step_3_title: "Enregistrez, comparez et suivez les recommandations", how_step_3_desc: "Téléchargez le PDF, suivez les tendances et agissez sur les prochaines étapes.",
         cta_features_heading: "Prêt à voir votre rapport ?", cta_features_sub: "Téléchargez vos résultats et obtenez un rapport clair et structuré en quelques minutes.",
-        cta_start_analysis: "Démarrer l'analyse", cta_view_pricing: "Voir les tarifs",
+        cta_start_analysis: "Démarrer l'analyse", cta_view_pricing: "Voir les tarifs", cta_buy_now: "Acheter — Forfait annuel", cta_sticky_pricing: "Voir les tarifs — Acheter",
         trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Sicurezza allineata HIPAA",
         footer_trust_ssl_desc: "Trafic chiffré SSL/TLS.", footer_trust_kvkk_desc: "Données personnelles conformes KVKK.", footer_trust_gdpr_desc: "Conforme RGPD pour l'UE.", footer_trust_paytr_desc: "Paiement sécurisé PayTR.", footer_trust_hipaa_desc: "Données de santé traitées en sécurité.",
@@ -8487,7 +8506,7 @@
         price_no_renewal: "Les forfaits Pro sont valables pour la période achetée (30 jours mensuel, 365 annuel). Pas de renouvellement automatique.",
         pricing_yearly_saving: "501€ d'économie par rapport au mensuel (83%)",
         pricing_yearly_math: "Au lieu de 50€ x 12 = 600€, vous payez 99€ une fois par an.",
-        pricing_badge_trial: "Essai", price_btn_free: "Commencer gratuitement", price_badge_fast: "Rapide", price_btn_single_label: "Acheter une analyse", price_btn_monthly_label: "Démarrer l'abonnement mensuel", pricing_yearly_value_mid: "valeur — Seulement", price_btn_yearly_label: "Choisir l'annuel",
+        pricing_badge_trial: "Essai", price_btn_free: "Commencer gratuitement", price_badge_fast: "Rapide", price_btn_single_label: "Acheter une analyse", price_btn_monthly_label: "Démarrer l'abonnement mensuel", price_btn_monthly_cta: "Démarrer l'abonnement — Acheter", pricing_yearly_value_mid: "valeur — Seulement", price_btn_yearly_label: "Choisir l'annuel",
         trust_title: "Service sécurisé et conforme",
         trust_subtitle: "Vos données sont traitées uniquement pour générer votre rapport. Norya ne pose pas de diagnostic médical ; il fournit des explications assistées par IA à titre informatif.",
         trust_cards_langs_title: "Support 9+ langues", trust_cards_langs_desc: "Lisez votre rapport en turc, anglais et autres langues prises en charge.",
@@ -8546,7 +8565,7 @@
         how_step_2_title: "Wir erstellen einen strukturierten Bericht", how_step_2_desc: "Klare Bereiche, Markierungen, Zusammenfassungen und Empfehlungen.",
         how_step_3_title: "Speichern, vergleichen und Empfehlungen umsetzen", how_step_3_desc: "PDF herunterladen, Trends verfolgen und nächste Schritte angehen.",
         cta_features_heading: "Bereit für Ihren Bericht?", cta_features_sub: "Laden Sie Ihre Laborergebnisse hoch und erhalten Sie in Minuten einen klaren, strukturierten Bericht.",
-        cta_start_analysis: "Analyse starten", cta_view_pricing: "Preise ansehen",
+        cta_start_analysis: "Analyse starten", cta_view_pricing: "Preise ansehen", cta_buy_now: "Jetzt kaufen — Jahresplan", cta_sticky_pricing: "Preise ansehen — Jetzt kaufen",
         trust_badge_secure_paytr: "🔒 Sichere Zahlung – PayTR",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "HIPAA-aligned Sicherheit",
         footer_trust_ssl_desc: "Verkehr SSL/TLS-verschlüsselt.", footer_trust_kvkk_desc: "Personendaten nach KVKK.", footer_trust_gdpr_desc: "DSGVO-konform für EU.", footer_trust_paytr_desc: "Sichere Zahlung per PayTR.", footer_trust_hipaa_desc: "Gesundheitsdaten sicher verarbeitet.",
@@ -8704,7 +8723,7 @@
         price_no_renewal: "Pro-Pakete gelten für den gekauften Zeitraum (30 Tage monatlich, 365 jährlich). Keine automatische Verlängerung.",
         pricing_yearly_saving: "501€ Ersparnis im Vergleich zum Monatsabo (83%)",
         pricing_yearly_math: "Statt 50€ x 12 = 600€ zahlen Sie einmalig 99€ pro Jahr.",
-        pricing_badge_trial: "Test", price_btn_free: "Kostenlos starten", price_badge_fast: "Schnell", price_btn_single_label: "Einzelanalyse kaufen", price_btn_monthly_label: "Monatsplan starten", pricing_yearly_value_mid: "Wert — Nur", price_btn_yearly_label: "Jahresersparnis sichern",
+        pricing_badge_trial: "Test", price_btn_free: "Kostenlos starten", price_badge_fast: "Schnell", price_btn_single_label: "Einzelanalyse kaufen", price_btn_monthly_label: "Monatsplan starten", price_btn_monthly_cta: "Monatsplan starten — Jetzt kaufen", pricing_yearly_value_mid: "Wert — Nur", price_btn_yearly_label: "Jahresersparnis sichern",
         trust_title: "Sicherer und konformer Service",
         trust_subtitle: "Ihre Daten werden nur zur Erstellung Ihres Berichts verarbeitet. Norya stellt keine medizinischen Diagnosen; es bietet KI-gestützte Erklärungen zu Informationszwecken.",
         trust_cards_langs_title: "9+ Sprachen unterstützt", trust_cards_langs_desc: "Lesen Sie Ihren Bericht auf Türkisch, Englisch und anderen unterstützten Sprachen.",
@@ -8882,7 +8901,7 @@
         price_no_renewal: "חבילות Pro תקפות לתקופה שנרכשה (30 יום חודשי, 365 שנתי). אין חידוש אוטומטי.",
         pricing_yearly_saving: "חיסכון של ‎501€ לעומת החודשי (83%)",
         pricing_yearly_math: "במקום ‎50€ x 12 = ‎600€, משלמים ‎99€ פעם בשנה.",
-        pricing_badge_trial: "ניסיון", price_btn_free: "התחל בחינם", price_badge_fast: "מהיר", price_btn_single_label: "רכוש ניתוח בודד", price_btn_monthly_label: "התחל מנוי חודשי", pricing_yearly_value_mid: "שווי — רק", price_btn_yearly_label: "בחר חיסכון שנתי",
+        pricing_badge_trial: "ניסיון", price_btn_free: "התחל בחינם", price_badge_fast: "מהיר", price_btn_single_label: "רכוש ניתוח בודד", price_btn_monthly_label: "התחל מנוי חודשי", price_btn_monthly_cta: "התחל מנוי — רכוש עכשיו", pricing_yearly_value_mid: "שווי — רק", price_btn_yearly_label: "בחר חיסכון שנתי",
         trust_title: "שירות מאובטח ותואם",
         trust_subtitle: "הנתונים שלך מעובדים רק לצורך יצירת הדוח. נוריה אינה עושה אבחון רפואי; היא מספקת הסברים מבוססי בינה מלאכותית למטרות מידע.",
         trust_cards_langs_title: "תמיכה ב-9+ שפות", trust_cards_langs_desc: "קרא את הדוח בעברית, אנגלית ושפות נתמכות נוספות.",
@@ -9059,7 +9078,7 @@
         price_no_renewal: "باقات Pro صالحة للفترة المشتراة (30 يوم شهري، 365 سنوي). لا تجديد تلقائي.",
         pricing_yearly_saving: "توفير 501€ مقارنة بالشهري (83%)",
         pricing_yearly_math: "بدلاً من ‎50€ × 12 = ‎600€، تدفع ‎99€ مرة واحدة في السنة.",
-        pricing_badge_trial: "تجربة", price_btn_free: "ابدأ مجاناً", price_badge_fast: "سريع", price_btn_single_label: "شراء تحليل واحد", price_btn_monthly_label: "بدء الاشتراك الشهري", pricing_yearly_value_mid: "قيمة — فقط", price_btn_yearly_label: "اختر التوفير السنوي",
+        pricing_badge_trial: "تجربة", price_btn_free: "ابدأ مجاناً", price_badge_fast: "سريع", price_btn_single_label: "شراء تحليل واحد", price_btn_monthly_label: "بدء الاشتراك الشهري", price_btn_monthly_cta: "بدء الاشتراك — شراء الآن", pricing_yearly_value_mid: "قيمة — فقط", price_btn_yearly_label: "اختر التوفير السنوي",
         trust_title: "خدمة آمنة ومتوافقة",
         trust_subtitle: "تُعالج بياناتك فقط لتوليد التقرير. نوريا لا تقوم بتشخيص طبي؛ تقدم شروحات مدعومة بالذكاء الاصطناعي لأغراض إعلامية.",
         trust_cards_langs_title: "دعم 9+ لغات", trust_cards_langs_desc: "اقرأ التقرير بالتركية والإنجليزية واللغات المدعومة الأخرى.",
@@ -9236,7 +9255,7 @@
         price_no_renewal: "Pro पैकेज खरीदी गई अवधि के लिए वैध (मासिक 30 दिन, वार्षिक 365)। कोई ऑटो-नवीनीकरण नहीं।",
         pricing_yearly_saving: "मासिक की तुलना में 501€ की बचत (83%)",
         pricing_yearly_math: "50€ x 12 = 600€ के बजाय, साल में केवल 99€ एक बार।",
-        pricing_badge_trial: "ट्रायल", price_btn_free: "मुफ्त शुरू करें", price_badge_fast: "त्वरित", price_btn_single_label: "एकल विश्लेषण खरीदें", price_btn_monthly_label: "मासिक प्लान शुरू करें", pricing_yearly_value_mid: "मूल्य — केवल", price_btn_yearly_label: "वार्षिक बचत चुनें",
+        pricing_badge_trial: "ट्रायल", price_btn_free: "मुफ्त शुरू करें", price_badge_fast: "त्वरित", price_btn_single_label: "एकल विश्लेषण खरीदें", price_btn_monthly_label: "मासिक प्लान शुरू करें", price_btn_monthly_cta: "मासिक प्लान — अभी खरीदें", pricing_yearly_value_mid: "मूल्य — केवल", price_btn_yearly_label: "वार्षिक बचत चुनें",
         trust_title: "सुरक्षित और अनुपालन सेवा",
         trust_subtitle: "आपका डेटा केवल रिपोर्ट बनाने के लिए प्रोसेस होता है। नोरिया चिकित्सा निदान नहीं करता; यह सूचनात्मक उद्देश्य के लिए AI-सहायक व्याख्या प्रदान करता है।",
         trust_cards_langs_title: "9+ भाषा समर्थन", trust_cards_langs_desc: "अपनी रिपोर्ट तुर्की, अंग्रेज़ी और अन्य समर्थित भाषाओं में पढ़ें।",
@@ -9411,7 +9430,7 @@
         price_no_renewal: "Τα Pro πακέτα ισχύουν για την αγορασμένη περίοδο (30 ημέρες μηνιαία, 365 ετήσια). Χωρίς αυτόματη ανανέωση.",
         pricing_yearly_saving: "501€ εξοικονόμηση σε σχέση με το μηνιαίο (83%)",
         pricing_yearly_math: "Αντί για 50€ x 12 = 600€, πληρώνετε 99€ μία φορά το χρόνο.",
-        pricing_badge_trial: "Δοκιμή", price_btn_free: "Ξεκινήστε δωρεάν", price_badge_fast: "Γρήγορο", price_btn_single_label: "Αγοράστε μία ανάλυση", price_btn_monthly_label: "Ξεκινήστε μηνιαίο πλάνο", pricing_yearly_value_mid: "αξία — Μόνο", price_btn_yearly_label: "Ετήσια εξοικονόμηση",
+        pricing_badge_trial: "Δοκιμή", price_btn_free: "Ξεκινήστε δωρεάν", price_badge_fast: "Γρήγορο", price_btn_single_label: "Αγοράστε μία ανάλυση", price_btn_monthly_label: "Ξεκινήστε μηνιαίο πλάνο", price_btn_monthly_cta: "Ξεκινήστε μηνιαίο πλάνο — Αγοράστε τώρα", pricing_yearly_value_mid: "αξία — Μόνο", price_btn_yearly_label: "Ετήσια εξοικονόμηση",
         trust_title: "Ασφαλής και συμβατή υπηρεσία",
         trust_subtitle: "Τα δεδομένα σας επεξεργάζονται μόνο για τη δημιουργία της αναφοράς. Η Norya δεν κάνει ιατρική διάγνωση· παρέχει επεξηγήσεις με τεχνητή νοημοσύνη για ενημερωτικούς σκοπούς.",
         trust_cards_langs_title: "Υποστήριξη 9+ γλωσσών", trust_cards_langs_desc: "Διαβάστε την αναφορά στα τουρκικά, αγγλικά και άλλες υποστηριζόμενες γλώσσες.",
@@ -9586,7 +9605,7 @@
         price_no_renewal: "Pro balíčky platí pro zakoupené období (30 dní měsíčně, 365 ročně). Bez automatického obnovení.",
         pricing_yearly_saving: "Úspora 501€ oproti měsíčnímu plánu (83 %)",
         pricing_yearly_math: "Místo 50€ x 12 = 600€ zaplatíte jednou ročně 99€.",
-        pricing_badge_trial: "Zkušební", price_btn_free: "Začít zdarma", price_badge_fast: "Rychlé", price_btn_single_label: "Koupit jednu analýzu", price_btn_monthly_label: "Spustit měsíční plán", pricing_yearly_value_mid: "hodnota — Jen", price_btn_yearly_label: "Roční úspora",
+        pricing_badge_trial: "Zkušební", price_btn_free: "Začít zdarma", price_badge_fast: "Rychlé", price_btn_single_label: "Koupit jednu analýzu", price_btn_monthly_label: "Spustit měsíční plán", price_btn_monthly_cta: "Spustit měsíční plán — Koupit nyní", pricing_yearly_value_mid: "hodnota — Jen", price_btn_yearly_label: "Roční úspora",
         trust_title: "Bezpečná a compliantní služba",
         trust_subtitle: "Vaše data se zpracovávají pouze pro vygenerování reportu. Norya nestanovuje lékařské diagnózy; poskytuje vysvětlení s podporou AI pro informační účely.",
         trust_cards_langs_title: "Podpora 9+ jazyků", trust_cards_langs_desc: "Přečtěte si report v turečtině, angličtině a dalších podporovaných jazycích.",
@@ -9761,7 +9780,7 @@
         price_no_renewal: "Pro paketi važe za kupljeni period (30 dana mesečno, 365 godišnje). Nema automatskog obnavljanja.",
         pricing_yearly_saving: "Ušteda 501€ u odnosu na mesečni plan (83%)",
         pricing_yearly_math: "Umesto 50€ x 12 = 600€, plaćate 99€ jednom godišnje.",
-        pricing_badge_trial: "Probni", price_btn_free: "Počni besplatno", price_badge_fast: "Brzo", price_btn_single_label: "Kupi jednu analizu", price_btn_monthly_label: "Pokreni mesečni plan", pricing_yearly_value_mid: "vrednost — Samo", price_btn_yearly_label: "Godišnja ušteda",
+        pricing_badge_trial: "Probni", price_btn_free: "Počni besplatno", price_badge_fast: "Brzo", price_btn_single_label: "Kupi jednu analizu", price_btn_monthly_label: "Pokreni mesečni plan", price_btn_monthly_cta: "Pokreni mesečni plan — Kupi sada", pricing_yearly_value_mid: "vrednost — Samo", price_btn_yearly_label: "Godišnja ušteda",
         trust_title: "Sigurna i usklađena usluga",
         trust_subtitle: "Vaši podaci se obrađuju samo za generisanje izveštaja. Norya ne postavlja medicinsku dijagnozu; pruža objašnjenja uz pomoć AI u informativne svrhe.",
         trust_cards_langs_title: "Podrška za 9+ jezika", trust_cards_langs_desc: "Čitajte izveštaj na turskom, engleskom i drugim podržanim jezicima.",
@@ -11696,26 +11715,46 @@
       if (Number.isInteger(n)) return String(n);
       return Number(n).toFixed(2).replace(/\.?0+$/, '');
     }
-    var DEFAULT_PRICING = { single: 13, monthly: 50, yearly: 99, symbol: '€', currency: 'EUR' };
+    var EMPTY_PRICE = '\u2014';
     function applyPricing(p) {
-      if (!p || (p.single == null && p.monthly == null && p.yearly == null))
-        p = DEFAULT_PRICING;
-      var sym = p.symbol || '€';
+      var sym = (p && p.symbol) ? p.symbol : '\u20AC';
+      var hasPrices = p && (p.single != null || p.monthly != null || p.yearly != null);
+      var campaign = hasPrices && p.campaign_active;
+      var singleVal = hasPrices ? (campaign && p.single_discounted != null ? p.single_discounted : p.single) : null;
+      var monthlyVal = hasPrices ? (campaign && p.monthly_discounted != null ? p.monthly_discounted : p.monthly) : null;
+      var yearlyVal = hasPrices ? (campaign && p.yearly_discounted != null ? p.yearly_discounted : p.yearly) : null;
+      function showPrice(el, val) { if (el) el.textContent = val != null ? formatPrice(val) : EMPTY_PRICE; }
+      function showPriceWithStrike(el, originalVal, discountedVal) {
+        if (!el) return;
+        if (originalVal != null && discountedVal != null && originalVal !== discountedVal)
+          el.innerHTML = '<span class="line-through opacity-70 mr-1">' + formatPrice(originalVal) + '</span> <span class="font-semibold">' + formatPrice(discountedVal) + '</span>';
+        else
+          el.textContent = discountedVal != null ? formatPrice(discountedVal) : (originalVal != null ? formatPrice(originalVal) : EMPTY_PRICE);
+      }
       var pe;
       pe = document.getElementById('price-symbol'); if (pe) pe.textContent = sym;
       pe = document.getElementById('price-symbol-monthly'); if (pe) pe.textContent = sym;
       pe = document.getElementById('price-symbol-yearly'); if (pe) pe.textContent = sym;
-      pe = document.getElementById('price-single'); if (pe) pe.textContent = formatPrice(p.single);
-      pe = document.getElementById('price-monthly'); if (pe) pe.textContent = formatPrice(p.monthly);
-      pe = document.getElementById('price-yearly'); if (pe) pe.textContent = formatPrice(p.yearly);
+      var ps = document.getElementById('price-single');
+      var pm = document.getElementById('price-monthly');
+      var py = document.getElementById('price-yearly');
+      if (campaign) {
+        showPriceWithStrike(ps, p.single_original, p.single_discounted);
+        showPriceWithStrike(pm, p.monthly_original, p.monthly_discounted);
+        showPriceWithStrike(py, p.yearly_original, p.yearly_discounted);
+      } else {
+        showPrice(ps, singleVal);
+        showPrice(pm, monthlyVal);
+        showPrice(py, yearlyVal);
+      }
       var yearlyOnly = document.getElementById('yearly-only-amount');
-      if (yearlyOnly) yearlyOnly.textContent = formatPrice(p.yearly);
+      if (yearlyOnly) yearlyOnly.textContent = yearlyVal != null ? formatPrice(yearlyVal) : EMPTY_PRICE;
       var cs = document.getElementById('compare-price-single');
       var cm = document.getElementById('compare-price-monthly');
       var cy = document.getElementById('compare-price-yearly');
-      if (cs) cs.textContent = formatPrice(p.single);
-      if (cm) cm.textContent = formatPrice(p.monthly);
-      if (cy) cy.textContent = formatPrice(p.yearly);
+      if (cs) cs.textContent = singleVal != null ? formatPrice(singleVal) : EMPTY_PRICE;
+      if (cm) cm.textContent = monthlyVal != null ? formatPrice(monthlyVal) : EMPTY_PRICE;
+      if (cy) cy.textContent = yearlyVal != null ? formatPrice(yearlyVal) : EMPTY_PRICE;
       var cSym1 = document.getElementById('compare-symbol-single');
       var cSym2 = document.getElementById('compare-symbol-monthly');
       var cSym3 = document.getElementById('compare-symbol-yearly');
@@ -11731,16 +11770,25 @@
       ['single','monthly','yearly'].forEach(function(k) {
         var mPrice = document.getElementById('compare-mobile-price-' + k);
         var mSym = document.getElementById('compare-mobile-symbol-' + k);
-        if (mPrice) mPrice.textContent = formatPrice(p[k]);
+        var v = k === 'single' ? singleVal : k === 'monthly' ? monthlyVal : yearlyVal;
+        if (mPrice) mPrice.textContent = v != null ? formatPrice(v) : EMPTY_PRICE;
         if (mSym) mSym.textContent = sym;
       });
-      document.getElementById('btn-single').textContent = formatPrice(p.single) + ' ' + sym;
-      document.getElementById('btn-monthly').textContent = formatPrice(p.monthly) + ' ' + sym;
-      document.getElementById('btn-yearly').textContent = formatPrice(p.yearly) + ' ' + sym;
+      var btnSingle = document.getElementById('btn-single');
+      var btnMonthly = document.getElementById('btn-monthly');
+      var btnYearly = document.getElementById('btn-yearly');
+      if (btnSingle) btnSingle.textContent = (singleVal != null ? formatPrice(singleVal) : EMPTY_PRICE) + ' ' + sym;
+      if (btnMonthly) btnMonthly.textContent = (monthlyVal != null ? formatPrice(monthlyVal) : EMPTY_PRICE) + ' ' + sym;
+      if (btnYearly) btnYearly.textContent = (yearlyVal != null ? formatPrice(yearlyVal) : EMPTY_PRICE) + ' ' + sym;
+      var campaignBadgeEl = document.getElementById('pricing-campaign-badge');
+      if (campaignBadgeEl) {
+        if (campaign && p.campaign_badge) { campaignBadgeEl.textContent = p.campaign_badge; campaignBadgeEl.classList.remove('hidden'); }
+        else { campaignBadgeEl.textContent = ''; campaignBadgeEl.classList.add('hidden'); }
+      }
       var note = document.getElementById('pricing-note');
-      if (note) {
-        var L = T[getLang()];
-        if (p.currency && L && L.pricing_note_currency)
+      if (note && p && p.currency) {
+        var L = typeof T !== 'undefined' ? T[getLang()] : null;
+        if (L && L.pricing_note_currency)
           note.textContent = L.pricing_note_currency.replace('{cur}', p.currency).replace('{sym}', sym);
         else if (L && L.pricing_eur)
           note.textContent = L.pricing_eur;
@@ -11753,16 +11801,16 @@
       var countryByLang = LANG_TO_PRICING_COUNTRY[lang];
       if (countryByLang !== undefined && countryByLang != null) {
         var url = API_BASE + '/api/pricing?country=' + encodeURIComponent(countryByLang);
-        fetch(url).then(function(r) { return r.json(); }).then(applyPricing).catch(function() { applyPricing(DEFAULT_PRICING); });
+        fetch(url).then(function(r) { return r.json(); }).then(applyPricing).catch(function() { applyPricing(null); });
         return;
       }
       fetch(API_BASE + '/api/locale').then(function(r) { return r.json(); }).then(function(loc) {
         var country = (loc && loc.countryCode) ? loc.countryCode : 'DE';
         var url = API_BASE + '/api/pricing?country=' + encodeURIComponent(country);
         return fetch(url).then(function(r) { return r.json(); });
-      }).then(applyPricing).catch(function() { applyPricing(DEFAULT_PRICING); });
+      }).then(applyPricing).catch(function() { applyPricing(null); });
     }
-    applyPricing(DEFAULT_PRICING);
+    applyPricing(null);
     loadPricing();
 
     /* Debug: yatay taşma yapan elementleri bulmak için ?debug=overflow ile açın */
@@ -11842,6 +11890,16 @@
           }
         })
         .catch(function() {});
+    })();
+    (function() {
+      var bar = document.getElementById('sticky-cta-bar');
+      if (!bar) return;
+      function onStickyCtaScroll() {
+        if (window.scrollY > 350) bar.classList.add('sticky-cta-visible');
+        else bar.classList.remove('sticky-cta-visible');
+      }
+      window.addEventListener('scroll', onStickyCtaScroll, { passive: true });
+      onStickyCtaScroll();
     })();
   </script>
 </body>

@@ -80,6 +80,11 @@ from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, get_active_campaign_for_checkout, validate_coupon
+from app.services.pricing import (
+    get_base_prices_cents,
+    get_plan_code_to_product_cents,
+    get_active_campaign_with_display,
+)
 from app.services.report_pdf import build_doctor_pdf, build_report_pdf, extract_trend_from_results
 from app.services.report_verification import get_or_create_verification
 from app.services.storage import upload_report_pdf
@@ -183,9 +188,30 @@ def _seed_default_coupon():
         log.warning("INDIRIM20 seed atlandı (ilk kupon doğrulamasında oluşturulacak): %s", e)
 
 
+def _seed_pricing_plan():
+    """PricingPlan tablosu boşsa varsayılan single/monthly/yearly fiyatlarını ekler (merkezi fiyat kaynağı)."""
+    try:
+        from app.models import PricingPlan
+        with Session(engine) as session:
+            existing = session.exec(select(PricingPlan).limit(1)).first()
+            if existing:
+                return
+            for code, product, cents, order in (
+                ("single_13eur", "single", 1404, 0),
+                ("monthly_50eur", "monthly", 5400, 1),
+                ("yearly_99eur", "yearly", 10692, 2),
+            ):
+                session.add(PricingPlan(code=code, product=product, price_cents=cents, display_order=order))
+            session.commit()
+            log.info("Merkezi fiyat planları seed edildi (single/monthly/yearly).")
+    except Exception as e:
+        log.warning("PricingPlan seed atlandı: %s", e)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
+    _seed_pricing_plan()
     _seed_default_coupon()
     key_ok = is_openai_configured()
     if key_ok:
@@ -609,7 +635,8 @@ COUNTRY_TO_CURRENCY = {
     "IN": "INR", "RU": "RUB", "CH": "CHF", "PL": "PLN", "MA": "MAD", "DZ": "DZD", "TN": "TND",
     "GR": "EUR", "CY": "EUR", "CZ": "CZK", "RS": "RSD", "BA": "BAM", "ME": "EUR",
 }
-EUR_BASE = {"single": 14.04, "monthly": 54, "yearly": 106.92}
+# Varsayılan EUR fiyatları (pricing service DB'den döndüremezse kullanılır)
+EUR_BASE_FALLBACK = {"single": 14.04, "monthly": 54, "yearly": 106.92}
 # Varsayılan kurlar (API yanıt vermezse kullanılır)
 EUR_RATES_FALLBACK = {
     "EUR": 1.0, "USD": 1.08, "GBP": 0.85, "TRY": 34.5, "SAR": 4.05, "AED": 3.97, "QAR": 3.94,
@@ -714,35 +741,77 @@ def get_locale(request: Request):
     return {"suggested": lang_from_browser, "countryCode": country}
 
 
-def _pricing_response(currency: str, rate: float) -> dict:
-    """Tek bir para birimi ve kur için fiyat yanıtı üretir."""
+def _pricing_response(currency: str, rate: float, eur_base: dict[str, float] | None = None) -> dict:
+    """Tek bir para birimi ve kur için fiyat yanıtı. eur_base yoksa EUR_BASE_FALLBACK kullanılır."""
+    base = eur_base or EUR_BASE_FALLBACK
     symbol = CURRENCY_SYMBOLS.get(currency, currency + " ")
     decimals = 0 if currency in ("JPY", "KRW") else 2
     return {
         "currency": currency,
         "symbol": symbol,
-        "single": round(EUR_BASE["single"] * rate, decimals),
-        "monthly": round(EUR_BASE["monthly"] * rate, decimals),
-        "yearly": round(EUR_BASE["yearly"] * rate, decimals),
+        "single": round(base["single"] * rate, decimals),
+        "monthly": round(base["monthly"] * rate, decimals),
+        "yearly": round(base["yearly"] * rate, decimals),
         "note": "pricing_note_" + currency.lower(),
     }
 
 
 @app.get("/api/pricing")
-def get_pricing(request: Request, country: str | None = None):
+def get_pricing(
+    request: Request,
+    country: str | None = None,
+    db: Session = Depends(get_db),
+):
     """
-    Ziyaretçinin ülkesine göre fiyatları anlık kura göre yerel para biriminde döner.
-    Kurlar Frankfurter API ile güncellenir (6 saat cache). Hata durumunda EUR fallback.
-    ?country=TR ile TRY, country=US ile USD vb. override edilebilir.
+    Merkezi fiyat kaynağı (PricingPlan). Ülkeye göre yerel para biriminde döner.
+    Kampanya aktifse campaign_* alanları dolu döner (landing/payment aynı veriyi kullanır).
     """
+    try:
+        base_cents = get_base_prices_cents(db)
+        eur_base = {k: v / 100.0 for k, v in base_cents.items()}
+    except Exception:
+        eur_base = dict(EUR_BASE_FALLBACK)
+    currency, rate = "EUR", 1.0
     try:
         country = (country or _get_country_from_request(request) or "DE").upper()[:2]
         currency = COUNTRY_TO_CURRENCY.get(country, "EUR")
         rates = _fetch_eur_rates_live()
         rate = float(rates.get(currency, EUR_RATES_FALLBACK.get(currency, 1.0)))
-        return _pricing_response(currency, rate)
     except Exception:
-        return _pricing_response("EUR", 1.0)
+        rates = {}
+    out = _pricing_response(currency, rate, eur_base)
+    # Kampanya: her plan için original/discounted (landing’de üstü çizili + yeni fiyat)
+    decimals = 0 if out.get("currency") in ("JPY", "KRW") else 2
+    for product, plan_code in (("single", "single_13eur"), ("monthly", "monthly_50eur"), ("yearly", "yearly_99eur")):
+        base_val = out.get(product, 0)
+        out[f"{product}_original"] = base_val
+        out[f"{product}_discounted"] = base_val
+    out["campaign_active"] = False
+    out["campaign_badge"] = ""
+    out["campaign_discount_value"] = 0
+    out["campaign_discount_type"] = ""
+    out["campaign_promo_code"] = ""
+    try:
+        for plan_code in ("yearly_99eur", "monthly_50eur", "single_13eur"):
+            campaign = get_active_campaign_with_display(db, plan_code)
+            if campaign:
+                product = (get_plan_code_to_product_cents(db).get(plan_code) or (None, 0))[0]
+                if not product:
+                    continue
+                old_c = campaign.get("old_price_cents")
+                new_c = campaign.get("new_price_cents")
+                if old_c is not None and new_c is not None:
+                    out["campaign_active"] = True
+                    out["campaign_badge"] = (campaign.get("campaign_badge") or "").strip()
+                    out["campaign_discount_value"] = campaign.get("discount_value") or 0
+                    out["campaign_discount_type"] = campaign.get("discount_type") or "percent"
+                    out["campaign_promo_code"] = (campaign.get("code") or "").strip()
+                    out[f"{product}_original"] = round(old_c / 100.0 * rate, decimals)
+                    out[f"{product}_discounted"] = round(new_c / 100.0 * rate, decimals)
+                break
+    except Exception:
+        pass
+    return out
 
 
 @app.get("/api/push/vapid-public")
@@ -2505,14 +2574,10 @@ def _paytr_canonical_base(request: Request) -> str:
         return base.rstrip("/")
 
 
-def _paytr_amount(product: str) -> int:
-    if product == "single":
-        return int(getattr(settings, "paytr_amount_single", 1404) or 1404)
-    if product == "monthly":
-        return int(getattr(settings, "paytr_amount_monthly", 5400) or 5400)
-    if product == "yearly":
-        return int(getattr(settings, "paytr_amount_yearly", 10692) or 10692)
-    return 300
+def _paytr_amount(product: str, db: Session) -> int:
+    """Merkezi fiyat kaynağından plan tutarını (EUR cent) döner."""
+    base = get_base_prices_cents(db)
+    return base.get(product, 300)
 
 
 def _paytr_amount_and_currency(amount_eur_cents: int) -> tuple[int, str]:
@@ -2540,17 +2605,10 @@ def _paytr_reason_to_detail(reason: str | None) -> str:
     return reason
 
 
-# Plan kodları (GET /pay?plan= ve POST /paytr/init)
-PAYTR_PLAN_CODES = {
-    "single_13eur": ("single", 1404),
-    "monthly_50eur": ("monthly", 5400),
-    "yearly_99eur": ("yearly", 10692),
-}
-
-
-def _plan_code_to_product_amount(plan_code: str) -> tuple[str, int]:
-    """plan_code -> (product, amount_cent). Geçersizse ValueError."""
-    t = PAYTR_PLAN_CODES.get((plan_code or "").strip().lower())
+def _plan_code_to_product_amount(plan_code: str, db: Session) -> tuple[str, int]:
+    """plan_code -> (product, amount_cent). Merkezi pricing planından; geçersizse ValueError."""
+    plan_map = get_plan_code_to_product_cents(db)
+    t = plan_map.get((plan_code or "").strip().lower())
     if not t:
         raise ValueError("Geçersiz plan_code. Desteklenen: single_13eur, monthly_50eur, yearly_99eur")
     return t[0], t[1]
@@ -2586,7 +2644,7 @@ def paytr_init(
 
 def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: User | None, db: Session):
     try:
-        product, amount = _plan_code_to_product_amount(body.plan_code)
+        product, amount = _plan_code_to_product_amount(body.plan_code, db)
     except ValueError as e:
         raise HTTPException(status_code=400, detail=str(e))
 
@@ -2931,7 +2989,8 @@ def pay_page(
 ):
     """Ödeme sayfası: plan seçili; /paytr/init ile token alınıp PayTR iFrame gösterilir. Tüm dillerde ve mobil uyumlu."""
     plan_code = (plan or "single_13eur").strip().lower()
-    if plan_code not in PAYTR_PLAN_CODES:
+    plan_map = get_plan_code_to_product_cents(db)
+    if plan_code not in plan_map:
         plan_code = "single_13eur"
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
@@ -2940,19 +2999,19 @@ def pay_page(
     plan_display = get_plan_display_name(plan_code, lang)
     benefits = get_plan_benefits(plan_code, lang)
     base_url = str(request.base_url).rstrip("/")
-    prices = {"single_13eur": "14.04", "monthly_50eur": "54", "yearly_99eur": "106.92"}
-    prices_cents = {"single_13eur": 1404, "monthly_50eur": 5400, "yearly_99eur": 10692}
+    prices = {code: f"{cents / 100:.2f}" for code, (_, cents) in plan_map.items()}
+    prices_cents = {code: cents for code, (_, cents) in plan_map.items()}
     benefits_monthly = get_plan_benefits("monthly_50eur", lang)
     benefits_yearly = get_plan_benefits("yearly_99eur", lang)
     # Bar’da kampanya görünsün: önce seçilen plan, yoksa herhangi bir planda aktif kampanya (featured)
     campaign_raw = None
     try:
-        campaign_raw = get_active_campaign_for_checkout(db, plan_code)
+        campaign_raw = get_active_campaign_for_checkout(db, plan_code, plan_code_to_amount=plan_map)
         if campaign_raw is None:
             for fallback_plan in ("yearly_99eur", "monthly_50eur", "single_13eur"):
                 if fallback_plan == plan_code:
                     continue
-                campaign_raw = get_active_campaign_for_checkout(db, fallback_plan)
+                campaign_raw = get_active_campaign_for_checkout(db, fallback_plan, plan_code_to_amount=plan_map)
                 if campaign_raw is not None:
                     break
     except Exception as e:
@@ -3003,11 +3062,12 @@ def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
     raw_value = campaign.get("discount_value")
     discount_value_int = int(raw_value) if raw_value is not None else 0
     display_label = (campaign.get("display_label") or "").strip()
+    badge = (campaign.get("campaign_badge") or "").strip()
     return {
         "campaignActive": True,
         "campaignTitle": display_label or t.get("offer_annual_text", "Annual plan includes 15 extra analyses + 2 bonus months value."),
         "campaignMessage": (campaign.get("display_note") or "").strip() or t.get("offer_best_savings_pill", "Best savings"),
-        "campaignBadge": t.get("offer_limited_badge", "Limited Offer"),
+        "campaignBadge": badge or t.get("offer_limited_badge", "Limited Offer"),
         "discountType": campaign.get("discount_type") or "percent",
         "discountValue": discount_value_int,
         "applicablePlans": (campaign.get("products") or "").strip() or "",
@@ -3028,11 +3088,17 @@ def payment_page_premium(
     t = get_pay_ui(lang)
     # Tek canonical domain (statik ve API istekleri)
     base_url = _paytr_canonical_base(request)
-    plans = [
-        {"code": "single_13eur", "price": "14.04", "price_cents": 1404, "label_key": "plan_single", "product": "single"},
-        {"code": "monthly_50eur", "price": "54", "price_cents": 5400, "label_key": "plan_monthly", "product": "monthly"},
-        {"code": "yearly_99eur", "price": "106.92", "price_cents": 10692, "label_key": "plan_yearly", "product": "yearly", "best_value": True},
-    ]
+    plan_map = get_plan_code_to_product_cents(db)
+    plans = []
+    for code, (product, price_cents) in plan_map.items():
+        plans.append({
+            "code": code,
+            "price": f"{price_cents / 100:.2f}",
+            "price_cents": price_cents,
+            "label_key": f"plan_{product}",
+            "product": product,
+            "best_value": product == "yearly",
+        })
     _card_label_keys = {"single": "plan_card_single", "monthly": "plan_card_monthly", "yearly": "plan_card_yearly"}
     for p in plans:
         p["label"] = t.get(p["label_key"], p["code"])
@@ -3045,7 +3111,7 @@ def payment_page_premium(
     campaign_raw = None
     if default_plan:
         try:
-            campaign_raw = get_active_campaign_for_checkout(db, default_plan["code"])
+            campaign_raw = get_active_campaign_for_checkout(db, default_plan["code"], plan_code_to_amount=plan_map)
         except Exception as e:
             log.warning("payment_page campaign fetch failed: %s", e)
     campaign_config = _payment_campaign_config(campaign_raw, t)
@@ -3080,14 +3146,14 @@ def coupon_validate(
     plan_code: str | None = None,
     db: Session = Depends(get_db),
 ):
-    """İndirim kodunu doğrular; geçerliyse indirim tutarı ve son fiyat döner. plan_code verilirse tutar onunla uyumlu hesaplanır."""
+    """İndirim kodunu doğrular; geçerliyse indirim tutarı ve son fiyat döner. plan_code verilirse tutar merkezi fiyattan hesaplanır."""
     if plan_code:
         try:
-            product, base = _plan_code_to_product_amount(plan_code)
+            product, base = _plan_code_to_product_amount(plan_code, db)
         except ValueError:
             raise HTTPException(status_code=400, detail="Geçersiz plan_code.")
     elif product and product in ("single", "monthly", "yearly"):
-        base = _paytr_amount(product)
+        base = _paytr_amount(product, db)
     else:
         raise HTTPException(status_code=400, detail="product veya plan_code gerekli.")
     discount, err = validate_coupon(db, code, product, base)
@@ -3137,11 +3203,12 @@ def campaigns_featured(
     lang: str = Query("tr", description="Language for campaign labels"),
     db: Session = Depends(get_db),
 ):
-    """Anasayfa / odeme linki icin tek bir aktif kampanya doner (yillik plan oncelikli). Kampanya yoksa active: false."""
+    """Anasayfa / odeme linki icin tek bir aktif kampanya doner (yillik plan oncelikli). Merkezi fiyat kullanilir."""
     t = get_pay_ui((lang or "tr").lower()[:2])
+    plan_map = get_plan_code_to_product_cents(db)
     for plan_code in ("yearly_99eur", "monthly_50eur", "single_13eur"):
         try:
-            campaign_raw = get_active_campaign_for_checkout(db, plan_code)
+            campaign_raw = get_active_campaign_for_checkout(db, plan_code, plan_code_to_amount=plan_map)
             if campaign_raw:
                 cfg = _payment_campaign_config(campaign_raw, t)
                 return JSONResponse(
@@ -3181,7 +3248,7 @@ def payment_get_token(
     from urllib.request import urlopen, Request as UrlRequest
 
     merchant_oid = f"norya{user.id}{int(datetime.now(timezone.utc).timestamp())}{secrets.token_hex(4)}"
-    amount = _paytr_amount(body.product)
+    amount = _paytr_amount(body.product, db)
     coupon_used: str | None = None
     if body.coupon_code and (code := (body.coupon_code or "").strip()):
         discount, err = validate_coupon(db, code, body.product, amount)
@@ -3295,7 +3362,7 @@ def payment_get_token_guest(
         db.refresh(user)
     user_id = user.id or 0
     merchant_oid = f"noryag{user_id}{int(datetime.now(timezone.utc).timestamp())}{secrets.token_hex(4)}"
-    amount = _paytr_amount("single")
+    amount = _paytr_amount("single", db)
     coupon_used: str | None = None
     if body.coupon_code and (code := (body.coupon_code or "").strip()):
         discount, err = validate_coupon(db, code, "single", amount)

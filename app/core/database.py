@@ -131,6 +131,13 @@ def init_db():
             "ALTER TABLE discountcode ADD COLUMN auto_apply BOOLEAN DEFAULT 0",
             "ALTER TABLE discountcode ADD COLUMN display_label VARCHAR(120)",
             "ALTER TABLE discountcode ADD COLUMN display_note VARCHAR(256)",
+            "ALTER TABLE discountcode ADD COLUMN campaign_badge VARCHAR(64)",
+            "ALTER TABLE discountcode ADD COLUMN old_price_single_cents INTEGER",
+            "ALTER TABLE discountcode ADD COLUMN new_price_single_cents INTEGER",
+            "ALTER TABLE discountcode ADD COLUMN old_price_monthly_cents INTEGER",
+            "ALTER TABLE discountcode ADD COLUMN new_price_monthly_cents INTEGER",
+            "ALTER TABLE discountcode ADD COLUMN old_price_yearly_cents INTEGER",
+            "ALTER TABLE discountcode ADD COLUMN new_price_yearly_cents INTEGER",
             "ALTER TABLE paymentorder ADD COLUMN quantity INTEGER DEFAULT 1",
         ):
             try:

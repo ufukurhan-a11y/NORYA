@@ -99,13 +99,15 @@ def apply_coupon_use(db: Session, code: str) -> None:
 def get_active_campaign_for_checkout(
     db: Session,
     plan_code: str,
+    plan_code_to_amount: dict[str, tuple[str, int]] | None = None,
 ) -> dict | None:
     """
     Seçilen plan için checkout’ta gösterilecek aktif kampanyayı döner.
     plan_code: single_13eur | monthly_50eur | yearly_99eur -> product: single | monthly | yearly.
-    Dönen kampanya: is_active=True, auto_show_on_checkout=True, tarih geçerli, products içinde plan.
+    plan_code_to_amount: None ise _PLAN_CODE_MAP; verilirse (örn. pricing.get_plan_code_to_product_cents) kullanılır.
     """
-    t = _PLAN_CODE_MAP.get((plan_code or "").strip().lower())
+    plan_map = plan_code_to_amount if plan_code_to_amount is not None else _PLAN_CODE_MAP
+    t = plan_map.get((plan_code or "").strip().lower())
     if not t:
         return None
     product, base_amount = t[0], t[1]

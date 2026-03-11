@@ -26,3 +26,11 @@ class DiscountCode(SQLModel, table=True):
     auto_apply: bool = Field(default=False)  # True ise sayfa açıldığında otomatik uygula
     display_label: str | None = Field(default=None, max_length=120)  # Örn: "%20 indirim"
     display_note: str | None = Field(default=None, max_length=256)  # Kısa açıklama
+    campaign_badge: str | None = Field(default=None, max_length=64)  # Badge metni (Limited Offer vb.)
+    # Opsiyonel: gösterim için eski/yeni fiyat (null ise base - indirim hesaplanır)
+    old_price_single_cents: int | None = Field(default=None)
+    new_price_single_cents: int | None = Field(default=None)
+    old_price_monthly_cents: int | None = Field(default=None)
+    new_price_monthly_cents: int | None = Field(default=None)
+    old_price_yearly_cents: int | None = Field(default=None)
+    new_price_yearly_cents: int | None = Field(default=None)

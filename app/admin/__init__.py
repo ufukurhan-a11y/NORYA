@@ -2,6 +2,7 @@
 from fastapi import APIRouter
 
 from app.admin.routers import (
+    pricing_plans,
     analyses,
     billing_links,
     coupons,
@@ -24,6 +25,7 @@ admin_router.include_router(analyses.router, prefix="/analyses", tags=["admin-an
 admin_router.include_router(reports.router, prefix="/reports", tags=["admin-reports"])
 admin_router.include_router(live.router, prefix="/live", tags=["admin-live"])
 admin_router.include_router(coupons.router, prefix="/coupons", tags=["admin-coupons"])
+admin_router.include_router(pricing_plans.router, prefix="/pricing-plans", tags=["admin-pricing"])
 admin_router.include_router(payments.router, prefix="/payments", tags=["admin-payments"])
 admin_router.include_router(errors.router, prefix="/errors", tags=["admin-errors"])
 admin_router.include_router(uploads.router, prefix="/uploads", tags=["admin-uploads"])

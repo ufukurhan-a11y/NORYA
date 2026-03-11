@@ -65,12 +65,26 @@ def _coupon_form_context(request: Request, coupon: DiscountCode | None, is_edit:
         out["coupon_auto_apply"] = getattr(coupon, "auto_apply", False)
         out["coupon_display_label"] = getattr(coupon, "display_label", None) or ""
         out["coupon_display_note"] = getattr(coupon, "display_note", None) or ""
+        out["coupon_campaign_badge"] = getattr(coupon, "campaign_badge", None) or ""
+        out["coupon_old_price_single"] = getattr(coupon, "old_price_single_cents", None)
+        out["coupon_new_price_single"] = getattr(coupon, "new_price_single_cents", None)
+        out["coupon_old_price_monthly"] = getattr(coupon, "old_price_monthly_cents", None)
+        out["coupon_new_price_monthly"] = getattr(coupon, "new_price_monthly_cents", None)
+        out["coupon_old_price_yearly"] = getattr(coupon, "old_price_yearly_cents", None)
+        out["coupon_new_price_yearly"] = getattr(coupon, "new_price_yearly_cents", None)
     else:
         out["coupon_is_active"] = True
         out["coupon_auto_show_on_checkout"] = False
         out["coupon_auto_apply"] = False
         out["coupon_display_label"] = ""
         out["coupon_display_note"] = ""
+        out["coupon_campaign_badge"] = ""
+        out["coupon_old_price_single"] = None
+        out["coupon_new_price_single"] = None
+        out["coupon_old_price_monthly"] = None
+        out["coupon_new_price_monthly"] = None
+        out["coupon_old_price_yearly"] = None
+        out["coupon_new_price_yearly"] = None
     return out
 
 
@@ -100,9 +114,19 @@ def coupon_create(
     auto_apply: str | None = Form(None),
     display_label: str | None = Form(None),
     display_note: str | None = Form(None),
+    campaign_badge: str | None = Form(None),
+    old_price_single_cents: int | None = Form(None),
+    new_price_single_cents: int | None = Form(None),
+    old_price_monthly_cents: int | None = Form(None),
+    new_price_monthly_cents: int | None = Form(None),
+    old_price_yearly_cents: int | None = Form(None),
+    new_price_yearly_cents: int | None = Form(None),
 ):
     def _form_bool(v: str | None) -> bool:
         return (v or "").strip().lower() in ("on", "true", "1", "yes")
+
+    def _form_int(v: int | None) -> int | None:
+        return v if v is not None and v >= 0 else None
 
     code_clean = (code or "").strip().upper()
     if not code_clean:
@@ -142,6 +166,13 @@ def coupon_create(
         auto_apply=_form_bool(auto_apply),
         display_label=(display_label or "").strip() or None,
         display_note=(display_note or "").strip() or None,
+        campaign_badge=(campaign_badge or "").strip() or None,
+        old_price_single_cents=_form_int(old_price_single_cents),
+        new_price_single_cents=_form_int(new_price_single_cents),
+        old_price_monthly_cents=_form_int(old_price_monthly_cents),
+        new_price_monthly_cents=_form_int(new_price_monthly_cents),
+        old_price_yearly_cents=_form_int(old_price_yearly_cents),
+        new_price_yearly_cents=_form_int(new_price_yearly_cents),
     )
     db.add(coupon)
     db.commit()
@@ -185,9 +216,19 @@ def coupon_update(
     auto_apply: str | None = Form(None),
     display_label: str | None = Form(None),
     display_note: str | None = Form(None),
+    campaign_badge: str | None = Form(None),
+    old_price_single_cents: int | None = Form(None),
+    new_price_single_cents: int | None = Form(None),
+    old_price_monthly_cents: int | None = Form(None),
+    new_price_monthly_cents: int | None = Form(None),
+    old_price_yearly_cents: int | None = Form(None),
+    new_price_yearly_cents: int | None = Form(None),
 ):
     def _form_bool(v: str | None) -> bool:
         return (v or "").strip().lower() in ("on", "true", "1", "yes")
+
+    def _form_int(v: int | None) -> int | None:
+        return v if v is not None and v >= 0 else None
 
     coupon = db.get(DiscountCode, coupon_id)
     if not coupon:
@@ -229,6 +270,13 @@ def coupon_update(
     coupon.auto_apply = _form_bool(auto_apply)
     coupon.display_label = (display_label or "").strip() or None
     coupon.display_note = (display_note or "").strip() or None
+    coupon.campaign_badge = (campaign_badge or "").strip() or None
+    coupon.old_price_single_cents = _form_int(old_price_single_cents)
+    coupon.new_price_single_cents = _form_int(new_price_single_cents)
+    coupon.old_price_monthly_cents = _form_int(old_price_monthly_cents)
+    coupon.new_price_monthly_cents = _form_int(new_price_monthly_cents)
+    coupon.old_price_yearly_cents = _form_int(old_price_yearly_cents)
+    coupon.new_price_yearly_cents = _form_int(new_price_yearly_cents)
     db.add(coupon)
     db.commit()
     return RedirectResponse(url="/admin/coupons", status_code=302)
