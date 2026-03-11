@@ -385,6 +385,30 @@ def unhandled_exception_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=500, content={"error": user_msg})
 
 
+# Google Ads conversion sayfası için tek CSP (script-src-elem + connect-src); path'ten bağımsız her zaman aynı
+# script-src-elem: 'unsafe-inline' gtag/conversion inline script'leri için; style-src: googletagmanager Tag Assistant badge için
+_CSP_PAYMENT_SUCCESS = (
+    "default-src 'self'; "
+    "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
+    "https://www.googletagmanager.com https://googletagmanager.com "
+    "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+    "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
+    "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://googletagmanager.com "
+    "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+    "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.googletagmanager.com https://googletagmanager.com; font-src 'self' https://fonts.gstatic.com; "
+    "img-src 'self' data: blob: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
+    "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com "
+    "https://googleads.g.doubleclick.net https://googletag.g.doubleclick.net; "
+    "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
+    "https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
+    "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+    "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net "
+    "https://www.google-analytics.com https://region1.google-analytics.com https://tpc.googletagmanager.com; "
+    "frame-ancestors 'self';"
+)
+
+
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
     """Production güvenlik başlıkları: CSP, X-Content-Type-Options, X-Frame-Options, HSTS (HTTPS)."""
@@ -394,32 +418,14 @@ async def security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     path = (request.url.path or "").strip().rstrip("/") or "/"
     is_payment_success = path == "/payment/success"
+    # Önce /payment/success: Google Ads conversion için CSP her ortamda aynı (ENVIRONMENT'dan bağımsız)
+    if is_payment_success:
+        response.headers["Content-Security-Policy"] = _CSP_PAYMENT_SUCCESS
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["X-Norya-CSP"] = "payment-success"  # Debug: bu sayfada gevşek CSP uygulandığını doğrula
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
-        # Payment success: Google Ads purchase conversion (gtag) — script-src-elem + connect-src engellemesin
-        if is_payment_success:
-            _csp = (
-                "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
-                "https://www.googletagmanager.com https://googletagmanager.com "
-                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
-                "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
-                "script-src-elem 'self' https://www.googletagmanager.com https://googletagmanager.com "
-                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
-                "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
-                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-                "img-src 'self' data: blob: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
-                "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com "
-                "https://googleads.g.doubleclick.net https://googletag.g.doubleclick.net; "
-                "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
-                "https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
-                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
-                "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net "
-                "https://www.google-analytics.com https://region1.google-analytics.com https://tpc.googletagmanager.com; "
-                "frame-ancestors 'self';"
-            )
-        else:
-            # API + form + inline script + cdn + Google Analytics (gtag) için CSP
+        if not is_payment_success:
             _csp = (
                 "default-src 'self'; "
                 "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
@@ -427,30 +433,7 @@ async def security_headers(request: Request, call_next):
                 "img-src 'self' data: blob: https:; "
                 "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
             )
-        response.headers["Content-Security-Policy"] = _csp
-    elif is_payment_success:
-        # Development/staging: payment success sayfasında da gtag için gevşek CSP (Tag Assistant testi)
-        _csp = (
-            "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
-            "https://www.googletagmanager.com https://googletagmanager.com "
-            "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
-            "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
-            "script-src-elem 'self' https://www.googletagmanager.com https://googletagmanager.com "
-            "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
-            "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: blob: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
-            "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com "
-            "https://googleads.g.doubleclick.net https://googletag.g.doubleclick.net; "
-            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
-            "https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
-            "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
-            "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net "
-            "https://tpc.googletagmanager.com; "
-            "frame-ancestors 'self';"
-        )
-        response.headers["Content-Security-Policy"] = _csp
+            response.headers["Content-Security-Policy"] = _csp
     return response
 
 
