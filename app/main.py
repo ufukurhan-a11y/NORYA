@@ -421,8 +421,11 @@ async def security_headers(request: Request, call_next):
     # Önce /payment/success: Google Ads conversion için CSP her ortamda aynı (ENVIRONMENT'dan bağımsız)
     if is_payment_success:
         response.headers["Content-Security-Policy"] = _CSP_PAYMENT_SUCCESS
-        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate, max-age=0"
+        response.headers["Pragma"] = "no-cache"
+        response.headers["Expires"] = "0"
         response.headers["X-Norya-CSP"] = "payment-success"  # Debug: bu sayfada gevşek CSP uygulandığını doğrula
+        # Cloudflare: Bu URL cache'lenmesin. Sorun sürerse Rules → Page Rules → *noryaai.com/payment/success* → Cache Level: Bypass
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
         if not is_payment_success:
@@ -2941,6 +2944,18 @@ def order_status(
     if not (merchant_oid and merchant_oid.strip()):
         raise HTTPException(status_code=400, detail="merchant_oid zorunludur.")
     oid = _validate_merchant_oid(merchant_oid)
+    # Test modu: sadece development'ta test123 için mock "paid" (Tag Assistant / conversion testi; production'da 404 kalır)
+    if oid == "test123" and getattr(settings, "environment", "development") != "production":
+        resp = {
+            "merchant_oid": "test123",
+            "status": "paid",
+            "is_premium_active": True,
+            "plan_code": "yearly",
+            "total_amount_eur": 99.0,
+        }
+        response = JSONResponse(content=resp)
+        response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        return response
     stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == oid)
     order = db.exec(stmt).first()
     if not order:
