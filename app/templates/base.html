@@ -102,7 +102,7 @@
   </style>
   {% block head %}{% endblock %}
   {% set ga_id = request.state.ga_measurement_id|default('G-1FLMLJH3Q0', true) %}
-  {% set aw_id = request.state.google_ads_conversion_id|default('', true) %}
+  {% set aw_id = request.state.google_ads_conversion_id|default('AW-18004536281', true) %}
   {% if ga_id or aw_id %}
   <!-- Google tag (gtag.js) — GA4 + Google Ads -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id or aw_id }}"></script>
