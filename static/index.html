@@ -4415,7 +4415,7 @@
               <p class="intake-subtitle" data-i18n="upload_intake_subtitle">Secure, structured intake. Your report is generated in minutes.</p>
             </div>
 
-            <form id="analyzeForm" method="post" action="#" onsubmit="return handleAnalyzeSubmit(event)" aria-label="Lab intake form">
+            <form id="analyzeForm" method="post" action="javascript:void(0)" onsubmit="handleAnalyzeSubmit(event); return false;" aria-label="Lab intake form">
               <div id="wizard-stepper" class="intake-stepper">
                 <div class="flex items-center flex-1">
                   <div id="wizard-dot-1" class="wizard-dot intake-stepper-dot active">1</div>
@@ -10993,7 +10993,11 @@
           if (wizardCurrentStep === 1) nextBtn.disabled = !wizardCanProceedFrom1();
         }
         if (wizardCurrentStep === 2) wizardFillPreview();
-        if (wizardCurrentStep === 3) wizardStartProgress();
+        if (wizardCurrentStep === 3) {
+          wizardStartProgress();
+          var step3 = document.getElementById('wizard-step-3');
+          if (step3) setTimeout(function() { step3.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+        }
         if (wizardCurrentStep === 4) wizardStopProgress();
       }
 
