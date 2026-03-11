@@ -3788,7 +3788,7 @@ def payment_success_page(
     report_url = f"{base}/report"
     guest_token_js = json.dumps((guest_token or "").strip() or "")
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
-    conversion_send_to = f"{aw_id}/RF4SCL78oIYcENnXnY1D"
+    conversion_send_to = f"{aw_id}/RF4SCL780lYcENnXnYID"
     gtag_script = (
         f'<script async src="https://www.googletagmanager.com/gtag/js?id={aw_id}"></script>'
         f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{aw_id}");</script>'
