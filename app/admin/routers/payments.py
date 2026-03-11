@@ -1,4 +1,5 @@
 """Satış & ödeme paneli: başarılı/hatalı/bekleyen, PayTR, detay, admin notu, e-arşiv fatura, iade."""
+from datetime import datetime
 from urllib.parse import quote
 
 from fastapi import APIRouter, Depends, Form, Query, Request
@@ -14,6 +15,19 @@ from app.services.paytr_refund import paytr_refund
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
+
+
+def _fmt_dt(val):
+    """Format datetime/date or string for display; avoid AttributeError if DB returns str."""
+    if val is None:
+        return "-"
+    if isinstance(val, datetime):
+        return val.strftime("%d.%m.%Y %H:%M")
+    if hasattr(val, "strftime"):
+        return val.strftime("%d.%m.%Y %H:%M")
+    if isinstance(val, str):
+        return val[:16] if len(val) > 16 else val
+    return "-"
 
 
 @router.get("", response_class=HTMLResponse)
@@ -35,14 +49,14 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
             "user_id": o.user_id,
             "user_email": users_map.get(o.user_id, ""),
             "product": o.product,
-            "amount_cents": o.amount_kurus,
+            "amount_cents": (o.amount_kurus or 0),
             "amount_eur": (o.amount_kurus or 0) / 100,
             "currency": getattr(o, "currency", None) or "EUR",
             "status": o.status,
             "paytr_transaction_id": getattr(o, "paytr_transaction_id", None) or "-",
             "is_processed": getattr(o, "is_processed", False),
-            "processed_at": (o.processed_at.strftime("%d.%m.%Y %H:%M") if getattr(o, "processed_at", None) else "-"),
-            "created_at": (o.created_at.strftime("%d.%m.%Y %H:%M") if o.created_at else "-"),
+            "processed_at": _fmt_dt(getattr(o, "processed_at", None)),
+            "created_at": _fmt_dt(o.created_at),
             "admin_note": getattr(o, "admin_note", None) or "",
             "invoice_ettn": getattr(o, "invoice_ettn", None) or "",
             "refunded_at": getattr(o, "refunded_at", None),
