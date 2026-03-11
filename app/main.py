@@ -394,14 +394,32 @@ async def security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
-        # API + form + inline script + cdn + Google Analytics (gtag) için CSP
-        _csp = (
-            "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: blob: https:; "
-            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
-        )
+        path = (request.url.path or "").strip()
+        # Payment success: Google Ads conversion (gtag event) için ek script/connect/img izinleri
+        if path == "/payment/success":
+            _csp = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
+                "https://www.googletagmanager.com https://googletagmanager.com "
+                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+                "img-src 'self' data: blob: https: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
+                "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com; "
+                "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
+                "https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
+                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+                "https://www.google-analytics.com https://region1.google-analytics.com https://tpc.googletagmanager.com; "
+                "frame-ancestors 'self';"
+            )
+        else:
+            # API + form + inline script + cdn + Google Analytics (gtag) için CSP
+            _csp = (
+                "default-src 'self'; "
+                "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
+                "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+                "img-src 'self' data: blob: https:; "
+                "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
+            )
         response.headers["Content-Security-Policy"] = _csp
     return response
 
@@ -2850,11 +2868,12 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
 
 
 def _validate_merchant_oid(merchant_oid: str) -> str:
-    """Validate merchant_oid format; return stripped. Raises 400 if invalid."""
+    """Validate merchant_oid format; return stripped. Raises 400 if invalid.
+    Beklenen format: alfanumerik, tire/alt çizgi/nokta olabilir; 6–128 karakter (örn. norya + 20 hex veya norya{user_id}{ts}{hex})."""
     oid = (merchant_oid or "").strip()
-    if not oid or len(oid) < 10 or len(oid) > 128:
-        raise HTTPException(status_code=400, detail="Geçersiz merchant_oid.")
-    if not all(c.isalnum() or c in "-_" for c in oid):
+    if not oid or len(oid) < 6 or len(oid) > 128:
+        raise HTTPException(status_code=400, detail="Geçersiz veya eksik merchant_oid.")
+    if not all(c.isalnum() or c in "-_." for c in oid):
         raise HTTPException(status_code=400, detail="Geçersiz merchant_oid formatı.")
     return oid
 
@@ -2862,11 +2881,14 @@ def _validate_merchant_oid(merchant_oid: str) -> str:
 @app.get("/api/orders/status")
 def order_status(
     request: Request,
-    merchant_oid: str = Query(..., description="Sipariş merchant_oid"),
+    merchant_oid: str = Query("", description="Sipariş merchant_oid (PayTR yönlendirmesinde query param)"),
     db: Session = Depends(get_db),
 ):
     """Ödeme durumu: pending, paid, failed. Premium kilit açma ve success sayfası polling için.
-    Response: merchant_oid, status (pending|paid|failed), is_premium_active, active_until?, plan_code?."""
+    Response: merchant_oid, status (pending|paid|failed), is_premium_active, plan_code?, total_amount_eur?.
+    merchant_oid eksik/geçersizse 400 döner."""
+    if not (merchant_oid and merchant_oid.strip()):
+        raise HTTPException(status_code=400, detail="merchant_oid zorunludur.")
     oid = _validate_merchant_oid(merchant_oid)
     stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == oid)
     order = db.exec(stmt).first()
@@ -3637,6 +3659,7 @@ def payment_success_page(
     btn_report = t.get("success_btn_report", "Rapor sayfasına git")
     check_done_btn = t.get("success_check_done_btn", "Ödeme tamamlandı mı?")
     retry_text = t.get("failed_retry", "Tekrar dene")
+    invalid_oid_msg = t.get("success_invalid_oid", "Sipariş bilgisi alınamadı veya geçersiz. Rapor sayfasına gidebilirsiniz.")
 
     if not (merchant_oid and merchant_oid.strip()):
         html = f"""<!DOCTYPE html>
@@ -3714,6 +3737,7 @@ def payment_success_page(
   var premiumActive = {json.dumps(premium_active)};
   var pendingBank = {json.dumps(pending_bank)};
   var failedShort = {json.dumps(failed_short)};
+  var invalidOidMsg = {json.dumps(invalid_oid_msg)};
   var start = Date.now();
   var timeoutTotal = 90000;
   var intervalFast = 2000;
@@ -3746,8 +3770,18 @@ def payment_success_page(
     var timeoutMsg = {json.dumps(t.get("success_timeout", "Zaman aşımı"))};
     if (Date.now() - start > timeoutTotal) {{ showSpinner(false); setStatus(updating + " (" + timeoutMsg + ")"); showButtons(true, false); return; }}
     fetch(apiBase + "/api/orders/status?merchant_oid=" + encodeURIComponent(oid))
-      .then(function(r) {{ return r.status === 404 ? null : r.json(); }})
+      .then(function(r) {{
+        if (r.status === 400 || r.status === 422) {{
+          stopPolling();
+          showSpinner(false);
+          setStatus(invalidOidMsg);
+          showButtons(true, false);
+          return {{ __invalidOid: true }};
+        }}
+        return r.status === 404 ? null : r.json();
+      }})
       .then(function(d) {{
+        if (d && d.__invalidOid) return;
         if (!d) {{ setStatus(updating); return; }}
         if (d.status === "paid" || d.is_premium_active) {{
           stopPolling();
