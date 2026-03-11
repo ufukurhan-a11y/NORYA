@@ -71,6 +71,11 @@ from app.models import (  # noqa: F401
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
 from app.base_i18n import get_base_ui
+from app.landing_i18n import (
+    LANDING_ROUTES,
+    get_landing_meta,
+    get_landing_ui,
+)
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
@@ -478,6 +483,32 @@ def index_options():
 def index_post(request: Request):
     """Ana sayfa POST: form veya yönlendirme bazen POST gönderir; 405 yerine aynı sayfayı döndür."""
     return _index_response(request)
+
+
+# Country-based landing: /tr, /en, /en-ca, /de, /it — aynı component, locale'den beslenen içerik
+@app.get("/tr", response_class=HTMLResponse)
+def landing_tr(request: Request):
+    return _landing_response("tr", request)
+
+
+@app.get("/en", response_class=HTMLResponse)
+def landing_en(request: Request):
+    return _landing_response("en", request)
+
+
+@app.get("/en-ca", response_class=HTMLResponse)
+def landing_en_ca(request: Request):
+    return _landing_response("en-ca", request)
+
+
+@app.get("/de", response_class=HTMLResponse)
+def landing_de(request: Request):
+    return _landing_response("de", request)
+
+
+@app.get("/it", response_class=HTMLResponse)
+def landing_it(request: Request):
+    return _landing_response("it", request)
 
 
 @app.get("/yonetim", response_class=HTMLResponse)
@@ -1295,6 +1326,93 @@ def _inject_canonical(raw: str, canonical_url: str) -> str:
     if "</head>" in raw and tag not in raw:
         raw = raw.replace("</head>", tag + "\n  </head>", 1)
     return raw
+
+
+def _landing_response(locale: str, request: Request):
+    """Country-based landing: aynı index.html, locale'e göre title/meta/hreflang ve __LANDING_T__ enjekte edilir."""
+    import re
+    from html import escape
+
+    index_file = STATIC_DIR / "index.html"
+    if not index_file.is_file():
+        index_file = Path.cwd() / "static" / "index.html"
+    if not index_file.is_file():
+        return JSONResponse(
+            content={"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."},
+            status_code=404,
+        )
+
+    raw = index_file.read_text(encoding="utf-8")
+    if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
+        raw = _inject_ga(raw)
+    raw = _inject_whatsapp(raw)
+    raw = _inject_company(raw)
+
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/{locale}"
+    raw = _inject_canonical(raw, canonical_url)
+
+    meta = get_landing_meta(locale)
+    ui = get_landing_ui(locale)
+    title = escape(meta.get("meta_title", "Norya"))
+    desc = escape(meta.get("meta_description", ""))
+    og_locale = meta.get("og_locale", "en_US")
+
+    raw = re.sub(r"<title>[^<]*</title>", f"<title>{title}</title>", raw, count=1)
+    raw = re.sub(
+        r'<meta name="description" content="[^"]*" */?>',
+        f'<meta name="description" content="{desc}" />',
+        raw,
+        count=1,
+    )
+    raw = re.sub(
+        r'<meta property="og:title" content="[^"]*" */?>',
+        f'<meta property="og:title" content="{title}" />',
+        raw,
+        count=1,
+    )
+    raw = re.sub(
+        r'<meta property="og:description" content="[^"]*" */?>',
+        f'<meta property="og:description" content="{desc}" />',
+        raw,
+        count=1,
+    )
+    raw = re.sub(
+        r'<meta property="og:locale" content="[^"]*" */?>',
+        f'<meta property="og:locale" content="{og_locale}" />',
+        raw,
+        count=1,
+    )
+
+    hreflang_lines = [
+        f'  <link rel="alternate" hreflang="tr" href="{base_url}/tr" />',
+        f'  <link rel="alternate" hreflang="en" href="{base_url}/en" />',
+        f'  <link rel="alternate" hreflang="en-CA" href="{base_url}/en-ca" />',
+        f'  <link rel="alternate" hreflang="de" href="{base_url}/de" />',
+        f'  <link rel="alternate" hreflang="it" href="{base_url}/it" />',
+        f'  <link rel="alternate" hreflang="x-default" href="{base_url}/en" />',
+    ]
+    hreflang_block = "\n".join(hreflang_lines)
+    raw = re.sub(
+        r'  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*(?:  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*)*',
+        hreflang_block + "\n  ",
+        raw,
+        count=1,
+    )
+
+    lang_attr = "en" if locale == "en-ca" else locale
+    raw = re.sub(r'<html lang="[^"]*"', f'<html lang="{lang_attr}"', raw, count=1)
+
+    landing_script = (
+        f'<script>window.__LANDING_LOCALE__="{escape(locale)}";'
+        f"window.__LANDING_T__={json.dumps(ui, ensure_ascii=False)};</script>\n  "
+    )
+    raw = raw.replace("</head>", landing_script + "</head>", 1)
+
+    return HTMLResponse(
+        raw,
+        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
+    )
 
 
 def _index_response(request: Request | None = None):

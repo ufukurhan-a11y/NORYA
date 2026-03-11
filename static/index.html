@@ -23,9 +23,12 @@
   <meta property="og:image" content="/static/norya_logo_transparent_trim.png" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
-  <link rel="alternate" hreflang="en" href="https://noryaai.com/" />
-  <link rel="alternate" hreflang="tr" href="https://noryaai.com/?lang=tr" />
-  <link rel="alternate" hreflang="x-default" href="https://noryaai.com/" />
+  <link rel="alternate" hreflang="tr" href="https://noryaai.com/tr" />
+  <link rel="alternate" hreflang="en" href="https://noryaai.com/en" />
+  <link rel="alternate" hreflang="en-CA" href="https://noryaai.com/en-ca" />
+  <link rel="alternate" hreflang="de" href="https://noryaai.com/de" />
+  <link rel="alternate" hreflang="it" href="https://noryaai.com/it" />
+  <link rel="alternate" hreflang="x-default" href="https://noryaai.com/en" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="Norya — Kan Tahlili Analizi" />
   <meta name="twitter:description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın." />
@@ -2332,7 +2335,7 @@
   </div>
   <script>
   (function(){
-    var SUPPORTED = ['en','de','it','fr','es','tr','ar','hi','he','el','sr'];
+    var SUPPORTED = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
     window.__noryaLangGo = function(locale) {
       console.log('[norya] switching to', locale);
       var path = window.location.pathname || '/';
@@ -2370,6 +2373,7 @@
           </button>
           <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h lang-dropdown-panel" style="right: 0; top: 0;" role="listbox" aria-label="Dil seçin">
             <button type="button" role="option" data-lang="en" class="lang-opt rounded-t-xl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('en'); else window.__noryaLangGo('en');">English</button>
+            <button type="button" role="option" data-lang="en-ca" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('en-ca'); else window.__noryaLangGo('en-ca');">English (Canada)</button>
             <button type="button" role="option" data-lang="de" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('de'); else window.__noryaLangGo('de');">Deutsch</button>
             <button type="button" role="option" data-lang="it" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('it'); else window.__noryaLangGo('it');">Italiano</button>
             <button type="button" role="option" data-lang="fr" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('fr'); else window.__noryaLangGo('fr');">Français</button>
@@ -9780,9 +9784,14 @@
         source_pdf: "PDF", source_image: "Slika", source_text: "Tekst"
       }
     };
+    if (window.__LANDING_T__ && window.__LANDING_LOCALE__) {
+      var _l = window.__LANDING_LOCALE__;
+      if (!T[_l]) T[_l] = (_l === 'en-ca' && T.en) ? Object.assign({}, T.en) : {};
+      for (var _k in window.__LANDING_T__) T[_l][_k] = window.__LANDING_T__[_k];
+    }
 
-    var SUPPORTED_LOCALES = ['en','de','it','fr','es','tr','ar','hi','he','el','sr'];
-    var LANG_LABELS = { tr: "TR", en: "EN", de: "DE", he: "HE", ar: "AR", hi: "HI", it: "IT", es: "ES", fr: "FR", el: "EL", cs: "CS", sr: "SR" };
+    var SUPPORTED_LOCALES = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
+    var LANG_LABELS = { tr: "TR", en: "EN", "en-ca": "EN-CA", de: "DE", he: "HE", ar: "AR", hi: "HI", it: "IT", es: "ES", fr: "FR", el: "EL", cs: "CS", sr: "SR" };
     function getLang() { return localStorage.getItem(LANG_KEY) || "en"; }
     function getEffectivePath() {
       var pathname = window.location.pathname || '/';
@@ -9872,6 +9881,7 @@
         if (wrap && !wrap.contains(m)) wrap.appendChild(m);
       }
     }
+    var LANDING_LOCALES = ['tr','en','en-ca','de','it'];
     function chooseLang(lang) {
       if (!lang || typeof lang !== 'string') return;
       lang = String(lang).toLowerCase().trim();
@@ -9882,6 +9892,11 @@
         modal.classList.add("hidden");
         var wrap = document.getElementById("lang-wrap");
         if (wrap && !wrap.contains(modal)) wrap.appendChild(modal);
+      }
+      if (LANDING_LOCALES.indexOf(lang) !== -1) {
+        localStorage.setItem(LANG_KEY, lang);
+        window.location.assign('/' + lang + (window.location.hash || ''));
+        return;
       }
       localStorage.setItem(LANG_KEY, lang);
       var base = window.location.pathname || '/';
