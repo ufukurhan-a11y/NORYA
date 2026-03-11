@@ -414,6 +414,8 @@ _CSP_PAYMENT_SUCCESS = (
     "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
     "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net "
     "https://www.google-analytics.com https://region1.google-analytics.com https://tpc.googletagmanager.com; "
+    "frame-src 'self' https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
+    "https://googleads.g.doubleclick.net https://googletag.g.doubleclick.net https://www.googleadservices.com; "
     "frame-ancestors 'self';"
 )
 
