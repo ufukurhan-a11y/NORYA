@@ -351,7 +351,7 @@ def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse
 
 
 @app.exception_handler(Exception)
-def unhandled_exception_handler(request: Request, exc: Exception) -> JSONResponse:
+def unhandled_exception_handler(request: Request, exc: Exception):
     log.exception("Unhandled exception: path=%s %s", request.url.path, exc, exc_info=True)
     import traceback
     try:
@@ -372,6 +372,16 @@ def unhandled_exception_handler(request: Request, exc: Exception) -> JSONRespons
         user_msg = "Analiz sırasında hata oluştu."
     else:
         user_msg = "Beklenmeyen sunucu hatası."
+    # Admin panel isteklerinde HTML döndür (JSON yerine)
+    if path.startswith("/admin"):
+        html = (
+            "<!DOCTYPE html><html><head><meta charset='utf-8'><title>Hata</title></head><body style='"
+            "font-family:system-ui;max-width:32rem;margin:2rem auto;padding:1rem;background:#1e293b;color:#e2e8f0;'>"
+            "<h1 style='color:#f87171;'>Sunucu hatası</h1><p>" + user_msg + "</p>"
+            "<p><a href='/admin' style='color:#38bdf8;'>Admin paneline dön</a></p>"
+            "</body></html>"
+        )
+        return HTMLResponse(status_code=500, content=html)
     return JSONResponse(status_code=500, content={"error": user_msg})
 
 
@@ -2867,11 +2877,13 @@ def order_status(
     status_out = "paid" if status == "completed" else status
     is_premium = status == "completed"
     plan_code = order.product if is_premium else None  # "single" | "monthly" | "yearly"
+    total_eur = round((order.amount_kurus or 0) / 100.0, 2)
     resp = {
         "merchant_oid": order.merchant_oid,
         "status": status_out,
         "is_premium_active": is_premium,
         "plan_code": plan_code,
+        "total_amount_eur": total_eur,
     }
     # active_until not stored for now; optional for future subscription end
     response = JSONResponse(content=resp)
@@ -3654,9 +3666,16 @@ def payment_success_page(
 
     oid = merchant_oid.strip()
     report_url = f"{base}/report"
+    aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
+    conversion_send_to = f"{aw_id}/RF4SCL78oIYcENnXnY1D"
+    gtag_script = (
+        f'<script async src="https://www.googletagmanager.com/gtag/js?id={aw_id}"></script>'
+        f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{aw_id}");</script>'
+    )
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
+{gtag_script}
 <title>{title} – {BRAND_NAME}</title>
 <style>
   body {{ font-family: system-ui, sans-serif; margin: 0; padding: max(16px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); background: linear-gradient(165deg, #0c1222 0%, #0f172a 50%); color: #e2e8f0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }}
@@ -3735,6 +3754,11 @@ def payment_success_page(
           showSpinner(false);
           setStatus(premiumActive + " ✓", true);
           showButtons(true, false);
+          if (typeof gtag === "function" && !window.__noryaConversionFired) {{
+            window.__noryaConversionFired = true;
+            var val = (typeof d.total_amount_eur === "number") ? d.total_amount_eur : 0;
+            gtag("event", "conversion", {{ send_to: {json.dumps(conversion_send_to)}, value: val, currency: "EUR", transaction_id: d.merchant_oid || oid }});
+          }}
           redirectTimer = setTimeout(function() {{ window.location.href = reportUrl; }}, 1000);
           return;
         }}
