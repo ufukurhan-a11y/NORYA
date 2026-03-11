@@ -245,6 +245,14 @@ app = FastAPI(
 
 # Statik dosyalar: proje kökünde /static klasöründen servis edilir
 app.mount("/static", StaticFiles(directory="static"), name="static")
+
+
+@app.get("/favicon.ico", include_in_schema=False)
+def favicon():
+    """Tarayıcı varsayılan isteği /favicon.ico → mevcut PNG favicon'a yönlendir (konsol 404'ü giderir)."""
+    return RedirectResponse(url="/static/icons/favicon-32x32.png", status_code=302)
+
+
 app.state.limiter = limiter
 
 # AI response cache: aynı analiz girdisi (normalize metin + dil + plan + model) tekrar gelirse OpenAI çağrılmaz
@@ -397,8 +405,9 @@ _CSP_PAYMENT_SUCCESS = (
     "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
     "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
     "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.googletagmanager.com https://googletagmanager.com; font-src 'self' https://fonts.gstatic.com; "
-    "img-src 'self' data: blob: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
-    "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com "
+    "img-src 'self' data: blob: https://www.google.com https://google.com https://www.google.com.tr https://google.com.tr "
+    "https://www.googleadservices.com https://googleadservices.com "
+    "https://www.googletagmanager.com https://googletagmanager.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com "
     "https://googleads.g.doubleclick.net https://googletag.g.doubleclick.net; "
     "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
     "https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
