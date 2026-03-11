@@ -5349,6 +5349,7 @@
               <span class="profile-meta-pill"><span data-i18n="profile_plan_label">Plan</span>: <strong id="profile-summary-plan">—</strong></span>
               <span class="profile-meta-pill"><span data-i18n="profile_remaining">Kalan</span>: <strong id="profile-summary-remaining">—</strong></span>
               <span class="profile-meta-pill"><span data-i18n="profile_ends">Bitiş</span>: <strong id="profile-summary-ends">—</strong></span>
+              <span class="profile-meta-pill" id="profile-meta-member-since-wrap" style="display:none;"><span data-i18n="profile_member_since">Kayıt tarihi</span>: <strong id="profile-summary-member-since">—</strong></span>
             </div>
           </div>
           <div class="shrink-0 w-full sm:w-auto">
@@ -5434,6 +5435,7 @@
         <h2 class="text-lg font-bold text-accent-900 dark:text-white mb-4" data-i18n="profile_tab_plan">Paket & Kullanım</h2>
         <p class="text-sm text-accent-600 dark:text-accent-400 mb-2" data-i18n="profile_plan_name">Plan</p>
         <p id="profile-plan-name" class="font-semibold text-accent-900 dark:text-white mb-4">—</p>
+        <p id="profile-free-plan-note" class="text-xs text-accent-600 dark:text-accent-400 mb-3 hidden" data-i18n="profile_free_plan_note">Ücretsiz plan: Ayda 1 analiz. İlk analiz (hesap açılışında 1 kez) ücretsizdir.</p>
         <p class="text-sm text-accent-600 dark:text-accent-400 mb-1" data-i18n="profile_usage_label">Kullanım (bu ay)</p>
         <div class="flex justify-between text-sm mb-1">
           <span id="profile-usage-text" class="text-accent-700 dark:text-accent-300">—</span>
@@ -7140,7 +7142,7 @@
         about_who_3: "Norya olarak amacımız, laboratuvar sonuçlarınızı korkulacak bir belge olmaktan çıkarıp anlaşılır bir rehbere dönüştürmektir. Sizin deneyiminiz ve geri bildirimleriniz bu yolculukta bize yön veriyor.",
         nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_profile: "Profil", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
         profile_email_verified: "E-posta doğrulandı", profile_save: "Kaydet", profile_change_password: "Şifre değiştir", profile_change_password_btn: "Şifreyi güncelle", profile_export_data: "Verilerimi indir (JSON)", profile_delete_account: "Hesabımı sil", profile_delete_confirm_title: "Hesabı sil", profile_delete_confirm_desc: "Bu işlem geri alınamaz. Tüm analizleriniz ve verileriniz silinecek. Onaylamak için şifrenizi girin.", profile_cancel: "İptal", profile_delete_confirm_btn: "Hesabı sil",
-        profile_tab_general: "Genel Bilgiler", profile_tab_plan: "Paket & Kullanım", profile_tab_history: "Analiz Geçmişi", profile_tab_security: "Güvenlik", profile_plan_label: "Plan", profile_remaining: "Kalan", profile_ends: "Bitiş", profile_no_analyses: "Henüz analiz yok", profile_plan_pro: "Pro", profile_ends_monthly: "Aylık yenilenir", profile_ends_na: "—", profile_usage_label: "Kullanım (bu ay)", profile_upgrade_cta: "Paket Yükselt", profile_view_analysis: "Görüntüle", profile_unlimited: "Sınırsız", profile_country: "Ülke",
+        profile_tab_general: "Genel Bilgiler", profile_tab_plan: "Paket & Kullanım", profile_tab_history: "Analiz Geçmişi", profile_tab_security: "Güvenlik", profile_plan_label: "Plan", profile_remaining: "Kalan", profile_ends: "Bitiş", profile_member_since: "Kayıt tarihi", profile_free_plan_note: "Ücretsiz plan: Ayda 1 analiz. İlk analiz (hesap açılışında 1 kez) ücretsizdir.", profile_no_analyses: "Henüz analiz yok", profile_plan_pro: "Pro", profile_ends_monthly: "Aylık yenilenir", profile_ends_na: "—", profile_usage_label: "Kullanım (bu ay)", profile_upgrade_cta: "Paket Yükselt", profile_view_analysis: "Görüntüle", profile_unlimited: "Sınırsız", profile_country: "Ülke",
         profile_corporate_title: "Kurumlar için Norya", profile_corporate_subtitle: "Hastane, klinik ve laboratuvarlar için toplu analiz ve kurumsal çözümler.", profile_corporate_1: "Çoklu kullanıcı yönetimi", profile_corporate_2: "Toplu analiz", profile_corporate_3: "Kurumsal PDF rapor", profile_corporate_4: "API erişimi (yakında)", profile_corporate_cta: "Kurumsal için bize ulaşın →",
         trust_row_3d: "3D Secure ödeme", trust_row_kvkk: "KVKK / GDPR uyumlu", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Arşiv fatura",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
@@ -7506,7 +7508,7 @@
         about_who_3: "Our goal at Norya is to turn your lab results from a document to fear into a clear guide. Your experience and feedback guide us on this journey.",
         nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_profile: "Profile", nav_analyze: "Analyze", nav_logout: "Log out",
         profile_email_verified: "Email verified", profile_save: "Save", profile_change_password: "Change password", profile_change_password_btn: "Update password", profile_export_data: "Download my data (JSON)", profile_delete_account: "Delete my account", profile_delete_confirm_title: "Delete account", profile_delete_confirm_desc: "This cannot be undone. All your analyses and data will be deleted. Enter your password to confirm.", profile_cancel: "Cancel", profile_delete_confirm_btn: "Delete account",
-        profile_tab_general: "General", profile_tab_plan: "Plan & Usage", profile_tab_history: "Analysis History", profile_tab_security: "Security", profile_plan_label: "Plan", profile_remaining: "Remaining", profile_ends: "Ends", profile_no_analyses: "No analyses yet", profile_plan_pro: "Pro", profile_ends_monthly: "Renews monthly", profile_ends_na: "—", profile_usage_label: "Usage (this month)", profile_upgrade_cta: "Upgrade plan", profile_view_analysis: "View", profile_unlimited: "Unlimited", profile_country: "Country",
+        profile_tab_general: "General", profile_tab_plan: "Plan & Usage", profile_tab_history: "Analysis History", profile_tab_security: "Security", profile_plan_label: "Plan", profile_remaining: "Remaining", profile_ends: "Ends", profile_member_since: "Member since", profile_free_plan_note: "Free plan: 1 analysis per month. First analysis (once per account) is free.", profile_no_analyses: "No analyses yet", profile_plan_pro: "Pro", profile_ends_monthly: "Renews monthly", profile_ends_na: "—", profile_usage_label: "Usage (this month)", profile_upgrade_cta: "Upgrade plan", profile_view_analysis: "View", profile_unlimited: "Unlimited", profile_country: "Country",
         profile_corporate_title: "Norya for organizations", profile_corporate_subtitle: "Bulk analysis and enterprise solutions for hospitals, clinics and labs.", profile_corporate_1: "Multi-user management", profile_corporate_2: "Bulk analysis", profile_corporate_3: "Enterprise PDF report", profile_corporate_4: "API access (coming soon)", profile_corporate_cta: "Contact us for enterprise →",
         trust_row_3d: "3D Secure payment", trust_row_kvkk: "KVKK / GDPR compliant", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Archive invoice",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
@@ -10701,8 +10703,8 @@
             product: 'single',
             email: email,
             full_name: fullName || null,
-            success_url: base + '#payment-ok',
-            cancel_url: base + '#pricing',
+            success_url: base + '/payment/success',
+            cancel_url: base + '/payment/failed',
             coupon_code: guestCoupon || null,
             consent_mesafeli: !!document.getElementById('guest-consent-mesafeli') && document.getElementById('guest-consent-mesafeli').checked,
             consent_kvkk: !!document.getElementById('guest-consent-kvkk') && document.getElementById('guest-consent-kvkk').checked
@@ -10733,8 +10735,8 @@
     async function goToPayment(product) {
       var t = T[getLang()] || T.tr;
       var base = window.location.origin + window.location.pathname;
-      var successUrl = base + '#payment-ok';
-      var cancelUrl = base + '#pricing';
+      var successUrl = base + '/payment/success';
+      var cancelUrl = base + '/payment/failed';
       var c1 = document.getElementById('checkout-consent-mesafeli');
       var c2 = document.getElementById('checkout-consent-kvkk');
       var a1 = document.getElementById('analyze-consent-mesafeli');
@@ -11553,6 +11555,17 @@
       document.getElementById('profile-summary-plan').textContent = planName;
       document.getElementById('profile-summary-remaining').textContent = remaining;
       document.getElementById('profile-summary-ends').textContent = (profileUsage && profileUsage.plan === 'pro') ? (t.profile_ends_monthly || 'Aylık yenilenir') : (t.profile_ends_na || '—');
+      var memberSinceWrap = document.getElementById('profile-meta-member-since-wrap');
+      var memberSinceEl = document.getElementById('profile-summary-member-since');
+      if (memberSinceWrap && memberSinceEl && profileMe && profileMe.created_at) {
+        try {
+          var d = new Date(profileMe.created_at);
+          memberSinceEl.textContent = d.toLocaleDateString(getLocale(), { year: 'numeric', month: 'short', day: 'numeric' });
+          memberSinceWrap.style.display = '';
+        } catch (_) { memberSinceWrap.style.display = 'none'; }
+      } else if (memberSinceWrap) { memberSinceWrap.style.display = 'none'; }
+      var freePlanNote = document.getElementById('profile-free-plan-note');
+      if (freePlanNote) freePlanNote.classList.toggle('hidden', !(profileUsage && (profileUsage.plan || 'free').toLowerCase() === 'free'));
       // Dashboard KPI: health score + biological age + last report date (approximate, from usage if available)
       var lastScore = profileUsage && typeof profileUsage.last_score === 'number' ? Math.round(Math.max(0, Math.min(100, profileUsage.last_score))) : null;
       var kpiScoreEl = document.getElementById('profile-kpi-health-score');

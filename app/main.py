@@ -3902,6 +3902,10 @@ def payment_success_page(
           if (typeof gtag === "function" && !window.__noryaConversionFired && !alreadyFired) {{
             window.__noryaConversionFired = true;
             gtag("event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }});
+            try {{
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push({{ event: "purchase", value: val, currency: "EUR", transaction_id: txId }});
+            }} catch(e) {{}}
             try {{ sessionStorage.setItem(storageKey, "1"); }} catch(e) {{}}
             window.__noryaPaymentDebug.conversionTriggered = true;
             try {{ console.log("[Norya payment] Google Ads conversion fired", {{ orderId: txId, value: val, currency: "EUR" }}); }} catch(e) {{}}

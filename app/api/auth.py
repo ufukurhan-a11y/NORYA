@@ -143,6 +143,7 @@ async def register(
             country=getattr(user, "country", None),
             email_verified=bool(getattr(user, "email_verified_at", None)),
             verify_email_sent=verify_email_sent,
+            created_at=getattr(user, "created_at", None),
         )
     except HTTPException:
         raise
@@ -202,7 +203,7 @@ async def login(
 
 @router.get("/me", response_model=UserResponse)
 def me(user: User = Depends(get_current_user)):
-    """Giriş yapmış kullanıcının ad, e-posta, telefon, ülke, e-posta doğrulama bilgisi."""
+    """Giriş yapmış kullanıcının ad, e-posta, telefon, ülke, e-posta doğrulama, kayıt tarihi."""
     return UserResponse(
         id=user.id or 0,
         email=user.email,
@@ -210,6 +211,7 @@ def me(user: User = Depends(get_current_user)):
         phone=getattr(user, "phone", None),
         country=getattr(user, "country", None),
         email_verified=bool(getattr(user, "email_verified_at", None)),
+        created_at=getattr(user, "created_at", None),
     )
 
 
@@ -236,6 +238,7 @@ def update_me(
         phone=getattr(user, "phone", None),
         country=getattr(user, "country", None),
         email_verified=bool(getattr(user, "email_verified_at", None)),
+        created_at=getattr(user, "created_at", None),
     )
 
 

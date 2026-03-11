@@ -1,4 +1,17 @@
+from datetime import datetime
+
 from pydantic import BaseModel, EmailStr, field_validator
+
+
+class UserResponse(BaseModel):
+    id: int
+    email: str
+    full_name: str
+    phone: str | None = None
+    country: str | None = None
+    email_verified: bool = False
+    verify_email_sent: bool | None = None  # Sadece register cevabında: e-posta doğrulama linki gönderildi mi?
+    created_at: datetime | None = None  # Kayıt tarihi (profilde "Üye since")
 
 
 class UserCreate(BaseModel):
@@ -18,16 +31,6 @@ class UserCreate(BaseModel):
 class UserLogin(BaseModel):
     email: EmailStr
     password: str
-
-
-class UserResponse(BaseModel):
-    id: int
-    email: str
-    full_name: str
-    phone: str | None = None
-    country: str | None = None
-    email_verified: bool = False
-    verify_email_sent: bool | None = None  # Sadece register cevabında: e-posta doğrulama linki gönderildi mi?
 
 
 class UserUpdate(BaseModel):
