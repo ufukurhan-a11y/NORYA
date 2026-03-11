@@ -511,30 +511,30 @@ def index_post(request: Request):
     return _index_response(request)
 
 
-# Country-based landing: geçici kapalı — tüm istekler ana sayfaya yönlendirilir (öncelik: Google Ads tag)
+# Country-based landing: /tr, /en, /en-ca, /de, /it — aynı component, locale'den beslenen içerik
 @app.get("/tr", response_class=HTMLResponse)
 def landing_tr(request: Request):
-    return RedirectResponse(url="/?lang=tr", status_code=302)
+    return _landing_response("tr", request)
 
 
 @app.get("/en", response_class=HTMLResponse)
 def landing_en(request: Request):
-    return RedirectResponse(url="/?lang=en", status_code=302)
+    return _landing_response("en", request)
 
 
 @app.get("/en-ca", response_class=HTMLResponse)
 def landing_en_ca(request: Request):
-    return RedirectResponse(url="/?lang=en", status_code=302)
+    return _landing_response("en-ca", request)
 
 
 @app.get("/de", response_class=HTMLResponse)
 def landing_de(request: Request):
-    return RedirectResponse(url="/?lang=de", status_code=302)
+    return _landing_response("de", request)
 
 
 @app.get("/it", response_class=HTMLResponse)
 def landing_it(request: Request):
-    return RedirectResponse(url="/?lang=it", status_code=302)
+    return _landing_response("it", request)
 
 
 @app.get("/yonetim", response_class=HTMLResponse)
