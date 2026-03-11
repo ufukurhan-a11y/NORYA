@@ -877,6 +877,17 @@
     .intake-dropzone { border: 2px dashed rgba(14,165,164,0.35); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; background: rgba(14,165,164,0.04); transition: border-color 0.2s, background 0.2s; cursor: pointer; }
     .intake-dropzone:hover { border-color: rgba(14,165,164,0.5); background: rgba(14,165,164,0.06); }
     .dark .intake-dropzone { border-color: rgba(14,165,164,0.25); background: rgba(14,165,164,0.08); }
+    /* Analyze wizard: stabilize layout so loading/result alanı zıplamasın */
+    #analyze-section { scroll-margin-top: 96px; }
+    /* Wizard ana container sabit yükseklikte kalsın, collapse olmasın */
+    #analyze-box .intake-card-inner { min-height: 520px; display: flex; flex-direction: column; }
+    #analyze-form { flex: 1; display: flex; flex-direction: column; }
+    .wizard-step { width: 100%; }
+    /* Step'ler DOM'da kalsın; display:none yerine visibility/opacity ile gizle */
+    .wizard-step.hidden { visibility: hidden; opacity: 0; position: absolute; left: 0; right: 0; pointer-events: none; }
+    .wizard-step:not(.hidden) { visibility: visible; opacity: 1; position: relative; }
+    #wizard-step-3 { min-height: 260px; }
+    #analyze-result-body { min-height: 320px; }
     .dark .intake-dropzone:hover { border-color: rgba(14,165,164,0.4); background: rgba(14,165,164,0.12); }
     .intake-dropzone.drag-over { border-color: #0EA5A4; background: rgba(14,165,164,0.08); }
     .intake-dropzone-label { font-size: 0.9375rem; font-weight: 600; color: #0f172a; margin-bottom: 0.25rem; }
@@ -3538,8 +3549,9 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
         <div class="bg-white dark:bg-accent-800 rounded-2xl p-5 shadow-lg border border-accent-100 dark:border-accent-700">
           <div class="flex items-start justify-between gap-2 mb-3">
-            <div class="flex items-center gap-3">
+          <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold">AY</span>
+              <span class="text-base" aria-hidden="true">🇹🇷</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_1_name">Ayşe Y.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_1_role">Check-up sonrası kullanıcı</p>
@@ -3554,6 +3566,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold">MR</span>
+              <span class="text-base" aria-hidden="true">🇹🇷</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_2_name">Mehmet R.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_2_role">Kronik takip kullanıcısı</p>
@@ -3568,6 +3581,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold">EŞ</span>
+              <span class="text-base" aria-hidden="true">🇹🇷</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_3_name">Elif Ş.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_3_role">Sağlık meraklısı</p>
@@ -3582,6 +3596,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold">EW</span>
+              <span class="text-base" aria-hidden="true">🇬🇧</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_4_name">Emma W.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_4_role">Check-up kullanıcısı</p>
@@ -3596,6 +3611,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold">HK</span>
+              <span class="text-base" aria-hidden="true">🇩🇪</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_5_name">Hans K.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_5_role">Düzenli tahlil yaptıran</p>
@@ -3610,6 +3626,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold">FK</span>
+              <span class="text-base" aria-hidden="true">🇹🇷</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_6_name">Fatma K.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_6_role">Aile hekimine götüren</p>
@@ -3624,6 +3641,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold">JL</span>
+              <span class="text-base" aria-hidden="true">🇬🇧</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_7_name">James L.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_7_role">Sporcu, düzenli kontrol</p>
@@ -3638,6 +3656,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold">SM</span>
+              <span class="text-base" aria-hidden="true">🇪🇸</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_8_name">Sofia M.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_8_role">İspanya'dan kullanıcı</p>
@@ -3652,6 +3671,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold">AV</span>
+              <span class="text-base" aria-hidden="true">🇮🇳</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_9_name">Ali V.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_9_role">Diyabet takibi</p>
@@ -3666,6 +3686,7 @@
           <div class="flex items-start justify-between gap-2 mb-3">
             <div class="flex items-center gap-3">
               <span class="w-10 h-10 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold">MD</span>
+              <span class="text-base" aria-hidden="true">🇫🇷</span>
               <div>
                 <p class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="testimonial_10_name">Marie D.</p>
                 <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="testimonial_10_role">Fransa'dan kullanıcı</p>
@@ -4373,6 +4394,7 @@
   </section>
 
   <!-- Analyze: ultra-premium clinical intake (Function Health / InsideTracker level) -->
+  <!-- DEBUG_BUILD_2026_03_11 -->
   <section id="analyze-section" class="intake-section">
     <div class="intake-container">
       <div id="analyze-box" class="intake-card">
@@ -4411,11 +4433,11 @@
 
             <div class="intake-header">
               <h2 class="intake-title" data-i18n="upload_intake_title">Upload Your Lab Results</h2>
-              <p class="intake-title-tr" data-i18n="upload_intake_title_tr">Kan tahlili sonuçlarınızı yükleyin</p>
               <p class="intake-subtitle" data-i18n="upload_intake_subtitle">Secure, structured intake. Your report is generated in minutes.</p>
             </div>
 
-            <form id="analyzeForm" method="post" action="javascript:void(0)" onsubmit="handleAnalyzeSubmit(event); return false;" aria-label="Lab intake form">
+            <!-- Wizard container: not a form; "Analiz Et" is JS-only (addEventListener) to prevent any native submit. -->
+            <div id="analyzeWizardRoot" class="wizard-form-root" aria-label="Analiz sihirbazı">
               <div id="wizard-stepper" class="intake-stepper">
                 <div class="flex items-center flex-1">
                   <div id="wizard-dot-1" class="wizard-dot intake-stepper-dot active">1</div>
@@ -4447,8 +4469,9 @@
                 <textarea id="analyze-text" name="analyze-text" rows="5" aria-describedby="analyze-error analyze-usage" class="intake-textarea" data-i18n-placeholder="analyze_placeholder" placeholder="e.g. Hemoglobin: 14 g/dL, WBC: 7.2, Glucose: 95 mg/dL..."></textarea>
               </div>
 
-          <!-- Adım 2: Önizleme + dil -->
-          <div id="wizard-step-2" class="wizard-step hidden">
+          <!-- Adım 2: Önizleme + dil (form yok; sadece JS state ile ilerler) -->
+          <div id="wizard-step-2" class="wizard-step hidden" data-wizard-step="2">
+            <div class="wizard-step-2-inner">
             <p class="text-sm font-semibold text-navy-700 dark:text-navy-200 mb-3" data-i18n="wizard_step2_title">Önizleme ve dil</p>
             <div id="wizard-preview-card" class="rounded-2xl border-2 border-primary-200 dark:border-primary-700 bg-primary-50/30 dark:bg-primary-900/20 p-4 mb-4">
               <div id="wizard-preview-file" class="flex items-center gap-3">
@@ -4480,6 +4503,7 @@
             </select>
             <label class="block text-sm font-semibold text-navy-700 dark:text-navy-200 mb-1" data-i18n="analyze_doctor_notes_label">Doktor notu (isteğe bağlı)</label>
             <textarea id="analyze-doctor-notes" rows="2" class="w-full rounded-xl border-2 border-navy-200 dark:border-navy-600 bg-white dark:bg-navy-900/50 text-navy-900 dark:text-white p-3 text-sm focus:ring-2 focus:ring-primary-500" data-i18n-placeholder="analyze_doctor_notes_placeholder" placeholder="Örn: Doktorum B12 takviyesi verdi."></textarea>
+            </div>
           </div>
 
           <!-- Adım 3: Analiz ediliyor -->
@@ -4580,15 +4604,14 @@
             </div>
           </div>
 
-          <!-- Sihirbaz: Geri / Sonraki. runAnalyze() analyze-btn arar; wizard'da gizli tutuyoruz. -->
-          <button type="button" id="analyze-btn" class="hidden" aria-hidden="true" data-i18n="btn_analyze">Analiz Et</button>
           <div id="wizard-actions" class="mt-6 flex flex-wrap gap-3">
             <button type="button" id="wizard-btn-prev" onclick="wizardPrev()" class="px-5 py-2.5 rounded-xl border border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-200 font-medium hover:bg-slate-50 dark:hover:bg-slate-800/50 transition hidden" data-i18n="wizard_back">Geri</button>
-            <button type="submit" id="wizard-btn-next" class="intake-cta flex-1 min-w-[160px] sm:min-w-[180px]" data-i18n="wizard_next">Sonraki</button>
+            <button type="button" id="wizard-btn-next" class="intake-cta flex-1 min-w-[160px] sm:min-w-[180px]" data-i18n="wizard_next">Sonraki</button>
+            <button type="button" id="wizard-btn-analyze" class="intake-cta flex-1 min-w-[160px] sm:min-w-[180px] hidden" data-i18n="btn_analyze">Analiz Et</button>
           </div>
           <p id="analyze-error" class="mt-2 text-red-600 text-sm hidden" role="alert" aria-live="assertive"></p>
           <p id="analyze-retry-wrap" class="mt-1 hidden"><button type="button" id="analyze-retry-btn" class="text-sm text-[#0EA5A4] hover:underline font-medium" data-i18n="retry_btn">Tekrar dene</button></p>
-          </form>
+          </div>
         </div>
       </div>
     </div>
@@ -5236,7 +5259,7 @@
         <a href="/legal/mesafeli-satis-sozlesmesi" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium legal-lang-link" data-i18n="footer_terms">Kullanım Koşulları</a>
         <a href="/legal/iletisim" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium" data-i18n="nav_contact">Destek / İletişim</a>
       </div>
-      <p class="mt-6 text-center text-xs text-accent-500 dark:text-accent-500">© Norya. Tüm hakları saklıdır.</p>
+      <p class="mt-6 text-center text-xs text-accent-500 dark:text-accent-500" data-i18n="footer_desc">Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.</p>
     </div>
   </footer>
 
@@ -5742,6 +5765,12 @@
   <div id="toast-container" aria-live="polite"></div>
 
   <script>
+    console.log('INDEX_HTML_DEBUG_BUILD_2026_03_11');
+    try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (_) {}
+    if (window && window.addEventListener) {
+      window.addEventListener('beforeunload', function() { console.log('BEFORE_UNLOAD_FIRED'); });
+      window.addEventListener('pagehide', function() { console.log('PAGEHIDE_FIRED'); });
+    }
     const API_BASE = window.location.origin;
     const TOKEN_KEY = 'norya_token';
     const USER_KEY = 'norya_user';
@@ -6863,17 +6892,8 @@
     }
     function scrollToManualEntry() {
       var section = document.getElementById('analyze-section');
-      var textarea = document.getElementById('analyze-text');
-      if (section) {
+      if (section && section.scrollIntoView) {
         section.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        setTimeout(function() {
-          if (textarea) {
-            textarea.focus();
-          }
-        }, 400);
-      } else if (textarea) {
-        textarea.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        textarea.focus();
       }
     }
     function renderReport(sonuc, opts) {
@@ -7162,17 +7182,17 @@
         elite_card_glucose_title: "Glukoz ve Metabolizma", elite_card_glucose_body: "Belirteçler uygun aralıkta. Zaman içinde tutarlılık ve düzenli kontrol önerilir.",
         elite_card_lipid_title: "Lipid Profili ve Karaciğer", elite_card_lipid_body: "Kolesterol paneli ve karaciğer enzimleri klinik standartlara göre yorumlanır; kardiyovasküler risk bağlamında sunulur.",
         customer_reviews_title: "Müşteri Yorumları", customer_reviews_subtitle: "Kullanıcıların anlayabildiği, güvenle tekrar kullandığı premium sağlık raporlama deneyimi.",
-        review_years: "3+ yıldır kullanıyor",
+        review_years: "Rutin kan tahlilleri için kullanıyor",
         review_name_de: "Anna Schmidt", review_name_it: "Marco Rossi", review_name_fr: "Sophie Laurent", review_name_uk: "James Clarke",
         review_name_il: "David Cohen", review_name_sa: "Omar Al-Rashid",
         review_country_de: "Almanya", review_country_it: "İtalya", review_country_fr: "Fransa", review_country_uk: "İngiltere",
         review_country_il: "İsrail", review_country_sa: "Suudi Arabistan",
-        review_il_quote: "Yıllardır tahlil sonuçlarımı Norya ile takip ediyorum. Raporlar net ve profesyonel; doktorum her zaman hazır özeti alıyor.",
-        review_sa_quote: "Yıllardır Norya ile tahlillerimi takip ediyorum. Raporlar anlaşılır, güvenilir ve doktora götürmek için her zaman hazır.",
-        review_de_quote: "Yıllardır check-up sonuçlarımı Norya ile takip ediyorum. Raporlar net, güvenilir ve doktoruma götürmek için hep hazır.",
-        review_it_quote: "Norya'yı yıllardır kullanıyorum. Sonuçlar anlaşılır, PDF raporu her seferinde profesyonel. Rutin tahlillerim için vazgeçilmez oldu.",
-        review_fr_quote: "J'utilise Norya depuis des années pour mes bilans. Clair, moderne et rassurant — je recommande.",
-        review_uk_quote: "Yıllardır yıllık kan tahlillerim için Norya kullanıyorum. Net, profesyonel raporlar ve PDF'i doktorumla paylaşmaya her zaman hazır.",
+        review_il_quote: "Kan tahlili sonuçlarımı Norya ile takip ediyorum. Raporlar net ve profesyonel; doktorum için hazır bir özet sağlıyor.",
+        review_sa_quote: "Tahlil sonuçlarımı Norya ile takip ediyorum. Raporlar anlaşılır, güvenilir ve doktora götürmek için hazır.",
+        review_de_quote: "Check-up sonuçlarımı Norya ile takip ediyorum. Raporlar net, güvenilir ve doktoruma götürmek için hazır.",
+        review_it_quote: "Rutin kan tahlillerimi Norya ile takip ediyorum. Sonuçlar anlaşılır, PDF raporu her seferinde profesyonel.",
+        review_fr_quote: "J'utilise Norya pour suivre mes bilans. Clair, moderne et rassurant pour en parler avec mon médecin.",
+        review_uk_quote: "Annual bloodwork için Norya kullanıyorum. Net, profesyonel raporlar ve PDF'i doktorumla paylaşmak kolay.",
         customer_review_verified: "Doğrulanmış Yorum",
         upload_intake_title: "Kan tahlili sonuçlarınızı yükleyin",
         upload_intake_title_tr: "Upload Your Lab Results",
@@ -7527,17 +7547,17 @@
         elite_card_glucose_title: "Glucose & Metabolism", elite_card_glucose_body: "Markers are within a favorable range. Consistency over time and regular checks are recommended.",
         elite_card_lipid_title: "Lipid Profile & Liver", elite_card_lipid_body: "Cholesterol panel and liver enzymes are interpreted to clinical standards and presented in a cardiovascular risk context.",
         customer_reviews_title: "Customer Reviews", customer_reviews_subtitle: "Clear, premium health reporting that users can understand and return to.",
-        review_years: "Using for 3+ years",
+        review_years: "Routine bloodwork user",
         review_name_de: "Anna Schmidt", review_name_it: "Marco Rossi", review_name_fr: "Sophie Laurent", review_name_uk: "James Clarke",
         review_name_il: "David Cohen", review_name_sa: "Omar Al-Rashid",
         review_country_de: "Germany", review_country_it: "Italy", review_country_fr: "France", review_country_uk: "United Kingdom",
         review_country_il: "Israel", review_country_sa: "Saudi Arabia",
-        review_il_quote: "I've been using Norya for years for my test results. Reports are clear and professional; my doctor always gets the summary ready.",
-        review_sa_quote: "I've been using Norya for years to track my lab work. Reports are clear, reliable and always ready to take to the doctor.",
-        review_de_quote: "I've been using Norya for years to track my check-up results. Reports are clear, reliable and always ready to take to my doctor.",
-        review_it_quote: "I've used Norya for years. Results are easy to understand, the PDF report is always professional. It's become essential for my routine tests.",
-        review_fr_quote: "J'utilise Norya depuis des années pour mes bilans. Clair, moderne et rassurant — je recommande.",
-        review_uk_quote: "I've been using Norya for years for my annual bloodwork. Clear, professional reports and the PDF is always ready to share with my doctor.",
+        review_il_quote: "I use Norya to keep track of my lab results. Reports are clear and professional; my doctor gets a concise summary.",
+        review_sa_quote: "I use Norya to follow my lab work. Reports are clear, reliable and easy to take to the doctor.",
+        review_de_quote: "I use Norya to track my check-up results. Reports are clear, reliable and easy to share with my doctor.",
+        review_it_quote: "Norya helps me understand my routine blood tests. Results are easy to read and the PDF looks professional.",
+        review_fr_quote: "J'utilise Norya pour suivre mes bilans. Clair, moderne et rassurant pour en discuter avec mon médecin.",
+        review_uk_quote: "I use Norya for my annual bloodwork. Clear, professional reports and a PDF that's ready to share with my doctor.",
         customer_review_verified: "Verified Review",
         before_after_title: "From lab sheet to Norya report", before_after_desc: "Same results — first a dense table, 60 seconds later a clear report. Our users see this transformation.",
         before_after_before_label: "Before — Lab printout", before_after_th_test: "Test", before_after_th_result: "Result", before_after_th_ref: "Reference",
@@ -10232,7 +10252,7 @@
         var duw = document.getElementById('drawer-user-wrap'); if (duw) duw.classList.remove('hidden');
         analyzeLoginPrompt.classList.add('hidden');
         analyzeForm.classList.remove('hidden');
-        if (typeof setWizardStep === 'function') setWizardStep(1);
+        if (typeof setWizardStep === 'function' && (typeof wizardCurrentStep === 'undefined' || wizardCurrentStep === 1 || wizardCurrentStep === 4)) setWizardStep(1);
         if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
         loadUsage();
         if (typeof updateTestModeUI === 'function') updateTestModeUI();
@@ -10274,7 +10294,7 @@
         var duw = document.getElementById('drawer-user-wrap'); if (duw) duw.classList.add('hidden');
         analyzeLoginPrompt.classList.remove('hidden');
         analyzeForm.classList.remove('hidden');
-        if (typeof setWizardStep === 'function') setWizardStep(1);
+        if (typeof setWizardStep === 'function' && (typeof wizardCurrentStep === 'undefined' || wizardCurrentStep === 1 || wizardCurrentStep === 4)) setWizardStep(1);
       }
     }
 
@@ -10967,8 +10987,87 @@
     var wizardCurrentStep = 1;
       var wizardProgressInterval = null;
       var WIZARD_MAX_FILE_SIZE = 15 * 1024 * 1024; // 15 MB
+      var analyzeScrollY = null;
+      (function() {
+        var root = document.getElementById('analyzeWizardRoot');
+        if (root && root.addEventListener) {
+          root.addEventListener('keydown', function(e) {
+            if (e.key === 'Enter' && root.contains(e.target)) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+            }
+          }, true);
+        }
+        var nextBtn = document.getElementById('wizard-btn-next');
+        if (nextBtn && nextBtn.addEventListener) {
+          nextBtn.addEventListener('click', function(e) {
+            console.log('ANALYZE_BTN_CAPTURE_CLICK', e && e.target && (e.target.id || e.target.tagName));
+            if (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+            }
+            if (typeof handleAnalyzeSubmit === 'function') handleAnalyzeSubmit(e);
+          }, true);
+        }
+        var analyzeBtn = document.getElementById('wizard-btn-analyze');
+        if (analyzeBtn && analyzeBtn.addEventListener) {
+          analyzeBtn.addEventListener('click', function(e) {
+            if (e) {
+              e.preventDefault();
+              e.stopPropagation();
+              if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
+            }
+            analyzeScrollY = window.scrollY || window.pageYOffset || 0;
+            window.wizardOnAnalyzeSuccess = function() { setWizardStep(4); window.wizardOnAnalyzeSuccess = null; };
+            setWizardStep(3);
+            runAnalyze();
+          }, true);
+        }
+      })();
+
+      function scrollToAnalyzeTarget(targetId, block) {
+        try {
+          var el = document.getElementById(targetId) || document.getElementById('analyze-section');
+          if (!el || !el.scrollIntoView) return;
+          var prefersReduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var behavior = prefersReduced ? 'auto' : 'smooth';
+          var opts = { behavior: behavior, block: block || 'start' };
+          requestAnimationFrame(function() { el.scrollIntoView(opts); });
+        } catch (_) {
+          /* sessizce yut */
+        }
+      }
 
       function setWizardStep(step) {
+        console.log('SET_WIZARD_STEP_FIRED', wizardCurrentStep, '->', step);
+        var prevStep = wizardCurrentStep;
+        var shouldLog = (prevStep === 2 && step === 3) || (prevStep === 3 && step === 4);
+        var box = document.getElementById('analyze-box');
+        var inner = document.querySelector('#analyze-box .intake-card-inner');
+        var step1 = document.getElementById('wizard-step-1');
+        var step2 = document.getElementById('wizard-step-2');
+        var step3 = document.getElementById('wizard-step-3');
+        var step4 = document.getElementById('wizard-step-4');
+        if (shouldLog) {
+          console.log(
+            '[wizard-debug-before]',
+            JSON.stringify({
+              fromStep: prevStep,
+              toStep: step,
+              windowScrollY: window.scrollY,
+              analyzeBoxHeight: box ? box.offsetHeight : null,
+              intakeCardInnerHeight: inner ? inner.offsetHeight : null,
+              wizardStep1Height: step1 ? step1.offsetHeight : null,
+              wizardStep2Height: step2 ? step2.offsetHeight : null,
+              wizardStep3Height: step3 ? step3.offsetHeight : null,
+              wizardStep4Height: step4 ? step4.offsetHeight : null,
+              activeElement:
+                document.activeElement && (document.activeElement.id || document.activeElement.tagName)
+            })
+          );
+        }
         wizardCurrentStep = Math.max(1, Math.min(4, step));
         var i;
         for (i = 1; i <= 4; i++) {
@@ -10982,8 +11081,32 @@
           }
           if (line) line.classList.toggle('filled', i < wizardCurrentStep);
         }
+        if (shouldLog) {
+          box = document.getElementById('analyze-box');
+          inner = document.querySelector('#analyze-box .intake-card-inner');
+          step1 = document.getElementById('wizard-step-1');
+          step2 = document.getElementById('wizard-step-2');
+          step3 = document.getElementById('wizard-step-3');
+          step4 = document.getElementById('wizard-step-4');
+          console.log(
+            '[wizard-debug-after]',
+            JSON.stringify({
+              currentStep: wizardCurrentStep,
+              windowScrollY: window.scrollY,
+              analyzeBoxHeight: box ? box.offsetHeight : null,
+              intakeCardInnerHeight: inner ? inner.offsetHeight : null,
+              wizardStep1Height: step1 ? step1.offsetHeight : null,
+              wizardStep2Height: step2 ? step2.offsetHeight : null,
+              wizardStep3Height: step3 ? step3.offsetHeight : null,
+              wizardStep4Height: step4 ? step4.offsetHeight : null,
+              activeElement:
+                document.activeElement && (document.activeElement.id || document.activeElement.tagName)
+            })
+          );
+        }
         var prevBtn = document.getElementById('wizard-btn-prev');
         var nextBtn = document.getElementById('wizard-btn-next');
+        var analyzeBtn = document.getElementById('wizard-btn-analyze');
         if (prevBtn) prevBtn.classList.toggle('hidden', wizardCurrentStep === 1);
         if (nextBtn) {
           nextBtn.disabled = false;
@@ -10991,14 +11114,31 @@
           var t = T[getLang()] || T.tr;
           nextBtn.textContent = wizardCurrentStep === 2 ? (t.analyze_btn || 'Analiz Et') : (t.wizard_next || 'Sonraki');
           if (wizardCurrentStep === 1) nextBtn.disabled = !wizardCanProceedFrom1();
+          nextBtn.removeAttribute('data-loading');
+        }
+        if (analyzeBtn) {
+          analyzeBtn.classList.add('hidden');
+          analyzeBtn.style.display = 'none';
         }
         if (wizardCurrentStep === 2) wizardFillPreview();
         if (wizardCurrentStep === 3) {
           wizardStartProgress();
-          var step3 = document.getElementById('wizard-step-3');
-          if (step3) setTimeout(function() { step3.scrollIntoView({ behavior: 'smooth', block: 'start' }); }, 50);
+          requestAnimationFrame(function() {
+            var y = (typeof analyzeScrollY === 'number' && analyzeScrollY >= 0) ? analyzeScrollY : (window.scrollY || window.pageYOffset || 0);
+            window.scrollTo(0, y);
+          });
         }
-        if (wizardCurrentStep === 4) wizardStopProgress();
+        if (wizardCurrentStep === 4) {
+          wizardStopProgress();
+          requestAnimationFrame(function() {
+            var y = (typeof analyzeScrollY === 'number' && analyzeScrollY >= 0) ? analyzeScrollY : (window.scrollY || window.pageYOffset || 0);
+            window.scrollTo(0, y);
+            requestAnimationFrame(function() {
+              var el = document.getElementById('analyze-result');
+              if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            });
+          });
+        }
       }
 
       var ALLOWED_EXT = ["pdf", "jpg", "jpeg", "png"];
@@ -11105,7 +11245,7 @@
           }
           setWizardStep(2);
         } else if (wizardCurrentStep === 2) {
-          document.getElementById('wizard-lang').value && chooseLang(document.getElementById('wizard-lang').value);
+          analyzeScrollY = window.scrollY || window.pageYOffset || 0;
           setWizardStep(3);
           window.wizardOnAnalyzeSuccess = function() { setWizardStep(4); window.wizardOnAnalyzeSuccess = null; };
           runAnalyze();
@@ -11119,7 +11259,11 @@
       }
 
       function handleAnalyzeSubmit(event) {
-        event.preventDefault();
+        if (event) {
+          if (typeof event.preventDefault === 'function') event.preventDefault();
+          if (typeof event.stopPropagation === 'function') event.stopPropagation();
+          if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+        }
         wizardNext();
         return false;
       }
@@ -11127,13 +11271,13 @@
       function updateAnalyzeButtonState() {
         const textEl = document.getElementById('analyze-text');
         const fileInput = document.getElementById('analyze-pdf');
-        const btn = document.getElementById('analyze-btn');
         var nextBtn = document.getElementById('wizard-btn-next');
+        var analyzeBtn = document.getElementById('wizard-btn-analyze');
         var text = textEl ? (textEl.value || '').trim() : '';
         var file = fileInput && fileInput.files && fileInput.files[0];
         var hasFile = !!(file && (file.size > 0 || file.size === undefined));
-        if (btn && btn.getAttribute('data-loading') !== 'true') { btn.disabled = !text && !hasFile; }
-        if (nextBtn && wizardCurrentStep === 1) nextBtn.disabled = !text && !hasFile;
+        if (nextBtn && wizardCurrentStep === 1 && nextBtn.getAttribute('data-loading') !== 'true') nextBtn.disabled = !text && !hasFile;
+        if (analyzeBtn && wizardCurrentStep === 2 && analyzeBtn.getAttribute('data-loading') !== 'true') analyzeBtn.disabled = !text && !hasFile;
       }
     async function runAnalyze(opts) {
       opts = opts || {};
@@ -11149,9 +11293,9 @@
         hasFile = !!(file && (file.size > 0 || file.size === undefined));
       }
       const errEl = document.getElementById('analyze-error');
-      const btn = document.getElementById('analyze-btn');
       const nextBtn = document.getElementById('wizard-btn-next');
-      if (btn && btn.getAttribute('data-loading') === 'true') return;
+      const analyzeBtn = document.getElementById('wizard-btn-analyze');
+      if (nextBtn && nextBtn.getAttribute('data-loading') === 'true') return;
       const resultDiv = document.getElementById('analyze-result');
       resultDiv.classList.add('hidden');
       errEl.classList.add('hidden');
@@ -11173,12 +11317,13 @@
       }
       var t = T[getLang()] || T.tr;
       var loadingText = hasFile ? (t.btn_processing_pdf || 'PDF işleniyor...') : (t.btn_processing_analyze || 'Analiz ediliyor...');
-      if (btn) { btn.disabled = true; btn.setAttribute('data-loading', 'true'); btn.textContent = loadingText; }
-      if (nextBtn && nextBtn.offsetParent !== null) { nextBtn.disabled = true; nextBtn.setAttribute('data-loading', 'true'); nextBtn.textContent = loadingText; }
+      if (nextBtn) { nextBtn.disabled = true; nextBtn.setAttribute('data-loading', 'true'); nextBtn.textContent = loadingText; }
       try {
         var res, data;
         var isUploadRequest = hasFile;
-        var lang = getLang() || 'en';
+        var langEl = document.getElementById('wizard-lang');
+        var lang = (langEl && langEl.value) ? String(langEl.value).trim() : (getLang() || 'en');
+        if (!lang) lang = 'en';
         if (hasFile) {
           var fd = new FormData();
           fd.append('file', file);
@@ -11253,8 +11398,7 @@
             toast(msg, 'info');
             var restoreT = T[getLang()] || T.tr;
             var restoreLabel = restoreT.analyze_btn || 'Analiz Et';
-            if (btn) { btn.removeAttribute('data-loading'); btn.disabled = false; btn.textContent = restoreLabel; }
-            if (nextBtn) { nextBtn.removeAttribute('data-loading'); nextBtn.disabled = false; nextBtn.textContent = (wizardCurrentStep === 2 ? restoreLabel : (restoreT.wizard_next || 'Sonraki')); }
+            if (nextBtn) { nextBtn.removeAttribute('data-loading'); nextBtn.disabled = false; nextBtn.textContent = wizardCurrentStep === 2 ? restoreLabel : (restoreT.wizard_next || 'Sonraki'); }
             updateAnalyzeButtonState();
             setTimeout(function() { runAnalyze({ retry: true }); }, 35000);
             return;
@@ -11280,17 +11424,16 @@
           resultDiv.dataset.rid = String(lastAnalysisId);
           try { sessionStorage.setItem(LAST_RID_KEY, String(lastAnalysisId)); } catch (_) {}
           var reportPath = '/report?rid=' + encodeURIComponent(lastAnalysisId);
-          if (window.history && window.history.replaceState) {
-            window.history.replaceState(null, '', reportPath);
-          }
+          try {
+            if (window.history && window.history.replaceState && (window.location.pathname || '').indexOf('/report') === 0) {
+              window.history.replaceState(null, '', reportPath);
+            }
+          } catch (_) {}
         }
         if (getToken()) { loadHistory(); loadUsage(); }
         toast('Analiz tamamlandı.', 'success');
+        analyzeScrollY = window.scrollY || window.pageYOffset || 0;
         if (typeof window.wizardOnAnalyzeSuccess === 'function') window.wizardOnAnalyzeSuccess();
-        setTimeout(function() {
-          var cta = document.getElementById('report-download-cta');
-          if (cta && cta.scrollIntoView) cta.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
-        }, 300);
       } catch (e) {
         console.error('runAnalyze error', e);
         if (e && (e.message || e.cause)) console.error('runAnalyze detail:', e.message || (e.cause && (e.cause.message || String(e.cause))));
@@ -11305,8 +11448,7 @@
       } finally {
         var restoreT = T[getLang()] || T.tr;
         var restoreLabel = restoreT.analyze_btn || 'Analiz Et';
-        if (btn) { btn.removeAttribute('data-loading'); btn.disabled = false; btn.textContent = restoreLabel; }
-        if (nextBtn) { nextBtn.removeAttribute('data-loading'); nextBtn.disabled = false; nextBtn.textContent = (wizardCurrentStep === 2 ? restoreLabel : (restoreT.wizard_next || 'Sonraki')); }
+        if (nextBtn) { nextBtn.removeAttribute('data-loading'); nextBtn.disabled = false; nextBtn.textContent = wizardCurrentStep === 2 ? restoreLabel : (restoreT.wizard_next || 'Sonraki'); }
         updateAnalyzeButtonState();
       }
     }
