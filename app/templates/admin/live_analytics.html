@@ -1,0 +1,292 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Live Analytics - Norya Admin{% endblock %}
+{% block content %}
+<style>
+  /* Live Analytics: Norya ana palet — teal accent, premium kartlar */
+  .la-accent { color: #0EA5A4; }
+  .la-accent-bg { background: linear-gradient(135deg, #0EA5A4 0%, #0d9488 100%); }
+  .la-card {
+    background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+    border: 1px solid rgba(14, 165, 164, 0.2);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+  .la-card:hover { border-color: rgba(14, 165, 164, 0.4); box-shadow: 0 8px 32px rgba(14, 165, 164, 0.08); }
+  .la-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #94a3b8; margin-bottom: 0.35rem; }
+  .la-card-value { font-size: 1.75rem; font-weight: 700; color: #f1f5f9; letter-spacing: -0.02em; }
+  .la-page-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.25rem; }
+  .la-page-sub { font-size: 0.875rem; color: #94a3b8; margin-bottom: 1.5rem; }
+  .la-updated { font-size: 0.8125rem; color: #64748b; }
+  .la-chart-container { position: relative; height: 280px; }
+  .la-pie-container { position: relative; height: 220px; }
+  @media (max-width: 640px) {
+    .la-card-value { font-size: 1.5rem; }
+    .la-chart-container { height: 240px; }
+    .la-pie-container { height: 200px; }
+  }
+</style>
+
+<div class="flex flex-wrap items-center justify-between gap-4 mb-2">
+  <div>
+    <h1 class="la-page-title">Live Analytics Dashboard</h1>
+    <p class="la-page-sub">Canlı metrikler — son N dakika ve bugünkü özet. Veriler mevcut analiz, ödeme ve event verilerinden üretilir.</p>
+  </div>
+  <div class="flex flex-wrap items-center gap-2">
+    <span class="text-sm text-slate-400 mr-1">Periyot:</span>
+    {% for p in period_options %}
+    <a href="?period={{ p }}" class="px-3 py-1.5 rounded-lg text-sm font-medium {% if period_minutes == p %}la-accent-bg text-white{% else %}bg-slate-700 text-slate-300 hover:bg-slate-600{% endif %}">
+      {% if p == 30 %}30 dk{% elif p == 60 %}1 saat{% elif p == 360 %}6 saat{% elif p == 1440 %}24 saat{% else %}{{ p }} dk{% endif %}
+    </a>
+    {% endfor %}
+    <button type="button" id="la-btn-refresh" class="px-4 py-2 rounded-lg text-sm font-semibold la-accent-bg text-white hover:opacity-90 transition opacity shadow-lg ml-2">Yenile</button>
+  </div>
+</div>
+
+<div class="flex flex-wrap items-center gap-2 mb-4">
+  <label class="flex items-center gap-2 cursor-pointer">
+    <input type="checkbox" id="la-auto-refresh" class="rounded border-slate-600 bg-slate-700 text-teal-500 focus:ring-teal-500" />
+    <span class="text-sm text-slate-300">Otomatik yenileme (60 sn)</span>
+  </label>
+</div>
+
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
+  <div class="la-card">
+    <p class="la-card-title">Son {% if period_minutes == 60 %}1 saat{% elif period_minutes == 360 %}6 saat{% elif period_minutes == 1440 %}24 saat{% else %}{{ period_minutes }} dk{% endif %} aktif kullanıcı</p>
+    <p class="la-card-value la-accent" id="la-active-users">{{ active_users_period }}</p>
+  </div>
+  <div class="la-card">
+    <p class="la-card-title">Bugünkü analiz sayısı</p>
+    <p class="la-card-value" id="la-today-analyses">{{ today_analyses }}</p>
+  </div>
+  <div class="la-card">
+    <p class="la-card-title">Bugünkü ödeme / satış</p>
+    <p class="la-card-value" id="la-today-payments">{{ today_payments }}</p>
+  </div>
+  <div class="la-card">
+    <p class="la-card-title">Bugünkü gelir (EUR)</p>
+    <p class="la-card-value la-accent" id="la-today-revenue">{{ "%.2f"|format(today_revenue_eur) }} €</p>
+  </div>
+  <div class="la-card">
+    <p class="la-card-title">Conversion (ödeme/analiz)</p>
+    <p class="la-card-value" id="la-conversion">{{ conversion_pct }}%</p>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+  <div class="la-card">
+    <p class="la-card-title mb-3">Dakika bazlı aktif kullanıcı (son {% if period_minutes == 60 %}1 saat{% elif period_minutes == 360 %}6 saat{% elif period_minutes == 1440 %}24 saat{% else %}{{ period_minutes }} dk{% endif %})</p>
+    <div class="la-chart-container">
+      <canvas id="chart-minute" aria-label="Dakika bazlı aktif kullanıcı grafiği"></canvas>
+    </div>
+  </div>
+  <div class="la-card">
+    <p class="la-card-title mb-3">Ülkelere göre ziyaretçi (son 24 saat)</p>
+    <div class="overflow-x-auto max-h-64 overflow-y-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-slate-400 border-b border-slate-600">
+            <th class="py-2 pr-2">Ülke</th>
+            <th class="py-2 text-right">Adet</th>
+          </tr>
+        </thead>
+        <tbody id="la-by-country-body">
+          {% for row in by_country %}
+          <tr class="border-b border-slate-700/50">
+            <td class="py-2 pr-2 text-slate-200">{{ row.country }}</td>
+            <td class="py-2 text-right la-accent font-semibold">{{ row.count }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="2" class="py-4 text-slate-500">Veri yok.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+  <div class="la-card">
+    <p class="la-card-title mb-3">Cihaz dağılımı</p>
+    <p class="text-xs text-slate-500 mb-2">Şimdilik örnek veri; ileride event tablosuna bağlanacak.</p>
+    <div class="la-pie-container">
+      <canvas id="chart-device" aria-label="Cihaz dağılımı"></canvas>
+    </div>
+  </div>
+  <div class="la-card">
+    <p class="la-card-title mb-3">Trafik kaynakları</p>
+    <p class="text-xs text-slate-500 mb-2">Şimdilik örnek veri; ileride UTM/referrer ile doldurulacak.</p>
+    <div class="la-pie-container">
+      <canvas id="chart-traffic" aria-label="Trafik kaynakları"></canvas>
+    </div>
+  </div>
+</div>
+
+<div class="la-card mb-6">
+  <p class="la-card-title mb-3">Son işlemler (son 10 ödeme)</p>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-slate-400 border-b border-slate-600">
+          <th class="py-2 pr-2">Tarih</th>
+          <th class="py-2 pr-2">Kullanıcı</th>
+          <th class="py-2 pr-2">Ürün</th>
+          <th class="py-2 text-right">Tutar</th>
+          <th class="py-2">Durum</th>
+        </tr>
+      </thead>
+      <tbody id="la-last-transactions">
+        {% for t in last_transactions %}
+        <tr class="border-b border-slate-700/50">
+          <td class="py-2 pr-2 text-slate-200">{{ t.created_at }}</td>
+          <td class="py-2 pr-2 text-slate-200 max-w-32 truncate" title="{{ t.user_email }}">{{ t.user_email }}</td>
+          <td class="py-2 pr-2 text-slate-300">{{ t.product }}</td>
+          <td class="py-2 text-right la-accent font-semibold">{{ "%.2f"|format(t.amount_eur) }} €</td>
+          <td class="py-2"><span class="{% if t.status == 'completed' %}text-green-400{% elif t.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ t.status }}</span></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="py-4 text-slate-500">İşlem yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<div id="la-data" data-period="{{ period_minutes }}" style="display:none;"></div>
+<p class="la-updated">Son güncelleme: <strong id="la-last-updated">{{ last_updated_display }}</strong> (UTC)</p>
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<script>
+(function() {
+  var minuteLabels = {{ minute_labels | tojson }};
+  var minuteCounts = {{ minute_counts | tojson }};
+  var deviceData = {{ device_distribution | tojson }};
+  var trafficData = {{ traffic_sources | tojson }};
+
+  if (!Array.isArray(minuteLabels)) minuteLabels = [];
+  if (!Array.isArray(minuteCounts)) minuteCounts = [];
+  if (!Array.isArray(deviceData)) deviceData = [];
+  if (!Array.isArray(trafficData)) trafficData = [];
+
+  var teal = '#0EA5A4';
+  var gridColor = 'rgba(71, 85, 105, 0.4)';
+  var tickColor = '#94a3b8';
+
+  function getCurrentPeriod() {
+    var el = document.getElementById('la-data');
+    if (el && el.getAttribute('data-period')) return parseInt(el.getAttribute('data-period'), 10) || 30;
+    var m = window.location.search.match(/[?&]period=(\d+)/);
+    return m ? parseInt(m[1], 10) : 30;
+  }
+
+  var minuteChart = null;
+  function drawMinuteChart(labels, counts) {
+    var canvas = document.getElementById('chart-minute');
+    if (!canvas || typeof Chart === 'undefined') return;
+    if (minuteChart) minuteChart.destroy();
+    minuteChart = new Chart(canvas, {
+      type: 'line',
+      data: {
+        labels: labels || [],
+        datasets: [{
+          label: 'Aktif kullanıcı',
+          data: counts || [],
+          borderColor: teal,
+          backgroundColor: 'rgba(14, 165, 164, 0.12)',
+          fill: true,
+          tension: 0.3
+        }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { display: false } },
+        scales: {
+          y: { beginAtZero: true, grid: { color: gridColor }, ticks: { color: tickColor } },
+          x: { grid: { color: gridColor }, ticks: { color: tickColor, maxRotation: 45 } }
+        }
+      }
+    });
+  }
+  drawMinuteChart(minuteLabels, minuteCounts);
+
+  function makeDoughnut(canvasId, dataArray, labelKey, valueKey, colorKey) {
+    var el = document.getElementById(canvasId);
+    if (!el || !Array.isArray(dataArray) || dataArray.length === 0) return null;
+    var labels = dataArray.map(function(d) { return d[labelKey] || d.label; });
+    var values = dataArray.map(function(d) { return d[valueKey] != null ? d[valueKey] : d.value; });
+    var colors = dataArray.map(function(d) { return d[colorKey] || d.color || teal; });
+    return new Chart(el, {
+      type: 'doughnut',
+      data: {
+        labels: labels,
+        datasets: [{ data: values, backgroundColor: colors, borderColor: 'rgba(15, 23, 42, 0.9)', borderWidth: 2 }]
+      },
+      options: {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: { legend: { position: 'bottom', labels: { color: tickColor, padding: 12 } } },
+        cutout: '58%'
+      }
+    });
+  }
+  makeDoughnut('chart-device', deviceData, 'label', 'value', 'color');
+  makeDoughnut('chart-traffic', trafficData, 'label', 'value', 'color');
+
+  document.getElementById('la-btn-refresh').addEventListener('click', function() {
+    var p = getCurrentPeriod();
+    window.location.href = '/admin/live-analytics?period=' + p;
+  });
+
+  function updateFromApi(data) {
+    if (!data) return;
+    var id = function(s) { return document.getElementById(s); };
+    if (id('la-active-users')) id('la-active-users').textContent = data.active_users_period != null ? data.active_users_period : '';
+    if (id('la-today-analyses')) id('la-today-analyses').textContent = data.today_analyses != null ? data.today_analyses : '';
+    if (id('la-today-payments')) id('la-today-payments').textContent = data.today_payments != null ? data.today_payments : '';
+    if (id('la-today-revenue')) id('la-today-revenue').textContent = (data.today_revenue_eur != null ? Number(data.today_revenue_eur).toFixed(2) : '0.00') + ' €';
+    if (id('la-conversion')) id('la-conversion').textContent = (data.conversion_pct != null ? data.conversion_pct : 0) + '%';
+    if (id('la-last-updated')) id('la-last-updated').textContent = data.last_updated_display || '';
+    if (data.minute_labels && data.minute_counts) drawMinuteChart(data.minute_labels, data.minute_counts);
+    var countryBody = id('la-by-country-body');
+    if (countryBody && Array.isArray(data.by_country)) {
+      if (data.by_country.length === 0) {
+        countryBody.innerHTML = '<tr><td colspan="2" class="py-4 text-slate-500">Veri yok.</td></tr>';
+      } else {
+        countryBody.innerHTML = data.by_country.map(function(r) {
+          return '<tr class="border-b border-slate-700/50"><td class="py-2 pr-2 text-slate-200">' + (r.country || '?') + '</td><td class="py-2 text-right la-accent font-semibold">' + (r.count || 0) + '</td></tr>';
+        }).join('');
+      }
+    }
+    var txBody = id('la-last-transactions');
+    if (txBody && Array.isArray(data.last_transactions)) {
+      var statusClass = function(s) { return s === 'completed' ? 'text-green-400' : (s === 'failed' ? 'text-red-400' : 'text-amber-400'); };
+      if (data.last_transactions.length === 0) {
+        txBody.innerHTML = '<tr><td colspan="5" class="py-4 text-slate-500">İşlem yok.</td></tr>';
+      } else {
+        txBody.innerHTML = data.last_transactions.map(function(t) {
+          var amt = (t.amount_eur != null ? Number(t.amount_eur).toFixed(2) : '0.00') + ' €';
+          return '<tr class="border-b border-slate-700/50"><td class="py-2 pr-2 text-slate-200">' + (t.created_at || '-') + '</td><td class="py-2 pr-2 text-slate-200 max-w-32 truncate" title="' + (t.user_email || '').replace(/"/g, '&quot;') + '">' + (t.user_email || '-') + '</td><td class="py-2 pr-2 text-slate-300">' + (t.product || '-') + '</td><td class="py-2 text-right la-accent font-semibold">' + amt + '</td><td class="py-2"><span class="' + statusClass(t.status) + '">' + (t.status || '') + '</span></td></tr>';
+        }).join('');
+      }
+    }
+  }
+
+  var autoRefreshTimer = null;
+  document.getElementById('la-auto-refresh').addEventListener('change', function() {
+    if (autoRefreshTimer) clearInterval(autoRefreshTimer);
+    autoRefreshTimer = null;
+    if (this.checked) {
+      autoRefreshTimer = setInterval(function() {
+        var p = getCurrentPeriod();
+        fetch('/admin/api/live-analytics?period=' + p, { method: 'GET', credentials: 'same-origin', headers: { 'Accept': 'application/json' } })
+          .then(function(r) { return r.ok ? r.json() : null; })
+          .then(updateFromApi)
+          .catch(function() {});
+      }, 60000);
+    }
+  });
+})();
+</script>
+{% endblock %}

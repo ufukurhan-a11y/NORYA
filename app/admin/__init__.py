@@ -9,6 +9,7 @@ from app.admin.routers import (
     dashboard,
     errors,
     live,
+    live_analytics,
     payments,
     queue,
     reports,
@@ -24,6 +25,7 @@ admin_router.include_router(users.router, prefix="/users", tags=["admin-users"])
 admin_router.include_router(analyses.router, prefix="/analyses", tags=["admin-analyses"])
 admin_router.include_router(reports.router, prefix="/reports", tags=["admin-reports"])
 admin_router.include_router(live.router, prefix="/live", tags=["admin-live"])
+admin_router.include_router(live_analytics.router, tags=["admin-live-analytics"])
 admin_router.include_router(coupons.router, prefix="/coupons", tags=["admin-coupons"])
 admin_router.include_router(pricing_plans.router, prefix="/pricing-plans", tags=["admin-pricing"])
 admin_router.include_router(payments.router, prefix="/payments", tags=["admin-payments"])
