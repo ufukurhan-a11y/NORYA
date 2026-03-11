@@ -902,8 +902,12 @@ if getattr(settings, "environment", "development") != "production":
 GOOGLE_ADS_GLOBAL_TAG_ID = "AW-18004536281"
 
 
+# Placeholder in static/index.html (and any HTML served with _inject_ga); replaced by real gtag script.
+_GTAG_INJECT_PLACEHOLDER = "  <!-- NORYA_GTAG_INJECT -->"
+
+
 def _inject_ga(html: str) -> str:
-    """Google Ads (AW-18004536281) ve isteğe bağlı GA4 gtag'ini <!-- GA_INJECT --> yerine koyar. Tek script, tek yükleme."""
+    """Google Ads (AW-18004536281) ve isteğe bağlı GA4 gtag'ini placeholder yerine koyar. Tek script, tek yükleme."""
     ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
     first_id = ga_id or aw_id
@@ -915,7 +919,7 @@ def _inject_ga(html: str) -> str:
         f'<script async src="https://www.googletagmanager.com/gtag/js?id={first_id}"></script>\n'
         f'  <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());{" ".join(configs)}</script>\n  '
     )
-    return html.replace("<!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->", inject)
+    return html.replace(_GTAG_INJECT_PLACEHOLDER, inject)
 
 
 def _whatsapp_url_and_style() -> tuple[str, str]:
@@ -1412,8 +1416,7 @@ def _landing_response(locale: str, request: Request):
         )
 
     raw = index_file.read_text(encoding="utf-8")
-    if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
-        raw = _inject_ga(raw)
+    raw = _inject_ga(raw)
     raw = _inject_whatsapp(raw)
     raw = _inject_company(raw)
 
