@@ -9,11 +9,12 @@ from sqlmodel import Session, select
 from app.models import DiscountCode, PricingPlan
 
 # Varsayılan fiyatlar (DB boşsa veya hata durumunda; sadece fallback)
-DEFAULT_BASE_CENTS = {"single": 1404, "monthly": 5400, "yearly": 10692}
+# Tek analiz: 14.00 €, Aylık: 54.00 €, Yıllık: 99.00 €
+DEFAULT_BASE_CENTS = {"single": 1400, "monthly": 5400, "yearly": 9900}
 DEFAULT_PLAN_CODE_MAP = {
-    "single_13eur": ("single", 1404),
+    "single_13eur": ("single", 1400),
     "monthly_50eur": ("monthly", 5400),
-    "yearly_99eur": ("yearly", 10692),
+    "yearly_99eur": ("yearly", 9900),
 }
 
 

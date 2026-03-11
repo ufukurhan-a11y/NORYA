@@ -877,8 +877,9 @@
     .intake-dropzone { border: 2px dashed rgba(14,165,164,0.35); border-radius: 16px; padding: 2rem 1.5rem; text-align: center; background: rgba(14,165,164,0.04); transition: border-color 0.2s, background 0.2s; cursor: pointer; }
     .intake-dropzone:hover { border-color: rgba(14,165,164,0.5); background: rgba(14,165,164,0.06); }
     .dark .intake-dropzone { border-color: rgba(14,165,164,0.25); background: rgba(14,165,164,0.08); }
-    /* Analyze wizard: stabilize layout so loading/result alanı zıplamasın */
+    /* Analyze wizard: stabilize layout so loading/result alanı zıplamasın; mobil uyumlu */
     #analyze-section { scroll-margin-top: 96px; }
+    @media (max-width: 767px) { #analyze-section { scroll-margin-top: 56px; } }
     /* Wizard ana container sabit yükseklikte kalsın, collapse olmasın */
     #analyze-box .intake-card-inner { min-height: 520px; display: flex; flex-direction: column; }
     #analyze-form { flex: 1; display: flex; flex-direction: column; }
@@ -886,7 +887,9 @@
     /* Step'ler DOM'da kalsın; display:none yerine visibility/opacity ile gizle */
     .wizard-step.hidden { visibility: hidden; opacity: 0; position: absolute; left: 0; right: 0; pointer-events: none; }
     .wizard-step:not(.hidden) { visibility: visible; opacity: 1; position: relative; }
+    #analyzeWizardRoot { touch-action: manipulation; }
     #wizard-step-3 { min-height: 260px; }
+    @media (max-width: 640px) { #wizard-step-3 { min-height: 200px; } #analyze-box .intake-card-inner { min-height: 420px; } }
     #analyze-result-body { min-height: 320px; }
     .dark .intake-dropzone:hover { border-color: rgba(14,165,164,0.4); background: rgba(14,165,164,0.12); }
     .intake-dropzone.drag-over { border-color: #0EA5A4; background: rgba(14,165,164,0.08); }
@@ -908,10 +911,12 @@
     .dark .intake-stepper-line { background: rgba(148,163,184,0.2); }
     .intake-stepper-line.filled { background: #0EA5A4; }
     .dark .intake-stepper-line.filled { background: #0EA5A4; }
-    .intake-cta { width: 100%; padding: 0.875rem 1.5rem; font-size: 1rem; font-weight: 600; border-radius: 14px; background: #0EA5A4; color: #fff; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; min-height: 48px; }
+    .intake-cta { width: 100%; padding: 0.875rem 1.5rem; font-size: 1rem; font-weight: 600; border-radius: 14px; background: #0EA5A4; color: #fff; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; min-height: 48px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
     .intake-cta:hover:not(:disabled) { background: #0d9488; }
+    .intake-cta:active:not(:disabled) { transform: scale(0.98); }
     .intake-cta:disabled { opacity: 0.5; cursor: not-allowed; }
     .intake-cta:focus { outline: none; box-shadow: 0 0 0 3px rgba(14,165,164,0.25); }
+    @media (max-width: 640px) { .intake-cta { min-height: 44px; padding: 0.75rem 1.25rem; } }
     /* PWA banner kaldırıldı — body padding artık gerekmiyor */
     /* Premium health SaaS: mobil-first, accent #0EA5A4, bol beyaz */
     .premium-wrap { max-width: var(--premium-container, 1100px); margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; overflow-x: clip; min-width: 0; box-sizing: border-box; }
@@ -1644,7 +1649,7 @@
     }
     .dark .drawer-head { border-bottom-color: rgba(255,255,255,.06); }
     .drawer-body {
-      padding: 16px;
+      padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom));
       display: flex;
       flex-direction: column;
       gap: 4px;
@@ -1652,6 +1657,7 @@
       overflow-x: hidden;
       flex: 1;
       min-height: 0;
+      -webkit-overflow-scrolling: touch;
     }
     .drawer-cta-primary {
       display: block;
@@ -2335,17 +2341,17 @@
     /* Promo bar: mobilde taşma olmasın */
     #promo-strip-home, #promo-strip-fixed { word-wrap: break-word; overflow-wrap: break-word; box-sizing: border-box; max-width: 100%; }
     #promo-strip-home p, #promo-strip-fixed span { word-wrap: break-word; overflow-wrap: break-word; }
-    /* Sticky CTA bar: kaydırınca altta Fiyatları Gör / Satın Al */
+    /* Sticky CTA bar: kaydırınca altta Fiyatları Gör / Satın Al; mobil safe-area */
     #sticky-cta-bar {
       position: fixed; bottom: 0; left: 0; right: 0; z-index: 999;
-      padding: 12px 16px; text-align: center;
+      padding: 12px 16px; padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right)); padding-bottom: max(12px, env(safe-area-inset-bottom)); text-align: center;
       background: linear-gradient(180deg, rgba(14,165,164,0.98) 0%, rgba(13,148,136,0.99) 100%);
       box-shadow: 0 -4px 20px rgba(14,165,164,0.3);
       transform: translateY(100%); transition: transform 0.3s ease;
       pointer-events: none;
     }
     #sticky-cta-bar.sticky-cta-visible { transform: translateY(0); pointer-events: auto; }
-    #sticky-cta-bar a { display: inline-block; padding: 10px 24px; background: #fff; color: #0d9488; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+    #sticky-cta-bar a { display: inline-block; padding: 10px 24px; min-height: 44px; box-sizing: border-box; align-items: center; justify-content: center; background: #fff; color: #0d9488; font-weight: 700; border-radius: 12px; text-decoration: none; box-shadow: 0 2px 10px rgba(0,0,0,0.1); -webkit-tap-highlight-color: transparent; touch-action: manipulation; }
     #sticky-cta-bar a:hover { background: #f0fdfa; }
     .dark #sticky-cta-bar { background: linear-gradient(180deg, rgba(45,212,191,0.95) 0%, rgba(20,184,166,0.98) 100%); }
     .dark #sticky-cta-bar a { color: #0f766e; }
@@ -10007,7 +10013,7 @@
       document.body.style.width = '';
       document.body.removeAttribute('data-drawer-open');
       document.body.removeAttribute('data-drawer-scroll-y');
-      if (scrollY !== null && scrollY !== '') window.scrollTo(0, parseInt(scrollY, 10));
+      if (scrollY !== null && scrollY !== '') { var y = parseInt(scrollY, 10); if (!isNaN(y) && typeof setScrollY === 'function') setScrollY(y); else window.scrollTo(0, y); }
       document.removeEventListener('keydown', onDrawerKeydown);
       if (hamburger) {
         hamburger.classList.remove('active');
@@ -10988,6 +10994,8 @@
       var wizardProgressInterval = null;
       var WIZARD_MAX_FILE_SIZE = 15 * 1024 * 1024; // 15 MB
       var analyzeScrollY = null;
+      function getScrollY() { return window.scrollY ?? window.pageYOffset ?? (document.documentElement && document.documentElement.scrollTop) ?? (document.body && document.body.scrollTop) ?? 0; }
+      function setScrollY(y) { var n = Number(y); if (n < 0 || isNaN(n)) return; window.scrollTo(0, n); if (document.documentElement) document.documentElement.scrollTop = n; if (document.body) document.body.scrollTop = n; }
       (function() {
         var root = document.getElementById('analyzeWizardRoot');
         if (root && root.addEventListener) {
@@ -11019,7 +11027,7 @@
               e.stopPropagation();
               if (typeof e.stopImmediatePropagation === 'function') e.stopImmediatePropagation();
             }
-            analyzeScrollY = window.scrollY || window.pageYOffset || 0;
+            analyzeScrollY = getScrollY();
             window.wizardOnAnalyzeSuccess = function() { setWizardStep(4); window.wizardOnAnalyzeSuccess = null; };
             setWizardStep(3);
             runAnalyze();
@@ -11124,15 +11132,15 @@
         if (wizardCurrentStep === 3) {
           wizardStartProgress();
           requestAnimationFrame(function() {
-            var y = (typeof analyzeScrollY === 'number' && analyzeScrollY >= 0) ? analyzeScrollY : (window.scrollY || window.pageYOffset || 0);
-            window.scrollTo(0, y);
+            var y = (typeof analyzeScrollY === 'number' && analyzeScrollY >= 0) ? analyzeScrollY : getScrollY();
+            setScrollY(y);
           });
         }
         if (wizardCurrentStep === 4) {
           wizardStopProgress();
           requestAnimationFrame(function() {
-            var y = (typeof analyzeScrollY === 'number' && analyzeScrollY >= 0) ? analyzeScrollY : (window.scrollY || window.pageYOffset || 0);
-            window.scrollTo(0, y);
+            var y = (typeof analyzeScrollY === 'number' && analyzeScrollY >= 0) ? analyzeScrollY : getScrollY();
+            setScrollY(y);
             requestAnimationFrame(function() {
               var el = document.getElementById('analyze-result');
               if (el && el.scrollIntoView) el.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
@@ -11245,7 +11253,7 @@
           }
           setWizardStep(2);
         } else if (wizardCurrentStep === 2) {
-          analyzeScrollY = window.scrollY || window.pageYOffset || 0;
+          analyzeScrollY = getScrollY();
           setWizardStep(3);
           window.wizardOnAnalyzeSuccess = function() { setWizardStep(4); window.wizardOnAnalyzeSuccess = null; };
           runAnalyze();
@@ -11432,7 +11440,7 @@
         }
         if (getToken()) { loadHistory(); loadUsage(); }
         toast('Analiz tamamlandı.', 'success');
-        analyzeScrollY = window.scrollY || window.pageYOffset || 0;
+        analyzeScrollY = getScrollY();
         if (typeof window.wizardOnAnalyzeSuccess === 'function') window.wizardOnAnalyzeSuccess();
       } catch (e) {
         console.error('runAnalyze error', e);

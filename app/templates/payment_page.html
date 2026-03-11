@@ -268,9 +268,9 @@
     @media (max-width: 767px){ .wrap{ padding: 0 18px; } }
     @media (max-width: 480px){ .wrap{ padding: 0 16px; } }
 
-    /* Hero + checkout grid: premium spacing, subtle depth */
-    .checkout-hero{ display: grid; gap: 44px; padding: 44px 0 52px; }
-    @media (min-width: 1024px){ .checkout-hero{ grid-template-columns: 1fr 360px; align-items: start; gap: 52px 60px; padding: 52px 0 64px; } }
+    /* Hero + checkout grid: solda plan kartları, sağda özet+CTA; boş alan yok */
+    .checkout-hero{ display: grid; gap: 32px; padding: 28px 0 40px; }
+    @media (min-width: 1024px){ .checkout-hero{ grid-template-columns: 1fr 360px; align-items: start; gap: 40px 48px; padding: 32px 0 48px; } }
     .hero-left{ min-width: 0; position: relative; }
     .hero-left::before{
       content: '';
@@ -298,11 +298,12 @@
     }
     .hero-left > *{ position: relative; z-index: 1; }
 
-    /* Hero heading: luxury layer behind title area */
+    /* Hero heading: üstte başlık, hemen altında plan kartları */
     .hero-heading{
       position: relative;
-      margin-bottom: 36px;
+      margin-bottom: 24px;
     }
+    @media (min-width: 1024px){ .hero-heading{ margin-bottom: 28px; } }
     .hero-heading::before{
       content: '';
       position: absolute;
@@ -318,6 +319,16 @@
 
     .summary-sidebar{ min-width: 0; }
     @media (min-width: 1024px){ .summary-sidebar{ position: sticky; top: 24px; } }
+
+    /* Checkout altı: metrics, why-norya, reassurance tek sütun / grid */
+    .checkout-below{ padding: 32px 0 40px; margin-top: 0; }
+    .checkout-below .hero-metrics{ margin-bottom: 28px; }
+    .checkout-below .social-proof{ margin-bottom: 24px; }
+    .checkout-below .payment-stats{ margin-bottom: 28px; }
+    .checkout-below .why-norya{ margin-bottom: 28px; }
+    .checkout-below .reassurance-cards{ margin-bottom: 28px; }
+    .checkout-below .qr-verify-card{ margin-bottom: 0; }
+    @media (max-width: 767px){ .checkout-below{ padding: 24px 0 32px; } }
 
     /* Hero content: refined vertical rhythm */
     .hero-brand{ display: flex; align-items: center; gap: 12px; margin-bottom: 28px; flex-wrap: wrap; }
@@ -389,7 +400,7 @@
     .social-proof-item{ display: inline-flex; align-items: center; gap: 8px; font-size: 0.8125rem; font-weight: var(--font-body); color: var(--text-secondary); }
     .social-proof-item svg{ width: var(--icon-md); height: var(--icon-md); flex-shrink: 0; color: #0EA5A4; stroke-width: var(--icon-stroke); }
 
-    /* Sosyal kanıt sayıları: premium kartlar (200.000+, 98%, 50+) */
+    /* Trust row: Secure payment, 3D Secure, Encrypted transfer, Privacy-first, Instant access, PDF report */
     .payment-stats{
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -397,6 +408,7 @@
       margin-bottom: 36px;
       align-items: stretch;
     }
+    .payment-stats .payment-stat-label { text-transform: none; font-size: 0.8125rem; line-height: 1.35; }
     .payment-stat-card{
       display: flex;
       flex-direction: column;
@@ -590,7 +602,6 @@
       position: relative;
       flex: 1;
       min-width: 0;
-      min-height: 400px;
       z-index: 1;
     }
     .plan-card:focus{ outline: none; }
@@ -1440,6 +1451,56 @@
     .coupon-msg.err svg{ width: 14px; height: 14px; flex-shrink: 0; stroke-width: 2; opacity: 0.9; }
 
     .summary-coupon-wrap.applied .summary-coupon-row .input{ border-color: rgba(5,150,105,0.35); background: rgba(5,150,105,0.03); }
+    .summary-coupon-compact{ margin-bottom: 14px; }
+    .summary-coupon-compact .summary-coupon-row{ margin-top: 0; }
+    .form-row-compact{ display: flex; gap: 10px; margin-bottom: 14px; }
+    .form-row-compact .input-compact{ flex: 1; min-width: 0; min-height: 44px; padding: 10px 14px; font-size: 0.875rem; border-radius: var(--radius-md); border: 1px solid var(--border-card); background: #fff; }
+    .input-compact{ min-height: 44px; padding: 10px 14px; font-size: 0.875rem; }
+    .btn-apply-compact{ min-height: 44px; padding: 0 16px; font-size: 0.8125rem; }
+
+    /* Premium checkout: tek güven metni + dönüş açıklaması + büyük buton */
+    .premium-checkout-block{
+      margin-top: 20px;
+      padding: 20px 0 0;
+      border-top: 1px solid var(--divider-subtle);
+    }
+    .premium-checkout-trust{
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin: 0 0 10px;
+      line-height: 1.4;
+    }
+    .premium-checkout-lock{ width: 16px; height: 16px; flex-shrink: 0; color: #059669; }
+    .premium-checkout-paytr-logo{ height: 20px; width: auto; margin-left: 4px; opacity: 0.85; vertical-align: middle; }
+    .premium-checkout-return{
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin: 0 0 20px;
+      line-height: 1.45;
+    }
+    .cta-wrap-premium{ margin-top: 0; }
+    .cta-premium{
+      width: 100%;
+      min-height: 52px;
+      padding: 14px 24px;
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: var(--radius-md);
+      background: linear-gradient(180deg, #0EA5A4 0%, #0d9488 100%);
+      color: #fff;
+      border: none;
+      cursor: pointer;
+      transition: background var(--duration-fast) var(--ease), box-shadow var(--duration-fast) var(--ease), transform var(--duration-fast) var(--ease);
+      box-shadow: 0 2px 8px rgba(14,165,164,0.35);
+    }
+    .cta-premium:hover:not(:disabled){ background: linear-gradient(180deg, #0d9488 0%, #0f766e 100%); box-shadow: 0 4px 12px rgba(14,165,164,0.4); }
+    .cta-premium:focus-visible{ outline: none; box-shadow: 0 0 0 2px #fff, 0 0 0 4px #0EA5A4; }
+    .cta-premium:disabled{ opacity: 0.65; cursor: not-allowed; }
+
     /* Güven katmanı: CTA hemen üstü — mini badges, sade, premium */
     .summary-reassurance{
       display: grid;
@@ -1813,6 +1874,9 @@
       .summary-coupon-row .btn-apply{ width: 100%; min-height: 48px; white-space: normal; min-width: 0; }
       .form-in-summary .form-group{ margin-bottom: 14px; }
       .form-in-summary .input{ min-height: 48px; font-size: 16px; -webkit-appearance: none; appearance: none; }
+      .form-row-compact{ flex-direction: column; gap: 10px; }
+      .premium-checkout-block{ margin-top: 18px; padding-top: 18px; }
+      .cta-premium{ min-height: 52px; font-size: 1rem; padding: 14px 20px; }
       .payment-methods{ margin-top: 18px; padding-top: 16px; }
       .payment-methods .pm-inner{ padding: 14px 16px 16px; }
       .payment-methods .pm-logos img{ height: 20px; }
@@ -1852,6 +1916,7 @@
     #promo-strip-payment, .offer-strip{ -webkit-user-select: none; user-select: none; }
     input, button, .plan-card, .quantity-btn{ -webkit-tap-highlight-color: transparent; tap-highlight-color: transparent; }
   </style>
+  {% include "includes/gtag_google_ads.html" %}
 </head>
 <body>
   <!-- Üst trust bar: /pay ile aynı (1. satır: 3D, PayTR, Cloudflare, SSL, kart bilgisi) -->
@@ -1902,92 +1967,6 @@
           </div>
           <h1 class="hero-title">{{ t.hero_choose_title }}</h1>
           <p class="hero-subtitle">{{ t.hero_subtitle }}</p>
-        </div>
-        <div class="hero-metrics">
-          <div class="hero-metric">
-            <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
-            <span class="hero-metric-title">{{ t.hero_metric_instant }}</span>
-            <p class="hero-metric-desc">{{ t.hero_metric_instant_desc }}</p>
-          </div>
-          <div class="hero-metric">
-            <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div>
-            <span class="hero-metric-title">{{ t.hero_metric_ai }}</span>
-            <p class="hero-metric-desc">{{ t.hero_metric_ai_desc }}</p>
-          </div>
-          <div class="hero-metric">
-            <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-            <span class="hero-metric-title">{{ t.hero_metric_secure }}</span>
-            <p class="hero-metric-desc">{{ t.hero_metric_secure_desc }}</p>
-          </div>
-          <div class="hero-metric">
-            <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
-            <span class="hero-metric-title">{{ t.hero_metric_pdf }}</span>
-            <p class="hero-metric-desc">{{ t.hero_metric_pdf_desc }}</p>
-          </div>
-        </div>
-        <div class="social-proof" role="region" aria-label="{{ t.aria_trust }}">
-          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>{{ t.social_trusted }}</span>
-          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.social_secure_ai }}</span>
-          <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.social_fast_private }}</span>
-        </div>
-        <div class="payment-stats" role="region" aria-label="{{ t.aria_trust }}">
-          <div class="payment-stat-card">
-            <span class="payment-stat-number">{{ t.stat_200k_number }}</span>
-            <span class="payment-stat-label">{{ t.stat_200k_label }}</span>
-          </div>
-          <div class="payment-stat-card">
-            <span class="payment-stat-number">{{ t.stat_satisfaction_number }}</span>
-            <span class="payment-stat-label">{{ t.stat_satisfaction_label }}</span>
-          </div>
-          <div class="payment-stat-card">
-            <span class="payment-stat-number">{{ t.stat_countries_number }}</span>
-            <span class="payment-stat-label">{{ t.stat_countries_label }}</span>
-          </div>
-        </div>
-        <div class="why-norya" role="region" aria-label="{{ t.aria_why_choose }}">
-          <div class="why-norya-item">
-            <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
-            <span class="why-norya-title">{{ t.why_privacy }}</span>
-            <p class="why-norya-desc">{{ t.why_privacy_desc }}</p>
-          </div>
-          <div class="why-norya-item">
-            <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
-            <span class="why-norya-title">{{ t.why_medical_report }}</span>
-            <p class="why-norya-desc">{{ t.why_medical_report_desc }}</p>
-          </div>
-          <div class="why-norya-item">
-            <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
-            <span class="why-norya-title">{{ t.why_instant_delivery }}</span>
-            <p class="why-norya-desc">{{ t.why_instant_delivery_desc }}</p>
-          </div>
-        </div>
-        <div class="reassurance-cards" role="region" aria-label="{{ t.reassurance_aria }}">
-          <div class="reassurance-card">
-            <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-            <span class="reassurance-card-title">{{ t.trust_badge_hipaa }}</span>
-            <p class="reassurance-card-desc">{{ t.reassurance_hipaa_desc }}</p>
-          </div>
-          <div class="reassurance-card">
-            <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
-            <span class="reassurance-card-title">{{ t.trust_badge_gdpr }}</span>
-            <p class="reassurance-card-desc">{{ t.reassurance_gdpr_desc }}</p>
-          </div>
-          <div class="reassurance-card">
-            <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
-            <span class="reassurance-card-title">{{ t.reassurance_secure_ai }}</span>
-            <p class="reassurance-card-desc">{{ t.reassurance_secure_ai_desc }}</p>
-          </div>
-          <div class="reassurance-card">
-            <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
-            <span class="reassurance-card-title">{{ t.reassurance_instant_pdf }}</span>
-            <p class="reassurance-card-desc">{{ t.reassurance_instant_pdf_desc }}</p>
-          </div>
-        </div>
-        <div class="qr-verify-card" role="region" aria-label="{{ t.qr_verify_card }}">
-          <div class="qr-verify-card-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M3 14h7v7H3z"/><path d="M14 14h3v3h-3z"/><path d="M18 14h3v3h-3z"/></svg>
-          </div>
-          <p class="qr-verify-card-text">{{ t.qr_verify_card }}</p>
         </div>
         <section class="plans-row" id="plans-row" role="group" aria-label="{{ t.selected_plan }}">
           {% for p in plans %}
@@ -2077,70 +2056,35 @@
 
           <div class="form-section form-in-summary" id="form-section">
             <input type="hidden" name="plan_code" id="plan-code-input" value="{{ default_plan.code if default_plan else '' }}" aria-hidden="true">
-            <div class="summary-coupon-wrap form-group" id="summary-coupon-wrap">
-              <label for="coupon-input" class="promo-label">{{ t.promo_code_label }}</label>
+            <div class="summary-coupon-wrap form-group summary-coupon-compact" id="summary-coupon-wrap">
               <div class="summary-coupon-row">
-                <input type="text" id="coupon-input" class="input" placeholder="{{ t.promo_code_placeholder }}" maxlength="64" autocomplete="off">
-                <button type="button" id="coupon-apply" class="btn-apply">{{ t.coupon_apply }}</button>
+                <input type="text" id="coupon-input" class="input input-compact" placeholder="{{ t.promo_code_placeholder }}" maxlength="64" autocomplete="off" aria-label="{{ t.promo_code_placeholder }}">
+                <button type="button" id="coupon-apply" class="btn-apply btn-apply-compact">{{ t.coupon_apply }}</button>
               </div>
               <p class="coupon-msg" id="coupon-msg" aria-live="polite" role="status"></p>
             </div>
             {% if not user_logged_in %}
-            <div class="form-group">
-              <label for="email">{{ t.pay_email_label }} <span style="color:#dc2626;">*</span></label>
-              <input type="email" id="email" class="input" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" value="{{ user_email }}">
+            <div class="form-group form-row-compact">
+              <input type="email" id="email" class="input input-compact" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" value="{{ user_email }}" aria-label="{{ t.pay_email_label }}">
+              <input type="text" id="name" class="input input-compact" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" value="{{ user_name }}" aria-label="{{ t.pay_name_label }}">
             </div>
+            {% else %}
+            <input type="hidden" id="email" value="{{ user_email }}">
+            <input type="hidden" id="name" value="{{ user_name }}">
             {% endif %}
-            <div class="form-group">
-              <label for="name">{{ t.pay_name_label }}</label>
-              <input type="text" id="name" class="input" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" value="{{ user_name }}">
-            </div>
             <p class="error-msg" id="error-msg"></p>
-            <div class="payment-methods" role="region" aria-label="{{ t.accepted_payment_methods }}">
-              <p class="pm-title">{{ t.accepted_payment_methods }}</p>
-              <div class="pm-inner">
-                <div class="pm-logos" aria-hidden="true">
-                  <img src="/static/assets/visa.png" alt="Visa" width="60" height="24" loading="lazy" decoding="async" />
-                  <img src="/static/brand/mastercard.svg" alt="Mastercard" width="40" height="24" loading="lazy" decoding="async" />
-                  <img src="/static/logos/paytr.svg" alt="PayTR" width="40" height="24" loading="lazy" decoding="async" class="pm-logo-paytr" />
-                </div>
-                <p class="pm-trust-line"><span>{{ t.pm_trust_secure_verified }}</span><span class="pm-trust-dot" aria-hidden="true">·</span><span>{{ t.pm_trust_3d_supported }}</span></p>
-              </div>
-            </div>
-            <div class="summary-reassurance" role="region" aria-label="{{ t.aria_security }}">
-              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_secure }}</span>
-              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_tax }}</span>
-              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.summary_trust_instant }}</span>
-              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_no_hidden_fees }}</span>
-              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_card_secure }}</span>
-              <span class="summary-reassurance-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>{{ t.summary_trust_pdf_instant }}</span>
-            </div>
-            <div class="refund-guarantee-strip" role="region" aria-label="{{ t.reassurance_refund }}">
-              <div class="refund-guarantee-strip-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg>
-              </div>
-              <div class="refund-guarantee-strip-text">
-                <p class="refund-guarantee-strip-title">{{ t.refund_card_title }}</p>
-                <p class="refund-guarantee-strip-desc">{{ t.refund_card_text }}</p>
-              </div>
-            </div>
-            <div class="cta-wrap">
-              <button type="button" class="cta-main cta-summary" id="pay-now-btn" disabled aria-label="{{ t.pay_btn }}">
-                <span class="btn-text" id="pay-now-btn-text">{{ t.cta_start_monthly }}</span>
-              </button>
-              <p class="cta-trust-line" aria-hidden="true">{{ t.cta_trust_secure }} · {{ t.cta_trust_instant }} · {{ t.cta_trust_digital }}</p>
-              <p class="cta-below-trust" role="region" aria-label="{{ t.aria_security }}">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
-                <span>{{ t.cta_below_trust }}</span>
+            <div class="premium-checkout-block" role="region" aria-label="{{ t.aria_payment_security }}">
+              <p class="premium-checkout-trust">
+                <svg class="icon-outline premium-checkout-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>
+                <span>{{ t.checkout_secure_via_paytr }}</span>
+                <img src="/static/logos/paytr.svg" alt="PayTR" class="premium-checkout-paytr-logo" width="56" height="20" loading="lazy" decoding="async" />
               </p>
-            </div>
-            <div class="summary-trust-block" role="region" aria-label="{{ t.aria_security }}">
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_secure }}</p>
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_tax }}</p>
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.summary_trust_instant }}</p>
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>{{ t.summary_trust_no_hidden_fees }}</p>
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.summary_trust_card_secure }}</p>
-              <p><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg>{{ t.summary_trust_pdf_instant }}</p>
+              <p class="premium-checkout-return">{{ t.checkout_return_norya }}</p>
+              <div class="cta-wrap cta-wrap-premium">
+                <button type="button" class="cta-main cta-summary cta-premium" id="pay-now-btn" disabled aria-label="{{ t.pay_btn }}">
+                  <span class="btn-text" id="pay-now-btn-text">{{ t.pay_btn }}</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -2155,6 +2099,89 @@
         </div>
       </aside>
     </main>
+
+    <section class="checkout-below" role="region" aria-label="{{ t.aria_why_choose }}">
+      <div class="hero-metrics">
+        <div class="hero-metric">
+          <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg></div>
+          <span class="hero-metric-title">{{ t.hero_metric_instant }}</span>
+          <p class="hero-metric-desc">{{ t.hero_metric_instant_desc }}</p>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg></div>
+          <span class="hero-metric-title">{{ t.hero_metric_ai }}</span>
+          <p class="hero-metric-desc">{{ t.hero_metric_ai_desc }}</p>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <span class="hero-metric-title">{{ t.hero_metric_secure }}</span>
+          <p class="hero-metric-desc">{{ t.hero_metric_secure_desc }}</p>
+        </div>
+        <div class="hero-metric">
+          <div class="hero-metric-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
+          <span class="hero-metric-title">{{ t.hero_metric_pdf }}</span>
+          <p class="hero-metric-desc">{{ t.hero_metric_pdf_desc }}</p>
+        </div>
+      </div>
+      <div class="social-proof" role="region" aria-label="{{ t.aria_trust }}">
+        <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>{{ t.social_trusted }}</span>
+        <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg>{{ t.social_secure_ai }}</span>
+        <span class="social-proof-item"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>{{ t.social_fast_private }}</span>
+      </div>
+      <div class="payment-stats" role="region" aria-label="{{ t.aria_trust }}">
+        <div class="payment-stat-card"><span class="payment-stat-label">{{ t.trust_row_1 }}</span></div>
+        <div class="payment-stat-card"><span class="payment-stat-label">{{ t.trust_row_2 }}</span></div>
+        <div class="payment-stat-card"><span class="payment-stat-label">{{ t.trust_row_3 }}</span></div>
+        <div class="payment-stat-card"><span class="payment-stat-label">{{ t.trust_row_4 }}</span></div>
+        <div class="payment-stat-card"><span class="payment-stat-label">{{ t.trust_row_5 }}</span></div>
+        <div class="payment-stat-card"><span class="payment-stat-label">{{ t.trust_row_6 }}</span></div>
+      </div>
+      <div class="why-norya" role="region" aria-label="{{ t.aria_why_choose }}">
+        <div class="why-norya-item">
+          <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <span class="why-norya-title">{{ t.why_privacy }}</span>
+          <p class="why-norya-desc">{{ t.why_privacy_desc }}</p>
+        </div>
+        <div class="why-norya-item">
+          <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
+          <span class="why-norya-title">{{ t.why_medical_report }}</span>
+          <p class="why-norya-desc">{{ t.why_medical_report_desc }}</p>
+        </div>
+        <div class="why-norya-item">
+          <div class="why-norya-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2L11 13"/><path d="M22 2l-7 20-4-9-9-4 20-7z"/></svg></div>
+          <span class="why-norya-title">{{ t.why_instant_delivery }}</span>
+          <p class="why-norya-desc">{{ t.why_instant_delivery_desc }}</p>
+        </div>
+      </div>
+      <div class="reassurance-cards" role="region" aria-label="{{ t.reassurance_aria }}">
+        <div class="reassurance-card">
+          <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+          <span class="reassurance-card-title">{{ t.trust_badge_hipaa }}</span>
+          <p class="reassurance-card-desc">{{ t.reassurance_hipaa_desc }}</p>
+        </div>
+        <div class="reassurance-card">
+          <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22c5.523 0 10-4.477 10-10S17.523 2 12 2 2 6.477 2 12s4.477 10 10 10z"/><path d="M9 12l2 2 4-4"/></svg></div>
+          <span class="reassurance-card-title">{{ t.trust_badge_gdpr }}</span>
+          <p class="reassurance-card-desc">{{ t.reassurance_gdpr_desc }}</p>
+        </div>
+        <div class="reassurance-card">
+          <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0110 0v4"/></svg></div>
+          <span class="reassurance-card-title">{{ t.reassurance_secure_ai }}</span>
+          <p class="reassurance-card-desc">{{ t.reassurance_secure_ai_desc }}</p>
+        </div>
+        <div class="reassurance-card">
+          <div class="reassurance-card-icon-wrap"><svg class="icon-outline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6"/><path d="M16 13H8"/><path d="M16 17H8"/><path d="M10 9H8"/></svg></div>
+          <span class="reassurance-card-title">{{ t.reassurance_instant_pdf }}</span>
+          <p class="reassurance-card-desc">{{ t.reassurance_instant_pdf_desc }}</p>
+        </div>
+      </div>
+      <div class="qr-verify-card" role="region" aria-label="{{ t.qr_verify_card }}">
+        <div class="qr-verify-card-icon">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3h7v7H3z"/><path d="M14 3h7v7h-7z"/><path d="M3 14h7v7H3z"/><path d="M14 14h3v3h-3z"/><path d="M18 14h3v3h-3z"/></svg>
+        </div>
+        <p class="qr-verify-card-text">{{ t.qr_verify_card }}</p>
+      </div>
+    </section>
 
     <section class="payment-testimonials" role="region" aria-label="{{ t.testimonials_heading }}">
       <h2 class="payment-testimonials-heading">{{ t.testimonials_heading }}</h2>
@@ -2641,8 +2668,7 @@ document.addEventListener('DOMContentLoaded', function(){
       payNowBtn.disabled = true;
       payNowBtn.innerHTML = '<span class="spinner" aria-hidden="true"></span><span class="btn-text" id="pay-now-btn-text">' + t.cta_loading + '</span>';
     } else {
-      var plan = getPlan(selectedPlan);
-      var label = plan ? plan.ctaText : t.pay_btn;
+      var label = t.pay_btn;
       payNowBtn.innerHTML = '<span class="btn-text" id="pay-now-btn-text">' + label + '</span>';
       payNowBtn.disabled = !selectedPlan;
     }

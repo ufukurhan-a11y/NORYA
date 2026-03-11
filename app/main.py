@@ -1566,14 +1566,42 @@ def analyze_landing():
 
 
 @app.get("/pricing", response_class=HTMLResponse)
-def pricing_landing(request: Request):
+def pricing_landing(
+    request: Request,
+    db: Session = Depends(get_db),
+):
     """
-    /pricing -> Premium ödeme sayfasına (/payment) yönlendir.
-    Plan seçimi ve PayTR iFrame /payment sayfasında yapılır.
+    /pricing -> Karşılaştırmalı fiyatlandırma sayfası.
+    Kullanıcı önce planları ve özelliklerini görür; ödeme için /payment'e yönlenir.
     """
-    query = request.url.query
-    target = "/payment" + ("?" + query if query else "")
-    return RedirectResponse(url=target, status_code=302)
+    lang = _payment_lang_from_request(request)
+    t = get_pay_ui(lang)
+    base_url = _paytr_canonical_base(request)
+    plan_map = get_plan_code_to_product_cents(db)
+
+    def _plan(product_key: str) -> dict:
+        for code, (product, cents) in plan_map.items():
+            if product == product_key:
+                return {"code": code, "product": product, "price_cents": cents}
+        return {"code": "", "product": product_key, "price_cents": 0}
+
+    plans = {
+        "single": _plan("single"),
+        "monthly": _plan("monthly"),
+        "yearly": _plan("yearly"),
+    }
+
+    return templates.TemplateResponse(
+        "pricing.html",
+        {
+            "request": request,
+            "brand": BRAND_NAME,
+            "lang": lang,
+            "t": t,
+            "base_url": base_url,
+            "plans": plans,
+        },
+    )
 
 
 @app.get("/odeme", response_class=HTMLResponse)
@@ -3124,16 +3152,18 @@ def payment_page_premium(
     # Tek canonical domain (statik ve API istekleri)
     base_url = _paytr_canonical_base(request)
     plan_map = get_plan_code_to_product_cents(db)
-    plans = []
+    plans: list[dict] = []
     for code, (product, price_cents) in plan_map.items():
-        plans.append({
-            "code": code,
-            "price": f"{price_cents / 100:.2f}",
-            "price_cents": price_cents,
-            "label_key": f"plan_{product}",
-            "product": product,
-            "best_value": product == "yearly",
-        })
+        plans.append(
+            {
+                "code": code,
+                "price": f"{price_cents / 100:.2f}",
+                "price_cents": price_cents,
+                "label_key": f"plan_{product}",
+                "product": product,
+                "best_value": product == "yearly",
+            }
+        )
     _card_label_keys = {"single": "plan_card_single", "monthly": "plan_card_monthly", "yearly": "plan_card_yearly"}
     for p in plans:
         p["label"] = t.get(p["label_key"], p["code"])
@@ -3143,6 +3173,14 @@ def payment_page_premium(
     user_email = (current_user.email or "").strip() if current_user else ""
     user_name = (getattr(current_user, "full_name", None) or "").strip() if current_user else ""
     default_plan = next((p for p in plans if p.get("product") == "yearly"), plans[0] if plans else None)
+
+    # Eski checkout şablonuyla uyum için: plan_code / prices / benefits_* değişkenleri
+    prices = {code: f"{price_cents / 100:.2f}" for code, (product, price_cents) in plan_map.items()}
+    prices_cents = {code: price_cents for code, (product, price_cents) in plan_map.items()}
+    benefits_single = next((p["benefits"] for p in plans if p["product"] == "single"), [])
+    benefits_monthly = next((p["benefits"] for p in plans if p["product"] == "monthly"), [])
+    benefits_yearly = next((p["benefits"] for p in plans if p["product"] == "yearly"), [])
+    plan_code = (default_plan or plans[0])["code"] if plans else "single_13eur"
     campaign_raw = None
     if default_plan:
         try:
@@ -3163,6 +3201,16 @@ def payment_page_premium(
             "plans_js": json.dumps(plans),
             "base_url_js": json.dumps(base_url),
             "default_plan": default_plan,
+            # Eski template alanları (plan_code + fiyat/benefit map'leri)
+            "plan_code": plan_code,
+            "plan_code_js": json.dumps(plan_code),
+            "prices": prices,
+            "prices_js": json.dumps(prices),
+            "prices_cents_js": json.dumps(prices_cents),
+            "benefits": benefits_single,
+            "benefits_js": json.dumps(benefits_single),
+            "benefits_monthly_js": json.dumps(benefits_monthly),
+            "benefits_yearly_js": json.dumps(benefits_yearly),
             "campaign_config": campaign_config,
             "campaign_js": json.dumps(campaign_config),
             "user_logged_in": user_logged_in,
