@@ -511,30 +511,30 @@ def index_post(request: Request):
     return _index_response(request)
 
 
-# Country-based landing: /tr, /en, /en-ca, /de, /it — aynı component, locale'den beslenen içerik
+# Country-based landing: geçici kapalı — tüm istekler ana sayfaya yönlendirilir (öncelik: Google Ads tag)
 @app.get("/tr", response_class=HTMLResponse)
 def landing_tr(request: Request):
-    return _landing_response("tr", request)
+    return RedirectResponse(url="/?lang=tr", status_code=302)
 
 
 @app.get("/en", response_class=HTMLResponse)
 def landing_en(request: Request):
-    return _landing_response("en", request)
+    return RedirectResponse(url="/?lang=en", status_code=302)
 
 
 @app.get("/en-ca", response_class=HTMLResponse)
 def landing_en_ca(request: Request):
-    return _landing_response("en-ca", request)
+    return RedirectResponse(url="/?lang=en", status_code=302)
 
 
 @app.get("/de", response_class=HTMLResponse)
 def landing_de(request: Request):
-    return _landing_response("de", request)
+    return RedirectResponse(url="/?lang=de", status_code=302)
 
 
 @app.get("/it", response_class=HTMLResponse)
 def landing_it(request: Request):
-    return _landing_response("it", request)
+    return RedirectResponse(url="/?lang=it", status_code=302)
 
 
 @app.get("/yonetim", response_class=HTMLResponse)
@@ -898,23 +898,23 @@ if getattr(settings, "environment", "development") != "production":
         return HTMLResponse(html)
 
 
+# Google Ads global site tag — tüm sayfalarda tek gtag yüklemesi için kullanılır
+GOOGLE_ADS_GLOBAL_TAG_ID = "AW-18004536281"
+
+
 def _inject_ga(html: str) -> str:
-    """GA_MEASUREMENT_ID ve/veya GOOGLE_ADS_CONVERSION_ID doluysa gtag script'ini <!-- GA_INJECT --> yerine koyar; ikisi de boşsa siler."""
+    """Google Ads (AW-18004536281) ve isteğe bağlı GA4 gtag'ini <!-- GA_INJECT --> yerine koyar. Tek script, tek yükleme."""
     ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
-    aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
-    if not ga_id and not aw_id:
-        inject = ""
-    else:
-        first_id = ga_id or aw_id
-        configs = []
-        if ga_id:
-            configs.append(f'gtag("config","{ga_id}");')
-        if aw_id:
-            configs.append(f'gtag("config","{aw_id}");')
-        inject = (
-            f'<script async src="https://www.googletagmanager.com/gtag/js?id={first_id}"></script>\n'
-            f'  <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());{" ".join(configs)}</script>\n  '
-        )
+    aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
+    first_id = ga_id or aw_id
+    configs = []
+    if ga_id:
+        configs.append(f'gtag("config","{ga_id}");')
+    configs.append(f'gtag("config","{aw_id}");')
+    inject = (
+        f'<script async src="https://www.googletagmanager.com/gtag/js?id={first_id}"></script>\n'
+        f'  <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());{" ".join(configs)}</script>\n  '
+    )
     return html.replace("<!-- GA_INJECT: .env GA_MEASUREMENT_ID=G-XXX ile GA4 eklenir -->", inject)
 
 
@@ -1491,8 +1491,7 @@ def _index_response(request: Request | None = None):
         index_file = Path.cwd() / "static" / "index.html"
     if index_file.is_file():
         raw = index_file.read_text(encoding="utf-8")
-        if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
-            raw = _inject_ga(raw)
+        raw = _inject_ga(raw)  # Google Ads AW-18004536281 + isteğe bağlı GA4, tek yükleme
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
         if request is not None:
@@ -1514,8 +1513,7 @@ def report_page(request: Request):
         index_file = Path.cwd() / "static" / "index.html"
     if index_file.is_file():
         raw = index_file.read_text(encoding="utf-8")
-        if getattr(settings, "ga_measurement_id", "") or getattr(settings, "google_ads_conversion_id", ""):
-            raw = _inject_ga(raw)
+        raw = _inject_ga(raw)  # Google Ads global site tag
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
         base_url = str(request.base_url).rstrip("/")
