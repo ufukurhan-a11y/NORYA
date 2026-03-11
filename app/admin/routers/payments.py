@@ -1,4 +1,5 @@
 """Satış & ödeme paneli: başarılı/hatalı/bekleyen, PayTR, detay, admin notu, e-arşiv fatura, iade."""
+import logging
 from datetime import datetime
 from urllib.parse import quote
 
@@ -15,18 +16,22 @@ from app.services.paytr_refund import paytr_refund
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
+log = logging.getLogger(__name__)
 
 
 def _fmt_dt(val):
     """Format datetime/date or string for display; avoid AttributeError if DB returns str."""
-    if val is None:
-        return "-"
-    if isinstance(val, datetime):
-        return val.strftime("%d.%m.%Y %H:%M")
-    if hasattr(val, "strftime"):
-        return val.strftime("%d.%m.%Y %H:%M")
-    if isinstance(val, str):
-        return val[:16] if len(val) > 16 else val
+    try:
+        if val is None:
+            return "-"
+        if isinstance(val, datetime):
+            return val.strftime("%d.%m.%Y %H:%M")
+        if hasattr(val, "strftime"):
+            return val.strftime("%d.%m.%Y %H:%M")
+        if isinstance(val, str):
+            return val[:16] if len(val) > 16 else val
+    except Exception:
+        pass
     return "-"
 
 
@@ -37,33 +42,59 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
     if status_filter and status_filter in ("completed", "failed", "pending"):
         stmt = stmt.where(PaymentOrder.status == status_filter)
     orders = list(db.exec(stmt).all())
-    user_ids = {o.user_id for o in orders}
+    user_ids = [o.user_id for o in orders if getattr(o, "user_id", None) is not None]
+    user_ids = list(dict.fromkeys(user_ids))  # unique, order preserved
     users_map = {}
     if user_ids:
-        for u in db.exec(select(User).where(User.id.in_(user_ids))).all():
-            users_map[u.id] = u.email or ""
-    rows = [
-        {
-            "id": o.id,
-            "merchant_oid": o.merchant_oid,
-            "user_id": o.user_id,
-            "user_email": users_map.get(o.user_id, ""),
-            "product": o.product,
-            "amount_cents": (o.amount_kurus or 0),
-            "amount_eur": (o.amount_kurus or 0) / 100,
-            "currency": getattr(o, "currency", None) or "EUR",
-            "status": o.status,
-            "paytr_transaction_id": getattr(o, "paytr_transaction_id", None) or "-",
-            "is_processed": getattr(o, "is_processed", False),
-            "processed_at": _fmt_dt(getattr(o, "processed_at", None)),
-            "created_at": _fmt_dt(o.created_at),
-            "admin_note": getattr(o, "admin_note", None) or "",
-            "invoice_ettn": getattr(o, "invoice_ettn", None) or "",
-            "refunded_at": getattr(o, "refunded_at", None),
-            "refund_amount_kurus": getattr(o, "refund_amount_kurus", None) or 0,
-        }
-        for o in orders
-    ]
+        try:
+            for u in db.exec(select(User).where(User.id.in_(user_ids))).all():
+                users_map[getattr(u, "id", None)] = getattr(u, "email", None) or ""
+        except Exception as e:
+            log.warning("payments_list: User lookup failed: %s", e)
+    rows = []
+    for o in orders:
+        try:
+            amount_cents = getattr(o, "amount_kurus", None) or 0
+            rows.append({
+                "id": getattr(o, "id", None),
+                "merchant_oid": getattr(o, "merchant_oid", "") or "",
+                "user_id": getattr(o, "user_id", None),
+                "user_email": users_map.get(getattr(o, "user_id", None), ""),
+                "product": getattr(o, "product", "") or "",
+                "amount_cents": amount_cents,
+                "amount_eur": amount_cents / 100.0,
+                "currency": getattr(o, "currency", None) or "EUR",
+                "status": getattr(o, "status", "") or "pending",
+                "paytr_transaction_id": getattr(o, "paytr_transaction_id", None) or "-",
+                "is_processed": getattr(o, "is_processed", False),
+                "processed_at": _fmt_dt(getattr(o, "processed_at", None)),
+                "created_at": _fmt_dt(getattr(o, "created_at", None)),
+                "admin_note": getattr(o, "admin_note", None) or "",
+                "invoice_ettn": getattr(o, "invoice_ettn", None) or "",
+                "refunded_at": getattr(o, "refunded_at", None),
+                "refund_amount_kurus": getattr(o, "refund_amount_kurus", None) or 0,
+            })
+        except Exception as e:
+            log.exception("payments_list: row build failed for order id=%s: %s", getattr(o, "id", "?"), e)
+            rows.append({
+                "id": getattr(o, "id", None),
+                "merchant_oid": getattr(o, "merchant_oid", "") or "?",
+                "user_id": getattr(o, "user_id", None),
+                "user_email": "",
+                "product": "?",
+                "amount_cents": 0,
+                "amount_eur": 0.0,
+                "currency": "EUR",
+                "status": "?",
+                "paytr_transaction_id": "-",
+                "is_processed": False,
+                "processed_at": "-",
+                "created_at": "-",
+                "admin_note": "",
+                "invoice_ettn": "",
+                "refunded_at": None,
+                "refund_amount_kurus": 0,
+            })
     # PayTR panelde girilmesi gereken bildirim URL (canonical domain)
     base = (request.base_url or "").rstrip("/")
     if "localhost" in base or "127.0.0.1" in base:
