@@ -392,22 +392,29 @@ async def security_headers(request: Request, call_next):
     response.headers["X-Content-Type-Options"] = "nosniff"
     response.headers["X-Frame-Options"] = "SAMEORIGIN"
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
+    path = (request.url.path or "").strip().rstrip("/") or "/"
+    is_payment_success = path == "/payment/success"
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
-        path = (request.url.path or "").strip()
-        # Payment success: Google Ads conversion (gtag event) için ek script/connect/img izinleri
-        if path == "/payment/success":
+        # Payment success: Google Ads purchase conversion (gtag) — script-src-elem + connect-src engellemesin
+        if is_payment_success:
             _csp = (
                 "default-src 'self'; "
                 "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
                 "https://www.googletagmanager.com https://googletagmanager.com "
-                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com; "
+                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+                "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
+                "script-src-elem 'self' https://www.googletagmanager.com https://googletagmanager.com "
+                "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+                "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-                "img-src 'self' data: blob: https: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
-                "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com; "
+                "img-src 'self' data: blob: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
+                "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com "
+                "https://googleads.g.doubleclick.net https://googletag.g.doubleclick.net; "
                 "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
                 "https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
                 "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+                "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net "
                 "https://www.google-analytics.com https://region1.google-analytics.com https://tpc.googletagmanager.com; "
                 "frame-ancestors 'self';"
             )
@@ -420,6 +427,29 @@ async def security_headers(request: Request, call_next):
                 "img-src 'self' data: blob: https:; "
                 "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
             )
+        response.headers["Content-Security-Policy"] = _csp
+    elif is_payment_success:
+        # Development/staging: payment success sayfasında da gtag için gevşek CSP (Tag Assistant testi)
+        _csp = (
+            "default-src 'self'; "
+            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
+            "https://www.googletagmanager.com https://googletagmanager.com "
+            "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+            "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
+            "script-src-elem 'self' https://www.googletagmanager.com https://googletagmanager.com "
+            "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+            "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net https://www.google.com; "
+            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+            "img-src 'self' data: blob: https://www.google.com https://www.googleadservices.com https://googleadservices.com "
+            "https://www.googletagmanager.com https://google.com https://pagead2.googlesyndication.com https://tpc.googletagmanager.com "
+            "https://googleads.g.doubleclick.net https://googletag.g.doubleclick.net; "
+            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
+            "https://www.google.com https://google.com https://www.googletagmanager.com https://googletagmanager.com "
+            "https://www.googleadservices.com https://googleadservices.com https://pagead2.googlesyndication.com "
+            "https://googletag.g.doubleclick.net https://googleads.g.doubleclick.net "
+            "https://tpc.googletagmanager.com; "
+            "frame-ancestors 'self';"
+        )
         response.headers["Content-Security-Policy"] = _csp
     return response
 
@@ -2282,12 +2312,22 @@ def analyze_usage(
     kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
     extra = _extra_credits(user)
     total_ever = _total_analiz_sayisi(db, user.id or 0)
+    last_rec = (
+        db.exec(
+            select(AnalysisRecord)
+            .where(AnalysisRecord.user_id == user.id)
+            .order_by(AnalysisRecord.created_at.desc())
+            .limit(1)
+        ).first()
+    )
+    last_analysis_at = last_rec.created_at.isoformat() + "Z" if (last_rec and last_rec.created_at) else None
     return {
         "kullanilan": kullanilan,
         "limit": limit,
         "plan": plan,
         "extra_credits": extra,
         "first_analysis_free": total_ever == 0,
+        "last_analysis_at": last_analysis_at,
     }
 
 
@@ -3372,8 +3412,10 @@ def payment_get_token(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
 
-    ok_url = (body.success_url or "").strip() or getattr(settings, "paytr_ok_url", "") or "/#analyze"
-    fail_url = (body.cancel_url or "").strip() or getattr(settings, "paytr_fail_url", "") or "/#pricing"
+    base_url = _paytr_canonical_base(request)
+    return_lang = _payment_lang_from_request(request) or "tr"
+    ok_url = f"{base_url}/payment/success?merchant_oid={merchant_oid}&lang={return_lang}"
+    fail_url = f"{base_url}/payment/failed?merchant_oid={merchant_oid}&lang={return_lang}"
 
     post_vals = {
         "merchant_id": merchant_id,
@@ -3492,16 +3534,10 @@ def payment_get_token_guest(
     paytr_token = base64.b64encode(
         hmac.new(merchant_key, (hash_str + merchant_salt).encode(), hashlib.sha256).digest()
     ).decode()
-    base_url = (str(request.base_url).rstrip("/") + "/").rstrip("/")
-    if body.success_url:
-        parts = body.success_url.split("#", 1)
-        success_base = parts[0].rstrip("/") or base_url
-        hash_part = (parts[1] if len(parts) > 1 else "") or "payment-ok"
-    else:
-        success_base = base_url
-        hash_part = "payment-ok"
-    merchant_ok_url = f"{success_base}#{hash_part}&guest_token={guest_token}"
-    merchant_fail_url = (body.cancel_url or "").strip() or (base_url + "#pricing")
+    base_url = _paytr_canonical_base(request)
+    return_lang = _payment_lang_from_request(request) or "tr"
+    merchant_ok_url = f"{base_url}/payment/success?merchant_oid={merchant_oid}&lang={return_lang}&guest_token={guest_token}"
+    merchant_fail_url = f"{base_url}/payment/failed?lang={return_lang}"
     post_vals = {
         "merchant_id": merchant_id,
         "user_ip": user_ip,
@@ -3689,6 +3725,7 @@ def payment_success_page(
     request: Request,
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
     merchant_oid: str = Query("", description="Sipariş merchant_oid (PayTR yönlendirmesinde eklenir)"),
+    guest_token: str = Query("", description="Misafir ödeme sonrası oturum için token"),
 ):
     """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir."""
     base = _paytr_canonical_base(request)
@@ -3736,7 +3773,13 @@ def payment_success_page(
         return HTMLResponse(html)
 
     oid = merchant_oid.strip()
+    log.info(
+        "PAYMENT_SUCCESS_PAGE: merchant_oid=%s guest_token=%s (conversion will fire client-side when order status=paid)",
+        oid[:64],
+        "yes" if (guest_token and guest_token.strip()) else "no",
+    )
     report_url = f"{base}/report"
+    guest_token_js = json.dumps((guest_token or "").strip() or "")
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
     conversion_send_to = f"{aw_id}/RF4SCL78oIYcENnXnY1D"
     gtag_script = (
@@ -3764,7 +3807,7 @@ def payment_success_page(
   .premium-done {{ color: #34d399; font-weight: 700; }}
 </style>
 </head>
-<body>
+<body data-gtag-conversion-page="payment-success" data-merchant-oid="{oid[:64]}">
   <div class="card">
     <div id="iconWrap" class="ok">✓</div>
     <div id="spinnerWrap" class="spinner" style="display:none;"></div>
@@ -3781,11 +3824,14 @@ def payment_success_page(
   var apiBase = {json.dumps(api_base)};
   var oid = {json.dumps(oid)};
   var reportUrl = {json.dumps(report_url)};
+  var guestToken = {guest_token_js};
+  var baseUrl = {json.dumps(base)};
   var updating = {json.dumps(updating)};
   var premiumActive = {json.dumps(premium_active)};
   var pendingBank = {json.dumps(pending_bank)};
   var failedShort = {json.dumps(failed_short)};
   var invalidOidMsg = {json.dumps(invalid_oid_msg)};
+  var conversionSendTo = {json.dumps(conversion_send_to)};
   var start = Date.now();
   var timeoutTotal = 90000;
   var intervalFast = 2000;
@@ -3793,6 +3839,8 @@ def payment_success_page(
   var fastUntil = 30000;
   var pollTimer = null;
   var redirectTimer = null;
+  window.__noryaPaymentDebug = {{ orderId: oid, paymentStatus: null, callbackStatus: "polling", conversionTriggered: false }};
+  try {{ console.log("[Norya payment success] orderId=" + oid + ", guest_token=" + (guestToken ? "yes" : "no")); }} catch(e) {{}}
 
   function showSpinner(show) {{
     document.getElementById("spinnerWrap").style.display = show ? "block" : "none";
@@ -3836,12 +3884,22 @@ def payment_success_page(
           showSpinner(false);
           setStatus(premiumActive + " ✓", true);
           showButtons(true, false);
-          if (typeof gtag === "function" && !window.__noryaConversionFired) {{
+          window.__noryaPaymentDebug.paymentStatus = d.status || "paid";
+          var txId = d.merchant_oid || oid;
+          var val = (typeof d.total_amount_eur === "number") ? d.total_amount_eur : 0;
+          var storageKey = "norya_conv_" + txId;
+          var alreadyFired = false;
+          try {{ alreadyFired = sessionStorage.getItem(storageKey) === "1"; }} catch(e) {{}}
+          if (typeof gtag === "function" && !window.__noryaConversionFired && !alreadyFired) {{
             window.__noryaConversionFired = true;
-            var val = (typeof d.total_amount_eur === "number") ? d.total_amount_eur : 0;
-            gtag("event", "conversion", {{ send_to: {json.dumps(conversion_send_to)}, value: val, currency: "EUR", transaction_id: d.merchant_oid || oid }});
+            gtag("event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }});
+            try {{ sessionStorage.setItem(storageKey, "1"); }} catch(e) {{}}
+            window.__noryaPaymentDebug.conversionTriggered = true;
+            try {{ console.log("[Norya payment] Google Ads conversion fired", {{ orderId: txId, value: val, currency: "EUR" }}); }} catch(e) {{}}
           }}
-          redirectTimer = setTimeout(function() {{ window.location.href = reportUrl; }}, 1000);
+          if (window.self !== window.top) {{ try {{ window.parent.postMessage("norya_payment_ok", "*"); }} catch(e) {{}} }}
+          var redirectTo = guestToken ? (baseUrl + "/?guest_token=" + encodeURIComponent(guestToken) + "#analyze") : reportUrl;
+          redirectTimer = setTimeout(function() {{ window.location.href = redirectTo; }}, 1500);
           return;
         }}
         if (d.status === "failed") {{
