@@ -1117,15 +1117,21 @@ def legal_page(request: Request, page: str):
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
     base_url = str(request.base_url).rstrip("/")
     canonical_url = f"{base_url}/legal/{page}"
+    legal_hreflang_langs = ("tr", "en", "de", "fr", "it", "es")
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/legal/{page}?lang={code}"} for code in legal_hreflang_langs]
+    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/legal/{page}?lang=en"})
+    page_title = content.title if content else page
+    breadcrumb_items = [
+        {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
+        {"@type": "ListItem", "position": 2, "name": ui.get("nav_legal", "Legal"), "item": f"{base_url}/legal/{page}"},
+        {"@type": "ListItem", "position": 3, "name": page_title, "item": canonical_url},
+    ]
+    breadcrumb_schema = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": breadcrumb_items}
+    breadcrumb_schema_json = json.dumps(breadcrumb_schema, ensure_ascii=False, indent=2)
+    ctx = {"request": request, "content": content, "canonical_url": canonical_url, "breadcrumb_schema_json": breadcrumb_schema_json, "hreflang_alternates": hreflang_alternates, **ui}
     if page == "iletisim":
-        return templates.TemplateResponse(
-            "legal/legal_contact.html",
-            {"request": request, "content": content, "canonical_url": canonical_url, **ui},
-        )
-    return templates.TemplateResponse(
-        "legal/legal_article.html",
-        {"request": request, "content": content, "canonical_url": canonical_url, **ui},
-    )
+        return templates.TemplateResponse("legal/legal_contact.html", ctx)
+    return templates.TemplateResponse("legal/legal_article.html", ctx)
 
 
 @app.get("/iade-iptal", response_class=HTMLResponse)
@@ -1137,9 +1143,20 @@ def iade_iptal_page(request: Request):
     if not content:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
     base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/iade-iptal"
+    legal_hreflang_langs = ("tr", "en", "de", "fr", "it", "es")
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/iade-iptal?lang={code}"} for code in legal_hreflang_langs]
+    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/iade-iptal?lang=en"})
+    breadcrumb_items = [
+        {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
+        {"@type": "ListItem", "position": 2, "name": ui.get("nav_legal", "Legal"), "item": base_url + "/iade-iptal"},
+        {"@type": "ListItem", "position": 3, "name": content.title if content else "Refund", "item": canonical_url},
+    ]
+    breadcrumb_schema = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": breadcrumb_items}
+    breadcrumb_schema_json = json.dumps(breadcrumb_schema, ensure_ascii=False, indent=2)
     return templates.TemplateResponse(
         "legal/legal_article.html",
-        {"request": request, "content": content, "canonical_url": f"{base_url}/iade-iptal", **ui},
+        {"request": request, "content": content, "canonical_url": canonical_url, "breadcrumb_schema_json": breadcrumb_schema_json, "hreflang_alternates": hreflang_alternates, **ui},
     )
 
 
@@ -1326,6 +1343,17 @@ def blog_index(request: Request, lang: str):
     meta_description = ui.get("meta_description", "")
     og_image = base_url + "/static/images/blog/how-to-read-blood-test-results.png"
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/blog"} for code in BLOG_LANGS_PREMIUM]
+    og_locale_map = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "it": "it_IT", "es": "es_ES", "he": "he_IL", "hi": "hi_IN"}
+    og_locale = og_locale_map.get(lang, "en_US")
+    item_list = [
+        {"@type": "ListItem", "position": i + 1, "url": f"{base_url}{p['url']}", "name": p.get("title", "")}
+        for i, p in enumerate(posts[:20])
+    ]
+    item_list_schema_json = json.dumps(
+        {"@context": "https://schema.org", "@type": "ItemList", "itemListElement": item_list},
+        ensure_ascii=False,
+        indent=2,
+    )
     base_ui = get_base_ui(lang)
     return templates.TemplateResponse(
         "blog/index.html",
@@ -1341,7 +1369,9 @@ def blog_index(request: Request, lang: str):
             "meta_description": meta_description,
             "canonical_url": canonical_url,
             "og_image": og_image,
+            "og_locale": og_locale,
             "hreflang_alternates": hreflang_alternates,
+            "item_list_schema_json": item_list_schema_json,
             "premium_langs": BLOG_LANGS_PREMIUM,
         },
     )
@@ -1396,6 +1426,14 @@ def blog_detail(request: Request, lang: str, slug: str):
         },
     }
     article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
+    blog_ui = BLOG_UI.get(lang, BLOG_UI["en"])
+    breadcrumb_items = [
+        {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
+        {"@type": "ListItem", "position": 2, "name": blog_ui.get("back_to_blog", "Blog"), "item": f"{base_url}/{lang}/blog"},
+        {"@type": "ListItem", "position": 3, "name": art["seo_title"] or art["title"], "item": canonical_url},
+    ]
+    breadcrumb_schema = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": breadcrumb_items}
+    breadcrumb_schema_json = json.dumps(breadcrumb_schema, ensure_ascii=False, indent=2)
     faq_schema_json = None
     faq_qa = art.get("faq_schema_qa")
     if faq_qa and isinstance(faq_qa, list):
@@ -1408,10 +1446,10 @@ def blog_detail(request: Request, lang: str, slug: str):
             ],
         }
         faq_schema_json = json.dumps(faq_schema, ensure_ascii=False, indent=2)
-
-    blog_ui = BLOG_UI.get(lang, BLOG_UI["en"])
     base_ui = get_base_ui(lang)
     related_posts = get_related_articles(lang, art["id"], base_url, limit=4)
+    og_locale_map = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "it": "it_IT", "es": "es_ES", "he": "he_IL", "hi": "hi_IN"}
+    og_locale = og_locale_map.get(lang, "en_US")
 
     return templates.TemplateResponse(
         "blog/detail.html",
@@ -1420,11 +1458,13 @@ def blog_detail(request: Request, lang: str, slug: str):
             "article": art,
             "canonical_url": canonical_url,
             "cover_absolute": cover_absolute,
+            "og_locale": og_locale,
             "toc": toc,
             "current_lang": lang,
             "lang_alternates": lang_alternates,
             "hreflang_alternates": hreflang_alternates,
             "article_schema_json": article_schema_json,
+            "breadcrumb_schema_json": breadcrumb_schema_json,
             "faq_schema_json": faq_schema_json,
             "blog_ui": blog_ui,
             "base_ui": base_ui,
@@ -1545,6 +1585,18 @@ def _landing_response(locale: str, request: Request):
         raw,
         count=1,
     )
+    raw = re.sub(
+        r'<meta name="twitter:title" content="[^"]*" */?>',
+        f'<meta name="twitter:title" content="{title}" />',
+        raw,
+        count=1,
+    )
+    raw = re.sub(
+        r'<meta name="twitter:description" content="[^"]*" */?>',
+        f'<meta name="twitter:description" content="{desc}" />',
+        raw,
+        count=1,
+    )
 
     hreflang_lines = [
         f'  <link rel="alternate" hreflang="tr" href="{base_url}/tr" />',
@@ -1569,6 +1621,20 @@ def _landing_response(locale: str, request: Request):
         f'<script>window.__LANDING_LOCALE__="{escape(locale)}";'
         f"window.__LANDING_T__={json.dumps(ui, ensure_ascii=False)};</script>\n  "
     )
+    faq_entities = []
+    for i in range(1, 7):
+        q = ui.get(f"faq_q{i}")
+        a = ui.get(f"faq_a{i}")
+        if q and a:
+            faq_entities.append(
+                {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+            )
+    if faq_entities:
+        faq_schema = json.dumps(
+            {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities},
+            ensure_ascii=False,
+        )
+        landing_script += f'\n  <script type="application/ld+json">\n  {faq_schema}\n  </script>\n  '
     raw = raw.replace("</head>", landing_script + "</head>", 1)
 
     return HTMLResponse(
@@ -1591,6 +1657,18 @@ def _index_response(request: Request | None = None):
             base_url = str(request.base_url).rstrip("/")
             canonical_url = base_url + request.url.path
             raw = _inject_canonical(raw, canonical_url)
+            if request.url.path == "/":
+                import re
+                from html import escape
+                meta = get_landing_meta("en")
+                _title = escape(meta.get("meta_title", "Norya"))
+                _desc = escape(meta.get("meta_description", ""))
+                raw = re.sub(r"<title>[^<]*</title>", f"<title>{_title}</title>", raw, count=1)
+                raw = re.sub(r'<meta name="description" content="[^"]*" */?>', f'<meta name="description" content="{_desc}" />', raw, count=1)
+                raw = re.sub(r'<meta property="og:title" content="[^"]*" */?>', f'<meta property="og:title" content="{_title}" />', raw, count=1)
+                raw = re.sub(r'<meta property="og:description" content="[^"]*" */?>', f'<meta property="og:description" content="{_desc}" />', raw, count=1)
+                raw = re.sub(r'<meta name="twitter:title" content="[^"]*" */?>', f'<meta name="twitter:title" content="{_title}" />', raw, count=1)
+                raw = re.sub(r'<meta name="twitter:description" content="[^"]*" */?>', f'<meta name="twitter:description" content="{_desc}" />', raw, count=1)
         return HTMLResponse(
             raw,
             headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
@@ -1619,12 +1697,19 @@ def report_page(request: Request):
 
 
 @app.get("/analyze", response_class=HTMLResponse)
-def analyze_landing():
+def analyze_landing(request: Request):
     """
     /analyze -> SPA içindeki analiz bölümüne yönlendir.
-    Blog CTA&apos;ları bu URL&apos;yi kullanır.
+    Blog CTA'ları bu URL'yi kullanır. Referer'dan locale çıkarılırsa /{locale}#analyze.
     """
-    return RedirectResponse(url="/#analyze", status_code=302)
+    referer = request.headers.get("referer") or ""
+    locale = None
+    for loc in SUPPORTED_LOCALES:
+        if f"/{loc}/" in referer or referer.rstrip("/").endswith(f"/{loc}"):
+            locale = loc
+            break
+    url = f"/{locale}#analyze" if locale else "/#analyze"
+    return RedirectResponse(url=url, status_code=302)
 
 
 @app.get("/pricing", response_class=HTMLResponse)

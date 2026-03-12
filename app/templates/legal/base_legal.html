@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>{% block title %}Legal — Norya{% endblock %}</title>
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+  {% if hreflang_alternates %}{% for alt in hreflang_alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />{% endfor %}{% endif %}
   {% block meta %}{% endblock %}
   <!-- Tarayıcı sekmesi: Norya N ikonu (static/icons ile ana sayfa ile aynı) -->
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
@@ -65,6 +66,9 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"NoryaAI","email":"support@noryaai.com","telephone":"+90 507 170 35 64","address":{"@type":"PostalAddress","streetAddress":"31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4","addressLocality":"Banaz","addressRegion":"Uşak","addressCountry":"TR"},"areaServed":{"@type":"Country","name":"Türkiye"}}
   </script>
+  {% if breadcrumb_schema_json %}
+  <script type="application/ld+json">{{ breadcrumb_schema_json|safe }}</script>
+  {% endif %}
 </head>
 <body class="bg-white text-accent-800 min-h-screen flex flex-col font-sans antialiased">
   <header class="border-b border-accent-200 bg-white/95 backdrop-blur sticky top-0 z-10">

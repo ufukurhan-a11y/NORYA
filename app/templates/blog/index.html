@@ -10,13 +10,21 @@
   <meta property="og:description" content="{{ meta_description }}" />
   <meta property="og:url" content="{{ canonical_url }}" />
   <meta property="og:image" content="{{ og_image }}" />
+  {% if og_locale %}<meta property="og:locale" content="{{ og_locale }}" />{% endif %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ seo_title }}" />
+  <meta name="twitter:description" content="{{ meta_description }}" />
+  <meta name="twitter:image" content="{{ og_image }}" />
   <meta name="robots" content="index,follow" />
   {% for alt in hreflang_alternates %}
   <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
   {% endfor %}
-{% for alt in hreflang_alternates %}{% if alt.lang == 'en' %}
+  {% for alt in hreflang_alternates %}{% if alt.lang == 'en' %}
   <link rel="alternate" hreflang="x-default" href="{{ alt.url }}" />
-{% endif %}{% endfor %}
+  {% endif %}{% endfor %}
+  {% if item_list_schema_json %}
+  <script type="application/ld+json">{{ item_list_schema_json|safe }}</script>
+  {% endif %}
   <style>
     :root {
       --blog-primary: #0EA5A4;
@@ -207,7 +215,7 @@
         </p>
 
         <div class="mt-7 sm:mt-8 flex flex-wrap items-center gap-4">
-          <a href="/upload" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-teal-500/30 hover:from-teal-600 hover:to-emerald-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
+          <a href="/{{ lang }}/upload" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-teal-500/30 hover:from-teal-600 hover:to-emerald-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
             {{ blog_ui.hero_cta_primary }}
           </a>
           <p class="text-xs sm:text-sm text-slate-500">

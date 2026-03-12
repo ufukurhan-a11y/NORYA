@@ -41,6 +41,7 @@ BLOG_UI = {
         "end_cta_text": "Laboratuvar sonuçlarınızı güvenle yükleyin, tıbbi terimleri sade dilde görün ve önemli noktaları dakikalar içinde kavrayın.",
         "end_cta_button": "Kan tahlili analizi",
         "related_label": "İlgili makaleler",
+        "blog_back_to_landing": "Ana Sayfa",
     },
     "en": {
         "hero_badge": "Health insights",
@@ -67,6 +68,7 @@ BLOG_UI = {
         "end_cta_text": "Upload your lab results securely, see medical terms in plain language and understand key points in minutes.",
         "end_cta_button": "Analyze blood test",
         "related_label": "Related articles",
+        "blog_back_to_landing": "Home",
     },
     "de": {
         "hero_badge": "Gesundheitswissen",
@@ -93,6 +95,7 @@ BLOG_UI = {
         "end_cta_text": "Laborergebnisse sicher hochladen. Verständliche Erklärungen — das Wichtigste in Minuten erfassen.",
         "end_cta_button": "Analyse starten",
         "related_label": "Das könnte Sie auch interessieren",
+        "blog_back_to_landing": "Startseite",
     },
     "fr": {
         "hero_badge": "Santé & analyses",
@@ -119,6 +122,7 @@ BLOG_UI = {
         "end_cta_text": "Téléchargez vos résultats d'analyses en toute sécurité, consultez les termes médicaux en langage clair et comprenez l'essentiel en quelques minutes.",
         "end_cta_button": "Analyser le bilan sanguin",
         "related_label": "Articles similaires",
+        "blog_back_to_landing": "Accueil",
     },
     "it": {
         "hero_badge": "Salute e analisi",
@@ -145,6 +149,7 @@ BLOG_UI = {
         "end_cta_text": "Carica i tuoi referti in modo sicuro, leggi i termini medici in linguaggio semplice e comprendi i punti chiave in pochi minuti.",
         "end_cta_button": "Analizza le analisi del sangue",
         "related_label": "Articoli correlati",
+        "blog_back_to_landing": "Home",
     },
     "es": {
         "hero_badge": "Salud y análisis",
@@ -171,6 +176,7 @@ BLOG_UI = {
         "end_cta_text": "Sube tus resultados de laboratorio de forma segura, consulta términos médicos en lenguaje claro y comprende lo esencial en minutos.",
         "end_cta_button": "Analizar análisis de sangre",
         "related_label": "Artículos relacionados",
+        "blog_back_to_landing": "Inicio",
     },
     "he": {
         "hero_badge": "תובנות בריאות",
@@ -197,6 +203,7 @@ BLOG_UI = {
         "end_cta_text": "העלה את תוצאות המעבדה שלך בצורה מאובטחת, צפה במונחים רפואיים בשפה פשוטה והבן את הנקודות העיקריות תוך דקות.",
         "end_cta_button": "ניתוח בדיקת דם",
         "related_label": "מאמרים קשורים",
+        "blog_back_to_landing": "בית",
     },
     "hi": {
         "hero_badge": "स्वास्थ्य जानकारी",
@@ -223,6 +230,7 @@ BLOG_UI = {
         "end_cta_text": "अपनी लैब रिपोर्ट सुरक्षित रूप से अपलोड करें, चिकित्सा शब्द सरल भाषा में देखें और मिनटों में मुख्य बिंदु समझें।",
         "end_cta_button": "ब्लड टेस्ट विश्लेषण",
         "related_label": "संबंधित लेख",
+        "blog_back_to_landing": "होम",
     },
 }
 
@@ -3696,6 +3704,94 @@ def _creatinine_egfr_sections_fr() -> List[Section]:
 _CREATININE_EGFR_ARTICLE = _article_creatinine_egfr()
 
 
+def _article_blutwerte_online_analysieren() -> Article:
+    """Blutwerte online analysieren — DE/EN/TR rehber (SEO: Blutwerte online analysieren)."""
+    published = date(2025, 3, 12)
+    cover = "/static/images/blog/how-to-read-blood-test-results.png"
+    return Article(
+        id="blutwerte-online-analysieren",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        category={
+            "tr": "Rehber",
+            "en": "Guide",
+            "de": "Ratgeber",
+        },
+        slugs={
+            "tr": "kan-tahlili-online-analiz",
+            "en": "blood-test-online-analysis",
+            "de": "blutwerte-online-analysieren-so-gehts",
+        },
+        titles={
+            "tr": "Kan tahlilini online nasıl analiz ettirirsiniz?",
+            "en": "How to analyse your blood test online",
+            "de": "Blutwerte online analysieren: So geht's",
+        },
+        subtitles={
+            "tr": "Laboratuvar sonuçlarınızı yükleyin, dakikalar içinde anlaşılır bir rapor alın. Üç adımda rehber.",
+            "en": "Upload your lab results and get a clear report in minutes. A short guide in three steps.",
+            "de": "Befund hochladen, in wenigen Minuten einen verständlichen Bericht erhalten. Kurz erklärt in drei Schritten.",
+        },
+        excerpts={
+            "tr": "Kan tahlili sonuçlarınızı online analiz ettirmek için Norya ile üç adım: yükle, raporu al, doktorunla paylaş.",
+            "en": "Three steps to analyse your blood test online with Norya: upload, get the report, share with your doctor.",
+            "de": "Blutwerte online analysieren mit Norya in drei Schritten: hochladen, Bericht erhalten, mit dem Arzt teilen.",
+        },
+        seo_titles={
+            "tr": "Kan Tahlili Online Analiz | Laboratuvar Sonuçları Yorumlama",
+            "en": "Blood Test Online Analysis: How It Works | NoryaAI",
+            "de": "Blutwerte online analysieren: So geht's | NoryaAI",
+        },
+        seo_descriptions={
+            "tr": "Kan tahlili sonuçlarınızı online analiz ettirin. PDF veya fotoğraf yükleyin, anlaşılır rapor alın. Teşhis yerine bilgilendirme.",
+            "en": "Analyse your blood test results online. Upload PDF or photo, get a clear report. For information only, not diagnosis.",
+            "de": "Blutwerte online analysieren: Befund hochladen, klaren Bericht erhalten. Nur zur Information, keine Diagnose.",
+        },
+        sections_by_lang={
+            "tr": _blutwerte_online_sections_tr(),
+            "en": _blutwerte_online_sections_en(),
+            "de": _blutwerte_online_sections_de(),
+        },
+    )
+
+
+def _blutwerte_online_sections_de() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="Warum Blutwerte online auswerten?",
+            body_html="<p>Viele Menschen erhalten nach dem Arztbesuch oder dem Labor einen Befund mit Abkürzungen und Zahlen. <strong>Blutwerte online analysieren</strong> hilft dabei, diese Werte einzuordnen—bevor Sie zum nächsten Termin gehen oder Fragen an Ihren Arzt haben. Mit Norya laden Sie Ihren Befund hoch und erhalten einen verständlichen Bericht mit Referenzbereichen und kurzen Empfehlungen. Das ersetzt keine Diagnose, unterstützt aber Ihre Vorbereitung auf das Arztgespräch.</p>"),
+        Section(id="steps", level=2, heading="Blutwerte online analysieren in drei Schritten",
+            body_html="<p><strong>Schritt 1:</strong> Auf Norya gehen und anmelden bzw. kostenlos starten. <strong>Schritt 2:</strong> Ihren Laborbefund hochladen—als PDF, Foto (JPG/PNG) oder durch Einfügen des Textes. <strong>Schritt 3:</strong> Den Bericht lesen und bei Bedarf als PDF herunterladen oder mit Ihrem Arzt teilen. Die Auswertung erfolgt automatisch; Sie erhalten eine strukturierte Übersicht und Einordnung Ihrer Werte.</p>"),
+        Section(id="disclaimer", level=2, heading="Hinweis",
+            body_html="<p><strong>Dieser Inhalt dient nur der Information und ersetzt keine medizinische Beratung, Diagnose oder Behandlung.</strong> Die Auswertung bei Norya ist bildend und orientierend. Besprechen Sie Ihre Ergebnisse und Beschwerden immer mit einem Arzt. <a href=\"/de/upload\">Blutwerte bei Norya auswerten</a> — Jetzt starten.</p>"),
+    ]
+
+
+def _blutwerte_online_sections_en() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="Why analyse blood test results online?",
+            body_html="<p>Many people receive a lab report full of abbreviations and numbers. <strong>Analysing your blood test online</strong> helps you understand these values—before your next appointment or when you have questions for your doctor. With Norya you upload your result and get a clear report with reference ranges and short recommendations. This is not a diagnosis, but it helps you prepare for the conversation with your doctor.</p>"),
+        Section(id="steps", level=2, heading="How to analyse your blood test online in three steps",
+            body_html="<p><strong>Step 1:</strong> Go to Norya and sign up or start for free. <strong>Step 2:</strong> Upload your lab result—as PDF, photo (JPG/PNG), or by pasting the text. <strong>Step 3:</strong> Read the report and, if needed, download it as PDF or share it with your doctor. The analysis is automatic; you get a structured overview and interpretation of your values.</p>"),
+        Section(id="disclaimer", level=2, heading="Disclaimer",
+            body_html="<p><strong>This content is for information only and does not constitute medical advice, diagnosis, or treatment.</strong> Norya's analysis is educational and for orientation. Always discuss your results and any symptoms with a doctor. <a href=\"/en/upload\">Analyse your blood test with Norya</a> — Get started.</p>"),
+    ]
+
+
+def _blutwerte_online_sections_tr() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="Kan tahlilini neden online analiz ettirmelisiniz?",
+            body_html="<p>Birçok kişi laboratuvar veya doktor sonrası kısaltmalar ve sayılarla dolu bir sonuç kağıdı alıyor. <strong>Kan tahlilini online analiz ettirmek</strong>, bir sonraki randevudan veya doktorunuza sormak istediğiniz sorulardan önce bu değerleri anlamanıza yardımcı olur. Norya ile sonucunuzu yüklersiniz ve referans aralıkları ile kısa öneriler içeren anlaşılır bir rapor alırsınız. Bu bir teşhis değildir; ancak doktor görüşmenize hazırlanmanıza yardımcı olur.</p>"),
+        Section(id="steps", level=2, heading="Kan tahlilini online analiz ettirmenin üç adımı",
+            body_html="<p><strong>Adım 1:</strong> Norya'ya gidin ve ücretsiz başlayın. <strong>Adım 2:</strong> Laboratuvar sonucunuzu yükleyin—PDF, fotoğraf (JPG/PNG) veya metni yapıştırarak. <strong>Adım 3:</strong> Raporu okuyun ve gerekiyorsa PDF indirin veya doktorunuzla paylaşın. Analiz otomatik yapılır; değerlerinizin yapılandırılmış bir özeti ve yorumunu alırsınız.</p>"),
+        Section(id="disclaimer", level=2, heading="Uyarı",
+            body_html="<p><strong>Bu içerik yalnızca bilgilendirme amaçlıdır; tıbbi tavsiye, teşhis veya tedavinin yerine geçmez.</strong> Norya analizi eğitim ve yönlendirme içindir. Sonuçlarınızı ve şikayetlerinizi her zaman bir hekimle görüşün. <a href=\"/tr/upload\">Norya ile kan tahlili analizi</a> — Hemen başlayın.</p>"),
+    ]
+
+
+_BLUTWERTE_ONLINE_ARTICLE = _article_blutwerte_online_analysieren()
+
+
 # TODO: create dedicated blog posts for "complete blood count explained" and "liver enzyme test explained"
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
@@ -3708,6 +3804,7 @@ ARTICLES: List[Article] = [
     _HBA1C_ARTICLE,
     _TSH_ARTICLE,
     _CREATININE_EGFR_ARTICLE,
+    _BLUTWERTE_ONLINE_ARTICLE,
 ]
 
 
