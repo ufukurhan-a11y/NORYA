@@ -393,7 +393,8 @@ def unhandled_exception_handler(request: Request, exc: Exception):
     return JSONResponse(status_code=500, content={"error": user_msg})
 
 
-# Google Ads conversion sayfası için tek CSP (script-src-elem + connect-src); path'ten bağımsız her zaman aynı
+# Google Ads için gevşek CSP'ler
+# 1) /payment/success: conversion/remarketing isteği, inline script ve Tag Assistant badge'i çalışmalı
 # script-src-elem: 'unsafe-inline' gtag/conversion inline script'leri için; style-src: googletagmanager Tag Assistant badge için
 _CSP_PAYMENT_SUCCESS = (
     "default-src 'self'; "
@@ -419,6 +420,25 @@ _CSP_PAYMENT_SUCCESS = (
     "frame-ancestors 'self';"
 )
 
+# 2) /payment: ödeme formu (PayTR iFrame + Google Ads/GA4/Tag Assistant scriptleri)
+_CSP_PAYMENT_PAGE = (
+    "default-src 'self'; "
+    "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
+    "https://www.googletagmanager.com https://googletagmanager.com "
+    "https://www.googleadservices.com https://googleadservices.com "
+    "https://googleads.g.doubleclick.net https://www.google.com; "
+    "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://googletagmanager.com "
+    "https://www.googleadservices.com https://googleadservices.com "
+    "https://googleads.g.doubleclick.net https://www.google.com; "
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
+    "img-src 'self' data: blob: https://www.google.com https://googleads.g.doubleclick.net https://www.google-analytics.com; "
+    "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
+    "https://www.google.com https://www.googletagmanager.com "
+    "https://googleads.g.doubleclick.net https://www.googleadservices.com; "
+    "frame-src 'self' https://www.googletagmanager.com https://www.google.com; "
+    "frame-ancestors 'self';"
+)
+
 
 @app.middleware("http")
 async def security_headers(request: Request, call_next):
@@ -429,6 +449,7 @@ async def security_headers(request: Request, call_next):
     response.headers["Referrer-Policy"] = "strict-origin-when-cross-origin"
     path = (request.url.path or "").strip().rstrip("/") or "/"
     is_payment_success = path == "/payment/success"
+    is_payment_page = path == "/payment"
     # Önce /payment/success: Google Ads conversion için CSP her ortamda aynı (ENVIRONMENT'dan bağımsız)
     if is_payment_success:
         response.headers["Content-Security-Policy"] = _CSP_PAYMENT_SUCCESS
@@ -437,9 +458,12 @@ async def security_headers(request: Request, call_next):
         response.headers["Expires"] = "0"
         response.headers["X-Norya-CSP"] = "payment-success"  # Debug: bu sayfada gevşek CSP uygulandığını doğrula
         # Cloudflare: Bu URL cache'lenmesin. Sorun sürerse Rules → Page Rules → *noryaai.com/payment/success* → Cache Level: Bypass
+    elif is_payment_page:
+        # Ödeme formu: Google Ads / GA4 / Tag Assistant script ve istekleri izinli
+        response.headers["Content-Security-Policy"] = _CSP_PAYMENT_PAGE
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
-        if not is_payment_success:
+        if not is_payment_success and not is_payment_page:
             _csp = (
                 "default-src 'self'; "
                 "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
