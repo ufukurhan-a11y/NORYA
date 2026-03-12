@@ -467,12 +467,20 @@ async def security_headers(request: Request, call_next):
     if getattr(settings, "environment", "development") == "production":
         response.headers["Strict-Transport-Security"] = "max-age=31536000; includeSubDomains; preload"
         if not is_payment_success and not is_payment_page:
+            # Genel sayfalar için CSP (landing, blog, vs.). GA + Google Ads / Tag Assistant isteklerine izin ver.
             _csp = (
                 "default-src 'self'; "
-                "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
+                "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
+                "https://www.googletagmanager.com https://googletagmanager.com "
+                "https://www.googleadservices.com https://googleadservices.com "
+                "https://googleads.g.doubleclick.net https://www.google.com; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-                "img-src 'self' data: blob: https:; "
-                "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
+                "img-src 'self' data: blob: https://www.google.com https://www.google.com.tr "
+                "https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com; "
+                "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
+                "https://www.google.com https://www.googletagmanager.com "
+                "https://googleads.g.doubleclick.net https://www.googleadservices.com; "
+                "frame-ancestors 'self';"
             )
             response.headers["Content-Security-Policy"] = _csp
     return response
