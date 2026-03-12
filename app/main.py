@@ -4151,8 +4151,11 @@ def sitemap_xml(request: Request):
     from datetime import date
     today = date.today().isoformat()
 
-    # Ana sayfa
+    # Ana sayfa (root) ve dil bazlı landing sayfaları (SEO: /de, /tr, /en vb.)
     add(f"{base_url}/", priority="0.9", lastmod=today)
+    for locale in LANDING_ROUTES:
+        add(f"{base_url}/{locale}", priority="0.9", lastmod=today)
+    add(f"{base_url}/pricing", priority="0.8", lastmod=today)
     add(f"{base_url}/kurumsal", lastmod=today)
     for page in LEGAL_PAGES:
         add(f"{base_url}/legal/{page}", priority="0.5", lastmod=today)

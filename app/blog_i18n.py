@@ -70,29 +70,29 @@ BLOG_UI = {
     },
     "de": {
         "hero_badge": "Gesundheitswissen",
-        "hero_title": "KI-Blutanalyse, Biomarker-Ratgeber und verständliche Laborergebnis-Erklärungen",
-        "hero_desc": "Einfache, vertrauenswürdige Artikel von Norya AI, um Blutwerte zu verstehen, Biomarker-Muster und Blutbild-Interpretation—vom kleinen Blutbild bis zu Leberwerten.",
+        "hero_title": "Blutwerte verstehen: Ratgeber zu Biomarkern und Laborergebnissen",
+        "hero_desc": "Verständliche Artikel zu Ferritin, CRP, Schilddrüse, Cholesterin und mehr — für Ihre Orientierung vor dem Arztgespräch.",
         "search_placeholder": "Artikel suchen…",
         "category_all": "Alle",
         "read_article": "Artikel lesen",
         "read_min": "Min. Lesezeit",
-        "cta_title": "Ihr Blutbild klarer verstehen",
-        "cta_text": f"Mit {BRAND_NAME} werden Ihre Biomarker-Werte in eine strukturierte, gut lesbare Gesundheitszusammenfassung übersetzt.",
+        "cta_title": "Blutwerte in Minuten verstehen",
+        "cta_text": f"Mit {BRAND_NAME} aus Ihren Werten eine klare, strukturierte Gesundheitszusammenfassung erstellen.",
         "cta_button": "Analyse starten",
         "toc_title": "Auf dieser Seite",
         "other_languages": "Andere Sprachen",
         "back_to_blog": "Zurück zum Blog",
         "home_link": BRAND_NAME,
-        "seo_title": f"{BRAND_NAME} Blog | KI-Blutanalyse & Blutwerte verstehen",
-        "meta_description": "Blutbild-Interpretation, Blutwerte erklärt: Ratgeber zu Ferritin, CRP, Schilddrüse, Cholesterin und mehr.",
+        "seo_title": f"{BRAND_NAME} Blog | Blutwerte & Laborergebnisse verstehen — Ratgeber",
+        "meta_description": "Blutwerte und Laborergebnisse verständlich erklärt: Ferritin, CRP, Schilddrüse, Cholesterin. Für die Orientierung vor dem Arztbesuch.",
         "no_results": "Keine Artikel entsprechen Ihrer Suche.",
         "last_updated": "Zuletzt aktualisiert",
         "hero_cta_primary": "Blutwerte analysieren",
-        "hero_cta_caption": "Datenschutz zuerst, klare Berichte in Minuten.",
-        "end_cta_title": "Laden Sie Ihre Ergebnisse hoch, erhalten Sie einen klaren Bericht",
-        "end_cta_text": "Laden Sie Ihre Laborergebnisse sicher hoch, sehen Sie medizinische Begriffe in verständlicher Sprache und erfassen Sie die wichtigsten Punkte in Minuten.",
-        "end_cta_button": "Blutanalyse starten",
-        "related_label": "Ähnliche Artikel",
+        "hero_cta_caption": "DSGVO-konform. Klare Berichte in Minuten.",
+        "end_cta_title": "Befund hochladen — klaren Bericht bekommen",
+        "end_cta_text": "Laborergebnisse sicher hochladen. Verständliche Erklärungen — das Wichtigste in Minuten erfassen.",
+        "end_cta_button": "Analyse starten",
+        "related_label": "Das könnte Sie auch interessieren",
     },
     "fr": {
         "hero_badge": "Santé & analyses",
@@ -616,7 +616,7 @@ def _article_kan_tahlili_nasil_okunur() -> Article:
         seo_descriptions={
             "tr": "Kan tahlili sonucu kâğıdında referans aralığı, birimler ve değerlerin anlamı. Adım adım, sade dilde rehber.",
             "en": "Learn how to read a blood test report: values, units, reference ranges, high/low flags, and common panels like CBC and lipids. A clear, step-by-step guide.",
-            "de": "Was Referenzbereich, Einheiten und Werte im Blutbefund bedeuten. Schritt-für-Schritt, verständlich.",
+            "de": "Referenzbereich, Einheiten und Werte im Blutbefund verstehen. Laborwerte einordnen — Schritt für Schritt, verständlich.",
             "it": "Cosa significano intervallo di riferimento, unità e valori sul referto. Guida passo passo in linguaggio semplice.",
             "es": "Qué significan rango de referencia, unidades y valores en el análisis. Guía paso a paso en lenguaje claro.",
             "fr": "Fourchette de référence, unités et valeurs sur la prise de sang : explications. Guide pas à pas en langage simple.",
@@ -1332,7 +1332,7 @@ def _article_ferritin() -> Article:
         },
         cover_alt={
             "en": "Ferritin blood test and lab dashboard — NoryaAI",
-            "de": "Ferritin blood test and lab dashboard — NoryaAI",
+            "de": "Ferritin-Bluttest und Labor-Überblick — NoryaAI",
             "it": "Ferritin blood test and lab dashboard — NoryaAI",
             "fr": "Ferritin blood test and lab dashboard — NoryaAI",
         },
@@ -2506,7 +2506,7 @@ def _article_hba1c() -> Article:
     cover = "/static/images/blog/hba1c-hero.png"
     cover_alt_text = {
         "en": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
-        "de": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
+        "de": "HbA1c-Test und Diabetes-Überwachung — NoryaAI",
         "it": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
         "fr": "HbA1c test and diabetes monitoring dashboard — NoryaAI",
     }
@@ -2524,7 +2524,7 @@ def _article_hba1c() -> Article:
             {"question": "Ist ein HbA1c von 5,8 % schlecht?", "answer": "5,8 % liegt im Prädiabetes-Bereich (5,7–6,4 %). Das bedeutet nicht zwingend Diabetes, weist aber auf ein höheres Risiko hin; Lebensstilmaßnahmen und ggf. Kontrollen können sinnvoll sein. Die Einordnung übernimmt Ihr Arzt."},
             {"question": "Warum ist mein HbA1c hoch, der Nüchternzucker aber normal?", "answer": "HbA1c erfasst 2–3 Monate Glukose; Nüchternzucker ist eine Momentaufnahme. Nach dem Essen oder nachts kann der Zucker erhöht sein. Auch Anämie oder Hämoglobinvarianten können den HbA1c beeinflussen. Ihr Arzt kann Ihr Muster erklären."},
             {"question": "Was ist mit Anämie und HbA1c?", "answer": "Eisenmangel, B12- oder Folsäuremangel und andere Ursachen einer Anämie können den HbA1c verfälschen (oft nach unten). Hämoglobinvarianten ebenfalls. Bei bekannter oder vermuteter Anämie berücksichtigt Ihr Arzt dies bei der Bewertung."},
-            {"question": "Muss ich für HbA1c nüchtern sein?", "answer": "HbA1c kann in der Regel nicht nüchtern gemessen werden. Wird dasselbe Blut für Nüchternglukose oder Fette verwendet, verlangt das Labor Nüchternheit; folgen Sie den Anweisungen."},
+            {"question": "Muss ich für HbA1c nüchtern sein?", "answer": "HbA1c kann in der Regel ohne Nüchternheit gemessen werden. Wird dasselbe Blut für Nüchternglukose oder Fette verwendet, verlangt das Labor Nüchternheit; folgen Sie den Anweisungen."},
             {"question": "Was ist ein normaler HbA1c?", "answer": "Nach gängigen Leitlinien gilt oft unter 5,7 % als Normalbereich. Grenzwerte und Referenzbereiche variieren je nach Labor und Leitlinie; Ihr Arzt interpretiert Ihren Wert im Kontext."},
         ],
         "it": [
@@ -2827,7 +2827,7 @@ def _article_tsh() -> Article:
     cover = "/static/images/blog/tsh-hero.png"
     cover_alt_text = {
         "en": "TSH thyroid test and monitoring dashboard — NoryaAI",
-        "de": "TSH thyroid test and monitoring dashboard — NoryaAI",
+        "de": "TSH-Schilddrüsen-Test und Überwachung — NoryaAI",
         "it": "TSH thyroid test and monitoring dashboard — NoryaAI",
         "fr": "TSH thyroid test and monitoring dashboard — NoryaAI",
     }
@@ -3261,7 +3261,7 @@ def _article_ldl_vs_hdl() -> Article:
     cover = "/static/images/blog/ldl-hdl-hero.png"
     cover_alt_text = {
         "en": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
-        "de": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
+        "de": "LDL- und HDL-Cholesterin: Lipidprofil und Überblick — NoryaAI",
         "it": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
         "fr": "LDL vs HDL cholesterol testing and lipid dashboard — NoryaAI",
     }
@@ -3375,7 +3375,7 @@ def _article_creatinine_egfr() -> Article:
     cover = "/static/images/blog/creatinine-egfr-hero.png"
     cover_alt_text = {
         "en": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
-        "de": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
+        "de": "Kreatinin und eGFR: Nierenfunktion im Überblick — NoryaAI",
         "it": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
         "fr": "Creatinine test and eGFR kidney function dashboard — NoryaAI",
     }

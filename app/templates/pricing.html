@@ -5,7 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
   <meta name="theme-color" content="#F8FAFA">
   <meta name="format-detection" content="telephone=no">
-  <title>{{ t.get("failed_pricing", "Pricing") }} – {{ brand }}</title>
+  <title>{{ t.get("pricing_page_title", t.get("failed_pricing", "Pricing")) }} – {{ brand }}</title>
+  {% if t.get("pricing_meta_description") %}
+  <meta name="description" content="{{ t.get('pricing_meta_description') }}" />
+  <meta property="og:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />
+  <meta property="og:description" content="{{ t.get('pricing_meta_description') }}" />
+  {% endif %}
   <!-- Tarayıcı sekmesi: Norya N ikonu -->
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
