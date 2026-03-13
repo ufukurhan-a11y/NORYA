@@ -77,6 +77,23 @@ def get_live_analytics(db: Session, period_minutes: int | None = None) -> dict[s
     )
     by_country = [{"country": c or "?", "count": n} for c, n in country_rows]
 
+    # Ülke + şehir (GA4 / Search Console benzeri; son 24 saat)
+    country_city_rows = (
+        db.exec(
+            select(AuditLog.country, AuditLog.city, func.count(AuditLog.id))
+            .where(AuditLog.created_at >= twenty_four_h_ago)
+            .where(AuditLog.country.isnot(None))
+            .where(AuditLog.country != "")
+            .group_by(AuditLog.country, AuditLog.city)
+            .order_by(func.count(AuditLog.id).desc())
+            .limit(30)
+        ).all()
+    )
+    by_country_city = [
+        {"country": c or "?", "city": (cit or "").strip() or "—", "count": n}
+        for c, cit, n in country_city_rows
+    ]
+
     # Bugünkü toplam analiz sayısı
     today_analyses = (
         db.exec(
@@ -154,6 +171,7 @@ def get_live_analytics(db: Session, period_minutes: int | None = None) -> dict[s
         "minute_labels": minute_labels,
         "minute_counts": minute_counts,
         "by_country": by_country,
+        "by_country_city": by_country_city,
         "today_analyses": today_analyses,
         "today_payments": today_payments,
         "today_revenue_eur": today_revenue_eur,

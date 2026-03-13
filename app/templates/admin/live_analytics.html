@@ -106,6 +106,35 @@
   </div>
 </div>
 
+<div class="grid grid-cols-1 gap-6 mb-6">
+  <div class="la-card">
+    <p class="la-card-title mb-3">Ülke / Şehir — girişler (son 24 saat)</p>
+    <p class="text-xs text-slate-500 mb-2">GA4 / Search Console benzeri: hangi ülke ve şehirden giriş yapıldığı.</p>
+    <div class="overflow-x-auto max-h-80 overflow-y-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-slate-400 border-b border-slate-600">
+            <th class="py-2 pr-2">Ülke</th>
+            <th class="py-2 pr-2">Şehir</th>
+            <th class="py-2 text-right">Adet</th>
+          </tr>
+        </thead>
+        <tbody id="la-by-country-city-body">
+          {% for row in by_country_city %}
+          <tr class="border-b border-slate-700/50">
+            <td class="py-2 pr-2 text-slate-200">{{ row.country }}</td>
+            <td class="py-2 pr-2 text-slate-300">{{ row.city }}</td>
+            <td class="py-2 text-right la-accent font-semibold">{{ row.count }}</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="3" class="py-4 text-slate-500">Veri yok.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
   <div class="la-card">
     <p class="la-card-title mb-3">Cihaz dağılımı</p>
@@ -256,6 +285,16 @@
       } else {
         countryBody.innerHTML = data.by_country.map(function(r) {
           return '<tr class="border-b border-slate-700/50"><td class="py-2 pr-2 text-slate-200">' + (r.country || '?') + '</td><td class="py-2 text-right la-accent font-semibold">' + (r.count || 0) + '</td></tr>';
+        }).join('');
+      }
+    }
+    var countryCityBody = id('la-by-country-city-body');
+    if (countryCityBody && Array.isArray(data.by_country_city)) {
+      if (data.by_country_city.length === 0) {
+        countryCityBody.innerHTML = '<tr><td colspan="3" class="py-4 text-slate-500">Veri yok.</td></tr>';
+      } else {
+        countryCityBody.innerHTML = data.by_country_city.map(function(r) {
+          return '<tr class="border-b border-slate-700/50"><td class="py-2 pr-2 text-slate-200">' + (r.country || '?') + '</td><td class="py-2 pr-2 text-slate-300">' + (r.city || '—') + '</td><td class="py-2 text-right la-accent font-semibold">' + (r.count || 0) + '</td></tr>';
         }).join('');
       }
     }

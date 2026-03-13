@@ -7,7 +7,7 @@ from sqlmodel import Session, select
 
 from app.core.config import settings
 from app.core.database import get_db
-from app.core.geo import get_country_from_ip
+from app.core.geo import get_geo_from_ip
 from app.core.rate_limit import limiter
 from app.core.security import (
     create_access_token,
@@ -45,8 +45,8 @@ def _client_ip(request: Request) -> str:
 
 def _audit(db: Session, event: str, user_id: int | None, ip: str | None) -> None:
     try:
-        country = get_country_from_ip(ip) if ip else None
-        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country))
+        country, city = get_geo_from_ip(ip) if ip else (None, None)
+        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country, city=city))
         db.commit()
     except Exception:
         pass
@@ -124,12 +124,12 @@ async def register(
         verify_email_sent = False
         if is_mail_configured():
             try:
-                _send_verify_email(email, token_str, country or (get_country_from_ip(ip) if ip else None))
+                _send_verify_email(email, token_str, (get_geo_from_ip(ip)[0] if ip else None))
                 verify_email_sent = True
             except Exception as e:
                 log.warning("Verify email send failed (user created): %s", e)
         _audit(db, "register", user.id, ip)
-        country = get_country_from_ip(ip)
+        country = get_geo_from_ip(ip)[0]
         if country and not getattr(user, "country", None):
             user.country = country
             db.add(user)
@@ -193,7 +193,7 @@ async def login(
     except Exception:
         pass
     if not getattr(user, "country", None):
-        country = get_country_from_ip(ip)
+        country = get_geo_from_ip(ip)[0]
         if country:
             user.country = country
             db.add(user)
@@ -396,7 +396,7 @@ def heartbeat(
         return {"ok": True}
     now = datetime.utcnow()
     ip = _client_ip(request)
-    country = get_country_from_ip(ip) if ip else None
+    country = get_geo_from_ip(ip)[0] if ip else None
     current_page = (page or "").strip() or None
     existing = db.exec(select(Presence).where(Presence.user_id == uid)).first()
     if existing:

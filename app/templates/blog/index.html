@@ -195,7 +195,7 @@
 {% endblock %}
 
 {% block content %}
-  <div class="blog-hero pt-12 pb-10 sm:pt-16 sm:pb-14 px-4 sm:px-6">
+  <div class="blog-hero pt-12 pb-10 sm:pt-16 sm:pb-14 px-4 sm:px-6" dir="{{ 'rtl' if lang in ['ar', 'he'] else 'ltr' }}">
     <div class="max-w-6xl mx-auto lg:grid lg:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)] lg:items-center lg:gap-10">
       <div class="mb-10 lg:mb-0">
         <div class="flex flex-wrap items-center justify-between gap-4 mb-8">
@@ -253,8 +253,8 @@
       <div class="hidden lg:block">
         <div class="relative max-w-md mx-auto">
           <div class="absolute -inset-6 rounded-3xl bg-teal-500/10 blur-2xl"></div>
-          <div class="blog-hero-img-wrap relative overflow-hidden rounded-3xl border border-white/70 shadow-xl shadow-slate-900/5 bg-white">
-            <img src="/static/images/blog/blog-hero.png" alt="People reviewing a clear health report together with a doctor" loading="lazy" />
+          <div class="blog-hero-img-wrap relative overflow-hidden rounded-3xl border border-white/70 shadow-xl shadow-slate-900/5 bg-white aspect-[16/10]">
+            <img src="/static/images/blog/blog-hero.png" alt="{{ blog_ui.hero_title|default('Blood test results explained') }}" loading="lazy" width="800" height="500" sizes="(max-width: 768px) 100vw, 28rem" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
@@ -285,7 +285,7 @@
   </div>
   {% endif %}
 
-  <section class="py-12 sm:py-16 px-4 sm:px-6 bg-[#fafbfc]" aria-label="Articles">
+  <section class="py-12 sm:py-16 px-4 sm:px-6 bg-[#fafbfc]" aria-label="Articles" dir="{{ 'rtl' if lang in ['ar', 'he'] else 'ltr' }}">
     <div class="max-w-5xl mx-auto">
       {% if posts %}
       {% set featured = posts[0] %}
@@ -293,7 +293,7 @@
         <a href="{{ featured.url }}" class="relative block bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
           <div class="blog-card-cover aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-t-[1rem] md:rounded-tr-none md:rounded-l-[1rem]">
             {% if featured.cover_image %}
-            <img src="{{ featured.cover_image }}" alt="{{ featured.cover_alt|default(featured.title) }}" loading="eager" class="transition-transform duration-200 hover:scale-[1.02]" />
+            <img src="{{ featured.cover_image }}" alt="{{ featured.cover_alt|default(featured.title) }}" loading="eager" width="800" height="500" sizes="(max-width: 768px) 100vw, 50vw" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/12 via-slate-900/0 to-slate-900/0"></div>
             {% else %}
             <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">
@@ -346,7 +346,7 @@
         <li class="blog-card overflow-hidden flex flex-col" data-title="{{ post.title|lower }}" data-excerpt="{{ post.excerpt|lower }}" data-category="{{ post.category }}">
           <a href="{{ post.url }}" class="blog-card-cover block relative overflow-hidden aspect-[16/10] bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t-[1rem]">
             {% if post.cover_image %}
-            <img src="{{ post.cover_image }}" alt="{{ post.cover_alt|default(post.title) }}" loading="lazy" class="transition-transform duration-200 hover:scale-[1.02]" />
+            <img src="{{ post.cover_image }}" alt="{{ post.cover_alt|default(post.title) }}" loading="lazy" width="640" height="400" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/10 via-slate-900/0 to-slate-900/0"></div>
             {% else %}
             <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">

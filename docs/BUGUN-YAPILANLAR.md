@@ -4,6 +4,60 @@ Kısa özet: PDF indirme (özellikle canlıda), admin logları, deploy, Cloudfla
 
 ---
 
+## Özet: SEO, çoklu dil landing, GA4, legal hreflang, mobil (13 Mart 2026)
+
+**Kısa özet:** Tüm dil/landing sayfalarında 6. FAQ ve pricing alt metni eklendi (TR, EN, DE, IT, ES, FR, HE, AR, HI, EL, CS, SR). GA4’e `pricing_view`, `payment_start`, `analysis_complete` event’leri ve Core Web Vitals (LCP, FCP, CLS) gönderimi eklendi. Legal sayfalara hreflang (tr, en, de, fr, it, es + x-default) kondu. FAQ accordion’da mobil için 44px touch target sağlandı. Blog tarafında og_locale, Twitter card, ItemList schema, locale-aware report CTA ve DE makale zaten yapılmıştı.
+
+---
+
+### 1. Landing: Tüm dillerde FAQ 6 + pricing satırı
+
+- **Static index.html:** Her dil için `faq_q6`, `faq_a6`, `pricing_hero_sub` eklendi.
+- **Diller:** TR, EN, DE, IT, ES, FR, HE, AR, HI, EL, CS, SR (T.tr, T.en, T.de, …).
+- **FR:** Apostrof eşleşmesi düzeltildi (Unicode apostrophe).
+- **Landing i18n:** tr, en, de, it zaten vardı; en-ca `_en_ui()` kullandığı için otomatik uyumlu.
+
+### 2. GA4 conversion event’leri
+
+- **pricing_view:** `#fiyatlandirma` bölümü görünür olduğunda veya hash `#pricing` / `#fiyatlandirma` olduğunda, oturumda bir kez.
+- **payment_start:** `goToCheckout(planKey)` çağrıldığında (single/monthly/yearly), `plan` parametresiyle.
+- **analysis_complete:** Rapor ilk kez render edildiğinde bir kez (`renderReport` sonunda).
+- gtag placeholder sonrası inline script; `sessionStorage` ile pricing_view tekrarsız.
+
+### 3. Core Web Vitals → GA4
+
+- **LCP:** `PerformanceObserver` ile `largest-contentful-paint`.
+- **FCP:** `performance.getEntriesByType('paint')` ile First Contentful Paint.
+- **CLS:** `layout-shift` observer, kümülatif değer; `pagehide` ile bir kez gönderim.
+- Event isimleri: `LCP`, `FCP`, `CLS`; `value`, `non_interaction: true`.
+
+### 4. Legal sayfalar hreflang
+
+- **`/legal/{page}`** ve **`/iade-iptal`** için `<link rel="alternate" hreflang="..." href="...">` eklendi.
+- **Diller:** tr, en, de, fr, it, es + x-default (en).
+- **URL:** `.../legal/{page}?lang=tr` vb.
+- **Şablon:** `app/templates/legal/base_legal.html` içinde `hreflang_alternates` döngüsü.
+- **Backend:** `app/main.py` içinde `legal_page` ve `iade_iptal_page` context’e `hreflang_alternates` ekleniyor.
+
+### 5. Mobil uyumluluk
+
+- **Mevcut:** Viewport, safe-area-inset, touch-action, 44/48px buton yükseklikleri, pricing grid mobil tek sütun zaten vardı.
+- **FAQ (SSS):** Tüm 6 maddenin `<summary>` öğesine mobil dokunma alanı eklendi:
+  - `min-h-[44px]`, `touch-manipulation`, `-webkit-tap-highlight-color: transparent`.
+- **Analytics:** IntersectionObserver, sessionStorage, PerformanceObserver mobil tarayıcılarda destekleniyor.
+
+### 6. Blog ve diğer (önceki oturumlardan)
+
+- Blog index/detail: `og_locale`, Twitter card, ItemList schema, CTA ve “back to landing” tüm dillerde.
+- Report CTA: locale-aware payment URL (`NORYA_PAYMENT_REPORT_URL`), `__noryaApplyReportPaymentUrls`.
+- DE makale: “Blutwerte online analysieren” eklendi.
+- Landing: nav/drawer/footer → `/pricing`, pricing sayfası hreflang, FAQ schema 1–7, WebSite + SearchAction.
+
+**Değişen / eklenen dosyalar:**  
+`static/index.html`, `app/main.py`, `app/landing_i18n.py`, `app/blog_i18n.py`, `app/templates/legal/base_legal.html`, `app/templates/blog/index.html`, `app/templates/blog/detail.html`, `app/templates/pricing.html`, `docs/SEO_AUDIT_DE_2025.md`.
+
+---
+
 ## 1. PDF indirme (local + canlı)
 
 **Sorun:** Lokalda PDF açılıyordu, canlıda (noryaai.com) “Önce analiz yapın” veya tıklanınca hareket yoktu.

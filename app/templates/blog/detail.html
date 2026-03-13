@@ -123,7 +123,7 @@
 {% endblock %}
 
 {% block content %}
-  <article class="blog-detail-hero pt-8 pb-6 sm:pt-10 sm:pb-8 px-4 sm:px-6">
+  <article class="blog-detail-hero pt-8 pb-6 sm:pt-10 sm:pb-8 px-4 sm:px-6" dir="{{ 'rtl' if current_lang in ['ar', 'he'] else 'ltr' }}">
     <div class="max-w-5xl mx-auto">
       <nav class="mb-3 text-xs sm:text-sm text-slate-500" aria-label="{{ blog_ui.breadcrumb_aria|default('Breadcrumb') }}">
         <ol class="flex flex-wrap items-center gap-1 sm:gap-1.5">
@@ -188,13 +188,13 @@
     </div>
   </article>
 
-  <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-14 sm:pb-20">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 pb-14 sm:pb-20" dir="{{ 'rtl' if current_lang in ['ar', 'he'] else 'ltr' }}">
     <div class="grid lg:grid-cols-[1fr_280px] gap-12 lg:gap-16">
       <div class="min-w-0">
         <div class="overflow-hidden rounded-2xl bg-white border border-slate-200/60 shadow-sm mb-10">
           {% if article.cover_image %}
           <div class="relative w-full aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-2xl">
-            <img src="{{ article.cover_image }}" alt="{{ article.cover_alt or article.title }}" loading="lazy" width="1200" height="630" sizes="(max-width: 768px) 100vw, 1200px" class="w-full h-full object-cover" />
+            <img src="{{ article.cover_image }}" alt="{{ article.cover_alt or article.title }}" loading="lazy" width="1200" height="630" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px" class="w-full h-full object-cover" decoding="async" />
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/16 via-slate-900/0 to-slate-900/0"></div>
             <div class="pointer-events-none absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1.5 rounded-md bg-white/90 px-2 py-1 shadow-sm" aria-hidden="true">
               <span class="text-slate-700 font-semibold text-xs tracking-tight">N</span>
@@ -290,7 +290,7 @@
           {% for post in related_posts %}
           <article class="blog-sidebar-card overflow-hidden flex flex-col">
             <a href="{{ post.url }}" class="block relative overflow-hidden aspect-[16/9] bg-slate-100">
-              <img src="{{ post.cover_image }}" alt="{{ post.cover_alt or post.title }}" loading="lazy" class="w-full h-full object-cover" />
+              <img src="{{ post.cover_image }}" alt="{{ post.cover_alt or post.title }}" loading="lazy" width="400" height="225" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" class="w-full h-full object-cover" decoding="async" />
             </a>
             <div class="p-4">
               <p class="text-xs font-medium text-teal-700 uppercase tracking-wide">{{ post.category }}</p>
@@ -308,6 +308,12 @@
         <a href="/{{ current_lang }}" class="text-teal-600 hover:underline">{{ blog_ui.blog_back_to_landing|default('Home') }}</a>
         <span aria-hidden="true"> · </span>
         <a href="/{{ current_lang }}/blog" class="text-teal-600 hover:underline">{{ blog_ui.back_to_blog }}</a>
+        <span aria-hidden="true"> · </span>
+        <a href="/{{ current_lang }}/upload" class="text-teal-600 hover:underline">{{ blog_ui.cta_button|default('Analyze') }}</a>
+        <span aria-hidden="true"> · </span>
+        <a href="/{{ current_lang }}/how-it-works" class="text-teal-600 hover:underline">{{ blog_ui.how_it_works_link|default('How it works') }}</a>
+        <span aria-hidden="true"> · </span>
+        <a href="/{{ current_lang }}/pricing" class="text-teal-600 hover:underline">{{ blog_ui.pricing_link|default('Pricing') }}</a>
       </p>
       <section class="mt-6 mb-6 rounded-2xl border border-slate-200 bg-white px-5 py-6 sm:px-7 sm:py-7 shadow-sm">
         <div class="flex flex-col sm:flex-row sm:items-center gap-5">

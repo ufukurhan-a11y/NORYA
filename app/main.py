@@ -41,7 +41,7 @@ from app.cache_utils import expires_iso, make_cache_key, now_iso
 from app.core.config import is_openai_configured, settings
 from app.core.database import engine, get_db, init_db
 from app.core.rate_limit import limiter
-from app.core.geo import get_country_from_ip
+from app.core.geo import get_geo_from_ip
 from app.legal_i18n import get_legal_content, get_legal_ui
 from app.core.security import (
     create_pdf_access_token,
@@ -1357,7 +1357,7 @@ def blog_index(request: Request, lang: str):
     meta_description = ui.get("meta_description", "")
     og_image = base_url + "/static/images/blog/how-to-read-blood-test-results.png"
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/blog"} for code in BLOG_LANGS_PREMIUM]
-    og_locale_map = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "it": "it_IT", "es": "es_ES", "he": "he_IL", "hi": "hi_IN"}
+    og_locale_map = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "it": "it_IT", "es": "es_ES", "he": "he_IL", "hi": "hi_IN", "ar": "ar_SA"}
     og_locale = og_locale_map.get(lang, "en_US")
     item_list = [
         {"@type": "ListItem", "position": i + 1, "url": f"{base_url}{p['url']}", "name": p.get("title", "")}
@@ -1462,7 +1462,7 @@ def blog_detail(request: Request, lang: str, slug: str):
         faq_schema_json = json.dumps(faq_schema, ensure_ascii=False, indent=2)
     base_ui = get_base_ui(lang)
     related_posts = get_related_articles(lang, art["id"], base_url, limit=4)
-    og_locale_map = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "it": "it_IT", "es": "es_ES", "he": "he_IL", "hi": "hi_IN"}
+    og_locale_map = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "it": "it_IT", "es": "es_ES", "he": "he_IL", "hi": "hi_IN", "ar": "ar_SA"}
     og_locale = og_locale_map.get(lang, "en_US")
 
     return templates.TemplateResponse(
@@ -1915,8 +1915,8 @@ def _check_analyze_hourly_limit(user_id: int) -> None:
 
 def _audit(db: Session, event: str, user_id: int | None, ip: str | None) -> None:
     try:
-        country = get_country_from_ip(ip) if ip else None
-        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country))
+        country, city = get_geo_from_ip(ip) if ip else (None, None)
+        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country, city=city))
         db.commit()
     except Exception:
         pass

@@ -9,4 +9,5 @@ class AuditLog(SQLModel, table=True):
     user_id: int | None = Field(default=None, index=True)
     ip: str | None = None
     country: str | None = None  # IP'den çözülen ülke kodu (TR, US vb.)
+    city: str | None = None  # IP'den çözülen şehir (GA4/Search Console benzeri)
     created_at: datetime = Field(default_factory=datetime.utcnow)
