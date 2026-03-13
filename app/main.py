@@ -636,6 +636,35 @@ def landing_de(request: Request):
     return _landing_response("de", request)
 
 
+@app.get("/de/faq", response_class=HTMLResponse)
+def faq_de(request: Request):
+    """
+    Almanca FAQ sayfası: /de/faq
+    Landing'deki DE FAQ içeriğini tek sayfada gösterir.
+    """
+    lang = "de"
+    base_url = str(request.base_url).rstrip("/")
+    t = get_landing_ui(lang)
+    meta_landing = get_landing_meta(lang)
+    meta = {
+        "meta_title": meta_landing.get("faq_title") or meta_landing.get("meta_title", "Norya FAQ"),
+        "meta_description": meta_landing.get("faq_subtitle") or meta_landing.get("meta_description", ""),
+    }
+    canonical_url = f"{base_url}/de/faq"
+    return templates.TemplateResponse(
+        "faq.html",
+        {
+            "request": request,
+            "lang": lang,
+            "t": t,
+            "meta": meta,
+            "canonical_url": canonical_url,
+            "og_locale": "de_DE",
+            "base_url": base_url,
+        },
+    )
+
+
 @app.get("/it", response_class=HTMLResponse)
 def landing_it(request: Request):
     return _landing_response("it", request)

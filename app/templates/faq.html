@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  <title>{{ meta.meta_title }}</title>
+  <meta name="description" content="{{ meta.meta_description }}" />
+  <meta property="og:title" content="{{ meta.meta_title }}" />
+  <meta property="og:description" content="{{ meta.meta_description }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="{{ og_locale }}" />
+  <meta name="theme-color" content="#0EA5A4" />
+  {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --norya-teal: #0EA5A4; --norya-teal-hover: #0d9488; }
+    body { font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; }
+    .text-norya-teal { color: var(--norya-teal); }
+    .bg-norya-teal { background-color: var(--norya-teal); }
+    .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
+    .border-norya-teal { border-color: var(--norya-teal); }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen flex flex-col antialiased">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-5xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/{{ lang }}" class="flex items-center gap-2 shrink-0">
+        <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="hidden sm:flex items-center gap-4 text-sm font-medium">
+        <a href="/{{ lang }}" class="text-slate-600 hover:text-norya-teal">{{ t.nav_home }}</a>
+        <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-slate-600 hover:text-norya-teal">{{ t.nav_how }}</a>
+        <a href="{{ base_url }}/pricing" class="text-slate-600 hover:text-norya-teal">{{ t.nav_pricing }}</a>
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[40px] px-3 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">
+          {{ t.nav_analyze }}
+        </a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <section class="py-10 sm:py-16 px-4 bg-white border-b border-slate-200">
+      <div class="max-w-3xl mx-auto">
+        <p class="text-sm font-semibold text-norya-teal mb-2 uppercase tracking-wide">{{ t.faq_label or "FAQ" }}</p>
+        <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-3 leading-tight">
+          {{ t.faq_title }}
+        </h1>
+        {% if t.faq_subtitle %}
+        <p class="text-slate-600 text-base sm:text-lg max-w-2xl">
+          {{ t.faq_subtitle }}
+        </p>
+        {% endif %}
+      </div>
+    </section>
+
+    <section class="py-10 sm:py-16 px-4 bg-slate-50">
+      <div class="max-w-3xl mx-auto space-y-4">
+        {% for i in range(1, 7) %}
+          {% set q = t.get("faq_q" ~ i) %}
+          {% set a = t.get("faq_a" ~ i) %}
+          {% if q and a %}
+          <article class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <h2 class="font-semibold text-slate-900 mb-2 text-base sm:text-lg">
+              {{ q }}
+            </h2>
+            <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
+              {{ a }}
+            </p>
+          </article>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+
+    <section class="py-10 sm:py-16 px-4 bg-white border-t border-slate-200">
+      <div class="max-w-3xl mx-auto text-center space-y-4">
+        <h2 class="text-2xl font-semibold text-slate-900">
+          {{ t.faq_cta_title or "Bereit, Ihre Werte auszuwerten?" }}
+        </h2>
+        <p class="text-slate-600 max-w-xl mx-auto">
+          {{ t.faq_cta_sub or "Laden Sie Ihren Laborbefund hoch und erhalten Sie in wenigen Minuten einen strukturierten Bericht." }}
+        </p>
+        <div class="flex flex-wrap justify-center gap-3">
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-6 py-2.5 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">
+            {{ t.faq_cta_primary or t.nav_analyze }}
+          </a>
+          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[44px] px-6 py-2.5 rounded-xl border border-norya-teal text-norya-teal font-semibold hover:bg-teal-50">
+            {{ t.faq_cta_secondary or t.nav_pricing }}
+          </a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-slate-50 py-6 px-4">
+    <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-3 text-xs sm:text-sm text-slate-600">
+      <p class="order-2 sm:order-1">&copy; {{ 2025 }} NoryaAI</p>
+      <nav class="order-1 sm:order-2 flex flex-wrap gap-3">
+        <a href="/{{ lang }}" class="hover:text-norya-teal">{{ t.nav_home }}</a>
+        <a href="{{ base_url }}/legal/gizlilik-politikasi?lang={{ lang }}" class="hover:text-norya-teal">{{ t.footer_privacy }}</a>
+        <a href="{{ base_url }}/legal/kullanim-sartlari?lang={{ lang }}" class="hover:text-norya-teal">{{ t.footer_terms }}</a>
+      </nav>
+    </div>
+  </footer>
+</body>
+</html>
+
