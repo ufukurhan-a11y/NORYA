@@ -1,6 +1,6 @@
 ---
-description: NoryaAI çok dilli içerik standardı — 9 dil, dil karışması yok, doğal metin, güven veren görsel. Tam metin: docs/NORYA-COK-DILLI-ICERIK-STANDARDI.md
-globs: ["**/*i18n*.py", "**/blog*.py", "**/landing*.py", "**/templates/**/*.html"]
+description: NoryaAI çok dilli içerik standardı — konu planı + full body, 9 dil, dil karışması yok, doğal metin, güven veren görsel. Tam metin: docs/NORYA-COK-DILLI-ICERIK-STANDARDI.md
+globs: ["**/*i18n*.py", "**/blog*.py", "**/landing*.py", "**/templates/**/*.html", "docs/**/BLOG*.md", "docs/**/*KONU*.md"]
 alwaysApply: false
 ---
 
@@ -8,24 +8,34 @@ alwaysApply: false
 
 İçerik veya çok dilli metin üretirken/düzenlerken bu kurallara uy.
 
+## Kapsam
+
+- Sadece **konu planı** üretimi. Uygun olduğunda **full body blog** içeriği de üretilir.
+
 ## Diller (hepsi ayrı üretilir)
 
-TR, EN, ES, DE, FR, IT, HE, HI, AR. Diller birbirine karışmaz; bir dildeki cümle/kelime/başlık/ton başka dile sızmaz.
+TR, EN, ES, DE, FR, IT, HE, HI, AR. Diller kesinlikle karışmaz; her dil yerel editör yazmış gibi doğal olacak.
 
-## Metin
+## Kalıcı kurallar
 
-- Her dil yerel editör yazmış gibi doğal; çeviri kokusu, robotik veya AI hissi yok.
-- Sağlık: abartılı vaat, teşhis iddiası, korku dili yok. İçerik güven vermeli.
-- Başlık, meta, CTA her dilde ayrı ayrı doğal yazılır (kelime kelime çeviri değil).
+- Çeviri gibi durmayacak; yapay zekâ yazmış hissi vermeyecek.
+- Müşteriye güven veren profesyonel sağlık dili; teşhis vaadi yok.
+- Görseller/ikonlar konu ile birebir alakalı; birbirine çok benzemeyecek, aynı görsel hissi tekrarlanmayacak.
+- Norya marka hissi korunacak. CTA doğal olacak, satış baskısı gibi görünmeyecek.
+- Blog tasarımını, routing mantığını ve backend’i bozma.
 
-## Görsel
+## Teslim şekli (her konu için gerektiğinde)
 
-- Konu ile doğrudan alakalı; ikonlar konu ile uyumlu.
-- Her içerikte farklı görsel yaklaşım; aynı kompozisyon/renk/ikon düzeni tekrarlanmaz.
-- Premium, clean, medical-tech; ucuz stok / karikatür / yapay AI hissi yok. Norya ikonu marka imzası olarak kullanılabilir; ana kompozisyon her içerikte farklı olmalı.
+title, slug, excerpt, meta title, meta description, category, read time, hero image prompt, icon concept, internal links, CTA text, full body content.
 
-## Yayın öncesi 7 kontrol
+## Full body yazım
 
-1. Dil karışması var mı? 2. Metin çeviri gibi mi? 3. Yerel kullanıcıya doğal mı? 4. AI yazmış hissi var mı? 5. Görsel konu ile uyumlu mu? 6. Görsel başka içeriklerle fazla benziyor mu? 7. İçerik güven veriyor mu?
+- Giriş doğal; AI/SEO klişe girişler yok. Her dil kendi doğal akışında; H2/H3 temiz.
+- Tek bir sonucun tanı koydurmadığı doğal şekilde anlatılır; uygun yerde doktora yönlendirme.
+- Blogdan analyze/pricing sayfalarına doğal CTA ile bağlansın.
+
+## Yayın öncesi 6 kontrol
+
+1. Dil karışması var mı? 2. Metin çeviri gibi duruyor mu? 3. AI hissi veriyor mu? 4. Güven veriyor mu? 5. Görsel konu ile uyumlu mu? 6. Başka içeriklerle fazla benziyor mu?
 
 Bu kontrollerden geçmeyen içerik yeniden yazılmalı / görsel yeniden üretilmeli. Tam standart: `docs/NORYA-COK-DILLI-ICERIK-STANDARDI.md`.
