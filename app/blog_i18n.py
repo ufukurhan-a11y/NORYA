@@ -4613,6 +4613,7 @@ def _article_albumin_low() -> Article:
         published_at=published,
         read_minutes=4,
         cover_image=cover,
+        icon="/static/images/blog/icons/albumin-low-meaning.svg",
         category={"tr": "Biyobelirteçler", "en": "Biomarkers", "es": "Biomarcadores", "de": "Biomarker", "fr": "Biomarqueurs", "it": "Biomarcatori", "he": "ביומרקרים", "hi": "बायोमार्कर", "ar": "المؤشرات الحيوية"},
         slugs=slugs,
         titles={"tr": "Albumin düşük çıkarsa ne olur?", "en": "What does low albumin mean?", "es": "Albúmina baja: ¿qué implica?", "de": "Albumin zu niedrig: Was bedeutet der Wert?", "fr": "Albumine basse : qu'est-ce que ça indique ?", "it": "Albumina bassa: cosa significa?", "he": "מה המשמעות של אלבומין נמוך?", "hi": "ऐल्ब्यूमिन लो का क्या मतलब है?", "ar": "ماذا يعني انخفاض الألبومين؟"},
@@ -4732,6 +4733,7 @@ def _article_alp_high() -> Article:
         published_at=published,
         read_minutes=4,
         cover_image=cover,
+        icon="/static/images/blog/icons/alp-high-meaning.svg",
         category={"tr": "Biyobelirteçler", "en": "Biomarkers", "es": "Biomarcadores", "de": "Biomarker", "fr": "Biomarqueurs", "it": "Biomarcatori", "he": "ביומרקרים", "hi": "बायोमार्कर", "ar": "المؤشرات الحيوية"},
         slugs=slugs,
         titles={"tr": "ALP (alkalen fosfataz) yüksek ne demek?", "en": "What does a high ALP level mean?", "es": "Fosfatasa alcalina alta: ¿qué significa?", "de": "Alkalische Phosphatase erhöht: Was bedeutet der Wert?", "fr": "Phosphatase alcaline élevée : que faut-il en penser ?", "it": "Fosfatasi alcaline alte: cosa significano?", "he": "מה המשמעות של ALP גבוה?", "hi": "ALP हाई का क्या मतलब है?", "ar": "ماذا يعني ارتفاع الفوسفاتاز القلوية؟"},
@@ -4751,6 +4753,7 @@ def _article_alp_high() -> Article:
             "hi": [Section(id="content", level=2, heading="ALP हाई का क्या मतलब है?", body_html="<p><strong>ALP</strong> (ऐल्कलाइन फॉस्फेटेज़) लिवर, हड्डी और पित्त नली में मौजूद एंजाइम है। हाई लेवल इनमें से किसी से आ सकता है; बढ़ती उम्र या प्रेगनेंसी में सामान्य रूप से भी बढ़ सकता है। अकेले निदान नहीं; डॉक्टर GGT, ALT/AST या बोन टेस्ट से स्रोत पता करेंगे। परिणाम डॉक्टर से चर्चा करें।</p>"), Section(id="disclaimer", level=2, heading="अस्वीकरण", body_html="<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>")],
             "ar": [Section(id="content", level=2, heading="ماذا يعني ارتفاع الفوسفاتاز القلوية؟", body_html="<p><strong>الفوسفاتاز القلوية</strong> إنزيم في الكبد والعظام والقنوات الصفراوية. ارتفاعها قد يأتي من أي منها؛ وقد يرتفع أيضاً بشكل طبيعي في النمو أو الحمل. الرقم وحده لا يشخّص؛ الطبيب يحدد المصدر بـ GGT أو ALT/AST أو فحوص العظام. ناقش نتيجتك مع الطبيب.</p>"), Section(id="disclaimer", level=2, heading="إخلاء المسؤولية", body_html="<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>")],
         },
+        icon="/static/images/blog/icons/alp-high-meaning.svg",
     )
 
 
@@ -4799,7 +4802,7 @@ def _article_sodium_low() -> Article:
         "hi": [Section(id="content", level=2, heading="सोडियम लो का क्या मतलब?", body_html=c_hi), Section(id="disclaimer", level=2, heading="अस्वीकरण", body_html=d_hi)],
         "ar": [Section(id="content", level=2, heading="ماذا يعني انخفاض الصوديوم؟", body_html=c_ar), Section(id="disclaimer", level=2, heading="إخلاء المسؤولية", body_html=d_ar)],
     }
-    return Article(id="sodium-low-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles={k: v + " | Norya Blog" for k, v in titles.items()}, seo_descriptions={k: "Sodium/electrolytes. For information only." if k == "en" else "Sodyum/elektrolit. Bilgilendirme amaçlı." if k == "tr" else "Solo informativo." for k in titles}, cover_alt={l: "Sodium / Natrium — Norya" for l in ("en", "de")} | {"tr": "Sodyum kan tahlili — Norya", "es": "Sodio análisis — Norya", "fr": "Sodium — Norya", "it": "Sodio — Norya", "he": "נתרן — Norya", "hi": "सोडियम — Norya", "ar": "الصوديوم — Norya"}, sections_by_lang=sections_by_lang)
+    return Article(id="sodium-low-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles={k: v + " | Norya Blog" for k, v in titles.items()}, seo_descriptions={k: "Sodium/electrolytes. For information only." if k == "en" else "Sodyum/elektrolit. Bilgilendirme amaçlı." if k == "tr" else "Solo informativo." for k in titles}, cover_alt={l: "Sodium / Natrium — Norya" for l in ("en", "de")} | {"tr": "Sodyum kan tahlili — Norya", "es": "Sodio análisis — Norya", "fr": "Sodium — Norya", "it": "Sodio — Norya", "he": "נתרן — Norya", "hi": "सोडियम — Norya", "ar": "الصوديوم — Norya"}, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/sodium-low-meaning.svg")
 
 
 def _article_potassium_high() -> Article:
@@ -4832,7 +4835,7 @@ def _article_potassium_high() -> Article:
         "hi": [Section(id="content", level=2, heading="पोटैशियम हाई का क्या मतलब है?", body_html=c_hi), Section(id="disclaimer", level=2, heading="अस्वीकरण", body_html=d["hi"])],
         "ar": [Section(id="content", level=2, heading="ماذا يعني ارتفاع البوتاسيوم؟", body_html=c_ar), Section(id="disclaimer", level=2, heading="إخلاء المسؤولية", body_html=d["ar"])],
     }
-    return Article(id="potassium-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles={k: v + " | Norya Blog" for k, v in titles.items()}, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang)
+    return Article(id="potassium-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles={k: v + " | Norya Blog" for k, v in titles.items()}, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/potassium-high-meaning.svg")
 
 
 _ARTICLE_SODIUM_LOW = _article_sodium_low()
@@ -4965,7 +4968,7 @@ def _article_calcium_high() -> Article:
     body_d = {"tr": "<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>", "en": "<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>", "es": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>", "de": "<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>", "fr": "<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>", "it": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>", "he": "<p><strong>למידע בלבד.</strong> <a href=\"/analyze\">התחל ניתוח</a></p>", "hi": "<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>", "ar": "<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>"}
     d = {"tr": "Uyarı", "en": "Disclaimer", "es": "Aviso", "de": "Hinweis", "fr": "Avertissement", "it": "Disclaimer", "he": "הודעה", "hi": "अस्वीकरण", "ar": "إخلاء المسؤولية"}
     sections_by_lang = {lang: [Section(id="content", level=2, heading=titles[lang], body_html=content[lang]), Section(id="disclaimer", level=2, heading=d[lang], body_html=body_d[lang])] for lang in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
-    return Article(id="calcium-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang)
+    return Article(id="calcium-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/calcium-high-meaning.svg")
 
 
 _ARTICLE_SODIUM_LOW = _article_sodium_low()
@@ -4989,7 +4992,7 @@ def _article_lymphocytes_high_low() -> Article:
     body_d = {"tr": "<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>", "en": "<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>", "es": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>", "de": "<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>", "fr": "<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>", "it": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>", "he": "<p><strong>למידע בלבד.</strong> <a href=\"/analyze\">התחל ניתוח</a></p>", "hi": "<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>", "ar": "<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>"}
     d = {"tr": "Uyarı", "en": "Disclaimer", "es": "Aviso", "de": "Hinweis", "fr": "Avertissement", "it": "Disclaimer", "he": "הודעה", "hi": "अस्वीकरण", "ar": "إخلاء المسؤولية"}
     sections_by_lang = {lang: [Section(id="content", level=2, heading=titles[lang], body_html=content[lang]), Section(id="disclaimer", level=2, heading=d[lang], body_html=body_d[lang])] for lang in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
-    return Article(id="lymphocytes-high-or-low", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang)
+    return Article(id="lymphocytes-high-or-low", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/lymphocytes-high-or-low.svg")
 
 
 def _article_monocytes_high() -> Article:
@@ -5008,7 +5011,7 @@ def _article_monocytes_high() -> Article:
     body_d = {"tr": "<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>", "en": "<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>", "es": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>", "de": "<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>", "fr": "<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>", "it": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>", "he": "<p><strong>למידע בלבד.</strong> <a href=\"/analyze\">התחל ניתוח</a></p>", "hi": "<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>", "ar": "<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>"}
     d = {"tr": "Uyarı", "en": "Disclaimer", "es": "Aviso", "de": "Hinweis", "fr": "Avertissement", "it": "Disclaimer", "he": "הודעה", "hi": "अस्वीकरण", "ar": "إخلاء المسؤولية"}
     sections_by_lang = {lang: [Section(id="content", level=2, heading=titles[lang], body_html=content[lang]), Section(id="disclaimer", level=2, heading=d[lang], body_html=body_d[lang])] for lang in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
-    return Article(id="monocytes-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang)
+    return Article(id="monocytes-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/monocytes-high-meaning.svg")
 
 
 def _article_mcv_high_low() -> Article:
@@ -5027,7 +5030,7 @@ def _article_mcv_high_low() -> Article:
     body_d = {"tr": "<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>", "en": "<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>", "es": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>", "de": "<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>", "fr": "<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>", "it": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>", "he": "<p><strong>למידע בלבד.</strong> <a href=\"/analyze\">התחל ניתוח</a></p>", "hi": "<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>", "ar": "<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>"}
     d = {"tr": "Uyarı", "en": "Disclaimer", "es": "Aviso", "de": "Hinweis", "fr": "Avertissement", "it": "Disclaimer", "he": "הודעה", "hi": "अस्वीकरण", "ar": "إخلاء المسؤولية"}
     sections_by_lang = {lang: [Section(id="content", level=2, heading=titles[lang], body_html=content[lang]), Section(id="disclaimer", level=2, heading=d[lang], body_html=body_d[lang])] for lang in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
-    return Article(id="mcv-high-or-low", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang)
+    return Article(id="mcv-high-or-low", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/mcv-high-or-low.svg")
 
 
 def _article_rdw_high() -> Article:
@@ -5046,7 +5049,7 @@ def _article_rdw_high() -> Article:
     body_d = {"tr": "<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>", "en": "<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>", "es": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>", "de": "<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>", "fr": "<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>", "it": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>", "he": "<p><strong>למידע בלבד.</strong> <a href=\"/analyze\">התחל ניתוח</a></p>", "hi": "<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>", "ar": "<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>"}
     d = {"tr": "Uyarı", "en": "Disclaimer", "es": "Aviso", "de": "Hinweis", "fr": "Avertissement", "it": "Disclaimer", "he": "הודעה", "hi": "अस्वीकरण", "ar": "إخلاء المسؤولية"}
     sections_by_lang = {lang: [Section(id="content", level=2, heading=titles[lang], body_html=content[lang]), Section(id="disclaimer", level=2, heading=d[lang], body_html=body_d[lang])] for lang in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
-    return Article(id="rdw-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang)
+    return Article(id="rdw-high-meaning", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/rdw-high-meaning.svg")
 
 
 def _article_ag_ratio_high_low() -> Article:
@@ -5065,7 +5068,7 @@ def _article_ag_ratio_high_low() -> Article:
     body_d = {"tr": "<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>", "en": "<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>", "es": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>", "de": "<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>", "fr": "<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>", "it": "<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>", "he": "<p><strong>למידע בלבד.</strong> <a href=\"/analyze\">התחל ניתוח</a></p>", "hi": "<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>", "ar": "<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>"}
     d = {"tr": "Uyarı", "en": "Disclaimer", "es": "Aviso", "de": "Hinweis", "fr": "Avertissement", "it": "Disclaimer", "he": "הודעה", "hi": "अस्वीकरण", "ar": "إخلاء المسؤولية"}
     sections_by_lang = {lang: [Section(id="content", level=2, heading=titles[lang], body_html=content[lang]), Section(id="disclaimer", level=2, heading=d[lang], body_html=body_d[lang])] for lang in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
-    return Article(id="ag-ratio-high-or-low", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang)
+    return Article(id="ag-ratio-high-or-low", published_at=published, read_minutes=4, cover_image=cover, category=cat, slugs=slugs, titles=titles, subtitles=subtitles, excerpts=excerpts, seo_titles=seo_titles, seo_descriptions=seo_descriptions, cover_alt=cover_alt, sections_by_lang=sections_by_lang, icon="/static/images/blog/icons/ag-ratio-high-or-low.svg")
 
 
 def _article_hematocrit_high_low() -> Article:
