@@ -1731,14 +1731,17 @@ def report_page(request: Request):
 def analyze_landing(request: Request):
     """
     /analyze -> SPA içindeki analiz bölümüne yönlendir.
-    Blog CTA'ları bu URL'yi kullanır. Referer'dan locale çıkarılırsa /{locale}#analyze.
+    Blog CTA'ları bu URL'yi kullanır.
+    Öncelik: ?lang= ile gelen dil, yoksa referer'dan locale çıkarılırsa /{locale}#analyze.
     """
-    referer = request.headers.get("referer") or ""
-    locale = None
-    for loc in SUPPORTED_LOCALES:
-        if f"/{loc}/" in referer or referer.rstrip("/").endswith(f"/{loc}"):
-            locale = loc
-            break
+    lang_q = (request.query_params.get("lang") or "").strip().lower()[:2]
+    locale = lang_q if lang_q in SUPPORTED_LOCALES else None
+    if locale is None:
+        referer = request.headers.get("referer") or ""
+        for loc in SUPPORTED_LOCALES:
+            if f"/{loc}/" in referer or referer.rstrip("/").endswith(f"/{loc}"):
+                locale = loc
+                break
     url = f"/{locale}#analyze" if locale else "/#analyze"
     return RedirectResponse(url=url, status_code=302)
 
@@ -4348,8 +4351,25 @@ def index_with_locale(request: Request, lang: str):
 
 @app.get("/{lang}/{path:path}", response_class=HTMLResponse)
 def index_with_locale_path(request: Request, lang: str, path: str):
-    """Locale prefix + path: /en/pricing, /de/report → SPA (blog hariç; /{lang}/blog ayrı route)."""
-    if lang.lower() in SUPPORTED_LOCALES:
+    """Locale prefix + path: /en/pricing, /de/report → SPA (blog hariç; /{lang}/blog ayrı route).
+
+    Özel durumlar:
+    - /{lang}/pricing       -> /pricing?lang={lang}
+    - /{lang}/how-it-works  -> /how-it-works?lang={lang}
+    - /{lang}/analyze       -> /analyze?lang={lang}
+    - /{lang}/faq           -> /{lang}#faq
+    """
+    lang_l = (lang or "").strip().lower()
+    if lang_l in SUPPORTED_LOCALES:
+        path_l = (path or "").strip().lower().strip("/")
+        if path_l == "pricing":
+            return RedirectResponse(url=f"/pricing?lang={lang_l}", status_code=302)
+        if path_l == "how-it-works":
+            return RedirectResponse(url=f"/how-it-works?lang={lang_l}", status_code=302)
+        if path_l == "analyze":
+            return RedirectResponse(url=f"/analyze?lang={lang_l}", status_code=302)
+        if path_l == "faq":
+            return RedirectResponse(url=f"/{lang_l}#faq", status_code=302)
         return _index_response(request)
     raise HTTPException(status_code=404, detail="Not Found")
 
