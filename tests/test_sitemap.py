@@ -73,3 +73,31 @@ def test_sitemap_xml_contains_how_it_works(client: TestClient):
     assert "/how-it-works</loc>" in r.text or "/how-it-works\n" in r.text, (
         "sitemap.xml içinde /how-it-works bulunamadı"
     )
+
+
+SEO_LANDING_PATHS = [
+    "/tr/kan-tahlili-sonucu",
+    "/tr/kan-degerleri-anlama",
+    "/tr/hemogram-sonucu",
+    "/de/blutwerte-verstehen",
+    "/de/laborwerte-verstehen",
+    "/en/blood-test-results",
+    "/en/understand-lab-results",
+]
+
+
+def test_seo_landing_pages_return_200(client: TestClient):
+    """SEO landing sayfaları 404 vermemeli; hepsi 200 dönmeli."""
+    for path in SEO_LANDING_PATHS:
+        r = client.get(path)
+        assert r.status_code == 200, f"{path} returned {r.status_code}"
+
+
+def test_sitemap_xml_contains_seo_landing_urls(client: TestClient):
+    """sitemap.xml içinde tüm SEO landing URL'leri olmalı."""
+    r = client.get("/sitemap.xml")
+    assert r.status_code == 200
+    body = r.text
+    for path in SEO_LANDING_PATHS:
+        # <loc>http://.../tr/kan-tahlili-sonucu</loc>
+        assert path in body, f"sitemap.xml içinde {path} bulunamadı"
