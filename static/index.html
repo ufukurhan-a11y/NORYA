@@ -2556,26 +2556,75 @@
     </div>
   </aside>
 
-  <!-- Hero: premium clinical biomarker (turquoise + navy); gradient section'ta, tam genişlik -->
+  <!-- Hero: clinical premium editorial with report-focused female visual -->
   <section class="hero gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
-    <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 20% 80%, rgba(13, 148, 136, 0.4) 0%, transparent 50%), radial-gradient(circle at 80% 20%, rgba(30, 58, 95, 0.3) 0%, transparent 45%);"></div>
-    <div class="hero-inner max-w-5xl mx-auto w-full px-3 sm:px-4 text-center relative z-10">
-      <p class="text-white/90 text-xs sm:text-sm font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Laboratuvar sonuçları anlaşılır dilde açıklanır. Teşhis değil—hekim görüşmenize hazırlık.</p>
-      <h1 class="hero-title text-2xl min-[480px]:text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.2] mb-4 sm:mb-5 tracking-tight px-1" data-i18n="hero_title">Kan Tahlilinizi 60 Saniyede Anlayın</h1>
-      <p class="hero-desc text-lg text-navy-100 max-w-2xl mx-auto mb-8 leading-relaxed" data-i18n="hero_desc">
-        Laboratuvar sonuçlarınızı yükleyin — yapılandırılmış kan tahlili yorumu ve klinik tarzı premium özet raporu alın.
-      </p>
-      <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center hero-cta-wrap">
-        <button onclick="openRegister(); scrollToAnalyze();" class="hero-cta-btn hero-primary-btn px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-navy-900 font-semibold hover:bg-primary-50 norya-card-shadow inline-flex items-center justify-center gap-2 transition hover:scale-[1.02] min-h-[44px]" data-i18n="hero_cta">Analizi Başlat</button>
-        <a href="/payment?plan=yearly_99eur" id="hero-cta-buy" class="hero-cta-btn min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/80 text-white hover:bg-white/15 font-semibold transition" data-i18n="cta_buy_now">Hemen Al — Yıllık Plan</a>
-        <a href="#ornek-rapor" class="hero-secondary-btn min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/40 text-white hover:bg-white/10 font-medium transition" data-i18n="hero_see_sample">Örnek Raporu Gör</a>
+    <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 18% 80%, rgba(13, 148, 136, 0.38) 0%, transparent 55%), radial-gradient(circle at 82% 20%, rgba(30, 64, 175, 0.35) 0%, transparent 50%);"></div>
+    <div class="hero-inner max-w-5xl mx-auto w-full px-3 sm:px-4 relative z-10">
+      <div class="flex flex-col lg:flex-row items-center lg:items-stretch gap-10 lg:gap-12">
+        <!-- Copy -->
+        <div class="w-full lg:w-[56%] text-center lg:text-left">
+          <p class="text-white/90 text-xs sm:text-sm font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Laboratuvar sonuçları anlaşılır dilde açıklanır. Teşhis değil—hekim görüşmenize hazırlık.</p>
+          <h1 class="hero-title text-2xl min-[480px]:text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.2] mb-4 sm:mb-5 tracking-tight px-1 lg:px-0" data-i18n="hero_title">Kan tahlilinizi dakikalar içinde anlayın</h1>
+          <p class="hero-desc text-lg text-navy-100 max-w-2xl lg:max-w-none mx-auto lg:mx-0 mb-6 sm:mb-7 leading-relaxed" data-i18n="hero_desc">
+            Sonuçlarınızı yükleyin; yapılandırılmış kan tahlili özeti, sağlık skoru ve doktora götürebileceğiniz premium PDF rapor alın.
+          </p>
+          <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start hero-cta-wrap">
+            <button onclick="openRegister(); scrollToAnalyze();" class="hero-cta-btn hero-primary-btn px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-navy-900 font-semibold hover:bg-primary-50 norya-card-shadow inline-flex items-center justify-center gap-2 transition hover:scale-[1.02] min-h-[44px]" data-i18n="hero_cta">Analizi Başlat</button>
+            <a href="#ornek-klinik-rapor" class="hero-secondary-btn min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/80 text-white/95 hover:bg-white/10 font-medium transition" data-i18n="hero_see_sample">Örnek raporu gör</a>
+          </div>
+          <ul class="hero-trust-list trust-chips mt-5 sm:mt-6 flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-5 gap-y-2 text-navy-100 text-xs sm:text-sm font-medium" aria-label="Güven rozetleri">
+            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">SSL şifreli</span></li>
+            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK / GDPR uyumlu</span></li>
+            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">3D Secure ödeme (PayTR)</span></li>
+            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🌐</span> <span data-i18n="trust_cards_langs_title">9+ dilde rapor</span></li>
+          </ul>
+        </div>
+
+        <!-- Visual -->
+        <div class="w-full lg:w-[44%]">
+          <div class="relative max-w-sm mx-auto">
+            <div class="absolute -top-6 -left-4 w-24 h-24 rounded-full bg-emerald-300/40 blur-3xl opacity-80"></div>
+            <div class="absolute -bottom-10 -right-6 w-28 h-28 rounded-full bg-sky-300/40 blur-3xl opacity-80"></div>
+            <div class="relative rounded-3xl overflow-hidden bg-white/5 border border-white/25 light-glass-card">
+              <figure class="aspect-[4/3] bg-slate-900/40">
+                <img
+                  src="/static/images/blog/how-to-read-blood-test-results.png"
+                  alt="Kan tahlili raporunu ekrandan inceleyen kadın; yanında yapılandırılmış Norya sağlık özeti."
+                  loading="lazy"
+                  class="w-full h-full object-cover"
+                />
+              </figure>
+              <div class="p-4 sm:p-5 border-t border-white/20 bg-slate-900/60">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-emerald-300">Örnek rapor</p>
+                    <p class="text-sm font-semibold text-white" data-i18n="health_dashboard_title">Premium Health raporu önizleme</p>
+                  </div>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold text-emerald-200">
+                    <span>●</span>
+                    <span>82 / 100</span>
+                  </span>
+                </div>
+                <div class="flex items-center justify-between text-[11px] sm:text-xs text-slate-100/90">
+                  <div class="flex flex-col gap-0.5">
+                    <span data-i18n="report_preview_line_1">Sağlık skoru, işaretli biyobelirteçler ve öne çıkan bulgular.</span>
+                    <span data-i18n="report_preview_line_2">Doktora hazır PDF ve QR ile rapor doğrulama.</span>
+                  </div>
+                  <div class="ml-3 flex flex-col items-end gap-1">
+                    <span class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium text-slate-50 border border-white/30">
+                      <span>PDF</span>
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-full bg-white text-slate-900 px-2.5 py-0.5 text-[10px] font-semibold">
+                      <span>QR</span>
+                      <span data-i18n="trust_block_qr">Rapor doğrulama</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-      <ul class="hero-trust-list trust-chips mt-6 flex flex-wrap justify-center gap-x-4 sm:gap-x-6 gap-y-2 text-navy-200 text-xs sm:text-sm font-medium" aria-label="Güven rozetleri">
-        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">SSL şifreli</span></li>
-        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK uyumlu</span></li>
-        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">PayTR güvenli ödeme</span></li>
-        <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">📱</span> <span data-i18n="trust_badge_qr">QR ile rapor doğrulama</span></li>
-      </ul>
     </div>
   </section>
 
@@ -7239,9 +7288,9 @@
         trust_row_3d: "3D Secure ödeme", trust_row_kvkk: "KVKK / GDPR uyumlu", trust_row_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu ilkeler", trust_row_invoice: "e-Arşiv fatura",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
         history_login_required: "Geçmişi görmek için giriş yapın.", history_session_expired: "Oturum süreniz dolmuş olabilir. Çıkış yapıp tekrar giriş yapın.",
-        hero_sub: "Laboratuvar sonuçları anlaşılır dilde açıklanır. Teşhis değil—sadece hekim görüşmenize hazırlık.",
-        hero_title: "Kan Tahlilinizi 60 Saniyede Anlayın",
-        hero_desc: "Laboratuvar sonuçlarınızı yükleyin — yapılandırılmış kan tahlili yorumu ve klinik tarzı premium özet raporu alın.",
+        hero_sub: "Kan tahlili sonuçlarınız sade bir dille açıklanır. Teşhis değil — hekim görüşmenize hazırlık.",
+        hero_title: "Kan tahlilinizi dakikalar içinde anlayın",
+        hero_desc: "Sonuçlarınızı yükleyin; referans aralıkları, anlaşılır açıklamalar ve doktora götürebileceğiniz premium PDF rapor görün.",
         hero_cta: "Analizi Başlat", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
@@ -7265,6 +7314,8 @@
         cta_features_heading: "Raporunuzu görmeye hazır mısınız?", cta_features_sub: "Laboratuvar sonuçlarınızı yükleyin, dakikalar içinde net, yapılandırılmış rapor alın.",
         cta_start_analysis: "Analizi başlat", cta_view_pricing: "Fiyatlandırmayı gör", cta_buy_now: "Hemen Al — Yıllık Plan", cta_sticky_pricing: "Fiyatları Gör — Satın Al",
         trust_badge_secure_paytr: "🔒 Güvenli ödeme – PayTR",
+        report_preview_line_1: "Sağlık skoru, işaretli biyobelirteçler ve öne çıkan bulgular.",
+        report_preview_line_2: "Doktora hazır PDF ve isteğe bağlı QR ile rapor doğrulama.",
         footer_trust_ssl: "SSL şifreli", footer_trust_kvkk: "KVKK uyumlu", footer_trust_gdpr: "GDPR uyumlu", footer_trust_paytr: "PayTR güvenli ödeme", footer_trust_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu",
         footer_trust_ssl_desc: "Trafik SSL/TLS ile şifrelenir.", footer_trust_kvkk_desc: "Kişisel veriler KVKK'ya uygun işlenir.", footer_trust_gdpr_desc: "AB kullanıcıları için GDPR uyumlu.", footer_trust_paytr_desc: "PayTR 3D Secure güvenli ödeme sistemi.", payment_infrastructure: "Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Güvenlik en iyi uygulamaları; Norya HIPAA kapsamında kayıtlı değildir.",
         infra_title: "Altyapı & Güvenlik", infra_google_title: "Google Cloud", infra_google_desc: "Güvenli altyapı ve veri işleme", footer_privacy: "Gizlilik", footer_terms: "Kullanım Koşulları",
@@ -7607,10 +7658,10 @@
         trust_row_3d: "3D Secure payment", trust_row_kvkk: "KVKK / GDPR compliant", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Archive invoice",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
         history_login_required: "Please log in to see history.", history_session_expired: "Your session may have expired. Try logging out and back in.",
-        hero_sub: "Clinical Biomarker Platform",
-        hero_title: "What Do Those Numbers on Your Lab Sheet Mean? Find Out in 60 Seconds.",
-        hero_desc: "Upload your lab results — get structured blood test interpretation and a clinical-style premium summary report.",
-        hero_cta: "Get my first analysis free", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
+        hero_sub: "Lab results explained in plain language. Not a diagnosis — just preparation for your doctor visit.",
+        hero_title: "Understand your blood test in minutes",
+        hero_desc: "Upload your results and get a structured summary with ranges, clear explanations and a doctor-ready PDF report.",
+        hero_cta: "Start analysis", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR", trust_badge_qr: "QR report verification",
@@ -7634,6 +7685,8 @@
         cta_features_heading: "Ready to see your report?", cta_features_sub: "Upload your lab results and get a clear, structured report in minutes.",
         cta_start_analysis: "Start analysis", cta_view_pricing: "View pricing", cta_buy_now: "Buy now — Yearly plan", cta_sticky_pricing: "View pricing — Buy now",
         trust_badge_secure_paytr: "🔒 Secure payment – PayTR",
+        report_preview_line_1: "Health score, highlighted markers and key findings.",
+        report_preview_line_2: "Doctor-ready PDF and optional QR verification for your report.",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK compliant", footer_trust_gdpr: "GDPR ready", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "Traffic encrypted with SSL/TLS.", footer_trust_kvkk_desc: "Personal data processed per KVKK.", footer_trust_gdpr_desc: "GDPR-aligned for EU users.", footer_trust_paytr_desc: "PayTR 3D Secure payment system.", payment_infrastructure: "Payment infrastructure: PayTR 3D Secure secure payment system.", payment_infrastructure_short: "PayTR 3D Secure", footer_trust_hipaa_desc: "Security best practices; Norya is not a HIPAA-registered entity.",
         trust_cloudflare_title: "Protected by Cloudflare", trust_cloudflare_desc: "Traffic protection and fast access.", trust_cloudflare_1: "DDoS protection", trust_cloudflare_2: "Global CDN acceleration", trust_cloudflare_3: "Edge security",
@@ -7967,15 +8020,18 @@
         about_who_2: "Offriamo servizi in diverse lingue nel mondo. La tua privacy è importante: i dati sono usati solo per generare il tuo report personale. Per domande o supporto puoi scriverci all'indirizzo email indicato sotto.",
         about_who_3: "Il nostro obiettivo è trasformare i risultati di laboratorio in una guida chiara. La tua esperienza e i tuoi feedback ci guidano in questo percorso.",
         nav_login: "Accedi", nav_register: "Inizia gratis", nav_history: "Cronologia", nav_analyze: "Analizza", nav_logout: "Esci",
-        hero_sub: "Risultati di laboratorio — report chiari",
-        hero_title: "Comprendi i tuoi esami del sangue in 60 secondi",
-        hero_desc: "Incolla i risultati delle analisi, l'IA li spiega per te. Prova gratis — nessuna carta richiesta.",
-        hero_cta: "Prima analisi gratis", hero_see_sample: "Vedi report esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy first",
-        hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "Valori in grado moderato: molti parametri in range, alcuni al limite. Il report include molti valori, spiegazioni e consigli personalizzati.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + consigli + PDF.", hero_sample_btn: "Ottieni questo report — Inizia gratis",
+        hero_sub: "Referti di laboratorio spiegati in modo chiaro. Non è una diagnosi — solo preparazione alla visita.",
+        hero_title: "Comprendi le tue analisi del sangue in pochi minuti",
+        hero_desc: "Carica il referto e ricevi un riepilogo strutturato con intervalli di riferimento, spiegazioni semplici e un PDF pronto per il medico.",
+        hero_cta: "Avvia analisi", hero_see_sample: "Vedi report di esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy by design",
+        hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "Valori in buona fascia: molti parametri nel range, alcuni da monitorare. Nel report trovi più valori, spiegazioni e note da discutere con il medico.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + note per il medico + PDF.", hero_sample_btn: "Ottieni un report così — Inizia gratis",
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR", trust_badge_qr: "Verifica report con QR",
         promo_strip_cta: "Applica nella pagina di pagamento", promo_strip_code_label: "Codice", promo_strip_discount_pct: "{percent}% sconto invernale",
         trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare", trust_bar_qr: "Verifica report con QR",
+        trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
+        report_preview_line_1: "Health Score, marker evidenziati e punti principali.",
+        report_preview_line_2: "PDF pronto per il medico e, se desideri, verifica tramite QR.",
         features_heading: "Approfondimenti sulla salute affidabili, pensati per la vita reale.",
         features_sub: "Carica i risultati delle analisi e ottieni un report chiaro e strutturato con trend, segnali di rischio e prossimi passi concreti.",
         features_trust_line: "Sicurezza di livello enterprise, comunicazione crittografata e architettura conforme al GDPR.",
@@ -8203,13 +8259,16 @@
         about_who_2: "Damos servicio en varios idiomas en todo el mundo. Tu privacidad importa: los datos solo se usan para generar tu informe personal. Para preguntas o soporte escríbenos al correo indicado abajo.",
         about_who_3: "Nuestro objetivo es convertir los resultados del laboratorio en una guía clara. Tu experiencia y tus comentarios nos orientan en este camino.",
         nav_login: "Iniciar sesión", nav_register: "Empezar gratis", nav_history: "Historial", nav_analyze: "Analizar", nav_logout: "Salir",
-        hero_sub: "Resultados de laboratorio — informe claro",
-        hero_title: "Comprende tus análisis de sangre en 60 segundos",
-        hero_desc: "Pega tus resultados, la IA los explica. Prueba gratis — sin tarjeta.",
-        hero_cta: "Mi primer análisis gratis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad primero",
+        hero_sub: "Resultados de laboratorio explicados en lenguaje claro. No es un diagnóstico — es preparación para tu cita médica.",
+        hero_title: "Entiende tu análisis de sangre en pocos minutos",
+        hero_desc: "Sube tus resultados y recibe un resumen estructurado con rangos de referencia, explicaciones sencillas y un PDF listo para tu médico.",
+        hero_cta: "Iniciar análisis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad desde el diseño",
         hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Valores en nivel moderado: muchos parámetros en rango, algunos en el límite. El informe incluye muchos valores, explicaciones y recomendaciones.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR", trust_badge_qr: "Verificación de informe por QR",
+        trust_badge_secure_paytr: "🔒 Pago seguro – PayTR",
+        report_preview_line_1: "Health Score, marcadores destacados y puntos clave.",
+        report_preview_line_2: "PDF listo para tu médico y, si lo deseas, verificación del informe por código QR.",
         promo_strip_cta: "Aplicar en la página de pago", promo_strip_code_label: "Código", promo_strip_discount_pct: "{percent}% descuento de invierno",
         trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare", trust_bar_qr: "Verificación de informe por QR",
         features_heading: "Información de salud fiable, diseñada para la vida real.",
@@ -8439,14 +8498,17 @@
         about_who_2: "Nous proposons nos services en plusieurs langues dans le monde. Votre vie privée compte : les données ne servent qu'à générer votre rapport personnel. Pour toute question ou assistance, écrivez-nous à l'adresse indiquée ci-dessous.",
         about_who_3: "Notre objectif est de transformer les résultats de laboratoire en un guide clair. Votre expérience et vos retours nous guident sur ce chemin.",
         nav_login: "Connexion", nav_register: "Commencer gratuit", nav_history: "Historique", nav_analyze: "Analyser", nav_logout: "Déconnexion",
-        hero_sub: "Résultats de laboratoire — rapport clair",
-        hero_title: "Comprenez vos analyses sanguines en 60 secondes",
-        hero_desc: "Collez vos résultats, l'IA les explique. Essai gratuit — sans carte.",
-        hero_cta: "Ma première analyse gratuite", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité",
+        hero_sub: "Résultats de laboratoire expliqués en langage clair. Pas un diagnostic — une préparation sereine à votre rendez-vous.",
+        hero_title: "Comprenez vos analyses sanguines en quelques minutes",
+        hero_desc: "Téléchargez vos résultats et recevez un résumé structuré avec plages de référence, explications simples et un PDF prêt pour votre médecin.",
+        hero_cta: "Démarrer l'analyse", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Privacy by design",
         hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Valeurs à niveau modéré: beaucoup de paramètres dans la norme, certains à la limite. Le rapport inclut de nombreuses valeurs et recommandations.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR", trust_badge_qr: "Vérification du rapport par QR",
         promo_strip_cta: "Appliquer sur la page de paiement", promo_strip_code_label: "Code", promo_strip_discount_pct: "{percent}% de réduction hiver",
+        trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
+        report_preview_line_1: "Health Score, valeurs signalées et points essentiels.",
+        report_preview_line_2: "PDF prêt pour le médecin et, si besoin, vérification du rapport par QR.",
         trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare", trust_bar_qr: "Vérification du rapport par QR",
         features_heading: "Des informations santé de confiance, conçues pour la vie réelle.",
         features_sub: "Téléchargez vos résultats d'analyses et obtenez un rapport clair et structuré avec tendances, alertes et prochaines étapes.",
@@ -8895,14 +8957,16 @@
         about_who_2: "אנחנו משרתים משתמשים במספר שפות ברחבי העולם. הפרטיות חשובה לנו: הנתונים משמשים רק ליצירת הדוח האישי שלך. לשאלות או תמיכה צור איתנו קשר בכתובת המייל למטה.",
         about_who_3: "המטרה שלנו היא להפוך תוצאות מעבדה למדריך ברור. החוויה והמשוב שלך מנחים אותנו בדרך.",
         nav_login: "התחברות", nav_register: "התחל בחינם", nav_history: "היסטוריה", nav_analyze: "נתח", nav_logout: "התנתק",
-        hero_sub: "תוצאות מעבדה — דוח ברור",
-        hero_title: "הבן את תוצאות בדיקת הדם שלך תוך 60 שניות",
-        hero_desc: "הדבק את תוצאות המעבדה, הבינה המלאכותית תסביר. נסה בחינם — בלי כרטיס אשראי.",
-        hero_cta: "נתח את בדיקת הדם שלי בחינם", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות",
+        hero_sub: "תוצאות מעבדה מוסברות בשפה ברורה. לא אבחנה — הכנה רגועה לפגישה עם הרופא.",
+        hero_title: "הבן את תוצאות בדיקת הדם שלך בתוך דקות",
+        hero_desc: "העלה את התוצאות וקבל סיכום מובנה עם טווחי התייחסות, הסברים פשוטים ו-PDF שנוח לקחת לרופא.",
+        hero_cta: "התחל ניתוח", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • Privacy by design",
         hero_sample_label: "כך ייראה הדוח שלך", hero_sample_summary: "הערכים בטווח התקין. המוגלובין וגלוקוז רגילים.", hero_sample_normal: "תקין", hero_sample_border: "גבול", hero_sample_risk: "תשומת לב", hero_sample_cta: "סיכום + ערכים + המלצות + הורדת PDF.", hero_sample_btn: "קבל דוח כזה — התחל בחינם",
         trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה", trust_badges_heading: "שירות מאובטח ותואם",
         trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR", trust_badge_qr: "אימות דוח עם QR", trust_bar_qr: "אימות דוח עם QR",
         trust_badge_secure_paytr: "🔒 תשלום מאובטח – PayTR",
+        report_preview_line_1: "ציון בריאות, ערכים מסומנים ותובנות עיקריות.",
+        report_preview_line_2: "PDF מוכן לרופא ואפשרות לאימות הדוח באמצעות QR.",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "תעבורה מוצפנת SSL/TLS.", footer_trust_kvkk_desc: "נתונים אישיים לפי KVKK.", footer_trust_gdpr_desc: "תואם GDPR ל-EU.", footer_trust_paytr_desc: "תשלום מאובטח דרך PayTR.", footer_trust_hipaa_desc: "נתוני בריאות מעובדים באבטחה.",
         trust_cloudflare_title: "מוגן על ידי Cloudflare", trust_cloudflare_desc: "הגנת תעבורה וגישה מהירה.", trust_cloudflare_1: "הגנת DDoS", trust_cloudflare_2: "תאוצת CDN גלובלית", trust_cloudflare_3: "אבטחת edge",
@@ -9074,14 +9138,16 @@
         about_who_2: "نقدم الخدمة بعدة لغات حول العالم. خصوصيتك مهمة: البيانات تُستخدم فقط لتوليد تقريرك الشخصي. للأسئلة أو الدعم راسلنا على البريد أدناه.",
         about_who_3: "هدفنا تحويل نتائج المختبر إلى دليل واضح. تجربتك وملاحظاتك ترشدنا في هذا المسار.",
         nav_login: "تسجيل الدخول", nav_register: "ابدأ مجاناً", nav_history: "السجل", nav_analyze: "تحليل", nav_logout: "تسجيل الخروج",
-        hero_sub: "نتائج المختبر — تقرير واضح",
-        hero_title: "افهم نتائج تحليل الدم في 60 ثانية",
-        hero_desc: "الصق نتائج المختبر، الذكاء الاصطناعي يشرحها. جرب مجاناً — بدون بطاقة.",
-        hero_cta: "تحليل تحاليل دمي مجاناً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • خصوصية",
+        hero_sub: "نتائج المختبر موضَّحة بلغة بسيطة. ليست تشخيصاً طبياً — بل تحضير هادئ لزيارة الطبيب.",
+        hero_title: "افهم نتائج تحليل الدم في دقائق قليلة",
+        hero_desc: "ارفع النتائج لتحصل على ملخص منظم مع حدود مرجعية، شروحات واضحة وملف PDF جاهز لتأخذه إلى طبيبك.",
+        hero_cta: "ابدأ التحليل", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • Privacy by design",
         hero_sample_label: "تقريرك سيبدو هكذا", hero_sample_summary: "قيمك ضمن النطاق المرجعي. الهيموغلوبين والغلوكوز طبيعيان.", hero_sample_normal: "طبيعي", hero_sample_border: "حدي", hero_sample_risk: "انتباه", hero_sample_cta: "ملخص + قيم + توصيات + تنزيل PDF.", hero_sample_btn: "احصل على هذا التقرير — ابدأ مجاناً",
         trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن", trust_badges_heading: "خدمة آمنة ومتوافقة",
         trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR", trust_badge_qr: "التحقق من التقرير برمز QR", trust_bar_qr: "التحقق من التقرير برمز QR",
         trust_badge_secure_paytr: "🔒 دفع آمن – PayTR",
+        report_preview_line_1: "درجة الصحة، قيم مميزة ونقاط رئيسية من التحليل.",
+        report_preview_line_2: "ملف PDF جاهز للطبيب مع إمكانية التحقق من التقرير عبر رمز QR.",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "المرور مشفّر SSL/TLS.", footer_trust_kvkk_desc: "البيانات الشخصية وفق KVKK.", footer_trust_gdpr_desc: "متوافق مع GDPR للاتحاد الأوروبي.", footer_trust_paytr_desc: "دفع آمن عبر PayTR.", footer_trust_hipaa_desc: "بيانات الصحة تُعالج بأمان.",
         trust_cloudflare_title: "محمي بواسطة Cloudflare", trust_cloudflare_desc: "حماية الحركة ووصول سريع.", trust_cloudflare_1: "حماية DDoS", trust_cloudflare_2: "تسريع CDN عالمي", trust_cloudflare_3: "أمان الحافة",
@@ -9253,14 +9319,16 @@
         about_who_2: "हम दुनिया भर में कई भाषाओं में सेवा देते हैं। आपकी गोपनीयता मायने रखती है: डेटा केवल आपकी व्यक्तिगत रिपोर्ट बनाने के लिए उपयोग होता है। प्रश्न या सहायता के लिए नीचे दिए ईमेल पर संपर्क करें।",
         about_who_3: "हमारा लक्ष्य लैब परिणामों को स्पष्ट मार्गदर्शन में बदलना है। आपका अनुभव और फीडबैक इस रास्ते में हमारी मदद करता है।",
         nav_login: "लॉग इन", nav_register: "मुफ्त शुरू करें", nav_history: "इतिहास", nav_analyze: "विश्लेषण", nav_logout: "लॉग आउट",
-        hero_sub: "लैब परिणाम — स्पष्ट रिपोर्ट",
-        hero_title: "60 सेकंड में अपने रक्त परीक्षण परिणाम समझें",
-        hero_desc: "लैब रिज़ल्ट चिपकाएं, AI समझाता है। मुफ्त आज़माएं — कार्ड ज़रूरी नहीं।",
-        hero_cta: "मेरी पहली विश्लेषण मुफ्त करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • गोपालन",
+        hero_sub: "लैब परिणाम सरल भाषा में समझाए जाते हैं। यह निदान नहीं — डॉक्टर से मिलने की तैयारी है।",
+        hero_title: "कुछ ही मिनटों में अपने रक्त परीक्षण को समझें",
+        hero_desc: "रिज़ल्ट अपलोड करें और संदर्भ सीमाओं, साफ व्याख्या और डॉक्टर को दिखाने लायक PDF के साथ संरचित सारांश पाएं।",
+        hero_cta: "विश्लेषण शुरू करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • Privacy by design",
         hero_sample_label: "आपकी रिपोर्ट ऐसी दिखेगी", hero_sample_summary: "मान सामान्य सीमा में। हीमोग्लोबिन और ग्लूकोज सामान्य।", hero_sample_normal: "सामान्य", hero_sample_border: "सीमा", hero_sample_risk: "ध्यान", hero_sample_cta: "सारांश + मान + सुझाव + PDF डाउनलोड।", hero_sample_btn: "ऐसी रिपोर्ट पाएं — मुफ्त शुरू करें",
         trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी", trust_badges_heading: "सुरक्षित और अनुपालन सेवा",
         trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान", trust_badge_qr: "QR से रिपोर्ट सत्यापन", trust_bar_qr: "QR से रिपोर्ट सत्यापन",
         trust_badge_secure_paytr: "🔒 सुरक्षित भुगतान – PayTR",
+        report_preview_line_1: "Health Score, हाइलाइटेड मान और मुख्य निष्कर्ष।",
+        report_preview_line_2: "डॉक्टर के लिए तैयार PDF और चाहें तो QR से रिपोर्ट सत्यापन.",
         footer_trust_ssl: "SSL Secure", footer_trust_kvkk: "KVKK", footer_trust_gdpr: "GDPR", footer_trust_paytr: "PayTR Secure", footer_trust_hipaa: "Security best practices / HIPAA-aligned",
         footer_trust_ssl_desc: "ट्रैफिक SSL/TLS से एन्क्रिप्ट.", footer_trust_kvkk_desc: "व्यक्तिगत डेटा KVKK अनुरूप.", footer_trust_gdpr_desc: "EU के लिए GDPR अनुरूप.", footer_trust_paytr_desc: "PayTR से सुरक्षित भुगतान.", footer_trust_hipaa_desc: "स्वास्थ्य डेटा सुरक्षित संसाधित.",
         trust_cloudflare_title: "Cloudflare द्वारा सुरक्षित", trust_cloudflare_desc: "ट्रैफिक सुरक्षा और तेज़ एक्सेस।", trust_cloudflare_1: "DDoS सुरक्षा", trust_cloudflare_2: "ग्लोबल CDN त्वरण", trust_cloudflare_3: "एज सुरक्षा",

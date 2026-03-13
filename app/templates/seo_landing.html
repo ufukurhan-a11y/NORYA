@@ -63,34 +63,203 @@
   </header>
 
   <main class="flex-1">
-    <!-- 1. HERO -->
-    <section class="py-12 sm:py-20 px-4 bg-gradient-to-br from-teal-50 to-slate-50">
-      <div class="max-w-4xl mx-auto text-center">
-        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 leading-tight">{{ t.hero_title }}</h1>
-        <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">{{ t.hero_sub }}</p>
-        <div class="flex flex-wrap gap-3 justify-center">
-          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95 shadow-lg">{{ t.cta_primary }}</a>
-          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50">{{ t.cta_secondary }}</a>
+    <!-- 1. HERO · Clinical premium editorial -->
+    <section class="py-12 sm:py-20 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-12 gap-10 items-center">
+        <!-- Copy -->
+        <div class="lg:col-span-7 space-y-6">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/80 border border-teal-100 px-3 py-1 text-xs font-semibold text-teal-700 shadow-sm">
+            <span class="inline-flex w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+            <span>{{ t.hero_trust_line or t.hero_sub }}</span>
+          </div>
+          <div>
+            <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight mb-3">
+              {{ t.hero_title }}
+            </h1>
+            <p class="text-base sm:text-lg text-slate-700 max-w-xl">
+              {{ t.hero_sub }}
+            </p>
+          </div>
+          <ul class="space-y-2 text-sm text-slate-700">
+            <li class="flex gap-2">
+              <span class="mt-1 text-teal-500">✓</span>
+              <span>{{ t.report_ref }}</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="mt-1 text-teal-500">✓</span>
+              <span>{{ t.report_plain }}</span>
+            </li>
+            <li class="flex gap-2">
+              <span class="mt-1 text-teal-500">✓</span>
+              <span>{{ t.report_doctor_prep }}</span>
+            </li>
+          </ul>
+          <div class="flex flex-wrap gap-3 pt-1">
+            <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-lg hover:opacity-95">
+              {{ t.cta_primary }}
+            </a>
+            <a href="#report-preview" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50">
+              {{ t.cta_sample_report or t.hero_see_sample }}
+            </a>
+            <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[48px] px-4 py-2 text-sm text-slate-600 hover:text-teal-700">
+              {{ t.cta_secondary }}
+            </a>
+          </div>
+          <div class="flex flex-wrap items-center gap-x-4 gap-y-2 text-xs text-slate-500">
+            <span class="inline-flex items-center gap-1">
+              <span class="text-teal-500">●</span>
+              <span>{{ t.trust_chip_kvkk or "GDPR / KVKK compliant" }}</span>
+            </span>
+            <span class="inline-flex items-center gap-1">
+              <span class="text-teal-500">●</span>
+              <span>{{ t.trust_chip_ssl or "Encrypted connection" }}</span>
+            </span>
+            <span class="inline-flex items-center gap-1">
+              <span class="text-teal-500">●</span>
+              <span>{{ t.trust_cards_langs_title or "Multi-language reports" }}</span>
+            </span>
+          </div>
+        </div>
+
+        <!-- Visual -->
+        <div class="lg:col-span-5">
+          <div class="relative max-w-md mx-auto">
+            <div class="absolute -top-6 -left-6 w-20 h-20 rounded-full bg-teal-100 blur-2xl opacity-70"></div>
+            <div class="absolute -bottom-8 -right-4 w-28 h-28 rounded-full bg-sky-100 blur-2xl opacity-70"></div>
+            <div class="relative overflow-hidden rounded-3xl bg-white shadow-2xl border border-slate-100">
+              <figure class="aspect-[4/3] bg-slate-100">
+                <img
+                  src="/static/images/blog/how-to-read-blood-test-results.png"
+                  alt="Woman reviewing a structured digital blood test report on her laptop."
+                  loading="lazy"
+                  class="w-full h-full object-cover"
+                />
+              </figure>
+              <div class="p-4 border-t border-slate-100 bg-slate-50/70">
+                <div class="flex items-center justify-between mb-3">
+                  <div>
+                    <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-teal-600">{{ t.report_preview_badge or "Sample report" }}</p>
+                    <p class="text-sm font-semibold text-slate-900">{{ t.report_preview_title or "Doctor-ready PDF summary" }}</p>
+                  </div>
+                  <span class="inline-flex items-center gap-1 rounded-full bg-emerald-50 px-3 py-1 text-[11px] font-semibold text-emerald-700">
+                    <span>●</span>
+                    <span>82 / 100</span>
+                  </span>
+                </div>
+                <div class="flex items-center justify-between text-[11px] text-slate-600">
+                  <div class="flex flex-col">
+                    <span>{{ t.report_preview_line_1 or "Health score & flagged markers." }}</span>
+                    <span>{{ t.report_preview_line_2 or "QR verification & secure link." }}</span>
+                  </div>
+                  <div class="ml-3 flex flex-col items-end gap-1">
+                    <span class="inline-flex items-center gap-1 rounded-full bg-white px-2 py-0.5 text-[10px] font-medium text-slate-700 border border-slate-200">
+                      <span>PDF</span>
+                    </span>
+                    <span class="inline-flex items-center gap-1 rounded-full bg-slate-900 text-white px-2 py-0.5 text-[10px] font-medium">
+                      <span>QR</span>
+                      <span>{{ t.trust_block_qr or "Report verification" }}</span>
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- 2. HOW IT WORKS — 3 STEPS -->
-    <section class="py-12 sm:py-16 px-4 bg-white">
-      <div class="max-w-4xl mx-auto">
+    <!-- 2. REPORT PREVIEW · premium cards -->
+    <section id="report-preview" class="py-12 sm:py-16 px-4 bg-white">
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-12 gap-10 items-start">
+        <div class="lg:col-span-6 space-y-4">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 mb-1">
+            {{ t.section_report_title }}
+          </h2>
+          <p class="text-slate-600 text-sm sm:text-base">
+            {{ t.report_preview_subtitle or t.hero_sub }}
+          </p>
+          <ul class="mt-4 space-y-3">
+            <li class="flex items-start gap-3 rounded-xl p-3 sm:p-4 bg-slate-50 border border-slate-100">
+              <span class="text-teal-500 font-bold mt-0.5">✓</span>
+              <span class="text-slate-700 text-sm sm:text-base">{{ t.report_ref }}</span>
+            </li>
+            <li class="flex items-start gap-3 rounded-xl p-3 sm:p-4 bg-slate-50 border border-slate-100">
+              <span class="text-teal-500 font-bold mt-0.5">✓</span>
+              <span class="text-slate-700 text-sm sm:text-base">{{ t.report_plain }}</span>
+            </li>
+            <li class="flex items-start gap-3 rounded-xl p-3 sm:p-4 bg-slate-50 border border-slate-100">
+              <span class="text-teal-500 font-bold mt-0.5">✓</span>
+              <span class="text-slate-700 text-sm sm:text-base">{{ t.report_highlights }}</span>
+            </li>
+            <li class="flex items-start gap-3 rounded-xl p-3 sm:p-4 bg-slate-50 border border-slate-100">
+              <span class="text-teal-500 font-bold mt-0.5">✓</span>
+              <span class="text-slate-700 text-sm sm:text-base">{{ t.report_doctor_prep }}</span>
+            </li>
+          </ul>
+        </div>
+        <div class="lg:col-span-6">
+          <div class="rounded-2xl border border-slate-200 bg-slate-50 p-5 sm:p-6 shadow-sm">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-teal-600">{{ t.report_health_score_label or "Health score" }}</p>
+                <p class="text-sm text-slate-600">{{ t.report_health_score_sub or "Structured summary of your latest blood test." }}</p>
+              </div>
+              <div class="text-right">
+                <p class="text-xs text-slate-500">{{ t.report_sample_label or "Example" }}</p>
+                <p class="text-xl font-bold text-slate-900">82 / 100</p>
+              </div>
+            </div>
+            <div class="grid sm:grid-cols-3 gap-3 mb-4">
+              <div class="rounded-xl bg-white p-3 border border-emerald-100">
+                <p class="text-xs font-semibold text-emerald-700">{{ t.report_card_ok_title or "Within range" }}</p>
+                <p class="mt-1 text-[11px] text-slate-600">{{ t.report_card_ok_body or "Most biomarkers are in the expected range." }}</p>
+              </div>
+              <div class="rounded-xl bg-white p-3 border border-amber-100">
+                <p class="text-xs font-semibold text-amber-700">{{ t.report_card_attention_title or "Needs attention" }}</p>
+                <p class="mt-1 text-[11px] text-slate-600">{{ t.report_card_attention_body or "A few values are highlighted to discuss with your doctor." }}</p>
+              </div>
+              <div class="rounded-xl bg-white p-3 border border-sky-100">
+                <p class="text-xs font-semibold text-sky-700">{{ t.report_card_trend_title or "Trends" }}</p>
+                <p class="mt-1 text-[11px] text-slate-600">{{ t.report_card_trend_body or "Compare with previous tests over time." }}</p>
+              </div>
+            </div>
+            <div class="flex flex-wrap items-center justify-between gap-3 text-[11px] text-slate-600">
+              <div class="flex flex-wrap gap-2">
+                <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 border border-slate-200">
+                  <span>PDF</span>
+                  <span>{{ t.trust_card_report_title or "Doctor-ready format" }}</span>
+                </span>
+                <span class="inline-flex items-center gap-1 rounded-full bg-white px-2.5 py-1 border border-slate-200">
+                  <span>🌐</span>
+                  <span>{{ t.trust_cards_langs_title or "Multi-language" }}</span>
+                </span>
+              </div>
+              <div class="flex items-center gap-1 text-slate-500">
+                <span>🔒</span>
+                <span>{{ t.trust_secure_infra or "Encrypted upload & storage." }}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. HOW IT WORKS — 3 STEPS -->
+    <section class="py-12 sm:py-16 px-4 bg-slate-50">
+      <div class="max-w-5xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-10">{{ t.section_how_title }}</h2>
         <div class="grid sm:grid-cols-3 gap-6 sm:gap-8">
-          <div class="rounded-2xl p-6 border-2 border-slate-100 bg-slate-50/50 text-center">
+          <div class="rounded-2xl p-6 border border-slate-100 bg-white/70 text-center shadow-sm">
             <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-600 font-bold text-lg mb-3">1</span>
             <h3 class="font-semibold text-slate-900 mb-2">{{ t.step1_title }}</h3>
             <p class="text-sm text-slate-600">{{ t.step1_desc }}</p>
           </div>
-          <div class="rounded-2xl p-6 border-2 border-slate-100 bg-slate-50/50 text-center">
+          <div class="rounded-2xl p-6 border border-slate-100 bg-white/70 text-center shadow-sm">
             <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-600 font-bold text-lg mb-3">2</span>
             <h3 class="font-semibold text-slate-900 mb-2">{{ t.step2_title }}</h3>
             <p class="text-sm text-slate-600">{{ t.step2_desc }}</p>
           </div>
-          <div class="rounded-2xl p-6 border-2 border-slate-100 bg-slate-50/50 text-center">
+          <div class="rounded-2xl p-6 border border-slate-100 bg-white/70 text-center shadow-sm">
             <span class="inline-flex items-center justify-center w-12 h-12 rounded-full bg-teal-100 text-teal-600 font-bold text-lg mb-3">3</span>
             <h3 class="font-semibold text-slate-900 mb-2">{{ t.step3_title }}</h3>
             <p class="text-sm text-slate-600">{{ t.step3_desc }}</p>
@@ -99,51 +268,56 @@
       </div>
     </section>
 
-    <!-- 3. WHAT YOU SEE IN THE REPORT -->
-    <section class="py-12 sm:py-16 px-4 bg-slate-50">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-8">{{ t.section_report_title }}</h2>
-        <ul class="space-y-4">
-          <li class="flex items-start gap-3 rounded-xl p-4 bg-white border border-slate-100">
-            <span class="text-teal-500 font-bold">✓</span>
-            <span class="text-slate-700">{{ t.report_ref }}</span>
-          </li>
-          <li class="flex items-start gap-3 rounded-xl p-4 bg-white border border-slate-100">
-            <span class="text-teal-500 font-bold">✓</span>
-            <span class="text-slate-700">{{ t.report_plain }}</span>
-          </li>
-          <li class="flex items-start gap-3 rounded-xl p-4 bg-white border border-slate-100">
-            <span class="text-teal-500 font-bold">✓</span>
-            <span class="text-slate-700">{{ t.report_highlights }}</span>
-          </li>
-          <li class="flex items-start gap-3 rounded-xl p-4 bg-white border border-slate-100">
-            <span class="text-teal-500 font-bold">✓</span>
-            <span class="text-slate-700">{{ t.report_doctor_prep }}</span>
-          </li>
-        </ul>
-      </div>
-    </section>
-
-    <!-- 4. WHO IT'S FOR -->
+    <!-- 4. WHY NORYA / WHO IT'S FOR -->
     <section class="py-12 sm:py-16 px-4 bg-white">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-8">{{ t.section_who_title }}</h2>
-        <ul class="space-y-3">
-          <li class="flex items-start gap-2 text-slate-700"><span class="text-teal-500 mt-0.5">•</span> {{ t.who_1 }}</li>
-          <li class="flex items-start gap-2 text-slate-700"><span class="text-teal-500 mt-0.5">•</span> {{ t.who_2 }}</li>
-          <li class="flex items-start gap-2 text-slate-700"><span class="text-teal-500 mt-0.5">•</span> {{ t.who_3 }}</li>
-        </ul>
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-10">{{ t.section_who_title }}</h2>
+        <div class="grid sm:grid-cols-3 gap-6">
+          <div class="rounded-2xl border border-slate-100 bg-slate-50/60 p-5 shadow-sm">
+            <div class="text-2xl mb-2" aria-hidden="true">🩸</div>
+            <p class="text-sm text-slate-700">{{ t.who_1 }}</p>
+          </div>
+          <div class="rounded-2xl border border-slate-100 bg-slate-50/60 p-5 shadow-sm">
+            <div class="text-2xl mb-2" aria-hidden="true">📋</div>
+            <p class="text-sm text-slate-700">{{ t.who_2 }}</p>
+          </div>
+          <div class="rounded-2xl border border-slate-100 bg-slate-50/60 p-5 shadow-sm">
+            <div class="text-2xl mb-2" aria-hidden="true">🌍</div>
+            <p class="text-sm text-slate-700">{{ t.who_3 }}</p>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- 5. TRUST -->
-    <section class="py-12 sm:py-16 px-4 bg-slate-50">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-8">{{ t.section_trust_title }}</h2>
-        <div class="rounded-2xl p-6 sm:p-8 bg-white border border-slate-200">
-          <p class="text-slate-700 mb-4">{{ t.trust_dsgvo }}</p>
-          <p class="text-slate-600 text-sm font-medium border-l-4 border-teal-500 pl-4">{{ t.trust_disclaimer }}</p>
+    <!-- 5. TRUST / SECURITY -->
+    <section class="py-12 sm:py-16 px-4 bg-slate-900 text-white">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center mb-8">{{ t.section_trust_title }}</h2>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-5 mb-8">
+          <article class="rounded-2xl bg-slate-800/80 border border-slate-700 p-4 flex flex-col gap-1">
+            <div class="text-lg" aria-hidden="true">📊</div>
+            <h3 class="text-sm font-semibold">{{ t.trust_card_structured_title or "Structured blood test summary" }}</h3>
+            <p class="text-xs text-slate-300">{{ t.trust_card_structured_body or "Organised ranges and explanations instead of raw numbers." }}</p>
+          </article>
+          <article class="rounded-2xl bg-slate-800/80 border border-slate-700 p-4 flex flex-col gap-1">
+            <div class="text-lg" aria-hidden="true">🩺</div>
+            <h3 class="text-sm font-semibold">{{ t.trust_card_pdf_title or "Doctor-ready premium PDF" }}</h3>
+            <p class="text-xs text-slate-300">{{ t.trust_card_pdf_body or "Bring a clean summary to your next appointment." }}</p>
+          </article>
+          <article class="rounded-2xl bg-slate-800/80 border border-slate-700 p-4 flex flex-col gap-1">
+            <div class="text-lg" aria-hidden="true">🔒</div>
+            <h3 class="text-sm font-semibold">{{ t.trust_card_secure_title or "Secure upload & privacy-first" }}</h3>
+            <p class="text-xs text-slate-300">{{ t.trust_card_secure_body or "Encrypted connection, no ads, data used only for your report." }}</p>
+          </article>
+          <article class="rounded-2xl bg-slate-800/80 border border-slate-700 p-4 flex flex-col gap-1">
+            <div class="text-lg" aria-hidden="true">🌐</div>
+            <h3 class="text-sm font-semibold">{{ t.trust_card_multilang_title or "Multi-language interpretation" }}</h3>
+            <p class="text-xs text-slate-300">{{ t.trust_card_multilang_body or "Read your report in your preferred language." }}</p>
+          </article>
         </div>
+        <p class="text-xs text-slate-300 border-l-4 border-teal-400/80 pl-4">
+          {{ t.trust_disclaimer }}
+        </p>
       </div>
     </section>
 
