@@ -4076,6 +4076,7 @@ def payment_success_page(
   var fastUntil = 30000;
   var pollTimer = null;
   var redirectTimer = null;
+  var hasTimedOut = false;
   window.__noryaPaymentDebug = {{ orderId: oid, paymentStatus: null, callbackStatus: "polling", conversionTriggered: false }};
   try {{ console.log("[Norya payment success] orderId=" + oid + ", guest_token=" + (guestToken ? "yes" : "no")); }} catch(e) {{}}
 
@@ -4099,9 +4100,27 @@ def payment_success_page(
   function stopPolling() {{
     if (pollTimer) {{ clearTimeout(pollTimer); pollTimer = null; }}
   }}
-  function doPoll() {{
+  function doPoll(isManual) {{
     var timeoutMsg = {json.dumps(t.get("success_timeout", "Zaman aşımı"))};
-    if (Date.now() - start > timeoutTotal) {{ showSpinner(false); setStatus(updating + " (" + timeoutMsg + ")"); showButtons(true, false); return; }}
+    var now = Date.now();
+    var elapsed = now - start;
+    if (elapsed > timeoutTotal && !isManual) {{
+      if (!hasTimedOut) {{
+        hasTimedOut = true;
+        stopPolling();
+        showSpinner(false);
+        setStatus(updating + " (" + timeoutMsg + ")");
+        showButtons(true, false);
+        try {{ console.log("[Norya payment success] payment status timeout (auto)"); }} catch(e) {{}}
+      }}
+      return;
+    }}
+    if (elapsed > timeoutTotal && isManual) {{
+      try {{ console.log("[Norya payment success] manual recheck clicked (reset timeout window)"); }} catch(e) {{}}
+      start = now;
+      hasTimedOut = false;
+    }}
+    try {{ console.log("[Norya payment success] polling request started", {{ orderId: oid, manual: !!isManual }}); }} catch(e) {{}}
     fetch(apiBase + "/api/orders/status?merchant_oid=" + encodeURIComponent(oid))
       .then(function(r) {{
         if (r.status === 400 || r.status === 422) {{
@@ -4117,6 +4136,7 @@ def payment_success_page(
         if (d && d.__invalidOid) return;
         if (!d) {{ setStatus(updating); return; }}
         if (d.status === "paid" || d.is_premium_active) {{
+          try {{ console.log("[Norya payment success] payment status=paid"); }} catch(e) {{}}
           stopPolling();
           showSpinner(false);
           setStatus(premiumActive + " ✓", true);
@@ -4168,23 +4188,28 @@ def payment_success_page(
           showButtons(false, true);
           return;
         }}
+        try {{ console.log("[Norya payment success] payment status pending", d && d.status); }} catch(e) {{}}
         setStatus(pendingBank);
       }})
-      .catch(function() {{ setStatus(updating); }});
+      .catch(function() {{
+        try {{ console.log("[Norya payment success] polling error"); }} catch(e) {{}}
+        setStatus(updating);
+      }});
   }}
   function scheduleNext() {{
+    if (hasTimedOut) return;
     if (Date.now() - start > timeoutTotal) return;
     var interval = (Date.now() - start) < fastUntil ? intervalFast : intervalSlow;
-    pollTimer = setTimeout(function() {{ doPoll(); scheduleNext(); }}, interval);
+    pollTimer = setTimeout(function() {{ doPoll(false); scheduleNext(); }}, interval);
   }}
   document.getElementById("checkDoneBtn").addEventListener("click", function() {{
-    doPoll();
+    doPoll(true);
     if (pollTimer) {{ clearTimeout(pollTimer); scheduleNext(); }}
   }});
   showSpinner(true);
   try {{ console.log("[Norya payment success] polling will start in 500ms (gtag load grace); send_to=" + conversionSendTo); }} catch(e) {{}}
   setTimeout(function() {{
-    doPoll();
+    doPoll(false);
     scheduleNext();
   }}, 500);
 }})();
