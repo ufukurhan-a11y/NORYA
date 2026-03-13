@@ -3980,7 +3980,8 @@ def payment_success_page(
     report_url = f"{base}/report"
     guest_token_js = json.dumps((guest_token or "").strip() or "")
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
-    conversion_send_to = f"{aw_id}/RF4SCL780lYcENnXnYID"
+    conv_label = (getattr(settings, "google_ads_conversion_label", "") or "").strip() or "RF4SCL780lYcENnXnYID"
+    conversion_send_to = f"{aw_id}/{conv_label}"
     gtag_script = (
         f'<script async src="https://www.googletagmanager.com/gtag/js?id={aw_id}"></script>'
         f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{aw_id}");</script>'
@@ -4089,16 +4090,29 @@ def payment_success_page(
           var storageKey = "norya_conv_" + txId;
           var alreadyFired = false;
           try {{ alreadyFired = sessionStorage.getItem(storageKey) === "1"; }} catch(e) {{}}
-          if (typeof gtag === "function" && !window.__noryaConversionFired && !alreadyFired) {{
-            window.__noryaConversionFired = true;
-            gtag("event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }});
+          window.__noryaPaymentDebug.send_to = conversionSendTo;
+          window.__noryaPaymentDebug.condition = "status=paid_or_premium";
+          if (!window.__noryaConversionFired && !alreadyFired) {{
+            if (typeof gtag === "function") {{
+              window.__noryaConversionFired = true;
+              gtag("event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }});
+              try {{ sessionStorage.setItem(storageKey, "1"); }} catch(e) {{}}
+              window.__noryaPaymentDebug.conversionTriggered = true;
+              try {{ console.log("[Norya] Google Ads conversion fired", {{ send_to: conversionSendTo, orderId: txId, value: val, currency: "EUR" }}); }} catch(e) {{}}
+            }} else {{
+              window.dataLayer = window.dataLayer || [];
+              window.dataLayer.push(["event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }}]);
+              try {{ sessionStorage.setItem(storageKey, "1"); }} catch(e) {{}}
+              window.__noryaConversionFired = true;
+              window.__noryaPaymentDebug.conversionTriggered = true;
+              try {{ console.log("[Norya] Google Ads conversion queued (gtag not ready)", {{ send_to: conversionSendTo }}); }} catch(e) {{}}
+            }}
             try {{
               window.dataLayer = window.dataLayer || [];
               window.dataLayer.push({{ event: "purchase", value: val, currency: "EUR", transaction_id: txId }});
             }} catch(e) {{}}
-            try {{ sessionStorage.setItem(storageKey, "1"); }} catch(e) {{}}
-            window.__noryaPaymentDebug.conversionTriggered = true;
-            try {{ console.log("[Norya payment] Google Ads conversion fired", {{ orderId: txId, value: val, currency: "EUR" }}); }} catch(e) {{}}
+          }} else {{
+            try {{ console.log("[Norya] Google Ads conversion skipped", {{ reason: alreadyFired ? "already_fired" : "noryaConversionFired_set", send_to: conversionSendTo }}); }} catch(e) {{}}
           }}
           if (window.self !== window.top) {{ try {{ window.parent.postMessage("norya_payment_ok", "*"); }} catch(e) {{}} }}
           var redirectTo = guestToken ? (baseUrl + "/?guest_token=" + encodeURIComponent(guestToken) + "#analyze") : reportUrl;
@@ -4126,8 +4140,11 @@ def payment_success_page(
     if (pollTimer) {{ clearTimeout(pollTimer); scheduleNext(); }}
   }});
   showSpinner(true);
-  doPoll();
-  scheduleNext();
+  try {{ console.log("[Norya payment success] polling will start in 500ms (gtag load grace); send_to=" + conversionSendTo); }} catch(e) {{}}
+  setTimeout(function() {{
+    doPoll();
+    scheduleNext();
+  }}, 500);
 }})();
   </script>
 </body>

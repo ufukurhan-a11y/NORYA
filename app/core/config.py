@@ -66,6 +66,8 @@ class Settings(BaseSettings):
     ga_measurement_id: str = ""
     # Google Ads: Dönüşüm hesabı kimliği (AW-XXXXXXXXX). Boşsa gtag'a eklenmez.
     google_ads_conversion_id: str = "AW-18004536281"
+    # Google Ads: "Satın alma işlemi" dönüşüm etiketi. Hesap > Araçlar > Dönüşümler'deki etiketle birebir aynı olmalı.
+    google_ads_conversion_label: str = "RF4SCL780lYcENnXnYID"
     # WhatsApp iletişim: ülke kodu + numara, boşluksuz (örn. 905551234567). Boşsa varsayılan 905071703564 kullanılır.
     whatsapp_contact: str = "905071703564"
     # GİB e-Arşiv fatura (admin'den sipariş başına kesim)
