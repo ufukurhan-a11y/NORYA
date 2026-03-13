@@ -4066,6 +4066,12 @@ def _article_blutwerte_online_analysieren() -> Article:
             "tr": _blutwerte_online_sections_tr(),
             "en": _blutwerte_online_sections_en(),
             "de": _blutwerte_online_sections_de(),
+            "it": _blutwerte_online_sections_it(),
+            "fr": _blutwerte_online_sections_fr(),
+            "es": _blutwerte_online_sections_es(),
+            "he": _blutwerte_online_sections_he(),
+            "hi": _blutwerte_online_sections_hi(),
+            "ar": _blutwerte_online_sections_ar(),
         },
     )
 
@@ -4103,7 +4109,488 @@ def _blutwerte_online_sections_tr() -> List[Section]:
     ]
 
 
+def _blutwerte_online_sections_it() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="Perché analizzare gli esami del sangue online?",
+            body_html="<p>Molte persone ricevono un referto pieno di sigle e numeri. <strong>Analizzare gli esami del sangue online</strong> aiuta a capire questi valori prima del prossimo controllo o quando avete domande per il medico. Con Norya caricate il risultato e ottenete un report chiaro con intervalli di riferimento e brevi raccomandazioni. Non è una diagnosi, ma aiuta a prepararsi al colloquio con il medico.</p>"),
+        Section(id="steps", level=2, heading="Come analizzare gli esami del sangue online in tre passi",
+            body_html="<p><strong>Passo 1:</strong> Andate su Norya e registratevi o iniziate gratuitamente. <strong>Passo 2:</strong> Caricate il referto—in PDF, foto (JPG/PNG) o incollando il testo. <strong>Passo 3:</strong> Leggete il report e, se serve, scaricatelo in PDF o condividetelo con il medico. L'analisi è automatica; ottenete una panoramica strutturata e un'interpretazione dei vostri valori.</p>"),
+        Section(id="disclaimer", level=2, heading="Nota",
+            body_html="<p><strong>Questo contenuto è solo informativo e non costituisce consulenza medica, diagnosi o trattamento.</strong> L'analisi Norya è a scopo educativo. Discutete sempre i risultati e i sintomi con un medico. <a href=\"/it/upload\">Analizza gli esami con Norya</a> — Inizia ora.</p>"),
+    ]
+
+
+def _blutwerte_online_sections_fr() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="Pourquoi analyser votre bilan sanguin en ligne ?",
+            body_html="<p>Beaucoup de personnes reçoivent un résultat d'analyses avec des abréviations et des chiffres. <strong>Analyser votre bilan sanguin en ligne</strong> vous aide à comprendre ces valeurs avant votre prochain rendez-vous ou quand vous avez des questions pour votre médecin. Avec Norya vous uploadez votre résultat et obtenez un rapport clair avec les fourchettes de référence et de courtes recommandations. Ce n'est pas un diagnostic, mais cela vous aide à préparer l'échange avec votre médecin.</p>"),
+        Section(id="steps", level=2, heading="Comment analyser votre bilan en ligne en trois étapes",
+            body_html="<p><strong>Étape 1 :</strong> Allez sur Norya et inscrivez-vous ou commencez gratuitement. <strong>Étape 2 :</strong> Uploadez votre résultat—en PDF, photo (JPG/PNG) ou en collant le texte. <strong>Étape 3 :</strong> Lisez le rapport et, si besoin, téléchargez-le en PDF ou partagez-le avec votre médecin. L'analyse est automatique ; vous obtenez une vue structurée et une interprétation de vos valeurs.</p>"),
+        Section(id="disclaimer", level=2, heading="Avertissement",
+            body_html="<p><strong>Ce contenu est à titre informatif uniquement et ne constitue pas un avis médical, un diagnostic ou un traitement.</strong> L'analyse Norya est à but éducatif. Discutez toujours de vos résultats et symptômes avec un médecin. <a href=\"/fr/upload\">Analyser votre bilan avec Norya</a> — Commencer.</p>"),
+    ]
+
+
+def _blutwerte_online_sections_es() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="¿Por qué analizar tu análisis de sangre online?",
+            body_html="<p>Muchas personas reciben un informe con abreviaturas y números. <strong>Analizar tu análisis de sangre online</strong> te ayuda a entender estos valores antes de tu próxima cita o cuando tengas preguntas para tu médico. Con Norya subes tu resultado y obtienes un informe claro con rangos de referencia y recomendaciones breves. No es un diagnóstico, pero te ayuda a preparar la conversación con tu médico.</p>"),
+        Section(id="steps", level=2, heading="Cómo analizar tu análisis online en tres pasos",
+            body_html="<p><strong>Paso 1:</strong> Entra en Norya y regístrate o empieza gratis. <strong>Paso 2:</strong> Sube tu resultado—en PDF, foto (JPG/PNG) o pegando el texto. <strong>Paso 3:</strong> Lee el informe y, si hace falta, descárgalo en PDF o compártelo con tu médico. El análisis es automático; obtienes una visión estructurada e interpretación de tus valores.</p>"),
+        Section(id="disclaimer", level=2, heading="Aviso",
+            body_html="<p><strong>Este contenido es solo informativo y no sustituye el consejo médico, el diagnóstico o el tratamiento.</strong> El análisis de Norya es educativo. Comenta siempre tus resultados y síntomas con un médico. <a href=\"/es/upload\">Analiza tu análisis con Norya</a> — Empieza ahora.</p>"),
+    ]
+
+
+def _blutwerte_online_sections_he() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="למה לנתח את בדיקת הדם אונליין?",
+            body_html="<p>רבים מקבלים דף תוצאות מלא בקיצורים ומספרים. <strong>ניתוח בדיקת הדם אונליין</strong> עוזר להבין את הערכים לפני הפגישה הבאה או כשיש שאלות לרופא. עם Norya מעלים את התוצאה ומקבלים דוח ברור עם טווחי נורמה והמלצות קצרות. זה לא אבחנה, אבל עוזר להתכונן לשיחה עם הרופא.</p>"),
+        Section(id="steps", level=2, heading="איך לנתח את בדיקת הדם אונליין בשלושה שלבים",
+            body_html="<p><strong>שלב 1:</strong> היכנסו ל-Norya והרשמו או התחילו בחינם. <strong>שלב 2:</strong> העלו את התוצאה—כ-PDF, תמונה (JPG/PNG) או בהדבקת הטקסט. <strong>שלב 3:</strong> קראו את הדוח ובהתאם הורידו PDF או שתפו עם הרופא. הניתוח אוטומטי; מקבלים סקירה מסודרת ופרשנות לערכים.</p>"),
+        Section(id="disclaimer", level=2, heading="הערה",
+            body_html="<p><strong>התוכן למידע בלבד ואינו ייעוץ רפואי, אבחנה או טיפול.</strong> ניתוח Norya הוא חינוכי. תמיד דונו בתוצאות ובתסמינים עם רופא. <a href=\"/he/upload\">נתח את הבדיקה עם Norya</a> — התחל עכשיו.</p>"),
+    ]
+
+
+def _blutwerte_online_sections_hi() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="ब्लड टेस्ट ऑनलाइन क्यों विश्लेषण करें?",
+            body_html="<p>कई लोगों को संक्षिप्त नाम और संख्याओं वाली रिपोर्ट मिलती है। <strong>ब्लड टेस्ट ऑनलाइन विश्लेषण</strong> अगली अपॉइंटमेंट से पहले या डॉक्टर से सवाल पूछने से पहले इन मानों को समझने में मदद करता है। Norya से आप रिज़ल्ट अपलोड करते हैं और रेफरेंस रेंज और संक्षिप्त सुझावों वाली स्पष्ट रिपोर्ट पाते हैं। यह डायग्नोसिस नहीं है; डॉक्टर से बातचीत की तैयारी में मदद मिलती है।</p>"),
+        Section(id="steps", level=2, heading="तीन चरणों में ब्लड टेस्ट ऑनलाइन कैसे विश्लेषण करें",
+            body_html="<p><strong>चरण 1:</strong> Norya पर जाएं और साइन अप करें या मुफ्त शुरू करें। <strong>चरण 2:</strong> अपना रिज़ल्ट अपलोड करें—PDF, फोटो (JPG/PNG) या टेक्स्ट पेस्ट करके। <strong>चरण 3:</strong> रिपोर्ट पढ़ें और जरूरत हो तो PDF डाउनलोड करें या डॉक्टर के साथ शेयर करें। विश्लेषण ऑटोमैटिक है; आपको संरचित सारांश और अपने मानों की व्याख्या मिलती है।</p>"),
+        Section(id="disclaimer", level=2, heading="अस्वीकरण",
+            body_html="<p><strong>यह सामग्री केवल सूचनार्थ है और चिकित्सा सलाह, निदान या उपचार नहीं है।</strong> Norya विश्लेषण शैक्षिक है। हमेशा अपने रिज़ल्ट और लक्षण डॉक्टर से चर्चा करें। <a href=\"/hi/upload\">Norya के साथ ब्लड टेस्ट विश्लेषण</a> — अभी शुरू करें।</p>"),
+    ]
+
+
+def _blutwerte_online_sections_ar() -> List[Section]:
+    return [
+        Section(id="intro", level=2, heading="لماذا تحلل تحاليلك الدموية عبر الإنترنت؟",
+            body_html="<p>كثيرون يستلمون تقريراً مليئاً بالاختصارات والأرقام. <strong>تحليل التحاليل الدموية عبر الإنترنت</strong> يساعدك على فهم هذه القيم قبل الموعد التالي أو عندما يكون لديك أسئلة لطبيبك. مع Norya ترفع نتيجتك وتحصل على تقرير واضح مع نطاقات مرجعية وتوصيات مختصرة. هذا ليس تشخيصاً؛ بل يساعدك على الاستعداد لمحادثة الطبيب.</p>"),
+        Section(id="steps", level=2, heading="كيف تحلل تحاليلك عبر الإنترنت في ثلاث خطوات",
+            body_html="<p><strong>الخطوة 1:</strong> ادخل إلى Norya وسجّل أو ابدأ مجاناً. <strong>الخطوة 2:</strong> ارفع نتيجتك—كـ PDF أو صورة (JPG/PNG) أو بلصق النص. <strong>الخطوة 3:</strong> اقرأ التقرير وحمّله PDF إن لزم أو شاركه مع طبيبك. التحليل آلي؛ تحصل على نظرة منظمة وتفسير لقيمك.</p>"),
+        Section(id="disclaimer", level=2, heading="إخلاء مسؤولية",
+            body_html="<p><strong>هذا المحتوى للمعلومات فقط ولا يغني عن الاستشارة الطبية أو التشخيص أو العلاج.</strong> تحليل Norya تعليمي. ناقش دائماً نتائجك وأعراضك مع الطبيب. <a href=\"/ar/upload\">حلل تحاليلك مع Norya</a> — ابدأ الآن.</p>"),
+    ]
+
+
 _BLUTWERTE_ONLINE_ARTICLE = _article_blutwerte_online_analysieren()
+
+
+# ——— Second-wave blog articles (long-tail, TR/DE/EN/FR/IT/ES). Cover images reused; Norya badge in template. ———
+def _article_b12_low() -> Article:
+    """B12 düşüklüğü ne anlama gelir? / What does low B12 mean? — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/vitamin-b12-hero.png"
+    return Article(
+        id="b12-dusuklugu-ne-anlama-gelir",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={
+            "tr": "B12 vitamini kan tahlili — Norya",
+            "en": "Vitamin B12 blood test — Norya",
+            "de": "Vitamin-B12-Bluttest — Norya",
+            "fr": "Dosage vitamine B12 — Norya",
+            "it": "Esame vitamina B12 — Norya",
+            "es": "Análisis vitamina B12 — Norya",
+            "he": "בדיקת ויטמין B12 — Norya",
+            "hi": "विटामिन B12 ब्लड टेस्ट — Norya",
+            "ar": "تحليل فيتامين B12 — Norya",
+        },
+        category={"tr": "Vitaminlar", "en": "Vitamins", "de": "Vitamine", "fr": "Vitamines", "it": "Vitamine", "es": "Vitaminas", "he": "ויטמינים", "hi": "विटामिन", "ar": "الفيتامينات"},
+        slugs={
+            "tr": "b12-dusuklugu-ne-anlama-gelir",
+            "en": "what-does-low-vitamin-b12-mean",
+            "de": "was-bedeutet-niedriger-vitamin-b12-wert",
+            "fr": "que-signifie-un-taux-faible-de-vitamine-b12",
+            "it": "cosa-significa-valore-basso-vitamina-b12",
+            "es": "que-significa-nivel-bajo-vitamina-b12",
+            "he": "what-does-low-vitamin-b12-mean",
+            "hi": "low-vitamin-b12-level-kya-matlab",
+            "ar": "ماذا-يعني-انخفاض-فيتامين-b12",
+        },
+        titles={
+            "tr": "B12 düşüklüğü ne anlama gelir?",
+            "en": "What does a low vitamin B12 level mean?",
+            "de": "Was bedeutet ein niedriger Vitamin-B12-Wert?",
+            "fr": "Que signifie un taux faible de vitamine B12 ?",
+            "it": "Cosa significa un valore basso di vitamina B12?",
+            "es": "¿Qué significa un nivel bajo de vitamina B12?",
+            "he": "מה המשמעות של ערך ויטמין B12 נמוך?",
+            "hi": "विटामिन B12 का निम्न स्तर क्या मतलब है?",
+            "ar": "ماذا يعني انخفاض مستوى فيتامين B12؟",
+        },
+        subtitles={
+            "tr": "B12 sonucunuz düşük veya sınırda çıktıysa ne yapmalısınız? Referans aralıkları ve sonraki adımlar hakkında kısa rehber.",
+            "en": "What to do if your B12 result is low or borderline? A short guide on reference ranges and next steps.",
+            "de": "Was tun, wenn Ihr B12-Wert niedrig oder grenzwertig ist? Kurzer Überblick zu Referenzbereichen und nächsten Schritten.",
+            "fr": "Que faire si votre B12 est basse ou limite ? Un guide court sur les fourchettes et les prochaines étapes.",
+            "it": "Cosa fare se la B12 è bassa o al limite? Breve guida su intervalli di riferimento e passi successivi.",
+            "es": "¿Qué hacer si tu B12 está baja o en el límite? Guía breve sobre rangos y próximos pasos.",
+            "he": "מה לעשות אם תוצאת B12 נמוכה או בגבול? מדריך קצר על טווחים והמשך.",
+            "hi": "B12 निम्न या सीमा पर हो तो क्या करें? संदर्भ सीमा और अगले कदमों पर संक्षिप्त मार्गदर्शन।",
+            "ar": "ماذا تفعل إذا كانت نتيجة B12 منخفضة أو على الحد؟ دليل قصير عن النطاقات والخطوات التالية.",
+        },
+        excerpts={
+            "tr": "B12 düşüklüğü tek başına teşhis değildir; nedenleri ve yorumu hekimle görüşülmelidir.",
+            "en": "Low B12 alone is not a diagnosis; causes and interpretation should be discussed with a doctor.",
+            "de": "Niedriges B12 ist keine Diagnose; Ursachen und Einordnung besprechen Sie mit dem Arzt.",
+            "fr": "Un B12 bas seul n'est pas un diagnostic ; causes et interprétation avec le médecin.",
+            "it": "B12 bassa da sola non è una diagnosi; cause e interpretazione vanno discusse con il medico.",
+            "es": "B12 baja por sí sola no es un diagnóstico; causas e interpretación con el médico.",
+            "he": "B12 נמוך לבדו אינו אבחנה; יש לדון בסיבות ובפרשנות עם רופא.",
+            "hi": "कम B12 अकेले निदान नहीं है; कारण और व्याख्या डॉक्टर से चर्चा करें।",
+            "ar": "انخفاض B12 وحده ليس تشخيصاً؛ ناقش الأسباب والتفسير مع الطبيب.",
+        },
+        seo_titles={
+            "tr": "B12 Düşüklüğü Ne Anlama Gelir? | Norya Blog",
+            "en": "What Does a Low Vitamin B12 Level Mean? | Norya Blog",
+            "de": "Was bedeutet ein niedriger Vitamin-B12-Wert? | Norya Blog",
+            "fr": "Que signifie un taux faible de vitamine B12 ? | Norya Blog",
+            "it": "Cosa significa un valore basso di vitamina B12? | Norya Blog",
+            "es": "¿Qué significa un nivel bajo de vitamina B12? | Norya Blog",
+            "he": "מה המשמעות של ערך B12 נמוך? | Norya Blog",
+            "hi": "विटामिन B12 का निम्न स्तर क्या मतलब है? | Norya Blog",
+            "ar": "ماذا يعني انخفاض فيتامين B12؟ | Norya Blog",
+        },
+        seo_descriptions={
+            "tr": "B12 düşüklüğü nedenleri, referans aralıkları ve ne zaman doktora gidilmeli. Sadece bilgilendirme amaçlı.",
+            "en": "Causes of low B12, reference ranges, and when to see a doctor. For information only.",
+            "de": "Ursachen für niedriges B12, Referenzbereiche und wann zum Arzt. Nur zur Information.",
+            "fr": "Causes d'un B12 bas, fourchettes de référence et quand consulter. À titre informatif uniquement.",
+            "it": "Cause di B12 bassa, intervalli di riferimento e quando rivolgersi al medico. Solo informativo.",
+            "es": "Causas de B12 baja, rangos de referencia y cuándo consultar. Solo informativo.",
+            "he": "סיבות ל-B12 נמוך, טווחי ייחוס ומתי לפנות לרופא. לצורכי מידע בלבד.",
+            "hi": "कम B12 के कारण, संदर्भ सीमा और डॉक्टर से कब मिलें. केवल सूचनार्थ।",
+            "ar": "أسباب انخفاض B12 والنطاقات المرجعية ومتى ترى الطبيب. لأغراض إعلامية فقط.",
+        },
+        sections_by_lang={
+            "tr": [
+                Section(id="content", level=2, heading="B12 düşüklüğü ne anlama gelir?",
+                    body_html="<p>B12 (kobalamin) sinir fonksiyonu, kırmızı kan hücresi yapımı ve DNA sentezi için gereklidir. Tahlilde <strong>referans aralığının altında</strong> veya sınırda bir değer çıkması, beslenme yetersizliği, emilim bozukluğu veya bazı ilaçlar gibi nedenlerle ilişkili olabilir. Tek bir sayı teşhis koymaz; sonucunuzu hekiminiz sizin öykünüz ve gerekirse ek tetkiklerle değerlendirir. Düşük veya sınırda B12 sonucu aldıysanız bir hekime danışın.</p>"),
+                Section(id="disclaimer", level=2, heading="Uyarı",
+                    body_html="<p><strong>Bu içerik yalnızca bilgilendirme amaçlıdır; tıbbi tavsiye veya teşhis yerine geçmez.</strong> Sonuçlarınızı ve şikayetlerinizi her zaman bir hekimle görüşün. <a href=\"/tr/kan-tahlili-sonucu\">Kan tahlili sonucu anlama</a> · <a href=\"/analyze\">Analiz başlat</a></p>"),
+            ],
+            "en": [
+                Section(id="content", level=2, heading="What does a low vitamin B12 level mean?",
+                    body_html="<p>Vitamin B12 (cobalamin) is needed for nerve function, red blood cell formation, and DNA synthesis. A result <strong>below or at the lower end</strong> of the reference range can be linked to diet, absorption issues, or certain medications. A single number does not make a diagnosis; your doctor will interpret your result with your history and any follow-up tests. If you have a low or borderline B12 result, see a doctor.</p>"),
+                Section(id="disclaimer", level=2, heading="Disclaimer",
+                    body_html="<p><strong>This content is for information only and does not replace medical advice or diagnosis.</strong> Always discuss your results and symptoms with a doctor. <a href=\"/en/blood-test-results\">Understand blood test results</a> · <a href=\"/analyze\">Start analysis</a></p>"),
+            ],
+            "de": [
+                Section(id="content", level=2, heading="Was bedeutet ein niedriger Vitamin-B12-Wert?",
+                    body_html="<p>Vitamin B12 (Cobalamin) ist wichtig für Nerven, rote Blutkörperchen und DNA. Ein Wert <strong>unterhalb oder am unteren Rand</strong> des Referenzbereichs kann an Ernährung, Aufnahme oder Medikamenten liegen. Ein einzelner Wert ist keine Diagnose; Ihr Arzt ordnet das Ergebnis mit Anamnese und ggf. weiteren Tests ein. Bei niedrigem oder grenzwertigem B12 bitte zum Arzt.</p>"),
+                Section(id="disclaimer", level=2, heading="Hinweis",
+                    body_html="<p><strong>Dieser Inhalt dient nur der Information und ersetzt keine medizinische Beratung oder Diagnose.</strong> Besprechen Sie Ergebnisse und Beschwerden immer mit einem Arzt. <a href=\"/de/blutwerte-verstehen\">Blutwerte verstehen</a> · <a href=\"/analyze\">Analyse starten</a></p>"),
+            ],
+            "fr": [
+                Section(id="content", level=2, heading="Que signifie un taux faible de vitamine B12 ?",
+                    body_html="<p>La vitamine B12 (cobalamine) est nécessaire aux nerfs, aux globules rouges et à l’ADN. Un résultat <strong>sous ou en bas</strong> de la fourchette de référence peut être lié à l’alimentation, à l’absorption ou à certains médicaments. Un chiffre seul ne fait pas un diagnostic ; votre médecin interprétera le résultat avec votre histoire et d’éventuels examens. En cas de B12 basse ou limite, consultez un médecin.</p>"),
+                Section(id="disclaimer", level=2, heading="Avertissement",
+                    body_html="<p><strong>Ce contenu est à titre informatif uniquement et ne remplace pas un avis ou diagnostic médical.</strong> Discutez toujours de vos résultats et symptômes avec un médecin. <a href=\"/analyze\">Lancer l'analyse</a></p>"),
+            ],
+            "it": [
+                Section(id="content", level=2, heading="Cosa significa un valore basso di vitamina B12?",
+                    body_html="<p>La vitamina B12 (cobalamina) serve per nervi, globuli rossi e DNA. Un valore <strong>sotto o al limite inferiore</strong> dell’intervallo di riferimento può dipendere da dieta, assorbimento o farmaci. Un solo numero non fa diagnosi; il medico valuterà il risultato con la tua storia e eventuali controlli. In caso di B12 bassa o limite, rivolgiti al medico.</p>"),
+                Section(id="disclaimer", level=2, heading="Disclaimer",
+                    body_html="<p><strong>Questo contenuto è solo informativo e non sostituisce parere o diagnosi medica.</strong> Discuti sempre risultati e sintomi con un medico. <a href=\"/analyze\">Avvia analisi</a></p>"),
+            ],
+            "es": [
+                Section(id="content", level=2, heading="¿Qué significa un nivel bajo de vitamina B12?",
+                    body_html="<p>La vitamina B12 (cobalamina) es necesaria para nervios, glóbulos rojos y ADN. Un resultado <strong>por debajo o en el límite</strong> del rango de referencia puede deberse a dieta, absorción o medicación. Un solo valor no es un diagnóstico; tu médico interpretará el resultado con tu historia y pruebas. Si tienes B12 baja o en el límite, consulta al médico.</p>"),
+                Section(id="disclaimer", level=2, heading="Aviso",
+                    body_html="<p><strong>Este contenido es solo informativo y no sustituye consejo ni diagnóstico médico.</strong> Siempre comenta resultados y síntomas con un médico. <a href=\"/analyze\">Iniciar análisis</a></p>"),
+            ],
+            "he": [
+                Section(id="content", level=2, heading="מה המשמעות של ערך ויטמין B12 נמוך?",
+                    body_html="<p>ויטמין B12 (קובלמין) נחוץ לתפקוד עצבים, יצירת תאי דם אדומים ו-DNA. תוצאה <strong>מתחת או בגבול התחתון</strong> של טווח הייחוס יכולה להיות קשורה לתזונה, ספיגה או תרופות. מספר בודד אינו אבחנה; הרופא יפרש את התוצאה עם ההיסטוריה והמעקב. אם יש לך B12 נמוך או בגבול — פנה לרופא.</p>"),
+                Section(id="disclaimer", level=2, heading="הודעה",
+                    body_html="<p><strong>תוכן זה למידע בלבד ואינו מחליף ייעוץ או אבחנה רפואית.</strong> תמיד לדון בתוצאות ובתסמינים עם רופא. <a href=\"/he/blog\">בלוג</a> · <a href=\"/analyze\">התחל ניתוח</a></p>"),
+            ],
+            "hi": [
+                Section(id="content", level=2, heading="विटामिन B12 का निम्न स्तर क्या मतलब है?",
+                    body_html="<p>विटामिन B12 (कोबालामिन) नसों, लाल रक्त कोशिकाओं और DNA के लिए जरूरी है। संदर्भ सीमा के <strong>नीचे या सीमा पर</strong> परिणाम आहार, अवशोषण या दवाओं से जुड़ा हो सकता है। एक अकेला नंबर निदान नहीं है; डॉक्टर आपके इतिहास और फॉलो-अप टेस्ट से परिणाम की व्याख्या करेंगे। कम या सीमा पर B12 हो तो डॉक्टर से मिलें।</p>"),
+                Section(id="disclaimer", level=2, heading="अस्वीकरण",
+                    body_html="<p><strong>यह सामग्री केवल जानकारी के लिए है और चिकित्सा सलाह या निदान का विकल्प नहीं।</strong> हमेशा परिणाम और लक्षण डॉक्टर से चर्चा करें। <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>"),
+            ],
+            "ar": [
+                Section(id="content", level=2, heading="ماذا يعني انخفاض مستوى فيتامين B12؟",
+                    body_html="<p>فيتامين B12 (كوبالامين) ضروري للأعصاب وخلايا الدم الحمراء والحمض النووي. نتيجة <strong>أقل أو عند الحد الأدنى</strong> من النطاق المرجعي قد ترتبط بالنظام الغذائي أو الامتصاص أو أدوية معينة. الرقم وحده لا يشخّص؛ الطبيب يفسر نتيجتك مع تاريخك وأي فحوصات متابعة. إن كانت B12 منخفضة أو على الحد، راجع الطبيب.</p>"),
+                Section(id="disclaimer", level=2, heading="إخلاء المسؤولية",
+                    body_html="<p><strong>هذا المحتوى للمعلومات فقط ولا يغني عن الاستشارة أو التشخيص الطبي.</strong> ناقش دائماً نتائجك وأعراضك مع الطبيب. <a href=\"/analyze\">بدء التحليل</a></p>"),
+            ],
+        },
+    )
+
+
+_ARTICLE_B12_LOW = _article_b12_low()
+
+
+def _article_vitamin_d_interpret() -> Article:
+    """D vitamini sonucu nasıl yorumlanır? / Vitamin D test results — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/vitamin-d-hero.png"
+    return Article(
+        id="d-vitamini-sonucu-nasil-yorumlanir",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={"tr": "D vitamini kan tahlili — Norya", "en": "Vitamin D blood test — Norya", "de": "Vitamin-D-Bluttest — Norya", "fr": "Dosage vitamine D — Norya", "it": "Esame vitamina D — Norya", "es": "Análisis vitamina D — Norya"},
+        category={"tr": "Vitaminlar", "en": "Vitamins", "de": "Vitamine", "fr": "Vitamines", "it": "Vitamine", "es": "Vitaminas"},
+        slugs={"tr": "d-vitamini-sonucu-nasil-yorumlanir", "en": "how-to-understand-vitamin-d-test-results", "de": "vitamin-d-verstehen-was-sagen-die-werte-aus", "fr": "vitamine-d-comprendre-les-resultats", "it": "come-interpretare-risultato-vitamina-d", "es": "como-interpretar-resultado-vitamina-d"},
+        titles={"tr": "D vitamini sonucu nasıl yorumlanır?", "en": "How to understand vitamin D test results", "de": "Vitamin D verstehen: Was sagen die Werte aus?", "fr": "Comprendre les résultats de la vitamine D", "it": "Come interpretare il risultato della vitamina D?", "es": "¿Cómo interpretar el resultado de vitamina D?"},
+        subtitles={"tr": "D vitamini (25-OH) referans aralıkları ve sonucunuzu nasıl değerlendireceğinize dair kısa rehber.", "en": "Vitamin D (25-OH) reference ranges and a short guide to interpreting your result.", "de": "Vitamin D (25-OH): Referenzbereiche und kurze Einordnung Ihres Befunds.", "fr": "Vitamine D (25-OH) : fourchettes de référence et comment interpréter votre résultat.", "it": "Vitamina D (25-OH): intervalli di riferimento e come interpretare il risultato.", "es": "Vitamina D (25-OH): rangos de referencia y cómo interpretar tu resultado."},
+        excerpts={"tr": "D vitamini sonucu laboratuvara göre değişir; yorumu hekimle yapılmalıdır.", "en": "Vitamin D results vary by lab; interpretation should be done with a doctor.", "de": "Vitamin-D-Werte sind laborabhängig; die Einordnung erfolgt mit dem Arzt.", "fr": "Les résultats vitamine D varient selon le laboratoire ; interprétation avec le médecin.", "it": "I risultati della vitamina D variano da laboratorio; interpretazione con il medico.", "es": "Los resultados de vitamina D varían por laboratorio; interpretación con el médico."},
+        seo_titles={"tr": "D Vitamini Sonucu Nasıl Yorumlanır? | Norya Blog", "en": "How to Understand Vitamin D Test Results | Norya Blog", "de": "Vitamin D verstehen: Was sagen die Werte aus? | Norya Blog", "fr": "Comprendre les résultats vitamine D | Norya Blog", "it": "Come interpretare il risultato della vitamina D | Norya Blog", "es": "Cómo interpretar el resultado de vitamina D | Norya Blog"},
+        seo_descriptions={"tr": "D vitamini (25-OH) referans aralıkları ve yorumlama. Bilgilendirme amaçlı.", "en": "Vitamin D (25-OH) reference ranges and interpretation. For information only.", "de": "Vitamin D (25-OH): Referenzbereiche und Einordnung. Nur zur Information.", "fr": "Vitamine D (25-OH) : fourchettes et interprétation. À titre informatif.", "it": "Vitamina D (25-OH): intervalli e interpretazione. Solo informativo.", "es": "Vitamina D (25-OH): rangos e interpretación. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="D vitamini sonucu nasıl yorumlanır?", body_html="<p>Kandaki <strong>25-OH D vitamini</strong> (kalsidiol) en sık ölçülen göstergedir. Referans aralıkları laboratuvara göre değişir; birçok laboratuvar \"yetersiz\" veya \"eksik\" için alt sınır kullanır. Sonucunuzu raporunuzdaki referans aralığıyla birlikte değerlendirin. D vitamini düşüklüğü kemik sağlığı ve bağışıklıkla ilişkili olabilir; takviye ve doz hekim tarafından belirlenmelidir.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bu içerik yalnızca bilgilendirme amaçlıdır.</strong> Sonuçlarınızı hekimle görüşün. <a href=\"/tr/kan-degerleri-anlama\">Kan değerleri anlama</a> · <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="How to understand vitamin D test results", body_html="<p><strong>25-OH vitamin D</strong> (calcidiol) in blood is the most common measure. Reference ranges vary by lab; many labs define \"insufficient\" or \"deficient\" with a lower cutoff. Interpret your result using the range on your report. Low vitamin D may relate to bone health and immunity; supplementation and dose should be decided by a doctor.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>This content is for information only.</strong> Discuss your results with a doctor. <a href=\"/en/understand-lab-results\">Understand lab results</a> · <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Vitamin D verstehen: Was sagen die Werte aus?", body_html="<p><strong>25-OH-Vitamin D</strong> (Calcidiol) im Blut wird am häufigsten gemessen. Referenzbereiche sind laborabhängig; viele Labore geben Untergrenzen für \"insuffizient\" oder \"Mangel\" an. Ordnen Sie Ihren Wert anhand des Referenzbereichs auf dem Befund ein. Niedriges Vitamin D kann mit Knochen und Immunität zusammenhängen; Einnahme und Dosis legt der Arzt fest.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> Besprechen Sie Ihren Befund mit dem Arzt. <a href=\"/de/laborwerte-verstehen\">Laborwerte verstehen</a> · <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Comprendre les résultats de la vitamine D", body_html="<p>La <strong>25-OH vitamine D</strong> (calcidiol) dans le sang est le dosage le plus courant. Les fourchettes varient selon le laboratoire. Interprétez votre résultat avec la fourchette indiquée sur le compte-rendu. Un taux bas peut concerner les os et l’immunité ; supplémentation et dose à voir avec le médecin.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif uniquement.</strong> Discutez de vos résultats avec un médecin. <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Come interpretare il risultato della vitamina D", body_html="<p>La <strong>25-OH vitamina D</strong> (calcidiolo) nel sangue è il dosaggio più usato. Gli intervalli di riferimento variano da laboratorio. Interpreta il risultato con l’intervallo sul referto. Valori bassi possono riguardare ossa e immunità; integrazione e dose vanno decise dal medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> Discuti i risultati con il medico. <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="Cómo interpretar el resultado de vitamina D", body_html="<p>La <strong>25-OH vitamina D</strong> (calcidiol) en sangre es la medida más habitual. Los rangos de referencia varían por laboratorio. Interpreta tu resultado con el rango de tu informe. Un nivel bajo puede relacionarse con huesos e inmunidad; suplementación y dosis deben determinarlas el médico.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> Comenta tus resultados con un médico. <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+_ARTICLE_VITAMIN_D_INTERPRET = _article_vitamin_d_interpret()
+
+
+def _article_iron_deficiency_blood() -> Article:
+    """Demir eksikliği hangi kan değerlerinde görülür? / How to spot iron deficiency — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/ferritin-hero.png"
+    return Article(
+        id="demir-eksikligi-hangi-kan-degerlerinde",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={"tr": "Demir ve ferritin kan tahlili — Norya", "en": "Iron and ferritin blood test — Norya", "de": "Eisen und Ferritin Bluttest — Norya", "fr": "Fer et ferritine — Norya", "it": "Ferro e ferritina — Norya", "es": "Hierro y ferritina — Norya"},
+        category={"tr": "Biyobelirteçler", "en": "Biomarkers", "de": "Biomarker", "fr": "Biomarqueurs", "it": "Biomarcatori", "es": "Biomarcadores"},
+        slugs={"tr": "demir-eksikligi-hangi-kan-degerlerinde-gorulur", "en": "how-to-spot-iron-deficiency-in-blood-results", "de": "eisenmangel-im-blutbild-erkennen", "fr": "reconnaitre-carence-fer-resultats-sang", "it": "come-riconoscere-carenza-ferro-esami", "es": "como-detectar-deficiencia-hierro-sangre"},
+        titles={"tr": "Demir eksikliği hangi kan değerlerinde görülür?", "en": "How to spot iron deficiency in blood results", "de": "Eisenmangel im Blutbild erkennen", "fr": "Reconnaître une carence en fer dans les résultats", "it": "Come riconoscere la carenza di ferro negli esami", "es": "Cómo detectar la deficiencia de hierro en sangre"},
+        subtitles={"tr": "Ferritin, hemoglobin, MCV ve diğer değerler demir eksikliğinde nasıl değişir? Kısa rehber.", "en": "How ferritin, haemoglobin, MCV and other values change in iron deficiency. A short guide.", "de": "Wie sich Ferritin, Hämoglobin, MCV bei Eisenmangel verändern. Kurzer Überblick.", "fr": "Comment la ferritine, l'hémoglobine et le VGM changent en cas de carence. Guide court.", "it": "Come cambiano ferritina, emoglobina e MCV in caso di carenza. Guida breve.", "es": "Cómo cambian ferritina, hemoglobina y VCM en la deficiencia de hierro. Guía breve."},
+        excerpts={"tr": "Demir eksikliği tek bir değerle teşhis edilmez; ferritin ve tam kan sayımı birlikte değerlendirilir.", "en": "Iron deficiency is not diagnosed by one value; ferritin and full blood count are evaluated together.", "de": "Eisenmangel wird nicht durch einen Wert allein festgestellt; Ferritin und Blutbild zusammen.", "fr": "La carence en fer ne se diagnostique pas sur un seul chiffre ; ferritine et NFS ensemble.", "it": "La carenza di ferro non si diagnostica con un solo valore; ferritina ed emocromo insieme.", "es": "La deficiencia de hierro no se diagnostica con un solo valor; ferritina y hemograma juntos."},
+        seo_titles={"tr": "Demir Eksikliği Hangi Kan Değerlerinde Görülür? | Norya Blog", "en": "How to Spot Iron Deficiency in Blood Results | Norya Blog", "de": "Eisenmangel im Blutbild erkennen | Norya Blog", "fr": "Reconnaître une carence en fer dans les résultats | Norya Blog", "it": "Come riconoscere la carenza di ferro negli esami | Norya Blog", "es": "Cómo detectar la deficiencia de hierro en sangre | Norya Blog"},
+        seo_descriptions={"tr": "Ferritin, hemoglobin ve MCV ile demir eksikliği. Bilgilendirme amaçlı.", "en": "Ferritin, haemoglobin and MCV in iron deficiency. For information only.", "de": "Ferritin, Hämoglobin und MCV bei Eisenmangel. Nur zur Information.", "fr": "Ferritine, hémoglobine et VGM en cas de carence. À titre informatif.", "it": "Ferritina, emoglobina e MCV nella carenza di ferro. Solo informativo.", "es": "Ferritina, hemoglobina y VCM en la deficiencia de hierro. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="Hangi kan değerleri?", body_html="<p><strong>Ferritin</strong> vücut demir depolarını yansıtır; düşük ferritin demir eksikliğini destekler. <strong>Hemoglobin</strong> (HGB) düşükse anemi olabilir. <strong>MCV</strong> (ortalama hücre hacmi) demir eksikliği anemisinde genellikle düşük veya normaldir. Tek başına bir değer teşhis koymaz; hekim tahlilleri birlikte yorumlar. Demir takviyesi hekim önerisiyle kullanılmalıdır.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> Sonuçlarınızı hekimle görüşün. <a href=\"/tr/hemogram-sonucu\">Hemogram sonucu</a> · <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="Which blood values?", body_html="<p><strong>Ferritin</strong> reflects body iron stores; low ferritin supports iron deficiency. <strong>Haemoglobin</strong> (HGB) may be low in anaemia. <strong>MCV</strong> (mean cell volume) is often low or normal in iron-deficiency anaemia. No single value makes a diagnosis; your doctor will interpret tests together. Iron supplements should be used on medical advice.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> Discuss your results with a doctor. <a href=\"/en/blood-test-results\">Blood test results</a> · <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Welche Blutwerte?", body_html="<p><strong>Ferritin</strong> spiegelt die Eisenspeicher wider; niedriges Ferritin spricht für Eisenmangel. <strong>Hämoglobin</strong> (HGB) kann bei Anämie erniedrigt sein. <strong>MCV</strong> ist bei Eisenmangelanämie oft niedrig oder normal. Ein Wert allein ergibt keine Diagnose; der Arzt wertet die Befunde gemeinsam aus. Eisenpräparate nur nach ärztlicher Rücksprache.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> Befund mit dem Arzt besprechen. <a href=\"/de/blutwerte-verstehen\">Blutwerte</a> · <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Quelles valeurs sanguines?", body_html="<p>La <strong>ferritine</strong> reflète les réserves en fer ; une ferritine basse oriente vers une carence. L’<strong>hémoglobine</strong> (HGB) peut être basse en cas d’anémie. Le <strong>VGM</strong> est souvent bas ou normal en cas d’anémie ferriprive. Un seul chiffre ne fait pas le diagnostic ; le médecin interprète l’ensemble. Supplémentation en fer sur avis médical.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> Discutez de vos résultats avec un médecin. <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Quali valori del sangue?", body_html="<p>La <strong>ferritina</strong> riflette le riserve di ferro; ferritina bassa suggerisce carenza. L’<strong>emoglobina</strong> (HGB) può essere bassa in caso di anemia. L’<strong>MCV</strong> è spesso basso o normale nell’anemia da carenza di ferro. Un solo valore non fa diagnosi; il medico valuta gli esami insieme. Integratori di ferro su consiglio medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> Discuti i risultati con il medico. <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="¿Qué valores en sangre?", body_html="<p>La <strong>ferritina</strong> refleja los depósitos de hierro; ferritina baja apoya deficiencia. La <strong>hemoglobina</strong> (HGB) puede estar baja en anemia. El <strong>VCM</strong> suele ser bajo o normal en la anemia ferropénica. Un solo valor no da el diagnóstico; el médico interpreta las pruebas juntas. Suplementos de hierro bajo indicación médica.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> Comenta tus resultados con un médico. <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+def _article_alt_ast_high() -> Article:
+    """ALT ve AST yüksekliği / High ALT and AST — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/crp-hero.png"
+    return Article(
+        id="alt-ast-yuksekligi-neyi-gosterir",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={"tr": "Karaciğer enzimleri ALT AST — Norya", "en": "Liver enzymes ALT AST — Norya", "de": "Leberenzyme ALT AST — Norya", "fr": "Enzymes hépatiques ALT AST — Norya", "it": "Enzimi epatici ALT AST — Norya", "es": "Enzimas hepáticas ALT AST — Norya"},
+        category={"tr": "Biyobelirteçler", "en": "Biomarkers", "de": "Biomarker", "fr": "Biomarqueurs", "it": "Biomarcatori", "es": "Biomarcadores"},
+        slugs={"tr": "alt-ve-ast-yuksekligi-neyi-gosterir", "en": "what-do-high-alt-and-ast-levels-mean", "de": "was-bedeuten-erhoehte-alt-und-ast-werte", "fr": "que-signifient-alt-ast-eleves", "it": "cosa-significano-alt-ast-alti", "es": "que-significan-alt-y-ast-altos"},
+        titles={"tr": "ALT ve AST yüksekliği neyi gösterir?", "en": "What do high ALT and AST levels mean?", "de": "Was bedeuten erhöhte ALT- und AST-Werte?", "fr": "Que signifient des ALT et AST élevés ?", "it": "Cosa significano ALT e AST alti?", "es": "¿Qué significan ALT y AST altos?"},
+        subtitles={"tr": "Karaciğer enzimleri yüksekliği nedenleri ve sonucunuzu nasıl değerlendireceğinize dair kısa rehber.", "en": "Causes of raised liver enzymes and a short guide to interpreting your result.", "de": "Ursachen erhöhter Leberwerte und kurze Einordnung Ihres Befunds.", "fr": "Causes des enzymes hépatiques élevées et comment interpréter votre résultat.", "it": "Cause di enzimi epatici alti e come interpretare il risultato.", "es": "Causas de ALT y AST altos y cómo interpretar tu resultado."},
+        excerpts={"tr": "ALT ve AST yüksekliği tek başına teşhis değildir; hekim öykü ve gerekirse ek tetkiklerle değerlendirir.", "en": "High ALT and AST alone are not a diagnosis; your doctor will assess with history and further tests if needed.", "de": "Erhöhte ALT/AST sind keine Diagnose; der Arzt beurteilt mit Anamnese und ggf. weiteren Tests.", "fr": "ALT et AST élevés seuls ne sont pas un diagnostic ; le médecin évalue avec l'histoire et examens.", "it": "ALT e AST alti da soli non sono una diagnosi; il medico valuta con anamnesi e eventuali esami.", "es": "ALT y AST altos por sí solos no son un diagnóstico; el médico valora con historia y pruebas."},
+        seo_titles={"tr": "ALT ve AST Yüksekliği Neyi Gösterir? | Norya Blog", "en": "What Do High ALT and AST Levels Mean? | Norya Blog", "de": "Was bedeuten erhöhte ALT- und AST-Werte? | Norya Blog", "fr": "Que signifient des ALT et AST élevés ? | Norya Blog", "it": "Cosa significano ALT e AST alti? | Norya Blog", "es": "¿Qué significan ALT y AST altos? | Norya Blog"},
+        seo_descriptions={"tr": "Karaciğer enzimleri ALT ve AST yüksekliği nedenleri. Bilgilendirme amaçlı.", "en": "Causes of high ALT and AST liver enzymes. For information only.", "de": "Ursachen für erhöhte Leberenzyme ALT und AST. Nur zur Information.", "fr": "Causes des ALT et AST élevés. À titre informatif.", "it": "Cause di ALT e AST alti. Solo informativo.", "es": "Causas de ALT y AST altos. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="ALT ve AST yüksekliği neyi gösterir?", body_html="<p><strong>ALT</strong> ve <strong>AST</strong> karaciğer hücrelerinde bulunan enzimlerdir; hasar veya stres durumunda kanda yükselebilir. Hafif yükselmeler bazen ilaç, yağlanma veya enfeksiyonla ilişkili olabilir. Tek başına sayı teşhis koymaz; hekiminiz öykünüz, muayene ve gerekirse ek tetkiklerle değerlendirir. Belirgin veya sürekli yükseklikte mutlaka hekime danışın.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> Sonuçlarınızı hekimle görüşün. <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="What do high ALT and AST levels mean?", body_html="<p><strong>ALT</strong> and <strong>AST</strong> are enzymes found in liver cells; they can rise in blood with injury or stress. Mild rises may be linked to medication, fatty liver, or infection. A number alone does not make a diagnosis; your doctor will assess with your history, examination, and further tests if needed. Always see a doctor for marked or persistent elevation.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> Discuss your results with a doctor. <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Was bedeuten erhöhte ALT- und AST-Werte?", body_html="<p><strong>ALT</strong> und <strong>AST</strong> sind Enzyme in Leberzellen; bei Schädigung oder Belastung können sie im Blut ansteigen. Leichte Erhöhungen können z. B. durch Medikamente, Fettleber oder Infektionen bedingt sein. Ein Wert allein ist keine Diagnose; Ihr Arzt beurteilt mit Anamnese, Untersuchung und ggf. weiteren Tests. Bei deutlicher oder anhaltender Erhöhung zum Arzt.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> Befund mit dem Arzt besprechen. <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Que signifient des ALT et AST élevés ?", body_html="<p>Les <strong>ALT</strong> et <strong>AST</strong> sont des enzymes hépatiques ; elles peuvent augmenter dans le sang en cas de souffrance ou de stress du foie. Une légère élévation peut être liée à un médicament, une stéatose ou une infection. Un chiffre seul ne fait pas un diagnostic ; le médecin évalue avec l’histoire, l’examen et d’éventuels examens. En cas d’élévation marquée ou persistante, consultez.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> Discutez de vos résultats avec un médecin. <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Cosa significano ALT e AST alti?", body_html="<p><strong>ALT</strong> e <strong>AST</strong> sono enzimi presenti nelle cellule del fegato; possono aumentare nel sangue in caso di danno o stress. Lievi aumenti possono dipendere da farmaci, steatosi o infezioni. Un solo valore non fa diagnosi; il medico valuta con anamnesi, visita ed eventuali esami. In caso di aumento marcato o persistente, rivolgersi al medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> Discuti i risultati con il medico. <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="¿Qué significan ALT y AST altos?", body_html="<p><strong>ALT</strong> y <strong>AST</strong> son enzimas del hígado; pueden subir en sangre con daño o estrés hepático. Elevaciones leves pueden relacionarse con medicación, hígado graso o infección. Un solo valor no es un diagnóstico; el médico valora con tu historia, exploración y pruebas si hace falta. Ante elevación marcada o persistente, consulta al médico.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> Comenta tus resultados con un médico. <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+def _article_urea_high() -> Article:
+    """Üre yüksekliği / High urea — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/creatinine-egfr-hero.png"
+    return Article(
+        id="ure-yuksekligi-ne-anlama-gelir",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={"tr": "Üre kan tahlili — Norya", "en": "Urea blood test — Norya", "de": "Harnstoff Bluttest — Norya", "fr": "Urée sanguine — Norya", "it": "Urea nel sangue — Norya", "es": "Urea en sangre — Norya"},
+        category={"tr": "Biyobelirteçler", "en": "Biomarkers", "de": "Biomarker", "fr": "Biomarqueurs", "it": "Biomarcatori", "es": "Biomarcadores"},
+        slugs={"tr": "ure-yuksekligi-ne-anlama-gelir", "en": "what-does-a-high-urea-level-mean", "de": "was-bedeutet-ein-hoher-harnstoffwert", "fr": "que-signifie-uree-elevee", "it": "cosa-significa-urea-alta", "es": "que-significa-urea-alta"},
+        titles={"tr": "Üre yüksekliği ne anlama gelir?", "en": "What does a high urea level mean?", "de": "Was bedeutet ein hoher Harnstoffwert?", "fr": "Que signifie un taux d'urée élevé ?", "it": "Cosa significa un valore di urea alto?", "es": "¿Qué significa un nivel de urea alto?"},
+        subtitles={"tr": "Üre (BUN) referans aralıkları ve yüksek çıkmasının olası nedenleri. Kısa rehber.", "en": "Urea (BUN) reference ranges and possible causes of a high result. Short guide.", "de": "Harnstoff (BUN): Referenzbereiche und mögliche Ursachen für einen hohen Wert.", "fr": "Urée (BUN) : fourchettes et causes possibles d'un taux élevé.", "it": "Urea (BUN): intervalli e possibili cause di un valore alto.", "es": "Urea (BUN): rangos y posibles causas de un nivel alto."},
+        excerpts={"tr": "Üre yüksekliği tek başına teşhis değildir; böbrek fonksiyonu ve sıvı alımı hekimle değerlendirilir.", "en": "High urea alone is not a diagnosis; kidney function and fluid intake are assessed with a doctor.", "de": "Hoher Harnstoff allein ist keine Diagnose; Nierenfunktion und Flüssigkeit mit dem Arzt besprechen.", "fr": "Une urée élevée seule n'est pas un diagnostic ; fonction rénale et hydratation avec le médecin.", "it": "Urea alta da sola non è una diagnosi; funzione renale e idratazione con il medico.", "es": "Urea alta por sí sola no es un diagnóstico; función renal e hidratación con el médico."},
+        seo_titles={"tr": "Üre Yüksekliği Ne Anlama Gelir? | Norya Blog", "en": "What Does a High Urea Level Mean? | Norya Blog", "de": "Was bedeutet ein hoher Harnstoffwert? | Norya Blog", "fr": "Que signifie un taux d'urée élevé ? | Norya Blog", "it": "Cosa significa urea alta? | Norya Blog", "es": "¿Qué significa urea alta? | Norya Blog"},
+        seo_descriptions={"tr": "Üre (BUN) yüksekliği nedenleri. Bilgilendirme amaçlı.", "en": "Causes of high urea (BUN). For information only.", "de": "Ursachen für hohen Harnstoff (BUN). Nur zur Information.", "fr": "Causes d'une urée (BUN) élevée. À titre informatif.", "it": "Cause di urea (BUN) alta. Solo informativo.", "es": "Causas de urea (BUN) alta. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="Üre yüksekliği ne anlama gelir?", body_html="<p><strong>Üre</strong> (bazen BUN) protein metabolizmasının bir ürünüdür; böbreklerden atılır. Yüksek çıkması böbrek fonksiyonunda azalma, susuzluk veya yüksek protein alımı gibi nedenlere bağlı olabilir. Tek başına teşhis koymaz; kreatinin ve eGFR ile birlikte hekim tarafından yorumlanır. Sonucunuzu hekimle görüşün.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="What does a high urea level mean?", body_html="<p><strong>Urea</strong> (sometimes BUN) is a product of protein metabolism and is cleared by the kidneys. A high level may be due to reduced kidney function, dehydration, or high protein intake. It does not make a diagnosis alone; it is interpreted by your doctor together with creatinine and eGFR. Discuss your result with a doctor.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Was bedeutet ein hoher Harnstoffwert?", body_html="<p><strong>Harnstoff</strong> (oft BUN) entsteht beim Eiweißstoffwechsel und wird über die Nieren ausgeschieden. Erhöhung kann z. B. bei eingeschränkter Nierenfunktion, Flüssigkeitsmangel oder hoher Eiweißzufuhr vorkommen. Ein Wert allein ergibt keine Diagnose; der Arzt beurteilt zusammen mit Kreatinin und eGFR. Befund mit dem Arzt besprechen.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Que signifie un taux d'urée élevé ?", body_html="<p>L’<strong>urée</strong> (parfois BUN) est un produit du métabolisme des protéines, éliminée par les reins. Une élévation peut être liée à une baisse de la fonction rénale, une déshydratation ou un apport protéique élevé. Un chiffre seul ne fait pas le diagnostic ; le médecin interprète avec la créatinine et le DFG. Discutez du résultat avec un médecin.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Cosa significa un valore di urea alto?", body_html="<p>L’<strong>urea</strong> (a volte BUN) è un prodotto del metabolismo delle proteine, eliminata dai reni. Un valore alto può dipendere da ridotta funzione renale, disidratazione o elevato apporto proteico. Un solo valore non fa diagnosi; il medico interpreta con creatinina e eGFR. Discuti il risultato con il medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="¿Qué significa un nivel de urea alto?", body_html="<p>La <strong>urea</strong> (a veces BUN) es un producto del metabolismo de las proteínas, eliminada por los riñones. Un nivel alto puede deberse a menor función renal, deshidratación o alto consumo de proteínas. Un solo valor no da el diagnóstico; el médico interpreta con creatinina y FG. Comenta el resultado con un médico.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+def _article_platelets_high_low() -> Article:
+    """Trombosit yüksekliği ve düşüklüğü / Platelets high or low — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/how-to-read-blood-test-results.png"
+    return Article(
+        id="trombosit-yuksekligi-dusuklugu",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={"tr": "Trombosit kan tahlili — Norya", "en": "Platelets blood test — Norya", "de": "Thrombozyten Bluttest — Norya", "fr": "Plaquettes sanguines — Norya", "it": "Piastrine esami — Norya", "es": "Plaquetas análisis — Norya"},
+        category={"tr": "Hemogram", "en": "Blood count", "de": "Blutbild", "fr": "Numération", "it": "Emocromo", "es": "Hemograma"},
+        slugs={"tr": "trombosit-yuksekligi-ve-dusuklugu-ne-demek", "en": "what-do-low-or-high-platelets-mean", "de": "thrombozyten-zu-hoch-oder-zu-niedrig", "fr": "plaquettes-trop-hautes-ou-basses", "it": "piastrine-alte-o-basse-cosa-significa", "es": "plaquetas-altas-o-bajas-que-significa"},
+        titles={"tr": "Trombosit yüksekliği ve düşüklüğü ne demek?", "en": "What do low or high platelets mean?", "de": "Thrombozyten zu hoch oder zu niedrig?", "fr": "Plaquettes trop hautes ou trop basses : que signifie ?", "it": "Piastrine alte o basse: cosa significa?", "es": "¿Qué significan las plaquetas altas o bajas?"},
+        subtitles={"tr": "Trombosit (PLT) referans aralıkları ve sapmaların olası nedenleri. Kısa rehber.", "en": "Platelet (PLT) reference ranges and possible causes of high or low. Short guide.", "de": "Thrombozyten (PLT): Referenzbereich und mögliche Ursachen für Abweichungen.", "fr": "Plaquettes (PLT) : fourchettes et causes possibles des écarts.", "it": "Piastrine (PLT): intervalli e possibili cause di valori alti o bassi.", "es": "Plaquetas (PLT): rangos y posibles causas de alteraciones."},
+        excerpts={"tr": "Trombosit düşüklüğü veya yüksekliği tek başına teşhis değildir; hekim tüm tahlilleri birlikte yorumlar.", "en": "Low or high platelets alone are not a diagnosis; your doctor interprets all results together.", "de": "Thrombozyten zu niedrig oder zu hoch sind keine Diagnose; der Arzt wertet alle Befunde gemeinsam.", "fr": "Plaquettes basses ou hautes seules ne font pas un diagnostic ; le médecin interprète l'ensemble.", "it": "Piastrine basse o alte da sole non sono una diagnosi; il medico valuta tutti gli esami.", "es": "Plaquetas bajas o altas por sí solas no son un diagnóstico; el médico valora todos los resultados."},
+        seo_titles={"tr": "Trombosit Yüksekliği ve Düşüklüğü Ne Demek? | Norya Blog", "en": "What Do Low or High Platelets Mean? | Norya Blog", "de": "Thrombozyten zu hoch oder zu niedrig? | Norya Blog", "fr": "Plaquettes trop hautes ou basses : que signifie ? | Norya Blog", "it": "Piastrine alte o basse: cosa significa? | Norya Blog", "es": "¿Qué significan plaquetas altas o bajas? | Norya Blog"},
+        seo_descriptions={"tr": "Trombosit (PLT) yüksek veya düşük nedenleri. Bilgilendirme amaçlı.", "en": "Causes of low or high platelets (PLT). For information only.", "de": "Ursachen für niedrige oder hohe Thrombozyten (PLT). Nur zur Information.", "fr": "Causes des plaquettes basses ou hautes (PLT). À titre informatif.", "it": "Cause di piastrine basse o alte (PLT). Solo informativo.", "es": "Causas de plaquetas bajas o altas (PLT). Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="Trombosit yüksekliği ve düşüklüğü", body_html="<p><strong>Trombosit</strong> (PLT) kanın pıhtılaşmasında rol oynar. Referans aralığının altında veya üstünde çıkması çeşitli nedenlere bağlı olabilir; tek bir değer teşhis koymaz. Hekiminiz hemogram ve gerekirse ek tetkiklerle değerlendirir. Belirgin sapma veya kanama belirtisi varsa mutlaka hekime danışın.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/tr/hemogram-sonucu\">Hemogram</a> · <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="What do low or high platelets mean?", body_html="<p><strong>Platelets</strong> (PLT) help blood to clot. A result below or above the reference range can have various causes; a single value does not make a diagnosis. Your doctor will assess with a full blood count and further tests if needed. If there is a marked change or signs of bleeding, see a doctor.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> <a href=\"/en/blood-test-results\">Blood test</a> · <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Thrombozyten zu hoch oder zu niedrig?", body_html="<p><strong>Thrombozyten</strong> (PLT) sind an der Blutgerinnung beteiligt. Abweichungen nach unten oder oben können verschiedene Ursachen haben; ein Wert allein ergibt keine Diagnose. Ihr Arzt beurteilt mit Blutbild und ggf. weiteren Tests. Bei deutlicher Abweichung oder Blutungszeichen zum Arzt.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> <a href=\"/de/blutwerte-verstehen\">Blutwerte</a> · <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Plaquettes trop hautes ou trop basses", body_html="<p>Les <strong>plaquettes</strong> (PLT) participent à la coagulation. Un écart à la fourchette peut avoir plusieurs causes ; un chiffre seul ne fait pas un diagnostic. Le médecin évalue avec la NFS et d’éventuels examens. En cas d’écart marqué ou de signes de saignement, consultez.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Piastrine alte o basse", body_html="<p>Le <strong>piastrine</strong> (PLT) partecipano alla coagulazione. Un valore fuori intervallo può dipendere da varie cause; un solo valore non fa diagnosi. Il medico valuta con emocromo ed eventuali esami. In caso di scostamento marcato o segni di sanguinamento, rivolgersi al medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="Plaquetas altas o bajas", body_html="<p>Las <strong>plaquetas</strong> (PLT) intervienen en la coagulación. Un valor fuera de rango puede deberse a varias causas; un solo valor no da el diagnóstico. El médico valora con hemograma y pruebas si hace falta. Ante alteración marcada o signos de sangrado, consulta al médico.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+def _article_wbc_rbc_hgb_hct() -> Article:
+    """WBC, RBC, HGB, HCT nasıl okunur? — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/how-to-read-blood-test-results.png"
+    return Article(
+        id="wbc-rbc-hgb-hct-nasil-okunur",
+        published_at=published,
+        read_minutes=5,
+        cover_image=cover,
+        cover_alt={"tr": "Tam kan sayımı WBC RBC HGB HCT — Norya", "en": "Complete blood count WBC RBC HGB HCT — Norya", "de": "Blutbild WBC RBC HGB HCT — Norya", "fr": "NFS globules blancs rouges HGB HCT — Norya", "it": "Emocromo globuli bianchi rossi HGB HCT — Norya", "es": "Hemograma WBC RBC HGB HCT — Norya"},
+        category={"tr": "Hemogram", "en": "Blood count", "de": "Blutbild", "fr": "Numération", "it": "Emocromo", "es": "Hemograma"},
+        slugs={"tr": "wbc-rbc-hgb-hct-nasil-okunur", "en": "how-to-understand-wbc-rbc-hgb-and-hct", "de": "wbc-rbc-hgb-und-hct-verstehen", "fr": "comprendre-globules-blancs-rouges-hgb-hct", "it": "come-leggere-wbc-rbc-hgb-hct", "es": "como-entender-wbc-rbc-hgb-y-hct"},
+        titles={"tr": "WBC, RBC, HGB, HCT nasıl okunur?", "en": "How to understand WBC, RBC, HGB and HCT", "de": "WBC, RBC, HGB und HCT verstehen", "fr": "Comprendre globules blancs, rouges, HGB et HCT", "it": "Come leggere WBC, RBC, HGB e HCT", "es": "Cómo entender WBC, RBC, HGB y HCT"},
+        subtitles={"tr": "Tam kan sayımında beyaz küre, kırmızı küre, hemoglobin ve hematokrit ne anlama gelir? Kısa rehber.", "en": "What white cells, red cells, haemoglobin and haematocrit mean in a full blood count. Short guide.", "de": "Was bedeuten weiße und rote Blutkörperchen, Hämoglobin und Hämatokrit im Blutbild? Kurzer Überblick.", "fr": "Que signifient globules blancs, rouges, hémoglobine et hématocrite dans la NFS ? Guide court.", "it": "Cosa significano globuli bianchi, rossi, emoglobina ed ematocrito nell'emocromo? Guida breve.", "es": "Qué significan glóbulos blancos, rojos, hemoglobina y hematocrito en el hemograma. Guía breve."},
+        excerpts={"tr": "WBC, RBC, HGB ve HCT tam kan sayımının temel değerleridir; yorumu hekimle yapılır.", "en": "WBC, RBC, HGB and HCT are key values in a full blood count; interpretation is with a doctor.", "de": "WBC, RBC, HGB und HCT sind zentrale Werte im Blutbild; Einordnung durch den Arzt.", "fr": "Globules blancs/rouges, HGB et HCT sont des valeurs clés de la NFS ; interprétation avec le médecin.", "it": "WBC, RBC, HGB e HCT sono valori chiave dell'emocromo; interpretazione con il medico.", "es": "WBC, RBC, HGB y HCT son valores clave del hemograma; interpretación con el médico."},
+        seo_titles={"tr": "WBC, RBC, HGB, HCT Nasıl Okunur? | Norya Blog", "en": "How to Understand WBC, RBC, HGB and HCT | Norya Blog", "de": "WBC, RBC, HGB und HCT verstehen | Norya Blog", "fr": "Comprendre globules blancs, rouges, HGB et HCT | Norya Blog", "it": "Come leggere WBC, RBC, HGB e HCT | Norya Blog", "es": "Cómo entender WBC, RBC, HGB y HCT | Norya Blog"},
+        seo_descriptions={"tr": "Tam kan sayımında WBC, RBC, hemoglobin ve hematokrit. Bilgilendirme amaçlı.", "en": "WBC, RBC, haemoglobin and haematocrit in a full blood count. For information only.", "de": "WBC, RBC, Hämoglobin und Hämatokrit im Blutbild. Nur zur Information.", "fr": "Globules blancs/rouges, HGB et HCT dans la NFS. À titre informatif.", "it": "WBC, RBC, emoglobina ed ematocrito nell'emocromo. Solo informativo.", "es": "WBC, RBC, hemoglobina y hematocrito en el hemograma. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="WBC, RBC, HGB, HCT ne demek?", body_html="<p><strong>WBC</strong> (lökosit) beyaz kan hücreleri; enfeksiyon veya iltihap durumunda değişebilir. <strong>RBC</strong> (eritrosit) kırmızı kan hücreleri; <strong>HGB</strong> (hemoglobin) oksijen taşır; <strong>HCT</strong> (hematokrit) kırmızı hücrelerin kandaki oranıdır. Referans aralıkları laboratuvara göre değişir. Sonucunuzu raporunuzdaki aralıklarla ve hekiminizle değerlendirin.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/tr/hemogram-sonucu\">Hemogram</a> · <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="What do WBC, RBC, HGB and HCT mean?", body_html="<p><strong>WBC</strong> (white blood cells) can change with infection or inflammation. <strong>RBC</strong> (red blood cells), <strong>HGB</strong> (haemoglobin) carries oxygen, and <strong>HCT</strong> (haematocrit) is the proportion of red cells in blood. Reference ranges vary by lab. Interpret your result using the ranges on your report and with your doctor.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> <a href=\"/en/understand-lab-results\">Lab results</a> · <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Was bedeuten WBC, RBC, HGB und HCT?", body_html="<p><strong>WBC</strong> (Leukozyten) können bei Infektion oder Entzündung verändert sein. <strong>RBC</strong> (Erythrozyten), <strong>HGB</strong> (Hämoglobin) und <strong>HCT</strong> (Hämatokrit) beschreiben die roten Blutkörperchen. Referenzbereiche sind laborabhängig. Ordnen Sie Ihren Befund anhand der Angaben auf dem Laborbericht und mit dem Arzt ein.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> <a href=\"/de/laborwerte-verstehen\">Laborwerte</a> · <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Que signifient globules blancs, rouges, HGB et HCT?", body_html="<p>Les <strong>globules blancs</strong> (GB) peuvent varier en cas d’infection ou d’inflammation. Les <strong>globules rouges</strong> (GR), l’<strong>hémoglobine</strong> (HGB) et l’<strong>hématocrite</strong> (HCT) décrivent les cellules rouges. Les fourchettes varient selon le laboratoire. Interprétez votre résultat avec la fourchette du compte-rendu et avec le médecin.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Cosa significano WBC, RBC, HGB e HCT?", body_html="<p>I <strong>globuli bianchi</strong> (WBC) possono variare in caso di infezione o infiammazione. <strong>Globuli rossi</strong> (RBC), <strong>emoglobina</strong> (HGB) e <strong>ematocrito</strong> (HCT) descrivono le cellule rosse. Gli intervalli di riferimento variano da laboratorio. Interpreta il risultato con l’intervallo sul referto e con il medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="¿Qué significan WBC, RBC, HGB y HCT?", body_html="<p>Los <strong>glóbulos blancos</strong> (WBC) pueden cambiar con infección o inflamación. <strong>Glóbulos rojos</strong> (RBC), <strong>hemoglobina</strong> (HGB) y <strong>hematocrito</strong> (HCT) describen las células rojas. Los rangos de referencia varían por laboratorio. Interpreta tu resultado con el rango del informe y con el médico.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+def _article_fasting_blood_sugar() -> Article:
+    """Açlık kan şekeri sonucu / Fasting blood sugar — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/hba1c-hero.png"
+    return Article(
+        id="aclik-kan-sekeri-sonucu-nasil-degerlendirilir",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={"tr": "Açlık kan şekeri — Norya", "en": "Fasting blood sugar — Norya", "de": "Nüchternblutzucker — Norya", "fr": "Glycémie à jeun — Norya", "it": "Glicemia a digiuno — Norya", "es": "Glucosa en ayunas — Norya"},
+        category={"tr": "Kan şekeri", "en": "Blood sugar", "de": "Blutzucker", "fr": "Glycémie", "it": "Glicemia", "es": "Glucosa"},
+        slugs={"tr": "aclik-kan-sekeri-sonucu-nasil-degerlendirilir", "en": "how-to-read-fasting-blood-sugar-results", "de": "nuechternblutzucker-verstehen", "fr": "comment-lire-glycemie-a-jeun", "it": "come-leggere-glicemia-a-digiuno", "es": "como-leer-glucosa-en-ayunas"},
+        titles={"tr": "Açlık kan şekeri sonucu nasıl değerlendirilir?", "en": "How to read fasting blood sugar results", "de": "Nüchternblutzucker verstehen", "fr": "Comment lire la glycémie à jeun ?", "it": "Come leggere la glicemia a digiuno?", "es": "¿Cómo leer la glucosa en ayunas?"},
+        subtitles={"tr": "Açlık glukozu referans aralıkları ve sonucunuzu nasıl yorumlayacağınıza dair kısa rehber.", "en": "Fasting glucose reference ranges and a short guide to interpreting your result.", "de": "Referenzbereiche für Nüchternglukose und kurze Einordnung.", "fr": "Fourchettes de référence pour la glycémie à jeun et comment interpréter.", "it": "Intervalli di riferimento per la glicemia a digiuno e come interpretare.", "es": "Rangos de referencia para glucosa en ayunas y cómo interpretar."},
+        excerpts={"tr": "Açlık kan şekeri tek başına teşhis değildir; diyabet veya prediyabet hekim tarafından değerlendirilir.", "en": "Fasting blood sugar alone is not a diagnosis; diabetes or prediabetes is assessed by a doctor.", "de": "Nüchternblutzucker allein ist keine Diagnose; Diabetes/Prädiabetes beurteilt der Arzt.", "fr": "La glycémie à jeun seule ne fait pas un diagnostic ; diabète ou prédiabète avec le médecin.", "it": "La glicemia a digiuno da sola non è una diagnosi; diabete o prediabete con il medico.", "es": "La glucosa en ayunas por sí sola no es un diagnóstico; diabetes o prediabetes con el médico."},
+        seo_titles={"tr": "Açlık Kan Şekeri Sonucu Nasıl Değerlendirilir? | Norya Blog", "en": "How to Read Fasting Blood Sugar Results | Norya Blog", "de": "Nüchternblutzucker verstehen | Norya Blog", "fr": "Comment lire la glycémie à jeun ? | Norya Blog", "it": "Come leggere la glicemia a digiuno? | Norya Blog", "es": "¿Cómo leer la glucosa en ayunas? | Norya Blog"},
+        seo_descriptions={"tr": "Açlık kan şekeri referans aralıkları ve yorumlama. Bilgilendirme amaçlı.", "en": "Fasting blood sugar reference ranges and interpretation. For information only.", "de": "Nüchternblutzucker: Referenzbereiche und Einordnung. Nur zur Information.", "fr": "Glycémie à jeun : fourchettes et interprétation. À titre informatif.", "it": "Glicemia a digiuno: intervalli e interpretazione. Solo informativo.", "es": "Glucosa en ayunas: rangos e interpretación. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="Açlık kan şekeri nasıl değerlendirilir?", body_html="<p><strong>Açlık kan şekeri</strong> (glukoz) genellikle 8–12 saat açlık sonrası ölçülür. Referans aralıkları laboratuvara göre değişir; yüksek çıkması diyabet veya prediyabet açısından değerlendirilir. Tek bir ölçüm teşhis koymaz; hekiminiz HbA1c veya OGTT gibi ek testlerle karar verir. Sonucunuzu hekimle görüşün.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="How to read fasting blood sugar results", body_html="<p><strong>Fasting blood sugar</strong> (glucose) is usually measured after 8–12 hours of fasting. Reference ranges vary by lab; a high result may be assessed for diabetes or prediabetes. A single reading does not make a diagnosis; your doctor may use HbA1c or OGTT. Discuss your result with a doctor.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Nüchternblutzucker verstehen", body_html="<p><strong>Nüchternblutzucker</strong> (Glukose) wird meist nach 8–12 Stunden Nüchternheit gemessen. Referenzbereiche sind laborabhängig; Erhöhung kann auf Diabetes oder Prädiabetes hinweisen. Ein einzelner Wert ergibt keine Diagnose; der Arzt kann HbA1c oder oGTT anordnen. Befund mit dem Arzt besprechen.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Comment lire la glycémie à jeun ?", body_html="<p>La <strong>glycémie à jeun</strong> (glucose) est mesurée après 8–12 h de jeûne. Les fourchettes varient selon le laboratoire ; une élévation peut orienter vers diabète ou prédiabète. Un seul chiffre ne fait pas le diagnostic ; le médecin peut prescrire HbA1c ou HGPO. Discutez du résultat avec un médecin.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Come leggere la glicemia a digiuno?", body_html="<p>La <strong>glicemia a digiuno</strong> (glucosio) si misura dopo 8–12 ore di digiuno. Gli intervalli variano da laboratorio; un valore alto può essere valutato per diabete o prediabete. Un solo valore non fa diagnosi; il medico può richiedere HbA1c o OGTT. Discuti il risultato con il medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="Cómo leer la glucosa en ayunas", body_html="<p>La <strong>glucosa en ayunas</strong> se mide tras 8–12 h de ayuno. Los rangos varían por laboratorio; un nivel alto puede valorarse para diabetes o prediabetes. Un solo valor no da el diagnóstico; el médico puede solicitar HbA1c o SOG. Comenta el resultado con un médico.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+def _article_hba1c_meaning() -> Article:
+    """HbA1c sonucu ne anlama gelir? / What does HbA1c result mean? — Second wave (focused)."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/hba1c-hero.png"
+    return Article(
+        id="hba1c-sonucu-ne-anlama-gelir",
+        published_at=published,
+        read_minutes=4,
+        cover_image=cover,
+        cover_alt={"tr": "HbA1c kan tahlili — Norya", "en": "HbA1c blood test — Norya", "de": "HbA1c Bluttest — Norya", "fr": "HbA1c sanguine — Norya", "it": "HbA1c esami — Norya", "es": "HbA1c análisis — Norya"},
+        category={"tr": "Kan şekeri", "en": "Blood sugar", "de": "Blutzucker", "fr": "Glycémie", "it": "Glicemia", "es": "Glucosa"},
+        slugs={"tr": "hba1c-sonucu-ne-anlama-gelir", "en": "what-does-an-hba1c-result-mean", "de": "hba1c-verstehen-was-bedeutet-der-wert", "fr": "hba1c-comprendre-resultat", "it": "hba1c-cosa-significa-il-valore", "es": "hba1c-que-significa-el-resultado"},
+        titles={"tr": "HbA1c sonucu ne anlama gelir?", "en": "What does an HbA1c result mean?", "de": "HbA1c verstehen: Was bedeutet der Wert?", "fr": "HbA1c : que signifie le résultat ?", "it": "HbA1c: cosa significa il valore?", "es": "¿Qué significa un resultado de HbA1c?"},
+        subtitles={"tr": "HbA1c son 2–3 aydaki ortalama kan şekerini yansıtır. Referans aralıkları ve yorumlama.", "en": "HbA1c reflects average blood sugar over the last 2–3 months. Reference ranges and interpretation.", "de": "HbA1c spiegelt den durchschnittlichen Blutzucker der letzten 2–3 Monate wider. Referenzbereiche und Einordnung.", "fr": "L'HbA1c reflète la glycémie moyenne sur 2–3 mois. Fourchettes et interprétation.", "it": "L'HbA1c riflette la glicemia media degli ultimi 2–3 mesi. Intervalli e interpretazione.", "es": "La HbA1c refleja el promedio de glucosa de los últimos 2–3 meses. Rangos e interpretación."},
+        excerpts={"tr": "HbA1c diyabet taraması ve takipte kullanılır; yorumu hekimle yapılır.", "en": "HbA1c is used for diabetes screening and monitoring; interpretation is with a doctor.", "de": "HbA1c wird zur Diabetesscreening und -kontrolle genutzt; Einordnung durch den Arzt.", "fr": "L'HbA1c sert au dépistage et au suivi du diabète ; interprétation avec le médecin.", "it": "L'HbA1c si usa per screening e monitoraggio del diabete; interpretazione con il medico.", "es": "La HbA1c se usa para cribado y seguimiento de la diabetes; interpretación con el médico."},
+        seo_titles={"tr": "HbA1c Sonucu Ne Anlama Gelir? | Norya Blog", "en": "What Does an HbA1c Result Mean? | Norya Blog", "de": "HbA1c verstehen: Was bedeutet der Wert? | Norya Blog", "fr": "HbA1c : que signifie le résultat ? | Norya Blog", "it": "HbA1c: cosa significa il valore? | Norya Blog", "es": "¿Qué significa un resultado de HbA1c? | Norya Blog"},
+        seo_descriptions={"tr": "HbA1c referans aralıkları ve ne anlama geldiği. Bilgilendirme amaçlı.", "en": "HbA1c reference ranges and what they mean. For information only.", "de": "HbA1c: Referenzbereiche und Bedeutung. Nur zur Information.", "fr": "HbA1c : fourchettes et signification. À titre informatif.", "it": "HbA1c: intervalli e significato. Solo informativo.", "es": "HbA1c: rangos y significado. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="HbA1c sonucu ne anlama gelir?", body_html="<p><strong>HbA1c</strong> son 2–3 aydaki ortalama kan şekerini tahmin etmek için kullanılır; diyabet tanısı ve takipte önemlidir. Referans aralıkları laboratuvara göre değişir; genelde yüzde (%) veya mmol/mol birimiyle raporlanır. Tek başına teşhis koymaz; hekiminiz açlık glukozu veya diğer testlerle birlikte değerlendirir.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="What does an HbA1c result mean?", body_html="<p><strong>HbA1c</strong> is used to estimate average blood sugar over the last 2–3 months and is important in diabetes diagnosis and monitoring. Reference ranges vary by lab; results are often reported as % or mmol/mol. It does not make a diagnosis alone; your doctor will assess it with fasting glucose or other tests.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="HbA1c verstehen: Was bedeutet der Wert?", body_html="<p><strong>HbA1c</strong> schätzt den durchschnittlichen Blutzucker der letzten 2–3 Monate und ist bei Diabetes-Diagnostik und -Kontrolle wichtig. Referenzbereiche sind laborabhängig; Angabe oft in % oder mmol/mol. Ein Wert allein ergibt keine Diagnose; der Arzt beurteilt mit Nüchternzucker und ggf. weiteren Tests.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="HbA1c : que signifie le résultat ?", body_html="<p>L’<strong>HbA1c</strong> reflète la glycémie moyenne sur 2–3 mois et est utilisée pour le diagnostic et le suivi du diabète. Les fourchettes varient selon le laboratoire ; résultat souvent en % ou mmol/mol. Un chiffre seul ne fait pas le diagnostic ; le médecin évalue avec la glycémie à jeun et d’éventuels autres examens.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="HbA1c: cosa significa il valore?", body_html="<p>L’<strong>HbA1c</strong> riflette la glicemia media degli ultimi 2–3 mesi ed è usata per diagnosi e monitoraggio del diabete. Gli intervalli variano da laboratorio; risultato spesso in % o mmol/mol. Un solo valore non fa diagnosi; il medico valuta con glicemia a digiuno ed eventuali altri esami.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="¿Qué significa un resultado de HbA1c?", body_html="<p>La <strong>HbA1c</strong> refleja el promedio de glucosa de los últimos 2–3 meses y se usa para diagnóstico y seguimiento de la diabetes. Los rangos varían por laboratorio; resultado a menudo en % o mmol/mol. Un solo valor no da el diagnóstico; el médico valora con glucosa en ayunas y otras pruebas.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+def _article_cholesterol_types() -> Article:
+    """Kan tahlilinde kolesterol türleri / Cholesterol types in blood work — Second wave."""
+    published = date(2026, 3, 15)
+    cover = "/static/images/blog/ldl-hdl-hero.png"
+    return Article(
+        id="kan-tahlilinde-kolesterol-turleri",
+        published_at=published,
+        read_minutes=5,
+        cover_image=cover,
+        cover_alt={"tr": "Kolesterol türleri kan tahlili — Norya", "en": "Cholesterol types blood test — Norya", "de": "Cholesterinarten Bluttest — Norya", "fr": "Types de cholestérol — Norya", "it": "Tipi di colesterolo — Norya", "es": "Tipos de colesterol — Norya"},
+        category={"tr": "Kolesterol", "en": "Cholesterol", "de": "Cholesterin", "fr": "Cholestérol", "it": "Colesterolo", "es": "Colesterol"},
+        slugs={"tr": "kan-tahlilinde-kolesterol-turleri-nasil-anlasilir", "en": "how-to-understand-cholesterol-types-in-blood-work", "de": "cholesterin-im-bluttest-richtig-einordnen", "fr": "comprendre-types-cholesterol-bilan-sanguin", "it": "come-capire-tipi-colesterolo-esami", "es": "como-entender-tipos-colesterol-analisis"},
+        titles={"tr": "Kan tahlilinde kolesterol türleri nasıl anlaşılır?", "en": "How to understand cholesterol types in blood work", "de": "Cholesterin im Bluttest richtig einordnen", "fr": "Comprendre les types de cholestérol dans le bilan sanguin", "it": "Come capire i tipi di colesterolo negli esami", "es": "Cómo entender los tipos de colesterol en el análisis"},
+        subtitles={"tr": "Total kolesterol, LDL, HDL ve trigliserit ne anlama gelir? Kısa rehber.", "en": "What total cholesterol, LDL, HDL and triglycerides mean. Short guide.", "de": "Was Gesamtcholesterin, LDL, HDL und Triglyceride bedeuten. Kurzer Überblick.", "fr": "Que signifient cholestérol total, LDL, HDL et triglycérides. Guide court.", "it": "Cosa significano colesterolo totale, LDL, HDL e trigliceridi. Guida breve.", "es": "Qué significan colesterol total, LDL, HDL y triglicéridos. Guía breve."},
+        excerpts={"tr": "Kolesterol türleri tek başına risk göstermez; hekim tüm değerleri ve risk faktörlerini birlikte değerlendirir.", "en": "Cholesterol types alone do not define risk; your doctor assesses all values and risk factors together.", "de": "Cholesterinwerte allein definieren kein Risiko; der Arzt beurteilt alle Werte und Risikofaktoren.", "fr": "Les types de cholestérol seuls ne définissent pas le risque ; le médecin évalue l'ensemble.", "it": "I tipi di colesterolo da soli non definiscono il rischio; il medico valuta tutti i valori.", "es": "Los tipos de colesterol por sí solos no definen el riesgo; el médico valora todos los valores."},
+        seo_titles={"tr": "Kan Tahlilinde Kolesterol Türleri Nasıl Anlaşılır? | Norya Blog", "en": "How to Understand Cholesterol Types in Blood Work | Norya Blog", "de": "Cholesterin im Bluttest richtig einordnen | Norya Blog", "fr": "Comprendre les types de cholestérol dans le bilan | Norya Blog", "it": "Come capire i tipi di colesterolo negli esami | Norya Blog", "es": "Cómo entender los tipos de colesterol en el análisis | Norya Blog"},
+        seo_descriptions={"tr": "Total kolesterol, LDL, HDL, trigliserit. Bilgilendirme amaçlı.", "en": "Total cholesterol, LDL, HDL, triglycerides. For information only.", "de": "Gesamtcholesterin, LDL, HDL, Triglyceride. Nur zur Information.", "fr": "Cholestérol total, LDL, HDL, triglycérides. À titre informatif.", "it": "Colesterolo totale, LDL, HDL, trigliceridi. Solo informativo.", "es": "Colesterol total, LDL, HDL, triglicéridos. Solo informativo."},
+        sections_by_lang={
+            "tr": [Section(id="content", level=2, heading="Kolesterol türleri nasıl anlaşılır?", body_html="<p><strong>Total kolesterol</strong> tüm kolesterol türlerinin toplamıdır. <strong>LDL</strong> (\"kötü\" kolesterol) damar riskiyle ilişkilidir; <strong>HDL</strong> (\"iyi\" kolesterol) koruyucu kabul edilir. <strong>Trigliserit</strong> kan yağıdır. Referans aralıkları laboratuvara göre değişir; hedef değerler kardiyovasküler riskinize göre belirlenir. Sonucunuzu hekimle görüşün.</p>"), Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> <a href=\"/tr/kan-degerleri-anlama\">Kan değerleri</a> · <a href=\"/pricing\">Fiyatlar</a> · <a href=\"/analyze\">Analiz</a></p>")],
+            "en": [Section(id="content", level=2, heading="How to understand cholesterol types", body_html="<p><strong>Total cholesterol</strong> is the sum of all cholesterol types. <strong>LDL</strong> (\"bad\" cholesterol) is linked to vascular risk; <strong>HDL</strong> (\"good\" cholesterol) is considered protective. <strong>Triglycerides</strong> are blood fats. Reference ranges vary by lab; targets depend on your cardiovascular risk. Discuss your result with a doctor.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> <a href=\"/en/understand-lab-results\">Lab results</a> · <a href=\"/pricing\">Pricing</a> · <a href=\"/analyze\">Analyze</a></p>")],
+            "de": [Section(id="content", level=2, heading="Cholesterin im Bluttest einordnen", body_html="<p><strong>Gesamtcholesterin</strong> ist die Summe aller Cholesterinanteile. <strong>LDL</strong> (\"schlechtes\" Cholesterin) ist mit Gefäßrisiko verbunden; <strong>HDL</strong> (\"gutes\" Cholesterin) gilt als schützend. <strong>Trigyceride</strong> sind Blutfette. Referenzbereiche sind laborabhängig; Ziele hängen vom kardiovaskulären Risiko ab. Befund mit dem Arzt besprechen.</p>"), Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> <a href=\"/de/laborwerte-verstehen\">Laborwerte</a> · <a href=\"/pricing\">Preise</a> · <a href=\"/analyze\">Analyse</a></p>")],
+            "fr": [Section(id="content", level=2, heading="Comprendre les types de cholestérol", body_html="<p>Le <strong>cholestérol total</strong> est la somme des fractions. Le <strong>LDL</strong> (\"mauvais\") est lié au risque vasculaire ; le <strong>HDL</strong> (\"bon\") est protecteur. Les <strong>triglycérides</strong> sont des graisses sanguines. Les fourchettes varient selon le laboratoire ; les cibles dépendent du risque cardiovasculaire. Discutez du résultat avec un médecin.</p>"), Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> <a href=\"/pricing\">Tarifs</a> · <a href=\"/analyze\">Analyser</a></p>")],
+            "it": [Section(id="content", level=2, heading="Come capire i tipi di colesterolo", body_html="<p>Il <strong>colesterolo totale</strong> è la somma delle frazioni. <strong>LDL</strong> (\"cattivo\") è legato al rischio vascolare; <strong>HDL</strong> (\"buono\") è protettivo. I <strong>trigliceridi</strong> sono grassi nel sangue. Gli intervalli variano da laboratorio; gli obiettivi dipendono dal rischio cardiovascolare. Discuti il risultato con il medico.</p>"), Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> <a href=\"/pricing\">Prezzi</a> · <a href=\"/analyze\">Analizza</a></p>")],
+            "es": [Section(id="content", level=2, heading="Cómo entender los tipos de colesterol", body_html="<p>El <strong>colesterol total</strong> es la suma de las fracciones. <strong>LDL</strong> (\"malo\") se asocia a riesgo vascular; <strong>HDL</strong> (\"bueno\") es protector. Los <strong>triglicéridos</strong> son grasas en sangre. Los rangos varían por laboratorio; los objetivos dependen del riesgo cardiovascular. Comenta el resultado con un médico.</p>"), Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> <a href=\"/pricing\">Precios</a> · <a href=\"/analyze\">Analizar</a></p>")],
+        },
+    )
+
+
+_ARTICLE_IRON_DEFICIENCY = _article_iron_deficiency_blood()
+_ARTICLE_ALT_AST = _article_alt_ast_high()
+_ARTICLE_UREA = _article_urea_high()
+_ARTICLE_PLATELETS = _article_platelets_high_low()
+_ARTICLE_WBC_RBC = _article_wbc_rbc_hgb_hct()
+_ARTICLE_FASTING_GLUCOSE = _article_fasting_blood_sugar()
+_ARTICLE_HBA1C_MEANING = _article_hba1c_meaning()
+_ARTICLE_CHOLESTEROL_TYPES = _article_cholesterol_types()
 
 
 # TODO: create dedicated blog posts for "complete blood count explained" and "liver enzyme test explained"
@@ -4119,6 +4606,16 @@ ARTICLES: List[Article] = [
     _TSH_ARTICLE,
     _CREATININE_EGFR_ARTICLE,
     _BLUTWERTE_ONLINE_ARTICLE,
+    _ARTICLE_B12_LOW,
+    _ARTICLE_VITAMIN_D_INTERPRET,
+    _ARTICLE_IRON_DEFICIENCY,
+    _ARTICLE_ALT_AST,
+    _ARTICLE_UREA,
+    _ARTICLE_PLATELETS,
+    _ARTICLE_WBC_RBC,
+    _ARTICLE_FASTING_GLUCOSE,
+    _ARTICLE_HBA1C_MEANING,
+    _ARTICLE_CHOLESTEROL_TYPES,
 ]
 
 
