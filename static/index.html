@@ -2605,19 +2605,10 @@
                     <span>82 / 100</span>
                   </span>
                 </div>
-                <div class="flex items-center justify-between text-[11px] sm:text-xs text-slate-100/90">
+                <div class="text-[11px] sm:text-xs text-slate-100/90">
                   <div class="flex flex-col gap-0.5">
                     <span data-i18n="report_preview_line_1">Sağlık skoru, işaretli biyobelirteçler ve öne çıkan bulgular.</span>
-                    <span data-i18n="report_preview_line_2">Doktora hazır PDF ve QR ile rapor doğrulama.</span>
-                  </div>
-                  <div class="ml-3 flex flex-col items-end gap-1">
-                    <span class="inline-flex items-center gap-1 rounded-full bg-white/10 px-2.5 py-0.5 text-[10px] font-medium text-slate-50 border border-white/30">
-                      <span>PDF</span>
-                    </span>
-                    <span class="inline-flex items-center gap-1 rounded-full bg-white text-slate-900 px-2.5 py-0.5 text-[10px] font-semibold">
-                      <span>QR</span>
-                      <span data-i18n="trust_block_qr">Rapor doğrulama</span>
-                    </span>
+                    <span data-i18n="report_preview_line_2">Doktora hazır PDF ve isteğe bağlı QR ile rapor doğrulama.</span>
                   </div>
                 </div>
               </div>
@@ -10516,6 +10507,17 @@
       if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
     }
 
+    (function checkLoginRedirect() {
+      var params = new URLSearchParams(window.location.search || '');
+      if (params.get('login') === '1' && params.get('next')) {
+        try { sessionStorage.setItem('norya_after_login_next', params.get('next')); } catch (_) {}
+        function openLoginWhenReady() { if (typeof openLogin === 'function') openLogin(); }
+        if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', openLoginWhenReady);
+        else openLoginWhenReady();
+        if (window.history && window.history.replaceState) window.history.replaceState({}, '', window.location.pathname || '/');
+      }
+    })();
+
     function openSampleReportModal(key) {
       var modal = document.getElementById('sample-report-modal');
       if (!modal) return;
@@ -10578,6 +10580,10 @@
         try { meData = await meRes.json(); } catch (_) {}
         setAuth(data.access_token, meRes.ok ? { email: meData.email, full_name: meData.full_name, phone: meData.phone, country: meData.country } : { email: email });
         closeLogin();
+        try {
+          var nextUrl = sessionStorage.getItem('norya_after_login_next');
+          if (nextUrl && nextUrl.indexOf('/') === 0) { sessionStorage.removeItem('norya_after_login_next'); window.location.href = nextUrl; return; }
+        } catch (_) {}
       } else {
         errEl.textContent = 'Giriş yanıtı hatalı.';
         errEl.classList.remove('hidden');
@@ -10662,6 +10668,10 @@
         try { meData = await meRes.json(); } catch (_) {}
         setAuth(loginData.access_token, meRes.ok ? { email: meData.email, full_name: meData.full_name, phone: meData.phone, country: meData.country } : { email: email, full_name: fullName, phone: phone, country: country });
         closeRegister();
+        try {
+          var nextUrlReg = sessionStorage.getItem('norya_after_login_next');
+          if (nextUrlReg && nextUrlReg.indexOf('/') === 0) { sessionStorage.removeItem('norya_after_login_next'); window.location.href = nextUrlReg; return; }
+        } catch (_) {}
         var t = (typeof T !== 'undefined' && T[getLang()]) ? T[getLang()] : {};
         if (data.verify_email_sent === false) {
           toast(t.toast_register_verify_not_sent || 'E-posta doğrulama linki şu an gönderilemedi. Hesabınız aktiftir; giriş yapabilirsiniz. Sorun yaşarsanız support@noryaai.com ile iletişime geçin.', 'info');

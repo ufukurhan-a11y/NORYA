@@ -3423,6 +3423,9 @@ def payment_page_premium(
     db: Session = Depends(get_db),
 ):
     """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kampanya admin’deki aktif kampanyaya bağlı."""
+    if current_user is None:
+        next_path = request.url.path + (("?" + request.url.query) if request.url.query else "")
+        return RedirectResponse(url="/?login=1&next=" + quote(next_path), status_code=302)
     lang = _payment_lang_from_request(request)
     t = get_pay_ui(lang)
     # Tek canonical domain (statik ve API istekleri)
