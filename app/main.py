@@ -4431,43 +4431,7 @@ def seo_landing_en_understand_lab(request: Request):
     return _render_seo_landing(request, "en", "understand-lab-results")
 
 
-# Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
-SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he", "el", "sr"})
-
-
-@app.get("/{lang}", response_class=HTMLResponse)
-def index_with_locale(request: Request, lang: str):
-    """Locale prefix tek segment: /en, /tr → SPA."""
-    if lang.lower() in SUPPORTED_LOCALES:
-        return _index_response(request)
-    raise HTTPException(status_code=404, detail="Not Found")
-
-
-@app.get("/{lang}/{path:path}", response_class=HTMLResponse)
-def index_with_locale_path(request: Request, lang: str, path: str):
-    """Locale prefix + path: /en/pricing, /de/report → SPA (blog hariç; /{lang}/blog ayrı route).
-
-    Özel durumlar:
-    - /{lang}/pricing       -> /pricing?lang={lang}
-    - /{lang}/how-it-works  -> /how-it-works?lang={lang}
-    - /{lang}/analyze       -> /analyze?lang={lang}
-    - /{lang}/faq           -> /{lang}#faq
-    """
-    lang_l = (lang or "").strip().lower()
-    if lang_l in SUPPORTED_LOCALES:
-        path_l = (path or "").strip().lower().strip("/")
-        if path_l == "pricing":
-            return RedirectResponse(url=f"/pricing?lang={lang_l}", status_code=302)
-        if path_l == "how-it-works":
-            return RedirectResponse(url=f"/how-it-works?lang={lang_l}", status_code=302)
-        if path_l == "analyze":
-            return RedirectResponse(url=f"/analyze?lang={lang_l}", status_code=302)
-        if path_l == "faq":
-            return RedirectResponse(url=f"/{lang_l}#faq", status_code=302)
-        return _index_response(request)
-    raise HTTPException(status_code=404, detail="Not Found")
-
-
+# SEO: robots.txt ve sitemap.xml — catch-all /{lang} rotasından ÖNCE tanımlanmalı (yoksa /sitemap.xml -> 404)
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt():
     """SEO: Allow all; Disallow admin ve 401 dönen path'ler; sitemap canonical URL."""
@@ -4528,3 +4492,40 @@ def sitemap_xml(request: Request):
     body += "\n".join(urls)
     body += "\n</urlset>"
     return PlainTextResponse(content=body, media_type="application/xml")
+
+
+# Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
+SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he", "el", "sr"})
+
+
+@app.get("/{lang}", response_class=HTMLResponse)
+def index_with_locale(request: Request, lang: str):
+    """Locale prefix tek segment: /en, /tr → SPA."""
+    if lang.lower() in SUPPORTED_LOCALES:
+        return _index_response(request)
+    raise HTTPException(status_code=404, detail="Not Found")
+
+
+@app.get("/{lang}/{path:path}", response_class=HTMLResponse)
+def index_with_locale_path(request: Request, lang: str, path: str):
+    """Locale prefix + path: /en/pricing, /de/report → SPA (blog hariç; /{lang}/blog ayrı route).
+
+    Özel durumlar:
+    - /{lang}/pricing       -> /pricing?lang={lang}
+    - /{lang}/how-it-works  -> /how-it-works?lang={lang}
+    - /{lang}/analyze       -> /analyze?lang={lang}
+    - /{lang}/faq           -> /{lang}#faq
+    """
+    lang_l = (lang or "").strip().lower()
+    if lang_l in SUPPORTED_LOCALES:
+        path_l = (path or "").strip().lower().strip("/")
+        if path_l == "pricing":
+            return RedirectResponse(url=f"/pricing?lang={lang_l}", status_code=302)
+        if path_l == "how-it-works":
+            return RedirectResponse(url=f"/how-it-works?lang={lang_l}", status_code=302)
+        if path_l == "analyze":
+            return RedirectResponse(url=f"/analyze?lang={lang_l}", status_code=302)
+        if path_l == "faq":
+            return RedirectResponse(url=f"/{lang_l}#faq", status_code=302)
+        return _index_response(request)
+    raise HTTPException(status_code=404, detail="Not Found")
