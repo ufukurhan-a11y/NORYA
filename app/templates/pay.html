@@ -1030,6 +1030,7 @@ document.addEventListener('DOMContentLoaded', function(){
   function doCheckout(useSamePage) {
     setLoading(true);
     var couponToSend = (couponInput && couponInput.value.trim()) || appliedCoupon || null;
+    var pageLang = (document.documentElement.getAttribute('lang') || 'tr').toLowerCase().slice(0, 2);
     fetch(baseUrl + '/paytr/init', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -1038,7 +1039,8 @@ document.addEventListener('DOMContentLoaded', function(){
         quantity: 1,
         email: (document.getElementById('email') && document.getElementById('email').value.trim()) || null,
         name: (document.getElementById('name') && document.getElementById('name').value.trim()) || null,
-        coupon_code: couponToSend
+        coupon_code: couponToSend,
+        lang: pageLang
       })
     })
     .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, data: d }; }); })
@@ -1082,7 +1084,7 @@ document.addEventListener('DOMContentLoaded', function(){
         var d = o.d;
         if (o.ok && d && (d.status === 'paid' || d.status === 'completed' || d.is_premium_active)) {
           window.location.href = baseUrl + '/payment/success?merchant_oid=' + encodeURIComponent(oid) + '&lang=' + (document.documentElement.lang || 'tr');
-        } else if (typeof alert !== 'undefined') alert(d && d.status === 'failed' ? 'Ödeme tamamlanamadı.' : (!o.ok ? 'Sipariş bulunamadı.' : 'Ödeme henüz tamamlanmadı.'));
+        } else if (typeof alert !== 'undefined') alert(d && d.status === 'failed' ? (t.success_payment_failed_short || 'Ödeme tamamlanamadı.') : (!o.ok ? (t.success_invalid_oid || 'Sipariş bulunamadı.') : (t.success_payment_pending_short || 'Ödeme henüz tamamlanmadı.')));
       });
   });
 
