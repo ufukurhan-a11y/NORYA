@@ -110,6 +110,35 @@
       font-size: 0.8125rem;
       color: #475569;
     }
+    .blog-lang-pill {
+      display: inline-flex;
+      align-items: center;
+      padding: 0.35rem 0.75rem;
+      font-size: 0.8125rem;
+      font-weight: 500;
+      border-radius: 9999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      background: #ffffff;
+      color: #475569;
+      text-decoration: none;
+      transition: background 0.15s, border-color 0.15s, color 0.15s;
+    }
+    .blog-lang-pill:hover {
+      background: rgba(14, 165, 164, 0.06);
+      border-color: rgba(14, 165, 164, 0.35);
+      color: #0f766e;
+    }
+    .blog-lang-pill.current {
+      background: #0d9488;
+      border-color: #0d9488;
+      color: #ffffff;
+      font-weight: 600;
+    }
+    .blog-lang-pill.current:hover {
+      background: #0f766e;
+      border-color: #0f766e;
+      color: #ffffff;
+    }
     @media (max-width: 1023px) {
       .blog-detail-hero .prose { max-width: 100%; }
     }
@@ -135,7 +164,7 @@
             <a href="/{{ current_lang }}/blog" class="hover:text-slate-700 transition-colors">{{ blog_ui.hero_title }}</a>
           </li>
           <li aria-hidden="true" class="text-slate-400 hidden sm:inline">/</li>
-          <li class="truncate max-w-[9rem] sm:max-w-xs text-slate-600" aria-current="page">
+          <li class="min-w-0 max-w-full sm:max-w-md text-slate-600 break-words" aria-current="page">
             {{ article.title }}
           </li>
         </ol>
@@ -145,7 +174,7 @@
         <a href="/{{ current_lang }}/blog" class="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">{{ blog_ui.back_to_blog }}</a>
         <nav class="flex flex-wrap items-center gap-1" aria-label="Language">
           {% for code, item in lang_alternates.items() %}
-          <a href="{{ item.url }}" class="blog-lang-pill {% if code == current_lang %}current{% endif %}">{{ item.label }}</a>
+          <a href="{{ item.url }}" class="blog-lang-pill {% if code == current_lang %}current{% endif %}" {% if code == current_lang %}aria-current="page"{% endif %}>{{ item.label }}</a>
           {% endfor %}
         </nav>
       </div>
@@ -271,7 +300,7 @@
           <h2 class="text-sm font-semibold text-slate-900 mb-3">{{ blog_ui.other_languages }}</h2>
           <div class="flex flex-wrap gap-2">
             {% for code, item in lang_alternates.items() %}
-            <a href="{{ item.url }}" class="blog-lang-pill {% if code == current_lang %}current{% endif %}">{{ item.label }}</a>
+            <a href="{{ item.url }}" class="blog-lang-pill {% if code == current_lang %}current{% endif %}" {% if code == current_lang %}aria-current="page"{% endif %}>{{ item.label }}</a>
             {% endfor %}
           </div>
         </div>

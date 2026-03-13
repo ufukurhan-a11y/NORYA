@@ -1410,9 +1410,11 @@ def blog_detail(request: Request, lang: str, slug: str):
     for sec in art["sections"]:
         toc.append({"id": sec.id, "level": sec.level, "label": sec.heading})
 
+    # Dil seçimleri sabit sırada (BLOG_LANGS_PREMIUM): TR, EN, ES, DE, FR, IT, HE, HI, AR
     lang_alternates: dict[str, dict] = {}
-    for code, s in art["available_langs"].items():
-        if code in BLOG_LANGS_PREMIUM:
+    for code in BLOG_LANGS_PREMIUM:
+        s = art["available_langs"].get(code)
+        if s is not None:
             lang_alternates[code] = {"url": f"{base_url}/{code}/blog/{s}", "label": _lang_label(code)}
 
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/blog/{art['available_langs'][code]}"} for code in BLOG_LANGS_PREMIUM if code in art["available_langs"]]
