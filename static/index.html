@@ -238,6 +238,284 @@
       min-width: 0;
       box-sizing: border-box;
     }
+
+    /* ===== Hero V2: premium health-tech, conversion-focused ===== */
+    .hero-v2 {
+      background: #0c1929;
+      position: relative;
+      z-index: 0;
+    }
+    .hero-v2-bg {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      background: radial-gradient(ellipse 90% 70% at 50% 0%, rgba(13, 148, 136, 0.18) 0%, transparent 55%),
+                  radial-gradient(ellipse 60% 50% at 85% 60%, rgba(14, 165, 164, 0.12) 0%, transparent 50%);
+      pointer-events: none;
+    }
+    .hero-v2-inner { padding: 2.5rem 1rem 3rem; }
+    @media (min-width: 1024px) { .hero-v2-inner { padding: 3.5rem 1.5rem 4rem; } }
+    .hero-v2-grid {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2.5rem;
+      position: relative;
+      z-index: 1;
+    }
+    @media (min-width: 1024px) {
+      .hero-v2-grid {
+        flex-direction: row;
+        align-items: center;
+        gap: 3.5rem;
+        max-width: 1120px;
+        margin: 0 auto;
+      }
+    }
+    .hero-v2-copy {
+      width: 100%;
+      max-width: 36rem;
+      text-align: center;
+    }
+    @media (min-width: 1024px) {
+      .hero-v2-copy {
+        flex: 1 1 52%;
+        max-width: none;
+        text-align: left;
+      }
+    }
+    .hero-v2-sub {
+      display: block;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(255, 255, 255, 0.75);
+      margin-bottom: 0.75rem;
+      line-height: 1.4;
+    }
+    @media (min-width: 640px) { .hero-v2-sub { font-size: 0.75rem; letter-spacing: 0.2em; } }
+    .hero-v2-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.22;
+      letter-spacing: -0.03em;
+      color: #fff;
+      margin-bottom: 1rem;
+    }
+    @media (min-width: 480px) { .hero-v2-title { font-size: 2rem; } }
+    @media (min-width: 640px) { .hero-v2-title { font-size: 2.5rem; margin-bottom: 1.25rem; } }
+    @media (min-width: 1024px) { .hero-v2-title { font-size: 3rem; margin-bottom: 1.5rem; } }
+    @media (min-width: 1280px) { .hero-v2-title { font-size: 3.25rem; } }
+    .hero-v2-desc {
+      font-size: 0.9375rem;
+      line-height: 1.55;
+      color: rgba(255, 255, 255, 0.88);
+      margin-bottom: 1.5rem;
+      max-width: 32rem;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    @media (min-width: 640px) { .hero-v2-desc { font-size: 1rem; margin-bottom: 1.75rem; } }
+    @media (min-width: 1024px) {
+      .hero-v2-desc { margin-left: 0; margin-right: 0; max-width: 28rem; margin-bottom: 2rem; }
+    }
+    .hero-v2-cta-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+    @media (min-width: 480px) {
+      .hero-v2-cta-wrap { flex-direction: row; flex-wrap: wrap; justify-content: center; gap: 1rem; }
+    }
+    @media (min-width: 1024px) {
+      .hero-v2-cta-wrap { justify-content: flex-start; margin-bottom: 1.75rem; }
+    }
+    .hero-v2-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 48px;
+      padding: 0.75rem 1.5rem;
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 12px;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, background 0.18s ease;
+      box-sizing: border-box;
+      width: 100%;
+      max-width: 100%;
+    }
+    @media (min-width: 480px) {
+      .hero-v2-btn { width: auto; min-width: 160px; padding: 0.875rem 1.75rem; font-size: 1rem; }
+    }
+    .hero-v2-btn--primary {
+      background: #fff;
+      color: #0c1929;
+      border: 1px solid rgba(255, 255, 255, 0.9);
+      box-shadow: 0 4px 14px rgba(0, 0, 0, 0.15);
+    }
+    .hero-v2-btn--primary:hover {
+      background: #f0fdfa;
+      box-shadow: 0 6px 20px rgba(0, 0, 0, 0.2);
+      transform: translateY(-1px);
+    }
+    .hero-v2-btn--secondary {
+      background: transparent;
+      color: rgba(255, 255, 255, 0.95);
+      border: 2px solid rgba(255, 255, 255, 0.5);
+    }
+    .hero-v2-btn--secondary:hover {
+      background: rgba(255, 255, 255, 0.08);
+      border-color: rgba(255, 255, 255, 0.7);
+    }
+    .hero-v2-trust {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem 1.25rem;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      color: rgba(255, 255, 255, 0.7);
+    }
+    @media (min-width: 1024px) { .hero-v2-trust { justify-content: flex-start; font-size: 0.75rem; } }
+    .hero-v2-trust-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+    .hero-v2-visual {
+      width: 100%;
+      max-width: 22rem;
+      margin: 0 auto;
+    }
+    @media (min-width: 1024px) {
+      .hero-v2-visual { flex: 0 0 44%; max-width: 420px; margin: 0; }
+    }
+    .hero-v2-visual-wrap {
+      position: relative;
+      min-height: 200px;
+    }
+    @media (min-width: 640px) { .hero-v2-visual-wrap { min-height: 260px; } }
+    .hero-v2-visual-img {
+      position: absolute;
+      inset: 0;
+      border-radius: 20px;
+      background: linear-gradient(165deg, rgba(14, 165, 164, 0.12) 0%, rgba(15, 23, 42, 0.4) 60%);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      overflow: hidden;
+    }
+    .hero-v2-visual-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 20px;
+    }
+    .hero-v2-report-card {
+      position: relative;
+      z-index: 2;
+      margin-top: 1.5rem;
+      padding: 1.5rem 1.35rem 1.15rem;
+      border-radius: 18px;
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border: 1px solid rgba(14, 165, 164, 0.22);
+      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.7) inset, 0 1px 0 0 rgba(14, 165, 164, 0.12);
+    }
+    .hero-v2-report-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      border-radius: 18px 18px 0 0;
+      background: linear-gradient(90deg, #0EA5A4 0%, #0d9488 50%, #14b8a6 100%);
+    }
+    @media (min-width: 1024px) {
+      .hero-v2-report-card {
+        position: absolute;
+        bottom: -0.5rem;
+        right: -0.5rem;
+        margin-top: 0;
+        width: calc(100% + 0.5rem);
+        max-width: 300px;
+        padding: 1.5rem 1.35rem 1.15rem;
+      }
+    }
+    .hero-v2-report-card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.6rem;
+    }
+    .hero-v2-report-card-badge {
+      font-size: 0.65rem;
+      font-weight: 700;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #0d9488;
+    }
+    .hero-v2-report-card-score-wrap {
+      display: inline-flex;
+      align-items: baseline;
+      padding: 0.35rem 0.6rem;
+      border-radius: 10px;
+      background: linear-gradient(135deg, rgba(14, 165, 164, 0.12) 0%, rgba(16, 185, 129, 0.08) 100%);
+      border: 1px solid rgba(14, 165, 164, 0.2);
+    }
+    .hero-v2-report-card-score {
+      font-size: 1.35rem;
+      font-weight: 800;
+      color: #0f172a;
+      letter-spacing: -0.03em;
+    }
+    .hero-v2-report-card-score-max { font-size: 0.8rem; font-weight: 600; color: #64748b; margin-left: 0.1rem; }
+    .hero-v2-report-card-title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #0f172a;
+      margin-bottom: 0.6rem;
+      letter-spacing: -0.01em;
+    }
+    .hero-v2-report-card-features {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      font-size: 0.75rem;
+      color: #475569;
+      line-height: 1.55;
+    }
+    .hero-v2-report-card-features li { display: flex; align-items: flex-start; gap: 0.5rem; margin-bottom: 0.35rem; }
+    .hero-v2-report-card-dot {
+      width: 5px;
+      height: 5px;
+      border-radius: 50%;
+      flex-shrink: 0;
+      margin-top: 0.5em;
+    }
+    .hero-v2-report-card-dot--ok { background: #10b981; box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.25); }
+    .hero-v2-report-card-footer {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+      padding-top: 0.85rem;
+      border-top: 1px solid rgba(14, 165, 164, 0.12);
+    }
+    .hero-v2-report-card-tag {
+      font-size: 0.65rem;
+      font-weight: 700;
+      padding: 0.3rem 0.6rem;
+      border-radius: 8px;
+      background: rgba(241, 245, 249, 0.9);
+      color: #475569;
+      letter-spacing: 0.02em;
+    }
+    .hero-v2-report-card-tag--dark {
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: #fff;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+    }
+
     .drop-shadow-soft { box-shadow: var(--norya-shadow); }
     .norya-card-shadow { box-shadow: var(--norya-card-shadow); }
     .bg-brand-gradient { background: linear-gradient(135deg, #0EA5A4 0%, #0f766e 100%); }
@@ -256,6 +534,26 @@
       box-shadow: 0 18px 40px rgba(15, 23, 42, 0.12);
       backdrop-filter: blur(18px);
       -webkit-backdrop-filter: blur(18px);
+    }
+    .premium-sample-card {
+      position: relative;
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
+      border: 1px solid rgba(14, 165, 164, 0.2);
+      box-shadow: 0 20px 40px rgba(15, 23, 42, 0.1), 0 0 0 1px rgba(255, 255, 255, 0.8) inset;
+      overflow: hidden;
+    }
+    .premium-sample-card::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #0EA5A4 0%, #0d9488 50%, #14b8a6 100%);
+    }
+    .dark .premium-sample-card {
+      background: linear-gradient(165deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
+      border-color: rgba(14, 165, 164, 0.3);
     }
     .rounded-14 { border-radius: 14px; }
     /* Health Score kartı: premium, kurumsal (trust-global ile aynı dil) */
@@ -1014,8 +1312,25 @@
     @media (max-width: 640px) {
       img { max-width: 100%; height: auto; }
       .gradient-hero { padding-top: calc(4rem + env(safe-area-inset-top, 0px)) !important; }
+      .hero-v2 { padding-top: calc(4rem + env(safe-area-inset-top, 0px)) !important; padding-bottom: 2rem !important; }
+      .hero-v2-inner { padding-top: 1rem !important; padding-bottom: 1.5rem !important; }
     }
-    /* Hero: 768px altı — CTA above the fold, daha az padding, küçük başlık */
+    /* Hero V2: 768px altı — CTA above the fold, kompakt */
+    @media (max-width: 767px) {
+      .hero-v2-title { font-size: 1.5rem !important; margin-bottom: 0.75rem !important; }
+      .hero-v2-desc { font-size: 0.875rem !important; margin-bottom: 1.25rem !important; }
+      .hero-v2-cta-wrap { margin-bottom: 1.25rem !important; }
+      .hero-v2-btn { min-height: 44px; padding: 0.75rem 1.25rem !important; }
+    }
+    @media (max-width: 480px) {
+      .hero-v2-title { font-size: 1.35rem !important; }
+      .hero-v2-desc { font-size: 0.8125rem !important; }
+    }
+    @media (max-width: 360px) {
+      .hero-v2-title { font-size: 1.2rem !important; }
+      .hero-v2-inner { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
+    }
+    /* Legacy hero (gradient-hero) — diğer sayfalarda kullanılıyorsa */
     @media (max-width: 767px) {
       .gradient-hero { padding-top: calc(3.5rem + env(safe-area-inset-top, 0px)) !important; padding-bottom: 1.5rem !important; }
       .hero-inner { padding-top: 0.5rem !important; padding-left: 1rem !important; padding-right: 1rem !important; }
@@ -1023,21 +1338,8 @@
       .hero-desc { font-size: 0.9375rem !important; margin-bottom: 1rem !important; }
       .hero-cta-wrap { margin-bottom: 0 !important; gap: 0.75rem !important; }
       .hero-trust-list { margin-top: 1rem !important; }
-      .hero-sample-block { margin-top: 1.5rem !important; }
       .hero-cta-btn { min-height: 44px; padding: 0.75rem 1.25rem !important; font-size: 0.9375rem !important; width: 100%; max-width: 100%; box-sizing: border-box; }
       .hero-secondary-btn { width: 100%; max-width: 100%; box-sizing: border-box; }
-    }
-    @media (max-width: 480px) {
-      .hero-title { font-size: 1.25rem !important; }
-      .hero-desc { font-size: 0.875rem !important; }
-    }
-    @media (max-width: 390px) {
-      .hero-title { font-size: 1.15rem !important; }
-      .hero-desc { font-size: 0.8125rem !important; }
-    }
-    @media (max-width: 360px) {
-      .hero-inner { padding-left: 0.75rem !important; padding-right: 0.75rem !important; }
-      .hero-title { font-size: 1.05rem !important; }
     }
     /* Örnek Klinik Rapor (sample-report): tek kart, slider, dots, mobil swipe */
     .sample-report { --sample-brand: #0EA5A4; padding: 2.5rem 1rem 3rem; background: var(--accent-50, #f8fafc); }
@@ -2449,13 +2751,12 @@
     else if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
     var SUPPORTED = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
     window.__noryaLangGo = function(locale) {
-      console.log('[norya] switching to', locale);
-      var path = window.location.pathname || '/';
+      if (typeof chooseLang === 'function') { chooseLang(locale); return; }
+      var path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
       var segments = path.split('/').filter(Boolean);
       if (segments.length && SUPPORTED.indexOf(segments[0]) >= 0) segments[0] = locale;
       else segments.unshift(locale);
-      var newPath = '/' + segments.join('/');
-      window.location.assign(newPath);
+      window.location.assign('/' + segments.join('/') + (window.location.hash || ''));
     };
   })();
   </script>
@@ -2557,53 +2858,49 @@
     </div>
   </aside>
 
-  <!-- Hero: clinical premium editorial with report-focused female visual -->
-  <section class="hero gradient-hero pt-24 sm:pt-32 pb-12 sm:pb-16 px-4 sm:px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
-    <div class="absolute inset-0 opacity-20 pointer-events-none" style="background-image: radial-gradient(circle at 18% 80%, rgba(13, 148, 136, 0.38) 0%, transparent 55%), radial-gradient(circle at 82% 20%, rgba(30, 64, 175, 0.35) 0%, transparent 50%);"></div>
-    <div class="hero-inner max-w-5xl mx-auto w-full px-3 sm:px-4 relative z-10">
-      <div class="flex flex-col lg:flex-row items-center lg:items-stretch gap-10 lg:gap-12">
-        <!-- Copy -->
-        <div class="w-full lg:w-[56%] text-center lg:text-left">
-          <p class="text-white/90 text-xs sm:text-sm font-semibold mb-2 uppercase tracking-[0.15em]" data-i18n="hero_sub">Laboratuvar sonuçları anlaşılır dilde açıklanır. Teşhis değil—hekim görüşmenize hazırlık.</p>
-          <h1 class="hero-title text-2xl min-[480px]:text-3xl sm:text-5xl lg:text-6xl font-bold leading-[1.2] mb-4 sm:mb-5 tracking-tight px-1 lg:px-0" data-i18n="hero_title">Kan tahlilinizi dakikalar içinde anlayın</h1>
-          <p class="hero-desc text-lg text-navy-100 max-w-2xl lg:max-w-none mx-auto lg:mx-0 mb-6 sm:mb-7 leading-relaxed" data-i18n="hero_desc">
-            Sonuçlarınızı yükleyin; yapılandırılmış kan tahlili özeti, sağlık skoru ve doktora götürebileceğiniz premium PDF rapor alın.
-          </p>
-          <div class="flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 justify-center lg:justify-start hero-cta-wrap">
-            <button onclick="openRegister(); scrollToAnalyze();" class="hero-cta-btn hero-primary-btn px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl bg-white text-navy-900 font-semibold hover:bg-primary-50 norya-card-shadow inline-flex items-center justify-center gap-2 transition hover:scale-[1.02] min-h-[44px]" data-i18n="hero_cta">Analizi Başlat</button>
-            <a href="#ornek-klinik-rapor" class="hero-secondary-btn min-h-[44px] inline-flex items-center justify-center px-6 sm:px-8 py-3.5 sm:py-4 rounded-2xl border-2 border-white/80 text-white/95 hover:bg-white/10 font-medium transition" data-i18n="hero_see_sample">Örnek raporu gör</a>
+  <!-- Hero: premium health-tech, conversion-focused, trust + speed + intelligence -->
+  <section class="hero hero-v2 pt-24 sm:pt-28 lg:pt-32 pb-14 sm:pb-16 lg:pb-20 px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
+    <div class="hero-v2-bg" aria-hidden="true"></div>
+    <div class="hero-inner hero-v2-inner max-w-6xl mx-auto w-full px-3 sm:px-4 relative z-10">
+      <div class="hero-v2-grid">
+        <!-- Left: headline, subheadline, CTAs, trust strip -->
+        <div class="hero-v2-copy">
+          <p class="hero-v2-sub" data-i18n="hero_sub">Kan tahlilinizi yükleyin. Yapay zekâ dakikalar içinde anlaşılır rapor üretsin.</p>
+          <h1 class="hero-v2-title" data-i18n="hero_title">Kan tahlilinizi yükleyin — anlaşılır raporu dakikalar içinde alın</h1>
+          <p class="hero-v2-desc" data-i18n="hero_desc">Sonuçlarınızı yükleyin; yapay zekâ analiz eder. Sağlık skoru, işaretli değerler ve doktora götürebileceğiniz PDF rapor — hızlı, güvenli, şeffaf.</p>
+          <div class="hero-v2-cta-wrap">
+            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="hero-v2-btn hero-v2-btn--primary" data-i18n="hero_cta">Analizi Başlat</button>
+            <a href="#ornek-klinik-rapor" class="hero-v2-btn hero-v2-btn--secondary" data-i18n="hero_see_sample">Örnek raporu gör</a>
           </div>
-          <ul class="hero-trust-list trust-chips mt-5 sm:mt-6 flex flex-wrap justify-center lg:justify-start gap-x-4 sm:gap-x-5 gap-y-2 text-navy-100 text-xs sm:text-sm font-medium" aria-label="Güven rozetleri">
-            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">SSL şifreli</span></li>
-            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK / GDPR uyumlu</span></li>
-            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">3D Secure ödeme (PayTR)</span></li>
-            <li class="chip inline-flex items-center gap-2"><span class="text-white/90" aria-hidden="true">🌐</span> <span data-i18n="trust_cards_langs_title">9+ dilde rapor</span></li>
-          </ul>
+          <div class="hero-v2-trust" role="group" aria-label="Güven ve uyumluluk">
+            <span class="hero-v2-trust-item"><span aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">SSL Şifreli</span></span>
+            <span class="hero-v2-trust-item"><span aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK Uyumlu</span></span>
+            <span class="hero-v2-trust-item"><span aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">Güvenli Ödeme</span></span>
+            <span class="hero-v2-trust-item"><span aria-hidden="true">🌐</span> <span data-i18n="trust_cards_langs_title">9+ Dil Desteği</span></span>
+          </div>
         </div>
 
-        <!-- Visual -->
-        <div class="w-full lg:w-[44%]">
-          <div class="relative max-w-sm mx-auto">
-            <div class="absolute -top-6 -left-4 w-24 h-24 rounded-full bg-emerald-300/40 blur-3xl opacity-80"></div>
-            <div class="absolute -bottom-10 -right-6 w-28 h-28 rounded-full bg-sky-300/40 blur-3xl opacity-80"></div>
-            <div class="relative rounded-3xl overflow-hidden bg-white/5 border border-white/25 light-glass-card">
-              <div class="p-4 sm:p-5 bg-slate-900/60">
-                <div class="flex items-center justify-between mb-3">
-                  <div>
-                    <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-emerald-300">Örnek rapor</p>
-                    <p class="text-sm font-semibold text-white" data-i18n="health_dashboard_title">Premium Health raporu önizleme</p>
-                  </div>
-                  <span class="inline-flex items-center gap-1 rounded-full bg-emerald-400/10 px-3 py-1 text-[11px] font-semibold text-emerald-200">
-                    <span>●</span>
-                    <span>82 / 100</span>
-                  </span>
-                </div>
-                <div class="text-[11px] sm:text-xs text-slate-100/90">
-                  <div class="flex flex-col gap-0.5">
-                    <span data-i18n="report_preview_line_1">Sağlık skoru, işaretli biyobelirteçler ve öne çıkan bulgular.</span>
-                    <span data-i18n="report_preview_line_2">Doktora hazır PDF ve isteğe bağlı QR ile rapor doğrulama.</span>
-                  </div>
-                </div>
+        <!-- Right: premium visual + floating report preview card -->
+        <div class="hero-v2-visual">
+          <div class="hero-v2-visual-wrap">
+            <div class="hero-v2-visual-img">
+              <!-- Optional img: <img src="/static/images/hero-visual.png" alt="" loading="lazy" /> -->
+            </div>
+            <div class="hero-v2-report-card" aria-hidden="true">
+              <div class="hero-v2-report-card-header">
+                <span class="hero-v2-report-card-badge" data-i18n="report_preview_badge">Örnek rapor</span>
+                <span class="hero-v2-report-card-score-wrap">
+                  <span class="hero-v2-report-card-score">82<span class="hero-v2-report-card-score-max">/100</span></span>
+                </span>
+              </div>
+              <p class="hero-v2-report-card-title" data-i18n="health_dashboard_title">Premium Health raporu</p>
+              <ul class="hero-v2-report-card-features">
+                <li><span class="hero-v2-report-card-dot hero-v2-report-card-dot--ok"></span><span data-i18n="report_preview_line_1">Sağlık skoru & işaretli biyobelirteçler</span></li>
+                <li><span class="hero-v2-report-card-dot hero-v2-report-card-dot--ok"></span><span data-i18n="report_preview_line_2">Doktora hazır PDF · QR doğrulama</span></li>
+              </ul>
+              <div class="hero-v2-report-card-footer">
+                <span class="hero-v2-report-card-tag">PDF</span>
+                <span class="hero-v2-report-card-tag hero-v2-report-card-tag--dark" data-i18n="trust_block_qr">Rapor doğrulama</span>
               </div>
             </div>
           </div>
@@ -3050,20 +3347,20 @@
 
     <!-- Premium rapor kartı -->
     <div class="premium-wrap mb-4">
-      <div class="max-w-md mx-auto light-glass-card rounded-14 p-5 sm:p-6">
+      <div class="max-w-md mx-auto premium-sample-card rounded-2xl p-5 sm:p-6">
         <div class="flex items-center justify-between mb-3">
           <div>
-            <p class="text-xs font-semibold tracking-[0.18em] uppercase text-accent-500">Örnek rapor</p>
-            <h3 class="text-lg font-semibold text-accent-900 dark:text-white">Norya Health Report</h3>
+            <p class="text-xs font-semibold tracking-[0.18em] uppercase text-[#0d9488]" data-i18n="report_preview_badge">Örnek rapor</p>
+            <h3 class="text-lg font-bold text-accent-900 dark:text-white" data-i18n="premium_report_card_title">Norya Health Report</h3>
           </div>
-          <span class="inline-flex items-center justify-center px-2.5 py-1 rounded-full text-[11px] font-semibold bg-[#0EA5A4]/10 text-[#0EA5A4]">PDF</span>
+          <span class="inline-flex items-center justify-center px-3 py-1.5 rounded-xl text-xs font-bold bg-[#0EA5A4]/15 text-[#0d9488] border border-[#0EA5A4]/25">PDF</span>
         </div>
-        <ul class="space-y-1.5 text-sm text-accent-700 dark:text-accent-200">
-          <li>• Health Score</li>
-          <li>• Diyabet Riski</li>
-          <li>• Kalp Riski</li>
-          <li>• Klinik grafikler</li>
-          <li>• Yapılandırılmış yorum</li>
+        <ul class="space-y-2 text-sm text-accent-700 dark:text-accent-200 font-medium">
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="premium_bullet_health_score">Health Score</span></li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="premium_bullet_diabetes">Diyabet Riski</span></li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="premium_bullet_heart">Kalp Riski</span></li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="premium_bullet_charts">Klinik grafikler</span></li>
+          <li class="flex items-center gap-2"><span class="w-1.5 h-1.5 rounded-full bg-emerald-500 flex-shrink-0"></span><span data-i18n="premium_bullet_comment">Yapılandırılmış yorum</span></li>
         </ul>
       </div>
     </div>
@@ -7273,9 +7570,9 @@
         trust_row_3d: "3D Secure ödeme", trust_row_kvkk: "KVKK / GDPR uyumlu", trust_row_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu ilkeler", trust_row_invoice: "e-Arşiv fatura",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
         history_login_required: "Geçmişi görmek için giriş yapın.", history_session_expired: "Oturum süreniz dolmuş olabilir. Çıkış yapıp tekrar giriş yapın.",
-        hero_sub: "Kan tahlili sonuçlarınız sade bir dille açıklanır. Teşhis değil — hekim görüşmenize hazırlık.",
-        hero_title: "Kan tahlilinizi dakikalar içinde anlayın",
-        hero_desc: "Sonuçlarınızı yükleyin; referans aralıkları, anlaşılır açıklamalar ve doktora götürebileceğiniz premium PDF rapor görün.",
+        hero_sub: "Kan tahlilinizi yükleyin. Yapay zekâ dakikalar içinde anlaşılır rapor üretsin.",
+        hero_title: "Kan tahlilinizi yükleyin — anlaşılır raporu dakikalar içinde alın",
+        hero_desc: "Sonuçlarınızı yükleyin; yapay zekâ analiz eder. Sağlık skoru, işaretli değerler ve doktora götürebileceğiniz PDF rapor — hızlı, güvenli, şeffaf.",
         hero_cta: "Analizi Başlat", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu",
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
@@ -7454,7 +7751,8 @@
         profile_kpi_last_hint: "En son klinik rapor tarihiniz.",
         example_report_domain_cardio: "Kardiyovasküler", example_report_domain_metabolic: "Metabolik", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Enflamasyon",
         example_report_risk_low: "Düşük", example_report_risk_mid: "Orta", example_report_risk_high: "Yüksek",
-        health_dashboard_title: "Premium Health Raporu Önizleme", health_dashboard_badge: "Premium Health",
+        report_preview_badge: "Örnek rapor", health_dashboard_title: "Premium Health Raporu Önizleme", health_dashboard_badge: "Premium Health",
+        premium_report_card_title: "Norya Health Report", premium_bullet_health_score: "Health Score", premium_bullet_diabetes: "Diyabet Riski", premium_bullet_heart: "Kalp Riski", premium_bullet_charts: "Klinik grafikler", premium_bullet_comment: "Yapılandırılmış yorum",
         health_kpi_bioage: "Biyolojik Yaş (tahmini)", health_kpi_bioage_desc: "Skorunuza göre tahmini sağlık yaşınız.",
         example_clinical_report_title: "Örnek Klinik Rapor", sample_report_desc: "Kan tahlili sonuçlarınız skor, risk göstergesi ve trend ile klinik rapor formatında sunulur.", sample_page1_title: "Genel Sağlık", sample_page2_title: "Test Sonuçları", sample_page3_title: "Yapılandırılmış Yorum", sample_page4_title: "Risk Skorları", sample_not_diagnosis: "Bu yorum teşhis değildir; bilgilendirme amaçlıdır. Sonuçları hekiminizle paylaşın.", example_slide_summary: "Genel sağlık özeti", example_slide_summary_text: "Değerleriniz genel olarak referans aralığına yakın. Birkaç parametre hafifçe sınırda; öneriler bölümünde detay bulabilirsiniz.", example_slide_results: "Test sonuçları", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukoz: 98 mg/dL (Ref: 70–100). Her parametre tek tek açıklanır ve referans aralığıyla karşılaştırılır.", example_slide_ai: "Yapılandırılmış yorum", example_slide_ai_text: "Tahlil sonuçlarınız yapılandırılmış şekilde yorumlanır; olası nedenler ve beslenme/yaşam tarzı önerileri sade bir dille sunulur.", example_slide_risk: "Risk skorları", example_slide_risk_text: "Parametreler normal, sınır veya dikkat olarak işaretlenir. Kalp sağlığı ve diğer risk notları raporunuzda yer alır.", example_btn_analyze: "Analiz Yap", example_btn_view_sample: "Örnek Raporu Gör",
         corporate_title: "Hastanelere ve Kurumlara Norya", corporate_subtitle: "Tahlil sonuçlarını hasta ve hekim için anlaşılır kılan kurumsal çözümler. Ücret yok; detay için bize ulaşın.",
@@ -7643,9 +7941,9 @@
         trust_row_3d: "3D Secure payment", trust_row_kvkk: "KVKK / GDPR compliant", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Archive invoice",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
         history_login_required: "Please log in to see history.", history_session_expired: "Your session may have expired. Try logging out and back in.",
-        hero_sub: "Lab results explained in plain language. Not a diagnosis — just preparation for your doctor visit.",
-        hero_title: "Understand your blood test in minutes",
-        hero_desc: "Upload your results and get a structured summary with ranges, clear explanations and a doctor-ready PDF report.",
+        hero_sub: "Upload your blood test. Get an AI-powered, easy-to-read health report in minutes.",
+        hero_title: "Upload your blood test — get a clear report in minutes",
+        hero_desc: "Upload your results; AI analyzes them. Health score, flagged markers, and a doctor-ready PDF — fast, secure, transparent.",
         hero_cta: "Start analysis", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant",
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
@@ -7819,7 +8117,8 @@
         profile_kpi_last_hint: "Date of your most recent clinical report.",
         example_report_domain_cardio: "Cardiovascular", example_report_domain_metabolic: "Metabolic", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Inflammation",
         example_report_risk_low: "Low", example_report_risk_mid: "Moderate", example_report_risk_high: "High",
-        health_dashboard_title: "Premium Health Report Preview", health_dashboard_badge: "Premium Health",
+        report_preview_badge: "Sample report", health_dashboard_title: "Premium Health Report Preview", health_dashboard_badge: "Premium Health",
+        premium_report_card_title: "Norya Health Report", premium_bullet_health_score: "Health Score", premium_bullet_diabetes: "Diabetes Risk", premium_bullet_heart: "Heart Risk", premium_bullet_charts: "Clinical charts", premium_bullet_comment: "Structured interpretation",
         health_kpi_bioage: "Biological age (estimate)", health_kpi_bioage_desc: "Estimated health age based on your score.",
         example_clinical_report_title: "Sample Clinical Report", sample_report_desc: "Your lab results are presented in clinical report format with score, risk indicator and trend.", example_slide_summary: "General health summary", example_slide_summary_text: "Your values are generally close to the reference range. A few parameters may be slightly borderline; see the recommendations section for details.", example_slide_results: "Test results", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucose: 98 mg/dL (Ref: 70–100). Each parameter is explained and compared to the reference range.", example_slide_ai: "Structured interpretation", example_slide_ai_text: "Your lab results are interpreted in a structured way, with possible causes and diet/lifestyle recommendations in plain language.", example_slide_risk: "Risk scores", example_slide_risk_text: "Parameters are marked as normal, borderline or attention. Heart health and other risk notes are included in your report.", example_btn_analyze: "Run analysis", example_btn_view_sample: "View sample report",
         corporate_title: "Norya for Hospitals & Organizations", corporate_subtitle: "Corporate solutions that make lab results clear for patients and physicians. No fee; contact us for details.",
@@ -10029,6 +10328,10 @@
       if (!nextLocale || typeof nextLocale !== 'string') return;
       nextLocale = String(nextLocale).toLowerCase().trim();
       if (SUPPORTED_LOCALES.indexOf(nextLocale) === -1) nextLocale = 'en';
+      if (typeof chooseLang === 'function') {
+        chooseLang(nextLocale);
+        return;
+      }
       var currentPath = window.location.pathname || '/';
       var segments = currentPath.split('/').filter(Boolean);
       if (segments.length > 0 && SUPPORTED_LOCALES.indexOf(segments[0]) !== -1) {
@@ -10116,12 +10419,20 @@
         var wrap = document.getElementById("lang-wrap");
         if (wrap && !wrap.contains(modal)) wrap.appendChild(modal);
       }
+      localStorage.setItem(LANG_KEY, lang);
       if (LANDING_LOCALES.indexOf(lang) !== -1) {
-        localStorage.setItem(LANG_KEY, lang);
-        window.location.assign('/' + lang + (window.location.hash || ''));
+        var path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
+        var segments = path.split('/').filter(Boolean);
+        if (segments.length && ['tr','en','en-ca','de','it'].indexOf(segments[0]) !== -1) segments[0] = lang;
+        else segments.unshift(lang);
+        var newPath = '/' + segments.join('/');
+        if (window.history && window.history.replaceState) {
+          window.history.replaceState({}, '', newPath + (window.location.search || '') + (window.location.hash || ''));
+        }
+        setLang(lang);
+        setTimeout(function() { setLang(lang); }, 0);
         return;
       }
-      localStorage.setItem(LANG_KEY, lang);
       var base = window.location.pathname || '/';
       var qs = window.location.search || '';
       var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(qs) : null;

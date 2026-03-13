@@ -1702,13 +1702,20 @@ def _index_response(request: Request | None = None):
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
         if request is not None:
+            import re
+            from html import escape
             base_url = str(request.base_url).rstrip("/")
             canonical_url = base_url + request.url.path
             raw = _inject_canonical(raw, canonical_url)
-            if request.url.path == "/":
-                import re
-                from html import escape
-                # Root "/": locale from Accept-Language so SPA shows one consistent language (no mixed TR/EN)
+            path = (request.url.path or "").strip()
+            # Path-based locale: /en, /de, /fr, /tr, /it, /es, /en-ca vb. — tek segment locale ise kullan (localde diğer ülkeler için de açılsın)
+            path_locale = None
+            if path.startswith("/") and path != "/":
+                segment = path[1:].split("/")[0].lower()
+                if segment in LANDING_ROUTES or segment in ("fr", "es", "ar", "hi", "he", "el", "sr"):
+                    path_locale = segment
+            if path == "/":
+                # Root "/": locale from Accept-Language so SPA shows one consistent language
                 accept_lang = (request.headers.get("accept-language") or "en")[:80]
                 _locale = "en"
                 for part in accept_lang.replace(" ", "").split(","):
@@ -1716,8 +1723,13 @@ def _index_response(request: Request | None = None):
                     if code in LANDING_ROUTES:
                         _locale = "en-ca" if part.lower().startswith("en-ca") else code
                         break
-                meta = get_landing_meta(_locale)
-                ui = get_landing_ui(_locale)
+            elif path_locale:
+                _locale = path_locale
+            else:
+                _locale = None
+            if _locale is not None:
+                meta = get_landing_meta(_locale) if _locale in LANDING_ROUTES else {"meta_title": "Norya", "meta_description": "", "og_locale": "en_US"}
+                ui = get_landing_ui(_locale) if _locale in LANDING_ROUTES else {}
                 _title = escape(meta.get("meta_title", "Norya"))
                 _desc = escape(meta.get("meta_description", ""))
                 raw = re.sub(r"<title>[^<]*</title>", f"<title>{_title}</title>", raw, count=1)
