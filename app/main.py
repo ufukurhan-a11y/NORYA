@@ -4149,6 +4149,11 @@ def payment_success_page(
           }} else {{
             try {{ console.log("[Norya] Google Ads conversion skipped", {{ reason: alreadyFired ? "already_fired" : "noryaConversionFired_set", send_to: conversionSendTo }}); }} catch(e) {{}}
           }}
+          // Test akışı: test123 için otomatik yönlendirme yapma; kullanıcı success ekranında kalır.
+          if (oid === "test123") {{
+            try {{ console.log("[Norya payment success] test mode: skip auto-redirect for merchant_oid=test123"); }} catch(e) {{}}
+            return;
+          }}
           if (window.self !== window.top) {{ try {{ window.parent.postMessage("norya_payment_ok", "*"); }} catch(e) {{}} }}
           var redirectTo = guestToken ? (baseUrl + "/?guest_token=" + encodeURIComponent(guestToken) + "#analyze") : reportUrl;
           redirectTimer = setTimeout(function() {{ window.location.href = redirectTo; }}, 1500);
