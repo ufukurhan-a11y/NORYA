@@ -2935,22 +2935,23 @@
     </div>
   </section>
 
-  <!-- Health Score kartı — premium, mobilde taşma yok -->
+  <!-- Rapor Özeti kartı — teşhis değil, hazırlık ve açıklama; premium -->
   <section class="premium-section health-score-section bg-[var(--norya-bg)] pt-8 sm:pt-10 pb-8 sm:pb-10">
     <div class="premium-wrap">
       <div class="max-w-md mx-auto px-1">
         <article class="rounded-2xl p-6 sm:p-8 flex flex-col gap-5 text-center health-score-card">
-          <div class="text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-accent-500 dark:text-accent-400" data-i18n="health_score_card_title">Sağlık Skoru</div>
+          <div class="text-[11px] sm:text-xs font-semibold tracking-[0.2em] uppercase text-accent-500 dark:text-accent-400" data-i18n="report_overview_title">Rapor Özeti</div>
           <div class="flex flex-col items-center gap-2">
             <div class="text-4xl sm:text-5xl font-bold text-accent-900 dark:text-white tracking-tight tabular-nums">
               82 <span class="text-lg sm:text-xl font-semibold text-accent-500 dark:text-accent-400">/ 100</span>
             </div>
-            <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 leading-relaxed max-w-xs mx-auto" data-i18n="health_score_card_desc">Genel sağlık durumunuz iyi seviyede.</p>
+            <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 leading-relaxed max-w-xs mx-auto" data-i18n="report_overview_intro">Bu özet, rapordaki öne çıkan bulguların hızlı görünümüdür.</p>
+            <p class="text-xs sm:text-sm text-accent-500 dark:text-accent-400 leading-relaxed max-w-xs mx-auto" data-i18n="report_overview_neutral">Öne çıkan biyobelirteçler ve dikkat edilmesi gereken noktalar özetlenir.</p>
           </div>
           <div class="mt-1 flex flex-col sm:flex-row sm:items-center sm:justify-center gap-3 sm:gap-5 text-[11px] sm:text-xs text-accent-500 dark:text-accent-400">
-            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.25)] flex-shrink-0"></span><span data-i18n="health_score_legend_green">90–100 arası • yeşil</span></div>
-            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_0_4px_rgba(245,158,11,0.25)] flex-shrink-0"></span><span data-i18n="health_score_legend_yellow">70–89 arası • sarı</span></div>
-            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_0_4px_rgba(244,63,94,0.25)] flex-shrink-0"></span><span data-i18n="health_score_legend_red">0–69 arası • kırmızı</span></div>
+            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-emerald-500 shadow-[0_0_0_4px_rgba(16,185,129,0.25)] flex-shrink-0"></span><span data-i18n="report_summary_legend_highlighted">Öne çıkan</span></div>
+            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-amber-400 shadow-[0_0_0_4px_rgba(245,158,11,0.25)] flex-shrink-0"></span><span data-i18n="report_summary_legend_watch">İzle</span></div>
+            <div class="inline-flex items-center gap-2"><span class="inline-flex w-3 h-3 rounded-full bg-rose-500 shadow-[0_0_0_4px_rgba(244,63,94,0.25)] flex-shrink-0"></span><span data-i18n="report_summary_legend_discuss">Görüş</span></div>
           </div>
         </article>
       </div>
@@ -7604,7 +7605,7 @@
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme", trust_badge_qr: "QR ile rapor doğrulama",
         promo_strip_cta: "Ödeme sayfasında uygula", promo_strip_code_label: "İndirim kodu", promo_strip_discount_pct: "{percent}% kış indirimi",
-        trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_bar_qr: "QR rapor doğrulama", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", health_score_card_title: "Sağlık Skoru", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
+        trust_bar_medical: "Tıbbi düzeyde içgörüler", trust_bar_3d: "3D Secure Ödemeler", trust_bar_doctor_reports: "Doktor tarzı raporlar", trust_bar_analyses: "50.000+ analiz üretildi", trust_bar_cloudflare: "Cloudflare Güvenlik", trust_bar_qr: "QR rapor doğrulama", trust_global_label: "Global standartlar ve güvenlik", trust_global_labs: "Global laboratuvar birimleri", report_overview_title: "Rapor Özeti", report_overview_intro: "Bu özet, rapordaki öne çıkan bulguların hızlı görünümüdür.", report_overview_neutral: "Öne çıkan biyobelirteçler ve dikkat edilmesi gereken noktalar özetlenir.", report_summary_legend_highlighted: "Öne çıkan", report_summary_legend_watch: "İzle", report_summary_legend_discuss: "Görüş", health_score_card_title: "Sağlık Skoru", health_score_card_desc: "Genel sağlık durumunuz iyi seviyede.", health_score_legend_green: "90–100 arası • yeşil", health_score_legend_yellow: "70–89 arası • sarı", health_score_legend_red: "0–69 arası • kırmızı",
         features_heading: "Güvenilir sağlık içgörüleri, gerçek hayat için tasarlandı.",
         features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
         features_trust_line: "Kurumsal düzey güvenlik, şifreli iletişim ve GDPR uyumlu mimari.",
@@ -7975,7 +7976,7 @@
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR", trust_badge_qr: "QR report verification",
         promo_strip_cta: "Apply on the payment page", promo_strip_code_label: "Discount code", promo_strip_discount_pct: "{percent}% winter discount",
-        trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_bar_qr: "QR report verification", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
+        trust_bar_medical: "Medical-grade insights", trust_bar_3d: "3D Secure Payments", trust_bar_doctor_reports: "Doctor-style Reports", trust_bar_analyses: "50,000+ analyses generated", trust_bar_cloudflare: "Cloudflare Security", trust_bar_qr: "QR report verification", trust_global_label: "Global standards & security", trust_global_labs: "Global lab units", report_overview_title: "Report overview", report_overview_intro: "A quick summary of the highlighted findings in your report.", report_overview_neutral: "Highlighted markers and notable points are summarized.", report_summary_legend_highlighted: "Highlighted", report_summary_legend_watch: "Watch", report_summary_legend_discuss: "Discuss", health_score_card_title: "Health Score", health_score_card_desc: "Your overall health status is at a good level.", health_score_legend_green: "90–100 • green", health_score_legend_yellow: "70–89 • yellow", health_score_legend_red: "0–69 • red",
         features_heading: "Trusted health insights, designed for real life.",
         features_sub: "Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.",
         features_trust_line: "Enterprise-grade security, encrypted communication and GDPR-aligned architecture.",
@@ -8338,7 +8339,7 @@
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR", trust_badge_qr: "Verifica report con QR",
         promo_strip_cta: "Applica nella pagina di pagamento", promo_strip_code_label: "Codice", promo_strip_discount_pct: "{percent}% sconto invernale",
-        trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare", trust_bar_qr: "Verifica report con QR",
+        trust_bar_medical: "Approfondimenti di livello medico", trust_bar_3d: "Pagamenti 3D Secure", trust_bar_doctor_reports: "Report in stile medico", trust_bar_analyses: "50.000+ analisi generate", trust_bar_cloudflare: "Sicurezza Cloudflare", trust_bar_qr: "Verifica report con QR", report_overview_title: "Riepilogo report", report_overview_intro: "Un riepilogo rapido dei risultati evidenziati nel report.", report_overview_neutral: "Marcatori evidenziati e punti degni di nota sono riepilogati.", report_summary_legend_highlighted: "Evidenziato", report_summary_legend_watch: "Da seguire", report_summary_legend_discuss: "Da discutere",
         trust_badge_secure_paytr: "🔒 Pagamento sicuro – PayTR",
         report_preview_line_1: "Health Score, marker evidenziati e punti principali.",
         report_preview_line_2: "PDF pronto per il medico e, se desideri, verifica tramite QR.",
@@ -8580,7 +8581,7 @@
         report_preview_line_1: "Health Score, marcadores destacados y puntos clave.",
         report_preview_line_2: "PDF listo para tu médico y, si lo deseas, verificación del informe por código QR.",
         promo_strip_cta: "Aplicar en la página de pago", promo_strip_code_label: "Código", promo_strip_discount_pct: "{percent}% descuento de invierno",
-        trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare", trust_bar_qr: "Verificación de informe por QR",
+        trust_bar_medical: "Información de nivel médico", trust_bar_3d: "Pagos 3D Secure", trust_bar_doctor_reports: "Informes estilo médico", trust_bar_analyses: "50.000+ análisis generados", trust_bar_cloudflare: "Seguridad Cloudflare", trust_bar_qr: "Verificación de informe por QR", report_overview_title: "Resumen del informe", report_overview_intro: "Un resumen rápido de los hallazgos destacados en tu informe.", report_overview_neutral: "Se resumen los marcadores destacados y los puntos a tener en cuenta.", report_summary_legend_highlighted: "Destacado", report_summary_legend_watch: "Seguir", report_summary_legend_discuss: "Comentar",
         features_heading: "Información de salud fiable, diseñada para la vida real.",
         features_sub: "Sube tus resultados de laboratorio y obtén un informe claro y estructurado con tendencias, señales de riesgo y próximos pasos.",
         features_trust_line: "Seguridad de nivel enterprise, comunicación cifrada y arquitectura alineada con el GDPR.",
@@ -8819,7 +8820,7 @@
         trust_badge_secure_paytr: "🔒 Paiement sécurisé – PayTR",
         report_preview_line_1: "Health Score, valeurs signalées et points essentiels.",
         report_preview_line_2: "PDF prêt pour le médecin et, si besoin, vérification du rapport par QR.",
-        trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare", trust_bar_qr: "Vérification du rapport par QR",
+        trust_bar_medical: "Informations de niveau médical", trust_bar_3d: "Paiements 3D Secure", trust_bar_doctor_reports: "Rapports style médecin", trust_bar_analyses: "50 000+ analyses générées", trust_bar_cloudflare: "Sécurité Cloudflare", trust_bar_qr: "Vérification du rapport par QR", report_overview_title: "Aperçu du rapport", report_overview_intro: "Un résumé rapide des éléments mis en évidence dans votre rapport.", report_overview_neutral: "Les marqueurs mis en évidence et les points notables sont résumés.", report_summary_legend_highlighted: "En évidence", report_summary_legend_watch: "À surveiller", report_summary_legend_discuss: "À discuter",
         features_heading: "Des informations santé de confiance, conçues pour la vie réelle.",
         features_sub: "Téléchargez vos résultats d'analyses et obtenez un rapport clair et structuré avec tendances, alertes et prochaines étapes.",
         features_trust_line: "Sécurité niveau enterprise, communication chiffrée et architecture conforme au RGPD.",
@@ -9055,7 +9056,7 @@
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
         trust_badge_ssl: "SSL-verschlüsselt", trust_badge_kvkk_gdpr: "DSGVO-konform", trust_badge_paytr: "Sichere Zahlung (PayTR)", trust_badge_qr: "QR-Berichtsprüfung",
         promo_strip_cta: "Auf der Zahlungsseite anwenden", promo_strip_code_label: "Code", promo_strip_discount_pct: "{percent}% Winterrabatt",
-        trust_bar_medical: "Medizinische Einblicke", trust_bar_3d: "3D-Secure-Zahlungen", trust_bar_doctor_reports: "Arzt-Style-Berichte", trust_bar_analyses: "50.000+ Analysen erstellt", trust_bar_cloudflare: "Cloudflare-Sicherheit", trust_bar_qr: "QR-Berichtsprüfung",
+        trust_bar_medical: "Medizinische Einblicke", trust_bar_3d: "3D-Secure-Zahlungen", trust_bar_doctor_reports: "Arzt-Style-Berichte", trust_bar_analyses: "50.000+ Analysen erstellt", trust_bar_cloudflare: "Cloudflare-Sicherheit", trust_bar_qr: "QR-Berichtsprüfung", trust_global_label: "Globale Standards & Sicherheit", trust_global_labs: "Globale Laboreinheiten", report_overview_title: "Ergebnisübersicht", report_overview_intro: "Eine schnelle Übersicht der hervorgehobenen Befunde im Bericht.", report_overview_neutral: "Hervorgehobene Marker und auffällige Punkte werden zusammengefasst.", report_summary_legend_highlighted: "Hervorgehoben", report_summary_legend_watch: "Beobachten", report_summary_legend_discuss: "Besprechen",
         features_heading: "Vertrauenswürdige Gesundheitseinblicke, für den Alltag konzipiert.",
         features_sub: "Laden Sie Ihre Laborergebnisse hoch und erhalten Sie einen klaren, strukturierten Bericht mit Trends, Risikohinweisen und umsetzbaren nächsten Schritten.",
         features_trust_line: "Sicherheit auf Unternehmensniveau, verschlüsselte Kommunikation und DSGVO-konforme Architektur.",
