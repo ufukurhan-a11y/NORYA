@@ -3962,8 +3962,10 @@ def payment_success_page(
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
     merchant_oid: str = Query("", description="Sipariş merchant_oid (PayTR yönlendirmesinde eklenir)"),
     guest_token: str = Query("", description="Misafir ödeme sonrası oturum için token"),
+    verify_tag: str = Query("", description="1 ise sadece tag doğrulama; conversion tetiklenmez"),
 ):
-    """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir."""
+    """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir.
+    Global tag (AW-18004536281) her zaman yüklenir; conversion sadece API paid/premium_active + gerçek transaction_id ile."""
     base = _paytr_canonical_base(request)
     api_base = base
     lang = (lang or "tr").lower()[:2]
@@ -3982,10 +3984,32 @@ def payment_success_page(
     retry_text = t.get("failed_retry", "Tekrar dene")
     invalid_oid_msg = t.get("success_invalid_oid", "Sipariş bilgisi alınamadı veya geçersiz. Rapor sayfasına gidebilirsiniz.")
 
+    # Global tag her zaman aynı şekilde yüklensin (merchant_oid olsa da olmasa da)
+    aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
+    gtag_script = (
+        f'<script async src="https://www.googletagmanager.com/gtag/js?id={aw_id}"></script>'
+        f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{aw_id}");</script>'
+    )
+    is_verify_tag = (verify_tag or "").strip() == "1"
+    data_verify_val = "1" if is_verify_tag else ""
+
     if not (merchant_oid and merchant_oid.strip()):
+        # merchant_oid yok: yine de global tag yüklü; verify_tag=1 ise konsola gtag/dataLayer durumu yazılır
+        verify_script = ""
+        if is_verify_tag:
+            verify_script = f"""  <script>
+(function(){{
+  try {{
+    var gtagDefined = typeof window.gtag === "function";
+    var dl = window.dataLayer || [];
+    console.log("[Norya verify_tag] gtag defined:", gtagDefined, "dataLayer length:", dl.length, "AW id:", {json.dumps(aw_id)});
+  }} catch(e) {{ console.warn("[Norya verify_tag]", e); }}
+}})();
+  </script>"""
         html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
+{gtag_script}
 <title>{title} – {BRAND_NAME}</title>
 <style>
   body {{ font-family: system-ui, sans-serif; margin: 0; padding: max(16px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); background: linear-gradient(165deg, #0c1222 0%, #0f172a 50%); color: #e2e8f0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }}
@@ -3997,7 +4021,8 @@ def payment_success_page(
   a:hover {{ transform: translateY(-2px); box-shadow: 0 6px 20px rgba(14,165,164,0.4); }}
 </style>
 </head>
-<body>
+<body data-gtag-conversion-page="payment-success" data-verify-tag="{data_verify_val}">
+{verify_script}
   <div class="card">
     <div class="ok">✓</div>
     <h1>{title}</h1>
@@ -4010,19 +4035,16 @@ def payment_success_page(
 
     oid = merchant_oid.strip()
     log.info(
-        "PAYMENT_SUCCESS_PAGE: merchant_oid=%s guest_token=%s (conversion will fire client-side when order status=paid)",
+        "PAYMENT_SUCCESS_PAGE: merchant_oid=%s guest_token=%s verify_tag=%s (conversion will fire client-side when order status=paid, unless verify_tag=1)",
         oid[:64],
         "yes" if (guest_token and guest_token.strip()) else "no",
+        "1" if is_verify_tag else "0",
     )
     report_url = f"{base}/report"
     guest_token_js = json.dumps((guest_token or "").strip() or "")
-    aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
     conv_label = (getattr(settings, "google_ads_conversion_label", "") or "").strip() or "RF4SCL78oIYcENnXnYID"
     conversion_send_to = f"{aw_id}/{conv_label}"
-    gtag_script = (
-        f'<script async src="https://www.googletagmanager.com/gtag/js?id={aw_id}"></script>'
-        f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());gtag("config","{aw_id}");</script>'
-    )
+    verify_tag_js = "true" if is_verify_tag else "false"
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
@@ -4058,6 +4080,7 @@ def payment_success_page(
   </div>
   <script>
 (function(){{
+  // Sıra: (1) gtag head'de yüklü, (2) 500ms sonra polling, (3) API paid/premium_active gelince conversion (verify_tag=1 ise conversion atlanır)
   var apiBase = {json.dumps(api_base)};
   var oid = {json.dumps(oid)};
   var reportUrl = {json.dumps(report_url)};
@@ -4069,6 +4092,7 @@ def payment_success_page(
   var failedShort = {json.dumps(failed_short)};
   var invalidOidMsg = {json.dumps(invalid_oid_msg)};
   var conversionSendTo = {json.dumps(conversion_send_to)};
+  var verifyTag = {verify_tag_js};
   var start = Date.now();
   var timeoutTotal = 90000;
   var intervalFast = 2000;
@@ -4077,8 +4101,8 @@ def payment_success_page(
   var pollTimer = null;
   var redirectTimer = null;
   var hasTimedOut = false;
-  window.__noryaPaymentDebug = {{ orderId: oid, paymentStatus: null, callbackStatus: "polling", conversionTriggered: false }};
-  try {{ console.log("[Norya payment success] orderId=" + oid + ", guest_token=" + (guestToken ? "yes" : "no")); }} catch(e) {{}}
+  window.__noryaPaymentDebug = {{ orderId: oid, paymentStatus: null, callbackStatus: "polling", conversionTriggered: false, verifyTag: verifyTag }};
+  try {{ console.log("[Norya payment success] orderId=" + oid + ", guest_token=" + (guestToken ? "yes" : "no") + ", verify_tag=" + verifyTag); }} catch(e) {{}}
 
   function showSpinner(show) {{
     document.getElementById("spinnerWrap").style.display = show ? "block" : "none";
@@ -4149,7 +4173,13 @@ def payment_success_page(
           try {{ alreadyFired = sessionStorage.getItem(storageKey) === "1"; }} catch(e) {{}}
           window.__noryaPaymentDebug.send_to = conversionSendTo;
           window.__noryaPaymentDebug.condition = "status=paid_or_premium";
-          if (!window.__noryaConversionFired && !alreadyFired) {{
+          if (verifyTag) {{
+            try {{
+              var gtagDefined = typeof window.gtag === "function";
+              var dl = window.dataLayer || [];
+              console.log("[Norya verify_tag] conversion NOT fired (verify_tag=1). gtag defined:", gtagDefined, "dataLayer length:", dl.length, "send_to:", conversionSendTo);
+            }} catch(e) {{ console.warn("[Norya verify_tag]", e); }}
+          }} else if (!window.__noryaConversionFired && !alreadyFired) {{
             if (typeof gtag === "function") {{
               window.__noryaConversionFired = true;
               gtag("event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }});

@@ -1,6 +1,7 @@
 """Satış & ödeme paneli: başarılı/hatalı/bekleyen, PayTR, detay, admin notu, e-arşiv fatura, iade."""
 import logging
 from datetime import datetime
+from pathlib import Path
 from urllib.parse import quote
 
 from fastapi import APIRouter, Depends, Form, Query, Request
@@ -15,7 +16,9 @@ from app.services.invoice_earsiv import create_earsiv_invoice
 from app.services.paytr_refund import paytr_refund
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+# Mutlak yol: çalışma dizini nereden başlatılırsa başlatılsın şablonlar bulunur
+_APP_DIR = Path(__file__).resolve().parent.parent.parent
+templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
 log = logging.getLogger(__name__)
 
 

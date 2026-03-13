@@ -1,4 +1,6 @@
 """Live Analytics Dashboard: sadece admin girişi sonrası görünür, premium metrik kartları."""
+from pathlib import Path
+
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse, JSONResponse
 from fastapi.templating import Jinja2Templates
@@ -12,7 +14,8 @@ from app.services.live_analytics import (
 )
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+_APP_DIR = Path(__file__).resolve().parent.parent.parent
+templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
 
 
 @router.get("/live-analytics", response_class=HTMLResponse)
