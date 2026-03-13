@@ -3177,10 +3177,13 @@ def order_status(
     if not (merchant_oid and merchant_oid.strip()):
         raise HTTPException(status_code=400, detail="merchant_oid zorunludur.")
     oid = _validate_merchant_oid(merchant_oid)
-    # Test modu: sadece development'ta test123 için mock "paid" (Tag Assistant / conversion testi; production'da 404 kalır)
-    if oid == "test123" and getattr(settings, "environment", "development") != "production":
+    stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == oid)
+    order = db.exec(stmt).first()
+    # Test OID'leri: gerçek sipariş yoksa kontrollü mock yanıt döndür (Tag Assistant / Google Ads conversion testi).
+    # Güvenlik: sadece sabit test OID listesi için ve sadece veritabanında gerçek kayıt bulunamadığında çalışır.
+    if not order and oid in {"test123"}:
         resp = {
-            "merchant_oid": "test123",
+            "merchant_oid": oid,
             "status": "paid",
             "is_premium_active": True,
             "plan_code": "yearly",
@@ -3188,9 +3191,8 @@ def order_status(
         }
         response = JSONResponse(content=resp)
         response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
+        response.headers["Pragma"] = "no-cache"
         return response
-    stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == oid)
-    order = db.exec(stmt).first()
     if not order:
         raise HTTPException(status_code=404, detail="Sipariş bulunamadı.")
     # Map backend "completed" -> "paid" for frontend contract

@@ -30,7 +30,7 @@ Yani dönüşüm sadece **başarılı ödeme sonrası teşekkür sayfasında**, 
 ### 1. Hangi sayfada test edeceğim?
 
 - **Sayfa:** `https://<siteniz>/payment/success?merchant_oid=<gerçek_veya_test_oid>`
-- **Test siparişi (sadece development):** `merchant_oid=test123` → API hemen `status: "paid"` döner, conversion tetiklenir.
+- **Test siparişi:** `merchant_oid=test123` → Gerçek sipariş kaydı yoksa API hemen `status: "paid"` döner, conversion tetiklenir.
 
 ### 2. Sayfada neyi kontrol etmeliyim?
 
