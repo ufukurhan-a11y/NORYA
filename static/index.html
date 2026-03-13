@@ -411,24 +411,29 @@
       border-radius: 20px;
     }
     .hero-v2-report-card {
+      --hero-card-radius: 18px;
       position: relative;
       z-index: 2;
       margin-top: 1.5rem;
-      padding: 1.5rem 1.35rem 1.15rem;
-      border-radius: 18px;
+      border-radius: var(--hero-card-radius);
       background: linear-gradient(165deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.98) 100%);
-      border: 1px solid rgba(14, 165, 164, 0.22);
-      box-shadow: 0 24px 48px rgba(0, 0, 0, 0.18), 0 0 0 1px rgba(255, 255, 255, 0.7) inset, 0 1px 0 0 rgba(14, 165, 164, 0.12);
+      border: 1px solid rgba(0, 0, 0, 0.06);
+      box-shadow: 0 16px 40px rgba(0, 0, 0, 0.08), 0 0 0 1px rgba(255, 255, 255, 0.5) inset;
+      overflow: hidden;
+      box-sizing: border-box;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
     }
-    .hero-v2-report-card::before {
-      content: "";
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      height: 3px;
-      border-radius: 18px 18px 0 0;
-      background: linear-gradient(90deg, #0EA5A4 0%, #0d9488 50%, #14b8a6 100%);
+    .hero-v2-report-card-accent {
+      flex-shrink: 0;
+      width: 100%;
+      height: 7px;
+      min-height: 7px;
+      background: #0d9488;
+    }
+    .hero-v2-report-card-body {
+      padding: 1.5rem 1.35rem 1.15rem;
     }
     @media (min-width: 1024px) {
       .hero-v2-report-card {
@@ -438,8 +443,8 @@
         margin-top: 0;
         width: calc(100% + 0.5rem);
         max-width: 300px;
-        padding: 1.5rem 1.35rem 1.15rem;
       }
+      .hero-v2-report-card-body { padding: 1.5rem 1.35rem 1.15rem; }
     }
     .hero-v2-report-card-header {
       display: flex;
@@ -496,10 +501,11 @@
     .hero-v2-report-card-footer {
       display: flex;
       flex-wrap: wrap;
+      align-items: center;
       gap: 0.5rem;
-      margin-top: 0.85rem;
-      padding-top: 0.85rem;
-      border-top: 1px solid rgba(14, 165, 164, 0.12);
+      margin-top: 1rem;
+      padding-top: 0.9rem;
+      border-top: 1px solid rgba(14, 165, 164, 0.1);
     }
     .hero-v2-report-card-tag {
       font-size: 0.65rem;
@@ -510,10 +516,24 @@
       color: #475569;
       letter-spacing: 0.02em;
     }
-    .hero-v2-report-card-tag--dark {
-      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
-      color: #fff;
-      border: 1px solid rgba(255, 255, 255, 0.08);
+    .hero-v2-report-card-qr-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.35rem;
+      font-size: 0.6rem;
+      font-weight: 600;
+      color: #64748b;
+      letter-spacing: 0.02em;
+      padding: 0.25rem 0.5rem;
+      border-radius: 6px;
+      background: rgba(241, 245, 249, 0.8);
+      border: 1px solid rgba(14, 165, 164, 0.15);
+    }
+    .hero-v2-report-card-qr-icon {
+      width: 12px;
+      height: 12px;
+      flex-shrink: 0;
+      color: #0d9488;
     }
 
     .drop-shadow-soft { box-shadow: var(--norya-shadow); }
@@ -2887,20 +2907,26 @@
               <!-- Optional img: <img src="/static/images/hero-visual.png" alt="" loading="lazy" /> -->
             </div>
             <div class="hero-v2-report-card" aria-hidden="true">
-              <div class="hero-v2-report-card-header">
-                <span class="hero-v2-report-card-badge" data-i18n="report_preview_badge">Örnek rapor</span>
-                <span class="hero-v2-report-card-score-wrap">
-                  <span class="hero-v2-report-card-score">82<span class="hero-v2-report-card-score-max">/100</span></span>
-                </span>
-              </div>
-              <p class="hero-v2-report-card-title" data-i18n="health_dashboard_title">Premium Health raporu</p>
-              <ul class="hero-v2-report-card-features">
-                <li><span class="hero-v2-report-card-dot hero-v2-report-card-dot--ok"></span><span data-i18n="report_preview_line_1">Sağlık skoru & işaretli biyobelirteçler</span></li>
-                <li><span class="hero-v2-report-card-dot hero-v2-report-card-dot--ok"></span><span data-i18n="report_preview_line_2">Doktora hazır PDF · QR doğrulama</span></li>
-              </ul>
-              <div class="hero-v2-report-card-footer">
-                <span class="hero-v2-report-card-tag">PDF</span>
-                <span class="hero-v2-report-card-tag hero-v2-report-card-tag--dark" data-i18n="trust_block_qr">Rapor doğrulama</span>
+              <div class="hero-v2-report-card-accent" aria-hidden="true"></div>
+              <div class="hero-v2-report-card-body">
+                <div class="hero-v2-report-card-header">
+                  <span class="hero-v2-report-card-badge" data-i18n="report_preview_badge">Örnek rapor</span>
+                  <span class="hero-v2-report-card-score-wrap">
+                    <span class="hero-v2-report-card-score">82<span class="hero-v2-report-card-score-max">/100</span></span>
+                  </span>
+                </div>
+                <p class="hero-v2-report-card-title" data-i18n="health_dashboard_title">Premium Health raporu</p>
+                <ul class="hero-v2-report-card-features">
+                  <li><span class="hero-v2-report-card-dot hero-v2-report-card-dot--ok"></span><span data-i18n="report_preview_line_1">Sağlık skoru & işaretli biyobelirteçler</span></li>
+                  <li><span class="hero-v2-report-card-dot hero-v2-report-card-dot--ok"></span><span data-i18n="report_preview_line_2">Doktora hazır PDF · QR doğrulama</span></li>
+                </ul>
+                <div class="hero-v2-report-card-footer">
+                  <span class="hero-v2-report-card-tag">PDF</span>
+                  <span class="hero-v2-report-card-qr-badge" aria-hidden="true">
+                    <svg class="hero-v2-report-card-qr-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="4" height="4" rx="0.5"/><rect x="9" y="14" width="4" height="4" rx="0.5"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+                    <span data-i18n="report_card_qr_label">QR doğrulama</span>
+                  </span>
+                </div>
               </div>
             </div>
           </div>
@@ -7751,7 +7777,7 @@
         profile_kpi_last_hint: "En son klinik rapor tarihiniz.",
         example_report_domain_cardio: "Kardiyovasküler", example_report_domain_metabolic: "Metabolik", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Enflamasyon",
         example_report_risk_low: "Düşük", example_report_risk_mid: "Orta", example_report_risk_high: "Yüksek",
-        report_preview_badge: "Örnek rapor", health_dashboard_title: "Premium Health Raporu Önizleme", health_dashboard_badge: "Premium Health",
+        report_preview_badge: "Örnek rapor", report_card_qr_label: "QR doğrulama", health_dashboard_title: "Premium Health Raporu Önizleme", health_dashboard_badge: "Premium Health",
         premium_report_card_title: "Norya Health Report", premium_bullet_health_score: "Health Score", premium_bullet_diabetes: "Diyabet Riski", premium_bullet_heart: "Kalp Riski", premium_bullet_charts: "Klinik grafikler", premium_bullet_comment: "Yapılandırılmış yorum",
         health_kpi_bioage: "Biyolojik Yaş (tahmini)", health_kpi_bioage_desc: "Skorunuza göre tahmini sağlık yaşınız.",
         example_clinical_report_title: "Örnek Klinik Rapor", sample_report_desc: "Kan tahlili sonuçlarınız skor, risk göstergesi ve trend ile klinik rapor formatında sunulur.", sample_page1_title: "Genel Sağlık", sample_page2_title: "Test Sonuçları", sample_page3_title: "Yapılandırılmış Yorum", sample_page4_title: "Risk Skorları", sample_not_diagnosis: "Bu yorum teşhis değildir; bilgilendirme amaçlıdır. Sonuçları hekiminizle paylaşın.", example_slide_summary: "Genel sağlık özeti", example_slide_summary_text: "Değerleriniz genel olarak referans aralığına yakın. Birkaç parametre hafifçe sınırda; öneriler bölümünde detay bulabilirsiniz.", example_slide_results: "Test sonuçları", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukoz: 98 mg/dL (Ref: 70–100). Her parametre tek tek açıklanır ve referans aralığıyla karşılaştırılır.", example_slide_ai: "Yapılandırılmış yorum", example_slide_ai_text: "Tahlil sonuçlarınız yapılandırılmış şekilde yorumlanır; olası nedenler ve beslenme/yaşam tarzı önerileri sade bir dille sunulur.", example_slide_risk: "Risk skorları", example_slide_risk_text: "Parametreler normal, sınır veya dikkat olarak işaretlenir. Kalp sağlığı ve diğer risk notları raporunuzda yer alır.", example_btn_analyze: "Analiz Yap", example_btn_view_sample: "Örnek Raporu Gör",
@@ -8117,7 +8143,7 @@
         profile_kpi_last_hint: "Date of your most recent clinical report.",
         example_report_domain_cardio: "Cardiovascular", example_report_domain_metabolic: "Metabolic", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Inflammation",
         example_report_risk_low: "Low", example_report_risk_mid: "Moderate", example_report_risk_high: "High",
-        report_preview_badge: "Sample report", health_dashboard_title: "Premium Health Report Preview", health_dashboard_badge: "Premium Health",
+        report_preview_badge: "Sample report", report_card_qr_label: "QR verified", health_dashboard_title: "Premium Health Report Preview", health_dashboard_badge: "Premium Health",
         premium_report_card_title: "Norya Health Report", premium_bullet_health_score: "Health Score", premium_bullet_diabetes: "Diabetes Risk", premium_bullet_heart: "Heart Risk", premium_bullet_charts: "Clinical charts", premium_bullet_comment: "Structured interpretation",
         health_kpi_bioage: "Biological age (estimate)", health_kpi_bioage_desc: "Estimated health age based on your score.",
         example_clinical_report_title: "Sample Clinical Report", sample_report_desc: "Your lab results are presented in clinical report format with score, risk indicator and trend.", example_slide_summary: "General health summary", example_slide_summary_text: "Your values are generally close to the reference range. A few parameters may be slightly borderline; see the recommendations section for details.", example_slide_results: "Test results", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucose: 98 mg/dL (Ref: 70–100). Each parameter is explained and compared to the reference range.", example_slide_ai: "Structured interpretation", example_slide_ai_text: "Your lab results are interpreted in a structured way, with possible causes and diet/lifestyle recommendations in plain language.", example_slide_risk: "Risk scores", example_slide_risk_text: "Parameters are marked as normal, borderline or attention. Heart health and other risk notes are included in your report.", example_btn_analyze: "Run analysis", example_btn_view_sample: "View sample report",
@@ -8406,7 +8432,7 @@
         example_report_health_score_title: "Punteggio salute generale",
         example_report_domain_cardio: "Cardiovascolare", example_report_domain_metabolic: "Metabolico", example_report_domain_vitamin: "Vitamina", example_report_domain_inflammation: "Infiammazione",
         example_report_risk_low: "Basso", example_report_risk_mid: "Moderato", example_report_risk_high: "Alto",
-        health_dashboard_title: "Anteprima report Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "Verifica QR", health_dashboard_title: "Anteprima report Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "I tuoi risultati sono presentati in formato report clinico con punteggio, indicatore di rischio e trend.",
         example_clinical_report_title: "Esempio di report clinico", example_slide_summary: "Riepilogo salute generale", example_slide_summary_text: "I tuoi valori sono in genere vicini all'intervallo di riferimento. Alcuni parametri leggermente al limite; vedi raccomandazioni.", example_slide_results: "Risultati dei test", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucosio: 98 mg/dL (Ref: 70–100). Ogni parametro spiegato con intervallo di riferimento.", example_slide_ai: "Commento AI", example_slide_ai_text: "L'IA interpreta i risultati e presenta cause possibili e consigli su dieta e stile di vita in linguaggio semplice.", example_slide_risk: "Punteggi di rischio", example_slide_risk_text: "Parametri segnati come normali, limite o attenzione. Salute cardiaca e altri rischi nel report.", example_btn_analyze: "Esegui analisi", example_btn_view_sample: "Vedi report di esempio",
         security_title: "Sicurezza e protezione dati", security_desc: "I tuoi dati sanitari sono protetti secondo gli standard più elevati.",
@@ -8645,7 +8671,7 @@
         example_report_health_score_title: "Puntuación de salud general",
         example_report_domain_cardio: "Cardiovascular", example_report_domain_metabolic: "Metabólico", example_report_domain_vitamin: "Vitamina", example_report_domain_inflammation: "Inflamación",
         example_report_risk_low: "Bajo", example_report_risk_mid: "Moderado", example_report_risk_high: "Alto",
-        health_dashboard_title: "Vista previa informe Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "Verificación QR", health_dashboard_title: "Vista previa informe Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "Tus resultados se presentan en formato de informe clínico con puntuación, indicador de riesgo y tendencia.",
         example_clinical_report_title: "Ejemplo de informe clínico", example_slide_summary: "Resumen de salud general", example_slide_summary_text: "Tus valores están en general cerca del rango de referencia. Algunos parámetros ligeramente al límite; ver recomendaciones.", example_slide_results: "Resultados de análisis", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucosa: 98 mg/dL (Ref: 70–100). Cada parámetro explicado con rango de referencia.", example_slide_ai: "Comentario IA", example_slide_ai_text: "La IA interpreta tus resultados y presenta causas posibles y consejos de dieta y estilo de vida en lenguaje claro.", example_slide_risk: "Puntuaciones de riesgo", example_slide_risk_text: "Parámetros marcados como normal, límite o atención. Salud cardíaca y otros riesgos en tu informe.", example_btn_analyze: "Hacer análisis", example_btn_view_sample: "Ver informe de ejemplo",
         security_title: "Seguridad y protección de datos", security_desc: "Tus datos de salud protegidos con los más altos estándares.",
@@ -8884,7 +8910,7 @@
         example_report_health_score_title: "Score de santé global",
         example_report_domain_cardio: "Cardiovasculaire", example_report_domain_metabolic: "Métabolique", example_report_domain_vitamin: "Vitamine", example_report_domain_inflammation: "Inflammation",
         example_report_risk_low: "Faible", example_report_risk_mid: "Modéré", example_report_risk_high: "Élevé",
-        health_dashboard_title: "Aperçu rapport Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "Vérification QR", health_dashboard_title: "Aperçu rapport Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "Vos résultats sont présentés en format rapport clinique avec score, indicateur de risque et tendance.",
         example_clinical_report_title: "Exemple de rapport clinique", example_slide_summary: "Résumé santé général", example_slide_summary_text: "Vos valeurs sont en général proches de la fourchette de référence. Quelques paramètres légèrement à la limite ; voir recommandations.", example_slide_results: "Résultats des analyses", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glucose: 98 mg/dL (Ref: 70–100). Chaque paramètre expliqué avec fourchette de référence.", example_slide_ai: "Commentaire IA", example_slide_ai_text: "L'IA interprète vos résultats et présente causes possibles et conseils alimentation et mode de vie en langage simple.", example_slide_risk: "Scores de risque", example_slide_risk_text: "Paramètres marqués normal, limite ou attention. Santé cardiaque et autres risques dans le rapport.", example_btn_analyze: "Lancer l'analyse", example_btn_view_sample: "Voir le rapport exemple",
         security_title: "Sécurité et protection des données", security_desc: "Vos données de santé protégées selon les plus hauts standards.",
@@ -9110,7 +9136,7 @@
         example_report_health_score_title: "Gesundheits-Score gesamt",
         example_report_domain_cardio: "Kardiovaskulär", example_report_domain_metabolic: "Metabolisch", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Entzündung",
         example_report_risk_low: "Niedrig", example_report_risk_mid: "Mäßig", example_report_risk_high: "Hoch",
-        health_dashboard_title: "Premium-Gesundheitsbericht: Vorschau", health_dashboard_badge: "Premium Gesundheit",
+        report_card_qr_label: "QR-Prüfung", health_dashboard_title: "Premium-Gesundheitsbericht: Vorschau", health_dashboard_badge: "Premium Gesundheit",
         sample_report_desc: "Ihre Werte werden im klinischen Berichtsformat mit Score, Risikoindikator und Trend dargestellt.",
         example_clinical_report_title: "Beispiel Klinikbericht", example_slide_summary: "Allgemeine Gesundheitszusammenfassung", example_slide_summary_text: "Ihre Werte liegen insgesamt im Referenzbereich. Einige Parameter leicht grenzwertig; siehe Empfehlungen.", example_slide_results: "Testergebnisse", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukose: 98 mg/dL (Ref: 70–100). Jeder Parameter mit Referenzbereich erklärt.", example_slide_ai: "KI-Kommentar", example_slide_ai_text: "Die KI interpretiert Ihre Werte und gibt mögliche Ursachen sowie Ernährungs- und Lebensstilempfehlungen in einfacher Sprache.", example_slide_risk: "Risikoscores", example_slide_risk_text: "Parameter als normal, Grenze oder Achtung markiert. Herzgesundheit und weitere Risiken im Bericht.", example_btn_analyze: "Analyse starten", example_btn_view_sample: "Beispielbericht ansehen",
         security_title: "Sicherheit und Datenschutz", security_desc: "Ihre Gesundheitsdaten werden nach höchsten Standards geschützt.",
@@ -9313,7 +9339,7 @@
         example_report_health_score_title: "ציון בריאות כללי",
         example_report_domain_cardio: "קרדיווסקולרי", example_report_domain_metabolic: "מטבולי", example_report_domain_vitamin: "ויטמין", example_report_domain_inflammation: "דלקת",
         example_report_risk_low: "נמוך", example_report_risk_mid: "בינוני", example_report_risk_high: "גבוה",
-        health_dashboard_title: "תצוגת דוח Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "אימות QR", health_dashboard_title: "תצוגת דוח Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "התוצאות שלך מוצגות בפורמט דוח קליני עם ציון, אינדיקטור סיכון ומגמה.",
         example_clinical_report_title: "דוח קליני לדוגמה", example_slide_summary: "סיכום בריאות כללי", example_slide_summary_text: "הערכים שלך בדרך כלל קרובים לטווח הייחוס. פרמטרים אחדים מעט בגבול; ראה המלצות.", example_slide_results: "תוצאות בדיקות", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). גלוקוז: 98 mg/dL (Ref: 70–100). כל פרמטר מוסבר עם טווח ייחוס.", example_slide_ai: "פרשנות AI", example_slide_ai_text: "בינה מלאכותית מפרשת את התוצאות ומציגה סיבות אפשריות והמלצות תזונה ואורח חיים.", example_slide_risk: "ציוני סיכון", example_slide_risk_text: "פרמטרים מסומנים כרגיל, גבול או תשומת לב. בריאות הלב וסיכונים נוספים בדוח.", example_btn_analyze: "הרץ ניתוח", example_btn_view_sample: "צפה בדוח לדוגמה",
         security_title: "אבטחה והגנה על נתונים", security_desc: "נתוני הבריאות שלך מוגנים לפי הסטנדרטים הגבוהים ביותר.",
@@ -9494,7 +9520,7 @@
         example_report_health_score_title: "درجة الصحة العامة",
         example_report_domain_cardio: "قلبي وعائي", example_report_domain_metabolic: "أيضي", example_report_domain_vitamin: "فيتامين", example_report_domain_inflammation: "التهاب",
         example_report_risk_low: "منخفض", example_report_risk_mid: "متوسط", example_report_risk_high: "عالي",
-        health_dashboard_title: "معاينة تقرير Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "التحقق QR", health_dashboard_title: "معاينة تقرير Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "تُعرض نتائجك بتنسيق تقرير سريري مع الدرجة ومؤشر المخاطر والاتجاه.",
         example_clinical_report_title: "تقرير سريري نموذجي", example_slide_summary: "ملخص الصحة العامة", example_slide_summary_text: "قيمك بشكل عام قريبة من المدى المرجعي. بعض المعايير عند الحد؛ انظر التوصيات.", example_slide_results: "نتائج التحاليل", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). غلوكوز: 98 mg/dL (Ref: 70–100). كل معيار موضح مع المدى المرجعي.", example_slide_ai: "تعليق الذكاء الاصطناعي", example_slide_ai_text: "الذكاء الاصطناعي يفسر النتائج ويعرض الأسباب المحتملة ونصائح التغذية ونمط الحياة.", example_slide_risk: "درجات المخاطر", example_slide_risk_text: "المعايير تُصنَّف عادي أو حد أو انتباه. صحة القلب ومخاطر أخرى في التقرير.", example_btn_analyze: "تشغيل التحليل", example_btn_view_sample: "عرض التقرير النموذجي",
         security_title: "الأمان وحماية البيانات", security_desc: "بياناتك الصحية محمية بأعلى المعايير.",
@@ -9675,7 +9701,7 @@
         example_report_health_score_title: "समग्र स्वास्थ्य स्कोर",
         example_report_domain_cardio: "हृदय संबंधी", example_report_domain_metabolic: "चयापचय", example_report_domain_vitamin: "विटामिन", example_report_domain_inflammation: "सूजन",
         example_report_risk_low: "कम", example_report_risk_mid: "मध्यम", example_report_risk_high: "उच्च",
-        health_dashboard_title: "Premium Health रिपोर्ट पूर्वावलोकन", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "QR सत्यापन", health_dashboard_title: "Premium Health रिपोर्ट पूर्वावलोकन", health_dashboard_badge: "Premium Health",
         sample_report_desc: "आपके परिणाम स्कोर, जोखिम संकेतक और ट्रेंड के साथ क्लिनिकल रिपोर्ट प्रारूप में दिखाए जाते हैं।",
         example_clinical_report_title: "नमूना क्लिनिकल रिपोर्ट", example_slide_summary: "सामान्य स्वास्थ्य सारांश", example_slide_summary_text: "आपके मान सामान्यतः संदर्भ सीमा के करीब। कुछ पैरामीटर हल्के सीमा पर; सिफारिशें देखें।", example_slide_results: "टेस्ट परिणाम", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). ग्लूकोज: 98 mg/dL (Ref: 70–100). प्रत्येक पैरामीटर संदर्भ सीमा के साथ समझाया।", example_slide_ai: "AI व्याख्या", example_slide_ai_text: "AI आपके परिणामों की व्याख्या करता है और संभावित कारण तथा आहार/जीवनशैली सुझाव सरल भाषा में देता है।", example_slide_risk: "जोखिम स्कोर", example_slide_risk_text: "पैरामीटर सामान्य, सीमा या ध्यान के रूप में चिह्नित। हृदय स्वास्थ्य और अन्य जोखिम रिपोर्ट में।", example_btn_analyze: "विश्लेषण चलाएं", example_btn_view_sample: "नमूना रिपोर्ट देखें",
         security_title: "सुरक्षा और डेटा संरक्षण", security_desc: "आपके स्वास्थ्य डेटा उच्चतम मानकों से सुरक्षित।",
@@ -9854,7 +9880,7 @@
         example_report_health_score_title: "Συνολικό σκορ υγείας",
         example_report_domain_cardio: "Καρδιαγγειακό", example_report_domain_metabolic: "Μεταβολικό", example_report_domain_vitamin: "Βιταμίνη", example_report_domain_inflammation: "Φλεγμονή",
         example_report_risk_low: "Χαμηλό", example_report_risk_mid: "Μέτριο", example_report_risk_high: "Υψηλό",
-        health_dashboard_title: "Προεπισκόπηση αναφοράς Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "Επαλήθευση QR", health_dashboard_title: "Προεπισκόπηση αναφοράς Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "Τα αποτελέσματά σας παρουσιάζονται σε κλινική μορφή με σκορ, δείκτη κινδύνου και τάση.",
         example_clinical_report_title: "Δείγμα κλινικής αναφοράς", example_slide_summary: "Γενική περίληψη υγείας", example_slide_summary_text: "Οι τιμές σας είναι γενικά κοντά στο εύρος αναφοράς. Μερικές παράμετροι ελαφρώς στο όριο· δείτε συμβουλές.", example_slide_results: "Αποτελέσματα δοκιμών", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Γλυκόζη: 98 mg/dL (Ref: 70–100). Κάθε παράμετρος εξηγείται με εύρος αναφοράς.", example_slide_ai: "Σχόλιο AI", example_slide_ai_text: "Η AI ερμηνεύει τα αποτελέσματα και παρουσιάζει πιθανές αιτίες και συμβουλές διατροφής/τρόπου ζωής.", example_slide_risk: "Βαθμολογίες κινδύνου", example_slide_risk_text: "Παράμετροι σημειώνονται ως φυσιολογικές, όριο ή προσοχή. Υγεία καρδιάς και άλλα στοιχεία στην αναφορά.", example_btn_analyze: "Εκτέλεση ανάλυσης", example_btn_view_sample: "Δείτε δείγμα αναφοράς",
         security_title: "Ασφάλεια και προστασία δεδομένων", security_desc: "Τα δεδομένα υγείας σας προστατεύονται.",
@@ -10031,7 +10057,7 @@
         example_report_health_score_title: "Celkové zdravotní skóre",
         example_report_domain_cardio: "Kardiovaskulární", example_report_domain_metabolic: "Metabolický", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Zánět",
         example_report_risk_low: "Nízké", example_report_risk_mid: "Střední", example_report_risk_high: "Vysoké",
-        health_dashboard_title: "Náhled zprávy Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "QR ověření", health_dashboard_title: "Náhled zprávy Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "Vaše výsledky jsou uvedeny ve formátu klinické zprávy se skóre, indikátorem rizika a trendem.",
         example_clinical_report_title: "Ukázka klinické zprávy", example_slide_summary: "Obecné zdravotní shrnutí", example_slide_summary_text: "Vaše hodnoty jsou obecně blízko referenčnímu rozsahu. Některé parametry lehce na hranici; viz doporučení.", example_slide_results: "Výsledky testů", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukóza: 98 mg/dL (Ref: 70–100). Každý parametr vysvětlen s referenčním rozsahem.", example_slide_ai: "Komentář AI", example_slide_ai_text: "AI interpretuje vaše výsledky a představuje možné příčiny a doporučení pro výživu a životní styl.", example_slide_risk: "Skóre rizika", example_slide_risk_text: "Parametry označeny jako normální, hranice nebo pozor. Zdraví srdce a další rizika ve zprávě.", example_btn_analyze: "Spustit analýzu", example_btn_view_sample: "Zobrazit ukázkovou zprávu",
         security_title: "Zabezpečení a ochrana dat", security_desc: "Vaše zdravotní data jsou chráněna.",
@@ -10208,7 +10234,7 @@
         example_report_health_score_title: "Ukupni zdravstveni skor",
         example_report_domain_cardio: "Kardiovaskularni", example_report_domain_metabolic: "Metabolički", example_report_domain_vitamin: "Vitamin", example_report_domain_inflammation: "Upala",
         example_report_risk_low: "Nizak", example_report_risk_mid: "Umeren", example_report_risk_high: "Visok",
-        health_dashboard_title: "Pregled izveštaja Premium Health", health_dashboard_badge: "Premium Health",
+        report_card_qr_label: "QR verifikacija", health_dashboard_title: "Pregled izveštaja Premium Health", health_dashboard_badge: "Premium Health",
         sample_report_desc: "Vaši rezultati su prikazani u formatu kliničkog izveštaja sa skorom, indikatorom rizika i trendom.",
         example_clinical_report_title: "Primer kliničkog izveštaja", example_slide_summary: "Opšti zdravstveni pregled", example_slide_summary_text: "Vaše vrednosti su uglavnom blizu referentnog opsega. Neki parametri blago na granici; v. preporuke.", example_slide_results: "Rezultati testova", example_slide_results_text: "Hb: 14 g/dL (Ref: 12–16). Glukoza: 98 mg/dL (Ref: 70–100). Svaki parametar objašnjen sa referentnim opsegom.", example_slide_ai: "AI komentar", example_slide_ai_text: "AI tumači vaše rezultate i predstavlja moguće uzroke i preporuke ishrane i životnog stila.", example_slide_risk: "Skorovi rizika", example_slide_risk_text: "Parametri označeni kao normalni, granica ili pažnja. Zdravlje srca i drugi rizici u izveštaju.", example_btn_analyze: "Pokreni analizu", example_btn_view_sample: "Pogledaj primer izveštaja",
         security_title: "Bezbednost i zaštita podataka", security_desc: "Vaši zdravstveni podaci su zaštićeni.",
