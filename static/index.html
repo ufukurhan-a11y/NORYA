@@ -617,7 +617,9 @@
     .trust-global-wrap { max-width: 64rem; margin-left: auto; margin-right: auto; padding-left: 1rem; padding-right: 1rem; }
     .trust-global-grid { display: grid; grid-template-columns: 1fr; gap: 1rem; }
     @media (min-width: 640px) { .trust-global-grid { grid-template-columns: repeat(2, 1fr); gap: 1.25rem; } }
-    @media (min-width: 1024px) { .trust-global-grid { grid-template-columns: repeat(5, 1fr); gap: 1.25rem; } }
+    @media (min-width: 1024px) { .trust-global-grid { grid-template-columns: repeat(7, 1fr); gap: 1.25rem; } }
+    .trust-global-stat { width: auto; min-width: 2.75rem; padding: 0 0.5rem; font-size: 1.15rem; font-weight: 800; color: #0EA5A4; letter-spacing: -0.02em; }
+    .dark .trust-global-stat { color: #5eead4; }
     .trust-global-card { position: relative; display: flex; flex-direction: column; align-items: flex-start; text-align: left; min-height: 100%; padding: 1.375rem 1.125rem; padding-top: 1.5rem; border-radius: 18px; border: 1px solid rgba(15,23,42,0.07); box-shadow: 0 2px 8px rgba(10,25,41,0.04); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; overflow: hidden; }
     .trust-global-card::before { content: ""; position: absolute; top: 0; left: 0; right: 0; height: 3px; background: #0EA5A4; opacity: 0.9; }
     @media (hover: hover) { .trust-global-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(10,25,41,0.08); border-color: rgba(14,165,164,0.25); } }
@@ -1572,6 +1574,32 @@
     .report-legend-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: 0.35rem; vertical-align: middle; }
     .report-premium-gate-cta { display: inline-block; margin-top: 0.75rem; padding: 0.5rem 1rem; border-radius: 10px; background: #0EA5A4; color: #fff; font-weight: 600; font-size: 0.875rem; text-decoration: none; transition: background 0.2s, transform 0.1s; }
     .report-premium-gate-cta:hover { background: #0d9488; color: #fff; transform: translateY(-1px); }
+    /* Premium özet alanı: rapor üstü, kategori kartları (teşhis değil, görünüm) */
+    .report-premium-overview { margin-bottom: 1.5rem; padding: 1.25rem 1rem; border-radius: 18px; border: 1px solid rgba(15,23,42,0.07); background: linear-gradient(180deg, rgba(14,165,164,0.04) 0%, rgba(255,255,255,0.98) 25%); }
+    .dark .report-premium-overview { border-color: rgba(255,255,255,0.08); background: linear-gradient(180deg, rgba(14,165,164,0.08) 0%, rgba(30,41,59,0.5) 25%); }
+    .report-premium-overview-title { font-size: 0.6875rem; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase; color: #64748b; margin-bottom: 1rem; }
+    .dark .report-premium-overview-title { color: #94a3b8; }
+    .report-premium-overview-grid { display: grid; gap: 0.75rem; grid-template-columns: repeat(2, 1fr); }
+    @media (min-width: 640px) { .report-premium-overview-grid { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .report-premium-overview-grid { grid-template-columns: repeat(6, 1fr); } }
+    .report-premium-overview-card { padding: 0.875rem 0.75rem; border-radius: 12px; border: 1px solid rgba(15,23,42,0.06); background: rgba(255,255,255,0.9); min-height: 0; }
+    .dark .report-premium-overview-card { background: rgba(30,41,59,0.4); border-color: rgba(255,255,255,0.06); }
+    .report-premium-overview-card-title { font-size: 0.75rem; font-weight: 700; color: #0f172a; margin-bottom: 0.35rem; }
+    .dark .report-premium-overview-card-title { color: #e2e8f0; }
+    .report-premium-overview-card-badge { display: inline-block; font-size: 0.625rem; font-weight: 600; letter-spacing: 0.03em; padding: 0.2rem 0.45rem; border-radius: 6px; margin-bottom: 0.4rem; }
+    .report-premium-overview-card-badge--ok { background: rgba(14,165,164,0.12); color: #0d9488; }
+    .report-premium-overview-card-badge--watch { background: rgba(217,119,6,0.1); color: #b45309; }
+    .report-premium-overview-card-badge--review { background: rgba(220,38,38,0.08); color: #b91c1c; }
+    .report-premium-overview-card-marker { font-size: 0.6875rem; color: #475569; line-height: 1.4; }
+    .dark .report-premium-overview-card-marker { color: #94a3b8; }
+    .report-findings-summary { margin-bottom: 1.5rem; padding: 1rem 1.25rem; border-radius: 14px; border: 1px solid rgba(14,165,164,0.12); background: rgba(248,250,252,0.95); }
+    .dark .report-findings-summary { border-color: rgba(94,234,212,0.15); background: rgba(30,41,59,0.4); }
+    .report-findings-summary-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; color: #0d9488; margin-bottom: 0.75rem; }
+    .dark .report-findings-summary-title { color: #5eead4; }
+    .report-findings-summary ul { margin: 0; padding-left: 1.25rem; font-size: 0.8125rem; color: #475569; line-height: 1.6; }
+    .dark .report-findings-summary ul { color: #cbd5e1; }
+    .report-plan-included { margin-top: 1.25rem; padding: 0.75rem 1rem; border-radius: 12px; background: rgba(14,165,164,0.06); border: 1px solid rgba(14,165,164,0.12); font-size: 0.8125rem; color: #475569; }
+    .dark .report-plan-included { background: rgba(94,234,212,0.06); border-color: rgba(94,234,212,0.12); color: #94a3b8; }
     /* Özellik tablosu: mobilde taşma yok, tablo yatay kayar */
     #compare-table-wrap { min-width: 0; max-width: 100%; }
     #compare-table-wrap > div { max-width: 100%; }
@@ -2958,6 +2986,22 @@
     </div>
   </section>
 
+  <!-- 2M kullanıcı + 98.7% doğruluk — ana sayfada görünür strip -->
+  <section class="premium-section py-6 sm:py-8 bg-[var(--norya-bg)]">
+    <div class="premium-wrap">
+      <div class="flex flex-wrap justify-center items-center gap-8 sm:gap-12 max-w-md mx-auto py-4 px-6 rounded-2xl bg-white/80 dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/50 shadow-sm">
+        <div class="text-center">
+          <p class="text-2xl sm:text-3xl font-bold text-[#0EA5A4] dark:text-teal-400">2M</p>
+          <p class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 mt-1" data-i18n="trust_stat_users">Kullanıcı</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl sm:text-3xl font-bold text-[#0EA5A4] dark:text-teal-400">98.7%</p>
+          <p class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 mt-1" data-i18n="trust_stat_accuracy">Doğruluk</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Global standartlar & güvenlik — premium renkli kartlar, HIPAA tarzı emoji/ikon rozetleri -->
   <section id="trust-global" class="trust-global-section bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800/50 py-8 sm:py-10 overflow-x-hidden">
     <div class="premium-wrap trust-global-wrap">
@@ -2982,6 +3026,14 @@
         <article class="trust-global-card trust-global-card--aqua">
           <span class="trust-global-icon-badge" aria-hidden="true" title="QR doğrulama">📋</span>
           <h3 class="trust-global-title" data-i18n="trust_bar_qr">QR ile rapor doğrulama</h3>
+        </article>
+        <article class="trust-global-card trust-global-card--aqua">
+          <span class="trust-global-icon-badge trust-global-stat" aria-hidden="true">2M</span>
+          <h3 class="trust-global-title" data-i18n="trust_stat_users">Kullanıcı</h3>
+        </article>
+        <article class="trust-global-card trust-global-card--aqua">
+          <span class="trust-global-icon-badge trust-global-stat" aria-hidden="true">98.7%</span>
+          <h3 class="trust-global-title" data-i18n="trust_stat_accuracy">Doğruluk</h3>
         </article>
       </div>
     </div>
@@ -3969,15 +4021,19 @@
       <div class="text-center mb-14">
         <h2 class="text-2xl sm:text-3xl font-bold text-accent-900 dark:text-white mb-2" data-i18n="trust_headline">Dünya çapında binlerce kullanıcı tarafından güveniliyor</h2>
         <p class="text-accent-600 dark:text-accent-400 text-sm sm:text-base max-w-2xl mx-auto mb-10" data-i18n="trust_subline">Sağlık meraklıları ve düzenli tahlil yaptıranlar neden Norya ile sonuçlarını anlamayı tercih ediyor.</p>
-        <div class="flex flex-wrap justify-center gap-10 sm:gap-16">
+        <div class="flex flex-wrap justify-center gap-8 sm:gap-12 lg:gap-16">
           <div>
             <p class="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">4.9</p>
             <p class="flex justify-center gap-0.5 mt-1 text-amber-500" aria-hidden="true">★★★★★</p>
             <p class="text-xs sm:text-sm text-accent-500 dark:text-accent-500 mt-1" data-i18n="trust_stat_rating">Ortalama puan</p>
           </div>
           <div>
-            <p class="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">100.000+</p>
+            <p class="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">2M</p>
             <p class="text-xs sm:text-sm text-accent-500 dark:text-accent-500 mt-2" data-i18n="trust_stat_users">Kullanıcı</p>
+          </div>
+          <div>
+            <p class="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">98.7%</p>
+            <p class="text-xs sm:text-sm text-accent-500 dark:text-accent-500 mt-2" data-i18n="trust_stat_accuracy">Doğruluk</p>
           </div>
           <div>
             <p class="text-3xl sm:text-4xl font-bold text-primary-600 dark:text-primary-400">9</p>
@@ -5252,6 +5308,17 @@
     <div class="pricing-container">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-4" data-i18n="pricing_title">Fiyatlandırma</h2>
       <p id="pricing-campaign-badge" class="hidden text-center text-sm font-semibold text-amber-700 dark:text-amber-300 mb-2"></p>
+      <!-- 2M kullanıcı + 98.7% doğruluk kartları (ödeme sayfasında da görünsün) -->
+      <div class="flex flex-wrap justify-center gap-6 sm:gap-10 mb-6 py-4 px-4 rounded-xl bg-white/60 dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/50 max-w-lg mx-auto">
+        <div class="text-center">
+          <p class="text-2xl sm:text-3xl font-bold text-[#0EA5A4] dark:text-teal-400">2M</p>
+          <p class="text-xs font-medium text-accent-500 dark:text-accent-400 mt-1" data-i18n="trust_stat_users">Kullanıcı</p>
+        </div>
+        <div class="text-center">
+          <p class="text-2xl sm:text-3xl font-bold text-[#0EA5A4] dark:text-teal-400">98.7%</p>
+          <p class="text-xs font-medium text-accent-500 dark:text-accent-400 mt-1" data-i18n="trust_stat_accuracy">Doğruluk</p>
+        </div>
+      </div>
       <p class="text-center text-accent-600 dark:text-accent-400 text-sm mb-1" id="pricing-hero-sub" data-i18n="pricing_hero_sub">Tahlil analizi: tek rapor veya abonelik.</p>
       <p class="text-center text-accent-600 dark:text-accent-400 mb-2" id="pricing-note" data-i18n="pricing_eur">Fiyatlar konumunuza göre yerel para biriminde gösterilir.</p>
       <p class="text-center text-sm font-medium text-amber-800 dark:text-amber-200 mb-4 max-w-xl mx-auto px-2" data-i18n="medical_disclaimer_full">Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.</p>
@@ -7156,6 +7223,67 @@
       var gy = (100 - 90 * Math.sin(angleRad)).toFixed(2);
       var fillClass = score <= 33 ? 'low' : (score <= 66 ? 'mid' : 'high');
       var html = '';
+      (function() {
+        var quickViewTitle = t.report_quick_view || 'Hızlı görünüm';
+        var badgeOk = t.report_overview_badge_ok || 'Genel görünüm';
+        var badgeWatch = t.report_overview_badge_watch || 'Dikkat noktası';
+        var badgeReview = t.report_overview_badge_review || 'Gözden geçirilebilir';
+        var catNames = { cardio: t.report_overview_cardio || t.report_cat_lipids || 'Kardiyovasküler', metabolic: t.report_overview_metabolic || t.report_category_metabolic || 'Metabolik', vitamin: t.report_overview_vitamin || t.report_category_vitamins || 'Vitamin', inflammation: t.report_overview_inflammation || t.report_category_inflammation || 'Enflamasyon', liver: t.report_cat_liver || 'Karaciğer', kidney: t.report_cat_kidney || 'Böbrek' };
+        function getLiverKidneyStatus(pv, keywords) {
+          if (!pv || !pv.length) return { score: 50, label: badgeOk, cls: 'ok', markers: [] };
+          var worst = 'normal', markers = [];
+          for (var i = 0; i < pv.length && markers.length < 2; i++) {
+            var lab = (pv[i].label || '').toLowerCase();
+            var match = false;
+            for (var k = 0; k < keywords.length; k++) if (lab.indexOf(keywords[k]) !== -1) { match = true; break; }
+            if (!match) continue;
+            markers.push(pv[i].label);
+            if (pv[i].status === 'high' || pv[i].status === 'low') worst = 'risk';
+            else if (pv[i].status === 'border' && worst !== 'risk') worst = 'border';
+          }
+          var score = worst === 'risk' ? 35 : (worst === 'border' ? 60 : 85);
+          var label = worst === 'risk' ? badgeReview : (worst === 'border' ? badgeWatch : badgeOk);
+          var cls = worst === 'risk' ? 'review' : (worst === 'border' ? 'watch' : 'ok');
+          return { score: score, label: label, cls: cls, markers: markers };
+        }
+        var liverKw = ['alt','ast','ggt','sgot','sgpt','karaciğer','liver'];
+        var kidneyKw = ['kreatinin','creatinine','egfr','üre','urea','bun','böbrek','kidney'];
+        var liverStatus = getLiverKidneyStatus(parsedValues, liverKw);
+        var kidneyStatus = getLiverKidneyStatus(parsedValues, kidneyKw);
+        var overviewOrder = ['cardio','metabolic','vitamin','inflammation','liver','kidney'];
+        var overviewCards = '';
+        for (var oi = 0; oi < overviewOrder.length; oi++) {
+          var ok = overviewOrder[oi];
+          var d = (ok === 'liver') ? liverStatus : (ok === 'kidney') ? kidneyStatus : (function() {
+            var dom = domains[ok] || {};
+            var s = Math.max(0, Math.min(100, dom.score != null ? dom.score : 50));
+            var lev = (dom.level || '').toLowerCase();
+            var cls = (lev === 'high' || s < 40) ? 'review' : (lev === 'mid' || s < 70) ? 'watch' : 'ok';
+            var label = (cls === 'review') ? badgeReview : (cls === 'watch') ? badgeWatch : badgeOk;
+            var markers = [];
+            for (var hi = 0; hi < highlights.length && markers.length < 2; hi++) {
+              var ht = (highlights[hi].test || '').toLowerCase();
+              var kws = { cardio: ['ldl','hdl','chol','trig','lipid','kolesterol'], metabolic: ['glucose','glukoz','hba1c','insulin'], vitamin: ['vitamin','b12','folat','demir','ferritin','d vitamini'], inflammation: ['crp','enflamasyon','c-reactive'] }[ok];
+              if (kws) for (var kw = 0; kw < kws.length; kw++) if (ht.indexOf(kws[kw]) !== -1) { markers.push(highlights[hi].test); break; }
+            }
+            return { score: s, label: label, cls: cls, markers: markers };
+          })();
+          var markerLine = (d.markers && d.markers.length) ? '<p class="report-premium-overview-card-marker">' + escapeHtml(d.markers.slice(0, 2).join(', ')) + '</p>' : '';
+          overviewCards += '<div class="report-premium-overview-card"><div class="report-premium-overview-card-title">' + escapeHtml(catNames[ok]) + '</div><span class="report-premium-overview-card-badge report-premium-overview-card-badge--' + d.cls + '">' + escapeHtml(d.label) + '</span>' + markerLine + '</div>';
+        }
+        html += '<section class="report-premium-overview report-section-anchor" aria-label="' + escapeHtml(quickViewTitle) + '"><p class="report-premium-overview-title">' + escapeHtml(quickViewTitle) + '</p><div class="report-premium-overview-grid">' + overviewCards + '</div></section>';
+      })();
+      var findingsTitle = t.report_findings_summary_title || 'Öne çıkan bulgular özeti';
+      var findingsIntro = t.report_findings_summary_intro || 'Hekim görüşmesinde konuşulabilecek başlıklar.';
+      if (attentionItems.length > 0) {
+        var findingsList = '';
+        for (var fi = 0; fi < Math.min(5, attentionItems.length); fi++) {
+          var item = attentionItems[fi];
+          var line = escapeHtml(item.name) + ' — ' + (t.report_findings_discuss || 'Hekim görüşmesinde konuşulabilir.');
+          findingsList += '<li>' + line + '</li>';
+        }
+        html += '<section class="report-findings-summary"><p class="report-findings-summary-title">' + escapeHtml(findingsTitle) + '</p><p class="report-premium-overview-card-marker" style="margin-bottom:0.5rem">' + escapeHtml(findingsIntro) + '</p><ul>' + findingsList + '</ul></section>';
+      }
       html += '<div id="report-score-summary" class="report-score-summary report-section-anchor">';
       html += '<div class="report-score-stats report-score-stats--elite">';
       html += '<div class="report-score-stat report-score-stat--optimal"><span class="report-score-stat-value">' + optimal + '</span><span class="report-score-stat-label">' + escapeHtml(t.report_optimal || 'Optimal') + '</span></div>';
@@ -7325,6 +7453,8 @@
       html += '</div>';
       if (!isGateUnlocked) html += '<div class="report-premium-gate-overlay"><span class="report-premium-gate-icon" aria-hidden="true">&#128274;</span><span class="report-premium-gate-label">' + escapeHtml(t.report_trends || 'Trends') + '</span><a href="/payment?from=report" class="report-premium-gate-cta" data-report-payment="1">' + escapeHtml(t.upgrade_cta_detail || t.report_upgrade_btn || 'Unlock full report') + '</a></div>';
       html += '</div>';
+      var planIncludedText = (plan === 'yearly') ? (t.report_plan_yearly_included || 'Bu raporda: Özet, parametreler, zaman içi değişim ve uzun dönem takip görünümü.') : (plan === 'monthly') ? (t.report_plan_monthly_included || 'Bu raporda: Özet, parametreler, geçmiş karşılaştırma ve trend görünümü.') : (t.report_plan_single_included || 'Bu rapor: Temel özet ve açıklamalı parametreler.');
+      html += '<div class="report-plan-included" role="status">' + escapeHtml(planIncludedText) + '</div>';
       return html;
     }
     function buildClinicalNoticeHTML(t) {
@@ -7679,7 +7809,7 @@
         trust_benefit_2_title: "Laboratuvar Yorumu", trust_benefit_2_desc: "Özet, değerler, olası nedenler ve öneriler — tek ekranda, sade dilde.",
         trust_benefit_3_title: "PDF, 9 Dil, Doktora Götür", trust_benefit_3_desc: "Tıbbi jargon yok; raporu PDF indirin veya hekiminizle paylaşın. 9 dilde.",
         trust_headline: "Sağlık odaklı kullanıcılar tarafından tercih ediliyor", trust_subline: "Düzenli tahlil yaptıranlar ve sağlık okuryazarlığına önem verenler Norya ile sonuçlarını anlamayı seçiyor.",
-        trust_stat_rating: "Örnek puan", trust_stat_users: "Kullanıcı (artan)", trust_stat_langs: "Dilde rapor",
+        trust_stat_rating: "Örnek puan", trust_stat_users: "Kullanıcı", trust_stat_accuracy: "Doğruluk", trust_stat_langs: "Dilde rapor",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Check-up sonrası kullanıcı", testimonial_1_quote: "Sonuçlarımı ilk kez bu kadar net anladım. Doktora giderken raporu yanımda götürdüm, çok faydalı oldu.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Kronik takip kullanıcısı", testimonial_2_quote: "Her tahlilden sonra Norya'ya yapıştırıyorum. Değerlerin nasıl değiştiğini takip etmek çok kolay.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Sağlık meraklısı", testimonial_3_quote: "PDF yükleyebilmek süper. Fotoğraf çekip attım, dakikada rapor geldi. Arayüz de çok sade.",
@@ -7852,6 +7982,7 @@
         report_score_summary: "Sağlık Skoru Özeti", report_optimal: "Optimal", report_needs_attention: "Dikkat gerekli", report_critical: "Kritik", report_unknown: "Bilinmiyor / Aralık yok",
         report_attention_title: "Dikkat Gerekli", report_view_details: "Detaylara git",
         report_category_summary: "Kategori Özeti", report_category_summary_desc: "Sonuçlarınız kategorilere göre özetlendi.",
+        report_quick_view: "Hızlı görünüm", report_overview_badge_ok: "Genel görünüm", report_overview_badge_watch: "Dikkat noktası", report_overview_badge_review: "Gözden geçirilebilir", report_overview_cardio: "Kardiyovasküler", report_overview_metabolic: "Metabolik", report_overview_vitamin: "Vitamin", report_overview_inflammation: "Enflamasyon", report_findings_summary_title: "Öne çıkan bulgular özeti", report_findings_summary_intro: "Hekim görüşmesinde konuşulabilecek başlıklar.", report_findings_discuss: "Hekim görüşmesinde konuşulabilir.", report_plan_single_included: "Bu rapor: Temel özet ve açıklamalı parametreler.", report_plan_monthly_included: "Bu raporda: Özet, parametreler, geçmiş karşılaştırma ve trend görünümü.", report_plan_yearly_included: "Bu raporda: Özet, parametreler, zaman içi değişim ve uzun dönem takip görünümü.",
         report_category_blood: "Kan Sayımı", report_category_metabolic: "Metabolik", report_category_vitamins: "Vitaminler ve Mineraller", report_category_inflammation: "İnflamasyon",
         report_cat_recommend_ok: "Değerler uygun aralıkta. Düzenli takip önerilir.", report_cat_recommend_mid: "Takip ve yaşam tarzı önerileri için hekiminizle görüşün.", report_cat_recommend_risk: "Hekiminizle görüşmeniz önerilir.",
         report_cat_recommend_hemogram: "Kan sayımı değerleriniz. Referans dışı sonuçlarda hekiminizle görüşün.", report_cat_recommend_crp: "Enflamasyon belirteci. Yükseklikte hekime danışın.", report_cat_recommend_glucose: "Kan şekeri ve metabolizma. Diyabet takibi için hekim önerisi alın.", report_cat_recommend_lipids: "Kolesterol ve lipid paneli. Kalp sağlığı için düzenli takip.", report_cat_recommend_liver: "Karaciğer enzimleri. Yükseklikte hekim değerlendirmesi önerilir.", report_cat_recommend_kidney: "Böbrek fonksiyonu. eGFR ve kreatinin takibi.", report_cat_recommend_iron: "Demir ve ferritin. Eksiklikte beslenme veya takviye hekimle konuşulmalı.", report_cat_recommend_thyroid: "Tiroid paneli. TSH/FT4 sonuçları hekim yorumu gerektirir.", report_cat_recommend_other: "Diğer parametreler. Hekiminizle paylaşın.",
@@ -8045,7 +8176,7 @@
         trust_benefit_2_title: "AI interpretation", trust_benefit_2_desc: "Summary, values, possible causes and tips — all on one screen, in plain language.",
         trust_benefit_3_title: "PDF, 9 languages, take to doctor", trust_benefit_3_desc: "No medical jargon; download PDF or share with your doctor. Available in 9 languages.",
         trust_headline: "Trusted by health-conscious users", trust_subline: "People who get regular lab work and care about health literacy choose Norya to understand their results.",
-        trust_stat_rating: "Sample rating", trust_stat_users: "Users (growing)", trust_stat_langs: "Report languages",
+        trust_stat_rating: "Sample rating", trust_stat_users: "Users", trust_stat_accuracy: "Accuracy", trust_stat_langs: "Report languages",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Check-up user", testimonial_1_quote: "First time I understood my results this clearly. Took the report to my doctor — very helpful.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Chronic follow-up user", testimonial_2_quote: "I paste every result into Norya. Tracking how my values change over time is so easy.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Health enthusiast", testimonial_3_quote: "Being able to upload PDFs is great. I took a photo, got the report in a minute. Interface is clean too.",
@@ -8218,6 +8349,7 @@
         report_score_summary: "Health Score Summary", report_optimal: "Optimal", report_needs_attention: "Needs attention", report_critical: "Critical", report_unknown: "Unknown / No range",
         report_attention_title: "Attention Needed", report_view_details: "View details",
         report_category_summary: "Category Summary", report_category_summary_desc: "Your results summarized by category.",
+        report_quick_view: "Quick view", report_overview_badge_ok: "General view", report_overview_badge_watch: "Worth watching", report_overview_badge_review: "Worth reviewing", report_overview_cardio: "Cardiovascular", report_overview_metabolic: "Metabolic", report_overview_vitamin: "Vitamin", report_overview_inflammation: "Inflammation", report_findings_summary_title: "Highlighted findings summary", report_findings_summary_intro: "Topics you can discuss with your doctor.", report_findings_discuss: "Worth discussing with your doctor.", report_plan_single_included: "This report: Basic summary and explanatory parameters.", report_plan_monthly_included: "This report includes: Summary, parameters, comparison with past reports and trend view.", report_plan_yearly_included: "This report includes: Summary, parameters, change over time and long-term tracking view.",
         report_category_blood: "Blood Count", report_category_metabolic: "Metabolic", report_category_vitamins: "Vitamins & Minerals", report_category_inflammation: "Inflammation",
         report_cat_recommend_ok: "Values in range. Regular follow-up recommended.", report_cat_recommend_mid: "Discuss with your doctor for follow-up and lifestyle advice.", report_cat_recommend_risk: "Discuss with your doctor.",
         report_cat_recommend_hemogram: "Blood count results. Discuss out-of-range values with your doctor.", report_cat_recommend_crp: "Inflammation marker. Consult your doctor if elevated.", report_cat_recommend_glucose: "Blood sugar and metabolism. Get clinician advice for diabetes follow-up.", report_cat_recommend_lipids: "Cholesterol and lipid panel. Regular follow-up for heart health.", report_cat_recommend_liver: "Liver enzymes. Doctor evaluation recommended if elevated.", report_cat_recommend_kidney: "Kidney function. eGFR and creatinine follow-up.", report_cat_recommend_iron: "Iron and ferritin. Discuss diet or supplements with your doctor if low.", report_cat_recommend_thyroid: "Thyroid panel. TSH/FT4 results require clinician interpretation.", report_cat_recommend_other: "Other parameters. Share with your doctor.",
@@ -8380,7 +8512,7 @@
         trust_benefit_2_title: "Interpretazione IA", trust_benefit_2_desc: "Riepilogo, valori, possibili cause e consigli — tutto in linguaggio semplice.",
         trust_benefit_3_title: "PDF, 9 lingue, porta al medico", trust_benefit_3_desc: "Niente gergo medico; scarica PDF o condividi con il medico. Disponibile in 9 lingue.",
         trust_headline: "Scelto da migliaia di utenti nel mondo", trust_subline: "Perché chi tiene alla salute sceglie Norya per capire i risultati.",
-        trust_stat_rating: "Valutazione media", trust_stat_users: "Utenti", trust_stat_langs: "Lingue report",
+        trust_stat_rating: "Valutazione media", trust_stat_users: "Utenti", trust_stat_accuracy: "Accuratezza", trust_stat_langs: "Lingue report",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Utente check-up", testimonial_1_quote: "Per la prima volta ho capito i miei risultati. Ho portato il report al medico — molto utile.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Follow-up cronico", testimonial_2_quote: "Incollo ogni risultato in Norya. Seguire l'andamento dei valori nel tempo è facile.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Appassionata di salute", testimonial_3_quote: "Potere caricare PDF è fantastico. Ho fatto una foto, report in un minuto. Interfaccia chiara.",
@@ -8619,7 +8751,7 @@
         trust_benefit_2_title: "Interpretación con IA", trust_benefit_2_desc: "Resumen, valores, posibles causas y consejos — en lenguaje sencillo.",
         trust_benefit_3_title: "PDF, 9 idiomas, llevar al médico", trust_benefit_3_desc: "Sin jerga médica; descarga PDF o comparte con tu médico. Disponible en 9 idiomas.",
         trust_headline: "Con la confianza de miles de usuarios en el mundo", trust_subline: "Por qué quienes cuidan su salud eligen Norya para entender sus resultados.",
-        trust_stat_rating: "Valoración media", trust_stat_users: "Usuarios", trust_stat_langs: "Idiomas del informe",
+        trust_stat_rating: "Valoración media", trust_stat_users: "Usuarios", trust_stat_accuracy: "Precisión", trust_stat_langs: "Idiomas del informe",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Usuario tras chequeo", testimonial_1_quote: "La primera vez que entendí mis resultados así de claro. Llevé el informe al médico — muy útil.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Seguimiento crónico", testimonial_2_quote: "Pego cada resultado en Norya. Seguir la evolución de los valores es muy fácil.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Entusiasta de la salud", testimonial_3_quote: "Poder subir PDF es genial. Hice una foto, el informe en un minuto. Interfaz clara.",
@@ -8858,7 +8990,7 @@
         trust_benefit_2_title: "Interprétation IA", trust_benefit_2_desc: "Résumé, valeurs, causes possibles et conseils — en langage simple.",
         trust_benefit_3_title: "PDF, 9 langues, apporter au médecin", trust_benefit_3_desc: "Pas de jargon médical; téléchargez le PDF ou partagez avec le médecin. Disponible en 9 langues.",
         trust_headline: "Approuvé par des milliers d'utilisateurs dans le monde", trust_subline: "Pourquoi les personnes soucieuses de leur santé choisissent Norya pour comprendre leurs résultats.",
-        trust_stat_rating: "Note moyenne", trust_stat_users: "Utilisateurs", trust_stat_langs: "Langues du rapport",
+        trust_stat_rating: "Note moyenne", trust_stat_users: "Utilisateurs", trust_stat_accuracy: "Exactitude", trust_stat_langs: "Langues du rapport",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Utilisateur après bilan", testimonial_1_quote: "J'ai compris mes résultats aussi clairement pour la première fois. J'ai apporté le rapport au médecin — très utile.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Suivi chronique", testimonial_2_quote: "Je colle chaque résultat dans Norya. Suivre l'évolution des valeurs est très simple.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Passionnée de santé", testimonial_3_quote: "Pouvoir uploader des PDF, super. J'ai pris une photo, rapport en une minute. Interface claire.",
@@ -9094,7 +9226,7 @@
         trust_benefit_2_title: "KI-Auswertung", trust_benefit_2_desc: "Zusammenfassung, Werte, mögliche Ursachen und Tipps — in einfacher Sprache.",
         trust_benefit_3_title: "PDF, 9 Sprachen, zum Arzt", trust_benefit_3_desc: "Kein Medizinjargon; PDF herunterladen oder mit dem Arzt teilen. In 9 Sprachen verfügbar.",
         trust_headline: "Von Nutzern in Deutschland und weltweit genutzt", trust_subline: "Verständliche Berichte, klare Werte — für den Arztbesuch oder zur eigenen Orientierung.",
-        trust_stat_rating: "Durchschnittsbewertung", trust_stat_users: "Nutzer", trust_stat_langs: "Sprachen Bericht",
+        trust_stat_rating: "Durchschnittsbewertung", trust_stat_users: "Nutzer", trust_stat_accuracy: "Genauigkeit", trust_stat_langs: "Sprachen Bericht",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Nach Check-up", testimonial_1_quote: "Endlich meine Werte verstanden. Den Bericht habe ich zum Arzt mitgenommen — hat super geholfen.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Dauerbeobachtung", testimonial_2_quote: "Jeden Befund gebe ich in Norya ein. So sehe ich auf einen Blick, wie sich die Werte entwickeln.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Gesundheitsbewusst", testimonial_3_quote: "Einfach Foto vom Befund gemacht, Minute später den Bericht. Übersichtlich und verständlich.",
@@ -9297,7 +9429,7 @@
         trust_benefit_2_title: "פירוש בינה מלאכותית", trust_benefit_2_desc: "סיכום, ערכים, סיבות אפשריות וטיפים — בשפה פשוטה.",
         trust_benefit_3_title: "PDF, 9 שפות, להרופא", trust_benefit_3_desc: "בלי ז'רגון רפואי; הורד PDF או שתף עם הרופא. זמין ב-9 שפות.",
         trust_headline: "מהימן על ידי אלפי משתמשים בעולם", trust_subline: "למה משתמשים מודעים לבריאות בוחרים בנוריה כדי להבין את התוצאות.",
-        trust_stat_rating: "ציון ממוצע", trust_stat_users: "משתמשים", trust_stat_langs: "שפות דוח",
+        trust_stat_rating: "ציון ממוצע", trust_stat_users: "משתמשים", trust_stat_accuracy: "דיוק", trust_stat_langs: "שפות דוח",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "משתמש אחרי בדיקה", testimonial_1_quote: "פעם ראשונה שהבנתי את התוצאות כל כך ברור. הבאתי את הדוח לרופא — מאוד עזר.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "מעקב כרוני", testimonial_2_quote: "אני מדביק כל תוצאה בנוריה. מעקב אחרי השינוי בערכים לאורך זמן קל מאוד.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "חובבת בריאות", testimonial_3_quote: "אפשרות להעלות PDF מעולה. צילמתי, קיבלתי דוח בדקה. ממשק נקי.",
@@ -9478,7 +9610,7 @@
         trust_benefit_2_title: "تفسير بالذكاء الاصطناعي", trust_benefit_2_desc: "ملخص، قيم، أسباب محتملة ونصائح — بلغة بسيطة.",
         trust_benefit_3_title: "PDF، 9 لغات، لأخذها للطبيب", trust_benefit_3_desc: "بدون مصطلحات طبية؛ حمّل PDF أو شارك مع الطبيب. متوفر بـ 9 لغات.",
         trust_headline: "موثوق به من آلاف المستخدمين حول العالم", trust_subline: "لماذا يختار المهتمون بالصحة نورية لفهم نتائجهم.",
-        trust_stat_rating: "متوسط التقييم", trust_stat_users: "مستخدمون", trust_stat_langs: "لغات التقرير",
+        trust_stat_rating: "متوسط التقييم", trust_stat_users: "مستخدمون", trust_stat_accuracy: "الدقة", trust_stat_langs: "لغات التقرير",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "مستخدم بعد الفحص", testimonial_1_quote: "أول مرة أفهم نتائجي بهذا الوضوح. أخذت التقرير للطبيب — كان مفيداً جداً.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "متابعة مزمنة", testimonial_2_quote: "ألصق كل نتيجة في نورية. تتبع تغيّر القيم بمرور الوقت سهل جداً.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "مهتمة بالصحة", testimonial_3_quote: "إمكانية رفع PDF رائعة. التقطت صورة، حصلت على التقرير بدقيقة. واجهة نظيفة.",
@@ -9659,7 +9791,7 @@
         trust_benefit_2_title: "AI व्याख्या", trust_benefit_2_desc: "सारांश, मान, संभावित कारण और सुझाव — सरल भाषा में।",
         trust_benefit_3_title: "PDF, 9 भाषाएं, डॉक्टर के पास", trust_benefit_3_desc: "कोई मेडिकल जार्गन नहीं; PDF डाउनलोड करें या डॉक्टर के साथ साझा करें। 9 भाषाओं में।",
         trust_headline: "दुनिया भर में हजारों यूजर्स का भरोसा", trust_subline: "स्वास्थ्य-जागरूक यूजर्स नोरिया को अपने नतीजे समझने के लिए क्यों चुनते हैं।",
-        trust_stat_rating: "औसत रेटिंग", trust_stat_users: "यूजर्स", trust_stat_langs: "रिपोर्ट भाषाएं",
+        trust_stat_rating: "औसत रेटिंग", trust_stat_users: "यूजर्स", trust_stat_accuracy: "सटीकता", trust_stat_langs: "रिपोर्ट भाषाएं",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "चेक-अप यूजर", testimonial_1_quote: "पहली बार मैंने अपने नतीजे इतने साफ समझे। रिपोर्ट डॉक्टर को दिखाई — बहुत मददगार।",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "क्रॉनिक फॉलो-अप यूजर", testimonial_2_quote: "हर नतीजा नोरिया में पेस्ट करता हूं। मानों के बदलाव का ट्रैक रखना बहुत आसान।",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "स्वास्थ्य प्रेमी", testimonial_3_quote: "PDF अपलोड कर सकना बढ़िया। फोटो ली, एक मिनट में रिपोर्ट मिली। इंटरफेस भी साफ।",
@@ -9838,7 +9970,7 @@
         trust_benefit_2_title: "Ερμηνεία AI", trust_benefit_2_desc: "Σύνοψη, τιμές, πιθανές αιτίες και συμβουλές — σε απλή γλώσσα.",
         trust_benefit_3_title: "PDF, 12 γλώσσες, για τον γιατρό", trust_benefit_3_desc: "Χωρίς ιατρική ορολογία· λήψη PDF ή κοινοποίηση με τον γιατρό.",
         trust_headline: "Εμπιστεύονται χιλιάδες χρήστες παγκοσμίως", trust_subline: "Γιατί επιλέγουν την Norya για να κατανοήσουν τα αποτελέσματά τους.",
-        trust_stat_rating: "Μέση βαθμολογία", trust_stat_users: "Χρήστες", trust_stat_langs: "Γλώσσες αναφοράς",
+        trust_stat_rating: "Μέση βαθμολογία", trust_stat_users: "Χρήστες", trust_stat_accuracy: "Ακρίβεια", trust_stat_langs: "Γλώσσες αναφοράς",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Χρήστρια μετά check-up", testimonial_1_quote: "Πρώτη φορά κατάλαβα τόσο ξεκάθαρα τα αποτελέσματά μου. Πήρα την αναφορά στον γιατρό — πολύ χρήσιμο.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Χρόνια παρακολούθηση", testimonial_2_quote: "Επικολλώ κάθε αποτέλεσμα στην Norya. Εύκολη παρακολούθηση των τιμών.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Λάτρης της υγείας", testimonial_3_quote: "Το ανέβασμα PDF είναι υπέροχο. Έβγαλα φωτογραφία, πήρα την αναφορά σε ένα λεπτό.",
@@ -10015,7 +10147,7 @@
         trust_benefit_2_title: "Interpretace AI", trust_benefit_2_desc: "Shrnutí, hodnoty, možné příčiny a tipy — jednoduchým jazykem.",
         trust_benefit_3_title: "PDF, 12 jazyků, k lékaři", trust_benefit_3_desc: "Bez lékařského žargonu; stáhněte PDF nebo sdílejte s lékařem.",
         trust_headline: "Důvěřují tisíce uživatelů po celém světě", trust_subline: "Proč si uživatelé vybírají Norya pro pochopení výsledků.",
-        trust_stat_rating: "Průměrné hodnocení", trust_stat_users: "Uživatelé", trust_stat_langs: "Jazyky zpráv",
+        trust_stat_rating: "Průměrné hodnocení", trust_stat_users: "Uživatelé", trust_stat_accuracy: "Přesnost", trust_stat_langs: "Jazyky zpráv",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Uživatelka po prohlídce", testimonial_1_quote: "Poprvé jsem tak jasně pochopila výsledky. Zprávu jsem vzala lékaři — velmi užitečné.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Dlouhodobé sledování", testimonial_2_quote: "Každý výsledek vkládám do Norya. Sledování změn hodnot je snadné.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Nadšenec do zdraví", testimonial_3_quote: "Nahrávání PDF je skvělé. Vyfotila jsem, zpráva za minutu.",
@@ -10192,7 +10324,7 @@
         trust_benefit_2_title: "Interpretacija AI", trust_benefit_2_desc: "Rezime, vrednosti, mogući uzroci i saveti — jednostavnim jezikom.",
         trust_benefit_3_title: "PDF, 12 jezika, kod lekara", trust_benefit_3_desc: "Bez medicinskog žargona; preuzmite PDF ili podelite sa lekarom.",
         trust_headline: "Tisuće korisnika širom sveta nam veruje", trust_subline: "Zašto korisnici biraju Norya za razumevanje rezultata.",
-        trust_stat_rating: "Prosečna ocena", trust_stat_users: "Korisnici", trust_stat_langs: "Jezici izveštaja",
+        trust_stat_rating: "Prosečna ocena", trust_stat_users: "Korisnici", trust_stat_accuracy: "Tačnost", trust_stat_langs: "Jezici izveštaja",
         testimonial_1_name: "Ayşe Y.", testimonial_1_role: "Korisnica posle pregleda", testimonial_1_quote: "Prvi put sam tako jasno razumela rezultate. Izveštaj sam ponela lekaru — veoma korisno.",
         testimonial_2_name: "Mehmet R.", testimonial_2_role: "Dugoročno praćenje", testimonial_2_quote: "Svaki rezultat nalepim u Norya. Praćenje promena vrednosti je lako.",
         testimonial_3_name: "Elif Ş.", testimonial_3_role: "Ljubitelj zdravlja", testimonial_3_quote: "Otpremanje PDF-a je odlično. Uslikala sam, izveštaj za minut.",
