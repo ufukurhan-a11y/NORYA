@@ -11,9 +11,9 @@
 ## Conversion ID ve label
 
 - **Conversion ID:** `AW-18004536281` (config: `google_ads_conversion_id`, env: `GOOGLE_ADS_CONVERSION_ID`)
-- **Conversion label:** Varsayılan `RF4SCL780lYcENnXnYID`. Google Ads’teki "Satın alma işlemi" dönüşümünün **etiket değeri** ile birebir aynı olmalı. (config: `google_ads_conversion_label`, env: `GOOGLE_ADS_CONVERSION_LABEL`)
+- **Conversion label:** Varsayılan `RF4SCL78oIYcENnXnYID`. Google Ads’teki "Satın alma işlemi" dönüşümünün **etiket değeri** ile birebir aynı olmalı. (config: `google_ads_conversion_label`, env: `GOOGLE_ADS_CONVERSION_LABEL`)
 
-`send_to` formatı: `AW-18004536281/RF4SCL780lYcENnXnYID` (ID/label aynı ise değiştirmeyin).
+`send_to` formatı: `AW-18004536281/RF4SCL78oIYcENnXnYID` (ID/label aynı ise değiştirmeyin).
 
 ## Tetiklenme koşulu
 
@@ -35,7 +35,7 @@ Yani dönüşüm sadece **başarılı ödeme sonrası teşekkür sayfasında**, 
 ### 2. Sayfada neyi kontrol etmeliyim?
 
 1. **Tarayıcı konsolu (F12 → Console):**
-   - `[Norya payment success] polling will start in 500ms (gtag load grace); send_to=AW-18004536281/RF4SCL780lYcENnXnYID`
+   - `[Norya payment success] polling will start in 500ms (gtag load grace); send_to=AW-18004536281/RF4SCL78oIYcENnXnYID`
    - Ödeme “paid” olduğunda: `[Norya] Google Ads conversion fired` veya `[Norya] Google Ads conversion queued (gtag not ready)` (ikisi de başarılı)
    - Dönüşüm atlanırsa: `[Norya] Google Ads conversion skipped` (reason: already_fired / noryaConversionFired_set)
 

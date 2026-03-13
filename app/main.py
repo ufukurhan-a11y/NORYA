@@ -4012,7 +4012,7 @@ def payment_success_page(
     report_url = f"{base}/report"
     guest_token_js = json.dumps((guest_token or "").strip() or "")
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
-    conv_label = (getattr(settings, "google_ads_conversion_label", "") or "").strip() or "RF4SCL780lYcENnXnYID"
+    conv_label = (getattr(settings, "google_ads_conversion_label", "") or "").strip() or "RF4SCL78oIYcENnXnYID"
     conversion_send_to = f"{aw_id}/{conv_label}"
     gtag_script = (
         f'<script async src="https://www.googletagmanager.com/gtag/js?id={aw_id}"></script>'
