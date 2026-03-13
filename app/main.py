@@ -82,6 +82,14 @@ from app.landing_i18n import (
     get_landing_meta,
     get_landing_ui,
 )
+from app.seo_landing_i18n import (
+    get_related_links,
+    get_seo_landing_content,
+    get_seo_landing_hreflang,
+    get_seo_landing_meta,
+    iter_seo_landing_urls,
+    OG_LOCALE_MAP as SEO_OG_LOCALE_MAP,
+)
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
@@ -1719,7 +1727,7 @@ def analyze_landing(request: Request):
 
 
 def _how_it_works_lang_from_request(request: Request) -> str:
-    """How-it-works sayfa dili: ?lang= veya Accept-Language. Desteklenen: de, en, tr."""
+    """How-it-works sayfa dili: ?lang= veya Accept-Language. Desteklenen: de, en, tr, it, fr, es."""
     lang_q = request.query_params.get("lang", "").strip().lower()[:2]
     if lang_q and lang_q in HOW_IT_WORKS_LANGS:
         return lang_q
@@ -1731,7 +1739,7 @@ def _how_it_works_lang_from_request(request: Request) -> str:
 def how_it_works_page(request: Request):
     """
     /how-it-works -> Nasıl çalışır sayfası. Google Ads site bağlantısı için.
-    ?lang=de, ?lang=en, ?lang=tr ile dil seçimi. SEO: title, meta, canonical, hreflang.
+    ?lang= de, en, tr, it, fr, es ile dil seçimi. SEO: title, meta, canonical, hreflang.
     """
     lang = _how_it_works_lang_from_request(request)
     t = get_how_it_works_ui(lang)
@@ -4228,6 +4236,70 @@ def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X
     return {"deleted": deleted}
 
 
+# ——— SEO landing pages (high-intent queries). Must be registered before /{lang}/{path:path}. ———
+def _render_seo_landing(request: Request, lang: str, slug: str) -> HTMLResponse:
+    """Render SEO landing template for (lang, slug). Call only when (lang, slug) is a valid SEO route."""
+    content = get_seo_landing_content(lang, slug)
+    if not content:
+        raise HTTPException(status_code=404, detail="Not Found")
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/{lang}/{slug}"
+    meta = get_seo_landing_meta(lang, slug)
+    hreflang_alternates = get_seo_landing_hreflang(lang, slug, base_url)
+    og_locale = SEO_OG_LOCALE_MAP.get(lang, "en_US")
+    related_links = get_related_links(lang, base_url)
+    return templates.TemplateResponse(
+        "seo_landing.html",
+        {
+            "request": request,
+            "lang": lang,
+            "slug": slug,
+            "t": content,
+            "meta": meta,
+            "canonical_url": canonical_url,
+            "hreflang_alternates": hreflang_alternates,
+            "og_locale": og_locale,
+            "base_url": base_url,
+            "related_links": related_links,
+        },
+    )
+
+
+@app.get("/tr/kan-tahlili-sonucu", response_class=HTMLResponse)
+def seo_landing_tr_kan_tahlili(request: Request):
+    return _render_seo_landing(request, "tr", "kan-tahlili-sonucu")
+
+
+@app.get("/tr/kan-degerleri-anlama", response_class=HTMLResponse)
+def seo_landing_tr_kan_degerleri(request: Request):
+    return _render_seo_landing(request, "tr", "kan-degerleri-anlama")
+
+
+@app.get("/tr/hemogram-sonucu", response_class=HTMLResponse)
+def seo_landing_tr_hemogram(request: Request):
+    return _render_seo_landing(request, "tr", "hemogram-sonucu")
+
+
+@app.get("/de/blutwerte-verstehen", response_class=HTMLResponse)
+def seo_landing_de_blutwerte(request: Request):
+    return _render_seo_landing(request, "de", "blutwerte-verstehen")
+
+
+@app.get("/de/laborwerte-verstehen", response_class=HTMLResponse)
+def seo_landing_de_laborwerte(request: Request):
+    return _render_seo_landing(request, "de", "laborwerte-verstehen")
+
+
+@app.get("/en/blood-test-results", response_class=HTMLResponse)
+def seo_landing_en_blood_test(request: Request):
+    return _render_seo_landing(request, "en", "blood-test-results")
+
+
+@app.get("/en/understand-lab-results", response_class=HTMLResponse)
+def seo_landing_en_understand_lab(request: Request):
+    return _render_seo_landing(request, "en", "understand-lab-results")
+
+
 # Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
 SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he", "el", "sr"})
 
@@ -4290,6 +4362,10 @@ def sitemap_xml(request: Request):
     add(f"{base_url}/kurumsal", lastmod=today)
     for page in LEGAL_PAGES:
         add(f"{base_url}/legal/{page}", priority="0.5", lastmod=today)
+
+    # SEO landing pages (high-intent): /tr/kan-tahlili-sonucu, /en/blood-test-results, vb.
+    for loc_lang, loc_slug in iter_seo_landing_urls():
+        add(f"{base_url}/{loc_lang}/{loc_slug}", priority="0.8", changefreq="monthly", lastmod=today)
 
     # Blog listeleri: /en/blog, /de/blog, /it/blog, /fr/blog dahil (BLOG_LANGS_PREMIUM)
     for lang in BLOG_LANGS_PREMIUM:

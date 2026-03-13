@@ -5,7 +5,7 @@ from __future__ import annotations
 
 from app.core.config import BRAND_NAME
 
-BASE_UI_LANGS = ("en", "de", "fr", "it", "tr")
+BASE_UI_LANGS = ("en", "de", "fr", "it", "tr", "es")
 DEFAULT_BASE_LANG = "en"
 
 BASE_UI = {
@@ -43,12 +43,12 @@ BASE_UI = {
         "nav_analyze": "Analyser",
         "nav_menu": "Menu",
         "nav_close": "Fermer",
-        "footer_tagline": "Résultats d'analyses expliqués simplement. Ne remplace pas un avis médical.",
+        "footer_tagline": "Résultats d'analyses expliqués en langage clair. À titre informatif uniquement — pas un diagnostic.",
         "footer_privacy": "Politique de confidentialité",
         "footer_terms": "Conditions d'utilisation",
         "footer_contact": "Contact",
         "cta_analyze": "Analyser",
-        "title_suffix": "— Analyse sanguine par IA fiable",
+        "title_suffix": "— Comprendre vos analyses sanguines",
         "home_link": BRAND_NAME,
     },
     "it": {
@@ -57,12 +57,12 @@ BASE_UI = {
         "nav_analyze": "Analizza",
         "nav_menu": "Menu",
         "nav_close": "Chiudi",
-        "footer_tagline": "Risultati di laboratorio in linguaggio chiaro. Non sostituiscono il parere medico.",
+        "footer_tagline": "Referti di laboratorio in linguaggio chiaro. Solo informativi — non sostituiscono il parere medico.",
         "footer_privacy": "Privacy",
         "footer_terms": "Termini d'uso",
         "footer_contact": "Contatti",
         "cta_analyze": "Analizza",
-        "title_suffix": "— Analisi del sangue con IA affidabile",
+        "title_suffix": "— Capire le analisi del sangue",
         "home_link": BRAND_NAME,
     },
     "tr": {
@@ -71,12 +71,26 @@ BASE_UI = {
         "nav_analyze": "Analiz Yap",
         "nav_menu": "Menü",
         "nav_close": "Kapat",
-        "footer_tagline": "Laboratuvar sonuçlarınızı anlaşılır dilde açıklayan bilgilendirme hizmeti. Teşhis yerine geçmez.",
+        "footer_tagline": "Laboratuvar sonuçları anlaşılır dilde açıklanır. Teşhis yerine geçmez; yalnızca bilgilendirme.",
         "footer_privacy": "Gizlilik Politikası",
         "footer_terms": "Kullanım Şartları",
         "footer_contact": "İletişim",
         "cta_analyze": "Analiz Yap",
-        "title_suffix": "— Güvenilir Yapay Zeka Kan Tahlili Analizi",
+        "title_suffix": "— Kan tahlili sonuçlarını anlaşılır kılan analiz",
+        "home_link": BRAND_NAME,
+    },
+    "es": {
+        "nav_how": "Cómo funciona",
+        "nav_security": "Seguridad",
+        "nav_analyze": "Analizar",
+        "nav_menu": "Menú",
+        "nav_close": "Cerrar",
+        "footer_tagline": "Resultados de laboratorio explicados en lenguaje claro. No sustituye el diagnóstico médico.",
+        "footer_privacy": "Política de privacidad",
+        "footer_terms": "Términos de uso",
+        "footer_contact": "Contacto",
+        "cta_analyze": "Analizar",
+        "title_suffix": "— Análisis de resultados de sangre en lenguaje claro",
         "home_link": BRAND_NAME,
     },
 }
