@@ -306,7 +306,10 @@
             </div>
             {% endif %}
           </div>
-          <span class="absolute top-3 left-3 blog-badge">{{ featured.category }}</span>
+          <span class="absolute top-3 left-3 flex items-center gap-2 blog-badge">
+            {% if featured.icon %}<img src="{{ featured.icon }}" alt="" class="h-4 w-4 opacity-90" width="16" height="16" />{% endif %}
+            {{ featured.category }}
+          </span>
           <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white">
             <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
             {{ featured.read_minutes }} {{ blog_ui.read_min }}
@@ -358,7 +361,10 @@
               </div>
             </div>
             {% endif %}
-            <span class="absolute top-3 left-3 blog-badge">{{ post.category }}</span>
+            <span class="absolute top-3 left-3 flex items-center gap-2 blog-badge">
+            {% if post.icon %}<img src="{{ post.icon }}" alt="" class="h-4 w-4 opacity-90" width="16" height="16" />{% endif %}
+            {{ post.category }}
+          </span>
             <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white">
               <svg class="h-3.5 w-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
               {{ post.read_minutes }} {{ blog_ui.read_min }}

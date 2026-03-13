@@ -4718,7 +4718,7 @@ def _article_total_protein_high_low() -> Article:
             "hi": [Section(id="content", level=2, heading="टोटल प्रोटीन हाई या लो", body_html="<p><strong>टोटल प्रोटीन</strong> ऐल्ब्यूमिन और ग्लोब्युलिन का योग है; लिवर और इम्युनिटी से जुड़ा है। हाई या लो इन्फ्लेमेशन, लिवर/किडनी रोग या पोषण से हो सकता है। अकेले निदान नहीं; डॉक्टर ऐल्ब्यूमिन और लिवर/किडनी टेस्ट के साथ व्याख्या करेंगे। परिणाम डॉक्टर से चर्चा करें।</p>"), Section(id="disclaimer", level=2, heading="अस्वीकरण", body_html="<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>")],
             "ar": [Section(id="content", level=2, heading="البروتين الكلي مرتفع أو منخفض", body_html="<p><strong>البروتين الكلي</strong> هو الألبومين والغلوبولينات؛ مرتبط بالكبد والمناعة. ارتفاع أو انخفاض قد يكون بسبب التهاب أو مرض كبد أو كلية أو التغذية. الرقم وحده لا يشخّص؛ الطبيب يفسره مع الألبومين وفحوص الكبد أو الكلى. ناقش نتيجتك مع الطبيب.</p>"), Section(id="disclaimer", level=2, heading="إخلاء المسؤولية", body_html="<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>")],
         },
-        icon="/static/images/blog/icons/total-protein-high-or-low.svg",
+        icon="/static/images/blog/icons/icon-total-protein.png",
     )
 
 
@@ -5088,49 +5088,427 @@ def _article_hematocrit_high_low() -> Article:
         cover_alt={"tr": "Hematokrit kan tahlili — Norya", "en": "Hematocrit blood test — Norya", "es": "Hematocrito — Norya", "de": "Hämatokrit Bluttest — Norya", "fr": "Hématocrite — Norya", "it": "Ematocrito — Norya", "he": "המטוקריט — Norya", "hi": "हीमाटोक्रिट — Norya", "ar": "الهيماتوكريت — Norya"},
         sections_by_lang={
             "tr": [
-                Section(id="hematocrit-nedir", level=2, heading="Hematokrit nedir?", body_html="<p><strong>Hematokrit</strong>, kanınızın ne kadarının kırmızı kan hücreleri (eritrosit) tarafından oluştuğunu gösteren yüzde değeridir. Tam kan sayımında (CBC) sıklıkla yer alır; hemoglobin ile birlikte anemi veya polisitemi değerlendirmesinde kullanılır. Tek bir değer teşhis koymaz; hekiminiz yaş, cinsiyet ve diğer sonuçlarla birlikte yorumlar.</p>"),
-                Section(id="yuksek-dusuk", level=2, heading="Hematokrit yüksek veya düşük çıkarsa", body_html="<p><strong>Düşük hematokrit</strong> genelde anemi (kansızlık), kan kaybı veya bazı kronik hastalıklarla ilişkili olabilir. <strong>Yüksek hematokrit</strong> ise dehidratasyon, sigara, yüksek rakım veya nadiren kemik iliği hastalıkları gibi nedenlerle görülebilir. Sonucunuzu mutlaka hekiminizle görüşün; gerekirse <a href=\"/tr/blog/kan-tahlili-nasil-okunur\">kan tahlili sonuçlarını nasıl okuyacağınız</a> rehberimizden faydalanabilirsiniz.</p>"),
-                Section(id="disclaimer", level=2, heading="Uyarı", body_html="<p><strong>Bilgilendirme amaçlıdır.</strong> Teşhis yerine geçmez. Sonuçlarınızı hekimle görüşün. <a href=\"/analyze\">Analiz</a> · <a href=\"/tr/pricing\">Fiyatlandırma</a></p>"),
+                Section(
+                    id="hematocrit-nedir",
+                    level=2,
+                    heading="Hematokrit nedir?",
+                    body_html=(
+                        "<p><strong>Hematokrit</strong>, kanınızın toplam hacmi içinde kırmızı kan hücrelerinin kapladığı yüzdedir. "
+                        "Tam kan sayımında (CBC) en sık görülen parametrelerden biridir ve kanın ne kadar \"seyrek\" veya \"yoğun\" "
+                        "olduğuna dair genel bir fikir verir. Bu değer tek başına bir hastalığı kanıtlamaz; sadece kan dolaşımınız "
+                        "hakkında ek bir bilgi katmanı sunar.</p>"
+                        "<p>Laboratuvar raporlarında hematokrit için yaşa, biyolojik cinsiyete ve kullanılan cihaza göre değişen "
+                        "referans aralıkları bulunur. Bu yüzden rapordaki \"normal\" aralığı mutlaka dikkate almak gerekir. "
+                        "Hekiminiz hematokriti; kırmızı hücre sayısı, oksijen taşıyan maddelerin düzeyi, kalp–damar ve solunum "
+                        "sistemi ile ilgili öykünüz ve fizik muayene bulgularınızla birlikte yorumlar.</p>"
+                    ),
+                ),
+                Section(
+                    id="yuksek-dusuk",
+                    level=2,
+                    heading="Hematokrit yüksek veya düşük çıkarsa",
+                    body_html=(
+                        "<p><strong>Düşük hematokrit</strong>, kanda kırmızı hücre hacminin azaldığını gösterir ve yorgunluk, nefes "
+                        "darlığı, çabuk yorulma gibi şikâyetlerle birlikte görülebilir. Uzun süren kan kaybı, bazı kronik hastalıklar "
+                        "ve beslenme yetersizlikleri tabloya eşlik edebilir; ancak tek bir düşük değerle nedenin ne olduğu "
+                        "söylenemez. Değerin hangi hızla düştüğü, diğer kan sayımı parametreleri ve hikâyeniz tanı sürecinde "
+                        "kritik öneme sahiptir.</p>"
+                        "<p><strong>Yüksek hematokrit</strong> ise kanın daha \"yoğun\" hale geldiği durumlarda görülebilir. "
+                        "Sıvı kaybı (örneğin az su içmek, yoğun terleme, ishal), sigara kullanımı, uzun süre yüksek rakımda "
+                        "yaşamak veya nadiren kemik iliğiyle ilişkili hastalıklar bu tabloya eşlik edebilir. Yüksek bir değer "
+                        "damar içindeki akışkanlığı etkileyebileceği için hekimler genellikle eşlik eden şikâyetleri, tansiyon "
+                        "ve nabız gibi yaşamsal bulguları, kalp–damar öyküsünü ve diğer testleri birlikte değerlendirir. "
+                        "Sonucunuzu mutlaka hekiminizle görüşün; isterseniz randevu öncesi hazırlık için "
+                        "<a href=\"/tr/blog/kan-tahlili-nasil-okunur\">kan tahlili sonuçlarını nasıl okuyacağınız</a> rehberimize de göz atabilirsiniz.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Uyarı",
+                    body_html=(
+                        "<p><strong>Bu içerik yalnızca bilgilendirme amaçlıdır; kişisel tıbbi değerlendirme veya teşhis yerine "
+                        "geçmez.</strong> Hematokritin tek başına düşük ya da yüksek çıkması, altta yatan nedenin kesin olarak "
+                        "bilindiği anlamına gelmez. Sonuçlarınızı; şikâyetleriniz, kullandığınız ilaçlar ve önceki tahlillerinizle "
+                        "birlikte hekiminiz değerlendirmelidir.</p>"
+                        "<p>Raporunuzu daha yapılandırılmış biçimde gözden geçirmek isterseniz kan tahlili analiz aracımızı "
+                        "kullanabilirsiniz: <a href=\"/analyze\">Analiz</a>. Ücretlendirme ve paketler için "
+                        "<a href=\"/tr/pricing\">Fiyatlandırma</a> sayfasına göz atabilirsiniz.</p>"
+                    ),
+                ),
             ],
             "en": [
-                Section(id="what-is-hematocrit", level=2, heading="What is hematocrit?", body_html="<p><strong>Hematocrit</strong> is the percentage of your blood that is made up of red blood cells. It appears on a complete blood count (CBC) and is used together with hemoglobin to assess anemia or polycythemia. A single value does not make a diagnosis; your doctor interprets it with age, sex, and other results.</p>"),
-                Section(id="high-or-low", level=2, heading="When hematocrit is high or low", body_html="<p><strong>Low hematocrit</strong> is often linked to anemia, blood loss, or some chronic conditions. <strong>High hematocrit</strong> can be seen with dehydration, smoking, high altitude, or rarely bone marrow disorders. Always discuss your result with your doctor. You can use our <a href=\"/en/blog/how-to-read-blood-test-results\">guide to understanding blood test results</a> to prepare for your visit.</p>"),
-                Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>For information only.</strong> Not a substitute for diagnosis. Discuss your results with a doctor. <a href=\"/analyze\">Analyze</a> · <a href=\"/en/pricing\">Pricing</a></p>"),
+                Section(
+                    id="what-is-hematocrit",
+                    level=2,
+                    heading="What is hematocrit?",
+                    body_html=(
+                        "<p><strong>Hematocrit</strong> is the percentage of your blood volume that is occupied by red blood cells. "
+                        "You will usually see it reported on a complete blood count (CBC). Together with the oxygen‑carrying "
+                        "components of red cells and the overall cell count, it helps your doctor understand how concentrated or "
+                        "diluted your blood is.</p>"
+                        "<p>Each laboratory uses its own reference ranges based on age, sex and equipment, so “normal” on one "
+                        "report may look slightly different on another. Hematocrit on its own never proves or rules out a "
+                        "condition. It is only one piece of the puzzle and is interpreted alongside your symptoms, examination, "
+                        "other blood tests and, when needed, imaging or further investigations.</p>"
+                    ),
+                ),
+                Section(
+                    id="high-or-low",
+                    level=2,
+                    heading="When hematocrit is high or low",
+                    body_html=(
+                        "<p><strong>Low hematocrit</strong> means that red cells make up a smaller proportion of your blood volume. "
+                        "People may notice tiredness, reduced exercise tolerance, shortness of breath on exertion or paleness, "
+                        "but some have no symptoms at all, especially if the drop is slow. Long‑term blood loss, nutritional "
+                        "issues or long‑standing illnesses can be associated, yet a single low reading cannot tell you the exact "
+                        "cause. Trends over time, the rest of the CBC and your clinical story are all important.</p>"
+                        "<p><strong>High hematocrit</strong> suggests that the blood is relatively more concentrated with red cells. "
+                        "This can happen when you are short on fluids (for example with limited water intake, heavy sweating or "
+                        "vomiting and diarrhoea), in people who live at high altitude, in smokers, or more rarely due to bone "
+                        "marrow conditions. A higher value does not automatically mean there is a serious disease, but it prompts "
+                        "your doctor to look at blood pressure, circulation, heart and lung health and any medicines you take. "
+                        "Always discuss your result with a clinician; our <a href=\"/en/blog/how-to-read-blood-test-results\">guide "
+                        "to understanding blood test results</a> can help you prepare questions for your appointment.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Disclaimer",
+                    body_html=(
+                        "<p><strong>This article is for information only and is not a diagnosis or treatment plan.</strong> "
+                        "Hematocrit values must be interpreted in the context of your full medical history, examination and "
+                        "other test results. Only a qualified health professional who knows you can make or exclude a diagnosis.</p>"
+                        "<p>If you would like a structured, plain‑language overview of your lab report, you can use our "
+                        "<a href=\"/analyze\">analysis</a> tool and review available options on the <a href=\"/en/pricing\">Pricing</a> "
+                        "page. These services are designed to support, not replace, your conversation with your doctor.</p>"
+                    ),
+                ),
             ],
             "es": [
-                Section(id="que-es-hematocrito", level=2, heading="¿Qué es el hematocrito?", body_html="<p>El <strong>hematocrito</strong> es el porcentaje de la sangre que corresponde a glóbulos rojos. Aparece en el hemograma (CBC) y se usa junto con la hemoglobina para valorar anemia o policitemia. Un solo valor no da el diagnóstico; el médico lo interpreta con edad, sexo y el resto de resultados.</p>"),
-                Section(id="alto-o-bajo", level=2, heading="Hematocrito alto o bajo", body_html="<p>Un <strong>hematocrito bajo</strong> suele relacionarse con anemia, pérdida de sangre o algunas enfermedades crónicas. Un <strong>hematocrito alto</strong> puede verse en deshidratación, tabaco, altitud o, raramente, trastornos de la médula ósea. Comenta siempre el resultado con tu médico. Puedes usar nuestra <a href=\"/es/blog/como-leer-analisis-sangre\">guía para entender el análisis</a> antes de la consulta.</p>"),
-                Section(id="disclaimer", level=2, heading="Aviso", body_html="<p><strong>Solo informativo.</strong> No sustituye un diagnóstico. Comenta tus resultados con un médico. <a href=\"/analyze\">Analizar</a> · <a href=\"/es/pricing\">Precios</a></p>"),
+                Section(
+                    id="que-es-hematocrito",
+                    level=2,
+                    heading="¿Qué es el hematocrito?",
+                    body_html=(
+                        "<p>El <strong>hematocrito</strong> indica qué porcentaje del volumen de sangre está formado por glóbulos rojos. "
+                        "Es un valor básico del hemograma y ayuda a saber si la sangre está más concentrada o más diluida. No es una "
+                        "medida aislada de salud, sino un dato adicional que el médico combina con el resto de parámetros.</p>"
+                        "<p>Los rangos de referencia dependen del laboratorio, la edad y el sexo, por lo que conviene fijarse siempre "
+                        "en los límites \"mínimo\" y \"máximo\" que aparecen en tu propio informe. Un hematocrito fuera de rango no "
+                        "explica por sí solo cuál es el motivo; el médico tiene en cuenta síntomas, exploración física, otros "
+                        "análisis y, si hace falta, pruebas complementarias.</p>"
+                    ),
+                ),
+                Section(
+                    id="alto-o-bajo",
+                    level=2,
+                    heading="Hematocrito alto o bajo",
+                    body_html=(
+                        "<p>Un <strong>hematocrito bajo</strong> significa que la proporción de glóbulos rojos es menor de lo esperado. "
+                        "Puede acompañarse de cansancio, sensación de falta de aire con el esfuerzo, mareos o palidez, aunque muchas "
+                        "personas no notan nada cuando el descenso es lento. Pérdidas de sangre, dificultades en la producción de "
+                        "células rojas o enfermedades crónicas pueden influir, pero un solo dato no permite saber la causa exacta.</p>"
+                        "<p>Un <strong>hematocrito alto</strong> sugiere que la sangre está más concentrada. La deshidratación, vivir "
+                        "a gran altitud, fumar o determinadas situaciones médicas pueden elevar este valor. En algunos casos el médico "
+                        "revisa la presión arterial, el estado de hidratación, el corazón, los pulmones y la medicación que tomas para "
+                        "decidir si hacen falta más estudios. Comenta siempre tus resultados con el profesional que te sigue; nuestra "
+                        "<a href=\"/es/blog/como-leer-analisis-sangre\">guía para entender el análisis de sangre</a> puede ayudarte a "
+                        "preparar la consulta.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Aviso",
+                    body_html=(
+                        "<p><strong>Este contenido es solo informativo y no reemplaza una valoración médica individual.</strong> "
+                        "El hematocrito debe interpretarse junto con el resto del hemograma, otros análisis y la historia clínica. "
+                        "Solo un profesional que conoce tu caso puede confirmar o descartar diagnósticos.</p>"
+                        "<p>Si quieres revisar tu informe de forma estructurada y en lenguaje sencillo, puedes usar nuestra página "
+                        "de <a href=\"/analyze\">análisis</a> y consultar las opciones disponibles en <a href=\"/es/pricing\">Precios</a>. "
+                        "Estas herramientas son un apoyo a la consulta médica, no un sustituto.</p>"
+                    ),
+                ),
             ],
             "de": [
-                Section(id="was-ist-haematokrit", level=2, heading="Was ist der Hämatokrit?", body_html="<p>Der <strong>Hämatokrit</strong> gibt den Anteil der roten Blutkörperchen am Gesamtblut in Prozent an. Er gehört zum kleinen oder großen Blutbild und wird zusammen mit dem Hämoglobin bei Anämie oder Polyzythämie beurteilt. Ein einzelner Wert ergibt keine Diagnose; Ihr Arzt ordnet ihn mit Alter, Geschlecht und weiteren Befunden ein.</p>"),
-                Section(id="hoch-oder-niedrig", level=2, heading="Hämatokrit zu hoch oder zu niedrig", body_html="<p>Ein <strong>niedriger Hämatokrit</strong> kann bei Anämie, Blutverlust oder chronischen Erkrankungen vorkommen. Ein <strong>erhöhter Hämatokrit</strong> ist z. B. bei Flüssigkeitsmangel, Rauchen, Höhenaufenthalt oder seltener bei Knochenmarkserkrankungen möglich. Besprechen Sie Ihren Befund immer mit dem Arzt. Unser <a href=\"/de/blog/blutwerte-lesen\">Ratgeber zum Lesen von Blutwerten</a> kann Sie auf den Termin vorbereiten.</p>"),
-                Section(id="disclaimer", level=2, heading="Hinweis", body_html="<p><strong>Nur zur Information.</strong> Ersetzt keine Diagnose. Befund mit dem Arzt besprechen. <a href=\"/analyze\">Analyse</a> · <a href=\"/de/pricing\">Preise</a></p>"),
+                Section(
+                    id="was-ist-haematokrit",
+                    level=2,
+                    heading="Was ist der Hämatokrit?",
+                    body_html=(
+                        "<p>Der <strong>Hämatokrit</strong> beschreibt, wie viel Prozent Ihres Blutvolumens aus roten Blutkörperchen "
+                        "bestehen. Er ist ein Standardwert im Blutbild und hilft einzuordnen, ob das Blut eher verdünnt oder eher "
+                        "eingedickt wirkt. Für sich allein sagt der Wert noch nichts über die eigentliche Ursache aus.</p>"
+                        "<p>Referenzbereiche unterscheiden sich je nach Labor, Alter, biologischem Geschlecht und Messmethode. "
+                        "Deshalb ist es wichtig, immer die Normspanne auf Ihrem eigenen Laborbericht heranzuziehen. Ärzte werten "
+                        "den Hämatokrit nie isoliert, sondern gemeinsam mit anderen Blutwerten, Beschwerden, Vorerkrankungen und "
+                        "gegebenenfalls weiteren Untersuchungen aus.</p>"
+                    ),
+                ),
+                Section(
+                    id="hoch-oder-niedrig",
+                    level=2,
+                    heading="Hämatokrit zu hoch oder zu niedrig",
+                    body_html=(
+                        "<p>Ein <strong>niedriger Hämatokrit</strong> bedeutet, dass der Anteil roter Blutkörperchen am Gesamtblut "
+                        "verringert ist. Betroffene berichten unter Umständen über Müdigkeit, Belastungsdyspnoe oder Schwindel, "
+                        "manchmal fehlen Beschwerden jedoch völlig – insbesondere, wenn der Wert langsam abgesunken ist. "
+                        "Längerfristiger Blutverlust, Ernährungsprobleme oder chronische Erkrankungen kommen als Ursachen in Frage, "
+                        "müssen aber im Einzelfall sorgfältig geprüft werden.</p>"
+                        "<p>Ein <strong>erhöhter Hämatokrit</strong> deutet darauf hin, dass das Blut relativ konzentrierter ist. "
+                        "Dies kann bei Flüssigkeitsmangel, Rauchen, Aufenthalt in großer Höhe oder – deutlich seltener – bei "
+                        "Bestandserkrankungen des Knochenmarks vorkommen. Erhöhte Werte veranlassen Ärztinnen und Ärzte dazu, "
+                        "Kreislauf, Herz‑ und Lungenfunktion, Trinkmenge und eingenommene Medikamente genauer anzuschauen. "
+                        "Besprechen Sie Ihren Befund immer mit dem Arzt; unser <a href=\"/de/blog/blutwerte-lesen\">Ratgeber zum "
+                        "Lesen von Blutwerten</a> kann Sie auf das Gespräch vorbereiten.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Hinweis",
+                    body_html=(
+                        "<p><strong>Die Informationen in diesem Artikel ersetzen keine ärztliche Diagnose oder Behandlung.</strong> "
+                        "Ein einzelner Hämatokrit‑Wert – ob hoch oder niedrig – genügt nicht, um eine Erkrankung sicher zu "
+                        "bestätigen oder auszuschließen. Die Einordnung erfolgt immer im Zusammenhang mit Ihrer Anamnese, "
+                        "Untersuchung und weiteren Befunden.</p>"
+                        "<p>Wenn Sie Ihre Laborwerte in klarer Sprache und strukturiert erläutert bekommen möchten, können Sie "
+                        "unser <a href=\"/analyze\">Analyse</a>‑Angebot nutzen und sich auf der Seite <a href=\"/de/pricing\">Preise</a> "
+                        "informieren. Dieses Angebot soll das Gespräch mit Ihrer behandelnden Ärztin oder Ihrem Arzt unterstützen, "
+                        "nicht ersetzen.</p>"
+                    ),
+                ),
             ],
             "fr": [
-                Section(id="quest-ce-hematocrite", level=2, heading="Qu'est-ce que l'hématocrite ?", body_html="<p>L'<strong>hématocrite</strong> est le pourcentage du sang constitué de globules rouges. Il figure sur la numération sanguine (NFS) et est utilisé avec l'hémoglobine pour évaluer une anémie ou une polyglobulie. Un chiffre seul ne fait pas un diagnostic ; le médecin l'interprète avec l'âge, le sexe et le reste du bilan.</p>"),
-                Section(id="haut-ou-bas", level=2, heading="Hématocrite haut ou bas", body_html="<p>Un <strong>hématocrite bas</strong> est souvent lié à une anémie, une perte de sang ou certaines maladies chroniques. Un <strong>hématocrite élevé</strong> peut s'observer en cas de déshydratation, tabagisme, altitude ou plus rarement maladies de la moelle. Discutez toujours du résultat avec votre médecin. Notre <a href=\"/fr/blog/lire-resultats-prise-de-sang\">guide pour comprendre la prise de sang</a> peut vous aider avant la consultation.</p>"),
-                Section(id="disclaimer", level=2, heading="Avertissement", body_html="<p><strong>À titre informatif.</strong> Ne remplace pas un diagnostic. Discutez de vos résultats avec un médecin. <a href=\"/analyze\">Analyser</a> · <a href=\"/fr/pricing\">Tarifs</a></p>"),
+                Section(
+                    id="quest-ce-hematocrite",
+                    level=2,
+                    heading="Qu'est-ce que l'hématocrite ?",
+                    body_html=(
+                        "<p>L’<strong>hématocrite</strong> correspond à la proportion du volume sanguin occupée par les globules rouges. "
+                        "C’est un paramètre de base de la numération formule sanguine (NFS) qui donne une idée du caractère plus "
+                        "ou moins concentré du sang. Pris isolément, il ne permet pas de conclure sur une maladie précise.</p>"
+                        "<p>Les valeurs de référence varient selon les laboratoires, l’âge, le sexe biologique et les méthodes de "
+                        "mesure. Il est donc important de s’appuyer sur l’intervalle « normal » indiqué sur votre propre compte‑rendu. "
+                        "Le médecin interprète l’hématocrite en même temps que les autres chiffres de la NFS, vos symptômes, vos "
+                        "antécédents et, si besoin, d’autres examens.</p>"
+                    ),
+                ),
+                Section(
+                    id="haut-ou-bas",
+                    level=2,
+                    heading="Hématocrite haut ou bas",
+                    body_html=(
+                        "<p>Un <strong>hématocrite bas</strong> signifie que la part de globules rouges dans le sang est diminuée. "
+                        "Cela peut s’accompagner de fatigue, d’essoufflement à l’effort, de vertiges ou de pâleur, mais certaines "
+                        "personnes ne ressentent rien, notamment si la baisse est progressive. Des pertes de sang, des apports "
+                        "insuffisants ou des maladies chroniques peuvent être en cause, mais un seul chiffre ne permet pas d’en "
+                        "identifier la raison exacte.</p>"
+                        "<p>Un <strong>hématocrite élevé</strong> traduit un sang plus concentré. La déshydratation, le tabagisme, "
+                        "la vie en altitude ou, plus rarement, des atteintes de la moelle osseuse peuvent participer à cette "
+                        "augmentation. Face à ce type de résultat, le médecin s’intéresse au contexte global : tension artérielle, "
+                        "fonction cardiaque et respiratoire, traitements en cours, autres analyses… Discutez toujours de vos "
+                        "résultats avec un professionnel ; notre <a href=\"/fr/blog/lire-resultats-prise-de-sang\">guide pour "
+                        "comprendre la prise de sang</a> peut vous aider à préparer vos questions.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Avertissement",
+                    body_html=(
+                        "<p><strong>Ce texte est fourni à titre informatif et ne remplace pas une consultation médicale.</strong> "
+                        "Un hématocrite haut ou bas doit toujours être interprété dans le contexte de votre histoire personnelle, "
+                        "de votre examen clinique et des autres résultats biologiques. Seul un professionnel de santé peut poser "
+                        "un diagnostic.</p>"
+                        "<p>Pour obtenir un résumé structuré et en langage clair de vos examens, vous pouvez utiliser notre page "
+                        "<a href=\"/analyze\">Analyser</a> et consulter les offres sur <a href=\"/fr/pricing\">Tarifs</a>. "
+                        "Ces outils complètent, mais ne remplacent pas, l’échange avec votre médecin.</p>"
+                    ),
+                ),
             ],
             "it": [
-                Section(id="cos-e-emocrito", level=2, heading="Cos'è l'ematocrito?", body_html="<p>L'<strong>ematocrito</strong> è la percentuale del sangue costituita da globuli rossi. Compare nell'emocromo (CBC) e si usa insieme all'emoglobina per valutare anemia o policitemia. Un solo valore non fa diagnosi; il medico lo inquadra con età, sesso e altri esami.</p>"),
-                Section(id="alto-o-basso", level=2, heading="Ematocrito alto o basso", body_html="<p>Un <strong>ematocrito basso</strong> è spesso legato ad anemia, perdita di sangue o alcune patologie croniche. Un <strong>ematocrito alto</strong> può dipendere da disidratazione, fumo, altitudine o più raramente da disturbi del midollo. Discuti sempre il risultato con il medico. La nostra <a href=\"/it/blog/come-leggere-esami-del-sangue\">guida per capire gli esami</a> può esserti utile prima della visita.</p>"),
-                Section(id="disclaimer", level=2, heading="Disclaimer", body_html="<p><strong>Solo informativo.</strong> Non sostituisce una diagnosi. Discuti i risultati con il medico. <a href=\"/analyze\">Analizza</a> · <a href=\"/it/pricing\">Prezzi</a></p>"),
+                Section(
+                    id="cos-e-emocrito",
+                    level=2,
+                    heading="Cos'è l'ematocrito?",
+                    body_html=(
+                        "<p>L’<strong>ematocrito</strong> indica la percentuale del volume di sangue occupata dai globuli rossi. "
+                        "È uno dei valori base dell’emocromo e aiuta a capire se il sangue appare più concentrato o più diluito. "
+                        "Da solo non basta per dire se c’è o meno una malattia precisa.</p>"
+                        "<p>I range di riferimento variano in base al laboratorio, all’età, al sesso biologico e alla metodica di "
+                        "misura. Per questo è importante guardare sempre l’intervallo «normale» riportato sul tuo referto. Il medico "
+                        "interpreta l’ematocrito assieme agli altri parametri dell’emocromo, ai sintomi, alla visita e, se serve, "
+                        "ad esami aggiuntivi.</p>"
+                    ),
+                ),
+                Section(
+                    id="alto-o-basso",
+                    level=2,
+                    heading="Ematocrito alto o basso",
+                    body_html=(
+                        "<p>Un <strong>ematocrito basso</strong> segnala che la quota di globuli rossi nel sangue è ridotta. "
+                        "Questo può tradursi in stanchezza, fiato corto sotto sforzo, capogiri o pallore, ma quando la variazione "
+                        "è lenta molte persone non avvertono disturbi evidenti. Perdite di sangue protratte, difficoltà nella "
+                        "produzione delle cellule rosse o malattie croniche possono contribuire al quadro, ma un singolo numero "
+                        "non permette di definire la causa.</p>"
+                        "<p>Un <strong>ematocrito alto</strong> suggerisce invece un sangue relativamente più concentrato. "
+                        "Può vedersi in caso di disidratazione, fumo, permanenza ad alta quota o, meno spesso, in presenza di "
+                        "patologie del midollo osseo. In queste situazioni il medico valuta con attenzione la pressione, lo stato "
+                        "di idratazione, la funzione di cuore e polmoni e le terapie in corso. Discuti sempre il risultato con il "
+                        "tuo curante; la nostra <a href=\"/it/blog/come-leggere-esami-del-sangue\">guida per capire gli esami del "
+                        "sangue</a> può aiutarti a preparare la visita.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="Disclaimer",
+                    body_html=(
+                        "<p><strong>Queste informazioni hanno solo scopo informativo e non sostituiscono una valutazione medica "
+                        "personale.</strong> Un ematocrito alto o basso va sempre interpretato nel contesto della tua storia "
+                        "clinica, dell’esame obiettivo e degli altri esami di laboratorio. Solo il medico può confermare o escludere "
+                        "una diagnosi.</p>"
+                        "<p>Per rivedere il referto in modo strutturato e con un linguaggio semplice puoi utilizzare la pagina "
+                        "<a href=\"/analyze\">Analisi</a> e consultare le opzioni su <a href=\"/it/pricing\">Prezzi</a>. "
+                        "Si tratta di un supporto alla relazione con il tuo medico, non di un sostituto.</p>"
+                    ),
+                ),
             ],
             "he": [
-                Section(id="ma-hu-hematocrit", level=2, heading="מהו המטוקריט?", body_html="<p><strong>המטוקריט</strong> הוא האחוז של הדם שמורכב מכדוריות דם אדומות. הוא מופיע בספירת דם מלאה (CBC) ומשמש יחד עם המוגלובין להערכת אנמיה או פוליציטמיה. ערך בודד לא קובע אבחנה; הרופא יפרש עם גיל, מין ושאר התוצאות.</p>"),
-                Section(id="gavoha-o-namuch", level=2, heading="המטוקריט גבוה או נמוך", body_html="<p><strong>המטוקריט נמוך</strong> קשור לעיתים לאנמיה, אובדן דם או מחלות כרוניות. <strong>המטוקריט גבוה</strong> יכול להופיע בהתייבשות, עישון, גובה או במקרים נדירים במחלות מח עצם. יש לדון בתוצאה עם הרופא. אפשר להשתמש ב<a href=\"/he/blog/how-to-read-blood-test\">המדריך שלנו להבנת תוצאות הבדיקה</a> לפני הפגישה.</p>"),
-                Section(id="disclaimer", level=2, heading="הודעה", body_html="<p><strong>למידע בלבד.</strong> אינו מחליף אבחנה. יש לדון בתוצאות עם רופא. <a href=\"/analyze\">התחל ניתוח</a> · <a href=\"/he/pricing\">מחירים</a></p>"),
+                Section(
+                    id="ma-hu-hematocrit",
+                    level=2,
+                    heading="מהו המטוקריט?",
+                    body_html=(
+                        "<p><strong>המטוקריט</strong> הוא האחוז מנפח הדם שמורכב מתאי דם אדומים. זהו אחד המדדים הבסיסיים "
+                        "בספירת הדם המלאה (CBC) והוא נותן תמונה אם הדם נראה מרוכז יותר או מדולל יותר. מדד זה אינו אבחנה "
+                        "בפני עצמו אלא נתון נוסף שהרופא משלב עם שאר הנתונים.</p>"
+                        "<p>טווחי הייחוס משתנים בין מעבדות ותלויים בגיל, במין הביולוגי ובשיטת המדידה. לכן חשוב להסתכל תמיד "
+                        "על הטווח שמודפס בדוח האישי שלך. הרופא מפרש את ערך ההמטוקריט יחד עם שאר מדדי ספירת הדם, הסימפטומים, "
+                        "הבדיקה הגופנית ולעיתים גם בדיקות נוספות.</p>"
+                    ),
+                ),
+                Section(
+                    id="gavoha-o-namuch",
+                    level=2,
+                    heading="המטוקריט גבוה או נמוך",
+                    body_html=(
+                        "<p><strong>המטוקריט נמוך</strong> פירושו שחלקן של תאי הדם האדומים בנפח הדם קטן מהמצופה. "
+                        "לעיתים זה מתבטא בעייפות, ירידה בסבולת המאמץ, קוצר נשימה במאמץ או סחרחורת, אך כאשר השינוי איטי "
+                        "ייתכן שלא יופיעו תסמינים ברורים. מצבים של אובדן דם ממושך, תזונה לא מספקת או מחלות כרוניות יכולים "
+                        "להשפיע, אבל ערך יחיד אינו מסביר לבדו מהי הסיבה.</p>"
+                        "<p><strong>המטוקריט גבוה</strong> מצביע על דם מרוכז יותר. זה יכול להופיע במצבי התייבשות, אצל "
+                        "מעשנים, במגורים בגובה רב או במקרים נדירים יותר במחלות של מח העצם. במצב כזה הרופא בודק גם לחץ דם, "
+                        "מאזן נוזלים, מצב לב וריאות והתרופות הקבועות. יש לדון בתוצאה עם הרופא; ניתן להיעזר ב"
+                        "<a href=\"/he/blog/how-to-read-blood-test\">מדריך להבנת תוצאות בדיקת הדם</a> כהכנה לפגישה.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="הודעה",
+                    body_html=(
+                        "<p><strong>המידע במאמר זה מיועד להסברה בלבד ואינו מחליף ייעוץ או אבחנה רפואית אישית.</strong> "
+                        "ערכים גבוהים או נמוכים של המטוקריט דורשים פרשנות בהקשר של הסיפור הרפואי המלא, הבדיקה הגופנית "
+                        "ושאר הבדיקות. רק איש מקצוע המכיר אותך יכול לקבוע אבחנה.</p>"
+                        "<p>אם ברצונך לסקור את בדיקת הדם בשפה ברורה ובאופן מובנה, ניתן להשתמש בכלי ה‑"
+                        "<a href=\"/analyze\">Analyse</a> של השירות ולבדוק אפשרויות בדף <a href=\"/he/pricing\">מחירים</a>. "
+                        "הכלי נועד להוסיף בהירות לשיחה עם הרופא – לא להחליף אותה.</p>"
+                    ),
+                ),
             ],
             "hi": [
-                Section(id="hematocrit-kya-hai", level=2, heading="हीमाटोक्रिट क्या है?", body_html="<p><strong>हीमाटोक्रिट</strong> खून का वह प्रतिशत है जो लाल रक्त कोशिकाओं से बना होता है। यह CBC में आता है और हीमोग्लोबिन के साथ एनीमिया या पॉलिसाइथीमिया देखने में इस्तेमाल होता है। एक अकेला वैल्यू निदान नहीं है; डॉक्टर उम्र, लिंग और बाकी रिज़ल्ट के साथ व्याख्या करेंगे।</p>"),
-                Section(id="high-ya-low", level=2, heading="हीमाटोक्रिट हाई या लो", body_html="<p><strong>लो हीमाटोक्रिट</strong> अक्सर एनीमिया, खून की कमी या कुछ क्रॉनिक स्थितियों से जुड़ा होता है। <strong>हाई हीमाटोक्रिट</strong> डिहाइड्रेशन, धूम्रपान, ऊँचाई या कभी-कभी बोन मैरो विकारों में दिख सकता है। परिणाम हमेशा डॉक्टर से चर्चा करें। विजिट से पहले <a href=\"/hi/blog/blood-test-kaise-padhe\">ब्लड टेस्ट समझने की गाइड</a> इस्तेमाल कर सकते हैं।</p>"),
-                Section(id="disclaimer", level=2, heading="अस्वीकरण", body_html="<p><strong>केवल सूचनार्थ।</strong> निदान का विकल्प नहीं। परिणाम डॉक्टर से चर्चा करें। <a href=\"/analyze\">विश्लेषण शुरू करें</a> · <a href=\"/hi/pricing\">मूल्य निर्धारण</a></p>"),
+                Section(
+                    id="hematocrit-kya-hai",
+                    level=2,
+                    heading="हीमाटोक्रिट क्या है?",
+                    body_html=(
+                        "<p><strong>हीमाटोक्रिट</strong> यह बताता है कि आपके खून के कुल वॉल्यूम का कितना हिस्सा लाल रक्त कोशिकाओं "
+                        "से बना है। यह CBC (complete blood count) की बेसिक वैल्यू में से एक है और यह दिखाता है कि खून अपेक्षाकृत "
+                        "गाढ़ा है या ज़्यादा पतला। अकेले हीमाटोक्रिट से किसी बीमारी का नाम तय नहीं किया जा सकता।</p>"
+                        "<p>हर लैब का रेफरेंस रेंज थोड़ा अलग हो सकता है और उम्र, जैविक लिंग तथा मशीन पर निर्भर करता है। "
+                        "इसलिए हमेशा अपने रिपोर्ट पर लिखे \"नॉर्मल\" रेंज को ही आधार मानें। डॉक्टर हीमाटोक्रिट को बाकी CBC "
+                        "वैल्यू, आपकी कहानी, दवाओं और ज़रूरत पड़ने पर अन्य जांचों के साथ जोड़कर देखते हैं।</p>"
+                    ),
+                ),
+                Section(
+                    id="high-ya-low",
+                    level=2,
+                    heading="हीमाटोक्रिट हाई या लो होने पर",
+                    body_html=(
+                        "<p><strong>लो हीमाटोक्रिट</strong> का मतलब होता है कि खून में लाल कोशिकाओं की हिस्सेदारी कम है। "
+                        "ऐसी स्थिति में थकान, सीढ़ियाँ चढ़ते समय सांस फूलना, चक्कर जैसा लगना या चेहरा फीका दिखना महसूस हो "
+                        "सकता है, लेकिन अगर गिरावट धीरे‑धीरे हो तो कई लोगों को शुरुआती समय में कोई खास लक्षण नहीं होते। "
+                        "लंबे समय से चल रही खून की कमी, कुछ पुरानी बीमारियाँ या पोषण संबंधी कारण पृष्ठभूमि में हो सकते हैं, "
+                        "पर एक रिपोर्ट से कारण तय नहीं किया जा सकता।</p>"
+                        "<p><strong>हाई हीमाटोक्रिट</strong> यह संकेत देता है कि खून अपेक्षाकृत ज़्यादा गाढ़ा है। कम पानी पीना, "
+                        "ज़्यादा पसीना या उल्टी‑दस्त से फ्लूड लॉस, ऊँचाई वाली जगह पर रहना या धूम्रपान जैसे कारण इससे जुड़े "
+                        "हो सकते हैं; कभी‑कभी बोन मैरो से संबंधित स्थितियाँ भी भूमिका निभाती हैं। ऐसे परिणाम में डॉक्टर "
+                        "ब्लड प्रेशर, हार्ट और लंग फंक्शन, दवाओं और समग्र स्थिति को साथ में देखते हैं। विजिट से पहले "
+                        "<a href=\"/hi/blog/blood-test-kaise-padhe\">ब्लड टेस्ट समझने की गाइड</a> पढ़ना आपके सवाल तैयार करने में "
+                        "मदद कर सकता है।</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="अस्वीकरण",
+                    body_html=(
+                        "<p><strong>यह जानकारी केवल शिक्षा के उद्देश्य से है; यह व्यक्तिगत चिकित्सीय सलाह या निदान नहीं है।</strong> "
+                        "हीमाटोक्रिट का हाई या लो होना अकेले किसी निष्कर्ष के लिए पर्याप्त नहीं होता। अंतिम निर्णय डॉक्टर "
+                        "आपके लक्षण, जांच और मेडिकल इतिहास को जोड़कर लेते हैं।</p>"
+                        "<p>अगर आप अपने लैब रिज़ल्ट को सरल भाषा में और ढाँचे के साथ देखना चाहें तो हमारा "
+                        "<a href=\"/analyze\">विश्लेषण</a> टूल और <a href=\"/hi/pricing\">मूल्य निर्धारण</a> पेज देख सकते हैं। "
+                        "ये टूल डॉक्टर से होने वाली बातचीत को सपोर्ट करते हैं, उसकी जगह नहीं लेते।</p>"
+                    ),
+                ),
             ],
             "ar": [
-                Section(id="ma-hu-al-haymatukrit", level=2, heading="ما هو الهيماتوكريت؟", body_html="<p><strong>الهيماتوكريت</strong> هو نسبة الدم المكوّن من كريات الدم الحمراء. يظهر في تحليل الدم الشامل (CBC) ويُستخدم مع الهيموغلوبين لتقييم فقر الدم أو كثرة الحمر. رقم واحد لا يشخّص؛ الطبيب يفسره مع العمر والجنس وباقي النتائج.</p>"),
-                Section(id="murtafi-aw-munkhafid", level=2, heading="الهيماتوكريت مرتفع أو منخفض", body_html="<p><strong>الهيماتوكريت المنخفض</strong> غالباً مرتبط بفقر الدم أو فقدان الدم أو بعض الأمراض المزمنة. <strong>المرتفع</strong> قد يظهر مع الجفاف أو التدخين أو الارتفاع أو نادراً أمراض نخاع العظم. ناقش نتيجتك دائماً مع الطبيب. يمكنك استخدام <a href=\"/ar/blog/how-to-read-blood-test\">دليلنا لفهم تحليل الدم</a> قبل الزيارة.</p>"),
-                Section(id="disclaimer", level=2, heading="إخلاء المسؤولية", body_html="<p><strong>للمعلومات فقط.</strong> لا يحل محل التشخيص. ناقش نتائجك مع الطبيب. <a href=\"/analyze\">بدء التحليل</a> · <a href=\"/ar/pricing\">الأسعار</a></p>"),
+                Section(
+                    id="ma-hu-al-haymatukrit",
+                    level=2,
+                    heading="ما هو الهيماتوكريت؟",
+                    body_html=(
+                        "<p><strong>الهيماتوكريت</strong> هو النسبة المئوية من حجم الدم التي تشغلها كريات الدم الحمراء. "
+                        "يظهر هذا الرقم في تحليل الدم الشامل ويعطي انطباعاً أولياً عما إذا كان الدم أكثر تركيزاً أو أكثر "
+                        "تمايعاً من المعتاد. هو مؤشر مساعد ولا يقدّم وحده تشخيصاً كاملاً.</p>"
+                        "<p>تختلف القيم المرجعية بين المختبرات بحسب العمر والجنس وطريقة القياس، لذلك ينبغي دائماً الاعتماد "
+                        "على المجال «الطبيعي» المدوّن في تقريرك الشخصي. يقوم الطبيب بتفسير الهيماتوكريت إلى جانب باقي قيم "
+                        "التحليل، والأعراض، والفحص السريري، وأحياناً فحوصات إضافية عند الحاجة.</p>"
+                    ),
+                ),
+                Section(
+                    id="murtafi-aw-munkhafid",
+                    level=2,
+                    heading="الهيماتوكريت مرتفع أو منخفض",
+                    body_html=(
+                        "<p><strong>الهيماتوكريت المنخفض</strong> يعني أن حصة الكريات الحمراء من حجم الدم أقل من المتوقع. "
+                        "قد يرافقه تعب، ضيق نفس مع الجهد، دوار أو شحوب، لكن في الحالات البطيئة التطور قد لا يلاحظ الشخص "
+                        "أي أعراض واضحة في البداية. يمكن أن تتداخل عوامل مثل نقص الوارد الغذائي، فقدان الدم المزمن أو "
+                        "أمراض طويلة الأمد، إلا أن قيمة واحدة لا تكفي لمعرفة السبب بدقة.</p>"
+                        "<p><strong>الهيماتوكريت المرتفع</strong> يشير إلى دم أكثر تركيزاً. قد يُرى مع الجفاف، أو عند المدخنين، "
+                        "أو لدى من يعيشون في المرتفعات، وأحياناً – بشكل أقل شيوعاً – في أمراض تصيب نخاع العظم. في مثل هذه "
+                        "الحالات يقيّم الطبيب ضغط الدم، وحالة السوائل، ووظيفة القلب والرئتين، والأدوية المستخدمة قبل أن يقرر "
+                        "إن كانت هناك حاجة إلى فحوص إضافية. ناقش نتيجتك دائماً مع الطبيب؛ ويمكنك استخدام "
+                        "<a href=\"/ar/blog/how-to-read-blood-test\">دليل فهم تحليل الدم</a> للتحضير للزيارة.</p>"
+                    ),
+                ),
+                Section(
+                    id="disclaimer",
+                    level=2,
+                    heading="إخلاء المسؤولية",
+                    body_html=(
+                        "<p><strong>هذه المعلومات لأغراض التثقيف فقط ولا تغني عن استشارة طبية شخصية.</strong> "
+                        "ارتفاع أو انخفاض الهيماتوكريت يجب أن يُفسر دوماً ضمن سياق التاريخ المرضي والفحص السريري وبقية "
+                        "التحاليل. وحده الطبيب الذي يعرف حالتك يمكنه تأكيد أو نفي التشخيص.</p>"
+                        "<p>للحصول على عرض منظم وبلغة مبسّطة لنتائجك يمكنك استخدام صفحة <a href=\"/analyze\">التحليل</a> "
+                        "والاطلاع على الخيارات المتاحة في صفحة <a href=\"/ar/pricing\">الأسعار</a>. هذه الأدوات مكمّلة "
+                        "للحوار مع طبيبك وليست بديلاً عنه.</p>"
+                    ),
+                ),
             ],
         },
         icon="/static/images/blog/icons/hematocrit-high-or-low.svg",
@@ -5281,8 +5659,18 @@ def _article_globulin_high_low() -> Article:
     ex = {"tr": "Globulin, total proteinde albümin dışında kalan proteinlerin toplamıdır; yüksek veya düşük nedenleri hekim tarafından albümin ve diğer tahlillerle değerlendirilir.", "en": "Globulin is the sum of proteins in blood other than albumin. Causes of high or low are assessed by your doctor together with albumin and other results.", "es": "La globulina es el conjunto de proteínas distintas de la albúmina; las causas de alto o bajo las valora el médico con albúmina y el resto.", "de": "Globuline sind die Summe der Eiweiße außer Albumin; Ursachen für hoch oder niedrig beurteilt der Arzt mit Albumin und übrigen Befunden.", "fr": "Les globulines regroupent les protéines autres que l'albumine ; les causes d'un taux haut ou bas sont évaluées par le médecin avec le bilan.", "it": "Le globuline sono l'insieme delle proteine diverse dall'albumina; le cause di alto o basso le valuta il medico con gli altri esami.", "he": "גלובולין הוא סך החלבונים מלבד אלבומין; סיבות לגבוה או נמוך יבדקו עם הרופא עם שאר התוצאות.", "hi": "ग्लोब्युलिन ऐल्ब्यूमिन के अलावा बाकी प्रोटीन का योग है; हाई या लो के कारण डॉक्टर ऐल्ब्यूमिन और बाकी रिज़ल्ट के साथ आंकलन करेंगे।", "ar": "الغلوبولين هو مجموع البروتينات عدا الألبومين؛ أسباب الارتفاع أو الانخفاض يقيّمها الطبيب مع بقية النتائج."}
     seo_t = {"tr": "Globulin Yüksek veya Düşük Ne Anlama Gelir? | Norya Blog", "en": "Globulin High or Low: What It Means | Norya Blog", "es": "Globulina alta o baja | Norya Blog", "de": "Globulin zu hoch oder zu niedrig | Norya Blog", "fr": "Globuline haute ou basse | Norya Blog", "it": "Globuline alte o basse | Norya Blog", "he": "גלובולין גבוה או נמוך | Norya Blog", "hi": "ग्लोब्युलिन हाई या लो | Norya Blog", "ar": "الغلوبولين مرتفع أو منخفض | Norya Blog"}
     seo_d = {"tr": "Globulin yüksek veya düşük nedenleri. Bilgilendirme amaçlı.", "en": "What globulin high or low means. For information only.", "es": "Globulina alta o baja: causas. Solo informativo.", "de": "Globulin zu hoch oder zu niedrig. Nur zur Information.", "fr": "Globuline haute ou basse. À titre informatif.", "it": "Globuline alte o basse. Solo informativo.", "he": "גלובולין גבוה או נמוך. למידע בלבד.", "hi": "ग्लोब्युलिन हाई या लो. केवल सूचनार्थ।", "ar": "الغلوبولين مرتفع أو منخفض. لأغراض إعلامية فقط."}
-    c = {"tr": "<p><strong>Globulin</strong>, kanda ölçülen total proteinin albümin dışında kalan kısmıdır; antikorlar ve taşıma proteinleri gibi farklı türleri kapsar. Yüksek veya düşük çıkması kronik iltihap, karaciğer hastalığı veya bağışıklıkla ilişkili olabilir. Tek başına teşhis koymaz; hekiminiz albümin, total protein ve karaciğer testleriyle birlikte yorumlar. Sonucunuzu hekimle görüşün. <a href=\"/tr/blog/total-protein-high-or-low\">Total protein</a> ve <a href=\"/tr/blog/albumin-low-meaning\">albumin</a> yazılarımıza bakabilirsiniz.</p>", "en": "<p><strong>Globulin</strong> is the part of total protein in blood that is not albumin; it includes antibodies and transport proteins. High or low can be due to chronic inflammation, liver disease, or immune-related conditions. It does not make a diagnosis alone; your doctor interprets it with albumin, total protein, and liver tests. Discuss your result with a doctor. See our <a href=\"/en/blog/total-protein-high-or-low\">total protein</a> and <a href=\"/en/blog/albumin-low-meaning\">albumin</a> articles.</p>", "es": "<p>La <strong>globulina</strong> es la parte de las proteínas totales que no es albúmina; incluye anticuerpos y proteínas de transporte. Alto o bajo puede deberse a inflamación crónica, enfermedad hepática o alteraciones inmunitarias. No da el diagnóstico por sí solo; el médico lo interpreta con albúmina, proteínas totales y pruebas hepáticas. Comenta el resultado con un médico. Consulta <a href=\"/es/blog/total-protein-high-or-low\">proteínas totales</a> y <a href=\"/es/blog/albumin-low-meaning\">albúmina</a>.</p>", "de": "<p><strong>Globuline</strong> sind der Teil des Gesamteiweißes im Blut außer Albumin; dazu zählen Antikörper und Transportproteine. Erhöhung oder Erniedrigung kann bei chronischer Entzündung, Lebererkrankung oder immunologischen Störungen vorkommen. Ein Wert allein ergibt keine Diagnose; der Arzt wertet mit Albumin, Gesamteiweiß und Leberwerten. Befund mit dem Arzt besprechen. Siehe <a href=\"/de/blog/total-protein-high-or-low\">Gesamteiweiß</a> und <a href=\"/de/blog/albumin-low-meaning\">Albumin</a>.</p>", "fr": "<p>Les <strong>globulines</strong> sont la partie des protéines totales du sang autre que l'albumine ; elles incluent anticorps et protéines de transport. Un taux haut ou bas peut être lié à une inflammation chronique, une maladie du foie ou des troubles immunitaires. Un chiffre seul ne fait pas un diagnostic ; le médecin l'interprète avec l'albumine, les protéines totales et le bilan hépatique. Discutez du résultat avec un médecin. Voir <a href=\"/fr/blog/total-protein-high-or-low\">protéines totales</a> et <a href=\"/fr/blog/albumin-low-meaning\">albumine</a>.</p>", "it": "<p>Le <strong>globuline</strong> sono la parte delle proteine totali nel sangue che non è albumina; includono anticorpi e proteine di trasporto. Alto o basso può dipendere da infiammazione cronica, malattia epatica o condizioni immunitarie. Un solo valore non fa diagnosi; il medico lo valuta con albumina, proteine totali ed esami epatici. Discuti il risultato con il medico. Vedi <a href=\"/it/blog/total-protein-high-or-low\">proteine totali</a> e <a href=\"/it/blog/albumin-low-meaning\">albumina</a>.</p>", "he": "<p><strong>גלובולין</strong> הוא החלק של חלבון כללי בדם שאינו אלבומין; כולל נוגדנים וחלבוני transport. גבוה או נמוך יכול לנבוע מדלקת כרונית, מחלת כבד או מצבים חיסוניים. ערך בודד לא קובע אבחנה; הרופא יפרש עם אלבומין, חלבון כללי ובדיקות כבד. יש לדון בתוצאה עם רופא. קראו על <a href=\"/he/blog/total-protein-high-or-low\">חלבון כללי</a> ו־<a href=\"/he/blog/albumin-low-meaning\">אלבומין</a>.</p>", "hi": "<p><strong>ग्लोब्युलिन</strong> टोटल प्रोटीन का वह हिस्सा है जो ऐल्ब्यूमिन नहीं है; इसमें एंटीबॉडी और ट्रांसपोर्ट प्रोटीन शामिल हैं। हाई या लो क्रॉनिक इन्फ्लेमेशन, लिवर रोग या इम्यून से जुड़ी स्थितियों से हो सकता है। अकेले निदान नहीं; डॉक्टर ऐल्ब्यूमिन, टोटल प्रोटीन और लिवर टेस्ट के साथ व्याख्या करेंगे। परिणाम डॉक्टर से चर्चा करें। <a href=\"/hi/blog/total-protein-high-or-low\">टोटल प्रोटीन</a> और <a href=\"/hi/blog/albumin-low-meaning\">ऐल्ब्यूमिन</a> लेख देखें।</p>", "ar": "<p><strong>الغلوبولين</strong> هو جزء البروتين الكلي في الدم غير الألبومين؛ يشمل الأجسام المضادة وبروتينات النقل. ارتفاع أو انخفاض قد يكون بسبب التهاب مزمن أو مرض كبد أو اضطرابات مناعية. الرقم وحده لا يشخّص؛ الطبيب يفسره مع الألبومين والبروتين الكلي وفحوص الكبد. ناقش نتيجتك مع الطبيب. راجع <a href=\"/ar/blog/total-protein-high-or-low\">البروتين الكلي</a> و<a href=\"/ar/blog/albumin-low-meaning\">الألبومين</a>.</p>"}
-    return _make_short_article("globulin-high-or-low", "globulin-high-or-low", published, cover, 5, cat, titles, subs, ex, seo_t, seo_d, c)
+    c = {
+        "tr": "<p><strong>Globulin</strong>, kanda ölçülen toplam protein miktarının albümin dışındaki kısmını temsil eder; antikorlar ve taşıma proteinleri gibi farklı protein türlerini içerir. Yüksek veya düşük globulin tek başına teşhis koydurmaz; karaciğer, böbrek ve beslenme ile ilgili başka verilerle birlikte anlam kazanır.</p><h3>Globulin yüksekse ne anlama gelebilir?</h3><p>Uzun süren iltihabi hastalıklar, bazı kronik enfeksiyonlar veya bağışıklık sistemiyle ilgili tablolar globulin düzeyini yükseltebilir. Karaciğer hastalıkları veya bazı kan hastalıklarında da globulin artışı görülebilir; bunun derecesi, birlikte değişen diğer kan değerleriyle beraber yorumlanmalıdır.</p><h3>Globulin düşükse ne anlama gelebilir?</h3><p>Düşük globulin, karaciğerin protein üretim kapasitesindeki azalma, yetersiz protein alımı veya bağırsak yoluyla protein kaybı gibi nedenlerle ilişkili olabilir. Bu durumun ciddiyetini anlamak için albümin, diğer protein ölçümleri ve klinik tablo birlikte değerlendirilir.</p><h3>Sonuçlar nasıl değerlendirilir?</h3><p>Referans aralıkları laboratuvarlar arasında değişebilir; bu nedenle raporda görülen aralık her zaman sizin için ideal değeri tam olarak yansıtmayabilir. Sonucunuzu hekiminizle görüşerek, gerekirse ayrıntılı değerlendirme veya ek testler planlamanız en güvenli yaklaşımdır. Bu yazı bilgilendirme amaçlıdır ve tıbbi muayenenin yerini tutmaz.</p>",
+        "en": "<p><strong>Globulin</strong> represents the portion of proteins in your blood that is not albumin; it includes antibodies and various transport proteins. A high or low globulin value on its own does not give a diagnosis; it has to be interpreted together with liver, kidney and nutritional information.</p><h3>What can a high globulin level suggest?</h3><p>Chronic inflammatory conditions, some long‑lasting infections, or immune‑related disorders can be associated with elevated globulin. Liver disease and certain blood disorders may also raise this value; how significant the change is depends on other results that move in the same direction.</p><h3>What can a low globulin level suggest?</h3><p>A low globulin level can appear when the liver produces fewer proteins, when protein intake is insufficient, or when proteins are lost through the gut. To understand how serious this is, doctors usually look at albumin, other protein results and your clinical picture together.</p><h3>How is the result interpreted in practice?</h3><p>Reference ranges differ from one laboratory to another, so the interval printed on your report is only a guide. Your doctor will put globulin next to albumin, other protein‑related tests and your symptoms before deciding whether any follow‑up is needed. This article is for information only and is not a substitute for a medical consultation.</p>",
+        "es": "<p>La <strong>globulina</strong> representa la fracción de proteínas en sangre que no es albúmina; incluye anticuerpos y proteínas de transporte. Un valor alto o bajo por sí solo no da el diagnóstico; debe interpretarse con la función hepática, el estado nutricional y el resto del análisis.</p><h3>¿Qué puede indicar una globulina alta?</h3><p>Procesos inflamatorios crónicos, algunas infecciones prolongadas y ciertas alteraciones inmunitarias pueden asociarse a globulina elevada. También en algunas enfermedades hepáticas o hematológicas el valor puede subir; la importancia real se valora junto con otros resultados.</p><h3>¿Y una globulina baja?</h3><p>Una globulina baja puede relacionarse con menor producción de proteínas en el hígado, ingesta insuficiente de proteínas o pérdida de proteínas por el intestino. Para entender el cuadro completo se revisan también la albúmina, otras proteínas y los síntomas.</p><h3>Cómo hablar de este resultado con el médico</h3><p>El rango de referencia del informe es orientativo y puede variar entre laboratorios. Comenta el resultado con tu médico, que decidirá si hacen falta controles adicionales o no. Este texto es informativo y no sustituye una valoración médica presencial.</p>",
+        "de": "<p><strong>Globuline</strong> stehen für den Anteil der Bluteiweiße, der nicht aus Albumin besteht; dazu gehören Antikörper und Transportproteine. Ein erhöhter oder erniedrigter Globulinwert allein ergibt noch keine Diagnose, sondern muss zusammen mit Leber‑, Nieren‑ und Ernährungsparametern betrachtet werden.</p><h3>Was kann ein erhöhter Globulinwert bedeuten?</h3><p>Chronische Entzündungen, länger bestehende Infektionen oder immunologische Erkrankungen können mit erhöhten Globulinen einhergehen. Auch Lebererkrankungen und bestimmte Bluterkrankungen kommen als Ursache infrage; wie relevant der Befund ist, zeigt sich erst im Zusammenspiel mit anderen Werten.</p><h3>Was bedeutet ein erniedrigter Globulinwert?</h3><p>Niedrige Globuline können bei eingeschränkter Eiweißproduktion in der Leber, bei unzureichender Eiweißzufuhr oder bei Eiweißverlust über den Darm auftreten. Zur Einordnung werden Albumin, andere Eiweißwerte und Ihre Beschwerden gemeinsam beurteilt.</p><h3>Wie geht man mit dem Befund um?</h3><p>Referenzbereiche unterscheiden sich je nach Labor, daher ist die aufgedruckte Spanne nur ein Anhaltspunkt. Besprechen Sie das Ergebnis mit Ihrer Ärztin/Ihrem Arzt, der entscheiden kann, ob weitere Kontrollen nötig sind. Dieser Text ersetzt keine ärztliche Beratung.</p>",
+        "fr": "<p>Les <strong>globulines</strong> correspondent à la part des protéines sanguines autre que l'albumine ; elles regroupent notamment les anticorps et certaines protéines de transport. Un taux de globulines élevé ou bas seul ne fait pas un diagnostic et doit être interprété avec le bilan hépatique, l'état nutritionnel et les autres résultats.</p><h3>Quand les globulines sont élevées</h3><p>Des globulines hautes peuvent s'observer en cas d'inflammation chronique, d'infections prolongées ou de troubles immunitaires. Certaines maladies du foie ou du sang peuvent également faire monter ce taux ; l'importance réelle se juge toujours en tenant compte du reste du bilan.</p><h3>Quand les globulines sont basses</h3><p>Un taux bas peut refléter une production moindre de protéines par le foie, une alimentation pauvre en protéines ou des pertes protéiques digestives. L'interprétation se fait avec l'albumine, les autres protéines et les symptômes.</p><h3>Parler de vos résultats avec un médecin</h3><p>Les fourchettes de référence varient d'un laboratoire à l'autre et restent indicatives. Discutez du résultat avec votre médecin, qui décidera si un contrôle ou des explorations complémentaires sont nécessaires. Ce texte est informatif et ne remplace pas une consultation médicale.</p>",
+        "it": "<p>Le <strong>globuline</strong> rappresentano la quota di proteine del sangue diversa dall'albumina; comprendono anticorpi e proteine di trasporto. Un valore di globuline alto o basso da solo non pone una diagnosi e va sempre letto insieme alla funzione epatica, allo stato nutrizionale e ad altri esami.</p><h3>Quando le globuline sono alte</h3><p>Globuline aumentate si possono vedere in corso di infiammazioni croniche, infezioni prolungate o alcune malattie immunitarie. Anche alcune patologie epatiche o ematologiche possono far salire il valore; la reale importanza si valuta con il resto del laboratorio.</p><h3>Quando le globuline sono basse</h3><p>Globuline basse possono indicare minore produzione di proteine da parte del fegato, scarso apporto proteico o perdite proteiche intestinali. Per inquadrare la situazione si considerano anche albumina, altre proteine e i sintomi.</p><h3>Cosa chiedere al proprio medico</h3><p>L'intervallo di riferimento sul referto è solo indicativo e può cambiare tra laboratori. Parla del risultato con il tuo medico, che valuterà se servono controlli o approfondimenti. Questo contenuto è informativo e non sostituisce una visita.</p>",
+        "he": "<p><strong>גלובולין</strong> הוא החלק של החלבון בדם שאינו אלבומין; הוא כולל נוגדנים וחלבוני הובלה שונים. ערך גלובולין גבוה או נמוך בפני עצמו אינו קובע אבחנה, אלא צריך להיבחן יחד עם תפקודי כבד, מצב תזונתי ושאר הבדיקות.</p><h3>מה עשוי להעיד גלובולין גבוה?</h3><p>דלקת כרונית, זיהומים ממושכים או מצבים הקשורים למערכת החיסון יכולים להיות מלווים בגלובולין מוגבר. גם מחלות כבד או מחלות דם מסוימות יכולות להשפיע על הערך; המשמעות נקבעת רק בהקשר של שאר התוצאות.</p><h3>ומה אם הגלובולין נמוך?</h3><p>גלובולין נמוך יכול להופיע כאשר ייצור החלבון בכבד פוחת, כאשר צריכת החלבון בתזונה נמוכה או כאשר יש איבוד חלבון דרך מערכת העיכול. לצורך ההערכה בודקים יחד גם אלבומין, בדיקות חלבון נוספות ותסמינים.</p><h3>איך להמשיך מכאן?</h3><p>טווחי הייחוס שונים בין מעבדות ולכן הם מדד כללי בלבד. חשוב לדון בתוצאה עם הרופא, שיחליט אם יש צורך בבדיקות נוספות או במעקב. המידע כאן הוא להסבר בלבד ואינו מחליף ייעוץ רפואי אישי.</p>",
+        "hi": "<p><strong>ग्लोब्युलिन</strong> खून में मौजूद प्रोटीनों का वह हिस्सा है जो ऐल्ब्यूमिन से अलग होता है; इसमें एंटीबॉडी और ट्रांसपोर्ट प्रोटीन जैसी कई किस्में शामिल हैं। ग्लोब्युलिन हाई या लो अकेले निदान नहीं देता, इसे लिवर फंक्शन, किडनी और पोषण से जुड़ी बाकी जानकारी के साथ देखना पड़ता है।</p><h3>ग्लोब्युलिन हाई होने पर क्या सोचा जाता है?</h3><p>लंबे समय तक चलने वाली सूजन, कुछ क्रॉनिक इन्फेक्शन या इम्यून सिस्टम की बीमारियों में ग्लोब्युलिन बढ़ा हुआ मिल सकता है। कुछ लिवर या रक्त सम्बंधी रोगों में भी यह मान ऊपर जा सकता है; असली महत्व बाकी वैल्यूज़ और लक्षणों के साथ मिलाकर तय होता है।</p><h3>ग्लोब्युलिन लो होने पर क्या मतलब हो सकता है?</h3><p>लो ग्लोब्युलिन लिवर द्वारा प्रोटीन बनाने की क्षमता में कमी, कम प्रोटीन वाला आहार या आंत से प्रोटीन के नुकसान से जुड़ा हो सकता है। डॉक्टर आम तौर पर ऐल्ब्यूमिन, अन्य प्रोटीन परिणाम और आपकी स्थिति को साथ में देखकर अर्थ निकालते हैं।</p><h3>रिपोर्ट को कैसे आगे ले जाएं?</h3><p>रिपोर्ट पर छपा रेफरेंस रेंज लैब‑दर‑लैब बदल सकता है और केवल एक मार्गदर्शक है। सबसे güvenli yol, bu sonucu kendi doktorunuzla konuşmanız ve gerekirse ileri tetkiklerin onun yönlendirmesiyle yapılmasıdır. यह लेख केवल जानकारी के लिए है, इलाज या निदान का विकल्प नहीं।</p>",
+        "ar": "<p><strong>الغلوبولين</strong> هو الجزء من بروتينات الدم الذي لا يكون ألبوميناً؛ يضم أجساماً مضادة وبروتينات نقل مختلفة. ارتفاع أو انخفاض الغلوبولين وحده لا يكفي لوضع تشخيص، بل يجب النظر إليه مع وظائف الكبد والكلى والحالة الغذائية وبقية التحاليل.</p><h3>ماذا قد يعني الغلوبولين المرتفع؟</h3><p>يمكن أن يرتفع في سياق التهابات مزمنة، أو بعض الإنتانات الطويلة، أو اضطرابات في الجهاز المناعي. بعض أمراض الكبد أو الدم قد ترفع هذا المؤشر أيضاً؛ وتُقيَّم أهميته الحقيقية فقط عند مقارنته بالتحاليل الأخرى.</p><h3>وماذا عن الغلوبولين المنخفض؟</h3><p>قد يرتبط الانخفاض بقلة تصنيع البروتين في الكبد، أو بقلة تناول البروتين في الغذاء، أو بفقدان البروتين عبر الأمعاء. عادة يُنظر أيضاً إلى الألبومين وبقية بروتينات الدم مع الأعراض السريرية.</p><h3>كيف تتعامل مع النتيجة؟</h3><p>نطاقات المرجع تختلف من مختبر لآخر، لذلك فهي دليل عام فقط. ناقش نتيجتك مع الطبيب، فهو من يقرر إن كانت هناك حاجة لمتابعة أو فحوص إضافية. هذه المعلومات للتثقيف فقط ولا تغني عن الاستشارة الطبية المباشرة.</p>",
+    }
+    return _make_short_article("globulin-high-or-low", "globulin-high-or-low", published, cover, 5, cat, titles, subs, ex, seo_t, seo_d, c, icon="/static/images/blog/icons/globulin-high-or-low.svg")
 
 
 _ARTICLE_MCH_HIGH_LOW = _article_mch_high_low()
@@ -5415,6 +5803,7 @@ def get_article(lang: str, slug: str) -> dict | None:
                     l: art.slugs[l] for l in art.slugs.keys() if l in BLOG_LANGS
                 },
                 "faq_schema_qa": faq_schema_qa,
+                "icon": getattr(art, "icon", None),
             }
     return None
 
