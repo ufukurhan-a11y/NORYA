@@ -4753,7 +4753,6 @@ def _article_alp_high() -> Article:
             "hi": [Section(id="content", level=2, heading="ALP हाई का क्या मतलब है?", body_html="<p><strong>ALP</strong> (ऐल्कलाइन फॉस्फेटेज़) लिवर, हड्डी और पित्त नली में मौजूद एंजाइम है। हाई लेवल इनमें से किसी से आ सकता है; बढ़ती उम्र या प्रेगनेंसी में सामान्य रूप से भी बढ़ सकता है। अकेले निदान नहीं; डॉक्टर GGT, ALT/AST या बोन टेस्ट से स्रोत पता करेंगे। परिणाम डॉक्टर से चर्चा करें।</p>"), Section(id="disclaimer", level=2, heading="अस्वीकरण", body_html="<p><strong>केवल सूचनार्थ।</strong> <a href=\"/analyze\">विश्लेषण शुरू करें</a></p>")],
             "ar": [Section(id="content", level=2, heading="ماذا يعني ارتفاع الفوسفاتاز القلوية؟", body_html="<p><strong>الفوسفاتاز القلوية</strong> إنزيم في الكبد والعظام والقنوات الصفراوية. ارتفاعها قد يأتي من أي منها؛ وقد يرتفع أيضاً بشكل طبيعي في النمو أو الحمل. الرقم وحده لا يشخّص؛ الطبيب يحدد المصدر بـ GGT أو ALT/AST أو فحوص العظام. ناقش نتيجتك مع الطبيب.</p>"), Section(id="disclaimer", level=2, heading="إخلاء المسؤولية", body_html="<p><strong>للمعلومات فقط.</strong> <a href=\"/analyze\">بدء التحليل</a></p>")],
         },
-        icon="/static/images/blog/icons/alp-high-meaning.svg",
     )
 
 
