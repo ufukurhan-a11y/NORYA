@@ -70,6 +70,12 @@ from app.models import (  # noqa: F401
     User,
 )
 from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
+from app.how_it_works_i18n import (
+    DEFAULT_HOW_IT_WORKS_LANG,
+    HOW_IT_WORKS_LANGS,
+    get_how_it_works_meta,
+    get_how_it_works_ui,
+)
 from app.base_i18n import get_base_ui
 from app.landing_i18n import (
     LANDING_ROUTES,
@@ -1710,6 +1716,45 @@ def analyze_landing(request: Request):
             break
     url = f"/{locale}#analyze" if locale else "/#analyze"
     return RedirectResponse(url=url, status_code=302)
+
+
+def _how_it_works_lang_from_request(request: Request) -> str:
+    """How-it-works sayfa dili: ?lang= veya Accept-Language. Desteklenen: de, en, tr."""
+    lang_q = request.query_params.get("lang", "").strip().lower()[:2]
+    if lang_q and lang_q in HOW_IT_WORKS_LANGS:
+        return lang_q
+    parsed = _parse_accept_language(request.headers.get("accept-language"))
+    return parsed if parsed in HOW_IT_WORKS_LANGS else DEFAULT_HOW_IT_WORKS_LANG
+
+
+@app.get("/how-it-works", response_class=HTMLResponse)
+def how_it_works_page(request: Request):
+    """
+    /how-it-works -> Nasıl çalışır sayfası. Google Ads site bağlantısı için.
+    ?lang=de, ?lang=en, ?lang=tr ile dil seçimi. SEO: title, meta, canonical, hreflang.
+    """
+    lang = _how_it_works_lang_from_request(request)
+    t = get_how_it_works_ui(lang)
+    meta = get_how_it_works_meta(lang)
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/how-it-works"
+    hreflang_alternates = [
+        {"lang": code, "url": f"{base_url}/how-it-works?lang={code}"}
+        for code in HOW_IT_WORKS_LANGS
+    ]
+    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/how-it-works?lang=en"})
+    return templates.TemplateResponse(
+        "how_it_works.html",
+        {
+            "request": request,
+            "lang": lang,
+            "t": t,
+            "meta": meta,
+            "canonical_url": canonical_url,
+            "hreflang_alternates": hreflang_alternates,
+            "base_url": base_url,
+        },
+    )
 
 
 @app.get("/pricing", response_class=HTMLResponse)
@@ -4241,6 +4286,7 @@ def sitemap_xml(request: Request):
     for locale in LANDING_ROUTES:
         add(f"{base_url}/{locale}", priority="0.9", lastmod=today)
     add(f"{base_url}/pricing", priority="0.8", lastmod=today)
+    add(f"{base_url}/how-it-works", priority="0.8", lastmod=today)
     add(f"{base_url}/kurumsal", lastmod=today)
     for page in LEGAL_PAGES:
         add(f"{base_url}/legal/{page}", priority="0.5", lastmod=today)

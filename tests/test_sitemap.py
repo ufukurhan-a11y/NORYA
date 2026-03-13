@@ -48,3 +48,28 @@ def test_sitemap_xml_lastmod_from_updated_at(client: TestClient):
             assert "<lastmod>" in block and "</lastmod>" in block, (
                 "Blog post URL'inde lastmod (updatedAt) eksik: " + block[:200]
             )
+
+
+def test_how_it_works_returns_200(client: TestClient):
+    """How it works sayfası 404 vermemeli; Google Ads site bağlantısı için 200 dönmeli."""
+    r = client.get("/how-it-works")
+    assert r.status_code == 200, f"/how-it-works returned {r.status_code}"
+
+
+def test_how_it_works_lang_de_returns_200_and_german_content(client: TestClient):
+    """https://noryaai.com/how-it-works?lang=de hedef URL'i 200 dönmeli ve Almanca içerik göstermeli."""
+    r = client.get("/how-it-works?lang=de")
+    assert r.status_code == 200, f"/how-it-works?lang=de returned {r.status_code}"
+    text = r.text
+    assert "So funktioniert" in text or "Analyse starten" in text or "Preise ansehen" in text, (
+        "Almanca metin bulunamadı; sayfa dil parametresine göre içerik değişmeli"
+    )
+
+
+def test_sitemap_xml_contains_how_it_works(client: TestClient):
+    """sitemap.xml içinde /how-it-works URL'i olmalı."""
+    r = client.get("/sitemap.xml")
+    assert r.status_code == 200
+    assert "/how-it-works</loc>" in r.text or "/how-it-works\n" in r.text, (
+        "sitemap.xml içinde /how-it-works bulunamadı"
+    )
