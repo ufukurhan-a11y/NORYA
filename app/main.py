@@ -1352,7 +1352,8 @@ def blog_index(request: Request, lang: str):
     categories = list({p["category"] for p in posts if p.get("category")})
     categories.sort()
     canonical_url = f"{base_url}/{lang}/blog"
-    ui = BLOG_UI.get(lang, BLOG_UI["en"])
+    # Fallback: ensure we always have a full UI dict (avoid KeyError in templates)
+    ui = dict(BLOG_UI.get(lang, BLOG_UI[DEFAULT_BLOG_LANG]))
     seo_title = ui.get("seo_title", f"{BRAND_NAME} Blog")
     meta_description = ui.get("meta_description", "")
     og_image = base_url + "/static/images/blog/how-to-read-blood-test-results.png"
@@ -1442,7 +1443,7 @@ def blog_detail(request: Request, lang: str, slug: str):
         },
     }
     article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
-    blog_ui = BLOG_UI.get(lang, BLOG_UI["en"])
+    blog_ui = dict(BLOG_UI.get(lang, BLOG_UI[DEFAULT_BLOG_LANG]))
     breadcrumb_items = [
         {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
         {"@type": "ListItem", "position": 2, "name": blog_ui.get("back_to_blog", "Blog"), "item": f"{base_url}/{lang}/blog"},
@@ -1676,7 +1677,16 @@ def _index_response(request: Request | None = None):
             if request.url.path == "/":
                 import re
                 from html import escape
-                meta = get_landing_meta("en")
+                # Root "/": locale from Accept-Language so SPA shows one consistent language (no mixed TR/EN)
+                accept_lang = (request.headers.get("accept-language") or "en")[:80]
+                _locale = "en"
+                for part in accept_lang.replace(" ", "").split(","):
+                    code = (part.split(";")[0].split("-")[0].lower())[:2]
+                    if code in LANDING_ROUTES:
+                        _locale = "en-ca" if part.lower().startswith("en-ca") else code
+                        break
+                meta = get_landing_meta(_locale)
+                ui = get_landing_ui(_locale)
                 _title = escape(meta.get("meta_title", "Norya"))
                 _desc = escape(meta.get("meta_description", ""))
                 raw = re.sub(r"<title>[^<]*</title>", f"<title>{_title}</title>", raw, count=1)
@@ -1685,6 +1695,11 @@ def _index_response(request: Request | None = None):
                 raw = re.sub(r'<meta property="og:description" content="[^"]*" */?>', f'<meta property="og:description" content="{_desc}" />', raw, count=1)
                 raw = re.sub(r'<meta name="twitter:title" content="[^"]*" */?>', f'<meta name="twitter:title" content="{_title}" />', raw, count=1)
                 raw = re.sub(r'<meta name="twitter:description" content="[^"]*" */?>', f'<meta name="twitter:description" content="{_desc}" />', raw, count=1)
+                landing_script = (
+                    f'<script>window.__LANDING_LOCALE__="{escape(_locale)}";'
+                    f"window.__LANDING_T__={json.dumps(ui, ensure_ascii=False)};</script>\n  "
+                )
+                raw = raw.replace("</head>", landing_script + "</head>", 1)
         return HTMLResponse(
             raw,
             headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
