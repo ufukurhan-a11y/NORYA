@@ -7,7 +7,7 @@
   <meta name="theme-color" content="#0EA5A4" media="(prefers-color-scheme: dark)" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <meta name="apple-mobile-web-app-title" content="Norya" />
+  <meta name="apple-mobile-web-app-title" content="NoryaAI" />
   <meta name="mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="/static/manifest.webmanifest" />
   <!-- Tarayıcı sekmesi ve mobil: Norya N ikonu (turkuaz/mavi N) -->
@@ -16,11 +16,12 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  <title>Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu</title>
-  <meta name="description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
-  <meta property="og:title" content="Norya — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu" />
+  <meta name="robots" content="index,follow" />
+  <title>NoryaAI — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu</title>
+  <meta name="description" content="NoryaAI ile laboratuvar sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor ve PDF alın. 9 dilde, gizlilik odaklı." />
+  <meta property="og:title" content="NoryaAI — Laboratuvar Sonuçlarınızı Anlaşılır Kılan Kan Tahlili Raporu" />
   <meta property="og:description" content="Kan tahlili sonuçlarınızı anlaşılır dilde açıklayın. PDF veya fotoğraf yükleyin, özet rapor alın. 9 dilde." />
-  <meta property="og:image" content="/static/norya_logo_transparent_trim.png" />
+  <meta property="og:image" content="https://noryaai.com/static/norya_logo_transparent_trim.png" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
   <link rel="alternate" hreflang="tr" href="https://noryaai.com/tr" />
@@ -30,13 +31,26 @@
   <link rel="alternate" hreflang="it" href="https://noryaai.com/it" />
   <link rel="alternate" hreflang="x-default" href="https://noryaai.com/en" />
   <meta name="twitter:card" content="summary_large_image" />
-  <meta name="twitter:title" content="Norya — Kan Tahlili Analizi" />
+  <meta name="twitter:title" content="NoryaAI — Kan Tahlili Analizi" />
   <meta name="twitter:description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın." />
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"Organization","name":"NoryaAI","email":"support@noryaai.com","telephone":"+90 507 170 35 64","address":{"@type":"PostalAddress","streetAddress":"31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4","addressLocality":"Banaz","addressRegion":"Uşak","addressCountry":"TR"},"areaServed":[{"@type":"Country","name":"Türkiye"},{"@type":"Country","name":"Germany"}]}
   </script>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"WebSite","name":"NoryaAI","url":"https://noryaai.com","potentialAction":{"@type":"SearchAction","target":{"@type":"EntryPoint","urlTemplate":"https://noryaai.com/blog?q={search_term}"},"query-input":"required name=search_term"}
+  {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    "name": "NoryaAI",
+    "url": "https://noryaai.com",
+    "potentialAction": {
+      "@type": "SearchAction",
+      "target": {
+        "@type": "EntryPoint",
+        "urlTemplate": "https://noryaai.com/blog?q={search_term_string}"
+      },
+      "query-input": "required name=search_term_string"
+    }
+  }
   </script>
   <!-- NORYA_GTAG_INJECT -->
   <script>

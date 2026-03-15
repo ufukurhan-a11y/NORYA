@@ -9,27 +9,27 @@ DEFAULT_LANDING_LOCALE = "en"
 # Meta and hreflang: title, description, og:locale per route
 LANDING_META = {
     "tr": {
-        "meta_title": "Norya — Kan Tahlili Sonuçlarınızı Dakikalar İçinde Anlayın | Laboratuvar Raporu Açıklaması",
+        "meta_title": "NoryaAI — Kan Tahlili Sonuçlarınızı Dakikalar İçinde Anlayın | Laboratuvar Raporu Açıklaması",
         "meta_description": "Laboratuvar sonuçlarınızı yükleyin; referans aralıkları ve önerilerle net rapor alın. KVKK uyumlu, teşhis yok—yalnızca bilgilendirme. 9 dil.",
         "og_locale": "tr_TR",
     },
     "en": {
-        "meta_title": "Norya — Understand Your Blood Test Results in Minutes | Lab Report Explained",
+        "meta_title": "NoryaAI — Understand Your Blood Test Results in Minutes | Lab Report Explained",
         "meta_description": "Upload your lab results and get a clear report with reference ranges and recommendations. GDPR compliant, no diagnosis—educational only. 9 languages.",
         "og_locale": "en_US",
     },
     "en-ca": {
-        "meta_title": "Norya — Reliable AI Blood Test Analysis (Canada)",
+        "meta_title": "NoryaAI — Reliable AI Blood Test Analysis (Canada)",
         "meta_description": "Understand your lab results in plain language. Upload PDF or photo, get a clear report. Privacy-first, for Canadian users.",
         "og_locale": "en_CA",
     },
     "de": {
-        "meta_title": "Norya — Blutwerte & Laborergebnisse verstehen | Auswertung in Minuten",
+        "meta_title": "NoryaAI — Blutwerte & Laborergebnisse verstehen | Auswertung in Minuten",
         "meta_description": "Blutwerte oder Laborergebnisse verstehen: Befund hochladen, in Minuten klaren Bericht mit Referenzbereichen und Empfehlungen. DSGVO-konform, keine Diagnose.",
         "og_locale": "de_DE",
     },
     "it": {
-        "meta_title": "Norya — Capire le analisi del sangue in pochi minuti | Referto spiegato",
+        "meta_title": "NoryaAI — Capire le analisi del sangue in pochi minuti | Referto spiegato",
         "meta_description": "Carica i risultati di laboratorio e ricevi un report chiaro con intervalli di riferimento e indicazioni. GDPR, nessuna diagnosi—solo informazione. 9 lingue.",
         "og_locale": "it_IT",
     },

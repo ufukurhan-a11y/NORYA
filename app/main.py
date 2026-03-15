@@ -649,7 +649,7 @@ def faq_de(request: Request):
     t = get_landing_ui(lang)
     meta_landing = get_landing_meta(lang)
     meta = {
-        "meta_title": meta_landing.get("faq_title") or meta_landing.get("meta_title", "Norya FAQ"),
+        "meta_title": meta_landing.get("faq_title") or meta_landing.get("meta_title", f"{BRAND_NAME} FAQ"),
         "meta_description": meta_landing.get("faq_subtitle") or meta_landing.get("meta_description", ""),
     }
     canonical_url = f"{base_url}/de/faq"
@@ -1615,7 +1615,7 @@ def _landing_response(locale: str, request: Request):
 
     meta = get_landing_meta(locale)
     ui = get_landing_ui(locale)
-    title = escape(meta.get("meta_title", "Norya"))
+    title = escape(meta.get("meta_title", BRAND_NAME))
     desc = escape(meta.get("meta_description", ""))
     og_locale = meta.get("og_locale", "en_US")
 
@@ -1739,9 +1739,9 @@ def _index_response(request: Request | None = None):
             else:
                 _locale = None
             if _locale is not None:
-                meta = get_landing_meta(_locale) if _locale in LANDING_ROUTES else {"meta_title": "Norya", "meta_description": "", "og_locale": "en_US"}
+                meta = get_landing_meta(_locale) if _locale in LANDING_ROUTES else {"meta_title": BRAND_NAME, "meta_description": "", "og_locale": "en_US"}
                 ui = get_landing_ui(_locale) if _locale in LANDING_ROUTES else {}
-                _title = escape(meta.get("meta_title", "Norya"))
+                _title = escape(meta.get("meta_title", BRAND_NAME))
                 _desc = escape(meta.get("meta_description", ""))
                 raw = re.sub(r"<title>[^<]*</title>", f"<title>{_title}</title>", raw, count=1)
                 raw = re.sub(r'<meta name="description" content="[^"]*" */?>', f'<meta name="description" content="{_desc}" />', raw, count=1)
