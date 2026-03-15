@@ -14,8 +14,8 @@ LANDING_META = {
         "og_locale": "tr_TR",
     },
     "en": {
-        "meta_title": "NoryaAI — Understand Your Blood Test Results in Minutes | Lab Report Explained",
-        "meta_description": "Upload your lab results and get a clear report with reference ranges and recommendations. GDPR compliant, no diagnosis—educational only. 9 languages.",
+        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
+        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
         "og_locale": "en_US",
     },
     "en-ca": {
