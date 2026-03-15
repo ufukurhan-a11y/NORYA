@@ -1,22 +1,26 @@
 """Auth: register, login, validation."""
+import uuid
+
 import pytest
 from fastapi.testclient import TestClient
 
 
 def test_register_success(client: TestClient):
+    # Her çalıştırmada benzersiz e-posta (paylaşılan in-memory DB, test sırası)
+    email = f"register-{uuid.uuid4().hex[:12]}@example.com"
     r = client.post(
         "/auth/register",
         data={
-            "email": "new@example.com",
+            "email": email,
             "password": "secure123",
             "full_name": "New User",
             "phone": "+905559999999",
             "country": "TR",
         },
     )
-    assert r.status_code == 200
+    assert r.status_code == 200, r.json()
     j = r.json()
-    assert j.get("email") == "new@example.com"
+    assert j.get("email") == email
     assert j.get("full_name") == "New User"
 
 

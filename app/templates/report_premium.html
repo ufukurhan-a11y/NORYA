@@ -33,12 +33,12 @@
             <div class="brand-name">Norya</div>
             <div class="brand-sub">{{ label_report_brand_sub }}</div>
           </div>
-          <span class="badge">PREMIUM</span>
+          <span class="badge">{% if plan_config and plan_config.plan_name == 'single' %}{{ label_report_plan_badge_single | default('RAPOR') }}{% else %}PREMIUM{% endif %}</span>
         </div>
       </div>
       <div class="h-mid">
         <div class="doc-title">{{ label_report_doc_title }}</div>
-        <div class="doc-sub">{{ label_report_doc_sub }}</div>
+        <div class="doc-sub">{% if plan_config and plan_config.plan_name == 'single' %}{{ label_report_doc_sub_single | default(label_report_doc_sub) }}{% else %}{{ label_report_doc_sub }}{% endif %}</div>
       </div>
       <div class="h-right">
         <div><span class="k">{{ label_report_rid }}:</span> {{ rid }}</div>
@@ -156,6 +156,14 @@
         {% for f in findings %}<li>{{ f }}</li>{% endfor %}
       </ul>
       {% endif %}
+    </section>
+
+    <section class="card risk-factors-section">
+      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('alert-circle', '')|safe }}</span>{% endif %} {{ label_report_risk_factors }}</div>
+      <ul class="bullets">
+        <li>{{ label_report_risk_factors_line_1 }}</li>
+        <li>{{ label_report_risk_factors_line_2 }}</li>
+      </ul>
     </section>
 
     {% if key_areas_to_watch %}
@@ -284,11 +292,31 @@
     </section>
     {% endif %}
 
+    {% if plan_config and plan_config.comparison_enabled %}
+    <section class="card comparison-section">
+      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('git-compare', '')|safe }}</span>{% endif %} {{ label_report_comparison_title }}</div>
+      {% if comparison_summary_text %}
+      <p class="comparison-summary-text">{{ comparison_summary_text }}</p>
+      {% else %}
+      <p class="comparison-no-data">{{ label_report_comparison_no_previous }}</p>
+      {% endif %}
+    </section>
+    <section class="card what-changed-section">
+      <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('trending-up', '')|safe }}</span>{% endif %} {{ label_report_what_changed_title }}</div>
+      {% if what_changed_items %}
+      <ul class="bullets">
+        {% for item in what_changed_items %}<li>{{ item }}</li>{% endfor %}
+      </ul>
+      {% else %}
+      <p class="what-changed-no-data">{{ label_report_what_changed_no_data }}</p>
+      {% endif %}
+    </section>
+    {% endif %}
+
+    {% if plan_config and plan_config.trend_enabled %}
     <section class="card trend-section">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('trending-up', '')|safe }}</span>{% endif %} {{ label_report_trend_analysis }}</div>
-      {% if trend_locked %}
-      <div class="trend-locked"><p class="trend-message">{{ label_report_trend_locked }}</p></div>
-      {% elif trend_has_data and trend_svg %}
+      {% if trend_has_data and trend_svg %}
       <div class="trend-chart">{{ trend_svg | safe }}</div>
       {% elif trend_has_data and trend_bars %}
       <div class="trend-chart">
@@ -300,6 +328,7 @@
       <p class="trend-message trend-placeholder">{{ trend_placeholder_text }}</p>
       {% endif %}
     </section>
+    {% endif %}
 
     <section class="card doctor-discussion-section">
       <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('message-circle', '')|safe }}</span>{% endif %} {{ label_report_doctor_discussion }}</div>
@@ -406,10 +435,12 @@
         <div class="note-h">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('heart', '')|safe }}</span>{% endif %} {{ label_report_recommendations }}</div>
         <ul class="bullets">{% for x in ai_recos %}<li>{{ x }}</li>{% endfor %}</ul>
       </div>
+      {% if plan_config and plan_config.trend_enabled %}
       <div class="note-block">
         <div class="note-h">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('trending-up', '')|safe }}</span>{% endif %} {{ label_report_followup }}</div>
         <ul class="bullets">{% for x in ai_followup %}<li>{{ x }}</li>{% endfor %}</ul>
       </div>
+      {% endif %}
       <div class="note-block">
         <div class="note-h">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('message-circle', '')|safe }}</span>{% endif %} {{ label_report_doctor_note }}</div>
         <div class="note-p">{{ doctor_note }}</div>

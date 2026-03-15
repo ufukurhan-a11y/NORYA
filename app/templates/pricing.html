@@ -11,39 +11,32 @@
   <meta property="og:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />
   <meta property="og:description" content="{{ t.get('pricing_meta_description') }}" />
   {% endif %}
-  <!-- Tarayıcı sekmesi: Norya N ikonu -->
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
   <link rel="canonical" href="{{ base_url }}/pricing" />
-  <link rel="alternate" hreflang="tr" href="{{ base_url }}/pricing" />
-  <link rel="alternate" hreflang="de" href="{{ base_url }}/pricing" />
-  <link rel="alternate" hreflang="en" href="{{ base_url }}/pricing" />
-  <link rel="alternate" hreflang="x-default" href="{{ base_url }}/pricing" />
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
-    html{ -webkit-text-size-adjust:100%; text-size-adjust:100%; overflow-x:hidden; width:100%; }
+    html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;width:100%;}
     body{
       font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,'Inter',sans-serif;
       background:linear-gradient(180deg,#f8fafc 0%,#f1f5f9 40%,#eef2f6 100%);
       color:#0f172a;
       min-height:100vh;
       min-height:100dvh;
-      min-height:-webkit-fill-available;
       -webkit-tap-highlight-color:transparent;
       overflow-x:hidden;
       padding-bottom:max(64px,env(safe-area-inset-bottom));
     }
-    .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 40px;}
-    @media (max-width:768px){.wrap{padding:20px 16px 32px;}}
+    .wrap{max-width:1100px;margin:0 auto;padding:24px 20px 48px;}
+    @media (max-width:768px){.wrap{padding:20px 16px 40px;}}
     .header{
       display:flex;
       align-items:center;
       justify-content:space-between;
       gap:12px;
-      margin-bottom:24px;
+      margin-bottom:32px;
       flex-wrap:wrap;
     }
     .header a{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
@@ -51,11 +44,11 @@
     .brand-tagline{font-size:12px;color:#64748b;font-weight:500;}
     .hero{
       background:#ffffff;
-      border-radius:18px;
-      padding:24px 22px 22px;
-      box-shadow:0 10px 40px rgba(15,23,42,0.06);
-      border:1px solid rgba(148,163,184,0.25);
-      margin-bottom:28px;
+      border-radius:24px;
+      padding:48px 32px 40px;
+      box-shadow:0 4px 24px rgba(15,23,42,0.06),0 0 0 1px rgba(148,163,184,0.12);
+      margin-bottom:40px;
+      text-align:center;
     }
     .hero-badge{
       font-size:11px;
@@ -63,299 +56,325 @@
       letter-spacing:0.08em;
       text-transform:uppercase;
       color:#0f766e;
-      background:rgba(45,212,191,0.1);
+      background:rgba(45,212,191,0.12);
       border-radius:999px;
-      padding:6px 12px;
+      padding:8px 14px;
       display:inline-flex;
       align-items:center;
       gap:6px;
-      margin-bottom:10px;
+      margin-bottom:20px;
     }
     .hero-title{
-      font-size:22px;
-      line-height:1.3;
+      font-size:clamp(1.5rem,4vw,2rem);
+      line-height:1.25;
       font-weight:700;
-      letter-spacing:-0.02em;
+      letter-spacing:-0.03em;
       color:#0f172a;
-      margin-bottom:6px;
+      margin-bottom:14px;
+      max-width:720px;
+      margin-left:auto;
+      margin-right:auto;
     }
     .hero-sub{
-      font-size:14px;
+      font-size:clamp(0.9375rem,2vw,1.0625rem);
       line-height:1.6;
-      color:#4b5563;
+      color:#475569;
+      max-width:600px;
+      margin:0 auto 28px;
     }
-    @media (min-width:768px){
-      .hero-title{font-size:26px;}
-      .hero-sub{font-size:15px;}
+    .hero-ctas{
+      display:flex;
+      flex-wrap:wrap;
+      gap:14px;
+      justify-content:center;
     }
+    .hero-cta{
+      display:inline-flex;
+      align-items:center;
+      justify-content:center;
+      padding:14px 28px;
+      border-radius:14px;
+      font-size:15px;
+      font-weight:600;
+      text-decoration:none;
+      cursor:pointer;
+      transition:transform 0.2s ease,box-shadow 0.2s ease;
+    }
+    .hero-cta--primary{
+      background:linear-gradient(135deg,#0EA5A4 0%,#0d9488 100%);
+      color:#fff;
+      box-shadow:0 4px 20px rgba(14,165,164,0.35);
+    }
+    .hero-cta--primary:hover{transform:translateY(-2px);box-shadow:0 8px 28px rgba(14,165,164,0.4);}
+    .hero-cta--secondary{
+      background:#fff;
+      color:#0f766e;
+      border:2px solid #0EA5A4;
+    }
+    .hero-cta--secondary:hover{background:rgba(14,165,164,0.06);transform:translateY(-1px);}
+    #plans{padding-top:8px;}
     .pricing-grid{
       display:grid;
       grid-template-columns:repeat(3,minmax(0,1fr));
-      gap:18px;
-      margin-top:26px;
+      gap:24px;
+      margin-top:32px;
     }
-    @media (max-width:960px){
-      .pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr));}
-    }
-    @media (max-width:640px){
-      .pricing-grid{grid-template-columns:1fr;}
-    }
+    @media (max-width:960px){.pricing-grid{grid-template-columns:repeat(2,minmax(0,1fr));}}
+    @media (max-width:640px){.pricing-grid{grid-template-columns:1fr;gap:20px;}}
     .plan-card{
       background:#ffffff;
-      border-radius:18px;
-      padding:18px 18px 20px;
-      border:1px solid rgba(148,163,184,0.4);
-      box-shadow:0 6px 24px rgba(15,23,42,0.05);
+      border-radius:20px;
+      padding:28px 24px 28px;
+      border:1px solid rgba(148,163,184,0.25);
+      box-shadow:0 4px 20px rgba(15,23,42,0.04),0 0 0 1px rgba(255,255,255,0.8) inset;
       display:flex;
       flex-direction:column;
       min-height:0;
+      transition:transform 0.2s ease,box-shadow 0.2s ease;
     }
+    .plan-card:hover{transform:translateY(-2px);box-shadow:0 12px 32px rgba(15,23,42,0.08),0 0 0 1px rgba(148,163,184,0.15);}
     .plan-card--featured{
-      border-color:rgba(14,165,164,0.7);
-      box-shadow:0 10px 32px rgba(14,165,164,0.18);
-      position:relative;
+      border-color:rgba(14,165,164,0.4);
+      box-shadow:0 8px 32px rgba(14,165,164,0.12),0 0 0 1px rgba(14,165,164,0.15);
     }
+    .plan-card--featured:hover{box-shadow:0 16px 40px rgba(14,165,164,0.18),0 0 0 1px rgba(14,165,164,0.2);}
     .plan-badge{
       position:absolute;
-      top:14px;
-      left:18px;
-      padding:4px 10px;
+      top:18px;
+      left:24px;
+      padding:6px 12px;
       border-radius:999px;
       background:linear-gradient(135deg,#0EA5A4 0%,#0d9488 100%);
       color:#ecfeff;
       font-size:11px;
       font-weight:600;
-      letter-spacing:0.08em;
+      letter-spacing:0.06em;
       text-transform:uppercase;
     }
     .plan-name{
-      font-size:16px;
-      font-weight:600;
+      font-size:1.25rem;
+      font-weight:700;
       color:#0f172a;
-      margin-bottom:2px;
+      margin-bottom:6px;
       margin-top:4px;
     }
-    .plan-period{
-      font-size:12px;
-      color:#6b7280;
-      margin-bottom:10px;
-    }
+    .plan-period{font-size:13px;color:#64748b;margin-bottom:12px;}
     .plan-price{
-      font-size:22px;
-      font-weight:700;
+      font-size:2rem;
+      font-weight:800;
       color:#0f766e;
-      margin-bottom:10px;
+      margin-bottom:12px;
+      letter-spacing:-0.02em;
     }
-    .plan-price span.currency{
-      font-size:14px;
-      vertical-align:top;
-      margin-right:2px;
-    }
-    .plan-price span.period{
-      font-size:12px;
-      font-weight:500;
-      color:#6b7280;
-      margin-left:4px;
-    }
+    .plan-price span.currency{font-size:1.125rem;font-weight:700;margin-right:2px;}
+    .plan-price span.period{font-size:13px;font-weight:500;color:#64748b;margin-left:4px;}
     .plan-desc{
-      font-size:13px;
-      color:#4b5563;
-      line-height:1.6;
-      margin-bottom:10px;
+      font-size:14px;
+      color:#475569;
+      line-height:1.55;
+      margin-bottom:20px;
       min-height:0;
     }
     .plan-features{
       list-style:none;
       padding:0;
-      margin:0 0 14px;
-      font-size:13px;
-      color:#374151;
+      margin:0 0 24px;
+      font-size:14px;
+      color:#334155;
       display:flex;
       flex-direction:column;
-      gap:6px;
+      gap:10px;
       flex:1;
     }
-    .plan-features li{
-      display:flex;
-      align-items:flex-start;
-      gap:8px;
-    }
-    .plan-features li span.bullet{
-      font-size:13px;
-      color:#0EA5A4;
-      margin-top:1px;
-    }
+    .plan-features li{display:flex;align-items:flex-start;gap:10px;}
+    .plan-features li span.bullet{font-size:14px;color:#0EA5A4;margin-top:1px;}
     .plan-cta{
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      padding:10px 14px;
-      border-radius:999px;
-      border:1px solid #0EA5A4;
-      font-size:13px;
+      padding:14px 20px;
+      border-radius:14px;
+      border:2px solid #0EA5A4;
+      font-size:14px;
       font-weight:600;
       text-decoration:none;
       cursor:pointer;
-      transition:background 0.18s ease,color 0.18s ease,box-shadow 0.18s ease,border-color 0.18s ease;
-      margin-top:4px;
+      transition:background 0.2s ease,color 0.2s ease,box-shadow 0.2s ease,border-color 0.2s ease,transform 0.2s ease;
+      margin-top:auto;
     }
     .plan-cta--primary{
       background:linear-gradient(135deg,#0EA5A4 0%,#0d9488 100%);
       color:#ecfeff;
       border-color:transparent;
-      box-shadow:0 8px 24px rgba(14,165,164,0.35);
+      box-shadow:0 6px 20px rgba(14,165,164,0.3);
     }
-    .plan-cta--primary:hover{
-      box-shadow:0 10px 30px rgba(14,165,164,0.4);
-      transform:translateY(-1px);
+    .plan-cta--primary:hover{box-shadow:0 8px 28px rgba(14,165,164,0.4);transform:translateY(-1px);}
+    .plan-cta--ghost{background:#fff;color:#0f766e;}
+    .plan-cta--ghost:hover{background:rgba(14,165,164,0.06);border-color:#0EA5A4;}
+    .trust-section{
+      margin-top:48px;
+      padding:32px 24px;
+      background:#fff;
+      border-radius:20px;
+      border:1px solid rgba(148,163,184,0.2);
+      box-shadow:0 2px 16px rgba(15,23,42,0.04);
     }
-    .plan-cta--ghost{
-      background:#ffffff;
-      color:#0f766e;
-    }
-    .plan-cta--ghost:hover{
-      background:rgba(14,165,164,0.04);
-      border-color:#0EA5A4;
+    .trust-title{
+      font-size:1.125rem;
+      font-weight:700;
+      color:#0f172a;
+      margin-bottom:20px;
+      text-align:center;
     }
     .trust-row{
-      margin-top:26px;
-      padding:12px 14px;
-      border-radius:999px;
-      background:rgba(15,23,42,0.02);
-      border:1px solid rgba(148,163,184,0.4);
       display:flex;
       flex-wrap:wrap;
       justify-content:center;
-      gap:10px 16px;
-      font-size:11px;
-      color:#4b5563;
+      gap:20px 28px;
     }
     .trust-item{
       display:inline-flex;
       align-items:center;
-      gap:6px;
-      white-space:nowrap;
-    }
-    .trust-icon{
-      width:16px;
-      height:16px;
-      display:inline-flex;
-      align-items:center;
-      justify-content:center;
+      gap:10px;
       font-size:13px;
+      color:#475569;
+      font-weight:500;
     }
-    @media (max-width:640px){
-      .trust-row{border-radius:14px;align-items:flex-start;justify-content:flex-start;}
-      .trust-item{white-space:normal;}
+    .trust-icon{width:20px;height:20px;flex-shrink:0;opacity:0.9;}
+    .faq-section{margin-top:48px;}
+    .faq-title{font-size:1.25rem;font-weight:700;color:#0f172a;margin-bottom:20px;text-align:center;}
+    .faq-list{max-width:640px;margin:0 auto;}
+    .faq-item{
+      background:#fff;
+      border-radius:14px;
+      margin-bottom:12px;
+      border:1px solid rgba(148,163,184,0.2);
+      overflow:hidden;
+    }
+    .faq-q{
+      padding:16px 20px;
+      font-size:15px;
+      font-weight:600;
+      color:#0f172a;
+    }
+    .faq-a{
+      padding:0 20px 16px;
+      font-size:14px;
+      color:#475569;
+      line-height:1.55;
     }
   </style>
 </head>
 <body>
   <div class="wrap">
     <header class="header" aria-label="Site header">
-      <a href="/" aria-label="{{ brand }}">
+      <a href="{{ base_url }}/" aria-label="{{ brand }}">
         <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="{{ brand }}" width="160" height="40" loading="eager">
       </a>
       <p class="brand-tagline">{{ t.get("brand_trust_line", "Clinical-style blood test reports.") }}</p>
     </header>
 
-    <section class="hero" aria-labelledby="pricing-title">
-      <div class="hero-badge">
-        {{ t.get("secure_checkout", "Secure pricing overview") }}
-      </div>
-      <h1 id="pricing-title" class="hero-title">
-        {{ t.get("failed_pricing", "Pricing") }}
+    <section class="hero" aria-labelledby="hero-title">
+      <div class="hero-badge">{{ t.get("secure_checkout", "Secure pricing") }}</div>
+      <h1 id="hero-title" class="hero-title">
+        {{ t.get("pricing_hero_title", "Understand your blood test results with a premium clinical-style report") }}
       </h1>
       <p class="hero-sub">
-        {{ t.get("cta_trust_note", "Understand the plans first, then continue to secure payment.") }}
+        {{ t.get("pricing_hero_sub", "Get a clear AI-powered explanation of your lab results, a polished doctor-style PDF report, and secure instant access — with or without creating an account.") }}
       </p>
+      <div class="hero-ctas">
+        <a href="#plans" class="hero-cta hero-cta--primary">{{ t.get("cta_view_plans", "View Plans") }}</a>
+        <a href="{{ base_url }}/#analyze" class="hero-cta hero-cta--secondary">{{ t.get("cta_start_free", "Start Free") }}</a>
+      </div>
+    </section>
 
-      <div class="pricing-grid" aria-label="Plans">
+    <section id="plans" class="pricing-section" aria-label="Plans">
+      <div class="pricing-grid">
+        <article class="plan-card" aria-label="{{ t.get('plan_free_preview', 'Free Preview') }}">
+          <h2 class="plan-name">{{ t.get("plan_free_preview", "Free Preview") }}</h2>
+          <p class="plan-period">{{ t.get("price_single_per", "Limited preview") }}</p>
+          <p class="plan-price"><span class="currency">€</span>0</p>
+          <p class="plan-desc">{{ t.get("plan_free_preview_desc", "Limited output, basic interpretation. Try it first.") }}</p>
+          <ul class="plan-features">
+            <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }} (sınırlı)</span></li>
+            <li><span class="bullet">✓</span><span>{{ t.get("trust_pdf", "Basic output") }}</span></li>
+          </ul>
+          <a href="{{ base_url }}/#analyze" class="plan-cta plan-cta--ghost">{{ t.get("cta_start_free", "Start Free") }}</a>
+        </article>
+
         {% set single = plans.single %}
-        {% set monthly = plans.monthly %}
-        {% set yearly = plans.yearly %}
-
-        <article class="plan-card" aria-label="{{ t.get('plan_single', 'Single Analysis') }}">
-          <h2 class="plan-name">{{ t.get("plan_single", "Single Analysis") }}</h2>
-          <p class="plan-period">{{ t.get("price_single_per", t.get("plan_single_for", "")) }}</p>
+        <article class="plan-card plan-card--featured" aria-label="{{ t.get('plan_premium_report', 'Premium Report') }}" style="position:relative;">
+          <span class="plan-badge">{{ t.get("most_popular", "Most Popular") }}</span>
+          <h2 class="plan-name">{{ t.get("plan_premium_report", "Premium Report") }}</h2>
+          <p class="plan-period">{{ t.get("price_single_per", "One-time") }}</p>
           <p class="plan-price">
             <span class="currency">€</span>{{ "%.2f"|format(single.price_cents / 100) }}
           </p>
-          <p class="plan-desc">
-            {{ t.get("plan_single_for", t.get("plan_desc_single", "One detailed analysis with doctor-style PDF report.")) }}
-          </p>
+          <p class="plan-desc">{{ t.get("plan_premium_report_desc", "Full analysis, premium PDF, doctor-style summary, health score and recommendations.") }}</p>
           <ul class="plan-features">
             <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }}</span></li>
-            <li><span class="bullet">✓</span><span>{{ t.get("kdv_dahil", "VAT included") }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("trust_pdf", "Downloadable PDF report") }}</span></li>
+            <li><span class="bullet">✓</span><span>{{ t.get("kdv_dahil", "VAT included") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=single" class="plan-cta plan-cta--ghost">
-            {{ t.get("cta_start_single", t.get("cta_single", "Buy single analysis")) }}
-          </a>
+          <a href="{{ base_url }}/payment?plan=single" class="plan-cta plan-cta--primary">{{ t.get("cta_get_premium_report", "Get Premium Report") or t.get("cta_single", "Get Premium Report") }}</a>
         </article>
 
-        <article class="plan-card plan-card--featured" aria-label="{{ t.get('plan_monthly', 'Monthly Subscription') }}">
-          <span class="plan-badge">{{ t.get("most_popular", "Most popular") }}</span>
-          <h2 class="plan-name">{{ t.get("plan_monthly", "Monthly Subscription") }}</h2>
-          <p class="plan-period">{{ t.get("price_monthly_per", "per month") }}</p>
-          <p class="plan-price">
-            <span class="currency">€</span>{{ "%.2f"|format(monthly.price_cents / 100) }}
-            <span class="period">/mo</span>
-          </p>
-          <p class="plan-desc">
-            {{ t.get("plan_monthly_for", t.get("plan_desc_monthly", "For regular lab work and follow-up. Multiple analyses every month.")) }}
-          </p>
-          <ul class="plan-features">
-            <li><span class="bullet">✓</span><span>{{ t.get("summary_value_monthly_per_month", "5 analyses per month") }}</span></li>
-            <li><span class="bullet">✓</span><span>{{ t.get("cancel_anytime", "Cancel anytime") }}</span></li>
-            <li><span class="bullet">✓</span><span>{{ t.get("active_after_payment", "Active immediately after payment") }}</span></li>
-          </ul>
-          <a href="{{ base_url }}/payment?plan=monthly" class="plan-cta plan-cta--primary">
-            {{ t.get("cta_start_monthly", t.get("cta_monthly", "Start monthly plan")) }}
-          </a>
-        </article>
-
-        <article class="plan-card" aria-label="{{ t.get('plan_yearly', 'Yearly Subscription') }}">
-          <h2 class="plan-name">{{ t.get("plan_yearly", "Yearly Subscription") }}</h2>
+        {% set yearly = plans.yearly %}
+        <article class="plan-card" aria-label="{{ t.get('plan_norya_plus', 'Norya Plus') }}">
+          <h2 class="plan-name">{{ t.get("plan_norya_plus", "Norya Plus") }}</h2>
           <p class="plan-period">{{ t.get("price_yearly_per", "per year") }}</p>
           <p class="plan-price">
             <span class="currency">€</span>{{ "%.2f"|format(yearly.price_cents / 100) }}
             <span class="period">/yr</span>
           </p>
-          <p class="plan-desc">
-            {{ t.get("plan_yearly_for", t.get("plan_desc_yearly", "Best value for frequent health tracking throughout the year.")) }}
-          </p>
+          <p class="plan-desc">{{ t.get("plan_norya_plus_desc", "Multiple analyses, report history, comparison, priority access.") }}</p>
           <ul class="plan-features">
-            <li><span class="bullet">✓</span><span>{{ t.get("summary_value_yearly_1y", "Total 16 analyses (13 + 3 free)") }}</span></li>
+            <li><span class="bullet">✓</span><span>{{ t.get("summary_value_yearly_1y", "Extended annual quota") }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("cancel_anytime", "Cancel anytime") }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("active_after_payment", "Active immediately after payment") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=annual" class="plan-cta plan-cta--ghost">
-            {{ t.get("cta_start_yearly", t.get("cta_yearly", "Secure annual savings")) }}
-          </a>
+          <a href="{{ base_url }}/payment?plan=annual" class="plan-cta plan-cta--ghost">{{ t.get("cta_start_yearly", t.get("cta_yearly", "Get Norya Plus")) }}</a>
         </article>
       </div>
 
-      <div class="trust-row" aria-label="{{ t.get('reassurance_aria', 'Trust & compliance') }}">
-        <div class="trust-item">
-          <span class="trust-icon">🔒</span>
-          <span>{{ t.get("trust_ssl_encryption", "256-bit SSL Encryption") }}</span>
+      <div class="trust-section" aria-label="{{ t.get('reassurance_aria', 'Trust') }}">
+        <h3 class="trust-title">{{ t.get("reassurance_aria", "Trust & compliance") }}</h3>
+        <div class="trust-row">
+          <span class="trust-item">🔒 {{ t.get("trust_secure_payment", t.get("trust_ssl_encryption", "Secure payment")) }}</span>
+          <span class="trust-item">🛡 {{ t.get("trust_privacy_first", "Privacy-first") }}</span>
+          <span class="trust-item">🌍 {{ t.get("trust_multilang", "Multi-language support") }}</span>
+          <span class="trust-item">📄 {{ t.get("trust_doctor_pdf", t.get("trust_pdf", "Doctor-style PDF report")) }}</span>
+          <span class="trust-item">⚡ {{ t.get("trust_instant_access", t.get("active_after_payment", "Instant access after payment")) }}</span>
+          <span class="trust-item">✓ {{ t.get("trust_no_account", "No account required") }}</span>
         </div>
-        <div class="trust-item">
-          <span class="trust-icon">💳</span>
-          <span>{{ t.get("trust_3d", "3D Secure") }}</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-icon">📄</span>
-          <span>{{ t.get("trust_pdf", t.get("report_download", "Downloadable PDF report")) }}</span>
-        </div>
-        <div class="trust-item">
-          <span class="trust-icon">⚡</span>
-          <span>{{ t.get("active_after_payment", "Active immediately after payment") }}</span>
+      </div>
+
+      <div class="faq-section">
+        <h3 class="faq-title">{{ t.get("faq_heading", "Frequently asked questions") }}</h3>
+        <div class="faq-list">
+          <div class="faq-item">
+            <p class="faq-q">{{ t.get("faq_need_account_q", "Do I need an account to pay?") }}</p>
+            <p class="faq-a">{{ t.get("faq_need_account_a", "No. You can pay securely with just your email and name.") }}</p>
+          </div>
+          <div class="faq-item">
+            <p class="faq-q">{{ t.get("faq_after_purchase_q", "What happens after purchase?") }}</p>
+            <p class="faq-a">{{ t.get("faq_after_purchase_a", "Your access is ready right after payment. You can create an account later if you wish.") }}</p>
+          </div>
+          <div class="faq-item">
+            <p class="faq-q">{{ t.get("faq_access_later_q", "Can I access my report later?") }}</p>
+            <p class="faq-a">{{ t.get("faq_access_later_a", "Yes. It is linked to your email.") }}</p>
+          </div>
+          <div class="faq-item">
+            <p class="faq-q">{{ t.get("faq_data_secure_q", "Is my data secure?") }}</p>
+            <p class="faq-a">{{ t.get("faq_data_secure_a", "Yes. Privacy-first processing and KVKK/GDPR compliant.") }}</p>
+          </div>
+          <div class="faq-item">
+            <p class="faq-q">{{ t.get("faq_what_included_q", "What is included in Premium Report?") }}</p>
+            <p class="faq-a">{{ t.get("faq_what_included_a", "Full analysis, downloadable PDF report, health score and recommendations.") }}</p>
+          </div>
         </div>
       </div>
     </section>
   </div>
 </body>
 </html>
-

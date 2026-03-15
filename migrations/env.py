@@ -20,9 +20,12 @@ config = context.config
 if config.get_main_option("sqlalchemy.url") != str(DATABASE_URL):
     config.set_main_option("sqlalchemy.url", str(DATABASE_URL))
 
-# Log yapılandırması
-if config.config_file_name is not None:
-    fileConfig(config.config_file_name)
+# Log yapılandırması (config dosyası yoksa veya okunamazsa sessizce atla)
+try:
+    if config.config_file_name is not None and Path(config.config_file_name).exists():
+        fileConfig(config.config_file_name)
+except Exception:
+    pass
 
 # Hedef metadata: tüm SQLModel tabloları
 target_metadata = SQLModel.metadata

@@ -12,6 +12,7 @@ class UserResponse(BaseModel):
     email_verified: bool = False
     verify_email_sent: bool | None = None  # Sadece register cevabında: e-posta doğrulama linki gönderildi mi?
     created_at: datetime | None = None  # Kayıt tarihi (profilde "Üye since")
+    purchase_linked: bool = False  # Register'da: bu e-posta ile daha önce misafir satın alımı vardı, hesaba bağlandı
 
 
 class UserCreate(BaseModel):

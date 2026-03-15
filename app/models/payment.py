@@ -9,6 +9,7 @@ class PaymentOrder(SQLModel, table=True):
     id: int | None = Field(default=None, primary_key=True)
     merchant_oid: str = Field(unique=True, index=True)
     user_id: int
+    customer_email: str | None = Field(default=None, index=True)  # email at purchase (guest or logged-in)
     product: str  # "single" | "monthly" | "yearly"
     amount_kurus: int  # Tutar en küçük birimde: EUR için cent (13,00 € = 1300)
     quantity: int = 1  # Tek analiz: adet; Aylık: ay; Yıllık: yıl (ödeme = birim_fiyat × quantity)

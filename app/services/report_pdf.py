@@ -239,8 +239,17 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_hydration_default": "Günde yaklaşık 1,5–2 litre sıvı tüketimi böbrek fonksiyonları ve genel metabolizma için önerilir.",
         "report_doctor_note_1": "Bu raporu hekiminizle paylaşarak laboratuvar sonuçlarınızı birlikte yorumlayabilirsiniz.",
         "report_doctor_note_2": "Belirti, şikâyet veya endişeleriniz varsa mutlaka hekim tarafından değerlendirilmelidir.",
+        "report_risk_factors": "Risk Faktörleri",
+        "report_risk_factors_line_1": "Kardiyovasküler veya metabolik faktörlere işaret edebilir; hekiminizle görüşün.",
+        "report_risk_factors_line_2": "Yaşam tarzı ve beslenme genel iyilik halini destekleyebilir.",
         "report_refined_disclaimer": "Bu rapor yalnızca bilgilendirme amaçlıdır; teşhis veya tedavi sunmaz. Sağlık durumunuzla ilgili kararlar ve tedavi seçenekleri için hekiminize başvurun.",
+        "report_doc_sub_single": "Tek analiz raporu — Özet, değerler ve öneriler; teşhis yerine geçmez, bilgilendirme amaçlıdır.",
+        "report_plan_badge_single": "RAPOR",
         "report_trend_placeholder": "Trend, zamanla daha fazla raporla kullanılabilir hale gelir.",
+        "report_comparison_title": "Önceki analizle karşılaştırma",
+        "report_what_changed_title": "Neler değişti?",
+        "report_comparison_no_previous": "Henüz önceki analiz yok. Bir sonraki raporunuzda bu bölüm karşılaştırma ile doldurulacaktır.",
+        "report_what_changed_no_data": "Değişim özeti, bir sonraki raporunuzdan itibaren karşılaştırma verisiyle birlikte görünecektir.",
         "report_why_it_matters": "Neden önemli",
         "report_monitoring_focus": "Takip odağı",
         "report_domain_cardio": "Kardiyovasküler",
@@ -368,6 +377,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_summary_tiles": "Summary — Score and risk level",
         "report_biomarker_highlights": "Biomarker Highlights — Key blood values",
         "report_risk_indicators": "Risk Indicators — Parameters worth monitoring",
+        "report_risk_factors": "Risk Factors",
+        "report_risk_factors_line_1": "May indicate cardiovascular or metabolic factors. Discuss with your clinician.",
+        "report_risk_factors_line_2": "Lifestyle and diet may support overall wellness.",
         "report_key_areas": "Key Areas to Watch — Health priorities",
         "report_foods_to_favor": "Foods to Favor",
         "report_foods_to_limit": "Foods to Limit",
@@ -407,7 +419,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_doctor_note_1": "Share this report with your doctor so you can interpret your lab results together.",
         "report_doctor_note_2": "Any symptoms, concerns or questions should be evaluated by a physician.",
         "report_refined_disclaimer": "This report is for informational use only; it does not provide a diagnosis or treatment. For decisions about your health and treatment options, consult your doctor.",
+        "report_doc_sub_single": "Single analysis report — Summary, values and recommendations; for information only, not a substitute for diagnosis.",
+        "report_plan_badge_single": "REPORT",
         "report_trend_placeholder": "Trend becomes available with more reports over time.",
+        "report_comparison_title": "Compare with previous analysis",
+        "report_what_changed_title": "What changed?",
+        "report_comparison_no_previous": "No previous analysis yet. After your next report, this section will show a comparison.",
+        "report_what_changed_no_data": "Change summary will appear after your next report when comparison data is available.",
         "report_why_it_matters": "Why it matters",
         "report_monitoring_focus": "Monitoring focus",
         "report_domain_cardio": "Cardiovascular",
@@ -499,6 +517,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Stoffwechsel",
         "report_domain_vitamin": "Vitamin",
         "report_domain_inflammation": "Entzündung",
+        "report_comparison_title": "Vergleich mit vorheriger Analyse",
+        "report_what_changed_title": "Was hat sich geändert?",
+        "report_comparison_no_previous": "Noch keine vorherige Analyse. Nach Ihrem nächsten Bericht wird hier der Vergleich angezeigt.",
+        "report_what_changed_no_data": "Die Änderungsübersicht erscheint nach Ihrem nächsten Bericht, sobald Vergleichsdaten vorliegen.",
+        "report_risk_factors": "Risikofaktoren",
+        "report_risk_factors_line_1": "Kann auf kardiovaskuläre oder metabolische Faktoren hinweisen. Mit dem Arzt besprechen.",
+        "report_risk_factors_line_2": "Lebensstil und Ernährung können das allgemeine Wohlbefinden unterstützen.",
     },
     "fr": {
         "title": "Rapport d'analyse Norya",
@@ -583,6 +608,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Métabolique",
         "report_domain_vitamin": "Vitamine",
         "report_domain_inflammation": "Inflammation",
+        "report_comparison_title": "Comparer à l'analyse précédente",
+        "report_what_changed_title": "Ce qui a changé",
+        "report_comparison_no_previous": "Pas encore d'analyse précédente. Après votre prochain rapport, cette section affichera la comparaison.",
+        "report_what_changed_no_data": "Le résumé des changements apparaîtra après votre prochain rapport lorsque les données de comparaison seront disponibles.",
+        "report_risk_factors": "Facteurs de risque",
+        "report_risk_factors_line_1": "Peut indiquer des facteurs cardiovasculaires ou métaboliques. À discuter avec votre médecin.",
+        "report_risk_factors_line_2": "Le mode de vie et l'alimentation peuvent favoriser le bien-être général.",
     },
     "es": {
         "title": "Informe de análisis Norya",
@@ -633,6 +665,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Metabólico",
         "report_domain_vitamin": "Vitamina",
         "report_domain_inflammation": "Inflamación",
+        "report_comparison_title": "Comparar con el análisis anterior",
+        "report_what_changed_title": "Qué ha cambiado",
+        "report_comparison_no_previous": "Aún no hay análisis anterior. Tras su próximo informe se mostrará aquí la comparación.",
+        "report_what_changed_no_data": "El resumen de cambios aparecerá tras su próximo informe cuando haya datos de comparación.",
+        "report_risk_factors": "Factores de riesgo",
+        "report_risk_factors_line_1": "Puede indicar factores cardiovasculares o metabólicos. Consulte con su médico.",
+        "report_risk_factors_line_2": "El estilo de vida y la dieta pueden favorecer el bienestar general.",
     },
     "it": {
         "title": "Report di analisi Norya",
@@ -683,6 +722,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Metabolico",
         "report_domain_vitamin": "Vitamina",
         "report_domain_inflammation": "Infiammazione",
+        "report_comparison_title": "Confronta con l'analisi precedente",
+        "report_what_changed_title": "Cosa è cambiato",
+        "report_comparison_no_previous": "Non c'è ancora un'analisi precedente. Dopo il prossimo report questa sezione mostrerà il confronto.",
+        "report_what_changed_no_data": "Il riepilogo delle modifiche apparirà dopo il prossimo report quando i dati di confronto saranno disponibili.",
+        "report_risk_factors": "Fattori di rischio",
+        "report_risk_factors_line_1": "Può indicare fattori cardiovascolari o metabolici. Da discutere con il medico.",
+        "report_risk_factors_line_2": "Stile di vita e alimentazione possono favorire il benessere generale.",
     },
     "he": {
         "title": "דוח ניתוח Norya",
@@ -732,6 +778,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "מטבולי",
         "report_domain_vitamin": "ויטמין",
         "report_domain_inflammation": "דלקת",
+        "report_comparison_title": "השוואה לניתוח הקודם",
+        "report_what_changed_title": "מה השתנה?",
+        "report_comparison_no_previous": "עדיין אין ניתוח קודם. לאחר הדוח הבא יוצג כאן ההשוואה.",
+        "report_what_changed_no_data": "סיכום השינויים יופיע לאחר הדוח הבא כאשר נתוני ההשוואה זמינים.",
+        "report_risk_factors": "גורמי סיכון",
+        "report_risk_factors_line_1": "עלול להצביע על גורמי סיכון קרדיווסקולריים או מטבוליים. יש להתייעץ עם הרופא.",
+        "report_risk_factors_line_2": "אורח חיים ותזונה יכולים לתמוך בבריאות הכללית.",
     },
     "ar": {
         "title": "تقرير تحليل Norya",
@@ -781,6 +834,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "أيضي",
         "report_domain_vitamin": "فيتامين",
         "report_domain_inflammation": "التهاب",
+        "report_comparison_title": "المقارنة مع التحليل السابق",
+        "report_what_changed_title": "ما الذي تغيّر؟",
+        "report_comparison_no_previous": "لا يوجد تحليل سابق بعد. بعد تقريرك التالي ستُعرض المقارنة في هذا القسم.",
+        "report_what_changed_no_data": "ملخص التغيّر سيظهر بعد تقريرك التالي عندما تتوفر بيانات المقارنة.",
+        "report_risk_factors": "عوامل الخطر",
+        "report_risk_factors_line_1": "قد يشير إلى عوامل قلبية أو استقلابية. ناقش مع طبيبك.",
+        "report_risk_factors_line_2": "نمط الحياة والنظام الغذائي قد يدعمان الصحة العامة.",
     },
     "hi": {
         "title": "Norya विश्लेषण रिपोर्ट",
@@ -830,6 +890,13 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "चयापचय",
         "report_domain_vitamin": "विटामिन",
         "report_domain_inflammation": "सूजन",
+        "report_comparison_title": "पिछले विश्लेषण से तुलना",
+        "report_what_changed_title": "क्या बदला?",
+        "report_comparison_no_previous": "अभी कोई पिछला विश्लेषण नहीं। अगली रिपोर्ट के बाद यह सेक्शन तुलना दिखाएगा।",
+        "report_what_changed_no_data": "बदलाव सारांश आपकी अगली रिपोर्ट के बाद दिखेगा जब तुलना डेटा उपलब्ध हो।",
+        "report_risk_factors": "जोखिम कारक",
+        "report_risk_factors_line_1": "हृदय या चयापचय कारकों की ओर इशारा कर सकता है। चिकित्सक से चर्चा करें।",
+        "report_risk_factors_line_2": "जीवनशैली और आहार समग्र सेहत को सहायता दे सकते हैं।",
     },
     "el": {
         "title": "Αναφορά ανάλυσης Norya",
@@ -2298,6 +2365,17 @@ def _build_premium_context(
     label_glucose_no = _t("report_glucose_in_report_no", "Blood sugar (Glucose/HbA1c): Not in report") if lang != "tr" else "Kan şekeri (Glukoz/HbA1c): Raporda yok"
     label_glucose_in_report = label_glucose_yes if has_glucose else label_glucose_no
 
+    def _normalize_what_changed(items: list) -> list[str]:
+        out: list[str] = []
+        for x in items[:10]:
+            if isinstance(x, str):
+                out.append(x)
+            elif isinstance(x, dict):
+                out.append((x.get("summary") or x.get("param") or x.get("name") or "").strip() or "—")
+            else:
+                out.append(str(x) if x else "—")
+        return out
+
     return {
         "rid": report_id,
         "trend_locked": trend_locked,
@@ -2389,11 +2467,20 @@ def _build_premium_context(
         "doctor_discussion_notes": doctor_discussion_notes,
         "refined_disclaimer": refined_disclaimer,
         "trend_placeholder_text": trend_placeholder_text,
+        "comparison_summary_text": (base_context.get("comparison_summary") or base_context.get("comparison", {}).get("summary") or "").strip(),
+        "what_changed_items": _normalize_what_changed(base_context.get("what_changed") or (base_context.get("comparison") or {}).get("changes") or []),
+        "label_report_comparison_title": _t("report_comparison_title", "Compare with previous analysis"),
+        "label_report_what_changed_title": _t("report_what_changed_title", "What changed?"),
+        "label_report_comparison_no_previous": _t("report_comparison_no_previous", "No previous analysis yet. After your next report, this section will show a comparison."),
+        "label_report_what_changed_no_data": _t("report_what_changed_no_data", "Change summary will appear after your next report when comparison data is available."),
         "report_icons": REPORT_ICONS,
         "label_report_executive_summary": _t("report_executive_summary", "Executive Summary"),
         "label_report_summary_tiles": _t("report_summary_tiles", "Summary"),
         "label_report_biomarker_highlights": _t("report_biomarker_highlights", "Biomarker Highlights"),
         "label_report_risk_indicators": _t("report_risk_indicators", "Risk Indicators"),
+        "label_report_risk_factors": _t("report_risk_factors", "Risk Factors"),
+        "label_report_risk_factors_line_1": _t("report_risk_factors_line_1", "May indicate cardiovascular or metabolic factors. Discuss with your clinician."),
+        "label_report_risk_factors_line_2": _t("report_risk_factors_line_2", "Lifestyle and diet may support overall wellness."),
         "label_report_key_areas": _t("report_key_areas", "Key Areas to Watch"),
         "label_report_foods_to_favor": _t("report_foods_to_favor", "Foods to Favor"),
         "label_report_foods_to_limit": _t("report_foods_to_limit", "Foods to Limit"),
@@ -2479,6 +2566,17 @@ def build_report_pdf(
         rid = str(verification_info["report_id"])
     user_id_str = (user_identifier or "").strip() or "—"
     plan = (plan_name or "").strip().lower()
+    # Merkezi plan config (feature gating altyapısı; şablonlar ileride bu değerlere göre bölüm açacak)
+    from app.core.plan_config import get_plan_config
+
+    plan_cfg = get_plan_config(plan_name)
+    plan_config_ctx = {
+        "plan_name": plan_cfg.plan_name,
+        "comparison_enabled": plan_cfg.comparison_enabled,
+        "trend_enabled": plan_cfg.trend_enabled,
+        "explanation_depth": plan_cfg.explanation_depth,
+        "pdf_depth": plan_cfg.pdf_depth,
+    }
     # premiumPdf: single, monthly, yearly, pro → premium şablon; premiumTrend: monthly, yearly, pro
     use_premium = plan == "premium" or plan in ("single", "monthly", "yearly", "pro")
     premium_trend = plan in ("monthly", "yearly", "pro")
@@ -2504,10 +2602,16 @@ def build_report_pdf(
             premium_ctx["verification_url"] = ""
             premium_ctx["verification_code"] = ""
             premium_ctx["qr_image_base64"] = ""
+        premium_ctx["plan_config"] = plan_config_ctx
+        _labels = _pdf_labels(lang)
+        _fallback_en = PDF_LABELS.get("en", {})
+        premium_ctx["label_report_doc_sub_single"] = _labels.get("report_doc_sub_single") or _fallback_en.get("report_doc_sub_single", "Single analysis report — Summary, values and recommendations; for information only.")
+        premium_ctx["label_report_plan_badge_single"] = _labels.get("report_plan_badge_single") or _fallback_en.get("report_plan_badge_single", "REPORT")
         return render_premium_pdf(premium_ctx)
 
     context = base_context
     context["report_id"] = rid
+    context["plan_config"] = plan_config_ctx
     context["user_id"] = user_id_str
     context["patient_name"] = (patient_name or "").strip() or "—"
     context["patient_age"] = (patient_age or "").strip() or "—"

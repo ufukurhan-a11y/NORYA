@@ -97,14 +97,39 @@ async def register(
         raise HTTPException(status_code=422, detail="Ülke seçin.")
     try:
         stmt = select(User).where(User.email == email)
-        if db.exec(stmt).first():
-            raise HTTPException(status_code=400, detail="Bu e-posta adresi zaten kayıtlı.")
+        existing = db.exec(stmt).first()
+        if existing:
+            # Post-payment account linking: guest purchase with this email → claim account by setting password
+            account_claimed_at = getattr(existing, "account_claimed_at", None)
+            if account_claimed_at is not None:
+                raise HTTPException(status_code=400, detail="Bu e-posta adresi zaten kayıtlı.")
+            existing.hashed_password = hash_password(password)
+            existing.full_name = full_name or existing.full_name or ""
+            existing.phone = phone or existing.phone
+            existing.country = country or existing.country
+            existing.account_claimed_at = datetime.utcnow()
+            db.add(existing)
+            db.commit()
+            db.refresh(existing)
+            _audit(db, "register_claim", existing.id, _client_ip(request))
+            return UserResponse(
+                id=existing.id or 0,
+                email=existing.email,
+                full_name=existing.full_name,
+                phone=getattr(existing, "phone", None),
+                country=getattr(existing, "country", None),
+                email_verified=bool(getattr(existing, "email_verified_at", None)),
+                verify_email_sent=False,
+                created_at=getattr(existing, "created_at", None),
+                purchase_linked=True,
+            )
         user = User(
             email=email,
             hashed_password=hash_password(password),
             full_name=full_name,
             phone=phone or None,
             country=country or None,
+            account_claimed_at=datetime.utcnow(),
         )
         db.add(user)
         db.commit()

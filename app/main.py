@@ -1001,6 +1001,226 @@ def api_check():
     }
 
 
+# Test raporu: development'ta bu URL ile seçenek sayfası (PDF/HTML) veya yardım
+@app.get("/dev/test-report")
+async def dev_test_report():
+    """Test raporu seçenek sayfası (PDF / HTML) veya rapor yoksa yardım. Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+    report_path = _PROJ_ROOT / "test-reports" / "report.html"
+    if report_path.is_file():
+        # Rapor var: tek sayfada butonlarla PDF ve HTML linkleri (yanlış URL yazılmasın)
+        index_html = """<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Test raporu</title>
+<style>
+  body { font-family: system-ui, sans-serif; padding: 2rem; max-width: 32rem; margin: 0 auto; }
+  h1 { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .sub { color: #64748b; font-size: 0.9375rem; margin-bottom: 1.5rem; }
+  .links { display: flex; flex-wrap: wrap; gap: 0.75rem; }
+  .btn { display: inline-block; padding: 0.75rem 1.25rem; border-radius: 8px; text-decoration: none; font-weight: 600; transition: opacity 0.2s; }
+  .btn:hover { opacity: 0.9; }
+  .btn-pdf { background: #0f172a; color: #fff; }
+  .btn-html { background: #e2e8f0; color: #0f172a; }
+  .back { margin-top: 1.5rem; font-size: 0.875rem; }
+  .back a { color: #64748b; }
+</style></head>
+<body>
+<h1>Test raporu</h1>
+<p class="sub">Raporu aşağıdaki butonlarla açın (adres çubuğuna ek karakter yazmayın).</p>
+<div class="links">
+  <a href="/dev/test-report.pdf" class="btn btn-pdf" target="_blank" rel="noopener">PDF olarak aç</a>
+  <a href="/dev/test-report/html" class="btn btn-html" target="_blank" rel="noopener">HTML raporu aç</a>
+</div>
+<p class="back"><a href="/">← Ana sayfa</a></p>
+</body></html>"""
+        return HTMLResponse(index_html)
+    # Rapor yoksa açıklayıcı sayfa (tek satır komutlar, kopyala-yapıştır güvenli)
+    help_html = """<!DOCTYPE html>
+<html><head><meta charset="utf-8"><title>Test raporu</title></head>
+<body style="font-family:sans-serif; padding:2rem; max-width:600px;">
+<h1>Test raporu henüz yok</h1>
+<p><strong>1.</strong> Terminali proje kökünde açın (Cursor: Terminal → New Terminal; veya <code>cd</code> ile norya klasörüne gidin).</p>
+<p><strong>2.</strong> Aşağıdaki komutlardan <strong>birini</strong> tek satır olarak yapıştırıp Enter'a basın:</p>
+<pre style="background:#f0f0f0; padding:1rem; border-radius:6px; overflow-x:auto;">cd /Users/ufukurhan/norya && ./scripts/run_tests_with_report.sh</pre>
+<p>pytest kurulu değilse önce sanal ortam ve bağımlılıklar (bir kez):</p>
+<pre style="background:#f0f0f0; padding:1rem; border-radius:6px; overflow-x:auto;">cd /Users/ufukurhan/norya && python3 -m venv .venv && source .venv/bin/activate && pip install -r requirements.txt</pre>
+<p>Sonra rapor için:</p>
+<pre style="background:#f0f0f0; padding:1rem; border-radius:6px; overflow-x:auto;">cd /Users/ufukurhan/norya && ./scripts/run_tests_with_report.sh</pre>
+<p>Bu sayfayı yenileyin; <strong>PDF olarak aç</strong> butonu görünecek.</p>
+<p><a href="/">← Ana sayfa</a></p>
+</body></html>"""
+    return HTMLResponse(help_html)
+
+
+@app.get("/dev/test-report/html")
+async def dev_test_report_html():
+    """Ham pytest HTML raporu (sayfa içi linklerden açılır). Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+    report_path = _PROJ_ROOT / "test-reports" / "report.html"
+    if not report_path.is_file():
+        raise HTTPException(status_code=404, detail="Test raporu yok. Önce: pytest")
+    return FileResponse(str(report_path), media_type="text/html")
+
+
+@app.get("/dev/test-report.pdf")
+async def dev_test_report_pdf():
+    """Test raporunu PDF olarak döndürür (WeasyPrint ile). Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+    report_path = _PROJ_ROOT / "test-reports" / "report.html"
+    if not report_path.is_file():
+        raise HTTPException(
+            status_code=404,
+            detail="Test raporu yok. Önce: pytest veya ./scripts/run_tests_with_report.sh",
+        )
+    try:
+        from weasyprint import HTML
+        pdf_doc = HTML(filename=str(report_path))
+        pdf_bytes = pdf_doc.write_pdf()
+    except Exception as e:
+        log.exception("Test report PDF conversion failed: %s", e)
+        raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "inline; filename=test-report.pdf"},
+    )
+
+
+# Örnek müşteri raporu (kan tahlili PDF) — şablonu buradan açıp düzenleyebilirsiniz
+_DEV_SAMPLE_RESULT_TEXT = """
+**Özet**:
+Genel durum iyi. Bazı parametreler referans sınırında. Beslenme ve hareket önerilir.
+
+**Risk göstergeleri**:
+LDL ve glukoz takip edilmeli.
+
+**Değerler**:
+**LDL**: 118 mg/dL Reference: 0-100. Normal.
+**HDL**: 52 mg/dL Reference: 40-. Normal.
+**Glucose**: 95 mg/dL Reference: 70-100. Normal.
+**CRP**: 2.2 mg/L Reference: 0-3. Normal.
+**Vitamin D**: 28 ng/mL Reference: 30-. Düşük.
+
+**Olası nedenler**:
+- D vitamini güneş ve diyetle desteklenebilir.
+
+**Öneriler**:
+- Düzenli kontrole devam edin. Doktorunuzla paylaşın.
+"""
+_DEV_SAMPLE_TREND_DATA = {
+    "dates": ["01.01.2025", "15.01.2025", "01.02.2025"],
+    "ldl": [128, 122, 118],
+    "glucose": [98, 96, 95],
+    "crp": [2.8, 2.5, 2.2],
+}
+
+
+@app.get("/dev/single-report-preview")
+async def dev_single_report_preview(request: Request):
+    """Tek analiz (single) rapor ekranı önizlemesi — giriş/ödeme olmadan tarayıcıda görüntülemek için. Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+    return RedirectResponse(url="/?demo=single", status_code=302)
+
+
+@app.get("/dev/sample-report")
+async def dev_sample_report_page(request: Request):
+    """Müşteri raporu önizleme sayfası (PDF/şablon düzenlerken buradan açın). Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+    base = str(request.base_url).rstrip("/")
+    index_html = f"""<!DOCTYPE html>
+<html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>Müşteri raporu önizleme</title>
+<style>
+  body {{ font-family: system-ui, sans-serif; padding: 2rem; max-width: 32rem; margin: 0 auto; }}
+  h1 {{ font-size: 1.35rem; margin-bottom: 0.5rem; }}
+  .sub {{ color: #64748b; font-size: 0.9375rem; margin-bottom: 1.5rem; }}
+  .btn {{ display: inline-block; padding: 0.75rem 1.25rem; border-radius: 8px; text-decoration: none; font-weight: 600; background: #0f172a; color: #fff; margin-right: 0.5rem; margin-bottom: 0.5rem; }}
+  .btn:hover {{ opacity: 0.9; }}
+  .back {{ margin-top: 1.5rem; font-size: 0.875rem; }}
+  .back a {{ color: #64748b; }}
+</style></head>
+<body>
+<h1>Müşteri raporu önizleme</h1>
+<p class="sub">Kan tahlili raporu PDF’i (report_premium.html). Şablonu düzenleyip sayfayı yenileyin.</p>
+<a href="/dev/sample-report.pdf" class="btn" target="_blank" rel="noopener">PDF olarak aç</a>
+<a href="/dev/single-report-preview" class="btn" target="_blank" rel="noopener">Tek analiz rapor önizlemesi (SPA)</a>
+<p class="back"><a href="/">← Ana sayfa</a> · <a href="/dev/test-report">Test raporu</a></p>
+</body></html>"""
+    return HTMLResponse(index_html)
+
+
+@app.get("/dev/sample-report.pdf")
+async def dev_sample_report_pdf(request: Request):
+    """Müşteri kan tahlili raporu örnek PDF (report_premium.html ile). Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+    base_url = str(request.base_url).rstrip("/")
+    report_id = "dev-sample-12345"
+    token = "dev-token"
+    verification_url = f"{base_url}/verify/{report_id}?token={token}"
+    verification_info = None
+    try:
+        from app.services.report_verification import _qr_png_base64
+        qr_b64 = _qr_png_base64(verification_url)
+        verification_info = {
+            "report_id": report_id,
+            "verification_code": "DEV-SAMPLE",
+            "verification_url": verification_url,
+            "qr_image_base64": qr_b64 or "",
+        }
+    except Exception as e:
+        log.debug("Dev sample report: QR skipped: %s", e)
+    try:
+        pdf_bytes = build_report_pdf(
+            result_text=_DEV_SAMPLE_RESULT_TEXT,
+            report_date=datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M"),
+            lang="tr",
+            report_id="DEV-001",
+            user_identifier="dev@norya.com",
+            patient_name="Örnek Kullanıcı",
+            plan_name="premium",
+            source_type="text",
+            trend_data=_DEV_SAMPLE_TREND_DATA,
+            verification_info=verification_info,
+        )
+    except Exception as e:
+        log.exception("Dev sample report PDF failed: %s", e)
+        raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "inline; filename=norya-ornek-rapor.pdf"},
+    )
+
+
+@app.get("/dev/single-plan-test.pdf")
+async def dev_single_plan_test_pdf(request: Request):
+    """Single plan PDF testi — aynı örnek metinle plan_name='single' ile PDF. Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+    try:
+        pdf_bytes = build_report_pdf(
+            result_text=_DEV_SAMPLE_RESULT_TEXT,
+            report_date=datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M"),
+            lang="tr",
+            report_id="single-plan-test",
+            user_identifier="test@norya.com",
+            plan_name="single",
+            source_type="text",
+        )
+    except Exception as e:
+        log.exception("Single plan test PDF failed: %s", e)
+        raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "inline; filename=norya-single-plan-test.pdf"},
+    )
+
+
 # DEBUG ONLY: Rate limit + GA debug — production'da kapalı
 if getattr(settings, "environment", "development") != "production":
     @app.get("/debug/rate-test")
@@ -2003,13 +2223,18 @@ def _save_analysis(
     result_text: str,
     source: str,
     doctor_notes: str | None = None,
+    plan_type: str | None = None,
 ) -> int:
+    from app.core.plan_config import normalize_plan_type
+
+    pt = normalize_plan_type(plan_type) if plan_type is not None else "single"
     rec = AnalysisRecord(
         user_id=user_id,
         input_text=input_text,
         result_text=result_text,
         source=source,
         doctor_notes=doctor_notes,
+        plan_type=pt,
     )
     db.add(rec)
     db.commit()
@@ -2147,7 +2372,7 @@ async def analyze(
         if cached is not None:
             log.info("CACHE HIT key=%s", cache_key[:16])
             result = cached["sonuc"]
-            aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes)
+            aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan)
             if job:
                 job.status = "done"
                 job.analysis_record_id = aid
@@ -2184,7 +2409,7 @@ async def analyze(
                 "meta": report_payload["meta"],
             },
         )
-        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes)
+        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan)
         if job:
             job.status = "done"
             job.analysis_record_id = aid
@@ -2389,6 +2614,8 @@ def _build_analyze_response(
     cached: bool = False,
 ) -> AnalyzeResponse:
     """Ortak: premiumPdf = single|monthly|yearly|pro (gauge+score+PDF), premiumTrend = monthly|yearly|pro (trend açık). PREMIUM_VISIBLE_FOR_FREE=True ise free de görür. Tek analiz ve aylıkta rapor ekranında sadece önizleme + kapı (hepsini görmek için aylık/yıllık)."""
+    from app.core.plan_config import normalize_plan_type
+
     premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
     premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
     # Tek analiz ve aylık: ekranda tam rapor gösterme; önizleme + "Hepsini görmek için aylık veya yıllık abonelik alın" kapısı. Yıllık/pro = tam rapor.
@@ -2396,6 +2623,7 @@ def _build_analyze_response(
     overall = (risk_summary or {}).get("overall") or {}
     health_score = HealthScoreSchema(score=overall.get("score", 0), level=overall.get("level", "mid")) if risk_summary else None
     trend = _get_trend_for_user(db, user_id, exclude_analysis_id=aid) if premium_trend and user_id else None
+    plan_type = normalize_plan_type(plan)
     return AnalyzeResponse(
         sonuc=result,
         analiz_id=aid,
@@ -2406,6 +2634,7 @@ def _build_analyze_response(
         trend=trend,
         ui_hints=UiHintsSchema(locked=not premium_pdf, report_limited_preview=report_limited_preview),
         pdf=PdfInfoSchema(template="premium" if premium_pdf else "basic", available=True),
+        plan_type=plan_type,
     )
 
 
@@ -2440,7 +2669,7 @@ def _process_uploaded_content(
                 db.refresh(job)
             result, usage = analyze_blood_test_from_image(content, mime, lang=report_lang)
             input_preview = f"[Görsel: {filename}]"
-            aid = _save_analysis(db, user_id, input_preview, result, "image")
+            aid = _save_analysis(db, user_id, input_preview, result, "image", plan_type=plan)
             if job:
                 job.status = "done"
                 job.analysis_record_id = aid
@@ -2470,7 +2699,7 @@ def _process_uploaded_content(
         labs_norm = {"t": " ".join(text.split()).strip(), "dn": None}
         report_payload, usage = analyze_blood_test(text, lang=report_lang, plan="free", labs_norm=labs_norm)
         result = report_payload["sonuc"]
-        aid = _save_analysis(db, user_id, text[:2000], result, "pdf")
+        aid = _save_analysis(db, user_id, text[:2000], result, "pdf", plan_type=plan)
         if job:
             job.status = "done"
             job.analysis_record_id = aid
@@ -2490,19 +2719,29 @@ def _process_uploaded_content(
         plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
         return _build_analyze_response(result, aid, report_payload.get("risk_summary"), plan, user_id, db, cached=False)
     except Exception as e:
+        try:
+            db.rollback()
+        except Exception:
+            pass
         if ul:
-            ul.status = "failed"
-            ul.error_message = str(e)[:500]
-            ul.duration_ms = int((time.perf_counter() - t0) * 1000)
-            db.add(ul)
-            db.commit()
-        if save:
-            last_job = db.exec(select(AnalysisJob).where(AnalysisJob.user_id == user_id).order_by(AnalysisJob.id.desc()).limit(1)).first()
-            if last_job:
-                last_job.status = "failed"
-                last_job.error_message = str(e)[:500]
-                db.add(last_job)
+            try:
+                ul.status = "failed"
+                ul.error_message = str(e)[:500]
+                ul.duration_ms = int((time.perf_counter() - t0) * 1000)
+                db.add(ul)
                 db.commit()
+            except Exception:
+                pass
+        if save:
+            try:
+                last_job = db.exec(select(AnalysisJob).where(AnalysisJob.user_id == user_id).order_by(AnalysisJob.id.desc()).limit(1)).first()
+                if last_job:
+                    last_job.status = "failed"
+                    last_job.error_message = str(e)[:500]
+                    db.add(last_job)
+                    db.commit()
+            except Exception:
+                pass
         raise
 
 
@@ -2664,6 +2903,7 @@ def analyze_history_detail(
         created_at=rec.created_at.isoformat() if hasattr(rec.created_at, "isoformat") else str(rec.created_at),
         doctor_notes=getattr(rec, "doctor_notes", None),
         is_favorite=getattr(rec, "is_favorite", False),
+        plan_type=getattr(rec, "plan_type", None) or "single",
     )
 
 
@@ -2741,10 +2981,11 @@ def download_analysis_pdf(
     report_lang = (lang or "tr").strip().lower()[:5]
     user = db.get(User, user_id)
     plan = getattr(user, "plan", None) or "free"
+    plan_for_pdf = getattr(rec, "plan_type", None) or plan
     use_pro_scope = (scope or "").strip().lower() == "pro"
-    premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
-    premium_trend = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
-    cache_key = (analysis_id, report_lang, "pro" if use_pro_scope else "std", plan or "free")
+    premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("single", "monthly", "yearly", "pro")
+    premium_trend = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
+    cache_key = (analysis_id, report_lang, "pro" if use_pro_scope else "std", plan_for_pdf or "free")
     now_ts = time.time()
     with _pdf_cache_lock:
         if cache_key in _pdf_cache:
@@ -2762,8 +3003,8 @@ def download_analysis_pdf(
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
     verification_info = None
-    if plan in ("single", "monthly", "yearly"):
-        verification_info = get_or_create_verification(db, analysis_id, user_id, plan, report_lang, verify_base_url)
+    if plan_for_pdf in ("single", "monthly", "yearly"):
+        verification_info = get_or_create_verification(db, analysis_id, user_id, plan_for_pdf, report_lang, verify_base_url)
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
@@ -2772,7 +3013,7 @@ def download_analysis_pdf(
             report_id=analysis_id,
             user_identifier=user.email if user else None,
             patient_name=user.full_name if user else None,
-            plan_name="premium" if premium_pdf else (user.plan if user else None),
+            plan_name=plan_for_pdf if premium_pdf else (user.plan if user else None),
             source_type=rec.source if getattr(rec, "source", None) else None,
             trend_data=trend_data,
             verification_info=verification_info,
@@ -2818,11 +3059,12 @@ def download_doctor_pdf(
     report_lang = (lang or "tr").strip().lower()[:5]
     user = db.get(User, user_id)
     plan = getattr(user, "plan", None) or "free"
-    premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan in ("single", "monthly", "yearly", "pro")
-    premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan in ("monthly", "yearly", "pro")
+    plan_for_pdf = getattr(rec, "plan_type", None) or plan
+    premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("single", "monthly", "yearly", "pro")
+    premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
-    verification_info = get_or_create_verification(db, analysis_id, user_id, plan, report_lang, verify_base_url) if plan in ("single", "monthly", "yearly") else None
+    verification_info = get_or_create_verification(db, analysis_id, user_id, plan_for_pdf, report_lang, verify_base_url) if plan_for_pdf in ("single", "monthly", "yearly") else None
     try:
         if premium_pdf:
             pdf_bytes = build_report_pdf(
@@ -2832,7 +3074,7 @@ def download_doctor_pdf(
                 report_id=analysis_id,
                 user_identifier=user.email if user else None,
                 patient_name=user.full_name if user else None,
-                plan_name="premium" if premium_pdf else (user.plan if user else None),
+                plan_name=plan_for_pdf if premium_pdf else (user.plan if user else None),
                 source_type=rec.source if getattr(rec, "source", None) else None,
                 trend_data=trend_data,
                 verification_info=verification_info,
@@ -3032,9 +3274,11 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     merchant_oid = "norya" + uuid.uuid4().hex[:20]
     currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
 
+    customer_email_val = (user.email or "").strip().lower() if user else None
     order = PaymentOrder(
         merchant_oid=merchant_oid,
         user_id=user_id,
+        customer_email=customer_email_val or None,
         product=product,
         amount_kurus=total_amount,
         currency=currency,
@@ -3203,8 +3447,8 @@ def order_status(
         raise HTTPException(status_code=400, detail="merchant_oid zorunludur.")
     oid = _validate_merchant_oid(merchant_oid)
     # Test OID: Google Ads / Tag Assistant testi için, veritabanına bakmadan hemen kontrollü yanıt döndür.
-    # Güvenlik: yalnızca sabit "test123" değeri için geçerlidir; gerçek sipariş akışını etkilemez.
-    if oid == "test123":
+    # test123 veya test123_<suffix> (örn. test123_1, test123_1734567890) — benzersiz OID ile ilk açılışta her seferinde conversion fire edilir.
+    if oid == "test123" or (oid.startswith("test123_") and len(oid) <= 64):
         resp = {
             "merchant_oid": oid,
             "status": "paid",
@@ -3233,7 +3477,10 @@ def order_status(
         "is_premium_active": is_premium,
         "plan_code": plan_code,
         "total_amount_eur": total_eur,
+        "currency": getattr(order, "currency", None) or "EUR",
     }
+    if getattr(order, "customer_email", None):
+        resp["customer_email"] = order.customer_email
     # active_until not stored for now; optional for future subscription end
     response = JSONResponse(content=resp)
     response.headers["Cache-Control"] = "no-store, no-cache, must-revalidate"
@@ -3446,9 +3693,6 @@ def payment_page_premium(
     db: Session = Depends(get_db),
 ):
     """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kampanya admin’deki aktif kampanyaya bağlı."""
-    if current_user is None:
-        next_path = request.url.path + (("?" + request.url.query) if request.url.query else "")
-        return RedirectResponse(url="/?login=1&next=" + quote(next_path), status_code=302)
     lang = _payment_lang_from_request(request)
     t = get_pay_ui(lang)
     # Tek canonical domain (statik ve API istekleri)
@@ -3645,6 +3889,7 @@ def payment_get_token(
     order = PaymentOrder(
         merchant_oid=merchant_oid,
         user_id=user.id or 0,
+        customer_email=(user.email or "").strip().lower() or None,
         product=body.product,
         amount_kurus=amount,
         currency=currency,
@@ -3761,6 +4006,7 @@ def payment_get_token_guest(
     order = PaymentOrder(
         merchant_oid=merchant_oid,
         user_id=user_id,
+        customer_email=email or None,
         product="single",
         amount_kurus=amount,
         currency=currency,
@@ -3993,7 +4239,8 @@ def payment_success_page(
     """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir.
     Global tag (AW-18004536281) her zaman yüklenir; conversion sadece API paid/premium_active + gerçek transaction_id ile."""
     base = _paytr_canonical_base(request)
-    api_base = base
+    # API polling aynı origin'e gitsin (localhost'ta CSP engeli olmasın; production'da da same-origin)
+    api_base = str(request.base_url).rstrip("/")
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
         lang = "tr"
@@ -4003,6 +4250,11 @@ def payment_success_page(
     btn_text = t["success_btn"]
     updating = t.get("success_updating", "Hesabınız güncelleniyor…")
     premium_active = t.get("success_premium_active", "Premium aktif")
+    success_access_ready = t.get("success_access_ready", "Erişiminiz hazır.")
+    success_linked_to_email = t.get("success_linked_to_email", "Rapor ve üyelik şu adrese bağlandı:")
+    success_create_account_cta = t.get("success_create_account_cta", "İsterseniz şifre oluşturarak hesabınızı tamamlayabilirsiniz.")
+    success_go_to_report = t.get("success_go_to_report", "Raporuma git")
+    success_create_account = t.get("success_create_account", "Hesap oluştur")
     pending_bank = t.get("success_pending_bank", "İşlem bankanızdan onay bekliyor olabilir.")
     failed_short = t.get("success_payment_failed_short", "Ödeme tamamlanamadı.")
     btn_report = t.get("success_btn_report", "Rapor sayfasına git")
@@ -4068,7 +4320,7 @@ def payment_success_page(
     )
     report_url = f"{base}/report"
     guest_token_js = json.dumps((guest_token or "").strip() or "")
-    conv_label = (getattr(settings, "google_ads_conversion_label", "") or "").strip() or "RF4SCL78oIYcENnXnYID"
+    conv_label = (getattr(settings, "google_ads_conversion_label", "") or "").strip() or "RF4SCL78oIYcENnXnYlD"
     conversion_send_to = f"{aw_id}/{conv_label}"
     verify_tag_js = "true" if is_verify_tag else "false"
     html = f"""<!DOCTYPE html>
@@ -4093,15 +4345,18 @@ def payment_success_page(
 </style>
 </head>
 <body data-gtag-conversion-page="payment-success" data-merchant-oid="{oid[:64]}">
+  <!-- Conversion fires only when backend confirms paid via /api/orders/status (status=paid or is_premium_active). Not on page load. -->
   <div class="card">
     <div id="iconWrap" class="ok">✓</div>
     <div id="spinnerWrap" class="spinner" style="display:none;"></div>
     <h1 id="titleEl">{title}</h1>
     <p id="statusMsg">{updating}</p>
     <div id="btnWrap" class="btns" style="display:none;">
-      <a id="btnReport" href="{report_url}">{btn_report}</a>
+      <a id="btnReport" href="{report_url}">{success_go_to_report}</a>
+      <a id="btnCreateAccount" href="{base}/?register=1" class="secondary" style="display:none;">{success_create_account}</a>
       <a id="btnRetry" class="secondary" href="{base}/payment?lang={lang}" style="display:none;">{retry_text}</a>
     </div>
+    <p id="successLinkedEmail" style="display:none; margin-top:12px; font-size:0.875rem; color:#94a3b8;"></p>
     <p style="margin-top:16px;"><button type="button" class="btn secondary" id="checkDoneBtn" style="background:transparent;border:2px solid rgba(14,165,164,0.5);color:#94a3b8;">{check_done_btn}</button></p>
   </div>
   <script>
@@ -4114,6 +4369,9 @@ def payment_success_page(
   var baseUrl = {json.dumps(base)};
   var updating = {json.dumps(updating)};
   var premiumActive = {json.dumps(premium_active)};
+  var successAccessReady = {json.dumps(success_access_ready)};
+  var successLinkedToEmail = {json.dumps(success_linked_to_email)};
+  var successCreateAccount = {json.dumps(success_create_account)};
   var pendingBank = {json.dumps(pending_bank)};
   var failedShort = {json.dumps(failed_short)};
   var invalidOidMsg = {json.dumps(invalid_oid_msg)};
@@ -4127,8 +4385,19 @@ def payment_success_page(
   var pollTimer = null;
   var redirectTimer = null;
   var hasTimedOut = false;
-  window.__noryaPaymentDebug = {{ orderId: oid, paymentStatus: null, callbackStatus: "polling", conversionTriggered: false, verifyTag: verifyTag }};
+  window.__noryaPaymentDebug = {{ orderId: oid, paymentStatus: null, callbackStatus: "polling", conversionTriggered: false, verifyTag: verifyTag, storageKey: "norya_conv_" + oid }};
   try {{ console.log("[Norya payment success] orderId=" + oid + ", guest_token=" + (guestToken ? "yes" : "no") + ", verify_tag=" + verifyTag); }} catch(e) {{}}
+  if (oid === "test123" || (String(oid).indexOf("test123_") === 0)) {{
+    try {{ console.log("[Norya] Test mode: use merchant_oid=test123_1 or test123_" + Date.now() + " for unique OID (fresh conversion fire every time, no sessionStorage). Or add ?conv_reset=1 to clear flag for " + oid); }} catch(e) {{}}
+  }}
+  if (typeof window.location !== "undefined" && window.location.search && window.location.search.indexOf("conv_reset=1") !== -1) {{
+    try {{
+      var resetKey = "norya_conv_" + oid;
+      sessionStorage.removeItem(resetKey);
+      window.__noryaPaymentDebug.convResetCleared = resetKey;
+      console.log("[Norya] conv_reset=1: cleared sessionStorage key '" + resetKey + "'. Conversion will FIRE on this load if status=paid. (Remove ?conv_reset=1 for normal behaviour.)");
+    }} catch(e) {{}}
+  }}
 
   function showSpinner(show) {{
     document.getElementById("spinnerWrap").style.display = show ? "block" : "none";
@@ -4161,6 +4430,8 @@ def payment_success_page(
         showSpinner(false);
         setStatus(updating + " (" + timeoutMsg + ")");
         showButtons(true, false);
+        window.__noryaPaymentDebug.conversionNotFiredReason = "timeout";
+        try {{ console.log("[Norya] Google Ads conversion NOT fired: timeout before paid (only paid orders trigger conversion)"); }} catch(e) {{}}
         try {{ console.log("[Norya payment success] payment status timeout (auto)"); }} catch(e) {{}}
       }}
       return;
@@ -4170,9 +4441,12 @@ def payment_success_page(
       start = now;
       hasTimedOut = false;
     }}
-    try {{ console.log("[Norya payment success] polling request started", {{ orderId: oid, manual: !!isManual }}); }} catch(e) {{}}
-    fetch(apiBase + "/api/orders/status?merchant_oid=" + encodeURIComponent(oid))
+    var statusUrl = apiBase + "/api/orders/status?merchant_oid=" + encodeURIComponent(oid);
+    try {{ console.log("[Norya] orders status request sent", {{ url: statusUrl, orderId: oid }}); }} catch(e) {{}}
+    try {{ console.log("[Norya] Network: look for GET request to url above (filter: 'orders/status' or 'merchant_oid')"); }} catch(e) {{}}
+    fetch(statusUrl)
       .then(function(r) {{
+        try {{ console.log("[Norya] orders status response received", {{ status: r.status, ok: r.ok, url: r.url }}); }} catch(e) {{}}
         if (r.status === 400 || r.status === 422) {{
           stopPolling();
           showSpinner(false);
@@ -4183,49 +4457,95 @@ def payment_success_page(
         return r.status === 404 ? null : r.json();
       }})
       .then(function(d) {{
-        if (d && d.__invalidOid) return;
+        if (d && typeof d.status !== "undefined") {{
+          try {{ console.log("[Norya] orders status response body", {{ status: d.status, merchant_oid: d.merchant_oid }}); }} catch(e) {{}}
+        }}
+        if (d && d.__invalidOid) {{
+          window.__noryaPaymentDebug.conversionNotFiredReason = "invalid_merchant_oid";
+          try {{ console.log("[Norya] Google Ads conversion NOT fired: invalid or missing merchant_oid"); }} catch(e) {{}}
+          return;
+        }}
         if (!d) {{ setStatus(updating); return; }}
         if (d.status === "paid" || d.is_premium_active) {{
           try {{ console.log("[Norya payment success] payment status=paid"); }} catch(e) {{}}
           stopPolling();
           showSpinner(false);
-          setStatus(premiumActive + " ✓", true);
+          setStatus(successAccessReady + " ✓", true);
+          var linkedEl = document.getElementById("successLinkedEmail");
+          var btnCreate = document.getElementById("btnCreateAccount");
+          if (d.customer_email && linkedEl && btnCreate) {{
+            linkedEl.textContent = successLinkedToEmail + " " + d.customer_email;
+            linkedEl.style.display = "block";
+            btnCreate.href = baseUrl + "/?register=1";
+            btnCreate.textContent = successCreateAccount;
+            btnCreate.style.display = "inline-block";
+          }}
           showButtons(true, false);
           window.__noryaPaymentDebug.paymentStatus = d.status || "paid";
-          var txId = d.merchant_oid || oid;
+          var txId = (d.merchant_oid && String(d.merchant_oid).trim()) ? String(d.merchant_oid).trim() : oid;
           var val = (typeof d.total_amount_eur === "number") ? d.total_amount_eur : 0;
+          var currency = (d.currency && typeof d.currency === "string") ? d.currency.trim() : "EUR";
           var storageKey = "norya_conv_" + txId;
           var alreadyFired = false;
           try {{ alreadyFired = sessionStorage.getItem(storageKey) === "1"; }} catch(e) {{}}
           window.__noryaPaymentDebug.send_to = conversionSendTo;
-          window.__noryaPaymentDebug.condition = "status=paid_or_premium";
+          window.__noryaPaymentDebug.condition = "status=paid_only";
+          window.__noryaPaymentDebug.storageKey = storageKey;
+          window.__noryaPaymentDebug.alreadyFiredFromSession = alreadyFired;
           if (verifyTag) {{
             try {{
               var gtagDefined = typeof window.gtag === "function";
               var dl = window.dataLayer || [];
               console.log("[Norya verify_tag] conversion NOT fired (verify_tag=1). gtag defined:", gtagDefined, "dataLayer length:", dl.length, "send_to:", conversionSendTo);
             }} catch(e) {{ console.warn("[Norya verify_tag]", e); }}
-          }} else if (!window.__noryaConversionFired && !alreadyFired) {{
+          }} else if (d.status === "paid" && !window.__noryaConversionFired && !alreadyFired) {{
+            try {{ console.log("[Norya] conversion event dispatch start", {{ send_to: conversionSendTo, transaction_id: txId, value: val, currency: currency }}); }} catch(e) {{}}
             if (typeof gtag === "function") {{
               window.__noryaConversionFired = true;
-              gtag("event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }});
+              gtag("event", "conversion", {{ send_to: conversionSendTo, value: val, currency: currency, transaction_id: txId }});
+              try {{ console.log("[Norya] conversion event dispatch attempted (gtag)", {{ send_to: conversionSendTo }}); }} catch(e) {{}}
               try {{ sessionStorage.setItem(storageKey, "1"); }} catch(e) {{}}
+              try {{ console.log("[Norya] already_fired set to true", {{ storageKey: storageKey }}); }} catch(e) {{}}
               window.__noryaPaymentDebug.conversionTriggered = true;
-              try {{ console.log("[Norya] Google Ads conversion fired", {{ send_to: conversionSendTo, orderId: txId, value: val, currency: "EUR" }}); }} catch(e) {{}}
+              window.__noryaPaymentDebug.value = val;
+              window.__noryaPaymentDebug.currency = currency;
+              window.__noryaPaymentDebug.transaction_id = txId;
+              try {{
+                console.log("[Norya] Google Ads conversion FIRED — event sent to Google Ads.", {{ send_to: conversionSendTo, transaction_id: txId, value: val, currency: currency }});
+                console.log("[Norya] Network: conversion request URL pattern — filter by 'googleadservices.com/pagead/conversion' or 'doubleclick.net/pagead/conversion' (GET, ~1-2s after this log).");
+              }} catch(e) {{}}
             }} else {{
               window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push(["event", "conversion", {{ send_to: conversionSendTo, value: val, currency: "EUR", transaction_id: txId }}]);
+              window.dataLayer.push(["event", "conversion", {{ send_to: conversionSendTo, value: val, currency: currency, transaction_id: txId }}]);
+              try {{ console.log("[Norya] conversion event dispatch attempted (dataLayer push, gtag not ready)"); }} catch(e) {{}}
               try {{ sessionStorage.setItem(storageKey, "1"); }} catch(e) {{}}
+              try {{ console.log("[Norya] already_fired set to true", {{ storageKey: storageKey }}); }} catch(e) {{}}
               window.__noryaConversionFired = true;
               window.__noryaPaymentDebug.conversionTriggered = true;
-              try {{ console.log("[Norya] Google Ads conversion queued (gtag not ready)", {{ send_to: conversionSendTo }}); }} catch(e) {{}}
+              window.__noryaPaymentDebug.value = val;
+              window.__noryaPaymentDebug.currency = currency;
+              window.__noryaPaymentDebug.transaction_id = txId;
+              try {{
+                console.log("[Norya] Google Ads conversion QUEUED — event in dataLayer; gtag will send when loaded. Network: filter 'googleadservices.com/pagead/conversion' or 'doubleclick.net/pagead/conversion'.");
+              }} catch(e) {{}}
             }}
             try {{
               window.dataLayer = window.dataLayer || [];
-              window.dataLayer.push({{ event: "purchase", value: val, currency: "EUR", transaction_id: txId }});
+              window.dataLayer.push({{ event: "purchase", value: val, currency: currency, transaction_id: txId }});
             }} catch(e) {{}}
+          }} else if (d.status !== "paid") {{
+            window.__noryaPaymentDebug.conversionNotFiredReason = "status_not_paid";
+            try {{ console.log("[Norya] Google Ads conversion NOT fired: status is not paid (purchase conversion only when status=paid)", {{ status: d.status }}); }} catch(e) {{}}
           }} else {{
-            try {{ console.log("[Norya] Google Ads conversion skipped", {{ reason: alreadyFired ? "already_fired" : "noryaConversionFired_set", send_to: conversionSendTo }}); }} catch(e) {{}}
+            window.__noryaPaymentDebug.conversionSkippedReason = alreadyFired ? "already_sent_this_session" : "already_sent_this_page";
+            if (alreadyFired) {{
+              try {{
+                console.log("[Norya] Google Ads conversion SKIPPED — already sent in this session for this order.", {{ storageKey: storageKey, reason: "sessionStorage set on a previous load" }});
+                console.log("[Norya] To see FIRED again (e.g. for testing): add ?conv_reset=1 to the URL and reload, or use a new incognito/session.");
+              }} catch(e) {{}}
+            }} else {{
+              try {{ console.log("[Norya] Google Ads conversion SKIPPED — already sent on this page load (duplicate prevention).", {{ send_to: conversionSendTo }}); }} catch(e) {{}}
+            }}
           }}
           // Test akışı: test123 için otomatik yönlendirme yapma; kullanıcı success ekranında kalır.
           if (oid === "test123") {{
@@ -4242,6 +4562,9 @@ def payment_success_page(
           showSpinner(false);
           setStatus(failedShort);
           showButtons(false, true);
+          window.__noryaPaymentDebug.paymentStatus = "failed";
+          window.__noryaPaymentDebug.conversionNotFiredReason = "status_failed";
+          try {{ console.log("[Norya] Google Ads conversion NOT fired: payment status=failed (only paid orders trigger conversion)"); }} catch(e) {{}}
           return;
         }}
         try {{ console.log("[Norya payment success] payment status pending", d && d.status); }} catch(e) {{}}

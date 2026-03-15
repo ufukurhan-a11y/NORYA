@@ -2078,6 +2078,9 @@
             <input type="hidden" id="email" value="{{ user_email }}">
             <input type="hidden" id="name" value="{{ user_name }}">
             {% endif %}
+            {% if not user_logged_in %}
+            <p class="summary-no-account-note" style="font-size:0.8125rem;color:var(--text-muted);margin-top:10px;line-height:1.45;">{{ t.get("checkout_no_account_required", "No account required to pay.") }} {{ t.get("checkout_email_access_note", "Your purchase will be linked to your email.") }}</p>
+            {% endif %}
             <p class="error-msg" id="error-msg"></p>
             <div class="premium-checkout-block" role="region" aria-label="{{ t.aria_payment_security }}">
               <p class="premium-checkout-trust">

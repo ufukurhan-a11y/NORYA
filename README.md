@@ -83,6 +83,24 @@ uvicorn app.main:app --reload
 
 Frontend `static/index.html` tek sayfa: mor tema, hero, “Nasıl çalışır”, giriş/kayıt modalleri ve tahlil metni analiz kutusu. [Kantesti](https://www.kantesti.net/tr/) benzeri yapıdadır.
 
+## Test raporu
+
+Testler pytest ile çalışır; sonuçlar **HTML rapor** olarak `test-reports/report.html` dosyasına yazılır.
+
+**Raporu görmek için:**
+
+1. **Uygulama çalışırken tarayıcıdan:**  
+   Testleri bir kez çalıştırdıktan sonra: **http://127.0.0.1:8000/dev/test-report**  
+   (Sadece development ortamında açılır; production'da 404.)
+
+2. **Raporu oluşturup dosyayı açmak:**  
+   ```bash
+   ./scripts/run_tests_with_report.sh
+   open test-reports/report.html
+   ```
+
+Sadece testleri çalıştırmak: `pytest` (rapor yine `test-reports/report.html`'e yazılır).
+
 ## SQLite veritabanı için yedek alma
 
 Geliştirme ortamında SQLite (`norya.db`) kullanıyorsan, projede basit bir yedekleme script’i var.

@@ -35,6 +35,8 @@ class AnalyzeResponse(BaseModel):
     trend: dict | None = None  # { dates, ldl, glucose, crp } veya null
     ui_hints: UiHintsSchema | None = None  # locked -> blur + Upgrade CTA
     pdf: PdfInfoSchema | None = None  # template: premium|basic, available
+    # Paket tipi: "single" | "monthly" | "yearly" — sonuç hangi planla üretildi (feature gating altyapısı; UI değişmez)
+    plan_type: str | None = None
 
 
 class UploadJsonRequest(BaseModel):
@@ -61,3 +63,4 @@ class AnalysisDetail(BaseModel):
     created_at: str
     doctor_notes: str | None = None
     is_favorite: bool = False
+    plan_type: str | None = None  # "single" | "monthly" | "yearly" — sonuç ekranı modül görünürlüğü için

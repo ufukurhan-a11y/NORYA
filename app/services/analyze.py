@@ -188,6 +188,17 @@ Kurallar:
 - Dil: Tüm yanıtı SADECE hedef dilde yaz (başlıklar dahil).
 - Teşhis önerisi veya kesin ifade kullanma. Bilgilendirme amaçlı olduğunu vurgula."""
 
+# Single plan: kullanıcı tek seferlik analiz aldığında açıklama kalitesi premium olsun — kısa etiket değil, anlaşılır paragraf/madde
+SINGLE_PLAN_EXPLANATION_PROMPT = """Verilen labs_norm ve risk_summary ile hastaya yönelik, anlaşılır ve güven veren bir yorum yaz. Bu rapor tek seferlik analiz paketi kullanıcısına sunulacak; kısa veya yüzeysel etiketler kullanma.
+
+Zorunlu kurallar:
+- Dil: Tüm yanıtı SADECE hedef dilde yaz (başlıklar dahil). Jargon veya korkutucu ifade kullanma. Teşhis koyma.
+- Her bölüm gerçekten bilgilendirici olsun: "Normal.", "Stable.", "Monitor." gibi tek başına bırakma. Altında mutlaka 2–4 cümle veya eşdeğer maddelerle ne anlama geldiğini, neyle birlikte düşünülmesi gerektiğini ve neden takip edilebileceğini açıkla.
+- Özet: En az 4–5 cümle (veya eşdeğer maddeler). Tahlilin genel tablosunu, hangi değerlerin referansta olduğunu, hangi alanlarda dikkat edilmesi gerektiğini sade dilde anlat. Kullanıcı "bu sonuç ne anlama geliyor?" sorusuna cevap almalı.
+- Olası nedenler: Varsa her dışarıda kalan parametre için 1–2 cümle; tek kelime veya tek satır etiket yeterli değil. Olası nedenleri kısa ama anlamlı şekilde açıkla.
+- Öneriler: 5–8 uygulanabilir madde. Beslenme, yaşam tarzı, ne zaman hekime gidilmeli konularında net ve somut ifadeler. Genel sözlerle şişirme; her madde gerçekten bilgilendirici olsun.
+- Gereksiz tekrar veya doldurma cümleleri yazma. Kısa ama anlamlı, premium his veren bir rapor hedefleniyor."""
+
 
 def ai_generate_explanation(
     risk_summary: dict,
@@ -199,6 +210,7 @@ def ai_generate_explanation(
     """
     Modele sadece labs_norm + risk_summary + plan + lang verir.
     Returns: (explanation_text, usage_dict). explanation = kısa, madde madde özet/neden/öneriler.
+    Single plan için daha açıklayıcı, 4-5 cümle seviyesinde premium açıklama üretilir.
     """
     import json
     lang_instruction = _language_instruction(lang)
@@ -211,16 +223,21 @@ def ai_generate_explanation(
         "risk_summary": risk_summary,
         "plan": plan,
     }
+    base_prompt = AI_EXPLANATION_PROMPT
+    plan_lower = (plan or "").strip().lower()
+    if plan_lower == "single":
+        base_prompt = SINGLE_PLAN_EXPLANATION_PROMPT
     prompt = (
-        lang_instruction + "\n\n" + AI_EXPLANATION_PROMPT + "\n\n"
+        lang_instruction + "\n\n" + base_prompt + "\n\n"
         "Input (JSON):\n" + json.dumps(payload, ensure_ascii=False, indent=0)
     )
 
+    max_tokens = 2048 if plan_lower == "single" else 1024
     def _create(client: OpenAI):
         return _openai_safe_call(lambda: client.chat.completions.create(
             model="gpt-4o-mini",
             messages=[{"role": "user", "content": prompt}],
-            max_tokens=1024,
+            max_tokens=max_tokens,
         ))
 
     try:

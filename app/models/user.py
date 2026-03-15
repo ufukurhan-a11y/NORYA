@@ -16,3 +16,4 @@ class User(SQLModel, table=True):
     created_at: datetime | None = Field(default_factory=datetime.utcnow)
     is_banned: bool = False
     last_login_at: datetime | None = None
+    account_claimed_at: datetime | None = None  # None = guest (no password set by user); set when they register/claim
