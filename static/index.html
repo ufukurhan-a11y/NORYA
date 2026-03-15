@@ -34,22 +34,32 @@
   <meta name="twitter:title" content="NoryaAI — Kan Tahlili Analizi" />
   <meta name="twitter:description" content="Laboratuvar sonuçlarınızı anlaşılır dilde açıklayın." />
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"NoryaAI","email":"support@noryaai.com","telephone":"+90 507 170 35 64","address":{"@type":"PostalAddress","streetAddress":"31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4","addressLocality":"Banaz","addressRegion":"Uşak","addressCountry":"TR"},"areaServed":[{"@type":"Country","name":"Türkiye"},{"@type":"Country","name":"Germany"}]}
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NoryaAI",
+    "url": "https://noryaai.com",
+    "email": "support@noryaai.com",
+    "telephone": "+90 507 170 35 64",
+    "address": {
+      "@type": "PostalAddress",
+      "streetAddress": "31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4",
+      "addressLocality": "Banaz",
+      "addressRegion": "Uşak",
+      "addressCountry": "TR"
+    },
+    "areaServed": [
+      {"@type": "Country", "name": "Türkiye"},
+      {"@type": "Country", "name": "Germany"}
+    ]
+  }
   </script>
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
     "@type": "WebSite",
     "name": "NoryaAI",
-    "url": "https://noryaai.com",
-    "potentialAction": {
-      "@type": "SearchAction",
-      "target": {
-        "@type": "EntryPoint",
-        "urlTemplate": "https://noryaai.com/blog?q={search_term_string}"
-      },
-      "query-input": "required name=search_term_string"
-    }
+    "url": "https://noryaai.com"
   }
   </script>
   <!-- NORYA_GTAG_INJECT -->
@@ -2825,12 +2835,12 @@
   <!-- Enterprise glass header: sticky + compact on scroll + pill nav + premium CTA -->
   <header id="main-header" class="header elite-header">
     <div class="header-inner elite-header__inner">
-      <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="Norya Ana Sayfa">
-        <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-8 w-auto" width="32" height="32" loading="eager" />
+      <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="NoryaAI Ana Sayfa">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
       </a>
       <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
         <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
-        <a href="#nasil-calisir" class="nav-link" data-nav="nasil-calisir" data-i18n="nav_how">Nasıl Çalışır</a>
+        <a href="/how-it-works" class="nav-link" data-nav="how-it-works" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
         <a href="/pricing" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Kurumsal</a>
@@ -2904,7 +2914,7 @@
       <div class="drawer-section drawer-section--nav">
         <a href="#analyze-section" onclick="closeMobileDrawer(); openAnalyze(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
         <a href="#hakkimizda" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
-        <a href="#nasil-calisir" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
+        <a href="/how-it-works" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="#yorumlar" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_reviews">Yorumlar</a>
         <a href="/pricing" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_pricing">Fiyatlandırma</a>
         <a href="/kurumsal" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_corporate">Kurumsal</a>
@@ -2927,6 +2937,7 @@
       <div class="hero-v2-grid">
         <!-- Left: headline, subheadline, CTAs, trust strip -->
         <div class="hero-v2-copy">
+          <p class="hero-v2-brand text-sm sm:text-base opacity-90 mb-1" aria-hidden="false">NoryaAI</p>
           <p class="hero-v2-sub" data-i18n="hero_sub">Kan tahlilinizi yükleyin. Yapay zekâ dakikalar içinde anlaşılır rapor üretsin.</p>
           <h1 class="hero-v2-title" data-i18n="hero_title">Kan tahlilinizi yükleyin — anlaşılır raporu dakikalar içinde alın</h1>
           <p class="hero-v2-desc" data-i18n="hero_desc">Sonuçlarınızı yükleyin; yapay zekâ analiz eder. Sağlık skoru, işaretli değerler ve doktora götürebileceğiniz PDF rapor — hızlı, güvenli, şeffaf.</p>
@@ -5785,8 +5796,9 @@
     <div class="premium-wrap">
       <div class="flex flex-col sm:flex-row flex-wrap items-center justify-center gap-4 sm:gap-8 text-sm text-accent-600 dark:text-accent-400">
         <a href="/blog" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium" data-i18n="nav_blog">Blog</a>
-        <a href="/tr/kan-tahlili-sonucu" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium seo-guide-link" data-i18n="footer_guide">Kan tahlili rehberi</a>
+        <a href="/how-it-works" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium" data-i18n="nav_how">Nasıl Çalışır</a>
         <a href="/pricing" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium" data-i18n="nav_pricing">Preise</a>
+        <a href="/tr/kan-tahlili-sonucu" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium seo-guide-link" data-i18n="footer_guide">Kan tahlili rehberi</a>
         <a href="/legal/gizlilik-politikasi" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium legal-lang-link" data-i18n="footer_privacy">Gizlilik</a>
         <a href="/legal/mesafeli-satis-sozlesmesi" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium legal-lang-link" data-i18n="footer_terms">Kullanım Koşulları</a>
         <a href="/legal/iletisim" class="hover:text-[#0EA5A4] dark:hover:text-[#5eead4] font-medium" data-i18n="nav_contact">Destek / İletişim</a>
