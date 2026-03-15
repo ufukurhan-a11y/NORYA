@@ -25,6 +25,9 @@
   {% if item_list_schema_json %}
   <script type="application/ld+json">{{ item_list_schema_json|safe }}</script>
   {% endif %}
+  {% if breadcrumb_schema_json %}
+  <script type="application/ld+json">{{ breadcrumb_schema_json|safe }}</script>
+  {% endif %}
   <style>
     :root {
       --blog-primary: #0EA5A4;

@@ -1400,7 +1400,17 @@ def blog_index(request: Request, lang: str):
         ensure_ascii=False,
         indent=2,
     )
+    # SEO: BreadcrumbList for blog index (Ana Sayfa > Blog)
     base_ui = get_base_ui(lang)
+    blog_index_breadcrumb = [
+        {"@type": "ListItem", "position": 1, "name": base_ui.get("home_link", BRAND_NAME), "item": f"{base_url}/{lang}"},
+        {"@type": "ListItem", "position": 2, "name": ui.get("back_to_blog", "Blog"), "item": f"{base_url}/{lang}/blog"},
+    ]
+    breadcrumb_schema_json = json.dumps(
+        {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": blog_index_breadcrumb},
+        ensure_ascii=False,
+        indent=2,
+    )
     return templates.TemplateResponse(
         "blog/index.html",
         {
@@ -1418,6 +1428,7 @@ def blog_index(request: Request, lang: str):
             "og_locale": og_locale,
             "hreflang_alternates": hreflang_alternates,
             "item_list_schema_json": item_list_schema_json,
+            "breadcrumb_schema_json": breadcrumb_schema_json,
             "premium_langs": BLOG_LANGS_PREMIUM,
         },
     )

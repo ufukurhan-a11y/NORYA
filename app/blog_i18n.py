@@ -5654,7 +5654,8 @@ def _article_mpv_high_low() -> Article:
 def _article_globulin_high_low() -> Article:
     """Globulin high or low meaning — 9 dil."""
     published = date(2026, 3, 13)
-    cover = "/static/images/blog/globulin-hero.png"
+    # Hero: globulin-hero.png yoksa total-protein (protein paneli) fallback
+    cover = "/static/images/blog/total-protein-hero.png"
     cat = {"tr": "Biyobelirteçler", "en": "Biomarkers", "es": "Biomarcadores", "de": "Biomarker", "fr": "Biomarqueurs", "it": "Biomarcatori", "he": "ביומרקרים", "hi": "बायोमार्कर", "ar": "المؤشرات الحيوية"}
     titles = {"tr": "Globulin yüksek veya düşük ne anlama gelir?", "en": "Globulin high or low: what it means", "es": "Globulina alta o baja: qué significa", "de": "Globulin zu hoch oder zu niedrig: Was bedeutet das?", "fr": "Globuline haute ou basse : qu'est-ce que ça indique ?", "it": "Globuline alte o basse: cosa significa?", "he": "גלובולין גבוה או נמוך: מה המשמעות?", "hi": "ग्लोब्युलिन हाई या लो का क्या मतलब?", "ar": "الغلوبولين مرتفع أو منخفض: ماذا يعني؟"}
     subs = {"tr": "Globulin, total proteinin albümin dışındaki kısmıdır; yüksek veya düşük tek başına teşhis değildir, hekimle yorumlanır.", "en": "Globulin is the non-albumin part of total protein; high or low is not a diagnosis on its own—your doctor interprets it with other results.", "es": "La globulina es la parte no albúmina de las proteínas totales; alto o bajo no es un diagnóstico por sí solo.", "de": "Globuline sind der Teil des Gesamteiweißes neben Albumin; zu hoch oder zu niedrig ist keine Diagnose für sich.", "fr": "Les globulines sont la partie des protéines totales autre que l'albumine ; un taux haut ou bas seul ne fait pas un diagnostic.", "it": "Le globuline sono la parte delle proteine totali diversa dall'albumina; alto o basso da solo non è una diagnosi.", "he": "גלובולין הוא החלק של חלבון כללי שאינו אלבומין; גבוה או נמוך לבדו אינו אבחנה.", "hi": "ग्लोब्युलिन टोटल प्रोटीन का वह हिस्सा है जो ऐल्ब्यूमिन नहीं है; हाई या लो अकेले निदान नहीं।", "ar": "الغلوبولين هو جزء البروتين الكلي غير الألبومين؛ ارتفاع أو انخفاض وحده ليس تشخيصاً."}
@@ -5675,6 +5676,75 @@ def _article_globulin_high_low() -> Article:
     return _make_short_article("globulin-high-or-low", "globulin-high-or-low", published, cover, 5, cat, titles, subs, ex, seo_t, seo_d, c, icon="/static/images/blog/icons/globulin-high-or-low.svg")
 
 
+def _article_low_wbc() -> Article:
+    """Low WBC: common causes explained — 9 dil, full body."""
+    from app.blog_article_low_wbc_content import get_low_wbc_sections_by_lang, get_low_wbc_faq_schema_qa
+    published = date(2026, 3, 14)
+    cover = "/static/images/blog/lymphocytes-hero.png"
+    slugs = {l: "low-wbc-meaning" for l in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
+    cat = {"tr": "Kan sayımı", "en": "Complete blood count", "es": "Hemograma", "de": "Blutbild", "fr": "Numération sanguine", "it": "Emocromo", "he": "ספירת דם", "hi": "ब्लड काउंट", "ar": "تحليل الدم"}
+    titles = {"tr": "Düşük WBC: yaygın nedenler", "en": "Low WBC: common causes explained", "es": "WBC bajo: causas frecuentes", "de": "Leukozyten niedrig: häufige Ursachen", "fr": "Globules blancs bas : causes fréquentes", "it": "Globuli bianchi bassi: cause comuni", "he": "WBC נמוך: סיבות נפוצות", "hi": "लो WBC: आम कारण", "ar": "انخفاض كريات الدم البيضاء: الأسباب الشائعة"}
+    subtitles = {"tr": "Düşük beyaz küre tek başına teşhis değildir; nedenler hekimle değerlendirilir.", "en": "A low white blood cell count alone is not a diagnosis; causes are evaluated by your doctor.", "es": "Un recuento bajo de glóbulos blancos por sí solo no es un diagnóstico; el médico evalúa las causas.", "de": "Ein niedriger Leukozytenwert allein ist keine Diagnose; die Ursachen beurteilt der Arzt.", "fr": "Un taux bas de globules blancs seul ne fait pas un diagnostic ; le médecin évalue les causes.", "it": "Un valore basso di globuli bianchi da solo non è una diagnosi; le cause le valuta il medico.", "he": "ספירת דם לבנים נמוכה לבדה אינה אבחנה; הסיבות יוערכו על ידי הרופא.", "hi": "लो WBC अकेले निदान नहीं; कारण डॉक्टर द्वारा मूल्यांकित किए जाते हैं।", "ar": "انخفاض عدد الكريات البيضاء وحده ليس تشخيصاً؛ الأسباب يقيّمها الطبيب."}
+    excerpts = {"tr": "Düşük WBC birçok nedene bağlı olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "Low WBC can have many causes; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "El WBC bajo puede deberse a muchas causas; no es un diagnóstico por sí solo. El médico lo interpreta con el resto.", "de": "Niedriges WBC kann viele Ursachen haben; allein keine Diagnose. Der Arzt wertet es mit den übrigen Befunden.", "fr": "Un WBC bas peut avoir de nombreuses causes ; ce n'est pas un diagnostic en soi. Le médecin l'interprète avec le bilan.", "it": "Un WBC basso può avere molte cause; non è una diagnosi da solo. Il medico lo valuta con il resto.", "he": "WBC נמוך יכול לנבוע מסיבות רבות; אינו אבחנה לבדו. הרופא יפרש עם שאר התוצאות.", "hi": "लो WBC के कई कारण हो सकते हैं; अकेले निदान नहीं। डॉक्टर बाकी रिज़ल्ट के साथ व्याख्या करेंगे।", "ar": "انخفاض WBC قد يكون لأسباب كثيرة؛ ليس تشخيصاً بذاته. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Düşük WBC nedenleri: bilgilendirme amaçlı.", "en": "Low WBC causes explained. For information only.", "es": "WBC bajo: causas. Solo informativo.", "de": "Leukozyten niedrig: Ursachen. Nur zur Information.", "fr": "Globules blancs bas : causes. À titre informatif.", "it": "Globuli bianchi bassi: cause. Solo informativo.", "he": "WBC נמוך: סיבות. למידע בלבד.", "hi": "लो WBC के कारण. केवल सूचनार्थ।", "ar": "انخفاض كريات الدم البيضاء: الأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Düşük WBC beyaz küre — Norya", "en": "Low WBC white blood cells — Norya", "es": "WBC bajo glóbulos blancos — Norya", "de": "Leukozyten niedrig — Norya", "fr": "Globules blancs bas — Norya", "it": "Globuli bianchi bassi — Norya", "he": "WBC נמוך — Norya", "hi": "लो WBC — Norya", "ar": "انخفاض كريات الدم البيضاء — Norya"}
+    sections_by_lang = get_low_wbc_sections_by_lang()
+    faq_schema_qa = get_low_wbc_faq_schema_qa()
+    return Article(
+        id="low-wbc-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+        icon="/static/images/blog/icons/low-wbc-meaning.svg",
+    )
+
+
+def _article_high_wbc() -> Article:
+    """High WBC: infection or inflammation? — 9 dil, full body."""
+    from app.blog_article_high_wbc_content import get_high_wbc_sections_by_lang, get_high_wbc_faq_schema_qa
+    published = date(2026, 3, 14)
+    # Hero: high-wbc-hero.png eklenene kadar WBC ile uyumlu fallback
+    cover = "/static/images/blog/lymphocytes-hero.png"
+    slugs = {l: "high-wbc-meaning" for l in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
+    cat = {"tr": "Kan sayımı", "en": "Complete blood count", "es": "Hemograma", "de": "Blutbild", "fr": "Numération sanguine", "it": "Emocromo", "he": "ספירת דם", "hi": "ब्लड काउंट", "ar": "تحليل الدم"}
+    titles = {"tr": "WBC yüksek: enfeksiyon mu, iltihap mı?", "en": "High WBC: infection or inflammation?", "es": "Glóbulos blancos altos: ¿infección o inflamación?", "de": "Leukozyten erhöht: Infektion oder Entzündung?", "fr": "Globules blancs élevés : infection ou inflammation ?", "it": "Globuli bianchi alti: infezione o infiammazione?", "he": "לויקוציטים גבוהים: זיהום או דלקת?", "hi": "हाई WBC: इन्फेक्शन या इन्फ्लेमेशन?", "ar": "ارتفاع كريات الدم البيضاء: عدوى أم التهاب؟"}
+    subtitles = {"tr": "Beyaz küre yüksekliği tek başına teşhis değildir; enfeksiyon ve iltihap ayrımı hekimle yapılır.", "en": "A high white blood cell count alone is not a diagnosis; infection vs inflammation is interpreted by your doctor.", "es": "Un recuento alto de glóbulos blancos por sí solo no es un diagnóstico; el médico interpreta infección vs inflamación.", "de": "Ein erhöhter Leukozytenwert allein ist keine Diagnose; Infektion vs. Entzündung beurteilt der Arzt.", "fr": "Un taux élevé de globules blancs seul ne fait pas un diagnostic ; le médecin interprète infection ou inflammation.", "it": "Un valore alto di globuli bianchi da solo non è una diagnosi; infezione vs infiammazione lo valuta il medico.", "he": "ספירת דם לבנים גבוהה לבדה אינה אבחנה; זיהום מול דלקת יפורש על ידי הרופא.", "hi": "हाई WBC अकेले निदान नहीं; इन्फेक्शन बनाम इन्फ्लेमेशन डॉक्टर समझाते हैं।", "ar": "ارتفاع عدد الكريات البيضاء وحده ليس تشخيصاً؛ الطبيب يفسر العدوى مقابل الالتهاب."}
+    excerpts = {"tr": "WBC yüksekliği enfeksiyon veya iltihap gibi nedenlere bağlı olabilir; tek başına teşhis değildir, hekim diğer sonuçlarla yorumlar.", "en": "High WBC can be due to infection or inflammation; it is not a diagnosis on its own—your doctor interprets it with other results.", "es": "Un WBC alto puede deberse a infección o inflamación; no es un diagnóstico por sí solo; el médico lo interpreta con el resto.", "de": "Erhöhter WBC kann von Infektion oder Entzündung kommen; allein keine Diagnose—der Arzt wertet mit den übrigen Befunden.", "fr": "Un taux de GB élevé peut être dû à une infection ou une inflammation ; ce n'est pas un diagnostic en soi—le médecin l'interprète avec le bilan.", "it": "Un WBC alto può dipendere da infezione o infiammazione; non è una diagnosi da solo—il medico lo valuta con il resto.", "he": "WBC גבוה יכול לנבוע מזיהום או דלקת; אינו אבחנה לבדו—הרופא יפרש עם שאר התוצאות.", "hi": "हाई WBC इन्फेक्शन या इन्फ्लेमेशन की वजह से हो सकता है; अकेले निदान नहीं—डॉक्टर बाकी रिज़ल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع WBC قد يكون بسبب عدوى أو التهاب؛ ليس تشخيصاً بذاته—الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "WBC yüksekliği nedenleri: enfeksiyon veya iltihap. Bilgilendirme amaçlı.", "en": "High WBC causes: infection or inflammation. For information only.", "es": "Glóbulos blancos altos: causas. Solo informativo.", "de": "Leukozyten erhöht: Ursachen. Nur zur Information.", "fr": "Globules blancs élevés : causes. À titre informatif.", "it": "Globuli bianchi alti: cause. Solo informativo.", "he": "לויקוציטים גבוהים: סיבות. למידע בלבד.", "hi": "हाई WBC के कारण. केवल सूचनार्थ।", "ar": "ارتفاع كريات الدم البيضاء: الأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "WBC beyaz küre kan tahlili — Norya", "en": "High WBC white blood cells — Norya", "es": "Glóbulos blancos altos — Norya", "de": "Leukozyten erhöht — Norya", "fr": "Globules blancs élevés — Norya", "it": "Globuli bianchi alti — Norya", "he": "לויקוציטים גבוהים — Norya", "hi": "हाई WBC — Norya", "ar": "ارتفاع كريات الدم البيضاء — Norya"}
+    sections_by_lang = get_high_wbc_sections_by_lang()
+    faq_schema_qa = get_high_wbc_faq_schema_qa()
+    return Article(
+        id="high-wbc-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+        icon="/static/images/blog/icons/high-wbc-meaning.svg",
+    )
+
+
 _ARTICLE_MCH_HIGH_LOW = _article_mch_high_low()
 _ARTICLE_MCHC_LOW = _article_mchc_low()
 _ARTICLE_EOSINOPHILS_HIGH = _article_eosinophils_high()
@@ -5684,6 +5754,8 @@ _ARTICLE_CO2_BLOOD_TEST = _article_co2_blood_test()
 _ARTICLE_ANION_GAP_HIGH = _article_anion_gap_high()
 _ARTICLE_MPV_HIGH_LOW = _article_mpv_high_low()
 _ARTICLE_GLOBULIN = _article_globulin_high_low()
+_ARTICLE_HIGH_WBC = _article_high_wbc()
+_ARTICLE_LOW_WBC = _article_low_wbc()
 
 
 # TODO: create dedicated blog posts for "complete blood count explained" and "liver enzyme test explained"
@@ -5730,6 +5802,8 @@ ARTICLES: List[Article] = [
     _ARTICLE_ANION_GAP_HIGH,
     _ARTICLE_MPV_HIGH_LOW,
     _ARTICLE_GLOBULIN,
+    _ARTICLE_HIGH_WBC,
+    _ARTICLE_LOW_WBC,
 ]
 
 
