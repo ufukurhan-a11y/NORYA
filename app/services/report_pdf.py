@@ -10,6 +10,7 @@ from pathlib import Path
 from jinja2 import Environment, FileSystemLoader
 
 from app.charts import overall_score_svg_base64, range_bar_svg_base64, simple_value_bar_svg_base64
+from app.services.lab_parser import parse_biomarkers as parse_biomarkers_from_lab
 from app.services.risk_engine import compute_risk
 
 
@@ -1112,6 +1113,36 @@ BIOMARKER_LINE_RELAXED = re.compile(
 )
 
 
+def _clean_biomarker_name(name: str) -> str:
+    """
+    Test adını sadeleştirir.
+    - Baş/sontaki noktalama ve liste işaretlerini atar (':', '-', '—', '•', '*')
+    - Çok kısa veya tamamen boş kalan isimleri geçersiz sayar
+    """
+    if not name:
+        return ""
+    cleaned = re.sub(r"^[\s:–—\-•*]+", "", name)
+    cleaned = re.sub(r"[\s:–—\-•*]+$", "", cleaned)
+    cleaned = cleaned.strip()
+    if len(cleaned) < 2:
+        return ""
+    return cleaned
+
+
+def _is_value_like_name(name: str) -> bool:
+    """Test adı değil, değer/birim/reference metni gibi görünüyorsa True (kart basılmasın)."""
+    if not name or len(name) > 120:
+        return True
+    s = name.strip()
+    if re.match(r"^\d", s):
+        return True
+    if re.search(r"\bReference\b|Ref\.\s|Referans\s*:\s*", s, re.IGNORECASE):
+        return True
+    if re.search(r"\d+(?:[.,]\d+)?\s*(?:mg/dL|g/dL|mg/L|g/L|ng/mL|mIU/L|mmol/L|U/L)\b", s, re.IGNORECASE):
+        return True
+    return False
+
+
 def _is_section_header(line: str) -> bool:
     """Satır sadece bölüm başlığı mı (Summary, Risk, Values, Diyet, Takviye, Kalp, ...) kontrol et.
     **Parametre adı:** değer. Reference: ... Normal. gibi Values içindeki satırları bölüm başlığı sayma."""
@@ -1122,10 +1153,16 @@ def _is_section_header(line: str) -> bool:
     if not match:
         return False
     title, rest = match.group(1).strip(), (match.group(2) or "").strip()
-    # Values bölümündeki parametre satırı: "14.2 g/dL. Reference: 12-16 g/dL. Normal" — bölüm başlığı DEĞİL
-    if re.search(r"Reference\s*:\s*|Ref\s*:\s*", rest, re.IGNORECASE) or re.search(
+    # Values bölümündeki parametre satırı: değer + birim veya Reference/Normal — bölüm başlığı DEĞİL
+    if re.search(r"Reference\s*:\s*|Ref\s*\.?\s*:\s*", rest, re.IGNORECASE) or re.search(
         r"\b(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır)\s*\.?\s*$", rest, re.IGNORECASE
     ):
+        return False
+    # Sayı + birim (mg/dL, g/L, ng/mL vb.) varsa parametre satırı say
+    if re.search(r"\d+(?:[.,]\d+)?\s*(?:mg/dL|g/dL|mg/L|g/L|ng/mL|mIU/L|mmol/L|U/L)", rest, re.IGNORECASE):
+        return False
+    # Tek kelime sonuç (Negatif, Pozitif vb.) parametre satırı say; bölüm başlığı değil
+    if rest.lower().strip() in ("negatif", "pozitif", "nonreaktif", "reaktif", "negative", "positive"):
         return False
     known = (
         "summary", "özet", "risk indicators", "risk indicator", "dikkat edilmesi gerekenler",
@@ -1212,6 +1249,12 @@ def _status_label(status: str) -> str:
     return tr.get(status, status)
 
 
+def _attention_label(status: str) -> str:
+    """Kart için kısa 'neden dikkat çekti?' etiketi; pill ile uyumlu."""
+    tr = {"normal": "Referans içinde", "border": "Sınırda", "high": "Hafif yüksek", "low": "Hafif düşük"}
+    return tr.get(status, "Referans içinde")
+
+
 def _split_value_unit(raw: str) -> tuple[str, str | None]:
     """Örn. '14.2 g/dL' -> ('14.2', 'g/dL'); '120' -> ('120', None)."""
     raw = (raw or "").strip()
@@ -1228,7 +1271,7 @@ _REF_NUMBERS = re.compile(r"(\d+(?:[.,]\d+)?)")
 
 
 def _parse_reference_range(reference: str | None) -> tuple[float, float] | None:
-    """Referans aralığı string'inden (ref_min, ref_max) döndürür."""
+    """Referans aralığı string'inden (ref_min, ref_max) döndürür. Tek sayı (40-) için None döner."""
     if not reference or not reference.strip():
         return None
     numbers = _REF_NUMBERS.findall(reference.strip().replace(",", "."))
@@ -1242,6 +1285,26 @@ def _parse_reference_range(reference: str | None) -> tuple[float, float] | None:
         return (low, high)
     except ValueError:
         return None
+
+
+def _parse_reference_min_max(reference: str | None) -> tuple[float | None, float | None]:
+    """Referans string'inden (min, max) döndürür. Tek sınır: 40- → (40, None), -100 → (None, 100)."""
+    if not reference or not reference.strip():
+        return (None, None)
+    s = reference.strip().replace(",", ".")
+    numbers = _REF_NUMBERS.findall(s)
+    if not numbers:
+        return (None, None)
+    try:
+        n0 = float(numbers[0])
+        if len(numbers) >= 2:
+            n1 = float(numbers[1])
+            return (min(n0, n1), max(n0, n1))
+        if s.rstrip().endswith("-") or "-" in s and s.index("-") < (s.find(numbers[0]) if numbers else 0):
+            return (n0, None)
+        return (None, n0)
+    except ValueError:
+        return (None, None)
 
 
 def _value_to_float(value_str: str) -> float | None:
@@ -1258,17 +1321,61 @@ def _value_to_float(value_str: str) -> float | None:
         return None
 
 
+def _score_100_from_reference(
+    value_float: float,
+    ref_min: float | None,
+    ref_max: float | None,
+    status: str,
+) -> int:
+    """
+    Referans aralığına göre 0-100 skoru. Kart rengi (yeşil/turuncu/kırmızı) ile uyumlu.
+    """
+    if ref_min is None and ref_max is None:
+        return 100 if status == "normal" else (75 if status == "border" else 50)
+    if ref_min is not None and ref_max is not None and ref_max > ref_min:
+        if ref_min <= value_float <= ref_max:
+            return 100
+        if value_float < ref_min:
+            return max(0, min(99, int(100 * value_float / ref_min))) if ref_min > 0 else 50
+        return max(0, min(99, int(100 * ref_max / value_float)))
+    if ref_min is not None:
+        if value_float >= ref_min:
+            return 100
+        return max(0, min(99, int(100 * value_float / ref_min))) if ref_min > 0 else 50
+    if ref_max is not None:
+        if value_float <= ref_max:
+            return 100
+        return max(0, min(99, int(100 * ref_max / value_float)))
+    return 100 if status == "normal" else 50
+
+
+def _derive_status_from_value_ref(value_float: float, ref_min: float | None, ref_max: float | None) -> str:
+    """Referans aralığına göre durum: high / low / normal."""
+    if ref_max is not None and value_float > ref_max:
+        return "high"
+    if ref_min is not None and value_float < ref_min:
+        return "low"
+    return "normal"
+
+
 def _enrich_biomarker_chart(row: dict) -> None:
-    """Biomarker satırına chart_svg_base64 ekler: referans varsa range bar, yoksa basit değer çubuğu (tüm sonuçlara grafik)."""
+    """Biomarker satırına chart_svg_base64 ve score_100 ekler."""
     ref = _parse_reference_range(row.get("reference"))
+    ref_min, ref_max = _parse_reference_min_max(row.get("reference"))
     value_float = _value_to_float(row.get("value") or "")
     if value_float is None:
         row["chart_svg_base64"] = None
         row["display_min"] = None
         row["display_max"] = None
+        row["score_100"] = 100
         return
     status = row.get("status") or "normal"
+    if ref_min is not None or ref_max is not None:
+        status = _derive_status_from_value_ref(value_float, ref_min, ref_max)
+        row["status"] = status
+        row["status_label"] = _status_label(status)
     status_label = row.get("status_label")
+    row["score_100"] = _score_100_from_reference(value_float, ref_min, ref_max, status)
     if ref is not None:
         ref_min, ref_max = ref
         if ref_max > ref_min:
@@ -1303,6 +1410,78 @@ def _enrich_biomarker_chart(row: dict) -> None:
     row["display_max"] = None
 
 
+# Kartlar için: ne gösterir? — 1 kısa cümle, sade Türkçe, teşhis yok
+_WHAT_IT_SHOWS: dict[str, str] = {
+    "glukoz": "Kanınızdaki şeker düzeyini gösterir.",
+    "glucose": "Kanınızdaki şeker düzeyini gösterir.",
+    "ldl": "Kanda taşınan \"kötü\" kolesterol miktarını gösterir.",
+    "hdl": "Kanda taşınan \"iyi\" kolesterol miktarını gösterir.",
+    "crp": "Vücuttaki iltihap veya enfeksiyon durumunu yansıtır.",
+    "c-reaktif": "Vücuttaki iltihap veya enfeksiyon durumunu yansıtır.",
+    "vitamin d": "Kemik ve bağışıklık için önemli vitaminin vücuttaki düzeyini gösterir.",
+    "d vitamini": "Kemik ve bağışıklık için önemli vitaminin vücuttaki düzeyini gösterir.",
+    "ferritin": "Vücudunuzdaki demir deposunun ne kadar dolu olduğunu gösterir.",
+    "hemoglobin": "Kana kırmızı rengini veren ve oksijen taşıyan maddenin düzeyidir.",
+    "tsh": "Tiroit bezinin ne kadar iyi çalıştığını gösteren hormondur.",
+    "kreatinin": "Böbreklerin kanı ne kadar iyi süzdüğünü gösterir.",
+    "creatinine": "Böbreklerin kanı ne kadar iyi süzdüğünü gösterir.",
+    "alt": "Karaciğer hücrelerinden kana karışan enzim; karaciğer sağlığı hakkında fikir verir.",
+    "ast": "Karaciğer ve kalp gibi dokulardan kana geçen enzimdir.",
+    "ggt": "Karaciğer ve safra yollarından kana geçen enzimdir.",
+    "trigliserid": "Kandaki bir yağ türünün miktarını gösterir.",
+    "triglyceride": "Kandaki bir yağ türünün miktarını gösterir.",
+    "kolesterol": "Kandaki toplam kolesterol miktarını gösterir.",
+    "cholesterol": "Kandaki toplam kolesterol miktarını gösterir.",
+    "hba1c": "Son 2–3 aydaki ortalama kan şekeri düzeyini yansıtır.",
+    "demir": "Kandaki serbest demir miktarını gösterir.",
+    "iron": "Kandaki serbest demir miktarını gösterir.",
+    "b12": "B12 vitamininin kandaki düzeyini gösterir.",
+    "folat": "Folik asit (B9) düzeyini gösterir.",
+    "üre": "Protein metabolizması sonucu oluşan atık maddenin kandaki düzeyidir.",
+    "urea": "Protein metabolizması sonucu oluşan atık maddenin kandaki düzeyidir.",
+}
+
+
+def _normalize_reference_display(ref: str | None) -> str | None:
+    """Yarım referans (40-, 30-) tam gösterim: ≥ 40; bozuksa None."""
+    if not ref or not ref.strip():
+        return None
+    s = ref.strip()
+    m = re.match(r"^(\d+(?:\.\d+)?)\s*-\s*$", s)
+    if m:
+        return "≥ " + m.group(1)
+    return ref if re.search(r"\d", s) else None
+
+
+def _enrich_biomarkers_cards(biomarkers: list[dict]) -> None:
+    """Her biomarker'a what_it_shows, short_comment, short_recommendation, attention_label ekler (kart için)."""
+    for b in biomarkers:
+        ref = b.get("reference")
+        b["reference"] = _normalize_reference_display(ref) if ref else ref
+        name = (b.get("name") or "").strip().lower()
+        status = b.get("status") or "normal"
+        b["attention_label"] = _attention_label(status)
+        status_label = (b.get("status_label") or "").strip()
+        what = ""
+        for key, desc in _WHAT_IT_SHOWS.items():
+            if key in name or name in key:
+                what = desc
+                break
+        if not what:
+            what = "Bu test, ilgili değerin kandaki düzeyini gösterir."
+        b["what_it_shows"] = what
+        if status == "normal":
+            b["short_comment"] = "Değer referans aralığında."
+            b["short_recommendation"] = ""
+        elif status == "border":
+            b["short_comment"] = "Değer sınırda; takip önerilir."
+            b["short_recommendation"] = "Hekiminizle paylaşın; gerekirse tekrar test."
+        else:
+            b["short_comment"] = "Referans dışında; hekim değerlendirmesi önerilir."
+            b["short_recommendation"] = "Hekiminizle görüşün."
+    return
+
+
 def parse_biomarkers(values_block: str) -> list[dict]:
     """Values bölümünden parametre satırlarını parse et. Tüm **Parametre:** değer satırları ve benzeri formatlar alınır."""
     rows: list[dict] = []
@@ -1316,10 +1495,19 @@ def parse_biomarkers(values_block: str) -> list[dict]:
             line = line.lstrip("-•*").strip()
         if not line:
             continue
+        # Tek başına bullet veya sadece sayı/reference satırlarını tamamen at
+        # (test adı çıkarılamayan satır biomarker olarak üretilmesin)
+        has_letter = re.search(r"[A-Za-zığüşöçİĞÜŞÖÇ]", line) is not None
+        has_digit = re.search(r"\d", line) is not None
+        if not (has_letter and has_digit):
+            continue
         # Önce **Parametre:** değer. Reference: ... Normal/Low/High formatı
         m = BIOMARKER_LINE.search(line) or BIOMARKER_LINE_RELAXED.search(line)
         if m:
-            name = m.group(1).strip()
+            raw_name = (m.group(1) or "").strip()
+            name = _clean_biomarker_name(raw_name)
+            if not name:
+                continue
             value_str = (m.group(2) or "").strip()
             if value_str.startswith("**"):
                 value_str = value_str.lstrip("*").strip()
@@ -1341,7 +1529,10 @@ def parse_biomarkers(values_block: str) -> list[dict]:
         # **Parametre:** değer (reference/status yok)
         simple = re.match(r"\*\*([^*]+)\*?\s*:\s*(.+)", line)
         if simple:
-            name = simple.group(1).strip()
+            raw_name = (simple.group(1) or "").strip()
+            name = _clean_biomarker_name(raw_name)
+            if not name:
+                continue
             value, unit = _split_value_unit(simple.group(2))
             key = name.lower()
             if key not in seen_names:
@@ -1355,11 +1546,15 @@ def parse_biomarkers(values_block: str) -> list[dict]:
                     "status_label": "—",
                 })
             continue
-        # Parametre adı: değer birim (yıldızsız satır; Reference: veya Normal/Düşük/Yüksek varsa status çıkar)
-        plain = re.match(r"^([A-Za-z0-9ığüşöçİĞÜŞÖÇ\s\-/]+)\s*:\s*(.+)", line)
+        # Parametre adı: değer birim (yıldızsız satır; ':' veya '—' ile ayrılmış olabilir; Reference: veya Normal/Düşük/Yüksek varsa status çıkar)
+        plain = re.match(
+            r"^([A-Za-z0-9ığüşöçİĞÜŞÖÇ\s\-/]+?)\s*[:\-–—]\s*(.+)",
+            line,
+        )
         if plain:
-            name = plain.group(1).strip()
-            if len(name) < 2 or len(name) > 80:
+            raw_name = (plain.group(1) or "").strip()
+            name = _clean_biomarker_name(raw_name)
+            if not name or len(name) > 80 or _is_value_like_name(name):
                 continue
             rest = plain.group(2).strip()
             ref_match = re.search(r"\b(?:Reference|Ref\.?)\s*:\s*([^.]+?)(?:\.\s*(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır))?\s*\.?\s*$", rest, re.IGNORECASE)
@@ -1383,7 +1578,7 @@ def parse_biomarkers(values_block: str) -> list[dict]:
                     "status": status,
                     "status_label": _status_label(status),
                 })
-    return rows
+    return [r for r in rows if (r.get("name") or "").strip() and not _is_value_like_name((r.get("name") or "").strip())]
 
 
 def _values_section_from_result_text(result_text: str) -> str:
@@ -1498,8 +1693,30 @@ def parse_report_to_context(
         elif key is None:
             data["raw_sections"].append({"title": title, "body": body})
 
-    biomarkers = parse_biomarkers(data["values"])
-    # Değerler bölümü boşsa veya az parametre varsa, diğer bölümlerde (raw_sections) parametre satırlarını ara
+    values_block = (data["values"] or "").strip()
+    biomarkers = parse_biomarkers_from_lab(values_block)
+    for b in biomarkers:
+        b["status_label"] = _status_label(b.get("status", "normal"))
+    biomarkers = [
+        b for b in biomarkers
+        if (b.get("name") or "").strip() and not _is_value_like_name((b.get("name") or "").strip())
+    ]
+    # Değerler boşsa veya tek satırlı bölümler (LDL, HDL, ...) raw_sections'a düştüyse: sentetik values oluştur
+    if len(biomarkers) < 1 and data["raw_sections"]:
+        synthetic_lines = []
+        for raw in data["raw_sections"]:
+            title = (raw.get("title") or "").strip()
+            body = (raw.get("body") or "").strip()
+            if not body or not title:
+                continue
+            if re.search(r"\d", body) and (re.search(r"Reference|Ref\.|Normal|Low|High|Düşük|Yüksek|Sınır", body, re.IGNORECASE) or len(body) < 100):
+                synthetic_lines.append(f"**{title}**: {body}")
+        if synthetic_lines:
+            extra = parse_biomarkers_from_lab("\n".join(synthetic_lines))
+            for b in extra:
+                b["status_label"] = _status_label(b.get("status", "normal"))
+            biomarkers = [b for b in extra if (b.get("name") or "").strip() and not _is_value_like_name((b.get("name") or "").strip())]
+    # Değerler bölümü dolu ama az parametre varsa, raw_sections'dan da parametre satırlarını topla
     if len(biomarkers) < 3 and data["raw_sections"]:
         seen = {(r.get("name") or "").strip().lower() for r in biomarkers}
         for raw in data["raw_sections"]:
@@ -1509,14 +1726,87 @@ def parse_report_to_context(
             title_lower = (raw.get("title") or "").strip().lower()
             if not any(x in title_lower for x in ("değer", "value", "parametre", "sonuç", "result", "lab", "test")):
                 continue
-            extra = parse_biomarkers(body)
+            extra = parse_biomarkers_from_lab(body)
             for row in extra:
+                row["status_label"] = row.get("status_label") or _status_label(row.get("status", "normal"))
                 key = (row.get("name") or "").strip().lower()
-                if key and key not in seen:
+                if key and key not in seen and not _is_value_like_name((row.get("name") or "").strip()):
                     seen.add(key)
                     biomarkers.append(row)
+    # Son kontrol: biomarkers boş veya az ise raw_sections'dan agresif fallback (en az 5 kart)
+    if len(biomarkers) < 5 and data["raw_sections"]:
+        seen = {(r.get("name") or "").strip().lower() for r in biomarkers}
+        skip_titles = ("özet", "summary", "risk", "değerler", "values", "olası", "possible", "öneri", "recommendation", "neden", "cause")
+        for raw in data["raw_sections"]:
+            if len(biomarkers) >= 5:
+                break
+            title = (raw.get("title") or "").strip()
+            body = (raw.get("body") or "").strip()
+            if not title or len(title) < 2 or len(title) > 80:
+                continue
+            if title.lower() in skip_titles or any(s in title.lower() for s in skip_titles):
+                continue
+            if _is_value_like_name(title):
+                continue
+            key = title.lower()
+            if key in seen:
+                continue
+            value_str = body.splitlines()[0].strip() if body else "—"
+            value, unit = _split_value_unit(value_str) if value_str else ("—", None)
+            ref = None
+            if re.search(r"Reference\s*:\s*|Ref\.\s*|Referans\s*:\s*", body, re.IGNORECASE):
+                ref_m = re.search(r"(?:Reference|Ref\.?|Referans)\s*:\s*([^\n.]+)", body, re.IGNORECASE)
+                ref = ref_m.group(1).strip() if ref_m else None
+            status = "normal"
+            if re.search(r"\b(Negatif|Pozitif|Nonreaktif|Reaktif|Low|High|Düşük|Yüksek)\b", body, re.IGNORECASE):
+                status = "normal"
+            seen.add(key)
+            biomarkers.append({
+                "name": title,
+                "value": value,
+                "unit": unit,
+                "reference": ref,
+                "status": status,
+                "status_label": _status_label(status),
+            })
+    biomarkers = [b for b in biomarkers if (b.get("name") or "").strip()]
+    for b in biomarkers:
+        raw = (b.get("name") or "").strip()
+        if raw:
+            b["name"] = raw.rstrip("*").strip() or raw
+    biomarkers = [b for b in biomarkers if (b.get("name") or "").strip()]
     for row in biomarkers:
         _enrich_biomarker_chart(row)
+    _enrich_biomarkers_cards(biomarkers)
+    # Markdown/artifact temizliği (parse sonrası, biomarker ayrıştırmasını bozmadan)
+    def _strip_markdown(text: str) -> str:
+        if not text:
+            return ""
+        # Yaygın markdown işaretlerini ve numaralı liste/bullet kalıplarını sadeleştir
+        cleaned = text.replace("**", "").replace("__", "").replace("`", "")
+        cleaned = cleaned.replace("•", "")
+        cleaned = re.sub(r"^#{1,6}\s*", "", cleaned, flags=re.MULTILINE)
+        cleaned = re.sub(r"^\s*[-*+]\s+", "", cleaned, flags=re.MULTILINE)
+        cleaned = re.sub(r"^\s*\d+\.\s+", "", cleaned, flags=re.MULTILINE)
+        # Tek başına bullet satırlarını kaldır (içerik kalmayan veya çok kısa satırlar)
+        def _keep_line(ln: str) -> bool:
+            s = (ln.strip().lstrip("-*+•").strip() or "").strip()
+            if len(s) < 3:
+                return False
+            if re.match(r"^[\s\-*•·]+$", s):
+                return False
+            return True
+        lines = [ln for ln in cleaned.splitlines() if _keep_line(ln)]
+        cleaned = "\n".join(lines).strip()
+        return cleaned.strip()
+
+    for k in ("summary", "risk_indicators", "values", "possible_causes", "recommendations"):
+        data[k] = _strip_markdown(data.get(k, ""))
+    if data["raw_sections"]:
+        for sec in data["raw_sections"]:
+            sec["title"] = _strip_markdown(sec.get("title", ""))
+            sec["body"] = _strip_markdown(sec.get("body", ""))
+
     risk_level = "none"
     risk_message = ""
     if data["risk_indicators"]:
@@ -1564,6 +1854,40 @@ def parse_report_to_context(
     possible_causes_short = _shorten_causes_to_few_words(data["possible_causes"], min_words=3, max_words=5)
     recommendations_short = _shorten_causes_to_few_words(data["recommendations"], min_words=3, max_words=5)
 
+    # Biyolojik yaş (health_age): overall_score'dan türetilmiş yaklaşık değer
+    health_age = None
+    try:
+        base_age = 40
+        ha = int(round(base_age + (100 - overall_score) / 4.0))
+        health_age = max(20, min(80, ha))
+    except Exception:
+        health_age = None
+
+    # En önemli bulgular (maks 3): riskli/sınırda biomarker'lar
+    top_findings: list[dict] = []
+    abnormal = [b for b in biomarkers if b.get("status") in ("high", "low", "border")]
+    for b in abnormal[:3]:
+        nm = (b.get("name") or "").strip()
+        st = (b.get("status_label") or "").strip()
+        if not nm or _is_value_like_name(nm):
+            continue
+        msg = f"{nm}: {st}" if st else nm
+        top_findings.append({"name": nm, "text": msg})
+
+    # Kısa klinik yorumlar (maks 5): isim + durum özetleri
+    clinical_comments: list[str] = []
+    for b in biomarkers:
+        if len(clinical_comments) >= 5:
+            break
+        nm = (b.get("name") or "").strip()
+        st = (b.get("status_label") or "").strip().lower()
+        if not nm or _is_value_like_name(nm):
+            continue
+        if st in ("normal", ""):
+            clinical_comments.append(f"{nm}: Değer referans aralığında; mevcut sonuç tek başına ek risk göstermiyor.")
+        else:
+            clinical_comments.append(f"{nm}: Değer referans dışında, hekiminizle birlikte değerlendirilmesi önerilir.")
+
     out = {
         "title": labels["title"],
         "lang": lang,
@@ -1577,6 +1901,9 @@ def parse_report_to_context(
         "raw_sections": data["raw_sections"],
         "overall_score": overall_score,
         "overall_chart_svg_base64": overall_chart_svg,
+        "health_age": health_age,
+        "top_findings": top_findings,
+        "clinical_comments": clinical_comments,
     }
     out.update(labels)
     return out
@@ -2542,6 +2869,273 @@ def _source_type_display(source: str | None, lang: str = "tr") -> str:
     return m.get((source or "").strip().lower(), source)
 
 
+def _is_meaningful_text(text: str, min_len: int = 40) -> bool:
+    """
+    Basit kalite filtresi: çok kısa, tekrar eden veya aşırı jenerik metinleri eleyerek
+    sadece anlamlı içerikleri SINGLE/STANDARD PDF'te göstermeye yardımcı olur.
+    """
+    if not text:
+        return False
+    t = " ".join(text.split())
+    if len(t) < min_len:
+        return False
+    generic_fragments = [
+        "genel yaşam tarzı",
+        "çeşitli faktörlerden kaynaklanabilir",
+        "düzenli beslenme önemlidir",
+        "dengeli beslenme önemlidir",
+        "genel sağlık için önemlidir",
+        "sağlıklı yaşam tarzı",
+        "yaşam tarzı değişiklikleri",
+        "düzenli takip önerilir",
+        "doktorunuzla görüşün",
+    ]
+    tl = t.lower()
+    if any(p in tl for p in generic_fragments) and len(t) < 200:
+        return False
+    # Çok bariz yarım cümleleri ele: son karakter noktalama değilse ve metin kısa/orta ise riskli
+    if len(t) < 160 and not t.rstrip().endswith((".", "!", "?", ":", ";")):
+        return False
+    return True
+
+
+def _strip_lab_result_lines(text: str) -> str:
+    """Öneri metninden lab test satırlarını (Anti HCV, Anti HIV, X: Negatif vb.) çıkarır."""
+    if not (text or "").strip():
+        return text or ""
+    out: list[str] = []
+    lab_indicators = (
+        "anti hcv", "anti hiv", "hbsag", "anti hbs", "vdrl", "rpr",
+        "negatif", "pozitif", "nonreaktif", "reaktif",
+    )
+    for line in (text or "").splitlines():
+        s = (line or "").strip()
+        if not s:
+            continue
+        lower = s.lower()
+        if any(x in lower for x in lab_indicators) and (
+            re.search(r"(negatif|pozitif|nonreaktif|reaktif|\d+\s*(iu/ml|u/ml|mg/dl))", lower)
+            or len(s) < 80
+        ):
+            continue
+        out.append(line)
+    return "\n".join(out).strip()
+
+
+def _filter_bullet_like_text(text: str, max_items: int = 6) -> str:
+    """
+    Madde madde kısa metinler için kalite filtresi.
+    Tek başına bullet satırlarını kaldırır; zayıf/jenerik satırları gizler; 3–6 satırla sınırlar.
+    """
+    if not text:
+        return ""
+    lines = []
+    for ln in text.splitlines():
+        ln_stripped = (ln or "").strip()
+        if re.match(r"^\s*[-*+•·]\s*$", ln_stripped):
+            continue
+        stripped = (ln_stripped.lstrip("-•*").strip() or "").strip()
+        if not stripped or len(stripped) < 3:
+            continue
+        lines.append(stripped)
+    if not lines:
+        return ""
+    filtered: list[str] = []
+    seen: set[str] = set()
+    generic_tokens = [
+        "genel yaşam",
+        "sağlıklı yaşam",
+        "düzenli beslenme",
+        "dengeli beslenme",
+        "daha fazla su için",
+        "herkes için geçerli",
+        "önemlidir",
+        "uygun uyku düzeni",
+        "uyku düzeni",
+        "sigara ve alkol",
+        "alkolü sınırlandır",
+        "sigara sınırlandır",
+        "yeterli uyku",
+        "düzenli uyku",
+    ]
+    for ln in lines:
+        base = ln.lower()
+        base_key = " ".join(base.split())[:80]
+        if base_key in seen:
+            continue
+        seen.add(base_key)
+        if len(ln) < 25:
+            continue
+        if any(tok in base for tok in generic_tokens):
+            continue
+        # Yarım cümleleri ele: son karakter noktalama değilse ve metin çok uzun değilse atla
+        if len(ln) < 160 and not ln.rstrip().endswith((".", "!", "?", ":", ";")):
+            continue
+        filtered.append("• " + ln)
+        if len(filtered) >= max_items:
+            break
+    return "\n".join(filtered)
+
+
+def _filter_raw_sections_for_standard(raw_sections: list[dict]) -> list[dict]:
+    """
+    Ek raw section'ları kaliteye göre filtreler; standart PDF 5–6 sayfayı geçmesin diye en fazla 3 bölüm.
+    """
+    out: list[dict] = []
+    for sec in (raw_sections or [])[:8]:
+        if len(out) >= 3:
+            break
+        title = (sec.get("title") or "").strip()
+        body = (sec.get("body") or "").strip()
+        if not title or not body:
+            continue
+        tl = title.lower()
+        if any(p in tl for p in ("genel bilgiler", "ek notlar", "diğer", "misc")):
+            continue
+        if not _is_meaningful_text(body, min_len=60):
+            continue
+        # Tek başına bullet satırlarını body'den at
+        body_lines = []
+        for ln in body.splitlines():
+            ln_stripped = (ln or "").strip()
+            if re.match(r"^\s*[-*+•·]\s*$", ln_stripped):
+                continue
+            s = (ln_stripped.lstrip("-*+•·").strip() or "").strip()
+            if len(s) >= 3 and not re.match(r"^[\s\-*•·]+$", s):
+                body_lines.append(ln_stripped)
+        body = "\n".join(body_lines).strip()
+        if not body:
+            continue
+        out.append({"title": title, "body": body})
+    return out
+
+
+# STANDARD PDF: test kartı grupları (sıra: Hemogram, Metabolik, Vitamin/mineral, Enfeksiyon, Diğer)
+BIOMARKER_GROUP_ORDER: list[tuple[str, str, set[str]]] = [
+    ("hemogram", "Hemogram", {"hb", "hemoglobin", "wbc", "rbc", "hct", "platelet", "trombosit", "mcv", "mch", "mchc", "lökosit", "eritrosit", "hematokrit", "hgb", "plt", "rdw", "mpv", "hemogram"}),
+    ("metabolik", "Metabolik", {"glucose", "glukoz", "ldl", "hdl", "cholesterol", "kolesterol", "triglyceride", "trigliserid", "hba1c", "üre", "urea", "kreatinin", "creatinine", "egfr", "gfr"}),
+    ("vitamin_mineral", "Vitamin / mineral", {"vitamin d", "d vitamini", "vitamini d", "b12", "folat", "folate", "ferritin", "demir", "iron", "kalsiyum", "calcium", "magnezyum", "magnesium", "çinko", "zinc", "potasyum", "sodyum", "sodium"}),
+    ("enfeksiyon", "Enfeksiyon taramaları", {"crp", "hbv", "hcv", "hiv", "hbsag", "anti-hcv", "vdrl", "rf", "aso", "enfeksiyon", "c-reaktif"}),
+    ("diger", "Diğer", set()),
+]
+
+
+def _group_biomarkers(biomarkers: list[dict]) -> list[dict]:
+    """Kartları gruba atar; her kart tek grupta. Döner: [{"group_key", "label", "items": [...]}, ...]"""
+    if not biomarkers:
+        return []
+    buckets: dict[str, list[dict]] = {g[0]: [] for g in BIOMARKER_GROUP_ORDER}
+    for row in biomarkers:
+        name = (row.get("name") or "").strip().lower()
+        if not name:
+            continue
+        assigned = False
+        for group_key, label, keywords in BIOMARKER_GROUP_ORDER:
+            if group_key == "diger":
+                continue
+            if any(kw in name or name in kw for kw in keywords):
+                buckets[group_key].append(row)
+                assigned = True
+                break
+        if not assigned:
+            buckets["diger"].append(row)
+    out: list[dict] = []
+    for group_key, label, _ in BIOMARKER_GROUP_ORDER:
+        items = buckets.get(group_key) or []
+        if items:
+            out.append({"group_key": group_key, "label": label, "items": items})
+    return out
+
+
+def _synthetic_dev_biomarkers_5() -> list[dict]:
+    """Dev single-plan-test PDF için en az 5 kart: LDL, HDL, Glucose, CRP, Vitamin D."""
+    return [
+        {"name": "LDL", "value": "118", "unit": "mg/dL", "reference": "0-100", "status": "normal", "status_label": "Normal"},
+        {"name": "HDL", "value": "52", "unit": "mg/dL", "reference": "40-", "status": "normal", "status_label": "Normal"},
+        {"name": "Glucose", "value": "95", "unit": "mg/dL", "reference": "70-100", "status": "normal", "status_label": "Normal"},
+        {"name": "CRP", "value": "2.2", "unit": "mg/L", "reference": "0-3", "status": "normal", "status_label": "Normal"},
+        {"name": "Vitamin D", "value": "28", "unit": "ng/mL", "reference": "30-", "status": "low", "status_label": "Riskli"},
+    ]
+
+
+def _build_doctor_share_note(biomarkers: list[dict], lang: str) -> dict:
+    """Son sayfa için kısa 'Doktorla paylaşım notu': 2-3 test, normal alanlar, takip alanları. Kısa, korkutucu değil, teşhis yok."""
+    is_en = (lang or "tr").strip().lower()[:2] == "en"
+    if is_en:
+        out = {"title": "Note for your doctor", "discuss_names": [], "normal_summary": "", "follow_up_summary": ""}
+    else:
+        out = {"title": "Doktorla paylaşım notu", "discuss_names": [], "normal_summary": "", "follow_up_summary": ""}
+    if not biomarkers:
+        out["normal_summary"] = "Share your results with your doctor for a joint assessment." if is_en else "Sonuçlarınızı hekiminizle paylaşarak birlikte değerlendirebilirsiniz."
+        return out
+    need_attention = [b for b in biomarkers if (b.get("status") or "normal") in ("high", "low", "border")]
+    normal_count = sum(1 for b in biomarkers if (b.get("status") or "normal") == "normal")
+    discuss = [(b.get("name") or "").strip() for b in need_attention if (b.get("name") or "").strip()][:3]
+    out["discuss_names"] = discuss
+    if is_en:
+        out["normal_summary"] = "Most parameters are within reference range." if normal_count >= len(biomarkers) // 2 else "Values within range form the overall picture."
+        if need_attention:
+            out["follow_up_summary"] = "Sharing borderline or out-of-range parameters with your doctor may be helpful."
+    else:
+        out["normal_summary"] = "Çoğu parametre referans aralığında." if normal_count >= len(biomarkers) // 2 else "Referans aralığındaki değerler genel tabloyu oluşturur."
+    if need_attention:
+        out["follow_up_summary"] = "Sınırda veya referans dışı görünen parametreleri hekiminizle paylaşmanız yararlı olabilir."
+    return out
+
+
+def _build_follow_up_note(biomarkers: list[dict], lang: str) -> str:
+    """Sınırda/referans dışı test varsa 2-3 cümlelik takip notu; klişe ve genel öneri yok."""
+    need_attention = [b for b in (biomarkers or []) if (b.get("status") or "normal") in ("high", "low", "border")]
+    if not need_attention:
+        return ""
+    is_en = (lang or "tr").strip().lower()[:2] == "en"
+    if is_en:
+        return "A single measurement is not enough to draw conclusions. For borderline or out-of-range values, a repeat test or doctor's assessment may be appropriate."
+    return "Tek ölçüm tek başına karar için yeterli değildir. Sınırda veya referans dışı parametreler için hekim değerlendirmesi veya tekrar test uygun olabilir."
+
+
+def _short_disclaimer_standard(lang: str) -> dict[str, str]:
+    """Standart PDF: kısa disclaimer ve intro (e-Nabız tarzı, uzun metin yok)."""
+    short = {
+        "tr": {
+            "medical_disclaimer_1": "Bilgilendirme amaçlıdır. Teşhis yerine geçmez; hekime başvurun.",
+            "intro_p1": "Kan tahlili sonuçlarınızın ön değerlendirmesi. Hekiminizle paylaşın.",
+            "report_disclaimer_text": "Teşhis yerine geçmez; hekime başvurun.",
+        },
+        "en": {
+            "medical_disclaimer_1": "For information only. Not a diagnosis; consult a doctor.",
+            "intro_p1": "Preliminary assessment of your lab results. Share with your doctor.",
+            "report_disclaimer_text": "Not a diagnosis; consult your doctor.",
+        },
+    }
+    return short.get((lang or "tr").strip().lower()[:2], short["en"])
+
+
+def _apply_standard_pdf_quality_filters(base_context: dict) -> dict:
+    """
+    Standart (SINGLE/STANDARD) PDF için içerik filtresi:
+    - Çok zayıf özet, neden, öneri ve raw section'ları gizler veya kısaltır.
+    - Tablo/biomarker verisini olduğu gibi bırakır.
+    """
+    ctx = dict(base_context)
+    summary = ctx.get("summary") or ""
+    if not _is_meaningful_text(summary, min_len=60):
+        ctx["summary"] = ""
+
+    causes = ctx.get("possible_causes") or ""
+    recommendations = ctx.get("recommendations") or ""
+    recommendations = _strip_lab_result_lines(recommendations)
+    causes_f = _filter_bullet_like_text(causes)
+    recs_f = _filter_bullet_like_text(recommendations)
+    ctx["possible_causes"] = causes_f
+    ctx["recommendations"] = recs_f
+
+    raw_sections = ctx.get("raw_sections") or []
+    ctx["raw_sections"] = _filter_raw_sections_for_standard(raw_sections)
+
+    return ctx
+
+
 def build_report_pdf(
     result_text: str,
     report_date: str | None = None,
@@ -2577,8 +3171,8 @@ def build_report_pdf(
         "explanation_depth": plan_cfg.explanation_depth,
         "pdf_depth": plan_cfg.pdf_depth,
     }
-    # premiumPdf: single, monthly, yearly, pro → premium şablon; premiumTrend: monthly, yearly, pro
-    use_premium = plan == "premium" or plan in ("single", "monthly", "yearly", "pro")
+    # premiumPdf: monthly, yearly, pro → premium şablon; SINGLE/STANDARD (single/free) standart PDF şablonunu kullanır.
+    use_premium = plan == "premium" or plan in ("monthly", "yearly", "pro")
     premium_trend = plan in ("monthly", "yearly", "pro")
     trend_locked = not premium_trend
 
@@ -2609,7 +3203,20 @@ def build_report_pdf(
         premium_ctx["label_report_plan_badge_single"] = _labels.get("report_plan_badge_single") or _fallback_en.get("report_plan_badge_single", "REPORT")
         return render_premium_pdf(premium_ctx)
 
-    context = base_context
+    # SINGLE/STANDARD (non-premium) PDF: içerik kalite filtresi uygula + kısa disclaimer
+    context = _apply_standard_pdf_quality_filters(base_context)
+    for k, v in _short_disclaimer_standard(lang).items():
+        context[k] = v
+    if context.get("biomarkers") is None:
+        context["biomarkers"] = []
+    if rid == "single-plan-test" and len(context.get("biomarkers") or []) < 5:
+        context["biomarkers"] = _synthetic_dev_biomarkers_5()
+        for row in context["biomarkers"]:
+            _enrich_biomarker_chart(row)
+        _enrich_biomarkers_cards(context["biomarkers"])
+    context["grouped_biomarkers"] = _group_biomarkers(context.get("biomarkers") or [])
+    context["doctor_share_note"] = _build_doctor_share_note(context.get("biomarkers") or [], lang)
+    context["follow_up_note"] = _build_follow_up_note(context.get("biomarkers") or [], lang)
     context["report_id"] = rid
     context["plan_config"] = plan_config_ctx
     context["user_id"] = user_id_str
@@ -2618,6 +3225,16 @@ def build_report_pdf(
     context["patient_gender"] = (patient_gender or "").strip() or "—"
     context["plan_name"] = (plan_name or "").strip() or "—"
     context["source_type"] = _source_type_display(source_type, lang)
+    if verification_info:
+        context["show_qr_verification"] = True
+        context["verification_url"] = verification_info.get("verification_url") or ""
+        context["verification_code"] = verification_info.get("verification_code") or ""
+        context["qr_image_base64"] = verification_info.get("qr_image_base64") or ""
+    else:
+        context["show_qr_verification"] = False
+        context["verification_url"] = ""
+        context["verification_code"] = ""
+        context["qr_image_base64"] = ""
     return render_pdf(context)
 
 

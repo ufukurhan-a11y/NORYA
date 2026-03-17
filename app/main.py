@@ -1244,7 +1244,8 @@ async def dev_single_plan_test_pdf(request: Request):
             lang="tr",
             report_id="single-plan-test",
             user_identifier="test@norya.com",
-            plan_name="single",
+            # Standart SINGLE/STANDARD akışını test etmek için premium şablon yerine standart PDF şablonu kullanılsın.
+            plan_name="free",
             source_type="text",
         )
     except Exception as e:
@@ -2345,6 +2346,23 @@ def _is_test_mode(request: Request) -> bool:
     )
 
 
+def _dev_override_plan(request: Request, user: User) -> str:
+    """
+    Development/test modunda plan önizleme:
+    ?dev_plan=free|single|monthly|yearly ile analiz planını zorla.
+    Production'da veya test_mode kapalıyken dev override çalışmaz.
+    """
+    env = (getattr(settings, "environment", "") or "").strip().lower()
+    if env == "production":
+        return (getattr(user, "plan", "free") or "free")
+    if not _is_test_mode(request):
+        return (getattr(user, "plan", "free") or "free")
+    raw = (request.query_params.get("dev_plan") or "").strip().lower()
+    if raw in {"free", "single", "monthly", "yearly"}:
+        return raw
+    return (getattr(user, "plan", "free") or "free")
+
+
 @app.post("/analyze", response_model=AnalyzeResponse)
 @limiter.limit("10/minute")
 async def analyze(
@@ -2374,7 +2392,7 @@ async def analyze(
         lang = form.get("lang") or None
     if not text:
         raise HTTPException(status_code=400, detail="Lütfen tahlil metnini girin veya PDF/görsel yükleyin.")
-    plan = getattr(user, "plan", "free") or "free"
+    plan = _dev_override_plan(request, user)
     if not test_mode:
         limit = _aylik_limit(plan)
         kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
@@ -2522,9 +2540,9 @@ async def _analyze_upload_impl(
     """analyze_upload iç mantığı (try/except dışında)."""
     log.info("analyze/upload: filename=%s", getattr(file, "filename", ""))
     test_mode = _is_test_mode(request)
+    plan = _dev_override_plan(request, user)
     if not test_mode:
         _check_analyze_hourly_limit(user.id or 0)
-        plan = getattr(user, "plan", "free") or "free"
         limit = _aylik_limit(plan)
         kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
         ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
@@ -3023,9 +3041,12 @@ def download_analysis_pdf(
     plan = getattr(user, "plan", None) or "free"
     plan_for_pdf = getattr(rec, "plan_type", None) or plan
     use_pro_scope = (scope or "").strip().lower() == "pro"
-    premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("single", "monthly", "yearly", "pro")
+    # SINGLE/STANDARD: premium PDF şablonunu kullanmaz; sadece monthly/yearly/pro veya scope=pro premium şablona geçer.
+    premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     premium_trend = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
-    cache_key = (analysis_id, report_lang, "pro" if use_pro_scope else "std", plan_for_pdf or "free")
+    # PDF cache şema versiyonu: çıktı yapısı değiştiğinde eski PDF'ler yerine yenileri üretmek için anahtara eklenir.
+    _PDF_SCHEMA_VERSION = 3
+    cache_key = (analysis_id, report_lang, "pro" if use_pro_scope else "std", plan_for_pdf or "free", _PDF_SCHEMA_VERSION)
     now_ts = time.time()
     with _pdf_cache_lock:
         if cache_key in _pdf_cache:

@@ -202,6 +202,7 @@
       border-radius: 50%;
       flex-shrink: 0;
     }
+    .report-legend-strip .report-legend-label { font-weight: 600; color: var(--norya-heading); margin-right: 8px; }
     .report-legend-strip .lab-legend-dot.lab-card--normal { background: #22c55e; }
     .report-legend-strip .lab-legend-dot.lab-card--border { background: #eab308; }
     .report-legend-strip .lab-legend-dot.lab-card--risk { background: #ef4444; }
@@ -257,23 +258,30 @@
     .section-title {
       display: flex;
       align-items: center;
-      gap: 6px;
-      font-size: 11px;
+      gap: 8px;
+      font-size: 10.5px;
       font-weight: 700;
       color: var(--norya-heading);
-      margin: 10px 0 6px 0;
-      padding-bottom: 4px;
-      border-bottom: 1px solid var(--norya-brand);
-      min-height: 1.3em;
+      margin: 14px 0 8px 0;
+      padding-bottom: 6px;
+      border-bottom: 1px solid var(--section-border);
+      letter-spacing: 0.01em;
+    }
+    .section-title .dot {
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--norya-brand);
+      flex-shrink: 0;
     }
     .section-title:first-of-type { margin-top: 0; }
     .section-title-tight { margin-top: 6px; margin-bottom: 4px; }
     .section-body-tight { margin-bottom: 4px; }
     .section-summary-wrap { page-break-inside: avoid; page-break-after: avoid; }
-    .section-causes-recommendations { page-break-before: always; page-break-inside: avoid; }
+    .section-causes-recommendations { page-break-inside: avoid; }
     .section-causes-recommendations .section-title { margin-top: 0; }
     .section-compact .section-title { margin: 6px 0 4px 0; }
-    .section-body { margin-bottom: 6px; white-space: pre-wrap; max-width: 100%; box-sizing: border-box; }
+    .section-body { margin-bottom: 10px; white-space: pre-wrap; max-width: 100%; box-sizing: border-box; line-height: 1.4; }
     .section-body-compact { margin-bottom: 4px; font-size: 9px; line-height: 1.35; white-space: pre-wrap; }
     .risk-banner {
       padding: 8px 10px;
@@ -295,6 +303,8 @@
       background: var(--risk-high-bg);
       color: var(--risk-high-text);
     }
+    .overall-score-line { margin: 0 0 6px 0; font-size: 10px; }
+    .overall-score-value { font-weight: 800; color: var(--norya-heading); }
     .intro-block {
       margin-bottom: 8px;
       padding: 8px 10px;
@@ -309,13 +319,13 @@
     .intro-block p:last-child { margin-bottom: 0; }
     .how-to-read-block {
       margin-bottom: 8px;
-      padding: 6px 10px;
-      background: var(--table-row-even);
-      border-radius: 6px;
+      padding: 8px 12px;
+      background: #f8fafc;
+      border-radius: var(--card-radius);
       font-size: 9px;
       color: var(--norya-muted);
       line-height: 1.4;
-      border: 1px solid var(--table-border);
+      border: 1px solid var(--section-border);
     }
     .chart-legend {
       font-size: 9px;
@@ -335,61 +345,133 @@
     .overall-chart-img { width: 100%; height: 90px; display: block; object-fit: contain; object-position: center center; }
     /* ========== Biyobelirteç kartları (Pro ile aynı düzen) ========== */
     .biomarker-cards { display: block; width: 100%; }
-    .lab-cards-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 4px 6px;
-      margin-top: 4px;
-      width: 100%;
+    .biomarker-group { margin-bottom: 14px; }
+    .biomarker-group:last-child { margin-bottom: 0; }
+    .biomarker-group-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--norya-heading);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+      padding-bottom: 4px;
+      border-bottom: 1px solid var(--section-border);
     }
+    .lab-cards-table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0 10px;
+      margin-top: 8px;
+      table-layout: fixed;
+    }
+    .lab-cards-table td {
+      width: 50%;
+      vertical-align: top;
+      padding: 0 6px 0 0;
+    }
+    .lab-cards-table td:first-child { padding: 0 6px 0 0; }
+    .lab-cards-table td:last-child { padding: 0 0 0 6px; }
+    .lab-cards-table tr { page-break-inside: avoid; }
     .lab-card {
       page-break-inside: avoid;
       break-inside: avoid;
-      border-radius: 6px;
-      padding: 5px 7px;
-      border: 1px solid rgba(15, 23, 42, 0.08);
-      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
+      border-radius: var(--card-radius);
+      padding: 10px 12px;
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
       min-height: 0;
       box-sizing: border-box;
+      background: #fff;
+      overflow: hidden;
+      word-break: normal;
+      overflow-wrap: break-word;
     }
     .lab-card--normal {
-      border-left: 3px solid #22c55e;
-      background: rgba(34, 197, 94, 0.06);
+      border-left: 4px solid #10b981;
+      background: #f0fdf4;
     }
-    .lab-card--border,
-    .lab-card--low,
-    .lab-card--high {
-      border-left: 3px solid #eab308;
-      background: rgba(234, 179, 8, 0.08);
+    .lab-card--border {
+      border-left: 4px solid #f59e0b;
+      background: #fffbeb;
     }
-    .lab-card--high { border-left-color: #ef4444; background: rgba(239, 68, 68, 0.06); }
+    .lab-card--risk {
+      border-left: 4px solid #ef4444;
+      background: #fef2f2;
+    }
+    .lab-card--high { border-left-color: #ef4444; background: #fef2f2; }
+    .lab-card--low { border-left-color: #f59e0b; background: #fffbeb; }
     .lab-card-name {
-      font-size: 8px;
+      font-size: 9px;
       font-weight: 700;
       color: var(--norya-heading);
-      margin-bottom: 1px;
-      text-transform: uppercase;
+      margin-bottom: 4px;
+      letter-spacing: 0.02em;
+      line-height: 1.3;
+    }
+    .lab-card-score-wrap { margin-bottom: 4px; }
+    .lab-card-score {
+      font-size: 11px;
+      font-weight: 800;
       letter-spacing: 0.02em;
       line-height: 1.2;
     }
+    .lab-card-score--normal { color: #059669; }
+    .lab-card-score--border { color: #b45309; }
+    .lab-card-score--risk { color: #dc2626; }
     .lab-card-value {
-      font-size: 10px;
-      font-weight: 800;
+      font-size: 12px;
+      font-weight: 700;
       color: var(--norya-heading);
-      margin-bottom: 0;
-      line-height: 1.2;
+      margin-bottom: 2px;
+      line-height: 1.3;
     }
     .lab-card-ref {
-      font-size: 7.5px;
+      font-size: 8px;
       color: var(--norya-muted);
-      margin-bottom: 0;
-      line-height: 1.25;
+      margin-bottom: 4px;
+      line-height: 1.35;
+      word-break: break-word;
+      overflow-wrap: break-word;
+      white-space: normal;
     }
     .lab-card-status {
       font-size: 8px;
-      font-weight: 700;
-      margin-top: 0;
+      margin-top: 2px;
       line-height: 1.2;
+    }
+    .lab-card-attention {
+      font-size: 7px;
+      color: var(--norya-muted);
+      margin-top: 2px;
+      line-height: 1.2;
+    }
+    .lab-card-what { font-size: 8px; color: var(--norya-muted); margin-top: 4px; line-height: 1.35; }
+    .lab-card-what-label { font-weight: 600; color: var(--norya-heading); }
+    .lab-card-comment { font-size: 8px; margin-top: 2px; line-height: 1.35; color: var(--norya-text); }
+    .lab-card-reco { font-size: 8px; margin-top: 2px; line-height: 1.35; color: var(--norya-brand); font-weight: 600; }
+    .lab-status-pill {
+      display: inline-block;
+      padding: 2px 8px;
+      border-radius: 999px;
+      font-size: 7px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .lab-status-pill--normal {
+      border: 1px solid rgba(16, 185, 129, 0.4);
+      color: #065f46;
+      background: #ecfdf5;
+    }
+    .lab-status-pill--border {
+      border: 1px solid rgba(245, 158, 11, 0.4);
+      color: #92400e;
+      background: #fffbeb;
+    }
+    .lab-status-pill--risk {
+      border: 1px solid rgba(239, 68, 68, 0.4);
+      color: #991b1b;
+      background: #fef2f2;
     }
     .lab-card--normal .lab-card-status { color: #15803d; }
     .lab-card--border .lab-card-status,
@@ -439,9 +521,6 @@
       margin-top: 8px;
       page-break-inside: avoid;
     }
-    .range-chart-fullwidth {
-      grid-column: 1 / -1;
-    }
     .range-chart {
       max-width: 100%;
       height: auto;
@@ -476,15 +555,16 @@
     .status-low { color: var(--status-low); font-weight: 600; }
     .status-high { color: var(--status-high); font-weight: 600; }
     .status-border { color: var(--status-border); font-weight: 600; }
-    /* Uyarı kutusu = bilgilendirme amaçlı */
+    /* Kısa bilgilendirme (premium: minimal) */
     .alert-clinical {
-      margin-bottom: 8px;
-      padding: 8px 10px;
-      background: #fffbeb;
-      border-radius: 6px;
-      font-size: 9.5px;
+      margin-bottom: 10px;
+      padding: 8px 12px;
+      background: var(--norya-brand-light);
+      border-radius: var(--card-radius);
+      font-size: 9px;
       line-height: 1.4;
-      color: #92400e;
+      color: var(--norya-text);
+      border: 1px solid var(--norya-brand-border);
       page-break-inside: avoid;
     }
     .footer-note {
@@ -513,12 +593,85 @@
       color: var(--footer-text);
       text-align: center;
     }
+    .doctor-share-note {
+      margin-top: 14px;
+      padding: 12px 14px;
+      border: 1px solid var(--norya-brand-border);
+      border-radius: var(--card-radius);
+      background: var(--norya-brand-light);
+      page-break-inside: avoid;
+    }
+    .doctor-share-note-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--norya-heading);
+      letter-spacing: 0.03em;
+      margin-bottom: 8px;
+    }
+    .doctor-share-note-body {
+      font-size: 9px;
+      line-height: 1.45;
+      color: var(--norya-text);
+    }
+    .doctor-share-note-body p { margin: 0 0 4px 0; }
+    .doctor-share-note-body p:last-child { margin-bottom: 0; }
+    .follow-up-note {
+      margin-top: 10px;
+      padding: 10px 12px;
+      border-left: 3px solid var(--norya-brand-border);
+      background: var(--table-row-even);
+      border-radius: 0 6px 6px 0;
+      font-size: 8px;
+      line-height: 1.45;
+      color: var(--norya-text);
+      page-break-inside: avoid;
+    }
+    /* QR doğrulama (e-Nabız tarzı, premium görünüm) */
+    .verification-section {
+      margin-top: 14px;
+      page-break-inside: avoid;
+    }
+    .verification-box-inner {
+      padding: 12px 14px;
+      border: 1px solid var(--norya-brand-border);
+      border-radius: var(--card-radius);
+      background: var(--norya-brand-light);
+    }
+    .verification-box-title {
+      font-size: 10px;
+      font-weight: 700;
+      color: var(--norya-heading);
+      margin-bottom: 8px;
+      letter-spacing: 0.02em;
+    }
+    .verification-box-content {
+      display: table;
+      width: 100%;
+      border-collapse: collapse;
+    }
+    .verification-qr {
+      display: table-cell;
+      width: 72px;
+      height: 72px;
+      vertical-align: middle;
+      padding-right: 12px;
+    }
+    .verification-meta {
+      display: table-cell;
+      vertical-align: middle;
+      font-size: 9px;
+      line-height: 1.4;
+      color: var(--norya-text);
+    }
+    .verification-code-line { font-weight: 700; color: var(--norya-heading); margin-bottom: 4px; }
+    .verification-code-line .k { font-weight: 600; color: var(--norya-muted); }
+    .verification-scan-hint { font-size: 8px; color: var(--norya-muted); }
   </style>
 </head>
 <body>
-  <!-- Running footer: tıbbi uyarı (her sayfa altı) -->
+  <!-- Running footer: kısa uyarı (her sayfa altı) -->
   <div id="pdf-disclaimer">
-    {{ medical_disclaimer_1 | default('Bu rapor bilgilendirme amaçlı klinik formattadır. Tıbbi tanı veya tedavi yerine geçmez. Sağlık kararları için lütfen doktorunuza başvurunuz.', true) }} — Norya
+    {{ medical_disclaimer_1 | default('Bilgilendirme amaçlıdır. Teşhis yerine geçmez; hekime başvurun.', true) }} — Norya
   </div>
   <!-- Running header: Tablo ile sabit, premium gibi nizami -->
   <div id="pdf-header">
@@ -549,7 +702,8 @@
   </div>
 
   <div class="header-divider"></div>
-  <div class="report-legend-strip" role="doc-noteref" aria-label="Durum göstergesi">
+  <div class="report-legend-strip" role="doc-noteref" aria-label="Renk sistemi">
+    <span class="report-legend-label">{{ color_system_heading | default('Renk sistemi', true) }}:</span>
     <span class="report-legend-item"><span class="lab-legend-dot lab-card--normal"></span>{{ report_dist_normal | default('Normal', true) }}</span>
     <span class="report-legend-item"><span class="lab-legend-dot lab-card--border"></span>{{ report_dist_borderline | default('Sınır', true) }}</span>
     <span class="report-legend-item"><span class="lab-legend-dot lab-card--risk"></span>{{ report_dist_attention | default('Dikkat', true) }}</span>
@@ -557,7 +711,7 @@
 
   <div class="report-body">
     <div class="alert-clinical">
-      <strong>{{ report_disclaimer_title | default('Bilgilendirme amaçlıdır.', true) }}</strong> {{ report_disclaimer_text | default('Teşhis veya tedavi yerine geçmez; hekiminize başvurun.', true) }}
+      {{ report_disclaimer_title | default('Bilgilendirme amaçlıdır.', true) }} {{ report_disclaimer_text | default('Teşhis yerine geçmez; hekime başvurun.', true) }}
     </div>
 
     <section>
@@ -576,113 +730,211 @@
       </div>
     </section>
 
-    <section>
-      <div class="section-title">{{ risk_indicators_heading | default('Risk İşaretleri', true) }}</div>
-      <div class="section-body">
+    <!-- Genel değerlendirme: risk bandı + kısa açıklama + özet + (varsa) genel durum grafiği -->
+    <section class="section-summary-wrap">
+      <div class="section-title section-title-tight">
+        <span class="dot"></span>
+        {{ overall_status_heading | default('Genel değerlendirme', true) }}
+      </div>
+      <div class="section-body section-body-tight">
+        <p class="overall-score-line"><strong>{{ overall_status_heading | default('Genel sağlık skoru', true) }}:</strong> <span class="overall-score-value">{{ overall_score | default(100, true) }}/100</span></p>
         {% if risk_level != 'none' %}
         <div class="risk-banner risk-{{ risk_level }}">{{ risk_message or risk_default_attention }}</div>
         {% else %}
         <div class="risk-banner risk-normal">{{ risk_message or risk_default_normal }}</div>
         {% endif %}
-      </div>
-    </section>
-
-    <section>
-      <div class="section-title section-title-tight">{{ intro_heading | default('Bu rapor hakkında', true) }}</div>
-      <div class="section-body section-body-tight">
         <div class="intro-block intro-block-tight">
-          <p>{{ intro_p1 | default('Bu rapor laboratuvar sonuçlarınızın ön değerlendirmesidir; yalnızca bilgilendirme amaçlıdır.', true) }}</p>
-          <p>{{ intro_p2 | default('Sonuçlarınızı hekiminizle görüşün; tıbbi kararlar için hekime danışın.', true) }}</p>
+          <p>{{ intro_p1 | default('Kan tahlili sonuçlarınızın ön değerlendirmesi. Hekiminizle paylaşın.', true) }}</p>
         </div>
-      </div>
-    </section>
-
-    {% if overall_chart_svg_base64 %}
-    <section class="section-overall">
-      <div class="section-title section-title-tight">{{ overall_status_heading | default('Genel durum', true) }}</div>
-      <div class="section-body section-body-tight">
+        {% if summary %}
+        <div class="section-body-tight">
+          <p><strong>{{ summary_heading | default('Kısa özet', true) }}:</strong> {{ summary }}</p>
+        </div>
+        {% endif %}
+        {% if health_age %}
+        <div class="section-body-tight">
+          <p><strong>{{ report_health_age_title | default('Biyolojik Yaş Tahmini', true) }}:</strong> ≈ {{ health_age }}</p>
+        </div>
+        {% endif %}
+        {% if overall_chart_svg_base64 %}
         <div class="overall-status-wrap overall-status--{{ risk_level if risk_level in ('normal','attention','high') else 'normal' }}">
           <p class="chart-legend">{{ overall_chart_legend | default('Yeşil = Normal · Turuncu = Sınır · Kırmızı = Riskli (skor 0–100)', true) }}</p>
           <div class="overall-chart-wrap">
             <img class="overall-chart-img" src="data:image/svg+xml;base64,{{ overall_chart_svg_base64 }}" alt="{{ overall_status_heading | default('Genel durum', true) }} {{ overall_score }}/100" />
           </div>
         </div>
+        {% endif %}
+      </div>
+    </section>
+
+    {% if top_findings and top_findings|length > 0 %}
+    <section>
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ report_top_attention | default('En önemli bulgular', true) }}
+      </div>
+      <div class="section-body">
+        <ul class="report-bullets">
+          {% for f in top_findings %}
+          <li>{{ f.text }}</li>
+          {% endfor %}
+        </ul>
       </div>
     </section>
     {% endif %}
-
-    {% if summary %}
-    <section class="section-summary-wrap">
-      <div class="section-title section-title-tight">{{ summary_heading | default('Özet', true) }}</div>
-      <div class="section-body section-body-tight">{{ summary }}</div>
+    {% if clinical_comments and clinical_comments|length > 0 %}
+    <section>
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ report_findings_highlight | default('Kısa klinik yorumlar', true) }}
+      </div>
+      <div class="section-body">
+        <ul class="report-bullets">
+          {% for c in clinical_comments %}
+          <li>{{ c }}</li>
+          {% endfor %}
+        </ul>
+      </div>
     </section>
     {% endif %}
-
-    {% if biomarkers %}
     <section>
-      <div class="section-title">{{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}</div>
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}
+      </div>
       <div class="section-body">
         <div class="how-to-read-block">{{ how_to_read_body | default('Her parametre için Sonuç ve Referans aralığı verilir. Yeşil = Normal, turuncu = Sınırda, kırmızı = Referans dışı.', true) }}</div>
       </div>
     </section>
-    <section>
-      <div class="section-title">{{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}</div>
+    <section class="section-biomarkers">
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}
+      </div>
       <div class="section-body">
-        <div class="biomarker-cards">
-          <div class="lab-cards-grid">
-            {% for row in biomarkers %}
-            <div class="lab-card lab-card--{{ 'risk' if row.status == 'high' or row.status == 'low' else ('border' if row.status == 'border' else 'normal') }}">
-              <div class="lab-card-name">{{ row.name or '—' }}</div>
-              <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
-              <div class="lab-card-ref">Ref: {{ row.reference or '—' }}</div>
-              <div class="lab-card-status">{{ row.status_label or '—' }}</div>
-            </div>
-            {% if row.chart_svg_base64 %}
-            <div class="range-chart-wrap range-chart-fullwidth">
-              <img class="range-chart" src="data:image/svg+xml;base64,{{ row.chart_svg_base64 }}" alt="Referans: {{ row.name }}" />
-            </div>
-            {% endif %}
-            {% endfor %}
+        {% for group in (grouped_biomarkers or []) %}
+        <div class="biomarker-group" style="page-break-inside: avoid;">
+          <div class="biomarker-group-title">{{ group.label }}</div>
+          <div class="biomarker-cards">
+            <table class="lab-cards-table">
+              {% set group_items = group["items"] if group["items"] is defined else [] %}
+              {% for row in group_items %}
+              {% if row and row.name %}
+              {% if loop.index0 % 2 == 0 %}<tr>{% endif %}
+              {% set status_class = 'risk' if row.status == 'high' or row.status == 'low' else ('border' if row.status == 'border' else 'normal') %}
+              <td>
+                <div class="lab-card lab-card--{{ status_class }}">
+                  <div class="lab-card-name">{{ row.name }}</div>
+                  <div class="lab-card-score-wrap">
+                    <span class="lab-card-score lab-card-score--{{ status_class }}">{{ row.score_100 | default(100, true) }}/100</span>
+                  </div>
+                  <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
+                  {% if row.reference %}
+                  <div class="lab-card-ref">{{ ref_label | default('Referans aralığı', true) }}: {{ row.reference }}</div>
+                  {% endif %}
+                {% if row.status_label %}
+                <div class="lab-card-status">
+                  <span class="lab-status-pill lab-status-pill--{{ status_class }}">{{ row.status_label }}</span>
+                </div>
+                {% endif %}
+                {% if row.attention_label %}
+                <div class="lab-card-attention">{{ row.attention_label }}</div>
+                {% endif %}
+                {% if row.what_it_shows %}
+                  <div class="lab-card-what"><span class="lab-card-what-label">{{ what_it_shows_label | default('Ne gösterir?', true) }}</span> {{ row.what_it_shows }}</div>
+                  {% endif %}
+                  {% if row.short_comment %}
+                  <div class="lab-card-comment">{{ row.short_comment }}</div>
+                  {% endif %}
+                  {% if row.short_recommendation %}
+                  <div class="lab-card-reco">{{ row.short_recommendation }}</div>
+                  {% endif %}
+                </div>
+              </td>
+              {% if loop.index0 % 2 == 1 or loop.last %}</tr>{% endif %}
+              {% endif %}
+              {% endfor %}
+            </table>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </section>
+
+    {% if possible_causes or recommendations %}
+    <section class="section-causes-recommendations">
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ recommendations_heading | default('Kısa öneriler ve olası nedenler', true) }}
+      </div>
+      <div class="section-body section-body-compact">
+        {% if recommendations %}
+        <p><strong>{{ recommendations_heading | default('Öneriler', true) }}:</strong></p>
+        <div class="section-body-compact">{{ recommendations }}</div>
+        {% endif %}
+        {% if possible_causes %}
+        <p style="margin-top:6px;"><strong>{{ possible_causes_heading | default('Olası nedenler', true) }}:</strong></p>
+        <div class="section-body-compact">{{ possible_causes }}</div>
+        {% endif %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% if raw_sections %}
+    {% for section in raw_sections %}
+    <section class="section-raw" style="page-break-inside: avoid;">
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ section.title }}
+      </div>
+      <div class="section-body section-body-compact">{{ section.body }}</div>
+    </section>
+    {% endfor %}
+    {% endif %}
+
+    {% if show_qr_verification and verification_code %}
+    <section class="verification-section" aria-label="{{ label_report_verification_title | default('Rapor Doğrulama', true) }}">
+      <div class="verification-box-inner">
+        <div class="verification-box-title">{{ label_report_verification_title | default('Rapor Doğrulama', true) }}</div>
+        <div class="verification-box-content">
+          {% if qr_image_base64 %}
+          <img class="verification-qr" src="data:image/png;base64,{{ qr_image_base64 }}" alt="QR Doğrula" width="72" height="72" />
+          {% endif %}
+          <div class="verification-meta">
+            <div class="verification-code-line"><span class="k">{{ label_verify_code | default('Doğrulama kodu', true) }}:</span> {{ verification_code }}</div>
+            <div class="verification-scan-hint">{{ label_report_verification_scan_hint | default('Orijinallik için QR ile tarayın veya noryaai.com üzerinden kodu girin.', true) }}</div>
           </div>
         </div>
       </div>
     </section>
     {% endif %}
 
-    {% if possible_causes or recommendations %}
-    <div class="section-causes-recommendations">
-    {% if possible_causes %}
-    <section class="section-compact">
-      <div class="section-title">{{ possible_causes_heading | default('Olası Nedenler', true) }}</div>
-      <div class="section-body section-body-compact">{{ possible_causes }}</div>
+    {% if doctor_share_note %}
+    <section class="doctor-share-note">
+      <div class="doctor-share-note-title">{{ doctor_share_note.title | default('Doktorla paylaşım notu', true) }}</div>
+      <div class="doctor-share-note-body">
+        {% if doctor_share_note.discuss_names and doctor_share_note.discuss_names|length > 0 %}
+        <p><strong>Özellikle konuşulabilecek parametreler:</strong> {{ doctor_share_note.discuss_names | join(', ') }}.</p>
+        {% endif %}
+        {% if doctor_share_note.normal_summary %}
+        <p>{{ doctor_share_note.normal_summary }}</p>
+        {% endif %}
+        {% if doctor_share_note.follow_up_summary %}
+        <p>{{ doctor_share_note.follow_up_summary }}</p>
+        {% endif %}
+      </div>
     </section>
-    {% endif %}
-    {% if recommendations %}
-    <section class="section-compact">
-      <div class="section-title">{{ recommendations_heading | default('Öneriler', true) }}</div>
-      <div class="section-body section-body-compact">{{ recommendations }}</div>
-    </section>
-    {% endif %}
-    </div>
     {% endif %}
 
-    {% if raw_sections %}
-    {% for section in raw_sections %}
-    <section>
-      <div class="section-title">{{ section.title }}</div>
-      <div class="section-body">{{ section.body }}</div>
-    </section>
-    {% endfor %}
+    {% if follow_up_note %}
+    <div class="follow-up-note">{{ follow_up_note }}</div>
     {% endif %}
 
     <div class="report-end-footer">
-      Norya · Bilgilendirme amaçlı klinik rapor · support@noryaai.com
+      {{ report_footer | default('Norya · support@noryaai.com', true) }}
     </div>
     <div class="footer-note">
-      {{ footer_note | default('Bu rapor Norya laboratuvar sonuçları yorumlama hizmeti ile oluşturulmuştur. Teşhis veya tedavi yerine geçmez. Tıbbi kararlar için mutlaka bir hekime danışın.', true) }}
-    </div>
-    <div class="footer-note emr-ehr-note">
-      {{ emr_ehr_note | default('EMR/EHR uyumlu — Bu rapor hastane veya hekim bilgi sistemlerine yüklenebilir formattadır.', true) }}
+      {{ footer_note | default('Teşhis yerine geçmez; hekime danışın.', true) }}
     </div>
   </div>
 </body>

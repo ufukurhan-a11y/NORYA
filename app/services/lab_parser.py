@@ -68,6 +68,96 @@ def _extract_ref_range(s: str) -> tuple[float | None, float | None]:
     return None, None
 
 
+def _name_before_value(s: str) -> str:
+    """Satırın başından ilk sayı / : / = / ( öncesine kadar test adı."""
+    if not s or not s.strip():
+        return ""
+    s = s.strip()
+    if s.startswith("-") or s.startswith("•") or s.startswith("*"):
+        s = s.lstrip("-•*").strip()
+    for i, c in enumerate(s):
+        if c in (":", "=", "(") or (c.isdigit() and (i == 0 or s[i - 1].isspace() or s[i - 1] in "-/")):
+            return s[:i].strip()
+    return ""
+
+
+def _split_value_unit(raw: str) -> tuple[str, str | None]:
+    if not raw or not raw.strip():
+        return ("—", None)
+    raw = raw.strip()
+    parts = raw.split(None, 1)
+    val = parts[0] if parts else "—"
+    unit = parts[1] if len(parts) > 1 else None
+    return (val, unit)
+
+
+def _norm_status(s: str) -> str:
+    s = (s or "").strip().lower()
+    if s in ("high", "yüksek"): return "high"
+    if s in ("low", "düşük"): return "low"
+    if "border" in s or "sınır" in s: return "border"
+    return "normal"
+
+
+def parse_biomarkers(values_block: str) -> list[dict]:
+    """
+    Values metninden biomarker listesi. Test adı boşsa kayıt üretilmez.
+    Ad: satır başından ilk sayı/:/=/( öncesi. Yarım satır (Ref: kesik) üretilmez.
+    """
+    out: list[dict] = []
+    seen: set[str] = set()
+    for raw_line in (values_block or "").splitlines():
+        line = raw_line.strip()
+        if not line or len(line) < 4:
+            continue
+        if line.startswith("-") or line.startswith("•") or line.startswith("*"):
+            line = line.lstrip("-•*").strip()
+        if not line:
+            continue
+        name = ""
+        rest = line
+        if line.startswith("**"):
+            m = re.match(r"\*\*([^*]+)\*?\s*:\s*(.+)", line)
+            if m:
+                name = (m.group(1) or "").strip().rstrip("*").strip()
+                rest = (m.group(2) or "").strip()
+        else:
+            name = _name_before_value(line)
+            if name:
+                idx = line.find(name)
+                if idx >= 0:
+                    rest = line[idx + len(name):].lstrip(":–—\- ").strip()
+        if not name or len(name) < 2 or len(name) > 80:
+            continue
+        if re.match(r"^\d", name) or re.search(r"\bReference\b|Ref\.\s|\d+\s*(?:mg|g|ng|mmol)", name, re.I):
+            continue
+        key = name.lower()
+        if key in seen:
+            continue
+        value_str = rest
+        ref = None
+        status = "normal"
+        ref_m = re.search(r"(?:Reference|Ref\.?|Referans)\s*:\s*([^\n.]+?)(?:\.\s*(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır))?\s*\.?\s*$", rest, re.I)
+        if ref_m:
+            ref = ref_m.group(1).strip() or None
+            if ref_m.lastindex and ref_m.lastindex >= 2 and ref_m.group(2):
+                status = _norm_status(ref_m.group(2))
+            value_str = rest[: ref_m.start()].strip().rstrip(".,")
+        value, unit = _split_value_unit(value_str)
+        if not value or value == "—":
+            value = value_str.split()[0] if value_str.split() else "—"
+            unit = value_str.split()[1] if len(value_str.split()) > 1 else None
+        seen.add(key)
+        out.append({
+            "name": name,
+            "value": value,
+            "unit": unit,
+            "reference": ref,
+            "status": status,
+        })
+    return out
+
+
 def parse_lab_text(text: str) -> list[dict[str, Any]]:
     """
     Ham tahlil metninden lab değerleri listesi döner.
