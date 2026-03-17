@@ -22,6 +22,11 @@ else
   EXEC="python3"
 fi
 
+LOG_DIR="./logs"
+mkdir -p "$LOG_DIR"
+TS="$(date +%Y-%m-%d_%H-%M-%S)"
+LOG_FILE="$LOG_DIR/server-$TS.log"
+
 echo "Sunucu başlatılıyor:"
 echo "  Bilgisayardan: http://127.0.0.1:$PORT"
 echo "  Admin:         http://127.0.0.1:$PORT/admin"
@@ -39,5 +44,10 @@ else
   echo "  Telefondan:    http://<BILGISAYAR-IP>:$PORT  (Sistem Ayarları > Wi-Fi > Detaylar > IP)"
 fi
 echo ""
+echo "Log dosyası: $LOG_FILE"
+echo "Log'u canlı görmek için başka bir terminalde:"
+echo "  tail -f \"$LOG_FILE\""
+echo ""
 # 0.0.0.0 = ağdaki diğer cihazlar (telefon vb.) bağlanabilsin
-$EXEC -m uvicorn app.main:app --reload --host 0.0.0.0 --port $PORT
+# Çıktıyı hem ekrana hem log dosyasına yaz
+$EXEC -m uvicorn app.main:app --reload --host 0.0.0.0 --port $PORT 2>&1 | tee -a "$LOG_FILE"

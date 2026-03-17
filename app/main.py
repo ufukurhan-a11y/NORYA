@@ -380,14 +380,31 @@ app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)  # cu
 app.add_middleware(SlowAPIMiddleware)
 
 
+def _accepts_html(request: Request) -> bool:
+    """İstek tarayıcıdan mı (HTML tercih ediyor mu) kontrol eder."""
+    accept = (request.headers.get("accept") or "").lower()
+    return "text/html" in accept and ("application/json" not in accept or accept.index("text/html") < accept.index("application/json"))
+
+
 @app.exception_handler(HTTPException)
-def http_exception_handler(request: Request, exc: HTTPException) -> JSONResponse:
+def http_exception_handler(request: Request, exc: HTTPException):
     if exc.status_code == 429:
         detail = exc.detail if isinstance(exc.detail, str) else "Rate limit exceeded. Please try again later."
         return JSONResponse(
             status_code=429,
             content={"error": "Too many requests", "detail": detail},
         )
+    if exc.status_code == 404 and _accepts_html(request):
+        # Tarayıcıda 404: JSON yerine kısa HTML sayfası (ana sayfaya dönüş)
+        detail = exc.detail if isinstance(exc.detail, str) else "Not Found"
+        html = (
+            "<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
+            "<title>Sayfa bulunamadı – Norya</title></head><body style='font-family:system-ui;max-width:32rem;margin:2rem auto;padding:1.5rem;text-align:center;'>"
+            "<h1 style='color:#0f172a;'>Sayfa bulunamadı</h1><p style='color:#475569;'>Aradığınız sayfa mevcut değil veya taşınmış olabilir.</p>"
+            "<p><a href='/' style='color:#0d9488;text-decoration:none;font-weight:600;'>Ana sayfaya dön</a></p>"
+            "</body></html>"
+        )
+        return HTMLResponse(status_code=404, content=html)
     return _error_response(request, exc.status_code, exc.detail if isinstance(exc.detail, str) else str(exc.detail))
 
 

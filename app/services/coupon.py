@@ -62,7 +62,8 @@ def validate_coupon(
     if days_ok is not None and today.day not in days_ok:
         return 0, "Bu indirim kodu bugün geçerli değil (sadece ayın belirli günlerinde geçerli)."
 
-    if coupon.max_uses is not None and coupon.use_count >= coupon.max_uses:
+    use_count = 0 if coupon.use_count is None else coupon.use_count
+    if coupon.max_uses is not None and use_count >= coupon.max_uses:
         return 0, "Bu indirim kodunun kullanım limiti dolmuş."
 
     products_raw = (coupon.products or "").strip().lower()
@@ -71,12 +72,13 @@ def validate_coupon(
         if allowed and product.lower() not in allowed:
             return 0, "Bu indirim kodu seçilen ürün için geçerli değil."
 
+    discount_val = coupon.discount_value if coupon.discount_value is not None else 0
     if coupon.discount_type == "percent":
-        if not (1 <= coupon.discount_value <= 100):
+        if not (1 <= discount_val <= 100):
             return 0, "Geçersiz indirim oranı."
-        discount_cents = int(base_amount_cents * coupon.discount_value / 100)
+        discount_cents = int(base_amount_cents * discount_val / 100)
     elif coupon.discount_type == "fixed":
-        discount_cents = min(coupon.discount_value, base_amount_cents)
+        discount_cents = min(discount_val, base_amount_cents)
     else:
         return 0, "Geçersiz indirim tipi."
 

@@ -2,6 +2,7 @@
 {% set _base_ui = base_ui|default({}) %}
 {% set _brand = brand_name|default('NoryaAI') %}
 <!DOCTYPE html>
+<!-- DEBUG_FILE: base.html v1 -->
 <html lang="{{ _locale }}">
 <head>
   <meta charset="UTF-8" />
@@ -125,6 +126,7 @@
           <a href="#nasil-calisir" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_how|default('How it works') }}</a>
           <a href="#guvenlik" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_security|default('Security') }}</a>
         </div>
+        {% include "partials/header_lang.html" %}
         {% block nav_actions %}
         <a href="/" class="nav-cta inline-flex items-center justify-center px-4 py-2 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
         {% endblock %}
@@ -171,6 +173,7 @@
   </footer>
 
   {% block scripts %}{% endblock %}
+  {% include "partials/scripts_lang.html" %}
 
   <script>
     function toggleBaseDrawer() {

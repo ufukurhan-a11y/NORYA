@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- DEBUG_FILE: enterprise/kurumsal.html v1 -->
 <html lang="{{ lang }}" {% if lang in ('ar', 'he') %}dir="rtl"{% endif %}>
 <head>
   <meta charset="UTF-8" />
@@ -52,6 +53,7 @@
         <a href="/kurumsal" class="text-teal-600">{{ t.nav_enterprise }}</a>
         <a href="/legal/gizlilik-politikasi?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.nav_privacy }}</a>
         <a href="/legal/kullanim-sartlari?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.nav_terms }}</a>
+        {% include "partials/header_lang.html" %}
       </nav>
     </div>
   </header>
@@ -301,5 +303,6 @@
       });
     })();
   </script>
+{% include "partials/scripts_lang.html" %}
 </body>
 </html>

@@ -1290,7 +1290,8 @@
     /* Analyze wizard: stabilize layout so loading/result alanı zıplamasın; mobil uyumlu */
     #analyze-section { scroll-margin-top: 96px; }
     @media (max-width: 767px) { #analyze-section { scroll-margin-top: 56px; } }
-    /* Wizard ana container sabit yükseklikte kalsın, collapse olmasın */
+    /* Wizard ana container sabit yükseklikte kalsın; auth modallar her zaman bunun üstünde olsun */
+    #analyze-box { position: relative; z-index: 10; }
     #analyze-box .intake-card-inner { min-height: 520px; display: flex; flex-direction: column; }
     #analyze-form { flex: 1; display: flex; flex-direction: column; }
     .wizard-step { width: 100%; }
@@ -1298,6 +1299,7 @@
     .wizard-step.hidden { visibility: hidden; opacity: 0; position: absolute; left: 0; right: 0; pointer-events: none; }
     .wizard-step:not(.hidden) { visibility: visible; opacity: 1; position: relative; }
     #analyzeWizardRoot { touch-action: manipulation; }
+    #wizard-actions { position: relative; z-index: 20; }
     #wizard-step-3 { min-height: 260px; }
     @media (max-width: 640px) { #wizard-step-3 { min-height: 200px; } #analyze-box .intake-card-inner { min-height: 420px; } }
     #analyze-result-body { min-height: 320px; }
@@ -1323,7 +1325,7 @@
     .dark .intake-stepper-line { background: rgba(148,163,184,0.2); }
     .intake-stepper-line.filled { background: #0EA5A4; }
     .dark .intake-stepper-line.filled { background: #0EA5A4; }
-    .intake-cta { width: 100%; padding: 0.875rem 1.5rem; font-size: 1rem; font-weight: 600; border-radius: 14px; background: #0EA5A4; color: #fff; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; min-height: 48px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; }
+    .intake-cta { width: 100%; padding: 0.875rem 1.5rem; font-size: 1rem; font-weight: 600; border-radius: 14px; background: #0EA5A4; color: #fff; border: none; cursor: pointer; transition: background 0.2s, transform 0.15s; min-height: 48px; touch-action: manipulation; -webkit-tap-highlight-color: transparent; pointer-events: auto; }
     .intake-cta:hover:not(:disabled) { background: #0d9488; }
     .intake-cta:active:not(:disabled) { transform: scale(0.98); }
     .intake-cta:disabled { opacity: 0.5; cursor: not-allowed; }
@@ -1692,20 +1694,64 @@
     }
     /* Dil dropdown: hero/rengin üstünde görünsün */
     #lang-wrap { position: relative; z-index: 201; }
-    /* Dil dropdown panel: premium shadow, radius, spacing */
+
+    /* ========== LANGUAGE SWITCH — ORTAK TASARIM SİSTEMİ ==========
+     * Görsel DNA: Temiz, premium, sağlık-teknoloji SaaS. Soft white / cam, ince border,
+     * yumuşak shadow, yuvarlatılmış radius (14–18px). Turkuaz aksan abartısız.
+     * Aktif dil: hafif tinted bg + küçük check. Animasyon: hafif fade + translate (kısa).
+     * Desktop: kompakt trigger, overlay dropdown. Mobile: aynı dil, 44px+ tap, taşma yok.
+     */
+    /* Design tokens (shared) */
+    :root {
+      --lang-border: 1px solid rgba(15,23,42,0.07);
+      --lang-bg: rgba(255,255,255,0.92);
+      --lang-shadow: 0 12px 40px rgba(15,23,42,0.08), 0 2px 8px rgba(15,23,42,0.03);
+      --lang-radius: 16px;
+      --lang-radius-inner: 12px;
+      --lang-accent-subtle: rgba(14,165,164,0.08);
+      --lang-accent-active: rgba(14,165,164,0.1);
+      --lang-check: #0d9488;
+    }
+    .dark {
+      --lang-border: 1px solid rgba(148,163,184,0.18);
+      --lang-bg: rgba(30,41,59,0.95);
+      --lang-shadow: 0 12px 40px rgba(0,0,0,0.25);
+      --lang-accent-subtle: rgba(14,165,164,0.1);
+      --lang-accent-active: rgba(14,165,164,0.18);
+      --lang-check: rgba(167,243,239,0.9);
+    }
+
+    /* ========== MOBILE LANGUAGE MODAL (aynı görsel dil) ========== */
+    #lang-wrap.lang-modal-backdrop {
+      background: rgba(15,23,42,0.22);
+      z-index: 1300;
+    }
+    .dark #lang-wrap.lang-modal-backdrop { background: rgba(0,0,0,0.4); }
     #lang-modal.lang-dropdown-panel {
-      z-index: 2147483647 !important;
+      z-index: 1400 !important;
       position: fixed !important;
-      box-shadow: 0 12px 48px rgba(0,0,0,0.12), 0 4px 16px rgba(0,0,0,0.08);
       margin-top: 0;
       pointer-events: auto !important;
       isolation: isolate;
-      border-radius: 14px;
-      padding: 6px 0;
-      min-width: 12rem;
+      min-width: 240px;
+      max-width: min(320px, calc(100vw - 24px));
+      padding: 10px;
+      border-radius: var(--lang-radius);
+      border: var(--lang-border);
+      background: var(--lang-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--lang-shadow);
+      overflow-x: hidden;
+      overflow-y: auto;
+      max-height: min(70vh, 70dvh);
     }
-    .dark #lang-modal.lang-dropdown-panel { box-shadow: 0 12px 48px rgba(0,0,0,0.35); }
-    /* Dil satırı: hizalama, padding, geçişler */
+    .dark #lang-modal.lang-dropdown-panel {
+      border-color: rgba(148,163,184,0.2);
+      background: rgba(30,41,59,0.95);
+      box-shadow: 0 12px 40px rgba(0,0,0,0.3);
+    }
+    /* Mobile lang items — same family as desktop; minimum 44px tap area (iOS/Android) */
     #lang-modal .lang-opt {
       cursor: pointer !important;
       pointer-events: auto !important;
@@ -1715,53 +1761,208 @@
       justify-content: space-between !important;
       text-align: left !important;
       min-height: 44px;
-      padding: 0 1rem 0 1rem;
-      padding-right: 2.25rem;
+      padding: 12px 16px;
       border: none;
       background: transparent;
       font: inherit;
       font-size: 0.9375rem;
-      line-height: 1.4;
-      color: rgb(30 41 59);
+      font-weight: 500;
+      line-height: 1.35;
+      color: #1e293b;
+      border-radius: var(--lang-radius-inner);
       -webkit-tap-highlight-color: transparent;
       touch-action: manipulation;
-      transition: background 0.2s ease;
+      transition: background 140ms ease, color 140ms ease;
       position: relative;
+      z-index: 2;
+      box-sizing: border-box;
     }
     .dark #lang-modal .lang-opt { color: rgba(226,232,240,0.92); }
-    /* Hover: nötr yumuşak (aktif dil rengiyle karışmasın) */
+    /* Header içindeki dropdown (desktop) — daha kompakt/premium görünüm */
+    .language-switch { position: relative; }
+    /* Trigger buttons: landing + backend (id ve class'ları birlikte hedefle) */
+    /* Desktop trigger — kompakt, soft glass */
+    .lang-trigger-btn,
+    #langToggle,
+    #base-lang-toggle {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      height: 40px;
+      padding: 0 14px;
+      border-radius: 14px;
+      border: var(--lang-border);
+      background: rgba(255,255,255,0.82);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      box-shadow: 0 4px 20px rgba(15,23,42,0.05);
+      color: #0f172a;
+      font-size: 0.875rem;
+      font-weight: 500;
+      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease, background 150ms ease;
+    }
+    .dark .lang-trigger-btn,
+    .dark #langToggle,
+    .dark #base-lang-toggle {
+      background: rgba(15,23,42,0.88);
+      border-color: rgba(148,163,184,0.3);
+      color: #e5e7eb;
+    }
+    .lang-trigger-btn:hover,
+    #langToggle:hover,
+    #base-lang-toggle:hover {
+      transform: translateY(-1px);
+      border-color: rgba(14,165,164,0.22);
+      box-shadow: 0 8px 28px rgba(15,23,42,0.08);
+      background: rgba(255,255,255,0.94);
+    }
+    .dark .lang-trigger-btn:hover,
+    .dark #langToggle:hover,
+    .dark #base-lang-toggle:hover {
+      background: rgba(15,23,42,0.94);
+      border-color: rgba(45,212,191,0.4);
+    }
+    .lang-trigger-btn:focus-visible,
+    #langToggle:focus-visible,
+    #base-lang-toggle:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(14,165,164,0.2), 0 8px 28px rgba(15,23,42,0.08);
+      border-color: rgba(14,165,164,0.35);
+    }
+    .lang-trigger-icon {
+      font-size: 0.95rem;
+      opacity: 0.85;
+    }
+    .lang-trigger-code {
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+    .lang-trigger-chevron {
+      font-size: 0.7rem;
+      opacity: 0.7;
+    }
+    /* Desktop dropdown — overlay, rafine panel (aynı tasarım ailesi) */
+    #langMenu,
+    #base-lang-menu {
+      position: absolute;
+      top: calc(100% + 8px);
+      right: 0;
+      width: max-content;
+      min-width: 220px;
+      max-width: calc(100vw - 24px);
+      padding: 10px;
+      border-radius: var(--lang-radius);
+      border: var(--lang-border);
+      background: var(--lang-bg);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      box-shadow: var(--lang-shadow);
+      z-index: 1400;
+      transform-origin: top right;
+      animation: langMenuIn 160ms ease;
+      pointer-events: auto;
+    }
+    #langMenu::before,
+    #langMenu::after,
+    #base-lang-menu::before,
+    #base-lang-menu::after {
+      pointer-events: none;
+    }
+    @keyframes langMenuIn {
+      from { opacity: 0; transform: translateY(-4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    /* Desktop menu items — düzenli, premium; aktif: hafif tint + küçük check */
+    #langMenu.lang-dropdown-panel .lang-option,
+    #base-lang-menu .header-lang-option {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.75rem;
+      width: 100%;
+      min-height: 42px;
+      padding: 10px 12px;
+      border-radius: var(--lang-radius-inner);
+      color: #1e293b;
+      font-weight: 500;
+      text-decoration: none;
+      position: relative;
+      z-index: 2;
+      cursor: pointer;
+      pointer-events: auto;
+      transition: background 140ms ease, color 140ms ease;
+    }
+    #langMenu.lang-dropdown-panel .lang-option:hover,
+    #base-lang-menu .header-lang-option:hover {
+      background: var(--lang-accent-subtle);
+      color: #0f172a;
+    }
+    #langMenu.lang-dropdown-panel .lang-option.is-active,
+    #base-lang-menu .header-lang-option.is-active {
+      background: var(--lang-accent-active);
+      color: #0f172a;
+      font-weight: 600;
+    }
+    #langMenu.lang-dropdown-panel .lang-option.is-active::after,
+    #base-lang-menu .header-lang-option.is-active::after {
+      content: "✓";
+      font-size: 0.75rem;
+      color: var(--lang-check);
+    }
+    [dir="rtl"] #langMenu.lang-dropdown-panel .lang-option,
+    [dir="rtl"] #base-lang-menu .header-lang-option {
+      text-align: right;
+    }
+    @media (max-width: 640px) {
+      #langMenu,
+      #base-lang-menu {
+        min-width: 200px;
+        max-width: calc(100vw - 16px);
+        padding: 8px;
+        border-radius: 16px;
+      }
+      #langMenu.lang-dropdown-panel .lang-option,
+      #base-lang-menu .header-lang-option {
+        min-height: 40px;
+        padding: 9px 10px;
+        font-size: 0.9375rem;
+      }
+    }
+    /* Mobile lang item hover/active — aynı aile: hafif tint, abartısız */
     #lang-modal .lang-opt:hover {
-      background: rgba(15,23,42,0.05);
+      background: var(--lang-accent-subtle);
+      color: #0f172a;
     }
     .dark #lang-modal .lang-opt:hover {
-      background: rgba(255,255,255,0.07);
+      background: var(--lang-accent-subtle);
+      color: #e5e7eb;
     }
-    /* Seçili dil: turkuaz tint + her zaman baskın; hover ile çakışmasın */
     #lang-modal .lang-opt.lang-opt-selected {
-      background: rgba(14,165,164,0.14);
+      background: var(--lang-accent-active);
       font-weight: 600;
-      color: rgb(13,148,136);
+      color: #0f172a;
     }
     #lang-modal .lang-opt.lang-opt-selected:hover {
-      background: rgba(14,165,164,0.2);
+      background: rgba(14,165,164,0.14);
     }
     .dark #lang-modal .lang-opt.lang-opt-selected {
-      background: rgba(14,165,164,0.22);
+      background: var(--lang-accent-active);
       color: rgba(167,243,239,0.95);
     }
     .dark #lang-modal .lang-opt.lang-opt-selected:hover {
-      background: rgba(14,165,164,0.28);
+      background: rgba(14,165,164,0.25);
     }
-    /* Seçili dil sağda tik (LTR) */
+    /* Aktif dil: küçük check (abartısız) */
     #lang-modal .lang-opt.lang-opt-selected::after {
       content: "✓";
       position: absolute;
       right: 1rem;
-      font-size: 0.875rem;
-      font-weight: 700;
-      color: rgb(13,148,136);
+      font-size: 0.75rem;
+      font-weight: 600;
+      color: var(--lang-check);
     }
-    .dark #lang-modal .lang-opt.lang-opt-selected::after { color: rgba(167,243,239,0.95); }
+    .dark #lang-modal .lang-opt.lang-opt-selected::after { color: var(--lang-check); }
     /* RTL: tik solda, padding ve hizalama */
     #lang-modal .lang-opt[dir="rtl"] {
       text-align: right !important;
@@ -1772,16 +1973,8 @@
       right: auto;
       left: 1rem;
     }
-    #lang-modal .lang-opt:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(14,165,164,0.5); }
-    .dark #lang-modal .lang-opt:focus-visible { box-shadow: inset 0 0 0 2px rgba(14,165,164,0.6); }
-    /* Dil trigger butonu: globe + kod + ok; açıkken vurgu */
-    .lang-trigger-btn { min-height: 2.5rem; padding: 0.4rem 0.6rem; border-radius: 10px; transition: background 0.2s ease; }
-    .lang-trigger-btn:hover { background: rgba(14,165,164,0.08); }
-    .lang-trigger-btn.lang-open { background: rgba(14,165,164,0.1); }
-    .lang-trigger-icon { font-size: 1rem; line-height: 1; }
-    .lang-trigger-code { font-weight: 600; font-size: 0.8125rem; letter-spacing: 0.02em; min-width: 1.5em; }
-    .lang-trigger-chevron { font-size: 0.5rem; opacity: 0.7; transition: transform 0.2s ease; }
-    .lang-trigger-btn.lang-open .lang-trigger-chevron { transform: rotate(180deg); }
+    #lang-modal .lang-opt:focus-visible { outline: none; box-shadow: inset 0 0 0 2px rgba(14,165,164,0.35); }
+    .dark #lang-modal .lang-opt:focus-visible { box-shadow: inset 0 0 0 2px rgba(14,165,164,0.45); }
     /* Mobilde menü ve dil dropdown sabit pozisyon + yüksek z-index; arkaya gitmesin */
     @media (max-width: 640px) {
       #nav-menu-dropdown {
@@ -1870,7 +2063,7 @@
       .header .logo { height: 28px; }
     }
     .header.compact .logo { height: 22px; }
-    /* Nav only on desktop (>= 769px); 768px ve altında sadece hamburger */
+    /* Nav only on desktop (>= 601px); 600px ve altında sadece hamburger */
     .nav-shell {
       display: none;
       background: rgba(15,23,42,.04);
@@ -1880,7 +2073,7 @@
       gap: 2px;
       flex-shrink: 0;
     }
-    @media (min-width: 769px) {
+    @media (min-width: 601px) {
       .nav-shell { display: flex; }
     }
     .dark .nav-shell {
@@ -1963,7 +2156,7 @@
       display: flex; align-items: center; gap: 6px; flex-shrink: 0; min-width: 0;
       overflow: visible;
     }
-    @media (max-width: 768px) {
+    @media (max-width: 600px) {
       .header-right-zone { gap: 0; flex-shrink: 0; }
     }
     /* Header logo: tek marka, taşma yok, premium hover */
@@ -1983,9 +2176,9 @@
     .header-mobile-cta {
       display: none !important;
     }
-    /* Desktop-only CTA: hide on mobile/tablet so only one CTA shows */
+    /* Desktop-only CTA: hide on mobile so only one CTA shows; 601px+ göster */
     .header-cta-desktop { display: none !important; }
-    @media (min-width: 769px) {
+    @media (min-width: 601px) {
       .header-cta-desktop { display: inline-flex !important; }
     }
     /* Hamburger: premium round glass (46–48px), turkuaz border, cam efekti */
@@ -2051,17 +2244,25 @@
     @media (min-width: 768px) {
       .hamburger { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
     }
-    @media (min-width: 769px) {
-      .hamburger { display: none !important; }
+    /* Tarayıcı/tablet: hamburger yok; sadece mobil (<=600px) hamburger + drawer */
+    @media (min-width: 601px) {
+      #main-header .hamburger,
+      #main-header .header-mobile-only,
+      .header .hamburger,
+      .header .header-mobile-only { display: none !important; visibility: hidden !important; }
     }
-    /* CTA in header (desktop): 769px ve üzeri */
+    @media (max-width: 600px) {
+      #main-header .header-mobile-only,
+      .header .header-mobile-only { display: flex !important; visibility: visible !important; }
+    }
+    /* CTA in header (desktop): 601px ve üzeri */
     .header-cta-inline {
       display: none;
     }
-    @media (min-width: 769px) {
+    @media (min-width: 601px) {
       .header-cta-inline { display: inline-flex; }
     }
-    @media (min-width: 769px) and (max-width: 1199px) {
+    @media (min-width: 601px) and (max-width: 1199px) {
       .primary-cta.header-cta-inline { padding: 10px 14px; font-size: 0.875rem; border-radius: 12px; }
     }
     .mobile-overlay {
@@ -2179,18 +2380,18 @@
       color: rgba(15,23,42,.7);
     }
     .dark .drawer-close { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
-    /* 768px ve altı: sadece logo + hamburger; Giriş/Ücretsiz Başla/dil/CTA drawer'da */
+    /* 600px ve altı: sadece logo + hamburger; Giriş/Ücretsiz Başla/dil/CTA drawer'da; 601px+ tam navbar */
     .header-desktop-only { display: none !important; }
-    @media (min-width: 769px) {
+    @media (min-width: 601px) {
       .header-desktop-only { display: flex !important; }
     }
     .header-desktop-only.inline-items { display: none !important; }
-    @media (min-width: 769px) {
+    @media (min-width: 601px) {
       .header-desktop-only.inline-items { display: inline-flex !important; }
     }
     .header.user-logged-in .header-cta-guest-only { display: none !important; }
     #nav-user.hidden { display: none !important; }
-    @media (min-width: 769px) {
+    @media (min-width: 601px) {
       #nav-user:not(.hidden) { display: inline-flex !important; align-items: center; gap: 0.5rem; }
       #nav-user .header-desktop-only { display: inline-flex !important; }
     }
@@ -2202,8 +2403,21 @@
     .lang-dropdown-max-h { max-height: 70vh; }
     @supports (height: 100dvh) { .lang-dropdown-max-h { max-height: 70dvh; } }
     .lang-opt { margin: 0; }
-    @media (max-width: 768px) {
-      #lang-modal .lang-opt { min-height: 48px; padding: 12px 16px; font-size: 1rem; display: flex; align-items: center; }
+    /* Mobile lang modal: 600px ve altı */
+    @media (max-width: 600px) {
+      #lang-modal.lang-dropdown-panel {
+        max-width: calc(100vw - 24px);
+        max-height: min(calc(100vh - 32px), calc(100dvh - 32px));
+        padding: 12px;
+      }
+      #lang-modal .lang-opt {
+        min-height: 48px;
+        min-width: 44px;
+        padding: 14px 16px;
+        font-size: 1rem;
+        display: flex !important;
+        align-items: center !important;
+      }
     }
     #nav-menu-dropdown a, #nav-menu-dropdown button { margin: 2px 0; }
     .nav-menu-mobile-only { display: none; }
@@ -2454,16 +2668,15 @@
       max-width: 100%;
       overflow-x: clip;
       padding-top: env(safe-area-inset-top);
-      background: rgba(255,255,255,.82);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid rgba(15,23,42,.08);
+      /* Transparent header so hero background continues behind it */
+      background: transparent;
+      border-bottom: none;
       transition: background .22s ease, box-shadow .22s ease;
     }
     .dark .elite-header { background: rgba(15,23,42,.85); border-bottom-color: rgba(255,255,255,.06); }
     .elite-header.compact {
-      background: rgba(255,255,255,.92);
-      box-shadow: 0 8px 24px rgba(15,23,42,.06);
+      background: rgba(15,23,42,.92);
+      box-shadow: 0 8px 24px rgba(15,23,42,.3);
     }
     .dark .elite-header.compact { background: rgba(15,23,42,.92); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
 
@@ -2472,7 +2685,6 @@
       width: 100%;
       margin: 0 auto;
       min-width: 0;
-      overflow: hidden;
       box-sizing: border-box;
     }
     @media (max-width: 1023px) {
@@ -2859,28 +3071,29 @@
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="header-right-zone">
-        <button type="button" onclick="toggleDark()" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
+        <button type="button" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
-        <div class="relative header-lang-wrap header-desktop-only" id="lang-wrap">
-          <button type="button" onclick="toggleLangModal()" class="secondary-link lang-trigger-btn flex items-center gap-2" id="lang-btn" data-i18n-aria-label="aria_select_language" aria-label="Dil seçin" aria-expanded="false" aria-haspopup="listbox">
-            <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
-            <span id="lang-current" class="lang-trigger-code">EN</span>
-            <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
-          </button>
-          <div id="lang-modal" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h lang-dropdown-panel" style="right: 0; top: 0;" role="listbox" aria-label="Dil seçin">
-            <button type="button" role="option" data-lang="en" class="lang-opt rounded-t-xl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('en'); else window.__noryaLangGo('en');">English</button>
-            <button type="button" role="option" data-lang="en-ca" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('en-ca'); else window.__noryaLangGo('en-ca');">English (Canada)</button>
-            <button type="button" role="option" data-lang="de" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('de'); else window.__noryaLangGo('de');">Deutsch</button>
-            <button type="button" role="option" data-lang="it" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('it'); else window.__noryaLangGo('it');">Italiano</button>
-            <button type="button" role="option" data-lang="fr" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('fr'); else window.__noryaLangGo('fr');">Français</button>
-            <button type="button" role="option" data-lang="es" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('es'); else window.__noryaLangGo('es');">Español</button>
-            <button type="button" role="option" data-lang="tr" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('tr'); else window.__noryaLangGo('tr');">Türkçe</button>
-            <button type="button" role="option" data-lang="ar" class="lang-opt" dir="rtl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('ar'); else window.__noryaLangGo('ar');">العربية</button>
-            <button type="button" role="option" data-lang="hi" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('hi'); else window.__noryaLangGo('hi');">हिन्दी</button>
-            <button type="button" role="option" data-lang="he" class="lang-opt" dir="rtl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('he'); else window.__noryaLangGo('he');">עברית</button>
-            <button type="button" role="option" data-lang="el" class="lang-opt" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('el'); else window.__noryaLangGo('el');">Ελληνικά</button>
-            <button type="button" role="option" data-lang="sr" class="lang-opt rounded-b-xl" aria-selected="false" onclick="if(typeof chooseLang==='function') chooseLang('sr'); else window.__noryaLangGo('sr');">Srpski</button>
+
+        <div class="relative header-lang-wrap header-desktop-only">
+          <div class="language-switch">
+            <button type="button" id="langToggle" aria-haspopup="true" aria-expanded="false" class="secondary-link lang-trigger-btn flex items-center gap-2">
+              <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
+              <span id="currentLangLabel" class="lang-trigger-code">EN</span>
+              <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
+            </button>
+
+            <div id="langMenu" class="hidden w-52 py-2 bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 overflow-y-auto lang-dropdown-max-h lang-dropdown-panel" aria-label="Dil seçin">
+              <a class="lang-option block text-left px-3 py-2 rounded-t-xl" data-locale="tr" href="/tr">Türkçe</a>
+              <a class="lang-option block text-left px-3 py-2" data-locale="en" href="/en">English</a>
+              <a class="lang-option block text-left px-3 py-2" data-locale="es" href="/es">Español</a>
+              <a class="lang-option block text-left px-3 py-2" data-locale="de" href="/de">Deutsch</a>
+              <a class="lang-option block text-left px-3 py-2" data-locale="fr" href="/fr">Français</a>
+              <a class="lang-option block text-left px-3 py-2" data-locale="it" href="/it">Italiano</a>
+              <a class="lang-option block text-left px-3 py-2" data-locale="he" href="/he" dir="rtl">עברית</a>
+              <a class="lang-option block text-left px-3 py-2 rounded-b-xl" data-locale="hi" href="/hi">हिन्दी</a>
+              <a class="lang-option block text-left px-3 py-2 rounded-b-xl" data-locale="ar" href="/ar" dir="rtl">العربية</a>
+            </div>
           </div>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
@@ -2894,7 +3107,7 @@
         </span>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analiz Yap</a>
-        <button type="button" class="hamburger elite-menu-btn" onclick="toggleMobileDrawer()" aria-label="Menüyü aç" aria-expanded="false" id="hamburger-btn">
+        <button type="button" class="hamburger header-mobile-only elite-menu-btn" onclick="toggleMobileDrawer()" aria-label="Menüyü aç" aria-expanded="false" id="hamburger-btn">
           <span class="hamburger-inner" aria-hidden="true">
             <span class="hamburger-line hamburger-line--top"></span>
             <span class="hamburger-line hamburger-line--mid"></span>
@@ -2904,6 +3117,27 @@
       </div>
     </div>
   </header>
+  <!-- DEBUG_FILE: static/index.html v2 -->
+  <!-- Global language modal used on mobile "Diller" button and desktop if needed -->
+  <div id="lang-wrap" class="fixed inset-0 pointer-events-none hidden">
+    <div
+      id="lang-modal"
+      class="hidden lang-dropdown-panel bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 max-w-xs mx-auto mt-24 pointer-events-auto"
+      role="dialog"
+      aria-modal="true"
+      aria-label="Dil seçin"
+    >
+      <button type="button" class="lang-opt w-full text-left" data-lang="tr" onclick="chooseLang('tr')">Türkçe</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="en" onclick="chooseLang('en')">English</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="es" onclick="chooseLang('es')">Español</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="de" onclick="chooseLang('de')">Deutsch</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="fr" onclick="chooseLang('fr')">Français</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="it" onclick="chooseLang('it')">Italiano</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="he" dir="rtl" onclick="chooseLang('he')">עברית</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="hi" onclick="chooseLang('hi')">हिन्दी</button>
+      <button type="button" class="lang-opt w-full text-left" data-lang="ar" dir="rtl" onclick="chooseLang('ar')">العربية</button>
+    </div>
+  </div>
   <div id="mobile-overlay" class="mobile-overlay" onclick="closeMobileDrawer()" aria-hidden="true"></div>
   <aside id="mobile-drawer" class="mobile-drawer" role="dialog" aria-label="Menü" aria-modal="true" tabindex="-1">
     <div class="drawer-head">
@@ -2922,7 +3156,7 @@
         <button type="button" onclick="closeMobileDrawer(); logout();" class="drawer-link drawer-link--tap" data-i18n="nav_logout">Çıkış</button>
       </div>
       <a href="#ornek-rapor" class="drawer-link drawer-link--primary" onclick="closeMobileDrawer()" data-i18n="hero_see_sample">Örnek Rapor</a>
-      <button type="button" onclick="closeMobileDrawer(); toggleLangModal();" class="drawer-link drawer-link--primary w-full text-left" data-i18n="nav_languages">Diller</button>
+      <button type="button" id="drawer-lang-btn" class="drawer-link drawer-link--primary w-full text-left" data-i18n="nav_languages" onclick="closeMobileDrawer(); requestAnimationFrame(function(){ toggleLangModal(); });">Diller</button>
       <div class="drawer-section drawer-section--nav">
         <a href="#analyze-section" onclick="closeMobileDrawer(); openAnalyze(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
         <a href="#hakkimizda" class="drawer-link drawer-link--tap" onclick="closeMobileDrawer()" data-i18n="nav_about">Hakkımızda</a>
@@ -2943,7 +3177,7 @@
   </aside>
 
   <!-- Hero: premium health-tech, conversion-focused, trust + speed + intelligence -->
-  <section class="hero hero-v2 pt-24 sm:pt-28 lg:pt-32 pb-14 sm:pb-16 lg:pb-20 px-4 text-white relative overflow-hidden" style="padding-top: calc(5.5rem + env(safe-area-inset-top, 0px));">
+  <section class="hero hero-v2 pt-16 sm:pt-20 lg:pt-24 pb-14 sm:pb-16 lg:pb-20 px-4 text-white relative overflow-hidden" style="padding-top: calc(4.25rem + env(safe-area-inset-top, 0px)); margin-top: -0.5rem;">
     <div class="hero-v2-bg" aria-hidden="true"></div>
     <div class="hero-inner hero-v2-inner max-w-6xl mx-auto w-full px-3 sm:px-4 relative z-10">
       <div class="hero-v2-grid">
@@ -3856,7 +4090,7 @@
 
         <div>
           <h3 class="text-xl font-semibold text-accent-900 dark:text-white mb-4" data-i18n="about_who_title">Biz kimiz?</h3>
-          <p class="mb-4" data-i18n="about_who_1">Norya, sağlık okuryazarlığını güçlendirmek isteyen küçük bir ekip tarafından kuruldu. Kurucumuz Ufuk Urhan, kullanıcıların kendi tahlil sonuçlarını anlamasının sağlıkla ilgili kararlarda önemli bir adım olduğuna inanıyor; Norya da bu ihtiyacı güvenli, sade ve hızlı bir şekilde karşılamak için tasarlandı.</p>
+          <p class="mb-4" data-i18n="about_who_1">Kurucumuz Ufuk Urhan, 2018’den beri yazılım geliştirici olarak çalışıyor. Kendi ve çevresindekilerin tahlil sonuçlarıyla karşılaştığında, sayılar ve kısaltmaların ne anlama geldiğini anlamanın ne kadar zor olduğunu gördü; piyasada bu ihtiyacı gerçekten karşılayan, sade ve güvenilir bir araç eksikliğini hissetti. Norya, bu boşluğu doldurmak ve sağlık okuryazarlığını güçlendirmek için kuruldu.</p>
           <p class="mb-4" data-i18n="about_who_2">Türkiye’den başlayarak dünya genelinde farklı dillerde hizmet veriyoruz. Gizliliğinize önem veriyoruz: verileriniz yalnızca size özel rapor üretmek için kullanılır ve güvenli bir altyapı ile korunur. Sorularınız, geri bildirimleriniz veya teknik destek talepleriniz için her zaman aşağıdaki e-posta adresinden bize ulaşabilirsiniz.</p>
           <p data-i18n="about_who_3">Norya olarak amacımız, laboratuvar sonuçlarınızı korkulacak bir belge olmaktan çıkarıp anlaşılır bir rehbere dönüştürmektir. Sizin deneyiminiz ve geri bildirimleriniz bu yolculukta bize yön veriyor.</p>
         </div>
@@ -6323,8 +6557,68 @@
 
   <div id="toast-container" aria-live="polite"></div>
 
+  <!-- Lightweight globals for critical header buttons so they work even if main bundle fails -->
   <script>
-    console.log('INDEX_HTML_DEBUG_BUILD_2026_03_11');
+    window.toggleLangModal = window.toggleLangModal || function () {
+      var m = document.getElementById('lang-modal');
+      var wrap = document.getElementById('lang-wrap');
+      if (!m) return;
+      var isHidden = m.classList.contains('hidden');
+      m.classList.toggle('hidden');
+      if (wrap) {
+        wrap.classList.toggle('hidden', !isHidden);
+        wrap.style.pointerEvents = isHidden ? 'auto' : '';
+        if (isHidden) {
+          window._langModalOpenedAt = Date.now();
+          wrap.classList.add('lang-modal-backdrop');
+          wrap.style.display = 'block';
+          wrap.style.visibility = 'visible';
+          wrap.style.opacity = '1';
+          document.body.appendChild(m);
+          m.style.position = 'fixed';
+          m.style.left = '50%';
+          m.style.top = '50%';
+          m.style.transform = 'translate(-50%, -50%)';
+          m.style.display = 'block';
+          m.style.visibility = 'visible';
+          m.style.pointerEvents = 'auto';
+        } else {
+          wrap.classList.remove('lang-modal-backdrop');
+          wrap.style.display = wrap.style.visibility = wrap.style.opacity = '';
+          if (!wrap.contains(m)) wrap.appendChild(m);
+          m.style.position = m.style.left = m.style.top = m.style.transform = m.style.display = m.style.visibility = m.style.pointerEvents = '';
+        }
+      }
+    };
+    window.openLogin = window.openLogin || function () {
+      var el = document.getElementById('modal-login');
+      if (el) { el.classList.remove('hidden'); el.classList.add('flex'); }
+      var err = document.getElementById('login-error');
+      if (err) err.classList.add('hidden');
+    };
+    window.closeLogin = window.closeLogin || function () {
+      var el = document.getElementById('modal-login');
+      if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
+    };
+    // Fallbacks so header buttons keep working even if later scripts fail to load.
+    window.openRegister = window.openRegister || function () {
+      var el = document.getElementById('modal-register');
+      if (el) {
+        el.classList.remove('hidden');
+        el.classList.add('flex');
+      }
+      var err = document.getElementById('register-error');
+      if (err) err.classList.add('hidden');
+    };
+    window.openAnalyze = window.openAnalyze || function () {
+      var el = document.getElementById('analyze-section');
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    };
+  </script>
+
+  <script>
+    console.log('[debug-file] static/index.html v2 landing script loaded');
+    console.log('[lang-debug] static/index.html main bundle loaded on', window.location.pathname);
     try { if ('scrollRestoration' in history) history.scrollRestoration = 'manual'; } catch (_) {}
     if (window && window.addEventListener) {
       window.addEventListener('beforeunload', function() { console.log('BEFORE_UNLOAD_FIRED'); });
@@ -6664,34 +6958,9 @@
         toast(t.toast_analyze_first || 'Rapor indirmek için giriş yapın.', 'error');
         return;
       }
-      var rid = getReportId();
-      var historyFetchFailed = false;
+      var rid = await ensureReportId();
       if (!rid) {
-        try {
-          var r = await fetch(API_BASE + '/analyze/history?limit=1', { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
-          if (r.ok) {
-            var list = await r.json();
-            if (list && list.length > 0 && list[0].id) {
-              rid = String(list[0].id);
-              var resultDiv = document.getElementById('analyze-result');
-              if (resultDiv) resultDiv.dataset.rid = rid;
-              lastAnalysisId = list[0].id;
-              try { sessionStorage.setItem(LAST_RID_KEY, rid); } catch (_) {}
-              if (window.history && window.history.replaceState) {
-                var qs = new URLSearchParams(window.location.search);
-                qs.set('rid', rid);
-                window.history.replaceState(null, '', (window.location.pathname || '/') + '?' + qs.toString());
-              }
-            }
-          } else { historyFetchFailed = true; }
-        } catch (_) { historyFetchFailed = true; }
-      }
-      if (!rid) {
-        if (historyFetchFailed) {
-          toast(t.toast_pdf_error || 'PDF indirilemedi, lütfen tekrar deneyin.', 'error');
-        } else {
-          toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error');
-        }
+        toast(t.toast_analyze_first || 'Önce analiz yapın. Giriş yaptığınızdan ve en az bir analiz yaptığınızdan emin olun.', 'error');
         return;
       }
       var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -6746,40 +7015,15 @@
       }
     }
     async function downloadForDoctor() {
-      var rid = getReportId();
       var t = T[getLang()] || T.tr;
       var token = getToken();
       if (!token) {
         toast(t.toast_analyze_first || 'Rapor indirmek için giriş yapın.', 'error');
         return;
       }
-      var historyFetchFailed = false;
+      var rid = await ensureReportId();
       if (!rid) {
-        try {
-          var r = await fetch(API_BASE + '/analyze/history?limit=1', { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
-          if (r.ok) {
-            var list = await r.json();
-            if (list && list.length > 0 && list[0].id) {
-              rid = String(list[0].id);
-              var resultDiv = document.getElementById('analyze-result');
-              if (resultDiv) resultDiv.dataset.rid = rid;
-              lastAnalysisId = list[0].id;
-              try { sessionStorage.setItem(LAST_RID_KEY, rid); } catch (_) {}
-              if (window.history && window.history.replaceState) {
-                var qs = new URLSearchParams(window.location.search);
-                qs.set('rid', rid);
-                window.history.replaceState(null, '', (window.location.pathname || '/') + '?' + qs.toString());
-              }
-            }
-          } else { historyFetchFailed = true; }
-        } catch (_) { historyFetchFailed = true; }
-      }
-      if (!rid) {
-        if (historyFetchFailed) {
-          toast(t.toast_pdf_error || 'PDF oluşturulamadı. Lütfen tekrar deneyin.', 'error');
-        } else {
-          toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error');
-        }
+        toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error');
         return;
       }
       try {
@@ -7296,7 +7540,12 @@
         var overviewCards = '';
         for (var oi = 0; oi < overviewOrder.length; oi++) {
           var ok = overviewOrder[oi];
-          var d = (ok === 'liver') ? liverStatus : (ok === 'kidney') ? kidneyStatus : (function() {
+          var d;
+          if (ok === 'liver') {
+            d = liverStatus;
+          } else if (ok === 'kidney') {
+            d = kidneyStatus;
+          } else {
             var dom = domains[ok] || {};
             var s = Math.max(0, Math.min(100, dom.score != null ? dom.score : 50));
             var lev = (dom.level || '').toLowerCase();
@@ -7308,8 +7557,8 @@
               var kws = { cardio: ['ldl','hdl','chol','trig','lipid','kolesterol'], metabolic: ['glucose','glukoz','hba1c','insulin'], vitamin: ['vitamin','b12','folat','demir','ferritin','d vitamini'], inflammation: ['crp','enflamasyon','c-reactive'] }[ok];
               if (kws) for (var kw = 0; kw < kws.length; kw++) if (ht.indexOf(kws[kw]) !== -1) { markers.push(highlights[hi].test); break; }
             }
-            return { score: s, label: label, cls: cls, markers: markers };
-          })();
+            d = { score: s, label: label, cls: cls, markers: markers };
+          }
           var markerLine = (d.markers && d.markers.length) ? '<p class="report-premium-overview-card-marker">' + escapeHtml(d.markers.slice(0, 2).join(', ')) + '</p>' : '';
           overviewCards += '<div class="report-premium-overview-card"><div class="report-premium-overview-card-title">' + escapeHtml(catNames[ok]) + '</div><span class="report-premium-overview-card-badge report-premium-overview-card-badge--' + d.cls + '">' + escapeHtml(d.label) + '</span>' + markerLine + '</div>';
         }
@@ -7470,13 +7719,55 @@
         var dom = domains[domKey] || {};
         var dScore = Math.max(0, Math.min(100, dom.score != null ? dom.score : 50));
         var dLevel = (dom.level || '').toLowerCase();
-        var cardColorClass = (dLevel === 'high' || dScore < 40) ? 'report-category-card--risk' : (dLevel === 'mid' || dScore < 70) ? 'report-category-card--border' : 'report-category-card--normal';
+        var cardColorClass;
+        if (dLevel === 'high' || dScore < 40) {
+          cardColorClass = 'report-category-card--risk';
+        } else if (dLevel === 'mid' || dScore < 70) {
+          cardColorClass = 'report-category-card--border';
+        } else {
+          cardColorClass = 'report-category-card--normal';
+        }
+
         var rec = getRecommendationForDomain(domKey);
-        var recLine = rec || (dScore >= 70 ? (planType === 'yearly' && t.report_cat_recommend_ok_yearly ? t.report_cat_recommend_ok_yearly : (planType === 'single' && t.report_cat_recommend_ok_single ? t.report_cat_recommend_ok_single : (planType === 'monthly' && t.report_cat_recommend_ok_monthly ? t.report_cat_recommend_ok_monthly : (t.report_cat_recommend_ok || 'Değerler uygun.')))) : (dScore >= 40 ? (planType === 'yearly' && t.report_cat_recommend_mid_yearly ? t.report_cat_recommend_mid_yearly : (planType === 'single' && t.report_cat_recommend_mid_single ? t.report_cat_recommend_mid_single : (planType === 'monthly' && t.report_cat_recommend_mid_monthly ? t.report_cat_recommend_mid_monthly : (t.report_cat_recommend_mid || 'Hekiminizle görüşün.')))) : (planType === 'yearly' && t.report_cat_recommend_risk_yearly ? t.report_cat_recommend_risk_yearly : (planType === 'single' && t.report_cat_recommend_risk_single ? t.report_cat_recommend_risk_single : (planType === 'monthly' && t.report_cat_recommend_risk_monthly ? t.report_cat_recommend_risk_monthly : (t.report_cat_recommend_risk || 'Hekiminizle görüşmeniz önerilir.')))));
+        var recLine = rec;
+        if (!recLine) {
+          if (dScore >= 70) {
+            if (planType === 'yearly' && t.report_cat_recommend_ok_yearly) {
+              recLine = t.report_cat_recommend_ok_yearly;
+            } else if (planType === 'single' && t.report_cat_recommend_ok_single) {
+              recLine = t.report_cat_recommend_ok_single;
+            } else if (planType === 'monthly' && t.report_cat_recommend_ok_monthly) {
+              recLine = t.report_cat_recommend_ok_monthly;
+            } else {
+              recLine = t.report_cat_recommend_ok || 'Değerler uygun.';
+            }
+          } else if (dScore >= 40) {
+            if (planType === 'yearly' && t.report_cat_recommend_mid_yearly) {
+              recLine = t.report_cat_recommend_mid_yearly;
+            } else if (planType === 'single' && t.report_cat_recommend_mid_single) {
+              recLine = t.report_cat_recommend_mid_single;
+            } else if (planType === 'monthly' && t.report_cat_recommend_mid_monthly) {
+              recLine = t.report_cat_recommend_mid_monthly;
+            } else {
+              recLine = t.report_cat_recommend_mid || 'Hekiminizle görüşün.';
+            }
+          } else {
+            if (planType === 'yearly' && t.report_cat_recommend_risk_yearly) {
+              recLine = t.report_cat_recommend_risk_yearly;
+            } else if (planType === 'single' && t.report_cat_recommend_risk_single) {
+              recLine = t.report_cat_recommend_risk_single;
+            } else if (planType === 'monthly' && t.report_cat_recommend_risk_monthly) {
+              recLine = t.report_cat_recommend_risk_monthly;
+            } else {
+              recLine = t.report_cat_recommend_risk || 'Hekiminizle görüşmeniz önerilir.';
+            }
+          }
+        }
+
         html += '<a href="#report-params" class="report-category-card ' + cardColorClass + '"><span class="report-category-card-icon">' + reportIcon('grid') + '</span><span class="report-category-card-title">' + escapeHtml(catTitles[dk]) + '</span><span class="report-category-card-meta">' + dScore + '%</span><div class="report-category-card-bar"><div class="report-category-card-bar-fill" style="width:' + dScore + '%"></div></div><p class="report-category-card-recommendation">' + escapeHtml(recLine) + '</p></a>';
       }
-      html += '</div>';
-      var catOrder = ['hemogram', 'crp', 'glucose', 'lipids', 'liver', 'kidney', 'iron', 'thyroid', 'other'];
+      html += '\x3c/div\x3e';
+      catOrder = ['hemogram', 'crp', 'glucose', 'lipids', 'liver', 'kidney', 'iron', 'thyroid', 'other'];
       var catKeywords = { hemogram: ['wbc','rbc','hgb','hct','plt','mcv','rdw','leukocyte','lökosit','erythrocyte','eritrosit','hemoglobin','hematocrit','platelet','trombosit','hemogram'], crp: ['crp','c-reactive','c reaktif','enflamasyon'], glucose: ['glucose','glukoz','açlık','fasting','hba1c','hb a1c'], lipids: ['ldl','hdl','triglyceride','trigliserid','cholesterol','kolesterol','lipid'], liver: ['alt','ast','ggt','sgot','sgpt','karaciğer','liver'], kidney: ['urea','üre','creatinine','kreatinin','egfr','bun','böbrek','kidney'], iron: ['iron','demir','ferritin'], thyroid: ['tsh','ft3','ft4','t3','t4','thyroid','tiroid'], other: [] };
       var catLabels = { hemogram: t.report_cat_hemogram || 'Hemogram', crp: t.report_cat_crp || 'CRP', glucose: t.report_cat_glucose || 'Glukoz', lipids: t.report_cat_lipids || 'Lipidler', liver: t.report_cat_liver || 'Karaciğer', kidney: t.report_cat_kidney || 'Böbrek', iron: t.report_cat_iron || 'Demir / Ferritin', thyroid: t.report_cat_thyroid || 'Tiroid', other: t.report_cat_other || 'Diğer' };
       var catIcons = { hemogram: 'barChart2', crp: 'alertCircle', glucose: 'activity', lipids: 'heart', liver: 'barChart2', kidney: 'info', iron: 'activity', thyroid: 'gauge', other: 'grid' };
@@ -7836,8 +8127,28 @@
         slider.scrollLeft = scrollLeft - (x - startX);
       }, { passive: true });
     }
-    async function getShareUrl() {
+    async function ensureReportId() {
       var rid = getReportId();
+      if (rid) return rid;
+      var token = getToken();
+      if (!token) return null;
+      try {
+        var r = await fetch(API_BASE + '/analyze/history?limit=1', { headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+        if (!r.ok) return null;
+        var list = await r.json();
+        if (list && list.length > 0 && list[0].id) {
+          rid = String(list[0].id);
+          var resultDiv = document.getElementById('analyze-result');
+          if (resultDiv) resultDiv.dataset.rid = rid;
+          lastAnalysisId = list[0].id;
+          try { sessionStorage.setItem(LAST_RID_KEY, rid); } catch (_) {}
+          return rid;
+        }
+      } catch (_) {}
+      return null;
+    }
+    async function getShareUrl() {
+      var rid = await ensureReportId();
       if (!rid) return null;
       if (lastShareToken) return API_BASE + '/share/' + lastShareToken;
       try {
@@ -7849,7 +8160,8 @@
     }
     async function shareReport() {
       var t = T[getLang()] || T.tr;
-      if (!getReportId()) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
+      var rid = await ensureReportId();
+      if (!rid) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
       var url = await getShareUrl();
       if (!url) { toast(t.toast_share_failed || 'Paylaşım linki oluşturulamadı.', 'error'); return; }
       var title = (t.report_title || 'Norya Analiz Raporu').replace(/<[^>]+>/g, '');
@@ -7870,7 +8182,8 @@
     }
     async function copyShareLink() {
       var t = T[getLang()] || T.tr;
-      if (!getReportId()) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
+      var rid = await ensureReportId();
+      if (!rid) { toast(t.toast_analyze_first || 'Önce analiz yapın.', 'error'); return; }
       var url = await getShareUrl();
       if (!url) { toast(t.toast_share_failed || 'Paylaşım linki oluşturulamadı.', 'error'); return; }
       try {
@@ -7888,7 +8201,7 @@
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade bir dille özetleyen ve referans aralıklarına göre yorumlayan bir hizmettir. Sayılar ve kısaltmalar yerine anlaşılır raporlar ve günlük hayata uyarlanabilir kısa öneriler sunuyoruz.",
         about_what_2: "Tahlilinizi PDF, görsel veya metin olarak yükleyebilirsiniz; raporunuz dakikalar içinde hazır olur. Norya teşhis aracı değildir; amacı sonuçlarınızı daha iyi kavramanız ve doktorunuzla görüşürken kendinizi bilinçli hissetmenizdir. Karar ve tedavi her zaman bir sağlık uzmanıyla alınmalıdır.",
         about_what_3: "Dünya genelinde birçok dilde rapor alabilirsiniz; dil tercihiniz raporun tamamına yansır. İster tek seferlik ister aylık/yıllık paketlerle kullanın — ilk analizinizi ücretsiz deneyerek Norya'nın size ne sunduğunu görebilirsiniz.",
-        about_who_1: "Norya, sağlık okuryazarlığını güçlendirmek isteyen küçük bir ekip tarafından kuruldu. Tahlil sonuçlarını anlamanın sağlık kararlarında önemli bir adım olduğuna inanıyoruz; Norya bu ihtiyacı güvenli ve sade bir şekilde karşılamak için tasarlandı.",
+        about_who_1: "Kurucumuz Ufuk Urhan, 2018'den beri yazılım geliştirici olarak çalışıyor. Kendi ve çevresindekilerin tahlil sonuçlarıyla karşılaştığında, sayılar ve kısaltmaların ne anlama geldiğini anlamanın ne kadar zor olduğunu gördü; piyasada bu ihtiyacı gerçekten karşılayan, sade ve güvenilir bir araç eksikliğini hissetti. Norya, bu boşluğu doldurmak ve sağlık okuryazarlığını güçlendirmek için kuruldu.",
         about_who_2: "Türkiye'den başlayarak çok dilli ve küresel erişim sunuyoruz. Verileriniz yalnızca size özel rapor için kullanılır ve güvenli altyapı ile korunur. Soru, geri bildirim veya destek için aşağıdaki e-posta ve WhatsApp üzerinden ulaşabilirsiniz.",
         about_who_3: "Norya olarak amacımız, laboratuvar sonuçlarınızı korkulacak bir belge olmaktan çıkarıp anlaşılır bir rehbere dönüştürmektir. Sizin deneyiminiz ve geri bildirimleriniz bu yolculukta bize yön veriyor.",
         nav_login: "Giriş", nav_register: "Ücretsiz Başla", nav_history: "Geçmiş", nav_profile: "Profil", nav_analyze: "Analiz Yap", nav_logout: "Çıkış",
@@ -8288,7 +8601,7 @@
         about_what_1: "Norya explains your blood test results in plain language and interprets them against reference ranges. Instead of numbers and abbreviations, you get clear reports and practical, day-to-day suggestions.",
         about_what_2: "Upload your test as a PDF, image, or text; your report is ready in minutes. Norya is not a diagnostic tool — it helps you understand your results and feel more confident with your doctor. Decisions and treatment should always be made with a healthcare professional.",
         about_what_3: "You can get reports in many languages worldwide; your language preference is applied to the whole report. Whether you use single analyses or monthly/yearly plans — you can try your first analysis for free and see what Norya offers you.",
-        about_who_1: "Norya was founded by a small team focused on health literacy. We believe understanding your test results is a key step in health decisions; Norya was designed to meet that need in a secure, simple way.",
+        about_who_1: "Our founder Ufuk Urhan has been working as a software developer since 2018. When facing his own and others' lab results, he saw how hard it was to make sense of the numbers and abbreviations—and felt the lack of a simple, trustworthy tool that truly meets this need. Norya was built to fill that gap and strengthen health literacy.",
         about_who_2: "We serve users in many languages worldwide. Your data is used only for your personal report and is protected by a secure infrastructure. For questions, feedback, or support, reach us via the email or WhatsApp below.",
         about_who_3: "Our goal at Norya is to turn your lab results from a document to fear into a clear guide. Your experience and feedback guide us on this journey.",
         nav_login: "Log in", nav_register: "Get started free", nav_history: "History", nav_profile: "Profile", nav_analyze: "Analyze", nav_logout: "Log out",
@@ -8686,7 +8999,7 @@
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
         about_what_2: "Puoi caricare l'analisi in PDF, immagine o testo; il report è pronto in pochi minuti. Norya non è uno strumento diagnostico; l'obiettivo è aiutarti a capire meglio i risultati e a sentirti più sicuro quando parli con il medico. La decisione finale e la terapia spettano sempre a un professionista sanitario.",
         about_what_3: "Puoi ricevere report in molte lingue; la tua preferenza linguistica si applica all'intero report. Puoi provare la prima analisi gratuitamente e scoprire cosa offre Norya.",
-        about_who_1: "Norya è stata fondata da un piccolo team che vuole rafforzare l'alfabetizzazione sanitaria. Il fondatore Ufuk Urhan crede che capire i propri risultati sia un passo importante; Norya è pensata per rispondere a questa esigenza in modo sicuro e veloce.",
+        about_who_1: "Il fondatore Ufuk Urhan lavora come sviluppatore software dal 2018. Di fronte ai propri risultati e a quelli di altri, ha visto quanto sia difficile capire numeri e sigle—e ha sentito la mancanza di uno strumento semplice e affidabile che risponda davvero a questo bisogno. Norya è nata per colmare questo vuoto e rafforzare l'alfabetizzazione sanitaria.",
         about_who_2: "Offriamo servizi in diverse lingue nel mondo. La tua privacy è importante: i dati sono usati solo per generare il tuo report personale. Per domande o supporto puoi scriverci all'indirizzo email indicato sotto.",
         about_who_3: "Il nostro obiettivo è trasformare i risultati di laboratorio in una guida chiara. La tua esperienza e i tuoi feedback ci guidano in questo percorso.",
         nav_login: "Accedi", nav_register: "Inizia gratis", nav_history: "Cronologia", nav_analyze: "Analizza", nav_logout: "Esci",
@@ -8948,7 +9261,7 @@
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
         about_what_2: "Puedes subir el análisis en PDF, imagen o texto; el informe estará listo en minutos. Norya no es una herramienta de diagnóstico; su objetivo es ayudarte a entender mejor los resultados y a sentirte más seguro al hablar con tu médico. La decisión final y el tratamiento siempre deben ser con un profesional sanitario.",
         about_what_3: "Puedes recibir informes en muchos idiomas; tu preferencia de idioma se aplica a todo el informe. Prueba tu primer análisis gratis y descubre qué te ofrece Norya.",
-        about_who_1: "Norya fue fundada por un equipo pequeño que quiere reforzar la alfabetización en salud. El fundador Ufuk Urhan cree que entender tus propios resultados es un paso importante; Norya está diseñada para cubrir esta necesidad de forma segura y rápida.",
+        about_who_1: "Nuestro fundador Ufuk Urhan trabaja como desarrollador de software desde 2018. Al enfrentarse a sus propios resultados y a los de otros, vio lo difícil que es entender números y abreviaturas—y sintió la falta de una herramienta sencilla y fiable que cubra esta necesidad. Norya nació para llenar ese vacío y reforzar la alfabetización en salud.",
         about_who_2: "Damos servicio en varios idiomas en todo el mundo. Tu privacidad importa: los datos solo se usan para generar tu informe personal. Para preguntas o soporte escríbenos al correo indicado abajo.",
         about_who_3: "Nuestro objetivo es convertir los resultados del laboratorio en una guía clara. Tu experiencia y tus comentarios nos orientan en este camino.",
         nav_login: "Iniciar sesión", nav_register: "Empezar gratis", nav_history: "Historial", nav_analyze: "Analizar", nav_logout: "Salir",
@@ -9210,7 +9523,7 @@
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
         about_what_2: "Vous pouvez envoyer l'analyse en PDF, image ou texte ; le rapport est prêt en quelques minutes. Norya n'est pas un outil de diagnostic ; l'objectif est de vous aider à mieux comprendre vos résultats et à vous sentir plus à l'aise avec votre médecin. La décision finale et le traitement relèvent toujours d'un professionnel de santé.",
         about_what_3: "Vous pouvez recevoir des rapports en plusieurs langues ; votre préférence linguistique s'applique à tout le rapport. Essayez votre première analyse gratuitement et découvrez ce que Norya vous offre.",
-        about_who_1: "Norya a été fondée par une petite équipe qui souhaite renforcer la littératie en santé. Le fondateur Ufuk Urhan est convaincu que comprendre ses propres résultats est une étape importante ; Norya a été conçue pour répondre à ce besoin de manière sûre et rapide.",
+        about_who_1: "Notre fondateur Ufuk Urhan travaille comme développeur logiciel depuis 2018. Face à ses propres résultats d'analyses et à ceux de son entourage, il a constaté à quel point il est difficile de comprendre les chiffres et les abréviations—et a ressenti l'absence d'un outil simple et fiable qui réponde vraiment à ce besoin. Norya a été créée pour combler ce manque et renforcer la littératie en santé.",
         about_who_2: "Nous proposons nos services en plusieurs langues dans le monde. Votre vie privée compte : les données ne servent qu'à générer votre rapport personnel. Pour toute question ou assistance, écrivez-nous à l'adresse indiquée ci-dessous.",
         about_who_3: "Notre objectif est de transformer les résultats de laboratoire en un guide clair. Votre expérience et vos retours nous guident sur ce chemin.",
         nav_login: "Connexion", nav_register: "Commencer gratuit", nav_history: "Historique", nav_analyze: "Analyser", nav_logout: "Déconnexion",
@@ -9472,7 +9785,7 @@
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
         about_what_2: "Sie können die Analyse als PDF, Bild oder Text hochladen; der Bericht ist in wenigen Minuten fertig. Norya ist kein Diagnoseinstrument; das Ziel ist, Ihnen zu helfen, Ihre Ergebnisse besser zu verstehen und sich beim Arztgespräch sicherer zu fühlen. Die endgültige Entscheidung und Behandlung liegen immer beim medizinischen Fachpersonal.",
         about_what_3: "Sie können Berichte in vielen Sprachen erhalten; Ihre Sprachwahl gilt für den gesamten Bericht. Probieren Sie Ihre erste Analyse kostenlos und erfahren Sie, was Norya Ihnen bietet.",
-        about_who_1: "Norya wurde von einem kleinen Team gegründet, das die Gesundheitskompetenz stärken möchte. Gründer Ufuk Urhan ist überzeugt, dass das Verstehen der eigenen Ergebnisse ein wichtiger Schritt ist; Norya wurde entwickelt, um dieses Bedürfnis sicher und schnell zu erfüllen.",
+        about_who_1: "Unser Gründer Ufuk Urhan arbeitet seit 2018 als Softwareentwickler. Bei eigenen und fremden Laborergebnissen sah er, wie schwer Zahlen und Abkürzungen zu deuten sind—und spürte das Fehlen eines einfachen, vertrauenswürdigen Tools, das dieses Bedürfnis wirklich erfüllt. Norya wurde geschaffen, um diese Lücke zu schließen und die Gesundheitskompetenz zu stärken.",
         about_who_2: "Wir bieten unseren Service weltweit in mehreren Sprachen an. Ihr Datenschutz ist uns wichtig: Ihre Daten werden nur für Ihren persönlichen Bericht verwendet. Bei Fragen oder Support erreichen Sie uns unter der unten angegebenen E-Mail-Adresse.",
         about_who_3: "Unser Ziel ist es, Laborergebnisse in eine klare Orientierungshilfe zu verwandeln. Ihre Erfahrung und Ihr Feedback leiten uns auf diesem Weg.",
         nav_login: "Anmelden", nav_register: "Kostenlos starten", nav_history: "Verlauf", nav_analyze: "Analysieren", nav_logout: "Abmelden",
@@ -9715,7 +10028,7 @@
         about_what_1: "נוריה הוא שירות שמסביר את תוצאות בדיקות הדם שלך בשפה ברורה. המספרים והקיצורים מהמעבדה קשים לעתים להבנה; נוריה מייצרת דוחות שמסכמים את התוצאות, מסבירים כל ערך ביחס לטווחי ההתייחסות ונותנים המלצות מעשיות.",
         about_what_2: "אפשר להעלות את הבדיקה כ-PDF, תמונה או טקסט; הדוח מוכן תוך דקות. נוריה אינו כלי אבחון; המטרה היא לעזור לך להבין טוב יותר את התוצאות ולהרגיש בטוח יותר בשיחה עם הרופא. ההחלטה והטיפול הסופיים תמיד עם איש מקצוע.",
         about_what_3: "אפשר לקבל דוחות במגוון שפות; העדפת השפה חלה על כל הדוח. נסה את הניתוח הראשון בחינם וגלה מה נוריה מציעה.",
-        about_who_1: "נוריה נוסדה על ידי צוות קטן שמבקש לחזק אוריינות בריאות. המייסד אופק אורהן מאמין שהבנת התוצאות האישיות היא צעד חשוב; נוריה תוכננה לענות על הצורך הזה בצורה בטוחה ומהירה.",
+        about_who_1: "המייסד אופק אורהן עובד כמפתח תוכנה מאז 2018. כשראה תוצאות בדיקות שלו ושל אחרים, הבין כמה קשה להבין מספרים וקיצורים—והרגיש את החוסר בכלי פשוט ואמין שעונה באמת על הצורך. נוריה נוצרה למלא את הפער ולחזק אוריינות בריאות.",
         about_who_2: "אנחנו משרתים משתמשים במספר שפות ברחבי העולם. הפרטיות חשובה לנו: הנתונים משמשים רק ליצירת הדוח האישי שלך. לשאלות או תמיכה צור איתנו קשר בכתובת המייל למטה.",
         about_who_3: "המטרה שלנו היא להפוך תוצאות מעבדה למדריך ברור. החוויה והמשוב שלך מנחים אותנו בדרך.",
         nav_login: "התחברות", nav_register: "התחל בחינם", nav_history: "היסטוריה", nav_analyze: "נתח", nav_logout: "התנתק",
@@ -9913,7 +10226,7 @@
         about_what_1: "نوريا خدمة تشرح نتائج تحاليل الدم بلغة واضحة. الأرقام والاختصارات من المختبر غالباً صعبة الفهم؛ نوريا تنتج تقارير تلخص النتائج وتشرح كل قيمة بالنسبة للمرجع وتقدم توصيات عملية.",
         about_what_2: "يمكنك رفع التحليل كـ PDF أو صورة أو نص؛ التقرير جاهز خلال دقائق. نوريا ليست أداة تشخيص؛ الهدف مساعدتك على فهم النتائج والشعور بثقة أكبر مع الطبيب. القرار والعلاج النهائيان دائماً مع المختص الصحي.",
         about_what_3: "يمكنك الحصول على تقارير بعدة لغات؛ تفضيل اللغة ينطبق على التقرير كاملاً. جرب أول تحليل مجاناً واكتشف ما تقدمه نوريا.",
-        about_who_1: "تأسست نوريا على يد فريق صغير يريد تعزيز التثقيف الصحي. المؤسس أوفوك أورهان يؤمن بأن فهم نتائجك خطوة مهمة؛ نوريا صُممت لتلبي هذه الحاجة بشكل آمن وسريع.",
+        about_who_1: "مؤسسنا أوفوك أورهان يعمل مطور برمجيات منذ 2018. عند مواجهة نتائجه ونتائج الآخرين، رأى صعوبة فهم الأرقام والاختصارات—وشعر بغياب أداة بسيطة وموثوقة تلبي هذا الاحتياج حقاً. تأسست نوريا لسد هذه الفجوة وتعزيز التثقيف الصحي.",
         about_who_2: "نقدم الخدمة بعدة لغات حول العالم. خصوصيتك مهمة: البيانات تُستخدم فقط لتوليد تقريرك الشخصي. للأسئلة أو الدعم راسلنا على البريد أدناه.",
         about_who_3: "هدفنا تحويل نتائج المختبر إلى دليل واضح. تجربتك وملاحظاتك ترشدنا في هذا المسار.",
         nav_login: "تسجيل الدخول", nav_register: "ابدأ مجاناً", nav_history: "السجل", nav_analyze: "تحليل", nav_logout: "تسجيل الخروج",
@@ -10111,7 +10424,7 @@
         about_what_1: "नोरिया एक सेवा है जो रक्त परीक्षण परिणामों को सरल भाषा में समझाती है। लैब के नंबर और संक्षिप्त नाम अक्सर समझने में कठिन होते हैं; नोरिया ऐसी रिपोर्ट बनाती है जो परिणामों को संक्षेप में बताती हैं, हर मान को संदर्भ सीमा के अनुसार समझाती हैं और व्यावहारिक सुझाव देती हैं।",
         about_what_2: "आप परीक्षण को PDF, चित्र या टेक्स्ट के रूप में अपलोड कर सकते हैं; रिपोर्ट मिनटों में तैयार। नोरिया निदान उपकरण नहीं है; लक्ष्य आपको परिणाम बेहतर समझने और डॉक्टर से बात करते समय आत्मविश्वास महसूस करने में मदद करना है। अंतिम निर्णय और उपचार हमेशा स्वास्थ्य पेशेवर के साथ।",
         about_what_3: "आप कई भाषाओं में रिपोर्ट प्राप्त कर सकते हैं; भाषा वरीयता पूरी रिपोर्ट पर लागू होती है। पहला विश्लेषण मुफ्त आज़माएं और देखें नोरिया क्या देता है।",
-        about_who_1: "नोरिया की स्थापना एक छोटी टीम ने की जो स्वास्थ्य साक्षरता बढ़ाना चाहती है। संस्थापक उफुक उरहान का मानना है कि अपने परिणाम समझना महत्वपूर्ण कदम है; नोरिया इस जरूरत को सुरक्षित और तेज़ तरीके से पूरा करने के लिए बनाई गई।",
+        about_who_1: "हमारे संस्थापक उफुक उरहान 2018 से सॉफ्टवेयर डेवलपर के रूप में काम कर रहे हैं। अपने और दूसरों के लैब परिणामों के सामने आने पर उन्होंने देखा कि संख्याओं और संक्षिप्तियों को समझना कितना मुश्किल है—और इस जरूरत को सच में पूरा करने वाले सरल, विश्वसनीय टूल की कमी महसूस की। नोरिया इस खाली जगह को भरने और स्वास्थ्य साक्षरता बढ़ाने के लिए बनाई गई।",
         about_who_2: "हम दुनिया भर में कई भाषाओं में सेवा देते हैं। आपकी गोपनीयता मायने रखती है: डेटा केवल आपकी व्यक्तिगत रिपोर्ट बनाने के लिए उपयोग होता है। प्रश्न या सहायता के लिए नीचे दिए ईमेल पर संपर्क करें।",
         about_who_3: "हमारा लक्ष्य लैब परिणामों को स्पष्ट मार्गदर्शन में बदलना है। आपका अनुभव और फीडबैक इस रास्ते में हमारी मदद करता है।",
         nav_login: "लॉग इन", nav_register: "मुफ्त शुरू करें", nav_history: "इतिहास", nav_analyze: "विश्लेषण", nav_logout: "लॉग आउट",
@@ -10309,7 +10622,7 @@
         about_what_1: "Η Norya είναι μια υπηρεσία που εξηγεί τα αποτελέσματα αιματολογικών σε απλή γλώσσα. Οι αριθμοί και οι συντομογραφίες από το εργαστήριο είναι συχνά δύσκολοι να γίνουν κατανοητοί· η Norya παράγει αναφορές που συνοψίζουν τα αποτελέσματα, εξηγούν κάθε τιμή σε σχέση με τα εύρη αναφοράς και δίνουν πρακτικές συμβουλές.",
         about_what_2: "Μπορείτε να ανεβάσετε την ανάλυση ως PDF, εικόνα ή κείμενο· η αναφορά είναι έτοιμη σε λεπτά. Η Norya δεν είναι διαγνωστικό εργαλείο· ο στόχος είναι να σας βοηθήσει να κατανοήσετε καλύτερα τα αποτελέσματα και να αισθανθείτε πιο σίγουροι με τον γιατρό. Η τελική απόφαση και η θεραπεία είναι πάντα με επαγγελματία υγείας.",
         about_what_3: "Μπορείτε να λάβετε αναφορές σε πολλές γλώσσες· η γλωσσική σας προτίμηση ισχύει για όλη την αναφορά. Δοκιμάστε την πρώτη σας ανάλυση δωρεάν και δείτε τι σας προσφέρει η Norya.",
-        about_who_1: "Η Norya ιδρύθηκε από μια μικρή ομάδα που θέλει να ενισχύσει τον αλφαβητισμό υγείας. Ο ιδρυτής Ufuk Urhan πιστεύει ότι η κατανόηση των δικών σας αποτελεσμάτων είναι σημαντικό βήμα· η Norya σχεδιάστηκε για να καλύψει αυτή την ανάγκη με ασφάλεια και ταχύτητα.",
+        about_who_1: "Ο ιδρυτής μας Ufuk Urhan εργάζεται ως προγραμματιστής λογισμικού από το 2018. Μπροστά στα δικά του και άλλων αποτελέσματα, είδε πόσο δύσκολο είναι να κατανοήσει κανείς αριθμούς και συντομογραφίες—και αισθάνθηκε την έλλειψη ενός απλού, αξιόπιστου εργαλείου που να καλύπτει πραγματικά αυτή την ανάγκη. Η Norya δημιουργήθηκε για να γεφυρώσει αυτό το κενό και να ενισχύσει τον αλφαβητισμό υγείας.",
         about_who_2: "Παρέχουμε υπηρεσία σε πολλές γλώσσες παγκοσμίως. Το απόρρητό σας μας νοιάζει· τα δεδομένα χρησιμοποιούνται μόνο για την προσωπική σας αναφορά. Για ερωτήσεις ή υποστήριξη επικοινωνήστε μαζί μας στο email παρακάτω.",
         about_who_3: "Ο στόχος μας είναι να μετατρέψουμε τα εργαστηριακά αποτελέσματα σε σαφή οδηγό. Η εμπειρία και τα σχόλιά σας μας καθοδηγούν.",
         nav_login: "Σύνδεση", nav_register: "Ξεκινήστε δωρεάν", nav_history: "Ιστορικό", nav_analyze: "Ανάλυση", nav_logout: "Αποσύνδεση",
@@ -10486,7 +10799,7 @@
         about_what_1: "Norya je služba, která vysvětluje výsledky krevních testů srozumitelným jazykem. Čísla a zkratky z laboratoře jsou často těžko srozumitelná; Norya vytváří zprávy, které shrnují výsledky, vysvětlují každou hodnotu vzhledem k referenčním rozsahům a nabízejí praktická doporučení.",
         about_what_2: "Analýzu můžete nahrát jako PDF, obrázek nebo text; zpráva je hotová během minut. Norya není diagnostický nástroj; cílem je pomoci vám lépe porozumět výsledkům a cítit se jistěji při rozhovoru s lékařem. Konečné rozhodnutí a léčba vždy s odborníkem.",
         about_what_3: "Zprávy můžete dostávat v mnoha jazycích; jazyková preference platí pro celou zprávu. Vyzkoušejte první analýzu zdarma a uvidíte, co Norya nabízí.",
-        about_who_1: "Norya založil malý tým, který chce posílit zdravotní gramotnost. Zakladatel Ufuk Urhan věří, že porozumění vlastním výsledkům je důležitý krok; Norya byla navržena tak, aby tuto potřebu naplnila bezpečně a rychle.",
+        about_who_1: "Náš zakladatel Ufuk Urhan pracuje jako vývojář software od roku 2018. Při setkání s vlastními i cizími laboratorními výsledky viděl, jak těžké je porozumět číslům a zkratkám—a cítil absenci jednoduchého, důvěryhodného nástroje, který by tuto potřebu opravdu naplňoval. Norya vznikla proto, aby tuto mezeru zaplnila a posílila zdravotní gramotnost.",
         about_who_2: "Službu poskytujeme v několika jazycích po celém světě. Na vaše soukromí dbáme: data se používají pouze k vytvoření vaší osobní zprávy. Pro dotazy nebo podporu nás kontaktujte na e-mailu níže.",
         about_who_3: "Naším cílem je proměnit laboratorní výsledky v srozumitelný průvodce. Vaše zkušenost a zpětná vazba nás na této cestě vedou.",
         nav_login: "Přihlásit", nav_register: "Začít zdarma", nav_history: "Historie", nav_analyze: "Analyzovat", nav_logout: "Odhlásit",
@@ -10663,7 +10976,7 @@
         about_what_1: "Norya je servis koji objašnjava rezultate krvnih testova jasnim jezikom. Brojevi i skraćenice iz laboratorije su često teški za razumevanje; Norya pravi izveštaje koji sumiraju rezultate, objašnjavaju svaku vrednost u odnosu na referentne opsege i daju praktične preporuke.",
         about_what_2: "Analizu možete otpremiti kao PDF, sliku ili tekst; izveštaj je spreman za nekoliko minuta. Norya nije dijagnostički alat; cilj je da vam pomogne da bolje razumete rezultate i da se osećate sigurnije kod lekara. Konačna odluka i lečenje uvek sa zdravstvenim stručnjakom.",
         about_what_3: "Izveštaje možete dobiti na više jezika; jezička preferenca važi za ceo izveštaj. Isprobajte prvu analizu besplatno i vidite šta Norya nudi.",
-        about_who_1: "Noryu je osnovao mali tim koji želi da ojača zdravstvenu pismenost. Osnivač Ufuk Urhan veruje da je razumevanje sopstvenih rezultata važan korak; Norya je dizajnirana da odgovori toj potrebi na siguran i brz način.",
+        about_who_1: "Osnivač Ufuk Urhan radi kao softverski programer od 2018. godine. Susrećući se sa sopstvenim i tuđim laboratorijskim rezultatima, video je koliko je teško razumeti brojeve i skraćenice—i osetio nedostatak jednostavnog, pouzdanog alata koji zaista odgovara toj potrebi. Norya je nastala da popuni tu prazninu i ojača zdravstvenu pismenost.",
         about_who_2: "Pružamo uslugu na više jezika širom sveta. Vaša privatnost nam je važna: podaci se koriste samo za vaš lični izveštaj. Za pitanja ili podršku pišite na email ispod.",
         about_who_3: "Cilj nam je da laboratorijske rezultate pretvorimo u jasan vodič. Vaše iskustvo i povratne informacije nas vode na tom putu.",
         nav_login: "Prijava", nav_register: "Počnite besplatno", nav_history: "Istorija", nav_analyze: "Analiziraj", nav_logout: "Odjava",
@@ -10839,11 +11152,17 @@
       for (var _k in window.__LANDING_T__) T[_l][_k] = window.__LANDING_T__[_k];
       var _blogLocale = _l === 'en-ca' ? 'en' : _l;
       document.querySelectorAll('a[href="/blog"]').forEach(function(a) { a.setAttribute('href', '/' + _blogLocale + '/blog'); });
+      window.__APPLY_LANG_EARLY__ = _l;
     }
 
     var SUPPORTED_LOCALES = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
     var LANG_LABELS = { tr: "TR", en: "EN", "en-ca": "EN-CA", de: "DE", he: "HE", ar: "AR", hi: "HI", it: "IT", es: "ES", fr: "FR", el: "EL", cs: "CS", sr: "SR" };
-    function getLang() { return localStorage.getItem(LANG_KEY) || "en"; }
+    function getLang() {
+      var pathname = (typeof window !== 'undefined' && window.location && window.location.pathname) ? window.location.pathname : '';
+      var seg = pathname.replace(/^\/+/, '').split('/')[0];
+      if (seg && SUPPORTED_LOCALES.indexOf(seg) !== -1) return seg;
+      try { return localStorage.getItem(LANG_KEY) || "en"; } catch (_) { return "en"; }
+    }
     function getEffectivePath() {
       var pathname = window.location.pathname || '/';
       var segments = pathname.split('/').filter(Boolean);
@@ -10854,9 +11173,22 @@
       return pathname;
     }
     function switchLocale(nextLocale) {
+      console.log("[lang] switchLocale called", nextLocale);
       if (!nextLocale || typeof nextLocale !== 'string') return;
       nextLocale = String(nextLocale).toLowerCase().trim();
       if (SUPPORTED_LOCALES.indexOf(nextLocale) === -1) nextLocale = 'en';
+      var prevLang = (typeof getLang === "function" ? getLang() : (localStorage.getItem(LANG_KEY) || "en"));
+      var cookieLangMatch = (document.cookie || "").match(/(?:^|;\s*)norya_lang=([^;]+)/);
+      var cookieLang = cookieLangMatch ? decodeURIComponent(cookieLangMatch[1]) : null;
+      console.log("[lang-switch] switchLocale called", {
+        selected: nextLocale,
+        prevLang: prevLang,
+        storageLang: localStorage.getItem(LANG_KEY) || null,
+        cookieLang: cookieLang,
+        htmlLang: document.documentElement.lang || null,
+        htmlDir: document.documentElement.dir || null,
+        path: window.location.pathname + (window.location.search || "") + (window.location.hash || "")
+      });
       if (typeof chooseLang === 'function') {
         chooseLang(nextLocale);
         return;
@@ -10891,19 +11223,34 @@
     }
     var LOCALE_MAP = { tr: 'tr-TR', en: 'en-US', it: 'it-IT', es: 'es-ES', fr: 'fr-FR', de: 'de-DE', he: 'he-IL', ar: 'ar', hi: 'hi-IN', el: 'el-GR', cs: 'cs-CZ', sr: 'sr-RS' };
     function getLocale() { var lang = getLang(); return LOCALE_MAP[lang] || 'en-US'; }
-    function toggleLangModal() {
+    // Ensure toggleLangModal is always a global helper used by inline onclick handlers.
+    window.toggleLangModal = function toggleLangModal() {
+      console.log("[lang] toggleLangModal called");
       var m = document.getElementById("lang-modal");
       var btn = document.getElementById("lang-btn");
       var wrap = document.getElementById("lang-wrap");
+      if (!m) return;
       var isNowHidden = m.classList.toggle("hidden");
       if (btn) {
         btn.setAttribute("aria-expanded", isNowHidden ? "false" : "true");
         btn.classList.toggle("lang-open", !isNowHidden);
       }
       if (!isNowHidden) {
+        window._langModalOpenedAt = Date.now();
+        if (wrap) {
+          wrap.classList.remove("hidden");
+          wrap.classList.add("lang-modal-backdrop");
+          wrap.style.pointerEvents = "auto";
+          wrap.style.display = "block";
+          wrap.style.visibility = "visible";
+          wrap.style.opacity = "1";
+        }
         document.body.appendChild(m);
+        m.classList.remove("hidden");
         m.classList.add("lang-modal-fixed");
         m.style.position = "fixed";
+        m.style.display = "block";
+        m.style.visibility = "visible";
         m.style.maxHeight = "70vh";
         m.style.pointerEvents = "auto";
         var r = btn ? btn.getBoundingClientRect() : { width: 0, height: 0, right: 0, bottom: 0 };
@@ -10919,14 +11266,26 @@
           m.style.transform = "none";
         } else {
           /* Mobil: drawer'dan açıldığında buton gizli (header-desktop-only), modalı ekran ortasında göster */
+          console.log("[lang] mobile lang modal positioning (no trigger)");
           m.style.left = "50%";
           m.style.right = "auto";
           m.style.top = "50%";
           m.style.transform = "translate(-50%, -50%)";
         }
       } else {
+        if (wrap) {
+          wrap.classList.add("hidden");
+          wrap.classList.remove("lang-modal-backdrop");
+          wrap.style.pointerEvents = "";
+          wrap.style.display = "";
+          wrap.style.visibility = "";
+          wrap.style.opacity = "";
+        }
+        m.classList.add("hidden");
         m.classList.remove("lang-modal-fixed");
         m.style.position = "";
+        m.style.display = "";
+        m.style.visibility = "";
         m.style.left = "";
         m.style.right = "";
         m.style.top = "";
@@ -10936,30 +11295,106 @@
         if (wrap && !wrap.contains(m)) wrap.appendChild(m);
       }
     }
-    var LANDING_LOCALES = ['tr','en','en-ca','de','it'];
+    document.addEventListener('DOMContentLoaded', function () {
+      function openLangMenu() {
+        var menu = document.getElementById('langMenu');
+        var toggle = document.getElementById('langToggle');
+        if (!menu || !toggle) return;
+        menu.classList.remove('hidden');
+        menu.style.setProperty('display', 'block', 'important');
+        menu.style.setProperty('visibility', 'visible', 'important');
+        menu.style.setProperty('opacity', '1', 'important');
+        toggle.setAttribute('aria-expanded', 'true');
+      }
+
+      function closeLangMenu() {
+        var menu = document.getElementById('langMenu');
+        var toggle = document.getElementById('langToggle');
+        if (!menu || !toggle) return;
+        menu.classList.add('hidden');
+        menu.style.setProperty('display', 'none', 'important');
+        menu.style.removeProperty('visibility');
+        menu.style.removeProperty('opacity');
+        toggle.setAttribute('aria-expanded', 'false');
+      }
+
+      function toggleLangMenu() {
+        var menu = document.getElementById('langMenu');
+        if (!menu) return;
+        if (menu.classList.contains('hidden')) openLangMenu(); else closeLangMenu();
+      }
+
+      var toggleBtn = document.getElementById('langToggle');
+      if (toggleBtn) {
+        toggleBtn.addEventListener('click', function (e) {
+          e.preventDefault();
+          e.stopPropagation();
+          toggleLangMenu();
+        });
+      }
+
+      var menuEl = document.getElementById('langMenu');
+      if (menuEl) {
+        menuEl.addEventListener('click', function (e) {
+          var opt = e.target && (e.target.closest ? e.target.closest('.lang-option[data-locale]') : null);
+          if (!opt) return;
+          e.preventDefault();
+          e.stopPropagation();
+          var href = opt.getAttribute('href');
+          if (href) {
+            closeLangMenu();
+            var url = (href.indexOf('http') === 0 ? href : (window.location.origin + href));
+            var search = window.location.search || '';
+            var hash = window.location.hash || '';
+            window.location.href = url + search + hash;
+          }
+        });
+      }
+
+      function isDesktopLangMenuOpen() {
+        var menu = document.getElementById('langMenu');
+        return menu && !menu.classList.contains('hidden');
+      }
+      document.addEventListener('click', function (e) {
+        var menu = document.getElementById('langMenu');
+        var toggle = document.getElementById('langToggle');
+        if (!menu || !toggle) return;
+        if (!isDesktopLangMenuOpen()) return;
+        var inside = menu.contains(e.target) || toggle.contains(e.target);
+        if (!inside) closeLangMenu();
+      });
+      document.addEventListener('keydown', function (e) {
+        if (e.key === 'Escape' && isDesktopLangMenuOpen()) {
+          closeLangMenu();
+        }
+      });
+      window.toggleLangMenu = toggleLangMenu;
+    });
+    // Use all supported locales for landing-level language switching, so every language
+    // (tr, en, de, es, fr, it, ar, hi, he, el, sr, etc.) updates the path consistently.
+    var LANDING_LOCALES = SUPPORTED_LOCALES.slice();
     function chooseLang(lang) {
+      console.log("[lang] chooseLang called", lang);
       if (!lang || typeof lang !== 'string') return;
       lang = String(lang).toLowerCase().trim();
-      if (typeof T === 'undefined') return;
-      if (!T[lang]) lang = 'en';
+      if (typeof T !== 'undefined' && !T[lang]) lang = 'en';
       var modal = document.getElementById("lang-modal");
       if (modal) {
         modal.classList.add("hidden");
         var wrap = document.getElementById("lang-wrap");
         if (wrap && !wrap.contains(modal)) wrap.appendChild(modal);
       }
-      localStorage.setItem(LANG_KEY, lang);
+      try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
       if (LANDING_LOCALES.indexOf(lang) !== -1) {
         var path = (window.location.pathname || '/').replace(/\/$/, '') || '/';
         var segments = path.split('/').filter(Boolean);
-        if (segments.length && ['tr','en','en-ca','de','it'].indexOf(segments[0]) !== -1) segments[0] = lang;
+        if (segments.length && LANDING_LOCALES.indexOf(segments[0]) !== -1) segments[0] = lang;
         else segments.unshift(lang);
         var newPath = '/' + segments.join('/');
-        if (window.history && window.history.replaceState) {
-          window.history.replaceState({}, '', newPath + (window.location.search || '') + (window.location.hash || ''));
-        }
-        setLang(lang);
-        setTimeout(function() { setLang(lang); }, 0);
+        var search = window.location.search || '';
+        var hash = window.location.hash || '';
+        /* Landing: tam sayfa yükle ki o dilde açılsın; replace ile geri tuşu aynı dilde kalsın */
+        window.location.replace(newPath + search + hash);
         return;
       }
       var base = window.location.pathname || '/';
@@ -10985,11 +11420,13 @@
       closeMobileDrawer();
     }
     function toggleMobileDrawer() {
+      console.log("[lang] hamburger clicked / toggleMobileDrawer called");
       var drawer = document.getElementById('mobile-drawer');
       if (drawer && drawer.classList.contains('open')) closeMobileDrawer();
       else openMobileDrawer();
     }
     function openMobileDrawer() {
+      console.log("[lang] mobile drawer opened");
       var overlay = document.getElementById('mobile-overlay');
       var drawer = document.getElementById('mobile-drawer');
       var hamburger = document.getElementById('hamburger-btn');
@@ -11059,13 +11496,18 @@
     document.addEventListener("click", function(e) {
       var drawer = document.getElementById("mobile-drawer");
       if (drawer && drawer.contains(e.target)) return;
-      var wrap = document.getElementById("lang-wrap");
+      /* Aynı tıklama dil butonundan (drawer "Diller") geliyorsa modalı kapatma */
+      if (e.target && (e.target.closest && e.target.closest('[onclick*="toggleLangModal"]'))) return;
+      if (window._langModalOpenedAt && (Date.now() - window._langModalOpenedAt < 250)) return;
       var lm = document.getElementById("lang-modal");
-      var clickedOutside = (!wrap || !wrap.contains(e.target)) && (!lm || !lm.contains(e.target));
-      if (clickedOutside && lm) {
+      var wrap = document.getElementById("lang-wrap");
+      var modalOpen = lm && !lm.classList.contains("hidden");
+      var clickedOutsideModal = modalOpen && !lm.contains(e.target);
+      if (clickedOutsideModal) {
         lm.classList.add("hidden");
         var langBtn = document.getElementById("lang-btn");
         if (langBtn) { langBtn.setAttribute("aria-expanded", "false"); langBtn.classList.remove("lang-open"); }
+        if (wrap) { wrap.classList.add("hidden"); wrap.classList.remove("lang-modal-backdrop"); wrap.style.pointerEvents = ""; }
         if (wrap && !wrap.contains(lm)) wrap.appendChild(lm);
       }
     });
@@ -11129,18 +11571,17 @@
       return '';
     }
     function applyTranslationToElement(el, text) {
-      if (!text) return;
+      if (text == null || text === '') return;
       var firstText = null;
       for (var i = 0; i < el.childNodes.length; i++) {
         if (el.childNodes[i].nodeType === 3) { firstText = el.childNodes[i]; break; }
       }
-      if (firstText) {
-        firstText.nodeValue = text;
-      } else {
-        el.textContent = text;
-      }
+      if (firstText) firstText.nodeValue = String(text);
+      else el.textContent = String(text);
     }
     function setLang(lang) {
+      console.log("[lang] setLang called", lang);
+      var prevLang = (typeof getLang === "function" ? getLang() : (localStorage.getItem(LANG_KEY) || "en"));
       if (typeof T === 'undefined') return;
       if (!T[lang]) lang = "en";
       localStorage.setItem(LANG_KEY, lang);
@@ -11153,6 +11594,16 @@
       if (typeof updateSeoGuideLink === 'function') updateSeoGuideLink();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
+      var headerLabel = document.getElementById("currentLangLabel");
+      if (headerLabel) headerLabel.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
+      // Header desktop dropdown: mark active language item
+      var headerMenu = document.getElementById("langMenu");
+      if (headerMenu) {
+        headerMenu.querySelectorAll(".lang-option[data-locale]").forEach(function(item) {
+          var code = (item.getAttribute("data-locale") || "").toLowerCase();
+          item.classList.toggle("is-active", code === lang);
+        });
+      }
       document.querySelectorAll(".lang-opt").forEach(function(opt) {
         var isSelected = opt.getAttribute("data-lang") === lang;
         opt.classList.toggle("lang-opt-selected", isSelected);
@@ -11161,14 +11612,14 @@
       document.querySelectorAll("[data-i18n]").forEach(function(el) {
         var key = (el.getAttribute("data-i18n") || "").trim();
         var text = getTranslation(lang, key);
-        if (text) applyTranslationToElement(el, text);
+        if (text != null && text !== '') applyTranslationToElement(el, text);
       });
       var drawer = document.getElementById("mobile-drawer");
       if (drawer) {
         drawer.querySelectorAll("[data-i18n]").forEach(function(el) {
           var key = (el.getAttribute("data-i18n") || "").trim();
           var text = getTranslation(lang, key);
-          if (text) applyTranslationToElement(el, text);
+          if (text != null && text !== '') applyTranslationToElement(el, text);
         });
       }
       document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
@@ -11223,10 +11674,32 @@
         }
       }, 150);
     }
+    if (window.__APPLY_LANG_EARLY__) {
+      var _early = window.__APPLY_LANG_EARLY__;
+      delete window.__APPLY_LANG_EARLY__;
+      try { localStorage.setItem(LANG_KEY, _early); } catch (_) {}
+      setLang(_early);
+    }
+    function applyLangFromPath() {
+      var pathname = (window.location && window.location.pathname) ? window.location.pathname : '';
+      var seg = pathname.replace(/^\/+/, '').split('/')[0];
+      if (seg && typeof SUPPORTED_LOCALES !== 'undefined' && SUPPORTED_LOCALES.indexOf(seg) !== -1 && typeof T !== 'undefined' && T[seg]) {
+        try { localStorage.setItem(LANG_KEY, seg); } catch (_) {}
+        setLang(seg);
+        setTimeout(function() { setLang(seg); }, 300);
+      }
+    }
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', applyLangFromPath);
+    } else {
+      applyLangFromPath();
+    }
 
     var heartbeatIntervalId = null;
     function getToken() { return localStorage.getItem(TOKEN_KEY); }
     function getUser() { try { return JSON.parse(localStorage.getItem(USER_KEY) || '{}'); } catch { return {}; } }
+    /** Yerel test: localhost/127.0.0.1'te giriş zorunluluğu kaldırıldı; backend dev guest kullanır. */
+    function isLocalDev() { try { var h = window.location.hostname; return h === 'localhost' || h === '127.0.0.1'; } catch (_) { return false; } }
     function setAuth(token, user) {
       localStorage.setItem(TOKEN_KEY, token);
       localStorage.setItem(USER_KEY, JSON.stringify(user));
@@ -11301,11 +11774,14 @@
         if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
         loadUsage();
         if (typeof updateTestModeUI === 'function') updateTestModeUI();
-        var ridFromUrl = (window.location.pathname === '/report' || window.location.search.indexOf('rid=') !== -1) ? getReportId() : null;
-        if (ridFromUrl) {
+        var isReportPage = (window.location.pathname === '/report' || window.location.search.indexOf('rid=') !== -1);
+        var isPaymentFromReport = (window.location.pathname.indexOf('/payment') !== -1 && window.location.search.indexOf('from=report') !== -1);
+        var ridFromUrl = (isReportPage || isPaymentFromReport) ? getReportId() : null;
+        function loadReportByRid(rid) {
+          if (!rid) return;
           var qsPlan = (typeof URLSearchParams !== 'undefined' && window.location.search) ? new URLSearchParams(window.location.search).get('plan') : null;
           var overridePlan = (qsPlan === 'monthly' || qsPlan === 'yearly') ? qsPlan : null;
-          fetch(API_BASE + '/analyze/history/' + encodeURIComponent(ridFromUrl), { headers: { 'Authorization': 'Bearer ' + getToken() } })
+          fetch(API_BASE + '/analyze/history/' + encodeURIComponent(rid), { headers: { 'Authorization': 'Bearer ' + getToken() } })
             .then(function(r) { return r.ok ? r.json() : null; })
             .then(function(data) {
               if (data && data.result_text) {
@@ -11315,12 +11791,30 @@
                 var reportLimitedPreview = (planForRender === 'monthly');
                 var optsFromHistory = { risk_summary: data.risk_summary || null, health_score: data.health_score || null, trend: data.trend || null, premium: isPro, ui_hints: data.ui_hints || { locked: !isPro, report_limited_preview: reportLimitedPreview }, plan: planForRender, plan_type: planForRender };
                 renderReport(data.result_text, optsFromHistory);
-                lastAnalysisId = data.id || ridFromUrl;
-                try { sessionStorage.setItem(LAST_RID_KEY, String(ridFromUrl)); } catch (_) {}
+                lastAnalysisId = data.id || rid;
+                try { sessionStorage.setItem(LAST_RID_KEY, String(rid)); } catch (_) {}
                 var resultDiv = document.getElementById('analyze-result');
-                if (resultDiv) { resultDiv.classList.remove('hidden'); resultDiv.dataset.rid = String(ridFromUrl); }
+                if (resultDiv) { resultDiv.classList.remove('hidden'); resultDiv.dataset.rid = String(rid); }
                 if (typeof setWizardStep === 'function') setWizardStep(4);
                 scrollToAnalyze();
+              }
+            })
+            .catch(function() {});
+        }
+        if (ridFromUrl) {
+          loadReportByRid(ridFromUrl);
+        } else if (isPaymentFromReport) {
+          fetch(API_BASE + '/analyze/history?limit=1', { headers: { 'Authorization': 'Bearer ' + getToken() }, credentials: 'include' })
+            .then(function(r) { return r.ok ? r.json() : null; })
+            .then(function(list) {
+              if (list && list.length > 0 && list[0].id) {
+                var lastRid = String(list[0].id);
+                lastAnalysisId = list[0].id;
+                try { sessionStorage.setItem(LAST_RID_KEY, lastRid); } catch (_) {}
+                var qs = new URLSearchParams(window.location.search);
+                qs.set('rid', lastRid);
+                if (window.history && window.history.replaceState) window.history.replaceState(null, '', (window.location.pathname || '') + '?' + qs.toString());
+                loadReportByRid(lastRid);
               }
             })
             .catch(function() {});
@@ -11331,6 +11825,13 @@
         document.getElementById('analyze-limit-msg').classList.add('hidden');
       }
       if (!token || !user.email) {
+        if (isLocalDev()) {
+          analyzeLoginPrompt.classList.add('hidden');
+          analyzeForm.classList.remove('hidden');
+          if (typeof setWizardStep === 'function' && (typeof wizardCurrentStep === 'undefined' || wizardCurrentStep === 1 || wizardCurrentStep === 4)) setWizardStep(1);
+          if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
+          return;
+        }
         navAuth.classList.remove('hidden');
         navUser.classList.add('hidden');
         navUser.classList.remove('flex');
@@ -11357,10 +11858,14 @@
       document.getElementById('modal-register').classList.add('flex');
       document.getElementById('register-error').classList.add('hidden');
     }
+    // Ensure global alias for inline onclick handlers
+    window.openRegister = window.openRegister || openRegister;
     function closeRegister() {
       var el = document.getElementById('modal-register');
       if (el) { el.classList.add('hidden'); el.classList.remove('flex'); }
     }
+    // Ensure global alias for inline onclick handlers using closeRegister()
+    window.closeRegister = window.closeRegister || closeRegister;
 
     (function checkLoginRedirect() {
       var params = new URLSearchParams(window.location.search || '');
@@ -11904,16 +12409,25 @@
     if (window.location.hash === '#odeme') showCheckoutPage();
     if (window.location.hash === '#profil') showProfilePage();
 
+    function revealLandingSectionById(id) {
+      var sec = document.getElementById(id);
+      if (sec && sec.classList.contains('landing-hidden')) {
+        sec.classList.remove('landing-hidden');
+        sec.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+      return sec;
+    }
     window.addEventListener('hashchange', function() {
       if (window.location.hash === '#odeme') showCheckoutPage();
       if (window.location.hash === '#profil') showProfilePage();
-      if (window.location.hash === '#ornek-rapor') {
-        var sec = document.getElementById('ornek-rapor');
-        if (sec) { sec.classList.remove('landing-hidden'); sec.scrollIntoView({ behavior: 'smooth', block: 'start' }); }
+      var hashId = (window.location.hash || '').replace('#', '');
+      if (hashId && ['ornek-rapor', 'hakkimizda', 'once-sonra', 'ozellikler', 'kimler-icin', 'guven-referanslar', 'doktorlar', 'kurumsal', 'parametreler', 'rehber', 'seffaflik'].indexOf(hashId) !== -1) {
+        revealLandingSectionById(hashId);
       }
     });
-    if (window.location.hash === '#ornek-rapor') {
-      var sec = document.getElementById('ornek-rapor');
+    var initialHash = (window.location.hash || '').replace('#', '');
+    if (initialHash && ['ornek-rapor', 'hakkimizda', 'once-sonra', 'ozellikler', 'kimler-icin', 'guven-referanslar', 'doktorlar', 'kurumsal', 'parametreler', 'rehber', 'seffaflik'].indexOf(initialHash) !== -1) {
+      var sec = document.getElementById(initialHash);
       if (sec) sec.classList.remove('landing-hidden');
     }
 
@@ -11921,6 +12435,8 @@
       var el = document.getElementById('analyze-section');
       if (el) el.scrollIntoView({ behavior: 'auto', block: 'start' });
     }
+    // Ensure global alias for inline onclick handlers
+    window.openAnalyze = window.openAnalyze || openAnalyze;
     function scrollToAnalyze() {
       setTimeout(() => document.getElementById('analyze-section').scrollIntoView({ behavior: 'smooth' }), 300);
     }
@@ -12301,13 +12817,12 @@
 
       function wizardNext() {
         var errEl = document.getElementById('analyze-error');
-        errEl.classList.add('hidden');
+        if (errEl) errEl.classList.add('hidden');
         if (wizardCurrentStep === 1) {
           var fileInput = document.getElementById('analyze-pdf');
           var file = fileInput && fileInput.files && fileInput.files[0];
           if (file && file.size > WIZARD_MAX_FILE_SIZE) {
-            errEl.textContent = 'Dosya çok büyük. En fazla 15 MB yükleyebilirsiniz.';
-            errEl.classList.remove('hidden');
+            if (errEl) { errEl.textContent = 'Dosya çok büyük. En fazla 15 MB yükleyebilirsiniz.'; errEl.classList.remove('hidden'); }
             return;
           }
           setWizardStep(2);
@@ -12318,6 +12833,16 @@
           runAnalyze();
         }
       }
+      window.wizardNext = wizardNext;
+      document.addEventListener('click', function wizardNextDelegation(e) {
+        var t = e && e.target;
+        if (!t) return;
+        var btn = (t.id === 'wizard-btn-next') ? t : (t.closest && t.closest('#wizard-btn-next'));
+        if (!btn || btn.disabled) return;
+        e.preventDefault();
+        e.stopPropagation();
+        if (typeof window.wizardNext === 'function') window.wizardNext();
+      }, true);
 
       function wizardPrev() {
         document.getElementById('analyze-error').classList.add('hidden');
@@ -12368,7 +12893,7 @@
       errEl.classList.add('hidden');
       var retryWrap = document.getElementById('analyze-retry-wrap');
       if (retryWrap) retryWrap.classList.add('hidden');
-      if (!getToken()) {
+      if (!getToken() && !isLocalDev()) {
         openLogin();
         return;
       }
@@ -12396,7 +12921,8 @@
           fd.append('file', file);
           fd.append('lang', lang);
           var uploadUrl = API_BASE + '/analyze/upload';
-          var uploadHeaders = { 'Authorization': 'Bearer ' + getToken() };
+          var uploadHeaders = {};
+          if (getToken()) uploadHeaders['Authorization'] = 'Bearer ' + getToken();
           if (getTestMode()) uploadHeaders['X-Test-Mode'] = '1';
           var acUpload = typeof AbortController !== 'undefined' ? new AbortController() : null;
           var timeoutIdUpload = acUpload ? setTimeout(function() { acUpload.abort(); }, 180000) : null;
@@ -12419,7 +12945,8 @@
           fd.append('text', text);
           if (doctorNotes) fd.append('doctor_notes', doctorNotes);
           fd.append('lang', lang);
-          var uploadHeaders = { 'Authorization': 'Bearer ' + getToken() };
+          var uploadHeaders = {};
+          if (getToken()) uploadHeaders['Authorization'] = 'Bearer ' + getToken();
           if (getTestMode()) uploadHeaders['X-Test-Mode'] = '1';
           var ac = typeof AbortController !== 'undefined' ? new AbortController() : null;
           var timeoutId = ac ? setTimeout(function() { ac.abort(); }, 120000) : null;
@@ -12910,8 +13437,10 @@
       var segments = pathname.split('/').filter(Boolean);
       var pathLang = segments.length > 0 && SUPPORTED_LOCALES.indexOf(segments[0]) !== -1 ? segments[0] : null;
       if (pathLang && typeof T !== 'undefined' && T[pathLang]) {
-        localStorage.setItem(LANG_KEY, pathLang);
+        try { localStorage.setItem(LANG_KEY, pathLang); } catch (_) {}
         setLang(pathLang);
+        setTimeout(function() { setLang(pathLang); }, 0);
+        setTimeout(function() { setLang(pathLang); }, 150);
         return;
       }
       var params = typeof URLSearchParams !== 'undefined' ? new URLSearchParams(window.location.search) : null;
@@ -13121,6 +13650,15 @@
       var bar = document.getElementById('sticky-cta-bar');
       if (!bar) return;
       function onStickyCtaScroll() {
+        var analyzeSection = document.getElementById('analyze-section');
+        var inAnalyze = analyzeSection && (function() {
+          var r = analyzeSection.getBoundingClientRect();
+          return r.top < window.innerHeight && r.bottom > 120;
+        })();
+        if (inAnalyze) {
+          bar.classList.remove('sticky-cta-visible');
+          return;
+        }
         if (window.scrollY > 350) bar.classList.add('sticky-cta-visible');
         else bar.classList.remove('sticky-cta-visible');
       }

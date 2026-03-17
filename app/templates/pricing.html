@@ -1,4 +1,5 @@
 <!DOCTYPE html>
+<!-- DEBUG_FILE: pricing.html v1 -->
 <html lang="{{ lang }}">
 <head>
   <meta charset="UTF-8">
@@ -16,6 +17,18 @@
   <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
   <link rel="canonical" href="{{ base_url }}/pricing" />
+  <script>
+    console.log('[debug-file] pricing.html v1 loaded, lang =', {{ lang|tojson|safe }});
+    console.log("[pricing] detected lang from backend:", {{ lang|tojson|safe }});
+    (function () {
+      try {
+        var cookieMatch = (document.cookie || "").match(/(?:^|;\s*)norya_lang=([^;]+)/);
+        var cookieLang = cookieMatch ? decodeURIComponent(cookieMatch[1]) : null;
+        console.log("[pricing] cookie norya_lang:", cookieLang);
+        console.log("[pricing] html lang/dir:", document.documentElement.lang || null, document.documentElement.dir || null);
+      } catch (_) {}
+    })();
+  </script>
   <style>
     *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
     html{-webkit-text-size-adjust:100%;text-size-adjust:100%;overflow-x:hidden;width:100%;}
@@ -271,7 +284,10 @@
       <a href="{{ base_url }}/" aria-label="{{ brand }}">
         <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="{{ brand }}" width="160" height="40" loading="eager">
       </a>
-      <p class="brand-tagline">{{ t.get("brand_trust_line", "Clinical-style blood test reports.") }}</p>
+      <div class="header-right">
+        <p class="brand-tagline">{{ t.get("brand_trust_line", "Clinical-style blood test reports.") }}</p>
+        {% include "partials/header_lang.html" %}
+      </div>
     </header>
 
     <section class="hero" aria-labelledby="hero-title">
@@ -376,5 +392,6 @@
       </div>
     </section>
   </div>
+{% include "partials/scripts_lang.html" %}
 </body>
 </html>

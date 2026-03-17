@@ -127,6 +127,7 @@ def init_db():
             "ALTER TABLE paymentorder ADD COLUMN raw_callback_json TEXT",
             "ALTER TABLE paymentorder ADD COLUMN refunded_at DATETIME",
             "ALTER TABLE paymentorder ADD COLUMN refund_amount_kurus INTEGER",
+            "ALTER TABLE paymentorder ADD COLUMN customer_email TEXT",
             "ALTER TABLE analysis_jobs ADD COLUMN prompt_tokens INTEGER",
             "ALTER TABLE analysis_jobs ADD COLUMN completion_tokens INTEGER",
             "ALTER TABLE discountcode ADD COLUMN is_active BOOLEAN DEFAULT 1",

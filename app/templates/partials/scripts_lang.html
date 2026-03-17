@@ -1,0 +1,130 @@
+<script>
+console.log('[debug-file] partials/scripts_lang.html v1 loaded on', window.location.pathname);
+(function () {
+  var SUPPORTED_LOCALES = ['tr','en','es','de','fr','it','he','hi','ar'];
+  var LANG_COOKIE = 'norya_lang';
+
+  function normalizeLocale(value) {
+    if (!value || typeof value !== 'string') return 'en';
+    value = String(value).toLowerCase().trim();
+    // normalize like "en-us" -> "en"
+    var short = value.split(/[-_]/)[0];
+    if (SUPPORTED_LOCALES.indexOf(short) !== -1) return short;
+    if (SUPPORTED_LOCALES.indexOf(value) !== -1) return value;
+    return 'en';
+  }
+
+  function setLangCookie(locale) {
+    try {
+      document.cookie = LANG_COOKIE + '=' + encodeURIComponent(locale) + '; path=/; max-age=31536000; samesite=lax';
+    } catch (_) {}
+  }
+
+  function getStoredLang() {
+    try {
+      var m = (document.cookie || '').match(/(?:^|;\s*)norya_lang=([^;]+)/);
+      if (m) return normalizeLocale(decodeURIComponent(m[1]));
+    } catch (_) {}
+    return null;
+  }
+
+  function switchLocale(nextLocale) {
+    console.log('[lang-debug] switchLocale called from partials/scripts_lang.html with', nextLocale, 'on', window.location.pathname);
+    nextLocale = normalizeLocale(nextLocale);
+    setLangCookie(nextLocale);
+
+    var path = window.location.pathname || '/';
+    var isBackendPage = /^\/(pricing|payment|verify|legal|blog|admin|iade-iptal|iade-talebi|kurumsal)/.test(path);
+
+    // SPA / landing branch: sadece tam SPA rotalarında chooseLang'e delege et.
+    if (!isBackendPage && typeof window.chooseLang === 'function') {
+      console.log('[lang-debug] chooseLang is present and path is SPA, delegating to SPA branch');
+      window.chooseLang(nextLocale);
+      return;
+    }
+
+    // Backend-rendered pages (veya SPA olmayan yollar): path'i koru, ?lang güncelle ve yeniden yükle.
+    try {
+      var url = new URL(window.location.href);
+      url.searchParams.set('lang', nextLocale);
+      console.log('[lang-debug] backend branch redirect to', url.toString());
+      window.location.href = url.toString();
+    } catch (_) {
+      var qs = window.location.search || '';
+      var hash = window.location.hash || '';
+      var sep = qs ? '&' : '?';
+      var fallbackUrl = path + qs + sep + 'lang=' + encodeURIComponent(nextLocale) + hash;
+      console.log('[lang-debug] backend branch fallback redirect to', fallbackUrl);
+      window.location.href = fallbackUrl;
+    }
+  }
+
+  function bindHeaderLangDropdown() {
+    var toggle = document.getElementById('base-lang-toggle');
+    var menu = document.getElementById('base-lang-menu');
+    var current = document.getElementById('base-lang-current');
+    if (!toggle || !menu) {
+      console.log('[lang-debug] header_lang dropdown not found on', window.location.pathname);
+      return;
+    }
+
+    var initial = normalizeLocale(getStoredLang() || document.documentElement.lang || 'en');
+    if (current) current.textContent = initial.toUpperCase();
+
+    function openMenu() {
+      menu.hidden = false;
+      toggle.setAttribute('aria-expanded', 'true');
+    }
+    function closeMenu() {
+      menu.hidden = true;
+      toggle.setAttribute('aria-expanded', 'false');
+    }
+    function toggleMenu() {
+      if (menu.hidden) openMenu(); else closeMenu();
+    }
+
+    toggle.addEventListener('click', function (e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('[lang-debug] base-lang-toggle clicked on', window.location.pathname);
+      toggleMenu();
+    });
+
+    document.addEventListener('click', function (e) {
+      if (!menu || menu.hidden) return;
+      if (menu.contains(e.target) || toggle.contains(e.target)) return;
+      console.log('[lang-debug] document outside click – closing header_lang menu on', window.location.pathname);
+      closeMenu();
+    });
+
+    var opts = menu.querySelectorAll('.header-lang-option[data-locale]');
+    opts.forEach(function (btn) {
+      var code = normalizeLocale(btn.getAttribute('data-locale') || '');
+      btn.classList.toggle('is-active', code === initial);
+      btn.addEventListener('click', function (e) {
+        e.preventDefault();
+        e.stopPropagation();
+        var locale = btn.getAttribute('data-locale');
+        console.log('[lang-debug] header_lang option clicked:', locale, 'on', window.location.pathname);
+        var norm = normalizeLocale(locale);
+        if (current) current.textContent = norm.toUpperCase();
+        opts.forEach(function (other) {
+          var otherCode = normalizeLocale(other.getAttribute('data-locale') || '');
+          other.classList.toggle('is-active', otherCode === norm);
+        });
+        closeMenu();
+        switchLocale(locale);
+      });
+    });
+  }
+
+  window.switchLocale = window.switchLocale || switchLocale;
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', bindHeaderLangDropdown);
+  } else {
+    bindHeaderLangDropdown();
+  }
+})();
+</script>
+
