@@ -30,12 +30,13 @@ from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
 from sqlalchemy import or_, text
+from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 from sqlmodel import Session, select
 
 from app.admin import admin_router as new_admin_router
 from app.api.admin import get_admin_html, router as admin_router
 from app.api.auth import router as auth_router
-from app.api.deps import get_current_user, get_current_user_optional, security
+from app.api.deps import get_current_user, get_current_user_optional, get_current_user_or_dev_guest, security
 from app.cache_db import cache_get, cache_set, get_conn as get_cache_conn, init_cache as init_ai_cache, purge_expired as purge_ai_cache_expired
 from app.cache_utils import expires_iso, make_cache_key, now_iso
 from app.core.config import is_openai_configured, settings
@@ -91,7 +92,7 @@ from app.seo_landing_i18n import (
     OG_LOCALE_MAP as SEO_OG_LOCALE_MAP,
 )
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
-from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_related_articles, iter_all_article_paths, list_articles_for_lang
+from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_blog_icon_paths, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, get_active_campaign_for_checkout, validate_coupon
 from app.services.pricing import (
@@ -248,6 +249,27 @@ async def lifespan(app: FastAPI):
         log.info("E-posta (şifre sıfırlama): SMTP yapılandırıldı, gerçek mail gönderilecek.")
     else:
         log.warning("E-posta (şifre sıfırlama): SMTP yapılandırılmadı — .env içinde SMTP_HOST, SMTP_USER, SMTP_PASSWORD ayarlayın; şifre sıfırlama mailleri GÖNDERİLMEYECEK.")
+    # Blog ikonları: referans verilen her dosya static altında yoksa uygulama başlamaz (404 tekrarlanmasın)
+    try:
+        icon_paths = get_blog_icon_paths()
+        missing = []
+        for rel in icon_paths:
+            full = STATIC_DIR / rel
+            if not full.is_file():
+                missing.append(rel)
+        if missing:
+            msg = (
+                "Blog ikonları eksik — sunucu başlatılamıyor. Eksik dosyalar: %s. "
+                "static/images/blog/icons/ altına bu dosyaları ekleyin veya ilgili makaleden icon referansını kaldırın."
+            ) % ", ".join(missing)
+            log.error(msg)
+            raise RuntimeError(msg)
+        if icon_paths:
+            log.info("Blog ikonları doğrulandı (%d dosya).", len(icon_paths))
+    except RuntimeError:
+        raise
+    except Exception as e:
+        log.warning("Blog ikon doğrulaması atlandı: %s", e)
     yield
 
 
@@ -1976,7 +1998,11 @@ def _index_response(request: Request | None = None):
                 raw = raw.replace("</head>", landing_script + "</head>", 1)
         return HTMLResponse(
             raw,
-            headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
+            headers={
+                "Cache-Control": "no-cache, no-store, must-revalidate",
+                "Pragma": "no-cache",
+                "Expires": "0",
+            },
         )
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
 
@@ -2309,7 +2335,7 @@ def _is_test_mode(request: Request) -> bool:
 @limiter.limit("10/minute")
 async def analyze(
     request: Request,
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user_or_dev_guest),
     db: Session = Depends(get_db),
 ):
     """Metin analizi. JSON body veya form (text, doctor_notes, lang) — PDF/görsel akışı ile aynı form gönderimi desteklenir."""
@@ -2456,7 +2482,7 @@ async def analyze_upload(
     request: Request,
     file: UploadFile = File(...),
     lang: str = Form("tr"),
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user_or_dev_guest),
     db: Session = Depends(get_db),
 ):
     """Dosya yükleme: multipart/form-data, alan adı 'file' (zorunlu), 'lang' (opsiyonel)."""
@@ -2749,7 +2775,7 @@ def _process_uploaded_content(
 async def analyze_upload_json(
     request: Request,
     body: UploadJsonRequest,
-    user: User = Depends(get_current_user),
+    user: User = Depends(get_current_user_or_dev_guest),
     db: Session = Depends(get_db),
 ):
     """Dosyayı base64 JSON ile alır (UI dışı / yedek). file_base64, filename, lang."""
@@ -3215,13 +3241,14 @@ def paytr_init(
     except HTTPException:
         raise
     except Exception as e:
-        log.exception("PayTR init failed")
-        msg = (str(e) or "").strip()[:200]
-        if not msg:
-            msg = "Beklenmeyen sunucu hatası. Terminal veya Render loglarında 'PayTR init failed' arayın."
+        err_type = type(e).__name__
+        err_msg = (str(e) or "").strip()[:200]
+        log.exception("PayTR init failed: %s: %s", err_type, err_msg)
+        if not err_msg:
+            err_msg = "Beklenmeyen sunucu hatası. Loglarda 'PayTR init failed' arayın."
         raise HTTPException(
             status_code=500,
-            detail=f"Ödeme başlatılamadı: {msg} (.env içinde PAYTR_MERCHANT_ID, PAYTR_MERCHANT_KEY, PAYTR_MERCHANT_SALT dolu mu kontrol edin.)",
+            detail=f"Ödeme başlatılamadı: {err_msg}",
         )
 
 
@@ -3256,14 +3283,21 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
             stmt = select(User).where(User.email == email)
             user = db.exec(stmt).first()
             if not user:
-                user = User(
-                    email=email,
-                    hashed_password=hash_password("guest_" + secrets.token_hex(32)),
-                    full_name=(body.name or "").strip()[:200] or "",
-                )
-                db.add(user)
-                db.commit()
-                db.refresh(user)
+                try:
+                    user = User(
+                        email=email,
+                        hashed_password=hash_password("guest_" + secrets.token_hex(32)),
+                        full_name=(body.name or "").strip()[:200] or "",
+                    )
+                    db.add(user)
+                    db.commit()
+                    db.refresh(user)
+                except SQLIntegrityError:
+                    db.rollback()
+                    user = db.exec(select(User).where(User.email == email)).first()
+                except Exception:
+                    db.rollback()
+                    raise
     if not user:
         raise HTTPException(
             status_code=400,

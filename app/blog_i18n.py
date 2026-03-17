@@ -5807,6 +5807,22 @@ ARTICLES: List[Article] = [
 ]
 
 
+def get_blog_icon_paths() -> List[str]:
+    """Blog makalelerinde referans verilen tüm ikon dosya yollarını döner (/static/ sonrası, static köküne göre).
+    Örnek: 'images/blog/icons/albumin-low-meaning.svg'
+    Eksik dosyaların başlangıçta tespiti için kullanılır."""
+    paths: List[str] = []
+    for art in ARTICLES:
+        icon = getattr(art, "icon", None)
+        if not icon or not isinstance(icon, str):
+            continue
+        if icon.startswith("/static/"):
+            paths.append(icon[len("/static/"):].lstrip("/"))
+        elif icon.startswith("static/"):
+            paths.append(icon[len("static/"):].lstrip("/"))
+    return paths
+
+
 def _normalize_lang(lang: str | None) -> str:
     if not lang:
         return DEFAULT_BLOG_LANG
