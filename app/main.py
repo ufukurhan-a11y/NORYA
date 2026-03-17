@@ -249,7 +249,7 @@ async def lifespan(app: FastAPI):
         log.info("E-posta (şifre sıfırlama): SMTP yapılandırıldı, gerçek mail gönderilecek.")
     else:
         log.warning("E-posta (şifre sıfırlama): SMTP yapılandırılmadı — .env içinde SMTP_HOST, SMTP_USER, SMTP_PASSWORD ayarlayın; şifre sıfırlama mailleri GÖNDERİLMEYECEK.")
-    # Blog ikonları: referans verilen her dosya static altında yoksa uygulama başlamaz (404 tekrarlanmasın)
+    # Blog ikonları: referans verilen dosyalar static altında yoksa uyar (404 olmasın diye); eksik olsa bile sunucu başlasın (deploy kırılmasın)
     try:
         icon_paths = get_blog_icon_paths()
         missing = []
@@ -258,16 +258,13 @@ async def lifespan(app: FastAPI):
             if not full.is_file():
                 missing.append(rel)
         if missing:
-            msg = (
-                "Blog ikonları eksik — sunucu başlatılamıyor. Eksik dosyalar: %s. "
-                "static/images/blog/icons/ altına bu dosyaları ekleyin veya ilgili makaleden icon referansını kaldırın."
-            ) % ", ".join(missing)
-            log.error(msg)
-            raise RuntimeError(msg)
-        if icon_paths:
+            log.error(
+                "Blog ikonları eksik (sayfada 404 olabilir). Eksik: %s. "
+                "static/images/blog/icons/ altına ekleyin veya ilgili makaleden icon referansını kaldırın.",
+                ", ".join(missing),
+            )
+        elif icon_paths:
             log.info("Blog ikonları doğrulandı (%d dosya).", len(icon_paths))
-    except RuntimeError:
-        raise
     except Exception as e:
         log.warning("Blog ikon doğrulaması atlandı: %s", e)
     yield
@@ -468,8 +465,8 @@ _CSP_PAYMENT_PAGE = (
     "script-src-elem 'self' 'unsafe-inline' https://www.googletagmanager.com https://googletagmanager.com "
     "https://www.googleadservices.com https://googleadservices.com "
     "https://googleads.g.doubleclick.net https://www.google.com; "
-    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.googletagmanager.com https://googletagmanager.com; "
-    "font-src 'self' https://fonts.gstatic.com; "
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://www.gstatic.com https://www.googletagmanager.com https://googletagmanager.com; "
+    "font-src 'self' https://fonts.gstatic.com https://www.gstatic.com; "
     "img-src 'self' data: blob: https://www.google.com https://www.google.com.tr "
     "https://googleads.g.doubleclick.net https://www.google-analytics.com "
     "https://www.googletagmanager.com; "
@@ -3309,6 +3306,7 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
 
     customer_email_val = (user.email or "").strip().lower() if user else None
+    coupon_used_trunc = (coupon_used or "")[:64] if coupon_used else None
     order = PaymentOrder(
         merchant_oid=merchant_oid,
         user_id=user_id,
@@ -3317,14 +3315,25 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
         amount_kurus=total_amount,
         currency=currency,
         status="pending",
-        coupon_code_used=coupon_used,
+        coupon_code_used=coupon_used_trunc,
         quantity=quantity,
     )
     db.add(order)
     try:
         db.commit()
+    except SQLIntegrityError as e:
+        log.warning("PayTR init: order insert IntegrityError merchant_oid=%s: %s", merchant_oid, e)
+        db.rollback()
+        raise HTTPException(status_code=500, detail="Sipariş oluşturulamadı (kayıt çakışması). Lütfen tekrar deneyin.")
     except Exception as e:
-        log.exception("PayTR init: order insert failed")
+        log.exception("PayTR init: order insert failed: %s", e)
+        db.rollback()
+        err_msg = str(e).strip()[:120] if str(e) else ""
+        if "no such column" in err_msg.lower() or "unknown column" in err_msg.lower():
+            raise HTTPException(
+                status_code=500,
+                detail="Veritabanı şeması güncel değil. Sunucu yöneticisi init_db veya migration çalıştırmalı.",
+            )
         raise HTTPException(status_code=500, detail="Sipariş oluşturulamadı.")
 
     paytr_amount, paytr_currency = _paytr_amount_and_currency(total_amount)
@@ -3729,8 +3738,9 @@ def payment_page_premium(
     """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kampanya admin’deki aktif kampanyaya bağlı."""
     lang = _payment_lang_from_request(request)
     t = get_pay_ui(lang)
-    # Tek canonical domain (statik ve API istekleri)
+    # Canonical domain (linkler, meta); API çağrıları için mevcut origin (localhost'ta CSP 'self' uyumu)
     base_url = _paytr_canonical_base(request)
+    api_base = str(request.base_url).rstrip("/")
     plan_map = get_plan_code_to_product_cents(db)
     plans: list[dict] = []
     for code, (product, price_cents) in plan_map.items():
@@ -3779,7 +3789,7 @@ def payment_page_premium(
             "base_url": base_url,
             "plans": plans,
             "plans_js": json.dumps(plans),
-            "base_url_js": json.dumps(base_url),
+            "base_url_js": json.dumps(api_base),
             "default_plan": default_plan,
             # Eski template alanları (plan_code + fiyat/benefit map'leri)
             "plan_code": plan_code,
