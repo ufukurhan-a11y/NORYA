@@ -4,7 +4,10 @@ import io
 import secrets
 from typing import Any
 
+import sqlite3
+
 from sqlmodel import Session, select
+from sqlalchemy.exc import OperationalError as SQLOperationalError
 
 from app.core.security import create_report_verification_token
 from app.models.report_verification import ReportVerification
@@ -68,27 +71,38 @@ def get_or_create_verification(
     else:
         report_id = _generate_report_id()
         verification_code = _generate_verification_code()
-        if existing:
-            existing.report_id = report_id
-            existing.verification_code = verification_code
-            existing.is_active = True
-            existing.report_status = "completed"
-            existing.package_type = plan
-            existing.language = language
-            db.add(existing)
-        else:
-            rv = ReportVerification(
-                report_id=report_id,
-                analysis_id=analysis_id,
-                user_id=user_id,
-                package_type=plan,
-                language=language,
-                verification_code=verification_code,
-                is_active=True,
-                report_status="completed",
-            )
-            db.add(rv)
-        db.commit()
+        try:
+            if existing:
+                existing.report_id = report_id
+                existing.verification_code = verification_code
+                existing.is_active = True
+                existing.report_status = "completed"
+                existing.package_type = plan
+                existing.language = language
+                db.add(existing)
+            else:
+                rv = ReportVerification(
+                    report_id=report_id,
+                    analysis_id=analysis_id,
+                    user_id=user_id,
+                    package_type=plan,
+                    language=language,
+                    verification_code=verification_code,
+                    is_active=True,
+                    report_status="completed",
+                )
+                db.add(rv)
+            db.commit()
+        except (sqlite3.OperationalError, SQLOperationalError) as e:
+            # DB readonly ise QR görünsün diye DB'ye kaydetmeden fallback döndür.
+            msg = str(e).lower()
+            if "readonly" in msg and "database" in msg:
+                try:
+                    db.rollback()
+                except Exception:
+                    pass
+            else:
+                raise
 
     signed_token = create_report_verification_token(report_id, verification_code)
     verification_url = f"{base_url}/verify/{report_id}?token={signed_token}"

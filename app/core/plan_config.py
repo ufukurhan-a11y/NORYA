@@ -105,7 +105,9 @@ def normalize_plan_type(plan: str | None) -> PlanType:
         return "single"
     if p in ("single", "monthly", "yearly"):
         return p  # type: ignore[return-value]
-    if p == "pro":
+    # "premium" UI'da/ödeme akışında tek bir ürün adı olarak gelebilir.
+    # PDF ve açıklama derinliği açısından en yakın karşılığı "yearly" kabul ediyoruz.
+    if p in ("premium", "pro"):
         return "yearly"
     # free veya bilinmeyen
     return "single"

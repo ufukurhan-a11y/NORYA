@@ -1232,11 +1232,75 @@ async def dev_sample_report_pdf(request: Request):
     )
 
 
+@app.get("/dev/monthly-sample-report.pdf")
+async def dev_monthly_sample_report_pdf(request: Request):
+    """Aylık (monthly) paket için örnek PDF (report_premium.html ile). Production'da 404."""
+    if getattr(settings, "environment", "development").strip().lower() == "production":
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    base_url = str(request.base_url).rstrip("/")
+    report_id = "dev-monthly-sample-12345"
+    token = "dev-token"
+    verification_url = f"{base_url}/verify/{report_id}?token={token}"
+    verification_info = None
+    try:
+        from app.services.report_verification import _qr_png_base64
+        qr_b64 = _qr_png_base64(verification_url)
+        verification_info = {
+            "report_id": report_id,
+            "verification_code": "DEV-MONTHLY-SAMPLE",
+            "verification_url": verification_url,
+            "qr_image_base64": qr_b64 or "",
+        }
+    except Exception as e:
+        log.debug("Dev monthly sample report: QR skipped: %s", e)
+
+    try:
+        pdf_bytes = build_report_pdf(
+            result_text=_DEV_SAMPLE_RESULT_TEXT,
+            report_date=datetime.now(timezone.utc).strftime("%d.%m.%Y %H:%M"),
+            lang="tr",
+            report_id="DEV-MONTHLY-001",
+            user_identifier="dev-monthly@norya.com",
+            patient_name="Örnek Kullanıcı (Aylık)",
+            plan_name="monthly",
+            source_type="text",
+            trend_data=_DEV_SAMPLE_TREND_DATA,
+            verification_info=verification_info,
+        )
+    except Exception as e:
+        log.exception("Dev monthly sample report PDF failed: %s", e)
+        raise HTTPException(status_code=500, detail=f"PDF oluşturulamadı: {e!s}")
+
+    return Response(
+        content=pdf_bytes,
+        media_type="application/pdf",
+        headers={"Content-Disposition": "inline; filename=norya-ornek-rapor-aylik.pdf"},
+    )
+
+
 @app.get("/dev/single-plan-test.pdf")
 async def dev_single_plan_test_pdf(request: Request):
     """Single plan PDF testi — aynı örnek metinle plan_name='single' ile PDF. Production'da 404."""
     if getattr(settings, "environment", "development").strip().lower() == "production":
         raise HTTPException(status_code=404, detail="Not Found")
+    verification_info = None
+    try:
+        base_url = str(request.base_url).rstrip("/")
+        report_id = "single-plan-test"
+        token = "dev-token"
+        verification_url = f"{base_url}/verify/{report_id}?token={token}"
+        from app.services.report_verification import _qr_png_base64
+
+        verification_info = {
+            "report_id": report_id,
+            "verification_code": "DEV-SAMPLE",
+            "verification_url": verification_url,
+            "qr_image_base64": _qr_png_base64(verification_url) or "",
+        }
+    except Exception:
+        verification_info = None
+
     try:
         pdf_bytes = build_report_pdf(
             result_text=_DEV_SAMPLE_RESULT_TEXT,
@@ -1247,6 +1311,7 @@ async def dev_single_plan_test_pdf(request: Request):
             # Standart SINGLE/STANDARD akışını test etmek için premium şablon yerine standart PDF şablonu kullanılsın.
             plan_name="free",
             source_type="text",
+            verification_info=verification_info,
         )
     except Exception as e:
         log.exception("Single plan test PDF failed: %s", e)
@@ -3004,7 +3069,9 @@ def _get_pdf_requester_id(
 @app.post("/analyze/history/{analysis_id}/pdf-token")
 def get_pdf_download_token(
     analysis_id: int,
-    user: User = Depends(get_current_user),
+    # Local development'da token olmayabilir; analiz endpoint'leri `get_current_user_or_dev_guest`
+    # ile dev guest kullanıyor. PDF token üretimi için de aynı davranışı uygulayalım.
+    user: User = Depends(get_current_user_or_dev_guest),
     db: Session = Depends(get_db),
 ) -> dict:
     """PDF indirme için 5 dakika geçerli tek kullanımlık token. Canlıda Raporu İndir bu token ile URL açar."""
@@ -3064,8 +3131,12 @@ def download_analysis_pdf(
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
     verification_info = None
-    if plan_for_pdf in ("single", "monthly", "yearly"):
-        verification_info = get_or_create_verification(db, analysis_id, user_id, plan_for_pdf, report_lang, verify_base_url)
+    verification_plan = (plan_for_pdf or "").strip().lower()
+    # Free plan standard PDF'lerde de QR göstermek için "free" -> "single" map ediyoruz.
+    if verification_plan == "free":
+        verification_plan = "single"
+    if verification_plan in ("single", "monthly", "yearly"):
+        verification_info = get_or_create_verification(db, analysis_id, user_id, verification_plan, report_lang, verify_base_url)
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
@@ -3125,7 +3196,12 @@ def download_doctor_pdf(
     premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
-    verification_info = get_or_create_verification(db, analysis_id, user_id, plan_for_pdf, report_lang, verify_base_url) if plan_for_pdf in ("single", "monthly", "yearly") else None
+    verification_info = None
+    verification_plan = (plan_for_pdf or "").strip().lower()
+    if verification_plan == "free":
+        verification_plan = "single"
+    if verification_plan in ("single", "monthly", "yearly"):
+        verification_info = get_or_create_verification(db, analysis_id, user_id, verification_plan, report_lang, verify_base_url)
     try:
         if premium_pdf:
             pdf_bytes = build_report_pdf(

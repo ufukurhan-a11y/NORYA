@@ -52,7 +52,7 @@
     /* Pro/Premium ile aynı sayfa düzeni */
     @page {
       size: A4;
-      margin: 26mm 16mm 22mm 16mm;
+      margin: 5mm 6mm 8mm 6mm;
       @top-center {
         content: element(pdf-header);
       }
@@ -60,7 +60,7 @@
         content: element(pdf-disclaimer);
       }
       @bottom-right {
-        font-size: 9px;
+        font-size: 8px;
         color: var(--page-footer-color);
         content: "Sayfa " counter(page) " / " counter(pages) " · noryaai.com";
       }
@@ -70,9 +70,9 @@
       position: running(pdf-header);
       display: block;
       width: 100%;
-      padding: 8px 12px 10px;
+      padding: 1px 4px 1px;
       margin: 0;
-      border-bottom: 2px solid var(--section-border);
+      border-bottom: 1px solid var(--section-border);
       background: #fff;
       box-sizing: border-box;
       word-break: normal;
@@ -111,22 +111,18 @@
       display: block;
     }
     .pdf-header-logo--report {
-      width: 32px;
-      height: 32px;
-      min-width: 32px;
-      min-height: 32px;
-      max-width: 32px;
-      max-height: 32px;
+      width: 24px;
+      height: 24px;
     }
     .pdf-header-brand-name {
-      font-size: 14px;
+      font-size: 9px;
       font-weight: 900;
       color: var(--norya-heading);
       line-height: 1.15;
       margin: 0;
     }
     .pdf-header-brand-sub {
-      font-size: 10px;
+      font-size: 6.3px;
       color: var(--norya-muted);
       margin: 0;
       line-height: 1.25;
@@ -142,7 +138,7 @@
       padding: 0 8px;
     }
     .pdf-header-title {
-      font-size: 14px;
+      font-size: 9px;
       font-weight: 950;
       color: var(--norya-heading);
       letter-spacing: 0.02em;
@@ -150,7 +146,7 @@
       line-height: 1.2;
     }
     .pdf-header-subtitle {
-      font-size: 10px;
+      font-size: 6.3px;
       color: var(--norya-muted);
       margin: 0;
       line-height: 1.25;
@@ -160,7 +156,7 @@
       width: 26%;
       text-align: right;
       vertical-align: middle;
-      font-size: 9.5px;
+      font-size: 6.3px;
       color: var(--norya-muted);
       line-height: 1.35;
       padding-left: 8px;
@@ -169,7 +165,7 @@
     .header-divider {
       height: 1px;
       background: rgba(15, 23, 42, 0.1);
-      margin: 10px 2px 0;
+      margin: 3px 2px 0;
     }
     /* Pro ile aynı: header altında tek legend strip */
     .report-legend-strip {
@@ -177,14 +173,14 @@
       align-items: center;
       flex-wrap: wrap;
       justify-content: flex-start;
-      gap: 10px 18px;
-      padding: 6px 12px 8px;
-      margin: 0 0 10px 0;
+      gap: 6px 12px;
+      padding: 1px 5px 1.2px;
+      margin: 0 0 3px 0;
       max-width: 100%;
       box-sizing: border-box;
       background: #f8fafc;
       border-bottom: 1px solid var(--section-border);
-      font-size: 10px;
+      font-size: 7px;
       color: var(--norya-muted);
       page-break-inside: avoid;
       overflow: hidden;
@@ -197,31 +193,31 @@
       flex-shrink: 0;
     }
     .report-legend-strip .lab-legend-dot {
-      width: 8px;
-      height: 8px;
+      width: 7px;
+      height: 7px;
       border-radius: 50%;
       flex-shrink: 0;
     }
-    .report-legend-strip .report-legend-label { font-weight: 600; color: var(--norya-heading); margin-right: 8px; }
-    .report-legend-strip .lab-legend-dot.lab-card--normal { background: #22c55e; }
-    .report-legend-strip .lab-legend-dot.lab-card--border { background: #eab308; }
-    .report-legend-strip .lab-legend-dot.lab-card--risk { background: #ef4444; }
+    .report-legend-strip .report-legend-label { font-weight: 600; color: var(--norya-heading); margin-right: 6px; }
+    .report-legend-strip .lab-legend-dot.lab-card--normal { background: #86efac; }
+    .report-legend-strip .lab-legend-dot.lab-card--border { background: #fde68a; }
+    .report-legend-strip .lab-legend-dot.lab-card--risk { background: #fca5a5; }
     /* ========== Footer (running): uyarı metni ========== */
     #pdf-disclaimer {
       position: running(pdf-disclaimer);
       display: block;
       width: 100%;
       margin: 0;
-      padding-top: 4px;
-      border-top: 1px solid var(--disclaimer-sep);
-      font-size: 7.5px;
-      line-height: 1.35;
+      padding-top: 0.15px;
+      border-top: none;
+      font-size: 4.2px;
+      line-height: 1.1;
       color: var(--disclaimer-color);
       text-align: left;
     }
     /* ========== Ana içerik alanı (Pro ile aynı üst boşluk) ========== */
     .report-body {
-      margin-top: 12px;
+      margin-top: 4px;
       padding: 0;
       max-width: 100%;
       overflow-x: hidden;
@@ -262,8 +258,8 @@
       font-size: 10.5px;
       font-weight: 700;
       color: var(--norya-heading);
-      margin: 14px 0 8px 0;
-      padding-bottom: 6px;
+      margin: 6px 0 3px 0;
+      padding-bottom: 3px;
       border-bottom: 1px solid var(--section-border);
       letter-spacing: 0.01em;
     }
@@ -276,13 +272,30 @@
     }
     .section-title:first-of-type { margin-top: 0; }
     .section-title-tight { margin-top: 6px; margin-bottom: 4px; }
-    .section-body-tight { margin-bottom: 4px; }
-    .section-summary-wrap { page-break-inside: avoid; page-break-after: avoid; }
+    .section-body-tight { margin-bottom: 3px; }
+    .top-attention-line {
+      margin: 2px 0 0 0;
+      padding: 0;
+      line-height: 1.25;
+      font-size: 9px;
+      color: var(--norya-text);
+    }
+    .section-summary-wrap { page-break-inside: avoid; }
     .section-causes-recommendations { page-break-inside: avoid; }
     .section-causes-recommendations .section-title { margin-top: 0; }
     .section-compact .section-title { margin: 6px 0 4px 0; }
-    .section-body { margin-bottom: 10px; white-space: pre-wrap; max-width: 100%; box-sizing: border-box; line-height: 1.4; }
-    .section-body-compact { margin-bottom: 4px; font-size: 9px; line-height: 1.35; white-space: pre-wrap; }
+    .section-body { margin-bottom: 3px; white-space: pre-wrap; max-width: 100%; box-sizing: border-box; line-height: 1.4; }
+    .section-body-compact { margin-bottom: 2px; font-size: 9px; line-height: 1.35; white-space: pre-wrap; }
+    /* Unordered list markers bazen PDF metin çıkarımında tek başına '•' olarak görünür.
+       Bunu önlemek için report-bullets için disc marker'ı kaldırıyoruz. */
+    .report-bullets {
+      list-style: none;
+      padding-left: 0;
+      margin: 0;
+    }
+    .report-bullets li {
+      margin: 0 0 2px 0;
+    }
     .risk-banner {
       padding: 8px 10px;
       border-radius: 6px;
@@ -318,68 +331,103 @@
     .intro-block-tight p:last-child { margin-bottom: 0; }
     .intro-block p:last-child { margin-bottom: 0; }
     .how-to-read-block {
-      margin-bottom: 8px;
-      padding: 8px 12px;
+      margin-bottom: 2px;
+      padding: 4px 7px;
       background: #f8fafc;
       border-radius: var(--card-radius);
-      font-size: 9px;
+      font-size: 8px;
       color: var(--norya-muted);
-      line-height: 1.4;
+      line-height: 1.25;
       border: 1px solid var(--section-border);
     }
     .chart-legend {
-      font-size: 9px;
+      font-size: 7.6px;
       color: var(--norya-muted);
-      margin: 0 0 6px 0;
+      margin: 0 0 4px 0;
     }
     .overall-status-wrap {
-      padding: 8px 10px 10px 12px;
+      padding: 4px 6px 6px 8px;
       border-radius: 6px;
-      margin-bottom: 6px;
+      margin-bottom: 3px;
       page-break-inside: avoid;
     }
     .overall-status-wrap.overall-status--normal { background: #f0fdf4; }
-    .overall-status-wrap.overall-status--attention { background: #fffbeb; }
-    .overall-status-wrap.overall-status--high { background: #fef2f2; }
-    .overall-chart-wrap { margin: 4px 0 0 0; page-break-inside: avoid; }
-    .overall-chart-img { width: 100%; height: 90px; display: block; object-fit: contain; object-position: center center; }
+    .overall-status-wrap.overall-status--attention { background: #fff9db; }
+    .overall-status-wrap.overall-status--high { background: #fff3f3; }
+    .overall-chart-wrap { margin: 2px 0 0 0; page-break-inside: avoid; }
+    .overall-chart-img { width: 100%; height: 52px; display: block; object-fit: contain; object-position: center center; }
     /* ========== Biyobelirteç kartları (Pro ile aynı düzen) ========== */
     .biomarker-cards { display: block; width: 100%; }
-    .biomarker-group { margin-bottom: 14px; }
+    /* Kartları parçalamadan grup seviyesinde sayfa akışına izin ver */
+    .biomarker-group { margin-bottom: 3px; page-break-inside: auto; break-inside: auto; page-break-after: auto; }
     .biomarker-group:last-child { margin-bottom: 0; }
     .biomarker-group-title {
-      font-size: 10px;
-      font-weight: 700;
+      font-size: 8px;
+      font-weight: 650;
       color: var(--norya-heading);
-      letter-spacing: 0.06em;
+      letter-spacing: 0.03em;
       text-transform: uppercase;
-      margin-bottom: 8px;
-      padding-bottom: 4px;
+      margin-bottom: 2px;
+      padding-bottom: 1px;
       border-bottom: 1px solid var(--section-border);
+      page-break-after: avoid;
+      break-after: avoid;
+      page-break-before: avoid;
+      break-before: avoid;
+    }
+    .biomarker-group-title-table {
+      font-size: 7.2px;
+      font-weight: 650;
+      color: var(--norya-heading);
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      margin: 0;
+      padding: 0 0 1px 0;
+      border-bottom: 1px solid var(--section-border);
+      line-height: 1.15;
+      white-space: nowrap;
     }
     .lab-cards-table {
       width: 100%;
       border-collapse: separate;
-      border-spacing: 0 10px;
-      margin-top: 8px;
+      border-spacing: 0 0.4px;
+      margin-top: 0.5px;
       table-layout: fixed;
     }
     .lab-cards-table td {
       width: 50%;
       vertical-align: top;
-      padding: 0 6px 0 0;
+      padding: 0 0.35px 0 0;
     }
-    .lab-cards-table td:first-child { padding: 0 6px 0 0; }
-    .lab-cards-table td:last-child { padding: 0 0 0 6px; }
-    .lab-cards-table tr { page-break-inside: avoid; }
-    .lab-card {
+    .lab-cards-table td:first-child { padding: 0 0.35px 0 0; }
+    .lab-cards-table td:last-child { padding: 0 0 0 0.35px; }
+    .lab-cards-table .biomarker-group-title-table {
+      width: 100%;
+      padding: 0 0 1px 0;
+    }
+    .lab-cards-table tr { page-break-inside: auto; }
+    .lab-cards-table tr:first-child { page-break-inside: avoid; break-inside: avoid; }
+
+    /* Premium/Net görünüm: table yerine 2 sütunlu grid */
+    .biomarker-group-block {
+      margin-bottom: 3px;
       page-break-inside: avoid;
       break-inside: avoid;
+    }
+    .lab-cards-grid2 {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 6px;
+      width: 100%;
+      align-items: start;
+    }
+    .lab-card {
+      page-break-inside: auto;
+      break-inside: auto;
       border-radius: var(--card-radius);
-      padding: 10px 12px;
+      padding: 0.9px 1.6px;
       border: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
-      min-height: 0;
+      box-shadow: 0 0.7px 1.4px rgba(15, 23, 42, 0.06);
       box-sizing: border-box;
       background: #fff;
       overflow: hidden;
@@ -387,91 +435,119 @@
       overflow-wrap: break-word;
     }
     .lab-card--normal {
-      border-left: 4px solid #10b981;
-      background: #f0fdf4;
+      border-left: 2px solid rgba(52, 211, 153, 0.9);
+      background: rgba(16, 185, 129, 0.045);
     }
     .lab-card--border {
-      border-left: 4px solid #f59e0b;
-      background: #fffbeb;
+      border-left: 2px solid rgba(251, 191, 36, 0.95);
+      background: rgba(245, 158, 11, 0.055);
     }
     .lab-card--risk {
-      border-left: 4px solid #ef4444;
-      background: #fef2f2;
+      border-left: 2px solid rgba(248, 113, 113, 0.95);
+      background: rgba(239, 68, 68, 0.055);
     }
-    .lab-card--high { border-left-color: #ef4444; background: #fef2f2; }
-    .lab-card--low { border-left-color: #f59e0b; background: #fffbeb; }
+    .lab-card--high { border-left-color: rgba(248, 113, 113, 0.95); background: rgba(239, 68, 68, 0.055); }
+    .lab-card--low { border-left-color: rgba(251, 191, 36, 0.95); background: rgba(245, 158, 11, 0.055); }
     .lab-card-name {
-      font-size: 9px;
+      font-size: 5.4px;
       font-weight: 700;
       color: var(--norya-heading);
-      margin-bottom: 4px;
+      margin-bottom: 0;
       letter-spacing: 0.02em;
-      line-height: 1.3;
+      line-height: 1.15;
     }
-    .lab-card-score-wrap { margin-bottom: 4px; }
+    .lab-card-head-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      margin-bottom: 1px;
+      line-height: 1;
+    }
+    .lab-card-head-line .lab-card-name { flex: 1 1 auto; }
+    .lab-card-score-wrap { margin-bottom: 0; }
     .lab-card-score {
-      font-size: 11px;
+      font-size: 5.4px;
       font-weight: 800;
       letter-spacing: 0.02em;
-      line-height: 1.2;
+      line-height: 1.05;
+      white-space: nowrap;
     }
     .lab-card-score--normal { color: #059669; }
     .lab-card-score--border { color: #b45309; }
     .lab-card-score--risk { color: #dc2626; }
+    .lab-card-result-line {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 4px;
+      margin-bottom: 1px;
+      line-height: 1;
+    }
     .lab-card-value {
-      font-size: 12px;
+      font-size: 6.0px;
       font-weight: 700;
       color: var(--norya-heading);
-      margin-bottom: 2px;
-      line-height: 1.3;
+      margin-bottom: 0;
+      line-height: 1.05;
+      white-space: nowrap;
     }
     .lab-card-ref {
-      font-size: 8px;
+      font-size: 3.6px;
       color: var(--norya-muted);
-      margin-bottom: 4px;
-      line-height: 1.35;
+      margin-bottom: 0;
+      line-height: 1.05;
       word-break: break-word;
       overflow-wrap: break-word;
       white-space: normal;
     }
     .lab-card-status {
-      font-size: 8px;
-      margin-top: 2px;
-      line-height: 1.2;
+      font-size: 3.8px;
+      margin-top: 0;
+      line-height: 1.0;
     }
     .lab-card-attention {
-      font-size: 7px;
+      font-size: 5.4px;
       color: var(--norya-muted);
-      margin-top: 2px;
-      line-height: 1.2;
+      margin-top: 0;
+      line-height: 1.05;
+      max-height: 8px;
+      overflow: hidden;
     }
-    .lab-card-what { font-size: 8px; color: var(--norya-muted); margin-top: 4px; line-height: 1.35; }
+    .lab-card-what {
+      font-size: 3.9px;
+      color: var(--norya-muted);
+      margin-top: 0;
+      line-height: 1.05;
+      max-height: 5.2px;
+      overflow: hidden;
+    }
     .lab-card-what-label { font-weight: 600; color: var(--norya-heading); }
-    .lab-card-comment { font-size: 8px; margin-top: 2px; line-height: 1.35; color: var(--norya-text); }
-    .lab-card-reco { font-size: 8px; margin-top: 2px; line-height: 1.35; color: var(--norya-brand); font-weight: 600; }
+    .lab-card-comment { font-size: 4.2px; margin-top: 0; line-height: 1.02; color: var(--norya-text); max-height: 5.6px; overflow: hidden; }
+    .lab-card-reco { font-size: 4.2px; margin-top: 0; line-height: 1.02; color: var(--norya-brand); font-weight: 600; max-height: 5.6px; overflow: hidden; }
     .lab-status-pill {
       display: inline-block;
-      padding: 2px 8px;
+      padding: 0.55px 3.0px;
       border-radius: 999px;
-      font-size: 7px;
-      font-weight: 700;
-      letter-spacing: 0.04em;
+      font-size: 3.6px;
+      font-weight: 650;
+      letter-spacing: 0.02em;
       text-transform: uppercase;
     }
     .lab-status-pill--normal {
-      border: 1px solid rgba(16, 185, 129, 0.4);
-      color: #065f46;
-      background: #ecfdf5;
+      border: 1px solid rgba(16, 185, 129, 0.25);
+      color: #047857;
+      background: rgba(16, 185, 129, 0.08);
     }
     .lab-status-pill--border {
-      border: 1px solid rgba(245, 158, 11, 0.4);
+      border: 1px solid rgba(245, 158, 11, 0.25);
       color: #92400e;
-      background: #fffbeb;
+      background: rgba(245, 158, 11, 0.09);
     }
     .lab-status-pill--risk {
-      border: 1px solid rgba(239, 68, 68, 0.4);
+      border: 1px solid rgba(239, 68, 68, 0.25);
       color: #991b1b;
-      background: #fef2f2;
+      background: rgba(239, 68, 68, 0.08);
     }
     .lab-card--normal .lab-card-status { color: #15803d; }
     .lab-card--border .lab-card-status,
@@ -514,9 +590,9 @@
       flex-shrink: 0;
       vertical-align: middle;
     }
-    .lab-legend-dot.lab-card--normal { background: #22c55e; }
-    .lab-legend-dot.lab-card--border { background: #eab308; }
-    .lab-legend-dot.lab-card--risk { background: #ef4444; }
+    .lab-legend-dot.lab-card--normal { background: #86efac; }
+    .lab-legend-dot.lab-card--border { background: #fde68a; }
+    .lab-legend-dot.lab-card--risk { background: #fca5a5; }
     .range-chart-wrap {
       margin-top: 8px;
       page-break-inside: avoid;
@@ -557,12 +633,12 @@
     .status-border { color: var(--status-border); font-weight: 600; }
     /* Kısa bilgilendirme (premium: minimal) */
     .alert-clinical {
-      margin-bottom: 10px;
-      padding: 8px 12px;
+      margin-bottom: 8px;
+      padding: 6px 10px;
       background: var(--norya-brand-light);
       border-radius: var(--card-radius);
-      font-size: 9px;
-      line-height: 1.4;
+      font-size: 8px;
+      line-height: 1.25;
       color: var(--norya-text);
       border: 1px solid var(--norya-brand-border);
       page-break-inside: avoid;
@@ -586,62 +662,62 @@
       color: var(--footer-emr);
     }
     .report-end-footer {
-      margin-top: 10px;
-      padding-top: 8px;
+      margin-top: 6px;
+      padding-top: 6px;
       border-top: 1px solid var(--section-border);
       font-size: 8px;
       color: var(--footer-text);
       text-align: center;
     }
     .doctor-share-note {
-      margin-top: 14px;
-      padding: 12px 14px;
+      margin-top: 6px;
+      padding: 8px 10px;
       border: 1px solid var(--norya-brand-border);
       border-radius: var(--card-radius);
       background: var(--norya-brand-light);
       page-break-inside: avoid;
     }
     .doctor-share-note-title {
-      font-size: 10px;
+      font-size: 8.5px;
       font-weight: 700;
       color: var(--norya-heading);
       letter-spacing: 0.03em;
-      margin-bottom: 8px;
+      margin-bottom: 4px;
     }
     .doctor-share-note-body {
-      font-size: 9px;
-      line-height: 1.45;
+      font-size: 8px;
+      line-height: 1.35;
       color: var(--norya-text);
     }
-    .doctor-share-note-body p { margin: 0 0 4px 0; }
+    .doctor-share-note-body p { margin: 0 0 3px 0; }
     .doctor-share-note-body p:last-child { margin-bottom: 0; }
     .follow-up-note {
-      margin-top: 10px;
-      padding: 10px 12px;
+      margin-top: 6px;
+      padding: 6px 8px;
       border-left: 3px solid var(--norya-brand-border);
       background: var(--table-row-even);
       border-radius: 0 6px 6px 0;
-      font-size: 8px;
-      line-height: 1.45;
+      font-size: 7px;
+      line-height: 1.25;
       color: var(--norya-text);
       page-break-inside: avoid;
     }
     /* QR doğrulama (e-Nabız tarzı, premium görünüm) */
     .verification-section {
-      margin-top: 14px;
+      margin-top: 6px;
       page-break-inside: avoid;
     }
     .verification-box-inner {
-      padding: 12px 14px;
+      padding: 6px 8px;
       border: 1px solid var(--norya-brand-border);
       border-radius: var(--card-radius);
       background: var(--norya-brand-light);
     }
     .verification-box-title {
-      font-size: 10px;
+      font-size: 7.5px;
       font-weight: 700;
       color: var(--norya-heading);
-      margin-bottom: 8px;
+      margin-bottom: 3px;
       letter-spacing: 0.02em;
     }
     .verification-box-content {
@@ -651,21 +727,21 @@
     }
     .verification-qr {
       display: table-cell;
-      width: 72px;
-      height: 72px;
+      width: 44px;
+      height: 44px;
       vertical-align: middle;
-      padding-right: 12px;
+      padding-right: 6px;
     }
     .verification-meta {
       display: table-cell;
       vertical-align: middle;
-      font-size: 9px;
-      line-height: 1.4;
+      font-size: 7px;
+      line-height: 1.25;
       color: var(--norya-text);
     }
-    .verification-code-line { font-weight: 700; color: var(--norya-heading); margin-bottom: 4px; }
+    .verification-code-line { font-weight: 700; color: var(--norya-heading); margin-bottom: 3px; }
     .verification-code-line .k { font-weight: 600; color: var(--norya-muted); }
-    .verification-scan-hint { font-size: 8px; color: var(--norya-muted); }
+    .verification-scan-hint { font-size: 6.8px; color: var(--norya-muted); }
   </style>
 </head>
 <body>
@@ -767,86 +843,48 @@
       </div>
     </section>
 
-    {% if top_findings and top_findings|length > 0 %}
+    {% if grouped_abnormal_biomarkers and grouped_abnormal_biomarkers|length > 0 %}
     <section>
       <div class="section-title">
         <span class="dot"></span>
         {{ report_top_attention | default('En önemli bulgular', true) }}
       </div>
       <div class="section-body">
-        <ul class="report-bullets">
-          {% for f in top_findings %}
-          <li>{{ f.text }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    </section>
-    {% endif %}
-    {% if clinical_comments and clinical_comments|length > 0 %}
-    <section>
-      <div class="section-title">
-        <span class="dot"></span>
-        {{ report_findings_highlight | default('Kısa klinik yorumlar', true) }}
-      </div>
-      <div class="section-body">
-        <ul class="report-bullets">
-          {% for c in clinical_comments %}
-          <li>{{ c }}</li>
-          {% endfor %}
-        </ul>
-      </div>
-    </section>
-    {% endif %}
-    <section>
-      <div class="section-title">
-        <span class="dot"></span>
-        {{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}
-      </div>
-      <div class="section-body">
-        <div class="how-to-read-block">{{ how_to_read_body | default('Her parametre için Sonuç ve Referans aralığı verilir. Yeşil = Normal, turuncu = Sınırda, kırmızı = Referans dışı.', true) }}</div>
-      </div>
-    </section>
-    <section class="section-biomarkers">
-      <div class="section-title">
-        <span class="dot"></span>
-        {{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}
-      </div>
-      <div class="section-body">
-        {% for group in (grouped_biomarkers or []) %}
-        <div class="biomarker-group" style="page-break-inside: avoid;">
-          <div class="biomarker-group-title">{{ group.label }}</div>
-          <div class="biomarker-cards">
+        <div class="section-body-tight">
+          {% for group in (grouped_abnormal_biomarkers or []) %}
+          {% set group_items = group["items"] if group["items"] is defined else [] %}
+          {% if group_items|length > 0 %}
+          <div class="biomarker-group-block">
+            <div class="biomarker-group-title-table" style="margin-bottom: 1px;">{{ group.label }}</div>
             <table class="lab-cards-table">
-              {% set group_items = group["items"] if group["items"] is defined else [] %}
               {% for row in group_items %}
               {% if row and row.name %}
               {% if loop.index0 % 2 == 0 %}<tr>{% endif %}
-              {% set status_class = 'risk' if row.status == 'high' or row.status == 'low' else ('border' if row.status == 'border' else 'normal') %}
               <td>
+                {% set status_class = 'risk' if row.status == 'high' or row.status == 'low' else ('border' if row.status == 'border' else 'normal') %}
                 <div class="lab-card lab-card--{{ status_class }}">
-                  <div class="lab-card-name">{{ row.name }}</div>
-                  <div class="lab-card-score-wrap">
-                    <span class="lab-card-score lab-card-score--{{ status_class }}">{{ row.score_100 | default(100, true) }}/100</span>
+                  <div class="lab-card-head-line">
+                    <div class="lab-card-name">{{ row.name }}</div>
+                    {% if row.status_label %}
+                    <div class="lab-card-status">
+                      <span class="lab-status-pill lab-status-pill--{{ status_class }}">{{ row.status_label }}</span>
+                    </div>
+                    {% endif %}
                   </div>
-                  <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
-                  {% if row.reference %}
+                  <div class="lab-card-result-line">
+                    <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
+                    <span class="lab-card-score lab-card-score--{{ status_class }}">Skor: {{ row.score_100 | default(100, true) }}/100</span>
+                  </div>
+                  {% if row.reference and row.status != 'normal' %}
                   <div class="lab-card-ref">{{ ref_label | default('Referans aralığı', true) }}: {{ row.reference }}</div>
                   {% endif %}
-                {% if row.status_label %}
-                <div class="lab-card-status">
-                  <span class="lab-status-pill lab-status-pill--{{ status_class }}">{{ row.status_label }}</span>
-                </div>
-                {% endif %}
-                {% if row.attention_label %}
-                <div class="lab-card-attention">{{ row.attention_label }}</div>
-                {% endif %}
-                {% if row.what_it_shows %}
+                  {% if row.what_it_shows and row.status != 'normal' %}
                   <div class="lab-card-what"><span class="lab-card-what-label">{{ what_it_shows_label | default('Ne gösterir?', true) }}</span> {{ row.what_it_shows }}</div>
                   {% endif %}
-                  {% if row.short_comment %}
+                  {% if row.short_comment and row.status != 'normal' %}
                   <div class="lab-card-comment">{{ row.short_comment }}</div>
                   {% endif %}
-                  {% if row.short_recommendation %}
+                  {% if row.short_recommendation and row.status != 'normal' %}
                   <div class="lab-card-reco">{{ row.short_recommendation }}</div>
                   {% endif %}
                 </div>
@@ -856,7 +894,79 @@
               {% endfor %}
             </table>
           </div>
+          {% endif %}
+          {% endfor %}
         </div>
+      </div>
+    </section>
+    {% endif %}
+    {% if show_how_to_read %}
+    <section>
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ how_to_read_heading | default('Parametreler nasıl okunur?', true) }}
+      </div>
+      <div class="section-body">
+        <div class="how-to-read-block">
+          {% if ((lang or '') | lower) == 'tr' %}
+          Her testte "Sonuç" ve "Referans" yer alır.
+          {% else %}
+          Each test shows "Result" and "Reference".
+          {% endif %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+    <section class="section-biomarkers">
+      <div class="section-title">
+        <span class="dot"></span>
+        {{ biomarkers_heading | default('Biyobelirteçler ve Referans Aralıkları', true) }}
+      </div>
+      <div class="section-body">
+        {% for group in (grouped_biomarkers or []) %}
+        {% set group_items = group["items"] if group["items"] is defined else [] %}
+        {% if group_items|length > 0 %}
+        <div class="biomarker-group-block">
+          <div class="biomarker-group-title-table" style="margin-bottom: 1px;">{{ group.label }}</div>
+          <table class="lab-cards-table">
+            {% for row in group_items %}
+            {% if row and row.name %}
+            {% if loop.index0 % 2 == 0 %}<tr>{% endif %}
+            <td>
+              {% set status_class = 'risk' if row.status == 'high' or row.status == 'low' else ('border' if row.status == 'border' else 'normal') %}
+              <div class="lab-card lab-card--{{ status_class }}">
+                <div class="lab-card-head-line">
+                  <div class="lab-card-name">{{ row.name }}</div>
+                  {% if row.status_label %}
+                  <div class="lab-card-status">
+                    <span class="lab-status-pill lab-status-pill--{{ status_class }}">{{ row.status_label }}</span>
+                  </div>
+                  {% endif %}
+                </div>
+                <div class="lab-card-result-line">
+                  <div class="lab-card-value">{{ row.value }}{% if row.unit %} {{ row.unit }}{% endif %}</div>
+                  <span class="lab-card-score lab-card-score--{{ status_class }}">Skor: {{ row.score_100 | default(100, true) }}/100</span>
+                </div>
+              {% if row.reference and row.status != 'normal' %}
+                <div class="lab-card-ref">{{ ref_label | default('Referans aralığı', true) }}: {{ row.reference }}</div>
+                {% endif %}
+              {% if row.what_it_shows and row.status != 'normal' %}
+                <div class="lab-card-what"><span class="lab-card-what-label">{{ what_it_shows_label | default('Ne gösterir?', true) }}</span> {{ row.what_it_shows }}</div>
+                {% endif %}
+              {% if row.short_comment and row.status != 'normal' %}
+                <div class="lab-card-comment">{{ row.short_comment }}</div>
+                {% endif %}
+              {% if row.short_recommendation and row.status != 'normal' %}
+                <div class="lab-card-reco">{{ row.short_recommendation }}</div>
+                {% endif %}
+              </div>
+            </td>
+            {% if loop.index0 % 2 == 1 or loop.last %}</tr>{% endif %}
+            {% endif %}
+            {% endfor %}
+          </table>
+        </div>
+        {% endif %}
         {% endfor %}
       </div>
     </section>
@@ -892,13 +1002,13 @@
     {% endfor %}
     {% endif %}
 
-    {% if show_qr_verification and verification_code %}
+    {% if show_qr_verification and (verification_code or qr_image_base64) %}
     <section class="verification-section" aria-label="{{ label_report_verification_title | default('Rapor Doğrulama', true) }}">
       <div class="verification-box-inner">
         <div class="verification-box-title">{{ label_report_verification_title | default('Rapor Doğrulama', true) }}</div>
         <div class="verification-box-content">
           {% if qr_image_base64 %}
-          <img class="verification-qr" src="data:image/png;base64,{{ qr_image_base64 }}" alt="QR Doğrula" width="72" height="72" />
+          <img class="verification-qr" src="data:image/png;base64,{{ qr_image_base64 }}" alt="QR Doğrula" width="44" height="44" />
           {% endif %}
           <div class="verification-meta">
             <div class="verification-code-line"><span class="k">{{ label_verify_code | default('Doğrulama kodu', true) }}:</span> {{ verification_code }}</div>

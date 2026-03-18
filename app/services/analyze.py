@@ -240,6 +240,95 @@ def ai_generate_explanation(
             max_tokens=max_tokens,
         ))
 
+    def _fallback_explanation(err: Exception | None = None) -> str:
+        """
+        OpenAI erişilemezse tüm analizi bozmak yerine, kural tabanlı risk özetinden
+        rapor şablonunun parse ettiği markdown bölümlerini üretir.
+
+        `report_pdf.py` tarafında `**Summary:**`, `**Possible causes:**`, `**Recommendations:**`
+        başlıklarıyla bölümlere ayrılıp context'e taşınıyor.
+        """
+        overall = (risk_summary or {}).get("overall") or {}
+        score = int(overall.get("score") or 0)
+        overall_level = (overall.get("level") or "").lower()
+        highlights = (risk_summary or {}).get("highlights") or []
+
+        lang_norm = (lang or "tr").strip().lower()
+        is_tr = lang_norm == "tr"
+
+        # İlk birkaç anormal parametreyi özetle
+        abnormal_tests = []
+        for h in highlights[:4]:
+            test = (h.get("test") or "").strip()
+            level = (h.get("level") or "").strip()
+            if test:
+                if level:
+                    abnormal_tests.append(f"{test} ({level})")
+                else:
+                    abnormal_tests.append(test)
+
+        abnormal_tests_str = ", ".join(abnormal_tests) if abnormal_tests else ""
+        # Premium PDF'de `AI/yapay zeka` kelimeleri otomatik temizleniyor; not metninde geçmesin.
+        ai_unavailable_note_tr = "Not: Yorum üretimi şu an geçici olarak yapılamadı. Aşağıdaki yorum kural tabanlıdır."
+        ai_unavailable_note_en = "Note: Interpretation is temporarily unavailable. The text below is rule-based."
+
+        if is_tr:
+            summary_text = (
+                f"Genel sağlık skorunuz: {score}/100. Genel seviye: {overall_level or '—'}. "
+                f"Referans aralığı dışında veya sınırda kalan parametreler: {abnormal_tests_str or '—'}. "
+                f"{ai_unavailable_note_tr}"
+            )
+            causes_lines = []
+            reco_lines = []
+            for h in highlights[:5]:
+                test = (h.get("test") or "").strip()
+                why = (h.get("why") or "").strip()
+                action = (h.get("action") or "").strip()
+                if test and why:
+                    causes_lines.append(f"- {test}: {why}")
+                if test and action:
+                    reco_lines.append(f"- {test}: {action}")
+            # Min miktar: PDF'de kısaltma işlevi satır satır çalışır.
+            if not causes_lines:
+                causes_lines = ["- Referans dışı değerler tespit edildi."]
+            if not reco_lines:
+                reco_lines = ["- Genel beslenme/yaşam tarzı önerileri için hekiminizle görüşün."]
+
+            summary_md = f"**Summary**: {summary_text}"
+            possible_causes_md = "**Possible causes**:\n" + "\n".join(causes_lines)
+            recommendations_md = "**Recommendations**:\n" + "\n".join(reco_lines)
+            return "\n\n".join([summary_md, possible_causes_md, recommendations_md])
+
+        # English fallback (i18n için sadece temel, kural tabanlı)
+        summary_text = (
+            f"Overall health score: {score}/100. Overall level: {overall_level or '—'}. "
+            f"Parameters outside the reference range: {abnormal_tests_str or '—'}. "
+            f"{ai_unavailable_note_en}"
+        )
+        causes_lines = []
+        reco_lines = []
+        for h in highlights[:5]:
+            test = (h.get("test") or "").strip()
+            level = (h.get("level") or "").strip()
+            action = (h.get("action") or "").strip()
+            why = (h.get("why") or "").strip()
+            if test:
+                if why:
+                    causes_lines.append(f"- {test}: {why} ({level or 'level'})")
+                else:
+                    causes_lines.append(f"- {test}: {level or 'flag'}")
+            if test and action:
+                reco_lines.append(f"- {test}: {action}")
+        if not causes_lines:
+            causes_lines = ["- Values outside the reference range were detected."]
+        if not reco_lines:
+            reco_lines = ["- Discuss results and next steps with your clinician."]
+
+        summary_md = f"**Summary**: {summary_text}"
+        possible_causes_md = "**Possible causes**:\n" + "\n".join(causes_lines)
+        recommendations_md = "**Recommendations**:\n" + "\n".join(reco_lines)
+        return "\n\n".join([summary_md, possible_causes_md, recommendations_md])
+
     try:
         response = _openai_create_with_fallback(_create)
         content = (response.choices[0].message.content or "").strip()
@@ -250,6 +339,10 @@ def ai_generate_explanation(
         return content, usage
     except (AuthenticationError, RateLimitError, APIConnectionError, APIError) as e:
         logger.exception("OpenAI API error in ai_generate_explanation: %s", e)
+        # OpenAI bağlantı/rate-limit sorunu varsa, raporu tamamen iptal etmek yerine
+        # kural tabanlı fallback üret.
+        if isinstance(e, (APIConnectionError, RateLimitError)):
+            return _fallback_explanation(err=e), None
         _raise_openai_http_error(e)
     except Exception as e:
         logger.exception("Unexpected error in ai_generate_explanation: %s", e)

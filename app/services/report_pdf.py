@@ -184,7 +184,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_status": "Durum",
         "report_alert_title": "Bilgilendirme amaçlıdır.",
         "report_alert_body": "Bu rapor tıbbi teşhis veya tedavi yerine geçmez. Sağlık kararlarınız için hekiminize başvurunuz.",
-        "report_footer": "Norya • Bilgilendirme amaçlıdır • support@noryaai.com",
+        "report_footer": "Norya · Bilgilendirme amaçlıdır · support@noryaai.com",
         "report_brand_sub": "Ön Değerlendirme Raporu",
         "report_doc_title": "Kan Tahlili Analiz Raporu",
         "report_doc_sub": "Sağlık durumunuzun ön değerlendirmesi; teşhis yerine geçmez, bilgilendirme amaçlıdır.",
@@ -209,7 +209,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_category_scores": "Kategori skorları",
         "report_risk_distribution": "Risk dağılımı",
         "report_radar_balance": "Biyobelirteç dengesi",
-        "report_top_attention": "Öne çıkan dikkat alanları",
+        "report_top_attention": "Genel dikkat çeken alanlar",
         "report_dist_normal": "Normal (referans aralığında)",
         "report_dist_borderline": "Sınırda (takip önerilir)",
         "report_dist_attention": "Dikkat (hekim değerlendirmesi önerilir)",
@@ -345,7 +345,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_status": "Status",
         "report_alert_title": "For information only.",
         "report_alert_body": "This report does not replace medical diagnosis or treatment. Consult your doctor for health decisions.",
-        "report_footer": "Norya • For information only • support@noryaai.com",
+        "report_footer": "Norya · For information only · support@noryaai.com",
         "report_brand_sub": "Clinical Report",
         "report_doc_title": "Blood Test Analysis Report",
         "report_doc_sub": "A preliminary view of your health status; it does not replace a diagnosis and is for information only.",
@@ -494,7 +494,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_status": "Status",
         "report_alert_title": "Nur zur Information.",
         "report_alert_body": "Dieser Bericht ersetzt keine Diagnose oder Behandlung. Konsultieren Sie Ihren Arzt.",
-        "report_footer": "Norya • Nur zur Information • support@noryaai.com",
+        "report_footer": "Norya · Nur zur Information · support@noryaai.com",
         "report_brand_sub": "Klinischer Bericht",
         "report_doc_title": "Blutbild-Analysebericht",
         "report_doc_sub": "Informationsorientiertes klinisches Berichtsformat",
@@ -585,7 +585,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_status": "Statut",
         "report_alert_title": "À titre informatif uniquement.",
         "report_alert_body": "Ce rapport ne remplace pas un diagnostic ou un traitement. Consultez votre médecin.",
-        "report_footer": "Norya • À titre informatif • support@noryaai.com",
+        "report_footer": "Norya · À titre informatif · support@noryaai.com",
         "report_brand_sub": "Rapport clinique",
         "report_doc_title": "Rapport d'analyse sanguine",
         "report_doc_sub": "Format de rapport clinique à titre informatif",
@@ -1134,6 +1134,17 @@ def _is_value_like_name(name: str) -> bool:
     if not name or len(name) > 120:
         return True
     s = name.strip()
+    s_low = s.lower().strip()
+    # PDF başlık/footer artefaktları bazen "kart adı" gibi parse edilebiliyor.
+    # Örn: "Datum", "Seite 1" gibi.
+    if s_low in ("datum", "seite", "page", "date"):
+        return True
+    if re.search(r"^(datum|seite|page)\b", s_low):
+        return True
+    if re.search(r"^(date|datum)\s*\d+", s_low):
+        return True
+    if re.search(r"\b(seite|page)\s*\d+\b", s_low):
+        return True
     if re.match(r"^\d", s):
         return True
     if re.search(r"\bReference\b|Ref\.\s|Referans\s*:\s*", s, re.IGNORECASE):
@@ -1188,8 +1199,17 @@ def _split_sections(text: str) -> list[tuple[str, str]]:
     result: list[tuple[str, str]] = []
     current_title: str | None = None
     current_body: list[str] = []
+
+    # Markdown heading destek: e.g. "## Değerler"
+    md_heading_re = re.compile(r"^\s*#{1,6}\s+(.+?)\s*$")
     for line in lines:
-        if _is_section_header(line):
+        heading_match = md_heading_re.match(line or "")
+        if heading_match:
+            if current_title is not None:
+                result.append((current_title, "\n".join(current_body).strip()))
+            current_title = heading_match.group(1).strip()
+            current_body = []
+        elif _is_section_header(line):
             if current_title is not None:
                 result.append((current_title, "\n".join(current_body).strip()))
             match = re.match(r"^\s*\*\*([^*]+)\*\*\s*:?\s*(.*)$", line.strip())
@@ -1350,11 +1370,40 @@ def _score_100_from_reference(
 
 
 def _derive_status_from_value_ref(value_float: float, ref_min: float | None, ref_max: float | None) -> str:
-    """Referans aralığına göre durum: high / low / normal."""
+    """
+    Referans aralığına göre durum: low / normal / border / high.
+    - value < ref_min => low
+    - ref_min <= value <= ref_max => normal (sınır kenarına yakınsa border)
+    - value > ref_max => high
+    """
+    # Low / High (dış aralık)
     if ref_max is not None and value_float > ref_max:
         return "high"
     if ref_min is not None and value_float < ref_min:
         return "low"
+
+    # Boundary (sınır etiketi): değer aralığın kenarına "yakınsa" border.
+    # Kenara yakınlığı bir tolerans ile ölçüyoruz.
+    if ref_min is not None and ref_max is not None and ref_max > ref_min:
+        span = ref_max - ref_min
+        # Borderline etiketini daha sık yakalamak için toleransı biraz büyütüyoruz.
+        edge_tol = max(span * 0.05, span * 0.02, 1e-9)
+        if abs(value_float - ref_min) <= edge_tol or abs(value_float - ref_max) <= edge_tol:
+            return "border"
+        return "normal"
+
+    # Tek taraflı referans: ref_max (örn. "<3") veya ref_min (örn. "40-")
+    if ref_min is not None and ref_max is None:
+        edge_tol = max(abs(ref_min) * 0.03, abs(ref_min) * 0.01, 1e-9)
+        if value_float - ref_min <= edge_tol:
+            return "border"
+        return "normal"
+    if ref_max is not None and ref_min is None:
+        edge_tol = max(abs(ref_max) * 0.03, abs(ref_max) * 0.01, 1e-9)
+        if ref_max - value_float <= edge_tol:
+            return "border"
+        return "normal"
+
     return "normal"
 
 
@@ -1371,6 +1420,7 @@ def _enrich_biomarker_chart(row: dict) -> None:
         return
     status = row.get("status") or "normal"
     if ref_min is not None or ref_max is not None:
+        # Durumu mutlaka referans + değere göre sayısal olarak türetiyoruz.
         status = _derive_status_from_value_ref(value_float, ref_min, ref_max)
         row["status"] = status
         row["status_label"] = _status_label(status)
@@ -1455,30 +1505,402 @@ def _normalize_reference_display(ref: str | None) -> str | None:
 
 def _enrich_biomarkers_cards(biomarkers: list[dict]) -> None:
     """Her biomarker'a what_it_shows, short_comment, short_recommendation, attention_label ekler (kart için)."""
+    present_names = {(b.get("name") or "").strip().lower() for b in (biomarkers or [])}
+    has_hba1c = any(("hba1c" in n or "hb a1c" in n) for n in present_names)
+    has_ferritin = any("ferritin" in n for n in present_names)
+    has_iron = any(n == "iron" or " iron" in n or n == "demir" or "demir" in n for n in present_names)
+
+    def _test_key_for_name(n: str) -> str | None:
+        x = (n or "").strip().lower()
+        if "hba1c" in x or "hb a1c" in x:
+            return None
+
+        if "anti" in x and "hcv" in x:
+            return "anti_hcv"
+        if "anti" in x and "hiv" in x:
+            return "anti_hiv"
+
+        if re.fullmatch(r"(hb|hgb)", x) or "hemoglobin" in x or x == "hgb":
+            return "hb"
+        if re.search(r"\brbc\b", x):
+            return "rbc"
+        if re.search(r"\bwbc\b", x):
+            return "wbc"
+        if re.search(r"\bhct\b", x) or "hematocrit" in x or "hematokrit" in x:
+            return "hct"
+        if re.search(r"\bmchc\b", x):
+            return "mchc"
+        if re.search(r"\bmch\b", x) and "mchc" not in x:
+            return "mch"
+        if re.search(r"\bmcv\b", x):
+            return "mcv"
+        if re.search(r"\bplt\b", x) or "trombosit" in x:
+            return "plt"
+
+        if any(t in x for t in ("glukoz", "glucose", "glikoz", "kan şekeri", "fasting glucose")):
+            return "glucose"
+        if re.search(r"\bldl\b", x):
+            return "ldl"
+        if re.search(r"\bhdl\b", x):
+            return "hdl"
+        if "vitamin d" in x or "d vitamini" in x:
+            return "vitamin_d"
+        if "ferritin" in x:
+            return "ferritin"
+        if any(t in x for t in ("crp", "c-reaktif", "c reaktif", "c reactive", "hs-crp", "hs crp")):
+            return "crp"
+        return None
+
+    def _effective_status_for_test(b: dict, test_key: str | None) -> str:
+        status = (b.get("status") or "normal").strip().lower()
+        if test_key in ("anti_hcv", "anti_hiv"):
+            v = str(b.get("value") or "").strip().lower()
+            if any(w in v for w in ("negatif", "nonreaktif", "non-reactive", "negative")):
+                return "normal"
+            if any(w in v for w in ("pozitif", "reaktif", "reactive", "positive")):
+                return "high"
+            return "high" if status in ("high", "low", "border") else "normal"
+        return status
+
+    WHAT: dict[str, str] = {
+        "hb": "Hb: Oksijen taşıma",
+        "rbc": "RBC: Kırmızı hücre düzeyi",
+        "wbc": "WBC: Bağışıklık yanıtı",
+        "hct": "HCT: Kırmızı hücre oranı",
+        "mcv": "MCV: Ortalama hücre hacmi",
+        "mch": "MCH: Ortalama Hb miktarı",
+        "mchc": "MCHC: Hb yoğunluğu",
+        "plt": "PLT: Pıhtılaşma hücreleri",
+        "crp": "CRP: İnflamasyon göstergesi",
+        "glucose": "Glukoz: Kan şekeri",
+        "ldl": "LDL: Kötü kolesterol",
+        "hdl": "HDL: İyi kolesterol",
+        "vitamin_d": "Vitamin D: D vitamini düzeyi",
+        "ferritin": "Ferritin: Demir depoları",
+        "anti_hcv": "Anti-HCV: Hepatit C antikoru",
+        "anti_hiv": "Anti-HIV: HIV antikoru",
+    }
+
+    LABEL = {
+        "hb": "Hb",
+        "rbc": "RBC",
+        "wbc": "WBC",
+        "hct": "HCT",
+        "mcv": "MCV",
+        "mch": "MCH",
+        "mchc": "MCHC",
+        "plt": "PLT",
+        "crp": "CRP",
+        "glucose": "Glucose",
+        "ldl": "LDL",
+        "hdl": "HDL",
+        "vitamin_d": "Vitamin D",
+        "ferritin": "Ferritin",
+        "anti_hcv": "Anti HCV",
+        "anti_hiv": "Anti HIV",
+    }
+
+    SHORT_COMMENT: dict[str, dict[str, str]] = {
+        "hb": {
+            "normal": "Hb: Oksijen taşıma kapasitesi referans aralığında görünüyor.",
+            "border": "Hb: Sınırda; hemogram trendiyle birlikte takip edilebilir.",
+            "low": "Hb: Referans dışı (düşük); hekim değerlendirmesi uygun olabilir.",
+            "high": "Hb: Referans dışı (yüksek); hekim değerlendirmesi uygun olabilir.",
+        },
+        "rbc": {
+            "normal": "RBC: Kırmızı kan hücre düzeyi referans aralığında görünüyor.",
+            "border": "RBC: Sınırda; Hb ve HCT ile birlikte izlenebilir.",
+            "low": "RBC: Referans dışı (düşük); hemogram bütünlüğüyle birlikte değerlendirme uygun olabilir.",
+            "high": "RBC: Referans dışı (yüksek); hekim değerlendirmesiyle bağlama göre yorumlanabilir.",
+        },
+        "wbc": {
+            "normal": "WBC: Bağışıklıkla ilişkili hücre düzeyi referans aralığında görünüyor.",
+            "border": "WBC: Sınırda; yakın dönem enfeksiyon/aktivite bağlamında takip edilebilir.",
+            "low": "WBC: Referans dışı (düşük); klinik bağlama göre hekim değerlendirmesi uygun olabilir.",
+            "high": "WBC: Referans dışı (yüksek); hekim değerlendirmesiyle bağlama göre yorumlanması uygun olur.",
+        },
+        "hct": {
+            "normal": "HCT: Kırmızı hücre oranı referans aralığında görünüyor.",
+            "border": "HCT: Sınırda; Hb ve RBC ile birlikte takip edilebilir.",
+            "low": "HCT: Referans dışı (düşük); hemoglobin/RBC ile birlikte değerlendirme uygun olabilir.",
+            "high": "HCT: Referans dışı (yüksek); bağlama göre hekim değerlendirmesi uygun olabilir.",
+        },
+        "mcv": {
+            "normal": "MCV: Kırmızı hücre ortalama hacmi referans aralığında görünüyor.",
+            "border": "MCV: Sınırda; kırmızı hücre indeksleriyle birlikte izlenebilir.",
+            "low": "MCV: Referans dışı (düşük); demirle ilişkili göstergelerle birlikte değerlendirilebilir.",
+            "high": "MCV: Referans dışı (yüksek); beslenme/vitamin göstergeleriyle bağlama göre yorumlanabilir.",
+        },
+        "mch": {
+            "normal": "MCH: Kırmızı hücrelerde ortalama hemoglobin miktarı referans aralığında görünüyor.",
+            "border": "MCH: Sınırda; MCV ve MCHC ile birlikte takip edilebilir.",
+            "low": "MCH: Referans dışı (düşük); hemogram bütünlüğüyle birlikte değerlendirme uygun olabilir.",
+            "high": "MCH: Referans dışı (yüksek); kırmızı hücre indeksleriyle bağlama göre yorumlanabilir.",
+        },
+        "mchc": {
+            "normal": "MCHC: Hemoglobin yoğunluğu referans aralığında görünüyor.",
+            "border": "MCHC: Sınırda; Hb ve kırmızı hücre indeksleriyle birlikte izlenebilir.",
+            "low": "MCHC: Referans dışı (düşük); hekim değerlendirmesi uygun olabilir.",
+            "high": "MCHC: Referans dışı (yüksek); hekim değerlendirmesi uygun olabilir.",
+        },
+        "plt": {
+            "normal": "PLT: Trombosit düzeyi referans aralığında görünüyor.",
+            "border": "PLT: Sınırda; kan tablosu trendiyle birlikte takip edilebilir.",
+            "low": "PLT: Referans dışı (düşük); klinik bağlamda hekim değerlendirmesi uygun olabilir.",
+            "high": "PLT: Referans dışı (yüksek); hekim değerlendirmesiyle bağlama göre yorumlanması uygun olur.",
+        },
+        "crp": {
+            "normal": "CRP: İnflamasyon göstergesi referans aralığında görünüyor.",
+            "border": "CRP: Sınırda; yakın dönemdeki enfeksiyon/aktiviteyle ilişkili olabilir ve hekimle konuşulabilir.",
+            "low": "CRP: Referans dışı (düşük); klinik bağlama göre yorumlanır.",
+            "high": "CRP: Referans dışı (yüksek); hekim değerlendirmesi uygun olabilir.",
+        },
+        "glucose": {
+            "normal": "Glucose: Kan şekeri referans aralığında görünüyor.",
+            "border": "Glucose: Sınırda; beslenme ve tekrar ölçümle takip edilebilir.",
+            "low": "Glucose: Referans dışı (düşük); güvenlik ve bağlama göre hekim değerlendirmesi uygun olabilir.",
+            "high": "Glucose: Referans dışı (yüksek); metabolik bağlamda hekim değerlendirmesi uygun olabilir.",
+        },
+        "ldl": {
+            "normal": "LDL: \"Kötü\" kolesterol fraksiyonu referans aralığında görünüyor.",
+            "border": "LDL: Sınırda; beslenme ve fiziksel aktivite planı gözden geçirilebilir.",
+            "low": "LDL: Referans dışı (düşük); genellikle bağlama göre yorumlanır; hekim değerlendirmesi uygun olabilir.",
+            "high": "LDL: Referans dışı (yüksek); hedef aralık için hekim değerlendirmesi uygun olabilir.",
+        },
+        "hdl": {
+            "normal": "HDL: \"İyi\" kolesterol fraksiyonu referans aralığında görünüyor.",
+            "border": "HDL: Sınırda; kardiyometabolik bağlamda takip edilebilir.",
+            "low": "HDL: Referans dışı (düşük); hekim değerlendirmesi ve yaşam tarzı planı uygun olabilir.",
+            "high": "HDL: Referans dışı (yüksek); genellikle bağlama göre yorumlanır; hekimle konuşmak faydalı olabilir.",
+        },
+        "vitamin_d": {
+            "normal": "Vitamin D: D vitamini düzeyi referans aralığında görünüyor.",
+            "border": "Vitamin D: Sınırda; güneşlenme-beslenme ile takip planı gözden geçirilebilir.",
+            "low": "Vitamin D: Referans dışı (düşük); hekim değerlendirmesiyle destek/plan konuşulabilir.",
+            "high": "Vitamin D: Referans dışı (yüksek); hekim değerlendirmesiyle birlikte yorumlanmalıdır.",
+        },
+        "ferritin": {
+            "normal": "Ferritin: Demir depoları referans aralığında görünüyor.",
+            "border": "Ferritin: Sınırda; Hb/MCV/MCH ile birlikte takip edilebilir.",
+            "low": "Ferritin: Referans dışı (düşük); demir depoları etkilenmiş olabilir ve hekim değerlendirmesi uygun olur.",
+            "high": "Ferritin: Referans dışı (yüksek); bağlama göre hekim değerlendirmesi uygun olabilir.",
+        },
+        "anti_hcv": {
+            "normal": "Anti HCV: Negatif/Nonreaktif görünüyor (hedef test değerine göre yorumlanır).",
+            "high": "Anti HCV: Reaktif/Pozitif olabilir; sonuçlar hekim değerlendirmesiyle doğrulanmalıdır.",
+        },
+        "anti_hiv": {
+            "normal": "Anti HIV: Negatif/Nonreaktif görünüyor (hedef test değerine göre yorumlanır).",
+            "high": "Anti HIV: Reaktif/Pozitif olabilir; sonuçlar hekim değerlendirmesiyle doğrulanmalıdır.",
+        },
+    }
+
+    SHORT_RECO: dict[str, dict[str, str]] = {
+        "hb": {
+            "normal": "",
+            "border": "Hb sınırda; ferritin/demir ve hemogram trendiyle birlikte takip edilebilir.",
+            "low": "Hb düşük; ferritin/demir ve MCV-MCH ile birlikte demir durumunu değerlendirmek uygun olabilir.",
+            "high": "Hb yüksek; hidrasyon ve eritrosit göstergeleriyle bağlamda yorumlanmalı.",
+        },
+        "rbc": {
+            "normal": "",
+            "border": "RBC sınırda; Hb-HCT ile birlikte trend izlenebilir.",
+            "low": "RBC düşük; Hb ve MCV-MCH ile birlikte değerlendirme uygun olabilir.",
+            "high": "RBC yüksek; Hb ve HCT ile birlikte bağlam açısından yorumlanabilir.",
+        },
+        "wbc": {
+            "normal": "",
+            "border": "WBC sınırda; şikayet/ilaç öyküsü varsa tekrar ölçüm ve takip düşünülebilir.",
+            "low": "WBC düşük; klinik bağlama göre tekrar sayım ve gerekirse değerlendirme uygun olur.",
+            "high": "WBC yüksek; yakın dönem enfeksiyon/aktivite varsa tekrar kontrol ve değerlendirme planlanabilir.",
+        },
+        "hct": {
+            "normal": "",
+            "border": "HCT sınırda; Hb-RBC ile birlikte kontrol planlanabilir.",
+            "low": "HCT düşük; Hb ve RBC ile birlikte hemogram bütünlüğü değerlendirilebilir.",
+            "high": "HCT yüksek; Hb/hidrasyon bağlamı ve tekrar ölçüm düşünülebilir.",
+        },
+        "mcv": {
+            "normal": "",
+            "border": "MCV sınırda; demir/B12/folat ile ilişkili indeksler birlikte izlenebilir.",
+            "low": "MCV düşük; mikrositoz bağlamında ferritin/demir değerlendirmesi uygun olabilir.",
+            "high": "MCV yüksek; B12/folat ile ilişkili durumlar bağlamında değerlendirilebilir.",
+        },
+        "mch": {
+            "normal": "",
+            "border": "MCH sınırda; MCV ve MCHC ile birlikte trend izlenebilir.",
+            "low": "MCH düşük; demir/B12 bağlamı, diğer indekslerle birlikte değerlendirilebilir.",
+            "high": "MCH yüksek; B12/folat ile ilişkili indekslerle birlikte değerlendirilebilir.",
+        },
+        "mchc": {
+            "normal": "",
+            "border": "MCHC sınırda; Hb ve MCV ile birlikte takip edilebilir.",
+            "low": "MCHC düşük; Hb ve indekslerle birlikte nedenler bağlamında değerlendirme uygun olabilir.",
+            "high": "MCHC yüksek; Hb/indekslerle birlikte klinik bağlama göre yorumlanabilir.",
+        },
+        "plt": {
+            "normal": "",
+            "border": "PLT sınırda; kanama öyküsü ve tabloda trend açısından takip edilebilir.",
+            "low": "PLT düşük; kanama/ilaç öyküsü varsa tekrar ölçüm planlanabilir.",
+            "high": "PLT yüksek; inflamasyon/demir durumu ve klinik bağlamla birlikte yorumlanabilir.",
+        },
+        "crp": {
+            "normal": "",
+            "border": "CRP sınırda; yakın dönem enfeksiyon/aktivite varsa tekrar ölçüm düşünülebilir.",
+            "low": "CRP düşük; genel trend ile uyumlu olup gerekirse bağlama göre izlenebilir.",
+            "high": "CRP yüksek; olası inflamasyon odağı için hekim değerlendirmesi ve gerekirse tekrar ölçüm uygun olur.",
+        },
+        "glucose": {
+            "normal": "",
+            "border": "Glukoz sınırda; açlık durumu, beslenme ve HbA1c ile birlikte izlenebilir.",
+            "low": "Glukoz düşük; öğün/ilaç bağlamı ile birlikte tekrar ölçüm ve değerlendirme uygun olabilir.",
+            "high": "Glukoz yüksek; HbA1c ile metabolik takip planlanabilir.",
+        },
+        "ldl": {
+            "normal": "",
+            "border": "LDL sınırda; diyet ve fiziksel aktiviteyle hedef aralık gözden geçirilebilir.",
+            "low": "LDL düşük; genellikle bağlama göre yorumlanır ve gerekirse risk profiliyle birlikte değerlendirilir.",
+            "high": "LDL yüksek; kardiyometabolik riskle birlikte hedef aralık ve takip planı konuşulabilir.",
+        },
+        "hdl": {
+            "normal": "",
+            "border": "HDL sınırda; kardiyometabolik risk bağlamında yaşam tarzı planı gözden geçirilebilir.",
+            "low": "HDL düşük; egzersiz ve beslenme ile birlikte takip düşünülebilir.",
+            "high": "HDL yüksek; diğer lipitlerle birlikte genel risk profili bağlamında yorumlanır.",
+        },
+        "vitamin_d": {
+            "normal": "",
+            "border": "Vitamin D sınırda; güneşlenme-beslenme ve tekrar ölçüm planlanabilir.",
+            "low": "Vitamin D düşük; uygun takviye ve tekrar kontrol planı hekimle yapılabilir.",
+            "high": "Vitamin D yüksek; takviye dozu/bağlam hekimce değerlendirilebilir.",
+        },
+        "ferritin": {
+            "normal": "",
+            "border": "Ferritin sınırda; Hb/MCV-MCH ile birlikte demir depoları izlenebilir.",
+            "low": "Ferritin düşük; demir eksikliği olasılığı Hb/MCV ile birlikte değerlendirilip gerekirse ek testler planlanabilir.",
+            "high": "Ferritin yüksek; inflamasyon/demir yüklenmesi bağlamında nedenler ve takip planı konuşulabilir.",
+        },
+        "anti_hcv": {
+            "normal": "",
+            "high": "Anti-HCV reaktif; doğrulama testleri ve hekim değerlendirmesiyle sonuç netleştirilmeli.",
+        },
+        "anti_hiv": {
+            "normal": "",
+            "high": "Anti-HIV reaktif; doğrulama testleri ve hekim değerlendirmesiyle sonuç netleştirilmeli.",
+        },
+    }
+
     for b in biomarkers:
         ref = b.get("reference")
         b["reference"] = _normalize_reference_display(ref) if ref else ref
-        name = (b.get("name") or "").strip().lower()
-        status = b.get("status") or "normal"
-        b["attention_label"] = _attention_label(status)
-        status_label = (b.get("status_label") or "").strip()
-        what = ""
-        for key, desc in _WHAT_IT_SHOWS.items():
-            if key in name or name in key:
-                what = desc
-                break
-        if not what:
-            what = "Bu test, ilgili değerin kandaki düzeyini gösterir."
-        b["what_it_shows"] = what
-        if status == "normal":
-            b["short_comment"] = "Değer referans aralığında."
-            b["short_recommendation"] = ""
-        elif status == "border":
-            b["short_comment"] = "Değer sınırda; takip önerilir."
-            b["short_recommendation"] = "Hekiminizle paylaşın; gerekirse tekrar test."
+
+        status = (b.get("status") or "normal").strip().lower()
+        name_low = (b.get("name") or "").strip().lower()
+
+        test_key = _test_key_for_name(b.get("name") or "")
+        eff_status = _effective_status_for_test(b, test_key)
+
+        # attention label (border/high/low pill)
+        att_status = status
+        if test_key in ("anti_hcv", "anti_hiv"):
+            att_status = "high" if eff_status == "high" else "normal"
+            # Enfeksiyon taramaları metin tabanlı; referans aralığı parse edilmeyebilir.
+            # Kart renk/etiketleri için de eff_status'u sayısal duruma yansıtıyoruz.
+            b["status"] = att_status if att_status != "normal" else "normal"
+            b["status_label"] = _status_label(b["status"])
+        b["attention_label"] = _attention_label(att_status)
+
+        # Ne gösterir?
+        if test_key and test_key in WHAT:
+            b["what_it_shows"] = WHAT[test_key]
         else:
-            b["short_comment"] = "Referans dışında; hekim değerlendirmesi önerilir."
-            b["short_recommendation"] = "Hekiminizle görüşün."
+            what = ""
+            for key, desc in _WHAT_IT_SHOWS.items():
+                if key in name_low or name_low in key:
+                    what = desc
+                    break
+            if not what:
+                what = f"{(b.get('name') or 'Test').strip()}: Bu test ilgili değerin kandaki düzeyini yansıtır."
+            b["what_it_shows"] = what
+
+        # Kısa yorum + öneri
+        if test_key and test_key in SHORT_COMMENT:
+            comment_map = SHORT_COMMENT[test_key]
+            reco_map = SHORT_RECO.get(test_key, {})
+            b["short_comment"] = comment_map.get(eff_status) or comment_map.get("normal") or ""
+            b["short_recommendation"] = reco_map.get(eff_status) or reco_map.get("normal") or ""
+
+            # Teste daha bağlı mini öneri + çapraz test adlarını sadece gerçekten varsa koru
+            if test_key == "glucose":
+                if eff_status == "border":
+                    b["short_recommendation"] = (
+                        "Glucose sınırda; açlık/saat ve beslenme düzeniyle kısa vadeli tekrar ölçüm planlanabilir."
+                        + (" HbA1c ile birlikte risk takibi de düşünülebilir." if has_hba1c else "")
+                    )
+                elif eff_status == "low":
+                    b["short_recommendation"] = "Glucose düşük; öğün/ilaç ve aktivite bağlamında tekrar ölçüm uygun olabilir."
+                elif eff_status == "high":
+                    b["short_recommendation"] = (
+                        "Glucose yüksek; metabolik değerlendirme ve kısa vadeli tekrar ölçüm planlanabilir."
+                        + (" HbA1c ile birlikte takip de planlanabilir." if has_hba1c else "")
+                    )
+            elif test_key == "ldl":
+                if eff_status == "border":
+                    b["short_recommendation"] = "LDL sınırda; diyet + fiziksel aktiviteyi gözden geçirip 8–12 hafta kontrol planlanabilir."
+                elif eff_status == "low":
+                    b["short_recommendation"] = "LDL düşük; risk bağlamında düzenli kontroller sürdürülebilir."
+                elif eff_status == "high":
+                    b["short_recommendation"] = "LDL yüksek; hedef aralık için yaşam tarzı ve hekim planıyla kontrol takvimi netleştirilebilir."
+            elif test_key == "ferritin":
+                if eff_status == "border":
+                    b["short_recommendation"] = "Ferritin sınırda; demir depoları ve klinik bağlamla birlikte gerekirse tekrar ölçüm planlanabilir."
+                elif eff_status == "low":
+                    b["short_recommendation"] = "Ferritin düşük; demir eksikliği olasılığı için klinik değerlendirme ve gerekirse ek planlama uygun olabilir."
+                elif eff_status == "high":
+                    b["short_recommendation"] = "Ferritin yüksek; inflamasyon veya demir yüklenmesi bağlamında hekim değerlendirmesi gerekebilir."
+            elif test_key == "vitamin_d":
+                if eff_status == "border":
+                    b["short_recommendation"] = "Vitamin D sınırda; güneşlenme-beslenme ve (uygunsa) takviye planıyla 8–12 hafta sonra tekrar kontrol düşünülebilir."
+                elif eff_status == "low":
+                    b["short_recommendation"] = "Vitamin D düşük; uygun takviye ve doktor planıyla 8–12 hafta sonra tekrar ölçüm planlanabilir."
+                elif eff_status == "high":
+                    b["short_recommendation"] = "Vitamin D yüksek; takviye doz/süre ve klinik bağlam doktorca değerlendirilmeli."
+            elif test_key == "crp":
+                if eff_status == "border":
+                    b["short_recommendation"] = "CRP sınırda; yakın dönem enfeksiyon/aktivite varsa klinik olarak yorumlanıp gerekirse tekrar ölçüm planlanabilir."
+                elif eff_status == "low":
+                    b["short_recommendation"] = "CRP düşük; genel trend ile uyumlu görünür."
+                elif eff_status == "high":
+                    b["short_recommendation"] = "CRP yüksek; olası inflamasyon odağı için klinik değerlendirme ve gerekirse kontrol amaçlı tekrar CRP uygun olur."
+            elif test_key == "hb":
+                if eff_status == "border":
+                    b["short_recommendation"] = (
+                        "Hb sınırda; "
+                        + ("demir durumu ve hemogram bütünlüğüyle birlikte değerlendirme uygun olabilir." if (has_ferritin or has_iron) else "hemogram bütünlüğü ve klinik bağlamla birlikte değerlendirme uygun olabilir.")
+                    )
+                elif eff_status == "low":
+                    b["short_recommendation"] = (
+                        "Hb düşük; "
+                        + (
+                            "demir eksikliği olasılığı için demir durumu/indekslerle birlikte değerlendirme planlanabilir."
+                            if (has_ferritin or has_iron)
+                            else "hekim değerlendirmesiyle gerekirse ek test planlanabilir."
+                        )
+                    )
+                elif eff_status == "high":
+                    b["short_recommendation"] = "Hb yüksek; hidrasyon ve eritrosit göstergeleriyle klinik bağlamda yorumlanmalı."
+        else:
+            # Bilinmeyen kartlar için daha az jenerik metin
+            nm = (b.get("name") or "Test").strip()
+            if eff_status == "normal":
+                b["short_comment"] = f"{nm}: Değer referans aralığında görünüyor."
+                b["short_recommendation"] = ""
+            elif eff_status == "border":
+                b["short_comment"] = f"{nm}: Sınırda; takip edilebilir."
+                b["short_recommendation"] = f"{nm} sınırda olduğunda tekrar ölçüm ve hekim değerlendirmesi uygun olabilir."
+            else:
+                b["short_comment"] = f"{nm}: Referans dışı; dikkat gerekebilir ve hekim değerlendirmesi uygun olabilir."
+                b["short_recommendation"] = f"{nm} için hekim değerlendirmesi ve gerekirse tekrar test planlanabilir."
     return
 
 
@@ -1773,7 +2195,42 @@ def parse_report_to_context(
     for b in biomarkers:
         raw = (b.get("name") or "").strip()
         if raw:
-            b["name"] = raw.rstrip("*").strip() or raw
+            cleaned = raw.rstrip("*").strip() or raw
+            nl = cleaned.lower().strip()
+            # SINGLE/STANDARD PDF için test isimlerini kanonikleştir (Glucose/GLUCOSE, Hb/HGB vb.)
+            if "hba1c" in nl or "hb a1c" in nl:
+                b["name"] = "HbA1c"
+            elif re.fullmatch(r"(hb|hgb)", nl) or "hemoglobin" in nl:
+                b["name"] = "Hb"
+            elif (
+                "glucose" in nl
+                or "glukoz" in nl
+                or "açlık glukoz" in nl
+                or "fasting glucose" in nl
+                or nl == "kan şekeri"
+            ):
+                b["name"] = "Glucose"
+            elif re.search(r"\bldl\b", nl) or "ldl-c" in nl or "ldl kolesterol" in nl:
+                b["name"] = "LDL"
+            elif re.search(r"\bhdl\b", nl):
+                b["name"] = "HDL"
+            elif (
+                "trigliserid" in nl
+                or "triglyceride" in nl
+                or "triglycerides" in nl
+                or nl == "tg"
+            ):
+                b["name"] = "Triglycerides"
+            elif "crp" in nl or "c-reaktif" in nl or "c reaktif" in nl or "c reactive" in nl:
+                b["name"] = "CRP"
+            elif "vitamin d" in nl or "d vitamini" in nl:
+                b["name"] = "Vitamin D"
+            elif "ferritin" in nl:
+                b["name"] = "Ferritin"
+            elif nl == "iron" or "iron" in nl or nl == "demir":
+                b["name"] = "Iron"
+            else:
+                b["name"] = cleaned
     biomarkers = [b for b in biomarkers if (b.get("name") or "").strip()]
     for row in biomarkers:
         _enrich_biomarker_chart(row)
@@ -1866,13 +2323,15 @@ def parse_report_to_context(
     # En önemli bulgular (maks 3): riskli/sınırda biomarker'lar
     top_findings: list[dict] = []
     abnormal = [b for b in biomarkers if b.get("status") in ("high", "low", "border")]
-    for b in abnormal[:3]:
+    abnormal_biomarkers_for_top: list[dict] = []
+    for b in abnormal:
         nm = (b.get("name") or "").strip()
         st = (b.get("status_label") or "").strip()
         if not nm or _is_value_like_name(nm):
             continue
         msg = f"{nm}: {st}" if st else nm
         top_findings.append({"name": nm, "text": msg})
+        abnormal_biomarkers_for_top.append(b)
 
     # Kısa klinik yorumlar (maks 5): isim + durum özetleri
     clinical_comments: list[str] = []
@@ -1902,6 +2361,7 @@ def parse_report_to_context(
         "overall_score": overall_score,
         "overall_chart_svg_base64": overall_chart_svg,
         "health_age": health_age,
+        "abnormal_biomarkers_for_top": abnormal_biomarkers_for_top,
         "top_findings": top_findings,
         "clinical_comments": clinical_comments,
     }
@@ -2050,6 +2510,329 @@ def _build_premium_context(
     risk_level = base_context.get("risk_level") or "normal"
     overall_score = base_context.get("overall_score") or 100
     biomarkers = base_context.get("biomarkers") or []
+
+    # -------------------------
+    # Plan farklandırması için içerik üretimi
+    # - monthly: takip/haftalık hedef odaklı metinler
+    # - premium (yearly): 1 haftalık kişiselleştirilmiş diyet planı
+    # -------------------------
+    is_tr = (lang or "tr").strip().lower()[:2] == "tr"
+
+    def _b_name_lower(b: dict) -> str:
+        return (b.get("name") or "").strip().lower()
+
+    def _b_status_lower(b: dict) -> str:
+        return (b.get("status") or "").strip().lower()
+
+    def _has_any(bnames: tuple[str, ...], statuses: tuple[str, ...]) -> bool:
+        for b in biomarkers:
+            n = _b_name_lower(b)
+            s = _b_status_lower(b)
+            if any(x in n for x in bnames) and any(st in s for st in statuses):
+                return True
+        return False
+
+    glucose_flag = _has_any(("glucose", "glukoz", "hba1c", "kan şekeri", "açlık glukoz"), ("high", "border"))
+    ldl_flag = _has_any(("ldl", "ldl-c", "ldl kolesterol", "total cholesterol", "kolesterol"), ("high", "border"))
+    crp_flag = _has_any(("crp", "c-reaktif", "c reaktif", "enflamasyon"), ("high", "border"))
+    vitd_flag = _has_any(("vitamin d", "d vitamini"), ("low", "border"))
+    ferritin_flag = _has_any(("ferritin",), ("low", "border"))
+
+    # Monthly: 2-4 haftalık takip hissi için haftalık hedefler (7 günlük menü değil)
+    monthly_weekly_targets: list[str] = []
+    monthly_weekly_targets.append(
+        (
+            "Yemek sonrası 10–15 dk hafif yürüyüş (haftada 5 gün) ve toplam 150 dk harekete yaklaşma."
+            if glucose_flag
+            else "Haftada en az 150 dk orta tempolu hareketi (mümkünse 3-4 güne bölerek) hedefleyin."
+        )
+        if is_tr
+        else (
+            "After-meal 10–15 min easy walk (5 days/week) and aiming toward ~150 min activity."
+            if glucose_flag
+            else "Aim for at least ~150 min moderate activity per week (split across 3–4 days if possible)."
+        )
+    )
+    monthly_weekly_targets.append(
+        (
+            "Her gün lif odaklı seçimler (baklagil/tam tahıl/sebze) + zeytinyağıyla dengeli tabak."
+            if (ldl_flag or crp_flag)
+            else "Her gün sebze-meyve + yeterli lifle dengeli tabak yaklaşımı."
+        )
+        if is_tr
+        else (
+            "Daily fiber-forward choices (legumes/whole grains/vegetables) + olive-oil balanced plate."
+            if (ldl_flag or crp_flag)
+            else "Daily vegetables/fruits plus adequate fiber for a balanced plate."
+        )
+    )
+    monthly_weekly_targets.append(
+        (
+            "Demir depoları için: baklagil/ıspanak gibi seçeneklere haftada birkaç öğünde yer verin."
+            if ferritin_flag
+            else "Günlük çeşitlilik: mikro besinleri dengeli almak için öğünleri çeşitlendirin."
+        )
+        if is_tr
+        else (
+            "For iron stores: include options like legumes/spinach in a few meals this week."
+            if ferritin_flag
+            else "Aim for daily variety so micronutrients are covered more evenly."
+        )
+    )
+    monthly_weekly_targets.append(
+        (
+            "Uyku ve stres: 7–8 saat uyku + kısa nefes/gevşeme molaları (özellikle akşam)."
+            if crp_flag
+            else "Uyku ve stres: 7–8 saat uyku + kısa gevşeme molaları."
+        )
+        if is_tr
+        else (
+            "Sleep & stress: 7–8 hours sleep + short breathing/relax breaks."
+            if crp_flag
+            else "Sleep & stress: 7–8 hours sleep + short relaxation breaks."
+        )
+    )
+    # D vitamini düşükse ek bir ipucu (monthly hedefi kısık tutulur)
+    if vitd_flag:
+        monthly_weekly_targets[2] = (
+            "D vitamini için: açık havayı gün ışığında değerlendirin ve öğünlere D ile destekli seçenekler ekleyin."
+            if is_tr
+            else "For vitamin D: get some daylight exposure and include vitamin D–supported food options in meals."
+        )
+
+    # Tekrar test/kontrol önerisi (kaba klinik zamanlama; teşhis değil)
+    attention_tests: list[str] = []
+    for b in biomarkers:
+        n = (b.get("name") or "").strip()
+        s = (b.get("status") or "").strip().lower()
+        if (s in ("high", "low", "border")) and n:
+            attention_tests.append(n)
+    # benzersiz + kısa
+    seen = set()
+    attention_tests = [x for x in attention_tests if not (x in seen or seen.add(x))]
+    attention_tests = attention_tests[:4]
+    attention_tests_txt = ", ".join(attention_tests) if attention_tests else ("—" if is_tr else "—")
+    if crp_flag:
+        monthly_control_recommendation = (
+            f"Hekiminiz uygun görürse {attention_tests_txt} için 4–8 hafta içinde kontrol değerlendirmesi yapılabilir."
+            if is_tr
+            else f"If appropriate, your clinician may consider follow-up for {attention_tests_txt} within 4–8 weeks."
+        )
+    else:
+        monthly_control_recommendation = (
+            f"Hekiminiz uygun görürse {attention_tests_txt} için 8–12 hafta içinde tekrar test/ kontrol planlanabilir."
+            if is_tr
+            else f"If appropriate, your clinician may plan a repeat test/follow-up for {attention_tests_txt} within 8–12 weeks."
+        )
+
+    # Premium (yearly): 1 haftalık diyet planı (yasak listesi değil, tercihe dayalı ve uygulanabilir)
+    anti_inflam_days = {0, 3} if crp_flag else set()
+    iron_days = {2, 5} if ferritin_flag else set()
+    vitd_days = {1, 4} if vitd_flag else set()
+
+    def _diet_day_label(i: int) -> str:
+        return f"{i + 1}. Gün" if is_tr else f"Day {i + 1}"
+
+    def _breakfast(i: int) -> str:
+        if i in iron_days:
+            return (
+                "Ispanaklı/yeşillikli omlet (az yağ) + tam tahıllı ekmek; yanında C vitamini için küçük bir meyve."
+                if is_tr
+                else "Spinach/greens omelet (low oil) + whole-grain toast; fruit on the side for vitamin C."
+            )
+        if i in vitd_days:
+            return (
+                "D ile destekli yoğurt/kefir + yulaf + chia; tarçın ve küçük bir meyve."
+                if is_tr
+                else "Vitamin D–supported yogurt/kefir + oats + chia; cinnamon and a small fruit."
+            )
+        # glucose-friendly default: lif + yoğurt + tahıl
+        if glucose_flag:
+            return (
+                "Yulaf + yoğurt + chia/tarzı lifli ek + tarçın; porsiyonu ölçülü küçük bir meyve."
+                if is_tr
+                else "Oats + yogurt + chia (fiber) + cinnamon; a measured small fruit portion."
+            )
+        return (
+            "Tam tahıllı ekmek + avokado veya yumurta + domates/salatalık; yanında sade yoğurt."
+            if is_tr
+            else "Whole-grain toast + avocado or eggs + tomato/cucumber; with plain yogurt."
+        )
+
+    def _lunch(i: int) -> str:
+        if i in iron_days:
+            return (
+                "Mercimek/nohut salatası + zeytinyağı-limon sos + bol yeşillik."
+                if is_tr
+                else "Lentil/chickpea salad + olive oil-lemon dressing + lots of greens."
+            )
+        if i in vitd_days:
+            return (
+                "Izgara somon/ton balığı + kinoa/bulgur (küçük porsiyon) + zeytinyağlı sebze."
+                if is_tr
+                else "Grilled salmon/tuna + quinoa/bulgur (small portion) + olive-oil vegetables."
+            )
+        if i in anti_inflam_days:
+            return (
+                "Zeytinyağlı sebze kasesi + baklagil; zerdeçal/ zencefil ile hafif tatlandırma."
+                if is_tr
+                else "Olive-oil veggie bowl + legumes; lightly season with turmeric/ginger."
+            )
+        return (
+            "Kinoa/bulgur veya tam tahıllı seçenek + tavuk/hindi veya baklagil + salata (zeytinyağıyla)."
+            if is_tr
+            else "Quinoa/bulgur or whole-grain choice + chicken/turkey or legumes + salad (olive-oil)."
+        )
+
+    def _dinner(i: int) -> str:
+        if i in vitd_days:
+            return (
+                "Somon/hamsi + fırın sebzeler + yoğurt (tercihen kefir de olabilir)."
+                if is_tr
+                else "Salmon/sardines + baked vegetables + yogurt (kefir is also fine)."
+            )
+        if i in iron_days:
+            return (
+                "Sebzeli ızgara tavuk veya az yağlı et + zeytinyağlı sebze; yanında baklagil (küçük porsiyon)."
+                if is_tr
+                else "Veggie-grilled chicken or lean meat + olive-oil vegetables; with a small portion of legumes."
+            )
+        if i in anti_inflam_days:
+            return (
+                "Anti-inflamatuar tabak: zeytinyağı, yeşillikler, kuruyemiş ekli salata + yoğurt."
+                if is_tr
+                else "Anti-inflammatory plate: olive oil, greens, nuts in a salad + yogurt."
+            )
+        return (
+            "Sebzeli baklagil yemeği veya hindi/tavuk + büyük salata + ölçülü tam tahıl."
+            if is_tr
+            else "Vegetable-legume meal or turkey/chicken + big salad + measured whole grain."
+        )
+
+    def _snack(i: int) -> str:
+        if i in vitd_days or i in anti_inflam_days:
+            return (
+                "Yoğurt/kefir + ceviz/badem; tarçınla tatlandırma."
+                if is_tr
+                else "Yogurt/kefir + walnuts/almonds; cinnamon if you like."
+            )
+        if glucose_flag:
+            return (
+                "Ara öğünde yoğurt/kefir veya küçük meyve + kuruyemiş (porsiyonu ölçülü)."
+                if is_tr
+                else "Snack: yogurt/kefir or a small fruit + nuts (keep portions moderate)."
+            )
+        return (
+            "1 küçük meyve + 1 avuç kuruyemiş veya hummus benzeri seçenek."
+            if is_tr
+            else "One small fruit + a small handful of nuts or hummus-like option."
+        )
+
+    weekly_diet_plan: list[dict] = []
+    for i in range(7):
+        weekly_diet_plan.append({
+            "day": _diet_day_label(i),
+            "breakfast": _breakfast(i),
+            "lunch": _lunch(i),
+            "dinner": _dinner(i),
+            "snack": _snack(i),
+        })
+
+    # Premium-only: supplement/destek, tekrar test ve yaşam tarzı notları
+    # - Tanı/tedavi dili yoktur
+    # - Kısa, uygulanabilir, hekim değerlendirmesi vurgulu
+    premium_supplement_notes: list[str] = []
+    premium_repeat_test_notes: list[str] = []
+    premium_lifestyle_notes: list[str] = []
+
+    if vitd_flag:
+        premium_supplement_notes.append(
+            "Vitamin D için uygun destek/takviye seçeneği (doz/süre) hekim değerlendirmesiyle netleştirilebilir."
+            if is_tr
+            else "Vitamin D support/supplement options (dose/duration) can be clarified with clinician guidance."
+        )
+        premium_repeat_test_notes.append(
+            "Vitamin D seviyesinin yanıtını görmek için genellikle 8–12 hafta içinde tekrar değerlendirme düşünülebilir."
+            if is_tr
+            else "A repeat check to see response is often considered within ~8–12 weeks."
+        )
+
+    if ferritin_flag:
+        premium_supplement_notes.append(
+            "Ferritin/demir depoları için gerekirse hekim uygun görürse demir desteği seçenekleri konuşulabilir."
+            if is_tr
+            else "For iron stores (ferritin), clinician-guided iron support options can be discussed if appropriate."
+        )
+        premium_repeat_test_notes.append(
+            "Demir depolarındaki değişimi görmek için hekim uygun görürse 8–12 hafta civarı tekrar kontrol planlanabilir."
+            if is_tr
+            else "To monitor changes, clinicians may plan a repeat check around ~8–12 weeks."
+        )
+
+    if crp_flag:
+        premium_lifestyle_notes.append(
+            "CRP bağlamında son dönem enfeksiyon/aktivite gibi etkenler olmuşsa, klinik durum düzelince yeniden değerlendirme faydalı olabilir."
+            if is_tr
+            else "If recent infection/activity may have influenced CRP, re-evaluation after recovery can be helpful."
+        )
+        premium_repeat_test_notes.append(
+            "CRP için tekrar değerlendirme genellikle klinik düzelme sonrasında ve hekimin uygun gördüğü aralıkta planlanır."
+            if is_tr
+            else "CRP follow-up is usually planned after clinical improvement at a clinician-chosen interval."
+        )
+
+    if glucose_flag:
+        premium_lifestyle_notes.append(
+            "Kan şekeri için öğün sonrası kısa yürüyüş ve lifli/ dengeli tabak yaklaşımı haftalık hedef olarak tutulabilir."
+            if is_tr
+            else "For glucose, a weekly goal can be a short post-meal walk and a fiber-balanced plate."
+        )
+        premium_repeat_test_notes.append(
+            "Glukoz/HbA1c için takip, hekimin uygun gördüğü zaman aralığında (sıklıkla birkaç ay içinde) tekrar planlanabilir."
+            if is_tr
+            else "For glucose/HbA1c, follow-up can be scheduled by the clinician at an interval (often within a few months)."
+        )
+
+    if ldl_flag:
+        premium_supplement_notes.append(
+            "LDL için; gerekirse hekim uygun görürse destek/takviye seçenekleri (ör. lif/omega-3 gibi) konuşulabilir."
+            if is_tr
+            else "For LDL, if appropriate, support/supplement options (e.g., fiber/omega-3) can be discussed with your clinician."
+        )
+        premium_lifestyle_notes.append(
+            "LDL için haftalık hedef: zeytinyağı/baklagil-temelli dengeli tabak + düzenli hareket rutini."
+            if is_tr
+            else "For LDL, a weekly goal: olive-oil/legume-based balanced plate plus a consistent activity routine."
+        )
+        premium_repeat_test_notes.append(
+            "LDL için hedef aralığındaki değişimi görmek adına genellikle 8–12 hafta sonra hekimle tekrar değerlendirme planlanabilir."
+            if is_tr
+            else "For LDL, clinician-guided re-evaluation is often considered within ~8–12 weeks to assess progress."
+        )
+
+    # Boş kalmasın: premium hissi için küçük, genel ama kısa set
+    if not premium_supplement_notes:
+        premium_supplement_notes.append(
+            "Destek/takviye seçenekleri varsa, kişisel durumunuza göre hekim değerlendirmesiyle şekillendirilebilir."
+            if is_tr
+            else "If supplements/support are considered, they can be tailored with clinician guidance."
+        )
+    if not premium_repeat_test_notes:
+        premium_repeat_test_notes.append(
+            "Takip zamanı için hekim uygun aralığı belirleyebilir."
+            if is_tr
+            else "Clinicians can decide the appropriate follow-up interval."
+        )
+    if not premium_lifestyle_notes:
+        premium_lifestyle_notes.append(
+            "Haftalık hedefler: hareket + uyku + beslenme dengesi; klinik bağlama göre hekimle netleştirilebilir."
+            if is_tr
+            else "Weekly goals: movement + sleep + dietary balance; can be clarified with clinical context."
+        )
+
+    premium_supplement_notes = premium_supplement_notes[:4]
+    premium_repeat_test_notes = premium_repeat_test_notes[:4]
+    premium_lifestyle_notes = premium_lifestyle_notes[:4]
     # Domain skorları: biomarkers'tan risk_engine ile hesapla (gerçekçi skorlar)
     risk_cards: list[dict] = []
     lab_values = _biomarkers_to_lab_values(biomarkers)
@@ -2135,6 +2918,31 @@ def _build_premium_context(
     def _t_early(key: str, default: str = "") -> str:
         return (_labels.get(key) or _fallback_en.get(key) or default)
 
+    # TR premium raporda tek raporda tekrar eden / yarım metinleri temizle
+    def _purge_banned_tr(text: str) -> str:
+        t = (text or "").strip()
+        if not t:
+            return ""
+        # Tek başına madde işareti / kısa kırıntılar: listede boş bullet gibi görünür
+        if t in ("•", "-") or re.match(r"^[•·\-]+$", t):
+            return ""
+        if len(t) < 3:
+            return ""
+        tl = t.lower()
+        # Tek raporda tekrar etmesin (executive summary cümleleri)
+        if "ldl ve glukoz" in tl and "takip" in tl:
+            return ""
+        if "referans sınır" in tl and "parametre" in tl:
+            return ""
+        if "beslenme ve hareket" in tl:
+            return ""
+        # Yarım cümle örnekleri
+        if "doktorunuzla" in tl:
+            return ""
+        if "d vitamini" in tl and "güneş" in tl and ("beslenme" in tl or "diyet" in tl):
+            return ""
+        return t
+
     # Biomarker category mapping for grouped highlights (Metabolic, Cardiovascular, Liver, Inflammation, Iron/Nutrients, Vitamins)
     BIOMARKER_GROUP: dict[str, tuple[str, ...]] = {
         "Metabolic": ("Glucose", "HbA1c", "Creatinine", "eGFR"),
@@ -2175,6 +2983,9 @@ def _build_premium_context(
         s.strip() + ("." if s.strip() and not s.strip().endswith(".") else "")
         for s in re.split(r"(?<=[.!])\s+", summary_txt) if s.strip()
     ][:8]
+    if lang == "tr":
+        executive_sentences = [_purge_banned_tr(s) for s in executive_sentences]
+        executive_sentences = [s for s in executive_sentences if s]
     executive_summary = " ".join(executive_sentences) if executive_sentences else (
         "Your lab results have been reviewed. Values within the reference range support general health; any out-of-range parameters should be discussed with your doctor for follow-up or further tests." if lang != "tr"
         else "Laboratuvar sonuçlarınız değerlendirildi. Referans aralığındaki değerler genel sağlık açısından olumludur; referans dışı parametreleri hekiminizle görüşerek takip veya ek tetkik planlayabilirsiniz."
@@ -2218,10 +3029,15 @@ def _build_premium_context(
                 if len(key_areas_to_watch) >= 5:
                     break
                 if (h.get("level") or "").lower() in ("mid", "high"):
+                    why_txt = _strip_ai_from_text(h.get("why") or "")
+                    action_txt = _strip_ai_from_text(h.get("action") or "")
+                    if lang == "tr":
+                        why_txt = _purge_banned_tr(why_txt)
+                        action_txt = _purge_banned_tr(action_txt)
                     key_areas_to_watch.append({
                         "parameter": h.get("test") or "—",
-                        "why_it_matters": _strip_ai_from_text(h.get("why") or ""),
-                        "monitoring_focus": _strip_ai_from_text(h.get("action") or ""),
+                        "why_it_matters": why_txt,
+                        "monitoring_focus": action_txt,
                     })
         except Exception:
             pass
@@ -2415,6 +3231,8 @@ def _build_premium_context(
     if summary_txt:
         for s in re.split(r"(?<=[.!])\s+", summary_txt):
             s = s.strip()
+            if lang == "tr":
+                s = _purge_banned_tr(s)
             if s and len(s) > 25 and len(doctor_discussion_notes) < 4:
                 doctor_discussion_notes.append(_strip_ai_from_text(s))
     if len(doctor_discussion_notes) < 2:
@@ -2434,19 +3252,23 @@ def _build_premium_context(
     if risk_txt:
         for line in risk_txt.splitlines():
             line = line.strip().lstrip("-•* ")
+            if lang == "tr":
+                line = _purge_banned_tr(line)
             if line and len(findings) < 6:
                 findings.append(line)
     if len(findings) < 3 and base_context.get("summary"):
         summary = (base_context["summary"] or "").strip()
         for part in re.split(r"[.!]\s+", summary):
             part = part.strip()
+            if lang == "tr":
+                part = _purge_banned_tr(part)
             if part and len(part) > 20 and len(findings) < 6:
                 findings.append(part + ("." if not part.endswith(".") else ""))
     if not findings:
         findings = [
             "Laboratuvar sonuçları değerlendirildi." if lang == "tr" else "Lab results have been reviewed.",
         ]
-    findings = [_strip_ai_from_text(s) for s in findings if s]
+    findings = [_strip_ai_from_text(s) for s in findings if s and (lang != "tr" or _purge_banned_tr(s))]
 
     # Bulguları renkli kart olarak: metinden "X:** Düşük/Normal/Sınır" çıkar → status_class
     def _finding_status_class(text: str) -> str:
@@ -2559,6 +3381,8 @@ def _build_premium_context(
             rname = (r.get("name") or "").strip().lower()
             if r.get("status_class") in ("border", "risk") and rname:
                 hint = highlights_by_test.get(rname, {}).get("action") or ""
+                if lang == "tr":
+                    hint = _purge_banned_tr(hint)
                 if hint and hint not in attention_do:
                     attention_do.append(hint)
         recommendation_summary = (attention_do[0][:120] + "…" if attention_do and len(attention_do[0]) > 120 else (attention_do[0] if attention_do else "")) or (
@@ -2746,7 +3570,7 @@ def _build_premium_context(
         "label_report_alert_body": _t("report_alert_body", "This report does not replace medical diagnosis or treatment. Consult your doctor."),
         "label_report_disclaimer_title": _t("report_disclaimer_title", "For information only."),
         "label_report_disclaimer_text": _t("report_disclaimer_text", "This report does not replace medical diagnosis or treatment. Consult your doctor."),
-        "label_report_footer": _t("report_footer", "Norya • For information only • support@noryaai.com"),
+        "label_report_footer": _t("report_footer", "Norya · For information only · support@noryaai.com"),
         "label_report_brand_sub": _t("report_brand_sub", "Clinical Report"),
         "label_report_doc_title": _t("report_doc_title", "Blood Test Analysis Report"),
         "label_report_doc_sub": _t("report_doc_sub", "Information-only clinical report format"),
@@ -2791,6 +3615,12 @@ def _build_premium_context(
         "stress_tips": stress_tips,
         "sleep_tips": sleep_tips,
         "hydration_tips": hydration_tips,
+        "monthly_weekly_targets": monthly_weekly_targets,
+        "monthly_control_recommendation": monthly_control_recommendation,
+        "weekly_diet_plan": weekly_diet_plan,
+        "premium_supplement_notes": premium_supplement_notes,
+        "premium_repeat_test_notes": premium_repeat_test_notes,
+        "premium_lifestyle_notes": premium_lifestyle_notes,
         "doctor_discussion_notes": doctor_discussion_notes,
         "refined_disclaimer": refined_disclaimer,
         "trend_placeholder_text": trend_placeholder_text,
@@ -2979,11 +3809,11 @@ def _filter_bullet_like_text(text: str, max_items: int = 6) -> str:
 
 def _filter_raw_sections_for_standard(raw_sections: list[dict]) -> list[dict]:
     """
-    Ek raw section'ları kaliteye göre filtreler; standart PDF 5–6 sayfayı geçmesin diye en fazla 3 bölüm.
+    Ek raw section'ları kaliteye göre filtreler; standart PDF 5–6 sayfayı geçmesin diye en fazla 1 bölüm.
     """
     out: list[dict] = []
     for sec in (raw_sections or [])[:8]:
-        if len(out) >= 3:
+        if len(out) >= 1:
             break
         title = (sec.get("title") or "").strip()
         body = (sec.get("body") or "").strip()
@@ -3001,8 +3831,11 @@ def _filter_raw_sections_for_standard(raw_sections: list[dict]) -> list[dict]:
             if re.match(r"^\s*[-*+•·]\s*$", ln_stripped):
                 continue
             s = (ln_stripped.lstrip("-*+•·").strip() or "").strip()
-            if len(s) >= 3 and not re.match(r"^[\s\-*•·]+$", s):
-                body_lines.append(ln_stripped)
+            if len(s) < 3:
+                continue
+            if re.match(r"^[\s\-*•·]+$", s):
+                continue
+            body_lines.append(ln_stripped)
         body = "\n".join(body_lines).strip()
         if not body:
             continue
@@ -3010,12 +3843,13 @@ def _filter_raw_sections_for_standard(raw_sections: list[dict]) -> list[dict]:
     return out
 
 
-# STANDARD PDF: test kartı grupları (sıra: Hemogram, Metabolik, Vitamin/mineral, Enfeksiyon, Diğer)
+# STANDARD PDF: test kartı grupları (sıra: Hemogram, Metabolik, İnflamasyon, Vitamin/mineral, Enfeksiyon, Diğer)
 BIOMARKER_GROUP_ORDER: list[tuple[str, str, set[str]]] = [
     ("hemogram", "Hemogram", {"hb", "hemoglobin", "wbc", "rbc", "hct", "platelet", "trombosit", "mcv", "mch", "mchc", "lökosit", "eritrosit", "hematokrit", "hgb", "plt", "rdw", "mpv", "hemogram"}),
     ("metabolik", "Metabolik", {"glucose", "glukoz", "ldl", "hdl", "cholesterol", "kolesterol", "triglyceride", "trigliserid", "hba1c", "üre", "urea", "kreatinin", "creatinine", "egfr", "gfr"}),
+    ("inflamasyon", "İnflamasyon", {"crp", "hs-crp", "hs crp", "c-reaktif", "c reaktif", "c reaksif", "c reactive"}),
     ("vitamin_mineral", "Vitamin / mineral", {"vitamin d", "d vitamini", "vitamini d", "b12", "folat", "folate", "ferritin", "demir", "iron", "kalsiyum", "calcium", "magnezyum", "magnesium", "çinko", "zinc", "potasyum", "sodyum", "sodium"}),
-    ("enfeksiyon", "Enfeksiyon taramaları", {"crp", "hbv", "hcv", "hiv", "hbsag", "anti-hcv", "vdrl", "rf", "aso", "enfeksiyon", "c-reaktif"}),
+    ("enfeksiyon", "Enfeksiyon taramaları", {"hbv", "hbsag", "hcv", "hiv", "anti-hcv", "anti hcv", "anti-hiv", "anti hiv", "vdrl", "rpr", "sifiliz", "syphilis", "enfeksiyon"}),
     ("diger", "Diğer", set()),
 ]
 
@@ -3122,13 +3956,45 @@ def _apply_standard_pdf_quality_filters(base_context: dict) -> dict:
     if not _is_meaningful_text(summary, min_len=60):
         ctx["summary"] = ""
 
+    biomarkers = ctx.get("biomarkers") or []
+    abnormal = [b for b in biomarkers if (b.get("status") or "") in ("high", "low", "border")]
+    abnormal_names = {
+        str((b.get("name") or "")).strip().lower()
+        for b in abnormal
+        if (b.get("name") or "").strip() and not _is_value_like_name((b.get("name") or "").strip())
+    }
+
     causes = ctx.get("possible_causes") or ""
     recommendations = ctx.get("recommendations") or ""
     recommendations = _strip_lab_result_lines(recommendations)
     causes_f = _filter_bullet_like_text(causes)
-    recs_f = _filter_bullet_like_text(recommendations)
-    ctx["possible_causes"] = causes_f
-    ctx["recommendations"] = recs_f
+
+    if abnormal:
+        # Test-bağlı öneriler: genel öneri yerine anormal test isimleri + karttaki kısa öneriyi kullan.
+        rec_lines: list[str] = []
+        for b in abnormal[:3]:
+            nm = (b.get("name") or "").strip()
+            reco = (b.get("short_recommendation") or "").strip()
+            if not nm or not reco:
+                continue
+            rec_lines.append(f"• {nm}: {reco.replace('\n', ' ').strip()[:130]}")
+        ctx["recommendations"] = "\n".join(rec_lines).strip()
+
+        # Olası nedenleri mümkünse test adına göre daralt; bulamazsak boş bırakıp sayfa kazandır.
+        if abnormal_names and causes_f:
+            keep: list[str] = []
+            for ln in (causes_f or "").splitlines():
+                ll = (ln or "").lower()
+                if any(nm in ll for nm in abnormal_names):
+                    keep.append(ln)
+                    if len(keep) >= 4:
+                        break
+            ctx["possible_causes"] = "\n".join(keep).strip()
+        else:
+            ctx["possible_causes"] = ""
+    else:
+        ctx["possible_causes"] = ""
+        ctx["recommendations"] = ""
 
     raw_sections = ctx.get("raw_sections") or []
     ctx["raw_sections"] = _filter_raw_sections_for_standard(raw_sections)
@@ -3163,7 +4029,13 @@ def build_report_pdf(
     # Merkezi plan config (feature gating altyapısı; şablonlar ileride bu değerlere göre bölüm açacak)
     from app.core.plan_config import get_plan_config
 
-    plan_cfg = get_plan_config(plan_name)
+    # PDF bağlamında "premium" → "yearly" gibi davran.
+    # (Template koşulları yearly/premium farkı için plan_config.plan_name üzerinden çalışıyor.)
+    plan_input = (plan_name or "").strip().lower()
+    plan_for_cfg = plan_input
+    if plan_for_cfg == "premium":
+        plan_for_cfg = "yearly"
+    plan_cfg = get_plan_config(plan_for_cfg)
     plan_config_ctx = {
         "plan_name": plan_cfg.plan_name,
         "comparison_enabled": plan_cfg.comparison_enabled,
@@ -3171,9 +4043,11 @@ def build_report_pdf(
         "explanation_depth": plan_cfg.explanation_depth,
         "pdf_depth": plan_cfg.pdf_depth,
     }
-    # premiumPdf: monthly, yearly, pro → premium şablon; SINGLE/STANDARD (single/free) standart PDF şablonunu kullanır.
-    use_premium = plan == "premium" or plan in ("monthly", "yearly", "pro")
+    # Bu sürümde SINGLE/STANDARD (single/free) da premium şablonla render edilsin:
+    # Amaç: kart düzeni/spacing hatalarını standart template'te yaşamadan premium (5 sayfa) hisse geçmek.
     premium_trend = plan in ("monthly", "yearly", "pro")
+    force_premium_layout = plan in ("free", "single") or plan_cfg.pdf_depth == "basic"
+    use_premium = plan == "premium" or plan in ("monthly", "yearly", "pro") or force_premium_layout
     trend_locked = not premium_trend
 
     if use_premium:
@@ -3197,16 +4071,82 @@ def build_report_pdf(
             premium_ctx["verification_code"] = ""
             premium_ctx["qr_image_base64"] = ""
         premium_ctx["plan_config"] = plan_config_ctx
+
+        # Paket tier: şablonda tek isimlendirme (standard/monthly/premium)
+        if plan_input == "monthly":
+            package_tier = "monthly"
+        elif plan_input in ("premium", "yearly", "pro", "monthly_50eur", "yearly_99eur"):
+            package_tier = "premium"
+        else:
+            package_tier = "standard"
+        premium_ctx["package_tier"] = package_tier
+
         _labels = _pdf_labels(lang)
         _fallback_en = PDF_LABELS.get("en", {})
         premium_ctx["label_report_doc_sub_single"] = _labels.get("report_doc_sub_single") or _fallback_en.get("report_doc_sub_single", "Single analysis report — Summary, values and recommendations; for information only.")
         premium_ctx["label_report_plan_badge_single"] = _labels.get("report_plan_badge_single") or _fallback_en.get("report_plan_badge_single", "REPORT")
+
+        # Plan bazlı görünüm farkı: monthly daha takip odaklı, yearly/premium daha güçlü yorum + diyet planı vurgusu.
+        plan_key = plan_cfg.plan_name
+        biomarkers_for_notes = base_context.get("biomarkers") or []
+        doctor_share = _build_doctor_share_note(biomarkers_for_notes, lang)
+        follow_up_note = _build_follow_up_note(biomarkers_for_notes, lang)
+        discuss_names = doctor_share.get("discuss_names") or []
+        discuss_txt = ", ".join([d for d in discuss_names if d]) if discuss_names else ("—" if (lang or "").strip().lower()[:2] == "tr" else "—")
+
+        if plan_key == "monthly":
+            # Aylık: daha kısa ve takibe odaklı
+            premium_ctx["doctor_note"] = (
+                f"Özellikle konuşulabilecek parametreler: {discuss_txt}. "
+                f"{doctor_share.get('follow_up_summary') or doctor_share.get('normal_summary') or ''} "
+                f"{follow_up_note or ''}".strip()
+            )
+        elif plan_key == "yearly":
+            # Yearly/premium: daha güçlü paylaşım ve diyet planı vurgusu
+            premium_supp = (premium_ctx.get("premium_supplement_notes") or [])
+            premium_repeat = (premium_ctx.get("premium_repeat_test_notes") or [])
+            premium_life = (premium_ctx.get("premium_lifestyle_notes") or [])
+            premium_hint = ""
+            if premium_supp or premium_repeat or premium_life:
+                # Doktor notu kısa kalır; sadece premium-only notların varlığını ima eder.
+                premium_hint = (
+                    (" " if lang == "tr" else " ")
+                    + ("Takipte; destek/takviye seçenekleri ve tekrar test zamanlaması hekimle birlikte netleştirilebilir." if lang == "tr" else "Follow-up can align support/supplement options and repeat-test timing with your clinician.")
+                )
+            diet_hint = (
+                "Doktorunuz, bu rapordaki 1 haftalık diyet planı ve kontrol zamanlamasını birlikte değerlendirebilir."
+                if (lang or "").strip().lower()[:2] == "tr"
+                else "Your clinician can review the 1-week diet plan and follow-up timing together."
+            )
+            premium_ctx["doctor_note"] = (
+                f"Özellikle konuşulabilecek parametreler: {discuss_txt}. "
+                f"{doctor_share.get('follow_up_summary') or doctor_share.get('normal_summary') or ''} "
+                f"{follow_up_note or ''} "
+                f"{diet_hint}{premium_hint}".strip()
+            )
+        else:
+            # Single/standard: kısa ve paylaşım odaklı
+            premium_ctx["doctor_note"] = (
+                f"Özellikle konuşulabilecek parametreler: {discuss_txt}. "
+                f"{doctor_share.get('follow_up_summary') or doctor_share.get('normal_summary') or ''} "
+                f"{follow_up_note or ''}".strip()
+            )
+
         return render_premium_pdf(premium_ctx)
 
     # SINGLE/STANDARD (non-premium) PDF: içerik kalite filtresi uygula + kısa disclaimer
     context = _apply_standard_pdf_quality_filters(base_context)
     for k, v in _short_disclaimer_standard(lang).items():
         context[k] = v
+    # Doctor-premium-ultra hissi için standart PDF'i çok kompakt tut:
+    # - ayrı causes/recommendations/raw bloklarını kaldır (kısa mini öneriler kartlarda var)
+    # - nasıl okunur (how-to-read) bloğunu gizle
+    context["show_how_to_read"] = False
+    context["possible_causes"] = ""
+    context["recommendations"] = ""
+    context["raw_sections"] = []
+    # Ultra-kompakt: SVG genel durum/gauge alanını kaldır (skor satırı kalır).
+    context["overall_chart_svg_base64"] = None
     if context.get("biomarkers") is None:
         context["biomarkers"] = []
     if rid == "single-plan-test" and len(context.get("biomarkers") or []) < 5:
@@ -3214,9 +4154,12 @@ def build_report_pdf(
         for row in context["biomarkers"]:
             _enrich_biomarker_chart(row)
         _enrich_biomarkers_cards(context["biomarkers"])
-    context["grouped_biomarkers"] = _group_biomarkers(context.get("biomarkers") or [])
-    context["doctor_share_note"] = _build_doctor_share_note(context.get("biomarkers") or [], lang)
-    context["follow_up_note"] = _build_follow_up_note(context.get("biomarkers") or [], lang)
+    all_biomarkers = context.get("biomarkers") or []
+    # Tek bir kart alanında tüm anlamlı testleri (abnormal + normal) grup başlıklarıyla göster.
+    context["grouped_abnormal_biomarkers"] = []
+    context["grouped_biomarkers"] = _group_biomarkers(all_biomarkers)
+    context["doctor_share_note"] = {}
+    context["follow_up_note"] = ""
     context["report_id"] = rid
     context["plan_config"] = plan_config_ctx
     context["user_id"] = user_id_str

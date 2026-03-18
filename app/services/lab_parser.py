@@ -137,7 +137,13 @@ def parse_biomarkers(values_block: str) -> list[dict]:
         value_str = rest
         ref = None
         status = "normal"
-        ref_m = re.search(r"(?:Reference|Ref\.?|Referans)\s*:\s*([^\n.]+?)(?:\.\s*(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır))?\s*\.?\s*$", rest, re.I)
+        # Reference kısmında ondalık (örn 13.5) olduğu için '.' karakterini dışarıda bırakmayalım.
+        # Bu regex ayrıca satır sonundaki durum (Normal/Low/High/Borderline...) varsa yakalar.
+        ref_m = re.search(
+            r"(?:Reference|Ref\.?|Referans)\s*:\s*([^\n]+?)(?:\.\s*(Normal|Low|High|Borderline|Düşük|Yüksek|Sınırda|Sınır))?\s*\.?\s*$",
+            rest,
+            re.I,
+        )
         if ref_m:
             ref = ref_m.group(1).strip() or None
             if ref_m.lastindex and ref_m.lastindex >= 2 and ref_m.group(2):

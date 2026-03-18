@@ -6954,7 +6954,10 @@
       var now = Date.now();
       if (now - reportDownloadState.lastTriggerAt < REPORT_DOWNLOAD_DEBOUNCE_MS) return;
       var token = getToken();
-      if (!token) {
+      // Local dev'de analizler dev guest ile çalışıyor; PDF token için de giriş şartı olmayabilsin.
+      // Bu yüzden token yoksa sadece local dev'de devam ediyoruz.
+      var hasAuth = !!token;
+      if (!hasAuth && !isLocalDev()) {
         toast(t.toast_analyze_first || 'Rapor indirmek için giriş yapın.', 'error');
         return;
       }
@@ -6974,7 +6977,9 @@
       var blobUrl = null;
       try {
         var tokenUrl = API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf-token';
-        var tokenRes = await fetch(tokenUrl, { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+        var tokenHeaders = {};
+        if (hasAuth) tokenHeaders['Authorization'] = 'Bearer ' + token;
+        var tokenRes = await fetch(tokenUrl, { method: 'POST', headers: tokenHeaders, credentials: 'include' });
         if (!tokenRes.ok) {
           var errBody = await tokenRes.text();
           var errMsg = t.toast_pdf_error || 'PDF indirilemedi, lütfen tekrar deneyin.';
@@ -7017,7 +7022,8 @@
     async function downloadForDoctor() {
       var t = T[getLang()] || T.tr;
       var token = getToken();
-      if (!token) {
+      var hasAuth = !!token;
+      if (!hasAuth && !isLocalDev()) {
         toast(t.toast_analyze_first || 'Rapor indirmek için giriş yapın.', 'error');
         return;
       }
@@ -7027,7 +7033,9 @@
         return;
       }
       try {
-        var tokenRes = await fetch(API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf-token', { method: 'POST', headers: { 'Authorization': 'Bearer ' + token }, credentials: 'include' });
+        var tokenHeaders = {};
+        if (hasAuth) tokenHeaders['Authorization'] = 'Bearer ' + token;
+        var tokenRes = await fetch(API_BASE + '/analyze/history/' + encodeURIComponent(rid) + '/pdf-token', { method: 'POST', headers: tokenHeaders, credentials: 'include' });
         if (!tokenRes.ok) {
           var errBody = await tokenRes.text();
           var errMsg = 'Rapor indirilemedi (HTTP ' + tokenRes.status + ').';
@@ -13021,9 +13029,9 @@
           try { sessionStorage.setItem(LAST_RID_KEY, String(lastAnalysisId)); } catch (_) {}
           var reportPath = '/report?rid=' + encodeURIComponent(lastAnalysisId);
           try {
-            if (window.history && window.history.replaceState && (window.location.pathname || '').indexOf('/report') === 0) {
-              window.history.replaceState(null, '', reportPath);
-            }
+            // Rapor indirme akışında `ensureReportId()` URL'den `rid` okumaya da ihtiyaç duyuyor.
+            // Bu yüzden başarı sonrası her durumda URL'yi '/report?rid=...' ile güncelliyoruz.
+            if (window.history && window.history.replaceState) window.history.replaceState(null, '', reportPath);
           } catch (_) {}
         }
         if (getToken()) { loadHistory(); loadUsage(); }

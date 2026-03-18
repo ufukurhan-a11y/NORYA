@@ -1,4 +1,5 @@
 import os
+from pathlib import Path
 
 from sqlalchemy import inspect, text
 from sqlalchemy.exc import OperationalError as SQLOperationalError
@@ -22,6 +23,29 @@ def _normalized_database_url(raw_url: str) -> str:
     if not raw_url:
         return "sqlite:///./norya.db"
     raw_url = raw_url.strip()
+
+    # SQLite path'leri `cwd`'ye göre değişmesin diye projedeki mutlak path'e çeviriyoruz.
+    # Bu özellikle "attempt to write a readonly database" hatasını azaltır.
+    if raw_url.startswith("sqlite:///"):
+        file_part = raw_url[len("sqlite:///") :]
+        if file_part in (":memory:", ""):
+            return raw_url
+
+        # Proje kökü: app/core/database.py -> app/core -> app -> repo kökü
+        proj_root = Path(__file__).resolve().parent.parent.parent
+
+        # sqlite:///./norya.db  -> <proj_root>/norya.db
+        if file_part.startswith("./"):
+            abs_path = (proj_root / file_part[2:]).resolve()
+            return f"sqlite:///{abs_path}"
+
+        # sqlite:///norya.db (./ yok) -> <proj_root>/norya.db
+        if not file_part.startswith("/") and not file_part.startswith(":"):
+            abs_path = (proj_root / file_part).resolve()
+            return f"sqlite:///{abs_path}"
+
+        return raw_url
+
     # postgres://...  -> postgresql+psycopg://...
     if raw_url.startswith("postgres://"):
         return "postgresql+psycopg://" + raw_url[len("postgres://") :]
