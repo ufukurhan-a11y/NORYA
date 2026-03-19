@@ -1,10 +1,16 @@
 # -*- coding: utf-8 -*-
 """
 SEO landing pages: high-intent queries per locale.
-Routes: /tr/kan-tahlili-sonucu, /tr/kan-degerleri-anlama, /tr/hemogram-sonucu,
-        /de/blutwerte-verstehen, /de/laborwerte-verstehen,
-        /en/blood-test-results, /en/understand-lab-results.
-Content is native per language; no diagnosis claims; informational only.
+
+Routes exist for:
+- TR: `kan-tahlili-sonucu`, `kan-degerleri-anlama`, `hemogram-sonucu`
+- DE: `blutwerte-verstehen`, `laborwerte-verstehen`
+- EN: `blood-test-results`, `understand-lab-results`
+
+Additionally, to support "all languages" for blood test intent, we add:
+- ES/FR/IT/HE/HI/AR: `blood-test-results`, `understand-lab-results`
+
+Content is informational only (no diagnosis claims).
 """
 
 from __future__ import annotations
@@ -18,20 +24,220 @@ SEO_LANDING_ROUTES = {
     ("de", "laborwerte-verstehen"),
     ("en", "blood-test-results"),
     ("en", "understand-lab-results"),
+    # "Read blood test results" intent for other languages (content fallback to English).
+    ("es", "blood-test-results"),
+    ("es", "understand-lab-results"),
+    ("fr", "blood-test-results"),
+    ("fr", "understand-lab-results"),
+    ("it", "blood-test-results"),
+    ("it", "understand-lab-results"),
+    ("he", "blood-test-results"),
+    ("he", "understand-lab-results"),
+    ("hi", "blood-test-results"),
+    ("hi", "understand-lab-results"),
+    ("ar", "blood-test-results"),
+    ("ar", "understand-lab-results"),
 }
 
 # Hreflang: (lang, slug) -> list of (lang_alt, slug_alt) for alternate URLs
 SEO_LANDING_HREFLANG = {
-    ("tr", "kan-tahlili-sonucu"): [("en", "blood-test-results")],
-    ("en", "blood-test-results"): [("tr", "kan-tahlili-sonucu")],
-    ("tr", "kan-degerleri-anlama"): [],
+    # Group A: "blood test results" intent
+    ("tr", "kan-tahlili-sonucu"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("de", "blutwerte-verstehen"): [
+        ("en", "blood-test-results"),
+        ("tr", "kan-tahlili-sonucu"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("en", "blood-test-results"): [
+        ("tr", "kan-tahlili-sonucu"),
+        ("de", "blutwerte-verstehen"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("es", "blood-test-results"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("tr", "kan-tahlili-sonucu"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("fr", "blood-test-results"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("tr", "kan-tahlili-sonucu"),
+        ("es", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("it", "blood-test-results"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("tr", "kan-tahlili-sonucu"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("he", "blood-test-results"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("tr", "kan-tahlili-sonucu"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("hi", "blood-test-results"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("tr", "kan-tahlili-sonucu"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
+    ("ar", "blood-test-results"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("tr", "kan-tahlili-sonucu"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+    ],
+
+    # Group B: "understand lab results" intent
     ("tr", "hemogram-sonucu"): [],
-    ("de", "blutwerte-verstehen"): [],
-    ("de", "laborwerte-verstehen"): [],
-    ("en", "understand-lab-results"): [],
+    ("en", "understand-lab-results"): [
+        ("tr", "kan-degerleri-anlama"),
+        ("de", "laborwerte-verstehen"),
+        ("es", "understand-lab-results"),
+        ("fr", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
+    ("es", "understand-lab-results"): [
+        ("en", "understand-lab-results"),
+        ("de", "laborwerte-verstehen"),
+        ("tr", "kan-degerleri-anlama"),
+        ("fr", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
+    ("fr", "understand-lab-results"): [
+        ("en", "understand-lab-results"),
+        ("de", "laborwerte-verstehen"),
+        ("tr", "kan-degerleri-anlama"),
+        ("es", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
+    ("it", "understand-lab-results"): [
+        ("en", "understand-lab-results"),
+        ("de", "laborwerte-verstehen"),
+        ("tr", "kan-degerleri-anlama"),
+        ("es", "understand-lab-results"),
+        ("fr", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
+    ("he", "understand-lab-results"): [
+        ("en", "understand-lab-results"),
+        ("de", "laborwerte-verstehen"),
+        ("tr", "kan-degerleri-anlama"),
+        ("es", "understand-lab-results"),
+        ("fr", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
+    ("hi", "understand-lab-results"): [
+        ("en", "understand-lab-results"),
+        ("de", "laborwerte-verstehen"),
+        ("tr", "kan-degerleri-anlama"),
+        ("es", "understand-lab-results"),
+        ("fr", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
+    ("ar", "understand-lab-results"): [
+        ("en", "understand-lab-results"),
+        ("de", "laborwerte-verstehen"),
+        ("tr", "kan-degerleri-anlama"),
+        ("es", "understand-lab-results"),
+        ("fr", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+    ],
+    ("tr", "kan-degerleri-anlama"): [
+        ("en", "understand-lab-results"),
+        ("de", "laborwerte-verstehen"),
+        ("es", "understand-lab-results"),
+        ("fr", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
+    ("de", "laborwerte-verstehen"): [
+        ("en", "understand-lab-results"),
+        ("tr", "kan-degerleri-anlama"),
+        ("es", "understand-lab-results"),
+        ("fr", "understand-lab-results"),
+        ("it", "understand-lab-results"),
+        ("he", "understand-lab-results"),
+        ("hi", "understand-lab-results"),
+        ("ar", "understand-lab-results"),
+    ],
 }
 
-OG_LOCALE_MAP = {"tr": "tr_TR", "de": "de_DE", "en": "en_US"}
+OG_LOCALE_MAP = {
+    "tr": "tr_TR",
+    "de": "de_DE",
+    "en": "en_US",
+    "es": "es_ES",
+    "fr": "fr_FR",
+    "it": "it_IT",
+    "he": "he_IL",
+    "hi": "hi_IN",
+    "ar": "ar_SA",
+}
 
 
 def _tr_kan_tahlili() -> dict:
@@ -577,6 +783,19 @@ _SEO_LANDING_CONTENT = {
     ("de", "laborwerte-verstehen"): _de_laborwerte(),
     ("en", "blood-test-results"): _en_blood_test_results(),
     ("en", "understand-lab-results"): _en_understand_lab_results(),
+    # Other languages: fallback to English content for now.
+    ("es", "blood-test-results"): _en_blood_test_results(),
+    ("es", "understand-lab-results"): _en_understand_lab_results(),
+    ("fr", "blood-test-results"): _en_blood_test_results(),
+    ("fr", "understand-lab-results"): _en_understand_lab_results(),
+    ("it", "blood-test-results"): _en_blood_test_results(),
+    ("it", "understand-lab-results"): _en_understand_lab_results(),
+    ("he", "blood-test-results"): _en_blood_test_results(),
+    ("he", "understand-lab-results"): _en_understand_lab_results(),
+    ("hi", "blood-test-results"): _en_blood_test_results(),
+    ("hi", "understand-lab-results"): _en_understand_lab_results(),
+    ("ar", "blood-test-results"): _en_blood_test_results(),
+    ("ar", "understand-lab-results"): _en_understand_lab_results(),
 }
 
 

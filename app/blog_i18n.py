@@ -2,6 +2,8 @@ from __future__ import annotations
 
 from dataclasses import dataclass
 from datetime import date
+from functools import lru_cache
+from pathlib import Path
 from typing import Dict, List, Optional
 
 from app.core.config import BRAND_NAME
@@ -13,6 +15,9 @@ BLOG_LANGS = frozenset({"tr", "en", "de", "it", "es", "fr", "he", "ar", "hi", "e
 # Premium blog: sadece bu dillerde route açılır; varsayılan İngilizce
 BLOG_LANGS_PREMIUM = ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")
 DEFAULT_BLOG_LANG = "en"
+BLOG_COVER_FALLBACK = "/static/images/blog/blog-hero.png"
+_PROJECT_ROOT = Path(__file__).resolve().parent.parent
+_STATIC_ROOT = _PROJECT_ROOT / "static"
 
 # Blog arayüzü çevirileri (liste sayfası, detay CTA, vb.)
 BLOG_UI = {
@@ -4929,7 +4934,7 @@ def _article_rdw_high() -> Article:
 def _article_ag_ratio_high_low() -> Article:
     """A/G oranı yüksek veya düşük — Plan 2."""
     published = date(2026, 3, 20)
-    cover = "/static/images/blog/ag-ratio-hero.png"
+    cover = "/static/images/blog/blog-hero.png"
     slugs = {l: "ag-ratio-high-or-low" for l in ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")}
     cat = {"tr": "Biyobelirteçler", "en": "Biomarkers", "es": "Biomarcadores", "de": "Biomarker", "fr": "Biomarqueurs", "it": "Biomarcatori", "he": "ביומרקרים", "hi": "बायोमार्कर", "ar": "المؤشرات الحيوية"}
     titles = {"tr": "A/G oranı yüksek veya düşük ne anlama gelir?", "en": "What do high or low A/G ratio mean?", "es": "Relación A/G alta o baja: ¿qué significan?", "de": "A/G-Quotient hoch oder niedrig: Was bedeutet das?", "fr": "Ratio A/G élevé ou bas : que signifient-ils ?", "it": "Rapporto A/G alto o basso: cosa significano?", "he": "מה המשמעות של יחס A/G גבוה או נמוך?", "hi": "A/G रेशियो हाई या लो का क्या मतलब है?", "ar": "ماذا يعني ارتفاع أو انخفاض نسبة الألبومين إلى الغلوبيولين؟"}
@@ -5833,6 +5838,32 @@ def _normalize_lang(lang: str | None) -> str:
     return short if short in BLOG_LANGS else DEFAULT_BLOG_LANG
 
 
+@lru_cache(maxsize=512)
+def _resolve_cover_image(cover_image: str | None) -> str:
+    """Return a valid cover image path or a safe fallback if file is missing."""
+    if not cover_image or not isinstance(cover_image, str):
+        return BLOG_COVER_FALLBACK
+    path = cover_image.strip()
+    if not path:
+        return BLOG_COVER_FALLBACK
+    # Absolute static path: /static/images/...
+    if path.startswith("/static/"):
+        rel = path[len("/static/"):].lstrip("/")
+        if (_STATIC_ROOT / rel).is_file():
+            return path
+        return BLOG_COVER_FALLBACK
+    # Relative static path: static/images/...
+    if path.startswith("static/"):
+        rel = path[len("static/"):].lstrip("/")
+        if (_STATIC_ROOT / rel).is_file():
+            return "/" + path
+        return BLOG_COVER_FALLBACK
+    # For non-static/remote URLs keep original.
+    if path.startswith("http://") or path.startswith("https://"):
+        return path
+    return BLOG_COVER_FALLBACK
+
+
 def list_articles_for_lang(lang: str) -> List[dict]:
     """Belirli bir dil için blog listesinde kullanılacak kart verilerini döner."""
     lang = _normalize_lang(lang)
@@ -5850,7 +5881,7 @@ def list_articles_for_lang(lang: str) -> List[dict]:
                 "title": art.titles.get(lang, art.titles.get(DEFAULT_BLOG_LANG)),
                 "excerpt": art.excerpts.get(lang, art.excerpts.get(DEFAULT_BLOG_LANG, "")),
                 "category": art.category.get(lang, art.category.get(DEFAULT_BLOG_LANG, "")),
-                "cover_image": art.cover_image,
+                "cover_image": _resolve_cover_image(art.cover_image),
                 "cover_alt": cover_alt,
                 "read_minutes": art.read_minutes,
                 "published_at": art.published_at,
@@ -5884,7 +5915,7 @@ def get_article(lang: str, slug: str) -> dict | None:
                 "excerpt": art.excerpts.get(lang, art.excerpts.get(DEFAULT_BLOG_LANG, "")),
                 "seo_title": art.seo_titles.get(lang, art.seo_titles.get(DEFAULT_BLOG_LANG)),
                 "seo_description": art.seo_descriptions.get(lang, art.seo_descriptions.get(DEFAULT_BLOG_LANG, "")),
-                "cover_image": art.cover_image,
+                "cover_image": _resolve_cover_image(art.cover_image),
                 "cover_alt": cover_alt,
                 "category": art.category.get(lang, art.category.get(DEFAULT_BLOG_LANG, "")),
                 "read_minutes": art.read_minutes,

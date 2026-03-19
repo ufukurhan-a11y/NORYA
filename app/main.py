@@ -1979,14 +1979,15 @@ def _landing_response(locale: str, request: Request):
         count=1,
     )
 
+    def _hreflang_code(loc: str) -> str:
+        # Google hreflang casing: en-CA (path: /en-ca)
+        return "en-CA" if loc == "en-ca" else loc
+
     hreflang_lines = [
-        f'  <link rel="alternate" hreflang="tr" href="{base_url}/tr" />',
-        f'  <link rel="alternate" hreflang="en" href="{base_url}/en" />',
-        f'  <link rel="alternate" hreflang="en-CA" href="{base_url}/en-ca" />',
-        f'  <link rel="alternate" hreflang="de" href="{base_url}/de" />',
-        f'  <link rel="alternate" hreflang="it" href="{base_url}/it" />',
-        f'  <link rel="alternate" hreflang="x-default" href="{base_url}/en" />',
+        f'  <link rel="alternate" hreflang="{_hreflang_code(loc)}" href="{base_url}/{loc}" />'
+        for loc in LANDING_ROUTES
     ]
+    hreflang_lines.append(f'  <link rel="alternate" hreflang="x-default" href="{base_url}/en" />')
     hreflang_block = "\n".join(hreflang_lines)
     raw = re.sub(
         r'  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*(?:  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*)*',
@@ -2048,14 +2049,8 @@ def _index_response(request: Request | None = None):
                 if segment in LANDING_ROUTES or segment in ("fr", "es", "ar", "hi", "he", "el", "sr"):
                     path_locale = segment
             if path == "/":
-                # Root "/": locale from Accept-Language so SPA shows one consistent language
-                accept_lang = (request.headers.get("accept-language") or "en")[:80]
+                # Root "/" is forced to English for consistent SEO default.
                 _locale = "en"
-                for part in accept_lang.replace(" ", "").split(","):
-                    code = (part.split(";")[0].split("-")[0].lower())[:2]
-                    if code in LANDING_ROUTES:
-                        _locale = "en-ca" if part.lower().startswith("en-ca") else code
-                        break
             elif path_locale:
                 _locale = path_locale
             else:
@@ -2071,6 +2066,26 @@ def _index_response(request: Request | None = None):
                 raw = re.sub(r'<meta property="og:description" content="[^"]*" */?>', f'<meta property="og:description" content="{_desc}" />', raw, count=1)
                 raw = re.sub(r'<meta name="twitter:title" content="[^"]*" */?>', f'<meta name="twitter:title" content="{_title}" />', raw, count=1)
                 raw = re.sub(r'<meta name="twitter:description" content="[^"]*" */?>', f'<meta name="twitter:description" content="{_desc}" />', raw, count=1)
+
+                def _hreflang_code(loc: str) -> str:
+                    # Google hreflang casing: en-CA (path: /en-ca)
+                    return "en-CA" if loc == "en-ca" else loc
+
+                # SPA'nin statik index.html'i sadece kısmi hreflang içeriyor.
+                # Burada tüm `LANDING_ROUTES` için hreflang bloğunu güncelliyoruz.
+                hreflang_lines = [
+                    f'  <link rel="alternate" hreflang="{_hreflang_code(loc)}" href="{base_url}/{loc}" />'
+                    for loc in LANDING_ROUTES
+                ]
+                hreflang_lines.append(f'  <link rel="alternate" hreflang="x-default" href="{base_url}/en" />')
+                hreflang_block = "\n".join(hreflang_lines)
+                raw = re.sub(
+                    r'  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*(?:  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*)*',
+                    hreflang_block + "\n  ",
+                    raw,
+                    count=1,
+                )
+
                 landing_script = (
                     f'<script>window.__LANDING_LOCALE__="{escape(_locale)}";'
                     f"window.__LANDING_T__={json.dumps(ui, ensure_ascii=False)};</script>\n  "
@@ -4957,6 +4972,67 @@ def seo_landing_en_blood_test(request: Request):
 @app.get("/en/understand-lab-results", response_class=HTMLResponse)
 def seo_landing_en_understand_lab(request: Request):
     return _render_seo_landing(request, "en", "understand-lab-results")
+
+
+# SEO: other languages "blood test results" & "understand lab results" intent
+@app.get("/es/blood-test-results", response_class=HTMLResponse)
+def seo_landing_es_blood_test(request: Request):
+    return _render_seo_landing(request, "es", "blood-test-results")
+
+
+@app.get("/es/understand-lab-results", response_class=HTMLResponse)
+def seo_landing_es_understand_lab(request: Request):
+    return _render_seo_landing(request, "es", "understand-lab-results")
+
+
+@app.get("/fr/blood-test-results", response_class=HTMLResponse)
+def seo_landing_fr_blood_test(request: Request):
+    return _render_seo_landing(request, "fr", "blood-test-results")
+
+
+@app.get("/fr/understand-lab-results", response_class=HTMLResponse)
+def seo_landing_fr_understand_lab(request: Request):
+    return _render_seo_landing(request, "fr", "understand-lab-results")
+
+
+@app.get("/it/blood-test-results", response_class=HTMLResponse)
+def seo_landing_it_blood_test(request: Request):
+    return _render_seo_landing(request, "it", "blood-test-results")
+
+
+@app.get("/it/understand-lab-results", response_class=HTMLResponse)
+def seo_landing_it_understand_lab(request: Request):
+    return _render_seo_landing(request, "it", "understand-lab-results")
+
+
+@app.get("/he/blood-test-results", response_class=HTMLResponse)
+def seo_landing_he_blood_test(request: Request):
+    return _render_seo_landing(request, "he", "blood-test-results")
+
+
+@app.get("/he/understand-lab-results", response_class=HTMLResponse)
+def seo_landing_he_understand_lab(request: Request):
+    return _render_seo_landing(request, "he", "understand-lab-results")
+
+
+@app.get("/hi/blood-test-results", response_class=HTMLResponse)
+def seo_landing_hi_blood_test(request: Request):
+    return _render_seo_landing(request, "hi", "blood-test-results")
+
+
+@app.get("/hi/understand-lab-results", response_class=HTMLResponse)
+def seo_landing_hi_understand_lab(request: Request):
+    return _render_seo_landing(request, "hi", "understand-lab-results")
+
+
+@app.get("/ar/blood-test-results", response_class=HTMLResponse)
+def seo_landing_ar_blood_test(request: Request):
+    return _render_seo_landing(request, "ar", "blood-test-results")
+
+
+@app.get("/ar/understand-lab-results", response_class=HTMLResponse)
+def seo_landing_ar_understand_lab(request: Request):
+    return _render_seo_landing(request, "ar", "understand-lab-results")
 
 
 # SEO: robots.txt ve sitemap.xml — catch-all /{lang} rotasından ÖNCE tanımlanmalı (yoksa /sitemap.xml -> 404)

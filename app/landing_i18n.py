@@ -1,9 +1,15 @@
 # -*- coding: utf-8 -*-
-"""Country-based landing page i18n. Routes: /tr, /en, /en-ca, /de, /it. Header, hero, CTA, FAQ, pricing from locale."""
+"""Country-based landing page i18n.
+
+Routes: /{lang} where {lang} is in `LANDING_ROUTES`.
+Header, hero, CTA, FAQ, pricing are injected from locale.
+"""
 
 from __future__ import annotations
 
-LANDING_ROUTES = ("tr", "en", "en-ca", "de", "it")
+# Blog/premium dilleriyle uyumlu şekilde 9 dile genişletildi.
+# Not: Şimdilik UI metinlerinde çeviri yoksa İngilizce fallback kullanılır.
+LANDING_ROUTES = ("tr", "en", "en-ca", "de", "it", "fr", "es", "he", "hi", "ar")
 DEFAULT_LANDING_LOCALE = "en"
 
 # Meta and hreflang: title, description, og:locale per route
@@ -32,6 +38,33 @@ LANDING_META = {
         "meta_title": "NoryaAI — Capire le analisi del sangue in pochi minuti | Referto spiegato",
         "meta_description": "Carica i risultati di laboratorio e ricevi un report chiaro con intervalli di riferimento e indicazioni. GDPR, nessuna diagnosi—solo informazione. 9 lingue.",
         "og_locale": "it_IT",
+    },
+    # Fallback: metinleri İngilizce kullanıp sadece og:locale doğru set ediliyor.
+    # İleride istersen tam çeviri ekleyebiliriz.
+    "fr": {
+        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
+        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "og_locale": "fr_FR",
+    },
+    "es": {
+        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
+        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "og_locale": "es_ES",
+    },
+    "he": {
+        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
+        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "og_locale": "he_IL",
+    },
+    "hi": {
+        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
+        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "og_locale": "hi_IN",
+    },
+    "ar": {
+        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
+        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "og_locale": "ar_SA",
     },
 }
 
@@ -811,6 +844,12 @@ LANDING_UI = {
     "en-ca": _en_ui(),  # placeholder: same as en
     "de": _de_ui(),
     "it": _it_ui(),
+    # Fallback: İngilizce UI metinleri kullanılıyor.
+    "fr": _en_ui(),
+    "es": _en_ui(),
+    "he": _en_ui(),
+    "hi": _en_ui(),
+    "ar": _en_ui(),
 }
 
 
