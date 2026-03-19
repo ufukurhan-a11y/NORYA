@@ -101,9 +101,9 @@
         <div class="sec-title">{% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('activity', '')|safe }}</span>{% endif %} {{ label_report_health_score }}</div>
         <div class="health-score-value">{{ overall_score }} / 100</div>
         <div class="health-score-band">{{ health_score_band_label }}</div>
-        <div class="health-age-note">
-          <span class="health-age-label">{{ label_report_health_age }}</span>
-          <span class="health-age-value">≈ {{ health_age }}</span>
+        <div class="health-age-note health-age-note--soft">
+          <div class="health-age-inline"><span class="health-age-label">{{ label_report_health_age }}</span><span class="health-age-sep"> · </span><span class="health-age-value">≈ {{ health_age }}</span></div>
+          <p class="health-age-disclaimer">{{ label_report_health_age_disclaimer }}</p>
         </div>
         <div class="report-meta-line glucose-in-report"><span class="report-meta-label">{% if lang == 'tr' %}Kan şekeri (Glukoz/HbA1c):{% else %}Blood sugar (Glucose/HbA1c):{% endif %}</span> <span class="report-meta-value">{% if has_glucose %}{% if lang == 'tr' %}Raporda var{% else %}In report{% endif %}{% else %}{% if lang == 'tr' %}Raporda yok{% else %}Not in report{% endif %}{% endif %}</span></div>
       </section>

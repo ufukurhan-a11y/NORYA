@@ -3134,7 +3134,7 @@ def download_analysis_pdf(
     premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     premium_trend = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     # PDF cache şema versiyonu: çıktı yapısı değiştiğinde eski PDF'ler yerine yenileri üretmek için anahtara eklenir.
-    _PDF_SCHEMA_VERSION = 4  # QR verify URL: proxy arkasında doğru public host
+    _PDF_SCHEMA_VERSION = 6  # Sağlık yaşı: dürüst etiket + feragatname (std/monthly/premium PDF)
     cache_key = (analysis_id, report_lang, "pro" if use_pro_scope else "std", plan_for_pdf or "free", _PDF_SCHEMA_VERSION)
     now_ts = time.time()
     with _pdf_cache_lock:
@@ -3152,13 +3152,12 @@ def download_analysis_pdf(
                 del _pdf_cache[cache_key]
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     verify_base_url = _public_base_url_for_pdf_verify(request)
-    verification_info = None
-    verification_plan = (plan_for_pdf or "").strip().lower()
-    # Free plan standard PDF'lerde de QR göstermek için "free" -> "single" map ediyoruz.
-    if verification_plan == "free":
-        verification_plan = "single"
-    if verification_plan in ("single", "monthly", "yearly"):
-        verification_info = get_or_create_verification(db, analysis_id, user_id, verification_plan, report_lang, verify_base_url)
+    from app.core.plan_config import normalize_plan_type
+
+    verification_package = normalize_plan_type(plan_for_pdf)
+    verification_info = get_or_create_verification(
+        db, analysis_id, user_id, verification_package, report_lang, verify_base_url
+    )
     try:
         pdf_bytes = build_report_pdf(
             result_text=rec.result_text or "",
@@ -3166,7 +3165,7 @@ def download_analysis_pdf(
             lang=report_lang,
             report_id=analysis_id,
             user_identifier=user.email if user else None,
-            patient_name=user.full_name if user else None,
+            patient_name=user.email if user else None,
             plan_name=plan_for_pdf if premium_pdf else (user.plan if user else None),
             source_type=rec.source if getattr(rec, "source", None) else None,
             trend_data=trend_data,
@@ -3218,12 +3217,12 @@ def download_doctor_pdf(
     premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
     verify_base_url = _public_base_url_for_pdf_verify(request)
-    verification_info = None
-    verification_plan = (plan_for_pdf or "").strip().lower()
-    if verification_plan == "free":
-        verification_plan = "single"
-    if verification_plan in ("single", "monthly", "yearly"):
-        verification_info = get_or_create_verification(db, analysis_id, user_id, verification_plan, report_lang, verify_base_url)
+    from app.core.plan_config import normalize_plan_type
+
+    verification_package = normalize_plan_type(plan_for_pdf)
+    verification_info = get_or_create_verification(
+        db, analysis_id, user_id, verification_package, report_lang, verify_base_url
+    )
     try:
         if premium_pdf:
             pdf_bytes = build_report_pdf(
@@ -3232,7 +3231,7 @@ def download_doctor_pdf(
                 lang=report_lang,
                 report_id=analysis_id,
                 user_identifier=user.email if user else None,
-                patient_name=user.full_name if user else None,
+                patient_name=user.email if user else None,
                 plan_name=plan_for_pdf if premium_pdf else (user.plan if user else None),
                 source_type=rec.source if getattr(rec, "source", None) else None,
                 trend_data=trend_data,

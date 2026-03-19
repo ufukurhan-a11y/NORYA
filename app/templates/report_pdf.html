@@ -273,6 +273,11 @@
     .section-title:first-of-type { margin-top: 0; }
     .section-title-tight { margin-top: 6px; margin-bottom: 4px; }
     .section-body-tight { margin-bottom: 3px; }
+    .health-age-block-pdf { margin-top: 2px; padding-top: 4px; border-top: 1px solid #e2e8f0; }
+    .health-age-line-pdf { font-size: 10px; color: var(--norya-muted); margin: 0 0 3px 0; line-height: 1.35; }
+    .health-age-line-pdf .ha-lab { font-weight: 600; color: #64748b; }
+    .health-age-line-pdf .ha-num { font-weight: 600; color: #94a3b8; font-size: 10px; }
+    .health-age-disc-pdf { font-size: 8px; line-height: 1.38; color: #94a3b8; margin: 0; max-width: 100%; }
     .top-attention-line {
       margin: 2px 0 0 0;
       padding: 0;
@@ -795,8 +800,8 @@
       <div class="section-body">
         <div class="info-band">
           <div class="info-band-col">
-            <p class="info-band-title">{{ info_patient_heading | default('Kişi', true) }}</p>
-            <p class="info-band-row">{{ patient_name | default('—', true) }} · {{ patient_age | default('—', true) }} · {{ patient_gender | default('—', true) }}</p>
+            <p class="info-band-title">{{ info_email_heading | default('E-posta', true) }}</p>
+            <p class="info-band-row">{{ user_id | default(patient_name) | default('—', true) }}</p>
           </div>
           <div class="info-band-col">
             <p class="info-band-title">{{ info_analysis_heading | default('Analiz', true) }}</p>
@@ -828,8 +833,9 @@
         </div>
         {% endif %}
         {% if health_age %}
-        <div class="section-body-tight">
-          <p><strong>{{ report_health_age_title | default('Biyolojik Yaş Tahmini', true) }}:</strong> ≈ {{ health_age }}</p>
+        <div class="section-body-tight health-age-block-pdf">
+          <p class="health-age-line-pdf"><span class="ha-lab">{{ report_health_age_title | default('Approximate health age indicator', true) }}</span> <span class="ha-num">≈ {{ health_age }}</span></p>
+          <p class="health-age-disc-pdf">{{ report_health_age_disclaimer | default('', true) }}</p>
         </div>
         {% endif %}
         {% if overall_chart_svg_base64 %}

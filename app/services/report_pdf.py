@@ -189,7 +189,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_doc_title": "Kan Tahlili Analiz Raporu",
         "report_doc_sub": "Sağlık durumunuzun ön değerlendirmesi; teşhis yerine geçmez, bilgilendirme amaçlıdır.",
         "report_rid_label": "Rapor No",
-        "report_user_label": "Kullanıcı",
+        "report_user_label": "E-posta",
         "report_date_label_short": "Tarih",
         "report_lang_label": "Dil",
         "report_verify_code": "Doğrulama",
@@ -226,7 +226,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_doctor_discussion": "Hekim Görüşmesi Notları",
         "report_tile_overall_score": "Genel Skor",
         "report_tile_risk_level": "Risk Düzeyi",
-        "report_tile_bio_age": "Biyolojik Yaş",
+        "report_tile_bio_age": "Sağlık yaşı (yaklaşık)",
         "report_tile_priority": "Öncelik",
         "report_priority_general": "Genel iyilik hali ve düzenli takip",
         "report_food_favor_default": "Dengeli beslenme; sebze ve meyveler lif ve vitaminlerle genel sağlığı destekleyebilir. Tam tahıllar ve baklagiller de kalp ve sindirim sağlığı için faydalıdır.",
@@ -257,7 +257,8 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Metabolik",
         "report_domain_vitamin": "Vitamin",
         "report_domain_inflammation": "Enflamasyon",
-        "report_health_age_title": "Biyolojik Yaş Tahmini",
+        "report_health_age_title": "Yaklaşık sağlık yaşı göstergesi",
+        "report_health_age_disclaimer": "Bu sayı, laboratuvar sonuçlarının genel örüntüsü ve sağlık skorundan türetilmiş yaklaşık bir göstergedir. Klinik biyolojik yaş ölçümü değildir. Tanı veya kesin tıbbi değerlendirme yerine geçmez.",
         "report_movement_heading": "Hareket ve Egzersiz",
         "report_stress_heading": "Stres Yönetimi",
         "report_sleep_heading": "Uyku ve Dinlenme",
@@ -350,7 +351,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_doc_title": "Blood Test Analysis Report",
         "report_doc_sub": "A preliminary view of your health status; it does not replace a diagnosis and is for information only.",
         "report_rid_label": "Report No",
-        "report_user_label": "User",
+        "report_user_label": "Email",
         "report_date_label_short": "Date",
         "report_lang_label": "Language",
         "report_verify_code": "Verification",
@@ -405,7 +406,7 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_doctor_discussion": "Doctor Discussion Notes",
         "report_tile_overall_score": "Overall Score",
         "report_tile_risk_level": "Risk Level",
-        "report_tile_bio_age": "Biological Age",
+        "report_tile_bio_age": "Health age (approx.)",
         "report_tile_priority": "Priority Focus",
         "report_priority_general": "General wellness and regular follow-up",
         "report_food_favor_default": "Balanced diet; vegetables and fruits provide fibre and vitamins that support general health. Whole grains and legumes are also beneficial for heart and digestive health.",
@@ -433,7 +434,8 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_domain_metabolic": "Metabolic",
         "report_domain_vitamin": "Vitamin",
         "report_domain_inflammation": "Inflammation",
-        "report_health_age_title": "Biological age estimate",
+        "report_health_age_title": "Approximate health age indicator",
+        "report_health_age_disclaimer": "This value is an approximate wellness indicator derived from the overall pattern of your lab results and health score. It is not a clinical biological age measurement. It does not replace diagnosis or definitive medical assessment.",
     },
     "de": {
         "title": "Norya Analysebericht",
@@ -525,6 +527,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_factors": "Risikofaktoren",
         "report_risk_factors_line_1": "Kann auf kardiovaskuläre oder metabolische Faktoren hinweisen. Mit dem Arzt besprechen.",
         "report_risk_factors_line_2": "Lebensstil und Ernährung können das allgemeine Wohlbefinden unterstützen.",
+        "report_tile_bio_age": "Gesundheitsalter (ca.)",
+        "report_health_age_title": "Ungefährer Gesundheitsalters-Indikator",
+        "report_health_age_disclaimer": "Dieser Wert ist ein ungefährer Wellness-Indikator aus dem Gesamtbild Ihrer Laborwerte und Ihres Gesundheitsscores. Er ist keine klinische biologische Altersbestimmung. Er ersetzt keine Diagnose oder abschließende ärztliche Beurteilung.",
     },
     "fr": {
         "title": "Rapport d'analyse Norya",
@@ -616,6 +621,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_factors": "Facteurs de risque",
         "report_risk_factors_line_1": "Peut indiquer des facteurs cardiovasculaires ou métaboliques. À discuter avec votre médecin.",
         "report_risk_factors_line_2": "Le mode de vie et l'alimentation peuvent favoriser le bien-être général.",
+        "report_tile_bio_age": "Âge santé (approx.)",
+        "report_health_age_title": "Indicateur approximatif d'âge de santé",
+        "report_health_age_disclaimer": "Cette valeur est un indicateur approximatif de bien-être déduit de l'ensemble de vos résultats de laboratoire et de votre score de santé. Ce n'est pas une mesure clinique d'âge biologique. Elle ne remplace pas un diagnostic ni une évaluation médicale définitive.",
     },
     "es": {
         "title": "Informe de análisis Norya",
@@ -673,6 +681,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_factors": "Factores de riesgo",
         "report_risk_factors_line_1": "Puede indicar factores cardiovasculares o metabólicos. Consulte con su médico.",
         "report_risk_factors_line_2": "El estilo de vida y la dieta pueden favorecer el bienestar general.",
+        "report_tile_bio_age": "Edad de salud (aprox.)",
+        "report_health_age_title": "Indicador aproximado de edad de salud",
+        "report_health_age_disclaimer": "Este valor es un indicador aproximado de bienestar derivado del patrón general de sus resultados de laboratorio y su puntuación de salud. No es una medición clínica de edad biológica. No sustituye el diagnóstico ni la evaluación médica definitiva.",
     },
     "it": {
         "title": "Report di analisi Norya",
@@ -730,6 +741,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_factors": "Fattori di rischio",
         "report_risk_factors_line_1": "Può indicare fattori cardiovascolari o metabolici. Da discutere con il medico.",
         "report_risk_factors_line_2": "Stile di vita e alimentazione possono favorire il benessere generale.",
+        "report_tile_bio_age": "Età di salute (appross.)",
+        "report_health_age_title": "Indicatore approssimativo di età di salute",
+        "report_health_age_disclaimer": "Questo valore è un indicatore approssimativo di benessere derivato dal quadro generale dei risultati di laboratorio e dal punteggio di salute. Non è una misura clinica dell'età biologica. Non sostituisce la diagnosi o la valutazione medica definitiva.",
     },
     "he": {
         "title": "דוח ניתוח Norya",
@@ -786,6 +800,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_factors": "גורמי סיכון",
         "report_risk_factors_line_1": "עלול להצביע על גורמי סיכון קרדיווסקולריים או מטבוליים. יש להתייעץ עם הרופא.",
         "report_risk_factors_line_2": "אורח חיים ותזונה יכולים לתמוך בבריאות הכללית.",
+        "report_tile_bio_age": "גיל בריאות (משוער)",
+        "report_health_age_title": "מדד משוער לגיל בריאות",
+        "report_health_age_disclaimer": "ערך זה הוא אינדיקטור משוער לרווחה הנגזר מהדפוס הכללי של תוצאות המעבדה וציון הבריאות. אין זו מדידה קלינית של גיל ביולוגי. אינו מחליף אבחנה או הערכה רפואית סופית.",
     },
     "ar": {
         "title": "تقرير تحليل Norya",
@@ -842,6 +859,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_factors": "عوامل الخطر",
         "report_risk_factors_line_1": "قد يشير إلى عوامل قلبية أو استقلابية. ناقش مع طبيبك.",
         "report_risk_factors_line_2": "نمط الحياة والنظام الغذائي قد يدعمان الصحة العامة.",
+        "report_tile_bio_age": "عمر الصحة (تقريبي)",
+        "report_health_age_title": "مؤشر تقريبي لعمر الصحة",
+        "report_health_age_disclaimer": "هذه القيمة مؤشر تقريبي للعافية مستمد من النمط العام لنتائج المختبر ودرجة الصحة. ليست قياساً سريرياً للعمر البيولوجي. لا تحل محل التشخيص أو التقييم الطبي النهائي.",
     },
     "hi": {
         "title": "Norya विश्लेषण रिपोर्ट",
@@ -898,6 +918,9 @@ PDF_LABELS: dict[str, dict[str, str]] = {
         "report_risk_factors": "जोखिम कारक",
         "report_risk_factors_line_1": "हृदय या चयापचय कारकों की ओर इशारा कर सकता है। चिकित्सक से चर्चा करें।",
         "report_risk_factors_line_2": "जीवनशैली और आहार समग्र सेहत को सहायता दे सकते हैं।",
+        "report_tile_bio_age": "स्वास्थ्य आयु (लगभग)",
+        "report_health_age_title": "लगभग स्वास्थ्य आयु संकेतक",
+        "report_health_age_disclaimer": "यह मान आपके प्रयोगशाला परिणामों के समग्र पैटर्न और स्वास्थ्य स्कोर से प्राप्त एक लगभग कल्याण संकेतक है। यह नैदानिक जैविक आयु मापन नहीं है। यह निदान या निश्चित चिकित्सा मूल्यांकन का स्थानापन्न नहीं है।",
     },
     "el": {
         "title": "Αναφορά ανάλυσης Norya",
@@ -2366,6 +2389,13 @@ def parse_report_to_context(
         "clinical_comments": clinical_comments,
     }
     out.update(labels)
+    if not (out.get("report_health_age_disclaimer") or "").strip():
+        _fen = PDF_LABELS.get("en", {})
+        out["report_health_age_title"] = _fen.get("report_health_age_title") or "Approximate health age indicator"
+        out["report_health_age_disclaimer"] = _fen.get(
+            "report_health_age_disclaimer",
+            "This value is an approximate wellness indicator derived from the overall pattern of your lab results and health score. It is not a clinical biological age measurement. It does not replace diagnosis or definitive medical assessment.",
+        )
     return out
 
 
@@ -3016,7 +3046,7 @@ def _build_premium_context(
     summary_tiles = [
         {"label": _t_early("report_tile_overall_score", "Overall Score"), "value": str(overall_score) + " / 100", "icon": "activity"},
         {"label": _t_early("report_tile_risk_level", "Risk Level"), "value": risk_level_label, "icon": "gauge"},
-        {"label": _t_early("report_tile_bio_age", "Biological Age"), "value": "≈ " + str(health_age), "icon": "target"},
+        {"label": _t_early("report_tile_bio_age", "Approx. health age"), "value": "≈ " + str(health_age), "icon": "target"},
         {"label": _t_early("report_tile_priority", "Priority Focus"), "value": priority_focus[:50] + ("…" if len(priority_focus) > 50 else ""), "icon": "eye"},
     ]
 
@@ -3585,7 +3615,11 @@ def _build_premium_context(
         "label_report_health_score": _t("report_health_score", "Overall Health Score"),
         "label_report_risk_indicator": _t("report_risk_indicator", "Risk Indicator"),
         "label_report_trend_analysis": _t("report_trend_analysis", "Trend Analysis"),
-        "label_report_health_age": _t("report_health_age_title", "Biological age estimate"),
+        "label_report_health_age": _t("report_health_age_title", "Approximate health age indicator"),
+        "label_report_health_age_disclaimer": _t(
+            "report_health_age_disclaimer",
+            "This value is an approximate wellness indicator derived from the overall pattern of your lab results and health score. It is not a clinical biological age measurement. It does not replace diagnosis or definitive medical assessment.",
+        ),
         "health_age": health_age,
         "health_score_band_label": health_score_band_label,
         "gauge_svg": gauge_svg,
