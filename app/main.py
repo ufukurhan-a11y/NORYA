@@ -3047,6 +3047,28 @@ def analyze_history_toggle_favorite(
     return {"is_favorite": getattr(rec, "is_favorite", False)}
 
 
+def _public_base_url_for_pdf_verify(request: Request) -> str:
+    """
+    PDF içindeki QR doğrulama linki için dışarıdan erişilebilir base URL.
+    Nginx/gunicorn arkasında request.base_url genelde http://127.0.0.1:8000 olur; QR telefonda açılmaz.
+    Öncelik: BACKEND_PUBLIC_URL > FRONTEND_URL (localhost değilse) > X-Forwarded-* > Host.
+    """
+    u = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/")
+    if u:
+        return u
+    fu = (getattr(settings, "frontend_url", None) or "").strip().rstrip("/")
+    if fu and "127.0.0.1" not in fu and "localhost" not in fu.lower():
+        return fu
+    proto = (request.headers.get("x-forwarded-proto") or "").split(",")[0].strip().lower()
+    host = (request.headers.get("x-forwarded-host") or request.headers.get("host") or "").split(",")[0].strip()
+    if host:
+        if proto not in ("http", "https"):
+            proto = "https" if (getattr(settings, "environment", "") or "").strip().lower() == "production" else "http"
+        host = host.split("/")[0].strip()
+        return f"{proto}://{host}"
+    return str(request.base_url).rstrip("/")
+
+
 def _get_pdf_requester_id(
     analysis_id: int,
     access_token: str | None = Query(None, description="Canlıda proxy Authorization keserse URL token (POST /pdf-token ile alınır)"),
@@ -3112,7 +3134,7 @@ def download_analysis_pdf(
     premium_pdf = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     premium_trend = use_pro_scope or PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     # PDF cache şema versiyonu: çıktı yapısı değiştiğinde eski PDF'ler yerine yenileri üretmek için anahtara eklenir.
-    _PDF_SCHEMA_VERSION = 3
+    _PDF_SCHEMA_VERSION = 4  # QR verify URL: proxy arkasında doğru public host
     cache_key = (analysis_id, report_lang, "pro" if use_pro_scope else "std", plan_for_pdf or "free", _PDF_SCHEMA_VERSION)
     now_ts = time.time()
     with _pdf_cache_lock:
@@ -3129,7 +3151,7 @@ def download_analysis_pdf(
             else:
                 del _pdf_cache[cache_key]
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
-    verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
+    verify_base_url = _public_base_url_for_pdf_verify(request)
     verification_info = None
     verification_plan = (plan_for_pdf or "").strip().lower()
     # Free plan standard PDF'lerde de QR göstermek için "free" -> "single" map ediyoruz.
@@ -3195,7 +3217,7 @@ def download_doctor_pdf(
     premium_pdf = PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("single", "monthly", "yearly", "pro")
     premium_trend = PREMIUM_VISIBLE_FOR_FREE or plan_for_pdf in ("monthly", "yearly", "pro")
     trend_data = _get_trend_for_user(db, user_id, exclude_analysis_id=analysis_id) if premium_trend else None
-    verify_base_url = (getattr(settings, "backend_public_url", None) or "").strip().rstrip("/") or str(request.base_url).rstrip("/")
+    verify_base_url = _public_base_url_for_pdf_verify(request)
     verification_info = None
     verification_plan = (plan_for_pdf or "").strip().lower()
     if verification_plan == "free":
