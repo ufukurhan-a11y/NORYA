@@ -134,7 +134,17 @@ SEO_LANDING_HREFLANG = {
     ],
 
     # Group B: "understand lab results" intent
-    ("tr", "hemogram-sonucu"): [],
+    # Hemogram: yalnızca TR sayfası; diğer dillerde en yakın kan sonuçları rehberine hreflang
+    ("tr", "hemogram-sonucu"): [
+        ("en", "blood-test-results"),
+        ("de", "blutwerte-verstehen"),
+        ("es", "blood-test-results"),
+        ("fr", "blood-test-results"),
+        ("it", "blood-test-results"),
+        ("he", "blood-test-results"),
+        ("hi", "blood-test-results"),
+        ("ar", "blood-test-results"),
+    ],
     ("en", "understand-lab-results"): [
         ("tr", "kan-degerleri-anlama"),
         ("de", "laborwerte-verstehen"),

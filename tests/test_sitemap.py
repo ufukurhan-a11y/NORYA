@@ -36,6 +36,15 @@ def test_sitemap_xml_contains_blog_post_urls(client: TestClient):
     assert len(matches) >= 1, "sitemap.xml içinde hiç blog post URL'i yok; tüm dillerdeki postlar eklenmeli"
 
 
+def test_sitemap_blog_urls_only_premium_locales(client: TestClient):
+    """Blog canlıda yalnızca BLOG_LANGS_PREMIUM; el/cs/sr vb. sitemap'te olmamalı (404 önlenir)."""
+    r = client.get("/sitemap.xml")
+    assert r.status_code == 200
+    body = r.text
+    bad = re.findall(r"<loc>[^<]+/(el|cs|sr)/blog/", body)
+    assert not bad, f"sitemap.xml premium olmayan blog locale içeriyor: {bad}"
+
+
 def test_sitemap_xml_lastmod_from_updated_at(client: TestClient):
     """sitemap.xml'deki blog post URL'lerinde lastmod alanı olmalı (updatedAt kaynaklı)."""
     r = client.get("/sitemap.xml")

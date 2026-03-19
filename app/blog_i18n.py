@@ -5932,11 +5932,15 @@ def get_article(lang: str, slug: str) -> dict | None:
 
 
 def iter_all_article_paths():
-    """Sitemap için tüm dil+slug kombinasyonlarını döner (last_updated = updatedAt)."""
+    """Sitemap için tüm dil+slug kombinasyonlarını döner (last_updated = updatedAt).
+
+    Yalnızca BLOG_LANGS_PREMIUM: /{lang}/blog/{slug} rotası bu dillerde 200 verir;
+    el/cs/sr vb. çeviriler veri içinde olsa bile canlı blog URL'si yok — sitemap'e eklenmez.
+    """
     for art in ARTICLES:
         last_updated = getattr(art, "last_updated", None) or art.published_at
         for lang, slug in art.slugs.items():
-            if lang not in BLOG_LANGS:
+            if lang not in BLOG_LANGS_PREMIUM:
                 continue
             yield {
                 "lang": lang,

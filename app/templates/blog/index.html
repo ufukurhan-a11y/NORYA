@@ -16,12 +16,15 @@
   <meta name="twitter:description" content="{{ meta_description }}" />
   <meta name="twitter:image" content="{{ og_image }}" />
   <meta name="robots" content="index,follow" />
+  {% set hreflang_x = namespace(url='') %}
   {% for alt in hreflang_alternates %}
   <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
+  {% if alt.lang == 'en' %}{% set hreflang_x.url = alt.url %}{% endif %}
   {% endfor %}
-  {% for alt in hreflang_alternates %}{% if alt.lang == 'en' %}
-  <link rel="alternate" hreflang="x-default" href="{{ alt.url }}" />
-  {% endif %}{% endfor %}
+  {% if hreflang_x.url == '' and hreflang_alternates %}{% set hreflang_x.url = hreflang_alternates[0].url %}{% endif %}
+  {% if hreflang_x.url %}
+  <link rel="alternate" hreflang="x-default" href="{{ hreflang_x.url }}" />
+  {% endif %}
   {% if item_list_schema_json %}
   <script type="application/ld+json">{{ item_list_schema_json|safe }}</script>
   {% endif %}
@@ -222,7 +225,7 @@
             {{ blog_ui.hero_cta_primary }}
           </a>
           <p class="text-xs sm:text-sm text-slate-500">
-            {{ blog_ui.hero_cta_caption|default('Privacy-first, clear reports in minutes.') }}
+            <a href="/{{ lang }}" class="text-teal-700 hover:underline font-medium">NoryaAI</a> · {{ blog_ui.hero_cta_caption|default('Privacy-first, clear reports in minutes.') }}
           </p>
         </div>
 
