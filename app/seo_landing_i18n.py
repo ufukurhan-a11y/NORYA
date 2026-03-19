@@ -8,12 +8,27 @@ Routes exist for:
 - EN: `blood-test-results`, `understand-lab-results`
 
 Additionally, to support "all languages" for blood test intent, we add:
-- ES/FR/IT/HE/HI/AR: `blood-test-results`, `understand-lab-results`
+- ES/FR/IT/HE/HI/AR: `blood-test-results`, `understand-lab-results` (copy in `seo_landing_extra_locales.py`)
 
 Content is informational only (no diagnosis claims).
 """
 
 from __future__ import annotations
+
+from app.seo_landing_extra_locales import (
+    _ar_blood_test_results,
+    _ar_understand_lab_results,
+    _es_blood_test_results,
+    _es_understand_lab_results,
+    _fr_blood_test_results,
+    _fr_understand_lab_results,
+    _he_blood_test_results,
+    _he_understand_lab_results,
+    _hi_blood_test_results,
+    _hi_understand_lab_results,
+    _it_blood_test_results,
+    _it_understand_lab_results,
+)
 
 # (lang, path_slug) -> page key for routing; used to know which content to load
 SEO_LANDING_ROUTES = {
@@ -793,19 +808,18 @@ _SEO_LANDING_CONTENT = {
     ("de", "laborwerte-verstehen"): _de_laborwerte(),
     ("en", "blood-test-results"): _en_blood_test_results(),
     ("en", "understand-lab-results"): _en_understand_lab_results(),
-    # Other languages: fallback to English content for now.
-    ("es", "blood-test-results"): _en_blood_test_results(),
-    ("es", "understand-lab-results"): _en_understand_lab_results(),
-    ("fr", "blood-test-results"): _en_blood_test_results(),
-    ("fr", "understand-lab-results"): _en_understand_lab_results(),
-    ("it", "blood-test-results"): _en_blood_test_results(),
-    ("it", "understand-lab-results"): _en_understand_lab_results(),
-    ("he", "blood-test-results"): _en_blood_test_results(),
-    ("he", "understand-lab-results"): _en_understand_lab_results(),
-    ("hi", "blood-test-results"): _en_blood_test_results(),
-    ("hi", "understand-lab-results"): _en_understand_lab_results(),
-    ("ar", "blood-test-results"): _en_blood_test_results(),
-    ("ar", "understand-lab-results"): _en_understand_lab_results(),
+    ("es", "blood-test-results"): _es_blood_test_results(),
+    ("es", "understand-lab-results"): _es_understand_lab_results(),
+    ("fr", "blood-test-results"): _fr_blood_test_results(),
+    ("fr", "understand-lab-results"): _fr_understand_lab_results(),
+    ("it", "blood-test-results"): _it_blood_test_results(),
+    ("it", "understand-lab-results"): _it_understand_lab_results(),
+    ("he", "blood-test-results"): _he_blood_test_results(),
+    ("he", "understand-lab-results"): _he_understand_lab_results(),
+    ("hi", "blood-test-results"): _hi_blood_test_results(),
+    ("hi", "understand-lab-results"): _hi_understand_lab_results(),
+    ("ar", "blood-test-results"): _ar_blood_test_results(),
+    ("ar", "understand-lab-results"): _ar_understand_lab_results(),
 }
 
 
@@ -873,6 +887,48 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "Preise", "url": f"{base_url}/pricing"},
             {"label": "So funktioniert's", "url": f"{base_url}/how-it-works"},
             {"label": "Blog", "url": f"{prefix}/blog"},
+        ]
+    if lang == "es":
+        return [
+            {"label": "Analizar", "url": f"{base_url}/analyze"},
+            {"label": "Precios", "url": f"{base_url}/pricing"},
+            {"label": "Cómo funciona", "url": f"{base_url}/how-it-works?lang=es"},
+            {"label": "Blog", "url": f"{prefix}/blog"},
+        ]
+    if lang == "fr":
+        return [
+            {"label": "Analyser", "url": f"{base_url}/analyze"},
+            {"label": "Tarifs", "url": f"{base_url}/pricing"},
+            {"label": "Comment ça marche", "url": f"{base_url}/how-it-works?lang=fr"},
+            {"label": "Blog", "url": f"{prefix}/blog"},
+        ]
+    if lang == "it":
+        return [
+            {"label": "Analizza", "url": f"{base_url}/analyze"},
+            {"label": "Prezzi", "url": f"{base_url}/pricing"},
+            {"label": "Come funziona", "url": f"{base_url}/how-it-works?lang=it"},
+            {"label": "Blog", "url": f"{prefix}/blog"},
+        ]
+    if lang == "he":
+        return [
+            {"label": "ניתוח", "url": f"{base_url}/analyze"},
+            {"label": "מחירים", "url": f"{base_url}/pricing"},
+            {"label": "איך זה עובד", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "בלוג", "url": f"{prefix}/blog"},
+        ]
+    if lang == "hi":
+        return [
+            {"label": "विश्लेषण", "url": f"{base_url}/analyze"},
+            {"label": "कीमतें", "url": f"{base_url}/pricing"},
+            {"label": "यह कैसे काम करता है", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "ब्लॉग", "url": f"{prefix}/blog"},
+        ]
+    if lang == "ar":
+        return [
+            {"label": "تحليل", "url": f"{base_url}/analyze"},
+            {"label": "الأسعار", "url": f"{base_url}/pricing"},
+            {"label": "كيف يعمل", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "المدوّنة", "url": f"{prefix}/blog"},
         ]
     return [
         {"label": "Analyze", "url": f"{base_url}/analyze"},

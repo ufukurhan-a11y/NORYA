@@ -1,5 +1,17 @@
 {% extends "legal/base_legal.html" %}
-{% block title %}{{ content.title }} — Norya{% endblock %}
+{% block title %}{{ content.title }} — NoryaAI{% endblock %}
+{% block meta %}
+{% if content.meta_description is defined and content.meta_description %}
+<meta name="description" content="{{ content.meta_description }}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ content.title }} — NoryaAI" />
+<meta property="og:description" content="{{ content.meta_description }}" />
+{% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="{{ content.title }} — NoryaAI" />
+<meta name="twitter:description" content="{{ content.meta_description }}" />
+{% endif %}
+{% endblock %}
 {% block content %}
 <article class="max-w-2xl mx-auto text-accent-700 text-sm leading-relaxed">
   <h1 class="text-2xl font-bold text-accent-900 mb-2">{{ content.title }}</h1>

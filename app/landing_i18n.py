@@ -7,63 +7,63 @@ Header, hero, CTA, FAQ, pricing are injected from locale.
 
 from __future__ import annotations
 
-# Blog/premium dilleriyle uyumlu şekilde 9 dile genişletildi.
-# Not: Şimdilik UI metinlerinde çeviri yoksa İngilizce fallback kullanılır.
+from app.landing_locale_patches import PATCH_AR, PATCH_ES, PATCH_FR, PATCH_HE, PATCH_HI
+
+# Blog/premium dilleriyle uyumlu şekilde 9 dil.
+# FR/ES/HE/HI/AR tam UI: landing_locale_patches — İngilizce iskelet kalmaz.
 LANDING_ROUTES = ("tr", "en", "en-ca", "de", "it", "fr", "es", "he", "hi", "ar")
 DEFAULT_LANDING_LOCALE = "en"
 
 # Meta and hreflang: title, description, og:locale per route
 LANDING_META = {
     "tr": {
-        "meta_title": "NoryaAI — Kan Tahlili Sonuçlarınızı Dakikalar İçinde Anlayın | Laboratuvar Raporu Açıklaması",
-        "meta_description": "Laboratuvar sonuçlarınızı yükleyin; referans aralıkları ve önerilerle net rapor alın. KVKK uyumlu, teşhis yok—yalnızca bilgilendirme. 9 dil.",
+        "meta_title": "NoryaAI | AI Kan Tahlili Analizi ve Sonuç Açıklama",
+        "meta_description": "Kan tahlili sonuçlarınızı yükleyin; NoryaAI ile laboratuvar değerlerini, biyobelirteçleri ve takip noktalarını sade bir dille anlayın.",
         "og_locale": "tr_TR",
     },
     "en": {
-        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
-        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "meta_title": "NoryaAI | AI Blood Test Analyzer & Lab Results Explanation",
+        "meta_description": "Upload your blood test results and get a clear AI-powered explanation of lab values, biomarkers, and practical follow-up insights with NoryaAI.",
         "og_locale": "en_US",
     },
     "en-ca": {
-        "meta_title": "NoryaAI — Reliable AI Blood Test Analysis (Canada)",
-        "meta_description": "Understand your lab results in plain language. Upload PDF or photo, get a clear report. Privacy-first, for Canadian users.",
+        "meta_title": "NoryaAI | AI Blood Test Analyzer for Canada",
+        "meta_description": "Upload your blood test results and get a clear AI-powered explanation of lab values and biomarkers with NoryaAI, tailored for Canadian users.",
         "og_locale": "en_CA",
     },
     "de": {
-        "meta_title": "NoryaAI — Blutwerte & Laborergebnisse verstehen | Auswertung in Minuten",
-        "meta_description": "Blutwerte oder Laborergebnisse verstehen: Befund hochladen, in Minuten klaren Bericht mit Referenzbereichen und Empfehlungen. DSGVO-konform, keine Diagnose.",
+        "meta_title": "NoryaAI | KI-Blutwertanalyse und Laborergebnis-Erklaerung",
+        "meta_description": "Laden Sie Ihre Blutwerte hoch und verstehen Sie mit NoryaAI Laborwerte, Biomarker und sinnvolle naechste Schritte in klarer Sprache.",
         "og_locale": "de_DE",
     },
     "it": {
-        "meta_title": "NoryaAI — Capire le analisi del sangue in pochi minuti | Referto spiegato",
-        "meta_description": "Carica i risultati di laboratorio e ricevi un report chiaro con intervalli di riferimento e indicazioni. GDPR, nessuna diagnosi—solo informazione. 9 lingue.",
+        "meta_title": "NoryaAI | Analisi AI del sangue e spiegazione referti",
+        "meta_description": "Carica i tuoi esami del sangue e leggi con NoryaAI valori di laboratorio, biomarcatori e indicazioni di follow-up in modo chiaro.",
         "og_locale": "it_IT",
     },
-    # Fallback: metinleri İngilizce kullanıp sadece og:locale doğru set ediliyor.
-    # İleride istersen tam çeviri ekleyebiliriz.
     "fr": {
-        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
-        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "meta_title": "NoryaAI | Analyse IA des bilans sanguins et explication",
+        "meta_description": "Importez vos analyses sanguines et comprenez clairement vos valeurs de laboratoire, biomarqueurs et points de suivi avec NoryaAI.",
         "og_locale": "fr_FR",
     },
     "es": {
-        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
-        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "meta_title": "NoryaAI | Analizador IA de analisis de sangre",
+        "meta_description": "Sube tus resultados de sangre y entiende con NoryaAI los valores de laboratorio, biomarcadores y recomendaciones de seguimiento de forma clara.",
         "og_locale": "es_ES",
     },
     "he": {
-        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
-        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "meta_title": "NoryaAI | ניתוח AI לבדיקות דם והסבר תוצאות",
+        "meta_description": "העלו את תוצאות בדיקות הדם שלכם וקבלו עם NoryaAI הסבר ברור לערכי מעבדה, ביומרקרים ותובנות מעקב.",
         "og_locale": "he_IL",
     },
     "hi": {
-        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
-        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "meta_title": "NoryaAI | AI Blood Test Analysis aur Lab Results Samjhaav",
+        "meta_description": "Apni blood test report upload karein aur NoryaAI ke saath lab values, biomarkers aur follow-up insights ko aasaan bhaasha mein samjhein.",
         "og_locale": "hi_IN",
     },
     "ar": {
-        "meta_title": "Free AI Blood Test Analyzer | NoryaAI",
-        "meta_description": "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused.",
+        "meta_title": "NoryaAI | تحليل ذكاء اصطناعي لفحوصات الدم",
+        "meta_description": "ارفع نتائج فحوصات الدم واحصل مع NoryaAI على شرح واضح لقيم المختبر والمؤشرات الحيوية ونقاط المتابعة.",
         "og_locale": "ar_SA",
     },
 }
@@ -89,7 +89,7 @@ def _tr_ui() -> dict:
         "nav_menu": "Menü",
         "nav_languages": "Diller",
         "hero_sub": "Laboratuvar sonuçları anlaşılır dilde açıklanır. Teşhis değil—sadece hekim görüşmenize hazırlık.",
-        "hero_title": "Kan Tahlilinizi Dakikalar İçinde Anlayın",
+        "hero_title": "Kan Tahlili Sonuclarinizi NoryaAI ile Anlayin",
         "hero_desc": "Sonuçlarınızı yükleyin; referans aralıkları, sade açıklamalar ve önerilerle net rapor alın. Hekim randevunuza hazırlanmak için ideal.",
         "hero_cta": "Analizi Başlat",
         "hero_see_sample": "Örnek Raporu Gör",
@@ -281,7 +281,7 @@ def _en_ui() -> dict:
         "nav_menu": "Menu",
         "nav_languages": "Languages",
         "hero_sub": "Lab results explained in plain language. Not a diagnosis—just clear guidance for your next doctor visit.",
-        "hero_title": "Understand Your Blood Test in Minutes",
+        "hero_title": "Understand Your Blood Test Results with NoryaAI",
         "hero_desc": "Upload your lab results and get a clear report with reference ranges, plain-language explanations and recommendations. Ideal to prepare for your appointment.",
         "hero_cta": "Start analysis",
         "hero_see_sample": "See sample report",
@@ -473,7 +473,7 @@ def _de_ui() -> dict:
         "nav_menu": "Menü",
         "nav_languages": "Sprachen",
         "hero_sub": "Laborergebnisse verständlich erklärt — keine Diagnose, nur Orientierung.",
-        "hero_title": "Blutwerte in Minuten verstehen",
+        "hero_title": "Blutwerte mit NoryaAI besser verstehen",
         "hero_desc": "Befund hochladen, klaren Bericht bekommen: Referenzbereiche, Einordnung und Empfehlungen. Ideal vor dem Arztbesuch.",
         "hero_cta": "Analyse starten",
         "hero_see_sample": "Beispielbericht ansehen",
@@ -665,7 +665,7 @@ def _it_ui() -> dict:
         "nav_menu": "Menu",
         "nav_languages": "Lingue",
         "hero_sub": "Referti di laboratorio spiegati in linguaggio chiaro. Nessuna diagnosi—solo orientamento per la prossima visita.",
-        "hero_title": "Comprendi le tue analisi del sangue in pochi minuti",
+        "hero_title": "Comprendi le analisi del sangue con NoryaAI",
         "hero_desc": "Carica i risultati di laboratorio e ricevi un report chiaro con intervalli di riferimento, spiegazioni in linguaggio semplice e indicazioni. Ideale per prepararti alla visita.",
         "hero_cta": "Avvia analisi",
         "hero_see_sample": "Vedi report di esempio",
@@ -837,6 +837,36 @@ def _it_ui() -> dict:
     }
 
 
+def _fr_ui() -> dict:
+    u = dict(_en_ui())
+    u.update(PATCH_FR)
+    return u
+
+
+def _es_ui() -> dict:
+    u = dict(_en_ui())
+    u.update(PATCH_ES)
+    return u
+
+
+def _he_ui() -> dict:
+    u = dict(_en_ui())
+    u.update(PATCH_HE)
+    return u
+
+
+def _hi_ui() -> dict:
+    u = dict(_en_ui())
+    u.update(PATCH_HI)
+    return u
+
+
+def _ar_ui() -> dict:
+    u = dict(_en_ui())
+    u.update(PATCH_AR)
+    return u
+
+
 # Per-locale UI; en-ca uses English
 LANDING_UI = {
     "tr": _tr_ui(),
@@ -844,13 +874,14 @@ LANDING_UI = {
     "en-ca": _en_ui(),  # placeholder: same as en
     "de": _de_ui(),
     "it": _it_ui(),
-    # Fallback: İngilizce UI metinleri kullanılıyor.
-    "fr": _en_ui(),
-    "es": _en_ui(),
-    "he": _en_ui(),
-    "hi": _en_ui(),
-    "ar": _en_ui(),
+    "fr": _fr_ui(),
+    "es": _es_ui(),
+    "he": _he_ui(),
+    "hi": _hi_ui(),
+    "ar": _ar_ui(),
 }
+
+LANDING_UI_OVERRIDES: dict[str, dict] = {}
 
 
 def get_landing_meta(locale: str) -> dict:
@@ -866,4 +897,6 @@ def get_landing_ui(locale: str) -> dict:
     locale = (locale or "").strip().lower()
     if locale not in LANDING_UI:
         locale = DEFAULT_LANDING_LOCALE
-    return dict(LANDING_UI.get(locale, LANDING_UI[DEFAULT_LANDING_LOCALE]))
+    ui = dict(LANDING_UI.get(locale, LANDING_UI[DEFAULT_LANDING_LOCALE]))
+    ui.update(LANDING_UI_OVERRIDES.get(locale, {}))
+    return ui

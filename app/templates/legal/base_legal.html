@@ -55,6 +55,7 @@
     }
     .wa-float:hover{ transform: translateY(-2px); }
     .wa-icon{ display: block; width: 32px; height: 32px; object-fit: contain; }
+    [dir="rtl"] .wa-float { right: auto; left: 20px; }
   </style>
   <!-- Google tag (gtag.js) — GA4 + Google Ads global site tag -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-1FLMLJH3Q0"></script>
@@ -89,10 +90,10 @@
 
   <footer class="border-t border-accent-200 bg-accent-50 py-10 px-4 mt-auto">
     <div class="max-w-4xl mx-auto">
-      <h3 class="text-sm font-bold uppercase tracking-wider text-accent-700 mb-3">İletişim ve Şirket Bilgileri</h3>
+      <h3 class="text-sm font-bold uppercase tracking-wider text-accent-700 mb-3">{{ footer_company_info_title }}</h3>
       <div class="text-sm text-accent-700 space-y-1.5 mb-6 max-w-full break-words">
         <p><strong>NoryaAI</strong> · {{ company_authorized_person }}</p>
-        <p>{{ company_tax_office }} Vergi Dairesi / {{ company_tax_number }}</p>
+        <p><span class="font-medium">{{ footer_tax_office_label }}:</span> {{ company_tax_office }} · <span class="font-medium">{{ footer_tax_no_label }}:</span> {{ company_tax_number }}</p>
         <p><a href="tel:{{ company_phone_wa }}" class="text-norya-brand hover:underline">{{ company_phone }}</a></p>
         <p><a href="mailto:{{ company_support_email }}" class="text-norya-brand hover:underline">{{ company_support_email }}</a> · <a href="mailto:{{ company_contact_email }}" class="text-norya-brand hover:underline">{{ company_contact_email }}</a></p>
         <p class="leading-relaxed">{{ company_address }}</p>

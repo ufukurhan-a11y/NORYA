@@ -164,7 +164,7 @@
           </li>
           <li aria-hidden="true" class="text-slate-400">/</li>
           <li>
-            <a href="/{{ current_lang }}/blog" class="hover:text-slate-700 transition-colors">{{ blog_ui.hero_title }}</a>
+            <a href="/{{ current_lang }}/blog" class="hover:text-slate-700 transition-colors">{{ blog_ui.breadcrumb_blog|default(blog_ui.back_to_blog) }}</a>
           </li>
           <li aria-hidden="true" class="text-slate-400 hidden sm:inline">/</li>
           <li class="min-w-0 max-w-full sm:max-w-md text-slate-600 break-words" aria-current="page">
@@ -175,7 +175,7 @@
 
       <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
         <a href="/{{ current_lang }}/blog" class="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">{{ blog_ui.back_to_blog }}</a>
-        <nav class="flex flex-wrap items-center gap-1" aria-label="Language">
+        <nav class="flex flex-wrap items-center gap-1" aria-label="{{ blog_ui.lang_nav_aria|default('Language') }}">
           {% for code, item in lang_alternates.items() %}
           <a href="{{ item.url }}" class="blog-lang-pill {% if code == current_lang %}current{% endif %}" {% if code == current_lang %}aria-current="page"{% endif %}>{{ item.label }}</a>
           {% endfor %}
@@ -193,6 +193,11 @@
         <p class="mt-4 text-lg sm:text-xl text-slate-600 leading-relaxed">
           {{ article.subtitle }}
         </p>
+        {% if blog_ui.article_edu_note %}
+        <p class="mt-4 rounded-lg border border-slate-200/90 bg-slate-50/90 px-4 py-3 text-sm text-slate-600 leading-relaxed border-s-teal-500/35 border-s-[3px]">
+          {{ blog_ui.article_edu_note }}
+        </p>
+        {% endif %}
         <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-slate-500">
           <div class="inline-flex items-center gap-2">
             <span class="inline-flex h-6 w-6 items-center justify-center rounded-full bg-white/60 border border-slate-200 text-slate-500">
@@ -272,8 +277,7 @@
               <h2 id="blog-cta-title" class="text-xl sm:text-2xl font-semibold text-slate-900">{{ blog_ui.cta_title }}</h2>
               <p class="mt-2 text-slate-600 leading-relaxed">{{ blog_ui.cta_text }}</p>
               <p class="mt-2 text-sm text-slate-500">
-                <a href="/{{ current_lang }}" class="text-teal-700 hover:underline font-medium">NoryaAI</a>
-                {% if current_lang == "tr" %} ile kan tahlili analizi{% elif current_lang == "en" %} blood test analyzer{% elif current_lang == "de" %} Blutwerte-Analyse{% elif current_lang == "fr" %} analyse des bilans sanguins{% elif current_lang == "it" %} analisi degli esami del sangue{% elif current_lang == "es" %} analisis de sangre{% elif current_lang == "he" %} לניתוח בדיקות דם{% elif current_lang == "hi" %} blood test analysis{% elif current_lang == "ar" %} لتحليل فحوصات الدم{% endif %}
+                <a href="/{{ current_lang }}" class="text-teal-700 hover:underline font-medium">{{ brand_name|default("NoryaAI") }}</a>{{ blog_ui.cta_after_brand|default("") }}
               </p>
             </div>
             <div class="flex-shrink-0">
@@ -319,9 +323,12 @@
     <div class="max-w-5xl mx-auto border-t border-slate-100 pt-8 mt-2">
       {% if related_posts %}
       <section aria-label="{{ blog_ui.related_label|default('Related articles') }}" class="mb-10">
-        <div class="flex items-center justify-between gap-3 mb-4">
+        <div class="flex items-center justify-between gap-3 mb-2">
           <h2 class="text-sm font-semibold tracking-wide text-slate-900 uppercase">{{ blog_ui.related_label|default("Related articles") }}</h2>
         </div>
+        {% if blog_ui.related_intro %}
+        <p class="mb-4 max-w-3xl text-sm text-slate-600 leading-relaxed">{{ blog_ui.related_intro }}</p>
+        {% endif %}
         <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
           {% for post in related_posts %}
           <article class="blog-sidebar-card overflow-hidden flex flex-col">
@@ -365,18 +372,20 @@
             <a href="/{{ current_lang }}/upload" class="inline-flex items-center justify-center rounded-xl bg-gradient-to-r from-teal-500 to-emerald-500 px-6 py-3 text-sm sm:text-base font-semibold text-white shadow-lg shadow-teal-500/30 hover:from-teal-600 hover:to-emerald-600 transition-colors focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
               {{ blog_ui.end_cta_button }}
             </a>
-            <p class="mt-3 text-sm text-slate-600">{{ blog_ui.end_cta_title }} — <a href="/{{ current_lang }}/upload" class="text-teal-600 font-medium hover:underline">{{ blog_ui.end_cta_button }}</a></p>
+            {% if blog_ui.end_cta_nudge %}
+            <p class="mt-3 text-sm text-slate-600">{{ blog_ui.end_cta_nudge }}</p>
+            {% endif %}
           </div>
         </div>
       </section>
 
       <div class="flex justify-center">
         <div class="blog-trust-strip">
-          <span>Privacy-first</span>
+          <span>{{ blog_ui.trust_strip_1|default("Privacy-first") }}</span>
           <span aria-hidden="true">•</span>
-          <span>Secure processing</span>
+          <span>{{ blog_ui.trust_strip_2|default("Secure processing") }}</span>
           <span aria-hidden="true">•</span>
-          <span>Designed for clarity</span>
+          <span>{{ blog_ui.trust_strip_3|default("Designed for clarity") }}</span>
         </div>
       </div>
     </div>

@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- DEBUG_FILE: how_it_works.html v1 -->
-<html lang="{{ lang }}">
+<html lang="{{ lang }}"{% if lang in ['he', 'ar'] %} dir="rtl"{% endif %}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
@@ -8,7 +8,11 @@
   <meta name="description" content="{{ meta.meta_description }}" />
   <meta property="og:title" content="{{ meta.meta_title }}" />
   <meta property="og:description" content="{{ meta.meta_description }}" />
+  {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
   <meta property="og:type" content="website" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ meta.meta_title }}" />
+  <meta name="twitter:description" content="{{ meta.meta_description }}" />
   <meta name="theme-color" content="#0EA5A4" />
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
   {% if hreflang_alternates %}{% for alt in hreflang_alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />{% endfor %}{% endif %}
@@ -43,6 +47,7 @@
       .header-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     }
     body { padding-bottom: env(safe-area-inset-bottom, 0); }
+    [dir="rtl"] .trust-disclaimer-rule { border-left-width: 0; border-right-width: 4px; padding-left: 0; padding-right: 1rem; }
   </style>
   {% include "includes/gtag_google_ads.html" %}
 </head>
@@ -50,13 +55,13 @@
   <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between header-inner">
       <a href="/" class="flex items-center shrink-0">
-        <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
       </a>
       <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
         <a href="/" class="text-slate-600 hover:text-teal-600">{{ t.nav_home }}</a>
         <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-teal-600">{{ t.nav_how }}</a>
-        <a href="{{ base_url }}/pricing" class="text-slate-600 hover:text-teal-600">{{ t.nav_pricing }}</a>
-        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">{{ t.nav_analyze }}</a>
+        <a href="{{ base_url }}/pricing?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.nav_pricing }}</a>
+        <a href="{{ base_url }}/analyze?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">{{ t.nav_analyze }}</a>
         {% include "partials/header_lang.html" %}
       </nav>
     </div>
@@ -69,8 +74,8 @@
         <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 mb-4 leading-tight">{{ t.hero_title }}</h1>
         <p class="text-lg text-slate-600 mb-8 max-w-2xl mx-auto">{{ t.hero_sub }}</p>
         <div class="flex flex-wrap gap-3 justify-center">
-          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95 shadow-lg">{{ t.cta_primary }}</a>
-          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50">{{ t.cta_secondary }}</a>
+          <a href="{{ base_url }}/analyze?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95 shadow-lg">{{ t.cta_primary }}</a>
+          <a href="{{ base_url }}/pricing?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50">{{ t.cta_secondary }}</a>
         </div>
       </div>
     </section>
@@ -130,7 +135,7 @@
         <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-8">{{ t.section_trust_title }}</h2>
         <div class="rounded-2xl p-6 sm:p-8 bg-slate-50 border border-slate-200">
           <p class="text-slate-700 mb-4">{{ t.trust_dsgvo }}</p>
-          <p class="text-slate-600 text-sm font-medium border-l-4 border-teal-500 pl-4">{{ t.trust_disclaimer }}</p>
+          <p class="trust-disclaimer-rule text-slate-600 text-sm font-medium border-l-4 border-teal-500 pl-4">{{ t.trust_disclaimer }}</p>
         </div>
       </div>
     </section>
@@ -152,8 +157,8 @@
       <div class="max-w-2xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ t.section_cta_title }}</h2>
         <div class="flex flex-wrap gap-3 justify-center">
-          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">{{ t.cta_primary2 }}</a>
-          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl border-2 border-white/80 text-white font-semibold hover:bg-white/10">{{ t.cta_secondary2 }}</a>
+          <a href="{{ base_url }}/analyze?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">{{ t.cta_primary2 }}</a>
+          <a href="{{ base_url }}/pricing?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl border-2 border-white/80 text-white font-semibold hover:bg-white/10">{{ t.cta_secondary2 }}</a>
         </div>
       </div>
     </section>
@@ -163,14 +168,14 @@
     <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-4 text-sm text-slate-600">
       <a href="/" class="hover:text-teal-600">{{ t.nav_home }}</a>
       <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="hover:text-teal-600">{{ t.nav_how }}</a>
-      <a href="{{ base_url }}/pricing" class="hover:text-teal-600">{{ t.nav_pricing }}</a>
+      <a href="{{ base_url }}/pricing?lang={{ lang }}" class="hover:text-teal-600">{{ t.nav_pricing }}</a>
       <a href="{{ base_url }}/legal/gizlilik-politikasi?lang={{ lang }}" class="hover:text-teal-600">{{ t.footer_privacy }}</a>
       <a href="{{ base_url }}/legal/kullanim-sartlari?lang={{ lang }}" class="hover:text-teal-600">{{ t.footer_terms }}</a>
     </div>
-    <p class="text-center text-slate-500 text-xs mt-4">
-      {% if lang == 'de' %}DE{% else %}<a href="{{ base_url }}/how-it-works?lang=de" class="hover:text-teal-600">DE</a>{% endif %}
-      · {% if lang == 'en' %}EN{% else %}<a href="{{ base_url }}/how-it-works?lang=en" class="hover:text-teal-600">EN</a>{% endif %}
-      · {% if lang == 'tr' %}TR{% else %}<a href="{{ base_url }}/how-it-works?lang=tr" class="hover:text-teal-600">TR</a>{% endif %}
+    <p class="text-center text-slate-500 text-xs mt-4" dir="ltr">
+      {% for code in hiw_lang_codes %}
+        {% if lang == code %}<span class="text-slate-700 font-medium">{{ code|upper }}</span>{% else %}<a href="{{ base_url }}/how-it-works?lang={{ code }}" class="hover:text-teal-600">{{ code|upper }}</a>{% endif %}{% if not loop.last %} · {% endif %}
+      {% endfor %}
     </p>
   </footer>
 {% include "partials/scripts_lang.html" %}

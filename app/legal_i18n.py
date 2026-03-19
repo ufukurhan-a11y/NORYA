@@ -5,8 +5,12 @@
 from app.core.config import settings
 
 LEGAL_LANGS = frozenset({"tr", "en", "de", "fr", "es", "it", "he", "ar", "hi", "el", "cs", "sr"})
+# Tam hukuki gövde sağlanan diller (legal_bodies + tr/en temel metin)
+LEGAL_CONTENT_LANGS = frozenset({"tr", "en", "de", "fr", "es", "it", "he", "hi", "ar"})
+# hreflang / alternate link sırası (pricing ile uyumlu)
+LEGAL_HREFLANG_LANGS = ("tr", "en", "de", "fr", "it", "es", "he", "hi", "ar")
 DEFAULT_LEGAL_LANG = "tr"
-FALLBACK_CONTENT_LANG = "en"  # İçerik çevirisi yoksa (sadece TR/EN var) EN kullan
+FALLBACK_CONTENT_LANG = "en"  # LEGAL_CONTENT_LANGS dışı dil kodunda içerik dili
 
 # UI: başlık, geri linki, footer nav etiketleri, footer metinleri
 UI = {
@@ -20,6 +24,10 @@ UI = {
         "nav_contact": "İletişim",
         "footer_desc": "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.",
         "footer_disclaimer": "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.",
+        "nav_legal": "Yasal",
+        "footer_company_info_title": "İletişim ve şirket bilgileri",
+        "footer_tax_office_label": "Vergi dairesi",
+        "footer_tax_no_label": "Vergi no",
     },
     "en": {
         "back_to_home": "← Home",
@@ -31,6 +39,10 @@ UI = {
         "nav_contact": "Contact",
         "footer_desc": "Tool that explains blood test results in plain language.",
         "footer_disclaimer": "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.",
+        "nav_legal": "Legal",
+        "footer_company_info_title": "Contact & company information",
+        "footer_tax_office_label": "Tax office",
+        "footer_tax_no_label": "Tax number",
     },
     "de": {
         "back_to_home": "← Start",
@@ -42,6 +54,10 @@ UI = {
         "nav_contact": "Kontakt",
         "footer_desc": "Laborergebnisse verständlich erklärt. Zur Orientierung — keine Diagnose.",
         "footer_disclaimer": "Nur zur Information. Medizinische Entscheidungen bitte mit dem Arzt besprechen.",
+        "nav_legal": "Rechtliches",
+        "footer_company_info_title": "Kontakt & Unternehmensangaben",
+        "footer_tax_office_label": "Finanzamt",
+        "footer_tax_no_label": "Steuernummer",
     },
     "fr": {
         "back_to_home": "← Accueil",
@@ -53,6 +69,10 @@ UI = {
         "nav_contact": "Contact",
         "footer_desc": "Résultats d'analyses expliqués en langage clair. À titre informatif uniquement — pas un diagnostic.",
         "footer_disclaimer": "Contenu à but informatif. Pour toute décision médicale, consultez un professionnel de santé.",
+        "nav_legal": "Mentions légales",
+        "footer_company_info_title": "Coordonnées et informations société",
+        "footer_tax_office_label": "Service des impôts",
+        "footer_tax_no_label": "Numéro fiscal",
     },
     "es": {
         "back_to_home": "← Inicio",
@@ -64,6 +84,10 @@ UI = {
         "nav_contact": "Contacto",
         "footer_desc": "Resultados de análisis explicados en lenguaje claro. Solo información — no sustituye el diagnóstico médico.",
         "footer_disclaimer": "Contenido informativo. Para decisiones médicas, consulte siempre a un profesional de la salud.",
+        "nav_legal": "Legal",
+        "footer_company_info_title": "Contacto e información de la empresa",
+        "footer_tax_office_label": "Oficina tributaria",
+        "footer_tax_no_label": "Número fiscal",
     },
     "it": {
         "back_to_home": "← Home",
@@ -75,6 +99,10 @@ UI = {
         "nav_contact": "Contatti",
         "footer_desc": "Referti di laboratorio in linguaggio chiaro. Solo informativi — non sostituiscono il parere medico.",
         "footer_disclaimer": "Contenuto a scopo informativo. Per decisioni mediche consultare sempre un medico.",
+        "nav_legal": "Note legali",
+        "footer_company_info_title": "Contatti e dati aziendali",
+        "footer_tax_office_label": "Ufficio imposte",
+        "footer_tax_no_label": "Partita IVA / codice fiscale",
     },
     "he": {
         "back_to_home": "← דף הבית",
@@ -86,6 +114,10 @@ UI = {
         "nav_contact": "צור קשר",
         "footer_desc": "תוצאות בדיקות דם מוסברות בשפה ברורה. למטרות מידע בלבד — לא תחליף לאבחון.",
         "footer_disclaimer": "תוכן אינפורמטיבי. להחלטות רפואיות יש להתייעץ עם רופא.",
+        "nav_legal": "מסמכים משפטיים",
+        "footer_company_info_title": "פרטי קשר וחברה",
+        "footer_tax_office_label": "רשות המס",
+        "footer_tax_no_label": "מספר עוסק / מס",
     },
     "ar": {
         "back_to_home": "← الرئيسية",
@@ -97,6 +129,10 @@ UI = {
         "nav_contact": "اتصل بنا",
         "footer_desc": "نتائج التحاليل مفسرة بلغة واضحة. للمعلومات فقط — لا تغني عن التشخيص الطبي.",
         "footer_disclaimer": "محتوى إعلامي. للقرارات الطبية استشر دائماً مختصاً.",
+        "nav_legal": "الوثائق القانونية",
+        "footer_company_info_title": "بيانات التواصل والشركة",
+        "footer_tax_office_label": "مأمورية الضرائب",
+        "footer_tax_no_label": "الرقم الضريبي",
     },
     "hi": {
         "back_to_home": "← होम",
@@ -108,6 +144,10 @@ UI = {
         "nav_contact": "संपर्क",
         "footer_desc": "लैब परिणाम सरल भाषा में समझाए गए। सिर्फ जानकारी—निदान का विकल्प नहीं।",
         "footer_disclaimer": "जानकारी के लिए। चिकित्सा निर्णय के लिए डॉक्टर से सलाह लें।",
+        "nav_legal": "कानूनी जानकारी",
+        "footer_company_info_title": "संपर्क व कंपनी विवरण",
+        "footer_tax_office_label": "कर कार्यालय",
+        "footer_tax_no_label": "कर संख्या",
     },
     "el": {
         "back_to_home": "← Αρχική",
@@ -119,6 +159,10 @@ UI = {
         "nav_contact": "Επικοινωνία",
         "footer_desc": "Αποτελέσματα αναλύσεων σε απλή γλώσσα. Μόνο ενημέρωση—όχι διάγνωση.",
         "footer_disclaimer": "Ενημερωτικό περιεχόμενο. Για ιατρικές αποφάσεις συμβουλευτείτε γιατρό.",
+        "nav_legal": "Legal",
+        "footer_company_info_title": "Contact & company information",
+        "footer_tax_office_label": "Tax office",
+        "footer_tax_no_label": "Tax number",
     },
     "cs": {
         "back_to_home": "← Domů",
@@ -130,6 +174,10 @@ UI = {
         "nav_contact": "Kontakt",
         "footer_desc": "Výsledky rozborů vysvětlené srozumitelně. Pouze informace—nenahrazuje diagnózu.",
         "footer_disclaimer": "Informační obsah. Pro lékařská rozhodnutí se poraďte s lékařem.",
+        "nav_legal": "Legal",
+        "footer_company_info_title": "Contact & company information",
+        "footer_tax_office_label": "Tax office",
+        "footer_tax_no_label": "Tax number",
     },
     "sr": {
         "back_to_home": "← Почетна",
@@ -141,6 +189,10 @@ UI = {
         "nav_contact": "Контакт",
         "footer_desc": "Резултати анализе објашњени јасно. Само информација—не замењује дијагнозу.",
         "footer_disclaimer": "Информативни садржај. За медицинске одлуке консултујте лекара.",
+        "nav_legal": "Legal",
+        "footer_company_info_title": "Contact & company information",
+        "footer_tax_office_label": "Tax office",
+        "footer_tax_no_label": "Tax number",
     },
 }
 
@@ -169,6 +221,7 @@ def _nav_links(lang: str) -> list[dict]:
 PRIVACY = {
     "tr": {
         "title": "Gizlilik Politikası",
+        "meta_description": "Norya gizlilik politikası: hangi kişisel veriler toplanır, kullanım amaçları, PayTR, KVKK/GDPR kapsamındaki haklar ve iletişim.",
         "last_updated": "Son güncelleme: Mart 2025",
         "intro": "Norya (“biz”, “bizim”) olarak kişisel verilerinize saygı duyuyoruz. Bu Gizlilik Politikası, Norya web sitesi ve kan tahlili analiz hizmetimizi kullanırken hangi verilerin toplandığını, nasıl kullanıldığını, kiminle paylaşılabileceğini ve haklarınızı açıklar. Türkiye'de 6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK), Avrupa Birliği Genel Veri Koruma Tüzüğü (GDPR) ve ilgili mevzuata uygun hareket ediyoruz.",
         "sections": [
@@ -187,6 +240,7 @@ PRIVACY = {
     },
     "en": {
         "title": "Privacy Policy",
+        "meta_description": "Norya privacy policy: what we collect, how we use data, PayTR, your KVKK/GDPR rights and how to contact us.",
         "last_updated": "Last updated: March 2025",
         "intro": "At Norya (“we”, “us”), we respect your personal data. This Privacy Policy explains what data we collect when you use the Norya website and blood test analysis service, how we use it, who we may share it with, and your rights. We comply with Turkey's Law on Protection of Personal Data (KVKK), the EU General Data Protection Regulation (GDPR), and related legislation.",
         "sections": [
@@ -209,6 +263,7 @@ PRIVACY = {
 TERMS = {
     "tr": {
         "title": "Kullanım Şartları",
+        "meta_description": "Norya kullanım şartları: hizmet kapsamı, hesap kuralları, yasak kullanımlar, sorumluluk ve uygulanacak hukuk.",
         "last_updated": "Son güncelleme: Mart 2025",
         "intro": "Norya hizmetini (“Site”, “Hizmet”) kullanarak aşağıdaki koşulları kabul etmiş sayılırsınız. Koşullarda değişiklik yapıldığında güncel metin sitede yayımlanır; önemli değişiklikler e-posta veya site bildirimi ile duyurulabilir.",
         "sections": [
@@ -225,6 +280,7 @@ TERMS = {
     },
     "en": {
         "title": "Terms of Use",
+        "meta_description": "Norya terms of use: service scope, account rules, prohibited use, liability and governing law.",
         "last_updated": "Last updated: March 2025",
         "intro": "By using the Norya service (“Site”, “Service”) you are deemed to accept the following terms. When terms are updated, the current text will be published on the site; material changes may be announced by email or site notice.",
         "sections": [
@@ -245,6 +301,7 @@ TERMS = {
 KVKK_GDPR = {
     "tr": {
         "title": "KVKK, GDPR ve HIPAA Aydınlatma Metni",
+        "meta_description": "KVKK, GDPR ve sağlık verisi güvenliği hakkında kısa aydınlatma; veri kategorileri, hukuki sebepler ve başvuru yolları.",
         "last_updated": "Son güncelleme: Mart 2025",
         "intro": "Norya olarak kişisel ve sağlıkla ilgili verilerinizi Türkiye'de KVKK, AB'de GDPR ve ABD'de sağlık verisi güvenliği ilkeleri (HIPAA-aligned güvenlik yaklaşımı) çerçevesinde işliyoruz. Bu sayfa, her bir çerçeveye ilişkin kısa aydınlatmayı içerir.",
         "sections": [
@@ -258,6 +315,7 @@ KVKK_GDPR = {
     },
     "en": {
         "title": "KVKK, GDPR and HIPAA Notice",
+        "meta_description": "Short notice on KVKK (Turkey), GDPR (EU) and our approach to health-related data security (HIPAA-aligned, non-covered entity).",
         "last_updated": "Last updated: March 2025",
         "intro": "At Norya we process your personal and health-related data in line with Turkey's KVKK, the EU GDPR and US health data security principles (HIPAA-aligned approach). This page provides a short notice for each framework.",
         "sections": [
@@ -275,6 +333,7 @@ KVKK_GDPR = {
 MESAFELI = {
     "tr": {
         "title": "Mesafeli Satış Sözleşmesi",
+        "meta_description": "Mesafeli satış sözleşmesi: dijital hizmet, PayTR ödeme, cayma ve iade koşulları, şikayet yolları.",
         "last_updated": "Son güncelleme: Mart 2025",
         "intro": "Bu sözleşme, 6502 sayılı Tüketicinin Korunması Hakkında Kanun ve Mesafeli Sözleşmeler Yönetmeliği hükümlerine uygun olarak Norya hizmeti üzerinden elektronik ortamda gerçekleştirilen satışlara ilişkindir.",
         "sections": [
@@ -288,6 +347,7 @@ MESAFELI = {
     },
     "en": {
         "title": "Distance Selling Agreement",
+        "meta_description": "Distance selling agreement for Norya digital services under Turkish consumer law, PayTR and withdrawal.",
         "last_updated": "Last updated: March 2025",
         "intro": "This agreement relates to sales made electronically via the Norya service in accordance with Turkish consumer protection law and the Distance Contracts Regulation.",
         "sections": [
@@ -305,6 +365,7 @@ MESAFELI = {
 REFUND = {
     "tr": {
         "title": "İade ve İptal Politikası",
+        "meta_description": "İade ve iptal politikası: dijital hizmet, PayTR, kullanılmamış analiz için 14 gün, abonelik ve iade süreci.",
         "last_updated": "Son güncelleme: Mart 2025",
         "intro": "Norya üzerinden satın alınan hizmetler dijital hizmet niteliğindedir. Ödemeler PayTR sanal pos altyapısı ile alınır; kart bilgileriniz Norya sunucularında tutulmaz.",
         "sections": [
@@ -318,6 +379,7 @@ REFUND = {
     },
     "en": {
         "title": "Refund and Cancellation Policy",
+        "meta_description": "Refund and cancellation policy: digital service, PayTR, 14 days if unused, subscription end and processing times.",
         "last_updated": "Last updated: March 2025",
         "intro": "Services purchased via Norya are digital services. Payments are taken via PayTR's payment infrastructure; your card details are not stored on Norya servers.",
         "sections": [
@@ -355,6 +417,17 @@ CONTACT = {
         "faq1_a": "Banka veya ödeme sağlayıcısı onayı bazen gecikebilir. E-posta ile sipariş veya ödeme bilginizi yazın; en geç 1 iş günü içinde kontrol edip düzeltiyoruz.",
         "faq2_q": "İade nasıl yapılır?",
         "faq2_a": "İade ve iptal koşulları <a href=\"/iade-iptal\" class=\"text-primary-600 hover:underline\">İade ve İptal Politikası</a> sayfamızda. Talebinizi support@noryaai.com veya norya.destek@gmail.com adresine iletebilirsiniz.",
+        "label_authorized": "Yetkili Kişi",
+        "label_trade_name": "Ticari Ünvan",
+        "label_tax": "Vergi Bilgileri",
+        "label_tax_office": "Vergi dairesi",
+        "label_tax_number": "Vergi no",
+        "label_phone_section": "Telefon / WhatsApp",
+        "label_support_email": "Destek e-postası",
+        "label_contact_email": "İletişim e-postası",
+        "label_address": "Adres",
+        "label_country": "Ülke",
+        "wa_button": "WhatsApp ile yazın",
     },
     "en": {
         "title": "Contact Us",
@@ -378,14 +451,51 @@ CONTACT = {
         "faq1_a": "Bank or payment provider approval can sometimes be delayed. Email us with your order or payment details; we'll check and fix within 1 business day.",
         "faq2_q": "How do I request a refund?",
         "faq2_a": "Refund and cancellation conditions are on our <a href=\"/iade-iptal\" class=\"text-primary-600 hover:underline\">Refund and Cancellation Policy</a> page. You can send your request to support@noryaai.com or norya.destek@gmail.com.",
+        "label_authorized": "Authorized person",
+        "label_trade_name": "Trade name",
+        "label_tax": "Tax information",
+        "label_tax_office": "Tax office",
+        "label_tax_number": "Tax number",
+        "label_phone_section": "Phone / WhatsApp",
+        "label_support_email": "Support email",
+        "label_contact_email": "General contact email",
+        "label_address": "Address",
+        "label_country": "Country",
+        "wa_button": "Message us on WhatsApp",
     },
 }
 
 
+def _inject_extended_legal_bodies() -> None:
+    """de/fr/es/it/he/hi/ar tam hukuki gövdeleri legal_bodies paketinden yükler."""
+    from app.legal_bodies import ar as ar_body
+    from app.legal_bodies import de, es, fr, he, hi, it
+
+    for code, pack in (
+        ("de", de),
+        ("fr", fr),
+        ("es", es),
+        ("it", it),
+        ("he", he),
+        ("hi", hi),
+        ("ar", ar_body),
+    ):
+        PRIVACY[code] = pack.PRIVACY
+        TERMS[code] = pack.TERMS
+        KVKK_GDPR[code] = pack.KVKK_GDPR
+        MESAFELI[code] = pack.MESAFELI
+        REFUND[code] = pack.REFUND
+        CONTACT[code] = pack.CONTACT
+
+
+_inject_extended_legal_bodies()
+
+
 def _content_lang(lang: str) -> str:
-    """İçerik için kullanılacak dil: sadece tr ve en tam metin var."""
-    if lang == "tr":
-        return "tr"
+    """Tam hukuki gövde dilini seçer; desteklenmeyen kodlarda İngilizce."""
+    code = (lang or "").strip().lower()[:2]
+    if code in LEGAL_CONTENT_LANGS:
+        return code
     return FALLBACK_CONTENT_LANG
 
 
@@ -393,6 +503,7 @@ def get_legal_ui(lang: str) -> dict:
     """Seçilen dil için UI metinleri ve nav linkleri."""
     use_lang = lang if lang in LEGAL_LANGS else "en"
     u = _ui(use_lang)
+    uen = UI["en"]
     # Şirket bilgileri: ENV'den okunur, boşsa config varsayılanları veya — kullanılır
     _f = "—"
     company_title = (settings.company_title or settings.invoice_company_title or "").strip() or _f
@@ -413,6 +524,10 @@ def get_legal_ui(lang: str) -> dict:
         "lang": use_lang,
         "back_to_home": u["back_to_home"],
         "nav_links": _nav_links(use_lang),
+        "nav_legal": u.get("nav_legal", uen["nav_legal"]),
+        "footer_company_info_title": u.get("footer_company_info_title", uen["footer_company_info_title"]),
+        "footer_tax_office_label": u.get("footer_tax_office_label", uen["footer_tax_office_label"]),
+        "footer_tax_no_label": u.get("footer_tax_no_label", uen["footer_tax_no_label"]),
         "footer_desc": u["footer_desc"],
         "footer_disclaimer": u["footer_disclaimer"],
         "company_title": company_title,

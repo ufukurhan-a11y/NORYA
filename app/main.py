@@ -43,7 +43,7 @@ from app.core.config import is_openai_configured, settings
 from app.core.database import engine, get_db, init_db
 from app.core.rate_limit import limiter
 from app.core.geo import get_geo_from_ip
-from app.legal_i18n import get_legal_content, get_legal_ui
+from app.legal_i18n import LEGAL_HREFLANG_LANGS, LEGAL_LANGS, get_legal_content, get_legal_ui
 from app.core.security import (
     create_pdf_access_token,
     decode_access_token,
@@ -92,6 +92,7 @@ from app.seo_landing_i18n import (
     OG_LOCALE_MAP as SEO_OG_LOCALE_MAP,
 )
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
+from app.pricing_page_i18n import PRICING_HREFLANG_LANGS, enrich_pricing_context
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_blog_icon_paths, get_related_articles, iter_all_article_paths, list_articles_for_lang
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, get_active_campaign_for_checkout, validate_coupon
@@ -1451,14 +1452,17 @@ LEGAL_PAGES = {
 
 
 def _legal_lang_from_request(request: Request) -> str:
-    """Yasal sayfa dili: önce ?lang=, yoksa Accept-Language."""
-    lang_q = request.query_params.get("lang", "").strip().lower()
-    if lang_q:
-        return lang_q[:5]
+    """Yasal sayfa dili: ?lang=, norya_lang çerezi, yoksa Accept-Language."""
+    lang_q = (request.query_params.get("lang") or "").strip().lower()[:2]
+    if lang_q in LEGAL_LANGS:
+        return lang_q
+    cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+    if cookie in LEGAL_LANGS:
+        return cookie
     return _parse_accept_language(request.headers.get("accept-language"))
 
 
-PAYMENT_LANGS = ("tr", "en", "de", "fr", "it", "es")
+PAYMENT_LANGS = ("tr", "en", "de", "fr", "it", "es", "he", "hi", "ar")
 
 
 def _payment_lang_from_request(request: Request) -> str:
@@ -1470,7 +1474,8 @@ def _payment_lang_from_request(request: Request) -> str:
     if lang_cookie in PAYMENT_LANGS:
         return lang_cookie
     browser = _parse_accept_language(request.headers.get("accept-language"))
-    return browser if browser in PAYMENT_LANGS else "tr"
+    # Bilinmeyen tarayıcı dili için TR yerine EN: HE/HI/AR vb. kullanıcılar yanlışlıkla Türkçe görmesin.
+    return browser if browser in PAYMENT_LANGS else "en"
 
 
 @app.get("/kvkk")
@@ -1510,8 +1515,7 @@ def legal_page(request: Request, page: str):
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
     base_url = str(request.base_url).rstrip("/")
     canonical_url = f"{base_url}/legal/{page}"
-    legal_hreflang_langs = ("tr", "en", "de", "fr", "it", "es")
-    hreflang_alternates = [{"lang": code, "url": f"{base_url}/legal/{page}?lang={code}"} for code in legal_hreflang_langs]
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/legal/{page}?lang={code}"} for code in LEGAL_HREFLANG_LANGS]
     hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/legal/{page}?lang=en"})
     page_title = content.title if content else page
     breadcrumb_items = [
@@ -1537,8 +1541,7 @@ def iade_iptal_page(request: Request):
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
     base_url = str(request.base_url).rstrip("/")
     canonical_url = f"{base_url}/iade-iptal"
-    legal_hreflang_langs = ("tr", "en", "de", "fr", "it", "es")
-    hreflang_alternates = [{"lang": code, "url": f"{base_url}/iade-iptal?lang={code}"} for code in legal_hreflang_langs]
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/iade-iptal?lang={code}"} for code in LEGAL_HREFLANG_LANGS]
     hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/iade-iptal?lang=en"})
     breadcrumb_items = [
         {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
@@ -1553,14 +1556,24 @@ def iade_iptal_page(request: Request):
     )
 
 
-REFUND_LANGS = ("tr", "en", "de", "fr", "it", "es")
+REFUND_LANGS = ("tr", "en", "de", "fr", "it", "es", "he", "hi", "ar")
+
+
+def _refund_page_hreflang_alternates(base_url: str) -> list[dict]:
+    u = f"{base_url.rstrip('/')}/iade-talebi"
+    alts = [{"lang": code, "url": f"{u}?lang={code}"} for code in LEGAL_HREFLANG_LANGS]
+    alts.append({"lang": "x-default", "url": f"{u}?lang=en"})
+    return alts
 
 
 def _refund_lang_from_request(request: Request) -> str:
-    """İade talebi dili: önce ?lang=, yoksa tarayıcı Accept-Language."""
-    lang_q = request.query_params.get("lang", "").strip().lower()[:2]
-    if lang_q and lang_q in REFUND_LANGS:
+    """İade talebi dili: ?lang=, norya_lang, yoksa Accept-Language."""
+    lang_q = (request.query_params.get("lang") or "").strip().lower()[:2]
+    if lang_q in REFUND_LANGS:
         return lang_q
+    cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+    if cookie in REFUND_LANGS:
+        return cookie
     browser = _parse_accept_language(request.headers.get("accept-language"))
     return browser if browser in REFUND_LANGS else "en"
 
@@ -1577,6 +1590,8 @@ def refund_request_page(
     t = get_pay_ui(lang)
     ui = get_legal_ui(lang)
     base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/iade-talebi"
+    hreflang_alternates = _refund_page_hreflang_alternates(base_url)
     return templates.TemplateResponse(
         "legal/refund_request.html",
         {
@@ -1588,7 +1603,8 @@ def refund_request_page(
             "merchant_oid": None,
             "email": None,
             "reason": None,
-            "canonical_url": f"{base_url}/iade-talebi",
+            "canonical_url": canonical_url,
+            "hreflang_alternates": hreflang_alternates,
             **ui,
         },
     )
@@ -1605,7 +1621,7 @@ def refund_request_submit(
 ):
     """İade talebini kaydeder: sipariş admin_note'a eklenir, admin panelden PayTR iade yapılabilir."""
     lang = (lang or "tr").strip().lower()[:2]
-    if lang not in ("tr", "en", "de", "fr", "it", "es"):
+    if lang not in REFUND_LANGS:
         lang = "tr"
     t = get_pay_ui(lang)
     ui = get_legal_ui(lang)
@@ -1616,6 +1632,7 @@ def refund_request_submit(
 
     base_url = str(request.base_url).rstrip("/")
     canonical = f"{base_url}/iade-talebi"
+    href_alts = _refund_page_hreflang_alternates(base_url)
     if not merchant_oid or not email:
         return templates.TemplateResponse(
             "legal/refund_request.html",
@@ -1629,6 +1646,7 @@ def refund_request_submit(
                 "email": email or None,
                 "reason": reason or None,
                 "canonical_url": canonical,
+                "hreflang_alternates": href_alts,
                 **ui,
             },
         )
@@ -1647,6 +1665,7 @@ def refund_request_submit(
                 "email": email,
                 "reason": reason or None,
                 "canonical_url": canonical,
+                "hreflang_alternates": href_alts,
                 **ui,
             },
         )
@@ -1752,7 +1771,7 @@ def blog_index(request: Request, lang: str):
     base_ui = get_base_ui(lang)
     blog_index_breadcrumb = [
         {"@type": "ListItem", "position": 1, "name": base_ui.get("home_link", BRAND_NAME), "item": f"{base_url}/{lang}"},
-        {"@type": "ListItem", "position": 2, "name": ui.get("back_to_blog", "Blog"), "item": f"{base_url}/{lang}/blog"},
+        {"@type": "ListItem", "position": 2, "name": ui.get("breadcrumb_blog", ui.get("back_to_blog", "Blog")), "item": f"{base_url}/{lang}/blog"},
     ]
     breadcrumb_schema_json = json.dumps(
         {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": blog_index_breadcrumb},
@@ -1836,7 +1855,7 @@ def blog_detail(request: Request, lang: str, slug: str):
     blog_ui = dict(BLOG_UI.get(lang, BLOG_UI[DEFAULT_BLOG_LANG]))
     breadcrumb_items = [
         {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
-        {"@type": "ListItem", "position": 2, "name": blog_ui.get("back_to_blog", "Blog"), "item": f"{base_url}/{lang}/blog"},
+        {"@type": "ListItem", "position": 2, "name": blog_ui.get("breadcrumb_blog", blog_ui.get("back_to_blog", "Blog")), "item": f"{base_url}/{lang}/blog"},
         {"@type": "ListItem", "position": 3, "name": art["seo_title"] or art["title"], "item": canonical_url},
     ]
     breadcrumb_schema = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": breadcrumb_items}
@@ -2024,7 +2043,13 @@ def _landing_response(locale: str, request: Request):
     )
 
     lang_attr = "en" if locale == "en-ca" else locale
-    raw = re.sub(r'<html lang="[^"]*"', f'<html lang="{lang_attr}"', raw, count=1)
+    dir_attr = ' dir="rtl"' if locale in ("he", "ar") else ""
+    raw = re.sub(
+        r'<html lang="[^"]*" id="html-lang"',
+        f'<html lang="{lang_attr}" id="html-lang"{dir_attr}',
+        raw,
+        count=1,
+    )
 
     landing_script = (
         f'<script>window.__LANDING_LOCALE__="{escape(locale)}";'
@@ -2094,6 +2119,21 @@ def _index_response(request: Request | None = None):
                 raw = re.sub(r'<meta property="og:description" content="[^"]*" */?>', f'<meta property="og:description" content="{_desc}" />', raw, count=1)
                 raw = re.sub(r'<meta name="twitter:title" content="[^"]*" */?>', f'<meta name="twitter:title" content="{_title}" />', raw, count=1)
                 raw = re.sub(r'<meta name="twitter:description" content="[^"]*" */?>', f'<meta name="twitter:description" content="{_desc}" />', raw, count=1)
+                _og_loc = meta.get("og_locale", "en_US")
+                raw = re.sub(
+                    r'<meta property="og:locale" content="[^"]*" */?>',
+                    f'<meta property="og:locale" content="{_og_loc}" />',
+                    raw,
+                    count=1,
+                )
+                _html_lang = "en" if _locale == "en-ca" else _locale
+                _html_dir = ' dir="rtl"' if _locale in ("he", "ar") else ""
+                raw = re.sub(
+                    r'<html lang="[^"]*" id="html-lang"',
+                    f'<html lang="{_html_lang}" id="html-lang"{_html_dir}',
+                    raw,
+                    count=1,
+                )
 
                 def _hreflang_code(loc: str) -> str:
                     # Google hreflang casing: en-CA (path: /en-ca)
@@ -2171,10 +2211,13 @@ def analyze_landing(request: Request):
 
 
 def _how_it_works_lang_from_request(request: Request) -> str:
-    """How-it-works sayfa dili: ?lang= veya Accept-Language. Desteklenen: de, en, tr, it, fr, es."""
+    """How-it-works dili: ?lang=, cookie norya_lang, sonra Accept-Language."""
     lang_q = request.query_params.get("lang", "").strip().lower()[:2]
     if lang_q and lang_q in HOW_IT_WORKS_LANGS:
         return lang_q
+    lang_cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+    if lang_cookie and lang_cookie in HOW_IT_WORKS_LANGS:
+        return lang_cookie
     parsed = _parse_accept_language(request.headers.get("accept-language"))
     return parsed if parsed in HOW_IT_WORKS_LANGS else DEFAULT_HOW_IT_WORKS_LANG
 
@@ -2183,7 +2226,7 @@ def _how_it_works_lang_from_request(request: Request) -> str:
 def how_it_works_page(request: Request):
     """
     /how-it-works -> Nasıl çalışır sayfası. Google Ads site bağlantısı için.
-    ?lang= de, en, tr, it, fr, es ile dil seçimi. SEO: title, meta, canonical, hreflang.
+    Dil: ?lang=, norya_lang çerezi veya Accept-Language (tr, en, de, fr, it, es, he, hi, ar). SEO: canonical, hreflang.
     """
     lang = _how_it_works_lang_from_request(request)
     t = get_how_it_works_ui(lang)
@@ -2204,6 +2247,7 @@ def how_it_works_page(request: Request):
             "meta": meta,
             "canonical_url": canonical_url,
             "hreflang_alternates": hreflang_alternates,
+            "hiw_lang_codes": HOW_IT_WORKS_LANGS,
             "base_url": base_url,
         },
     )
@@ -2219,8 +2263,10 @@ def pricing_landing(
     Kullanıcı önce planları ve özelliklerini görür; ödeme için /payment'e yönlenir.
     """
     lang = _payment_lang_from_request(request)
-    t = get_pay_ui(lang)
+    t = enrich_pricing_context(lang, get_pay_ui(lang))
     base_url = _paytr_canonical_base(request)
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/pricing?lang={code}"} for code in PRICING_HREFLANG_LANGS]
+    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/pricing?lang=en"})
     plan_map = get_plan_code_to_product_cents(db)
 
     def _plan(product_key: str) -> dict:
@@ -2244,6 +2290,7 @@ def pricing_landing(
             "t": t,
             "base_url": base_url,
             "plans": plans,
+            "hreflang_alternates": hreflang_alternates,
         },
     )
 

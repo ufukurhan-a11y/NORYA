@@ -75,6 +75,14 @@ def test_how_it_works_lang_de_returns_200_and_german_content(client: TestClient)
     )
 
 
+def test_how_it_works_lang_ar_returns_200_and_arabic_content(client: TestClient):
+    r = client.get("/how-it-works?lang=ar")
+    assert r.status_code == 200
+    text = r.text
+    assert "كيف يعمل" in text and 'dir="rtl"' in text
+    assert 'hreflang="ar"' in text and "how-it-works?lang=he" in text
+
+
 def test_sitemap_xml_contains_how_it_works(client: TestClient):
     """sitemap.xml içinde /how-it-works URL'i olmalı."""
     r = client.get("/sitemap.xml")

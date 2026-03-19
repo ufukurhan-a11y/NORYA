@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="{{ lang }}">
+<html lang="{{ lang }}"{% if lang in ('ar', 'he') %} dir="rtl"{% endif %}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
@@ -422,7 +422,7 @@
       · <a href="/de/blutwerte-verstehen" class="hover:text-teal-600">DE</a>
       · <a href="/en/blood-test-results" class="hover:text-teal-600">EN</a>
     </p>
-    <p class="text-center text-slate-500 text-xs mt-3">NoryaAI is a multilingual AI-powered platform designed to help users understand blood test results more clearly.</p>
+    <p class="text-center text-slate-500 text-xs mt-3">{{ t.get("footer_tagline", "NoryaAI is a multilingual AI-powered platform designed to help users understand blood test results more clearly.") }}</p>
   </footer>
 </body>
 </html>

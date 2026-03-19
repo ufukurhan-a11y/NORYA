@@ -3,7 +3,7 @@
 
 from __future__ import annotations
 
-PAY_LANGS = ("tr", "en", "de", "fr", "it", "es", "hi", "he")
+PAY_LANGS = ("tr", "en", "de", "fr", "it", "es", "hi", "he", "ar")
 DEFAULT_PAY_LANG = "tr"
 
 # Plan bazlı fayda listeleri (tek kaynak; payment page, pay.html, checkout summary hepsi buradan beslenir)
@@ -17,6 +17,7 @@ PLAN_BENEFITS = {
         "es": ["1 análisis", "Puntuación de salud e informe resumido", "Descarga PDF", "Recomendaciones básicas dieta y estilo de vida"],
         "hi": ["1 रक्त परीक्षण विश्लेषण", "स्वास्थ्य स्कोर और सारांश", "PDF रिपोर्ट", "जीवनशैली सुझाव"],
         "he": ["ניתוח בדיקת דם אחת", "ציון בריאות ותקציר", "דוח PDF", "המלצות אורח חיים"],
+        "ar": ["تحليل واحد لتحاليل الدم", "نقاط صحية وملخص", "تقرير PDF", "توصيات نمط حياة"],
     },
     "monthly": {
         "tr": ["Ayda 5 analiz", "İlerleme karşılaştırması", "PDF raporlar", "Yaşam tarzı önerileri", "Öncelikli destek"],
@@ -27,6 +28,7 @@ PLAN_BENEFITS = {
         "es": ["5 análisis al mes", "Comparación de análisis anteriores", "Descarga PDF", "Recomendaciones de dieta y estilo de vida", "Soporte prioritario"],
         "hi": ["महीने में 5 विश्लेषण", "प्रगति तुलना", "PDF रिपोर्ट", "जीवनशैली सुझाव", "प्राथमिकता सहायता"],
         "he": ["5 ניתוחים בחודש", "השוואת התקדמות", "דוחות PDF", "המלצות אורח חיים", "תמיכה עדיפה"],
+        "ar": ["5 تحليلات شهريًا", "مقارنة التقدم", "تقارير PDF", "توصيات نمط حياة", "دعم ذو أولوية"],
     },
     "yearly": {
         # Yıllık planda sayısal kotayı tek kaynaktan yönetmek için,
@@ -39,6 +41,7 @@ PLAN_BENEFITS = {
         "es": ["Cuota anual de análisis ampliada", "Plan anual con valor añadido", "Todas las funciones Pro", "Soporte prioritario", "Mejor ahorro a largo plazo"],
         "hi": ["विस्तारित वार्षिक विश्लेषण कोटा", "वार्षिक प्लान में अतिरिक्त मूल्य शामिल", "सभी प्रीमियम सुविधाएं", "प्राथमिकता सहायता", "दीर्घकालिक सर्वोत्तम बचत"],
         "he": ["מכסת ניתוח שנתית מורחבת", "תכנית שנתית עם ערך נוסף", "כל התכונות הפרימיום", "תמיכה עדיפה", "החיסכון הטוב ביותר לטווח ארוך"],
+        "ar": ["حصة تحليلات سنوية موسعة", "قيمة إضافية في الاشتراك السنوي", "كل مزايا البريميوم", "دعم ذو أولوية", "أفضل توفير على المدى الطويل"],
     },
 }
 
@@ -67,6 +70,8 @@ PAY_UI = {
         "failed_message": "İşlem iptal edildi veya bir hata oluştu. Tekrar deneyebilirsiniz.",
         "failed_retry": "Tekrar dene",
         "failed_pricing": "Fiyatlandırma",
+        "pricing_page_title": "Fiyatlar: Tek analiz ve abonelik | Kan tahlili raporu | NoryaAI",
+        "pricing_meta_description": "Kan tahlili sonuçlarınız için şeffaf fiyatlandırma: tek seferlik rapor veya abonelik. Güvenli ödeme, hızlı erişim. KVKK ve GDPR uyumlu.",
         "secure_checkout": "Güvenli ödeme",
         "trust_3d": "3D Secure",
         "trust_3d_protected": "3D Secure Korumalı",
@@ -199,6 +204,13 @@ PAY_UI = {
         "plan_free_preview_desc": "Sınırlı çıktı, temel yorum. Denemeye teşvik.",
         "plan_premium_report_desc": "Tam analiz, premium PDF, doktor tarzı özet, sağlık puanı ve öneriler.",
         "plan_norya_plus_desc": "Birden fazla analiz, rapor geçmişi, karşılaştırma, öncelikli erişim.",
+        "pricing_free_plan_period": "Sınırlı önizleme",
+        "plan_free_limited_note": "(sınırlı)",
+        "price_yearly_abbr": "/yıl",
+        "plan_free_feature_secondary": "Temel ekran özeti",
+        "plan_premium_feature_pdf": "İndirilebilir PDF rapor",
+        "price_yearly_per": "Yıllık",
+        "cta_get_premium_report": "Premium raporu al",
         "trust_secure_payment": "Güvenli ödeme",
         "trust_privacy_first": "Gizlilik öncelikli",
         "trust_multilang": "Çok dilli destek",
@@ -676,6 +688,13 @@ PAY_UI = {
         "plan_free_preview_desc": "Limited output, basic interpretation. Try it first.",
         "plan_premium_report_desc": "Full analysis, premium PDF, doctor-style summary, health score and recommendations.",
         "plan_norya_plus_desc": "Multiple analyses, report history, comparison, priority access.",
+        "pricing_free_plan_period": "Limited preview",
+        "plan_free_limited_note": "(limited)",
+        "price_yearly_abbr": "/yr",
+        "plan_free_feature_secondary": "Basic on-screen summary",
+        "plan_premium_feature_pdf": "Downloadable PDF report",
+        "price_yearly_per": "per year",
+        "cta_get_premium_report": "Get Premium Report",
         "trust_secure_payment": "Secure payment",
         "trust_privacy_first": "Privacy-first handling",
         "trust_multilang": "Multi-language support",
@@ -2282,6 +2301,22 @@ _hi.update({
     "testimonial_12_name": "Dr. Y. B.",
     "testimonial_12_text": "क्लीनिकल निर्णय समर्थन और मरीज़ फॉलो-अप के लिए उपयोग करता हूं। सारांश स्पष्ट है।",
     "testimonial_12_country": "इज़राइल",
+    "footer_refund": "रिफ़ंड",
+    "refund_request_title": "रिफ़ंड अनुरोध",
+    "refund_request_intro": "ऑर्डर नंबर और ईमेल के साथ अनुरोध भेजें। स्वीकृत रिफ़ंड PayTR के ज़रिए आपके कार्ड पर किए जाते हैं।",
+    "refund_request_merchant_oid": "ऑर्डर नंबर (merchant_oid)",
+    "refund_request_merchant_oid_placeholder": "उदा. ord_abc123...",
+    "refund_request_email": "आपका ईमेल",
+    "refund_request_reason": "कारण (वैकल्पिक)",
+    "refund_request_reason_placeholder": "संक्षिप्त विवरण...",
+    "refund_request_submit": "अनुरोध भेजें",
+    "refund_request_success": "आपका अनुरोध प्राप्त हो गया है। हम जल्द ईमेल से जवाब देंगे।",
+    "refund_request_error_order_not_found": "इस ऑर्डर नंबर के लिए कोई पूर्ण भुगतान नहीं मिला।",
+    "refund_request_error_invalid": "ऑर्डर नंबर और ईमेल आवश्यक हैं।",
+    "refund_request_link": "रिफ़ंड फॉर्म",
+    "refund_request_merchant_oid_help": "भुगतान पुष्टि ईमेल या PayTR पेज से ऑर्डर नंबर।",
+    "refund_request_success_back": "आप रिफ़ंड और रद्दीकरण नीति पृष्ठ पर वापस जा सकते हैं।",
+    "refund_request_paytr_footer": "भुगतान PayTR के माध्यम से लिए जाते हैं; रिफ़ंड उसी चैनल से संसाधित होते हैं।",
 })
 PAY_UI["hi"] = _hi
 
@@ -2307,14 +2342,73 @@ _he.update({
     "testimonial_12_name": "Dr. Y. B.",
     "testimonial_12_text": "אני משתמש לתמיכה בהחלטות קליניות ומעקב מטופלים. התקציר ברור.",
     "testimonial_12_country": "ישראל",
+    "footer_refund": "החזר",
+    "refund_request_title": "בקשת החזר",
+    "refund_request_intro": "שלחו את הבקשה עם מספר ההזמנה והאימייל. החזרים שאושרו מעובדים לכרטיס דרך PayTR.",
+    "refund_request_merchant_oid": "מספר הזמנה (merchant_oid)",
+    "refund_request_merchant_oid_placeholder": "למשל ord_abc123...",
+    "refund_request_email": "האימייל שלכם",
+    "refund_request_reason": "סיבה (אופציונלי)",
+    "refund_request_reason_placeholder": "תיאור קצר...",
+    "refund_request_submit": "שליחת בקשה",
+    "refund_request_success": "הבקשה התקבלה. נחזור אליכם במייל בהקדם.",
+    "refund_request_error_order_not_found": "לא נמצא תשלום שהושלם עבור מספר הזמנה זה.",
+    "refund_request_error_invalid": "מספר הזמנה ואימייל הם שדות חובה.",
+    "refund_request_link": "טופס החזר",
+    "refund_request_merchant_oid_help": "מספר ההזמנה ממייל אישור התשלום או מעמוד PayTR.",
+    "refund_request_success_back": "אפשר לחזור לעמוד מדיניות ההחזר והביטול.",
+    "refund_request_paytr_footer": "תשלומים מתקבלים דרך PayTR; החזרים מעובדים באותו ערוץ.",
 })
 PAY_UI["he"] = _he
+
+# Arabic: copy from English, override key strings (checkout + testimonials)
+_ar = dict(PAY_UI["en"])
+_ar.update(
+    {
+        "pay_title": "الدفع",
+        "plan_single": "تحليل واحد",
+        "plan_monthly": "اشتراك شهري",
+        "plan_yearly": "اشتراك سنوي",
+        "testimonials_heading": "ماذا يقول المستخدمون",
+        "testimonial_verified": "شراء مُؤكد",
+        "testimonial_doctor_badge": "طبيب",
+        "testimonial_9_name": "P. S.",
+        "testimonial_9_text": "التقرير كان واضحًا جدًا، واستلمته في نفس اليوم.",
+        "testimonial_9_country": "الهند",
+        "testimonial_10_name": "J. M.",
+        "testimonial_10_text": "ساعدني على فهم مستويات الفيتامينات لدي.",
+        "testimonial_10_country": "المملكة المتحدة",
+        "testimonial_11_name": "Dr. S. P.",
+        "testimonial_11_text": "أنصح المرضى بثقة لملخصات تحاليل الدم في العيادة.",
+        "testimonial_11_country": "الهند",
+        "testimonial_12_name": "Dr. Y. B.",
+        "testimonial_12_text": "أستخدمه لدعم القرار السريري ومتابعة المرضى. الملخص واضح.",
+        "testimonial_12_country": "إسرائيل",
+        "footer_refund": "استرداد",
+        "refund_request_title": "طلب استرداد",
+        "refund_request_intro": "أرسل الطلب برقم الطلب والبريد الإلكتروني. تُعالَج المبالغ المستردة المعتمدة إلى بطاقتك عبر PayTR.",
+        "refund_request_merchant_oid": "رقم الطلب (merchant_oid)",
+        "refund_request_merchant_oid_placeholder": "مثال ord_abc123...",
+        "refund_request_email": "بريدك الإلكتروني",
+        "refund_request_reason": "السبب (اختياري)",
+        "refund_request_reason_placeholder": "وصف موجز...",
+        "refund_request_submit": "إرسال الطلب",
+        "refund_request_success": "تم استلام طلبك. سنعود إليك عبر البريد قريبًا.",
+        "refund_request_error_order_not_found": "لا يوجد دفع مكتمل لهذا رقم الطلب.",
+        "refund_request_error_invalid": "رقم الطلب والبريد الإلكتروني مطلوبان.",
+        "refund_request_link": "نموذج الاسترداد",
+        "refund_request_merchant_oid_help": "رقم الطلب من بريد تأكيد الدفع أو صفحة PayTR.",
+        "refund_request_success_back": "يمكنك العودة إلى صفحة سياسة الاسترداد والإلغاء.",
+        "refund_request_paytr_footer": "تُستقبل المدفوعات عبر PayTR؛ وتُعالَج المبالغ المستردة عبر نفس القناة.",
+    }
+)
+PAY_UI["ar"] = _ar
 
 
 def get_plan_benefits(plan_code: str, lang: str) -> list[str]:
     """Plan code -> list of benefit strings for that plan in given language."""
     lang = (lang or "tr").lower()[:2]
-    if lang not in ("tr", "en", "de", "fr", "it", "es", "hi", "he"):
+    if lang not in ("tr", "en", "de", "fr", "it", "es", "hi", "he", "ar"):
         lang = "en"
     if "single" in (plan_code or "").lower():
         return PLAN_BENEFITS["single"].get(lang, PLAN_BENEFITS["single"]["en"])
@@ -2326,13 +2420,11 @@ def get_plan_benefits(plan_code: str, lang: str) -> list[str]:
 
 
 def get_pay_ui(lang: str | None) -> dict:
-    """Return PAY_UI for the given locale. hi/he use en; others fallback to tr."""
+    """Return PAY_UI for the given locale. Unknown codes fall back to English (not Turkish)."""
     if not lang:
-        return PAY_UI[DEFAULT_PAY_LANG]
+        return PAY_UI.get(DEFAULT_PAY_LANG, PAY_UI["en"])
     lang = (lang or "").lower()[:2]
-    if lang in ("hi", "he"):
-        return PAY_UI.get("en", PAY_UI[DEFAULT_PAY_LANG])
-    return PAY_UI.get(lang, PAY_UI[DEFAULT_PAY_LANG])
+    return PAY_UI.get(lang, PAY_UI["en"])
 
 
 def get_plan_display_name(plan_code: str, lang: str | None) -> str:

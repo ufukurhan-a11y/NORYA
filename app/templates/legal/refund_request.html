@@ -1,5 +1,15 @@
 {% extends "legal/base_legal.html" %}
-{% block title %}{{ t.refund_request_title }} — Norya{% endblock %}
+{% block title %}{{ t.refund_request_title }} — NoryaAI{% endblock %}
+{% block meta %}
+<meta name="description" content="{{ t.refund_request_intro }}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ t.refund_request_title }} — NoryaAI" />
+<meta property="og:description" content="{{ t.refund_request_intro }}" />
+{% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="{{ t.refund_request_title }} — NoryaAI" />
+<meta name="twitter:description" content="{{ t.refund_request_intro }}" />
+{% endblock %}
 {% block content %}
 <div class="max-w-2xl mx-auto">
   <h1 class="text-2xl font-bold text-accent-900 mb-2">{{ t.refund_request_title }}</h1>
@@ -16,6 +26,12 @@
     <a href="/iade-talebi?lang=it" class="{% if lang == 'it' %}font-semibold text-[#0EA5A4]{% else %}text-accent-600 hover:text-[#0EA5A4]{% endif %}">IT</a>
     <span class="text-accent-300 mx-1">|</span>
     <a href="/iade-talebi?lang=es" class="{% if lang == 'es' %}font-semibold text-[#0EA5A4]{% else %}text-accent-600 hover:text-[#0EA5A4]{% endif %}">ES</a>
+    <span class="text-accent-300 mx-1">|</span>
+    <a href="/iade-talebi?lang=he" class="{% if lang == 'he' %}font-semibold text-[#0EA5A4]{% else %}text-accent-600 hover:text-[#0EA5A4]{% endif %}">HE</a>
+    <span class="text-accent-300 mx-1">|</span>
+    <a href="/iade-talebi?lang=hi" class="{% if lang == 'hi' %}font-semibold text-[#0EA5A4]{% else %}text-accent-600 hover:text-[#0EA5A4]{% endif %}">HI</a>
+    <span class="text-accent-300 mx-1">|</span>
+    <a href="/iade-talebi?lang=ar" class="{% if lang == 'ar' %}font-semibold text-[#0EA5A4]{% else %}text-accent-600 hover:text-[#0EA5A4]{% endif %}">AR</a>
   </p>
   <p class="text-accent-600 text-sm mb-6">{{ t.refund_request_intro }}</p>
 

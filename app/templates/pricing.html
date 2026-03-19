@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <!-- DEBUG_FILE: pricing.html v1 -->
-<html lang="{{ lang }}">
+<html lang="{{ lang }}"{% if lang in ['ar', 'he'] %} dir="rtl"{% endif %}>
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5.0">
@@ -10,13 +10,22 @@
   {% if t.get("pricing_meta_description") %}
   <meta name="description" content="{{ t.get('pricing_meta_description') }}" />
   <meta property="og:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />
+  <meta property="og:url" content="{{ base_url }}/pricing" />
   <meta property="og:description" content="{{ t.get('pricing_meta_description') }}" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />
+  <meta name="twitter:description" content="{{ t.get('pricing_meta_description') }}" />
   {% endif %}
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="{{ base_url }}/static/icons/apple-touch-icon.png" />
   <link rel="canonical" href="{{ base_url }}/pricing" />
+  {% if hreflang_alternates %}
+  {% for alt in hreflang_alternates %}
+  <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
+  {% endfor %}
+  {% endif %}
   <script>
     console.log('[debug-file] pricing.html v1 loaded, lang =', {{ lang|tojson|safe }});
     console.log("[pricing] detected lang from backend:", {{ lang|tojson|safe }});
@@ -151,6 +160,9 @@
       box-shadow:0 8px 32px rgba(14,165,164,0.12),0 0 0 1px rgba(14,165,164,0.15);
     }
     .plan-card--featured:hover{box-shadow:0 16px 40px rgba(14,165,164,0.18),0 0 0 1px rgba(14,165,164,0.2);}
+    [dir="rtl"] .plan-badge{left:auto;right:24px;}
+    [dir="rtl"] .plan-price span.currency{margin-right:0;margin-left:2px;}
+    [dir="rtl"] .plan-price span.period{margin-left:0;margin-right:4px;}
     .plan-badge{
       position:absolute;
       top:18px;
@@ -308,12 +320,12 @@
       <div class="pricing-grid">
         <article class="plan-card" aria-label="{{ t.get('plan_free_preview', 'Free Preview') }}">
           <h2 class="plan-name">{{ t.get("plan_free_preview", "Free Preview") }}</h2>
-          <p class="plan-period">{{ t.get("price_single_per", "Limited preview") }}</p>
+          <p class="plan-period">{{ t.get("pricing_free_plan_period", t.get("price_single_per", "Limited preview")) }}</p>
           <p class="plan-price"><span class="currency">€</span>0</p>
           <p class="plan-desc">{{ t.get("plan_free_preview_desc", "Limited output, basic interpretation. Try it first.") }}</p>
           <ul class="plan-features">
-            <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }} (sınırlı)</span></li>
-            <li><span class="bullet">✓</span><span>{{ t.get("trust_pdf", "Basic output") }}</span></li>
+            <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }}{% if t.get('plan_free_limited_note') %} {{ t.get('plan_free_limited_note') }}{% endif %}</span></li>
+            <li><span class="bullet">✓</span><span>{{ t.get("plan_free_feature_secondary", t.get("trust_pdf", "Basic output")) }}</span></li>
           </ul>
           <a href="{{ base_url }}/#analyze" class="plan-cta plan-cta--ghost">{{ t.get("cta_start_free", "Start Free") }}</a>
         </article>
@@ -322,14 +334,14 @@
         <article class="plan-card plan-card--featured" aria-label="{{ t.get('plan_premium_report', 'Premium Report') }}" style="position:relative;">
           <span class="plan-badge">{{ t.get("most_popular", "Most Popular") }}</span>
           <h2 class="plan-name">{{ t.get("plan_premium_report", "Premium Report") }}</h2>
-          <p class="plan-period">{{ t.get("price_single_per", "One-time") }}</p>
+          <p class="plan-period">{{ t.get("pricing_single_plan_period", t.get("price_once", t.get("price_single_per", "One-time"))) }}</p>
           <p class="plan-price">
             <span class="currency">€</span>{{ "%.2f"|format(single.price_cents / 100) }}
           </p>
           <p class="plan-desc">{{ t.get("plan_premium_report_desc", "Full analysis, premium PDF, doctor-style summary, health score and recommendations.") }}</p>
           <ul class="plan-features">
             <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }}</span></li>
-            <li><span class="bullet">✓</span><span>{{ t.get("trust_pdf", "Downloadable PDF report") }}</span></li>
+            <li><span class="bullet">✓</span><span>{{ t.get("plan_premium_feature_pdf", t.get("trust_pdf", "Downloadable PDF report")) }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("kdv_dahil", "VAT included") }}</span></li>
           </ul>
           <a href="{{ base_url }}/payment?plan=single" class="plan-cta plan-cta--primary">{{ t.get("cta_get_premium_report", "Get Premium Report") or t.get("cta_single", "Get Premium Report") }}</a>
@@ -341,7 +353,7 @@
           <p class="plan-period">{{ t.get("price_yearly_per", "per year") }}</p>
           <p class="plan-price">
             <span class="currency">€</span>{{ "%.2f"|format(yearly.price_cents / 100) }}
-            <span class="period">/yr</span>
+            <span class="period">{{ t.get("price_yearly_abbr", "/yr") }}</span>
           </p>
           <p class="plan-desc">{{ t.get("plan_norya_plus_desc", "Multiple analyses, report history, comparison, priority access.") }}</p>
           <ul class="plan-features">
