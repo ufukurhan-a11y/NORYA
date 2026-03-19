@@ -286,6 +286,15 @@ def favicon():
     return RedirectResponse(url="/static/icons/favicon-32x32.png", status_code=302)
 
 
+@app.get("/googlec8b372359ba47dd3.html", include_in_schema=False)
+def google_site_verification():
+    """Google Search Console doğrulama dosyasını kökten servis et."""
+    verification_file = STATIC_DIR / "googlec8b372359ba47dd3.html"
+    if not verification_file.is_file():
+        verification_file = Path.cwd() / "static" / "googlec8b372359ba47dd3.html"
+    return FileResponse(str(verification_file), media_type="text/html; charset=utf-8")
+
+
 app.state.limiter = limiter
 
 # AI response cache: aynı analiz girdisi (normalize metin + dil + plan + model) tekrar gelirse OpenAI çağrılmaz
@@ -543,6 +552,7 @@ async def inject_tracking_ids(request: Request, call_next):
     """Şablonlarda kullanılmak üzere GA ve Google Ads kimliklerini request.state'e yazar."""
     request.state.ga_measurement_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
     request.state.google_ads_conversion_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
+    request.state.google_site_verification = (getattr(settings, "google_site_verification", "") or "").strip()
     return await call_next(request)
 
 
@@ -1414,6 +1424,22 @@ def _inject_company(html: str) -> str:
     return html
 
 
+_GSC_VERIFICATION_PLACEHOLDER = "  <!-- NORYA_GSC_VERIFICATION -->"
+
+
+def _inject_google_site_verification(html: str) -> str:
+    """Search Console HTML etiketi: static/index.html içindeki placeholder'ı meta ile değiştirir."""
+    from html import escape
+
+    token = (getattr(settings, "google_site_verification", "") or "").strip()
+    if not token:
+        return html.replace(_GSC_VERIFICATION_PLACEHOLDER + "\n", "").replace(_GSC_VERIFICATION_PLACEHOLDER, "")
+    meta = f'  <meta name="google-site-verification" content="{escape(token, quote=True)}" />'
+    if _GSC_VERIFICATION_PLACEHOLDER in html:
+        return html.replace(_GSC_VERIFICATION_PLACEHOLDER, meta, 1)
+    return html
+
+
 LEGAL_PAGES = {
     "mesafeli-satis-sozlesmesi",
     "gizlilik-politikasi",
@@ -1930,6 +1956,7 @@ def _landing_response(locale: str, request: Request):
     raw = _inject_ga(raw)
     raw = _inject_whatsapp(raw)
     raw = _inject_company(raw)
+    raw = _inject_google_site_verification(raw)
 
     base_url = str(request.base_url).rstrip("/")
     canonical_url = f"{base_url}/{locale}"
@@ -2035,6 +2062,7 @@ def _index_response(request: Request | None = None):
         raw = _inject_ga(raw)  # Google Ads AW-18004536281 + isteğe bağlı GA4, tek yükleme
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
+        raw = _inject_google_site_verification(raw)
         if request is not None:
             import re
             from html import escape
@@ -2113,6 +2141,7 @@ def report_page(request: Request):
         raw = _inject_ga(raw)  # Google Ads global site tag
         raw = _inject_whatsapp(raw)
         raw = _inject_company(raw)
+        raw = _inject_google_site_verification(raw)
         base_url = str(request.base_url).rstrip("/")
         raw = _inject_canonical(raw, f"{base_url}/report")
         return HTMLResponse(

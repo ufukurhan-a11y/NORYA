@@ -4,7 +4,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}Legal — Norya{% endblock %}</title>
+  {% include "partials/gsc_meta.html" %}
+  <title>{% block title %}Legal — NoryaAI{% endblock %}</title>
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
   {% if hreflang_alternates %}{% for alt in hreflang_alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />{% endfor %}{% endif %}
   {% block meta %}{% endblock %}
@@ -74,7 +75,7 @@
 <body class="bg-white text-accent-800 min-h-screen flex flex-col font-sans antialiased">
   <header class="border-b border-accent-200 bg-white/95 backdrop-blur sticky top-0 z-10">
     <div class="max-w-4xl mx-auto px-4 py-4 flex items-center justify-between">
-      <a href="/" class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="Norya AI" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
+      <a href="/" class="flex items-center shrink-0" aria-label="NoryaAI home"><img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 sm:h-10 w-auto object-contain" width="200" height="50" loading="eager" /></a>
       <div class="flex items-center gap-3">
         <a href="/" class="text-sm text-accent-600 hover:text-primary-600 font-medium">{{ back_to_home }}</a>
         {% include "partials/header_lang.html" %}
@@ -112,7 +113,7 @@
     </div>
   </footer>
 
-  <a href="https://wa.me/{{ company_phone_wa }}?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
+  <a href="https://wa.me/{{ company_phone_wa }}?text=Merhaba%20NoryaAI%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."
      target="_blank" rel="noopener"
      class="wa-float"
      aria-label="WhatsApp ile iletişim">

@@ -68,6 +68,8 @@ class Settings(BaseSettings):
     google_ads_conversion_id: str = "AW-18004536281"
     # Google Ads: "Satın alma işlemi" dönüşüm etiketi. Hesap > Araçlar > Dönüşümler'deki etiketle birebir aynı olmalı.
     google_ads_conversion_label: str = "RF4SCL78oIYcENnXnYlD"
+    # Google Search Console — HTML etiketi doğrulama: meta content değeri. Boşsa dosya doğrulamasındaki token kullanılır.
+    google_site_verification: str = "googlec8b372359ba47dd3"
     # WhatsApp iletişim: ülke kodu + numara, boşluksuz (örn. 905551234567). Boşsa varsayılan 905071703564 kullanılır.
     whatsapp_contact: str = "905071703564"
     # GİB e-Arşiv fatura (admin'den sipariş başına kesim)

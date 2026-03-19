@@ -1,0 +1,5 @@
+{# Google Search Console — HTML tag doğrulama (yalnızca content doluysa) #}
+{% set _gsc = request.state.google_site_verification|default('', true) if request else '' %}
+{% if _gsc %}
+  <meta name="google-site-verification" content="{{ _gsc|e }}" />
+{% endif %}
