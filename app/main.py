@@ -56,6 +56,7 @@ from app.models import (  # noqa: F401
     AnalysisRecord,
     AuditLog,
     DiscountCode,
+    EmailLead,
     EnterpriseLead,
     ErrorLog,
     PaymentOrder,
@@ -1947,6 +1948,69 @@ async def api_enterprise_lead(request: Request, db: Session = Depends(get_db)):
         log.warning("EnterpriseLead save failed: %s", e)
         raise HTTPException(status_code=500, detail="Kayıt alınamadı. Lütfen tekrar deneyin.")
     return JSONResponse(content={"ok": True})
+
+
+VALID_LEAD_SOURCES = frozenset({"homepage", "blog", "sample-report", "pricing"})
+
+
+@app.post("/api/lead/subscribe")
+@limiter.limit("5/minute")
+async def api_lead_subscribe(request: Request, db: Session = Depends(get_db)):
+    """E-posta toplama: blog, homepage, sample report vb. kaynaklardan gelen lead'ler."""
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid request.")
+    if not isinstance(body, dict):
+        raise HTTPException(status_code=400, detail="Invalid request.")
+
+    email = (body.get("email") or "").strip().lower()
+    if not email or "@" not in email or "." not in email.split("@")[-1]:
+        return JSONResponse(status_code=422, content={"ok": False, "error": "invalid_email"})
+    if len(email) > 255:
+        return JSONResponse(status_code=422, content={"ok": False, "error": "invalid_email"})
+
+    name = (body.get("name") or "").strip()[:255] or None
+    source = (body.get("source") or "").strip().lower()
+    if source not in VALID_LEAD_SOURCES:
+        source = "homepage"
+    locale = (body.get("locale") or "").strip().lower()[:16] or None
+
+    from sqlmodel import select
+    existing = db.exec(select(EmailLead).where(EmailLead.email == email)).first()
+    if existing:
+        return JSONResponse(content={"ok": True, "already": True})
+
+    ip = _client_ip(request)
+    user_agent = (request.headers.get("user-agent") or "")[:500] or None
+    try:
+        db.add(EmailLead(
+            email=email,
+            name=name,
+            source=source,
+            locale=locale,
+            ip=ip,
+            user_agent=user_agent,
+        ))
+        db.commit()
+    except Exception as e:
+        log.warning("EmailLead save failed: %s", e)
+        return JSONResponse(status_code=500, content={"ok": False, "error": "server_error"})
+
+    # Welcome email (background thread — non-blocking)
+    base_url = str(request.base_url).rstrip("/")
+    _lang = (locale or "en").split("-")[0].split("_")[0].strip().lower() or "en"
+
+    def _send():
+        try:
+            from app.services.email_sender import send_welcome_email
+            send_welcome_email(email, lang=_lang, base_url=base_url)
+        except Exception as exc:
+            log.warning("Welcome email failed for %s: %s", email, exc)
+
+    threading.Thread(target=_send, daemon=True).start()
+
+    return JSONResponse(content={"ok": True, "already": False})
 
 
 def _inject_canonical(raw: str, canonical_url: str) -> str:
@@ -5040,6 +5104,1285 @@ def seo_landing_de_laborwerte(request: Request):
     return _render_seo_landing(request, "de", "laborwerte-verstehen")
 
 
+@app.get("/en/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_en_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "en", "ai-blood-test-analyzer")
+
+
+@app.get("/en/compare/norya-vs-generic-ai", response_class=HTMLResponse)
+def compare_en_norya_vs_generic_ai(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "NoryaAI vs Generic AI for Blood Tests — Honest Comparison | NoryaAI",
+        "meta_description": "How does NoryaAI compare to ChatGPT or other AI chatbots for understanding blood test results? Side-by-side comparison of structured reports vs free-form chat answers.",
+        "hero_title": "NoryaAI vs Generic AI Chatbots for Blood Tests",
+        "hero_sub": "Both can work with lab data — but they approach it very differently. Here is an honest, side-by-side look at what each one offers when you need to understand your blood test results.",
+        "cta_hero_primary": "Analyze my blood test",
+        "cta_hero_secondary": "See a sample report",
+        "quick_answer_title": "The short version",
+        "quick_answer": "Generic AI chatbots like ChatGPT can explain medical terms and answer health questions in conversation. NoryaAI is purpose-built for blood tests: it reads your lab report, maps every value to reference ranges, and produces a structured, doctor-ready summary with a health score — not a free-form paragraph. Both have a place, but they solve different problems.",
+        "comparison_title": "Side-by-side comparison",
+        "comparison_sub": "How the two approaches differ across the features that matter most when you are looking at blood test results.",
+        "comparison_items": [
+            {
+                "label": "Report upload",
+                "generic": "Copy-paste values into a chat prompt and hope the formatting holds",
+                "norya": "Upload PDF, snap a photo, or paste text — values and ranges are parsed automatically",
+            },
+            {
+                "label": "Reference ranges",
+                "generic": "May guess ranges or omit them; no guarantee they match your lab's standards",
+                "norya": "Reference ranges displayed for every value — normal, low, or high — clearly labeled",
+            },
+            {
+                "label": "Units and lab formatting",
+                "generic": "No built-in awareness of lab-specific units or result layouts",
+                "norya": "Recognizes common lab units, panel structures, and result formats automatically",
+            },
+            {
+                "label": "Output structure",
+                "generic": "Free-form paragraph that varies with each prompt — no consistent format",
+                "norya": "Structured health score, category breakdown, and flagged markers — consistent every time",
+            },
+            {
+                "label": "Multilingual reports",
+                "generic": "Can translate text, but medical nuance may be lost in general translation",
+                "norya": "Full reports in 9+ languages with medical context preserved throughout",
+            },
+            {
+                "label": "Doctor-ready summary",
+                "generic": "No downloadable report — you would need to copy and format the chat yourself",
+                "norya": "Doctor-ready PDF with QR verification — print it, save it, or share it",
+            },
+            {
+                "label": "Privacy and data handling",
+                "generic": "Conversations may be stored and used for model training",
+                "norya": "GDPR/KVKK compliant — encrypted, never sold, never used for training",
+            },
+            {
+                "label": "Blood-test specific workflow",
+                "generic": "General-purpose chat interface designed for any topic",
+                "norya": "Dedicated upload, analysis, and report pipeline built specifically for lab results",
+            },
+            {
+                "label": "Workflow type",
+                "generic": "Open-ended conversation — the quality depends on how you write your prompt",
+                "norya": "Guided, structured analysis — upload once and get a complete report, no prompt needed",
+            },
+        ],
+        "generic_helps_title": "When generic AI chatbots can still help",
+        "generic_helps_sub": "This is not about one tool being bad and another being good. They serve different purposes.",
+        "generic_helps_items": [
+            {
+                "icon": "📚",
+                "title": "General health education",
+                "desc": "Chatbots are great for learning what a biomarker means, how the immune system works, or what a specific condition involves — broad educational questions.",
+            },
+            {
+                "icon": "💡",
+                "title": "Brainstorming questions for your doctor",
+                "desc": "Before an appointment, a chatbot can help you think through what to ask — even if it cannot read your actual lab report with precision.",
+            },
+            {
+                "icon": "🔍",
+                "title": "Understanding medical terminology",
+                "desc": "If you encounter an unfamiliar term in your report, a general AI can explain it quickly in plain language.",
+            },
+        ],
+        "why_norya_title": "Why people choose NoryaAI for blood tests",
+        "why_norya_sub": "When accuracy, structure, and a clean next-step matter more than a general conversation.",
+        "why_norya_items": [
+            {
+                "title": "Upload once, get a structured report",
+                "desc": "No prompt engineering, no reformatting. Upload your lab results and receive a health score, category breakdown, and flagged markers — automatically.",
+            },
+            {
+                "title": "Consistent format you can compare over time",
+                "desc": "Every report follows the same structure, so you can track changes across multiple blood tests and spot trends at a glance.",
+            },
+            {
+                "title": "Doctor-ready PDF you can actually bring",
+                "desc": "A clean, professional summary with QR verification. Print it or share it digitally — designed to be useful at your next appointment.",
+            },
+            {
+                "title": "Your language, your report",
+                "desc": "Choose from 9+ languages and get your full report in the one that feels most natural to you — with medical context intact.",
+            },
+        ],
+        "faqs": [
+            {
+                "q": "Can ChatGPT explain blood test results?",
+                "a": "Yes, to a degree. ChatGPT can explain what individual values mean in general terms. However, it does not parse your actual lab report, may hallucinate reference ranges, and produces a different answer each time you ask. NoryaAI is built to read your report directly and output a consistent, structured summary.",
+            },
+            {
+                "q": "Is NoryaAI a diagnosis tool?",
+                "a": "No. NoryaAI provides structured, educational explanations of your lab values. It does not diagnose conditions or recommend treatments. Always consult a qualified doctor for medical decisions.",
+            },
+            {
+                "q": "Why is a structured report better than a chat answer?",
+                "a": "A structured report gives you a health score, category breakdown, and flagged markers in a consistent format. You can compare it with previous tests, print it for your doctor, and see at a glance which values need attention — something a free-form chat paragraph cannot reliably offer.",
+            },
+            {
+                "q": "Can I upload a PDF instead of copying values manually?",
+                "a": "Yes. NoryaAI accepts PDF uploads, photos of printed lab reports (JPG/PNG), and pasted text. It parses the values and reference ranges automatically — no manual data entry required.",
+            },
+            {
+                "q": "Is NoryaAI better for multilingual lab reports?",
+                "a": "NoryaAI generates full reports in 9+ languages with preserved medical context. While general chatbots can translate text, they may lose nuance in medical terminology. NoryaAI's multilingual output is designed specifically for lab result interpretation.",
+            },
+        ],
+        "cta_title": "Ready to try a structured blood test report?",
+        "cta_sub": "Upload your lab results and see the difference a purpose-built analyzer makes.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing plans",
+    }
+    return templates.TemplateResponse("compare_page.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/compare/norya-vs-generic-ai",
+    })
+
+
+@app.get("/en/why-not-generic-ai-for-blood-test-results", response_class=HTMLResponse)
+def editorial_en_why_not_generic_ai(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "Should You Use Generic AI for Blood Test Results? | NoryaAI",
+        "meta_description": "Can ChatGPT or other AI chatbots safely explain your blood test results? Learn where general-purpose AI helps, where it falls short, and when a structured tool makes more sense.",
+        "hero_title": "Should You Use Generic AI for Blood Test Results?",
+        "hero_sub": "AI chatbots can do a lot \u2014 but understanding lab results takes more than a general conversation. Here is an honest look at what works, what does not, and when a purpose-built workflow makes the difference.",
+        "cta_hero_primary": "Analyze my blood test",
+        "cta_hero_secondary": "See a sample report",
+        "short_answer_title": "The short answer",
+        "short_answer": "Generic AI chatbots are useful for explaining medical terms and exploring health topics. But when you need to upload a lab report and get structured output \u2014 with reference ranges, flagged markers, and a summary you can bring to your doctor \u2014 a tool built for that specific task tends to be more practical and reliable.",
+        "generic_helps_title": "Where generic AI chatbots can genuinely help",
+        "generic_helps_sub": "General-purpose AI is not the wrong choice for everything. Here is where it works well.",
+        "generic_helps_items": [
+            {
+                "icon": "\U0001f4da",
+                "title": "Learning about health topics",
+                "desc": "Chatbots are excellent at exploring what a biomarker means, how certain conditions work, or what a specific lab panel measures \u2014 broad educational questions without needing your actual report.",
+            },
+            {
+                "icon": "\U0001f4a1",
+                "title": "Preparing questions for your doctor",
+                "desc": "Before an appointment, a chatbot can help you brainstorm what to ask \u2014 even if it cannot reliably parse your lab report.",
+            },
+            {
+                "icon": "\U0001f4dd",
+                "title": "Summarizing general health articles",
+                "desc": "If you find a medical article that is hard to follow, a chatbot can break it down into simpler language quickly.",
+            },
+        ],
+        "falls_short_title": "Where generic AI falls short for lab reports",
+        "falls_short_sub": "Lab results are not regular text. They contain structured data \u2014 values, units, reference ranges, panel groupings \u2014 that general-purpose chatbots were not designed to handle consistently.",
+        "falls_short_items": [
+            {
+                "icon": "\U0001f4c4",
+                "title": "Uploading a lab report directly",
+                "desc": "Most chatbots require you to copy and paste values manually. Formatting, tables, and panel structure are often lost \u2014 and with them, important context.",
+            },
+            {
+                "icon": "\U0001f4cf",
+                "title": "Reference ranges and units",
+                "desc": "A chatbot may guess reference ranges or skip them entirely. It has no reliable way to know what your specific lab considers normal, low, or high.",
+            },
+            {
+                "icon": "\U0001f4ca",
+                "title": "Structured, consistent output",
+                "desc": "Every chatbot response is different. There is no health score, no category breakdown, no flagged markers \u2014 just a paragraph that changes each time you ask.",
+            },
+            {
+                "icon": "\U0001fa7a",
+                "title": "A doctor-ready summary",
+                "desc": "Chatbot responses cannot be downloaded, printed, or verified. A dedicated tool produces a clean PDF you can share at your next appointment.",
+            },
+            {
+                "icon": "\U0001f310",
+                "title": "Multilingual medical context",
+                "desc": "General translation can lose medical nuance. A purpose-built tool preserves clinical context when generating reports in different languages.",
+            },
+            {
+                "icon": "\U0001f512",
+                "title": "Privacy-first data handling",
+                "desc": "Chat conversations may be stored and used for model training. A dedicated health tool can offer encrypted processing with no data reuse.",
+            },
+        ],
+        "structured_title": "Why a structured workflow matters for blood tests",
+        "structured_sub": "When you are looking at lab results, what you need is not a conversation \u2014 it is clarity.",
+        "structured_items": [
+            {
+                "title": "Consistency you can track over time",
+                "desc": "A structured report uses the same format every time, so you can compare your results across months and spot trends \u2014 not something a chat paragraph allows.",
+            },
+            {
+                "title": "A format your doctor recognizes",
+                "desc": "Doctors are used to structured summaries with ranges, flags, and categories. A well-organized report makes your appointment more productive.",
+            },
+            {
+                "title": "No prompt engineering required",
+                "desc": "Upload your report once and get a complete analysis. No need to figure out the right question or reformat your data.",
+            },
+            {
+                "title": "Verified, downloadable output",
+                "desc": "A PDF with a health score and QR verification is something you can save, print, and share \u2014 a chat window is not.",
+            },
+        ],
+        "why_norya_title": "Why some users choose NoryaAI",
+        "why_norya_sub": "NoryaAI is one option for people who want a structured, privacy-first approach to understanding their blood test results.",
+        "why_norya_items": [
+            {
+                "title": "Upload once, get a structured report",
+                "desc": "PDF, photo, or pasted text. NoryaAI reads your lab report and produces a health score, category breakdown, and flagged markers \u2014 automatically.",
+            },
+            {
+                "title": "Doctor-ready PDF with QR verification",
+                "desc": "A professional summary you can print, save, or share digitally. Designed to be useful at your next appointment.",
+            },
+            {
+                "title": "Reports in 9+ languages",
+                "desc": "English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, Arabic, and more \u2014 with medical context preserved.",
+            },
+            {
+                "title": "Privacy-first \u2014 encrypted, never sold",
+                "desc": "GDPR and KVKK compliant. Your data is encrypted, used only for your report, and never shared with third parties.",
+            },
+        ],
+        "faqs": [
+            {
+                "q": "Should I use ChatGPT to understand my blood test results?",
+                "a": "ChatGPT can explain what individual blood values mean in general terms. However, it cannot reliably parse your actual lab report, may generate inaccurate reference ranges, and produces inconsistent output. For structured analysis with reference ranges and a downloadable summary, a purpose-built tool is more practical.",
+            },
+            {
+                "q": "Can generic AI tools read a lab report PDF?",
+                "a": "Most general-purpose chatbots work with pasted text, not uploaded files. Even when file upload is available, they are not designed to parse lab-specific formatting \u2014 values, units, panel structures, and reference ranges may be misread or ignored.",
+            },
+            {
+                "q": "Is NoryaAI a replacement for my doctor?",
+                "a": "No. NoryaAI provides structured, educational explanations of your lab values. It does not diagnose, treat, or recommend medication. Always consult a qualified healthcare professional for medical decisions.",
+            },
+            {
+                "q": "What makes a structured report different from a chatbot answer?",
+                "a": "A structured report gives you a health score, category breakdown, and flagged markers in a consistent format that you can compare over time, print for your doctor, and verify. A chatbot gives you a paragraph that changes with every prompt.",
+            },
+            {
+                "q": "Does NoryaAI support reports in different languages?",
+                "a": "Yes. NoryaAI generates full reports in 9+ languages including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic \u2014 with medical context preserved throughout.",
+            },
+            {
+                "q": "Is my health data safe with NoryaAI?",
+                "a": "All uploads are encrypted in transit and at rest. Your data is used only to generate your report and is never sold, shared with advertisers, or used for model training. NoryaAI is GDPR and KVKK compliant.",
+            },
+        ],
+        "cta_title": "Ready to try a structured approach?",
+        "cta_sub": "Upload your blood test and see what a purpose-built report looks like.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+    }
+    return templates.TemplateResponse("editorial_landing.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/why-not-generic-ai-for-blood-test-results",
+    })
+
+
+@app.get("/en/upload-blood-test-results", response_class=HTMLResponse)
+def landing_en_upload_blood_test(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "Upload Blood Test Results \u2014 AI-Powered Analysis | NoryaAI",
+        "meta_description": "Upload your blood test PDF, photo, or lab report and get a structured, doctor-ready summary with reference ranges, health score, and flagged markers \u2014 in minutes.",
+        "hero_title": "Upload Your Blood Test Results",
+        "hero_sub": "Upload a PDF, snap a photo, or paste your lab values. NoryaAI turns your blood test into a structured, easy-to-read report with reference ranges, flagged markers, and a health score.",
+        "hero_trust": "Encrypted upload \u00b7 GDPR & KVKK compliant \u00b7 No data sharing",
+        "cta_hero_primary": "Start analysis",
+        "cta_hero_secondary": "View sample report",
+        "formats_title": "Supported upload formats",
+        "formats_sub": "Choose whichever method is easiest for you \u2014 all three produce the same structured report.",
+        "formats": [
+            {
+                "icon": "\U0001f4c4",
+                "title": "PDF lab reports",
+                "desc": "Upload the PDF you received from your lab or hospital. NoryaAI reads tables, values, and reference ranges directly from the document.",
+            },
+            {
+                "icon": "\U0001f4f7",
+                "title": "Photos & screenshots",
+                "desc": "Take a photo of your printed report or screenshot your online lab portal. JPG and PNG files are supported.",
+            },
+            {
+                "icon": "\u2328\ufe0f",
+                "title": "Pasted text",
+                "desc": "No file? Copy and paste your lab values directly. NoryaAI will structure them into a complete report.",
+            },
+        ],
+        "steps_title": "What happens after you upload",
+        "steps_sub": "From upload to a structured report \u2014 the entire process takes just a few minutes.",
+        "steps": [
+            {
+                "icon": "\U0001f4e4",
+                "title": "Upload your report",
+                "desc": "Choose a PDF, photo, or paste your lab values into the analysis form.",
+            },
+            {
+                "icon": "\U0001f9e0",
+                "title": "AI reads your data",
+                "desc": "Values, units, and reference ranges are extracted and structured automatically.",
+            },
+            {
+                "icon": "\U0001f4cb",
+                "title": "Structured summary",
+                "desc": "Health score, category breakdown, and flagged markers \u2014 all in one clear view.",
+            },
+            {
+                "icon": "\U0001f4e5",
+                "title": "Download your report",
+                "desc": "Get a doctor-ready PDF you can print, save, or share at your next appointment.",
+            },
+        ],
+        "reasons_title": "Why people upload their results here",
+        "reasons": [
+            {
+                "icon": "\U0001fa7a",
+                "title": "Before a doctor visit",
+                "desc": "Arrive at your appointment with a clear, organized summary. It helps you ask better questions and makes the conversation more productive.",
+            },
+            {
+                "icon": "\U0001f310",
+                "title": "Reports in another language",
+                "desc": "Got lab results in a language you do not fully understand? Upload them and get a structured explanation in your preferred language \u2014 9+ languages supported.",
+            },
+            {
+                "icon": "\U0001f4d6",
+                "title": "To understand a complex report",
+                "desc": "Pages of lab data can be overwhelming. NoryaAI turns them into a categorized, easy-to-read breakdown with reference ranges and clear explanations.",
+            },
+        ],
+        "trust_title": "Your data stays yours",
+        "trust_sub": "Privacy is not an afterthought. It is built into every step of the upload and analysis process.",
+        "trust_items": [
+            {"icon": "\U0001f512", "text": "Encrypted in transit and at rest"},
+            {"icon": "\U0001f6e1\ufe0f", "text": "GDPR & KVKK compliant"},
+            {"icon": "\U0001f6ab", "text": "Never shared or sold"},
+            {"icon": "\U0001f504", "text": "Not used for model training"},
+        ],
+        "preview_title": "What your report looks like",
+        "preview_sub": "Here is a glimpse of the structured output you receive after uploading your blood test.",
+        "preview_lines": [
+            {"label": "Health Score", "value": "78 / 100 \u2014 Good overall, a few markers to watch"},
+            {"label": "Hemoglobin", "value": "14.2 g/dL \u2014 Within normal range (13.5\u201317.5)"},
+            {"label": "Glucose", "value": "108 mg/dL \u2014 Slightly elevated (normal: 70\u2013100)"},
+            {"label": "TSH", "value": "2.1 mIU/L \u2014 Normal thyroid function (0.4\u20134.0)"},
+            {"label": "Vitamin D", "value": "18 ng/mL \u2014 Below recommended level (30\u2013100)"},
+        ],
+        "preview_disclaimer": "Sample data for illustration only. Your actual report will reflect your personal lab values, units, and reference ranges.",
+        "preview_link": "See a full sample report \u2192",
+        "faqs": [
+            {
+                "q": "What file formats can I upload?",
+                "a": "NoryaAI accepts PDF files, JPG/JPEG images, and PNG images. You can also paste your lab values as text if you do not have a file to upload.",
+            },
+            {
+                "q": "How long does the analysis take?",
+                "a": "Most reports are processed in under two minutes. Complex multi-page PDFs may take slightly longer, but you will see your structured summary shortly after uploading.",
+            },
+            {
+                "q": "Is my uploaded report stored or shared?",
+                "a": "Your uploaded file is used only to generate your report. All data is encrypted in transit and at rest, never shared with third parties, and never used for model training. NoryaAI is GDPR and KVKK compliant.",
+            },
+            {
+                "q": "Can I upload reports in languages other than English?",
+                "a": "Yes. NoryaAI can read lab reports in multiple languages and generate your structured summary in any of 9+ supported languages, including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic.",
+            },
+            {
+                "q": "Do I need to create an account to upload?",
+                "a": "You can start an analysis without creating an account. An account lets you save your reports, track results over time, and access them from any device.",
+            },
+            {
+                "q": "Is NoryaAI a replacement for my doctor?",
+                "a": "No. NoryaAI provides structured, educational explanations of your lab values to help you understand your results better. It does not diagnose, treat, or prescribe. Always consult a qualified healthcare professional for medical decisions.",
+            },
+        ],
+        "cta_title": "Ready to upload your blood test?",
+        "cta_sub": "Get a structured, doctor-ready report in minutes. PDF, photo, or pasted text \u2014 your choice.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+    }
+    return templates.TemplateResponse("upload_landing.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/upload-blood-test-results",
+    })
+
+
+@app.get("/en/blood-test-results-explained", response_class=HTMLResponse)
+def landing_en_blood_test_explained(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "Blood Test Results Explained \u2014 What Your Report Actually Means | NoryaAI",
+        "meta_description": "Not sure what your blood test results mean? Learn how to read abbreviations, reference ranges, and units \u2014 and how a structured AI report can make it clearer.",
+        "hero_title": "Blood Test Results Explained",
+        "hero_sub": "Lab reports are packed with abbreviations, numbers, and ranges that most people were never taught to read. This guide covers what makes them confusing, what to look for, and how a structured approach can help you understand your results before your next doctor visit.",
+        "cta_hero_primary": "Analyze my blood test",
+        "cta_hero_secondary": "See a sample report",
+        "confusing_title": "Why blood test reports can feel confusing",
+        "confusing_sub": "You are not the only one who finds lab reports hard to read. Here are the most common reasons people struggle with them.",
+        "confusing_items": [
+            {
+                "icon": "\U0001f524",
+                "title": "Unfamiliar abbreviations",
+                "desc": "WBC, RBC, ALT, TSH, HbA1c \u2014 lab reports are full of shorthand that is rarely explained on the document itself.",
+            },
+            {
+                "icon": "\U0001f4cf",
+                "title": "Reference ranges that vary",
+                "desc": "What counts as \u201cnormal\u201d can differ between labs, age groups, and even measurement methods. A value that is flagged at one lab may be fine at another.",
+            },
+            {
+                "icon": "\u2696\ufe0f",
+                "title": "Different units, same test",
+                "desc": "Hemoglobin in g/dL or g/L? Glucose in mg/dL or mmol/L? The same biomarker can appear in different units depending on the country or lab.",
+            },
+            {
+                "icon": "\U0001f4c4",
+                "title": "Dense formatting, no explanation",
+                "desc": "Most lab reports are designed for clinicians, not patients. You get rows of numbers but no context about what they mean for you.",
+            },
+        ],
+        "clarify_title": "What NoryaAI helps clarify",
+        "clarify_sub": "NoryaAI does not replace your doctor. It gives you a structured, readable version of your results so you can walk into your appointment better informed.",
+        "clarify_items": [
+            {
+                "icon": "\U0001f4d6",
+                "title": "Plain-language explanations",
+                "desc": "Each biomarker comes with a clear, jargon-free explanation of what it measures and why it matters.",
+            },
+            {
+                "icon": "\U0001f4ca",
+                "title": "Reference ranges in context",
+                "desc": "Your values are shown alongside reference ranges so you can see where you stand \u2014 high, low, or within normal limits.",
+            },
+            {
+                "icon": "\U0001f3f7\ufe0f",
+                "title": "Flagged markers",
+                "desc": "Values outside the expected range are highlighted so you can focus on what may need attention.",
+            },
+            {
+                "icon": "\U0001f4cb",
+                "title": "Structured categories",
+                "desc": "Results are grouped by category \u2014 liver, kidney, thyroid, blood cells, and more \u2014 instead of a flat list of numbers.",
+            },
+            {
+                "icon": "\U0001f310",
+                "title": "Multilingual reports",
+                "desc": "Get your report in 9+ languages with medical context preserved. Useful when your lab report is in a language you do not fully understand.",
+            },
+            {
+                "icon": "\U0001fa7a",
+                "title": "Doctor-ready summary",
+                "desc": "A clean PDF with a health score and QR verification that you can print, save, or share at your next appointment.",
+            },
+        ],
+        "common_title": "Common things people look for in their results",
+        "common_sub": "These are some of the most frequently searched biomarkers and panels. NoryaAI covers all of them in its structured reports.",
+        "common_items": [
+            {"title": "Complete Blood Count (CBC)", "desc": "WBC, RBC, hemoglobin, hematocrit, platelets \u2014 the most common panel in routine checkups."},
+            {"title": "Liver function (ALT, AST, ALP)", "desc": "Enzymes that indicate how well your liver is working. Often checked in routine bloodwork."},
+            {"title": "Kidney function (BUN, creatinine)", "desc": "Markers that show how effectively your kidneys are filtering waste from your blood."},
+            {"title": "Thyroid panel (TSH, T3, T4)", "desc": "Hormones that regulate metabolism, energy levels, and body temperature."},
+            {"title": "Blood sugar (glucose, HbA1c)", "desc": "Fasting glucose and long-term average blood sugar. Key markers for metabolic health."},
+            {"title": "Cholesterol & lipids (LDL, HDL, triglycerides)", "desc": "Lipid panel results that are commonly discussed in cardiovascular health assessments."},
+            {"title": "Iron & ferritin", "desc": "Markers related to iron storage and transport. Relevant for fatigue, anemia, and general energy levels."},
+            {"title": "Vitamin D & B12", "desc": "Common vitamin levels that many people have checked, especially in routine annual bloodwork."},
+            {"title": "Inflammation markers (CRP, ESR)", "desc": "General indicators of inflammation in the body. Often used as a screening baseline."},
+        ],
+        "how_title": "How it works",
+        "how_sub": "Three steps from a confusing lab report to a structured summary you can actually understand.",
+        "how_steps": [
+            {
+                "icon": "\U0001f4e4",
+                "title": "Upload your report",
+                "desc": "PDF, photo, or pasted text. Choose whatever is easiest.",
+            },
+            {
+                "icon": "\U0001f9e0",
+                "title": "AI structures your data",
+                "desc": "Values, units, and ranges are extracted and organized into clear categories.",
+            },
+            {
+                "icon": "\U0001f4e5",
+                "title": "Get your explained report",
+                "desc": "Health score, flagged markers, plain-language explanations, and a downloadable PDF.",
+            },
+        ],
+        "preview_title": "What your explained report looks like",
+        "preview_sub": "Here is a glimpse of how NoryaAI structures and explains your blood test results.",
+        "preview_lines": [
+            {"label": "Health Score", "value": "78 / 100 \u2014 Good overall, a few markers to review"},
+            {"label": "WBC", "value": "6.8 \u00d710\u00b3/\u00b5L \u2014 Normal white blood cell count (4.5\u201311.0)"},
+            {"label": "Hemoglobin", "value": "14.2 g/dL \u2014 Within reference range (13.5\u201317.5)"},
+            {"label": "ALT", "value": "42 U/L \u2014 Slightly elevated liver enzyme (normal: 7\u201335)"},
+            {"label": "TSH", "value": "2.1 mIU/L \u2014 Normal thyroid function (0.4\u20134.0)"},
+            {"label": "Vitamin D", "value": "18 ng/mL \u2014 Below recommended level (30\u2013100)"},
+        ],
+        "preview_disclaimer": "Sample data for illustration only. Your actual report will reflect your personal lab values, units, and reference ranges.",
+        "faqs": [
+            {
+                "q": "What does \u201cblood test results explained\u201d actually mean?",
+                "a": "It means turning the raw numbers, abbreviations, and reference ranges on your lab report into plain-language explanations you can understand \u2014 with context about what each value measures and whether it falls within normal limits.",
+            },
+            {
+                "q": "Can NoryaAI explain any type of blood test?",
+                "a": "NoryaAI supports most standard blood panels including CBC, metabolic panels, liver and kidney function, thyroid, lipids, vitamins, and inflammation markers. If your report contains values it can parse, they will be included in your structured summary.",
+            },
+            {
+                "q": "Is this a medical diagnosis?",
+                "a": "No. NoryaAI provides structured, educational explanations of your lab values. It does not diagnose conditions, recommend treatments, or replace professional medical advice. Always consult a qualified healthcare professional.",
+            },
+            {
+                "q": "Why do reference ranges differ between labs?",
+                "a": "Labs use different equipment, methods, and population samples to establish their ranges. Age, sex, and even altitude can influence what a lab considers \u201cnormal.\u201d This is why the same value might be flagged at one lab but not another.",
+            },
+            {
+                "q": "Can I get my results explained in another language?",
+                "a": "Yes. NoryaAI generates reports in 9+ languages including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic \u2014 with medical context preserved in translation.",
+            },
+            {
+                "q": "How is this different from just Googling my results?",
+                "a": "Googling individual values one by one gives you scattered, generic information. NoryaAI reads your entire report at once, compares each value against its reference range, and produces a single structured summary with a health score, flagged markers, and categories \u2014 all in one place.",
+            },
+        ],
+        "cta_title": "Ready to understand your blood test?",
+        "cta_sub": "Upload your lab report and get a clear, structured summary with plain-language explanations \u2014 in minutes.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+    }
+    return templates.TemplateResponse("explained_landing.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/blood-test-results-explained",
+    })
+
+
+@app.get("/en/guides/how-to-read-cbc", response_class=HTMLResponse)
+def guide_en_how_to_read_cbc(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "How to Read a CBC \u2014 Complete Blood Count Explained | NoryaAI",
+        "meta_description": "Learn how to read a CBC (complete blood count) report. Understand WBC, RBC, hemoglobin, hematocrit, platelets, and indices \u2014 with reference ranges explained in plain language.",
+        "badge": "Lab Guide",
+        "hero_title": "How to Read a CBC",
+        "hero_sub": "A complete blood count is one of the most common blood tests ordered worldwide. This guide walks through each component \u2014 what it measures, what the abbreviations mean, and how to make sense of the numbers on your report.",
+        "sections": [
+            {
+                "title": "What is a CBC?",
+                "intro": "A complete blood count (CBC) measures the cells that make up your blood: red cells, white cells, and platelets. Doctors use it as a general screening tool to check for infections, anemia, clotting issues, and overall health. It is often part of a routine physical or a first step when investigating symptoms like fatigue, bruising, or recurring infections.",
+                "paragraphs": [
+                    "Your CBC report typically includes 10\u201320 individual values. Each one describes a different aspect of your blood \u2014 how many cells you have, how large they are, how much hemoglobin they carry, and how varied they are in size.",
+                    "The sections below break these down into groups so they are easier to understand.",
+                ],
+            },
+            {
+                "title": "White blood cells (WBC)",
+                "intro": "White blood cells are part of your immune system. A CBC measures their total count and sometimes breaks them into subtypes (a differential).",
+                "markers": [
+                    {
+                        "name": "White blood cell count",
+                        "abbr": "WBC",
+                        "desc": "The total number of white blood cells in a given volume of blood. A high count may suggest infection or inflammation; a low count may indicate a weakened immune response. Many temporary factors \u2014 stress, exercise, medications \u2014 can shift this number.",
+                        "range": "4,500\u201311,000 cells/\u00b5L",
+                    },
+                    {
+                        "name": "Neutrophils",
+                        "abbr": "NEUT",
+                        "desc": "The most common type of white blood cell. Neutrophils are usually the first responders to bacterial infections. Their percentage and absolute count are reported separately.",
+                        "range": "40\u201370% of WBC",
+                    },
+                    {
+                        "name": "Lymphocytes",
+                        "abbr": "LYMPH",
+                        "desc": "Involved in viral defense and long-term immunity. A rise in lymphocytes can occur with viral infections; a decrease may appear in certain immune conditions.",
+                        "range": "20\u201340% of WBC",
+                    },
+                ],
+            },
+            {
+                "title": "Red blood cells, hemoglobin, and hematocrit",
+                "intro": "Red blood cells carry oxygen from your lungs to the rest of your body. Several CBC values describe their count, their oxygen-carrying capacity, and their proportion in your blood.",
+                "markers": [
+                    {
+                        "name": "Red blood cell count",
+                        "abbr": "RBC",
+                        "desc": "The total number of red blood cells per volume of blood. Values vary by sex and age. A low count is one sign that may be associated with anemia; a high count may be seen in dehydration or other conditions.",
+                        "range": "4.5\u20135.5 million cells/\u00b5L (men) \u00b7 4.0\u20135.0 (women)",
+                    },
+                    {
+                        "name": "Hemoglobin",
+                        "abbr": "HGB / Hb",
+                        "desc": "The protein inside red blood cells that binds oxygen. Hemoglobin is one of the most commonly checked values in a CBC. Low hemoglobin is a key marker associated with anemia.",
+                        "range": "13.5\u201317.5 g/dL (men) \u00b7 12.0\u201316.0 g/dL (women)",
+                    },
+                    {
+                        "name": "Hematocrit",
+                        "abbr": "HCT",
+                        "desc": "The percentage of your blood volume that is made up of red blood cells. It rises with dehydration and falls with blood loss or reduced red cell production.",
+                        "range": "38.3\u201348.6% (men) \u00b7 35.5\u201344.9% (women)",
+                    },
+                ],
+            },
+            {
+                "title": "Platelets",
+                "intro": "Platelets are small cell fragments that help your blood clot. A CBC reports their count and sometimes their average size.",
+                "markers": [
+                    {
+                        "name": "Platelet count",
+                        "abbr": "PLT",
+                        "desc": "The number of platelets per volume of blood. A low count (thrombocytopenia) can increase bleeding risk; a high count (thrombocytosis) may be reactive or, less commonly, related to a bone marrow condition.",
+                        "range": "150,000\u2013400,000 /\u00b5L",
+                    },
+                    {
+                        "name": "Mean platelet volume",
+                        "abbr": "MPV",
+                        "desc": "The average size of your platelets. Larger platelets are often younger and may indicate that your body is producing them faster to replace ones being used up.",
+                        "range": "7.5\u201312.0 fL",
+                    },
+                ],
+            },
+            {
+                "title": "Red cell indices",
+                "intro": "Indices describe the size and hemoglobin content of your red blood cells. They help characterize the type of anemia if one is present.",
+                "markers": [
+                    {
+                        "name": "Mean corpuscular volume",
+                        "abbr": "MCV",
+                        "desc": "The average size of a single red blood cell. A high MCV (macrocytic) can be associated with B12 or folate issues; a low MCV (microcytic) can be associated with iron-related conditions.",
+                        "range": "80\u2013100 fL",
+                    },
+                    {
+                        "name": "Mean corpuscular hemoglobin",
+                        "abbr": "MCH",
+                        "desc": "The average amount of hemoglobin in a single red blood cell. It usually tracks with MCV \u2014 small cells carry less hemoglobin, large cells carry more.",
+                        "range": "27\u201333 pg",
+                    },
+                    {
+                        "name": "Mean corpuscular hemoglobin concentration",
+                        "abbr": "MCHC",
+                        "desc": "The average concentration of hemoglobin within red blood cells. Low MCHC suggests the cells are paler than usual (hypochromic).",
+                        "range": "32\u201336 g/dL",
+                    },
+                    {
+                        "name": "Red cell distribution width",
+                        "abbr": "RDW",
+                        "desc": "Measures how much variation there is in the size of your red blood cells. A high RDW means your cells vary more in size, which can be an early sign that something is affecting red cell production.",
+                        "range": "11.5\u201314.5%",
+                    },
+                ],
+            },
+            {
+                "title": "What reference ranges actually mean",
+                "intro": None,
+                "paragraphs": [
+                    "Reference ranges represent the middle 95% of results from a healthy population tested by that specific lab. They are not absolute cutoffs for health or disease. A value slightly outside the range does not automatically mean something is wrong, and a value inside the range does not guarantee everything is fine.",
+                    "Ranges vary between labs because of differences in equipment, reagents, and the population samples used to establish them. Age, sex, altitude, hydration, and even the time of day can influence your results. This is why comparing your numbers against a single \u201cnormal\u201d value from the internet can be misleading.",
+                    "The most useful way to interpret your CBC is in context: how do your values compare to your own previous results, and what does your doctor think given your symptoms and history?",
+                ],
+            },
+            {
+                "title": "Why one result alone is not the whole picture",
+                "intro": None,
+                "points": [
+                    {
+                        "title": "Values interact with each other",
+                        "desc": "A low hemoglobin means more when MCV is also low (suggesting a possible iron-related cause) than when MCV is normal. Individual numbers gain meaning from the pattern they form together.",
+                    },
+                    {
+                        "title": "Temporary factors matter",
+                        "desc": "Dehydration, a recent meal, intense exercise, stress, or medication can shift your numbers for hours or days. One slightly out-of-range result is often repeated before any conclusion is drawn.",
+                    },
+                    {
+                        "title": "Trends are more informative than snapshots",
+                        "desc": "A hemoglobin of 12.0 g/dL means something different if your last three results were 14.5, 13.8, and 12.8 than if they have been stable around 12.0 for years.",
+                    },
+                    {
+                        "title": "Clinical context is essential",
+                        "desc": "Your doctor interprets your CBC alongside your symptoms, medical history, physical exam, and other tests. A lab report alone \u2014 without that context \u2014 can be misleading.",
+                    },
+                ],
+            },
+            {
+                "title": "When people want a clearer summary",
+                "intro": None,
+                "paragraphs": [
+                    "Many people receive a CBC report and feel lost. The abbreviations are unfamiliar, the reference ranges are hard to compare, and there is no plain-language explanation included.",
+                    "Some look up individual values online, but that gives scattered, generic answers without showing how the numbers relate to each other. Others wait for their doctor appointment, which may be days or weeks away.",
+                    "A structured tool like NoryaAI can help bridge that gap. It reads your report, organizes the values into categories, flags anything outside the reference range, and provides plain-language context \u2014 all in a single, downloadable summary you can review on your own time or bring to your next appointment.",
+                    "It does not replace your doctor. But it can make the conversation more productive.",
+                ],
+            },
+        ],
+        "mid_cta_title": "Have a CBC report you want to understand?",
+        "mid_cta_sub": "Upload it and get a structured summary with plain-language explanations, flagged markers, and a health score.",
+        "mid_cta_primary": "Upload your report",
+        "mid_cta_secondary": "See a sample report",
+        "faqs": [
+            {
+                "q": "What does CBC stand for?",
+                "a": "CBC stands for complete blood count. It is a routine blood test that measures the cells in your blood \u2014 red blood cells, white blood cells, and platelets \u2014 along with related values like hemoglobin, hematocrit, and cell indices.",
+            },
+            {
+                "q": "How often should I get a CBC?",
+                "a": "There is no universal schedule. Many doctors include a CBC in annual checkups. It may be ordered more frequently if you have symptoms, a chronic condition, or are taking medication that affects blood cell counts. Your doctor will recommend the right frequency for you.",
+            },
+            {
+                "q": "What does it mean if one value is slightly out of range?",
+                "a": "A single value slightly outside the reference range is common and not always a cause for concern. Temporary factors like hydration, exercise, or stress can shift your numbers. Doctors typically look at the overall pattern and may repeat the test before drawing conclusions.",
+            },
+            {
+                "q": "Can NoryaAI interpret my CBC results?",
+                "a": "NoryaAI can read your CBC report, organize each marker with its reference range, flag values outside normal limits, and provide plain-language explanations. It does not diagnose conditions \u2014 it structures your results so they are easier to understand.",
+            },
+            {
+                "q": "Is this guide a substitute for medical advice?",
+                "a": "No. This guide is educational and intended to help you understand the components of a CBC report. It does not diagnose or recommend treatment. Always consult a qualified healthcare professional for medical decisions about your results.",
+            },
+            {
+                "q": "Why do reference ranges differ between labs?",
+                "a": "Labs use different equipment, reagents, and population samples to establish their ranges. Factors like age, sex, and geographic location also influence what is considered \u201cnormal.\u201d This is why the same result may be flagged at one lab but considered within range at another.",
+            },
+        ],
+        "cta_title": "Ready to make sense of your CBC?",
+        "cta_sub": "Upload your report and get a structured, easy-to-read summary \u2014 in minutes.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+        "internal_links": [
+            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
+            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
+            {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
+            {"label": "Pricing", "path": "/pricing"},
+            {"label": "How it works", "path": "/how-it-works"},
+            {"label": "Blog", "path": "/en/blog"},
+        ],
+    }
+    return templates.TemplateResponse("guide_landing.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/guides/how-to-read-cbc",
+    })
+
+
+@app.get("/en/tools/unit-converter", response_class=HTMLResponse)
+def tool_en_unit_converter(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "Blood Test Unit Converter \u2014 Free mg/dL to mmol/L Tool | NoryaAI",
+        "meta_description": "Convert blood test values between mg/dL, mmol/L, g/dL, \u00b5mol/L, and more. Free online converter for glucose, cholesterol, hemoglobin, creatinine, and other common biomarkers.",
+        "hero_title": "Blood Test Unit Converter",
+        "hero_sub": "Different labs, different countries, different units. Use this free tool to convert your blood test values between common measurement systems \u2014 instantly, with no signup required.",
+        "disclaimer": "This tool performs standard unit conversions using published conversion factors. It does not provide medical advice, diagnosis, or interpretation. Always verify values with your lab report and consult a healthcare professional.",
+        "table_title": "Supported conversions",
+        "table_sub": "All conversion factors below are standard values used in clinical laboratory practice.",
+        "soft_cta_title": "Need more than a conversion?",
+        "soft_cta_sub": "Upload your full blood test report and get a structured summary with reference ranges, flagged markers, and plain-language explanations.",
+        "soft_cta_primary": "Upload your report",
+        "soft_cta_secondary": "See a sample report",
+        "faqs": [
+            {
+                "q": "Why do blood test units differ between countries?",
+                "a": "The United States primarily uses conventional units (mg/dL, g/dL), while most other countries use SI units (mmol/L, \u00b5mol/L, g/L). Both systems are scientifically valid \u2014 the difference is historical, not medical. This can be confusing when comparing results from labs in different countries.",
+            },
+            {
+                "q": "What is the conversion factor for glucose?",
+                "a": "To convert glucose from mg/dL to mmol/L, multiply by 0.05551. For example, 100 mg/dL equals approximately 5.6 mmol/L. To go in the other direction, divide by 0.05551.",
+            },
+            {
+                "q": "Is this converter accurate?",
+                "a": "This converter uses the same standard conversion factors used in clinical laboratory practice. The math is straightforward multiplication or division. However, always verify converted values against your original lab report.",
+            },
+            {
+                "q": "What is the difference between mg/dL and mmol/L?",
+                "a": "mg/dL (milligrams per deciliter) measures the weight of a substance in a given volume of blood. mmol/L (millimoles per liter) measures the number of molecules. They express the same measurement in different ways, and the conversion factor depends on the molecular weight of the specific substance.",
+            },
+            {
+                "q": "Can I convert HbA1c between % and mmol/mol?",
+                "a": "Yes. This tool supports the NGSP (%) to IFCC (mmol/mol) conversion using the standard formula: mmol/mol = (% \u00d7 10.929) \u2212 23.5. For example, an HbA1c of 7.0% equals approximately 53 mmol/mol.",
+            },
+            {
+                "q": "Does this tool store my data?",
+                "a": "No. All conversions happen entirely in your browser. No values are sent to any server, stored, or logged.",
+            },
+        ],
+        "cta_title": "Want your full report analyzed?",
+        "cta_sub": "Upload your blood test and get a structured, doctor-ready summary with all units, ranges, and explanations included.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+        "internal_links": [
+            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
+            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
+            {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
+            {"label": "How to Read a CBC", "path": "/en/guides/how-to-read-cbc"},
+            {"label": "Pricing", "path": "/pricing"},
+            {"label": "Blog", "path": "/en/blog"},
+        ],
+    }
+    return templates.TemplateResponse("tool_unit_converter.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/tools/unit-converter",
+    })
+
+
+@app.get("/en/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_en_sample_reports(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "Sample Blood Test Reports \u2014 See What NoryaAI Produces | NoryaAI",
+        "meta_description": "Preview sample blood test reports generated by NoryaAI. See how your results are structured with a health score, reference ranges, flagged markers, and plain-language explanations.",
+        "hero_title": "Sample Blood Test Reports",
+        "hero_sub": "Wondering what a NoryaAI report looks like before you upload? Browse sample reports below to see the structure, level of detail, and format you can expect.",
+        "cta_hero_primary": "Analyze my blood test",
+        "cta_hero_secondary": "View pricing",
+        "overview_title": "What every report includes",
+        "overview_sub": "Each NoryaAI report follows the same structured format, regardless of the lab or language your original results are in.",
+        "overview_items": [
+            {"icon": "\U0001f4ca", "label": "Health score (0\u2013100)"},
+            {"icon": "\U0001f6a9", "label": "Flagged markers"},
+            {"icon": "\U0001f4cb", "label": "Category breakdown"},
+            {"icon": "\U0001f4cf", "label": "Reference ranges"},
+            {"icon": "\U0001f4d6", "label": "Plain-language explanations"},
+            {"icon": "\U0001fa7a", "label": "Doctor-ready PDF"},
+            {"icon": "\U0001f310", "label": "9+ languages"},
+            {"icon": "\U0001f512", "label": "QR verification"},
+        ],
+        "samples_title": "Sample report previews",
+        "samples_sub": "These illustrative examples show how NoryaAI structures different types of blood test panels. All values below are fictional and for demonstration only.",
+        "sample_cards": [
+            {
+                "title": "Routine checkup \u2014 CBC + metabolic panel",
+                "panel": "Complete blood count, glucose, kidney, liver",
+                "score": 82,
+                "score_label": "Good",
+                "score_class": "bg-green-100 text-green-700",
+                "lines": [
+                    {"name": "Hemoglobin", "value": "14.2 g/dL (ref: 13.5\u201317.5)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "Glucose (fasting)", "value": "108 mg/dL (ref: 70\u2013100)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
+                    {"name": "Creatinine", "value": "0.9 mg/dL (ref: 0.7\u20131.3)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "ALT", "value": "28 U/L (ref: 7\u201335)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "WBC", "value": "6.8 \u00d710\u00b3/\u00b5L (ref: 4.5\u201311.0)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                ],
+                "note": "Illustrative data only. A real report includes all parsed markers, full explanations, and a downloadable PDF.",
+            },
+            {
+                "title": "Thyroid panel",
+                "panel": "TSH, Free T3, Free T4",
+                "score": 74,
+                "score_label": "Moderate",
+                "score_class": "bg-amber-100 text-amber-700",
+                "lines": [
+                    {"name": "TSH", "value": "5.8 mIU/L (ref: 0.4\u20134.0)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
+                    {"name": "Free T4", "value": "1.1 ng/dL (ref: 0.8\u20131.8)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "Free T3", "value": "2.9 pg/mL (ref: 2.3\u20134.2)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                ],
+                "note": "Illustrative data only. Your report would include a plain-language explanation of each value and its clinical context.",
+            },
+            {
+                "title": "Lipid panel",
+                "panel": "Total cholesterol, LDL, HDL, triglycerides",
+                "score": 68,
+                "score_label": "Moderate",
+                "score_class": "bg-amber-100 text-amber-700",
+                "lines": [
+                    {"name": "Total cholesterol", "value": "228 mg/dL (ref: <200)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
+                    {"name": "LDL", "value": "148 mg/dL (ref: <100)", "status": "High", "status_class": "bg-red-50 text-red-600"},
+                    {"name": "HDL", "value": "52 mg/dL (ref: >40)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "Triglycerides", "value": "165 mg/dL (ref: <150)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
+                ],
+                "note": "Illustrative data only. A full report groups lipid values under a cardiovascular health category with explanations.",
+            },
+            {
+                "title": "Vitamin & mineral panel",
+                "panel": "Vitamin D, B12, Iron, Ferritin",
+                "score": 71,
+                "score_label": "Moderate",
+                "score_class": "bg-amber-100 text-amber-700",
+                "lines": [
+                    {"name": "Vitamin D", "value": "18 ng/mL (ref: 30\u2013100)", "status": "Low", "status_class": "bg-red-50 text-red-600"},
+                    {"name": "Vitamin B12", "value": "380 pg/mL (ref: 200\u2013900)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "Iron", "value": "65 \u00b5g/dL (ref: 60\u2013170)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "Ferritin", "value": "22 ng/mL (ref: 30\u2013300)", "status": "Low", "status_class": "bg-red-50 text-red-600"},
+                ],
+                "note": "Illustrative data only. Low markers are flagged with context about what they mean and when to discuss them with your doctor.",
+            },
+            {
+                "title": "Comprehensive panel \u2014 multilingual output",
+                "panel": "CBC + metabolic + thyroid + vitamins \u00b7 Report in German",
+                "score": 77,
+                "score_label": "Good",
+                "score_class": "bg-green-100 text-green-700",
+                "lines": [
+                    {"name": "H\u00e4moglobin", "value": "13.8 g/dL (Ref: 12.0\u201316.0)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "Glukose (n\u00fcchtern)", "value": "95 mg/dL (Ref: 70\u2013100)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "TSH", "value": "3.2 mIU/L (Ref: 0.4\u20134.0)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
+                    {"name": "Vitamin D", "value": "24 ng/mL (Ref: 30\u2013100)", "status": "Niedrig", "status_class": "bg-amber-50 text-amber-600"},
+                ],
+                "note": "Illustrative data only. This shows how the same structured format works when the report is generated in German.",
+            },
+        ],
+        "expect_title": "What you can expect from your report",
+        "expect_sub": "Every NoryaAI report is built to be useful, clear, and ready to share.",
+        "expect_items": [
+            {
+                "icon": "\U0001f3af",
+                "title": "Structured, not scattered",
+                "desc": "Your results are grouped by category \u2014 blood cells, liver, kidney, thyroid, vitamins \u2014 instead of a flat list of numbers.",
+            },
+            {
+                "icon": "\U0001f4ac",
+                "title": "Written for people, not clinicians",
+                "desc": "Each marker comes with a plain-language explanation of what it measures and whether your value is within the expected range.",
+            },
+            {
+                "icon": "\U0001f4e5",
+                "title": "Downloadable and shareable",
+                "desc": "Your report is a clean PDF with a health score and QR verification. Print it, save it, or share it with your doctor.",
+            },
+        ],
+        "doctor_title": "Bring your report to your next appointment",
+        "doctor_sub": "A NoryaAI report is designed to make your doctor visit more productive \u2014 not to replace it.",
+        "doctor_items": [
+            {"icon": "\U0001f4c4", "text": "Clean PDF format"},
+            {"icon": "\u2705", "text": "QR-verified output"},
+            {"icon": "\U0001f5e3\ufe0f", "text": "Better questions for your doctor"},
+            {"icon": "\U0001f310", "text": "Same format, any language"},
+        ],
+        "faqs": [
+            {
+                "q": "Are these real patient reports?",
+                "a": "No. All values shown on this page are fictional and created for illustration only. They demonstrate the structure and format of a NoryaAI report, not actual patient data.",
+            },
+            {
+                "q": "What panels can NoryaAI analyze?",
+                "a": "NoryaAI supports most standard blood test panels including CBC, metabolic panels, liver and kidney function, thyroid, lipids, vitamins, iron studies, inflammation markers, and more. If your report contains values it can parse, they will be included.",
+            },
+            {
+                "q": "Can I download the report as a PDF?",
+                "a": "Yes. Every analysis generates a downloadable, printable PDF report with a health score, category breakdown, flagged markers, explanations, and QR verification.",
+            },
+            {
+                "q": "Is the report available in other languages?",
+                "a": "Yes. NoryaAI generates reports in 9+ languages including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic. You choose the language when you start your analysis.",
+            },
+            {
+                "q": "How accurate is the health score?",
+                "a": "The health score is an educational summary based on how many of your values fall within reference ranges. It is not a clinical diagnosis. It gives you a quick overview of your results and highlights areas that may need attention.",
+            },
+            {
+                "q": "Is NoryaAI a replacement for my doctor?",
+                "a": "No. NoryaAI structures and explains your lab values to help you understand them better. It does not diagnose, treat, or prescribe. Always consult a qualified healthcare professional for medical decisions.",
+            },
+        ],
+        "cta_title": "Ready to see your own report?",
+        "cta_sub": "Upload your blood test and get a structured, doctor-ready summary in minutes.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+        "internal_links": [
+            {"label": "Analyze", "path": "/analyze"},
+            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
+            {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
+            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
+            {"label": "Pricing", "path": "/pricing"},
+            {"label": "How it works", "path": "/how-it-works"},
+            {"label": "Blog", "path": "/en/blog"},
+        ],
+    }
+    return templates.TemplateResponse("sample_reports_landing.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/sample-blood-test-reports",
+    })
+
+
+@app.get("/en/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
+def landing_en_multilingual(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "Understand Blood Test Results in Your Language | NoryaAI",
+        "meta_description": "Got lab results in a language you don\u2019t fully understand? Upload your blood test and get a structured, easy-to-read report in English, German, Turkish, French, and 6 more languages.",
+        "hero_title": "Understand Your Blood Test Results \u2014 in Your Language",
+        "hero_sub": "Living abroad or dealing with a lab report in an unfamiliar language? Upload your results and get a clear, structured explanation in the language you are most comfortable with.",
+        "cta_hero_primary": "Analyze my blood test",
+        "cta_hero_secondary": "See sample reports",
+        "barrier_title": "Why language makes lab reports harder to understand",
+        "barrier_sub": "A blood test is already difficult to read. When the report is in a language that is not your first, the challenge multiplies.",
+        "barrier_items": [
+            {
+                "icon": "\U0001f4c4",
+                "title": "Medical terms you cannot look up easily",
+                "desc": "Lab reports are full of abbreviations and clinical terms. When those terms are in another language, even a dictionary does not always help \u2014 medical vocabulary is specialized.",
+            },
+            {
+                "icon": "\U0001f5fa\ufe0f",
+                "title": "Different naming conventions",
+                "desc": "The same blood test may have a different name, abbreviation, or panel grouping depending on the country. A \u201cBlutbild\u201d in Germany is a CBC in the US, but the structure can differ.",
+            },
+            {
+                "icon": "\U0001f4cf",
+                "title": "Units and ranges vary by region",
+                "desc": "Is your glucose in mg/dL or mmol/L? Reference ranges and measurement systems differ between countries, making it harder to compare values you may have seen before.",
+            },
+            {
+                "icon": "\U0001f6ab",
+                "title": "Generic translators miss medical nuance",
+                "desc": "Running a lab report through a general translator can produce awkward or misleading results. Medical context requires more than word-for-word translation.",
+            },
+        ],
+        "helps_title": "How NoryaAI bridges the language gap",
+        "helps_sub": "NoryaAI does not just translate your report. It reads, structures, and explains your results in the language you choose.",
+        "helps_steps": [
+            {
+                "icon": "\U0001f4e4",
+                "title": "Upload in any language",
+                "desc": "Your lab report can be in German, Turkish, Italian, French, or any supported language. Upload the PDF, photo, or paste the text.",
+            },
+            {
+                "icon": "\U0001f9e0",
+                "title": "AI structures your data",
+                "desc": "Values, units, and reference ranges are extracted and organized into clear categories \u2014 regardless of the original language.",
+            },
+            {
+                "icon": "\U0001f310",
+                "title": "Get your report in your language",
+                "desc": "Choose the output language. Your structured summary, explanations, and health score are generated in the language you are most comfortable reading.",
+            },
+        ],
+        "langs_title": "Supported report languages",
+        "langs_sub": "Upload your lab results in any of these languages and receive your structured report in whichever you prefer.",
+        "langs": [
+            {"flag": "\U0001f1ec\U0001f1e7", "name": "English"},
+            {"flag": "\U0001f1e9\U0001f1ea", "name": "Deutsch"},
+            {"flag": "\U0001f1f9\U0001f1f7", "name": "T\u00fcrk\u00e7e"},
+            {"flag": "\U0001f1eb\U0001f1f7", "name": "Fran\u00e7ais"},
+            {"flag": "\U0001f1ee\U0001f1f9", "name": "Italiano"},
+            {"flag": "\U0001f1ea\U0001f1f8", "name": "Espa\u00f1ol"},
+            {"flag": "\U0001f1ee\U0001f1f1", "name": "\u05e2\u05d1\u05e8\u05d9\u05ea"},
+            {"flag": "\U0001f1ee\U0001f1f3", "name": "\u0939\u093f\u0928\u094d\u0926\u0940"},
+            {"flag": "\U0001f1f8\U0001f1e6", "name": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"},
+            {"flag": "\U0001f30d", "name": "More coming"},
+        ],
+        "who_title": "Who this is for",
+        "who_items": [
+            {
+                "icon": "\u2708\ufe0f",
+                "title": "Expats and immigrants",
+                "desc": "You moved to a new country and got bloodwork done. The report is in the local language, but you think and understand health topics in your mother tongue.",
+            },
+            {
+                "icon": "\U0001f393",
+                "title": "International students",
+                "desc": "Required health screenings at university often produce reports in the local language. A structured explanation in your own language helps you follow up.",
+            },
+            {
+                "icon": "\U0001f468\u200d\U0001f469\u200d\U0001f467",
+                "title": "Families across borders",
+                "desc": "Your parent or partner got lab results in another country. Upload their report and generate a summary in the language you both understand.",
+            },
+            {
+                "icon": "\U0001f3d6\ufe0f",
+                "title": "Medical tourists and travelers",
+                "desc": "Had bloodwork done while traveling or during a medical trip abroad? Get a structured summary you can share with your doctor at home.",
+            },
+            {
+                "icon": "\U0001fa7a",
+                "title": "Bilingual doctor visits",
+                "desc": "You understand your doctor in one language but received your lab report in another. A single structured PDF in your preferred language can make the appointment smoother.",
+            },
+            {
+                "icon": "\U0001f310",
+                "title": "Anyone comparing international results",
+                "desc": "If you have had bloodwork done in different countries, a unified structured format in one language makes it easier to track your values over time.",
+            },
+        ],
+        "mid_cta_title": "Your lab report, your language",
+        "mid_cta_sub": "Upload your blood test in any supported language and choose how you want to read the results.",
+        "faqs": [
+            {
+                "q": "Can I upload a lab report in one language and get the results in another?",
+                "a": "Yes. You can upload a report in any supported language \u2014 German, Turkish, French, Italian, and more \u2014 and choose a different language for your structured output. The values and reference ranges stay the same; the explanations are generated in your preferred language.",
+            },
+            {
+                "q": "Is this a medical translation service?",
+                "a": "No. NoryaAI does not provide certified medical translations. It reads your lab report, structures the data, and generates an educational explanation in the language you choose. For official or legal purposes, consult a certified medical translator.",
+            },
+            {
+                "q": "Does the language affect the accuracy of the analysis?",
+                "a": "No. The underlying analysis works with the numerical values, units, and reference ranges in your report. The language of the original document does not affect how the values are parsed or structured.",
+            },
+            {
+                "q": "Which languages are supported?",
+                "a": "NoryaAI currently supports English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic. More languages are being added over time.",
+            },
+            {
+                "q": "Can I share the report with a doctor who speaks a different language?",
+                "a": "Yes. You can generate the same report in multiple languages if needed. The structured PDF format is designed to be clear and useful regardless of the reader\u2019s medical background.",
+            },
+            {
+                "q": "Is NoryaAI a replacement for my doctor?",
+                "a": "No. NoryaAI provides structured, educational explanations to help you understand your lab results. It does not diagnose, treat, or prescribe. Always consult a qualified healthcare professional for medical decisions.",
+            },
+        ],
+        "cta_title": "Ready to understand your results?",
+        "cta_sub": "Upload your blood test in any language and get a clear, structured report in the one you prefer.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+        "internal_links": [
+            {"label": "Analyze", "path": "/analyze"},
+            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
+            {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
+            {"label": "Sample Reports", "path": "/en/sample-blood-test-reports"},
+            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
+            {"label": "Pricing", "path": "/pricing"},
+            {"label": "Blog", "path": "/en/blog"},
+        ],
+    }
+    return templates.TemplateResponse("multilingual_landing.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/understand-blood-test-results-in-your-language",
+    })
+
+
+@app.get("/en/blood-test-results-germany", response_class=HTMLResponse)
+def landing_en_blood_test_germany(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = {
+        "meta_title": "Understanding Blood Test Results from Germany | NoryaAI",
+        "meta_description": "Got a Blutbild or Laborwerte report from a German lab? Learn how to read German blood test results, common abbreviations, and how to get a structured English summary.",
+        "badge": "Country Guide \u00b7 Germany",
+        "hero_title": "Understanding Blood Test Results from Germany",
+        "hero_sub": "If you have received a Blutbild, gro\u00dfes Blutbild, or Laborwerte report from a German lab, this guide explains what the abbreviations mean, how German reference ranges work, and how to get a clear summary in English.",
+        "sections": [
+            {
+                "title": "How blood tests work in Germany",
+                "intro": None,
+                "paragraphs": [
+                    "In Germany, blood tests are typically ordered by your Hausarzt (family doctor) or a specialist and processed by certified labs (Labore). Results are usually returned as a printed or digital Laborbericht \u2014 a structured document listing each measured parameter, its value, the unit, and the reference range.",
+                    "Most reports are written entirely in German, using abbreviations and terminology that can be difficult to navigate if German is not your first language. Even fluent speakers sometimes struggle with the medical vocabulary.",
+                    "If you are an expat, international student, or someone who moved to Germany recently, understanding your Laborwerte can feel unnecessarily complicated \u2014 especially when you need to discuss the results with a doctor or share them with a physician in your home country.",
+                ],
+            },
+            {
+                "title": "Common German blood test abbreviations",
+                "intro": "German lab reports use abbreviations that differ from the English-language conventions you may be used to. Here are the most frequently encountered ones.",
+                "markers": [
+                    {"name": "Kleines Blutbild", "abbr": "KBB", "desc": "The equivalent of a CBC (complete blood count). Includes red cells, white cells, hemoglobin, hematocrit, and platelets.", "range": None},
+                    {"name": "Gro\u00dfes Blutbild", "abbr": "GBB", "desc": "An extended blood count that adds a white cell differential (neutrophils, lymphocytes, monocytes, eosinophils, basophils) to the kleines Blutbild.", "range": None},
+                    {"name": "Erythrozyten", "abbr": "ERY", "desc": "Red blood cells (RBC). Measured in millions per microliter (Mio/\u00b5L or T/L).", "range": "4.1\u20135.9 Mio/\u00b5L (men) \u00b7 3.9\u20135.4 (women)"},
+                    {"name": "Leukozyten", "abbr": "LEUK", "desc": "White blood cells (WBC). Reported in thousands per microliter (Tsd/\u00b5L or G/L).", "range": "4.0\u201310.0 Tsd/\u00b5L"},
+                    {"name": "H\u00e4moglobin", "abbr": "HB / HGB", "desc": "The oxygen-carrying protein in red blood cells. German labs typically report in g/dL, the same unit used in the US.", "range": "13.5\u201317.5 g/dL (men) \u00b7 12.0\u201316.0 (women)"},
+                    {"name": "H\u00e4matokrit", "abbr": "HKT / HCT", "desc": "The percentage of blood volume occupied by red blood cells.", "range": "40\u201354% (men) \u00b7 36\u201348% (women)"},
+                    {"name": "Thrombozyten", "abbr": "THRO / PLT", "desc": "Platelets. Reported in thousands per microliter (Tsd/\u00b5L).", "range": "150\u2013400 Tsd/\u00b5L"},
+                    {"name": "Blutzucker (n\u00fcchtern)", "abbr": "GLU", "desc": "Fasting blood glucose. German labs commonly use mg/dL, though some use mmol/L.", "range": "70\u2013100 mg/dL (fasting)"},
+                    {"name": "Kreatinin", "abbr": "KREA", "desc": "Creatinine \u2014 a kidney function marker. Usually reported in mg/dL in Germany.", "range": "0.7\u20131.3 mg/dL (men) \u00b7 0.6\u20131.1 (women)"},
+                    {"name": "Leberwerte", "abbr": "GOT / GPT / GGT", "desc": "Liver enzymes. GOT is AST, GPT is ALT, GGT is gamma-GT. These are the most commonly checked liver markers in German bloodwork.", "range": "GOT <50 U/L \u00b7 GPT <50 U/L \u00b7 GGT <60 U/L (men)"},
+                ],
+            },
+            {
+                "title": "Units and reference ranges in German labs",
+                "intro": None,
+                "paragraphs": [
+                    "German labs generally use the same conventional units as US labs for most markers (mg/dL for glucose and creatinine, g/dL for hemoglobin). However, some labs report in SI units (mmol/L for glucose, \u00b5mol/L for creatinine), especially in academic hospital settings.",
+                    "Reference ranges (Referenzbereiche or Normwerte) can differ slightly between German labs, just as they do worldwide. Your report will typically show the lab\u2019s own range next to each value. Values outside the range are often marked with an arrow (\u2191 for high, \u2193 for low) or printed in bold.",
+                    "If you are comparing results from a German lab with previous results from another country, pay close attention to the units. NoryaAI\u2019s free unit converter can help you translate between measurement systems.",
+                ],
+            },
+            {
+                "title": "What makes German lab reports different",
+                "intro": None,
+                "points": [
+                    {"title": "Language barrier", "desc": "All parameter names, explanations, and doctor comments are in German. Even common terms like Schilddr\u00fcse (thyroid), Nierenwerte (kidney values), or Blutfettwerte (blood lipids) can be hard to look up without medical context."},
+                    {"title": "GOT/GPT instead of AST/ALT", "desc": "German labs traditionally use GOT (Glutamat-Oxalacetat-Transaminase) and GPT (Glutamat-Pyruvat-Transaminase) instead of the international AST/ALT nomenclature. Both refer to the same liver enzymes."},
+                    {"title": "Structured Laborbericht format", "desc": "German lab reports are typically well-organized with clear columns for Messwert (measured value), Einheit (unit), and Referenzbereich (reference range). But the medical terminology can still be opaque."},
+                    {"title": "Krankenkasse context", "desc": "In the German healthcare system, certain tests are covered by public insurance (gesetzliche Krankenversicherung) and others require private payment (IGeL). This affects which panels appear on your report and how results are communicated to you."},
+                ],
+            },
+            {
+                "title": "How to get your German results explained in English",
+                "intro": None,
+                "paragraphs": [
+                    "If you have a Laborbericht from a German lab and want to understand it in English, you have a few options. You can ask your doctor to walk you through the results \u2014 but appointments are often short, and the explanation may still be in German.",
+                    "You can try translating the report yourself, but general translators often miss medical nuance. \u201cErh\u00f6ht\u201d means elevated, not just \u201cincreased,\u201d and \u201cauff\u00e4llig\u201d means \u201cabnormal / notable,\u201d not just \u201cconspicuous.\u201d",
+                    "NoryaAI offers a different approach: upload your German lab report (PDF or photo), and it extracts the values, matches them to reference ranges, and generates a structured summary in English (or any of 9+ languages). The output includes a health score, flagged markers, plain-language explanations, and a downloadable PDF you can bring to your next appointment \u2014 whether that is in Germany or your home country.",
+                ],
+            },
+        ],
+        "mid_cta_title": "Have a German lab report you want to understand?",
+        "mid_cta_sub": "Upload your Blutbild or Laborwerte and get a structured English summary with reference ranges, flagged markers, and a health score.",
+        "mid_cta_primary": "Upload your report",
+        "mid_cta_secondary": "See a sample report",
+        "faqs": [
+            {
+                "q": "Can I upload a lab report written in German?",
+                "a": "Yes. NoryaAI can read lab reports in German (and other supported languages). It extracts the values, units, and reference ranges regardless of the document language and generates your structured summary in whichever language you choose.",
+            },
+            {
+                "q": "What is the difference between a kleines and gro\u00dfes Blutbild?",
+                "a": "A kleines Blutbild (small blood count) is equivalent to a standard CBC: red cells, white cells, hemoglobin, hematocrit, and platelets. A gro\u00dfes Blutbild (large blood count) adds a white cell differential, breaking WBC into neutrophils, lymphocytes, monocytes, eosinophils, and basophils.",
+            },
+            {
+                "q": "Why does my German report say GOT/GPT instead of AST/ALT?",
+                "a": "German labs traditionally use the older nomenclature: GOT (Glutamat-Oxalacetat-Transaminase) for AST and GPT (Glutamat-Pyruvat-Transaminase) for ALT. They measure the same liver enzymes. NoryaAI recognizes both naming conventions.",
+            },
+            {
+                "q": "Do German labs use different units?",
+                "a": "Most German labs use the same conventional units as US labs (mg/dL, g/dL, U/L). Some academic hospitals use SI units (mmol/L, \u00b5mol/L). Your report will show which units are used. NoryaAI handles both systems automatically.",
+            },
+            {
+                "q": "Can I share my English report with my German doctor?",
+                "a": "Yes. The NoryaAI report includes a structured PDF with reference ranges, flagged markers, and a health score. You can also generate the report in German if your doctor prefers. The format is designed to be useful in any clinical setting.",
+            },
+            {
+                "q": "Is this a certified medical translation?",
+                "a": "No. NoryaAI provides structured, educational explanations of your lab values. It does not provide certified medical translations. For official or legal purposes, consult a certified medical translator. Always discuss your results with a qualified healthcare professional.",
+            },
+        ],
+        "cta_title": "Ready to understand your German lab report?",
+        "cta_sub": "Upload your Blutbild or Laborwerte and get a clear, structured summary in English \u2014 in minutes.",
+        "cta_primary": "Upload and analyze now",
+        "cta_secondary": "View pricing",
+        "internal_links": [
+            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
+            {"label": "Understand Results in Your Language", "path": "/en/understand-blood-test-results-in-your-language"},
+            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
+            {"label": "Unit Converter", "path": "/en/tools/unit-converter"},
+            {"label": "Blutwerte verstehen (DE)", "path": "/de/blutwerte-verstehen"},
+            {"label": "Pricing", "path": "/pricing"},
+            {"label": "Blog", "path": "/en/blog"},
+        ],
+    }
+    return templates.TemplateResponse("guide_landing.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/blood-test-results-germany",
+    })
+
+
 @app.get("/en/blood-test-results", response_class=HTMLResponse)
 def seo_landing_en_blood_test(request: Request):
     return _render_seo_landing(request, "en", "blood-test-results")
@@ -5158,6 +6501,17 @@ def sitemap_xml(request: Request):
     # SEO landing pages (high-intent): /tr/kan-tahlili-sonucu, /en/blood-test-results, vb.
     for loc_lang, loc_slug in iter_seo_landing_urls():
         add(f"{base_url}/{loc_lang}/{loc_slug}", priority="0.8", changefreq="monthly", lastmod=today)
+
+    # Compare pages
+    add(f"{base_url}/en/compare/norya-vs-generic-ai", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/why-not-generic-ai-for-blood-test-results", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/upload-blood-test-results", priority="0.8", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/blood-test-results-explained", priority="0.8", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/guides/how-to-read-cbc", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/tools/unit-converter", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/sample-blood-test-reports", priority="0.8", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/understand-blood-test-results-in-your-language", priority="0.8", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/blood-test-results-germany", priority="0.7", changefreq="monthly", lastmod=today)
 
     # Blog listeleri: /en/blog, /de/blog, /it/blog, /fr/blog dahil (BLOG_LANGS_PREMIUM)
     for lang in BLOG_LANGS_PREMIUM:

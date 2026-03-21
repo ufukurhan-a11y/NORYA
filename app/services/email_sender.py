@@ -360,3 +360,276 @@ def send_verify_email(to_email: str, verify_link: str, lang: str = "en") -> bool
     """E-posta doğrulama linki gönderir (dil ve kurumsal şablon)."""
     subject, html = build_verify_email_html(lang, verify_link)
     return send_email(to_email, subject, html)
+
+
+# ---------------------------------------------------------------------------
+# Welcome email (lead subscribe sonrası)
+# ---------------------------------------------------------------------------
+
+_WELCOME_SUBJECT = {
+    "tr": "Norya'ya hoş geldiniz — örnek raporu inceleyin",
+    "en": "Welcome to NoryaAI — see what your report looks like",
+    "de": "Willkommen bei NoryaAI — so sieht Ihr Bericht aus",
+    "fr": "Bienvenue sur NoryaAI — découvrez votre rapport",
+    "es": "Bienvenido a NoryaAI — vea cómo es su informe",
+    "it": "Benvenuto su NoryaAI — ecco come appare il tuo report",
+    "he": "ברוכים הבאים ל-NoryaAI — צפו בדוגמת דוח",
+    "hi": "NoryaAI में आपका स्वागत है — अपनी रिपोर्ट देखें",
+    "ar": "مرحبًا بك في NoryaAI — شاهد نموذج التقرير",
+}
+
+_WELCOME_GREETING = {
+    "tr": "Kaydınız için teşekkürler!",
+    "en": "Thanks for signing up!",
+    "de": "Vielen Dank für Ihre Anmeldung!",
+    "fr": "Merci pour votre inscription !",
+    "es": "¡Gracias por registrarse!",
+    "it": "Grazie per l'iscrizione!",
+    "he": "!תודה שנרשמת",
+    "hi": "साइन अप करने के लिए धन्यवाद!",
+    "ar": "!شكرًا لتسجيلك",
+}
+
+_WELCOME_BODY = {
+    "tr": (
+        "Norya, kan tahlili sonuçlarınızı yapılandırılmış, anlaşılır ve doktora hazır bir rapora dönüştürür. "
+        "İşte size yardımcı olabileceği birkaç şey:"
+    ),
+    "en": (
+        "NoryaAI turns your blood test results into a structured, easy-to-read, doctor-ready report. "
+        "Here are a few things it can help with:"
+    ),
+    "de": (
+        "NoryaAI verwandelt Ihre Blutwerte in einen strukturierten, leicht lesbaren und arztfertigen Bericht. "
+        "Hier sind einige Möglichkeiten:"
+    ),
+    "fr": (
+        "NoryaAI transforme vos résultats d'analyses sanguines en un rapport structuré, lisible et prêt pour votre médecin. "
+        "Voici ce qu'il peut vous apporter :"
+    ),
+    "es": (
+        "NoryaAI convierte sus resultados de análisis de sangre en un informe estructurado y listo para su médico. "
+        "Esto es lo que puede hacer por usted:"
+    ),
+    "it": (
+        "NoryaAI trasforma i tuoi risultati delle analisi del sangue in un report strutturato e pronto per il medico. "
+        "Ecco cosa può fare per te:"
+    ),
+    "he": (
+        "NoryaAI הופך את תוצאות בדיקות הדם שלך לדוח מובנה, קריא ומוכן לרופא. "
+        "הנה כמה דברים שהוא יכול לעזור בהם:"
+    ),
+    "hi": (
+        "NoryaAI आपकी रक्त जांच के परिणामों को एक संरचित, पढ़ने में आसान, डॉक्टर-रेडी रिपोर्ट में बदलता है। "
+        "यहां कुछ चीज़ें हैं जिनमें यह मदद कर सकता है:"
+    ),
+    "ar": (
+        "يحول NoryaAI نتائج تحاليل الدم إلى تقرير منظم وسهل القراءة وجاهز للطبيب. "
+        "إليك بعض الأشياء التي يمكنه مساعدتك فيها:"
+    ),
+}
+
+_WELCOME_BULLETS = {
+    "tr": [
+        "Sağlık skoru ve işaretlenmiş değerler",
+        "Referans aralıkları ile yapılandırılmış özet",
+        "9+ dilde rapor desteği",
+        "Doktora hazır, indirilebilir PDF",
+    ],
+    "en": [
+        "Health score and flagged markers",
+        "Structured summary with reference ranges",
+        "Reports in 9+ languages",
+        "Doctor-ready, downloadable PDF",
+    ],
+    "de": [
+        "Gesundheits-Score und markierte Werte",
+        "Strukturierte Zusammenfassung mit Referenzbereichen",
+        "Berichte in 9+ Sprachen",
+        "Arztfertiger, herunterladbarer PDF-Bericht",
+    ],
+    "fr": [
+        "Score de santé et marqueurs signalés",
+        "Résumé structuré avec valeurs de référence",
+        "Rapports en 9+ langues",
+        "PDF téléchargeable, prêt pour votre médecin",
+    ],
+    "es": [
+        "Puntuación de salud y marcadores señalados",
+        "Resumen estructurado con rangos de referencia",
+        "Informes en más de 9 idiomas",
+        "PDF descargable, listo para su médico",
+    ],
+    "it": [
+        "Punteggio di salute e marcatori segnalati",
+        "Riepilogo strutturato con intervalli di riferimento",
+        "Report in oltre 9 lingue",
+        "PDF scaricabile, pronto per il medico",
+    ],
+    "he": [
+        "ציון בריאות וסמנים מסומנים",
+        "סיכום מובנה עם טווחי ייחוס",
+        "דוחות ב-9+ שפות",
+        "PDF להורדה, מוכן לרופא",
+    ],
+    "hi": [
+        "स्वास्थ्य स्कोर और फ़्लैग किए गए मार्कर",
+        "संदर्भ सीमाओं के साथ संरचित सारांश",
+        "9+ भाषाओं में रिपोर्ट",
+        "डॉक्टर-रेडी, डाउनलोड करने योग्य PDF",
+    ],
+    "ar": [
+        "درجة الصحة والعلامات المميزة",
+        "ملخص منظم مع نطاقات مرجعية",
+        "تقارير بأكثر من 9 لغات",
+        "تقرير PDF جاهز للطبيب وقابل للتحميل",
+    ],
+}
+
+_WELCOME_CTA = {
+    "tr": "Kan tahlilimi analiz et",
+    "en": "Analyze my blood test",
+    "de": "Meine Blutwerte analysieren",
+    "fr": "Analyser mes résultats",
+    "es": "Analizar mi análisis de sangre",
+    "it": "Analizza le mie analisi",
+    "he": "נתח את בדיקת הדם שלי",
+    "hi": "मेरी रक्त जांच का विश्लेषण करें",
+    "ar": "حلل تحليل الدم الخاص بي",
+}
+
+_WELCOME_SAMPLE_LINK_TEXT = {
+    "tr": "Örnek raporu inceleyin →",
+    "en": "See a sample report →",
+    "de": "Beispielbericht ansehen →",
+    "fr": "Voir un exemple de rapport →",
+    "es": "Ver un informe de ejemplo →",
+    "it": "Vedi un report di esempio →",
+    "he": "→ צפו בדוגמת דוח",
+    "hi": "एक नमूना रिपोर्ट देखें →",
+    "ar": "→ شاهد نموذج تقرير",
+}
+
+_WELCOME_HOW_LINK_TEXT = {
+    "tr": "Nasıl çalışır →",
+    "en": "How it works →",
+    "de": "So funktioniert's →",
+    "fr": "Comment ça marche →",
+    "es": "Cómo funciona →",
+    "it": "Come funziona →",
+    "he": "→ איך זה עובד",
+    "hi": "यह कैसे काम करता है →",
+    "ar": "→ كيف يعمل",
+}
+
+_WELCOME_PRIVACY = {
+    "tr": "Verileriniz şifrelenir ve asla üçüncü taraflarla paylaşılmaz.",
+    "en": "Your data is encrypted and never shared with third parties.",
+    "de": "Ihre Daten werden verschlüsselt und niemals an Dritte weitergegeben.",
+    "fr": "Vos données sont chiffrées et ne sont jamais partagées avec des tiers.",
+    "es": "Sus datos están encriptados y nunca se comparten con terceros.",
+    "it": "I tuoi dati sono crittografati e non vengono mai condivisi con terze parti.",
+    "he": "הנתונים שלך מוצפנים ולעולם לא משותפים עם צדדים שלישיים.",
+    "hi": "आपका डेटा एन्क्रिप्टेड है और कभी भी तीसरे पक्ष के साथ साझा नहीं किया जाता।",
+    "ar": "بياناتك مشفرة ولن تتم مشاركتها مع أطراف ثالثة أبدًا.",
+}
+
+_WELCOME_FOOTER = {
+    "tr": "Bu e-postayı Norya bültenine kayıt olduğunuz için aldınız.",
+    "en": "You are receiving this because you signed up for NoryaAI updates.",
+    "de": "Sie erhalten diese E-Mail, weil Sie sich für NoryaAI-Updates angemeldet haben.",
+    "fr": "Vous recevez cet e-mail car vous vous êtes inscrit aux mises à jour de NoryaAI.",
+    "es": "Recibe este correo porque se suscribió a las actualizaciones de NoryaAI.",
+    "it": "Ricevi questa email perché ti sei iscritto agli aggiornamenti di NoryaAI.",
+    "he": "אתה מקבל מייל זה כי נרשמת לעדכוני NoryaAI.",
+    "hi": "आपको यह ईमेल इसलिए मिल रहा है क्योंकि आपने NoryaAI अपडेट के लिए साइन अप किया है।",
+    "ar": "تتلقى هذا البريد لأنك اشتركت في تحديثات NoryaAI.",
+}
+
+
+def build_welcome_email_html(lang: str, base_url: str) -> tuple[str, str]:
+    """Lead welcome email HTML + subject. Returns (subject, html_body)."""
+    lang = lang or DEFAULT_LANG
+    if lang not in _WELCOME_SUBJECT:
+        lang = DEFAULT_LANG
+
+    subject = _WELCOME_SUBJECT[lang]
+    greeting = _WELCOME_GREETING.get(lang, _WELCOME_GREETING["en"])
+    body = _WELCOME_BODY.get(lang, _WELCOME_BODY["en"])
+    bullets = _WELCOME_BULLETS.get(lang, _WELCOME_BULLETS["en"])
+    cta = _WELCOME_CTA.get(lang, _WELCOME_CTA["en"])
+    sample_link_text = _WELCOME_SAMPLE_LINK_TEXT.get(lang, _WELCOME_SAMPLE_LINK_TEXT["en"])
+    how_link_text = _WELCOME_HOW_LINK_TEXT.get(lang, _WELCOME_HOW_LINK_TEXT["en"])
+    privacy = _WELCOME_PRIVACY.get(lang, _WELCOME_PRIVACY["en"])
+    footer = _WELCOME_FOOTER.get(lang, _WELCOME_FOOTER["en"])
+    from_name = getattr(settings, "smtp_from_name", None) or "Norya"
+
+    base = base_url.rstrip("/")
+    analyze_url = f"{base}/analyze"
+    sample_url = f"{base}/en/sample-blood-test-reports"
+    how_url = f"{base}/how-it-works"
+    logo_url = f"{base}/static/norya_logo_transparent_trim.png"
+
+    dir_attr = ' dir="rtl"' if lang in ("he", "ar") else ""
+    bullet_html = "".join(
+        f'<li style="margin-bottom:6px;font-size:15px;color:#334155;">{b}</li>'
+        for b in bullets
+    )
+
+    html = f"""<!DOCTYPE html>
+<html lang="{lang}"{dir_attr}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{subject}</title>
+</head>
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:'Segoe UI',system-ui,-apple-system,sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f1f5f9;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:480px;background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(10,25,41,0.08);overflow:hidden;">
+          <tr>
+            <td style="background:linear-gradient(135deg,#1a2d42 0%,#2d4a6f 50%,#0d9488 100%);padding:28px 24px;text-align:center;">
+              <img src="{logo_url}" alt="Norya" style="height:56px;width:auto;max-width:200px;display:block;margin:0 auto 8px;object-fit:contain;" />
+              <div style="font-size:18px;font-weight:600;color:#ffffff;">{from_name}</div>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:28px 24px;">
+              <p style="margin:0 0 16px;font-size:20px;font-weight:700;color:#0f172a;">{greeting}</p>
+              <p style="margin:0 0 20px;font-size:15px;line-height:1.6;color:#334155;">{body}</p>
+              <ul style="margin:0 0 24px;padding-left:20px;list-style:disc;">
+                {bullet_html}
+              </ul>
+              <p style="margin:0 0 24px;text-align:center;">
+                <a href="{analyze_url}" style="display:inline-block;padding:14px 28px;background:#0d9488;color:#ffffff!important;text-decoration:none;font-weight:600;font-size:15px;border-radius:10px;">{cta}</a>
+              </p>
+              <p style="margin:0 0 8px;text-align:center;">
+                <a href="{sample_url}" style="color:#0d9488;text-decoration:underline;font-size:14px;font-weight:500;">{sample_link_text}</a>
+              </p>
+              <p style="margin:0 0 20px;text-align:center;">
+                <a href="{how_url}" style="color:#0d9488;text-decoration:underline;font-size:14px;font-weight:500;">{how_link_text}</a>
+              </p>
+              <p style="margin:0;padding:12px 16px;background:#f8fafc;border-radius:8px;font-size:13px;line-height:1.5;color:#64748b;">
+                🔒 {privacy}
+              </p>
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:16px 24px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;text-align:center;">
+              {footer}<br/>&copy; NoryaAI
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>"""
+    return subject, html
+
+
+def send_welcome_email(to_email: str, lang: str = "en", base_url: str = "https://noryaai.com") -> bool:
+    """Lead subscribe sonrası welcome e-postası gönderir."""
+    subject, html = build_welcome_email_html(lang, base_url)
+    return send_email(to_email, subject, html)

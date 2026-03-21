@@ -1172,6 +1172,38 @@
       .doctor-insights-carousel { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; max-width: 56rem; margin-left: auto; margin-right: auto; }
       .doctor-card { padding: 1.875rem 1.625rem 1.625rem; min-height: 280px; }
     }
+    /* Email lead capture widget */
+    .lead-capture { --lc-brand: #0EA5A4; padding: 2.5rem 1rem; background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 50%, #f0f9ff 100%); border-top: 1px solid rgba(14,165,164,0.12); border-bottom: 1px solid rgba(14,165,164,0.12); }
+    .dark .lead-capture { background: linear-gradient(135deg, rgba(15,23,42,0.5) 0%, rgba(6,28,28,0.4) 100%); border-color: rgba(14,165,164,0.15); }
+    .lead-capture-inner { max-width: 520px; margin: 0 auto; text-align: center; }
+    .lead-capture-icon { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 14px; background: rgba(14,165,164,0.1); color: var(--lc-brand); margin-bottom: 1rem; }
+    .dark .lead-capture-icon { background: rgba(14,165,164,0.18); color: #5eead4; }
+    .lead-capture h2 { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    .dark .lead-capture h2 { color: #f1f5f9; }
+    .lead-capture-desc { font-size: 0.9rem; color: #475569; line-height: 1.55; margin-bottom: 1.25rem; }
+    .dark .lead-capture-desc { color: #94a3b8; }
+    .lead-capture-form { display: flex; flex-direction: column; gap: 0.625rem; }
+    @media (min-width: 480px) { .lead-capture-form { flex-direction: row; gap: 0.5rem; } }
+    .lead-capture-form input { flex: 1; min-width: 0; padding: 0.7rem 1rem; border-radius: 12px; border: 1.5px solid rgba(15,23,42,0.12); background: #fff; font-size: 0.875rem; color: #0f172a; transition: border-color 0.2s; }
+    .lead-capture-form input:focus { outline: none; border-color: var(--lc-brand); box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
+    .dark .lead-capture-form input { background: rgba(30,41,59,0.7); border-color: rgba(255,255,255,0.1); color: #f1f5f9; }
+    .dark .lead-capture-form input:focus { border-color: #5eead4; box-shadow: 0 0 0 3px rgba(94,234,212,0.15); }
+    .lead-capture-form input::placeholder { color: #94a3b8; }
+    .dark .lead-capture-form input::placeholder { color: #64748b; }
+    .lead-capture-btn { padding: 0.7rem 1.5rem; border-radius: 12px; background: var(--lc-brand); color: #fff; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; white-space: nowrap; transition: background 0.2s, opacity 0.2s; }
+    .lead-capture-btn:hover { background: #0d9488; }
+    .lead-capture-btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .lead-capture-privacy { font-size: 0.75rem; color: #94a3b8; margin-top: 0.75rem; }
+    .dark .lead-capture-privacy { color: #64748b; }
+    .lead-capture-msg { margin-top: 0.75rem; font-size: 0.8125rem; font-weight: 500; border-radius: 8px; padding: 0.5rem 0.75rem; }
+    .lead-capture-msg.success { color: #065f46; background: rgba(16,185,129,0.1); }
+    .dark .lead-capture-msg.success { color: #6ee7b7; background: rgba(16,185,129,0.12); }
+    .lead-capture-msg.error { color: #991b1b; background: rgba(239,68,68,0.08); }
+    .dark .lead-capture-msg.error { color: #fca5a5; background: rgba(239,68,68,0.12); }
+    .lead-capture-msg.info { color: #92400e; background: rgba(245,158,11,0.1); }
+    .dark .lead-capture-msg.info { color: #fcd34d; background: rgba(245,158,11,0.12); }
+    [dir="rtl"] .lead-capture-form { direction: rtl; }
+
     /* Customer Reviews: premium testimonial cards — warmer, trusted */
     .customer-reviews-section { background: linear-gradient(180deg, #fefdfb 0%, #faf8f5 100%); border-top: 1px solid rgba(15,23,42,0.04); overflow-x: clip; max-width: 100%; }
     .dark .customer-reviews-section { background: linear-gradient(180deg, rgba(30,41,59,0.2) 0%, rgba(30,35,40,0.25) 100%); border-top-color: rgba(148,163,184,0.08); }
@@ -4915,6 +4947,24 @@
     </div>
   </section>
 
+  <!-- E-posta toplama: sample report altı -->
+  <section class="lead-capture" id="lead-capture-home" aria-labelledby="lead-capture-title-home">
+    <div class="lead-capture-inner">
+      <div class="lead-capture-icon" aria-hidden="true">
+        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M22 7l-10 6L2 7"/></svg>
+      </div>
+      <h2 id="lead-capture-title-home" data-i18n="lead_title">Kan tahlili rehberleri ve yeni özellikler</h2>
+      <p class="lead-capture-desc" data-i18n="lead_desc">Örnek raporlar, test yorumlama rehberleri ve doktora hazır özet güncellemelerini e-postana gönderelim.</p>
+      <form class="lead-capture-form" onsubmit="return submitLeadForm(event, 'homepage')" autocomplete="on">
+        <input type="email" name="email" required autocomplete="email" data-i18n-placeholder="lead_placeholder_email" placeholder="E-posta adresiniz" aria-label="Email" />
+        <input type="text" name="name" autocomplete="given-name" data-i18n-placeholder="lead_placeholder_name" placeholder="Adınız (opsiyonel)" aria-label="Name" style="max-width:160px" />
+        <button type="submit" class="lead-capture-btn" data-i18n="lead_btn">Beni bilgilendir</button>
+      </form>
+      <p class="lead-capture-privacy" data-i18n="lead_privacy">Spam göndermeyiz. İstediğiniz zaman çıkabilirsiniz.</p>
+      <div class="lead-capture-msg hidden" role="status" aria-live="polite"></div>
+    </div>
+  </section>
+
   <!-- Örnek rapor modal — kartlardan "Rapor örneğini gör" tıklanınca açılır -->
   <div id="sample-report-modal" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50" role="dialog" aria-modal="true" aria-labelledby="sample-report-modal-title">
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl w-full max-w-2xl max-h-[90vh] flex flex-col border border-accent-200 dark:border-accent-700" onclick="event.stopPropagation()">
@@ -8561,6 +8611,17 @@
         footer_paytr_provided: "Ödeme altyapısı PayTR 3D Secure güvenli ödeme sistemi ile sağlanmaktadır.", footer_card_not_stored: "Kart bilgileriniz Norya sunucularında saklanmaz.",
         footer_health_disclaimer_full: "Norya bir tıbbi teşhis veya tedavi hizmeti değildir. Sunulan analizler yalnızca bilgilendirme amaçlıdır. Kesin sağlık kararları için bir doktora danışınız.",
         footer_copyright: "© 2026 Norya. Tüm hakları saklıdır.",
+        lead_title: "Kan tahlili rehberleri ve yeni özellikler",
+        lead_desc: "Örnek raporlar, test yorumlama rehberleri ve doktora hazır özet güncellemelerini e-postana gönderelim.",
+        lead_placeholder_email: "E-posta adresiniz",
+        lead_placeholder_name: "Adınız (opsiyonel)",
+        lead_btn: "Beni bilgilendir",
+        lead_btn_loading: "Gönderiliyor…",
+        lead_success: "Kaydınız alındı — teşekkürler!",
+        lead_already: "Bu e-posta zaten kayıtlı.",
+        lead_error_email: "Lütfen geçerli bir e-posta girin.",
+        lead_error_generic: "Bir hata oluştu. Lütfen tekrar deneyin.",
+        lead_privacy: "Spam göndermeyiz. İstediğiniz zaman çıkabilirsiniz.",
         footer_platform_disclaimer: "Norya, kan tahlili sonuçlarınızı yapılandırılmış analiz ve raporlarla sunan bir biyobelirteç platformudur. Norya bir tıbbi teşhis sistemi değildir.",
         footer_terms: "Kullanım Şartları", footer_payment: "Ödeme ve İade", footer_contact: "İletişim", back_home: "← Ana sayfa",
         terms_heading: "Kullanım Koşulları", privacy_heading: "Gizlilik Politikası", payment_heading: "Ödeme ve İade Koşulları",
@@ -8960,6 +9021,17 @@
         footer_paytr_provided: "Payment infrastructure is provided by the PayTR 3D Secure payment system.", footer_card_not_stored: "Your card details are not stored on Norya servers.",
         footer_health_disclaimer_full: "Norya is not a medical diagnosis or treatment service. The analyses provided are for information only. Consult a doctor for any definitive health decisions.",
         footer_copyright: "© 2026 Norya. All rights reserved.",
+        lead_title: "Blood test guides & new features",
+        lead_desc: "Get sample reports, lab result guides, and doctor-ready summary updates straight to your inbox.",
+        lead_placeholder_email: "Your email address",
+        lead_placeholder_name: "Your name (optional)",
+        lead_btn: "Keep me updated",
+        lead_btn_loading: "Sending…",
+        lead_success: "You're in — thank you!",
+        lead_already: "This email is already registered.",
+        lead_error_email: "Please enter a valid email.",
+        lead_error_generic: "Something went wrong. Please try again.",
+        lead_privacy: "No spam. Unsubscribe anytime.",
         footer_platform_disclaimer: "Norya is a biomarker platform that delivers structured analysis and reporting of your blood test results. Norya is not a medical diagnosis system.",
         footer_terms: "Terms of Use", footer_payment: "Payment & Refunds", footer_contact: "Contact", back_home: "← Home",
         terms_heading: "Terms of Use", privacy_heading: "Privacy Policy", payment_heading: "Payment and Refund Terms",
@@ -9219,6 +9291,17 @@
         trust_badge_cloudflare: "Cloudflare Security Protection",
         footer_paytr_provided: "L'infrastruttura di pagamento è fornita dal sistema PayTR 3D Secure.", footer_card_not_stored: "I dati della carta non sono memorizzati sui server Norya.",
         footer_health_disclaimer_full: "Norya non è un servizio di diagnosi o trattamento medico. Le analisi fornite sono solo a scopo informativo. Consultare un medico per decisioni di salute definitive.",
+        lead_title: "Guide alle analisi del sangue e novità",
+        lead_desc: "Ricevi report di esempio, guide ai risultati di laboratorio e aggiornamenti sui riepiloghi per il medico nella tua casella.",
+        lead_placeholder_email: "Il tuo indirizzo email",
+        lead_placeholder_name: "Il tuo nome (facoltativo)",
+        lead_btn: "Tienimi aggiornato",
+        lead_btn_loading: "Invio in corso…",
+        lead_success: "Iscrizione avvenuta — grazie!",
+        lead_already: "Questa email è già registrata.",
+        lead_error_email: "Inserisci un'email valida.",
+        lead_error_generic: "Si è verificato un errore. Riprova.",
+        lead_privacy: "Niente spam. Cancella quando vuoi.",
         footer_copyright: "© 2026 Norya. Tutti i diritti riservati.",
         footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Termini d'uso", footer_payment: "Pagamento e rimborsi", footer_contact: "Contatti", back_home: "← Home",
@@ -9481,6 +9564,17 @@
         trust_badge_cloudflare: "Cloudflare Security Protection",
         footer_paytr_provided: "La infraestructura de pago es proporcionada por el sistema PayTR 3D Secure.", footer_card_not_stored: "Los datos de su tarjeta no se almacenan en los servidores de Norya.",
         footer_health_disclaimer_full: "Norya no es un servicio de diagnóstico o tratamiento médico. Los análisis ofrecidos son solo informativos. Consulte a un médico para decisiones de salud definitivas.",
+        lead_title: "Guías de análisis de sangre y novedades",
+        lead_desc: "Recibe informes de ejemplo, guías de resultados de laboratorio y actualizaciones sobre resúmenes para el médico en tu correo.",
+        lead_placeholder_email: "Tu correo electrónico",
+        lead_placeholder_name: "Tu nombre (opcional)",
+        lead_btn: "Mantenme informado",
+        lead_btn_loading: "Enviando…",
+        lead_success: "¡Registro completado — gracias!",
+        lead_already: "Este correo ya está registrado.",
+        lead_error_email: "Introduce un correo válido.",
+        lead_error_generic: "Algo salió mal. Inténtalo de nuevo.",
+        lead_privacy: "Sin spam. Cancela cuando quieras.",
         footer_copyright: "© 2026 Norya. Todos los derechos reservados.",
         footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Términos de uso", footer_payment: "Pago y reembolsos", footer_contact: "Contacto", back_home: "← Inicio",
@@ -9743,6 +9837,17 @@
         trust_badge_cloudflare: "Cloudflare Security Protection",
         footer_paytr_provided: "L'infrastructure de paiement est fournie par le système PayTR 3D Secure.", footer_card_not_stored: "Vos données de carte ne sont pas stockées sur les serveurs Norya.",
         footer_health_disclaimer_full: "Norya n'est pas un service de diagnostic ou de traitement médical. Les analyses fournies sont à titre informatif uniquement. Consultez un médecin pour toute décision de santé.",
+        lead_title: "Guides d'analyses sanguines et nouveautés",
+        lead_desc: "Recevez des rapports exemples, des guides de résultats de labo et des mises à jour sur les résumés prêts pour le médecin.",
+        lead_placeholder_email: "Votre adresse email",
+        lead_placeholder_name: "Votre nom (facultatif)",
+        lead_btn: "Me tenir informé",
+        lead_btn_loading: "Envoi en cours…",
+        lead_success: "Inscription réussie — merci !",
+        lead_already: "Cet email est déjà inscrit.",
+        lead_error_email: "Veuillez entrer un email valide.",
+        lead_error_generic: "Une erreur est survenue. Veuillez réessayer.",
+        lead_privacy: "Pas de spam. Désabonnement à tout moment.",
         footer_copyright: "© 2026 Norya. Tous droits réservés.",
         footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Conditions d'utilisation", footer_payment: "Paiement et remboursements", footer_contact: "Contact", back_home: "← Accueil",
@@ -9986,6 +10091,17 @@
         trust_badge_cloudflare: "Cloudflare-Schutz",
         footer_paytr_provided: "Die Zahlungsinfrastruktur wird vom PayTR-3D-Secure-System bereitgestellt.", footer_card_not_stored: "Ihre Kartendaten werden nicht auf Norya-Servern gespeichert.",
         footer_health_disclaimer_full: "Norya ist kein medizinischer Diagnose- oder Behandlungsdienst. Die angebotenen Analysen dienen nur der Information. Konsultieren Sie einen Arzt für verbindliche Gesundheitsentscheidungen.",
+        lead_title: "Bluttest-Leitfäden und neue Funktionen",
+        lead_desc: "Erhalten Sie Beispielberichte, Laborergebnis-Leitfäden und Updates zu arztfertigen Zusammenfassungen direkt in Ihr Postfach.",
+        lead_placeholder_email: "Ihre E-Mail-Adresse",
+        lead_placeholder_name: "Ihr Name (optional)",
+        lead_btn: "Auf dem Laufenden bleiben",
+        lead_btn_loading: "Wird gesendet…",
+        lead_success: "Anmeldung erfolgreich — danke!",
+        lead_already: "Diese E-Mail ist bereits registriert.",
+        lead_error_email: "Bitte geben Sie eine gültige E-Mail ein.",
+        lead_error_generic: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
+        lead_privacy: "Kein Spam. Jederzeit abmeldbar.",
         footer_copyright: "© 2026 Norya. Alle Rechte vorbehalten.",
         footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "Datenschutz (DSGVO)", footer_kvkk_link: "Datenschutz",
         footer_terms: "Nutzungsbedingungen", footer_payment: "Zahlung & Rückerstattung", footer_contact: "Kontakt", back_home: "← Start",
@@ -10184,6 +10300,17 @@
         report_next_steps_intro_monthly: "פרמטרים שכדאי לעקוב בבדיקה הבאה, נושאים לשיחה עם הרופא והצעות למעקב באורח חיים.", report_next_steps_monthly_1: "פרמטרים לעקוב בניתוח הבא: ערכים שדורשים תשומת לב או בגבול.", report_next_steps_monthly_2: "המלצות תזונה ופעילות לפי תחומים במגמת שיפור או הידרדרות; הסכם עם הרופא על מועדי מעקב.", report_next_steps_monthly_3: "נושאים לשיחה עם הרופא: למה ערכים אלה אולי השתנו, מתי לחזור על בדיקות.", report_next_steps_monthly_4: "אורח חיים ומעקב: שינה, מתח, תנועה; עקוב אחר השינוי בהשוואה לדוח הבא.",
         price_best_badge: "המשתלם ביותר", price_best_badge_value: "הערך הטוב ביותר", price_yearly_title: "מנוי שנתי", price_per_year: "/שנה", price_yearly_per: "16 ניתוחים סה\"כ (13 + 3 במתנה)", price_yearly_1: "✓ ניתוח מגמה ארוך טווח", price_yearly_2: "✓ תכנית מעקב מתקדמת; ההסברים המעמיקים ביותר", price_yearly_3: "✓ PDF הפרימיום החזק ביותר; להראות לרופא", price_yearly_4: "✓ נהל את תמונת הבריאות לאורך זמן", price_btn_yearly: "/שנה — התחל",
         plan_yearly_1: "ניתוח מגמה ארוך טווח; שינוי לאורך זמן", plan_yearly_2: "תכנית מעקב מתקדמת ופרמטרים עדיפים", plan_yearly_3: "ההסברים המעמיקים ביותר לסמנים ולקטגוריות", plan_yearly_4: "השוואה לניתוחים קודמים ומה השתנה", plan_yearly_5: "סיכום מבט בריאות ארוך טווח", plan_yearly_6: "סעיף תובנות מועדפות", plan_yearly_7: "ה-PDF המקיף ביותר לרופא", plan_yearly_8: "גרפים וסעיפי סיכון פרימיום", plan_yearly_9: "תוספים ואורח חיים", plan_yearly_10: "בריאות הלב וקרדיווסקולרי",
+        lead_title: "מדריכי בדיקות דם וחדשות",
+        lead_desc: "קבלו דוחות לדוגמה, מדריכי תוצאות מעבדה ועדכונים על סיכומים מוכנים לרופא ישירות למייל.",
+        lead_placeholder_email: "כתובת המייל שלך",
+        lead_placeholder_name: "השם שלך (אופציונלי)",
+        lead_btn: "עדכנו אותי",
+        lead_btn_loading: "שולח…",
+        lead_success: "נרשמת בהצלחה — תודה!",
+        lead_already: "מייל זה כבר רשום.",
+        lead_error_email: "נא להזין כתובת מייל תקינה.",
+        lead_error_generic: "אירעה שגיאה. נסה שוב.",
+        lead_privacy: "ללא ספאם. ביטול בכל עת.",
         footer_desc: "תוצאות בדיקות דם מוסברות בשפה ברורה.", footer_disclaimer: "הכלי להנחיה בלבד. להחלטות רפואיות יש להתייעץ עם רופא.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "ניתוח זה למידע בלבד. אינו מחליף אבחנה רפואית.", medical_disclaimer_full: "Norya אינה כלי לאבחון רפואי. התוכן למידע בלבד. במקרי חירום או לאבחון/טיפול פנה לרופא.", doctor_cta_note: "אינו מחליף אבחנה; שתף את התוצאות עם הרופא.",
         footer_mesafeli: "הסכם מכר מרחוק", footer_privacy: "פרטיות", footer_refund: "החזרה וביטול", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -10382,6 +10509,17 @@
         report_next_steps_intro_monthly: "معاملات تستحق المتابعة في الفحص القادم، مواضيع تناقشها مع الطبيب واقتراحات متابعة لنمط الحياة.", report_next_steps_monthly_1: "معاملات تتابعها في التحليل القادم: قيم تحتاج انتباهاً أو حدية.", report_next_steps_monthly_2: "اقتراحات غذاء ونشاط حسب المجالات المتحسّنة أو المتدهورة؛ اتّفق مع الطبيب على مواعيد المتابعة.", report_next_steps_monthly_3: "مواضيع تطرحها في الزيارة: لماذا ربما تغيّرت هذه القيم، متى تعيد الفحوص.", report_next_steps_monthly_4: "نمط الحياة والمتابعة: نوم، توتر، حركة؛ تتبع التغيّر بمقارنة التقرير القادم.",
         price_best_badge: "الأفضل قيمة", price_best_badge_value: "أفضل قيمة", price_yearly_title: "اشتراك سنوي", price_per_year: "/سنة", price_yearly_per: "16 تحليلاً إجمالاً (13 + 3 هدية)", price_yearly_1: "✓ تحليل اتجاه طويل الأمد", price_yearly_2: "✓ خطة متابعة متقدمة؛ أعمق الشروحات", price_yearly_3: "✓ أقوى PDF مميز؛ لأخذه للطبيب", price_yearly_4: "✓ إدارة نظرتك الصحية عبر الزمن", price_btn_yearly: "/سنة — ابدأ",
         plan_yearly_1: "تحليل اتجاه طويل الأمد؛ التغيّر عبر الزمن", plan_yearly_2: "خطة متابعة متقدمة ومعاملات أولوية", plan_yearly_3: "أعمق شروحات المؤشرات والفئات", plan_yearly_4: "المقارنة مع تحليلات سابقة وما تغيّر", plan_yearly_5: "ملخص نظرة صحية طويلة الأمد", plan_yearly_6: "قسم الرؤى ذات الأولوية", plan_yearly_7: "أقوى PDF للمشاركة مع الطبيب", plan_yearly_8: "رسوم وأقسام مخاطر مميزة", plan_yearly_9: "مكملات ونمط حياة", plan_yearly_10: "صحة القلب والأوعية الدموية",
+        lead_title: "أدلة تحاليل الدم وآخر المستجدات",
+        lead_desc: "احصل على تقارير نموذجية، أدلة نتائج المختبر وتحديثات الملخصات الجاهزة للطبيب مباشرة في بريدك.",
+        lead_placeholder_email: "بريدك الإلكتروني",
+        lead_placeholder_name: "اسمك (اختياري)",
+        lead_btn: "أبقني على اطلاع",
+        lead_btn_loading: "جارٍ الإرسال…",
+        lead_success: "تم التسجيل — شكراً!",
+        lead_already: "هذا البريد مسجل بالفعل.",
+        lead_error_email: "يرجى إدخال بريد إلكتروني صحيح.",
+        lead_error_generic: "حدث خطأ. يرجى المحاولة مرة أخرى.",
+        lead_privacy: "لا رسائل مزعجة. إلغاء الاشتراك في أي وقت.",
         footer_desc: "نتائج تحاليل الدم مفسرة بلغة واضحة.", footer_disclaimer: "هذه الأداة للمعلومات فقط. استشر طبيباً دائماً للقرارات الطبية.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "هذا التحليل للمعلومات فقط. لا يحل محل التشخيص الطبي.", medical_disclaimer_full: "Norya ليست أداة تشخيص طبي. المحتوى للمعلومات فقط. في الطوارئ أو للتشخيص/العلاج استشر طبيبك.", doctor_cta_note: "لا يحل محل التشخيص؛ شارك النتائج مع طبيبك.",
         footer_mesafeli: "عقد البيع عن بعد", footer_privacy: "الخصوصية", footer_refund: "الاسترداد والإلغاء", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -10580,6 +10718,17 @@
         report_next_steps_intro_monthly: "अगले टेस्ट में निगरानी के लायक पैरामीटर, डॉक्टर से चर्चा के विषय और जीवनशैली फॉलो-अप सुझाव।", report_next_steps_monthly_1: "अगले विश्लेषण में ध्यान देने वाले पैरामीटर: ध्यान चाहने वाले या सीमा पर मान।", report_next_steps_monthly_2: "सुधरते या बिगड़ते क्षेत्रों के हिसाब से डाइट और एक्टिविटी सुझाव; डॉक्टर के साथ फॉलो-अप समय तय करें।", report_next_steps_monthly_3: "विजिट में पूछने के विषय: ये मान क्यों बदले होंगे, टेस्ट कब दोहराएँ।", report_next_steps_monthly_4: "जीवनशैली और फॉलो-अप: नींद, तनाव, गति; अगली रिपोर्ट से तुलना कर बदलाव ट्रैक करें।",
         price_best_badge: "सर्वोत्तम मूल्य", price_best_badge_value: "सर्वोत्तम मूल्य", price_yearly_title: "वार्षिक प्लान", price_per_year: "/वर्ष", price_yearly_per: "कुल 16 विश्लेषण (13 + 3 मुफ्त)", price_yearly_1: "✓ लंबी अवधि का ट्रेंड विश्लेषण", price_yearly_2: "✓ उन्नत फॉलो-अप प्लान; गहरी व्याख्या", price_yearly_3: "✓ सबसे मजबूत प्रीमियम PDF; डॉक्टर के पास ले जाएँ", price_yearly_4: "✓ समय के साथ स्वास्थ्य दृश्य प्रबंधित करें", price_btn_yearly: "/वर्ष — शुरू करें",
         plan_yearly_1: "लंबी अवधि का ट्रेंड विश्लेषण; समय के साथ बदलाव", plan_yearly_2: "उन्नत फॉलो-अप प्लान और प्राथमिकता पैरामीटर", plan_yearly_3: "गहरी बायोमार्कर और श्रेणी व्याख्या", plan_yearly_4: "पिछले विश्लेषण से तुलना और क्या बदला", plan_yearly_5: "लंबी अवधि का स्वास्थ्य दृश्य सारांश", plan_yearly_6: "प्राथमिकता वाली अंतर्दृष्टि सेक्शन", plan_yearly_7: "डॉक्टर के लिए सबसे व्यापक PDF", plan_yearly_8: "प्रीमियम चार्ट और रिस्क सेक्शन", plan_yearly_9: "सप्लीमेंट और जीवनशैली", plan_yearly_10: "हृदय और कार्डियोवैस्कुलर कमेंटरी",
+        lead_title: "रक्त परीक्षण गाइड और नई सुविधाएँ",
+        lead_desc: "नमूना रिपोर्ट, लैब परिणाम गाइड और डॉक्टर-रेडी सारांश अपडेट सीधे अपने इनबॉक्स में पाएँ।",
+        lead_placeholder_email: "आपका ईमेल पता",
+        lead_placeholder_name: "आपका नाम (वैकल्पिक)",
+        lead_btn: "मुझे अपडेट रखें",
+        lead_btn_loading: "भेजा जा रहा है…",
+        lead_success: "पंजीकरण सफल — धन्यवाद!",
+        lead_already: "यह ईमेल पहले से पंजीकृत है।",
+        lead_error_email: "कृपया एक मान्य ईमेल दर्ज करें।",
+        lead_error_generic: "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
+        lead_privacy: "कोई स्पैम नहीं। कभी भी अनसब्सक्राइब करें।",
         footer_desc: "रक्त परीक्षण परिणाम सरल भाषा में समझाए गए।", footer_disclaimer: "यह उपकरण शैक्षिक उद्देश्य के लिए है। चिकित्सा निर्णय के लिए हमेशा डॉक्टर से सलाह लें।", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "यह विश्लेषण केवल सूचनात्मक है। चिकित्सा निदान का विकल्प नहीं है।", medical_disclaimer_full: "Norya चिकित्सा निदान उपकरण नहीं है। सामग्री केवल सूचनात्मक है। आपातकाल या निदान/उपचार के लिए डॉक्टर से सलाह लें।", doctor_cta_note: "निदान का विकल्प नहीं; परिणाम डॉक्टर के साथ साझा करें।",
         footer_mesafeli: "दूरबिक्री समझौता", footer_privacy: "गोपनीयता", footer_refund: "रिफंड और रद्दीकरण", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -11919,6 +12068,44 @@
       var modal = document.getElementById('sample-report-modal');
       if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
       document.body.style.overflow = '';
+    }
+
+    function submitLeadForm(e, source) {
+      e.preventDefault();
+      var form = e.target;
+      var btn = form.querySelector('.lead-capture-btn');
+      var msgEl = form.parentElement.querySelector('.lead-capture-msg');
+      var t = T[getLang()] || T.en;
+      var emailInput = form.querySelector('input[name="email"]');
+      var nameInput = form.querySelector('input[name="name"]');
+      var email = (emailInput.value || '').trim();
+      if (!email || email.indexOf('@') < 1 || email.lastIndexOf('.') <= email.indexOf('@')) {
+        msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_email || 'Please enter a valid email.'; msgEl.classList.remove('hidden'); return false;
+      }
+      btn.disabled = true; btn.textContent = t.lead_btn_loading || 'Sending…';
+      msgEl.classList.add('hidden');
+      fetch('/api/lead/subscribe', {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email: email, name: nameInput ? nameInput.value.trim() : '', source: source || 'homepage', locale: getLang() })
+      }).then(function(r) { return r.json(); }).then(function(d) {
+        if (d.ok && d.already) {
+          msgEl.className = 'lead-capture-msg info'; msgEl.textContent = t.lead_already || 'This email is already registered.';
+        } else if (d.ok) {
+          msgEl.className = 'lead-capture-msg success'; msgEl.textContent = t.lead_success || "You're in — thank you!";
+          emailInput.value = ''; if (nameInput) nameInput.value = '';
+        } else if (d.error === 'invalid_email') {
+          msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_email || 'Please enter a valid email.';
+        } else {
+          msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
+        }
+        msgEl.classList.remove('hidden');
+      }).catch(function() {
+        msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
+        msgEl.classList.remove('hidden');
+      }).finally(function() {
+        btn.disabled = false; btn.textContent = t.lead_btn || 'Keep me updated';
+      });
+      return false;
     }
 
     async function submitLogin(e) {

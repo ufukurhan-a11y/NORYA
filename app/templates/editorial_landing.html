@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  {% include "partials/gsc_meta.html" %}
+  <meta name="robots" content="index,follow" />
+  <title>{{ t.meta_title }}</title>
+  <meta name="description" content="{{ t.meta_description }}" />
+  <meta property="og:title" content="{{ t.meta_title }}" />
+  <meta property="og:description" content="{{ t.meta_description }}" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ t.meta_title }}" />
+  <meta name="twitter:description" content="{{ t.meta_description }}" />
+  <meta name="theme-color" content="#0EA5A4" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: { 500: '#0EA5A4', 600: '#0d9488' },
+            accent: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root { --norya-teal: #0EA5A4; --norya-teal-hover: #0d9488; }
+    .text-norya-teal { color: var(--norya-teal); }
+    .bg-norya-teal { background-color: var(--norya-teal); }
+    .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
+    .border-norya-teal { border-color: var(--norya-teal); }
+    @media (max-width: 768px) {
+      .header-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+    }
+    body { padding-bottom: env(safe-area-inset-bottom, 0); }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NoryaAI",
+    "url": "{{ base_url }}",
+    "logo": "{{ base_url }}/static/norya_logo_transparent_trim.png"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {% for faq in t.faqs %}{% if not loop.first %},{% endif %}
+      {"@type": "Question", "name": {{ faq.q|tojson }}, "acceptedAnswer": {"@type": "Answer", "text": {{ faq.a|tojson }}}}
+      {% endfor %}
+    ]
+  }
+  </script>
+  {% include "includes/gtag_google_ads.html" %}
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between header-inner">
+      <a href="/en" class="flex items-center shrink-0" aria-label="NoryaAI home">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
+        <a href="/en" class="text-slate-600 hover:text-teal-600">Home</a>
+        <a href="{{ base_url }}/how-it-works?lang=en" class="text-slate-600 hover:text-teal-600">How it works</a>
+        <a href="{{ base_url }}/pricing" class="text-slate-600 hover:text-teal-600">Pricing</a>
+        <a href="{{ base_url }}/en/blog" class="text-slate-600 hover:text-teal-600">Blog</a>
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">Analyze</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+
+    <!-- HERO -->
+    <section class="py-12 sm:py-20 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
+      <div class="max-w-3xl mx-auto text-center">
+        <span class="inline-block text-xs font-semibold tracking-wide uppercase text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-3 py-1 mb-5">Editorial Guide</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">{{ t.hero_title }}</h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{{ t.hero_sub }}</p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-7 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-md hover:opacity-95 transition-opacity">{{ t.cta_hero_primary }}</a>
+          <a href="{{ base_url }}/en/ai-blood-test-analyzer#report-preview" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50 transition-colors">{{ t.cta_hero_secondary }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- THE SHORT ANSWER -->
+    <section class="py-10 sm:py-14 px-4 bg-white">
+      <div class="max-w-3xl mx-auto">
+        <div class="rounded-2xl bg-gradient-to-br from-teal-50/80 via-cyan-50/60 to-slate-50 border border-teal-100/60 p-6 sm:p-8">
+          <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mb-3">{{ t.short_answer_title }}</h2>
+          <p class="text-slate-700 leading-relaxed">{{ t.short_answer }}</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- WHERE GENERIC AI CAN HELP -->
+    <section class="py-12 sm:py-16 px-4 bg-slate-50">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.generic_helps_title }}</h2>
+          <p class="mt-3 text-slate-600 max-w-2xl mx-auto">{{ t.generic_helps_sub }}</p>
+        </div>
+        <div class="grid sm:grid-cols-3 gap-5">
+          {% for item in t.generic_helps_items %}
+          <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm">
+            <span class="text-2xl mb-3 block">{{ item.icon }}</span>
+            <h3 class="font-semibold text-slate-900 mb-2">{{ item.title }}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{{ item.desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- WHERE GENERIC AI FALLS SHORT FOR LAB REPORTS -->
+    <section class="py-12 sm:py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.falls_short_title }}</h2>
+          <p class="mt-3 text-slate-600 max-w-2xl mx-auto">{{ t.falls_short_sub }}</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {% for item in t.falls_short_items %}
+          <div class="bg-slate-50 rounded-xl border border-slate-200 p-5 sm:p-6">
+            <span class="text-2xl mb-3 block">{{ item.icon }}</span>
+            <h3 class="font-semibold text-slate-900 mb-2">{{ item.title }}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{{ item.desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY STRUCTURED WORKFLOWS MATTER -->
+    <section class="py-12 sm:py-16 px-4 bg-slate-50">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.structured_title }}</h2>
+          <p class="mt-3 text-slate-600 max-w-2xl mx-auto">{{ t.structured_sub }}</p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-5">
+          {% for item in t.structured_items %}
+          <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6 shadow-sm flex gap-4">
+            <span class="flex-shrink-0 w-8 h-8 rounded-full bg-teal-100 text-teal-700 flex items-center justify-center font-bold text-sm">{{ loop.index }}</span>
+            <div>
+              <h3 class="font-semibold text-slate-900 mb-1">{{ item.title }}</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">{{ item.desc }}</p>
+            </div>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- WHY SOME USERS CHOOSE NORYA -->
+    <section class="py-12 sm:py-16 px-4 bg-white">
+      <div class="max-w-4xl mx-auto">
+        <div class="text-center mb-10">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.why_norya_title }}</h2>
+          <p class="mt-3 text-slate-600 max-w-2xl mx-auto">{{ t.why_norya_sub }}</p>
+        </div>
+        <div class="grid sm:grid-cols-2 gap-5">
+          {% for item in t.why_norya_items %}
+          <div class="rounded-xl border border-teal-100 bg-teal-50/40 p-5 sm:p-6">
+            <h3 class="font-semibold text-slate-900 mb-2">{{ item.title }}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{{ item.desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+        <div class="text-center mt-8">
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-7 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-md hover:opacity-95 transition-opacity">{{ t.cta_hero_primary }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-12 sm:py-16 px-4 bg-slate-50">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 text-center mb-10">Frequently Asked Questions</h2>
+        <dl class="space-y-5">
+          {% for faq in t.faqs %}
+          <div class="bg-white rounded-xl border border-slate-200 p-5 sm:p-6">
+            <dt class="font-semibold text-slate-900">{{ faq.q }}</dt>
+            <dd class="mt-2 text-sm text-slate-600 leading-relaxed">{{ faq.a }}</dd>
+          </div>
+          {% endfor %}
+        </dl>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="py-12 sm:py-16 px-4 bg-slate-800 text-white text-center">
+      <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold">{{ t.cta_title }}</h2>
+        <p class="mt-3 text-slate-300 max-w-xl mx-auto">{{ t.cta_sub }}</p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-7 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-md hover:opacity-95 transition-opacity">{{ t.cta_primary }}</a>
+          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-slate-400 text-slate-200 font-semibold hover:bg-slate-700 transition-colors">{{ t.cta_secondary }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERNAL LINKS -->
+    <section class="py-10 px-4 bg-slate-50 border-t border-slate-200">
+      <div class="max-w-3xl mx-auto">
+        <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
+          <li><a href="{{ base_url }}/analyze" class="text-teal-600 hover:text-teal-700 underline">Analyze</a></li>
+          <li><a href="{{ base_url }}/pricing" class="text-teal-600 hover:text-teal-700 underline">Pricing</a></li>
+          <li><a href="{{ base_url }}/how-it-works" class="text-teal-600 hover:text-teal-700 underline">How it works</a></li>
+          <li><a href="{{ base_url }}/en/blog" class="text-teal-600 hover:text-teal-700 underline">Blog</a></li>
+          <li><a href="{{ base_url }}/en/ai-blood-test-analyzer" class="text-teal-600 hover:text-teal-700 underline">AI Blood Test Analyzer</a></li>
+          <li><a href="{{ base_url }}/en/compare/norya-vs-generic-ai" class="text-teal-600 hover:text-teal-700 underline">Norya vs Generic AI</a></li>
+          <li><a href="{{ base_url }}/en/blood-test-results" class="text-teal-600 hover:text-teal-700 underline">Blood Test Results</a></li>
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-slate-50 py-8 px-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-4 text-sm text-slate-600">
+      <a href="/en" class="hover:text-teal-600">Home</a>
+      <a href="{{ base_url }}/analyze" class="hover:text-teal-600">Analyze</a>
+      <a href="{{ base_url }}/pricing" class="hover:text-teal-600">Pricing</a>
+      <a href="{{ base_url }}/how-it-works?lang=en" class="hover:text-teal-600">How it works</a>
+      <a href="{{ base_url }}/en/blog" class="hover:text-teal-600">Blog</a>
+      <a href="{{ base_url }}/legal/gizlilik-politikasi?lang=en" class="hover:text-teal-600">Privacy</a>
+      <a href="{{ base_url }}/legal/kullanim-sartlari?lang=en" class="hover:text-teal-600">Terms of use</a>
+    </div>
+    <p class="text-center text-slate-500 text-xs mt-3">NoryaAI does not provide medical diagnoses. All content is for educational and informational purposes only.</p>
+  </footer>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  {% include "partials/gsc_meta.html" %}
+  <meta name="robots" content="index,follow" />
+  <title>{{ t.meta_title }}</title>
+  <meta name="description" content="{{ t.meta_description }}" />
+  <meta property="og:title" content="{{ t.meta_title }}" />
+  <meta property="og:description" content="{{ t.meta_description }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="en_US" />
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ t.meta_title }}" />
+  <meta name="twitter:description" content="{{ t.meta_description }}" />
+  <meta name="theme-color" content="#0EA5A4" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+          colors: {
+            primary: { 500: '#0EA5A4', 600: '#0d9488' },
+            accent: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
+          }
+        }
+      }
+    }
+  </script>
+  <style>
+    :root { --norya-teal: #0EA5A4; --norya-teal-hover: #0d9488; }
+    .text-norya-teal { color: var(--norya-teal); }
+    .bg-norya-teal { background-color: var(--norya-teal); }
+    .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
+    @media (max-width: 768px) {
+      .header-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+    }
+    body { padding-bottom: env(safe-area-inset-bottom, 0); }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NoryaAI",
+    "url": "{{ base_url }}",
+    "logo": "{{ base_url }}/static/norya_logo_transparent_trim.png"
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {% for faq in t.faqs %}{% if not loop.first %},{% endif %}
+      {"@type": "Question", "name": {{ faq.q|tojson }}, "acceptedAnswer": {"@type": "Answer", "text": {{ faq.a|tojson }}}}
+      {% endfor %}
+    ]
+  }
+  </script>
+  {% include "includes/gtag_google_ads.html" %}
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between header-inner">
+      <a href="/en" class="flex items-center shrink-0" aria-label="NoryaAI home">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
+        <a href="/en" class="text-slate-600 hover:text-teal-600">Home</a>
+        <a href="{{ base_url }}/how-it-works?lang=en" class="text-slate-600 hover:text-teal-600">How it works</a>
+        <a href="{{ base_url }}/pricing" class="text-slate-600 hover:text-teal-600">Pricing</a>
+        <a href="{{ base_url }}/en/blog" class="text-slate-600 hover:text-teal-600">Blog</a>
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">Analyze</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+
+    <!-- HERO -->
+    <section class="py-10 sm:py-16 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
+      <div class="max-w-3xl mx-auto text-center">
+        <span class="inline-block text-xs font-semibold tracking-wide uppercase text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-3 py-1 mb-5">Free Tool</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">{{ t.hero_title }}</h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{{ t.hero_sub }}</p>
+      </div>
+    </section>
+
+    <!-- CONVERTER WIDGET -->
+    <section class="py-10 sm:py-14 px-4 bg-white">
+      <div class="max-w-xl mx-auto">
+        <div class="rounded-2xl border-2 border-teal-200 bg-gradient-to-br from-white to-teal-50/30 p-6 sm:p-8 shadow-lg" id="converter-widget">
+
+          <!-- Biomarker select -->
+          <label for="biomarker-select" class="block text-sm font-semibold text-slate-700 mb-2">Select biomarker</label>
+          <select id="biomarker-select" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-sm font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 mb-5" aria-label="Select biomarker">
+          </select>
+
+          <!-- Direction toggle -->
+          <div class="flex items-center justify-between mb-5">
+            <div class="flex-1">
+              <p class="text-xs text-slate-500 mb-1">From</p>
+              <p id="unit-from" class="text-sm font-semibold text-slate-800">—</p>
+            </div>
+            <button id="swap-btn" type="button" class="mx-3 w-10 h-10 rounded-full border-2 border-slate-200 bg-white flex items-center justify-center text-slate-500 hover:border-teal-400 hover:text-teal-600 transition-colors" aria-label="Swap direction" title="Swap direction">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"/></svg>
+            </button>
+            <div class="flex-1 text-right">
+              <p class="text-xs text-slate-500 mb-1">To</p>
+              <p id="unit-to" class="text-sm font-semibold text-slate-800">—</p>
+            </div>
+          </div>
+
+          <!-- Input -->
+          <label for="input-value" class="block text-sm font-semibold text-slate-700 mb-2">Enter value</label>
+          <input id="input-value" type="number" inputmode="decimal" step="any" min="0" placeholder="e.g. 100" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 mb-5" aria-label="Enter value" />
+
+          <!-- Result -->
+          <div id="result-box" class="rounded-xl bg-teal-50 border border-teal-200 p-4 text-center min-h-[60px] flex flex-col items-center justify-center">
+            <p id="result-value" class="text-2xl font-bold text-teal-700">—</p>
+            <p id="result-unit" class="text-sm text-teal-600 mt-1"></p>
+          </div>
+
+          <!-- Factor note -->
+          <p id="factor-note" class="text-xs text-slate-400 text-center mt-3"></p>
+        </div>
+
+        <p class="text-xs text-slate-500 text-center mt-4 italic">{{ t.disclaimer }}</p>
+      </div>
+    </section>
+
+    <!-- SUPPORTED CONVERSIONS TABLE -->
+    <section class="py-10 sm:py-14 px-4 bg-slate-50">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 text-center mb-3">{{ t.table_title }}</h2>
+        <p class="text-slate-600 text-center max-w-xl mx-auto mb-8">{{ t.table_sub }}</p>
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm border-collapse">
+            <thead>
+              <tr class="bg-slate-100">
+                <th class="text-left font-semibold text-slate-700 px-4 py-3 rounded-tl-lg">Biomarker</th>
+                <th class="text-left font-semibold text-slate-700 px-4 py-3">Unit A</th>
+                <th class="text-left font-semibold text-slate-700 px-4 py-3">Unit B</th>
+                <th class="text-left font-semibold text-slate-700 px-4 py-3 rounded-tr-lg">Factor (A &rarr; B)</th>
+              </tr>
+            </thead>
+            <tbody id="conversion-table-body">
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+
+    <!-- SOFT CTA -->
+    <section class="py-10 sm:py-12 px-4 bg-gradient-to-br from-teal-50/80 via-cyan-50/60 to-slate-50 border-y border-teal-100/60">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-xl sm:text-2xl font-bold text-slate-900 mb-3">{{ t.soft_cta_title }}</h2>
+        <p class="text-slate-600 mb-6">{{ t.soft_cta_sub }}</p>
+        <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-7 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-md hover:opacity-95 transition-opacity">{{ t.soft_cta_primary }}</a>
+          <a href="{{ base_url }}/en/ai-blood-test-analyzer#report-preview" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50 transition-colors">{{ t.soft_cta_secondary }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ -->
+    <section class="py-12 sm:py-16 px-4 bg-white">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900 text-center mb-10">Frequently Asked Questions</h2>
+        <dl class="space-y-5">
+          {% for faq in t.faqs %}
+          <div class="bg-slate-50 rounded-xl border border-slate-200 p-5 sm:p-6">
+            <dt class="font-semibold text-slate-900">{{ faq.q }}</dt>
+            <dd class="mt-2 text-sm text-slate-600 leading-relaxed">{{ faq.a }}</dd>
+          </div>
+          {% endfor %}
+        </dl>
+      </div>
+    </section>
+
+    <!-- FINAL CTA -->
+    <section class="py-12 sm:py-16 px-4 bg-slate-800 text-white text-center">
+      <div class="max-w-2xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold">{{ t.cta_title }}</h2>
+        <p class="mt-3 text-slate-300 max-w-xl mx-auto">{{ t.cta_sub }}</p>
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-7 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-md hover:opacity-95 transition-opacity">{{ t.cta_primary }}</a>
+          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-slate-400 text-slate-200 font-semibold hover:bg-slate-700 transition-colors">{{ t.cta_secondary }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- INTERNAL LINKS -->
+    <section class="py-10 px-4 bg-slate-50 border-t border-slate-200">
+      <div class="max-w-3xl mx-auto">
+        <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
+          {% for link in t.internal_links %}
+          <li><a href="{{ base_url }}{{ link.path }}" class="text-teal-600 hover:text-teal-700 underline">{{ link.label }}</a></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-slate-50 py-8 px-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-4 text-sm text-slate-600">
+      <a href="/en" class="hover:text-teal-600">Home</a>
+      <a href="{{ base_url }}/analyze" class="hover:text-teal-600">Analyze</a>
+      <a href="{{ base_url }}/pricing" class="hover:text-teal-600">Pricing</a>
+      <a href="{{ base_url }}/how-it-works?lang=en" class="hover:text-teal-600">How it works</a>
+      <a href="{{ base_url }}/en/blog" class="hover:text-teal-600">Blog</a>
+      <a href="{{ base_url }}/legal/gizlilik-politikasi?lang=en" class="hover:text-teal-600">Privacy</a>
+      <a href="{{ base_url }}/legal/kullanim-sartlari?lang=en" class="hover:text-teal-600">Terms of use</a>
+    </div>
+    <p class="text-center text-slate-500 text-xs mt-3">NoryaAI does not provide medical diagnoses. All content is for educational and informational purposes only.</p>
+  </footer>
+
+  <script>
+  (function () {
+    var DATA = [
+      { name: "Glucose",       unitA: "mg/dL", unitB: "mmol/L",  factor: 0.05551 },
+      { name: "Cholesterol (Total, LDL, HDL)", unitA: "mg/dL", unitB: "mmol/L", factor: 0.02586 },
+      { name: "Triglycerides", unitA: "mg/dL", unitB: "mmol/L",  factor: 0.01129 },
+      { name: "Hemoglobin",    unitA: "g/dL",  unitB: "g/L",     factor: 10 },
+      { name: "Creatinine",    unitA: "mg/dL", unitB: "\u00b5mol/L", factor: 88.4 },
+      { name: "BUN / Urea nitrogen", unitA: "mg/dL", unitB: "mmol/L", factor: 0.357 },
+      { name: "Bilirubin",     unitA: "mg/dL", unitB: "\u00b5mol/L", factor: 17.1 },
+      { name: "Uric acid",     unitA: "mg/dL", unitB: "\u00b5mol/L", factor: 59.48 },
+      { name: "Calcium",       unitA: "mg/dL", unitB: "mmol/L",  factor: 0.2495 },
+      { name: "Iron",          unitA: "\u00b5g/dL", unitB: "\u00b5mol/L", factor: 0.1791 },
+      { name: "HbA1c",         unitA: "% (NGSP)", unitB: "mmol/mol (IFCC)", factor: 0, custom: true }
+    ];
+
+    var select  = document.getElementById("biomarker-select");
+    var unitFrom = document.getElementById("unit-from");
+    var unitTo   = document.getElementById("unit-to");
+    var input    = document.getElementById("input-value");
+    var resultV  = document.getElementById("result-value");
+    var resultU  = document.getElementById("result-unit");
+    var factorN  = document.getElementById("factor-note");
+    var swapBtn  = document.getElementById("swap-btn");
+    var tbody    = document.getElementById("conversion-table-body");
+
+    var reversed = false;
+
+    DATA.forEach(function (d, i) {
+      var opt = document.createElement("option");
+      opt.value = i;
+      opt.textContent = d.name + "  (" + d.unitA + " \u2194 " + d.unitB + ")";
+      select.appendChild(opt);
+    });
+
+    function buildTable() {
+      tbody.innerHTML = "";
+      DATA.forEach(function (d) {
+        var tr = document.createElement("tr");
+        tr.className = "border-t border-slate-200";
+        var factorText = d.custom ? "NGSP\u2192IFCC formula" : ("\u00d7 " + d.factor);
+        tr.innerHTML =
+          '<td class="px-4 py-2.5 font-medium text-slate-800">' + d.name + '</td>' +
+          '<td class="px-4 py-2.5 text-slate-600">' + d.unitA + '</td>' +
+          '<td class="px-4 py-2.5 text-slate-600">' + d.unitB + '</td>' +
+          '<td class="px-4 py-2.5 text-slate-600">' + factorText + '</td>';
+        tbody.appendChild(tr);
+      });
+    }
+    buildTable();
+
+    function update() {
+      var idx = parseInt(select.value, 10);
+      var d = DATA[idx];
+      if (!d) return;
+
+      var fromU = reversed ? d.unitB : d.unitA;
+      var toU   = reversed ? d.unitA : d.unitB;
+      unitFrom.textContent = fromU;
+      unitTo.textContent   = toU;
+
+      var raw = parseFloat(input.value);
+      if (isNaN(raw) || raw < 0) {
+        resultV.textContent = "\u2014";
+        resultU.textContent = "";
+        if (d.custom) {
+          factorN.textContent = "NGSP \u2194 IFCC: mmol/mol = (% \u00d7 10.929) \u2212 23.5";
+        } else {
+          factorN.textContent = "Factor: \u00d7 " + d.factor + " (" + d.unitA + " \u2192 " + d.unitB + ")";
+        }
+        return;
+      }
+
+      var result;
+      if (d.custom) {
+        if (!reversed) {
+          result = (raw * 10.929) - 23.5;
+        } else {
+          result = (raw + 23.5) / 10.929;
+        }
+        factorN.textContent = "NGSP \u2194 IFCC: mmol/mol = (% \u00d7 10.929) \u2212 23.5";
+      } else {
+        result = reversed ? (raw / d.factor) : (raw * d.factor);
+        factorN.textContent = "Factor: \u00d7 " + d.factor + " (" + d.unitA + " \u2192 " + d.unitB + ")";
+      }
+
+      var decimals = result >= 100 ? 1 : (result >= 1 ? 2 : 4);
+      resultV.textContent = result.toFixed(decimals);
+      resultU.textContent = toU;
+    }
+
+    select.addEventListener("change", function () { reversed = false; update(); });
+    input.addEventListener("input", update);
+    swapBtn.addEventListener("click", function () { reversed = !reversed; update(); });
+
+    update();
+  })();
+  </script>
+</body>
+</html>

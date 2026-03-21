@@ -287,6 +287,20 @@
             </div>
           </div>
         </section>
+
+        <section class="mt-10 rounded-2xl border border-teal-200/60 bg-gradient-to-br from-teal-50/80 via-cyan-50/60 to-slate-50 p-6 sm:p-8 text-center" aria-labelledby="blog-lead-title">
+          <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl bg-teal-500/10 text-teal-600 mb-4">
+            <svg width="22" height="22" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M22 7l-10 6L2 7"/></svg>
+          </div>
+          <h3 id="blog-lead-title" class="text-lg font-semibold text-slate-900 mb-2">{{ blog_ui.lead_title|default("Blood test guides & new features") }}</h3>
+          <p class="text-sm text-slate-600 leading-relaxed mb-5 max-w-md mx-auto">{{ blog_ui.lead_desc|default("Get sample reports, lab result guides, and doctor-ready summary updates straight to your inbox.") }}</p>
+          <form id="blog-lead-form" class="flex flex-col sm:flex-row gap-2 max-w-md mx-auto" onsubmit="return noryaBlogLeadSubmit(event)">
+            <input type="email" name="email" required autocomplete="email" placeholder="{{ blog_ui.lead_placeholder_email|default('Your email address') }}" aria-label="Email" class="flex-1 min-w-0 px-4 py-2.5 rounded-xl border border-slate-200 bg-white text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:border-teal-500 focus:ring-2 focus:ring-teal-500/20 transition" />
+            <button type="submit" class="px-5 py-2.5 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 transition-colors whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed">{{ blog_ui.lead_btn|default("Keep me updated") }}</button>
+          </form>
+          <p class="text-xs text-slate-400 mt-3">{{ blog_ui.lead_privacy|default("No spam. Unsubscribe anytime.") }}</p>
+          <div id="blog-lead-msg" class="hidden mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto" role="status" aria-live="polite"></div>
+        </section>
       </div>
 
       <aside class="space-y-6 lg:pt-2">
@@ -417,6 +431,52 @@
     </div>
   </div>
 
+  <script>
+  var _blogLeadUI = {{ blog_ui|tojson }};
+  function noryaBlogLeadSubmit(e) {
+    e.preventDefault();
+    var form = document.getElementById('blog-lead-form');
+    var btn = form.querySelector('button[type="submit"]');
+    var msg = document.getElementById('blog-lead-msg');
+    var emailInput = form.querySelector('input[name="email"]');
+    var email = (emailInput.value || '').trim();
+    var t = _blogLeadUI || {};
+    if (!email || email.indexOf('@') < 1 || email.lastIndexOf('.') <= email.indexOf('@')) {
+      msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
+      msg.textContent = t.lead_error_email || 'Please enter a valid email.';
+      msg.classList.remove('hidden'); return false;
+    }
+    btn.disabled = true; btn.textContent = t.lead_btn_loading || 'Sending…';
+    msg.classList.add('hidden');
+    fetch('/api/lead/subscribe', {
+      method: 'POST', headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify({email: email, source: 'blog', locale: '{{ current_lang }}'})
+    }).then(function(r){return r.json();}).then(function(d){
+      if (d.ok && d.already) {
+        msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-amber-700 bg-amber-50';
+        msg.textContent = t.lead_already || 'This email is already registered.';
+      } else if (d.ok) {
+        msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-emerald-700 bg-emerald-50';
+        msg.textContent = t.lead_success || "You're in — thank you!";
+        emailInput.value = '';
+      } else if (d.error === 'invalid_email') {
+        msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
+        msg.textContent = t.lead_error_email || 'Please enter a valid email.';
+      } else {
+        msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
+        msg.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
+      }
+      msg.classList.remove('hidden');
+    }).catch(function(){
+      msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
+      msg.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
+      msg.classList.remove('hidden');
+    }).finally(function(){
+      btn.disabled = false; btn.textContent = t.lead_btn || 'Keep me updated';
+    });
+    return false;
+  }
+  </script>
   <script>
   (function() {
     var headingSelector = '[id^="section-"], h2[id], h3[id]';
