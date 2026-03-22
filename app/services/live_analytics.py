@@ -8,8 +8,8 @@ from sqlmodel import Session, select, func
 
 from app.models import AnalysisRecord, AuditLog, PaymentOrder, Presence, User
 
-# İzin verilen periyotlar (dakika): 30, 60, 360, 1440
-PERIOD_OPTIONS = (30, 60, 360, 1440)
+# İzin verilen periyotlar (dakika): 30, 60, 360, 1440, 43200 (30 gün)
+PERIOD_OPTIONS = (30, 60, 360, 1440, 43200)
 DEFAULT_PERIOD = 30
 
 
@@ -19,18 +19,31 @@ def _period_minutes(period: int | None) -> int:
     return period if period in PERIOD_OPTIONS else DEFAULT_PERIOD
 
 
+def _period_label_tr(period: int) -> str:
+    return {
+        30: "30 dk",
+        60: "1 saat",
+        360: "6 saat",
+        1440: "24 saat",
+        43200: "30 gün",
+    }.get(period, f"{period} dk")
+
+
 def get_live_analytics(db: Session, period_minutes: int | None = None) -> dict[str, Any]:
     """
     Canlı analitik verileri döndürür.
-    period_minutes: 30, 60, 360 veya 1440 (dakika); aktif kullanıcı ve dakika grafiği buna göre.
+    period_minutes: 30, 60, 360, 1440 veya 43200 (30 gün); aktif kullanıcı ve zaman serisi buna göre.
     """
     period = _period_minutes(period_minutes)
     now = datetime.utcnow()
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
     period_ago = now - timedelta(minutes=period)
     twenty_four_h_ago = now - timedelta(hours=24)
+    # Coğrafya (AuditLog): kısa periyotlarda son 24 saat; 30 gün seçilince tam 30 günlük pencere
+    geo_since = period_ago if period >= 43200 else twenty_four_h_ago
+    geo_label_tr = "son 30 gün" if period >= 43200 else "son 24 saat"
 
-    # Son N dakikada aktif kullanıcı (Presence)
+    # Seçilen pencerede en az bir kez görünen kullanıcı sayısı (Presence: kullanıcı başına tek satır)
     active_users_period = (
         db.exec(
             select(func.count(Presence.id)).where(Presence.last_seen_at >= period_ago)
@@ -47,6 +60,7 @@ def get_live_analytics(db: Session, period_minutes: int | None = None) -> dict[s
     else:
         step_minutes = max(1, period // 60)
         n_buckets = 60
+    label_fmt = "%d.%m %H:%M" if period >= 1440 else "%H:%M"
     for i in range(n_buckets):
         bucket_start = period_ago + timedelta(minutes=i * step_minutes)
         bucket_end = bucket_start + timedelta(minutes=step_minutes)
@@ -60,33 +74,36 @@ def get_live_analytics(db: Session, period_minutes: int | None = None) -> dict[s
             ).one()
             or 0
         )
-        minute_labels.append(bucket_start.strftime("%H:%M"))
+        minute_labels.append(bucket_start.strftime(label_fmt))
         minute_counts.append(cnt)
 
-    # Ülkelere göre ziyaretçi (AuditLog son 24 saat; country dolu kayıtlar)
+    country_limit = 25 if period >= 43200 else 15
+    city_limit = 50 if period >= 43200 else 30
+
+    # Ülkelere göre ziyaretçi (AuditLog; kısa periyotta 24 saat, 30 gün modunda 30 gün)
     country_rows = (
         db.exec(
             select(AuditLog.country, func.count(AuditLog.id))
-            .where(AuditLog.created_at >= twenty_four_h_ago)
+            .where(AuditLog.created_at >= geo_since)
             .where(AuditLog.country.isnot(None))
             .where(AuditLog.country != "")
             .group_by(AuditLog.country)
             .order_by(func.count(AuditLog.id).desc())
-            .limit(15)
+            .limit(country_limit)
         ).all()
     )
     by_country = [{"country": c or "?", "count": n} for c, n in country_rows]
 
-    # Ülke + şehir (GA4 / Search Console benzeri; son 24 saat)
+    # Ülke + şehir
     country_city_rows = (
         db.exec(
             select(AuditLog.country, AuditLog.city, func.count(AuditLog.id))
-            .where(AuditLog.created_at >= twenty_four_h_ago)
+            .where(AuditLog.created_at >= geo_since)
             .where(AuditLog.country.isnot(None))
             .where(AuditLog.country != "")
             .group_by(AuditLog.country, AuditLog.city)
             .order_by(func.count(AuditLog.id).desc())
-            .limit(30)
+            .limit(city_limit)
         ).all()
     )
     by_country_city = [
@@ -167,6 +184,8 @@ def get_live_analytics(db: Session, period_minutes: int | None = None) -> dict[s
 
     return {
         "period_minutes": period,
+        "period_label_tr": _period_label_tr(period),
+        "geo_label_tr": geo_label_tr,
         "active_users_period": active_users_period,
         "minute_labels": minute_labels,
         "minute_counts": minute_counts,

@@ -1,16 +1,81 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
   <title>{% block title %}Norya Admin{% endblock %}</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>tailwind.config = { theme: { extend: { colors: { brand: '#e07a5f' } } } }</script>
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "outline-variant": "#bcc9c8",
+            "secondary-container": "#cadaff",
+            "on-surface-variant": "#3d4949",
+            "tertiary-container": "#37a49a",
+            "surface-container-low": "#f3f4f5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#e7e8e9",
+            "surface-container": "#edeeef",
+            "surface-container-highest": "#e1e3e4",
+            "surface-bright": "#f8f9fa",
+            "surface-dim": "#d9dadb",
+            "surface-variant": "#e1e3e4",
+            "surface": "#f8f9fa",
+            "on-surface": "#191c1d",
+            "on-background": "#191c1d",
+            "background": "#f8f9fa",
+            "primary": "#006a69",
+            "primary-container": "#0ea5a4",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#003333",
+            "inverse-primary": "#5ed9d7",
+            "primary-fixed-dim": "#5ed9d7",
+            "outline": "#6d7a79",
+            "secondary": "#4f5e7e",
+            "tertiary": "#006a63",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6",
+            "on-error": "#ffffff",
+            "on-error-container": "#93000a",
+            brand: "#0ea5a4",
+          },
+          fontFamily: {
+            headline: ["Manrope", "system-ui", "sans-serif"],
+            body: ["Inter", "system-ui", "sans-serif"],
+          },
+          borderRadius: { lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", "3xl": "1.5rem", full: "9999px" },
+          boxShadow: {
+            ambient: "0 12px 40px rgba(25, 28, 29, 0.04)",
+          },
+        },
+      },
+    };
+  </script>
   <style>
-    .sidebar-link.active { background: rgba(224, 122, 95, 0.2); color: #e07a5f; }
-    .sidebar-link { white-space: nowrap; }
-    .wa-float{
+    body { font-family: Inter, system-ui, sans-serif; }
+    .font-headline { font-family: Manrope, system-ui, sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      font-size: 22px;
+      line-height: 1;
+    }
+    .admin-nav-active {
+      color: #0ea5a4;
+      font-weight: 700;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(25, 28, 29, 0.06);
+    }
+    .wa-float {
       position: fixed !important;
       right: 20px;
       bottom: 20px;
@@ -18,20 +83,22 @@
       width: 60px;
       height: 60px;
       border-radius: 999px;
-      background: #25D366;
+      background: #25d366;
       display: flex;
       align-items: center;
       justify-content: center;
       text-decoration: none;
-      box-shadow: 0 10px 30px rgba(2,6,23,.18);
+      box-shadow: 0 10px 30px rgba(2, 6, 23, 0.18);
     }
-    .wa-float:hover{ transform: translateY(-2px); }
-    .wa-icon{ display: block; width: 32px; height: 32px; object-fit: contain; }
+    .wa-float:hover { transform: translateY(-2px); }
+    .wa-icon { display: block; width: 32px; height: 32px; object-fit: contain; }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
   </style>
+  {% block extra_head %}{% endblock %}
   {% set ga_id = request.state.ga_measurement_id|default('G-1FLMLJH3Q0', true) %}
   {% set aw_id = request.state.google_ads_conversion_id|default('', true) %}
   {% if ga_id or aw_id %}
-  <!-- Google tag (gtag.js) — GA4 + Google Ads -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id or aw_id }}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -42,37 +109,105 @@
   </script>
   {% endif %}
 </head>
-<body class="bg-slate-900 text-slate-200 min-h-screen">
-  <div class="flex">
-    <aside class="w-60 min-h-screen bg-slate-800 border-r border-slate-700 flex-shrink-0">
-      <div class="p-4 border-b border-slate-700">
-        <a href="/admin/dashboard" class="font-semibold text-lg text-white flex items-center gap-2">
-          <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-10 w-auto max-w-[180px] object-contain flex-shrink-0" />
-          <span class="hidden sm:inline">Norya Admin</span>
+<body class="bg-surface text-on-surface min-h-screen antialiased">
+  <div class="flex min-h-screen">
+    <aside class="w-64 flex-shrink-0 min-h-screen bg-surface-container-low border-r-0 flex flex-col py-6 pl-3 pr-0 z-40">
+      <div class="px-4 mb-8">
+        <a href="/admin/dashboard" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white flex-shrink-0">
+            <span class="material-symbols-outlined !text-[22px]" style="font-variation-settings: 'FILL' 1;">biotech</span>
+          </div>
+          <div class="min-w-0">
+            <p class="font-headline font-bold text-on-surface text-lg leading-tight tracking-tight truncate">Norya</p>
+            <p class="text-[10px] uppercase tracking-widest text-primary font-semibold">Clinical Curator</p>
+          </div>
         </a>
       </div>
-      <nav class="p-2">
-        <a href="/admin/dashboard" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path == '/admin/dashboard' or request.url.path == '/admin' %}active{% endif %}">Dashboard</a>
-        <a href="/admin/users" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/users') %}active{% endif %}">Kullanıcılar</a>
-        <a href="/admin/analyses" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/analyses') %}active{% endif %}">Analiz geçmişi</a>
-        <a href="/admin/reports" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/reports') %}active{% endif %}">Raporlar</a>
-        <a href="/admin/live" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path == '/admin/live' or request.url.path == '/admin/live/' %}active{% endif %}">Canlı Kullanıcılar</a>
-        <a href="/admin/live-analytics" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/live-analytics') %}active{% endif %}">Live Analytics</a>
-        <a href="/admin/payments" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/payments') %}active{% endif %}">Ödemeler</a>
-        <a href="/admin/payments?status_filter=completed" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-amber-200 hover:bg-slate-700 border-l-2 border-amber-500 ml-2 {% if request.url.path.startswith('/admin/payments') %}active{% endif %}" title="Tamamlanmış siparişlere girip E-arşiv fatura kes">📄 E-arşiv Fatura</a>
-        <a href="/admin/billing-links" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/billing-links') %}active{% endif %}">📋 Faturalar & Giderler</a>
-        <a href="/admin/pricing-plans" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/pricing-plans') %}active{% endif %}">Fiyat Planları</a>
-        <a href="/admin/coupons" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/coupons') %}active{% endif %}">İndirim Kodları</a>
-        <a href="/admin/errors" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/errors') %}active{% endif %}">Hata Logları</a>
-        <a href="/admin/uploads" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/uploads') %}active{% endif %}">Dosya Upload Logları</a>
-        <a href="/admin/queue" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/queue') %}active{% endif %}">Analiz Kuyruğu</a>
-        <a href="/admin/security" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-300 hover:bg-slate-700 {% if request.url.path.startswith('/admin/security') %}active{% endif %}">Güvenlik</a>
-        <a href="/admin/legacy" class="sidebar-link flex items-center gap-2 px-3 py-2 rounded-lg text-slate-400 hover:bg-slate-700 mt-2" target="_blank">Eski panel (API)</a>
+      <nav class="flex-1 space-y-1 pr-3 overflow-y-auto no-scrollbar">
+        <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path == '/admin/dashboard' or request.url.path == '/admin' or request.url.path == '/admin/' %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">dashboard</span>
+          Dashboard
+        </a>
+        <a href="/admin/users" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/users') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">group</span>
+          Kullanıcılar
+        </a>
+        <a href="/admin/analyses" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/analyses') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">biotech</span>
+          Analiz geçmişi
+        </a>
+        <a href="/admin/reports" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/reports') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">analytics</span>
+          Raporlar
+        </a>
+        <a href="/admin/live" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path == '/admin/live' or request.url.path == '/admin/live/' %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">visibility</span>
+          Canlı kullanıcılar
+        </a>
+        <a href="/admin/live-analytics" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/live-analytics') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">query_stats</span>
+          Live analytics
+        </a>
+        <a href="/admin/payments" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/payments') and 'status_filter=completed' not in (request.url.query or '') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">payments</span>
+          Ödemeler
+        </a>
+        <a href="/admin/payments?invoice_pending=1" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if 'invoice_pending=1' in (request.url.query or '') or 'invoice_pending=true' in (request.url.query or '') %}bg-amber-50 text-amber-900 font-semibold{% else %}text-on-surface-variant{% endif %} hover:bg-white/70 border-l-2 border-amber-500/80 ml-1 pl-3" title="Faturası kesilmemiş başarılı ödemeler — E-arşiv kesmek için">
+          <span class="material-symbols-outlined text-amber-700">receipt_long</span>
+          E-arşiv fatura
+        </a>
+        <a href="/admin/billing-links" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/billing-links') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">account_balance</span>
+          Faturalar &amp; giderler
+        </a>
+        <a href="/admin/pricing-plans" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/pricing-plans') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">sell</span>
+          Fiyat planları
+        </a>
+        <a href="/admin/coupons" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/coupons') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">confirmation_number</span>
+          İndirim kodları
+        </a>
+        <a href="/admin/errors" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/errors') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">bug_report</span>
+          Hata logları
+        </a>
+        <a href="/admin/uploads" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/uploads') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">upload</span>
+          Upload logları
+        </a>
+        <a href="/admin/queue" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/queue') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">schedule</span>
+          Analiz kuyruğu
+        </a>
+        <a href="/admin/security" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/security') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">shield</span>
+          Güvenlik
+        </a>
+        <a href="/admin/legacy" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm text-on-surface-variant/70 hover:bg-white/70 mt-2" target="_blank" rel="noopener">
+          <span class="material-symbols-outlined">code</span>
+          Eski panel (API)
+        </a>
       </nav>
+      <div class="mt-auto px-4 pr-6 pt-4">
+        <a href="/" class="w-full py-3.5 rounded-xl font-headline font-bold text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] transition-all">
+          <span class="material-symbols-outlined text-lg">open_in_new</span>
+          Siteye git
+        </a>
+      </div>
     </aside>
-    <main class="flex-1 p-6">
-      {% block content %}{% endblock %}
-    </main>
+
+    <div class="flex-1 flex flex-col min-w-0">
+      <header class="sticky top-0 z-30 flex items-center justify-between px-6 lg:px-8 h-16 bg-white/85 backdrop-blur-xl shadow-ambient border-b border-outline-variant/10">
+        <h1 class="font-headline font-semibold text-lg text-primary">{% block admin_header_title %}Yönetim paneli{% endblock %}</h1>
+        <div class="flex items-center gap-2 text-on-surface-variant text-sm">
+          <span class="material-symbols-outlined text-outline text-xl">admin_panel_settings</span>
+        </div>
+      </header>
+      <main class="flex-1 p-6 lg:p-8 max-w-[1600px] w-full mx-auto">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
   </div>
 
   <a href="https://wa.me/905071703564?text=Merhaba%20Norya%2C%20kan%20tahlili%20analizi%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum."

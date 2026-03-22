@@ -7,6 +7,7 @@ from urllib.parse import quote
 from fastapi import APIRouter, Depends, Form, Query, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.templating import Jinja2Templates
+from sqlalchemy import or_
 from sqlmodel import Session, select
 
 from app.admin.deps import require_admin_cookie
@@ -40,10 +41,24 @@ def _fmt_dt(val):
 
 @router.get("", response_class=HTMLResponse)
 @router.get("/", response_class=HTMLResponse)
-def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session = Depends(get_db), status_filter: str | None = None):
-    stmt = select(PaymentOrder).order_by(PaymentOrder.id.desc()).limit(200)
-    if status_filter and status_filter in ("completed", "failed", "pending"):
+def payments_list(
+    request: Request,
+    _=Depends(require_admin_cookie),
+    db: Session = Depends(get_db),
+    status_filter: str | None = None,
+    invoice_pending: str | None = Query(None, description="1 ise: tamamlanmış ama e-arşiv faturası kesilmemiş siparişler"),
+):
+    """Ödeme listesi. Önce WHERE uygulanır, sonra sıralama ve limit — böylece 'Başarılı' filtresi tüm tamamlananları bulur."""
+    list_limit = 500
+    want_invoice_pending = (invoice_pending or "").strip().lower() in ("1", "true", "yes", "on")
+    stmt = select(PaymentOrder)
+    if want_invoice_pending:
+        stmt = stmt.where(PaymentOrder.status == "completed").where(
+            or_(PaymentOrder.invoice_ettn.is_(None), PaymentOrder.invoice_ettn == "")
+        )
+    elif status_filter and status_filter in ("completed", "failed", "pending"):
         stmt = stmt.where(PaymentOrder.status == status_filter)
+    stmt = stmt.order_by(PaymentOrder.id.desc()).limit(list_limit)
     orders = list(db.exec(stmt).all())
     user_ids = [o.user_id for o in orders if getattr(o, "user_id", None) is not None]
     user_ids = list(dict.fromkeys(user_ids))  # unique, order preserved
@@ -62,7 +77,9 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
                 "id": getattr(o, "id", None),
                 "merchant_oid": getattr(o, "merchant_oid", "") or "",
                 "user_id": getattr(o, "user_id", None),
-                "user_email": users_map.get(getattr(o, "user_id", None), ""),
+                "user_email": users_map.get(getattr(o, "user_id", None), "")
+                or (getattr(o, "customer_email", None) or "").strip()
+                or "",
                 "product": getattr(o, "product", "") or "",
                 "amount_cents": amount_cents,
                 "amount_eur": amount_cents / 100.0,
@@ -107,7 +124,14 @@ def payments_list(request: Request, _=Depends(require_admin_cookie), db: Session
         paytr_callback_url = f"{base}/paytr/callback"
     return templates.TemplateResponse(
         "admin/payments_list.html",
-        {"request": request, "payments": rows, "status_filter": status_filter or "", "paytr_callback_url": paytr_callback_url},
+        {
+            "request": request,
+            "payments": rows,
+            "status_filter": status_filter or "",
+            "invoice_pending": want_invoice_pending,
+            "payments_list_limit": list_limit,
+            "paytr_callback_url": paytr_callback_url,
+        },
     )
 
 

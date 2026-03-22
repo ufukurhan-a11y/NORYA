@@ -1,36 +1,62 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="tr" class="light">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="robots" content="noindex, nofollow" />
   <title>Norya Admin Giriş</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@600;700;800&family=Inter:wght@400;500&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            primary: "#006a69",
+            "primary-container": "#0ea5a4",
+            "on-surface": "#191c1d",
+            "on-surface-variant": "#3d4949",
+            surface: "#f8f9fa",
+            "surface-container-low": "#f3f4f5",
+            "surface-container-lowest": "#ffffff",
+          },
+          fontFamily: { headline: ["Manrope", "system-ui", "sans-serif"], body: ["Inter", "system-ui", "sans-serif"] },
+          boxShadow: { ambient: "0 12px 40px rgba(25, 28, 29, 0.04)" },
+        },
+      },
+    };
+  </script>
   <style>
-    .wa-float{ position: fixed !important; right: 20px; bottom: 20px; z-index: 9999; width: 60px; height: 60px; border-radius: 999px; background: #25D366; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 10px 30px rgba(2,6,23,.18); }
-    .wa-float:hover{ transform: translateY(-2px); }
-    .wa-icon{ display: block; width: 32px; height: 32px; object-fit: contain; }
+    body { font-family: Inter, system-ui, sans-serif; }
+    .wa-float { position: fixed !important; right: 20px; bottom: 20px; z-index: 9999; width: 60px; height: 60px; border-radius: 999px; background: #25d366; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 10px 30px rgba(2, 6, 23, 0.18); }
+    .wa-float:hover { transform: translateY(-2px); }
+    .wa-icon { display: block; width: 32px; height: 32px; object-fit: contain; }
   </style>
 </head>
-<body class="bg-slate-900 text-slate-200 min-h-screen flex items-center justify-center">
-  <div class="w-full max-w-sm rounded-xl bg-slate-800 border border-slate-700 p-6 shadow-xl">
-    <div class="flex justify-center mb-4">
-      <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-10 w-auto max-w-[200px] object-contain" />
+<body class="bg-surface text-on-surface min-h-screen flex items-center justify-center p-4 antialiased">
+  <div class="w-full max-w-sm rounded-2xl bg-surface-container-lowest p-8 shadow-ambient border border-[#bcc9c8]/15">
+    <div class="flex justify-center mb-5">
+      <img src="/static/norya_logo_transparent_trim.png" alt="Norya" class="h-11 w-auto max-w-[200px] object-contain" />
     </div>
-    <h1 class="text-xl font-semibold text-white mb-2 text-center">Norya Admin</h1>
-    <p class="text-slate-400 text-sm mb-4">ADMIN_SECRET ile giriş yapın.</p>
+    <h1 class="text-xl font-headline font-bold text-on-surface mb-1 text-center tracking-tight">Norya Admin</h1>
+    <p class="text-on-surface-variant text-sm mb-6 text-center">Clinical Curator · ADMIN_SECRET ile giriş</p>
     {% if err %}
-    <p class="text-red-400 text-sm mb-2">{% if err == 'config' %}Admin yapılandırılmamış.{% elif err == 'lockout' %}Çok fazla başarısız deneme. 15 dakika sonra tekrar deneyin.{% else %}Geçersiz şifre.{% endif %}</p>
+    <p class="text-red-600 text-sm mb-4 text-center">{% if err == 'config' %}Admin yapılandırılmamış.{% elif err == 'lockout' %}Çok fazla başarısız deneme. 15 dakika sonra tekrar deneyin.{% else %}Geçersiz şifre.{% endif %}</p>
     {% endif %}
     <form method="post" action="/admin/login" class="space-y-4">
       <input type="hidden" name="csrf_token" value="{{ csrf_token or '' }}" />
       <div>
-        <label for="secret" class="block text-sm text-slate-400 mb-1">Admin şifresi</label>
+        <label for="secret" class="block text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-2">Admin şifresi</label>
         <input type="password" id="secret" name="admin_secret" required
-          class="w-full px-3 py-2 rounded-lg bg-slate-900 border border-slate-600 text-white placeholder-slate-500 focus:ring-2 focus:ring-brand focus:border-transparent"
+          class="w-full px-4 py-3 rounded-xl bg-surface-container-low border-0 text-on-surface placeholder:text-on-surface-variant/60 focus:ring-2 focus:ring-primary-container/30 focus:bg-white transition-all"
           placeholder="ADMIN_SECRET" />
       </div>
-      <button type="submit" class="w-full py-2 rounded-lg bg-brand hover:bg-brand/90 text-white font-medium">
+      <button type="submit" class="w-full py-3 rounded-xl bg-gradient-to-r from-primary to-primary-container text-white font-headline font-bold shadow-ambient hover:brightness-[1.02] transition-all">
         Giriş
       </button>
     </form>

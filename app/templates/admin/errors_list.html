@@ -1,31 +1,35 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Hata Logları - Norya Admin{% endblock %}
+{% block admin_header_title %}Hata logları{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold text-white mb-4">Hata Log Merkezi</h1>
-<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-  <table class="w-full text-sm">
-    <thead>
-      <tr class="text-left text-slate-400 border-b border-slate-700">
-        <th class="px-4 py-2">ID</th>
-        <th class="px-4 py-2">Tarih</th>
-        <th class="px-4 py-2">user_id</th>
-        <th class="px-4 py-2">Endpoint</th>
-        <th class="px-4 py-2">Hata (özet)</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for e in errors %}
-      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
-        <td class="px-4 py-2"><a href="/admin/errors/{{ e.id }}" class="text-brand">{{ e.id }}</a></td>
-        <td class="px-4 py-2">{{ e.created_at }}</td>
-        <td class="px-4 py-2">{{ e.user_id or '-' }}</td>
-        <td class="px-4 py-2">{{ e.method }} {{ e.endpoint }}</td>
-        <td class="px-4 py-2 text-red-300 break-words whitespace-pre-wrap max-w-xl" title="{{ e.error_message }}">{{ e.error_message }}</td>
-      </tr>
-      {% else %}
-      <tr><td colspan="5" class="px-4 py-4 text-slate-500">Hata kaydı yok.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-1">Hata log merkezi</h2>
+<p class="text-on-surface-variant text-sm mb-6">Uç nokta ve sunucu hatalarının özeti. Detay için satıra tıklayın.</p>
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden border border-[#bcc9c8]/10">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">Tarih</th>
+          <th class="px-5 py-3">user_id</th>
+          <th class="px-5 py-3">Endpoint</th>
+          <th class="px-5 py-3">Hata (özet)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in errors %}
+        <tr class="border-b border-outline-variant/15 hover:bg-surface-container-low/60 transition-colors">
+          <td class="px-5 py-3"><a href="/admin/errors/{{ e.id }}" class="text-primary font-semibold hover:text-primary-container hover:underline">{{ e.id }}</a></td>
+          <td class="px-5 py-3 text-on-surface">{{ e.created_at }}</td>
+          <td class="px-5 py-3 text-on-surface">{{ e.user_id or '-' }}</td>
+          <td class="px-5 py-3 text-on-surface font-mono text-xs">{{ e.method }} {{ e.endpoint }}</td>
+          <td class="px-5 py-3 text-red-700 break-words whitespace-pre-wrap max-w-xl bg-red-50/50" title="{{ e.error_message }}">{{ e.error_message }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="px-5 py-8 text-center text-on-surface-variant">Hata kaydı yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

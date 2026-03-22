@@ -1,99 +1,125 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Dashboard - Norya Admin{% endblock %}
+{% block admin_header_title %}Dashboard{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold text-white mb-6">Dashboard</h1>
-
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <p class="text-slate-400 text-sm">Günlük satış (EUR)</p>
-    <p class="text-2xl font-bold text-brand">{{ daily_sales }} €</p>
-  </div>
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <p class="text-slate-400 text-sm">Aylık satış (EUR)</p>
-    <p class="text-2xl font-bold text-brand">{{ monthly_sales }} €</p>
-  </div>
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <p class="text-slate-400 text-sm">Toplam kullanıcı</p>
-    <p class="text-2xl font-bold text-white">{{ total_users }}</p>
-  </div>
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <p class="text-slate-400 text-sm">Aktif kullanıcı (son 2 dk)</p>
-    <p class="text-2xl font-bold text-white">{{ active_users }}</p>
-  </div>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <p class="text-slate-400 text-sm mb-2">Ortalama analiz süresi</p>
-    <p class="text-xl text-white">{{ avg_analysis_time }}</p>
-  </div>
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <p class="text-slate-400 text-sm mb-2">Başarısız ödeme sayısı</p>
-    <p class="text-xl text-white">{{ failed_payments }}</p>
-  </div>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-      <p class="text-slate-400 text-sm font-medium">AI Durumu</p>
-      <button type="button" id="ai-refresh" class="text-xs px-3 py-1.5 rounded bg-slate-600 text-slate-200 hover:bg-slate-500">Yenile</button>
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
+  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
+    <div class="flex justify-between items-start mb-4">
+      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
+        <span class="material-symbols-outlined text-primary group-hover:text-white">payments</span>
+      </div>
     </div>
-    <p id="ai-badge" class="text-lg font-semibold text-slate-300">Kontrol ediliyor…</p>
-    <p id="ai-detail" class="text-sm text-slate-500 mt-1"></p>
+    <div>
+      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Günlük satış (EUR)</p>
+      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ daily_sales }} €</p>
+    </div>
   </div>
-  <div class="bg-slate-800 rounded-lg border border-slate-700 p-4">
-    <p class="text-slate-400 text-sm font-medium mb-2">OpenAI kullanımı (bu ay)</p>
-    <p class="text-2xl font-bold text-white">{{ openai_tokens_month | default(0) | int }} <span class="text-sm font-normal text-slate-400">token</span></p>
-    <p class="text-sm text-slate-400 mt-1">Tahmini maliyet: <span class="text-brand font-semibold">{{ "%.2f"|format(openai_cost_usd | default(0)) }} USD</span></p>
-    <p class="text-xs text-slate-500 mt-1">gpt-4o-mini · Sadece bu uygulama üzerinden yapılan analizler.</p>
+  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
+    <div class="flex justify-between items-start mb-4">
+      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
+        <span class="material-symbols-outlined text-primary group-hover:text-white">account_balance_wallet</span>
+      </div>
+    </div>
+    <div>
+      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Aylık satış (EUR)</p>
+      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ monthly_sales }} €</p>
+    </div>
+  </div>
+  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
+    <div class="flex justify-between items-start mb-4">
+      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
+        <span class="material-symbols-outlined text-primary group-hover:text-white">group</span>
+      </div>
+    </div>
+    <div>
+      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Toplam kullanıcı</p>
+      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ total_users }}</p>
+    </div>
+  </div>
+  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
+    <div class="flex justify-between items-start mb-4">
+      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
+        <span class="material-symbols-outlined text-primary group-hover:text-white">monitoring</span>
+      </div>
+    </div>
+    <div>
+      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Aktif kullanıcı (son 2 dk)</p>
+      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ active_users }}</p>
+    </div>
   </div>
 </div>
 
-<div class="bg-slate-800/80 rounded-lg border border-slate-600 p-3 mb-8 text-sm text-slate-300">
-  <strong class="text-slate-200">E-arşiv fatura:</strong> Ödemeler menüsüne girip bir siparişe tıklayın; tamamlanmış siparişlerde <strong>«E-arşiv fatura kes»</strong> ile GİB faturası kesebilirsiniz.
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
+    <p class="text-on-surface-variant text-sm font-medium mb-2">Ortalama analiz süresi</p>
+    <p class="text-xl font-headline font-semibold text-on-surface">{{ avg_analysis_time }}</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
+    <p class="text-on-surface-variant text-sm font-medium mb-2">Başarısız ödeme sayısı</p>
+    <p class="text-xl font-headline font-semibold text-on-surface">{{ failed_payments }}</p>
+  </div>
 </div>
 
-<!-- Son 24 ay trend grafiği: analiz sayısı, satış, yeni kullanıcı -->
-<div class="bg-slate-800 rounded-lg border border-slate-700 p-4 mb-8">
-  <h2 class="text-lg font-medium text-white mb-4">Son 24 ay trendi</h2>
-  <p class="text-slate-500 text-sm mb-4">Ay ay analiz sayısı, satış (EUR) ve yeni kullanıcı — yükseliş ve durgunluk takibi.</p>
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
+    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
+      <p class="text-on-surface-variant text-sm font-medium">AI durumu</p>
+      <button type="button" id="ai-refresh" class="text-xs px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container font-medium transition-colors">Yenile</button>
+    </div>
+    <p id="ai-badge" class="text-lg font-semibold text-on-surface">Kontrol ediliyor…</p>
+    <p id="ai-detail" class="text-sm text-on-surface-variant mt-1"></p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
+    <p class="text-on-surface-variant text-sm font-medium mb-2">OpenAI kullanımı (bu ay)</p>
+    <p class="text-2xl font-bold font-headline text-on-surface">{{ openai_tokens_month | default(0) | int }} <span class="text-sm font-normal text-on-surface-variant">token</span></p>
+    <p class="text-sm text-on-surface-variant mt-1">Tahmini maliyet: <span class="text-primary font-semibold">{{ "%.2f"|format(openai_cost_usd | default(0)) }} USD</span></p>
+    <p class="text-xs text-outline mt-1">gpt-4o-mini · Sadece bu uygulama üzerinden yapılan analizler.</p>
+  </div>
+</div>
+
+<div class="bg-primary-container/10 rounded-2xl p-4 mb-8 text-sm text-on-surface border border-primary-container/15">
+  <strong class="font-headline">E-arşiv fatura:</strong> Ödemeler menüsüne girip bir siparişe tıklayın; tamamlanmış siparişlerde <strong>«E-arşiv fatura kes»</strong> ile GİB faturası kesebilirsiniz.
+</div>
+
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6 mb-8">
+  <h2 class="text-lg font-headline font-bold text-on-surface mb-1">Son 24 ay trendi</h2>
+  <p class="text-on-surface-variant text-sm mb-4">Ay ay analiz sayısı, satış (EUR) ve yeni kullanıcı.</p>
   <div class="h-80">
     <canvas id="trend-chart" aria-label="Son 24 aylık trend grafiği"></canvas>
   </div>
-  <div class="flex flex-wrap gap-4 mt-3 text-xs text-slate-400">
-    <span><span class="inline-block w-3 h-3 rounded-full bg-teal-400 mr-1"></span> Analiz sayısı</span>
+  <div class="flex flex-wrap gap-4 mt-3 text-xs text-on-surface-variant">
+    <span><span class="inline-block w-3 h-3 rounded-full bg-primary-container mr-1"></span> Analiz sayısı</span>
     <span><span class="inline-block w-3 h-3 rounded-full bg-amber-400 mr-1"></span> Satış (€)</span>
-    <span><span class="inline-block w-3 h-3 rounded-full bg-slate-400 mr-1"></span> Yeni kullanıcı</span>
+    <span><span class="inline-block w-3 h-3 rounded-full bg-secondary/50 mr-1"></span> Yeni kullanıcı</span>
   </div>
 </div>
 
-<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-  <h2 class="text-lg font-medium text-white px-4 py-3 border-b border-slate-700">Son 10 işlem</h2>
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden">
+  <h2 class="text-lg font-headline font-bold text-on-surface px-6 py-4 bg-surface-container-low/80">Son 10 işlem</h2>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
       <thead>
-        <tr class="text-left text-slate-400 border-b border-slate-700">
-          <th class="px-4 py-2">Tarih</th>
-          <th class="px-4 py-2">merchant_oid</th>
-          <th class="px-4 py-2">Kullanıcı</th>
-          <th class="px-4 py-2">Ürün</th>
-          <th class="px-4 py-2">Tutar (EUR)</th>
-          <th class="px-4 py-2">Durum</th>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider">
+          <th class="px-6 py-3">Tarih</th>
+          <th class="px-6 py-3">merchant_oid</th>
+          <th class="px-6 py-3">Kullanıcı</th>
+          <th class="px-6 py-3">Ürün</th>
+          <th class="px-6 py-3">Tutar (EUR)</th>
+          <th class="px-6 py-3">Durum</th>
         </tr>
       </thead>
       <tbody>
         {% for t in last_transactions %}
-        <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
-          <td class="px-4 py-2">{{ t.created_at }}</td>
-          <td class="px-4 py-2 font-mono text-xs">{{ t.merchant_oid }}</td>
-          <td class="px-4 py-2">{{ t.user_email or t.user_id }}</td>
-          <td class="px-4 py-2">{{ t.product }}</td>
-          <td class="px-4 py-2">{{ "%.2f"|format(t.amount_kurus / 100) }} €</td>
-          <td class="px-4 py-2"><span class="{% if t.status == 'completed' %}text-green-400{% elif t.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ t.status }}</span></td>
+        <tr class="hover:bg-surface-container-low/60 transition-colors">
+          <td class="px-6 py-3 text-on-surface">{{ t.created_at }}</td>
+          <td class="px-6 py-3 font-mono text-xs text-on-surface-variant">{{ t.merchant_oid }}</td>
+          <td class="px-6 py-3">{{ t.user_email or t.user_id }}</td>
+          <td class="px-6 py-3">{{ t.product }}</td>
+          <td class="px-6 py-3 font-medium">{{ "%.2f"|format(t.amount_kurus / 100) }} €</td>
+          <td class="px-6 py-3"><span class="{% if t.status == 'completed' %}text-emerald-700{% elif t.status == 'failed' %}text-red-600{% else %}text-amber-700{% endif %} font-medium">{{ t.status }}</span></td>
         </tr>
         {% else %}
-        <tr><td colspan="6" class="px-4 py-4 text-slate-500">İşlem yok.</td></tr>
+        <tr><td colspan="6" class="px-6 py-8 text-center text-on-surface-variant">İşlem yok.</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -123,8 +149,8 @@
           {
             label: 'Analiz sayısı',
             data: chartAnalyses,
-            borderColor: 'rgb(45, 212, 191)',
-            backgroundColor: 'rgba(45, 212, 191, 0.1)',
+            borderColor: 'rgb(14, 165, 164)',
+            backgroundColor: 'rgba(14, 165, 164, 0.12)',
             fill: true,
             tension: 0.3,
             yAxisID: 'y'
@@ -133,7 +159,7 @@
             label: 'Satış (€)',
             data: chartSales,
             borderColor: 'rgb(251, 191, 36)',
-            backgroundColor: 'rgba(251, 191, 36, 0.1)',
+            backgroundColor: 'rgba(251, 191, 36, 0.12)',
             fill: true,
             tension: 0.3,
             yAxisID: 'y1'
@@ -141,8 +167,8 @@
           {
             label: 'Yeni kullanıcı',
             data: chartUsers,
-            borderColor: 'rgb(148, 163, 184)',
-            backgroundColor: 'rgba(148, 163, 184, 0.1)',
+            borderColor: 'rgb(79, 94, 126)',
+            backgroundColor: 'rgba(79, 94, 126, 0.1)',
             fill: true,
             tension: 0.3,
             yAxisID: 'y'
@@ -160,26 +186,26 @@
           y: {
             type: 'linear',
             position: 'left',
-            title: { display: true, text: 'Adet (analiz / kullanıcı)', color: '#94a3b8' },
-            grid: { color: 'rgba(71, 85, 105, 0.5)' },
-            ticks: { color: '#94a3b8' }
+            title: { display: true, text: 'Adet (analiz / kullanıcı)', color: '#3d4949' },
+            grid: { color: 'rgba(109, 122, 121, 0.15)' },
+            ticks: { color: '#3d4949' }
           },
           y1: {
             type: 'linear',
             position: 'right',
-            title: { display: true, text: 'Satış (€)', color: '#94a3b8' },
+            title: { display: true, text: 'Satış (€)', color: '#3d4949' },
             grid: { drawOnChartArea: false },
-            ticks: { color: '#94a3b8' }
+            ticks: { color: '#3d4949' }
           },
           x: {
-            grid: { color: 'rgba(71, 85, 105, 0.5)' },
-            ticks: { color: '#94a3b8', maxRotation: 45 }
+            grid: { color: 'rgba(109, 122, 121, 0.12)' },
+            ticks: { color: '#3d4949', maxRotation: 45 }
           }
         }
       }
     });
     } catch (e) {
-      trendCanvas.parentElement.innerHTML = '<p class="text-amber-400 text-sm">Grafik yüklenemedi: ' + (e.message || 'bilinmeyen hata') + '</p>';
+      trendCanvas.parentElement.innerHTML = '<p class="text-amber-700 text-sm">Grafik yüklenemedi: ' + (e.message || 'bilinmeyen hata') + '</p>';
     }
   }
 
@@ -193,21 +219,21 @@
       try {
         if (loading) {
           badgeEl.textContent = 'Kontrol ediliyor…';
-          badgeEl.className = 'text-lg font-semibold text-slate-400';
+          badgeEl.className = 'text-lg font-semibold text-on-surface-variant';
           detailEl.textContent = '';
-          detailEl.className = 'text-sm text-slate-500 mt-1';
+          detailEl.className = 'text-sm text-on-surface-variant mt-1';
           return;
         }
         if (ok) {
           badgeEl.innerHTML = '🟢 Çalışıyor';
-          badgeEl.className = 'text-lg font-semibold text-green-400';
+          badgeEl.className = 'text-lg font-semibold text-emerald-700';
           detailEl.textContent = detail || '';
-          detailEl.className = 'text-sm text-slate-500 mt-1';
+          detailEl.className = 'text-sm text-on-surface-variant mt-1';
         } else {
           badgeEl.innerHTML = '🔴 Sorun var';
-          badgeEl.className = 'text-lg font-semibold text-red-400';
+          badgeEl.className = 'text-lg font-semibold text-red-600';
           detailEl.textContent = msg || 'AI erişilemedi.';
-          detailEl.className = 'text-sm text-red-300 mt-1';
+          detailEl.className = 'text-sm text-red-700 mt-1';
         }
       } catch (e) {
         if (detailEl) detailEl.textContent = 'Güncelleme hatası: ' + (e.message || String(e));

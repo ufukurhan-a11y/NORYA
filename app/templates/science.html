@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html class="scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Science & Technology | NoryaAI</title>
+<meta name="description" content="Precision AI for Complex Diagnostics. NoryaAI bridges the gap between raw data and clinical intuition with peer-reviewed methodology."/>
+<link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#006a69", "primary-container": "#0ea5a4", "on-primary": "#ffffff",
+        "on-primary-container": "#003333", "on-surface": "#191c1d", "on-surface-variant": "#3d4949",
+        "surface": "#f8f9fa", "surface-container-low": "#f3f4f5", "surface-container-lowest": "#ffffff",
+        "surface-container-high": "#e7e8e9", "surface-container": "#edeeef", "surface-dim": "#d9dadb",
+        "outline-variant": "#bcc9c8", "outline": "#6d7a79", "surface-bright": "#f8f9fa",
+        "inverse-primary": "#5ed9d7", "inverse-surface": "#2e3132",
+        "tertiary": "#006a63", "tertiary-container": "#37a49a",
+        "error": "#ba1a1a", "error-container": "#ffdad6",
+        "secondary": "#4f5e7e", "secondary-container": "#cadaff"
+      },
+      fontFamily: { "headline": ["Manrope","sans-serif"], "body": ["Inter","sans-serif"], "label": ["Inter","sans-serif"] },
+      borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+    },
+  },
+}
+</script>
+<style>
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.no-scrollbar::-webkit-scrollbar { display: none; }
+.no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container/20">
+<!-- Nav -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
+<a href="/" class="flex items-center gap-3">
+<img alt="NoryaAI Logo" class="w-8 h-8" src="/static/norya_logo_transparent_trim.png"/>
+<span class="text-2xl font-bold tracking-tighter text-slate-900 font-headline">NoryaAI</span>
+</a>
+<div class="hidden md:flex items-center gap-10">
+<a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/">Analysis</a>
+<a class="font-headline tracking-tight text-sm font-semibold text-[#0EA5A4] border-b-2 border-[#0EA5A4] pb-1" href="/science">Science</a>
+<a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/about">About</a>
+<a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/security">Security</a>
+<a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/pricing">Pricing</a>
+</div>
+<a href="/#analyze" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20">
+Get Started
+</a>
+</div>
+</nav>
+
+<main class="pt-32 pb-24">
+<!-- Hero -->
+<section class="max-w-7xl mx-auto px-8 mb-32">
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-end">
+<div class="lg:col-span-8">
+<span class="text-primary font-bold tracking-widest text-xs uppercase mb-6 block">The Clinical Curator Approach</span>
+<h1 class="font-headline text-5xl md:text-7xl font-extrabold tracking-tighter leading-[0.95] text-on-surface mb-8">
+Precision AI for <br/><span class="text-primary-container">Complex Diagnostics.</span>
+</h1>
+<p class="text-xl md:text-2xl text-on-surface-variant max-w-2xl font-light leading-relaxed">
+NoryaAI bridges the gap between raw data and clinical intuition. Our methodology transforms biochemical signals into actionable health intelligence.
+</p>
+</div>
+<div class="lg:col-span-4 pb-4">
+<div class="bg-surface-container-low p-8 rounded-xl relative overflow-hidden group">
+<div class="absolute -right-4 -top-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
+<p class="text-sm font-medium mb-4 text-on-surface-variant italic">"We don't just provide numbers; we provide context that saves lives."</p>
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-slate-300 overflow-hidden">
+<img alt="Dr. Elena Vance" class="w-full h-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDICloJpNTFwn6aNEIaBUF7E0CET6nUUrXtEpSUw2sodtA3N1CTspytYr1iCCPpbVQydyHPRBL3BclWg9ExZg75DlSN-Q9EBDipCccsCV6ncMzVw6sliGOTg8VwQSrfyGYdayM_mXCYGA4XqnbI-A3St6WJRbcsGGey9MtfBe0xnyShntIeeXYQbGSzlY66GJ89wABL2_Ya7fnPdJiVGUuKlcm8qsEqUh9z899zMGMeJkuh6Y5jhPZqR4LS9O6ttTaWxhcp84WJDrDE"/>
+</div>
+<div>
+<p class="text-xs font-bold text-on-surface">Dr. Elena Vance</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Chief Medical Officer</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Methodology Bento -->
+<section class="max-w-7xl mx-auto px-8 mb-48">
+<div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+<div class="md:col-span-2 bg-white p-12 rounded-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)] flex flex-col justify-between min-h-[500px]">
+<div>
+<div class="flex items-center gap-2 mb-8">
+<span class="material-symbols-outlined text-primary text-3xl">biotech</span>
+<span class="font-headline font-bold text-lg">Biomarker Synthesis</span>
+</div>
+<h2 class="font-headline text-4xl font-bold mb-6 tracking-tight">The Neural Network of <br/>Human Physiology</h2>
+<p class="text-on-surface-variant leading-relaxed max-w-lg mb-8">
+Our proprietary AI models analyze over 150 distinct biomarkers simultaneously, accounting for age-adjusted baselines, seasonal variability, and genetic predispositions. This multi-layered synthesis identifies patterns invisible to the human eye.
+</p>
+</div>
+<div class="flex flex-wrap gap-3">
+<span class="px-4 py-2 bg-surface-container-low rounded-lg text-xs font-bold uppercase tracking-wider">Metabolic Profile</span>
+<span class="px-4 py-2 bg-surface-container-low rounded-lg text-xs font-bold uppercase tracking-wider">Hormonal Balance</span>
+<span class="px-4 py-2 bg-surface-container-low rounded-lg text-xs font-bold uppercase tracking-wider">Immune Resilience</span>
+</div>
+</div>
+<div class="space-y-6">
+<div class="bg-primary text-on-primary p-8 rounded-xl h-1/2 flex flex-col justify-center">
+<span class="material-symbols-outlined text-4xl mb-6">shield_lock</span>
+<h3 class="text-2xl font-bold mb-2">HIPAA Confirmed</h3>
+<p class="text-on-primary/80 text-sm">Military-grade encryption for all sensitive health data points.</p>
+</div>
+<div class="bg-surface-container-lowest p-8 rounded-xl h-1/2 flex flex-col justify-center shadow-sm">
+<span class="material-symbols-outlined text-primary-container text-4xl mb-6">analytics</span>
+<h3 class="text-2xl font-bold mb-2">99.8% Accuracy</h3>
+<p class="text-on-surface-variant text-sm">Validated against clinical gold standards across global laboratories.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Medical Board -->
+<section class="bg-surface-container-low py-32 overflow-hidden">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
+<div class="max-w-xl">
+<h2 class="font-headline text-5xl font-extrabold tracking-tighter mb-6">Global Medical Board</h2>
+<p class="text-on-surface-variant">Our advisory council consists of leading endocrinologists, data scientists, and clinical researchers from the world's top institutions.</p>
+</div>
+<div class="flex gap-4">
+<button class="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-white transition-colors">
+<span class="material-symbols-outlined">west</span>
+</button>
+<button class="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-white transition-colors">
+<span class="material-symbols-outlined">east</span>
+</button>
+</div>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-slate-200 rounded-xl mb-6 overflow-hidden relative">
+<img alt="Dr. Julian Thorne" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCb6BWumIUncrD52aY3I67xEM0_9vKifaaiHt37r5PfRAn_aRX_M4wzXzyGMp1YN3XExk3zZchZbus-ksxVKLBqxRWE1YyUSuO59BSYKSFaGh6rHuHHCVNBlOFLC1HpGEAGmMcea4DZ_zdDEhSQBVKPRLOKYPzspZu1OISIdRXJTcl1TqDABTlEwaabKh-pUAZncuGc4c4Nby_is3N9cdAMJ3UP-Ph3LzkUFn9IJNlHY7BQXV1vU7dJTDBTeUCDHaXiQTow6c1WAWrS"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<h4 class="font-headline font-bold text-xl">Dr. Julian Thorne</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Systems Biology</p>
+<p class="text-sm text-on-surface-variant">Oxford University Research Lead</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-slate-200 rounded-xl mb-6 overflow-hidden relative">
+<img alt="Dr. Sarah Chen" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuD-23ZLVF2bOo_GL7Fmj_4UOmabk0jcHBPcRLrPRm3YOkZ5AM_36HfnSwe0Hln0HWBiU0Y_rmDwCqURlW_UTc6RnUgA6HTXUso5qauMdPeKhvMpq1XgO3iuRl_Pm76CuFalQmSbl_dcVyaq6N7fS64CiA0UyyRG2c_Pn8RdsPwiQHD-MHF1to1TsZdZzedOwdm1y9XA1GfMDu9m111VfU-JsRYPDu25xt7lxtAasfbBo-Mm2qv2ZtgDeROtA60JgCAg0d3AGqvBH7pv"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<h4 class="font-headline font-bold text-xl">Dr. Sarah Chen</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Machine Learning</p>
+<p class="text-sm text-on-surface-variant">MIT Health AI Department</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-slate-200 rounded-xl mb-6 overflow-hidden relative">
+<img alt="Dr. Marcus G." class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuBrKFNb2yWnt4FqUOMg2-WlAcnXngF1YcHZ_WqlF_qhtG_Gzz6z6QueGe01Y12f-t3CtXUUViXf0kjG96cqjrHV1IHtkmkLlaZzQCPri87eq6FubmxyrAmS0P3yhwhQDRxH2IKF1fWsaXLkOauFSdl6Ih4HnPFOwUCNSRWwVGrQCxm0jSUUyKjHazgZ7ETp2TxqRtDLwatfGhFf-RNM7rG-kotZISQTR2rVmMRduF4UmoOjNO7tPu-HsjKP04NXTuBD002tThCK2xJH"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<h4 class="font-headline font-bold text-xl">Dr. Marcus G.</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Pathology</p>
+<p class="text-sm text-on-surface-variant">Stanford Medical Center</p>
+</div>
+<div class="group cursor-pointer">
+<div class="aspect-[4/5] bg-slate-200 rounded-xl mb-6 overflow-hidden relative">
+<img alt="Dr. Amara Okoro" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCGDxHpaOmRaVdnmIkZNQ58qBYKZiIHesA7JY52EJHLULB3EyFOlvHMbTnspI1SppAJgrjykRJBgzzNHI4L0LWEIJycB0EDjfSEajqLypl_srbXmkaGp249dh9W6mPNZD7EKfrqg-9Izjn6mECcPDMvidiEywbEPhDkpCTwvEqu3n0Mytq9rORJL0EodeJe8aIy1mBmEwUoovlTJawrcR5_GIFyXyLG6Gr3wgc070wK61mVq6MSVC3goJcd-1HDaMLwIqv5a9lHVoy4"/>
+<div class="absolute inset-0 bg-gradient-to-t from-primary/40 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+</div>
+<h4 class="font-headline font-bold text-xl">Dr. Amara Okoro</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Preventative Care</p>
+<p class="text-sm text-on-surface-variant">Johns Hopkins Medicine</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Peer-Reviewed -->
+<section class="max-w-7xl mx-auto px-8 py-48">
+<div class="flex flex-col lg:flex-row gap-24">
+<div class="lg:w-1/3">
+<h2 class="font-headline text-4xl font-extrabold tracking-tighter mb-8 leading-tight">Peer-Reviewed <br/>Foundations</h2>
+<p class="text-on-surface-variant mb-10 leading-relaxed">Our AI models are built upon decades of clinical research. We believe in radical transparency and open scientific discourse.</p>
+<a href="#" class="flex items-center gap-2 font-headline font-bold text-primary group">
+View Full Publications
+<span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_right_alt</span>
+</a>
+</div>
+<div class="lg:w-2/3 space-y-4">
+<div class="p-8 bg-surface-container-lowest rounded-xl flex items-center justify-between group hover:bg-primary transition-colors">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">Journal of Clinical AI &middot; 2023</span>
+<h5 class="text-xl font-bold group-hover:text-on-primary">Multi-modal Biomarker Analysis in Early Detection</h5>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-primary">description</span>
+</div>
+<div class="p-8 bg-surface-container-lowest rounded-xl flex items-center justify-between group hover:bg-primary transition-colors">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">The Lancet Health-Tech &middot; 2022</span>
+<h5 class="text-xl font-bold group-hover:text-on-primary">Automated Hematology Interpretation Performance</h5>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-primary">description</span>
+</div>
+<div class="p-8 bg-surface-container-lowest rounded-xl flex items-center justify-between group hover:bg-primary transition-colors">
+<div class="flex flex-col gap-1">
+<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">Nature Medicine &middot; 2024</span>
+<h5 class="text-xl font-bold group-hover:text-on-primary">Predictive Modeling for Metabolic Syndrome</h5>
+</div>
+<span class="material-symbols-outlined text-outline-variant group-hover:text-on-primary">description</span>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Global Reference Database -->
+<section class="max-w-7xl mx-auto px-8 mb-48">
+<div class="relative bg-on-surface rounded-[2rem] p-16 overflow-hidden">
+<div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
+<div class="relative z-10 max-w-2xl">
+<h2 class="font-headline text-5xl font-extrabold text-white mb-8 tracking-tighter">The Global Reference Database</h2>
+<p class="text-white/70 text-lg mb-12 leading-relaxed">
+NoryaAI leverages an anonymized dataset of over 40 million clinical records, allowing our AI to understand geographical nuances and ethnic variability in human biology.
+</p>
+<div class="grid grid-cols-2 md:grid-cols-4 gap-8">
+<div>
+<p class="text-3xl font-headline font-bold text-primary-container">40M+</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Data Points</p>
+</div>
+<div>
+<p class="text-3xl font-headline font-bold text-primary-container">120</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Partner Labs</p>
+</div>
+<div>
+<p class="text-3xl font-headline font-bold text-primary-container">18</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Countries</p>
+</div>
+<div>
+<p class="text-3xl font-headline font-bold text-primary-container">9</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">ISO Certs</p>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- Footer -->
+<footer class="bg-slate-50 w-full border-t border-slate-200">
+<div class="w-full py-12 px-8 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-8">
+<div>
+<a href="/" class="flex items-center gap-2 mb-2">
+<img alt="NoryaAI" class="w-6 h-6 object-contain" src="/static/norya_logo_transparent_trim.png"/>
+<span class="font-headline font-bold text-slate-900">NoryaAI</span>
+</a>
+<p class="font-body text-xs tracking-wide uppercase text-slate-400">&copy; 2025 NoryaAI. High-End Editorial Health-Tech.</p>
+</div>
+<div class="flex flex-wrap justify-center gap-8">
+<a class="font-body text-xs tracking-wide uppercase text-slate-400 hover:text-[#0EA5A4] transition-colors" href="/legal/kullanim-sartlari">Terms of Service</a>
+<a class="font-body text-xs tracking-wide uppercase text-slate-400 hover:text-[#0EA5A4] transition-colors" href="/security">HIPAA Compliance</a>
+<a class="font-body text-xs tracking-wide uppercase text-slate-400 hover:text-[#0EA5A4] transition-colors" href="/legal/iletisim">Contact Support</a>
+</div>
+</div>
+</footer>
+</body>
+</html>

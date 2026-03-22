@@ -1391,18 +1391,36 @@ def _inject_ga(html: str) -> str:
     return html.replace(_GTAG_INJECT_PLACEHOLDER, inject)
 
 
-def _whatsapp_url_and_style() -> tuple[str, str]:
-    """WhatsApp iletişim: (href, style). Numara yoksa varsayılan kullanılır, yine de gizlenmez."""
+WHATSAPP_GREETINGS: dict[str, str] = {
+    "tr": "Merhaba, Norya hakkında soru sormak istiyorum.",
+    "en": "Hello, I would like to ask a question about Norya.",
+    "de": "Hallo, ich möchte eine Frage zu Norya stellen.",
+    "fr": "Bonjour, je voudrais poser une question sur Norya.",
+    "it": "Ciao, vorrei fare una domanda su Norya.",
+    "es": "Hola, me gustaría hacer una pregunta sobre Norya.",
+    "he": "שלום, אני רוצה לשאול שאלה על Norya.",
+    "hi": "नमस्ते, मैं Norya के बारे में एक सवाल पूछना चाहता/चाहती हूँ।",
+    "ar": "مرحبًا، أود طرح سؤال حول Norya.",
+    "el": "Γεια σας, θα ήθελα να κάνω μια ερώτηση σχετικά με το Norya.",
+    "sr": "Zdravo, želim da postavim pitanje o Norya.",
+    "cs": "Dobrý den, chtěl/a bych se zeptat na Norya.",
+    "en-ca": "Hello, I would like to ask a question about Norya.",
+}
+
+
+def _whatsapp_url_and_style(locale: str = "tr") -> tuple[str, str]:
+    """WhatsApp iletişim: (href, style). Numara yoksa varsayılan kullanılır, yine de gizlenmez. Mesaj locale'e göre çevrilir."""
     num = (getattr(settings, "whatsapp_contact", None) or "905071703564").strip().replace("+", "").replace(" ", "")
     if not num or len(num) < 10:
         num = "905071703564"
-    text = quote("Merhaba, Norya hakkında soru sormak istiyorum.")
+    greeting = WHATSAPP_GREETINGS.get(locale, WHATSAPP_GREETINGS["en"])
+    text = quote(greeting)
     return f"https://wa.me/{num}?text={text}", ""
 
 
-def _inject_whatsapp(html: str) -> str:
-    """__NORYA_WHATSAPP_URL__ ve __NORYA_WHATSAPP_STYLE__ placeholder'larını doldurur."""
-    url, style = _whatsapp_url_and_style()
+def _inject_whatsapp(html: str, locale: str = "tr") -> str:
+    """__NORYA_WHATSAPP_URL__ ve __NORYA_WHATSAPP_STYLE__ placeholder'larını doldurur. Locale'e göre mesaj dili değişir."""
+    url, style = _whatsapp_url_and_style(locale)
     html = html.replace("__NORYA_WHATSAPP_URL__", url)
     html = html.replace("__NORYA_WHATSAPP_STYLE__", style)
     return html
@@ -2037,7 +2055,7 @@ def _landing_response(locale: str, request: Request):
 
     raw = index_file.read_text(encoding="utf-8")
     raw = _inject_ga(raw)
-    raw = _inject_whatsapp(raw)
+    raw = _inject_whatsapp(raw, locale)
     raw = _inject_company(raw)
     raw = _inject_google_site_verification(raw)
 
@@ -2147,9 +2165,22 @@ def _index_response(request: Request | None = None):
     if not index_file.is_file():
         index_file = Path.cwd() / "static" / "index.html"
     if index_file.is_file():
+        _locale: str | None = None
+        if request is not None:
+            path = (request.url.path or "").strip()
+            path_locale = None
+            if path.startswith("/") and path != "/":
+                segment = path[1:].split("/")[0].lower()
+                if segment in LANDING_ROUTES or segment in ("fr", "es", "ar", "hi", "he", "el", "sr"):
+                    path_locale = segment
+            if path == "/":
+                _locale = "en"
+            elif path_locale:
+                _locale = path_locale
+
         raw = index_file.read_text(encoding="utf-8")
         raw = _inject_ga(raw)  # Google Ads AW-18004536281 + isteğe bağlı GA4, tek yükleme
-        raw = _inject_whatsapp(raw)
+        raw = _inject_whatsapp(raw, _locale or "en")
         raw = _inject_company(raw)
         raw = _inject_google_site_verification(raw)
         if request is not None:
@@ -2158,20 +2189,6 @@ def _index_response(request: Request | None = None):
             base_url = str(request.base_url).rstrip("/")
             canonical_url = base_url + request.url.path
             raw = _inject_canonical(raw, canonical_url)
-            path = (request.url.path or "").strip()
-            # Path-based locale: /en, /de, /fr, /tr, /it, /es, /en-ca vb. — tek segment locale ise kullan (localde diğer ülkeler için de açılsın)
-            path_locale = None
-            if path.startswith("/") and path != "/":
-                segment = path[1:].split("/")[0].lower()
-                if segment in LANDING_ROUTES or segment in ("fr", "es", "ar", "hi", "he", "el", "sr"):
-                    path_locale = segment
-            if path == "/":
-                # Root "/" is forced to English for consistent SEO default.
-                _locale = "en"
-            elif path_locale:
-                _locale = path_locale
-            else:
-                _locale = None
             if _locale is not None:
                 meta = get_landing_meta(_locale) if _locale in LANDING_ROUTES else {"meta_title": BRAND_NAME, "meta_description": "", "og_locale": "en_US"}
                 ui = get_landing_ui(_locale) if _locale in LANDING_ROUTES else {}
@@ -2241,9 +2258,12 @@ def report_page(request: Request):
     if not index_file.is_file():
         index_file = Path.cwd() / "static" / "index.html"
     if index_file.is_file():
+        _lang = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+        if _lang not in WHATSAPP_GREETINGS:
+            _lang = _parse_accept_language(request.headers.get("accept-language"))
         raw = index_file.read_text(encoding="utf-8")
         raw = _inject_ga(raw)  # Google Ads global site tag
-        raw = _inject_whatsapp(raw)
+        raw = _inject_whatsapp(raw, _lang)
         raw = _inject_company(raw)
         raw = _inject_google_site_verification(raw)
         base_url = str(request.base_url).rstrip("/")
@@ -2284,6 +2304,46 @@ def _how_it_works_lang_from_request(request: Request) -> str:
         return lang_cookie
     parsed = _parse_accept_language(request.headers.get("accept-language"))
     return parsed if parsed in HOW_IT_WORKS_LANGS else DEFAULT_HOW_IT_WORKS_LANG
+
+
+@app.get("/about", response_class=HTMLResponse)
+def about_page(request: Request):
+    """Hakkımızda / About sayfası – Stitch v21 tasarımı."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "about.html",
+        {"request": request, "canonical_url": f"{base_url}/about"},
+    )
+
+
+@app.get("/science", response_class=HTMLResponse)
+def science_page(request: Request):
+    """Bilim & Teknoloji sayfası – Stitch v20 tasarımı."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "science.html",
+        {"request": request, "canonical_url": f"{base_url}/science"},
+    )
+
+
+@app.get("/security", response_class=HTMLResponse)
+def security_page(request: Request):
+    """Güvenlik & Gizlilik sayfası – Stitch v25 tasarımı."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "security.html",
+        {"request": request, "canonical_url": f"{base_url}/security"},
+    )
+
+
+@app.get("/technology", response_class=HTMLResponse)
+def technology_page(request: Request):
+    """Teknoloji sayfası – Stitch v22 tasarımı."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "technology.html",
+        {"request": request, "canonical_url": f"{base_url}/technology"},
+    )
 
 
 @app.get("/how-it-works", response_class=HTMLResponse)
@@ -4525,7 +4585,7 @@ async def _paytr_callback_handle(request: Request, db: Session):
         if hasattr(order, "paytr_payment_amount"):
             order.paytr_payment_amount = str(payment_amount) if payment_amount else None
 
-        if status == "success":
+        if (status or "").strip().lower() == "success":
             user = db.get(User, order.user_id)
             if user:
                 qty = getattr(order, "quantity", 1) or 1

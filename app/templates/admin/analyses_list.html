@@ -1,56 +1,59 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Analiz geçmişi - Norya Admin{% endblock %}
+{% block admin_header_title %}Analiz geçmişi{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold text-white mb-4">Analiz geçmişi</h1>
-<form method="get" class="mb-4 flex flex-wrap gap-3 items-end">
-  <input type="text" name="q" value="{{ q }}" placeholder="E-posta veya kullanıcı ID" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white w-48" />
-  <input type="date" name="date_from" value="{{ date_from }}" placeholder="Başlangıç" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
-  <input type="date" name="date_to" value="{{ date_to }}" placeholder="Bitiş" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
-  <select name="source" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white">
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-4">Analiz geçmişi</h2>
+<form method="get" class="mb-6 flex flex-wrap gap-3 items-end">
+  <input type="text" name="q" value="{{ q }}" placeholder="E-posta veya kullanıcı ID" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface w-52 max-w-full focus:ring-2 focus:ring-primary-container/25 focus:bg-white placeholder:text-on-surface-variant/60" />
+  <input type="date" name="date_from" value="{{ date_from }}" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+  <input type="date" name="date_to" value="{{ date_to }}" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+  <select name="source" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface focus:ring-2 focus:ring-primary-container/25">
     <option value="">Tümü</option>
     <option value="text" {% if source == 'text' %}selected{% endif %}>text</option>
     <option value="pdf" {% if source == 'pdf' %}selected{% endif %}>pdf</option>
     <option value="image" {% if source == 'image' %}selected{% endif %}>image</option>
   </select>
-  <button type="submit" class="px-4 py-2 rounded-lg bg-brand text-white">Filtrele</button>
+  <button type="submit" class="px-5 py-2.5 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02]">Filtrele</button>
 </form>
-<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-  <table class="w-full text-sm">
-    <thead>
-      <tr class="text-left text-slate-400 border-b border-slate-700">
-        <th class="px-4 py-2">ID</th>
-        <th class="px-4 py-2">Kullanıcı</th>
-        <th class="px-4 py-2">Tarih</th>
-        <th class="px-4 py-2">Kaynak</th>
-        <th class="px-4 py-2">Girdi önizleme</th>
-        <th class="px-4 py-2">Sonuç önizleme</th>
-        <th class="px-4 py-2">Belgeler</th>
-        <th class="px-4 py-2"></th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for a in analyses %}
-      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
-        <td class="px-4 py-2">{{ a.id }}</td>
-        <td class="px-4 py-2">{{ a.email }} <span class="text-slate-500">({{ a.user_id }})</span></td>
-        <td class="px-4 py-2">{{ a.created_at }}</td>
-        <td class="px-4 py-2">{{ a.source }}</td>
-        <td class="px-4 py-2 max-w-md truncate" title="{{ a.input_preview }}">{{ a.input_preview }}</td>
-        <td class="px-4 py-2 max-w-md truncate" title="{{ a.result_preview }}">{{ a.result_preview }}</td>
-        <td class="px-4 py-2">
-          <a href="/admin/analyses/{{ a.id }}/pdf" target="_blank" class="inline-block px-2 py-1 rounded bg-slate-600 hover:bg-slate-500 text-white text-xs mr-1">Norya raporu</a>
-          {% if a.has_original %}
-          <a href="/admin/analyses/{{ a.id }}/original" target="_blank" class="inline-block px-2 py-1 rounded bg-slate-600 hover:bg-slate-500 text-white text-xs">Müşteri belgesi</a>
-          {% else %}
-          <span class="text-slate-500 text-xs">—</span>
-          {% endif %}
-        </td>
-        <td class="px-4 py-2"><a href="/admin/users/{{ a.user_id }}" class="text-brand hover:underline">Kullanıcı</a></td>
-      </tr>
-      {% else %}
-      <tr><td colspan="8" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden border border-[#bcc9c8]/10">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">Kullanıcı</th>
+          <th class="px-5 py-3">Tarih</th>
+          <th class="px-5 py-3">Kaynak</th>
+          <th class="px-5 py-3">Girdi önizleme</th>
+          <th class="px-5 py-3">Sonuç önizleme</th>
+          <th class="px-5 py-3">Belgeler</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in analyses %}
+        <tr class="border-b border-outline-variant/15 hover:bg-surface-container-low/60 transition-colors">
+          <td class="px-5 py-3 text-on-surface font-medium">{{ a.id }}</td>
+          <td class="px-5 py-3 text-on-surface">{{ a.email }} <span class="text-on-surface-variant">({{ a.user_id }})</span></td>
+          <td class="px-5 py-3 text-on-surface text-xs">{{ a.created_at }}</td>
+          <td class="px-5 py-3 text-on-surface">{{ a.source }}</td>
+          <td class="px-5 py-3 max-w-md truncate text-on-surface" title="{{ a.input_preview }}">{{ a.input_preview }}</td>
+          <td class="px-5 py-3 max-w-md truncate text-on-surface-variant text-xs" title="{{ a.result_preview }}">{{ a.result_preview }}</td>
+          <td class="px-5 py-3">
+            <a href="/admin/analyses/{{ a.id }}/pdf" target="_blank" class="inline-block px-2.5 py-1 rounded-lg bg-primary-container/15 text-primary text-xs font-semibold hover:bg-primary-container/25 mr-1">Norya raporu</a>
+            {% if a.has_original %}
+            <a href="/admin/analyses/{{ a.id }}/original" target="_blank" class="inline-block px-2.5 py-1 rounded-lg bg-secondary/15 text-secondary text-xs font-semibold hover:bg-secondary/25">Müşteri belgesi</a>
+            {% else %}
+            <span class="text-on-surface-variant text-xs">—</span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-3"><a href="/admin/users/{{ a.user_id }}" class="text-primary font-semibold hover:underline">Kullanıcı</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="px-5 py-8 text-center text-on-surface-variant">Kayıt yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

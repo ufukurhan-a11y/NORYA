@@ -1,27 +1,28 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Raporlar - Norya Admin{% endblock %}
+{% block admin_header_title %}Raporlar{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold text-white mb-4">Raporlar</h1>
-{% if error %}<p class="mb-4 text-red-400">{{ error }}</p>{% endif %}
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-4">Raporlar</h2>
+{% if error %}<p class="mb-4 text-red-600 font-medium">{{ error }}</p>{% endif %}
 <form method="get" class="mb-6 flex flex-wrap gap-4 items-end">
   <label class="flex flex-col gap-1">
-    <span class="text-slate-400 text-sm">Başlangıç</span>
-    <input type="date" name="date_from" value="{{ date_from }}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
+    <span class="text-on-surface-variant text-sm font-medium">Başlangıç</span>
+    <input type="date" name="date_from" value="{{ date_from }}" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
   </label>
   <label class="flex flex-col gap-1">
-    <span class="text-slate-400 text-sm">Bitiş</span>
-    <input type="date" name="date_to" value="{{ date_to }}" class="px-3 py-2 rounded-lg bg-slate-800 border border-slate-600 text-white" />
+    <span class="text-on-surface-variant text-sm font-medium">Bitiş</span>
+    <input type="date" name="date_to" value="{{ date_to }}" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
   </label>
-  <button type="submit" class="px-4 py-2 rounded-lg bg-brand text-white">Hesapla</button>
-  <a href="?date_from={{ date_from }}&date_to={{ date_to }}&export=csv" class="px-4 py-2 rounded-lg bg-green-600 text-white">CSV indir</a>
+  <button type="submit" class="px-5 py-2.5 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient">Hesapla</button>
+  <a href="?date_from={{ date_from }}&date_to={{ date_to }}&export=csv" class="px-5 py-2.5 rounded-full font-semibold text-sm bg-emerald-600 text-white hover:bg-emerald-700 shadow-ambient">CSV indir</a>
 </form>
-<div class="bg-slate-800 rounded-lg border border-slate-700 p-6 max-w-xl">
-  <h2 class="text-lg font-medium text-white mb-4">Seçili tarih aralığı özeti</h2>
-  <ul class="space-y-2 text-slate-200">
-    <li><span class="text-slate-400">Yeni kullanıcı:</span> {{ new_users }}</li>
-    <li><span class="text-slate-400">Analiz sayısı:</span> {{ analyses_count }}</li>
-    <li><span class="text-slate-400">Tamamlanan ödeme:</span> {{ payments_count }}</li>
-    <li><span class="text-slate-400">Ciro (EUR):</span> {{ revenue_eur }}</li>
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient border border-[#bcc9c8]/10 p-6 max-w-xl">
+  <h3 class="text-lg font-headline font-bold text-on-surface mb-4">Seçili tarih aralığı özeti</h3>
+  <ul class="space-y-3 text-on-surface">
+    <li><span class="text-on-surface-variant">Yeni kullanıcı:</span> <strong>{{ new_users }}</strong></li>
+    <li><span class="text-on-surface-variant">Analiz sayısı:</span> <strong>{{ analyses_count }}</strong></li>
+    <li><span class="text-on-surface-variant">Tamamlanan ödeme:</span> <strong>{{ payments_count }}</strong></li>
+    <li><span class="text-on-surface-variant">Ciro (EUR):</span> <strong>{{ revenue_eur }}</strong></li>
   </ul>
 </div>
 {% endblock %}

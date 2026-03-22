@@ -1,28 +1,29 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Fiyat Planları - Norya Admin{% endblock %}
+{% block admin_header_title %}Fiyat planları{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold text-white mb-2">Fiyat Planları (Merkezi Kaynak)</h1>
-<p class="text-slate-400 text-sm mb-6">Bu fiyatlar tüm landing sayfaları, pricing kartları ve ödeme sayfasında kullanılır. Değişiklik anında yansır.</p>
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-2">Fiyat planları (merkezi kaynak)</h2>
+<p class="text-on-surface-variant text-sm mb-6">Bu fiyatlar tüm landing sayfaları, pricing kartları ve ödeme sayfasında kullanılır. Değişiklik anında yansır.</p>
 {% if not plans %}
-<p class="text-amber-400">Henüz plan kaydı yok. Uygulama başlarken seed ile eklenir (single_13eur, monthly_50eur, yearly_99eur).</p>
+<p class="text-amber-800 font-medium">Henüz plan kaydı yok. Uygulama başlarken seed ile eklenir (single_13eur, monthly_50eur, yearly_99eur).</p>
 {% else %}
 <div class="max-w-2xl space-y-4">
   {% for p in plans %}
-  <div class="bg-slate-800 rounded-lg border border-slate-600 p-4 flex items-center justify-between gap-4">
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/15 shadow-ambient p-5 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
     <div>
-      <span class="font-mono text-white">{{ p.code }}</span>
-      <span class="text-slate-400 ml-2">({{ p.product }})</span>
-      <span class="text-slate-500 ml-2">Sıra: {{ p.display_order }}</span>
+      <span class="font-mono font-semibold text-on-surface">{{ p.code }}</span>
+      <span class="text-on-surface-variant ml-2">({{ p.product }})</span>
+      <span class="text-on-surface-variant text-sm ml-2">Sıra: {{ p.display_order }}</span>
     </div>
-    <form method="post" action="/admin/pricing-plans/{{ p.id }}" class="flex items-center gap-2">
-      <label class="text-slate-300 text-sm">Fiyat (EUR cent):</label>
-      <input type="number" name="price_cents" value="{{ p.price_cents }}" min="0" step="1" class="w-24 px-2 py-1.5 rounded bg-slate-700 border border-slate-600 text-white text-sm">
-      <span class="text-slate-500 text-sm">= {{ "%.2f"|format(p.price_eur) }} €</span>
-      <button type="submit" class="px-3 py-1.5 rounded bg-brand text-white text-sm hover:bg-brand/90">Güncelle</button>
+    <form method="post" action="/admin/pricing-plans/{{ p.id }}" class="flex flex-wrap items-center gap-2">
+      <label class="text-on-surface-variant text-sm font-medium">Fiyat (EUR cent):</label>
+      <input type="number" name="price_cents" value="{{ p.price_cents }}" min="0" step="1" class="w-28 px-3 py-2 rounded-xl bg-surface-container-low border-0 text-on-surface text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white">
+      <span class="text-on-surface-variant text-sm">= {{ "%.2f"|format(p.price_eur) }} €</span>
+      <button type="submit" class="px-4 py-2 rounded-full text-sm font-headline font-bold bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02]">Güncelle</button>
     </form>
   </div>
   {% endfor %}
 </div>
 {% endif %}
-<p class="mt-6 text-slate-500 text-xs">İndirim ve kampanya gösterimi (eski/yeni fiyat, badge) İndirim Kodları sayfasındaki kupon formundan yönetilir.</p>
+<p class="mt-6 text-on-surface-variant text-xs">İndirim ve kampanya gösterimi (eski/yeni fiyat, badge) İndirim Kodları sayfasındaki kupon formundan yönetilir.</p>
 {% endblock %}

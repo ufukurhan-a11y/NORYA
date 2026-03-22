@@ -1,28 +1,12 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Live Analytics - Norya Admin{% endblock %}
+{% block admin_header_title %}Live analytics{% endblock %}
 {% block content %}
 <style>
-  /* Live Analytics: Norya ana palet — teal accent, premium kartlar */
-  .la-accent { color: #0EA5A4; }
-  .la-accent-bg { background: linear-gradient(135deg, #0EA5A4 0%, #0d9488 100%); }
-  .la-card {
-    background: linear-gradient(180deg, rgba(30, 41, 59, 0.95) 0%, rgba(15, 23, 42, 0.98) 100%);
-    border: 1px solid rgba(14, 165, 164, 0.2);
-    border-radius: 16px;
-    padding: 1.25rem 1.5rem;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.15);
-    transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  }
-  .la-card:hover { border-color: rgba(14, 165, 164, 0.4); box-shadow: 0 8px 32px rgba(14, 165, 164, 0.08); }
-  .la-card-title { font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: #94a3b8; margin-bottom: 0.35rem; }
-  .la-card-value { font-size: 1.75rem; font-weight: 700; color: #f1f5f9; letter-spacing: -0.02em; }
-  .la-page-title { font-size: 1.5rem; font-weight: 700; color: #f8fafc; margin-bottom: 0.25rem; }
-  .la-page-sub { font-size: 0.875rem; color: #94a3b8; margin-bottom: 1.5rem; }
-  .la-updated { font-size: 0.8125rem; color: #64748b; }
+  .la-accent { color: #0ea5a4; }
   .la-chart-container { position: relative; height: 280px; }
   .la-pie-container { position: relative; height: 220px; }
   @media (max-width: 640px) {
-    .la-card-value { font-size: 1.5rem; }
     .la-chart-container { height: 240px; }
     .la-pie-container { height: 200px; }
   }
@@ -30,75 +14,75 @@
 
 <div class="flex flex-wrap items-center justify-between gap-4 mb-2">
   <div>
-    <h1 class="la-page-title">Live Analytics Dashboard</h1>
-    <p class="la-page-sub">Canlı metrikler — son N dakika ve bugünkü özet. Veriler mevcut analiz, ödeme ve event verilerinden üretilir.</p>
+    <h2 class="text-2xl font-headline font-bold text-on-surface">Live Analytics</h2>
+    <p class="text-on-surface-variant text-sm mt-1 max-w-2xl">Canlı metrikler — periyot seçebilirsiniz; <strong>30 gün</strong> ile ülke/şehir ve grafik son 30 güne göre genişler (kısa periyotlarda coğrafya yine son 24 saattir).</p>
   </div>
   <div class="flex flex-wrap items-center gap-2">
-    <span class="text-sm text-slate-400 mr-1">Periyot:</span>
+    <span class="text-sm text-on-surface-variant mr-1">Periyot:</span>
     {% for p in period_options %}
-    <a href="?period={{ p }}" class="px-3 py-1.5 rounded-lg text-sm font-medium {% if period_minutes == p %}la-accent-bg text-white{% else %}bg-slate-700 text-slate-300 hover:bg-slate-600{% endif %}">
-      {% if p == 30 %}30 dk{% elif p == 60 %}1 saat{% elif p == 360 %}6 saat{% elif p == 1440 %}24 saat{% else %}{{ p }} dk{% endif %}
+    <a href="?period={{ p }}" class="px-3 py-1.5 rounded-full text-sm font-medium {% if period_minutes == p %}bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">
+      {% if p == 30 %}30 dk{% elif p == 60 %}1 saat{% elif p == 360 %}6 saat{% elif p == 1440 %}24 saat{% elif p == 43200 %}30 gün{% else %}{{ p }} dk{% endif %}
     </a>
     {% endfor %}
-    <button type="button" id="la-btn-refresh" class="px-4 py-2 rounded-lg text-sm font-semibold la-accent-bg text-white hover:opacity-90 transition opacity shadow-lg ml-2">Yenile</button>
+    <button type="button" id="la-btn-refresh" class="px-4 py-2 rounded-full text-sm font-headline font-bold bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] ml-2">Yenile</button>
   </div>
 </div>
 
-<div class="flex flex-wrap items-center gap-2 mb-4">
+<div class="flex flex-wrap items-center gap-2 mb-6">
   <label class="flex items-center gap-2 cursor-pointer">
-    <input type="checkbox" id="la-auto-refresh" class="rounded border-slate-600 bg-slate-700 text-teal-500 focus:ring-teal-500" />
-    <span class="text-sm text-slate-300">Otomatik yenileme (60 sn)</span>
+    <input type="checkbox" id="la-auto-refresh" class="rounded border-outline-variant text-primary-container focus:ring-primary-container/30" />
+    <span class="text-sm text-on-surface">Otomatik yenileme (60 sn)</span>
   </label>
 </div>
 
 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 mb-6">
-  <div class="la-card">
-    <p class="la-card-title">Son {% if period_minutes == 60 %}1 saat{% elif period_minutes == 360 %}6 saat{% elif period_minutes == 1440 %}24 saat{% else %}{{ period_minutes }} dk{% endif %} aktif kullanıcı</p>
-    <p class="la-card-value la-accent" id="la-active-users">{{ active_users_period }}</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5 hover:border-primary-container/25 transition-colors">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1">Seçilen aralıkta aktif kullanıcı ({{ period_label_tr|default('—') }})</p>
+    <p class="text-2xl font-headline font-extrabold la-accent" id="la-active-users">{{ active_users_period }}</p>
   </div>
-  <div class="la-card">
-    <p class="la-card-title">Bugünkü analiz sayısı</p>
-    <p class="la-card-value" id="la-today-analyses">{{ today_analyses }}</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1">Bugünkü analiz</p>
+    <p class="text-2xl font-headline font-extrabold text-on-surface" id="la-today-analyses">{{ today_analyses }}</p>
   </div>
-  <div class="la-card">
-    <p class="la-card-title">Bugünkü ödeme / satış</p>
-    <p class="la-card-value" id="la-today-payments">{{ today_payments }}</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1">Bugünkü ödeme</p>
+    <p class="text-2xl font-headline font-extrabold text-on-surface" id="la-today-payments">{{ today_payments }}</p>
   </div>
-  <div class="la-card">
-    <p class="la-card-title">Bugünkü gelir (EUR)</p>
-    <p class="la-card-value la-accent" id="la-today-revenue">{{ "%.2f"|format(today_revenue_eur) }} €</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1">Bugünkü gelir</p>
+    <p class="text-2xl font-headline font-extrabold la-accent" id="la-today-revenue">{{ "%.2f"|format(today_revenue_eur) }} €</p>
   </div>
-  <div class="la-card">
-    <p class="la-card-title">Conversion (ödeme/analiz)</p>
-    <p class="la-card-value" id="la-conversion">{{ conversion_pct }}%</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1">Conversion</p>
+    <p class="text-2xl font-headline font-extrabold text-on-surface" id="la-conversion">{{ conversion_pct }}%</p>
   </div>
 </div>
 
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
-  <div class="la-card">
-    <p class="la-card-title mb-3">Dakika bazlı aktif kullanıcı (son {% if period_minutes == 60 %}1 saat{% elif period_minutes == 360 %}6 saat{% elif period_minutes == 1440 %}24 saat{% else %}{{ period_minutes }} dk{% endif %})</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-3">{% if period_minutes >= 43200 %}Zaman serisi (12 saatlik dilimler, 30 gün){% elif period_minutes >= 1440 %}Zaman serisi (seçilen güne/periyoda göre){% else %}Dakika bazlı aktif kullanıcı{% endif %}</p>
     <div class="la-chart-container">
       <canvas id="chart-minute" aria-label="Dakika bazlı aktif kullanıcı grafiği"></canvas>
     </div>
   </div>
-  <div class="la-card">
-    <p class="la-card-title mb-3">Ülkelere göre ziyaretçi (son 24 saat)</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-3">Ülkelere göre ({{ geo_label_tr|default('son 24 saat') }})</p>
     <div class="overflow-x-auto max-h-64 overflow-y-auto">
       <table class="w-full text-sm">
         <thead>
-          <tr class="text-left text-slate-400 border-b border-slate-600">
-            <th class="py-2 pr-2">Ülke</th>
-            <th class="py-2 text-right">Adet</th>
+          <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+            <th class="py-2 px-2">Ülke</th>
+            <th class="py-2 px-2 text-right">Adet</th>
           </tr>
         </thead>
         <tbody id="la-by-country-body">
           {% for row in by_country %}
-          <tr class="border-b border-slate-700/50">
-            <td class="py-2 pr-2 text-slate-200">{{ row.country }}</td>
-            <td class="py-2 text-right la-accent font-semibold">{{ row.count }}</td>
+          <tr class="border-b border-outline-variant/10 hover:bg-surface-container-low/50">
+            <td class="py-2 px-2 text-on-surface">{{ row.country }}</td>
+            <td class="py-2 px-2 text-right la-accent font-semibold">{{ row.count }}</td>
           </tr>
           {% else %}
-          <tr><td colspan="2" class="py-4 text-slate-500">Veri yok.</td></tr>
+          <tr><td colspan="2" class="py-4 text-center text-on-surface-variant">Veri yok.</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -107,27 +91,27 @@
 </div>
 
 <div class="grid grid-cols-1 gap-6 mb-6">
-  <div class="la-card">
-    <p class="la-card-title mb-3">Ülke / Şehir — girişler (son 24 saat)</p>
-    <p class="text-xs text-slate-500 mb-2">GA4 / Search Console benzeri: hangi ülke ve şehirden giriş yapıldığı.</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1">Ülke / şehir ({{ geo_label_tr|default('son 24 saat') }})</p>
+    <p class="text-xs text-on-surface-variant mb-3">Hangi ülke ve şehirden giriş yapıldığı.</p>
     <div class="overflow-x-auto max-h-80 overflow-y-auto">
       <table class="w-full text-sm">
         <thead>
-          <tr class="text-left text-slate-400 border-b border-slate-600">
-            <th class="py-2 pr-2">Ülke</th>
-            <th class="py-2 pr-2">Şehir</th>
-            <th class="py-2 text-right">Adet</th>
+          <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+            <th class="py-2 px-2">Ülke</th>
+            <th class="py-2 px-2">Şehir</th>
+            <th class="py-2 px-2 text-right">Adet</th>
           </tr>
         </thead>
         <tbody id="la-by-country-city-body">
           {% for row in by_country_city %}
-          <tr class="border-b border-slate-700/50">
-            <td class="py-2 pr-2 text-slate-200">{{ row.country }}</td>
-            <td class="py-2 pr-2 text-slate-300">{{ row.city }}</td>
-            <td class="py-2 text-right la-accent font-semibold">{{ row.count }}</td>
+          <tr class="border-b border-outline-variant/10 hover:bg-surface-container-low/50">
+            <td class="py-2 px-2 text-on-surface">{{ row.country }}</td>
+            <td class="py-2 px-2 text-on-surface-variant">{{ row.city }}</td>
+            <td class="py-2 px-2 text-right la-accent font-semibold">{{ row.count }}</td>
           </tr>
           {% else %}
-          <tr><td colspan="3" class="py-4 text-slate-500">Veri yok.</td></tr>
+          <tr><td colspan="3" class="py-4 text-center text-on-surface-variant">Veri yok.</td></tr>
           {% endfor %}
         </tbody>
       </table>
@@ -136,46 +120,46 @@
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
-  <div class="la-card">
-    <p class="la-card-title mb-3">Cihaz dağılımı</p>
-    <p class="text-xs text-slate-500 mb-2">Şimdilik örnek veri; ileride event tablosuna bağlanacak.</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-2">Cihaz dağılımı</p>
+    <p class="text-xs text-on-surface-variant mb-2">Örnek veri.</p>
     <div class="la-pie-container">
       <canvas id="chart-device" aria-label="Cihaz dağılımı"></canvas>
     </div>
   </div>
-  <div class="la-card">
-    <p class="la-card-title mb-3">Trafik kaynakları</p>
-    <p class="text-xs text-slate-500 mb-2">Şimdilik örnek veri; ileride UTM/referrer ile doldurulacak.</p>
+  <div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-2">Trafik kaynakları</p>
+    <p class="text-xs text-on-surface-variant mb-2">Örnek veri.</p>
     <div class="la-pie-container">
       <canvas id="chart-traffic" aria-label="Trafik kaynakları"></canvas>
     </div>
   </div>
 </div>
 
-<div class="la-card mb-6">
-  <p class="la-card-title mb-3">Son işlemler (son 10 ödeme)</p>
+<div class="bg-surface-container-lowest rounded-2xl border border-[#bcc9c8]/10 shadow-ambient p-5 mb-6">
+  <p class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-3">Son işlemler (10 ödeme)</p>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
       <thead>
-        <tr class="text-left text-slate-400 border-b border-slate-600">
-          <th class="py-2 pr-2">Tarih</th>
-          <th class="py-2 pr-2">Kullanıcı</th>
-          <th class="py-2 pr-2">Ürün</th>
-          <th class="py-2 text-right">Tutar</th>
-          <th class="py-2">Durum</th>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+          <th class="py-2 px-2">Tarih</th>
+          <th class="py-2 px-2">Kullanıcı</th>
+          <th class="py-2 px-2">Ürün</th>
+          <th class="py-2 px-2 text-right">Tutar</th>
+          <th class="py-2 px-2">Durum</th>
         </tr>
       </thead>
       <tbody id="la-last-transactions">
         {% for t in last_transactions %}
-        <tr class="border-b border-slate-700/50">
-          <td class="py-2 pr-2 text-slate-200">{{ t.created_at }}</td>
-          <td class="py-2 pr-2 text-slate-200 max-w-32 truncate" title="{{ t.user_email }}">{{ t.user_email }}</td>
-          <td class="py-2 pr-2 text-slate-300">{{ t.product }}</td>
-          <td class="py-2 text-right la-accent font-semibold">{{ "%.2f"|format(t.amount_eur) }} €</td>
-          <td class="py-2"><span class="{% if t.status == 'completed' %}text-green-400{% elif t.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ t.status }}</span></td>
+        <tr class="border-b border-outline-variant/10 hover:bg-surface-container-low/50">
+          <td class="py-2 px-2 text-on-surface text-xs">{{ t.created_at }}</td>
+          <td class="py-2 px-2 text-on-surface max-w-32 truncate" title="{{ t.user_email }}">{{ t.user_email }}</td>
+          <td class="py-2 px-2 text-on-surface-variant">{{ t.product }}</td>
+          <td class="py-2 px-2 text-right la-accent font-semibold">{{ "%.2f"|format(t.amount_eur) }} €</td>
+          <td class="py-2 px-2"><span class="{% if t.status == 'completed' %}text-emerald-700 font-semibold{% elif t.status == 'failed' %}text-red-600 font-semibold{% else %}text-amber-700 font-semibold{% endif %}">{{ t.status }}</span></td>
         </tr>
         {% else %}
-        <tr><td colspan="5" class="py-4 text-slate-500">İşlem yok.</td></tr>
+        <tr><td colspan="5" class="py-4 text-center text-on-surface-variant">İşlem yok.</td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -183,7 +167,7 @@
 </div>
 
 <div id="la-data" data-period="{{ period_minutes }}" style="display:none;"></div>
-<p class="la-updated">Son güncelleme: <strong id="la-last-updated">{{ last_updated_display }}</strong> (UTC)</p>
+<p class="text-sm text-on-surface-variant">Son güncelleme: <strong class="text-on-surface" id="la-last-updated">{{ last_updated_display }}</strong> (UTC)</p>
 
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
@@ -199,8 +183,8 @@
   if (!Array.isArray(trafficData)) trafficData = [];
 
   var teal = '#0EA5A4';
-  var gridColor = 'rgba(71, 85, 105, 0.4)';
-  var tickColor = '#94a3b8';
+  var gridColor = 'rgba(109, 122, 121, 0.18)';
+  var tickColor = '#3d4949';
 
   function getCurrentPeriod() {
     var el = document.getElementById('la-data');
@@ -250,12 +234,12 @@
       type: 'doughnut',
       data: {
         labels: labels,
-        datasets: [{ data: values, backgroundColor: colors, borderColor: 'rgba(15, 23, 42, 0.9)', borderWidth: 2 }]
+        datasets: [{ data: values, backgroundColor: colors, borderColor: '#ffffff', borderWidth: 2 }]
       },
       options: {
         responsive: true,
         maintainAspectRatio: false,
-        plugins: { legend: { position: 'bottom', labels: { color: tickColor, padding: 12 } } },
+        plugins: { legend: { position: 'bottom', labels: { color: tickColor, padding: 12, font: { size: 11 } } } },
         cutout: '58%'
       }
     });
@@ -281,32 +265,32 @@
     var countryBody = id('la-by-country-body');
     if (countryBody && Array.isArray(data.by_country)) {
       if (data.by_country.length === 0) {
-        countryBody.innerHTML = '<tr><td colspan="2" class="py-4 text-slate-500">Veri yok.</td></tr>';
+        countryBody.innerHTML = '<tr><td colspan="2" class="py-4 text-center text-on-surface-variant">Veri yok.</td></tr>';
       } else {
         countryBody.innerHTML = data.by_country.map(function(r) {
-          return '<tr class="border-b border-slate-700/50"><td class="py-2 pr-2 text-slate-200">' + (r.country || '?') + '</td><td class="py-2 text-right la-accent font-semibold">' + (r.count || 0) + '</td></tr>';
+          return '<tr class="border-b border-outline-variant/10 hover:bg-surface-container-low/50"><td class="py-2 px-2 text-on-surface">' + (r.country || '?') + '</td><td class="py-2 px-2 text-right la-accent font-semibold">' + (r.count || 0) + '</td></tr>';
         }).join('');
       }
     }
     var countryCityBody = id('la-by-country-city-body');
     if (countryCityBody && Array.isArray(data.by_country_city)) {
       if (data.by_country_city.length === 0) {
-        countryCityBody.innerHTML = '<tr><td colspan="3" class="py-4 text-slate-500">Veri yok.</td></tr>';
+        countryCityBody.innerHTML = '<tr><td colspan="3" class="py-4 text-center text-on-surface-variant">Veri yok.</td></tr>';
       } else {
         countryCityBody.innerHTML = data.by_country_city.map(function(r) {
-          return '<tr class="border-b border-slate-700/50"><td class="py-2 pr-2 text-slate-200">' + (r.country || '?') + '</td><td class="py-2 pr-2 text-slate-300">' + (r.city || '—') + '</td><td class="py-2 text-right la-accent font-semibold">' + (r.count || 0) + '</td></tr>';
+          return '<tr class="border-b border-outline-variant/10 hover:bg-surface-container-low/50"><td class="py-2 px-2 text-on-surface">' + (r.country || '?') + '</td><td class="py-2 px-2 text-on-surface-variant">' + (r.city || '—') + '</td><td class="py-2 px-2 text-right la-accent font-semibold">' + (r.count || 0) + '</td></tr>';
         }).join('');
       }
     }
     var txBody = id('la-last-transactions');
     if (txBody && Array.isArray(data.last_transactions)) {
-      var statusClass = function(s) { return s === 'completed' ? 'text-green-400' : (s === 'failed' ? 'text-red-400' : 'text-amber-400'); };
+      var statusClass = function(s) { return s === 'completed' ? 'text-emerald-700 font-semibold' : (s === 'failed' ? 'text-red-600 font-semibold' : 'text-amber-700 font-semibold'); };
       if (data.last_transactions.length === 0) {
-        txBody.innerHTML = '<tr><td colspan="5" class="py-4 text-slate-500">İşlem yok.</td></tr>';
+        txBody.innerHTML = '<tr><td colspan="5" class="py-4 text-center text-on-surface-variant">İşlem yok.</td></tr>';
       } else {
         txBody.innerHTML = data.last_transactions.map(function(t) {
           var amt = (t.amount_eur != null ? Number(t.amount_eur).toFixed(2) : '0.00') + ' €';
-          return '<tr class="border-b border-slate-700/50"><td class="py-2 pr-2 text-slate-200">' + (t.created_at || '-') + '</td><td class="py-2 pr-2 text-slate-200 max-w-32 truncate" title="' + (t.user_email || '').replace(/"/g, '&quot;') + '">' + (t.user_email || '-') + '</td><td class="py-2 pr-2 text-slate-300">' + (t.product || '-') + '</td><td class="py-2 text-right la-accent font-semibold">' + amt + '</td><td class="py-2"><span class="' + statusClass(t.status) + '">' + (t.status || '') + '</span></td></tr>';
+          return '<tr class="border-b border-outline-variant/10 hover:bg-surface-container-low/50"><td class="py-2 px-2 text-on-surface text-xs">' + (t.created_at || '-') + '</td><td class="py-2 px-2 text-on-surface max-w-32 truncate" title="' + (t.user_email || '').replace(/"/g, '&quot;') + '">' + (t.user_email || '-') + '</td><td class="py-2 px-2 text-on-surface-variant">' + (t.product || '-') + '</td><td class="py-2 px-2 text-right la-accent font-semibold">' + amt + '</td><td class="py-2 px-2"><span class="' + statusClass(t.status) + '">' + (t.status || '') + '</span></td></tr>';
         }).join('');
       }
     }

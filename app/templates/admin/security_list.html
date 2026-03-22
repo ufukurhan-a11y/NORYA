@@ -1,42 +1,45 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Güvenlik - Norya Admin{% endblock %}
+{% block admin_header_title %}Güvenlik{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold text-white mb-4">Güvenlik Paneli</h1>
-<p class="text-slate-400 text-sm mb-4">Başarısız girişler, rate limit ve şüpheli aktiviteler.</p>
-<div class="flex gap-2 mb-4">
-  <a href="/admin/security" class="px-3 py-1.5 rounded {% if not event_filter %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Tümü</a>
-  <a href="/admin/security?event=failed_login" class="px-3 py-1.5 rounded {% if event_filter == 'failed_login' %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Başarısız giriş</a>
-  <a href="/admin/security?event=rate_limit" class="px-3 py-1.5 rounded {% if event_filter == 'rate_limit' %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Rate limit</a>
-  <a href="/admin/security?event=suspicious" class="px-3 py-1.5 rounded {% if event_filter == 'suspicious' %}bg-brand text-white{% else %}bg-slate-700 text-slate-300{% endif %}">Şüpheli</a>
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-1">Güvenlik paneli</h2>
+<p class="text-on-surface-variant text-sm mb-6">Başarısız girişler, rate limit ve şüpheli aktiviteler.</p>
+<div class="flex flex-wrap gap-2 mb-6">
+  <a href="/admin/security" class="px-3 py-1.5 rounded-full text-sm font-medium {% if not event_filter %}bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">Tümü</a>
+  <a href="/admin/security?event=failed_login" class="px-3 py-1.5 rounded-full text-sm font-medium {% if event_filter == 'failed_login' %}bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">Başarısız giriş</a>
+  <a href="/admin/security?event=rate_limit" class="px-3 py-1.5 rounded-full text-sm font-medium {% if event_filter == 'rate_limit' %}bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">Rate limit</a>
+  <a href="/admin/security?event=suspicious" class="px-3 py-1.5 rounded-full text-sm font-medium {% if event_filter == 'suspicious' %}bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">Şüpheli</a>
 </div>
-<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-  <table class="w-full text-sm">
-    <thead>
-      <tr class="text-left text-slate-400 border-b border-slate-700">
-        <th class="px-4 py-2">ID</th>
-        <th class="px-4 py-2">Tarih</th>
-        <th class="px-4 py-2">Event</th>
-        <th class="px-4 py-2">user_id</th>
-        <th class="px-4 py-2">IP</th>
-        <th class="px-4 py-2">Endpoint</th>
-        <th class="px-4 py-2">Detay</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for s in logs %}
-      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
-        <td class="px-4 py-2">{{ s.id }}</td>
-        <td class="px-4 py-2">{{ s.created_at }}</td>
-        <td class="px-4 py-2"><span class="{% if s.event == 'failed_login' %}text-red-400{% elif s.event == 'rate_limit' %}text-amber-400{% else %}text-orange-400{% endif %}">{{ s.event }}</span></td>
-        <td class="px-4 py-2">{{ s.user_id or '-' }}</td>
-        <td class="px-4 py-2 font-mono">{{ s.ip }}</td>
-        <td class="px-4 py-2">{{ s.endpoint }}</td>
-        <td class="px-4 py-2 truncate max-w-xs">{{ s.detail }}</td>
-      </tr>
-      {% else %}
-      <tr><td colspan="7" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden border border-[#bcc9c8]/10">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">Tarih</th>
+          <th class="px-5 py-3">Event</th>
+          <th class="px-5 py-3">user_id</th>
+          <th class="px-5 py-3">IP</th>
+          <th class="px-5 py-3">Endpoint</th>
+          <th class="px-5 py-3">Detay</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for s in logs %}
+        <tr class="border-b border-outline-variant/15 hover:bg-surface-container-low/60 transition-colors">
+          <td class="px-5 py-3 text-on-surface">{{ s.id }}</td>
+          <td class="px-5 py-3 text-on-surface">{{ s.created_at }}</td>
+          <td class="px-5 py-3"><span class="{% if s.event == 'failed_login' %}text-red-600 font-semibold{% elif s.event == 'rate_limit' %}text-amber-700 font-semibold{% else %}text-orange-700 font-semibold{% endif %}">{{ s.event }}</span></td>
+          <td class="px-5 py-3 text-on-surface">{{ s.user_id or '-' }}</td>
+          <td class="px-5 py-3 font-mono text-xs text-on-surface">{{ s.ip }}</td>
+          <td class="px-5 py-3 text-on-surface text-xs">{{ s.endpoint }}</td>
+          <td class="px-5 py-3 text-on-surface-variant truncate max-w-xs">{{ s.detail }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="7" class="px-5 py-8 text-center text-on-surface-variant">Kayıt yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

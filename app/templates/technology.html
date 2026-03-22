@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html class="light scroll-smooth" lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Technology | NoryaAI Clinical Grade Intelligence</title>
+<meta name="description" content="From Raw Data to Clinical Clarity. NoryaAI transforms complex lab results into readable, actionable summaries with doctor-ready briefings."/>
+<link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+<link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+<link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+<link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script>
+tailwind.config = {
+  darkMode: "class",
+  theme: {
+    extend: {
+      colors: {
+        "primary": "#006a69", "primary-container": "#0ea5a4", "on-primary": "#ffffff",
+        "on-primary-container": "#003333", "on-surface": "#191c1d", "on-surface-variant": "#3d4949",
+        "surface": "#f8f9fa", "surface-container-low": "#f3f4f5", "surface-container-lowest": "#ffffff",
+        "surface-container-high": "#e7e8e9", "surface-container": "#edeeef", "surface-dim": "#d9dadb",
+        "surface-bright": "#f8f9fa", "surface-variant": "#e1e3e4",
+        "outline-variant": "#bcc9c8", "outline": "#6d7a79",
+        "inverse-primary": "#5ed9d7", "inverse-surface": "#2e3132",
+        "tertiary": "#006a63", "tertiary-container": "#37a49a",
+        "error": "#ba1a1a", "error-container": "#ffdad6",
+        "secondary": "#4f5e7e", "secondary-container": "#cadaff",
+        "secondary-fixed": "#d7e2ff", "on-secondary-fixed": "#091b37"
+      },
+      fontFamily: { "headline": ["Manrope"], "body": ["Inter"], "label": ["Inter"] },
+      borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
+    },
+  },
+}
+</script>
+<style>
+body { font-family: 'Inter', sans-serif; background-color: #f8f9fa; color: #191c1d; }
+.font-headline { font-family: 'Manrope', sans-serif; }
+.material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+.ambient-card { box-shadow: 0 12px 40px rgba(25, 28, 29, 0.04); }
+.dotted-pattern { background-image: radial-gradient(#6d7a79 0.5px, transparent 0.5px); background-size: 24px 24px; opacity: 0.1; }
+</style>
+</head>
+<body class="bg-surface selection:bg-primary-container/20">
+<!-- Nav -->
+<nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
+<div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
+<div class="flex items-center gap-8">
+<a href="/" class="flex items-center gap-2">
+<img alt="NoryaAI" class="h-8 w-auto" src="/static/norya_logo_transparent_trim.png"/>
+<span class="text-2xl font-bold tracking-tighter text-[#191c1d]">NoryaAI</span>
+</a>
+<div class="hidden md:flex gap-6 font-headline font-medium text-sm tracking-tight">
+<a class="text-slate-600 hover:text-[#006a69] transition-colors" href="/">Analysis</a>
+<a class="text-[#006a69] font-semibold border-b-2 border-[#006a69] pb-1" href="/technology">Technology</a>
+<a class="text-slate-600 hover:text-[#006a69] transition-colors" href="/science">Science</a>
+<a class="text-slate-600 hover:text-[#006a69] transition-colors" href="/pricing">Pricing</a>
+</div>
+</div>
+<div class="flex items-center gap-4">
+<a href="/#analyze" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full font-headline font-bold text-sm transition-transform active:scale-95">
+Get Started
+</a>
+</div>
+</div>
+</nav>
+
+<main class="pt-24">
+<!-- Hero -->
+<section class="relative px-8 py-24 md:py-32 max-w-7xl mx-auto overflow-hidden">
+<div class="absolute inset-0 dotted-pattern -z-10"></div>
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+<div class="lg:col-span-7">
+<span class="inline-block px-4 py-1.5 rounded-full bg-secondary-fixed text-on-secondary-fixed text-xs font-bold tracking-widest uppercase mb-6">Analysis Intelligence</span>
+<h1 class="text-5xl md:text-7xl font-headline font-extrabold tracking-tighter leading-[0.9] text-on-surface mb-8">
+From Raw Data to <span class="text-primary">Clinical Clarity</span>.
+</h1>
+<p class="text-xl text-outline leading-relaxed max-w-xl mb-10">
+NoryaAI transforms complex lab results into readable, actionable summaries. We decode the language of your blood to provide the insights your doctor needs.
+</p>
+<div class="flex flex-wrap gap-4">
+<a href="/#analyze" class="px-8 py-4 bg-primary text-on-primary rounded-full font-headline font-bold hover:shadow-lg transition-all">Start Your Analysis</a>
+<a href="/#sample-report" class="px-8 py-4 border border-outline-variant/30 text-on-surface rounded-full font-headline font-bold hover:bg-surface-container-low transition-all">View Sample Report</a>
+</div>
+</div>
+<div class="lg:col-span-5 relative">
+<div class="bg-surface-container-lowest ambient-card rounded-3xl p-6 border border-outline-variant/10">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline font-bold text-lg">Biomarker Synthesis</h3>
+<span class="material-symbols-outlined text-primary">analytics</span>
+</div>
+<div class="space-y-4">
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary w-3/4"></div>
+</div>
+<div class="flex justify-between text-xs font-medium text-outline">
+<span>Glucose (HbA1c)</span>
+<span class="text-primary">Optimal 5.2%</span>
+</div>
+<div class="h-2 w-full bg-surface-container rounded-full overflow-hidden">
+<div class="h-full bg-primary-container w-1/2"></div>
+</div>
+<div class="flex justify-between text-xs font-medium text-outline">
+<span>Vitamin D</span>
+<span class="text-secondary">Low 24 ng/mL</span>
+</div>
+</div>
+<div class="mt-8 pt-6 border-t border-outline-variant/10">
+<p class="text-xs text-outline italic leading-tight">"AI Synthesis identified a subtle trend in metabolic markers over the last 6 months."</p>
+</div>
+</div>
+<div class="absolute -bottom-8 -right-4 bg-surface-bright/80 backdrop-blur-md ambient-card p-4 rounded-2xl border border-outline-variant/20 hidden md:block">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
+<span class="material-symbols-outlined text-primary text-sm">verified_user</span>
+</div>
+<div>
+<p class="text-[10px] uppercase tracking-widest text-outline font-bold">Security Status</p>
+<p class="text-xs font-bold">HIPAA Compliant</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Analysis Journey -->
+<section class="bg-surface-container-low py-32">
+<div class="max-w-7xl mx-auto px-8">
+<div class="mb-20">
+<h2 class="text-3xl md:text-5xl font-headline font-bold tracking-tight text-on-surface mb-4">The Analysis Journey</h2>
+<p class="text-outline max-w-xl">A sophisticated pipeline designed for medical accuracy and absolute privacy.</p>
+</div>
+<div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+<div class="group">
+<div class="text-6xl font-headline font-black text-outline-variant/20 mb-6 group-hover:text-primary/20 transition-colors">01</div>
+<div class="w-12 h-12 bg-white rounded-xl ambient-card flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary">cloud_upload</span>
+</div>
+<h4 class="text-xl font-headline font-bold mb-3">Secure Upload</h4>
+<p class="text-outline text-sm leading-relaxed">Encrypted data transmission with full HIPAA and GDPR compliance. Your health data remains your own.</p>
+</div>
+<div class="group">
+<div class="text-6xl font-headline font-black text-outline-variant/20 mb-6 group-hover:text-primary/20 transition-colors">02</div>
+<div class="w-12 h-12 bg-white rounded-xl ambient-card flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary">psychology</span>
+</div>
+<h4 class="text-xl font-headline font-bold mb-3">AI Synthesis</h4>
+<p class="text-outline text-sm leading-relaxed">Cross-referencing 500+ biomarkers against peer-reviewed clinical data to identify hidden trends.</p>
+</div>
+<div class="group">
+<div class="text-6xl font-headline font-black text-outline-variant/20 mb-6 group-hover:text-primary/20 transition-colors">03</div>
+<div class="w-12 h-12 bg-white rounded-xl ambient-card flex items-center justify-center mb-6">
+<span class="material-symbols-outlined text-primary">medical_services</span>
+</div>
+<h4 class="text-xl font-headline font-bold mb-3">Clinical Curation</h4>
+<p class="text-outline text-sm leading-relaxed">Results are formatted into a professional briefing that is instantly ready for your physician's review.</p>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Bento Features -->
+<section class="py-32 px-8 max-w-7xl mx-auto">
+<div class="grid grid-cols-1 md:grid-cols-12 gap-6 h-auto md:h-[700px]">
+<div class="md:col-span-8 bg-surface-container-lowest ambient-card rounded-3xl p-10 flex flex-col justify-between overflow-hidden relative">
+<div class="relative z-10">
+<span class="text-primary font-headline font-bold text-sm tracking-widest uppercase">Communication</span>
+<h3 class="text-3xl md:text-4xl font-headline font-extrabold mt-4 mb-6">Doctor-Ready Summaries</h3>
+<p class="text-outline max-w-md">Our AI doesn't just give you numbers; it prepares a professional summary. Save time during appointments with clear, medically-formatted briefs.</p>
+</div>
+<div class="mt-12 bg-surface-container-low rounded-2xl p-6 border border-outline-variant/10 transform translate-y-4">
+<div class="flex items-center gap-4 mb-4">
+<div class="w-10 h-10 rounded-full bg-primary"></div>
+<div>
+<p class="text-sm font-bold">Clinical Insight #042</p>
+<p class="text-xs text-outline">Patient: Sample &bull; Jan 2025</p>
+</div>
+</div>
+<div class="space-y-2">
+<div class="h-3 w-3/4 bg-outline-variant/20 rounded"></div>
+<div class="h-3 w-full bg-outline-variant/20 rounded"></div>
+<div class="h-3 w-2/3 bg-outline-variant/20 rounded"></div>
+</div>
+</div>
+</div>
+<div class="md:col-span-4 bg-primary text-on-primary rounded-3xl p-10 flex flex-col justify-center items-center text-center overflow-hidden">
+<span class="material-symbols-outlined text-5xl mb-6">language</span>
+<h3 class="text-2xl font-headline font-bold mb-4">Global Intelligence</h3>
+<p class="text-on-primary/80 text-sm mb-8">Clinical analysis available in 9 languages for universal health equity.</p>
+<div class="flex flex-wrap justify-center gap-2">
+<span class="px-3 py-1 bg-white/10 rounded-md text-xs font-bold uppercase">EN</span>
+<span class="px-3 py-1 bg-white/10 rounded-md text-xs font-bold uppercase">TR</span>
+<span class="px-3 py-1 bg-white/10 rounded-md text-xs font-bold uppercase">DE</span>
+<span class="px-3 py-1 bg-white/10 rounded-md text-xs font-bold uppercase">FR</span>
+<span class="px-3 py-1 bg-white/10 rounded-md text-xs font-bold uppercase">ES</span>
+<span class="px-3 py-1 bg-white/10 rounded-md text-xs font-bold uppercase">IT</span>
+</div>
+</div>
+<div class="md:col-span-12 bg-surface-container-high rounded-3xl p-10 flex flex-col md:flex-row items-center gap-12 overflow-hidden">
+<div class="md:w-1/2">
+<h3 class="text-3xl font-headline font-extrabold mb-4">Longitudinal Tracking</h3>
+<p class="text-outline">One blood test is a snapshot. Ten years of blood tests is a story. NoryaAI visualizes your health trajectory over time to predict and prevent.</p>
+<div class="mt-8 flex gap-4">
+<div class="flex flex-col">
+<span class="text-2xl font-bold font-headline">14.2%</span>
+<span class="text-xs uppercase text-outline font-bold">Improvement</span>
+</div>
+<div class="w-px h-10 bg-outline-variant/30"></div>
+<div class="flex flex-col">
+<span class="text-2xl font-bold font-headline">500+</span>
+<span class="text-xs uppercase text-outline font-bold">Data Points</span>
+</div>
+</div>
+</div>
+<div class="md:w-1/2 w-full h-48 bg-surface-container-lowest rounded-2xl flex items-end justify-between p-6 gap-2">
+<div class="w-full bg-primary/20 h-[20%] rounded-t-lg"></div>
+<div class="w-full bg-primary/30 h-[40%] rounded-t-lg"></div>
+<div class="w-full bg-primary/40 h-[35%] rounded-t-lg"></div>
+<div class="w-full bg-primary/50 h-[60%] rounded-t-lg"></div>
+<div class="w-full bg-primary/60 h-[55%] rounded-t-lg"></div>
+<div class="w-full bg-primary h-[90%] rounded-t-lg"></div>
+</div>
+</div>
+</div>
+</section>
+
+<!-- Trust -->
+<section class="py-24 border-t border-outline-variant/10">
+<div class="max-w-7xl mx-auto px-8">
+<div class="flex flex-col md:flex-row justify-between items-center gap-12">
+<div class="text-center md:text-left">
+<h4 class="text-sm font-bold uppercase tracking-widest text-outline mb-2">Infrastructure & Trust</h4>
+<p class="font-headline font-bold text-xl">Enterprise-Grade Integrity</p>
+</div>
+<div class="flex flex-wrap justify-center items-center gap-12 grayscale opacity-60">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">cloud</span>
+<span class="font-bold text-xs uppercase">Cloudflare</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="text-xl font-black text-on-surface">PayTR</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">lock</span>
+<span class="font-bold text-xs uppercase">HIPAA Compliant</span>
+</div>
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-3xl">gpp_good</span>
+<span class="font-bold text-xs uppercase">GDPR Protected</span>
+</div>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<!-- Footer -->
+<footer class="w-full pt-24 pb-12 bg-[#f3f4f5]">
+<div class="max-w-7xl mx-auto px-8 grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
+<div class="space-y-6">
+<a href="/" class="flex items-center gap-2">
+<img alt="NoryaAI" class="h-6 w-auto" src="/static/norya_logo_transparent_trim.png"/>
+<span class="text-lg font-bold text-[#191c1d]">NoryaAI</span>
+</a>
+<p class="font-body text-xs uppercase tracking-widest text-slate-500 max-w-sm">
+&copy; 2025 NoryaAI. Clinical Grade Intelligence. Providing laboratory-grade AI analysis for longevity and health optimization.
+</p>
+</div>
+<div class="flex flex-wrap justify-start md:justify-end gap-x-8 gap-y-4 font-body text-xs uppercase tracking-widest text-slate-500">
+<a class="hover:text-[#006a69] transition-colors" href="/legal/gizlilik-politikasi">Privacy Policy</a>
+<a class="hover:text-[#006a69] transition-colors" href="/legal/kullanim-sartlari">Terms of Service</a>
+<a class="hover:text-[#006a69] transition-colors" href="/security">Trust Center</a>
+<a class="hover:text-[#006a69] transition-colors" href="/legal/iletisim">Contact</a>
+</div>
+</div>
+<div class="max-w-7xl mx-auto px-8 mt-16 pt-8 border-t border-outline-variant/10 text-[10px] text-outline/50 flex flex-col md:flex-row justify-between gap-4">
+<p>Designed for informative purposes. Always consult with a licensed healthcare professional before making medical decisions.</p>
+<p>Made with Clinical Precision in EU/TR.</p>
+</div>
+</footer>
+</body>
+</html>

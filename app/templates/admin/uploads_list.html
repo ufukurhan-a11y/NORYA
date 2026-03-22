@@ -1,37 +1,41 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Upload Logları - Norya Admin{% endblock %}
+{% block admin_header_title %}Upload logları{% endblock %}
 {% block content %}
-<h1 class="text-2xl font-semibold text-white mb-4">Dosya Upload Logları</h1>
-<div class="bg-slate-800 rounded-lg border border-slate-700 overflow-hidden">
-  <table class="w-full text-sm">
-    <thead>
-      <tr class="text-left text-slate-400 border-b border-slate-700">
-        <th class="px-4 py-2">ID</th>
-        <th class="px-4 py-2">Tarih</th>
-        <th class="px-4 py-2">user_id</th>
-        <th class="px-4 py-2">Dosya</th>
-        <th class="px-4 py-2">Boyut</th>
-        <th class="px-4 py-2">Durum</th>
-        <th class="px-4 py-2">Süre (ms)</th>
-        <th class="px-4 py-2">Hata</th>
-      </tr>
-    </thead>
-    <tbody>
-      {% for u in uploads %}
-      <tr class="border-b border-slate-700/50 hover:bg-slate-700/30">
-        <td class="px-4 py-2">{{ u.id }}</td>
-        <td class="px-4 py-2">{{ u.created_at }}</td>
-        <td class="px-4 py-2">{{ u.user_id or '-' }}</td>
-        <td class="px-4 py-2">{{ u.filename }}</td>
-        <td class="px-4 py-2">{{ u.file_size_bytes }}</td>
-        <td class="px-4 py-2"><span class="{% if u.status == 'success' %}text-green-400{% elif u.status == 'failed' %}text-red-400{% else %}text-amber-400{% endif %}">{{ u.status }}</span></td>
-        <td class="px-4 py-2">{{ u.duration_ms }}</td>
-        <td class="px-4 py-2 text-red-300 break-words whitespace-pre-wrap max-w-xl" title="{{ u.error_message if u.error_message and u.error_message != '-' else '' }}">{{ u.error_message if u.error_message != '-' else '' }}</td>
-      </tr>
-      {% else %}
-      <tr><td colspan="8" class="px-4 py-4 text-slate-500">Kayıt yok.</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-1">Dosya upload logları</h2>
+<p class="text-on-surface-variant text-sm mb-6">Yüklenen dosyalar, boyut ve sonuç durumu.</p>
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden border border-[#bcc9c8]/10">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">Tarih</th>
+          <th class="px-5 py-3">user_id</th>
+          <th class="px-5 py-3">Dosya</th>
+          <th class="px-5 py-3">Boyut</th>
+          <th class="px-5 py-3">Durum</th>
+          <th class="px-5 py-3">Süre (ms)</th>
+          <th class="px-5 py-3">Hata</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for u in uploads %}
+        <tr class="border-b border-outline-variant/15 hover:bg-surface-container-low/60 transition-colors">
+          <td class="px-5 py-3 text-on-surface">{{ u.id }}</td>
+          <td class="px-5 py-3 text-on-surface">{{ u.created_at }}</td>
+          <td class="px-5 py-3 text-on-surface">{{ u.user_id or '-' }}</td>
+          <td class="px-5 py-3 text-on-surface font-medium">{{ u.filename }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ u.file_size_bytes }}</td>
+          <td class="px-5 py-3"><span class="{% if u.status == 'success' %}text-emerald-700 font-semibold{% elif u.status == 'failed' %}text-red-600 font-semibold{% else %}text-amber-700 font-semibold{% endif %}">{{ u.status }}</span></td>
+          <td class="px-5 py-3 text-on-surface">{{ u.duration_ms }}</td>
+          <td class="px-5 py-3 text-red-700 break-words whitespace-pre-wrap max-w-md text-xs bg-red-50/40">{{ u.error_message if u.error_message and u.error_message != '-' else '' }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="px-5 py-8 text-center text-on-surface-variant">Kayıt yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 {% endblock %}

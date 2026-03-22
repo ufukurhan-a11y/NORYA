@@ -175,3 +175,16 @@ def init_db():
             except Exception:
                 # Mevcut kurulumlarda sütun zaten varsa veya tablo yoksa sessizce devam et
                 pass
+    # Bazı ortamlarda yukarıdaki ALTER sessizce başarısız olabiliyor; şema denetimi ile tamamla
+    if DATABASE_URL.startswith("sqlite"):
+        try:
+            insp = inspect(engine)
+            if insp.has_table("paymentorder"):
+                col_names = {c["name"] for c in insp.get_columns("paymentorder")}
+                if "quantity" not in col_names:
+                    with engine.begin() as conn:
+                        conn.execute(
+                            text("ALTER TABLE paymentorder ADD COLUMN quantity INTEGER DEFAULT 1")
+                        )
+        except Exception:
+            pass
