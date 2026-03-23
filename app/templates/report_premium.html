@@ -37,7 +37,7 @@
             {% if package_tier == 'standard' %}
             {{ label_report_plan_badge_single | default('RAPOR') }}
             {% elif package_tier == 'monthly' %}
-            {{ 'Aylık' if lang == 'tr' else 'Monthly' }}
+            {{ label_monthly_badge }}
             {% else %}
             PREMIUM
             {% endif %}
@@ -50,7 +50,7 @@
           {% if package_tier == 'standard' %}
           {{ label_report_doc_sub_single | default(label_report_doc_sub) }}
           {% elif package_tier == 'monthly' %}
-          {{ 'Takip odaklı aylık rapor formatı' if lang == 'tr' else 'Monthly follow-up report format' }}
+          {{ label_monthly_doc_sub }}
           {% else %}
           {{ label_report_doc_sub }}
           {% endif %}
@@ -62,7 +62,7 @@
         <div><span class="k">{{ label_report_date }}:</span> {{ report_datetime }}</div>
         <div><span class="k">{{ label_report_lang }}:</span> {{ lang|upper }}</div>
         {% if show_qr_verification and verification_code %}
-        <div class="h-verify-code-every-page"><span class="k">{{ label_verify_code | default('Doğrulama', true) }}:</span> {{ verification_code }}</div>
+        <div class="h-verify-code-every-page"><span class="k">{{ label_verify_code | default('Verification', true) }}:</span> {{ verification_code }}</div>
         {% endif %}
       </div>
     </div>
@@ -71,7 +71,7 @@
   <div class="header-divider"></div>
 
   <!-- Tek göstergeler çubuğu: kurumsal, tüm sayfalarda tekrarsız -->
-  <div class="report-legend-strip" role="doc-noteref" aria-label="Rapor göstergesi">
+  <div class="report-legend-strip" role="doc-noteref" aria-label="{{ label_report_legend_aria }}">
     <span class="report-legend-item"><span class="lab-legend-dot lab-card--normal"></span> {{ label_dist_normal }}</span>
     <span class="report-legend-item"><span class="lab-legend-dot lab-card--border"></span> {{ label_dist_borderline }}</span>
     <span class="report-legend-item"><span class="lab-legend-dot lab-card--risk"></span> {{ label_dist_attention }}</span>
@@ -90,7 +90,7 @@
         <div class="sec-title">
           {% if report_icons %}<span class="sec-icon-wrap">{{ report_icons.get('file-text', '')|safe }}</span>{% endif %}
           {% if package_tier == 'monthly' %}
-          {{ 'Takip odaklı özet' if lang == 'tr' else 'Tracking summary' }}
+          {{ label_monthly_tracking_summary }}
           {% else %}
           {{ label_report_executive_summary }}
           {% endif %}
@@ -105,14 +105,14 @@
           <div class="health-age-inline"><span class="health-age-label">{{ label_report_health_age }}</span><span class="health-age-sep"> · </span><span class="health-age-value">≈ {{ health_age }}</span></div>
           <p class="health-age-disclaimer">{{ label_report_health_age_disclaimer }}</p>
         </div>
-        <div class="report-meta-line glucose-in-report"><span class="report-meta-label">{% if lang == 'tr' %}Kan şekeri (Glukoz/HbA1c):{% else %}Blood sugar (Glucose/HbA1c):{% endif %}</span> <span class="report-meta-value">{% if has_glucose %}{% if lang == 'tr' %}Raporda var{% else %}In report{% endif %}{% else %}{% if lang == 'tr' %}Raporda yok{% else %}Not in report{% endif %}{% endif %}</span></div>
+        <div class="report-meta-line glucose-in-report"><span class="report-meta-label">{{ label_glucose_label }}:</span> <span class="report-meta-value">{% if has_glucose %}{{ label_glucose_in_report_yes }}{% else %}{{ label_glucose_in_report_no }}{% endif %}</span></div>
       </section>
     </div>
 
     {% if package_tier == 'monthly' %}
     <section class="card monthly-tracking-section">
       <div class="sec-title">
-        {{ 'Önümüzdeki 2–4 haftada izlenecek hedefler' if lang == 'tr' else 'Targets for the next 2–4 weeks' }}
+        {{ label_monthly_targets_title }}
       </div>
 
       <ul class="bullets">
@@ -125,7 +125,7 @@
       </ul>
 
       <div class="monthly-subtitle">
-        {{ 'Haftalık hedefler' if lang == 'tr' else 'Weekly targets' }}
+        {{ label_monthly_weekly_targets }}
       </div>
       <ul class="bullets">
         {% for t in (monthly_weekly_targets or [])[:4] %}
@@ -134,7 +134,7 @@
       </ul>
 
       <div class="monthly-subtitle">
-        {{ 'Tekrar test / kontrol önerisi' if lang == 'tr' else 'Repeat test / follow-up suggestion' }}
+        {{ label_monthly_repeat_test_suggestion }}
       </div>
       <div class="monthly-control-note">
         {{ monthly_control_recommendation }}
@@ -219,16 +219,16 @@
     {% if package_tier == 'premium' and weekly_diet_plan %}
     <section class="card weekly-diet-plan-section">
       <div class="sec-title">
-        {{ 'Premium 1 haftalık diyet planı' if lang == 'tr' else 'Premium 1-week diet plan' }}
+        {{ label_premium_weekly_diet_plan }}
       </div>
       <div class="weekly-diet-plan">
         {% for d in weekly_diet_plan %}
         <div class="diet-day">
           <div class="diet-day-title">{{ d.day }}</div>
-          <div class="diet-meal"><span class="diet-meal-label">{{ 'Kahvaltı' if lang == 'tr' else 'Breakfast' }}:</span> {{ d.breakfast }}</div>
-          <div class="diet-meal"><span class="diet-meal-label">{{ 'Öğle' if lang == 'tr' else 'Lunch' }}:</span> {{ d.lunch }}</div>
-          <div class="diet-meal"><span class="diet-meal-label">{{ 'Akşam' if lang == 'tr' else 'Dinner' }}:</span> {{ d.dinner }}</div>
-          <div class="diet-meal"><span class="diet-meal-label">{{ 'Ara öğün' if lang == 'tr' else 'Snack' }}:</span> {{ d.snack }}</div>
+          <div class="diet-meal"><span class="diet-meal-label">{{ label_meal_breakfast }}:</span> {{ d.breakfast }}</div>
+          <div class="diet-meal"><span class="diet-meal-label">{{ label_meal_lunch }}:</span> {{ d.lunch }}</div>
+          <div class="diet-meal"><span class="diet-meal-label">{{ label_meal_dinner }}:</span> {{ d.dinner }}</div>
+          <div class="diet-meal"><span class="diet-meal-label">{{ label_meal_snack }}:</span> {{ d.snack }}</div>
         </div>
         {% endfor %}
       </div>
@@ -238,13 +238,13 @@
     {% if package_tier == 'premium' %}
     <section class="card premium-support-section">
       <div class="sec-title">
-        {{ 'Premium Destek & Tekrar Test Notları' if lang == 'tr' else 'Premium Support & Repeat Test Notes' }}
+        {{ label_premium_support_repeat_notes_title }}
       </div>
 
       <div class="premium-support-grid">
         <div class="premium-support-block">
           <div class="premium-support-subtitle">
-            {{ 'Takviye / destek notları' if lang == 'tr' else 'Support & supplement notes' }}
+            {{ label_premium_support_supp_notes }}
           </div>
           <ul class="bullets">
             {% for n in (premium_supplement_notes or [])[:3] %}
@@ -255,7 +255,7 @@
 
         <div class="premium-support-block">
           <div class="premium-support-subtitle">
-            {{ 'Tekrar test notları' if lang == 'tr' else 'Repeat test notes' }}
+            {{ label_premium_support_repeat_test_notes }}
           </div>
           <ul class="bullets">
             {% for n in (premium_repeat_test_notes or [])[:3] %}
@@ -266,7 +266,7 @@
 
         <div class="premium-support-block">
           <div class="premium-support-subtitle">
-            {{ 'Yaşam tarzı notları' if lang == 'tr' else 'Lifestyle notes' }}
+            {{ label_premium_support_lifestyle_notes }}
           </div>
           <ul class="bullets">
             {% for n in (premium_lifestyle_notes or [])[:3] %}
@@ -324,15 +324,15 @@
     {% endif %}
     </section>
     {% if show_qr_verification and (verification_code or qr_image_base64) %}
-    <section class="card verification-box" aria-label="{{ label_report_verification_title | default('Rapor Doğrulama', true) }}">
-      <div class="sec-title">{{ label_report_verification_title | default('Rapor Doğrulama', true) }}</div>
+    <section class="card verification-box" aria-label="{{ label_report_verification_title | default('Report Verification', true) }}">
+      <div class="sec-title">{{ label_report_verification_title | default('Report Verification', true) }}</div>
       <div class="verification-box-inner">
         <div class="verification-box-content">
           {% if qr_image_base64 %}
-          <img class="verification-qr" src="data:image/png;base64,{{ qr_image_base64 }}" alt="QR Doğrula" width="64" height="64" />
+          <img class="verification-qr" src="data:image/png;base64,{{ qr_image_base64 }}" alt="{{ label_qr_verify_alt }}" width="64" height="64" />
           {% endif %}
           <div class="verification-meta">
-            <div class="verification-code-line"><span class="k">{{ label_verify_code | default('Doğrulama', true) }}:</span> {{ verification_code }}</div>
+            <div class="verification-code-line"><span class="k">{{ label_verify_code | default('Verification', true) }}:</span> {{ verification_code }}</div>
           </div>
         </div>
       </div>
@@ -354,9 +354,9 @@
     <img class="pdf-footer-logo" src="{{ logo_url }}" alt="Norya" />
     {% endif %}
     <span class="pdf-footer-text" style="white-space: nowrap;">{{ label_report_footer }}</span>
-    <span class="pdf-footer-rid" style="white-space: nowrap;">Rapor No: {{ rid }}</span>
+    <span class="pdf-footer-rid" style="white-space: nowrap;">{{ label_footer_report_no }}: {{ rid }}</span>
     {% if show_qr_verification and verification_code %}
-    <span class="pdf-footer-verify" style="white-space: nowrap;">Doğrulama: {{ verification_code }}</span>
+    <span class="pdf-footer-verify" style="white-space: nowrap;">{{ label_footer_verification }}: {{ verification_code }}</span>
     {% endif %}
   </footer>
 </body>
