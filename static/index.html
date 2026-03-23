@@ -206,14 +206,13 @@
     }
     /* 768px altı: mobil header taşmasın, sadece logo + hamburger */
     @media (max-width: 767px) {
-      .header { overflow-x: hidden !important; }
-      .header-inner { overflow-x: hidden !important; justify-content: space-between; align-items: center; }
+      .header-inner { justify-content: space-between; align-items: center; }
     }
     @media (max-width: 640px) {
       html { overflow-x: hidden !important; width: 100% !important; max-width: 100% !important; }
       body { overflow-x: hidden !important; overflow-wrap: break-word; width: 100% !important; max-width: 100% !important; }
       body > header, body > section, body > aside, body > footer, body > div { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
-      .header { width: 100% !important; max-width: 100% !important; min-width: 0 !important; overflow-x: clip !important; }
+      .header { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .header-inner { width: 100% !important; max-width: 100% !important; min-width: 0 !important; padding-left: 12px !important; padding-right: 12px !important; padding-left: max(12px, env(safe-area-inset-left)) !important; padding-right: max(12px, env(safe-area-inset-right)) !important; box-sizing: border-box !important; flex-wrap: nowrap !important; }
       .header .header-right-zone, .header .right-zone, .header .nav-actions { min-width: 0 !important; max-width: none !important; flex-shrink: 0 !important; }
       .header .elite-cta-btn, .header .primary-cta, .header .secondary-link, .header button { max-width: 100% !important; }
@@ -1840,6 +1839,7 @@
       color: #0f172a;
       font-size: 0.875rem;
       font-weight: 500;
+      cursor: pointer;
       transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease, background 150ms ease;
     }
     .dark .lang-trigger-btn,
@@ -1883,77 +1883,11 @@
       font-size: 0.7rem;
       opacity: 0.7;
     }
-    .lang-native-wrap {
-      position: relative;
-      display: inline-flex;
-      align-items: center;
-      justify-content: flex-start;
-      min-width: 94px;
-      height: 38px;
-      border-radius: 12px;
-      border: 1px solid rgba(14,165,164,0.18);
-      background: linear-gradient(180deg, rgba(255,255,255,0.97), rgba(248,252,252,0.94));
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      box-shadow: 0 2px 8px rgba(15,23,42,0.06), 0 1px 2px rgba(15,23,42,0.04), inset 0 1px 0 rgba(255,255,255,0.85);
-      transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
-      cursor: pointer;
-    }
-    .lang-shell-icon { margin-left: 12px; font-size: 0.92rem; opacity: 0.85; pointer-events: none; }
-    .lang-shell-code { margin-left: 8px; font-size: 0.82rem; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #0f172a; pointer-events: none; }
-    .lang-shell-chevron { margin-left: 6px; margin-right: 12px; font-size: 0.65rem; color: #64748b; opacity: 0.7; pointer-events: none; }
-    .lang-native-wrap:hover {
-      transform: translateY(-1px);
-      border-color: rgba(14,165,164,0.30);
-      box-shadow: 0 4px 14px rgba(15,23,42,0.08), 0 1px 3px rgba(15,23,42,0.05), inset 0 1px 0 rgba(255,255,255,0.8);
-    }
-    .dark .lang-native-wrap {
-      background: linear-gradient(180deg, rgba(15,23,42,0.94), rgba(15,23,42,0.9));
-      border-color: rgba(148,163,184,0.3);
-      box-shadow: 0 10px 24px rgba(2,6,23,0.45), inset 0 1px 0 rgba(255,255,255,0.03);
-    }
-    .dark .lang-native-wrap:hover {
-      background: linear-gradient(180deg, rgba(15,23,42,0.97), rgba(15,23,42,0.94));
-      border-color: rgba(45,212,191,0.4);
-    }
-    .dark .lang-shell-code { color: #e5e7eb; }
-    .dark .lang-shell-chevron { color: #cbd5e1; }
-    .lang-native-overlay {
-      position: absolute;
-      inset: 0;
-      width: 100% !important;
-      height: 100% !important;
-      min-width: 100% !important;
-      max-width: 100% !important;
-      opacity: 0;
-      cursor: pointer;
-      z-index: 3;
-      border: 0;
-      margin: 0;
-      padding: 0;
-      appearance: none;
-      -webkit-appearance: none;
-      -moz-appearance: none;
-      background: transparent;
-    }
-    .lang-native-overlay:focus {
-      outline: none;
-    }
-    .lang-native-overlay:focus + .lang-shell-icon,
-    .lang-native-wrap:focus-within {
-      box-shadow: 0 0 0 2.5px rgba(14,165,164,0.18);
-    }
-    .lang-native-overlay option {
-      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-      font-weight: 500;
-      font-size: 0.92rem;
-      line-height: 1.6;
-      padding: 10px 14px;
-      letter-spacing: 0.01em;
-    }
-    /* Desktop dropdown — overlay, rafine panel (aynı tasarım ailesi) */
+    .language-switch { position: relative; }
+    /* Dropdown panel */
     #langMenu,
-    #base-lang-menu {
+    #base-lang-menu,
+    #base-lang-menu-mobile {
       position: absolute;
       top: calc(100% + 8px);
       right: 0;
@@ -1975,16 +1909,19 @@
     #langMenu::before,
     #langMenu::after,
     #base-lang-menu::before,
-    #base-lang-menu::after {
+    #base-lang-menu::after,
+    #base-lang-menu-mobile::before,
+    #base-lang-menu-mobile::after {
       pointer-events: none;
     }
     @keyframes langMenuIn {
       from { opacity: 0; transform: translateY(-4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* Desktop menu items — düzenli, premium; aktif: hafif tint + küçük check */
+    /* Menu items */
     #langMenu.lang-dropdown-panel .lang-option,
-    #base-lang-menu .header-lang-option {
+    #base-lang-menu .header-lang-option,
+    #base-lang-menu-mobile .header-lang-option {
       display: flex;
       align-items: center;
       justify-content: space-between;
@@ -2000,42 +1937,48 @@
       z-index: 2;
       cursor: pointer;
       pointer-events: auto;
+      border: none;
+      background: transparent;
+      font-size: 0.875rem;
       transition: background 140ms ease, color 140ms ease;
     }
-    #base-lang-details summary::-webkit-details-marker { display: none; }
-    #base-lang-details > #base-lang-menu { display: none; }
-    #base-lang-details[open] > #base-lang-menu { display: block; }
     #langMenu.lang-dropdown-panel .lang-option:hover,
-    #base-lang-menu .header-lang-option:hover {
+    #base-lang-menu .header-lang-option:hover,
+    #base-lang-menu-mobile .header-lang-option:hover {
       background: var(--lang-accent-subtle);
       color: #0f172a;
     }
     #langMenu.lang-dropdown-panel .lang-option.is-active,
-    #base-lang-menu .header-lang-option.is-active {
+    #base-lang-menu .header-lang-option.is-active,
+    #base-lang-menu-mobile .header-lang-option.is-active {
       background: var(--lang-accent-active);
       color: #0f172a;
       font-weight: 600;
     }
     #langMenu.lang-dropdown-panel .lang-option.is-active::after,
-    #base-lang-menu .header-lang-option.is-active::after {
+    #base-lang-menu .header-lang-option.is-active::after,
+    #base-lang-menu-mobile .header-lang-option.is-active::after {
       content: "✓";
       font-size: 0.75rem;
       color: var(--lang-check);
     }
     [dir="rtl"] #langMenu.lang-dropdown-panel .lang-option,
-    [dir="rtl"] #base-lang-menu .header-lang-option {
+    [dir="rtl"] #base-lang-menu .header-lang-option,
+    [dir="rtl"] #base-lang-menu-mobile .header-lang-option {
       text-align: right;
     }
     @media (max-width: 640px) {
       #langMenu,
-      #base-lang-menu {
+      #base-lang-menu,
+      #base-lang-menu-mobile {
         min-width: 200px;
         max-width: calc(100vw - 16px);
         padding: 8px;
         border-radius: 16px;
       }
       #langMenu.lang-dropdown-panel .lang-option,
-      #base-lang-menu .header-lang-option {
+      #base-lang-menu .header-lang-option,
+      #base-lang-menu-mobile .header-lang-option {
         min-height: 40px;
         padding: 9px 10px;
         font-size: 0.9375rem;
@@ -2108,8 +2051,6 @@
       position: sticky; top: 0; z-index: 1001;
       width: 100%;
       max-width: 100%;
-      overflow-x: hidden;
-      overflow-y: visible;
       background: rgba(255,255,255,.78);
       backdrop-filter: blur(10px);
       -webkit-backdrop-filter: blur(10px);
@@ -2143,8 +2084,6 @@
       min-width: 0;
       width: 100%;
       max-width: 100%;
-      overflow-x: clip;
-      overflow-y: visible;
       transition: padding .22s ease;
       box-sizing: border-box;
     }
@@ -3479,6 +3418,49 @@
     }
 
   </style>
+  <script>
+  window._toggleLangDrop = function(menuId, toggleId) {
+    var menu = document.getElementById(menuId);
+    var btn  = document.getElementById(toggleId);
+    if (!menu || !btn) return;
+    var closing = !menu.hidden;
+    document.querySelectorAll('.header-lang-menu').forEach(function(m) {
+      m.hidden = true;
+      m.style.cssText = '';
+    });
+    document.querySelectorAll('.header-lang-toggle').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
+    if (!closing) {
+      var rect = btn.getBoundingClientRect();
+      menu.hidden = false;
+      menu.style.position = 'fixed';
+      menu.style.top = (rect.bottom + 6) + 'px';
+      menu.style.right = (window.innerWidth - rect.right) + 'px';
+      menu.style.left = 'auto';
+      menu.style.zIndex = '99999';
+      btn.setAttribute('aria-expanded', 'true');
+      document.body.appendChild(menu);
+    }
+  };
+  window._pickLang = function(lang) {
+    console.log('[lang-pick]', lang);
+    document.querySelectorAll('.header-lang-menu').forEach(function(m) {
+      m.hidden = true;
+      m.style.cssText = '';
+    });
+    document.querySelectorAll('.header-lang-toggle').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
+    try { document.cookie = 'norya_lang=' + lang + '; path=/; max-age=31536000; samesite=lax'; } catch(_){}
+    window.location.href = '/?lang=' + encodeURIComponent(lang);
+  };
+  document.addEventListener('click', function(e) {
+    if (e.target && e.target.closest && e.target.closest('.header-lang-switch')) return;
+    if (e.target && e.target.closest && e.target.closest('.header-lang-menu')) return;
+    document.querySelectorAll('.header-lang-menu').forEach(function(m) {
+      m.hidden = true;
+      m.style.cssText = '';
+    });
+    document.querySelectorAll('.header-lang-toggle').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
+  });
+  </script>
 </head>
 <body class="font-sans text-accent-800 antialiased bg-[var(--norya-bg)] text-[var(--norya-text)]" id="body-theme">
   <!-- Kaydırırken görünen sabit indirim şeridi (kampanya aktifse) -->
@@ -3533,23 +3515,22 @@
           <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
         </button>
 
-        <div class="relative header-lang-wrap header-desktop-only">
-          <div class="lang-native-wrap">
-            <span class="lang-shell-icon" aria-hidden="true">🌐</span>
-            <span id="lang-shell-desktop" class="lang-shell-code">EN</span>
-            <span class="lang-shell-chevron" aria-hidden="true">▾</span>
-            <label for="lang-native-select-desktop" class="sr-only">Dil seçin</label>
-            <select id="lang-native-select-desktop" data-locale-select class="lang-native-overlay">
-              <option value="tr">🇹🇷  TR · Türkçe</option>
-              <option value="en">🇬🇧  EN · English</option>
-              <option value="es">🇪🇸  ES · Español</option>
-              <option value="de">🇩🇪  DE · Deutsch</option>
-              <option value="fr">🇫🇷  FR · Français</option>
-              <option value="it">🇮🇹  IT · Italiano</option>
-              <option value="he">🇮🇱  HE · עברית</option>
-              <option value="hi">🇮🇳  HI · हिन्दी</option>
-              <option value="ar">🇸🇦  AR · العربية</option>
-            </select>
+        <div class="header-lang-switch language-switch header-desktop-only" aria-label="Language">
+          <button type="button" id="base-lang-toggle" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu','base-lang-toggle')">
+            <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
+            <span class="header-lang-code lang-trigger-code" id="base-lang-current">EN</span>
+            <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
+          </button>
+          <div id="base-lang-menu" class="header-lang-menu" hidden>
+            <a href="/?lang=tr" class="header-lang-option" onclick="window._pickLang('tr');return false">TR</a>
+            <a href="/?lang=en" class="header-lang-option" onclick="window._pickLang('en');return false">EN</a>
+            <a href="/?lang=es" class="header-lang-option" onclick="window._pickLang('es');return false">ES</a>
+            <a href="/?lang=de" class="header-lang-option" onclick="window._pickLang('de');return false">DE</a>
+            <a href="/?lang=fr" class="header-lang-option" onclick="window._pickLang('fr');return false">FR</a>
+            <a href="/?lang=it" class="header-lang-option" onclick="window._pickLang('it');return false">IT</a>
+            <a href="/?lang=he" class="header-lang-option" onclick="window._pickLang('he');return false">HE</a>
+            <a href="/?lang=hi" class="header-lang-option" onclick="window._pickLang('hi');return false">HI</a>
+            <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
           </div>
         </div>
         <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
@@ -3563,22 +3544,23 @@
         </span>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analiz Yap</a>
-        <div class="lang-native-wrap header-mobile-only">
-          <span class="lang-shell-icon" aria-hidden="true">🌐</span>
-          <span id="lang-shell-mobile" class="lang-shell-code">EN</span>
-          <span class="lang-shell-chevron" aria-hidden="true">▾</span>
-          <label for="lang-native-select-mobile" class="sr-only">Dil seçin</label>
-          <select id="lang-native-select-mobile" data-locale-select class="lang-native-overlay">
-            <option value="tr">🇹🇷  TR · Türkçe</option>
-            <option value="en">🇬🇧  EN · English</option>
-            <option value="es">🇪🇸  ES · Español</option>
-            <option value="de">🇩🇪  DE · Deutsch</option>
-            <option value="fr">🇫🇷  FR · Français</option>
-            <option value="it">🇮🇹  IT · Italiano</option>
-            <option value="he">🇮🇱  HE · עברית</option>
-            <option value="hi">🇮🇳  HI · हिन्दी</option>
-            <option value="ar">🇸🇦  AR · العربية</option>
-          </select>
+        <div class="header-lang-switch language-switch header-mobile-only" aria-label="Language">
+          <button type="button" id="base-lang-toggle-mobile" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu-mobile','base-lang-toggle-mobile')">
+            <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
+            <span class="header-lang-code lang-trigger-code" id="base-lang-current-mobile">EN</span>
+            <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
+          </button>
+          <div id="base-lang-menu-mobile" class="header-lang-menu" hidden>
+            <a href="/?lang=tr" class="header-lang-option" onclick="window._pickLang('tr');return false">TR</a>
+            <a href="/?lang=en" class="header-lang-option" onclick="window._pickLang('en');return false">EN</a>
+            <a href="/?lang=es" class="header-lang-option" onclick="window._pickLang('es');return false">ES</a>
+            <a href="/?lang=de" class="header-lang-option" onclick="window._pickLang('de');return false">DE</a>
+            <a href="/?lang=fr" class="header-lang-option" onclick="window._pickLang('fr');return false">FR</a>
+            <a href="/?lang=it" class="header-lang-option" onclick="window._pickLang('it');return false">IT</a>
+            <a href="/?lang=he" class="header-lang-option" onclick="window._pickLang('he');return false">HE</a>
+            <a href="/?lang=hi" class="header-lang-option" onclick="window._pickLang('hi');return false">HI</a>
+            <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
+          </div>
         </div>
       </div>
     </div>
@@ -11841,14 +11823,6 @@
       }
     }
     document.addEventListener('DOMContentLoaded', function () {
-      document.querySelectorAll('select[data-locale-select]').forEach(function(sel) {
-        sel.addEventListener('change', function() {
-          var next = (sel.value || '').toLowerCase().trim();
-          console.log('[lang-flow] native-select-change', next);
-          if (!next) return;
-          if (typeof window.switchLocale === 'function') window.switchLocale(next);
-        });
-      });
 
 
 
@@ -12216,12 +12190,10 @@
       if (headerLabel) headerLabel.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
       var baseCurrent = document.getElementById("base-lang-current");
       if (baseCurrent) baseCurrent.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
-      var shellDesktop = document.getElementById("lang-shell-desktop");
-      if (shellDesktop) shellDesktop.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
-      var shellMobile = document.getElementById("lang-shell-mobile");
-      if (shellMobile) shellMobile.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
-      document.querySelectorAll('select[data-locale-select]').forEach(function(sel) {
-        if ((sel.value || '').toLowerCase() !== lang) sel.value = lang;
+      var baseMobile = document.getElementById("base-lang-current-mobile");
+      if (baseMobile) baseMobile.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
+      document.querySelectorAll('#base-lang-menu .header-lang-option[data-locale], #base-lang-menu-mobile .header-lang-option[data-locale]').forEach(function(btn) {
+        btn.classList.toggle('is-active', btn.getAttribute('data-locale') === lang);
       });
       // Header desktop dropdown: mark active language item
       var headerMenu = document.getElementById("langMenu");
