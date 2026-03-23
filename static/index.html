@@ -2295,7 +2295,7 @@
     @media (min-width: 768px) {
       .hamburger { width: 48px; height: 48px; min-width: 48px; min-height: 48px; }
     }
-    /* Tarayıcı/tablet: hamburger yok; sadece mobil (<=600px) hamburger + drawer */
+    /* Desktop: hamburger gizle; mobile: hamburger göster */
     @media (min-width: 601px) {
       #main-header .hamburger,
       #main-header .header-mobile-only,
@@ -2303,6 +2303,14 @@
       .header .header-mobile-only { display: none !important; visibility: hidden !important; }
     }
     @media (max-width: 600px) {
+      #main-header .hamburger {
+        display: flex !important;
+        visibility: visible !important;
+        width: 40px;
+        height: 40px;
+        min-width: 40px;
+        min-height: 40px;
+      }
       #main-header .header-mobile-only,
       .header .header-mobile-only { display: flex !important; visibility: visible !important; }
     }
@@ -2431,7 +2439,7 @@
       color: rgba(15,23,42,.7);
     }
     .dark .drawer-close { background: rgba(255,255,255,.08); color: rgba(255,255,255,.8); }
-    /* 600px ve altı: sadece logo + hamburger; Giriş/Ücretsiz Başla/dil/CTA drawer'da; 601px+ tam navbar */
+    /* 600px ve altı: logo + auth + hamburger; 601px+ tam navbar */
     .header-desktop-only { display: none !important; }
     @media (min-width: 601px) {
       .header-desktop-only { display: flex !important; }
@@ -2439,6 +2447,30 @@
     .header-desktop-only.inline-items { display: none !important; }
     @media (min-width: 601px) {
       .header-desktop-only.inline-items { display: inline-flex !important; }
+    }
+    /* Mobile: Giriş + Ücretsiz Başla always visible (unless logged in → .hidden) */
+    .header-auth-always {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      flex-shrink: 0;
+    }
+    .header-auth-always.hidden { display: none !important; }
+    @media (max-width: 600px) {
+      .header-auth-always .secondary-link {
+        font-size: 0.8125rem;
+        padding: 6px 10px;
+        border-radius: 10px;
+      }
+      .header-auth-always .secondary-link[data-i18n="nav_register"] {
+        background: linear-gradient(135deg, #0EA5A4, #0B8F8E);
+        color: #fff !important;
+        font-weight: 600;
+        border-radius: 10px;
+        padding: 6px 12px;
+        box-shadow: 0 2px 8px rgba(14,165,164,0.18);
+      }
+      .header-mobile-lang-hide { display: none !important; }
     }
     .header.user-logged-in .header-cta-guest-only { display: none !important; }
     #nav-user.hidden { display: none !important; }
@@ -3533,7 +3565,7 @@
             <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
           </div>
         </div>
-        <span id="nav-auth" class="header-desktop-only inline-items items-center flex-shrink-0 gap-2">
+        <span id="nav-auth" class="header-auth-always items-center flex-shrink-0 gap-2">
           <button type="button" onclick="openLogin()" class="secondary-link" data-i18n="nav_login">Giriş</button>
           <button type="button" onclick="openRegister()" class="secondary-link" data-i18n="nav_register">Ücretsiz Başla</button>
         </span>
@@ -3544,7 +3576,7 @@
         </span>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analiz Yap</a>
-        <div class="header-lang-switch language-switch header-mobile-only" aria-label="Language">
+        <div class="header-lang-switch language-switch header-mobile-only header-mobile-lang-hide" aria-label="Language">
           <button type="button" id="base-lang-toggle-mobile" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu-mobile','base-lang-toggle-mobile')">
             <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
             <span class="header-lang-code lang-trigger-code" id="base-lang-current-mobile">EN</span>
@@ -3562,9 +3594,62 @@
             <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
           </div>
         </div>
+        <button type="button" id="hamburger-btn" class="hamburger" onclick="toggleMobileDrawer()" aria-label="Menüyü aç" aria-expanded="false" aria-controls="mobile-drawer">
+          <span class="hamburger-inner">
+            <span class="hamburger-line hamburger-line--top"></span>
+            <span class="hamburger-line hamburger-line--mid"></span>
+            <span class="hamburger-line hamburger-line--bottom"></span>
+          </span>
+        </button>
       </div>
     </div>
   </header>
+  <!-- Mobile Drawer: premium slide-in -->
+  <div id="mobile-overlay" class="mobile-overlay" onclick="closeMobileDrawer()" aria-hidden="true"></div>
+  <aside id="mobile-drawer" class="mobile-drawer" role="dialog" aria-label="Menü" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <a href="/" class="flex items-center gap-2" aria-label="NoryaAI">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" style="height:28px;width:auto;" width="120" height="30" loading="lazy" />
+      </a>
+      <button type="button" id="drawer-close-btn" onclick="closeMobileDrawer()" class="drawer-close" aria-label="Menüyü kapat">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <a href="#analyze-section" onclick="openAnalyze(); closeMobileDrawer(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
+      <div class="drawer-section drawer-section--nav">
+        <a href="#hakkimizda" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_about">Hakkımızda</a>
+        <a href="/how-it-works" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_how">Nasıl Çalışır</a>
+        <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Yorumlar</a>
+        <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Fiyatlandırma</a>
+        <a href="/kurumsal" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_corporate">Kurumsal</a>
+        <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
+      </div>
+      <div class="drawer-section">
+        <div id="drawer-auth-wrap" style="display:flex;flex-direction:column;gap:0.5rem;">
+          <button type="button" onclick="openLogin(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary" data-i18n="nav_login">Giriş</button>
+          <button type="button" onclick="openRegister(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--cta" data-i18n="nav_register">Ücretsiz Başla</button>
+        </div>
+        <div id="drawer-user-wrap" style="display:none;flex-direction:column;gap:0.5rem;">
+          <button type="button" onclick="openProfile(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary" data-i18n="nav_profile">Profil</button>
+          <button type="button" onclick="logout(); closeMobileDrawer();" class="drawer-link drawer-link--tap" data-i18n="nav_logout">Çıkış</button>
+        </div>
+      </div>
+      <div class="drawer-section drawer-section--footer">
+        <button type="button" onclick="toggleLangModal(); closeMobileDrawer();" class="drawer-link drawer-link--tap" style="gap:0.5rem;">
+          <span aria-hidden="true">🌐</span>
+          <span data-i18n="nav_languages">Diller</span>
+        </button>
+        <button type="button" onclick="document.getElementById('theme-btn').click(); closeMobileDrawer();" class="drawer-link drawer-link--tap" style="gap:0.5rem;">
+          <span aria-hidden="true">🎨</span>
+          <span data-i18n="nav_theme">Tema</span>
+        </button>
+      </div>
+      <div class="drawer-trust-meta">
+        <span data-i18n="drawer_trust">256-bit SSL · KVKK & GDPR uyumlu</span>
+      </div>
+    </div>
+  </aside>
   <!-- DEBUG_FILE: static/index.html v2 -->
   <!-- Global language modal used on mobile "Diller" button and desktop if needed -->
   <div id="lang-wrap" class="fixed inset-0 pointer-events-none hidden">
@@ -4098,8 +4183,8 @@
         <!-- Card 1: Health Score -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4>Sağlık Skoru</h4>
-            <span class="rc-page">Sayfa 1 / 5</span>
+            <h4 data-i18n="rc_health_title">Sağlık Skoru</h4>
+            <span class="rc-page" data-i18n="rc_page_1">Sayfa 1 / 5</span>
           </div>
           <div class="report-card-body" style="text-align:center;">
             <div class="rc-gauge-ring">
@@ -4113,10 +4198,10 @@
               </svg>
             </div>
             <div style="display:flex;justify-content:center;gap:0.75rem;margin-bottom:1rem;">
-              <span class="rc-status normal">● Düşük Risk</span>
+              <span class="rc-status normal" data-i18n="rc_low_risk">● Düşük Risk</span>
             </div>
             <div style="text-align:left;">
-              <p style="font-size:0.8rem;color:#334155;line-height:1.6;margin:0;">
+              <p style="font-size:0.8rem;color:#334155;line-height:1.6;margin:0;" data-i18n="rc_health_desc">
                 Genel sağlık skorunuz 84/100 olarak hesaplandı. Kan değerleriniz büyük ölçüde referans aralıklarında. Vitamin D takviyesi ve düzenli kontrol önerilir.
               </p>
             </div>
@@ -4126,17 +4211,17 @@
         <!-- Card 2: Diabetes & Metabolic Risk -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4>Diyabet &amp; Metabolik Risk</h4>
-            <span class="rc-page">Sayfa 2 / 5</span>
+            <h4 data-i18n="rc_diabetes_title">Diyabet &amp; Metabolik Risk</h4>
+            <span class="rc-page" data-i18n="rc_page_2">Sayfa 2 / 5</span>
           </div>
           <div class="report-card-body">
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.75rem;">
-              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Risk Skoru</span>
+              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_risk_score">Risk Skoru</span>
               <span style="font-size:1.5rem;font-weight:800;color:#22c55e;">28<span style="font-size:0.75rem;color:#94a3b8;font-weight:500;"> / 100</span></span>
             </div>
             <div style="margin-bottom:1.25rem;">
               <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span>Glukoz</span><span style="font-weight:600;">98 mg/dL</span>
+                <span data-i18n="rc_glucose">Glukoz</span><span style="font-weight:600;">98 mg/dL</span>
               </div>
               <div class="rc-bar-track"><div class="rc-bar-fill good" style="width:54%;"></div></div>
             </div>
@@ -4148,13 +4233,13 @@
             </div>
             <div style="margin-bottom:1rem;">
               <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span>İnsülin</span><span style="font-weight:600;">8.2 µIU/mL</span>
+                <span data-i18n="rc_insulin">İnsülin</span><span style="font-weight:600;">8.2 µIU/mL</span>
               </div>
               <div class="rc-bar-track"><div class="rc-bar-fill good" style="width:41%;"></div></div>
             </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <span class="rc-status normal">● Glukoz Normal</span>
-              <span class="rc-status normal">● HbA1c Normal</span>
+              <span class="rc-status normal" data-i18n="rc_glucose_normal">● Glukoz Normal</span>
+              <span class="rc-status normal" data-i18n="rc_hba1c_normal">● HbA1c Normal</span>
             </div>
           </div>
         </div>
@@ -4162,12 +4247,12 @@
         <!-- Card 3: Heart & Lipid Profile -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4>Kalp &amp; Lipid Profili</h4>
-            <span class="rc-page">Sayfa 3 / 5</span>
+            <h4 data-i18n="rc_heart_title">Kalp &amp; Lipid Profili</h4>
+            <span class="rc-page" data-i18n="rc_page_3">Sayfa 3 / 5</span>
           </div>
           <div class="report-card-body">
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.75rem;">
-              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;">Kardiyovasküler Risk</span>
+              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_cardio_risk">Kardiyovasküler Risk</span>
               <span style="font-size:1.5rem;font-weight:800;color:#f59e0b;">42<span style="font-size:0.75rem;color:#94a3b8;font-weight:500;"> / 100</span></span>
             </div>
             <div style="margin-bottom:1.25rem;">
@@ -4184,13 +4269,13 @@
             </div>
             <div style="margin-bottom:1rem;">
               <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span>Trigliserit</span><span style="font-weight:600;">142 mg/dL</span>
+                <span data-i18n="rc_triglyceride">Trigliserit</span><span style="font-weight:600;">142 mg/dL</span>
               </div>
               <div class="rc-bar-track"><div class="rc-bar-fill" style="width:57%;"></div></div>
             </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <span class="rc-status warn">● LDL Sınırda</span>
-              <span class="rc-status normal">● HDL Normal</span>
+              <span class="rc-status warn" data-i18n="rc_ldl_borderline">● LDL Sınırda</span>
+              <span class="rc-status normal" data-i18n="rc_hdl_normal">● HDL Normal</span>
             </div>
           </div>
         </div>
@@ -4198,23 +4283,23 @@
         <!-- Card 4: Biomarker Table -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4>Biyobelirteç Tablosu</h4>
-            <span class="rc-page">Sayfa 4 / 5</span>
+            <h4 data-i18n="rc_biomarker_title">Biyobelirteç Tablosu</h4>
+            <span class="rc-page" data-i18n="rc_page_4">Sayfa 4 / 5</span>
           </div>
           <div class="report-card-body" style="padding:1rem 1.25rem;">
             <div class="rc-table-wrap" role="region" aria-label="Örnek biyobelirteç tablosu" tabindex="0">
               <table class="rc-table">
                 <thead>
-                  <tr><th>Belirteç</th><th>Sonuç</th><th>Referans</th><th>Durum</th></tr>
+                  <tr><th data-i18n="rc_th_marker">Belirteç</th><th data-i18n="rc_th_result">Sonuç</th><th data-i18n="rc_th_reference">Referans</th><th data-i18n="rc_th_status">Durum</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td>Glukoz</td><td>98 mg/dL</td><td>70–100</td><td><span class="rc-status normal">Normal</span></td></tr>
-                  <tr><td>HbA1c</td><td>5.4%</td><td>&lt; 5.7</td><td><span class="rc-status normal">Normal</span></td></tr>
-                  <tr><td>LDL</td><td>128 mg/dL</td><td>&lt; 130</td><td><span class="rc-status warn">Sınırda</span></td></tr>
-                  <tr><td>HDL</td><td>48 mg/dL</td><td>&gt; 40</td><td><span class="rc-status normal">Normal</span></td></tr>
-                  <tr><td>Vit D</td><td>18 ng/mL</td><td>30–100</td><td><span class="rc-status high">Düşük</span></td></tr>
-                  <tr><td>B12</td><td>240 pg/mL</td><td>200–900</td><td><span class="rc-status warn">Sınırda</span></td></tr>
-                  <tr><td>CRP</td><td>2.1 mg/L</td><td>&lt; 5</td><td><span class="rc-status normal">Normal</span></td></tr>
+                  <tr><td data-i18n="rc_glucose">Glukoz</td><td>98 mg/dL</td><td>70–100</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
+                  <tr><td>HbA1c</td><td>5.4%</td><td>&lt; 5.7</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
+                  <tr><td>LDL</td><td>128 mg/dL</td><td>&lt; 130</td><td><span class="rc-status warn" data-i18n="rc_borderline">Sınırda</span></td></tr>
+                  <tr><td>HDL</td><td>48 mg/dL</td><td>&gt; 40</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
+                  <tr><td>Vit D</td><td>18 ng/mL</td><td>30–100</td><td><span class="rc-status high" data-i18n="rc_low">Düşük</span></td></tr>
+                  <tr><td>B12</td><td>240 pg/mL</td><td>200–900</td><td><span class="rc-status warn" data-i18n="rc_borderline">Sınırda</span></td></tr>
+                  <tr><td>CRP</td><td>2.1 mg/L</td><td>&lt; 5</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
                 </tbody>
               </table>
             </div>
@@ -4224,27 +4309,27 @@
         <!-- Card 5: Clinical Summary & Recommendations -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4>Klinik Özet &amp; Öneriler</h4>
-            <span class="rc-page">Sayfa 5 / 5</span>
+            <h4 data-i18n="rc_summary_title">Klinik Özet &amp; Öneriler</h4>
+            <span class="rc-page" data-i18n="rc_page_5">Sayfa 5 / 5</span>
           </div>
           <div class="report-card-body">
-            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.75rem;">Öne Çıkan Bulgular</p>
+            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.75rem;" data-i18n="rc_key_findings">Öne Çıkan Bulgular</p>
             <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.25rem;">
-              <div class="rc-finding">LDL kolesterol referans üst sınırda; beslenme ve aktivite ile takip önerilir.</div>
-              <div class="rc-finding">Vitamin D düşük; güneş ve takviye doktor önerisiyle değerlendirilmeli.</div>
-              <div class="rc-finding">B12 sınırda; beslenme veya takviye hekimle görüşülebilir.</div>
+              <div class="rc-finding" data-i18n="rc_finding_1">LDL kolesterol referans üst sınırda; beslenme ve aktivite ile takip önerilir.</div>
+              <div class="rc-finding" data-i18n="rc_finding_2">Vitamin D düşük; güneş ve takviye doktor önerisiyle değerlendirilmeli.</div>
+              <div class="rc-finding" data-i18n="rc_finding_3">B12 sınırda; beslenme veya takviye hekimle görüşülebilir.</div>
             </div>
-            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.5rem;">Sonraki Adımlar</p>
+            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.5rem;" data-i18n="rc_next_steps">Sonraki Adımlar</p>
             <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.25rem;">
-              <div class="rc-finding">3 ay sonra Vitamin D ve B12 tekrarı</div>
-              <div class="rc-finding">6 ay içinde lipid paneli kontrolü</div>
-              <div class="rc-finding">Yıllık genel kan tahlili</div>
+              <div class="rc-finding" data-i18n="rc_step_1">3 ay sonra Vitamin D ve B12 tekrarı</div>
+              <div class="rc-finding" data-i18n="rc_step_2">6 ay içinde lipid paneli kontrolü</div>
+              <div class="rc-finding" data-i18n="rc_step_3">Yıllık genel kan tahlili</div>
             </div>
             <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:0.75rem;background:#f0fdfa;border:1px solid #ccfbf1;">
               <span style="font-size:1.25rem;">✅</span>
               <div>
-                <p style="font-size:0.75rem;font-weight:700;color:#0f766e;margin:0;">QR Doğrulanmış Rapor</p>
-                <p style="font-size:0.65rem;color:#64748b;margin:0;">NoryaAI tarafından üretildi — orijinallik doğrulandı</p>
+                <p style="font-size:0.75rem;font-weight:700;color:#0f766e;margin:0;" data-i18n="rc_qr_title">QR Doğrulanmış Rapor</p>
+                <p style="font-size:0.65rem;color:#64748b;margin:0;" data-i18n="rc_qr_desc">NoryaAI tarafından üretildi — orijinallik doğrulandı</p>
               </div>
             </div>
           </div>
@@ -9010,7 +9095,13 @@
         guest_checkout_title: "Kayıt olmadan tek analiz", guest_checkout_desc: "E-posta adresinizi girin; ödeme sonrası aynı e-posta ile oturum açıp analiz yapabilirsiniz.", guest_checkout_name: "Ad (opsiyonel)",
         btn_processing_pdf: "PDF işleniyor...", btn_processing_analyze: "Analiz ediliyor...",
         source_pdf: "PDF", source_image: "Görsel", source_text: "Metin",
-        clinical_notice_title: "Klinik Bilgilendirme", clinical_notice_body: "Bu dosyadan yapılandırılmış laboratuvar değerleri doğrulanamadı. Sonuçlarınızı aşağıya manuel girerek klinik formatta rapor oluşturabilirsiniz.", clinical_notice_helper: "Bu yöntem raporun daha doğru ve düzenli hazırlanmasına yardımcı olur.", clinical_notice_cta: "Manuel girişle devam et"
+        clinical_notice_title: "Klinik Bilgilendirme", clinical_notice_body: "Bu dosyadan yapılandırılmış laboratuvar değerleri doğrulanamadı. Sonuçlarınızı aşağıya manuel girerek klinik formatta rapor oluşturabilirsiniz.", clinical_notice_helper: "Bu yöntem raporun daha doğru ve düzenli hazırlanmasına yardımcı olur.", clinical_notice_cta: "Manuel girişle devam et",
+        rc_health_title: "Sağlık Skoru", rc_page_1: "Sayfa 1 / 5", rc_low_risk: "● Düşük Risk", rc_health_desc: "Genel sağlık skorunuz 84/100 olarak hesaplandı. Kan değerleriniz büyük ölçüde referans aralıklarında. Vitamin D takviyesi ve düzenli kontrol önerilir.",
+        rc_diabetes_title: "Diyabet & Metabolik Risk", rc_page_2: "Sayfa 2 / 5", rc_risk_score: "Risk Skoru", rc_glucose: "Glukoz", rc_insulin: "İnsülin", rc_glucose_normal: "● Glukoz Normal", rc_hba1c_normal: "● HbA1c Normal",
+        rc_heart_title: "Kalp & Lipid Profili", rc_page_3: "Sayfa 3 / 5", rc_cardio_risk: "Kardiyovasküler Risk", rc_triglyceride: "Trigliserit", rc_ldl_borderline: "● LDL Sınırda", rc_hdl_normal: "● HDL Normal",
+        rc_biomarker_title: "Biyobelirteç Tablosu", rc_page_4: "Sayfa 4 / 5", rc_th_marker: "Belirteç", rc_th_result: "Sonuç", rc_th_reference: "Referans", rc_th_status: "Durum", rc_normal: "Normal", rc_borderline: "Sınırda", rc_low: "Düşük",
+        rc_summary_title: "Klinik Özet & Öneriler", rc_page_5: "Sayfa 5 / 5", rc_key_findings: "Öne Çıkan Bulgular", rc_finding_1: "LDL kolesterol referans üst sınırda; beslenme ve aktivite ile takip önerilir.", rc_finding_2: "Vitamin D düşük; güneş ve takviye doktor önerisiyle değerlendirilmeli.", rc_finding_3: "B12 sınırda; beslenme veya takviye hekimle görüşülebilir.",
+        rc_next_steps: "Sonraki Adımlar", rc_step_1: "3 ay sonra Vitamin D ve B12 tekrarı", rc_step_2: "6 ay içinde lipid paneli kontrolü", rc_step_3: "Yıllık genel kan tahlili", rc_qr_title: "QR Doğrulanmış Rapor", rc_qr_desc: "NoryaAI tarafından üretildi — orijinallik doğrulandı"
       },
       en: {
         nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
@@ -9421,7 +9512,13 @@
         paytr_infrastructure_note: "Payment infrastructure is provided by PayTR.",
         guest_checkout_title: "Single analysis without account", guest_checkout_desc: "Enter your email; after payment you can sign in with the same email and run your analysis.", guest_checkout_name: "Name (optional)",
         btn_processing_pdf: "Processing PDF...", btn_processing_analyze: "Analyzing...",
-        source_pdf: "PDF", source_image: "Image", source_text: "Text"
+        source_pdf: "PDF", source_image: "Image", source_text: "Text",
+        rc_health_title: "Health Score", rc_page_1: "Page 1 / 5", rc_low_risk: "● Low Risk", rc_health_desc: "Your overall health score is 84/100. Your blood values are largely within reference ranges. Vitamin D supplementation and regular check-ups are recommended.",
+        rc_diabetes_title: "Diabetes & Metabolic Risk", rc_page_2: "Page 2 / 5", rc_risk_score: "Risk Score", rc_glucose: "Glucose", rc_insulin: "Insulin", rc_glucose_normal: "● Glucose Normal", rc_hba1c_normal: "● HbA1c Normal",
+        rc_heart_title: "Heart & Lipid Profile", rc_page_3: "Page 3 / 5", rc_cardio_risk: "Cardiovascular Risk", rc_triglyceride: "Triglycerides", rc_ldl_borderline: "● LDL Borderline", rc_hdl_normal: "● HDL Normal",
+        rc_biomarker_title: "Biomarker Table", rc_page_4: "Page 4 / 5", rc_th_marker: "Marker", rc_th_result: "Result", rc_th_reference: "Reference", rc_th_status: "Status", rc_normal: "Normal", rc_borderline: "Borderline", rc_low: "Low",
+        rc_summary_title: "Clinical Summary & Recommendations", rc_page_5: "Page 5 / 5", rc_key_findings: "Key Findings", rc_finding_1: "LDL cholesterol near the upper reference limit; dietary and activity-based follow-up recommended.", rc_finding_2: "Vitamin D is low; sunlight and supplementation should be evaluated with your doctor.", rc_finding_3: "B12 is borderline; nutritional or supplemental support may be discussed with your physician.",
+        rc_next_steps: "Next Steps", rc_step_1: "Repeat Vitamin D and B12 in 3 months", rc_step_2: "Lipid panel check-up in 6 months", rc_step_3: "Annual general blood test", rc_qr_title: "QR Verified Report", rc_qr_desc: "Generated by NoryaAI — authenticity verified"
       },
       it: {
         nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
@@ -9694,7 +9791,13 @@
         checkout_back: "← Cambia piano", checkout_title: "Riepilogo ordine", checkout_subtitle: "Norya — Analisi del sangue", checkout_plan: "Piano selezionato", checkout_total: "Totale", checkout_secure: "Il pagamento è protetto con SSL 256-bit. I dati della carta non ci vengono inviati; l'operazione è completata in sicurezza tramite PayTR.", checkout_consent_mesafeli: "Ho letto e accetto il Contratto di vendita a distanza.", checkout_consent_kvkk: "Ho letto e accetto la Politica sulla privacy/KVKK.", checkout_btn: "Vai al pagamento sicuro", checkout_accepted_cards: "Visa, Mastercard, Amex accettati.", checkout_trust_note: "Norya offre pagamento sicuro con HTTPS e PayTR. I dati della carta sono elaborati solo dal fornitore di pagamento.",
         guest_checkout_title: "Un'analisi senza account", guest_checkout_desc: "Inserisci l'email; dopo il pagamento potrai accedere con la stessa email ed eseguire l'analisi.", guest_checkout_name: "Nome (opzionale)",
         btn_processing_pdf: "Elaborazione PDF...", btn_processing_analyze: "Analisi in corso...",
-        source_pdf: "PDF", source_image: "Immagine", source_text: "Testo"
+        source_pdf: "PDF", source_image: "Immagine", source_text: "Testo",
+        rc_health_title: "Punteggio di Salute", rc_page_1: "Pagina 1 / 5", rc_low_risk: "● Rischio Basso", rc_health_desc: "Il tuo punteggio di salute generale è 84/100. I valori ematici sono in gran parte entro gli intervalli di riferimento. Si raccomandano integrazione di Vitamina D e controlli regolari.",
+        rc_diabetes_title: "Diabete e Rischio Metabolico", rc_page_2: "Pagina 2 / 5", rc_risk_score: "Punteggio di Rischio", rc_glucose: "Glucosio", rc_insulin: "Insulina", rc_glucose_normal: "● Glucosio Normale", rc_hba1c_normal: "● HbA1c Normale",
+        rc_heart_title: "Cuore e Profilo Lipidico", rc_page_3: "Pagina 3 / 5", rc_cardio_risk: "Rischio Cardiovascolare", rc_triglyceride: "Trigliceridi", rc_ldl_borderline: "● LDL al Limite", rc_hdl_normal: "● HDL Normale",
+        rc_biomarker_title: "Tabella Biomarcatori", rc_page_4: "Pagina 4 / 5", rc_th_marker: "Marcatore", rc_th_result: "Risultato", rc_th_reference: "Riferimento", rc_th_status: "Stato", rc_normal: "Normale", rc_borderline: "Al Limite", rc_low: "Basso",
+        rc_summary_title: "Riepilogo Clinico e Raccomandazioni", rc_page_5: "Pagina 5 / 5", rc_key_findings: "Risultati Principali", rc_finding_1: "Colesterolo LDL vicino al limite superiore; si consiglia follow-up con dieta e attività.", rc_finding_2: "Vitamina D bassa; esposizione solare e integrazione da valutare col medico.", rc_finding_3: "B12 al limite; integrazione alimentare da discutere col medico.",
+        rc_next_steps: "Prossimi Passi", rc_step_1: "Ripetere Vitamina D e B12 tra 3 mesi", rc_step_2: "Controllo profilo lipidico tra 6 mesi", rc_step_3: "Esame del sangue annuale", rc_qr_title: "Report Verificato QR", rc_qr_desc: "Generato da NoryaAI — autenticità verificata"
       },
       es: {
         nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
@@ -9967,7 +10070,13 @@
         checkout_back: "← Cambiar plan", checkout_title: "Resumen del pedido", checkout_subtitle: "Norya — Análisis de sangre", checkout_plan: "Plan seleccionado", checkout_total: "Total", checkout_secure: "Tu pago está protegido con SSL de 256 bits. Los datos de la tarjeta no se envían a nosotros; la transacción se completa de forma segura con PayTR.", checkout_consent_mesafeli: "He leído y acepto el Contrato de venta a distancia.", checkout_consent_kvkk: "He leído y acepto la Política de privacidad/KVKK.", checkout_btn: "Ir al pago seguro", checkout_accepted_cards: "Visa, Mastercard, Amex aceptados.", checkout_trust_note: "Norya ofrece pago seguro con HTTPS y PayTR. Los datos de tu tarjeta los procesa solo el proveedor de pago.",
         guest_checkout_title: "Un análisis sin cuenta", guest_checkout_desc: "Introduce tu email; después del pago podrás iniciar sesión con el mismo email y realizar el análisis.", guest_checkout_name: "Nombre (opcional)",
         btn_processing_pdf: "Procesando PDF...", btn_processing_analyze: "Analizando...",
-        source_pdf: "PDF", source_image: "Imagen", source_text: "Texto"
+        source_pdf: "PDF", source_image: "Imagen", source_text: "Texto",
+        rc_health_title: "Puntuación de Salud", rc_page_1: "Página 1 / 5", rc_low_risk: "● Riesgo Bajo", rc_health_desc: "Tu puntuación general de salud es 84/100. Tus valores sanguíneos están en gran medida dentro de los rangos de referencia. Se recomienda suplementación de Vitamina D y controles regulares.",
+        rc_diabetes_title: "Diabetes y Riesgo Metabólico", rc_page_2: "Página 2 / 5", rc_risk_score: "Puntuación de Riesgo", rc_glucose: "Glucosa", rc_insulin: "Insulina", rc_glucose_normal: "● Glucosa Normal", rc_hba1c_normal: "● HbA1c Normal",
+        rc_heart_title: "Corazón y Perfil Lipídico", rc_page_3: "Página 3 / 5", rc_cardio_risk: "Riesgo Cardiovascular", rc_triglyceride: "Triglicéridos", rc_ldl_borderline: "● LDL en Límite", rc_hdl_normal: "● HDL Normal",
+        rc_biomarker_title: "Tabla de Biomarcadores", rc_page_4: "Página 4 / 5", rc_th_marker: "Marcador", rc_th_result: "Resultado", rc_th_reference: "Referencia", rc_th_status: "Estado", rc_normal: "Normal", rc_borderline: "En Límite", rc_low: "Bajo",
+        rc_summary_title: "Resumen Clínico y Recomendaciones", rc_page_5: "Página 5 / 5", rc_key_findings: "Hallazgos Principales", rc_finding_1: "Colesterol LDL cerca del límite superior; se recomienda seguimiento con dieta y actividad.", rc_finding_2: "Vitamina D baja; exposición solar y suplementación deben evaluarse con el médico.", rc_finding_3: "B12 en el límite; nutrición o suplementación pueden discutirse con su médico.",
+        rc_next_steps: "Próximos Pasos", rc_step_1: "Repetir Vitamina D y B12 en 3 meses", rc_step_2: "Control de perfil lipídico en 6 meses", rc_step_3: "Análisis de sangre general anual", rc_qr_title: "Informe Verificado QR", rc_qr_desc: "Generado por NoryaAI — autenticidad verificada"
       },
       fr: {
         nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
@@ -10240,7 +10349,13 @@
         checkout_back: "← Changer de forfait", checkout_title: "Récapitulatif", checkout_subtitle: "Norya — Analyse de sang", checkout_plan: "Forfait choisi", checkout_total: "Total", checkout_secure: "Votre paiement est protégé par SSL 256 bits. Les données de carte ne nous sont pas transmises ; la transaction est traitée de façon sécurisée par PayTR.", checkout_consent_mesafeli: "J'ai lu et j'accepte le Contrat de vente à distance.", checkout_consent_kvkk: "J'ai lu et j'accepte la Politique de confidentialité/KVKK.", checkout_btn: "Aller au paiement sécurisé", checkout_accepted_cards: "Visa, Mastercard, Amex acceptés.", checkout_trust_note: "Norya propose un paiement sécurisé via HTTPS et PayTR. Les données de carte sont traitées uniquement par le prestataire de paiement.",
         guest_checkout_title: "Une analyse sans compte", guest_checkout_desc: "Entrez votre email ; après le paiement vous pourrez vous connecter avec ce même email et lancer l'analyse.", guest_checkout_name: "Nom (facultatif)",
         btn_processing_pdf: "Traitement du PDF...", btn_processing_analyze: "Analyse en cours...",
-        source_pdf: "PDF", source_image: "Image", source_text: "Texte"
+        source_pdf: "PDF", source_image: "Image", source_text: "Texte",
+        rc_health_title: "Score de Santé", rc_page_1: "Page 1 / 5", rc_low_risk: "● Risque Faible", rc_health_desc: "Votre score de santé global est de 84/100. Vos valeurs sanguines sont largement dans les plages de référence. Une supplémentation en Vitamine D et des contrôles réguliers sont recommandés.",
+        rc_diabetes_title: "Diabète et Risque Métabolique", rc_page_2: "Page 2 / 5", rc_risk_score: "Score de Risque", rc_glucose: "Glucose", rc_insulin: "Insuline", rc_glucose_normal: "● Glucose Normal", rc_hba1c_normal: "● HbA1c Normal",
+        rc_heart_title: "Cœur et Profil Lipidique", rc_page_3: "Page 3 / 5", rc_cardio_risk: "Risque Cardiovasculaire", rc_triglyceride: "Triglycérides", rc_ldl_borderline: "● LDL Limite", rc_hdl_normal: "● HDL Normal",
+        rc_biomarker_title: "Tableau des Biomarqueurs", rc_page_4: "Page 4 / 5", rc_th_marker: "Marqueur", rc_th_result: "Résultat", rc_th_reference: "Référence", rc_th_status: "Statut", rc_normal: "Normal", rc_borderline: "Limite", rc_low: "Bas",
+        rc_summary_title: "Résumé Clinique et Recommandations", rc_page_5: "Page 5 / 5", rc_key_findings: "Résultats Principaux", rc_finding_1: "Cholestérol LDL proche de la limite supérieure ; suivi alimentaire et activité recommandés.", rc_finding_2: "Vitamine D basse ; exposition au soleil et supplémentation à évaluer avec votre médecin.", rc_finding_3: "B12 limite ; nutrition ou supplémentation à discuter avec votre médecin.",
+        rc_next_steps: "Prochaines Étapes", rc_step_1: "Répéter Vitamine D et B12 dans 3 mois", rc_step_2: "Contrôle du bilan lipidique dans 6 mois", rc_step_3: "Bilan sanguin général annuel", rc_qr_title: "Rapport Vérifié QR", rc_qr_desc: "Généré par NoryaAI — authenticité vérifiée"
       },
       de: {
         nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
@@ -10494,7 +10609,13 @@
         checkout_back: "← Plan ändern", checkout_title: "Bestellübersicht", checkout_subtitle: "Norya — Blutanalyse", checkout_plan: "Gewählter Plan", checkout_total: "Gesamtbetrag", checkout_secure: "Ihre Zahlung ist durch 256-Bit-SSL geschützt. Kartendaten werden nicht an uns übermittelt; die Transaktion wird sicher über PayTR abgewickelt.", checkout_consent_mesafeli: "Ich habe die Fernabsatzvereinbarung gelesen und akzeptiert.", checkout_consent_kvkk: "Ich habe die Datenschutz-/KVKK-Richtlinie gelesen und akzeptiert.", checkout_btn: "Zur sicheren Zahlung", checkout_accepted_cards: "Visa, Mastercard, Amex akzeptiert.", checkout_trust_note: "Norya bietet sichere Zahlung per HTTPS und PayTR. Kartendaten werden nur vom Zahlungsanbieter verarbeitet.",
         guest_checkout_title: "Einzelanalyse ohne Konto", guest_checkout_desc: "E-Mail eingeben; nach der Zahlung können Sie sich mit derselben E-Mail anmelden und die Analyse starten.", guest_checkout_name: "Name (optional)",
         btn_processing_pdf: "PDF wird verarbeitet...", btn_processing_analyze: "Analyse läuft...",
-        source_pdf: "PDF", source_image: "Bild", source_text: "Text"
+        source_pdf: "PDF", source_image: "Bild", source_text: "Text",
+        rc_health_title: "Gesundheitsscore", rc_page_1: "Seite 1 / 5", rc_low_risk: "● Niedriges Risiko", rc_health_desc: "Ihr Gesundheitsscore beträgt 84/100. Ihre Blutwerte liegen größtenteils im Referenzbereich. Vitamin-D-Ergänzung und regelmäßige Kontrollen werden empfohlen.",
+        rc_diabetes_title: "Diabetes & Metabolisches Risiko", rc_page_2: "Seite 2 / 5", rc_risk_score: "Risikoscore", rc_glucose: "Glukose", rc_insulin: "Insulin", rc_glucose_normal: "● Glukose Normal", rc_hba1c_normal: "● HbA1c Normal",
+        rc_heart_title: "Herz & Lipidprofil", rc_page_3: "Seite 3 / 5", rc_cardio_risk: "Kardiovaskuläres Risiko", rc_triglyceride: "Triglyceride", rc_ldl_borderline: "● LDL Grenzwertig", rc_hdl_normal: "● HDL Normal",
+        rc_biomarker_title: "Biomarker-Tabelle", rc_page_4: "Seite 4 / 5", rc_th_marker: "Marker", rc_th_result: "Ergebnis", rc_th_reference: "Referenz", rc_th_status: "Status", rc_normal: "Normal", rc_borderline: "Grenzwertig", rc_low: "Niedrig",
+        rc_summary_title: "Klinische Zusammenfassung & Empfehlungen", rc_page_5: "Seite 5 / 5", rc_key_findings: "Wichtige Befunde", rc_finding_1: "LDL-Cholesterin nahe der oberen Referenzgrenze; Ernährungs- und Aktivitätskontrolle empfohlen.", rc_finding_2: "Vitamin D niedrig; Sonnenlicht und Ergänzung mit dem Arzt besprechen.", rc_finding_3: "B12 grenzwertig; Ernährung oder Ergänzung mit dem Arzt besprechen.",
+        rc_next_steps: "Nächste Schritte", rc_step_1: "Vitamin D und B12 in 3 Monaten wiederholen", rc_step_2: "Lipidprofil-Kontrolle in 6 Monaten", rc_step_3: "Jährliches allgemeines Blutbild", rc_qr_title: "QR-verifizierter Bericht", rc_qr_desc: "Erstellt von NoryaAI — Echtheit verifiziert"
       },
       he: {
         nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
@@ -10703,7 +10824,13 @@
         checkout_back: "← החלף תוכנית", checkout_title: "סיכום הזמנה", checkout_subtitle: "Norya — ניתוח דם", checkout_plan: "תוכנית נבחרת", checkout_total: "סה״כ", checkout_secure: "התשלום מוגן ב-SSL 256 ביט. פרטי כרטיס לא מועברים אלינו; העסקה מתבצעת בצורה מאובטחת דרך PayTR.", checkout_consent_mesafeli: "קראתי ומאשר/ת את הסכם המכירה מרחוק.", checkout_consent_kvkk: "קראתי ומאשר/ת את מדיניות הפרטיות/KVKK.", checkout_btn: "המשך לתשלום מאובטח", checkout_accepted_cards: "Visa, Mastercard, Amex מתקבלים.", checkout_trust_note: "Norya מציעה תשלום מאובטח עם HTTPS ו-PayTR. פרטי הכרטיס מעובדים רק על ידי ספק התשלום.",
         guest_checkout_title: "ניתוח אחד בלי חשבון", guest_checkout_desc: "הזן אימייל; אחרי התשלום תוכל להתחבר עם אותו אימייל ולהריץ את הניתוח.", guest_checkout_name: "שם (אופציונלי)",
         btn_processing_pdf: "מעבד PDF...", btn_processing_analyze: "מנתח...",
-        source_pdf: "PDF", source_image: "תמונה", source_text: "טקסט"
+        source_pdf: "PDF", source_image: "תמונה", source_text: "טקסט",
+        rc_health_title: "ציון בריאות", rc_page_1: "עמוד 1 / 5", rc_low_risk: "● סיכון נמוך", rc_health_desc: "ציון הבריאות הכללי שלך הוא 84/100. ערכי הדם שלך בעיקר בטווח הייחוס. מומלצת תוספת ויטמין D ובדיקות תקופתיות.",
+        rc_diabetes_title: "סוכרת וסיכון מטבולי", rc_page_2: "עמוד 2 / 5", rc_risk_score: "ציון סיכון", rc_glucose: "גלוקוז", rc_insulin: "אינסולין", rc_glucose_normal: "● גלוקוז תקין", rc_hba1c_normal: "● HbA1c תקין",
+        rc_heart_title: "לב ופרופיל שומנים", rc_page_3: "עמוד 3 / 5", rc_cardio_risk: "סיכון קרדיווסקולרי", rc_triglyceride: "טריגליצרידים", rc_ldl_borderline: "● LDL גבולי", rc_hdl_normal: "● HDL תקין",
+        rc_biomarker_title: "טבלת סמנים ביולוגיים", rc_page_4: "עמוד 4 / 5", rc_th_marker: "סמן", rc_th_result: "תוצאה", rc_th_reference: "ייחוס", rc_th_status: "מצב", rc_normal: "תקין", rc_borderline: "גבולי", rc_low: "נמוך",
+        rc_summary_title: "סיכום קליני והמלצות", rc_page_5: "עמוד 5 / 5", rc_key_findings: "ממצאים עיקריים", rc_finding_1: "כולסטרול LDL קרוב לגבול העליון; מעקב תזונתי ופעילות מומלץ.", rc_finding_2: "ויטמין D נמוך; חשיפה לשמש ותוספים יש להעריך עם הרופא.", rc_finding_3: "B12 גבולי; תזונה או תוספים ניתן לדון עם הרופא.",
+        rc_next_steps: "צעדים הבאים", rc_step_1: "חזרה על ויטמין D ו-B12 בעוד 3 חודשים", rc_step_2: "בדיקת פרופיל שומנים בעוד 6 חודשים", rc_step_3: "בדיקת דם כללית שנתית", rc_qr_title: "דוח מאומת QR", rc_qr_desc: "נוצר על ידי NoryaAI — אותנטיות מאומתת"
       },
       ar: {
         nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
@@ -10912,7 +11039,13 @@
         checkout_back: "← تغيير الخطة", checkout_title: "ملخص الطلب", checkout_subtitle: "Norya — تحليل الدم", checkout_plan: "الخطة المختارة", checkout_total: "المجموع", checkout_secure: "دفعتك محمية بـ SSL 256 بت. لا تُرسل بيانات البطاقة إلينا؛ تتم المعاملة بشكل آمن عبر PayTR.", checkout_consent_mesafeli: "لقد قرأت وأوافق على اتفاقية البيع عن بُعد.", checkout_consent_kvkk: "لقد قرأت وأوافق على سياسة الخصوصية/KVKK.", checkout_btn: "المتابعة للدفع الآمن", checkout_accepted_cards: "Visa وMastercard وAmex مقبولة.", checkout_trust_note: "Norya تقدم دفعاً آمناً عبر HTTPS وPayTR. بيانات البطاقة تُعالج فقط من قبل مزود الدفع.",
         guest_checkout_title: "تحليل واحد دون حساب", guest_checkout_desc: "أدخل بريدك؛ بعد الدفع يمكنك تسجيل الدخول بنفس البريد وتشغيل التحليل.", guest_checkout_name: "الاسم (اختياري)",
         btn_processing_pdf: "جاري معالجة PDF...", btn_processing_analyze: "جاري التحليل...",
-        source_pdf: "PDF", source_image: "صورة", source_text: "نص"
+        source_pdf: "PDF", source_image: "صورة", source_text: "نص",
+        rc_health_title: "نتيجة الصحة", rc_page_1: "صفحة 1 / 5", rc_low_risk: "● خطر منخفض", rc_health_desc: "نتيجة صحتك العامة 84/100. قيم الدم لديك ضمن النطاق المرجعي إلى حد كبير. يُوصى بمكملات فيتامين د وفحوصات دورية.",
+        rc_diabetes_title: "السكري والخطر الأيضي", rc_page_2: "صفحة 2 / 5", rc_risk_score: "نقاط الخطر", rc_glucose: "الجلوكوز", rc_insulin: "الأنسولين", rc_glucose_normal: "● الجلوكوز طبيعي", rc_hba1c_normal: "● HbA1c طبيعي",
+        rc_heart_title: "القلب وملف الدهون", rc_page_3: "صفحة 3 / 5", rc_cardio_risk: "خطر القلب والأوعية", rc_triglyceride: "الدهون الثلاثية", rc_ldl_borderline: "● LDL حدّي", rc_hdl_normal: "● HDL طبيعي",
+        rc_biomarker_title: "جدول المؤشرات الحيوية", rc_page_4: "صفحة 4 / 5", rc_th_marker: "المؤشر", rc_th_result: "النتيجة", rc_th_reference: "المرجع", rc_th_status: "الحالة", rc_normal: "طبيعي", rc_borderline: "حدّي", rc_low: "منخفض",
+        rc_summary_title: "ملخص سريري وتوصيات", rc_page_5: "صفحة 5 / 5", rc_key_findings: "النتائج الرئيسية", rc_finding_1: "كولسترول LDL قريب من الحد الأعلى؛ يُنصح بمتابعة غذائية ونشاط بدني.", rc_finding_2: "فيتامين د منخفض؛ التعرض للشمس والمكملات يجب تقييمها مع الطبيب.", rc_finding_3: "B12 حدّي؛ التغذية أو المكملات يمكن مناقشتها مع الطبيب.",
+        rc_next_steps: "الخطوات التالية", rc_step_1: "إعادة فيتامين د و B12 بعد 3 أشهر", rc_step_2: "فحص ملف الدهون بعد 6 أشهر", rc_step_3: "فحص دم عام سنوي", rc_qr_title: "تقرير موثّق بـ QR", rc_qr_desc: "أُنشئ بواسطة NoryaAI — تم التحقق من الأصالة"
       },
       hi: {
         nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
@@ -11121,7 +11254,13 @@
         checkout_back: "← प्लान बदलें", checkout_title: "ऑर्डर सारांश", checkout_subtitle: "Norya — रक्त परीक्षण विश्लेषण", checkout_plan: "चयनित प्लान", checkout_total: "कुल", checkout_secure: "आपका भुगतान 256-बिट SSL से सुरक्षित। कार्ड विवरण हमें नहीं भेजे जाते; लेनदेन PayTR के ज़रिए सुरक्षित रूप से पूरा होता है।", checkout_consent_mesafeli: "मैंने दूरस्थ बिक्री समझौता पढ़ लिया और स्वीकार किया।", checkout_consent_kvkk: "मैंने गोपनीयता/KVKK नीति पढ़ ली और स्वीकार की।", checkout_btn: "सुरक्षित भुगतान पर जाएं", checkout_accepted_cards: "Visa, Mastercard, Amex स्वीकृत।", checkout_trust_note: "Norya HTTPS और PayTR के ज़रिए सुरक्षित भुगतान प्रदान करता है। कार्ड विवरण केवल भुगतान प्रदाता द्वारा संसाधित होते हैं।",
         guest_checkout_title: "बिना अकाउंट एक विश्लेषण", guest_checkout_desc: "ईमेल दर्ज करें; भुगतान के बाद उसी ईमेल से लॉग इन कर विश्लेषण चला सकते हैं।", guest_checkout_name: "नाम (वैकल्पिक)",
         btn_processing_pdf: "PDF प्रोसेस हो रहा है...", btn_processing_analyze: "विश्लेषण हो रहा है...",
-        source_pdf: "PDF", source_image: "छवि", source_text: "टेक्स्ट"
+        source_pdf: "PDF", source_image: "छवि", source_text: "टेक्स्ट",
+        rc_health_title: "स्वास्थ्य स्कोर", rc_page_1: "पृष्ठ 1 / 5", rc_low_risk: "● कम जोखिम", rc_health_desc: "आपका समग्र स्वास्थ्य स्कोर 84/100 है। आपके रक्त मान अधिकतर संदर्भ सीमा में हैं। विटामिन D पूरक और नियमित जांच की सिफारिश की जाती है।",
+        rc_diabetes_title: "मधुमेह और चयापचय जोखिम", rc_page_2: "पृष्ठ 2 / 5", rc_risk_score: "जोखिम स्कोर", rc_glucose: "ग्लूकोज", rc_insulin: "इंसुलिन", rc_glucose_normal: "● ग्लूकोज सामान्य", rc_hba1c_normal: "● HbA1c सामान्य",
+        rc_heart_title: "हृदय और लिपिड प्रोफ़ाइल", rc_page_3: "पृष्ठ 3 / 5", rc_cardio_risk: "हृदय संवहनी जोखिम", rc_triglyceride: "ट्राइग्लिसराइड्स", rc_ldl_borderline: "● LDL सीमा पर", rc_hdl_normal: "● HDL सामान्य",
+        rc_biomarker_title: "बायोमार्कर तालिका", rc_page_4: "पृष्ठ 4 / 5", rc_th_marker: "मार्कर", rc_th_result: "परिणाम", rc_th_reference: "संदर्भ", rc_th_status: "स्थिति", rc_normal: "सामान्य", rc_borderline: "सीमा पर", rc_low: "कम",
+        rc_summary_title: "नैदानिक सारांश और सिफारिशें", rc_page_5: "पृष्ठ 5 / 5", rc_key_findings: "प्रमुख निष्कर्ष", rc_finding_1: "LDL कोलेस्ट्रॉल ऊपरी संदर्भ सीमा के पास; आहार और गतिविधि-आधारित अनुवर्ती अनुशंसित।", rc_finding_2: "विटामिन D कम; सूर्य प्रकाश और पूरक अपने डॉक्टर से मूल्यांकित करें।", rc_finding_3: "B12 सीमा पर; पोषण या पूरक अपने चिकित्सक से चर्चा करें।",
+        rc_next_steps: "अगले कदम", rc_step_1: "3 महीने में विटामिन D और B12 दोहराएं", rc_step_2: "6 महीने में लिपिड पैनल जांच", rc_step_3: "वार्षिक सामान्य रक्त परीक्षण", rc_qr_title: "QR सत्यापित रिपोर्ट", rc_qr_desc: "NoryaAI द्वारा निर्मित — प्रामाणिकता सत्यापित"
       },
       el: {
         nav_home: "Αρχική", nav_languages: "Γλώσσες", nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
@@ -11298,7 +11437,13 @@
         checkout_back: "← Αλλαγή πλάνου", checkout_title: "Σύνοψη παραγγελίας", checkout_subtitle: "Norya — Ανάλυση αίματος", checkout_plan: "Επιλεγμένο πλάνο", checkout_total: "Σύνολο", checkout_secure: "Η πληρωμή σας προστατεύεται με SSL 256-bit. Τα στοιχεία κάρτας δεν μας αποστέλλονται· η συναλλαγή ολοκληρώνεται με ασφάλεια μέσω PayTR.", checkout_consent_mesafeli: "Έχω διαβάσει και αποδεχτώ τη Σύμβαση Πώλησης από Απόσταση.", checkout_consent_kvkk: "Έχω διαβάσει και αποδεχτώ την Πολιτική Απορρήτου/KVKK.", checkout_btn: "Μετάβαση στην ασφαλή πληρωμή", checkout_accepted_cards: "Visa, Mastercard, Amex αποδεκτά.", checkout_trust_note: "Η Norya προσφέρει ασφαλή πληρωμή μέσω HTTPS και PayTR. Τα στοιχεία κάρτας επεξεργάζονται μόνο από τον πάροχο πληρωμών.",
         guest_checkout_title: "Μία ανάλυση χωρίς λογαριασμό", guest_checkout_desc: "Εισάγετε το email σας· μετά την πληρωμή μπορείτε να συνδεθείτε με το ίδιο email και να τρέξετε την ανάλυση.", guest_checkout_name: "Όνομα (προαιρετικό)",
         btn_processing_pdf: "Επεξεργασία PDF...", btn_processing_analyze: "Ανάλυση σε εξέλιξη...",
-        source_pdf: "PDF", source_image: "Εικόνα", source_text: "Κείμενο"
+        source_pdf: "PDF", source_image: "Εικόνα", source_text: "Κείμενο",
+        rc_health_title: "Βαθμολογία Υγείας", rc_page_1: "Σελίδα 1 / 5", rc_low_risk: "● Χαμηλός Κίνδυνος", rc_health_desc: "Η συνολική βαθμολογία υγείας σας είναι 84/100. Οι τιμές αίματός σας είναι σε μεγάλο βαθμό εντός των ορίων αναφοράς. Συνιστάται συμπλήρωμα βιταμίνης D και τακτικοί έλεγχοι.",
+        rc_diabetes_title: "Διαβήτης & Μεταβολικός Κίνδυνος", rc_page_2: "Σελίδα 2 / 5", rc_risk_score: "Βαθμολογία Κινδύνου", rc_glucose: "Γλυκόζη", rc_insulin: "Ινσουλίνη", rc_glucose_normal: "● Γλυκόζη Φυσιολογική", rc_hba1c_normal: "● HbA1c Φυσιολογική",
+        rc_heart_title: "Καρδιά & Λιπιδαιμικό Προφίλ", rc_page_3: "Σελίδα 3 / 5", rc_cardio_risk: "Καρδιαγγειακός Κίνδυνος", rc_triglyceride: "Τριγλυκερίδια", rc_ldl_borderline: "● LDL Οριακή", rc_hdl_normal: "● HDL Φυσιολογική",
+        rc_biomarker_title: "Πίνακας Βιοδεικτών", rc_page_4: "Σελίδα 4 / 5", rc_th_marker: "Δείκτης", rc_th_result: "Αποτέλεσμα", rc_th_reference: "Αναφορά", rc_th_status: "Κατάσταση", rc_normal: "Φυσιολογικό", rc_borderline: "Οριακό", rc_low: "Χαμηλό",
+        rc_summary_title: "Κλινική Σύνοψη & Συστάσεις", rc_page_5: "Σελίδα 5 / 5", rc_key_findings: "Κύρια Ευρήματα", rc_finding_1: "Χοληστερόλη LDL κοντά στο ανώτερο όριο· συνιστάται παρακολούθηση διατροφής και δραστηριότητας.", rc_finding_2: "Βιταμίνη D χαμηλή· ηλιοφάνεια και συμπληρώματα πρέπει να αξιολογηθούν με τον γιατρό.", rc_finding_3: "B12 οριακή· διατροφή ή συμπληρώματα μπορούν να συζητηθούν με τον γιατρό.",
+        rc_next_steps: "Επόμενα Βήματα", rc_step_1: "Επανάληψη βιταμίνης D και B12 σε 3 μήνες", rc_step_2: "Έλεγχος λιπιδαιμικού προφίλ σε 6 μήνες", rc_step_3: "Ετήσια γενική εξέταση αίματος", rc_qr_title: "Αναφορά Επαληθευμένη QR", rc_qr_desc: "Δημιουργήθηκε από NoryaAI — η αυθεντικότητα επαληθεύτηκε"
       },
       cs: {
         nav_home: "Domů", nav_languages: "Jazyky", nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
@@ -11475,7 +11620,13 @@
         checkout_back: "← Změnit plán", checkout_title: "Shrnutí objednávky", checkout_subtitle: "Norya — Analýza krve", checkout_plan: "Vybraný plán", checkout_total: "Celkem", checkout_secure: "Vaše platba je chráněna 256bitovým SSL. Údaje o kartě nám nejsou předávány; transakce je dokončena bezpečně přes PayTR.", checkout_consent_mesafeli: "Přečetl(a) jsem si Smlouvu o dálkovém prodeji a souhlasím s ní.", checkout_consent_kvkk: "Přečetl(a) jsem si Zásady ochrany osobních údajů/KVKK a souhlasím s nimi.", checkout_btn: "Přejít k zabezpečené platbě", checkout_accepted_cards: "Visa, Mastercard, Amex přijímány.", checkout_trust_note: "Norya nabízí zabezpečenou platbu přes HTTPS a PayTR. Údaje o kartě zpracovává pouze poskytovatel plateb.",
         guest_checkout_title: "Jedna analýza bez účtu", guest_checkout_desc: "Zadejte e-mail; po platbě se můžete přihlásit stejným e-mailem a spustit analýzu.", guest_checkout_name: "Jméno (volitelné)",
         btn_processing_pdf: "Zpracování PDF...", btn_processing_analyze: "Analýza...",
-        source_pdf: "PDF", source_image: "Obrázek", source_text: "Text"
+        source_pdf: "PDF", source_image: "Obrázek", source_text: "Text",
+        rc_health_title: "Zdravotní skóre", rc_page_1: "Strana 1 / 5", rc_low_risk: "● Nízké riziko", rc_health_desc: "Vaše celkové zdravotní skóre je 84/100. Vaše krevní hodnoty jsou převážně v referenčním rozmezí. Doporučuje se doplnění vitamínu D a pravidelné kontroly.",
+        rc_diabetes_title: "Diabetes a metabolické riziko", rc_page_2: "Strana 2 / 5", rc_risk_score: "Skóre rizika", rc_glucose: "Glukóza", rc_insulin: "Inzulín", rc_glucose_normal: "● Glukóza v normě", rc_hba1c_normal: "● HbA1c v normě",
+        rc_heart_title: "Srdce a lipidový profil", rc_page_3: "Strana 3 / 5", rc_cardio_risk: "Kardiovaskulární riziko", rc_triglyceride: "Triglyceridy", rc_ldl_borderline: "● LDL hraniční", rc_hdl_normal: "● HDL v normě",
+        rc_biomarker_title: "Tabulka biomarkerů", rc_page_4: "Strana 4 / 5", rc_th_marker: "Marker", rc_th_result: "Výsledek", rc_th_reference: "Reference", rc_th_status: "Stav", rc_normal: "Normální", rc_borderline: "Hraniční", rc_low: "Nízký",
+        rc_summary_title: "Klinický souhrn a doporučení", rc_page_5: "Strana 5 / 5", rc_key_findings: "Hlavní nálezy", rc_finding_1: "LDL cholesterol blízko horní hranice; doporučuje se sledování stravou a aktivitou.", rc_finding_2: "Vitamin D nízký; sluneční záření a doplnění je třeba zhodnotit s lékařem.", rc_finding_3: "B12 hraniční; výživa nebo doplnění lze konzultovat s lékařem.",
+        rc_next_steps: "Další kroky", rc_step_1: "Opakovat vitamin D a B12 za 3 měsíce", rc_step_2: "Kontrola lipidového profilu za 6 měsíců", rc_step_3: "Roční obecný krevní test", rc_qr_title: "QR ověřená zpráva", rc_qr_desc: "Vytvořeno NoryaAI — pravost ověřena"
       },
       sr: {
         nav_home: "Početna", nav_languages: "Jezici", nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
@@ -11652,7 +11803,13 @@
         checkout_back: "← Promeni plan", checkout_title: "Pregled porudžbine", checkout_subtitle: "Norya — Analiza krvi", checkout_plan: "Izabrani plan", checkout_total: "Ukupno", checkout_secure: "Vaše plaćanje je zaštićeno 256-bit SSL-om. Podaci o kartici nam se ne šalju; transakcija se sigurno završava putem PayTR.", checkout_consent_mesafeli: "Pročitao/la sam Ugovor o prodaji na daljinu i prihvatam ga.", checkout_consent_kvkk: "Pročitao/la sam Politiku privatnosti/KVKK i prihvatam je.", checkout_btn: "Nastavi na sigurno plaćanje", checkout_accepted_cards: "Visa, Mastercard, Amex prihvaćeni.", checkout_trust_note: "Norya nudi sigurno plaćanje putem HTTPS i PayTR. Podatke o kartici obrađuje samo provajder plaćanja.",
         guest_checkout_title: "Jedna analiza bez naloga", guest_checkout_desc: "Unesite email; posle plaćanja možete se prijaviti istim emailom i pokrenuti analizu.", guest_checkout_name: "Ime (opciono)",
         btn_processing_pdf: "Obrada PDF-a...", btn_processing_analyze: "Analiziranje...",
-        source_pdf: "PDF", source_image: "Slika", source_text: "Tekst"
+        source_pdf: "PDF", source_image: "Slika", source_text: "Tekst",
+        rc_health_title: "Zdravstveni skor", rc_page_1: "Strana 1 / 5", rc_low_risk: "● Nizak rizik", rc_health_desc: "Vaš ukupni zdravstveni skor je 84/100. Vaše krvne vrednosti su uglavnom u referentnom opsegu. Preporučuje se suplementacija vitaminom D i redovne kontrole.",
+        rc_diabetes_title: "Dijabetes i metabolički rizik", rc_page_2: "Strana 2 / 5", rc_risk_score: "Skor rizika", rc_glucose: "Glukoza", rc_insulin: "Insulin", rc_glucose_normal: "● Glukoza normalna", rc_hba1c_normal: "● HbA1c normalan",
+        rc_heart_title: "Srce i lipidni profil", rc_page_3: "Strana 3 / 5", rc_cardio_risk: "Kardiovaskularni rizik", rc_triglyceride: "Trigliceridi", rc_ldl_borderline: "● LDL granično", rc_hdl_normal: "● HDL normalan",
+        rc_biomarker_title: "Tabela biomarkera", rc_page_4: "Strana 4 / 5", rc_th_marker: "Marker", rc_th_result: "Rezultat", rc_th_reference: "Referenca", rc_th_status: "Status", rc_normal: "Normalan", rc_borderline: "Granično", rc_low: "Nizak",
+        rc_summary_title: "Klinički rezime i preporuke", rc_page_5: "Strana 5 / 5", rc_key_findings: "Ključni nalazi", rc_finding_1: "LDL holesterol blizu gornje granice; preporučuje se praćenje ishranom i aktivnošću.", rc_finding_2: "Vitamin D nizak; sunce i suplementacija treba da se procene sa lekarom.", rc_finding_3: "B12 granično; ishrana ili suplementacija može se razmotriti sa lekarom.",
+        rc_next_steps: "Sledeći koraci", rc_step_1: "Ponoviti vitamin D i B12 za 3 meseca", rc_step_2: "Kontrola lipidnog profila za 6 meseci", rc_step_3: "Godišnji opšti krvni test", rc_qr_title: "QR verifikovani izveštaj", rc_qr_desc: "Generisao NoryaAI — autentičnost verifikovana"
       }
     };
     if (window.__LANDING_T__ && window.__LANDING_LOCALE__) {
@@ -12402,8 +12559,8 @@
         var ue = document.getElementById('user-email'); if (ue) ue.textContent = user.email;
         var upc = document.getElementById('user-phone-country'); if (upc) { var pc = [user.phone, user.country].filter(Boolean).join(' • '); upc.textContent = pc || ''; upc.style.display = pc ? '' : 'none'; }
         var mh = document.getElementById('main-header'); if (mh) mh.classList.add('user-logged-in');
-        var daw = document.getElementById('drawer-auth-wrap'); if (daw) daw.classList.add('hidden');
-        var duw = document.getElementById('drawer-user-wrap'); if (duw) duw.classList.remove('hidden');
+        var daw = document.getElementById('drawer-auth-wrap'); if (daw) { daw.classList.add('hidden'); daw.style.display = 'none'; }
+        var duw = document.getElementById('drawer-user-wrap'); if (duw) { duw.classList.remove('hidden'); duw.style.display = 'flex'; }
         analyzeLoginPrompt.classList.add('hidden');
         analyzeForm.classList.remove('hidden');
         if (typeof setWizardStep === 'function' && (typeof wizardCurrentStep === 'undefined' || wizardCurrentStep === 1 || wizardCurrentStep === 4)) setWizardStep(1);
@@ -12472,8 +12629,8 @@
         navUser.classList.add('hidden');
         navUser.classList.remove('flex');
         var mh = document.getElementById('main-header'); if (mh) mh.classList.remove('user-logged-in');
-        var daw = document.getElementById('drawer-auth-wrap'); if (daw) daw.classList.remove('hidden');
-        var duw = document.getElementById('drawer-user-wrap'); if (duw) duw.classList.add('hidden');
+        var daw = document.getElementById('drawer-auth-wrap'); if (daw) { daw.classList.remove('hidden'); daw.style.display = 'flex'; }
+        var duw = document.getElementById('drawer-user-wrap'); if (duw) { duw.classList.add('hidden'); duw.style.display = 'none'; }
         analyzeLoginPrompt.classList.remove('hidden');
         analyzeForm.classList.remove('hidden');
         if (typeof setWizardStep === 'function' && (typeof wizardCurrentStep === 'undefined' || wizardCurrentStep === 1 || wizardCurrentStep === 4)) setWizardStep(1);
