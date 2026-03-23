@@ -1,7 +1,7 @@
 """Admin: Fatura ve gider linkleri — PayTR, Render, Cursor, OpenAI, Cloudflare tek sayfadan."""
 from fastapi import APIRouter, Depends, Request
 from fastapi.responses import HTMLResponse
-from fastapi.templating import Jinja2Templates
+from app.core.templating import Jinja2Templates
 
 from app.admin.deps import require_admin_cookie
 

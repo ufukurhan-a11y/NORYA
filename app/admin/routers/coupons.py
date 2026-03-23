@@ -3,7 +3,7 @@ from datetime import date
 
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
-from fastapi.templating import Jinja2Templates
+from app.core.templating import Jinja2Templates
 from sqlmodel import Session, select
 
 from app.admin.deps import require_admin_cookie
