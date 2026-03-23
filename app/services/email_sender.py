@@ -43,6 +43,37 @@ COUNTRY_TO_LANG = {
 }
 DEFAULT_LANG = "en"
 
+# Kurumsal kısa slogan (doğrulama / şifre sıfırlama şablonlarında; dil ile uyumlu)
+_EMAIL_BRAND_TAGLINE = {
+    "tr": "Norya — Güvenilir kan tahlili analizi",
+    "en": "Norya — Trusted blood test analysis",
+    "de": "Norya — Zuverlässige Bluttest-Analyse",
+    "fr": "Norya — Analyse fiable des résultats sanguins",
+    "es": "Norya — Análisis fiable de analíticas sanguíneas",
+    "it": "Norya — Analisi affidabile degli esami del sangue",
+    "nl": "Norya — Betrouwbare bloedtestanalyse",
+    "pt": "Norya — Análise confiável de exames de sangue",
+    "pl": "Norya — Niezawodna analiza badań krwi",
+    "ru": "Norya — Надёжный анализ результатов анализа крови",
+    "ar": "Norya — تحليل موثوق لنتائج فحص الدم",
+    "el": "Norya — Αξιόπιστη ανάλυση αιματολογικών εξετάσεων",
+    "cs": "Norya — Spolehlivá analýza krevních testů",
+    "ja": "Norya — 信頼できる血液検査の分析",
+    "ko": "Norya — 신뢰할 수 있는 혈액 검사 분석",
+    "zh": "Norya — 值得信赖的验血分析",
+    "sv": "Norya — Pålitlig blodprovskontroll",
+    "no": "Norya — Pålitelig blodprøveanalyse",
+    "da": "Norya — Pålidelig blodprøveanalyse",
+    "fi": "Norya — Luotettava verikokeanalyysi",
+    "ro": "Norya — Analiză de încredere a analizelor de sânge",
+    "hu": "Norya — Megbízható vérvizsgálati elemzés",
+}
+
+
+def _email_brand_tagline(lang: str | None) -> str:
+    code = (lang or DEFAULT_LANG).strip() if lang else DEFAULT_LANG
+    return _EMAIL_BRAND_TAGLINE.get(code, _EMAIL_BRAND_TAGLINE["en"])
+
 
 def country_to_lang(country_code: str | None) -> str:
     """Kullanıcı ülkesine göre e-posta dil kodu (tr, en, de, fr, ...)."""
@@ -172,6 +203,7 @@ def build_reset_email_html(lang: str, reset_link: str, expiry_hours: int = 1) ->
     intro = _reset_body_intro(lang, expiry_hours)
     footer = _reset_body_footer(lang)
     btn = _button_text(lang)
+    tagline = _email_brand_tagline(lang)
     from_name = getattr(settings, "smtp_from_name", None) or "Norya"
     logo_url = (getattr(settings, "frontend_url", None) or "").strip().rstrip("/") or "https://norya.com"
     logo_url = f"{logo_url}/static/norya_logo_transparent_trim.png"
@@ -205,7 +237,7 @@ def build_reset_email_html(lang: str, reset_link: str, expiry_hours: int = 1) ->
           </tr>
           <tr>
             <td style="padding:16px 24px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;text-align:center;">
-              &copy; Norya — Güvenilir kan tahlili analizi
+              &copy; {tagline}
             </td>
           </tr>
         </table>
@@ -281,6 +313,9 @@ _VERIFY_SUBJECT = {
     "no": "Norya — Bekreft e-postadressen din",
     "da": "Norya — Bekræft din e-mailadresse",
     "fi": "Norya — Vahvista sähköpostiosoitteesi",
+    "cs": "Norya — Potvrďte svou e-mailovou adresu",
+    "ro": "Norya — Confirmați adresa de e-mail",
+    "hu": "Norya — Erősítse meg e-mail-címét",
 }
 _VERIFY_INTRO = {
     "tr": "Kaydınızı tamamlamak için aşağıdaki butona tıklayarak e-posta adresinizi doğrulayın.",
@@ -302,8 +337,34 @@ _VERIFY_INTRO = {
     "no": "Klikk på knappen nedenfor for å bekrefte e-postadressen din.",
     "da": "Klik på knappen nedenfor for at bekræfte din e-mailadresse.",
     "fi": "Napsauta alla olevaa painiketta vahvistaaksesi sähköpostiosoitteesi.",
+    "cs": "Klepnutím na tlačítko níže potvrďte svou e-mailovou adresu a dokončete registraci.",
+    "ro": "Faceți clic pe butonul de mai jos pentru a confirma adresa de e-mail și a finaliza înregistrarea.",
+    "hu": "Kattintson az alábbi gombra e-mail-címe megerősítéséhez és a regisztráció befejezéséhez.",
 }
-_VERIFY_BTN = {"tr": "E-postayı doğrula", "en": "Verify email", "de": "E-Mail bestätigen", "fr": "Vérifier", "es": "Verificar", "it": "Verifica", "nl": "Bevestigen", "pt": "Verificar", "pl": "Potwierdź", "ru": "Подтвердить", "ar": "تحقق", "el": "Επιβεβαίωση", "ja": "確認", "ko": "확인", "zh": "验证", "sv": "Verifiera", "no": "Bekreft", "da": "Bekræft", "fi": "Vahvista"}
+_VERIFY_BTN = {
+    "tr": "E-postayı doğrula",
+    "en": "Verify email",
+    "de": "E-Mail bestätigen",
+    "fr": "Vérifier",
+    "es": "Verificar",
+    "it": "Verifica",
+    "nl": "Bevestigen",
+    "pt": "Verificar",
+    "pl": "Potwierdź",
+    "ru": "Подтвердить",
+    "ar": "تحقق",
+    "el": "Επιβεβαίωση",
+    "ja": "確認",
+    "ko": "확인",
+    "zh": "验证",
+    "sv": "Verifiera",
+    "no": "Bekreft",
+    "da": "Bekræft",
+    "fi": "Vahvista",
+    "cs": "Potvrdit e-mail",
+    "ro": "Confirmă e-mailul",
+    "hu": "E-mail megerősítése",
+}
 
 
 def build_verify_email_html(lang: str, verify_link: str) -> tuple[str, str]:
@@ -314,6 +375,7 @@ def build_verify_email_html(lang: str, verify_link: str) -> tuple[str, str]:
     subject = _VERIFY_SUBJECT.get(lang, _VERIFY_SUBJECT["en"])
     intro = _VERIFY_INTRO.get(lang, _VERIFY_INTRO["en"])
     btn = _VERIFY_BTN.get(lang, _VERIFY_BTN["en"])
+    tagline = _email_brand_tagline(lang)
     from_name = getattr(settings, "smtp_from_name", None) or "Norya"
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">
@@ -339,7 +401,7 @@ def build_verify_email_html(lang: str, verify_link: str) -> tuple[str, str]:
               <p style="margin:0 0 24px;text-align:center;">
                 <a href="{verify_link}" style="display:inline-block;padding:14px 28px;background:#0d9488;color:#ffffff!important;text-decoration:none;font-weight:600;font-size:15px;border-radius:10px;">{btn}</a>
               </p>
-              <p style="margin:0;font-size:13px;line-height:1.5;color:#64748b;">Norya — Güvenilir kan tahlili analizi</p>
+              <p style="margin:0;font-size:13px;line-height:1.5;color:#64748b;">{tagline}</p>
             </td>
           </tr>
           <tr>
@@ -373,9 +435,24 @@ _WELCOME_SUBJECT = {
     "fr": "Bienvenue sur NoryaAI — découvrez votre rapport",
     "es": "Bienvenido a NoryaAI — vea cómo es su informe",
     "it": "Benvenuto su NoryaAI — ecco come appare il tuo report",
+    "nl": "Welkom bij NoryaAI — zo ziet uw rapport eruit",
+    "pt": "Bem-vindo à NoryaAI — veja como é o seu relatório",
+    "pl": "Witamy w NoryaAI — zobacz, jak wygląda Twój raport",
+    "ru": "Добро пожаловать в NoryaAI — посмотрите, как выглядит ваш отчёт",
+    "ar": "مرحبًا بك في NoryaAI — شاهد نموذج التقرير",
+    "el": "Καλώς ήρθατε στο NoryaAI — δείτε πώς φαίνεται η αναφορά σας",
+    "cs": "Vítejte v NoryaAI — podívejte se, jak vypadá vaše zpráva",
+    "ja": "NoryaAIへようこそ — レポートのイメージをご覧ください",
+    "ko": "NoryaAI에 오신 것을 환영합니다 — 리포트 예시를 확인하세요",
+    "zh": "欢迎来到 NoryaAI — 查看您的报告样例",
+    "sv": "Välkommen till NoryaAI — så här kan din rapport se ut",
+    "no": "Velkommen til NoryaAI — slik kan rapporten din se ut",
+    "da": "Velkommen til NoryaAI — sådan kan din rapport se ud",
+    "fi": "Tervetuloa NoryaAIhin — näin raporttisi voi näyttää",
+    "ro": "Bun venit la NoryaAI — vezi cum arată raportul tău",
+    "hu": "Üdvözöljük a NoryaAI-nál — így nézhet ki a jelentése",
     "he": "ברוכים הבאים ל-NoryaAI — צפו בדוגמת דוח",
     "hi": "NoryaAI में आपका स्वागत है — अपनी रिपोर्ट देखें",
-    "ar": "مرحبًا بك في NoryaAI — شاهد نموذج التقرير",
 }
 
 _WELCOME_GREETING = {
@@ -385,9 +462,24 @@ _WELCOME_GREETING = {
     "fr": "Merci pour votre inscription !",
     "es": "¡Gracias por registrarse!",
     "it": "Grazie per l'iscrizione!",
+    "nl": "Bedankt voor uw aanmelding!",
+    "pt": "Obrigado por se cadastrar!",
+    "pl": "Dziękujemy za rejestrację!",
+    "ru": "Спасибо за регистрацию!",
+    "ar": "!شكرًا لتسجيلك",
+    "el": "Ευχαριστούμε για την εγγραφή σας!",
+    "cs": "Děkujeme za registraci!",
+    "ja": "ご登録ありがとうございます！",
+    "ko": "가입해 주셔서 감사합니다!",
+    "zh": "感谢您的注册！",
+    "sv": "Tack för att du registrerade dig!",
+    "no": "Takk for at du registrerte deg!",
+    "da": "Tak for din tilmelding!",
+    "fi": "Kiitos rekisteröitymisestä!",
+    "ro": "Mulțumim că v-ați înscris!",
+    "hu": "Köszönjük a regisztrációt!",
     "he": "!תודה שנרשמת",
     "hi": "साइन अप करने के लिए धन्यवाद!",
-    "ar": "!شكرًا لتسجيلك",
 }
 
 _WELCOME_BODY = {
@@ -415,6 +507,70 @@ _WELCOME_BODY = {
         "NoryaAI trasforma i tuoi risultati delle analisi del sangue in un report strutturato e pronto per il medico. "
         "Ecco cosa può fare per te:"
     ),
+    "nl": (
+        "NoryaAI zet uw bloedtestuitslagen om in een gestructureerd, leesbaar rapport, klaar voor uw arts. "
+        "Dit kan het voor u doen:"
+    ),
+    "pt": (
+        "A NoryaAI transforma os resultados dos seus exames de sangue num relatório estruturado e pronto para o médico. "
+        "Eis o que pode fazer por si:"
+    ),
+    "pl": (
+        "NoryaAI zamienia wyniki badań krwi w uporządkowany, czytelny raport gotowy dla lekarza. "
+        "Oto kilka rzeczy, w których pomoże:"
+    ),
+    "ru": (
+        "NoryaAI превращает результаты анализа крови в структурированный, понятный отчёт, готовый для врача. "
+        "Вот чем он может помочь:"
+    ),
+    "ar": (
+        "يحول NoryaAI نتائج تحاليل الدم إلى تقرير منظم وسهل القراءة وجاهز للطبيب. "
+        "إليك بعض الأشياء التي يمكنه مساعدتك فيها:"
+    ),
+    "el": (
+        "Το NoryaAI μετατρέπει τα αποτελέσματα των εξετάσεών σας σε μια δομημένη, ευανάγνωστη αναφορά έτοιμη για τον γιατρό. "
+        "Ορίστε μερικά πράγματα που μπορεί να σας βοηθήσει:"
+    ),
+    "cs": (
+        "NoryaAI přetvoří výsledky vašich krevních testů ve strukturovanou, srozumitelnou zprávu připravenou pro lékaře. "
+        "Zde je několik oblastí, kde pomůže:"
+    ),
+    "ja": (
+        "NoryaAIは血液検査の結果を、医師に見せやすい分かりやすいレポートにまとめます。"
+        "次のようなことができます："
+    ),
+    "ko": (
+        "NoryaAI는 혈액 검사 결과를 의사에게 보여주기 좋은 구조화된 보고서로 정리해 드립니다. "
+        "도움이 되는 몇 가지:"
+    ),
+    "zh": (
+        "NoryaAI 将您的验血结果整理成结构清晰、便于向医生展示的报告。"
+        "它可以帮您："
+    ),
+    "sv": (
+        "NoryaAI förvandlar dina blodprovssvar till en tydlig, strukturerad rapport redo för läkaren. "
+        "Här är några saker den kan hjälpa till med:"
+    ),
+    "no": (
+        "NoryaAI gjør blodprøvesvarene dine om til en strukturert, lettlest rapport klar for legen. "
+        "Slik kan den hjelpe deg:"
+    ),
+    "da": (
+        "NoryaAI forvandler dine blodprøveresultater til en struktureret, læsbar rapport klar til lægen. "
+        "Her er nogle ting, den kan hjælpe med:"
+    ),
+    "fi": (
+        "NoryaAI muuttaa verikokeiden tuloksesi jäsennellyksi, helppolukuiseksi raportiksi, jota voit näyttää lääkärille. "
+        "Tässä muutamia asioita, joissa se auttaa:"
+    ),
+    "ro": (
+        "NoryaAI transformă rezultatele analizelor de sânge într-un raport structurat, ușor de citit, pregătit pentru medic. "
+        "Iată câteva lucruri cu care vă poate ajuta:"
+    ),
+    "hu": (
+        "A NoryaAI a vérvizsgálati eredményeit strukturált, könnyen olvasható, orvosnak átadható jelentéssé alakítja. "
+        "Íme néhány dolog, amiben segít:"
+    ),
     "he": (
         "NoryaAI הופך את תוצאות בדיקות הדם שלך לדוח מובנה, קריא ומוכן לרופא. "
         "הנה כמה דברים שהוא יכול לעזור בהם:"
@@ -422,10 +578,6 @@ _WELCOME_BODY = {
     "hi": (
         "NoryaAI आपकी रक्त जांच के परिणामों को एक संरचित, पढ़ने में आसान, डॉक्टर-रेडी रिपोर्ट में बदलता है। "
         "यहां कुछ चीज़ें हैं जिनमें यह मदद कर सकता है:"
-    ),
-    "ar": (
-        "يحول NoryaAI نتائج تحاليل الدم إلى تقرير منظم وسهل القراءة وجاهز للطبيب. "
-        "إليك بعض الأشياء التي يمكنه مساعدتك فيها:"
     ),
 }
 
@@ -484,6 +636,96 @@ _WELCOME_BULLETS = {
         "تقارير بأكثر من 9 لغات",
         "تقرير PDF جاهز للطبيب وقابل للتحميل",
     ],
+    "nl": [
+        "Gezondheidsscore en gemarkeerde waarden",
+        "Gestructureerde samenvatting met referentiewaarden",
+        "Rapporten in 9+ talen",
+        "Downloadbare PDF, klaar voor uw arts",
+    ],
+    "pt": [
+        "Pontuação de saúde e marcadores assinalados",
+        "Resumo estruturado com valores de referência",
+        "Relatórios em mais de 9 idiomas",
+        "PDF transferível, pronto para o médico",
+    ],
+    "pl": [
+        "Wynik zdrowia i oznaczone parametry",
+        "Uporządkowane podsumowanie z zakresami referencyjnymi",
+        "Raporty w ponad 9 językach",
+        "PDF do pobrania, gotowy dla lekarza",
+    ],
+    "ru": [
+        "Оценка здоровья и отмеченные показатели",
+        "Структурированная сводка с референсными диапазонами",
+        "Отчёты на 9+ языках",
+        "PDF для скачивания, готовый для врача",
+    ],
+    "el": [
+        "Βαθμολογία υγείας και επισημασμένοι δείκτες",
+        "Δομημένη περίληψη με φυσιολογικές τιμές",
+        "Αναφορές σε 9+ γλώσσες",
+        "Λήψιμο PDF, έτοιμο για τον γιατρό",
+    ],
+    "cs": [
+        "Skóre zdraví a zvýrazněné hodnoty",
+        "Strukturované shrnutí s referenčními rozmezími",
+        "Zprávy ve více než 9 jazycích",
+        "PDF ke stažení, připravené pro lékaře",
+    ],
+    "ja": [
+        "健康スコアと注意が必要な項目",
+        "基準値付きの整理された要約",
+        "9か国語以上のレポート",
+        "医師に見せやすいPDFでダウンロード",
+    ],
+    "ko": [
+        "건강 점수 및 주의 지표",
+        "참고 범위가 포함된 구조화된 요약",
+        "9개 이상 언어로 보고서",
+        "의사에게 보여주기 좋은 다운로드 가능 PDF",
+    ],
+    "zh": [
+        "健康评分与异常指标提示",
+        "含参考范围的结构化摘要",
+        "支持 9 种以上语言的报告",
+        "可下载、便于向医生展示的 PDF",
+    ],
+    "sv": [
+        "Hälsopoäng och markerade värden",
+        "Strukturerad sammanfattning med referensintervall",
+        "Rapporter på 9+ språk",
+        "Nedladdningsbar PDF, redo för läkaren",
+    ],
+    "no": [
+        "Helsepoeng og markerte verdier",
+        "Strukturert sammendrag med referanseområder",
+        "Rapporter på 9+ språk",
+        "Nedlastbar PDF, klar for legen",
+    ],
+    "da": [
+        "Helbredsscore og markerede værdier",
+        "Struktureret oversigt med referenceintervaller",
+        "Rapporter på 9+ sprog",
+        "Downloadbar PDF, klar til lægen",
+    ],
+    "fi": [
+        "Terveyspisteet ja korostetut arvot",
+        "Rakennettu yhteenveto viitearvoineen",
+        "Raportit yli 9 kielellä",
+        "Ladattava PDF, valmis lääkärille",
+    ],
+    "ro": [
+        "Scor de sănătate și markeri evidențiați",
+        "Rezumat structurat cu intervale de referință",
+        "Rapoarte în peste 9 limbi",
+        "PDF descărcabil, pregătit pentru medic",
+    ],
+    "hu": [
+        "Egészségpontszám és kiemelt értékek",
+        "Strukturált összefoglaló referenciatartományokkal",
+        "Jelentések 9+ nyelven",
+        "Letölthető PDF, orvosnak átadható",
+    ],
 }
 
 _WELCOME_CTA = {
@@ -493,9 +735,24 @@ _WELCOME_CTA = {
     "fr": "Analyser mes résultats",
     "es": "Analizar mi análisis de sangre",
     "it": "Analizza le mie analisi",
+    "nl": "Mijn bloedtest analyseren",
+    "pt": "Analisar o meu exame de sangue",
+    "pl": "Przeanalizuj moje badanie krwi",
+    "ru": "Проанализировать мой анализ крови",
+    "ar": "حلل تحليل الدم الخاص بي",
+    "el": "Αναλύστε τις εξετάσεις αίματός μου",
+    "cs": "Analyzovat mé krevní testy",
+    "ja": "血液検査を分析する",
+    "ko": "혈액 검사 분석하기",
+    "zh": "分析我的验血报告",
+    "sv": "Analysera mitt blodprov",
+    "no": "Analyser blodprøven min",
+    "da": "Analyser min blodprøve",
+    "fi": "Analysoi verikokeeni",
+    "ro": "Analizează analiza mea de sânge",
+    "hu": "Vérvizsgálatom elemzése",
     "he": "נתח את בדיקת הדם שלי",
     "hi": "मेरी रक्त जांच का विश्लेषण करें",
-    "ar": "حلل تحليل الدم الخاص بي",
 }
 
 _WELCOME_SAMPLE_LINK_TEXT = {
@@ -505,9 +762,24 @@ _WELCOME_SAMPLE_LINK_TEXT = {
     "fr": "Voir un exemple de rapport →",
     "es": "Ver un informe de ejemplo →",
     "it": "Vedi un report di esempio →",
+    "nl": "Bekijk een voorbeeldrapport →",
+    "pt": "Ver um relatório de exemplo →",
+    "pl": "Zobacz przykładowy raport →",
+    "ru": "Посмотреть пример отчёта →",
+    "ar": "→ شاهد نموذج تقرير",
+    "el": "Δείτε δείγμα αναφοράς →",
+    "cs": "Zobrazit ukázkovou zprávu →",
+    "ja": "サンプルレポートを見る →",
+    "ko": "샘플 리포트 보기 →",
+    "zh": "查看示例报告 →",
+    "sv": "Se ett exempel på rapport →",
+    "no": "Se en eksempelrapport →",
+    "da": "Se en eksempelrapport →",
+    "fi": "Katso esimerkkiraportti →",
+    "ro": "Vezi un raport exemplu →",
+    "hu": "Minta jelentés megtekintése →",
     "he": "→ צפו בדוגמת דוח",
     "hi": "एक नमूना रिपोर्ट देखें →",
-    "ar": "→ شاهد نموذج تقرير",
 }
 
 _WELCOME_HOW_LINK_TEXT = {
@@ -517,9 +789,24 @@ _WELCOME_HOW_LINK_TEXT = {
     "fr": "Comment ça marche →",
     "es": "Cómo funciona →",
     "it": "Come funziona →",
+    "nl": "Hoe het werkt →",
+    "pt": "Como funciona →",
+    "pl": "Jak to działa →",
+    "ru": "Как это работает →",
+    "ar": "→ كيف يعمل",
+    "el": "Πώς λειτουργεί →",
+    "cs": "Jak to funguje →",
+    "ja": "仕組み →",
+    "ko": "작동 방식 →",
+    "zh": "如何运作 →",
+    "sv": "Så funkar det →",
+    "no": "Slik fungerer det →",
+    "da": "Sådan virker det →",
+    "fi": "Näin se toimii →",
+    "ro": "Cum funcționează →",
+    "hu": "Hogyan működik →",
     "he": "→ איך זה עובד",
     "hi": "यह कैसे काम करता है →",
-    "ar": "→ كيف يعمل",
 }
 
 _WELCOME_PRIVACY = {
@@ -529,9 +816,24 @@ _WELCOME_PRIVACY = {
     "fr": "Vos données sont chiffrées et ne sont jamais partagées avec des tiers.",
     "es": "Sus datos están encriptados y nunca se comparten con terceros.",
     "it": "I tuoi dati sono crittografati e non vengono mai condivisi con terze parti.",
+    "nl": "Uw gegevens worden versleuteld en nooit met derden gedeeld.",
+    "pt": "Os seus dados são encriptados e nunca são partilhados com terceiros.",
+    "pl": "Twoje dane są szyfrowane i nigdy nie są udostępniane osobom trzecim.",
+    "ru": "Ваши данные шифруются и никогда не передаются третьим лицам.",
+    "ar": "بياناتك مشفرة ولن تتم مشاركتها مع أطراف ثالثة أبدًا.",
+    "el": "Τα δεδομένα σας κρυπτογραφούνται και δεν κοινοποιούνται ποτέ σε τρίτους.",
+    "cs": "Vaše data jsou šifrována a nikdy je nesdílíme s třetími stranami.",
+    "ja": "お客様のデータは暗号化され、第三者と共有されることはありません。",
+    "ko": "데이터는 암호화되며 제3자와 공유되지 않습니다.",
+    "zh": "您的数据已加密，绝不会与第三方共享。",
+    "sv": "Dina uppgifter krypteras och delas aldrig med tredje part.",
+    "no": "Dataene dine krypteres og deles aldri med tredjeparter.",
+    "da": "Dine data krypteres og deles aldrig med tredjeparter.",
+    "fi": "Tietosi salataan eikä niitä koskaan jaeta kolmansille osapuolille.",
+    "ro": "Datele dvs. sunt criptate și nu sunt niciodată partajate cu terți.",
+    "hu": "Az adatai titkosítva vannak, és soha nem osztjuk meg harmadik felekkel.",
     "he": "הנתונים שלך מוצפנים ולעולם לא משותפים עם צדדים שלישיים.",
     "hi": "आपका डेटा एन्क्रिप्टेड है और कभी भी तीसरे पक्ष के साथ साझा नहीं किया जाता।",
-    "ar": "بياناتك مشفرة ولن تتم مشاركتها مع أطراف ثالثة أبدًا.",
 }
 
 _WELCOME_FOOTER = {
@@ -541,9 +843,24 @@ _WELCOME_FOOTER = {
     "fr": "Vous recevez cet e-mail car vous vous êtes inscrit aux mises à jour de NoryaAI.",
     "es": "Recibe este correo porque se suscribió a las actualizaciones de NoryaAI.",
     "it": "Ricevi questa email perché ti sei iscritto agli aggiornamenti di NoryaAI.",
+    "nl": "U ontvangt dit omdat u zich heeft aangemeld voor NoryaAI-updates.",
+    "pt": "Está a receber isto porque se inscreveu nas atualizações da NoryaAI.",
+    "pl": "Otrzymujesz tę wiadomość, ponieważ zapisałeś się na aktualizacje NoryaAI.",
+    "ru": "Вы получили это письмо, потому что подписались на обновления NoryaAI.",
+    "ar": "تتلقى هذا البريد لأنك اشتركت في تحديثات NoryaAI.",
+    "el": "Λαμβάνετε αυτό το email επειδή εγγραφήκατε για ενημερώσεις NoryaAI.",
+    "cs": "Tento e-mail dostáváte, protože jste se zaregistrovali k aktualizacím NoryaAI.",
+    "ja": "NoryaAIの更新情報にご登録いただいたため、このメールをお送りしています。",
+    "ko": "NoryaAI 업데이트에 가입하셨기 때문에 이 메일을 받으셨습니다.",
+    "zh": "您收到此邮件是因为您订阅了 NoryaAI 更新。",
+    "sv": "Du får detta eftersom du registrerade dig för uppdateringar från NoryaAI.",
+    "no": "Du mottar denne e-posten fordi du registrerte deg for oppdateringer fra NoryaAI.",
+    "da": "Du modtager denne e-mail, fordi du tilmeldte dig opdateringer fra NoryaAI.",
+    "fi": "Saat tämän sähköpostin, koska rekisteröidyit NoryaAI-päivityksiin.",
+    "ro": "Primiți acest e-mail deoarece v-ați înscris pentru actualizări NoryaAI.",
+    "hu": "Azért kapja ezt az e-mailt, mert feliratkozott a NoryaAI hírekre.",
     "he": "אתה מקבל מייל זה כי נרשמת לעדכוני NoryaAI.",
     "hi": "आपको यह ईमेल इसलिए मिल रहा है क्योंकि आपने NoryaAI अपडेट के लिए साइन अप किया है।",
-    "ar": "تتلقى هذا البريد لأنك اشتركت في تحديثات NoryaAI.",
 }
 
 
