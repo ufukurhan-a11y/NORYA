@@ -1,0 +1,233 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.rev_title }}{% endblock %}
+{% block header_title %}{{ t.rev_header }}{% endblock %}
+{% block content %}
+<div class="mb-8 flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4">
+  <div>
+    <div class="flex flex-wrap items-center gap-3 mb-1">
+      <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface">{{ t.rev_title }}</h2>
+      <span class="inline-flex items-center justify-center min-w-[2rem] h-8 px-2.5 rounded-full text-sm font-bold font-headline bg-primary/10 text-primary border border-primary/20" title="{{ t.rev_pending_badge }}">
+        {{ pending_count }}
+      </span>
+    </div>
+    <p class="text-on-surface-variant text-sm">{{ t.rev_subtitle }}</p>
+  </div>
+  <div class="inline-flex rounded-xl bg-white shadow-ambient p-1 border border-outline-variant/10">
+    <a href="/enterprise/review?show=pending" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {% if show == 'pending' %}bg-primary text-white shadow-sm{% else %}text-on-surface-variant hover:bg-surface-container-low{% endif %}">
+      {{ t.rev_tab_pending }}
+    </a>
+    <a href="/enterprise/review?show=all" class="px-4 py-2 rounded-lg text-sm font-semibold transition-all {% if show == 'all' %}bg-primary text-white shadow-sm{% else %}text-on-surface-variant hover:bg-surface-container-low{% endif %}">
+      {{ t.rev_tab_all }}
+    </a>
+  </div>
+</div>
+
+{% if not cases and show == 'pending' %}
+<div class="bg-white rounded-xl shadow-ambient p-12 text-center">
+  <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-surface-container-low flex items-center justify-center">
+    <span class="material-symbols-outlined text-4xl text-on-surface-variant/50">task_alt</span>
+  </div>
+  <p class="font-headline font-semibold text-on-surface text-lg">{{ t.rev_empty_pending }}</p>
+  <p class="text-sm text-on-surface-variant mt-2 max-w-md mx-auto">{{ t.rev_empty_pending_sub }}</p>
+</div>
+{% elif not cases %}
+<div class="bg-white rounded-xl shadow-ambient p-12 text-center">
+  <p class="font-headline font-semibold text-on-surface text-lg">{{ t.rev_empty_all }}</p>
+</div>
+{% else %}
+<div class="space-y-5">
+  {% for c in cases %}
+  <article class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden">
+    <div class="p-5 lg:p-6">
+      <div class="flex flex-col lg:flex-row lg:items-start gap-4 lg:gap-6">
+        <div class="flex-1 min-w-0">
+          <div class="flex flex-wrap items-center gap-2 mb-3">
+            <span class="font-mono text-xs text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded-md">#{{ c.id }}</span>
+            {% set stype = (c.source_type or '')|lower %}
+            {% if stype == 'pdf' %}
+            <span class="material-symbols-outlined text-red-600 text-[22px]" title="{{ t.filetype_pdf }}">picture_as_pdf</span>
+            {% elif stype == 'image' %}
+            <span class="material-symbols-outlined text-violet-600 text-[22px]" title="{{ t.filetype_image }}">image</span>
+            {% else %}
+            <span class="material-symbols-outlined text-slate-600 text-[22px]" title="{{ t.filetype_text }}">article</span>
+            {% endif %}
+            <a href="/enterprise/case/{{ c.id }}" class="font-headline font-semibold text-on-surface truncate flex-1 min-w-0 hover:text-primary hover:underline">{{ c.filename }}</a>
+          </div>
+          {% set st = c.status %}
+          <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold mb-4
+            {% if st == 'new' %}bg-blue-50 text-blue-800
+            {% elif st == 'processing' %}bg-amber-50 text-amber-800
+            {% elif st == 'needs_review' %}bg-orange-50 text-orange-800
+            {% elif st == 'approved' %}bg-emerald-50 text-emerald-800
+            {% elif st == 'rejected' %}bg-red-50 text-red-800
+            {% elif st == 'archived' %}bg-slate-100 text-slate-600
+            {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+            {{ c.status_label or c.status }}
+          </span>
+
+          <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-3 text-sm">
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-on-surface-variant">{{ t.rev_meta_uploader }}</dt>
+              <dd class="text-on-surface font-medium mt-0.5 break-all">{{ c.uploader_email or '—' }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-on-surface-variant">{{ t.rev_meta_upload_date }}</dt>
+              <dd class="text-on-surface font-medium mt-0.5">{{ c.created_at or '—' }}</dd>
+            </div>
+            {% if c.reviewer_email or c.reviewed_at %}
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-on-surface-variant">{{ t.rev_meta_reviewer }}</dt>
+              <dd class="text-on-surface font-medium mt-0.5 break-all">{{ c.reviewer_email or '—' }}</dd>
+            </div>
+            <div>
+              <dt class="text-xs uppercase tracking-wider text-on-surface-variant">{{ t.rev_meta_review_date }}</dt>
+              <dd class="text-on-surface font-medium mt-0.5">{{ c.reviewed_at or '—' }}</dd>
+            </div>
+            {% endif %}
+          </dl>
+          {% if c.review_notes %}
+          <div class="mt-4 p-3 rounded-lg bg-surface-container-low border border-outline-variant/10">
+            <p class="text-xs uppercase tracking-wider text-on-surface-variant mb-1">{{ t.rev_notes }}</p>
+            <p class="text-sm text-on-surface whitespace-pre-wrap">{{ c.review_notes }}</p>
+          </div>
+          {% endif %}
+
+          {% if c.reports %}
+          <div class="mt-5 pt-5 border-t border-outline-variant/10">
+            <p class="text-xs font-bold uppercase tracking-widest text-outline mb-3">{{ t.rev_reports }}</p>
+            <ul class="flex flex-wrap gap-2">
+              {% for r in c.reports %}
+              <li class="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg bg-surface text-sm border border-outline-variant/15">
+                <span class="font-medium text-on-surface uppercase text-xs tracking-wide">{{ r.language }}</span>
+                <span class="text-on-surface-variant">·</span>
+                {% set ap = (r.approval_status or '')|lower %}
+                <span class="text-xs font-semibold
+                  {% if ap == 'approved' %}text-emerald-700
+                  {% elif ap == 'rejected' %}text-red-700
+                  {% elif ap == 'pending' %}text-amber-700
+                  {% else %}text-on-surface-variant{% endif %}">
+                  {% if ap == 'approved' %}{{ t.rev_report_approved }}{% elif ap == 'rejected' %}{{ t.rev_report_rejected }}{% elif ap == 'pending' %}{{ t.rev_report_pending }}{% else %}{{ r.approval_status }}{% endif %}
+                </span>
+              </li>
+              {% endfor %}
+            </ul>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="mt-6 pt-5 border-t border-outline-variant/10 flex flex-col gap-4">
+        <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+          <div class="flex flex-wrap gap-2 items-start" data-review-card="{{ c.id }}">
+            <a href="/enterprise/case/{{ c.id }}" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-primary text-white hover:brightness-105 transition-all shadow-sm">
+              <span class="material-symbols-outlined !text-[18px]">visibility</span>
+              {{ t.rev_view_detail }}
+            </a>
+            <button type="button" class="review-toggle-notes inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-sm" data-target="approve-panel-{{ c.id }}">
+              <span class="material-symbols-outlined !text-[18px]">check_circle</span>
+              {{ t.rev_approve }}
+            </button>
+            <button type="button" class="review-toggle-notes inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-white border border-red-200 text-red-700 hover:bg-red-50 transition-colors" data-target="reject-panel-{{ c.id }}">
+              <span class="material-symbols-outlined !text-[18px]">cancel</span>
+              {{ t.rev_reject }}
+            </button>
+          </div>
+          <form method="post" action="/enterprise/review/{{ c.id }}/status" class="flex flex-wrap items-center gap-2 sm:ml-auto">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <label for="status-{{ c.id }}" class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.rev_status_label }}</label>
+            <select id="status-{{ c.id }}" name="new_status" class="rounded-lg border-outline-variant/30 text-sm py-2 pl-3 pr-8 bg-white focus:ring-primary focus:border-primary">
+              <option value="new" {% if c.status == 'new' %}selected{% endif %}>{{ t.status_new }}</option>
+              <option value="processing" {% if c.status == 'processing' %}selected{% endif %}>{{ t.status_processing }}</option>
+              <option value="needs_review" {% if c.status == 'needs_review' %}selected{% endif %}>{{ t.status_needs_review }}</option>
+              <option value="approved" {% if c.status == 'approved' %}selected{% endif %}>{{ t.status_approved }}</option>
+              <option value="rejected" {% if c.status == 'rejected' %}selected{% endif %}>{{ t.status_rejected }}</option>
+              <option value="archived" {% if c.status == 'archived' %}selected{% endif %}>{{ t.status_archived }}</option>
+            </select>
+            <button type="submit" class="px-3 py-2 rounded-lg text-sm font-semibold bg-surface-container-high text-on-surface hover:bg-surface-container transition-colors">
+              {{ t.update }}
+            </button>
+          </form>
+        </div>
+
+        <div id="approve-panel-{{ c.id }}" class="hidden rounded-xl border border-emerald-200 bg-emerald-50/40 p-4">
+          <form method="post" action="/enterprise/review/{{ c.id }}/approve" class="space-y-3">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.rev_approve_note_label }}</label>
+            <textarea name="notes" rows="3" class="w-full rounded-lg border-outline-variant/30 text-sm focus:ring-primary focus:border-primary" placeholder="{{ t.rev_approve_note_ph }}"></textarea>
+            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors">
+              <span class="material-symbols-outlined !text-[18px]">send</span>
+              {{ t.rev_approve_submit }}
+            </button>
+          </form>
+        </div>
+        <div id="reject-panel-{{ c.id }}" class="hidden rounded-xl border border-red-200 bg-red-50/40 p-4">
+          <form method="post" action="/enterprise/review/{{ c.id }}/reject" class="space-y-3">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+            <label class="block text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.rev_reject_note_label }}</label>
+            <textarea name="notes" rows="3" class="w-full rounded-lg border-outline-variant/30 text-sm focus:ring-primary focus:border-primary" placeholder="{{ t.rev_reject_note_ph }}"></textarea>
+            <button type="submit" class="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold bg-red-600 text-white hover:bg-red-700 transition-colors">
+              <span class="material-symbols-outlined !text-[18px]">send</span>
+              {{ t.rev_reject_submit }}
+            </button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </article>
+  {% endfor %}
+</div>
+
+{% if total > per_page or page > 1 %}
+<nav class="mt-8 flex flex-wrap items-center justify-between gap-4" aria-label="{{ t.pagination }}">
+  <p class="text-sm text-on-surface-variant">
+    {{ t.rev_total }} <span class="font-semibold text-on-surface">{{ total }}</span> {{ t.records }} · {{ t.page }} {{ page }}
+  </p>
+  <div class="flex items-center gap-2">
+    {% if has_prev %}
+    <a href="?show={{ show }}&page={{ page - 1 }}" class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold bg-white border border-outline-variant/20 text-on-surface hover:bg-surface-container-low shadow-ambient transition-colors">
+      <span class="material-symbols-outlined !text-[18px]">chevron_left</span>
+      {{ t.prev }}
+    </a>
+    {% else %}
+    <span class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold text-on-surface-variant/50 border border-transparent cursor-not-allowed">{{ t.prev }}</span>
+    {% endif %}
+    {% if has_next %}
+    <a href="?show={{ show }}&page={{ page + 1 }}" class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold bg-white border border-outline-variant/20 text-on-surface hover:bg-surface-container-low shadow-ambient transition-colors">
+      {{ t.next }}
+      <span class="material-symbols-outlined !text-[18px]">chevron_right</span>
+    </a>
+    {% else %}
+    <span class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold text-on-surface-variant/50 border border-transparent cursor-not-allowed">{{ t.next }}</span>
+    {% endif %}
+  </div>
+</nav>
+{% endif %}
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  document.querySelectorAll('.review-toggle-notes').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      var id = btn.getAttribute('data-target');
+      if (!id) return;
+      var panel = document.getElementById(id);
+      if (!panel) return;
+      var cardRoot = btn.closest('[data-review-card]');
+      var cardId = cardRoot ? cardRoot.getAttribute('data-review-card') : null;
+      document.querySelectorAll('[id^="approve-panel-"], [id^="reject-panel-"]').forEach(function (p) {
+        if (cardId && (p.id === 'approve-panel-' + cardId || p.id === 'reject-panel-' + cardId)) {
+          if (p.id !== id) p.classList.add('hidden');
+        }
+      });
+      panel.classList.toggle('hidden');
+      if (!panel.classList.contains('hidden')) {
+        var ta = panel.querySelector('textarea');
+        if (ta) ta.focus();
+      }
+    });
+  });
+})();
+</script>
+{% endblock %}

@@ -1,0 +1,280 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}{{ inst.name }} - Norya Admin{% endblock %}
+{% block admin_header_title %}{{ inst.name }}{% endblock %}
+{% block content %}
+<a href="/admin/institutions" class="inline-flex items-center gap-1 text-sm text-primary hover:underline mb-6">
+  <span class="material-symbols-outlined text-lg">arrow_back</span>
+  Kurum listesine dön
+</a>
+
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-5">
+    <p class="text-xs uppercase tracking-wider text-on-surface-variant mb-1">Durum</p>
+    <p class="text-lg font-bold font-headline {% if inst.is_active %}text-emerald-700{% else %}text-red-600{% endif %}">
+      {% if inst.is_active %}Aktif{% else %}Pasif{% endif %}
+    </p>
+    <p class="text-xs text-on-surface-variant mt-1">Tür: {{ type_label }}</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-5">
+    <p class="text-xs uppercase tracking-wider text-on-surface-variant mb-1">Aylık kota</p>
+    <p class="text-lg font-bold font-headline text-on-surface">
+      {{ inst.quota_used_this_month }} <span class="text-on-surface-variant font-normal">/ {{ inst.monthly_quota }}</span>
+    </p>
+    <div class="w-full bg-surface-container-high rounded-full h-2 mt-2">
+      {% set pct = (inst.quota_used_this_month / inst.monthly_quota * 100) if inst.monthly_quota > 0 else 0 %}
+      <div class="h-2 rounded-full {% if pct > 90 %}bg-red-500{% elif pct > 70 %}bg-amber-500{% else %}bg-primary{% endif %}" style="width: {{ [pct, 100] | min }}%"></div>
+    </div>
+    <form method="post" action="/admin/institutions/{{ inst.id }}/quota-reset" class="mt-2">
+      <button type="submit" class="text-xs text-primary hover:underline">Kotayı sıfırla</button>
+    </form>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-5">
+    <p class="text-xs uppercase tracking-wider text-on-surface-variant mb-1">Sözleşme</p>
+    <p class="text-sm text-on-surface">
+      {{ inst.contract_start.strftime('%d.%m.%Y') if inst.contract_start else '—' }}
+      →
+      {{ inst.contract_end.strftime('%d.%m.%Y') if inst.contract_end else '—' }}
+    </p>
+    {% if inst.contact_email %}<p class="text-xs text-on-surface-variant mt-1">{{ inst.contact_email }}</p>{% endif %}
+    {% if inst.contact_phone %}<p class="text-xs text-on-surface-variant">{{ inst.contact_phone }}</p>{% endif %}
+  </div>
+</div>
+
+<!-- Edit form -->
+<details class="mb-8 bg-surface-container-lowest rounded-xl shadow-ambient">
+  <summary class="px-6 py-4 cursor-pointer font-headline font-semibold text-on-surface flex items-center gap-2">
+    <span class="material-symbols-outlined text-lg">edit</span>
+    Kurum bilgilerini düzenle
+  </summary>
+  <div class="px-6 pb-6">
+    <form method="post" action="/admin/institutions/{{ inst.id }}/edit" class="space-y-4 max-w-xl">
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1">Kurum adı</label>
+        <input type="text" name="name" value="{{ inst.name }}" required class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Tür</label>
+          <select name="type" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm">
+            {% for val, label in types %}<option value="{{ val }}" {% if inst.type == val %}selected{% endif %}>{{ label }}</option>{% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Aylık kota</label>
+          <input type="number" name="monthly_quota" value="{{ inst.monthly_quota }}" min="1" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Kota sıfırlama günü</label>
+          <input type="number" name="quota_reset_day" value="{{ inst.quota_reset_day }}" min="1" max="28" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+        <div class="flex items-end pb-1">
+          <label class="flex items-center gap-2 text-sm font-medium text-on-surface">
+            <input type="checkbox" name="is_active" value="true" {% if inst.is_active %}checked{% endif %} class="rounded border-outline-variant/40" />
+            Aktif
+          </label>
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">İletişim e-posta</label>
+          <input type="email" name="contact_email" value="{{ inst.contact_email or '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">İletişim telefon</label>
+          <input type="tel" name="contact_phone" value="{{ inst.contact_phone or '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Sözleşme başlangıç</label>
+          <input type="date" name="contract_start" value="{{ inst.contract_start.strftime('%Y-%m-%d') if inst.contract_start else '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Sözleşme bitiş</label>
+          <input type="date" name="contract_end" value="{{ inst.contract_end.strftime('%Y-%m-%d') if inst.contract_end else '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1">Notlar</label>
+        <textarea name="notes" rows="2" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm resize-none">{{ inst.notes or '' }}</textarea>
+      </div>
+      <button type="submit" class="px-6 py-2.5 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02]">Kaydet</button>
+    </form>
+  </div>
+</details>
+
+<!-- Members -->
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient mb-8">
+  <div class="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">group</span>
+      Üyeler ({{ members | length }})
+    </h3>
+  </div>
+
+  <div class="px-6 py-4 border-b border-outline-variant/10 bg-surface-container-low/30">
+    <form method="post" action="/admin/institutions/{{ inst.id }}/add-member" class="flex flex-wrap items-end gap-3">
+      <div>
+        <label class="block text-xs font-medium text-on-surface-variant mb-1">E-posta (mevcut kullanıcı)</label>
+        <input type="email" name="user_email" required placeholder="kullanici@ornek.com" class="px-4 py-2 rounded-xl bg-white border-0 text-sm w-64 focus:ring-2 focus:ring-primary-container/25" />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-on-surface-variant mb-1">Rol</label>
+        <select name="role" class="px-4 py-2 rounded-xl bg-white border-0 text-sm focus:ring-2 focus:ring-primary-container/25">
+          {% for val, label in roles %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="px-5 py-2 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02]">Ekle</button>
+    </form>
+  </div>
+
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">Kullanıcı</th>
+          <th class="px-5 py-3">Ad</th>
+          <th class="px-5 py-3">Rol</th>
+          <th class="px-5 py-3">Kabul</th>
+          <th class="px-5 py-3">Durum</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+        <tr class="hover:bg-surface-container-low/50 transition-colors border-t border-outline-variant/10">
+          <td class="px-5 py-3 font-medium">{{ m.email }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ m.full_name }}</td>
+          <td class="px-5 py-3">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium
+              {% if m.role == 'admin' %}bg-violet-50 text-violet-800
+              {% elif m.role == 'reviewer' %}bg-blue-50 text-blue-800
+              {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+              {{ m.role }}
+            </span>
+          </td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ m.accepted_at }}</td>
+          <td class="px-5 py-3">
+            {% if m.is_active %}<span class="text-emerald-700 font-medium text-xs">Aktif</span>
+            {% else %}<span class="text-red-600 font-medium text-xs">Pasif</span>{% endif %}
+          </td>
+          <td class="px-5 py-3">
+            <form method="post" action="/admin/institutions/{{ inst.id }}/members/{{ m.id }}/toggle" class="inline">
+              <button type="submit" class="text-xs text-primary hover:underline">
+                {% if m.is_active %}Devre dışı bırak{% else %}Aktifleştir{% endif %}
+              </button>
+            </form>
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="px-5 py-6 text-center text-on-surface-variant">Henüz üye eklenmemiş.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Pending Invites -->
+{% if pending_invites %}
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient mb-8">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">mail</span>
+      Bekleyen davetler ({{ pending_invites | length }})
+    </h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">E-posta</th>
+          <th class="px-5 py-3">Rol</th>
+          <th class="px-5 py-3">Davet tarihi</th>
+          <th class="px-5 py-3">Son kullanma</th>
+          <th class="px-5 py-3">Token</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inv in pending_invites %}
+        <tr class="border-t border-outline-variant/10">
+          <td class="px-5 py-3 font-medium">{{ inv.email }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ inv.role }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ inv.created_at.strftime('%d.%m.%Y %H:%M') if inv.created_at else '—' }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ inv.expires_at.strftime('%d.%m.%Y') if inv.expires_at else '—' }}</td>
+          <td class="px-5 py-3 font-mono text-xs text-on-surface-variant truncate max-w-[200px]">{{ inv.token[:16] }}…</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+
+<!-- Invite form -->
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient mb-8">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">person_add</span>
+      Davet gönder
+    </h3>
+  </div>
+  <div class="px-6 py-4">
+    <form method="post" action="/admin/institutions/{{ inst.id }}/invite" class="flex flex-wrap items-end gap-3">
+      <div>
+        <label class="block text-xs font-medium text-on-surface-variant mb-1">E-posta adresi</label>
+        <input type="email" name="email" required placeholder="davet@ornek.com" class="px-4 py-2 rounded-xl bg-surface-container-low border-0 text-sm w-64 focus:ring-2 focus:ring-primary-container/25" />
+      </div>
+      <div>
+        <label class="block text-xs font-medium text-on-surface-variant mb-1">Rol</label>
+        <select name="role" class="px-4 py-2 rounded-xl bg-surface-container-low border-0 text-sm">
+          {% for val, label in roles %}<option value="{{ val }}">{{ label }}</option>{% endfor %}
+        </select>
+      </div>
+      <button type="submit" class="px-5 py-2 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02]">Davet oluştur</button>
+    </form>
+  </div>
+</div>
+
+<!-- Recent Analyses -->
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">biotech</span>
+      Son analizler
+    </h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">Kullanıcı</th>
+          <th class="px-5 py-3">Kaynak</th>
+          <th class="px-5 py-3">Tarih</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for a in recent_analyses %}
+        <tr class="border-t border-outline-variant/10 hover:bg-surface-container-low/50">
+          <td class="px-5 py-3 font-mono text-xs text-on-surface-variant">{{ a.id }}</td>
+          <td class="px-5 py-3 font-medium">{{ a.user_email }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ a.source }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ a.created_at }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="px-5 py-6 text-center text-on-surface-variant">Henüz analiz yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if inst.notes %}
+<div class="mt-6 bg-amber-50/50 rounded-xl p-5">
+  <p class="text-xs uppercase tracking-wider text-amber-800 font-medium mb-1">Notlar</p>
+  <p class="text-sm text-amber-900/80">{{ inst.notes }}</p>
+</div>
+{% endif %}
+{% endblock %}

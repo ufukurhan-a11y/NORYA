@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  {% include "partials/gsc_meta.html" %}
+  <title>Hastaneler için NoryaAI — Kurumsal Yapay Zekâ Altyapısı</title>
+  <meta name="description" content="NoryaAI Clinical Enterprise: Hastaneler için laboratuvar sonuçlarını yapılandırılmış, çok dilli ve izlenebilir biçimde ön analiz desteğine dönüştüren kurumsal çözüm." />
+  <meta property="og:title" content="Hastaneler için NoryaAI — Kurumsal Yapay Zekâ Altyapısı" />
+  <meta property="og:description" content="Kan tahlili ve laboratuvar sonuçlarını daha anlaşılır, daha düzenli ve çok dilli biçimde ön yapılandırmaya yardımcı olan kurumsal çözüm." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#006a69" />
+  {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "outline-variant": "#bcc9c8",
+            "on-primary-container": "#003333",
+            "inverse-on-surface": "#f0f1f2",
+            "secondary": "#4f5e7e",
+            "surface-bright": "#f8f9fa",
+            "surface-container": "#edeeef",
+            "inverse-primary": "#5ed9d7",
+            "inverse-surface": "#2e3132",
+            "surface-dim": "#d9dadb",
+            "on-primary": "#ffffff",
+            "surface-container-high": "#e7e8e9",
+            "on-surface": "#191c1d",
+            "primary-container": "#0ea5a4",
+            "surface": "#f8f9fa",
+            "error": "#ba1a1a",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-low": "#f3f4f5",
+            "on-surface-variant": "#3d4949",
+            "surface-variant": "#e1e3e4",
+            "primary-fixed-dim": "#5ed9d7",
+            "primary-fixed": "#7df5f4",
+            "primary": "#006a69",
+            "outline": "#6d7a79",
+            "secondary-container": "#cadaff",
+            "surface-container-highest": "#e1e3e4",
+          },
+          fontFamily: {
+            headline: ["Manrope", "system-ui", "sans-serif"],
+            body: ["Inter", "system-ui", "sans-serif"],
+          },
+          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", "3xl": "1.5rem", full: "9999px" },
+        },
+      },
+    };
+  </script>
+  <style>
+    .material-symbols-outlined {
+      font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    }
+    html { scroll-behavior: smooth; }
+    body { font-family: 'Inter', system-ui, sans-serif; background: #f8f9fa; color: #191c1d; }
+    #toast { transition: opacity 0.2s, transform 0.2s; }
+    .hosp-subnav-wrap {
+      position: sticky; top: 64px; z-index: 45;
+      background: rgba(248, 249, 250, 0.86);
+      backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+      border-bottom: 1px solid rgba(188, 201, 200, 0.32);
+    }
+    .hosp-subnav { display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding: 0.65rem 0; }
+    .hosp-subnav::-webkit-scrollbar { display: none; }
+    .hosp-subnav-link {
+      white-space: nowrap; border: 1px solid transparent; color: #3d4949;
+      font-size: 0.82rem; font-weight: 600; letter-spacing: 0.01em;
+      border-radius: 9999px; padding: 0.45rem 0.85rem; transition: all 160ms ease;
+    }
+    .hosp-subnav-link:hover { color: #0f172a; background: rgba(14, 165, 164, 0.08); }
+    .hosp-subnav-link.active {
+      color: #006a69; background: rgba(14, 165, 164, 0.12);
+      border-color: rgba(14, 165, 164, 0.2); box-shadow: 0 1px 0 rgba(14, 165, 164, 0.16) inset;
+    }
+    .hosp-anchor { scroll-margin-top: 148px; }
+    @media (min-width: 640px) { .hosp-subnav-link { font-size: 0.86rem; padding: 0.5rem 1rem; } }
+    @media (min-width: 1024px) { .hosp-subnav-wrap { top: 72px; } .hosp-anchor { scroll-margin-top: 162px; } }
+  </style>
+  {% include "includes/gtag_google_ads.html" %}
+</head>
+<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container antialiased">
+
+  <!-- Header -->
+  <header class="fixed top-0 w-full z-50 bg-[#f8f9fa]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 sm:py-4 flex justify-between items-center">
+      <a href="/" class="flex items-center gap-2 shrink-0">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 sm:h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="/" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">Ana Sayfa</a>
+        <a href="/kurumsal" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">Kurumsal</a>
+        <a href="/hastaneler-icin" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">Hastaneler</a>
+      </nav>
+      <div class="flex items-center gap-3">
+        <a href="#iletisim" class="hidden sm:inline-flex bg-gradient-to-r from-primary to-primary-container text-on-primary px-5 py-2.5 rounded-full font-bold text-sm shadow-lg transition-transform hover:scale-105 active:scale-95">
+          Demo Talep Et
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden w-10 h-10 rounded-xl flex items-center justify-center border border-outline-variant/20 bg-white/60" onclick="toggleMobileMenu()">
+          <span class="material-symbols-outlined text-on-surface">menu</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Sub-Navigation -->
+  <div class="hosp-subnav-wrap">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8">
+      <nav class="hosp-subnav" aria-label="Sayfa bölümleri">
+        <a href="#genel" class="hosp-subnav-link active" data-subnav-link>Genel Bakış</a>
+        <a href="#neden" class="hosp-subnav-link" data-subnav-link>Neden</a>
+        <a href="#ekipler" class="hosp-subnav-link" data-subnav-link>Ekipler</a>
+        <a href="#kullanim" class="hosp-subnav-link" data-subnav-link>Kullanım Alanları</a>
+        <a href="#guvenlik" class="hosp-subnav-link" data-subnav-link>Güvenlik</a>
+        <a href="#isakisi" class="hosp-subnav-link" data-subnav-link>İş Akışı</a>
+        <a href="#pilot" class="hosp-subnav-link" data-subnav-link>Pilot</a>
+        <a href="#sss" class="hosp-subnav-link" data-subnav-link>SSS</a>
+        <a href="#iletisim" class="hosp-subnav-link" data-subnav-link>İletişim</a>
+      </nav>
+    </div>
+  </div>
+
+  <!-- Mobile Menu -->
+  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/30 z-[60] hidden" onclick="toggleMobileMenu()"></div>
+  <aside id="mobile-menu" class="fixed top-0 right-0 h-full w-[min(86vw,360px)] bg-surface-container-lowest z-[61] shadow-2xl p-6 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="flex justify-between items-center mb-6">
+      <span class="font-headline font-bold text-lg">Menü</span>
+      <button onclick="toggleMobileMenu()" class="w-9 h-9 rounded-lg border border-outline-variant/20 flex items-center justify-center">
+        <span class="material-symbols-outlined">close</span>
+      </button>
+    </div>
+    <a href="/" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">Ana Sayfa</a>
+    <a href="/kurumsal" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">Kurumsal</a>
+    <a href="/hastaneler-icin" class="block py-3 px-4 rounded-xl font-bold text-primary bg-primary/5">Hastaneler</a>
+    <a href="#iletisim" onclick="toggleMobileMenu()" class="mt-4 block py-3 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-center shadow-lg">Demo Talep Et</a>
+  </aside>
+
+  <main class="pt-8 sm:pt-10">
+
+    <!-- ═══════════════ 1. HERO ═══════════════ -->
+    <section id="genel" class="hosp-anchor max-w-7xl mx-auto px-4 sm:px-8 mb-16 sm:mb-24">
+      <div class="relative">
+        <div class="pointer-events-none absolute inset-x-0 -top-10 h-56 sm:h-72 opacity-25"
+             style="background: radial-gradient(55% 100% at 65% 15%, rgba(14,165,164,0.22), transparent);"></div>
+        <div class="relative flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
+          <div class="flex-1 flex flex-col gap-5 sm:gap-6 text-center lg:text-left">
+            <div class="flex flex-wrap items-center gap-3 justify-center lg:justify-start">
+              <span class="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-primary/15">
+                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
+                Hastane Çözümü
+              </span>
+              <span class="text-primary font-bold tracking-[0.15em] uppercase text-xs font-headline">Hastaneler için Kurumsal Yapay Zekâ Altyapısı</span>
+            </div>
+            <h1 class="text-3xl sm:text-5xl lg:text-[4.25rem] font-extrabold font-headline leading-[1.08] tracking-tight text-on-surface">
+              Hastaneler için<br class="hidden sm:block" /> NoryaAI Clinical Enterprise
+            </h1>
+            <p class="text-base sm:text-xl text-on-surface-variant max-w-xl leading-relaxed mx-auto lg:mx-0">
+              Kan tahlili ve laboratuvar sonuçlarını daha anlaşılır, daha düzenli ve çok dilli biçimde ön yapılandırmaya yardımcı olan kurumsal çözüm.
+            </p>
+            <div class="flex flex-wrap gap-3 sm:gap-4 mt-2 justify-center lg:justify-start">
+              <a href="#iletisim" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-7 sm:px-10 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-primary/10 hover:brightness-105 transition-all">
+                Demo Talep Et
+              </a>
+              <a href="mailto:sales@norya.ai" class="border border-outline-variant/30 text-on-surface px-7 sm:px-10 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-surface-container-low transition-all">
+                Satış Ekibiyle Görüş
+              </a>
+              <a href="/docs" target="_blank" rel="noopener noreferrer" class="border border-outline-variant/30 text-on-surface-variant px-6 py-3 sm:py-4 rounded-full font-semibold text-sm hover:bg-surface-container-low transition-all hidden sm:inline-flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">description</span>
+                Teknik Dokümanlar
+              </a>
+            </div>
+          </div>
+
+          <!-- Hospital Panel -->
+          <div class="flex-1 relative w-full max-w-md lg:max-w-lg">
+            <div class="absolute -inset-8 bg-primary/5 rounded-full blur-3xl"></div>
+            <div class="relative bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-[0_16px_48px_rgba(25,28,29,0.06)] border border-outline-variant/10 overflow-hidden">
+              <div class="flex items-center gap-3 mb-6">
+                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
+                  <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
+                </div>
+                <span class="text-xs font-bold text-outline uppercase tracking-widest">Hastane Operasyonları</span>
+              </div>
+              <div class="space-y-3 sm:space-y-4">
+                <div class="p-4 rounded-xl bg-primary/5 border border-primary/10">
+                  <div class="flex items-center gap-3 mb-2">
+                    <span class="material-symbols-outlined text-primary text-lg">biotech</span>
+                    <span class="text-sm font-bold">Yapılandırılmış Ön Analiz</span>
+                  </div>
+                  <div class="flex gap-1.5">
+                    <div class="h-2 flex-[3] bg-primary-container/50 rounded-full"></div>
+                    <div class="h-2 flex-[5] bg-primary/30 rounded-full"></div>
+                    <div class="h-2 flex-[2] bg-primary-fixed-dim/40 rounded-full"></div>
+                  </div>
+                </div>
+                <div class="p-4 rounded-xl bg-surface-container-low">
+                  <div class="flex items-center gap-3 mb-2">
+                    <span class="material-symbols-outlined text-primary text-lg">translate</span>
+                    <span class="text-sm font-bold">Çok Dilli Hasta İletişimi</span>
+                  </div>
+                  <div class="flex gap-2 text-[11px] font-semibold text-on-surface-variant">
+                    <span class="bg-surface-container-high px-2 py-0.5 rounded">TR</span>
+                    <span class="bg-surface-container-high px-2 py-0.5 rounded">EN</span>
+                    <span class="bg-surface-container-high px-2 py-0.5 rounded">DE</span>
+                    <span class="bg-surface-container-high px-2 py-0.5 rounded">AR</span>
+                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded">+8</span>
+                  </div>
+                </div>
+                <div class="p-4 rounded-xl bg-surface-container-low">
+                  <div class="flex items-center gap-3 mb-2">
+                    <span class="material-symbols-outlined text-primary text-lg">clinical_notes</span>
+                    <span class="text-sm font-bold">Klinisyen Gözetimli İş Akışı</span>
+                  </div>
+                  <div class="flex items-center gap-2">
+                    <div class="h-2 flex-1 bg-primary-fixed-dim/30 rounded-full"></div>
+                    <span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">Gözden Geçir → Onayla</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Trust Chips -->
+      <div class="mt-10 sm:mt-14 py-5 sm:py-6 px-5 sm:px-8 rounded-2xl bg-surface-container-lowest border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+        <div class="flex flex-wrap items-center justify-center lg:justify-between gap-x-6 sm:gap-x-10 gap-y-3">
+          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
+            <span class="material-symbols-outlined text-primary text-base">translate</span> Çok Dilli Destek
+          </span>
+          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
+            <span class="material-symbols-outlined text-primary text-base">account_tree</span> Kurumsal İş Akışı
+          </span>
+          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
+            <span class="material-symbols-outlined text-primary text-base">clinical_notes</span> Klinik Gözetim Odaklı
+          </span>
+          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
+            <span class="material-symbols-outlined text-primary text-base">history</span> İzlenebilir Süreç Mantığı
+          </span>
+          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
+            <span class="material-symbols-outlined text-primary text-base">api</span> Entegrasyona Uygun Yapı
+          </span>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 2. NEDEN HASTANEYE ÖZEL ═══════════════ -->
+    <section id="neden" class="hosp-anchor bg-surface-container-low py-16 sm:py-24 lg:py-32 px-4 sm:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-3xl mb-10 sm:mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Neden hastaneye özel bir çözüm?</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">Hastaneler; yüksek hacimli laboratuvar iş yükü, çok disiplinli ekipler, farklı dillerde hasta iletişimi ve kurumsal denetim gereksinimleriyle diğer sağlık kuruluşlarından ayrılır. Genel amaçlı araçlar bu karmaşıklığı karşılamaz.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          <div class="bg-surface-container-lowest p-7 sm:p-8 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined text-2xl">speed</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold font-headline">Yüksek hacimli laboratuvar çıktıları</h3>
+            <p class="text-on-surface-variant leading-relaxed text-sm sm:text-base">Günde yüzlerce tahlil sonucu üretilir. Her birini ayrı ayrı yorumlamak ve yapılandırmak zaman alır; tutarsızlık riski yüksektir.</p>
+          </div>
+          <div class="bg-surface-container-lowest p-7 sm:p-8 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined text-2xl">groups</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold font-headline">Çok disiplinli ekip koordinasyonu</h3>
+            <p class="text-on-surface-variant leading-relaxed text-sm sm:text-base">Laboratuvar, klinik, acil servis ve idari birimler arasında tutarlı bir raporlama dili ve iş akışı standardı gereklidir.</p>
+          </div>
+          <div class="bg-surface-container-lowest p-7 sm:p-8 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex flex-col gap-4">
+            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
+              <span class="material-symbols-outlined text-2xl">language</span>
+            </div>
+            <h3 class="text-lg sm:text-xl font-bold font-headline">Farklı dillerde hasta iletişimi</h3>
+            <p class="text-on-surface-variant leading-relaxed text-sm sm:text-base">Uluslararası hastalar, sağlık turizmi ve çok kültürlü topluluklar; sonuçların birden fazla dilde anlaşılır biçimde sunulmasını gerektirir.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 3. HANGİ EKİPLER KULLANABİLİR ═══════════════ -->
+    <section id="ekipler" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
+      <div class="max-w-3xl mb-10 sm:mb-14">
+        <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Hastane içinde kimler kullanabilir?</h2>
+        <p class="text-base sm:text-lg text-on-surface-variant">NoryaAI, hastane organizasyon şemasının farklı noktalarına değer katacak şekilde tasarlanmıştır.</p>
+      </div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+          <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-blue-700">biotech</span>
+          </div>
+          <h3 class="font-bold font-headline text-base mb-2">Laboratuvar Ekipleri</h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed">Yüksek hacimli tahlil çıktılarını yapılandırılmış biçimde ön hazırlığa alarak uzman incelemesi öncesinde düzenli bir alt yapı oluşturur.</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+          <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-emerald-700">stethoscope</span>
+          </div>
+          <h3 class="font-bold font-headline text-base mb-2">Klinik Ekipler</h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed">Yapılandırılmış ön analizler, klinisyenin hasta görüşmesine daha hazırlıklı girmesine yardımcı olabilir.</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+          <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-amber-700">emergency</span>
+          </div>
+          <h3 class="font-bold font-headline text-base mb-2">Acil Servis</h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed">Hızlı karar alınması gereken ortamlarda yapılandırılmış özet çıktılar, tahlil sonuçlarının daha çabuk kavranmasına destek olabilir.</p>
+        </div>
+        <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+          <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center mb-4">
+            <span class="material-symbols-outlined text-violet-700">admin_panel_settings</span>
+          </div>
+          <h3 class="font-bold font-headline text-base mb-2">Yönetim ve Operasyon</h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed">Kota yönetimi, kullanım takibi ve kurumsal denetim özellikleri, hastane yönetim ekiplerinin ihtiyaçlarına göre tasarlanmıştır.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 4. HASTANEYE ÖZGÜ KULLANIM ALANLARI ═══════════════ -->
+    <section id="kullanim" class="hosp-anchor bg-surface-container-low py-16 sm:py-24 lg:py-32 px-4 sm:px-8">
+      <div class="max-w-7xl mx-auto">
+        <div class="max-w-3xl mb-10 sm:mb-14">
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Hastaneye özgü kullanım alanları</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant">NoryaAI'nin hastane operasyonlarında somut katkı sağlayabileceği alanlar.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
+          <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-1">
+              <span class="material-symbols-outlined">format_list_bulleted</span>
+            </div>
+            <div>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Tahlil sonuçlarının ön yapılandırması</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Laboratuvardan çıkan ham sonuçlar, klinisyen incelemesi öncesinde yapılandırılmış ve kategorize edilmiş biçimde hazırlanır.</p>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-1">
+              <span class="material-symbols-outlined">translate</span>
+            </div>
+            <div>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Çok dilli hasta bilgilendirme desteği</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Sonuçlar, hastanenin hizmet verdiği hasta profiline göre birden fazla dilde anlaşılır özetlere dönüştürülebilir.</p>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-1">
+              <span class="material-symbols-outlined">sync_alt</span>
+            </div>
+            <div>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Birimler arası tutarlı raporlama</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Farklı bölümlerin aynı standart ve dilde sonuç paylaşmasını kolaylaştırır. Tutarsız yorum riskini azaltmayı hedefler.</p>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-1">
+              <span class="material-symbols-outlined">analytics</span>
+            </div>
+            <div>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Operasyonel yük azaltma</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Tekrarlayan ön hazırlık adımlarını otomatikleştirerek ekiplerin daha kritik görevlere odaklanmasına alan açmayı amaçlar.</p>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-1">
+              <span class="material-symbols-outlined">monitoring</span>
+            </div>
+            <div>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Kurumsal kullanım takibi</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Hangi birimde, kaç analiz yapıldığı, kota kullanımı ve denetim kaydı gibi operasyonel verilere kurumsal panel üzerinden erişim.</p>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
+            <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center text-primary flex-shrink-0 mt-1">
+              <span class="material-symbols-outlined">travel_explore</span>
+            </div>
+            <div>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Sağlık turizmi desteği</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">Uluslararası hastalara sonuçlarını kendi dillerinde sunarak hastanenin uluslararası hizmet kalitesini desteklemeyi hedefler.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 5. GÜVENLİK / YÖNETİŞİM ═══════════════ -->
+    <section id="guvenlik" class="hosp-anchor py-16 sm:py-24 lg:py-32 max-w-7xl mx-auto px-4 sm:px-8">
+      <div class="bg-surface-container rounded-[2rem] sm:rounded-[3rem] p-8 sm:p-12 lg:p-16 flex flex-col lg:flex-row gap-10 sm:gap-12 lg:gap-14 items-start relative overflow-hidden">
+        <div class="absolute inset-0 opacity-[0.06] pointer-events-none"
+             style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 30px 30px;"></div>
+        <div class="lg:w-1/2">
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4 sm:mb-6">Kurumsal güvenlik ve yönetişim</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-6 sm:mb-8">Hastane ortamının gerektirdiği erişim kontrolü, izlenebilirlik ve klinik gözetim altyapısı.</p>
+          <div class="rounded-2xl bg-surface/70 border border-outline-variant/15 px-5 sm:px-6 py-4 sm:py-5">
+            <p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">Güvenlik kontrolleri, hastane operasyonlarını net sorumluluk sınırları, izlenebilir iş akışları ve klinisyen denetimli gözden geçirme süreçleriyle desteklemek üzere tasarlanmıştır.</p>
+          </div>
+        </div>
+        <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full">
+          <div class="bg-surface-container-lowest rounded-2xl p-4 sm:p-5 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary mt-0.5">lock</span>
+              <div>
+                <h5 class="font-bold text-sm sm:text-base mb-1">Gizlilik odaklı veri işleme</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Hassas klinik veriler, veri minimizasyonu ilkeleri ve kapsamlı erişim kısıtlamalarıyla işlenir.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest rounded-2xl p-4 sm:p-5 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary mt-0.5">badge</span>
+              <div>
+                <h5 class="font-bold text-sm sm:text-base mb-1">Rol bazlı erişim kontrolü</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Kullanıcı yetkileri, kurumsal rollere göre yapılandırılarak her ekip yalnızca ilgili iş akışlarına erişir.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest rounded-2xl p-4 sm:p-5 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary mt-0.5">history</span>
+              <div>
+                <h5 class="font-bold text-sm sm:text-base mb-1">İzlenebilir iş akışı mantığı</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">İş akışı aksiyonları, izlenebilir gözden geçirme adımlarını ve kurumsal denetim dokümantasyonunu destekleyecek şekilde organize edilmiştir.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest rounded-2xl p-4 sm:p-5 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary mt-0.5">domain_verification</span>
+              <div>
+                <h5 class="font-bold text-sm sm:text-base mb-1">Kontrollü kurum içi erişim</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Operasyonel erişim, onaylı kurum içi ekiplerle sınırlandırılarak net hesap verebilirlik sağlanır.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest rounded-2xl p-4 sm:p-5 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary mt-0.5">translate</span>
+              <div>
+                <h5 class="font-bold text-sm sm:text-base mb-1">Çok dilli kurumsal destek</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Yapılandırılmış çok dilli çıktılar, sınır ötesi ekipler ve hasta iletişimi bağlamında standartlaşmayı destekler.</p>
+              </div>
+            </div>
+          </div>
+          <div class="bg-surface-container-lowest rounded-2xl p-4 sm:p-5 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
+            <div class="flex items-start gap-3">
+              <span class="material-symbols-outlined text-primary mt-0.5">clinical_notes</span>
+              <div>
+                <h5 class="font-bold text-sm sm:text-base mb-1">Klinisyen gözetimi</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Klinik ekipler, hasta iletişiminde kullanılmadan önce tüm çıktıları gözden geçirir ve kontrol eder.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 6. HASTANE İŞ AKIŞI ═══════════════ -->
+    <section id="isakisi" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
+      <div class="rounded-[2rem] sm:rounded-[2.5rem] bg-surface-container-low p-6 sm:p-8 lg:p-10">
+        <div class="max-w-2xl mb-8 sm:mb-10">
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Hastane iş akışı</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">Sonuçların yüklenmesinden klinisyen gözden geçirmesine kadar basit ve izlenebilir bir süreç.</p>
+        </div>
+        <div class="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-4">
+          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">01</span>
+              <span class="material-symbols-outlined text-primary">upload_file</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Sonuç yükleme</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Laboratuvar sonuçları PDF, görsel veya metin olarak sisteme yüklenir.</p>
+          </div>
+          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">02</span>
+              <span class="material-symbols-outlined text-primary">biotech</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Yapılandırılmış ön analiz</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Yapay zekâ, sonuçları yapılandırılmış ve kategorize edilmiş biçimde ön hazırlığa alır.</p>
+          </div>
+          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">03</span>
+              <span class="material-symbols-outlined text-primary">translate</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Çok dilli özet</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">İhtiyaç halinde sonuçlar birden fazla dilde anlaşılır özet biçiminde hazırlanır.</p>
+          </div>
+          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">04</span>
+              <span class="material-symbols-outlined text-primary">clinical_notes</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Klinisyen gözden geçirme</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Klinik veya operasyonel ekip, çıktıları gözden geçirir ve uygunluğunu değerlendirir.</p>
+          </div>
+          <div class="rounded-2xl bg-primary-container/15 border border-primary/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
+            <div class="flex items-center justify-between mb-3">
+              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">05</span>
+              <span class="material-symbols-outlined text-primary">check_circle</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Kullanıma hazır çıktı</h3>
+            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Onaylanan çıktılar, hasta bilgilendirme veya kurum içi raporlama amacıyla kullanılabilir hale gelir.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 7. TIBBİ SORUMLULUK REDDİ ═══════════════ -->
+    <section class="py-8 sm:py-12 px-4 sm:px-8 border-y border-outline-variant/10">
+      <div class="max-w-4xl mx-auto">
+        <div class="p-6 sm:p-8 bg-surface-container-high rounded-2xl sm:rounded-3xl text-sm text-on-surface-variant leading-relaxed border-l-4 border-primary">
+          <p class="font-bold text-on-surface mb-2">Tıbbi Sorumluluk Reddi:</p>
+          <p class="mb-2">NoryaAI, laboratuvar sonuçlarının yapılandırılmış biçimde ön hazırlanmasına yardımcı olan bir destek aracıdır. Tıbbi teşhis koymaz, tedavi önerisi sunmaz ve doktor değerlendirmesinin yerine geçmez.</p>
+          <p>Tüm çıktılar, yetkili sağlık profesyonellerinin gözden geçirmesine tabidir. Hastane, klinik kararlarını yalnızca platform çıktısına dayandırmamalıdır.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 8. PİLOT DAĞITIM ═══════════════ -->
+    <section id="pilot" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
+      <div class="bg-surface-container-lowest rounded-[2rem] sm:rounded-[3rem] p-8 sm:p-12 lg:p-16 border border-outline-variant/10 shadow-[0_16px_48px_rgba(25,28,29,0.04)]">
+        <div class="max-w-3xl mx-auto text-center mb-10 sm:mb-14">
+          <span class="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-primary/15 mb-4">
+            <span class="material-symbols-outlined text-sm">rocket_launch</span>
+            Pilot Program
+          </span>
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4">Pilot dağıtım ile başlayın</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">Hastanenizin belirli bir bölümünde sınırlı kapsamlı bir pilot ile başlayarak sistemi değerlendirin. Kurumsal sözleşme öncesinde sonuçları ölçün.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          <div class="text-center">
+            <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+              <span class="material-symbols-outlined text-2xl">tune</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Kapsam belirleme</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">Pilot bölüm, kullanıcı sayısı ve aylık kota birlikte belirlenir.</p>
+          </div>
+          <div class="text-center">
+            <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+              <span class="material-symbols-outlined text-2xl">play_circle</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Pilot uygulama</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">Belirlenen ekip, gerçek iş akışlarında sistemi kullanmaya başlar.</p>
+          </div>
+          <div class="text-center">
+            <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
+              <span class="material-symbols-outlined text-2xl">assessment</span>
+            </div>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Değerlendirme ve genişleme</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">Pilot sonuçları birlikte değerlendirilir; uygunsa kurumsal ölçeğe geçilir.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 9. HASTANE SSS ═══════════════ -->
+    <section id="sss" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8">
+      <div class="max-w-4xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline text-center mb-10 sm:mb-14">Sıkça Sorulan Sorular</h2>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
+          <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">NoryaAI doktorların yerine mi geçiyor?</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Hayır. NoryaAI, laboratuvar sonuçlarının yapılandırılmış biçimde ön hazırlanmasına yardımcı olan bir destek aracıdır. Nihai klinik karar yetkili hekimdedir.</dd>
+          </div>
+          <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Hangi birimler kullanabilir?</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Laboratuvar, klinik, acil servis ve operasyonel yönetim birimleri; rol bazlı erişim ile her birim kendi ihtiyacına uygun iş akışına erişir.</dd>
+          </div>
+          <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Çok dilli destek nasıl çalışır?</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Tahlil sonuçları, Türkçe dahil 12'den fazla dilde yapılandırılmış özet olarak sunulabilir. Bu, özellikle uluslararası hasta profiline sahip hastaneler için faydalıdır.</dd>
+          </div>
+          <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Mevcut hastane sistemleriyle uyumlu mu?</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">NoryaAI, mevcut kurumsal iş akışlarına entegrasyonu destekleyecek şekilde tasarlanmıştır. Pilot süreçte entegrasyon planlaması birlikte yapılır.</dd>
+          </div>
+          <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Veri güvenliği nasıl sağlanıyor?</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Gizlilik odaklı veri işleme, rol bazlı erişim, izlenebilir iş akışları ve kurumsal denetim kaydı altyapısı ile güvenlik desteklenir.</dd>
+          </div>
+          <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Pilot başvurusu nasıl yapılır?</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Bu sayfadaki iletişim formunu doldurarak veya satış ekibimizle doğrudan iletişime geçerek pilot başvurusu yapabilirsiniz.</dd>
+          </div>
+          <div class="p-5 sm:p-6 md:col-span-2 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Ücretlendirme nasıl çalışır?</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Kurumsal ücretlendirme, hastanenin hacmine, birim sayısına ve kota ihtiyacına göre özel olarak belirlenir. Pilot süreç için ayrı koşullar sunulabilir.</dd>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 10. KAPANIŞ CTA + İLETİŞİM FORMU ═══════════════ -->
+    <section id="iletisim" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
+      <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl text-white text-sm font-medium shadow-lg"></div>
+      <div class="bg-surface-container-lowest rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-outline-variant/10">
+        <!-- Benefits Panel -->
+        <div class="flex-1 p-8 sm:p-12 lg:p-16 xl:p-20 bg-primary text-on-primary">
+          <span class="inline-block text-primary-fixed text-xs sm:text-sm font-semibold tracking-[0.14em] uppercase mb-3">Hastaneler İçin Kurumsal İletişim</span>
+          <h2 class="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6">Hastaneniz için NoryaAI'yi değerlendirin</h2>
+          <p class="text-on-primary/85 text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed">Kurumsal dağıtım, pilot planlama ve teknik detaylar için satış ve klinik mühendislik ekibimizle görüşün.</p>
+          <div class="flex flex-wrap gap-3 mb-8 sm:mb-10">
+            <a href="mailto:sales@norya.ai" class="inline-flex items-center justify-center px-4 sm:px-5 py-2.5 rounded-full border border-white/35 text-white font-semibold text-sm hover:bg-white/10 transition-colors">Satış Ekibiyle Görüş</a>
+            <a href="/docs" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-4 sm:px-5 py-2.5 rounded-full border border-white/35 text-white font-semibold text-sm hover:bg-white/10 transition-colors">Teknik Dokümanları İncele</a>
+          </div>
+          <div class="space-y-4 sm:space-y-6">
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+              <span class="text-sm sm:text-base">Pilot dağıtım planlaması</span>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+              <span class="text-sm sm:text-base">Güvenlik ve uyumluluk değerlendirmesi</span>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+              <span class="text-sm sm:text-base">Kurumsal entegrasyon planlaması</span>
+            </div>
+            <div class="flex items-center gap-3 sm:gap-4">
+              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
+              <span class="text-sm sm:text-base">Özel kota ve sözleşme koşulları</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Panel -->
+        <div class="flex-1 p-8 sm:p-12 lg:p-16 xl:p-20">
+          <div class="mb-6 sm:mb-8">
+            <h3 class="font-headline font-bold text-xl sm:text-2xl text-on-surface mb-2">Hastane Demo Talep Formu</h3>
+            <p class="text-sm sm:text-base text-on-surface-variant">Hastanenizin profili ve ihtiyaçları doğrultusunda size özel bir değerlendirme sunalım.</p>
+          </div>
+          <form id="enterprise-lead-form" class="space-y-5 sm:space-y-6">
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+              <div>
+                <label for="kurum_adi" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Hastane / Kurum Adı *</label>
+                <input type="text" id="kurum_adi" name="kurum_adi" required maxlength="255" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
+              </div>
+              <div>
+                <label for="yetkili_ad" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Yetkili Ad Soyad *</label>
+                <input type="text" id="yetkili_ad" name="yetkili_ad" required maxlength="255" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+              <div>
+                <label for="email" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Kurumsal E-posta *</label>
+                <input type="email" id="email" name="email" required maxlength="255" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
+              </div>
+              <div>
+                <label for="telefon" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Telefon</label>
+                <input type="tel" id="telefon" name="telefon" maxlength="64" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+              <div>
+                <label for="kurum_tipi" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Hastane Türü</label>
+                <select id="kurum_tipi" name="kurum_tipi" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg">
+                  <option value="">Seçiniz</option>
+                  <option value="hospital">Devlet Hastanesi</option>
+                  <option value="hospital-private">Özel Hastane</option>
+                  <option value="hospital-university">Üniversite Hastanesi</option>
+                  <option value="hospital-group">Hastane Grubu / Zinciri</option>
+                </select>
+              </div>
+              <div>
+                <label for="aylik_rapor" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Tahmini Aylık Tahlil Hacmi</label>
+                <select id="aylik_rapor" name="aylik_rapor" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg">
+                  <option value="">Seçiniz</option>
+                  <option value="1-500">1 – 500</option>
+                  <option value="501-2000">501 – 2.000</option>
+                  <option value="2001-10000">2.001 – 10.000</option>
+                  <option value="10000+">10.000+</option>
+                </select>
+              </div>
+            </div>
+            <div>
+              <label for="mesaj" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Ek Not veya Beklentiler</label>
+              <textarea id="mesaj" name="mesaj" rows="3" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg"></textarea>
+            </div>
+            <div class="flex items-start gap-3">
+              <input type="checkbox" id="kvkk" name="kvkk" required class="mt-1 rounded border-outline/30 text-primary focus:ring-primary" />
+              <label for="kvkk" class="text-sm text-on-surface-variant leading-relaxed">Kişisel verilerimin işlenmesini kabul ediyorum. (<a href="/legal/gizlilik-politikasi" class="text-primary underline" target="_blank">Gizlilik Politikası</a>)</label>
+            </div>
+            <div class="flex flex-col sm:flex-row gap-3">
+              <button type="submit" id="submit-btn" class="flex-1 bg-gradient-to-r from-primary to-primary-container text-on-primary py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50">
+                Demo Talep Et
+              </button>
+              <a href="mailto:sales@norya.ai" class="sm:w-auto inline-flex items-center justify-center px-6 py-4 rounded-full border border-outline-variant/30 text-on-surface font-semibold hover:bg-surface-container-low transition-colors">
+                Satış Ekibiyle Görüş
+              </a>
+            </div>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ KAPANIŞ CTA BAR ═══════════════ -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-8 mb-16 sm:mb-24">
+      <div class="relative bg-inverse-surface rounded-[2rem] sm:rounded-[3rem] py-16 sm:py-20 lg:py-24 px-8 sm:px-12 text-center overflow-hidden">
+        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
+        <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-5 sm:gap-8">
+          <h2 class="text-2xl sm:text-3xl lg:text-5xl font-extrabold font-headline text-inverse-on-surface leading-tight">Hastanenizi kurumsal yapay zekâ altyapısıyla güçlendirin</h2>
+          <p class="text-base sm:text-xl text-inverse-on-surface opacity-80 max-w-2xl">Satın alma, klinik liderlik ve teknik ekiplerinizi güvenli ve gözden geçirme odaklı bir dağıtım planı etrafında buluşturun.</p>
+          <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
+            <a href="#iletisim" class="bg-primary-fixed-dim text-on-primary-container px-6 sm:px-8 py-3.5 rounded-full font-bold text-sm sm:text-base hover:brightness-110 transition-all">Demo Talep Et</a>
+            <a href="mailto:sales@norya.ai" class="bg-white/10 text-inverse-on-surface border border-white/30 px-6 sm:px-8 py-3.5 rounded-full font-bold text-sm sm:text-base hover:bg-white/20 transition-all">Satış Ekibiyle Görüş</a>
+            <a href="/docs" target="_blank" rel="noopener noreferrer" class="bg-transparent text-inverse-on-surface border border-white/30 px-6 sm:px-8 py-3.5 rounded-full font-bold text-sm sm:text-base hover:bg-white/10 transition-all">Teknik Dokümanları İncele</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="w-full py-10 sm:py-16 px-4 sm:px-8 bg-surface-container-low mt-12 sm:mt-24">
+    <div class="max-w-7xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-8 sm:gap-12 items-center">
+      <div class="flex flex-col gap-4 sm:gap-6">
+        <div class="flex items-center gap-2">
+          <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-7 sm:h-8 w-auto object-contain" width="160" height="40" loading="lazy" />
+        </div>
+        <p class="text-on-surface-variant text-xs sm:text-sm tracking-wide max-w-sm">Sağlık kurumları için yapılandırılmış klinik yapay zekâ altyapısı.</p>
+        <p class="text-outline text-xs tracking-wide">&copy; 2026 NoryaAI. Tüm hakları saklıdır.</p>
+      </div>
+      <div class="flex flex-wrap gap-x-6 sm:gap-x-12 gap-y-4 sm:gap-y-6 md:justify-end">
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/">Ana Sayfa</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/kurumsal">Kurumsal</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/hastaneler-icin">Hastaneler</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/gizlilik-politikasi">Gizlilik</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/kullanim-sartlari">Kullanım Şartları</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Scripts -->
+  <script>
+    (function() {
+      var form = document.getElementById('enterprise-lead-form');
+      var toast = document.getElementById('toast');
+      var submitBtn = document.getElementById('submit-btn');
+
+      function showToast(msg, isError) {
+        toast.textContent = msg;
+        toast.className = 'fixed top-4 left-1/2 -translate-x-1/2 z-50 px-5 py-3 rounded-xl text-white text-sm font-medium shadow-lg ' + (isError ? 'bg-red-500' : 'bg-primary');
+        toast.hidden = false;
+        setTimeout(function() { toast.hidden = true; }, 4000);
+      }
+
+      function setLoading(loading) {
+        submitBtn.disabled = loading;
+        submitBtn.textContent = loading ? '...' : 'Demo Talep Et';
+      }
+
+      form.addEventListener('submit', function(e) {
+        e.preventDefault();
+        var kurumAdi = (document.getElementById('kurum_adi').value || '').trim();
+        var yetkiliAd = (document.getElementById('yetkili_ad').value || '').trim();
+        var email = (document.getElementById('email').value || '').trim();
+        var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!kurumAdi) { showToast('Hastane / kurum adını girin.', true); return; }
+        if (!yetkiliAd) { showToast('Yetkili ad soyadını girin.', true); return; }
+        if (!email) { showToast('Kurumsal e-posta adresini girin.', true); return; }
+        if (!emailRe.test(email)) { showToast('Geçerli bir e-posta adresi girin.', true); return; }
+        if (!document.getElementById('kvkk').checked) { showToast('KVKK onayı gereklidir.', true); return; }
+
+        setLoading(true);
+        fetch('/api/enterprise-lead', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            kurum_adi: kurumAdi,
+            yetkili_ad: yetkiliAd,
+            email: email,
+            telefon: (document.getElementById('telefon').value || '').trim() || null,
+            kurum_tipi: (document.getElementById('kurum_tipi').value || '').trim() || null,
+            aylik_rapor: (document.getElementById('aylik_rapor').value || '').trim() || null,
+            mesaj: (document.getElementById('mesaj').value || '').trim() || null,
+            kvkk: true
+          })
+        })
+        .then(function(r) {
+          if (r.status === 429) { showToast('Çok fazla istek. Lütfen biraz bekleyin.', true); return; }
+          if (!r.ok) throw new Error();
+          return r.json();
+        })
+        .then(function(data) {
+          if (data && data.ok) {
+            showToast('Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.', false);
+            form.reset();
+          } else { showToast('Bir hata oluştu. Lütfen tekrar deneyin.', true); }
+        })
+        .catch(function() { showToast('Bir hata oluştu. Lütfen tekrar deneyin.', true); })
+        .finally(function() { setLoading(false); });
+      });
+    })();
+
+    function toggleMobileMenu() {
+      var backdrop = document.getElementById('mobile-menu-backdrop');
+      var menu = document.getElementById('mobile-menu');
+      if (!backdrop || !menu) return;
+      var isOpen = menu.classList.contains('translate-x-0');
+      if (isOpen) {
+        menu.classList.remove('translate-x-0');
+        menu.classList.add('translate-x-full');
+        backdrop.classList.add('hidden');
+        document.body.style.overflow = '';
+      } else {
+        menu.classList.remove('translate-x-full');
+        menu.classList.add('translate-x-0');
+        backdrop.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      }
+    }
+
+    (function() {
+      var links = Array.prototype.slice.call(document.querySelectorAll('[data-subnav-link]'));
+      var sectionIds = ['genel', 'neden', 'ekipler', 'kullanim', 'guvenlik', 'isakisi', 'pilot', 'sss', 'iletisim'];
+      var sections = sectionIds.map(function(id) { return document.getElementById(id); }).filter(Boolean);
+
+      function setActiveById(id) {
+        links.forEach(function(link) {
+          link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+        });
+      }
+
+      links.forEach(function(link) {
+        link.addEventListener('click', function() {
+          var targetId = (link.getAttribute('href') || '').replace('#', '');
+          if (targetId) setActiveById(targetId);
+        });
+      });
+
+      if ('IntersectionObserver' in window && sections.length) {
+        var observer = new IntersectionObserver(function(entries) {
+          entries.forEach(function(entry) {
+            if (entry.isIntersecting) setActiveById(entry.target.id);
+          });
+        }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
+        sections.forEach(function(section) { observer.observe(section); });
+      }
+    })();
+  </script>
+</body>
+</html>

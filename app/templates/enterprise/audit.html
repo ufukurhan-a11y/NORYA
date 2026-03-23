@@ -1,0 +1,123 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.aud_title }}{% endblock %}
+{% block header_title %}{{ t.aud_header }}{% endblock %}
+{% block content %}
+<div class="mb-8">
+  <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">{{ t.aud_title }}</h2>
+  <p class="text-on-surface-variant text-sm">
+    <span class="text-primary font-semibold">{{ total }}</span> {{ t.aud_event_count }}
+    {% if inst.name %}· {{ inst.name }}{% endif %}
+  </p>
+</div>
+
+<!-- Filtre -->
+<div class="bg-white rounded-xl shadow-ambient p-4 lg:p-5 mb-6">
+  <p class="text-xs font-bold uppercase tracking-widest text-on-surface-variant mb-3">{{ t.aud_filter_type }}</p>
+  <div class="flex flex-wrap gap-2">
+    <a href="/enterprise/audit"
+       class="inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors
+       {% if not event_filter %}bg-primary text-white shadow-sm{% else %}bg-surface text-on-surface-variant hover:bg-surface-container border border-outline-variant/30{% endif %}">
+      {{ t.all }}
+    </a>
+    {% for code, label in event_labels|dictsort %}
+    <a href="/enterprise/audit?event_filter={{ code | urlencode }}"
+       class="inline-flex items-center px-3.5 py-1.5 rounded-full text-sm font-medium transition-colors
+       {% if event_filter == code %}bg-primary/10 text-primary ring-1 ring-primary/25{% else %}bg-surface text-on-surface-variant hover:bg-surface-container border border-outline-variant/30{% endif %}">
+      {{ label }}
+    </a>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-ambient overflow-hidden">
+  {% if logs %}
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm text-left">
+      <thead>
+        <tr class="text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/60 border-b border-outline-variant/15">
+          <th class="px-5 py-3.5 font-semibold">{{ t.aud_col_date }}</th>
+          <th class="px-5 py-3.5 font-semibold">{{ t.aud_col_user }}</th>
+          <th class="px-5 py-3.5 font-semibold">{{ t.aud_col_event }}</th>
+          <th class="px-5 py-3.5 font-semibold">{{ t.aud_col_entity }}</th>
+          <th class="px-5 py-3.5 font-semibold">{{ t.aud_col_ip }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for log in logs %}
+        <tr class="border-b border-outline-variant/10 transition-colors hover:bg-primary/[0.03] {% if loop.index0 % 2 == 0 %}bg-white{% else %}bg-surface/40{% endif %}">
+          <td class="px-5 py-3.5 text-on-surface-variant whitespace-nowrap">{{ log.created_at }}</td>
+          <td class="px-5 py-3.5 font-medium text-on-surface">{{ log.user_email }}</td>
+          <td class="px-5 py-3.5">
+            <span class="inline-flex px-2.5 py-1 rounded-lg text-xs font-semibold bg-surface-container text-on-surface">{{ log.event_label }}</span>
+          </td>
+          <td class="px-5 py-3.5 text-on-surface-variant">
+            {% if log.entity_type %}
+              {% if log.entity_type == 'case' and log.entity_id %}
+                {{ t.aud_entity_case }} #{{ log.entity_id }}
+              {% elif log.entity_type == 'membership' and log.entity_id %}
+                {{ t.aud_entity_membership }} #{{ log.entity_id }}
+              {% elif log.entity_type == 'institution' and log.entity_id %}
+                {{ t.aud_entity_institution }} #{{ log.entity_id }}
+              {% elif log.entity_type == 'invite' %}
+                {{ t.aud_entity_invite }}{% if log.entity_id %} #{{ log.entity_id }}{% endif %}
+              {% elif log.entity_id %}
+                {{ log.entity_type }} #{{ log.entity_id }}
+              {% else %}
+                {{ log.entity_type }}
+              {% endif %}
+            {% else %}
+              —
+            {% endif %}
+          </td>
+          <td class="px-5 py-3.5 font-mono text-xs text-on-surface-variant whitespace-nowrap">{{ log.ip }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+  {% else %}
+  <div class="px-6 py-16 text-center">
+    <div class="w-14 h-14 mx-auto mb-4 rounded-xl bg-surface-container-low flex items-center justify-center">
+      <span class="material-symbols-outlined text-3xl text-on-surface-variant/50">history</span>
+    </div>
+    <p class="font-headline font-semibold text-on-surface mb-1">{{ t.aud_empty }}</p>
+    <p class="text-sm text-on-surface-variant max-w-md mx-auto">{{ t.aud_empty_hint }}</p>
+  </div>
+  {% endif %}
+
+  {% if logs and (has_prev or has_next) %}
+  <div class="px-5 py-4 border-t border-outline-variant/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 bg-surface/30">
+    <p class="text-xs text-on-surface-variant">
+      {{ t.page }} <span class="font-semibold text-on-surface">{{ page }}</span>
+      · {{ t.per_page }} {{ per_page }} {{ t.records }}
+    </p>
+    <div class="flex items-center gap-3">
+      {% if has_prev %}
+      <a href="/enterprise/audit?page={{ page - 1 }}{% if event_filter %}&event_filter={{ event_filter | urlencode }}{% endif %}"
+         class="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+        <span class="material-symbols-outlined !text-lg">chevron_left</span>
+        {{ t.prev }}
+      </a>
+      {% else %}
+      <span class="text-sm text-on-surface-variant/40 cursor-not-allowed inline-flex items-center gap-1">
+        <span class="material-symbols-outlined !text-lg">chevron_left</span>
+        {{ t.prev }}
+      </span>
+      {% endif %}
+      {% if has_next %}
+      <a href="/enterprise/audit?page={{ page + 1 }}{% if event_filter %}&event_filter={{ event_filter | urlencode }}{% endif %}"
+         class="inline-flex items-center gap-1 text-sm font-semibold text-primary hover:underline">
+        {{ t.next }}
+        <span class="material-symbols-outlined !text-lg">chevron_right</span>
+      </a>
+      {% else %}
+      <span class="text-sm text-on-surface-variant/40 cursor-not-allowed inline-flex items-center gap-1">
+        {{ t.next }}
+        <span class="material-symbols-outlined !text-lg">chevron_right</span>
+      </span>
+      {% endif %}
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

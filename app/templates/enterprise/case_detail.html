@@ -1,0 +1,245 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.case_title }} #{{ case.id }}{% endblock %}
+{% block header_title %}{{ t.case_title }}{% endblock %}
+{% block content %}
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <div>
+    <div class="flex flex-wrap items-center gap-3 mb-1">
+      <a href="/enterprise/uploads" class="text-primary hover:underline text-sm font-medium flex items-center gap-1">
+        <span class="material-symbols-outlined !text-[18px]">arrow_back</span>
+        {{ t.case_breadcrumb }}
+      </a>
+      <span class="text-on-surface-variant">/</span>
+      <span class="font-mono text-xs text-on-surface-variant bg-surface-container-low px-2 py-0.5 rounded-md">#{{ case.id }}</span>
+    </div>
+    <h2 class="text-xl lg:text-2xl font-extrabold font-headline tracking-tight text-on-surface">{{ case.source_filename or t.case_fallback_name }}</h2>
+  </div>
+  <span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold uppercase tracking-wide
+    {% if case.status == 'new' %}bg-blue-50 text-blue-800 border border-blue-200/50
+    {% elif case.status == 'processing' %}bg-amber-50 text-amber-800 border border-amber-200/50
+    {% elif case.status == 'needs_review' %}bg-orange-50 text-orange-800 border border-orange-200/50
+    {% elif case.status == 'approved' %}bg-emerald-50 text-emerald-800 border border-emerald-200/50
+    {% elif case.status == 'rejected' %}bg-red-50 text-red-800 border border-red-200/50
+    {% elif case.status == 'archived' %}bg-slate-100 text-slate-600 border border-slate-200/50
+    {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+    {{ status_label }}
+  </span>
+</div>
+
+<div class="grid grid-cols-1 xl:grid-cols-3 gap-6">
+  <!-- Main content: Analysis result -->
+  <div class="xl:col-span-2 space-y-6">
+    {% if analysis and analysis.result_text %}
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden">
+      <div class="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between">
+        <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-xl">biotech</span>
+          {{ t.case_analysis_title }}
+        </h3>
+        <span class="text-xs text-on-surface-variant font-medium">
+          {{ t.case_analysis_id }} #{{ analysis.id }} · {{ analysis.created_at.strftime('%d.%m.%Y %H:%M') if analysis.created_at else '—' }}
+        </span>
+      </div>
+      <div class="p-6 prose prose-sm max-w-none text-on-surface leading-relaxed" style="white-space: pre-wrap; font-family: Inter, system-ui, sans-serif; font-size: 14px; line-height: 1.75;">{{ analysis.result_text }}</div>
+    </div>
+    {% elif case.status == 'processing' %}
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 p-12 text-center">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-amber-50 flex items-center justify-center">
+        <span class="material-symbols-outlined text-amber-600 text-4xl">hourglass_top</span>
+      </div>
+      <h3 class="font-headline font-semibold text-on-surface text-lg mb-2">{{ t.case_processing_title }}</h3>
+      <p class="text-sm text-on-surface-variant">{{ t.case_processing_desc }}</p>
+    </div>
+    {% elif case.status == 'new' and case.review_notes %}
+    <div class="bg-white rounded-xl shadow-ambient border border-red-200/30 p-6">
+      <div class="flex items-start gap-3">
+        <span class="material-symbols-outlined text-red-600 text-2xl shrink-0">error</span>
+        <div>
+          <h3 class="font-headline font-semibold text-on-surface text-lg mb-2">{{ t.case_failed_title }}</h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed">{{ case.review_notes }}</p>
+          <p class="text-xs text-on-surface-variant mt-3">{{ t.case_failed_hint }}</p>
+        </div>
+      </div>
+    </div>
+    {% else %}
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 p-12 text-center">
+      <div class="w-16 h-16 mx-auto mb-4 rounded-2xl bg-surface-container-low flex items-center justify-center">
+        <span class="material-symbols-outlined text-on-surface-variant text-4xl">description</span>
+      </div>
+      <h3 class="font-headline font-semibold text-on-surface text-lg mb-2">{{ t.case_no_result_title }}</h3>
+      <p class="text-sm text-on-surface-variant">{{ t.case_no_result_desc }}</p>
+    </div>
+    {% endif %}
+
+    {% if reports %}
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden">
+      <div class="px-6 py-4 border-b border-outline-variant/10">
+        <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+          <span class="material-symbols-outlined text-primary text-xl">translate</span>
+          {{ t.case_reports }} ({{ reports|length }})
+        </h3>
+      </div>
+      <div class="divide-y divide-outline-variant/10">
+        {% for r in reports %}
+        <div class="p-6">
+          <div class="flex items-center justify-between gap-3 mb-3">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center px-2.5 py-1 rounded-lg bg-surface-container text-xs font-bold uppercase tracking-wider text-on-surface">{{ r.language }}</span>
+              <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-semibold
+                {% if r.approval_status == 'approved' %}bg-emerald-50 text-emerald-700
+                {% elif r.approval_status == 'rejected' %}bg-red-50 text-red-700
+                {% else %}bg-amber-50 text-amber-700{% endif %}">
+                {% if r.approval_status == 'approved' %}{{ t.rev_report_approved }}{% elif r.approval_status == 'rejected' %}{{ t.rev_report_rejected }}{% else %}{{ t.rev_report_pending }}{% endif %}
+              </span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="text-xs text-on-surface-variant">{{ r.created_at.strftime('%d.%m.%Y %H:%M') if r.created_at else '—' }}</span>
+              {% if r.approval_status == 'approved' %}
+              <a href="/enterprise/case/{{ case.id }}/export-pdf?report_id={{ r.id }}"
+                 class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg text-xs font-semibold bg-primary/10 text-primary hover:bg-primary/20 transition-colors">
+                <span class="material-symbols-outlined !text-[14px]">download</span>
+                {{ t.case_download_pdf }}
+              </a>
+              {% endif %}
+            </div>
+          </div>
+          {% if r.report_text %}
+          <div class="text-sm text-on-surface leading-relaxed" style="white-space: pre-wrap;">{{ r.report_text[:500] }}{% if r.report_text|length > 500 %}…{% endif %}</div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+    {% endif %}
+
+    {% if analysis and analysis.input_text and active_languages %}
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 p-6">
+      <h3 class="font-headline font-semibold text-on-surface mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">translate</span>
+        {{ t.case_regenerate }}
+      </h3>
+      <form method="post" action="/enterprise/case/{{ case.id }}/regenerate" class="flex flex-wrap items-center gap-3">
+        <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <label class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.case_regenerate_lang }}</label>
+        <select name="target_lang" class="rounded-lg border-outline-variant/30 text-sm py-2 pl-3 pr-8 bg-white focus:ring-primary focus:border-primary">
+          {% for lc in active_languages %}
+          <option value="{{ lc }}">{{ lc|upper }}</option>
+          {% endfor %}
+        </select>
+        <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold bg-primary text-white hover:brightness-105 transition-all shadow-sm">
+          <span class="material-symbols-outlined !text-[18px]">autorenew</span>
+          {{ t.case_regenerate_btn }}
+        </button>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if can_review and case.status in ['new', 'needs_review', 'processing'] %}
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 p-6">
+      <h3 class="font-headline font-semibold text-on-surface mb-4 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">rate_review</span>
+        {{ t.case_review_actions }}
+      </h3>
+      <div class="flex flex-wrap gap-3 mb-4">
+        <form method="post" action="/enterprise/review/{{ case.id }}/approve" class="inline">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+          <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold bg-emerald-600 text-white hover:bg-emerald-700 transition-colors shadow-sm">
+            <span class="material-symbols-outlined !text-[18px]">check_circle</span>
+            {{ t.rev_approve }}
+          </button>
+        </form>
+        <form method="post" action="/enterprise/review/{{ case.id }}/reject" class="inline">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+          <button type="submit" class="inline-flex items-center gap-1.5 px-5 py-2.5 rounded-xl text-sm font-semibold bg-white border border-red-200 text-red-700 hover:bg-red-50 transition-colors">
+            <span class="material-symbols-outlined !text-[18px]">cancel</span>
+            {{ t.rev_reject }}
+          </button>
+        </form>
+      </div>
+      <form method="post" action="/enterprise/review/{{ case.id }}/status" class="flex flex-wrap items-center gap-3">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+        <label class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.case_change_status }}</label>
+        <select name="new_status" class="rounded-lg border-outline-variant/30 text-sm py-2 pl-3 pr-8 bg-white focus:ring-primary focus:border-primary">
+          <option value="new" {% if case.status == 'new' %}selected{% endif %}>{{ t.status_new }}</option>
+          <option value="processing" {% if case.status == 'processing' %}selected{% endif %}>{{ t.status_processing }}</option>
+          <option value="needs_review" {% if case.status == 'needs_review' %}selected{% endif %}>{{ t.status_needs_review }}</option>
+          <option value="approved" {% if case.status == 'approved' %}selected{% endif %}>{{ t.status_approved }}</option>
+          <option value="rejected" {% if case.status == 'rejected' %}selected{% endif %}>{{ t.status_rejected }}</option>
+          <option value="archived" {% if case.status == 'archived' %}selected{% endif %}>{{ t.status_archived }}</option>
+        </select>
+        <button type="submit" class="px-4 py-2 rounded-lg text-sm font-semibold bg-surface-container-high text-on-surface hover:bg-surface-container transition-colors">
+          {{ t.update }}
+        </button>
+      </form>
+    </div>
+    {% endif %}
+
+    {% if case.review_notes and case.status in ['approved', 'rejected'] %}
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 p-6">
+      <h3 class="font-headline font-semibold text-on-surface mb-3 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">notes</span>
+        {{ t.case_review_notes }}
+      </h3>
+      <p class="text-sm text-on-surface leading-relaxed whitespace-pre-wrap">{{ case.review_notes }}</p>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Sidebar: Metadata -->
+  <div class="space-y-5">
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 p-5">
+      <h4 class="text-xs font-bold uppercase tracking-widest text-outline mb-4">{{ t.case_info }}</h4>
+      <dl class="space-y-4 text-sm">
+        <div>
+          <dt class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">{{ t.case_file }}</dt>
+          <dd class="mt-1 font-medium text-on-surface break-all">{{ case.source_filename or '—' }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">{{ t.case_type }}</dt>
+          <dd class="mt-1 font-medium text-on-surface">
+            {% if case.source_type == 'pdf' %}{{ t.filetype_pdf }}
+            {% elif case.source_type == 'image' %}{{ t.filetype_image }}
+            {% else %}{{ t.filetype_text }}{% endif %}
+          </dd>
+        </div>
+        <div>
+          <dt class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">{{ t.case_uploader }}</dt>
+          <dd class="mt-1 font-medium text-on-surface">{{ uploader.full_name or uploader.email if uploader else '—' }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">{{ t.case_upload_date }}</dt>
+          <dd class="mt-1 font-medium text-on-surface">{{ case.created_at.strftime('%d.%m.%Y %H:%M') if case.created_at else '—' }}</dd>
+        </div>
+        {% if reviewer %}
+        <div class="pt-4 border-t border-outline-variant/10">
+          <dt class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">{{ t.case_reviewer }}</dt>
+          <dd class="mt-1 font-medium text-on-surface">{{ reviewer.full_name or reviewer.email }}</dd>
+        </div>
+        <div>
+          <dt class="text-xs text-on-surface-variant font-semibold uppercase tracking-wider">{{ t.case_review_date }}</dt>
+          <dd class="mt-1 font-medium text-on-surface">{{ case.reviewed_at.strftime('%d.%m.%Y %H:%M') if case.reviewed_at else '—' }}</dd>
+        </div>
+        {% endif %}
+      </dl>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 p-5">
+      <h4 class="text-xs font-bold uppercase tracking-widest text-outline mb-4">{{ t.case_quick_actions }}</h4>
+      <div class="space-y-2">
+        <a href="/enterprise/review" class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors">
+          <span class="material-symbols-outlined !text-[20px] text-primary">fact_check</span>
+          {{ t.case_review_queue }}
+        </a>
+        <a href="/enterprise/uploads" class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors">
+          <span class="material-symbols-outlined !text-[20px] text-primary">upload_file</span>
+          {{ t.case_all_uploads }}
+        </a>
+        <a href="/enterprise/audit" class="flex items-center gap-2 px-3 py-2.5 rounded-lg text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors">
+          <span class="material-symbols-outlined !text-[20px] text-primary">history</span>
+          {{ t.case_audit_trail }}
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

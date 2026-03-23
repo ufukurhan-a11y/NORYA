@@ -2,6 +2,9 @@ from .analysis import AnalysisRecord
 from .analysis_job import AnalysisJob
 from .audit import AuditLog
 from .discount import DiscountCode
+from .enterprise_case import EnterpriseCase, EnterpriseReport
+from .enterprise_subscription import EnterpriseSubscription
+from .institution import Institution, InstitutionInvite, InstitutionMembership
 from .pricing_plan import PricingPlan
 from .email_lead import EmailLead
 from .enterprise_lead import EnterpriseLead
@@ -20,6 +23,12 @@ __all__ = [
     "AnalysisJob",
     "AuditLog",
     "DiscountCode",
+    "EnterpriseCase",
+    "EnterpriseReport",
+    "EnterpriseSubscription",
+    "Institution",
+    "InstitutionInvite",
+    "InstitutionMembership",
     "EmailLead",
     "PricingPlan",
     "EnterpriseLead",

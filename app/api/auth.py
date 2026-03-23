@@ -43,10 +43,10 @@ def _client_ip(request: Request) -> str:
     return request.client.host if request.client else ""
 
 
-def _audit(db: Session, event: str, user_id: int | None, ip: str | None) -> None:
+def _audit(db: Session, event: str, user_id: int | None, ip: str | None, institution_id: int | None = None) -> None:
     try:
         country, city = get_geo_from_ip(ip) if ip else (None, None)
-        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country, city=city))
+        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country, city=city, institution_id=institution_id))
         db.commit()
     except Exception:
         pass

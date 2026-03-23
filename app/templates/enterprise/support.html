@@ -1,0 +1,131 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.sup_title }}{% endblock %}
+{% block header_title %}{{ t.sup_header }}{% endblock %}
+{% block content %}
+
+<div class="mb-8">
+  <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">{{ t.sup_header }}</h2>
+  <p class="text-on-surface-variant text-sm">{{ t.sup_subtitle }}</p>
+</div>
+
+<div class="grid grid-cols-1 md:grid-cols-3 gap-5 mb-8">
+  <div class="bg-white rounded-xl shadow-ambient p-6 flex flex-col border border-outline-variant/10">
+    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+      <span class="material-symbols-outlined text-primary text-3xl">description</span>
+    </div>
+    <h3 class="font-headline font-bold text-lg text-on-surface mb-2">{{ t.sup_docs_title }}</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed flex-1 mb-5">{{ t.sup_docs_desc }}</p>
+    <a href="/docs" target="_blank" rel="noopener noreferrer"
+       class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-headline font-semibold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] transition-all">
+      {{ t.sup_docs_cta }}
+      <span class="material-symbols-outlined !text-lg">open_in_new</span>
+    </a>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-ambient p-6 flex flex-col border border-outline-variant/10">
+    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+      <span class="material-symbols-outlined text-primary text-3xl">handshake</span>
+    </div>
+    <h3 class="font-headline font-bold text-lg text-on-surface mb-2">{{ t.sup_sales_title }}</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed flex-1 mb-5">{{ t.sup_sales_desc }}</p>
+    <a href="mailto:enterprise@norya.ai"
+       class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-headline font-semibold text-sm border-2 border-primary text-primary hover:bg-primary/5 transition-colors">
+      <span class="material-symbols-outlined !text-lg">mail</span>
+      enterprise@norya.ai
+    </a>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-ambient p-6 flex flex-col border border-outline-variant/10">
+    <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center mb-4">
+      <span class="material-symbols-outlined text-primary text-3xl">support_agent</span>
+    </div>
+    <h3 class="font-headline font-bold text-lg text-on-surface mb-2">{{ t.sup_support_title }}</h3>
+    <p class="text-sm text-on-surface-variant leading-relaxed flex-1 mb-5">{{ t.sup_support_desc }}</p>
+    <a href="mailto:destek@norya.ai"
+       class="inline-flex items-center justify-center gap-2 w-full py-3 rounded-xl font-headline font-semibold text-sm border-2 border-primary text-primary hover:bg-primary/5 transition-colors">
+      <span class="material-symbols-outlined !text-lg">mail</span>
+      destek@norya.ai
+    </a>
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-ambient p-6 lg:p-8 mb-8 border border-outline-variant/10">
+  <h3 class="font-headline font-bold text-lg text-primary mb-6 flex items-center gap-2">
+    <span class="material-symbols-outlined">apartment</span>
+    {{ t.sup_org_summary }}
+  </h3>
+  <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+    <div>
+      <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.sup_org_name }}</dt>
+      <dd class="mt-1 font-medium text-on-surface">{{ inst.name }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.sup_org_type }}</dt>
+      <dd class="mt-1 font-medium text-on-surface">{{ type_label }}</dd>
+    </div>
+    <div>
+      <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.sup_org_status }}</dt>
+      <dd class="mt-1">
+        <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold
+          {% if inst.status == 'active' %}bg-emerald-50 text-emerald-700{% elif inst.status == 'pilot' %}bg-amber-50 text-amber-700{% else %}bg-red-50 text-red-700{% endif %}">
+          {{ inst_status_label }}
+        </span>
+      </dd>
+    </div>
+    <div>
+      <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.sup_org_plan }}</dt>
+      <dd class="mt-1 font-medium text-on-surface capitalize">{{ inst.plan }}</dd>
+    </div>
+    {% if inst.contract_start or inst.contract_end %}
+    <div class="sm:col-span-2">
+      <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.sup_org_contract }}</dt>
+      <dd class="mt-1 font-medium text-on-surface">
+        {% if inst.contract_start %}{{ inst.contract_start.strftime('%d.%m.%Y') }}{% else %}—{% endif %}
+        <span class="text-on-surface-variant mx-1">→</span>
+        {% if inst.contract_end %}{{ inst.contract_end.strftime('%d.%m.%Y') }}{% else %}—{% endif %}
+      </dd>
+    </div>
+    {% endif %}
+    {% if inst.contact_email %}
+    <div class="sm:col-span-2">
+      <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.sup_org_email }}</dt>
+      <dd class="mt-1">
+        <a href="mailto:{{ inst.contact_email }}" class="font-medium text-primary hover:underline">{{ inst.contact_email }}</a>
+      </dd>
+    </div>
+    {% endif %}
+  </dl>
+</div>
+
+<div class="bg-surface-container-low rounded-xl p-6 lg:p-8 mb-8 border border-outline-variant/10">
+  <p class="font-headline font-semibold text-on-surface mb-2">{{ t.sup_trust_title }}</p>
+  <p class="text-sm text-on-surface-variant leading-relaxed mb-4">
+    {{ t.sup_trust_desc }}
+  </p>
+  <p class="text-xs text-on-surface-variant/90 leading-relaxed border-t border-outline-variant/20 pt-4">
+    {{ t.sup_trust_detail }}
+  </p>
+</div>
+
+<div class="bg-white rounded-xl shadow-ambient p-6 lg:p-8 border border-outline-variant/10">
+  <h3 class="font-headline font-bold text-lg text-on-surface mb-6">{{ t.sup_faq_title }}</h3>
+  <div class="space-y-5">
+    <div class="border-b border-outline-variant/15 pb-5 last:border-0 last:pb-0">
+      <p class="font-headline font-semibold text-on-surface text-sm mb-2">{{ t.sup_faq_q1 }}</p>
+      <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.sup_faq_a1 }}</p>
+    </div>
+    <div class="border-b border-outline-variant/15 pb-5 last:border-0 last:pb-0">
+      <p class="font-headline font-semibold text-on-surface text-sm mb-2">{{ t.sup_faq_q2 }}</p>
+      <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.sup_faq_a2 }}</p>
+    </div>
+    <div class="border-b border-outline-variant/15 pb-5 last:border-0 last:pb-0">
+      <p class="font-headline font-semibold text-on-surface text-sm mb-2">{{ t.sup_faq_q3 }}</p>
+      <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.sup_faq_a3 }}</p>
+    </div>
+    <div>
+      <p class="font-headline font-semibold text-on-surface text-sm mb-2">{{ t.sup_faq_q4 }}</p>
+      <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.sup_faq_a4 }}</p>
+    </div>
+  </div>
+</div>
+{% endblock %}

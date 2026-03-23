@@ -1,0 +1,50 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}Analizler{% endblock %}
+{% block header_title %}Kurum analizleri{% endblock %}
+{% block content %}
+<div class="mb-8">
+  <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">Analizler</h2>
+  <p class="text-on-surface-variant text-sm">{{ inst.name }} kapsamında yapılan tüm analizler (toplam: {{ total }})</p>
+</div>
+
+<div class="bg-white rounded-xl shadow-ambient">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">Kullanıcı</th>
+          <th class="px-5 py-3">Ad</th>
+          <th class="px-5 py-3">Kaynak</th>
+          <th class="px-5 py-3">Tarih</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in reports %}
+        <tr class="border-t border-outline-variant/10 hover:bg-surface-container-low/30 transition-colors">
+          <td class="px-5 py-3 font-mono text-xs text-on-surface-variant">{{ r.id }}</td>
+          <td class="px-5 py-3 font-medium">{{ r.user_email }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ r.user_name }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ r.source }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ r.created_at }}</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="5" class="px-5 py-8 text-center text-on-surface-variant">Henüz analiz yapılmamış.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% if has_prev or has_next %}
+  <div class="px-6 py-4 border-t border-outline-variant/10 flex items-center justify-between">
+    {% if has_prev %}
+    <a href="/enterprise/dashboard/reports?page={{ page - 1 }}" class="text-sm text-primary font-medium hover:underline">← Önceki</a>
+    {% else %}<span></span>{% endif %}
+    <span class="text-xs text-on-surface-variant">Sayfa {{ page }}</span>
+    {% if has_next %}
+    <a href="/enterprise/dashboard/reports?page={{ page + 1 }}" class="text-sm text-primary font-medium hover:underline">Sonraki →</a>
+    {% else %}<span></span>{% endif %}
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

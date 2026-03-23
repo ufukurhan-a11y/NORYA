@@ -8,6 +8,7 @@ from app.admin.routers import (
     coupons,
     dashboard,
     errors,
+    institutions,
     live,
     live_analytics,
     payments,
@@ -34,3 +35,4 @@ admin_router.include_router(uploads.router, prefix="/uploads", tags=["admin-uplo
 admin_router.include_router(queue.router, prefix="/queue", tags=["admin-queue"])
 admin_router.include_router(security.router, prefix="/security", tags=["admin-security"])
 admin_router.include_router(billing_links.router, prefix="/billing-links", tags=["admin-billing"])
+admin_router.include_router(institutions.router, prefix="/institutions", tags=["admin-institutions"])

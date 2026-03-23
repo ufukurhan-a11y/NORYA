@@ -1,0 +1,346 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.onb_title }}{% endblock %}
+{% block header_title %}{{ t.onb_header }}{% endblock %}
+
+{% set lang_labels = {
+  'tr': 'Türkçe',
+  'en': 'İngilizce',
+  'de': 'Almanca',
+  'ar': 'Arapça',
+  'fr': 'Fransızca',
+  'es': 'İspanyolca',
+  'ru': 'Rusça',
+  'zh': 'Çince'
+} %}
+{% set active_lang_set = (inst.active_languages or 'tr,en').replace(' ', '').split(',') %}
+
+{% block head_extra %}
+<style>
+  .onb-step { display: none; }
+  .onb-step.is-active { display: block; }
+  .onb-indicator-dot[data-done="1"] { background: #006a69; color: #fff; border-color: #006a69; }
+  .onb-indicator-dot.is-current { box-shadow: 0 0 0 4px rgba(14, 165, 164, 0.25); border-color: #0ea5a4; color: #006a69; background: #fff; }
+  .onb-line.is-done { background: linear-gradient(90deg, #006a69, #0ea5a4); }
+</style>
+{% endblock %}
+
+{% block content %}
+<div class="w-full max-w-4xl mx-auto pb-8">
+  <div class="mb-8">
+    <p class="text-xs font-bold uppercase tracking-widest text-primary mb-2">{{ t.onb_welcome }}</p>
+    <h2 class="text-2xl lg:text-3xl font-headline font-bold text-on-surface tracking-tight mb-2">
+      {{ t.onb_configure }}
+    </h2>
+    <p class="text-on-surface-variant text-sm max-w-2xl">
+      {{ t.onb_intro }}
+    </p>
+  </div>
+
+  {% if not is_admin %}
+  <div class="mb-8 rounded-xl border border-amber-200 bg-amber-50/80 px-5 py-4 flex gap-3 shadow-ambient">
+    <span class="material-symbols-outlined text-amber-800 shrink-0">info</span>
+    <div class="text-sm text-amber-950">
+      <p class="font-headline font-semibold mb-1">{{ t.onb_admin_required }}</p>
+      <p class="text-amber-900/90">{{ t.onb_admin_desc }}</p>
+    </div>
+  </div>
+  {% endif %}
+
+  <!-- Step indicator -->
+  <div class="mb-10 px-1">
+    <div class="flex items-center justify-between gap-1 sm:gap-2" id="onb-indicators" aria-hidden="true">
+      {% for n in range(1, 6) %}
+      <div class="flex items-center flex-1 min-w-0 {% if not loop.last %}gap-1 sm:gap-2{% endif %}">
+        <div
+          class="onb-indicator-dot flex h-9 w-9 sm:h-10 sm:w-10 shrink-0 items-center justify-center rounded-full border-2 border-outline-variant bg-white font-headline text-xs sm:text-sm font-bold text-on-surface-variant transition-all {% if n == 1 %}is-current{% endif %}"
+          data-step-indicator="{{ n }}"
+          data-done="0"
+        >{{ n }}</div>
+        {% if not loop.last %}
+        <div class="onb-line h-0.5 flex-1 min-w-[8px] rounded-full bg-outline-variant/40 transition-all" data-line="{{ n }}"></div>
+        {% endif %}
+      </div>
+      {% endfor %}
+    </div>
+    <div class="mt-3 flex justify-between text-[10px] sm:text-xs text-on-surface-variant font-medium uppercase tracking-wide gap-1">
+      <span class="w-14 sm:w-16 text-center shrink-0">{{ t.onb_step_org }}</span>
+      <span class="w-14 sm:w-16 text-center shrink-0 hidden sm:block">{{ t.onb_step_langs }}</span>
+      <span class="flex-1 text-center sm:hidden">{{ t.onb_step }}</span>
+      <span class="w-14 sm:w-16 text-center shrink-0 hidden sm:block">{{ t.onb_step_team }}</span>
+      <span class="w-14 sm:w-16 text-center shrink-0 hidden sm:block">{{ t.onb_step_status }}</span>
+      <span class="w-14 sm:w-16 text-center shrink-0">{{ t.onb_step_summary }}</span>
+    </div>
+  </div>
+
+  <form method="post" action="/enterprise/onboarding" id="onb-form" class="bg-white rounded-xl shadow-ambient border border-outline-variant/10 overflow-hidden"
+    data-t-no-invites="{{ t.onb_no_invites }}"
+    data-t-active="{{ t.onb_status_active }}"
+    data-t-pilot="{{ t.onb_status_pilot }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <input type="hidden" name="active_languages" id="field_active_languages" value="{{ inst.active_languages or 'tr,en' }}" />
+
+    <!-- Step 1 -->
+    <div class="onb-step is-active p-6 sm:p-8" data-step="1">
+      <h3 class="font-headline text-lg font-bold text-on-surface mb-1 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">apartment</span>
+        {{ t.onb_org_info }}
+      </h3>
+      <p class="text-sm text-on-surface-variant mb-6">{{ t.onb_org_info_desc }}</p>
+      <label class="block">
+        <span class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.onb_org_name }}</span>
+        <input type="text" name="institution_name" required value="{{ inst.name }}"
+          class="mt-2 w-full rounded-xl border-outline-variant/30 shadow-sm focus:border-primary focus:ring-primary text-on-surface" placeholder="{{ t.onb_org_name_ph }}" />
+      </label>
+      <fieldset class="mt-6">
+        <legend class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-3">{{ t.onb_org_type }}</legend>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {% for key, label in type_labels.items() %}
+          <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-outline-variant/20 bg-surface/40 px-4 py-3 has-[:checked]:border-primary/40 has-[:checked]:bg-primary/5 transition-colors">
+            <input type="radio" name="institution_type" value="{{ key }}" class="text-primary focus:ring-primary border-outline-variant"
+              {% if inst.type == key %}checked{% endif %} />
+            <span class="text-sm font-medium text-on-surface">{{ label }}</span>
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="onb-step p-6 sm:p-8" data-step="2">
+      <h3 class="font-headline text-lg font-bold text-on-surface mb-1 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">translate</span>
+        {{ t.onb_langs_title }}
+      </h3>
+      <p class="text-sm text-on-surface-variant mb-6">{{ t.onb_langs_desc }}</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3" id="lang-checkboxes">
+        {% for code, label in lang_labels.items() %}
+        <label class="flex cursor-pointer items-center gap-3 rounded-xl border border-outline-variant/20 bg-surface/30 px-4 py-3 has-[:checked]:border-primary/35 has-[:checked]:bg-primary/5">
+          <input type="checkbox" value="{{ code }}" class="lang-cb rounded border-outline-variant text-primary focus:ring-primary"
+            {% if code in active_lang_set %}checked{% endif %} />
+          <span class="text-sm font-medium text-on-surface">{{ label }} <span class="text-on-surface-variant font-normal">({{ code }})</span></span>
+        </label>
+        {% endfor %}
+      </div>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="onb-step p-6 sm:p-8" data-step="3">
+      <h3 class="font-headline text-lg font-bold text-on-surface mb-1 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">mail</span>
+        {{ t.onb_team_title }}
+      </h3>
+      <p class="text-sm text-on-surface-variant mb-6">{{ t.onb_team_desc }}</p>
+      <label class="block">
+        <span class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.onb_team_emails }}</span>
+        <textarea name="invite_emails" rows="4" class="mt-2 w-full rounded-xl border-outline-variant/30 shadow-sm focus:border-primary focus:ring-primary text-on-surface text-sm"
+          placeholder="{{ t.onb_team_emails_ph }}"></textarea>
+      </label>
+      <label class="block mt-4">
+        <span class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant">{{ t.onb_team_role }}</span>
+        <select name="invite_role" class="mt-2 w-full rounded-xl border-outline-variant/30 shadow-sm focus:border-primary focus:ring-primary text-on-surface text-sm">
+          {% for rkey, rlabel in role_labels.items() %}
+          <option value="{{ rkey }}" {% if rkey == 'member' %}selected{% endif %}>{{ rlabel }}</option>
+          {% endfor %}
+        </select>
+      </label>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="onb-step p-6 sm:p-8" data-step="4">
+      <h3 class="font-headline text-lg font-bold text-on-surface mb-1 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">toggle_on</span>
+        {{ t.onb_status_title }}
+      </h3>
+      <p class="text-sm text-on-surface-variant mb-6">{{ t.onb_status_desc }}</p>
+      <div class="space-y-3">
+        <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-outline-variant/20 bg-surface/40 p-4 has-[:checked]:border-primary/40 has-[:checked]:bg-primary/5">
+          <input type="radio" name="status_choice" value="pilot" class="mt-1 text-primary focus:ring-primary border-outline-variant"
+            {% if inst.status == 'pilot' or inst.status not in ['active'] %}checked{% endif %} />
+          <div>
+            <span class="font-headline font-semibold text-on-surface">{{ t.onb_status_pilot }}</span>
+            <p class="text-sm text-on-surface-variant mt-1">{{ t.onb_status_pilot_desc }}</p>
+          </div>
+        </label>
+        <label class="flex cursor-pointer items-start gap-3 rounded-xl border border-outline-variant/20 bg-surface/40 p-4 has-[:checked]:border-primary/40 has-[:checked]:bg-primary/5">
+          <input type="radio" name="status_choice" value="active" class="mt-1 text-primary focus:ring-primary border-outline-variant"
+            {% if inst.status == 'active' %}checked{% endif %} />
+          <div>
+            <span class="font-headline font-semibold text-on-surface">{{ t.onb_status_active }}</span>
+            <p class="text-sm text-on-surface-variant mt-1">{{ t.onb_status_active_desc }}</p>
+          </div>
+        </label>
+      </div>
+    </div>
+
+    <!-- Step 5 -->
+    <div class="onb-step p-6 sm:p-8" data-step="5">
+      <h3 class="font-headline text-lg font-bold text-on-surface mb-1 flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary text-xl">task_alt</span>
+        {{ t.onb_summary_title }}
+      </h3>
+      <p class="text-sm text-on-surface-variant mb-6">{{ t.onb_summary_desc }}</p>
+      <dl class="space-y-4 rounded-xl bg-surface/80 border border-outline-variant/10 p-5 text-sm">
+        <div class="flex justify-between gap-4 border-b border-outline-variant/10 pb-3">
+          <dt class="text-on-surface-variant">{{ t.onb_summary_name }}</dt>
+          <dd class="font-medium text-on-surface text-right" id="sum-name">—</dd>
+        </div>
+        <div class="flex justify-between gap-4 border-b border-outline-variant/10 pb-3">
+          <dt class="text-on-surface-variant">{{ t.onb_summary_type }}</dt>
+          <dd class="font-medium text-on-surface text-right" id="sum-type">—</dd>
+        </div>
+        <div class="flex justify-between gap-4 border-b border-outline-variant/10 pb-3">
+          <dt class="text-on-surface-variant">{{ t.onb_summary_langs }}</dt>
+          <dd class="font-medium text-on-surface text-right max-w-[60%]" id="sum-langs">—</dd>
+        </div>
+        <div class="flex justify-between gap-4 border-b border-outline-variant/10 pb-3">
+          <dt class="text-on-surface-variant">{{ t.onb_summary_invites }}</dt>
+          <dd class="font-medium text-on-surface text-right max-w-[60%] break-words" id="sum-invites">—</dd>
+        </div>
+        <div class="flex justify-between gap-4">
+          <dt class="text-on-surface-variant">{{ t.onb_summary_status }}</dt>
+          <dd class="font-medium text-primary text-right" id="sum-status">—</dd>
+        </div>
+      </dl>
+      {% if is_admin %}
+      <p class="text-xs text-on-surface-variant mt-4">{{ t.onb_summary_note }}</p>
+      {% endif %}
+    </div>
+
+    <div class="flex flex-col-reverse sm:flex-row sm:items-center sm:justify-between gap-3 border-t border-outline-variant/10 bg-surface/50 px-6 py-4 sm:px-8">
+      <button type="button" id="onb-prev" class="hidden inline-flex w-full sm:w-auto items-center justify-center gap-2 rounded-xl border border-outline-variant/30 bg-white px-5 py-2.5 text-sm font-headline font-semibold text-on-surface hover:bg-surface-container-low transition-colors">
+        <span class="material-symbols-outlined !text-[18px]">arrow_back</span>
+        {{ t.back }}
+      </button>
+      <div class="flex flex-col-reverse sm:flex-row gap-3 sm:ml-auto w-full sm:w-auto">
+        <button type="button" id="onb-next" class="inline-flex flex-1 sm:flex-none items-center justify-center gap-2 rounded-xl bg-primary px-6 py-2.5 text-sm font-headline font-semibold text-on-primary shadow-ambient hover:brightness-[1.03] transition-all">
+          {{ t.forward }}
+          <span class="material-symbols-outlined !text-[18px]">arrow_forward</span>
+        </button>
+        {% if is_admin %}
+        <button type="submit" id="onb-finish" class="hidden items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-primary to-primary-container px-6 py-2.5 text-sm font-headline font-semibold text-white shadow-ambient hover:brightness-[1.02] transition-all">
+          <span class="material-symbols-outlined !text-[18px]">check_circle</span>
+          {{ t.onb_finish }}
+        </button>
+        {% else %}
+        <button type="button" disabled class="hidden items-center justify-center gap-2 rounded-xl border border-outline-variant/30 bg-surface-container px-6 py-2.5 text-sm font-headline font-semibold text-on-surface-variant cursor-not-allowed opacity-70" id="onb-finish-disabled" title="{{ t.onb_finish_disabled_title }}">
+          {{ t.onb_finish }}
+        </button>
+        {% endif %}
+      </div>
+    </div>
+  </form>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+(function () {
+  var TOTAL = 5;
+  var step = 1;
+  var form = document.getElementById('onb-form');
+  var btnNext = document.getElementById('onb-next');
+  var btnFinish = document.getElementById('onb-finish');
+  var btnFinishDisabled = document.getElementById('onb-finish-disabled');
+  var btnPrev = document.getElementById('onb-prev');
+  var hiddenLangs = document.getElementById('field_active_languages');
+
+  var typeLabels = {{ type_labels | tojson }};
+  var langLabels = {{ lang_labels | tojson }};
+
+  function $(sel) { return document.querySelector(sel); }
+  function $all(sel) { return Array.prototype.slice.call(document.querySelectorAll(sel)); }
+
+  function syncLanguages() {
+    var codes = $all('.lang-cb:checked').map(function (el) { return el.value; });
+    if (!codes.length) codes = ['tr'];
+    hiddenLangs.value = codes.join(',');
+    return codes;
+  }
+
+  function showStep(n) {
+    step = Math.min(Math.max(n, 1), TOTAL);
+    $all('.onb-step').forEach(function (el) {
+      el.classList.toggle('is-active', parseInt(el.getAttribute('data-step'), 10) === step);
+    });
+    $all('[data-step-indicator]').forEach(function (dot) {
+      var d = parseInt(dot.getAttribute('data-step-indicator'), 10);
+      dot.classList.toggle('is-current', d === step);
+      var done = d < step;
+      dot.setAttribute('data-done', done ? '1' : '0');
+    });
+    $all('.onb-line').forEach(function (line) {
+      var after = parseInt(line.getAttribute('data-line'), 10);
+      line.classList.toggle('is-done', after < step);
+    });
+    var showPrev = step > 1;
+    btnPrev.classList.toggle('hidden', !showPrev);
+    if (step < TOTAL) {
+      btnNext.classList.remove('hidden');
+      btnNext.style.display = '';
+      if (btnFinish) { btnFinish.classList.add('hidden'); btnFinish.style.display = 'none'; }
+      if (btnFinishDisabled) { btnFinishDisabled.classList.add('hidden'); btnFinishDisabled.style.display = 'none'; }
+    } else {
+      btnNext.classList.add('hidden');
+      btnNext.style.display = 'none';
+      if (btnFinish) { btnFinish.classList.remove('hidden'); btnFinish.style.display = 'inline-flex'; }
+      if (btnFinishDisabled) { btnFinishDisabled.classList.remove('hidden'); btnFinishDisabled.style.display = 'inline-flex'; }
+      refreshSummary();
+    }
+  }
+
+  function refreshSummary() {
+    var nameEl = form.querySelector('[name="institution_name"]');
+    var typeEl = form.querySelector('[name="institution_type"]:checked');
+    var statusEl = form.querySelector('[name="status_choice"]:checked');
+    var inviteEl = form.querySelector('[name="invite_emails"]');
+    syncLanguages();
+    var codes = hiddenLangs.value.split(',').filter(Boolean);
+    $('#sum-name').textContent = (nameEl && nameEl.value.trim()) || '—';
+    $('#sum-type').textContent = typeEl ? (typeLabels[typeEl.value] || typeEl.value) : '—';
+    $('#sum-langs').textContent = codes.map(function (c) { return langLabels[c] || c; }).join(', ') || '—';
+    var inv = inviteEl && inviteEl.value.trim();
+    $('#sum-invites').textContent = inv ? inv : form.getAttribute('data-t-no-invites');
+    $('#sum-status').textContent = statusEl && statusEl.value === 'active'
+      ? form.getAttribute('data-t-active')
+      : form.getAttribute('data-t-pilot');
+  }
+
+  function validateStep() {
+    if (step === 1) {
+      var nameEl = form.querySelector('[name="institution_name"]');
+      if (!nameEl || !nameEl.value.trim()) {
+        nameEl && nameEl.focus();
+        return false;
+      }
+      return true;
+    }
+    if (step === 2) {
+      syncLanguages();
+      if (!$all('.lang-cb:checked').length) {
+        var first = $('.lang-cb');
+        if (first) first.checked = true;
+        syncLanguages();
+      }
+      return true;
+    }
+    return true;
+  }
+
+  btnNext.addEventListener('click', function () {
+    if (!validateStep()) return;
+    if (step < TOTAL) showStep(step + 1);
+  });
+  btnPrev.addEventListener('click', function () { showStep(step - 1); });
+
+  form.addEventListener('submit', function (e) {
+    syncLanguages();
+    {% if not is_admin %}
+    e.preventDefault();
+    return false;
+    {% endif %}
+  });
+
+  showStep(1);
+})();
+</script>
+{% endblock %}

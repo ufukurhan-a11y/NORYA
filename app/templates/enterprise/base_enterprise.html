@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="{{ lang|default('tr') }}" dir="{{ 'rtl' if is_rtl else 'ltr' }}" class="light">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>{% block title %}{{ t.panel }}{% endblock %} — NoryaAI</title>
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <script src="https://cdn.tailwindcss.com?plugins=forms"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            "outline-variant": "#bcc9c8",
+            "surface-container-low": "#f3f4f5",
+            "surface-container-lowest": "#ffffff",
+            "surface-container-high": "#e7e8e9",
+            "surface-container": "#edeeef",
+            "surface": "#f8f9fa",
+            "on-surface": "#191c1d",
+            "on-surface-variant": "#3d4949",
+            "primary": "#006a69",
+            "primary-container": "#0ea5a4",
+            "on-primary": "#ffffff",
+            "outline": "#6d7a79",
+            "error": "#ba1a1a",
+            brand: "#0ea5a4",
+          },
+          fontFamily: {
+            headline: ["Manrope", "system-ui", "sans-serif"],
+            body: ["Inter", "system-ui", "sans-serif"],
+          },
+          boxShadow: { ambient: "0 12px 40px rgba(25, 28, 29, 0.04)" },
+        },
+      },
+    };
+  </script>
+  <style>
+    body { font-family: Inter, system-ui, sans-serif; }
+    .font-headline { font-family: Manrope, system-ui, sans-serif; }
+    .material-symbols-outlined {
+      font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
+      font-size: 22px; line-height: 1;
+    }
+    .ent-nav-active {
+      color: #0ea5a4;
+      font-weight: 700;
+      background: #fff;
+      box-shadow: 0 1px 3px rgba(25, 28, 29, 0.06);
+    }
+    .no-scrollbar::-webkit-scrollbar { display: none; }
+    .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    {% if is_rtl %}
+    .rounded-l-xl { border-radius: 0 0.75rem 0.75rem 0; }
+    {% endif %}
+  </style>
+  {% block head_extra %}{% endblock %}
+</head>
+<body class="bg-surface text-on-surface min-h-screen antialiased">
+  <div class="flex min-h-screen">
+
+    <!-- Sidebar -->
+    <aside class="w-64 flex-shrink-0 min-h-screen bg-surface-container-low border-{{ 'l' if is_rtl else 'r' }}-0 flex flex-col py-6 {{ 'pr-3 pl-0' if is_rtl else 'pl-3 pr-0' }} z-40 hidden lg:flex">
+      <div class="px-4 mb-8">
+        <a href="/enterprise/dashboard" class="flex items-center gap-3 group">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white flex-shrink-0">
+            <span class="material-symbols-outlined !text-[22px]" style="font-variation-settings: 'FILL' 1;">domain</span>
+          </div>
+          <div class="min-w-0">
+            <p class="font-headline font-bold text-on-surface text-lg leading-tight tracking-tight truncate">{{ inst.name | truncate(18, True, '…') }}</p>
+            <p class="text-[10px] uppercase tracking-widest text-primary font-semibold">{{ t.panel }}</p>
+          </div>
+        </a>
+      </div>
+
+      <nav class="flex-1 space-y-0.5 {{ 'pl-3' if is_rtl else 'pr-3' }} overflow-y-auto no-scrollbar">
+        <p class="px-4 pt-2 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-outline">{{ t.nav_section_main }}</p>
+
+        <a href="/enterprise/dashboard" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'dashboard' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">dashboard</span>
+          {{ t.nav_overview }}
+        </a>
+
+        <a href="/enterprise/uploads" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'uploads' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">upload_file</span>
+          {{ t.nav_uploads }}
+        </a>
+
+        {% if is_admin or membership.role in ['reviewer', 'owner'] %}
+        <a href="/enterprise/review" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'review' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">fact_check</span>
+          {{ t.nav_review }}
+        </a>
+        {% endif %}
+
+        <p class="px-4 pt-5 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-outline">{{ t.nav_section_mgmt }}</p>
+
+        <a href="/enterprise/team" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'team' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">group</span>
+          {{ t.nav_team }}
+        </a>
+
+        <a href="/enterprise/billing" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'billing' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">account_balance_wallet</span>
+          {{ t.nav_billing }}
+        </a>
+
+        {% if is_admin or membership.role in ['reviewer', 'owner'] %}
+        <a href="/enterprise/audit" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'audit' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">history</span>
+          {{ t.nav_audit }}
+        </a>
+        {% endif %}
+
+        <a href="/enterprise/settings" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'settings' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">settings</span>
+          {{ t.nav_settings }}
+        </a>
+
+        <p class="px-4 pt-5 pb-1.5 text-[10px] font-bold uppercase tracking-widest text-outline">{{ t.nav_section_support }}</p>
+
+        <a href="/enterprise/support" class="flex items-center gap-3 px-4 py-2.5 rounded-l-xl text-sm font-medium transition-colors {% if active_page == 'support' %}ent-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">support_agent</span>
+          {{ t.nav_support }}
+        </a>
+      </nav>
+
+      <div class="mt-auto px-4 {{ 'pl-6' if is_rtl else 'pr-6' }} pt-4 space-y-2">
+        <a href="/" class="w-full py-3 rounded-xl font-headline font-bold text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] transition-all">
+          <span class="material-symbols-outlined text-lg">open_in_new</span>
+          {{ t.nav_site }}
+        </a>
+        <p class="text-xs text-center text-on-surface-variant truncate">{{ user.email }}</p>
+      </div>
+    </aside>
+
+    <!-- Mobile bottom nav -->
+    <div class="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-xl border-t border-outline-variant/15 px-2 h-16 flex items-center justify-around safe-area-bottom">
+      <a href="/enterprise/dashboard" class="flex flex-col items-center gap-0.5 py-1 px-2 {% if active_page == 'dashboard' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+        <span class="material-symbols-outlined !text-[22px]">dashboard</span>
+        <span class="text-[10px] font-semibold">{{ t.mob_overview }}</span>
+      </a>
+      <a href="/enterprise/uploads" class="flex flex-col items-center gap-0.5 py-1 px-2 {% if active_page == 'uploads' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+        <span class="material-symbols-outlined !text-[22px]">upload_file</span>
+        <span class="text-[10px] font-semibold">{{ t.mob_uploads }}</span>
+      </a>
+      <a href="/enterprise/review" class="flex flex-col items-center gap-0.5 py-1 px-2 {% if active_page == 'review' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+        <span class="material-symbols-outlined !text-[22px]">fact_check</span>
+        <span class="text-[10px] font-semibold">{{ t.mob_review }}</span>
+      </a>
+      <a href="/enterprise/team" class="flex flex-col items-center gap-0.5 py-1 px-2 {% if active_page == 'team' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+        <span class="material-symbols-outlined !text-[22px]">group</span>
+        <span class="text-[10px] font-semibold">{{ t.mob_team }}</span>
+      </a>
+      <a href="/enterprise/billing" class="flex flex-col items-center gap-0.5 py-1 px-2 {% if active_page == 'billing' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+        <span class="material-symbols-outlined !text-[22px]">account_balance_wallet</span>
+        <span class="text-[10px] font-semibold">{{ t.mob_billing }}</span>
+      </a>
+    </div>
+
+    <!-- Mobile top bar -->
+    <div class="lg:hidden fixed top-0 left-0 right-0 z-50 bg-white/90 backdrop-blur-xl border-b border-outline-variant/10 px-4 h-14 flex items-center justify-between">
+      <a href="/enterprise/dashboard" class="flex items-center gap-2">
+        <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white">
+          <span class="material-symbols-outlined !text-[18px]" style="font-variation-settings: 'FILL' 1;">domain</span>
+        </div>
+        <span class="font-headline font-bold text-sm truncate max-w-[140px]">{{ inst.name | truncate(20, True, '…') }}</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <a href="/enterprise/support" class="p-2 rounded-lg {% if active_page == 'support' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">support_agent</span>
+        </a>
+        <a href="/enterprise/settings" class="p-2 rounded-lg {% if active_page == 'settings' %}text-primary{% else %}text-on-surface-variant{% endif %}">
+          <span class="material-symbols-outlined !text-[20px]">settings</span>
+        </a>
+      </div>
+    </div>
+
+    <div class="flex-1 flex flex-col min-w-0 pt-14 pb-20 lg:pt-0 lg:pb-0">
+      <header class="sticky top-0 z-30 hidden lg:flex items-center justify-between px-6 lg:px-8 h-16 bg-white/85 backdrop-blur-xl shadow-ambient border-b border-outline-variant/10">
+        <h1 class="font-headline font-semibold text-lg text-primary">{% block header_title %}{{ t.panel }}{% endblock %}</h1>
+        <div class="flex items-center gap-4 text-sm text-on-surface-variant">
+          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold
+            {% if inst.status == 'active' %}bg-emerald-50 text-emerald-700{% elif inst.status == 'pilot' %}bg-amber-50 text-amber-700{% else %}bg-red-50 text-red-700{% endif %}">
+            {{ inst_status_label }}
+          </span>
+          <span class="flex items-center gap-2">
+            <span class="material-symbols-outlined text-outline text-xl">person</span>
+            {{ user.full_name or user.email }}
+          </span>
+        </div>
+      </header>
+      <main class="flex-1 p-4 lg:p-8 max-w-[1400px] w-full mx-auto">
+        {% block content %}{% endblock %}
+      </main>
+    </div>
+  </div>
+  {% block scripts %}{% endblock %}
+</body>
+</html>

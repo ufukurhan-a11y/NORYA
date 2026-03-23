@@ -1,0 +1,73 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}{% if mode == 'create' %}Yeni kurum{% else %}Kurum düzenle{% endif %} - Norya Admin{% endblock %}
+{% block admin_header_title %}{% if mode == 'create' %}Yeni kurum oluştur{% else %}Kurum düzenle{% endif %}{% endblock %}
+{% block content %}
+<div class="max-w-2xl">
+  <a href="/admin/institutions" class="inline-flex items-center gap-1 text-sm text-primary hover:underline mb-6">
+    <span class="material-symbols-outlined text-lg">arrow_back</span>
+    Kurum listesine dön
+  </a>
+
+  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6 lg:p-8">
+    <h2 class="text-2xl font-bold font-headline tracking-tight text-on-surface mb-6">Kurum bilgileri</h2>
+
+    <form method="post" action="{% if mode == 'create' %}/admin/institutions/create{% else %}/admin/institutions/{{ institution.id }}/edit{% endif %}" class="space-y-5">
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1">Kurum adı *</label>
+        <input type="text" name="name" value="{{ institution.name if institution else '' }}" required class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+      </div>
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1">Kurum türü</label>
+        <select name="type" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white">
+          {% for val, label in types %}
+          <option value="{{ val }}" {% if institution and institution.type == val %}selected{% endif %}>{{ label }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Aylık kota</label>
+          <input type="number" name="monthly_quota" value="{{ institution.monthly_quota if institution else 100 }}" min="1" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Kota sıfırlama günü</label>
+          <input type="number" name="quota_reset_day" value="{{ institution.quota_reset_day if institution else 1 }}" min="1" max="28" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">İletişim e-postası</label>
+          <input type="email" name="contact_email" value="{{ institution.contact_email if institution and institution.contact_email else '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">İletişim telefonu</label>
+          <input type="tel" name="contact_phone" value="{{ institution.contact_phone if institution and institution.contact_phone else '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Sözleşme başlangıç</label>
+          <input type="date" name="contract_start" value="{{ institution.contract_start.strftime('%Y-%m-%d') if institution and institution.contract_start else '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Sözleşme bitiş</label>
+          <input type="date" name="contract_end" value="{{ institution.contract_end.strftime('%Y-%m-%d') if institution and institution.contract_end else '' }}" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
+        </div>
+      </div>
+      {% if mode == 'edit' %}
+      <div class="flex items-center gap-3">
+        <input type="checkbox" name="is_active" id="is_active" value="true" {% if institution and institution.is_active %}checked{% endif %} class="rounded border-outline-variant/40" />
+        <label for="is_active" class="text-sm font-medium text-on-surface">Kurum aktif</label>
+      </div>
+      {% endif %}
+      <div>
+        <label class="block text-sm font-medium text-on-surface mb-1">Notlar</label>
+        <textarea name="notes" rows="3" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white resize-none">{{ institution.notes if institution and institution.notes else '' }}</textarea>
+      </div>
+      <button type="submit" class="px-8 py-3 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] transition-all">
+        {% if mode == 'create' %}Kurum oluştur{% else %}Değişiklikleri kaydet{% endif %}
+      </button>
+    </form>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,248 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.upl_title }}{% endblock %}
+{% block header_title %}
+<div class="flex items-center gap-3 flex-wrap">
+  <span>{{ t.upl_header }}</span>
+  <span class="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-xs font-semibold bg-surface-container-high text-on-surface-variant">
+    {{ total }} {{ t.records }}
+  </span>
+</div>
+{% endblock %}
+{% block content %}
+<div class="mb-6">
+  <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">{{ t.upl_header }}</h2>
+  <p class="text-on-surface-variant text-sm">{{ inst.name }} — {{ t.upl_subtitle }}</p>
+</div>
+
+{% if request.query_params.get('error') == 'quota' %}
+<div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex items-start gap-2">
+  <span class="material-symbols-outlined text-red-600 !text-[20px] shrink-0">error</span>
+  <span>{{ t.upl_err_quota }}</span>
+</div>
+{% elif request.query_params.get('error') == 'format' %}
+<div class="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 flex items-start gap-2">
+  <span class="material-symbols-outlined text-amber-700 !text-[20px] shrink-0">warning</span>
+  <span>{{ t.upl_err_format }}</span>
+</div>
+{% elif request.query_params.get('error') == 'empty' %}
+<div class="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 flex items-start gap-2">
+  <span class="material-symbols-outlined text-amber-700 !text-[20px] shrink-0">warning</span>
+  <span>{{ t.upl_err_empty }}</span>
+</div>
+{% elif request.query_params.get('error') == 'size' %}
+<div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex items-start gap-2">
+  <span class="material-symbols-outlined text-red-600 !text-[20px] shrink-0">error</span>
+  <span>{{ t.upl_err_size }}</span>
+</div>
+{% endif %}
+
+{% if can_upload %}
+<div class="bg-white rounded-xl shadow-ambient mb-8 overflow-hidden">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg text-primary">cloud_upload</span>
+      {{ t.upl_upload_title }}
+    </h3>
+  </div>
+  <form id="upload-form" action="/enterprise/uploads" method="post" enctype="multipart/form-data" class="p-6" data-t-processing="{{ t.upl_processing }}">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <label for="file-input" id="drop-zone"
+      class="flex flex-col items-center justify-center gap-3 px-6 py-12 rounded-xl border-2 border-dashed border-outline-variant/60 bg-surface/80 hover:border-primary/40 hover:bg-primary/[0.03] transition-colors cursor-pointer group">
+      <input id="file-input" type="file" name="file" required class="sr-only" accept=".pdf,.jpg,.jpeg,.png,.webp,application/pdf,image/*" />
+      <span class="material-symbols-outlined text-5xl text-primary/70 group-hover:text-primary transition-colors" id="upload-icon">upload_file</span>
+      <div class="text-center" id="upload-text">
+        <p class="font-headline font-semibold text-on-surface">{{ t.upl_drag_drop }}</p>
+        <p class="text-sm text-on-surface-variant mt-1">{{ t.upl_supported }}</p>
+      </div>
+      <div class="text-center hidden" id="upload-processing">
+        <p class="font-headline font-semibold text-primary animate-pulse">{{ t.upl_processing }}</p>
+        <p class="text-sm text-on-surface-variant mt-1">{{ t.upl_processing_desc }}</p>
+      </div>
+      <p id="file-name" class="text-xs font-medium text-primary min-h-[1rem]"></p>
+    </label>
+    <div class="mt-4 flex flex-col sm:flex-row items-stretch sm:items-center sm:justify-between gap-3">
+      <div class="flex items-center gap-3">
+        <label for="upload-lang" class="text-xs font-semibold uppercase tracking-wider text-on-surface-variant whitespace-nowrap">{{ t.upl_lang_label }}</label>
+        <select id="upload-lang" name="lang" class="rounded-lg border-outline-variant/30 text-sm py-2 pl-3 pr-8 bg-white focus:ring-primary focus:border-primary">
+          <option value="tr" selected>Türkçe</option>
+          <option value="en">English</option>
+          <option value="de">Deutsch</option>
+          <option value="ar">العربية</option>
+        </select>
+      </div>
+      <button type="submit" id="upload-btn"
+        class="inline-flex items-center justify-center gap-2 px-6 py-2.5 rounded-xl font-headline font-semibold text-sm text-white bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:brightness-[1.02] transition-all disabled:opacity-50 disabled:cursor-not-allowed">
+        <span class="material-symbols-outlined !text-[20px]" id="upload-btn-icon">upload</span>
+        <span id="upload-btn-text">{{ t.upl_submit }}</span>
+      </button>
+    </div>
+  </form>
+</div>
+{% endif %}
+
+<div class="mb-6 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+  <p class="text-xs font-bold uppercase tracking-widest text-outline">{{ t.upl_filter }}</p>
+  <div class="flex flex-wrap items-center gap-2">
+    {% if status_filter %}
+    <a href="/enterprise/uploads"
+      class="inline-flex items-center px-3 py-1.5 rounded-full text-xs font-semibold border border-outline-variant/40 text-on-surface-variant hover:bg-white transition-colors">
+      {{ t.all }}
+    </a>
+    {% endif %}
+    {% for st, cnt in status_counts.items() %}
+    <a href="/enterprise/uploads?status_filter={{ st }}"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold transition-colors border
+      {% if status_filter == st %}bg-primary text-white border-primary shadow-sm{% else %}bg-white border-outline-variant/25 text-on-surface-variant hover:border-primary/30 hover:text-primary{% endif %}">
+      {{ status_labels.get(st, st) }}
+      <span class="tabular-nums px-1.5 py-0.5 rounded-md {% if status_filter == st %}bg-white/20{% else %}bg-surface-container-high{% endif %}">{{ cnt }}</span>
+    </a>
+    {% else %}
+    <span class="text-xs text-on-surface-variant">{{ t.upl_filter_hint }}</span>
+    {% endfor %}
+  </div>
+</div>
+
+<div class="bg-white rounded-xl shadow-ambient overflow-hidden">
+  {% if cases %}
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">{{ t.upl_col_id }}</th>
+          <th class="px-5 py-3">{{ t.upl_col_file }}</th>
+          <th class="px-5 py-3">{{ t.upl_col_type }}</th>
+          <th class="px-5 py-3">{{ t.upl_col_status }}</th>
+          <th class="px-5 py-3">{{ t.upl_col_uploader }}</th>
+          <th class="px-5 py-3">{{ t.upl_col_date }}</th>
+          <th class="px-5 py-3">{{ t.upl_col_reviewer }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in cases %}
+        <tr class="border-t border-outline-variant/10 hover:bg-surface-container-low/30 transition-colors">
+          <td class="px-5 py-3 font-mono text-xs text-on-surface-variant">
+            <a href="/enterprise/case/{{ c.id }}" class="text-primary hover:underline">{{ c.id }}</a>
+          </td>
+          <td class="px-5 py-3 font-medium text-on-surface max-w-[200px] truncate" title="{{ c.filename }}">
+            <a href="/enterprise/case/{{ c.id }}" class="hover:text-primary hover:underline">{{ c.filename }}</a>
+          </td>
+          <td class="px-5 py-3 text-on-surface-variant">
+            {% if c.source_type == 'pdf' %}{{ t.filetype_pdf }}
+            {% elif c.source_type == 'image' %}{{ t.filetype_image }}
+            {% elif c.source_type == 'text' %}{{ t.filetype_text }}
+            {% else %}{{ c.source_type }}{% endif %}
+          </td>
+          <td class="px-5 py-3">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold
+              {% if c.status == 'new' %}bg-sky-50 text-sky-800
+              {% elif c.status == 'processing' %}bg-amber-50 text-amber-900
+              {% elif c.status == 'needs_review' %}bg-violet-50 text-violet-800
+              {% elif c.status == 'approved' %}bg-emerald-50 text-emerald-800
+              {% elif c.status == 'rejected' %}bg-red-50 text-red-800
+              {% elif c.status == 'archived' %}bg-slate-100 text-slate-600
+              {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+              {{ c.status_label }}
+            </span>
+          </td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ c.uploader_email }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant whitespace-nowrap">{{ c.created_at }}</td>
+          <td class="px-5 py-3 text-on-surface-variant text-xs">{{ c.reviewer_email or '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  {% set base_q = '/enterprise/uploads?' %}
+  {% if status_filter %}{% set base_q = '/enterprise/uploads?status_filter=' ~ status_filter ~ '&' %}{% endif %}
+  <div class="px-6 py-4 border-t border-outline-variant/10 flex flex-col sm:flex-row items-center justify-between gap-4">
+    <p class="text-xs text-on-surface-variant">
+      {{ t.page }} <span class="font-semibold text-on-surface">{{ page }}</span>
+      · {{ per_page }} / {{ t.per_page }}
+    </p>
+    <div class="flex items-center gap-2">
+      {% if has_prev %}
+      <a href="{{ base_q }}page={{ page - 1 }}"
+        class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold border border-outline-variant/30 text-on-surface hover:bg-surface-container-low transition-colors">
+        <span class="material-symbols-outlined !text-[18px]">chevron_left</span>
+        {{ t.prev }}
+      </a>
+      {% else %}
+      <span class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm text-on-surface-variant/50 border border-transparent cursor-not-allowed">
+        <span class="material-symbols-outlined !text-[18px]">chevron_left</span>
+        {{ t.prev }}
+      </span>
+      {% endif %}
+      {% if has_next %}
+      <a href="{{ base_q }}page={{ page + 1 }}"
+        class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm font-semibold border border-outline-variant/30 text-on-surface hover:bg-surface-container-low transition-colors">
+        {{ t.next }}
+        <span class="material-symbols-outlined !text-[18px]">chevron_right</span>
+      </a>
+      {% else %}
+      <span class="inline-flex items-center gap-1 px-4 py-2 rounded-xl text-sm text-on-surface-variant/50 border border-transparent cursor-not-allowed">
+        {{ t.next }}
+        <span class="material-symbols-outlined !text-[18px]">chevron_right</span>
+      </span>
+      {% endif %}
+    </div>
+  </div>
+  {% else %}
+  <div class="px-6 py-16 flex flex-col items-center text-center">
+    <div class="w-16 h-16 rounded-2xl bg-primary/10 flex items-center justify-center mb-4">
+      <span class="material-symbols-outlined text-4xl text-primary">folder_open</span>
+    </div>
+    <h3 class="font-headline font-bold text-lg text-on-surface mb-1">{{ t.upl_empty }}</h3>
+    <p class="text-sm text-on-surface-variant max-w-md">
+      {% if can_upload %}{{ t.upl_empty_can }}{% else %}{{ t.upl_empty_cannot }}{% endif %}
+    </p>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{% if can_upload %}
+<script>
+(function () {
+  var form = document.getElementById('upload-form');
+  if (!form) return;
+  var input = document.getElementById('file-input');
+  var zone = document.getElementById('drop-zone');
+  var nameEl = document.getElementById('file-name');
+  function showName(files) {
+    if (files && files.length) nameEl.textContent = files[0].name;
+    else nameEl.textContent = '';
+  }
+  input.addEventListener('change', function () { showName(input.files); });
+  zone.addEventListener('dragover', function (e) {
+    e.preventDefault();
+    zone.classList.add('border-primary', 'bg-primary/5');
+  });
+  zone.addEventListener('dragleave', function () {
+    zone.classList.remove('border-primary', 'bg-primary/5');
+  });
+  zone.addEventListener('drop', function (e) {
+    e.preventDefault();
+    zone.classList.remove('border-primary', 'bg-primary/5');
+    if (e.dataTransfer.files.length) {
+      input.files = e.dataTransfer.files;
+      showName(input.files);
+    }
+  });
+  form.addEventListener('submit', function () {
+    var btn = document.getElementById('upload-btn');
+    var btnText = document.getElementById('upload-btn-text');
+    var btnIcon = document.getElementById('upload-btn-icon');
+    var uploadText = document.getElementById('upload-text');
+    var processing = document.getElementById('upload-processing');
+    if (btn) { btn.disabled = true; }
+    if (btnText) { btnText.textContent = form.getAttribute('data-t-processing'); }
+    if (btnIcon) { btnIcon.textContent = 'hourglass_top'; }
+    if (uploadText) { uploadText.classList.add('hidden'); }
+    if (processing) { processing.classList.remove('hidden'); }
+  });
+})();
+</script>
+{% endif %}
+{% endblock %}

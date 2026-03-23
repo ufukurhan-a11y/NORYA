@@ -36,6 +36,8 @@ from sqlmodel import Session, select
 from app.admin import admin_router as new_admin_router
 from app.api.admin import get_admin_html, router as admin_router
 from app.api.auth import router as auth_router
+from app.api.institution import router as institution_api_router, page_router as institution_page_router
+from app.enterprise import enterprise_router
 from app.api.deps import get_current_user, get_current_user_optional, get_current_user_or_dev_guest, security
 from app.cache_db import cache_get, cache_set, get_conn as get_cache_conn, init_cache as init_ai_cache, purge_expired as purge_ai_cache_expired
 from app.cache_utils import expires_iso, make_cache_key, now_iso
@@ -225,11 +227,35 @@ def _seed_pricing_plan():
         log.warning("PricingPlan seed atlandı: %s", e)
 
 
+def _reset_institution_quotas_if_due():
+    """Kurum kotalarını reset günü geldiyse sıfırla (başlangıçta ve günlük)."""
+    try:
+        from app.models.institution import Institution
+        today = datetime.now().day
+        with Session(engine) as db:
+            institutions = list(db.exec(
+                select(Institution).where(
+                    Institution.is_active == True,
+                    Institution.quota_reset_day == today,
+                    Institution.quota_used_this_month > 0,
+                )
+            ).all())
+            for inst in institutions:
+                inst.quota_used_this_month = 0
+                db.add(inst)
+            if institutions:
+                db.commit()
+                log.info("Institution quota reset: %d institution(s) reset", len(institutions))
+    except Exception as e:
+        log.warning("Institution quota reset check failed: %s", e)
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
     _seed_pricing_plan()
     _seed_default_coupon()
+    _reset_institution_quotas_if_due()
     key_ok = is_openai_configured()
     if key_ok:
         log.info("OPENAI_API_KEY: ok (sk-... ile yüklendi)")
@@ -626,6 +652,9 @@ app.add_middleware(ForceHTTPSRedirectMiddleware)
 
 app.include_router(auth_router)
 app.include_router(auth_router, prefix="/v1")  # Geriye uyumlu: /v1/auth/login vb.
+app.include_router(institution_api_router)
+app.include_router(institution_page_router)
+app.include_router(enterprise_router)
 app.include_router(new_admin_router)  # Yeni modüler admin (Jinja2); /admin/ -> login/dashboard
 # GET /admin (slash yok) için her zaman önce login sayfası açılsın
 @app.get("/admin")
@@ -1536,7 +1565,7 @@ def legal_page(request: Request, page: str):
     canonical_url = f"{base_url}/legal/{page}"
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/legal/{page}?lang={code}"} for code in LEGAL_HREFLANG_LANGS]
     hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/legal/{page}?lang=en"})
-    page_title = content.title if content else page
+    page_title = content.get("title", page) if content else page
     breadcrumb_items = [
         {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
         {"@type": "ListItem", "position": 2, "name": ui.get("nav_legal", "Legal"), "item": f"{base_url}/legal/{page}"},
@@ -1722,6 +1751,16 @@ def kurumsal_page(request: Request):
     return templates.TemplateResponse(
         "enterprise/kurumsal.html",
         {"request": request, "lang": lang, "t": t, "canonical_url": f"{base_url}/kurumsal"},
+    )
+
+
+@app.get("/hastaneler-icin", response_class=HTMLResponse)
+def hastaneler_icin_page(request: Request):
+    """Hastaneye özel kurumsal landing page (Türkçe)."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "enterprise/hastaneler.html",
+        {"request": request, "canonical_url": f"{base_url}/hastaneler-icin"},
     )
 
 
@@ -2490,6 +2529,39 @@ def _use_analysis_credit(db: Session, user: User, limit: int, kullanilan: int) -
         db.commit()
 
 
+def _get_active_institution(db: Session, user_id: int):
+    """Kullanıcının aktif kurumsal üyeliğini ve kurumunu döndür. Yoksa (None, None)."""
+    from app.models.institution import Institution, InstitutionMembership
+    membership = db.exec(
+        select(InstitutionMembership).where(
+            InstitutionMembership.user_id == user_id,
+            InstitutionMembership.is_active == True,
+        )
+    ).first()
+    if not membership:
+        return None, None
+    inst = db.get(Institution, membership.institution_id)
+    if not inst or not inst.is_active:
+        return None, None
+    return inst, membership
+
+
+def _institution_can_analyze(inst) -> bool:
+    """Kurum kotası yeterli mi?"""
+    if not inst:
+        return False
+    return inst.quota_used_this_month < inst.monthly_quota
+
+
+def _use_institution_credit(db: Session, inst) -> None:
+    """Kurum kotasından bir hak düşür."""
+    if not inst:
+        return
+    inst.quota_used_this_month = (inst.quota_used_this_month or 0) + 1
+    db.add(inst)
+    db.commit()
+
+
 def _client_ip(request: Request) -> str:
     """Müşteri IP'si; PayTR için proxy başlıkları öncelikli (Cloudflare, Render)."""
     cf = request.headers.get("cf-connecting-ip")
@@ -2528,10 +2600,10 @@ def _check_analyze_hourly_limit(user_id: int) -> None:
         times.append(now)
 
 
-def _audit(db: Session, event: str, user_id: int | None, ip: str | None) -> None:
+def _audit(db: Session, event: str, user_id: int | None, ip: str | None, institution_id: int | None = None) -> None:
     try:
         country, city = get_geo_from_ip(ip) if ip else (None, None)
-        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country, city=city))
+        db.add(AuditLog(event=event, user_id=user_id, ip=ip, country=country, city=city, institution_id=institution_id))
         db.commit()
     except Exception:
         pass
@@ -2545,6 +2617,7 @@ def _save_analysis(
     source: str,
     doctor_notes: str | None = None,
     plan_type: str | None = None,
+    institution_id: int | None = None,
 ) -> int:
     from app.core.plan_config import normalize_plan_type
 
@@ -2556,6 +2629,7 @@ def _save_analysis(
         source=source,
         doctor_notes=doctor_notes,
         plan_type=pt,
+        institution_id=institution_id,
     )
     db.add(rec)
     db.commit()
@@ -2673,17 +2747,25 @@ async def analyze(
     if not text:
         raise HTTPException(status_code=400, detail="Lütfen tahlil metnini girin veya PDF/görsel yükleyin.")
     plan = _dev_override_plan(request, user)
+    _active_inst, _active_membership = (None, None)
     if not test_mode:
-        limit = _aylik_limit(plan)
-        kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
-        ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
-        if not ilk_ucretsiz and not _can_analyze(limit, kullanilan, user):
-            raise HTTPException(
-                status_code=402,
-                detail=f"Aylık analiz hakkınız doldu ({kullanilan}/{limit}). Önce 1 analiz satın alın veya Pro plana geçin.",
-            )
-        if not ilk_ucretsiz:
-            _use_analysis_credit(db, user, limit, kullanilan)
+        _active_inst, _active_membership = _get_active_institution(db, user.id or 0)
+        if _active_inst and _institution_can_analyze(_active_inst):
+            _use_institution_credit(db, _active_inst)
+        else:
+            if _active_inst and not _institution_can_analyze(_active_inst):
+                _active_inst = None
+            limit = _aylik_limit(plan)
+            kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
+            ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
+            if not ilk_ucretsiz and not _can_analyze(limit, kullanilan, user):
+                raise HTTPException(
+                    status_code=402,
+                    detail=f"Aylık analiz hakkınız doldu ({kullanilan}/{limit}). Önce 1 analiz satın alın veya Pro plana geçin.",
+                )
+            if not ilk_ucretsiz:
+                _use_analysis_credit(db, user, limit, kullanilan)
+    _inst_id_for_save = _active_inst.id if _active_inst else None
     log.info("/analyze payload: text_len=%s, has_doctor_notes=%s, lang=%s", len(text), bool(doctor_notes), lang)
     job = None
     if not test_mode:
@@ -2710,14 +2792,14 @@ async def analyze(
         if cached is not None:
             log.info("CACHE HIT key=%s", cache_key[:16])
             result = cached["sonuc"]
-            aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan)
+            aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save)
             if job:
                 job.status = "done"
                 job.analysis_record_id = aid
                 job.duration_ms = int((time.perf_counter() - t0) * 1000)
                 db.add(job)
                 db.commit()
-            _audit(db, "analyze", user.id, _client_ip(request))
+            _audit(db, "analyze", user.id, _client_ip(request), institution_id=_inst_id_for_save)
             return _build_analyze_response(
                 result, aid, cached.get("risk_summary"), plan, user.id or 0, db, cached=True
             )
@@ -2747,7 +2829,7 @@ async def analyze(
                 "meta": report_payload["meta"],
             },
         )
-        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan)
+        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save)
         if job:
             job.status = "done"
             job.analysis_record_id = aid
@@ -2757,7 +2839,7 @@ async def analyze(
                 job.completion_tokens = usage.get("completion_tokens")
             db.add(job)
             db.commit()
-        _audit(db, "analyze", user.id, _client_ip(request))
+        _audit(db, "analyze", user.id, _client_ip(request), institution_id=_inst_id_for_save)
         return _build_analyze_response(
             result, aid, report_payload.get("risk_summary"), plan, user.id or 0, db, cached=False
         )
@@ -2821,18 +2903,26 @@ async def _analyze_upload_impl(
     log.info("analyze/upload: filename=%s", getattr(file, "filename", ""))
     test_mode = _is_test_mode(request)
     plan = _dev_override_plan(request, user)
+    _active_inst, _active_membership = (None, None)
     if not test_mode:
         _check_analyze_hourly_limit(user.id or 0)
-        limit = _aylik_limit(plan)
-        kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
-        ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
-        if not ilk_ucretsiz and not _can_analyze(limit, kullanilan, user):
-            raise HTTPException(
-                status_code=402,
-                detail=f"Aylık analiz hakkınız doldu ({kullanilan}/{limit}). Önce 1 analiz satın alın veya Pro plana geçin.",
-            )
-        if not ilk_ucretsiz:
-            _use_analysis_credit(db, user, limit, kullanilan)
+        _active_inst, _active_membership = _get_active_institution(db, user.id or 0)
+        if _active_inst and _institution_can_analyze(_active_inst):
+            _use_institution_credit(db, _active_inst)
+        else:
+            if _active_inst and not _institution_can_analyze(_active_inst):
+                _active_inst = None
+            limit = _aylik_limit(plan)
+            kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
+            ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
+            if not ilk_ucretsiz and not _can_analyze(limit, kullanilan, user):
+                raise HTTPException(
+                    status_code=402,
+                    detail=f"Aylık analiz hakkınız doldu ({kullanilan}/{limit}). Önce 1 analiz satın alın veya Pro plana geçin.",
+                )
+            if not ilk_ucretsiz:
+                _use_analysis_credit(db, user, limit, kullanilan)
+    _inst_id_for_save = _active_inst.id if _active_inst else None
 
     if not file.filename:
         raise HTTPException(status_code=400, detail="Dosya seçin.")
@@ -2932,6 +3022,7 @@ async def _analyze_upload_impl(
         return _process_uploaded_content(
             content, file.filename, report_lang, user.id or 0, db, request, save=True,
             plan=getattr(user, "plan", None) or "free",
+            institution_id=_inst_id_for_save,
         )
     except HTTPException:
         raise
@@ -2985,6 +3076,7 @@ def _process_uploaded_content(
     request: Request,
     save: bool = True,
     plan: str | None = None,
+    institution_id: int | None = None,
 ) -> AnalyzeResponse:
     """Ortak: yüklenen dosya içeriğini analiz eder (görsel veya PDF). Her zaman kaydeder (PDF/rapor için analiz_id döner)."""
     ext = "." + filename.lower().rsplit(".", 1)[-1] if "." in filename else ""
@@ -3007,7 +3099,7 @@ def _process_uploaded_content(
                 db.refresh(job)
             result, usage = analyze_blood_test_from_image(content, mime, lang=report_lang)
             input_preview = f"[Görsel: {filename}]"
-            aid = _save_analysis(db, user_id, input_preview, result, "image", plan_type=plan)
+            aid = _save_analysis(db, user_id, input_preview, result, "image", plan_type=plan, institution_id=institution_id)
             if job:
                 job.status = "done"
                 job.analysis_record_id = aid
@@ -3023,7 +3115,7 @@ def _process_uploaded_content(
                 ul.duration_ms = int((time.perf_counter() - t0) * 1000)
                 db.add(ul)
                 db.commit()
-            _audit(db, "analyze", user_id, _client_ip(request))
+            _audit(db, "analyze", user_id, _client_ip(request), institution_id=institution_id)
             plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
             return _build_analyze_response(result, aid, None, plan, user_id, db, cached=False)
         text = extract_text_from_pdf(content)
@@ -3037,7 +3129,7 @@ def _process_uploaded_content(
         labs_norm = {"t": " ".join(text.split()).strip(), "dn": None}
         report_payload, usage = analyze_blood_test(text, lang=report_lang, plan="free", labs_norm=labs_norm)
         result = report_payload["sonuc"]
-        aid = _save_analysis(db, user_id, text[:2000], result, "pdf", plan_type=plan)
+        aid = _save_analysis(db, user_id, text[:2000], result, "pdf", plan_type=plan, institution_id=institution_id)
         if job:
             job.status = "done"
             job.analysis_record_id = aid
@@ -3053,7 +3145,7 @@ def _process_uploaded_content(
             ul.duration_ms = int((time.perf_counter() - t0) * 1000)
             db.add(ul)
             db.commit()
-        _audit(db, "analyze", user_id, _client_ip(request))
+        _audit(db, "analyze", user_id, _client_ip(request), institution_id=institution_id)
         plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
         return _build_analyze_response(result, aid, report_payload.get("risk_summary"), plan, user_id, db, cached=False)
     except Exception as e:
@@ -3092,18 +3184,25 @@ async def analyze_upload_json(
 ):
     """Dosyayı base64 JSON ile alır (UI dışı / yedek). file_base64, filename, lang."""
     test_mode = _is_test_mode(request)
+    _active_inst, _active_membership = (None, None)
     if not test_mode:
         plan = getattr(user, "plan", "free") or "free"
-        limit = _aylik_limit(plan)
-        kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
-        ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
-        if not ilk_ucretsiz and not _can_analyze(limit, kullanilan, user):
-            raise HTTPException(
-                status_code=402,
-                detail=f"Aylık analiz hakkınız doldu ({kullanilan}/{limit}). Önce 1 analiz satın alın veya Pro plana geçin.",
-            )
-        if not ilk_ucretsiz:
-            _use_analysis_credit(db, user, limit, kullanilan)
+        _active_inst, _active_membership = _get_active_institution(db, user.id or 0)
+        if _active_inst and _institution_can_analyze(_active_inst):
+            _use_institution_credit(db, _active_inst)
+        else:
+            if _active_inst and not _institution_can_analyze(_active_inst):
+                _active_inst = None
+            limit = _aylik_limit(plan)
+            kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
+            ilk_ucretsiz = _ilk_analiz_ucretsiz(db, user.id or 0)
+            if not ilk_ucretsiz and not _can_analyze(limit, kullanilan, user):
+                raise HTTPException(
+                    status_code=402,
+                    detail=f"Aylık analiz hakkınız doldu ({kullanilan}/{limit}). Önce 1 analiz satın alın veya Pro plana geçin.",
+                )
+            if not ilk_ucretsiz:
+                _use_analysis_credit(db, user, limit, kullanilan)
     if not (body.file_base64 and body.file_base64.strip()):
         raise HTTPException(status_code=400, detail="Dosya verisi gönderilmedi (file_base64 zorunlu).")
     try:
@@ -3116,9 +3215,11 @@ async def analyze_upload_json(
     if len(content) == 0:
         raise HTTPException(status_code=400, detail="Dosya boş.")
     report_lang = _report_lang_from_request(request, body.lang)
+    _inst_id_for_save = _active_inst.id if _active_inst else None
     return _process_uploaded_content(
         content, body.filename or "upload", report_lang, user.id or 0, db, request, save=not test_mode,
         plan=getattr(user, "plan", None) or "free",
+        institution_id=_inst_id_for_save,
     )
 
 

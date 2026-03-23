@@ -1,0 +1,205 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.team_title }}{% endblock %}
+{% block header_title %}
+<div class="flex items-center gap-3 flex-wrap">
+  <span>{{ t.team_header }}</span>
+  <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-primary/10 text-primary border border-primary/15">
+    <span class="material-symbols-outlined !text-[16px]">event_seat</span>
+    {{ seat_used }} / {{ seat_limit }} {{ t.seat }}
+  </span>
+</div>
+{% endblock %}
+{% block content %}
+<div class="mb-6">
+  <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">{{ t.team_header }}</h2>
+  <p class="text-on-surface-variant text-sm">{{ inst.name }} — {{ t.team_subtitle }}</p>
+</div>
+
+{% if request.query_params.get('error') == 'seat_limit' %}
+<div class="mb-6 rounded-xl border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800 flex items-start gap-2">
+  <span class="material-symbols-outlined text-red-600 !text-[20px] shrink-0">error</span>
+  <span>{{ t.team_seat_limit_err }}</span>
+</div>
+{% elif request.query_params.get('error') == 'self' %}
+<div class="mb-6 rounded-xl border border-amber-200 bg-amber-50 px-4 py-3 text-sm text-amber-900 flex items-start gap-2">
+  <span class="material-symbols-outlined text-amber-700 !text-[20px] shrink-0">info</span>
+  <span>{{ t.team_self_err }}</span>
+</div>
+{% endif %}
+
+{% if is_admin %}
+<div class="bg-white rounded-xl shadow-ambient mb-8 overflow-hidden">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg text-primary">person_add</span>
+      {{ t.team_invite_title }}
+    </h3>
+    <p class="text-xs text-on-surface-variant mt-1">{{ t.team_invite_desc }}</p>
+  </div>
+  <form action="/enterprise/team/invite" method="post" class="p-6 flex flex-col lg:flex-row lg:flex-wrap gap-4 lg:items-end">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+    <div class="flex-1 min-w-[200px]">
+      <label for="invite-email" class="block text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1.5">{{ t.team_invite_email }}</label>
+      <input id="invite-email" type="email" name="email" required autocomplete="email"
+        class="w-full rounded-xl border-outline-variant/40 bg-surface focus:border-primary focus:ring-primary/20 text-sm"
+        placeholder="{{ t.team_invite_email_ph }}" />
+    </div>
+    <div class="w-full lg:w-52">
+      <label for="invite-role" class="block text-xs font-semibold uppercase tracking-wider text-on-surface-variant mb-1.5">{{ t.team_invite_role }}</label>
+      <select id="invite-role" name="role"
+        class="w-full rounded-xl border-outline-variant/40 bg-surface focus:border-primary focus:ring-primary/20 text-sm">
+        <option value="admin">{{ role_labels.get('admin') }}</option>
+        <option value="reviewer">{{ role_labels.get('reviewer') }}</option>
+        <option value="staff">{{ role_labels.get('staff') }}</option>
+        <option value="member" selected>{{ role_labels.get('member') }}</option>
+        <option value="readonly">{{ role_labels.get('readonly') }}</option>
+      </select>
+    </div>
+    <button type="submit"
+      class="inline-flex items-center justify-center gap-2 px-5 py-2.5 rounded-xl font-headline font-semibold text-sm text-white bg-gradient-to-r from-primary to-primary-container shadow-ambient hover:brightness-[1.02] transition-all whitespace-nowrap">
+      <span class="material-symbols-outlined !text-[20px]">send</span>
+      {{ t.team_invite_send }}
+    </button>
+  </form>
+</div>
+{% endif %}
+
+<div class="bg-white rounded-xl shadow-ambient mb-8 overflow-hidden">
+  <div class="px-6 py-4 border-b border-outline-variant/10 flex items-center justify-between gap-3">
+    <h3 class="font-headline font-semibold text-on-surface">{{ t.team_members }}</h3>
+    <span class="text-xs text-on-surface-variant font-medium">{{ members | length }} {{ t.records }}</span>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">{{ t.team_col_name }}</th>
+          <th class="px-5 py-3">{{ t.team_col_email }}</th>
+          <th class="px-5 py-3">{{ t.team_col_role }}</th>
+          <th class="px-5 py-3">{{ t.team_col_analyses }}</th>
+          <th class="px-5 py-3">{{ t.team_col_joined }}</th>
+          <th class="px-5 py-3">{{ t.team_col_status }}</th>
+          {% if is_admin %}<th class="px-5 py-3 text-right">{{ t.team_col_actions }}</th>{% endif %}
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+        <tr class="border-t border-outline-variant/10 hover:bg-surface-container-low/30 transition-colors">
+          <td class="px-5 py-3 font-medium text-on-surface">{{ m.full_name }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ m.email }}</td>
+          <td class="px-5 py-3">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-semibold
+              {% if m.role == 'owner' %}bg-amber-50 text-amber-900
+              {% elif m.role == 'admin' %}bg-violet-50 text-violet-800
+              {% elif m.role == 'reviewer' %}bg-blue-50 text-blue-800
+              {% elif m.role == 'staff' %}bg-teal-50 text-teal-800
+              {% elif m.role == 'readonly' %}bg-slate-100 text-slate-700
+              {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+              {{ m.role_label }}
+            </span>
+          </td>
+          <td class="px-5 py-3 text-on-surface-variant tabular-nums">{{ m.analyses }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant whitespace-nowrap">{{ m.accepted_at }}</td>
+          <td class="px-5 py-3">
+            {% if m.is_active %}
+            <span class="inline-flex items-center gap-1 text-emerald-700 font-medium text-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-emerald-500"></span> {{ t.team_active }}
+            </span>
+            {% else %}
+            <span class="inline-flex items-center gap-1 text-red-600 font-medium text-xs">
+              <span class="w-1.5 h-1.5 rounded-full bg-red-500"></span> {{ t.team_inactive }}
+            </span>
+            {% endif %}
+          </td>
+          {% if is_admin %}
+          <td class="px-5 py-3 text-right">
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-end gap-2">
+              {% if m.role == 'owner' %}
+              <span class="text-xs text-on-surface-variant font-medium tabular-nums">{{ role_labels.get('owner') }}</span>
+              {% else %}
+              <form action="/enterprise/team/members/{{ m.id }}/role" method="post" class="inline-flex">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <select name="new_role" onchange="this.form.submit()"
+                  class="text-xs rounded-lg border-outline-variant/40 bg-surface py-1.5 pl-2 pr-7 max-w-[9.5rem] focus:border-primary focus:ring-primary/20">
+                  <option value="admin" {% if m.role == 'admin' %}selected{% endif %}>{{ role_labels.get('admin') }}</option>
+                  <option value="reviewer" {% if m.role == 'reviewer' %}selected{% endif %}>{{ role_labels.get('reviewer') }}</option>
+                  <option value="staff" {% if m.role == 'staff' %}selected{% endif %}>{{ role_labels.get('staff') }}</option>
+                  <option value="member" {% if m.role == 'member' %}selected{% endif %}>{{ role_labels.get('member') }}</option>
+                  <option value="readonly" {% if m.role == 'readonly' %}selected{% endif %}>{{ role_labels.get('readonly') }}</option>
+                </select>
+              </form>
+              {% endif %}
+              {% if m.user_id != user.id %}
+              <form action="/enterprise/team/members/{{ m.id }}/toggle" method="post" class="inline-flex">
+    <input type="hidden" name="csrf_token" value="{{ csrf_token }}" />
+                <button type="submit"
+                  class="text-xs font-semibold px-3 py-1.5 rounded-lg border transition-colors
+                  {% if m.is_active %}border-outline-variant/40 text-on-surface-variant hover:bg-surface-container-low{% else %}border-primary/30 text-primary hover:bg-primary/5{% endif %}">
+                  {% if m.is_active %}{{ t.team_deactivate }}{% else %}{{ t.team_activate }}{% endif %}
+                </button>
+              </form>
+              {% else %}
+              <span class="text-[10px] text-on-surface-variant self-center sm:self-auto">—</span>
+              {% endif %}
+            </div>
+          </td>
+          {% endif %}
+        </tr>
+        {% else %}
+        <tr>
+          <td colspan="{% if is_admin %}7{% else %}6{% endif %}" class="px-5 py-12 text-center text-on-surface-variant">
+            {{ t.team_no_members }}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% if pending_invites %}
+<div class="bg-white rounded-xl shadow-ambient overflow-hidden">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg text-primary">mark_email_unread</span>
+      {{ t.team_pending }} ({{ pending_invites | length }})
+    </h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">{{ t.team_col_email }}</th>
+          <th class="px-5 py-3">{{ t.team_col_role }}</th>
+          <th class="px-5 py-3">{{ t.team_pending_col_link }}</th>
+          <th class="px-5 py-3">{{ t.team_pending_col_date }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inv in pending_invites %}
+        <tr class="border-t border-outline-variant/10 hover:bg-surface-container-low/20 transition-colors">
+          <td class="px-5 py-3 font-medium">{{ inv.email }}</td>
+          <td class="px-5 py-3">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-surface-container text-on-surface-variant">
+              {{ role_labels.get(inv.role, inv.role) }}
+            </span>
+          </td>
+          <td class="px-5 py-3 max-w-md">
+            <a href="/institution/join/{{ inv.token }}" class="text-primary text-xs font-medium hover:underline break-all" title="{{ inv.token }}">
+              {{ t.team_invite_link }}
+            </a>
+          </td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant whitespace-nowrap">
+            {% if inv.created_at %}{{ inv.created_at.strftime('%d.%m.%Y %H:%M') }}{% else %}—{% endif %}
+            {% if inv.expires_at %}
+            <span class="block text-[10px] text-on-surface-variant/80 mt-0.5">{{ t.team_pending_prefix }} {{ inv.expires_at.strftime('%d.%m.%Y') }}</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

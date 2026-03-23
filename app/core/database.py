@@ -167,6 +167,16 @@ def init_db():
             "ALTER TABLE discountcode ADD COLUMN old_price_yearly_cents INTEGER",
             "ALTER TABLE discountcode ADD COLUMN new_price_yearly_cents INTEGER",
             "ALTER TABLE paymentorder ADD COLUMN quantity INTEGER DEFAULT 1",
+            "ALTER TABLE analysisrecord ADD COLUMN institution_id INTEGER",
+            "ALTER TABLE auditlog ADD COLUMN institution_id INTEGER",
+            "ALTER TABLE auditlog ADD COLUMN entity_type VARCHAR(64)",
+            "ALTER TABLE auditlog ADD COLUMN entity_id INTEGER",
+            "ALTER TABLE auditlog ADD COLUMN metadata_json TEXT",
+            "ALTER TABLE institutions ADD COLUMN status VARCHAR(32) DEFAULT 'pilot'",
+            "ALTER TABLE institutions ADD COLUMN seat_limit INTEGER DEFAULT 25",
+            "ALTER TABLE institutions ADD COLUMN active_languages VARCHAR(255) DEFAULT 'tr,en'",
+            "ALTER TABLE institutions ADD COLUMN onboarding_completed BOOLEAN DEFAULT 0",
+            "ALTER TABLE institutions ADD COLUMN updated_at DATETIME",
         ):
             try:
                 with engine.connect() as conn:

@@ -1,0 +1,88 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}Ekip Üyeleri{% endblock %}
+{% block header_title %}Ekip üyeleri{% endblock %}
+{% block content %}
+<div class="mb-8">
+  <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">Ekip üyeleri</h2>
+  <p class="text-on-surface-variant text-sm">{{ inst.name }} kurumsal hesabındaki tüm üyeler ve davetler</p>
+</div>
+
+<!-- Members Table -->
+<div class="bg-white rounded-xl shadow-ambient mb-8">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface">Üyeler ({{ members | length }})</h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">E-posta</th>
+          <th class="px-5 py-3">Ad</th>
+          <th class="px-5 py-3">Rol</th>
+          <th class="px-5 py-3">Analiz</th>
+          <th class="px-5 py-3">Kabul</th>
+          <th class="px-5 py-3">Durum</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for m in members %}
+        <tr class="border-t border-outline-variant/10 hover:bg-surface-container-low/30 transition-colors">
+          <td class="px-5 py-3 font-medium">{{ m.email }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ m.full_name }}</td>
+          <td class="px-5 py-3">
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium
+              {% if m.role == 'admin' %}bg-violet-50 text-violet-800
+              {% elif m.role == 'reviewer' %}bg-blue-50 text-blue-800
+              {% else %}bg-surface-container text-on-surface-variant{% endif %}">
+              {{ m.role_label }}
+            </span>
+          </td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ m.analyses }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ m.accepted_at }}</td>
+          <td class="px-5 py-3">
+            {% if m.is_active %}<span class="text-emerald-700 font-medium text-xs">Aktif</span>
+            {% else %}<span class="text-red-600 font-medium text-xs">Pasif</span>{% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="6" class="px-5 py-8 text-center text-on-surface-variant">Henüz üye yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Pending Invites -->
+{% if pending_invites %}
+<div class="bg-white rounded-xl shadow-ambient">
+  <div class="px-6 py-4 border-b border-outline-variant/10">
+    <h3 class="font-headline font-semibold text-on-surface flex items-center gap-2">
+      <span class="material-symbols-outlined text-lg">mail</span>
+      Bekleyen davetler ({{ pending_invites | length }})
+    </h3>
+  </div>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/50">
+          <th class="px-5 py-3">E-posta</th>
+          <th class="px-5 py-3">Rol</th>
+          <th class="px-5 py-3">Davet tarihi</th>
+          <th class="px-5 py-3">Son kullanma</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for inv in pending_invites %}
+        <tr class="border-t border-outline-variant/10">
+          <td class="px-5 py-3 font-medium">{{ inv.email }}</td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ inv.role }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ inv.created_at.strftime('%d.%m.%Y %H:%M') if inv.created_at else '—' }}</td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant">{{ inv.expires_at.strftime('%d.%m.%Y') if inv.expires_at else '—' }}</td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endif %}
+{% endblock %}

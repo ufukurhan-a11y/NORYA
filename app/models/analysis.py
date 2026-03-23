@@ -22,3 +22,4 @@ class AnalysisRecord(SQLModel, table=True):
     is_favorite: bool = False  # Kullanıcının "favori" veya "doktora göstereceğim" işareti
     # Paket tipi: "single" | "monthly" | "yearly" — analiz hangi ürünle üretildi (sonuç ekranı/PDF feature gating)
     plan_type: str = Field(default=PLAN_TYPE_DEFAULT, max_length=16, index=True)
+    institution_id: int | None = Field(default=None, foreign_key="institutions.id", index=True)

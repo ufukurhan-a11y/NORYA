@@ -1,0 +1,116 @@
+{% extends "enterprise/base_enterprise.html" %}
+{% block title %}{{ t.set_title }}{% endblock %}
+{% block header_title %}{{ t.set_header }}{% endblock %}
+{% block content %}
+<div class="mb-8">
+  <h2 class="text-2xl lg:text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-1">{{ t.set_header }}</h2>
+  <p class="text-on-surface-variant text-sm">{{ t.set_readonly }}</p>
+</div>
+
+<div class="space-y-6 max-w-4xl">
+  <div class="bg-white rounded-xl shadow-ambient p-6 lg:p-8 border border-outline-variant/10">
+    <h3 class="font-headline font-bold text-lg text-primary mb-6 flex items-center gap-2">
+      <span class="material-symbols-outlined">domain</span>
+      {{ t.set_details }}
+    </h3>
+    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+      <div class="sm:col-span-2">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_org_name }}</dt>
+        <dd class="mt-1 font-medium text-on-surface text-lg">{{ inst.name }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_type }}</dt>
+        <dd class="mt-1 font-medium text-on-surface">{{ type_label }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_status }}</dt>
+        <dd class="mt-1">
+          <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold
+            {% if inst.status == 'active' %}bg-emerald-50 text-emerald-700{% elif inst.status == 'pilot' %}bg-amber-50 text-amber-700{% else %}bg-red-50 text-red-700{% endif %}">
+            {{ inst_status_label }}
+          </span>
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_plan }}</dt>
+        <dd class="mt-1 font-medium text-on-surface capitalize">{{ inst.plan }}</dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_langs }}</dt>
+        <dd class="mt-1 font-medium text-on-surface">{{ inst.active_languages or '—' }}</dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_email }}</dt>
+        <dd class="mt-1 font-medium text-on-surface">
+          {% if inst.contact_email %}
+          <a href="mailto:{{ inst.contact_email }}" class="text-primary hover:underline">{{ inst.contact_email }}</a>
+          {% else %}—{% endif %}
+        </dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_phone }}</dt>
+        <dd class="mt-1 font-medium text-on-surface">{{ inst.contact_phone or '—' }}</dd>
+      </div>
+      {% if inst.notes %}
+      <div class="sm:col-span-2">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_notes }}</dt>
+        <dd class="mt-1 text-sm text-on-surface-variant leading-relaxed whitespace-pre-wrap">{{ inst.notes }}</dd>
+      </div>
+      {% endif %}
+    </dl>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-ambient p-6 lg:p-8 border border-outline-variant/10">
+    <h3 class="font-headline font-bold text-lg text-primary mb-6 flex items-center gap-2">
+      <span class="material-symbols-outlined">assignment</span>
+      {{ t.set_contract }}
+    </h3>
+    <dl class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-5">
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_contract_start }}</dt>
+        <dd class="mt-1 font-medium text-on-surface">
+          {% if inst.contract_start %}{{ inst.contract_start.strftime('%d.%m.%Y') }}{% else %}{{ t.not_specified }}{% endif %}
+        </dd>
+      </div>
+      <div>
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_contract_end }}</dt>
+        <dd class="mt-1 font-medium text-on-surface">
+          {% if inst.contract_end %}{{ inst.contract_end.strftime('%d.%m.%Y') }}{% else %}{{ t.not_specified }}{% endif %}
+        </dd>
+      </div>
+      <div class="sm:col-span-2">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_quota_reset }}</dt>
+        <dd class="mt-1 font-medium text-on-surface">{{ t.set_quota_reset_prefix }}{{ inst.quota_reset_day }}{{ t.set_quota_reset_suffix }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="bg-white rounded-xl shadow-ambient p-6 lg:p-8 border border-outline-variant/10">
+    <h3 class="font-headline font-bold text-lg text-primary mb-6 flex items-center gap-2">
+      <span class="material-symbols-outlined">data_usage</span>
+      {{ t.set_quota }}
+    </h3>
+    <dl class="grid grid-cols-1 sm:grid-cols-3 gap-6">
+      <div class="rounded-xl bg-surface/80 p-4 border border-outline-variant/10">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_monthly_quota }}</dt>
+        <dd class="mt-2 text-2xl font-headline font-bold text-on-surface">{{ inst.monthly_quota }}</dd>
+      </div>
+      <div class="rounded-xl bg-surface/80 p-4 border border-outline-variant/10">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_used_this_month }}</dt>
+        <dd class="mt-2 text-2xl font-headline font-bold text-primary">{{ inst.quota_used_this_month }}</dd>
+      </div>
+      <div class="rounded-xl bg-surface/80 p-4 border border-outline-variant/10">
+        <dt class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">{{ t.set_seat_limit }}</dt>
+        <dd class="mt-2 text-2xl font-headline font-bold text-on-surface">{{ inst.seat_limit }}</dd>
+      </div>
+    </dl>
+  </div>
+
+  <div class="rounded-xl bg-surface-container-low border border-outline-variant/15 px-5 py-4">
+    <p class="text-sm text-on-surface-variant leading-relaxed">
+      {{ t.set_footer }}
+      <a href="mailto:enterprise@norya.ai" class="text-primary font-semibold hover:underline">enterprise@norya.ai</a>
+    </p>
+  </div>
+</div>
+{% endblock %}
