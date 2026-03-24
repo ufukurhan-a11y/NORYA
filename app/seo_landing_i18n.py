@@ -1249,6 +1249,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "Analiz Yap", "url": f"{base_url}/analyze"},
             {"label": "Fiyatlandırma", "url": f"{base_url}/pricing"},
             {"label": "Nasıl Çalışır", "url": f"{base_url}/how-it-works"},
+            {"label": "Karşılaştır", "url": f"{prefix}/compare/"},
             {"label": "Blog", "url": f"{prefix}/blog"},
         ]
     if lang == "de":
@@ -1256,6 +1257,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "Analysieren", "url": f"{base_url}/analyze"},
             {"label": "Preise", "url": f"{base_url}/pricing"},
             {"label": "So funktioniert's", "url": f"{base_url}/how-it-works"},
+            {"label": "Vergleich", "url": f"{prefix}/compare/"},
             {"label": "Blog", "url": f"{prefix}/blog"},
         ]
     if lang == "es":
@@ -1263,6 +1265,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "Analizar", "url": f"{base_url}/analyze"},
             {"label": "Precios", "url": f"{base_url}/pricing"},
             {"label": "Cómo funciona", "url": f"{base_url}/how-it-works?lang=es"},
+            {"label": "Comparar", "url": f"{prefix}/compare/"},
             {"label": "Blog", "url": f"{prefix}/blog"},
         ]
     if lang == "fr":
@@ -1270,6 +1273,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "Analyser", "url": f"{base_url}/analyze"},
             {"label": "Tarifs", "url": f"{base_url}/pricing"},
             {"label": "Comment ça marche", "url": f"{base_url}/how-it-works?lang=fr"},
+            {"label": "Comparer", "url": f"{prefix}/compare/"},
             {"label": "Blog", "url": f"{prefix}/blog"},
         ]
     if lang == "it":
@@ -1277,6 +1281,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "Analizza", "url": f"{base_url}/analyze"},
             {"label": "Prezzi", "url": f"{base_url}/pricing"},
             {"label": "Come funziona", "url": f"{base_url}/how-it-works?lang=it"},
+            {"label": "Confronta", "url": f"{prefix}/compare/"},
             {"label": "Blog", "url": f"{prefix}/blog"},
         ]
     if lang == "he":
@@ -1284,6 +1289,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "ניתוח", "url": f"{base_url}/analyze"},
             {"label": "מחירים", "url": f"{base_url}/pricing"},
             {"label": "איך זה עובד", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "השוואה", "url": f"{prefix}/compare/"},
             {"label": "בלוג", "url": f"{prefix}/blog"},
         ]
     if lang == "hi":
@@ -1291,6 +1297,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "विश्लेषण", "url": f"{base_url}/analyze"},
             {"label": "कीमतें", "url": f"{base_url}/pricing"},
             {"label": "यह कैसे काम करता है", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "तुलना", "url": f"{prefix}/compare/"},
             {"label": "ब्लॉग", "url": f"{prefix}/blog"},
         ]
     if lang == "ar":
@@ -1298,11 +1305,13 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
             {"label": "تحليل", "url": f"{base_url}/analyze"},
             {"label": "الأسعار", "url": f"{base_url}/pricing"},
             {"label": "كيف يعمل", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "مقارنة", "url": f"{prefix}/compare/"},
             {"label": "المدوّنة", "url": f"{prefix}/blog"},
         ]
     return [
         {"label": "Analyze", "url": f"{base_url}/analyze"},
         {"label": "Pricing", "url": f"{base_url}/pricing"},
         {"label": "How it works", "url": f"{base_url}/how-it-works"},
+        {"label": "Compare", "url": f"{prefix}/compare/"},
         {"label": "Blog", "url": f"{prefix}/blog"},
     ]

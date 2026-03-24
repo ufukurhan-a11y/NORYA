@@ -97,6 +97,19 @@ from app.seo_landing_i18n import (
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.pricing_page_i18n import PRICING_HREFLANG_LANGS, enrich_pricing_context
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_blog_icon_paths, get_related_articles, iter_all_article_paths, list_articles_for_lang
+from app.compare_i18n import (
+    COMPARE_LANGS,
+    COMPARE_SLUGS,
+    RTL_LANGS as COMPARE_RTL_LANGS,
+    get_compare_breadcrumbs,
+    get_compare_detail,
+    get_compare_hreflang_detail,
+    get_compare_hreflang_hub,
+    get_compare_hub,
+    get_compare_og_locale,
+    get_compare_related,
+    iter_compare_sitemap_urls,
+)
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, get_active_campaign_for_checkout, validate_coupon
 from app.services.pricing import (
@@ -5352,140 +5365,63 @@ def seo_landing_en_ai_blood_test_analyzer(request: Request):
     return _render_seo_landing(request, "en", "ai-blood-test-analyzer")
 
 
-@app.get("/en/compare/norya-vs-generic-ai", response_class=HTMLResponse)
-def compare_en_norya_vs_generic_ai(request: Request):
+def _render_compare_hub(request: Request, lang: str) -> HTMLResponse:
+    t = get_compare_hub(lang)
+    if not t:
+        raise HTTPException(status_code=404, detail="Not Found")
     base_url = str(request.base_url).rstrip("/")
-    t = {
-        "meta_title": "NoryaAI vs Generic AI for Blood Tests — Honest Comparison | NoryaAI",
-        "meta_description": "How does NoryaAI compare to ChatGPT or other AI chatbots for understanding blood test results? Side-by-side comparison of structured reports vs free-form chat answers.",
-        "hero_title": "NoryaAI vs Generic AI Chatbots for Blood Tests",
-        "hero_sub": "Both can work with lab data — but they approach it very differently. Here is an honest, side-by-side look at what each one offers when you need to understand your blood test results.",
-        "cta_hero_primary": "Analyze my blood test",
-        "cta_hero_secondary": "See a sample report",
-        "quick_answer_title": "The short version",
-        "quick_answer": "Generic AI chatbots like ChatGPT can explain medical terms and answer health questions in conversation. NoryaAI is purpose-built for blood tests: it reads your lab report, maps every value to reference ranges, and produces a structured, doctor-ready summary with a health score — not a free-form paragraph. Both have a place, but they solve different problems.",
-        "comparison_title": "Side-by-side comparison",
-        "comparison_sub": "How the two approaches differ across the features that matter most when you are looking at blood test results.",
-        "comparison_items": [
-            {
-                "label": "Report upload",
-                "generic": "Copy-paste values into a chat prompt and hope the formatting holds",
-                "norya": "Upload PDF, snap a photo, or paste text — values and ranges are parsed automatically",
-            },
-            {
-                "label": "Reference ranges",
-                "generic": "May guess ranges or omit them; no guarantee they match your lab's standards",
-                "norya": "Reference ranges displayed for every value — normal, low, or high — clearly labeled",
-            },
-            {
-                "label": "Units and lab formatting",
-                "generic": "No built-in awareness of lab-specific units or result layouts",
-                "norya": "Recognizes common lab units, panel structures, and result formats automatically",
-            },
-            {
-                "label": "Output structure",
-                "generic": "Free-form paragraph that varies with each prompt — no consistent format",
-                "norya": "Structured health score, category breakdown, and flagged markers — consistent every time",
-            },
-            {
-                "label": "Multilingual reports",
-                "generic": "Can translate text, but medical nuance may be lost in general translation",
-                "norya": "Full reports in 9+ languages with medical context preserved throughout",
-            },
-            {
-                "label": "Doctor-ready summary",
-                "generic": "No downloadable report — you would need to copy and format the chat yourself",
-                "norya": "Doctor-ready PDF with QR verification — print it, save it, or share it",
-            },
-            {
-                "label": "Privacy and data handling",
-                "generic": "Conversations may be stored and used for model training",
-                "norya": "GDPR/KVKK compliant — encrypted, never sold, never used for training",
-            },
-            {
-                "label": "Blood-test specific workflow",
-                "generic": "General-purpose chat interface designed for any topic",
-                "norya": "Dedicated upload, analysis, and report pipeline built specifically for lab results",
-            },
-            {
-                "label": "Workflow type",
-                "generic": "Open-ended conversation — the quality depends on how you write your prompt",
-                "norya": "Guided, structured analysis — upload once and get a complete report, no prompt needed",
-            },
-        ],
-        "generic_helps_title": "When generic AI chatbots can still help",
-        "generic_helps_sub": "This is not about one tool being bad and another being good. They serve different purposes.",
-        "generic_helps_items": [
-            {
-                "icon": "📚",
-                "title": "General health education",
-                "desc": "Chatbots are great for learning what a biomarker means, how the immune system works, or what a specific condition involves — broad educational questions.",
-            },
-            {
-                "icon": "💡",
-                "title": "Brainstorming questions for your doctor",
-                "desc": "Before an appointment, a chatbot can help you think through what to ask — even if it cannot read your actual lab report with precision.",
-            },
-            {
-                "icon": "🔍",
-                "title": "Understanding medical terminology",
-                "desc": "If you encounter an unfamiliar term in your report, a general AI can explain it quickly in plain language.",
-            },
-        ],
-        "why_norya_title": "Why people choose NoryaAI for blood tests",
-        "why_norya_sub": "When accuracy, structure, and a clean next-step matter more than a general conversation.",
-        "why_norya_items": [
-            {
-                "title": "Upload once, get a structured report",
-                "desc": "No prompt engineering, no reformatting. Upload your lab results and receive a health score, category breakdown, and flagged markers — automatically.",
-            },
-            {
-                "title": "Consistent format you can compare over time",
-                "desc": "Every report follows the same structure, so you can track changes across multiple blood tests and spot trends at a glance.",
-            },
-            {
-                "title": "Doctor-ready PDF you can actually bring",
-                "desc": "A clean, professional summary with QR verification. Print it or share it digitally — designed to be useful at your next appointment.",
-            },
-            {
-                "title": "Your language, your report",
-                "desc": "Choose from 9+ languages and get your full report in the one that feels most natural to you — with medical context intact.",
-            },
-        ],
-        "faqs": [
-            {
-                "q": "Can ChatGPT explain blood test results?",
-                "a": "Yes, to a degree. ChatGPT can explain what individual values mean in general terms. However, it does not parse your actual lab report, may hallucinate reference ranges, and produces a different answer each time you ask. NoryaAI is built to read your report directly and output a consistent, structured summary.",
-            },
-            {
-                "q": "Is NoryaAI a diagnosis tool?",
-                "a": "No. NoryaAI provides structured, educational explanations of your lab values. It does not diagnose conditions or recommend treatments. Always consult a qualified doctor for medical decisions.",
-            },
-            {
-                "q": "Why is a structured report better than a chat answer?",
-                "a": "A structured report gives you a health score, category breakdown, and flagged markers in a consistent format. You can compare it with previous tests, print it for your doctor, and see at a glance which values need attention — something a free-form chat paragraph cannot reliably offer.",
-            },
-            {
-                "q": "Can I upload a PDF instead of copying values manually?",
-                "a": "Yes. NoryaAI accepts PDF uploads, photos of printed lab reports (JPG/PNG), and pasted text. It parses the values and reference ranges automatically — no manual data entry required.",
-            },
-            {
-                "q": "Is NoryaAI better for multilingual lab reports?",
-                "a": "NoryaAI generates full reports in 9+ languages with preserved medical context. While general chatbots can translate text, they may lose nuance in medical terminology. NoryaAI's multilingual output is designed specifically for lab result interpretation.",
-            },
-        ],
-        "cta_title": "Ready to try a structured blood test report?",
-        "cta_sub": "Upload your lab results and see the difference a purpose-built analyzer makes.",
-        "cta_primary": "Upload and analyze now",
-        "cta_secondary": "View pricing plans",
-    }
-    return templates.TemplateResponse("compare_page.html", {
+    canonical_url = f"{base_url}/{lang}/compare/"
+    return templates.TemplateResponse("compare_hub.html", {
         "request": request,
-        "lang": "en",
+        "lang": lang,
+        "dir": "rtl" if lang in COMPARE_RTL_LANGS else "ltr",
         "t": t,
         "base_url": base_url,
-        "canonical_url": f"{base_url}/en/compare/norya-vs-generic-ai",
+        "canonical_url": canonical_url,
+        "og_locale": get_compare_og_locale(lang),
+        "hreflang_alternates": get_compare_hreflang_hub(lang, base_url),
+        "breadcrumbs": get_compare_breadcrumbs(lang, base_url),
     })
+
+
+def _render_compare_detail(request: Request, lang: str, slug: str) -> HTMLResponse:
+    t = get_compare_detail(lang, slug)
+    if not t:
+        raise HTTPException(status_code=404, detail="Not Found")
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/{lang}/compare/{slug}"
+    return templates.TemplateResponse("compare_page.html", {
+        "request": request,
+        "lang": lang,
+        "dir": "rtl" if lang in COMPARE_RTL_LANGS else "ltr",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": canonical_url,
+        "og_locale": get_compare_og_locale(lang),
+        "hreflang_alternates": get_compare_hreflang_detail(lang, slug, base_url),
+        "breadcrumbs": get_compare_breadcrumbs(lang, base_url, slug, t.get("competitor_name")),
+        "related_comparisons": get_compare_related(lang, slug),
+    })
+
+
+# Register compare hub and detail routes for all active locales
+for _compare_lang in COMPARE_LANGS:
+    def _make_hub_handler(_l=_compare_lang):
+        @app.get(f"/{_l}/compare/", response_class=HTMLResponse)
+        def compare_hub(request: Request, _lang=_l):
+            return _render_compare_hub(request, _lang)
+        compare_hub.__name__ = f"compare_hub_{_l}"
+        return compare_hub
+    _make_hub_handler()
+
+    for _compare_slug in COMPARE_SLUGS:
+        def _make_detail_handler(_l=_compare_lang, _s=_compare_slug):
+            @app.get(f"/{_l}/compare/{_s}", response_class=HTMLResponse)
+            def compare_detail(request: Request, _lang=_l, _slug=_s):
+                return _render_compare_detail(request, _lang, _slug)
+            compare_detail.__name__ = f"compare_detail_{_l}_{_s.replace('-', '_')}"
+            return compare_detail
+        _make_detail_handler()
 
 
 @app.get("/en/why-not-generic-ai-for-blood-test-results", response_class=HTMLResponse)
@@ -6755,8 +6691,9 @@ def sitemap_xml(request: Request):
     for loc_lang, loc_slug in iter_seo_landing_urls():
         add(f"{base_url}/{loc_lang}/{loc_slug}", priority="0.8", changefreq="monthly", lastmod=today)
 
-    # Compare pages
-    add(f"{base_url}/en/compare/norya-vs-generic-ai", priority="0.7", changefreq="monthly", lastmod=today)
+    # Compare pages (hub + detail, all locales)
+    for _cmp_lang, _cmp_path in iter_compare_sitemap_urls():
+        add(f"{base_url}/{_cmp_path}", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/why-not-generic-ai-for-blood-test-results", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/upload-blood-test-results", priority="0.8", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/blood-test-results-explained", priority="0.8", changefreq="monthly", lastmod=today)

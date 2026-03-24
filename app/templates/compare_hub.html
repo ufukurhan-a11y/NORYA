@@ -37,7 +37,6 @@
     .text-norya-teal { color: var(--norya-teal); }
     .bg-norya-teal { background-color: var(--norya-teal); }
     .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
-    .border-norya-teal { border-color: var(--norya-teal); }
     @media (max-width: 768px) {
       .header-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     }
@@ -49,9 +48,11 @@
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{% for bc in breadcrumbs %}{% if not loop.first %},{% endif %}{"@type":"ListItem","position":{{ loop.index }},"name":{{ bc.name|tojson }},"item":"{{ bc.url }}"}{% endfor %}]}
   </script>
+  {% if t.hub_faqs %}
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for faq in t.faqs %}{% if not loop.first %},{% endif %}{"@type":"Question","name":{{ faq.q|tojson }},"acceptedAnswer":{"@type":"Answer","text":{{ faq.a|tojson }}}}{% endfor %}]}
+  {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{% for faq in t.hub_faqs %}{% if not loop.first %},{% endif %}{"@type":"Question","name":{{ faq.q|tojson }},"acceptedAnswer":{"@type":"Answer","text":{{ faq.a|tojson }}}}{% endfor %}]}
   </script>
+  {% endif %}
   {% include "includes/gtag_google_ads.html" %}
 </head>
 <body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
@@ -85,7 +86,7 @@
       </ol>
     </nav>
 
-    <!-- 1. HERO -->
+    <!-- HERO -->
     <section class="py-12 sm:py-20 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
       <div class="max-w-3xl mx-auto text-center">
         <div class="inline-flex items-center gap-2 rounded-full bg-white/80 border border-teal-100 px-3 py-1 text-xs font-semibold text-teal-700 shadow-sm mb-6">
@@ -94,107 +95,37 @@
         </div>
         <h1 class="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-slate-900 leading-tight mb-4">{{ t.hero_title }}</h1>
         <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8">{{ t.hero_sub }}</p>
-        <div class="flex flex-wrap gap-3 justify-center">
-          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-lg hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:14px 28px;border-radius:16px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);">{{ t.cta_hero_primary }}</a>
-          <a href="{{ base_url }}/{{ lang }}/ai-blood-test-analyzer#report-preview" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50" style="padding:14px 28px;border-radius:16px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #14b8a6;color:#0f766e;">{{ t.cta_hero_secondary }}</a>
-        </div>
       </div>
     </section>
 
-    <!-- 2. QUICK ANSWER -->
-    <section class="py-10 sm:py-12 px-4 bg-white">
-      <div class="max-w-3xl mx-auto">
-        <div class="rounded-2xl bg-gradient-to-br from-teal-50/80 via-cyan-50/60 to-slate-50 border border-teal-100/60 p-6 sm:p-8">
-          <h2 class="text-lg sm:text-xl font-bold text-slate-900 mb-3">{{ t.quick_answer_title }}</h2>
-          <p class="text-sm sm:text-base text-slate-700 leading-relaxed">{{ t.quick_answer }}</p>
-        </div>
-      </div>
-    </section>
-
-    <!-- 3. SIDE-BY-SIDE COMPARISON -->
-    <section id="comparison" class="py-12 sm:py-16 px-4 bg-slate-50">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-3">{{ t.comparison_title }}</h2>
-        <p class="text-center text-slate-600 text-sm sm:text-base max-w-2xl mx-auto mb-8">{{ t.comparison_sub }}</p>
-        <div class="flex items-center justify-center gap-6 sm:gap-10 mb-6 text-sm font-medium">
-          <span class="flex items-center gap-1.5 text-slate-500">
-            <span class="w-2.5 h-2.5 rounded-full bg-slate-300"></span> {{ t.competitor_name }}
-          </span>
-          <span class="flex items-center gap-1.5 text-teal-700">
-            <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span> NoryaAI
-          </span>
-        </div>
-        <div class="space-y-3">
-          {% for item in t.comparison_items %}
-          <div class="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-sm">
-            <div class="px-4 py-2.5 bg-slate-50/80 border-b border-slate-100">
-              <p class="font-semibold text-sm text-slate-900">{{ item.label }}</p>
-            </div>
-            <div class="grid sm:grid-cols-2 divide-y sm:divide-y-0 sm:divide-x divide-slate-100">
-              <div class="px-4 py-3">
-                <span class="inline-flex items-center gap-1 text-[11px] font-medium text-slate-400 mb-1.5 sm:hidden">💬 {{ t.competitor_name }}</span>
-                <p class="text-sm text-slate-500 flex gap-2">
-                  <span class="text-slate-300 shrink-0 mt-0.5">✗</span>
-                  <span>{{ item.competitor }}</span>
-                </p>
-              </div>
-              <div class="px-4 py-3 bg-teal-50/20">
-                <span class="inline-flex items-center gap-1 text-[11px] font-medium text-teal-600 mb-1.5 sm:hidden">🩺 NoryaAI</span>
-                <p class="text-sm text-teal-700 flex gap-2">
-                  <span class="text-teal-500 shrink-0 mt-0.5">✓</span>
-                  <span>{{ item.norya }}</span>
-                </p>
-              </div>
-            </div>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-
-    <!-- 4. WHEN COMPETITOR MAY STILL HELP -->
+    <!-- COMPETITOR CARDS -->
     <section class="py-12 sm:py-16 px-4 bg-white">
-      <div class="max-w-3xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-3">{{ t.helps_title }}</h2>
-        <p class="text-center text-slate-600 text-sm sm:text-base max-w-xl mx-auto mb-8">{{ t.helps_sub }}</p>
-        <div class="grid sm:grid-cols-3 gap-4">
-          {% for item in t.helps_items %}
-          <div class="rounded-xl border border-slate-200 bg-slate-50/50 p-5 shadow-sm">
-            <div class="text-xl mb-2" aria-hidden="true">{{ item.icon }}</div>
-            <h3 class="font-semibold text-slate-900 text-sm mb-1">{{ item.title }}</h3>
-            <p class="text-xs text-slate-600 leading-relaxed">{{ item.desc }}</p>
-          </div>
+      <div class="max-w-4xl mx-auto">
+        <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
+          {% for card in t.cards %}
+          <a href="{{ base_url }}/{{ lang }}/compare/{{ card.slug }}" class="group block rounded-2xl border border-slate-200 bg-white p-6 hover:border-teal-300 hover:shadow-md transition-all">
+            <div class="flex items-center gap-3 mb-3">
+              <span class="inline-flex items-center justify-center w-10 h-10 rounded-xl bg-teal-50 text-teal-600 font-bold text-sm">vs</span>
+              <h2 class="font-bold text-lg text-slate-900 group-hover:text-teal-700 transition-colors">{{ card.name }}</h2>
+            </div>
+            <p class="text-sm text-slate-600 leading-relaxed mb-4">{{ card.summary }}</p>
+            <span class="inline-flex items-center gap-1 text-sm font-medium text-teal-600 group-hover:text-teal-700">
+              {{ card.link_text }} <span aria-hidden="true">→</span>
+            </span>
+          </a>
           {% endfor %}
         </div>
       </div>
     </section>
 
-    <!-- 5. WHY PEOPLE CHOOSE NORYA -->
+    <!-- FAQ -->
+    {% if t.hub_faqs %}
     <section class="py-12 sm:py-16 px-4 bg-slate-50">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-3">{{ t.why_norya_title }}</h2>
-        <p class="text-center text-slate-600 text-sm sm:text-base max-w-xl mx-auto mb-8">{{ t.why_norya_sub }}</p>
-        <div class="grid sm:grid-cols-2 gap-4">
-          {% for item in t.why_norya_items %}
-          <div class="rounded-2xl border border-slate-100 bg-white p-5 sm:p-6 shadow-sm">
-            <div class="flex items-center gap-2 mb-2">
-              <span class="inline-flex items-center justify-center w-7 h-7 rounded-lg bg-teal-100 text-teal-600 text-xs font-bold">{{ loop.index }}</span>
-              <h3 class="font-semibold text-slate-900 text-sm">{{ item.title }}</h3>
-            </div>
-            <p class="text-sm text-slate-600 leading-relaxed">{{ item.desc }}</p>
-          </div>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
-
-    <!-- 6. FAQ -->
-    <section class="py-12 sm:py-16 px-4 bg-white">
       <div class="max-w-3xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-8">{{ t.ui_faq_heading }}</h2>
         <dl class="space-y-4">
-          {% for faq in t.faqs %}
-          <div class="rounded-xl p-4 sm:p-5 border border-slate-200 bg-slate-50/50">
+          {% for faq in t.hub_faqs %}
+          <div class="rounded-xl p-4 sm:p-5 border border-slate-200 bg-white">
             <dt class="font-semibold text-slate-900 mb-2">{{ faq.q }}</dt>
             <dd class="text-slate-600 text-sm leading-relaxed">{{ faq.a }}</dd>
           </div>
@@ -202,24 +133,9 @@
         </dl>
       </div>
     </section>
-
-    <!-- 7. RELATED COMPARISONS -->
-    {% if related_comparisons %}
-    <section class="py-12 sm:py-14 px-4 bg-slate-50">
-      <div class="max-w-4xl mx-auto">
-        <h2 class="text-xl sm:text-2xl font-bold text-center text-slate-900 mb-6">{{ t.ui_related_heading }}</h2>
-        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
-          {% for rc in related_comparisons %}
-          <a href="{{ base_url }}{{ rc.url }}" class="block rounded-xl border border-slate-200 bg-white p-4 hover:border-teal-300 hover:shadow-sm transition-all">
-            <p class="font-semibold text-sm text-slate-900">NoryaAI vs {{ rc.name }}</p>
-          </a>
-          {% endfor %}
-        </div>
-      </div>
-    </section>
     {% endif %}
 
-    <!-- 8. FINAL CTA -->
+    <!-- CTA -->
     <section class="py-12 sm:py-16 px-4 bg-slate-800 text-white text-center">
       <div class="max-w-2xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold mb-4">{{ t.cta_title }}</h2>
@@ -231,7 +147,7 @@
       </div>
     </section>
 
-    <!-- 9. INTERNAL LINKS -->
+    <!-- INTERNAL LINKS -->
     <section class="py-10 px-4 bg-slate-50 border-t border-slate-200">
       <div class="max-w-3xl mx-auto">
         <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
@@ -239,7 +155,6 @@
           <li><a href="{{ base_url }}/pricing" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_pricing }}</a></li>
           <li><a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_how_it_works }}</a></li>
           <li><a href="{{ base_url }}/{{ lang }}/blog" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_blog }}</a></li>
-          <li><a href="{{ base_url }}/{{ lang }}/compare/" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_compare }}</a></li>
         </ul>
       </div>
     </section>
