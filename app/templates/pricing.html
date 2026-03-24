@@ -9,13 +9,19 @@
   <title>{{ t.get("pricing_page_title", t.get("failed_pricing", "Pricing")) }} – {{ brand }}</title>
   {% if t.get("pricing_meta_description") %}
   <meta name="description" content="{{ t.get('pricing_meta_description') }}" />
+  <meta property="og:type" content="website" />
   <meta property="og:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />
   <meta property="og:url" content="{{ base_url }}/pricing" />
   <meta property="og:description" content="{{ t.get('pricing_meta_description') }}" />
+  <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  {% include "partials/og_default_dimensions.html" %}
+  <meta property="og:locale" content="{{ t.get('og_locale', 'en_US') }}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />
   <meta name="twitter:description" content="{{ t.get('pricing_meta_description') }}" />
+  <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png" />
   {% endif %}
+  <meta name="robots" content="index,follow" />
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />

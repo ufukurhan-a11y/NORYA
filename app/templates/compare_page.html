@@ -11,9 +11,13 @@
   <meta property="og:description" content="{{ t.meta_description }}" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="en_US" />
+  <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  {% include "partials/og_default_dimensions.html" %}
+  {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ t.meta_title }}" />
   <meta name="twitter:description" content="{{ t.meta_description }}" />
+  <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png" />
   <meta name="theme-color" content="#0EA5A4" />
   <link rel="canonical" href="{{ canonical_url }}" />
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
@@ -21,22 +25,10 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="/static/css/tailwind.css" />
+  <link rel="stylesheet" href="/static/css/app.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
-          colors: {
-            primary: { 500: '#0EA5A4', 600: '#0d9488' },
-            accent: { 50: '#f8fafc', 100: '#f1f5f9', 200: '#e2e8f0', 500: '#64748b', 600: '#475569', 700: '#334155', 800: '#1e293b', 900: '#0f172a' }
-          }
-        }
-      }
-    }
-  </script>
   <style>
     :root { --norya-teal: #0EA5A4; --norya-teal-hover: #0d9488; }
     .text-norya-teal { color: var(--norya-teal); }
@@ -54,7 +46,7 @@
     "@type": "Organization",
     "name": "NoryaAI",
     "url": "{{ base_url }}",
-    "logo": "{{ base_url }}/static/norya_logo_transparent_trim.png"
+    "logo": "{{ base_url }}/static/images/og-default.png"
   }
   </script>
   <script type="application/ld+json">

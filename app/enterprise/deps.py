@@ -46,8 +46,14 @@ def require_enterprise_user(request: Request, db: Session = Depends(get_db)):
             ).first()
             if membership:
                 inst = db.get(Institution, inst_id)
-                if inst and inst.is_active:
+                if inst and inst.is_active and inst.status != "suspended":
                     return {"user": user, "membership": membership, "institution": inst}
+                if inst and (not inst.is_active or inst.status == "suspended"):
+                    from fastapi.responses import HTMLResponse
+                    return HTMLResponse(
+                        _no_membership_page(user.email, suspended=True),
+                        status_code=403,
+                    )
         except (ValueError, TypeError):
             pass
 
@@ -64,7 +70,7 @@ def require_enterprise_user(request: Request, db: Session = Depends(get_db)):
             status_code=403,
         )
     inst = db.get(Institution, membership.institution_id)
-    if not inst or not inst.is_active:
+    if not inst or not inst.is_active or inst.status == "suspended":
         from fastapi.responses import HTMLResponse
         return HTMLResponse(
             _no_membership_page(user.email, suspended=True),

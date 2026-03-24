@@ -5,36 +5,32 @@
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>About NoryaAI | The Future of Global Health Intelligence</title>
 <meta name="description" content="NoryaAI bridges the gap between complex laboratory data and actionable human health insights, powered by precision engineering."/>
+<meta name="robots" content="index,follow" />
+{% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+<meta property="og:type" content="website" />
+<meta property="og:title" content="About NoryaAI | The Future of Global Health Intelligence" />
+<meta property="og:description" content="NoryaAI bridges the gap between complex laboratory data and actionable human health insights, powered by precision engineering." />
+{% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
+{% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
+{% if og_image and '/static/images/og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="About NoryaAI | The Future of Global Health Intelligence" />
+<meta name="twitter:description" content="NoryaAI bridges the gap between complex laboratory data and actionable human health insights, powered by precision engineering." />
+{% if og_image %}<meta name="twitter:image" content="{{ og_image }}" />{% endif %}
 <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
 <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"Organization","name":"NoryaAI","url":"{{ base_url }}","logo":"{{ base_url }}/static/images/og-default.png","description":"AI-powered blood test analysis platform","contactPoint":{"@type":"ContactPoint","email":"support@noryaai.com","contactType":"customer support"}}
+</script>
+{% if breadcrumb_json %}<script type="application/ld+json">{{ breadcrumb_json|safe }}</script>{% endif %}
+<link rel="stylesheet" href="/static/css/tailwind.css" />
+<link rel="stylesheet" href="/static/css/app.css" />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;700;800&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
-<script>
-tailwind.config = {
-  darkMode: "class",
-  theme: {
-    extend: {
-      colors: {
-        "primary": "#006a69", "primary-container": "#0ea5a4", "on-primary": "#ffffff",
-        "on-primary-container": "#003333", "on-surface": "#191c1d", "on-surface-variant": "#3d4949",
-        "surface": "#f8f9fa", "surface-container-low": "#f3f4f5", "surface-container-lowest": "#ffffff",
-        "surface-container-high": "#e7e8e9", "surface-container": "#edeeef",
-        "outline-variant": "#bcc9c8", "outline": "#6d7a79",
-        "inverse-primary": "#5ed9d7", "inverse-surface": "#2e3132",
-        "tertiary": "#006a63", "tertiary-container": "#37a49a",
-        "error": "#ba1a1a", "error-container": "#ffdad6",
-        "secondary": "#4f5e7e", "secondary-container": "#cadaff"
-      },
-      fontFamily: { "headline": ["Manrope"], "body": ["Inter"], "label": ["Inter"] },
-      borderRadius: {"DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px"},
-    },
-  },
-}
-</script>
 <style>
 .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; vertical-align: middle; }
 .orbital-pattern {

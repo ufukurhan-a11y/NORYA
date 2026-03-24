@@ -4,7 +4,14 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>{{ labels.title }} — {{ labels.brand }}</title>
+  <meta name="description" content="{{ labels.get('meta_description', 'Verify the authenticity of a NoryaAI blood test analysis report.') }}" />
+  <meta name="robots" content="noindex,nofollow" />
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
   <style>
     :root { --brand: #0EA5A4; --ink: #0F172A; --muted: #64748b; --border: #e2e8f0; --valid: #059669; --invalid: #dc2626; }
     * { box-sizing: border-box; }

@@ -432,16 +432,10 @@ def http_exception_handler(request: Request, exc: HTTPException):
             content={"error": "Too many requests", "detail": detail},
         )
     if exc.status_code == 404 and _accepts_html(request):
-        # Tarayıcıda 404: JSON yerine kısa HTML sayfası (ana sayfaya dönüş)
-        detail = exc.detail if isinstance(exc.detail, str) else "Not Found"
-        html = (
-            "<!DOCTYPE html><html><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>"
-            "<title>Sayfa bulunamadı – Norya</title></head><body style='font-family:system-ui;max-width:32rem;margin:2rem auto;padding:1.5rem;text-align:center;'>"
-            "<h1 style='color:#0f172a;'>Sayfa bulunamadı</h1><p style='color:#475569;'>Aradığınız sayfa mevcut değil veya taşınmış olabilir.</p>"
-            "<p><a href='/' style='color:#0d9488;text-decoration:none;font-weight:600;'>Ana sayfaya dön</a></p>"
-            "</body></html>"
-        )
-        return HTMLResponse(status_code=404, content=html)
+        _404_path = _APP_DIR / "templates" / "404.html"
+        if _404_path.is_file():
+            return HTMLResponse(status_code=404, content=_404_path.read_text(encoding="utf-8"))
+        return HTMLResponse(status_code=404, content="<html><body><h1>404 Not Found</h1></body></html>")
     return _error_response(request, exc.status_code, exc.detail if isinstance(exc.detail, str) else str(exc.detail))
 
 
@@ -730,6 +724,19 @@ def faq_de(request: Request):
         "meta_description": meta_landing.get("faq_subtitle") or meta_landing.get("meta_description", ""),
     }
     canonical_url = f"{base_url}/de/faq"
+    og_image = f"{base_url}/static/images/og-default.png"
+    faq_entities = []
+    for i in range(1, 7):
+        q = t.get(f"faq_q{i}")
+        a = t.get(f"faq_a{i}")
+        if q and a:
+            faq_entities.append(
+                {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
+            )
+    faq_schema_json = json.dumps(
+        {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities},
+        ensure_ascii=False,
+    ) if faq_entities else None
     return templates.TemplateResponse(
         "faq.html",
         {
@@ -739,7 +746,9 @@ def faq_de(request: Request):
             "meta": meta,
             "canonical_url": canonical_url,
             "og_locale": "de_DE",
+            "og_image": og_image,
             "base_url": base_url,
+            "faq_schema_json": faq_schema_json,
         },
     )
 
@@ -2381,13 +2390,28 @@ def _how_it_works_lang_from_request(request: Request) -> str:
     return parsed if parsed in HOW_IT_WORKS_LANGS else DEFAULT_HOW_IT_WORKS_LANG
 
 
+def _breadcrumb_json(base_url: str, items: list[tuple[str, str]]) -> str:
+    """BreadcrumbList JSON-LD üret. items: [(name, url), ...]"""
+    bc_items = []
+    for i, (name, url) in enumerate(items, 1):
+        bc_items.append({"@type": "ListItem", "position": i, "name": name, "item": url})
+    return json.dumps({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": bc_items}, ensure_ascii=False)
+
+
 @app.get("/about", response_class=HTMLResponse)
 def about_page(request: Request):
     """Hakkımızda / About sayfası – Stitch v21 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
+    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("About", f"{base_url}/about")])
     return templates.TemplateResponse(
         "about.html",
-        {"request": request, "canonical_url": f"{base_url}/about"},
+        {
+            "request": request,
+            "canonical_url": f"{base_url}/about",
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+            "breadcrumb_json": breadcrumb_json,
+        },
     )
 
 
@@ -2395,9 +2419,16 @@ def about_page(request: Request):
 def science_page(request: Request):
     """Bilim & Teknoloji sayfası – Stitch v20 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
+    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("Science", f"{base_url}/science")])
     return templates.TemplateResponse(
         "science.html",
-        {"request": request, "canonical_url": f"{base_url}/science"},
+        {
+            "request": request,
+            "canonical_url": f"{base_url}/science",
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+            "breadcrumb_json": breadcrumb_json,
+        },
     )
 
 
@@ -2405,9 +2436,16 @@ def science_page(request: Request):
 def security_page(request: Request):
     """Güvenlik & Gizlilik sayfası – Stitch v25 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
+    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("Security", f"{base_url}/security")])
     return templates.TemplateResponse(
         "security.html",
-        {"request": request, "canonical_url": f"{base_url}/security"},
+        {
+            "request": request,
+            "canonical_url": f"{base_url}/security",
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+            "breadcrumb_json": breadcrumb_json,
+        },
     )
 
 
@@ -2415,9 +2453,16 @@ def security_page(request: Request):
 def technology_page(request: Request):
     """Teknoloji sayfası – Stitch v22 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
+    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("Technology", f"{base_url}/technology")])
     return templates.TemplateResponse(
         "technology.html",
-        {"request": request, "canonical_url": f"{base_url}/technology"},
+        {
+            "request": request,
+            "canonical_url": f"{base_url}/technology",
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+            "breadcrumb_json": breadcrumb_json,
+        },
     )
 
 
@@ -2437,6 +2482,7 @@ def how_it_works_page(request: Request):
         for code in HOW_IT_WORKS_LANGS
     ]
     hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/how-it-works?lang=en"})
+    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("How it works", canonical_url)])
     return templates.TemplateResponse(
         "how_it_works.html",
         {
@@ -2448,6 +2494,7 @@ def how_it_works_page(request: Request):
             "hreflang_alternates": hreflang_alternates,
             "hiw_lang_codes": HOW_IT_WORKS_LANGS,
             "base_url": base_url,
+            "breadcrumb_json": breadcrumb_json,
         },
     )
 
@@ -2464,8 +2511,8 @@ def pricing_landing(
     lang = _payment_lang_from_request(request)
     t = enrich_pricing_context(lang, get_pay_ui(lang))
     base_url = _paytr_canonical_base(request)
-    hreflang_alternates = [{"lang": code, "url": f"{base_url}/pricing?lang={code}"} for code in PRICING_HREFLANG_LANGS]
-    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/pricing?lang=en"})
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/pricing"} for code in PRICING_HREFLANG_LANGS]
+    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/en/pricing"})
     plan_map = get_plan_code_to_product_cents(db)
 
     def _plan(product_key: str) -> dict:
@@ -6653,8 +6700,9 @@ def seo_landing_ar_understand_lab(request: Request):
 
 # SEO: robots.txt ve sitemap.xml — catch-all /{lang} rotasından ÖNCE tanımlanmalı (yoksa /sitemap.xml -> 404)
 @app.get("/robots.txt", response_class=PlainTextResponse)
-def robots_txt():
+def robots_txt(request: Request):
     """SEO: Allow all; Disallow admin ve 401 dönen path'ler; sitemap canonical URL."""
+    base_url = str(request.base_url).rstrip("/")
     return PlainTextResponse(
         "User-agent: *\n"
         "Allow: /\n"
@@ -6662,7 +6710,11 @@ def robots_txt():
         "Disallow: /analyze/history\n"
         "Disallow: /analyze/usage\n"
         "Disallow: /analyze/export\n"
-        "\nSitemap: https://noryaai.com/sitemap.xml\n",
+        "Disallow: /enterprise/\n"
+        "Disallow: /pay\n"
+        "Disallow: /payment\n"
+        "Disallow: /verify/\n"
+        f"\nSitemap: {base_url}/sitemap.xml\n",
         media_type="text/plain",
     )
 
@@ -6691,6 +6743,11 @@ def sitemap_xml(request: Request):
         add(f"{base_url}/{locale}", priority="0.9", lastmod=today)
     add(f"{base_url}/pricing", priority="0.8", lastmod=today)
     add(f"{base_url}/how-it-works", priority="0.8", lastmod=today)
+    add(f"{base_url}/about", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/science", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/security", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/technology", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/de/faq", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/kurumsal", lastmod=today)
     for page in LEGAL_PAGES:
         add(f"{base_url}/legal/{page}", priority="0.5", lastmod=today)
@@ -6737,6 +6794,12 @@ def index_with_locale(request: Request, lang: str):
     raise HTTPException(status_code=404, detail="Not Found")
 
 
+_KNOWN_SPA_PATHS = frozenset({
+    "upload", "report", "results", "history", "settings", "profile",
+    "payment", "pay", "checkout", "success", "share",
+})
+
+
 @app.get("/{lang}/{path:path}", response_class=HTMLResponse)
 def index_with_locale_path(request: Request, lang: str, path: str):
     """Locale prefix + path: /en/pricing, /de/report → SPA (blog hariç; /{lang}/blog ayrı route).
@@ -6746,17 +6809,22 @@ def index_with_locale_path(request: Request, lang: str, path: str):
     - /{lang}/how-it-works  -> /how-it-works?lang={lang}
     - /{lang}/analyze       -> /analyze?lang={lang}
     - /{lang}/faq           -> /{lang}#faq
+
+    SEO: Bilinmeyen path'lerde noindex enjekte edilir (duplicate content önleme).
     """
     lang_l = (lang or "").strip().lower()
     if lang_l in SUPPORTED_LOCALES:
         path_l = (path or "").strip().lower().strip("/")
         if path_l == "pricing":
-            return RedirectResponse(url=f"/pricing?lang={lang_l}", status_code=302)
+            return RedirectResponse(url=f"/pricing?lang={lang_l}", status_code=301)
         if path_l == "how-it-works":
-            return RedirectResponse(url=f"/how-it-works?lang={lang_l}", status_code=302)
+            return RedirectResponse(url=f"/how-it-works?lang={lang_l}", status_code=301)
         if path_l == "analyze":
-            return RedirectResponse(url=f"/analyze?lang={lang_l}", status_code=302)
+            return RedirectResponse(url=f"/analyze?lang={lang_l}", status_code=301)
         if path_l == "faq":
             return RedirectResponse(url=f"/{lang_l}#faq", status_code=302)
+        first_segment = path_l.split("/")[0] if path_l else ""
+        if first_segment not in _KNOWN_SPA_PATHS:
+            raise HTTPException(status_code=404, detail="Not Found")
         return _index_response(request)
     raise HTTPException(status_code=404, detail="Not Found")

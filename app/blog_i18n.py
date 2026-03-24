@@ -60,6 +60,9 @@ BLOG_UI = {
         "trust_strip_2": "Güvenli işleme",
         "trust_strip_3": "Anlaşılır sunum",
         "cta_after_brand": " ile kan tahlili sonuçlarınızı yapılandırılmış, hekime hazır bir özet rapora dönüştürün.",
+        "mid_cta_title": "Kendi sonuçlarınızı anlamak ister misiniz?",
+        "mid_cta_desc": "Kan tahlili sonuçlarınızı yükleyin, yapay zeka destekli net bir açıklama alın.",
+        "mid_cta_btn": "NoryaAI'yı dene",
         "article_edu_note": "Bu rehber bilgilendirme amaçlıdır; tıbbi tavsiye veya teşhis yerine geçmez. Sonuçları mutlaka bir hekimle birlikte değerlendirin.",
         "related_intro": "Laboratuvar değerleri ve akıllı takip için seçilmiş okumalar.",
         "categories_aria": "Kategoriler",
@@ -117,6 +120,9 @@ BLOG_UI = {
         "trust_strip_2": "Secure processing",
         "trust_strip_3": "Built for clarity",
         "cta_after_brand": " — turn your lab results into a structured, clinician-ready summary.",
+        "mid_cta_title": "Want to understand your own results?",
+        "mid_cta_desc": "Upload your blood test and get a clear AI-powered explanation.",
+        "mid_cta_btn": "Try NoryaAI",
         "article_edu_note": "Educational guide only — not medical advice. Always review results with a qualified clinician.",
         "related_intro": "Further reading on lab markers, trends, and sensible follow-up.",
         "categories_aria": "Categories",
@@ -174,6 +180,9 @@ BLOG_UI = {
         "trust_strip_2": "Sichere Verarbeitung",
         "trust_strip_3": "Klar strukturiert",
         "cta_after_brand": " — machen Sie aus Ihren Laborwerten eine strukturierte, arzttaugliche Zusammenfassung.",
+        "mid_cta_title": "Möchten Sie Ihre eigenen Ergebnisse verstehen?",
+        "mid_cta_desc": "Laden Sie Ihr Blutbild hoch und erhalten Sie eine klare KI-gestützte Erklärung.",
+        "mid_cta_btn": "NoryaAI testen",
         "article_edu_note": "Dieser Ratgeber ersetzt keine ärztliche Beratung oder Diagnose. Besprechen Sie Befunde immer mit Ihrem Arzt oder Ihrer Ärztin.",
         "related_intro": "Weitere Artikel zu Biomarkern, Verlauf und sinnvollem Kontext.",
         "categories_aria": "Kategorien",
@@ -231,6 +240,9 @@ BLOG_UI = {
         "trust_strip_2": "Traitement sécurisé",
         "trust_strip_3": "Lecture claire",
         "cta_after_brand": " — transformez vos résultats en synthèse structurée, prête à être partagée avec un soignant.",
+        "mid_cta_title": "Envie de comprendre vos propres résultats ?",
+        "mid_cta_desc": "Téléchargez votre bilan sanguin et obtenez une explication claire par IA.",
+        "mid_cta_btn": "Essayer NoryaAI",
         "article_edu_note": "Ce guide est informatif ; il ne remplace ni un avis médical ni un diagnostic. Examinez toujours vos résultats avec un professionnel de santé.",
         "related_intro": "Pour aller plus loin : autres repères sur les biomarqueurs et le suivi.",
         "categories_aria": "Catégories",
@@ -288,6 +300,9 @@ BLOG_UI = {
         "trust_strip_2": "Elaborazione sicura",
         "trust_strip_3": "Chiarezza strutturata",
         "cta_after_brand": " — trasforma i risultati in un riepilogo chiaro e ordinato, utile al medico.",
+        "mid_cta_title": "Vuoi capire i tuoi risultati?",
+        "mid_cta_desc": "Carica le tue analisi del sangue e ottieni una spiegazione chiara con l'IA.",
+        "mid_cta_btn": "Prova NoryaAI",
         "article_edu_note": "Questo contenuto è solo informativo; non sostituisce consulenza o diagnosi medica. Valuta sempre i risultati con un professionista.",
         "related_intro": "Altri approfondimenti sui biomarcatori e su un follow-up sensato.",
         "categories_aria": "Categorie",
@@ -345,6 +360,9 @@ BLOG_UI = {
         "trust_strip_2": "Procesamiento seguro",
         "trust_strip_3": "Pensado para claridad",
         "cta_after_brand": " — convierta sus resultados en un informe estructurado y claro para compartir con su médico.",
+        "mid_cta_title": "¿Quiere entender sus propios resultados?",
+        "mid_cta_desc": "Suba su análisis de sangre y obtenga una explicación clara con IA.",
+        "mid_cta_btn": "Probar NoryaAI",
         "article_edu_note": "Esta guía es informativa; no sustituye consejo ni diagnóstico médico. Revise siempre los resultados con un profesional.",
         "related_intro": "Más lecturas sobre biomarcadores, tendencias y seguimiento sensato.",
         "categories_aria": "Categorías",
@@ -402,6 +420,9 @@ BLOG_UI = {
         "trust_strip_2": "עיבוד מאובטח",
         "trust_strip_3": "בהיר ומסודר",
         "cta_after_brand": " — הפכו את תוצאות המעבדה לסיכום ברור ומובנה, מוכן לשיתוף עם הרופא.",
+        "mid_cta_title": "רוצים להבין את התוצאות שלכם?",
+        "mid_cta_desc": "העלו את בדיקת הדם וקבלו הסבר ברור באמצעות בינה מלאכותית.",
+        "mid_cta_btn": "נסו את NoryaAI",
         "article_edu_note": "מדריך להעשרה בלבד; אינו מהווה ייעוץ רפואי או אבחון. יש להצליב תמיד עם רופא/ה.",
         "related_intro": "קראו עוד על מדדים, מגמות ומעקב נבון.",
         "categories_aria": "קטגוריות",
@@ -459,6 +480,9 @@ BLOG_UI = {
         "trust_strip_2": "सुरक्षित प्रसंस्करण",
         "trust_strip_3": "स्पष्ट प्रस्तुति",
         "cta_after_brand": " — अपने लैब रिज़ल्ट को संरचित, चिकित्सक-अनुकूल सारांश में बदलें।",
+        "mid_cta_title": "अपने नतीजे समझना चाहते हैं?",
+        "mid_cta_desc": "अपनी रक्त जाँच अपलोड करें और AI द्वारा स्पष्ट व्याख्या पाएँ।",
+        "mid_cta_btn": "NoryaAI आज़माएँ",
         "article_edu_note": "यह मार्गदर्शन केवल जानकारी हेतु है; चिकित्सा सलाह या निदान नहीं। परिणाम हमेशा योग्य चिकित्सक के साथ साझा करें।",
         "related_intro": "बायोमार्कर और सही फ़ॉलो-अप पर और पढ़ें।",
         "categories_aria": "श्रेणियाँ",
@@ -516,6 +540,9 @@ BLOG_UI = {
         "trust_strip_2": "معالجة آمنة",
         "trust_strip_3": "وضوح منظم",
         "cta_after_brand": " — حوّل نتائج المختبر إلى ملخص منظم وواضح يمكن مناقشته مع الطبيب.",
+        "mid_cta_title": "هل تريد فهم نتائجك الخاصة؟",
+        "mid_cta_desc": "ارفع تحليل الدم واحصل على شرح واضح بالذكاء الاصطناعي.",
+        "mid_cta_btn": "جرّب NoryaAI",
         "article_edu_note": "هذا الدليل تثقيفي فقط؛ لا يغني عن استشارة طبية أو تشخيص. ناقش النتائج دائمًا مع مختص مؤهل.",
         "related_intro": "قراءات إضافية عن المؤشرات والاتجاهات والمتابعة المنطقية.",
         "categories_aria": "التصنيفات",
@@ -6009,6 +6036,218 @@ _ARTICLE_HIGH_WBC = _article_high_wbc()
 _ARTICLE_LOW_WBC = _article_low_wbc()
 
 
+def _article_homa_ir() -> Article:
+    """HOMA-IR nedir / What is HOMA-IR — 9 dil, full body."""
+    from app.blog_article_homa_ir_content import get_homa_ir_sections_by_lang, get_homa_ir_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/hba1c-hero.png"
+    slugs = {
+        "tr": "homa-ir-nedir",
+        "en": "what-is-homa-ir",
+        "de": "homa-ir-was-bedeutet-das",
+        "es": "que-es-homa-ir",
+        "fr": "quest-ce-que-homa-ir",
+        "it": "cos-e-homa-ir",
+        "he": "\u05de\u05d4-\u05d6\u05d4-homa-ir",
+        "hi": "homa-ir-kya-hai",
+        "ar": "\u0645\u0627-\u0647\u0648-homa-ir",
+    }
+    cat = {"tr": "Kan \u015fekeri", "en": "Blood sugar", "es": "Glucosa", "de": "Blutzucker", "fr": "Glyc\u00e9mie", "it": "Glicemia", "he": "\u05e1\u05d5\u05db\u05e8 \u05d1\u05d3\u05dd", "hi": "\u092c\u094d\u0932\u0921 \u0936\u0941\u0917\u0930", "ar": "\u0633\u0643\u0631 \u0627\u0644\u062f\u0645"}
+    titles = {
+        "tr": "HOMA-IR nedir? \u0130ns\u00fclin direnci indeksini anlamak",
+        "en": "What is HOMA-IR? Understanding the insulin resistance index",
+        "de": "HOMA-IR: Was bedeutet der Insulinresistenz-Index?",
+        "es": "\u00bfQu\u00e9 es el HOMA-IR? Entender el \u00edndice de resistencia a la insulina",
+        "fr": "Qu\u2019est-ce que le HOMA-IR ? Comprendre l\u2019indice d\u2019insulinor\u00e9sistance",
+        "it": "Cos\u2019\u00e8 l\u2019HOMA-IR? Capire l\u2019indice di resistenza insulinica",
+        "he": "\u05de\u05d4\u05d5 HOMA-IR? \u05de\u05d3\u05e8\u05d9\u05da \u05dc\u05de\u05d3\u05d3 \u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df",
+        "hi": "HOMA-IR \u0915\u094d\u092f\u093e \u0939\u0948? \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938 \u0907\u0902\u0921\u0947\u0915\u094d\u0938 \u0915\u094b \u0938\u092e\u091d\u0947\u0902",
+        "ar": "\u0645\u0627 \u0647\u0648 HOMA-IR\u061f \u0641\u0647\u0645 \u0645\u0624\u0634\u0631 \u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646",
+    }
+    subtitles = {
+        "tr": "HOMA-IR a\u00e7l\u0131k glukozu ve a\u00e7l\u0131k ins\u00fclini ile hesaplanan bir ins\u00fclin direnci g\u00f6stergesidir; tek ba\u015f\u0131na te\u015fhis arac\u0131 de\u011fildir.",
+        "en": "HOMA-IR is an insulin resistance marker calculated from fasting glucose and fasting insulin; it is not a diagnostic tool on its own.",
+        "de": "HOMA-IR ist ein aus N\u00fcchternglukose und N\u00fcchterninsulin berechneter Insulinresistenz-Marker; allein kein Diagnose-Instrument.",
+        "es": "El HOMA-IR es un marcador de resistencia a la insulina calculado a partir de glucosa e insulina en ayunas; no es una herramienta diagn\u00f3stica por s\u00ed solo.",
+        "fr": "Le HOMA-IR est un marqueur d\u2019insulinor\u00e9sistance calcul\u00e9 \u00e0 partir de la glyc\u00e9mie et de l\u2019insuline \u00e0 jeun ; ce n\u2019est pas un outil diagnostique en soi.",
+        "it": "L\u2019HOMA-IR \u00e8 un marcatore di resistenza insulinica calcolato da glicemia e insulinemia a digiuno; da solo non \u00e8 uno strumento diagnostico.",
+        "he": "HOMA-IR \u05d4\u05d5\u05d0 \u05de\u05d3\u05d3 \u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d4\u05de\u05d7\u05d5\u05e9\u05d1 \u05de\u05d2\u05dc\u05d5\u05e7\u05d5\u05d6 \u05d5\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd; \u05d0\u05d9\u05e0\u05d5 \u05db\u05dc\u05d9 \u05d0\u05d1\u05d7\u05d5\u05df \u05d1\u05e4\u05e0\u05d9 \u05e2\u05e6\u05de\u05d5.",
+        "hi": "HOMA-IR \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0917\u094d\u0932\u0942\u0915\u094b\u091c\u093c \u0914\u0930 \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0938\u0947 \u0915\u0948\u0932\u0915\u0941\u0932\u0947\u091f \u0939\u094b\u0928\u0947 \u0935\u093e\u0932\u093e \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938 \u092e\u093e\u0930\u094d\u0915\u0930 \u0939\u0948; \u0905\u0915\u0947\u0932\u0947 \u092f\u0939 \u0921\u093e\u092f\u0917\u094d\u0928\u094b\u0938\u094d\u091f\u093f\u0915 \u091f\u0942\u0932 \u0928\u0939\u0940\u0902\u0964",
+        "ar": "HOMA-IR \u0645\u0624\u0634\u0631 \u0644\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u064a\u064f\u062d\u0633\u0628 \u0645\u0646 \u0627\u0644\u063a\u0644\u0648\u0643\u0648\u0632 \u0648\u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645\u064a\u0646\u061b \u0644\u064a\u0633 \u0623\u062f\u0627\u0629 \u062a\u0634\u062e\u064a\u0635 \u0628\u0645\u0641\u0631\u062f\u0647.",
+    }
+    excerpts = {
+        "tr": "HOMA-IR a\u00e7l\u0131k kan \u015fekeri ve a\u00e7l\u0131k ins\u00fclini ile hesaplanan bir tarama indeksidir. Tek ba\u015f\u0131na te\u015fhis koymaz; hekim di\u011fer de\u011ferlerle birlikte yorumlar.",
+        "en": "HOMA-IR is a screening index calculated from fasting blood sugar and fasting insulin. It does not diagnose on its own; your doctor interprets it with other results.",
+        "de": "Der HOMA-IR ist ein Screening-Index aus N\u00fcchternblutzucker und N\u00fcchterninsulin. Er stellt allein keine Diagnose; der Arzt wertet ihn mit weiteren Befunden.",
+        "es": "El HOMA-IR es un \u00edndice de cribado calculado a partir de la glucosa y la insulina en ayunas. No diagnostica por s\u00ed solo; el m\u00e9dico lo interpreta con otros resultados.",
+        "fr": "Le HOMA-IR est un indice de d\u00e9pistage calcul\u00e9 \u00e0 partir de la glyc\u00e9mie et de l\u2019insuline \u00e0 jeun. Il ne diagnostique pas seul ; le m\u00e9decin l\u2019interpr\u00e8te avec d\u2019autres r\u00e9sultats.",
+        "it": "L\u2019HOMA-IR \u00e8 un indice di screening calcolato da glicemia e insulinemia a digiuno. Non diagnostica da solo; il medico lo interpreta con altri referti.",
+        "he": "HOMA-IR \u05d4\u05d5\u05d0 \u05de\u05d3\u05d3 \u05e1\u05d9\u05e0\u05d5\u05df \u05d4\u05de\u05d7\u05d5\u05e9\u05d1 \u05de\u05d2\u05dc\u05d5\u05e7\u05d5\u05d6 \u05d5\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd. \u05d0\u05d9\u05e0\u05d5 \u05de\u05d0\u05d1\u05d7\u05df \u05dc\u05d1\u05d3\u05d5; \u05d4\u05e8\u05d5\u05e4\u05d0 \u05de\u05e4\u05e8\u05e9 \u05e2\u05dd \u05e9\u05d0\u05e8 \u05d4\u05ea\u05d5\u05e6\u05d0\u05d5\u05ea.",
+        "hi": "HOMA-IR \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0917\u094d\u0932\u0942\u0915\u094b\u091c\u093c \u0914\u0930 \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0938\u0947 \u0915\u0948\u0932\u0915\u0941\u0932\u0947\u091f \u0939\u094b\u0928\u0947 \u0935\u093e\u0932\u093e \u0938\u094d\u0915\u094d\u0930\u0940\u0928\u093f\u0902\u0917 \u0907\u0902\u0921\u0947\u0915\u094d\u0938 \u0939\u0948\u0964 \u0905\u0915\u0947\u0932\u0947 \u092f\u0939 \u0928\u093f\u0926\u093e\u0928 \u0928\u0939\u0940\u0902 \u0915\u0930\u0924\u093e; \u0921\u0949\u0915\u094d\u091f\u0930 \u0926\u0942\u0938\u0930\u0947 \u0930\u093f\u091c\u093c\u0932\u094d\u091f\u094d\u0938 \u0915\u0947 \u0938\u093e\u0925 \u092a\u0922\u093c\u0924\u0947 \u0939\u0948\u0902\u0964",
+        "ar": "HOMA-IR \u0645\u0624\u0634\u0631 \u0641\u062d\u0635 \u064a\u064f\u062d\u0633\u0628 \u0645\u0646 \u0627\u0644\u063a\u0644\u0648\u0643\u0648\u0632 \u0648\u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645\u064a\u0646. \u0644\u0627 \u064a\u064f\u0634\u062e\u0651\u0635 \u0628\u0645\u0641\u0631\u062f\u0647\u061b \u0627\u0644\u0637\u0628\u064a\u0628 \u064a\u064f\u0641\u0633\u0651\u0631\u0647 \u0645\u0639 \u0628\u0642\u064a\u0629 \u0627\u0644\u0646\u062a\u0627\u0626\u062c.",
+    }
+    seo_titles = {
+        "tr": "HOMA-IR Nedir? \u0130ns\u00fclin Direnci \u0130ndeksi Rehberi | Norya Blog",
+        "en": "What Is HOMA-IR? Insulin Resistance Index Guide | Norya Blog",
+        "de": "HOMA-IR: Was bedeutet der Insulinresistenz-Index? | Norya Blog",
+        "es": "\u00bfQu\u00e9 es el HOMA-IR? Gu\u00eda del \u00edndice de resistencia a la insulina | Norya Blog",
+        "fr": "Qu\u2019est-ce que le HOMA-IR ? Guide de l\u2019insulinor\u00e9sistance | Norya Blog",
+        "it": "Cos\u2019\u00e8 l\u2019HOMA-IR? Guida all\u2019indice di resistenza insulinica | Norya Blog",
+        "he": "\u05de\u05d4\u05d5 HOMA-IR? \u05de\u05d3\u05e8\u05d9\u05da \u05dc\u05de\u05d3\u05d3 \u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df | Norya Blog",
+        "hi": "HOMA-IR \u0915\u094d\u092f\u093e \u0939\u0948? \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938 \u0907\u0902\u0921\u0947\u0915\u094d\u0938 \u0917\u093e\u0907\u0921 | Norya Blog",
+        "ar": "\u0645\u0627 \u0647\u0648 HOMA-IR\u061f \u062f\u0644\u064a\u0644 \u0645\u0624\u0634\u0631 \u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 | Norya Blog",
+    }
+    seo_descriptions = {
+        "tr": "HOMA-IR nedir, nas\u0131l hesaplan\u0131r, a\u00e7l\u0131k glukozu ve ins\u00fclin ile ili\u015fkisi, ins\u00fclin direnci ba\u011flant\u0131s\u0131. E\u011fitim ama\u00e7l\u0131.",
+        "en": "What is HOMA-IR, how it is calculated, its link to fasting glucose, fasting insulin, and insulin resistance. For information only.",
+        "de": "Was ist der HOMA-IR, wie wird er berechnet, Zusammenhang mit N\u00fcchternglukose, N\u00fcchterninsulin und Insulinresistenz. Nur zur Information.",
+        "es": "Qu\u00e9 es el HOMA-IR, c\u00f3mo se calcula, relaci\u00f3n con glucosa e insulina en ayunas y resistencia a la insulina. Solo informativo.",
+        "fr": "Qu\u2019est-ce que le HOMA-IR, comment il est calcul\u00e9, lien avec la glyc\u00e9mie et l\u2019insuline \u00e0 jeun, insulinor\u00e9sistance. \u00c0 titre informatif.",
+        "it": "Cos\u2019\u00e8 l\u2019HOMA-IR, come si calcola, rapporto con glicemia e insulinemia a digiuno, resistenza insulinica. Solo informativo.",
+        "he": "\u05de\u05d4\u05d5 HOMA-IR, \u05d0\u05d9\u05da \u05de\u05d7\u05e9\u05d1\u05d9\u05dd, \u05e7\u05e9\u05e8 \u05dc\u05d2\u05dc\u05d5\u05e7\u05d5\u05d6 \u05d5\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd, \u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df. \u05dc\u05de\u05d9\u05d3\u05e2 \u05d1\u05dc\u05d1\u05d3.",
+        "hi": "HOMA-IR \u0915\u094d\u092f\u093e \u0939\u0948, \u0915\u0948\u0938\u0947 \u0915\u0948\u0932\u0915\u0941\u0932\u0947\u091f \u0939\u094b\u0924\u093e \u0939\u0948, \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0917\u094d\u0932\u0942\u0915\u094b\u091c\u093c \u0914\u0930 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0938\u0947 \u0938\u0902\u092c\u0902\u0927, \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938\u0964 \u0915\u0947\u0935\u0932 \u0938\u0942\u091a\u0928\u093e\u0930\u094d\u0925\u0964",
+        "ar": "\u0645\u0627 \u0647\u0648 HOMA-IR\u060c \u0643\u064a\u0641 \u064a\u064f\u062d\u0633\u0628\u060c \u0639\u0644\u0627\u0642\u062a\u0647 \u0628\u0627\u0644\u063a\u0644\u0648\u0643\u0648\u0632 \u0648\u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645\u064a\u0646 \u0648\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646. \u0644\u0623\u063a\u0631\u0627\u0636 \u0625\u0639\u0644\u0627\u0645\u064a\u0629 \u0641\u0642\u0637.",
+    }
+    cover_alt = {
+        "tr": "HOMA-IR ins\u00fclin direnci kan tahlili \u2014 Norya",
+        "en": "HOMA-IR insulin resistance blood test \u2014 Norya",
+        "de": "HOMA-IR Insulinresistenz Bluttest \u2014 Norya",
+        "es": "HOMA-IR resistencia a la insulina \u2014 Norya",
+        "fr": "HOMA-IR insulinor\u00e9sistance \u2014 Norya",
+        "it": "HOMA-IR resistenza insulinica \u2014 Norya",
+        "he": "HOMA-IR \u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u2014 Norya",
+        "hi": "HOMA-IR \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938 \u2014 Norya",
+        "ar": "HOMA-IR \u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u2014 Norya",
+    }
+    sections_by_lang = get_homa_ir_sections_by_lang()
+    faq_schema_qa = get_homa_ir_faq_schema_qa()
+    return Article(
+        id="homa-ir-what-it-is",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+_ARTICLE_HOMA_IR = _article_homa_ir()
+
+
+def _article_fasting_insulin_high() -> Article:
+    """Açlık insülini yüksekse ne anlama gelir / High fasting insulin meaning — 9 dil, full body."""
+    from app.blog_article_fasting_insulin_content import get_fasting_insulin_sections_by_lang, get_fasting_insulin_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/hba1c-hero.png"
+    slugs = {
+        "tr": "aclik-insulini-yuksekse-ne-anlama-gelir",
+        "en": "high-fasting-insulin-meaning",
+        "de": "nuechterninsulin-zu-hoch",
+        "es": "insulina-en-ayunas-alta",
+        "fr": "insuline-a-jeun-elevee",
+        "it": "insulina-a-digiuno-alta",
+        "he": "\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df-\u05d1\u05e6\u05d5\u05dd-\u05d2\u05d1\u05d5\u05d4",
+        "hi": "fasting-insulin-high-meaning",
+        "ar": "\u0627\u0631\u062a\u0641\u0627\u0639-\u0627\u0644\u0627\u0646\u0633\u0648\u0644\u064a\u0646-\u0627\u0644\u0635\u0627\u0626\u0645",
+    }
+    cat = {"tr": "Kan \u015fekeri", "en": "Blood sugar", "es": "Glucosa", "de": "Blutzucker", "fr": "Glyc\u00e9mie", "it": "Glicemia", "he": "\u05e1\u05d5\u05db\u05e8 \u05d1\u05d3\u05dd", "hi": "\u092c\u094d\u0932\u0921 \u0936\u0941\u0917\u0930", "ar": "\u0633\u0643\u0631 \u0627\u0644\u062f\u0645"}
+    titles = {
+        "tr": "A\u00e7l\u0131k ins\u00fclini y\u00fcksekse ne anlama gelir?",
+        "en": "What does high fasting insulin mean?",
+        "de": "N\u00fcchterninsulin zu hoch: Was bedeutet das?",
+        "es": "\u00bfQu\u00e9 significa tener la insulina en ayunas alta?",
+        "fr": "Insuline \u00e0 jeun \u00e9lev\u00e9e : que signifie ce r\u00e9sultat ?",
+        "it": "Insulina a digiuno alta: cosa significa?",
+        "he": "\u05de\u05d4 \u05de\u05e9\u05de\u05e2\u05d5\u05ea \u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd \u05d2\u05d1\u05d5\u05d4?",
+        "hi": "\u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0939\u093e\u0908 \u0939\u094b\u0928\u0947 \u0915\u093e \u0915\u094d\u092f\u093e \u092e\u0924\u0932\u092c \u0939\u0948?",
+        "ar": "\u0645\u0627\u0630\u0627 \u064a\u0639\u0646\u064a \u0627\u0631\u062a\u0641\u0627\u0639 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645\u061f",
+    }
+    subtitles = {
+        "tr": "A\u00e7l\u0131k ins\u00fclini y\u00fcksekli\u011fi ins\u00fclin direncinin erken i\u015fareti olabilir; tek ba\u015f\u0131na te\u015fhis arac\u0131 de\u011fildir.",
+        "en": "Elevated fasting insulin may be an early sign of insulin resistance; it is not a diagnostic tool on its own.",
+        "de": "Erh\u00f6htes N\u00fcchterninsulin kann ein Fr\u00fchzeichen f\u00fcr Insulinresistenz sein; allein kein Diagnoseinstrument.",
+        "es": "La insulina en ayunas elevada puede ser una se\u00f1al temprana de resistencia a la insulina; no es una herramienta diagn\u00f3stica por s\u00ed sola.",
+        "fr": "Une insuline \u00e0 jeun \u00e9lev\u00e9e peut \u00eatre un signe pr\u00e9coce d\u2019insulinor\u00e9sistance ; ce n\u2019est pas un outil diagnostique en soi.",
+        "it": "Un\u2019insulina a digiuno elevata pu\u00f2 essere un segnale precoce di resistenza insulinica; da sola non \u00e8 uno strumento diagnostico.",
+        "he": "\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd \u05d2\u05d1\u05d5\u05d4 \u05e2\u05e9\u05d5\u05d9 \u05dc\u05d4\u05d9\u05d5\u05ea \u05e1\u05d9\u05de\u05df \u05de\u05d5\u05e7\u05d3\u05dd \u05dc\u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df; \u05d0\u05d9\u05e0\u05d5 \u05db\u05dc\u05d9 \u05d0\u05d1\u05d7\u05d5\u05df \u05d1\u05e4\u05e0\u05d9 \u05e2\u05e6\u05de\u05d5.",
+        "hi": "\u0939\u093e\u0908 \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938 \u0915\u093e \u0905\u0930\u094d\u0932\u0940 \u0938\u0902\u0915\u0947\u0924 \u0939\u094b \u0938\u0915\u0924\u093e \u0939\u0948; \u0905\u0915\u0947\u0932\u0947 \u092f\u0939 \u0921\u093e\u092f\u0917\u094d\u0928\u094b\u0938\u094d\u091f\u093f\u0915 \u091f\u0942\u0932 \u0928\u0939\u0940\u0902\u0964",
+        "ar": "\u0627\u0631\u062a\u0641\u0627\u0639 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645 \u0642\u062f \u064a\u0643\u0648\u0646 \u0639\u0644\u0627\u0645\u0629 \u0645\u0628\u0643\u0631\u0629 \u0639\u0644\u0649 \u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646\u061b \u0644\u064a\u0633 \u0623\u062f\u0627\u0629 \u062a\u0634\u062e\u064a\u0635 \u0628\u0645\u0641\u0631\u062f\u0647.",
+    }
+    excerpts = {
+        "tr": "A\u00e7l\u0131k ins\u00fclini y\u00fcksekli\u011fi ins\u00fclin direnci veya metabolik sendrom habercisi olabilir. Tek ba\u015f\u0131na te\u015fhis koymaz; hekim di\u011fer de\u011ferlerle yorumlar.",
+        "en": "High fasting insulin can signal insulin resistance or metabolic syndrome risk. It is not a diagnosis alone; your doctor interprets it with other results.",
+        "de": "Erh\u00f6htes N\u00fcchterninsulin kann auf Insulinresistenz oder metabolisches Syndrom hindeuten. Allein keine Diagnose; der Arzt wertet mit weiteren Befunden.",
+        "es": "La insulina en ayunas alta puede indicar resistencia a la insulina o riesgo metab\u00f3lico. No diagnostica sola; el m\u00e9dico la interpreta con otros resultados.",
+        "fr": "Une insuline \u00e0 jeun \u00e9lev\u00e9e peut signaler une insulinor\u00e9sistance. Elle ne diagnostique pas seule ; le m\u00e9decin l\u2019interpr\u00e8te avec d\u2019autres r\u00e9sultats.",
+        "it": "Un\u2019insulina a digiuno elevata pu\u00f2 segnalare resistenza insulinica. Non diagnostica da sola; il medico la interpreta con altri referti.",
+        "he": "\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd \u05d2\u05d1\u05d5\u05d4 \u05e2\u05e9\u05d5\u05d9 \u05dc\u05d4\u05e6\u05d1\u05d9\u05e2 \u05e2\u05dc \u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df. \u05d0\u05d9\u05e0\u05d5 \u05de\u05d0\u05d1\u05d7\u05df \u05dc\u05d1\u05d3\u05d5; \u05d4\u05e8\u05d5\u05e4\u05d0 \u05de\u05e4\u05e8\u05e9 \u05e2\u05dd \u05e9\u05d0\u05e8 \u05d4\u05ea\u05d5\u05e6\u05d0\u05d5\u05ea.",
+        "hi": "\u0939\u093e\u0908 \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938 \u0915\u093e \u0938\u0902\u0915\u0947\u0924 \u0939\u094b \u0938\u0915\u0924\u093e \u0939\u0948\u0964 \u0905\u0915\u0947\u0932\u0947 \u092f\u0939 \u0928\u093f\u0926\u093e\u0928 \u0928\u0939\u0940\u0902 \u0915\u0930\u0924\u093e; \u0921\u0949\u0915\u094d\u091f\u0930 \u0926\u0942\u0938\u0930\u0947 \u0930\u093f\u091c\u093c\u0932\u094d\u091f\u094d\u0938 \u0915\u0947 \u0938\u093e\u0925 \u092a\u0922\u093c\u0924\u0947 \u0939\u0948\u0902\u0964",
+        "ar": "\u0627\u0631\u062a\u0641\u0627\u0639 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645 \u0642\u062f \u064a\u0634\u064a\u0631 \u0625\u0644\u0649 \u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646. \u0644\u0627 \u064a\u064f\u0634\u062e\u0651\u0635 \u0628\u0645\u0641\u0631\u062f\u0647\u061b \u0627\u0644\u0637\u0628\u064a\u0628 \u064a\u064f\u0641\u0633\u0651\u0631\u0647 \u0645\u0639 \u0628\u0642\u064a\u0629 \u0627\u0644\u0646\u062a\u0627\u0626\u062c.",
+    }
+    seo_titles = {
+        "tr": "A\u00e7l\u0131k \u0130ns\u00fclini Y\u00fcksekse Ne Anlama Gelir? | Norya Blog",
+        "en": "What Does High Fasting Insulin Mean? | Norya Blog",
+        "de": "N\u00fcchterninsulin zu hoch: Was bedeutet das? | Norya Blog",
+        "es": "\u00bfQu\u00e9 significa la insulina en ayunas alta? | Norya Blog",
+        "fr": "Insuline \u00e0 jeun \u00e9lev\u00e9e : que signifie ce r\u00e9sultat ? | Norya Blog",
+        "it": "Insulina a digiuno alta: cosa significa? | Norya Blog",
+        "he": "\u05de\u05d4 \u05de\u05e9\u05de\u05e2\u05d5\u05ea \u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd \u05d2\u05d1\u05d5\u05d4? | Norya Blog",
+        "hi": "\u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0939\u093e\u0908 \u0915\u093e \u0915\u094d\u092f\u093e \u092e\u0924\u0932\u092c? | Norya Blog",
+        "ar": "\u0645\u0627\u0630\u0627 \u064a\u0639\u0646\u064a \u0627\u0631\u062a\u0641\u0627\u0639 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645\u061f | Norya Blog",
+    }
+    seo_descriptions = {
+        "tr": "A\u00e7l\u0131k ins\u00fclini y\u00fcksekli\u011fi, ins\u00fclin direnci, HOMA-IR ba\u011flant\u0131s\u0131 ve glukoz normal olsa bile neden ins\u00fclin y\u00fcksek olabilece\u011fi. E\u011fitim ama\u00e7l\u0131.",
+        "en": "What high fasting insulin means, its link to insulin resistance and HOMA-IR, and why glucose can be normal while insulin is high. For information only.",
+        "de": "Was erh\u00f6htes N\u00fcchterninsulin bedeutet, Zusammenhang mit Insulinresistenz und HOMA-IR, warum der Blutzucker normal sein kann. Nur zur Information.",
+        "es": "Qu\u00e9 significa insulina en ayunas alta, relaci\u00f3n con resistencia a la insulina y HOMA-IR. Solo informativo.",
+        "fr": "Insuline \u00e0 jeun \u00e9lev\u00e9e : signification, lien avec l\u2019insulinor\u00e9sistance et le HOMA-IR. \u00c0 titre informatif.",
+        "it": "Insulina a digiuno alta: significato, legame con resistenza insulinica e HOMA-IR. Solo informativo.",
+        "he": "\u05de\u05d4 \u05de\u05e9\u05de\u05e2\u05d5\u05ea \u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd \u05d2\u05d1\u05d5\u05d4, \u05e7\u05e9\u05e8 \u05dc\u05e2\u05de\u05d9\u05d3\u05d5\u05ea \u05dc\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d5-HOMA-IR. \u05dc\u05de\u05d9\u05d3\u05e2 \u05d1\u05dc\u05d1\u05d3.",
+        "hi": "\u0939\u093e\u0908 \u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0915\u093e \u092e\u0924\u0932\u092c, \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u0930\u0947\u091c\u093c\u093f\u0938\u094d\u091f\u0947\u0902\u0938 \u0914\u0930 HOMA-IR \u0938\u0947 \u0938\u0902\u092c\u0902\u0927\u0964 \u0915\u0947\u0935\u0932 \u0938\u0942\u091a\u0928\u093e\u0930\u094d\u0925\u0964",
+        "ar": "\u0645\u0627\u0630\u0627 \u064a\u0639\u0646\u064a \u0627\u0631\u062a\u0641\u0627\u0639 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645\u060c \u0639\u0644\u0627\u0642\u062a\u0647 \u0628\u0645\u0642\u0627\u0648\u0645\u0629 \u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0648HOMA-IR. \u0644\u0623\u063a\u0631\u0627\u0636 \u0625\u0639\u0644\u0627\u0645\u064a\u0629 \u0641\u0642\u0637.",
+    }
+    cover_alt = {
+        "tr": "A\u00e7l\u0131k ins\u00fclini kan tahlili \u2014 Norya",
+        "en": "Fasting insulin blood test \u2014 Norya",
+        "de": "N\u00fcchterninsulin Bluttest \u2014 Norya",
+        "es": "Insulina en ayunas an\u00e1lisis \u2014 Norya",
+        "fr": "Insuline \u00e0 jeun bilan sanguin \u2014 Norya",
+        "it": "Insulina a digiuno esame \u2014 Norya",
+        "he": "\u05d0\u05d9\u05e0\u05e1\u05d5\u05dc\u05d9\u05df \u05d1\u05e6\u05d5\u05dd \u05d1\u05d3\u05d9\u05e7\u05ea \u05d3\u05dd \u2014 Norya",
+        "hi": "\u092b\u093c\u093e\u0938\u094d\u091f\u093f\u0902\u0917 \u0907\u0902\u0938\u0941\u0932\u093f\u0928 \u092c\u094d\u0932\u0921 \u091f\u0947\u0938\u094d\u091f \u2014 Norya",
+        "ar": "\u0627\u0644\u0623\u0646\u0633\u0648\u0644\u064a\u0646 \u0627\u0644\u0635\u0627\u0626\u0645 \u062a\u062d\u0644\u064a\u0644 \u062f\u0645 \u2014 Norya",
+    }
+    sections_by_lang = get_fasting_insulin_sections_by_lang()
+    faq_schema_qa = get_fasting_insulin_faq_schema_qa()
+    return Article(
+        id="fasting-insulin-high-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+_ARTICLE_FASTING_INSULIN_HIGH = _article_fasting_insulin_high()
+
+
 # TODO: create dedicated blog posts for "complete blood count explained" and "liver enzyme test explained"
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
@@ -6055,6 +6294,8 @@ ARTICLES: List[Article] = [
     _ARTICLE_GLOBULIN,
     _ARTICLE_HIGH_WBC,
     _ARTICLE_LOW_WBC,
+    _ARTICLE_HOMA_IR,
+    _ARTICLE_FASTING_INSULIN_HIGH,
 ]
 
 
@@ -6086,25 +6327,32 @@ def _normalize_lang(lang: str | None) -> str:
 
 @lru_cache(maxsize=512)
 def _resolve_cover_image(cover_image: str | None) -> str:
-    """Return a valid cover image path or a safe fallback if file is missing."""
+    """Return a valid cover image path or a safe fallback if file is missing.
+    Prefers compressed .jpg over .png when both exist."""
     if not cover_image or not isinstance(cover_image, str):
         return BLOG_COVER_FALLBACK
     path = cover_image.strip()
     if not path:
         return BLOG_COVER_FALLBACK
-    # Absolute static path: /static/images/...
+
+    def _prefer_jpg(static_rel: str, url_prefix: str) -> str | None:
+        """If a .png is requested and .jpg exists, prefer .jpg for smaller file size."""
+        if static_rel.lower().endswith(".png"):
+            jpg_rel = static_rel[:-4] + ".jpg"
+            if (_STATIC_ROOT / jpg_rel).is_file():
+                return url_prefix + jpg_rel
+        if (_STATIC_ROOT / static_rel).is_file():
+            return url_prefix + static_rel
+        return None
+
     if path.startswith("/static/"):
         rel = path[len("/static/"):].lstrip("/")
-        if (_STATIC_ROOT / rel).is_file():
-            return path
-        return BLOG_COVER_FALLBACK
-    # Relative static path: static/images/...
+        result = _prefer_jpg(rel, "/static/")
+        return result if result else BLOG_COVER_FALLBACK
     if path.startswith("static/"):
         rel = path[len("static/"):].lstrip("/")
-        if (_STATIC_ROOT / rel).is_file():
-            return "/" + path
-        return BLOG_COVER_FALLBACK
-    # For non-static/remote URLs keep original.
+        result = _prefer_jpg(rel, "/static/")
+        return result if result else BLOG_COVER_FALLBACK
     if path.startswith("http://") or path.startswith("https://"):
         return path
     return BLOG_COVER_FALLBACK

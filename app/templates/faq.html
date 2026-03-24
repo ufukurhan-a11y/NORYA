@@ -1,15 +1,23 @@
 <!DOCTYPE html>
-<!-- DEBUG_FILE: faq.html v1 -->
+<!-- DEBUG_FILE: faq.html v2 -->
 <html lang="{{ lang }}">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
   <title>{{ meta.meta_title }}</title>
   <meta name="description" content="{{ meta.meta_description }}" />
+  <meta name="robots" content="index,follow" />
   <meta property="og:title" content="{{ meta.meta_title }}" />
   <meta property="og:description" content="{{ meta.meta_description }}" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="{{ og_locale }}" />
+  {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
+  {% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
+  {% if og_image and '/static/images/og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ meta.meta_title }}" />
+  <meta name="twitter:description" content="{{ meta.meta_description }}" />
+  {% if og_image %}<meta name="twitter:image" content="{{ og_image }}" />{% endif %}
   <meta name="theme-color" content="#0EA5A4" />
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
@@ -17,7 +25,11 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
+  {% if faq_schema_json %}
+  <script type="application/ld+json">{{ faq_schema_json|safe }}</script>
+  {% endif %}
+  <link rel="stylesheet" href="/static/css/tailwind.css" />
+  <link rel="stylesheet" href="/static/css/app.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>

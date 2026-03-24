@@ -30,6 +30,7 @@
           <th class="px-5 py-3">ID</th>
           <th class="px-5 py-3">Kurum adı</th>
           <th class="px-5 py-3">Tür</th>
+          <th class="px-5 py-3">Plan</th>
           <th class="px-5 py-3">Üyeler</th>
           <th class="px-5 py-3">Kota</th>
           <th class="px-5 py-3">Toplam analiz</th>
@@ -52,7 +53,10 @@
               {{ i.type_label }}
             </span>
           </td>
-          <td class="px-5 py-3 text-on-surface-variant">{{ i.members }}</td>
+          <td class="px-5 py-3">
+            <span class="text-xs text-on-surface-variant">{{ i.plan_label }}</span>
+          </td>
+          <td class="px-5 py-3 text-on-surface-variant">{{ i.members }} / {{ i.seat_limit }}</td>
           <td class="px-5 py-3">
             <span class="text-on-surface font-medium">{{ i.quota_used }}</span>
             <span class="text-on-surface-variant">/ {{ i.monthly_quota }}</span>
@@ -60,16 +64,20 @@
           <td class="px-5 py-3 text-on-surface-variant">{{ i.total_analyses }}</td>
           <td class="px-5 py-3 text-on-surface-variant text-xs">{{ i.contract_end }}</td>
           <td class="px-5 py-3">
-            {% if i.is_active %}
-            <span class="text-emerald-700 font-medium">Aktif</span>
+            {% if i.status == 'suspended' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-amber-50 text-amber-800">Askıda</span>
+            {% elif i.is_active and i.status == 'active' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-emerald-50 text-emerald-800">Aktif</span>
+            {% elif i.is_active and i.status == 'pilot' %}
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-blue-50 text-blue-800">Pilot</span>
             {% else %}
-            <span class="text-red-600 font-medium">Pasif</span>
+            <span class="inline-flex px-2.5 py-1 rounded-full text-xs font-medium bg-red-50 text-red-800">Pasif</span>
             {% endif %}
           </td>
           <td class="px-5 py-3"><a href="/admin/institutions/{{ i.id }}" class="text-primary font-semibold hover:text-primary-container hover:underline">Detay</a></td>
         </tr>
         {% else %}
-        <tr><td colspan="9" class="px-5 py-10 text-center text-on-surface-variant">Henüz kurum eklenmemiş.</td></tr>
+        <tr><td colspan="10" class="px-5 py-10 text-center text-on-surface-variant">Henüz kurum eklenmemiş.</td></tr>
         {% endfor %}
       </tbody>
     </table>

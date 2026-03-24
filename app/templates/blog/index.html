@@ -2,6 +2,8 @@
 
 {% block title %}{{ seo_title }}{% endblock %}
 
+{% block meta_seo %}{% endblock %}
+
 {% block head %}
   <meta name="description" content="{{ meta_description }}" />
   <link rel="canonical" href="{{ canonical_url }}" />
@@ -10,6 +12,7 @@
   <meta property="og:description" content="{{ meta_description }}" />
   <meta property="og:url" content="{{ canonical_url }}" />
   <meta property="og:image" content="{{ og_image }}" />
+  {% if og_image and '/static/images/og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}
   {% if og_locale %}<meta property="og:locale" content="{{ og_locale }}" />{% endif %}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ seo_title }}" />
@@ -245,14 +248,8 @@
               <button type="button" class="blog-pill px-4 py-2 text-sm font-medium text-slate-600 whitespace-nowrap" data-category="{{ cat }}">{{ cat }}</button>
               {% endfor %}
             </div>
-            {% if tags %}
-            <button type="button" id="blog-tag-filter-toggle" class="blog-tag-filter-button sm:hidden">
-              <svg class="h-4 w-4 text-slate-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 7h18M7 12h10M10 17h4" />
-              </svg>
-              <span>{{ blog_ui.filter_tags_label|default("Etiketler") }}</span>
-            </button>
-            {% endif %}
+
+
           </div>
         </div>
       </div>
@@ -267,29 +264,8 @@
     </div>
   </div>
 
-  {% if tags %}
-  <div id="blog-tag-drawer" class="blog-tag-drawer sm:hidden" aria-hidden="true">
-    <button type="button" class="blog-tag-drawer-backdrop" data-close-tag-drawer="true" aria-label="{{ blog_ui.close_filter_drawer|default('Close tag filter') }}"></button>
-    <div class="blog-tag-drawer-panel" role="dialog" aria-modal="true" aria-labelledby="blog-tag-drawer-title">
-      <div class="flex items-center justify-between gap-3 mb-3">
-        <h2 id="blog-tag-drawer-title" class="text-sm font-semibold text-slate-900">
-          {{ blog_ui.filter_tags_title|default("Etiket filtrele") }}
-        </h2>
-        <button type="button" class="inline-flex items-center justify-center rounded-full border border-slate-200 bg-white text-slate-500 hover:text-slate-700 hover:border-slate-300 w-8 h-8" data-close-tag-drawer="true">
-          <span class="sr-only">{{ blog_ui.close_filter_drawer|default("Close tag filter") }}</span>
-          <svg class="h-4 w-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
-      <div class="flex flex-wrap gap-2">
-        {% for tag in tags %}
-        <button type="button" class="blog-pill px-3 py-1.5 text-xs font-medium text-slate-600" data-tag="{{ tag.slug }}">{{ tag.name }}</button>
-        {% endfor %}
-      </div>
-    </div>
-  </div>
-  {% endif %}
+
+
 
   <section class="py-12 sm:py-16 px-4 sm:px-6 bg-[#fafbfc]" aria-label="{{ blog_ui.articles_section_aria|default('Articles') }}" dir="{{ 'rtl' if lang in ['ar', 'he'] else 'ltr' }}">
     <div class="max-w-5xl mx-auto">
@@ -404,10 +380,6 @@
     var list = document.getElementById('blog-list');
     var noResults = document.getElementById('blog-no-results');
     var cards = list ? list.querySelectorAll('.blog-card') : [];
-    var tagDrawer = document.getElementById('blog-tag-drawer');
-    var tagDrawerToggle = document.getElementById('blog-tag-filter-toggle');
-    var tagDrawerCloseButtons = tagDrawer ? tagDrawer.querySelectorAll('[data-close-tag-drawer="true"]') : [];
-    var tagButtons = tagDrawer ? tagDrawer.querySelectorAll('[data-tag]') : [];
     var searchDebounceTimer = null;
 
     function filter() {
@@ -430,6 +402,12 @@
       if (noResults) noResults.classList.toggle('hidden', shown > 0);
     }
 
+    var urlQ = new URLSearchParams(window.location.search).get('q');
+    if (urlQ && search) {
+      search.value = urlQ;
+      filter();
+    }
+
     if (search) {
       search.addEventListener('input', function() {
         if (searchDebounceTimer) window.clearTimeout(searchDebounceTimer);
@@ -444,39 +422,8 @@
       });
     });
 
-    if (tagDrawer && tagDrawerToggle) {
-      tagDrawerToggle.addEventListener('click', function() {
-        tagDrawer.setAttribute('data-open', 'true');
-        tagDrawer.setAttribute('aria-hidden', 'false');
-      });
-      tagDrawerCloseButtons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          tagDrawer.setAttribute('data-open', 'false');
-          tagDrawer.setAttribute('aria-hidden', 'true');
-        });
-      });
-      document.addEventListener('keydown', function(event) {
-        if (event.key === 'Escape' && tagDrawer.getAttribute('data-open') === 'true') {
-          tagDrawer.setAttribute('data-open', 'false');
-          tagDrawer.setAttribute('aria-hidden', 'true');
-        }
-      });
-      tagButtons.forEach(function(btn) {
-        btn.addEventListener('click', function() {
-          var tag = btn.getAttribute('data-tag');
-          var ev;
-          try {
-            ev = new CustomEvent('norya:blogTagSelected', { detail: { tag: tag } });
-          } catch (e) {
-            ev = document.createEvent('CustomEvent');
-            ev.initCustomEvent('norya:blogTagSelected', true, true, { tag: tag });
-          }
-          document.dispatchEvent(ev);
-          tagDrawer.setAttribute('data-open', 'false');
-          tagDrawer.setAttribute('aria-hidden', 'true');
-        });
-      });
-    }
+
+
   })();
   </script>
 {% endblock %}

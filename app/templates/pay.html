@@ -6,7 +6,8 @@
   <meta name="theme-color" content="#F8FAFA">
   <meta name="format-detection" content="telephone=no">
   <title>{{ t.pay_title }} – {{ brand }}</title>
-  <!-- Tarayıcı sekmesi: Norya N ikonu -->
+  <meta name="description" content="{{ t.get('pay_meta_description', 'Secure payment for NoryaAI blood test analysis. Choose your plan and pay safely.') }}" />
+  <meta name="robots" content="noindex,nofollow" />
   <link rel="icon" type="image/png" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="{{ base_url }}/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="{{ base_url }}/static/icons/favicon-16x16.png" />
@@ -583,7 +584,7 @@
     <header class="header">
       <div class="header-brand">
         <a href="{{ base_url }}/" aria-label="{{ brand }}">
-          <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="" width="140" height="36">{{ brand }}
+          <img src="{{ base_url }}/static/norya_logo_transparent_trim.png" alt="{{ brand }}" width="140" height="36">{{ brand }}
         </a>
         <span class="brand-tagline">{{ t.brand_trust_line }}</span>
       </div>

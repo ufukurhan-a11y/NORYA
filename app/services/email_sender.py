@@ -950,3 +950,89 @@ def send_welcome_email(to_email: str, lang: str = "en", base_url: str = "https:/
     """Lead subscribe sonrası welcome e-postası gönderir."""
     subject, html = build_welcome_email_html(lang, base_url)
     return send_email(to_email, subject, html)
+
+
+# ---------------------------------------------------------------------------
+# Enterprise lead notification (admin bildirim)
+# ---------------------------------------------------------------------------
+
+def build_enterprise_lead_notification_html(
+    kurum_adi: str,
+    yetkili_ad: str,
+    email: str,
+    telefon: str | None = None,
+    kurum_tipi: str | None = None,
+    aylik_rapor: str | None = None,
+    mesaj: str | None = None,
+) -> tuple[str, str]:
+    """Admin'e gönderilecek kurumsal demo talebi bildirim e-postası."""
+    subject = f"Yeni kurumsal talep: {kurum_adi}"
+
+    rows = f"""
+    <tr><td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap;">Kurum adı</td><td style="padding:8px 12px;color:#1e293b;">{kurum_adi}</td></tr>
+    <tr style="background:#f8fafc;"><td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap;">Yetkili</td><td style="padding:8px 12px;color:#1e293b;">{yetkili_ad}</td></tr>
+    <tr><td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap;">E-posta</td><td style="padding:8px 12px;color:#1e293b;"><a href="mailto:{email}" style="color:#0d9488;">{email}</a></td></tr>
+    """
+    if telefon:
+        rows += f'<tr style="background:#f8fafc;"><td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap;">Telefon</td><td style="padding:8px 12px;color:#1e293b;">{telefon}</td></tr>'
+    if kurum_tipi:
+        rows += f'<tr><td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap;">Kurum türü</td><td style="padding:8px 12px;color:#1e293b;">{kurum_tipi}</td></tr>'
+    if aylik_rapor:
+        rows += f'<tr style="background:#f8fafc;"><td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap;">Aylık rapor</td><td style="padding:8px 12px;color:#1e293b;">{aylik_rapor}</td></tr>'
+    if mesaj:
+        rows += f'<tr><td style="padding:8px 12px;font-weight:600;color:#334155;white-space:nowrap;">Mesaj</td><td style="padding:8px 12px;color:#1e293b;">{mesaj}</td></tr>'
+
+    admin_url = (getattr(settings, "frontend_url", None) or "").strip().rstrip("/") or "https://noryaai.com"
+
+    html = f"""<!DOCTYPE html>
+<html lang="tr">
+<head><meta charset="UTF-8"/><title>{subject}</title></head>
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:'Segoe UI',system-ui,sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f1f5f9;">
+    <tr><td align="center" style="padding:32px 16px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(10,25,41,0.08);overflow:hidden;">
+        <tr><td style="background:linear-gradient(135deg,#1a2d42 0%,#2d4a6f 50%,#0d9488 100%);padding:24px;text-align:center;">
+          <div style="font-size:14px;letter-spacing:0.12em;color:rgba(255,255,255,0.9);font-weight:700;">NORYA</div>
+          <div style="font-size:18px;font-weight:600;color:#ffffff;margin-top:4px;">Yeni Kurumsal Demo Talebi</div>
+        </td></tr>
+        <tr><td style="padding:24px;">
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;font-size:14px;">
+            {rows}
+          </table>
+          <p style="margin:24px 0 0;text-align:center;">
+            <a href="{admin_url}/admin/enterprise-leads" style="display:inline-block;padding:12px 24px;background:#0d9488;color:#ffffff!important;text-decoration:none;font-weight:600;font-size:14px;border-radius:10px;">Admin panelde görüntüle</a>
+          </p>
+        </td></tr>
+        <tr><td style="padding:16px 24px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;text-align:center;">&copy; Norya — Kurumsal bildirim</td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>"""
+    return subject, html
+
+
+def send_enterprise_lead_notification(
+    kurum_adi: str,
+    yetkili_ad: str,
+    email: str,
+    telefon: str | None = None,
+    kurum_tipi: str | None = None,
+    aylik_rapor: str | None = None,
+    mesaj: str | None = None,
+) -> bool:
+    """Kurumsal demo talebi geldiğinde admin e-postasına bildirim gönderir."""
+    admin_email = getattr(settings, "admin_notification_email", None) or getattr(settings, "smtp_from", None)
+    if not admin_email:
+        log.warning("No admin_notification_email configured; enterprise lead notification skipped")
+        return False
+    subject, html = build_enterprise_lead_notification_html(
+        kurum_adi=kurum_adi,
+        yetkili_ad=yetkili_ad,
+        email=email,
+        telefon=telefon,
+        kurum_tipi=kurum_tipi,
+        aylik_rapor=aylik_rapor,
+        mesaj=mesaj,
+    )
+    return send_email(admin_email, subject, html)

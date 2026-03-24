@@ -15,6 +15,7 @@ from app.models import (
     User,
 )
 from app.models.institution import Institution, InstitutionInvite, InstitutionMembership
+from app.models.enterprise_subscription import EnterpriseSubscription
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -26,11 +27,56 @@ INSTITUTION_TYPES = [
     ("network", "Sağlayıcı Ağı"),
 ]
 
+INSTITUTION_STATUSES = [
+    ("pilot", "Pilot"),
+    ("active", "Aktif"),
+    ("suspended", "Askıda"),
+]
+
+INSTITUTION_PLANS = [
+    ("enterprise", "Enterprise"),
+    ("pro", "Pro Hastane"),
+    ("custom", "Özel"),
+]
+
 MEMBER_ROLES = [
     ("admin", "Yönetici"),
     ("reviewer", "Gözlemci"),
     ("member", "Üye"),
 ]
+
+
+def _sync_enterprise_subscription(db: Session, inst: Institution) -> None:
+    """Kurum oluşturulduğunda veya düzenlendiğinde EnterpriseSubscription kaydını senkronize et."""
+    sub = db.exec(
+        select(EnterpriseSubscription)
+        .where(EnterpriseSubscription.institution_id == inst.id)
+        .order_by(EnterpriseSubscription.created_at.desc())
+    ).first()
+
+    billing_status = "active" if inst.is_active and inst.status != "suspended" else "cancelled"
+    if inst.status == "pilot":
+        billing_status = "trial"
+
+    if sub:
+        sub.plan_name = inst.plan
+        sub.billing_status = billing_status
+        sub.quota_limit = inst.monthly_quota
+        sub.seat_limit = inst.seat_limit
+        sub.start_date = inst.contract_start
+        sub.end_date = inst.contract_end
+        db.add(sub)
+    else:
+        sub = EnterpriseSubscription(
+            institution_id=inst.id,
+            plan_name=inst.plan,
+            billing_status=billing_status,
+            start_date=inst.contract_start,
+            end_date=inst.contract_end,
+            quota_limit=inst.monthly_quota,
+            seat_limit=inst.seat_limit,
+        )
+        db.add(sub)
 
 
 @router.get("", response_class=HTMLResponse)
@@ -64,13 +110,19 @@ def institutions_list(
             usage_counts[row[0]] = row[1]
 
     type_labels = dict(INSTITUTION_TYPES)
+    status_labels = dict(INSTITUTION_STATUSES)
+    plan_labels = dict(INSTITUTION_PLANS)
     rows = [
         {
             "id": i.id,
             "name": i.name,
             "type": i.type,
             "type_label": type_labels.get(i.type, i.type),
+            "status": i.status,
+            "status_label": status_labels.get(i.status, i.status),
             "plan": i.plan,
+            "plan_label": plan_labels.get(i.plan, i.plan),
+            "seat_limit": i.seat_limit,
             "monthly_quota": i.monthly_quota,
             "quota_used": i.quota_used_this_month,
             "is_active": i.is_active,
@@ -95,6 +147,8 @@ def institution_create_form(request: Request, _=Depends(require_admin_cookie)):
         "request": request,
         "institution": None,
         "types": INSTITUTION_TYPES,
+        "statuses": INSTITUTION_STATUSES,
+        "plans": INSTITUTION_PLANS,
         "mode": "create",
     })
 
@@ -106,6 +160,9 @@ def institution_create(
     db: Session = Depends(get_db),
     name: str = Form(...),
     type: str = Form("hospital"),
+    status: str = Form("pilot"),
+    plan: str = Form("enterprise"),
+    seat_limit: int = Form(25),
     monthly_quota: int = Form(100),
     quota_reset_day: int = Form(1),
     contact_email: str = Form(""),
@@ -117,6 +174,9 @@ def institution_create(
     inst = Institution(
         name=name.strip(),
         type=type,
+        status=status if status in ("pilot", "active", "suspended") else "pilot",
+        plan=plan if plan in ("enterprise", "pro", "custom") else "enterprise",
+        seat_limit=max(seat_limit, 1),
         monthly_quota=monthly_quota,
         quota_reset_day=min(max(quota_reset_day, 1), 28),
         contact_email=contact_email.strip() or None,
@@ -134,6 +194,8 @@ def institution_create(
         except ValueError:
             pass
     db.add(inst)
+    db.flush()
+    _sync_enterprise_subscription(db, inst)
     db.commit()
     db.refresh(inst)
     return RedirectResponse(url=f"/admin/institutions/{inst.id}", status_code=303)
@@ -202,15 +264,22 @@ def institution_detail(
 
     type_labels = dict(INSTITUTION_TYPES)
 
+    status_labels = dict(INSTITUTION_STATUSES)
+    plan_labels = dict(INSTITUTION_PLANS)
+
     return templates.TemplateResponse("admin/institution_detail.html", {
         "request": request,
         "inst": inst,
         "type_label": type_labels.get(inst.type, inst.type),
+        "status_label": status_labels.get(inst.status, inst.status),
+        "plan_label": plan_labels.get(inst.plan, inst.plan),
         "members": members,
         "pending_invites": pending_invites,
         "recent_analyses": recent,
         "roles": MEMBER_ROLES,
         "types": INSTITUTION_TYPES,
+        "statuses": INSTITUTION_STATUSES,
+        "plans": INSTITUTION_PLANS,
     })
 
 
@@ -222,6 +291,9 @@ def institution_edit(
     db: Session = Depends(get_db),
     name: str = Form(...),
     type: str = Form("hospital"),
+    status: str = Form("pilot"),
+    plan: str = Form("enterprise"),
+    seat_limit: int = Form(25),
     monthly_quota: int = Form(100),
     quota_reset_day: int = Form(1),
     is_active: bool = Form(False),
@@ -236,6 +308,9 @@ def institution_edit(
         return HTMLResponse("Kurum bulunamadı", status_code=404)
     inst.name = name.strip()
     inst.type = type
+    inst.status = status if status in ("pilot", "active", "suspended") else inst.status
+    inst.plan = plan if plan in ("enterprise", "pro", "custom") else inst.plan
+    inst.seat_limit = max(seat_limit, 1)
     inst.monthly_quota = monthly_quota
     inst.quota_reset_day = min(max(quota_reset_day, 1), 28)
     inst.is_active = is_active
@@ -252,7 +327,9 @@ def institution_edit(
             inst.contract_end = datetime.strptime(contract_end, "%Y-%m-%d")
         except ValueError:
             pass
+    inst.updated_at = datetime.utcnow()
     db.add(inst)
+    _sync_enterprise_subscription(db, inst)
     db.commit()
     return RedirectResponse(url=f"/admin/institutions/{inst_id}", status_code=303)
 

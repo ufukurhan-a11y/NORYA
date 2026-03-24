@@ -6,7 +6,7 @@ function isLocalePath(pathname) {
   var seg = pathname.replace(/^\/+/, '').split('/')[0];
   return LOCALE_PREFIXES.indexOf(seg) !== -1;
 }
-const STATIC_CACHE = ['/', '/static/index.html', '/static/manifest.json', '/static/manifest.webmanifest', '/static/norya_logo_transparent_trim.png', '/static/css/app.css'];
+const STATIC_CACHE = ['/', '/static/index.html', '/static/manifest.json', '/static/manifest.webmanifest', '/static/norya_logo_transparent_trim.png', '/static/images/og-default.png', '/static/css/app.css'];
 
 self.addEventListener('install', function (e) {
   e.waitUntil(

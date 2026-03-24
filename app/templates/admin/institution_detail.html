@@ -7,13 +7,14 @@
   Kurum listesine dön
 </a>
 
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-6 mb-8">
   <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-5">
     <p class="text-xs uppercase tracking-wider text-on-surface-variant mb-1">Durum</p>
-    <p class="text-lg font-bold font-headline {% if inst.is_active %}text-emerald-700{% else %}text-red-600{% endif %}">
-      {% if inst.is_active %}Aktif{% else %}Pasif{% endif %}
+    <p class="text-lg font-bold font-headline {% if inst.is_active and inst.status != 'suspended' %}text-emerald-700{% elif inst.status == 'suspended' %}text-amber-700{% else %}text-red-600{% endif %}">
+      {{ status_label }}{% if not inst.is_active %} (Pasif){% endif %}
     </p>
-    <p class="text-xs text-on-surface-variant mt-1">Tür: {{ type_label }}</p>
+    <p class="text-xs text-on-surface-variant mt-1">Tür: {{ type_label }} · Plan: {{ plan_label }}</p>
+    <p class="text-xs text-on-surface-variant">Koltuk: {{ inst.seat_limit }}</p>
   </div>
   <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-5">
     <p class="text-xs uppercase tracking-wider text-on-surface-variant mb-1">Aylık kota</p>
@@ -60,21 +61,37 @@
           </select>
         </div>
         <div>
-          <label class="block text-sm font-medium text-on-surface mb-1">Aylık kota</label>
-          <input type="number" name="monthly_quota" value="{{ inst.monthly_quota }}" min="1" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+          <label class="block text-sm font-medium text-on-surface mb-1">Durum</label>
+          <select name="status" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm">
+            {% for val, label in statuses %}<option value="{{ val }}" {% if inst.status == val %}selected{% endif %}>{{ label }}</option>{% endfor %}
+          </select>
         </div>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Plan</label>
+          <select name="plan" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm">
+            {% for val, label in plans %}<option value="{{ val }}" {% if inst.plan == val %}selected{% endif %}>{{ label }}</option>{% endfor %}
+          </select>
+        </div>
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Koltuk limiti</label>
+          <input type="number" name="seat_limit" value="{{ inst.seat_limit }}" min="1" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="block text-sm font-medium text-on-surface mb-1">Aylık kota</label>
+          <input type="number" name="monthly_quota" value="{{ inst.monthly_quota }}" min="1" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
+        </div>
+        <div>
           <label class="block text-sm font-medium text-on-surface mb-1">Kota sıfırlama günü</label>
           <input type="number" name="quota_reset_day" value="{{ inst.quota_reset_day }}" min="1" max="28" class="w-full px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-sm" />
         </div>
-        <div class="flex items-end pb-1">
-          <label class="flex items-center gap-2 text-sm font-medium text-on-surface">
-            <input type="checkbox" name="is_active" value="true" {% if inst.is_active %}checked{% endif %} class="rounded border-outline-variant/40" />
-            Aktif
-          </label>
-        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <input type="checkbox" name="is_active" id="edit_is_active" value="true" {% if inst.is_active %}checked{% endif %} class="rounded border-outline-variant/40" />
+        <label for="edit_is_active" class="text-sm font-medium text-on-surface">Kurum aktif</label>
       </div>
       <div class="grid grid-cols-2 gap-4">
         <div>

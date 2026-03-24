@@ -2,6 +2,8 @@
 
 {% block title %}{{ article.seo_title or article.title }}{% endblock %}
 
+{% block meta_seo %}{% endblock %}
+
 {% block head %}
   <meta name="description" content="{{ article.seo_description or article.subtitle }}" />
   <link rel="canonical" href="{{ canonical_url }}" />
@@ -255,6 +257,15 @@
 
         <div class="prose prose-slate prose-lg max-w-none prose-headings:font-semibold prose-headings:text-slate-900 prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline">
           {% for section in article.sections %}
+          {% if loop.index == (article.sections|length // 2 + 1) and article.sections|length > 4 %}
+          <aside class="not-prose my-10 rounded-xl border border-teal-200/50 bg-gradient-to-r from-teal-50/60 to-cyan-50/40 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
+            <div class="flex-1 min-w-0">
+              <p class="text-sm font-semibold text-slate-800">{{ blog_ui.mid_cta_title|default("Want to understand your own results?") }}</p>
+              <p class="text-xs text-slate-500 mt-0.5">{{ blog_ui.mid_cta_desc|default("Upload your blood test and get a clear AI-powered explanation.") }}</p>
+            </div>
+            <a href="/{{ current_lang }}/upload" class="inline-flex items-center justify-center rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 transition whitespace-nowrap">{{ blog_ui.mid_cta_btn|default("Try NoryaAI") }}</a>
+          </aside>
+          {% endif %}
           {% if section.level == 2 %}
           <h2 id="{{ section.id }}" class="scroll-mt-24 text-2xl sm:text-3xl mt-10 first:mt-0">{{ section.heading }}</h2>
           {% else %}
