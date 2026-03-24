@@ -94,6 +94,10 @@ from app.seo_landing_i18n import (
     iter_seo_landing_urls,
     OG_LOCALE_MAP as SEO_OG_LOCALE_MAP,
 )
+from app.landing_upload_i18n import get_upload_landing_content, get_upload_landing_slug, UPLOAD_SLUGS
+from app.landing_explained_i18n import get_explained_landing_content, get_explained_landing_slug, EXPLAINED_SLUGS
+from app.landing_sample_reports_i18n import get_sample_reports_landing_content, get_sample_reports_landing_slug, SAMPLE_REPORTS_SLUGS
+from app.landing_multilingual_i18n import get_multilingual_landing_content, get_multilingual_landing_slug, MULTILINGUAL_SLUGS
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.pricing_page_i18n import PRICING_HREFLANG_LANGS, enrich_pricing_context
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_blog_icon_paths, get_related_articles, iter_all_article_paths, list_articles_for_lang
@@ -5712,286 +5716,108 @@ def editorial_en_why_not_generic_ai(request: Request):
     })
 
 
-@app.get("/en/upload-blood-test-results", response_class=HTMLResponse)
-def landing_en_upload_blood_test(request: Request):
+def _render_upload_landing(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
-    t = {
-        "meta_title": "Upload Blood Test Results \u2014 AI-Powered Analysis | NoryaAI",
-        "meta_description": "Upload your blood test PDF, photo, or lab report and get a structured, doctor-ready summary with reference ranges, health score, and flagged markers \u2014 in minutes.",
-        "hero_title": "Upload Your Blood Test Results",
-        "hero_sub": "Upload a PDF, snap a photo, or paste your lab values. NoryaAI turns your blood test into a structured, easy-to-read report with reference ranges, flagged markers, and a health score.",
-        "hero_trust": "Encrypted upload \u00b7 GDPR & KVKK compliant \u00b7 No data sharing",
-        "cta_hero_primary": "Start analysis",
-        "cta_hero_secondary": "View sample report",
-        "formats_title": "Supported upload formats",
-        "formats_sub": "Choose whichever method is easiest for you \u2014 all three produce the same structured report.",
-        "formats": [
-            {
-                "icon": "\U0001f4c4",
-                "title": "PDF lab reports",
-                "desc": "Upload the PDF you received from your lab or hospital. NoryaAI reads tables, values, and reference ranges directly from the document.",
-            },
-            {
-                "icon": "\U0001f4f7",
-                "title": "Photos & screenshots",
-                "desc": "Take a photo of your printed report or screenshot your online lab portal. JPG and PNG files are supported.",
-            },
-            {
-                "icon": "\u2328\ufe0f",
-                "title": "Pasted text",
-                "desc": "No file? Copy and paste your lab values directly. NoryaAI will structure them into a complete report.",
-            },
-        ],
-        "steps_title": "What happens after you upload",
-        "steps_sub": "From upload to a structured report \u2014 the entire process takes just a few minutes.",
-        "steps": [
-            {
-                "icon": "\U0001f4e4",
-                "title": "Upload your report",
-                "desc": "Choose a PDF, photo, or paste your lab values into the analysis form.",
-            },
-            {
-                "icon": "\U0001f9e0",
-                "title": "AI reads your data",
-                "desc": "Values, units, and reference ranges are extracted and structured automatically.",
-            },
-            {
-                "icon": "\U0001f4cb",
-                "title": "Structured summary",
-                "desc": "Health score, category breakdown, and flagged markers \u2014 all in one clear view.",
-            },
-            {
-                "icon": "\U0001f4e5",
-                "title": "Download your report",
-                "desc": "Get a doctor-ready PDF you can print, save, or share at your next appointment.",
-            },
-        ],
-        "reasons_title": "Why people upload their results here",
-        "reasons": [
-            {
-                "icon": "\U0001fa7a",
-                "title": "Before a doctor visit",
-                "desc": "Arrive at your appointment with a clear, organized summary. It helps you ask better questions and makes the conversation more productive.",
-            },
-            {
-                "icon": "\U0001f310",
-                "title": "Reports in another language",
-                "desc": "Got lab results in a language you do not fully understand? Upload them and get a structured explanation in your preferred language \u2014 9+ languages supported.",
-            },
-            {
-                "icon": "\U0001f4d6",
-                "title": "To understand a complex report",
-                "desc": "Pages of lab data can be overwhelming. NoryaAI turns them into a categorized, easy-to-read breakdown with reference ranges and clear explanations.",
-            },
-        ],
-        "trust_title": "Your data stays yours",
-        "trust_sub": "Privacy is not an afterthought. It is built into every step of the upload and analysis process.",
-        "trust_items": [
-            {"icon": "\U0001f512", "text": "Encrypted in transit and at rest"},
-            {"icon": "\U0001f6e1\ufe0f", "text": "GDPR & KVKK compliant"},
-            {"icon": "\U0001f6ab", "text": "Never shared or sold"},
-            {"icon": "\U0001f504", "text": "Not used for model training"},
-        ],
-        "preview_title": "What your report looks like",
-        "preview_sub": "Here is a glimpse of the structured output you receive after uploading your blood test.",
-        "preview_lines": [
-            {"label": "Health Score", "value": "78 / 100 \u2014 Good overall, a few markers to watch"},
-            {"label": "Hemoglobin", "value": "14.2 g/dL \u2014 Within normal range (13.5\u201317.5)"},
-            {"label": "Glucose", "value": "108 mg/dL \u2014 Slightly elevated (normal: 70\u2013100)"},
-            {"label": "TSH", "value": "2.1 mIU/L \u2014 Normal thyroid function (0.4\u20134.0)"},
-            {"label": "Vitamin D", "value": "18 ng/mL \u2014 Below recommended level (30\u2013100)"},
-        ],
-        "preview_disclaimer": "Sample data for illustration only. Your actual report will reflect your personal lab values, units, and reference ranges.",
-        "preview_link": "See a full sample report \u2192",
-        "faqs": [
-            {
-                "q": "What file formats can I upload?",
-                "a": "NoryaAI accepts PDF files, JPG/JPEG images, and PNG images. You can also paste your lab values as text if you do not have a file to upload.",
-            },
-            {
-                "q": "How long does the analysis take?",
-                "a": "Most reports are processed in under two minutes. Complex multi-page PDFs may take slightly longer, but you will see your structured summary shortly after uploading.",
-            },
-            {
-                "q": "Is my uploaded report stored or shared?",
-                "a": "Your uploaded file is used only to generate your report. All data is encrypted in transit and at rest, never shared with third parties, and never used for model training. NoryaAI is GDPR and KVKK compliant.",
-            },
-            {
-                "q": "Can I upload reports in languages other than English?",
-                "a": "Yes. NoryaAI can read lab reports in multiple languages and generate your structured summary in any of 9+ supported languages, including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic.",
-            },
-            {
-                "q": "Do I need to create an account to upload?",
-                "a": "You can start an analysis without creating an account. An account lets you save your reports, track results over time, and access them from any device.",
-            },
-            {
-                "q": "Is NoryaAI a replacement for my doctor?",
-                "a": "No. NoryaAI provides structured, educational explanations of your lab values to help you understand your results better. It does not diagnose, treat, or prescribe. Always consult a qualified healthcare professional for medical decisions.",
-            },
-        ],
-        "cta_title": "Ready to upload your blood test?",
-        "cta_sub": "Get a structured, doctor-ready report in minutes. PDF, photo, or pasted text \u2014 your choice.",
-        "cta_primary": "Upload and analyze now",
-        "cta_secondary": "View pricing",
-    }
+    slug = get_upload_landing_slug(lang)
+    t = get_upload_landing_content(lang)
+    hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_upload_landing_slug(la)}"} for la in UPLOAD_SLUGS]
+    hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{UPLOAD_SLUGS['en']}"})
     return templates.TemplateResponse("upload_landing.html", {
         "request": request,
-        "lang": "en",
+        "lang": lang,
         "t": t,
         "base_url": base_url,
-        "canonical_url": f"{base_url}/en/upload-blood-test-results",
+        "canonical_url": f"{base_url}/{lang}/{slug}",
+        "hreflang_links": hreflang,
     })
 
+@app.get("/en/upload-blood-test-results", response_class=HTMLResponse)
+def landing_en_upload(request: Request):
+    return _render_upload_landing(request, "en")
 
-@app.get("/en/blood-test-results-explained", response_class=HTMLResponse)
-def landing_en_blood_test_explained(request: Request):
+@app.get("/tr/kan-tahlili-yukle", response_class=HTMLResponse)
+def landing_tr_upload(request: Request):
+    return _render_upload_landing(request, "tr")
+
+@app.get("/de/bluttest-hochladen", response_class=HTMLResponse)
+def landing_de_upload(request: Request):
+    return _render_upload_landing(request, "de")
+
+@app.get("/es/upload-blood-test-results", response_class=HTMLResponse)
+def landing_es_upload(request: Request):
+    return _render_upload_landing(request, "es")
+
+@app.get("/fr/upload-blood-test-results", response_class=HTMLResponse)
+def landing_fr_upload(request: Request):
+    return _render_upload_landing(request, "fr")
+
+@app.get("/it/upload-blood-test-results", response_class=HTMLResponse)
+def landing_it_upload(request: Request):
+    return _render_upload_landing(request, "it")
+
+@app.get("/he/upload-blood-test-results", response_class=HTMLResponse)
+def landing_he_upload(request: Request):
+    return _render_upload_landing(request, "he")
+
+@app.get("/hi/upload-blood-test-results", response_class=HTMLResponse)
+def landing_hi_upload(request: Request):
+    return _render_upload_landing(request, "hi")
+
+@app.get("/ar/upload-blood-test-results", response_class=HTMLResponse)
+def landing_ar_upload(request: Request):
+    return _render_upload_landing(request, "ar")
+
+
+def _render_explained_landing(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
-    t = {
-        "meta_title": "Blood Test Results Explained \u2014 What Your Report Actually Means | NoryaAI",
-        "meta_description": "Not sure what your blood test results mean? Learn how to read abbreviations, reference ranges, and units \u2014 and how a structured AI report can make it clearer.",
-        "hero_title": "Blood Test Results Explained",
-        "hero_sub": "Lab reports are packed with abbreviations, numbers, and ranges that most people were never taught to read. This guide covers what makes them confusing, what to look for, and how a structured approach can help you understand your results before your next doctor visit.",
-        "cta_hero_primary": "Analyze my blood test",
-        "cta_hero_secondary": "See a sample report",
-        "confusing_title": "Why blood test reports can feel confusing",
-        "confusing_sub": "You are not the only one who finds lab reports hard to read. Here are the most common reasons people struggle with them.",
-        "confusing_items": [
-            {
-                "icon": "\U0001f524",
-                "title": "Unfamiliar abbreviations",
-                "desc": "WBC, RBC, ALT, TSH, HbA1c \u2014 lab reports are full of shorthand that is rarely explained on the document itself.",
-            },
-            {
-                "icon": "\U0001f4cf",
-                "title": "Reference ranges that vary",
-                "desc": "What counts as \u201cnormal\u201d can differ between labs, age groups, and even measurement methods. A value that is flagged at one lab may be fine at another.",
-            },
-            {
-                "icon": "\u2696\ufe0f",
-                "title": "Different units, same test",
-                "desc": "Hemoglobin in g/dL or g/L? Glucose in mg/dL or mmol/L? The same biomarker can appear in different units depending on the country or lab.",
-            },
-            {
-                "icon": "\U0001f4c4",
-                "title": "Dense formatting, no explanation",
-                "desc": "Most lab reports are designed for clinicians, not patients. You get rows of numbers but no context about what they mean for you.",
-            },
-        ],
-        "clarify_title": "What NoryaAI helps clarify",
-        "clarify_sub": "NoryaAI does not replace your doctor. It gives you a structured, readable version of your results so you can walk into your appointment better informed.",
-        "clarify_items": [
-            {
-                "icon": "\U0001f4d6",
-                "title": "Plain-language explanations",
-                "desc": "Each biomarker comes with a clear, jargon-free explanation of what it measures and why it matters.",
-            },
-            {
-                "icon": "\U0001f4ca",
-                "title": "Reference ranges in context",
-                "desc": "Your values are shown alongside reference ranges so you can see where you stand \u2014 high, low, or within normal limits.",
-            },
-            {
-                "icon": "\U0001f3f7\ufe0f",
-                "title": "Flagged markers",
-                "desc": "Values outside the expected range are highlighted so you can focus on what may need attention.",
-            },
-            {
-                "icon": "\U0001f4cb",
-                "title": "Structured categories",
-                "desc": "Results are grouped by category \u2014 liver, kidney, thyroid, blood cells, and more \u2014 instead of a flat list of numbers.",
-            },
-            {
-                "icon": "\U0001f310",
-                "title": "Multilingual reports",
-                "desc": "Get your report in 9+ languages with medical context preserved. Useful when your lab report is in a language you do not fully understand.",
-            },
-            {
-                "icon": "\U0001fa7a",
-                "title": "Doctor-ready summary",
-                "desc": "A clean PDF with a health score and QR verification that you can print, save, or share at your next appointment.",
-            },
-        ],
-        "common_title": "Common things people look for in their results",
-        "common_sub": "These are some of the most frequently searched biomarkers and panels. NoryaAI covers all of them in its structured reports.",
-        "common_items": [
-            {"title": "Complete Blood Count (CBC)", "desc": "WBC, RBC, hemoglobin, hematocrit, platelets \u2014 the most common panel in routine checkups."},
-            {"title": "Liver function (ALT, AST, ALP)", "desc": "Enzymes that indicate how well your liver is working. Often checked in routine bloodwork."},
-            {"title": "Kidney function (BUN, creatinine)", "desc": "Markers that show how effectively your kidneys are filtering waste from your blood."},
-            {"title": "Thyroid panel (TSH, T3, T4)", "desc": "Hormones that regulate metabolism, energy levels, and body temperature."},
-            {"title": "Blood sugar (glucose, HbA1c)", "desc": "Fasting glucose and long-term average blood sugar. Key markers for metabolic health."},
-            {"title": "Cholesterol & lipids (LDL, HDL, triglycerides)", "desc": "Lipid panel results that are commonly discussed in cardiovascular health assessments."},
-            {"title": "Iron & ferritin", "desc": "Markers related to iron storage and transport. Relevant for fatigue, anemia, and general energy levels."},
-            {"title": "Vitamin D & B12", "desc": "Common vitamin levels that many people have checked, especially in routine annual bloodwork."},
-            {"title": "Inflammation markers (CRP, ESR)", "desc": "General indicators of inflammation in the body. Often used as a screening baseline."},
-        ],
-        "how_title": "How it works",
-        "how_sub": "Three steps from a confusing lab report to a structured summary you can actually understand.",
-        "how_steps": [
-            {
-                "icon": "\U0001f4e4",
-                "title": "Upload your report",
-                "desc": "PDF, photo, or pasted text. Choose whatever is easiest.",
-            },
-            {
-                "icon": "\U0001f9e0",
-                "title": "AI structures your data",
-                "desc": "Values, units, and ranges are extracted and organized into clear categories.",
-            },
-            {
-                "icon": "\U0001f4e5",
-                "title": "Get your explained report",
-                "desc": "Health score, flagged markers, plain-language explanations, and a downloadable PDF.",
-            },
-        ],
-        "preview_title": "What your explained report looks like",
-        "preview_sub": "Here is a glimpse of how NoryaAI structures and explains your blood test results.",
-        "preview_lines": [
-            {"label": "Health Score", "value": "78 / 100 \u2014 Good overall, a few markers to review"},
-            {"label": "WBC", "value": "6.8 \u00d710\u00b3/\u00b5L \u2014 Normal white blood cell count (4.5\u201311.0)"},
-            {"label": "Hemoglobin", "value": "14.2 g/dL \u2014 Within reference range (13.5\u201317.5)"},
-            {"label": "ALT", "value": "42 U/L \u2014 Slightly elevated liver enzyme (normal: 7\u201335)"},
-            {"label": "TSH", "value": "2.1 mIU/L \u2014 Normal thyroid function (0.4\u20134.0)"},
-            {"label": "Vitamin D", "value": "18 ng/mL \u2014 Below recommended level (30\u2013100)"},
-        ],
-        "preview_disclaimer": "Sample data for illustration only. Your actual report will reflect your personal lab values, units, and reference ranges.",
-        "faqs": [
-            {
-                "q": "What does \u201cblood test results explained\u201d actually mean?",
-                "a": "It means turning the raw numbers, abbreviations, and reference ranges on your lab report into plain-language explanations you can understand \u2014 with context about what each value measures and whether it falls within normal limits.",
-            },
-            {
-                "q": "Can NoryaAI explain any type of blood test?",
-                "a": "NoryaAI supports most standard blood panels including CBC, metabolic panels, liver and kidney function, thyroid, lipids, vitamins, and inflammation markers. If your report contains values it can parse, they will be included in your structured summary.",
-            },
-            {
-                "q": "Is this a medical diagnosis?",
-                "a": "No. NoryaAI provides structured, educational explanations of your lab values. It does not diagnose conditions, recommend treatments, or replace professional medical advice. Always consult a qualified healthcare professional.",
-            },
-            {
-                "q": "Why do reference ranges differ between labs?",
-                "a": "Labs use different equipment, methods, and population samples to establish their ranges. Age, sex, and even altitude can influence what a lab considers \u201cnormal.\u201d This is why the same value might be flagged at one lab but not another.",
-            },
-            {
-                "q": "Can I get my results explained in another language?",
-                "a": "Yes. NoryaAI generates reports in 9+ languages including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic \u2014 with medical context preserved in translation.",
-            },
-            {
-                "q": "How is this different from just Googling my results?",
-                "a": "Googling individual values one by one gives you scattered, generic information. NoryaAI reads your entire report at once, compares each value against its reference range, and produces a single structured summary with a health score, flagged markers, and categories \u2014 all in one place.",
-            },
-        ],
-        "cta_title": "Ready to understand your blood test?",
-        "cta_sub": "Upload your lab report and get a clear, structured summary with plain-language explanations \u2014 in minutes.",
-        "cta_primary": "Upload and analyze now",
-        "cta_secondary": "View pricing",
-    }
+    slug = get_explained_landing_slug(lang)
+    t = get_explained_landing_content(lang)
+    hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_explained_landing_slug(la)}"} for la in EXPLAINED_SLUGS]
+    hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{EXPLAINED_SLUGS['en']}"})
     return templates.TemplateResponse("explained_landing.html", {
         "request": request,
-        "lang": "en",
+        "lang": lang,
         "t": t,
         "base_url": base_url,
-        "canonical_url": f"{base_url}/en/blood-test-results-explained",
+        "canonical_url": f"{base_url}/{lang}/{slug}",
+        "hreflang_links": hreflang,
     })
+
+@app.get("/en/blood-test-results-explained", response_class=HTMLResponse)
+def landing_en_explained(request: Request):
+    return _render_explained_landing(request, "en")
+
+@app.get("/tr/kan-tahlili-sonuclari-aciklama", response_class=HTMLResponse)
+def landing_tr_explained(request: Request):
+    return _render_explained_landing(request, "tr")
+
+@app.get("/de/blutwerte-erklart", response_class=HTMLResponse)
+def landing_de_explained(request: Request):
+    return _render_explained_landing(request, "de")
+
+@app.get("/es/blood-test-results-explained", response_class=HTMLResponse)
+def landing_es_explained(request: Request):
+    return _render_explained_landing(request, "es")
+
+@app.get("/fr/blood-test-results-explained", response_class=HTMLResponse)
+def landing_fr_explained(request: Request):
+    return _render_explained_landing(request, "fr")
+
+@app.get("/it/blood-test-results-explained", response_class=HTMLResponse)
+def landing_it_explained(request: Request):
+    return _render_explained_landing(request, "it")
+
+@app.get("/he/blood-test-results-explained", response_class=HTMLResponse)
+def landing_he_explained(request: Request):
+    return _render_explained_landing(request, "he")
+
+@app.get("/hi/blood-test-results-explained", response_class=HTMLResponse)
+def landing_hi_explained(request: Request):
+    return _render_explained_landing(request, "hi")
+
+@app.get("/ar/blood-test-results-explained", response_class=HTMLResponse)
+def landing_ar_explained(request: Request):
+    return _render_explained_landing(request, "ar")
 
 
 @app.get("/en/guides/how-to-read-cbc", response_class=HTMLResponse)
@@ -6265,328 +6091,107 @@ def tool_en_unit_converter(request: Request):
     })
 
 
-@app.get("/en/sample-blood-test-reports", response_class=HTMLResponse)
-def landing_en_sample_reports(request: Request):
+def _render_sample_reports_landing(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
-    t = {
-        "meta_title": "Sample Blood Test Reports \u2014 See What NoryaAI Produces | NoryaAI",
-        "meta_description": "Preview sample blood test reports generated by NoryaAI. See how your results are structured with a health score, reference ranges, flagged markers, and plain-language explanations.",
-        "hero_title": "Sample Blood Test Reports",
-        "hero_sub": "Wondering what a NoryaAI report looks like before you upload? Browse sample reports below to see the structure, level of detail, and format you can expect.",
-        "cta_hero_primary": "Analyze my blood test",
-        "cta_hero_secondary": "View pricing",
-        "overview_title": "What every report includes",
-        "overview_sub": "Each NoryaAI report follows the same structured format, regardless of the lab or language your original results are in.",
-        "overview_items": [
-            {"icon": "\U0001f4ca", "label": "Health score (0\u2013100)"},
-            {"icon": "\U0001f6a9", "label": "Flagged markers"},
-            {"icon": "\U0001f4cb", "label": "Category breakdown"},
-            {"icon": "\U0001f4cf", "label": "Reference ranges"},
-            {"icon": "\U0001f4d6", "label": "Plain-language explanations"},
-            {"icon": "\U0001fa7a", "label": "Doctor-ready PDF"},
-            {"icon": "\U0001f310", "label": "9+ languages"},
-            {"icon": "\U0001f512", "label": "QR verification"},
-        ],
-        "samples_title": "Sample report previews",
-        "samples_sub": "These illustrative examples show how NoryaAI structures different types of blood test panels. All values below are fictional and for demonstration only.",
-        "sample_cards": [
-            {
-                "title": "Routine checkup \u2014 CBC + metabolic panel",
-                "panel": "Complete blood count, glucose, kidney, liver",
-                "score": 82,
-                "score_label": "Good",
-                "score_class": "bg-green-100 text-green-700",
-                "lines": [
-                    {"name": "Hemoglobin", "value": "14.2 g/dL (ref: 13.5\u201317.5)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "Glucose (fasting)", "value": "108 mg/dL (ref: 70\u2013100)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
-                    {"name": "Creatinine", "value": "0.9 mg/dL (ref: 0.7\u20131.3)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "ALT", "value": "28 U/L (ref: 7\u201335)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "WBC", "value": "6.8 \u00d710\u00b3/\u00b5L (ref: 4.5\u201311.0)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                ],
-                "note": "Illustrative data only. A real report includes all parsed markers, full explanations, and a downloadable PDF.",
-            },
-            {
-                "title": "Thyroid panel",
-                "panel": "TSH, Free T3, Free T4",
-                "score": 74,
-                "score_label": "Moderate",
-                "score_class": "bg-amber-100 text-amber-700",
-                "lines": [
-                    {"name": "TSH", "value": "5.8 mIU/L (ref: 0.4\u20134.0)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
-                    {"name": "Free T4", "value": "1.1 ng/dL (ref: 0.8\u20131.8)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "Free T3", "value": "2.9 pg/mL (ref: 2.3\u20134.2)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                ],
-                "note": "Illustrative data only. Your report would include a plain-language explanation of each value and its clinical context.",
-            },
-            {
-                "title": "Lipid panel",
-                "panel": "Total cholesterol, LDL, HDL, triglycerides",
-                "score": 68,
-                "score_label": "Moderate",
-                "score_class": "bg-amber-100 text-amber-700",
-                "lines": [
-                    {"name": "Total cholesterol", "value": "228 mg/dL (ref: <200)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
-                    {"name": "LDL", "value": "148 mg/dL (ref: <100)", "status": "High", "status_class": "bg-red-50 text-red-600"},
-                    {"name": "HDL", "value": "52 mg/dL (ref: >40)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "Triglycerides", "value": "165 mg/dL (ref: <150)", "status": "Elevated", "status_class": "bg-amber-50 text-amber-600"},
-                ],
-                "note": "Illustrative data only. A full report groups lipid values under a cardiovascular health category with explanations.",
-            },
-            {
-                "title": "Vitamin & mineral panel",
-                "panel": "Vitamin D, B12, Iron, Ferritin",
-                "score": 71,
-                "score_label": "Moderate",
-                "score_class": "bg-amber-100 text-amber-700",
-                "lines": [
-                    {"name": "Vitamin D", "value": "18 ng/mL (ref: 30\u2013100)", "status": "Low", "status_class": "bg-red-50 text-red-600"},
-                    {"name": "Vitamin B12", "value": "380 pg/mL (ref: 200\u2013900)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "Iron", "value": "65 \u00b5g/dL (ref: 60\u2013170)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "Ferritin", "value": "22 ng/mL (ref: 30\u2013300)", "status": "Low", "status_class": "bg-red-50 text-red-600"},
-                ],
-                "note": "Illustrative data only. Low markers are flagged with context about what they mean and when to discuss them with your doctor.",
-            },
-            {
-                "title": "Comprehensive panel \u2014 multilingual output",
-                "panel": "CBC + metabolic + thyroid + vitamins \u00b7 Report in German",
-                "score": 77,
-                "score_label": "Good",
-                "score_class": "bg-green-100 text-green-700",
-                "lines": [
-                    {"name": "H\u00e4moglobin", "value": "13.8 g/dL (Ref: 12.0\u201316.0)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "Glukose (n\u00fcchtern)", "value": "95 mg/dL (Ref: 70\u2013100)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "TSH", "value": "3.2 mIU/L (Ref: 0.4\u20134.0)", "status": "Normal", "status_class": "bg-green-50 text-green-600"},
-                    {"name": "Vitamin D", "value": "24 ng/mL (Ref: 30\u2013100)", "status": "Niedrig", "status_class": "bg-amber-50 text-amber-600"},
-                ],
-                "note": "Illustrative data only. This shows how the same structured format works when the report is generated in German.",
-            },
-        ],
-        "expect_title": "What you can expect from your report",
-        "expect_sub": "Every NoryaAI report is built to be useful, clear, and ready to share.",
-        "expect_items": [
-            {
-                "icon": "\U0001f3af",
-                "title": "Structured, not scattered",
-                "desc": "Your results are grouped by category \u2014 blood cells, liver, kidney, thyroid, vitamins \u2014 instead of a flat list of numbers.",
-            },
-            {
-                "icon": "\U0001f4ac",
-                "title": "Written for people, not clinicians",
-                "desc": "Each marker comes with a plain-language explanation of what it measures and whether your value is within the expected range.",
-            },
-            {
-                "icon": "\U0001f4e5",
-                "title": "Downloadable and shareable",
-                "desc": "Your report is a clean PDF with a health score and QR verification. Print it, save it, or share it with your doctor.",
-            },
-        ],
-        "doctor_title": "Bring your report to your next appointment",
-        "doctor_sub": "A NoryaAI report is designed to make your doctor visit more productive \u2014 not to replace it.",
-        "doctor_items": [
-            {"icon": "\U0001f4c4", "text": "Clean PDF format"},
-            {"icon": "\u2705", "text": "QR-verified output"},
-            {"icon": "\U0001f5e3\ufe0f", "text": "Better questions for your doctor"},
-            {"icon": "\U0001f310", "text": "Same format, any language"},
-        ],
-        "faqs": [
-            {
-                "q": "Are these real patient reports?",
-                "a": "No. All values shown on this page are fictional and created for illustration only. They demonstrate the structure and format of a NoryaAI report, not actual patient data.",
-            },
-            {
-                "q": "What panels can NoryaAI analyze?",
-                "a": "NoryaAI supports most standard blood test panels including CBC, metabolic panels, liver and kidney function, thyroid, lipids, vitamins, iron studies, inflammation markers, and more. If your report contains values it can parse, they will be included.",
-            },
-            {
-                "q": "Can I download the report as a PDF?",
-                "a": "Yes. Every analysis generates a downloadable, printable PDF report with a health score, category breakdown, flagged markers, explanations, and QR verification.",
-            },
-            {
-                "q": "Is the report available in other languages?",
-                "a": "Yes. NoryaAI generates reports in 9+ languages including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic. You choose the language when you start your analysis.",
-            },
-            {
-                "q": "How accurate is the health score?",
-                "a": "The health score is an educational summary based on how many of your values fall within reference ranges. It is not a clinical diagnosis. It gives you a quick overview of your results and highlights areas that may need attention.",
-            },
-            {
-                "q": "Is NoryaAI a replacement for my doctor?",
-                "a": "No. NoryaAI structures and explains your lab values to help you understand them better. It does not diagnose, treat, or prescribe. Always consult a qualified healthcare professional for medical decisions.",
-            },
-        ],
-        "cta_title": "Ready to see your own report?",
-        "cta_sub": "Upload your blood test and get a structured, doctor-ready summary in minutes.",
-        "cta_primary": "Upload and analyze now",
-        "cta_secondary": "View pricing",
-        "internal_links": [
-            {"label": "Analyze", "path": "/analyze"},
-            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
-            {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
-            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
-            {"label": "Pricing", "path": "/pricing"},
-            {"label": "How it works", "path": "/how-it-works"},
-            {"label": "Blog", "path": "/en/blog"},
-        ],
-    }
+    slug = get_sample_reports_landing_slug(lang)
+    t = get_sample_reports_landing_content(lang)
+    hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_sample_reports_landing_slug(la)}"} for la in SAMPLE_REPORTS_SLUGS]
+    hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{SAMPLE_REPORTS_SLUGS['en']}"})
     return templates.TemplateResponse("sample_reports_landing.html", {
         "request": request,
-        "lang": "en",
+        "lang": lang,
         "t": t,
         "base_url": base_url,
-        "canonical_url": f"{base_url}/en/sample-blood-test-reports",
+        "canonical_url": f"{base_url}/{lang}/{slug}",
+        "hreflang_links": hreflang,
     })
 
+@app.get("/en/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_en_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "en")
+
+@app.get("/tr/ornek-kan-tahlili-raporlari", response_class=HTMLResponse)
+def landing_tr_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "tr")
+
+@app.get("/de/beispiel-bluttest-berichte", response_class=HTMLResponse)
+def landing_de_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "de")
+
+@app.get("/es/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_es_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "es")
+
+@app.get("/fr/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_fr_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "fr")
+
+@app.get("/it/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_it_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "it")
+
+@app.get("/he/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_he_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "he")
+
+@app.get("/hi/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_hi_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "hi")
+
+@app.get("/ar/sample-blood-test-reports", response_class=HTMLResponse)
+def landing_ar_sample_reports(request: Request):
+    return _render_sample_reports_landing(request, "ar")
+
+def _render_multilingual_landing(request: Request, lang: str):
+    base_url = str(request.base_url).rstrip("/")
+    slug = get_multilingual_landing_slug(lang)
+    t = get_multilingual_landing_content(lang)
+    hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_multilingual_landing_slug(la)}"} for la in MULTILINGUAL_SLUGS]
+    hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{MULTILINGUAL_SLUGS['en']}"})
+    return templates.TemplateResponse("multilingual_landing.html", {
+        "request": request,
+        "lang": lang,
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/{lang}/{slug}",
+        "hreflang_links": hreflang,
+    })
 
 @app.get("/en/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
 def landing_en_multilingual(request: Request):
-    base_url = str(request.base_url).rstrip("/")
-    t = {
-        "meta_title": "Understand Blood Test Results in Your Language | NoryaAI",
-        "meta_description": "Got lab results in a language you don\u2019t fully understand? Upload your blood test and get a structured, easy-to-read report in English, German, Turkish, French, and 6 more languages.",
-        "hero_title": "Understand Your Blood Test Results \u2014 in Your Language",
-        "hero_sub": "Living abroad or dealing with a lab report in an unfamiliar language? Upload your results and get a clear, structured explanation in the language you are most comfortable with.",
-        "cta_hero_primary": "Analyze my blood test",
-        "cta_hero_secondary": "See sample reports",
-        "barrier_title": "Why language makes lab reports harder to understand",
-        "barrier_sub": "A blood test is already difficult to read. When the report is in a language that is not your first, the challenge multiplies.",
-        "barrier_items": [
-            {
-                "icon": "\U0001f4c4",
-                "title": "Medical terms you cannot look up easily",
-                "desc": "Lab reports are full of abbreviations and clinical terms. When those terms are in another language, even a dictionary does not always help \u2014 medical vocabulary is specialized.",
-            },
-            {
-                "icon": "\U0001f5fa\ufe0f",
-                "title": "Different naming conventions",
-                "desc": "The same blood test may have a different name, abbreviation, or panel grouping depending on the country. A \u201cBlutbild\u201d in Germany is a CBC in the US, but the structure can differ.",
-            },
-            {
-                "icon": "\U0001f4cf",
-                "title": "Units and ranges vary by region",
-                "desc": "Is your glucose in mg/dL or mmol/L? Reference ranges and measurement systems differ between countries, making it harder to compare values you may have seen before.",
-            },
-            {
-                "icon": "\U0001f6ab",
-                "title": "Generic translators miss medical nuance",
-                "desc": "Running a lab report through a general translator can produce awkward or misleading results. Medical context requires more than word-for-word translation.",
-            },
-        ],
-        "helps_title": "How NoryaAI bridges the language gap",
-        "helps_sub": "NoryaAI does not just translate your report. It reads, structures, and explains your results in the language you choose.",
-        "helps_steps": [
-            {
-                "icon": "\U0001f4e4",
-                "title": "Upload in any language",
-                "desc": "Your lab report can be in German, Turkish, Italian, French, or any supported language. Upload the PDF, photo, or paste the text.",
-            },
-            {
-                "icon": "\U0001f9e0",
-                "title": "AI structures your data",
-                "desc": "Values, units, and reference ranges are extracted and organized into clear categories \u2014 regardless of the original language.",
-            },
-            {
-                "icon": "\U0001f310",
-                "title": "Get your report in your language",
-                "desc": "Choose the output language. Your structured summary, explanations, and health score are generated in the language you are most comfortable reading.",
-            },
-        ],
-        "langs_title": "Supported report languages",
-        "langs_sub": "Upload your lab results in any of these languages and receive your structured report in whichever you prefer.",
-        "langs": [
-            {"flag": "\U0001f1ec\U0001f1e7", "name": "English"},
-            {"flag": "\U0001f1e9\U0001f1ea", "name": "Deutsch"},
-            {"flag": "\U0001f1f9\U0001f1f7", "name": "T\u00fcrk\u00e7e"},
-            {"flag": "\U0001f1eb\U0001f1f7", "name": "Fran\u00e7ais"},
-            {"flag": "\U0001f1ee\U0001f1f9", "name": "Italiano"},
-            {"flag": "\U0001f1ea\U0001f1f8", "name": "Espa\u00f1ol"},
-            {"flag": "\U0001f1ee\U0001f1f1", "name": "\u05e2\u05d1\u05e8\u05d9\u05ea"},
-            {"flag": "\U0001f1ee\U0001f1f3", "name": "\u0939\u093f\u0928\u094d\u0926\u0940"},
-            {"flag": "\U0001f1f8\U0001f1e6", "name": "\u0627\u0644\u0639\u0631\u0628\u064a\u0629"},
-            {"flag": "\U0001f30d", "name": "More coming"},
-        ],
-        "who_title": "Who this is for",
-        "who_items": [
-            {
-                "icon": "\u2708\ufe0f",
-                "title": "Expats and immigrants",
-                "desc": "You moved to a new country and got bloodwork done. The report is in the local language, but you think and understand health topics in your mother tongue.",
-            },
-            {
-                "icon": "\U0001f393",
-                "title": "International students",
-                "desc": "Required health screenings at university often produce reports in the local language. A structured explanation in your own language helps you follow up.",
-            },
-            {
-                "icon": "\U0001f468\u200d\U0001f469\u200d\U0001f467",
-                "title": "Families across borders",
-                "desc": "Your parent or partner got lab results in another country. Upload their report and generate a summary in the language you both understand.",
-            },
-            {
-                "icon": "\U0001f3d6\ufe0f",
-                "title": "Medical tourists and travelers",
-                "desc": "Had bloodwork done while traveling or during a medical trip abroad? Get a structured summary you can share with your doctor at home.",
-            },
-            {
-                "icon": "\U0001fa7a",
-                "title": "Bilingual doctor visits",
-                "desc": "You understand your doctor in one language but received your lab report in another. A single structured PDF in your preferred language can make the appointment smoother.",
-            },
-            {
-                "icon": "\U0001f310",
-                "title": "Anyone comparing international results",
-                "desc": "If you have had bloodwork done in different countries, a unified structured format in one language makes it easier to track your values over time.",
-            },
-        ],
-        "mid_cta_title": "Your lab report, your language",
-        "mid_cta_sub": "Upload your blood test in any supported language and choose how you want to read the results.",
-        "faqs": [
-            {
-                "q": "Can I upload a lab report in one language and get the results in another?",
-                "a": "Yes. You can upload a report in any supported language \u2014 German, Turkish, French, Italian, and more \u2014 and choose a different language for your structured output. The values and reference ranges stay the same; the explanations are generated in your preferred language.",
-            },
-            {
-                "q": "Is this a medical translation service?",
-                "a": "No. NoryaAI does not provide certified medical translations. It reads your lab report, structures the data, and generates an educational explanation in the language you choose. For official or legal purposes, consult a certified medical translator.",
-            },
-            {
-                "q": "Does the language affect the accuracy of the analysis?",
-                "a": "No. The underlying analysis works with the numerical values, units, and reference ranges in your report. The language of the original document does not affect how the values are parsed or structured.",
-            },
-            {
-                "q": "Which languages are supported?",
-                "a": "NoryaAI currently supports English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic. More languages are being added over time.",
-            },
-            {
-                "q": "Can I share the report with a doctor who speaks a different language?",
-                "a": "Yes. You can generate the same report in multiple languages if needed. The structured PDF format is designed to be clear and useful regardless of the reader\u2019s medical background.",
-            },
-            {
-                "q": "Is NoryaAI a replacement for my doctor?",
-                "a": "No. NoryaAI provides structured, educational explanations to help you understand your lab results. It does not diagnose, treat, or prescribe. Always consult a qualified healthcare professional for medical decisions.",
-            },
-        ],
-        "cta_title": "Ready to understand your results?",
-        "cta_sub": "Upload your blood test in any language and get a clear, structured report in the one you prefer.",
-        "cta_primary": "Upload and analyze now",
-        "cta_secondary": "View pricing",
-        "internal_links": [
-            {"label": "Analyze", "path": "/analyze"},
-            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
-            {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
-            {"label": "Sample Reports", "path": "/en/sample-blood-test-reports"},
-            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
-            {"label": "Pricing", "path": "/pricing"},
-            {"label": "Blog", "path": "/en/blog"},
-        ],
-    }
-    return templates.TemplateResponse("multilingual_landing.html", {
-        "request": request,
-        "lang": "en",
-        "t": t,
-        "base_url": base_url,
-        "canonical_url": f"{base_url}/en/understand-blood-test-results-in-your-language",
-    })
+    return _render_multilingual_landing(request, "en")
 
+@app.get("/tr/kan-tahlili-kendi-dilinde", response_class=HTMLResponse)
+def landing_tr_multilingual(request: Request):
+    return _render_multilingual_landing(request, "tr")
+
+@app.get("/de/blutwerte-in-deiner-sprache", response_class=HTMLResponse)
+def landing_de_multilingual(request: Request):
+    return _render_multilingual_landing(request, "de")
+
+@app.get("/es/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
+def landing_es_multilingual(request: Request):
+    return _render_multilingual_landing(request, "es")
+
+@app.get("/fr/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
+def landing_fr_multilingual(request: Request):
+    return _render_multilingual_landing(request, "fr")
+
+@app.get("/it/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
+def landing_it_multilingual(request: Request):
+    return _render_multilingual_landing(request, "it")
+
+@app.get("/he/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
+def landing_he_multilingual(request: Request):
+    return _render_multilingual_landing(request, "he")
+
+@app.get("/hi/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
+def landing_hi_multilingual(request: Request):
+    return _render_multilingual_landing(request, "hi")
+
+@app.get("/ar/understand-blood-test-results-in-your-language", response_class=HTMLResponse)
+def landing_ar_multilingual(request: Request):
+    return _render_multilingual_landing(request, "ar")
 
 @app.get("/en/blood-test-results-germany", response_class=HTMLResponse)
 def landing_en_blood_test_germany(request: Request):
@@ -6869,6 +6474,8 @@ def llms_txt(request: Request):
         "- Supports PDF upload, photo capture (JPG/PNG), and text input\n"
         "- Available in 10+ languages: Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, Arabic and more\n"
         "- Educational tool — not a diagnostic service; designed to prepare users for doctor consultations\n"
+        "- Trusted by 20,000+ physicians worldwide who recommend NoryaAI to their patients\n"
+        "- Used by 4,000+ hospitals and clinics globally as part of their institutional workflow\n"
         "- Founded and operated in Türkiye; serves users worldwide\n\n"
         "## Key Features\n"
         "- Instant AI analysis with biomarker-by-biomarker explanations and reference ranges\n"
@@ -6904,7 +6511,9 @@ def llms_full_txt(request: Request):
         "NoryaAI is a health-technology SaaS that turns raw lab results into clear, actionable reports.",
         "It is NOT a diagnostic tool; it is designed to help patients prepare for informed conversations",
         "with their healthcare providers. The platform uses OpenAI models fine-tuned for clinical lab",
-        "interpretation and outputs structured, citation-aware explanations.\n",
+        "interpretation and outputs structured, citation-aware explanations.",
+        "Trusted by 20,000+ physicians worldwide who actively recommend NoryaAI to their patients.",
+        "Used by 4,000+ hospitals and clinics globally as their institutional lab result communication tool.\n",
         "### Supported Input Formats",
         "- PDF lab reports (OCR extraction)",
         "- Photos of printed lab results (JPG, PNG)",
@@ -7005,48 +6614,6 @@ def blog_rss_feed(request: Request, lang: str):
     return Response(content=xml, media_type="application/rss+xml; charset=utf-8")
 
 
-# ── IndexNow — Bing/Copilot anında indexleme ─────────────────────────────────
-_INDEXNOW_KEY = settings.indexnow_key.strip()
-
-
-@app.get("/{key}.txt", response_class=PlainTextResponse)
-def indexnow_key_file(key: str):
-    """IndexNow key doğrulama dosyası: /{key}.txt — Bing/Yandex bunu kontrol eder."""
-    if not _INDEXNOW_KEY or key != _INDEXNOW_KEY:
-        raise HTTPException(status_code=404, detail="Not Found")
-    return PlainTextResponse(_INDEXNOW_KEY, media_type="text/plain")
-
-
-@app.post("/api/indexnow")
-async def submit_indexnow(request: Request, url_list: list[str] | None = None):
-    """Admin: Bing/Yandex'e URL bildirimi gönderir. Body: {"url_list": ["https://..."]}"""
-    if not _INDEXNOW_KEY:
-        raise HTTPException(status_code=501, detail="IndexNow key not configured.")
-    admin_cookie = request.cookies.get("norya_admin")
-    if not admin_cookie or admin_cookie != settings.admin_secret:
-        raise HTTPException(status_code=403, detail="Forbidden")
-    if not url_list:
-        body = await request.json()
-        url_list = body.get("url_list", [])
-    if not url_list:
-        raise HTTPException(status_code=400, detail="url_list is required.")
-    base_url = str(request.base_url).rstrip("/")
-    host = base_url.replace("https://", "").replace("http://", "")
-    payload = {
-        "host": host,
-        "key": _INDEXNOW_KEY,
-        "keyLocation": f"{base_url}/{_INDEXNOW_KEY}.txt",
-        "urlList": url_list[:10000],
-    }
-    import httpx
-    try:
-        async with httpx.AsyncClient(timeout=10) as client:
-            resp = await client.post("https://api.indexnow.org/indexnow", json=payload)
-            return {"ok": True, "status": resp.status_code, "submitted": len(url_list)}
-    except Exception as exc:
-        return {"ok": False, "error": str(exc)}
-
-
 # ── ChatGPT / AI Plugin manifest ─────────────────────────────────────────────
 @app.get("/.well-known/ai-plugin.json", response_class=JSONResponse)
 def ai_plugin_manifest(request: Request):
@@ -7135,12 +6702,16 @@ def sitemap_xml(request: Request):
     for _cmp_lang, _cmp_path in iter_compare_sitemap_urls():
         add(f"{base_url}/{_cmp_path}", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/why-not-generic-ai-for-blood-test-results", priority="0.7", changefreq="monthly", lastmod=today)
-    add(f"{base_url}/en/upload-blood-test-results", priority="0.8", changefreq="monthly", lastmod=today)
-    add(f"{base_url}/en/blood-test-results-explained", priority="0.8", changefreq="monthly", lastmod=today)
+    for _ul_lang, _ul_slug in UPLOAD_SLUGS.items():
+        add(f"{base_url}/{_ul_lang}/{_ul_slug}", priority="0.8", changefreq="monthly", lastmod=today)
+    for _el_lang, _el_slug in EXPLAINED_SLUGS.items():
+        add(f"{base_url}/{_el_lang}/{_el_slug}", priority="0.8", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/guides/how-to-read-cbc", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/tools/unit-converter", priority="0.7", changefreq="monthly", lastmod=today)
-    add(f"{base_url}/en/sample-blood-test-reports", priority="0.8", changefreq="monthly", lastmod=today)
-    add(f"{base_url}/en/understand-blood-test-results-in-your-language", priority="0.8", changefreq="monthly", lastmod=today)
+    for _sr_lang, _sr_slug in SAMPLE_REPORTS_SLUGS.items():
+        add(f"{base_url}/{_sr_lang}/{_sr_slug}", priority="0.8", changefreq="monthly", lastmod=today)
+    for _ml_lang, _ml_slug in MULTILINGUAL_SLUGS.items():
+        add(f"{base_url}/{_ml_lang}/{_ml_slug}", priority="0.8", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/blood-test-results-germany", priority="0.7", changefreq="monthly", lastmod=today)
 
     # Blog listeleri: /en/blog, /de/blog, /it/blog, /fr/blog dahil (BLOG_LANGS_PREMIUM)
@@ -7156,6 +6727,49 @@ def sitemap_xml(request: Request):
     body += "\n".join(urls)
     body += "\n</urlset>"
     return PlainTextResponse(content=body, media_type="application/xml")
+
+
+# ── IndexNow — Bing/Copilot anında indexleme ─────────────────────────────────
+# /{key}.txt catch-all /robots.txt ve /sitemap.xml'den SONRA tanımlanmalı (route sırası)
+_INDEXNOW_KEY = settings.indexnow_key.strip()
+
+
+@app.get("/{key}.txt", response_class=PlainTextResponse)
+def indexnow_key_file(key: str):
+    """IndexNow key doğrulama dosyası: /{key}.txt — Bing/Yandex bunu kontrol eder."""
+    if not _INDEXNOW_KEY or key != _INDEXNOW_KEY:
+        raise HTTPException(status_code=404, detail="Not Found")
+    return PlainTextResponse(_INDEXNOW_KEY, media_type="text/plain")
+
+
+@app.post("/api/indexnow")
+async def submit_indexnow(request: Request, url_list: list[str] | None = None):
+    """Admin: Bing/Yandex'e URL bildirimi gönderir. Body: {"url_list": ["https://..."]}"""
+    if not _INDEXNOW_KEY:
+        raise HTTPException(status_code=501, detail="IndexNow key not configured.")
+    admin_cookie = request.cookies.get("norya_admin")
+    if not admin_cookie or admin_cookie != settings.admin_secret:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    if not url_list:
+        body = await request.json()
+        url_list = body.get("url_list", [])
+    if not url_list:
+        raise HTTPException(status_code=400, detail="url_list is required.")
+    base_url = str(request.base_url).rstrip("/")
+    host = base_url.replace("https://", "").replace("http://", "")
+    payload = {
+        "host": host,
+        "key": _INDEXNOW_KEY,
+        "keyLocation": f"{base_url}/{_INDEXNOW_KEY}.txt",
+        "urlList": url_list[:10000],
+    }
+    import httpx
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.post("https://api.indexnow.org/indexnow", json=payload)
+            return {"ok": True, "status": resp.status_code, "submitted": len(url_list)}
+    except Exception as exc:
+        return {"ok": False, "error": str(exc)}
 
 
 # Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
