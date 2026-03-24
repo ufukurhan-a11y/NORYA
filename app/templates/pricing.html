@@ -14,7 +14,6 @@
   <meta property="og:url" content="{{ base_url }}/pricing" />
   <meta property="og:description" content="{{ t.get('pricing_meta_description') }}" />
   <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
-  {% include "partials/og_default_dimensions.html" %}
   <meta property="og:locale" content="{{ t.get('og_locale', 'en_US') }}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />
@@ -295,6 +294,9 @@
       line-height:1.55;
     }
   </style>
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}/"},{"@type":"ListItem","position":2,"name":"{{ t.get('pricing_page_title', 'Pricing') }}","item":"{{ base_url }}/pricing"}]}
+  </script>
 </head>
 <body>
   <div class="wrap">
@@ -318,7 +320,7 @@
       </p>
       <div class="hero-ctas">
         <a href="#plans" class="hero-cta hero-cta--primary">{{ t.get("cta_view_plans", "View Plans") }}</a>
-        <a href="{{ base_url }}/#analyze" class="hero-cta hero-cta--secondary">{{ t.get("cta_start_free", "Start Free") }}</a>
+        <a href="{{ base_url }}/#analyze" class="hero-cta hero-cta--secondary" style="display:inline-flex;align-items:center;justify-content:center;background:#0EA5A4;color:#fff;padding:14px 28px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);">{{ t.get("cta_start_free", "Start Free") }}</a>
       </div>
     </section>
 
@@ -333,7 +335,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }}{% if t.get('plan_free_limited_note') %} {{ t.get('plan_free_limited_note') }}{% endif %}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("plan_free_feature_secondary", t.get("trust_pdf", "Basic output")) }}</span></li>
           </ul>
-          <a href="{{ base_url }}/#analyze" class="plan-cta plan-cta--ghost">{{ t.get("cta_start_free", "Start Free") }}</a>
+          <a href="{{ base_url }}/#analyze" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;background:#f8fafc;color:#0EA5A4;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #0EA5A4;">{{ t.get("cta_start_free", "Start Free") }}</a>
         </article>
 
         {% set single = plans.single %}
@@ -350,7 +352,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("plan_premium_feature_pdf", t.get("trust_pdf", "Downloadable PDF report")) }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("kdv_dahil", "VAT included") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=single" class="plan-cta plan-cta--primary">{{ t.get("cta_get_premium_report", "Get Premium Report") or t.get("cta_single", "Get Premium Report") }}</a>
+          <a href="{{ base_url }}/payment?plan=single" class="plan-cta plan-cta--primary" style="display:block;text-align:center;background:#0EA5A4;color:#fff;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 6px 20px rgba(14,165,164,.3);">{{ t.get("cta_get_premium_report", "Get Premium Report") or t.get("cta_single", "Get Premium Report") }}</a>
         </article>
 
         {% set monthly = plans.monthly %}
@@ -367,7 +369,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("plan_premium_feature_pdf", t.get("trust_pdf", "Downloadable PDF report")) }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("cancel_anytime", "Cancel anytime") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=monthly" class="plan-cta plan-cta--ghost">{{ t.get("cta_start_monthly", t.get("cta_monthly", "Start Monthly Plan")) }}</a>
+          <a href="{{ base_url }}/payment?plan=monthly" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;background:#f8fafc;color:#0EA5A4;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #0EA5A4;">{{ t.get("cta_start_monthly", t.get("cta_monthly", "Start Monthly Plan")) }}</a>
         </article>
 
         {% set yearly = plans.yearly %}
@@ -384,7 +386,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("cancel_anytime", "Cancel anytime") }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("active_after_payment", "Active immediately after payment") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=annual" class="plan-cta plan-cta--ghost">{{ t.get("cta_start_yearly", t.get("cta_yearly", "Get Norya Plus")) }}</a>
+          <a href="{{ base_url }}/payment?plan=annual" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;background:#f8fafc;color:#0EA5A4;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #0EA5A4;">{{ t.get("cta_start_yearly", t.get("cta_yearly", "Get Norya Plus")) }}</a>
         </article>
       </div>
 

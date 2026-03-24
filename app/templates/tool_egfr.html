@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  {% include "partials/gsc_meta.html" %}
+  <meta name="robots" content="index,follow" />
+  <title>{{ t.meta_title }}</title>
+  <meta name="description" content="{{ t.meta_description }}" />
+  <meta property="og:title" content="{{ t.meta_title }}" />
+  <meta property="og:description" content="{{ t.meta_description }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ canonical_url }}" />
+  <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  {% include "partials/og_default_dimensions.html" %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="theme-color" content="#0EA5A4" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/static/css/tailwind.css" />
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --norya-teal: #0EA5A4; --norya-teal-hover: #0d9488; }
+    .text-norya-teal { color: var(--norya-teal); }
+    .bg-norya-teal { background-color: var(--norya-teal); }
+    .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "{{ t.meta_title }}",
+    "url": "{{ canonical_url }}",
+    "applicationCategory": "HealthApplication",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "publisher": {"@type": "Organization", "name": "NoryaAI", "url": "{{ base_url }}"}
+  }
+  </script>
+  {% if t.faqs %}
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {% for faq in t.faqs %}{% if not loop.first %},{% endif %}
+      {"@type": "Question", "name": {{ faq.q|tojson }}, "acceptedAnswer": {"@type": "Answer", "text": {{ faq.a|tojson }}}}
+      {% endfor %}
+    ]
+  }
+  </script>
+  {% endif %}
+  {% include "includes/gtag_google_ads.html" %}
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/en" class="flex items-center shrink-0" aria-label="NoryaAI home">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
+        <a href="/en" class="text-slate-600 hover:text-teal-600">Home</a>
+        <a href="{{ base_url }}/en/blog" class="text-slate-600 hover:text-teal-600">Blog</a>
+        <a href="{{ base_url }}/en/tools/unit-converter" class="text-slate-600 hover:text-teal-600">Unit Converter</a>
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">Analyze</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <section class="py-10 sm:py-16 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
+      <div class="max-w-3xl mx-auto text-center">
+        <span class="inline-block text-xs font-semibold tracking-wide uppercase text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-3 py-1 mb-5">{{ t.badge|default('Free Calculator') }}</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">{{ t.hero_title }}</h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{{ t.hero_sub }}</p>
+      </div>
+    </section>
+
+    <section class="py-10 sm:py-14 px-4 bg-white">
+      <div class="max-w-xl mx-auto">
+        <div class="rounded-2xl border-2 border-teal-200 bg-gradient-to-br from-white to-teal-50/30 p-6 sm:p-8 shadow-lg">
+          <h2 class="text-lg font-bold text-slate-900 mb-6">{{ t.calc_title|default('eGFR Calculator (CKD-EPI 2021)') }}</h2>
+
+          <label for="creatinine" class="block text-sm font-semibold text-slate-700 mb-2">{{ t.creatinine_label|default('Serum Creatinine (mg/dL)') }}</label>
+          <input id="creatinine" type="number" inputmode="decimal" step="any" min="0" placeholder="e.g. 1.1" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 mb-5" />
+
+          <label for="age" class="block text-sm font-semibold text-slate-700 mb-2">{{ t.age_label|default('Age') }}</label>
+          <input id="age" type="number" inputmode="numeric" min="1" max="120" placeholder="e.g. 45" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 mb-5" />
+
+          <label class="block text-sm font-semibold text-slate-700 mb-2">{{ t.sex_label|default('Sex') }}</label>
+          <div class="flex gap-4 mb-5">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="sex" value="male" checked class="accent-teal-600 w-4 h-4" />
+              <span class="text-sm text-slate-700">{{ t.sex_male|default('Male') }}</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="sex" value="female" class="accent-teal-600 w-4 h-4" />
+              <span class="text-sm text-slate-700">{{ t.sex_female|default('Female') }}</span>
+            </label>
+          </div>
+
+          <button type="button" onclick="calcEGFR()" class="w-full py-3.5 rounded-xl bg-norya-teal text-white font-semibold text-base hover:opacity-90 transition" style="background:#0EA5A4;color:#fff;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;border:none;cursor:pointer;width:100%;box-shadow:0 4px 16px rgba(14,165,164,.3);">{{ t.calc_btn|default('Calculate eGFR') }}</button>
+
+          <div id="egfr-result" style="display:none;" class="mt-6 rounded-xl border border-teal-200 bg-teal-50/50 p-5 text-center">
+            <p class="text-sm text-slate-600 mb-1">{{ t.result_label|default('Estimated GFR') }}</p>
+            <p id="egfr-value" class="text-4xl font-bold text-slate-900"></p>
+            <p class="text-xs text-slate-500 mt-1">mL/min/1.73m²</p>
+            <p id="egfr-stage" class="mt-2 text-sm font-medium"></p>
+          </div>
+        </div>
+
+        <div class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-6">
+          <h3 class="text-base font-bold text-slate-900 mb-3">{{ t.stages_title|default('CKD Stages by eGFR') }}</h3>
+          <div class="space-y-2 text-sm text-slate-600">
+            <div class="flex justify-between"><span>{{ t.stage_g1|default('G1 — Normal') }}</span><span class="font-semibold text-emerald-600">≥ 90</span></div>
+            <div class="flex justify-between"><span>{{ t.stage_g2|default('G2 — Mildly decreased') }}</span><span class="font-semibold text-teal-600">60–89</span></div>
+            <div class="flex justify-between"><span>{{ t.stage_g3a|default('G3a — Mild to moderate') }}</span><span class="font-semibold text-amber-600">45–59</span></div>
+            <div class="flex justify-between"><span>{{ t.stage_g3b|default('G3b — Moderate to severe') }}</span><span class="font-semibold text-orange-600">30–44</span></div>
+            <div class="flex justify-between"><span>{{ t.stage_g4|default('G4 — Severely decreased') }}</span><span class="font-semibold text-red-500">15–29</span></div>
+            <div class="flex justify-between"><span>{{ t.stage_g5|default('G5 — Kidney failure') }}</span><span class="font-semibold text-red-700">&lt; 15</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-10 px-4 bg-slate-50">
+      <div class="max-w-3xl mx-auto prose prose-slate">
+        <h2>{{ t.about_title|default('What is eGFR?') }}</h2>
+        <p>{{ t.about_text|default('eGFR (estimated Glomerular Filtration Rate) measures how well your kidneys filter waste from the blood. It is calculated using your serum creatinine level, age, and sex. The CKD-EPI 2021 equation (race-free) is used here. Normal eGFR is ≥ 90 mL/min/1.73m². Lower values may indicate chronic kidney disease.') }}</p>
+      </div>
+    </section>
+
+    {% if t.faqs %}
+    <section class="py-10 px-4 bg-white">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">{{ t.faq_title|default('Frequently Asked Questions') }}</h2>
+        <div class="space-y-4">
+          {% for faq in t.faqs %}
+          <details class="group rounded-xl border border-slate-200 bg-white">
+            <summary class="flex items-center justify-between cursor-pointer p-5 font-semibold text-slate-800 text-sm">
+              {{ faq.q }}
+              <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">{{ faq.a }}</div>
+          </details>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="py-10 sm:py-14 px-4 bg-gradient-to-b from-teal-50 to-white">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.cta_title|default('Get your complete kidney health picture') }}</h2>
+        <p class="mt-3 text-slate-600 leading-relaxed">{{ t.cta_text|default('Upload your full blood test and get a comprehensive AI-powered analysis of all your biomarkers.') }}</p>
+        <a href="{{ base_url }}/analyze" class="mt-6 inline-flex items-center justify-center px-8 py-4 rounded-xl bg-norya-teal text-white font-semibold text-lg hover:opacity-90 transition shadow-lg shadow-teal-500/20" style="display:inline-flex;align-items:center;justify-content:center;background:#0EA5A4;color:#fff;padding:16px 36px;border-radius:12px;font-weight:700;font-size:18px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);margin-top:24px;">{{ t.cta_btn|default('Analyze my blood test') }}</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white py-8 px-4 text-center text-sm text-slate-500">
+    <p>&copy; NoryaAI · <a href="/en/tools/homa-ir-calculator" class="text-teal-600 hover:underline">HOMA-IR</a> · <a href="/en/tools/unit-converter" class="text-teal-600 hover:underline">Unit Converter</a> · <a href="/en/blog" class="text-teal-600 hover:underline">Blog</a></p>
+    <p class="mt-2 text-xs text-slate-400">{{ t.disclaimer|default('This calculator is for educational purposes only. Not a substitute for medical advice.') }}</p>
+  </footer>
+
+  <script>
+  function calcEGFR() {
+    var scr = parseFloat(document.getElementById('creatinine').value);
+    var age = parseInt(document.getElementById('age').value);
+    var sex = document.querySelector('input[name="sex"]:checked').value;
+    var box = document.getElementById('egfr-result');
+    var valEl = document.getElementById('egfr-value');
+    var stageEl = document.getElementById('egfr-stage');
+    if (isNaN(scr) || isNaN(age) || scr <= 0 || age <= 0) { box.style.display='none'; return; }
+
+    /* CKD-EPI 2021 (race-free) */
+    var kappa = sex === 'female' ? 0.7 : 0.9;
+    var alpha = sex === 'female' ? -0.241 : -0.302;
+    var mult = sex === 'female' ? 1.012 : 1.0;
+    var scrk = scr / kappa;
+    var egfr = 142 * Math.pow(Math.min(scrk, 1), alpha) * Math.pow(Math.max(scrk, 1), -1.200) * Math.pow(0.9938, age) * mult;
+    egfr = Math.round(egfr * 10) / 10;
+
+    valEl.textContent = egfr;
+    box.style.display = 'block';
+
+    if (egfr >= 90) { stageEl.textContent = '{{ t.interp_g1|default("G1 — Normal kidney function") }}'; stageEl.style.color = '#059669'; }
+    else if (egfr >= 60) { stageEl.textContent = '{{ t.interp_g2|default("G2 — Mildly decreased") }}'; stageEl.style.color = '#0d9488'; }
+    else if (egfr >= 45) { stageEl.textContent = '{{ t.interp_g3a|default("G3a — Mild to moderate decrease") }}'; stageEl.style.color = '#d97706'; }
+    else if (egfr >= 30) { stageEl.textContent = '{{ t.interp_g3b|default("G3b — Moderate to severe decrease") }}'; stageEl.style.color = '#ea580c'; }
+    else if (egfr >= 15) { stageEl.textContent = '{{ t.interp_g4|default("G4 — Severely decreased") }}'; stageEl.style.color = '#dc2626'; }
+    else { stageEl.textContent = '{{ t.interp_g5|default("G5 — Kidney failure — seek medical attention") }}'; stageEl.style.color = '#991b1b'; }
+  }
+  </script>
+</body>
+</html>

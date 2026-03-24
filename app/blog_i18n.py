@@ -6247,8 +6247,12 @@ def _article_fasting_insulin_high() -> Article:
 
 _ARTICLE_FASTING_INSULIN_HIGH = _article_fasting_insulin_high()
 
+# Pillar articles (imported from dedicated content modules)
+from app.blog_article_cbc_guide_content import build_cbc_article
+from app.blog_article_thyroid_panel_content import build_thyroid_article
+_ARTICLE_CBC_GUIDE = build_cbc_article()
+_ARTICLE_THYROID_GUIDE = build_thyroid_article()
 
-# TODO: create dedicated blog posts for "complete blood count explained" and "liver enzyme test explained"
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
     _LDL_HDL_ARTICLE,
@@ -6296,6 +6300,8 @@ ARTICLES: List[Article] = [
     _ARTICLE_LOW_WBC,
     _ARTICLE_HOMA_IR,
     _ARTICLE_FASTING_INSULIN_HIGH,
+    _ARTICLE_CBC_GUIDE,
+    _ARTICLE_THYROID_GUIDE,
 ]
 
 

@@ -13,7 +13,6 @@
   <meta property="og:locale" content="{{ og_locale }}" />
   {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
   {% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
-  {% if og_image and '/static/images/og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ meta.meta_title }}" />
   <meta name="twitter:description" content="{{ meta.meta_description }}" />
@@ -28,8 +27,10 @@
   {% if faq_schema_json %}
   <script type="application/ld+json">{{ faq_schema_json|safe }}</script>
   {% endif %}
-  <link rel="stylesheet" href="/static/css/tailwind.css" />
-  <link rel="stylesheet" href="/static/css/app.css" />
+  <script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}/"},{"@type":"ListItem","position":2,"name":"FAQ","item":"{{ canonical_url }}"}]}
+  </script>
+  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
@@ -51,7 +52,7 @@
         <a href="/{{ lang }}" class="text-slate-600 hover:text-norya-teal">{{ t.nav_home }}</a>
         <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-slate-600 hover:text-norya-teal">{{ t.nav_how }}</a>
         <a href="{{ base_url }}/pricing" class="text-slate-600 hover:text-norya-teal">{{ t.nav_pricing }}</a>
-        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[40px] px-3 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[40px] px-3 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">
           {{ t.nav_analyze }}
         </a>
         {% include "partials/header_lang.html" %}
@@ -102,10 +103,10 @@
           {{ t.faq_cta_sub or "Laden Sie Ihren Laborbefund hoch und erhalten Sie in wenigen Minuten einen strukturierten Bericht." }}
         </p>
         <div class="flex flex-wrap justify-center gap-3">
-          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-6 py-2.5 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95">
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-6 py-2.5 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:14px 28px;border-radius:16px;font-weight:700;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);">
             {{ t.faq_cta_primary or t.nav_analyze }}
           </a>
-          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[44px] px-6 py-2.5 rounded-xl border border-norya-teal text-norya-teal font-semibold hover:bg-teal-50">
+          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[44px] px-6 py-2.5 rounded-xl border border-norya-teal text-norya-teal font-semibold hover:bg-teal-50" style="padding:14px 28px;border-radius:16px;font-weight:700;text-decoration:none;border:2px solid #14b8a6;color:#0f766e;">
             {{ t.faq_cta_secondary or t.nav_pricing }}
           </a>
         </div>

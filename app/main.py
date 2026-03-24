@@ -432,10 +432,17 @@ def http_exception_handler(request: Request, exc: HTTPException):
             content={"error": "Too many requests", "detail": detail},
         )
     if exc.status_code == 404 and _accepts_html(request):
-        _404_path = _APP_DIR / "templates" / "404.html"
-        if _404_path.is_file():
-            return HTMLResponse(status_code=404, content=_404_path.read_text(encoding="utf-8"))
-        return HTMLResponse(status_code=404, content="<html><body><h1>404 Not Found</h1></body></html>")
+        lang = "en"
+        path = (request.url.path or "").strip().lower()
+        if path.startswith("/tr") or path == "/tr":
+            lang = "tr"
+        elif path.startswith("/de"):
+            lang = "de"
+        return templates.TemplateResponse(
+            "404.html",
+            {"request": request, "lang": lang},
+            status_code=404,
+        )
     return _error_response(request, exc.status_code, exc.detail if isinstance(exc.detail, str) else str(exc.detail))
 
 
@@ -2390,19 +2397,10 @@ def _how_it_works_lang_from_request(request: Request) -> str:
     return parsed if parsed in HOW_IT_WORKS_LANGS else DEFAULT_HOW_IT_WORKS_LANG
 
 
-def _breadcrumb_json(base_url: str, items: list[tuple[str, str]]) -> str:
-    """BreadcrumbList JSON-LD üret. items: [(name, url), ...]"""
-    bc_items = []
-    for i, (name, url) in enumerate(items, 1):
-        bc_items.append({"@type": "ListItem", "position": i, "name": name, "item": url})
-    return json.dumps({"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": bc_items}, ensure_ascii=False)
-
-
 @app.get("/about", response_class=HTMLResponse)
 def about_page(request: Request):
     """Hakkımızda / About sayfası – Stitch v21 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
-    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("About", f"{base_url}/about")])
     return templates.TemplateResponse(
         "about.html",
         {
@@ -2410,7 +2408,6 @@ def about_page(request: Request):
             "canonical_url": f"{base_url}/about",
             "base_url": base_url,
             "og_image": f"{base_url}/static/images/og-default.png",
-            "breadcrumb_json": breadcrumb_json,
         },
     )
 
@@ -2419,7 +2416,6 @@ def about_page(request: Request):
 def science_page(request: Request):
     """Bilim & Teknoloji sayfası – Stitch v20 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
-    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("Science", f"{base_url}/science")])
     return templates.TemplateResponse(
         "science.html",
         {
@@ -2427,7 +2423,6 @@ def science_page(request: Request):
             "canonical_url": f"{base_url}/science",
             "base_url": base_url,
             "og_image": f"{base_url}/static/images/og-default.png",
-            "breadcrumb_json": breadcrumb_json,
         },
     )
 
@@ -2436,7 +2431,6 @@ def science_page(request: Request):
 def security_page(request: Request):
     """Güvenlik & Gizlilik sayfası – Stitch v25 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
-    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("Security", f"{base_url}/security")])
     return templates.TemplateResponse(
         "security.html",
         {
@@ -2444,7 +2438,6 @@ def security_page(request: Request):
             "canonical_url": f"{base_url}/security",
             "base_url": base_url,
             "og_image": f"{base_url}/static/images/og-default.png",
-            "breadcrumb_json": breadcrumb_json,
         },
     )
 
@@ -2453,7 +2446,6 @@ def security_page(request: Request):
 def technology_page(request: Request):
     """Teknoloji sayfası – Stitch v22 tasarımı."""
     base_url = str(request.base_url).rstrip("/")
-    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("Technology", f"{base_url}/technology")])
     return templates.TemplateResponse(
         "technology.html",
         {
@@ -2461,7 +2453,6 @@ def technology_page(request: Request):
             "canonical_url": f"{base_url}/technology",
             "base_url": base_url,
             "og_image": f"{base_url}/static/images/og-default.png",
-            "breadcrumb_json": breadcrumb_json,
         },
     )
 
@@ -2482,7 +2473,6 @@ def how_it_works_page(request: Request):
         for code in HOW_IT_WORKS_LANGS
     ]
     hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/how-it-works?lang=en"})
-    breadcrumb_json = _breadcrumb_json(base_url, [("Home", base_url), ("How it works", canonical_url)])
     return templates.TemplateResponse(
         "how_it_works.html",
         {
@@ -2494,7 +2484,6 @@ def how_it_works_page(request: Request):
             "hreflang_alternates": hreflang_alternates,
             "hiw_lang_codes": HOW_IT_WORKS_LANGS,
             "base_url": base_url,
-            "breadcrumb_json": breadcrumb_json,
         },
     )
 
@@ -2511,8 +2500,8 @@ def pricing_landing(
     lang = _payment_lang_from_request(request)
     t = enrich_pricing_context(lang, get_pay_ui(lang))
     base_url = _paytr_canonical_base(request)
-    hreflang_alternates = [{"lang": code, "url": f"{base_url}/{code}/pricing"} for code in PRICING_HREFLANG_LANGS]
-    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/en/pricing"})
+    hreflang_alternates = [{"lang": code, "url": f"{base_url}/pricing?lang={code}"} for code in PRICING_HREFLANG_LANGS]
+    hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/pricing?lang=en"})
     plan_map = get_plan_code_to_product_cents(db)
 
     def _plan(product_key: str) -> dict:
@@ -6816,11 +6805,11 @@ def index_with_locale_path(request: Request, lang: str, path: str):
     if lang_l in SUPPORTED_LOCALES:
         path_l = (path or "").strip().lower().strip("/")
         if path_l == "pricing":
-            return RedirectResponse(url=f"/pricing?lang={lang_l}", status_code=301)
+            return RedirectResponse(url=f"/pricing?lang={lang_l}", status_code=302)
         if path_l == "how-it-works":
-            return RedirectResponse(url=f"/how-it-works?lang={lang_l}", status_code=301)
+            return RedirectResponse(url=f"/how-it-works?lang={lang_l}", status_code=302)
         if path_l == "analyze":
-            return RedirectResponse(url=f"/analyze?lang={lang_l}", status_code=301)
+            return RedirectResponse(url=f"/analyze?lang={lang_l}", status_code=302)
         if path_l == "faq":
             return RedirectResponse(url=f"/{lang_l}#faq", status_code=302)
         first_segment = path_l.split("/")[0] if path_l else ""

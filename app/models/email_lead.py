@@ -14,3 +14,13 @@ class EmailLead(SQLModel, table=True):
     ip: str | None = Field(default=None, max_length=64)
     user_agent: str | None = Field(default=None)
     created_at: datetime = Field(default_factory=datetime.utcnow)
+    # UTM tracking fields
+    utm_source: str | None = Field(default=None, max_length=128)
+    utm_medium: str | None = Field(default=None, max_length=128)
+    utm_campaign: str | None = Field(default=None, max_length=128)
+    utm_content: str | None = Field(default=None, max_length=128)
+    utm_term: str | None = Field(default=None, max_length=128)
+    # Drip campaign tracking
+    drip_step: int = Field(default=0)  # en son gönderilen drip adımı
+    drip_last_sent_at: datetime | None = Field(default=None)
+    unsubscribed: bool = Field(default=False)

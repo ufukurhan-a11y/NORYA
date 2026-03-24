@@ -2,6 +2,7 @@ from .analysis import AnalysisRecord
 from .analysis_job import AnalysisJob
 from .audit import AuditLog
 from .discount import DiscountCode
+from .drip_email import DripEmailLog
 from .enterprise_case import EnterpriseCase, EnterpriseReport
 from .enterprise_subscription import EnterpriseSubscription
 from .institution import Institution, InstitutionInvite, InstitutionMembership
@@ -11,6 +12,7 @@ from .enterprise_lead import EnterpriseLead
 from .error_log import ErrorLog
 from .payment import PaymentOrder
 from .presence import Presence
+from .referral import ReferralCode, ReferralUsage
 from .report_verification import ReportVerification
 from .security_log import SecurityLog
 from .tokens import EmailVerifyToken, GuestLoginToken, PasswordResetToken, ShareToken
@@ -23,6 +25,7 @@ __all__ = [
     "AnalysisJob",
     "AuditLog",
     "DiscountCode",
+    "DripEmailLog",
     "EnterpriseCase",
     "EnterpriseReport",
     "EnterpriseSubscription",
@@ -35,6 +38,8 @@ __all__ = [
     "ErrorLog",
     "PaymentOrder",
     "Presence",
+    "ReferralCode",
+    "ReferralUsage",
     "ReportVerification",
     "SecurityLog",
     "UploadLog",

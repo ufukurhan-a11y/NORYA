@@ -12,7 +12,6 @@
   <meta property="og:description" content="{{ meta_description }}" />
   <meta property="og:url" content="{{ canonical_url }}" />
   <meta property="og:image" content="{{ og_image }}" />
-  {% if og_image and '/static/images/og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}
   {% if og_locale %}<meta property="og:locale" content="{{ og_locale }}" />{% endif %}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ seo_title }}" />
@@ -146,56 +145,6 @@
       padding-bottom: 0.25rem;
     }
     .blog-category-scroll::-webkit-scrollbar { display: none; }
-    .blog-tag-filter-button {
-      border-radius: 9999px;
-      border: 1px dashed rgba(148, 163, 184, 0.9);
-      background: #ffffff;
-      padding: 0.5rem 0.9rem;
-      font-size: 0.8125rem;
-      font-weight: 500;
-      color: #475569;
-      display: inline-flex;
-      align-items: center;
-      gap: 0.4rem;
-      transition: background 0.18s ease, border-color 0.18s ease, color 0.18s ease, transform 0.18s ease;
-    }
-    .blog-tag-filter-button:hover {
-      background: rgba(15, 23, 42, 0.02);
-      border-color: rgba(148, 163, 184, 1);
-      transform: translateY(-1px);
-    }
-    .blog-tag-filter-button:focus-visible {
-      outline: 2px solid rgba(14, 165, 164, 0.9);
-      outline-offset: 2px;
-    }
-    .blog-tag-drawer {
-      position: fixed;
-      inset: 0;
-      z-index: 40;
-      display: none;
-    }
-    .blog-tag-drawer[data-open="true"] { display: block; }
-    .blog-tag-drawer-backdrop {
-      position: absolute;
-      inset: 0;
-      background: rgba(15, 23, 42, 0.45);
-    }
-    .blog-tag-drawer-panel {
-      position: absolute;
-      inset-inline: 0;
-      bottom: 0;
-      border-radius: 1.5rem 1.5rem 0 0;
-      background: #ffffff;
-      box-shadow: 0 -18px 45px rgba(15, 23, 42, 0.32);
-      padding: 1.25rem 1.25rem 1.75rem;
-      max-height: 75vh;
-      overflow-y: auto;
-      transform: translateY(100%);
-      transition: transform 0.2s ease-out;
-    }
-    .blog-tag-drawer[data-open="true"] .blog-tag-drawer-panel {
-      transform: translateY(0);
-    }
     @media (max-width: 640px) {
       .blog-hero { padding-top: 1.5rem; padding-bottom: 2rem; }
       .blog-card { margin-left: -0.5rem; margin-right: -0.5rem; max-width: calc(100% + 1rem); }
@@ -248,8 +197,6 @@
               <button type="button" class="blog-pill px-4 py-2 text-sm font-medium text-slate-600 whitespace-nowrap" data-category="{{ cat }}">{{ cat }}</button>
               {% endfor %}
             </div>
-
-
           </div>
         </div>
       </div>
@@ -264,9 +211,6 @@
     </div>
   </div>
 
-
-
-
   <section class="py-12 sm:py-16 px-4 sm:px-6 bg-[#fafbfc]" aria-label="{{ blog_ui.articles_section_aria|default('Articles') }}" dir="{{ 'rtl' if lang in ['ar', 'he'] else 'ltr' }}">
     <div class="max-w-5xl mx-auto">
       {% if posts %}
@@ -275,7 +219,10 @@
         <a href="{{ featured.url }}" class="relative block bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2">
           <div class="blog-card-cover aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-t-[1rem] md:rounded-tr-none md:rounded-l-[1rem]">
             {% if featured.cover_image %}
-            <img src="{{ featured.cover_image }}" alt="{{ featured.cover_alt|default(featured.title) }}" loading="eager" width="800" height="500" sizes="(max-width: 768px) 100vw, 50vw" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            <picture>
+              <source srcset="{{ featured.cover_image|replace('.png', '.webp') }}" type="image/webp" sizes="(max-width: 768px) 100vw, 50vw" />
+              <img src="{{ featured.cover_image }}" alt="{{ featured.cover_alt|default(featured.title) }}" loading="eager" width="800" height="500" sizes="(max-width: 768px) 100vw, 50vw" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            </picture>
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/12 via-slate-900/0 to-slate-900/0"></div>
             {% else %}
             <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">
@@ -331,7 +278,10 @@
         <li class="blog-card overflow-hidden flex flex-col" data-title="{{ post.title|lower }}" data-excerpt="{{ post.excerpt|lower }}" data-category="{{ post.category }}">
           <a href="{{ post.url }}" class="blog-card-cover block relative overflow-hidden aspect-[16/10] bg-slate-100 focus:outline-none focus:ring-2 focus:ring-teal-500 focus:ring-offset-2 rounded-t-[1rem]">
             {% if post.cover_image %}
-            <img src="{{ post.cover_image }}" alt="{{ post.cover_alt|default(post.title) }}" loading="lazy" width="640" height="400" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            <picture>
+              <source srcset="{{ post.cover_image|replace('.png', '.webp') }}" type="image/webp" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" />
+              <img src="{{ post.cover_image }}" alt="{{ post.cover_alt|default(post.title) }}" loading="lazy" width="640" height="400" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw" class="w-full h-full object-cover transition-transform duration-200 hover:scale-[1.02]" />
+            </picture>
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/10 via-slate-900/0 to-slate-900/0"></div>
             {% else %}
             <div class="w-full h-full bg-gradient-to-br from-teal-500/16 via-cyan-400/10 to-slate-50 relative">
@@ -402,12 +352,6 @@
       if (noResults) noResults.classList.toggle('hidden', shown > 0);
     }
 
-    var urlQ = new URLSearchParams(window.location.search).get('q');
-    if (urlQ && search) {
-      search.value = urlQ;
-      filter();
-    }
-
     if (search) {
       search.addEventListener('input', function() {
         if (searchDebounceTimer) window.clearTimeout(searchDebounceTimer);
@@ -422,8 +366,11 @@
       });
     });
 
-
-
+    var urlQ = new URLSearchParams(window.location.search).get('q');
+    if (urlQ && search) {
+      search.value = urlQ;
+      filter();
+    }
   })();
   </script>
 {% endblock %}

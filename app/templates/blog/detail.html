@@ -233,7 +233,10 @@
         <div class="overflow-hidden rounded-2xl bg-white border border-slate-200/60 shadow-sm mb-10">
           {% if article.cover_image %}
           <div class="relative w-full aspect-[16/10] sm:aspect-[2/1] overflow-hidden rounded-2xl">
-            <img src="{{ article.cover_image }}" alt="{{ article.cover_alt or article.title }}" loading="lazy" width="1200" height="630" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px" class="w-full h-full object-cover" decoding="async" />
+            <picture>
+              <source srcset="{{ article.cover_image|replace('.png', '.webp') }}" type="image/webp" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px" />
+              <img src="{{ article.cover_image }}" alt="{{ article.cover_alt or article.title }}" loading="lazy" width="1200" height="630" sizes="(max-width: 768px) 100vw, (max-width: 1024px) 90vw, 1200px" class="w-full h-full object-cover" decoding="async" />
+            </picture>
             <div class="pointer-events-none absolute inset-0 bg-gradient-to-t from-slate-900/16 via-slate-900/0 to-slate-900/0"></div>
             <div class="pointer-events-none absolute bottom-2 right-2 sm:bottom-3 sm:right-3 flex items-center gap-1.5 rounded-md bg-white/90 px-2 py-1 shadow-sm" aria-hidden="true">
               <span class="text-slate-700 font-semibold text-xs tracking-tight">N</span>
@@ -257,15 +260,6 @@
 
         <div class="prose prose-slate prose-lg max-w-none prose-headings:font-semibold prose-headings:text-slate-900 prose-headings:tracking-tight prose-p:text-slate-600 prose-p:leading-relaxed prose-li:text-slate-600 prose-a:text-teal-600 prose-a:no-underline hover:prose-a:underline">
           {% for section in article.sections %}
-          {% if loop.index == (article.sections|length // 2 + 1) and article.sections|length > 4 %}
-          <aside class="not-prose my-10 rounded-xl border border-teal-200/50 bg-gradient-to-r from-teal-50/60 to-cyan-50/40 px-5 py-4 flex flex-col sm:flex-row sm:items-center gap-3">
-            <div class="flex-1 min-w-0">
-              <p class="text-sm font-semibold text-slate-800">{{ blog_ui.mid_cta_title|default("Want to understand your own results?") }}</p>
-              <p class="text-xs text-slate-500 mt-0.5">{{ blog_ui.mid_cta_desc|default("Upload your blood test and get a clear AI-powered explanation.") }}</p>
-            </div>
-            <a href="/{{ current_lang }}/upload" class="inline-flex items-center justify-center rounded-lg bg-teal-600 px-4 py-2 text-sm font-semibold text-white shadow-sm hover:bg-teal-700 transition whitespace-nowrap">{{ blog_ui.mid_cta_btn|default("Try NoryaAI") }}</a>
-          </aside>
-          {% endif %}
           {% if section.level == 2 %}
           <h2 id="{{ section.id }}" class="scroll-mt-24 text-2xl sm:text-3xl mt-10 first:mt-0">{{ section.heading }}</h2>
           {% else %}
@@ -358,7 +352,10 @@
           {% for post in related_posts %}
           <article class="blog-sidebar-card overflow-hidden flex flex-col">
             <a href="{{ post.url }}" class="block relative overflow-hidden aspect-[16/9] bg-slate-100">
-              <img src="{{ post.cover_image }}" alt="{{ post.cover_alt or post.title }}" loading="lazy" width="400" height="225" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" class="w-full h-full object-cover" decoding="async" />
+              <picture>
+                <source srcset="{{ post.cover_image|replace('.png', '.webp') }}" type="image/webp" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" />
+                <img src="{{ post.cover_image }}" alt="{{ post.cover_alt or post.title }}" loading="lazy" width="400" height="225" sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw" class="w-full h-full object-cover" decoding="async" />
+              </picture>
             </a>
             <div class="p-4">
               <p class="text-xs font-medium text-teal-700 uppercase tracking-wide">{{ post.category }}</p>

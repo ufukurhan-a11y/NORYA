@@ -12,7 +12,6 @@
 <meta property="og:description" content="Precision AI for Complex Diagnostics. NoryaAI bridges the gap between raw data and clinical intuition with peer-reviewed methodology." />
 {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
 {% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
-{% if og_image and '/static/images/og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Science & Technology | NoryaAI" />
@@ -24,7 +23,6 @@
 <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
 <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
 <link rel="stylesheet" href="/static/css/tailwind.css" />
-<link rel="stylesheet" href="/static/css/app.css" />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet"/>
 <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <style>
@@ -32,7 +30,9 @@
 .no-scrollbar::-webkit-scrollbar { display: none; }
 .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
 </style>
-{% if breadcrumb_json %}<script type="application/ld+json">{{ breadcrumb_json|safe }}</script>{% endif %}
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://noryaai.com/"},{"@type":"ListItem","position":2,"name":"Science","item":"https://noryaai.com/science"}]}
+</script>
 </head>
 <body class="bg-surface font-body text-on-surface selection:bg-primary-container/20">
 <!-- Nav -->
@@ -49,7 +49,7 @@
 <a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/security">Security</a>
 <a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/pricing">Pricing</a>
 </div>
-<a href="/#analyze" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20">
+<a href="/#analyze" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:9999px;font-weight:600;text-decoration:none;">
 Get Started
 </a>
 </div>

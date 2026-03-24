@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  {% include "partials/gsc_meta.html" %}
+  <meta name="robots" content="index,follow" />
+  <title>{{ t.meta_title }}</title>
+  <meta name="description" content="{{ t.meta_description }}" />
+  <meta property="og:title" content="{{ t.meta_title }}" />
+  <meta property="og:description" content="{{ t.meta_description }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ canonical_url }}" />
+  <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  {% include "partials/og_default_dimensions.html" %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ t.meta_title }}" />
+  <meta name="twitter:description" content="{{ t.meta_description }}" />
+  <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png" />
+  <meta name="theme-color" content="#0EA5A4" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/static/css/tailwind.css" />
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root { --norya-teal: #0EA5A4; --norya-teal-hover: #0d9488; }
+    .text-norya-teal { color: var(--norya-teal); }
+    .bg-norya-teal { background-color: var(--norya-teal); }
+    .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
+  </style>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "{{ t.meta_title }}",
+    "url": "{{ canonical_url }}",
+    "applicationCategory": "HealthApplication",
+    "offers": {"@type": "Offer", "price": "0", "priceCurrency": "USD"},
+    "publisher": {"@type": "Organization", "name": "NoryaAI", "url": "{{ base_url }}"}
+  }
+  </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    "mainEntity": [
+      {% for faq in t.faqs %}{% if not loop.first %},{% endif %}
+      {"@type": "Question", "name": {{ faq.q|tojson }}, "acceptedAnswer": {"@type": "Answer", "text": {{ faq.a|tojson }}}}
+      {% endfor %}
+    ]
+  }
+  </script>
+  {% include "includes/gtag_google_ads.html" %}
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/en" class="flex items-center shrink-0" aria-label="NoryaAI home">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
+        <a href="/en" class="text-slate-600 hover:text-teal-600">Home</a>
+        <a href="{{ base_url }}/how-it-works?lang=en" class="text-slate-600 hover:text-teal-600">How it works</a>
+        <a href="{{ base_url }}/en/blog" class="text-slate-600 hover:text-teal-600">Blog</a>
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">Analyze</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <section class="py-10 sm:py-16 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
+      <div class="max-w-3xl mx-auto text-center">
+        <span class="inline-block text-xs font-semibold tracking-wide uppercase text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-3 py-1 mb-5">{{ t.badge|default('Free Calculator') }}</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">{{ t.hero_title }}</h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-2xl mx-auto leading-relaxed">{{ t.hero_sub }}</p>
+      </div>
+    </section>
+
+    <section class="py-10 sm:py-14 px-4 bg-white">
+      <div class="max-w-xl mx-auto">
+        <div class="rounded-2xl border-2 border-teal-200 bg-gradient-to-br from-white to-teal-50/30 p-6 sm:p-8 shadow-lg" id="homa-widget">
+          <h2 class="text-lg font-bold text-slate-900 mb-6">{{ t.calc_title|default('HOMA-IR Calculator') }}</h2>
+
+          <label for="fasting-glucose" class="block text-sm font-semibold text-slate-700 mb-2">{{ t.glucose_label|default('Fasting Glucose (mg/dL)') }}</label>
+          <input id="fasting-glucose" type="number" inputmode="decimal" step="any" min="0" placeholder="e.g. 95" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 mb-5" />
+
+          <label for="fasting-insulin" class="block text-sm font-semibold text-slate-700 mb-2">{{ t.insulin_label|default('Fasting Insulin (µIU/mL)') }}</label>
+          <input id="fasting-insulin" type="number" inputmode="decimal" step="any" min="0" placeholder="e.g. 12" class="w-full rounded-xl border border-slate-300 bg-white px-4 py-3 text-lg font-medium text-slate-800 focus:outline-none focus:ring-2 focus:ring-teal-400 focus:border-teal-400 mb-5" />
+
+          <button id="calc-btn" type="button" onclick="calcHomaIR()" class="w-full py-3.5 rounded-xl bg-norya-teal text-white font-semibold text-base hover:opacity-90 transition" style="background:#0EA5A4;color:#fff;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;border:none;cursor:pointer;width:100%;box-shadow:0 4px 16px rgba(14,165,164,.3);">{{ t.calc_btn|default('Calculate HOMA-IR') }}</button>
+
+          <div id="result-box" style="display:none;" class="mt-6 rounded-xl border border-teal-200 bg-teal-50/50 p-5 text-center">
+            <p class="text-sm text-slate-600 mb-1">{{ t.result_label|default('Your HOMA-IR') }}</p>
+            <p id="result-value" class="text-4xl font-bold text-slate-900"></p>
+            <p id="result-interpretation" class="mt-2 text-sm font-medium"></p>
+          </div>
+        </div>
+
+        <div class="mt-8 rounded-xl border border-slate-200 bg-slate-50 p-6">
+          <h3 class="text-base font-bold text-slate-900 mb-3">{{ t.ranges_title|default('HOMA-IR Reference Ranges') }}</h3>
+          <div class="space-y-2 text-sm text-slate-600">
+            <div class="flex justify-between"><span>{{ t.range_optimal|default('Optimal') }}</span><span class="font-semibold text-emerald-600">&lt; 1.0</span></div>
+            <div class="flex justify-between"><span>{{ t.range_normal|default('Normal') }}</span><span class="font-semibold text-teal-600">1.0 – 1.9</span></div>
+            <div class="flex justify-between"><span>{{ t.range_early|default('Early insulin resistance') }}</span><span class="font-semibold text-amber-600">2.0 – 2.9</span></div>
+            <div class="flex justify-between"><span>{{ t.range_significant|default('Significant insulin resistance') }}</span><span class="font-semibold text-red-600">≥ 3.0</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-10 px-4 bg-slate-50">
+      <div class="max-w-3xl mx-auto prose prose-slate">
+        <h2>{{ t.about_title|default('What is HOMA-IR?') }}</h2>
+        <p>{{ t.about_text|default('HOMA-IR (Homeostatic Model Assessment of Insulin Resistance) estimates insulin resistance from fasting glucose and insulin levels. The formula is: HOMA-IR = (Fasting Glucose mg/dL × Fasting Insulin µIU/mL) / 405. Higher values indicate greater insulin resistance, which is associated with increased risk of type 2 diabetes and metabolic syndrome.') }}</p>
+      </div>
+    </section>
+
+    {% if t.faqs %}
+    <section class="py-10 px-4 bg-white">
+      <div class="max-w-3xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-900 mb-6 text-center">{{ t.faq_title|default('Frequently Asked Questions') }}</h2>
+        <div class="space-y-4">
+          {% for faq in t.faqs %}
+          <details class="group rounded-xl border border-slate-200 bg-white">
+            <summary class="flex items-center justify-between cursor-pointer p-5 font-semibold text-slate-800 text-sm">
+              {{ faq.q }}
+              <svg class="w-5 h-5 text-slate-400 group-open:rotate-180 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+            </summary>
+            <div class="px-5 pb-5 text-sm text-slate-600 leading-relaxed">{{ faq.a }}</div>
+          </details>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
+    <section class="py-10 sm:py-14 px-4 bg-gradient-to-b from-teal-50 to-white">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.cta_title|default('Want a complete blood test analysis?') }}</h2>
+        <p class="mt-3 text-slate-600 leading-relaxed">{{ t.cta_text|default('Upload your full lab results and get a comprehensive AI-powered health report.') }}</p>
+        <a href="{{ base_url }}/analyze" class="mt-6 inline-flex items-center justify-center px-8 py-4 rounded-xl bg-norya-teal text-white font-semibold text-lg hover:opacity-90 transition shadow-lg shadow-teal-500/20" style="display:inline-flex;align-items:center;justify-content:center;background:#0EA5A4;color:#fff;padding:16px 36px;border-radius:12px;font-weight:700;font-size:18px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);margin-top:24px;">{{ t.cta_btn|default('Analyze my blood test') }}</a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-white py-8 px-4 text-center text-sm text-slate-500">
+    <p>&copy; NoryaAI · <a href="/en/blog" class="text-teal-600 hover:underline">Blog</a> · <a href="/en/tools/unit-converter" class="text-teal-600 hover:underline">Unit Converter</a> · <a href="/pricing" class="text-teal-600 hover:underline">Pricing</a></p>
+    <p class="mt-2 text-xs text-slate-400">{{ t.disclaimer|default('This calculator is for educational purposes only. Not a substitute for medical advice.') }}</p>
+  </footer>
+
+  <script>
+  function calcHomaIR() {
+    var glucose = parseFloat(document.getElementById('fasting-glucose').value);
+    var insulin = parseFloat(document.getElementById('fasting-insulin').value);
+    var box = document.getElementById('result-box');
+    var val = document.getElementById('result-value');
+    var interp = document.getElementById('result-interpretation');
+    if (isNaN(glucose) || isNaN(insulin) || glucose <= 0 || insulin <= 0) {
+      box.style.display = 'none'; return;
+    }
+    var homa = (glucose * insulin) / 405;
+    val.textContent = homa.toFixed(2);
+    box.style.display = 'block';
+    if (homa < 1.0) {
+      interp.textContent = '{{ t.interp_optimal|default("Optimal — no insulin resistance detected") }}';
+      interp.style.color = '#059669';
+    } else if (homa < 2.0) {
+      interp.textContent = '{{ t.interp_normal|default("Normal range") }}';
+      interp.style.color = '#0d9488';
+    } else if (homa < 3.0) {
+      interp.textContent = '{{ t.interp_early|default("Early signs of insulin resistance") }}';
+      interp.style.color = '#d97706';
+    } else {
+      interp.textContent = '{{ t.interp_significant|default("Significant insulin resistance — consult your doctor") }}';
+      interp.style.color = '#dc2626';
+    }
+  }
+  </script>
+</body>
+</html>
