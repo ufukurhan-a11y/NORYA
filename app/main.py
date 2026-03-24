@@ -6633,6 +6633,86 @@ def seo_landing_ar_understand_lab(request: Request):
     return _render_seo_landing(request, "ar", "understand-lab-results")
 
 
+@app.get("/en/hemogram", response_class=HTMLResponse)
+def seo_landing_en_hemogram(request: Request):
+    return _render_seo_landing(request, "en", "hemogram")
+
+
+@app.get("/de/hemogram", response_class=HTMLResponse)
+def seo_landing_de_hemogram(request: Request):
+    return _render_seo_landing(request, "de", "hemogram")
+
+
+@app.get("/es/hemogram", response_class=HTMLResponse)
+def seo_landing_es_hemogram(request: Request):
+    return _render_seo_landing(request, "es", "hemogram")
+
+
+@app.get("/fr/hemogram", response_class=HTMLResponse)
+def seo_landing_fr_hemogram(request: Request):
+    return _render_seo_landing(request, "fr", "hemogram")
+
+
+@app.get("/it/hemogram", response_class=HTMLResponse)
+def seo_landing_it_hemogram(request: Request):
+    return _render_seo_landing(request, "it", "hemogram")
+
+
+@app.get("/he/hemogram", response_class=HTMLResponse)
+def seo_landing_he_hemogram(request: Request):
+    return _render_seo_landing(request, "he", "hemogram")
+
+
+@app.get("/hi/hemogram", response_class=HTMLResponse)
+def seo_landing_hi_hemogram(request: Request):
+    return _render_seo_landing(request, "hi", "hemogram")
+
+
+@app.get("/ar/hemogram", response_class=HTMLResponse)
+def seo_landing_ar_hemogram(request: Request):
+    return _render_seo_landing(request, "ar", "hemogram")
+
+
+@app.get("/tr/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_tr_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "tr", "ai-blood-test-analyzer")
+
+
+@app.get("/de/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_de_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "de", "ai-blood-test-analyzer")
+
+
+@app.get("/es/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_es_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "es", "ai-blood-test-analyzer")
+
+
+@app.get("/fr/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_fr_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "fr", "ai-blood-test-analyzer")
+
+
+@app.get("/it/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_it_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "it", "ai-blood-test-analyzer")
+
+
+@app.get("/he/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_he_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "he", "ai-blood-test-analyzer")
+
+
+@app.get("/hi/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_hi_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "hi", "ai-blood-test-analyzer")
+
+
+@app.get("/ar/ai-blood-test-analyzer", response_class=HTMLResponse)
+def seo_landing_ar_ai_blood_test_analyzer(request: Request):
+    return _render_seo_landing(request, "ar", "ai-blood-test-analyzer")
+
+
 # SEO: robots.txt ve sitemap.xml — catch-all /{lang} rotasından ÖNCE tanımlanmalı (yoksa /sitemap.xml -> 404)
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt(request: Request):
