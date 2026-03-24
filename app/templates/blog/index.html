@@ -18,6 +18,7 @@
   <meta name="twitter:description" content="{{ meta_description }}" />
   <meta name="twitter:image" content="{{ og_image }}" />
   <meta name="robots" content="index,follow" />
+  <link rel="alternate" type="application/rss+xml" title="NoryaAI Blog" href="/{{ lang }}/blog/feed.xml" />
   {% set hreflang_x = namespace(url='') %}
   {% for alt in hreflang_alternates %}
   <link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />

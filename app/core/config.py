@@ -95,6 +95,9 @@ class Settings(BaseSettings):
     company_contact_email: str = "info@noryaai.com"
     company_country: str = "Türkiye"
 
+    # IndexNow (Bing/Yandex anında indexleme): 32 hex key. Boşsa IndexNow devre dışı.
+    indexnow_key: str = ""
+
     # MinIO (S3 uyumlu): PDF raporları yüklenir, frontend buradan indirir
     minio_endpoint: str = ""           # örn. minio.example.com veya 127.0.0.1:9000
     minio_access_key: str = ""
