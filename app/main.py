@@ -1931,7 +1931,7 @@ def blog_detail(request: Request, lang: str, slug: str):
     logo_url = f"{base_url}/static/logo.png"
     blog_posting_schema = {
         "@context": "https://schema.org",
-        "@type": "BlogPosting",
+        "@type": ["BlogPosting", "MedicalWebPage"],
         "headline": art["seo_title"] or art["title"],
         "description": art["seo_description"] or art["subtitle"],
         "image": cover_absolute,
@@ -1941,11 +1941,29 @@ def blog_detail(request: Request, lang: str, slug: str):
         "dateModified": modified_iso,
         "mainEntityOfPage": {"@type": "WebPage", "@id": canonical_url},
         "url": canonical_url,
-        "author": {"@type": "Organization", "name": BRAND_NAME},
+        "author": {
+            "@type": "Organization",
+            "name": BRAND_NAME,
+            "url": base_url,
+            "logo": {"@type": "ImageObject", "url": logo_url},
+        },
         "publisher": {
             "@type": "Organization",
             "name": BRAND_NAME,
+            "url": base_url,
             "logo": {"@type": "ImageObject", "url": logo_url},
+        },
+        "medicalAudience": {
+            "@type": "MedicalAudience",
+            "audienceType": "Patient",
+        },
+        "about": {
+            "@type": "MedicalCondition",
+            "name": art["seo_title"] or art["title"],
+        },
+        "speakable": {
+            "@type": "SpeakableSpecification",
+            "cssSelector": [".prose h2", ".prose h3", ".blog-definition"],
         },
     }
     article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
@@ -2120,6 +2138,131 @@ async def api_lead_subscribe(request: Request, db: Session = Depends(get_db)):
     threading.Thread(target=_send, daemon=True).start()
 
     return JSONResponse(content={"ok": True, "already": False})
+
+
+# ---------------------------------------------------------------------------
+# Müşteri İletişim Merkezi — AI Chat (OpenAI)
+# ---------------------------------------------------------------------------
+_CHAT_SYSTEM_PROMPT = """Sen Lisa'sın — NoryaAI'nin müşteri temsilcisi. Samimi, sıcak ve profesyonel bir kadın temsilci olarak kullanıcıların sorularını yanıtlıyorsun. Kendini tanıtırken "Ben Lisa, NoryaAI müşteri temsilciniz" şeklinde tanıt.
+
+NoryaAI Hakkında:
+- NoryaAI, kan tahlili sonuçlarını akıllı analiz motoruyla değerlendirip anlaşılır ve klinik düzeyde bir rapor sunan sağlık teknolojisi platformudur.
+- %98.7 kanıtlanmış doğruluk oranıyla sektörün en güvenilir kan tahlili analiz platformudur.
+- Kullanıcılar kan tahlili PDF'lerini veya fotoğraflarını yükler, dakikalar içinde 200'den fazla biyobelirteç üzerinden detaylı, klinik düzeyde bir rapor alırlar.
+- Raporlar tıbbi literatür ve güncel referans aralıklarına dayanır. Her değer tek tek açıklanır, sağlık skoru hesaplanır ve kişiye özel öneriler sunulur.
+- 50.000'den fazla analiz başarıyla tamamlanmıştır.
+- 10+ dilde hizmet verir: Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, İbranice, Hintçe, Arapça ve daha fazlası.
+- Mobil uygulama (iOS/Android) ve web üzerinden erişilebilir.
+
+Fiyatlandırma:
+- Ücretsiz Önizleme: €0 — Sınırlı çıktı, temel yorumlama. Deneme amaçlı.
+- Premium Rapor (Tek Seferlik): €14.00 — Tam analiz, premium PDF rapor, sağlık skoru ve öneriler. KDV dahil.
+- Aylık Plan: €54.00/ay — Ayda 5 analiz hakkı, PDF rapor, istediğin zaman iptal.
+- Yıllık Plan (Norya Plus): €99.00/yıl — Genişletilmiş yıllık kota, rapor geçmişi, öncelikli erişim.
+
+Ödeme:
+- PayTR altyapısı ile güvenli ödeme (3D Secure).
+- Visa, Mastercard, Troy desteklenir.
+- Hesap açmadan sadece e-posta ve isimle ödeme yapılabilir.
+- Ödeme sonrası erişim anında aktif olur.
+- 14 gün içinde iade talep edilebilir.
+
+Güvenlik ve Gizlilik:
+- Tüm veriler TLS ile şifrelenir.
+- KVKK ve GDPR uyumlu.
+- Kan tahlili verileri analiz sonrası saklanmaz (privacy-first yaklaşım).
+- Cloudflare CDN ve güvenlik katmanı.
+
+Nasıl Çalışır:
+1. Kan tahlili sonucunuzu (PDF, fotoğraf veya metin) yükleyin.
+2. Analiz motorumuz sonuçlarınızı 200+ biyobelirteç üzerinden değerlendirir.
+3. Dakikalar içinde detaylı, klinik düzeyde raporunuzu alın.
+4. PDF olarak indirin veya çevrimiçi görüntüleyin.
+
+İletişim:
+- E-posta: support@noryaai.com
+- WhatsApp: +90 507 170 35 64
+- Web: https://noryaai.com
+
+Kurumsal (B2B):
+- Hastaneler, klinikler ve şirketler için toplu analiz paketleri mevcuttur.
+- Kurumsal demo talebi için /kurumsal sayfasını ziyaret edebilirler.
+
+Kurallar:
+- Sen Lisa'sın. Samimi, sıcak ve yardımsever ol. Bir arkadaş gibi konuş ama profesyonelliğini koru.
+- Her zaman kullanıcının dilinde yanıt ver. Kullanıcı hangi dilde yazıyorsa o dilde cevap ver.
+- Kısa, net ve yardımcı ol. Gereksiz uzun yanıtlar verme.
+- Fiyatları Euro (€) cinsinden belirt.
+- Kullanıcıyı uygun sayfalara yönlendir: analiz için /analyze, fiyatlar için /pricing, kurumsal için /kurumsal.
+- Kişisel sağlık tavsiyeleri verme, sadece NoryaAI platformu hakkında bilgi ver.
+- Eğer soruyu cevaplayamıyorsan, kullanıcıyı support@noryaai.com veya WhatsApp'a yönlendir.
+- Yapay zeka olduğunu söyleme. Sen Lisa, NoryaAI müşteri temsilcisisin.
+- "Yapay zeka", "AI", "AI-powered" gibi ifadeler kullanma. Bunların yerine "akıllı analiz motoru", "klinik düzeyde analiz", "gelişmiş sağlık teknolojisi" gibi ifadeler kullan.
+- Ürünü anlatırken güven veren ve iddialı ifadeler kullan: "%98.7 kanıtlanmış doğruluk", "klinik düzeyde", "tıbbi literatüre dayalı", "200+ biyobelirteç", "50.000+ başarılı analiz", "uçtan uca şifreli" gibi.
+- NoryaAI'den gurur duyarak ve özgüvenle bahset. Piyasadaki en güvenilir ve en doğru kan tahlili analiz platformu olarak tanıt.
+"""
+
+_CHAT_MAX_HISTORY = 10
+
+
+@app.post("/api/chat")
+@limiter.limit("15/minute")
+async def api_chat(request: Request):
+    """Müşteri İletişim Merkezi: AI destekli müşteri sohbeti."""
+    if not is_openai_configured():
+        return JSONResponse(status_code=503, content={"error": "AI servisi şu an kullanılamıyor."})
+
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid request.")
+
+    message = (body.get("message") or "").strip()
+    if not message or len(message) > 2000:
+        return JSONResponse(status_code=422, content={"error": "Mesaj boş veya çok uzun."})
+
+    history = body.get("history") or []
+    if not isinstance(history, list):
+        history = []
+    history = history[-_CHAT_MAX_HISTORY:]
+
+    locale = (body.get("locale") or "en").strip().lower()[:5]
+    page = (body.get("page") or "").strip().lower()[:30]
+
+    messages = [{"role": "system", "content": _CHAT_SYSTEM_PROMPT}]
+
+    if locale:
+        messages.append({"role": "system", "content": f"Kullanıcının dili: {locale}. Bu dilde yanıt ver."})
+    if page:
+        messages.append({"role": "system", "content": f"Kullanıcı şu anda '{page}' sayfasında."})
+
+    for h in history:
+        role = h.get("role", "")
+        content = (h.get("content") or "").strip()
+        if role in ("user", "assistant") and content and len(content) <= 2000:
+            messages.append({"role": role, "content": content})
+
+    messages.append({"role": "user", "content": message})
+
+    try:
+        from app.services.analyze import _openai_create_with_fallback, _openai_safe_call
+
+        def _create(client):
+            return _openai_safe_call(lambda: client.chat.completions.create(
+                model="gpt-4o-mini",
+                messages=messages,
+                max_tokens=500,
+                temperature=0.7,
+            ))
+
+        response = _openai_create_with_fallback(_create)
+        reply = response.choices[0].message.content.strip()
+        return JSONResponse(content={"reply": reply})
+    except HTTPException:
+        raise
+    except Exception as e:
+        log.warning("Chat API error: %s", e)
+        return JSONResponse(status_code=500, content={"error": "Bir hata oluştu, lütfen tekrar deneyin."})
 
 
 def _inject_canonical(raw: str, canonical_url: str) -> str:
@@ -6713,6 +6856,222 @@ def seo_landing_ar_ai_blood_test_analyzer(request: Request):
     return _render_seo_landing(request, "ar", "ai-blood-test-analyzer")
 
 
+# ── LLMs.txt — AI model discoverability (llmstxt.org standardı) ──────────────
+@app.get("/llms.txt", response_class=PlainTextResponse)
+def llms_txt(request: Request):
+    """Concise site description for large language models (llmstxt.org)."""
+    base_url = str(request.base_url).rstrip("/")
+    return PlainTextResponse(
+        "# NoryaAI\n\n"
+        "> AI-powered blood test interpretation platform that helps users understand their lab results before visiting a doctor.\n\n"
+        "## About\n"
+        "- NoryaAI analyzes blood test results (CBC, metabolic panels, thyroid, lipid panels, etc.) using AI\n"
+        "- Supports PDF upload, photo capture (JPG/PNG), and text input\n"
+        "- Available in 10+ languages: Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, Arabic and more\n"
+        "- Educational tool — not a diagnostic service; designed to prepare users for doctor consultations\n"
+        "- Founded and operated in Türkiye; serves users worldwide\n\n"
+        "## Key Features\n"
+        "- Instant AI analysis with biomarker-by-biomarker explanations and reference ranges\n"
+        "- PDF report generation (patient-friendly and doctor-oriented versions)\n"
+        "- QR-verified shareable reports for secure sharing with healthcare providers\n"
+        "- Unit converter for lab values (mg/dL ↔ mmol/L, etc.)\n"
+        "- Enterprise and institutional solutions for hospitals and clinics\n"
+        "- 70+ in-depth biomarker guides in the blog (LDL, ferritin, CRP, HbA1c, TSH, and more)\n\n"
+        "## Links\n"
+        f"- [Homepage]({base_url})\n"
+        f"- [Blog — Biomarker Guides]({base_url}/en/blog)\n"
+        f"- [How It Works]({base_url}/how-it-works)\n"
+        f"- [Pricing]({base_url}/pricing)\n"
+        f"- [Science & Methodology]({base_url}/science)\n"
+        f"- [Security & Privacy]({base_url}/security)\n"
+        f"- [Technology]({base_url}/technology)\n"
+        f"- [About NoryaAI]({base_url}/about)\n"
+        f"- [Full LLM context]({base_url}/llms-full.txt)\n",
+        media_type="text/plain",
+    )
+
+
+@app.get("/llms-full.txt", response_class=PlainTextResponse)
+def llms_full_txt(request: Request):
+    """Extended site description with all blog articles for AI model context."""
+    base_url = str(request.base_url).rstrip("/")
+    lines = [
+        "# NoryaAI — Full Context\n",
+        "> AI-powered blood test interpretation platform. Upload a blood test PDF, photo, or text and receive a detailed,",
+        "> educational explanation of every biomarker — reference ranges, what abnormal values may indicate,",
+        "> and practical next-step suggestions to discuss with your doctor.\n",
+        "## Product Overview\n",
+        "NoryaAI is a health-technology SaaS that turns raw lab results into clear, actionable reports.",
+        "It is NOT a diagnostic tool; it is designed to help patients prepare for informed conversations",
+        "with their healthcare providers. The platform uses OpenAI models fine-tuned for clinical lab",
+        "interpretation and outputs structured, citation-aware explanations.\n",
+        "### Supported Input Formats",
+        "- PDF lab reports (OCR extraction)",
+        "- Photos of printed lab results (JPG, PNG)",
+        "- Copy-pasted text from patient portals\n",
+        "### Output",
+        "- Biomarker-by-biomarker explanation with reference ranges",
+        "- Risk flags and categorization (normal / borderline / abnormal)",
+        "- Downloadable PDF reports (patient and doctor versions)",
+        "- QR-verified shareable report links\n",
+        "### Languages",
+        "Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, Arabic, Greek, Czech, Serbian\n",
+        "## Pages\n",
+        f"- [Homepage]({base_url})",
+        f"- [How It Works]({base_url}/how-it-works)",
+        f"- [Pricing]({base_url}/pricing)",
+        f"- [Science & Methodology]({base_url}/science)",
+        f"- [Security & Privacy]({base_url}/security)",
+        f"- [Technology]({base_url}/technology)",
+        f"- [About]({base_url}/about)",
+        f"- [Unit Converter Tool]({base_url}/en/tools/unit-converter)",
+        f"- [Sample Reports]({base_url}/en/sample-blood-test-reports)",
+        f"- [Blood Test Results Explained]({base_url}/en/blood-test-results-explained)",
+        f"- [How to Read a CBC]({base_url}/en/guides/how-to-read-cbc)\n",
+        "## Blog — Biomarker Guides\n",
+        "NoryaAI publishes in-depth, multilingual guides on individual biomarkers and lab panels.",
+        "Each article explains what the biomarker measures, normal ranges, causes of high/low values,",
+        "and when to consult a doctor.\n",
+    ]
+
+    from app.blog_i18n import ARTICLES as _BLOG_ARTICLES
+    for art in _BLOG_ARTICLES:
+        slug = art.slugs.get("en")
+        if not slug:
+            continue
+        title = art.titles.get("en", slug)
+        url = f"{base_url}/en/blog/{slug}"
+        lines.append(f"- [{title}]({url})")
+
+    lines.append("")
+    lines.append("## Contact\n")
+    lines.append("- Email: support@noryaai.com")
+    lines.append(f"- Website: {base_url}")
+    lines.append("")
+
+    return PlainTextResponse("\n".join(lines), media_type="text/plain")
+
+
+# ── RSS Feed — AI crawlers & feed readers ────────────────────────────────────
+@app.get("/{lang}/blog/feed.xml", response_class=Response)
+def blog_rss_feed(request: Request, lang: str):
+    """RSS 2.0 feed for blog articles. AI search engines (Perplexity, Bing/Copilot) actively crawl RSS."""
+    lang = (lang or "").lower()[:2]
+    if lang not in BLOG_LANGS_PREMIUM:
+        raise HTTPException(status_code=404, detail="Feed not available for this language.")
+    base_url = str(request.base_url).rstrip("/")
+    posts = list_articles_for_lang(lang)
+
+    items_xml: list[str] = []
+    for post in posts[:50]:
+        pub_date = post["published_at"].strftime("%a, %d %b %Y 00:00:00 +0000")
+        link = f"{base_url}/{lang}/blog/{post['slug']}"
+        cover = post["cover_image"] if post["cover_image"].startswith("http") else f"{base_url}{post['cover_image']}"
+        items_xml.append(
+            f"    <item>\n"
+            f"      <title><![CDATA[{post['title']}]]></title>\n"
+            f"      <link>{link}</link>\n"
+            f"      <guid isPermaLink=\"true\">{link}</guid>\n"
+            f"      <description><![CDATA[{post.get('excerpt', '')}]]></description>\n"
+            f"      <category><![CDATA[{post.get('category', '')}]]></category>\n"
+            f"      <pubDate>{pub_date}</pubDate>\n"
+            f"      <enclosure url=\"{cover}\" type=\"image/jpeg\" />\n"
+            f"    </item>"
+        )
+
+    lang_labels = {"en": "English", "tr": "Türkçe", "de": "Deutsch", "fr": "Français", "es": "Español", "it": "Italiano", "he": "עברית", "hi": "हिन्दी", "ar": "العربية"}
+    channel_title = f"NoryaAI Blog ({lang_labels.get(lang, lang.upper())})"
+    feed_url = f"{base_url}/{lang}/blog/feed.xml"
+
+    xml = (
+        '<?xml version="1.0" encoding="UTF-8"?>\n'
+        '<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">\n'
+        '  <channel>\n'
+        f'    <title>{channel_title}</title>\n'
+        f'    <link>{base_url}/{lang}/blog</link>\n'
+        f'    <atom:link href="{feed_url}" rel="self" type="application/rss+xml" />\n'
+        f'    <description>In-depth biomarker guides and blood test explanations by NoryaAI.</description>\n'
+        f'    <language>{lang}</language>\n'
+        f'    <lastBuildDate>{datetime.now(timezone.utc).strftime("%a, %d %b %Y %H:%M:%S +0000")}</lastBuildDate>\n'
+        f'    <image>\n'
+        f'      <url>{base_url}/static/images/og-default.png</url>\n'
+        f'      <title>{channel_title}</title>\n'
+        f'      <link>{base_url}/{lang}/blog</link>\n'
+        f'    </image>\n'
+        + "\n".join(items_xml) + "\n"
+        '  </channel>\n'
+        '</rss>'
+    )
+    return Response(content=xml, media_type="application/rss+xml; charset=utf-8")
+
+
+# ── IndexNow — Bing/Copilot anında indexleme ─────────────────────────────────
+_INDEXNOW_KEY = settings.indexnow_key.strip()
+
+
+@app.get("/{key}.txt", response_class=PlainTextResponse)
+def indexnow_key_file(key: str):
+    """IndexNow key doğrulama dosyası: /{key}.txt — Bing/Yandex bunu kontrol eder."""
+    if not _INDEXNOW_KEY or key != _INDEXNOW_KEY:
+        raise HTTPException(status_code=404, detail="Not Found")
+    return PlainTextResponse(_INDEXNOW_KEY, media_type="text/plain")
+
+
+@app.post("/api/indexnow")
+async def submit_indexnow(request: Request, url_list: list[str] | None = None):
+    """Admin: Bing/Yandex'e URL bildirimi gönderir. Body: {"url_list": ["https://..."]}"""
+    if not _INDEXNOW_KEY:
+        raise HTTPException(status_code=501, detail="IndexNow key not configured.")
+    admin_cookie = request.cookies.get("norya_admin")
+    if not admin_cookie or admin_cookie != settings.admin_secret:
+        raise HTTPException(status_code=403, detail="Forbidden")
+    if not url_list:
+        body = await request.json()
+        url_list = body.get("url_list", [])
+    if not url_list:
+        raise HTTPException(status_code=400, detail="url_list is required.")
+    base_url = str(request.base_url).rstrip("/")
+    host = base_url.replace("https://", "").replace("http://", "")
+    payload = {
+        "host": host,
+        "key": _INDEXNOW_KEY,
+        "keyLocation": f"{base_url}/{_INDEXNOW_KEY}.txt",
+        "urlList": url_list[:10000],
+    }
+    import httpx
+    try:
+        async with httpx.AsyncClient(timeout=10) as client:
+            resp = await client.post("https://api.indexnow.org/indexnow", json=payload)
+            return {"ok": True, "status": resp.status_code, "submitted": len(url_list)}
+    except Exception as exc:
+        return {"ok": False, "error": str(exc)}
+
+
+# ── ChatGPT / AI Plugin manifest ─────────────────────────────────────────────
+@app.get("/.well-known/ai-plugin.json", response_class=JSONResponse)
+def ai_plugin_manifest(request: Request):
+    """OpenAI ChatGPT plugin discovery manifest."""
+    base_url = str(request.base_url).rstrip("/")
+    return JSONResponse({
+        "schema_version": "v1",
+        "name_for_human": "NoryaAI — Blood Test Analyzer",
+        "name_for_model": "noryaai_blood_test_analyzer",
+        "description_for_human": "Upload blood test results and get AI-powered explanations of biomarkers, reference ranges, and health insights.",
+        "description_for_model": (
+            "NoryaAI is an AI-powered blood test interpretation platform. "
+            "It analyzes lab results (CBC, metabolic panels, lipid panels, thyroid function, liver/kidney function, vitamins, hormones, etc.) "
+            "and provides structured, educational explanations with biomarker-level detail, reference ranges, "
+            "risk flags, and actionable next-step suggestions for doctor consultations. "
+            "Available in 10+ languages. Not a diagnostic tool."
+        ),
+        "auth": {"type": "none"},
+        "api": {"type": "openapi", "url": f"{base_url}/openapi.json"},
+        "logo_url": f"{base_url}/static/images/og-default.png",
+        "contact_email": "support@noryaai.com",
+        "legal_info_url": f"{base_url}/legal/kullanim-sartlari",
+    })
+
+
 # SEO: robots.txt ve sitemap.xml — catch-all /{lang} rotasından ÖNCE tanımlanmalı (yoksa /sitemap.xml -> 404)
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt(request: Request):
@@ -6729,7 +7088,8 @@ def robots_txt(request: Request):
         "Disallow: /pay\n"
         "Disallow: /payment\n"
         "Disallow: /verify/\n"
-        f"\nSitemap: {base_url}/sitemap.xml\n",
+        f"\nSitemap: {base_url}/sitemap.xml\n"
+        f"LLMs-Txt: {base_url}/llms.txt\n",
         media_type="text/plain",
     )
 

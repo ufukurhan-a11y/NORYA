@@ -11,6 +11,7 @@
   <meta name="apple-mobile-web-app-title" content="NoryaAI" />
   <meta name="mobile-web-app-capable" content="yes" />
   <link rel="manifest" href="/static/manifest.webmanifest" />
+  <link rel="llms-txt" href="/llms.txt" />
   <!-- Tarayıcı sekmesi ve mobil: Norya N ikonu (turkuaz/mavi N) -->
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
@@ -50,11 +51,13 @@
     "@context": "https://schema.org",
     "@type": "Organization",
     "name": "NoryaAI",
-    "alternateName": "NoryaAI",
+    "alternateName": ["NoryaAI", "Norya AI", "Norya"],
     "url": "https://noryaai.com",
     "logo": "https://noryaai.com/static/images/og-default.png",
     "email": "support@noryaai.com",
     "telephone": "+90 507 170 35 64",
+    "description": "AI-powered blood test interpretation platform that helps users understand lab results with biomarker-level explanations, reference ranges, and actionable health insights.",
+    "foundingDate": "2024",
     "address": {
       "@type": "PostalAddress",
       "streetAddress": "31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4",
@@ -73,6 +76,24 @@
       {"@type": "Country", "name": "India"},
       {"@type": "Country", "name": "United States"},
       {"@type": "Country", "name": "United Kingdom"}
+    ],
+    "knowsAbout": [
+      "Blood test interpretation",
+      "Complete blood count (CBC)",
+      "Metabolic panel analysis",
+      "Lipid panel (LDL, HDL, triglycerides)",
+      "Thyroid function tests (TSH, T3, T4)",
+      "HbA1c and diabetes markers",
+      "Liver function tests (ALT, AST, GGT, bilirubin)",
+      "Kidney function tests (creatinine, eGFR, BUN)",
+      "Iron studies (ferritin, iron levels)",
+      "Vitamin levels (B12, D, folate)",
+      "Inflammatory markers (CRP, ESR)",
+      "Hormone analysis (testosterone, cortisol, prolactin)",
+      "Electrolyte panel (sodium, potassium, calcium, magnesium)",
+      "AI in healthcare",
+      "Lab result explanation",
+      "Biomarker reference ranges"
     ],
     "sameAs": []
   }
@@ -6994,11 +7015,9 @@
     </div>
   </footer>
 
-  <!-- WhatsApp: mobilde yazı + ikon, masaüstünde yuvarlak ikon; renk ve konum mobil uyumlu -->
-  <a href="__NORYA_WHATSAPP_URL__" target="_blank" rel="noopener noreferrer" class="wa-fab rounded-full bg-[#25D366] text-white shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-[#25D366] focus:ring-offset-2" aria-label="WhatsApp ile yazın" title="WhatsApp ile yazın">
-    <img src="/static/images/whatsapp-icon-white.svg" alt="" class="w-8 h-8 flex-shrink-0 opacity-100" width="32" height="32" style="opacity:1;filter:none;" />
-    <span class="wa-fab-text sr-only">WhatsApp</span>
-  </a>
+  <!-- Müşteri İletişim Merkezi (Chat Widget) -->
+  <link rel="stylesheet" href="/static/css/chat-widget.css" />
+  <script src="/static/js/chat-widget.js" defer></script>
 
   <!-- Login Modal: e-posta + şifre -->
   <div id="modal-login" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
