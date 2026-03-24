@@ -177,6 +177,16 @@ if not STATIC_DIR.is_dir():
 templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
 templates.env.globals["getattr"] = getattr
 
+def _css_version() -> str:
+    """Cache-busting hash for tailwind.css based on file modification time."""
+    css_path = _PROJ_ROOT / "static" / "css" / "tailwind.css"
+    try:
+        return str(int(css_path.stat().st_mtime))
+    except OSError:
+        return "1"
+
+templates.env.globals["css_v"] = _css_version()
+
 
 def _seed_default_coupon():
     """INDIRIM20 kuponu yoksa oluşturur (%20 indirim, tüm planlar). Render/Production'da bar görünsün diye auto_show_on_checkout=True."""

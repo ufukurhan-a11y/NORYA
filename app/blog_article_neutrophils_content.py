@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 """
-Neutrophils high or low blog article — full body content for all 9 languages.
+Neutrophils blog article — full body content for all 9 languages.
 Used by blog_i18n._article_neutrophils().
 Sections: intro, what-are-neutrophils, normal-ranges, high-neutrophils-causes,
 low-neutrophils-causes, absolute-vs-percentage, symptoms, related-tests,
@@ -12,300 +12,187 @@ LANGS = ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")
 
 
 # ---------------------------------------------------------------------------
-# English
-# ---------------------------------------------------------------------------
-def _sections_en() -> list:
-    from app.blog_i18n import Section
-    return [
-        Section(
-            id="intro", level=2,
-            heading="Neutrophils high or low: understanding your white blood cell differential",
-            body_html=(
-                "<p>When your complete blood count (CBC) includes a white blood cell differential, neutrophils are usually the first line your eyes land on. "
-                "They are the most abundant type of white blood cell, and shifts in their number&mdash;up or down&mdash;can signal everything from a common bacterial infection "
-                "to medication side effects. But a single neutrophil count, like any lab value, needs context to be meaningful.</p>"
-                "<p>This guide explains what neutrophils are, how to read the reference ranges on your report, the most common reasons for high or low counts, "
-                "and when you should involve a healthcare professional. It is intended for education, not diagnosis&mdash;always discuss your results with a doctor.</p>"
-            ),
-        ),
-        Section(
-            id="what-are-neutrophils", level=2,
-            heading="What are neutrophils and what do they do?",
-            body_html=(
-                "<p><strong>Neutrophils</strong> are a type of granulocyte&mdash;a white blood cell that contains tiny granules filled with enzymes capable of destroying bacteria and fungi. "
-                "They are produced in the bone marrow and released into the bloodstream, where they circulate for only 6&ndash;12&nbsp;hours before migrating into tissues. "
-                "Despite their short lifespan, they are the immune system&rsquo;s rapid-response force: the first cells to arrive at the site of an infection or injury.</p>"
-                "<p>Neutrophils work by engulfing (phagocytosing) pathogens and releasing antimicrobial substances. "
-                "They also form neutrophil extracellular traps (NETs)&mdash;web-like structures of DNA and proteins that physically snare bacteria. "
-                "Because they are so central to innate immunity, a significant drop in their number leaves the body vulnerable to infections, "
-                "while a dramatic rise usually indicates the immune system is actively fighting something.</p>"
-                "<p>On a lab report, neutrophils may appear as &ldquo;Neutrophils (Absolute)&rdquo; or &ldquo;Neut %&rdquo; (percentage of total WBC). "
-                "Both values are important; the absolute count is generally considered more clinically useful because it is not influenced by changes in other cell types.</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="Normal neutrophil ranges",
-            body_html=(
-                "<p>Reference ranges vary between laboratories and populations. The values below are widely used in adults. "
-                "Always compare your result with the range printed on <em>your</em> report.</p>"
-                '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                "<thead><tr>"
-                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Parameter</th>'
-                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Typical adult range</th>'
-                "</tr></thead><tbody>"
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Absolute neutrophil count (ANC)</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2,500&ndash;7,000 cells/&mu;L</td></tr>'
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Neutrophil percentage</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70 % of total WBC</td></tr>'
-                "</tbody></table>"
-                "<p>Some ethnic groups, particularly people of African, Middle Eastern, or Caribbean descent, may have a lower baseline neutrophil count "
-                "(a benign condition called <strong>benign ethnic neutropenia</strong>). Children&rsquo;s ranges differ from adults and change with age. "
-                "Pregnancy can also raise the neutrophil count physiologically.</p>"
-            ),
-        ),
-        Section(
-            id="high-neutrophils-causes", level=2,
-            heading="Causes of high neutrophils (neutrophilia)",
-            body_html=(
-                "<p>A neutrophil count above the upper reference limit is called <strong>neutrophilia</strong>. "
-                "The most common trigger is <strong>bacterial infection</strong>: when bacteria invade, the bone marrow ramps up production and the spleen and blood vessel walls "
-                "release stored neutrophils into the circulation. Urinary tract infections, pneumonia, skin infections, and abscesses are classic examples.</p>"
-                "<p><strong>Acute inflammation</strong> from non-infectious causes&mdash;surgery, trauma, burns, myocardial infarction, or autoimmune flares&mdash;can also elevate neutrophils. "
-                "<strong>Physiological stress</strong> (intense exercise, emotional distress, pain) produces a short-lived &ldquo;stress leukocytosis&rdquo; driven mainly by neutrophils. "
-                "<strong>Corticosteroids</strong> are a well-known pharmacological cause: they reduce neutrophil migration from blood into tissues, artificially raising the circulating count.</p>"
-                "<p><strong>Smoking</strong> chronically raises neutrophils through low-grade airway inflammation. "
-                "Less commonly, persistent or very high neutrophilia may point to <strong>myeloproliferative neoplasms</strong> (e.g.&nbsp;chronic myeloid leukaemia) "
-                "or other bone marrow disorders. Your doctor will consider the degree of elevation, the trend over time, and the overall clinical picture.</p>"
-            ),
-        ),
-        Section(
-            id="low-neutrophils-causes", level=2,
-            heading="Causes of low neutrophils (neutropenia)",
-            body_html=(
-                "<p>A neutrophil count below 2,500&nbsp;cells/&mu;L is called <strong>neutropenia</strong>. Severity matters: mild neutropenia (1,000&ndash;2,500) is often clinically benign, "
-                "while severe neutropenia (&lt;&nbsp;500) significantly increases infection risk. "
-                "The most common cause in everyday practice is <strong>viral infection</strong>&mdash;influenza, hepatitis, HIV, EBV, and many other viruses can temporarily suppress neutrophil production or increase their consumption.</p>"
-                "<p><strong>Medications</strong> are another frequent cause. Chemotherapy drugs are the best-known example, but antibiotics (e.g.&nbsp;trimethoprim-sulfamethoxazole), "
-                "anticonvulsants (e.g.&nbsp;carbamazepine), antithyroid medications (e.g.&nbsp;methimazole), and some anti-inflammatory agents can all lower neutrophils. "
-                "Drug-induced neutropenia is usually reversible once the offending medication is stopped.</p>"
-                "<p><strong>Autoimmune neutropenia</strong> occurs when the body produces antibodies against its own neutrophils. "
-                "<strong>Nutritional deficiencies</strong> (B12, folate, copper) can impair production. "
-                "<strong>Severe infections</strong> (sepsis) can paradoxically lower neutrophils by consuming them faster than the marrow can replace them. "
-                "Inherited conditions like <strong>cyclic neutropenia</strong> and <strong>severe congenital neutropenia</strong> are rare but important in paediatric settings.</p>"
-            ),
-        ),
-        Section(
-            id="absolute-vs-percentage", level=2,
-            heading="Absolute count vs. percentage: which matters more?",
-            body_html=(
-                "<p>Your report may show neutrophils as a <strong>percentage</strong> (e.g.&nbsp;&ldquo;Neut 65&nbsp;%&rdquo;) and/or as an <strong>absolute count</strong> "
-                "(e.g.&nbsp;&ldquo;Neut# 4,200 cells/&mu;L&rdquo;). While both are informative, the <strong>absolute neutrophil count (ANC)</strong> is generally more reliable "
-                "for clinical decisions. The reason: a percentage can be misleading if the total WBC is abnormal. "
-                "For example, a patient with a very high lymphocyte count may appear to have a &ldquo;low&rdquo; neutrophil percentage even though the absolute number is perfectly normal.</p>"
-                "<p>ANC is often calculated automatically by the analyser, but you can estimate it yourself: "
-                "<strong>ANC = WBC &times; (Neutrophil&nbsp;% &divide; 100)</strong>. "
-                "If your WBC is 8,000 and neutrophils are 60&nbsp;%, your ANC is 4,800&mdash;well within the normal range. "
-                "When your doctor assesses infection risk (e.g.&nbsp;during chemotherapy), they almost always focus on ANC.</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="Symptoms associated with neutrophil changes",
-            body_html=(
-                "<p><strong>Neutrophilia</strong> itself rarely causes symptoms&mdash;instead the symptoms come from the underlying condition (e.g.&nbsp;fever and cough in pneumonia, "
-                "pain and swelling at an injury site). You may not notice high neutrophils unless told by a blood test.</p>"
-                "<p><strong>Neutropenia</strong> can be silent if mild. When severe (&lt;&nbsp;500 cells/&mu;L), the body struggles to fight infections, "
-                "so recurrent or unusually severe infections become the hallmark: mouth ulcers, sore throat, skin infections, fever, or infections that don&rsquo;t respond as expected to treatment. "
-                "Febrile neutropenia (fever + severe neutropenia) is a medical emergency, particularly in chemotherapy patients.</p>"
-                "<p>If you have been told your neutrophils are low and you develop a fever (&ge;&nbsp;38&nbsp;&deg;C / 100.4&nbsp;&deg;F), "
-                "contact your doctor or go to the emergency department immediately&mdash;prompt antibiotic treatment can be lifesaving.</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="Related tests your doctor may review",
-            body_html=(
-                "<p>Neutrophils are part of the WBC differential, which also includes <a href=\"/en/blog/lymphocytes-high-or-low\">lymphocytes</a>, "
-                "<a href=\"/en/blog/monocytes-high-meaning\">monocytes</a>, <a href=\"/en/blog/eosinophils-high-meaning\">eosinophils</a>, "
-                "and <a href=\"/en/blog/basophils-high-meaning\">basophils</a>. Together they reveal which arm of the immune system is active.</p>"
-                "<p>Depending on the clinical picture, the doctor may also request <strong>CRP</strong> or <strong>procalcitonin</strong> (to gauge inflammation or infection severity), "
-                "<strong>blood cultures</strong>, a <strong>peripheral blood smear</strong> (to look at cell morphology), <strong>bone marrow biopsy</strong> (if a marrow disorder is suspected), "
-                "or specific tests such as <strong>anti-neutrophil antibodies</strong> for autoimmune neutropenia. "
-                "Serial CBCs to track the trend over days or weeks are often more informative than a single snapshot.</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="When to see a doctor",
-            body_html=(
-                "<p>Discuss any neutrophil result outside the reference range with your doctor. "
-                "Seek <strong>urgent</strong> medical attention if you have neutropenia and develop a fever, chills, sore throat, mouth ulcers, or any sign of infection. "
-                "Febrile neutropenia is a time-sensitive emergency.</p>"
-                "<p>For high neutrophils, the urgency depends on the underlying cause&mdash;but if you have unexplained persistent neutrophilia, particularly with fatigue, "
-                "night sweats, or weight loss, a haematology referral may be warranted. Even mild or borderline abnormalities deserve a conversation with your healthcare provider.</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="How Norya helps",
-            body_html=(
-                "<p>Norya does not diagnose&mdash;we help you prepare. Upload your blood test at <a href=\"/analyze\">noryaai.com/analyze</a> and receive a clear, structured summary "
-                "that explains your neutrophil count and the rest of the CBC differential in plain language, with reference ranges and context. "
-                "This makes it easier to understand the numbers and have a productive conversation with your doctor.</p>"
-                "<p>Whether you are monitoring neutropenia during treatment or simply curious about a &ldquo;Neut# 1,800&rdquo; on your report, "
-                "Norya organises your results so you can ask the right questions. For plans and pricing, see our <a href=\"/pricing\">pricing page</a>.</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="Disclaimer",
-            body_html=(
-                '<p><strong>This guide is for informational purposes only and does not replace medical advice or diagnosis.</strong> '
-                'Always discuss your results with a healthcare professional. <a href="/analyze">Start analysis with Norya</a></p>'
-            ),
-        ),
-    ]
-
-
-# ---------------------------------------------------------------------------
-# Turkish
+# TURKISH
 # ---------------------------------------------------------------------------
 def _sections_tr() -> list:
     from app.blog_i18n import Section
     return [
         Section(
             id="intro", level=2,
-            heading="Nötrofil yüksek veya düşük: lökosit formülünüzü anlamak",
+            heading="Nötrofil yüksekliği ve düşüklüğü: kan testiniz ne anlama geliyor?",
             body_html=(
-                "<p>Tam kan sayımınızda (CBC) lökosit formülü yer aldığında, nötrofil genellikle ilk dikkat çeken satırdır. "
-                "Beyaz kan hücrelerinin en bol tipi olan nötrofiller, sayısındaki artış veya azalma yaygın bakteriyel enfeksiyonlardan ilaç yan etkilerine kadar pek çok duruma işaret edebilir. "
-                "Ancak tek bir nötrofil değeri, her laboratuvar sonucu gibi, anlamlı olabilmesi için bağlam gerektirir.</p>"
-                "<p>Bu rehber nötrofillerin ne olduğunu, raporunuzdaki referans aralıklarını, yüksek veya düşük sayının yaygın nedenlerini "
-                "ve ne zaman bir sağlık uzmanıyla görüşmeniz gerektiğini açıklar. Eğitim amaçlıdır, teşhis değildir.</p>"
+                "<p><strong>Nötrofiller</strong>, bağışıklık sisteminin ön cephe savunma hücreleri olup beyaz kan hücrelerinin "
+                "(lökositler) en kalabalık grubunu oluşturur. Bakteri ve mantar enfeksiyonlarına karşı ilk yanıt veren hücrelerdir; "
+                "enfeksiyon bölgesine hızla göç ederek patojenleri fagosite ederler (yutup sindirirler). Tam kan sayımının (CBC) "
+                "ayrılmaz parçası olan nötrofil değeri, enfeksiyon, inflamasyon ve kemik iliği fonksiyonu hakkında kritik bilgi sağlar.</p>"
+                "<p>Nötrofil sayısının normalin üzerinde olması <strong>nötrofili</strong>, altında olması <strong>nötropeni</strong> "
+                "olarak adlandırılır. Her iki durum da farklı nedenlere bağlı olabilir ve klinik değerlendirme gerektirir.</p>"
+                "<p>Bu rehber bilgilendirme amaçlıdır ve tıbbi tavsiye yerine geçmez. Sonuçlarınızı mutlaka doktorunuzla görüşün.</p>"
             ),
         ),
         Section(
             id="what-are-neutrophils", level=2,
-            heading="Nötrofil nedir ve ne işe yarar?",
+            heading="Nötrofiller nedir ve neden önemlidir?",
             body_html=(
-                "<p><strong>Nötrofiller</strong>, bakteri ve mantarları yok edebilen enzimlerle dolu küçük granüller içeren bir beyaz kan hücresi (granülosit) türüdür. "
-                "Kemik iliğinde üretilir ve kan dolaşımına salınırlar; orada yalnızca 6&ndash;12&nbsp;saat dolaştıktan sonra dokulara göç ederler. "
-                "Kısa ömürlerine rağmen bağışıklık sisteminin acil müdahale gücüdürler: enfeksiyon veya yaralanma bölgesine ilk ulaşan hücrelerdir.</p>"
-                "<p>Nötrofiller patojenleri yutarak (fagositoz) ve antimikrobiyal maddeler salgılayarak çalışır. "
-                "Ayrıca bakterileri fiziksel olarak yakalayan DNA ve protein ağları olan nötrofil hücre dışı tuzaklar (NET) oluştururlar. "
-                "Doğal bağışıklıkta bu kadar merkezi oldukları için sayılarındaki belirgin düşüş vücudu enfeksiyonlara savunmasız bırakır.</p>"
-                "<p>Laboratuvar raporunda nötrofiller &ldquo;Nötrofil (Mutlak)&rdquo; veya &ldquo;Neut&nbsp;%&rdquo; olarak görünebilir. "
-                "Her iki değer de önemlidir; mutlak sayı genellikle klinik olarak daha kullanışlıdır çünkü diğer hücre tiplerindeki değişikliklerden etkilenmez.</p>"
+                "<p><strong>Nötrofiller</strong>, kemik iliğinde üretilen ve kana salınan granülositlerdir. Dolaşımdaki beyaz kan "
+                "hücrelerinin yaklaşık %50&ndash;70&rsquo;ini oluşturur ve ortalama ömürleri sadece 5&ndash;90 saattir; "
+                "bu nedenle kemik iliği sürekli yeni nötrofil üretmek zorundadır.</p>"
+                "<p>Nötrofillerin enfeksiyona karşı temel mekanizmaları şunlardır:</p>"
+                "<ul>"
+                "<li><strong>Fagositoz</strong> &ndash; bakterileri ve mantar hücrelerini yutarak hücre içi enzimleriyle parçalarlar.</li>"
+                "<li><strong>Degranülasyon</strong> &ndash; antimikrobiyal proteinler içeren granüllerini dışarı salarlar.</li>"
+                "<li><strong>NET (nötrofil ekstraselüler tuzaklar)</strong> &ndash; DNA ipliklerinden oluşan ağ benzeri yapılar salgılayarak "
+                "patojenleri hapsederler.</li>"
+                "</ul>"
+                "<p>Nötrofillerin ağır düşüklüğü (mutlak sayı &lt;500/µL), ciddi enfeksiyon riskine yol açar ve "
+                "<strong>şiddetli nötropeni</strong> olarak adlandırılır. Bu durum özellikle kemoterapi alan hastalarda "
+                "yaşamı tehdit edici olabilir.</p>"
             ),
         ),
         Section(
             id="normal-ranges", level=2,
-            heading="Normal nötrofil aralıkları",
+            heading="Normal nötrofil değerleri",
             body_html=(
-                "<p>Referans aralıkları laboratuvarlar ve popülasyonlar arasında farklılık gösterebilir. Aşağıdaki değerler yetişkinlerde yaygın olarak kullanılır.</p>"
+                "<p>Nötrofiller hem mutlak sayı (ANC) hem de yüzde olarak raporlanır:</p>"
                 '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
                 "<thead><tr>"
                 '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Parametre</th>'
-                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Tipik yetişkin aralığı</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Normal Aralık</th>'
                 "</tr></thead><tbody>"
                 '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Mutlak nötrofil sayısı (ANC)</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2.500&ndash;7.000 hücre/&mu;L</td></tr>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2.500&ndash;7.000 hücre/&micro;L</td></tr>'
                 '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Nötrofil yüzdesi</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">%40&ndash;70</td></tr>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">%40&ndash;%70</td></tr>'
                 "</tbody></table>"
-                "<p>Bazı etnik gruplarda, özellikle Afrika, Orta Doğu veya Karayip kökenli kişilerde başlangıç nötrofil sayısı daha düşük olabilir "
-                "(iyi huylu etnik nötropeni). Çocuk aralıkları yetişkinlerden farklıdır. Hamilelik de nötrofil sayısını fizyolojik olarak yükseltebilir.</p>"
+                "<p>ANC, toplam beyaz küre sayısının nötrofil yüzdesiyle çarpılmasıyla hesaplanır: "
+                "<em>ANC = WBC &times; nötrofil % / 100</em>. Klinik kararlar genellikle yüzde yerine mutlak sayıya göre verilir; "
+                "çünkü toplam WBC değiştiğinde yüzde yanıltıcı olabilir.</p>"
+                "<p><strong>Nötropeni sınıflandırması:</strong> hafif (1.000&ndash;1.500/µL), orta (500&ndash;1.000/µL), "
+                "ağır (&lt;500/µL). Ağır nötropeni ciddi enfeksiyon riski taşır.</p>"
             ),
         ),
         Section(
             id="high-neutrophils-causes", level=2,
-            heading="Nötrofil yüksekliğinin nedenleri (nötrofili)",
+            heading="Nötrofil yüksekliğinin (nötrofili) nedenleri",
             body_html=(
-                "<p>Üst referans sınırını aşan nötrofil sayısı <strong>nötrofili</strong> olarak adlandırılır. "
-                "En sık tetikleyici <strong>bakteriyel enfeksiyon</strong>dur: bakteri istilasında kemik iliği üretimi artırır, dalak ve damar duvarları depolanmış nötrofilleri salar. "
-                "İdrar yolu enfeksiyonları, pnömoni, cilt enfeksiyonları ve apseler klasik örneklerdir.</p>"
-                "<p>Enfeksiyon dışı nedenlerden kaynaklanan <strong>akut inflamasyon</strong>&mdash;cerrahi, travma, yanıklar, miyokard enfarktüsü veya otoimmün alevlenmeler&mdash;de nötrofilleri yükseltebilir. "
-                "<strong>Fizyolojik stres</strong> (yoğun egzersiz, duygusal sıkıntı, ağrı) ağırlıklı olarak nötrofillerin yönlendirdiği kısa süreli bir &ldquo;stres lökositozu&rdquo; üretir. "
-                "<strong>Kortikosteroidler</strong> iyi bilinen farmakolojik bir nedendir: nötrofillerin kandan dokulara göçünü azaltarak dolaşımdaki sayıyı yapay olarak yükseltirler.</p>"
-                "<p><strong>Sigara</strong>, havayolu inflamasyonu yoluyla nötrofilleri kronik olarak yükseltir. "
-                "Daha nadir olarak, inatçı veya çok yüksek nötrofili <strong>miyeloproliferatif neoplazmlara</strong> (kronik miyeloid lösemi gibi) işaret edebilir. "
-                "Hekiminiz yükselme derecesini, zamanla gidişatı ve genel klinik tabloyu değerlendirecektir.</p>"
+                "<p><strong>Nötrofili</strong>, nötrofil sayısının 7.000/µL&rsquo;nin üzerine çıkması olarak tanımlanır. En yaygın nedenler:</p>"
+                "<ul>"
+                "<li><strong>Bakteriyel enfeksiyonlar</strong> &ndash; en sık neden; pnömoni, üriner enfeksiyon, selülit, apseler. "
+                "Vücut enfeksiyonla savaşmak için kemik iliğinden hızla nötrofil salgılar.</li>"
+                "<li><strong>Akut inflamasyon</strong> &ndash; cerrahi sonrası, travma, yanık, miyokard enfarktüsü gibi doku hasarı durumları.</li>"
+                "<li><strong>Stres yanıtı</strong> &ndash; akut fiziksel veya duygusal stres, kortizol aracılığıyla nötrofillerin "
+                "marjinal havuzdan dolaşıma geçmesine neden olur.</li>"
+                "<li><strong>Kortikosteroid kullanımı</strong> &ndash; prednizon, deksametazon gibi ilaçlar nötrofil sayısını yükseltir; "
+                "bu etki nötrofillerin damar duvarından ayrılmasını artırmalarından kaynaklanır.</li>"
+                "<li><strong>Sigara</strong> &ndash; kronik hafif nötrofiliye neden olabilir.</li>"
+                "<li><strong>Miyeloproliferatif hastalıklar</strong> &ndash; kronik miyeloid lösemi (KML) ve polisitemia vera gibi "
+                "kemik iliği kaynaklı neoplaziler.</li>"
+                "</ul>"
+                "<p>Nötrofilinin kendi başına bir hastalık olmadığını, altta yatan bir duruma bağlı olarak geliştiğini "
+                "hatırlamak önemlidir. Nedene yönelik değerlendirme gerekir.</p>"
             ),
         ),
         Section(
             id="low-neutrophils-causes", level=2,
-            heading="Nötrofil düşüklüğünün nedenleri (nötropeni)",
+            heading="Nötrofil düşüklüğünün (nötropeni) nedenleri",
             body_html=(
-                "<p>2.500&nbsp;hücre/&mu;L altındaki nötrofil sayısına <strong>nötropeni</strong> denir. Şiddeti önemlidir: hafif nötropeni (1.000&ndash;2.500) genellikle klinik olarak iyi huyludur; "
-                "ciddi nötropeni (&lt;&nbsp;500) enfeksiyon riskini belirgin artırır. "
-                "Günlük pratikte en sık neden <strong>viral enfeksiyon</strong>dur&mdash;influenza, hepatit, HIV, EBV gibi birçok virüs nötrofil üretimini geçici olarak baskılayabilir.</p>"
-                "<p><strong>İlaçlar</strong> bir diğer sık nedendir. Kemoterapi ilaçları en bilinen örnek olsa da bazı antibiyotikler (TMP-SMX), antikonvülzanlar (karbamazepin), "
-                "antitiroid ilaçlar (metimazol) ve bazı anti-inflamatuvar ajanlar da nötrofilleri düşürebilir. İlaca bağlı nötropeni genellikle ilaç kesildikten sonra geri dönüşümlüdür.</p>"
-                "<p><strong>Otoimmün nötropeni</strong>, vücudun kendi nötrofillerine karşı antikor üretmesiyle oluşur. "
-                "<strong>Besinsel eksiklikler</strong> (B12, folat, bakır) üretimi bozabilir. "
-                "<strong>Ciddi enfeksiyonlar</strong> (sepsis), kemik iliğinin karşılayamayacağı kadar hızlı tüketim nedeniyle paradoks olarak nötrofilleri düşürebilir. "
-                "<strong>Siklik nötropeni</strong> ve <strong>ciddi konjenital nötropeni</strong> gibi kalıtsal durumlar nadir ancak pediatri pratiğinde önemlidir.</p>"
+                "<p><strong>Nötropeni</strong>, mutlak nötrofil sayısının 1.500/µL&rsquo;nin altına düşmesi olarak tanımlanır. Başlıca nedenler:</p>"
+                "<ul>"
+                "<li><strong>Viral enfeksiyonlar</strong> &ndash; grip, HIV, hepatit, EBV gibi virüsler kemik iliği üretimini "
+                "geçici olarak baskılayabilir veya nötrofilleri dokulara çekebilir.</li>"
+                "<li><strong>İlaçlar</strong> &ndash; kemoterapötik ajanlar (en sık neden), kloramfenikol, karbamazepin, "
+                "klozapin, metamizol, tiyonamidler (metimazol) gibi ilaçlar.</li>"
+                "<li><strong>Otoimmün nötropeni</strong> &ndash; nötrofillere karşı antikor oluşumu sonucu yıkımlarının artması.</li>"
+                "<li><strong>Kemik iliği yetmezliği</strong> &ndash; aplastik anemi, miyelodisplastik sendrom veya kemik iliği "
+                "infiltrasyonu (lösemi, lenfoma, metastatik kanser).</li>"
+                "<li><strong>Ağır enfeksiyonlar (sepsis)</strong> &ndash; paradoks olarak çok şiddetli enfeksiyonlarda nötrofil "
+                "tüketimi üretimi aşarak nötropeni oluşabilir; bu kötü prognoz işaretidir.</li>"
+                "<li><strong>Benign etnik nötropeni</strong> &ndash; Afrika, Ortadoğu ve Akdeniz kökenli bireylerde genetik olarak "
+                "ANC 1.000&ndash;1.500/µL arasında olabilir, bu patolojik değildir.</li>"
+                "</ul>"
+                "<p>Nötropeni şiddeti arttıkça enfeksiyon riski üstel olarak yükselir. ANC &lt;500/µL olan hastalar "
+                "ateş geliştirdiğinde &ldquo;febril nötropeni&rdquo; acildir ve hemen geniş spektrumlu antibiyotik başlanmalıdır.</p>"
             ),
         ),
         Section(
             id="absolute-vs-percentage", level=2,
-            heading="Mutlak sayı mı, yüzde mi: hangisi daha önemli?",
+            heading="Mutlak nötrofil sayısı (ANC) ve nötrofil yüzdesi farkı",
             body_html=(
-                "<p>Raporunuzda nötrofiller <strong>yüzde</strong> (&ldquo;Neut %65&rdquo;) ve/veya <strong>mutlak sayı</strong> (&ldquo;Neut# 4.200 hücre/&mu;L&rdquo;) olarak görünebilir. "
-                "Her ikisi de bilgilendirici olmakla birlikte, klinik kararlar için genellikle <strong>mutlak nötrofil sayısı (ANC)</strong> daha güvenilirdir. "
-                "Nedeni: toplam WBC anormalse yüzde yanıltıcı olabilir.</p>"
-                "<p>ANC genellikle analizör tarafından otomatik hesaplanır; kendiniz de tahmin edebilirsiniz: "
-                "<strong>ANC = WBC &times; (Nötrofil&nbsp;% &divide; 100)</strong>. "
-                "WBC&rsquo;niz 8.000 ve nötrofil %60 ise ANC&rsquo;niz 4.800&mdash;normal aralıkta. "
-                "Hekiminiz enfeksiyon riskini değerlendirirken (örn. kemoterapi sırasında) neredeyse her zaman ANC&rsquo;ye odaklanır.</p>"
+                "<p>Kan testi raporlarında nötrofiller genellikle iki şekilde belirtilir:</p>"
+                "<ul>"
+                "<li><strong>Yüzde (%)</strong> &ndash; toplam beyaz kan hücreleri içindeki nötrofil oranı. "
+                "Örneğin WBC = 10.000/µL ve nötrofil = %60 ise ANC = 6.000/µL.</li>"
+                "<li><strong>Mutlak sayı (ANC)</strong> &ndash; mikrolitre başına nötrofil sayısı. "
+                "Klinik açıdan daha güvenilir bir göstergedir.</li>"
+                "</ul>"
+                "<p>Yüzde tek başına yanıltıcı olabilir. Örneğin WBC = 3.000/µL ve nötrofil = %60 ise ANC = 1.800/µL olup "
+                "aslında nötropeni sınırındadır; ancak yüzdeye bakıldığında &ldquo;normal&rdquo; görünür. "
+                "Bu nedenle doktorlar ve klinik rehberler değerlendirmelerini her zaman mutlak sayıya dayandırır.</p>"
+                "<p>Norya raporlarında hem yüzde hem de mutlak sayı gösterilir ve referans aralıklarıyla karşılaştırılır, "
+                "böylece doktorunuzla paylaşmak için net bir resim elde edersiniz.</p>"
             ),
         ),
         Section(
             id="symptoms", level=2,
-            heading="Nötrofil değişiklikleriyle ilişkili belirtiler",
+            heading="Nötrofil bozukluklarının belirtileri",
             body_html=(
-                "<p><strong>Nötrofili</strong> kendisi nadiren belirtiye neden olur&mdash;belirtiler altta yatan durumdan gelir (pnömonide ateş ve öksürük, yaralanma bölgesinde ağrı ve şişlik gibi). "
-                "Kan testinde söylenmediği sürece yüksek nötrofilleri fark etmeyebilirsiniz.</p>"
-                "<p><strong>Nötropeni</strong> hafifse sessiz kalabilir. Ciddi olduğunda (&lt;&nbsp;500 hücre/&mu;L) vücut enfeksiyonlarla mücadelede zorlanır; "
-                "tekrarlayan veya olağandışı şiddetli enfeksiyonlar (ağız ülserleri, boğaz ağrısı, cilt enfeksiyonları, ateş) ön plana çıkar. "
-                "Febril nötropeni (ateş + ciddi nötropeni) özellikle kemoterapi hastalarında tıbbi acildir.</p>"
-                "<p>Nötrofillerinizin düşük olduğu söylenmiş ve ateşiniz çıkıyorsa (&ge;&nbsp;38&nbsp;&deg;C), "
-                "derhal doktorunuzu arayın veya acil servise gidin&mdash;hızlı antibiyotik tedavisi hayat kurtarıcı olabilir.</p>"
+                "<p><strong>Nötrofilinin kendine özgü bir belirtisi genellikle yoktur</strong>; belirtiler altta yatan "
+                "nedene bağlıdır (örneğin enfeksiyon belirtileri: ateş, kızarıklık, şişlik).</p>"
+                "<p><strong>Nötropeni belirtileri</strong> enfeksiyon eğilimiyle ilişkilidir:</p>"
+                "<ul>"
+                "<li>Tekrarlayan veya uzun süren ateşli enfeksiyonlar</li>"
+                "<li>Ağız ülserleri (aftöz stomatit)</li>"
+                "<li>Dişeti iltihabı ve periodontal hastalık</li>"
+                "<li>Cilt enfeksiyonları, apseler</li>"
+                "<li>Solunum yolu enfeksiyonları (pnömoni)</li>"
+                "<li>Ateş&mdash;nötropenik hastada tek belirti sadece ateş olabilir, çünkü enflamatuar yanıt "
+                "baskılandığından tipik enfeksiyon bulguları (kızarıklık, cerahat) oluşmayabilir</li>"
+                "</ul>"
+                "<p>Nötropenik hastada ateş tıbbi acil kabul edilir ve derhal değerlendirilmelidir.</p>"
             ),
         ),
         Section(
             id="related-tests", level=2,
-            heading="Hekimin değerlendirebileceği ilişkili testler",
+            heading="İlgili testler",
             body_html=(
-                "<p>Nötrofiller, <a href=\"/tr/blog/lymphocytes-high-or-low\">lenfosit</a>, "
-                "<a href=\"/tr/blog/monocytes-high-meaning\">monosit</a>, <a href=\"/tr/blog/eosinophils-high-meaning\">eozinofil</a> "
-                "ve <a href=\"/tr/blog/basophils-high-meaning\">bazofilleri</a> de içeren lökosit formülünün bir parçasıdır. "
-                "Birlikte bağışıklık sisteminin hangi kolunun aktif olduğunu gösterirler.</p>"
-                "<p>Klinik tabloya bağlı olarak hekim <strong>CRP</strong> veya <strong>prokalsitonin</strong>, <strong>kan kültürü</strong>, "
-                "<strong>periferik yayma</strong>, <strong>kemik iliği biyopsisi</strong> veya <strong>anti-nötrofil antikorları</strong> gibi testler de isteyebilir. "
-                "Günler veya haftalar içinde trendi izlemek için seri CBC&rsquo;ler genellikle tek bir ölçümden daha bilgilendiricidir.</p>"
+                "<p>Nötrofil değerlendirmesi genellikle tam kan sayımı ve lökosit formülü (diferansiyel) kapsamında yapılır:</p>"
+                "<ul>"
+                "<li><strong>Toplam beyaz küre sayısı (WBC)</strong> &ndash; nötrofil mutlak sayısının hesaplanması için gereklidir.</li>"
+                "<li><strong>Lenfositler</strong> &ndash; viral enfeksiyonlarda artabilir; nötrofil/lenfosit oranı (NLR) inflamasyon belirteci olarak kullanılır.</li>"
+                "<li><strong>Monositler</strong> &ndash; kronik enfeksiyonlarda artabilir.</li>"
+                "<li><strong>Eozinofiller</strong> &ndash; alerjik durumlar ve paraziter enfeksiyonlarda artar.</li>"
+                "<li><strong>Bazofiller</strong> &ndash; nadir durumlarda değerlendirilir.</li>"
+                "<li><strong>CRP (C-reaktif protein)</strong> &ndash; sistemik inflamasyonun belirteci; nötrofili ile birlikte değerlendirilir.</li>"
+                "<li><strong>Prokalsitonin</strong> &ndash; bakteriyel enfeksiyon için daha spesifik bir belirteç.</li>"
+                "<li><strong>Periferik yayma</strong> &ndash; nötrofillerin morfolojisini (toksik granülasyon, band formları) değerlendirir.</li>"
+                "</ul>"
+                "<p>Bu testlerin kombinasyonu, nötrofil değişikliğinin nedenini daraltmaya yardımcı olur.</p>"
             ),
         ),
         Section(
             id="when-to-see-doctor", level=2,
-            heading="Ne zaman hekime başvurmalısınız?",
+            heading="Doktora ne zaman başvurmalısınız?",
             body_html=(
-                "<p>Referans aralığı dışındaki herhangi bir nötrofil sonucunu hekiminizle görüşün. "
-                "Nötropeniniz varsa ve ateş, titreme, boğaz ağrısı, ağız ülserleri veya herhangi bir enfeksiyon belirtisi geliştirirseniz <strong>acil</strong> tıbbi yardım alın. "
-                "Febril nötropeni zamana duyarlı bir acildir.</p>"
-                "<p>Yüksek nötrofiller için aciliyet altta yatan nedene bağlıdır; ancak açıklanamayan inatçı nötrofili, özellikle yorgunluk, "
-                "gece terlemesi veya kilo kaybıyla birlikteyse hematoloji yönlendirmesi gerekebilir.</p>"
+                "<p>Aşağıdaki durumlarda bir sağlık uzmanına danışın:</p>"
+                "<ul>"
+                "<li>Nötrofil sayınız referans aralığının dışında çıktıysa</li>"
+                "<li>Tekrarlayan veya uzun süreli enfeksiyonlar yaşıyorsanız</li>"
+                "<li>Ağız ülserleri, dişeti kanaması veya cilt enfeksiyonlarınız varsa</li>"
+                "<li>Kemoterapi veya immunosupresif tedavi alıyorsanız</li>"
+                "</ul>"
+                "<p><strong>Acil durum (febril nötropeni):</strong> ANC &lt;500/µL olan bir hastada 38,3°C ve üzeri ateş "
+                "(veya bir saat süren 38,0°C ateş) acil müdahale gerektirir. Gecikmiş antibiyotik tedavisi yaşamı tehdit edebilir.</p>"
             ),
         ),
         Section(
             id="how-norya-helps", level=2,
             heading="Norya nasıl yardımcı olur?",
             body_html=(
-                "<p>Norya teşhis koymaz&mdash;randevunuza hazırlanmanıza yardımcı olur. Kan tahlili raporunuzu <a href=\"/analyze\">noryaai.com/analyze</a> adresinden yükleyin "
-                "ve nötrofil sayınız ile CBC formülünün geri kalanını sade dilde, referans aralıkları ve bağlamlarıyla açıklayan net, yapılandırılmış bir özet alın.</p>"
-                "<p>İster tedavi sırasında nötropeniyi takip edin, ister raporunuzdaki &ldquo;Neut# 1.800&rdquo; değerini merak edin; "
-                "Norya sonuçlarınızı düzenler ve doğru soruları sormanıza yardımcı olur. Plan ve fiyatlar: <a href=\"/pricing\">fiyatlandırma sayfası</a>.</p>"
+                "<p>Norya teşhis koymaz&mdash;doktor ziyaretinize hazırlanmanıza yardımcı olur. "
+                "Kan tahlili raporunuzu <a href=\"/analyze\">noryaai.com/analyze</a> sayfasına yükleyin; "
+                "yapay zekâ motorumuz nötrofil mutlak sayısı ve yüzdesini, toplam WBC&rsquo;yi ve diğer lökosit alt tiplerini "
+                "otomatik olarak çıkarır, referans aralıklarıyla karşılaştırır ve anlaşılır bir rapor oluşturur.</p>"
+                "<p>Abonelik seçenekleri için <a href=\"/pricing\">fiyatlandırma sayfamızı</a> ziyaret edin.</p>"
             ),
         ),
         Section(
@@ -313,500 +200,432 @@ def _sections_tr() -> list:
             heading="Uyarı",
             body_html=(
                 '<p><strong>Bu rehber bilgilendirme amaçlıdır; tıbbi tavsiye veya teşhis yerine geçmez.</strong> '
-                'Sonuçlarınızı mutlaka bir sağlık uzmanıyla değerlendirin. <a href="/analyze">Norya ile analiz başlat</a></p>'
+                'Sonuçlarınızı mutlaka bir sağlık uzmanıyla değerlendirin. '
+                '<a href="/analyze">Norya ile analiz başlat</a></p>'
             ),
         ),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Spanish
+# ENGLISH
+# ---------------------------------------------------------------------------
+def _sections_en() -> list:
+    from app.blog_i18n import Section
+    return [
+        Section(
+            id="intro", level=2,
+            heading="Neutrophils high or low: what your blood test means",
+            body_html=(
+                "<p><strong>Neutrophils</strong> are the most abundant type of white blood cell and serve as the immune system&rsquo;s "
+                "first responders. They are the frontline defence against bacterial and fungal infections, rushing to the site of "
+                "invasion to engulf and destroy pathogens through phagocytosis. Neutrophil counts are a key component of the "
+                "<strong>complete blood count (CBC)</strong> with differential and provide critical insight into infection, "
+                "inflammation, and bone marrow function.</p>"
+                "<p>An elevated count is called <strong>neutrophilia</strong>, while a reduced count is called <strong>neutropenia</strong>. "
+                "Both conditions can arise from a wide range of causes and warrant clinical evaluation.</p>"
+                "<p>This guide is educational and does not replace medical advice. Always discuss your results with a healthcare professional.</p>"
+            ),
+        ),
+        Section(
+            id="what-are-neutrophils", level=2,
+            heading="What are neutrophils and why do they matter?",
+            body_html=(
+                "<p><strong>Neutrophils</strong> are granulocytes produced in the bone marrow and released into the bloodstream. "
+                "They make up approximately 50&ndash;70% of circulating white blood cells and have a remarkably short lifespan of "
+                "just 5&ndash;90 hours in circulation, which means the bone marrow must continuously produce new neutrophils "
+                "at an estimated rate of 10<sup>11</sup> cells per day.</p>"
+                "<p>Neutrophils fight infection through several mechanisms:</p>"
+                "<ul>"
+                "<li><strong>Phagocytosis</strong> &ndash; engulfing bacteria and fungi, then destroying them with intracellular enzymes "
+                "and reactive oxygen species.</li>"
+                "<li><strong>Degranulation</strong> &ndash; releasing antimicrobial proteins and enzymes from cytoplasmic granules.</li>"
+                "<li><strong>NETs (neutrophil extracellular traps)</strong> &ndash; extruding web-like structures of DNA and antimicrobial "
+                "proteins to trap and kill pathogens.</li>"
+                "</ul>"
+                "<p>Severely low neutrophil counts (absolute count &lt;500/&micro;L) leave the body vulnerable to life-threatening "
+                "infections, a state known as <strong>severe neutropenia</strong>. This is particularly dangerous in patients "
+                "undergoing chemotherapy.</p>"
+            ),
+        ),
+        Section(
+            id="normal-ranges", level=2,
+            heading="Normal neutrophil ranges",
+            body_html=(
+                "<p>Neutrophils are reported as both an absolute count (ANC) and a percentage of total white blood cells:</p>"
+                '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
+                "<thead><tr>"
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Parameter</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Normal Range</th>'
+                "</tr></thead><tbody>"
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Absolute Neutrophil Count (ANC)</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2,500&ndash;7,000 cells/&micro;L</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Neutrophil percentage</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70%</td></tr>'
+                "</tbody></table>"
+                "<p>The ANC is calculated by multiplying the total WBC count by the neutrophil percentage: "
+                "<em>ANC = WBC &times; neutrophil % / 100</em>. Clinical decisions are based on the absolute count rather than "
+                "the percentage, because the percentage can be misleading when the total WBC is abnormal.</p>"
+                "<p><strong>Neutropenia grading:</strong> mild (1,000&ndash;1,500/&micro;L), moderate (500&ndash;1,000/&micro;L), "
+                "severe (&lt;500/&micro;L). Severe neutropenia carries significant infection risk.</p>"
+            ),
+        ),
+        Section(
+            id="high-neutrophils-causes", level=2,
+            heading="Causes of high neutrophils (neutrophilia)",
+            body_html=(
+                "<p><strong>Neutrophilia</strong> is defined as an ANC above 7,000/&micro;L. The most common causes include:</p>"
+                "<ul>"
+                "<li><strong>Bacterial infections</strong> &ndash; the most frequent trigger. Pneumonia, urinary tract infections, "
+                "cellulitis, and abscesses all provoke rapid neutrophil mobilization from the bone marrow.</li>"
+                "<li><strong>Acute inflammation</strong> &ndash; post-surgical tissue injury, trauma, burns, and myocardial infarction "
+                "cause neutrophil recruitment to damaged tissue.</li>"
+                "<li><strong>Physiological stress response</strong> &ndash; acute physical or emotional stress causes cortisol-mediated "
+                "demargination of neutrophils from blood vessel walls into the circulating pool.</li>"
+                "<li><strong>Corticosteroid medications</strong> &ndash; prednisone, dexamethasone, and similar drugs increase the "
+                "neutrophil count by promoting demargination and reducing neutrophil migration out of blood vessels.</li>"
+                "<li><strong>Smoking</strong> &ndash; chronic low-grade inflammation from smoking can cause persistent mild neutrophilia.</li>"
+                "<li><strong>Myeloproliferative disorders</strong> &ndash; chronic myeloid leukaemia (CML), polycythemia vera, "
+                "and essential thrombocythemia may present with markedly elevated neutrophils.</li>"
+                "</ul>"
+                "<p>Neutrophilia is a response to an underlying process, not a disease in itself. Identifying the trigger "
+                "is essential for appropriate management.</p>"
+            ),
+        ),
+        Section(
+            id="low-neutrophils-causes", level=2,
+            heading="Causes of low neutrophils (neutropenia)",
+            body_html=(
+                "<p><strong>Neutropenia</strong> is defined as an ANC below 1,500/&micro;L. Principal causes include:</p>"
+                "<ul>"
+                "<li><strong>Viral infections</strong> &ndash; influenza, HIV, hepatitis, EBV, and other viruses can temporarily "
+                "suppress bone marrow production or redistribute neutrophils to tissues.</li>"
+                "<li><strong>Medications</strong> &ndash; chemotherapy agents (the most common cause of severe neutropenia), "
+                "chloramphenicol, carbamazepine, clozapine, metamizole, and thionamides (methimazole).</li>"
+                "<li><strong>Autoimmune neutropenia</strong> &ndash; antibodies directed against neutrophils cause increased destruction.</li>"
+                "<li><strong>Bone marrow failure</strong> &ndash; aplastic anemia, myelodysplastic syndromes, or bone marrow "
+                "infiltration (leukaemia, lymphoma, metastatic cancer).</li>"
+                "<li><strong>Severe infections (sepsis)</strong> &ndash; paradoxically, overwhelming infections can consume neutrophils "
+                "faster than the marrow can produce them, leading to neutropenia&mdash;a poor prognostic sign.</li>"
+                "<li><strong>Benign ethnic neutropenia</strong> &ndash; individuals of African, Middle Eastern, and Mediterranean "
+                "descent may have a constitutionally lower ANC (1,000&ndash;1,500/&micro;L) without increased infection risk.</li>"
+                "</ul>"
+                "<p>As neutropenia deepens, infection risk increases exponentially. A neutropenic patient who develops fever "
+                "(≥38.3°C or sustained ≥38.0°C for one hour) has <strong>febrile neutropenia</strong>&mdash;a medical emergency "
+                "requiring immediate broad-spectrum antibiotics.</p>"
+            ),
+        ),
+        Section(
+            id="absolute-vs-percentage", level=2,
+            heading="Absolute neutrophil count (ANC) vs. percentage: why it matters",
+            body_html=(
+                "<p>Blood test reports typically display neutrophils in two ways:</p>"
+                "<ul>"
+                "<li><strong>Percentage (%)</strong> &ndash; the proportion of total white blood cells that are neutrophils. "
+                "For example, if WBC = 10,000/&micro;L and neutrophils = 60%, then ANC = 6,000/&micro;L.</li>"
+                "<li><strong>Absolute count (ANC)</strong> &ndash; the actual number of neutrophils per microlitre of blood. "
+                "This is clinically more reliable.</li>"
+                "</ul>"
+                "<p>The percentage can be misleading on its own. Consider a patient with WBC = 3,000/&micro;L and neutrophils = 60%. "
+                "The percentage appears &ldquo;normal,&rdquo; but the ANC is only 1,800/&micro;L&mdash;approaching the neutropenia "
+                "threshold. Conversely, a high neutrophil percentage with a low total WBC may mask a truly low ANC.</p>"
+                "<p>Clinical guidelines and treatment decisions (especially for febrile neutropenia) are always based on the "
+                "absolute count, not the percentage. Norya reports display both values and compare each against reference ranges "
+                "so you have a clear picture to share with your doctor.</p>"
+            ),
+        ),
+        Section(
+            id="symptoms", level=2,
+            heading="Symptoms of neutrophil disorders",
+            body_html=(
+                "<p><strong>Neutrophilia usually has no symptoms of its own</strong>&mdash;symptoms are those of the underlying cause "
+                "(e.g. fever, redness, swelling from an infection).</p>"
+                "<p><strong>Neutropenia symptoms</strong> relate to increased infection susceptibility:</p>"
+                "<ul>"
+                "<li>Recurrent or prolonged febrile infections</li>"
+                "<li>Mouth ulcers (aphthous stomatitis)</li>"
+                "<li>Gum inflammation and periodontal disease</li>"
+                "<li>Skin infections and abscesses</li>"
+                "<li>Respiratory infections (pneumonia)</li>"
+                "<li>Fever may be the <em>only</em> sign in a neutropenic patient, because the suppressed inflammatory response "
+                "may prevent typical infection signs (redness, pus formation) from appearing</li>"
+                "</ul>"
+                "<p>Fever in a neutropenic patient is treated as a medical emergency and requires immediate evaluation.</p>"
+            ),
+        ),
+        Section(
+            id="related-tests", level=2,
+            heading="Related tests",
+            body_html=(
+                "<p>Neutrophil evaluation is part of the CBC with differential and is interpreted alongside:</p>"
+                "<ul>"
+                "<li><strong>Total white blood cell count (WBC)</strong> &ndash; required for calculating the ANC.</li>"
+                "<li><strong>Lymphocytes</strong> &ndash; may rise in viral infections; the neutrophil-to-lymphocyte ratio (NLR) "
+                "is used as an inflammation marker.</li>"
+                "<li><strong>Monocytes</strong> &ndash; may increase in chronic infections and granulomatous diseases.</li>"
+                "<li><strong>Eosinophils</strong> &ndash; elevated in allergic conditions and parasitic infections.</li>"
+                "<li><strong>Basophils</strong> &ndash; evaluated in rare conditions.</li>"
+                "<li><strong>CRP (C-reactive protein)</strong> &ndash; a systemic inflammation marker often evaluated alongside neutrophilia.</li>"
+                "<li><strong>Procalcitonin</strong> &ndash; a more specific marker for bacterial infection.</li>"
+                "<li><strong>Peripheral blood smear</strong> &ndash; allows morphological assessment of neutrophils (toxic granulation, "
+                "band forms, hypersegmentation).</li>"
+                "</ul>"
+                "<p>The combination of these tests helps narrow down the cause of abnormal neutrophil counts.</p>"
+            ),
+        ),
+        Section(
+            id="when-to-see-doctor", level=2,
+            heading="When to see a doctor",
+            body_html=(
+                "<p>Consult a healthcare professional if:</p>"
+                "<ul>"
+                "<li>Your neutrophil count is outside the reference range</li>"
+                "<li>You experience recurrent or prolonged infections</li>"
+                "<li>You develop mouth ulcers, gum bleeding, or skin infections</li>"
+                "<li>You are receiving chemotherapy or immunosuppressive therapy</li>"
+                "</ul>"
+                "<p><strong>Emergency (febrile neutropenia):</strong> If your ANC is &lt;500/&micro;L and you develop a fever of "
+                "38.3°C (101°F) or higher (or sustained 38.0°C for one hour), seek emergency medical care immediately. "
+                "Delayed antibiotic treatment can be life-threatening.</p>"
+            ),
+        ),
+        Section(
+            id="how-norya-helps", level=2,
+            heading="How Norya helps",
+            body_html=(
+                "<p>Norya does not diagnose&mdash;we help you prepare for your doctor visit. Upload your blood test report at "
+                "<a href=\"/analyze\">noryaai.com/analyze</a> and our AI engine automatically extracts your neutrophil absolute "
+                "count and percentage, total WBC, and other leukocyte subtypes, compares them against reference ranges, "
+                "and generates a clear, structured report.</p>"
+                "<p>For subscription options, visit our <a href=\"/pricing\">pricing page</a>.</p>"
+            ),
+        ),
+        Section(
+            id="disclaimer", level=2,
+            heading="Disclaimer",
+            body_html=(
+                '<p><strong>This guide is for informational purposes only and does not replace medical advice or diagnosis.</strong> '
+                'Always discuss your results with a healthcare professional. '
+                '<a href="/analyze">Start analysis with Norya</a></p>'
+            ),
+        ),
+    ]
+
+
+# ---------------------------------------------------------------------------
+# SPANISH
 # ---------------------------------------------------------------------------
 def _sections_es() -> list:
     from app.blog_i18n import Section
     return [
-        Section(id="intro", level=2, heading="Neutrófilos altos o bajos: entiende tu fórmula leucocitaria",
-                body_html=(
-                    "<p>Cuando el hemograma incluye una fórmula leucocitaria, los neutrófilos suelen ser la primera línea en la que te fijas. "
-                    "Son el tipo más abundante de glóbulos blancos, y los cambios en su número pueden indicar desde una infección bacteriana común hasta efectos secundarios de medicamentos.</p>"
-                    "<p>Esta guía explica qué son los neutrófilos, cómo leer los rangos de referencia, las causas más frecuentes de valores altos o bajos, "
-                    "y cuándo consultar al médico. Es educativa, no diagnóstica.</p>")),
-        Section(id="what-are-neutrophils", level=2, heading="¿Qué son los neutrófilos y qué hacen?",
-                body_html=(
-                    "<p><strong>Los neutrófilos</strong> son un tipo de granulocito: un glóbulo blanco que contiene gránulos llenos de enzimas capaces de destruir bacterias y hongos. "
-                    "Se producen en la médula ósea y circulan en sangre solo 6&ndash;12&nbsp;horas antes de migrar a los tejidos. Son la fuerza de respuesta rápida del sistema inmunitario.</p>"
-                    "<p>Funcionan fagocitando patógenos y liberando sustancias antimicrobianas. También forman trampas extracelulares (NETs) que atrapan bacterias físicamente. "
-                    "En el informe aparecen como &ldquo;Neutrófilos (Absoluto)&rdquo; o &ldquo;Neut %&rdquo;; el recuento absoluto suele ser más útil clínicamente.</p>")),
-        Section(id="normal-ranges", level=2, heading="Rangos normales de neutrófilos",
-                body_html=(
-                    "<p>Los rangos de referencia varían entre laboratorios. Los valores siguientes se usan ampliamente en adultos.</p>"
-                    '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                    "<thead><tr>"
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Parámetro</th>'
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Rango adulto típico</th>'
-                    "</tr></thead><tbody>"
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Recuento absoluto (ANC)</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2.500&ndash;7.000 cél./&mu;L</td></tr>'
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Porcentaje</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70 %</td></tr>'
-                    "</tbody></table>"
-                    "<p>Algunos grupos étnicos tienen un recuento basal inferior (neutropenia étnica benigna). Los rangos infantiles difieren y cambian con la edad. El embarazo eleva fisiológicamente los neutrófilos.</p>")),
+        Section(id="intro", level=2, heading="Neutrófilos altos o bajos: qué significan en tu análisis de sangre",
+                body_html="<p>Los <strong>neutrófilos</strong> son el tipo más abundante de glóbulo blanco y actúan como primera línea de defensa del sistema inmunitario contra infecciones bacterianas y fúngicas. Su recuento forma parte del <strong>hemograma completo (CBC)</strong> y aporta información clave sobre infecciones, inflamación y función de la médula ósea.</p><p>Un recuento elevado se denomina <strong>neutrofilia</strong> y uno bajo <strong>neutropenia</strong>. Ambas situaciones pueden tener múltiples causas y requieren valoración clínica.</p><p>Esta guía es educativa y no sustituye el consejo médico profesional.</p>"),
+        Section(id="what-are-neutrophils", level=2, heading="¿Qué son los neutrófilos?",
+                body_html="<p>Los <strong>neutrófilos</strong> son granulocitos producidos en la médula ósea. Representan el 50&ndash;70% de los leucocitos circulantes y tienen una vida media de solo 5&ndash;90 horas. Combaten las infecciones mediante fagocitosis, degranulación y trampas extracelulares de neutrófilos (NETs).</p><p>Una neutropenia grave (ANC &lt;500/µL) deja al organismo vulnerable a infecciones potencialmente mortales, especialmente en pacientes que reciben quimioterapia.</p>"),
+        Section(id="normal-ranges", level=2, heading="Valores normales de neutrófilos",
+                body_html="<p>Los neutrófilos se expresan como recuento absoluto (ANC) y porcentaje:</p><table class=\"w-full border border-slate-200 text-sm my-4\" style=\"border-collapse: collapse;\"><thead><tr><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Parámetro</th><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Rango normal</th></tr></thead><tbody><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">ANC</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">2.500&ndash;7.000 células/µL</td></tr><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">Porcentaje</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">40&ndash;70%</td></tr></tbody></table><p>ANC = WBC &times; % neutrófilos / 100. Las decisiones clínicas se basan en el recuento absoluto. Neutropenia: leve 1.000&ndash;1.500, moderada 500&ndash;1.000, grave &lt;500/µL.</p>"),
         Section(id="high-neutrophils-causes", level=2, heading="Causas de neutrófilos altos (neutrofilia)",
-                body_html=(
-                    "<p>La causa más frecuente es la <strong>infección bacteriana</strong>: la médula aumenta la producción y se liberan neutrófilos almacenados. "
-                    "Infecciones urinarias, neumonía, infecciones cutáneas y abscesos son ejemplos clásicos.</p>"
-                    "<p>La <strong>inflamación aguda</strong> no infecciosa (cirugía, trauma, quemaduras), el <strong>estrés fisiológico</strong> (ejercicio intenso, dolor) "
-                    "y los <strong>corticosteroides</strong> también pueden elevar los neutrófilos. El <strong>tabaquismo</strong> los eleva crónicamente.</p>"
-                    "<p>Más raramente, una neutrofilia persistente o muy alta puede apuntar a <strong>neoplasias mieloproliferativas</strong>. El médico evaluará el grado, la tendencia y el cuadro clínico.</p>")),
+                body_html="<p>Las causas más frecuentes de <strong>neutrofilia</strong> (ANC &gt;7.000/µL) incluyen: infecciones bacterianas (neumonía, ITU, celulitis), inflamación aguda (cirugía, traumatismo, infarto), respuesta al estrés (liberación de cortisol), corticosteroides, tabaquismo y trastornos mieloproliferativos (LMC, policitemia vera).</p><p>La neutrofilia es una respuesta a un proceso subyacente, no una enfermedad en sí misma.</p>"),
         Section(id="low-neutrophils-causes", level=2, heading="Causas de neutrófilos bajos (neutropenia)",
-                body_html=(
-                    "<p>La causa más común es la <strong>infección viral</strong> (gripe, hepatitis, HIV). La neutropenia grave (&lt;&nbsp;500) aumenta significativamente el riesgo de infección.</p>"
-                    "<p><strong>Medicamentos</strong> como quimioterapia, ciertos antibióticos, anticonvulsivos y antitiroideos pueden reducir los neutrófilos. Suele ser reversible al retirar el fármaco.</p>"
-                    "<p><strong>Neutropenia autoinmunitaria</strong>, <strong>déficit de B12/folato</strong> e infecciones graves (sepsis) son otras causas. Condiciones hereditarias como la neutropenia cíclica son raras pero importantes en pediatría.</p>")),
+                body_html="<p>La <strong>neutropenia</strong> (ANC &lt;1.500/µL) puede deberse a: infecciones virales (gripe, VIH, hepatitis), fármacos (quimioterapia, clozapina, metamizol), neutropenia autoinmune, insuficiencia medular (anemia aplásica, mielodisplasia), sepsis grave y neutropenia étnica benigna.</p><p>La neutropenia febril (ANC &lt;500 + fiebre ≥38,3°C) es una emergencia que requiere antibióticos de amplio espectro inmediatos.</p>"),
         Section(id="absolute-vs-percentage", level=2, heading="Recuento absoluto vs. porcentaje",
-                body_html=(
-                    "<p>El <strong>recuento absoluto (ANC)</strong> es más fiable que el porcentaje para decisiones clínicas, porque el porcentaje puede ser engañoso si el WBC total es anormal.</p>"
-                    "<p>Cálculo: <strong>ANC = WBC &times; (Neut&nbsp;% &divide; 100)</strong>. Si WBC es 8.000 y Neut 60&nbsp;%, ANC = 4.800, dentro del rango normal.</p>")),
-        Section(id="symptoms", level=2, heading="Síntomas asociados a cambios en neutrófilos",
-                body_html=(
-                    "<p><strong>Neutrofilia</strong> en sí rara vez causa síntomas; los síntomas provienen de la causa subyacente.</p>"
-                    "<p><strong>Neutropenia grave</strong> (&lt;&nbsp;500) reduce la capacidad de combatir infecciones: úlceras bucales, dolor de garganta, infecciones cutáneas y fiebre. "
-                    "La neutropenia febril es una urgencia médica, especialmente en pacientes con quimioterapia.</p>")),
+                body_html="<p>El porcentaje puede ser engañoso por sí solo. Ejemplo: WBC = 3.000/µL con 60% de neutrófilos da un ANC de solo 1.800/µL, que está cerca de la neutropenia, aunque el porcentaje parezca normal. Las guías clínicas siempre usan el recuento absoluto (ANC) para tomar decisiones terapéuticas.</p>"),
+        Section(id="symptoms", level=2, heading="Síntomas de alteraciones de neutrófilos",
+                body_html="<p><strong>Neutrofilia:</strong> generalmente sin síntomas propios; los síntomas son los de la causa subyacente. <strong>Neutropenia:</strong> infecciones recurrentes, úlceras orales, gingivitis, infecciones cutáneas, neumonía. La fiebre puede ser el único signo en un paciente neutropénico.</p>"),
         Section(id="related-tests", level=2, heading="Pruebas relacionadas",
-                body_html=(
-                    "<p>Los neutrófilos forman parte de la fórmula leucocitaria junto con <a href=\"/es/blog/lymphocytes-high-or-low\">linfocitos</a>, "
-                    "<a href=\"/es/blog/monocytes-high-meaning\">monocitos</a>, eosinófilos y basófilos.</p>"
-                    "<p>Según el caso: PCR, procalcitonina, hemocultivos, frotis periférico, biopsia de médula ósea o anticuerpos antineutrófilos.</p>")),
-        Section(id="when-to-see-doctor", level=2, heading="¿Cuándo acudir al médico?",
-                body_html=(
-                    "<p>Comenta cualquier neutrófilos fuera de rango con tu médico. Busca atención <strong>urgente</strong> si tienes neutropenia y fiebre, escalofríos o signos de infección.</p>"
-                    "<p>Para neutrofilia persistente inexplicada, especialmente con fatiga, sudores nocturnos o pérdida de peso, puede estar indicada una derivación a hematología.</p>")),
+                body_html="<p>WBC total, linfocitos, monocitos, eosinófilos, basófilos, PCR, procalcitonina y frotis de sangre periférica. La ratio neutrófilos/linfocitos (NLR) se usa como marcador inflamatorio.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="Cuándo consultar al médico",
+                body_html="<p>Consulte si los neutrófilos están fuera del rango, si tiene infecciones recurrentes o si recibe quimioterapia. <strong>Urgencia:</strong> ANC &lt;500/µL con fiebre ≥38,3°C requiere atención de emergencia inmediata.</p>"),
         Section(id="how-norya-helps", level=2, heading="Cómo ayuda Norya",
-                body_html=(
-                    "<p>Norya no diagnostica&mdash;te ayuda a prepararte. Sube tu analítica en <a href=\"/analyze\">noryaai.com/analyze</a> y recibe un resumen claro "
-                    "de tus neutrófilos y la fórmula leucocitaria en lenguaje sencillo.</p>"
-                    "<p>Ya sea que monitorices neutropenia o quieras entender un &ldquo;Neut# 1.800&rdquo;, Norya organiza tus resultados. "
-                    "Opciones y precios: <a href=\"/pricing\">página de precios</a>.</p>")),
+                body_html="<p>Suba su análisis en <a href=\"/analyze\">noryaai.com/analyze</a> y nuestra IA extraerá el ANC, el porcentaje de neutrófilos y otros subtipos leucocitarios, comparándolos con los rangos de referencia. Visite nuestra <a href=\"/pricing\">página de precios</a>.</p>"),
         Section(id="disclaimer", level=2, heading="Aviso",
-                body_html=(
-                    '<p><strong>Esta guía es solo informativa; no sustituye el consejo ni el diagnóstico médico.</strong> '
-                    'Consulte siempre sus resultados con un profesional sanitario. <a href="/analyze">Iniciar análisis con Norya</a></p>')),
+                body_html='<p><strong>Esta guía es solo informativa; no sustituye el consejo ni el diagnóstico médico.</strong> Consulte siempre sus resultados con un profesional sanitario. <a href="/analyze">Iniciar análisis con Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# German
+# GERMAN
 # ---------------------------------------------------------------------------
 def _sections_de() -> list:
     from app.blog_i18n import Section
     return [
-        Section(id="intro", level=2, heading="Neutrophile hoch oder niedrig: Differentialblutbild verstehen",
-                body_html=(
-                    "<p>Wenn Ihr Blutbild ein Differentialblutbild enthält, sind Neutrophile meist die erste Zeile, die ins Auge fällt. "
-                    "Sie sind die häufigsten weißen Blutkörperchen, und Veränderungen ihrer Zahl können von einer banalen Infektion bis zu Medikamentennebenwirkungen reichen.</p>"
-                    "<p>Dieser Ratgeber erklärt, was Neutrophile sind, wie Sie die Referenzbereiche lesen, häufige Ursachen für hohe oder niedrige Werte "
-                    "und wann Sie einen Arzt aufsuchen sollten.</p>")),
-        Section(id="what-are-neutrophils", level=2, heading="Was sind Neutrophile und was machen sie?",
-                body_html=(
-                    "<p><strong>Neutrophile</strong> sind Granulozyten mit Enzymen, die Bakterien und Pilze zerstören können. "
-                    "Sie werden im Knochenmark gebildet und zirkulieren nur 6&ndash;12&nbsp;Stunden im Blut, bevor sie ins Gewebe wandern&mdash;die Schnelleingreiftruppe des Immunsystems.</p>"
-                    "<p>Sie phagozytieren Erreger und bilden neutrophile extrazelluläre Fallen (NETs). "
-                    "Im Laborbericht erscheinen sie als &bdquo;Neutrophile (absolut)&ldquo; oder &bdquo;Neut %&ldquo;; der absolute Wert ist klinisch meist aussagekräftiger.</p>")),
-        Section(id="normal-ranges", level=2, heading="Normale Neutrophilen-Bereiche",
-                body_html=(
-                    '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                    "<thead><tr>"
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Parameter</th>'
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Typischer Erwachsenenbereich</th>'
-                    "</tr></thead><tbody>"
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Absolute Neutrophilenzahl (ANC)</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2.500&ndash;7.000 Zellen/&mu;L</td></tr>'
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Prozent</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70 %</td></tr>'
-                    "</tbody></table>"
-                    "<p>Manche Ethnien haben physiologisch niedrigere Ausgangswerte (benigne ethnische Neutropenie). Kinderwerte unterscheiden sich. Schwangerschaft erhöht die Neutrophilen physiologisch.</p>")),
-        Section(id="high-neutrophils-causes", level=2, heading="Ursachen erhöhter Neutrophiler (Neutrophilie)",
-                body_html=(
-                    "<p>Häufigster Auslöser ist eine <strong>bakterielle Infektion</strong>. Auch <strong>akute Entzündung</strong> (OP, Trauma, Verbrennung), "
-                    "<strong>Stress</strong>, <strong>Kortikosteroide</strong> und <strong>Rauchen</strong> können den Wert erhöhen.</p>"
-                    "<p>Seltener deutet eine anhaltend sehr hohe Neutrophilie auf <strong>myeloproliferative Neoplasien</strong> hin. "
-                    "Der Arzt beurteilt Ausmaß, Trend und klinisches Bild.</p>")),
-        Section(id="low-neutrophils-causes", level=2, heading="Ursachen niedriger Neutrophiler (Neutropenie)",
-                body_html=(
-                    "<p>Die häufigste Ursache sind <strong>Virusinfektionen</strong>. Schwere Neutropenie (&lt;&nbsp;500) erhöht das Infektionsrisiko erheblich.</p>"
-                    "<p><strong>Medikamente</strong> (Chemotherapie, bestimmte Antibiotika, Antikonvulsiva, Thyreostatika) sind eine weitere häufige Ursache&mdash;meist reversibel nach Absetzen.</p>"
-                    "<p>Weitere Ursachen: autoimmune Neutropenie, B12-/Folsäure-/Kupfermangel, Sepsis und seltene erbliche Formen.</p>")),
-        Section(id="absolute-vs-percentage", level=2, heading="Absolutzahl vs. Prozentsatz",
-                body_html=(
-                    "<p>Die <strong>absolute Neutrophilenzahl (ANC)</strong> ist klinisch aussagekräftiger als der Prozentsatz, "
-                    "da der Prozentsatz bei abweichendem Gesamt-WBC irreführend sein kann.</p>"
-                    "<p>Berechnung: <strong>ANC = WBC &times; (Neut % &divide; 100)</strong>.</p>")),
-        Section(id="symptoms", level=2, heading="Symptome bei Neutrophilen-Veränderungen",
-                body_html=(
-                    "<p><strong>Neutrophilie</strong> verursacht selbst selten Beschwerden; Symptome stammen von der Grunderkrankung.</p>"
-                    "<p><strong>Schwere Neutropenie</strong> macht anfällig für Infektionen: Mundulzera, Halsentzündung, Hautinfektionen, Fieber. "
-                    "Febrile Neutropenie ist ein Notfall, besonders bei Chemotherapie.</p>")),
-        Section(id="related-tests", level=2, heading="Verwandte Tests",
-                body_html=(
-                    "<p>Neutrophile gehören zum Differentialblutbild mit <a href=\"/de/blog/lymphocytes-high-or-low\">Lymphozyten</a>, "
-                    "<a href=\"/de/blog/monocytes-high-meaning\">Monozyten</a>, Eosinophilen und Basophilen.</p>"
-                    "<p>Je nach Situation: CRP, Procalcitonin, Blutkulturen, Blutausstrich, Knochenmarkbiopsie oder Anti-Neutrophilen-Antikörper.</p>")),
+        Section(id="intro", level=2, heading="Neutrophile hoch oder niedrig: Was bedeutet Ihr Blutwert?",
+                body_html="<p><strong>Neutrophile Granulozyten</strong> sind die häufigsten weißen Blutkörperchen und die Erstverteidiger des Immunsystems gegen bakterielle und Pilzinfektionen. Ihr Wert ist ein zentraler Bestandteil des <strong>großen Blutbilds</strong> und liefert wichtige Informationen über Infektionen, Entzündungen und die Knochenmarkfunktion.</p><p>Ein erhöhter Wert heißt <strong>Neutrophilie</strong>, ein erniedrigter <strong>Neutropenie</strong>. Beide Zustände können vielfältige Ursachen haben und erfordern ärztliche Abklärung.</p><p>Dieser Leitfaden dient der Information und ersetzt keine ärztliche Beratung.</p>"),
+        Section(id="what-are-neutrophils", level=2, heading="Was sind Neutrophile?",
+                body_html="<p><strong>Neutrophile</strong> sind Granulozyten aus dem Knochenmark, die 50&ndash;70% der zirkulierenden Leukozyten ausmachen. Ihre Lebensdauer beträgt nur 5&ndash;90 Stunden. Sie bekämpfen Infektionen durch Phagozytose, Degranulation und NETs (neutrophile extrazelluläre Fallen).</p><p>Schwere Neutropenie (ANC &lt;500/µL) hinterlässt den Körper anfällig für lebensbedrohliche Infektionen.</p>"),
+        Section(id="normal-ranges", level=2, heading="Normale Neutrophilen-Werte",
+                body_html="<table class=\"w-full border border-slate-200 text-sm my-4\" style=\"border-collapse: collapse;\"><thead><tr><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Parameter</th><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Normalbereich</th></tr></thead><tbody><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">ANC</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">2.500&ndash;7.000 Zellen/µL</td></tr><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">Neutrophile %</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">40&ndash;70%</td></tr></tbody></table><p>ANC = WBC &times; Neutrophile % / 100. Neutropenie-Grade: leicht 1.000&ndash;1.500, mäßig 500&ndash;1.000, schwer &lt;500/µL.</p>"),
+        Section(id="high-neutrophils-causes", level=2, heading="Ursachen für erhöhte Neutrophile (Neutrophilie)",
+                body_html="<p>Häufige Ursachen: bakterielle Infektionen, akute Entzündung (postoperativ, Trauma), Stressreaktion, Kortikosteroide, Rauchen und myeloproliferative Erkrankungen (CML, Polycythaemia vera).</p><p>Neutrophilie ist eine Reaktion auf einen zugrunde liegenden Prozess.</p>"),
+        Section(id="low-neutrophils-causes", level=2, heading="Ursachen für niedrige Neutrophile (Neutropenie)",
+                body_html="<p>Häufige Ursachen: Virusinfektionen, Medikamente (Chemotherapie, Clozapin, Metamizol), Autoimmun-Neutropenie, Knochenmarkversagen, schwere Sepsis und benigne ethnische Neutropenie. Febrile Neutropenie (ANC &lt;500 + Fieber ≥38,3°C) ist ein Notfall.</p>"),
+        Section(id="absolute-vs-percentage", level=2, heading="Absoluter Wert vs. Prozentsatz",
+                body_html="<p>Der Prozentsatz allein kann irreführend sein. Beispiel: WBC = 3.000/µL bei 60% Neutrophilen ergibt einen ANC von nur 1.800/µL. Klinische Entscheidungen basieren stets auf dem absoluten Wert.</p>"),
+        Section(id="symptoms", level=2, heading="Symptome",
+                body_html="<p><strong>Neutrophilie:</strong> meist keine eigenen Symptome. <strong>Neutropenie:</strong> rezidivierende Infektionen, Mundulzera, Gingivitis, Hautinfektionen. Fieber kann das einzige Zeichen sein.</p>"),
+        Section(id="related-tests", level=2, heading="Verwandte Untersuchungen",
+                body_html="<p>Gesamt-WBC, Lymphozyten, Monozyten, Eosinophile, Basophile, CRP, Procalcitonin und peripherer Blutausstrich. Der Neutrophilen-Lymphozyten-Quotient (NLR) wird als Entzündungsmarker verwendet.</p>"),
         Section(id="when-to-see-doctor", level=2, heading="Wann zum Arzt?",
-                body_html=(
-                    "<p>Besprechen Sie jeden Wert außerhalb des Referenzbereichs mit Ihrem Arzt. "
-                    "<strong>Dringende</strong> Vorstellung bei Neutropenie mit Fieber, Schüttelfrost oder Infektionszeichen.</p>"
-                    "<p>Anhaltende unerklärte Neutrophilie mit Müdigkeit, Nachtschweiß oder Gewichtsverlust sollte hämatologisch abgeklärt werden.</p>")),
+                body_html="<p>Suchen Sie einen Arzt auf bei Neutrophilen außerhalb des Referenzbereichs, wiederkehrenden Infektionen oder unter Chemotherapie. <strong>Notfall:</strong> ANC &lt;500/µL mit Fieber ≥38,3°C erfordert sofortige Notfallbehandlung.</p>"),
         Section(id="how-norya-helps", level=2, heading="Wie Norya hilft",
-                body_html=(
-                    "<p>Norya stellt keine Diagnosen&mdash;wir helfen bei der Vorbereitung. Laden Sie Ihren Laborbericht unter <a href=\"/analyze\">noryaai.com/analyze</a> hoch "
-                    "und erhalten Sie eine klare Zusammenfassung Ihrer Neutrophilenzahl und des Differentialblutbilds.</p>"
-                    "<p>Optionen und Preise: <a href=\"/pricing\">Preisseite</a>.</p>")),
+                body_html="<p>Laden Sie Ihren Befund unter <a href=\"/analyze\">noryaai.com/analyze</a> hoch. Unsere KI extrahiert ANC, Neutrophilen-%, Gesamt-WBC und weitere Leukozyten-Subtypen. <a href=\"/pricing\">Preisseite</a>.</p>"),
         Section(id="disclaimer", level=2, heading="Hinweis",
-                body_html=(
-                    '<p><strong>Dieser Leitfaden dient nur zur Information und ersetzt keine ärztliche Beratung oder Diagnose.</strong> '
-                    'Besprechen Sie Ihre Ergebnisse immer mit einem Arzt. <a href="/analyze">Analyse mit Norya starten</a></p>')),
+                body_html='<p><strong>Dieser Leitfaden dient nur zur Information und ersetzt keine ärztliche Beratung oder Diagnose.</strong> Besprechen Sie Ihre Ergebnisse immer mit einem Arzt. <a href="/analyze">Analyse mit Norya starten</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# French
+# FRENCH
 # ---------------------------------------------------------------------------
 def _sections_fr() -> list:
     from app.blog_i18n import Section
     return [
-        Section(id="intro", level=2, heading="Neutrophiles hauts ou bas : comprendre votre formule leucocytaire",
-                body_html=(
-                    "<p>Quand votre NFS comprend une formule leucocytaire, les neutrophiles sont souvent la première ligne que l&rsquo;on regarde. "
-                    "Ce sont les globules blancs les plus nombreux ; des variations de leur nombre peuvent signaler une infection bactérienne, un effet médicamenteux ou un stress.</p>"
-                    "<p>Ce guide explique ce que sont les neutrophiles, comment lire les fourchettes, les causes de valeurs hautes ou basses, et quand consulter.</p>")),
-        Section(id="what-are-neutrophils", level=2, heading="Que sont les neutrophiles et quel est leur rôle ?",
-                body_html=(
-                    "<p><strong>Les neutrophiles</strong> sont des granulocytes contenant des enzymes capables de détruire bactéries et champignons. "
-                    "Produits dans la moelle, ils circulent 6&ndash;12&nbsp;h avant de migrer dans les tissus&mdash;la force d&rsquo;intervention rapide de l&rsquo;immunité.</p>"
-                    "<p>Ils phagocytent les pathogènes et forment des pièges extracellulaires (NETs). Sur le bilan, ils apparaissent en valeur absolue ou en pourcentage ; "
-                    "le compte absolu (PNN) est généralement plus fiable cliniquement.</p>")),
+        Section(id="intro", level=2, heading="Polynucléaires neutrophiles : que signifie un taux élevé ou bas ?",
+                body_html="<p>Les <strong>polynucléaires neutrophiles</strong> (PNN) sont les globules blancs les plus abondants et constituent la première ligne de défense de l&rsquo;organisme contre les infections bactériennes et fongiques. Leur numération fait partie de la <strong>NFS (numération formule sanguine)</strong> et fournit des informations essentielles sur l&rsquo;infection, l&rsquo;inflammation et la moelle osseuse.</p><p>Un taux élevé est appelé <strong>neutrophilie</strong>, un taux bas <strong>neutropénie</strong>. Les deux nécessitent une évaluation médicale.</p><p>Ce guide est informatif et ne remplace pas un avis médical.</p>"),
+        Section(id="what-are-neutrophils", level=2, heading="Que sont les neutrophiles ?",
+                body_html="<p>Les <strong>neutrophiles</strong> sont des granulocytes produits par la moelle osseuse, représentant 50&ndash;70% des leucocytes circulants. Durée de vie : 5&ndash;90 heures. Mécanismes de défense : phagocytose, dégranulation et NETs (pièges extracellulaires). Une neutropénie sévère (PNN &lt;500/µL) expose à des infections graves.</p>"),
         Section(id="normal-ranges", level=2, heading="Valeurs normales des neutrophiles",
-                body_html=(
-                    '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                    "<thead><tr>"
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Paramètre</th>'
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Fourchette adulte</th>'
-                    "</tr></thead><tbody>"
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">PNN (polynucléaires neutrophiles)</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2 500&ndash;7 000 /&mu;L</td></tr>'
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Pourcentage</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70 %</td></tr>'
-                    "</tbody></table>"
-                    "<p>Certaines origines ethniques ont un taux de base plus faible (neutropénie ethnique bénigne). La grossesse élève physiologiquement les PNN.</p>")),
+                body_html="<table class=\"w-full border border-slate-200 text-sm my-4\" style=\"border-collapse: collapse;\"><thead><tr><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Paramètre</th><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Valeur normale</th></tr></thead><tbody><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">PNN absolus</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">2 500&ndash;7 000/µL</td></tr><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">Pourcentage</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">40&ndash;70%</td></tr></tbody></table><p>PNN = GB &times; % neutrophiles / 100. Neutropénie : légère 1 000&ndash;1 500, modérée 500&ndash;1 000, sévère &lt;500/µL.</p>"),
         Section(id="high-neutrophils-causes", level=2, heading="Causes de neutrophiles élevés (neutrophilie)",
-                body_html=(
-                    "<p>Le déclencheur le plus fréquent est l&rsquo;<strong>infection bactérienne</strong>. L&rsquo;inflammation aiguë non infectieuse, le stress, "
-                    "les corticoïdes et le tabac peuvent aussi les augmenter.</p>"
-                    "<p>Une neutrophilie très élevée et persistante peut orienter vers une <strong>néoplasie myéloproliférative</strong>.</p>")),
+                body_html="<p>Causes fréquentes : infections bactériennes, inflammation aiguë, stress, corticoïdes, tabagisme et syndromes myéloprolifératifs (LMC, polyglobulie de Vaquez). La neutrophilie est une réponse à un processus sous-jacent.</p>"),
         Section(id="low-neutrophils-causes", level=2, heading="Causes de neutrophiles bas (neutropénie)",
-                body_html=(
-                    "<p>Cause la plus courante : <strong>infection virale</strong>. Une neutropénie sévère (&lt;&nbsp;500) augmente nettement le risque infectieux.</p>"
-                    "<p><strong>Médicaments</strong> (chimiothérapie, certains antibiotiques, antiépileptiques, antithyroïdiens) sont une cause fréquente, en général réversible.</p>"
-                    "<p>Autres causes : neutropénie auto-immune, carences (B12, folates, cuivre), sepsis et formes héréditaires rares.</p>")),
-        Section(id="absolute-vs-percentage", level=2, heading="Valeur absolue vs pourcentage",
-                body_html=(
-                    "<p>Le <strong>PNN absolu</strong> est plus fiable que le pourcentage car ce dernier peut être trompeur si le nombre total de GB est anormal.</p>"
-                    "<p>Calcul : <strong>PNN = GB totaux &times; (Neut % &divide; 100)</strong>.</p>")),
-        Section(id="symptoms", level=2, heading="Symptômes liés aux variations de neutrophiles",
-                body_html=(
-                    "<p>La <strong>neutrophilie</strong> elle-même donne rarement des symptômes ; ceux-ci viennent de la cause sous-jacente.</p>"
-                    "<p>La <strong>neutropénie sévère</strong> expose aux infections : aphtes, angine, infections cutanées, fièvre. "
-                    "La neutropénie fébrile est une urgence, surtout sous chimiothérapie.</p>")),
-        Section(id="related-tests", level=2, heading="Examens complémentaires",
-                body_html=(
-                    "<p>Les neutrophiles font partie de la formule qui inclut <a href=\"/fr/blog/lymphocytes-high-or-low\">lymphocytes</a>, "
-                    "<a href=\"/fr/blog/monocytes-high-meaning\">monocytes</a>, éosinophiles et basophiles.</p>"
-                    "<p>Selon le contexte : CRP, procalcitonine, hémocultures, frottis, biopsie médullaire ou anticorps anti-neutrophiles.</p>")),
+                body_html="<p>Causes : infections virales, médicaments (chimiothérapie, clozapine, métamizole), neutropénie auto-immune, insuffisance médullaire, sepsis sévère et neutropénie ethnique bénigne. La neutropénie fébrile (PNN &lt;500 + fièvre ≥38,3°C) est une urgence.</p>"),
+        Section(id="absolute-vs-percentage", level=2, heading="Valeur absolue vs. pourcentage",
+                body_html="<p>Le pourcentage seul peut induire en erreur. Exemple : GB = 3 000/µL avec 60% PNN = 1 800/µL (quasi neutropénie). Les décisions cliniques reposent toujours sur la valeur absolue.</p>"),
+        Section(id="symptoms", level=2, heading="Symptômes",
+                body_html="<p><strong>Neutrophilie :</strong> pas de symptômes propres. <strong>Neutropénie :</strong> infections récurrentes, aphtes, gingivite, infections cutanées. La fièvre peut être le seul signe chez un patient neutropénique.</p>"),
+        Section(id="related-tests", level=2, heading="Examens associés",
+                body_html="<p>GB totaux, lymphocytes, monocytes, éosinophiles, basophiles, CRP, procalcitonine et frottis sanguin. Le rapport neutrophiles/lymphocytes (NLR) est un marqueur inflammatoire.</p>"),
         Section(id="when-to-see-doctor", level=2, heading="Quand consulter ?",
-                body_html=(
-                    "<p>Parlez-en à votre médecin si les neutrophiles sont hors fourchette. Consultez <strong>en urgence</strong> si neutropénie + fièvre ou signe d&rsquo;infection.</p>"
-                    "<p>Une neutrophilie persistante inexpliquée avec fatigue, sueurs nocturnes ou perte de poids justifie un avis hématologique.</p>")),
-        Section(id="how-norya-helps", level=2, heading="Comment Norya vous aide",
-                body_html=(
-                    "<p>Norya ne pose pas de diagnostic&mdash;nous vous aidons à préparer votre rendez-vous. "
-                    "Envoyez votre bilan sur <a href=\"/analyze\">noryaai.com/analyze</a> pour un résumé clair de vos neutrophiles.</p>"
-                    "<p>Options et tarifs : <a href=\"/pricing\">page tarifs</a>.</p>")),
+                body_html="<p>Consultez si les PNN sont hors des valeurs de référence ou en cas d&rsquo;infections récurrentes. <strong>Urgence :</strong> PNN &lt;500/µL + fièvre ≥38,3°C nécessite une prise en charge urgente.</p>"),
+        Section(id="how-norya-helps", level=2, heading="Comment Norya peut vous aider",
+                body_html="<p>Téléchargez votre bilan sur <a href=\"/analyze\">noryaai.com/analyze</a>. Notre IA extraira PNN absolus, pourcentage et autres sous-types leucocytaires. <a href=\"/pricing\">Page tarifs</a>.</p>"),
         Section(id="disclaimer", level=2, heading="Avertissement",
-                body_html=(
-                    '<p><strong>Ce guide est fourni à titre informatif uniquement et ne remplace pas un avis ou un diagnostic médical.</strong> '
-                    "Discutez toujours de vos résultats avec un professionnel de santé. <a href=\"/analyze\">Commencer l'analyse avec Norya</a></p>")),
+                body_html='<p><strong>Ce guide est fourni à titre informatif uniquement et ne remplace pas un avis ou un diagnostic médical.</strong> Discutez toujours de vos résultats avec un professionnel de santé. <a href="/analyze">Commencer l\'analyse avec Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Italian
+# ITALIAN
 # ---------------------------------------------------------------------------
 def _sections_it() -> list:
     from app.blog_i18n import Section
     return [
-        Section(id="intro", level=2, heading="Neutrofili alti o bassi: capire la formula leucocitaria",
-                body_html=(
-                    "<p>Quando l&rsquo;emocromo include la formula leucocitaria, i neutrofili sono di solito la prima riga su cui cade l&rsquo;occhio. "
-                    "Sono il tipo più abbondante di globuli bianchi e le variazioni del loro numero possono segnalare infezioni batteriche, effetti di farmaci o stress.</p>"
-                    "<p>Questa guida spiega cosa sono i neutrofili, come leggere gli intervalli, le cause di valori alti o bassi e quando consultare il medico.</p>")),
-        Section(id="what-are-neutrophils", level=2, heading="Cosa sono i neutrofili e a che cosa servono?",
-                body_html=(
-                    "<p><strong>I neutrofili</strong> sono granulociti con enzimi capaci di distruggere batteri e funghi. "
-                    "Prodotti nel midollo osseo, circolano 6&ndash;12&nbsp;ore prima di migrare nei tessuti: la forza di risposta rapida dell&rsquo;immunità.</p>"
-                    "<p>Fagocitano i patogeni e formano trappole extracellulari (NET). Nel referto appaiono come valore assoluto o percentuale; "
-                    "il conteggio assoluto è generalmente più affidabile.</p>")),
+        Section(id="intro", level=2, heading="Neutrofili alti o bassi: cosa significano nel tuo esame del sangue",
+                body_html="<p>I <strong>neutrofili</strong> sono i globuli bianchi più abbondanti e rappresentano la prima linea di difesa contro le infezioni batteriche e fungine. Il loro valore è parte integrante dell&rsquo;<strong>emocromo completo</strong> e fornisce informazioni fondamentali su infezioni, infiammazione e funzione midollare.</p><p>Un valore elevato è detto <strong>neutrofilia</strong>, uno basso <strong>neutropenia</strong>. Entrambi richiedono valutazione medica.</p><p>Questa guida è informativa e non sostituisce il parere medico.</p>"),
+        Section(id="what-are-neutrophils", level=2, heading="Cosa sono i neutrofili?",
+                body_html="<p>I <strong>neutrofili</strong> sono granulociti prodotti dal midollo osseo, pari al 50&ndash;70% dei leucociti circolanti. Durata di vita: 5&ndash;90 ore. Meccanismi: fagocitosi, degranulazione e NETs. La neutropenia grave (ANC &lt;500/µL) espone a infezioni potenzialmente letali.</p>"),
         Section(id="normal-ranges", level=2, heading="Valori normali dei neutrofili",
-                body_html=(
-                    '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                    "<thead><tr>"
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Parametro</th>'
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Intervallo adulto</th>'
-                    "</tr></thead><tbody>"
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Conta assoluta (ANC)</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2.500&ndash;7.000 cellule/&mu;L</td></tr>'
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Percentuale</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70 %</td></tr>'
-                    "</tbody></table>"
-                    "<p>Alcune etnie hanno valori basali inferiori (neutropenia etnica benigna). La gravidanza eleva fisiologicamente i neutrofili.</p>")),
+                body_html="<table class=\"w-full border border-slate-200 text-sm my-4\" style=\"border-collapse: collapse;\"><thead><tr><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Parametro</th><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">Intervallo normale</th></tr></thead><tbody><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">ANC</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">2.500&ndash;7.000 cellule/µL</td></tr><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">Percentuale</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">40&ndash;70%</td></tr></tbody></table><p>ANC = WBC &times; % neutrofili / 100. Neutropenia: lieve 1.000&ndash;1.500, moderata 500&ndash;1.000, grave &lt;500/µL.</p>"),
         Section(id="high-neutrophils-causes", level=2, heading="Cause di neutrofili alti (neutrofilia)",
-                body_html=(
-                    "<p>Causa più frequente: <strong>infezione batterica</strong>. Anche infiammazione acuta, stress, cortisonici e fumo possono alzarli.</p>"
-                    "<p>Una neutrofilia molto alta e persistente può orientare verso <strong>neoplasie mieloproliferative</strong>.</p>")),
+                body_html="<p>Cause comuni: infezioni batteriche, infiammazione acuta, stress, corticosteroidi, fumo e disordini mieloproliferativi (LMC, policitemia vera). La neutrofilia è una risposta a un processo sottostante.</p>"),
         Section(id="low-neutrophils-causes", level=2, heading="Cause di neutrofili bassi (neutropenia)",
-                body_html=(
-                    "<p>Causa più comune: <strong>infezione virale</strong>. Neutropenia grave (&lt;&nbsp;500) aumenta molto il rischio infettivo.</p>"
-                    "<p><strong>Farmaci</strong> (chemioterapia, alcuni antibiotici, antiepilettici, antitiroidei) sono un&rsquo;altra causa frequente, di solito reversibile.</p>"
-                    "<p>Altre cause: neutropenia autoimmune, carenze (B12, folati, rame), sepsi e forme ereditarie rare.</p>")),
-        Section(id="absolute-vs-percentage", level=2, heading="Conta assoluta vs percentuale",
-                body_html=(
-                    "<p>La <strong>conta assoluta (ANC)</strong> è clinicamente più affidabile della percentuale, che può ingannare se il WBC totale è anomalo.</p>"
-                    "<p>Calcolo: <strong>ANC = WBC &times; (Neut % &divide; 100)</strong>.</p>")),
-        Section(id="symptoms", level=2, heading="Sintomi legati alle variazioni dei neutrofili",
-                body_html=(
-                    "<p>La <strong>neutrofilia</strong> di per sé raramente provoca sintomi; quelli avvertiti derivano dalla causa sottostante.</p>"
-                    "<p>La <strong>neutropenia grave</strong> espone a infezioni: afte, mal di gola, infezioni cutanee, febbre. La neutropenia febbrile è un&rsquo;emergenza.</p>")),
+                body_html="<p>Cause: infezioni virali, farmaci (chemioterapia, clozapina, metamizolo), neutropenia autoimmune, insufficienza midollare, sepsi grave e neutropenia etnica benigna. La neutropenia febbrile (ANC &lt;500 + febbre ≥38,3°C) è un&rsquo;emergenza.</p>"),
+        Section(id="absolute-vs-percentage", level=2, heading="Conta assoluta vs. percentuale",
+                body_html="<p>La percentuale da sola può trarre in inganno. Esempio: WBC = 3.000/µL con 60% neutrofili = ANC 1.800/µL (quasi neutropenia). Le decisioni cliniche si basano sempre sul valore assoluto.</p>"),
+        Section(id="symptoms", level=2, heading="Sintomi",
+                body_html="<p><strong>Neutrofilia:</strong> generalmente asintomatica. <strong>Neutropenia:</strong> infezioni ricorrenti, afte orali, gengivite, infezioni cutanee. La febbre può essere l&rsquo;unico segno nel paziente neutropenico.</p>"),
         Section(id="related-tests", level=2, heading="Esami correlati",
-                body_html=(
-                    "<p>I neutrofili fanno parte della formula che include <a href=\"/it/blog/lymphocytes-high-or-low\">linfociti</a>, "
-                    "<a href=\"/it/blog/monocytes-high-meaning\">monociti</a>, eosinofili e basofili.</p>"
-                    "<p>A seconda del caso: PCR, procalcitonina, emocolture, striscio, biopsia midollare o anticorpi anti-neutrofili.</p>")),
-        Section(id="when-to-see-doctor", level=2, heading="Quando rivolgersi al medico",
-                body_html=(
-                    "<p>Parla con il medico se i neutrofili sono fuori intervallo. Cerca assistenza <strong>urgente</strong> se neutropenia + febbre o segni di infezione.</p>"
-                    "<p>Neutrofilia persistente inspiegata con stanchezza, sudorazioni notturne o calo di peso richiede un parere ematologico.</p>")),
-        Section(id="how-norya-helps", level=2, heading="Come Norya ti aiuta",
-                body_html=(
-                    "<p>Norya non fa diagnosi&mdash;ti aiuta a prepararti. Carica il referto su <a href=\"/analyze\">noryaai.com/analyze</a> "
-                    "per un riepilogo chiaro dei neutrofili e della formula.</p>"
-                    "<p>Opzioni e prezzi: <a href=\"/pricing\">pagina prezzi</a>.</p>")),
+                body_html="<p>WBC totali, linfociti, monociti, eosinofili, basofili, PCR, procalcitonina e striscio di sangue periferico. Il rapporto neutrofili/linfociti (NLR) è un marcatore infiammatorio.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="Quando consultare il medico",
+                body_html="<p>Consultate il medico se i neutrofili sono fuori intervallo, se avete infezioni ricorrenti o se ricevete chemioterapia. <strong>Emergenza:</strong> ANC &lt;500/µL con febbre ≥38,3°C richiede intervento immediato.</p>"),
+        Section(id="how-norya-helps", level=2, heading="Come Norya può aiutarti",
+                body_html="<p>Caricate il vostro esame su <a href=\"/analyze\">noryaai.com/analyze</a>. La nostra IA estrarrà ANC, percentuale di neutrofili e altri sottotipi leucocitari. <a href=\"/pricing\">Pagina prezzi</a>.</p>"),
         Section(id="disclaimer", level=2, heading="Disclaimer",
-                body_html=(
-                    '<p><strong>Questa guida è solo a scopo informativo e non sostituisce il parere o la diagnosi medica.</strong> '
-                    'Discutete sempre i risultati con un professionista sanitario. <a href="/analyze">Inizia l\'analisi con Norya</a></p>')),
+                body_html='<p><strong>Questa guida è solo a scopo informativo e non sostituisce il parere o la diagnosi medica.</strong> Discutete sempre i risultati con un professionista sanitario. <a href="/analyze">Inizia l\'analisi con Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Hebrew
+# HEBREW
 # ---------------------------------------------------------------------------
 def _sections_he() -> list:
     from app.blog_i18n import Section
     return [
-        Section(id="intro", level=2, heading="נויטרופילים גבוהים או נמוכים: הבנת ספירת הדם הלבנה",
-                body_html=(
-                    "<p>כשספירת הדם כוללת נוסחת דם, הנויטרופילים הם בדרך כלל השורה הראשונה שאליה מסתכלים. "
-                    "הם סוג תאי הדם הלבנים השכיח ביותר, ושינויים במספרם יכולים להצביע על זיהום חיידקי, תופעות לוואי של תרופות או מתח.</p>"
-                    "<p>מדריך זה מסביר מהם נויטרופילים, כיצד לקרוא את הטווחים, גורמים לערכים גבוהים או נמוכים, ומתי לפנות לרופא.</p>")),
-        Section(id="what-are-neutrophils", level=2, heading="מהם נויטרופילים ומה הם עושים?",
-                body_html=(
-                    "<p><strong>נויטרופילים</strong> הם גרנולוציטים המכילים אנזימים שמשמידים חיידקים ופטריות. "
-                    "הם מיוצרים במח העצם וסובבים בדם 6&ndash;12 שעות לפני שנודדים לרקמות&mdash;כוח התגובה המהירה של מערכת החיסון.</p>"
-                    "<p>הם בולעים פתוגנים ויוצרים מלכודות חוץ-תאיות (NETs). בדוח הם מופיעים כערך מוחלט או אחוז; הספירה המוחלטת בדרך כלל אמינה יותר קלינית.</p>")),
-        Section(id="normal-ranges", level=2, heading="טווחים תקינים של נויטרופילים",
-                body_html=(
-                    '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                    "<thead><tr>"
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">פרמטר</th>'
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">טווח בוגרים</th>'
-                    "</tr></thead><tbody>"
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">ספירה מוחלטת (ANC)</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2,500&ndash;7,000 תאים/&mu;L</td></tr>'
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">אחוז</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70%</td></tr>'
-                    "</tbody></table>"
-                    "<p>בקרב קבוצות אתניות מסוימות הספירה הבסיסית נמוכה יותר (נויטרופניה אתנית שפירה). הריון מעלה את הנויטרופילים באופן פיזיולוגי.</p>")),
-        Section(id="high-neutrophils-causes", level=2, heading="גורמים לנויטרופילים גבוהים (נויטרופיליה)",
-                body_html=(
-                    "<p>הגורם השכיח ביותר הוא <strong>זיהום חיידקי</strong>. גם דלקת חריפה, מתח, קורטיקוסטרואידים ועישון יכולים להעלות.</p>"
-                    "<p>נויטרופיליה גבוהה מאוד ומתמשכת עשויה להצביע על <strong>ניאופלזמות מיאלופרוליפרטיביות</strong>.</p>")),
-        Section(id="low-neutrophils-causes", level=2, heading="גורמים לנויטרופילים נמוכים (נויטרופניה)",
-                body_html=(
-                    "<p>הגורם השכיח ביותר הוא <strong>זיהום נגיפי</strong>. נויטרופניה חמורה (&lt;&nbsp;500) מגבירה מאוד את סיכון הזיהום.</p>"
-                    "<p><strong>תרופות</strong> (כימותרפיה, אנטיביוטיקות מסוימות, נוגדי פרכוסים, אנטי-תירואידים)&mdash;בדרך כלל הפיך.</p>"
-                    "<p>גורמים נוספים: נויטרופניה אוטואימונית, חוסרי B12/פולאט/נחושת, אלח דם וצורות תורשתיות נדירות.</p>")),
-        Section(id="absolute-vs-percentage", level=2, heading="ספירה מוחלטת מול אחוז",
-                body_html=(
-                    "<p><strong>הספירה המוחלטת (ANC)</strong> אמינה יותר קלינית מהאחוז, כי האחוז עלול להטעות אם ה-WBC הכולל חריג.</p>"
-                    "<p>חישוב: <strong>ANC = WBC &times; (Neut % &divide; 100)</strong>.</p>")),
-        Section(id="symptoms", level=2, heading="תסמינים הקשורים לשינויי נויטרופילים",
-                body_html=(
-                    "<p><strong>נויטרופיליה</strong> עצמה לרוב אינה גורמת תסמינים; התסמינים מגיעים מהגורם הבסיסי.</p>"
-                    "<p><strong>נויטרופניה חמורה</strong> חושפת לזיהומים: אפטות בפה, כאב גרון, זיהומי עור, חום. נויטרופניה חום היא מצב חירום רפואי.</p>")),
+        Section(id="intro", level=2, heading="נויטרופילים: מה המשמעות של ערך גבוה או נמוך?",
+                body_html="<p><strong>נויטרופילים</strong> הם תאי הדם הלבנים הנפוצים ביותר ומהווים קו ההגנה הראשון של מערכת החיסון נגד זיהומים חיידקיים ופטרייתיים. ספירתם היא חלק מ<strong>ספירת דם מלאה (CBC)</strong> ומספקת מידע חיוני על זיהומים, דלקת ותפקוד מח העצם.</p><p>ספירה גבוהה נקראת <strong>נויטרופיליה</strong>, נמוכה <strong>נויטרופניה</strong>. שני המצבים דורשים הערכה רפואית.</p><p>מדריך זה חינוכי בלבד ואינו מחליף ייעוץ רפואי.</p>"),
+        Section(id="what-are-neutrophils", level=2, heading="מהם נויטרופילים?",
+                body_html="<p><strong>נויטרופילים</strong> הם גרנולוציטים המיוצרים במח העצם, המהווים 50&ndash;70% מהלויקוציטים. אורך חייהם 5&ndash;90 שעות בלבד. מנגנוני לחימה: פגוציטוזה, דגרנולציה ו-NETs. נויטרופניה חמורה (ANC &lt;500/µL) חושפת לזיהומים מסכני חיים.</p>"),
+        Section(id="normal-ranges", level=2, heading="טווחי נויטרופילים תקינים",
+                body_html="<table class=\"w-full border border-slate-200 text-sm my-4\" style=\"border-collapse: collapse;\"><thead><tr><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:right;\">פרמטר</th><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:right;\">טווח תקין</th></tr></thead><tbody><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">ANC</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">2,500&ndash;7,000 תאים/µL</td></tr><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">אחוז</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">40&ndash;70%</td></tr></tbody></table><p>ANC = WBC &times; % נויטרופילים / 100. דרגות נויטרופניה: קלה 1,000&ndash;1,500, בינונית 500&ndash;1,000, חמורה &lt;500/µL.</p>"),
+        Section(id="high-neutrophils-causes", level=2, heading="גורמים לנויטרופילים גבוהים",
+                body_html="<p>גורמים: זיהומים חיידקיים, דלקת חריפה, סטרס, קורטיקוסטרואידים, עישון והפרעות מיאלופרוליפרטיביות (CML, פוליציתמיה ורה). נויטרופיליה היא תגובה לתהליך בסיסי.</p>"),
+        Section(id="low-neutrophils-causes", level=2, heading="גורמים לנויטרופילים נמוכים",
+                body_html="<p>גורמים: זיהומים ויראליים, תרופות (כימותרפיה, קלוזפין, מטמיזול), נויטרופניה אוטואימונית, כשל מח עצם, אלח דם חמור ונויטרופניה אתנית שפירה. נויטרופניה חום (ANC &lt;500 + חום ≥38.3°C) היא מצב חירום.</p>"),
+        Section(id="absolute-vs-percentage", level=2, heading="ספירה מוחלטת לעומת אחוז",
+                body_html="<p>האחוז לבדו עלול להטעות. דוגמה: WBC = 3,000/µL עם 60% נויטרופילים = ANC 1,800/µL בלבד (קרוב לנויטרופניה). ההחלטות הקליניות מבוססות תמיד על הספירה המוחלטת.</p>"),
+        Section(id="symptoms", level=2, heading="תסמינים",
+                body_html="<p><strong>נויטרופיליה:</strong> ללא תסמינים ייחודיים בדרך כלל. <strong>נויטרופניה:</strong> זיהומים חוזרים, אפטות בפה, דלקת חניכיים, זיהומי עור. חום עשוי להיות הסימן היחיד בחולה נויטרופני.</p>"),
         Section(id="related-tests", level=2, heading="בדיקות קשורות",
-                body_html=(
-                    "<p>נויטרופילים הם חלק מנוסחת הדם הכוללת <a href=\"/he/blog/lymphocytes-high-or-low\">לימפוציטים</a>, "
-                    "<a href=\"/he/blog/monocytes-high-meaning\">מונוציטים</a>, אאוזינופילים ובזופילים.</p>"
-                    "<p>לפי ההקשר: CRP, פרוקלציטונין, תרביות דם, משטח דם, ביופסיית מח עצם או נוגדני אנטי-נויטרופילים.</p>")),
+                body_html="<p>WBC כולל, לימפוציטים, מונוציטים, אאוזינופילים, בזופילים, CRP, פרוקלציטונין ומשטח דם היקפי. יחס נויטרופילים/לימפוציטים (NLR) משמש כסמן דלקתי.</p>"),
         Section(id="when-to-see-doctor", level=2, heading="מתי לפנות לרופא?",
-                body_html=(
-                    "<p>דברו עם הרופא אם הנויטרופילים חורגים מהטווח. פנו <strong>בדחיפות</strong> אם יש נויטרופניה + חום או סימני זיהום.</p>"
-                    "<p>נויטרופיליה מתמשכת לא מוסברת עם עייפות, הזעות לילה או ירידה במשקל מצדיקה הפניה להמטולוג.</p>")),
+                body_html="<p>פנו לרופא אם הנויטרופילים מחוץ לטווח או בזיהומים חוזרים. <strong>חירום:</strong> ANC &lt;500/µL עם חום ≥38.3°C דורש טיפול חירום מיידי.</p>"),
         Section(id="how-norya-helps", level=2, heading="איך Norya עוזרת",
-                body_html=(
-                    "<p>Norya לא מאבחנת&mdash;אנחנו עוזרים לכם להתכונן. העלו את הדוח ב-<a href=\"/analyze\">noryaai.com/analyze</a> "
-                    "לסיכום ברור של הנויטרופילים ונוסחת הדם.</p>"
-                    "<p>אפשרויות ומחירים: <a href=\"/pricing\">עמוד מחירים</a>.</p>")),
+                body_html="<p>העלו את בדיקת הדם ב-<a href=\"/analyze\">noryaai.com/analyze</a>. ה-AI שלנו יחלץ ANC, אחוז נויטרופילים ותתי-סוגי לויקוציטים נוספים. <a href=\"/pricing\">עמוד תמחור</a>.</p>"),
         Section(id="disclaimer", level=2, heading="הודעה",
-                body_html=(
-                    '<p><strong>מדריך זה נועד למידע בלבד ואינו מחליף ייעוץ או אבחון רפואי.</strong> '
-                    'דונו תמיד בתוצאות עם איש מקצוע רפואי. <a href="/analyze">התחל ניתוח עם Norya</a></p>')),
+                body_html='<p><strong>מדריך זה נועד למידע בלבד ואינו מחליף ייעוץ או אבחון רפואי.</strong> דונו תמיד בתוצאות עם איש מקצוע רפואי. <a href="/analyze">התחל ניתוח עם Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Hindi
+# HINDI
 # ---------------------------------------------------------------------------
 def _sections_hi() -> list:
     from app.blog_i18n import Section
     return [
-        Section(id="intro", level=2, heading="न्यूट्रोफिल हाई या लो: आपकी WBC डिफरेंशियल को समझें",
-                body_html=(
-                    "<p>जब CBC में WBC डिफरेंशियल शामिल होता है, तो न्यूट्रोफिल आमतौर पर पहली लाइन होती है जिस पर नज़र जाती है। "
-                    "ये सबसे प्रचुर प्रकार की वाइट ब्लड सेल हैं और इनकी संख्या में बदलाव बैक्टीरियल इन्फेक्शन से लेकर दवा के साइड इफेक्ट तक कई चीज़ें बता सकता है।</p>"
-                    "<p>यह गाइड बताती है कि न्यूट्रोफिल क्या हैं, रिफरेंस रेंज कैसे पढ़ें, हाई या लो काउंट के कारण, और कब डॉक्टर से मिलें।</p>")),
-        Section(id="what-are-neutrophils", level=2, heading="न्यूट्रोफिल क्या हैं और क्या करते हैं?",
-                body_html=(
-                    "<p><strong>न्यूट्रोफिल</strong> ग्रैनुलोसाइट हैं जिनमें बैक्टीरिया और फंगस को नष्ट करने वाले एंज़ाइम होते हैं। "
-                    "बोन मैरो में बनते हैं और ब्लड में सिर्फ 6&ndash;12 घंटे घूमते हैं, फिर टिश्यू में चले जाते हैं&mdash;इम्यून सिस्टम की रैपिड रिस्पॉन्स फ़ोर्स।</p>"
-                    "<p>ये पैथोजन को निगलते (फ़ैगोसाइटोसिस) हैं और न्यूट्रोफिल एक्स्ट्रासेलुलर ट्रैप्स (NETs) बनाते हैं। "
-                    "रिपोर्ट में ये एब्सोल्यूट काउंट या % के रूप में दिखते हैं; एब्सोल्यूट काउंट क्लिनिकली अधिक उपयोगी माना जाता है।</p>")),
-        Section(id="normal-ranges", level=2, heading="सामान्य न्यूट्रोफिल रेंज",
-                body_html=(
-                    '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                    "<thead><tr>"
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">पैरामीटर</th>'
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">सामान्य वयस्क रेंज</th>'
-                    "</tr></thead><tbody>"
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">एब्सोल्यूट न्यूट्रोफिल काउंट (ANC)</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2,500&ndash;7,000 सेल/&mu;L</td></tr>'
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">प्रतिशत</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70%</td></tr>'
-                    "</tbody></table>"
-                    "<p>कुछ एथनिक ग्रुप्स में बेसलाइन काउंट कम होता है (बिनाइन एथनिक न्यूट्रोपीनिया)। प्रेग्नेंसी फिज़ियोलॉजिकली न्यूट्रोफिल बढ़ाती है।</p>")),
-        Section(id="high-neutrophils-causes", level=2, heading="हाई न्यूट्रोफिल के कारण (न्यूट्रोफीलिया)",
-                body_html=(
-                    "<p>सबसे आम ट्रिगर <strong>बैक्टीरियल इन्फेक्शन</strong> है। एक्यूट इन्फ्लेमेशन, स्ट्रेस, कॉर्टिकोस्टेरॉइड्स और स्मोकिंग भी बढ़ा सकते हैं।</p>"
-                    "<p>बहुत ज़्यादा और लगातार न्यूट्रोफीलिया <strong>माइलोप्रोलिफ़ेरेटिव नियोप्लाज़्म</strong> की ओर इशारा कर सकता है।</p>")),
-        Section(id="low-neutrophils-causes", level=2, heading="लो न्यूट्रोफिल के कारण (न्यूट्रोपीनिया)",
-                body_html=(
-                    "<p>सबसे आम कारण <strong>वायरल इन्फेक्शन</strong> है। गंभीर न्यूट्रोपीनिया (&lt;&nbsp;500) इन्फेक्शन का ख़तरा काफ़ी बढ़ा देता है।</p>"
-                    "<p><strong>दवाएं</strong> (कीमोथेरेपी, कुछ एंटीबायोटिक्स, एंटीकॉन्वल्सेंट्स, एंटी-थायरॉइड)&mdash;आमतौर पर दवा बंद करने पर ठीक हो जाता है।</p>"
-                    "<p>अन्य कारण: ऑटोइम्यून न्यूट्रोपीनिया, B12/फ़ोलेट/कॉपर की कमी, सेप्सिस और दुर्लभ वंशानुगत रूप।</p>")),
-        Section(id="absolute-vs-percentage", level=2, heading="एब्सोल्यूट काउंट बनाम प्रतिशत",
-                body_html=(
-                    "<p><strong>ANC (एब्सोल्यूट न्यूट्रोफिल काउंट)</strong> क्लिनिकल फ़ैसलों के लिए % से ज़्यादा विश्वसनीय है।</p>"
-                    "<p>कैलकुलेशन: <strong>ANC = WBC &times; (Neut % &divide; 100)</strong>।</p>")),
-        Section(id="symptoms", level=2, heading="न्यूट्रोफिल बदलाव से जुड़े लक्षण",
-                body_html=(
-                    "<p><strong>न्यूट्रोफीलिया</strong> खुद शायद ही लक्षण पैदा करता है; लक्षण अंतर्निहित कारण से आते हैं।</p>"
-                    "<p><strong>गंभीर न्यूट्रोपीनिया</strong> इन्फेक्शन के प्रति संवेदनशील बनाता है: मुंह के छाले, गले में दर्द, त्वचा संक्रमण, बुखार। "
-                    "फ़ेब्राइल न्यूट्रोपीनिया मेडिकल इमरजेंसी है।</p>")),
-        Section(id="related-tests", level=2, heading="संबंधित टेस्ट",
-                body_html=(
-                    "<p>न्यूट्रोफिल WBC डिफरेंशियल का हिस्सा हैं जिसमें <a href=\"/hi/blog/lymphocytes-high-or-low\">लिम्फोसाइट्स</a>, "
-                    "<a href=\"/hi/blog/monocytes-high-meaning\">मोनोसाइट्स</a>, इओसिनोफिल्स और बेसोफिल्स भी शामिल हैं।</p>"
-                    "<p>स्थिति के अनुसार: CRP, प्रोकैल्सिटोनिन, ब्लड कल्चर, पेरिफ़ेरल स्मीयर, बोन मैरो बायोप्सी।</p>")),
+        Section(id="intro", level=2, heading="न्यूट्रोफिल उच्च या निम्न: आपकी रक्त जाँच का क्या मतलब है?",
+                body_html="<p><strong>न्यूट्रोफिल</strong> सबसे प्रचुर प्रकार की श्वेत रक्त कोशिकाएँ हैं और बैक्टीरियल तथा फंगल संक्रमणों के खिलाफ प्रतिरक्षा प्रणाली की पहली पंक्ति हैं। इनकी गिनती <strong>कम्प्लीट ब्लड काउंट (CBC)</strong> का अभिन्न हिस्सा है।</p><p>बढ़ी हुई गिनती को <strong>न्यूट्रोफिलिया</strong>, कम गिनती को <strong>न्यूट्रोपेनिया</strong> कहते हैं। दोनों स्थितियाँ चिकित्सा मूल्यांकन की माँग करती हैं।</p><p>यह गाइड शैक्षणिक है और चिकित्सा सलाह का विकल्प नहीं है।</p>"),
+        Section(id="what-are-neutrophils", level=2, heading="न्यूट्रोफिल क्या हैं?",
+                body_html="<p><strong>न्यूट्रोफिल</strong> अस्थि मज्जा में बनने वाले ग्रैनुलोसाइट्स हैं जो परिसंचारी श्वेत रक्त कोशिकाओं का 50&ndash;70% हिस्सा हैं। उनका जीवनकाल केवल 5&ndash;90 घंटे है। वे फैगोसाइटोसिस, डीग्रैनुलेशन और NETs द्वारा संक्रमण से लड़ते हैं। गंभीर न्यूट्रोपेनिया (ANC &lt;500/µL) जानलेवा संक्रमणों का खतरा बढ़ाती है।</p>"),
+        Section(id="normal-ranges", level=2, heading="सामान्य न्यूट्रोफिल मान",
+                body_html="<table class=\"w-full border border-slate-200 text-sm my-4\" style=\"border-collapse: collapse;\"><thead><tr><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">पैरामीटर</th><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:left;\">सामान्य सीमा</th></tr></thead><tbody><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">ANC</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">2,500&ndash;7,000 कोशिकाएँ/µL</td></tr><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">प्रतिशत</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">40&ndash;70%</td></tr></tbody></table><p>ANC = WBC &times; न्यूट्रोफिल % / 100। न्यूट्रोपेनिया: हल्की 1,000&ndash;1,500, मध्यम 500&ndash;1,000, गंभीर &lt;500/µL।</p>"),
+        Section(id="high-neutrophils-causes", level=2, heading="उच्च न्यूट्रोफिल (न्यूट्रोफिलिया) के कारण",
+                body_html="<p>मुख्य कारण: बैक्टीरियल संक्रमण, तीव्र सूजन, तनाव, कॉर्टिकोस्टेरॉइड, धूम्रपान और माइलोप्रोलिफ़ेरेटिव विकार (CML, पॉलीसाइथेमिया वेरा)। न्यूट्रोफिलिया अपने आप में रोग नहीं बल्कि अंतर्निहित प्रक्रिया की प्रतिक्रिया है।</p>"),
+        Section(id="low-neutrophils-causes", level=2, heading="कम न्यूट्रोफिल (न्यूट्रोपेनिया) के कारण",
+                body_html="<p>कारण: वायरल संक्रमण, दवाएँ (कीमोथेरेपी, क्लोज़ापिन, मेटामिज़ोल), ऑटोइम्यून न्यूट्रोपेनिया, अस्थि मज्जा विफलता, गंभीर सेप्सिस और बिनाइन एथनिक न्यूट्रोपेनिया। ज्वर-संबंधी न्यूट्रोपेनिया (ANC &lt;500 + बुखार ≥38.3°C) आपातकालीन स्थिति है।</p>"),
+        Section(id="absolute-vs-percentage", level=2, heading="मुतलक़ गिनती (ANC) बनाम प्रतिशत",
+                body_html="<p>अकेले प्रतिशत भ्रामक हो सकता है। उदाहरण: WBC = 3,000/µL और न्यूट्रोफिल 60% = ANC केवल 1,800/µL (लगभग न्यूट्रोपेनिया)। चिकित्सा निर्णय हमेशा मुतलक़ गिनती पर आधारित होते हैं।</p>"),
+        Section(id="symptoms", level=2, heading="लक्षण",
+                body_html="<p><strong>न्यूट्रोफिलिया:</strong> आमतौर पर स्वयं के लक्षण नहीं। <strong>न्यूट्रोपेनिया:</strong> बार-बार संक्रमण, मुँह के छाले, मसूड़ों की सूजन, त्वचा संक्रमण। न्यूट्रोपेनिक रोगी में बुखार एकमात्र संकेत हो सकता है।</p>"),
+        Section(id="related-tests", level=2, heading="संबंधित परीक्षण",
+                body_html="<p>कुल WBC, लिम्फोसाइट्स, मोनोसाइट्स, इओसिनोफिल्स, बेसोफिल्स, CRP, प्रोकैल्सीटोनिन और पेरिफ़ेरल ब्लड स्मीयर। NLR (न्यूट्रोफिल-लिम्फोसाइट अनुपात) सूजन मार्कर के रूप में उपयोग होता है।</p>"),
         Section(id="when-to-see-doctor", level=2, heading="डॉक्टर से कब मिलें?",
-                body_html=(
-                    "<p>रिफरेंस रेंज से बाहर कोई भी न्यूट्रोफिल रिज़ल्ट डॉक्टर से चर्चा करें। "
-                    "न्यूट्रोपीनिया + बुखार या इन्फेक्शन के लक्षण हों तो <strong>तुरंत</strong> मेडिकल अटेंशन लें।</p>"
-                    "<p>अस्पष्ट लगातार न्यूट्रोफीलिया, खासकर थकान, रात को पसीना या वजन कम होने के साथ, हेमैटोलॉजी रेफ़रल की आवश्यकता हो सकती है।</p>")),
+                body_html="<p>डॉक्टर से मिलें यदि न्यूट्रोफिल सामान्य सीमा से बाहर हैं या बार-बार संक्रमण हो। <strong>आपातकाल:</strong> ANC &lt;500/µL और बुखार ≥38.3°C में तुरंत आपातकालीन चिकित्सा लें।</p>"),
         Section(id="how-norya-helps", level=2, heading="Norya कैसे मदद करता है",
-                body_html=(
-                    "<p>Norya डायग्नोज़ नहीं करता&mdash;तैयारी में मदद करता है। अपनी ब्लड रिपोर्ट <a href=\"/analyze\">noryaai.com/analyze</a> पर अपलोड करें "
-                    "और न्यूट्रोफिल काउंट का स्पष्ट सारांश पाएं।</p>"
-                    "<p>प्लान और कीमत: <a href=\"/pricing\">प्राइसिंग पेज</a>।</p>")),
+                body_html="<p>अपनी रक्त रिपोर्ट <a href=\"/analyze\">noryaai.com/analyze</a> पर अपलोड करें। हमारा AI ANC, न्यूट्रोफिल % और अन्य ल्यूकोसाइट उपप्रकार निकालेगा। <a href=\"/pricing\">मूल्य निर्धारण पृष्ठ</a>।</p>"),
         Section(id="disclaimer", level=2, heading="अस्वीकरण",
-                body_html=(
-                    '<p><strong>यह गाइड केवल सूचनार्थ है; यह चिकित्सा सलाह या निदान का विकल्प नहीं है।</strong> '
-                    'अपने परिणामों पर हमेशा डॉक्टर से चर्चा करें। <a href="/analyze">Norya से विश्लेषण शुरू करें</a></p>')),
+                body_html='<p><strong>यह गाइड केवल सूचनार्थ है; यह चिकित्सा सलाह या निदान का विकल्प नहीं है।</strong> अपने परिणामों पर हमेशा डॉक्टर से चर्चा करें। <a href="/analyze">Norya से विश्लेषण शुरू करें</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Arabic
+# ARABIC
 # ---------------------------------------------------------------------------
 def _sections_ar() -> list:
     from app.blog_i18n import Section
     return [
-        Section(id="intro", level=2, heading="العدلات مرتفعة أو منخفضة: فهم تفريق كريات الدم البيضاء",
-                body_html=(
-                    "<p>عندما يتضمن تحليل الدم تفريق كريات الدم البيضاء، تكون العدلات (النيوتروفيل) عادة أول سطر تنظر إليه. "
-                    "هي أكثر أنواع الكريات البيضاء وفرة، وتغيرات عددها قد تشير إلى عدوى بكتيرية أو تأثيرات دوائية أو إجهاد.</p>"
-                    "<p>يشرح هذا الدليل ماهية العدلات، كيفية قراءة النطاقات، أسباب الارتفاع أو الانخفاض، ومتى تستشير الطبيب.</p>")),
-        Section(id="what-are-neutrophils", level=2, heading="ما هي العدلات وما وظيفتها؟",
-                body_html=(
-                    "<p><strong>العدلات</strong> خلايا حبيبية تحتوي إنزيمات قادرة على تدمير البكتيريا والفطريات. "
-                    "تُنتج في نقي العظم وتدور في الدم 6&ndash;12 ساعة قبل أن تهاجر للأنسجة&mdash;قوة التدخل السريع للمناعة.</p>"
-                    "<p>تبتلع الجراثيم وتُشكّل شِراكاً خارج خلوية (NETs). في التقرير تظهر كقيمة مطلقة أو نسبة مئوية؛ القيمة المطلقة أكثر موثوقية سريرياً.</p>")),
-        Section(id="normal-ranges", level=2, heading="النطاقات الطبيعية للعدلات",
-                body_html=(
-                    '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
-                    "<thead><tr>"
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">المعامل</th>'
-                    '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">النطاق الطبيعي للبالغين</th>'
-                    "</tr></thead><tbody>"
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">العد المطلق (ANC)</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">2,500&ndash;7,000 خلية/&mu;L</td></tr>'
-                    '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">النسبة المئوية</td>'
-                    '<td style="border:1px solid #cbd5e1;padding:8px 12px;">40&ndash;70%</td></tr>'
-                    "</tbody></table>"
-                    "<p>بعض المجموعات العرقية لديها عد أساسي أقل (نقص عدلات عرقي حميد). الحمل يرفع العدلات فسيولوجياً.</p>")),
-        Section(id="high-neutrophils-causes", level=2, heading="أسباب ارتفاع العدلات (كثرة العدلات)",
-                body_html=(
-                    "<p>السبب الأكثر شيوعاً هو <strong>العدوى البكتيرية</strong>. الالتهاب الحاد والإجهاد والكورتيكوستيرويدات والتدخين يمكنها أيضاً الرفع.</p>"
-                    "<p>كثرة عدلات مرتفعة جداً ومستمرة قد تشير إلى <strong>أورام تكاثرية نقوية</strong>.</p>")),
-        Section(id="low-neutrophils-causes", level=2, heading="أسباب انخفاض العدلات (قلة العدلات)",
-                body_html=(
-                    "<p>السبب الأكثر شيوعاً هو <strong>العدوى الفيروسية</strong>. قلة العدلات الشديدة (&lt;&nbsp;500) تزيد خطر العدوى بشكل كبير.</p>"
-                    "<p><strong>الأدوية</strong> (كيميائي، بعض المضادات الحيوية، مضادات الاختلاج، مضادات الدرقية)&mdash;عادة قابلة للعكس بعد الإيقاف.</p>"
-                    "<p>أسباب أخرى: قلة عدلات مناعية ذاتية، نقص B12/فولات/نحاس، إنتان وأشكال وراثية نادرة.</p>")),
-        Section(id="absolute-vs-percentage", level=2, heading="العد المطلق مقابل النسبة المئوية",
-                body_html=(
-                    "<p><strong>العد المطلق (ANC)</strong> أكثر موثوقية سريرياً من النسبة، لأنها قد تكون مضللة إذا كان WBC الكلي غير طبيعي.</p>"
-                    "<p>الحساب: <strong>ANC = WBC &times; (Neut % &divide; 100)</strong>.</p>")),
-        Section(id="symptoms", level=2, heading="أعراض مرتبطة بتغيرات العدلات",
-                body_html=(
-                    "<p><strong>كثرة العدلات</strong> نادراً ما تسبب أعراضاً بذاتها؛ الأعراض تأتي من السبب الكامن.</p>"
-                    "<p><strong>قلة العدلات الشديدة</strong> تعرض للعدوى: تقرحات فموية، التهاب حلق، عدوى جلدية، حمى. قلة العدلات الحموية حالة طوارئ طبية.</p>")),
+        Section(id="intro", level=2, heading="العدلات (النيوتروفيل): ماذا يعني ارتفاعها أو انخفاضها؟",
+                body_html="<p><strong>العدلات (النيوتروفيل)</strong> هي أكثر أنواع كريات الدم البيضاء شيوعاً وتمثّل خط الدفاع الأول لجهاز المناعة ضد العدوى البكتيرية والفطرية. تعدادها جزء أساسي من <strong>تعداد الدم الكامل (CBC)</strong>.</p><p>الارتفاع يُسمى <strong>كثرة العدلات</strong> والانخفاض <strong>قلة العدلات</strong>. كلا الحالتين يتطلبان تقييماً طبياً.</p><p>هذا الدليل تثقيفي ولا يحل محل الاستشارة الطبية.</p>"),
+        Section(id="what-are-neutrophils", level=2, heading="ما هي العدلات؟",
+                body_html="<p><strong>العدلات</strong> خلايا حبيبية تُنتج في نخاع العظم وتشكّل 50&ndash;70% من الكريات البيضاء الدائرة. عمرها 5&ndash;90 ساعة فقط. تقاوم العدوى بالبلعمة وإفراز الحبيبات وشبكات NET. قلة العدلات الشديدة (ANC &lt;500/µL) تعرّض لعدوى مهددة للحياة.</p>"),
+        Section(id="normal-ranges", level=2, heading="المعدلات الطبيعية للعدلات",
+                body_html="<table class=\"w-full border border-slate-200 text-sm my-4\" style=\"border-collapse: collapse;\"><thead><tr><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:right;\">المعيار</th><th style=\"border:1px solid #cbd5e1;padding:8px 12px;text-align:right;\">الطبيعي</th></tr></thead><tbody><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">ANC</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">2,500&ndash;7,000 خلية/µL</td></tr><tr><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">النسبة المئوية</td><td style=\"border:1px solid #cbd5e1;padding:8px 12px;\">40&ndash;70%</td></tr></tbody></table><p>ANC = WBC &times; % العدلات / 100. قلة العدلات: خفيفة 1,000&ndash;1,500، متوسطة 500&ndash;1,000، شديدة &lt;500/µL.</p>"),
+        Section(id="high-neutrophils-causes", level=2, heading="أسباب ارتفاع العدلات",
+                body_html="<p>الأسباب: عدوى بكتيرية، التهاب حاد، إجهاد، كورتيكوستيرويدات، تدخين واضطرابات تكاثرية نقيية (CML، كثرة الحمر الحقيقية). كثرة العدلات استجابة لعملية أساسية.</p>"),
+        Section(id="low-neutrophils-causes", level=2, heading="أسباب انخفاض العدلات",
+                body_html="<p>الأسباب: عدوى فيروسية، أدوية (كيماوي، كلوزابين، ميتاميزول)، قلة عدلات مناعية ذاتية، فشل نخاع العظم، إنتان شديد وقلة عدلات عرقية حميدة. قلة العدلات الحموية (ANC &lt;500 + حرارة ≥38.3°C) حالة طوارئ.</p>"),
+        Section(id="absolute-vs-percentage", level=2, heading="العدد المطلق مقابل النسبة المئوية",
+                body_html="<p>النسبة وحدها قد تكون مضللة. مثال: WBC = 3,000/µL مع 60% عدلات = ANC 1,800/µL فقط (قرب قلة العدلات). القرارات السريرية تعتمد دائماً على العدد المطلق.</p>"),
+        Section(id="symptoms", level=2, heading="الأعراض",
+                body_html="<p><strong>كثرة العدلات:</strong> عادةً بلا أعراض خاصة. <strong>قلة العدلات:</strong> عدوى متكررة، تقرحات فموية، التهاب لثة، عدوى جلدية. الحمى قد تكون العلامة الوحيدة.</p>"),
         Section(id="related-tests", level=2, heading="فحوصات ذات صلة",
-                body_html=(
-                    "<p>العدلات جزء من التفريق الذي يشمل <a href=\"/ar/blog/lymphocytes-high-or-low\">اللمفاويات</a>، "
-                    "<a href=\"/ar/blog/monocytes-high-meaning\">الوحيدات</a>، الحمضات والقعدات.</p>"
-                    "<p>حسب الحالة: CRP، بروكالسيتونين، مزارع دم، لطاخة محيطية، خزعة نقي عظم أو أضداد مضادة للعدلات.</p>")),
+                body_html="<p>WBC الكلي، لمفاويات، وحيدات، حمضات، قاعدات، CRP، بروكالسيتونين ومسحة دم محيطية. نسبة العدلات/اللمفاويات (NLR) تُستخدم كمؤشر التهابي.</p>"),
         Section(id="when-to-see-doctor", level=2, heading="متى تراجع الطبيب؟",
-                body_html=(
-                    "<p>ناقش أي نتيجة عدلات خارج النطاق مع طبيبك. اطلب مساعدة <strong>طارئة</strong> إذا كان لديك قلة عدلات + حمى أو علامات عدوى.</p>"
-                    "<p>كثرة عدلات مستمرة غير مفسرة مع إرهاق أو تعرق ليلي أو نقص وزن قد تستدعي إحالة لأمراض الدم.</p>")),
-        Section(id="how-norya-helps", level=2, heading="كيف تساعد Norya",
-                body_html=(
-                    "<p>Norya لا تُشخّص&mdash;نساعدك على التحضير. ارفع تقريرك على <a href=\"/analyze\">noryaai.com/analyze</a> "
-                    "للحصول على ملخص واضح للعدلات وتفريق الكريات.</p>"
-                    "<p>الخيارات والأسعار: <a href=\"/pricing\">صفحة الأسعار</a>.</p>")),
+                body_html="<p>راجع الطبيب إذا كانت العدلات خارج النطاق أو عند عدوى متكررة. <strong>طوارئ:</strong> ANC &lt;500/µL مع حرارة ≥38.3°C يتطلب علاجاً طارئاً فورياً.</p>"),
+        Section(id="how-norya-helps", level=2, heading="كيف تساعدك Norya",
+                body_html="<p>ارفع تقريرك على <a href=\"/analyze\">noryaai.com/analyze</a> وسيستخرج الذكاء الاصطناعي ANC ونسبة العدلات وأنواع الكريات البيضاء الأخرى. <a href=\"/pricing\">صفحة الأسعار</a>.</p>"),
         Section(id="disclaimer", level=2, heading="إخلاء المسؤولية",
-                body_html=(
-                    '<p><strong>هذا الدليل لأغراض إعلامية فقط ولا يحل محل المشورة أو التشخيص الطبي.</strong> '
-                    'ناقش نتائجك دائماً مع متخصص في الرعاية الصحية. <a href="/analyze">ابدأ التحليل مع Norya</a></p>')),
+                body_html='<p><strong>هذا الدليل لأغراض إعلامية فقط ولا يحل محل المشورة أو التشخيص الطبي.</strong> ناقش نتائجك دائماً مع متخصص في الرعاية الصحية. <a href="/analyze">ابدأ التحليل مع Norya</a></p>'),
     ]
 
 
@@ -828,50 +647,81 @@ def get_neutrophils_faq_schema_qa() -> dict:
     """Returns faq_schema_qa dict for neutrophils article (all 9 languages)."""
     return {
         "en": [
-            {"question": "What is a normal neutrophil count?", "answer": "The normal absolute neutrophil count (ANC) for adults is roughly 2,500–7,000 cells/μL, or 40–70% of total white blood cells. Ranges may vary between labs."},
-            {"question": "What causes high neutrophils?", "answer": "The most common cause is bacterial infection. Other causes include acute inflammation, physiological stress, corticosteroid use, and smoking. Rarely, myeloproliferative disorders can be responsible."},
-            {"question": "What causes low neutrophils?", "answer": "Viral infections are the most common cause. Medications (chemotherapy, certain antibiotics, anticonvulsants), autoimmune conditions, nutritional deficiencies, and severe infections can also lower neutrophils."},
-            {"question": "What is the difference between absolute and percentage neutrophils?", "answer": "The absolute count (ANC) tells you the actual number of neutrophils per volume of blood, while the percentage shows neutrophils as a fraction of all white cells. ANC is generally more clinically reliable because it is not skewed by changes in other cell types."},
-            {"question": "When is low neutrophil count dangerous?", "answer": "Severe neutropenia (ANC below 500 cells/μL) significantly increases infection risk. If you have known neutropenia and develop a fever, seek immediate medical attention as febrile neutropenia is a medical emergency."},
+            {"question": "What is a normal neutrophil count?",
+             "answer": "The normal absolute neutrophil count (ANC) is 2,500–7,000 cells/µL, representing 40–70% of total white blood cells. Clinical decisions are based on the absolute count, not the percentage."},
+            {"question": "What causes high neutrophils?",
+             "answer": "Common causes include bacterial infections, acute inflammation (surgery, trauma), physiological stress, corticosteroid medications, smoking, and myeloproliferative disorders such as chronic myeloid leukaemia."},
+            {"question": "What causes low neutrophils?",
+             "answer": "Causes include viral infections, medications (especially chemotherapy), autoimmune neutropenia, bone marrow failure, severe sepsis, and benign ethnic neutropenia. Severe neutropenia (ANC < 500) increases infection risk dramatically."},
+            {"question": "What is febrile neutropenia?",
+             "answer": "Febrile neutropenia is a medical emergency defined as fever ≥38.3°C (or sustained ≥38.0°C for one hour) in a patient with ANC < 500/µL. It requires immediate broad-spectrum antibiotic treatment."},
+            {"question": "What is the difference between absolute neutrophil count and percentage?",
+             "answer": "The percentage shows the proportion of WBCs that are neutrophils, while the absolute count (ANC) is the actual number per microlitre. ANC is clinically more reliable because the percentage can be misleading when total WBC is abnormal."},
         ],
         "tr": [
-            {"question": "Normal nötrofil sayısı nedir?", "answer": "Yetişkinlerde normal mutlak nötrofil sayısı (ANC) yaklaşık 2.500–7.000 hücre/μL veya toplam beyaz kürelerin %40–70'idir."},
-            {"question": "Nötrofil yüksekliğine ne sebep olur?", "answer": "En sık neden bakteriyel enfeksiyondur. Akut inflamasyon, stres, kortikosteroidler ve sigara da yükseltebilir. Nadir olarak miyeloproliferatif hastalıklar sorumlu olabilir."},
-            {"question": "Nötrofil düşüklüğü ne zaman tehlikelidir?", "answer": "Ciddi nötropeni (ANC 500'ün altında) enfeksiyon riskini belirgin artırır. Nötropeniniz biliniyorsa ve ateşiniz çıkıyorsa febril nötropeni acildir; derhal tıbbi yardım alın."},
+            {"question": "Normal nötrofil sayısı nedir?",
+             "answer": "Normal ANC 2.500–7.000 hücre/µL, toplam WBC'nin %40–70'idir. Klinik kararlar mutlak sayıya göre verilir."},
+            {"question": "Nötrofil yüksekliğinin nedenleri nelerdir?",
+             "answer": "Bakteriyel enfeksiyonlar, akut inflamasyon, stres, kortikosteroidler, sigara ve miyeloproliferatif hastalıklar (KML) başlıca nedenlerdir."},
+            {"question": "Nötrofil düşüklüğünün nedenleri nelerdir?",
+             "answer": "Viral enfeksiyonlar, ilaçlar (kemoterapi), otoimmün nötropeni, kemik iliği yetmezliği, ağır sepsis ve benign etnik nötropeni."},
+            {"question": "Febril nötropeni nedir?",
+             "answer": "ANC <500/µL olan hastada 38,3°C ve üzeri ateş. Acil geniş spektrumlu antibiyotik gerektirir."},
         ],
         "es": [
-            {"question": "¿Cuál es el recuento normal de neutrófilos?", "answer": "El ANC normal para adultos es aproximadamente 2.500–7.000 células/μL, o 40–70% del total de leucocitos."},
-            {"question": "¿Qué causa neutrófilos altos?", "answer": "La causa más frecuente es la infección bacteriana. Inflamación aguda, estrés, corticosteroides y tabaco también los elevan."},
-            {"question": "¿Cuándo es peligroso tener neutrófilos bajos?", "answer": "La neutropenia grave (ANC < 500) aumenta mucho el riesgo de infección. Si tiene neutropenia conocida y aparece fiebre, busque atención médica inmediata."},
+            {"question": "¿Cuál es el recuento normal de neutrófilos?",
+             "answer": "ANC normal: 2.500–7.000 células/µL (40–70% del total de leucocitos). Las decisiones clínicas se basan en el recuento absoluto."},
+            {"question": "¿Qué causa neutrófilos altos?",
+             "answer": "Infecciones bacterianas, inflamación aguda, estrés, corticosteroides, tabaquismo y trastornos mieloproliferativos."},
+            {"question": "¿Qué es la neutropenia febril?",
+             "answer": "Fiebre ≥38,3°C con ANC <500/µL. Es una emergencia que requiere antibióticos inmediatos."},
         ],
         "de": [
-            {"question": "Was ist eine normale Neutrophilenzahl?", "answer": "Die normale ANC bei Erwachsenen liegt bei ca. 2.500–7.000 Zellen/μL oder 40–70 % des Gesamt-WBC."},
-            {"question": "Was verursacht hohe Neutrophile?", "answer": "Häufigste Ursache ist eine bakterielle Infektion. Entzündung, Stress, Kortikosteroide und Rauchen können den Wert ebenfalls erhöhen."},
-            {"question": "Wann sind niedrige Neutrophile gefährlich?", "answer": "Schwere Neutropenie (ANC < 500) erhöht das Infektionsrisiko erheblich. Fieber bei bekannter Neutropenie ist ein Notfall."},
+            {"question": "Was ist eine normale Neutrophilenzahl?",
+             "answer": "Normaler ANC: 2.500–7.000 Zellen/µL (40–70% der Gesamt-WBC). Klinische Entscheidungen basieren auf dem absoluten Wert."},
+            {"question": "Was verursacht erhöhte Neutrophile?",
+             "answer": "Bakterielle Infektionen, akute Entzündung, Stress, Kortikosteroide, Rauchen und myeloproliferative Erkrankungen."},
+            {"question": "Was ist febrile Neutropenie?",
+             "answer": "Fieber ≥38,3°C bei ANC <500/µL. Ein Notfall, der sofortige Breitspektrum-Antibiotika erfordert."},
         ],
         "fr": [
-            {"question": "Quel est le taux normal de neutrophiles ?", "answer": "Le PNN normal chez l'adulte est environ 2 500–7 000/μL, soit 40–70 % des globules blancs."},
-            {"question": "Quelles sont les causes de neutrophiles élevés ?", "answer": "L'infection bactérienne est la cause la plus fréquente. Inflammation aiguë, stress, corticoïdes et tabac peuvent aussi les augmenter."},
-            {"question": "Quand la neutropénie est-elle dangereuse ?", "answer": "La neutropénie sévère (PNN < 500) augmente nettement le risque infectieux. Fièvre + neutropénie connue = urgence médicale."},
+            {"question": "Quel est le taux normal de neutrophiles ?",
+             "answer": "PNN normal : 2 500–7 000/µL (40–70% des GB). Les décisions cliniques reposent sur la valeur absolue."},
+            {"question": "Quelles sont les causes de neutrophiles élevés ?",
+             "answer": "Infections bactériennes, inflammation aiguë, stress, corticoïdes, tabagisme et syndromes myéloprolifératifs."},
+            {"question": "Qu'est-ce que la neutropénie fébrile ?",
+             "answer": "Fièvre ≥38,3°C avec PNN <500/µL. Urgence nécessitant des antibiotiques à large spectre immédiats."},
         ],
         "it": [
-            {"question": "Qual è la conta normale dei neutrofili?", "answer": "L'ANC normale negli adulti è circa 2.500–7.000 cellule/μL, ovvero 40–70% dei globuli bianchi totali."},
-            {"question": "Cosa causa neutrofili alti?", "answer": "La causa più frequente è l'infezione batterica. Anche infiammazione, stress, cortisonici e fumo possono alzarli."},
-            {"question": "Quando la neutropenia è pericolosa?", "answer": "Neutropenia grave (ANC < 500) aumenta molto il rischio infettivo. Febbre + neutropenia nota = emergenza medica."},
+            {"question": "Qual è la conta normale dei neutrofili?",
+             "answer": "ANC normale: 2.500–7.000 cellule/µL (40–70% dei WBC totali). Le decisioni cliniche si basano sul valore assoluto."},
+            {"question": "Cosa causa i neutrofili alti?",
+             "answer": "Infezioni batteriche, infiammazione acuta, stress, corticosteroidi, fumo e disordini mieloproliferativi."},
+            {"question": "Cos'è la neutropenia febbrile?",
+             "answer": "Febbre ≥38,3°C con ANC <500/µL. Un'emergenza che richiede antibiotici ad ampio spettro immediati."},
         ],
         "he": [
-            {"question": "מהי ספירת נויטרופילים תקינה?", "answer": "ANC תקין במבוגרים הוא כ-2,500–7,000 תאים/μL, או 40–70% מכלל הלויקוציטים."},
-            {"question": "מה גורם לנויטרופילים גבוהים?", "answer": "הגורם השכיח ביותר הוא זיהום חיידקי. גם דלקת, מתח, קורטיקוסטרואידים ועישון יכולים להעלות."},
-            {"question": "מתי נויטרופילים נמוכים מסוכנים?", "answer": "נויטרופניה חמורה (ANC מתחת ל-500) מגבירה מאוד את סיכון הזיהום. חום + נויטרופניה = מצב חירום."},
+            {"question": "מהי ספירת נויטרופילים תקינה?",
+             "answer": "ANC תקין: 2,500–7,000 תאים/µL (40–70% מסך הלויקוציטים). החלטות קליניות מבוססות על הספירה המוחלטת."},
+            {"question": "מה גורם לנויטרופילים גבוהים?",
+             "answer": "זיהומים חיידקיים, דלקת חריפה, סטרס, קורטיקוסטרואידים, עישון והפרעות מיאלופרוליפרטיביות."},
+            {"question": "מהי נויטרופניה חום?",
+             "answer": "חום ≥38.3°C עם ANC <500/µL. מצב חירום הדורש אנטיביוטיקה רחבת טווח מיידית."},
         ],
         "hi": [
-            {"question": "सामान्य न्यूट्रोफिल काउंट कितना होता है?", "answer": "वयस्कों में सामान्य ANC लगभग 2,500–7,000 सेल/μL या कुल WBC का 40–70% है।"},
-            {"question": "हाई न्यूट्रोफिल किससे होता है?", "answer": "सबसे आम कारण बैक्टीरियल इन्फेक्शन है। इन्फ्लेमेशन, स्ट्रेस, कॉर्टिकोस्टेरॉइड्स और स्मोकिंग भी बढ़ा सकते हैं।"},
-            {"question": "लो न्यूट्रोफिल कब ख़तरनाक होता है?", "answer": "गंभीर न्यूट्रोपीनिया (ANC < 500) इन्फेक्शन का ख़तरा काफ़ी बढ़ा देता है। बुखार + ज्ञात न्यूट्रोपीनिया = मेडिकल इमरजेंसी।"},
+            {"question": "सामान्य न्यूट्रोफिल गिनती कितनी होनी चाहिए?",
+             "answer": "सामान्य ANC: 2,500–7,000 कोशिकाएँ/µL (कुल WBC का 40–70%)। चिकित्सा निर्णय मुतलक़ गिनती पर आधारित होते हैं।"},
+            {"question": "न्यूट्रोफिल बढ़ने के कारण क्या हैं?",
+             "answer": "बैक्टीरियल संक्रमण, तीव्र सूजन, तनाव, कॉर्टिकोस्टेरॉइड, धूम्रपान और माइलोप्रोलिफ़ेरेटिव विकार।"},
+            {"question": "फ़ेब्राइल न्यूट्रोपेनिया क्या है?",
+             "answer": "ANC <500/µL वाले रोगी में बुखार ≥38.3°C। यह आपातकालीन स्थिति है जिसमें तुरंत व्यापक स्पेक्ट्रम एंटीबायोटिक चाहिए।"},
         ],
         "ar": [
-            {"question": "ما هو العدد الطبيعي للعدلات؟", "answer": "العد المطلق الطبيعي (ANC) للبالغين حوالي 2,500–7,000 خلية/μL أو 40–70% من إجمالي الكريات البيضاء."},
-            {"question": "ما أسباب ارتفاع العدلات؟", "answer": "السبب الأكثر شيوعاً هو العدوى البكتيرية. الالتهاب الحاد والإجهاد والكورتيكوستيرويدات والتدخين يمكنها أيضاً الرفع."},
-            {"question": "متى يكون انخفاض العدلات خطيراً؟", "answer": "قلة العدلات الشديدة (ANC أقل من 500) تزيد خطر العدوى بشكل كبير. حمى + قلة عدلات معروفة = حالة طوارئ طبية."},
+            {"question": "ما هو العدد الطبيعي للعدلات؟",
+             "answer": "ANC الطبيعي: 2,500–7,000 خلية/µL (40–70% من مجموع الكريات البيضاء). القرارات السريرية تعتمد على العدد المطلق."},
+            {"question": "ما أسباب ارتفاع العدلات؟",
+             "answer": "عدوى بكتيرية، التهاب حاد، إجهاد، كورتيكوستيرويدات، تدخين واضطرابات تكاثرية نقيية."},
+            {"question": "ما هي قلة العدلات الحموية؟",
+             "answer": "حمى ≥38.3°C مع ANC <500/µL. حالة طوارئ تتطلب مضادات حيوية واسعة الطيف فورية."},
         ],
     }
