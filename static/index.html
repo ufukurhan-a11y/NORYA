@@ -5656,7 +5656,7 @@
     <div class="intake-container">
       <div id="analyze-box" class="intake-card">
         <div class="intake-card-inner">
-          <p id="analyze-login-prompt" class="text-center py-3 px-4 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-sm font-medium flex flex-wrap items-center justify-center gap-2 text-slate-600 dark:text-slate-300"><span data-i18n="analyze_prompt">Raporu almak için </span><button type="button" onclick="openLogin()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_login">Giriş</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button><span class="opacity-90" data-i18n="analyze_prompt_suffix">— adımlar aşağıda.</span></p>
+          <p id="analyze-login-prompt" class="hidden text-center py-3 px-4 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-sm font-medium flex flex-wrap items-center justify-center gap-2 text-slate-600 dark:text-slate-300"><span data-i18n="analyze_prompt">Raporu almak için </span><button type="button" onclick="openLogin()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_login">Giriş</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button><span class="opacity-90" data-i18n="analyze_prompt_suffix">— adımlar aşağıda.</span></p>
           <p id="analyze-after-actions-hint" class="text-center py-2 px-4 mb-4 rounded-xl bg-[#0EA5A4]/08 dark:bg-[#0EA5A4]/12 border border-[#0EA5A4]/20 text-sm text-slate-700 dark:text-slate-200 flex flex-wrap items-center justify-center gap-2">
             <span aria-hidden="true">📥</span>
             <span data-i18n="analyze_after_hint">Rapor hazır olunca: Raporu İndir (PDF) ve Doktoruma götür ile hekime özel özet alabilirsiniz.</span>
@@ -12635,9 +12635,10 @@
         var mh = document.getElementById('main-header'); if (mh) mh.classList.remove('user-logged-in');
         var daw = document.getElementById('drawer-auth-wrap'); if (daw) { daw.classList.remove('hidden'); daw.style.display = 'flex'; }
         var duw = document.getElementById('drawer-user-wrap'); if (duw) { duw.classList.add('hidden'); duw.style.display = 'none'; }
-        analyzeLoginPrompt.classList.remove('hidden');
+        analyzeLoginPrompt.classList.add('hidden');
         analyzeForm.classList.remove('hidden');
         if (typeof setWizardStep === 'function' && (typeof wizardCurrentStep === 'undefined' || wizardCurrentStep === 1 || wizardCurrentStep === 4)) setWizardStep(1);
+        if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
       }
     }
 
@@ -13728,10 +13729,6 @@
       errEl.classList.add('hidden');
       var retryWrap = document.getElementById('analyze-retry-wrap');
       if (retryWrap) retryWrap.classList.add('hidden');
-      if (!getToken() && !isLocalDev()) {
-        openLogin();
-        return;
-      }
       if (!text && !hasFile) {
         var t = T[getLang()] || T.tr;
         if (hasPdfName) {
