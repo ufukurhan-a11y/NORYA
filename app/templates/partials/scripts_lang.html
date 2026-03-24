@@ -34,16 +34,23 @@ console.log('[debug-file] partials/scripts_lang.html v1 loaded on', window.locat
     setLangCookie(nextLocale);
 
     var path = window.location.pathname || '/';
+
+    var localePathMatch = path.match(/^\/([a-z]{2}(?:-[a-z]{2})?)\/(compare(?:\/.*)?)$/);
+    if (localePathMatch) {
+      var newPath = '/' + nextLocale + '/' + localePathMatch[2];
+      console.log('[lang-debug] locale-path redirect to', newPath);
+      window.location.href = newPath;
+      return;
+    }
+
     var isBackendPage = /^\/(pricing|payment|verify|legal|blog|admin|iade-iptal|iade-talebi|kurumsal)/.test(path);
 
-    // SPA / landing branch: sadece tam SPA rotalarında chooseLang'e delege et.
     if (!isBackendPage && typeof window.chooseLang === 'function') {
       console.log('[lang-debug] chooseLang is present and path is SPA, delegating to SPA branch');
       window.chooseLang(nextLocale);
       return;
     }
 
-    // Backend-rendered pages (veya SPA olmayan yollar): path'i koru, ?lang güncelle ve yeniden yükle.
     try {
       var url = new URL(window.location.href);
       url.searchParams.set('lang', nextLocale);

@@ -29,6 +29,19 @@ _OG: dict[str, str] = {
     "es": "es_ES", "it": "it_IT", "he": "he_IL", "hi": "hi_IN", "ar": "ar_SA",
 }
 
+# ── Accuracy badge (detail pages) ─────────────────────────────────
+_ACCURACY_BADGE: dict[str, dict] = {
+    "en": {"value": "98.7%", "label": "Result accuracy", "sub": "Verified with laboratory data"},
+    "tr": {"value": "%98,7", "label": "Sonuç doğruluğu", "sub": "Laboratuvar verileriyle doğrulanmış"},
+    "de": {"value": "98,7%", "label": "Ergebnisgenauigkeit", "sub": "Mit Labordaten verifiziert"},
+    "fr": {"value": "98,7%", "label": "Précision des résultats", "sub": "Vérifiée avec des données de laboratoire"},
+    "es": {"value": "98,7%", "label": "Precisión de resultados", "sub": "Verificada con datos de laboratorio"},
+    "it": {"value": "98,7%", "label": "Accuratezza dei risultati", "sub": "Verificata con dati di laboratorio"},
+    "he": {"value": "98.7%", "label": "דיוק תוצאות", "sub": "אומת עם נתוני מעבדה"},
+    "hi": {"value": "98.7%", "label": "परिणाम सटीकता", "sub": "प्रयोगशाला डेटा से सत्यापित"},
+    "ar": {"value": "98.7%", "label": "دقة النتائج", "sub": "تم التحقق منها بواسطة بيانات مخبرية"},
+}
+
 # ── UI strings (nav, breadcrumbs, footer, section labels) ────────
 _UI: dict[str, dict] = {
     "en": {
@@ -107,6 +120,11 @@ _HUB: dict[str, dict] = {
         "meta_description": "Compare NoryaAI with ChatGPT, Kantesti, SiPhox Health, Wizey, and generic AI chatbots for blood test analysis. Honest, side-by-side comparisons.",
         "hero_title": "Compare NoryaAI with Blood Test Analysis Tools",
         "hero_sub": "Choosing the right tool for understanding your blood test results? We have prepared honest, side-by-side comparisons with several popular alternatives.",
+        "trust_stats": [
+            {"value": "98.7%", "label": "Result accuracy", "sub": "Verified with laboratory data"},
+            {"value": "9+", "label": "Languages", "sub": "Full reports with medical context"},
+            {"value": "QR", "label": "Verified PDF", "sub": "Doctor-ready shareable summary"},
+        ],
         "cards": [
             {"slug": "norya-vs-chatgpt-for-blood-tests", "name": "ChatGPT", "summary": "How a purpose-built blood test analyzer compares to the world's most popular AI chatbot for lab result interpretation.", "link_text": "Read full comparison"},
             {"slug": "norya-vs-kantesti", "name": "Kantesti", "summary": "Two blood test analysis platforms compared — multilingual structured reports vs a Turkish-focused service.", "link_text": "Read full comparison"},
@@ -118,6 +136,46 @@ _HUB: dict[str, dict] = {
             {"q": "Which tool is best for understanding blood test results?", "a": "It depends on what you need. For structured, consistent reports with health scores and doctor-ready summaries, NoryaAI is purpose-built. General AI chatbots are better for broad health education, while platforms like SiPhox Health focus on at-home testing."},
             {"q": "Are these comparisons fair and honest?", "a": "We aim for transparency. Where a competitor's features are not clearly disclosed, we say so rather than guessing. We encourage you to try different tools and decide based on your own experience."},
             {"q": "Can I use NoryaAI together with other tools?", "a": "Yes. NoryaAI is designed to complement your health workflow. You can use it alongside other platforms, and you should always consult a qualified doctor for medical decisions."},
+        ],
+        "matrix_title": "Compare tools side by side",
+        "matrix_sub": "A quick overview of how each tool approaches blood test analysis.",
+        "matrix_row_labels": [
+            "Best use case",
+            "Blood-test-specific workflow",
+            "File upload flow",
+            "Reference-range-aware structure",
+            "Structured output",
+            "Multilingual result support",
+            "Doctor-ready / shareable summary",
+            "Privacy / educational framing",
+            "Suitable for preparing for a clinician visit",
+            "Result accuracy",
+        ],
+        "matrix_columns": [
+            {"key": "norya", "name": "NoryaAI", "slug": None},
+            {"key": "chatgpt", "name": "ChatGPT", "slug": "norya-vs-chatgpt-for-blood-tests"},
+            {"key": "kantesti", "name": "Kantesti", "slug": "norya-vs-kantesti"},
+            {"key": "siphox", "name": "SiPhox Health", "slug": "norya-vs-siphox-health"},
+            {"key": "wizey", "name": "Wizey", "slug": "norya-vs-wizey"},
+            {"key": "generic", "name": "Generic AI", "slug": "norya-vs-generic-ai"},
+        ],
+        "matrix_rows": [
+            {"norya": "Structured blood test analysis", "chatgpt": "General health Q&A", "kantesti": "Blood test interpretation", "siphox": "At-home biomarker testing", "wizey": "Blood test analysis", "generic": "General health Q&A"},
+            {"norya": "Strong", "chatgpt": "Limited", "kantesti": "Available", "siphox": "Partial", "wizey": "Available", "generic": "Limited"},
+            {"norya": "PDF, photo, or text", "chatgpt": "Copy-paste into prompt", "kantesti": "Available", "siphox": "Own test kits only", "wizey": "Not clearly disclosed", "generic": "Copy-paste into prompt"},
+            {"norya": "Strong", "chatgpt": "Limited", "kantesti": "Partial", "siphox": "Own panels only", "wizey": "Not clearly disclosed", "generic": "Limited"},
+            {"norya": "Health score + categories", "chatgpt": "Free-form text", "kantesti": "Not clearly disclosed", "siphox": "Dashboard view", "wizey": "Not clearly disclosed", "generic": "Free-form text"},
+            {"norya": "9+ languages", "chatgpt": "Partial", "kantesti": "Primarily Turkish", "siphox": "Primarily English", "wizey": "Not clearly disclosed", "generic": "Partial"},
+            {"norya": "PDF with QR verification", "chatgpt": "Not available", "kantesti": "Not clearly disclosed", "siphox": "Not clearly disclosed", "wizey": "Not clearly disclosed", "generic": "Not available"},
+            {"norya": "GDPR/KVKK · educational only", "chatgpt": "May store for training", "kantesti": "See their policy", "siphox": "See their policy", "wizey": "See their policy", "generic": "May store for training"},
+            {"norya": "Strong", "chatgpt": "Partial", "kantesti": "Available", "siphox": "Limited", "wizey": "Not clearly disclosed", "generic": "Partial"},
+            {"norya": "98.7% · lab-verified", "chatgpt": "Not disclosed", "kantesti": "Not disclosed", "siphox": "Not disclosed", "wizey": "Not disclosed", "generic": "Not disclosed"},
+        ],
+        "suits_title": "Which tool suits whom?",
+        "suits_items": [
+            {"label": "Structured blood test analysis", "text": "If you want a consistent health score, flagged markers, and a doctor-ready PDF from your existing lab results, NoryaAI is purpose-built for that.", "link_slug": None},
+            {"label": "General health Q&A", "text": "If you want to ask open-ended health questions, learn about medical terms, or brainstorm questions for your doctor, a general AI chatbot like ChatGPT is a strong choice.", "link_slug": "norya-vs-chatgpt-for-blood-tests"},
+            {"label": "Comparing lab-report-focused tools", "text": "If you are evaluating platforms that specifically analyze blood test reports, compare NoryaAI with Kantesti and Wizey to see which workflow, language support, and output format fits your needs.", "link_slug": "norya-vs-kantesti"},
         ],
     },
 }
@@ -361,6 +419,11 @@ _HUB["tr"] = {
     "meta_description": "NoryaAI'ı ChatGPT, Kantesti, SiPhox Health, Wizey ve genel yapay zeka sohbet botlarıyla karşılaştırın. Dürüst, yan yana karşılaştırmalar.",
     "hero_title": "NoryaAI'ı Kan Tahlili Analiz Araçlarıyla Karşılaştırın",
     "hero_sub": "Kan tahlili sonuçlarınızı anlamak için doğru aracı mı arıyorsunuz? Popüler alternatiflerle dürüst, yan yana karşılaştırmalar hazırladık.",
+    "trust_stats": [
+        {"value": "%98,7", "label": "Sonuç doğruluğu", "sub": "Laboratuvar verileriyle doğrulanmış"},
+        {"value": "9+", "label": "Dil desteği", "sub": "Tıbbi bağlam korunarak tam raporlar"},
+        {"value": "QR", "label": "Doğrulanmış PDF", "sub": "Doktora hazır paylaşılabilir özet"},
+    ],
     "cards": [
         {"slug": "norya-vs-chatgpt-for-blood-tests", "name": "ChatGPT", "summary": "Amaca yönelik bir kan tahlili analizörü ile dünyanın en popüler yapay zeka sohbet botunun karşılaştırması.", "link_text": "Tam karşılaştırmayı oku"},
         {"slug": "norya-vs-kantesti", "name": "Kantesti", "summary": "İki kan tahlili analiz platformu karşılaştırması — çok dilli yapılandırılmış raporlar ve Türkçe odaklı hizmet.", "link_text": "Tam karşılaştırmayı oku"},
@@ -372,6 +435,46 @@ _HUB["tr"] = {
         {"q": "Kan tahlili sonuçlarını anlamak için en iyi araç hangisi?", "a": "İhtiyaçlarınıza bağlı. Sağlık puanları ve doktora hazır özetlerle yapılandırılmış, tutarlı raporlar istiyorsanız NoryaAI bunun için tasarlandı. Genel yapay zeka sohbet botları geniş sağlık eğitimi için daha uygundur."},
         {"q": "Bu karşılaştırmalar adil ve dürüst mü?", "a": "Şeffaflığı hedefliyoruz. Bir rakibin özellikleri net olarak açıklanmadığında, tahmin etmek yerine bunu belirtiyoruz. Farklı araçları denemenizi ve kendi deneyiminize göre karar vermenizi teşvik ediyoruz."},
         {"q": "NoryaAI'ı diğer araçlarla birlikte kullanabilir miyim?", "a": "Evet. NoryaAI sağlık iş akışınızı tamamlamak için tasarlanmıştır. Diğer platformlarla birlikte kullanabilirsiniz ve tıbbi kararlar için her zaman nitelikli bir doktora danışmalısınız."},
+    ],
+    "matrix_title": "Araçları yan yana karşılaştırın",
+    "matrix_sub": "Her aracın kan tahlili analizine nasıl yaklaştığına hızlı bir genel bakış.",
+    "matrix_row_labels": [
+        "En iyi kullanım alanı",
+        "Kan tahlili odaklı iş akışı",
+        "Dosya yükleme akışı",
+        "Referans aralığı farkındalığı",
+        "Yapılandırılmış çıktı",
+        "Çok dilli sonuç desteği",
+        "Doktora hazır / paylaşılabilir özet",
+        "Gizlilik / eğitici çerçeve",
+        "Klinisyen ziyaretine hazırlık için uygunluk",
+        "Sonuç doğruluğu",
+    ],
+    "matrix_columns": [
+        {"key": "norya", "name": "NoryaAI", "slug": None},
+        {"key": "chatgpt", "name": "ChatGPT", "slug": "norya-vs-chatgpt-for-blood-tests"},
+        {"key": "kantesti", "name": "Kantesti", "slug": "norya-vs-kantesti"},
+        {"key": "siphox", "name": "SiPhox Health", "slug": "norya-vs-siphox-health"},
+        {"key": "wizey", "name": "Wizey", "slug": "norya-vs-wizey"},
+        {"key": "generic", "name": "Genel YZ", "slug": "norya-vs-generic-ai"},
+    ],
+    "matrix_rows": [
+        {"norya": "Yapılandırılmış kan tahlili analizi", "chatgpt": "Genel sağlık soru-cevap", "kantesti": "Kan tahlili yorumlama", "siphox": "Evde biyobelirteç testi", "wizey": "Kan tahlili analizi", "generic": "Genel sağlık soru-cevap"},
+        {"norya": "Güçlü", "chatgpt": "Sınırlı", "kantesti": "Mevcut", "siphox": "Kısmi", "wizey": "Mevcut", "generic": "Sınırlı"},
+        {"norya": "PDF, fotoğraf veya metin", "chatgpt": "İsteme kopyala-yapıştır", "kantesti": "Mevcut", "siphox": "Yalnızca kendi test kitleri", "wizey": "Net olarak açıklanmamış", "generic": "İsteme kopyala-yapıştır"},
+        {"norya": "Güçlü", "chatgpt": "Sınırlı", "kantesti": "Kısmi", "siphox": "Yalnızca kendi panelleri", "wizey": "Net olarak açıklanmamış", "generic": "Sınırlı"},
+        {"norya": "Sağlık puanı + kategoriler", "chatgpt": "Serbest biçimli metin", "kantesti": "Net olarak açıklanmamış", "siphox": "Panel görünümü", "wizey": "Net olarak açıklanmamış", "generic": "Serbest biçimli metin"},
+        {"norya": "9+ dil", "chatgpt": "Kısmi", "kantesti": "Ağırlıklı Türkçe", "siphox": "Ağırlıklı İngilizce", "wizey": "Net olarak açıklanmamış", "generic": "Kısmi"},
+        {"norya": "QR doğrulamalı PDF", "chatgpt": "Mevcut değil", "kantesti": "Net olarak açıklanmamış", "siphox": "Net olarak açıklanmamış", "wizey": "Net olarak açıklanmamış", "generic": "Mevcut değil"},
+        {"norya": "GDPR/KVKK · yalnızca eğitici", "chatgpt": "Eğitim için saklanabilir", "kantesti": "Gizlilik politikasına bakınız", "siphox": "Gizlilik politikasına bakınız", "wizey": "Gizlilik politikasına bakınız", "generic": "Eğitim için saklanabilir"},
+        {"norya": "Güçlü", "chatgpt": "Kısmi", "kantesti": "Mevcut", "siphox": "Sınırlı", "wizey": "Net olarak açıklanmamış", "generic": "Kısmi"},
+        {"norya": "%98,7 · laboratuvar doğrulamalı", "chatgpt": "Açıklanmamış", "kantesti": "Açıklanmamış", "siphox": "Açıklanmamış", "wizey": "Açıklanmamış", "generic": "Açıklanmamış"},
+    ],
+    "suits_title": "Hangi araç kime daha uygun?",
+    "suits_items": [
+        {"label": "Yapılandırılmış kan tahlili analizi", "text": "Mevcut laboratuvar sonuçlarınızdan tutarlı sağlık puanı, işaretlenmiş belirteçler ve doktora hazır PDF istiyorsanız NoryaAI bunun için özel olarak tasarlanmıştır.", "link_slug": None},
+        {"label": "Genel sağlık soru-cevap", "text": "Açık uçlu sağlık soruları sormak, tıbbi terimler hakkında bilgi edinmek veya doktorunuz için sorular hazırlamak istiyorsanız ChatGPT gibi genel bir yapay zeka sohbet botu güçlü bir seçenektir.", "link_slug": "norya-vs-chatgpt-for-blood-tests"},
+        {"label": "Laboratuvar raporu odaklı araçları karşılaştırma", "text": "Özellikle kan tahlili raporlarını analiz eden platformları değerlendiriyorsanız, hangi iş akışı, dil desteği ve çıktı formatının ihtiyaçlarınıza uyduğunu görmek için NoryaAI'ı Kantesti ve Wizey ile karşılaştırın.", "link_slug": "norya-vs-kantesti"},
     ],
 }
 _COMP["norya-vs-chatgpt-for-blood-tests"]["tr"] = {
@@ -595,6 +698,11 @@ _HUB["de"] = {
     "meta_description": "Vergleichen Sie NoryaAI mit ChatGPT, Kantesti, SiPhox Health, Wizey und allgemeinen KI-Chatbots für die Bluttestanalyse. Ehrliche Vergleiche.",
     "hero_title": "NoryaAI mit Bluttest-Analyse-Tools vergleichen",
     "hero_sub": "Suchen Sie das richtige Tool zum Verstehen Ihrer Bluttestergebnisse? Wir haben ehrliche Vergleiche mit mehreren beliebten Alternativen vorbereitet.",
+    "trust_stats": [
+        {"value": "98,7%", "label": "Ergebnisgenauigkeit", "sub": "Mit Labordaten verifiziert"},
+        {"value": "9+", "label": "Sprachen", "sub": "Vollständige Berichte mit medizinischem Kontext"},
+        {"value": "QR", "label": "Verifiziertes PDF", "sub": "Arztfertiger teilbarer Bericht"},
+    ],
     "cards": [
         {"slug": "norya-vs-chatgpt-for-blood-tests", "name": "ChatGPT", "summary": "Wie ein spezialisierter Bluttest-Analysator im Vergleich zum weltweit beliebtesten KI-Chatbot abschneidet.", "link_text": "Vollständigen Vergleich lesen"},
         {"slug": "norya-vs-kantesti", "name": "Kantesti", "summary": "Zwei Bluttest-Analyseplattformen im Vergleich — mehrsprachige strukturierte Berichte vs. ein türkischsprachiger Dienst.", "link_text": "Vollständigen Vergleich lesen"},
@@ -606,6 +714,46 @@ _HUB["de"] = {
         {"q": "Welches Tool ist am besten zum Verstehen von Bluttestergebnissen?", "a": "Es hängt von Ihren Bedürfnissen ab. Für strukturierte, konsistente Berichte mit Gesundheitsscores und arztfertigen Zusammenfassungen ist NoryaAI speziell entwickelt. Allgemeine KI-Chatbots eignen sich besser für allgemeine Gesundheitsbildung."},
         {"q": "Sind diese Vergleiche fair und ehrlich?", "a": "Wir streben Transparenz an. Wo die Funktionen eines Mitbewerbers nicht klar offengelegt sind, sagen wir das, anstatt zu raten. Wir ermutigen Sie, verschiedene Tools auszuprobieren und aufgrund Ihrer eigenen Erfahrung zu entscheiden."},
         {"q": "Kann ich NoryaAI zusammen mit anderen Tools nutzen?", "a": "Ja. NoryaAI ergänzt Ihren Gesundheits-Workflow. Sie können es neben anderen Plattformen nutzen und sollten für medizinische Entscheidungen immer einen qualifizierten Arzt konsultieren."},
+    ],
+    "matrix_title": "Tools im direkten Vergleich",
+    "matrix_sub": "Ein schneller Überblick, wie jedes Tool die Bluttestanalyse angeht.",
+    "matrix_row_labels": [
+        "Bester Anwendungsfall",
+        "Bluttest-spezifischer Workflow",
+        "Datei-Upload-Ablauf",
+        "Referenzbereich-Erkennung",
+        "Strukturierte Ausgabe",
+        "Mehrsprachige Ergebnisunterstützung",
+        "Arztfertiger / teilbarer Bericht",
+        "Datenschutz / Bildungsrahmen",
+        "Geeignet zur Vorbereitung auf einen Arztbesuch",
+        "Ergebnisgenauigkeit",
+    ],
+    "matrix_columns": [
+        {"key": "norya", "name": "NoryaAI", "slug": None},
+        {"key": "chatgpt", "name": "ChatGPT", "slug": "norya-vs-chatgpt-for-blood-tests"},
+        {"key": "kantesti", "name": "Kantesti", "slug": "norya-vs-kantesti"},
+        {"key": "siphox", "name": "SiPhox Health", "slug": "norya-vs-siphox-health"},
+        {"key": "wizey", "name": "Wizey", "slug": "norya-vs-wizey"},
+        {"key": "generic", "name": "Allgemeine KI", "slug": "norya-vs-generic-ai"},
+    ],
+    "matrix_rows": [
+        {"norya": "Strukturierte Bluttestanalyse", "chatgpt": "Allgemeine Gesundheitsfragen", "kantesti": "Bluttest-Interpretation", "siphox": "Heim-Biomarker-Tests", "wizey": "Bluttestanalyse", "generic": "Allgemeine Gesundheitsfragen"},
+        {"norya": "Stark", "chatgpt": "Begrenzt", "kantesti": "Verfügbar", "siphox": "Teilweise", "wizey": "Verfügbar", "generic": "Begrenzt"},
+        {"norya": "PDF, Foto oder Text", "chatgpt": "Kopieren-Einfügen", "kantesti": "Verfügbar", "siphox": "Nur eigene Testkits", "wizey": "Nicht klar offengelegt", "generic": "Kopieren-Einfügen"},
+        {"norya": "Stark", "chatgpt": "Begrenzt", "kantesti": "Teilweise", "siphox": "Nur eigene Panels", "wizey": "Nicht klar offengelegt", "generic": "Begrenzt"},
+        {"norya": "Gesundheitsscore + Kategorien", "chatgpt": "Freitext", "kantesti": "Nicht klar offengelegt", "siphox": "Dashboard-Ansicht", "wizey": "Nicht klar offengelegt", "generic": "Freitext"},
+        {"norya": "9+ Sprachen", "chatgpt": "Teilweise", "kantesti": "Hauptsächlich Türkisch", "siphox": "Hauptsächlich Englisch", "wizey": "Nicht klar offengelegt", "generic": "Teilweise"},
+        {"norya": "PDF mit QR-Verifizierung", "chatgpt": "Nicht verfügbar", "kantesti": "Nicht klar offengelegt", "siphox": "Nicht klar offengelegt", "wizey": "Nicht klar offengelegt", "generic": "Nicht verfügbar"},
+        {"norya": "DSGVO · nur bildungsbezogen", "chatgpt": "Kann für Training gespeichert werden", "kantesti": "Siehe Datenschutzrichtlinie", "siphox": "Siehe Datenschutzrichtlinie", "wizey": "Siehe Datenschutzrichtlinie", "generic": "Kann für Training gespeichert werden"},
+        {"norya": "Stark", "chatgpt": "Teilweise", "kantesti": "Verfügbar", "siphox": "Begrenzt", "wizey": "Nicht klar offengelegt", "generic": "Teilweise"},
+        {"norya": "98,7% · laborverifiziert", "chatgpt": "Nicht offengelegt", "kantesti": "Nicht offengelegt", "siphox": "Nicht offengelegt", "wizey": "Nicht offengelegt", "generic": "Nicht offengelegt"},
+    ],
+    "suits_title": "Welches Tool passt zu wem?",
+    "suits_items": [
+        {"label": "Strukturierte Bluttestanalyse", "text": "Wenn Sie aus Ihren vorhandenen Laborergebnissen einen konsistenten Gesundheitsscore, markierte Marker und ein arztfertiges PDF möchten, ist NoryaAI dafür speziell entwickelt.", "link_slug": None},
+        {"label": "Allgemeine Gesundheitsfragen", "text": "Wenn Sie offene Gesundheitsfragen stellen, medizinische Begriffe lernen oder Fragen für Ihren Arzt vorbereiten möchten, ist ein allgemeiner KI-Chatbot wie ChatGPT eine starke Wahl.", "link_slug": "norya-vs-chatgpt-for-blood-tests"},
+        {"label": "Laborbericht-fokussierte Tools vergleichen", "text": "Wenn Sie Plattformen bewerten, die speziell Bluttestberichte analysieren, vergleichen Sie NoryaAI mit Kantesti und Wizey, um zu sehen, welcher Workflow und welches Ausgabeformat zu Ihnen passt.", "link_slug": "norya-vs-kantesti"},
     ],
 }
 # DE competitor content — using concise keys
@@ -812,6 +960,7 @@ def get_compare_detail(lang: str, slug: str) -> dict | None:
         "why_norya_sub": why["sub"],
         "why_norya_items": why["items"],
         "faqs": c["faqs"],
+        "accuracy_badge": _ACCURACY_BADGE.get(lang, _ACCURACY_BADGE["en"]),
         "cta_title": cta["title"],
         "cta_sub": cta["sub"],
         "cta_primary": cta["primary"],
@@ -830,13 +979,22 @@ def get_compare_hub(lang: str) -> dict | None:
         return None
     ui = _UI.get(lang, _UI["en"])
     cta = _CTA.get(lang, _CTA["en"])
+    en_hub = _HUB["en"]
     return {
         "meta_title": hub["meta_title"],
         "meta_description": hub["meta_description"],
         "hero_title": hub["hero_title"],
         "hero_sub": hub["hero_sub"],
+        "trust_stats": hub.get("trust_stats", en_hub["trust_stats"]),
         "cards": hub["cards"],
         "hub_faqs": hub["hub_faqs"],
+        "matrix_title": hub.get("matrix_title", en_hub["matrix_title"]),
+        "matrix_sub": hub.get("matrix_sub", en_hub["matrix_sub"]),
+        "matrix_row_labels": hub.get("matrix_row_labels", en_hub["matrix_row_labels"]),
+        "matrix_columns": hub.get("matrix_columns", en_hub["matrix_columns"]),
+        "matrix_rows": hub.get("matrix_rows", en_hub["matrix_rows"]),
+        "suits_title": hub.get("suits_title", en_hub["suits_title"]),
+        "suits_items": hub.get("suits_items", en_hub["suits_items"]),
         "cta_title": cta["title"],
         "cta_sub": cta["sub"],
         "cta_primary": cta["primary"],
