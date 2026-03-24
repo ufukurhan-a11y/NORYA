@@ -853,5 +853,6 @@ function toggleFaq(item){
   new MutationObserver(()=>{overlay.classList.toggle('hidden',!menu.classList.contains('open'))}).observe(menu,{attributes:true,attributeFilter:['class']});
 })();
 </script>
+{% include "partials/chat_widget.html" %}
 </body>
 </html>
