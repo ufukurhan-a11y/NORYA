@@ -2004,6 +2004,19 @@ async def api_enterprise_lead(request: Request, db: Session = Depends(get_db)):
     except Exception as e:
         log.warning("EnterpriseLead save failed: %s", e)
         raise HTTPException(status_code=500, detail="Kayıt alınamadı. Lütfen tekrar deneyin.")
+    try:
+        from app.services.email_sender import send_enterprise_lead_notification
+        send_enterprise_lead_notification(
+            kurum_adi=kurum_adi,
+            yetkili_ad=yetkili_ad,
+            email=email,
+            telefon=telefon,
+            kurum_tipi=kurum_tipi,
+            aylik_rapor=aylik_rapor,
+            mesaj=mesaj,
+        )
+    except Exception as e:
+        log.warning("Enterprise lead notification email failed: %s", e)
     return JSONResponse(content={"ok": True})
 
 
@@ -2145,6 +2158,18 @@ def _landing_response(locale: str, request: Request):
         raw,
         count=1,
     )
+    raw = re.sub(
+        r'<meta property="og:url" content="[^"]*" */?>',
+        f'<meta property="og:url" content="{canonical_url}" />',
+        raw,
+        count=1,
+    )
+    raw = re.sub(
+        r'<link rel="canonical" href="[^"]*" */?>',
+        f'<link rel="canonical" href="{canonical_url}" />',
+        raw,
+        count=1,
+    )
 
     def _hreflang_code(loc: str) -> str:
         # Google hreflang casing: en-CA (path: /en-ca)
@@ -2194,7 +2219,7 @@ def _landing_response(locale: str, request: Request):
 
     return HTMLResponse(
         raw,
-        headers={"Cache-Control": "no-cache, no-store, must-revalidate", "Pragma": "no-cache"},
+        headers={"Cache-Control": "public, max-age=0, s-maxage=600, must-revalidate"},
     )
 
 
@@ -2227,7 +2252,20 @@ def _index_response(request: Request | None = None):
             from html import escape
             base_url = str(request.base_url).rstrip("/")
             canonical_url = base_url + request.url.path
-            raw = _inject_canonical(raw, canonical_url)
+            raw = re.sub(
+                r'<link rel="canonical" href="[^"]*" */?>',
+                f'<link rel="canonical" href="{canonical_url}" />',
+                raw,
+                count=1,
+            )
+            if '<link rel="canonical"' not in raw:
+                raw = _inject_canonical(raw, canonical_url)
+            raw = re.sub(
+                r'<meta property="og:url" content="[^"]*" */?>',
+                f'<meta property="og:url" content="{canonical_url}" />',
+                raw,
+                count=1,
+            )
             if _locale is not None:
                 meta = get_landing_meta(_locale) if _locale in LANDING_ROUTES else {"meta_title": BRAND_NAME, "meta_description": "", "og_locale": "en_US"}
                 ui = get_landing_ui(_locale) if _locale in LANDING_ROUTES else {}
@@ -2282,9 +2320,7 @@ def _index_response(request: Request | None = None):
         return HTMLResponse(
             raw,
             headers={
-                "Cache-Control": "no-cache, no-store, must-revalidate",
-                "Pragma": "no-cache",
-                "Expires": "0",
+                "Cache-Control": "public, max-age=0, s-maxage=600, must-revalidate",
             },
         )
     return {"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı. Proje kökünden çalıştırın: uvicorn app.main:app --reload"}
