@@ -38,6 +38,14 @@
       .header-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     }
     body { padding-bottom: env(safe-area-inset-bottom, 0); }
+    .nry-fade { opacity: 0; transform: translateY(24px); transition: opacity .6s ease-out, transform .6s ease-out; }
+    .nry-fade.is-visible { opacity: 1; transform: translateY(0); }
+    @keyframes nryGaugeFill { from { stroke-dashoffset: 201; } }
+    .nry-gauge-ring { animation: nryGaugeFill 1.2s ease-out forwards; }
+    @keyframes nryCountUp { from { opacity: 0; transform: scale(.85); } to { opacity: 1; transform: scale(1); } }
+    .nry-stat-num { animation: nryCountUp .8s ease-out both; }
+    .nry-param-card { transition: transform .2s ease, box-shadow .2s ease; }
+    .nry-param-card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(14,165,164,.12); }
   </style>
   <script type="application/ld+json">
   {
@@ -193,6 +201,24 @@
       </div>
     </section>
 
+    {% if t.stat_1_number %}
+    <!-- 1b. SOCIAL PROOF STATS BAR -->
+    <section class="py-6 px-4 bg-white border-b border-slate-100 nry-fade">
+      <div class="max-w-5xl mx-auto grid grid-cols-2 md:grid-cols-4 gap-6 text-center">
+        {% for i in range(1, 5) %}
+        {% set sn = 'stat_' ~ i ~ '_number' %}
+        {% set sl = 'stat_' ~ i ~ '_label' %}
+        {% if t.get(sn) %}
+        <div>
+          <p class="text-2xl sm:text-3xl font-bold text-teal-600 nry-stat-num" style="animation-delay:{{ (i - 1) * 150 }}ms">{{ t.get(sn) }}</p>
+          <p class="text-xs sm:text-sm text-slate-500 mt-1">{{ t.get(sl) }}</p>
+        </div>
+        {% endif %}
+        {% endfor %}
+      </div>
+    </section>
+    {% endif %}
+
     <!-- 2. REPORT PREVIEW · premium cards -->
     <section id="report-preview" class="py-12 sm:py-16 px-4 bg-white">
       <div class="max-w-5xl mx-auto grid lg:grid-cols-12 gap-10 items-start">
@@ -229,9 +255,17 @@
                 <p class="text-[11px] font-semibold tracking-[0.18em] uppercase text-teal-600">{{ t.report_health_score_label or "Health score" }}</p>
                 <p class="text-sm text-slate-600">{{ t.report_health_score_sub or "Structured summary of your latest blood test." }}</p>
               </div>
-              <div class="text-right">
-                <p class="text-xs text-slate-500">{{ t.report_sample_label or "Example" }}</p>
-                <p class="text-xl font-bold text-slate-900">82 / 100</p>
+              <div class="text-right flex flex-col items-end">
+                <p class="text-xs text-slate-500 mb-1">{{ t.report_sample_label or "Example" }}</p>
+                <div class="relative w-16 h-16">
+                  <svg viewBox="0 0 80 80" class="w-full h-full" aria-label="82 / 100">
+                    <circle cx="40" cy="40" r="32" fill="none" stroke="#e2e8f0" stroke-width="6"/>
+                    <circle cx="40" cy="40" r="32" fill="none" stroke="#0EA5A4" stroke-width="6"
+                      stroke-dasharray="165 201" stroke-dashoffset="0" stroke-linecap="round"
+                      transform="rotate(-90 40 40)" class="nry-gauge-ring" style="stroke-dashoffset:36"/>
+                  </svg>
+                  <span class="absolute inset-0 flex items-center justify-center text-sm font-bold text-slate-900">82</span>
+                </div>
               </div>
             </div>
             <div class="grid sm:grid-cols-3 gap-3 mb-4">
@@ -293,6 +327,28 @@
       </div>
     </section>
 
+    {% if t.section_params_title and t.hemogram_params %}
+    <!-- 3b. HEMOGRAM PARAMETER DETAIL CARDS -->
+    <section class="py-12 sm:py-16 px-4 bg-white nry-fade">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-2">{{ t.section_params_title }}</h2>
+        <p class="text-center text-slate-600 text-sm sm:text-base max-w-2xl mx-auto mb-10">{{ t.section_params_sub }}</p>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {% for p in t.hemogram_params %}
+          <div class="nry-param-card rounded-2xl border border-slate-200 bg-slate-50/60 p-4 flex flex-col gap-1.5">
+            <div class="flex items-center gap-2">
+              <span class="inline-flex items-center justify-center w-9 h-9 rounded-lg bg-teal-100 text-teal-700 text-xs font-bold shrink-0">{{ p.name }}</span>
+              <span class="text-sm font-semibold text-slate-800 leading-tight">{{ p.full }}</span>
+            </div>
+            <p class="text-xs font-mono text-teal-600 bg-teal-50 rounded-md px-2 py-1 inline-block self-start">{{ p.range }}</p>
+            <p class="text-xs text-slate-600 leading-relaxed">{{ p.desc }}</p>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
     <!-- 4. WHY NORYA / WHO IT'S FOR -->
     <section class="py-12 sm:py-16 px-4 bg-white">
       <div class="max-w-5xl mx-auto">
@@ -314,8 +370,57 @@
       </div>
     </section>
 
+    {% if t.section_trend_title %}
+    <!-- 4b. TREND CHART PREVIEW -->
+    <section class="py-12 sm:py-16 px-4 bg-gradient-to-b from-slate-50 to-white nry-fade">
+      <div class="max-w-5xl mx-auto grid lg:grid-cols-2 gap-10 items-center">
+        <div class="space-y-4">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.section_trend_title }}</h2>
+          <p class="text-slate-600 text-sm sm:text-base">{{ t.section_trend_sub }}</p>
+          <a href="{{ base_url }}/analyze" class="inline-flex items-center gap-2 text-sm font-semibold text-teal-600 hover:text-teal-700">
+            {{ t.cta_primary }} <span aria-hidden="true">&rarr;</span>
+          </a>
+        </div>
+        <div class="rounded-2xl border border-slate-200 bg-white p-5 shadow-sm">
+          <div class="flex items-center justify-between mb-3">
+            <p class="text-xs font-semibold text-slate-500 tracking-wide uppercase">Hemoglobin (g/dL)</p>
+            <span class="text-[10px] text-slate-400">{{ t.report_sample_label or "Example" }}</span>
+          </div>
+          <svg viewBox="0 0 320 120" class="w-full" aria-label="Trend chart example">
+            <defs>
+              <linearGradient id="trendFill" x1="0" y1="0" x2="0" y2="1">
+                <stop offset="0%" stop-color="#0EA5A4" stop-opacity="0.15"/>
+                <stop offset="100%" stop-color="#0EA5A4" stop-opacity="0"/>
+              </linearGradient>
+            </defs>
+            <line x1="40" y1="15" x2="40" y2="100" stroke="#e2e8f0" stroke-width="0.5"/>
+            <line x1="40" y1="100" x2="300" y2="100" stroke="#e2e8f0" stroke-width="0.5"/>
+            <line x1="40" y1="57" x2="300" y2="57" stroke="#0EA5A4" stroke-width="0.5" stroke-dasharray="4 4" opacity="0.3"/>
+            <text x="12" y="61" font-size="8" fill="#94a3b8" text-anchor="middle">14</text>
+            <text x="12" y="104" font-size="8" fill="#94a3b8" text-anchor="middle">10</text>
+            <text x="12" y="19" font-size="8" fill="#94a3b8" text-anchor="middle">18</text>
+            <text x="82" y="114" font-size="8" fill="#94a3b8" text-anchor="middle">Oca</text>
+            <text x="154" y="114" font-size="8" fill="#94a3b8" text-anchor="middle">Nis</text>
+            <text x="226" y="114" font-size="8" fill="#94a3b8" text-anchor="middle">Tem</text>
+            <text x="298" y="114" font-size="8" fill="#94a3b8" text-anchor="middle">Eki</text>
+            <path d="M82,72 L154,55 L226,48 L298,40" fill="none" stroke="#0EA5A4" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M82,72 L154,55 L226,48 L298,40 L298,100 L82,100 Z" fill="url(#trendFill)"/>
+            <circle cx="82" cy="72" r="4" fill="#fff" stroke="#0EA5A4" stroke-width="2"/>
+            <circle cx="154" cy="55" r="4" fill="#fff" stroke="#0EA5A4" stroke-width="2"/>
+            <circle cx="226" cy="48" r="4" fill="#fff" stroke="#0EA5A4" stroke-width="2"/>
+            <circle cx="298" cy="40" r="4" fill="#fff" stroke="#0EA5A4" stroke-width="2"/>
+            <text x="82" y="66" font-size="8" fill="#0d9488" text-anchor="middle" font-weight="600">12.8</text>
+            <text x="154" y="49" font-size="8" fill="#0d9488" text-anchor="middle" font-weight="600">13.6</text>
+            <text x="226" y="42" font-size="8" fill="#0d9488" text-anchor="middle" font-weight="600">14.0</text>
+            <text x="298" y="34" font-size="8" fill="#0d9488" text-anchor="middle" font-weight="600">14.8</text>
+          </svg>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
     {% if t.section_compare_title %}
-    <!-- 4b. PURPOSE-BUILT vs GENERIC AI -->
+    <!-- 4c. PURPOSE-BUILT vs GENERIC AI -->
     <section class="py-12 sm:py-16 px-4 bg-gradient-to-b from-white to-slate-50">
       <div class="max-w-5xl mx-auto">
         <h2 class="text-2xl sm:text-3xl font-bold text-center text-slate-900 mb-3">{{ t.section_compare_title }}</h2>
@@ -353,6 +458,23 @@
           </a>
         </div>
         {% endif %}
+      </div>
+    </section>
+    {% endif %}
+
+    {% if t.doctor_endorsement_title %}
+    <!-- 4d. DOCTOR ENDORSEMENT -->
+    <section class="py-10 sm:py-12 px-4 bg-white nry-fade">
+      <div class="max-w-3xl mx-auto">
+        <div class="rounded-2xl border-2 border-teal-100 bg-gradient-to-br from-teal-50/60 to-white p-6 sm:p-8 flex flex-col sm:flex-row items-start gap-5">
+          <div class="shrink-0">
+            <span class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-teal-100 text-2xl" aria-hidden="true">&#x1F3E5;</span>
+          </div>
+          <div class="space-y-2">
+            <h3 class="text-lg font-bold text-slate-900">{{ t.doctor_endorsement_title }}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{{ t.doctor_endorsement }}</p>
+          </div>
+        </div>
       </div>
     </section>
     {% endif %}
@@ -495,5 +617,13 @@
     </p>
     <p class="text-center text-slate-500 text-xs mt-3">{{ t.get("footer_tagline", "NoryaAI is a multilingual AI-powered platform designed to help users understand blood test results more clearly.") }}</p>
   </footer>
+  <script>
+  document.addEventListener('DOMContentLoaded',function(){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(e){if(e.isIntersecting){e.target.classList.add('is-visible');io.unobserve(e.target);}});
+    },{threshold:0.08});
+    document.querySelectorAll('.nry-fade').forEach(function(el){io.observe(el);});
+  });
+  </script>
 </body>
 </html>
