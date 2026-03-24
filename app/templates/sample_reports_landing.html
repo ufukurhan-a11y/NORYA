@@ -20,6 +20,8 @@
   <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png" />
   <meta name="theme-color" content="#0EA5A4" />
   <link rel="canonical" href="{{ canonical_url }}" />
+  {% if hreflang_links %}{% for hl in hreflang_links %}
+  <link rel="alternate" hreflang="{{ hl.lang }}" href="{{ hl.url }}" />{% endfor %}{% endif %}
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
