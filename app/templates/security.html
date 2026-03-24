@@ -24,14 +24,12 @@
 <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
 <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" />
 <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
 <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://noryaai.com/"},{"@type":"ListItem","position":2,"name":"Security","item":"https://noryaai.com/security"}]}
 </script>
 <style>
 :root{--c-primary:#006a69;--c-primary-light:#0EA5A4;--c-dark:#191c1d;--c-surface:#f8f9fa}
-.material-symbols-outlined{font-variation-settings:'FILL' 0,'wght' 400,'GRAD' 0,'opsz' 24;overflow:hidden;text-overflow:clip;white-space:nowrap;display:inline-flex;align-items:center;justify-content:center;max-width:1.5em;max-height:1.5em;vertical-align:middle;line-height:1}
-.mat-filled{font-variation-settings:'FILL' 1,'wght' 400,'GRAD' 0,'opsz' 24}
+.ic{display:inline-flex;align-items:center;justify-content:center;flex-shrink:0;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
 
 .card-premium{position:relative;overflow:hidden;border-radius:1.5rem;background:#fff;border:1px solid rgba(188,201,200,.08);box-shadow:0 4px 24px rgba(0,106,105,.04);transition:all .5s cubic-bezier(.16,1,.3,1)}
 .card-premium:hover{transform:translateY(-6px);box-shadow:0 20px 60px rgba(0,106,105,.1);border-color:rgba(14,165,164,.15)}
@@ -40,21 +38,12 @@
 .card-premium .card-icon{width:3.5rem;height:3.5rem;border-radius:1rem;display:flex;align-items:center;justify-content:center;background:rgba(0,106,105,.06);transition:all .5s ease;flex-shrink:0}
 .card-premium:hover .card-icon{background:rgba(0,106,105,.12);transform:scale(1.08)}
 
-/* Animations */
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-12px)}}
-@keyframes pulse-ring{0%{transform:scale(.8);opacity:1}100%{transform:scale(2.4);opacity:0}}
-@keyframes fade-up{from{opacity:0;transform:translateY(40px)}to{opacity:1;transform:translateY(0)}}
-@keyframes fade-in{from{opacity:0}to{opacity:1}}
 @keyframes slide-right{from{width:0}to{width:var(--target-w,100%)}}
-@keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
 @keyframes gradient-shift{0%{background-position:0% 50%}50%{background-position:100% 50%}100%{background-position:0% 50%}}
-@keyframes counter-pulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
-@keyframes orbit{from{transform:rotate(0deg) translateX(120px) rotate(0deg)}to{transform:rotate(360deg) translateX(120px) rotate(-360deg)}}
-@keyframes orbit-reverse{from{transform:rotate(360deg) translateX(90px) rotate(-360deg)}to{transform:rotate(0deg) translateX(90px) rotate(0deg)}}
 
 .anim-float{animation:float 6s ease-in-out infinite}
 .anim-float-delay{animation:float 6s ease-in-out 1.5s infinite}
-.anim-float-delay-2{animation:float 6s ease-in-out 3s infinite}
 
 .reveal{opacity:0;transform:translateY(40px);transition:all .8s cubic-bezier(.16,1,.3,1)}
 .reveal.visible{opacity:1;transform:translateY(0)}
@@ -62,40 +51,66 @@
 .reveal-delay-2{transition-delay:.3s}
 .reveal-delay-3{transition-delay:.45s}
 .reveal-delay-4{transition-delay:.6s}
-.reveal-delay-5{transition-delay:.75s}
 
 .glass{background:rgba(255,255,255,.6);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.3)}
-.glass-dark{background:rgba(25,28,29,.7);backdrop-filter:blur(24px);-webkit-backdrop-filter:blur(24px);border:1px solid rgba(255,255,255,.08)}
-
 .gradient-text{background:linear-gradient(135deg,#006a69 0%,#0EA5A4 50%,#5ed9d7 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text}
-.gradient-bg{background:linear-gradient(135deg,#006a69,#0EA5A4,#5ed9d7);background-size:200% 200%;animation:gradient-shift 8s ease infinite}
-
 .dot-pattern{background-image:radial-gradient(circle,rgba(14,165,164,.12) 1.2px,transparent 1.2px);background-size:28px 28px}
 .line-pattern{background-image:repeating-linear-gradient(90deg,rgba(14,165,164,.05) 0,rgba(14,165,164,.05) 1px,transparent 1px,transparent 60px);background-size:60px 100%}
 
-.card-hover{transition:all .5s cubic-bezier(.16,1,.3,1)}
-.card-hover:hover{transform:translateY(-8px);box-shadow:0 24px 64px rgba(0,106,105,.12)}
-
-.metric-bar{height:4px;border-radius:9999px;background:#e7e8e9;overflow:hidden;position:relative}
+.metric-bar{height:4px;border-radius:9999px;background:#e7e8e9;overflow:hidden}
 .metric-bar-fill{height:100%;border-radius:9999px;background:linear-gradient(90deg,#006a69,#0EA5A4);animation:slide-right 2s cubic-bezier(.16,1,.3,1) forwards}
-
-.shimmer-bg{background:linear-gradient(90deg,transparent 25%,rgba(14,165,164,.06) 50%,transparent 75%);background-size:200% 100%;animation:shimmer 3s linear infinite}
 
 .faq-answer{max-height:0;overflow:hidden;transition:max-height .4s cubic-bezier(.16,1,.3,1),padding .4s ease}
 .faq-answer.open{max-height:600px;padding-top:1rem;padding-bottom:.5rem}
 .faq-icon{transition:transform .3s ease}
 .faq-open .faq-icon{transform:rotate(180deg)}
 
-.hero-orbit{position:absolute;width:280px;height:280px;top:50%;left:50%;margin:-140px 0 0 -140px}
-.orbit-dot{position:absolute;top:50%;left:50%;width:10px;height:10px;margin:-5px;border-radius:50%;background:rgba(14,165,164,.5);animation:orbit 12s linear infinite}
-.orbit-dot-2{width:8px;height:8px;margin:-4px;background:rgba(94,217,215,.4);animation:orbit-reverse 16s linear infinite}
-.orbit-dot-3{width:6px;height:6px;margin:-3px;background:rgba(0,106,105,.3);animation:orbit 20s linear infinite}
-
 .nav-mobile{transform:translateX(100%);transition:transform .4s cubic-bezier(.16,1,.3,1)}
 .nav-mobile.open{transform:translateX(0)}
 </style>
 </head>
 <body class="bg-surface font-body text-on-surface antialiased overflow-x-hidden">
+
+<!-- ═══ SVG SPRITE (hidden) ═══ -->
+<svg xmlns="http://www.w3.org/2000/svg" class="hidden">
+<symbol id="i-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 5l7 7m0 0l-7 7m7-7H3"/></symbol>
+<symbol id="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 6h16M4 12h16M4 18h16"/></symbol>
+<symbol id="i-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M18 6L6 18M6 6l12 12"/></symbol>
+<symbol id="i-biotech" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 2v4m0 12v4M2 12h4m12 0h4m-3.5-7.5l-2.8 2.8m-7.4 7.4l-2.8 2.8m0-13l2.8 2.8m7.4 7.4l2.8 2.8"/></symbol>
+<symbol id="i-science" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 3h6m-5 0v6l-5 8.5a1.5 1.5 0 001.3 2.5h11.4a1.5 1.5 0 001.3-2.5L14 9V3"/></symbol>
+<symbol id="i-info" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 16v-4m0-4h.01"/></symbol>
+<symbol id="i-shield" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v5c0 5.25-3.5 10-7 11-3.5-1-7-5.75-7-11V6l7-4z"/></symbol>
+<symbol id="i-shield-fill" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 1L4 5v6c0 5.55 3.84 10.74 8 12 4.16-1.26 8-6.45 8-12V5L12 1z"/></symbol>
+<symbol id="i-payments" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></symbol>
+<symbol id="i-check-circle" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/></symbol>
+<symbol id="i-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/></symbol>
+<symbol id="i-lock-fill" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M18 8h-1V6c0-2.76-2.24-5-5-5S7 3.24 7 6v2H6c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V10c0-1.1-.9-2-2-2zm-6 9c-1.1 0-2-.9-2-2s.9-2 2-2 2 .9 2 2-.9 2-2 2zm3.1-9H8.9V6c0-1.71 1.39-3.1 3.1-3.1 1.71 0 3.1 1.39 3.1 3.1v2z"/></symbol>
+<symbol id="i-hub" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><circle cx="12" cy="3" r="2"/><circle cx="21" cy="12" r="2"/><circle cx="12" cy="21" r="2"/><circle cx="3" cy="12" r="2"/><path d="M12 5v4m0 6v4m4-7h4M3 12h5"/></symbol>
+<symbol id="i-upload" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"/><path d="M14 2v6h6m-8 4v6m-3-3l3-3 3 3"/></symbol>
+<symbol id="i-encrypt" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V7a4 4 0 018 0v4"/><circle cx="12" cy="16" r="1.5"/></symbol>
+<symbol id="i-brain" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a5 5 0 00-4.9 4A4 4 0 004 10a4.5 4.5 0 00.5 8.5A5 5 0 0012 22a5 5 0 007.5-3.5A4.5 4.5 0 0020 10a4 4 0 00-3.1-3.9A5 5 0 0012 2z"/><path d="M12 2v20"/></symbol>
+<symbol id="i-storage" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="12" cy="5" rx="9" ry="3"/><path d="M21 12c0 1.66-4 3-9 3s-9-1.34-9-3"/><path d="M3 5v14c0 1.66 4 3 9 3s9-1.34 9-3V5"/></symbol>
+<symbol id="i-person-lock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M2 20c0-3.31 3.58-6 8-6"/><rect x="16" y="15" width="6" height="7" rx="1"/><path d="M18 15v-1.5a1.5 1.5 0 013 0V15"/></symbol>
+<symbol id="i-dns" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="7" rx="2"/><rect x="3" y="14" width="18" height="7" rx="2"/><circle cx="7" cy="6.5" r="1" fill="currentColor" stroke="none"/><circle cx="7" cy="17.5" r="1" fill="currentColor" stroke="none"/></symbol>
+<symbol id="i-cloud" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M18 10h-1.26A8 8 0 109 20h9a5 5 0 000-10z"/></symbol>
+<symbol id="i-monitor" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></symbol>
+<symbol id="i-gavel" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M12 3v7m-5 4l5-4 5 4M7 14v7m10-7v7"/></symbol>
+<symbol id="i-timeline" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2"/><circle cx="18" cy="12" r="2"/><circle cx="6" cy="18" r="2"/><path d="M8 6h4a2 2 0 012 2v0a2 2 0 01-2 2H8m8 2h-4a2 2 0 00-2 2v0a2 2 0 002 2h4"/></symbol>
+<symbol id="i-help" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 015.83 1c0 2-3 3-3 3m.08 4h.01"/></symbol>
+<symbol id="i-chevron-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></symbol>
+<symbol id="i-shield-check" viewBox="0 0 24 24" fill="currentColor" stroke="none"><path d="M12 1L3 5v6c0 5.55 3.84 10.74 8 12 .35-.11.7-.24 1.04-.39a.996.996 0 01-.03-1.02l.01-.02c.24-.42.7-.64 1.16-.54C16.85 19.74 19 16 19 11V5l-7-4zm-1 15l-4-4 1.41-1.41L11 13.17l5.59-5.59L18 9l-7 7z"/></symbol>
+<symbol id="i-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M22 7l-10 6L2 7"/></symbol>
+<symbol id="i-globe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></symbol>
+<symbol id="i-key" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></symbol>
+<symbol id="i-eye-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M3 3l18 18"/></symbol>
+<symbol id="i-finger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></symbol>
+<symbol id="i-radar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></symbol>
+<symbol id="i-cloud-up" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></symbol>
+<symbol id="i-trash" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></symbol>
+<symbol id="i-download" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></symbol>
+<symbol id="i-data-rights" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v5c0 5.25-3.5 10-7 11-3.5-1-7-5.75-7-11V6l7-4z"/><path d="M9 12l2 2 4-4"/></symbol>
+<symbol id="i-security-badge" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2l7 4v5c0 5.25-3.5 10-7 11-3.5-1-7-5.75-7-11V6l7-4z"/><rect x="9" y="10" width="6" height="5" rx="1"/><path d="M10 10V8a2 2 0 014 0v2"/></symbol>
+</svg>
 
 <!-- ═══════════════════════ NAV ═══════════════════════ -->
 <nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 h-20" id="mainNav">
@@ -114,10 +129,10 @@
 <div class="flex items-center gap-4">
 <a href="/#analyze" class="hidden md:inline-flex items-center gap-2 bg-primary text-white px-7 py-2.5 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20">
 Get Started
-<span translate="no" class="material-symbols-outlined notranslate text-base">arrow_forward</span>
+<svg class="w-4 h-4"><use href="#i-arrow"/></svg>
 </a>
 <button class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-surface-container transition-colors" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu">
-<span translate="no" class="material-symbols-outlined notranslate text-2xl" id="menuIcon">menu</span>
+<svg class="w-6 h-6"><use href="#i-menu"/></svg>
 </button>
 </div>
 </div>
@@ -128,28 +143,28 @@ Get Started
 <div class="flex items-center justify-between p-6 border-b border-outline-variant/10">
 <span class="font-headline font-bold text-lg">Menu</span>
 <button onclick="document.getElementById('mobileMenu').classList.remove('open')" class="w-10 h-10 rounded-lg hover:bg-surface-container flex items-center justify-center transition-colors">
-<span translate="no" class="material-symbols-outlined notranslate">close</span>
+<svg class="w-5 h-5"><use href="#i-close"/></svg>
 </button>
 </div>
 <div class="flex flex-col p-6 gap-2">
 <a href="/" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container transition-colors font-headline font-semibold text-sm">
-<span translate="no" class="material-symbols-outlined notranslate text-primary">biotech</span> Analysis
+<svg class="w-5 h-5 text-primary"><use href="#i-biotech"/></svg> Analysis
 </a>
 <a href="/science" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container transition-colors font-headline font-semibold text-sm">
-<span translate="no" class="material-symbols-outlined notranslate text-primary">science</span> Science
+<svg class="w-5 h-5 text-primary"><use href="#i-science"/></svg> Science
 </a>
 <a href="/about" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container transition-colors font-headline font-semibold text-sm">
-<span translate="no" class="material-symbols-outlined notranslate text-primary">info</span> About
+<svg class="w-5 h-5 text-primary"><use href="#i-info"/></svg> About
 </a>
 <a href="/security" class="flex items-center gap-3 px-4 py-3 rounded-xl bg-primary/5 text-primary transition-colors font-headline font-bold text-sm">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled">shield</span> Security
+<svg class="w-5 h-5"><use href="#i-shield-fill"/></svg> Security
 </a>
 <a href="/pricing" class="flex items-center gap-3 px-4 py-3 rounded-xl hover:bg-surface-container transition-colors font-headline font-semibold text-sm">
-<span translate="no" class="material-symbols-outlined notranslate text-primary">payments</span> Pricing
+<svg class="w-5 h-5 text-primary"><use href="#i-payments"/></svg> Pricing
 </a>
 <div class="mt-4 pt-4 border-t border-outline-variant/10">
 <a href="/#analyze" class="flex items-center justify-center gap-2 bg-primary text-white px-6 py-3 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all">
-Get Started <span translate="no" class="material-symbols-outlined notranslate text-base">arrow_forward</span>
+Get Started <svg class="w-4 h-4"><use href="#i-arrow"/></svg>
 </a>
 </div>
 </div>
@@ -181,24 +196,24 @@ At NoryaAI, your biological data is treated with the same reverence as clinical 
 <div class="reveal reveal-delay-3 flex flex-wrap gap-4 mb-12">
 <a href="/#analyze" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-xl shadow-primary/20">
 Start Secure Analysis
-<span translate="no" class="material-symbols-outlined notranslate text-base">arrow_forward</span>
+<svg class="w-4 h-4"><use href="#i-arrow"/></svg>
 </a>
 <a href="#architecture" class="inline-flex items-center gap-2 px-8 py-4 rounded-full font-headline font-bold text-sm border-2 border-outline-variant/20 hover:border-primary/30 hover:bg-primary/5 transition-all">
 View Architecture
-<span translate="no" class="material-symbols-outlined notranslate text-base">expand_more</span>
+<svg class="w-4 h-4"><use href="#i-chevron-down"/></svg>
 </a>
 </div>
 <div class="reveal reveal-delay-4 flex flex-wrap gap-6 text-sm">
 <div class="flex items-center gap-2 text-secondary">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-primary text-lg">verified</span>
+<svg class="w-5 h-5 text-primary"><use href="#i-check-circle"/></svg>
 <span>SOC 2 Type II</span>
 </div>
 <div class="flex items-center gap-2 text-secondary">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-primary text-lg">verified</span>
+<svg class="w-5 h-5 text-primary"><use href="#i-check-circle"/></svg>
 <span>HIPAA Compliant</span>
 </div>
 <div class="flex items-center gap-2 text-secondary">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-primary text-lg">verified</span>
+<svg class="w-5 h-5 text-primary"><use href="#i-check-circle"/></svg>
 <span>GDPR Ready</span>
 </div>
 </div>
@@ -213,7 +228,7 @@ View Architecture
 <div class="absolute -bottom-6 -left-6 glass rounded-2xl p-5 shadow-xl anim-float">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-xl bg-primary/10 flex items-center justify-center">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-primary">lock</span>
+<svg class="w-5 h-5 text-primary"><use href="#i-lock-fill"/></svg>
 </div>
 <div>
 <p class="text-xs text-secondary font-medium">Encryption</p>
@@ -224,7 +239,7 @@ View Architecture
 <div class="absolute -top-4 -right-4 glass rounded-2xl p-5 shadow-xl anim-float-delay">
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-xl bg-green-500/10 flex items-center justify-center">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-green-600">shield</span>
+<svg class="w-5 h-5 text-green-600"><use href="#i-shield-fill"/></svg>
 </div>
 <div>
 <p class="text-xs text-secondary font-medium">Status</p>
@@ -252,7 +267,7 @@ View Architecture
 <p class="text-xs md:text-sm text-inverse-on-surface/60 font-medium uppercase tracking-wider">Encryption Level</p>
 </div>
 <div class="text-center reveal reveal-delay-2">
-<p class="text-3xl md:text-4xl font-headline font-extrabold text-white mb-1" data-count="0" data-suffix="" data-special="zero">0</p>
+<p class="text-3xl md:text-4xl font-headline font-extrabold text-white mb-1" data-count="0" data-suffix="">0</p>
 <p class="text-xs md:text-sm text-inverse-on-surface/60 font-medium uppercase tracking-wider">Data Breaches</p>
 </div>
 <div class="text-center reveal reveal-delay-3">
@@ -294,7 +309,7 @@ View Architecture
 </div>
 <div class="flex flex-col items-center gap-3 group">
 <div class="w-20 h-20 rounded-2xl bg-surface-container-low flex items-center justify-center border border-outline-variant/10 group-hover:border-primary/20 group-hover:shadow-lg transition-all duration-500">
-<svg class="w-10 h-10 text-primary" fill="currentColor" viewBox="0 0 24 24"><path d="M13 7h-2v4H7v2h4v4h2v-4h4v-2h-4V7zm-1-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"/></svg>
+<span class="text-lg font-headline font-extrabold text-[#F48120]">CF</span>
 </div>
 <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Cloudflare</span>
 </div>
@@ -308,7 +323,7 @@ View Architecture
 <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
 <div class="text-center mb-16 md:mb-20">
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
-<span translate="no" class="material-symbols-outlined notranslate text-sm">security</span> Defense in Depth
+<svg class="w-4 h-4"><use href="#i-security-badge"/></svg> Defense in Depth
 </span>
 <h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 Six Layers of <span class="gradient-text">Protection</span>
@@ -319,97 +334,67 @@ Every piece of your health data passes through multiple security layers before s
 </div>
 
 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
-<!-- Card 1: AES-256 -->
 <div class="reveal card-premium group p-8 md:p-10">
 <div class="absolute top-0 right-0 w-40 h-40 bg-primary/3 rounded-full blur-[80px] group-hover:bg-primary/8 transition-all duration-700"></div>
 <div class="relative z-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 2l7 4v5c0 5.25-3.5 10-7 11-3.5-1-7-5.75-7-11V6l7-4z"/><path stroke-linecap="round" stroke-linejoin="round" d="M12 11v2m0 0v2m0-2h2m-2 0h-2"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-shield"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">AES-256 Isolation</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-Every biomarker profile is isolated in its own encrypted container with unique encryption keys, creating an impenetrable vault for each user.
-</p>
+<p class="text-secondary text-sm leading-relaxed mb-6">Every biomarker profile is isolated in its own encrypted container with unique encryption keys, creating an impenetrable vault for each user.</p>
 <div class="flex items-center gap-2 text-xs text-primary font-bold uppercase tracking-wider">
 <span class="w-6 h-[2px] bg-gradient-to-r from-primary to-primary-container rounded-full"></span> Military Grade
 </div>
 </div>
 </div>
-<!-- Card 2: E2E -->
 <div class="reveal reveal-delay-1 card-premium group p-8 md:p-10">
 <div class="absolute top-0 right-0 w-40 h-40 bg-primary/3 rounded-full blur-[80px] group-hover:bg-primary/8 transition-all duration-700"></div>
 <div class="relative z-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M15 7a2 2 0 012 2m4 0a6 6 0 01-7.743 5.743L11 17H9v2H7v2H4a1 1 0 01-1-1v-2.586a1 1 0 01.293-.707l5.964-5.964A6 6 0 1121 9z"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-key"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">End-to-End Encryption</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-Data is encrypted at rest and in transit using TLS 1.3 and hardware-level security modules. No intermediary can read your data.
-</p>
+<p class="text-secondary text-sm leading-relaxed mb-6">Data is encrypted at rest and in transit using TLS 1.3 and hardware-level security modules. No intermediary can read your data.</p>
 <div class="flex items-center gap-2 text-xs text-primary font-bold uppercase tracking-wider">
 <span class="w-6 h-[2px] bg-gradient-to-r from-primary to-primary-container rounded-full"></span> TLS 1.3
 </div>
 </div>
 </div>
-<!-- Card 3: Zero-Knowledge -->
 <div class="reveal reveal-delay-2 card-premium group p-8 md:p-10">
 <div class="absolute top-0 right-0 w-40 h-40 bg-primary/3 rounded-full blur-[80px] group-hover:bg-primary/8 transition-all duration-700"></div>
 <div class="relative z-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-eye-off"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Zero-Knowledge Processing</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-Our AI analyzes your data within an encrypted sandbox. Raw laboratory values are never exposed to human operators or third parties.
-</p>
+<p class="text-secondary text-sm leading-relaxed mb-6">Our AI analyzes your data within an encrypted sandbox. Raw laboratory values are never exposed to human operators or third parties.</p>
 <div class="flex items-center gap-2 text-xs text-primary font-bold uppercase tracking-wider">
 <span class="w-6 h-[2px] bg-gradient-to-r from-primary to-primary-container rounded-full"></span> Sandboxed AI
 </div>
 </div>
 </div>
-<!-- Card 4: MFA -->
 <div class="reveal card-premium group p-8 md:p-10">
 <div class="absolute top-0 right-0 w-40 h-40 bg-primary/3 rounded-full blur-[80px] group-hover:bg-primary/8 transition-all duration-700"></div>
 <div class="relative z-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-finger"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Multi-Factor Authentication</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-Biometric, OTP and device-based authentication layers ensure only you can access your health data. Unauthorized access is impossible.
-</p>
+<p class="text-secondary text-sm leading-relaxed mb-6">Biometric, OTP and device-based authentication layers ensure only you can access your health data. Unauthorized access is impossible.</p>
 <div class="flex items-center gap-2 text-xs text-primary font-bold uppercase tracking-wider">
 <span class="w-6 h-[2px] bg-gradient-to-r from-primary to-primary-container rounded-full"></span> Biometric
 </div>
 </div>
 </div>
-<!-- Card 5: Threat Detection -->
 <div class="reveal reveal-delay-1 card-premium group p-8 md:p-10">
 <div class="absolute top-0 right-0 w-40 h-40 bg-primary/3 rounded-full blur-[80px] group-hover:bg-primary/8 transition-all duration-700"></div>
 <div class="relative z-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/><line x1="12" y1="2" x2="12" y2="4"/><line x1="12" y1="20" x2="12" y2="22"/><line x1="2" y1="12" x2="4" y2="12"/><line x1="20" y1="12" x2="22" y2="12"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-radar"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Real-time Threat Detection</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-AI-powered anomaly detection monitors every request in real-time. Suspicious activity is flagged and blocked within milliseconds.
-</p>
+<p class="text-secondary text-sm leading-relaxed mb-6">AI-powered anomaly detection monitors every request in real-time. Suspicious activity is flagged and blocked within milliseconds.</p>
 <div class="flex items-center gap-2 text-xs text-primary font-bold uppercase tracking-wider">
 <span class="w-6 h-[2px] bg-gradient-to-r from-primary to-primary-container rounded-full"></span> AI-Powered
 </div>
 </div>
 </div>
-<!-- Card 6: Backup -->
 <div class="reveal reveal-delay-2 card-premium group p-8 md:p-10">
 <div class="absolute top-0 right-0 w-40 h-40 bg-primary/3 rounded-full blur-[80px] group-hover:bg-primary/8 transition-all duration-700"></div>
 <div class="relative z-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-cloud-up"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Automated Backup & Recovery</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-Encrypted backups are replicated across geographically distributed data centers with automated disaster recovery protocols.
-</p>
+<p class="text-secondary text-sm leading-relaxed mb-6">Encrypted backups are replicated across geographically distributed data centers with automated disaster recovery protocols.</p>
 <div class="flex items-center gap-2 text-xs text-primary font-bold uppercase tracking-wider">
 <span class="w-6 h-[2px] bg-gradient-to-r from-primary to-primary-container rounded-full"></span> Geo-Redundant
 </div>
@@ -423,11 +408,10 @@ Encrypted backups are replicated across geographically distributed data centers 
 <section id="architecture" class="py-20 md:py-32 bg-on-background text-white relative overflow-hidden">
 <div class="absolute inset-0 opacity-20 dot-pattern" style="background-image:radial-gradient(circle,rgba(94,217,215,.15) 1.2px,transparent 1.2px)"></div>
 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[400px] bg-primary/10 rounded-full blur-[150px] pointer-events-none"></div>
-
 <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
 <div class="text-center mb-16 md:mb-20">
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 text-primary-container font-bold tracking-wider text-xs uppercase">
-<span translate="no" class="material-symbols-outlined notranslate text-sm">hub</span> Security Architecture
+<svg class="w-4 h-4"><use href="#i-hub"/></svg> Security Architecture
 </span>
 <h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 How Your Data <span class="text-inverse-primary">Stays Safe</span>
@@ -436,13 +420,10 @@ How Your Data <span class="text-inverse-primary">Stays Safe</span>
 From the moment your lab results enter our system, multiple security layers protect every byte of information through its entire lifecycle.
 </p>
 </div>
-
-<!-- Architecture Flow -->
 <div class="reveal grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-0 items-start">
-<!-- Step 1 -->
 <div class="flex flex-col items-center text-center group">
 <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-primary/30 group-hover:border-primary/30 transition-all duration-500">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-inverse-primary text-2xl">upload_file</span>
+<svg class="w-7 h-7 text-inverse-primary"><use href="#i-upload"/></svg>
 </div>
 <h4 class="font-headline font-bold text-sm mb-2">Data Ingestion</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">TLS 1.3 encrypted upload with certificate pinning</p>
@@ -452,10 +433,9 @@ From the moment your lab results enter our system, multiple security layers prot
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
 </div>
-<!-- Step 2 -->
 <div class="flex flex-col items-center text-center group">
 <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-primary/30 group-hover:border-primary/30 transition-all duration-500">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-inverse-primary text-2xl">enhanced_encryption</span>
+<svg class="w-7 h-7 text-inverse-primary"><use href="#i-encrypt"/></svg>
 </div>
 <h4 class="font-headline font-bold text-sm mb-2">Encryption Layer</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">AES-256 with per-user unique keys via HSM</p>
@@ -465,10 +445,9 @@ From the moment your lab results enter our system, multiple security layers prot
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
 </div>
-<!-- Step 3 -->
 <div class="flex flex-col items-center text-center group">
 <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-primary/30 group-hover:border-primary/30 transition-all duration-500">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-inverse-primary text-2xl">psychology</span>
+<svg class="w-7 h-7 text-inverse-primary"><use href="#i-brain"/></svg>
 </div>
 <h4 class="font-headline font-bold text-sm mb-2">AI Sandbox</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">Zero-knowledge processing in isolated containers</p>
@@ -478,10 +457,9 @@ From the moment your lab results enter our system, multiple security layers prot
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
 </div>
-<!-- Step 4 -->
 <div class="flex flex-col items-center text-center group">
 <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-primary/30 group-hover:border-primary/30 transition-all duration-500">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-inverse-primary text-2xl">storage</span>
+<svg class="w-7 h-7 text-inverse-primary"><use href="#i-storage"/></svg>
 </div>
 <h4 class="font-headline font-bold text-sm mb-2">Secure Storage</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">Geo-redundant encrypted storage with auto-backup</p>
@@ -491,10 +469,9 @@ From the moment your lab results enter our system, multiple security layers prot
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
 </div>
-<!-- Step 5 -->
 <div class="flex flex-col items-center text-center group">
 <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-primary/30 group-hover:border-primary/30 transition-all duration-500">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-inverse-primary text-2xl">lock_person</span>
+<svg class="w-7 h-7 text-inverse-primary"><use href="#i-person-lock"/></svg>
 </div>
 <h4 class="font-headline font-bold text-sm mb-2">Secure Delivery</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">Encrypted reports delivered only to authenticated users</p>
@@ -509,7 +486,7 @@ From the moment your lab results enter our system, multiple security layers prot
 <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24 items-center">
 <div>
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
-<span translate="no" class="material-symbols-outlined notranslate text-sm">dns</span> Infrastructure
+<svg class="w-4 h-4"><use href="#i-dns"/></svg> Infrastructure
 </span>
 <h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 World-Class<br/><span class="gradient-text">Infrastructure</span>
@@ -518,34 +495,32 @@ World-Class<br/><span class="gradient-text">Infrastructure</span>
 We partner with global leaders in edge security to ensure NoryaAI is resilient against evolving threats. Our infrastructure is monitored 24/7/365 with automated incident response.
 </p>
 <div class="reveal reveal-delay-3 grid grid-cols-2 gap-4">
-<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500 group">
+<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500">
 <div class="w-12 h-12 rounded-xl bg-[#F48120]/10 flex items-center justify-center">
 <span class="text-lg font-extrabold text-[#F48120] font-headline">CF</span>
 </div>
 <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Cloudflare WAF</span>
 </div>
-<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500 group">
+<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500">
 <div class="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-primary text-xl">payments</span>
+<svg class="w-6 h-6 text-primary"><use href="#i-payments"/></svg>
 </div>
 <span class="text-[10px] uppercase tracking-widest text-outline font-bold">PayTR Secure</span>
 </div>
-<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500 group">
+<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500">
 <div class="w-12 h-12 rounded-xl bg-blue-500/10 flex items-center justify-center">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-blue-600 text-xl">cloud</span>
+<svg class="w-6 h-6 text-blue-600"><use href="#i-cloud"/></svg>
 </div>
 <span class="text-[10px] uppercase tracking-widest text-outline font-bold">Cloud HSM</span>
 </div>
-<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500 group">
+<div class="p-6 bg-white rounded-2xl border border-outline-variant/10 flex flex-col items-center justify-center space-y-3 shadow-sm hover:shadow-lg hover:border-primary/15 transition-all duration-500">
 <div class="w-12 h-12 rounded-xl bg-purple-500/10 flex items-center justify-center">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-purple-600 text-xl">monitoring</span>
+<svg class="w-6 h-6 text-purple-600"><use href="#i-monitor"/></svg>
 </div>
 <span class="text-[10px] uppercase tracking-widest text-outline font-bold">24/7 SOC</span>
 </div>
 </div>
 </div>
-
-<!-- Live Dashboard -->
 <div class="reveal reveal-delay-1 relative">
 <div class="p-8 md:p-10 bg-white rounded-[2rem] border border-outline-variant/10 shadow-2xl shadow-primary/5">
 <div class="flex items-center justify-between mb-8">
@@ -558,52 +533,17 @@ We partner with global leaders in edge security to ensure NoryaAI is resilient a
 </div>
 <span class="text-[10px] text-outline font-mono">REAL-TIME</span>
 </div>
-
 <div class="space-y-6">
-<div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-xs font-medium text-on-surface">API Gateway</span>
-<span class="text-xs font-mono text-green-600 font-bold">99.99%</span>
+<div><div class="flex justify-between items-center mb-2"><span class="text-xs font-medium text-on-surface">API Gateway</span><span class="text-xs font-mono text-green-600 font-bold">99.99%</span></div><div class="metric-bar"><div class="metric-bar-fill" style="--target-w:99.99%"></div></div></div>
+<div><div class="flex justify-between items-center mb-2"><span class="text-xs font-medium text-on-surface">Encryption Service</span><span class="text-xs font-mono text-green-600 font-bold">100%</span></div><div class="metric-bar"><div class="metric-bar-fill" style="--target-w:100%"></div></div></div>
+<div><div class="flex justify-between items-center mb-2"><span class="text-xs font-medium text-on-surface">AI Analysis Engine</span><span class="text-xs font-mono text-green-600 font-bold">99.97%</span></div><div class="metric-bar"><div class="metric-bar-fill" style="--target-w:99.97%"></div></div></div>
+<div><div class="flex justify-between items-center mb-2"><span class="text-xs font-medium text-on-surface">Data Storage</span><span class="text-xs font-mono text-green-600 font-bold">99.99%</span></div><div class="metric-bar"><div class="metric-bar-fill" style="--target-w:99.99%"></div></div></div>
+<div><div class="flex justify-between items-center mb-2"><span class="text-xs font-medium text-on-surface">CDN / Edge Network</span><span class="text-xs font-mono text-green-600 font-bold">100%</span></div><div class="metric-bar"><div class="metric-bar-fill" style="--target-w:100%"></div></div></div>
 </div>
-<div class="metric-bar"><div class="metric-bar-fill" style="--target-w:99.99%"></div></div>
-</div>
-<div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-xs font-medium text-on-surface">Encryption Service</span>
-<span class="text-xs font-mono text-green-600 font-bold">100%</span>
-</div>
-<div class="metric-bar"><div class="metric-bar-fill" style="--target-w:100%"></div></div>
-</div>
-<div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-xs font-medium text-on-surface">AI Analysis Engine</span>
-<span class="text-xs font-mono text-green-600 font-bold">99.97%</span>
-</div>
-<div class="metric-bar"><div class="metric-bar-fill" style="--target-w:99.97%"></div></div>
-</div>
-<div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-xs font-medium text-on-surface">Data Storage</span>
-<span class="text-xs font-mono text-green-600 font-bold">99.99%</span>
-</div>
-<div class="metric-bar"><div class="metric-bar-fill" style="--target-w:99.99%"></div></div>
-</div>
-<div>
-<div class="flex justify-between items-center mb-2">
-<span class="text-xs font-medium text-on-surface">CDN / Edge Network</span>
-<span class="text-xs font-mono text-green-600 font-bold">100%</span>
-</div>
-<div class="metric-bar"><div class="metric-bar-fill" style="--target-w:100%"></div></div>
-</div>
-</div>
-
 <div class="mt-8 pt-6 border-t border-outline-variant/10 flex items-center justify-between">
-<div>
-<p class="text-sm font-headline font-bold">SOC 2 Type II Certified</p>
-<p class="text-xs text-secondary">Verified operational security excellence</p>
-</div>
+<div><p class="text-sm font-headline font-bold">SOC 2 Type II Certified</p><p class="text-xs text-secondary">Verified operational security excellence</p></div>
 <div class="flex items-center gap-1">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-primary text-lg">verified</span>
+<svg class="w-5 h-5 text-primary"><use href="#i-check-circle"/></svg>
 <span class="text-xs font-bold text-primary">Verified</span>
 </div>
 </div>
@@ -620,7 +560,7 @@ We partner with global leaders in edge security to ensure NoryaAI is resilient a
 <div class="max-w-7xl mx-auto px-6 md:px-8 relative z-10">
 <div class="text-center mb-16 md:mb-20">
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
-<span translate="no" class="material-symbols-outlined notranslate text-sm">sovereignty</span> Data Rights
+<svg class="w-4 h-4"><use href="#i-data-rights"/></svg> Data Rights
 </span>
 <h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 Your Data, Your <span class="gradient-text">Sovereignty</span>
@@ -629,45 +569,24 @@ Your Data, Your <span class="gradient-text">Sovereignty</span>
 We provide the tools and legal frameworks to keep you in total control of your health journey. Your data belongs to you&mdash;always.
 </p>
 </div>
-
 <div class="grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8">
 <div class="reveal card-premium group p-8 md:p-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-trash"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Right to be Forgotten</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-With a single action, permanently delete your entire account and all associated data. We purge it globally following GDPR guidelines&mdash;no hidden copies.
-</p>
-<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="/legal/kvkk-gdpr">
-Learn more <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-</a>
+<p class="text-secondary text-sm leading-relaxed mb-6">With a single action, permanently delete your entire account and all associated data. We purge it globally following GDPR guidelines&mdash;no hidden copies.</p>
+<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="/legal/kvkk-gdpr">Learn more <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1"><use href="#i-arrow"/></svg></a>
 </div>
-
 <div class="reveal reveal-delay-1 card-premium group p-8 md:p-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M13.875 18.825A10.05 10.05 0 0112 19c-4.478 0-8.268-2.943-9.543-7a9.97 9.97 0 011.563-3.029m5.858.908a3 3 0 114.243 4.243M9.878 9.878l4.242 4.242M9.88 9.88l-3.29-3.29m7.532 7.532l3.29 3.29M3 3l3.59 3.59m0 0A9.953 9.953 0 0112 5c4.478 0 8.268 2.943 9.543 7a10.025 10.025 0 01-4.132 5.411m0 0L21 21"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-eye-off"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Zero-Knowledge Encryption</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-NoryaAI staff cannot view your biomarker results. The AI processes data in an encrypted sandbox, returning insights without exposing raw values.
-</p>
-<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="#">
-Technical details <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-</a>
+<p class="text-secondary text-sm leading-relaxed mb-6">NoryaAI staff cannot view your biomarker results. The AI processes data in an encrypted sandbox, returning insights without exposing raw values.</p>
+<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="#">Technical details <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1"><use href="#i-arrow"/></svg></a>
 </div>
-
 <div class="reveal reveal-delay-2 card-premium group p-8 md:p-10">
-<div class="card-icon mb-6">
-<svg class="w-6 h-6 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8"><path stroke-linecap="round" stroke-linejoin="round" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-</div>
+<div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-download"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Data Portability</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">
-Export all your health data in standard formats anytime. Your data is never locked in&mdash;take it wherever you want, whenever you want.
-</p>
-<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="#">
-Export options <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M14 5l7 7m0 0l-7 7m7-7H3"/></svg>
-</a>
+<p class="text-secondary text-sm leading-relaxed mb-6">Export all your health data in standard formats anytime. Your data is never locked in&mdash;take it wherever you want, whenever you want.</p>
+<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="#">Export options <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1"><use href="#i-arrow"/></svg></a>
 </div>
 </div>
 </div>
@@ -678,125 +597,69 @@ Export options <svg class="w-4 h-4 transition-transform group-hover/link:transla
 <div class="max-w-7xl mx-auto px-6 md:px-8">
 <div class="text-center mb-16 md:mb-20">
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
-<span translate="no" class="material-symbols-outlined notranslate text-sm">gavel</span> Compliance
+<svg class="w-4 h-4"><use href="#i-gavel"/></svg> Compliance
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
-Regulatory <span class="gradient-text">Excellence</span>
-</h2>
-<p class="reveal reveal-delay-2 text-secondary text-lg max-w-2xl mx-auto leading-relaxed">
-We don't just meet regulations&mdash;we exceed them. Every feature is designed with compliance built into its DNA.
-</p>
+<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Regulatory <span class="gradient-text">Excellence</span></h2>
+<p class="reveal reveal-delay-2 text-secondary text-lg max-w-2xl mx-auto leading-relaxed">We don't just meet regulations&mdash;we exceed them. Every feature is designed with compliance built into its DNA.</p>
 </div>
-
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
-<!-- HIPAA -->
 <div class="reveal card-hover group p-8 md:p-10 bg-on-background text-white rounded-[2rem] relative overflow-hidden">
 <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
 <div class="relative z-10">
 <div class="flex items-center gap-4 mb-6">
 <div class="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center font-headline font-extrabold text-inverse-primary text-lg">HIPAA</div>
-<div>
-<h3 class="text-xl font-headline font-bold">Clinical Privacy Standards</h3>
-<p class="text-inverse-on-surface/50 text-xs font-medium">Protected Health Information (PHI)</p>
+<div><h3 class="text-xl font-headline font-bold">Clinical Privacy Standards</h3><p class="text-inverse-on-surface/50 text-xs font-medium">Protected Health Information (PHI)</p></div>
 </div>
-</div>
-<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">
-We are fully HIPAA compliant, adhering to the highest standards for handling Protected Health Information. Our administrative and technical safeguards are audited annually by independent third parties.
-</p>
+<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">We are fully HIPAA compliant, adhering to the highest standards for handling Protected Health Information. Our administrative and technical safeguards are audited annually by independent third parties.</p>
 <div class="flex flex-wrap gap-3">
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> PHI Protection
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Annual Audit
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> BAA Available
-</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> PHI Protection</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Annual Audit</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> BAA Available</span>
 </div>
 </div>
 </div>
-
-<!-- GDPR -->
 <div class="reveal reveal-delay-1 card-hover group p-8 md:p-10 bg-on-background text-white rounded-[2rem] relative overflow-hidden">
 <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
 <div class="relative z-10">
 <div class="flex items-center gap-4 mb-6">
 <div class="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center font-headline font-extrabold text-inverse-primary text-lg">GDPR</div>
-<div>
-<h3 class="text-xl font-headline font-bold">Global Data Rights</h3>
-<p class="text-inverse-on-surface/50 text-xs font-medium">European Data Protection</p>
+<div><h3 class="text-xl font-headline font-bold">Global Data Rights</h3><p class="text-inverse-on-surface/50 text-xs font-medium">European Data Protection</p></div>
 </div>
-</div>
-<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">
-We respect European data protection laws with a "Privacy by Design" approach. Data minimization and user consent are hardcoded into every product feature from the ground up.
-</p>
+<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">We respect European data protection laws with a "Privacy by Design" approach. Data minimization and user consent are hardcoded into every product feature from the ground up.</p>
 <div class="flex flex-wrap gap-3">
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Privacy by Design
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> DPO Assigned
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Data Portability
-</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Privacy by Design</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> DPO Assigned</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Data Portability</span>
 </div>
 </div>
 </div>
-
-<!-- SOC 2 -->
 <div class="reveal card-hover group p-8 md:p-10 bg-on-background text-white rounded-[2rem] relative overflow-hidden">
 <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
 <div class="relative z-10">
 <div class="flex items-center gap-4 mb-6">
 <div class="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center font-headline font-extrabold text-inverse-primary text-lg">SOC2</div>
-<div>
-<h3 class="text-xl font-headline font-bold">Operational Security</h3>
-<p class="text-inverse-on-surface/50 text-xs font-medium">Trust Services Criteria</p>
+<div><h3 class="text-xl font-headline font-bold">Operational Security</h3><p class="text-inverse-on-surface/50 text-xs font-medium">Trust Services Criteria</p></div>
 </div>
-</div>
-<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">
-Our SOC 2 Type II certification validates that our security controls are not only designed correctly but operate effectively over time. Continuous monitoring ensures ongoing compliance.
-</p>
+<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">Our SOC 2 Type II certification validates that our security controls are not only designed correctly but operate effectively over time. Continuous monitoring ensures ongoing compliance.</p>
 <div class="flex flex-wrap gap-3">
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Type II Verified
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Continuous Monitoring
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Pentest Reports
-</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Type II Verified</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Continuous Monitoring</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Pentest Reports</span>
 </div>
 </div>
 </div>
-
-<!-- KVKK -->
 <div class="reveal reveal-delay-1 card-hover group p-8 md:p-10 bg-on-background text-white rounded-[2rem] relative overflow-hidden">
 <div class="absolute top-0 right-0 w-64 h-64 bg-primary/10 rounded-full blur-[80px] pointer-events-none"></div>
 <div class="relative z-10">
 <div class="flex items-center gap-4 mb-6">
 <div class="w-14 h-14 rounded-xl bg-white/10 flex items-center justify-center font-headline font-extrabold text-inverse-primary text-lg">KVKK</div>
-<div>
-<h3 class="text-xl font-headline font-bold">Turkish Data Protection</h3>
-<p class="text-inverse-on-surface/50 text-xs font-medium">Kişisel Verilerin Korunması</p>
+<div><h3 class="text-xl font-headline font-bold">Turkish Data Protection</h3><p class="text-inverse-on-surface/50 text-xs font-medium">Kişisel Verilerin Korunması</p></div>
 </div>
-</div>
-<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">
-Full compliance with Turkey's Personal Data Protection Law (KVKK). All personal health data processing follows explicit consent protocols and data controller obligations.
-</p>
+<p class="text-inverse-on-surface/70 text-sm leading-relaxed mb-6">Full compliance with Turkey's Personal Data Protection Law (KVKK). All personal health data processing follows explicit consent protocols and data controller obligations.</p>
 <div class="flex flex-wrap gap-3">
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> VERBİS Registered
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Explicit Consent
-</span>
-<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70">
-<span translate="no" class="material-symbols-outlined notranslate text-xs text-inverse-primary">check_circle</span> Data Deletion
-</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> VERBİS Registered</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Explicit Consent</span>
+<span class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white/8 text-xs font-medium text-inverse-on-surface/70"><svg class="w-3.5 h-3.5 text-inverse-primary"><use href="#i-check-circle"/></svg> Data Deletion</span>
 </div>
 </div>
 </div>
@@ -809,64 +672,33 @@ Full compliance with Turkey's Personal Data Protection Law (KVKK). All personal 
 <div class="max-w-4xl mx-auto px-6 md:px-8">
 <div class="text-center mb-16">
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
-<span translate="no" class="material-symbols-outlined notranslate text-sm">timeline</span> Milestones
+<svg class="w-4 h-4"><use href="#i-timeline"/></svg> Milestones
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
-Security <span class="gradient-text">Milestones</span>
-</h2>
+<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Security <span class="gradient-text">Milestones</span></h2>
 </div>
-
 <div class="relative">
 <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-[2px] bg-outline-variant/20 md:-translate-x-[1px]"></div>
-<!-- Milestone 1 -->
 <div class="reveal relative flex items-start mb-12 md:mb-16">
-<div class="hidden md:block w-1/2 pr-12 text-right">
-<p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q1 2024</p>
-<h4 class="font-headline font-bold text-lg mb-2">Platform Launch</h4>
-<p class="text-secondary text-sm">Launched with AES-256 encryption and HIPAA compliance from day one.</p>
-</div>
+<div class="hidden md:block w-1/2 pr-12 text-right"><p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q1 2024</p><h4 class="font-headline font-bold text-lg mb-2">Platform Launch</h4><p class="text-secondary text-sm">Launched with AES-256 encryption and HIPAA compliance from day one.</p></div>
 <div class="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-primary border-4 border-surface-container-low z-10"></div>
-<div class="md:hidden ml-12 flex-1">
-<p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q1 2024</p>
-<h4 class="font-headline font-bold text-lg mb-2">Platform Launch</h4>
-<p class="text-secondary text-sm">Launched with AES-256 encryption and HIPAA compliance from day one.</p>
-</div>
+<div class="md:hidden ml-12 flex-1"><p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q1 2024</p><h4 class="font-headline font-bold text-lg mb-2">Platform Launch</h4><p class="text-secondary text-sm">Launched with AES-256 encryption and HIPAA compliance from day one.</p></div>
 <div class="hidden md:block w-1/2 pl-12"></div>
 </div>
-<!-- Milestone 2 -->
 <div class="reveal reveal-delay-1 relative flex items-start mb-12 md:mb-16">
 <div class="hidden md:block w-1/2 pr-12"></div>
 <div class="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-primary border-4 border-surface-container-low z-10"></div>
-<div class="md:w-1/2 md:pl-12 ml-12 md:ml-0 flex-1">
-<p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q2 2024</p>
-<h4 class="font-headline font-bold text-lg mb-2">SOC 2 Certification</h4>
-<p class="text-secondary text-sm">Achieved SOC 2 Type II certification after rigorous third-party audit.</p>
+<div class="md:w-1/2 md:pl-12 ml-12 md:ml-0 flex-1"><p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q2 2024</p><h4 class="font-headline font-bold text-lg mb-2">SOC 2 Certification</h4><p class="text-secondary text-sm">Achieved SOC 2 Type II certification after rigorous third-party audit.</p></div>
 </div>
-</div>
-<!-- Milestone 3 -->
 <div class="reveal reveal-delay-2 relative flex items-start mb-12 md:mb-16">
-<div class="hidden md:block w-1/2 pr-12 text-right">
-<p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q3 2024</p>
-<h4 class="font-headline font-bold text-lg mb-2">Zero-Knowledge Architecture</h4>
-<p class="text-secondary text-sm">Implemented zero-knowledge processing ensuring no human access to raw data.</p>
-</div>
+<div class="hidden md:block w-1/2 pr-12 text-right"><p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q3 2024</p><h4 class="font-headline font-bold text-lg mb-2">Zero-Knowledge Architecture</h4><p class="text-secondary text-sm">Implemented zero-knowledge processing ensuring no human access to raw data.</p></div>
 <div class="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-primary border-4 border-surface-container-low z-10"></div>
-<div class="md:hidden ml-12 flex-1">
-<p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q3 2024</p>
-<h4 class="font-headline font-bold text-lg mb-2">Zero-Knowledge Architecture</h4>
-<p class="text-secondary text-sm">Implemented zero-knowledge processing ensuring no human access to raw data.</p>
-</div>
+<div class="md:hidden ml-12 flex-1"><p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">Q3 2024</p><h4 class="font-headline font-bold text-lg mb-2">Zero-Knowledge Architecture</h4><p class="text-secondary text-sm">Implemented zero-knowledge processing ensuring no human access to raw data.</p></div>
 <div class="hidden md:block w-1/2 pl-12"></div>
 </div>
-<!-- Milestone 4 -->
 <div class="reveal reveal-delay-3 relative flex items-start">
 <div class="hidden md:block w-1/2 pr-12"></div>
 <div class="absolute left-4 md:left-1/2 md:-translate-x-1/2 w-5 h-5 rounded-full bg-primary-container border-4 border-surface-container-low z-10 animate-pulse"></div>
-<div class="md:w-1/2 md:pl-12 ml-12 md:ml-0 flex-1">
-<p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">2025 &amp; Beyond</p>
-<h4 class="font-headline font-bold text-lg mb-2">Continuous Enhancement</h4>
-<p class="text-secondary text-sm">Ongoing penetration testing, KVKK compliance, and ISO 27001 pursuit.</p>
-</div>
+<div class="md:w-1/2 md:pl-12 ml-12 md:ml-0 flex-1"><p class="text-xs text-primary font-bold uppercase tracking-wider mb-1">2025 &amp; Beyond</p><h4 class="font-headline font-bold text-lg mb-2">Continuous Enhancement</h4><p class="text-secondary text-sm">Ongoing penetration testing, KVKK compliance, and ISO 27001 pursuit.</p></div>
 </div>
 </div>
 </div>
@@ -877,72 +709,34 @@ Security <span class="gradient-text">Milestones</span>
 <div class="max-w-3xl mx-auto px-6 md:px-8">
 <div class="text-center mb-16">
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
-<span translate="no" class="material-symbols-outlined notranslate text-sm">help</span> FAQ
+<svg class="w-4 h-4"><use href="#i-help"/></svg> FAQ
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
-Frequently Asked <span class="gradient-text">Questions</span>
-</h2>
+<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Frequently Asked <span class="gradient-text">Questions</span></h2>
 </div>
-
 <div class="reveal space-y-4">
 <div class="faq-item bg-white rounded-2xl border border-outline-variant/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow" onclick="toggleFaq(this)">
-<div class="flex items-center justify-between p-6 cursor-pointer select-none">
-<h4 class="font-headline font-bold text-sm md:text-base pr-4">How is my health data encrypted?</h4>
-<span translate="no" class="material-symbols-outlined notranslate faq-icon text-primary text-xl shrink-0">expand_more</span>
+<div class="flex items-center justify-between p-6 cursor-pointer select-none"><h4 class="font-headline font-bold text-sm md:text-base pr-4">How is my health data encrypted?</h4><svg class="w-5 h-5 faq-icon text-primary shrink-0"><use href="#i-chevron-down"/></svg></div>
+<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">All data is encrypted using AES-256 encryption at rest and TLS 1.3 in transit. Each user's biomarker profile is stored in its own isolated encrypted container with unique encryption keys managed by Hardware Security Modules (HSM). Even in the unlikely event of a system breach, individual data containers remain impenetrable.</div>
 </div>
-<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">
-All data is encrypted using AES-256 encryption at rest and TLS 1.3 in transit. Each user's biomarker profile is stored in its own isolated encrypted container with unique encryption keys managed by Hardware Security Modules (HSM). Even in the unlikely event of a system breach, individual data containers remain impenetrable.
-</div>
-</div>
-
 <div class="faq-item bg-white rounded-2xl border border-outline-variant/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow" onclick="toggleFaq(this)">
-<div class="flex items-center justify-between p-6 cursor-pointer select-none">
-<h4 class="font-headline font-bold text-sm md:text-base pr-4">Can NoryaAI employees see my lab results?</h4>
-<span translate="no" class="material-symbols-outlined notranslate faq-icon text-primary text-xl shrink-0">expand_more</span>
+<div class="flex items-center justify-between p-6 cursor-pointer select-none"><h4 class="font-headline font-bold text-sm md:text-base pr-4">Can NoryaAI employees see my lab results?</h4><svg class="w-5 h-5 faq-icon text-primary shrink-0"><use href="#i-chevron-down"/></svg></div>
+<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">No. We use a zero-knowledge architecture where the AI processes your data within an encrypted sandbox. Raw laboratory values are never exposed to human operators. Our staff can only see anonymized metadata necessary for system maintenance&mdash;never your actual health data.</div>
 </div>
-<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">
-No. We use a zero-knowledge architecture where the AI processes your data within an encrypted sandbox. Raw laboratory values are never exposed to human operators. Our staff can only see anonymized metadata necessary for system maintenance&mdash;never your actual health data.
-</div>
-</div>
-
 <div class="faq-item bg-white rounded-2xl border border-outline-variant/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow" onclick="toggleFaq(this)">
-<div class="flex items-center justify-between p-6 cursor-pointer select-none">
-<h4 class="font-headline font-bold text-sm md:text-base pr-4">How can I delete all my data?</h4>
-<span translate="no" class="material-symbols-outlined notranslate faq-icon text-primary text-xl shrink-0">expand_more</span>
+<div class="flex items-center justify-between p-6 cursor-pointer select-none"><h4 class="font-headline font-bold text-sm md:text-base pr-4">How can I delete all my data?</h4><svg class="w-5 h-5 faq-icon text-primary shrink-0"><use href="#i-chevron-down"/></svg></div>
+<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">You can request permanent deletion of your entire account and all associated data at any time. Under GDPR's "Right to be Forgotten," we don't just hide your data&mdash;we purge it from all servers globally, including backups, within 30 days of your request. This process is irreversible and complete.</div>
 </div>
-<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">
-You can request permanent deletion of your entire account and all associated data at any time. Under GDPR's "Right to be Forgotten," we don't just hide your data&mdash;we purge it from all servers globally, including backups, within 30 days of your request. This process is irreversible and complete.
-</div>
-</div>
-
 <div class="faq-item bg-white rounded-2xl border border-outline-variant/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow" onclick="toggleFaq(this)">
-<div class="flex items-center justify-between p-6 cursor-pointer select-none">
-<h4 class="font-headline font-bold text-sm md:text-base pr-4">Is my payment information secure?</h4>
-<span translate="no" class="material-symbols-outlined notranslate faq-icon text-primary text-xl shrink-0">expand_more</span>
+<div class="flex items-center justify-between p-6 cursor-pointer select-none"><h4 class="font-headline font-bold text-sm md:text-base pr-4">Is my payment information secure?</h4><svg class="w-5 h-5 faq-icon text-primary shrink-0"><use href="#i-chevron-down"/></svg></div>
+<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">We never store your credit card details. All payment processing is handled by PayTR, a PCI-DSS Level 1 certified payment provider. Transactions are tokenized and encrypted, ensuring your financial data never touches our servers.</div>
 </div>
-<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">
-We never store your credit card details. All payment processing is handled by PayTR, a PCI-DSS Level 1 certified payment provider. Transactions are tokenized and encrypted, ensuring your financial data never touches our servers.
-</div>
-</div>
-
 <div class="faq-item bg-white rounded-2xl border border-outline-variant/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow" onclick="toggleFaq(this)">
-<div class="flex items-center justify-between p-6 cursor-pointer select-none">
-<h4 class="font-headline font-bold text-sm md:text-base pr-4">Where is my data physically stored?</h4>
-<span translate="no" class="material-symbols-outlined notranslate faq-icon text-primary text-xl shrink-0">expand_more</span>
+<div class="flex items-center justify-between p-6 cursor-pointer select-none"><h4 class="font-headline font-bold text-sm md:text-base pr-4">Where is my data physically stored?</h4><svg class="w-5 h-5 faq-icon text-primary shrink-0"><use href="#i-chevron-down"/></svg></div>
+<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">Your data is stored in geographically distributed, SOC 2 certified data centers with automated redundancy. All storage locations comply with GDPR and KVKK regulations. Data residency preferences can be configured for enterprise customers to meet specific regulatory requirements.</div>
 </div>
-<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">
-Your data is stored in geographically distributed, SOC 2 certified data centers with automated redundancy. All storage locations comply with GDPR and KVKK regulations. Data residency preferences can be configured for enterprise customers to meet specific regulatory requirements.
-</div>
-</div>
-
 <div class="faq-item bg-white rounded-2xl border border-outline-variant/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow" onclick="toggleFaq(this)">
-<div class="flex items-center justify-between p-6 cursor-pointer select-none">
-<h4 class="font-headline font-bold text-sm md:text-base pr-4">Do you share data with third parties?</h4>
-<span translate="no" class="material-symbols-outlined notranslate faq-icon text-primary text-xl shrink-0">expand_more</span>
-</div>
-<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">
-Absolutely not. Your health data is never shared with, sold to, or accessed by any third party. We do not use your data for advertising, research, or any purpose beyond providing you with personalized health insights. Our business model is built on subscriptions, not data monetization.
-</div>
+<div class="flex items-center justify-between p-6 cursor-pointer select-none"><h4 class="font-headline font-bold text-sm md:text-base pr-4">Do you share data with third parties?</h4><svg class="w-5 h-5 faq-icon text-primary shrink-0"><use href="#i-chevron-down"/></svg></div>
+<div class="faq-answer px-6 text-secondary text-sm leading-relaxed">Absolutely not. Your health data is never shared with, sold to, or accessed by any third party. We do not use your data for advertising, research, or any purpose beyond providing you with personalized health insights. Our business model is built on subscriptions, not data monetization.</div>
 </div>
 </div>
 </div>
@@ -955,21 +749,15 @@ Absolutely not. Your health data is never shared with, sold to, or accessed by a
 <div class="absolute inset-0 opacity-30 dot-pattern" style="background-image:radial-gradient(circle,rgba(94,217,215,.12) 1px,transparent 1px);background-size:24px 24px"></div>
 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/15 rounded-full blur-[120px] pointer-events-none"></div>
 <div class="relative z-10">
-<span translate="no" class="material-symbols-outlined notranslate mat-filled text-inverse-primary text-5xl mb-6">verified_user</span>
-<h2 class="text-3xl md:text-5xl font-headline font-extrabold text-white tracking-tight mb-6 leading-tight">
-Start Your Secure<br/>Health Journey Today
-</h2>
-<p class="text-inverse-on-surface/60 text-lg max-w-xl mx-auto mb-10 leading-relaxed">
-Join thousands who trust NoryaAI with their most sensitive health data. Your privacy is our promise.
-</p>
+<svg class="w-14 h-14 text-inverse-primary mx-auto mb-6"><use href="#i-shield-check"/></svg>
+<h2 class="text-3xl md:text-5xl font-headline font-extrabold text-white tracking-tight mb-6 leading-tight">Start Your Secure<br/>Health Journey Today</h2>
+<p class="text-inverse-on-surface/60 text-lg max-w-xl mx-auto mb-10 leading-relaxed">Join thousands who trust NoryaAI with their most sensitive health data. Your privacy is our promise.</p>
 <div class="flex flex-wrap justify-center gap-4">
 <a href="/#analyze" class="inline-flex items-center gap-2 bg-primary text-white px-10 py-4 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-xl shadow-primary/30">
-Get Started Free
-<span translate="no" class="material-symbols-outlined notranslate text-base">arrow_forward</span>
+Get Started Free <svg class="w-4 h-4"><use href="#i-arrow"/></svg>
 </a>
 <a href="mailto:security@noryaai.com" class="inline-flex items-center gap-2 px-10 py-4 rounded-full font-headline font-bold text-sm border-2 border-white/15 text-white hover:bg-white/5 transition-all">
-Contact Security Team
-<span translate="no" class="material-symbols-outlined notranslate text-base">mail</span>
+Contact Security Team <svg class="w-4 h-4"><use href="#i-mail"/></svg>
 </a>
 </div>
 </div>
@@ -982,19 +770,12 @@ Contact Security Team
 <div class="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12">
 <div class="col-span-2 md:col-span-1 space-y-5">
 <a href="/" class="font-headline font-bold text-lg text-on-background flex items-center gap-2">
-<img alt="NoryaAI" class="h-6" src="/static/norya_logo_transparent_trim.png"/>
-NoryaAI
+<img alt="NoryaAI" class="h-6" src="/static/norya_logo_transparent_trim.png"/> NoryaAI
 </a>
-<p class="text-secondary text-sm leading-relaxed">
-Personalized AI-driven health analytics powered by your unique biological blueprint.
-</p>
+<p class="text-secondary text-sm leading-relaxed">Personalized AI-driven health analytics powered by your unique biological blueprint.</p>
 <div class="flex gap-3">
-<a class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all" href="#">
-<span translate="no" class="material-symbols-outlined notranslate text-base">public</span>
-</a>
-<a class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all" href="mailto:security@noryaai.com">
-<span translate="no" class="material-symbols-outlined notranslate text-base">mail</span>
-</a>
+<a class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all" href="#"><svg class="w-4 h-4"><use href="#i-globe"/></svg></a>
+<a class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all" href="mailto:security@noryaai.com"><svg class="w-4 h-4"><use href="#i-mail"/></svg></a>
 </div>
 </div>
 <div class="space-y-5">
@@ -1024,9 +805,7 @@ Personalized AI-driven health analytics powered by your unique biological bluepr
 </div>
 </div>
 <div class="max-w-7xl mx-auto px-6 md:px-8 mt-12 pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4">
-<p class="text-secondary text-xs tracking-wide">
-&copy; 2025 NoryaAI. Clinical Grade Data Encryption.
-</p>
+<p class="text-secondary text-xs tracking-wide">&copy; 2025 NoryaAI. Clinical Grade Data Encryption.</p>
 <div class="flex items-center gap-4 text-xs text-secondary">
 <a href="/legal/gizlilik-politikasi" class="hover:text-primary transition-colors">Privacy</a>
 <span class="text-outline-variant">|</span>
@@ -1038,70 +817,40 @@ Personalized AI-driven health analytics powered by your unique biological bluepr
 </footer>
 
 <script>
-/* ═══ Scroll Reveal ═══ */
 (function(){
   const obs=new IntersectionObserver((entries)=>{
     entries.forEach(e=>{if(e.isIntersecting){e.target.classList.add('visible');obs.unobserve(e.target)}})
   },{threshold:0.08,rootMargin:'0px 0px -40px 0px'});
   document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
 })();
-
-/* ═══ Animated Counters ═══ */
 (function(){
   const counters=document.querySelectorAll('[data-count]');
   const obs=new IntersectionObserver((entries)=>{
     entries.forEach(e=>{
       if(!e.isIntersecting) return;
-      const el=e.target;
-      const target=parseFloat(el.dataset.count);
-      const suffix=el.dataset.suffix||'';
-      const decimals=parseInt(el.dataset.decimals)||0;
-      const duration=2000;
-      const start=performance.now();
-      function update(now){
-        const elapsed=now-start;
-        const progress=Math.min(elapsed/duration,1);
-        const eased=1-Math.pow(1-progress,4);
-        const current=target*eased;
-        el.textContent=current.toFixed(decimals)+suffix;
-        if(progress<1) requestAnimationFrame(update);
-      }
-      requestAnimationFrame(update);
-      obs.unobserve(el);
+      const el=e.target;const target=parseFloat(el.dataset.count);const suffix=el.dataset.suffix||'';const decimals=parseInt(el.dataset.decimals)||0;const duration=2000;const start=performance.now();
+      function update(now){const elapsed=now-start;const progress=Math.min(elapsed/duration,1);const eased=1-Math.pow(1-progress,4);el.textContent=( target*eased).toFixed(decimals)+suffix;if(progress<1) requestAnimationFrame(update)}
+      requestAnimationFrame(update);obs.unobserve(el);
     });
   },{threshold:0.5});
   counters.forEach(el=>obs.observe(el));
 })();
-
-/* ═══ FAQ Toggle ═══ */
 function toggleFaq(item){
-  const answer=item.querySelector('.faq-answer');
-  const isOpen=answer.classList.contains('open');
+  const answer=item.querySelector('.faq-answer');const isOpen=answer.classList.contains('open');
   document.querySelectorAll('.faq-answer.open').forEach(a=>a.classList.remove('open'));
   document.querySelectorAll('.faq-open').forEach(i=>i.classList.remove('faq-open'));
-  if(!isOpen){answer.classList.add('open');item.classList.add('faq-open');}
+  if(!isOpen){answer.classList.add('open');item.classList.add('faq-open')}
 }
-
-/* ═══ Nav Scroll Effect ═══ */
 (function(){
   const nav=document.getElementById('mainNav');
-  let lastScroll=0;
   window.addEventListener('scroll',()=>{
-    const y=window.scrollY;
-    if(y>80){nav.classList.add('shadow-lg');nav.style.background='rgba(248,249,250,.95)'}
+    if(window.scrollY>80){nav.classList.add('shadow-lg');nav.style.background='rgba(248,249,250,.95)'}
     else{nav.classList.remove('shadow-lg');nav.style.background=''}
-    lastScroll=y;
   },{passive:true});
 })();
-
-/* ═══ Mobile Menu Overlay ═══ */
 (function(){
-  const menu=document.getElementById('mobileMenu');
-  const overlay=document.getElementById('mobileOverlay');
-  const mo=new MutationObserver(()=>{
-    overlay.classList.toggle('hidden',!menu.classList.contains('open'));
-  });
-  mo.observe(menu,{attributes:true,attributeFilter:['class']});
+  const menu=document.getElementById('mobileMenu');const overlay=document.getElementById('mobileOverlay');
+  new MutationObserver(()=>{overlay.classList.toggle('hidden',!menu.classList.contains('open'))}).observe(menu,{attributes:true,attributeFilter:['class']});
 })();
 </script>
 </body>
