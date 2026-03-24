@@ -2,8 +2,9 @@
 """
 ESR (Erythrocyte Sedimentation Rate) blog article — full body content for all 9 languages.
 Used by blog_i18n._article_esr().
-Sections: intro, what-is, normal-ranges, causes, symptoms,
-related-tests, when-to-see-doctor, how-norya-helps, disclaimer.
+Sections: intro, what-is-esr, how-esr-works, normal-ranges, high-esr-causes,
+esr-vs-crp, false-elevations, monitoring-role, when-to-see-doctor,
+how-norya-helps, disclaimer.
 """
 from __future__ import annotations
 
@@ -11,135 +12,208 @@ LANGS = ("tr", "en", "es", "de", "fr", "it", "he", "hi", "ar")
 
 
 # ---------------------------------------------------------------------------
-# English
+# ENGLISH
 # ---------------------------------------------------------------------------
 def _sections_en() -> list:
     from app.blog_i18n import Section
     return [
         Section(
             id="intro", level=2,
-            heading="ESR high: what your erythrocyte sedimentation rate means",
+            heading="High ESR: what your blood test result means",
             body_html=(
-                "<p>The erythrocyte sedimentation rate (ESR), often called the <em>sed rate</em>, is one of the oldest and simplest blood tests still in routine use. "
-                "It measures how quickly red blood cells settle to the bottom of a vertical tube over one hour. A faster-than-normal rate suggests that something in the body "
-                "is driving inflammation, but the ESR cannot tell you exactly what. Think of it as a general alarm bell rather than a precise diagnosis.</p>"
-                "<p>This guide explains what ESR measures, how to read your result against age- and sex-specific reference ranges, "
-                "the most common reasons for an elevated or low ESR, and when to follow up with your doctor. "
-                "It is educational content, not a medical diagnosis&mdash;always discuss your results with a healthcare professional.</p>"
+                "<p>The <strong>ESR (Erythrocyte Sedimentation Rate)</strong> is one of the oldest and simplest blood tests still in routine use. "
+                "It measures how quickly red blood cells (<em>erythrocytes</em>) settle to the bottom of a vertical tube over one hour. A faster "
+                "settling rate indicates that inflammation is likely present in the body&mdash;though it does not pinpoint where or why.</p>"
+                "<p>Despite the availability of more specific inflammation markers such as <strong>C-reactive protein (CRP)</strong>, the ESR "
+                "remains valuable because it reflects chronic, low-grade inflammatory processes that CRP may not capture as well. It is widely "
+                "used to help diagnose and monitor conditions like <em>temporal arteritis</em>, <em>polymyalgia rheumatica</em>, <em>rheumatoid "
+                "arthritis</em>, and <em>systemic lupus erythematosus</em>.</p>"
+                "<p>This guide explains what the ESR measures, how to interpret your result, common causes of elevation, and when to seek "
+                "medical attention. It is for educational purposes only and does not replace a doctor's advice.</p>"
             ),
         ),
         Section(
-            id="what-is", level=2,
-            heading="What is ESR and how is it measured?",
+            id="what-is-esr", level=2,
+            heading="What is ESR (Erythrocyte Sedimentation Rate)?",
             body_html=(
-                "<p>The <strong>erythrocyte sedimentation rate</strong> measures the distance (in millimetres) that red blood cells fall in a standardised tube over 60 minutes. "
-                "Under normal conditions, red cells repel each other due to their negative surface charge and settle slowly. "
-                "When inflammation is present, the liver produces higher levels of acute-phase proteins&mdash;especially <strong>fibrinogen</strong>&mdash;"
-                "that neutralise the surface charge and cause red cells to clump together into stacks called <em>rouleaux</em>. "
-                "These stacks are heavier and fall faster, producing a higher ESR reading.</p>"
-                "<p>The test is typically performed using the <strong>Westergren method</strong>: blood mixed with sodium citrate is drawn into a 200 mm vertical tube "
-                "and left undisturbed for one hour. The result is reported as mm/hr. Although simple, the ESR remains a useful screening tool "
-                "for detecting and monitoring inflammatory and infectious diseases.</p>"
-                "<p>It is important to understand that ESR is a <strong>non-specific</strong> marker. An elevated result tells your doctor that inflammation is likely present, "
-                "but it does not identify the cause. Additional tests are needed to pinpoint the source.</p>"
+                "<p>The ESR is a non-specific marker of inflammation. When inflammation is present in the body, the liver increases production "
+                "of certain proteins&mdash;particularly <strong>fibrinogen</strong> and <strong>immunoglobulins</strong>&mdash;that cause red blood "
+                "cells to stick together and form stacks called <em>rouleaux</em>. These rouleaux are heavier than individual red blood cells and "
+                "therefore settle faster in the test tube, producing a higher ESR reading.</p>"
+                "<p>The test was first described in the early 1900s and standardized by Westergren in 1921. The <strong>Westergren method</strong> "
+                "remains the reference standard: anticoagulated blood is drawn into a 200&nbsp;mm vertical tube, and the distance the red cells "
+                "have fallen from the top after exactly 60 minutes is recorded in millimeters per hour (mm/hr).</p>"
+                "<p>Because the ESR depends on changes in plasma proteins rather than detecting a specific pathogen or cytokine, it is considered "
+                "a <strong>non-specific</strong> test. An elevated ESR tells your doctor that <em>something</em> is causing inflammation but "
+                "requires additional investigation to determine the cause. Conversely, a normal ESR does not rule out disease entirely, as some "
+                "inflammatory conditions may not elevate it significantly.</p>"
+            ),
+        ),
+        Section(
+            id="how-esr-works", level=2,
+            heading="How does the ESR test work?",
+            body_html=(
+                "<p>The physics behind ESR are straightforward. Red blood cells normally repel each other because they carry a net negative charge "
+                "on their surface (the <em>zeta potential</em>). This negative charge keeps cells dispersed in plasma, causing them to settle slowly.</p>"
+                "<p>When acute-phase proteins such as fibrinogen increase during inflammation, they reduce the zeta potential between red cells, "
+                "allowing cells to aggregate into rouleaux formations. These multi-cell stacks have a greater mass-to-surface-area ratio and "
+                "therefore sink faster through the plasma column. The rate of sedimentation is proportional to the concentration of these "
+                "aggregation-promoting proteins.</p>"
+                "<p>Several factors besides inflammation can alter the ESR. Anemia increases ESR because fewer red cells create less resistance "
+                "to sedimentation. Polycythemia (excess red cells) has the opposite effect, slowing sedimentation. Abnormally shaped red cells "
+                "(sickle cells, spherocytes) do not form rouleaux well and tend to produce falsely low ESR values. The test is also affected by "
+                "temperature, tube tilt, and time delay before processing&mdash;which is why standardized conditions are important for reliable results.</p>"
             ),
         ),
         Section(
             id="normal-ranges", level=2,
             heading="Normal ESR ranges",
             body_html=(
-                "<p>ESR reference ranges depend on age and sex. The widely used Westergren upper limits are:</p>"
                 '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
                 "<thead><tr>"
                 '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Group</th>'
-                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Upper limit (mm/hr)</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Normal ESR (mm/hr)</th>'
                 "</tr></thead><tbody>"
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Men under 50</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 15</td></tr>'
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Men over 50</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 20</td></tr>'
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Women under 50</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 20</td></tr>'
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Women over 50</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 30</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Men &lt; 50 years</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Men &ge; 50 years</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Women &lt; 50 years</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Women &ge; 50 years</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr>'
                 "</tbody></table>"
-                "<p>A common rule of thumb is: upper limit for men = age ÷ 2; for women = (age + 10) ÷ 2. "
-                "ESR tends to rise with age and is generally higher in women. Pregnancy can also physiologically increase ESR. "
-                "Always compare your result to the reference range on your own laboratory report.</p>"
+                "<p>A commonly used <strong>age-adjusted formula</strong> is: upper limit of normal = age/2 for men and (age+10)/2 for women. "
+                "This acknowledges that ESR naturally rises with age due to increased fibrinogen levels and other plasma protein changes.</p>"
+                "<p>An ESR above <strong>100&nbsp;mm/hr</strong> is considered markedly elevated and strongly suggests serious underlying disease, "
+                "such as infection, malignancy, or autoimmune disease. Values between 40&ndash;100 are moderately elevated and warrant investigation. "
+                "Mildly elevated values (20&ndash;40) are common and may reflect minor inflammation, aging, or obesity.</p>"
             ),
         ),
         Section(
-            id="causes", level=2,
+            id="high-esr-causes", level=2,
             heading="Causes of high ESR",
             body_html=(
-                "<p>A moderately elevated ESR (20&ndash;60 mm/hr) can occur with a wide range of conditions. "
-                "<strong>Infections</strong>&mdash;bacterial, viral, or fungal&mdash;are among the most common triggers. "
-                "<strong>Autoimmune and inflammatory diseases</strong> such as rheumatoid arthritis, systemic lupus erythematosus (SLE), "
-                "polymyalgia rheumatica, and giant-cell arteritis characteristically raise the ESR, sometimes markedly.</p>"
-                "<p><strong>Cancer</strong>&mdash;particularly lymphoma, multiple myeloma, and metastatic disease&mdash;can push the ESR above 100 mm/hr. "
-                "An ESR above 100 is considered highly elevated and warrants a thorough clinical workup including evaluation for malignancy, "
-                "severe infection, and renal disease. <strong>Anemia</strong> also increases ESR because fewer red cells settle more quickly in plasma.</p>"
-                "<p>Other common causes include <strong>pregnancy</strong>, <strong>advanced age</strong>, <strong>obesity</strong>, "
-                "and <strong>chronic kidney disease</strong>. Certain medications (e.g. oral contraceptives, heparin) can also influence the result. "
-                "Conversely, conditions such as polycythemia, sickle cell disease, and extreme leukocytosis can cause a <em>low</em> ESR "
-                "by interfering with rouleaux formation. Because the list of causes is so broad, an elevated ESR always requires clinical correlation&mdash;"
-                "your doctor will interpret it in the context of your symptoms, physical examination, and other lab results such as "
-                "<a href=\"/en/blog/crp-inflammation-marker\">CRP</a>.</p>"
+                "<p>An elevated ESR has a broad differential diagnosis. The most important categories include:</p>"
+                "<p><strong>Infections:</strong></p>"
+                "<ul>"
+                "<li>Bacterial infections (pneumonia, endocarditis, osteomyelitis, tuberculosis, abscess).</li>"
+                "<li>Chronic infections tend to cause higher ESR elevations than acute viral infections.</li>"
+                "</ul>"
+                "<p><strong>Autoimmune and inflammatory diseases:</strong></p>"
+                "<ul>"
+                "<li><strong>Temporal (giant cell) arteritis</strong> and <strong>polymyalgia rheumatica</strong> &ndash; ESR is a key diagnostic "
+                "criterion; values often exceed 50&ndash;100&nbsp;mm/hr.</li>"
+                "<li><strong>Rheumatoid arthritis</strong> &ndash; ESR correlates with disease activity.</li>"
+                "<li><strong>Systemic lupus erythematosus (SLE)</strong> &ndash; ESR rises during flares, though CRP may remain normal in SLE "
+                "(a useful distinguishing feature).</li>"
+                "<li>Inflammatory bowel disease, vasculitis, and sarcoidosis.</li>"
+                "</ul>"
+                "<p><strong>Malignancies:</strong> Multiple myeloma, lymphoma, and metastatic cancers can cause markedly elevated ESR. "
+                "In myeloma, the excess immunoglobulins strongly promote rouleaux formation.</p>"
+                "<p><strong>Other causes:</strong> Anemia, pregnancy (ESR normally rises in the second and third trimester), end-stage renal "
+                "disease, heart failure, obesity, and advanced age.</p>"
             ),
         ),
         Section(
-            id="symptoms", level=2,
-            heading="Symptoms associated with elevated ESR",
+            id="esr-vs-crp", level=2,
+            heading="ESR vs. CRP: which inflammation marker is better?",
             body_html=(
-                "<p>ESR itself does not cause symptoms&mdash;it is a laboratory marker that reflects an underlying process. "
-                "The symptoms you experience depend entirely on the condition driving the inflammation. "
-                "Patients with infections may have fever, chills, and localised pain. Those with autoimmune diseases may experience joint pain, "
-                "stiffness, skin rashes, and fatigue. Cancer-related elevations may present with unexplained weight loss, night sweats, or lymphadenopathy.</p>"
-                "<p>Some people with a mildly elevated ESR have no symptoms at all&mdash;the finding may be incidental on routine blood work. "
-                "Even in this case, your doctor may recommend follow-up testing to determine whether an underlying condition is present. "
-                "A very high ESR (above 100 mm/hr) with constitutional symptoms (fever, weight loss, fatigue) should prompt an urgent clinical evaluation.</p>"
+                "<p>Both ESR and CRP are markers of inflammation, but they behave differently and provide complementary information:</p>"
+                '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
+                "<thead><tr>"
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Feature</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">ESR</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">CRP</th>'
+                "</tr></thead><tbody>"
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Response speed</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Slow (days to change)</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Fast (rises within 6&ndash;8 hours)</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Normalization</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Slow (weeks)</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Rapid (days)</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Affected by anemia</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Yes (falsely elevated)</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">No</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Best for</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Chronic inflammation monitoring</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Acute infection detection</td></tr>'
+                "</tbody></table>"
+                "<p>In systemic lupus erythematosus, the ESR often rises while CRP remains normal&mdash;this discordance helps distinguish SLE "
+                "flares from infections. For more on CRP, see our <a href=\"/blog/crp-high-meaning\">CRP guide</a>.</p>"
+                "<p>In practice, many clinicians order both tests together to get a more complete picture of a patient's inflammatory status.</p>"
             ),
         ),
         Section(
-            id="related-tests", level=2,
-            heading="Related tests your doctor may order",
+            id="false-elevations", level=2,
+            heading="False elevations and limitations of ESR",
             body_html=(
-                "<p>Because ESR is non-specific, it is almost always paired with more targeted tests. "
-                "<strong><a href=\"/en/blog/crp-inflammation-marker\">C-reactive protein (CRP)</a></strong> is another acute-phase reactant "
-                "that rises and falls more quickly than ESR, making it useful for tracking short-term changes in inflammation. "
-                "Together, ESR and CRP provide complementary information&mdash;CRP can confirm that the ESR elevation is due to active inflammation "
-                "rather than other factors like anemia or aging.</p>"
-                "<p>A <strong>complete blood count (CBC)</strong> is essential to check for anemia, infection (elevated white cells), "
-                "or blood cancers. If autoimmune disease is suspected, tests such as <strong>ANA</strong> (antinuclear antibodies), "
-                "<strong>RF</strong> (rheumatoid factor), and <strong>anti-CCP</strong> may be ordered. "
-                "For suspected malignancy, protein electrophoresis (SPEP), imaging studies, and sometimes a biopsy are considered.</p>"
-                "<p>Your doctor will choose the appropriate investigations based on the clinical picture. "
-                "An isolated mildly elevated ESR in an otherwise healthy person may only need repeat testing in a few weeks to see if it normalises.</p>"
+                "<p>Because ESR depends on red blood cell behavior and plasma protein composition, several non-inflammatory conditions can "
+                "falsely elevate the result:</p>"
+                "<ul>"
+                "<li><strong>Anemia</strong> &ndash; lower hematocrit means less resistance to sedimentation, producing a falsely high ESR "
+                "even without inflammation.</li>"
+                "<li><strong>Obesity</strong> &ndash; adipose tissue produces pro-inflammatory cytokines that mildly elevate ESR.</li>"
+                "<li><strong>Aging</strong> &ndash; ESR rises 1&ndash;2&nbsp;mm/hr per decade of age due to increasing fibrinogen.</li>"
+                "<li><strong>Female sex</strong> &ndash; women tend to have higher ESR than men.</li>"
+                "<li><strong>Pregnancy</strong> &ndash; physiological increase in fibrinogen and plasma volume.</li>"
+                "<li><strong>Kidney failure</strong> &ndash; uremia alters plasma proteins.</li>"
+                "<li><strong>Hypergammaglobulinemia</strong> &ndash; high immunoglobulins (as in myeloma or liver disease) strongly promote "
+                "rouleaux formation.</li>"
+                "</ul>"
+                "<p>Conditions that can <strong>falsely lower</strong> ESR include polycythemia, sickle cell disease, spherocytosis, "
+                "extreme leukocytosis, and certain protein abnormalities. Clinicians must interpret ESR in the context of the patient's "
+                "overall clinical picture.</p>"
+            ),
+        ),
+        Section(
+            id="monitoring-role", level=2,
+            heading="The role of ESR in disease monitoring",
+            body_html=(
+                "<p>While ESR has limited value as a screening tool in asymptomatic patients, it is extremely useful for monitoring disease "
+                "activity over time in conditions where it is known to correlate with clinical status:</p>"
+                "<ul>"
+                "<li><strong>Temporal arteritis / polymyalgia rheumatica</strong> &ndash; ESR is followed serially during treatment with "
+                "corticosteroids. A rising ESR may indicate relapse.</li>"
+                "<li><strong>Rheumatoid arthritis</strong> &ndash; ESR is part of composite disease activity scores (DAS28). Declining ESR "
+                "suggests treatment is working.</li>"
+                "<li><strong>Infections</strong> &ndash; ESR tracks the response to antibiotic therapy in chronic infections like osteomyelitis "
+                "or endocarditis.</li>"
+                "<li><strong>Hodgkin lymphoma</strong> &ndash; ESR is an independent prognostic factor; high ESR at diagnosis is associated with "
+                "worse outcomes.</li>"
+                "</ul>"
+                "<p>Because ESR changes slowly, it is best suited for tracking chronic conditions rather than acute changes. CRP is preferred "
+                "when rapid response to treatment needs to be assessed. The combination of both markers provides the most informative longitudinal "
+                "tracking of inflammatory disease.</p>"
             ),
         ),
         Section(
             id="when-to-see-doctor", level=2,
             heading="When to see a doctor",
             body_html=(
-                "<p>Discuss any ESR result outside the reference range with your healthcare provider. "
-                "Although a mildly elevated ESR can be benign&mdash;especially in older adults or during pregnancy&mdash;it deserves at least a conversation. "
-                "Seek <strong>prompt</strong> medical attention if your ESR is very high (above 100 mm/hr) or if you are experiencing symptoms such as "
-                "unexplained fever, significant weight loss, severe joint pain, persistent fatigue, or night sweats.</p>"
-                "<p>If you have a known inflammatory condition (e.g. rheumatoid arthritis, lupus, polymyalgia rheumatica), "
-                "your doctor may use serial ESR measurements to monitor disease activity and treatment response. "
-                "A rising ESR in this context may indicate a flare, while a falling ESR suggests improvement.</p>"
+                "<p>Consult your doctor about an elevated ESR in the following situations:</p>"
+                "<ul>"
+                "<li>Your ESR is <strong>above the age-adjusted normal range</strong> and you have unexplained symptoms such as fatigue, weight loss, "
+                "fever, or joint pain.</li>"
+                "<li>Your ESR is <strong>above 100&nbsp;mm/hr</strong>&mdash;this strongly suggests serious underlying disease and requires prompt evaluation.</li>"
+                "<li>You have been diagnosed with an <strong>autoimmune or inflammatory condition</strong> and your ESR is rising despite treatment.</li>"
+                "<li>You have <strong>new-onset severe headache, jaw claudication, or visual changes</strong> in patients over 50&mdash;these may "
+                "indicate temporal arteritis, a medical emergency.</li>"
+                "<li>You have <strong>persistent unexplained anemia</strong> with high ESR, which may suggest multiple myeloma or other malignancy.</li>"
+                "</ul>"
+                "<p>A mildly elevated ESR in an otherwise healthy person may not require immediate action but should be noted and rechecked "
+                "if symptoms develop. Context is everything when interpreting this test.</p>"
             ),
         ),
         Section(
             id="how-norya-helps", level=2,
-            heading="How Norya helps you understand your ESR",
+            heading="How Norya helps you understand your ESR results",
             body_html=(
-                "<p>Norya does not diagnose&mdash;we help you prepare. Upload your blood test report at "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> and receive a clear, structured summary that flags your ESR alongside related markers "
-                "like CRP and CBC values. The report provides context on what the numbers may mean and helps you ask more informed questions at your appointment.</p>"
-                "<p>Whether you are monitoring a chronic inflammatory condition or seeing an unexpected elevation on routine blood work, "
-                "Norya organises your results so you can focus on the conversation with your doctor. "
-                "For plan options and pricing, visit our <a href=\"/pricing\">pricing page</a>.</p>"
+                "<p>Understanding your ESR result alongside other blood markers can be challenging. <strong>Norya</strong> simplifies this: "
+                "upload your blood test results and receive a clear, structured health summary within minutes. Norya evaluates your ESR in the "
+                "context of CRP, complete blood count, and other inflammation markers to help you see the full picture.</p>"
+                "<p>The report highlights abnormal values, explains their significance in plain language, and helps you prepare the right "
+                "questions for your doctor. <a href=\"/analyze\">Start your free analysis with Norya</a>.</p>"
             ),
         ),
         Section(
@@ -154,932 +228,414 @@ def _sections_en() -> list:
 
 
 # ---------------------------------------------------------------------------
-# Turkish
+# TURKISH
 # ---------------------------------------------------------------------------
 def _sections_tr() -> list:
     from app.blog_i18n import Section
     return [
         Section(
             id="intro", level=2,
-            heading="Sedimentasyon (ESR) yüksekliği: sonucunuz ne anlama geliyor?",
+            heading="Yüksek sedimentasyon (ESR): kan testi sonucunuz ne anlama geliyor?",
             body_html=(
-                "<p>Eritrosit sedimentasyon hızı (ESR), halk arasında <em>sedimentasyon</em> veya <em>çökelme hızı</em> olarak bilinen, "
-                "hâlâ rutin kullanımdaki en eski ve en basit kan testlerinden biridir. Kırmızı kan hücrelerinin dikey bir tüpte bir saat içinde ne kadar hızlı çökeldiğini ölçer. "
-                "Normalden hızlı bir çökelme, vücutta bir şeyin iltihaplanmayı tetiklediğini düşündürür; ancak ESR tek başına nedenini söyleyemez. "
-                "Onu kesin bir tanı yerine genel bir alarm zili olarak düşünün.</p>"
-                "<p>Bu rehber ESR&rsquo;nin ne ölçtüğünü, yaşa ve cinsiyete göre referans aralıklarını, yüksek veya düşük ESR&rsquo;nin en yaygın nedenlerini "
-                "ve ne zaman hekime başvurmanız gerektiğini açıklar. Eğitim amaçlıdır, teşhis değildir&mdash;"
-                "sonuçlarınızı mutlaka bir sağlık profesyoneliyle değerlendirin.</p>"
+                "<p><strong>ESR (Eritrosit Sedimentasyon Hızı)</strong>, hâlâ rutin kullanımda olan en eski ve en basit kan testlerinden biridir. "
+                "Kırmızı kan hücrelerinin (<em>eritrositlerin</em>) bir saat içinde dikey bir tüpün dibine ne kadar hızlı çöktüğünü ölçer. "
+                "Daha hızlı çökme, vücutta iltihabın muhtemelen mevcut olduğunu gösterir&mdash;ancak nerede veya neden olduğunu belirtmez.</p>"
+                "<p><strong>C-reaktif protein (CRP)</strong> gibi daha spesifik iltihap belirteçlerinin mevcut olmasına rağmen ESR değerli olmaya "
+                "devam etmektedir çünkü CRP'nin yeterince yansıtamadığı kronik, düşük dereceli iltihabi süreçleri gösterir. <em>Temporal arterit</em>, "
+                "<em>polimiyalji romatika</em>, <em>romatoid artrit</em> ve <em>sistemik lupus eritematozus</em> gibi durumların tanı ve takibinde "
+                "yaygın olarak kullanılır.</p>"
+                "<p>Bu rehber ESR'nin ne ölçtüğünü, sonucunuzun nasıl yorumlanacağını, yükselme nedenlerini ve ne zaman tıbbi yardım almanız "
+                "gerektiğini açıklar. Yalnızca eğitim amaçlıdır.</p>"
             ),
         ),
         Section(
-            id="what-is", level=2,
-            heading="ESR (sedimentasyon) nedir ve nasıl ölçülür?",
+            id="what-is-esr", level=2,
+            heading="ESR (Eritrosit Sedimentasyon Hızı) nedir?",
             body_html=(
-                "<p><strong>Eritrosit sedimentasyon hızı</strong>, kırmızı kan hücrelerinin standart bir tüpte 60 dakikada düştüğü mesafeyi (milimetre cinsinden) ölçer. "
-                "Normal koşullarda kırmızı hücreler yüzey yüklerinin birbirini itmesi nedeniyle yavaş çökelir. "
-                "İltihap olduğunda karaciğer daha fazla akut faz proteini&mdash;özellikle <strong>fibrinojen</strong>&mdash;üretir; "
-                "bu proteinler yüzey yükünü nötralize ederek kırmızı hücrelerin <em>rulo</em> denilen yığınlar halinde birleşmesine neden olur. "
-                "Bu yığınlar daha ağırdır ve daha hızlı düşerek yüksek ESR değeri verir.</p>"
-                "<p>Test genellikle <strong>Westergren yöntemi</strong> ile yapılır: sodyum sitratla karıştırılmış kan 200 mm&rsquo;lik dikey bir tüpe çekilerek "
-                "bir saat bozulmadan bırakılır. Sonuç mm/saat olarak raporlanır. Basit olmasına rağmen ESR, inflamatuar ve enfeksiyöz hastalıkları "
-                "tespit etmek ve izlemek için hâlâ yararlı bir tarama aracıdır.</p>"
-                "<p>ESR&rsquo;nin <strong>spesifik olmayan</strong> bir belirteç olduğunu anlamak önemlidir. Yüksek bir sonuç hekiminize "
-                "iltihaplanmanın muhtemelen mevcut olduğunu söyler, ancak nedeni belirlemez. Kaynağı saptamak için ek testler gerekir.</p>"
+                "<p>ESR, spesifik olmayan bir iltihap belirtecidir. Vücutta iltihap olduğunda karaciğer, kırmızı kan hücrelerinin birbirine "
+                "yapışıp <em>rulo</em> adı verilen yığınlar oluşturmasına neden olan <strong>fibrinojen</strong> ve <strong>immünoglobulinler</strong> "
+                "gibi belirli proteinlerin üretimini artırır. Bu rulolar bireysel kırmızı kan hücrelerinden daha ağırdır ve test tüpünde daha hızlı çöker.</p>"
+                "<p>Test ilk kez 1900'lerin başında tanımlanmış ve 1921'de Westergren tarafından standartlaştırılmıştır. <strong>Westergren yöntemi</strong> "
+                "referans standart olarak kalmaktadır: antikoagüle edilmiş kan 200&nbsp;mm'lik dikey bir tüpe çekilir ve tam 60 dakika sonra kırmızı "
+                "hücrelerin tepeden ne kadar düştüğü milimetre/saat (mm/sa) olarak kaydedilir.</p>"
+                "<p>ESR belirli bir patojen veya sitokin tespit etmek yerine plazma proteinlerindeki değişikliklere dayandığından <strong>spesifik "
+                "olmayan</strong> bir test olarak kabul edilir. Yüksek ESR doktorunuza <em>bir şeyin</em> iltihaplanmaya neden olduğunu söyler ancak "
+                "nedenin belirlenmesi için ek araştırma gerektirir.</p>"
+            ),
+        ),
+        Section(
+            id="how-esr-works", level=2,
+            heading="ESR testi nasıl çalışır?",
+            body_html=(
+                "<p>ESR'nin arkasındaki fizik basittir. Kırmızı kan hücreleri normalde yüzeylerinde net negatif bir yük (<em>zeta potansiyeli</em>) "
+                "taşıdıkları için birbirlerini iterler. Bu negatif yük hücreleri plazmada dağınık tutar ve yavaş çökmelerine neden olur.</p>"
+                "<p>İltihap sırasında fibrinojen gibi akut faz proteinleri arttığında, kırmızı hücreler arasındaki zeta potansiyelini azaltarak "
+                "hücrelerin rulo formasyonlarına toplanmasına izin verirler. Bu çok hücreli yığınlar daha büyük kütle-yüzey oranına sahiptir ve "
+                "bu nedenle plazma sütununda daha hızlı çökerler.</p>"
+                "<p>İltihabın yanı sıra çeşitli faktörler ESR'yi değiştirebilir. Anemi, daha az kırmızı hücre nedeniyle ESR'yi artırır. "
+                "Polisitemi (fazla kırmızı hücre) ise sedimentasyonu yavaşlatır. Orak hücreler ve sferositler gibi anormal şekilli kırmızı "
+                "hücreler rulo oluşturamaz ve yanlış düşük ESR değerleri üretme eğilimindedir.</p>"
             ),
         ),
         Section(
             id="normal-ranges", level=2,
-            heading="Normal sedimentasyon (ESR) aralıkları",
+            heading="Normal ESR aralıkları",
             body_html=(
-                "<p>ESR referans aralıkları yaşa ve cinsiyete bağlıdır. Yaygın kullanılan Westergren üst sınırları:</p>"
                 '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
                 "<thead><tr>"
                 '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Grup</th>'
-                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Üst sınır (mm/saat)</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Normal ESR (mm/sa)</th>'
                 "</tr></thead><tbody>"
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">50 yaş altı erkek</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 15</td></tr>'
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">50 yaş üstü erkek</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 20</td></tr>'
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">50 yaş altı kadın</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 20</td></tr>'
-                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">50 yaş üstü kadın</td>'
-                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">&lt; 30</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Erkekler &lt; 50 yaş</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Erkekler &ge; 50 yaş</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Kadınlar &lt; 50 yaş</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Kadınlar &ge; 50 yaş</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr>'
                 "</tbody></table>"
-                "<p>Genel kural: erkeklerde üst sınır ≈ yaş ÷ 2; kadınlarda ≈ (yaş + 10) ÷ 2. "
-                "ESR yaşla birlikte yükselme eğilimindedir ve kadınlarda genellikle daha yüksektir. Gebelik ESR&rsquo;yi fizyolojik olarak artırabilir. "
-                "Sonucunuzu her zaman kendi laboratuvar raporunuzdaki referans aralığıyla karşılaştırın.</p>"
+                "<p>Yaygın olarak kullanılan <strong>yaşa göre düzeltilmiş formül</strong>: üst normal sınır = erkeklerde yaş/2, kadınlarda (yaş+10)/2.</p>"
+                "<p><strong>100&nbsp;mm/sa</strong> üzerinde bir ESR belirgin şekilde yükselmiş kabul edilir ve enfeksiyon, malignite veya otoimmün "
+                "hastalık gibi ciddi bir altta yatan hastalığı kuvvetle düşündürür. 40&ndash;100 arası değerler orta derecede yüksektir ve araştırma gerektirir.</p>"
             ),
         ),
         Section(
-            id="causes", level=2,
-            heading="Sedimentasyon (ESR) yüksekliğinin nedenleri",
+            id="high-esr-causes", level=2,
+            heading="Yüksek ESR nedenleri",
             body_html=(
-                "<p>Orta düzeyde yüksek ESR (20&ndash;60 mm/saat) pek çok durumda görülebilir. "
-                "<strong>Enfeksiyonlar</strong>&mdash;bakteriyel, viral veya fungal&mdash;en yaygın tetikleyiciler arasındadır. "
-                "<strong>Otoimmün ve inflamatuar hastalıklar</strong> (romatoid artrit, sistemik lupus eritematozus, polimiyalji romatika, dev hücreli arterit) "
-                "karakteristik olarak ESR&rsquo;yi yükseltir, bazen belirgin şekilde.</p>"
-                "<p><strong>Kanser</strong>&mdash;özellikle lenfoma, multipl miyelom ve metastatik hastalık&mdash;ESR&rsquo;yi 100 mm/saat&rsquo;in üzerine çıkarabilir. "
-                "100&rsquo;ün üzerindeki ESR çok yüksek kabul edilir ve malignite, ciddi enfeksiyon ve böbrek hastalığı dahil kapsamlı bir klinik değerlendirme gerektirir. "
-                "<strong>Anemi</strong> de ESR&rsquo;yi artırır çünkü daha az sayıda kırmızı hücre plazmada daha hızlı çökelir.</p>"
-                "<p>Diğer yaygın nedenler arasında <strong>gebelik</strong>, <strong>ileri yaş</strong>, <strong>obezite</strong> ve "
-                "<strong>kronik böbrek hastalığı</strong> sayılabilir. Bazı ilaçlar (oral kontraseptifler, heparin vb.) da sonucu etkileyebilir. "
-                "Öte yandan polisitemi, orak hücre hastalığı ve aşırı lökositoz gibi durumlar rulo oluşumunu bozarak ESR&rsquo;yi <em>düşürebilir</em>. "
-                "Nedenlerin listesi çok geniş olduğundan, yüksek ESR her zaman klinik korelasyon gerektirir&mdash;hekiminiz bunu belirtileriniz, "
-                "muayene bulguları ve <a href=\"/tr/blog/crp-inflamasyon-belirteci\">CRP</a> gibi diğer sonuçlarla birlikte yorumlayacaktır.</p>"
+                "<p>Yüksek ESR'nin geniş bir ayırıcı tanısı vardır:</p>"
+                "<p><strong>Enfeksiyonlar:</strong> Bakteriyel enfeksiyonlar (pnömoni, endokardit, osteomiyelit, tüberküloz). Kronik enfeksiyonlar "
+                "akut viral enfeksiyonlardan daha yüksek ESR yükselmelerine neden olma eğilimindedir.</p>"
+                "<p><strong>Otoimmün ve inflamatuar hastalıklar:</strong></p>"
+                "<ul>"
+                "<li><strong>Temporal (dev hücreli) arterit</strong> ve <strong>polimiyalji romatika</strong> &ndash; ESR kilit tanı kriteridir; değerler genellikle 50&ndash;100&nbsp;mm/sa'ı aşar.</li>"
+                "<li><strong>Romatoid artrit</strong> &ndash; ESR hastalık aktivitesiyle koreledir.</li>"
+                "<li><strong>Sistemik lupus eritematozus (SLE)</strong> &ndash; alevlenmelerde ESR yükselirken CRP normal kalabilir.</li>"
+                "<li>İnflamatuar bağırsak hastalığı, vaskülit ve sarkoidoz.</li>"
+                "</ul>"
+                "<p><strong>Malignansiler:</strong> Multipl miyelom, lenfoma ve metastatik kanserler. <strong>Diğer nedenler:</strong> Anemi, gebelik, "
+                "son dönem böbrek yetmezliği, kalp yetmezliği, obezite ve ileri yaş.</p>"
             ),
         ),
         Section(
-            id="symptoms", level=2,
-            heading="Yüksek ESR ile ilişkili belirtiler",
+            id="esr-vs-crp", level=2,
+            heading="ESR ve CRP: hangi iltihap belirteci daha iyi?",
             body_html=(
-                "<p>ESR&rsquo;nin kendisi belirti oluşturmaz&mdash;altta yatan süreci yansıtan bir laboratuvar belirtecidir. "
-                "Yaşadığınız belirtiler tamamen iltihaplanmayı tetikleyen duruma bağlıdır. "
-                "Enfeksiyonu olan hastalarda ateş, titreme ve lokalize ağrı olabilir. Otoimmün hastalığı olanlarda eklem ağrısı, "
-                "sertlik, deri döküntüleri ve yorgunluk görülebilir. Kanserle ilişkili yükselmelerde açıklanamayan kilo kaybı, "
-                "gece terlemeleri veya lenfadenopati olabilir.</p>"
-                "<p>Hafif yüksek ESR&rsquo;si olan bazı kişilerin hiç belirtisi yoktur&mdash;bulgu rutin kan çalışmasında rastlantısal olarak ortaya çıkabilir. "
-                "Bu durumda bile hekiminiz altta yatan bir durum olup olmadığını belirlemek için takip testleri önerebilir. "
-                "Ateş, kilo kaybı ve yorgunluk gibi genel belirtilerle birlikte çok yüksek ESR (100 mm/saat üzerinde) acil klinik değerlendirme gerektirmelidir.</p>"
+                "<p>Her iki belirteç de iltihabı gösterir ancak farklı davranır ve tamamlayıcı bilgi sağlar:</p>"
+                '<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;">'
+                "<thead><tr>"
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Özellik</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">ESR</th>'
+                '<th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">CRP</th>'
+                "</tr></thead><tbody>"
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Yanıt hızı</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Yavaş (değişmesi günler alır)</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Hızlı (6&ndash;8 saat içinde yükselir)</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Normalleşme</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Yavaş (haftalar)</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Hızlı (günler)</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Anemiden etkilenir mi?</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Evet (yanlış yüksek)</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Hayır</td></tr>'
+                '<tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">En uygun kullanım</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Kronik iltihap takibi</td>'
+                '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Akut enfeksiyon tespiti</td></tr>'
+                "</tbody></table>"
+                "<p>SLE'de ESR yükselirken CRP normal kalabilir&mdash;bu uyumsuzluk SLE alevlenmelerini enfeksiyonlardan ayırmaya yardımcı olur. "
+                "CRP hakkında daha fazla bilgi için <a href=\"/blog/crp-high-meaning\">CRP rehberimize</a> bakın.</p>"
             ),
         ),
         Section(
-            id="related-tests", level=2,
-            heading="Hekiminizin isteyebileceği ilişkili testler",
+            id="false-elevations", level=2,
+            heading="ESR'de yanlış yükselmeler ve sınırlamalar",
             body_html=(
-                "<p>ESR spesifik olmadığından neredeyse her zaman daha hedefli testlerle birlikte değerlendirilir. "
-                "<strong><a href=\"/tr/blog/crp-inflamasyon-belirteci\">C-reaktif protein (CRP)</a></strong>, ESR&rsquo;den daha hızlı yükselip düşen "
-                "bir akut faz reaktanıdır ve kısa vadeli iltihap değişikliklerini izlemek için yararlıdır. "
-                "Birlikte değerlendirildiklerinde ESR ve CRP tamamlayıcı bilgi sunar.</p>"
-                "<p><strong>Tam kan sayımı (CBC)</strong>, anemi, enfeksiyon veya kan kanserleri açısından kontrol için gereklidir. "
-                "Otoimmün hastalık şüphesinde <strong>ANA</strong>, <strong>RF</strong> ve <strong>anti-CCP</strong> gibi testler istenebilir. "
-                "Malignite şüphesinde protein elektroforezi (SPEP), görüntüleme ve bazen biyopsi düşünülür.</p>"
-                "<p>Hekiminiz klinik tabloya göre uygun incelemeleri seçecektir. Sağlıklı bir kişide izole hafif ESR yüksekliği, "
-                "normalleşip normalleşmediğini görmek için birkaç hafta sonra tekrar test gerektirebilir.</p>"
+                "<p>ESR kırmızı kan hücresi davranışına ve plazma protein bileşimine bağlı olduğundan, iltihapsız çeşitli durumlar sonucu yanlış "
+                "yükseltebilir:</p>"
+                "<ul>"
+                "<li><strong>Anemi</strong> &ndash; düşük hematokrit sedimentasyona daha az direnç anlamına gelir.</li>"
+                "<li><strong>Obezite</strong> &ndash; yağ dokusu pro-inflamatuar sitokinler üretir.</li>"
+                "<li><strong>Yaşlanma</strong> &ndash; ESR artan fibrinojen nedeniyle on yılda 1&ndash;2&nbsp;mm/sa artar.</li>"
+                "<li><strong>Kadın cinsiyet</strong> &ndash; kadınlar erkeklerden daha yüksek ESR'ye sahip olma eğilimindedir.</li>"
+                "<li><strong>Gebelik</strong> &ndash; fizyolojik fibrinojen ve plazma hacmi artışı.</li>"
+                "<li><strong>Böbrek yetmezliği</strong> &ndash; üremi plazma proteinlerini değiştirir.</li>"
+                "</ul>"
+                "<p>ESR'yi <strong>yanlış düşürebilecek</strong> durumlar: polisitemi, orak hücre hastalığı, sferositoz ve aşırı lökositoz.</p>"
+            ),
+        ),
+        Section(
+            id="monitoring-role", level=2,
+            heading="ESR'nin hastalık takibindeki rolü",
+            body_html=(
+                "<p>ESR, asemptomatik hastalarda tarama aracı olarak sınırlı değere sahip olsa da klinik durumla korelasyon gösterdiği bilinen "
+                "hastalıklarda aktivite takibinde son derece yararlıdır:</p>"
+                "<ul>"
+                "<li><strong>Temporal arterit / polimiyalji romatika</strong> &ndash; kortikosteroid tedavisi sırasında seri takip.</li>"
+                "<li><strong>Romatoid artrit</strong> &ndash; ESR, DAS28 gibi kompozit hastalık aktivite skorlarının bir parçasıdır.</li>"
+                "<li><strong>Enfeksiyonlar</strong> &ndash; osteomiyelit veya endokardit gibi kronik enfeksiyonlarda antibiyotik tedavisine yanıtı izler.</li>"
+                "<li><strong>Hodgkin lenfoma</strong> &ndash; ESR bağımsız bir prognostik faktördür.</li>"
+                "</ul>"
+                "<p>ESR yavaş değiştiğinden, akut değişikliklerden ziyade kronik durumları takip etmeye en uygunudur.</p>"
             ),
         ),
         Section(
             id="when-to-see-doctor", level=2,
             heading="Ne zaman doktora başvurmalısınız?",
             body_html=(
-                "<p>Referans aralığı dışındaki herhangi bir ESR sonucunu sağlık hizmet sağlayıcınızla tartışın. "
-                "Hafif yüksek ESR&mdash;özellikle yaşlılarda veya hamilelikte&mdash;selim olabilse de en azından bir konuşma hak eder. "
-                "ESR çok yüksekse (100 mm/saat üzeri) veya açıklanamayan ateş, belirgin kilo kaybı, şiddetli eklem ağrısı, "
-                "sürekli yorgunluk veya gece terlemeleri gibi belirtileriniz varsa <strong>acilen</strong> tıbbi yardım alın.</p>"
-                "<p>Bilinen bir inflamatuar durumunuz varsa (romatoid artrit, lupus, polimiyalji romatika), "
-                "hekiminiz hastalık aktivitesini ve tedaviye yanıtı izlemek için seri ESR ölçümleri kullanabilir. "
-                "Bu bağlamda yükselen ESR bir alevlenmeyi, düşen ESR ise iyileşmeyi gösterebilir.</p>"
+                "<p>Aşağıdaki durumlarda yüksek ESR hakkında doktorunuza danışın:</p>"
+                "<ul>"
+                "<li>ESR'niz <strong>yaşa göre düzeltilmiş normal aralığın üzerinde</strong> ve yorgunluk, kilo kaybı, ateş veya eklem ağrısı gibi açıklanamayan belirtileriniz var.</li>"
+                "<li>ESR'niz <strong>100&nbsp;mm/sa'nın üzerinde</strong>&mdash;bu ciddi altta yatan hastalığı kuvvetle düşündürür.</li>"
+                "<li><strong>Otoimmün veya inflamatuar hastalık</strong> tanınız var ve tedaviye rağmen ESR'niz yükseliyor.</li>"
+                "<li>50 yaş üstü hastalarda <strong>yeni başlayan şiddetli baş ağrısı, çene kladikasyonu veya görme değişiklikleri</strong>&mdash;temporal arteriti düşündürebilir.</li>"
+                "<li>Yüksek ESR ile birlikte <strong>açıklanamayan anemi</strong>&mdash;multipl miyelom düşündürebilir.</li>"
+                "</ul>"
+                "<p>Sağlıklı bir kişide hafif yüksek ESR acil müdahale gerektirmeyebilir ancak belirtiler gelişirse yeniden kontrol edilmelidir.</p>"
             ),
         ),
         Section(
             id="how-norya-helps", level=2,
-            heading="Norya sedimentasyonunuzu anlamanıza nasıl yardımcı olur?",
+            heading="Norya ESR sonuçlarınızı anlamanıza nasıl yardımcı olur?",
             body_html=(
-                "<p>Norya teşhis koymaz&mdash;hazırlanmanıza yardımcı olur. Kan tahlili raporunuzu "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> adresine yükleyin ve ESR&rsquo;nizi CRP ve CBC değerleri gibi ilişkili belirteçlerle birlikte "
-                "açıklayan yapılandırılmış bir özet alın.</p>"
-                "<p>Kronik bir inflamatuar durumu takip ediyor veya rutin kan çalışmasında beklenmedik bir yükselme görüyor olun, "
-                "Norya sonuçlarınızı düzenler ve hekiminizle yapacağınız görüşmeye odaklanmanızı sağlar. "
-                "Plan seçenekleri ve fiyatlandırma için <a href=\"/pricing\">fiyatlandırma sayfamızı</a> ziyaret edin.</p>"
+                "<p>ESR sonucunuzu diğer kan belirteçleriyle birlikte anlamak zor olabilir. <strong>Norya</strong> bunu basitleştirir: "
+                "kan testi sonuçlarınızı yükleyin ve dakikalar içinde net, yapılandırılmış bir sağlık özeti alın. Norya, ESR'nizi CRP, "
+                "tam kan sayımı ve diğer iltihap belirteçleriyle birlikte değerlendirir.</p>"
+                "<p>Rapor anormal değerleri vurgular, anlaşılır dilde açıklar ve doktor ziyaretiniz için hazırlanmanıza yardımcı olur. "
+                "<a href=\"/analyze\">Norya ile ücretsiz analizinizi başlatın</a>.</p>"
             ),
         ),
         Section(
             id="disclaimer", level=2,
-            heading="Yasal uyarı",
+            heading="Uyarı",
             body_html=(
-                '<p><strong>Bu rehber yalnızca bilgilendirme amaçlıdır; tıbbi tavsiye veya teşhis yerine geçmez.</strong> '
-                'Sonuçlarınızı mutlaka bir sağlık profesyoneliyle değerlendirin. <a href="/analyze">Norya ile analize başlayın</a></p>'
+                '<p><strong>Bu rehber bilgilendirme amaçlıdır; tıbbi tavsiye veya teşhis yerine geçmez.</strong> '
+                'Sonuçlarınızı mutlaka bir sağlık uzmanıyla değerlendirin. <a href="/analyze">Norya ile analiz başlat</a></p>'
             ),
         ),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Spanish
+# SPANISH
 # ---------------------------------------------------------------------------
 def _sections_es() -> list:
     from app.blog_i18n import Section
     return [
-        Section(
-            id="intro", level=2,
-            heading="VSG alta: qué significa tu velocidad de sedimentación",
-            body_html=(
-                "<p>La velocidad de sedimentación globular (VSG o ESR) es una de las pruebas de sangre más antiguas y sencillas que siguen en uso rutinario. "
-                "Mide la rapidez con la que los glóbulos rojos se depositan en el fondo de un tubo vertical en una hora. "
-                "Una velocidad superior a la normal sugiere inflamación, pero la VSG no puede precisar la causa exacta.</p>"
-                "<p>Esta guía explica qué mide la VSG, cómo interpretar tu resultado según los rangos de referencia por edad y sexo, "
-                "las causas más frecuentes de VSG elevada o baja, y cuándo consultar al médico. "
-                "Es contenido educativo, no un diagnóstico médico&mdash;comenta siempre tus resultados con un profesional sanitario.</p>"
-            ),
-        ),
-        Section(
-            id="what-is", level=2,
-            heading="¿Qué es la VSG y cómo se mide?",
-            body_html=(
-                "<p>La <strong>velocidad de sedimentación globular</strong> mide la distancia (en milímetros) que recorren los glóbulos rojos al descender en un tubo "
-                "estandarizado durante 60 minutos. En condiciones normales, los eritrocitos se repelen por su carga negativa superficial y sedimentan lentamente. "
-                "Cuando hay inflamación, el hígado produce más proteínas de fase aguda&mdash;especialmente <strong>fibrinógeno</strong>&mdash;que neutralizan "
-                "la carga y hacen que los eritrocitos se apilen en formaciones llamadas <em>rouleaux</em>, más pesadas y que caen más rápido.</p>"
-                "<p>La prueba suele realizarse con el <strong>método de Westergren</strong>: la sangre mezclada con citrato sódico se introduce en un tubo vertical "
-                "de 200 mm y se deja reposar una hora. El resultado se informa en mm/h. A pesar de su sencillez, la VSG sigue siendo útil "
-                "para detectar y monitorizar enfermedades inflamatorias e infecciosas.</p>"
-                "<p>Es importante comprender que la VSG es un marcador <strong>inespecífico</strong>: indica inflamación probable, "
-                "pero no identifica la causa. Se necesitan pruebas adicionales para determinar el origen.</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="Rangos normales de la VSG",
-            body_html=(
-                "<p>Los rangos de referencia dependen de la edad y el sexo. Límites superiores habituales (Westergren):</p>"
-                "<ul>"
-                "<li><strong>Hombres &lt; 50 años:</strong> &lt; 15 mm/h</li>"
-                "<li><strong>Hombres &gt; 50 años:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Mujeres &lt; 50 años:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Mujeres &gt; 50 años:</strong> &lt; 30 mm/h</li>"
-                "</ul>"
-                "<p>La VSG tiende a aumentar con la edad y suele ser más alta en mujeres. El embarazo también la eleva fisiológicamente. "
-                "Compara siempre tu resultado con el rango de tu informe de laboratorio.</p>"
-            ),
-        ),
-        Section(
-            id="causes", level=2,
-            heading="Causas de VSG alta",
-            body_html=(
-                "<p>Una VSG moderadamente elevada (20&ndash;60 mm/h) puede aparecer en múltiples situaciones. "
-                "Las <strong>infecciones</strong> (bacterianas, víricas o fúngicas) se encuentran entre los desencadenantes más comunes. "
-                "Las <strong>enfermedades autoinmunes e inflamatorias</strong> (artritis reumatoide, lupus, polimialgia reumática, arteritis de células gigantes) "
-                "elevan la VSG de forma característica.</p>"
-                "<p>El <strong>cáncer</strong>&mdash;especialmente linfoma, mieloma múltiple y enfermedad metastásica&mdash;puede elevar la VSG por encima de 100 mm/h. "
-                "La <strong>anemia</strong> también la incrementa porque menos eritrocitos sedimentan más rápido. "
-                "Otros factores: embarazo, edad avanzada, obesidad y enfermedad renal crónica. "
-                "Tu médico interpretará el resultado junto con los síntomas y otras pruebas como "
-                "<a href=\"/es/blog/crp-marcador-inflamacion\">CRP</a>.</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="Síntomas asociados a la VSG elevada",
-            body_html=(
-                "<p>La VSG en sí no causa síntomas; es un marcador del proceso subyacente. "
-                "Los síntomas dependen de la enfermedad responsable: fiebre e infección, dolor articular en la artritis, "
-                "pérdida de peso inexplicable en el cáncer, etc.</p>"
-                "<p>Algunas personas con VSG ligeramente elevada no presentan síntomas; puede ser un hallazgo casual en analíticas rutinarias. "
-                "Una VSG muy alta (&gt; 100 mm/h) con síntomas constitucionales (fiebre, pérdida de peso, fatiga) requiere evaluación clínica urgente.</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="Pruebas relacionadas",
-            body_html=(
-                "<p>La VSG suele acompañarse de pruebas más específicas: "
-                "<strong><a href=\"/es/blog/crp-marcador-inflamacion\">proteína C reactiva (PCR)</a></strong>, que sube y baja más rápido que la VSG; "
-                "<strong>hemograma completo</strong> para evaluar anemia, infección o neoplasias hematológicas; "
-                "y pruebas autoinmunes como <strong>ANA</strong>, <strong>FR</strong> y <strong>anti-CCP</strong> cuando se sospecha enfermedad autoinmune.</p>"
-                "<p>En caso de sospecha de malignidad, pueden realizarse electroforesis de proteínas, estudios de imagen y biopsia.</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="Cuándo consultar al médico",
-            body_html=(
-                "<p>Consulta con tu médico cualquier VSG fuera de rango, aunque te sientas bien. "
-                "Busca atención <strong>urgente</strong> si la VSG supera 100 mm/h o si tienes fiebre inexplicable, pérdida de peso significativa, "
-                "dolor articular intenso o sudoración nocturna.</p>"
-                "<p>Si tienes una enfermedad inflamatoria conocida, tu médico puede usar mediciones seriadas de VSG "
-                "para monitorizar la actividad y la respuesta al tratamiento.</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="Cómo Norya te ayuda a entender tu VSG",
-            body_html=(
-                "<p>Norya no diagnostica&mdash;te ayuda a prepararte. Sube tu análisis de sangre en "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> y recibe un resumen claro que señala tu VSG junto con marcadores relacionados "
-                "como PCR y hemograma.</p>"
-                "<p>Ya sea que estés monitorizando una condición inflamatoria crónica o veas un resultado inesperado, "
-                "Norya organiza tus resultados para centrarte en la conversación con tu médico. "
-                "Para opciones de plan y precios, visita nuestra <a href=\"/pricing\">página de precios</a>.</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="Aviso legal",
-            body_html=(
-                '<p><strong>Esta guía es solo informativa y no sustituye el consejo ni el diagnóstico médico.</strong> '
-                'Comenta siempre tus resultados con un profesional sanitario. <a href="/analyze">Iniciar análisis con Norya</a></p>'
-            ),
-        ),
+        Section(id="intro", level=2, heading="VSG elevada: qué significa su resultado de análisis de sangre",
+                body_html="<p>La <strong>VSG (Velocidad de Sedimentación Globular)</strong> es una de las pruebas de sangre más antiguas y sencillas. Mide la rapidez con la que los glóbulos rojos se depositan en el fondo de un tubo vertical en una hora. Una velocidad más rápida indica inflamación en el cuerpo.</p><p>A pesar de marcadores más específicos como la <strong>proteína C reactiva (PCR)</strong>, la VSG sigue siendo valiosa para procesos inflamatorios crónicos. Se usa ampliamente en el diagnóstico y seguimiento de arteritis temporal, polimialgia reumática, artritis reumatoide y lupus.</p><p>Esta guía es educativa y no sustituye el consejo médico.</p>"),
+        Section(id="what-is-esr", level=2, heading="¿Qué es la VSG?",
+                body_html="<p>La VSG es un marcador inespecífico de inflamación. Cuando hay inflamación, el hígado aumenta la producción de <strong>fibrinógeno</strong> e <strong>inmunoglobulinas</strong>, que hacen que los glóbulos rojos se apilen en formaciones llamadas <em>rouleaux</em>. Estos son más pesados y sedimentan más rápido.</p><p>El método de <strong>Westergren</strong> es el estándar de referencia. La VSG no indica dónde ni por qué hay inflamación; requiere investigación adicional.</p>"),
+        Section(id="how-esr-works", level=2, heading="¿Cómo funciona la prueba de VSG?",
+                body_html="<p>Los glóbulos rojos tienen una carga negativa neta (<em>potencial zeta</em>) que los mantiene dispersos en el plasma. Las proteínas de fase aguda como el fibrinógeno reducen este potencial, permitiendo la formación de rouleaux que sedimentan más rápido.</p><p>La anemia aumenta la VSG falsamente. La policitemia la disminuye. Las células falciformes y esferocitos no forman rouleaux adecuadamente.</p>"),
+        Section(id="normal-ranges", level=2, heading="Rangos normales de VSG",
+                body_html='<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;"><thead><tr><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Grupo</th><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">VSG normal (mm/h)</th></tr></thead><tbody><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Hombres &lt; 50 años</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Hombres &ge; 50 años</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Mujeres &lt; 50 años</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Mujeres &ge; 50 años</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr></tbody></table><p>Una VSG superior a <strong>100&nbsp;mm/h</strong> sugiere fuertemente enfermedad grave subyacente.</p>'),
+        Section(id="high-esr-causes", level=2, heading="Causas de VSG elevada",
+                body_html="<p><strong>Infecciones:</strong> neumonía, endocarditis, tuberculosis. <strong>Enfermedades autoinmunes:</strong> arteritis temporal, polimialgia reumática, artritis reumatoide, lupus. <strong>Neoplasias:</strong> mieloma múltiple, linfoma. <strong>Otros:</strong> anemia, embarazo, insuficiencia renal, obesidad, edad avanzada.</p>"),
+        Section(id="esr-vs-crp", level=2, heading="VSG vs. PCR",
+                body_html="<p>La VSG responde lentamente (días) y se normaliza en semanas; ideal para inflamación crónica. La PCR responde rápidamente (6-8 horas) y se normaliza en días; ideal para infección aguda. En el lupus, la VSG sube mientras la PCR puede permanecer normal. Para más información, consulte nuestra <a href=\"/blog/crp-high-meaning\">guía de PCR</a>.</p>"),
+        Section(id="false-elevations", level=2, heading="Falsas elevaciones y limitaciones de la VSG",
+                body_html="<p>La anemia, la obesidad, el envejecimiento, el embarazo, la insuficiencia renal y la hipergammaglobulinemia pueden elevar falsamente la VSG. La policitemia, la drepanocitosis y la esferocitosis pueden disminuirla falsamente.</p>"),
+        Section(id="monitoring-role", level=2, heading="Papel de la VSG en el seguimiento de enfermedades",
+                body_html="<p>La VSG es extremadamente útil para monitorizar la actividad de la arteritis temporal, la artritis reumatoide (parte del DAS28), infecciones crónicas y linfoma de Hodgkin. Como cambia lentamente, es más adecuada para condiciones crónicas.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="Cuándo consultar al médico",
+                body_html="<p>Consulte si: VSG por encima del rango normal ajustado por edad con síntomas inexplicables; VSG &gt;100 mm/h; enfermedad autoinmune con VSG en aumento; cefalea intensa de inicio reciente en mayores de 50 (posible arteritis temporal); o anemia inexplicable con VSG alta.</p>"),
+        Section(id="how-norya-helps", level=2, heading="Cómo Norya le ayuda a entender sus resultados de VSG",
+                body_html="<p><strong>Norya</strong> simplifica la interpretación: suba sus resultados y reciba un resumen de salud claro en minutos. <a href=\"/analyze\">Inicie su análisis con Norya</a>.</p>"),
+        Section(id="disclaimer", level=2, heading="Aviso",
+                body_html='<p><strong>Esta guía es solo informativa; no sustituye el consejo ni el diagnóstico médico.</strong> Consulte siempre sus resultados con un profesional sanitario. <a href="/analyze">Iniciar análisis con Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# German
+# GERMAN
 # ---------------------------------------------------------------------------
 def _sections_de() -> list:
     from app.blog_i18n import Section
     return [
-        Section(
-            id="intro", level=2,
-            heading="Blutsenkung (BSG) erhöht: was Ihr Ergebnis bedeutet",
-            body_html=(
-                "<p>Die Blutsenkungsgeschwindigkeit (BSG oder ESR) ist einer der ältesten und einfachsten Bluttests, die noch routinemäßig eingesetzt werden. "
-                "Sie misst, wie schnell rote Blutkörperchen in einem vertikalen Röhrchen innerhalb einer Stunde absinken. "
-                "Eine erhöhte Senkungsgeschwindigkeit deutet auf Entzündung hin, kann aber die genaue Ursache nicht bestimmen.</p>"
-                "<p>Dieser Ratgeber erklärt, was die BSG misst, wie Sie Ihr Ergebnis anhand alters- und geschlechtsspezifischer Referenzbereiche einordnen, "
-                "die häufigsten Ursachen einer erhöhten oder niedrigen BSG und wann Sie einen Arzt aufsuchen sollten.</p>"
-            ),
-        ),
-        Section(
-            id="what-is", level=2,
-            heading="Was ist die BSG und wie wird sie gemessen?",
-            body_html=(
-                "<p>Die <strong>Blutsenkungsgeschwindigkeit</strong> misst die Strecke (in Millimetern), die Erythrozyten in einem standardisierten Röhrchen innerhalb von 60 Minuten zurücklegen. "
-                "Normalerweise stoßen sich die roten Blutkörperchen aufgrund ihrer negativen Oberflächenladung ab und sinken langsam. "
-                "Bei Entzündungen produziert die Leber mehr Akute-Phase-Proteine&mdash;insbesondere <strong>Fibrinogen</strong>&mdash;, die die Ladung neutralisieren "
-                "und zur Bildung von <em>Geldrollenformationen</em> (Rouleaux) führen, die schwerer sind und schneller sinken.</p>"
-                "<p>Die Messung erfolgt meist nach der <strong>Westergren-Methode</strong>. Das Ergebnis wird in mm/h angegeben. "
-                "Die BSG ist ein <strong>unspezifischer</strong> Marker: Sie zeigt an, dass wahrscheinlich eine Entzündung vorliegt, identifiziert aber nicht die Ursache.</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="Normale BSG-Werte",
-            body_html=(
-                "<p>Die Referenzbereiche hängen von Alter und Geschlecht ab:</p>"
-                "<ul>"
-                "<li><strong>Männer &lt; 50 Jahre:</strong> &lt; 15 mm/h</li>"
-                "<li><strong>Männer &gt; 50 Jahre:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Frauen &lt; 50 Jahre:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Frauen &gt; 50 Jahre:</strong> &lt; 30 mm/h</li>"
-                "</ul>"
-                "<p>Die BSG steigt tendenziell mit dem Alter und ist bei Frauen höher. Schwangerschaft kann die BSG physiologisch erhöhen. "
-                "Vergleichen Sie Ihr Ergebnis immer mit dem Referenzbereich auf Ihrem Laborbefund.</p>"
-            ),
-        ),
-        Section(
-            id="causes", level=2,
-            heading="Ursachen einer erhöhten BSG",
-            body_html=(
-                "<p>Eine mäßig erhöhte BSG (20&ndash;60 mm/h) kann bei vielen Zuständen auftreten: "
-                "<strong>Infektionen</strong>, <strong>Autoimmunerkrankungen</strong> (rheumatoide Arthritis, Lupus, Polymyalgia rheumatica, Riesenzellarteriitis) "
-                "und <strong>Krebs</strong> (insbesondere Lymphom, multiples Myelom). Eine BSG über 100 mm/h erfordert eine gründliche Abklärung.</p>"
-                "<p><strong>Anämie</strong>, Schwangerschaft, Adipositas und chronische Nierenerkrankung erhöhen die BSG ebenfalls. "
-                "Umgekehrt können Polyzythämie, Sichelzellanämie und extreme Leukozytose die BSG senken. "
-                "Ihr Arzt wird das Ergebnis im klinischen Kontext zusammen mit Tests wie "
-                "<a href=\"/de/blog/crp-entzuendungsmarker\">CRP</a> bewerten.</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="Symptome bei erhöhter BSG",
-            body_html=(
-                "<p>Die BSG selbst verursacht keine Symptome&mdash;sie spiegelt den zugrunde liegenden Prozess wider. "
-                "Die Symptome hängen von der auslösenden Erkrankung ab: Fieber bei Infektionen, Gelenkschmerzen bei Autoimmunerkrankungen, "
-                "Gewichtsverlust bei Krebs.</p>"
-                "<p>Manche Menschen mit leicht erhöhter BSG sind beschwerdefrei. "
-                "Eine sehr hohe BSG (&gt; 100 mm/h) mit konstitutionellen Symptomen erfordert eine dringliche Abklärung.</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="Ergänzende Untersuchungen",
-            body_html=(
-                "<p>Die BSG wird fast immer zusammen mit gezielteren Tests bewertet: "
-                "<strong><a href=\"/de/blog/crp-entzuendungsmarker\">CRP</a></strong>, <strong>Blutbild</strong>, "
-                "und bei Verdacht auf Autoimmunerkrankung <strong>ANA</strong>, <strong>RF</strong> und <strong>Anti-CCP</strong>. "
-                "Bei Malignitätsverdacht können Proteinelektrophorese, Bildgebung und Biopsie folgen.</p>"
-                "<p>Eine isolierte leichte BSG-Erhöhung bei einem ansonsten gesunden Patienten kann zunächst nur eine Verlaufskontrolle erfordern.</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="Wann zum Arzt?",
-            body_html=(
-                "<p>Besprechen Sie jeden auffälligen BSG-Wert mit Ihrem Arzt. "
-                "Suchen Sie <strong>umgehend</strong> Hilfe, wenn die BSG über 100 mm/h liegt oder wenn Sie ungeklärtes Fieber, "
-                "erheblichen Gewichtsverlust, starke Gelenkschmerzen oder Nachtschweiß haben.</p>"
-                "<p>Bei bekannter entzündlicher Erkrankung kann Ihr Arzt serielle BSG-Messungen zur Verlaufsbeurteilung nutzen.</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="Wie Norya Ihnen hilft, Ihre BSG zu verstehen",
-            body_html=(
-                "<p>Norya stellt keine Diagnosen&mdash;wir helfen bei der Vorbereitung. Laden Sie Ihren Blutbefund unter "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> hoch und erhalten Sie eine Zusammenfassung, "
-                "die Ihre BSG zusammen mit CRP und Blutbild in verständlicher Sprache erklärt.</p>"
-                "<p>Ob Sie eine chronische Entzündung verfolgen oder ein unerwartetes Ergebnis sehen&mdash;"
-                "Norya ordnet Ihre Ergebnisse für das Arztgespräch. "
-                "Pläne und Preise auf unserer <a href=\"/pricing\">Preisseite</a>.</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="Haftungsausschluss",
-            body_html=(
-                '<p><strong>Dieser Ratgeber dient ausschließlich der Information und ersetzt keine ärztliche Beratung oder Diagnose.</strong> '
-                'Besprechen Sie Ihre Ergebnisse immer mit einem Arzt. <a href="/analyze">Analyse mit Norya starten</a></p>'
-            ),
-        ),
+        Section(id="intro", level=2, heading="Hohe BSG: Was Ihr Blutergebnis bedeutet",
+                body_html="<p>Die <strong>BSG (Blutsenkungsgeschwindigkeit)</strong> misst, wie schnell rote Blutkörperchen in einem vertikalen Röhrchen sedimentieren. Eine schnellere Senkung deutet auf Entzündung hin.</p><p>Trotz spezifischerer Marker wie <strong>CRP</strong> bleibt die BSG wertvoll für chronische Entzündungsprozesse. Sie wird zur Diagnose und Überwachung von Riesenzellarteriitis, Polymyalgia rheumatica, rheumatoider Arthritis und Lupus verwendet.</p>"),
+        Section(id="what-is-esr", level=2, heading="Was ist die BSG?",
+                body_html="<p>Die BSG ist ein unspezifischer Entzündungsmarker. Fibrinogen und Immunglobuline lassen Erythrozyten <em>Rouleaux</em> bilden, die schneller sedimentieren. Die <strong>Westergren-Methode</strong> ist der Referenzstandard.</p>"),
+        Section(id="how-esr-works", level=2, heading="Wie funktioniert die BSG?",
+                body_html="<p>Erythrozyten tragen eine negative Ladung (Zetapotenzial), die sie in Suspension hält. Akute-Phase-Proteine verringern dieses Potenzial und ermöglichen die Rouleaux-Bildung. Anämie erhöht die BSG falsch, Polyzythämie verringert sie.</p>"),
+        Section(id="normal-ranges", level=2, heading="Normale BSG-Werte",
+                body_html='<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;"><thead><tr><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Gruppe</th><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Normale BSG (mm/h)</th></tr></thead><tbody><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Männer &lt; 50 Jahre</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Männer &ge; 50 Jahre</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Frauen &lt; 50 Jahre</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Frauen &ge; 50 Jahre</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr></tbody></table><p>BSG über <strong>100&nbsp;mm/h</strong> deutet stark auf schwere Grunderkrankung hin.</p>'),
+        Section(id="high-esr-causes", level=2, heading="Ursachen einer hohen BSG",
+                body_html="<p><strong>Infektionen:</strong> Pneumonie, Endokarditis, Tuberkulose. <strong>Autoimmunerkrankungen:</strong> Riesenzellarteriitis, Polymyalgia rheumatica, rheumatoide Arthritis, SLE. <strong>Malignome:</strong> Multiples Myelom, Lymphom. <strong>Sonstige:</strong> Anämie, Schwangerschaft, Niereninsuffizienz, Adipositas.</p>"),
+        Section(id="esr-vs-crp", level=2, heading="BSG vs. CRP",
+                body_html="<p>BSG reagiert langsam und eignet sich für chronische Entzündungen. CRP reagiert schnell und eignet sich für akute Infektionen. Bei SLE steigt die BSG, während CRP normal bleiben kann. Siehe unseren <a href=\"/blog/crp-high-meaning\">CRP-Leitfaden</a>.</p>"),
+        Section(id="false-elevations", level=2, heading="Falsche Erhöhungen und Einschränkungen",
+                body_html="<p>Anämie, Adipositas, Alter, Schwangerschaft, Nierenversagen und Hypergammaglobulinämie können die BSG falsch erhöhen. Polyzythämie und Sichelzellkrankheit können sie falsch senken.</p>"),
+        Section(id="monitoring-role", level=2, heading="Rolle der BSG bei der Krankheitsüberwachung",
+                body_html="<p>Die BSG ist wertvoll zur Überwachung von Riesenzellarteriitis, rheumatoider Arthritis (Teil des DAS28), chronischen Infektionen und Hodgkin-Lymphom.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="Wann Sie einen Arzt aufsuchen sollten",
+                body_html="<p>Konsultieren Sie Ihren Arzt bei: BSG über dem altersangepassten Normalbereich mit unerklärlichen Symptomen; BSG &gt;100&nbsp;mm/h; Autoimmunerkrankung mit steigender BSG; neuen starken Kopfschmerzen ab 50 Jahren (mögliche Riesenzellarteriitis).</p>"),
+        Section(id="how-norya-helps", level=2, heading="Wie Norya Ihnen hilft, Ihre BSG-Ergebnisse zu verstehen",
+                body_html="<p><strong>Norya</strong> vereinfacht die Interpretation: Laden Sie Ihre Blutergebnisse hoch und erhalten Sie in Minuten einen klaren Gesundheitsbericht. <a href=\"/analyze\">Starten Sie Ihre Analyse mit Norya</a>.</p>"),
+        Section(id="disclaimer", level=2, heading="Hinweis",
+                body_html='<p><strong>Dieser Leitfaden dient nur zur Information und ersetzt keine ärztliche Beratung oder Diagnose.</strong> Besprechen Sie Ihre Ergebnisse immer mit einem Arzt. <a href="/analyze">Analyse mit Norya starten</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# French
+# FRENCH
 # ---------------------------------------------------------------------------
 def _sections_fr() -> list:
     from app.blog_i18n import Section
     return [
-        Section(
-            id="intro", level=2,
-            heading="VS élevée : que signifie votre vitesse de sédimentation ?",
-            body_html=(
-                "<p>La vitesse de sédimentation (VS ou ESR) est l&rsquo;un des tests sanguins les plus anciens et les plus simples encore utilisés en routine. "
-                "Elle mesure la vitesse à laquelle les globules rouges se déposent dans un tube vertical en une heure. "
-                "Une valeur supérieure à la normale suggère une inflammation, mais la VS ne peut pas en identifier la cause précise.</p>"
-                "<p>Ce guide explique ce que mesure la VS, comment interpréter votre résultat, "
-                "les causes fréquentes d&rsquo;une VS élevée ou basse, et quand consulter. "
-                "Il est éducatif et ne constitue pas un diagnostic&mdash;discutez toujours de vos résultats avec un professionnel de santé.</p>"
-            ),
-        ),
-        Section(
-            id="what-is", level=2,
-            heading="Qu'est-ce que la VS et comment est-elle mesurée ?",
-            body_html=(
-                "<p>La <strong>vitesse de sédimentation</strong> mesure la distance (en millimètres) parcourue par les globules rouges en 60 minutes dans un tube standardisé. "
-                "En conditions normales, les érythrocytes se repoussent par leur charge de surface négative et sédimentent lentement. "
-                "En cas d&rsquo;inflammation, le foie produit davantage de protéines de phase aiguë&mdash;notamment le <strong>fibrinogène</strong>&mdash;"
-                "qui neutralisent la charge et provoquent la formation de <em>rouleaux</em>, plus lourds et qui tombent plus vite.</p>"
-                "<p>La mesure se fait habituellement par la <strong>méthode de Westergren</strong>. Le résultat est exprimé en mm/h. "
-                "La VS est un marqueur <strong>non spécifique</strong> : elle signale une inflammation probable mais n&rsquo;en identifie pas la cause.</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="Valeurs normales de la VS",
-            body_html=(
-                "<p>Les valeurs de référence varient selon l&rsquo;âge et le sexe :</p>"
-                "<ul>"
-                "<li><strong>Hommes &lt; 50 ans :</strong> &lt; 15 mm/h</li>"
-                "<li><strong>Hommes &gt; 50 ans :</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Femmes &lt; 50 ans :</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Femmes &gt; 50 ans :</strong> &lt; 30 mm/h</li>"
-                "</ul>"
-                "<p>La VS augmente avec l&rsquo;âge, est généralement plus élevée chez les femmes et peut s&rsquo;élever physiologiquement pendant la grossesse. "
-                "Comparez toujours votre résultat à la plage de votre compte-rendu.</p>"
-            ),
-        ),
-        Section(
-            id="causes", level=2,
-            heading="Causes d'une VS élevée",
-            body_html=(
-                "<p>Les <strong>infections</strong>, les <strong>maladies auto-immunes</strong> (polyarthrite rhumatoïde, lupus, polymyalgie rhumatismale) "
-                "et le <strong>cancer</strong> (lymphome, myélome multiple) sont parmi les causes les plus fréquentes. "
-                "L&rsquo;<strong>anémie</strong>, la grossesse, l&rsquo;obésité et l&rsquo;insuffisance rénale chronique élèvent également la VS.</p>"
-                "<p>Une VS supérieure à 100 mm/h nécessite un bilan approfondi incluant recherche de néoplasie, infection sévère et maladie rénale. "
-                "Votre médecin interprétera le résultat avec les symptômes et d&rsquo;autres examens comme "
-                "<a href=\"/fr/blog/crp-marqueur-inflammation\">la CRP</a>.</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="Symptômes associés à une VS élevée",
-            body_html=(
-                "<p>La VS ne provoque pas de symptômes en elle-même ; elle reflète le processus sous-jacent. "
-                "Les symptômes dépendent de la cause : fièvre en cas d&rsquo;infection, douleurs articulaires en cas de maladie auto-immune, "
-                "perte de poids en cas de cancer.</p>"
-                "<p>Certaines personnes avec une VS légèrement élevée sont asymptomatiques. "
-                "Une VS très haute (&gt; 100 mm/h) accompagnée de symptômes généraux justifie une évaluation clinique urgente.</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="Examens complémentaires",
-            body_html=(
-                "<p>La VS est presque toujours associée à des tests plus ciblés : "
-                "<strong><a href=\"/fr/blog/crp-marqueur-inflammation\">CRP</a></strong>, <strong>hémogramme</strong>, "
-                "et, en cas de suspicion auto-immune, <strong>ANA</strong>, <strong>FR</strong> et <strong>anti-CCP</strong>. "
-                "En cas de suspicion de malignité, électrophorèse des protéines, imagerie et biopsie peuvent être envisagées.</p>"
-                "<p>Une VS légèrement élevée isolée chez un sujet sain peut ne nécessiter qu&rsquo;un contrôle à quelques semaines.</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="Quand consulter un médecin ?",
-            body_html=(
-                "<p>Parlez à votre médecin de tout résultat de VS hors norme. "
-                "Consultez en <strong>urgence</strong> si la VS dépasse 100 mm/h ou si vous présentez fièvre inexpliquée, perte de poids, "
-                "douleurs articulaires sévères ou sueurs nocturnes.</p>"
-                "<p>Si vous avez une maladie inflammatoire connue, votre médecin peut utiliser la VS en série pour surveiller l&rsquo;activité et la réponse au traitement.</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="Comment Norya vous aide à comprendre votre VS",
-            body_html=(
-                "<p>Norya ne pose pas de diagnostic&mdash;nous vous aidons à vous préparer. Téléversez votre bilan sur "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> et recevez un résumé clair expliquant votre VS, votre CRP et votre hémogramme.</p>"
-                "<p>Que vous suiviez une maladie inflammatoire ou découvriez un résultat inattendu, "
-                "Norya organise vos résultats pour votre rendez-vous médical. "
-                "Formules et tarifs sur notre <a href=\"/pricing\">page tarifs</a>.</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="Avertissement",
-            body_html=(
-                '<p><strong>Ce guide est fourni à titre informatif uniquement et ne remplace pas un avis médical ou un diagnostic.</strong> '
-                'Discutez toujours de vos résultats avec un professionnel de santé. <a href="/analyze">Commencer l\'analyse avec Norya</a></p>'
-            ),
-        ),
+        Section(id="intro", level=2, heading="VS élevée : que signifie votre résultat d'analyse de sang ?",
+                body_html="<p>La <strong>VS (Vitesse de Sédimentation)</strong> mesure la rapidité avec laquelle les globules rouges sédimentent au fond d'un tube vertical. Une vitesse plus rapide indique une inflammation.</p><p>Malgré des marqueurs plus spécifiques comme la <strong>CRP</strong>, la VS reste utile pour les processus inflammatoires chroniques. Ce guide est éducatif et ne remplace pas un avis médical.</p>"),
+        Section(id="what-is-esr", level=2, heading="Qu'est-ce que la VS ?",
+                body_html="<p>La VS est un marqueur non spécifique d'inflammation. Le fibrinogène et les immunoglobulines font que les globules rouges forment des <em>rouleaux</em> qui sédimentent plus vite. La <strong>méthode de Westergren</strong> est la référence.</p>"),
+        Section(id="how-esr-works", level=2, heading="Comment fonctionne le test de VS ?",
+                body_html="<p>Les globules rouges ont une charge négative (potentiel zêta) qui les maintient en suspension. Les protéines de phase aiguë réduisent ce potentiel, permettant la formation de rouleaux. L'anémie augmente faussement la VS, la polyglobulie la diminue.</p>"),
+        Section(id="normal-ranges", level=2, heading="Valeurs normales de VS",
+                body_html='<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;"><thead><tr><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Groupe</th><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">VS normale (mm/h)</th></tr></thead><tbody><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Hommes &lt; 50 ans</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Hommes &ge; 50 ans</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Femmes &lt; 50 ans</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Femmes &ge; 50 ans</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr></tbody></table><p>Une VS supérieure à <strong>100&nbsp;mm/h</strong> suggère fortement une maladie grave sous-jacente.</p>'),
+        Section(id="high-esr-causes", level=2, heading="Causes d'une VS élevée",
+                body_html="<p><strong>Infections :</strong> pneumonie, endocardite, tuberculose. <strong>Maladies auto-immunes :</strong> artérite temporale, polymyalgie rhumatismale, polyarthrite rhumatoïde, lupus. <strong>Cancers :</strong> myélome multiple, lymphome. <strong>Autres :</strong> anémie, grossesse, insuffisance rénale, obésité.</p>"),
+        Section(id="esr-vs-crp", level=2, heading="VS vs. CRP",
+                body_html="<p>La VS est lente (jours) et adaptée à l'inflammation chronique. La CRP est rapide (6-8 h) et adaptée à l'infection aiguë. Dans le lupus, la VS augmente tandis que la CRP reste souvent normale. Voir notre <a href=\"/blog/crp-high-meaning\">guide CRP</a>.</p>"),
+        Section(id="false-elevations", level=2, heading="Fausses élévations et limites de la VS",
+                body_html="<p>L'anémie, l'obésité, l'âge, la grossesse, l'insuffisance rénale et l'hypergammaglobulinémie peuvent faussement élever la VS. La polyglobulie et la drépanocytose peuvent la diminuer faussement.</p>"),
+        Section(id="monitoring-role", level=2, heading="Rôle de la VS dans le suivi des maladies",
+                body_html="<p>La VS est précieuse pour surveiller l'artérite temporale, la polyarthrite rhumatoïde (partie du DAS28), les infections chroniques et le lymphome de Hodgkin.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="Quand consulter un médecin",
+                body_html="<p>Consultez si : VS au-dessus de la norme ajustée par l'âge avec symptômes inexpliqués ; VS &gt;100&nbsp;mm/h ; maladie auto-immune avec VS en hausse ; céphalées intenses récentes après 50 ans (artérite temporale possible).</p>"),
+        Section(id="how-norya-helps", level=2, heading="Comment Norya vous aide à comprendre vos résultats de VS",
+                body_html="<p><strong>Norya</strong> simplifie l'interprétation : téléchargez vos résultats et recevez un rapport de santé clair en minutes. <a href=\"/analyze\">Commencez votre analyse avec Norya</a>.</p>"),
+        Section(id="disclaimer", level=2, heading="Avertissement",
+                body_html='<p><strong>Ce guide est fourni à titre informatif uniquement et ne remplace pas un avis ou un diagnostic médical.</strong> Discutez toujours de vos résultats avec un professionnel de santé. <a href="/analyze">Commencer l\'analyse avec Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Italian
+# ITALIAN
 # ---------------------------------------------------------------------------
 def _sections_it() -> list:
     from app.blog_i18n import Section
     return [
-        Section(
-            id="intro", level=2,
-            heading="VES alta: cosa significa la tua velocità di eritrosedimentazione",
-            body_html=(
-                "<p>La velocità di eritrosedimentazione (VES o ESR) è uno degli esami del sangue più antichi e semplici ancora in uso routinario. "
-                "Misura la velocità con cui i globuli rossi si depositano sul fondo di una provetta verticale in un&rsquo;ora. "
-                "Un valore superiore alla norma suggerisce infiammazione, ma la VES non può identificarne la causa precisa.</p>"
-                "<p>Questa guida spiega cosa misura la VES, come interpretare il risultato, "
-                "le cause più comuni di VES elevata o bassa e quando consultare il medico. "
-                "È a scopo educativo, non diagnostico&mdash;discuti sempre i tuoi risultati con un medico.</p>"
-            ),
-        ),
-        Section(
-            id="what-is", level=2,
-            heading="Cos'è la VES e come si misura?",
-            body_html=(
-                "<p>La <strong>velocità di eritrosedimentazione</strong> misura la distanza (in millimetri) percorsa dai globuli rossi in una provetta standardizzata in 60 minuti. "
-                "In condizioni normali, gli eritrociti si respingono per la loro carica superficiale negativa e sedimentano lentamente. "
-                "In presenza di infiammazione, il fegato produce più proteine di fase acuta&mdash;soprattutto <strong>fibrinogeno</strong>&mdash;che "
-                "neutralizzano la carica e causano la formazione di <em>rouleaux</em>, più pesanti e che cadono più rapidamente.</p>"
-                "<p>La misura si effettua di solito con il <strong>metodo Westergren</strong>. Il risultato è espresso in mm/h. "
-                "La VES è un marcatore <strong>aspecifico</strong>: segnala un&rsquo;infiammazione probabile ma non ne identifica la causa.</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="Valori normali della VES",
-            body_html=(
-                "<p>I valori di riferimento dipendono da età e sesso:</p>"
-                "<ul>"
-                "<li><strong>Uomini &lt; 50 anni:</strong> &lt; 15 mm/h</li>"
-                "<li><strong>Uomini &gt; 50 anni:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Donne &lt; 50 anni:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>Donne &gt; 50 anni:</strong> &lt; 30 mm/h</li>"
-                "</ul>"
-                "<p>La VES tende ad aumentare con l&rsquo;età ed è generalmente più alta nelle donne. La gravidanza può elevarla fisiologicamente. "
-                "Confronta sempre il risultato con l&rsquo;intervallo del tuo referto.</p>"
-            ),
-        ),
-        Section(
-            id="causes", level=2,
-            heading="Cause della VES alta",
-            body_html=(
-                "<p>Le <strong>infezioni</strong>, le <strong>malattie autoimmuni</strong> (artrite reumatoide, lupus, polimialgia reumatica) "
-                "e il <strong>cancro</strong> (linfoma, mieloma multiplo) sono tra le cause più frequenti. "
-                "L&rsquo;<strong>anemia</strong>, la gravidanza, l&rsquo;obesità e l&rsquo;insufficienza renale cronica aumentano anch&rsquo;esse la VES.</p>"
-                "<p>Una VES superiore a 100 mm/h richiede un&rsquo;indagine approfondita. "
-                "Il medico interpreterà il risultato insieme ai sintomi e ad altri esami come "
-                "<a href=\"/it/blog/crp-marcatore-infiammazione\">la PCR</a>.</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="Sintomi associati alla VES elevata",
-            body_html=(
-                "<p>La VES di per sé non causa sintomi; riflette il processo sottostante. "
-                "I sintomi dipendono dalla causa: febbre nelle infezioni, dolori articolari nelle malattie autoimmuni, "
-                "perdita di peso nel cancro.</p>"
-                "<p>Alcune persone con VES lievemente elevata sono asintomatiche. "
-                "Una VES molto alta (&gt; 100 mm/h) con sintomi costituzionali richiede una valutazione clinica urgente.</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="Esami correlati",
-            body_html=(
-                "<p>La VES è quasi sempre associata a test più mirati: "
-                "<strong><a href=\"/it/blog/crp-marcatore-infiammazione\">PCR</a></strong>, <strong>emocromo</strong>, "
-                "e, in caso di sospetto autoimmune, <strong>ANA</strong>, <strong>FR</strong> e <strong>anti-CCP</strong>. "
-                "Per sospetta neoplasia: elettroforesi proteica, imaging e biopsia.</p>"
-                "<p>Una VES lievemente elevata isolata in un soggetto sano può richiedere solo un controllo a distanza di settimane.</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="Quando rivolgersi al medico",
-            body_html=(
-                "<p>Discutete con il medico qualsiasi VES fuori intervallo. "
-                "Cercate assistenza <strong>urgente</strong> se la VES supera 100 mm/h o se avete febbre inspiegabile, "
-                "perdita di peso, forte dolore articolare o sudorazione notturna.</p>"
-                "<p>Se avete una malattia infiammatoria nota, il medico può utilizzare misurazioni seriali della VES per monitorare l&rsquo;attività.</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="Come Norya ti aiuta a capire la tua VES",
-            body_html=(
-                "<p>Norya non fa diagnosi&mdash;ti aiuta a prepararti. Carica le tue analisi su "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> e ricevi un riepilogo chiaro che spiega VES, PCR ed emocromo in linguaggio semplice.</p>"
-                "<p>Che tu stia monitorando un&rsquo;infiammazione cronica o abbia trovato un valore inatteso, "
-                "Norya organizza i tuoi risultati per il dialogo con il medico. "
-                "Piani e prezzi sulla nostra <a href=\"/pricing\">pagina prezzi</a>.</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="Avvertenza",
-            body_html=(
-                '<p><strong>Questa guida ha finalità esclusivamente informative e non sostituisce il parere medico o la diagnosi.</strong> '
-                'Discuti sempre i tuoi risultati con un professionista sanitario. <a href="/analyze">Inizia l\'analisi con Norya</a></p>'
-            ),
-        ),
+        Section(id="intro", level=2, heading="VES alta: cosa significa il risultato delle analisi del sangue",
+                body_html="<p>La <strong>VES (Velocità di Eritrosedimentazione)</strong> misura la rapidità con cui i globuli rossi si depositano sul fondo di una provetta verticale. Una velocità maggiore indica infiammazione.</p><p>La VES rimane utile per i processi infiammatori cronici e il monitoraggio di arterite temporale, polimialgia reumatica, artrite reumatoide e lupus.</p>"),
+        Section(id="what-is-esr", level=2, heading="Cos'è la VES?",
+                body_html="<p>La VES è un marcatore aspecifico di infiammazione. Fibrinogeno e immunoglobuline fanno sì che i globuli rossi formino <em>rouleaux</em> che sedimentano più velocemente. Il <strong>metodo Westergren</strong> è lo standard di riferimento.</p>"),
+        Section(id="how-esr-works", level=2, heading="Come funziona il test della VES?",
+                body_html="<p>I globuli rossi hanno una carica negativa (potenziale zeta) che li mantiene dispersi nel plasma. Le proteine di fase acuta riducono questo potenziale, permettendo la formazione di rouleaux. L'anemia aumenta falsamente la VES; la policitemia la diminuisce.</p>"),
+        Section(id="normal-ranges", level=2, heading="Valori normali della VES",
+                body_html='<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;"><thead><tr><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">Gruppo</th><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">VES normale (mm/h)</th></tr></thead><tbody><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Uomini &lt; 50 anni</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Uomini &ge; 50 anni</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Donne &lt; 50 anni</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">Donne &ge; 50 anni</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr></tbody></table><p>VES superiore a <strong>100&nbsp;mm/h</strong> suggerisce fortemente una malattia grave.</p>'),
+        Section(id="high-esr-causes", level=2, heading="Cause di VES alta",
+                body_html="<p><strong>Infezioni:</strong> polmonite, endocardite, tubercolosi. <strong>Malattie autoimmuni:</strong> arterite temporale, polimialgia reumatica, artrite reumatoide, LES. <strong>Neoplasie:</strong> mieloma multiplo, linfoma. <strong>Altro:</strong> anemia, gravidanza, insufficienza renale, obesità.</p>"),
+        Section(id="esr-vs-crp", level=2, heading="VES vs. PCR",
+                body_html="<p>La VES risponde lentamente ed è adatta per l'infiammazione cronica. La PCR risponde rapidamente ed è ideale per le infezioni acute. Nel lupus, la VES sale mentre la PCR può restare normale. Vedere la nostra <a href=\"/blog/crp-high-meaning\">guida PCR</a>.</p>"),
+        Section(id="false-elevations", level=2, heading="False elevazioni e limiti della VES",
+                body_html="<p>Anemia, obesità, età, gravidanza, insufficienza renale e ipergammaglobulinemia possono elevare falsamente la VES. Policitemia, drepanocitosi e sferocitosi possono diminuirla falsamente.</p>"),
+        Section(id="monitoring-role", level=2, heading="Ruolo della VES nel monitoraggio delle malattie",
+                body_html="<p>La VES è preziosa per monitorare arterite temporale, artrite reumatoide (parte del DAS28), infezioni croniche e linfoma di Hodgkin.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="Quando consultare il medico",
+                body_html="<p>Consultate il medico se: VES sopra il range normale aggiustato per età con sintomi inspiegabili; VES &gt;100 mm/h; malattia autoimmune con VES in aumento; cefalea intensa di nuova insorgenza dopo i 50 anni (possibile arterite temporale).</p>"),
+        Section(id="how-norya-helps", level=2, heading="Come Norya ti aiuta a capire i risultati della VES",
+                body_html="<p><strong>Norya</strong> semplifica l'interpretazione: caricate i risultati e ricevete un report chiaro in minuti. <a href=\"/analyze\">Iniziate l'analisi con Norya</a>.</p>"),
+        Section(id="disclaimer", level=2, heading="Disclaimer",
+                body_html='<p><strong>Questa guida è solo a scopo informativo e non sostituisce il parere o la diagnosi medica.</strong> Discutete sempre i risultati con un professionista sanitario. <a href="/analyze">Inizia l\'analisi con Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Hebrew
+# HEBREW
 # ---------------------------------------------------------------------------
 def _sections_he() -> list:
     from app.blog_i18n import Section
     return [
-        Section(
-            id="intro", level=2,
-            heading="שקיעת דם (ESR) גבוהה: מה המשמעות של התוצאה שלך",
-            body_html=(
-                "<p>שקיעת הדם (ESR), הנקראת גם <em>שקיעת כדוריות</em>, היא אחת מבדיקות הדם הוותיקות והפשוטות ביותר שעדיין בשימוש שגרתי. "
-                "היא מודדת כמה מהר כדוריות דם אדומות שוקעות לתחתית מבחנה אנכית תוך שעה. קצב מהיר מהרגיל מעיד על דלקת בגוף, "
-                "אך הבדיקה לא יכולה לזהות את הסיבה המדויקת.</p>"
-                "<p>מדריך זה מסביר מה ESR מודד, כיצד לפרש את התוצאה, הגורמים הנפוצים ל-ESR גבוה או נמוך, ומתי לפנות לרופא. "
-                "הוא חינוכי ואינו מהווה אבחנה&mdash;שוחחו תמיד עם רופא על התוצאות שלכם.</p>"
-            ),
-        ),
-        Section(
-            id="what-is", level=2,
-            heading="מהי שקיעת דם (ESR) וכיצד היא נמדדת?",
-            body_html=(
-                "<p><strong>קצב שקיעת אריתרוציטים</strong> מודד את המרחק (במילימטרים) שכדוריות דם אדומות נופלות במבחנה סטנדרטית תוך 60 דקות. "
-                "בתנאים רגילים, כדוריות אדומות דוחות זו את זו בשל המטען השלילי על פניהן ושוקעות לאט. "
-                "כשיש דלקת, הכבד מייצר יותר חלבוני שלב חריף&mdash;במיוחד <strong>פיברינוגן</strong>&mdash;שמנטרלים את המטען "
-                "וגורמים לכדוריות להיערם ב<em>רולו</em> (Rouleaux), שהם כבדים יותר ושוקעים מהר יותר.</p>"
-                "<p>הבדיקה נעשית בדרך כלל בשיטת <strong>וסטרגרן</strong>. התוצאה מדווחת ב-mm/h. "
-                "ESR הוא סמן <strong>לא ספציפי</strong>: הוא מעיד על דלקת סבירה אך לא מזהה את הגורם.</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="טווחי ESR תקינים",
-            body_html=(
-                "<p>טווחי הייחוס תלויים בגיל ובמין:</p>"
-                "<ul>"
-                "<li><strong>גברים מתחת ל-50:</strong> &lt; 15 mm/h</li>"
-                "<li><strong>גברים מעל 50:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>נשים מתחת ל-50:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>נשים מעל 50:</strong> &lt; 30 mm/h</li>"
-                "</ul>"
-                "<p>ESR נוטה לעלות עם הגיל וגבוהה יותר בנשים. הריון יכול להעלות את ESR באופן פיזיולוגי. "
-                "השוו תמיד את התוצאה לטווח בדוח המעבדה שלכם.</p>"
-            ),
-        ),
-        Section(
-            id="causes", level=2,
-            heading="גורמים ל-ESR גבוהה",
-            body_html=(
-                "<p><strong>זיהומים</strong>, <strong>מחלות אוטואימוניות</strong> (דלקת מפרקים שגרונית, לופוס, פולימיאלגיה ראומטיקה) "
-                "ו<strong>סרטן</strong> (לימפומה, מיאלומה נפוצה) הם בין הגורמים השכיחים ביותר. "
-                "<strong>אנמיה</strong>, הריון, השמנת יתר ומחלת כליות כרונית גם מעלים ESR.</p>"
-                "<p>ESR מעל 100 mm/h דורש בירור מקיף. הרופא יפרש את התוצאה יחד עם התסמינים ובדיקות נוספות כמו "
-                "<a href=\"/he/blog/crp-inflammation-marker\">CRP</a>.</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="תסמינים הקשורים ל-ESR גבוהה",
-            body_html=(
-                "<p>ESR עצמו לא גורם לתסמינים; הוא משקף את התהליך הבסיסי. "
-                "התסמינים תלויים בגורם: חום בזיהום, כאבי מפרקים במחלה אוטואימונית, ירידה במשקל בסרטן.</p>"
-                "<p>חלק מהאנשים עם ESR מעט גבוה הם ללא תסמינים. "
-                "ESR גבוהה מאוד (&gt; 100 mm/h) עם תסמינים מערכתיים מחייבת הערכה קלינית דחופה.</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="בדיקות נלוות",
-            body_html=(
-                "<p>ESR כמעט תמיד נבדק יחד עם: "
-                "<strong><a href=\"/he/blog/crp-inflammation-marker\">CRP</a></strong>, <strong>ספירת דם מלאה</strong>, "
-                "ובחשד למחלה אוטואימונית&mdash;<strong>ANA</strong>, <strong>RF</strong> ו-<strong>anti-CCP</strong>. "
-                "בחשד לממאירות: אלקטרופורזה של חלבונים, הדמיה וביופסיה.</p>"
-                "<p>ESR מעט גבוה בודד באדם בריא עשוי לדרוש רק בדיקה חוזרת בעוד מספר שבועות.</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="מתי לפנות לרופא?",
-            body_html=(
-                "<p>שוחחו עם הרופא על כל תוצאת ESR מחוץ לטווח. "
-                "פנו ל<strong>טיפול דחוף</strong> אם ESR מעל 100 mm/h או אם יש חום לא מוסבר, ירידה משמעותית במשקל, "
-                "כאבי מפרקים חמורים או הזעות לילה.</p>"
-                "<p>אם יש לכם מחלה דלקתית ידועה, הרופא עשוי להשתמש במדידות ESR סדרתיות לניטור פעילות המחלה.</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="איך Norya עוזרת לכם להבין את ה-ESR",
-            body_html=(
-                "<p>Norya לא מאבחנת&mdash;אנחנו עוזרים לכם להתכונן. העלו את הדוח ב-"
-                "<a href=\"/analyze\">noryaai.com/analyze</a> וקבלו סיכום ברור המסביר את ה-ESR לצד CRP וספירת דם בשפה פשוטה.</p>"
-                "<p>בין אם אתם עוקבים אחרי מצב דלקתי כרוני או מצאתם ערך בלתי צפוי, "
-                "Norya מארגנת את התוצאות לקראת הפגישה עם הרופא. "
-                "לאפשרויות מנוי ומחירים, בקרו ב<a href=\"/pricing\">עמוד המחירים</a>.</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="הבהרה",
-            body_html=(
-                '<p><strong>מדריך זה מיועד למטרות מידע בלבד ואינו מהווה תחליף לייעוץ רפואי או אבחנה.</strong> '
-                'שוחחו תמיד עם רופא על התוצאות שלכם. <a href="/analyze">התחילו ניתוח עם Norya</a></p>'
-            ),
-        ),
+        Section(id="intro", level=2, heading="שקיעת דם (ESR) גבוהה: מה המשמעות של תוצאת בדיקת הדם שלך",
+                body_html="<p><strong>ESR (קצב שקיעת אריתרוציטים)</strong> מודד את המהירות שבה כדוריות דם אדומות שוקעות לתחתית מבחנה אנכית תוך שעה. שקיעה מהירה יותר מצביעה על דלקת בגוף.</p><p>למרות זמינות סמנים ספציפיים יותר כמו <strong>CRP</strong>, ה-ESR נותר בעל ערך לתהליכים דלקתיים כרוניים. הוא נמצא בשימוש נרחב באבחון ומעקב של דלקת עורקים ענקית תאים, פולימיאלגיה ראומטיקה, דלקת מפרקים שגרונית ולופוס.</p>"),
+        Section(id="what-is-esr", level=2, heading="מהו ESR?",
+                body_html="<p>ESR הוא סמן דלקת לא ספציפי. פיברינוגן ואימונוגלובולינים גורמים לכדוריות אדומות ליצור <em>רולו</em> ששוקעות מהר יותר. שיטת <strong>וסטרגרן</strong> היא סטנדרט הייחוס.</p>"),
+        Section(id="how-esr-works", level=2, heading="כיצד עובדת בדיקת ESR?",
+                body_html="<p>כדוריות דם אדומות נושאות מטען שלילי (פוטנציאל זטא) המשמר אותן בתרחיף. חלבוני שלב חריף מפחיתים פוטנציאל זה ומאפשרים יצירת רולו. אנמיה מעלה ESR באופן שגוי; פוליציטמיה מורידה אותו.</p>"),
+        Section(id="normal-ranges", level=2, heading="טווחים תקינים של ESR",
+                body_html='<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;"><thead><tr><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">קבוצה</th><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">ESR תקין (mm/hr)</th></tr></thead><tbody><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">גברים &lt; 50</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">גברים &ge; 50</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">נשים &lt; 50</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">נשים &ge; 50</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr></tbody></table><p>ESR מעל <strong>100 mm/hr</strong> מרמז בחוזקה על מחלה חמורה.</p>'),
+        Section(id="high-esr-causes", level=2, heading="גורמים ל-ESR גבוה",
+                body_html="<p><strong>זיהומים:</strong> דלקת ריאות, אנדוקרדיטיס, שחפת. <strong>מחלות אוטואימוניות:</strong> דלקת עורקים ענקית תאים, פולימיאלגיה ראומטיקה, דלקת מפרקים שגרונית, לופוס. <strong>ממאירויות:</strong> מיאלומה, לימפומה. <strong>אחר:</strong> אנמיה, הריון, אי-ספיקת כליות, השמנה.</p>"),
+        Section(id="esr-vs-crp", level=2, heading="ESR לעומת CRP",
+                body_html="<p>ESR מגיב לאט (ימים) ומתאים לדלקת כרונית. CRP מגיב מהר (6-8 שעות) ומתאים לזיהום חריף. בלופוס, ESR עולה בעוד CRP עשוי להישאר תקין. ראו <a href=\"/blog/crp-high-meaning\">מדריך CRP</a>.</p>"),
+        Section(id="false-elevations", level=2, heading="עליות שגויות ומגבלות של ESR",
+                body_html="<p>אנמיה, השמנה, גיל, הריון, אי-ספיקת כליות והיפרגמגלובולינמיה עלולים להעלות ESR באופן שגוי. פוליציטמיה ואנמיה חרמשית עלולות להורידו באופן שגוי.</p>"),
+        Section(id="monitoring-role", level=2, heading="תפקיד ESR במעקב אחר מחלות",
+                body_html="<p>ESR יקר ערך למעקב אחר דלקת עורקים ענקית תאים, דלקת מפרקים שגרונית (חלק מ-DAS28), זיהומים כרוניים ולימפומת הודג'קין.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="מתי לפנות לרופא",
+                body_html="<p>פנו לרופא אם: ESR מעל הנורמה המותאמת לגיל עם תסמינים לא מוסברים; ESR מעל 100; מחלה אוטואימונית עם ESR עולה; כאב ראש חדש חמור מעל גיל 50 (חשד לדלקת עורקים ענקית תאים).</p>"),
+        Section(id="how-norya-helps", level=2, heading="כיצד Norya עוזרת לך להבין את תוצאות ה-ESR",
+                body_html="<p><strong>Norya</strong> מפשטת את הפרשנות: העלו תוצאות וקבלו דוח בריאות ברור תוך דקות. <a href=\"/analyze\">התחילו ניתוח עם Norya</a>.</p>"),
+        Section(id="disclaimer", level=2, heading="הודעה",
+                body_html='<p><strong>מדריך זה נועד למידע בלבד ואינו מחליף ייעוץ או אבחון רפואי.</strong> דונו תמיד בתוצאות עם איש מקצוע רפואי. <a href="/analyze">התחל ניתוח עם Norya</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Hindi
+# HINDI
 # ---------------------------------------------------------------------------
 def _sections_hi() -> list:
     from app.blog_i18n import Section
     return [
-        Section(
-            id="intro", level=2,
-            heading="ESR (सेडिमेंटेशन रेट) अधिक: आपकी रिपोर्ट का क्या मतलब है",
-            body_html=(
-                "<p>एरिथ्रोसाइट सेडिमेंटेशन रेट (ESR), जिसे <em>सेड रेट</em> या <em>ब्लड सेडिमेंटेशन</em> भी कहते हैं, "
-                "अभी भी नियमित उपयोग में सबसे पुरानी और सरल ब्लड टेस्ट में से एक है। यह मापता है कि एक घंटे में लाल रक्त कोशिकाएँ "
-                "एक ऊर्ध्वाधर ट्यूब में कितनी तेज़ी से नीचे बैठती हैं। सामान्य से तेज़ दर शरीर में सूजन का संकेत देती है, "
-                "लेकिन ESR अकेले कारण नहीं बता सकता।</p>"
-                "<p>यह गाइड बताती है कि ESR क्या मापता है, रिफरेंस रेंज, उच्च या निम्न ESR के सामान्य कारण, "
-                "और डॉक्टर से कब मिलना चाहिए। यह शैक्षिक है, निदान नहीं&mdash;अपने परिणामों पर हमेशा डॉक्टर से चर्चा करें।</p>"
-            ),
-        ),
-        Section(
-            id="what-is", level=2,
-            heading="ESR क्या है और कैसे मापा जाता है?",
-            body_html=(
-                "<p><strong>एरिथ्रोसाइट सेडिमेंटेशन रेट</strong> उस दूरी (मिलीमीटर में) को मापता है जो लाल रक्त कोशिकाएँ "
-                "एक मानकीकृत ट्यूब में 60 मिनट में तय करती हैं। सामान्य परिस्थितियों में, लाल कोशिकाएँ अपने नकारात्मक सतह चार्ज "
-                "के कारण एक-दूसरे को दूर करती हैं और धीरे-धीरे बैठती हैं। सूजन होने पर लिवर अधिक एक्यूट फेज प्रोटीन&mdash;"
-                "विशेषकर <strong>फाइब्रिनोजन</strong>&mdash;बनाता है, जो चार्ज को न्यूट्रल कर देते हैं और कोशिकाएँ <em>रूलो</em> बनाकर "
-                "तेज़ी से नीचे गिरती हैं।</p>"
-                "<p>टेस्ट आमतौर पर <strong>वेस्टरग्रेन विधि</strong> से किया जाता है। परिणाम mm/hr में रिपोर्ट होता है। "
-                "ESR एक <strong>नॉन-स्पेसिफिक</strong> मार्कर है: यह सूजन की संभावना बताता है लेकिन कारण नहीं।</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="सामान्य ESR रेंज",
-            body_html=(
-                "<p>ESR रिफरेंस रेंज उम्र और लिंग पर निर्भर करती है:</p>"
-                "<ul>"
-                "<li><strong>50 वर्ष से कम पुरुष:</strong> &lt; 15 mm/hr</li>"
-                "<li><strong>50 वर्ष से अधिक पुरुष:</strong> &lt; 20 mm/hr</li>"
-                "<li><strong>50 वर्ष से कम महिलाएँ:</strong> &lt; 20 mm/hr</li>"
-                "<li><strong>50 वर्ष से अधिक महिलाएँ:</strong> &lt; 30 mm/hr</li>"
-                "</ul>"
-                "<p>ESR उम्र के साथ बढ़ने की प्रवृत्ति रखता है और महिलाओं में आमतौर पर अधिक होता है। गर्भावस्था ESR को शारीरिक रूप से बढ़ा सकती है। "
-                "अपने परिणाम की तुलना हमेशा अपनी लैब रिपोर्ट पर दी गई रेंज से करें।</p>"
-            ),
-        ),
-        Section(
-            id="causes", level=2,
-            heading="ESR बढ़ने के कारण",
-            body_html=(
-                "<p><strong>संक्रमण</strong> (बैक्टीरियल, वायरल या फंगल), <strong>ऑटोइम्यून रोग</strong> "
-                "(रुमेटॉइड आर्थराइटिस, ल्यूपस, पॉलीमायल्जिया रूमेटिका) और <strong>कैंसर</strong> (लिम्फोमा, मल्टीपल मायलोमा) "
-                "सबसे आम कारणों में हैं। <strong>एनीमिया</strong>, गर्भावस्था, मोटापा और क्रोनिक किडनी डिजीज भी ESR बढ़ाते हैं।</p>"
-                "<p>100 mm/hr से अधिक ESR को बहुत उच्च माना जाता है और इसमें गहन जाँच ज़रूरी है। "
-                "डॉक्टर परिणाम का मूल्यांकन लक्षणों और अन्य टेस्ट जैसे "
-                "<a href=\"/hi/blog/crp-inflammation-marker\">CRP</a> के साथ करेंगे।</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="उच्च ESR से जुड़े लक्षण",
-            body_html=(
-                "<p>ESR स्वयं लक्षण नहीं पैदा करता; यह अंतर्निहित प्रक्रिया को दर्शाता है। "
-                "लक्षण कारण पर निर्भर करते हैं: संक्रमण में बुखार, ऑटोइम्यून रोगों में जोड़ों का दर्द, कैंसर में वज़न घटना।</p>"
-                "<p>कुछ लोगों में हल्की ESR वृद्धि के साथ कोई लक्षण नहीं होते। "
-                "बहुत उच्च ESR (&gt; 100 mm/hr) के साथ बुखार, वज़न कम होना और थकान होने पर तुरंत डॉक्टर से मिलें।</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="संबंधित जाँचें",
-            body_html=(
-                "<p>ESR लगभग हमेशा अधिक लक्षित टेस्ट के साथ जाँचा जाता है: "
-                "<strong><a href=\"/hi/blog/crp-inflammation-marker\">CRP</a></strong>, <strong>CBC (पूर्ण रक्त गणना)</strong>, "
-                "और ऑटोइम्यून संदेह में <strong>ANA</strong>, <strong>RF</strong> व <strong>anti-CCP</strong>। "
-                "कैंसर की शंका में प्रोटीन इलेक्ट्रोफोरेसिस, इमेजिंग और बायोप्सी हो सकती है।</p>"
-                "<p>स्वस्थ व्यक्ति में अलग-थलग हल्की ESR वृद्धि को कुछ हफ्तों बाद दोहराने की ज़रूरत हो सकती है।</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="डॉक्टर से कब मिलें?",
-            body_html=(
-                "<p>रेफरेंस रेंज से बाहर किसी भी ESR परिणाम पर डॉक्टर से बात करें। "
-                "ESR 100 mm/hr से अधिक हो या अस्पष्ट बुखार, वज़न घटना, गंभीर जोड़ दर्द या रात में पसीना आता हो "
-                "तो <strong>तुरंत</strong> चिकित्सा सहायता लें।</p>"
-                "<p>यदि आपको कोई ज्ञात सूजन संबंधी रोग है, तो डॉक्टर रोग की गतिविधि की निगरानी के लिए क्रमिक ESR माप कर सकते हैं।</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="Norya आपकी ESR समझने में कैसे मदद करता है",
-            body_html=(
-                "<p>Norya निदान नहीं करता&mdash;हम आपको तैयार होने में मदद करते हैं। अपनी ब्लड रिपोर्ट "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> पर अपलोड करें और ESR, CRP व CBC को सरल भाषा में समझाने वाला स्पष्ट सारांश प्राप्त करें।</p>"
-                "<p>चाहे आप क्रोनिक इन्फ्लेमेटरी कंडीशन ट्रैक कर रहे हों या अनपेक्षित रिजल्ट देखा हो, "
-                "Norya आपके परिणामों को व्यवस्थित करता है। प्लान विकल्प व मूल्य के लिए <a href=\"/pricing\">प्राइसिंग पेज</a> देखें।</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="अस्वीकरण",
-            body_html=(
-                '<p><strong>यह गाइड केवल सूचना के उद्देश्य से है और चिकित्सा सलाह या निदान का विकल्प नहीं है।</strong> '
-                'अपने परिणामों पर हमेशा डॉक्टर से चर्चा करें। <a href="/analyze">Norya के साथ विश्लेषण शुरू करें</a></p>'
-            ),
-        ),
+        Section(id="intro", level=2, heading="उच्च ESR: आपकी रक्त जांच के परिणाम का क्या अर्थ है",
+                body_html="<p><strong>ESR (एरिथ्रोसाइट सेडिमेंटेशन रेट)</strong> सबसे पुरानी और सरल रक्त जांचों में से एक है। यह मापता है कि लाल रक्त कोशिकाएँ एक घंटे में एक ऊर्ध्वाधर ट्यूब के तल में कितनी तेजी से बैठती हैं। तेज़ बैठना शरीर में सूजन का संकेत देता है।</p><p><strong>CRP</strong> जैसे अधिक विशिष्ट मार्करों की उपलब्धता के बावजूद, ESR पुरानी, निम्न-श्रेणी की सूजन प्रक्रियाओं के लिए मूल्यवान बना हुआ है।</p>"),
+        Section(id="what-is-esr", level=2, heading="ESR क्या है?",
+                body_html="<p>ESR एक गैर-विशिष्ट सूजन मार्कर है। फाइब्रिनोजेन और इम्युनोग्लोबुलिन लाल रक्त कोशिकाओं को <em>रूलो</em> बनाने का कारण बनते हैं जो तेज़ी से बैठती हैं। <strong>वेस्टरग्रेन विधि</strong> संदर्भ मानक है।</p>"),
+        Section(id="how-esr-works", level=2, heading="ESR परीक्षण कैसे काम करता है?",
+                body_html="<p>लाल रक्त कोशिकाएँ ऋणात्मक आवेश (ज़ीटा पोटेंशियल) रखती हैं जो उन्हें प्लाज्मा में बिखरा रखता है। तीव्र-चरण प्रोटीन इस पोटेंशियल को कम करते हैं, रूलो गठन की अनुमति देते हैं। एनीमिया ESR को गलत तरीके से बढ़ाता है; पॉलीसिथेमिया इसे कम करता है।</p>"),
+        Section(id="normal-ranges", level=2, heading="सामान्य ESR सीमाएँ",
+                body_html='<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;"><thead><tr><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">समूह</th><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:left;">सामान्य ESR (mm/hr)</th></tr></thead><tbody><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">पुरुष &lt; 50 वर्ष</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">पुरुष &ge; 50 वर्ष</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">महिलाएँ &lt; 50 वर्ष</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">महिलाएँ &ge; 50 वर्ष</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr></tbody></table><p><strong>100 mm/hr</strong> से ऊपर ESR गंभीर अंतर्निहित बीमारी का संकेत देता है।</p>'),
+        Section(id="high-esr-causes", level=2, heading="उच्च ESR के कारण",
+                body_html="<p><strong>संक्रमण:</strong> निमोनिया, एंडोकार्डाइटिस, तपेदिक। <strong>ऑटोइम्यून:</strong> टेम्पोरल आर्टेराइटिस, पॉलीमायल्जिया रूमेटिका, रूमेटॉइड आर्थराइटिस, ल्यूपस। <strong>कैंसर:</strong> मल्टीपल मायलोमा, लिम्फोमा। <strong>अन्य:</strong> एनीमिया, गर्भावस्था, गुर्दे की विफलता, मोटापा।</p>"),
+        Section(id="esr-vs-crp", level=2, heading="ESR बनाम CRP",
+                body_html="<p>ESR धीरे प्रतिक्रिया करता है (दिन) और पुरानी सूजन के लिए उपयुक्त है। CRP तेज़ प्रतिक्रिया करता है (6-8 घंटे) और तीव्र संक्रमण के लिए आदर्श है। ल्यूपस में ESR बढ़ता है जबकि CRP सामान्य रह सकता है। <a href=\"/blog/crp-high-meaning\">CRP गाइड</a> देखें।</p>"),
+        Section(id="false-elevations", level=2, heading="ESR की गलत ऊंचाई और सीमाएँ",
+                body_html="<p>एनीमिया, मोटापा, उम्र, गर्भावस्था, गुर्दे की विफलता और हाइपरगैमाग्लोबुलिनीमिया ESR को गलत तरीके से बढ़ा सकते हैं। पॉलीसिथेमिया और सिकल सेल रोग इसे गलत तरीके से कम कर सकते हैं।</p>"),
+        Section(id="monitoring-role", level=2, heading="रोग निगरानी में ESR की भूमिका",
+                body_html="<p>ESR टेम्पोरल आर्टेराइटिस, रूमेटॉइड आर्थराइटिस (DAS28 का हिस्सा), पुराने संक्रमण और हॉजकिन लिम्फोमा की निगरानी के लिए अमूल्य है।</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="डॉक्टर को कब दिखाएँ",
+                body_html="<p>डॉक्टर से परामर्श करें यदि: ESR आयु-समायोजित सामान्य सीमा से ऊपर; ESR &gt;100 mm/hr; ऑटोइम्यून रोग में बढ़ता ESR; 50 से अधिक उम्र में नया गंभीर सिरदर्द (संभावित टेम्पोरल आर्टेराइटिस)।</p>"),
+        Section(id="how-norya-helps", level=2, heading="Norya ESR परिणामों को समझने में कैसे मदद करता है",
+                body_html="<p><strong>Norya</strong> व्याख्या को सरल बनाता है: रक्त जांच के परिणाम अपलोड करें और मिनटों में स्पष्ट स्वास्थ्य रिपोर्ट प्राप्त करें। <a href=\"/analyze\">Norya के साथ विश्लेषण शुरू करें</a>।</p>"),
+        Section(id="disclaimer", level=2, heading="अस्वीकरण",
+                body_html='<p><strong>यह गाइड केवल सूचनार्थ है; यह चिकित्सा सलाह या निदान का विकल्प नहीं है।</strong> अपने परिणामों पर हमेशा डॉक्टर से चर्चा करें। <a href="/analyze">Norya से विश्लेषण शुरू करें</a></p>'),
     ]
 
 
 # ---------------------------------------------------------------------------
-# Arabic
+# ARABIC
 # ---------------------------------------------------------------------------
 def _sections_ar() -> list:
     from app.blog_i18n import Section
     return [
-        Section(
-            id="intro", level=2,
-            heading="سرعة الترسيب (ESR) مرتفعة: ماذا تعني نتيجتك",
-            body_html=(
-                "<p>معدل ترسيب كريات الدم الحمراء (ESR)، المعروف أيضاً بـ<em>سرعة الترسيب</em>، هو أحد أقدم وأبسط فحوصات الدم التي لا تزال مستخدمة بشكل روتيني. "
-                "يقيس سرعة ترسّب الكريات الحمراء في أنبوب عمودي خلال ساعة واحدة. معدل أسرع من الطبيعي يدل على وجود التهاب، "
-                "لكن الفحص لا يستطيع تحديد السبب بدقة.</p>"
-                "<p>يشرح هذا الدليل ما يقيسه ESR، كيفية قراءة النتيجة، الأسباب الشائعة لارتفاعه، ومتى يجب مراجعة الطبيب. "
-                "هو تثقيفي وليس تشخيصياً&mdash;ناقش نتائجك دائماً مع طبيب مؤهل.</p>"
-            ),
-        ),
-        Section(
-            id="what-is", level=2,
-            heading="ما هو ESR وكيف يُقاس؟",
-            body_html=(
-                "<p><strong>معدل ترسيب كريات الدم الحمراء</strong> يقيس المسافة (بالمليمترات) التي تقطعها الكريات الحمراء في أنبوب معياري خلال 60 دقيقة. "
-                "في الظروف العادية، تتنافر الكريات بسبب شحنتها السطحية السالبة وتترسب ببطء. "
-                "عند وجود التهاب، ينتج الكبد مزيداً من بروتينات المرحلة الحادة&mdash;خاصة <strong>الفيبرينوجين</strong>&mdash;"
-                "التي تُعادل الشحنة وتُسبب تكدّس الكريات في تشكيلات تُسمى <em>رولو</em>، أثقل وتسقط أسرع.</p>"
-                "<p>يُجرى القياس عادة بطريقة <strong>وسترغرين</strong>. النتيجة تُعبَّر بـ mm/h. "
-                "ESR مؤشر <strong>غير نوعي</strong>: يشير إلى التهاب محتمل لكن لا يحدد السبب.</p>"
-            ),
-        ),
-        Section(
-            id="normal-ranges", level=2,
-            heading="نطاقات ESR الطبيعية",
-            body_html=(
-                "<p>تعتمد النطاقات المرجعية على العمر والجنس:</p>"
-                "<ul>"
-                "<li><strong>رجال أقل من 50 سنة:</strong> &lt; 15 mm/h</li>"
-                "<li><strong>رجال فوق 50 سنة:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>نساء أقل من 50 سنة:</strong> &lt; 20 mm/h</li>"
-                "<li><strong>نساء فوق 50 سنة:</strong> &lt; 30 mm/h</li>"
-                "</ul>"
-                "<p>يميل ESR للارتفاع مع التقدم في العمر ويكون أعلى عند النساء عموماً. الحمل يرفعه فسيولوجياً. "
-                "قارن دائماً نتيجتك بالنطاق المحدد في تقرير مختبرك.</p>"
-            ),
-        ),
-        Section(
-            id="causes", level=2,
-            heading="أسباب ارتفاع ESR",
-            body_html=(
-                "<p><strong>العدوى</strong>، <strong>أمراض المناعة الذاتية</strong> (التهاب المفاصل الروماتويدي، الذئبة، ألم العضلات الروماتيزمي) "
-                "و<strong>السرطان</strong> (ليمفوما، ورم نقوي متعدد) هي من أكثر الأسباب شيوعاً. "
-                "<strong>فقر الدم</strong> والحمل والسمنة ومرض الكلى المزمن ترفع أيضاً ESR.</p>"
-                "<p>ESR فوق 100 mm/h يتطلب تقييماً شاملاً. سيُفسّر الطبيب النتيجة مع الأعراض وفحوصات أخرى مثل "
-                "<a href=\"/ar/blog/crp-inflammation-marker\">CRP</a>.</p>"
-            ),
-        ),
-        Section(
-            id="symptoms", level=2,
-            heading="أعراض مرتبطة بارتفاع ESR",
-            body_html=(
-                "<p>ESR بحد ذاته لا يسبب أعراضاً؛ إنه يعكس العملية الأساسية. "
-                "الأعراض تعتمد على السبب: حمى في العدوى، آلام مفاصل في المناعة الذاتية، فقدان وزن في السرطان.</p>"
-                "<p>بعض الأشخاص مع ESR مرتفع قليلاً لا يشكون من أعراض. "
-                "ESR مرتفع جداً (&gt; 100 mm/h) مع أعراض عامة يستوجب تقييماً سريرياً عاجلاً.</p>"
-            ),
-        ),
-        Section(
-            id="related-tests", level=2,
-            heading="فحوصات ذات صلة",
-            body_html=(
-                "<p>ESR يُقيَّم دائماً تقريباً مع فحوصات أكثر استهدافاً: "
-                "<strong><a href=\"/ar/blog/crp-inflammation-marker\">CRP</a></strong>، <strong>تعداد دم شامل</strong>، "
-                "وعند الاشتباه بمرض مناعي&mdash;<strong>ANA</strong> و<strong>RF</strong> و<strong>anti-CCP</strong>. "
-                "عند الاشتباه بورم: رحلان بروتيني وتصوير وخزعة.</p>"
-                "<p>ارتفاع ESR المعزول الخفيف في شخص سليم قد يحتاج فقط إلى إعادة فحص بعد أسابيع.</p>"
-            ),
-        ),
-        Section(
-            id="when-to-see-doctor", level=2,
-            heading="متى تراجع الطبيب؟",
-            body_html=(
-                "<p>ناقش أي نتيجة ESR خارج النطاق مع طبيبك. "
-                "اطلب رعاية <strong>عاجلة</strong> إذا تجاوز ESR الـ100 mm/h أو إذا عانيت من حمى غير مفسَّرة أو فقدان وزن كبير "
-                "أو ألم مفاصل شديد أو تعرّق ليلي.</p>"
-                "<p>إذا كان لديك مرض التهابي معروف، قد يستخدم الطبيب قياسات ESR متسلسلة لمراقبة نشاط المرض والاستجابة للعلاج.</p>"
-            ),
-        ),
-        Section(
-            id="how-norya-helps", level=2,
-            heading="كيف تساعدك Norya في فهم ESR",
-            body_html=(
-                "<p>Norya لا تُشخّص&mdash;نحن نساعدك على الاستعداد. ارفع تقريرك على "
-                "<a href=\"/analyze\">noryaai.com/analyze</a> واحصل على ملخص واضح يشرح ESR مع CRP وتعداد الدم بلغة بسيطة.</p>"
-                "<p>سواء كنت تراقب حالة التهابية مزمنة أو وجدت نتيجة غير متوقعة، "
-                "تنظّم Norya نتائجك لتحضيرك لموعد الطبيب. "
-                "لخيارات الاشتراك والأسعار: <a href=\"/pricing\">صفحة الأسعار</a>.</p>"
-            ),
-        ),
-        Section(
-            id="disclaimer", level=2,
-            heading="إخلاء مسؤولية",
-            body_html=(
-                '<p><strong>هذا الدليل لأغراض تثقيفية فقط ولا يحل محل الاستشارة الطبية أو التشخيص.</strong> '
-                'ناقش نتائجك دائماً مع طبيب مختص. <a href="/analyze">ابدأ التحليل مع Norya</a></p>'
-            ),
-        ),
+        Section(id="intro", level=2, heading="سرعة ترسيب الدم المرتفعة (ESR): ماذا تعني نتيجة تحليل الدم",
+                body_html="<p><strong>سرعة ترسيب كريات الدم الحمراء (ESR)</strong> تقيس مدى سرعة ترسب كريات الدم الحمراء في أنبوب عمودي خلال ساعة. ترسب أسرع يشير إلى وجود التهاب في الجسم.</p><p>رغم توفر علامات أكثر تحديداً مثل <strong>البروتين التفاعلي C (CRP)</strong>، يظل ESR قيّماً للعمليات الالتهابية المزمنة. يُستخدم في تشخيص ومتابعة التهاب الشريان الصدغي والتهاب المفاصل الروماتويدي والذئبة.</p>"),
+        Section(id="what-is-esr", level=2, heading="ما هو ESR؟",
+                body_html="<p>ESR علامة التهاب غير نوعية. الفيبرينوجين والغلوبولينات المناعية تجعل كريات الدم الحمراء تتكدس في تشكيلات <em>رولو</em> تترسب أسرع. طريقة <strong>ويسترغرن</strong> هي المعيار المرجعي.</p>"),
+        Section(id="how-esr-works", level=2, heading="كيف يعمل اختبار ESR؟",
+                body_html="<p>كريات الدم الحمراء تحمل شحنة سالبة (جهد زيتا) تبقيها معلقة في البلازما. بروتينات الطور الحاد تقلل هذا الجهد وتسمح بتكوين الرولو. فقر الدم يرفع ESR زوراً؛ كثرة الحمر تخفضه.</p>"),
+        Section(id="normal-ranges", level=2, heading="النطاقات الطبيعية لـ ESR",
+                body_html='<table class="w-full border border-slate-200 text-sm my-4" style="border-collapse: collapse;"><thead><tr><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">المجموعة</th><th style="border:1px solid #cbd5e1;padding:8px 12px;text-align:right;">ESR طبيعي (mm/hr)</th></tr></thead><tbody><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">رجال &lt; 50 سنة</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 15</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">رجال &ge; 50 سنة</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">نساء &lt; 50 سنة</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 20</td></tr><tr><td style="border:1px solid #cbd5e1;padding:8px 12px;">نساء &ge; 50 سنة</td><td style="border:1px solid #cbd5e1;padding:8px 12px;">0 &ndash; 30</td></tr></tbody></table><p>ESR فوق <strong>100 mm/hr</strong> يشير بقوة إلى مرض أساسي خطير.</p>'),
+        Section(id="high-esr-causes", level=2, heading="أسباب ارتفاع ESR",
+                body_html="<p><strong>عدوى:</strong> التهاب رئوي، التهاب شغاف القلب، سل. <strong>أمراض مناعية:</strong> التهاب الشريان الصدغي، التهاب المفاصل الروماتويدي، الذئبة. <strong>أورام:</strong> المايلوما المتعددة، اللمفومة. <strong>أخرى:</strong> فقر الدم، الحمل، الفشل الكلوي، السمنة.</p>"),
+        Section(id="esr-vs-crp", level=2, heading="ESR مقابل CRP",
+                body_html="<p>ESR يستجيب ببطء (أيام) ومناسب للالتهاب المزمن. CRP يستجيب بسرعة (6-8 ساعات) ومناسب للعدوى الحادة. في الذئبة، يرتفع ESR بينما قد يبقى CRP طبيعياً. انظر <a href=\"/blog/crp-high-meaning\">دليل CRP</a>.</p>"),
+        Section(id="false-elevations", level=2, heading="ارتفاعات خاطئة وقيود ESR",
+                body_html="<p>فقر الدم، السمنة، التقدم بالعمر، الحمل، الفشل الكلوي وفرط غاماغلوبولينات الدم قد ترفع ESR زوراً. كثرة الحمر وفقر الدم المنجلي قد تخفضه زوراً.</p>"),
+        Section(id="monitoring-role", level=2, heading="دور ESR في مراقبة الأمراض",
+                body_html="<p>ESR ذو قيمة في متابعة التهاب الشريان الصدغي، التهاب المفاصل الروماتويدي (جزء من DAS28)، العدوى المزمنة ولمفومة هودجكين.</p>"),
+        Section(id="when-to-see-doctor", level=2, heading="متى يجب مراجعة الطبيب",
+                body_html="<p>استشر طبيبك إذا: ESR فوق المعدل الطبيعي المعدل بالعمر مع أعراض غير مفسرة؛ ESR فوق 100؛ مرض مناعي ذاتي مع ارتفاع ESR؛ صداع شديد حديث فوق 50 سنة (التهاب الشريان الصدغي المحتمل).</p>"),
+        Section(id="how-norya-helps", level=2, heading="كيف تساعدك Norya في فهم نتائج ESR",
+                body_html="<p><strong>Norya</strong> تبسّط التفسير: ارفع نتائج تحليل الدم واحصل على تقرير صحي واضح خلال دقائق. <a href=\"/analyze\">ابدأ التحليل مع Norya</a>.</p>"),
+        Section(id="disclaimer", level=2, heading="إخلاء المسؤولية",
+                body_html='<p><strong>هذا الدليل لأغراض إعلامية فقط ولا يحل محل المشورة أو التشخيص الطبي.</strong> ناقش نتائجك دائماً مع متخصص في الرعاية الصحية. <a href="/analyze">ابدأ التحليل مع Norya</a></p>'),
     ]
 
 
-# ============================================================================
-# Public API
-# ============================================================================
-
+# ---------------------------------------------------------------------------
+# PUBLIC GETTERS
+# ---------------------------------------------------------------------------
 def get_esr_sections_by_lang() -> dict:
-    """Returns sections_by_lang dict for ESR article (all 9 languages)."""
     builders = {
         "tr": _sections_tr, "en": _sections_en, "es": _sections_es,
         "de": _sections_de, "fr": _sections_fr, "it": _sections_it,
@@ -1089,86 +645,83 @@ def get_esr_sections_by_lang() -> dict:
 
 
 def get_esr_faq_schema_qa() -> dict:
-    """Returns faq_schema_qa dict for ESR article (all 9 languages)."""
     return {
         "en": [
             {"question": "What is a normal ESR level?",
-             "answer": "Normal ESR depends on age and sex. General upper limits: men under 50: <15 mm/hr, men over 50: <20 mm/hr, women under 50: <20 mm/hr, women over 50: <30 mm/hr."},
-            {"question": "What causes high ESR?",
-             "answer": "Common causes include infections, autoimmune diseases (rheumatoid arthritis, lupus), cancer (lymphoma, myeloma), anemia, pregnancy, and chronic kidney disease. ESR is non-specific and requires clinical correlation."},
-            {"question": "Is ESR the same as CRP?",
-             "answer": "No. Both are markers of inflammation, but CRP rises and falls more quickly than ESR. They provide complementary information; doctors often order both together to assess inflammation."},
-            {"question": "When should I see a doctor about my ESR?",
-             "answer": "See a doctor if your ESR is outside the reference range. Seek urgent attention if ESR is above 100 mm/hr or if you have unexplained fever, weight loss, severe joint pain, or night sweats."},
+             "answer": "Normal ESR varies by age and sex: men under 50: 0-15 mm/hr, men over 50: 0-20 mm/hr, women under 50: 0-20 mm/hr, women over 50: 0-30 mm/hr. ESR naturally increases with age."},
+            {"question": "What causes a high ESR?",
+             "answer": "High ESR can be caused by infections, autoimmune diseases (rheumatoid arthritis, lupus, temporal arteritis), cancer (multiple myeloma, lymphoma), anemia, pregnancy, obesity, and kidney disease."},
+            {"question": "What is the difference between ESR and CRP?",
+             "answer": "ESR responds slowly (days) and is best for monitoring chronic inflammation. CRP responds quickly (6-8 hours) and is better for detecting acute infections. In lupus, ESR rises while CRP may stay normal."},
+            {"question": "Does a high ESR always mean something is wrong?",
+             "answer": "Not necessarily. ESR can be mildly elevated due to aging, obesity, or anemia without serious disease. However, very high ESR (above 100 mm/hr) strongly suggests significant underlying disease."},
+            {"question": "Can ESR be falsely elevated?",
+             "answer": "Yes. Anemia, obesity, aging, pregnancy, kidney failure, and high immunoglobulin levels can all cause false ESR elevations without actual inflammation."},
         ],
         "tr": [
-            {"question": "Normal sedimentasyon (ESR) değeri nedir?",
-             "answer": "Normal ESR yaş ve cinsiyete göre değişir. Genel üst sınırlar: 50 altı erkek <15 mm/saat, 50 üstü erkek <20, 50 altı kadın <20, 50 üstü kadın <30 mm/saat."},
-            {"question": "Sedimentasyon yüksekliğinin nedenleri nelerdir?",
-             "answer": "Yaygın nedenler enfeksiyonlar, otoimmün hastalıklar (romatoid artrit, lupus), kanser (lenfoma, miyelom), anemi, gebelik ve kronik böbrek hastalığıdır. ESR spesifik değildir ve klinik korelasyon gerektirir."},
-            {"question": "ESR ile CRP aynı şey mi?",
-             "answer": "Hayır. Her ikisi de inflamasyon belirtecidir ancak CRP, ESR'den daha hızlı yükselip düşer. Tamamlayıcı bilgi sağlarlar; hekimler genellikle ikisini birlikte ister."},
-            {"question": "Sedimentasyon sonucu için ne zaman doktora başvurmalıyım?",
-             "answer": "ESR referans aralığı dışındaysa doktora danışın. 100 mm/saat üzerinde ise veya açıklanamayan ateş, kilo kaybı veya şiddetli eklem ağrısı varsa acilen yardım alın."},
+            {"question": "Normal ESR (sedimentasyon) değeri nedir?",
+             "answer": "Normal ESR yaşa ve cinsiyete göre değişir: 50 yaş altı erkekler: 0-15, 50 yaş üstü erkekler: 0-20, 50 yaş altı kadınlar: 0-20, 50 yaş üstü kadınlar: 0-30 mm/sa."},
+            {"question": "Yüksek ESR'nin nedenleri nelerdir?",
+             "answer": "Enfeksiyonlar, otoimmün hastalıklar (romatoid artrit, lupus, temporal arterit), kanser (multipl miyelom, lenfoma), anemi, gebelik, obezite ve böbrek hastalığı."},
+            {"question": "ESR ve CRP arasındaki fark nedir?",
+             "answer": "ESR yavaş tepki verir (günler) ve kronik iltihap takibi için uygundur. CRP hızlı tepki verir (6-8 saat) ve akut enfeksiyonlar için daha iyidir."},
+            {"question": "ESR yanlış yüksek çıkabilir mi?",
+             "answer": "Evet. Anemi, obezite, yaşlanma, gebelik, böbrek yetmezliği ve yüksek immünoglobulin düzeyleri ESR'yi yanlış yükseltebilir."},
         ],
         "es": [
-            {"question": "¿Cuál es la VSG normal?",
-             "answer": "Depende de la edad y el sexo. Límites superiores: hombres <50 años: <15 mm/h, >50: <20; mujeres <50: <20, >50: <30 mm/h."},
-            {"question": "¿Qué causa la VSG alta?",
-             "answer": "Infecciones, enfermedades autoinmunes, cáncer, anemia, embarazo y enfermedad renal crónica. La VSG es inespecífica y necesita correlación clínica."},
-            {"question": "¿La VSG y la PCR son lo mismo?",
-             "answer": "No. Ambas son marcadores de inflamación, pero la PCR sube y baja más rápido. Se complementan y los médicos suelen solicitar ambas."},
+            {"question": "¿Cuál es un valor normal de VSG?",
+             "answer": "Hombres <50 años: 0-15, hombres ≥50: 0-20, mujeres <50: 0-20, mujeres ≥50: 0-30 mm/h."},
+            {"question": "¿Qué causa una VSG elevada?",
+             "answer": "Infecciones, enfermedades autoinmunes, cáncer, anemia, embarazo, obesidad y enfermedad renal."},
+            {"question": "¿Cuál es la diferencia entre VSG y PCR?",
+             "answer": "La VSG responde lentamente y es ideal para inflamación crónica. La PCR responde rápidamente y es mejor para infecciones agudas."},
         ],
         "de": [
             {"question": "Was ist ein normaler BSG-Wert?",
-             "answer": "Hängt von Alter und Geschlecht ab. Obergrenzen: Männer <50: <15 mm/h, >50: <20; Frauen <50: <20, >50: <30 mm/h."},
-            {"question": "Was verursacht eine erhöhte BSG?",
-             "answer": "Häufige Ursachen sind Infektionen, Autoimmunerkrankungen, Krebs, Anämie, Schwangerschaft und chronische Nierenerkrankung."},
-            {"question": "Wann zum Arzt bei erhöhter BSG?",
-             "answer": "Sprechen Sie mit Ihrem Arzt bei jeder auffälligen BSG. Dringende Abklärung bei >100 mm/h oder ungeklärtem Fieber, Gewichtsverlust oder Nachtschweiß."},
+             "answer": "Männer <50: 0-15, Männer ≥50: 0-20, Frauen <50: 0-20, Frauen ≥50: 0-30 mm/h."},
+            {"question": "Was verursacht eine hohe BSG?",
+             "answer": "Infektionen, Autoimmunerkrankungen, Krebs, Anämie, Schwangerschaft, Adipositas und Nierenerkrankung."},
+            {"question": "Was ist der Unterschied zwischen BSG und CRP?",
+             "answer": "BSG reagiert langsam und eignet sich für chronische Entzündungen. CRP reagiert schnell und ist besser für akute Infektionen."},
         ],
         "fr": [
-            {"question": "Quelle est la VS normale ?",
-             "answer": "Dépend de l'âge et du sexe. Limites : hommes <50 ans : <15 mm/h, >50 : <20 ; femmes <50 : <20, >50 : <30 mm/h."},
+            {"question": "Quelle est une VS normale ?",
+             "answer": "Hommes <50 ans : 0-15, hommes ≥50 : 0-20, femmes <50 : 0-20, femmes ≥50 : 0-30 mm/h."},
             {"question": "Quelles sont les causes d'une VS élevée ?",
-             "answer": "Infections, maladies auto-immunes, cancer, anémie, grossesse et insuffisance rénale chronique. La VS est non spécifique."},
-            {"question": "Quand consulter pour la VS ?",
-             "answer": "Consultez si la VS est hors norme. Urgence si >100 mm/h ou fièvre inexpliquée, perte de poids, douleurs articulaires sévères."},
+             "answer": "Infections, maladies auto-immunes, cancers, anémie, grossesse, obésité et maladie rénale."},
+            {"question": "Quelle est la différence entre VS et CRP ?",
+             "answer": "La VS répond lentement et convient à l'inflammation chronique. La CRP répond rapidement et est meilleure pour les infections aiguës."},
         ],
         "it": [
-            {"question": "Qual è la VES normale?",
-             "answer": "Dipende da età e sesso. Limiti: uomini <50 anni: <15 mm/h, >50: <20; donne <50: <20, >50: <30 mm/h."},
-            {"question": "Cosa causa la VES alta?",
-             "answer": "Infezioni, malattie autoimmuni, cancro, anemia, gravidanza e insufficienza renale cronica. La VES è aspecifica."},
-            {"question": "Quando rivolgersi al medico per la VES?",
-             "answer": "Parlate con il medico se la VES è fuori intervallo. Urgenza se >100 mm/h o febbre inspiegabile, perdita di peso, dolori articolari severi."},
+            {"question": "Qual è un valore normale di VES?",
+             "answer": "Uomini <50 anni: 0-15, uomini ≥50: 0-20, donne <50: 0-20, donne ≥50: 0-30 mm/h."},
+            {"question": "Cosa causa una VES alta?",
+             "answer": "Infezioni, malattie autoimmuni, tumori, anemia, gravidanza, obesità e nefropatia."},
+            {"question": "Qual è la differenza tra VES e PCR?",
+             "answer": "La VES risponde lentamente ed è adatta per l'infiammazione cronica. La PCR risponde rapidamente ed è migliore per le infezioni acute."},
         ],
         "he": [
             {"question": "מהו ערך ESR תקין?",
-             "answer": "תלוי בגיל ובמין. גבולות עליונים: גברים <50: <15 mm/h, >50: <20; נשים <50: <20, >50: <30 mm/h."},
+             "answer": "גברים מתחת ל-50: 0-15, גברים מעל 50: 0-20, נשים מתחת ל-50: 0-20, נשים מעל 50: 0-30 mm/hr."},
             {"question": "מה גורם ל-ESR גבוה?",
-             "answer": "זיהומים, מחלות אוטואימוניות, סרטן, אנמיה, הריון ומחלת כליות כרונית. ESR הוא לא ספציפי ודורש מתאם קליני."},
-            {"question": "מתי לפנות לרופא בגלל ESR?",
-             "answer": "פנו לרופא בכל ESR חורג מהטווח. פנו בדחיפות אם מעל 100 mm/h או חום לא מוסבר, ירידה במשקל, כאבי מפרקים חמורים או הזעות לילה."},
+             "answer": "זיהומים, מחלות אוטואימוניות, סרטן, אנמיה, הריון, השמנה ומחלת כליות."},
+            {"question": "מה ההבדל בין ESR ל-CRP?",
+             "answer": "ESR מגיב לאט ומתאים לדלקת כרונית. CRP מגיב מהר ומתאים יותר לזיהומים חריפים."},
         ],
         "hi": [
-            {"question": "सामान्य ESR कितना होना चाहिए?",
-             "answer": "यह उम्र और लिंग पर निर्भर करता है। ऊपरी सीमाएँ: 50 से कम पुरुष <15 mm/hr, 50 से अधिक <20; 50 से कम महिलाएँ <20, 50 से अधिक <30 mm/hr।"},
-            {"question": "ESR बढ़ने के कारण क्या हैं?",
-             "answer": "संक्रमण, ऑटोइम्यून रोग, कैंसर, एनीमिया, गर्भावस्था और क्रोनिक किडनी डिजीज। ESR नॉन-स्पेसिफिक है और क्लिनिकल कोरिलेशन ज़रूरी है।"},
+            {"question": "सामान्य ESR स्तर क्या है?",
+             "answer": "पुरुष <50: 0-15, पुरुष ≥50: 0-20, महिलाएँ <50: 0-20, महिलाएँ ≥50: 0-30 mm/hr."},
+            {"question": "उच्च ESR का क्या कारण है?",
+             "answer": "संक्रमण, ऑटोइम्यून रोग, कैंसर, एनीमिया, गर्भावस्था, मोटापा और गुर्दे की बीमारी।"},
             {"question": "ESR और CRP में क्या अंतर है?",
-             "answer": "दोनों सूजन के मार्कर हैं लेकिन CRP, ESR से ज़्यादा तेज़ी से बढ़ता-घटता है। वे पूरक जानकारी देते हैं; डॉक्टर अक्सर दोनों मँगवाते हैं।"},
-            {"question": "ESR के लिए डॉक्टर से कब मिलें?",
-             "answer": "ESR रेफरेंस रेंज से बाहर हो तो डॉक्टर से बात करें। 100 mm/hr से ऊपर हो या अस्पष्ट बुखार, वज़न कम होना, गंभीर जोड़ दर्द हो तो तुरंत सहायता लें।"},
+             "answer": "ESR धीरे प्रतिक्रिया करता है और पुरानी सूजन के लिए उपयुक्त है। CRP तेज़ प्रतिक्रिया करता है और तीव्र संक्रमण के लिए बेहतर है।"},
         ],
         "ar": [
-            {"question": "ما هو معدل ESR الطبيعي؟",
-             "answer": "يعتمد على العمر والجنس. الحدود العليا: رجال <50 سنة: <15 mm/h، >50: <20؛ نساء <50: <20، >50: <30 mm/h."},
+            {"question": "ما هو مستوى ESR الطبيعي؟",
+             "answer": "رجال أقل من 50: 0-15، رجال 50 فأكثر: 0-20، نساء أقل من 50: 0-20، نساء 50 فأكثر: 0-30 mm/hr."},
             {"question": "ما أسباب ارتفاع ESR؟",
-             "answer": "العدوى، أمراض المناعة الذاتية، السرطان، فقر الدم، الحمل ومرض الكلى المزمن. ESR غير نوعي ويحتاج ربطاً سريرياً."},
-            {"question": "هل ESR نفس CRP؟",
-             "answer": "لا. كلاهما مؤشرا التهاب لكن CRP يرتفع وينخفض أسرع. يقدمان معلومات متكاملة ويطلبهما الأطباء معاً عادةً."},
-            {"question": "متى أراجع الطبيب بسبب ESR؟",
-             "answer": "راجع الطبيب عند أي ESR خارج النطاق. اطلب رعاية عاجلة إذا تجاوز 100 mm/h أو عند حمى غير مفسَّرة أو فقدان وزن أو آلام مفاصل شديدة."},
+             "answer": "العدوى، أمراض المناعة الذاتية، السرطان، فقر الدم، الحمل، السمنة وأمراض الكلى."},
+            {"question": "ما الفرق بين ESR وCRP؟",
+             "answer": "ESR يستجيب ببطء ومناسب للالتهاب المزمن. CRP يستجيب بسرعة ومناسب أكثر للعدوى الحادة."},
         ],
     }

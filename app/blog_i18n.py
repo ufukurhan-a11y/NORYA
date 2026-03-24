@@ -6247,6 +6247,503 @@ def _article_fasting_insulin_high() -> Article:
 
 _ARTICLE_FASTING_INSULIN_HIGH = _article_fasting_insulin_high()
 
+
+def _article_triglycerides() -> Article:
+    from app.blog_article_triglycerides_content import get_triglycerides_sections_by_lang, get_triglycerides_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/triglycerides-high-hero.png"
+    slugs = {"tr": "trigliserit-yuksekligi-ne-anlama-gelir", "en": "triglycerides-high-meaning", "es": "trigliceridos-altos-significado", "de": "triglyzeride-zu-hoch-bedeutung", "fr": "triglycerides-eleves-signification", "it": "trigliceridi-alti-significato", "he": "טריגליצרידים-גבוהים", "hi": "triglycerides-high-meaning-hindi", "ar": "ارتفاع-الدهون-الثلاثية"}
+    cat = {"tr": "Kolesterol", "en": "Cholesterol", "es": "Colesterol", "de": "Cholesterin", "fr": "Cholestérol", "it": "Colesterolo", "he": "כולסטרול", "hi": "कोलेस्ट्रॉल", "ar": "الكوليسترول"}
+    titles = {"tr": "Trigliserit yüksekliği ne anlama gelir?", "en": "What does high triglycerides mean?", "es": "¿Qué significan los triglicéridos altos?", "de": "Triglyzeride zu hoch: Was bedeutet das?", "fr": "Triglycérides élevés : que signifie ce résultat ?", "it": "Trigliceridi alti: cosa significa?", "he": "מה משמעות טריגליצרידים גבוהים?", "hi": "हाई ट्राइग्लिसराइड्स का क्या मतलब है?", "ar": "ماذا يعني ارتفاع الدهون الثلاثية؟"}
+    subtitles = {"tr": "Trigliserit yüksekliği kalp-damar riski açısından önemli; tek başına teşhis değildir.", "en": "High triglycerides can be a cardiovascular risk factor; they are not a diagnosis on their own.", "es": "Los triglicéridos altos pueden ser un factor de riesgo cardiovascular; no son un diagnóstico por sí solos.", "de": "Erhöhte Triglyzeride können ein kardiovaskulärer Risikofaktor sein; allein keine Diagnose.", "fr": "Des triglycérides élevés peuvent être un facteur de risque cardiovasculaire ; ce n'est pas un diagnostic en soi.", "it": "I trigliceridi alti possono essere un fattore di rischio cardiovascolare; non sono una diagnosi da soli.", "he": "טריגליצרידים גבוהים עשויים להוות גורם סיכון קרדיווסקולרי; אינם אבחנה בפני עצמם.", "hi": "हाई ट्राइग्लिसराइड्स हृदय रोग का जोखिम कारक हो सकते हैं; अकेले निदान नहीं।", "ar": "ارتفاع الدهون الثلاثية قد يكون عامل خطر قلبي وعائي؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Trigliserit yüksekliği kalp-damar hastalıkları riski ile ilişkilendirilebilir. Tek başına teşhis değildir; hekim diğer değerlerle yorumlar.", "en": "High triglycerides may be linked to cardiovascular disease risk. Not a diagnosis alone; your doctor interprets with other results.", "es": "Los triglicéridos altos pueden estar ligados al riesgo cardiovascular. No son diagnóstico; el médico interpreta con el resto.", "de": "Erhöhte Triglyzeride können mit kardiovaskulärem Risiko zusammenhängen. Keine Diagnose allein; der Arzt wertet mit anderen Werten.", "fr": "Des triglycérides élevés peuvent être liés au risque cardiovasculaire. Pas un diagnostic seul ; le médecin interprète avec le bilan.", "it": "I trigliceridi alti possono essere legati al rischio cardiovascolare. Non diagnosi da soli; il medico valuta con altri risultati.", "he": "טריגליצרידים גבוהים עשויים לקשור לסיכון קרדיווסקולרי. לא אבחנה לבד; הרופא מפרש עם שאר התוצאות.", "hi": "हाई ट्राइग्लिसराइड्स हृदय रोग जोखिम से जुड़े हो सकते हैं। अकेले निदान नहीं; डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع الدهون الثلاثية قد يرتبط بخطر أمراض القلب. ليس تشخيصاً وحده؛ الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Trigliserit yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high triglycerides mean, normal ranges, and causes. For information only.", "es": "Triglicéridos altos: significado y causas. Solo informativo.", "de": "Triglyzeride erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "Triglycérides élevés : signification et causes. À titre informatif.", "it": "Trigliceridi alti: significato e cause. Solo informativo.", "he": "טריגליצרידים גבוהים: משמעות וסיבות. למידע בלבד.", "hi": "हाई ट्राइग्लिसराइड्स: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع الدهون الثلاثية: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Trigliserit kan tahlili — Norya", "en": "Triglycerides blood test — Norya", "es": "Triglicéridos análisis — Norya", "de": "Triglyzeride Bluttest — Norya", "fr": "Triglycérides bilan sanguin — Norya", "it": "Trigliceridi esame del sangue — Norya", "he": "טריגליצרידים בדיקת דם — Norya", "hi": "ट्राइग्लिसराइड्स ब्लड टेस्ट — Norya", "ar": "الدهون الثلاثية تحليل دم — Norya"}
+    sections_by_lang = get_triglycerides_sections_by_lang()
+    faq_schema_qa = get_triglycerides_faq_schema_qa()
+    return Article(
+        id="triglycerides-high-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_ggt() -> Article:
+    from app.blog_article_ggt_content import get_ggt_sections_by_lang, get_ggt_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/ggt-high-hero.png"
+    slugs = {"tr": "ggt-yuksekligi-ne-anlama-gelir", "en": "ggt-high-meaning", "es": "ggt-alta-significado", "de": "ggt-gamma-gt-zu-hoch", "fr": "ggt-gamma-gt-elevee", "it": "ggt-gamma-gt-alta", "he": "ggt-גבוה", "hi": "ggt-high-meaning-hindi", "ar": "ارتفاع-ggt"}
+    cat = {"tr": "Karaciğer", "en": "Liver", "es": "Hígado", "de": "Leber", "fr": "Foie", "it": "Fegato", "he": "כבד", "hi": "लिवर", "ar": "الكبد"}
+    titles = {"tr": "GGT yüksekliği ne anlama gelir?", "en": "What does high GGT (Gamma-GT) mean?", "es": "¿Qué significa la GGT alta?", "de": "GGT (Gamma-GT) zu hoch: Was bedeutet das?", "fr": "GGT élevée : que signifie ce résultat ?", "it": "GGT alta: cosa significa?", "he": "מה משמעות GGT גבוה?", "hi": "हाई GGT (गामा-GT) का क्या मतलब है?", "ar": "ماذا يعني ارتفاع GGT؟"}
+    subtitles = {"tr": "GGT karaciğer ve safra yolları hakkında ipucu verir; tek başına teşhis koymaz.", "en": "GGT gives clues about liver and bile duct health; it does not diagnose on its own.", "es": "La GGT da pistas sobre hígado y vías biliares; no diagnostica por sí sola.", "de": "GGT gibt Hinweise auf Leber und Gallenwege; allein keine Diagnose.", "fr": "La GGT donne des indices sur le foie et les voies biliaires ; elle ne diagnostique pas seule.", "it": "La GGT offre indizi su fegato e vie biliari; non diagnostica da sola.", "he": "GGT נותן רמזים על הכבד ודרכי המרה; אינו מאבחן לבד.", "hi": "GGT लिवर और पित्त नली के बारे में संकेत देता है; अकेले निदान नहीं करता।", "ar": "GGT يعطي مؤشرات عن الكبد والقنوات الصفراوية؛ لا يشخّص بمفرده."}
+    excerpts = {"tr": "GGT yüksekliği karaciğer veya safra yolları sorunlarının işareti olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "High GGT may indicate liver or bile duct issues; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La GGT alta puede indicar problemas hepáticos o biliares; no es diagnóstico por sí sola. El médico interpreta con el resto.", "de": "Erhöhte GGT kann auf Leber- oder Gallenwegserkrankungen hinweisen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une GGT élevée peut indiquer des problèmes hépatiques ou biliaires ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "La GGT alta può indicare problemi epatici o biliari; non è diagnosi da sola. Il medico valuta con altri risultati.", "he": "GGT גבוה עשוי להצביע על בעיות בכבד או בדרכי המרה; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई GGT लिवर या पित्त नली की समस्या का संकेत हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع GGT قد يشير إلى مشاكل في الكبد أو القنوات الصفراوية؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "GGT yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high GGT means, normal ranges, and causes. For information only.", "es": "GGT alta: significado y causas. Solo informativo.", "de": "GGT erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "GGT élevée : signification et causes. À titre informatif.", "it": "GGT alta: significato e cause. Solo informativo.", "he": "GGT גבוה: משמעות וסיבות. למידע בלבד.", "hi": "हाई GGT: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع GGT: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "GGT kan tahlili — Norya", "en": "GGT blood test — Norya", "es": "GGT análisis de sangre — Norya", "de": "GGT Bluttest — Norya", "fr": "GGT bilan sanguin — Norya", "it": "GGT esame del sangue — Norya", "he": "GGT בדיקת דם — Norya", "hi": "GGT ब्लड टेस्ट — Norya", "ar": "GGT تحليل دم — Norya"}
+    sections_by_lang = get_ggt_sections_by_lang()
+    faq_schema_qa = get_ggt_faq_schema_qa()
+    return Article(
+        id="ggt-high-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_uric_acid() -> Article:
+    from app.blog_article_uric_acid_content import get_uric_acid_sections_by_lang, get_uric_acid_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/uric-acid-high-hero.png"
+    slugs = {"tr": "urik-asit-yuksekligi-ne-anlama-gelir", "en": "uric-acid-high-meaning", "es": "acido-urico-alto-significado", "de": "harnsaeure-zu-hoch-bedeutung", "fr": "acide-urique-eleve-signification", "it": "acido-urico-alto-significato", "he": "חומצה-אורית-גבוהה", "hi": "uric-acid-high-meaning-hindi", "ar": "ارتفاع-حمض-اليوريك"}
+    cat = {"tr": "Böbrek", "en": "Kidney", "es": "Riñón", "de": "Niere", "fr": "Rein", "it": "Rene", "he": "כליות", "hi": "किडनी", "ar": "الكلى"}
+    titles = {"tr": "Ürik asit yüksekliği ne anlama gelir?", "en": "What does high uric acid mean?", "es": "¿Qué significa el ácido úrico alto?", "de": "Harnsäure zu hoch: Was bedeutet das?", "fr": "Acide urique élevé : que signifie ce résultat ?", "it": "Acido urico alto: cosa significa?", "he": "מה משמעות חומצה אורית גבוהה?", "hi": "हाई यूरिक एसिड का क्या मतलब है?", "ar": "ماذا يعني ارتفاع حمض اليوريك؟"}
+    subtitles = {"tr": "Ürik asit yüksekliği gut veya böbrek sorunlarına işaret edebilir; tek başına teşhis değildir.", "en": "High uric acid may point to gout or kidney issues; it is not a diagnosis on its own.", "es": "El ácido úrico alto puede indicar gota o problemas renales; no es un diagnóstico por sí solo.", "de": "Erhöhte Harnsäure kann auf Gicht oder Nierenprobleme hinweisen; allein keine Diagnose.", "fr": "Un acide urique élevé peut indiquer la goutte ou des problèmes rénaux ; ce n'est pas un diagnostic en soi.", "it": "L'acido urico alto può indicare gotta o problemi renali; non è una diagnosi da solo.", "he": "חומצה אורית גבוהה עשויה להצביע על שגדון או בעיות כליות; אינה אבחנה בפני עצמה.", "hi": "हाई यूरिक एसिड गाउट या किडनी समस्या का संकेत हो सकता है; अकेले निदान नहीं।", "ar": "ارتفاع حمض اليوريك قد يشير إلى النقرس أو مشاكل كلوية؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Ürik asit yüksekliği gut veya böbrek sorunlarıyla ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "High uric acid may be associated with gout or kidney problems; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "El ácido úrico alto puede estar asociado a gota o problemas renales; no es diagnóstico solo. El médico interpreta con el resto.", "de": "Erhöhte Harnsäure kann mit Gicht oder Nierenproblemen zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Un acide urique élevé peut être lié à la goutte ou à des problèmes rénaux ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "L'acido urico alto può essere legato a gotta o problemi renali; non diagnosi da solo. Il medico valuta con altri risultati.", "he": "חומצה אורית גבוהה עשויה לקשור לשגדון או בעיות כליות; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई यूरिक एसिड गाउट या किडनी समस्या से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع حمض اليوريك قد يرتبط بالنقرس أو مشاكل الكلى؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Ürik asit yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high uric acid means, normal ranges, and causes. For information only.", "es": "Ácido úrico alto: significado y causas. Solo informativo.", "de": "Harnsäure erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "Acide urique élevé : signification et causes. À titre informatif.", "it": "Acido urico alto: significato e cause. Solo informativo.", "he": "חומצה אורית גבוהה: משמעות וסיבות. למידע בלבד.", "hi": "हाई यूरिक एसिड: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع حمض اليوريك: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Ürik asit kan tahlili — Norya", "en": "Uric acid blood test — Norya", "es": "Ácido úrico análisis — Norya", "de": "Harnsäure Bluttest — Norya", "fr": "Acide urique bilan sanguin — Norya", "it": "Acido urico esame del sangue — Norya", "he": "חומצה אורית בדיקת דם — Norya", "hi": "यूरिक एसिड ब्लड टेस्ट — Norya", "ar": "حمض اليوريك تحليل دم — Norya"}
+    sections_by_lang = get_uric_acid_sections_by_lang()
+    faq_schema_qa = get_uric_acid_faq_schema_qa()
+    return Article(
+        id="uric-acid-high-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_magnesium() -> Article:
+    from app.blog_article_magnesium_content import get_magnesium_sections_by_lang, get_magnesium_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/magnesium-deficiency-hero.png"
+    slugs = {"tr": "magnezyum-eksikligi-ne-anlama-gelir", "en": "magnesium-deficiency-meaning", "es": "deficiencia-magnesio-significado", "de": "magnesiummangel-bedeutung", "fr": "carence-magnesium-signification", "it": "carenza-magnesio-significato", "he": "מחסור-מגנזיום", "hi": "magnesium-deficiency-meaning-hindi", "ar": "نقص-المغنيسيوم"}
+    cat = {"tr": "Mineraller", "en": "Minerals", "es": "Minerales", "de": "Mineralstoffe", "fr": "Minéraux", "it": "Minerali", "he": "מינרלים", "hi": "मिनरल्स", "ar": "المعادن"}
+    titles = {"tr": "Magnezyum eksikliği ne anlama gelir?", "en": "What does magnesium deficiency mean?", "es": "¿Qué significa la deficiencia de magnesio?", "de": "Magnesiummangel: Was bedeutet das?", "fr": "Carence en magnésium : que signifie ce résultat ?", "it": "Carenza di magnesio: cosa significa?", "he": "מה משמעות מחסור במגנזיום?", "hi": "मैग्नीशियम की कमी का क्या मतलब है?", "ar": "ماذا يعني نقص المغنيسيوم؟"}
+    subtitles = {"tr": "Magnezyum eksikliği kas, sinir ve kalp fonksiyonlarını etkileyebilir; tek başına teşhis değildir.", "en": "Magnesium deficiency can affect muscle, nerve, and heart function; it is not a diagnosis on its own.", "es": "La deficiencia de magnesio puede afectar músculos, nervios y corazón; no es un diagnóstico por sí sola.", "de": "Magnesiummangel kann Muskel-, Nerven- und Herzfunktion beeinflussen; allein keine Diagnose.", "fr": "Une carence en magnésium peut affecter muscles, nerfs et cœur ; ce n'est pas un diagnostic en soi.", "it": "La carenza di magnesio può influire su muscoli, nervi e cuore; non è una diagnosi da sola.", "he": "מחסור במגנזיום עשוי להשפיע על שרירים, עצבים ולב; אינו אבחנה בפני עצמו.", "hi": "मैग्नीशियम की कमी मांसपेशियों, नसों और हृदय को प्रभावित कर सकती है; अकेले निदान नहीं।", "ar": "نقص المغنيسيوم قد يؤثر على العضلات والأعصاب والقلب؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Magnezyum eksikliği kas krampları, yorgunluk ve kalp ritmi sorunlarıyla ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "Magnesium deficiency may be associated with muscle cramps, fatigue, and heart rhythm issues; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La deficiencia de magnesio puede asociarse a calambres, fatiga y arritmias; no es diagnóstico solo. El médico interpreta con el resto.", "de": "Magnesiummangel kann mit Muskelkrämpfen, Müdigkeit und Herzrhythmusstörungen zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une carence en magnésium peut être liée à des crampes, de la fatigue et des troubles du rythme ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "La carenza di magnesio può essere legata a crampi, stanchezza e aritmie; non diagnosi da sola. Il medico valuta con altri risultati.", "he": "מחסור במגנזיום עשוי לקשור להתכווצויות שרירים, עייפות ובעיות קצב לב; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "मैग्नीशियम की कमी मांसपेशियों में ऐंठन, थकान और हृदय ताल समस्या से जुड़ी हो सकती है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "نقص المغنيسيوم قد يرتبط بتشنجات عضلية وإرهاق واضطرابات نظم القلب؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Magnezyum eksikliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What magnesium deficiency means, normal ranges, and causes. For information only.", "es": "Deficiencia de magnesio: significado y causas. Solo informativo.", "de": "Magnesiummangel: Ursachen und Normalwerte. Nur zur Information.", "fr": "Carence en magnésium : signification et causes. À titre informatif.", "it": "Carenza di magnesio: significato e cause. Solo informativo.", "he": "מחסור במגנזיום: משמעות וסיבות. למידע בלבד.", "hi": "मैग्नीशियम की कमी: मतलब और कारण। केवल सूचनार्थ।", "ar": "نقص المغنيسيوم: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Magnezyum kan tahlili — Norya", "en": "Magnesium blood test — Norya", "es": "Magnesio análisis — Norya", "de": "Magnesium Bluttest — Norya", "fr": "Magnésium bilan sanguin — Norya", "it": "Magnesio esame del sangue — Norya", "he": "מגנזיום בדיקת דם — Norya", "hi": "मैग्नीशियम ब्लड टेस्ट — Norya", "ar": "المغنيسيوم تحليل دم — Norya"}
+    sections_by_lang = get_magnesium_sections_by_lang()
+    faq_schema_qa = get_magnesium_faq_schema_qa()
+    return Article(
+        id="magnesium-deficiency-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_bilirubin() -> Article:
+    from app.blog_article_bilirubin_content import get_bilirubin_sections_by_lang, get_bilirubin_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/bilirubin-high-hero.png"
+    slugs = {"tr": "bilirubin-yuksekligi-ne-anlama-gelir", "en": "bilirubin-high-meaning", "es": "bilirrubina-alta-significado", "de": "bilirubin-zu-hoch-bedeutung", "fr": "bilirubine-elevee-signification", "it": "bilirubina-alta-significato", "he": "בילירובין-גבוה", "hi": "bilirubin-high-meaning-hindi", "ar": "ارتفاع-البيليروبين"}
+    cat = {"tr": "Karaciğer", "en": "Liver", "es": "Hígado", "de": "Leber", "fr": "Foie", "it": "Fegato", "he": "כבד", "hi": "लिवर", "ar": "الكبد"}
+    titles = {"tr": "Bilirubin yüksekliği ne anlama gelir?", "en": "What does high bilirubin mean?", "es": "¿Qué significa la bilirrubina alta?", "de": "Bilirubin zu hoch: Was bedeutet das?", "fr": "Bilirubine élevée : que signifie ce résultat ?", "it": "Bilirubina alta: cosa significa?", "he": "מה משמעות בילירובין גבוה?", "hi": "हाई बिलीरुबिन का क्या मतलब है?", "ar": "ماذا يعني ارتفاع البيليروبين؟"}
+    subtitles = {"tr": "Bilirubin yüksekliği karaciğer veya kan yıkımı sorunlarına işaret edebilir; tek başına teşhis değildir.", "en": "High bilirubin may indicate liver or red blood cell breakdown issues; it is not a diagnosis on its own.", "es": "La bilirrubina alta puede indicar problemas hepáticos o hemólisis; no es un diagnóstico por sí sola.", "de": "Erhöhtes Bilirubin kann auf Leber- oder Hämolyseprobleme hinweisen; allein keine Diagnose.", "fr": "Une bilirubine élevée peut indiquer des problèmes hépatiques ou d'hémolyse ; ce n'est pas un diagnostic en soi.", "it": "La bilirubina alta può indicare problemi epatici o emolisi; non è una diagnosi da sola.", "he": "בילירובין גבוה עשוי להצביע על בעיות בכבד או פירוק תאי דם; אינו אבחנה בפני עצמו.", "hi": "हाई बिलीरुबिन लिवर या लाल रक्त कोशिका विघटन समस्या का संकेत हो सकता है; अकेले निदान नहीं।", "ar": "ارتفاع البيليروبين قد يشير إلى مشاكل في الكبد أو تحلل كريات الدم الحمراء؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Bilirubin yüksekliği karaciğer hastalığı veya hemoliz ile ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "High bilirubin may be linked to liver disease or hemolysis; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La bilirrubina alta puede estar ligada a enfermedad hepática o hemólisis; no es diagnóstico sola. El médico interpreta con el resto.", "de": "Erhöhtes Bilirubin kann mit Lebererkrankung oder Hämolyse zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une bilirubine élevée peut être liée à une maladie hépatique ou une hémolyse ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "La bilirubina alta può essere legata a malattia epatica o emolisi; non diagnosi da sola. Il medico valuta con altri risultati.", "he": "בילירובין גבוה עשוי לקשור למחלת כבד או המוליזה; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई बिलीरुबिन लिवर रोग या हेमोलिसिस से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع البيليروبين قد يرتبط بمرض كبدي أو انحلال الدم؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Bilirubin yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high bilirubin means, normal ranges, and causes. For information only.", "es": "Bilirrubina alta: significado y causas. Solo informativo.", "de": "Bilirubin erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "Bilirubine élevée : signification et causes. À titre informatif.", "it": "Bilirubina alta: significato e cause. Solo informativo.", "he": "בילירובין גבוה: משמעות וסיבות. למידע בלבד.", "hi": "हाई बिलीरुबिन: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع البيليروبين: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Bilirubin kan tahlili — Norya", "en": "Bilirubin blood test — Norya", "es": "Bilirrubina análisis — Norya", "de": "Bilirubin Bluttest — Norya", "fr": "Bilirubine bilan sanguin — Norya", "it": "Bilirubina esame del sangue — Norya", "he": "בילירובין בדיקת דם — Norya", "hi": "बिलीरुबिन ब्लड टेस्ट — Norya", "ar": "البيليروبين تحليل دم — Norya"}
+    sections_by_lang = get_bilirubin_sections_by_lang()
+    faq_schema_qa = get_bilirubin_faq_schema_qa()
+    return Article(
+        id="bilirubin-high-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_esr() -> Article:
+    from app.blog_article_esr_content import get_esr_sections_by_lang, get_esr_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/esr-sedimentation-hero.png"
+    slugs = {"tr": "sedimentasyon-yuksekligi-ne-anlama-gelir", "en": "esr-sedimentation-rate-meaning", "es": "vsg-sedimentacion-alta-significado", "de": "blutsenkung-bsg-erhoht-bedeutung", "fr": "vitesse-sedimentation-elevee-signification", "it": "ves-alta-significato", "he": "שקיעת-דם-גבוהה", "hi": "esr-sedimentation-rate-meaning-hindi", "ar": "ارتفاع-سرعة-الترسيب"}
+    cat = {"tr": "İltihap", "en": "Inflammation", "es": "Inflamación", "de": "Entzündung", "fr": "Inflammation", "it": "Infiammazione", "he": "דלקת", "hi": "सूजन", "ar": "الالتهاب"}
+    titles = {"tr": "Sedimentasyon (ESR) yüksekliği ne anlama gelir?", "en": "What does a high ESR (sedimentation rate) mean?", "es": "¿Qué significa la VSG alta?", "de": "Blutsenkung (BSG) erhöht: Was bedeutet das?", "fr": "Vitesse de sédimentation élevée : que signifie ce résultat ?", "it": "VES alta: cosa significa?", "he": "מה משמעות שקיעת דם (ESR) גבוהה?", "hi": "हाई ESR (सेडिमेंटेशन रेट) का क्या मतलब है?", "ar": "ماذا يعني ارتفاع سرعة الترسيب (ESR)؟"}
+    subtitles = {"tr": "ESR yüksekliği iltihap veya enfeksiyon varlığına işaret edebilir; tek başına teşhis değildir.", "en": "A high ESR may indicate inflammation or infection; it is not a diagnosis on its own.", "es": "Una VSG alta puede indicar inflamación o infección; no es un diagnóstico por sí sola.", "de": "Eine erhöhte BSG kann auf Entzündung oder Infektion hinweisen; allein keine Diagnose.", "fr": "Une VS élevée peut indiquer une inflammation ou une infection ; ce n'est pas un diagnostic en soi.", "it": "Una VES alta può indicare infiammazione o infezione; non è una diagnosi da sola.", "he": "שקיעת דם גבוהה עשויה להצביע על דלקת או זיהום; אינה אבחנה בפני עצמה.", "hi": "हाई ESR सूजन या संक्रमण का संकेत हो सकता है; अकेले निदान नहीं।", "ar": "ارتفاع سرعة الترسيب قد يشير إلى التهاب أو عدوى؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "ESR yüksekliği iltihap veya enfeksiyon ile ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "A high ESR may be linked to inflammation or infection; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "Una VSG alta puede estar ligada a inflamación o infección; no es diagnóstico sola. El médico interpreta con el resto.", "de": "Erhöhte BSG kann mit Entzündung oder Infektion zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une VS élevée peut être liée à une inflammation ou une infection ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "Una VES alta può essere legata a infiammazione o infezione; non diagnosi da sola. Il medico valuta con altri risultati.", "he": "שקיעת דם גבוהה עשויה לקשור לדלקת או זיהום; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई ESR सूजन या संक्रमण से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع سرعة الترسيب قد يرتبط بالتهاب أو عدوى؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Sedimentasyon (ESR) yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What a high ESR means, normal ranges, and causes. For information only.", "es": "VSG alta: significado y causas. Solo informativo.", "de": "BSG erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "VS élevée : signification et causes. À titre informatif.", "it": "VES alta: significato e cause. Solo informativo.", "he": "שקיעת דם גבוהה: משמעות וסיבות. למידע בלבד.", "hi": "हाई ESR: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع سرعة الترسيب: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Sedimentasyon ESR kan tahlili — Norya", "en": "ESR sedimentation rate blood test — Norya", "es": "VSG análisis de sangre — Norya", "de": "BSG Blutsenkung Bluttest — Norya", "fr": "VS vitesse de sédimentation — Norya", "it": "VES esame del sangue — Norya", "he": "שקיעת דם בדיקת דם — Norya", "hi": "ESR सेडिमेंटेशन रेट ब्लड टेस्ट — Norya", "ar": "سرعة الترسيب تحليل دم — Norya"}
+    sections_by_lang = get_esr_sections_by_lang()
+    faq_schema_qa = get_esr_faq_schema_qa()
+    return Article(
+        id="esr-sedimentation-rate-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_cortisol() -> Article:
+    from app.blog_article_cortisol_content import get_cortisol_sections_by_lang, get_cortisol_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/cortisol-levels-hero.png"
+    slugs = {"tr": "kortizol-yuksekligi-ne-anlama-gelir", "en": "cortisol-levels-meaning", "es": "cortisol-alto-significado", "de": "cortisol-zu-hoch-bedeutung", "fr": "cortisol-eleve-signification", "it": "cortisolo-alto-significato", "he": "קורטיזול-גבוה", "hi": "cortisol-levels-meaning-hindi", "ar": "ارتفاع-الكورتيزول"}
+    cat = {"tr": "Hormonlar", "en": "Hormones", "es": "Hormonas", "de": "Hormone", "fr": "Hormones", "it": "Ormoni", "he": "הורמונים", "hi": "हार्मोन", "ar": "الهرمونات"}
+    titles = {"tr": "Kortizol yüksekliği ne anlama gelir?", "en": "What do high cortisol levels mean?", "es": "¿Qué significa el cortisol alto?", "de": "Cortisol zu hoch: Was bedeutet das?", "fr": "Cortisol élevé : que signifie ce résultat ?", "it": "Cortisolo alto: cosa significa?", "he": "מה משמעות רמת קורטיזול גבוהה?", "hi": "हाई कोर्टिसोल का क्या मतलब है?", "ar": "ماذا يعني ارتفاع الكورتيزول؟"}
+    subtitles = {"tr": "Kortizol stres hormonu olarak bilinir; yüksekliği tek başına teşhis değildir, hekim bağlamla değerlendirir.", "en": "Cortisol is known as the stress hormone; high levels alone are not a diagnosis — your doctor evaluates in context.", "es": "El cortisol es la hormona del estrés; su elevación sola no es diagnóstico — el médico evalúa en contexto.", "de": "Cortisol ist als Stresshormon bekannt; ein erhöhter Wert allein ist keine Diagnose — der Arzt beurteilt im Kontext.", "fr": "Le cortisol est l'hormone du stress ; un taux élevé seul n'est pas un diagnostic — le médecin évalue en contexte.", "it": "Il cortisolo è noto come ormone dello stress; un valore alto da solo non è una diagnosi — il medico valuta nel contesto.", "he": "קורטיזול ידוע כהורמון הלחץ; רמה גבוהה לבדה אינה אבחנה — הרופא מעריך בהקשר.", "hi": "कोर्टिसोल स्ट्रेस हार्मोन के रूप में जाना जाता है; अकेले उच्च स्तर निदान नहीं — डॉक्टर संदर्भ में मूल्यांकन करते हैं।", "ar": "الكورتيزول يُعرف بهرمون التوتر؛ ارتفاعه وحده ليس تشخيصاً — الطبيب يقيّم في السياق."}
+    excerpts = {"tr": "Kortizol yüksekliği stres, ilaç kullanımı veya hormonal bozukluk ile ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "High cortisol may be related to stress, medication, or hormonal disorders; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "El cortisol alto puede estar relacionado con estrés, medicación o trastornos hormonales; no es diagnóstico solo. El médico interpreta con el resto.", "de": "Erhöhtes Cortisol kann mit Stress, Medikamenten oder Hormonstörungen zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Un cortisol élevé peut être lié au stress, à des médicaments ou à des troubles hormonaux ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "Il cortisolo alto può essere legato a stress, farmaci o disturbi ormonali; non diagnosi da solo. Il medico valuta con altri risultati.", "he": "קורטיזול גבוה עשוי לקשור ללחץ, תרופות או הפרעות הורמונליות; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई कोर्टिसोल तनाव, दवा या हार्मोनल विकार से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع الكورتيزول قد يرتبط بالتوتر أو الأدوية أو اضطرابات هرمونية؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Kortizol yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high cortisol levels mean, normal ranges, and causes. For information only.", "es": "Cortisol alto: significado y causas. Solo informativo.", "de": "Cortisol erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "Cortisol élevé : signification et causes. À titre informatif.", "it": "Cortisolo alto: significato e cause. Solo informativo.", "he": "קורטיזול גבוה: משמעות וסיבות. למידע בלבד.", "hi": "हाई कोर्टिसोल: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع الكورتيزول: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Kortizol kan tahlili — Norya", "en": "Cortisol blood test — Norya", "es": "Cortisol análisis de sangre — Norya", "de": "Cortisol Bluttest — Norya", "fr": "Cortisol bilan sanguin — Norya", "it": "Cortisolo esame del sangue — Norya", "he": "קורטיזול בדיקת דם — Norya", "hi": "कोर्टिसोल ब्लड टेस्ट — Norya", "ar": "الكورتيزول تحليل دم — Norya"}
+    sections_by_lang = get_cortisol_sections_by_lang()
+    faq_schema_qa = get_cortisol_faq_schema_qa()
+    return Article(
+        id="cortisol-levels-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_testosterone() -> Article:
+    from app.blog_article_testosterone_content import get_testosterone_sections_by_lang, get_testosterone_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/testosterone-levels-hero.png"
+    slugs = {"tr": "testosteron-dusuklugu-ne-anlama-gelir", "en": "testosterone-levels-meaning", "es": "testosterona-baja-significado", "de": "testosteron-zu-niedrig-bedeutung", "fr": "testosterone-basse-signification", "it": "testosterone-basso-significato", "he": "טסטוסטרון-נמוך", "hi": "testosterone-levels-meaning-hindi", "ar": "انخفاض-التستوستيرون"}
+    cat = {"tr": "Hormonlar", "en": "Hormones", "es": "Hormonas", "de": "Hormone", "fr": "Hormones", "it": "Ormoni", "he": "הורמונים", "hi": "हार्मोन", "ar": "الهرمونات"}
+    titles = {"tr": "Testosteron düşüklüğü ne anlama gelir?", "en": "What do low testosterone levels mean?", "es": "¿Qué significa la testosterona baja?", "de": "Testosteron zu niedrig: Was bedeutet das?", "fr": "Testostérone basse : que signifie ce résultat ?", "it": "Testosterone basso: cosa significa?", "he": "מה משמעות טסטוסטרון נמוך?", "hi": "लो टेस्टोस्टेरोन का क्या मतलब है?", "ar": "ماذا يعني انخفاض التستوستيرون؟"}
+    subtitles = {"tr": "Testosteron düşüklüğü hormonal dengesizliğe işaret edebilir; tek başına teşhis değildir, hekim bağlamla değerlendirir.", "en": "Low testosterone may indicate hormonal imbalance; it is not a diagnosis on its own — your doctor evaluates in context.", "es": "La testosterona baja puede indicar desequilibrio hormonal; no es diagnóstico por sí sola — el médico evalúa en contexto.", "de": "Niedriges Testosteron kann auf ein hormonelles Ungleichgewicht hinweisen; allein keine Diagnose — der Arzt beurteilt im Kontext.", "fr": "Une testostérone basse peut indiquer un déséquilibre hormonal ; ce n'est pas un diagnostic en soi — le médecin évalue en contexte.", "it": "Il testosterone basso può indicare uno squilibrio ormonale; non è una diagnosi da solo — il medico valuta nel contesto.", "he": "טסטוסטרון נמוך עשוי להצביע על חוסר איזון הורמונלי; אינו אבחנה בפני עצמו — הרופא מעריך בהקשר.", "hi": "लो टेस्टोस्टेरोन हार्मोनल असंतुलन का संकेत हो सकता है; अकेले निदान नहीं — डॉक्टर संदर्भ में मूल्यांकन करते हैं।", "ar": "انخفاض التستوستيرون قد يشير إلى خلل هرموني؛ ليس تشخيصاً بمفرده — الطبيب يقيّم في السياق."}
+    excerpts = {"tr": "Testosteron düşüklüğü hormonal bozukluk, yaşlanma veya yaşam tarzı ile ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "Low testosterone may be related to hormonal disorders, aging, or lifestyle; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La testosterona baja puede estar relacionada con trastornos hormonales, envejecimiento o estilo de vida; no es diagnóstico solo. El médico interpreta con el resto.", "de": "Niedriges Testosteron kann mit Hormonstörungen, Alterung oder Lebensstil zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une testostérone basse peut être liée à des troubles hormonaux, au vieillissement ou au mode de vie ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "Il testosterone basso può essere legato a disturbi ormonali, invecchiamento o stile di vita; non diagnosi da solo. Il medico valuta con altri risultati.", "he": "טסטוסטרון נמוך עשוי לקשור להפרעות הורמונליות, הזדקנות או אורח חיים; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "लो टेस्टोस्टेरोन हार्मोनल विकार, उम्र बढ़ने या जीवनशैली से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "انخفاض التستوستيرون قد يرتبط باضطرابات هرمونية أو التقدم في العمر أو نمط الحياة؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Testosteron düşüklüğü nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What low testosterone levels mean, normal ranges, and causes. For information only.", "es": "Testosterona baja: significado y causas. Solo informativo.", "de": "Testosteron niedrig: Ursachen und Normalwerte. Nur zur Information.", "fr": "Testostérone basse : signification et causes. À titre informatif.", "it": "Testosterone basso: significato e cause. Solo informativo.", "he": "טסטוסטרון נמוך: משמעות וסיבות. למידע בלבד.", "hi": "लो टेस्टोस्टेरोन: मतलब और कारण। केवल सूचनार्थ।", "ar": "انخفاض التستوستيرون: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Testosteron kan tahlili — Norya", "en": "Testosterone blood test — Norya", "es": "Testosterona análisis de sangre — Norya", "de": "Testosteron Bluttest — Norya", "fr": "Testostérone bilan sanguin — Norya", "it": "Testosterone esame del sangue — Norya", "he": "טסטוסטרון בדיקת דם — Norya", "hi": "टेस्टोस्टेरोन ब्लड टेस्ट — Norya", "ar": "التستوستيرون تحليل دم — Norya"}
+    sections_by_lang = get_testosterone_sections_by_lang()
+    faq_schema_qa = get_testosterone_faq_schema_qa()
+    return Article(
+        id="testosterone-levels-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_folate() -> Article:
+    from app.blog_article_folate_content import get_folate_sections_by_lang, get_folate_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/folate-deficiency-hero.png"
+    slugs = {"tr": "folik-asit-eksikligi-ne-anlama-gelir", "en": "folate-deficiency-meaning", "es": "deficiencia-acido-folico-significado", "de": "folsaeuremangel-bedeutung", "fr": "carence-acide-folique-signification", "it": "carenza-acido-folico-significato", "he": "מחסור-חומצה-פולית", "hi": "folate-deficiency-meaning-hindi", "ar": "نقص-حمض-الفوليك"}
+    cat = {"tr": "Vitaminler", "en": "Vitamins", "es": "Vitaminas", "de": "Vitamine", "fr": "Vitamines", "it": "Vitamine", "he": "ויטמינים", "hi": "विटामिन", "ar": "الفيتامينات"}
+    titles = {"tr": "Folik asit eksikliği ne anlama gelir?", "en": "What does folate (folic acid) deficiency mean?", "es": "¿Qué significa la deficiencia de ácido fólico?", "de": "Folsäuremangel: Was bedeutet das?", "fr": "Carence en acide folique : que signifie ce résultat ?", "it": "Carenza di acido folico: cosa significa?", "he": "מה משמעות מחסור בחומצה פולית?", "hi": "फोलेट (फोलिक एसिड) की कमी का क्या मतलब है?", "ar": "ماذا يعني نقص حمض الفوليك؟"}
+    subtitles = {"tr": "Folik asit eksikliği anemi ve sinir sistemi sorunlarına yol açabilir; tek başına teşhis değildir.", "en": "Folate deficiency can lead to anemia and nervous system issues; it is not a diagnosis on its own.", "es": "La deficiencia de ácido fólico puede causar anemia y problemas neurológicos; no es un diagnóstico por sí sola.", "de": "Folsäuremangel kann zu Anämie und Nervenproblemen führen; allein keine Diagnose.", "fr": "Une carence en acide folique peut entraîner anémie et troubles neurologiques ; ce n'est pas un diagnostic en soi.", "it": "La carenza di acido folico può causare anemia e problemi neurologici; non è una diagnosi da sola.", "he": "מחסור בחומצה פולית עשוי לגרום לאנמיה ובעיות מערכת עצבים; אינו אבחנה בפני עצמו.", "hi": "फोलेट की कमी एनीमिया और तंत्रिका तंत्र समस्या का कारण बन सकती है; अकेले निदान नहीं।", "ar": "نقص حمض الفوليك قد يؤدي إلى فقر الدم ومشاكل عصبية؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Folik asit eksikliği anemi ve sinir sistemi sorunlarıyla ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "Folate deficiency may be associated with anemia and nervous system problems; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La deficiencia de ácido fólico puede estar asociada a anemia y problemas neurológicos; no es diagnóstico sola. El médico interpreta con el resto.", "de": "Folsäuremangel kann mit Anämie und Nervenproblemen zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une carence en acide folique peut être liée à l'anémie et à des troubles neurologiques ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "La carenza di acido folico può essere legata ad anemia e problemi neurologici; non diagnosi da sola. Il medico valuta con altri risultati.", "he": "מחסור בחומצה פולית עשוי לקשור לאנמיה ובעיות מערכת עצבים; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "फोलेट की कमी एनीमिया और तंत्रिका तंत्र समस्या से जुड़ी हो सकती है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "نقص حمض الفوليك قد يرتبط بفقر الدم ومشاكل عصبية؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Folik asit eksikliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What folate deficiency means, normal ranges, and causes. For information only.", "es": "Deficiencia de ácido fólico: significado y causas. Solo informativo.", "de": "Folsäuremangel: Ursachen und Normalwerte. Nur zur Information.", "fr": "Carence en acide folique : signification et causes. À titre informatif.", "it": "Carenza di acido folico: significato e cause. Solo informativo.", "he": "מחסור בחומצה פולית: משמעות וסיבות. למידע בלבד.", "hi": "फोलेट की कमी: मतलब और कारण। केवल सूचनार्थ।", "ar": "نقص حمض الفوليك: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Folik asit kan tahlili — Norya", "en": "Folate blood test — Norya", "es": "Ácido fólico análisis — Norya", "de": "Folsäure Bluttest — Norya", "fr": "Acide folique bilan sanguin — Norya", "it": "Acido folico esame del sangue — Norya", "he": "חומצה פולית בדיקת דם — Norya", "hi": "फोलेट ब्लड टेस्ट — Norya", "ar": "حمض الفوليك تحليل دم — Norya"}
+    sections_by_lang = get_folate_sections_by_lang()
+    faq_schema_qa = get_folate_faq_schema_qa()
+    return Article(
+        id="folate-deficiency-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_phosphorus() -> Article:
+    from app.blog_article_phosphorus_content import get_phosphorus_sections_by_lang, get_phosphorus_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/phosphorus-high-hero.png"
+    slugs = {"tr": "fosfor-yuksekligi-ne-anlama-gelir", "en": "phosphorus-high-meaning", "es": "fosforo-alto-significado", "de": "phosphor-zu-hoch-bedeutung", "fr": "phosphore-eleve-signification", "it": "fosforo-alto-significato", "he": "זרחן-גבוה", "hi": "phosphorus-high-meaning-hindi", "ar": "ارتفاع-الفوسفور"}
+    cat = {"tr": "Mineraller", "en": "Minerals", "es": "Minerales", "de": "Mineralstoffe", "fr": "Minéraux", "it": "Minerali", "he": "מינרלים", "hi": "मिनरल्स", "ar": "المعادن"}
+    titles = {"tr": "Fosfor yüksekliği ne anlama gelir?", "en": "What does high phosphorus mean?", "es": "¿Qué significa el fósforo alto?", "de": "Phosphor zu hoch: Was bedeutet das?", "fr": "Phosphore élevé : que signifie ce résultat ?", "it": "Fosforo alto: cosa significa?", "he": "מה משמעות זרחן גבוה?", "hi": "हाई फॉस्फोरस का क्या मतलब है?", "ar": "ماذا يعني ارتفاع الفوسفور؟"}
+    subtitles = {"tr": "Fosfor yüksekliği böbrek fonksiyonu veya kalsiyum dengesiyle ilgili olabilir; tek başına teşhis değildir.", "en": "High phosphorus may relate to kidney function or calcium balance; it is not a diagnosis on its own.", "es": "El fósforo alto puede estar relacionado con función renal o equilibrio de calcio; no es un diagnóstico por sí solo.", "de": "Erhöhter Phosphor kann mit Nierenfunktion oder Kalziumgleichgewicht zusammenhängen; allein keine Diagnose.", "fr": "Un phosphore élevé peut être lié à la fonction rénale ou à l'équilibre calcique ; ce n'est pas un diagnostic en soi.", "it": "Il fosforo alto può essere legato alla funzione renale o all'equilibrio del calcio; non è una diagnosi da solo.", "he": "זרחן גבוה עשוי לקשור לתפקוד כליות או מאזן סידן; אינו אבחנה בפני עצמו.", "hi": "हाई फॉस्फोरस किडनी फंक्शन या कैल्शियम संतुलन से जुड़ा हो सकता है; अकेले निदान नहीं।", "ar": "ارتفاع الفوسفور قد يتعلق بوظائف الكلى أو توازن الكالسيوم؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Fosfor yüksekliği böbrek sorunları veya kalsiyum dengesizliğiyle ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "High phosphorus may be linked to kidney problems or calcium imbalance; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "El fósforo alto puede estar ligado a problemas renales o desequilibrio de calcio; no es diagnóstico solo. El médico interpreta con el resto.", "de": "Erhöhter Phosphor kann mit Nierenproblemen oder Kalziumungleichgewicht zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Un phosphore élevé peut être lié à des problèmes rénaux ou un déséquilibre calcique ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "Il fosforo alto può essere legato a problemi renali o squilibrio di calcio; non diagnosi da solo. Il medico valuta con altri risultati.", "he": "זרחן גבוה עשוי לקשור לבעיות כליות או חוסר איזון סידן; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई फॉस्फोरस किडनी समस्या या कैल्शियम असंतुलन से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع الفوسفور قد يرتبط بمشاكل كلوية أو خلل في توازن الكالسيوم؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Fosfor yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high phosphorus means, normal ranges, and causes. For information only.", "es": "Fósforo alto: significado y causas. Solo informativo.", "de": "Phosphor erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "Phosphore élevé : signification et causes. À titre informatif.", "it": "Fosforo alto: significato e cause. Solo informativo.", "he": "זרחן גבוה: משמעות וסיבות. למידע בלבד.", "hi": "हाई फॉस्फोरस: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع الفوسفور: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Fosfor kan tahlili — Norya", "en": "Phosphorus blood test — Norya", "es": "Fósforo análisis — Norya", "de": "Phosphor Bluttest — Norya", "fr": "Phosphore bilan sanguin — Norya", "it": "Fosforo esame del sangue — Norya", "he": "זרחן בדיקת דם — Norya", "hi": "फॉस्फोरस ब्लड टेस्ट — Norya", "ar": "الفوسفور تحليل دم — Norya"}
+    sections_by_lang = get_phosphorus_sections_by_lang()
+    faq_schema_qa = get_phosphorus_faq_schema_qa()
+    return Article(
+        id="phosphorus-high-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_zinc() -> Article:
+    from app.blog_article_zinc_content import get_zinc_sections_by_lang, get_zinc_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/zinc-deficiency-hero.png"
+    slugs = {"tr": "cinko-eksikligi-ne-anlama-gelir", "en": "zinc-deficiency-meaning", "es": "deficiencia-zinc-significado", "de": "zinkmangel-bedeutung", "fr": "carence-zinc-signification", "it": "carenza-zinco-significato", "he": "מחסור-אבץ", "hi": "zinc-deficiency-meaning-hindi", "ar": "نقص-الزنك"}
+    cat = {"tr": "Mineraller", "en": "Minerals", "es": "Minerales", "de": "Mineralstoffe", "fr": "Minéraux", "it": "Minerali", "he": "מינרלים", "hi": "मिनरल्स", "ar": "المعادن"}
+    titles = {"tr": "Çinko eksikliği ne anlama gelir?", "en": "What does zinc deficiency mean?", "es": "¿Qué significa la deficiencia de zinc?", "de": "Zinkmangel: Was bedeutet das?", "fr": "Carence en zinc : que signifie ce résultat ?", "it": "Carenza di zinco: cosa significa?", "he": "מה משמעות מחסור באבץ?", "hi": "जिंक की कमी का क्या मतलब है?", "ar": "ماذا يعني نقص الزنك؟"}
+    subtitles = {"tr": "Çinko eksikliği bağışıklık ve iyileşme süreçlerini etkileyebilir; tek başına teşhis değildir.", "en": "Zinc deficiency can affect immunity and healing; it is not a diagnosis on its own.", "es": "La deficiencia de zinc puede afectar la inmunidad y la cicatrización; no es un diagnóstico por sí sola.", "de": "Zinkmangel kann Immunität und Wundheilung beeinflussen; allein keine Diagnose.", "fr": "Une carence en zinc peut affecter l'immunité et la cicatrisation ; ce n'est pas un diagnostic en soi.", "it": "La carenza di zinco può influire sull'immunità e sulla guarigione; non è una diagnosi da sola.", "he": "מחסור באבץ עשוי להשפיע על חיסון וריפוי; אינו אבחנה בפני עצמו.", "hi": "जिंक की कमी इम्युनिटी और उपचार को प्रभावित कर सकती है; अकेले निदान नहीं।", "ar": "نقص الزنك قد يؤثر على المناعة والتئام الجروح؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Çinko eksikliği bağışıklık zayıflığı ve yara iyileşmesi sorunlarıyla ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "Zinc deficiency may be associated with weakened immunity and poor wound healing; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La deficiencia de zinc puede asociarse a inmunidad débil y cicatrización lenta; no es diagnóstico sola. El médico interpreta con el resto.", "de": "Zinkmangel kann mit geschwächter Immunität und schlechter Wundheilung zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une carence en zinc peut être liée à une immunité affaiblie et une cicatrisation lente ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "La carenza di zinco può essere legata a immunità debole e guarigione lenta; non diagnosi da sola. Il medico valuta con altri risultati.", "he": "מחסור באבץ עשוי לקשור לחיסון מוחלש וריפוי איטי; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "जिंक की कमी कमजोर इम्युनिटी और घाव भरने में समस्या से जुड़ी हो सकती है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "نقص الزنك قد يرتبط بضعف المناعة وبطء التئام الجروح؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Çinko eksikliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What zinc deficiency means, normal ranges, and causes. For information only.", "es": "Deficiencia de zinc: significado y causas. Solo informativo.", "de": "Zinkmangel: Ursachen und Normalwerte. Nur zur Information.", "fr": "Carence en zinc : signification et causes. À titre informatif.", "it": "Carenza di zinco: significato e cause. Solo informativo.", "he": "מחסור באבץ: משמעות וסיבות. למידע בלבד.", "hi": "जिंक की कमी: मतलब और कारण। केवल सूचनार्थ।", "ar": "نقص الزنك: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Çinko kan tahlili — Norya", "en": "Zinc blood test — Norya", "es": "Zinc análisis — Norya", "de": "Zink Bluttest — Norya", "fr": "Zinc bilan sanguin — Norya", "it": "Zinco esame del sangue — Norya", "he": "אבץ בדיקת דם — Norya", "hi": "जिंक ब्लड टेस्ट — Norya", "ar": "الزنك تحليل دم — Norya"}
+    sections_by_lang = get_zinc_sections_by_lang()
+    faq_schema_qa = get_zinc_faq_schema_qa()
+    return Article(
+        id="zinc-deficiency-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_inr() -> Article:
+    from app.blog_article_inr_content import get_inr_sections_by_lang, get_inr_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/inr-prothrombin-hero.png"
+    slugs = {"tr": "inr-protrombin-zamani-ne-anlama-gelir", "en": "inr-prothrombin-time-meaning", "es": "inr-tiempo-protrombina-significado", "de": "inr-prothrombinzeit-bedeutung", "fr": "inr-temps-prothrombine-signification", "it": "inr-tempo-protrombina-significato", "he": "inr-זמן-פרותרומבין", "hi": "inr-prothrombin-time-meaning-hindi", "ar": "inr-زمن-البروثرومبين"}
+    cat = {"tr": "Pıhtılaşma", "en": "Coagulation", "es": "Coagulación", "de": "Gerinnung", "fr": "Coagulation", "it": "Coagulazione", "he": "קרישה", "hi": "कोगुलेशन", "ar": "التخثر"}
+    titles = {"tr": "INR / Protrombin zamanı ne anlama gelir?", "en": "What does INR / prothrombin time mean?", "es": "¿Qué significan el INR y el tiempo de protrombina?", "de": "INR / Prothrombinzeit: Was bedeutet das?", "fr": "INR / temps de prothrombine : que signifie ce résultat ?", "it": "INR / tempo di protrombina: cosa significa?", "he": "מה משמעות INR / זמן פרותרומבין?", "hi": "INR / प्रोथ्रोम्बिन टाइम का क्या मतलब है?", "ar": "ماذا يعني INR / زمن البروثرومبين؟"}
+    subtitles = {"tr": "INR pıhtılaşma hızını ölçer; tek başına teşhis değildir, hekim klinik bağlamla değerlendirir.", "en": "INR measures clotting speed; it is not a diagnosis on its own — your doctor evaluates in clinical context.", "es": "El INR mide la velocidad de coagulación; no es diagnóstico por sí solo — el médico evalúa en contexto clínico.", "de": "Der INR misst die Gerinnungsgeschwindigkeit; allein keine Diagnose — der Arzt beurteilt im klinischen Kontext.", "fr": "L'INR mesure la vitesse de coagulation ; ce n'est pas un diagnostic en soi — le médecin évalue en contexte clinique.", "it": "L'INR misura la velocità di coagulazione; non è una diagnosi da solo — il medico valuta nel contesto clinico.", "he": "INR מודד את מהירות הקרישה; אינו אבחנה בפני עצמו — הרופא מעריך בהקשר קליני.", "hi": "INR क्लॉटिंग स्पीड मापता है; अकेले निदान नहीं — डॉक्टर क्लिनिकल संदर्भ में मूल्यांकन करते हैं।", "ar": "INR يقيس سرعة التخثر؛ ليس تشخيصاً بمفرده — الطبيب يقيّم في السياق السريري."}
+    excerpts = {"tr": "INR / protrombin zamanı kanın pıhtılaşma hızını gösterir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "INR / prothrombin time reflects how quickly blood clots; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "El INR / tiempo de protrombina refleja la velocidad de coagulación; no es diagnóstico solo. El médico interpreta con el resto.", "de": "INR / Prothrombinzeit zeigt die Gerinnungsgeschwindigkeit; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "L'INR / temps de prothrombine reflète la vitesse de coagulation ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "L'INR / tempo di protrombina riflette la velocità di coagulazione; non diagnosi da solo. Il medico valuta con altri risultati.", "he": "INR / זמן פרותרומבין משקף את מהירות קרישת הדם; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "INR / प्रोथ्रोम्बिन टाइम रक्त के थक्के बनने की गति दर्शाता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "INR / زمن البروثرومبين يعكس سرعة تخثر الدم؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "INR ve protrombin zamanı ne anlama gelir, normal aralıklar. Eğitim amaçlı.", "en": "What INR and prothrombin time mean, normal ranges. For information only.", "es": "INR y tiempo de protrombina: significado y causas. Solo informativo.", "de": "INR und Prothrombinzeit: Bedeutung und Normalwerte. Nur zur Information.", "fr": "INR et temps de prothrombine : signification et causes. À titre informatif.", "it": "INR e tempo di protrombina: significato e cause. Solo informativo.", "he": "INR וזמן פרותרומבין: משמעות וסיבות. למידע בלבד.", "hi": "INR और प्रोथ्रोम्बिन टाइम: मतलब और कारण। केवल सूचनार्थ।", "ar": "INR وزمن البروثرومبين: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "INR protrombin kan tahlili — Norya", "en": "INR prothrombin time blood test — Norya", "es": "INR tiempo de protrombina análisis — Norya", "de": "INR Prothrombinzeit Bluttest — Norya", "fr": "INR temps de prothrombine bilan sanguin — Norya", "it": "INR tempo di protrombina esame — Norya", "he": "INR זמן פרותרומבין בדיקת דם — Norya", "hi": "INR प्रोथ्रोम्बिन टाइम ब्लड टेस्ट — Norya", "ar": "INR زمن البروثرومبين تحليل دم — Norya"}
+    sections_by_lang = get_inr_sections_by_lang()
+    faq_schema_qa = get_inr_faq_schema_qa()
+    return Article(
+        id="inr-prothrombin-time-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_prolactin() -> Article:
+    from app.blog_article_prolactin_content import get_prolactin_sections_by_lang, get_prolactin_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/prolactin-high-hero.png"
+    slugs = {"tr": "prolaktin-yuksekligi-ne-anlama-gelir", "en": "prolactin-high-meaning", "es": "prolactina-alta-significado", "de": "prolaktin-zu-hoch-bedeutung", "fr": "prolactine-elevee-signification", "it": "prolattina-alta-significato", "he": "פרולקטין-גבוה", "hi": "prolactin-high-meaning-hindi", "ar": "ارتفاع-البرولاكتين"}
+    cat = {"tr": "Hormonlar", "en": "Hormones", "es": "Hormonas", "de": "Hormone", "fr": "Hormones", "it": "Ormoni", "he": "הורמונים", "hi": "हार्मोन", "ar": "الهرمونات"}
+    titles = {"tr": "Prolaktin yüksekliği ne anlama gelir?", "en": "What does high prolactin mean?", "es": "¿Qué significa la prolactina alta?", "de": "Prolaktin zu hoch: Was bedeutet das?", "fr": "Prolactine élevée : que signifie ce résultat ?", "it": "Prolattina alta: cosa significa?", "he": "מה משמעות פרולקטין גבוה?", "hi": "हाई प्रोलैक्टिन का क्या मतलब है?", "ar": "ماذا يعني ارتفاع البرولاكتين؟"}
+    subtitles = {"tr": "Prolaktin yüksekliği hormonal bozukluk veya ilaç etkisine bağlı olabilir; tek başına teşhis değildir.", "en": "High prolactin may be due to hormonal disorders or medication; it is not a diagnosis on its own.", "es": "La prolactina alta puede deberse a trastornos hormonales o medicación; no es un diagnóstico por sí sola.", "de": "Erhöhtes Prolaktin kann durch Hormonstörungen oder Medikamente bedingt sein; allein keine Diagnose.", "fr": "Une prolactine élevée peut être due à des troubles hormonaux ou à des médicaments ; ce n'est pas un diagnostic en soi.", "it": "La prolattina alta può essere dovuta a disturbi ormonali o farmaci; non è una diagnosi da sola.", "he": "פרולקטין גבוה עשוי לנבוע מהפרעות הורמונליות או תרופות; אינו אבחנה בפני עצמו.", "hi": "हाई प्रोलैक्टिन हार्मोनल विकार या दवा के कारण हो सकता है; अकेले निदान नहीं।", "ar": "ارتفاع البرولاكتين قد يكون بسبب اضطرابات هرمونية أو أدوية؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Prolaktin yüksekliği hormonal bozukluk veya ilaç kullanımıyla ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "High prolactin may be related to hormonal disorders or medication; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La prolactina alta puede estar relacionada con trastornos hormonales o medicación; no es diagnóstico sola. El médico interpreta con el resto.", "de": "Erhöhtes Prolaktin kann mit Hormonstörungen oder Medikamenten zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une prolactine élevée peut être liée à des troubles hormonaux ou des médicaments ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "La prolattina alta può essere legata a disturbi ormonali o farmaci; non diagnosi da sola. Il medico valuta con altri risultati.", "he": "פרולקטין גבוה עשוי לקשור להפרעות הורמונליות או תרופות; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई प्रोलैक्टिन हार्मोनल विकार या दवा से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع البرولاكتين قد يرتبط باضطرابات هرمونية أو أدوية؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Prolaktin yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high prolactin means, normal ranges, and causes. For information only.", "es": "Prolactina alta: significado y causas. Solo informativo.", "de": "Prolaktin erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "Prolactine élevée : signification et causes. À titre informatif.", "it": "Prolattina alta: significato e cause. Solo informativo.", "he": "פרולקטין גבוה: משמעות וסיבות. למידע בלבד.", "hi": "हाई प्रोलैक्टिन: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع البرولاكتين: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Prolaktin kan tahlili — Norya", "en": "Prolactin blood test — Norya", "es": "Prolactina análisis de sangre — Norya", "de": "Prolaktin Bluttest — Norya", "fr": "Prolactine bilan sanguin — Norya", "it": "Prolattina esame del sangue — Norya", "he": "פרולקטין בדיקת דם — Norya", "hi": "प्रोलैक्टिन ब्लड टेस्ट — Norya", "ar": "البرولاكتين تحليل دم — Norya"}
+    sections_by_lang = get_prolactin_sections_by_lang()
+    faq_schema_qa = get_prolactin_faq_schema_qa()
+    return Article(
+        id="prolactin-high-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_lipase() -> Article:
+    from app.blog_article_lipase_content import get_lipase_sections_by_lang, get_lipase_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/lipase-high-hero.png"
+    slugs = {"tr": "lipaz-yuksekligi-ne-anlama-gelir", "en": "lipase-high-meaning", "es": "lipasa-alta-significado", "de": "lipase-zu-hoch-bedeutung", "fr": "lipase-elevee-signification", "it": "lipasi-alta-significato", "he": "ליפאז-גבוה", "hi": "lipase-high-meaning-hindi", "ar": "ارتفاع-الليباز"}
+    cat = {"tr": "Pankreas", "en": "Pancreas", "es": "Páncreas", "de": "Bauchspeicheldrüse", "fr": "Pancréas", "it": "Pancreas", "he": "לבלב", "hi": "पैंक्रियास", "ar": "البنكرياس"}
+    titles = {"tr": "Lipaz yüksekliği ne anlama gelir?", "en": "What does high lipase mean?", "es": "¿Qué significa la lipasa alta?", "de": "Lipase zu hoch: Was bedeutet das?", "fr": "Lipase élevée : que signifie ce résultat ?", "it": "Lipasi alta: cosa significa?", "he": "מה משמעות ליפאז גבוה?", "hi": "हाई लाइपेज का क्या मतलब है?", "ar": "ماذا يعني ارتفاع الليباز؟"}
+    subtitles = {"tr": "Lipaz yüksekliği pankreas sorunlarına işaret edebilir; tek başına teşhis değildir.", "en": "High lipase may indicate pancreatic issues; it is not a diagnosis on its own.", "es": "La lipasa alta puede indicar problemas pancreáticos; no es un diagnóstico por sí sola.", "de": "Erhöhte Lipase kann auf Pankreasprobleme hinweisen; allein keine Diagnose.", "fr": "Une lipase élevée peut indiquer des problèmes pancréatiques ; ce n'est pas un diagnostic en soi.", "it": "La lipasi alta può indicare problemi pancreatici; non è una diagnosi da sola.", "he": "ליפאז גבוה עשוי להצביע על בעיות בלבלב; אינו אבחנה בפני עצמו.", "hi": "हाई लाइपेज पैंक्रियास समस्या का संकेत हो सकता है; अकेले निदान नहीं।", "ar": "ارتفاع الليباز قد يشير إلى مشاكل في البنكرياس؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "Lipaz yüksekliği pankreatit veya diğer pankreas sorunlarıyla ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "High lipase may be linked to pancreatitis or other pancreatic issues; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "La lipasa alta puede estar ligada a pancreatitis u otros problemas pancreáticos; no es diagnóstico sola. El médico interpreta con el resto.", "de": "Erhöhte Lipase kann mit Pankreatitis oder anderen Pankreasproblemen zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Une lipase élevée peut être liée à une pancréatite ou d'autres problèmes pancréatiques ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "La lipasi alta può essere legata a pancreatite o altri problemi pancreatici; non diagnosi da sola. Il medico valuta con altri risultati.", "he": "ליפאז גבוה עשוי לקשור לדלקת לבלב או בעיות לבלב אחרות; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई लाइपेज पैंक्रिएटाइटिस या अन्य पैंक्रियास समस्या से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع الليباز قد يرتبط بالتهاب البنكرياس أو مشاكل بنكرياسية أخرى؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "Lipaz yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What high lipase means, normal ranges, and causes. For information only.", "es": "Lipasa alta: significado y causas. Solo informativo.", "de": "Lipase erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "Lipase élevée : signification et causes. À titre informatif.", "it": "Lipasi alta: significato e cause. Solo informativo.", "he": "ליפאז גבוה: משמעות וסיבות. למידע בלבד.", "hi": "हाई लाइपेज: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع الليباز: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "Lipaz kan tahlili — Norya", "en": "Lipase blood test — Norya", "es": "Lipasa análisis de sangre — Norya", "de": "Lipase Bluttest — Norya", "fr": "Lipase bilan sanguin — Norya", "it": "Lipasi esame del sangue — Norya", "he": "ליפאז בדיקת דם — Norya", "hi": "लाइपेज ब्लड टेस्ट — Norya", "ar": "الليباز تحليل دم — Norya"}
+    sections_by_lang = get_lipase_sections_by_lang()
+    faq_schema_qa = get_lipase_faq_schema_qa()
+    return Article(
+        id="lipase-high-meaning",
+        published_at=published,
+        read_minutes=6,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+def _article_d_dimer() -> Article:
+    from app.blog_article_d_dimer_content import get_d_dimer_sections_by_lang, get_d_dimer_faq_schema_qa
+    published = date(2026, 3, 24)
+    cover = "/static/images/blog/d-dimer-high-hero.png"
+    slugs = {"tr": "d-dimer-yuksekligi-ne-anlama-gelir", "en": "d-dimer-high-meaning", "es": "d-dimero-alto-significado", "de": "d-dimer-erhoht-bedeutung", "fr": "d-dimeres-eleves-signification", "it": "d-dimero-alto-significato", "he": "d-dimer-גבוה", "hi": "d-dimer-high-meaning-hindi", "ar": "ارتفاع-d-dimer"}
+    cat = {"tr": "Pıhtılaşma", "en": "Coagulation", "es": "Coagulación", "de": "Gerinnung", "fr": "Coagulation", "it": "Coagulazione", "he": "קרישה", "hi": "कोगुलेशन", "ar": "التخثر"}
+    titles = {"tr": "D-Dimer yüksekliği ne anlama gelir?", "en": "What does a high D-Dimer mean?", "es": "¿Qué significa el D-Dímero alto?", "de": "D-Dimer erhöht: Was bedeutet das?", "fr": "D-Dimères élevés : que signifie ce résultat ?", "it": "D-Dimero alto: cosa significa?", "he": "מה משמעות D-Dimer גבוה?", "hi": "हाई D-Dimer का क्या मतलब है?", "ar": "ماذا يعني ارتفاع D-Dimer؟"}
+    subtitles = {"tr": "D-Dimer yüksekliği pıhtılaşma aktivitesine işaret edebilir; tek başına teşhis değildir.", "en": "A high D-Dimer may indicate clotting activity; it is not a diagnosis on its own.", "es": "El D-Dímero alto puede indicar actividad de coagulación; no es un diagnóstico por sí solo.", "de": "Ein erhöhter D-Dimer kann auf Gerinnungsaktivität hinweisen; allein keine Diagnose.", "fr": "Des D-Dimères élevés peuvent indiquer une activité de coagulation ; ce n'est pas un diagnostic en soi.", "it": "Un D-Dimero alto può indicare attività di coagulazione; non è una diagnosi da solo.", "he": "D-Dimer גבוה עשוי להצביע על פעילות קרישה; אינו אבחנה בפני עצמו.", "hi": "हाई D-Dimer क्लॉटिंग गतिविधि का संकेत हो सकता है; अकेले निदान नहीं।", "ar": "ارتفاع D-Dimer قد يشير إلى نشاط تخثري؛ ليس تشخيصاً بمفرده."}
+    excerpts = {"tr": "D-Dimer yüksekliği pıhtı oluşumu veya çözülmesiyle ilişkili olabilir; tek başına teşhis değildir. Hekiminiz sonucu diğer değerlerle yorumlar.", "en": "A high D-Dimer may be linked to clot formation or breakdown; it is not a diagnosis on its own. Your doctor interprets it with other results.", "es": "El D-Dímero alto puede estar ligado a formación o degradación de coágulos; no es diagnóstico solo. El médico interpreta con el resto.", "de": "Ein erhöhter D-Dimer kann mit Gerinnselbildung oder -abbau zusammenhängen; allein keine Diagnose. Der Arzt wertet mit anderen Werten.", "fr": "Des D-Dimères élevés peuvent être liés à la formation ou dégradation de caillots ; pas un diagnostic seul. Le médecin interprète avec le bilan.", "it": "Un D-Dimero alto può essere legato a formazione o degradazione di coaguli; non diagnosi da solo. Il medico valuta con altri risultati.", "he": "D-Dimer גבוה עשוי לקשור ליצירת קרישים או פירוקם; לא אבחנה לבד. הרופא מפרש עם שאר התוצאות.", "hi": "हाई D-Dimer रक्त के थक्के बनने या टूटने से जुड़ा हो सकता है; अकेले निदान नहीं। डॉक्टर अन्य रिजल्ट के साथ व्याख्या करेंगे।", "ar": "ارتفاع D-Dimer قد يرتبط بتكوّن الجلطات أو تحللها؛ ليس تشخيصاً وحده. الطبيب يفسره مع بقية النتائج."}
+    seo_titles = {k: v + " | Norya Blog" for k, v in titles.items()}
+    seo_descriptions = {"tr": "D-Dimer yüksekliği nedenleri ve normal aralıklar. Eğitim amaçlı.", "en": "What a high D-Dimer means, normal ranges, and causes. For information only.", "es": "D-Dímero alto: significado y causas. Solo informativo.", "de": "D-Dimer erhöht: Ursachen und Normalwerte. Nur zur Information.", "fr": "D-Dimères élevés : signification et causes. À titre informatif.", "it": "D-Dimero alto: significato e cause. Solo informativo.", "he": "D-Dimer גבוה: משמעות וסיבות. למידע בלבד.", "hi": "हाई D-Dimer: मतलब और कारण। केवल सूचनार्थ।", "ar": "ارتفاع D-Dimer: المعنى والأسباب. لأغراض إعلامية فقط."}
+    cover_alt = {"tr": "D-Dimer kan tahlili — Norya", "en": "D-Dimer blood test — Norya", "es": "D-Dímero análisis de sangre — Norya", "de": "D-Dimer Bluttest — Norya", "fr": "D-Dimères bilan sanguin — Norya", "it": "D-Dimero esame del sangue — Norya", "he": "D-Dimer בדיקת דם — Norya", "hi": "D-Dimer ब्लड टेस्ट — Norya", "ar": "D-Dimer تحليل دم — Norya"}
+    sections_by_lang = get_d_dimer_sections_by_lang()
+    faq_schema_qa = get_d_dimer_faq_schema_qa()
+    return Article(
+        id="d-dimer-high-meaning",
+        published_at=published,
+        read_minutes=7,
+        cover_image=cover,
+        category=cat,
+        slugs=slugs,
+        titles=titles,
+        subtitles=subtitles,
+        excerpts=excerpts,
+        seo_titles=seo_titles,
+        seo_descriptions=seo_descriptions,
+        cover_alt=cover_alt,
+        sections_by_lang=sections_by_lang,
+        faq_schema_qa=faq_schema_qa,
+    )
+
+
+_ARTICLE_TRIGLYCERIDES = _article_triglycerides()
+_ARTICLE_GGT = _article_ggt()
+_ARTICLE_URIC_ACID = _article_uric_acid()
+_ARTICLE_MAGNESIUM = _article_magnesium()
+_ARTICLE_BILIRUBIN = _article_bilirubin()
+_ARTICLE_ESR = _article_esr()
+_ARTICLE_CORTISOL = _article_cortisol()
+_ARTICLE_TESTOSTERONE = _article_testosterone()
+_ARTICLE_FOLATE = _article_folate()
+_ARTICLE_PHOSPHORUS = _article_phosphorus()
+_ARTICLE_ZINC = _article_zinc()
+_ARTICLE_INR = _article_inr()
+_ARTICLE_PROLACTIN = _article_prolactin()
+_ARTICLE_LIPASE = _article_lipase()
+_ARTICLE_D_DIMER = _article_d_dimer()
+
 # Pillar articles (imported from dedicated content modules)
 from app.blog_article_cbc_guide_content import build_cbc_article
 from app.blog_article_thyroid_panel_content import build_thyroid_article
@@ -6302,6 +6799,21 @@ ARTICLES: List[Article] = [
     _ARTICLE_FASTING_INSULIN_HIGH,
     _ARTICLE_CBC_GUIDE,
     _ARTICLE_THYROID_GUIDE,
+    _ARTICLE_TRIGLYCERIDES,
+    _ARTICLE_GGT,
+    _ARTICLE_URIC_ACID,
+    _ARTICLE_MAGNESIUM,
+    _ARTICLE_BILIRUBIN,
+    _ARTICLE_ESR,
+    _ARTICLE_CORTISOL,
+    _ARTICLE_TESTOSTERONE,
+    _ARTICLE_FOLATE,
+    _ARTICLE_PHOSPHORUS,
+    _ARTICLE_ZINC,
+    _ARTICLE_INR,
+    _ARTICLE_PROLACTIN,
+    _ARTICLE_LIPASE,
+    _ARTICLE_D_DIMER,
 ]
 
 

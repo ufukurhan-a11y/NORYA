@@ -1,134 +1,327 @@
 {% extends "admin/base_admin.html" %}
 {% block title %}Dashboard - Norya Admin{% endblock %}
 {% block admin_header_title %}Dashboard{% endblock %}
+{% block extra_head %}
+<style>
+  .kpi-card {
+    position: relative;
+    overflow: hidden;
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .kpi-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 48px rgba(25, 28, 29, 0.10);
+  }
+  .kpi-card .kpi-glow {
+    position: absolute;
+    top: -40px;
+    right: -40px;
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    opacity: 0.07;
+    transition: opacity .3s ease;
+    pointer-events: none;
+  }
+  .kpi-card:hover .kpi-glow { opacity: 0.13; }
+  .status-dot {
+    width: 8px; height: 8px; border-radius: 50%;
+    display: inline-block;
+    animation: pulse-dot 2s infinite;
+  }
+  @keyframes pulse-dot {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+    50% { opacity: .7; box-shadow: 0 0 0 4px currentColor; }
+  }
+  .txn-row { transition: background .15s ease; }
+  .txn-row:hover { background: rgba(14, 165, 164, 0.04); }
+  .health-ring {
+    width: 48px; height: 48px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    position: relative;
+  }
+  .health-ring::before {
+    content: '';
+    position: absolute; inset: 0;
+    border-radius: 50%;
+    border: 3px solid currentColor;
+    opacity: 0.15;
+  }
+  .quick-link {
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease;
+  }
+  .quick-link:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px rgba(25, 28, 29, 0.08);
+  }
+</style>
+{% endblock %}
 {% block content %}
-<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-8">
-  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
-    <div class="flex justify-between items-start mb-4">
-      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
-        <span class="material-symbols-outlined text-primary group-hover:text-white">payments</span>
+
+{# ── Hero Banner ── #}
+<div class="rounded-2xl p-6 lg:p-8 mb-8 relative overflow-hidden" style="background: linear-gradient(135deg, #0f2744 0%, #1e3a5f 40%, #006a69 100%);">
+  <div class="relative z-10">
+    <div class="flex flex-wrap items-start justify-between gap-4">
+      <div>
+        <h2 class="text-xl lg:text-2xl font-headline font-bold text-white mb-1">Norya Kontrol Merkezi</h2>
+        <p class="text-white/60 text-sm" id="hero-date"></p>
+      </div>
+      <div class="flex items-center gap-2">
+        <span class="status-dot" style="color: #34d399;" id="live-dot"></span>
+        <span class="text-emerald-300 text-sm font-medium" id="live-badge">{{ active_users }} aktif</span>
       </div>
     </div>
-    <div>
-      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Günlük satış (EUR)</p>
-      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ daily_sales }} €</p>
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mt-6">
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+        <p class="text-white/50 text-xs font-medium uppercase tracking-wider">Bugün</p>
+        <p class="text-white text-lg font-headline font-bold mt-0.5">{{ daily_sales }} &euro;</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+        <p class="text-white/50 text-xs font-medium uppercase tracking-wider">Bu ay</p>
+        <p class="text-white text-lg font-headline font-bold mt-0.5">{{ monthly_sales }} &euro;</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+        <p class="text-white/50 text-xs font-medium uppercase tracking-wider">Kullanıcı</p>
+        <p class="text-white text-lg font-headline font-bold mt-0.5">{{ total_users }}</p>
+      </div>
+      <div class="bg-white/10 backdrop-blur-sm rounded-xl px-4 py-3">
+        <p class="text-white/50 text-xs font-medium uppercase tracking-wider">Ort. analiz</p>
+        <p class="text-white text-lg font-headline font-bold mt-0.5">{{ avg_analysis_time }}</p>
+      </div>
     </div>
   </div>
-  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
-    <div class="flex justify-between items-start mb-4">
-      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
-        <span class="material-symbols-outlined text-primary group-hover:text-white">account_balance_wallet</span>
+  <div style="position:absolute;top:-60px;right:-60px;width:260px;height:260px;border-radius:50%;background:rgba(14,165,164,.15);pointer-events:none;"></div>
+  <div style="position:absolute;bottom:-80px;left:-40px;width:200px;height:200px;border-radius:50%;background:rgba(94,217,215,.08);pointer-events:none;"></div>
+</div>
+
+{# ── KPI Cards ── #}
+<div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-5 mb-8">
+  <div class="kpi-card bg-white rounded-2xl p-5 shadow-ambient border border-slate-100">
+    <div class="kpi-glow" style="background: #0ea5a4;"></div>
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #0ea5a4, #14b8a6);">
+        <span class="material-symbols-outlined text-white" style="font-size:20px;">payments</span>
       </div>
+      <p class="text-on-surface-variant text-sm font-medium">Günlük satış</p>
     </div>
-    <div>
-      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Aylık satış (EUR)</p>
-      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ monthly_sales }} €</p>
+    <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface">{{ daily_sales }}<span class="text-lg font-semibold text-on-surface-variant ml-1">&euro;</span></p>
+  </div>
+
+  <div class="kpi-card bg-white rounded-2xl p-5 shadow-ambient border border-slate-100">
+    <div class="kpi-glow" style="background: #3d5f8c;"></div>
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #2d4a6f, #3d5f8c);">
+        <span class="material-symbols-outlined text-white" style="font-size:20px;">account_balance_wallet</span>
+      </div>
+      <p class="text-on-surface-variant text-sm font-medium">Aylık satış</p>
+    </div>
+    <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface">{{ monthly_sales }}<span class="text-lg font-semibold text-on-surface-variant ml-1">&euro;</span></p>
+  </div>
+
+  <div class="kpi-card bg-white rounded-2xl p-5 shadow-ambient border border-slate-100">
+    <div class="kpi-glow" style="background: #006a69;"></div>
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #006a69, #0d9488);">
+        <span class="material-symbols-outlined text-white" style="font-size:20px;">group</span>
+      </div>
+      <p class="text-on-surface-variant text-sm font-medium">Toplam kullanıcı</p>
+    </div>
+    <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface">{{ total_users }}</p>
+  </div>
+
+  <div class="kpi-card bg-white rounded-2xl p-5 shadow-ambient border border-slate-100">
+    <div class="kpi-glow" style="background: #f59e0b;"></div>
+    <div class="flex items-center gap-3 mb-4">
+      <div class="w-11 h-11 rounded-xl flex items-center justify-center" style="background: linear-gradient(135deg, #f59e0b, #fbbf24);">
+        <span class="material-symbols-outlined text-white" style="font-size:20px;">warning</span>
+      </div>
+      <p class="text-on-surface-variant text-sm font-medium">Başarısız ödeme</p>
+    </div>
+    <p class="text-3xl font-extrabold font-headline tracking-tight {% if failed_payments > 0 %}text-amber-600{% else %}text-on-surface{% endif %}">{{ failed_payments }}</p>
+  </div>
+</div>
+
+{# ── Quick Actions ── #}
+<div class="flex flex-wrap gap-2.5 mb-8">
+  <a href="/admin/users" class="quick-link inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-100 shadow-sm text-sm font-medium text-on-surface-variant hover:text-primary hover:border-primary/20">
+    <span class="material-symbols-outlined" style="font-size:18px;">person_add</span> Kullanıcılar
+  </a>
+  <a href="/admin/payments" class="quick-link inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-100 shadow-sm text-sm font-medium text-on-surface-variant hover:text-primary hover:border-primary/20">
+    <span class="material-symbols-outlined" style="font-size:18px;">receipt_long</span> Ödemeler
+  </a>
+  <a href="/admin/payments?invoice_pending=1" class="quick-link inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-amber-50 border border-amber-200/60 shadow-sm text-sm font-semibold text-amber-800 hover:bg-amber-100">
+    <span class="material-symbols-outlined" style="font-size:18px;">description</span> E-arşiv fatura
+  </a>
+  <a href="/admin/analyses" class="quick-link inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-100 shadow-sm text-sm font-medium text-on-surface-variant hover:text-primary hover:border-primary/20">
+    <span class="material-symbols-outlined" style="font-size:18px;">biotech</span> Analizler
+  </a>
+  <a href="/admin/errors" class="quick-link inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-100 shadow-sm text-sm font-medium text-on-surface-variant hover:text-primary hover:border-primary/20">
+    <span class="material-symbols-outlined" style="font-size:18px;">bug_report</span> Hatalar
+  </a>
+  <a href="/admin/revenue" class="quick-link inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-white border border-slate-100 shadow-sm text-sm font-medium text-on-surface-variant hover:text-primary hover:border-primary/20">
+    <span class="material-symbols-outlined" style="font-size:18px;">monitoring</span> Gelir analitik
+  </a>
+</div>
+
+{# ── System Health + OpenAI Row ── #}
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+  <div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <div class="health-ring text-primary">
+          <span class="material-symbols-outlined text-primary" style="font-size:22px;">psychology</span>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-on-surface">AI Motoru</p>
+          <p class="text-xs text-on-surface-variant">OpenAI GPT-4o-mini</p>
+        </div>
+      </div>
+      <button type="button" id="ai-refresh" class="w-8 h-8 rounded-lg flex items-center justify-center bg-surface-container-high/60 hover:bg-surface-container text-on-surface-variant transition-colors" title="Yenile">
+        <span class="material-symbols-outlined" style="font-size:16px;">refresh</span>
+      </button>
+    </div>
+    <div class="rounded-xl bg-surface/80 p-3.5">
+      <p id="ai-badge" class="text-base font-semibold text-on-surface">Kontrol ediliyor&hellip;</p>
+      <p id="ai-detail" class="text-xs text-on-surface-variant mt-1"></p>
     </div>
   </div>
-  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
-    <div class="flex justify-between items-start mb-4">
-      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
-        <span class="material-symbols-outlined text-primary group-hover:text-white">group</span>
+
+  <div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="health-ring text-secondary">
+        <span class="material-symbols-outlined text-secondary" style="font-size:22px;">token</span>
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-on-surface">Token kullanımı</p>
+        <p class="text-xs text-on-surface-variant">Bu ay</p>
       </div>
     </div>
-    <div>
-      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Toplam kullanıcı</p>
-      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ total_users }}</p>
+    <div class="rounded-xl bg-surface/80 p-3.5">
+      <p class="text-2xl font-bold font-headline text-on-surface">{{ "{:,}".format(openai_tokens_month | default(0) | int) }} <span class="text-xs font-normal text-on-surface-variant">token</span></p>
+      <div class="flex items-center justify-between mt-2">
+        <p class="text-xs text-on-surface-variant">Tahmini maliyet</p>
+        <p class="text-sm font-bold text-primary">{{ "%.2f"|format(openai_cost_usd | default(0)) }} USD</p>
+      </div>
     </div>
   </div>
-  <div class="bg-surface-container-lowest p-6 rounded-xl shadow-ambient flex flex-col justify-between group hover:bg-primary transition-colors duration-300">
-    <div class="flex justify-between items-start mb-4">
-      <div class="p-3 bg-primary-container/10 rounded-lg group-hover:bg-white/20 transition-colors">
-        <span class="material-symbols-outlined text-primary group-hover:text-white">monitoring</span>
+
+  <div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6">
+    <div class="flex items-center gap-3 mb-4">
+      <div class="health-ring" style="color: #0ea5a4;">
+        <span class="material-symbols-outlined" style="font-size:22px;color:#0ea5a4;">speed</span>
+      </div>
+      <div>
+        <p class="text-sm font-semibold text-on-surface">Performans</p>
+        <p class="text-xs text-on-surface-variant">Sistem metrikleri</p>
       </div>
     </div>
-    <div>
-      <p class="text-on-surface-variant text-sm font-medium group-hover:text-white/80">Aktif kullanıcı (son 2 dk)</p>
-      <p class="text-3xl font-extrabold font-headline tracking-tight text-on-surface group-hover:text-white">{{ active_users }}</p>
+    <div class="space-y-3">
+      <div class="flex items-center justify-between rounded-xl bg-surface/80 px-3.5 py-2.5">
+        <span class="text-xs text-on-surface-variant">Ort. analiz süresi</span>
+        <span class="text-sm font-semibold text-on-surface font-headline">{{ avg_analysis_time }}</span>
+      </div>
+      <div class="flex items-center justify-between rounded-xl bg-surface/80 px-3.5 py-2.5">
+        <span class="text-xs text-on-surface-variant">Aktif kullanıcı</span>
+        <span class="text-sm font-semibold text-on-surface font-headline flex items-center gap-1.5">
+          <span class="status-dot" style="color:#34d399;width:6px;height:6px;"></span> {{ active_users }}
+        </span>
+      </div>
     </div>
   </div>
 </div>
 
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
-    <p class="text-on-surface-variant text-sm font-medium mb-2">Ortalama analiz süresi</p>
-    <p class="text-xl font-headline font-semibold text-on-surface">{{ avg_analysis_time }}</p>
-  </div>
-  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
-    <p class="text-on-surface-variant text-sm font-medium mb-2">Başarısız ödeme sayısı</p>
-    <p class="text-xl font-headline font-semibold text-on-surface">{{ failed_payments }}</p>
-  </div>
-</div>
-
-<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
-  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
-    <div class="flex flex-wrap items-center justify-between gap-2 mb-2">
-      <p class="text-on-surface-variant text-sm font-medium">AI durumu</p>
-      <button type="button" id="ai-refresh" class="text-xs px-3 py-1.5 rounded-full bg-surface-container-high text-on-surface hover:bg-surface-container font-medium transition-colors">Yenile</button>
+{# ── Trend Chart ── #}
+<div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6 mb-8">
+  <div class="flex flex-wrap items-center justify-between gap-3 mb-5">
+    <div>
+      <h2 class="text-base font-headline font-bold text-on-surface">Trend Analizi</h2>
+      <p class="text-on-surface-variant text-xs mt-0.5">Son 24 ay &mdash; analiz, satış &amp; kullanıcı büyümesi</p>
     </div>
-    <p id="ai-badge" class="text-lg font-semibold text-on-surface">Kontrol ediliyor…</p>
-    <p id="ai-detail" class="text-sm text-on-surface-variant mt-1"></p>
+    <div class="flex items-center gap-4 text-xs text-on-surface-variant">
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background:#0ea5a4;"></span> Analiz</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background:#fbbf24;"></span> Satış (&euro;)</span>
+      <span class="flex items-center gap-1.5"><span class="w-2.5 h-2.5 rounded-full" style="background:#4f5e7e;"></span> Kullanıcı</span>
+    </div>
   </div>
-  <div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6">
-    <p class="text-on-surface-variant text-sm font-medium mb-2">OpenAI kullanımı (bu ay)</p>
-    <p class="text-2xl font-bold font-headline text-on-surface">{{ openai_tokens_month | default(0) | int }} <span class="text-sm font-normal text-on-surface-variant">token</span></p>
-    <p class="text-sm text-on-surface-variant mt-1">Tahmini maliyet: <span class="text-primary font-semibold">{{ "%.2f"|format(openai_cost_usd | default(0)) }} USD</span></p>
-    <p class="text-xs text-outline mt-1">gpt-4o-mini · Sadece bu uygulama üzerinden yapılan analizler.</p>
-  </div>
-</div>
-
-<div class="bg-primary-container/10 rounded-2xl p-4 mb-8 text-sm text-on-surface border border-primary-container/15">
-  <strong class="font-headline">E-arşiv fatura:</strong> Ödemeler menüsüne girip bir siparişe tıklayın; tamamlanmış siparişlerde <strong>«E-arşiv fatura kes»</strong> ile GİB faturası kesebilirsiniz.
-</div>
-
-<div class="bg-surface-container-lowest rounded-xl shadow-ambient p-6 mb-8">
-  <h2 class="text-lg font-headline font-bold text-on-surface mb-1">Son 24 ay trendi</h2>
-  <p class="text-on-surface-variant text-sm mb-4">Ay ay analiz sayısı, satış (EUR) ve yeni kullanıcı.</p>
-  <div class="h-80">
+  <div style="height: 320px;">
     <canvas id="trend-chart" aria-label="Son 24 aylık trend grafiği"></canvas>
   </div>
-  <div class="flex flex-wrap gap-4 mt-3 text-xs text-on-surface-variant">
-    <span><span class="inline-block w-3 h-3 rounded-full bg-primary-container mr-1"></span> Analiz sayısı</span>
-    <span><span class="inline-block w-3 h-3 rounded-full bg-amber-400 mr-1"></span> Satış (€)</span>
-    <span><span class="inline-block w-3 h-3 rounded-full bg-secondary/50 mr-1"></span> Yeni kullanıcı</span>
-  </div>
 </div>
 
-<div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden">
-  <h2 class="text-lg font-headline font-bold text-on-surface px-6 py-4 bg-surface-container-low/80">Son 10 işlem</h2>
+{# ── Recent Transactions ── #}
+<div class="bg-white rounded-2xl shadow-ambient border border-slate-100 overflow-hidden mb-6">
+  <div class="flex items-center justify-between px-6 py-4 border-b border-slate-100">
+    <h2 class="text-base font-headline font-bold text-on-surface">Son işlemler</h2>
+    <a href="/admin/payments" class="text-xs font-medium text-primary hover:text-primary/80 transition-colors flex items-center gap-1">
+      Tümünü gör <span class="material-symbols-outlined" style="font-size:14px;">arrow_forward</span>
+    </a>
+  </div>
   <div class="overflow-x-auto">
     <table class="w-full text-sm">
       <thead>
-        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider">
-          <th class="px-6 py-3">Tarih</th>
-          <th class="px-6 py-3">merchant_oid</th>
-          <th class="px-6 py-3">Kullanıcı</th>
-          <th class="px-6 py-3">Ürün</th>
-          <th class="px-6 py-3">Tutar (EUR)</th>
-          <th class="px-6 py-3">Durum</th>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-slate-50/60">
+          <th class="px-6 py-3 font-medium">Tarih</th>
+          <th class="px-6 py-3 font-medium">Sipariş</th>
+          <th class="px-6 py-3 font-medium">Kullanıcı</th>
+          <th class="px-6 py-3 font-medium">Ürün</th>
+          <th class="px-6 py-3 font-medium text-right">Tutar</th>
+          <th class="px-6 py-3 font-medium text-center">Durum</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="divide-y divide-slate-50">
         {% for t in last_transactions %}
-        <tr class="hover:bg-surface-container-low/60 transition-colors">
-          <td class="px-6 py-3 text-on-surface">{{ t.created_at }}</td>
-          <td class="px-6 py-3 font-mono text-xs text-on-surface-variant">{{ t.merchant_oid }}</td>
-          <td class="px-6 py-3">{{ t.user_email or t.user_id }}</td>
-          <td class="px-6 py-3">{{ t.product }}</td>
-          <td class="px-6 py-3 font-medium">{{ "%.2f"|format(t.amount_kurus / 100) }} €</td>
-          <td class="px-6 py-3"><span class="{% if t.status == 'completed' %}text-emerald-700{% elif t.status == 'failed' %}text-red-600{% else %}text-amber-700{% endif %} font-medium">{{ t.status }}</span></td>
+        <tr class="txn-row">
+          <td class="px-6 py-3.5 text-on-surface whitespace-nowrap">{{ t.created_at }}</td>
+          <td class="px-6 py-3.5 font-mono text-xs text-on-surface-variant">{{ t.merchant_oid[:20] }}{% if t.merchant_oid|length > 20 %}&hellip;{% endif %}</td>
+          <td class="px-6 py-3.5 text-on-surface">{{ t.user_email or t.user_id }}</td>
+          <td class="px-6 py-3.5 text-on-surface-variant">{{ t.product }}</td>
+          <td class="px-6 py-3.5 font-semibold text-on-surface text-right whitespace-nowrap">{{ "%.2f"|format(t.amount_kurus / 100) }} &euro;</td>
+          <td class="px-6 py-3.5 text-center">
+            {% if t.status == 'completed' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700">
+              <span style="width:5px;height:5px;border-radius:50%;background:currentColor;"></span> Tamamlandı
+            </span>
+            {% elif t.status == 'failed' %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-red-50 text-red-600">
+              <span style="width:5px;height:5px;border-radius:50%;background:currentColor;"></span> Başarısız
+            </span>
+            {% else %}
+            <span class="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-50 text-amber-700">
+              <span style="width:5px;height:5px;border-radius:50%;background:currentColor;"></span> {{ t.status }}
+            </span>
+            {% endif %}
+          </td>
         </tr>
         {% else %}
-        <tr><td colspan="6" class="px-6 py-8 text-center text-on-surface-variant">İşlem yok.</td></tr>
+        <tr><td colspan="6" class="px-6 py-12 text-center text-on-surface-variant">
+          <span class="material-symbols-outlined text-3xl text-outline/40 mb-2 block">inbox</span>
+          Henüz işlem yok.
+        </td></tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
 </div>
 
+{# ── E-arşiv Tip ── #}
+<div class="flex items-start gap-3 rounded-2xl p-4 mb-4 bg-amber-50/60 border border-amber-200/40">
+  <span class="material-symbols-outlined text-amber-600 mt-0.5" style="font-size:20px;">info</span>
+  <p class="text-sm text-amber-900"><strong class="font-headline font-semibold">E-arşiv fatura:</strong> Ödemeler menüsüne girip bir siparişe tıklayın; tamamlanmış siparişlerde <strong>«E-arşiv fatura kes»</strong> ile GİB faturası kesebilirsiniz.</p>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
 <script>
 (function() {
+  /* Hero date */
+  var dateEl = document.getElementById('hero-date');
+  if (dateEl) {
+    var now = new Date();
+    var days = ['Pazar','Pazartesi','Salı','Çarşamba','Perşembe','Cuma','Cumartesi'];
+    var months = ['Ocak','Şubat','Mart','Nisan','Mayıs','Haziran','Temmuz','Ağustos','Eylül','Ekim','Kasım','Aralık'];
+    dateEl.textContent = days[now.getDay()] + ', ' + now.getDate() + ' ' + months[now.getMonth()] + ' ' + now.getFullYear() + ' — ' + String(now.getHours()).padStart(2,'0') + ':' + String(now.getMinutes()).padStart(2,'0');
+  }
+
+  /* Chart */
   var chartLabels = {{ chart_labels | tojson }};
   var chartAnalyses = {{ chart_analyses | tojson }};
   var chartSales = {{ chart_sales | tojson }};
@@ -141,36 +334,56 @@
   var trendCanvas = document.getElementById('trend-chart');
   if (trendCanvas && typeof Chart !== 'undefined') {
     try {
+    Chart.defaults.font.family = "'Inter', system-ui, sans-serif";
     new Chart(trendCanvas, {
       type: 'line',
       data: {
         labels: chartLabels,
         datasets: [
           {
-            label: 'Analiz sayısı',
+            label: 'Analiz',
             data: chartAnalyses,
-            borderColor: 'rgb(14, 165, 164)',
-            backgroundColor: 'rgba(14, 165, 164, 0.12)',
+            borderColor: '#0ea5a4',
+            backgroundColor: 'rgba(14, 165, 164, 0.08)',
             fill: true,
-            tension: 0.3,
+            tension: 0.4,
+            borderWidth: 2.5,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#0ea5a4',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2,
             yAxisID: 'y'
           },
           {
             label: 'Satış (€)',
             data: chartSales,
-            borderColor: 'rgb(251, 191, 36)',
-            backgroundColor: 'rgba(251, 191, 36, 0.12)',
+            borderColor: '#fbbf24',
+            backgroundColor: 'rgba(251, 191, 36, 0.06)',
             fill: true,
-            tension: 0.3,
+            tension: 0.4,
+            borderWidth: 2.5,
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#fbbf24',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2,
             yAxisID: 'y1'
           },
           {
-            label: 'Yeni kullanıcı',
+            label: 'Kullanıcı',
             data: chartUsers,
-            borderColor: 'rgb(79, 94, 126)',
-            backgroundColor: 'rgba(79, 94, 126, 0.1)',
+            borderColor: '#4f5e7e',
+            backgroundColor: 'rgba(79, 94, 126, 0.05)',
             fill: true,
-            tension: 0.3,
+            tension: 0.4,
+            borderWidth: 2,
+            borderDash: [4, 4],
+            pointRadius: 0,
+            pointHoverRadius: 5,
+            pointHoverBackgroundColor: '#4f5e7e',
+            pointHoverBorderColor: '#fff',
+            pointHoverBorderWidth: 2,
             yAxisID: 'y'
           }
         ]
@@ -180,35 +393,50 @@
         maintainAspectRatio: false,
         interaction: { mode: 'index', intersect: false },
         plugins: {
-          legend: { display: false }
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#0f2744',
+            titleColor: '#fff',
+            bodyColor: 'rgba(255,255,255,.8)',
+            borderColor: 'rgba(255,255,255,.1)',
+            borderWidth: 1,
+            cornerRadius: 10,
+            padding: 12,
+            bodySpacing: 6,
+            titleFont: { weight: '600' }
+          }
         },
         scales: {
           y: {
             type: 'linear',
             position: 'left',
-            title: { display: true, text: 'Adet (analiz / kullanıcı)', color: '#3d4949' },
-            grid: { color: 'rgba(109, 122, 121, 0.15)' },
-            ticks: { color: '#3d4949' }
+            title: { display: true, text: 'Adet', color: '#6d7a79', font: { size: 11 } },
+            grid: { color: 'rgba(109,122,121,.08)', drawBorder: false },
+            ticks: { color: '#6d7a79', font: { size: 11 } },
+            border: { display: false }
           },
           y1: {
             type: 'linear',
             position: 'right',
-            title: { display: true, text: 'Satış (€)', color: '#3d4949' },
-            grid: { drawOnChartArea: false },
-            ticks: { color: '#3d4949' }
+            title: { display: true, text: 'Satış (€)', color: '#6d7a79', font: { size: 11 } },
+            grid: { drawOnChartArea: false, drawBorder: false },
+            ticks: { color: '#6d7a79', font: { size: 11 } },
+            border: { display: false }
           },
           x: {
-            grid: { color: 'rgba(109, 122, 121, 0.12)' },
-            ticks: { color: '#3d4949', maxRotation: 45 }
+            grid: { display: false },
+            ticks: { color: '#6d7a79', font: { size: 11 }, maxRotation: 45 },
+            border: { display: false }
           }
         }
       }
     });
     } catch (e) {
-      trendCanvas.parentElement.innerHTML = '<p class="text-amber-700 text-sm">Grafik yüklenemedi: ' + (e.message || 'bilinmeyen hata') + '</p>';
+      trendCanvas.parentElement.innerHTML = '<p class="text-amber-700 text-sm p-4">Grafik yüklenemedi: ' + (e.message || 'bilinmeyen hata') + '</p>';
     }
   }
 
+  /* AI Health */
   function initAIStatus() {
     var badgeEl = document.getElementById('ai-badge');
     var detailEl = document.getElementById('ai-detail');
@@ -218,22 +446,21 @@
     function setAIState(loading, ok, msg, detail) {
       try {
         if (loading) {
-          badgeEl.textContent = 'Kontrol ediliyor…';
-          badgeEl.className = 'text-lg font-semibold text-on-surface-variant';
+          badgeEl.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;"><span class="material-symbols-outlined" style="font-size:16px;animation:spin 1s linear infinite;">progress_activity</span> Kontrol ediliyor\u2026</span>';
+          badgeEl.className = 'text-sm font-medium text-on-surface-variant';
           detailEl.textContent = '';
-          detailEl.className = 'text-sm text-on-surface-variant mt-1';
           return;
         }
         if (ok) {
-          badgeEl.innerHTML = '🟢 Çalışıyor';
-          badgeEl.className = 'text-lg font-semibold text-emerald-700';
+          badgeEl.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#34d399;"></span> Çalışıyor</span>';
+          badgeEl.className = 'text-sm font-semibold text-emerald-700';
           detailEl.textContent = detail || '';
-          detailEl.className = 'text-sm text-on-surface-variant mt-1';
+          detailEl.className = 'text-xs text-on-surface-variant mt-1';
         } else {
-          badgeEl.innerHTML = '🔴 Sorun var';
-          badgeEl.className = 'text-lg font-semibold text-red-600';
+          badgeEl.innerHTML = '<span style="display:inline-flex;align-items:center;gap:6px;"><span style="width:8px;height:8px;border-radius:50%;background:#ef4444;"></span> Sorun var</span>';
+          badgeEl.className = 'text-sm font-semibold text-red-600';
           detailEl.textContent = msg || 'AI erişilemedi.';
-          detailEl.className = 'text-sm text-red-700 mt-1';
+          detailEl.className = 'text-xs text-red-600 mt-1';
         }
       } catch (e) {
         if (detailEl) detailEl.textContent = 'Güncelleme hatası: ' + (e.message || String(e));
@@ -266,7 +493,7 @@
         .catch(function(e) {
           var msg = (e && e.message) ? e.message : String(e);
           if (/connection|failed to fetch|network|load/i.test(msg)) {
-            msg = 'AI durumu kontrol edilemedi (sayfa veya ağ sorunu). Raporlar ve diğer sayfalar çalışıyor olabilir.';
+            msg = 'AI durumu kontrol edilemedi (sayfa veya ağ sorunu).';
           } else {
             msg = 'Bağlantı hatası: ' + msg;
           }
@@ -288,4 +515,5 @@
   }
 })();
 </script>
+<style>@keyframes spin{to{transform:rotate(360deg)}}</style>
 {% endblock %}

@@ -10,60 +10,13 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  <script src="https://cdn.tailwindcss.com/3.4.17?plugins=forms"></script>
+  <link rel="stylesheet" href="/static/css/tailwind.css" />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            "outline-variant": "#bcc9c8",
-            "secondary-container": "#cadaff",
-            "on-surface-variant": "#3d4949",
-            "tertiary-container": "#37a49a",
-            "surface-container-low": "#f3f4f5",
-            "surface-container-lowest": "#ffffff",
-            "surface-container-high": "#e7e8e9",
-            "surface-container": "#edeeef",
-            "surface-container-highest": "#e1e3e4",
-            "surface-bright": "#f8f9fa",
-            "surface-dim": "#d9dadb",
-            "surface-variant": "#e1e3e4",
-            "surface": "#f8f9fa",
-            "on-surface": "#191c1d",
-            "on-background": "#191c1d",
-            "background": "#f8f9fa",
-            "primary": "#006a69",
-            "primary-container": "#0ea5a4",
-            "on-primary": "#ffffff",
-            "on-primary-container": "#003333",
-            "inverse-primary": "#5ed9d7",
-            "primary-fixed-dim": "#5ed9d7",
-            "outline": "#6d7a79",
-            "secondary": "#4f5e7e",
-            "tertiary": "#006a63",
-            "error": "#ba1a1a",
-            "error-container": "#ffdad6",
-            "on-error": "#ffffff",
-            "on-error-container": "#93000a",
-            brand: "#0ea5a4",
-          },
-          fontFamily: {
-            headline: ["Manrope", "system-ui", "sans-serif"],
-            body: ["Inter", "system-ui", "sans-serif"],
-          },
-          borderRadius: { lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", "3xl": "1.5rem", full: "9999px" },
-          boxShadow: {
-            ambient: "0 12px 40px rgba(25, 28, 29, 0.04)",
-          },
-        },
-      },
-    };
-  </script>
   <style>
     body { font-family: Inter, system-ui, sans-serif; }
     .font-headline { font-family: Manrope, system-ui, sans-serif; }
+    .shadow-ambient { box-shadow: 0 12px 40px rgba(25, 28, 29, 0.04); }
     .material-symbols-outlined {
       font-variation-settings: "FILL" 0, "wght" 400, "GRAD" 0, "opsz" 24;
       font-size: 22px;
@@ -94,6 +47,28 @@
     .wa-icon { display: block; width: 32px; height: 32px; object-fit: contain; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
+    /* Mobile sidebar drawer */
+    .admin-sidebar { transition: transform .25s cubic-bezier(.4,0,.2,1); }
+    @media (max-width: 1023px) {
+      .admin-sidebar {
+        position: fixed; inset: 0; z-index: 50;
+        width: min(280px, 85vw);
+        transform: translateX(-100%);
+        box-shadow: 20px 0 60px rgba(0,0,0,.15);
+      }
+      .admin-sidebar.open { transform: translateX(0); }
+    }
+    @media (min-width: 1024px) {
+      .admin-sidebar { position: relative; transform: none; }
+      .admin-hamburger { display: none !important; }
+    }
+    .admin-backdrop {
+      position: fixed; inset: 0; z-index: 49;
+      background: rgba(0,0,0,.35);
+      opacity: 0; pointer-events: none;
+      transition: opacity .25s ease;
+    }
+    .admin-backdrop.open { opacity: 1; pointer-events: auto; }
   </style>
   {% block extra_head %}{% endblock %}
   {% set ga_id = request.state.ga_measurement_id|default('G-1FLMLJH3Q0', true) %}
@@ -110,9 +85,10 @@
   {% endif %}
 </head>
 <body class="bg-surface text-on-surface min-h-screen antialiased">
+  <div id="admin-backdrop" class="admin-backdrop" onclick="toggleAdminSidebar()"></div>
   <div class="flex min-h-screen">
-    <aside class="w-64 flex-shrink-0 min-h-screen bg-surface-container-low border-r-0 flex flex-col py-6 pl-3 pr-0 z-40">
-      <div class="px-4 mb-8">
+    <aside id="admin-sidebar" class="admin-sidebar w-64 flex-shrink-0 min-h-screen bg-surface-container-low border-r-0 flex flex-col py-6 pl-3 pr-0 z-50 lg:z-40">
+      <div class="px-4 mb-8 flex items-center justify-between">
         <a href="/admin/dashboard" class="flex items-center gap-3 group">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-primary to-primary-container flex items-center justify-center text-white flex-shrink-0">
             <span class="material-symbols-outlined !text-[22px]" style="font-variation-settings: 'FILL' 1;">biotech</span>
@@ -122,6 +98,9 @@
             <p class="text-[10px] uppercase tracking-widest text-primary font-semibold">Clinical Curator</p>
           </div>
         </a>
+        <button type="button" onclick="toggleAdminSidebar()" class="lg:hidden w-8 h-8 rounded-lg flex items-center justify-center text-on-surface-variant hover:bg-white/70" aria-label="Menüyü kapat">
+          <span class="material-symbols-outlined" style="font-size:20px;">close</span>
+        </button>
       </div>
       <nav class="flex-1 space-y-1 pr-3 overflow-y-auto no-scrollbar">
         <a href="/admin/dashboard" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path == '/admin/dashboard' or request.url.path == '/admin' or request.url.path == '/admin/' %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
@@ -210,13 +189,18 @@
     </aside>
 
     <div class="flex-1 flex flex-col min-w-0">
-      <header class="sticky top-0 z-30 flex items-center justify-between px-6 lg:px-8 h-16 bg-white/85 backdrop-blur-xl shadow-ambient border-b border-outline-variant/10">
-        <h1 class="font-headline font-semibold text-lg text-primary">{% block admin_header_title %}Yönetim paneli{% endblock %}</h1>
+      <header class="sticky top-0 z-30 flex items-center justify-between px-4 lg:px-8 h-14 lg:h-16 bg-white/85 backdrop-blur-xl shadow-ambient border-b border-outline-variant/10">
+        <div class="flex items-center gap-3">
+          <button type="button" onclick="toggleAdminSidebar()" class="admin-hamburger w-9 h-9 rounded-lg flex items-center justify-center border border-outline-variant/20 bg-white/80 text-on-surface-variant hover:bg-surface-container transition-colors" aria-label="Menüyü aç">
+            <span class="material-symbols-outlined" style="font-size:20px;">menu</span>
+          </button>
+          <h1 class="font-headline font-semibold text-base lg:text-lg text-primary">{% block admin_header_title %}Yönetim paneli{% endblock %}</h1>
+        </div>
         <div class="flex items-center gap-2 text-on-surface-variant text-sm">
           <span class="material-symbols-outlined text-outline text-xl">admin_panel_settings</span>
         </div>
       </header>
-      <main class="flex-1 p-6 lg:p-8 max-w-[1600px] w-full mx-auto">
+      <main class="flex-1 p-4 sm:p-6 lg:p-8 max-w-[1600px] w-full mx-auto">
         {% block content %}{% endblock %}
       </main>
     </div>
@@ -228,5 +212,29 @@
      aria-label="WhatsApp ile iletişim">
     <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="wa-icon" width="32" height="32" />
   </a>
+  <script>
+  function toggleAdminSidebar() {
+    var sidebar = document.getElementById('admin-sidebar');
+    var backdrop = document.getElementById('admin-backdrop');
+    if (!sidebar) return;
+    var isOpen = sidebar.classList.contains('open');
+    if (isOpen) {
+      sidebar.classList.remove('open');
+      backdrop.classList.remove('open');
+      document.body.style.overflow = '';
+    } else {
+      sidebar.classList.add('open');
+      backdrop.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+  }
+  document.querySelectorAll('#admin-sidebar nav a').forEach(function(link) {
+    link.addEventListener('click', function() {
+      if (window.innerWidth < 1024) {
+        toggleAdminSidebar();
+      }
+    });
+  });
+  </script>
 </body>
 </html>

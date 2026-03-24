@@ -112,6 +112,7 @@ module.exports = {
         "norya-md": "0 4px 20px rgba(14, 23, 41, 0.08)",
         "norya-lg": "0 8px 32px rgba(14, 23, 41, 0.1)",
         "norya-brand": "0 4px 16px rgba(224, 122, 95, 0.2)",
+        ambient: "0 12px 40px rgba(25, 28, 29, 0.04)",
       },
       spacing: {
         norya: "0.625rem",

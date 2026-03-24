@@ -271,6 +271,22 @@
           {% endfor %}
         </div>
 
+        {% if related_posts %}
+        <nav class="mt-10 border border-slate-200/60 rounded-xl bg-slate-50/60 p-5 sm:p-6" aria-label="{{ blog_ui.related_label|default('Related articles') }}">
+          <p class="text-xs font-semibold uppercase tracking-wider text-slate-500 mb-3">{{ blog_ui.related_label|default('Related articles') }}</p>
+          <ul class="space-y-2 list-none m-0 p-0">
+            {% for rp in related_posts[:3] %}
+            <li><a href="{{ rp.url }}" class="text-sm font-medium text-teal-700 hover:text-teal-900 hover:underline">{{ rp.title }}</a></li>
+            {% endfor %}
+          </ul>
+          <div class="mt-3 pt-3 border-t border-slate-200/50 flex flex-wrap gap-4 text-sm">
+            <a href="/pricing" class="text-slate-600 hover:text-teal-700">{{ blog_ui.pricing_link|default('Pricing') }} &rarr;</a>
+            <a href="/how-it-works" class="text-slate-600 hover:text-teal-700">{{ blog_ui.how_it_works_link|default('How it works') }} &rarr;</a>
+            <a href="/{{ current_lang }}/blog" class="text-slate-600 hover:text-teal-700">{{ blog_ui.breadcrumb_blog|default('Blog') }} &rarr;</a>
+          </div>
+        </nav>
+        {% endif %}
+
         <section class="blog-cta-card mt-14 sm:mt-16 p-6 sm:p-8" aria-labelledby="blog-cta-title">
           <div class="flex flex-col sm:flex-row sm:items-center gap-6">
             <div class="flex-shrink-0 w-14 h-14 rounded-2xl bg-teal-500/10 flex items-center justify-center text-teal-600">
