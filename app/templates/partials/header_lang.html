@@ -1,4 +1,22 @@
-<!-- DEBUG_FILE: partials/header_lang.html v1 -->
+<!-- DEBUG_FILE: partials/header_lang.html v2 -->
+{% raw %}<style>
+:root{--lang-border:1px solid rgba(15,23,42,0.07);--lang-bg:rgba(255,255,255,0.92);--lang-shadow:0 12px 40px rgba(15,23,42,0.08),0 2px 8px rgba(15,23,42,0.03);--lang-radius:16px;--lang-radius-inner:12px;--lang-accent-subtle:rgba(14,165,164,0.08);--lang-accent-active:rgba(14,165,164,0.1);--lang-check:#0d9488}
+.language-switch{position:relative}
+.lang-trigger-btn{display:inline-flex;align-items:center;gap:.5rem;height:40px;padding:0 14px;border-radius:14px;border:var(--lang-border);background:rgba(255,255,255,.82);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px);box-shadow:0 4px 20px rgba(15,23,42,.05);color:#0f172a;font-size:.875rem;font-weight:500;cursor:pointer;transition:transform 150ms ease,box-shadow 150ms ease,border-color 150ms ease,background 150ms ease}
+.lang-trigger-btn:hover{transform:translateY(-1px);border-color:rgba(14,165,164,.22);box-shadow:0 8px 28px rgba(15,23,42,.08);background:rgba(255,255,255,.94)}
+.lang-trigger-btn:focus-visible{outline:none;box-shadow:0 0 0 2px rgba(14,165,164,.2),0 8px 28px rgba(15,23,42,.08);border-color:rgba(14,165,164,.35)}
+.lang-trigger-icon{font-size:.95rem;opacity:.85}
+.lang-trigger-code{font-weight:600;letter-spacing:.04em;text-transform:uppercase}
+.lang-trigger-chevron{font-size:.7rem;opacity:.7}
+#base-lang-menu,#base-lang-menu-mobile{position:absolute;top:calc(100% + 8px);right:0;width:max-content;min-width:220px;max-width:calc(100vw - 24px);padding:10px;border-radius:var(--lang-radius);border:var(--lang-border);background:var(--lang-bg);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);box-shadow:var(--lang-shadow);z-index:1400;transform-origin:top right;animation:langMenuIn 160ms ease}
+@keyframes langMenuIn{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+#base-lang-menu .header-lang-option,#base-lang-menu-mobile .header-lang-option{display:flex;align-items:center;justify-content:space-between;gap:.75rem;width:100%;min-height:42px;padding:10px 12px;border-radius:var(--lang-radius-inner);color:#1e293b;font-weight:500;text-decoration:none;cursor:pointer;border:none;background:transparent;font-size:.875rem;transition:background 140ms ease,color 140ms ease}
+#base-lang-menu .header-lang-option:hover,#base-lang-menu-mobile .header-lang-option:hover{background:var(--lang-accent-subtle);color:#0f172a}
+#base-lang-menu .header-lang-option.is-active,#base-lang-menu-mobile .header-lang-option.is-active{background:var(--lang-accent-active);color:#0f172a;font-weight:600}
+#base-lang-menu .header-lang-option.is-active::after,#base-lang-menu-mobile .header-lang-option.is-active::after{content:"\2713";font-size:.75rem;color:var(--lang-check)}
+[dir="rtl"] #base-lang-menu .header-lang-option,[dir="rtl"] #base-lang-menu-mobile .header-lang-option{text-align:right}
+@media(max-width:640px){#base-lang-menu,#base-lang-menu-mobile{min-width:200px;max-width:calc(100vw - 16px);padding:8px;border-radius:16px}#base-lang-menu .header-lang-option,#base-lang-menu-mobile .header-lang-option{min-height:40px;padding:9px 10px;font-size:.9375rem}}
+</style>{% endraw %}
 <div class="header-lang-switch language-switch" aria-label="Language">
   <button type="button" id="base-lang-toggle" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false">
     <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
