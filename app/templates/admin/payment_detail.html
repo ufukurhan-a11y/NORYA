@@ -6,7 +6,7 @@
 <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/15 shadow-ambient p-6 mb-6 max-w-2xl space-y-2 text-on-surface">
   <p><span class="text-on-surface-variant">ID:</span> {{ order.id }}</p>
   <p><span class="text-on-surface-variant">merchant_oid:</span> <code class="text-sm bg-surface-container-low px-1 rounded">{{ order.merchant_oid }}</code></p>
-  <p><span class="text-on-surface-variant">Kullanıcı:</span> {{ user_email }} (ID: {{ order.user_id }})</p>
+  <p><span class="text-on-surface-variant">Kullanıcı:</span> <a href="/admin/users/{{ order.user_id }}" class="text-primary hover:underline">{{ user_email }}</a> (ID: {{ order.user_id }})</p>
   <p><span class="text-on-surface-variant">Ürün:</span> {{ order.product }}</p>
   <p><span class="text-on-surface-variant">Tutar:</span> {{ "%.2f"|format(amount_eur) }} {{ order.currency }}</p>
   <p><span class="text-on-surface-variant">Durum:</span> <span class="{% if order.status == 'completed' %}text-emerald-700 font-semibold{% elif order.status == 'failed' %}text-red-600 font-semibold{% else %}text-amber-700 font-semibold{% endif %}">{{ order.status }}</span></p>
@@ -21,6 +21,13 @@
   <p><span class="text-on-surface-variant">İade:</span> <span class="text-amber-800 font-semibold">Yapıldı</span> — {{ (refund_amount_kurus or 0) / 100 }} {{ order.currency }} ({{ refunded_at.strftime("%d.%m.%Y %H:%M") }})</p>
   {% endif %}
 </div>
+
+{% if status_ok %}
+<div class="mb-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm">{{ status_ok }}</div>
+{% endif %}
+{% if status_err %}
+<div class="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">{{ status_err }}</div>
+{% endif %}
 {% if refund_ok %}
 <div class="mb-4 p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-900 text-sm">İade talebi PayTR tarafından kabul edildi. Tutar kartına işlenecektir.</div>
 {% endif %}
@@ -33,6 +40,24 @@
 {% if invoice_err %}
 <div class="mb-4 p-4 rounded-xl bg-red-50 border border-red-200 text-red-800 text-sm">{{ invoice_err }}</div>
 {% endif %}
+
+<!-- Manuel durum güncelleme -->
+<div class="mb-6 max-w-2xl p-5 rounded-2xl bg-surface-container-lowest border border-[#bcc9c8]/15 shadow-ambient">
+  <h3 class="text-base font-headline font-bold text-on-surface mb-3">Durum güncelle</h3>
+  <p class="text-on-surface-variant text-xs mb-3">PayTR callback gelmezse veya hata oluştuysa durumu manuel değiştirebilirsiniz. Dikkatli kullanın.</p>
+  <form method="post" action="/admin/payments/{{ order.id }}/status" class="flex flex-wrap gap-3 items-end">
+    <div>
+      <label class="block text-on-surface-variant text-xs font-medium mb-1">Yeni durum</label>
+      <select name="new_status" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface text-sm focus:ring-2 focus:ring-primary-container/25 focus:bg-white">
+        <option value="pending" {% if order.status == 'pending' %}selected{% endif %}>pending</option>
+        <option value="completed" {% if order.status == 'completed' %}selected{% endif %}>completed</option>
+        <option value="failed" {% if order.status == 'failed' %}selected{% endif %}>failed</option>
+      </select>
+    </div>
+    <button type="submit" onclick="return confirm('Ödeme durumu değiştirilecek. Emin misiniz?')" class="px-5 py-2.5 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient">Güncelle</button>
+  </form>
+</div>
+
 <form method="post" action="/admin/payments/{{ order.id }}/note" class="mb-6 max-w-2xl">
   <label class="block text-on-surface-variant text-sm font-medium mb-2">Admin notu (iade / açıklama)</label>
   <textarea name="admin_note" rows="3" class="w-full px-4 py-3 rounded-xl bg-surface-container-low border-0 text-on-surface focus:ring-2 focus:ring-primary-container/25 focus:bg-white placeholder:text-on-surface-variant/50" placeholder="İade veya not...">{{ admin_note }}</textarea>
@@ -45,7 +70,7 @@
 {% if order.status == 'completed' and not invoice_ettn %}
 <section id="fatura" class="mt-6 max-w-2xl p-6 rounded-2xl border border-[#bcc9c8]/15 bg-surface-container-lowest shadow-ambient">
   <h3 class="text-lg font-headline font-bold text-on-surface mb-3">E-arşiv fatura kes</h3>
-  <p class="text-on-surface-variant text-sm mb-4">Alıcı bilgilerini girin; tutar siparişe göre TL’ye çevrilerek GİB’e gönderilir. GİB e-Arşiv Portal’da SMS ile onay gerekebilir.</p>
+  <p class="text-on-surface-variant text-sm mb-4">Alıcı bilgilerini girin; tutar siparişe göre TL'ye çevrilerek GİB'e gönderilir. GİB e-Arşiv Portal'da SMS ile onay gerekebilir.</p>
   <form method="post" action="/admin/payments/{{ order.id }}/invoice" class="space-y-3">
     <div>
       <label class="block text-on-surface-variant text-sm mb-1">Alıcı TC Kimlik No <span class="text-red-600">*</span></label>
@@ -97,6 +122,35 @@
       </div>
     </div>
   </form>
+</section>
+{% endif %}
+
+<!-- Audit Log -->
+{% if audit_logs %}
+<section class="mt-8 max-w-2xl">
+  <h3 class="text-lg font-headline font-bold text-on-surface mb-3">İşlem geçmişi (Audit Log)</h3>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/15 shadow-ambient overflow-hidden">
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+            <th class="px-5 py-3">Tarih</th>
+            <th class="px-5 py-3">Olay</th>
+            <th class="px-5 py-3">Detay</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for al in audit_logs %}
+          <tr class="border-b border-outline-variant/15">
+            <td class="px-5 py-2.5 text-on-surface text-xs">{{ al.created_at.strftime('%d.%m.%Y %H:%M') if al.created_at else '-' }}</td>
+            <td class="px-5 py-2.5 text-on-surface font-medium">{{ al.event }}</td>
+            <td class="px-5 py-2.5 text-on-surface-variant text-xs max-w-xs truncate">{{ al.metadata_json or '-' }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 </section>
 {% endif %}
 

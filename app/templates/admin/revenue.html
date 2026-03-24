@@ -1,0 +1,223 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}Gelir Analitik - Norya Admin{% endblock %}
+{% block admin_header_title %}Gelir analitik{% endblock %}
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+{% endblock %}
+{% block content %}
+<h2 class="text-2xl font-headline font-bold text-on-surface mb-6">Gelir analitik</h2>
+
+<!-- KPI Kartları -->
+<div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Bugün</p>
+    <p class="text-2xl font-headline font-bold text-on-surface">{{ "%.2f"|format(daily_eur) }} €</p>
+    <p class="text-xs text-on-surface-variant mt-1">{{ daily_count }} sipariş</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Bu Hafta</p>
+    <p class="text-2xl font-headline font-bold text-on-surface">{{ "%.2f"|format(weekly_eur) }} €</p>
+    <p class="text-xs text-on-surface-variant mt-1">{{ weekly_count }} sipariş</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Bu Ay</p>
+    <p class="text-2xl font-headline font-bold text-emerald-700">{{ "%.2f"|format(monthly_eur) }} €</p>
+    <p class="text-xs text-on-surface-variant mt-1">{{ monthly_count }} sipariş</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Bu Yıl</p>
+    <p class="text-2xl font-headline font-bold text-on-surface">{{ "%.2f"|format(yearly_eur) }} €</p>
+    <p class="text-xs text-on-surface-variant mt-1">{{ yearly_count }} sipariş</p>
+  </div>
+</div>
+
+<!-- Özet metrikler -->
+<div class="grid grid-cols-2 md:grid-cols-5 gap-4 mb-8">
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Toplam Gelir</p>
+    <p class="text-xl font-headline font-bold text-on-surface">{{ "%.2f"|format(total_revenue_eur) }} €</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Dönüşüm Oranı</p>
+    <p class="text-xl font-headline font-bold text-on-surface">{{ "%.1f"|format(conversion_rate) }}%</p>
+    <p class="text-xs text-on-surface-variant mt-1">{{ total_completed }} / {{ total_all }}</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Ort. Sipariş (AOV)</p>
+    <p class="text-xl font-headline font-bold text-on-surface">{{ "%.2f"|format(aov) }} €</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Toplam Sipariş</p>
+    <p class="text-xl font-headline font-bold text-on-surface">{{ total_completed }}</p>
+  </div>
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-5">
+    <p class="text-on-surface-variant text-xs font-medium uppercase tracking-wider mb-1">Toplam İade</p>
+    <p class="text-xl font-headline font-bold text-red-600">{{ "%.2f"|format(total_refunded_eur) }} €</p>
+  </div>
+</div>
+
+<!-- Aylık Gelir Grafiği (ürün bazlı stacked) -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-6 mb-8">
+  <div class="flex items-center justify-between mb-4">
+    <h3 class="text-lg font-headline font-bold text-on-surface">Aylık gelir trendi (ürün bazlı)</h3>
+    <div class="flex gap-2">
+      <a href="/admin/revenue?months=6" class="px-3 py-1 rounded-full text-xs font-medium {% if months == 6 %}bg-primary text-white{% else %}bg-surface-container-high text-on-surface-variant{% endif %}">6 ay</a>
+      <a href="/admin/revenue?months=12" class="px-3 py-1 rounded-full text-xs font-medium {% if months == 12 %}bg-primary text-white{% else %}bg-surface-container-high text-on-surface-variant{% endif %}">12 ay</a>
+      <a href="/admin/revenue?months=24" class="px-3 py-1 rounded-full text-xs font-medium {% if months == 24 %}bg-primary text-white{% else %}bg-surface-container-high text-on-surface-variant{% endif %}">24 ay</a>
+    </div>
+  </div>
+  <canvas id="revenueChart" height="100"></canvas>
+</div>
+
+<!-- Dönüşüm Oranı Grafiği -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient p-6 mb-8">
+  <h3 class="text-lg font-headline font-bold text-on-surface mb-4">Aylık dönüşüm oranı (%)</h3>
+  <canvas id="conversionChart" height="80"></canvas>
+</div>
+
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+  <!-- Ürün bazlı kırılım -->
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient overflow-hidden">
+    <h3 class="text-base font-headline font-bold text-on-surface px-5 py-4 bg-surface-container-low/80 border-b border-outline-variant/10">Ürün bazlı kırılım</h3>
+    <div class="overflow-x-auto">
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+            <th class="px-5 py-3">Ürün</th>
+            <th class="px-5 py-3">Adet</th>
+            <th class="px-5 py-3">Toplam (EUR)</th>
+            <th class="px-5 py-3">Ort. (EUR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in product_breakdown %}
+          <tr class="border-b border-outline-variant/15">
+            <td class="px-5 py-3 text-on-surface font-medium">{{ p.product }}</td>
+            <td class="px-5 py-3 text-on-surface">{{ p.count }}</td>
+            <td class="px-5 py-3 text-on-surface font-semibold">{{ "%.2f"|format(p.total_eur) }} €</td>
+            <td class="px-5 py-3 text-on-surface-variant">{{ "%.2f"|format(p.avg_eur) }} €</td>
+          </tr>
+          {% else %}
+          <tr><td colspan="4" class="px-5 py-6 text-center text-on-surface-variant">Veri yok.</td></tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Kupon etkisi -->
+  <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient overflow-hidden">
+    <h3 class="text-base font-headline font-bold text-on-surface px-5 py-4 bg-surface-container-low/80 border-b border-outline-variant/10">Kupon etkisi</h3>
+    <div class="p-5 space-y-4">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="p-4 rounded-xl bg-surface-container-low">
+          <p class="text-xs text-on-surface-variant font-medium mb-1">Kuponlu satış</p>
+          <p class="text-lg font-bold text-on-surface">{{ coupon_used_count }}</p>
+          <p class="text-sm text-on-surface-variant">{{ "%.2f"|format(coupon_used_revenue_eur) }} €</p>
+        </div>
+        <div class="p-4 rounded-xl bg-surface-container-low">
+          <p class="text-xs text-on-surface-variant font-medium mb-1">Kuponsuz satış</p>
+          <p class="text-lg font-bold text-on-surface">{{ no_coupon_count }}</p>
+          <p class="text-sm text-on-surface-variant">{{ "%.2f"|format(no_coupon_revenue_eur) }} €</p>
+        </div>
+      </div>
+      {% if top_coupons %}
+      <h4 class="text-sm font-medium text-on-surface-variant mt-2">En çok kullanılan kuponlar</h4>
+      <table class="w-full text-sm">
+        <thead>
+          <tr class="text-left text-on-surface-variant text-xs uppercase">
+            <th class="py-2">Kod</th>
+            <th class="py-2">Kullanım</th>
+            <th class="py-2">Gelir (EUR)</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for c in top_coupons %}
+          <tr class="border-b border-outline-variant/10">
+            <td class="py-2 font-mono text-xs text-on-surface">{{ c.code }}</td>
+            <td class="py-2 text-on-surface">{{ c.count }}</td>
+            <td class="py-2 text-on-surface">{{ "%.2f"|format(c.total_eur) }} €</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% endif %}
+    </div>
+  </div>
+</div>
+
+<!-- En çok harcayan müşteriler -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/10 shadow-ambient overflow-hidden mb-8">
+  <h3 class="text-base font-headline font-bold text-on-surface px-5 py-4 bg-surface-container-low/80 border-b border-outline-variant/10">En çok harcayan müşteriler (Top 10)</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+          <th class="px-5 py-3">#</th>
+          <th class="px-5 py-3">Kullanıcı</th>
+          <th class="px-5 py-3">Sipariş Sayısı</th>
+          <th class="px-5 py-3">Toplam Harcama (EUR)</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in top_customers %}
+        <tr class="border-b border-outline-variant/15 hover:bg-surface-container-low/50">
+          <td class="px-5 py-3 text-on-surface-variant">{{ loop.index }}</td>
+          <td class="px-5 py-3"><a href="/admin/users/{{ c.user_id }}" class="text-primary hover:underline">{{ c.email or c.user_id }}</a></td>
+          <td class="px-5 py-3 text-on-surface">{{ c.order_count }}</td>
+          <td class="px-5 py-3 text-on-surface font-semibold">{{ "%.2f"|format(c.total_eur) }} €</td>
+        </tr>
+        {% else %}
+        <tr><td colspan="4" class="px-5 py-6 text-center text-on-surface-variant">Veri yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<script>
+const labels = {{ chart_labels | tojson }};
+new Chart(document.getElementById('revenueChart'), {
+  type: 'bar',
+  data: {
+    labels: labels,
+    datasets: [
+      { label: 'Tek analiz', data: {{ chart_single | tojson }}, backgroundColor: 'rgba(14,165,164,0.7)', borderRadius: 4 },
+      { label: 'Aylık', data: {{ chart_monthly_plan | tojson }}, backgroundColor: 'rgba(79,94,126,0.7)', borderRadius: 4 },
+      { label: 'Yıllık', data: {{ chart_yearly | tojson }}, backgroundColor: 'rgba(55,164,154,0.7)', borderRadius: 4 },
+    ],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { position: 'top' } },
+    scales: {
+      x: { stacked: true, grid: { display: false } },
+      y: { stacked: true, ticks: { callback: v => v + ' €' } },
+    },
+  },
+});
+new Chart(document.getElementById('conversionChart'), {
+  type: 'line',
+  data: {
+    labels: labels,
+    datasets: [{
+      label: 'Dönüşüm oranı (%)',
+      data: {{ chart_conversion | tojson }},
+      borderColor: '#006a69',
+      backgroundColor: 'rgba(0,106,105,0.1)',
+      fill: true,
+      tension: 0.3,
+      pointRadius: 4,
+    }],
+  },
+  options: {
+    responsive: true,
+    plugins: { legend: { display: false } },
+    scales: {
+      y: { min: 0, max: 100, ticks: { callback: v => v + '%' } },
+      x: { grid: { display: false } },
+    },
+  },
+});
+</script>
+{% endblock %}

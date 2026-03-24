@@ -12,6 +12,7 @@
   <p><span class="text-on-surface-variant">Toplam analiz:</span> {{ analysis_count }}</p>
   <p><span class="text-on-surface-variant">Son giriş:</span> {{ last_login }}</p>
   <p><span class="text-on-surface-variant">Durum:</span> {% if user.is_banned %}<span class="text-red-600 font-semibold">Yasaklı</span>{% else %}<span class="text-emerald-700 font-semibold">Aktif</span>{% endif %}</p>
+  <p><span class="text-on-surface-variant">Toplam harcama:</span> <span class="font-semibold text-emerald-700">{{ "%.2f"|format(total_spent_eur) }} €</span> ({{ payment_count }} sipariş)</p>
 </div>
 <div class="flex flex-wrap gap-2 mb-8">
   {% if user.is_banned %}
@@ -38,6 +39,45 @@
     </label>
     <button type="submit" class="px-5 py-2.5 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient">Kaydet</button>
   </form>
+</div>
+
+<!-- Ödeme geçmişi -->
+<div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/15 shadow-ambient overflow-hidden mb-6">
+  <h3 class="text-lg font-headline font-bold text-on-surface px-5 py-4 bg-surface-container-low/80 border-b border-outline-variant/10">Ödeme geçmişi (son 50)</h3>
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">Tarih</th>
+          <th class="px-5 py-3">Ürün</th>
+          <th class="px-5 py-3">Tutar</th>
+          <th class="px-5 py-3">Durum</th>
+          <th class="px-5 py-3">Kupon</th>
+          <th class="px-5 py-3">Fatura</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for p in payments %}
+        <tr class="border-b border-outline-variant/15 hover:bg-surface-container-low/50">
+          <td class="px-5 py-3 text-on-surface">{{ p.id }}</td>
+          <td class="px-5 py-3 text-on-surface text-xs">{{ p.created_at.strftime('%d.%m.%Y %H:%M') if p.created_at else '-' }}</td>
+          <td class="px-5 py-3 text-on-surface">{{ p.product }}</td>
+          <td class="px-5 py-3 text-on-surface font-medium">{{ "%.2f"|format((p.amount_kurus or 0) / 100) }} {{ p.currency or 'EUR' }}</td>
+          <td class="px-5 py-3"><span class="{% if p.status == 'completed' %}text-emerald-700 font-semibold{% elif p.status == 'failed' %}text-red-600 font-semibold{% else %}text-amber-700 font-semibold{% endif %}">{{ p.status }}</span></td>
+          <td class="px-5 py-3 text-xs text-on-surface-variant font-mono">{{ p.coupon_code_used or '-' }}</td>
+          <td class="px-5 py-3">
+            {% if p.invoice_ettn %}<span class="text-emerald-700 font-semibold text-xs">Kesildi</span>{% elif p.status == 'completed' %}<span class="text-amber-700 text-xs">Bekliyor</span>{% else %}<span class="text-on-surface-variant">—</span>{% endif %}
+          </td>
+          <td class="px-5 py-3"><a href="/admin/payments/{{ p.id }}" class="text-primary text-xs font-semibold hover:underline">Detay</a></td>
+        </tr>
+        {% else %}
+        <tr><td colspan="8" class="px-5 py-8 text-center text-on-surface-variant">Ödeme yok.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
 </div>
 
 <div class="bg-surface-container-lowest rounded-xl border border-[#bcc9c8]/15 shadow-ambient overflow-hidden mb-6">

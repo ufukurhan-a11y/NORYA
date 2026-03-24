@@ -7,6 +7,7 @@ from app.admin.routers import (
     billing_links,
     coupons,
     dashboard,
+    enterprise_leads,
     errors,
     institutions,
     live,
@@ -14,6 +15,7 @@ from app.admin.routers import (
     payments,
     queue,
     reports,
+    revenue,
     security,
     uploads,
     users,
@@ -30,9 +32,11 @@ admin_router.include_router(live_analytics.router, tags=["admin-live-analytics"]
 admin_router.include_router(coupons.router, prefix="/coupons", tags=["admin-coupons"])
 admin_router.include_router(pricing_plans.router, prefix="/pricing-plans", tags=["admin-pricing"])
 admin_router.include_router(payments.router, prefix="/payments", tags=["admin-payments"])
+admin_router.include_router(revenue.router, prefix="/revenue", tags=["admin-revenue"])
 admin_router.include_router(errors.router, prefix="/errors", tags=["admin-errors"])
 admin_router.include_router(uploads.router, prefix="/uploads", tags=["admin-uploads"])
 admin_router.include_router(queue.router, prefix="/queue", tags=["admin-queue"])
 admin_router.include_router(security.router, prefix="/security", tags=["admin-security"])
 admin_router.include_router(billing_links.router, prefix="/billing-links", tags=["admin-billing"])
 admin_router.include_router(institutions.router, prefix="/institutions", tags=["admin-institutions"])
+admin_router.include_router(enterprise_leads.router, prefix="/enterprise-leads", tags=["admin-enterprise-leads"])

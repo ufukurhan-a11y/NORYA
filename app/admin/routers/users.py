@@ -8,7 +8,7 @@ from sqlmodel import Session, select, func
 
 from app.admin.deps import require_admin_cookie
 from app.core.database import get_db
-from app.models import AnalysisRecord, AuditLog, User
+from app.models import AnalysisRecord, AuditLog, PaymentOrder, User
 
 router = APIRouter()
 templates = Jinja2Templates(directory="app/templates")
@@ -144,6 +144,26 @@ def user_detail(
             .limit(100)
         ).all()
     )
+
+    payments = list(
+        db.exec(
+            select(PaymentOrder)
+            .where(PaymentOrder.user_id == user_id)
+            .order_by(PaymentOrder.created_at.desc())
+            .limit(50)
+        ).all()
+    )
+    total_spent_cents = db.exec(
+        select(func.sum(PaymentOrder.amount_kurus))
+        .where(PaymentOrder.user_id == user_id)
+        .where(PaymentOrder.status == "completed")
+    ).one() or 0
+    payment_count = db.exec(
+        select(func.count(PaymentOrder.id))
+        .where(PaymentOrder.user_id == user_id)
+        .where(PaymentOrder.status == "completed")
+    ).one() or 0
+
     return templates.TemplateResponse(
         "admin/user_detail.html",
         {
@@ -153,6 +173,9 @@ def user_detail(
             "last_login": last_login,
             "analyses": analyses,
             "audit_logs": audit_logs,
+            "payments": payments,
+            "total_spent_eur": total_spent_cents / 100.0,
+            "payment_count": payment_count,
         },
     )
 

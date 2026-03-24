@@ -152,6 +152,10 @@
           <span class="material-symbols-outlined">payments</span>
           Ödemeler
         </a>
+        <a href="/admin/revenue" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/revenue') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">monitoring</span>
+          Gelir analitik
+        </a>
         <a href="/admin/payments?invoice_pending=1" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if 'invoice_pending=1' in (request.url.query or '') or 'invoice_pending=true' in (request.url.query or '') %}bg-amber-50 text-amber-900 font-semibold{% else %}text-on-surface-variant{% endif %} hover:bg-white/70 border-l-2 border-amber-500/80 ml-1 pl-3" title="Faturası kesilmemiş başarılı ödemeler — E-arşiv kesmek için">
           <span class="material-symbols-outlined text-amber-700">receipt_long</span>
           E-arşiv fatura
@@ -183,6 +187,10 @@
         <a href="/admin/institutions" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/institutions') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
           <span class="material-symbols-outlined">domain</span>
           Kurumlar
+        </a>
+        <a href="/admin/enterprise-leads" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/enterprise-leads') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
+          <span class="material-symbols-outlined">handshake</span>
+          Kurumsal talepler
         </a>
         <a href="/admin/security" class="flex items-center gap-3 px-4 py-3 rounded-l-xl text-sm font-medium transition-colors {% if request.url.path.startswith('/admin/security') %}admin-nav-active{% else %}text-on-surface-variant hover:bg-white/70{% endif %}">
           <span class="material-symbols-outlined">shield</span>
