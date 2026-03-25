@@ -1,0 +1,467 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}SEO Dashboard — Norya Admin{% endblock %}
+{% block admin_header_title %}SEO Dashboard{% endblock %}
+
+{% block extra_head %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4/dist/chart.umd.min.js"></script>
+<style>
+  .kpi-card{background:#fff;border-radius:16px;padding:20px 24px;box-shadow:0 1px 4px rgba(25,28,29,.04)}
+  .kpi-value{font-size:1.75rem;font-weight:800;letter-spacing:-.02em;line-height:1.1}
+  .kpi-label{font-size:.75rem;font-weight:600;text-transform:uppercase;letter-spacing:.06em;margin-top:4px}
+  .tab-btn{padding:6px 16px;border-radius:999px;font-size:.8125rem;font-weight:600;transition:all .15s}
+  .tab-btn.active{background:linear-gradient(to right,#006a69,#0ea5a4);color:#fff}
+  .tab-btn:not(.active){background:#f4f6f6;color:#49454f}
+  .tab-btn:not(.active):hover{background:#e8eaeb}
+  .tbl{width:100%;border-collapse:separate;border-spacing:0}
+  .tbl th{text-align:left;font-size:.7rem;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#79747e;padding:10px 12px;border-bottom:1px solid #e8eaeb}
+  .tbl td{padding:10px 12px;font-size:.8125rem;border-bottom:1px solid #f4f6f6}
+  .tbl tr:hover td{background:#f8fafa}
+  .badge{display:inline-flex;align-items:center;gap:4px;padding:2px 10px;border-radius:999px;font-size:.7rem;font-weight:700;letter-spacing:.02em}
+  .badge-green{background:#dcfce7;color:#166534}
+  .badge-red{background:#fce4ec;color:#b71c1c}
+  .badge-amber{background:#fff8e1;color:#e65100}
+  .badge-gray{background:#f4f6f6;color:#49454f}
+  .setup-step{display:flex;gap:16px;padding:16px 0;border-bottom:1px solid #f4f6f6}
+  .setup-step:last-child{border-bottom:none}
+  .step-num{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#006a69,#0ea5a4);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:.8rem;flex-shrink:0}
+  .inspect-result{background:#f8fafa;border-radius:12px;padding:20px;margin-top:16px}
+  .inspect-row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #eee;font-size:.8125rem}
+  .inspect-row:last-child{border-bottom:none}
+</style>
+{% endblock %}
+
+{% block content %}
+
+{# ── Period selector ── #}
+<div class="flex flex-wrap items-center justify-between gap-3 mb-6">
+  <div class="flex items-center gap-2">
+    <span class="material-symbols-outlined text-primary" style="font-variation-settings:'FILL' 1;">travel_explore</span>
+    <span class="font-headline font-bold text-lg">Google Search Console</span>
+    <span class="text-xs text-on-surface-variant ml-1">{{ site_url }}</span>
+  </div>
+  {% if configured %}
+  <div class="flex gap-1.5">
+    {% for d in [7, 28, 90] %}
+    <a href="?days={{ d }}" class="tab-btn {% if days == d %}active{% endif %}">{{ d }} gün</a>
+    {% endfor %}
+  </div>
+  {% endif %}
+</div>
+
+{% if not configured %}
+{# ══════════════════ SETUP GUIDE ══════════════════ #}
+<div class="bg-white rounded-2xl shadow-ambient p-8 max-w-3xl">
+  <div class="flex items-center gap-3 mb-6">
+    <div class="w-12 h-12 rounded-xl bg-amber-50 flex items-center justify-center">
+      <span class="material-symbols-outlined text-amber-700" style="font-size:28px;">settings</span>
+    </div>
+    <div>
+      <h2 class="font-headline font-bold text-lg">Google Search Console API Kurulumu</h2>
+      <p class="text-sm text-on-surface-variant">SEO verilerini görmek için aşağıdaki adımları tamamlayın.</p>
+    </div>
+  </div>
+
+  <div class="setup-step">
+    <div class="step-num">1</div>
+    <div>
+      <p class="font-semibold text-sm">Google Cloud Console'da proje oluşturun</p>
+      <p class="text-xs text-on-surface-variant mt-1"><a href="https://console.cloud.google.com/projectcreate" target="_blank" class="text-primary underline">console.cloud.google.com</a> adresinden yeni bir proje oluşturun veya mevcut projenizi seçin.</p>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num">2</div>
+    <div>
+      <p class="font-semibold text-sm">Search Console API'yi etkinleştirin</p>
+      <p class="text-xs text-on-surface-variant mt-1"><a href="https://console.cloud.google.com/apis/library/searchconsole.googleapis.com" target="_blank" class="text-primary underline">Search Console API</a> ve <a href="https://console.cloud.google.com/apis/library/webmasters.googleapis.com" target="_blank" class="text-primary underline">Search Console API (webmasters)</a> sayfalarından "Enable" butonuna tıklayın.</p>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num">3</div>
+    <div>
+      <p class="font-semibold text-sm">Service Account oluşturun</p>
+      <p class="text-xs text-on-surface-variant mt-1"><a href="https://console.cloud.google.com/iam-admin/serviceaccounts/create" target="_blank" class="text-primary underline">IAM & Admin &gt; Service Accounts</a>'tan yeni bir service account oluşturun. "Keys" sekmesinden JSON key dosyasını indirin.</p>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num">4</div>
+    <div>
+      <p class="font-semibold text-sm">Service account'u Search Console'a ekleyin</p>
+      <p class="text-xs text-on-surface-variant mt-1"><a href="https://search.google.com/search-console" target="_blank" class="text-primary underline">Search Console</a> &gt; Ayarlar &gt; Kullanıcılar ve izinler &gt; "Kullanıcı ekle". Service account e-posta adresini (örn. <code class="bg-surface-container-low px-1.5 py-0.5 rounded text-xs">norya-seo@project.iam.gserviceaccount.com</code>) "Tam" izinle ekleyin.</p>
+    </div>
+  </div>
+  <div class="setup-step">
+    <div class="step-num">5</div>
+    <div>
+      <p class="font-semibold text-sm">.env dosyasına yol ekleyin</p>
+      <p class="text-xs text-on-surface-variant mt-1">İndirdiğiniz JSON key dosyasını sunucuya yükleyin ve <code class="bg-surface-container-low px-1.5 py-0.5 rounded text-xs">.env</code> dosyanıza ekleyin:</p>
+      <pre class="bg-surface-container-low rounded-lg px-4 py-3 mt-2 text-xs font-mono overflow-x-auto">GSC_SERVICE_ACCOUNT_JSON=/path/to/service-account-key.json</pre>
+    </div>
+  </div>
+  <div class="mt-6 p-4 bg-primary/5 rounded-xl">
+    <p class="text-xs text-on-surface-variant"><span class="font-bold text-primary">Not:</span> Kurulumu tamamladıktan sonra uygulamayı yeniden başlatın. Veriler 5 dakika önbelleğe alınır.</p>
+  </div>
+</div>
+
+{% else %}
+{# ══════════════════ DASHBOARD ══════════════════ #}
+
+{# KPI Cards #}
+<div class="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="material-symbols-outlined text-blue-600" style="font-size:20px;font-variation-settings:'FILL' 1;">ads_click</span>
+      <span class="kpi-label text-blue-600">Tıklama</span>
+    </div>
+    <div class="kpi-value text-blue-700">{{ "{:,}".format(total_clicks) }}</div>
+  </div>
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="material-symbols-outlined text-purple-600" style="font-size:20px;font-variation-settings:'FILL' 1;">visibility</span>
+      <span class="kpi-label text-purple-600">Gösterim</span>
+    </div>
+    <div class="kpi-value text-purple-700">{{ "{:,}".format(total_impressions) }}</div>
+  </div>
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="material-symbols-outlined text-emerald-600" style="font-size:20px;font-variation-settings:'FILL' 1;">percent</span>
+      <span class="kpi-label text-emerald-600">Ort. TO</span>
+    </div>
+    <div class="kpi-value text-emerald-700">%{{ avg_ctr }}</div>
+  </div>
+  <div class="kpi-card">
+    <div class="flex items-center gap-2 mb-1">
+      <span class="material-symbols-outlined text-amber-600" style="font-size:20px;font-variation-settings:'FILL' 1;">leaderboard</span>
+      <span class="kpi-label text-amber-600">Ort. Sıra</span>
+    </div>
+    <div class="kpi-value text-amber-700">{{ avg_position }}</div>
+  </div>
+</div>
+
+{# Performance Chart #}
+{% if daily %}
+<div class="bg-white rounded-2xl shadow-ambient p-6 mb-6">
+  <h3 class="font-headline font-bold text-sm mb-4">Günlük Performans</h3>
+  <div style="height:280px;position:relative">
+    <canvas id="perfChart"></canvas>
+  </div>
+</div>
+{% endif %}
+
+{# Tabs: Queries / Pages / Countries / Devices #}
+<div class="bg-white rounded-2xl shadow-ambient mb-6">
+  <div class="flex gap-1.5 p-4 pb-0 border-b border-outline-variant/10 overflow-x-auto">
+    <button onclick="showTab('queries')" id="tab-queries" class="tab-btn active">Sorgular</button>
+    <button onclick="showTab('pages')" id="tab-pages" class="tab-btn">Sayfalar</button>
+    <button onclick="showTab('countries')" id="tab-countries" class="tab-btn">Ülkeler</button>
+    <button onclick="showTab('devices')" id="tab-devices" class="tab-btn">Cihazlar</button>
+  </div>
+
+  {# Queries #}
+  <div id="panel-queries" class="p-4 overflow-x-auto">
+    {% if queries %}
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Sorgu</th><th class="text-right">Tıklama</th><th class="text-right">Gösterim</th><th class="text-right">TO</th><th class="text-right">Sıra</th></tr></thead>
+      <tbody>
+      {% for q in queries %}
+      <tr>
+        <td class="text-on-surface-variant">{{ loop.index }}</td>
+        <td class="font-medium">{{ q.query }}</td>
+        <td class="text-right font-semibold text-blue-700">{{ "{:,}".format(q.clicks) }}</td>
+        <td class="text-right text-on-surface-variant">{{ "{:,}".format(q.impressions) }}</td>
+        <td class="text-right">%{{ q.ctr }}</td>
+        <td class="text-right">{{ q.position }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-sm text-on-surface-variant py-8 text-center">Veri bulunamadı.</p>
+    {% endif %}
+  </div>
+
+  {# Pages #}
+  <div id="panel-pages" class="p-4 overflow-x-auto" style="display:none">
+    {% if pages %}
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Sayfa</th><th class="text-right">Tıklama</th><th class="text-right">Gösterim</th><th class="text-right">TO</th><th class="text-right">Sıra</th></tr></thead>
+      <tbody>
+      {% for p in pages %}
+      <tr>
+        <td class="text-on-surface-variant">{{ loop.index }}</td>
+        <td class="font-medium max-w-xs truncate" title="{{ p.page }}">
+          <a href="{{ p.page }}" target="_blank" class="text-primary hover:underline">{{ p.page | replace(site_url, '') or '/' }}</a>
+        </td>
+        <td class="text-right font-semibold text-blue-700">{{ "{:,}".format(p.clicks) }}</td>
+        <td class="text-right text-on-surface-variant">{{ "{:,}".format(p.impressions) }}</td>
+        <td class="text-right">%{{ p.ctr }}</td>
+        <td class="text-right">{{ p.position }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-sm text-on-surface-variant py-8 text-center">Veri bulunamadı.</p>
+    {% endif %}
+  </div>
+
+  {# Countries #}
+  <div id="panel-countries" class="p-4 overflow-x-auto" style="display:none">
+    {% if countries %}
+    <table class="tbl">
+      <thead><tr><th>#</th><th>Ülke</th><th class="text-right">Tıklama</th><th class="text-right">Gösterim</th><th class="text-right">TO</th><th class="text-right">Sıra</th></tr></thead>
+      <tbody>
+      {% for c in countries %}
+      <tr>
+        <td class="text-on-surface-variant">{{ loop.index }}</td>
+        <td class="font-medium">{{ c.country_name }}</td>
+        <td class="text-right font-semibold text-blue-700">{{ "{:,}".format(c.clicks) }}</td>
+        <td class="text-right text-on-surface-variant">{{ "{:,}".format(c.impressions) }}</td>
+        <td class="text-right">%{{ c.ctr }}</td>
+        <td class="text-right">{{ c.position }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-sm text-on-surface-variant py-8 text-center">Veri bulunamadı.</p>
+    {% endif %}
+  </div>
+
+  {# Devices #}
+  <div id="panel-devices" class="p-4 overflow-x-auto" style="display:none">
+    {% if devices %}
+    <table class="tbl">
+      <thead><tr><th>Cihaz</th><th class="text-right">Tıklama</th><th class="text-right">Gösterim</th><th class="text-right">TO</th><th class="text-right">Sıra</th></tr></thead>
+      <tbody>
+      {% for d in devices %}
+      <tr>
+        <td class="font-medium">{{ d.device_name }}</td>
+        <td class="text-right font-semibold text-blue-700">{{ "{:,}".format(d.clicks) }}</td>
+        <td class="text-right text-on-surface-variant">{{ "{:,}".format(d.impressions) }}</td>
+        <td class="text-right">%{{ d.ctr }}</td>
+        <td class="text-right">{{ d.position }}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+    {% else %}
+    <p class="text-sm text-on-surface-variant py-8 text-center">Veri bulunamadı.</p>
+    {% endif %}
+  </div>
+</div>
+
+{# URL Inspection #}
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-6">
+  <div class="bg-white rounded-2xl shadow-ambient p-6">
+    <h3 class="font-headline font-bold text-sm mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary" style="font-size:20px;">search</span>
+      URL Denetimi
+    </h3>
+    <div class="flex gap-2">
+      <input type="url" id="inspectUrl" placeholder="https://noryaai.com/tr" class="flex-1 px-4 py-2.5 rounded-xl border border-outline-variant/30 text-sm focus:outline-none focus:ring-2 focus:ring-primary/30 focus:border-primary" value="{{ site_url }}/" />
+      <button onclick="inspectURL()" id="inspectBtn" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-primary to-primary-container text-white text-sm font-bold hover:brightness-[1.02] transition-all flex items-center gap-1.5">
+        <span class="material-symbols-outlined" style="font-size:18px;">fact_check</span>
+        Denetle
+      </button>
+    </div>
+    <div id="inspectResult" style="display:none"></div>
+    <div id="inspectLoading" style="display:none" class="flex items-center justify-center py-8">
+      <div class="animate-spin rounded-full h-8 w-8 border-b-2 border-primary"></div>
+    </div>
+  </div>
+
+  {# Sitemaps #}
+  <div class="bg-white rounded-2xl shadow-ambient p-6">
+    <h3 class="font-headline font-bold text-sm mb-4 flex items-center gap-2">
+      <span class="material-symbols-outlined text-primary" style="font-size:20px;">map</span>
+      Site Haritaları
+    </h3>
+    {% if sitemaps %}
+    {% for s in sitemaps %}
+    <div class="p-3 bg-surface-container-low rounded-xl mb-2 last:mb-0">
+      <div class="flex items-center justify-between mb-1">
+        <a href="{{ s.path }}" target="_blank" class="text-sm font-semibold text-primary hover:underline truncate max-w-[220px]">{{ s.path | replace(site_url, '') }}</a>
+        {% if s.errors > 0 %}
+        <span class="badge badge-red">{{ s.errors }} hata</span>
+        {% elif s.warnings > 0 %}
+        <span class="badge badge-amber">{{ s.warnings }} uyarı</span>
+        {% else %}
+        <span class="badge badge-green">Sorunsuz</span>
+        {% endif %}
+      </div>
+      {% if s.contents %}
+      {% for c in s.contents %}
+      <div class="flex justify-between text-xs text-on-surface-variant">
+        <span>{{ c.get('type', '?') }}</span>
+        <span>{{ c.get('submitted', 0) }} gönderilen / {{ c.get('indexed', 0) }} dizinlenen</span>
+      </div>
+      {% endfor %}
+      {% endif %}
+      {% if s.last_downloaded %}
+      <p class="text-[10px] text-on-surface-variant/60 mt-1">Son indirme: {{ s.last_downloaded[:10] }}</p>
+      {% endif %}
+    </div>
+    {% endfor %}
+    {% else %}
+    <p class="text-sm text-on-surface-variant">Sitemap verisi alınamadı veya henüz gönderilmemiş.</p>
+    <a href="https://search.google.com/search-console/sitemaps" target="_blank" class="inline-flex items-center gap-1 text-sm text-primary hover:underline mt-2">
+      <span class="material-symbols-outlined" style="font-size:16px;">open_in_new</span>
+      Search Console'dan gönder
+    </a>
+    {% endif %}
+  </div>
+</div>
+
+{% endif %}{# /configured #}
+
+<script>
+function showTab(name) {
+  ['queries','pages','countries','devices'].forEach(function(t) {
+    document.getElementById('panel-' + t).style.display = t === name ? '' : 'none';
+    var btn = document.getElementById('tab-' + t);
+    if (btn) {
+      btn.classList.toggle('active', t === name);
+    }
+  });
+}
+
+function inspectURL() {
+  var url = document.getElementById('inspectUrl').value.trim();
+  if (!url) return;
+  var btn = document.getElementById('inspectBtn');
+  var loading = document.getElementById('inspectLoading');
+  var result = document.getElementById('inspectResult');
+  btn.disabled = true;
+  btn.style.opacity = '0.5';
+  loading.style.display = '';
+  result.style.display = 'none';
+
+  fetch('/admin/seo/api/inspect?url=' + encodeURIComponent(url))
+    .then(function(r) { return r.json(); })
+    .then(function(d) {
+      loading.style.display = 'none';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      if (d.error) {
+        result.innerHTML = '<div class="inspect-result"><p class="text-red-600 text-sm font-semibold">Hata: ' + escapeHtml(d.error) + '</p></div>';
+        result.style.display = '';
+        return;
+      }
+      var verdictClass = d.verdict === 'PASS' ? 'badge-green' : (d.verdict === 'FAIL' ? 'badge-red' : 'badge-amber');
+      var verdictText = d.verdict === 'PASS' ? 'Dizine eklendi' : (d.verdict === 'FAIL' ? 'Dizine eklenmedi' : (d.verdict === 'NEUTRAL' ? 'Nötr' : d.verdict));
+      var mobileClass = d.mobile_verdict === 'PASS' ? 'badge-green' : (d.mobile_verdict === 'VERDICT_UNSPECIFIED' ? 'badge-gray' : 'badge-amber');
+      var mobileText = d.mobile_verdict === 'PASS' ? 'Uygun' : (d.mobile_verdict === 'VERDICT_UNSPECIFIED' ? 'Bilinmiyor' : d.mobile_verdict);
+      var html = '<div class="inspect-result">';
+      html += '<div class="flex items-center justify-between mb-3"><span class="font-semibold text-sm truncate max-w-[200px]" title="' + escapeHtml(d.url) + '">' + escapeHtml(d.url.replace('{{ site_url }}', '')) + '</span><span class="badge ' + verdictClass + '">' + verdictText + '</span></div>';
+      html += '<div class="inspect-row"><span class="text-on-surface-variant">Kapsam durumu</span><span class="font-medium">' + escapeHtml(d.coverage_state || '-') + '</span></div>';
+      html += '<div class="inspect-row"><span class="text-on-surface-variant">İndeksleme</span><span class="font-medium">' + escapeHtml(d.indexing_state || '-') + '</span></div>';
+      html += '<div class="inspect-row"><span class="text-on-surface-variant">Son tarama</span><span class="font-medium">' + escapeHtml(d.last_crawl_time ? d.last_crawl_time.substring(0,10) : '-') + '</span></div>';
+      html += '<div class="inspect-row"><span class="text-on-surface-variant">Sayfa getirme</span><span class="font-medium">' + escapeHtml(d.page_fetch_state || '-') + '</span></div>';
+      html += '<div class="inspect-row"><span class="text-on-surface-variant">robots.txt</span><span class="font-medium">' + escapeHtml(d.robots_txt_state || '-') + '</span></div>';
+      html += '<div class="inspect-row"><span class="text-on-surface-variant">Tarayıcı</span><span class="font-medium">' + escapeHtml(d.crawled_as || '-') + '</span></div>';
+      html += '<div class="inspect-row"><span class="text-on-surface-variant">Mobil uyumluluk</span><span class="badge ' + mobileClass + '">' + mobileText + '</span></div>';
+      if (d.rich_results_verdict) {
+        var richClass = d.rich_results_verdict === 'PASS' ? 'badge-green' : 'badge-amber';
+        var richText = d.rich_results_verdict === 'PASS' ? 'Geçerli' : d.rich_results_verdict;
+        html += '<div class="inspect-row"><span class="text-on-surface-variant">Zengin sonuçlar</span><span class="badge ' + richClass + '">' + richText + '</span></div>';
+      }
+      html += '</div>';
+      result.innerHTML = html;
+      result.style.display = '';
+    })
+    .catch(function(e) {
+      loading.style.display = 'none';
+      btn.disabled = false;
+      btn.style.opacity = '1';
+      result.innerHTML = '<div class="inspect-result"><p class="text-red-600 text-sm">Bağlantı hatası.</p></div>';
+      result.style.display = '';
+    });
+}
+
+function escapeHtml(str) {
+  var div = document.createElement('div');
+  div.appendChild(document.createTextNode(str || ''));
+  return div.innerHTML;
+}
+
+{% if configured and daily %}
+(function() {
+  var dates = {{ daily.dates | tojson }};
+  var clicks = {{ daily.clicks | tojson }};
+  var impressions = {{ daily.impressions | tojson }};
+  var labels = dates.map(function(d) {
+    var parts = d.split('-');
+    return parts[2] + '.' + parts[1];
+  });
+
+  var ctx = document.getElementById('perfChart');
+  if (!ctx) return;
+  new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels: labels,
+      datasets: [
+        {
+          label: 'Tıklama',
+          data: clicks,
+          borderColor: '#2563eb',
+          backgroundColor: 'rgba(37,99,235,.08)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          borderWidth: 2.5,
+          yAxisID: 'y',
+        },
+        {
+          label: 'Gösterim',
+          data: impressions,
+          borderColor: '#9333ea',
+          backgroundColor: 'rgba(147,51,234,.06)',
+          fill: true,
+          tension: 0.35,
+          pointRadius: 0,
+          pointHoverRadius: 5,
+          borderWidth: 2,
+          yAxisID: 'y1',
+        }
+      ]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
+      plugins: {
+        legend: { display: true, position: 'top', labels: { usePointStyle: true, boxWidth: 8, font: { size: 11, weight: '600' } } },
+        tooltip: {
+          backgroundColor: '#1c1b1f',
+          titleFont: { size: 11 },
+          bodyFont: { size: 12, weight: '600' },
+          padding: 10,
+          cornerRadius: 10,
+          callbacks: {
+            label: function(c) { return c.dataset.label + ': ' + c.parsed.y.toLocaleString(); }
+          }
+        }
+      },
+      scales: {
+        x: { grid: { display: false }, ticks: { font: { size: 10 }, maxRotation: 0, autoSkip: true, maxTicksLimit: 14 } },
+        y: {
+          type: 'linear', position: 'left',
+          grid: { color: 'rgba(0,0,0,.04)' },
+          ticks: { font: { size: 10 }, callback: function(v) { return v >= 1000 ? (v/1000).toFixed(0) + 'K' : v; } },
+          title: { display: true, text: 'Tıklama', font: { size: 10, weight: '600' }, color: '#2563eb' }
+        },
+        y1: {
+          type: 'linear', position: 'right',
+          grid: { drawOnChartArea: false },
+          ticks: { font: { size: 10 }, callback: function(v) { return v >= 1000 ? (v/1000).toFixed(0) + 'K' : v; } },
+          title: { display: true, text: 'Gösterim', font: { size: 10, weight: '600' }, color: '#9333ea' }
+        }
+      }
+    }
+  });
+})();
+{% endif %}
+</script>
+{% endblock %}

@@ -105,6 +105,9 @@ class Settings(BaseSettings):
     company_contact_email: str = "info@noryaai.com"
     company_country: str = "Türkiye"
 
+    # Google Search Console API: service account JSON dosya yolu. Boşsa SEO dashboard veri çekemez.
+    gsc_service_account_json: str = ""
+
     # IndexNow (Bing/Yandex anında indexleme): 32 hex key. Boşsa IndexNow devre dışı.
     indexnow_key: str = ""
 

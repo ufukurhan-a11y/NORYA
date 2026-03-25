@@ -17,6 +17,7 @@ from app.admin.routers import (
     reports,
     revenue,
     security,
+    seo,
     uploads,
     users,
 )
@@ -40,3 +41,4 @@ admin_router.include_router(security.router, prefix="/security", tags=["admin-se
 admin_router.include_router(billing_links.router, prefix="/billing-links", tags=["admin-billing"])
 admin_router.include_router(institutions.router, prefix="/institutions", tags=["admin-institutions"])
 admin_router.include_router(enterprise_leads.router, prefix="/enterprise-leads", tags=["admin-enterprise-leads"])
+admin_router.include_router(seo.router, prefix="/seo", tags=["admin-seo"])
