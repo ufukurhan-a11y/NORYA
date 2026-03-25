@@ -1377,30 +1377,52 @@
       .doctor-insights-carousel { grid-template-columns: repeat(2, 1fr); gap: 1.75rem; max-width: 56rem; margin-left: auto; margin-right: auto; }
       .doctor-card { padding: 1.875rem 1.625rem 1.625rem; min-height: 280px; }
     }
-    /* Email lead capture widget */
-    .lead-capture { --lc-brand: #0EA5A4; padding: 2.5rem 1rem; background: linear-gradient(135deg, #f0fdfa 0%, #ecfeff 50%, #f0f9ff 100%); border-top: 1px solid rgba(14,165,164,0.12); border-bottom: 1px solid rgba(14,165,164,0.12); }
-    .dark .lead-capture { background: linear-gradient(135deg, rgba(15,23,42,0.5) 0%, rgba(6,28,28,0.4) 100%); border-color: rgba(14,165,164,0.15); }
-    .lead-capture-inner { max-width: 520px; margin: 0 auto; text-align: center; }
-    .lead-capture-icon { display: inline-flex; align-items: center; justify-content: center; width: 3rem; height: 3rem; border-radius: 14px; background: rgba(14,165,164,0.1); color: var(--lc-brand); margin-bottom: 1rem; }
-    .dark .lead-capture-icon { background: rgba(14,165,164,0.18); color: #5eead4; }
-    .lead-capture h2 { font-size: 1.25rem; font-weight: 700; color: #0f172a; margin-bottom: 0.5rem; letter-spacing: -0.01em; }
+    /* Email lead capture widget — premium redesign */
+    .lead-capture { --lc-brand: #0EA5A4; --lc-brand-dark: #0d9488; position: relative; padding: 4rem 1.5rem; background: linear-gradient(160deg, #f0fdfa 0%, #ecfeff 40%, #eff6ff 100%); border-top: none; border-bottom: none; overflow: hidden; }
+    .lead-capture::before { content: ""; position: absolute; top: -60%; right: -20%; width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(14,165,164,0.07) 0%, transparent 70%); pointer-events: none; }
+    .lead-capture::after { content: ""; position: absolute; bottom: -40%; left: -15%; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(59,130,246,0.05) 0%, transparent 70%); pointer-events: none; }
+    .dark .lead-capture { background: linear-gradient(160deg, rgba(15,23,42,0.8) 0%, rgba(6,28,28,0.5) 50%, rgba(15,23,42,0.7) 100%); }
+    .dark .lead-capture::before { background: radial-gradient(circle, rgba(14,165,164,0.08) 0%, transparent 70%); }
+    .dark .lead-capture::after { background: radial-gradient(circle, rgba(94,234,212,0.04) 0%, transparent 70%); }
+    .lead-capture-inner { position: relative; z-index: 1; max-width: 560px; margin: 0 auto; text-align: center; }
+    .lead-capture-card { background: rgba(255,255,255,0.7); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-radius: 24px; border: 1px solid rgba(14,165,164,0.12); box-shadow: 0 4px 32px rgba(14,165,164,0.06), 0 1px 4px rgba(0,0,0,0.04); padding: 2.5rem 2rem 2rem; }
+    .dark .lead-capture-card { background: rgba(30,41,59,0.5); border-color: rgba(94,234,212,0.12); box-shadow: 0 4px 32px rgba(0,0,0,0.2), 0 1px 4px rgba(94,234,212,0.04); }
+    .lead-capture-icon { display: inline-flex; align-items: center; justify-content: center; width: 3.5rem; height: 3.5rem; border-radius: 16px; background: linear-gradient(135deg, rgba(14,165,164,0.12) 0%, rgba(14,165,164,0.06) 100%); color: var(--lc-brand); margin-bottom: 1.25rem; box-shadow: 0 2px 12px rgba(14,165,164,0.1); }
+    .dark .lead-capture-icon { background: linear-gradient(135deg, rgba(14,165,164,0.2) 0%, rgba(14,165,164,0.1) 100%); color: #5eead4; box-shadow: 0 2px 12px rgba(94,234,212,0.08); }
+    .lead-capture h2 { font-size: 1.375rem; font-weight: 800; color: #0f172a; margin-bottom: 0.625rem; letter-spacing: -0.02em; line-height: 1.3; }
     .dark .lead-capture h2 { color: #f1f5f9; }
-    .lead-capture-desc { font-size: 0.9rem; color: #475569; line-height: 1.55; margin-bottom: 1.25rem; }
+    .lead-capture-desc { font-size: 0.9rem; color: #475569; line-height: 1.6; margin-bottom: 1.5rem; max-width: 420px; margin-left: auto; margin-right: auto; }
     .dark .lead-capture-desc { color: #94a3b8; }
     .lead-capture-form { display: flex; flex-direction: column; gap: 0.625rem; }
-    @media (min-width: 480px) { .lead-capture-form { flex-direction: row; gap: 0.5rem; } }
-    .lead-capture-form input { flex: 1; min-width: 0; padding: 0.7rem 1rem; border-radius: 12px; border: 1.5px solid rgba(15,23,42,0.12); background: #fff; font-size: 0.875rem; color: #0f172a; transition: border-color 0.2s; }
-    .lead-capture-form input:focus { outline: none; border-color: var(--lc-brand); box-shadow: 0 0 0 3px rgba(14,165,164,0.15); }
-    .dark .lead-capture-form input { background: rgba(30,41,59,0.7); border-color: rgba(255,255,255,0.1); color: #f1f5f9; }
-    .dark .lead-capture-form input:focus { border-color: #5eead4; box-shadow: 0 0 0 3px rgba(94,234,212,0.15); }
+    .lead-capture-inputs { display: flex; flex-direction: column; gap: 0.5rem; }
+    @media (min-width: 480px) { .lead-capture-inputs { flex-direction: row; gap: 0.5rem; } }
+    .lead-capture-form input[type="email"],
+    .lead-capture-form input[type="text"] { flex: 1; min-width: 0; padding: 0.75rem 1rem; border-radius: 12px; border: 1.5px solid rgba(15,23,42,0.1); background: rgba(255,255,255,0.9); font-size: 0.875rem; color: #0f172a; transition: border-color 0.2s, box-shadow 0.2s; }
+    .lead-capture-form input[type="email"]:focus,
+    .lead-capture-form input[type="text"]:focus { outline: none; border-color: var(--lc-brand); box-shadow: 0 0 0 3px rgba(14,165,164,0.12); }
+    .dark .lead-capture-form input[type="email"],
+    .dark .lead-capture-form input[type="text"] { background: rgba(15,23,42,0.5); border-color: rgba(255,255,255,0.08); color: #f1f5f9; }
+    .dark .lead-capture-form input[type="email"]:focus,
+    .dark .lead-capture-form input[type="text"]:focus { border-color: #5eead4; box-shadow: 0 0 0 3px rgba(94,234,212,0.12); }
     .lead-capture-form input::placeholder { color: #94a3b8; }
     .dark .lead-capture-form input::placeholder { color: #64748b; }
-    .lead-capture-btn { padding: 0.7rem 1.5rem; border-radius: 12px; background: var(--lc-brand); color: #fff; font-weight: 600; font-size: 0.875rem; border: none; cursor: pointer; white-space: nowrap; transition: background 0.2s, opacity 0.2s; }
-    .lead-capture-btn:hover { background: #0d9488; }
-    .lead-capture-btn:disabled { opacity: 0.6; cursor: not-allowed; }
-    .lead-capture-privacy { font-size: 0.75rem; color: #94a3b8; margin-top: 0.75rem; }
+    .lead-capture-consent { display: flex; align-items: flex-start; gap: 0.5rem; text-align: left; font-size: 0.75rem; color: #64748b; margin-top: 0.25rem; }
+    .lead-capture-consent input[type="checkbox"] { margin-top: 2px; accent-color: var(--lc-brand); width: 15px; height: 15px; border-radius: 4px; flex-shrink: 0; }
+    .dark .lead-capture-consent { color: #94a3b8; }
+    .lead-capture-btn { width: 100%; padding: 0.8rem 1.5rem; border-radius: 12px; background: linear-gradient(135deg, var(--lc-brand) 0%, var(--lc-brand-dark) 100%); color: #fff; font-weight: 600; font-size: 0.9rem; border: none; cursor: pointer; white-space: nowrap; transition: all 0.25s ease; display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem; box-shadow: 0 2px 8px rgba(14,165,164,0.2); margin-top: 0.25rem; }
+    .lead-capture-btn:hover { transform: translateY(-1px); box-shadow: 0 4px 16px rgba(14,165,164,0.3); background: linear-gradient(135deg, #0d9488 0%, #0f766e 100%); }
+    .lead-capture-btn:active { transform: translateY(0); }
+    .lead-capture-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; box-shadow: none; }
+    .lead-capture-btn svg { width: 16px; height: 16px; transition: transform 0.2s; }
+    .lead-capture-btn:hover svg { transform: translateX(2px); }
+    .lead-capture-trust { display: flex; align-items: center; justify-content: center; gap: 1.25rem; margin-top: 1.25rem; flex-wrap: wrap; }
+    .lead-capture-trust-item { display: flex; align-items: center; gap: 0.35rem; font-size: 0.7rem; color: #94a3b8; font-weight: 500; letter-spacing: 0.01em; }
+    .lead-capture-trust-item svg { width: 13px; height: 13px; color: var(--lc-brand); flex-shrink: 0; }
+    .dark .lead-capture-trust-item { color: #64748b; }
+    .dark .lead-capture-trust-item svg { color: #5eead4; }
+    .lead-capture-privacy { font-size: 0.75rem; color: #94a3b8; margin-top: 0; }
     .dark .lead-capture-privacy { color: #64748b; }
-    .lead-capture-msg { margin-top: 0.75rem; font-size: 0.8125rem; font-weight: 500; border-radius: 8px; padding: 0.5rem 0.75rem; }
+    .lead-capture-msg { margin-top: 0.75rem; font-size: 0.8125rem; font-weight: 500; border-radius: 10px; padding: 0.5rem 0.75rem; }
     .lead-capture-msg.success { color: #065f46; background: rgba(16,185,129,0.1); }
     .dark .lead-capture-msg.success { color: #6ee7b7; background: rgba(16,185,129,0.12); }
     .lead-capture-msg.error { color: #991b1b; background: rgba(239,68,68,0.08); }
@@ -1408,6 +1430,8 @@
     .lead-capture-msg.info { color: #92400e; background: rgba(245,158,11,0.1); }
     .dark .lead-capture-msg.info { color: #fcd34d; background: rgba(245,158,11,0.12); }
     [dir="rtl"] .lead-capture-form { direction: rtl; }
+    [dir="rtl"] .lead-capture-btn svg { transform: scaleX(-1); }
+    [dir="rtl"] .lead-capture-btn:hover svg { transform: scaleX(-1) translateX(-2px); }
 
     /* Customer Reviews: premium testimonial cards — warmer, trusted */
     .customer-reviews-section { background: linear-gradient(180deg, #fefdfb 0%, #faf8f5 100%); border-top: 1px solid rgba(15,23,42,0.04); overflow-x: clip; max-width: 100%; }
@@ -5616,27 +5640,46 @@
   <!-- E-posta toplama: sample report altı -->
   <section class="lead-capture" id="lead-capture-home" aria-labelledby="lead-capture-title-home">
     <div class="lead-capture-inner">
-      <div class="lead-capture-icon" aria-hidden="true">
-        <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M22 7l-10 6L2 7"/></svg>
+      <div class="lead-capture-card">
+        <div class="lead-capture-icon" aria-hidden="true">
+          <svg width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="3"/><path d="M22 7l-10 6L2 7"/></svg>
+        </div>
+        <h2 id="lead-capture-title-home" data-i18n="lead_title">Kan tahlili rehberleri ve yeni özellikler</h2>
+        <p class="lead-capture-desc" data-i18n="lead_desc">Örnek raporlar, test yorumlama rehberleri ve doktora hazır özet güncellemelerini e-postana gönderelim.</p>
+        <form class="lead-capture-form" onsubmit="return submitLeadForm(event, 'homepage')" autocomplete="on">
+          <div class="lead-capture-inputs">
+            <input type="email" name="email" required autocomplete="email" data-i18n-placeholder="lead_placeholder_email" placeholder="E-posta adresiniz" aria-label="Email" />
+            <input type="text" name="name" autocomplete="given-name" data-i18n-placeholder="lead_placeholder_name" placeholder="Adınız (opsiyonel)" aria-label="Name" style="max-width:160px" />
+          </div>
+          <label class="lead-capture-consent">
+            <input
+              type="checkbox"
+              name="lead_consent"
+              id="lead-consent-kvkk-gdpr"
+              required
+            />
+            <span data-i18n="lead_consent_text">KVKK/GDPR kapsamında e-posta güncellemelerini almak için onay veriyorum.</span>
+          </label>
+          <button type="submit" class="lead-capture-btn" data-i18n="lead_btn">
+            Beni bilgilendir
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+          </button>
+        </form>
+        <div class="lead-capture-trust">
+          <span class="lead-capture-trust-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            <span data-i18n="lead_trust_privacy">Gizlilik önceliğimiz</span>
+          </span>
+          <span class="lead-capture-trust-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 7 17l-5-5"/><path d="m22 10-7.5 7.5L13 16"/></svg>
+            <span data-i18n="lead_trust_no_spam">Spam yok</span>
+          </span>
+          <span class="lead-capture-trust-item">
+            <svg fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="m8 12 3 3 5-5"/></svg>
+            <span data-i18n="lead_trust_unsubscribe">İstediğiniz zaman çıkın</span>
+          </span>
+        </div>
       </div>
-      <h2 id="lead-capture-title-home" data-i18n="lead_title">Kan tahlili rehberleri ve yeni özellikler</h2>
-      <p class="lead-capture-desc" data-i18n="lead_desc">Örnek raporlar, test yorumlama rehberleri ve doktora hazır özet güncellemelerini e-postana gönderelim.</p>
-      <form class="lead-capture-form" onsubmit="return submitLeadForm(event, 'homepage')" autocomplete="on">
-        <input type="email" name="email" required autocomplete="email" data-i18n-placeholder="lead_placeholder_email" placeholder="E-posta adresiniz" aria-label="Email" />
-        <input type="text" name="name" autocomplete="given-name" data-i18n-placeholder="lead_placeholder_name" placeholder="Adınız (opsiyonel)" aria-label="Name" style="max-width:160px" />
-        <label class="lead-capture-consent mt-3 flex items-start gap-2 text-xs text-slate-600" style="max-width:520px;">
-          <input
-            type="checkbox"
-            name="lead_consent"
-            id="lead-consent-kvkk-gdpr"
-            required
-            class="mt-0.5 rounded border-accent-300 dark:border-accent-600 text-primary-600 focus:ring-primary-500"
-          />
-          <span data-i18n="lead_consent_text">KVKK/GDPR kapsamında e-posta güncellemelerini almak için onay veriyorum.</span>
-        </label>
-        <button type="submit" class="lead-capture-btn" data-i18n="lead_btn">Beni bilgilendir</button>
-      </form>
-      <p class="lead-capture-privacy" data-i18n="lead_privacy">Spam göndermeyiz. İstediğiniz zaman çıkabilirsiniz.</p>
       <div class="lead-capture-msg hidden" role="status" aria-live="polite"></div>
     </div>
   </section>
@@ -6379,7 +6422,7 @@
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_single_per">tek seferlik</p>
           </div>
           <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
-            <span class="align-top text-base mr-0.5">€</span><span id="price-single">13</span>
+            <span class="align-top text-base mr-0.5">€</span><span id="price-single">14.04</span>
           </p>
           <ul class="elite-feature-list mt-5 flex-1">
             <li><span aria-hidden="true">📄</span><span data-i18n="plan_single_1">Tek yükleme, tek rapor</span></li>
@@ -6389,7 +6432,7 @@
             <li><span aria-hidden="true">💡</span><span data-i18n="plan_single_5">Sınırlı öneriler</span></li>
             <li><span aria-hidden="true">📑</span><span data-i18n="plan_single_6">Standart PDF rapor</span></li>
           </ul>
-          <button type="button" onclick="goToCheckout('single')" class="cta-button elite-cta mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-single">13 €</span> <span data-i18n="price_btn_single_label">Tek Analizi Satın Al</span></button>
+          <button type="button" onclick="goToCheckout('single')" class="cta-button elite-cta mt-6 border-2 border-primary-600 text-primary-700 dark:text-primary-300 font-semibold hover:bg-primary-50 dark:hover:bg-primary-900/30 transition text-sm"><span id="btn-single">14.04 €</span> <span data-i18n="price_btn_single_label">Tek Analizi Satın Al</span></button>
         </div>
 
         <!-- 2) Orta Paket (Aylık) -->
@@ -6399,7 +6442,7 @@
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_monthly_per">5 analiz / ay</p>
           </div>
           <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
-            <span class="align-top text-base mr-0.5">€</span><span id="price-monthly">50</span><span id="price-symbol-monthly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_month">/ay</span>
+            <span class="align-top text-base mr-0.5">€</span><span id="price-monthly">54</span><span id="price-symbol-monthly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_month">/ay</span>
           </p>
           <ul class="elite-feature-list mt-5 flex-1">
             <li><span aria-hidden="true">✅</span><span data-i18n="plan_monthly_1">Aylık analiz hakkı</span></li>
@@ -6411,7 +6454,7 @@
             <li><span aria-hidden="true">📑</span><span data-i18n="plan_monthly_7">Gelişmiş PDF raporu</span></li>
           </ul>
           <p class="mt-3 text-xs text-accent-500 dark:text-accent-400"></p>
-          <button type="button" onclick="goToCheckout('monthly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">50 €</span> <span data-i18n="price_btn_monthly_cta">Aylık Planı Başlat — Hemen satın al</span></button>
+          <button type="button" onclick="goToCheckout('monthly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-monthly">54 €</span> <span data-i18n="price_btn_monthly_cta">Aylık Planı Başlat — Hemen satın al</span></button>
         </div>
 
         <!-- 3) Yıllık — En Popüler -->
@@ -6423,7 +6466,7 @@
             <p class="text-sm text-accent-500 mt-1" data-i18n="price_yearly_per">Toplam 16 analiz (13 + 3 hediye)</p>
           </div>
           <p class="pricing-price text-primary-600 dark:text-teal-400 mt-2">
-            <span class="align-top text-base mr-0.5">€</span><span id="price-yearly">99</span><span id="price-symbol-yearly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span>
+            <span class="align-top text-base mr-0.5">€</span><span id="price-yearly">106.92</span><span id="price-symbol-yearly" class="hidden">€</span><span class="text-sm font-normal text-accent-500" data-i18n="price_per_year">/yıl</span>
           </p>
           <div class="pricing-value-callout mt-2">
             <p class="pricing-value-line">💎 <span data-i18n="pricing_yearly_value_midline">Yıllık planda maksimum tasarruf</span></p>
@@ -6441,7 +6484,7 @@
             <li><span aria-hidden="true">❤️</span><span data-i18n="plan_yearly_10">Kalp sağlığı yorumu</span></li>
           </ul>
           <p class="mt-3 text-xs text-accent-500 dark:text-accent-400" data-i18n="pricing_monthly_most_chosen">Kullanıcıların çoğu bu planı seçiyor.</p>
-          <button type="button" onclick="goToCheckout('yearly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-yearly">99 €</span> <span data-i18n="price_btn_yearly_label">Yıllık Tasarrufu Al</span></button>
+          <button type="button" onclick="goToCheckout('yearly')" class="cta-button elite-cta mt-5 bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-md hover:shadow-lg transition text-sm"><span id="btn-yearly">106.92 €</span> <span data-i18n="price_btn_yearly_label">Yıllık Tasarrufu Al</span></button>
         </div>
       </div>
 
@@ -6569,9 +6612,9 @@
             <tr>
               <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_price">Fiyat</td>
               <td class="py-3 px-3 text-center"><span id="compare-price-free">0 €</span><br><button type="button" onclick="goToCheckout('free')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50" data-i18n="compare_btn_select">Select</button></td>
-              <td class="py-3 px-3 text-center"><span id="compare-price-single">13</span> <span id="compare-symbol-single">€</span><br><button type="button" onclick="goToCheckout('single')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50" data-i18n="compare_btn_select">Select</button></td>
-              <td class="py-3 px-3 text-center"><span id="compare-price-monthly">50</span> <span id="compare-symbol-monthly">€</span><span data-i18n="price_per_month">/mo</span><br><button type="button" onclick="goToCheckout('monthly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-200 text-primary-700 hover:bg-primary-50" data-i18n="compare_btn_select">Select</button></td>
-              <td class="py-3 px-3 text-center bg-primary-50/30 dark:bg-primary-900/10"><span id="compare-price-yearly">99</span> <span id="compare-symbol-yearly">€</span><span data-i18n="price_per_year">/yr</span><br><button type="button" onclick="goToCheckout('yearly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-300 text-primary-700 bg-white/80 hover:bg-primary-50" data-i18n="compare_btn_select">Select</button></td>
+              <td class="py-3 px-3 text-center"><span id="compare-price-single">14.04</span> <span id="compare-symbol-single">€</span><br><button type="button" onclick="goToCheckout('single')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50" data-i18n="compare_btn_select">Select</button></td>
+              <td class="py-3 px-3 text-center"><span id="compare-price-monthly">54</span> <span id="compare-symbol-monthly">€</span><span data-i18n="price_per_month">/mo</span><br><button type="button" onclick="goToCheckout('monthly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-200 text-primary-700 hover:bg-primary-50" data-i18n="compare_btn_select">Select</button></td>
+              <td class="py-3 px-3 text-center bg-primary-50/30 dark:bg-primary-900/10"><span id="compare-price-yearly">106.92</span> <span id="compare-symbol-yearly">€</span><span data-i18n="price_per_year">/yr</span><br><button type="button" onclick="goToCheckout('yearly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-300 text-primary-700 bg-white/80 hover:bg-primary-50" data-i18n="compare_btn_select">Select</button></td>
             </tr>
           </tbody>
         </table>
@@ -6607,7 +6650,7 @@
             <div class="compare-card" data-plan="single" id="compare-card-single">
               <div class="compare-card-header">
                 <span class="compare-card-badge" data-i18n="compare_plan_single">Tek Analiz</span>
-                <p class="compare-card-price"><span id="compare-mobile-price-single">13</span> <span id="compare-mobile-symbol-single">€</span></p>
+                <p class="compare-card-price"><span id="compare-mobile-price-single">14.04</span> <span id="compare-mobile-symbol-single">€</span></p>
               </div>
               <ul class="compare-card-highlights">
                 <li data-i18n="compare_upload">Metin, PDF, görsel yükleme</li>
@@ -6630,7 +6673,7 @@
             <div class="compare-card" data-plan="monthly" id="compare-card-monthly">
               <div class="compare-card-header">
                 <span class="compare-card-badge" data-i18n="compare_plan_monthly">Aylık</span>
-                <p class="compare-card-price"><span id="compare-mobile-price-monthly">50</span> <span id="compare-mobile-symbol-monthly">€</span><span class="compare-card-period" data-i18n="price_per_month">/ay</span></p>
+                <p class="compare-card-price"><span id="compare-mobile-price-monthly">54</span> <span id="compare-mobile-symbol-monthly">€</span><span class="compare-card-period" data-i18n="price_per_month">/ay</span></p>
               </div>
               <ul class="compare-card-highlights">
                 <li data-i18n="compare_analyses_per_month">10+3 / ay</li>
@@ -6655,7 +6698,7 @@
               <div class="compare-card-header">
                 <span class="compare-card-badge compare-card-badge-best" data-i18n="price_best_badge">En avantajlı</span>
                 <span class="compare-card-badge" data-i18n="compare_plan_yearly">Yıllık</span>
-                <p class="compare-card-price"><span id="compare-mobile-price-yearly">99</span> <span id="compare-mobile-symbol-yearly">€</span><span class="compare-card-period" data-i18n="price_per_year">/yıl</span></p>
+                <p class="compare-card-price"><span id="compare-mobile-price-yearly">106.92</span> <span id="compare-mobile-symbol-yearly">€</span><span class="compare-card-period" data-i18n="price_per_year">/yıl</span></p>
               </div>
               <ul class="compare-card-highlights">
                 <li data-i18n="compare_analyses_per_month">10+3 / ay</li>
@@ -9297,6 +9340,9 @@
         lead_error_email: "Lütfen geçerli bir e-posta girin.",
         lead_error_generic: "Bir hata oluştu. Lütfen tekrar deneyin.",
         lead_privacy: "Spam göndermeyiz. İstediğiniz zaman çıkabilirsiniz.",
+        lead_trust_privacy: "Gizlilik önceliğimiz",
+        lead_trust_no_spam: "Spam yok",
+        lead_trust_unsubscribe: "İstediğiniz zaman çıkın",
         lead_consent_text: "KVKK/GDPR kapsamında e-posta güncellemelerini almak için onay veriyorum.",
         lead_error_consent: "KVKK/GDPR onayını kabul etmelisiniz.",
         footer_platform_disclaimer: "Norya, kan tahlili sonuçlarınızı yapılandırılmış analiz ve raporlarla sunan bir biyobelirteç platformudur. Norya bir tıbbi teşhis sistemi değildir.",
@@ -9316,13 +9362,13 @@
         privacy_rights_1: "Haklarınız. Verilerinize erişim, düzeltme ve silme talebinde bulunabilirsiniz. Taleplerinizi",
         privacy_rights_2: "bölümünden iletebilirsiniz.",
         payment_intro: "Ödemeler PayTR sanal pos altyapısı ile alınır. Kart bilgileriniz bize iletilmez; işlem PayTR üzerinden güvenli şekilde tamamlanır.",
-        payment_packages: "Tek analiz ve Pro paketleri. Tek analiz satın aldığınızda hesabınıza bir analiz hakkı eklenir. Pro aylık (50€) veya yıllık (99€) pakette ayda 10+3 analiz hakkı tanınır. Otomatik yenileme yoktur; süre bitince paket sona erer.",
+        payment_packages: "Tek analiz ve Pro paketleri. Tek analiz satın aldığınızda hesabınıza bir analiz hakkı eklenir. Pro aylık (54€) veya yıllık (106.92€) pakette ayda 10+3 analiz hakkı tanınır. Otomatik yenileme yoktur; süre bitince paket sona erer.",
         payment_refund_1: "İade. Ödeme sonrası 14 gün içinde kullanılmayan (hiç analiz yapılmamış) paket veya tek analiz hakkı için iade talebinde bulunabilirsiniz. Kısmen kullanılmış paketlerde oransal iade uygulanmaz. İade talebinizi",
         payment_refund_2: "üzerinden iletin; geçerli talepler ödeme yönteminize göre işleme alınır.",
         payment_credit_issue: "Ödeme alındı ama hak tanınmadı. Ödemeniz banka/ödeme kuruluşu tarafından onaylandığı hâlde hesabınıza hak yansımadıysa, lütfen sipariş veya ödeme bilginizle birlikte bize yazın. En kısa sürede kontrol edip düzeltiyoruz.",
         price_no_renewal: "Pro paketleri satın aldığınız dönem boyunca geçerlidir (aylık 30 gün, yıllık 365 gün). Otomatik yenileme yoktur; süre bitince isterseniz tekrar satın alabilirsiniz.",
-        pricing_yearly_saving: "Aylığa göre 501 € tasarruf (%83)",
-        pricing_yearly_math: "50€ x 12 = 600€ yerine 99€ (yıllık toplu ödeme).",
+        pricing_yearly_saving: "Aylığa göre 541 € tasarruf (%84)",
+        pricing_yearly_math: "54€ x 12 = 648€ yerine 106.92€ (yıllık toplu ödeme).",
         pricing_badge_trial: "Deneme", price_btn_free: "Ücretsiz Başla", price_badge_fast: "Hızlı", price_btn_single_label: "Tek Analizi Satın Al", price_btn_monthly_label: "Aylık Planı Başlat", price_btn_monthly_cta: "Aylık Planı Başlat — Hemen satın al", pricing_yearly_value_mid: "değerinde analiz — Sadece", price_btn_yearly_label: "Yıllık Tasarrufu Al",
         trust_title: "Güvenli ve uyumlu hizmet",
         trust_subtitle: "Veriler yalnızca rapor üretimi amacıyla işlenir. Norya tıbbi tanı koymaz; bilgilendirme amaçlı AI destekli yorum sunar.",
@@ -9750,6 +9796,9 @@
         lead_error_email: "Please enter a valid email.",
         lead_error_generic: "Something went wrong. Please try again.",
         lead_privacy: "No spam. Unsubscribe anytime.",
+        lead_trust_privacy: "Privacy first",
+        lead_trust_no_spam: "No spam",
+        lead_trust_unsubscribe: "Unsubscribe anytime",
         lead_consent_text: "I consent to receive email updates in accordance with KVKK/GDPR.",
         lead_error_consent: "Please accept the KVKK/GDPR consent.",
         footer_platform_disclaimer: "Norya is a biomarker platform that delivers structured analysis and reporting of your blood test results. Norya is not a medical diagnosis system.",
@@ -9769,13 +9818,13 @@
         privacy_rights_1: "Your rights. You may request access, correction and deletion of your data. You can send your requests via the",
         privacy_rights_2: "section.",
         payment_intro: "Payments are taken via the PayTR payment infrastructure. Your card details are not sent to us; the transaction is completed securely through PayTR.",
-        payment_packages: "Single analysis and Pro packages. When you buy a single analysis, one credit is added. Pro monthly (50€) or yearly (99€) gives 10+3 analyses per month. No auto-renewal; the package ends when the period ends.",
+        payment_packages: "Single analysis and Pro packages. When you buy a single analysis, one credit is added. Pro monthly (54€) or yearly (106.92€) gives 10+3 analyses per month. No auto-renewal; the package ends when the period ends.",
         payment_refund_1: "Refunds. You may request a refund within 14 days of payment for unused packages or single analysis (no analyses run). Proportional refunds do not apply to partially used packages. Send your refund request via",
         payment_refund_2: "; valid requests are processed according to your payment method.",
         payment_credit_issue: "Payment received but no credit. If your payment was confirmed by the bank or payment provider but no credit was added to your account, please contact us with your order or payment details. We will check and correct it as soon as possible.",
         price_no_renewal: "Pro packages are valid for the period you purchased (30 days monthly, 365 days yearly). No auto-renewal; you can purchase again when the period ends.",
-        pricing_yearly_saving: "Save €501 vs monthly (%83)",
-        pricing_yearly_math: "Instead of €50 x 12 = €600, you pay €99 once per year.",
+        pricing_yearly_saving: "Save €541 vs monthly (84%)",
+        pricing_yearly_math: "Instead of €54 x 12 = €648, you pay €106.92 once per year.",
         pricing_badge_trial: "Trial", price_btn_free: "Get started free", price_badge_fast: "Quick", price_btn_single_label: "Buy single analysis", price_btn_monthly_label: "Start monthly plan", price_btn_monthly_cta: "Start monthly plan — Buy now", pricing_yearly_value_mid: "worth — Only", price_btn_yearly_label: "Get yearly savings",
         trust_title: "Secure and compliant service",
         trust_subtitle: "Your data is processed only to generate your report. Norya does not make medical diagnoses; it provides AI-assisted explanations for educational purposes.",
@@ -10061,6 +10110,9 @@
         lead_error_email: "Inserisci un'email valida.",
         lead_error_generic: "Si è verificato un errore. Riprova.",
         lead_privacy: "Niente spam. Cancella quando vuoi.",
+        lead_trust_privacy: "Privacy prioritaria",
+        lead_trust_no_spam: "Niente spam",
+        lead_trust_unsubscribe: "Cancella quando vuoi",
         lead_consent_text: "Acconsento a ricevere aggiornamenti via email in conformità con KVKK/GDPR.",
         lead_error_consent: "Devi accettare il consenso KVKK/GDPR.",
         footer_copyright: "© 2026 Norya. Tutti i diritti riservati.",
@@ -10089,8 +10141,8 @@
         payment_refund_2: "; le richieste valide sono elaborate in base al metodo di pagamento.",
         payment_credit_issue: "Pagamento ricevuto ma nessun credito. Se il pagamento è stato confermato ma il credito non è stato aggiunto, contattaci con ordine o dati di pagamento. Verificheremo e correggeremo al più presto.",
         price_no_renewal: "I piani Pro sono validi per il periodo acquistato (30 giorni mensili, 365 annuali). Nessun rinnovo automatico.",
-        pricing_yearly_saving: "Risparmi 501€ rispetto al mensile (83%)",
-        pricing_yearly_math: "Invece di 50€ x 12 = 600€, paghi 99€ una volta l'anno.",
+        pricing_yearly_saving: "Risparmi 541€ rispetto al mensile (84%)",
+        pricing_yearly_math: "Invece di 54€ x 12 = 648€, paghi 106.92€ una volta l'anno.",
         pricing_badge_trial: "Prova", price_btn_free: "Inizia gratis", price_badge_fast: "Veloce", price_btn_single_label: "Acquista analisi singola", price_btn_monthly_label: "Avvia piano mensile", price_btn_monthly_cta: "Avvia piano mensile — Acquista ora", pricing_yearly_value_mid: "valore — Solo", price_btn_yearly_label: "Scegli annuale",
         trust_title: "Servizio sicuro e conforme",
         trust_subtitle: "I dati sono elaborati solo per generare il report. Norya non effettua diagnosi mediche; fornisce spiegazioni assistite da IA a scopo informativo.",
@@ -10374,6 +10426,9 @@
         lead_error_email: "Introduce un correo válido.",
         lead_error_generic: "Algo salió mal. Inténtalo de nuevo.",
         lead_privacy: "Sin spam. Cancela cuando quieras.",
+        lead_trust_privacy: "Privacidad primero",
+        lead_trust_no_spam: "Sin spam",
+        lead_trust_unsubscribe: "Cancela cuando quieras",
         lead_consent_text: "Acepto recibir actualizaciones por correo según KVKK/GDPR.",
         lead_error_consent: "Debe aceptar el consentimiento KVKK/GDPR.",
         footer_copyright: "© 2026 Norya. Todos los derechos reservados.",
@@ -10402,8 +10457,8 @@
         payment_refund_2: "; las solicitudes válidas se procesan según el método de pago.",
         payment_credit_issue: "Pago recibido pero sin crédito. Si el pago fue confirmado pero no se añadió el crédito, escríbenos con el pedido o datos del pago. Comprobaremos y corregiremos lo antes posible.",
         price_no_renewal: "Los planes Pro son válidos para el período comprado (30 días mensual, 365 anual). Sin renovación automática.",
-        pricing_yearly_saving: "Ahorra 501€ frente al mensual (83%)",
-        pricing_yearly_math: "En lugar de 50€ x 12 = 600€, pagas 99€ una sola vez al año.",
+        pricing_yearly_saving: "Ahorra 541€ frente al mensual (84%)",
+        pricing_yearly_math: "En lugar de 54€ x 12 = 648€, pagas 106.92€ una sola vez al año.",
         pricing_badge_trial: "Prueba", price_btn_free: "Empezar gratis", price_badge_fast: "Rápido", price_btn_single_label: "Comprar análisis único", price_btn_monthly_label: "Comenzar plan mensual", price_btn_monthly_cta: "Comenzar plan mensual — Comprar ahora", pricing_yearly_value_mid: "valor — Solo", price_btn_yearly_label: "Elegir anual",
         trust_title: "Servicio seguro y conforme",
         trust_subtitle: "Tus datos se procesan solo para generar el informe. Norya no realiza diagnósticos médicos; ofrece explicaciones con IA con fines informativos.",
@@ -10687,6 +10742,9 @@
         lead_error_email: "Veuillez entrer un email valide.",
         lead_error_generic: "Une erreur est survenue. Veuillez réessayer.",
         lead_privacy: "Pas de spam. Désabonnement à tout moment.",
+        lead_trust_privacy: "Confidentialité d'abord",
+        lead_trust_no_spam: "Pas de spam",
+        lead_trust_unsubscribe: "Désabonnement à tout moment",
         lead_consent_text: "J'accepte de recevoir des mises à jour par e-mail conformément à la politique KVKK/GDPR.",
         lead_error_consent: "Veuillez accepter le consentement KVKK/GDPR.",
         footer_copyright: "© 2026 Norya. Tous droits réservés.",
@@ -10715,8 +10773,8 @@
         payment_refund_2: " ; les demandes valides sont traitées selon le mode de paiement.",
         payment_credit_issue: "Paiement reçu mais pas de crédit. Si le paiement a été confirmé mais qu'aucun crédit n'a été ajouté, contactez-nous avec la commande ou les informations de paiement. Nous vérifierons et corrigerons au plus tôt.",
         price_no_renewal: "Les forfaits Pro sont valables pour la période achetée (30 jours mensuel, 365 annuel). Pas de renouvellement automatique.",
-        pricing_yearly_saving: "501€ d'économie par rapport au mensuel (83%)",
-        pricing_yearly_math: "Au lieu de 50€ x 12 = 600€, vous payez 99€ une fois par an.",
+        pricing_yearly_saving: "541€ d'économie par rapport au mensuel (84%)",
+        pricing_yearly_math: "Au lieu de 54€ x 12 = 648€, vous payez 106.92€ une fois par an.",
         pricing_badge_trial: "Essai", price_btn_free: "Commencer gratuitement", price_badge_fast: "Rapide", price_btn_single_label: "Acheter une analyse", price_btn_monthly_label: "Démarrer l'abonnement mensuel", price_btn_monthly_cta: "Démarrer l'abonnement — Acheter", pricing_yearly_value_mid: "valeur — Seulement", price_btn_yearly_label: "Choisir l'annuel",
         trust_title: "Service sécurisé et conforme",
         trust_subtitle: "Vos données sont traitées uniquement pour générer votre rapport. Norya ne pose pas de diagnostic médical ; il fournit des explications assistées par IA à titre informatif.",
@@ -10981,6 +11039,9 @@
         lead_error_email: "Bitte geben Sie eine gültige E-Mail ein.",
         lead_error_generic: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
         lead_privacy: "Kein Spam. Jederzeit abmeldbar.",
+        lead_trust_privacy: "Datenschutz zuerst",
+        lead_trust_no_spam: "Kein Spam",
+        lead_trust_unsubscribe: "Jederzeit abmeldbar",
         lead_consent_text: "Ich stimme zu, E-Mail-Updates gemäß KVKK/GDPR zu erhalten.",
         lead_error_consent: "Bitte stimmen Sie der KVKK/GDPR Einwilligung zu.",
         footer_copyright: "© 2026 Norya. Alle Rechte vorbehalten.",
@@ -11009,8 +11070,8 @@
         payment_refund_2: "; berechtigte Anträge werden entsprechend Ihrer Zahlungsmethode bearbeitet.",
         payment_credit_issue: "Zahlung erhalten, aber kein Guthaben. Wenn die Zahlung bestätigt wurde, aber kein Guthaben gutgeschrieben wurde, kontaktieren Sie uns bitte mit Bestell- oder Zahlungsangaben. Wir prüfen und korrigieren schnellstmöglich.",
         price_no_renewal: "Pro-Pakete gelten für den gekauften Zeitraum (30 Tage monatlich, 365 jährlich). Keine automatische Verlängerung.",
-        pricing_yearly_saving: "501€ Ersparnis im Vergleich zum Monatsabo (83%)",
-        pricing_yearly_math: "Statt 50€ x 12 = 600€ zahlen Sie einmalig 99€ pro Jahr.",
+        pricing_yearly_saving: "541€ Ersparnis im Vergleich zum Monatsabo (84%)",
+        pricing_yearly_math: "Statt 54€ x 12 = 648€ zahlen Sie einmalig 106.92€ pro Jahr.",
         pricing_badge_trial: "Test", price_btn_free: "Kostenlos starten", price_badge_fast: "Schnell", price_btn_single_label: "Einzelanalyse kaufen", price_btn_monthly_label: "Monatsplan starten", price_btn_monthly_cta: "Monatsplan starten — Jetzt kaufen", pricing_yearly_value_mid: "Wert — Nur", price_btn_yearly_label: "Jahresersparnis sichern",
         trust_title: "Sicherer und konformer Service",
         trust_subtitle: "Ihre Daten werden nur zur Erstellung Ihres Berichts verarbeitet. Norya stellt keine medizinischen Diagnosen; es bietet KI-gestützte Erklärungen zu Informationszwecken.",
@@ -11230,6 +11291,9 @@
         lead_error_email: "נא להזין כתובת מייל תקינה.",
         lead_error_generic: "אירעה שגיאה. נסה שוב.",
         lead_privacy: "ללא ספאם. ביטול בכל עת.",
+        lead_trust_privacy: "פרטיות בראש סדר העדיפויות",
+        lead_trust_no_spam: "ללא ספאם",
+        lead_trust_unsubscribe: "ביטול בכל עת",
         lead_consent_text: "אני מסכים לקבל עדכונים במייל בהתאם ל-KVKK/GDPR.",
         lead_error_consent: "יש לאשר את הסכמת KVKK/GDPR.",
         footer_desc: "תוצאות בדיקות דם מוסברות בשפה ברורה.", footer_disclaimer: "הכלי להנחיה בלבד. להחלטות רפואיות יש להתייעץ עם רופא.", made_with_cursor: "Made with Cursor",
@@ -11259,8 +11323,8 @@
         payment_refund_2: "; בקשות תקפות מטופלות לפי אמצעי התשלום.",
         payment_credit_issue: "התשלום התקבל אך לא נוסף קרדיט. אם התשלום אושר אך לא נזקף, צור איתנו קשר עם פרטי ההזמנה או התשלום. נבדוק ונתקן בהקדם.",
         price_no_renewal: "חבילות Pro תקפות לתקופה שנרכשה (30 יום חודשי, 365 שנתי). אין חידוש אוטומטי.",
-        pricing_yearly_saving: "חיסכון של ‎501€ לעומת החודשי (83%)",
-        pricing_yearly_math: "במקום ‎50€ x 12 = ‎600€, משלמים ‎99€ פעם בשנה.",
+        pricing_yearly_saving: "חיסכון של ‎541€ לעומת החודשי (84%)",
+        pricing_yearly_math: "במקום ‎54€ x 12 = ‎648€, משלמים ‎106.92€ פעם בשנה.",
         pricing_badge_trial: "ניסיון", price_btn_free: "התחל בחינם", price_badge_fast: "מהיר", price_btn_single_label: "רכוש ניתוח בודד", price_btn_monthly_label: "התחל מנוי חודשי", price_btn_monthly_cta: "התחל מנוי — רכוש עכשיו", pricing_yearly_value_mid: "שווי — רק", price_btn_yearly_label: "בחר חיסכון שנתי",
         trust_title: "שירות מאובטח ותואם",
         trust_subtitle: "הנתונים שלך מעובדים רק לצורך יצירת הדוח. נוריה אינה עושה אבחון רפואי; היא מספקת הסברים מבוססי בינה מלאכותית למטרות מידע.",
@@ -11495,6 +11559,9 @@
         lead_error_email: "يرجى إدخال بريد إلكتروني صحيح.",
         lead_error_generic: "حدث خطأ. يرجى المحاولة مرة أخرى.",
         lead_privacy: "لا رسائل مزعجة. إلغاء الاشتراك في أي وقت.",
+        lead_trust_privacy: "الخصوصية أولاً",
+        lead_trust_no_spam: "لا رسائل مزعجة",
+        lead_trust_unsubscribe: "إلغاء الاشتراك في أي وقت",
         lead_consent_text: "أوافق على تلقي تحديثات عبر البريد الإلكتروني وفقًا لـ KVKK/GDPR.",
         lead_error_consent: "يرجى قبول موافقة KVKK/GDPR.",
         footer_desc: "نتائج تحاليل الدم مفسرة بلغة واضحة.", footer_disclaimer: "هذه الأداة للمعلومات فقط. استشر طبيباً دائماً للقرارات الطبية.", made_with_cursor: "Made with Cursor",
@@ -11524,8 +11591,8 @@
         payment_refund_2: "؛ تُمعالَج الطلبات الصالحة حسب طريقة الدفع.",
         payment_credit_issue: "تم استلام الدفع لكن لم يُضف رصيد. إن تم تأكيد الدفع ولم يُضف الرصيد، تواصل معنا مع رقم الطلب أو بيانات الدفع. نتحقق ونصحح في أقرب وقت.",
         price_no_renewal: "باقات Pro صالحة للفترة المشتراة (30 يوم شهري، 365 سنوي). لا تجديد تلقائي.",
-        pricing_yearly_saving: "توفير 501€ مقارنة بالشهري (83%)",
-        pricing_yearly_math: "بدلاً من ‎50€ × 12 = ‎600€، تدفع ‎99€ مرة واحدة في السنة.",
+        pricing_yearly_saving: "توفير 541€ مقارنة بالشهري (84%)",
+        pricing_yearly_math: "بدلاً من ‎54€ × 12 = ‎648€، تدفع ‎106.92€ مرة واحدة في السنة.",
         pricing_badge_trial: "تجربة", price_btn_free: "ابدأ مجاناً", price_badge_fast: "سريع", price_btn_single_label: "شراء تحليل واحد", price_btn_monthly_label: "بدء الاشتراك الشهري", price_btn_monthly_cta: "بدء الاشتراك — شراء الآن", pricing_yearly_value_mid: "قيمة — فقط", price_btn_yearly_label: "اختر التوفير السنوي",
         trust_title: "خدمة آمنة ومتوافقة",
         trust_subtitle: "تُعالج بياناتك فقط لتوليد التقرير. نوريا لا تقوم بتشخيص طبي؛ تقدم شروحات مدعومة بالذكاء الاصطناعي لأغراض إعلامية.",
@@ -11760,6 +11827,9 @@
         lead_error_email: "कृपया एक मान्य ईमेल दर्ज करें।",
         lead_error_generic: "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
         lead_privacy: "कोई स्पैम नहीं। कभी भी अनसब्सक्राइब करें।",
+        lead_trust_privacy: "गोपनीयता सर्वोपरि",
+        lead_trust_no_spam: "कोई स्पैम नहीं",
+        lead_trust_unsubscribe: "कभी भी अनसब्सक्राइब करें",
         lead_consent_text: "मैं KVKK/GDPR के अनुसार ईमेल अपडेट प्राप्त करने की सहमति देता/देती हूँ।",
         lead_error_consent: "कृपया KVKK/GDPR सहमति स्वीकार करें।",
         footer_desc: "रक्त परीक्षण परिणाम सरल भाषा में समझाए गए।", footer_disclaimer: "यह उपकरण शैक्षिक उद्देश्य के लिए है। चिकित्सा निर्णय के लिए हमेशा डॉक्टर से सलाह लें।", made_with_cursor: "Made with Cursor",
@@ -11789,8 +11859,8 @@
         payment_refund_2: "के जरिए; वैध अनुरोध भुगतान विधि के अनुसार संसाधित।",
         payment_credit_issue: "भुगतान मिला लेकिन क्रेडिट नहीं मिला। यदि भुगतान पुष्ट हुआ लेकिन क्रेडिट नहीं जुड़ा तो ऑर्डर या भुगतान जानकारी के साथ संपर्क करें। जल्द जांच और सुधार करेंगे।",
         price_no_renewal: "Pro पैकेज खरीदी गई अवधि के लिए वैध (मासिक 30 दिन, वार्षिक 365)। कोई ऑटो-नवीनीकरण नहीं।",
-        pricing_yearly_saving: "मासिक की तुलना में 501€ की बचत (83%)",
-        pricing_yearly_math: "50€ x 12 = 600€ के बजाय, साल में केवल 99€ एक बार।",
+        pricing_yearly_saving: "मासिक की तुलना में 541€ की बचत (84%)",
+        pricing_yearly_math: "54€ x 12 = 648€ के बजाय, साल में केवल 106.92€ एक बार।",
         pricing_badge_trial: "ट्रायल", price_btn_free: "मुफ्त शुरू करें", price_badge_fast: "त्वरित", price_btn_single_label: "एकल विश्लेषण खरीदें", price_btn_monthly_label: "मासिक प्लान शुरू करें", price_btn_monthly_cta: "मासिक प्लान — अभी खरीदें", pricing_yearly_value_mid: "मूल्य — केवल", price_btn_yearly_label: "वार्षिक बचत चुनें",
         trust_title: "सुरक्षित और अनुपालन सेवा",
         trust_subtitle: "आपका डेटा केवल रिपोर्ट बनाने के लिए प्रोसेस होता है। नोरिया चिकित्सा निदान नहीं करता; यह सूचनात्मक उद्देश्य के लिए AI-सहायक व्याख्या प्रदान करता है।",
@@ -12020,8 +12090,8 @@
         payment_refund_2: "· τα έγκυρα αιτήματα επεξεργάζονται σύμφωνα με τον τρόπο πληρωμής.",
         payment_credit_issue: "Η πληρωμή ελήφθη αλλά δεν προστέθηκε πίστωση. Αν η πληρωμή επιβεβαιώθηκε αλλά δεν προστέθηκε πίστωση, επικοινωνήστε μαζί μας με αριθμό παραγγελίας ή στοιχεία πληρωμής. Θα ελέγξουμε και θα διορθώσουμε το συντομότερο.",
         price_no_renewal: "Τα Pro πακέτα ισχύουν για την αγορασμένη περίοδο (30 ημέρες μηνιαία, 365 ετήσια). Χωρίς αυτόματη ανανέωση.",
-        pricing_yearly_saving: "501€ εξοικονόμηση σε σχέση με το μηνιαίο (83%)",
-        pricing_yearly_math: "Αντί για 50€ x 12 = 600€, πληρώνετε 99€ μία φορά το χρόνο.",
+        pricing_yearly_saving: "541€ εξοικονόμηση σε σχέση με το μηνιαίο (84%)",
+        pricing_yearly_math: "Αντί για 54€ x 12 = 648€, πληρώνετε 106.92€ μία φορά το χρόνο.",
         pricing_badge_trial: "Δοκιμή", price_btn_free: "Ξεκινήστε δωρεάν", price_badge_fast: "Γρήγορο", price_btn_single_label: "Αγοράστε μία ανάλυση", price_btn_monthly_label: "Ξεκινήστε μηνιαίο πλάνο", price_btn_monthly_cta: "Ξεκινήστε μηνιαίο πλάνο — Αγοράστε τώρα", pricing_yearly_value_mid: "αξία — Μόνο", price_btn_yearly_label: "Ετήσια εξοικονόμηση",
         trust_title: "Ασφαλής και συμβατή υπηρεσία",
         trust_subtitle: "Τα δεδομένα σας επεξεργάζονται μόνο για τη δημιουργία της αναφοράς. Η Norya δεν κάνει ιατρική διάγνωση· παρέχει επεξηγήσεις με τεχνητή νοημοσύνη για ενημερωτικούς σκοπούς.",
@@ -12231,8 +12301,8 @@
         payment_refund_2: "; platné žádosti budou zpracovány podle platební metody.",
         payment_credit_issue: "Platba byla přijata, ale nebyl přidán kredit. Pokud byla platba potvrzena, ale kredit nebyl přidán, kontaktujte nás s číslem objednávky nebo údaji o platbě. Zkontrolujeme a opravíme co nejdříve.",
         price_no_renewal: "Pro balíčky platí pro zakoupené období (30 dní měsíčně, 365 ročně). Bez automatického obnovení.",
-        pricing_yearly_saving: "Úspora 501€ oproti měsíčnímu plánu (83 %)",
-        pricing_yearly_math: "Místo 50€ x 12 = 600€ zaplatíte jednou ročně 99€.",
+        pricing_yearly_saving: "Úspora 541€ oproti měsíčnímu plánu (84 %)",
+        pricing_yearly_math: "Místo 54€ x 12 = 648€ zaplatíte jednou ročně 106.92€.",
         pricing_badge_trial: "Zkušební", price_btn_free: "Začít zdarma", price_badge_fast: "Rychlé", price_btn_single_label: "Koupit jednu analýzu", price_btn_monthly_label: "Spustit měsíční plán", price_btn_monthly_cta: "Spustit měsíční plán — Koupit nyní", pricing_yearly_value_mid: "hodnota — Jen", price_btn_yearly_label: "Roční úspora",
         trust_title: "Bezpečná a compliantní služba",
         trust_subtitle: "Vaše data se zpracovávají pouze pro vygenerování reportu. Norya nestanovuje lékařské diagnózy; poskytuje vysvětlení s podporou AI pro informační účely.",
@@ -12442,8 +12512,8 @@
         payment_refund_2: "; validni zahtevi obrađuju se prema načinu plaćanja.",
         payment_credit_issue: "Plaćanje je primljeno ali kredit nije dodat. Ako je plaćanje potvrđeno ali kredit nije dodat, kontaktirajte nas sa brojem porudžbine ili podacima o plaćanju. Proverićemo i ispraviti što pre.",
         price_no_renewal: "Pro paketi važe za kupljeni period (30 dana mesečno, 365 godišnje). Nema automatskog obnavljanja.",
-        pricing_yearly_saving: "Ušteda 501€ u odnosu na mesečni plan (83%)",
-        pricing_yearly_math: "Umesto 50€ x 12 = 600€, plaćate 99€ jednom godišnje.",
+        pricing_yearly_saving: "Ušteda 541€ u odnosu na mesečni plan (84%)",
+        pricing_yearly_math: "Umesto 54€ x 12 = 648€, plaćate 106.92€ jednom godišnje.",
         pricing_badge_trial: "Probni", price_btn_free: "Počni besplatno", price_badge_fast: "Brzo", price_btn_single_label: "Kupi jednu analizu", price_btn_monthly_label: "Pokreni mesečni plan", price_btn_monthly_cta: "Pokreni mesečni plan — Kupi sada", pricing_yearly_value_mid: "vrednost — Samo", price_btn_yearly_label: "Godišnja ušteda",
         trust_title: "Sigurna i usklađena usluga",
         trust_subtitle: "Vaši podaci se obrađuju samo za generisanje izveštaja. Norya ne postavlja medicinsku dijagnozu; pruža objašnjenja uz pomoć AI u informativne svrhe.",
