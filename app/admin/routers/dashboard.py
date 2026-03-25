@@ -206,17 +206,41 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
 
     failed_payments = db.exec(select(func.count(PaymentOrder.id)).where(PaymentOrder.status == "failed")).one() or 0
 
-    # Bu ay OpenAI token kullanımı (tahmini maliyet için)
+    # ── OpenAI maliyet metrikleri ──
     month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    # gpt-4o-mini: input $0.15/1M, output $0.60/1M
+    _INPUT_RATE = 0.15 / 1_000_000
+    _OUTPUT_RATE = 0.60 / 1_000_000
+
+    # Bu ay
     prompt_sum = db.exec(
         select(func.coalesce(func.sum(AnalysisJob.prompt_tokens), 0)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
     ).one() or 0
     completion_sum = db.exec(
         select(func.coalesce(func.sum(AnalysisJob.completion_tokens), 0)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
     ).one() or 0
-    # gpt-4o-mini: input $0.15/1M, output $0.60/1M (yaklaşık)
-    openai_cost_usd = (prompt_sum / 1_000_000 * 0.15) + (completion_sum / 1_000_000 * 0.60)
+    openai_cost_usd = prompt_sum * _INPUT_RATE + completion_sum * _OUTPUT_RATE
     openai_tokens_month = int(prompt_sum) + int(completion_sum)
+    reports_this_month = db.exec(
+        select(func.count(AnalysisJob.id)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
+    ).one() or 0
+
+    # Tüm zamanlar
+    all_prompt = db.exec(
+        select(func.coalesce(func.sum(AnalysisJob.prompt_tokens), 0)).where(AnalysisJob.status == "done")
+    ).one() or 0
+    all_completion = db.exec(
+        select(func.coalesce(func.sum(AnalysisJob.completion_tokens), 0)).where(AnalysisJob.status == "done")
+    ).one() or 0
+    all_reports = db.exec(
+        select(func.count(AnalysisJob.id)).where(AnalysisJob.status == "done")
+    ).one() or 0
+    openai_cost_total = all_prompt * _INPUT_RATE + all_completion * _OUTPUT_RATE
+    cost_per_report = (openai_cost_total / all_reports) if all_reports else 0
+    openai_budget = settings.openai_budget_usd or 0
+    openai_remaining = max(openai_budget - openai_cost_total, 0)
+    remaining_reports = int(openai_remaining / cost_per_report) if cost_per_report > 0 else 0
+    budget_pct = min(round((openai_cost_total / openai_budget) * 100, 1), 100) if openai_budget > 0 else 0
 
     # Son 10 işlem (payment)
     orders = list(
@@ -266,5 +290,13 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
             "chart_users": chart_users,
             "openai_tokens_month": openai_tokens_month,
             "openai_cost_usd": openai_cost_usd,
+            "reports_this_month": reports_this_month,
+            "openai_cost_total": openai_cost_total,
+            "all_reports": all_reports,
+            "cost_per_report": cost_per_report,
+            "openai_budget": openai_budget,
+            "openai_remaining": openai_remaining,
+            "remaining_reports": remaining_reports,
+            "budget_pct": budget_pct,
         },
     )

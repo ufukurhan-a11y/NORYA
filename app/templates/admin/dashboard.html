@@ -164,7 +164,7 @@
 </div>
 
 {# ── System Health + OpenAI Row ── #}
-<div class="grid grid-cols-1 lg:grid-cols-3 gap-5 mb-8">
+<div class="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-8">
   <div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6">
     <div class="flex items-center justify-between mb-4">
       <div class="flex items-center gap-3">
@@ -186,21 +186,55 @@
     </div>
   </div>
 
-  <div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6">
-    <div class="flex items-center gap-3 mb-4">
-      <div class="health-ring text-secondary">
-        <span class="material-symbols-outlined text-secondary" style="font-size:22px;">token</span>
-      </div>
-      <div>
-        <p class="text-sm font-semibold text-on-surface">Token kullanımı</p>
-        <p class="text-xs text-on-surface-variant">Bu ay</p>
+  <div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6 lg:col-span-2">
+    <div class="flex items-center justify-between mb-4">
+      <div class="flex items-center gap-3">
+        <div class="health-ring text-secondary">
+          <span class="material-symbols-outlined text-secondary" style="font-size:22px;">account_balance_wallet</span>
+        </div>
+        <div>
+          <p class="text-sm font-semibold text-on-surface">AI Maliyet Takibi</p>
+          <p class="text-xs text-on-surface-variant">OpenAI GPT-4o-mini</p>
+        </div>
       </div>
     </div>
-    <div class="rounded-xl bg-surface/80 p-3.5">
-      <p class="text-2xl font-bold font-headline text-on-surface">{{ "{:,}".format(openai_tokens_month | default(0) | int) }} <span class="text-xs font-normal text-on-surface-variant">token</span></p>
-      <div class="flex items-center justify-between mt-2">
-        <p class="text-xs text-on-surface-variant">Tahmini maliyet</p>
-        <p class="text-sm font-bold text-primary">{{ "%.2f"|format(openai_cost_usd | default(0)) }} USD</p>
+
+    {# Bakiye çubuğu #}
+    <div class="rounded-xl bg-surface/80 p-4 mb-3">
+      <div class="flex items-center justify-between mb-2">
+        <span class="text-xs font-semibold text-on-surface-variant">Bakiye</span>
+        <span class="text-xs font-bold {% if budget_pct|default(0) > 80 %}text-red-600{% elif budget_pct|default(0) > 50 %}text-amber-600{% else %}text-emerald-600{% endif %}">{{ "%.2f"|format(openai_remaining|default(0)) }} USD kaldı</span>
+      </div>
+      <div class="w-full bg-slate-100 rounded-full h-3 overflow-hidden">
+        <div class="h-full rounded-full transition-all duration-500 {% if budget_pct|default(0) > 80 %}bg-red-500{% elif budget_pct|default(0) > 50 %}bg-amber-400{% else %}bg-emerald-500{% endif %}" style="width: {{ budget_pct|default(0) }}%"></div>
+      </div>
+      <div class="flex items-center justify-between mt-1.5">
+        <span class="text-[10px] text-on-surface-variant">Harcanan: {{ "%.2f"|format(openai_cost_total|default(0)) }} USD</span>
+        <span class="text-[10px] text-on-surface-variant">Bütçe: {{ "%.2f"|format(openai_budget|default(0)) }} USD</span>
+      </div>
+    </div>
+
+    {# Özet metrikler #}
+    <div class="grid grid-cols-2 gap-2.5">
+      <div class="rounded-xl bg-surface/80 px-3.5 py-2.5">
+        <p class="text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Bu ay</p>
+        <p class="text-lg font-bold font-headline text-on-surface mt-0.5">{{ reports_this_month|default(0) }} <span class="text-xs font-normal text-on-surface-variant">rapor</span></p>
+        <p class="text-xs text-on-surface-variant">{{ "%.3f"|format(openai_cost_usd|default(0)) }} USD</p>
+      </div>
+      <div class="rounded-xl bg-surface/80 px-3.5 py-2.5">
+        <p class="text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Toplam</p>
+        <p class="text-lg font-bold font-headline text-on-surface mt-0.5">{{ all_reports|default(0) }} <span class="text-xs font-normal text-on-surface-variant">rapor</span></p>
+        <p class="text-xs text-on-surface-variant">{{ "%.3f"|format(openai_cost_total|default(0)) }} USD</p>
+      </div>
+      <div class="rounded-xl bg-surface/80 px-3.5 py-2.5">
+        <p class="text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Rapor başı</p>
+        <p class="text-lg font-bold font-headline text-primary mt-0.5">{{ "%.3f"|format(cost_per_report|default(0)) }} <span class="text-xs font-normal text-on-surface-variant">USD</span></p>
+        <p class="text-xs text-on-surface-variant">≈ {{ "%.2f"|format((cost_per_report|default(0)) * 35) }} TL</p>
+      </div>
+      <div class="rounded-xl bg-surface/80 px-3.5 py-2.5">
+        <p class="text-[10px] uppercase tracking-wider text-on-surface-variant font-semibold">Kalan kapasiteyle</p>
+        <p class="text-lg font-bold font-headline {% if remaining_reports|default(0) < 100 %}text-amber-600{% else %}text-emerald-600{% endif %} mt-0.5">~{{ "{:,}".format(remaining_reports|default(0)) }} <span class="text-xs font-normal text-on-surface-variant">rapor</span></p>
+        <p class="text-xs text-on-surface-variant">daha üretilebilir</p>
       </div>
     </div>
   </div>

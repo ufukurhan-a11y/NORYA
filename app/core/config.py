@@ -105,6 +105,9 @@ class Settings(BaseSettings):
     company_contact_email: str = "info@noryaai.com"
     company_country: str = "Türkiye"
 
+    # OpenAI bütçe takibi: satın alınan toplam kredi (USD). Dashboard'da kalan bakiye gösterilir.
+    openai_budget_usd: float = 20.0
+
     # Google Search Console API: service account JSON dosya yolu. Boşsa SEO dashboard veri çekemez.
     gsc_service_account_json: str = ""
 
