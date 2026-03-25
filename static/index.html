@@ -3622,6 +3622,68 @@
       }
     }
 
+    /* ===== MOBILE NAV FIX: 768px breakpoint — Logo + compact CTA + Hamburger ===== */
+    @media (max-width: 767px) {
+      .nav-shell, .elite-nav { display: none !important; }
+      .header-desktop-only { display: none !important; }
+      #main-header .header-lang-switch,
+      .header .header-lang-switch,
+      .header .language-switch { display: none !important; }
+      #theme-btn { display: none !important; }
+      .header-cta-guest-only,
+      .header-cta-desktop,
+      .header-cta-inline,
+      .header-mobile-cta { display: none !important; }
+      #nav-user .secondary-link.header-desktop-only { display: none !important; }
+
+      #nav-auth .secondary-link[data-i18n="nav_login"] { display: none !important; }
+      #nav-auth {
+        display: inline-flex !important;
+        flex-shrink: 0 !important;
+        gap: 0 !important;
+      }
+      #nav-auth .secondary-link[data-i18n="nav_register"] {
+        display: inline-flex !important;
+        background: linear-gradient(135deg, #0EA5A4, #0B8F8E) !important;
+        color: #fff !important;
+        font-weight: 600 !important;
+        padding: 7px 14px !important;
+        border-radius: 10px !important;
+        font-size: 0.8125rem !important;
+        white-space: nowrap !important;
+        box-shadow: 0 2px 8px rgba(14,165,164,0.18) !important;
+        border: none !important;
+      }
+
+      #main-header .hamburger,
+      .header .hamburger {
+        display: flex !important;
+        visibility: visible !important;
+        width: 42px !important;
+        height: 42px !important;
+        min-width: 42px !important;
+        min-height: 42px !important;
+        flex-shrink: 0 !important;
+        order: 99;
+      }
+
+      .header-right-zone {
+        gap: 8px !important;
+        flex-shrink: 0 !important;
+        overflow: visible !important;
+      }
+      .header-inner, .elite-header__inner {
+        overflow: visible !important;
+      }
+    }
+    @media (min-width: 768px) {
+      #main-header .hamburger,
+      .header .hamburger { display: none !important; visibility: hidden !important; }
+      .nav-shell, .elite-nav { display: flex !important; }
+      .header-desktop-only { display: flex !important; }
+      .header-desktop-only.inline-items { display: inline-flex !important; }
+    }
+
   </style>
   <script>
   window._toggleLangDrop = function(menuId, toggleId) {
@@ -12969,6 +13031,13 @@
               event_category: 'lead',
               event_label: source || 'homepage',
               locale: getLang(),
+              utm_source: qp.get('utm_source'),
+              utm_medium: qp.get('utm_medium'),
+              utm_campaign: qp.get('utm_campaign'),
+              utm_term: qp.get('utm_term'),
+              utm_content: qp.get('utm_content'),
+              gclid: qp.get('gclid'),
+              fbclid: qp.get('fbclid'),
               non_interaction: true
             });
           }
