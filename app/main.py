@@ -287,19 +287,26 @@ async def lifespan(app: FastAPI):
     _seed_pricing_plan()
     _seed_default_coupon()
     _reset_institution_quotas_if_due()
+    env_prod = getattr(settings, "environment", "").lower() == "production"
     key_ok = is_openai_configured()
+    secret_ok = bool(settings.secret_key) and settings.secret_key != "change-me-in-production"
+    if env_prod:
+        log.info(
+            "Ortam özeti (değerler loglanmaz): ENVIRONMENT=production, openai_yapilandirildi=%s, secret_key_gecerli=%s",
+            key_ok,
+            secret_ok,
+        )
     if key_ok:
         log.info("OPENAI_API_KEY: ok (sk-... ile yüklendi)")
     else:
         log.error(
             "OPENAI_API_KEY EKSİK VEYA GEÇERSİZ — Analiz çalışmaz. .env dosyasına OPENAI_API_KEY=sk-... ekleyin (başında/sonunda boşluk olmasın)."
         )
-        if getattr(settings, "environment", "").lower() == "production":
+        if env_prod:
             raise RuntimeError(
                 "OPENAI_API_KEY tanımlı değil. Production'da analiz servisi açılamaz. .env veya ortam değişkenine OPENAI_API_KEY=sk-... ekleyin."
             )
-    env_prod = getattr(settings, "environment", "").lower() == "production"
-    if env_prod and (not settings.secret_key or settings.secret_key == "change-me-in-production"):
+    if env_prod and not secret_ok:
         raise RuntimeError(
             "SECRET_KEY production'da değiştirilmeli. .env içinde SECRET_KEY=<güçlü-rastgele-key> ekleyin (örn. openssl rand -hex 32)."
         )
@@ -6477,7 +6484,9 @@ def ai_plugin_manifest(request: Request):
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt(request: Request):
     """SEO: Allow all; Disallow admin ve 401 dönen path'ler; sitemap canonical URL."""
-    base_url = str(request.base_url).rstrip("/")
+    canon = (settings.canonical_site_url or "").strip().rstrip("/")
+    if not canon:
+        canon = str(request.base_url).rstrip("/")
     return PlainTextResponse(
         "User-agent: *\n"
         "Allow: /\n"
@@ -6489,8 +6498,8 @@ def robots_txt(request: Request):
         "Disallow: /pay\n"
         "Disallow: /payment\n"
         "Disallow: /verify/\n"
-        f"\nSitemap: {base_url}/sitemap.xml\n"
-        f"LLMs-Txt: {base_url}/llms.txt\n",
+        f"\nSitemap: {canon}/sitemap.xml\n"
+        f"LLMs-Txt: {canon}/llms.txt\n",
         media_type="text/plain",
     )
 

@@ -11,6 +11,7 @@
   {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
   <meta property="og:type" content="website" />
   <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  {% include "partials/og_default_dimensions.html" %}
   <meta property="og:locale" content="{{ og_locale|default('en_US') }}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ meta.meta_title }}" />

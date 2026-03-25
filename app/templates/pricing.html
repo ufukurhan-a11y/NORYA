@@ -14,6 +14,7 @@
   <meta property="og:url" content="{{ base_url }}/pricing" />
   <meta property="og:description" content="{{ t.get('pricing_meta_description') }}" />
   <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  {% include "partials/og_default_dimensions.html" %}
   <meta property="og:locale" content="{{ t.get('og_locale', 'en_US') }}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ t.get('pricing_page_title', t.get('failed_pricing', 'Pricing')) }} – {{ brand }}" />

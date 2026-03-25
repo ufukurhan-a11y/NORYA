@@ -11,7 +11,7 @@
 <meta property="og:title" content="About NoryaAI | The Future of Global Health Intelligence" />
 <meta property="og:description" content="NoryaAI bridges the gap between complex laboratory data and actionable human health insights, powered by precision engineering." />
 {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
-{% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
+{% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% if 'og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}{% endif %}
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="About NoryaAI | The Future of Global Health Intelligence" />

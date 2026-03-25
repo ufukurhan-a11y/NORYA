@@ -13,6 +13,7 @@
   <meta property="og:locale" content="{{ og_locale }}" />
   {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
   <meta property="og:image" content="{{ og_image }}" />
+  {% if 'og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ meta.meta_title }}" />
   <meta name="twitter:description" content="{{ meta.meta_description }}" />

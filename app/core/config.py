@@ -57,6 +57,8 @@ class Settings(BaseSettings):
     smtp_use_tls: bool = True
     # Şifre sıfırlama linkindeki site adresi (e-postadaki buton linki)
     frontend_url: str = "http://127.0.0.1:8000"
+    # robots.txt Sitemap:/LLMs-Txt: mutlak URL (SEO; TestClient'ta bile canonical kalmalı). Staging için CANONICAL_SITE_URL.
+    canonical_site_url: str = "https://noryaai.com"
     # QR doğrulama linki için backend adresi. Boşsa PDF isteğinin geldiği host kullanılır. Örn: https://api.norya.com
     backend_public_url: str = ""
     # PWA push bildirimleri (opsiyonel): VAPID public key (base64url). Boşsa push aboneliği alınmaz.
