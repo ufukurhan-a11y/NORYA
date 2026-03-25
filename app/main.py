@@ -98,6 +98,10 @@ from app.landing_upload_i18n import get_upload_landing_content, get_upload_landi
 from app.landing_explained_i18n import get_explained_landing_content, get_explained_landing_slug, EXPLAINED_SLUGS
 from app.landing_sample_reports_i18n import get_sample_reports_landing_content, get_sample_reports_landing_slug, SAMPLE_REPORTS_SLUGS
 from app.landing_multilingual_i18n import get_multilingual_landing_content, get_multilingual_landing_slug, MULTILINGUAL_SLUGS
+from app.faq_i18n import get_faq_content, get_faq_slug, FAQ_SLUGS
+from app.guide_cbc_i18n import get_cbc_guide_content, get_cbc_guide_slug, CBC_GUIDE_SLUGS
+from app.guide_germany_i18n import get_germany_guide_content, get_germany_guide_slug, GERMANY_GUIDE_SLUGS
+from app.tools_i18n import get_egfr_content, get_homa_ir_content
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.pricing_page_i18n import PRICING_HREFLANG_LANGS, enrich_pricing_context
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_blog_icon_paths, get_related_articles, iter_all_article_paths, list_articles_for_lang
@@ -678,6 +682,8 @@ class ForceHTTPSRedirectMiddleware:
 
 app.add_middleware(ForceHTTPSRedirectMiddleware)
 
+
+
 app.include_router(auth_router)
 app.include_router(auth_router, prefix="/v1")  # Geriye uyumlu: /v1/auth/login vb.
 app.include_router(institution_api_router)
@@ -743,34 +749,25 @@ def landing_de(request: Request):
     return _landing_response("de", request)
 
 
-@app.get("/de/faq", response_class=HTMLResponse)
-def faq_de(request: Request):
-    """
-    Almanca FAQ sayfası: /de/faq
-    Landing'deki DE FAQ içeriğini tek sayfada gösterir.
-    """
-    lang = "de"
+_OG_LOCALE_FAQ = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "es": "es_ES", "fr": "fr_FR", "it": "it_IT", "he": "he_IL", "hi": "hi_IN", "ar": "ar_SA"}
+
+def _render_faq(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
-    t = get_landing_ui(lang)
-    meta_landing = get_landing_meta(lang)
-    meta = {
-        "meta_title": meta_landing.get("faq_title") or meta_landing.get("meta_title", f"{BRAND_NAME} FAQ"),
-        "meta_description": meta_landing.get("faq_subtitle") or meta_landing.get("meta_description", ""),
-    }
-    canonical_url = f"{base_url}/de/faq"
-    og_image = f"{base_url}/static/images/og-default.png"
-    faq_entities = []
-    for i in range(1, 7):
-        q = t.get(f"faq_q{i}")
-        a = t.get(f"faq_a{i}")
-        if q and a:
-            faq_entities.append(
-                {"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}}
-            )
+    faq_data = get_faq_content(lang)
+    slug = get_faq_slug(lang)
+    meta = {"meta_title": faq_data["meta_title"], "meta_description": faq_data["meta_description"]}
+    og_image = f"{base_url}/static/images/og-faq.png"
+    faq_entities = [
+        {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}}
+        for f in faq_data.get("faqs", [])
+    ]
     faq_schema_json = json.dumps(
         {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities},
         ensure_ascii=False,
     ) if faq_entities else None
+    hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_faq_slug(la)}"} for la in FAQ_SLUGS]
+    hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{FAQ_SLUGS['en']}"})
+    t = faq_data
     return templates.TemplateResponse(
         "faq.html",
         {
@@ -778,13 +775,50 @@ def faq_de(request: Request):
             "lang": lang,
             "t": t,
             "meta": meta,
-            "canonical_url": canonical_url,
-            "og_locale": "de_DE",
+            "canonical_url": f"{base_url}/{lang}/{slug}",
+            "og_locale": _OG_LOCALE_FAQ.get(lang, "en_US"),
             "og_image": og_image,
             "base_url": base_url,
             "faq_schema_json": faq_schema_json,
+            "hreflang_links": hreflang,
         },
     )
+
+@app.get("/en/faq", response_class=HTMLResponse)
+def faq_en(request: Request):
+    return _render_faq(request, "en")
+
+@app.get("/tr/sss", response_class=HTMLResponse)
+def faq_tr(request: Request):
+    return _render_faq(request, "tr")
+
+@app.get("/de/faq", response_class=HTMLResponse)
+def faq_de(request: Request):
+    return _render_faq(request, "de")
+
+@app.get("/es/faq", response_class=HTMLResponse)
+def faq_es(request: Request):
+    return _render_faq(request, "es")
+
+@app.get("/fr/faq", response_class=HTMLResponse)
+def faq_fr(request: Request):
+    return _render_faq(request, "fr")
+
+@app.get("/it/faq", response_class=HTMLResponse)
+def faq_it(request: Request):
+    return _render_faq(request, "it")
+
+@app.get("/he/faq", response_class=HTMLResponse)
+def faq_he(request: Request):
+    return _render_faq(request, "he")
+
+@app.get("/hi/faq", response_class=HTMLResponse)
+def faq_hi(request: Request):
+    return _render_faq(request, "hi")
+
+@app.get("/ar/faq", response_class=HTMLResponse)
+def faq_ar(request: Request):
+    return _render_faq(request, "ar")
 
 
 @app.get("/it", response_class=HTMLResponse)
@@ -5454,6 +5488,12 @@ def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X
 
 
 # ——— SEO landing pages (high-intent queries). Must be registered before /{lang}/{path:path}. ———
+SEO_LANDING_OG_IMAGES = {
+    "hemogram": "og-hemogram.png",
+    "hemogram-sonucu": "og-hemogram.png",
+    "ai-blood-test-analyzer": "og-ai-analyzer.png",
+}
+
 def _render_seo_landing(request: Request, lang: str, slug: str) -> HTMLResponse:
     """Render SEO landing template for (lang, slug). Call only when (lang, slug) is a valid SEO route."""
     content = get_seo_landing_content(lang, slug)
@@ -5465,6 +5505,8 @@ def _render_seo_landing(request: Request, lang: str, slug: str) -> HTMLResponse:
     hreflang_alternates = get_seo_landing_hreflang(lang, slug, base_url)
     og_locale = SEO_OG_LOCALE_MAP.get(lang, "en_US")
     related_links = get_related_links(lang, base_url)
+    og_image_file = SEO_LANDING_OG_IMAGES.get(slug, "og-default.png")
+    og_image = f"{base_url}/static/images/{og_image_file}"
     return templates.TemplateResponse(
         "seo_landing.html",
         {
@@ -5478,6 +5520,7 @@ def _render_seo_landing(request: Request, lang: str, slug: str) -> HTMLResponse:
             "og_locale": og_locale,
             "base_url": base_url,
             "related_links": related_links,
+            "og_image": og_image,
         },
     )
 
@@ -5722,6 +5765,7 @@ def _render_upload_landing(request: Request, lang: str):
     t = get_upload_landing_content(lang)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_upload_landing_slug(la)}"} for la in UPLOAD_SLUGS]
     hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{UPLOAD_SLUGS['en']}"})
+    og_image = f"{base_url}/static/images/og-upload-blood-test.png"
     return templates.TemplateResponse("upload_landing.html", {
         "request": request,
         "lang": lang,
@@ -5729,6 +5773,7 @@ def _render_upload_landing(request: Request, lang: str):
         "base_url": base_url,
         "canonical_url": f"{base_url}/{lang}/{slug}",
         "hreflang_links": hreflang,
+        "og_image": og_image,
     })
 
 @app.get("/en/upload-blood-test-results", response_class=HTMLResponse)
@@ -5774,6 +5819,7 @@ def _render_explained_landing(request: Request, lang: str):
     t = get_explained_landing_content(lang)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_explained_landing_slug(la)}"} for la in EXPLAINED_SLUGS]
     hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{EXPLAINED_SLUGS['en']}"})
+    og_image = f"{base_url}/static/images/og-blood-test-explained.png"
     return templates.TemplateResponse("explained_landing.html", {
         "request": request,
         "lang": lang,
@@ -5781,6 +5827,7 @@ def _render_explained_landing(request: Request, lang: str):
         "base_url": base_url,
         "canonical_url": f"{base_url}/{lang}/{slug}",
         "hreflang_links": hreflang,
+        "og_image": og_image,
     })
 
 @app.get("/en/blood-test-results-explained", response_class=HTMLResponse)
@@ -5820,212 +5867,58 @@ def landing_ar_explained(request: Request):
     return _render_explained_landing(request, "ar")
 
 
-@app.get("/en/guides/how-to-read-cbc", response_class=HTMLResponse)
-def guide_en_how_to_read_cbc(request: Request):
+def _render_cbc_guide(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
-    t = {
-        "meta_title": "How to Read a CBC \u2014 Complete Blood Count Explained | NoryaAI",
-        "meta_description": "Learn how to read a CBC (complete blood count) report. Understand WBC, RBC, hemoglobin, hematocrit, platelets, and indices \u2014 with reference ranges explained in plain language.",
-        "badge": "Lab Guide",
-        "hero_title": "How to Read a CBC",
-        "hero_sub": "A complete blood count is one of the most common blood tests ordered worldwide. This guide walks through each component \u2014 what it measures, what the abbreviations mean, and how to make sense of the numbers on your report.",
-        "sections": [
-            {
-                "title": "What is a CBC?",
-                "intro": "A complete blood count (CBC) measures the cells that make up your blood: red cells, white cells, and platelets. Doctors use it as a general screening tool to check for infections, anemia, clotting issues, and overall health. It is often part of a routine physical or a first step when investigating symptoms like fatigue, bruising, or recurring infections.",
-                "paragraphs": [
-                    "Your CBC report typically includes 10\u201320 individual values. Each one describes a different aspect of your blood \u2014 how many cells you have, how large they are, how much hemoglobin they carry, and how varied they are in size.",
-                    "The sections below break these down into groups so they are easier to understand.",
-                ],
-            },
-            {
-                "title": "White blood cells (WBC)",
-                "intro": "White blood cells are part of your immune system. A CBC measures their total count and sometimes breaks them into subtypes (a differential).",
-                "markers": [
-                    {
-                        "name": "White blood cell count",
-                        "abbr": "WBC",
-                        "desc": "The total number of white blood cells in a given volume of blood. A high count may suggest infection or inflammation; a low count may indicate a weakened immune response. Many temporary factors \u2014 stress, exercise, medications \u2014 can shift this number.",
-                        "range": "4,500\u201311,000 cells/\u00b5L",
-                    },
-                    {
-                        "name": "Neutrophils",
-                        "abbr": "NEUT",
-                        "desc": "The most common type of white blood cell. Neutrophils are usually the first responders to bacterial infections. Their percentage and absolute count are reported separately.",
-                        "range": "40\u201370% of WBC",
-                    },
-                    {
-                        "name": "Lymphocytes",
-                        "abbr": "LYMPH",
-                        "desc": "Involved in viral defense and long-term immunity. A rise in lymphocytes can occur with viral infections; a decrease may appear in certain immune conditions.",
-                        "range": "20\u201340% of WBC",
-                    },
-                ],
-            },
-            {
-                "title": "Red blood cells, hemoglobin, and hematocrit",
-                "intro": "Red blood cells carry oxygen from your lungs to the rest of your body. Several CBC values describe their count, their oxygen-carrying capacity, and their proportion in your blood.",
-                "markers": [
-                    {
-                        "name": "Red blood cell count",
-                        "abbr": "RBC",
-                        "desc": "The total number of red blood cells per volume of blood. Values vary by sex and age. A low count is one sign that may be associated with anemia; a high count may be seen in dehydration or other conditions.",
-                        "range": "4.5\u20135.5 million cells/\u00b5L (men) \u00b7 4.0\u20135.0 (women)",
-                    },
-                    {
-                        "name": "Hemoglobin",
-                        "abbr": "HGB / Hb",
-                        "desc": "The protein inside red blood cells that binds oxygen. Hemoglobin is one of the most commonly checked values in a CBC. Low hemoglobin is a key marker associated with anemia.",
-                        "range": "13.5\u201317.5 g/dL (men) \u00b7 12.0\u201316.0 g/dL (women)",
-                    },
-                    {
-                        "name": "Hematocrit",
-                        "abbr": "HCT",
-                        "desc": "The percentage of your blood volume that is made up of red blood cells. It rises with dehydration and falls with blood loss or reduced red cell production.",
-                        "range": "38.3\u201348.6% (men) \u00b7 35.5\u201344.9% (women)",
-                    },
-                ],
-            },
-            {
-                "title": "Platelets",
-                "intro": "Platelets are small cell fragments that help your blood clot. A CBC reports their count and sometimes their average size.",
-                "markers": [
-                    {
-                        "name": "Platelet count",
-                        "abbr": "PLT",
-                        "desc": "The number of platelets per volume of blood. A low count (thrombocytopenia) can increase bleeding risk; a high count (thrombocytosis) may be reactive or, less commonly, related to a bone marrow condition.",
-                        "range": "150,000\u2013400,000 /\u00b5L",
-                    },
-                    {
-                        "name": "Mean platelet volume",
-                        "abbr": "MPV",
-                        "desc": "The average size of your platelets. Larger platelets are often younger and may indicate that your body is producing them faster to replace ones being used up.",
-                        "range": "7.5\u201312.0 fL",
-                    },
-                ],
-            },
-            {
-                "title": "Red cell indices",
-                "intro": "Indices describe the size and hemoglobin content of your red blood cells. They help characterize the type of anemia if one is present.",
-                "markers": [
-                    {
-                        "name": "Mean corpuscular volume",
-                        "abbr": "MCV",
-                        "desc": "The average size of a single red blood cell. A high MCV (macrocytic) can be associated with B12 or folate issues; a low MCV (microcytic) can be associated with iron-related conditions.",
-                        "range": "80\u2013100 fL",
-                    },
-                    {
-                        "name": "Mean corpuscular hemoglobin",
-                        "abbr": "MCH",
-                        "desc": "The average amount of hemoglobin in a single red blood cell. It usually tracks with MCV \u2014 small cells carry less hemoglobin, large cells carry more.",
-                        "range": "27\u201333 pg",
-                    },
-                    {
-                        "name": "Mean corpuscular hemoglobin concentration",
-                        "abbr": "MCHC",
-                        "desc": "The average concentration of hemoglobin within red blood cells. Low MCHC suggests the cells are paler than usual (hypochromic).",
-                        "range": "32\u201336 g/dL",
-                    },
-                    {
-                        "name": "Red cell distribution width",
-                        "abbr": "RDW",
-                        "desc": "Measures how much variation there is in the size of your red blood cells. A high RDW means your cells vary more in size, which can be an early sign that something is affecting red cell production.",
-                        "range": "11.5\u201314.5%",
-                    },
-                ],
-            },
-            {
-                "title": "What reference ranges actually mean",
-                "intro": None,
-                "paragraphs": [
-                    "Reference ranges represent the middle 95% of results from a healthy population tested by that specific lab. They are not absolute cutoffs for health or disease. A value slightly outside the range does not automatically mean something is wrong, and a value inside the range does not guarantee everything is fine.",
-                    "Ranges vary between labs because of differences in equipment, reagents, and the population samples used to establish them. Age, sex, altitude, hydration, and even the time of day can influence your results. This is why comparing your numbers against a single \u201cnormal\u201d value from the internet can be misleading.",
-                    "The most useful way to interpret your CBC is in context: how do your values compare to your own previous results, and what does your doctor think given your symptoms and history?",
-                ],
-            },
-            {
-                "title": "Why one result alone is not the whole picture",
-                "intro": None,
-                "points": [
-                    {
-                        "title": "Values interact with each other",
-                        "desc": "A low hemoglobin means more when MCV is also low (suggesting a possible iron-related cause) than when MCV is normal. Individual numbers gain meaning from the pattern they form together.",
-                    },
-                    {
-                        "title": "Temporary factors matter",
-                        "desc": "Dehydration, a recent meal, intense exercise, stress, or medication can shift your numbers for hours or days. One slightly out-of-range result is often repeated before any conclusion is drawn.",
-                    },
-                    {
-                        "title": "Trends are more informative than snapshots",
-                        "desc": "A hemoglobin of 12.0 g/dL means something different if your last three results were 14.5, 13.8, and 12.8 than if they have been stable around 12.0 for years.",
-                    },
-                    {
-                        "title": "Clinical context is essential",
-                        "desc": "Your doctor interprets your CBC alongside your symptoms, medical history, physical exam, and other tests. A lab report alone \u2014 without that context \u2014 can be misleading.",
-                    },
-                ],
-            },
-            {
-                "title": "When people want a clearer summary",
-                "intro": None,
-                "paragraphs": [
-                    "Many people receive a CBC report and feel lost. The abbreviations are unfamiliar, the reference ranges are hard to compare, and there is no plain-language explanation included.",
-                    "Some look up individual values online, but that gives scattered, generic answers without showing how the numbers relate to each other. Others wait for their doctor appointment, which may be days or weeks away.",
-                    "A structured tool like NoryaAI can help bridge that gap. It reads your report, organizes the values into categories, flags anything outside the reference range, and provides plain-language context \u2014 all in a single, downloadable summary you can review on your own time or bring to your next appointment.",
-                    "It does not replace your doctor. But it can make the conversation more productive.",
-                ],
-            },
-        ],
-        "mid_cta_title": "Have a CBC report you want to understand?",
-        "mid_cta_sub": "Upload it and get a structured summary with plain-language explanations, flagged markers, and a health score.",
-        "mid_cta_primary": "Upload your report",
-        "mid_cta_secondary": "See a sample report",
-        "faqs": [
-            {
-                "q": "What does CBC stand for?",
-                "a": "CBC stands for complete blood count. It is a routine blood test that measures the cells in your blood \u2014 red blood cells, white blood cells, and platelets \u2014 along with related values like hemoglobin, hematocrit, and cell indices.",
-            },
-            {
-                "q": "How often should I get a CBC?",
-                "a": "There is no universal schedule. Many doctors include a CBC in annual checkups. It may be ordered more frequently if you have symptoms, a chronic condition, or are taking medication that affects blood cell counts. Your doctor will recommend the right frequency for you.",
-            },
-            {
-                "q": "What does it mean if one value is slightly out of range?",
-                "a": "A single value slightly outside the reference range is common and not always a cause for concern. Temporary factors like hydration, exercise, or stress can shift your numbers. Doctors typically look at the overall pattern and may repeat the test before drawing conclusions.",
-            },
-            {
-                "q": "Can NoryaAI interpret my CBC results?",
-                "a": "NoryaAI can read your CBC report, organize each marker with its reference range, flag values outside normal limits, and provide plain-language explanations. It does not diagnose conditions \u2014 it structures your results so they are easier to understand.",
-            },
-            {
-                "q": "Is this guide a substitute for medical advice?",
-                "a": "No. This guide is educational and intended to help you understand the components of a CBC report. It does not diagnose or recommend treatment. Always consult a qualified healthcare professional for medical decisions about your results.",
-            },
-            {
-                "q": "Why do reference ranges differ between labs?",
-                "a": "Labs use different equipment, reagents, and population samples to establish their ranges. Factors like age, sex, and geographic location also influence what is considered \u201cnormal.\u201d This is why the same result may be flagged at one lab but considered within range at another.",
-            },
-        ],
-        "cta_title": "Ready to make sense of your CBC?",
-        "cta_sub": "Upload your report and get a structured, easy-to-read summary \u2014 in minutes.",
-        "cta_primary": "Upload and analyze now",
-        "cta_secondary": "View pricing",
-        "internal_links": [
-            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
-            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
-            {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
-            {"label": "Pricing", "path": "/pricing"},
-            {"label": "How it works", "path": "/how-it-works"},
-            {"label": "Blog", "path": "/en/blog"},
-        ],
-    }
+    slug = get_cbc_guide_slug(lang)
+    t = get_cbc_guide_content(lang)
+    hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_cbc_guide_slug(la)}"} for la in CBC_GUIDE_SLUGS]
+    hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{CBC_GUIDE_SLUGS['en']}"})
+    og_image = f"{base_url}/static/images/og-cbc-guide.png"
     return templates.TemplateResponse("guide_landing.html", {
         "request": request,
-        "lang": "en",
+        "lang": lang,
         "t": t,
         "base_url": base_url,
-        "canonical_url": f"{base_url}/en/guides/how-to-read-cbc",
+        "canonical_url": f"{base_url}/{lang}/{slug}",
+        "hreflang_links": hreflang,
+        "og_image": og_image,
     })
+
+@app.get("/en/guides/how-to-read-cbc", response_class=HTMLResponse)
+def guide_en_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "en")
+
+@app.get("/tr/rehber/hemogram-nasil-okunur", response_class=HTMLResponse)
+def guide_tr_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "tr")
+
+@app.get("/de/ratgeber/blutbild-lesen", response_class=HTMLResponse)
+def guide_de_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "de")
+
+@app.get("/es/guias/como-leer-hemograma", response_class=HTMLResponse)
+def guide_es_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "es")
+
+@app.get("/fr/guides/comment-lire-nfs", response_class=HTMLResponse)
+def guide_fr_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "fr")
+
+@app.get("/it/guide/come-leggere-emocromo", response_class=HTMLResponse)
+def guide_it_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "it")
+
+@app.get("/he/guides/how-to-read-cbc", response_class=HTMLResponse)
+def guide_he_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "he")
+
+@app.get("/hi/guides/how-to-read-cbc", response_class=HTMLResponse)
+def guide_hi_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "hi")
+
+@app.get("/ar/guides/how-to-read-cbc", response_class=HTMLResponse)
+def guide_ar_how_to_read_cbc(request: Request):
+    return _render_cbc_guide(request, "ar")
 
 
 @app.get("/en/tools/unit-converter", response_class=HTMLResponse)
@@ -6091,12 +5984,39 @@ def tool_en_unit_converter(request: Request):
     })
 
 
+@app.get("/en/tools/egfr-calculator", response_class=HTMLResponse)
+def tool_en_egfr(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = get_egfr_content("en")
+    return templates.TemplateResponse("tool_egfr.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/tools/egfr-calculator",
+    })
+
+
+@app.get("/en/tools/homa-ir-calculator", response_class=HTMLResponse)
+def tool_en_homa_ir(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = get_homa_ir_content("en")
+    return templates.TemplateResponse("tool_homa_ir.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/tools/homa-ir-calculator",
+    })
+
+
 def _render_sample_reports_landing(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
     slug = get_sample_reports_landing_slug(lang)
     t = get_sample_reports_landing_content(lang)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_sample_reports_landing_slug(la)}"} for la in SAMPLE_REPORTS_SLUGS]
     hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{SAMPLE_REPORTS_SLUGS['en']}"})
+    og_image = f"{base_url}/static/images/og-sample-reports.png"
     return templates.TemplateResponse("sample_reports_landing.html", {
         "request": request,
         "lang": lang,
@@ -6104,6 +6024,7 @@ def _render_sample_reports_landing(request: Request, lang: str):
         "base_url": base_url,
         "canonical_url": f"{base_url}/{lang}/{slug}",
         "hreflang_links": hreflang,
+        "og_image": og_image,
     })
 
 @app.get("/en/sample-blood-test-reports", response_class=HTMLResponse)
@@ -6193,121 +6114,34 @@ def landing_hi_multilingual(request: Request):
 def landing_ar_multilingual(request: Request):
     return _render_multilingual_landing(request, "ar")
 
-@app.get("/en/blood-test-results-germany", response_class=HTMLResponse)
-def landing_en_blood_test_germany(request: Request):
+def _render_germany_guide(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
-    t = {
-        "meta_title": "Understanding Blood Test Results from Germany | NoryaAI",
-        "meta_description": "Got a Blutbild or Laborwerte report from a German lab? Learn how to read German blood test results, common abbreviations, and how to get a structured English summary.",
-        "badge": "Country Guide \u00b7 Germany",
-        "hero_title": "Understanding Blood Test Results from Germany",
-        "hero_sub": "If you have received a Blutbild, gro\u00dfes Blutbild, or Laborwerte report from a German lab, this guide explains what the abbreviations mean, how German reference ranges work, and how to get a clear summary in English.",
-        "sections": [
-            {
-                "title": "How blood tests work in Germany",
-                "intro": None,
-                "paragraphs": [
-                    "In Germany, blood tests are typically ordered by your Hausarzt (family doctor) or a specialist and processed by certified labs (Labore). Results are usually returned as a printed or digital Laborbericht \u2014 a structured document listing each measured parameter, its value, the unit, and the reference range.",
-                    "Most reports are written entirely in German, using abbreviations and terminology that can be difficult to navigate if German is not your first language. Even fluent speakers sometimes struggle with the medical vocabulary.",
-                    "If you are an expat, international student, or someone who moved to Germany recently, understanding your Laborwerte can feel unnecessarily complicated \u2014 especially when you need to discuss the results with a doctor or share them with a physician in your home country.",
-                ],
-            },
-            {
-                "title": "Common German blood test abbreviations",
-                "intro": "German lab reports use abbreviations that differ from the English-language conventions you may be used to. Here are the most frequently encountered ones.",
-                "markers": [
-                    {"name": "Kleines Blutbild", "abbr": "KBB", "desc": "The equivalent of a CBC (complete blood count). Includes red cells, white cells, hemoglobin, hematocrit, and platelets.", "range": None},
-                    {"name": "Gro\u00dfes Blutbild", "abbr": "GBB", "desc": "An extended blood count that adds a white cell differential (neutrophils, lymphocytes, monocytes, eosinophils, basophils) to the kleines Blutbild.", "range": None},
-                    {"name": "Erythrozyten", "abbr": "ERY", "desc": "Red blood cells (RBC). Measured in millions per microliter (Mio/\u00b5L or T/L).", "range": "4.1\u20135.9 Mio/\u00b5L (men) \u00b7 3.9\u20135.4 (women)"},
-                    {"name": "Leukozyten", "abbr": "LEUK", "desc": "White blood cells (WBC). Reported in thousands per microliter (Tsd/\u00b5L or G/L).", "range": "4.0\u201310.0 Tsd/\u00b5L"},
-                    {"name": "H\u00e4moglobin", "abbr": "HB / HGB", "desc": "The oxygen-carrying protein in red blood cells. German labs typically report in g/dL, the same unit used in the US.", "range": "13.5\u201317.5 g/dL (men) \u00b7 12.0\u201316.0 (women)"},
-                    {"name": "H\u00e4matokrit", "abbr": "HKT / HCT", "desc": "The percentage of blood volume occupied by red blood cells.", "range": "40\u201354% (men) \u00b7 36\u201348% (women)"},
-                    {"name": "Thrombozyten", "abbr": "THRO / PLT", "desc": "Platelets. Reported in thousands per microliter (Tsd/\u00b5L).", "range": "150\u2013400 Tsd/\u00b5L"},
-                    {"name": "Blutzucker (n\u00fcchtern)", "abbr": "GLU", "desc": "Fasting blood glucose. German labs commonly use mg/dL, though some use mmol/L.", "range": "70\u2013100 mg/dL (fasting)"},
-                    {"name": "Kreatinin", "abbr": "KREA", "desc": "Creatinine \u2014 a kidney function marker. Usually reported in mg/dL in Germany.", "range": "0.7\u20131.3 mg/dL (men) \u00b7 0.6\u20131.1 (women)"},
-                    {"name": "Leberwerte", "abbr": "GOT / GPT / GGT", "desc": "Liver enzymes. GOT is AST, GPT is ALT, GGT is gamma-GT. These are the most commonly checked liver markers in German bloodwork.", "range": "GOT <50 U/L \u00b7 GPT <50 U/L \u00b7 GGT <60 U/L (men)"},
-                ],
-            },
-            {
-                "title": "Units and reference ranges in German labs",
-                "intro": None,
-                "paragraphs": [
-                    "German labs generally use the same conventional units as US labs for most markers (mg/dL for glucose and creatinine, g/dL for hemoglobin). However, some labs report in SI units (mmol/L for glucose, \u00b5mol/L for creatinine), especially in academic hospital settings.",
-                    "Reference ranges (Referenzbereiche or Normwerte) can differ slightly between German labs, just as they do worldwide. Your report will typically show the lab\u2019s own range next to each value. Values outside the range are often marked with an arrow (\u2191 for high, \u2193 for low) or printed in bold.",
-                    "If you are comparing results from a German lab with previous results from another country, pay close attention to the units. NoryaAI\u2019s free unit converter can help you translate between measurement systems.",
-                ],
-            },
-            {
-                "title": "What makes German lab reports different",
-                "intro": None,
-                "points": [
-                    {"title": "Language barrier", "desc": "All parameter names, explanations, and doctor comments are in German. Even common terms like Schilddr\u00fcse (thyroid), Nierenwerte (kidney values), or Blutfettwerte (blood lipids) can be hard to look up without medical context."},
-                    {"title": "GOT/GPT instead of AST/ALT", "desc": "German labs traditionally use GOT (Glutamat-Oxalacetat-Transaminase) and GPT (Glutamat-Pyruvat-Transaminase) instead of the international AST/ALT nomenclature. Both refer to the same liver enzymes."},
-                    {"title": "Structured Laborbericht format", "desc": "German lab reports are typically well-organized with clear columns for Messwert (measured value), Einheit (unit), and Referenzbereich (reference range). But the medical terminology can still be opaque."},
-                    {"title": "Krankenkasse context", "desc": "In the German healthcare system, certain tests are covered by public insurance (gesetzliche Krankenversicherung) and others require private payment (IGeL). This affects which panels appear on your report and how results are communicated to you."},
-                ],
-            },
-            {
-                "title": "How to get your German results explained in English",
-                "intro": None,
-                "paragraphs": [
-                    "If you have a Laborbericht from a German lab and want to understand it in English, you have a few options. You can ask your doctor to walk you through the results \u2014 but appointments are often short, and the explanation may still be in German.",
-                    "You can try translating the report yourself, but general translators often miss medical nuance. \u201cErh\u00f6ht\u201d means elevated, not just \u201cincreased,\u201d and \u201cauff\u00e4llig\u201d means \u201cabnormal / notable,\u201d not just \u201cconspicuous.\u201d",
-                    "NoryaAI offers a different approach: upload your German lab report (PDF or photo), and it extracts the values, matches them to reference ranges, and generates a structured summary in English (or any of 9+ languages). The output includes a health score, flagged markers, plain-language explanations, and a downloadable PDF you can bring to your next appointment \u2014 whether that is in Germany or your home country.",
-                ],
-            },
-        ],
-        "mid_cta_title": "Have a German lab report you want to understand?",
-        "mid_cta_sub": "Upload your Blutbild or Laborwerte and get a structured English summary with reference ranges, flagged markers, and a health score.",
-        "mid_cta_primary": "Upload your report",
-        "mid_cta_secondary": "See a sample report",
-        "faqs": [
-            {
-                "q": "Can I upload a lab report written in German?",
-                "a": "Yes. NoryaAI can read lab reports in German (and other supported languages). It extracts the values, units, and reference ranges regardless of the document language and generates your structured summary in whichever language you choose.",
-            },
-            {
-                "q": "What is the difference between a kleines and gro\u00dfes Blutbild?",
-                "a": "A kleines Blutbild (small blood count) is equivalent to a standard CBC: red cells, white cells, hemoglobin, hematocrit, and platelets. A gro\u00dfes Blutbild (large blood count) adds a white cell differential, breaking WBC into neutrophils, lymphocytes, monocytes, eosinophils, and basophils.",
-            },
-            {
-                "q": "Why does my German report say GOT/GPT instead of AST/ALT?",
-                "a": "German labs traditionally use the older nomenclature: GOT (Glutamat-Oxalacetat-Transaminase) for AST and GPT (Glutamat-Pyruvat-Transaminase) for ALT. They measure the same liver enzymes. NoryaAI recognizes both naming conventions.",
-            },
-            {
-                "q": "Do German labs use different units?",
-                "a": "Most German labs use the same conventional units as US labs (mg/dL, g/dL, U/L). Some academic hospitals use SI units (mmol/L, \u00b5mol/L). Your report will show which units are used. NoryaAI handles both systems automatically.",
-            },
-            {
-                "q": "Can I share my English report with my German doctor?",
-                "a": "Yes. The NoryaAI report includes a structured PDF with reference ranges, flagged markers, and a health score. You can also generate the report in German if your doctor prefers. The format is designed to be useful in any clinical setting.",
-            },
-            {
-                "q": "Is this a certified medical translation?",
-                "a": "No. NoryaAI provides structured, educational explanations of your lab values. It does not provide certified medical translations. For official or legal purposes, consult a certified medical translator. Always discuss your results with a qualified healthcare professional.",
-            },
-        ],
-        "cta_title": "Ready to understand your German lab report?",
-        "cta_sub": "Upload your Blutbild or Laborwerte and get a clear, structured summary in English \u2014 in minutes.",
-        "cta_primary": "Upload and analyze now",
-        "cta_secondary": "View pricing",
-        "internal_links": [
-            {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
-            {"label": "Understand Results in Your Language", "path": "/en/understand-blood-test-results-in-your-language"},
-            {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
-            {"label": "Unit Converter", "path": "/en/tools/unit-converter"},
-            {"label": "Blutwerte verstehen (DE)", "path": "/de/blutwerte-verstehen"},
-            {"label": "Pricing", "path": "/pricing"},
-            {"label": "Blog", "path": "/en/blog"},
-        ],
-    }
+    slug = get_germany_guide_slug(lang)
+    t = get_germany_guide_content(lang)
+    hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_germany_guide_slug(la)}"} for la in GERMANY_GUIDE_SLUGS]
+    hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{GERMANY_GUIDE_SLUGS['en']}"})
+    og_image = f"{base_url}/static/images/og-default.png"
     return templates.TemplateResponse("guide_landing.html", {
         "request": request,
-        "lang": "en",
+        "lang": lang,
         "t": t,
         "base_url": base_url,
-        "canonical_url": f"{base_url}/en/blood-test-results-germany",
+        "canonical_url": f"{base_url}/{lang}/{slug}",
+        "hreflang_links": hreflang,
+        "og_image": og_image,
     })
+
+@app.get("/en/blood-test-results-germany", response_class=HTMLResponse)
+def landing_en_blood_test_germany(request: Request):
+    return _render_germany_guide(request, "en")
+
+@app.get("/de/blutwerte-aus-deutschland", response_class=HTMLResponse)
+def landing_de_blood_test_germany(request: Request):
+    return _render_germany_guide(request, "de")
+
+@app.get("/tr/almanya-kan-tahlili-sonuclari", response_class=HTMLResponse)
+def landing_tr_blood_test_germany(request: Request):
+    return _render_germany_guide(request, "tr")
 
 
 @app.get("/en/blood-test-results", response_class=HTMLResponse)
@@ -6689,7 +6523,8 @@ def sitemap_xml(request: Request):
     add(f"{base_url}/science", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/security", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/technology", priority="0.6", changefreq="monthly", lastmod=today)
-    add(f"{base_url}/de/faq", priority="0.7", changefreq="monthly", lastmod=today)
+    for _fq_lang, _fq_slug in FAQ_SLUGS.items():
+        add(f"{base_url}/{_fq_lang}/{_fq_slug}", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/kurumsal", lastmod=today)
     for page in LEGAL_PAGES:
         add(f"{base_url}/legal/{page}", priority="0.5", lastmod=today)
@@ -6706,13 +6541,17 @@ def sitemap_xml(request: Request):
         add(f"{base_url}/{_ul_lang}/{_ul_slug}", priority="0.8", changefreq="monthly", lastmod=today)
     for _el_lang, _el_slug in EXPLAINED_SLUGS.items():
         add(f"{base_url}/{_el_lang}/{_el_slug}", priority="0.8", changefreq="monthly", lastmod=today)
-    add(f"{base_url}/en/guides/how-to-read-cbc", priority="0.7", changefreq="monthly", lastmod=today)
+    for _cbc_lang, _cbc_slug in CBC_GUIDE_SLUGS.items():
+        add(f"{base_url}/{_cbc_lang}/{_cbc_slug}", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/tools/unit-converter", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/tools/egfr-calculator", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/tools/homa-ir-calculator", priority="0.7", changefreq="monthly", lastmod=today)
     for _sr_lang, _sr_slug in SAMPLE_REPORTS_SLUGS.items():
         add(f"{base_url}/{_sr_lang}/{_sr_slug}", priority="0.8", changefreq="monthly", lastmod=today)
     for _ml_lang, _ml_slug in MULTILINGUAL_SLUGS.items():
         add(f"{base_url}/{_ml_lang}/{_ml_slug}", priority="0.8", changefreq="monthly", lastmod=today)
-    add(f"{base_url}/en/blood-test-results-germany", priority="0.7", changefreq="monthly", lastmod=today)
+    for _gg_lang, _gg_slug in GERMANY_GUIDE_SLUGS.items():
+        add(f"{base_url}/{_gg_lang}/{_gg_slug}", priority="0.7", changefreq="monthly", lastmod=today)
 
     # Blog listeleri: /en/blog, /de/blog, /it/blog, /fr/blog dahil (BLOG_LANGS_PREMIUM)
     for lang in BLOG_LANGS_PREMIUM:

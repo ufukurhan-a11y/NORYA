@@ -81,6 +81,8 @@ module.exports = {
         "secondary-container": "#cadaff",
         "secondary-fixed": "#d7e2ff",
         "on-secondary-fixed": "#091b37",
+        "primary-fixed": "#7df5f4",
+        "primary-fixed-dim": "#5ed9d7",
         norya: {
           brand: "#e07a5f",
           "brand-hover": "#c9684a",

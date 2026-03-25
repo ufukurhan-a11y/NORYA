@@ -19,6 +19,8 @@
   {% if og_image %}<meta name="twitter:image" content="{{ og_image }}" />{% endif %}
   <meta name="theme-color" content="#0EA5A4" />
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+  {% if hreflang_links %}{% for hl in hreflang_links %}
+  <link rel="alternate" hreflang="{{ hl.lang }}" href="{{ hl.url }}" />{% endfor %}{% endif %}
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
@@ -65,11 +67,11 @@
       <div class="max-w-3xl mx-auto">
         <p class="text-sm font-semibold text-norya-teal mb-2 uppercase tracking-wide">{{ t.faq_label or "FAQ" }}</p>
         <h1 class="text-3xl sm:text-4xl font-bold text-slate-900 mb-3 leading-tight">
-          {{ t.faq_title }}
+          {{ t.page_title or t.faq_title }}
         </h1>
-        {% if t.faq_subtitle %}
+        {% if t.page_sub or t.faq_subtitle %}
         <p class="text-slate-600 text-base sm:text-lg max-w-2xl">
-          {{ t.faq_subtitle }}
+          {{ t.page_sub or t.faq_subtitle }}
         </p>
         {% endif %}
       </div>
@@ -77,20 +79,25 @@
 
     <section class="py-10 sm:py-16 px-4 bg-slate-50">
       <div class="max-w-3xl mx-auto space-y-4">
-        {% for i in range(1, 7) %}
-          {% set q = t.get("faq_q" ~ i) %}
-          {% set a = t.get("faq_a" ~ i) %}
-          {% if q and a %}
+        {% if t.faqs %}
+          {% for faq in t.faqs %}
           <article class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
-            <h2 class="font-semibold text-slate-900 mb-2 text-base sm:text-lg">
-              {{ q }}
-            </h2>
-            <p class="text-slate-700 text-sm sm:text-base leading-relaxed">
-              {{ a }}
-            </p>
+            <h2 class="font-semibold text-slate-900 mb-2 text-base sm:text-lg">{{ faq.q }}</h2>
+            <p class="text-slate-700 text-sm sm:text-base leading-relaxed">{{ faq.a }}</p>
           </article>
-          {% endif %}
-        {% endfor %}
+          {% endfor %}
+        {% else %}
+          {% for i in range(1, 7) %}
+            {% set q = t.get("faq_q" ~ i) %}
+            {% set a = t.get("faq_a" ~ i) %}
+            {% if q and a %}
+            <article class="rounded-2xl bg-white border border-slate-200 p-5 sm:p-6 shadow-sm">
+              <h2 class="font-semibold text-slate-900 mb-2 text-base sm:text-lg">{{ q }}</h2>
+              <p class="text-slate-700 text-sm sm:text-base leading-relaxed">{{ a }}</p>
+            </article>
+            {% endif %}
+          {% endfor %}
+        {% endif %}
       </div>
     </section>
 
@@ -113,6 +120,21 @@
       </div>
     </section>
   </main>
+
+  <!-- Internal links for SEO -->
+  <nav class="max-w-5xl mx-auto px-4 py-8 border-t border-slate-200/60" aria-label="Related pages">
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Explore</p>
+    <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+      <a href="/analyze" class="text-slate-500 hover:text-teal-700">Analyze</a>
+      <a href="/pricing" class="text-slate-500 hover:text-teal-700">Pricing</a>
+      <a href="/how-it-works" class="text-slate-500 hover:text-teal-700">How it works</a>
+      <a href="/{{ lang }}/blog" class="text-slate-500 hover:text-teal-700">Blog</a>
+      <a href="/en/upload-blood-test-results" class="text-slate-500 hover:text-teal-700">Upload Results</a>
+      <a href="/en/blood-test-results-explained" class="text-slate-500 hover:text-teal-700">Results Explained</a>
+      <a href="/en/sample-blood-test-reports" class="text-slate-500 hover:text-teal-700">Sample Reports</a>
+      <a href="/en/ai-blood-test-analyzer" class="text-slate-500 hover:text-teal-700">AI Analyzer</a>
+    </div>
+  </nav>
 
   <footer class="border-t border-slate-200 bg-slate-50 py-6 px-4">
     <div class="max-w-5xl mx-auto flex flex-wrap justify-between items-center gap-3 text-xs sm:text-sm text-slate-600">

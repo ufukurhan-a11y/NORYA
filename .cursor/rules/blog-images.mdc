@@ -1,0 +1,37 @@
+---
+description: Blog cover image standards — real stock photos only, no AI-generated abstract art
+globs: app/blog_i18n.py, app/blog_article_*_content.py, app/templates/blog/**
+alwaysApply: false
+---
+
+# Blog Cover Image Standards
+
+## Mandatory: Real Photos Only
+
+Blog cover images MUST be **real, professional stock/medical photographs** — NOT AI-generated abstract illustrations or generic vector art.
+
+### Sourcing
+
+- Use royalty-free stock photo APIs (Unsplash, Pexels, Pixabay) to download real photos.
+- Search terms should match the biomarker/topic (e.g. "blood test tube laboratory", "doctor reviewing results", "liver function test").
+- Prefer images showing: lab equipment, blood samples, medical professionals, human anatomy illustrations from textbooks.
+
+### Technical Requirements
+
+- Format: `.jpg` preferred (smaller file size); `.png` acceptable.
+- Max file size: ~200 KB (resize/compress large images before saving).
+- Dimensions: at least 1200x630 px for OG/social sharing compatibility.
+- Save to: `/static/images/blog/{article-id}-hero.jpg`
+
+### Template Rules
+
+- Use direct `<img>` tags — do NOT wrap in `<picture>` with `<source type="image/webp">` unless `.webp` files actually exist.
+- Cover image on detail page: `loading="eager"` (above the fold).
+- Card images on index page: `loading="lazy"`.
+
+### When Adding New Blog Articles
+
+1. Find a relevant real photo from a stock photo API.
+2. Download, resize to ~1200x630, compress to <200 KB.
+3. Save as `/static/images/blog/{id}-hero.jpg`.
+4. Reference the path in the article's `cover` variable in `blog_i18n.py`.

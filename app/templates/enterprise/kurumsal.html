@@ -16,51 +16,11 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            "outline-variant": "#bcc9c8",
-            "on-primary-container": "#003333",
-            "inverse-on-surface": "#f0f1f2",
-            "secondary": "#4f5e7e",
-            "surface-bright": "#f8f9fa",
-            "surface-container": "#edeeef",
-            "inverse-primary": "#5ed9d7",
-            "inverse-surface": "#2e3132",
-            "surface-dim": "#d9dadb",
-            "on-primary": "#ffffff",
-            "surface-container-high": "#e7e8e9",
-            "on-surface": "#191c1d",
-            "primary-container": "#0ea5a4",
-            "surface": "#f8f9fa",
-            "error": "#ba1a1a",
-            "surface-container-lowest": "#ffffff",
-            "surface-container-low": "#f3f4f5",
-            "on-surface-variant": "#3d4949",
-            "surface-variant": "#e1e3e4",
-            "primary-fixed-dim": "#5ed9d7",
-            "primary-fixed": "#7df5f4",
-            "primary": "#006a69",
-            "outline": "#6d7a79",
-            "secondary-container": "#cadaff",
-            "surface-container-highest": "#e1e3e4",
-          },
-          fontFamily: {
-            headline: ["Manrope", "system-ui", "sans-serif"],
-            body: ["Inter", "system-ui", "sans-serif"],
-          },
-          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", "3xl": "1.5rem", full: "9999px" },
-        },
-      },
-    };
-  </script>
   <style>
     :root {
       --lang-border: 1px solid rgba(15,23,42,0.07);

@@ -116,7 +116,7 @@
 <nav class="fixed top-0 w-full z-50 bg-surface/80 backdrop-blur-xl border-b border-outline-variant/10 h-20" id="mainNav">
 <div class="flex justify-between items-center max-w-7xl mx-auto px-6 md:px-8 h-full">
 <a href="/" class="flex items-center gap-3 shrink-0">
-<img alt="NoryaAI Logo" class="h-8" src="/static/norya_logo_transparent_trim.png"/>
+<img alt="NoryaAI Logo" class="h-8" src="/static/norya_logo_transparent_trim.png" loading="eager"/>
 <span class="text-2xl font-bold tracking-tighter text-on-background font-headline">NoryaAI</span>
 </a>
 <div class="hidden md:flex items-center gap-10 font-headline tracking-tight font-semibold text-sm">
@@ -223,7 +223,7 @@ View Architecture
 <div class="lg:col-span-5 relative reveal reveal-delay-2">
 <div class="relative">
 <div class="aspect-square rounded-[2.5rem] overflow-hidden shadow-2xl shadow-primary/10 border border-outline-variant/10">
-<img alt="NoryaAI Security Shield" class="w-full h-full object-cover" src="/static/images/security-hero.png"/>
+<img alt="NoryaAI Security Shield" class="w-full h-full object-cover" src="/static/images/security-hero.png" loading="eager"/>
 </div>
 <div class="absolute -bottom-6 -left-6 glass rounded-2xl p-5 shadow-xl anim-float">
 <div class="flex items-center gap-3">
@@ -765,12 +765,27 @@ Contact Security Team <svg class="w-4 h-4"><use href="#i-mail"/></svg>
 </div>
 </section>
 
+<!-- Internal links for SEO -->
+<nav class="max-w-5xl mx-auto px-4 py-8 border-t border-slate-200/60" aria-label="Related pages">
+  <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Explore</p>
+  <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
+    <a href="/analyze" class="text-slate-500 hover:text-teal-700">Analyze</a>
+    <a href="/pricing" class="text-slate-500 hover:text-teal-700">Pricing</a>
+    <a href="/how-it-works" class="text-slate-500 hover:text-teal-700">How it works</a>
+    <a href="/en/blog" class="text-slate-500 hover:text-teal-700">Blog</a>
+    <a href="/en/upload-blood-test-results" class="text-slate-500 hover:text-teal-700">Upload Results</a>
+    <a href="/en/blood-test-results-explained" class="text-slate-500 hover:text-teal-700">Results Explained</a>
+    <a href="/en/sample-blood-test-reports" class="text-slate-500 hover:text-teal-700">Sample Reports</a>
+    <a href="/en/ai-blood-test-analyzer" class="text-slate-500 hover:text-teal-700">AI Analyzer</a>
+  </div>
+</nav>
+
 <!-- ═══════════════════════ FOOTER ═══════════════════════ -->
 <footer class="w-full pt-20 pb-10 bg-surface-container-low border-t border-outline-variant/10">
 <div class="max-w-7xl mx-auto px-6 md:px-8 grid grid-cols-2 md:grid-cols-4 gap-10 md:gap-12">
 <div class="col-span-2 md:col-span-1 space-y-5">
 <a href="/" class="font-headline font-bold text-lg text-on-background flex items-center gap-2">
-<img alt="NoryaAI" class="h-6" src="/static/norya_logo_transparent_trim.png"/> NoryaAI
+<img alt="NoryaAI" class="h-6" src="/static/norya_logo_transparent_trim.png" loading="lazy" decoding="async"/> NoryaAI
 </a>
 <p class="text-secondary text-sm leading-relaxed">Personalized AI-driven health analytics powered by your unique biological blueprint.</p>
 <div class="flex gap-3">
