@@ -606,7 +606,7 @@
                 <div class="plan-badges" id="plan-badges">
                   {% if plan_code == 'single_13eur' %}<span class="badge-start">{{ t.badge_start }}</span>{% endif %}
                   {% if 'yearly' in plan_code %}<span class="badge-best">{{ t.best_value_badge }}</span><span class="badge-save">{{ t.save_pct }}</span>{% endif %}
-                  {% if 'monthly' in plan_code and plan_code != 'yearly_99eur' %}<span class="badge-popular">{{ t.most_popular }}</span>{% endif %}
+                  {% if 'yearly' in plan_code %}<span class="badge-popular">{{ t.most_popular }}</span>{% endif %}
                 </div>
 
                 <p class="card-title" style="margin-top:16px;margin-bottom:8px;">{{ t.benefits_heading }}</p>
@@ -845,7 +845,7 @@ document.addEventListener('DOMContentLoaded', function(){
         var s1 = document.createElement('span'); s1.className = 'badge-best'; s1.textContent = t.best_value_badge || 'En avantajlı'; badges.appendChild(s1);
         var s2 = document.createElement('span'); s2.className = 'badge-save'; s2.textContent = t.save_pct || '83% save'; badges.appendChild(s2);
       }
-      if (pc.indexOf('monthly') !== -1 && pc.indexOf('yearly') === -1) {
+      if (pc.indexOf('yearly') !== -1) {
         var s = document.createElement('span'); s.className = 'badge-popular'; s.textContent = t.most_popular || 'Most popular'; badges.appendChild(s);
       }
     }

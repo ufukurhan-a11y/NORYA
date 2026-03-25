@@ -443,7 +443,16 @@ _CONTENT: dict[str, dict] = {
 
 def get_faq_content(lang: str) -> dict:
     """Return FAQ page content for the given language, falling back to English."""
-    return _CONTENT.get(lang, _CONTENT["en"])
+    from app.base_i18n import get_base_ui, get_seo_nav
+
+    out = dict(_CONTENT.get(lang, _CONTENT["en"]))
+    base = get_base_ui(lang)
+    for k, v in base.items():
+        out.setdefault(k, v)
+    seo = get_seo_nav(lang)
+    for k, v in seo.items():
+        out.setdefault(k, v)
+    return out
 
 
 def get_faq_slug(lang: str) -> str:

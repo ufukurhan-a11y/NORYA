@@ -1976,10 +1976,10 @@
         </div>
         <section class="plans-row" id="plans-row" role="group" aria-label="{{ t.selected_plan }}">
           {% for p in plans %}
-          <div class="plan-card {% if p.best_value %}annual{% endif %} {% if p.product == 'monthly' %}popular{% endif %} {% if default_plan and p.code == default_plan.code %}selected{% endif %}" data-plan="{{ p.code }}" data-price="{{ p.price }}" data-price-cents="{{ p.price_cents }}" data-label="{{ p.label }}" role="button" tabindex="0">
+          <div class="plan-card {% if p.best_value %}annual{% endif %} {% if p.product == 'yearly' %}popular{% endif %} {% if default_plan and p.code == default_plan.code %}selected{% endif %}" data-plan="{{ p.code }}" data-price="{{ p.price }}" data-price-cents="{{ p.price_cents }}" data-label="{{ p.label }}" role="button" tabindex="0">
             <div class="plan-card-head">
               {% if p.product == 'single' %}<span class="card-badge one-time">{{ t.price_once }}</span>{% endif %}
-              {% if p.product == 'monthly' %}<span class="card-badge most-popular">{{ t.most_popular_badge }}</span>{% endif %}
+              {% if p.product == 'yearly' %}<span class="card-badge most-popular">{{ t.most_popular_badge }}</span>{% endif %}
               {% if p.best_value %}<span class="card-badge best-value">{{ t.best_value_badge }}</span>{% endif %}
               <h3 class="plan-card-title">{% if p.product == 'single' %}{{ t.plan_card_single }}{% elif p.product == 'monthly' %}{{ t.plan_card_monthly }}{% else %}{{ t.plan_card_yearly }}{% endif %}</h3>
             </div>

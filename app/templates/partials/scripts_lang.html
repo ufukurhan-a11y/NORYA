@@ -75,8 +75,13 @@ console.log('[debug-file] partials/scripts_lang.html v1 loaded on', window.locat
       return;
     }
 
-    var initial = normalizeLocale(getStoredLang() || document.documentElement.lang || 'en');
+    var htmlLang = normalizeLocale(document.documentElement.lang || '');
+    var stored = getStoredLang();
+    var initial = (htmlLang && htmlLang !== 'en') ? htmlLang : (stored || htmlLang || 'en');
     if (current) current.textContent = initial.toUpperCase();
+    if (stored && stored !== htmlLang && htmlLang && htmlLang !== 'en') {
+      setLangCookie(htmlLang);
+    }
 
     function openMenu() {
       menu.hidden = false;

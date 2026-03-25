@@ -1,6 +1,7 @@
+{% set _ts = trust_strip_ui|default({}) %}
 <section class="border-y border-slate-200/90 bg-gradient-to-b from-slate-50 to-white py-10" aria-label="Trust and infrastructure" dir="ltr">
   <div class="max-w-7xl mx-auto px-4 sm:px-8">
-    <p class="text-center text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-8">Infrastructure you can verify</p>
+    <p class="text-center text-[11px] font-bold uppercase tracking-[0.2em] text-slate-500 mb-8">{{ _ts.ts_heading|default('Infrastructure you can verify') }}</p>
     <div class="flex flex-wrap justify-center items-center gap-x-12 gap-y-8">
       <img src="/static/logos/cloudflare.svg" alt="Cloudflare" class="h-9 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity" width="130" height="36"/>
       <img src="/static/logos/paytr.svg" alt="PayTR" class="h-9 w-auto object-contain opacity-85 hover:opacity-100 transition-opacity" width="130" height="36"/>
@@ -9,18 +10,18 @@
     <div class="mt-10 grid sm:grid-cols-3 gap-6 text-center max-w-4xl mx-auto">
       <div class="rounded-2xl bg-white border border-slate-100 px-4 py-4 shadow-sm">
         <span class="material-symbols-outlined text-[#0EA5A4] text-2xl mb-2" aria-hidden="true">lock</span>
-        <p class="text-sm font-semibold text-slate-900">TLS in transit</p>
-        <p class="text-xs text-slate-500 mt-1">Encrypted uploads and sessions</p>
+        <p class="text-sm font-semibold text-slate-900">{{ _ts.ts_tls_title|default('TLS in transit') }}</p>
+        <p class="text-xs text-slate-500 mt-1">{{ _ts.ts_tls_sub|default('Encrypted uploads and sessions') }}</p>
       </div>
       <div class="rounded-2xl bg-white border border-slate-100 px-4 py-4 shadow-sm">
         <span class="material-symbols-outlined text-[#0EA5A4] text-2xl mb-2" aria-hidden="true">translate</span>
-        <p class="text-sm font-semibold text-slate-900">9+ languages</p>
-        <p class="text-xs text-slate-500 mt-1">Same flow worldwide</p>
+        <p class="text-sm font-semibold text-slate-900">{{ _ts.ts_lang_title|default('9+ languages') }}</p>
+        <p class="text-xs text-slate-500 mt-1">{{ _ts.ts_lang_sub|default('Same flow worldwide') }}</p>
       </div>
       <div class="rounded-2xl bg-white border border-slate-100 px-4 py-4 shadow-sm">
         <span class="material-symbols-outlined text-[#0EA5A4] text-2xl mb-2" aria-hidden="true">description</span>
-        <p class="text-sm font-semibold text-slate-900">PDF-native</p>
-        <p class="text-xs text-slate-500 mt-1">Works with real lab exports</p>
+        <p class="text-sm font-semibold text-slate-900">{{ _ts.ts_pdf_title|default('PDF-native') }}</p>
+        <p class="text-xs text-slate-500 mt-1">{{ _ts.ts_pdf_sub|default('Works with real lab exports') }}</p>
       </div>
     </div>
   </div>

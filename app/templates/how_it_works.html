@@ -161,16 +161,22 @@
 
   <!-- Internal links for SEO -->
   <nav class="max-w-5xl mx-auto px-4 py-8 border-t border-slate-200/60" aria-label="Related pages">
-    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Explore</p>
+    <p class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">{{ t.seo_nav_explore }}</p>
     <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
-      <a href="/analyze" class="text-slate-500 hover:text-teal-700">Analyze</a>
-      <a href="/pricing" class="text-slate-500 hover:text-teal-700">Pricing</a>
-      <a href="/how-it-works" class="text-slate-500 hover:text-teal-700">How it works</a>
-      <a href="/{{ lang }}/blog" class="text-slate-500 hover:text-teal-700">Blog</a>
-      <a href="/en/upload-blood-test-results" class="text-slate-500 hover:text-teal-700">Upload Results</a>
-      <a href="/en/blood-test-results-explained" class="text-slate-500 hover:text-teal-700">Results Explained</a>
-      <a href="/en/sample-blood-test-reports" class="text-slate-500 hover:text-teal-700">Sample Reports</a>
-      <a href="/en/ai-blood-test-analyzer" class="text-slate-500 hover:text-teal-700">AI Analyzer</a>
+      <a href="/analyze" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_analyze }}</a>
+      <a href="/pricing?lang={{ lang }}" class="text-slate-500 hover:text-teal-700">{{ t.nav_pricing }}</a>
+      <a href="/how-it-works?lang={{ lang }}" class="text-slate-500 hover:text-teal-700">{{ t.nav_how }}</a>
+      <a href="/{{ lang }}/blog" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_blog }}</a>
+      {% if lang == 'tr' %}
+      <a href="/tr/kan-tahlili-yukle" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_upload }}</a>
+      <a href="/tr/kan-tahlili-sonuclari-aciklama" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_explained }}</a>
+      <a href="/tr/ornek-kan-tahlili-raporlari" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_samples }}</a>
+      {% else %}
+      <a href="/{{ lang }}/upload-blood-test-results" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_upload }}</a>
+      <a href="/{{ lang }}/blood-test-results-explained" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_explained }}</a>
+      <a href="/{{ lang }}/sample-blood-test-reports" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_samples }}</a>
+      {% endif %}
+      <a href="/{{ lang }}/ai-blood-test-analyzer" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_ai }}</a>
     </div>
   </nav>
 

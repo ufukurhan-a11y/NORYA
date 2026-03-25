@@ -5764,9 +5764,15 @@ SEO_LANDING_OG_IMAGES = {
 
 def _render_seo_landing(request: Request, lang: str, slug: str) -> HTMLResponse:
     """Render SEO landing template for (lang, slug). Call only when (lang, slug) is a valid SEO route."""
+    from app.base_i18n import get_seo_nav
+
     content = get_seo_landing_content(lang, slug)
     if not content:
         raise HTTPException(status_code=404, detail="Not Found")
+    merged = dict(content)
+    seo = get_seo_nav(lang)
+    for k, v in seo.items():
+        merged.setdefault(k, v)
     base_url = str(request.base_url).rstrip("/")
     canonical_url = f"{base_url}/{lang}/{slug}"
     meta = get_seo_landing_meta(lang, slug)
@@ -5781,7 +5787,7 @@ def _render_seo_landing(request: Request, lang: str, slug: str) -> HTMLResponse:
             "request": request,
             "lang": lang,
             "slug": slug,
-            "t": content,
+            "t": merged,
             "meta": meta,
             "canonical_url": canonical_url,
             "hreflang_alternates": hreflang_alternates,
@@ -5824,6 +5830,8 @@ def seo_landing_en_ai_blood_test_analyzer(request: Request):
 
 
 def _render_compare_hub(request: Request, lang: str) -> HTMLResponse:
+    from app.base_i18n import get_trust_strip
+
     t = get_compare_hub(lang)
     if not t:
         raise HTTPException(status_code=404, detail="Not Found")
@@ -5839,10 +5847,13 @@ def _render_compare_hub(request: Request, lang: str) -> HTMLResponse:
         "og_locale": get_compare_og_locale(lang),
         "hreflang_alternates": get_compare_hreflang_hub(lang, base_url),
         "breadcrumbs": get_compare_breadcrumbs(lang, base_url),
+        "trust_strip_ui": get_trust_strip(lang),
     })
 
 
 def _render_compare_detail(request: Request, lang: str, slug: str) -> HTMLResponse:
+    from app.base_i18n import get_trust_strip
+
     t = get_compare_detail(lang, slug)
     if not t:
         raise HTTPException(status_code=404, detail="Not Found")
@@ -5859,6 +5870,7 @@ def _render_compare_detail(request: Request, lang: str, slug: str) -> HTMLRespon
         "hreflang_alternates": get_compare_hreflang_detail(lang, slug, base_url),
         "breadcrumbs": get_compare_breadcrumbs(lang, base_url, slug, t.get("competitor_name")),
         "related_comparisons": get_compare_related(lang, slug),
+        "trust_strip_ui": get_trust_strip(lang),
     })
 
 
@@ -6018,6 +6030,9 @@ def editorial_en_why_not_generic_ai(request: Request):
         "cta_primary": "Upload and analyze now",
         "cta_secondary": "View pricing",
     }
+    from app.base_i18n import get_seo_nav
+    for k, v in get_seo_nav("en").items():
+        t.setdefault(k, v)
     return templates.TemplateResponse("editorial_landing.html", {
         "request": request,
         "lang": "en",
@@ -6028,9 +6043,13 @@ def editorial_en_why_not_generic_ai(request: Request):
 
 
 def _render_upload_landing(request: Request, lang: str):
+    from app.base_i18n import get_seo_nav
+
     base_url = str(request.base_url).rstrip("/")
     slug = get_upload_landing_slug(lang)
-    t = get_upload_landing_content(lang)
+    t = dict(get_upload_landing_content(lang))
+    for k, v in get_seo_nav(lang).items():
+        t.setdefault(k, v)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_upload_landing_slug(la)}"} for la in UPLOAD_SLUGS]
     hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{UPLOAD_SLUGS['en']}"})
     og_image = f"{base_url}/static/images/og-upload-blood-test.png"
@@ -6082,9 +6101,13 @@ def landing_ar_upload(request: Request):
 
 
 def _render_explained_landing(request: Request, lang: str):
+    from app.base_i18n import get_seo_nav
+
     base_url = str(request.base_url).rstrip("/")
     slug = get_explained_landing_slug(lang)
-    t = get_explained_landing_content(lang)
+    t = dict(get_explained_landing_content(lang))
+    for k, v in get_seo_nav(lang).items():
+        t.setdefault(k, v)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_explained_landing_slug(la)}"} for la in EXPLAINED_SLUGS]
     hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{EXPLAINED_SLUGS['en']}"})
     og_image = f"{base_url}/static/images/og-blood-test-explained.png"
@@ -6255,7 +6278,10 @@ def tool_en_unit_converter(request: Request):
 @app.get("/en/tools/egfr-calculator", response_class=HTMLResponse)
 def tool_en_egfr(request: Request):
     base_url = str(request.base_url).rstrip("/")
-    t = get_egfr_content("en")
+    from app.base_i18n import get_seo_nav
+    t = dict(get_egfr_content("en"))
+    for k, v in get_seo_nav("en").items():
+        t.setdefault(k, v)
     return templates.TemplateResponse("tool_egfr.html", {
         "request": request,
         "lang": "en",
@@ -6268,7 +6294,10 @@ def tool_en_egfr(request: Request):
 @app.get("/en/tools/homa-ir-calculator", response_class=HTMLResponse)
 def tool_en_homa_ir(request: Request):
     base_url = str(request.base_url).rstrip("/")
-    t = get_homa_ir_content("en")
+    from app.base_i18n import get_seo_nav
+    t = dict(get_homa_ir_content("en"))
+    for k, v in get_seo_nav("en").items():
+        t.setdefault(k, v)
     return templates.TemplateResponse("tool_homa_ir.html", {
         "request": request,
         "lang": "en",

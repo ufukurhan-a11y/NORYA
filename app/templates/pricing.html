@@ -340,8 +340,7 @@
         </article>
 
         {% set single = plans.single %}
-        <article class="plan-card plan-card--featured" aria-label="{{ t.get('plan_premium_report', 'Premium Report') }}" style="position:relative;">
-          <span class="plan-badge">{{ t.get("most_popular", "Most Popular") }}</span>
+        <article class="plan-card" aria-label="{{ t.get('plan_premium_report', 'Premium Report') }}">
           <h2 class="plan-name">{{ t.get("plan_premium_report", "Premium Report") }}</h2>
           <p class="plan-period">{{ t.get("pricing_single_plan_period", t.get("price_once", t.get("price_single_per", "One-time"))) }}</p>
           <p class="plan-price">
@@ -374,7 +373,8 @@
         </article>
 
         {% set yearly = plans.yearly %}
-        <article class="plan-card" aria-label="{{ t.get('plan_norya_plus', 'Norya Plus') }}">
+        <article class="plan-card plan-card--featured" aria-label="{{ t.get('plan_norya_plus', 'Norya Plus') }}" style="position:relative;">
+          <span class="plan-badge">{{ t.get("most_popular", "Most Popular") }}</span>
           <h2 class="plan-name">{{ t.get("plan_norya_plus", "Norya Plus") }}</h2>
           <p class="plan-period">{{ t.get("price_yearly_per", "per year") }}</p>
           <p class="plan-price">

@@ -447,6 +447,17 @@ def payment_update_status(
     if new_status == "completed" and not order.is_processed:
         order.is_processed = True
         order.processed_at = datetime.now(timezone.utc)
+        if not getattr(order, "paid_at", None):
+            order.paid_at = datetime.now(timezone.utc)
+        user = db.get(User, order.user_id)
+        if user:
+            qty = getattr(order, "quantity", 1) or 1
+            if order.product == "single":
+                user.extra_credits = (getattr(user, "extra_credits", 0) or 0) + qty
+                db.add(user)
+            elif order.product in ("monthly", "yearly"):
+                user.plan = "pro"
+                db.add(user)
     db.add(order)
     _audit(db, "payment_status_changed", order_id=order_id, detail=f"{old_status} -> {new_status}")
     db.commit()

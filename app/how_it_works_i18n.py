@@ -383,10 +383,16 @@ _HOW_IT_WORKS_UI = {
 
 def get_how_it_works_ui(lang: str) -> dict:
     """Return UI strings for the How it works page. Fallback: en."""
+    from app.base_i18n import get_seo_nav
+
     lang = (lang or "").strip().lower()[:2]
     if lang not in _HOW_IT_WORKS_UI:
         lang = DEFAULT_HOW_IT_WORKS_LANG
-    return dict(_HOW_IT_WORKS_UI[lang])
+    out = dict(_HOW_IT_WORKS_UI[lang])
+    seo = get_seo_nav(lang)
+    for k, v in seo.items():
+        out.setdefault(k, v)
+    return out
 
 
 def get_how_it_works_meta(lang: str) -> dict:
