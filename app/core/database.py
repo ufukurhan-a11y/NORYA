@@ -177,6 +177,19 @@ def init_db():
             "ALTER TABLE institutions ADD COLUMN active_languages VARCHAR(255) DEFAULT 'tr,en'",
             "ALTER TABLE institutions ADD COLUMN onboarding_completed BOOLEAN DEFAULT 0",
             "ALTER TABLE institutions ADD COLUMN updated_at DATETIME",
+            # Lead e-posta onayları (KVKK/GDPR)
+            "ALTER TABLE email_leads ADD COLUMN consent_kvkk BOOLEAN DEFAULT 0",
+            "ALTER TABLE email_leads ADD COLUMN consent_gdpr BOOLEAN DEFAULT 0",
+            "ALTER TABLE email_leads ADD COLUMN consent_at DATETIME",
+            # Lead UTM tracking
+            "ALTER TABLE email_leads ADD COLUMN utm_source VARCHAR(128)",
+            "ALTER TABLE email_leads ADD COLUMN utm_medium VARCHAR(128)",
+            "ALTER TABLE email_leads ADD COLUMN utm_campaign VARCHAR(128)",
+            "ALTER TABLE email_leads ADD COLUMN utm_content VARCHAR(128)",
+            "ALTER TABLE email_leads ADD COLUMN utm_term VARCHAR(128)",
+            "ALTER TABLE email_leads ADD COLUMN drip_step INTEGER DEFAULT 0",
+            "ALTER TABLE email_leads ADD COLUMN drip_last_sent_at DATETIME",
+            "ALTER TABLE email_leads ADD COLUMN unsubscribed BOOLEAN DEFAULT 0",
         ):
             try:
                 with engine.connect() as conn:

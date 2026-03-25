@@ -5561,6 +5561,16 @@
       <form class="lead-capture-form" onsubmit="return submitLeadForm(event, 'homepage')" autocomplete="on">
         <input type="email" name="email" required autocomplete="email" data-i18n-placeholder="lead_placeholder_email" placeholder="E-posta adresiniz" aria-label="Email" />
         <input type="text" name="name" autocomplete="given-name" data-i18n-placeholder="lead_placeholder_name" placeholder="Adınız (opsiyonel)" aria-label="Name" style="max-width:160px" />
+        <label class="lead-capture-consent mt-3 flex items-start gap-2 text-xs text-slate-600" style="max-width:520px;">
+          <input
+            type="checkbox"
+            name="lead_consent"
+            id="lead-consent-kvkk-gdpr"
+            required
+            class="mt-0.5 rounded border-accent-300 dark:border-accent-600 text-primary-600 focus:ring-primary-500"
+          />
+          <span data-i18n="lead_consent_text">KVKK/GDPR kapsamında e-posta güncellemelerini almak için onay veriyorum.</span>
+        </label>
         <button type="submit" class="lead-capture-btn" data-i18n="lead_btn">Beni bilgilendir</button>
       </form>
       <p class="lead-capture-privacy" data-i18n="lead_privacy">Spam göndermeyiz. İstediğiniz zaman çıkabilirsiniz.</p>
@@ -9223,6 +9233,8 @@
         lead_error_email: "Lütfen geçerli bir e-posta girin.",
         lead_error_generic: "Bir hata oluştu. Lütfen tekrar deneyin.",
         lead_privacy: "Spam göndermeyiz. İstediğiniz zaman çıkabilirsiniz.",
+        lead_consent_text: "KVKK/GDPR kapsamında e-posta güncellemelerini almak için onay veriyorum.",
+        lead_error_consent: "KVKK/GDPR onayını kabul etmelisiniz.",
         footer_platform_disclaimer: "Norya, kan tahlili sonuçlarınızı yapılandırılmış analiz ve raporlarla sunan bir biyobelirteç platformudur. Norya bir tıbbi teşhis sistemi değildir.",
         footer_terms: "Kullanım Şartları", footer_payment: "Ödeme ve İade", footer_contact: "İletişim", back_home: "← Ana sayfa",
         terms_heading: "Kullanım Koşulları", privacy_heading: "Gizlilik Politikası", payment_heading: "Ödeme ve İade Koşulları",
@@ -9641,6 +9653,8 @@
         lead_error_email: "Please enter a valid email.",
         lead_error_generic: "Something went wrong. Please try again.",
         lead_privacy: "No spam. Unsubscribe anytime.",
+        lead_consent_text: "I consent to receive email updates in accordance with KVKK/GDPR.",
+        lead_error_consent: "Please accept the KVKK/GDPR consent.",
         footer_platform_disclaimer: "Norya is a biomarker platform that delivers structured analysis and reporting of your blood test results. Norya is not a medical diagnosis system.",
         footer_terms: "Terms of Use", footer_payment: "Payment & Refunds", footer_contact: "Contact", back_home: "← Home",
         terms_heading: "Terms of Use", privacy_heading: "Privacy Policy", payment_heading: "Payment and Refund Terms",
@@ -9917,6 +9931,8 @@
         lead_error_email: "Inserisci un'email valida.",
         lead_error_generic: "Si è verificato un errore. Riprova.",
         lead_privacy: "Niente spam. Cancella quando vuoi.",
+        lead_consent_text: "Acconsento a ricevere aggiornamenti via email in conformità con KVKK/GDPR.",
+        lead_error_consent: "Devi accettare il consenso KVKK/GDPR.",
         footer_copyright: "© 2026 Norya. Tutti i diritti riservati.",
         footer_mesafeli: "Contratto di vendita a distanza", footer_privacy: "Privacy", footer_refund: "Recesso e rimborso", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Termini d'uso", footer_payment: "Pagamento e rimborsi", footer_contact: "Contatti", back_home: "← Home",
@@ -10196,6 +10212,8 @@
         lead_error_email: "Introduce un correo válido.",
         lead_error_generic: "Algo salió mal. Inténtalo de nuevo.",
         lead_privacy: "Sin spam. Cancela cuando quieras.",
+        lead_consent_text: "Acepto recibir actualizaciones por correo según KVKK/GDPR.",
+        lead_error_consent: "Debe aceptar el consentimiento KVKK/GDPR.",
         footer_copyright: "© 2026 Norya. Todos los derechos reservados.",
         footer_mesafeli: "Contrato de compraventa a distancia", footer_privacy: "Privacidad", footer_refund: "Devolución y cancelación", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Términos de uso", footer_payment: "Pago y reembolsos", footer_contact: "Contacto", back_home: "← Inicio",
@@ -10475,6 +10493,8 @@
         lead_error_email: "Veuillez entrer un email valide.",
         lead_error_generic: "Une erreur est survenue. Veuillez réessayer.",
         lead_privacy: "Pas de spam. Désabonnement à tout moment.",
+        lead_consent_text: "J'accepte de recevoir des mises à jour par e-mail conformément à la politique KVKK/GDPR.",
+        lead_error_consent: "Veuillez accepter le consentement KVKK/GDPR.",
         footer_copyright: "© 2026 Norya. Tous droits réservés.",
         footer_mesafeli: "Contrat de vente à distance", footer_privacy: "Confidentialité", footer_refund: "Remboursement et annulation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_terms: "Conditions d'utilisation", footer_payment: "Paiement et remboursements", footer_contact: "Contact", back_home: "← Accueil",
@@ -10735,6 +10755,8 @@
         lead_error_email: "Bitte geben Sie eine gültige E-Mail ein.",
         lead_error_generic: "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
         lead_privacy: "Kein Spam. Jederzeit abmeldbar.",
+        lead_consent_text: "Ich stimme zu, E-Mail-Updates gemäß KVKK/GDPR zu erhalten.",
+        lead_error_consent: "Bitte stimmen Sie der KVKK/GDPR Einwilligung zu.",
         footer_copyright: "© 2026 Norya. Alle Rechte vorbehalten.",
         footer_mesafeli: "Fernabsatzvertrag", footer_privacy: "Datenschutz", footer_refund: "Rückerstattung & Stornierung", footer_kvkk_gdpr: "Datenschutz (DSGVO)", footer_kvkk_link: "Datenschutz",
         footer_terms: "Nutzungsbedingungen", footer_payment: "Zahlung & Rückerstattung", footer_contact: "Kontakt", back_home: "← Start",
@@ -10950,6 +10972,8 @@
         lead_error_email: "נא להזין כתובת מייל תקינה.",
         lead_error_generic: "אירעה שגיאה. נסה שוב.",
         lead_privacy: "ללא ספאם. ביטול בכל עת.",
+        lead_consent_text: "אני מסכים לקבל עדכונים במייל בהתאם ל-KVKK/GDPR.",
+        lead_error_consent: "יש לאשר את הסכמת KVKK/GDPR.",
         footer_desc: "תוצאות בדיקות דם מוסברות בשפה ברורה.", footer_disclaimer: "הכלי להנחיה בלבד. להחלטות רפואיות יש להתייעץ עם רופא.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "ניתוח זה למידע בלבד. אינו מחליף אבחנה רפואית.", medical_disclaimer_full: "Norya אינה כלי לאבחון רפואי. התוכן למידע בלבד. במקרי חירום או לאבחון/טיפול פנה לרופא.", doctor_cta_note: "אינו מחליף אבחנה; שתף את התוצאות עם הרופא.",
         footer_mesafeli: "הסכם מכר מרחוק", footer_privacy: "פרטיות", footer_refund: "החזרה וביטול", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -11165,6 +11189,8 @@
         lead_error_email: "يرجى إدخال بريد إلكتروني صحيح.",
         lead_error_generic: "حدث خطأ. يرجى المحاولة مرة أخرى.",
         lead_privacy: "لا رسائل مزعجة. إلغاء الاشتراك في أي وقت.",
+        lead_consent_text: "أوافق على تلقي تحديثات عبر البريد الإلكتروني وفقًا لـ KVKK/GDPR.",
+        lead_error_consent: "يرجى قبول موافقة KVKK/GDPR.",
         footer_desc: "نتائج تحاليل الدم مفسرة بلغة واضحة.", footer_disclaimer: "هذه الأداة للمعلومات فقط. استشر طبيباً دائماً للقرارات الطبية.", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "هذا التحليل للمعلومات فقط. لا يحل محل التشخيص الطبي.", medical_disclaimer_full: "Norya ليست أداة تشخيص طبي. المحتوى للمعلومات فقط. في الطوارئ أو للتشخيص/العلاج استشر طبيبك.", doctor_cta_note: "لا يحل محل التشخيص؛ شارك النتائج مع طبيبك.",
         footer_mesafeli: "عقد البيع عن بعد", footer_privacy: "الخصوصية", footer_refund: "الاسترداد والإلغاء", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -11380,6 +11406,8 @@
         lead_error_email: "कृपया एक मान्य ईमेल दर्ज करें।",
         lead_error_generic: "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
         lead_privacy: "कोई स्पैम नहीं। कभी भी अनसब्सक्राइब करें।",
+        lead_consent_text: "मैं KVKK/GDPR के अनुसार ईमेल अपडेट प्राप्त करने की सहमति देता/देती हूँ।",
+        lead_error_consent: "कृपया KVKK/GDPR सहमति स्वीकार करें।",
         footer_desc: "रक्त परीक्षण परिणाम सरल भाषा में समझाए गए।", footer_disclaimer: "यह उपकरण शैक्षिक उद्देश्य के लिए है। चिकित्सा निर्णय के लिए हमेशा डॉक्टर से सलाह लें।", made_with_cursor: "Made with Cursor",
         disclaimer_informative: "यह विश्लेषण केवल सूचनात्मक है। चिकित्सा निदान का विकल्प नहीं है।", medical_disclaimer_full: "Norya चिकित्सा निदान उपकरण नहीं है। सामग्री केवल सूचनात्मक है। आपातकाल या निदान/उपचार के लिए डॉक्टर से सलाह लें।", doctor_cta_note: "निदान का विकल्प नहीं; परिणाम डॉक्टर के साथ साझा करें।",
         footer_mesafeli: "दूरबिक्री समझौता", footer_privacy: "गोपनीयता", footer_refund: "रिफंड और रद्दीकरण", footer_kvkk_gdpr: "KVKK / GDPR",
@@ -12885,11 +12913,43 @@
       if (!email || email.indexOf('@') < 1 || email.lastIndexOf('.') <= email.indexOf('@')) {
         msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_email || 'Please enter a valid email.'; msgEl.classList.remove('hidden'); return false;
       }
+      var consentEl = form.querySelector('input[name="lead_consent"]');
+      if (!consentEl || !consentEl.checked) {
+        msgEl.className = 'lead-capture-msg error';
+        msgEl.textContent = t.lead_error_consent || 'Consent onayını kabul etmelisiniz.';
+        msgEl.classList.remove('hidden');
+        try {
+          if (typeof gtag === 'function') {
+            gtag('event', 'lead_consent_required', {
+              event_category: 'lead',
+              event_label: source || 'homepage',
+              locale: getLang(),
+              non_interaction: true
+            });
+          }
+        } catch (err) {}
+        return false;
+      }
       btn.disabled = true; btn.textContent = t.lead_btn_loading || 'Sending…';
       msgEl.classList.add('hidden');
+      var qp = new URLSearchParams(window.location.search || "");
       fetch('/api/lead/subscribe', {
         method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email: email, name: nameInput ? nameInput.value.trim() : '', source: source || 'homepage', locale: getLang() })
+        body: JSON.stringify({
+          email: email,
+          name: nameInput ? nameInput.value.trim() : '',
+          source: source || 'homepage',
+          locale: getLang(),
+          consent_kvkk: true,
+          consent_gdpr: true,
+          utm_source: qp.get('utm_source'),
+          utm_medium: qp.get('utm_medium'),
+          utm_campaign: qp.get('utm_campaign'),
+          utm_term: qp.get('utm_term'),
+          utm_content: qp.get('utm_content'),
+          gclid: qp.get('gclid'),
+          fbclid: qp.get('fbclid')
+        })
       }).then(function(r) { return r.json(); }).then(function(d) {
         if (d.ok && d.already) {
           msgEl.className = 'lead-capture-msg info'; msgEl.textContent = t.lead_already || 'This email is already registered.';
@@ -12902,6 +12962,17 @@
           msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
         }
         msgEl.classList.remove('hidden');
+
+        try {
+          if (typeof gtag === 'function') {
+            gtag('event', (d.already ? 'lead_already' : 'lead_subscribe'), {
+              event_category: 'lead',
+              event_label: source || 'homepage',
+              locale: getLang(),
+              non_interaction: true
+            });
+          }
+        } catch (err) {}
       }).catch(function() {
         msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
         msgEl.classList.remove('hidden');

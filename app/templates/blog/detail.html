@@ -322,6 +322,15 @@
             <button type="submit" class="px-5 py-2.5 rounded-xl bg-teal-600 text-white text-sm font-semibold hover:bg-teal-700 transition-colors whitespace-nowrap disabled:opacity-60 disabled:cursor-not-allowed">{{ blog_ui.lead_btn|default("Keep me updated") }}</button>
           </form>
           <p class="text-xs text-slate-400 mt-3">{{ blog_ui.lead_privacy|default("No spam. Unsubscribe anytime.") }}</p>
+          <label class="mt-3 flex items-start gap-2 text-xs text-slate-600 max-w-md mx-auto">
+            <input
+              type="checkbox"
+              name="lead_consent"
+              required
+              class="mt-0.5 rounded border-teal-300 text-teal-600 focus:ring-teal-500"
+            />
+            <span>{{ blog_ui.lead_consent_text|default("KVKK/GDPR kapsamında e-posta güncellemelerini almak için onay veriyorum.") }}</span>
+          </label>
           <div id="blog-lead-msg" class="hidden mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto" role="status" aria-live="polite"></div>
         </section>
       </div>
@@ -469,11 +478,42 @@
       msg.textContent = t.lead_error_email || 'Please enter a valid email.';
       msg.classList.remove('hidden'); return false;
     }
+      var consentEl = form.parentElement.querySelector('input[name="lead_consent"]');
+      if (!consentEl || !consentEl.checked) {
+        msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
+        msg.textContent = t.lead_error_consent || 'Consent onayını kabul etmelisiniz.';
+        msg.classList.remove('hidden');
+        try {
+          if (typeof gtag === 'function') {
+            gtag('event', 'lead_consent_required', {
+              event_category: 'lead',
+              event_label: 'blog',
+              locale: '{{ current_lang }}',
+              non_interaction: true
+            });
+          }
+        } catch (err) {}
+        return false;
+      }
     btn.disabled = true; btn.textContent = t.lead_btn_loading || 'Sending…';
     msg.classList.add('hidden');
+      var qp = new URLSearchParams(window.location.search || "");
     fetch('/api/lead/subscribe', {
       method: 'POST', headers: {'Content-Type': 'application/json'},
-      body: JSON.stringify({email: email, source: 'blog', locale: '{{ current_lang }}'})
+        body: JSON.stringify({
+          email: email,
+          source: 'blog',
+          locale: '{{ current_lang }}',
+          consent_kvkk: true,
+          consent_gdpr: true,
+          utm_source: qp.get('utm_source'),
+          utm_medium: qp.get('utm_medium'),
+          utm_campaign: qp.get('utm_campaign'),
+          utm_term: qp.get('utm_term'),
+          utm_content: qp.get('utm_content'),
+          gclid: qp.get('gclid'),
+          fbclid: qp.get('fbclid')
+        })
     }).then(function(r){return r.json();}).then(function(d){
       if (d.ok && d.already) {
         msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-amber-700 bg-amber-50';
@@ -485,11 +525,25 @@
       } else if (d.error === 'invalid_email') {
         msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
         msg.textContent = t.lead_error_email || 'Please enter a valid email.';
+        } else if (d.error === 'consent_required') {
+          msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
+          msg.textContent = t.lead_error_consent || 'Consent onayını kabul etmelisiniz.';
       } else {
         msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
         msg.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
       }
       msg.classList.remove('hidden');
+
+        try {
+          if (typeof gtag === 'function') {
+            gtag('event', (d.already ? 'lead_already' : 'lead_subscribe'), {
+              event_category: 'lead',
+              event_label: 'blog',
+              locale: '{{ current_lang }}',
+              non_interaction: true
+            });
+          }
+        } catch (err) {}
     }).catch(function(){
       msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';
       msg.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';

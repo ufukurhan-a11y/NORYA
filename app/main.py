@@ -2148,10 +2148,89 @@ async def api_lead_subscribe(request: Request, db: Session = Depends(get_db)):
         source = "homepage"
     locale = (body.get("locale") or "").strip().lower()[:16] or None
 
+    def _truthy(v) -> bool:
+        if isinstance(v, bool):
+            return v
+        if isinstance(v, (int, float)):
+            return int(v) == 1
+        if isinstance(v, str):
+            return v.strip().lower() in {"1", "true", "yes", "on", "y"}
+        return False
+
+    # KVKK/GDPR onayı (e-posta iletişimi için)
+    consent_kvkk = _truthy(body.get("consent_kvkk"))
+    consent_gdpr = _truthy(body.get("consent_gdpr"))
+    if not (consent_kvkk and consent_gdpr):
+        return JSONResponse(
+            status_code=400,
+            content={"ok": False, "error": "consent_required"},
+        )
+
+    # UTM / reklam atıf parametreleri (varsa sakla)
+    utm_source = (body.get("utm_source") or "").strip() or None
+    utm_medium = (body.get("utm_medium") or "").strip() or None
+    utm_campaign = (body.get("utm_campaign") or "").strip() or None
+    utm_term = (body.get("utm_term") or "").strip() or None
+    utm_content = (body.get("utm_content") or "").strip() or None
+    gclid = (body.get("gclid") or "").strip() or None
+    fbclid = (body.get("fbclid") or "").strip() or None
+    if (gclid or fbclid) and utm_content:
+        extra = []
+        if gclid:
+            extra.append(f"gclid={gclid}")
+        if fbclid:
+            extra.append(f"fbclid={fbclid}")
+        utm_content = (utm_content + " " + " ".join(extra))[:128]
+    elif (gclid or fbclid) and not utm_content:
+        parts = []
+        if gclid:
+            parts.append(f"gclid={gclid}")
+        if fbclid:
+            parts.append(f"fbclid={fbclid}")
+        utm_content = (" ".join(parts))[:128] or None
+
     from sqlmodel import select
     existing = db.exec(select(EmailLead).where(EmailLead.email == email)).first()
+
+    should_send_welcome = False
     if existing:
-        return JSONResponse(content={"ok": True, "already": True})
+        # Daha önce unsubscribe olmuşsa, tekrar onay + yeniden abone olma durumunu aç.
+        if existing.unsubscribed and consent_kvkk and consent_gdpr:
+            existing.unsubscribed = False
+            existing.consent_kvkk = True
+            existing.consent_gdpr = True
+            existing.consent_at = datetime.utcnow()
+            existing.source = source
+            existing.locale = locale
+            existing.utm_source = utm_source
+            existing.utm_medium = utm_medium
+            existing.utm_campaign = utm_campaign
+            existing.utm_content = utm_content
+            existing.utm_term = utm_term
+            existing.ip = _client_ip(request)
+            existing.user_agent = (request.headers.get("user-agent") or "")[:500] or None
+            existing.drip_step = 0
+            db.add(existing)
+            db.commit()
+            should_send_welcome = True
+        if should_send_welcome:
+            # Mevcut kayıt için de welcome gönder (kullanıcı tekrar açık onay verdiğinde).
+            base_url = str(request.base_url).rstrip("/")
+            _lang = (locale or "en").split("-")[0].split("_")[0].strip().lower() or "en"
+
+            def _send():
+                try:
+                    from app.services.email_sender import send_welcome_email
+
+                    send_welcome_email(email, lang=_lang, base_url=base_url)
+                except Exception as exc:
+                    log.warning("Welcome email failed for %s: %s", email, exc)
+
+            threading.Thread(target=_send, daemon=True).start()
+
+        # "Unsubscribe" olmuş kullanıcı tekrar onay verirse fiilen yeniden abone olmuş olur:
+        # pazarlama/analytics tarafında bunu "yeni lead" gibi saymak için already=False döndürüyoruz.
+        return JSONResponse(content={"ok": True, "already": not should_send_welcome})
 
     ip = _client_ip(request)
     user_agent = (request.headers.get("user-agent") or "")[:500] or None
@@ -2161,28 +2240,88 @@ async def api_lead_subscribe(request: Request, db: Session = Depends(get_db)):
             name=name,
             source=source,
             locale=locale,
+            consent_kvkk=consent_kvkk,
+            consent_gdpr=consent_gdpr,
+            consent_at=datetime.utcnow(),
             ip=ip,
             user_agent=user_agent,
+            utm_source=utm_source,
+            utm_medium=utm_medium,
+            utm_campaign=utm_campaign,
+            utm_content=utm_content,
+            utm_term=utm_term,
         ))
         db.commit()
     except Exception as e:
         log.warning("EmailLead save failed: %s", e)
         return JSONResponse(status_code=500, content={"ok": False, "error": "server_error"})
 
+    should_send_welcome = True
+
     # Welcome email (background thread — non-blocking)
     base_url = str(request.base_url).rstrip("/")
     _lang = (locale or "en").split("-")[0].split("_")[0].strip().lower() or "en"
 
-    def _send():
-        try:
-            from app.services.email_sender import send_welcome_email
-            send_welcome_email(email, lang=_lang, base_url=base_url)
-        except Exception as exc:
-            log.warning("Welcome email failed for %s: %s", email, exc)
+    if should_send_welcome:
+        def _send():
+            try:
+                from app.services.email_sender import send_welcome_email
+                send_welcome_email(email, lang=_lang, base_url=base_url)
+            except Exception as exc:
+                log.warning("Welcome email failed for %s: %s", email, exc)
 
-    threading.Thread(target=_send, daemon=True).start()
+        threading.Thread(target=_send, daemon=True).start()
 
     return JSONResponse(content={"ok": True, "already": False})
+
+
+@app.get("/api/lead/unsubscribe", response_class=HTMLResponse)
+def api_lead_unsubscribe(
+    request: Request,
+    email: str = Query("", description="Unsubscribe email"),
+    db: Session = Depends(get_db),
+):
+    """Lead unsubscribe endpoint: e-posta içinden tıklanınca kayıt günceller."""
+    email_norm = (email or "").strip().lower()
+    if not email_norm or "@" not in email_norm or "." not in email_norm.split("@")[-1]:
+        return HTMLResponse("<html><body><h3>Unsubscribe işlemi başarısız.</h3></body></html>", status_code=400)
+
+    try:
+        existing = db.exec(select(EmailLead).where(EmailLead.email == email_norm)).first()
+        if existing:
+            existing.unsubscribed = True
+            db.add(existing)
+            db.commit()
+    except Exception:
+        # Unsubscribe başarısız olsa bile kullanıcıya “OK” göstermek daha güvenli (tahmin yürütmeyi azaltır).
+        pass
+
+    ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
+    aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
+    tag_id_for_script = ga_id or aw_id or "G-1FLMLJH3Q0"
+
+    ga_cfg = f"gtag('config', '{ga_id}');" if ga_id else ""
+    aw_cfg = f"gtag('config', '{aw_id}');" if aw_id else ""
+
+    # Email içinden tıklanarak açılan sayfada en azından bir event atabilelim.
+    # (SPA'deki base template'ler bu endpoint'te otomatik yüklenmediği için burada minimal gtag init yapıyoruz.)
+    body_html = (
+        "<html><head>"
+        f"<script async src=\"https://www.googletagmanager.com/gtag/js?id={tag_id_for_script}\"></script>"
+        "<script>"
+        "window.dataLayer = window.dataLayer || []; "
+        "function gtag(){dataLayer.push(arguments);} "
+        "gtag('js', new Date()); "
+        f"{ga_cfg}{aw_cfg}"
+        "try { gtag('event', 'lead_unsubscribe', { event_category: 'engagement', event_label: 'email', non_interaction: true }); } catch(e) {}"
+        "</script>"
+        "</head><body>"
+        "<h3>İptal edildi.</h3>"
+        "<p>E-posta iletişimlerinden çıkarıldınız.</p>"
+        "</body></html>"
+    )
+
+    return HTMLResponse(body_html, status_code=200)
 
 
 # ---------------------------------------------------------------------------

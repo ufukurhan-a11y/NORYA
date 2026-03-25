@@ -6,7 +6,7 @@ from typing import Any
 
 from sqlmodel import Session, select, func
 
-from app.models import AnalysisRecord, AuditLog, PaymentOrder, Presence, User
+from app.models import AnalysisRecord, AuditLog, EmailLead, PaymentOrder, Presence, User
 
 # İzin verilen periyotlar (dakika): 30, 60, 360, 1440, 43200 (30 gün)
 PERIOD_OPTIONS = (30, 60, 360, 1440, 43200)
@@ -174,12 +174,44 @@ def get_live_analytics(db: Session, period_minutes: int | None = None) -> dict[s
         {"label": "Tablet", "value": 6, "color": "#2dd4bf"},
     ]
 
-    # Trafik kaynakları: şimdilik mock; ileride UTM/Referer ile doldurulabilir
+    # Trafik kaynakları: Lead kayıtlarından (UTM varsa) yaklaşık olarak çıkarılır.
+    # - Reklam: gclid/fbclid veya utm_medium/campaign var.
+    # - Organic: blog kaynağı
+    # - Direct: homepage kaynağı
+    # - Referral: diğer kaynaklar (sample-report/pricing vb.)
+    lead_rows = db.exec(
+        select(EmailLead)
+        .where(EmailLead.created_at >= period_ago)
+    ).all()
+
+    cnt_reklam = 0
+    cnt_organic = 0
+    cnt_direct = 0
+    cnt_referral = 0
+    for lead in lead_rows:
+        utm_medium = (getattr(lead, "utm_medium", None) or "").lower()
+        utm_campaign = (getattr(lead, "utm_campaign", None) or "").lower()
+        utm_content = (getattr(lead, "utm_content", None) or "").lower()
+        is_paid = (
+            "gclid=" in utm_content
+            or "fbclid=" in utm_content
+            or any(k in utm_medium for k in ("cpc", "ppc", "paid"))
+            or any(k in utm_campaign for k in ("ads", "google", "search"))
+        )
+        if is_paid:
+            cnt_reklam += 1
+        elif (lead.source or "").lower() == "blog":
+            cnt_organic += 1
+        elif (lead.source or "").lower() == "homepage":
+            cnt_direct += 1
+        else:
+            cnt_referral += 1
+
     traffic_sources = [
-        {"label": "Organic", "value": 45, "color": "#0EA5A4"},
-        {"label": "Reklam", "value": 25, "color": "#0d9488"},
-        {"label": "Direct", "value": 20, "color": "#14b8a6"},
-        {"label": "Referral", "value": 10, "color": "#2dd4bf"},
+        {"label": "Organic", "value": cnt_organic, "color": "#0EA5A4"},
+        {"label": "Reklam", "value": cnt_reklam, "color": "#0d9488"},
+        {"label": "Direct", "value": cnt_direct, "color": "#14b8a6"},
+        {"label": "Referral", "value": cnt_referral, "color": "#2dd4bf"},
     ]
 
     return {

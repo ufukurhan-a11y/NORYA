@@ -4,11 +4,11 @@ import pytest
 from fastapi.testclient import TestClient
 
 # Test ortamında in-memory SQLite (app import edilmeden önce set edilmeli)
-os.environ.setdefault("DATABASE_URL", "sqlite:///:memory:")
-os.environ.setdefault("SECRET_KEY", "test-secret-key")
-os.environ.setdefault("OPENAI_API_KEY", "sk-test-dummy")
+os.environ["DATABASE_URL"] = "sqlite:///:memory:"
+os.environ["SECRET_KEY"] = "test-secret-key"
+os.environ["OPENAI_API_KEY"] = "sk-test-dummy"
 # Kayıt rate limit yüksek olsun ki tüm testler geçebilsin
-os.environ.setdefault("RATE_LIMIT_REGISTER_PER_MINUTE", "100")
+os.environ["RATE_LIMIT_REGISTER_PER_MINUTE"] = "100"
 
 from app.main import app
 

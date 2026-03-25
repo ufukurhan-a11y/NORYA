@@ -80,6 +80,8 @@ BLOG_UI = {
         "lead_error_email": "Lütfen geçerli bir e-posta girin.",
         "lead_error_generic": "Bir hata oluştu. Lütfen tekrar deneyin.",
         "lead_privacy": "Spam göndermeyiz. İstediğiniz zaman çıkabilirsiniz.",
+        "lead_consent_text": "KVKK/GDPR kapsamında e-posta güncellemelerini almak için onay veriyorum.",
+        "lead_error_consent": "KVKK/GDPR onayını kabul etmelisiniz.",
     },
     "en": {
         "hero_badge": "Health insights",
@@ -140,6 +142,8 @@ BLOG_UI = {
         "lead_error_email": "Please enter a valid email.",
         "lead_error_generic": "Something went wrong. Please try again.",
         "lead_privacy": "No spam. Unsubscribe anytime.",
+        "lead_consent_text": "I consent to receive email updates in accordance with KVKK/GDPR.",
+        "lead_error_consent": "Please accept the KVKK/GDPR consent.",
     },
     "de": {
         "hero_badge": "Gesundheitswissen",
@@ -200,6 +204,8 @@ BLOG_UI = {
         "lead_error_email": "Bitte geben Sie eine gültige E-Mail ein.",
         "lead_error_generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
         "lead_privacy": "Kein Spam. Jederzeit abmeldbar.",
+        "lead_consent_text": "Ich stimme zu, E-Mail-Updates gemäß KVKK/GDPR zu erhalten.",
+        "lead_error_consent": "Bitte stimmen Sie der KVKK/GDPR Einwilligung zu.",
     },
     "fr": {
         "hero_badge": "Santé & analyses",
@@ -260,6 +266,8 @@ BLOG_UI = {
         "lead_error_email": "Veuillez entrer un email valide.",
         "lead_error_generic": "Une erreur est survenue. Veuillez réessayer.",
         "lead_privacy": "Pas de spam. Désabonnement à tout moment.",
+        "lead_consent_text": "J'accepte de recevoir des mises à jour par e-mail conformément à la politique KVKK/GDPR.",
+        "lead_error_consent": "Veuillez accepter le consentement KVKK/GDPR.",
     },
     "it": {
         "hero_badge": "Salute e analisi",
@@ -320,6 +328,8 @@ BLOG_UI = {
         "lead_error_email": "Inserisci un'email valida.",
         "lead_error_generic": "Si è verificato un errore. Riprova.",
         "lead_privacy": "Niente spam. Cancella quando vuoi.",
+        "lead_consent_text": "Acconsento a ricevere aggiornamenti via email in conformità con KVKK/GDPR.",
+        "lead_error_consent": "Devi accettare il consenso KVKK/GDPR.",
     },
     "es": {
         "hero_badge": "Salud y análisis",
@@ -380,6 +390,8 @@ BLOG_UI = {
         "lead_error_email": "Introduce un correo válido.",
         "lead_error_generic": "Algo salió mal. Inténtalo de nuevo.",
         "lead_privacy": "Sin spam. Cancela cuando quieras.",
+        "lead_consent_text": "Acepto recibir actualizaciones por correo según KVKK/GDPR.",
+        "lead_error_consent": "Debe aceptar el consentimiento KVKK/GDPR.",
     },
     "he": {
         "hero_badge": "תובנות בריאות",
@@ -440,6 +452,8 @@ BLOG_UI = {
         "lead_error_email": "נא להזין כתובת מייל תקינה.",
         "lead_error_generic": "אירעה שגיאה. נסה שוב.",
         "lead_privacy": "ללא ספאם. ביטול בכל עת.",
+        "lead_consent_text": "אני מסכים לקבל עדכונים במייל בהתאם ל-KVKK/GDPR.",
+        "lead_error_consent": "יש לאשר את הסכמת KVKK/GDPR.",
     },
     "hi": {
         "hero_badge": "स्वास्थ्य जानकारी",
@@ -500,6 +514,8 @@ BLOG_UI = {
         "lead_error_email": "कृपया एक मान्य ईमेल दर्ज करें।",
         "lead_error_generic": "कुछ गलत हो गया। कृपया पुनः प्रयास करें।",
         "lead_privacy": "कोई स्पैम नहीं। कभी भी अनसब्सक्राइब करें।",
+        "lead_consent_text": "मैं KVKK/GDPR के अनुसार ईमेल अपडेट प्राप्त करने की सहमति देता/देती हूँ।",
+        "lead_error_consent": "कृपया KVKK/GDPR सहमति स्वीकार करें।",
     },
     "ar": {
         "hero_badge": "صحة وتحاليل",
@@ -560,6 +576,8 @@ BLOG_UI = {
         "lead_error_email": "يرجى إدخال بريد إلكتروني صحيح.",
         "lead_error_generic": "حدث خطأ. يرجى المحاولة مرة أخرى.",
         "lead_privacy": "لا رسائل مزعجة. إلغاء الاشتراك في أي وقت.",
+        "lead_consent_text": "أوافق على تلقي تحديثات عبر البريد الإلكتروني وفقًا لـ KVKK/GDPR.",
+        "lead_error_consent": "يرجى قبول موافقة KVKK/GDPR.",
     },
 }
 

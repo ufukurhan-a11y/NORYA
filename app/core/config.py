@@ -1,4 +1,5 @@
 from pathlib import Path
+import sys
 
 from dotenv import load_dotenv
 from pydantic import field_validator
@@ -11,7 +12,10 @@ BRAND_NAME = "NoryaAI"
 _ROOT = Path(__file__).resolve().parent.parent.parent
 _ENV_FILE = _ROOT / ".env"
 # Config import edilir edilmez .env yüklensin (uvicorn cwd farklı olsa bile)
-load_dotenv(_ENV_FILE, override=True)
+# Pytest sırasında test fixture'larının (özellikle DATABASE_URL) override'ını bozmamak için
+# .env override davranışını kapatıyoruz.
+_IS_PYTEST = "pytest" in sys.modules
+load_dotenv(_ENV_FILE, override=not _IS_PYTEST)
 
 # OpenAI anahtarının geçerli sayılması için (başında boşluk vb. olmaması)
 OPENAI_KEY_PREFIX = "sk-"

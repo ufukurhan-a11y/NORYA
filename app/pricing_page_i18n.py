@@ -20,10 +20,22 @@ PRICING_OVERLAYS: dict[str, dict] = {
     "tr": {
         "price_monthly_per": "aylık",
         "price_monthly_abbr": "/ay",
+        "seo_nav_explore": "Keşfet",
+        "seo_nav_analyze": "Analiz Et",
+        "seo_nav_upload": "Sonuçları Yükle",
+        "seo_nav_explained": "Sonuç Açıklaması",
+        "seo_nav_samples": "Örnek Raporlar",
+        "seo_nav_ai": "Yapay Zeka Analizcisi",
     },
     "en": {
         "price_monthly_per": "per month",
         "price_monthly_abbr": "/mo",
+        "seo_nav_explore": "Explore",
+        "seo_nav_analyze": "Analyze",
+        "seo_nav_upload": "Upload Results",
+        "seo_nav_explained": "Results Explained",
+        "seo_nav_samples": "Sample Reports",
+        "seo_nav_ai": "AI Analyzer",
     },
     "de": {
         "pricing_page_title": "Preise: Einzelanalyse & Abo | Blutwerte verstehen | NoryaAI",
