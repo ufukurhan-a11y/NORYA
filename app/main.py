@@ -2884,6 +2884,51 @@ def about_page(request: Request):
     )
 
 
+@app.get("/press", response_class=HTMLResponse)
+def press_page(request: Request):
+    """Basın & Medya sayfası."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "press.html",
+        {
+            "request": request,
+            "canonical_url": f"{base_url}/press",
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+        },
+    )
+
+
+@app.get("/about/founder", response_class=HTMLResponse)
+def founder_page(request: Request):
+    """Kurucu profil sayfası – Ufuk Urhan."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "founder.html",
+        {
+            "request": request,
+            "canonical_url": f"{base_url}/about/founder",
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+        },
+    )
+
+
+@app.get("/impact", response_class=HTMLResponse)
+def impact_page(request: Request):
+    """Canlı istatistik / etki sayfası."""
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "impact.html",
+        {
+            "request": request,
+            "canonical_url": f"{base_url}/impact",
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+        },
+    )
+
+
 @app.get("/science", response_class=HTMLResponse)
 def science_page(request: Request):
     """Bilim & Teknoloji sayfası – Stitch v20 tasarımı."""

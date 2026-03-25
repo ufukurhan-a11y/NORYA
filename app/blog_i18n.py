@@ -7119,11 +7119,13 @@ from app.blog_article_thyroid_panel_content import build_thyroid_article
 from app.blog_article_liver_panel_content import build_liver_panel_article
 from app.blog_article_annual_tests_content import build_annual_tests_article
 from app.blog_article_blood_sugar_guide_content import build_blood_sugar_article
+from app.blog_article_noryaai_story_content import build_noryaai_story_article
 _ARTICLE_CBC_GUIDE = build_cbc_article()
 _ARTICLE_THYROID_GUIDE = build_thyroid_article()
 _ARTICLE_LIVER_PANEL = build_liver_panel_article()
 _ARTICLE_ANNUAL_TESTS = build_annual_tests_article()
 _ARTICLE_BLOOD_SUGAR_GUIDE = build_blood_sugar_article()
+_ARTICLE_NORYAAI_STORY = build_noryaai_story_article()
 
 ARTICLES: List[Article] = [
     _LDL_ARTICLE,
@@ -7213,6 +7215,7 @@ ARTICLES: List[Article] = [
     _ARTICLE_LIVER_PANEL,
     _ARTICLE_ANNUAL_TESTS,
     _ARTICLE_BLOOD_SUGAR_GUIDE,
+    _ARTICLE_NORYAAI_STORY,
 ]
 
 
