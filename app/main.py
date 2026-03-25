@@ -2462,9 +2462,9 @@ NoryaAI Hakkında:
 
 Fiyatlandırma:
 - Ücretsiz Önizleme: €0 — Sınırlı çıktı, temel yorumlama. Deneme amaçlı.
-- Premium Rapor (Tek Seferlik): €14.00 — Tam analiz, premium PDF rapor, sağlık skoru ve öneriler. KDV dahil.
-- Aylık Plan: €54.00/ay — Ayda 5 analiz hakkı, PDF rapor, istediğin zaman iptal.
-- Yıllık Plan (Norya Plus): €99.00/yıl — Genişletilmiş yıllık kota, rapor geçmişi, öncelikli erişim.
+- Premium Rapor (Tek Seferlik): €14.04 — Tam analiz, premium PDF rapor, sağlık skoru ve öneriler. KDV dahil.
+- Aylık Plan: €54.00/ay — Ayda 5 analiz hakkı, PDF rapor, istediğin zaman iptal. KDV dahil.
+- Yıllık Plan (Norya Plus): €106.92/yıl — Genişletilmiş yıllık kota, rapor geçmişi, öncelikli erişim. KDV dahil.
 
 Ödeme:
 - PayTR altyapısı ile güvenli ödeme (3D Secure).
@@ -3060,7 +3060,7 @@ def odeme_landing(request: Request):
 
 # Ücretsiz planda: ilk analiz ücretsiz, sonrası için ödeme gerekir (ayda 1 hak)
 AYLIK_LIMIT_UCRETSIZ = 1
-# Pro planı (50€ aylık / 99€ yıllık): ayda 10+3 = 13 analiz
+# Pro planı (54€ aylık / 106.92€ yıllık, KDV dahil): ayda 10+3 = 13 analiz
 AYLIK_LIMIT_PRO = 13
 
 
@@ -4768,9 +4768,16 @@ def _payment_campaign_config(campaign: dict | None, t: dict) -> dict:
     }
 
 
+_PLAN_PARAM_MAP = {
+    "single": "single", "monthly": "monthly", "yearly": "yearly", "annual": "yearly",
+    "single_13eur": "single", "monthly_50eur": "monthly", "yearly_99eur": "yearly",
+}
+
+
 @app.get("/payment", response_class=HTMLResponse)
 def payment_page_premium(
     request: Request,
+    plan: str | None = Query(None, description="Plan seçimi: single, monthly, yearly/annual veya plan kodu"),
     lang: str | None = Query(None, description="Dil override; yoksa tarayıcı diline göre otomatik"),
     current_user: User | None = Depends(get_current_user_optional),
     db: Session = Depends(get_db),
@@ -4802,7 +4809,13 @@ def payment_page_premium(
     user_logged_in = current_user is not None
     user_email = (current_user.email or "").strip() if current_user else ""
     user_name = (getattr(current_user, "full_name", None) or "").strip() if current_user else ""
-    default_plan = next((p for p in plans if p.get("product") == "yearly"), plans[0] if plans else None)
+    requested_product = _PLAN_PARAM_MAP.get((plan or "").strip().lower())
+    if requested_product:
+        default_plan = next((p for p in plans if p.get("product") == requested_product), None)
+    else:
+        default_plan = None
+    if not default_plan:
+        default_plan = next((p for p in plans if p.get("product") == "yearly"), plans[0] if plans else None)
 
     # Eski checkout şablonuyla uyum için: plan_code / prices / benefits_* değişkenleri
     prices = {code: f"{price_cents / 100:.2f}" for code, (product, price_cents) in plan_map.items()}

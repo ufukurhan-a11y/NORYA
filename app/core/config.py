@@ -42,9 +42,9 @@ class Settings(BaseSettings):
     paytr_fail_url: str = ""           # Hata/iptal sonrası yönlendirilecek
     paytr_currency: str = "EUR"        # Fiyat listesi para birimi (EUR); PayTR'ye TL göndermek için paytr_eur_to_try_rate kullanın
     paytr_eur_to_try_rate: float = 35.0  # EUR → TL kuru (örn. 35 = 1 EUR). >0 ise PayTR'ye TL ile ödeme gönderilir (mağazada EUR hesabı yoksa)
-    paytr_amount_single: int = 1400   # Tek analiz (euro cent), 1400 = 14,00 €
-    paytr_amount_monthly: int = 5400   # Aylık Pro (euro cent), 5400 = 54,00 €
-    paytr_amount_yearly: int = 9900   # Yıllık Pro (euro cent), 9900 = 99,00 €
+    paytr_amount_single: int = 1404   # Tek analiz (euro cent), 1404 = 14,04 € (KDV dahil)
+    paytr_amount_monthly: int = 5400   # Aylık Pro (euro cent), 5400 = 54,00 € (KDV dahil)
+    paytr_amount_yearly: int = 10692   # Yıllık Pro (euro cent), 10692 = 106,92 € (KDV dahil)
     paytr_test_mode: str = "0"         # Test için 1
     paytr_debug: bool = False          # True ise get-token'da debug_on=1; PayTR detaylı hata döner (sadece test için)
     admin_secret: str = ""             # Manuel hak tanıma (destek): POST /payment/grant için

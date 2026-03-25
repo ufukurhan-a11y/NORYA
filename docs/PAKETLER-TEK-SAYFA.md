@@ -18,14 +18,14 @@ Tarayıcıda paketleri görmek için: **`http://127.0.0.1:8000/pay`** (veya canl
 
 ## Paket özeti (kod tanımları)
 
-| Paket | Plan kodu | Ürün (product) | Fiyat (EUR) | PayTR amount (cent) |
-|-------|-----------|-----------------|-------------|--------------------|
-| **Tek Analiz** | `single_13eur` | `single` | 13 € | 1300 |
-| **Aylık Abonelik** | `monthly_50eur` | `monthly` | 50 € | 5000 |
-| **Yıllık Abonelik** | `yearly_99eur` | `yearly` | 99 € | 9900 |
+| Paket | Plan kodu | Ürün (product) | Fiyat (EUR, KDV dahil) | PricingPlan (cent) |
+|-------|-----------|-----------------|------------------------|--------------------|
+| **Tek Analiz** | `single_13eur` | `single` | 14.04 € | 1404 |
+| **Aylık Abonelik** | `monthly_50eur` | `monthly` | 54.00 € | 5400 |
+| **Yıllık Abonelik** | `yearly_99eur` | `yearly` | 106.92 € | 10692 |
 
-- **Fiyatlar:** `app/main.py` → `EUR_BASE = {"single": 13, "monthly": 50, "yearly": 99}`
-- **Plan kodları:** `app/main.py` → `PAYTR_PLAN_CODES` (single_13eur, monthly_50eur, yearly_99eur)
+- **Merkezi fiyat kaynağı:** `PricingPlan` tablosu (admin'den güncellenir) → `app/services/pricing.py`
+- **Plan kodları:** single_13eur, monthly_50eur, yearly_99eur (kodlar tarihî; fiyat DB'den gelir)
 
 ---
 
