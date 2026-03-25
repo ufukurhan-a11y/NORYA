@@ -1458,24 +1458,62 @@ if getattr(settings, "environment", "development") != "production":
 
     @app.get("/debug/ga", response_class=HTMLResponse)
     async def debug_ga(request: Request):
-        """GA4 Measurement ID ve CSP bilgisini gösterir (doğrulama için). Production'da 404."""
+        """Tüm lead event'lerini tek seferde ateşler — GA4 Realtime/DebugView'da görünmelerini sağlar."""
         ga_id = (getattr(settings, "ga_measurement_id", "") or "G-1FLMLJH3Q0").strip()
-        csp = (
-            "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com https://www.googletagmanager.com; "
-            "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
-            "img-src 'self' data: blob: https:; "
-            "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com; frame-ancestors 'self';"
-        )
+        aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
+        first_id = ga_id or aw_id
+        ga_cfg = f"gtag('config','{ga_id}');" if ga_id else ""
+        aw_cfg = f"gtag('config','{aw_id}');" if aw_id else ""
         html = f"""<!DOCTYPE html>
-<html><head><meta charset="utf-8"><title>Debug GA</title></head>
-<body style="font-family:sans-serif; padding:1.5rem; max-width:640px;">
-<h1>GA4 Debug</h1>
-<p><strong>Measurement ID:</strong> <code>{ga_id}</code></p>
-<p>Bu sayfada tag yüklü olmalı. Realtime test için gizli sekmede site açıp 1-2 sayfa gezin.</p>
-<h2>Content-Security-Policy (production)</h2>
-<pre style="background:#f0f0f0; padding:0.75rem; overflow-x:auto; font-size:0.85rem;">{csp}</pre>
-<p><a href="/">← Ana sayfa</a></p>
+<html><head><meta charset="utf-8"><title>GA4 Lead Event Debug</title>
+<script async src="https://www.googletagmanager.com/gtag/js?id={first_id}"></script>
+<script>
+window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}
+gtag('js',new Date());{ga_cfg}{aw_cfg}
+</script>
+</head>
+<body style="font-family:system-ui,sans-serif;padding:2rem;max-width:640px;margin:0 auto;">
+<h1 style="color:#1a73e8;">GA4 Lead Event Debug</h1>
+<p><strong>GA4 ID:</strong> <code>{ga_id}</code></p>
+<p><strong>Google Ads ID:</strong> <code>{aw_id or '—'}</code></p>
+<hr>
+<p>Asagidaki butona tikla — 4 lead event birden GA4'e gonderilecek:</p>
+<ul>
+<li><code>lead_subscribe</code></li>
+<li><code>lead_already</code></li>
+<li><code>lead_consent_required</code></li>
+<li><code>lead_unsubscribe</code></li>
+</ul>
+<button id="fireBtn" style="background:#1a73e8;color:#fff;border:none;padding:12px 32px;border-radius:8px;font-size:16px;cursor:pointer;margin:16px 0;">
+Tum Lead Event'leri Gonder
+</button>
+<div id="log" style="background:#f8f9fa;padding:12px;border-radius:8px;margin-top:12px;font-size:14px;display:none;"></div>
+<script>
+document.getElementById('fireBtn').addEventListener('click', function() {{
+  var log = document.getElementById('log');
+  log.style.display = 'block';
+  log.innerHTML = '';
+  var events = [
+    ['lead_subscribe', {{event_category:'lead',event_label:'debug',locale:'tr',non_interaction:true}}],
+    ['lead_already', {{event_category:'lead',event_label:'debug',locale:'tr',non_interaction:true}}],
+    ['lead_consent_required', {{event_category:'lead',event_label:'debug',locale:'tr',non_interaction:true}}],
+    ['lead_unsubscribe', {{event_category:'engagement',event_label:'email',non_interaction:true}}]
+  ];
+  events.forEach(function(ev) {{
+    try {{
+      gtag('event', ev[0], ev[1]);
+      log.innerHTML += '<div style="color:green;">&#10003; ' + ev[0] + ' gonderildi</div>';
+    }} catch(e) {{
+      log.innerHTML += '<div style="color:red;">&#10007; ' + ev[0] + ' HATA: ' + e.message + '</div>';
+    }}
+  }});
+  log.innerHTML += "<br><strong>GA4 Realtime / DebugView sayfasinda 1-2 dk icinde gorunecek.</strong>";
+  this.textContent = 'Gonderildi!';
+  this.style.background = '#0d904f';
+}});
+</script>
+<hr>
+<p><a href="/">Ana sayfa</a></p>
 </body></html>"""
         return HTMLResponse(html)
 
@@ -1490,7 +1528,10 @@ _GTAG_INJECT_PLACEHOLDER = "  <!-- NORYA_GTAG_INJECT -->"
 
 def _inject_ga(html: str) -> str:
     """Google Ads (AW-18004536281) ve isteğe bağlı GA4 gtag'ini placeholder yerine koyar. Tek script, tek yükleme."""
-    ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
+    # static/index.html (SPA) için gtag enjeksiyonu.
+    # settings.ga_measurement_id boş kalırsa GA4 config çalışmayabilir; bu da
+    # özel event'lerin (lead_subscribe vb.) GA4'te görünmemesine yol açar.
+    ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip() or "G-1FLMLJH3Q0"
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
     first_id = ga_id or aw_id
     configs = []
@@ -2228,9 +2269,11 @@ async def api_lead_subscribe(request: Request, db: Session = Depends(get_db)):
 
             threading.Thread(target=_send, daemon=True).start()
 
-        # "Unsubscribe" olmuş kullanıcı tekrar onay verirse fiilen yeniden abone olmuş olur:
-        # pazarlama/analytics tarafında bunu "yeni lead" gibi saymak için already=False döndürüyoruz.
-        return JSONResponse(content={"ok": True, "already": not should_send_welcome})
+        # Standart: DB'de e-posta zaten varsa "mevcut lead" sayılır.
+        # Frontend tarafı `already`'ya göre GA4 event'ini seçer:
+        # - already=False -> lead_subscribe
+        # - already=True  -> lead_already
+        return JSONResponse(content={"ok": True, "already": True})
 
     ip = _client_ip(request)
     user_agent = (request.headers.get("user-agent") or "")[:500] or None
@@ -2296,9 +2339,9 @@ def api_lead_unsubscribe(
         # Unsubscribe başarısız olsa bile kullanıcıya “OK” göstermek daha güvenli (tahmin yürütmeyi azaltır).
         pass
 
-    ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
+    ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip() or "G-1FLMLJH3Q0"
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
-    tag_id_for_script = ga_id or aw_id or "G-1FLMLJH3Q0"
+    tag_id_for_script = ga_id or aw_id
 
     ga_cfg = f"gtag('config', '{ga_id}');" if ga_id else ""
     aw_cfg = f"gtag('config', '{aw_id}');" if aw_id else ""

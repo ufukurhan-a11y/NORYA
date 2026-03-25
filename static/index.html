@@ -13026,7 +13026,7 @@
         msgEl.classList.remove('hidden');
 
         try {
-          if (typeof gtag === 'function') {
+          if (d && d.ok && typeof gtag === 'function') {
             gtag('event', (d.already ? 'lead_already' : 'lead_subscribe'), {
               event_category: 'lead',
               event_label: source || 'homepage',
