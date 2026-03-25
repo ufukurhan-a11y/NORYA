@@ -62,7 +62,7 @@
     @media (max-width:640px) { #base-lang-menu { min-width:200px; max-width:calc(100vw - 16px); padding:8px; border-radius:16px; } #base-lang-menu .header-lang-option { min-height:40px; padding:9px 10px; font-size:0.9375rem; } }
   </style>
   <script type="application/ld+json">
-  {"@context":"https://schema.org","@type":"Organization","name":"NoryaAI","url":"{{ base_url }}","logo":"{{ base_url }}/static/images/og-default.png"}
+  {"@context":"https://schema.org","@type":"Organization","name":"NoryaAI","url":"{{ base_url }}","logo":"{{ base_url }}/static/images/og-default.png","sameAs":["https://www.linkedin.com/company/noryaai","https://www.instagram.com/noryaai","https://x.com/noryaai","https://www.youtube.com/@noryaai","https://www.facebook.com/noryaai"]}
   </script>
   <script type="application/ld+json">
   {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{% for bc in breadcrumbs %}{% if not loop.first %},{% endif %}{"@type":"ListItem","position":{{ loop.index }},"name":{{ bc.name|tojson }},"item":"{{ bc.url }}"}{% endfor %}]}

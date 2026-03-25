@@ -621,15 +621,15 @@ async def security_headers(request: Request, call_next):
                 "https://www.googletagmanager.com https://googletagmanager.com "
                 "https://www.googleadservices.com https://googleadservices.com "
                 "https://googleads.g.doubleclick.net https://www.google.com "
-                "https://connect.facebook.net; "
+                "https://connect.facebook.net https://snap.licdn.com; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
                 "img-src 'self' data: blob: https://www.google.com https://www.google.com.tr "
                 "https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com "
-                "https://www.facebook.com; "
+                "https://www.facebook.com https://px.ads.linkedin.com; "
                 "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
                 "https://www.google.com https://www.googletagmanager.com "
                 "https://googleads.g.doubleclick.net https://www.googleadservices.com "
-                "https://www.facebook.com https://connect.facebook.net; "
+                "https://www.facebook.com https://connect.facebook.net https://px.ads.linkedin.com; "
                 "frame-ancestors 'self';"
             )
             response.headers["Content-Security-Policy"] = _csp
@@ -643,6 +643,7 @@ async def inject_tracking_ids(request: Request, call_next):
     request.state.google_ads_conversion_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
     request.state.google_site_verification = (getattr(settings, "google_site_verification", "") or "").strip()
     request.state.meta_pixel_id = (getattr(settings, "meta_pixel_id", "") or "").strip()
+    request.state.linkedin_partner_id = (getattr(settings, "linkedin_partner_id", "") or "").strip()
     return await call_next(request)
 
 
@@ -1550,10 +1551,11 @@ _GTAG_INJECT_PLACEHOLDER = "  <!-- NORYA_GTAG_INJECT -->"
 
 
 def _inject_ga(html: str) -> str:
-    """GA4 + Google Ads + opsiyonel Meta Pixel gtag'ini placeholder yerine koyar. Consent Mode v2 ile."""
+    """GA4 + Google Ads + Meta Pixel + LinkedIn Insight gtag'ini placeholder yerine koyar. Consent Mode v2 ile."""
     ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip() or "G-1FLMLJH3Q0"
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
     fb_id = (getattr(settings, "meta_pixel_id", "") or "").strip()
+    li_id = (getattr(settings, "linkedin_partner_id", "") or "").strip()
     first_id = ga_id or aw_id
     configs = []
     if ga_id:
@@ -1570,6 +1572,18 @@ def _inject_ga(html: str) -> str:
             f"(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');\n"
             f"  if(document.cookie.indexOf('norya_consent=1')!==-1){{fbq('consent','grant');}}else{{fbq('consent','revoke');}}\n"
             f"  fbq('init','{fb_id}');fbq('track','PageView');\n"
+        )
+
+    li_snippet = ""
+    if li_id:
+        li_snippet = (
+            f'_linkedin_partner_id="{li_id}";window._linkedin_data_partner_ids=window._linkedin_data_partner_ids||[];'
+            f'window._linkedin_data_partner_ids.push(_linkedin_partner_id);'
+            f'(function(l){{if(!l){{window.lintrk=function(a,b){{window.lintrk.q.push([a,b])}};'
+            f'window.lintrk.q=[]}}var s=document.getElementsByTagName("script")[0];'
+            f'var b=document.createElement("script");b.type="text/javascript";b.async=true;'
+            f'b.src="https://snap.licdn.com/li.lms-analytics/insight.min.js";'
+            f's.parentNode.insertBefore(b,s);}})(window.lintrk);\n'
         )
 
     consent_default = (
@@ -1590,6 +1604,8 @@ def _inject_ga(html: str) -> str:
     )
     if fb_snippet:
         inject += f'  <script>{fb_snippet}</script>\n'
+    if li_snippet:
+        inject += f'  <script>{li_snippet}</script>\n'
     inject += '  '
     return html.replace(_GTAG_INJECT_PLACEHOLDER, inject)
 
