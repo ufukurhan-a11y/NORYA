@@ -126,7 +126,7 @@ def parse_biomarkers(values_block: str) -> list[dict]:
             if name:
                 idx = line.find(name)
                 if idx >= 0:
-                    rest = line[idx + len(name):].lstrip(":–—\- ").strip()
+                    rest = line[idx + len(name):].lstrip(":–—- ").strip()
         if not name or len(name) < 2 or len(name) > 80:
             continue
         if re.match(r"^\d", name) or re.search(r"\bReference\b|Ref\.\s|\d+\s*(?:mg|g|ng|mmol)", name, re.I):
