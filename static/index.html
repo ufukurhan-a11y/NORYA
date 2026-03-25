@@ -13041,6 +13041,9 @@
               non_interaction: true
             });
           }
+          if (d && d.ok && !d.already && typeof fbq === 'function') {
+            fbq('track', 'Lead', {content_name: source || 'homepage'});
+          }
         } catch (err) {}
       }).catch(function() {
         msgEl.className = 'lead-capture-msg error'; msgEl.textContent = t.lead_error_generic || 'Something went wrong. Please try again.';
@@ -14820,5 +14823,62 @@
       onStickyCtaScroll();
     })();
   </script>
+<!-- Cookie Consent Banner -->
+<div id="norya-cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1e293b;color:#f1f5f9;padding:14px 20px;font-size:14px;line-height:1.5;box-shadow:0 -2px 12px rgba(0,0,0,.25);font-family:system-ui,sans-serif;">
+  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
+    <span id="cookie-text" style="flex:1 1 300px;">Bu site, deneyiminizi iyileştirmek ve analiz amacıyla çerez kullanır.</span>
+    <div style="display:flex;gap:8px;flex-shrink:0;">
+      <button id="cookie-accept" style="background:#2563eb;color:#fff;border:none;padding:8px 22px;border-radius:6px;font-size:14px;cursor:pointer;font-weight:500;">Kabul Et</button>
+      <button id="cookie-reject" style="background:transparent;color:#94a3b8;border:1px solid #475569;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer;">Reddet</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var CB={
+    tr:"Bu site, deneyiminizi iyileştirmek ve analiz amacıyla çerez kullanır.",
+    en:"This site uses cookies to improve your experience and for analytics.",
+    de:"Diese Website verwendet Cookies zur Verbesserung Ihrer Erfahrung und für Analysen.",
+    fr:"Ce site utilise des cookies pour améliorer votre expérience et à des fins d\u0027analyse.",
+    it:"Questo sito utilizza cookie per migliorare la tua esperienza e per analisi.",
+    es:"Este sitio utiliza cookies para mejorar su experiencia y con fines analíticos.",
+    he:"אתר זה משתמש בעוגיות לשיפור החוויה ולצורכי ניתוח.",
+    ar:"يستخدم هذا الموقع ملفات تعريف الارتباط لتحسين تجربتك ولأغراض التحليل.",
+    hi:"यह साइट आपके अनुभव को बेहतर बनाने और विश्लेषण के लिए कुकीज़ का उपयोग करती है."
+  };
+  var CA={tr:"Kabul Et",en:"Accept",de:"Akzeptieren",fr:"Accepter",it:"Accetta",es:"Aceptar",he:"אישור",ar:"قبول",hi:"स्वीकार करें"};
+  var CR={tr:"Reddet",en:"Reject",de:"Ablehnen",fr:"Refuser",it:"Rifiuta",es:"Rechazar",he:"דחייה",ar:"رفض",hi:"अस्वीकार करें"};
+  function gl(){try{var s=localStorage.getItem('norya_lang');if(s)return s;}catch(e){}return(document.documentElement.lang||'tr').split('-')[0];}
+  function sc(n,v,d){var e=new Date();e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+  function gc(n){var m=document.cookie.match('(^|;)\\s*'+n+'=([^;]*)');return m?m[2]:null;}
+
+  if(gc('norya_consent')!==null) return;
+
+  var banner=document.getElementById('norya-cookie-banner');
+  var lang=gl();
+  var txt=document.getElementById('cookie-text');
+  var btnA=document.getElementById('cookie-accept');
+  var btnR=document.getElementById('cookie-reject');
+  if(txt&&CB[lang])txt.textContent=CB[lang];
+  if(btnA&&CA[lang])btnA.textContent=CA[lang];
+  if(btnR&&CR[lang])btnR.textContent=CR[lang];
+  if(banner)banner.style.display='block';
+
+  function accept(){
+    sc('norya_consent','1',365);
+    if(typeof gtag==='function'){
+      gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});
+    }
+    if(typeof fbq==='function')fbq('consent','grant');
+    if(banner)banner.style.display='none';
+  }
+  function reject(){
+    sc('norya_consent','0',365);
+    if(banner)banner.style.display='none';
+  }
+  if(btnA)btnA.addEventListener('click',accept);
+  if(btnR)btnR.addEventListener('click',reject);
+})();
+</script>
 </body>
 </html>

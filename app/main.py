@@ -333,6 +333,25 @@ async def lifespan(app: FastAPI):
             log.info("Blog ikonları doğrulandı (%d dosya).", len(icon_paths))
     except Exception as e:
         log.warning("Blog ikon doğrulaması atlandı: %s", e)
+
+    # Drip e-posta kampanyası: her saat process_drip_emails() çalıştır (daemon thread — uygulama kapanınca otomatik sonlanır)
+    def _drip_loop():
+        import time as _time
+        _INTERVAL = 3600  # 1 saat
+        _time.sleep(30)  # startup'tan 30s sonra ilk çalıştırma
+        while True:
+            try:
+                from app.services.drip_campaign import process_drip_emails
+                sent = process_drip_emails(batch_size=50)
+                if sent:
+                    log.info("Drip kampanya: %d e-posta gönderildi.", sent)
+            except Exception as exc:
+                log.warning("Drip kampanya hatası: %s", exc)
+            _time.sleep(_INTERVAL)
+
+    threading.Thread(target=_drip_loop, daemon=True, name="drip-campaign").start()
+    log.info("Drip kampanya thread başlatıldı (saatlik).")
+
     yield
 
 
@@ -601,13 +620,16 @@ async def security_headers(request: Request, call_next):
                 "script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://cdn.tailwindcss.com "
                 "https://www.googletagmanager.com https://googletagmanager.com "
                 "https://www.googleadservices.com https://googleadservices.com "
-                "https://googleads.g.doubleclick.net https://www.google.com; "
+                "https://googleads.g.doubleclick.net https://www.google.com "
+                "https://connect.facebook.net; "
                 "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; "
                 "img-src 'self' data: blob: https://www.google.com https://www.google.com.tr "
-                "https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com; "
+                "https://googleads.g.doubleclick.net https://www.google-analytics.com https://www.googletagmanager.com "
+                "https://www.facebook.com; "
                 "connect-src 'self' https://www.google-analytics.com https://region1.google-analytics.com "
                 "https://www.google.com https://www.googletagmanager.com "
-                "https://googleads.g.doubleclick.net https://www.googleadservices.com; "
+                "https://googleads.g.doubleclick.net https://www.googleadservices.com "
+                "https://www.facebook.com https://connect.facebook.net; "
                 "frame-ancestors 'self';"
             )
             response.headers["Content-Security-Policy"] = _csp
@@ -620,6 +642,7 @@ async def inject_tracking_ids(request: Request, call_next):
     request.state.ga_measurement_id = (getattr(settings, "ga_measurement_id", "") or "").strip()
     request.state.google_ads_conversion_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
     request.state.google_site_verification = (getattr(settings, "google_site_verification", "") or "").strip()
+    request.state.meta_pixel_id = (getattr(settings, "meta_pixel_id", "") or "").strip()
     return await call_next(request)
 
 
@@ -1527,21 +1550,47 @@ _GTAG_INJECT_PLACEHOLDER = "  <!-- NORYA_GTAG_INJECT -->"
 
 
 def _inject_ga(html: str) -> str:
-    """Google Ads (AW-18004536281) ve isteğe bağlı GA4 gtag'ini placeholder yerine koyar. Tek script, tek yükleme."""
-    # static/index.html (SPA) için gtag enjeksiyonu.
-    # settings.ga_measurement_id boş kalırsa GA4 config çalışmayabilir; bu da
-    # özel event'lerin (lead_subscribe vb.) GA4'te görünmemesine yol açar.
+    """GA4 + Google Ads + opsiyonel Meta Pixel gtag'ini placeholder yerine koyar. Consent Mode v2 ile."""
     ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip() or "G-1FLMLJH3Q0"
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip() or GOOGLE_ADS_GLOBAL_TAG_ID
+    fb_id = (getattr(settings, "meta_pixel_id", "") or "").strip()
     first_id = ga_id or aw_id
     configs = []
     if ga_id:
         configs.append(f'gtag("config","{ga_id}");')
     configs.append(f'gtag("config","{aw_id}");')
-    inject = (
-        f'<script async src="https://www.googletagmanager.com/gtag/js?id={first_id}"></script>\n'
-        f'  <script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}gtag("js",new Date());{" ".join(configs)}</script>\n  '
+
+    fb_snippet = ""
+    if fb_id:
+        fb_snippet = (
+            f"!function(f,b,e,v,n,t,s){{if(f.fbq)return;n=f.fbq=function(){{n.callMethod?"
+            f"n.callMethod.apply(n,arguments):n.queue.push(arguments)}};if(!f._fbq)f._fbq=n;"
+            f"n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;"
+            f"t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}}"
+            f"(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');\n"
+            f"  if(document.cookie.indexOf('norya_consent=1')!==-1){{fbq('consent','grant');}}else{{fbq('consent','revoke');}}\n"
+            f"  fbq('init','{fb_id}');fbq('track','PageView');\n"
+        )
+
+    consent_default = (
+        'gtag("consent","default",{analytics_storage:"denied",ad_storage:"denied",'
+        'ad_user_data:"denied",ad_personalization:"denied"});'
     )
+    consent_restore = (
+        'if(document.cookie.indexOf("norya_consent=1")!==-1){'
+        'gtag("consent","update",{analytics_storage:"granted",ad_storage:"granted",'
+        'ad_user_data:"granted",ad_personalization:"granted"});}'
+    )
+
+    inject = (
+        f'<script>window.dataLayer=window.dataLayer||[];function gtag(){{dataLayer.push(arguments);}}'
+        f'{consent_default}{consent_restore}</script>\n'
+        f'  <script async src="https://www.googletagmanager.com/gtag/js?id={first_id}"></script>\n'
+        f'  <script>gtag("js",new Date());{" ".join(configs)}</script>\n'
+    )
+    if fb_snippet:
+        inject += f'  <script>{fb_snippet}</script>\n'
+    inject += '  '
     return html.replace(_GTAG_INJECT_PLACEHOLDER, inject)
 
 
@@ -2341,13 +2390,26 @@ def api_lead_unsubscribe(
 
     ga_id = (getattr(settings, "ga_measurement_id", "") or "").strip() or "G-1FLMLJH3Q0"
     aw_id = (getattr(settings, "google_ads_conversion_id", "") or "").strip()
+    fb_id = (getattr(settings, "meta_pixel_id", "") or "").strip()
     tag_id_for_script = ga_id or aw_id
 
     ga_cfg = f"gtag('config', '{ga_id}');" if ga_id else ""
     aw_cfg = f"gtag('config', '{aw_id}');" if aw_id else ""
 
-    # Email içinden tıklanarak açılan sayfada en azından bir event atabilelim.
-    # (SPA'deki base template'ler bu endpoint'te otomatik yüklenmediği için burada minimal gtag init yapıyoruz.)
+    fb_script = ""
+    if fb_id:
+        fb_script = (
+            "<script>"
+            "!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?"
+            "n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;"
+            "n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;"
+            "t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}"
+            "(window,document,'script','https://connect.facebook.net/en_US/fbevents.js');"
+            f"fbq('consent','grant');fbq('init','{fb_id}');"
+            "fbq('trackCustom','LeadUnsubscribe');"
+            "</script>"
+        )
+
     body_html = (
         "<html><head>"
         f"<script async src=\"https://www.googletagmanager.com/gtag/js?id={tag_id_for_script}\"></script>"
@@ -2358,6 +2420,7 @@ def api_lead_unsubscribe(
         f"{ga_cfg}{aw_cfg}"
         "try { gtag('event', 'lead_unsubscribe', { event_category: 'engagement', event_label: 'email', non_interaction: true }); } catch(e) {}"
         "</script>"
+        f"{fb_script}"
         "</head><body>"
         "<h3>İptal edildi.</h3>"
         "<p>E-posta iletişimlerinden çıkarıldınız.</p>"

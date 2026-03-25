@@ -550,6 +550,9 @@
               non_interaction: true
             });
           }
+          if (d && d.ok && !d.already && typeof fbq === 'function') {
+            fbq('track', 'Lead', {content_name: 'blog'});
+          }
         } catch (err) {}
     }).catch(function(){
       msg.className = 'mt-3 text-sm font-medium rounded-lg px-3 py-2 max-w-md mx-auto text-red-700 bg-red-50';

@@ -72,6 +72,8 @@ class Settings(BaseSettings):
     ga_measurement_id: str = ""
     # Google Ads: Dönüşüm hesabı kimliği (AW-XXXXXXXXX). Boşsa gtag'a eklenmez.
     google_ads_conversion_id: str = "AW-18004536281"
+    # Meta (Facebook) Pixel ID. Boşsa FB pixel yüklenmez.
+    meta_pixel_id: str = ""
     # Google Ads: "Satın alma işlemi" dönüşüm etiketi. Hesap > Araçlar > Dönüşümler'deki etiketle birebir aynı olmalı.
     google_ads_conversion_label: str = "RF4SCL78oIYcENnXnYlD"
     # Google Search Console — HTML etiketi doğrulama: meta content değeri (Search Console ile birebir).

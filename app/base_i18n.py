@@ -22,6 +22,9 @@ BASE_UI = {
         "cta_analyze": "Analyze",
         "title_suffix": "— Reliable AI blood test analysis",
         "home_link": BRAND_NAME,
+        "cookie_text": "This site uses cookies to improve your experience and for analytics.",
+        "cookie_accept": "Accept",
+        "cookie_reject": "Reject",
     },
     "de": {
         "nav_how": "So funktioniert's",
@@ -36,6 +39,9 @@ BASE_UI = {
         "cta_analyze": "Analysieren",
         "title_suffix": "— Zuverlässige KI-Blutanalyse",
         "home_link": BRAND_NAME,
+        "cookie_text": "Diese Website verwendet Cookies zur Verbesserung Ihrer Erfahrung und für Analysen.",
+        "cookie_accept": "Akzeptieren",
+        "cookie_reject": "Ablehnen",
     },
     "fr": {
         "nav_how": "Comment ça marche",
@@ -50,6 +56,9 @@ BASE_UI = {
         "cta_analyze": "Analyser",
         "title_suffix": "— Comprendre vos analyses sanguines",
         "home_link": BRAND_NAME,
+        "cookie_text": "Ce site utilise des cookies pour améliorer votre expérience et à des fins d'analyse.",
+        "cookie_accept": "Accepter",
+        "cookie_reject": "Refuser",
     },
     "it": {
         "nav_how": "Come funziona",
@@ -64,6 +73,9 @@ BASE_UI = {
         "cta_analyze": "Analizza",
         "title_suffix": "— Capire le analisi del sangue",
         "home_link": BRAND_NAME,
+        "cookie_text": "Questo sito utilizza cookie per migliorare la tua esperienza e per analisi.",
+        "cookie_accept": "Accetta",
+        "cookie_reject": "Rifiuta",
     },
     "tr": {
         "nav_how": "Nasıl Çalışır",
@@ -78,6 +90,9 @@ BASE_UI = {
         "cta_analyze": "Analiz Yap",
         "title_suffix": "— Kan tahlili sonuçlarını anlaşılır kılan analiz",
         "home_link": BRAND_NAME,
+        "cookie_text": "Bu site, deneyiminizi iyileştirmek ve analiz amacıyla çerez kullanır.",
+        "cookie_accept": "Kabul Et",
+        "cookie_reject": "Reddet",
     },
     "es": {
         "nav_how": "Cómo funciona",
@@ -92,6 +107,9 @@ BASE_UI = {
         "cta_analyze": "Analizar",
         "title_suffix": "— Análisis de resultados de sangre en lenguaje claro",
         "home_link": BRAND_NAME,
+        "cookie_text": "Este sitio utiliza cookies para mejorar su experiencia y con fines analíticos.",
+        "cookie_accept": "Aceptar",
+        "cookie_reject": "Rechazar",
     },
     "he": {
         "nav_how": "איך זה עובד",
@@ -106,6 +124,9 @@ BASE_UI = {
         "cta_analyze": "נתחו",
         "title_suffix": "— ניתוח ברור של בדיקות דם",
         "home_link": BRAND_NAME,
+        "cookie_text": "אתר זה משתמש בעוגיות לשיפור החוויה ולצורכי ניתוח.",
+        "cookie_accept": "אישור",
+        "cookie_reject": "דחייה",
     },
     "hi": {
         "nav_how": "Kaise kaam karta hai",
@@ -120,6 +141,9 @@ BASE_UI = {
         "cta_analyze": "Analyze karein",
         "title_suffix": "— AI blood test analysis",
         "home_link": BRAND_NAME,
+        "cookie_text": "यह साइट आपके अनुभव को बेहतर बनाने और विश्लेषण के लिए कुकीज़ का उपयोग करती है.",
+        "cookie_accept": "स्वीकार करें",
+        "cookie_reject": "अस्वीकार करें",
     },
     "ar": {
         "nav_how": "كيف يعمل",
@@ -134,6 +158,9 @@ BASE_UI = {
         "cta_analyze": "ابدأ التحليل",
         "title_suffix": "— تحليل واضح لفحوصات الدم",
         "home_link": BRAND_NAME,
+        "cookie_text": "يستخدم هذا الموقع ملفات تعريف الارتباط لتحسين تجربتك ولأغراض التحليل.",
+        "cookie_accept": "قبول",
+        "cookie_reject": "رفض",
     },
 }
 
