@@ -3742,14 +3742,18 @@
     }
   };
   window._pickLang = function(lang) {
-    console.log('[lang-pick]', lang);
+    console.log('[i18n-home] _pickLang → switchLocale', lang);
     document.querySelectorAll('.header-lang-menu').forEach(function(m) {
       m.hidden = true;
       m.style.cssText = '';
     });
     document.querySelectorAll('.header-lang-toggle').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
-    try { document.cookie = 'norya_lang=' + lang + '; path=/; max-age=31536000; samesite=lax'; } catch(_){}
-    window.location.href = '/?lang=' + encodeURIComponent(lang);
+    if (typeof window.switchLocale === 'function') { window.switchLocale(lang); }
+    else if (typeof window.chooseLang === 'function') { window.chooseLang(lang); }
+    else {
+      try { document.cookie = 'norya_lang=' + lang + '; path=/; max-age=31536000; samesite=lax'; } catch(_){}
+      window.location.href = '/?lang=' + encodeURIComponent(lang);
+    }
   };
   document.addEventListener('click', function(e) {
     if (e.target && e.target.closest && e.target.closest('.header-lang-switch')) return;
@@ -3769,7 +3773,7 @@
     <a href="/payment" id="promo-strip-fixed-link" data-i18n="promo_strip_cta"></a>
   </div>
   <div id="sticky-cta-bar" class="no-print" aria-hidden="true">
-    <a href="/payment" id="sticky-cta-link" data-i18n="cta_sticky_pricing">Fiyatları Gör — Satın Al</a>
+    <a href="/payment" id="sticky-cta-link" data-i18n="cta_sticky_pricing">View pricing — Buy now</a>
   </div>
   <script>
   (function(){
@@ -3803,11 +3807,11 @@
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
       </a>
       <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
-        <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">Hakkımızda</a>
-        <a href="/how-it-works" class="nav-link" data-nav="how-it-works" data-i18n="nav_how">Nasıl Çalışır</a>
-        <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Yorumlar</a>
-        <a href="/pricing" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Fiyatlandırma</a>
-        <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Kurumsal</a>
+        <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">About us</a>
+        <a href="/how-it-works" class="nav-link" data-nav="how-it-works" data-i18n="nav_how">How it works</a>
+        <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Reviews</a>
+        <a href="/pricing" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
+        <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Corporate</a>
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="header-right-zone">
@@ -3834,16 +3838,16 @@
           </div>
         </div>
         <span id="nav-auth" class="header-auth-always items-center flex-shrink-0 gap-2">
-          <button type="button" onclick="openLogin()" class="secondary-link" data-i18n="nav_login">Giriş</button>
-          <button type="button" onclick="openRegister()" class="secondary-link" data-i18n="nav_register">Ücretsiz Başla</button>
+          <button type="button" onclick="openLogin()" class="secondary-link" data-i18n="nav_login">Log in</button>
+          <button type="button" onclick="openRegister()" class="secondary-link" data-i18n="nav_register">Get started free</button>
         </span>
         <span id="nav-user" class="hidden items-center gap-2 header-desktop-only">
-          <button type="button" onclick="openProfile()" class="secondary-link header-desktop-only" data-i18n="nav_profile">Profil</button>
-          <button type="button" onclick="openAnalyze()" class="primary-cta header-cta-inline header-cta-desktop elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></button>
-          <button type="button" onclick="logout()" class="secondary-link header-desktop-only" data-i18n="nav_logout">Çıkış</button>
+          <button type="button" onclick="openProfile()" class="secondary-link header-desktop-only" data-i18n="nav_profile">Profile</button>
+          <button type="button" onclick="openAnalyze()" class="primary-cta header-cta-inline header-cta-desktop elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analyze <span class="cta-icon" aria-hidden="true"></span></button>
+          <button type="button" onclick="logout()" class="secondary-link header-desktop-only" data-i18n="nav_logout">Log out</button>
         </span>
-        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analiz Yap <span class="cta-icon" aria-hidden="true"></span></a>
-        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analiz Yap</a>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analyze <span class="cta-icon" aria-hidden="true"></span></a>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analyze</a>
         <div class="header-lang-switch language-switch header-mobile-only header-mobile-lang-hide" aria-label="Language">
           <button type="button" id="base-lang-toggle-mobile" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu-mobile','base-lang-toggle-mobile')">
             <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
@@ -3862,7 +3866,7 @@
             <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
           </div>
         </div>
-        <button type="button" id="hamburger-btn" class="hamburger" onclick="toggleMobileDrawer()" aria-label="Menüyü aç" aria-expanded="false" aria-controls="mobile-drawer">
+        <button type="button" id="hamburger-btn" class="hamburger" onclick="toggleMobileDrawer()" aria-label="Open menu" data-i18n-aria-label="hamburger_open" aria-expanded="false" aria-controls="mobile-drawer">
           <span class="hamburger-inner">
             <span class="hamburger-line hamburger-line--top"></span>
             <span class="hamburger-line hamburger-line--mid"></span>
@@ -3874,39 +3878,39 @@
   </header>
   <!-- Mobile Drawer: premium slide-in -->
   <div id="mobile-overlay" class="mobile-overlay" onclick="closeMobileDrawer()" aria-hidden="true"></div>
-  <aside id="mobile-drawer" class="mobile-drawer" role="dialog" aria-label="Menü" aria-modal="true" tabindex="-1">
+  <aside id="mobile-drawer" class="mobile-drawer" role="dialog" aria-label="Menu" data-i18n-aria-label="nav_menu" aria-modal="true" tabindex="-1">
     <div class="drawer-head">
       <a href="/" class="flex items-center gap-2" aria-label="NoryaAI">
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" style="height:28px;width:auto;" width="120" height="30" loading="lazy" />
       </a>
-      <button type="button" id="drawer-close-btn" onclick="closeMobileDrawer()" class="drawer-close" aria-label="Menüyü kapat">
+      <button type="button" id="drawer-close-btn" onclick="closeMobileDrawer()" class="drawer-close" aria-label="Close menu" data-i18n-aria-label="hamburger_close">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
       </button>
     </div>
     <div class="drawer-body">
-      <a href="#analyze-section" onclick="openAnalyze(); closeMobileDrawer(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analiz Yap</a>
+      <a href="#analyze-section" onclick="openAnalyze(); closeMobileDrawer(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analyze</a>
       <div class="drawer-section drawer-section--nav">
-        <a href="#hakkimizda" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_about">Hakkımızda</a>
-        <a href="/how-it-works" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_how">Nasıl Çalışır</a>
-        <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Yorumlar</a>
-        <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Fiyatlandırma</a>
-        <a href="/kurumsal" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_corporate">Kurumsal</a>
+        <a href="#hakkimizda" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_about">About us</a>
+        <a href="/how-it-works" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_how">How it works</a>
+        <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Reviews</a>
+        <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Pricing</a>
+        <a href="/kurumsal" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_corporate">Corporate</a>
         <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
       </div>
       <div class="drawer-section">
         <div id="drawer-auth-wrap" style="display:flex;flex-direction:column;gap:0.5rem;">
-          <button type="button" onclick="openLogin(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary" data-i18n="nav_login">Giriş</button>
-          <button type="button" onclick="openRegister(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--cta" data-i18n="nav_register">Ücretsiz Başla</button>
+          <button type="button" onclick="openLogin(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary" data-i18n="nav_login">Log in</button>
+          <button type="button" onclick="openRegister(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--cta" data-i18n="nav_register">Get started free</button>
         </div>
         <div id="drawer-user-wrap" style="display:none;flex-direction:column;gap:0.5rem;">
-          <button type="button" onclick="openProfile(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary" data-i18n="nav_profile">Profil</button>
-          <button type="button" onclick="logout(); closeMobileDrawer();" class="drawer-link drawer-link--tap" data-i18n="nav_logout">Çıkış</button>
+          <button type="button" onclick="openProfile(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary" data-i18n="nav_profile">Profile</button>
+          <button type="button" onclick="logout(); closeMobileDrawer();" class="drawer-link drawer-link--tap" data-i18n="nav_logout">Log out</button>
         </div>
       </div>
       <div class="drawer-section drawer-section--footer">
         <button type="button" onclick="toggleLangModal(); closeMobileDrawer();" class="drawer-link drawer-link--tap" style="gap:0.5rem;">
           <span aria-hidden="true">🌐</span>
-          <span data-i18n="nav_languages">Diller</span>
+          <span data-i18n="nav_languages">Languages</span>
         </button>
         <button type="button" onclick="document.getElementById('theme-btn').click(); closeMobileDrawer();" class="drawer-link drawer-link--tap" style="gap:0.5rem;">
           <span aria-hidden="true">🎨</span>
@@ -3914,7 +3918,7 @@
         </button>
       </div>
       <div class="drawer-trust-meta">
-        <span data-i18n="drawer_trust">256-bit SSL · KVKK & GDPR uyumlu</span>
+        <span data-i18n="drawer_trust">256-bit SSL · KVKK & GDPR compliant</span>
       </div>
     </div>
   </aside>
@@ -3926,7 +3930,7 @@
       class="hidden lang-dropdown-panel bg-white dark:bg-accent-800 rounded-xl shadow-lg border border-accent-200 dark:border-accent-700 max-w-xs mx-auto mt-24 pointer-events-auto"
       role="dialog"
       aria-modal="true"
-      aria-label="Dil seçin"
+      aria-label="Choose language" data-i18n-aria-label="lang_modal_aria"
     >
       <button type="button" class="lang-opt w-full text-left" data-lang="tr" onclick="switchLocale('tr')">Türkçe</button>
       <button type="button" class="lang-opt w-full text-left" data-lang="en" onclick="switchLocale('en')">English</button>
@@ -3946,50 +3950,46 @@
         <!-- Left: headline, CTAs, trust -->
         <div class="text-left z-10">
           <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-4 block" data-i18n="hero_sub">Analyze blood test results with AI — free lab results explanation in minutes.</span>
-          <h1 class="font-['Manrope',sans-serif] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 sm:mb-8 text-accent-900 dark:text-white" data-i18n="hero_title">
-            Understand Your Blood Test Results with NoryaAI
-          </h1>
-          <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 mb-8 sm:mb-12 leading-relaxed max-w-xl" data-i18n="hero_desc">
-            Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused. By NoryaAI.
-          </p>
+          <h1 class="font-['Manrope',sans-serif] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 sm:mb-8 text-accent-900 dark:text-white" data-i18n="hero_title">Free AI Blood Test Analyzer</h1>
+          <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 mb-8 sm:mb-12 leading-relaxed max-w-xl" data-i18n="hero_desc">Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused. By NoryaAI.</p>
           <div class="flex flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
-            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-all" style="background-color:#0EA5A4;box-shadow:0 10px 15px -3px rgba(14,165,164,0.25);" onmouseover="this.style.backgroundColor='#0d9488';this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#0EA5A4';this.style.transform='scale(1)'" data-i18n="hero_cta">Analizi Başlat</button>
-            <a href="#ornek-klinik-rapor" class="border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors" data-i18n="hero_see_sample">Örnek raporu gör</a>
+            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-all" style="background-color:#0EA5A4;box-shadow:0 10px 15px -3px rgba(14,165,164,0.25);" onmouseover="this.style.backgroundColor='#0d9488';this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#0EA5A4';this.style.transform='scale(1)'" data-i18n="hero_cta">Start analysis</button>
+            <a href="#ornek-klinik-rapor" class="border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors" data-i18n="hero_see_sample">See sample report</a>
           </div>
-          <div class="flex flex-wrap gap-3 sm:gap-5" role="group" aria-label="Güven ve uyumluluk">
-            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">SSL Şifreli</span></span>
-            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK Uyumlu</span></span>
-            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">Güvenli Ödeme</span></span>
-            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🌐</span> <span data-i18n="trust_cards_langs_title">9+ Dil Desteği</span></span>
+          <div class="flex flex-wrap gap-3 sm:gap-5" role="group" data-i18n-aria-label="trust_badges_aria" aria-label="Trust and compliance">
+            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL protected</span></span>
+            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR compliant</span></span>
+            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">Secure payment via PayTR</span></span>
+            <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🌐</span> <span data-i18n="trust_cards_langs_title">9+ Language support</span></span>
           </div>
         </div>
         <!-- Right: Globe visual + floating report card -->
         <div class="relative flex justify-center lg:justify-end">
           <div class="relative w-full max-w-[420px] sm:max-w-[512px]" style="aspect-ratio:1/1;">
-            <img alt="Küresel sağlık ve laboratuvar sonuçları bağlantısı — Norya" class="w-full h-full object-contain" style="filter:drop-shadow(0 25px 25px rgba(0,0,0,.12));" src="/static/images/hero-globe.png" width="512" height="512" loading="eager" decoding="async" />
+            <img alt="Global health and lab results connection — Norya" data-i18n-alt="hero_globe_alt" class="w-full h-full object-contain" style="filter:drop-shadow(0 25px 25px rgba(0,0,0,.12));" src="/static/images/hero-globe.png" width="512" height="512" loading="eager" decoding="async" />
             <div class="absolute inset-0 rounded-full" style="background:radial-gradient(circle,rgba(14,165,164,0.08) 0%,transparent 70%);z-index:-1;"></div>
           </div>
           <!-- Floating report card -->
           <div class="absolute rounded-2xl p-4 sm:p-5 shadow-xl border border-accent-100 dark:border-accent-700" style="bottom:2rem;left:-1rem;max-width:260px;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);z-index:20;" aria-hidden="true">
             <div class="flex justify-between items-center mb-3">
-              <span class="text-xs font-bold uppercase tracking-wider" style="color:#0EA5A4;" data-i18n="report_preview_badge">Örnek rapor</span>
+              <span class="text-xs font-bold uppercase tracking-wider" style="color:#0EA5A4;" data-i18n="report_preview_badge">Sample report</span>
               <span class="text-2xl font-extrabold" style="color:#0EA5A4;">84<span class="text-sm font-semibold text-accent-400">/100</span></span>
             </div>
-            <p class="text-sm font-semibold text-accent-900 dark:text-white mb-2" data-i18n="health_dashboard_title">Premium Health raporu</p>
+            <p class="text-sm font-semibold text-accent-900 dark:text-white mb-2" data-i18n="health_dashboard_title">Premium Health Report</p>
             <div class="flex items-center gap-2 text-xs text-accent-500 mb-1">
               <span class="inline-flex w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <span data-i18n="report_preview_line_1">Sağlık skoru & işaretli biyobelirteçler</span>
+              <span data-i18n="report_preview_line_1">Health score, highlighted markers and key findings.</span>
             </div>
             <div class="flex items-center gap-2 text-xs text-accent-500">
               <span class="inline-flex w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
-              <span data-i18n="report_preview_line_2">Doktora hazır PDF · QR doğrulama</span>
+              <span data-i18n="report_preview_line_2">Doctor-ready PDF and optional QR verification for your report.</span>
             </div>
           </div>
         </div>
       </div>
       <div class="flex items-center justify-center gap-2.5 mt-10 sm:mt-14">
         <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <p class="text-sm sm:text-base text-accent-500 dark:text-accent-400 font-medium tracking-wide" data-i18n="hero_global_reach">Dünyanın her yerindeyiz — 190+ ülkeden erişilebilir</p>
+        <p class="text-sm sm:text-base text-accent-500 dark:text-accent-400 font-medium tracking-wide" data-i18n="hero_global_reach">We're everywhere — Accessible from 190+ countries</p>
       </div>
     </div>
   </section>
@@ -4000,19 +4000,19 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 text-center">
         <div class="flex flex-col items-center gap-2">
           <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums" data-i18n="trust_stat_users">2M+</span>
-          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase">Kullanıcı</span>
+          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase" data-i18n="stat_label_users">Users</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums" data-i18n="trust_stat_accuracy">98.7%</span>
-          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase">Doğruluk</span>
+          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase" data-i18n="stat_label_accuracy">Accuracy</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums">10+</span>
-          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase">Biyobelirteç</span>
+          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase" data-i18n="stat_label_biomarkers">Biomarkers</span>
         </div>
         <div class="flex flex-col items-center gap-2">
           <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums">1-2</span>
-          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase">Dakika</span>
+          <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase" data-i18n="stat_label_minutes">Minutes</span>
         </div>
       </div>
     </div>
@@ -4021,35 +4021,35 @@
   <!-- Trust badges — v24 horizontal strip -->
   <section id="trust-global" class="py-10 sm:py-14 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800/50 overflow-x-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <p class="text-center text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#0ea5a4] mb-8" data-i18n="trust_global_label">Küresel standartlar ve güvenlik</p>
+      <p class="text-center text-[11px] sm:text-xs font-bold tracking-[0.2em] uppercase text-[#0ea5a4] mb-8" data-i18n="trust_global_label">Global standards & security</p>
       <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-4 sm:gap-5">
         <div class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[#f5fafa] dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/40">
           <span class="text-2xl" aria-hidden="true">📄</span>
-          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_doctor_reports">Hekim tarzı raporlar</span>
+          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_doctor_reports">Doctor-style Reports</span>
         </div>
         <div class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[#f5fafa] dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/40">
           <span class="text-2xl" aria-hidden="true">💳</span>
-          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_3d">3D Secure ödeme</span>
+          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_3d">3D Secure Payments</span>
         </div>
         <div class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[#f5fafa] dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/40">
           <span class="text-2xl" aria-hidden="true">🌐</span>
-          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_global_labs">Küresel laboratuvar birimleri</span>
+          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_global_labs">Global lab units</span>
         </div>
         <div class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[#f5fafa] dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/40">
           <span class="flex items-center justify-center w-8 h-8" aria-hidden="true"><img src="/static/logos/cloudflare.svg" alt="" width="24" height="24" loading="lazy" /></span>
-          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_cloudflare">Cloudflare güvenliği</span>
+          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_cloudflare">Cloudflare Security</span>
         </div>
         <div class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[#f5fafa] dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/40">
           <span class="text-2xl" aria-hidden="true">📋</span>
-          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_qr">QR ile rapor doğrulama</span>
+          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_bar_qr">QR report verification</span>
         </div>
         <div class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[#f5fafa] dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/40">
           <span class="text-2xl font-extrabold text-[#0ea5a4]" aria-hidden="true">2M</span>
-          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_stat_users">Kullanıcı</span>
+          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_stat_users">Users</span>
         </div>
         <div class="flex flex-col items-center gap-2 p-4 rounded-2xl bg-[#f5fafa] dark:bg-accent-800/40 border border-accent-100 dark:border-accent-700/40">
           <span class="text-2xl font-extrabold text-[#0ea5a4]" aria-hidden="true">98.7%</span>
-          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_stat_accuracy">Doğruluk</span>
+          <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_stat_accuracy">Accuracy</span>
         </div>
       </div>
     </div>
@@ -4059,55 +4059,55 @@
   <section id="ozellikler" class="py-16 sm:py-20 bg-[#f5fafa] dark:bg-[#191c1d]">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
-        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block">FEATURES</span>
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-accent-900 dark:text-white mb-4 leading-tight" data-i18n="features_heading">Güvenilir sağlık özetleri, günlük hayat için.</h2>
-        <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 leading-relaxed" data-i18n="features_sub">Sonuçlarınızı yükleyin — trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış rapor.</p>
+        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="features_eyebrow">FEATURES</span>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-accent-900 dark:text-white mb-4 leading-tight" data-i18n="features_heading">Trusted health insights, designed for real life.</h2>
+        <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 leading-relaxed" data-i18n="features_sub">Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.</p>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_1_title">Anında, yapılandırılmış analiz</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_1_desc">Yaygın biyobelirteçlerin net açıklamaları ve neye işaret edebilecekleri — dakikalar içinde.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_1_title">Instant, structured analysis</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_1_desc">Clear explanations of common biomarkers and what they may indicate — in minutes.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_2_title">Klinik tarzı rapor formatı</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_2_desc">Hekim dostu düzen: referans aralıkları, işaretler, özetler ve takip önerileri.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_2_title">Clinical-style report format</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_2_desc">Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_3_title">Küresel laboratuvar uyumluluğu</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_3_desc">Birçok laboratuvar formatı ve birimini destekler — uluslararası kullanıcılar için.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_3_title">Global lab compatibility</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_3_desc">Supports many lab formats and units — designed for international users.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_4_title">Gizlilik ve güvenlik ön planda</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_4_desc">İletimde şifreli, sıkı erişim kontrolleri ve veri minimizasyonu. KVKK/GDPR uyumlu yaklaşım.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_4_title">Privacy & security by design</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_4_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_5_title">Trendler ve karşılaştırmalar</h3>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_5_title">Trends & comparisons</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_5_desc">Track changes over time and compare past results with one dashboard.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_6_title">Uygulanabilir sonraki adımlar</h3>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_6_title">Actionable next steps</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_6_desc">Practical lifestyle and nutrition tips tailored to your markers.</p>
         </article>
       </div>
-      <p class="text-center text-xs sm:text-sm text-accent-500 dark:text-accent-400 mt-8 sm:mt-10" data-i18n="features_trust_line">Kurumsal düzey güvenlik, şifreli iletişim ve uyumlu mimari.</p>
+      <p class="text-center text-xs sm:text-sm text-accent-500 dark:text-accent-400 mt-8 sm:mt-10" data-i18n="features_trust_line">Enterprise-grade security, encrypted communication and GDPR-aligned architecture.</p>
     </div>
   </section>
 
@@ -4130,7 +4130,7 @@
   <section class="py-16 sm:py-20 bg-white dark:bg-accent-900/20 overflow-x-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-16">
-        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block">HOW IT WORKS</span>
+        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="how_works_eyebrow">HOW IT WORKS</span>
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="how_section_title">How it works</h2>
         <p class="text-base sm:text-lg text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="how_section_desc">Three simple steps to your structured report.</p>
       </div>
@@ -4177,47 +4177,47 @@
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div class="flex items-center gap-3 mb-3">
             <span class="inline-flex w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 text-emerald-600 items-center justify-center text-xl" aria-hidden="true">🩸</span>
-            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_diabetes_title">Diyabet Riski</h3>
+            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_diabetes_title">Diabetes Risk</h3>
           </div>
           <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300 flex items-center gap-2 mb-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span data-i18n="home_risk_low_sample">Örnek: Düşük risk</span>
+            <span data-i18n="home_risk_low_sample">Sample: Low risk</span>
           </p>
-          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_diabetes_desc">Glukoz, HbA1c ve trigliserid değerlerine göre diyabet riski skoru.</p>
+          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_diabetes_desc">Diabetes risk score based on glucose, HbA1c and triglyceride values.</p>
         </article>
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div class="flex items-center gap-3 mb-3">
             <span class="inline-flex w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 text-amber-600 items-center justify-center text-xl" aria-hidden="true">❤️</span>
-            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_heart_title">Kalp Hastalığı Riski</h3>
+            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_heart_title">Heart Disease Risk</h3>
           </div>
           <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300 flex items-center gap-2 mb-2">
             <span class="w-2 h-2 rounded-full bg-amber-400"></span>
-            <span data-i18n="home_risk_mid_sample">Örnek: Orta risk</span>
+            <span data-i18n="home_risk_mid_sample">Sample: Moderate risk</span>
           </p>
-          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_heart_desc">LDL, HDL, total kolesterol ve trigliserid üzerinden kalp sağlığı analizi.</p>
+          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_heart_desc">Heart health analysis based on LDL, HDL, total cholesterol and triglycerides.</p>
         </article>
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div class="flex items-center gap-3 mb-3">
             <span class="inline-flex w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/30 text-sky-600 items-center justify-center text-xl" aria-hidden="true">🧫</span>
-            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_liver_title">Karaciğer Sağlığı</h3>
+            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_liver_title">Liver Health</h3>
           </div>
           <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300 flex items-center gap-2 mb-2">
             <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
-            <span data-i18n="home_risk_normal_sample">Örnek: Normal</span>
+            <span data-i18n="home_risk_normal_sample">Sample: Normal</span>
           </p>
-          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_liver_desc">ALT, AST ve GGT değerlerinden karaciğer fonksiyon durumu.</p>
+          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_liver_desc">Liver function status from ALT, AST and GGT values.</p>
         </article>
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:-translate-y-1 hover:shadow-lg transition-all duration-300">
           <div class="flex items-center gap-3 mb-3">
             <span class="inline-flex w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 text-purple-600 items-center justify-center text-xl" aria-hidden="true">⌛</span>
-            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_bio_age_title">Vücut / Biyolojik Yaş</h3>
+            <h3 class="text-sm font-bold text-accent-900 dark:text-white" data-i18n="home_risk_bio_age_title">Body / Biological Age</h3>
           </div>
           <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-300 flex items-center gap-1.5 mb-2">
             <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 text-[11px] font-bold">34</span>
             <span class="text-accent-400">→</span>
             <span class="inline-flex items-center justify-center px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-700 text-[11px] font-bold">29</span>
           </p>
-          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_bio_age_desc">Örnek: Gerçek yaşınız 34 ise, biyolojik yaşınız 29 çıkabilir.</p>
+          <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="home_risk_bio_age_desc">Example: If your actual age is 34, your biological age could be 29.</p>
         </article>
       </div>
     </div>
@@ -4230,8 +4230,8 @@
         <div class="flex items-center gap-3 mb-5">
           <div class="w-10 h-10 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center text-xl" aria-hidden="true">🧪</div>
           <div>
-            <p class="text-xs font-bold tracking-[0.2em] uppercase text-[#0ea5a4]">Biomarker Analizi</p>
-            <h3 class="text-lg font-bold text-accent-900 dark:text-white">10+ biomarker analiz edilir</h3>
+            <p class="text-xs font-bold tracking-[0.2em] uppercase text-[#0ea5a4]" data-i18n="biomarker_section_label">Biomarker Analysis</p>
+            <h3 class="text-lg font-bold text-accent-900 dark:text-white" data-i18n="biomarker_section_count">10+ biomarkers analyzed</h3>
           </div>
         </div>
         <div class="flex flex-wrap gap-2">
@@ -4258,120 +4258,94 @@
           <p class="inline-flex items-center gap-2 text-[11px] font-bold uppercase tracking-[0.2em] mb-4" id="elite-badge">
             <span class="inline-flex px-3 py-1.5 rounded-full bg-[#0ea5a4]/10 border border-[#0ea5a4]/25 text-[#006a69] dark:text-[#5eead4]" data-i18n="elite_badge">ELITE HEALTH REPORT</span>
           </p>
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight text-accent-900 dark:text-white mb-4" id="elite-title" data-i18n="elite_title">Klinik seviyede biyobelirteç raporu</h2>
-          <p class="text-base sm:text-lg leading-relaxed max-w-xl mb-8 text-accent-600 dark:text-accent-300" data-i18n="elite_desc">Biyobelirteçlerinizi referans aralıkları, risk profili ve trend mantığıyla değerlendirir; tek sayfada özet ve detaylı premium PDF rapor üretir.</p>
-          <ul class="space-y-4 mb-8" aria-label="Rapor özellikleri">
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold leading-tight text-accent-900 dark:text-white mb-4" id="elite-title" data-i18n="elite_title">Clinical-grade biomarker report</h2>
+          <p class="text-base sm:text-lg leading-relaxed max-w-xl mb-8 text-accent-600 dark:text-accent-300" data-i18n="elite_desc">Evaluates your biomarkers with reference ranges, risk profiles and trend logic; produces a summary and detailed premium PDF report on a single page.</p>
+          <ul class="space-y-4 mb-8" aria-label="Report features" data-i18n-aria-label="elite_features_aria">
             <li class="flex items-center gap-4 text-sm font-medium text-accent-800 dark:text-accent-200">
               <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center text-[#0ea5a4] text-lg" aria-hidden="true">📊</span>
-              <span data-i18n="elite_feature_1">Sağlık Skoru ve risk profili</span>
+              <span data-i18n="elite_feature_1">Health Score and risk profile</span>
             </li>
             <li class="flex items-center gap-4 text-sm font-medium text-accent-800 dark:text-accent-200">
               <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center text-[#0ea5a4] text-lg" aria-hidden="true">❤️</span>
-              <span data-i18n="elite_feature_2">Kalp ve metabolik risk</span>
+              <span data-i18n="elite_feature_2">Cardiovascular and metabolic risk</span>
             </li>
             <li class="flex items-center gap-4 text-sm font-medium text-accent-800 dark:text-accent-200">
               <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center text-[#0ea5a4] text-lg" aria-hidden="true">🫀</span>
-              <span data-i18n="elite_feature_3">Karaciğer ve enflamasyon belirteçleri</span>
+              <span data-i18n="elite_feature_3">Liver and inflammation markers</span>
             </li>
             <li class="flex items-center gap-4 text-sm font-medium text-accent-800 dark:text-accent-200">
               <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center text-[#0ea5a4] text-lg" aria-hidden="true">📄</span>
-              <span data-i18n="elite_feature_4">Premium hekim tarzı PDF</span>
+              <span data-i18n="elite_feature_4">Premium doctor-style PDF</span>
             </li>
             <li class="flex items-center gap-4 text-sm font-medium text-accent-800 dark:text-accent-200">
               <span class="flex-shrink-0 w-10 h-10 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center text-[#0ea5a4] text-lg" aria-hidden="true">📱</span>
-              <span data-i18n="elite_feature_qr">QR ile rapor doğrulama & orijinallik</span>
+              <span data-i18n="elite_feature_qr">QR report verification & authenticity</span>
             </li>
           </ul>
           <div class="flex flex-wrap gap-2">
-            <span class="inline-flex px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-bold" data-i18n="elite_chip_1">10+ biyobelirteç</span>
-            <span class="inline-flex px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-bold" data-i18n="elite_chip_2">1–2 dk</span>
+            <span class="inline-flex px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-bold" data-i18n="elite_chip_1">10+ biomarkers</span>
+            <span class="inline-flex px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-bold" data-i18n="elite_chip_2">1–2 min</span>
             <span class="inline-flex px-3 py-1.5 rounded-full bg-accent-100 dark:bg-accent-700/50 text-accent-800 dark:text-accent-200 text-xs font-bold" data-i18n="elite_chip_3">Premium PDF</span>
           </div>
         </div>
         <div class="lg:col-span-2">
           <div class="bg-gradient-to-br from-[#f5fafa] to-white dark:from-accent-800/40 dark:to-accent-800/20 rounded-3xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 text-center">
-            <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4] mb-4" data-i18n="elite_cta_free_label">İlk rapor ücretsiz</p>
-            <p class="text-sm text-accent-600 dark:text-accent-400 mb-6 leading-relaxed" data-i18n="elite_trust_badges">Güvenli yükleme · Gizlilik odaklı · PDF hazır</p>
-            <a href="/upload" class="inline-flex items-center justify-center w-full py-4 px-6 text-base sm:text-lg font-bold rounded-full bg-[#0ea5a4] hover:bg-[#006a69] text-white shadow-lg shadow-[#0ea5a4]/20 hover:scale-105 transition-all no-underline mb-4" data-i18n="elite_cta_btn">İlk raporu ücretsiz oluştur</a>
-            <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="elite_cta_sub">Memnun kalırsanız dilediğiniz an premium üyeliğe geçin.</p>
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4] mb-4" data-i18n="elite_cta_free_label">First report free</p>
+            <p class="text-sm text-accent-600 dark:text-accent-400 mb-6 leading-relaxed" data-i18n="elite_trust_badges">Secure upload · Privacy-focused · PDF ready</p>
+            <a href="/upload" class="inline-flex items-center justify-center w-full py-4 px-6 text-base sm:text-lg font-bold rounded-full bg-[#0ea5a4] hover:bg-[#006a69] text-white shadow-lg shadow-[#0ea5a4]/20 hover:scale-105 transition-all no-underline mb-4" data-i18n="elite_cta_btn">Create your first report free</a>
+            <p class="text-xs text-accent-500 dark:text-accent-400" data-i18n="elite_cta_sub">Upgrade to premium anytime if you're satisfied.</p>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- Nasıl çalışır (TR) — v24 editorial -->
-  <section id="nasil-calisir" class="py-14 sm:py-18 bg-[#f5fafa] dark:bg-[#191c1d]">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-10 sm:mb-14">
-        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block">NASIL ÇALIŞIR</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="how_title">Norya Nasıl Çalışır?</h2>
-        <p class="text-base text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="how_desc">PDF veya fotoğraf yükleyin, yapılandırılmış analiz ve premium raporunuzu alın.</p>
-      </div>
-      <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 sm:gap-8">
-        <div class="group text-center bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all">
-          <div class="w-14 h-14 rounded-full bg-[#0ea5a4] text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#0ea5a4]/20">1</div>
-          <h3 class="font-bold text-accent-900 dark:text-white mb-2 text-lg" data-i18n="how_1">Tahlil sonuçlarınızı yükleyin</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="how_1d">Kan tahlilinizi PDF veya fotoğraf olarak yükleyin.</p>
-        </div>
-        <div class="group text-center bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all">
-          <div class="w-14 h-14 rounded-full bg-[#0ea5a4] text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#0ea5a4]/20">2</div>
-          <h3 class="font-bold text-accent-900 dark:text-white mb-2 text-lg" data-i18n="how_2">Yapılandırılmış analiz</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="how_2d">Referans aralıkları ve risk profiliyle klinik tarzı değerlendirme.</p>
-        </div>
-        <div class="group text-center bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all">
-          <div class="w-14 h-14 rounded-full bg-[#0ea5a4] text-white font-extrabold text-xl flex items-center justify-center mx-auto mb-5 shadow-lg shadow-[#0ea5a4]/20">3</div>
-          <h3 class="font-bold text-accent-900 dark:text-white mb-2 text-lg" data-i18n="how_3">Raporunuzu alın</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400" data-i18n="how_3d">Sağlık Skoru, grafikler ve doktorla paylaşılabilir premium PDF.</p>
-        </div>
-      </div>
-    </div>
-  </section>
+  <!-- Duplicate TR "Nasıl Çalışır" section removed — unified via how_section_* keys above -->
 
   <!-- Yorumlar — v24 editorial layout -->
   <section id="yorumlar" class="py-16 sm:py-20 bg-white dark:bg-accent-900/20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="text-center mb-12 sm:mb-16">
-        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block">REVIEWS</span>
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="reviews_section_title">Yorumlar</h2>
-        <p class="text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="reviews_section_subtitle">Uzman değerlendirmeleri ve üye deneyimleri.</p>
+        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="reviews_eyebrow">REVIEWS</span>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="reviews_section_title">Reviews</h2>
+        <p class="text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="reviews_section_subtitle">Expert assessments and member experiences.</p>
       </div>
 
       <!-- Uzman (Doktor) Yorumları -->
       <div id="doctor-insights" class="mb-16 sm:mb-20" aria-labelledby="doctor-insights-title">
         <div class="text-center mb-8">
           <span class="inline-flex px-3 py-1.5 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-xs font-bold uppercase tracking-wider mb-3" data-i18n="doctor_section_badge">Premium Health</span>
-          <h3 id="doctor-insights-title" class="text-xl sm:text-2xl font-extrabold text-accent-900 dark:text-white mb-2" data-i18n="doctor_insights_title">Uzman Yorumları</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="doctor_insights_subtitle">Laboratuvar sonuçlarını hastalarıyla anlaşılır paylaşan hekimlerin deneyimleri.</p>
+          <h3 id="doctor-insights-title" class="text-xl sm:text-2xl font-extrabold text-accent-900 dark:text-white mb-2" data-i18n="doctor_insights_title">Expert Reviews</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="doctor_insights_subtitle">How physicians use Norya to make lab results clearer for patients.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/25 shadow-sm" src="/static/images/reviews/doctor-1.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Hekim görüşü</p>
+            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Physician</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-0.5" data-i18n="doctor_1_name">Dr. Ayşe K.</p>
-            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_1_role">Aile Hekimi</p>
-            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_1_quote">Check-up sonrası hastalarıma raporu Norya'dan çıkarıp veriyorum. Hem onlar anlıyor hem ben zaman kazanıyorum. Bundan sonra da hep buradan vereceğim.</p>
+            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_1_role">Family Physician</p>
+            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_1_quote">After check-ups I give my patients the report from Norya. They understand it and I save time. I'll keep giving them results through this app.</p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/25 shadow-sm" src="/static/images/reviews/doctor-2.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Hekim görüşü</p>
+            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Physician</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-0.5" data-i18n="doctor_2_name">Dr. Markus B.</p>
-            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_2_role">İç Hastalıkları Uzmanı</p>
-            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_2_quote">Kronik takip ettiğim hastaların tahlil sonuçlarını Norya ile açıklıyorum. Özellikle yaşlı hastalar sade dilde anlatımı çok takdir ediyor. Uygulamayı kullanmaya devam edeceğim.</p>
+            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_2_role">Internal medicine</p>
+            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_2_quote">I explain my chronic patients' lab results with Norya. Older patients especially appreciate the plain-language summary. I'll keep using it.</p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/25 shadow-sm" src="/static/images/reviews/doctor-3.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Hekim görüşü</p>
+            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Physician</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-0.5" data-i18n="doctor_3_name">Dr. Elena V.</p>
-            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_3_role">Dahiliye</p>
-            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_3_quote">Hastalarıma «Bu raporu eve götür, Norya'da açtır» diyorum. Kontrol randevusunda zaten hazırlıklı geliyorlar. Sonuçları bu uygulama üzerinden vermeye devam edeceğim.</p>
+            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_3_role">Internal medicine</p>
+            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_3_quote">I tell patients to take the report home and open it in Norya. By the follow-up they're already prepared. I'll keep sharing results through this application.</p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/25 shadow-sm" src="/static/images/reviews/doctor-4.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Hekim görüşü</p>
+            <p class="text-[10px] font-bold text-[#0ea5a4] uppercase tracking-wider mb-1" data-i18n="doctor_testimonial_badge">Physician</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-0.5" data-i18n="doctor_4_name">Dr. Can Ö.</p>
-            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_4_role">Genel Pratisyen</p>
-            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_4_quote">Üç aydır neredeyse her tahlil sonrası hastalarıma Norya çıktısı veriyorum. Artık alışkanlık oldu, memnunlar. Sürekli buradan sonuç vereceğim.</p>
+            <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="doctor_4_role">General practitioner</p>
+            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="doctor_4_quote">For three months I've been giving almost every patient a Norya printout after their labs. It's become routine and they're happy. I'll keep giving results this way.</p>
           </article>
         </div>
       </div>
@@ -4380,51 +4354,51 @@
       <div id="customer-reviews" aria-labelledby="customer-reviews-title">
         <div class="text-center mb-8">
           <span class="inline-flex px-3 py-1.5 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-xs font-bold uppercase tracking-wider mb-3" data-i18n="customer_section_badge">Trusted Reviews</span>
-          <h3 id="customer-reviews-title" class="text-xl sm:text-2xl font-extrabold text-accent-900 dark:text-white mb-2" data-i18n="customer_reviews_title">Müşteri Yorumları</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="customer_reviews_subtitle">Kullanıcıların anlayabildiği, güvenle tekrar kullandığı premium sağlık raporlama deneyimi.</p>
+          <h3 id="customer-reviews-title" class="text-xl sm:text-2xl font-extrabold text-accent-900 dark:text-white mb-2" data-i18n="customer_reviews_title">Customer Reviews</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="customer_reviews_subtitle">Clear, premium health reporting that users can understand and return to.</p>
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5 sm:gap-6">
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/20 shadow-sm" src="/static/images/reviews/user-de.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Üye yorumu</p>
+            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Member review</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="review_name_de">Anna Schmidt</p>
-            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_de_quote">Yıllardır check-up sonuçlarımı Norya ile takip ediyorum. Raporlar net, güvenilir ve doktoruma götürmek için hep hazır.</p>
-            <p class="text-xs text-accent-500"><span aria-hidden="true">🇩🇪</span> <span data-i18n="review_country_de">Almanya</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_de_quote">I use Norya to track my check-up results. Reports are clear, reliable and easy to share with my doctor.</p>
+            <p class="text-xs text-accent-500"><span aria-hidden="true">🇩🇪</span> <span data-i18n="review_country_de">Germany</span> · <span data-i18n="review_years">Routine bloodwork user</span></p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/20 shadow-sm" src="/static/images/reviews/user-it.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Üye yorumu</p>
+            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Member review</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="review_name_it">Marco Rossi</p>
-            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_it_quote">Norya'yı yıllardır kullanıyorum. Sonuçlar anlaşılır, PDF raporu her seferinde profesyonel. Rutin tahlillerim için vazgeçilmez oldu.</p>
-            <p class="text-xs text-accent-500"><span aria-hidden="true">🇮🇹</span> <span data-i18n="review_country_it">İtalya</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_it_quote">Norya helps me understand my routine blood tests. Results are easy to read and the PDF looks professional.</p>
+            <p class="text-xs text-accent-500"><span aria-hidden="true">🇮🇹</span> <span data-i18n="review_country_it">Italy</span> · <span data-i18n="review_years">Routine bloodwork user</span></p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/20 shadow-sm" src="/static/images/reviews/user-fr.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Üye yorumu</p>
+            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Member review</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="review_name_fr">Sophie Laurent</p>
             <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_fr_quote">J'utilise Norya depuis des années pour mes bilans. Clair, moderne et rassurant — je recommande.</p>
-            <p class="text-xs text-accent-500"><span aria-hidden="true">🇫🇷</span> <span data-i18n="review_country_fr">Fransa</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="text-xs text-accent-500"><span aria-hidden="true">🇫🇷</span> <span data-i18n="review_country_fr">France</span> · <span data-i18n="review_years">Routine bloodwork user</span></p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/20 shadow-sm" src="/static/images/reviews/user-uk.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Üye yorumu</p>
+            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Member review</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="review_name_uk">James Clarke</p>
             <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_uk_quote">I've been using Norya for years for my annual bloodwork. Clear, professional reports and the PDF is always ready to share with my doctor.</p>
-            <p class="text-xs text-accent-500"><span aria-hidden="true">🇬🇧</span> <span data-i18n="review_country_uk">İngiltere</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="text-xs text-accent-500"><span aria-hidden="true">🇬🇧</span> <span data-i18n="review_country_uk">United Kingdom</span> · <span data-i18n="review_years">Routine bloodwork user</span></p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/20 shadow-sm" src="/static/images/reviews/user-il.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Üye yorumu</p>
+            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Member review</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="review_name_il">David Cohen</p>
             <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_il_quote">אני משתמש בנוריה כבר שנים לתוצאות הבדיקות שלי. הדוחות ברורים ומקצועיים, והרופא שלי תמיד מקבל את הסיכום המוכן.</p>
-            <p class="text-xs text-accent-500"><span aria-hidden="true">🇮🇱</span> <span data-i18n="review_country_il">İsrail</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="text-xs text-accent-500"><span aria-hidden="true">🇮🇱</span> <span data-i18n="review_country_il">Israel</span> · <span data-i18n="review_years">Routine bloodwork user</span></p>
           </article>
           <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40">
             <img class="w-12 h-12 rounded-full mb-3 object-cover border-2 border-[#0ea5a4]/20 shadow-sm" src="/static/images/reviews/user-sa.jpg" alt="" width="48" height="48" loading="lazy" decoding="async">
-            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Üye yorumu</p>
+            <p class="text-[10px] font-bold text-amber-800/90 dark:text-amber-200/80 uppercase tracking-wider mb-1" data-i18n="customer_review_type_label">Member review</p>
             <p class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="review_name_sa">Omar Al-Rashid</p>
             <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="review_sa_quote">أستخدم نوريا منذ سنوات لمتابعة تحاليلي. التقارير واضحة وموثوقة وجاهزة دائماً لأخذها إلى الطبيب.</p>
-            <p class="text-xs text-accent-500"><span aria-hidden="true">🇸🇦</span> <span data-i18n="review_country_sa">Suudi Arabistan</span> · <span data-i18n="review_years">3+ yıldır kullanıyor</span></p>
+            <p class="text-xs text-accent-500"><span aria-hidden="true">🇸🇦</span> <span data-i18n="review_country_sa">Saudi Arabia</span> · <span data-i18n="review_years">Routine bloodwork user</span></p>
           </article>
         </div>
       </div>
@@ -4437,22 +4411,22 @@
   <!-- 3) Premium Health Report Carousel -->
   <section id="ornek-klinik-rapor" class="py-16 sm:py-24" style="background:#f8fffe;">
     <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center mb-10">
-      <p class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#0ea5a4;" data-i18n="report_preview_badge">Örnek Rapor</p>
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="health_dashboard_title">Premium Health Raporu Önizleme</h2>
-      <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="sample_report_desc">Kan tahlili sonuçlarınız skor, risk göstergesi ve trend ile klinik rapor formatında sunulur.</p>
+      <p class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#0ea5a4;" data-i18n="report_preview_badge">Sample report</p>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="health_dashboard_title">Premium Health Report Preview</h2>
+      <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="sample_report_desc">Your lab results are presented in clinical report format with score, risk indicator and trend.</p>
     </div>
 
     <div class="report-carousel-wrap">
-      <button type="button" class="carousel-arrow left" id="rcLeft" aria-label="Önceki">&#8249;</button>
-      <button type="button" class="carousel-arrow right" id="rcRight" aria-label="Sonraki">&#8250;</button>
+      <button type="button" class="carousel-arrow left" id="rcLeft" aria-label="Previous" data-i18n-aria-label="carousel_prev">&#8249;</button>
+      <button type="button" class="carousel-arrow right" id="rcRight" aria-label="Next" data-i18n-aria-label="carousel_next">&#8250;</button>
 
       <div class="report-carousel" id="reportCarousel">
 
         <!-- Card 1: Health Score -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4 data-i18n="rc_health_title">Sağlık Skoru</h4>
-            <span class="rc-page" data-i18n="rc_page_1">Sayfa 1 / 5</span>
+            <h4 data-i18n="rc_health_title">Health Score</h4>
+            <span class="rc-page" data-i18n="rc_page_1">Page 1 / 5</span>
           </div>
           <div class="report-card-body" style="text-align:center;">
             <div class="rc-gauge-ring">
@@ -4466,12 +4440,10 @@
               </svg>
             </div>
             <div style="display:flex;justify-content:center;gap:0.75rem;margin-bottom:1rem;">
-              <span class="rc-status normal" data-i18n="rc_low_risk">● Düşük Risk</span>
+              <span class="rc-status normal" data-i18n="rc_low_risk">● Low Risk</span>
             </div>
             <div style="text-align:left;">
-              <p style="font-size:0.8rem;color:#334155;line-height:1.6;margin:0;" data-i18n="rc_health_desc">
-                Genel sağlık skorunuz 84/100 olarak hesaplandı. Kan değerleriniz büyük ölçüde referans aralıklarında. Vitamin D takviyesi ve düzenli kontrol önerilir.
-              </p>
+              <p style="font-size:0.8rem;color:#334155;line-height:1.6;margin:0;" data-i18n="rc_health_desc">Your overall health score is 84/100. Your blood values are largely within reference ranges. Vitamin D supplementation and regular check-ups are recommended.</p>
             </div>
           </div>
         </div>
@@ -4479,17 +4451,17 @@
         <!-- Card 2: Diabetes & Metabolic Risk -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4 data-i18n="rc_diabetes_title">Diyabet &amp; Metabolik Risk</h4>
-            <span class="rc-page" data-i18n="rc_page_2">Sayfa 2 / 5</span>
+            <h4 data-i18n="rc_diabetes_title">Diabetes &amp; Metabolic Risk</h4>
+            <span class="rc-page" data-i18n="rc_page_2">Page 2 / 5</span>
           </div>
           <div class="report-card-body">
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.75rem;">
-              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_risk_score">Risk Skoru</span>
+              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_risk_score">Risk Score</span>
               <span style="font-size:1.5rem;font-weight:800;color:#22c55e;">28<span style="font-size:0.75rem;color:#94a3b8;font-weight:500;"> / 100</span></span>
             </div>
             <div style="margin-bottom:1.25rem;">
               <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span data-i18n="rc_glucose">Glukoz</span><span style="font-weight:600;">98 mg/dL</span>
+                <span data-i18n="rc_glucose">Glucose</span><span style="font-weight:600;">98 mg/dL</span>
               </div>
               <div class="rc-bar-track"><div class="rc-bar-fill good" style="width:54%;"></div></div>
             </div>
@@ -4501,12 +4473,12 @@
             </div>
             <div style="margin-bottom:1rem;">
               <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span data-i18n="rc_insulin">İnsülin</span><span style="font-weight:600;">8.2 µIU/mL</span>
+                <span data-i18n="rc_insulin">Insulin</span><span style="font-weight:600;">8.2 µIU/mL</span>
               </div>
               <div class="rc-bar-track"><div class="rc-bar-fill good" style="width:41%;"></div></div>
             </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <span class="rc-status normal" data-i18n="rc_glucose_normal">● Glukoz Normal</span>
+              <span class="rc-status normal" data-i18n="rc_glucose_normal">● Glucose Normal</span>
               <span class="rc-status normal" data-i18n="rc_hba1c_normal">● HbA1c Normal</span>
             </div>
           </div>
@@ -4515,12 +4487,12 @@
         <!-- Card 3: Heart & Lipid Profile -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4 data-i18n="rc_heart_title">Kalp &amp; Lipid Profili</h4>
-            <span class="rc-page" data-i18n="rc_page_3">Sayfa 3 / 5</span>
+            <h4 data-i18n="rc_heart_title">Heart &amp; Lipid Profile</h4>
+            <span class="rc-page" data-i18n="rc_page_3">Page 3 / 5</span>
           </div>
           <div class="report-card-body">
             <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.75rem;">
-              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_cardio_risk">Kardiyovasküler Risk</span>
+              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_cardio_risk">Cardiovascular Risk</span>
               <span style="font-size:1.5rem;font-weight:800;color:#f59e0b;">42<span style="font-size:0.75rem;color:#94a3b8;font-weight:500;"> / 100</span></span>
             </div>
             <div style="margin-bottom:1.25rem;">
@@ -4537,12 +4509,12 @@
             </div>
             <div style="margin-bottom:1rem;">
               <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span data-i18n="rc_triglyceride">Trigliserit</span><span style="font-weight:600;">142 mg/dL</span>
+                <span data-i18n="rc_triglyceride">Triglycerides</span><span style="font-weight:600;">142 mg/dL</span>
               </div>
               <div class="rc-bar-track"><div class="rc-bar-fill" style="width:57%;"></div></div>
             </div>
             <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <span class="rc-status warn" data-i18n="rc_ldl_borderline">● LDL Sınırda</span>
+              <span class="rc-status warn" data-i18n="rc_ldl_borderline">● LDL Borderline</span>
               <span class="rc-status normal" data-i18n="rc_hdl_normal">● HDL Normal</span>
             </div>
           </div>
@@ -4551,22 +4523,22 @@
         <!-- Card 4: Biomarker Table -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4 data-i18n="rc_biomarker_title">Biyobelirteç Tablosu</h4>
-            <span class="rc-page" data-i18n="rc_page_4">Sayfa 4 / 5</span>
+            <h4 data-i18n="rc_biomarker_title">Biomarker Table</h4>
+            <span class="rc-page" data-i18n="rc_page_4">Page 4 / 5</span>
           </div>
           <div class="report-card-body" style="padding:1rem 1.25rem;">
-            <div class="rc-table-wrap" role="region" aria-label="Örnek biyobelirteç tablosu" tabindex="0">
+            <div class="rc-table-wrap" role="region" aria-label="Sample biomarker table" tabindex="0">
               <table class="rc-table">
                 <thead>
-                  <tr><th data-i18n="rc_th_marker">Belirteç</th><th data-i18n="rc_th_result">Sonuç</th><th data-i18n="rc_th_reference">Referans</th><th data-i18n="rc_th_status">Durum</th></tr>
+                  <tr><th data-i18n="rc_th_marker">Marker</th><th data-i18n="rc_th_result">Result</th><th data-i18n="rc_th_reference">Reference</th><th data-i18n="rc_th_status">Status</th></tr>
                 </thead>
                 <tbody>
-                  <tr><td data-i18n="rc_glucose">Glukoz</td><td>98 mg/dL</td><td>70–100</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
+                  <tr><td data-i18n="rc_glucose">Glucose</td><td>98 mg/dL</td><td>70–100</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
                   <tr><td>HbA1c</td><td>5.4%</td><td>&lt; 5.7</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
-                  <tr><td>LDL</td><td>128 mg/dL</td><td>&lt; 130</td><td><span class="rc-status warn" data-i18n="rc_borderline">Sınırda</span></td></tr>
+                  <tr><td>LDL</td><td>128 mg/dL</td><td>&lt; 130</td><td><span class="rc-status warn" data-i18n="rc_borderline">Borderline</span></td></tr>
                   <tr><td>HDL</td><td>48 mg/dL</td><td>&gt; 40</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
-                  <tr><td>Vit D</td><td>18 ng/mL</td><td>30–100</td><td><span class="rc-status high" data-i18n="rc_low">Düşük</span></td></tr>
-                  <tr><td>B12</td><td>240 pg/mL</td><td>200–900</td><td><span class="rc-status warn" data-i18n="rc_borderline">Sınırda</span></td></tr>
+                  <tr><td>Vit D</td><td>18 ng/mL</td><td>30–100</td><td><span class="rc-status high" data-i18n="rc_low">Low</span></td></tr>
+                  <tr><td>B12</td><td>240 pg/mL</td><td>200–900</td><td><span class="rc-status warn" data-i18n="rc_borderline">Borderline</span></td></tr>
                   <tr><td>CRP</td><td>2.1 mg/L</td><td>&lt; 5</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
                 </tbody>
               </table>
@@ -4577,27 +4549,27 @@
         <!-- Card 5: Clinical Summary & Recommendations -->
         <div class="report-card">
           <div class="report-card-header">
-            <h4 data-i18n="rc_summary_title">Klinik Özet &amp; Öneriler</h4>
-            <span class="rc-page" data-i18n="rc_page_5">Sayfa 5 / 5</span>
+            <h4 data-i18n="rc_summary_title">Clinical Summary &amp; Recommendations</h4>
+            <span class="rc-page" data-i18n="rc_page_5">Page 5 / 5</span>
           </div>
           <div class="report-card-body">
-            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.75rem;" data-i18n="rc_key_findings">Öne Çıkan Bulgular</p>
+            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.75rem;" data-i18n="rc_key_findings">Key Findings</p>
             <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.25rem;">
-              <div class="rc-finding" data-i18n="rc_finding_1">LDL kolesterol referans üst sınırda; beslenme ve aktivite ile takip önerilir.</div>
-              <div class="rc-finding" data-i18n="rc_finding_2">Vitamin D düşük; güneş ve takviye doktor önerisiyle değerlendirilmeli.</div>
-              <div class="rc-finding" data-i18n="rc_finding_3">B12 sınırda; beslenme veya takviye hekimle görüşülebilir.</div>
+              <div class="rc-finding" data-i18n="rc_finding_1">LDL cholesterol near the upper reference limit; dietary and activity-based follow-up recommended.</div>
+              <div class="rc-finding" data-i18n="rc_finding_2">Vitamin D is low; sunlight and supplementation should be evaluated with your doctor.</div>
+              <div class="rc-finding" data-i18n="rc_finding_3">B12 is borderline; nutritional or supplemental support may be discussed with your physician.</div>
             </div>
-            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.5rem;" data-i18n="rc_next_steps">Sonraki Adımlar</p>
+            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.5rem;" data-i18n="rc_next_steps">Next Steps</p>
             <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.25rem;">
-              <div class="rc-finding" data-i18n="rc_step_1">3 ay sonra Vitamin D ve B12 tekrarı</div>
-              <div class="rc-finding" data-i18n="rc_step_2">6 ay içinde lipid paneli kontrolü</div>
-              <div class="rc-finding" data-i18n="rc_step_3">Yıllık genel kan tahlili</div>
+              <div class="rc-finding" data-i18n="rc_step_1">Repeat Vitamin D and B12 in 3 months</div>
+              <div class="rc-finding" data-i18n="rc_step_2">Lipid panel check-up in 6 months</div>
+              <div class="rc-finding" data-i18n="rc_step_3">Annual general blood test</div>
             </div>
             <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:0.75rem;background:#f0fdfa;border:1px solid #ccfbf1;">
               <span style="font-size:1.25rem;">✅</span>
               <div>
-                <p style="font-size:0.75rem;font-weight:700;color:#0f766e;margin:0;" data-i18n="rc_qr_title">QR Doğrulanmış Rapor</p>
-                <p style="font-size:0.65rem;color:#64748b;margin:0;" data-i18n="rc_qr_desc">NoryaAI tarafından üretildi — orijinallik doğrulandı</p>
+                <p style="font-size:0.75rem;font-weight:700;color:#0f766e;margin:0;" data-i18n="rc_qr_title">QR Verified Report</p>
+                <p style="font-size:0.65rem;color:#64748b;margin:0;" data-i18n="rc_qr_desc">Generated by NoryaAI — authenticity verified</p>
               </div>
             </div>
           </div>
@@ -4615,13 +4587,9 @@
   <section class="py-16 sm:py-20 bg-[#f5fafa] dark:bg-[#191c1d]">
     <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
       <div class="inline-flex items-center justify-center w-16 h-16 rounded-2xl bg-[#0ea5a4]/10 text-3xl mb-6" aria-hidden="true">🌍</div>
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-4" data-i18n="global_platform_title">
-        Çok dilli sağlık analiz platformu
-      </h2>
-      <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 max-w-2xl mx-auto mb-4" data-i18n="global_platform_desc">
-        Laboratuvar sonuçlarınızı yapılandırılmış rapor ve net özetle sunan biyobelirteç platformu.
-      </p>
-      <span class="inline-flex px-4 py-2 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-sm font-bold" data-i18n="global_platform_langs">12 dil desteği</span>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-4" data-i18n="global_platform_title">Multilingual health analysis platform</h2>
+      <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 max-w-2xl mx-auto mb-4" data-i18n="global_platform_desc">A biomarker platform that presents your lab results with structured reports and clear summaries.</p>
+      <span class="inline-flex px-4 py-2 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-sm font-bold" data-i18n="global_platform_langs">12 language support</span>
     </div>
   </section>
 
@@ -4629,30 +4597,30 @@
   <section class="py-14 sm:py-18 bg-white dark:bg-accent-900/20">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
       <div class="max-w-3xl mx-auto text-center mb-10 sm:mb-14">
-        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block">TRUST</span>
-        <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-3">Klinik Standartlarda Sağlık Analizi</h2>
-        <p class="text-base text-accent-600 dark:text-accent-400">Klinik referans aralıkları ve güvenli altyapı ile tasarlanmış biyobelirteç analiz platformu.</p>
+        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="trust_section_eyebrow">TRUST</span>
+        <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="trust_section_title">Clinical-grade health analysis</h2>
+        <p class="text-base text-accent-600 dark:text-accent-400" data-i18n="trust_section_desc">A biomarker analysis platform designed with clinical reference ranges and secure infrastructure.</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 sm:gap-6">
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 transition-colors">
           <div class="w-10 h-10 rounded-xl bg-emerald-100 dark:bg-emerald-900/30 flex items-center justify-center text-xl mb-4" aria-hidden="true">🔒</div>
-          <h3 class="text-sm font-bold text-accent-900 dark:text-white mb-1">Veri Güvenliği</h3>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_secure_infra">Şifreli iletişim ve güvenli altyapı.</p>
+          <h3 class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="trust_card_security_title">Data Security</h3>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_secure_infra">Encrypted communication and secure infrastructure.</p>
         </article>
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 transition-colors">
           <div class="w-10 h-10 rounded-xl bg-sky-100 dark:bg-sky-900/30 flex items-center justify-center text-xl mb-4" aria-hidden="true">🛡</div>
           <h3 class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="trust_card_compliance_title">KVKK & GDPR</h3>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_kvkk_gdpr_desc">Gizlilik odaklı tasarım; veri koruma prensipleri.</p>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_kvkk_gdpr_desc">Privacy-focused design; data protection principles.</p>
         </article>
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 transition-colors">
           <div class="w-10 h-10 rounded-xl bg-amber-100 dark:bg-amber-900/30 flex items-center justify-center text-xl mb-4" aria-hidden="true">📈</div>
-          <h3 class="text-sm font-bold text-accent-900 dark:text-white mb-1">Klinik Referans Aralıkları</h3>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_clinical_ref">Klinik referans aralıklarına göre değerlendirilmiş sonuçlar.</p>
+          <h3 class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="trust_card_clinical_title">Clinical Reference Ranges</h3>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_clinical_ref">Results evaluated against clinical reference ranges.</p>
         </article>
         <article class="bg-[#f5fafa] dark:bg-accent-800/40 rounded-2xl p-5 sm:p-6 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 transition-colors">
           <div class="w-10 h-10 rounded-xl bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center text-xl mb-4" aria-hidden="true">🩺</div>
-          <h3 class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="trust_card_report_title">Doktor Dostu Rapor</h3>
-          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_card_report_desc">Klinik formatta yapılandırılmış açıklamalar ve PDF çıktı.</p>
+          <h3 class="text-sm font-bold text-accent-900 dark:text-white mb-1" data-i18n="trust_card_report_title">Doctor-Friendly Report</h3>
+          <p class="text-xs sm:text-sm text-accent-600 dark:text-accent-400" data-i18n="trust_card_report_desc">Structured explanations in clinical format and PDF output.</p>
         </article>
       </div>
     </div>
@@ -4661,13 +4629,13 @@
   <!-- Güven — v24 clean trust strip -->
   <section class="py-12 sm:py-16 bg-[#f5fafa] dark:bg-[#191c1d]" id="trust-block-numeric-free">
     <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
-      <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="trust_block_label">Güven ve tasarım</span>
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-6" data-i18n="trust_block_title">Net ve güvenilir kan tahlili yorumu</h2>
+      <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="trust_block_label">Trust & design</span>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-6" data-i18n="trust_block_title">Clear and reliable blood test interpretation</h2>
       <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
-        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span class="w-2 h-2 rounded-full bg-[#0ea5a4]" aria-hidden="true"></span><span data-i18n="trust_block_1">Çok dilli erişim için tasarlandı</span></span>
-        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span class="w-2 h-2 rounded-full bg-[#0ea5a4]" aria-hidden="true"></span><span data-i18n="trust_block_2">Yapılandırılmış rapor ve doktor dostu çıktı</span></span>
-        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span class="w-2 h-2 rounded-full bg-[#0ea5a4]" aria-hidden="true"></span><span data-i18n="trust_block_3">Güvenli, gizlilik odaklı, şifreli iletişim</span></span>
-        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span aria-hidden="true">📱</span><span data-i18n="trust_block_qr">QR ile rapor doğrulama ve orijinallik</span></span>
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span class="w-2 h-2 rounded-full bg-[#0ea5a4]" aria-hidden="true"></span><span data-i18n="trust_block_1">Designed for multilingual access</span></span>
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span class="w-2 h-2 rounded-full bg-[#0ea5a4]" aria-hidden="true"></span><span data-i18n="trust_block_2">Structured report and doctor-friendly output</span></span>
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span class="w-2 h-2 rounded-full bg-[#0ea5a4]" aria-hidden="true"></span><span data-i18n="trust_block_3">Secure, privacy-focused, encrypted communication</span></span>
+        <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span aria-hidden="true">📱</span><span data-i18n="trust_block_qr">QR report verification and authenticity</span></span>
       </div>
     </div>
   </section>
@@ -5253,48 +5221,48 @@
   <!-- Doktorlar: 4 kart, hastalarıma bu uygulama ile sürekli sonuç vereceğim tarzı özgün yorumlar -->
   <section id="doktorlar" class="landing-hidden py-20 px-4 bg-white dark:bg-accent-900/30 border-y border-accent-100 dark:border-accent-800">
     <div class="max-w-6xl mx-auto w-full px-4">
-      <h2 class="text-2xl sm:text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="doctor_section_title">Doktorlar Norya'yı nasıl kullanıyor?</h2>
-      <p class="text-center text-accent-600 dark:text-accent-400 text-sm sm:text-base max-w-2xl mx-auto mb-12" data-i18n="doctor_section_subtitle">Hastalarına tahlil sonuçlarını anlaşılır şekilde iletmek için Norya'yı kullanan hekimler.</p>
+      <h2 class="text-2xl sm:text-3xl font-bold text-center text-accent-900 dark:text-white mb-2" data-i18n="doctor_section_title">How doctors use Norya</h2>
+      <p class="text-center text-accent-600 dark:text-accent-400 text-sm sm:text-base max-w-2xl mx-auto mb-12" data-i18n="doctor_section_subtitle">Physicians who use Norya to share clear lab results with their patients.</p>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
           <div class="flex items-center gap-3 mb-4">
             <span class="w-12 h-12 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold shrink-0">AK</span>
             <div>
               <p class="font-semibold text-accent-900 dark:text-white" data-i18n="doctor_1_name">Dr. Ayşe K.</p>
-              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_1_role">Aile Hekimi</p>
+              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_1_role">Family Physician</p>
             </div>
           </div>
-          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_1_quote">Check-up sonrası hastalarıma raporu Norya'dan çıkarıp veriyorum. Hem onlar anlıyor hem ben zaman kazanıyorum. Bundan sonra da hep buradan vereceğim.</p>
+          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_1_quote">After check-ups I give my patients the report from Norya. They understand it and I save time. I'll keep giving them results through this app.</p>
         </div>
         <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
           <div class="flex items-center gap-3 mb-4">
             <span class="w-12 h-12 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold shrink-0">MB</span>
             <div>
               <p class="font-semibold text-accent-900 dark:text-white" data-i18n="doctor_2_name">Dr. Markus B.</p>
-              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_2_role">İç Hastalıkları Uzmanı</p>
+              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_2_role">Internal medicine</p>
             </div>
           </div>
-          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_2_quote">Kronik takip ettiğim hastaların tahlil sonuçlarını Norya ile açıklıyorum. Özellikle yaşlı hastalar sade dilde anlatımı çok takdir ediyor. Uygulamayı kullanmaya devam edeceğim.</p>
+          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_2_quote">I explain my chronic patients' lab results with Norya. Older patients especially appreciate the plain-language summary. I'll keep using it.</p>
         </div>
         <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
           <div class="flex items-center gap-3 mb-4">
             <span class="w-12 h-12 rounded-full bg-primary-600 text-white flex items-center justify-center text-sm font-bold shrink-0">EV</span>
             <div>
               <p class="font-semibold text-accent-900 dark:text-white" data-i18n="doctor_3_name">Dr. Elena V.</p>
-              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_3_role">Dahiliye</p>
+              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_3_role">Internal medicine</p>
             </div>
           </div>
-          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_3_quote">Hastalarıma «Bu raporu eve götür, Norya'da açtır» diyorum. Kontrol randevusunda zaten hazırlıklı geliyorlar. Sonuçları bu uygulama üzerinden vermeye devam edeceğim.</p>
+          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_3_quote">I tell patients to take the report home and open it in Norya. By the follow-up they're already prepared. I'll keep sharing results through this application.</p>
         </div>
         <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
           <div class="flex items-center gap-3 mb-4">
             <span class="w-12 h-12 rounded-full bg-primary-500 text-white flex items-center justify-center text-sm font-bold shrink-0">CÖ</span>
             <div>
               <p class="font-semibold text-accent-900 dark:text-white" data-i18n="doctor_4_name">Dr. Can Ö.</p>
-              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_4_role">Genel Pratisyen</p>
+              <p class="text-xs text-accent-500 dark:text-accent-500" data-i18n="doctor_4_role">General practitioner</p>
             </div>
           </div>
-          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_4_quote">Üç aydır neredeyse her tahlil sonrası hastalarıma Norya çıktısı veriyorum. Artık alışkanlık oldu, memnunlar. Sürekli buradan sonuç vereceğim.</p>
+          <p class="text-accent-700 dark:text-accent-300 text-sm leading-relaxed pl-4 border-l-2 border-primary-300 dark:border-primary-600" data-i18n="doctor_4_quote">For three months I've been giving almost every patient a Norya printout after their labs. It's become routine and they're happy. I'll keep giving results this way.</p>
         </div>
         <div class="bg-accent-50 dark:bg-accent-800 rounded-2xl p-5 shadow-md border border-accent-100 dark:border-accent-700">
           <div class="flex items-center gap-3 mb-4">
@@ -5708,11 +5676,11 @@
             <h3 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="sample_card_bio_title">Biyolojik yaş</h3>
             <div class="flex flex-wrap items-center gap-4">
               <div>
-                <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase">Tahmini biyolojik yaş</div>
-                <div class="text-2xl font-bold text-[#0EA5A4]">38 <span class="text-sm font-normal text-accent-500">yaş</span></div>
+                <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase" data-i18n="sample_bio_age_label">Estimated biological age</div>
+                <div class="text-2xl font-bold text-[#0EA5A4]">38 <span class="text-sm font-normal text-accent-500" data-i18n="sample_bio_age_unit">years</span></div>
               </div>
               <div>
-                <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase">Genel sağlık skoru</div>
+                <div class="text-xs font-semibold text-accent-500 dark:text-accent-400 uppercase" data-i18n="sample_health_score_label">Overall health score</div>
                 <div class="text-2xl font-bold text-accent-900 dark:text-white">72 <span class="text-sm font-normal text-accent-500">/ 100</span></div>
               </div>
             </div>
@@ -5758,9 +5726,9 @@
           <div class="rounded-xl p-4 bg-slate-50 dark:bg-accent-800/50 border border-slate-100 dark:border-accent-700 space-y-3">
             <h3 class="font-semibold text-accent-900 dark:text-white text-sm" data-i18n="sample_card_attention_title">Dikkat gerektiren değerler</h3>
             <ul class="space-y-2 text-sm text-accent-700 dark:text-accent-300">
-              <li class="flex items-start gap-2"><span class="text-amber-500">●</span> LDL kolesterol — hedefe göre takip önerilir</li>
-              <li class="flex items-start gap-2"><span class="text-amber-500">●</span> D vitamini — hafif düşük, takviye doktorla görüşülebilir</li>
-              <li class="flex items-start gap-2"><span class="text-emerald-500">●</span> Diğer parametreler referans aralığında</li>
+              <li class="flex items-start gap-2"><span class="text-amber-500">●</span> <span data-i18n="sample_attention_1">LDL cholesterol — monitoring recommended based on target</span></li>
+              <li class="flex items-start gap-2"><span class="text-amber-500">●</span> <span data-i18n="sample_attention_2">Vitamin D — slightly low, supplementation may be discussed with doctor</span></li>
+              <li class="flex items-start gap-2"><span class="text-emerald-500">●</span> <span data-i18n="sample_attention_3">Other parameters within reference range</span></li>
             </ul>
             <p class="text-accent-600 dark:text-accent-400 text-xs" data-i18n="sample_card_attention_desc">Öne çıkan parametreler ve hekiminizle paylaşmanız gereken başlıklar — tek bakışta.</p>
           </div>
@@ -5934,7 +5902,7 @@
     <div class="intake-container">
       <div id="analyze-box" class="intake-card">
         <div class="intake-card-inner">
-          <p id="analyze-login-prompt" class="hidden text-center py-3 px-4 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-sm font-medium flex flex-wrap items-center justify-center gap-2 text-slate-600 dark:text-slate-300"><span data-i18n="analyze_prompt">Raporu almak için </span><button type="button" onclick="openLogin()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_login">Giriş</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button><span class="opacity-90" data-i18n="analyze_prompt_suffix">— adımlar aşağıda.</span></p>
+          <p id="analyze-login-prompt" class="hidden text-center py-3 px-4 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-sm font-medium flex flex-wrap items-center justify-center gap-2 text-slate-600 dark:text-slate-300"><span data-i18n="analyze_prompt">Raporu almak için </span><button type="button" onclick="openLogin()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_login">Log in</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button><span class="opacity-90" data-i18n="analyze_prompt_suffix">— adımlar aşağıda.</span></p>
           <p id="analyze-after-actions-hint" class="text-center py-2 px-4 mb-4 rounded-xl bg-[#0EA5A4]/08 dark:bg-[#0EA5A4]/12 border border-[#0EA5A4]/20 text-sm text-slate-700 dark:text-slate-200 flex flex-wrap items-center justify-center gap-2">
             <span aria-hidden="true">📥</span>
             <span data-i18n="analyze_after_hint">Rapor hazır olunca: Raporu İndir (PDF) ve Doktoruma götür ile hekime özel özet alabilirsiniz.</span>
@@ -6178,8 +6146,8 @@
           </label>
         </div>
         <!-- PayTR: ödeme/destek/iletişim mini bilgi -->
-        <p class="mb-3 text-xs font-semibold text-accent-800 dark:text-accent-200 border-t border-accent-200 dark:border-accent-600 pt-3">Ödeme, destek ve iletişim için bizimle iletişime geçebilirsiniz.</p>
-        <p class="mb-4 text-xs text-accent-600 dark:text-accent-400"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a> · <a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a> · Banaz/Uşak, Türkiye · <a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">İletişim sayfası</a></p>
+        <p class="mb-3 text-xs font-semibold text-accent-800 dark:text-accent-200 border-t border-accent-200 dark:border-accent-600 pt-3" data-i18n="merchant_contact_info">For payment, support and contact, please reach out to us.</p>
+        <p class="mb-4 text-xs text-accent-600 dark:text-accent-400"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a> · <a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a> · Banaz/Uşak, Türkiye · <a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">Contact page</a></p>
         <button type="submit" id="guest-checkout-submit" disabled class="w-full py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="checkout_btn">Güvenli ödemeye geç</button>
       </form>
     </div>
@@ -6203,9 +6171,9 @@
       </div>
       <!-- PayTR: ödeme/destek/iletişim mini kurumsal bilgi -->
       <div class="px-4 py-3 border-b border-accent-200 dark:border-accent-700 bg-accent-50/50 dark:bg-accent-800/50">
-        <p class="text-xs font-semibold text-accent-800 dark:text-accent-200 mb-1">Ödeme, destek ve iletişim için bizimle iletişime geçebilirsiniz.</p>
+        <p class="text-xs font-semibold text-accent-800 dark:text-accent-200 mb-1" data-i18n="merchant_contact_info">For payment, support and contact, please reach out to us.</p>
         <p class="text-xs text-accent-700 dark:text-accent-300"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a> · <a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a> · Banaz/Uşak, Türkiye</p>
-        <p class="text-xs text-accent-600 dark:text-accent-400 mt-0.5"><a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">İletişim sayfası</a></p>
+        <p class="text-xs text-accent-600 dark:text-accent-400 mt-0.5"><a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">Contact page</a></p>
       </div>
       <div class="flex-1 min-h-[400px] overflow-hidden">
         <iframe id="payment-iframe" src="" title="PayTR ödeme" class="w-full h-full min-h-[450px] border-0 rounded-b-2xl"></iframe>
@@ -6363,11 +6331,11 @@
       <p class="text-center text-xs font-medium text-[#0EA5A4] dark:text-teal-400 mb-4" data-i18n="paytr_infrastructure_note">Ödeme altyapısı PayTR ile sağlanacaktır.</p>
       <!-- Mini kurumsal bilgi kartı: fiyatlandırma sayfasında (PayTR uyumlu) -->
       <div class="mb-8 py-4 px-4 rounded-xl bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 max-w-2xl mx-auto">
-        <p class="text-sm font-semibold text-accent-800 dark:text-accent-200 text-center mb-2">Ödeme, destek ve iletişim için bizimle iletişime geçebilirsiniz.</p>
+        <p class="text-sm font-semibold text-accent-800 dark:text-accent-200 text-center mb-2" data-i18n="merchant_contact_info">For payment, support and contact, please reach out to us.</p>
         <p class="text-xs text-accent-700 dark:text-accent-300 text-center"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a></p>
         <p class="text-xs text-accent-700 dark:text-accent-300 text-center"><a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a></p>
         <p class="text-xs text-accent-700 dark:text-accent-300 text-center">Banaz/Uşak, Türkiye</p>
-        <p class="text-xs text-accent-600 dark:text-accent-400 text-center mt-2"><a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">İletişim sayfası</a></p>
+        <p class="text-xs text-accent-600 dark:text-accent-400 text-center mt-2"><a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">Contact page</a></p>
       </div>
       <!-- Güvenli Ödeme bölümü: fiyatlandırma sayfasında -->
       <div class="mb-8 py-4 px-4 sm:px-5 rounded-2xl bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 max-w-3xl mx-auto">
@@ -6600,10 +6568,10 @@
             </tr>
             <tr>
               <td class="py-3 px-4 font-medium text-accent-900 dark:text-white" data-i18n="compare_price">Fiyat</td>
-              <td class="py-3 px-3 text-center"><span id="compare-price-free">0 €</span><br><button type="button" onclick="goToCheckout('free')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50">Seç</button></td>
-              <td class="py-3 px-3 text-center"><span id="compare-price-single">13</span> <span id="compare-symbol-single">€</span><br><button type="button" onclick="goToCheckout('single')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50">Seç</button></td>
-              <td class="py-3 px-3 text-center"><span id="compare-price-monthly">50</span> <span id="compare-symbol-monthly">€</span><span data-i18n="price_per_month">/ay</span><br><button type="button" onclick="goToCheckout('monthly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-200 text-primary-700 hover:bg-primary-50">Seç</button></td>
-              <td class="py-3 px-3 text-center bg-primary-50/30 dark:bg-primary-900/10"><span id="compare-price-yearly">99</span> <span id="compare-symbol-yearly">€</span><span data-i18n="price_per_year">/yıl</span><br><button type="button" onclick="goToCheckout('yearly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-300 text-primary-700 bg-white/80 hover:bg-primary-50">Seç</button></td>
+              <td class="py-3 px-3 text-center"><span id="compare-price-free">0 €</span><br><button type="button" onclick="goToCheckout('free')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50" data-i18n="compare_btn_select">Select</button></td>
+              <td class="py-3 px-3 text-center"><span id="compare-price-single">13</span> <span id="compare-symbol-single">€</span><br><button type="button" onclick="goToCheckout('single')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-accent-200 text-accent-700 hover:bg-accent-50" data-i18n="compare_btn_select">Select</button></td>
+              <td class="py-3 px-3 text-center"><span id="compare-price-monthly">50</span> <span id="compare-symbol-monthly">€</span><span data-i18n="price_per_month">/mo</span><br><button type="button" onclick="goToCheckout('monthly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-200 text-primary-700 hover:bg-primary-50" data-i18n="compare_btn_select">Select</button></td>
+              <td class="py-3 px-3 text-center bg-primary-50/30 dark:bg-primary-900/10"><span id="compare-price-yearly">99</span> <span id="compare-symbol-yearly">€</span><span data-i18n="price_per_year">/yr</span><br><button type="button" onclick="goToCheckout('yearly')" class="mt-1 inline-flex items-center justify-center px-3 py-1 text-xs rounded-full border border-primary-300 text-primary-700 bg-white/80 hover:bg-primary-50" data-i18n="compare_btn_select">Select</button></td>
             </tr>
           </tbody>
         </table>
@@ -6718,8 +6686,8 @@
       <!-- Güven satırı: PayTR 3D Secure + KVKK/GDPR + iade -->
       <div class="mt-6 flex flex-wrap justify-center gap-3 text-xs sm:text-sm text-accent-600 dark:text-accent-300">
         <a href="#odeme" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400" title="Ödeme Altyapısı: PayTR 3D Secure Güvenli Ödeme Sistemi"><span aria-hidden="true">🔒</span><span data-i18n="payment_infrastructure_short">PayTR 3D Secure</span></a>
-        <a href="/legal/mesafeli-satis-sozlesmesi" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🧾</span><span>Fatura / e-Arşiv</span></a>
-        <a href="/iade-iptal" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🔁</span><span>İptal &amp; iade politikası</span></a>
+        <a href="/legal/mesafeli-satis-sozlesmesi" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🧾</span><span data-i18n="footer_invoice">Invoice / e-Archive</span></a>
+        <a href="/iade-iptal" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🔁</span><span data-i18n="footer_refund_policy">Cancellation &amp; refund policy</span></a>
         <a href="/legal/kvkk-gdpr" class="inline-flex items-center gap-1.5 hover:text-primary-600 dark:hover:text-primary-400 legal-lang-link"><span aria-hidden="true">🛡️</span><span>KVKK / GDPR</span></a>
       </div>
     </div>
@@ -6810,8 +6778,8 @@
     <div class="max-w-4xl mx-auto">
       <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-accent-600 dark:text-accent-400">
         <a href="/blog" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_blog">Blog</a>
-        <a href="/how-it-works" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_how">Nasıl Çalışır</a>
-        <a href="/pricing" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_pricing">Preise</a>
+        <a href="/how-it-works" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_how">How it works</a>
+        <a href="/pricing" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_pricing">Pricing</a>
         <a href="/tr/kan-tahlili-sonucu" class="hover:text-[#0ea5a4] font-medium transition-colors seo-guide-link" data-i18n="footer_guide">Kan tahlili rehberi</a>
         <a href="/legal/gizlilik-politikasi" class="hover:text-[#0ea5a4] font-medium transition-colors legal-lang-link" data-i18n="footer_privacy">Gizlilik</a>
         <a href="/legal/mesafeli-satis-sozlesmesi" class="hover:text-[#0ea5a4] font-medium transition-colors legal-lang-link" data-i18n="footer_terms">Kullanım Koşulları</a>
@@ -7087,7 +7055,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
         <!-- Sütun 1 - İletişim -->
         <div class="space-y-4">
-          <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]">İletişim ve Şirket Bilgileri</h3>
+          <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]" data-i18n="footer_contact_company">Contact & Company Info</h3>
           <div class="text-sm text-accent-600 dark:text-accent-400 space-y-1.5 break-words">
             <p><strong class="text-accent-800 dark:text-accent-200">NoryaAI</strong> · Ufuk Urhan</p>
             <p>Banaz Vergi Dairesi / 8940311420</p>
@@ -7114,7 +7082,7 @@
         <div class="space-y-4">
           <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]" data-i18n="footer_col_support">Destek</h3>
           <nav class="flex flex-col gap-2.5" aria-label="Destek">
-            <a href="/pricing" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="nav_pricing">Preise</a>
+            <a href="/pricing" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="nav_pricing">Pricing</a>
             <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_support_center">Destek Merkezi</a>
             <a href="#sss" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_faq">Sık Sorulan Sorular</a>
             <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_contact">İletişim</a>
@@ -7204,24 +7172,24 @@
         <input type="tel" id="register-phone" required autocomplete="tel" data-i18n-placeholder="placeholder_phone" placeholder="Telefon (ülke kodu ile, örn. +90 555 123 45 67)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
         <select id="register-country" required class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500">
           <option value="" data-i18n="placeholder_country">Ülke seçin</option>
-          <option value="TR">Türkiye (+90)</option>
-          <option value="US">ABD (+1)</option>
-          <option value="CA">Kanada (+1)</option>
-          <option value="GB">Birleşik Krallık (+44)</option>
-          <option value="DE">Almanya (+49)</option>
-          <option value="CZ">Çek Cumhuriyeti (+420)</option>
-          <option value="RS">Sırbistan (+381)</option>
-          <option value="FR">Fransa (+33)</option>
-          <option value="SA">Suudi Arabistan (+966)</option>
-          <option value="AE">BAE (+971)</option>
-          <option value="NL">Hollanda (+31)</option>
-          <option value="IT">İtalya (+39)</option>
-          <option value="ES">İspanya (+34)</option>
-          <option value="PL">Polonya (+48)</option>
-          <option value="RU">Rusya (+7)</option>
-          <option value="IN">Hindistan (+91)</option>
-          <option value="EG">Mısır (+20)</option>
-          <option value="IL">İsrail (+972)</option>
+          <option value="TR">Turkey (+90)</option>
+          <option value="US">USA (+1)</option>
+          <option value="CA">Canada (+1)</option>
+          <option value="GB">United Kingdom (+44)</option>
+          <option value="DE">Germany (+49)</option>
+          <option value="CZ">Czech Republic (+420)</option>
+          <option value="RS">Serbia (+381)</option>
+          <option value="FR">France (+33)</option>
+          <option value="SA">Saudi Arabia (+966)</option>
+          <option value="AE">UAE (+971)</option>
+          <option value="NL">Netherlands (+31)</option>
+          <option value="IT">Italy (+39)</option>
+          <option value="ES">Spain (+34)</option>
+          <option value="PL">Poland (+48)</option>
+          <option value="RU">Russia (+7)</option>
+          <option value="IN">India (+91)</option>
+          <option value="EG">Egypt (+20)</option>
+          <option value="IL">Israel (+972)</option>
           <option value="XX" data-i18n="country_other">Diğer</option>
         </select>
         <input type="password" id="register-password" required autocomplete="new-password" minlength="6" data-i18n-placeholder="placeholder_password_hint" placeholder="Şifre (en az 6 karakter)" class="w-full rounded-lg border border-accent-200 dark:border-accent-600 bg-white dark:bg-accent-900 text-accent-900 dark:text-white p-3 mb-3 focus:ring-2 focus:ring-primary-500" />
@@ -7229,7 +7197,7 @@
         <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="register_email_verify">Kayıt olunca e-posta doğrulama linki gönderilecektir.</p>
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="btn_register">Kayıt Ol</button>
       </form>
-      <p class="mt-4 text-center text-sm text-accent-500 dark:text-accent-400"><span data-i18n="have_account">Zaten hesabınız var mı? </span><button type="button" onclick="closeRegister(); openLogin()" class="text-primary-600 font-medium hover:underline" data-i18n="nav_login">Giriş yapın</button></p>
+      <p class="mt-4 text-center text-sm text-accent-500 dark:text-accent-400"><span data-i18n="have_account">Zaten hesabınız var mı? </span><button type="button" onclick="closeRegister(); openLogin()" class="text-primary-600 font-medium hover:underline" data-i18n="nav_login">Log in yapın</button></p>
       <button type="button" onclick="closeRegister()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Kayıt penceresini kapat">✕</button>
     </div>
   </div>
@@ -7269,7 +7237,7 @@
   <!-- Profil modal: ad, telefon, ülke, e-posta doğrulama, şifre değiştir, veri indir, hesap sil -->
   <div id="modal-profile" class="fixed inset-0 z-[100] hidden items-center justify-center p-4 bg-black/50">
     <div class="bg-white dark:bg-accent-800 rounded-2xl shadow-xl max-w-md w-full p-6 relative border border-accent-200 dark:border-accent-700 max-h-[90vh] overflow-y-auto">
-      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="nav_profile">Profil</h3>
+      <h3 class="text-xl font-bold text-accent-900 dark:text-white mb-4" data-i18n="nav_profile">Profile</h3>
       <p id="profile-email" class="text-sm text-accent-600 dark:text-accent-400 mb-2"></p>
       <p id="profile-email-verified" class="text-xs mb-4 hidden"><span class="px-2 py-0.5 rounded bg-emerald-100 dark:bg-emerald-900/40 text-emerald-700 dark:text-emerald-300" data-i18n="profile_email_verified">E-posta doğrulandı</span></p>
       <form onsubmit="submitProfile(event)">
@@ -9384,7 +9352,40 @@
         rc_heart_title: "Kalp & Lipid Profili", rc_page_3: "Sayfa 3 / 5", rc_cardio_risk: "Kardiyovasküler Risk", rc_triglyceride: "Trigliserit", rc_ldl_borderline: "● LDL Sınırda", rc_hdl_normal: "● HDL Normal",
         rc_biomarker_title: "Biyobelirteç Tablosu", rc_page_4: "Sayfa 4 / 5", rc_th_marker: "Belirteç", rc_th_result: "Sonuç", rc_th_reference: "Referans", rc_th_status: "Durum", rc_normal: "Normal", rc_borderline: "Sınırda", rc_low: "Düşük",
         rc_summary_title: "Klinik Özet & Öneriler", rc_page_5: "Sayfa 5 / 5", rc_key_findings: "Öne Çıkan Bulgular", rc_finding_1: "LDL kolesterol referans üst sınırda; beslenme ve aktivite ile takip önerilir.", rc_finding_2: "Vitamin D düşük; güneş ve takviye doktor önerisiyle değerlendirilmeli.", rc_finding_3: "B12 sınırda; beslenme veya takviye hekimle görüşülebilir.",
-        rc_next_steps: "Sonraki Adımlar", rc_step_1: "3 ay sonra Vitamin D ve B12 tekrarı", rc_step_2: "6 ay içinde lipid paneli kontrolü", rc_step_3: "Yıllık genel kan tahlili", rc_qr_title: "QR Doğrulanmış Rapor", rc_qr_desc: "NoryaAI tarafından üretildi — orijinallik doğrulandı"
+        rc_next_steps: "Sonraki Adımlar", rc_step_1: "3 ay sonra Vitamin D ve B12 tekrarı", rc_step_2: "6 ay içinde lipid paneli kontrolü", rc_step_3: "Yıllık genel kan tahlili", rc_qr_title: "QR Doğrulanmış Rapor", rc_qr_desc: "NoryaAI tarafından üretildi — orijinallik doğrulandı",
+        stat_label_users: "Kullanıcı", stat_label_accuracy: "Doğruluk", stat_label_biomarkers: "Biyobelirteç", stat_label_minutes: "Dakika",
+        features_eyebrow: "ÖZELLİKLER", how_works_eyebrow: "NASIL ÇALIŞIR", reviews_eyebrow: "YORUMLAR",
+        biomarker_section_label: "Biyobelirteç Analizi", biomarker_section_count: "10+ biyobelirteç analiz edilir",
+        trust_badges_aria: "Güven ve uyumluluk", drawer_trust: "256-bit SSL · KVKK & GDPR uyumlu",
+        hamburger_open: "Menüyü aç", hamburger_close: "Menüyü kapat", lang_modal_aria: "Dil seçin", elite_features_aria: "Rapor özellikleri", carousel_prev: "Önceki", carousel_next: "Sonraki",
+        nav_theme: 'Tema',
+        trust_card_compliance_title: 'KVKK & GDPR',
+        trust_section_eyebrow: 'GÜVEN',
+        trust_section_title: 'Klinik Standartlarda Sağlık Analizi',
+        trust_section_desc: 'Klinik referans aralıkları ve güvenli altyapı ile tasarlanmış biyobelirteç analiz platformu.',
+        trust_card_security_title: 'Veri Güvenliği',
+        trust_card_clinical_title: 'Klinik Referans Aralıkları',
+        sample_bio_age_label: 'Tahmini biyolojik yaş',
+        sample_bio_age_unit: 'yaş',
+        sample_health_score_label: 'Genel sağlık skoru',
+        sample_attention_1: 'LDL kolesterol — hedefe göre takip önerilir',
+        sample_attention_2: 'D vitamini — hafif düşük, takviye doktorla görüşülebilir',
+        sample_attention_3: 'Diğer parametreler referans aralığında',
+        merchant_contact_info: 'Ödeme, destek ve iletişim için bizimle iletişime geçebilirsiniz.',
+        footer_invoice: 'Fatura / e-Arşiv',
+        footer_refund_policy: 'İptal & iade politikası',
+        footer_contact_company: 'İletişim ve Şirket Bilgileri',
+        hero_globe_alt: 'NoryaAI küre görseli',
+        alert_medical_text: 'Bilgilendirme amaçlıdır. Bu rapor tıbbi teşhis/tedavi yerine geçmez.',
+        checkout_choose_plan: 'Planı değiştir',
+        checkout_plan_includes: 'Dahil olanlar',
+        checkout_coupon: 'İndirim kodu',
+        checkout_coupon_hint: 'İndirimden faydalanmak için kupon kodunuzu aşağıya yazıp Uygula\'ya tıklayın.',
+        checkout_coupon_apply: 'Uygula',
+        checkout_paytr_note: 'PayTR ayarlı değilse kart ödeme sayfası açılmaz.',
+        pricing_yearly_value_midline: 'Yıllık planda maksimum tasarruf',
+        profile_plan_name: 'Plan',
+        footer_powered_by: 'Yapay zeka altyapısı Kantesti AI Engine tarafından desteklenmektedir.',
       },
       en: {
         nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
@@ -9803,7 +9804,40 @@
         rc_heart_title: "Heart & Lipid Profile", rc_page_3: "Page 3 / 5", rc_cardio_risk: "Cardiovascular Risk", rc_triglyceride: "Triglycerides", rc_ldl_borderline: "● LDL Borderline", rc_hdl_normal: "● HDL Normal",
         rc_biomarker_title: "Biomarker Table", rc_page_4: "Page 4 / 5", rc_th_marker: "Marker", rc_th_result: "Result", rc_th_reference: "Reference", rc_th_status: "Status", rc_normal: "Normal", rc_borderline: "Borderline", rc_low: "Low",
         rc_summary_title: "Clinical Summary & Recommendations", rc_page_5: "Page 5 / 5", rc_key_findings: "Key Findings", rc_finding_1: "LDL cholesterol near the upper reference limit; dietary and activity-based follow-up recommended.", rc_finding_2: "Vitamin D is low; sunlight and supplementation should be evaluated with your doctor.", rc_finding_3: "B12 is borderline; nutritional or supplemental support may be discussed with your physician.",
-        rc_next_steps: "Next Steps", rc_step_1: "Repeat Vitamin D and B12 in 3 months", rc_step_2: "Lipid panel check-up in 6 months", rc_step_3: "Annual general blood test", rc_qr_title: "QR Verified Report", rc_qr_desc: "Generated by NoryaAI — authenticity verified"
+        rc_next_steps: "Next Steps", rc_step_1: "Repeat Vitamin D and B12 in 3 months", rc_step_2: "Lipid panel check-up in 6 months", rc_step_3: "Annual general blood test", rc_qr_title: "QR Verified Report", rc_qr_desc: "Generated by NoryaAI — authenticity verified",
+        stat_label_users: "Users", stat_label_accuracy: "Accuracy", stat_label_biomarkers: "Biomarkers", stat_label_minutes: "Minutes",
+        features_eyebrow: "FEATURES", how_works_eyebrow: "HOW IT WORKS", reviews_eyebrow: "REVIEWS",
+        biomarker_section_label: "Biomarker Analysis", biomarker_section_count: "10+ biomarkers analyzed",
+        trust_badges_aria: "Trust and compliance", drawer_trust: "256-bit SSL · KVKK & GDPR compliant",
+        hamburger_open: "Open menu", hamburger_close: "Close menu", lang_modal_aria: "Choose language", elite_features_aria: "Report features", carousel_prev: "Previous", carousel_next: "Next",
+        nav_theme: 'Theme',
+        trust_card_compliance_title: 'KVKK & GDPR',
+        trust_section_eyebrow: 'TRUST',
+        trust_section_title: 'Clinical-grade health analysis',
+        trust_section_desc: 'A biomarker analysis platform designed with clinical reference ranges and secure infrastructure.',
+        trust_card_security_title: 'Data Security',
+        trust_card_clinical_title: 'Clinical Reference Ranges',
+        sample_bio_age_label: 'Estimated biological age',
+        sample_bio_age_unit: 'years',
+        sample_health_score_label: 'Overall health score',
+        sample_attention_1: 'LDL cholesterol — monitoring recommended based on target',
+        sample_attention_2: 'Vitamin D — slightly low, supplementation may be discussed with doctor',
+        sample_attention_3: 'Other parameters within reference range',
+        merchant_contact_info: 'For payment, support and contact, please reach out to us.',
+        footer_invoice: 'Invoice / e-Archive',
+        footer_refund_policy: 'Cancellation & refund policy',
+        footer_contact_company: 'Contact & Company Info',
+        hero_globe_alt: 'NoryaAI globe visual',
+        alert_medical_text: 'For informational purposes only. This report does not replace medical diagnosis or treatment.',
+        checkout_choose_plan: 'Change plan',
+        checkout_plan_includes: 'Includes',
+        checkout_coupon: 'Discount code',
+        checkout_coupon_hint: 'Enter your coupon code below and click Apply to use your discount.',
+        checkout_coupon_apply: 'Apply',
+        checkout_paytr_note: 'If PayTR is not configured, the card payment page will not open.',
+        pricing_yearly_value_midline: 'Maximum savings with annual plan',
+        profile_plan_name: 'Plan',
+        footer_powered_by: 'AI infrastructure powered by Kantesti AI Engine.',
       },
       it: {
         nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
@@ -10084,7 +10118,39 @@
         rc_heart_title: "Cuore e Profilo Lipidico", rc_page_3: "Pagina 3 / 5", rc_cardio_risk: "Rischio Cardiovascolare", rc_triglyceride: "Trigliceridi", rc_ldl_borderline: "● LDL al Limite", rc_hdl_normal: "● HDL Normale",
         rc_biomarker_title: "Tabella Biomarcatori", rc_page_4: "Pagina 4 / 5", rc_th_marker: "Marcatore", rc_th_result: "Risultato", rc_th_reference: "Riferimento", rc_th_status: "Stato", rc_normal: "Normale", rc_borderline: "Al Limite", rc_low: "Basso",
         rc_summary_title: "Riepilogo Clinico e Raccomandazioni", rc_page_5: "Pagina 5 / 5", rc_key_findings: "Risultati Principali", rc_finding_1: "Colesterolo LDL vicino al limite superiore; si consiglia follow-up con dieta e attività.", rc_finding_2: "Vitamina D bassa; esposizione solare e integrazione da valutare col medico.", rc_finding_3: "B12 al limite; integrazione alimentare da discutere col medico.",
-        rc_next_steps: "Prossimi Passi", rc_step_1: "Ripetere Vitamina D e B12 tra 3 mesi", rc_step_2: "Controllo profilo lipidico tra 6 mesi", rc_step_3: "Esame del sangue annuale", rc_qr_title: "Report Verificato QR", rc_qr_desc: "Generato da NoryaAI — autenticità verificata"
+        rc_next_steps: "Prossimi Passi", rc_step_1: "Ripetere Vitamina D e B12 tra 3 mesi", rc_step_2: "Controllo profilo lipidico tra 6 mesi", rc_step_3: "Esame del sangue annuale", rc_qr_title: "Report Verificato QR", rc_qr_desc: "Generato da NoryaAI — autenticità verificata",
+        stat_label_users: "Utenti", stat_label_accuracy: "Precisione", stat_label_biomarkers: "Biomarcatori", stat_label_minutes: "Minuti",
+        features_eyebrow: "FUNZIONALITÀ", how_works_eyebrow: "COME FUNZIONA", reviews_eyebrow: "RECENSIONI",
+        biomarker_section_label: "Analisi biomarcatori", biomarker_section_count: "10+ biomarcatori analizzati",
+        trust_badges_aria: "Fiducia e conformità", drawer_trust: "256-bit SSL · KVKK & GDPR conforme",
+        nav_theme: 'Tema',
+        trust_card_compliance_title: 'KVKK e GDPR',
+        trust_section_eyebrow: 'FIDUCIA',
+        trust_section_title: 'Analisi sanitaria di livello clinico',
+        trust_section_desc: 'Piattaforma di analisi dei biomarcatori progettata con intervalli di riferimento clinici e infrastruttura sicura.',
+        trust_card_security_title: 'Sicurezza dei dati',
+        trust_card_clinical_title: 'Intervalli di riferimento clinici',
+        sample_bio_age_label: 'Età biologica stimata',
+        sample_bio_age_unit: 'anni',
+        sample_health_score_label: 'Punteggio salute generale',
+        sample_attention_1: 'Colesterolo LDL — monitoraggio raccomandato',
+        sample_attention_2: 'Vitamina D — leggermente bassa, supplementazione da discutere con il medico',
+        sample_attention_3: 'Altri parametri nel range di riferimento',
+        merchant_contact_info: 'Per pagamenti, supporto e contatti, contattateci.',
+        footer_invoice: 'Fattura / e-Archivio',
+        footer_refund_policy: 'Politica di cancellazione e rimborso',
+        footer_contact_company: 'Contatti e Informazioni Aziendali',
+        hero_globe_alt: 'Immagine del globo NoryaAI',
+        alert_medical_text: 'Solo a scopo informativo. Questo rapporto non sostituisce diagnosi o trattamento medico.',
+        checkout_choose_plan: 'Cambia piano',
+        checkout_plan_includes: 'Include',
+        checkout_coupon: 'Codice sconto',
+        checkout_coupon_hint: 'Inserisci il codice coupon e clicca Applica.',
+        checkout_coupon_apply: 'Applica',
+        checkout_paytr_note: 'Se PayTR non è configurato, la pagina di pagamento non si aprirà.',
+        pricing_yearly_value_midline: 'Massimo risparmio con il piano annuale',
+        profile_plan_name: 'Piano',
+        footer_powered_by: 'Infrastruttura AI alimentata da Kantesti AI Engine.',
       },
       es: {
         nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
@@ -10365,7 +10431,39 @@
         rc_heart_title: "Corazón y Perfil Lipídico", rc_page_3: "Página 3 / 5", rc_cardio_risk: "Riesgo Cardiovascular", rc_triglyceride: "Triglicéridos", rc_ldl_borderline: "● LDL en Límite", rc_hdl_normal: "● HDL Normal",
         rc_biomarker_title: "Tabla de Biomarcadores", rc_page_4: "Página 4 / 5", rc_th_marker: "Marcador", rc_th_result: "Resultado", rc_th_reference: "Referencia", rc_th_status: "Estado", rc_normal: "Normal", rc_borderline: "En Límite", rc_low: "Bajo",
         rc_summary_title: "Resumen Clínico y Recomendaciones", rc_page_5: "Página 5 / 5", rc_key_findings: "Hallazgos Principales", rc_finding_1: "Colesterol LDL cerca del límite superior; se recomienda seguimiento con dieta y actividad.", rc_finding_2: "Vitamina D baja; exposición solar y suplementación deben evaluarse con el médico.", rc_finding_3: "B12 en el límite; nutrición o suplementación pueden discutirse con su médico.",
-        rc_next_steps: "Próximos Pasos", rc_step_1: "Repetir Vitamina D y B12 en 3 meses", rc_step_2: "Control de perfil lipídico en 6 meses", rc_step_3: "Análisis de sangre general anual", rc_qr_title: "Informe Verificado QR", rc_qr_desc: "Generado por NoryaAI — autenticidad verificada"
+        rc_next_steps: "Próximos Pasos", rc_step_1: "Repetir Vitamina D y B12 en 3 meses", rc_step_2: "Control de perfil lipídico en 6 meses", rc_step_3: "Análisis de sangre general anual", rc_qr_title: "Informe Verificado QR", rc_qr_desc: "Generado por NoryaAI — autenticidad verificada",
+        stat_label_users: "Usuarios", stat_label_accuracy: "Precisión", stat_label_biomarkers: "Biomarcadores", stat_label_minutes: "Minutos",
+        features_eyebrow: "CARACTERÍSTICAS", how_works_eyebrow: "CÓMO FUNCIONA", reviews_eyebrow: "RESEÑAS",
+        biomarker_section_label: "Análisis de biomarcadores", biomarker_section_count: "10+ biomarcadores analizados",
+        trust_badges_aria: "Confianza y cumplimiento", drawer_trust: "256-bit SSL · KVKK y GDPR",
+        nav_theme: 'Tema',
+        trust_card_compliance_title: 'KVKK y RGPD',
+        trust_section_eyebrow: 'CONFIANZA',
+        trust_section_title: 'Análisis de salud de grado clínico',
+        trust_section_desc: 'Plataforma de análisis de biomarcadores diseñada con rangos de referencia clínicos e infraestructura segura.',
+        trust_card_security_title: 'Seguridad de datos',
+        trust_card_clinical_title: 'Rangos de referencia clínicos',
+        sample_bio_age_label: 'Edad biológica estimada',
+        sample_bio_age_unit: 'años',
+        sample_health_score_label: 'Puntuación de salud general',
+        sample_attention_1: 'Colesterol LDL — seguimiento recomendado según objetivo',
+        sample_attention_2: 'Vitamina D — ligeramente baja, suplementación a discutir con el médico',
+        sample_attention_3: 'Otros parámetros dentro del rango de referencia',
+        merchant_contact_info: 'Para pagos, soporte y contacto, contáctenos.',
+        footer_invoice: 'Factura / e-Archivo',
+        footer_refund_policy: 'Política de cancelación y reembolso',
+        footer_contact_company: 'Contacto e Información de la Empresa',
+        hero_globe_alt: 'Imagen del globo NoryaAI',
+        alert_medical_text: 'Solo con fines informativos. Este informe no reemplaza el diagnóstico o tratamiento médico.',
+        checkout_choose_plan: 'Cambiar plan',
+        checkout_plan_includes: 'Incluye',
+        checkout_coupon: 'Código de descuento',
+        checkout_coupon_hint: 'Ingrese su código de cupón y haga clic en Aplicar.',
+        checkout_coupon_apply: 'Aplicar',
+        checkout_paytr_note: 'Si PayTR no está configurado, la página de pago no se abrirá.',
+        pricing_yearly_value_midline: 'Máximo ahorro con el plan anual',
+        profile_plan_name: 'Plan',
+        footer_powered_by: 'Infraestructura de IA impulsada por Kantesti AI Engine.',
       },
       fr: {
         nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
@@ -10646,7 +10744,39 @@
         rc_heart_title: "Cœur et Profil Lipidique", rc_page_3: "Page 3 / 5", rc_cardio_risk: "Risque Cardiovasculaire", rc_triglyceride: "Triglycérides", rc_ldl_borderline: "● LDL Limite", rc_hdl_normal: "● HDL Normal",
         rc_biomarker_title: "Tableau des Biomarqueurs", rc_page_4: "Page 4 / 5", rc_th_marker: "Marqueur", rc_th_result: "Résultat", rc_th_reference: "Référence", rc_th_status: "Statut", rc_normal: "Normal", rc_borderline: "Limite", rc_low: "Bas",
         rc_summary_title: "Résumé Clinique et Recommandations", rc_page_5: "Page 5 / 5", rc_key_findings: "Résultats Principaux", rc_finding_1: "Cholestérol LDL proche de la limite supérieure ; suivi alimentaire et activité recommandés.", rc_finding_2: "Vitamine D basse ; exposition au soleil et supplémentation à évaluer avec votre médecin.", rc_finding_3: "B12 limite ; nutrition ou supplémentation à discuter avec votre médecin.",
-        rc_next_steps: "Prochaines Étapes", rc_step_1: "Répéter Vitamine D et B12 dans 3 mois", rc_step_2: "Contrôle du bilan lipidique dans 6 mois", rc_step_3: "Bilan sanguin général annuel", rc_qr_title: "Rapport Vérifié QR", rc_qr_desc: "Généré par NoryaAI — authenticité vérifiée"
+        rc_next_steps: "Prochaines Étapes", rc_step_1: "Répéter Vitamine D et B12 dans 3 mois", rc_step_2: "Contrôle du bilan lipidique dans 6 mois", rc_step_3: "Bilan sanguin général annuel", rc_qr_title: "Rapport Vérifié QR", rc_qr_desc: "Généré par NoryaAI — authenticité vérifiée",
+        stat_label_users: "Utilisateurs", stat_label_accuracy: "Précision", stat_label_biomarkers: "Biomarqueurs", stat_label_minutes: "Minutes",
+        features_eyebrow: "FONCTIONNALITÉS", how_works_eyebrow: "COMMENT ÇA MARCHE", reviews_eyebrow: "AVIS",
+        biomarker_section_label: "Analyse des biomarqueurs", biomarker_section_count: "10+ biomarqueurs analysés",
+        trust_badges_aria: "Confiance et conformité", drawer_trust: "256-bit SSL · KVKK & RGPD conforme",
+        nav_theme: 'Thème',
+        trust_card_compliance_title: 'KVKK et RGPD',
+        trust_section_eyebrow: 'CONFIANCE',
+        trust_section_title: 'Analyse de santé de niveau clinique',
+        trust_section_desc: 'Plateforme d\'analyse de biomarqueurs conçue avec des plages de référence cliniques et une infrastructure sécurisée.',
+        trust_card_security_title: 'Sécurité des données',
+        trust_card_clinical_title: 'Plages de référence cliniques',
+        sample_bio_age_label: 'Âge biologique estimé',
+        sample_bio_age_unit: 'ans',
+        sample_health_score_label: 'Score de santé global',
+        sample_attention_1: 'Cholestérol LDL — suivi recommandé selon l\'objectif',
+        sample_attention_2: 'Vitamine D — légèrement basse, supplémentation à discuter avec le médecin',
+        sample_attention_3: 'Autres paramètres dans la plage de référence',
+        merchant_contact_info: 'Pour le paiement, le support et le contact, contactez-nous.',
+        footer_invoice: 'Facture / e-Archive',
+        footer_refund_policy: 'Politique d\'annulation et de remboursement',
+        footer_contact_company: 'Contact et Informations Société',
+        hero_globe_alt: 'Image du globe NoryaAI',
+        alert_medical_text: 'À titre informatif uniquement. Ce rapport ne remplace pas un diagnostic ou traitement médical.',
+        checkout_choose_plan: 'Changer de plan',
+        checkout_plan_includes: 'Inclus',
+        checkout_coupon: 'Code de réduction',
+        checkout_coupon_hint: 'Entrez votre code promo et cliquez sur Appliquer.',
+        checkout_coupon_apply: 'Appliquer',
+        checkout_paytr_note: 'Si PayTR n\'est pas configuré, la page de paiement ne s\'ouvrira pas.',
+        pricing_yearly_value_midline: 'Économies maximales avec le plan annuel',
+        profile_plan_name: 'Plan',
+        footer_powered_by: 'Infrastructure IA propulsée par Kantesti AI Engine.',
       },
       de: {
         nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
@@ -10908,7 +11038,39 @@
         rc_heart_title: "Herz & Lipidprofil", rc_page_3: "Seite 3 / 5", rc_cardio_risk: "Kardiovaskuläres Risiko", rc_triglyceride: "Triglyceride", rc_ldl_borderline: "● LDL Grenzwertig", rc_hdl_normal: "● HDL Normal",
         rc_biomarker_title: "Biomarker-Tabelle", rc_page_4: "Seite 4 / 5", rc_th_marker: "Marker", rc_th_result: "Ergebnis", rc_th_reference: "Referenz", rc_th_status: "Status", rc_normal: "Normal", rc_borderline: "Grenzwertig", rc_low: "Niedrig",
         rc_summary_title: "Klinische Zusammenfassung & Empfehlungen", rc_page_5: "Seite 5 / 5", rc_key_findings: "Wichtige Befunde", rc_finding_1: "LDL-Cholesterin nahe der oberen Referenzgrenze; Ernährungs- und Aktivitätskontrolle empfohlen.", rc_finding_2: "Vitamin D niedrig; Sonnenlicht und Ergänzung mit dem Arzt besprechen.", rc_finding_3: "B12 grenzwertig; Ernährung oder Ergänzung mit dem Arzt besprechen.",
-        rc_next_steps: "Nächste Schritte", rc_step_1: "Vitamin D und B12 in 3 Monaten wiederholen", rc_step_2: "Lipidprofil-Kontrolle in 6 Monaten", rc_step_3: "Jährliches allgemeines Blutbild", rc_qr_title: "QR-verifizierter Bericht", rc_qr_desc: "Erstellt von NoryaAI — Echtheit verifiziert"
+        rc_next_steps: "Nächste Schritte", rc_step_1: "Vitamin D und B12 in 3 Monaten wiederholen", rc_step_2: "Lipidprofil-Kontrolle in 6 Monaten", rc_step_3: "Jährliches allgemeines Blutbild", rc_qr_title: "QR-verifizierter Bericht", rc_qr_desc: "Erstellt von NoryaAI — Echtheit verifiziert",
+        stat_label_users: "Nutzer", stat_label_accuracy: "Genauigkeit", stat_label_biomarkers: "Biomarker", stat_label_minutes: "Minuten",
+        features_eyebrow: "FUNKTIONEN", how_works_eyebrow: "SO FUNKTIONIERT'S", reviews_eyebrow: "BEWERTUNGEN",
+        biomarker_section_label: "Biomarker-Analyse", biomarker_section_count: "10+ Biomarker analysiert",
+        trust_badges_aria: "Vertrauen und Compliance", drawer_trust: "256-bit SSL · DSGVO-konform · Sichere Zahlung",
+        nav_theme: 'Design',
+        trust_card_compliance_title: 'KVKK & DSGVO',
+        trust_section_eyebrow: 'VERTRAUEN',
+        trust_section_title: 'Gesundheitsanalyse auf klinischem Niveau',
+        trust_section_desc: 'Eine Biomarker-Analyseplattform mit klinischen Referenzbereichen und sicherer Infrastruktur.',
+        trust_card_security_title: 'Datensicherheit',
+        trust_card_clinical_title: 'Klinische Referenzbereiche',
+        sample_bio_age_label: 'Geschätztes biologisches Alter',
+        sample_bio_age_unit: 'Jahre',
+        sample_health_score_label: 'Allgemeiner Gesundheitswert',
+        sample_attention_1: 'LDL-Cholesterin — Überwachung empfohlen',
+        sample_attention_2: 'Vitamin D — leicht niedrig, Supplementierung mit dem Arzt besprechen',
+        sample_attention_3: 'Andere Parameter im Referenzbereich',
+        merchant_contact_info: 'Für Zahlung, Support und Kontakt wenden Sie sich an uns.',
+        footer_invoice: 'Rechnung / e-Archiv',
+        footer_refund_policy: 'Stornierungs- und Erstattungsrichtlinie',
+        footer_contact_company: 'Kontakt & Firmeninformationen',
+        hero_globe_alt: 'NoryaAI Globus-Bild',
+        alert_medical_text: 'Nur zu Informationszwecken. Dieser Bericht ersetzt keine medizinische Diagnose oder Behandlung.',
+        checkout_choose_plan: 'Plan ändern',
+        checkout_plan_includes: 'Enthält',
+        checkout_coupon: 'Rabattcode',
+        checkout_coupon_hint: 'Geben Sie Ihren Gutscheincode ein und klicken Sie auf Anwenden.',
+        checkout_coupon_apply: 'Anwenden',
+        checkout_paytr_note: 'Wenn PayTR nicht konfiguriert ist, wird die Zahlungsseite nicht geöffnet.',
+        pricing_yearly_value_midline: 'Maximale Ersparnis mit dem Jahresplan',
+        profile_plan_name: 'Plan',
+        footer_powered_by: 'KI-Infrastruktur betrieben von Kantesti AI Engine.',
       },
       he: {
         nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
@@ -11125,7 +11287,55 @@
         rc_heart_title: "לב ופרופיל שומנים", rc_page_3: "עמוד 3 / 5", rc_cardio_risk: "סיכון קרדיווסקולרי", rc_triglyceride: "טריגליצרידים", rc_ldl_borderline: "● LDL גבולי", rc_hdl_normal: "● HDL תקין",
         rc_biomarker_title: "טבלת סמנים ביולוגיים", rc_page_4: "עמוד 4 / 5", rc_th_marker: "סמן", rc_th_result: "תוצאה", rc_th_reference: "ייחוס", rc_th_status: "מצב", rc_normal: "תקין", rc_borderline: "גבולי", rc_low: "נמוך",
         rc_summary_title: "סיכום קליני והמלצות", rc_page_5: "עמוד 5 / 5", rc_key_findings: "ממצאים עיקריים", rc_finding_1: "כולסטרול LDL קרוב לגבול העליון; מעקב תזונתי ופעילות מומלץ.", rc_finding_2: "ויטמין D נמוך; חשיפה לשמש ותוספים יש להעריך עם הרופא.", rc_finding_3: "B12 גבולי; תזונה או תוספים ניתן לדון עם הרופא.",
-        rc_next_steps: "צעדים הבאים", rc_step_1: "חזרה על ויטמין D ו-B12 בעוד 3 חודשים", rc_step_2: "בדיקת פרופיל שומנים בעוד 6 חודשים", rc_step_3: "בדיקת דם כללית שנתית", rc_qr_title: "דוח מאומת QR", rc_qr_desc: "נוצר על ידי NoryaAI — אותנטיות מאומתת"
+        rc_next_steps: "צעדים הבאים", rc_step_1: "חזרה על ויטמין D ו-B12 בעוד 3 חודשים", rc_step_2: "בדיקת פרופיל שומנים בעוד 6 חודשים", rc_step_3: "בדיקת דם כללית שנתית", rc_qr_title: "דוח מאומת QR", rc_qr_desc: "נוצר על ידי NoryaAI — אותנטיות מאומתת",
+        stat_label_users: "משתמשים", stat_label_accuracy: "דיוק", stat_label_biomarkers: "סמנים ביולוגיים", stat_label_minutes: "דקות",
+        features_eyebrow: "תכונות", how_works_eyebrow: "איך זה עובד", reviews_eyebrow: "ביקורות",
+        biomarker_section_label: "ניתוח סמנים ביולוגיים", biomarker_section_count: "10+ סמנים ביולוגיים מנותחים",
+        trust_badges_aria: "אמון ותאימות", drawer_trust: "256-bit SSL · KVKK ו-GDPR",
+        features_heading: "תובנות בריאות אמינות, מעוצבות לחיים האמיתיים.",
+        features_sub: "העלו את תוצאות המעבדה וקבלו דוח ברור ומובנה עם מגמות, סימני סיכון וצעדים הבאים.",
+        features_trust_line: "אבטחה ברמה ארגונית, תקשורת מוצפנת וארכיטקטורה תואמת GDPR.",
+        feature_1_title: "ניתוח מיידי ומובנה", feature_1_desc: "הסברים ברורים על סמנים ביולוגיים נפוצים ומה הם עשויים להצביע — בדקות.",
+        feature_2_title: "פורמט דוח קליני", feature_2_desc: "עיצוב ידידותי לרופא: טווחים, סימונים, סיכומים והמלצות למעקב.",
+        feature_3_title: "תאימות מעבדה גלובלית", feature_3_desc: "תומך בפורמטים ויחידות מעבדה רבים — מעוצב למשתמשים בינלאומיים.",
+        feature_4_title: "פרטיות ואבטחה בתכנון", feature_4_desc: "מוצפן בהעברה, בקרות גישה קפדניות ומינימום נתונים. מוכן ל-GDPR.",
+        feature_5_title: "מגמות והשוואות", feature_5_desc: "עקוב אחר שינויים לאורך זמן והשווה תוצאות קודמות בלוח מחוונים אחד.",
+        feature_6_title: "צעדים הבאים ישימים", feature_6_desc: "טיפים מעשיים לאורח חיים ותזונה המותאמים לסמנים שלך.",
+        how_section_title: "איך זה עובד", how_section_desc: "שלושה שלבים פשוטים לדוח המובנה שלך.",
+        how_step_1_title: "העלה את תוצאות המעבדה", how_step_1_desc: "PDF או תמונה — אנחנו מקבלים פורמטים נפוצים.",
+        how_step_2_title: "אנחנו מייצרים דוח מובנה", how_step_2_desc: "טווחים ברורים, סימונים, סיכומים והמלצות.",
+        how_step_3_title: "שמור, השווה ופעל לפי ההמלצות", how_step_3_desc: "הורד PDF, עקוב אחר מגמות ופעל בהתאם.",
+        cta_features_heading: "מוכן לראות את הדוח שלך?", cta_features_sub: "העלה את תוצאות המעבדה וקבל דוח ברור ומובנה תוך דקות.",
+        cta_start_analysis: "התחל ניתוח", cta_view_pricing: "צפה במחירים",
+        enterprise_infra_label: "תשתית אמינה", enterprise_infra_title: "תשתית ואבטחה ארגונית", enterprise_infra_subtitle: "מופעל על ידי ספקי ענן ואבטחה מהימנים בעולם.", enterprise_infra_tagline: "אספקה גלובלית מאובטחת דרך Cloudflare CDN ותשתית Google Cloud.", enterprise_infra_legal: "הלוגואים הם רכוש בעליהם.",
+        nav_theme: 'ערכת נושא',
+        trust_card_compliance_title: 'KVKK ו-GDPR',
+        trust_section_eyebrow: 'אמון',
+        trust_section_title: 'ניתוח בריאות ברמה קלינית',
+        trust_section_desc: 'פלטפורמת ניתוח סמנים ביולוגיים עם טווחי ייחוס קליניים ותשתית מאובטחת.',
+        trust_card_security_title: 'אבטחת מידע',
+        trust_card_clinical_title: 'טווחי ייחוס קליניים',
+        sample_bio_age_label: 'גיל ביולוגי משוער',
+        sample_bio_age_unit: 'שנים',
+        sample_health_score_label: 'ציון בריאות כללי',
+        sample_attention_1: 'כולסטרול LDL — מומלץ מעקב לפי יעד',
+        sample_attention_2: 'ויטמין D — נמוך מעט, תוספים לדיון עם הרופא',
+        sample_attention_3: 'פרמטרים אחרים בטווח הייחוס',
+        merchant_contact_info: 'לתשלום, תמיכה וקשר, צרו איתנו קשר.',
+        footer_invoice: 'חשבונית / ארכיון דיגיטלי',
+        footer_refund_policy: 'מדיניות ביטול והחזר',
+        footer_contact_company: 'יצירת קשר ומידע על החברה',
+        hero_globe_alt: 'תמונת גלובוס NoryaAI',
+        alert_medical_text: 'למטרות מידע בלבד. דוח זה אינו מחליף אבחון או טיפול רפואי.',
+        checkout_choose_plan: 'שנה תוכנית',
+        checkout_plan_includes: 'כולל',
+        checkout_coupon: 'קוד הנחה',
+        checkout_coupon_hint: 'הזן את קוד הקופון ולחץ על החל.',
+        checkout_coupon_apply: 'החל',
+        checkout_paytr_note: 'אם PayTR לא מוגדר, דף התשלום לא ייפתח.',
+        pricing_yearly_value_midline: 'חיסכון מקסימלי בתוכנית שנתית',
+        profile_plan_name: 'תוכנית',
+        footer_powered_by: 'תשתית AI מופעלת על ידי Kantesti AI Engine.',
       },
       ar: {
         nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
@@ -11342,7 +11552,55 @@
         rc_heart_title: "القلب وملف الدهون", rc_page_3: "صفحة 3 / 5", rc_cardio_risk: "خطر القلب والأوعية", rc_triglyceride: "الدهون الثلاثية", rc_ldl_borderline: "● LDL حدّي", rc_hdl_normal: "● HDL طبيعي",
         rc_biomarker_title: "جدول المؤشرات الحيوية", rc_page_4: "صفحة 4 / 5", rc_th_marker: "المؤشر", rc_th_result: "النتيجة", rc_th_reference: "المرجع", rc_th_status: "الحالة", rc_normal: "طبيعي", rc_borderline: "حدّي", rc_low: "منخفض",
         rc_summary_title: "ملخص سريري وتوصيات", rc_page_5: "صفحة 5 / 5", rc_key_findings: "النتائج الرئيسية", rc_finding_1: "كولسترول LDL قريب من الحد الأعلى؛ يُنصح بمتابعة غذائية ونشاط بدني.", rc_finding_2: "فيتامين د منخفض؛ التعرض للشمس والمكملات يجب تقييمها مع الطبيب.", rc_finding_3: "B12 حدّي؛ التغذية أو المكملات يمكن مناقشتها مع الطبيب.",
-        rc_next_steps: "الخطوات التالية", rc_step_1: "إعادة فيتامين د و B12 بعد 3 أشهر", rc_step_2: "فحص ملف الدهون بعد 6 أشهر", rc_step_3: "فحص دم عام سنوي", rc_qr_title: "تقرير موثّق بـ QR", rc_qr_desc: "أُنشئ بواسطة NoryaAI — تم التحقق من الأصالة"
+        rc_next_steps: "الخطوات التالية", rc_step_1: "إعادة فيتامين د و B12 بعد 3 أشهر", rc_step_2: "فحص ملف الدهون بعد 6 أشهر", rc_step_3: "فحص دم عام سنوي", rc_qr_title: "تقرير موثّق بـ QR", rc_qr_desc: "أُنشئ بواسطة NoryaAI — تم التحقق من الأصالة",
+        stat_label_users: "مستخدمون", stat_label_accuracy: "دقة", stat_label_biomarkers: "مؤشرات حيوية", stat_label_minutes: "دقائق",
+        features_eyebrow: "المميزات", how_works_eyebrow: "كيف يعمل", reviews_eyebrow: "المراجعات",
+        biomarker_section_label: "تحليل المؤشرات الحيوية", biomarker_section_count: "10+ مؤشرات حيوية محللة",
+        trust_badges_aria: "الثقة والامتثال", drawer_trust: "256-bit SSL · KVKK وGDPR",
+        features_heading: "معلومات صحية موثوقة، مصممة للحياة الواقعية.",
+        features_sub: "ارفع نتائج المختبر واحصل على تقرير واضح ومنظم مع الاتجاهات وعلامات المخاطر والخطوات التالية.",
+        features_trust_line: "أمان بمستوى المؤسسات، اتصال مشفر وبنية متوافقة مع GDPR.",
+        feature_1_title: "تحليل فوري ومنظم", feature_1_desc: "شروحات واضحة للمؤشرات الحيوية الشائعة وما قد تشير إليه — في دقائق.",
+        feature_2_title: "تنسيق تقرير سريري", feature_2_desc: "تصميم ملائم للطبيب: نطاقات، علامات، ملخصات واقتراحات متابعة.",
+        feature_3_title: "توافق مختبري عالمي", feature_3_desc: "يدعم العديد من تنسيقات ووحدات المختبر — مصمم للمستخدمين الدوليين.",
+        feature_4_title: "الخصوصية والأمان حسب التصميم", feature_4_desc: "مشفر أثناء النقل، ضوابط وصول صارمة وتقليل البيانات. متوافق مع GDPR.",
+        feature_5_title: "الاتجاهات والمقارنات", feature_5_desc: "تتبع التغييرات بمرور الوقت وقارن النتائج السابقة في لوحة واحدة.",
+        feature_6_title: "خطوات تالية قابلة للتنفيذ", feature_6_desc: "نصائح عملية لنمط الحياة والتغذية مخصصة لمؤشراتك.",
+        how_section_title: "كيف يعمل", how_section_desc: "ثلاث خطوات بسيطة للحصول على تقريرك المنظم.",
+        how_step_1_title: "ارفع نتائج المختبر", how_step_1_desc: "PDF أو صورة — نقبل التنسيقات الشائعة.",
+        how_step_2_title: "نُنشئ تقريراً منظماً", how_step_2_desc: "نطاقات واضحة، علامات، ملخصات وتوصيات.",
+        how_step_3_title: "احفظ، قارن واتبع التوصيات", how_step_3_desc: "حمّل PDF، تابع الاتجاهات واتخذ الخطوات التالية.",
+        cta_features_heading: "مستعد لرؤية تقريرك؟", cta_features_sub: "ارفع نتائج المختبر واحصل على تقرير واضح ومنظم في دقائق.",
+        cta_start_analysis: "ابدأ التحليل", cta_view_pricing: "عرض الأسعار",
+        enterprise_infra_label: "بنية تحتية موثوقة", enterprise_infra_title: "بنية تحتية وأمان مؤسسي", enterprise_infra_subtitle: "مدعوم من مزودي سحابة وأمان موثوقين عالمياً.", enterprise_infra_tagline: "توصيل عالمي آمن عبر Cloudflare CDN وبنية Google Cloud.", enterprise_infra_legal: "الشعارات ملك لأصحابها.",
+        nav_theme: 'المظهر',
+        trust_card_compliance_title: 'KVKK و GDPR',
+        trust_section_eyebrow: 'ثقة',
+        trust_section_title: 'تحليل صحي بمستوى سريري',
+        trust_section_desc: 'منصة تحليل المؤشرات الحيوية مصممة بنطاقات مرجعية سريرية وبنية تحتية آمنة.',
+        trust_card_security_title: 'أمان البيانات',
+        trust_card_clinical_title: 'نطاقات مرجعية سريرية',
+        sample_bio_age_label: 'العمر البيولوجي المقدر',
+        sample_bio_age_unit: 'سنة',
+        sample_health_score_label: 'درجة الصحة العامة',
+        sample_attention_1: 'كولسترول LDL — يُوصى بالمتابعة وفقاً للهدف',
+        sample_attention_2: 'فيتامين D — منخفض قليلاً، يمكن مناقشة المكملات مع الطبيب',
+        sample_attention_3: 'المؤشرات الأخرى ضمن النطاق المرجعي',
+        merchant_contact_info: 'للدفع والدعم والتواصل، تواصلوا معنا.',
+        footer_invoice: 'فاتورة / أرشيف إلكتروني',
+        footer_refund_policy: 'سياسة الإلغاء والاسترداد',
+        footer_contact_company: 'التواصل ومعلومات الشركة',
+        hero_globe_alt: 'صورة كرة NoryaAI',
+        alert_medical_text: 'لأغراض إعلامية فقط. هذا التقرير لا يحل محل التشخيص أو العلاج الطبي.',
+        checkout_choose_plan: 'تغيير الخطة',
+        checkout_plan_includes: 'يشمل',
+        checkout_coupon: 'رمز الخصم',
+        checkout_coupon_hint: 'أدخل رمز القسيمة وانقر على تطبيق.',
+        checkout_coupon_apply: 'تطبيق',
+        checkout_paytr_note: 'إذا لم يتم تكوين PayTR، لن تفتح صفحة الدفع.',
+        pricing_yearly_value_midline: 'أقصى توفير مع الخطة السنوية',
+        profile_plan_name: 'الخطة',
+        footer_powered_by: 'بنية الذكاء الاصطناعي مدعومة من Kantesti AI Engine.',
       },
       hi: {
         nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
@@ -11559,7 +11817,55 @@
         rc_heart_title: "हृदय और लिपिड प्रोफ़ाइल", rc_page_3: "पृष्ठ 3 / 5", rc_cardio_risk: "हृदय संवहनी जोखिम", rc_triglyceride: "ट्राइग्लिसराइड्स", rc_ldl_borderline: "● LDL सीमा पर", rc_hdl_normal: "● HDL सामान्य",
         rc_biomarker_title: "बायोमार्कर तालिका", rc_page_4: "पृष्ठ 4 / 5", rc_th_marker: "मार्कर", rc_th_result: "परिणाम", rc_th_reference: "संदर्भ", rc_th_status: "स्थिति", rc_normal: "सामान्य", rc_borderline: "सीमा पर", rc_low: "कम",
         rc_summary_title: "नैदानिक सारांश और सिफारिशें", rc_page_5: "पृष्ठ 5 / 5", rc_key_findings: "प्रमुख निष्कर्ष", rc_finding_1: "LDL कोलेस्ट्रॉल ऊपरी संदर्भ सीमा के पास; आहार और गतिविधि-आधारित अनुवर्ती अनुशंसित।", rc_finding_2: "विटामिन D कम; सूर्य प्रकाश और पूरक अपने डॉक्टर से मूल्यांकित करें।", rc_finding_3: "B12 सीमा पर; पोषण या पूरक अपने चिकित्सक से चर्चा करें।",
-        rc_next_steps: "अगले कदम", rc_step_1: "3 महीने में विटामिन D और B12 दोहराएं", rc_step_2: "6 महीने में लिपिड पैनल जांच", rc_step_3: "वार्षिक सामान्य रक्त परीक्षण", rc_qr_title: "QR सत्यापित रिपोर्ट", rc_qr_desc: "NoryaAI द्वारा निर्मित — प्रामाणिकता सत्यापित"
+        rc_next_steps: "अगले कदम", rc_step_1: "3 महीने में विटामिन D और B12 दोहराएं", rc_step_2: "6 महीने में लिपिड पैनल जांच", rc_step_3: "वार्षिक सामान्य रक्त परीक्षण", rc_qr_title: "QR सत्यापित रिपोर्ट", rc_qr_desc: "NoryaAI द्वारा निर्मित — प्रामाणिकता सत्यापित",
+        stat_label_users: "उपयोगकर्ता", stat_label_accuracy: "सटीकता", stat_label_biomarkers: "बायोमार्कर", stat_label_minutes: "मिनट",
+        features_eyebrow: "विशेषताएं", how_works_eyebrow: "कैसे काम करता है", reviews_eyebrow: "समीक्षाएं",
+        biomarker_section_label: "बायोमार्कर विश्लेषण", biomarker_section_count: "10+ बायोमार्कर का विश्लेषण",
+        trust_badges_aria: "विश्वास और अनुपालन", drawer_trust: "256-bit SSL · KVKK & GDPR अनुपालन",
+        features_heading: "विश्वसनीय स्वास्थ्य जानकारी, वास्तविक जीवन के लिए डिज़ाइन की गई।",
+        features_sub: "अपने लैब परिणाम अपलोड करें और रुझान, जोखिम संकेत और कार्रवाई योग्य अगले कदमों के साथ स्पष्ट, संरचित रिपोर्ट प्राप्त करें।",
+        features_trust_line: "उद्यम-स्तरीय सुरक्षा, एन्क्रिप्टेड संचार और GDPR-संरेखित आर्किटेक्चर।",
+        feature_1_title: "तुरंत, संरचित विश्लेषण", feature_1_desc: "सामान्य बायोमार्कर की स्पष्ट व्याख्या और वे क्या संकेत दे सकते हैं — मिनटों में।",
+        feature_2_title: "क्लिनिकल-शैली रिपोर्ट प्रारूप", feature_2_desc: "डॉक्टर-अनुकूल लेआउट: श्रेणियां, ध्वज, सारांश और अनुवर्ती सुझाव।",
+        feature_3_title: "वैश्विक प्रयोगशाला अनुकूलता", feature_3_desc: "कई लैब प्रारूपों और इकाइयों का समर्थन करता है — अंतर्राष्ट्रीय उपयोगकर्ताओं के लिए।",
+        feature_4_title: "गोपनीयता और सुरक्षा डिज़ाइन में", feature_4_desc: "ट्रांज़िट में एन्क्रिप्टेड, सख्त एक्सेस नियंत्रण और डेटा न्यूनीकरण। GDPR-तैयार।",
+        feature_5_title: "रुझान और तुलनाएं", feature_5_desc: "समय के साथ परिवर्तनों को ट्रैक करें और पिछले परिणामों की एक डैशबोर्ड में तुलना करें।",
+        feature_6_title: "कार्रवाई योग्य अगले कदम", feature_6_desc: "आपके मार्करों के अनुरूप व्यावहारिक जीवनशैली और पोषण सुझाव।",
+        how_section_title: "कैसे काम करता है", how_section_desc: "आपकी संरचित रिपोर्ट के लिए तीन सरल कदम।",
+        how_step_1_title: "अपने लैब परिणाम अपलोड करें", how_step_1_desc: "PDF या छवि — हम सामान्य लैब प्रारूप स्वीकार करते हैं।",
+        how_step_2_title: "हम एक संरचित रिपोर्ट बनाते हैं", how_step_2_desc: "स्पष्ट श्रेणियां, ध्वज, सारांश और सिफारिशें।",
+        how_step_3_title: "सहेजें, तुलना करें और सिफारिशों का पालन करें", how_step_3_desc: "PDF डाउनलोड करें, रुझान ट्रैक करें और अगले कदम उठाएं।",
+        cta_features_heading: "अपनी रिपोर्ट देखने के लिए तैयार हैं?", cta_features_sub: "अपने लैब परिणाम अपलोड करें और मिनटों में स्पष्ट, संरचित रिपोर्ट प्राप्त करें।",
+        cta_start_analysis: "विश्लेषण शुरू करें", cta_view_pricing: "मूल्य देखें",
+        enterprise_infra_label: "विश्वसनीय बुनियादी ढांचा", enterprise_infra_title: "उद्यम बुनियादी ढांचा और सुरक्षा", enterprise_infra_subtitle: "विश्व स्तर पर विश्वसनीय क्लाउड और सुरक्षा प्रदाताओं द्वारा संचालित।", enterprise_infra_tagline: "Cloudflare CDN और Google Cloud बुनियादी ढांचे के माध्यम से सुरक्षित वैश्विक वितरण।", enterprise_infra_legal: "लोगो उनके संबंधित मालिकों की संपत्ति हैं।",
+        nav_theme: 'थीम',
+        trust_card_compliance_title: 'KVKK और GDPR',
+        trust_section_eyebrow: 'विश्वास',
+        trust_section_title: 'क्लिनिकल-ग्रेड स्वास्थ्य विश्लेषण',
+        trust_section_desc: 'क्लिनिकल संदर्भ श्रेणियों और सुरक्षित बुनियादी ढांचे के साथ डिज़ाइन की गई बायोमार्कर विश्लेषण प्लेटफ़ॉर्म।',
+        trust_card_security_title: 'डेटा सुरक्षा',
+        trust_card_clinical_title: 'क्लिनिकल संदर्भ श्रेणियाँ',
+        sample_bio_age_label: 'अनुमानित जैविक आयु',
+        sample_bio_age_unit: 'वर्ष',
+        sample_health_score_label: 'समग्र स्वास्थ्य स्कोर',
+        sample_attention_1: 'LDL कोलेस्ट्रॉल — लक्ष्य के आधार पर निगरानी की सिफारिश',
+        sample_attention_2: 'विटामिन D — थोड़ा कम, डॉक्टर से पूरक पर चर्चा करें',
+        sample_attention_3: 'अन्य पैरामीटर संदर्भ सीमा में',
+        merchant_contact_info: 'भुगतान, सहायता और संपर्क के लिए हमसे संपर्क करें।',
+        footer_invoice: 'चालान / ई-आर्काइव',
+        footer_refund_policy: 'रद्दीकरण और रिफंड नीति',
+        footer_contact_company: 'संपर्क और कंपनी जानकारी',
+        hero_globe_alt: 'NoryaAI ग्लोब इमेज',
+        alert_medical_text: 'केवल सूचनात्मक उद्देश्यों के लिए। यह रिपोर्ट चिकित्सा निदान या उपचार का स्थान नहीं लेती।',
+        checkout_choose_plan: 'प्लान बदलें',
+        checkout_plan_includes: 'शामिल',
+        checkout_coupon: 'छूट कोड',
+        checkout_coupon_hint: 'अपना कूपन कोड दर्ज करें और लागू करें पर क्लिक करें।',
+        checkout_coupon_apply: 'लागू करें',
+        checkout_paytr_note: 'यदि PayTR कॉन्फ़िगर नहीं है, तो भुगतान पृष्ठ नहीं खुलेगा।',
+        pricing_yearly_value_midline: 'वार्षिक योजना के साथ अधिकतम बचत',
+        profile_plan_name: 'योजना',
+        footer_powered_by: 'AI इंफ्रास्ट्रक्चर Kantesti AI Engine द्वारा संचालित।',
       },
       el: {
         nav_home: "Αρχική", nav_languages: "Γλώσσες", nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
@@ -11742,7 +12048,35 @@
         rc_heart_title: "Καρδιά & Λιπιδαιμικό Προφίλ", rc_page_3: "Σελίδα 3 / 5", rc_cardio_risk: "Καρδιαγγειακός Κίνδυνος", rc_triglyceride: "Τριγλυκερίδια", rc_ldl_borderline: "● LDL Οριακή", rc_hdl_normal: "● HDL Φυσιολογική",
         rc_biomarker_title: "Πίνακας Βιοδεικτών", rc_page_4: "Σελίδα 4 / 5", rc_th_marker: "Δείκτης", rc_th_result: "Αποτέλεσμα", rc_th_reference: "Αναφορά", rc_th_status: "Κατάσταση", rc_normal: "Φυσιολογικό", rc_borderline: "Οριακό", rc_low: "Χαμηλό",
         rc_summary_title: "Κλινική Σύνοψη & Συστάσεις", rc_page_5: "Σελίδα 5 / 5", rc_key_findings: "Κύρια Ευρήματα", rc_finding_1: "Χοληστερόλη LDL κοντά στο ανώτερο όριο· συνιστάται παρακολούθηση διατροφής και δραστηριότητας.", rc_finding_2: "Βιταμίνη D χαμηλή· ηλιοφάνεια και συμπληρώματα πρέπει να αξιολογηθούν με τον γιατρό.", rc_finding_3: "B12 οριακή· διατροφή ή συμπληρώματα μπορούν να συζητηθούν με τον γιατρό.",
-        rc_next_steps: "Επόμενα Βήματα", rc_step_1: "Επανάληψη βιταμίνης D και B12 σε 3 μήνες", rc_step_2: "Έλεγχος λιπιδαιμικού προφίλ σε 6 μήνες", rc_step_3: "Ετήσια γενική εξέταση αίματος", rc_qr_title: "Αναφορά Επαληθευμένη QR", rc_qr_desc: "Δημιουργήθηκε από NoryaAI — η αυθεντικότητα επαληθεύτηκε"
+        rc_next_steps: "Επόμενα Βήματα", rc_step_1: "Επανάληψη βιταμίνης D και B12 σε 3 μήνες", rc_step_2: "Έλεγχος λιπιδαιμικού προφίλ σε 6 μήνες", rc_step_3: "Ετήσια γενική εξέταση αίματος", rc_qr_title: "Αναφορά Επαληθευμένη QR", rc_qr_desc: "Δημιουργήθηκε από NoryaAI — η αυθεντικότητα επαληθεύτηκε",
+        nav_theme: 'Θέμα',
+        trust_card_compliance_title: 'KVKK & GDPR',
+        trust_section_eyebrow: 'ΕΜΠΙΣΤΟΣΥΝΗ',
+        trust_section_title: 'Ανάλυση υγείας κλινικού επιπέδου',
+        trust_section_desc: 'Πλατφόρμα ανάλυσης βιοδεικτών σχεδιασμένη με κλινικά εύρη αναφοράς και ασφαλή υποδομή.',
+        trust_card_security_title: 'Ασφάλεια δεδομένων',
+        trust_card_clinical_title: 'Κλινικά εύρη αναφοράς',
+        sample_bio_age_label: 'Εκτιμώμενη βιολογική ηλικία',
+        sample_bio_age_unit: 'έτη',
+        sample_health_score_label: 'Συνολικό σκορ υγείας',
+        sample_attention_1: 'LDL χοληστερόλη — συνιστάται παρακολούθηση',
+        sample_attention_2: 'Βιταμίνη D — ελαφρώς χαμηλή, η συμπληρωματική αγωγή να συζητηθεί με γιατρό',
+        sample_attention_3: 'Άλλες παράμετροι εντός εύρους αναφοράς',
+        merchant_contact_info: 'Για πληρωμή, υποστήριξη και επικοινωνία, επικοινωνήστε μαζί μας.',
+        footer_invoice: 'Τιμολόγιο / ψηφιακό αρχείο',
+        footer_refund_policy: 'Πολιτική ακύρωσης και επιστροφής',
+        footer_contact_company: 'Επικοινωνία & Πληροφορίες Εταιρείας',
+        hero_globe_alt: 'Εικόνα σφαίρας NoryaAI',
+        alert_medical_text: 'Μόνο για ενημερωτικούς σκοπούς. Αυτή η αναφορά δεν αντικαθιστά ιατρική διάγνωση ή θεραπεία.',
+        checkout_choose_plan: 'Αλλαγή πλάνου',
+        checkout_plan_includes: 'Περιλαμβάνει',
+        checkout_coupon: 'Κωδικός έκπτωσης',
+        checkout_coupon_hint: 'Εισάγετε τον κωδικό κουπονιού και κάντε κλικ στο Εφαρμογή.',
+        checkout_coupon_apply: 'Εφαρμογή',
+        checkout_paytr_note: 'Εάν το PayTR δεν έχει ρυθμιστεί, η σελίδα πληρωμής δεν θα ανοίξει.',
+        pricing_yearly_value_midline: 'Μέγιστη εξοικονόμηση με ετήσιο πλάνο',
+        profile_plan_name: 'Πλάνο',
+        footer_powered_by: 'Υποδομή AI από Kantesti AI Engine.',
       },
       cs: {
         nav_home: "Domů", nav_languages: "Jazyky", nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
@@ -11925,7 +12259,35 @@
         rc_heart_title: "Srdce a lipidový profil", rc_page_3: "Strana 3 / 5", rc_cardio_risk: "Kardiovaskulární riziko", rc_triglyceride: "Triglyceridy", rc_ldl_borderline: "● LDL hraniční", rc_hdl_normal: "● HDL v normě",
         rc_biomarker_title: "Tabulka biomarkerů", rc_page_4: "Strana 4 / 5", rc_th_marker: "Marker", rc_th_result: "Výsledek", rc_th_reference: "Reference", rc_th_status: "Stav", rc_normal: "Normální", rc_borderline: "Hraniční", rc_low: "Nízký",
         rc_summary_title: "Klinický souhrn a doporučení", rc_page_5: "Strana 5 / 5", rc_key_findings: "Hlavní nálezy", rc_finding_1: "LDL cholesterol blízko horní hranice; doporučuje se sledování stravou a aktivitou.", rc_finding_2: "Vitamin D nízký; sluneční záření a doplnění je třeba zhodnotit s lékařem.", rc_finding_3: "B12 hraniční; výživa nebo doplnění lze konzultovat s lékařem.",
-        rc_next_steps: "Další kroky", rc_step_1: "Opakovat vitamin D a B12 za 3 měsíce", rc_step_2: "Kontrola lipidového profilu za 6 měsíců", rc_step_3: "Roční obecný krevní test", rc_qr_title: "QR ověřená zpráva", rc_qr_desc: "Vytvořeno NoryaAI — pravost ověřena"
+        rc_next_steps: "Další kroky", rc_step_1: "Opakovat vitamin D a B12 za 3 měsíce", rc_step_2: "Kontrola lipidového profilu za 6 měsíců", rc_step_3: "Roční obecný krevní test", rc_qr_title: "QR ověřená zpráva", rc_qr_desc: "Vytvořeno NoryaAI — pravost ověřena",
+        nav_theme: 'Motiv',
+        trust_card_compliance_title: 'KVKK a GDPR',
+        trust_section_eyebrow: 'DŮVĚRA',
+        trust_section_title: 'Zdravotní analýza klinické úrovně',
+        trust_section_desc: 'Platforma pro analýzu biomarkerů navržená s klinickými referenčními rozsahy a bezpečnou infrastrukturou.',
+        trust_card_security_title: 'Zabezpečení dat',
+        trust_card_clinical_title: 'Klinické referenční rozsahy',
+        sample_bio_age_label: 'Odhadovaný biologický věk',
+        sample_bio_age_unit: 'let',
+        sample_health_score_label: 'Celkové skóre zdraví',
+        sample_attention_1: 'LDL cholesterol — doporučeno sledování',
+        sample_attention_2: 'Vitamin D — mírně nízký, suplementaci konzultujte s lékařem',
+        sample_attention_3: 'Ostatní parametry v referenčním rozmezí',
+        merchant_contact_info: 'Pro platby, podporu a kontakt nás kontaktujte.',
+        footer_invoice: 'Faktura / e-Archiv',
+        footer_refund_policy: 'Zásady stornování a vrácení peněz',
+        footer_contact_company: 'Kontakt a informace o společnosti',
+        hero_globe_alt: 'Obrázek globusu NoryaAI',
+        alert_medical_text: 'Pouze pro informační účely. Tato zpráva nenahrazuje lékařskou diagnózu ani léčbu.',
+        checkout_choose_plan: 'Změnit plán',
+        checkout_plan_includes: 'Zahrnuje',
+        checkout_coupon: 'Slevový kód',
+        checkout_coupon_hint: 'Zadejte svůj kód kupónu a klikněte na Použít.',
+        checkout_coupon_apply: 'Použít',
+        checkout_paytr_note: 'Pokud PayTR není nakonfigurováno, platební stránka se neotevře.',
+        pricing_yearly_value_midline: 'Maximální úspora s ročním plánem',
+        profile_plan_name: 'Plán',
+        footer_powered_by: 'AI infrastruktura poháněná Kantesti AI Engine.',
       },
       sr: {
         nav_home: "Početna", nav_languages: "Jezici", nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
@@ -12108,7 +12470,35 @@
         rc_heart_title: "Srce i lipidni profil", rc_page_3: "Strana 3 / 5", rc_cardio_risk: "Kardiovaskularni rizik", rc_triglyceride: "Trigliceridi", rc_ldl_borderline: "● LDL granično", rc_hdl_normal: "● HDL normalan",
         rc_biomarker_title: "Tabela biomarkera", rc_page_4: "Strana 4 / 5", rc_th_marker: "Marker", rc_th_result: "Rezultat", rc_th_reference: "Referenca", rc_th_status: "Status", rc_normal: "Normalan", rc_borderline: "Granično", rc_low: "Nizak",
         rc_summary_title: "Klinički rezime i preporuke", rc_page_5: "Strana 5 / 5", rc_key_findings: "Ključni nalazi", rc_finding_1: "LDL holesterol blizu gornje granice; preporučuje se praćenje ishranom i aktivnošću.", rc_finding_2: "Vitamin D nizak; sunce i suplementacija treba da se procene sa lekarom.", rc_finding_3: "B12 granično; ishrana ili suplementacija može se razmotriti sa lekarom.",
-        rc_next_steps: "Sledeći koraci", rc_step_1: "Ponoviti vitamin D i B12 za 3 meseca", rc_step_2: "Kontrola lipidnog profila za 6 meseci", rc_step_3: "Godišnji opšti krvni test", rc_qr_title: "QR verifikovani izveštaj", rc_qr_desc: "Generisao NoryaAI — autentičnost verifikovana"
+        rc_next_steps: "Sledeći koraci", rc_step_1: "Ponoviti vitamin D i B12 za 3 meseca", rc_step_2: "Kontrola lipidnog profila za 6 meseci", rc_step_3: "Godišnji opšti krvni test", rc_qr_title: "QR verifikovani izveštaj", rc_qr_desc: "Generisao NoryaAI — autentičnost verifikovana",
+        nav_theme: 'Tema',
+        trust_card_compliance_title: 'KVKK i GDPR',
+        trust_section_eyebrow: 'POVERENJE',
+        trust_section_title: 'Zdravstvena analiza kliničkog nivoa',
+        trust_section_desc: 'Platforma za analizu biomarkera dizajnirana sa kliničkim referentnim opsezima i bezbednom infrastrukturom.',
+        trust_card_security_title: 'Bezbednost podataka',
+        trust_card_clinical_title: 'Klinički referentni opsezi',
+        sample_bio_age_label: 'Procenjena biološka starost',
+        sample_bio_age_unit: 'godina',
+        sample_health_score_label: 'Ukupni zdravstveni skor',
+        sample_attention_1: 'LDL holesterol — preporučuje se praćenje',
+        sample_attention_2: 'Vitamin D — blago nizak, suplementaciju razmotriti sa lekarom',
+        sample_attention_3: 'Ostali parametri u referentnom opsegu',
+        merchant_contact_info: 'Za plaćanje, podršku i kontakt, obratite nam se.',
+        footer_invoice: 'Faktura / e-Arhiv',
+        footer_refund_policy: 'Politika otkazivanja i povrata',
+        footer_contact_company: 'Kontakt i informacije o kompaniji',
+        hero_globe_alt: 'NoryaAI slika globusa',
+        alert_medical_text: 'Samo u informativne svrhe. Ovaj izveštaj ne zamenjuje medicinsku dijagnozu ili lečenje.',
+        checkout_choose_plan: 'Promenite plan',
+        checkout_plan_includes: 'Uključuje',
+        checkout_coupon: 'Kod za popust',
+        checkout_coupon_hint: 'Unesite kod kupona i kliknite na Primeni.',
+        checkout_coupon_apply: 'Primeni',
+        checkout_paytr_note: 'Ako PayTR nije konfigurisan, stranica za plaćanje se neće otvoriti.',
+        pricing_yearly_value_midline: 'Maksimalna ušteda sa godišnjim planom',
+        profile_plan_name: 'Plan',
+        footer_powered_by: 'AI infrastruktura pokretana Kantesti AI Engine.',
       }
     };
     if (window.__LANDING_T__ && window.__LANDING_LOCALE__) {
@@ -12403,11 +12793,11 @@
     // (tr, en, de, es, fr, it, ar, hi, he, el, sr, etc.) updates the path consistently.
     var LANDING_LOCALES = SUPPORTED_LOCALES.slice();
     function chooseLang(lang) {
-      console.log("[lang-flow] chooseLang:called", lang);
+      console.log("[i18n-home] chooseLang:called", lang);
       if (!lang || typeof lang !== 'string') return;
       lang = String(lang).toLowerCase().trim();
       if (typeof T !== 'undefined' && !T[lang]) lang = 'en';
-      console.log("[lang-flow] chooseLang:entered", { lang: lang, path: window.location.pathname });
+      console.log("[i18n-home] chooseLang:entered", { lang: lang, path: window.location.pathname });
       var modal = document.getElementById("lang-modal");
       if (modal) {
         modal.classList.add("hidden");
@@ -12425,26 +12815,7 @@
       try { localStorage.setItem(LANG_KEY, lang); } catch (_) {}
       try { document.cookie = "norya_lang=" + encodeURIComponent(lang) + "; path=/; max-age=31536000; samesite=lax"; } catch (_) {}
       if (typeof setLang === 'function') {
-        console.log("[lang-flow] chooseLang:setLang-call", lang);
         setLang(lang);
-      }
-      if (LANDING_LOCALES.indexOf(lang) !== -1) {
-        try {
-          var url = new URL(window.location.href);
-          url.searchParams.set('lang', lang);
-          var target = url.pathname + url.search + url.hash;
-          console.log("[lang-flow] chooseLang:navigation-target", target, "(query-lang hard reload)");
-          if (target !== (window.location.pathname + (window.location.search || '') + (window.location.hash || ''))) {
-            window.location.assign(target);
-          } else {
-            window.location.reload();
-          }
-        } catch (_) {
-          var fb = (window.location.pathname || '/') + '?lang=' + encodeURIComponent(lang);
-          console.log("[lang-flow] chooseLang:navigation-target", fb, "(fallback)");
-          window.location.assign(fb);
-        }
-        return;
       }
       var base = window.location.pathname || '/';
       var qs = window.location.search || '';
@@ -12453,12 +12824,8 @@
         params.set('lang', lang);
         var newUrl = base + '?' + params.toString() + (window.location.hash || '');
         try { window.history.replaceState({ lang: lang }, '', newUrl); } catch (_) {}
-        console.log("[lang-flow] chooseLang:navigation-target", newUrl);
+        console.log("[i18n-home] chooseLang:url-updated", newUrl);
       }
-      setLang(lang);
-      setTimeout(function() { setLang(lang); }, 0);
-      setTimeout(function() { setLang(lang); }, 100);
-      requestAnimationFrame(function() { setLang(lang); });
     }
     window.chooseLang = chooseLang;
     window.setLang = setLang;
@@ -12500,7 +12867,7 @@
       if (hamburger) {
         hamburger.classList.add('active');
         hamburger.setAttribute('aria-expanded', 'true');
-        hamburger.setAttribute('aria-label', 'Menüyü kapat');
+        hamburger.setAttribute('aria-label', getTranslation(getLang(), 'hamburger_close') || 'Close menu');
       }
     }
     function closeMobileDrawer() {
@@ -12616,8 +12983,14 @@
       if (typeof T === 'undefined' || !key) return '';
       key = String(key).trim();
       var t = T[lang];
-      if (t && t[key]) return t[key];
-      if (T.en && T.en[key]) return T.en[key];
+      if (t && t[key] != null && t[key] !== '') return t[key];
+      if (lang !== 'en' && T.en && T.en[key] != null && T.en[key] !== '') {
+        console.warn('[i18n-home] missing key', { key: key, locale: lang, fallback: 'en' });
+        return T.en[key];
+      }
+      if (!t || t[key] == null) {
+        console.warn('[i18n-home] missing key (no fallback)', { key: key, locale: lang });
+      }
       return '';
     }
     function applyTranslationToElement(el, text) {
@@ -12630,7 +13003,7 @@
       else el.textContent = String(text);
     }
     function setLang(lang) {
-      console.log("[lang-flow] setLang:applied", lang);
+      console.log("[i18n-home] active locale:", lang);
       var storedLang = null;
       try { storedLang = localStorage.getItem(LANG_KEY); } catch (_) { storedLang = null; }
       var prevLang = (typeof getLang === "function" ? getLang() : (storedLang || "en"));
@@ -12675,17 +13048,20 @@
         opt.classList.toggle("lang-opt-selected", isSelected);
         opt.setAttribute("aria-selected", isSelected ? "true" : "false");
       });
+      var _i18nApplied = 0, _i18nMissing = 0;
       document.querySelectorAll("[data-i18n]").forEach(function(el) {
         var key = (el.getAttribute("data-i18n") || "").trim();
         var text = getTranslation(lang, key);
-        if (text != null && text !== '') applyTranslationToElement(el, text);
+        if (text != null && text !== '') { applyTranslationToElement(el, text); _i18nApplied++; }
+        else { _i18nMissing++; }
       });
       var drawer = document.getElementById("mobile-drawer");
       if (drawer) {
         drawer.querySelectorAll("[data-i18n]").forEach(function(el) {
           var key = (el.getAttribute("data-i18n") || "").trim();
           var text = getTranslation(lang, key);
-          if (text != null && text !== '') applyTranslationToElement(el, text);
+          if (text != null && text !== '') { applyTranslationToElement(el, text); _i18nApplied++; }
+          else { _i18nMissing++; }
         });
       }
       document.querySelectorAll("[data-i18n-placeholder]").forEach(function(el) {
@@ -12698,6 +13074,7 @@
         var text = getTranslation(lang, key);
         if (text) el.setAttribute("aria-label", text);
       });
+      console.log("[i18n-home] applied section", { locale: lang, applied: _i18nApplied, missing: _i18nMissing });
       if (typeof window.updatePromoStripText === 'function') window.updatePromoStripText(lang);
       var charEl = document.getElementById("wizard-preview-char");
       var wizardCount = getTranslation(lang, 'wizard_char_count');
