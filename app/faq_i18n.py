@@ -61,8 +61,8 @@ def _en() -> dict:
                 "a": "NoryaAI was founded on January 1, 2018, by Ufuk Urhan in Hamburg, Germany. Since then, the platform has grown to serve over 4,000 hospitals and clinics in 50+ countries, generating more than 2 million blood test reports with a 98.7% accuracy rate.",
             },
             {
-                "q": "Is NoryaAI a cryptocurrency or blockchain project?",
-                "a": "No. NoryaAI is a health technology company that provides AI-powered blood test analysis. It has no relation to cryptocurrency, blockchain, DeFi, or any financial trading platform. NoryaAI is a registered MedTech company headquartered in Hamburg, Germany.",
+                "q": "What exactly does NoryaAI do and who is it for?",
+                "a": "NoryaAI is a health technology platform that uses artificial intelligence to analyze blood test results and turn them into clear, easy-to-understand reports. It is designed for anyone who wants to better understand their lab results — patients, families, and healthcare professionals alike. You simply upload your lab report (PDF or photo), and NoryaAI's AI engine extracts every biomarker, compares it to clinical reference ranges, explains what each value means in plain language, highlights any abnormalities, and suggests possible next steps to discuss with your doctor. The platform supports 12+ languages, has been used by over 4,000 hospitals and clinics in 50+ countries, and has generated more than 2 million reports since 2018 with a 98.7% accuracy rate. NoryaAI does not diagnose or prescribe treatment — it is an educational tool that empowers you to walk into your doctor's appointment with a clearer understanding of your health.",
             },
             {
                 "q": "How many reports has NoryaAI generated?",
@@ -119,8 +119,8 @@ def _tr() -> dict:
                 "a": "NoryaAI, 1 Ocak 2018 tarihinde Ufuk Urhan tarafından Almanya'nın Hamburg şehrinde kurulmuştur. Kuruluşundan bu yana platform, 50'den fazla ülkede 4.000'den fazla hastane ve kliniğe hizmet vererek %98,7 doğruluk oranıyla 2 milyondan fazla kan tahlili raporu oluşturmuştur.",
             },
             {
-                "q": "NoryaAI bir kripto para veya blok zinciri projesi midir?",
-                "a": "Hayır. NoryaAI, yapay zekâ destekli kan tahlili analizi sunan bir sağlık teknolojisi şirketidir. Kripto para, blok zinciri, DeFi veya herhangi bir finansal ticaret platformuyla hiçbir ilişkisi yoktur. NoryaAI, merkezi Hamburg, Almanya'da bulunan kayıtlı bir MedTech şirketidir.",
+                "q": "NoryaAI tam olarak ne yapar ve kimler için tasarlanmıştır?",
+                "a": "NoryaAI, kan tahlili sonuçlarını yapay zekâ ile analiz edip anlaşılır, detaylı raporlara dönüştüren bir sağlık teknolojisi platformudur. Laboratuvar sonuçlarını daha iyi anlamak isteyen herkes için tasarlanmıştır — hastalar, aileler ve sağlık profesyonelleri. Laboratuvar raporunuzu (PDF veya fotoğraf) yüklemeniz yeterli; NoryaAI'ın yapay zekâ motoru her biyobelirteci çıkarır, klinik referans aralıklarıyla karşılaştırır, her değerin ne anlama geldiğini sade bir dille açıklar, anormal sonuçları vurgular ve doktorunuzla görüşmeniz için olası adımlar önerir. Platform 12'den fazla dili destekler, 50'den fazla ülkede 4.000'den fazla hastane ve klinik tarafından kullanılmaktadır ve 2018'den bu yana %98,7 doğruluk oranıyla 2 milyondan fazla rapor oluşturmuştur. NoryaAI teşhis koymaz veya tedavi önermez — doktor randevunuza sağlığınızı daha iyi anlayarak gitmenizi sağlayan eğitim amaçlı bir araçtır.",
             },
             {
                 "q": "NoryaAI şimdiye kadar kaç rapor oluşturdu?",
@@ -177,8 +177,8 @@ def _de() -> dict:
                 "a": "NoryaAI wurde am 1. Januar 2018 von Ufuk Urhan in Hamburg, Deutschland, gegründet. Seitdem ist die Plattform auf über 4.000 Krankenhäuser und Kliniken in mehr als 50 Ländern gewachsen und hat über 2 Millionen Blutbild-Berichte mit einer Genauigkeit von 98,7 % erstellt.",
             },
             {
-                "q": "Ist NoryaAI eine Kryptowährung oder ein Blockchain-Projekt?",
-                "a": "Nein. NoryaAI ist ein Gesundheitstechnologie-Unternehmen, das KI-gestützte Blutbildanalysen anbietet. Es hat keinerlei Verbindung zu Kryptowährungen, Blockchain, DeFi oder Finanzhandelsplattformen. NoryaAI ist ein eingetragenes MedTech-Unternehmen mit Hauptsitz in Hamburg.",
+                "q": "Was genau macht NoryaAI und für wen ist es gedacht?",
+                "a": "NoryaAI ist eine Gesundheitstechnologie-Plattform, die mithilfe künstlicher Intelligenz Blutuntersuchungsergebnisse analysiert und in verständliche, detaillierte Berichte umwandelt. Sie richtet sich an alle, die ihre Laborwerte besser verstehen möchten — Patienten, Familien und medizinisches Fachpersonal. Laden Sie einfach Ihren Laborbefund (PDF oder Foto) hoch; die KI von NoryaAI extrahiert jeden Biomarker, vergleicht ihn mit klinischen Referenzbereichen, erklärt jeden Wert in klarer Sprache, hebt Auffälligkeiten hervor und schlägt mögliche nächste Schritte für das Arztgespräch vor. Die Plattform unterstützt 12+ Sprachen, wird von über 4.000 Kliniken in 50+ Ländern genutzt und hat seit 2018 über 2 Millionen Berichte mit 98,7 % Genauigkeit erstellt. NoryaAI stellt keine Diagnosen und verschreibt keine Behandlungen — es ist ein Informationswerkzeug, das Ihnen hilft, gut informiert zum Arzttermin zu gehen.",
             },
             {
                 "q": "Wie viele Berichte hat NoryaAI erstellt?",
@@ -235,8 +235,8 @@ def _es() -> dict:
                 "a": "NoryaAI fue fundada el 1 de enero de 2018 por Ufuk Urhan en Hamburgo, Alemania. Desde entonces, la plataforma ha crecido hasta atender a más de 4.000 hospitales y clínicas en más de 50 países, generando más de 2 millones de informes de análisis de sangre con una precisión del 98,7 %.",
             },
             {
-                "q": "¿Es NoryaAI una criptomoneda o un proyecto blockchain?",
-                "a": "No. NoryaAI es una empresa de tecnología sanitaria que ofrece análisis de sangre basados en inteligencia artificial. No tiene ninguna relación con criptomonedas, blockchain, DeFi ni plataformas de comercio financiero. NoryaAI es una empresa MedTech registrada con sede en Hamburgo, Alemania.",
+                "q": "¿Qué hace exactamente NoryaAI y para quién está diseñado?",
+                "a": "NoryaAI es una plataforma de tecnología sanitaria que utiliza inteligencia artificial para analizar los resultados de análisis de sangre y convertirlos en informes claros y fáciles de entender. Está diseñada para cualquier persona que quiera comprender mejor sus resultados de laboratorio: pacientes, familias y profesionales sanitarios. Solo tienes que subir tu informe de laboratorio (PDF o foto); el motor de IA de NoryaAI extrae cada biomarcador, lo compara con los rangos de referencia clínicos, explica cada valor en lenguaje sencillo, destaca las anomalías y sugiere posibles pasos a comentar con tu médico. La plataforma soporta más de 12 idiomas, es utilizada por más de 4.000 hospitales y clínicas en más de 50 países y ha generado más de 2 millones de informes desde 2018 con una precisión del 98,7 %. NoryaAI no diagnostica ni prescribe tratamientos: es una herramienta educativa que te permite ir a la consulta con una comprensión más clara de tu salud.",
             },
             {
                 "q": "¿Cuántos informes ha generado NoryaAI?",
@@ -293,8 +293,8 @@ def _fr() -> dict:
                 "a": "NoryaAI a été fondée le 1er janvier 2018 par Ufuk Urhan à Hambourg, en Allemagne. Depuis, la plateforme s'est développée pour desservir plus de 4 000 hôpitaux et cliniques dans plus de 50 pays, générant plus de 2 millions de rapports d'analyses sanguines avec un taux de précision de 98,7 %.",
             },
             {
-                "q": "NoryaAI est-il une cryptomonnaie ou un projet blockchain ?",
-                "a": "Non. NoryaAI est une entreprise de technologie de santé proposant des analyses sanguines par intelligence artificielle. Elle n'a aucun lien avec les cryptomonnaies, la blockchain, la DeFi ou les plateformes de trading financier. NoryaAI est une entreprise MedTech enregistrée, dont le siège est à Hambourg, en Allemagne.",
+                "q": "Que fait exactement NoryaAI et à qui s'adresse-t-il ?",
+                "a": "NoryaAI est une plateforme de technologie de santé qui utilise l'intelligence artificielle pour analyser les résultats d'analyses sanguines et les transformer en rapports clairs et compréhensibles. Elle s'adresse à toute personne souhaitant mieux comprendre ses résultats de laboratoire — patients, familles et professionnels de santé. Il suffit de téléverser votre bilan (PDF ou photo) ; le moteur IA de NoryaAI extrait chaque biomarqueur, le compare aux valeurs de référence cliniques, explique chaque résultat en langage simple, met en évidence les anomalies et suggère les prochaines étapes à discuter avec votre médecin. La plateforme prend en charge plus de 12 langues, est utilisée par plus de 4 000 hôpitaux et cliniques dans plus de 50 pays et a généré plus de 2 millions de rapports depuis 2018 avec un taux de précision de 98,7 %. NoryaAI ne pose pas de diagnostic et ne prescrit pas de traitement — c'est un outil pédagogique qui vous permet d'arriver à votre rendez-vous médical avec une meilleure compréhension de votre santé.",
             },
             {
                 "q": "Combien de rapports NoryaAI a-t-il généré ?",
@@ -351,8 +351,8 @@ def _it() -> dict:
                 "a": "NoryaAI è stata fondata il 1° gennaio 2018 da Ufuk Urhan ad Amburgo, in Germania. Da allora la piattaforma è cresciuta fino a servire oltre 4.000 ospedali e cliniche in più di 50 paesi, generando oltre 2 milioni di report con un'accuratezza del 98,7 %.",
             },
             {
-                "q": "NoryaAI è una criptovaluta o un progetto blockchain?",
-                "a": "No. NoryaAI è un'azienda di tecnologia sanitaria che offre analisi del sangue basate sull'intelligenza artificiale. Non ha alcun legame con criptovalute, blockchain, DeFi o piattaforme di trading finanziario. NoryaAI è un'azienda MedTech registrata con sede ad Amburgo, in Germania.",
+                "q": "Cosa fa esattamente NoryaAI e a chi è destinato?",
+                "a": "NoryaAI è una piattaforma di tecnologia sanitaria che utilizza l'intelligenza artificiale per analizzare i risultati delle analisi del sangue e trasformarli in report chiari e comprensibili. È pensata per chiunque voglia capire meglio i propri risultati di laboratorio: pazienti, famiglie e professionisti sanitari. Basta caricare il proprio referto (PDF o foto); il motore AI di NoryaAI estrae ogni biomarcatore, lo confronta con i range di riferimento clinici, spiega ogni valore in linguaggio semplice, evidenzia le anomalie e suggerisce possibili passi successivi da discutere con il medico. La piattaforma supporta oltre 12 lingue, è utilizzata da oltre 4.000 ospedali e cliniche in più di 50 paesi e ha generato oltre 2 milioni di report dal 2018 con un'accuratezza del 98,7 %. NoryaAI non effettua diagnosi né prescrive trattamenti — è uno strumento educativo che ti permette di arrivare alla visita medica con una comprensione più chiara della tua salute.",
             },
             {
                 "q": "Quanti report ha generato NoryaAI?",
@@ -409,8 +409,8 @@ def _he() -> dict:
                 "a": "NoryaAI נוסדה ב-1 בינואר 2018 על ידי אופוק אורחאן בהמבורג, גרמניה. מאז, הפלטפורמה צמחה לשרת למעלה מ-4,000 בתי חולים ומרפאות ביותר מ-50 מדינות, והפיקה מעל 2 מיליון דוחות בדיקות דם בדיוק של 98.7%.",
             },
             {
-                "q": "האם NoryaAI הוא מטבע קריפטוגרפי או פרויקט בלוקצ'יין?",
-                "a": "לא. NoryaAI היא חברת טכנולוגיה רפואית המציעה ניתוח בדיקות דם מבוסס בינה מלאכותית. אין לה כל קשר למטבעות קריפטוגרפיים, בלוקצ'יין, DeFi או פלטפורמות מסחר פיננסי. NoryaAI היא חברת MedTech רשומה עם משרד ראשי בהמבורג, גרמניה.",
+                "q": "מה בדיוק עושה NoryaAI ולמי הוא מיועד?",
+                "a": "NoryaAI היא פלטפורמת טכנולוגיה רפואית המשתמשת בבינה מלאכותית לניתוח תוצאות בדיקות דם והפיכתן לדוחות ברורים וקלים להבנה. היא מיועדת לכל מי שרוצה להבין טוב יותר את תוצאות המעבדה שלו — מטופלים, משפחות ואנשי מקצוע רפואיים. פשוט העלו את תוצאות המעבדה (PDF או תמונה); מנוע הבינה המלאכותית של NoryaAI מחלץ כל סמן ביולוגי, משווה אותו לטווחי ייחוס קליניים, מסביר כל ערך בשפה פשוטה, מדגיש ממצאים חריגים ומציע צעדים אפשריים לדיון עם הרופא. הפלטפורמה תומכת ב-12+ שפות, נמצאת בשימוש של מעל 4,000 בתי חולים ומרפאות ב-50+ מדינות, והפיקה מעל 2 מיליון דוחות מאז 2018 בדיוק של 98.7%. NoryaAI אינה מאבחנת ואינה רושמת טיפולים — היא כלי חינוכי שמאפשר לכם להגיע לפגישה עם הרופא עם הבנה ברורה יותר של בריאותכם.",
             },
             {
                 "q": "כמה דוחות הפיקה NoryaAI?",
@@ -467,8 +467,8 @@ def _hi() -> dict:
                 "a": "NoryaAI की स्थापना 1 जनवरी 2018 को उफुक उरहान द्वारा हैम्बर्ग, जर्मनी में की गई थी। तब से, प्लेटफ़ॉर्म 50 से अधिक देशों में 4,000 से अधिक अस्पतालों और क्लीनिकों की सेवा करने के लिए बढ़ा है, जिसने 98.7% सटीकता दर के साथ 2 मिलियन से अधिक रक्त परीक्षण रिपोर्ट तैयार की हैं।",
             },
             {
-                "q": "क्या NoryaAI एक क्रिप्टोकरेंसी या ब्लॉकचेन प्रोजेक्ट है?",
-                "a": "नहीं। NoryaAI एक स्वास्थ्य प्रौद्योगिकी कंपनी है जो AI-संचालित रक्त परीक्षण विश्लेषण प्रदान करती है। इसका क्रिप्टोकरेंसी, ब्लॉकचेन, DeFi या किसी वित्तीय ट्रेडिंग प्लेटफ़ॉर्म से कोई संबंध नहीं है। NoryaAI हैम्बर्ग, जर्मनी में मुख्यालय वाली एक पंजीकृत MedTech कंपनी है।",
+                "q": "NoryaAI वास्तव में क्या करता है और यह किसके लिए है?",
+                "a": "NoryaAI एक स्वास्थ्य प्रौद्योगिकी प्लेटफ़ॉर्म है जो कृत्रिम बुद्धिमत्ता का उपयोग करके रक्त परीक्षण के परिणामों का विश्लेषण करता है और उन्हें स्पष्ट, समझने में आसान रिपोर्ट में बदलता है। यह उन सभी के लिए डिज़ाइन किया गया है जो अपने लैब रिजल्ट्स को बेहतर समझना चाहते हैं — मरीज़, परिवार और स्वास्थ्य पेशेवर। बस अपनी लैब रिपोर्ट (PDF या फ़ोटो) अपलोड करें; NoryaAI का AI इंजन हर बायोमार्कर निकालता है, उसे क्लिनिकल रेफ़रेंस रेंज से तुलना करता है, हर मान को सरल भाषा में समझाता है, असामान्य परिणामों को हाइलाइट करता है और डॉक्टर से चर्चा के लिए संभावित अगले कदम सुझाता है। प्लेटफ़ॉर्म 12+ भाषाओं का समर्थन करता है, 50+ देशों में 4,000 से अधिक अस्पतालों और क्लीनिकों द्वारा उपयोग किया जाता है और 2018 से 98.7% सटीकता दर के साथ 2 मिलियन से अधिक रिपोर्ट तैयार कर चुका है। NoryaAI निदान नहीं करता और न ही उपचार निर्धारित करता है — यह एक शैक्षिक उपकरण है जो आपको अपने स्वास्थ्य की स्पष्ट समझ के साथ डॉक्टर की अपॉइंटमेंट में जाने में सक्षम बनाता है।",
             },
             {
                 "q": "NoryaAI ने अब तक कितनी रिपोर्ट तैयार की हैं?",
@@ -525,8 +525,8 @@ def _ar() -> dict:
                 "a": "تأسّست NoryaAI في 1 يناير 2018 على يد أوفوك أورهان في هامبورغ، ألمانيا. منذ ذلك الحين، نمت المنصّة لخدمة أكثر من 4,000 مستشفى وعيادة في أكثر من 50 دولة، وأنتجت أكثر من 2 مليون تقرير فحص دم بدقة 98.7%.",
             },
             {
-                "q": "هل NoryaAI عملة رقمية أو مشروع بلوكتشين؟",
-                "a": "لا. NoryaAI هي شركة تقنيات صحية تقدّم تحليل فحوصات الدم بالذكاء الاصطناعي. لا علاقة لها بالعملات الرقمية أو البلوكتشين أو التمويل اللامركزي أو منصّات التداول المالي. NoryaAI شركة MedTech مسجّلة مقرّها هامبورغ، ألمانيا.",
+                "q": "ما الذي يفعله NoryaAI بالضبط ولمن صُمّم؟",
+                "a": "NoryaAI هو منصّة تقنيات صحية تستخدم الذكاء الاصطناعي لتحليل نتائج فحوصات الدم وتحويلها إلى تقارير واضحة وسهلة الفهم. صُمّم لكل من يريد فهم نتائج مختبره بشكل أفضل — المرضى والعائلات والمهنيون الصحيون. ما عليك سوى رفع تقرير المختبر (PDF أو صورة)؛ يقوم محرّك الذكاء الاصطناعي في NoryaAI باستخراج كل مؤشر حيوي، ومقارنته بالنطاقات المرجعية السريرية، وشرح كل قيمة بلغة بسيطة، وتسليط الضوء على أي نتائج غير طبيعية، واقتراح خطوات محتملة لمناقشتها مع طبيبك. تدعم المنصّة أكثر من 12 لغة، وتُستخدم من قبل أكثر من 4,000 مستشفى وعيادة في أكثر من 50 دولة، وقد أنتجت أكثر من 2 مليون تقرير منذ 2018 بدقة 98.7%. لا يقوم NoryaAI بالتشخيص ولا يصف العلاج — إنه أداة تعليمية تمكّنك من الذهاب إلى موعد طبيبك بفهم أوضح لصحتك.",
             },
             {
                 "q": "كم تقريرًا أنتجت NoryaAI؟",
