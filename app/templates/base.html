@@ -109,21 +109,33 @@
         </div>
         {% include "partials/header_lang.html" %}
         {% block nav_actions %}
-        <a href="/" class="nav-cta inline-flex items-center justify-center px-4 py-2 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
+        <a href="/analyze" class="nav-cta inline-flex items-center justify-center px-4 py-2 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
         {% endblock %}
-        <button type="button" onclick="toggleBaseDrawer()" class="nav-hamburger items-center justify-center w-11 h-11 rounded-xl border border-norya-ink-subtle/30 bg-white/80 shrink-0" aria-label="{{ _base_ui.nav_menu|default('Menüyü aç') }}">☰</button>
+        <button type="button"
+          id="base-hamburger"
+          onclick="toggleBaseDrawer()"
+          class="nav-hamburger items-center justify-center w-11 h-11 rounded-xl border border-norya-ink-subtle/30 bg-white/80 shrink-0"
+          aria-label="{{ _base_ui.nav_menu|default('Menüyü aç') }}"
+          aria-controls="base-drawer"
+          aria-expanded="false">☰</button>
       </div>
     </nav>
   </header>
   <div id="base-drawer-backdrop" class="mobile-drawer-backdrop" onclick="toggleBaseDrawer()" aria-hidden="true"></div>
-  <aside id="base-drawer" class="mobile-drawer" role="dialog" aria-label="{{ _base_ui.nav_menu|default('Menu') }}" aria-modal="true" tabindex="-1">
+  <aside id="base-drawer" class="mobile-drawer" role="dialog" aria-label="{{ _base_ui.nav_menu|default('Menu') }}" aria-modal="true" aria-hidden="true" tabindex="-1">
     <div class="flex items-center justify-between mb-4 flex-shrink-0">
       <span class="font-semibold text-norya-ink">{{ _base_ui.nav_menu|default('Menu') }}</span>
       <button type="button" onclick="toggleBaseDrawer()" class="w-9 h-9 rounded-lg border border-norya-ink-subtle/30 flex items-center justify-center" aria-label="{{ _base_ui.nav_close|default('Kapat') }}">✕</button>
     </div>
-    <a href="/" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mb-2">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
-    <a href="#nasil-calisir" onclick="toggleBaseDrawer()">{{ _base_ui.nav_how|default('How it works') }}</a>
-    <a href="#guvenlik" onclick="toggleBaseDrawer()">{{ _base_ui.nav_security|default('Security') }}</a>
+    <a href="/analyze" onclick="toggleBaseDrawer()" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mb-2 shadow-norya-brand/30">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
+    <div class="flex flex-col gap-1">
+      <a href="/" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_home|default('Home') }}</a>
+      <a href="/about" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_about|default('About') }}</a>
+      <a href="/pricing" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_pricing|default('Pricing') }}</a>
+      <a href="/how-it-works" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_how|default('How it works') }}</a>
+      <a href="/security" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_security|default('Security') }}</a>
+      <a href="/{{ _locale }}/blog" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_blog|default('Blog') }}</a>
+    </div>
   </aside>
 
   <main class="flex-1">
@@ -168,14 +180,17 @@
       if (!back || !drawer) return;
       var isOpen = drawer.classList.toggle('open');
       back.classList.toggle('open', isOpen);
+      back.setAttribute('aria-hidden', (!isOpen).toString());
+      drawer.setAttribute('aria-hidden', (!isOpen).toString());
       document.body.style.overflow = isOpen ? 'hidden' : '';
+      var hamburger = document.getElementById('base-hamburger') || document.querySelector('.nav-hamburger');
+      if (hamburger) hamburger.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
       if (isOpen) {
         document.addEventListener('keydown', onBaseDrawerEscape);
         var btn = drawer.querySelector('button[aria-label]');
         if (btn) btn.focus();
       } else {
         document.removeEventListener('keydown', onBaseDrawerEscape);
-        var hamburger = document.querySelector('.nav-hamburger');
         if (hamburger) hamburger.focus();
       }
     }
