@@ -198,6 +198,18 @@ def init_db():
             except Exception:
                 # Mevcut kurulumlarda sütun zaten varsa veya tablo yoksa sessizce devam et
                 pass
+    # PostgreSQL: admin dashboard ve maliyet sorguları bu sütunlara ihtiyaç duyar.
+    # SQLite için yukarıdaki blokta ekleniyordu; eski Postgres kurulumlarında eksik kalabiliyordu (500).
+    if DATABASE_URL.startswith("postgresql"):
+        for stmt in (
+            "ALTER TABLE analysis_jobs ADD COLUMN IF NOT EXISTS prompt_tokens INTEGER",
+            "ALTER TABLE analysis_jobs ADD COLUMN IF NOT EXISTS completion_tokens INTEGER",
+        ):
+            try:
+                with engine.begin() as conn:
+                    conn.execute(text(stmt))
+            except Exception:
+                pass
     # Bazı ortamlarda yukarıdaki ALTER sessizce başarısız olabiliyor; şema denetimi ile tamamla
     if DATABASE_URL.startswith("sqlite"):
         try:

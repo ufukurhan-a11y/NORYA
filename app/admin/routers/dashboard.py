@@ -1,6 +1,7 @@
 """Dashboard: özet metrikler, son işlemler, aylık trend grafiği."""
 import time as _time
 from datetime import date, datetime, timedelta
+from pathlib import Path
 
 from fastapi import APIRouter, Depends, Form, Request
 from fastapi.responses import HTMLResponse, JSONResponse, RedirectResponse
@@ -68,7 +69,8 @@ def _last_24_months_monthly_stats(db: Session, now: datetime) -> tuple[list[str]
     return labels, analyses, sales, users
 
 router = APIRouter()
-templates = Jinja2Templates(directory="app/templates")
+_APP_DIR = Path(__file__).resolve().parent.parent.parent
+templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
 
 # AI durumu cache (60 sn) — dashboard'daki "AI Durumu" bu endpoint'i kullanır
 _ai_health_cache: dict = {"ts": 0.0, "data": None}
@@ -200,7 +202,7 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
 
     # Ortalama analiz süresi (analysis_jobs done)
     avg_duration = db.exec(
-        select(func.avg(AnalysisJob.duration_ms)).where(AnalysisJob.status == "done").where(AnalysisJob.duration_ms.isnot(None))
+        select(func.avg(AnalysisJob.duration_ms)).where(AnalysisJob.status == "done").where(AnalysisJob.duration_ms.is_not(None))
     ).one()
     avg_analysis_time = f"{(avg_duration or 0):.0f} ms" if avg_duration else "-"
 
