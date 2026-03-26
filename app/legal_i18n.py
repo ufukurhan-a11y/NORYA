@@ -573,6 +573,7 @@ def get_legal_ui(lang: str) -> dict:
     return {
         "lang": use_lang,
         "back_to_home": u["back_to_home"],
+        "nav_contact": u["nav_contact"],
         "nav_links": _nav_links(use_lang),
         "nav_legal": u.get("nav_legal", uen["nav_legal"]),
         "footer_company_info_title": u.get("footer_company_info_title", uen["footer_company_info_title"]),

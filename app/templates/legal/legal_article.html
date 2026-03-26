@@ -13,45 +13,207 @@
 {% endif %}
 {% endblock %}
 {% block content %}
+{% set legal_labels = {
+  "tr": {
+    "read_document": "Belgeyi Oku",
+    "overview": "Ozet",
+    "highlights": "Hizli Bakis",
+    "full_text": "Tam Metin",
+    "status_current": "Guncel",
+    "note": "Not",
+    "ask_question": "Soru Sor",
+    "in_this_document": "Bu Belgede",
+    "help": "Yardim",
+    "contact_page": "Iletisim Sayfasi",
+    "trust_title": "Guven ve guvenlik",
+    "trust_desc": "NoryaAI'nin metodoloji, tibbi inceleme, seffaflik ve guvenlik yaklasimini inceleyin.",
+    "trust_center": "Guven Merkezi",
+    "trust_methodology": "Metodoloji",
+    "trust_medical_review": "Tibbi Inceleme",
+    "trust_transparency": "Seffaflik",
+    "trust_security": "Guvenlik"
+  },
+  "en": {
+    "read_document": "Read document",
+    "overview": "Overview",
+    "highlights": "Highlights",
+    "full_text": "Full text",
+    "status_current": "Current",
+    "note": "Note",
+    "ask_question": "Ask a question",
+    "in_this_document": "In this document",
+    "help": "Help",
+    "contact_page": "Contact page",
+    "trust_title": "Trust & safety",
+    "trust_desc": "Learn how NoryaAI handles methodology, medical review, transparency, and security.",
+    "trust_center": "Trust Center",
+    "trust_methodology": "Methodology",
+    "trust_medical_review": "Medical Review",
+    "trust_transparency": "Transparency",
+    "trust_security": "Security"
+  }
+} %}
+{% set labels = legal_labels[lang] if lang in legal_labels else legal_labels["en"] %}
 <style>
-  .legal-body ul { list-style-type: disc; padding-left: 1.5rem; margin-top: 0.625rem; margin-bottom: 0.625rem; }
-  .legal-body ul li { margin-bottom: 0.375rem; line-height: 1.7; }
-  .legal-body p { margin-bottom: 0.75rem; line-height: 1.75; }
+  .legal-body ul { list-style-type: disc; padding-inline-start: 1.5rem; margin-top: 0.75rem; margin-bottom: 0.75rem; }
+  .legal-body ol { list-style-type: decimal; padding-inline-start: 1.5rem; margin-top: 0.75rem; margin-bottom: 0.75rem; }
+  .legal-body li { margin-bottom: 0.45rem; line-height: 1.75; }
+  .legal-body p { margin-bottom: 0.9rem; line-height: 1.85; }
   .legal-body p:last-child { margin-bottom: 0; }
-  .legal-section + .legal-section { border-top: 1px solid #e2e8f0; padding-top: 1.75rem; }
+  .legal-body a { color: #0b8d8b; text-decoration: underline; text-underline-offset: 3px; }
+  .legal-body strong { color: #0f172a; }
+  .legal-summary-card {
+    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+  }
 </style>
-<article class="max-w-3xl mx-auto">
-  <div class="mb-10">
-    <h1 class="text-2xl sm:text-3xl font-bold text-accent-900 mb-3 tracking-tight">{{ content.title }}</h1>
-    <p class="text-accent-500 text-sm">{{ content.last_updated }}</p>
-  </div>
+<article class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_320px] gap-6 xl:gap-8 items-start">
+  <div class="space-y-6 sm:space-y-8 min-w-0">
+    <section class="legal-panel rounded-[28px] overflow-hidden">
+      <div class="px-5 sm:px-8 lg:px-10 py-8 sm:py-10 bg-gradient-to-br from-primary-500/10 via-white to-accent-50">
+        <div class="flex flex-wrap items-center gap-3 mb-5 text-xs sm:text-sm">
+          <span class="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-white/90 px-3 py-1.5 font-semibold tracking-wide text-primary-600">
+            {{ nav_legal }}
+          </span>
+          <span class="inline-flex items-center gap-2 rounded-full border border-accent-200 bg-white/70 px-3 py-1.5 text-accent-600">
+            {{ content.last_updated }}
+          </span>
+        </div>
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-accent-900 tracking-tight leading-tight max-w-3xl">
+          {{ content.title }}
+        </h1>
+        {% if content.meta_description is defined and content.meta_description %}
+        <p class="mt-4 text-base sm:text-lg text-accent-600 leading-relaxed max-w-3xl">
+          {{ content.meta_description }}
+        </p>
+        {% endif %}
+        <div class="mt-6 flex flex-wrap gap-3">
+          <a href="#legal-content" class="inline-flex items-center justify-center min-h-[44px] rounded-xl bg-norya-brand px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600">
+            {{ labels.read_document }}
+          </a>
+          <a href="/contact?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[44px] rounded-xl border border-accent-200 bg-white px-5 py-3 text-sm font-semibold text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+            {{ nav_contact }}
+          </a>
+        </div>
+      </div>
+    </section>
 
-  <div class="legal-body text-accent-700 text-sm sm:text-base leading-relaxed mb-10">{{ content.intro | safe }}</div>
+    <section id="legal-content" class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-7 sm:py-9">
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.overview }}</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900">{{ content.summary_title if content.summary_title is defined and content.summary_title else content.title }}</h2>
+        </div>
+      </div>
+      <div class="legal-body text-accent-700 text-sm sm:text-base">{{ content.intro | safe }}</div>
+    </section>
 
   {% if content.summary is defined and content.summary %}
-  <div class="mb-10 p-6 sm:p-8 bg-accent-50 rounded-2xl border border-accent-200">
-    <h2 class="text-lg font-bold text-accent-900 mb-1">{{ content.summary_title }}</h2>
-    <p class="text-xs text-accent-500 mb-5">{{ content.summary_note }}</p>
+  <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-7 sm:py-9">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+      <div>
+        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.highlights }}</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900">{{ content.summary_title }}</h2>
+      </div>
+      {% if content.summary_note %}
+      <p class="text-sm text-accent-500 max-w-xl">{{ content.summary_note }}</p>
+      {% endif %}
+    </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
       {% for item in content.summary %}
-      <div class="bg-white rounded-xl p-4 border border-accent-100">
-        <p class="text-xs font-semibold text-primary-600 uppercase tracking-wider mb-1">{{ item.label }}</p>
-        <p class="text-sm text-accent-700 leading-relaxed">{{ item.text }}</p>
+      <div class="legal-summary-card rounded-2xl p-5 sm:p-6">
+        <p class="text-xs font-semibold text-primary-600 uppercase tracking-[0.18em] mb-2">{{ item.label }}</p>
+        <p class="text-sm sm:text-[15px] text-accent-700 leading-relaxed">{{ item.text }}</p>
       </div>
       {% endfor %}
     </div>
-  </div>
+  </section>
   {% endif %}
 
-  {% for section in content.sections %}
-  <section class="legal-section mb-6">
-    <h2 class="text-base sm:text-lg font-semibold text-accent-900 mb-3">{{ section.title }}</h2>
-    <div class="legal-body text-accent-700 text-sm sm:text-base leading-relaxed">{{ section.body | safe }}</div>
-  </section>
-  {% endfor %}
+    <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-7 sm:py-9">
+      <div class="flex items-center justify-between gap-4 mb-6">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.full_text }}</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900">{{ content.title }}</h2>
+        </div>
+        <div class="hidden sm:flex items-center gap-2 rounded-full border border-accent-200 bg-accent-50 px-4 py-2 text-xs font-medium text-accent-600">
+          <span>{{ labels.status_current }}</span>
+          <span class="h-1.5 w-1.5 rounded-full bg-primary-500"></span>
+          <span>NoryaAI</span>
+        </div>
+      </div>
 
-  <div class="border-t border-accent-200 mt-12 pt-6">
-    <p class="text-accent-500 text-sm">{{ content.footer_note }}</p>
+  {% for section in content.sections %}
+      <section id="section-{{ loop.index }}" class="{% if not loop.first %}border-t border-accent-200/80 pt-7 mt-7{% endif %}">
+        <div class="flex items-start gap-4">
+          <span class="mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-500/10 text-sm font-bold text-primary-600">{{ loop.index }}</span>
+          <div class="min-w-0 flex-1">
+            <h3 class="text-lg sm:text-xl font-semibold text-accent-900 mb-3">{{ section.title }}</h3>
+            <div class="legal-body text-accent-700 text-sm sm:text-base">{{ section.body | safe }}</div>
+          </div>
+        </div>
+      </section>
+  {% endfor %}
+    </section>
+
+    <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-6 sm:py-7">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.note }}</p>
+          <p class="text-accent-600 text-sm sm:text-base leading-relaxed">{{ content.footer_note }}</p>
+        </div>
+        <a href="/contact?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[44px] rounded-xl border border-accent-200 px-5 py-3 text-sm font-semibold text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+          {{ labels.ask_question }}
+        </a>
+      </div>
+    </section>
   </div>
+
+  <aside class="xl:sticky xl:top-24 space-y-4">
+    <section class="legal-panel rounded-[24px] p-5 sm:p-6">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-3">{{ labels.in_this_document }}</p>
+      <nav class="space-y-2" aria-label="Legal sections">
+        {% for section in content.sections %}
+        <a href="#section-{{ loop.index }}" class="block rounded-xl border border-accent-200/80 bg-white px-4 py-3 text-sm text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+          {{ loop.index }}. {{ section.title }}
+        </a>
+        {% endfor %}
+      </nav>
+    </section>
+
+    <section class="legal-panel rounded-[24px] p-5 sm:p-6">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-3">{{ labels.help }}</p>
+      <div class="space-y-3 text-sm text-accent-600">
+        <p>
+          {% if lang == "tr" %}
+          Belgeyle ilgili sorulariniz icin bizimle iletisime gecebilirsiniz.
+          {% else %}
+          Contact us if you have any questions about this document.
+          {% endif %}
+        </p>
+        <a href="mailto:{{ company_support_email }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-primary-600 transition hover:border-primary-500/30">
+          {{ company_support_email }}
+        </a>
+        <a href="/contact?lang={{ lang }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+          {{ labels.contact_page }}
+        </a>
+      </div>
+    </section>
+
+    <section class="legal-panel rounded-[24px] p-5 sm:p-6">
+      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-3">{{ labels.trust_title }}</p>
+      <div class="space-y-3 text-sm text-accent-600">
+        <p>{{ labels.trust_desc }}</p>
+        <nav class="space-y-2" aria-label="{{ labels.trust_title }}">
+          <a href="/trust?lang={{ lang }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">{{ labels.trust_center }}</a>
+          <a href="/methodology?lang={{ lang }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">{{ labels.trust_methodology }}</a>
+          <a href="/medical-review?lang={{ lang }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">{{ labels.trust_medical_review }}</a>
+          <a href="/transparency?lang={{ lang }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">{{ labels.trust_transparency }}</a>
+          <a href="/security?lang={{ lang }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">{{ labels.trust_security }}</a>
+        </nav>
+      </div>
+    </section>
+  </aside>
 </article>
 {% endblock %}
