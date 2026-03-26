@@ -156,30 +156,30 @@ _CTA: dict[str, dict] = {
 # ── Hub page content ─────────────────────────────────────────────
 _HUB: dict[str, dict] = {
     "en": {
-        "meta_title": "Compare NoryaAI — Blood Test Analysis Alternatives | NoryaAI",
-        "meta_description": "Compare NoryaAI with ChatGPT, BloodGPT, Kantesti, SiPhox Health, Wizey, and generic AI chatbots for blood test analysis. Honest, side-by-side comparisons.",
-        "hero_title": "Compare NoryaAI with Blood Test Analysis Tools",
-        "hero_sub": "Choosing the right tool for understanding your blood test results? We have prepared honest, side-by-side comparisons with several popular alternatives.",
+        "meta_title": "Best AI for Blood Test Results? Compare NoryaAI, ChatGPT, and Alternatives | NoryaAI",
+        "meta_description": "Compare NoryaAI with ChatGPT, BloodGPT, Kantesti, SiPhox Health, Wizey, and other AI tools for blood test interpretation. Honest side-by-side comparisons for structured reports, privacy, and reference-range-aware analysis.",
+        "hero_title": "Compare AI Tools for Blood Test Results",
+        "hero_sub": "Trying to decide which AI tool is best for blood test interpretation? Compare NoryaAI with ChatGPT and other alternatives to see which workflow, output format, and privacy approach fit your needs.",
         "trust_stats": [
             {"value": "98.7%", "label": "Result accuracy", "sub": "Verified with laboratory data"},
             {"value": "9+", "label": "Languages", "sub": "Full reports with medical context"},
             {"value": "QR", "label": "Verified PDF", "sub": "Doctor-ready shareable summary"},
         ],
         "cards": [
-            {"slug": "norya-vs-chatgpt-for-blood-tests", "name": "ChatGPT", "summary": "How a purpose-built blood test analyzer compares to the world's most popular AI chatbot for lab result interpretation.", "link_text": "Read full comparison"},
+            {"slug": "norya-vs-chatgpt-for-blood-tests", "name": "ChatGPT", "summary": "Compare ChatGPT vs NoryaAI for blood test interpretation, lab report upload support, and structured report output.", "link_text": "Read full comparison"},
             {"slug": "norya-vs-bloodgpt", "name": "BloodGPT", "summary": "A blood-test-focused AI chat workflow compared with NoryaAI's structured reports, multilingual output, and doctor-ready summaries.", "link_text": "Read full comparison"},
             {"slug": "norya-vs-kantesti", "name": "Kantesti", "summary": "Two blood test analysis platforms compared — multilingual structured reports vs a Turkish-focused service.", "link_text": "Read full comparison"},
             {"slug": "norya-vs-siphox-health", "name": "SiPhox Health", "summary": "At-home biomarker test kits vs structured analysis of your existing lab results — two different approaches.", "link_text": "Read full comparison"},
             {"slug": "norya-vs-wizey", "name": "Wizey", "summary": "How NoryaAI's structured report workflow compares to Wizey's approach to blood test analysis.", "link_text": "Read full comparison"},
-            {"slug": "norya-vs-generic-ai", "name": "Generic AI", "summary": "What a purpose-built blood test analyzer offers compared to asking ChatGPT or other AI chatbots about your results.", "link_text": "Read full comparison"},
+            {"slug": "norya-vs-generic-ai", "name": "Generic AI", "summary": "See how a purpose-built blood test analyzer compares with generic AI chatbots for blood test results and lab report questions.", "link_text": "Read full comparison"},
         ],
         "hub_faqs": [
             {"q": "Which tool is best for understanding blood test results?", "a": "It depends on what you need. For structured, consistent reports with health scores and doctor-ready summaries, NoryaAI is purpose-built. General AI chatbots are better for broad health education, while platforms like SiPhox Health focus on at-home testing."},
             {"q": "Are these comparisons fair and honest?", "a": "We aim for transparency. Where a competitor's features are not clearly disclosed, we say so rather than guessing. We encourage you to try different tools and decide based on your own experience."},
             {"q": "Can I use NoryaAI together with other tools?", "a": "Yes. NoryaAI is designed to complement your health workflow. You can use it alongside other platforms, and you should always consult a qualified doctor for medical decisions."},
         ],
-        "matrix_title": "Compare tools side by side",
-        "matrix_sub": "A quick overview of how each tool approaches blood test analysis.",
+        "matrix_title": "Blood test AI comparison table",
+        "matrix_sub": "A quick side-by-side view of which tool is better for blood test interpretation, report uploads, structured output, and privacy.",
         "matrix_row_labels": [
             "Best use case",
             "Blood-test-specific workflow",
@@ -227,12 +227,12 @@ _COMP: dict[str, dict] = {
     "norya-vs-chatgpt-for-blood-tests": {
         "name": "ChatGPT",
         "en": {
-            "meta_title": "NoryaAI vs ChatGPT for Blood Tests — Honest Comparison | NoryaAI",
-            "meta_description": "How does NoryaAI compare to ChatGPT for understanding blood test results? A structured blood test analyzer vs a general-purpose AI chatbot — side by side.",
-            "hero_title": "NoryaAI vs ChatGPT for Blood Test Analysis",
-            "hero_sub": "ChatGPT is a powerful general-purpose AI assistant. NoryaAI is purpose-built for blood test analysis. Here is an honest look at what each one does best.",
+            "meta_title": "NoryaAI vs ChatGPT for Blood Test Interpretation | NoryaAI",
+            "meta_description": "Compare NoryaAI vs ChatGPT for blood test interpretation. See which tool is better for lab report uploads, reference ranges, structured summaries, privacy, and doctor-ready output.",
+            "hero_title": "NoryaAI vs ChatGPT for Blood Test Interpretation",
+            "hero_sub": "ChatGPT is useful for general health questions, but NoryaAI is built specifically for blood test results. This comparison shows which tool is better when you need lab-report parsing, structured summaries, and reference-range-aware output.",
             "quick_answer_title": "The short version",
-            "quick_answer": "ChatGPT can explain medical terms and answer health questions in conversation, but it was not designed to parse lab reports. NoryaAI reads your blood test results directly, maps values to reference ranges, and generates a structured, doctor-ready summary — not a free-form conversation. They solve different problems.",
+            "quick_answer": "If you want general explanations, ChatGPT can help. If you want blood test interpretation from an actual lab report, NoryaAI is the stronger fit: it reads the report directly, maps values to reference ranges, and generates a structured, doctor-ready summary instead of a free-form chat reply.",
             "cells": {
                 "report_upload": "Requires copy-pasting values into a chat prompt; no native lab report parsing pipeline",
                 "reference_ranges": "May cite general ranges or hallucinate values; no guarantee they match your lab",
@@ -405,12 +405,12 @@ _COMP: dict[str, dict] = {
     "norya-vs-generic-ai": {
         "name": "Generic AI",
         "en": {
-            "meta_title": "NoryaAI vs Generic AI for Blood Tests — Honest Comparison | NoryaAI",
-            "meta_description": "How does NoryaAI compare to ChatGPT or other AI chatbots for understanding blood test results? Side-by-side comparison of structured reports vs free-form chat answers.",
-            "hero_title": "NoryaAI vs Generic AI Chatbots for Blood Tests",
-            "hero_sub": "Both can work with lab data — but they approach it very differently. Here is an honest, side-by-side look at what each one offers when you need to understand your blood test results.",
+            "meta_title": "NoryaAI vs Generic AI Chatbots for Blood Test Results | NoryaAI",
+            "meta_description": "Compare NoryaAI with generic AI chatbots for blood test results. See the difference between structured lab report analysis and free-form AI answers for blood test interpretation.",
+            "hero_title": "NoryaAI vs Generic AI for Blood Test Results",
+            "hero_sub": "Generic AI chatbots can discuss blood test questions, but they are not built as blood test analyzers. Here is a side-by-side comparison for people choosing between a structured lab-report workflow and open-ended AI chat.",
             "quick_answer_title": "The short version",
-            "quick_answer": "Generic AI chatbots like ChatGPT can explain medical terms and answer health questions in conversation. NoryaAI is purpose-built for blood tests: it reads your lab report, maps every value to reference ranges, and produces a structured, doctor-ready summary with a health score — not a free-form paragraph. Both have a place, but they solve different problems.",
+            "quick_answer": "Generic AI tools are better for broad medical Q&A. NoryaAI is better for blood test interpretation from real lab reports: it reads the report, maps every value to reference ranges, and produces a structured summary with flagged markers and a doctor-ready PDF instead of a one-off chat answer.",
             "cells": {
                 "report_upload": "Copy-paste values into a chat prompt and hope the formatting holds",
                 "reference_ranges": "May guess ranges or omit them; no guarantee they match your lab's standards",

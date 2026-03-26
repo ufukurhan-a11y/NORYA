@@ -17,14 +17,14 @@ EXPLAINED_SLUGS: dict[str, str] = {
 
 def _en() -> dict:
     return {
-        "meta_title": "Blood Test Results Explained \u2014 What Your Report Actually Means | NoryaAI",
-        "meta_description": "Not sure what your blood test results mean? Learn how to read abbreviations, reference ranges, and units \u2014 and how a structured AI report can make it clearer.",
-        "hero_title": "Blood Test Results Explained",
-        "hero_sub": "Lab reports are packed with abbreviations, numbers, and ranges that most people were never taught to read. This guide covers what makes them confusing, what to look for, and how a structured approach can help you understand your results before your next doctor visit.",
+        "meta_title": "Blood Test Results Explained | How to Read Your Lab Report | NoryaAI",
+        "meta_description": "Learn how to read blood test results, reference ranges, abbreviations, and units. Understand what high, low, and normal values mean before your next doctor visit.",
+        "hero_title": "Blood Test Results Explained: How to Read Your Lab Report",
+        "hero_sub": "If your lab report feels like a wall of abbreviations, numbers, and flagged values, you are not alone. This guide explains how to read blood test results, what reference ranges mean, and how a structured report can help you prepare for your next doctor visit.",
         "cta_hero_primary": "Analyze my blood test",
         "cta_hero_secondary": "See a sample report",
         "confusing_title": "Why blood test reports can feel confusing",
-        "confusing_sub": "You are not the only one who finds lab reports hard to read. Here are the most common reasons people struggle with them.",
+        "confusing_sub": "Many people search for blood test interpretation because lab reports are hard to read without context. These are the most common reasons they feel confusing.",
         "confusing_items": [
             {
                 "icon": "\U0001f524",
@@ -48,7 +48,7 @@ def _en() -> dict:
             },
         ],
         "clarify_title": "What NoryaAI helps clarify",
-        "clarify_sub": "NoryaAI does not replace your doctor. It gives you a structured, readable version of your results so you can walk into your appointment better informed.",
+        "clarify_sub": "NoryaAI does not replace your doctor. It gives you a structured, readable version of your results so you can understand what is high, low, or in range before your appointment.",
         "clarify_items": [
             {
                 "icon": "\U0001f4d6",
@@ -82,7 +82,7 @@ def _en() -> dict:
             },
         ],
         "common_title": "Common things people look for in their results",
-        "common_sub": "These are some of the most frequently searched biomarkers and panels. NoryaAI covers all of them in its structured reports.",
+        "common_sub": "These are some of the most commonly searched panels and biomarkers when people try to understand blood test results online. NoryaAI covers all of them in its structured reports.",
         "common_items": [
             {"title": "Complete Blood Count (CBC)", "desc": "WBC, RBC, hemoglobin, hematocrit, platelets \u2014 the most common panel in routine checkups."},
             {"title": "Liver function (ALT, AST, ALP)", "desc": "Enzymes that indicate how well your liver is working. Often checked in routine bloodwork."},
@@ -95,7 +95,7 @@ def _en() -> dict:
             {"title": "Inflammation markers (CRP, ESR)", "desc": "General indicators of inflammation in the body. Often used as a screening baseline."},
         ],
         "how_title": "How it works",
-        "how_sub": "Three steps from a confusing lab report to a structured summary you can actually understand.",
+        "how_sub": "Three steps from a confusing blood test report to a structured summary you can actually understand.",
         "how_steps": [
             {
                 "icon": "\U0001f4e4",
@@ -113,8 +113,8 @@ def _en() -> dict:
                 "desc": "Health score, flagged markers, plain-language explanations, and a downloadable PDF.",
             },
         ],
-        "preview_title": "What your explained report looks like",
-        "preview_sub": "Here is a glimpse of how NoryaAI structures and explains your blood test results.",
+        "preview_title": "What an explained blood test report looks like",
+        "preview_sub": "Here is a glimpse of how NoryaAI structures and explains blood test results in plain language.",
         "preview_lines": [
             {"label": "Health Score", "value": "78 / 100 \u2014 Good overall, a few markers to review"},
             {"label": "WBC", "value": "6.8 \u00d710\u00b3/\u00b5L \u2014 Normal white blood cell count (4.5\u201311.0)"},
@@ -128,6 +128,10 @@ def _en() -> dict:
             {
                 "q": "What does \u201cblood test results explained\u201d actually mean?",
                 "a": "It means turning the raw numbers, abbreviations, and reference ranges on your lab report into plain-language explanations you can understand \u2014 with context about what each value measures and whether it falls within normal limits.",
+            },
+            {
+                "q": "Is this the same as blood test interpretation?",
+                "a": "Yes, in practice people use both phrases to mean understanding what lab values, abbreviations, and reference ranges are telling them. NoryaAI focuses on structured blood test interpretation in plain language, not diagnosis.",
             },
             {
                 "q": "Can NoryaAI explain any type of blood test?",
@@ -151,7 +155,7 @@ def _en() -> dict:
             },
         ],
         "cta_title": "Ready to understand your blood test?",
-        "cta_sub": "Upload your lab report and get a clear, structured summary with plain-language explanations \u2014 in minutes.",
+        "cta_sub": "Upload your lab report and get blood test results explained in a clear, structured summary with plain-language context \u2014 in minutes.",
         "cta_primary": "Upload and analyze now",
         "cta_secondary": "View pricing",
     }

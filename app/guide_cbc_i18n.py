@@ -19,11 +19,11 @@ CBC_GUIDE_SLUGS: dict[str, str] = {
 # ---------------------------------------------------------------------------
 def _en() -> dict:
     return {
-        "meta_title": "How to Read a CBC — Complete Blood Count Explained | NoryaAI",
-        "meta_description": "Learn how to read a CBC (complete blood count) report. Understand WBC, RBC, hemoglobin, hematocrit, platelets, and indices — with reference ranges explained in plain language.",
+        "meta_title": "How to Read a CBC Report | Complete Blood Count Explained | NoryaAI",
+        "meta_description": "Learn how to read CBC results step by step. Understand WBC, RBC, hemoglobin, hematocrit, platelets, MCV, MCH, and RDW with plain-language explanations and reference ranges.",
         "badge": "Lab Guide",
-        "hero_title": "How to Read a CBC",
-        "hero_sub": "A complete blood count is one of the most common blood tests ordered worldwide. This guide walks through each component — what it measures, what the abbreviations mean, and how to make sense of the numbers on your report.",
+        "hero_title": "How to Read a CBC Report",
+        "hero_sub": "A complete blood count (CBC) is one of the most common blood tests ordered worldwide. This guide explains how to read CBC results line by line, what abbreviations like WBC, RBC, HGB, HCT, PLT, and MCV mean, and how to make sense of the numbers on your report.",
         "sections": [
             {
                 "title": "What is a CBC?",
@@ -171,8 +171,8 @@ def _en() -> dict:
                 ],
             },
         ],
-        "mid_cta_title": "Have a CBC report you want to understand?",
-        "mid_cta_sub": "Upload it and get a structured summary with plain-language explanations, flagged markers, and a health score.",
+        "mid_cta_title": "Have CBC results you want explained?",
+        "mid_cta_sub": "Upload your report and get a structured CBC summary with plain-language explanations, flagged markers, and a health score.",
         "mid_cta_primary": "Upload your report",
         "mid_cta_secondary": "See a sample report",
         "faqs": [
@@ -181,8 +181,8 @@ def _en() -> dict:
                 "a": "CBC stands for complete blood count. It is a routine blood test that measures the cells in your blood — red blood cells, white blood cells, and platelets — along with related values like hemoglobin, hematocrit, and cell indices.",
             },
             {
-                "q": "How often should I get a CBC?",
-                "a": "There is no universal schedule. Many doctors include a CBC in annual checkups. It may be ordered more frequently if you have symptoms, a chronic condition, or are taking medication that affects blood cell counts. Your doctor will recommend the right frequency for you.",
+                "q": "How do I read CBC results line by line?",
+                "a": "Start with the main groups: white blood cells, red blood cells, hemoglobin and hematocrit, platelets, and red cell indices like MCV and RDW. Then compare each value with the reference range shown by your lab. The pattern across several CBC markers is usually more meaningful than one value on its own.",
             },
             {
                 "q": "What does it mean if one value is slightly out of range?",
@@ -201,12 +201,13 @@ def _en() -> dict:
                 "a": "Labs use different equipment, reagents, and population samples to establish their ranges. Factors like age, sex, and geographic location also influence what is considered “normal.” This is why the same result may be flagged at one lab but considered within range at another.",
             },
         ],
-        "cta_title": "Ready to make sense of your CBC?",
-        "cta_sub": "Upload your report and get a structured, easy-to-read summary — in minutes.",
+        "cta_title": "Ready to make sense of your CBC results?",
+        "cta_sub": "Upload your report and get a structured, easy-to-read CBC summary with reference ranges and plain-language explanations in minutes.",
         "cta_primary": "Upload and analyze now",
         "cta_secondary": "View pricing",
         "internal_links": [
             {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
+            {"label": "Blood Test Interpretation Online", "path": "/en/blood-test-results"},
             {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
             {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
             {"label": "Pricing", "path": "/pricing"},

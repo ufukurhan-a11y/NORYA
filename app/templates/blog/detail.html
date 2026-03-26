@@ -282,8 +282,10 @@
             {% endfor %}
           </ul>
           <div class="mt-3 pt-3 border-t border-slate-200/50 flex flex-wrap gap-4 text-sm">
-            <a href="/pricing" class="text-slate-600 hover:text-teal-700">{{ blog_ui.pricing_link|default('Pricing') }} &rarr;</a>
-            <a href="/how-it-works" class="text-slate-600 hover:text-teal-700">{{ blog_ui.how_it_works_link|default('How it works') }} &rarr;</a>
+            <a href="/pricing?lang={{ current_lang }}" class="text-slate-600 hover:text-teal-700">{{ blog_ui.pricing_link|default('Pricing') }} &rarr;</a>
+            <a href="/how-it-works?lang={{ current_lang }}" class="text-slate-600 hover:text-teal-700">{{ blog_ui.how_it_works_link|default('How it works') }} &rarr;</a>
+            <a href="/trust?lang={{ current_lang }}" class="text-slate-600 hover:text-teal-700">{{ blog_ui.trust_link|default('Trust Center') }} &rarr;</a>
+            <a href="/methodology?lang={{ current_lang }}" class="text-slate-600 hover:text-teal-700">{{ blog_ui.methodology_link|default('Methodology') }} &rarr;</a>
             <a href="/{{ current_lang }}/blog" class="text-slate-600 hover:text-teal-700">{{ blog_ui.breadcrumb_blog|default('Blog') }} &rarr;</a>
           </div>
         </nav>

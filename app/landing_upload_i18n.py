@@ -17,15 +17,15 @@ UPLOAD_SLUGS: dict[str, str] = {
 
 def _en() -> dict:
     return {
-        "meta_title": "Upload Blood Test Results — AI-Powered Analysis | NoryaAI",
-        "meta_description": "Upload your blood test PDF, photo, or lab report and get a structured, doctor-ready summary with reference ranges, health score, and flagged markers — in minutes.",
-        "hero_title": "Upload Your Blood Test Results",
-        "hero_sub": "Upload a PDF, snap a photo, or paste your lab values. NoryaAI turns your blood test into a structured, easy-to-read report with reference ranges, flagged markers, and a health score.",
+        "meta_title": "Upload Blood Test Results Online | AI Lab Report Analysis | NoryaAI",
+        "meta_description": "Upload blood test results from any lab as a PDF, photo, or pasted text and get a structured AI report with reference ranges, flagged markers, and a doctor-ready summary.",
+        "hero_title": "Upload Blood Test Results and Get a Clear AI Report",
+        "hero_sub": "Upload a blood test PDF, snap a photo of your lab report, or paste your values directly. NoryaAI turns raw lab data into a structured report with reference ranges, highlighted findings, and a doctor-ready summary.",
         "hero_trust": "Encrypted upload · GDPR & KVKK compliant · No data sharing",
-        "cta_hero_primary": "Start analysis",
+        "cta_hero_primary": "Upload and analyze now",
         "cta_hero_secondary": "View sample report",
         "formats_title": "Supported upload formats",
-        "formats_sub": "Choose whichever method is easiest for you — all three produce the same structured report.",
+        "formats_sub": "Choose the upload method that matches your lab report format. Every option leads to the same structured interpretation.",
         "formats": [
             {
                 "icon": "\U0001f4c4",
@@ -44,7 +44,7 @@ def _en() -> dict:
             },
         ],
         "steps_title": "What happens after you upload",
-        "steps_sub": "From upload to a structured report — the entire process takes just a few minutes.",
+        "steps_sub": "From file upload to a structured blood test interpretation, the full flow usually takes only a few minutes.",
         "steps": [
             {
                 "icon": "\U0001f4e4",
@@ -67,12 +67,12 @@ def _en() -> dict:
                 "desc": "Get a doctor-ready PDF you can print, save, or share at your next appointment.",
             },
         ],
-        "reasons_title": "Why people upload their results here",
+        "reasons_title": "Why people upload blood test results to NoryaAI",
         "reasons": [
             {
                 "icon": "\U0001fa7a",
                 "title": "Before a doctor visit",
-                "desc": "Arrive at your appointment with a clear, organized summary. It helps you ask better questions and makes the conversation more productive.",
+                "desc": "Arrive at your appointment with a clear, organized summary of your blood test. It helps you ask better questions and makes the conversation more productive.",
             },
             {
                 "icon": "\U0001f310",
@@ -82,7 +82,7 @@ def _en() -> dict:
             {
                 "icon": "\U0001f4d6",
                 "title": "To understand a complex report",
-                "desc": "Pages of lab data can be overwhelming. NoryaAI turns them into a categorized, easy-to-read breakdown with reference ranges and clear explanations.",
+                "desc": "Pages of lab data can be overwhelming. NoryaAI turns them into a categorized, easy-to-read breakdown with reference ranges, flagged markers, and clear explanations.",
             },
         ],
         "trust_title": "Your data stays yours",
@@ -93,8 +93,8 @@ def _en() -> dict:
             {"icon": "\U0001f6ab", "text": "Never shared or sold"},
             {"icon": "\U0001f504", "text": "Not used for model training"},
         ],
-        "preview_title": "What your report looks like",
-        "preview_sub": "Here is a glimpse of the structured output you receive after uploading your blood test.",
+        "preview_title": "What your uploaded blood test report looks like",
+        "preview_sub": "Here is a glimpse of the structured output you receive after uploading blood test results to NoryaAI.",
         "preview_lines": [
             {"label": "Health Score", "value": "78 / 100 — Good overall, a few markers to watch"},
             {"label": "Hemoglobin", "value": "14.2 g/dL — Within normal range (13.5–17.5)"},
@@ -110,6 +110,10 @@ def _en() -> dict:
                 "a": "NoryaAI accepts PDF files, JPG/JPEG images, and PNG images. You can also paste your lab values as text if you do not have a file to upload.",
             },
             {
+                "q": "Can I upload blood test results from any lab?",
+                "a": "Yes. You can upload blood test results from hospitals, private labs, checkup providers, and international lab portals. NoryaAI works with PDFs, photos, screenshots, and pasted text from many report layouts.",
+            },
+            {
                 "q": "How long does the analysis take?",
                 "a": "Most reports are processed in under two minutes. Complex multi-page PDFs may take slightly longer, but you will see your structured summary shortly after uploading.",
             },
@@ -118,12 +122,12 @@ def _en() -> dict:
                 "a": "Your uploaded file is used only to generate your report. All data is encrypted in transit and at rest, never shared with third parties, and never used for model training. NoryaAI is GDPR and KVKK compliant.",
             },
             {
-                "q": "Can I upload reports in languages other than English?",
-                "a": "Yes. NoryaAI can read lab reports in multiple languages and generate your structured summary in any of 9+ supported languages, including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic.",
-            },
-            {
                 "q": "Do I need to create an account to upload?",
                 "a": "You can start an analysis without creating an account. An account lets you save your reports, track results over time, and access them from any device.",
+            },
+            {
+                "q": "Can I upload reports in languages other than English?",
+                "a": "Yes. NoryaAI can read lab reports in multiple languages and generate your structured summary in any of 9+ supported languages, including English, German, Turkish, French, Italian, Spanish, Hebrew, Hindi, and Arabic.",
             },
             {
                 "q": "Is NoryaAI a replacement for my doctor?",
@@ -131,7 +135,7 @@ def _en() -> dict:
             },
         ],
         "cta_title": "Ready to upload your blood test?",
-        "cta_sub": "Get a structured, doctor-ready report in minutes. PDF, photo, or pasted text — your choice.",
+        "cta_sub": "Upload blood test results from any lab and get a structured, doctor-ready report in minutes. PDF, photo, or pasted text all work.",
         "cta_primary": "Upload and analyze now",
         "cta_secondary": "View pricing",
     }
