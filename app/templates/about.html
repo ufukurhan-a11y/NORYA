@@ -1,8 +1,11 @@
 {% extends "base.html" %}
+
 {% block title %}{{ t.meta_title }}{% endblock %}
+
 {% block meta_seo %}
 <meta name="description" content="{{ t.meta_desc }}" />
 <meta property="og:type" content="website" />
+<meta property="og:site_name" content="{{ _brand }}" />
 <meta property="og:title" content="{{ t.meta_title }}" />
 <meta property="og:description" content="{{ t.meta_desc }}" />
 {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
@@ -10,7 +13,6 @@
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="{{ t.meta_title }}" />
 <meta name="twitter:description" content="{{ t.meta_desc }}" />
-{% if og_image %}<meta name="twitter:image" content="{{ og_image }}" />{% endif %}
 {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
 {% for alt in hreflang_alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
 {% endfor %}
@@ -20,191 +22,149 @@
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
-  "@type": "AboutPage",
-  "name": "{{ t.meta_title }}",
-  "description": "{{ t.meta_desc }}",
-  "url": "{{ canonical_url }}",
-  "publisher": {
-    "@type": "Organization",
-    "name": "NoryaAI",
-    "url": "https://noryaai.com",
-    "foundingDate": "2018-01-01",
-    "founder": {"@type": "Person", "name": "Ufuk Urhan"}
-  }
+  "@type": "Organization",
+  "name": "NoryaAI",
+  "url": "https://noryaai.com",
+  "logo": "https://noryaai.com/static/norya_logo_transparent_trim.png",
+  "description": "AI-powered blood test interpretation platform providing structured, multilingual explanations of laboratory results.",
+  "foundingDate": "2018-01-01",
+  "founder": {"@type": "Person", "name": "Ufuk Urhan", "jobTitle": "Founder & CEO"},
+  "email": "support@noryaai.com",
+  "address": {"@type": "PostalAddress", "addressLocality": "Hamburg", "addressCountry": "DE"},
+  "sameAs": [
+    "https://www.linkedin.com/company/noryaai",
+    "https://www.instagram.com/noryaai",
+    "https://x.com/noryaai"
+  ]
 }
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://noryaai.com/"},{"@type":"ListItem","position":2,"name":"About","item":"https://noryaai.com/about"}]}
 </script>
 {% endblock %}
 
 {% block content %}
-<!-- Hero -->
-<section class="bg-gradient-to-b from-norya-surface-elevated to-norya-surface py-20 sm:py-28">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+{# ── HERO ── #}
+<section class="relative overflow-hidden bg-gradient-to-b from-norya-surface to-norya-surface-elevated">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-20 sm:py-28 text-center">
     <span class="inline-block text-xs font-bold uppercase tracking-widest text-norya-brand mb-4">{{ t.hero_badge }}</span>
-    <h1 class="text-3xl sm:text-5xl font-bold text-norya-ink leading-tight mb-6">{{ t.hero_title }}</h1>
-    <p class="text-lg sm:text-xl text-norya-ink-muted max-w-2xl mx-auto leading-relaxed">{{ t.hero_desc }}</p>
+    <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-norya-ink leading-tight mb-6">{{ t.hero_title }}</h1>
+    <p class="text-lg sm:text-xl text-norya-ink-muted max-w-3xl mx-auto leading-relaxed">{{ t.hero_desc }}</p>
   </div>
 </section>
 
-<!-- Mission / Why We Exist -->
-<section class="py-16 sm:py-24 bg-norya-surface">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-8">{{ t.mission_heading }}</h2>
+{# ── MISSION ── #}
+<section class="bg-norya-surface-elevated">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-xs font-bold uppercase tracking-widest text-norya-brand mb-6">{{ t.mission_heading }}</h2>
     <div class="space-y-5 text-norya-ink-muted text-base sm:text-lg leading-relaxed">
       <p>{{ t.mission_p1 }}</p>
       <p>{{ t.mission_p2 }}</p>
-      <p>{{ t.mission_p3 }}</p>
+      <p class="text-sm border-l-2 border-norya-brand/30 pl-4 text-norya-ink-muted/80">{{ t.mission_p3 }}</p>
     </div>
   </div>
 </section>
 
-<!-- What We Believe -->
-<section class="py-16 sm:py-24 bg-norya-surface-elevated">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink text-center mb-12">{{ t.believe_heading }}</h2>
+{# ── WHAT WE BELIEVE ── #}
+<section class="bg-norya-surface">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-10 text-center">{{ t.believe_heading }}</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
-          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M2.036 12.322a1.012 1.012 0 0 1 0-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178Z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z"/></svg>
-        </div>
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.believe_clarity_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.believe_clarity_desc }}</p>
+      {% set beliefs = [
+        (t.believe_clarity_title, t.believe_clarity_desc),
+        (t.believe_responsible_title, t.believe_responsible_desc),
+        (t.believe_multilingual_title, t.believe_multilingual_desc),
+        (t.believe_privacy_title, t.believe_privacy_desc),
+        (t.believe_structured_title, t.believe_structured_desc),
+      ] %}
+      {% for title, desc in beliefs %}
+      <div class="rounded-xl border border-norya-ink-subtle/15 bg-norya-surface-elevated p-6">
+        <h3 class="font-semibold text-norya-ink mb-2">{{ title }}</h3>
+        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ desc }}</p>
       </div>
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
-          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9 12.75 11.25 15 15 9.75m-3-7.036A11.959 11.959 0 0 1 3.598 6 11.99 11.99 0 0 0 3 9.749c0 5.592 3.824 10.29 9 11.623 5.176-1.332 9-6.03 9-11.622 0-1.31-.21-2.571-.598-3.751h-.152c-3.196 0-6.1-1.248-8.25-3.285Z"/></svg>
-        </div>
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.believe_responsible_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.believe_responsible_desc }}</p>
-      </div>
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
-          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m10.5 21 5.25-11.25L21 21m-9-3h7.5M3 5.621a48.474 48.474 0 0 1 6-.371m0 0c1.12 0 2.233.038 3.334.114M9 5.25V3m3.334 2.364C11.176 10.658 7.69 15.08 3 17.502m9.334-12.138c.896.061 1.785.147 2.666.257m-4.589 8.495a18.023 18.023 0 0 1-3.827-5.802"/></svg>
-        </div>
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.believe_multilingual_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.believe_multilingual_desc }}</p>
-      </div>
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
-          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-        </div>
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.believe_privacy_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.believe_privacy_desc }}</p>
-      </div>
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
-          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6A2.25 2.25 0 0 1 6 3.75h2.25A2.25 2.25 0 0 1 10.5 6v2.25a2.25 2.25 0 0 1-2.25 2.25H6a2.25 2.25 0 0 1-2.25-2.25V6ZM3.75 15.75A2.25 2.25 0 0 1 6 13.5h2.25a2.25 2.25 0 0 1 2.25 2.25V18a2.25 2.25 0 0 1-2.25 2.25H6A2.25 2.25 0 0 1 3.75 18v-2.25ZM13.5 6a2.25 2.25 0 0 1 2.25-2.25H18A2.25 2.25 0 0 1 20.25 6v2.25A2.25 2.25 0 0 1 18 10.5h-2.25a2.25 2.25 0 0 1-2.25-2.25V6ZM13.5 15.75a2.25 2.25 0 0 1 2.25-2.25H18a2.25 2.25 0 0 1 2.25 2.25V18A2.25 2.25 0 0 1 18 20.25h-2.25a2.25 2.25 0 0 1-2.25-2.25v-2.25Z"/></svg>
-        </div>
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.believe_structured_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.believe_structured_desc }}</p>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- What NoryaAI Is / Is Not -->
-<section class="py-16 sm:py-24 bg-norya-surface">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+{# ── IS / IS NOT ── #}
+<section class="bg-norya-surface-elevated">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-      <div class="bg-norya-brand/5 rounded-2xl p-8 border border-norya-brand/10">
-        <h2 class="text-xl font-bold text-norya-ink mb-6">{{ t.is_heading }}</h2>
+      <div class="rounded-xl border border-norya-brand/20 bg-norya-brand/5 p-6 sm:p-8">
+        <h2 class="text-lg font-bold text-norya-ink mb-5 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-norya-brand/15 flex items-center justify-center text-norya-brand text-xs font-bold">✓</span>
+          {{ t.is_heading }}
+        </h2>
         <ul class="space-y-3">
-          <li class="flex items-start gap-3">
-            <span class="mt-1 w-5 h-5 rounded-full bg-norya-brand/20 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg></span>
-            <span class="text-sm text-norya-ink-muted leading-relaxed">{{ t.is_1 }}</span>
+          {% for item in [t.is_1, t.is_2, t.is_3, t.is_4] %}
+          <li class="flex items-start gap-3 text-sm text-norya-ink-muted">
+            <span class="w-1.5 h-1.5 rounded-full bg-norya-brand mt-1.5 shrink-0"></span>
+            {{ item }}
           </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-1 w-5 h-5 rounded-full bg-norya-brand/20 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg></span>
-            <span class="text-sm text-norya-ink-muted leading-relaxed">{{ t.is_2 }}</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-1 w-5 h-5 rounded-full bg-norya-brand/20 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg></span>
-            <span class="text-sm text-norya-ink-muted leading-relaxed">{{ t.is_3 }}</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-1 w-5 h-5 rounded-full bg-norya-brand/20 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="m4.5 12.75 6 6 9-13.5"/></svg></span>
-            <span class="text-sm text-norya-ink-muted leading-relaxed">{{ t.is_4 }}</span>
-          </li>
+          {% endfor %}
         </ul>
       </div>
-      <div class="bg-norya-surface-elevated rounded-2xl p-8 border border-norya-ink-subtle/10">
-        <h2 class="text-xl font-bold text-norya-ink mb-6">{{ t.isnot_heading }}</h2>
+      <div class="rounded-xl border border-norya-ink-subtle/15 bg-norya-surface p-6 sm:p-8">
+        <h2 class="text-lg font-bold text-norya-ink mb-5 flex items-center gap-2">
+          <span class="w-6 h-6 rounded-full bg-norya-ink-subtle/15 flex items-center justify-center text-norya-ink-muted text-xs font-bold">✕</span>
+          {{ t.isnot_heading }}
+        </h2>
         <ul class="space-y-3">
-          <li class="flex items-start gap-3">
-            <span class="mt-1 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg></span>
-            <span class="text-sm text-norya-ink-muted leading-relaxed">{{ t.isnot_1 }}</span>
+          {% for item in [t.isnot_1, t.isnot_2, t.isnot_3] %}
+          <li class="flex items-start gap-3 text-sm text-norya-ink-muted">
+            <span class="w-1.5 h-1.5 rounded-full bg-norya-ink-muted/40 mt-1.5 shrink-0"></span>
+            {{ item }}
           </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-1 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg></span>
-            <span class="text-sm text-norya-ink-muted leading-relaxed">{{ t.isnot_2 }}</span>
-          </li>
-          <li class="flex items-start gap-3">
-            <span class="mt-1 w-5 h-5 rounded-full bg-red-100 flex items-center justify-center flex-shrink-0"><svg class="w-3 h-3 text-red-500" fill="none" viewBox="0 0 24 24" stroke-width="3" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18 18 6M6 6l12 12"/></svg></span>
-            <span class="text-sm text-norya-ink-muted leading-relaxed">{{ t.isnot_3 }}</span>
-          </li>
+          {% endfor %}
         </ul>
       </div>
     </div>
   </div>
 </section>
 
-<!-- For Who -->
-<section class="py-16 sm:py-24 bg-norya-surface-elevated">
-  <div class="max-w-5xl mx-auto px-4 sm:px-6">
-    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink text-center mb-12">{{ t.forwho_heading }}</h2>
+{# ── FOR WHO ── #}
+<section class="bg-norya-surface">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-10 text-center">{{ t.forwho_heading }}</h2>
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.forwho_individuals_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.forwho_individuals_desc }}</p>
+      {% set audiences = [
+        (t.forwho_individuals_title, t.forwho_individuals_desc),
+        (t.forwho_international_title, t.forwho_international_desc),
+        (t.forwho_multilingual_title, t.forwho_multilingual_desc),
+        (t.forwho_organizations_title, t.forwho_organizations_desc),
+      ] %}
+      {% for title, desc in audiences %}
+      <div class="rounded-xl border border-norya-ink-subtle/15 bg-norya-surface-elevated p-6">
+        <h3 class="font-semibold text-norya-ink mb-2">{{ title }}</h3>
+        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ desc }}</p>
       </div>
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.forwho_international_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.forwho_international_desc }}</p>
-      </div>
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.forwho_multilingual_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.forwho_multilingual_desc }}</p>
-      </div>
-      <div class="bg-norya-surface rounded-2xl p-6 border border-norya-ink-subtle/10">
-        <h3 class="font-semibold text-norya-ink mb-2">{{ t.forwho_organizations_title }}</h3>
-        <p class="text-sm text-norya-ink-muted leading-relaxed">{{ t.forwho_organizations_desc }}</p>
-      </div>
+      {% endfor %}
     </div>
   </div>
 </section>
 
-<!-- Trust Connections -->
-<section class="py-16 sm:py-24 bg-norya-surface">
-  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+{# ── TRUST CONNECTIONS ── #}
+<section class="bg-norya-surface-elevated">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
     <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-8">{{ t.trust_heading }}</h2>
-    <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-      <a href="/methodology?lang={{ _locale }}" class="block bg-norya-surface-elevated rounded-xl p-5 border border-norya-ink-subtle/10 hover:border-norya-brand/30 transition">
-        <svg class="w-6 h-6 text-norya-brand mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.75 3.104v5.714a2.25 2.25 0 0 1-.659 1.591L5 14.5M9.75 3.104c-.251.023-.501.05-.75.082m.75-.082a24.301 24.301 0 0 1 4.5 0m0 0v5.714c0 .597.237 1.17.659 1.591L19.8 15.3M14.25 3.104c.251.023.501.05.75.082M19.8 15.3l-1.57.393A9.065 9.065 0 0 1 12 15a9.065 9.065 0 0 0-6.23.693L5 14.5m14.8.8 1.402 1.402c1.232 1.232.65 3.318-1.067 3.611A48.309 48.309 0 0 1 12 21c-2.773 0-5.491-.235-8.135-.687-1.718-.293-2.3-2.379-1.067-3.61L5 14.5"/></svg>
-        <span class="text-xs font-medium text-norya-ink-muted">{{ t.trust_methodology }}</span>
-      </a>
-      <a href="/medical-review?lang={{ _locale }}" class="block bg-norya-surface-elevated rounded-xl p-5 border border-norya-ink-subtle/10 hover:border-norya-brand/30 transition">
-        <svg class="w-6 h-6 text-norya-brand mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M11.35 3.836c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 0 0 .75-.75 2.25 2.25 0 0 0-.1-.664m-5.8 0A2.251 2.251 0 0 1 13.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m8.9-4.414c.376.023.75.05 1.124.08 1.131.094 1.976 1.057 1.976 2.192V16.5A2.25 2.25 0 0 1 18 18.75h-2.25m-7.5-10.5H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V18.75m-7.5-10.5h6.375c.621 0 1.125.504 1.125 1.125v9.375m-8.25-3 1.5 1.5 3-3.75"/></svg>
-        <span class="text-xs font-medium text-norya-ink-muted">{{ t.trust_medical_review }}</span>
-      </a>
-      <a href="/transparency?lang={{ _locale }}" class="block bg-norya-surface-elevated rounded-xl p-5 border border-norya-ink-subtle/10 hover:border-norya-brand/30 transition">
-        <svg class="w-6 h-6 text-norya-brand mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25A2.25 2.25 0 0 0 6 16.5h2.25M3.75 3h-1.5m1.5 0h16.5m0 0h1.5m-1.5 0v11.25A2.25 2.25 0 0 1 18 16.5h-2.25m-7.5 0h7.5m-7.5 0-1 3m8.5-3 1 3m0 0 .5 1.5m-.5-1.5h-9.5m0 0-.5 1.5m.75-9 3-3 2.148 2.148A12.061 12.061 0 0 1 16.5 7.605"/></svg>
-        <span class="text-xs font-medium text-norya-ink-muted">{{ t.trust_transparency }}</span>
-      </a>
-      <a href="/security" class="block bg-norya-surface-elevated rounded-xl p-5 border border-norya-ink-subtle/10 hover:border-norya-brand/30 transition">
-        <svg class="w-6 h-6 text-norya-brand mx-auto mb-2" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M16.5 10.5V6.75a4.5 4.5 0 1 0-9 0v3.75m-.75 11.25h10.5a2.25 2.25 0 0 0 2.25-2.25v-6.75a2.25 2.25 0 0 0-2.25-2.25H6.75a2.25 2.25 0 0 0-2.25 2.25v6.75a2.25 2.25 0 0 0 2.25 2.25Z"/></svg>
-        <span class="text-xs font-medium text-norya-ink-muted">{{ t.trust_security }}</span>
-      </a>
+    <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
+      <a href="/methodology?lang={{ _locale }}" class="inline-flex items-center gap-2 rounded-lg border border-norya-ink-subtle/20 px-4 py-2.5 text-sm font-medium text-norya-ink hover:border-norya-brand/40 hover:text-norya-brand transition-colors">{{ t.trust_methodology }}</a>
+      <a href="/medical-review?lang={{ _locale }}" class="inline-flex items-center gap-2 rounded-lg border border-norya-ink-subtle/20 px-4 py-2.5 text-sm font-medium text-norya-ink hover:border-norya-brand/40 hover:text-norya-brand transition-colors">{{ t.trust_medical_review }}</a>
+      <a href="/transparency?lang={{ _locale }}" class="inline-flex items-center gap-2 rounded-lg border border-norya-ink-subtle/20 px-4 py-2.5 text-sm font-medium text-norya-ink hover:border-norya-brand/40 hover:text-norya-brand transition-colors">{{ t.trust_transparency }}</a>
+      <a href="/security" class="inline-flex items-center gap-2 rounded-lg border border-norya-ink-subtle/20 px-4 py-2.5 text-sm font-medium text-norya-ink hover:border-norya-brand/40 hover:text-norya-brand transition-colors">{{ t.trust_security }}</a>
     </div>
   </div>
 </section>
 
-<!-- CTA -->
-<section class="py-16 sm:py-20 bg-norya-brand/5">
-  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+{# ── CTA ── #}
+<section class="bg-norya-surface border-t border-norya-ink-subtle/10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
     <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-8">{{ t.cta_title }}</h2>
-    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
-      <a href="/trust?lang={{ _locale }}" class="inline-flex items-center justify-center px-6 py-3 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">{{ t.cta_trust }}</a>
-      <a href="/legal/iletisim" class="inline-flex items-center justify-center px-6 py-3 rounded-norya font-medium text-norya-ink border border-norya-ink-subtle/30 hover:bg-norya-surface-elevated transition">{{ t.cta_contact }}</a>
-      <a href="/kurumsal" class="inline-flex items-center justify-center px-6 py-3 rounded-norya font-medium text-norya-brand border border-norya-brand/30 hover:bg-norya-brand/5 transition">{{ t.cta_demo }}</a>
+    <div class="flex flex-wrap justify-center gap-4">
+      <a href="/trust?lang={{ _locale }}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-sm transition-colors">{{ t.cta_trust }}</a>
+      <a href="/contact?lang={{ _locale }}" class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium text-norya-ink border border-norya-ink-subtle/25 hover:border-norya-brand/40 transition-colors">{{ t.cta_contact }}</a>
+      <a href="/kurumsal" class="inline-flex items-center justify-center px-6 py-3 rounded-lg font-medium text-norya-ink border border-norya-ink-subtle/25 hover:border-norya-brand/40 transition-colors">{{ t.cta_demo }}</a>
     </div>
   </div>
 </section>

@@ -138,7 +138,7 @@
       <a href="/" class="flex items-center shrink-0 min-w-0" aria-label="{{ _brand }} home"><img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 sm:h-9 w-auto object-contain" width="200" height="50" loading="eager" /></a>
       <div class="nav-right">
         <div class="nav-links-desktop">
-          <a href="/about" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_about|default('About') }}</a>
+          <a href="/about?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_about|default('About') }}</a>
           <a href="/how-it-works?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_how|default('How it works') }}</a>
           <a href="/pricing?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_pricing|default('Pricing') }}</a>
           <a href="/kurumsal" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_corporate|default('Corporate') }}</a>
@@ -167,11 +167,11 @@
     <a href="/analyze" onclick="toggleBaseDrawer()" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mb-2 shadow-norya-brand/30">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
     <div class="flex flex-col gap-1">
       <a href="/" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_home|default('Home') }}</a>
-      <a href="/about" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_about|default('About') }}</a>
+      <a href="/about?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_about|default('About') }}</a>
       <a href="/how-it-works?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_how|default('How it works') }}</a>
       <a href="/pricing?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_pricing|default('Pricing') }}</a>
       <a href="/kurumsal" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_corporate|default('Corporate') }}</a>
-      <a href="/legal/iletisim" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_contact|default('Contact') }}</a>
+      <a href="/contact?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_contact|default('Contact') }}</a>
       <a href="/trust?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
       <a href="/security" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_security|default('Security') }}</a>
       <a href="/{{ _locale }}/blog" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_blog|default('Blog') }}</a>
@@ -223,9 +223,9 @@
         <div class="lg:col-span-3">
           <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-4">{{ _base_ui.footer_company_heading|default('Company') }}</h3>
           <nav class="flex flex-col space-y-2.5 text-sm mb-5" aria-label="{{ _base_ui.footer_company_heading|default('Company') }}">
-            <a href="/about" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_about|default('About') }}</a>
-            <a href="/legal/iletisim?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_contact|default('Contact') }}</a>
-            <a href="/legal/iletisim?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_support|default('Support') }}</a>
+            <a href="/about?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_about|default('About') }}</a>
+            <a href="/contact?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_contact|default('Contact') }}</a>
+            <a href="/contact?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_support|default('Support') }}</a>
           </nav>
           <div class="pt-4 border-t border-norya-ink-subtle/10">
             <h4 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-2">{{ _base_ui.footer_contact_heading|default('Get in Touch') }}</h4>
@@ -244,7 +244,7 @@
         <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-norya-ink-muted">
           <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_privacy|default('Privacy') }}</a>
           <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_terms|default('Terms') }}</a>
-          <a href="/legal/iletisim?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_contact|default('Contact') }}</a>
+          <a href="/contact?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_contact|default('Contact') }}</a>
         </div>
       </div>
     </div>

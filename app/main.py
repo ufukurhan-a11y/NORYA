@@ -7105,6 +7105,7 @@ def sitemap_xml(request: Request):
     add(f"{base_url}/pricing", priority="0.8", lastmod=today)
     add(f"{base_url}/how-it-works", priority="0.8", lastmod=today)
     add(f"{base_url}/about", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/contact", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/about/founder", priority="0.5", changefreq="monthly", lastmod=today)
     add(f"{base_url}/science", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/security", priority="0.6", changefreq="monthly", lastmod=today)
