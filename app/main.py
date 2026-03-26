@@ -131,6 +131,12 @@ from app.trust_center_i18n import (
     get_transparency_ui,
     get_transparency_meta,
 )
+from app.security_i18n import (
+    SECURITY_LANGS,
+    DEFAULT_SECURITY_LANG,
+    get_security_ui,
+    get_security_meta,
+)
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, get_active_campaign_for_checkout, validate_coupon
 from app.services.pricing import (
@@ -3003,14 +3009,34 @@ def science_page(request: Request):
 
 @app.get("/security", response_class=HTMLResponse)
 def security_page(request: Request):
-    """Güvenlik & Gizlilik sayfası – Stitch v25 tasarımı."""
+    """Security & Privacy page – procurement-ready, i18n-aware."""
+    lang_q = request.query_params.get("lang", "").strip().lower()[:2]
+    if lang_q and lang_q in SECURITY_LANGS:
+        lang = lang_q
+    else:
+        lang_cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+        if lang_cookie and lang_cookie in SECURITY_LANGS:
+            lang = lang_cookie
+        else:
+            parsed = _parse_accept_language(request.headers.get("accept-language"))
+            lang = parsed if parsed in SECURITY_LANGS else DEFAULT_SECURITY_LANG
+    request.state.locale = lang
+    t = get_security_ui(lang)
     base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/security"
+    hreflang_alternates = [
+        {"lang": loc, "url": f"{base_url}/security?lang={loc}"}
+        for loc in SECURITY_LANGS
+    ]
     return templates.TemplateResponse(
         "security.html",
         {
             "request": request,
-            "canonical_url": f"{base_url}/security",
+            "t": t,
+            "lang": lang,
+            "canonical_url": canonical_url,
             "base_url": base_url,
+            "hreflang_alternates": hreflang_alternates,
             "og_image": f"{base_url}/static/images/og-default.png",
         },
     )
@@ -3053,6 +3079,7 @@ def _trust_hreflang(base_url: str, path: str) -> list[dict]:
 def trust_page(request: Request):
     """Trust Center ana sayfası – güven merkezi."""
     lang = _trust_lang_from_request(request)
+    request.state.locale = lang
     t = get_trust_ui(lang)
     meta = get_trust_meta(lang)
     base_url = str(request.base_url).rstrip("/")
@@ -3074,6 +3101,7 @@ def trust_page(request: Request):
 def methodology_page(request: Request):
     """Methodology sayfası – analiz sürecinin şeffaf açıklaması."""
     lang = _trust_lang_from_request(request)
+    request.state.locale = lang
     t = get_methodology_ui(lang)
     meta = get_methodology_meta(lang)
     base_url = str(request.base_url).rstrip("/")
@@ -3095,6 +3123,7 @@ def methodology_page(request: Request):
 def medical_review_page(request: Request):
     """Medical Review sayfası – klinisyen denetimi ve güvenlik."""
     lang = _trust_lang_from_request(request)
+    request.state.locale = lang
     t = get_medical_review_ui(lang)
     meta = get_medical_review_meta(lang)
     base_url = str(request.base_url).rstrip("/")
@@ -3116,6 +3145,7 @@ def medical_review_page(request: Request):
 def transparency_page(request: Request):
     """Transparency sayfası – claim ve metrik tanımları."""
     lang = _trust_lang_from_request(request)
+    request.state.locale = lang
     t = get_transparency_ui(lang)
     meta = get_transparency_meta(lang)
     base_url = str(request.base_url).rstrip("/")
@@ -6092,6 +6122,11 @@ def _render_compare_detail(request: Request, lang: str, slug: str) -> HTMLRespon
 
 
 # Register compare hub and detail routes for all active locales
+@app.get("/compare", include_in_schema=False)
+def compare_root_redirect():
+    return RedirectResponse(url="/en/compare/", status_code=302)
+
+
 for _compare_lang in COMPARE_LANGS:
     def _make_hub_handler(_l=_compare_lang):
         @app.get(f"/{_l}/compare/", response_class=HTMLResponse)

@@ -13,6 +13,196 @@ def apply_translations(_UI, _LABELS, _NORYA, _WHY, _CTA, _HUB, _COMP):
     _apply_he(_UI, _LABELS, _NORYA, _WHY, _CTA, _HUB, _COMP)
     _apply_hi(_UI, _LABELS, _NORYA, _WHY, _CTA, _HUB, _COMP)
     _apply_ar(_UI, _LABELS, _NORYA, _WHY, _CTA, _HUB, _COMP)
+    _apply_bloodgpt_detail_translations(_COMP)
+
+
+def _apply_bloodgpt_detail_translations(_COMP):
+    _COMP["norya-vs-bloodgpt"]["fr"] = {
+        "meta_title": "NoryaAI vs BloodGPT pour les analyses sanguines — Comparaison | NoryaAI",
+        "meta_description": "Comparez NoryaAI et BloodGPT pour l'analyse sanguine. Rapports structurés, sortie multilingue et PDF prêts pour le médecin face à un workflow orienté chat.",
+        "hero_title": "NoryaAI vs BloodGPT pour l'analyse sanguine",
+        "hero_sub": "BloodGPT semble proposer une expérience IA conversationnelle centrée sur les analyses sanguines. NoryaAI est conçu autour de rapports structurés, de plages de référence et de sorties prêtes pour le médecin.",
+        "quick_answer_title": "En bref",
+        "quick_answer": "BloodGPT semble adopter une approche conversationnelle pour discuter des résultats sanguins. NoryaAI suit un flux structuré d'import et de rapport : il lit votre bilan, associe les marqueurs aux plages de référence et génère un résumé multilingue avec score de santé et PDF prêt pour le médecin.",
+        "cells": {
+            "report_upload": "Flux orienté chat ; la prise en charge native du téléversement de rapports n'est pas clairement divulguée",
+            "reference_ranges": "Peut discuter des plages dans la conversation, mais la correspondance spécifique au laboratoire n'est pas clairement divulguée",
+            "units_formatting": "Peut interpréter les valeurs en conversation, mais le support des formats de laboratoire et des unités n'est pas clairement divulgué",
+            "output_structure": "Réponses conversationnelles plutôt qu'un rapport fixe",
+            "multilingual": "La couverture linguistique n'est pas clairement divulguée",
+            "doctor_summary": "Le PDF prêt pour le médecin ou un export vérifié n'est pas clairement divulgué",
+            "privacy": "Consultez leur politique pour le stockage, la rétention et l'utilisation des modèles",
+            "workflow": "Expérience IA conversationnelle centrée sur les analyses sanguines",
+            "guided_flow": "Questions-réponses conversationnelles autour des résultats sanguins",
+        },
+        "helps_title": "Quand BloodGPT peut quand même aider",
+        "helps_sub": "Un outil centré sur le chat peut convenir aux utilisateurs qui préfèrent explorer leurs résultats en aller-retour.",
+        "helps_items": [
+            {"icon": "💬", "title": "Expérience orientée conversation", "desc": "Si vous préférez poser des questions de suivi dans une interface de chat, un chatbot dédié peut sembler plus naturel qu'un rapport fixe."},
+            {"icon": "🧪", "title": "Contexte ciblé sur les analyses", "desc": "Un chatbot spécialisé peut fournir un contexte plus resserré qu'une IA généraliste lorsque vous voulez discuter de biomarqueurs."},
+            {"icon": "⚡", "title": "Réponses exploratoires rapides", "desc": "Pour un échange rapide autour des marqueurs, une interface conversationnelle peut être utile avant de vouloir un résumé formel."},
+        ],
+        "faqs": [
+            {"q": "Quelle est la différence entre BloodGPT et NoryaAI ?", "a": "BloodGPT semble se concentrer sur l'interprétation des analyses sanguines en mode conversation. NoryaAI se concentre sur des rapports structurés avec plages de référence, score de santé, sortie multilingue et PDF prêts pour le médecin."},
+            {"q": "Une interface de chat suffit-elle pour relire des analyses sanguines ?", "a": "Cela dépend de votre objectif. Le chat peut être utile pour discuter. Si vous voulez un format cohérent à relire, comparer dans le temps ou partager avec un clinicien, un rapport structuré est souvent plus pratique."},
+            {"q": "NoryaAI est-il un outil de diagnostic ?", "a": "Non. NoryaAI fournit des explications structurées et éducatives de vos valeurs de laboratoire. Il ne pose pas de diagnostic et ne recommande pas de traitement. Consultez toujours un médecin qualifié."},
+        ],
+    }
+    _COMP["norya-vs-bloodgpt"]["es"] = {
+        "meta_title": "NoryaAI vs BloodGPT para análisis de sangre — Comparación | NoryaAI",
+        "meta_description": "Compare NoryaAI y BloodGPT para análisis de sangre. Informes estructurados, salida multilingüe y PDF listos para el médico frente a un flujo conversacional.",
+        "hero_title": "NoryaAI vs BloodGPT para análisis de sangre",
+        "hero_sub": "BloodGPT parece ofrecer una experiencia conversacional de IA centrada en análisis de sangre. NoryaAI está construido alrededor de informes estructurados, rangos de referencia y salidas listas para el médico.",
+        "quick_answer_title": "En resumen",
+        "quick_answer": "BloodGPT parece seguir un enfoque conversacional para hablar sobre resultados de análisis de sangre. NoryaAI usa un flujo estructurado de carga y reporte: lee su informe, relaciona los marcadores con rangos de referencia y genera un resumen multilingüe con puntuación de salud y PDF listo para el médico.",
+        "cells": {
+            "report_upload": "Flujo orientado al chat; el soporte nativo de subida de informes no está claramente divulgado",
+            "reference_ranges": "Puede comentar rangos en la conversación, pero la coincidencia específica con el laboratorio no está claramente divulgada",
+            "units_formatting": "Puede interpretar valores en el chat, pero el soporte para formatos de laboratorio y unidades no está claramente divulgado",
+            "output_structure": "Respuestas conversacionales en lugar de un informe fijo",
+            "multilingual": "La cobertura de idiomas no está claramente divulgada",
+            "doctor_summary": "El PDF listo para el médico o un formato de exportación verificado no está claramente divulgado",
+            "privacy": "Revise su política para almacenamiento, retención y uso del modelo",
+            "workflow": "Experiencia conversacional de IA centrada en análisis de sangre",
+            "guided_flow": "Preguntas y respuestas conversacionales sobre resultados de sangre",
+        },
+        "helps_title": "Cuándo BloodGPT aún puede ayudar",
+        "helps_sub": "Una herramienta orientada al chat puede encajar mejor con usuarios que prefieren explorar resultados en conversación.",
+        "helps_items": [
+            {"icon": "💬", "title": "Experiencia conversacional", "desc": "Si prefiere hacer preguntas de seguimiento en una interfaz de chat, un chatbot especializado puede sentirse más natural que un informe fijo."},
+            {"icon": "🧪", "title": "Contexto centrado en análisis", "desc": "Un chatbot especializado puede ofrecer un contexto más específico que una IA general cuando quiere hablar de biomarcadores."},
+            {"icon": "⚡", "title": "Respuestas exploratorias rápidas", "desc": "Para un ida y vuelta rápido sobre marcadores, una interfaz conversacional puede ser útil antes de necesitar un resumen formal."},
+        ],
+        "faqs": [
+            {"q": "¿Cuál es la diferencia entre BloodGPT y NoryaAI?", "a": "BloodGPT parece centrarse en la interpretación de análisis de sangre en formato conversacional. NoryaAI se centra en informes estructurados con rangos de referencia, puntuación de salud, salida multilingüe y PDF listos para el médico."},
+            {"q": "¿Una interfaz de chat es suficiente para revisar análisis de sangre?", "a": "Depende de su objetivo. El chat puede ser útil para conversar. Si quiere un formato coherente para revisar, comparar en el tiempo o compartir con un médico, un informe estructurado suele ser más práctico."},
+            {"q": "¿NoryaAI es una herramienta de diagnóstico?", "a": "No. NoryaAI ofrece explicaciones estructuradas y educativas de sus valores de laboratorio. No diagnostica enfermedades ni recomienda tratamiento. Consulte siempre a un médico cualificado."},
+        ],
+    }
+    _COMP["norya-vs-bloodgpt"]["it"] = {
+        "meta_title": "NoryaAI vs BloodGPT per esami del sangue — Confronto | NoryaAI",
+        "meta_description": "Confronta NoryaAI e BloodGPT per l'analisi degli esami del sangue. Report strutturati, output multilingue e PDF pronti per il medico contro un flusso conversazionale.",
+        "hero_title": "NoryaAI vs BloodGPT per l'analisi degli esami del sangue",
+        "hero_sub": "BloodGPT sembra offrire un'esperienza conversazionale di IA focalizzata sugli esami del sangue. NoryaAI e costruito attorno a report strutturati, intervalli di riferimento e output pronti per il medico.",
+        "quick_answer_title": "In breve",
+        "quick_answer": "BloodGPT sembra seguire un approccio conversazionale per discutere i risultati degli esami del sangue. NoryaAI usa invece un flusso strutturato di caricamento e report: legge il referto, collega ogni marker agli intervalli di riferimento e genera un riepilogo multilingue con punteggio di salute e PDF pronto per il medico.",
+        "cells": {
+            "report_upload": "Flusso orientato alla chat; il supporto nativo al caricamento dei referti non e chiaramente divulgato",
+            "reference_ranges": "Puo discutere gli intervalli in conversazione, ma l'abbinamento specifico al laboratorio non e chiaramente divulgato",
+            "units_formatting": "Puo interpretare i valori in chat, ma il supporto per i formati di laboratorio e le unita non e chiaramente divulgato",
+            "output_structure": "Risposte conversazionali invece di una struttura di report fissa",
+            "multilingual": "La copertura linguistica non e chiaramente divulgata",
+            "doctor_summary": "Il PDF pronto per il medico o un formato di esportazione verificato non e chiaramente divulgato",
+            "privacy": "Consulta la loro policy per archiviazione, conservazione e uso del modello",
+            "workflow": "Esperienza IA conversazionale focalizzata sugli esami del sangue",
+            "guided_flow": "Domande e risposte conversazionali sui risultati del sangue",
+        },
+        "helps_title": "Quando BloodGPT puo comunque aiutare",
+        "helps_sub": "Uno strumento orientato alla chat puo adattarsi meglio a chi preferisce esplorare i risultati in conversazione.",
+        "helps_items": [
+            {"icon": "💬", "title": "Esperienza conversazionale", "desc": "Se preferisci fare domande di follow-up in una chat, un chatbot specializzato puo sembrare piu naturale di un report fisso."},
+            {"icon": "🧪", "title": "Contesto focalizzato sugli esami", "desc": "Un chatbot specializzato puo offrire un contesto piu mirato di una IA generica quando vuoi discutere di biomarcatori."},
+            {"icon": "⚡", "title": "Risposte esplorative rapide", "desc": "Per un confronto rapido sui marker, un'interfaccia conversazionale puo essere utile prima di passare a un riepilogo formale."},
+        ],
+        "faqs": [
+            {"q": "Qual e la differenza tra BloodGPT e NoryaAI?", "a": "BloodGPT sembra concentrarsi sull'interpretazione degli esami del sangue in formato conversazionale. NoryaAI si concentra su report strutturati con intervalli di riferimento, punteggi di salute, output multilingue e PDF pronti per il medico."},
+            {"q": "Una interfaccia chat basta per rivedere gli esami del sangue?", "a": "Dipende dall'obiettivo. La chat puo essere utile per discutere. Se vuoi un formato coerente da rileggere, confrontare nel tempo o condividere con un medico, un report strutturato e spesso piu pratico."},
+            {"q": "NoryaAI e uno strumento diagnostico?", "a": "No. NoryaAI fornisce spiegazioni strutturate ed educative dei valori di laboratorio. Non formula diagnosi e non suggerisce trattamenti. Consulta sempre un medico qualificato."},
+        ],
+    }
+    _COMP["norya-vs-bloodgpt"]["he"] = {
+        "meta_title": "NoryaAI מול BloodGPT לבדיקות דם — השוואה | NoryaAI",
+        "meta_description": "השוו בין NoryaAI ל-BloodGPT לניתוח בדיקות דם. דוחות מובנים, פלט רב-לשוני ו-PDF מוכן לרופא מול זרימת עבודה שיחתית.",
+        "hero_title": "NoryaAI מול BloodGPT לניתוח בדיקות דם",
+        "hero_sub": "BloodGPT נראה כחוויית AI שיחתית הממוקדת בבדיקות דם. NoryaAI בנוי סביב דוחות מובנים, טווחי ייחוס ופלט מוכן לרופא.",
+        "quick_answer_title": "בקצרה",
+        "quick_answer": "BloodGPT נראה כגישה שיחתית לדיון בתוצאות בדיקות דם. NoryaAI משתמש בזרימת עבודה מובנית של העלאה ודוח: הוא קורא את הדוח, משייך כל סמן לטווחי הייחוס ומייצר סיכום רב-לשוני עם ציון בריאות ו-PDF מוכן לרופא.",
+        "cells": {
+            "report_upload": "זרימת עבודה מבוססת צ'אט; תמיכה מקורית בהעלאת דוחות אינה מפורטת בבירור",
+            "reference_ranges": "יכול לדון בטווחים בשיחה, אך התאמה ספציפית למעבדה אינה מפורטת בבירור",
+            "units_formatting": "יכול לפרש ערכים בשיחה, אך התמיכה בפורמטי מעבדה ויחידות אינה מפורטת בבירור",
+            "output_structure": "תשובות שיחתיות במקום מבנה דוח קבוע",
+            "multilingual": "כיסוי השפות אינו מפורט בבירור",
+            "doctor_summary": "PDF מוכן לרופא או יצוא מאומת אינם מפורטים בבירור",
+            "privacy": "עיינו במדיניות שלהם לגבי אחסון, שמירה ושימוש במודל",
+            "workflow": "חוויית AI שיחתית ממוקדת בדיקות דם",
+            "guided_flow": "שאלות ותשובות שיחתיות על תוצאות בדיקות דם",
+        },
+        "helps_title": "מתי BloodGPT עדיין יכול לעזור",
+        "helps_sub": "כלי שיחתי עשוי להתאים למשתמשים שמעדיפים לחקור תוצאות דרך שיחה הלוך ושוב.",
+        "helps_items": [
+            {"icon": "💬", "title": "חוויה שיחתית", "desc": "אם אתם מעדיפים לשאול שאלות המשך בממשק צ'אט, צ'אטבוט ייעודי יכול להרגיש טבעי יותר מדוח קבוע."},
+            {"icon": "🧪", "title": "הקשר ממוקד בדיקות", "desc": "צ'אטבוט ייעודי יכול להציע הקשר ממוקד יותר ממודל כללי כשאתם רוצים לדבר על סמנים ביולוגיים."},
+            {"icon": "⚡", "title": "תשובות מהירות לחקירה", "desc": "לדיון מהיר סביב סמנים, ממשק שיחתי יכול להיות שימושי לפני שעוברים לסיכום פורמלי."},
+        ],
+        "faqs": [
+            {"q": "מה ההבדל בין BloodGPT ל-NoryaAI?", "a": "BloodGPT נראה כממוקד בפרשנות בדיקות דם בסגנון שיחתי. NoryaAI מתמקד בדוחות מובנים עם טווחי ייחוס, ציון בריאות, פלט רב-לשוני ו-PDF מוכן לרופא."},
+            {"q": "האם ממשק צ'אט מספיק לבדיקת בדיקות דם?", "a": "זה תלוי במטרה שלכם. צ'אט יכול להיות שימושי לדיון. אם אתם רוצים פורמט עקבי שאפשר לחזור אליו, להשוות לאורך זמן או לשתף עם רופא, דוח מובנה הוא לרוב מעשי יותר."},
+            {"q": "האם NoryaAI הוא כלי אבחון?", "a": "לא. NoryaAI מספק הסברים מובנים וחינוכיים לערכי המעבדה שלכם. הוא אינו מאבחן מחלות ואינו ממליץ על טיפול. תמיד יש להתייעץ עם רופא מוסמך."},
+        ],
+    }
+    _COMP["norya-vs-bloodgpt"]["hi"] = {
+        "meta_title": "NoryaAI बनाम BloodGPT ब्लड टेस्ट के लिए — तुलना | NoryaAI",
+        "meta_description": "ब्लड टेस्ट विश्लेषण के लिए NoryaAI और BloodGPT की तुलना करें। संरचित रिपोर्ट, बहुभाषी आउटपुट और डॉक्टर-तैयार PDF बनाम चैट-आधारित वर्कफ़्लो.",
+        "hero_title": "ब्लड टेस्ट विश्लेषण के लिए NoryaAI बनाम BloodGPT",
+        "hero_sub": "BloodGPT एक ब्लड टेस्ट केंद्रित conversational AI अनुभव जैसा लगता है। NoryaAI संरचित रिपोर्ट, reference range समझ और doctor-ready output के आसपास बनाया गया है.",
+        "quick_answer_title": "संक्षेप में",
+        "quick_answer": "BloodGPT ब्लड टेस्ट परिणामों पर बातचीत करने वाला chat-first तरीका लगता है। NoryaAI structured upload-and-report workflow है: यह आपकी लैब रिपोर्ट पढ़ता है, हर marker को reference range से जोड़ता है, और health score व doctor-ready PDF के साथ multilingual summary बनाता है.",
+        "cells": {
+            "report_upload": "चैट-आधारित वर्कफ़्लो; native report upload support स्पष्ट रूप से सार्वजनिक नहीं है",
+            "reference_ranges": "बातचीत में ranges पर चर्चा कर सकता है, लेकिन lab-specific matching स्पष्ट रूप से सार्वजनिक नहीं है",
+            "units_formatting": "चैट में values समझा सकता है, लेकिन lab formats और units का support स्पष्ट रूप से सार्वजनिक नहीं है",
+            "output_structure": "फिक्स्ड रिपोर्ट संरचना के बजाय conversational answers",
+            "multilingual": "भाषा coverage स्पष्ट रूप से सार्वजनिक नहीं है",
+            "doctor_summary": "Doctor-ready PDF या verified export format स्पष्ट रूप से सार्वजनिक नहीं है",
+            "privacy": "Storage, retention और model use के लिए उनकी policy देखें",
+            "workflow": "ब्लड टेस्ट केंद्रित conversational AI अनुभव",
+            "guided_flow": "ब्लड टेस्ट results पर conversational Q&A",
+        },
+        "helps_title": "BloodGPT कब फिर भी मदद कर सकता है",
+        "helps_sub": "चैट-आधारित टूल उन लोगों के लिए बेहतर हो सकता है जो रिपोर्ट से ज़्यादा बातचीत पसंद करते हैं.",
+        "helps_items": [
+            {"icon": "💬", "title": "Conversation-first experience", "desc": "अगर आप follow-up questions चैट में पूछना पसंद करते हैं, तो dedicated chatbot fixed report से अधिक natural लग सकता है."},
+            {"icon": "🧪", "title": "ब्लड टेस्ट केंद्रित संदर्भ", "desc": "जब आप biomarkers पर बातचीत करना चाहते हैं, तब specialized chatbot generic AI की तुलना में अधिक focused context दे सकता है."},
+            {"icon": "⚡", "title": "तेज़ exploratory answers", "desc": "Markers पर तेज़ back-and-forth के लिए conversational interface formal summary से पहले उपयोगी हो सकता है."},
+        ],
+        "faqs": [
+            {"q": "BloodGPT और NoryaAI में क्या अंतर है?", "a": "BloodGPT ब्लड टेस्ट interpretation को conversational style में पेश करता हुआ लगता है। NoryaAI structured reports, reference ranges, health scores, multilingual output और doctor-ready PDFs पर केंद्रित है."},
+            {"q": "क्या ब्लड टेस्ट review के लिए chat interface काफी है?", "a": "यह आपके goal पर निर्भर करता है। बातचीत के लिए chat उपयोगी हो सकता है। लेकिन अगर आपको ऐसा consistent format चाहिए जिसे बाद में फिर देख सकें, समय के साथ compare कर सकें या clinician के साथ share कर सकें, तो structured report ज़्यादा practical होती है."},
+            {"q": "क्या NoryaAI diagnosis tool है?", "a": "नहीं। NoryaAI लैब values की structured, educational explanations देता है। यह diagnosis या treatment recommendation नहीं देता। मेडिकल निर्णयों के लिए हमेशा qualified doctor से सलाह लें."},
+        ],
+    }
+    _COMP["norya-vs-bloodgpt"]["ar"] = {
+        "meta_title": "NoryaAI مقابل BloodGPT لتحاليل الدم — مقارنة | NoryaAI",
+        "meta_description": "قارن بين NoryaAI وBloodGPT لتحليل تحاليل الدم. تقارير منظمة ومخرجات متعددة اللغات وملفات PDF جاهزة للطبيب مقابل سير عمل محادثي.",
+        "hero_title": "NoryaAI مقابل BloodGPT لتحليل تحاليل الدم",
+        "hero_sub": "يبدو BloodGPT كتجربة ذكاء اصطناعي محادثية تركز على تحاليل الدم. أما NoryaAI فمبني حول تقارير منظمة ونطاقات مرجعية ومخرجات جاهزة للطبيب.",
+        "quick_answer_title": "الملخص",
+        "quick_answer": "يبدو BloodGPT كنهج محادثي لمناقشة نتائج تحاليل الدم. أما NoryaAI فيستخدم سير عمل منظم للرفع والتقرير: يقرأ تقرير المختبر، ويربط كل مؤشر بالنطاق المرجعي، ويولد ملخصًا متعدد اللغات مع درجة صحية وPDF جاهز للطبيب.",
+        "cells": {
+            "report_upload": "سير عمل يعتمد على الدردشة؛ دعم رفع التقارير بشكل أصلي غير مُفصح عنه بوضوح",
+            "reference_ranges": "قد يناقش النطاقات داخل المحادثة، لكن المطابقة الخاصة بالمختبر غير مُفصح عنها بوضوح",
+            "units_formatting": "قد يفسر القيم داخل الدردشة، لكن دعم تنسيقات المختبرات والوحدات غير مُفصح عنه بوضوح",
+            "output_structure": "إجابات بأسلوب المحادثة بدلًا من تقرير ثابت",
+            "multilingual": "تغطية اللغات غير مُفصح عنها بوضوح",
+            "doctor_summary": "ملف PDF الجاهز للطبيب أو التصدير الموثق غير مُفصح عنه بوضوح",
+            "privacy": "راجع سياستهم لمعرفة التخزين والاحتفاظ واستخدام النموذج",
+            "workflow": "تجربة ذكاء اصطناعي محادثية تركز على تحاليل الدم",
+            "guided_flow": "أسئلة وأجوبة محادثية حول نتائج تحاليل الدم",
+        },
+        "helps_title": "متى قد يساعد BloodGPT",
+        "helps_sub": "قد يناسبك هذا النوع إذا كنت تفضل استكشاف النتائج عبر محادثة متبادلة بدلًا من تقرير ثابت.",
+        "helps_items": [
+            {"icon": "💬", "title": "تجربة محادثية", "desc": "إذا كنت تفضل طرح أسئلة متابعة داخل واجهة دردشة، فقد يبدو روبوت متخصص أكثر طبيعية من تقرير ثابت."},
+            {"icon": "🧪", "title": "سياق مخصص لتحاليل الدم", "desc": "قد يوفر روبوت متخصص سياقًا أضيق من الذكاء الاصطناعي العام عندما تريد مناقشة المؤشرات الحيوية."},
+            {"icon": "⚡", "title": "إجابات استكشافية سريعة", "desc": "للنقاش السريع حول المؤشرات، قد تكون الواجهة المحادثية مفيدة قبل الحاجة إلى ملخص رسمي."},
+        ],
+        "faqs": [
+            {"q": "ما الفرق بين BloodGPT وNoryaAI؟", "a": "يبدو BloodGPT مركزًا على تفسير تحاليل الدم بأسلوب محادثي. بينما يركز NoryaAI على التقارير المنظمة مع نطاقات مرجعية ودرجة صحية ومخرجات متعددة اللغات وملفات PDF جاهزة للطبيب."},
+            {"q": "هل تكفي واجهة الدردشة لمراجعة تحاليل الدم؟", "a": "يعتمد ذلك على هدفك. قد تكون الدردشة مفيدة للنقاش. لكن إذا كنت تريد تنسيقًا ثابتًا يمكنك الرجوع إليه أو مقارنته بمرور الوقت أو مشاركته مع طبيب، فغالبًا ما يكون التقرير المنظم أكثر عملية."},
+            {"q": "هل NoryaAI أداة تشخيص؟", "a": "لا. يقدم NoryaAI شروحات تعليمية ومنظمة لقيم المختبر. لا يشخص الأمراض ولا يوصي بالعلاج. استشر دائمًا طبيبًا مؤهلًا للقرارات الطبية."},
+        ],
+    }
 
 
 # ══════════════════════════════════════════════════════════════════

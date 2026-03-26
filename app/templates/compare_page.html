@@ -38,6 +38,22 @@
     .bg-norya-teal { background-color: var(--norya-teal); }
     .bg-norya-teal:hover { background-color: var(--norya-teal-hover); }
     .border-norya-teal { border-color: var(--norya-teal); }
+    .hero-mesh { position: relative; overflow: hidden; }
+    .hero-mesh::before { content: ""; position: absolute; inset: -12% auto auto -7%; width: 22rem; height: 22rem; border-radius: 999px; background: radial-gradient(circle, rgba(45,212,191,0.24), rgba(45,212,191,0)); filter: blur(10px); pointer-events: none; }
+    .hero-mesh::after { content: ""; position: absolute; inset: auto -12% -22% auto; width: 28rem; height: 28rem; border-radius: 999px; background: radial-gradient(circle, rgba(59,130,246,0.16), rgba(59,130,246,0)); filter: blur(16px); pointer-events: none; }
+    .premium-panel { border: 1px solid rgba(148,163,184,0.18); background: rgba(255,255,255,0.84); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); box-shadow: 0 24px 80px rgba(15,23,42,0.12); }
+    .hero-visual { position: relative; overflow: hidden; min-height: 440px; }
+    .hero-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .hero-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.08), rgba(15,23,42,0.78)); }
+    .visual-chip { position: relative; z-index: 1; display: inline-flex; align-items: center; gap: .5rem; padding: .55rem .9rem; border-radius: 999px; background: rgba(255,255,255,0.92); color: #0f172a; font-size: .76rem; font-weight: 700; box-shadow: 0 12px 36px rgba(15,23,42,0.14); }
+    .visual-mark { width: 1.95rem; height: 1.95rem; display: inline-flex; align-items: center; justify-content: center; border-radius: .8rem; color: #fff; font-size: .68rem; font-weight: 800; letter-spacing: .04em; }
+    .visual-stat { position: relative; z-index: 1; padding: .85rem .95rem; border-radius: 1rem; background: rgba(15,23,42,0.7); color: #fff; box-shadow: 0 18px 40px rgba(15,23,42,0.24); }
+    .comparison-shell { border: 1px solid rgba(148,163,184,0.18); border-radius: 1.5rem; background: rgba(255,255,255,0.88); box-shadow: 0 22px 60px rgba(15,23,42,0.08); }
+    .related-card { overflow: hidden; border-radius: 1.25rem; border: 1px solid rgba(148,163,184,0.18); background: rgba(255,255,255,0.9); box-shadow: 0 18px 54px rgba(15,23,42,0.08); transition: transform .28s ease, box-shadow .28s ease, border-color .28s ease; }
+    .related-card:hover { transform: translateY(-4px); box-shadow: 0 22px 64px rgba(15,23,42,0.12); }
+    .related-visual { position: relative; min-height: 132px; overflow: hidden; }
+    .related-visual img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; }
+    .related-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.02), rgba(15,23,42,0.72)); }
     @media (max-width: 768px) {
       .header-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
     }
@@ -122,27 +138,59 @@
     </nav>
 
     <!-- 1. HERO -->
-    <section class="py-12 sm:py-20 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
-      <div class="max-w-3xl mx-auto text-center">
-        <div class="inline-flex items-center gap-2 rounded-full bg-white/80 border border-teal-100 px-3 py-1 text-xs font-semibold text-teal-700 shadow-sm mb-6">
-          <span class="inline-flex w-1.5 h-1.5 rounded-full bg-teal-500"></span>
-          <span>{{ t.ui_badge }}</span>
+    <section class="hero-mesh py-12 sm:py-20 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
+      <div class="max-w-6xl mx-auto grid lg:grid-cols-[1.02fr_0.98fr] gap-10 items-center">
+        <div class="text-center lg:text-left relative z-10">
+          <div class="inline-flex items-center gap-2 rounded-full bg-white/80 border border-teal-100 px-3 py-1 text-xs font-semibold text-teal-700 shadow-sm mb-6">
+            <span class="inline-flex w-1.5 h-1.5 rounded-full bg-teal-500"></span>
+            <span>{{ t.ui_badge }}</span>
+          </div>
+          <h1 class="text-3xl sm:text-4xl lg:text-[3rem] font-bold text-slate-900 leading-tight mb-4">{{ t.hero_title }}</h1>
+          <p class="text-base sm:text-lg text-slate-600 max-w-2xl lg:max-w-none mx-auto lg:mx-0 mb-8">{{ t.hero_sub }}</p>
+          <div class="flex flex-wrap gap-3 justify-center lg:justify-start">
+            <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-lg hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:14px 28px;border-radius:16px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);">{{ t.cta_hero_primary }}</a>
+            <a href="{{ base_url }}/{{ lang }}/ai-blood-test-analyzer#report-preview" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50" style="padding:14px 28px;border-radius:16px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #14b8a6;color:#0f766e;">{{ t.cta_hero_secondary }}</a>
+          </div>
+          {% if t.hero_highlights %}
+          <div class="grid sm:grid-cols-3 gap-3 mt-8">
+            {% for stat in t.hero_highlights %}
+            <div class="premium-panel rounded-2xl px-4 py-4 text-left">
+              <div class="text-2xl font-extrabold {% if loop.first %}text-teal-600{% else %}text-slate-900{% endif %}">{{ stat.value }}</div>
+              <div class="text-sm font-semibold text-slate-800 mt-1">{{ stat.label }}</div>
+              <div class="text-xs text-slate-500 mt-1">{{ stat.sub }}</div>
+            </div>
+            {% endfor %}
+          </div>
+          {% endif %}
         </div>
-        <h1 class="text-3xl sm:text-4xl lg:text-[2.75rem] font-bold text-slate-900 leading-tight mb-4">{{ t.hero_title }}</h1>
-        <p class="text-base sm:text-lg text-slate-600 max-w-2xl mx-auto mb-8">{{ t.hero_sub }}</p>
-        <div class="flex flex-wrap gap-3 justify-center">
-          <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl bg-norya-teal text-white font-semibold shadow-lg hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:14px 28px;border-radius:16px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);">{{ t.cta_hero_primary }}</a>
-          <a href="{{ base_url }}/{{ lang }}/ai-blood-test-analyzer#report-preview" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50" style="padding:14px 28px;border-radius:16px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #14b8a6;color:#0f766e;">{{ t.cta_hero_secondary }}</a>
+        <div class="relative z-10">
+          <div class="premium-panel rounded-[2rem] p-4 sm:p-5">
+            <div class="hero-visual rounded-[1.6rem]" style="background: linear-gradient(135deg, {{ t.hero_visual.glow }}, rgba(255,255,255,0.04));">
+              <img src="{{ t.hero_visual.image }}" alt="NoryaAI vs {{ t.competitor_name }}" loading="lazy" />
+              <div class="relative z-10 flex h-full flex-col justify-between p-5 sm:p-6">
+                <div class="flex items-start justify-between gap-3">
+                  <span class="visual-chip">NoryaAI</span>
+                  <span class="visual-chip">
+                    <span class="visual-mark" style="background: {{ t.hero_visual.accent }};">{{ t.hero_visual.mark }}</span>
+                    {{ t.competitor_name }}
+                  </span>
+                </div>
+                <div class="grid sm:grid-cols-2 gap-3 items-end">
+                  <div class="visual-stat">
+                    <div class="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-2">{{ t.ui_compare }}</div>
+                    <div class="text-xl font-bold">{{ t.accuracy_badge.value }}</div>
+                    <div class="text-xs text-white/80 mt-1">{{ t.accuracy_badge.label }}</div>
+                  </div>
+                  <div class="visual-stat">
+                    <div class="text-[11px] uppercase tracking-[0.18em] text-white/70 mb-2">NoryaAI</div>
+                    <div class="text-xl font-bold">{{ t.hero_highlights[1].value }}</div>
+                    <div class="text-xs text-white/80 mt-1">{{ t.hero_highlights[1].label }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
-        {% if t.accuracy_badge %}
-        <div class="mt-6 inline-flex items-center gap-2 rounded-full bg-white/90 border border-teal-200 px-4 py-2 shadow-sm">
-          <span class="text-lg sm:text-xl font-extrabold text-teal-600 leading-none">{{ t.accuracy_badge.value }}</span>
-          <span class="text-left leading-tight">
-            <span class="block text-xs font-semibold text-slate-700">{{ t.accuracy_badge.label }}</span>
-            <span class="block text-[10px] text-slate-400">{{ t.accuracy_badge.sub }}</span>
-          </span>
-        </div>
-        {% endif %}
       </div>
     </section>
 
@@ -172,7 +220,7 @@
             <span class="w-2.5 h-2.5 rounded-full bg-teal-500"></span> NoryaAI
           </span>
         </div>
-        <div class="space-y-3">
+        <div class="comparison-shell p-3 sm:p-4 space-y-3">
           {% for item in t.comparison_items %}
           <div class="rounded-xl border border-slate-200 bg-white overflow-hidden shadow-sm">
             <div class="px-4 py-2.5 bg-slate-50/80 border-b border-slate-100">
@@ -261,8 +309,20 @@
         <h2 class="text-xl sm:text-2xl font-bold text-center text-slate-900 mb-6">{{ t.ui_related_heading }}</h2>
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
           {% for rc in related_comparisons %}
-          <a href="{{ base_url }}{{ rc.url }}" class="block rounded-xl border border-slate-200 bg-white p-4 hover:border-teal-300 hover:shadow-sm transition-all">
-            <p class="font-semibold text-sm text-slate-900">NoryaAI vs {{ rc.name }}</p>
+          <a href="{{ base_url }}{{ rc.url }}" class="related-card block hover:border-teal-300">
+            <div class="related-visual" style="background: linear-gradient(135deg, {{ rc.visual.glow }}, rgba(255,255,255,0.04));">
+              <img src="{{ rc.visual.image }}" alt="NoryaAI vs {{ rc.name }}" loading="lazy" />
+              <div class="relative z-10 flex h-full items-start justify-between p-4">
+                <span class="visual-chip">NoryaAI</span>
+                <span class="visual-chip">
+                  <span class="visual-mark" style="background: {{ rc.visual.accent }};">{{ rc.visual.mark }}</span>
+                  {{ rc.name }}
+                </span>
+              </div>
+            </div>
+            <div class="p-4">
+              <p class="font-semibold text-sm text-slate-900">NoryaAI vs {{ rc.name }}</p>
+            </div>
           </a>
           {% endfor %}
         </div>
