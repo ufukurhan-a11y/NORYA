@@ -66,7 +66,7 @@ def _sections_en() -> list:
                 "irritability, and seizures in severe cases.</li>"
                 "<li><strong>Heart rhythm</strong> &ndash; magnesium stabilizes cardiac cell membranes and is critical for normal heart rhythm. "
                 "Deficiency is a recognized cause of cardiac arrhythmias, including torsades de pointes. For related markers, see our guides on "
-                '<a href="/blog/calcium-blood-test-meaning">calcium</a> and <a href="/blog/potassium-blood-test-meaning">potassium</a>.</li>'
+                '<a href="/en/blog/calcium-high-meaning">calcium</a> and <a href="/en/blog/potassium-high-meaning">potassium</a>.</li>'
                 "<li><strong>Bone health</strong> &ndash; about 60% of body magnesium resides in bone. Magnesium influences both bone mineral "
                 "density and calcium metabolism; deficiency is associated with increased osteoporosis risk.</li>"
                 "<li><strong>Blood sugar regulation</strong> &ndash; magnesium plays a role in insulin signaling. Low magnesium is linked to "

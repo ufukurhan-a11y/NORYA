@@ -563,6 +563,81 @@
     }
     @media (min-width: 1024px) { .hero-v2-trust { justify-content: flex-start; font-size: 0.75rem; } }
     .hero-v2-trust-item { display: inline-flex; align-items: center; gap: 0.35rem; }
+    /* Homepage: B2B quick links below hero */
+    .home-b2b-strip {
+      background: linear-gradient(180deg, rgba(14,165,164,0.06) 0%, rgba(248,250,252,1) 100%);
+      border-bottom: 1px solid rgba(15,23,42,0.06);
+    }
+    .dark .home-b2b-strip {
+      background: linear-gradient(180deg, rgba(14,165,164,0.08) 0%, rgba(25,28,29,1) 100%);
+      border-bottom-color: rgba(148,163,184,0.12);
+    }
+    .home-b2b-strip-inner { max-width: 72rem; margin: 0 auto; padding: 0.875rem 1rem 1rem; }
+    @media (min-width: 640px) { .home-b2b-strip-inner { padding: 1rem 1.5rem 1.125rem; } }
+    .home-b2b-strip-label {
+      font-size: 0.625rem; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase;
+      color: #0ea5a4; margin-bottom: 0.5rem; text-align: center;
+    }
+    .home-b2b-strip-links {
+      display: flex; flex-wrap: wrap; justify-content: center; align-items: stretch;
+      gap: 0.5rem 0.35rem;
+    }
+    @media (max-width: 639px) {
+      .home-b2b-strip-links {
+        flex-wrap: nowrap; justify-content: flex-start; overflow-x: auto; -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x proximity; padding-bottom: 0.25rem; gap: 0.5rem;
+      }
+      .home-b2b-strip-links a { scroll-snap-align: start; flex: 0 0 auto; }
+    }
+    .home-b2b-strip-links a {
+      display: inline-flex; align-items: center; justify-content: center; min-height: 44px;
+      padding: 0.5rem 0.9rem; border-radius: 999px; font-size: 0.8125rem; font-weight: 600;
+      text-decoration: none; color: #0f172a; background: rgba(255,255,255,0.9);
+      border: 1px solid rgba(14,165,164,0.22); box-shadow: 0 2px 8px rgba(15,23,42,0.04);
+      transition: border-color 0.15s, background 0.15s, transform 0.15s;
+    }
+    .dark .home-b2b-strip-links a {
+      color: #e2e8f0; background: rgba(30,41,59,0.65); border-color: rgba(94,234,212,0.2);
+    }
+    @media (hover: hover) {
+      .home-b2b-strip-links a:hover { border-color: rgba(14,165,164,0.45); background: rgba(14,165,164,0.06); }
+    }
+    .why-mini-list li { position: relative; padding-left: 1.25rem; }
+    .why-mini-list li::before {
+      content: ""; position: absolute; left: 0; top: 0.5rem; width: 6px; height: 6px; border-radius: 50%; background: #0ea5a4;
+    }
+    .reviews-block--physician {
+      border-radius: 1rem; padding: 1rem 0.75rem 1.25rem; margin-bottom: 2.5rem;
+      border: 1px solid rgba(14,165,164,0.2);
+      background: linear-gradient(180deg, rgba(14,165,164,0.05) 0%, transparent 50%);
+    }
+    @media (min-width: 640px) { .reviews-block--physician { padding: 1.25rem 1.25rem 1.5rem; } }
+    .reviews-block--member {
+      border-radius: 1rem; padding: 1rem 0.75rem 1.25rem;
+      border: 1px solid rgba(245,158,11,0.22);
+      background: linear-gradient(180deg, rgba(251,191,36,0.06) 0%, transparent 45%);
+    }
+    @media (min-width: 640px) { .reviews-block--member { padding: 1.25rem 1.25rem 1.5rem; } }
+    .reviews-block-heading {
+      font-size: 0.6875rem; font-weight: 800; letter-spacing: 0.14em; text-transform: uppercase;
+      margin-bottom: 0.75rem; padding-bottom: 0.5rem; border-bottom: 1px solid rgba(15,23,42,0.08);
+    }
+    .dark .reviews-block-heading { border-bottom-color: rgba(148,163,184,0.15); }
+    .reviews-block--physician .reviews-block-heading { color: #0d9488; }
+    .dark .reviews-block--physician .reviews-block-heading { color: #5eead4; }
+    .reviews-block--member .reviews-block-heading { color: #b45309; }
+    .dark .reviews-block--member .reviews-block-heading { color: #fbbf24; }
+    @media (max-width: 640px) {
+      .hero-trust-badges { gap: 0.5rem 0.65rem !important; row-gap: 0.55rem !important; }
+      .hero-trust-badges > span {
+        font-size: 0.7rem !important; line-height: 1.35 !important;
+        padding: 0.4rem 0.55rem; background: rgba(15,23,42,0.04); border-radius: 8px;
+      }
+      .dark .hero-trust-badges > span { background: rgba(255,255,255,0.06); }
+      .hero-primary-ctas .hero-cta-pill { width: 100%; justify-content: center; }
+      #ozellikler .grid > article { padding: 1.25rem 1.15rem !important; border-radius: 1rem !important; }
+      #ozellikler { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+    }
     .hero-v2-visual {
       width: 100%;
       max-width: 22rem;
@@ -4009,14 +4084,12 @@
           <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-4 block" data-i18n="hero_sub">Analyze blood test results with AI — free lab results explanation in minutes.</span>
           <h1 class="font-['Manrope',sans-serif] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 sm:mb-8 text-accent-900 dark:text-white" data-i18n="hero_title">Free AI Blood Test Analyzer</h1>
           <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 mb-8 sm:mb-12 leading-relaxed max-w-xl" data-i18n="hero_desc">Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused. By NoryaAI.</p>
-          <div class="flex flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
-            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-all" style="background-color:#0EA5A4;box-shadow:0 10px 15px -3px rgba(14,165,164,0.25);" onmouseover="this.style.backgroundColor='#0d9488';this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#0EA5A4';this.style.transform='scale(1)'" data-i18n="hero_cta">Start analysis</button>
-            <a href="/en/sample-blood-test-reports" class="border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors" data-i18n="hero_see_sample" data-sample-reports-link="1">See sample report</a>
+          <div class="hero-primary-ctas flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8 w-full max-w-xl">
+            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="hero-cta-pill text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-all" style="background-color:#0EA5A4;box-shadow:0 10px 15px -3px rgba(14,165,164,0.25);" onmouseover="this.style.backgroundColor='#0d9488';this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#0EA5A4';this.style.transform='scale(1)'" data-i18n="hero_cta">Start free</button>
+            <a href="/en/sample-blood-test-reports" class="hero-cta-pill border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors text-center" data-i18n="hero_see_sample" data-sample-reports-link="1">See sample report</a>
+            <a href="/clinical-demo?lang=en" class="hero-cta-pill border-2 border-[#0ea5a4] text-[#0ea5a4] dark:text-[#5eead4] dark:border-[#5eead4] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-[#0ea5a4]/10 transition-colors text-center" data-i18n="hero_book_demo" data-locale-link="clinical-demo">Book demo</a>
           </div>
-          <div class="mb-5 sm:mb-6">
-            <a href="/en/compare/" class="inline-flex items-center gap-2 text-sm sm:text-base text-[#0ea5a4] font-semibold hover:underline underline-offset-4 transition-colors" data-i18n="hero_compare_link" data-compare-nav-link="1">Compare with ChatGPT and other AI tools</a>
-          </div>
-          <div class="flex flex-wrap gap-3 sm:gap-5" role="group" data-i18n-aria-label="trust_badges_aria" aria-label="Trust and compliance">
+          <div class="hero-trust-badges flex flex-wrap gap-3 sm:gap-5" role="group" data-i18n-aria-label="trust_badges_aria" aria-label="Trust and compliance">
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL protected</span></span>
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR compliant</span></span>
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">Secure payment via PayTR</span></span>
@@ -4053,6 +4126,19 @@
       </div>
     </div>
   </section>
+
+  <!-- B2B / trust quick strip — links to audience & compare hubs -->
+  <nav class="home-b2b-strip" aria-label="Solutions">
+    <div class="home-b2b-strip-inner">
+      <p class="home-b2b-strip-label" data-i18n="b2b_strip_label">For teams</p>
+      <div class="home-b2b-strip-links">
+        <a href="/for-doctors?lang=en" data-i18n="b2b_strip_doctors" data-locale-link="for-doctors">For doctors</a>
+        <a href="/for-clinics?lang=en" data-i18n="b2b_strip_clinics" data-locale-link="for-clinics">For clinics</a>
+        <a href="/trust?lang=en" data-i18n="b2b_strip_trust" data-trust-nav-link="1">Trust Center</a>
+        <a href="/en/compare/" data-i18n="b2b_strip_compare" data-compare-nav-link="1">Compare Norya</a>
+      </div>
+    </div>
+  </nav>
 
   <!-- Rapor Özeti + İstatistik — v24 premium editorial strip -->
   <section class="py-12 sm:py-16 bg-[#f5fafa] dark:bg-[#191c1d]">
@@ -4150,48 +4236,63 @@
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_1_title">Instant, structured analysis</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_1_desc">Clear explanations of common biomarkers and what they may indicate — in minutes.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_1_title">Structured report</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_1_desc">Summary, key findings, reference ranges, and follow-ups — formatted for real lab output.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_2_title">Clinical-style report format</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_2_desc">Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_2_title">Doctor-ready PDF</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_2_desc">A clean clinical layout for review and patient handoff — export in one step.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_3_title">Global lab compatibility</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_3_desc">Supports many lab formats and units — designed for international users.</p>
-        </article>
-        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_4_title">Privacy & security by design</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_4_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_3_title">Multilingual output</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_3_desc">Generate reports in 9+ languages so patients and teams can read in their language.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
             <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_5_title">Trends & comparisons</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_5_desc">Track changes over time and compare past results with one dashboard.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_4_title">Trend comparison</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_4_desc">See how markers move across visits and compare past results in one view.</p>
         </article>
         <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
           <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11l3 3L22 4"/><path d="M21 12v7a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11"/></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
           </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_6_title">Actionable next steps</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_6_desc">Practical lifestyle and nutrition tips tailored to your markers.</p>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_5_title">Privacy-first design</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_5_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
+        </article>
+        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
+          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h4v4H8zM12 12h4v4h-4z"/></svg>
+          </div>
+          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_6_title">QR verification</h3>
+          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_6_desc">Optional authenticity check so recipients can trust the PDF came from Norya.</p>
         </article>
       </div>
       <p class="text-center text-xs sm:text-sm text-accent-500 dark:text-accent-400 mt-8 sm:mt-10" data-i18n="features_trust_line">Enterprise-grade security, encrypted communication and GDPR-aligned architecture.</p>
+    </div>
+  </section>
+
+  <!-- Why Norya — compact conversion block -->
+  <section id="why-norya-mini" class="py-12 sm:py-16 bg-white dark:bg-accent-900/25 border-y border-accent-100 dark:border-accent-800/50" aria-labelledby="why-norya-mini-title">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <h2 id="why-norya-mini-title" class="text-xl sm:text-2xl font-extrabold text-accent-900 dark:text-white mb-2 text-center" data-i18n="why_mini_title">Why Norya</h2>
+      <p class="text-sm text-accent-600 dark:text-accent-400 text-center mb-8 max-w-lg mx-auto" data-i18n="why_mini_sub">Purpose-built for lab reports — not open-ended chat.</p>
+      <ul class="why-mini-list space-y-3.5 sm:space-y-4 text-sm sm:text-base text-accent-700 dark:text-accent-300 max-w-xl mx-auto">
+        <li data-i18n="why_mini_1">Built for lab reports, not general chat.</li>
+        <li data-i18n="why_mini_2">Clear patient summaries.</li>
+        <li data-i18n="why_mini_3">Doctor-friendly output.</li>
+        <li data-i18n="why_mini_4">Multilingual access.</li>
+        <li data-i18n="why_mini_5">Trust-first architecture.</li>
+      </ul>
     </div>
   </section>
 
@@ -4386,9 +4487,10 @@
         <div class="relative z-10">
           <h2 class="text-2xl sm:text-3xl font-extrabold text-white mb-3" data-i18n="cta_features_heading">Ready to see your report?</h2>
           <p class="text-base text-white/80 mb-8 max-w-lg mx-auto" data-i18n="cta_features_sub">Upload your lab results and get a clear, structured report in minutes.</p>
-          <div class="flex flex-wrap justify-center gap-4">
-            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="bg-white text-[#006a69] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-accent-50 hover:scale-105 transition-all shadow-lg" data-i18n="cta_start_analysis">Start analysis</button>
-            <a href="/payment" class="border-2 border-white/60 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/10 transition-colors" data-i18n="cta_view_pricing">View pricing</a>
+          <div class="flex flex-col sm:flex-row flex-wrap justify-center gap-3 sm:gap-4 max-w-xl mx-auto">
+            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="w-full sm:w-auto bg-white text-[#006a69] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-accent-50 hover:scale-[1.02] transition-all shadow-lg" data-i18n="hero_cta">Start free</button>
+            <a href="/en/sample-blood-test-reports" class="w-full sm:w-auto inline-flex items-center justify-center border-2 border-white/70 text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/10 transition-colors" data-i18n="hero_see_sample" data-sample-reports-link="1">See sample report</a>
+            <a href="/clinical-demo?lang=en" class="w-full sm:w-auto inline-flex items-center justify-center border-2 border-white text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg bg-white/10 hover:bg-white/20 transition-colors" data-i18n="hero_book_demo" data-locale-link="clinical-demo">Book demo</a>
           </div>
         </div>
       </div>
@@ -4537,9 +4639,10 @@
       </div>
 
       <!-- Uzman (Doktor) Yorumları -->
-      <div id="doctor-insights" class="mb-16 sm:mb-20" aria-labelledby="doctor-insights-title">
+      <div id="doctor-insights" class="reviews-block reviews-block--physician mb-10 sm:mb-14" aria-labelledby="doctor-insights-title">
+        <p class="reviews-block-heading" data-i18n="reviews_physician_heading">Physician perspectives</p>
         <div class="text-center mb-8">
-          <span class="inline-flex px-3 py-1.5 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-xs font-bold uppercase tracking-wider mb-3" data-i18n="doctor_section_badge">Premium Health</span>
+          <span class="inline-flex px-3 py-1.5 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-xs font-bold uppercase tracking-wider mb-3" data-i18n="doctor_section_badge">Physician</span>
           <h3 id="doctor-insights-title" class="text-xl sm:text-2xl font-extrabold text-accent-900 dark:text-white mb-2" data-i18n="doctor_insights_title">Expert Reviews</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="doctor_insights_subtitle">How physicians use Norya to make lab results clearer for patients.</p>
         </div>
@@ -4576,9 +4679,10 @@
       </div>
 
       <!-- Müşteri Yorumları -->
-      <div id="customer-reviews" aria-labelledby="customer-reviews-title">
+      <div id="customer-reviews" class="reviews-block reviews-block--member" aria-labelledby="customer-reviews-title">
+        <p class="reviews-block-heading" data-i18n="reviews_member_heading">Member experiences</p>
         <div class="text-center mb-8">
-          <span class="inline-flex px-3 py-1.5 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-xs font-bold uppercase tracking-wider mb-3" data-i18n="customer_section_badge">Trusted Reviews</span>
+          <span class="inline-flex px-3 py-1.5 rounded-full bg-amber-100/90 dark:bg-amber-900/35 text-amber-900 dark:text-amber-100 text-xs font-bold uppercase tracking-wider mb-3 border border-amber-200/80 dark:border-amber-800/60" data-i18n="customer_section_badge">Members</span>
           <h3 id="customer-reviews-title" class="text-xl sm:text-2xl font-extrabold text-accent-900 dark:text-white mb-2" data-i18n="customer_reviews_title">Customer Reviews</h3>
           <p class="text-sm text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="customer_reviews_subtitle">Clear, premium health reporting that users can understand and return to.</p>
         </div>
@@ -4639,6 +4743,14 @@
       <p class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#0ea5a4;" data-i18n="report_preview_badge">Sample report</p>
       <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="health_dashboard_title">Premium Health Report Preview</h2>
       <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="sample_report_desc">Your lab results are presented in clinical report format with score, risk indicator and trend.</p>
+      <div class="mt-6 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-1 text-sm">
+        <span class="text-accent-500 dark:text-accent-400 font-medium" data-i18n="sample_report_links_intro">Explore:</span>
+        <a href="/for-doctors?lang=en" class="font-semibold text-[#0ea5a4] hover:underline underline-offset-4" data-i18n="sample_link_doctors" data-locale-link="for-doctors">For doctors</a>
+        <span class="hidden sm:inline text-accent-300 dark:text-accent-600" aria-hidden="true">·</span>
+        <a href="/for-clinics?lang=en" class="font-semibold text-[#0ea5a4] hover:underline underline-offset-4" data-i18n="sample_link_clinics" data-locale-link="for-clinics">For clinics</a>
+        <span class="hidden sm:inline text-accent-300 dark:text-accent-600" aria-hidden="true">·</span>
+        <a href="/en/compare/" class="font-semibold text-[#0ea5a4] hover:underline underline-offset-4" data-i18n="sample_link_compare" data-compare-nav-link="1">Compare Norya</a>
+      </div>
     </div>
 
     <div class="report-carousel-wrap">
@@ -9226,7 +9338,12 @@
         hero_sub: "Kan tahlilinizi yükleyin. Yapay zekâ dakikalar içinde anlaşılır rapor üretsin.",
         hero_title: "Kan tahlilinizi yükleyin — anlaşılır raporu dakikalar içinde alın",
         hero_desc: "Sonuçlarınızı yükleyin; yapay zekâ analiz eder. Sağlık skoru, işaretli değerler ve doktora götürebileceğiniz PDF rapor — hızlı, güvenli, şeffaf.",
-        hero_cta: "Analizi Başlat", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek Raporu Gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu", hero_global_reach: "Dünyanın her yerindeyiz — 190+ ülkeden erişilebilir",
+        hero_cta: "Ücretsiz başla", hero_book_demo: "Demo talep et", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek raporu gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu", hero_global_reach: "Dünyanın her yerindeyiz — 190+ ülkeden erişilebilir",
+        b2b_strip_label: "Profesyoneller", b2b_strip_doctors: "Doktorlar için", b2b_strip_clinics: "Klinikler için", b2b_strip_trust: "Güven Merkezi", b2b_strip_compare: "Norya karşılaştırması",
+        why_mini_title: "Neden Norya?", why_mini_sub: "Genel sohbet için değil — gerçek tahlil akışları için tasarlandı.",
+        why_mini_1: "Genel sohbet için değil; laboratuvar raporları için üretildi.", why_mini_2: "Hastalar için net özetler.", why_mini_3: "Hekimlere uygun çıktı.", why_mini_4: "Çok dilli erişim.", why_mini_5: "Güven öncelikli mimari.",
+        reviews_physician_heading: "Hekim perspektifi", reviews_member_heading: "Üye deneyimleri",
+        sample_report_links_intro: "Keşfet:", sample_link_doctors: "Doktorlar için", sample_link_clinics: "Klinikler için", sample_link_compare: "Norya karşılaştırması",
         hero_sample_label: "Alacağınız rapor böyle görünür", hero_sample_summary: "Değerleriniz orta derecede: birçok parametre referans aralığında, bazıları sınırda. Raporda bol sayıda değer, her biri için açıklama, risk seviyesi ve kişiselleştirilmiş öneriler yer alır. Özet, değerler ve doktora götürecek PDF tek tıkla.", hero_sample_normal: "Normal", hero_sample_border: "Sınır", hero_sample_risk: "Dikkat", hero_sample_cta: "Özet + değerler + öneriler + PDF indirme — hepsi tek tıkla.", hero_sample_btn: "Böyle Rapor Al — Ücretsiz Başla",
         trust_since: "2017'den beri", trust_satisfaction: "%100 müşteri memnuniyeti", trust_users: "100.000+ kullanıcıya bu zamana kadar hizmet verdik", trust_badges_heading: "Güvenli ve uyumlu hizmet",
         trust_badge_ssl: "256-bit SSL", trust_badge_kvkk_gdpr: "KVKK & GDPR", trust_badge_paytr: "PayTR güvenli ödeme", trust_badge_qr: "QR ile rapor doğrulama",
@@ -9236,12 +9353,12 @@
         features_sub: "Laboratuvar sonuçlarınızı yükleyin; trendler, risk işaretleri ve uygulanabilir adımlarla net, yapılandırılmış bir rapor alın.",
         features_trust_line: "Kurumsal düzey güvenlik, şifreli iletişim ve GDPR uyumlu mimari.",
         enterprise_infra_label: "Güvenilir Altyapı", enterprise_infra_title: "Kurumsal Altyapı ve Güvenlik", enterprise_infra_subtitle: "Küresel güvenilen bulut ve güvenlik sağlayıcıları ile desteklenmektedir.", enterprise_infra_tagline: "Cloudflare CDN ve Google Cloud altyapısı ile güvenli küresel teslimat.", enterprise_infra_legal: "Logolar ilgili marka sahiplerinin mülkiyetindedir.",
-        feature_1_title: "Anında, yapılandırılmış analiz", feature_1_desc: "Yaygın biyobelirteçlerin net açıklamaları ve ne anlama gelebilecekleri — dakikalar içinde.",
-        feature_2_title: "Klinik tarzı rapor formatı", feature_2_desc: "Doktor dostu düzen: referans aralıkları, işaretler, özetler ve takip önerileri.",
-        feature_3_title: "Küresel laboratuvar uyumluluğu", feature_3_desc: "Birçok laboratuvar formatı ve birimini destekler — uluslararası kullanıcılar için tasarlandı.",
-        feature_4_title: "Gizlilik ve güvenlik tasarımda", feature_4_desc: "İletimde şifreli, sıkı erişim kontrolleri ve veri minimizasyonu. GDPR’ye hazır yaklaşım.",
-        feature_5_title: "Trendler ve karşılaştırmalar", feature_5_desc: "Zaman içindeki değişimleri takip edin ve geçmiş sonuçları tek bir panelde karşılaştırın.",
-        feature_6_title: "Uygulanabilir sonraki adımlar", feature_6_desc: "Belirteçlerinize özel pratik yaşam tarzı ve beslenme ipuçları.",
+        feature_1_title: "Yapılandırılmış rapor", feature_1_desc: "Özet, öne çıkan bulgular, referans aralıkları ve takip — gerçek lab çıktısı için biçimlendirildi.",
+        feature_2_title: "Hekime hazır PDF", feature_2_desc: "İnceleme ve hastaya teslim için sade klinik düzen — tek adımda dışa aktarın.",
+        feature_3_title: "Çok dilli çıktı", feature_3_desc: "Hastalar ve ekipler kendi dillerinde okusun diye 9+ dilde rapor üretin.",
+        feature_4_title: "Trend karşılaştırması", feature_4_desc: "Ziyaretler arası belirteçleri görün ve geçmiş sonuçları tek görünümde kıyaslayın.",
+        feature_5_title: "Gizlilik öncelikli tasarım", feature_5_desc: "İletimde şifreli, sıkı erişim kontrolleri ve veri minimizasyonu. GDPR’ye hazır yaklaşım.",
+        feature_6_title: "QR doğrulama", feature_6_desc: "İsteğe bağlı doğrulama — PDF’in Norya’dan geldiğine güvenilsin.",
         how_section_title: "Nasıl çalışır", how_section_desc: "Yapılandırılmış raporunuza üç basit adım.",
         how_step_1_title: "Laboratuvar sonuçlarınızı yükleyin", how_step_1_desc: "PDF veya görsel — yaygın laboratuvar formatlarını kabul ediyoruz.",
         how_step_2_title: "Yapılandırılmış rapor oluşturuyoruz", how_step_2_desc: "Net aralıklar, işaretler, özetler ve öneriler.",
@@ -9260,8 +9377,8 @@
         how_2: "Yapılandırılmış analiz", how_2d: "Referans aralıkları ve risk profiliyle klinik tarzı değerlendirme.",
         how_3: "Raporunuzu alın", how_3d: "Sağlık Skoru, grafikler ve doktorla paylaşılabilir premium PDF.",
         reviews_section_title: "Yorumlar", reviews_section_subtitle: "Uzman değerlendirmeleri ve üye deneyimleri.",
-        doctor_section_badge: "Premium Sağlık", doctor_insights_title: "Uzman Yorumları", doctor_insights_subtitle: "Laboratuvar sonuçlarını hastalarıyla anlaşılır paylaşan hekimlerin deneyimleri.",
-        customer_section_badge: "Güvenilir Yorumlar",
+        doctor_section_badge: "Hekim", doctor_insights_title: "Uzman değerlendirmeleri", doctor_insights_subtitle: "Laboratuvar sonuçlarını hastalarıyla anlaşılır paylaşan hekimlerin deneyimleri.",
+        customer_section_badge: "Üyeler",
         doctor_testimonial_badge: "Hekim görüşü",
         customer_review_type_label: "Üye yorumu",
         doctor_card_label: "Klinik Yorum",
@@ -9542,7 +9659,7 @@
         footer_col_norya: "Norya", footer_col_legal: "Yasal", footer_col_support: "Destek", footer_col_payment: "Güvenli Ödeme",
         footer_norya_desc: "Norya, kan tahlili sonuçlarınızı yapılandırılmış analiz ve klinik tarzı raporlarla sunan bir biyobelirteç platformudur.",
         trust_block_label: "Güven ve tasarım", trust_block_title: "Net ve güvenilir kan tahlili yorumu", trust_block_1: "Çok dilli erişim için tasarlandı", trust_block_2: "Yapılandırılmış rapor ve doktor dostu çıktı", trust_block_3: "Güvenli, gizlilik odaklı, şifreli iletişim", trust_block_qr: "QR ile rapor doğrulama ve orijinallik",
-        global_platform_title: "Çok dilli sağlık analiz platformu", global_platform_desc: "Laboratuvar sonuçlarınızı yapılandırılmış rapor ve net özetle sunan biyobelirteç platformu.", global_platform_langs: "12 dil desteği",
+        global_platform_title: "Çok dilli sağlık analiz platformu", global_platform_desc: "Laboratuvar sonuçlarınızı yapılandırılmış rapor ve net özetle sunan biyobelirteç platformu.", global_platform_langs: "9+ rapor dili",
         trust_card_report_title: "Doktor Dostu Rapor", trust_card_report_desc: "Klinik formatta yapılandırılmış açıklamalar ve PDF çıktı.", trust_secure_infra: "Şifreli iletişim ve güvenli altyapı.", trust_kvkk_gdpr_desc: "Gizlilik odaklı tasarım; veri koruma prensipleri.", trust_clinical_ref: "Klinik referans aralıklarına göre değerlendirilmiş sonuçlar.",
         footer_company_info_title: "Şirket Bilgileri", footer_company_title_label: "Ticari Unvan:", footer_company_tax_label: "Vergi Dairesi / Vergi No:", footer_company_address_label: "Adres:", footer_company_phone_label: "Telefon:", footer_company_email_label: "E-posta:",
         footer_support_center: "Destek Merkezi", footer_faq: "Sık Sorulan Sorular",
@@ -9601,7 +9718,7 @@
         pricing_badge_trial: "Deneme", price_btn_free: "Ücretsiz Başla", price_badge_fast: "Hızlı", price_btn_single_label: "Tek Analizi Satın Al", price_btn_monthly_label: "Aylık Planı Başlat", price_btn_monthly_cta: "Aylık Planı Başlat — Hemen satın al", pricing_yearly_value_mid: "değerinde analiz — Sadece", price_btn_yearly_label: "Yıllık Tasarrufu Al",
         trust_title: "Güvenli ve uyumlu hizmet",
         trust_subtitle: "Veriler yalnızca rapor üretimi amacıyla işlenir. Norya tıbbi tanı koymaz; bilgilendirme amaçlı AI destekli yorum sunar.",
-        trust_cards_langs_title: "9+ dil desteği", trust_cards_langs_desc: "Tahlilinizi Türkçe, İngilizce ve diğer desteklenen dillerde okuyabilirsiniz.",
+        trust_cards_langs_title: "9+ rapor dili", trust_cards_langs_desc: "Tahlilinizi Türkçe, İngilizce ve diğer desteklenen dillerde okuyabilirsiniz.",
         trust_cards_input_title: "Esnek girdi türleri", trust_cards_input_desc: "Metin, PDF veya fotoğraf yükleyerek analiz alın.",
         trust_cards_speed_title: "1 dakikadan kısa sonuç", trust_cards_speed_desc: "Sunucu uygun olduğunda çoğu rapor saniyeler içinde hazır olur.",
         trust_cards_ssl_title: "SSL/TLS güvenli bağlantı", trust_cards_ssl_desc: "Tarayıcı ile sunucu arasındaki iletişim şifrelenir.",
@@ -9682,7 +9799,12 @@
         hero_sub: "Analyze blood test results with AI — free lab results explanation in minutes.",
         hero_title: "Free AI Blood Test Analyzer",
         hero_desc: "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused. By NoryaAI.",
-        hero_cta: "Start analysis", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant", hero_global_reach: "We're everywhere — Accessible from 190+ countries",
+        hero_cta: "Start free", hero_book_demo: "Book demo", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant", hero_global_reach: "We're everywhere — Accessible from 190+ countries",
+        b2b_strip_label: "For teams", b2b_strip_doctors: "For doctors", b2b_strip_clinics: "For clinics", b2b_strip_trust: "Trust Center", b2b_strip_compare: "Compare Norya",
+        why_mini_title: "Why Norya", why_mini_sub: "Purpose-built for lab workflows — not open-ended chat.",
+        why_mini_1: "Built for lab reports, not general chat.", why_mini_2: "Clear patient summaries.", why_mini_3: "Doctor-friendly output.", why_mini_4: "Multilingual access.", why_mini_5: "Trust-first architecture.",
+        reviews_physician_heading: "Physician perspectives", reviews_member_heading: "Member experiences",
+        sample_report_links_intro: "Explore:", sample_link_doctors: "For doctors", sample_link_clinics: "For clinics", sample_link_compare: "Compare Norya",
         hero_sample_label: "Your report will look like this", hero_sample_summary: "Your values at moderate level: many parameters in range, some borderline. The report includes plenty of values, each with explanation, risk level and personalised recommendations. Summary, values and PDF to take to your doctor — all in one click.", hero_sample_normal: "Normal", hero_sample_border: "Borderline", hero_sample_risk: "Attention", hero_sample_cta: "Summary + values + recommendations + PDF download — all in one click.", hero_sample_btn: "Get this report — Start free",
         trust_since: "Since 2017", trust_satisfaction: "100% customer satisfaction", trust_users: "100,000+ users served to date", trust_badges_heading: "Secure and compliant service",
         trust_badge_ssl: "256-bit SSL protected", trust_badge_kvkk_gdpr: "KVKK & GDPR compliant", trust_badge_paytr: "Secure payment via PayTR", trust_badge_qr: "QR report verification",
@@ -9693,12 +9815,12 @@
         features_trust_line: "Enterprise-grade security, encrypted communication and GDPR-aligned architecture.",
         enterprise_infra_label: "Trusted Infrastructure", enterprise_infra_title: "Enterprise Infrastructure & Security", enterprise_infra_subtitle: "Powered by globally trusted cloud and security providers.", enterprise_infra_tagline: "Secure global delivery via Cloudflare CDN and Google Cloud infrastructure.", enterprise_infra_legal: "Logos are property of their respective owners.",
         infra_title: "Infrastructure & Security", infra_google_title: "Google Cloud", infra_google_desc: "Secure infrastructure and data processing",
-        feature_1_title: "Instant, structured analysis", feature_1_desc: "Clear explanations of common biomarkers and what they may indicate — in minutes.",
-        feature_2_title: "Clinical-style report format", feature_2_desc: "Doctor-friendly layout: ranges, flags, summaries, and follow-up suggestions.",
-        feature_3_title: "Global lab compatibility", feature_3_desc: "Supports many lab formats and units — designed for international users.",
-        feature_4_title: "Privacy & security by design", feature_4_desc: "Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.",
-        feature_5_title: "Trends & comparisons", feature_5_desc: "Track changes over time and compare past results with one dashboard.",
-        feature_6_title: "Actionable next steps", feature_6_desc: "Practical lifestyle and nutrition tips tailored to your markers.",
+        feature_1_title: "Structured report", feature_1_desc: "Summary, key findings, reference ranges, and follow-ups — formatted for real lab output.",
+        feature_2_title: "Doctor-ready PDF", feature_2_desc: "A clean clinical layout for review and patient handoff — export in one step.",
+        feature_3_title: "Multilingual output", feature_3_desc: "Generate reports in 9+ languages so patients and teams can read in their language.",
+        feature_4_title: "Trend comparison", feature_4_desc: "See how markers move across visits and compare past results in one view.",
+        feature_5_title: "Privacy-first design", feature_5_desc: "Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.",
+        feature_6_title: "QR verification", feature_6_desc: "Optional authenticity check so recipients can trust the PDF came from Norya.",
         how_section_title: "How it works", how_section_desc: "Three simple steps to your structured report.",
         how_step_1_title: "Upload your lab results", how_step_1_desc: "PDF or image — we accept common lab formats.",
         how_step_2_title: "We generate a structured report", how_step_2_desc: "Clear ranges, flags, summaries and recommendations.",
@@ -9716,8 +9838,8 @@
         how_2: "Structured analysis", how_2d: "Clinical-style evaluation with reference ranges and risk profile.",
         how_3: "Get your report", how_3d: "Health Score, charts and doctor-ready premium PDF.",
         reviews_section_title: "Reviews", reviews_section_subtitle: "Expert assessments and member experiences.",
-        doctor_section_badge: "Premium Health", doctor_insights_title: "Expert Reviews", doctor_insights_subtitle: "How physicians use Norya to make lab results clearer for patients.",
-        customer_section_badge: "Trusted Reviews",
+        doctor_section_badge: "Physician", doctor_insights_title: "Expert assessments", doctor_insights_subtitle: "How physicians use Norya to make lab results clearer for patients.",
+        customer_section_badge: "Members",
         doctor_testimonial_badge: "Physician",
         customer_review_type_label: "Member review",
         doctor_card_label: "Clinical Review",
@@ -9997,7 +10119,7 @@
         footer_col_norya: "Norya", footer_col_legal: "Legal", footer_col_support: "Support", footer_col_payment: "Secure Payment",
         footer_norya_desc: "Norya is a biomarker platform that delivers your blood test results through structured analysis and clinical-style reporting.",
         trust_block_label: "Trust & design", trust_block_title: "Clear, reliable blood test interpretation", trust_block_1: "Designed for multilingual health access", trust_block_2: "Structured report and doctor-friendly output", trust_block_3: "Secure, privacy-first, encrypted transmission", trust_block_qr: "QR report verification & authenticity",
-        global_platform_title: "Multilingual health analysis platform", global_platform_desc: "Biomarker platform that turns your lab results into structured reports and clear summaries.", global_platform_langs: "12 languages supported",
+        global_platform_title: "Multilingual health analysis platform", global_platform_desc: "Biomarker platform that turns your lab results into structured reports and clear summaries.", global_platform_langs: "9+ report languages",
         trust_card_report_title: "Doctor-friendly report", trust_card_report_desc: "Structured explanations in clinical format and PDF output.", trust_secure_infra: "Encrypted transmission and secure infrastructure.", trust_kvkk_gdpr_desc: "Privacy-first design; data protection principles.", trust_clinical_ref: "Results evaluated against clinical reference ranges.",
         footer_company_info_title: "Company Information", footer_company_title_label: "Legal name:", footer_company_tax_label: "Tax office / Tax no.:", footer_company_address_label: "Address:", footer_company_phone_label: "Phone:", footer_company_email_label: "Email:",
         footer_support_center: "Support Centre", footer_faq: "FAQ",
@@ -10056,7 +10178,7 @@
         pricing_badge_trial: "Trial", price_btn_free: "Get started free", price_badge_fast: "Quick", price_btn_single_label: "Buy single analysis", price_btn_monthly_label: "Start monthly plan", price_btn_monthly_cta: "Start monthly plan — Buy now", pricing_yearly_value_mid: "worth — Only", price_btn_yearly_label: "Get yearly savings",
         trust_title: "Secure and compliant service",
         trust_subtitle: "Your data is processed only to generate your report. Norya does not make medical diagnoses; it provides AI-assisted explanations for educational purposes.",
-        trust_cards_langs_title: "9+ language support", trust_cards_langs_desc: "Read your report in Turkish, English and other supported languages.",
+        trust_cards_langs_title: "9+ report languages", trust_cards_langs_desc: "Read your report in Turkish, English and other supported languages.",
         trust_cards_input_title: "Flexible input types", trust_cards_input_desc: "Paste text, upload a PDF or a photo to start an analysis.",
         trust_cards_speed_title: "Results in under a minute", trust_cards_speed_desc: "When servers are available, most reports are ready within seconds.",
         trust_cards_ssl_title: "SSL/TLS secure connection", trust_cards_ssl_desc: "Traffic between your browser and our servers is encrypted.",
@@ -10130,7 +10252,12 @@
         hero_sub: "Referti di laboratorio spiegati in modo chiaro. Non è una diagnosi — solo preparazione alla visita.",
         hero_title: "Comprendi le tue analisi del sangue in pochi minuti",
         hero_desc: "Carica il referto e ricevi un riepilogo strutturato con intervalli di riferimento, spiegazioni semplici e un PDF pronto per il medico.",
-        hero_cta: "Avvia analisi", hero_see_sample: "Vedi report di esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy dalla progettazione", hero_global_reach: "Siamo ovunque — Accessibile da oltre 190 paesi",
+        hero_cta: "Inizia gratis", hero_book_demo: "Prenota demo", hero_see_sample: "Vedi report di esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy dalla progettazione", hero_global_reach: "Siamo ovunque — Accessibile da oltre 190 paesi",
+        b2b_strip_label: "Per i team", b2b_strip_doctors: "Per i medici", b2b_strip_clinics: "Per le cliniche", b2b_strip_trust: "Centro fiducia", b2b_strip_compare: "Confronta Norya",
+        why_mini_title: "Perché Norya", why_mini_sub: "Pensato per i referti di laboratorio — non per chat generiche.",
+        why_mini_1: "Pensato per i referti, non per chat generiche.", why_mini_2: "Riassunti chiari per i pazienti.", why_mini_3: "Output adatto al medico.", why_mini_4: "Accesso multilingue.", why_mini_5: "Architettura trust-first.",
+        reviews_physician_heading: "Prospettiva medica", reviews_member_heading: "Esperienze membri",
+        sample_report_links_intro: "Esplora:", sample_link_doctors: "Per i medici", sample_link_clinics: "Per le cliniche", sample_link_compare: "Confronta Norya",
         hero_sample_label: "Il tuo report sarà così", hero_sample_summary: "Valori in buona fascia: molti parametri nel range, alcuni da monitorare. Nel report trovi più valori, spiegazioni e note da discutere con il medico.", hero_sample_normal: "Normale", hero_sample_border: "Limite", hero_sample_risk: "Attenzione", hero_sample_cta: "Riepilogo + valori + note per il medico + PDF.", hero_sample_btn: "Ottieni un report così — Inizia gratis",
         trust_since: "Dal 2017", trust_satisfaction: "100% soddisfazione clienti", trust_users: "Oltre 100.000 utenti serviti finora", trust_badges_heading: "Servizio sicuro e conforme",
         trust_badge_ssl: "Protetto con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK e GDPR", trust_badge_paytr: "Pagamento sicuro PayTR", trust_badge_qr: "Verifica report con QR",
@@ -10144,12 +10271,12 @@
         features_trust_line: "Sicurezza di livello enterprise, comunicazione crittografata e architettura conforme al GDPR.",
         enterprise_infra_label: "Infrastruttura affidabile", enterprise_infra_title: "Infrastruttura e sicurezza enterprise", enterprise_infra_subtitle: "Supportato da provider cloud e di sicurezza di fiducia a livello globale.", enterprise_infra_tagline: "Consegna globale sicura tramite CDN Cloudflare e infrastruttura Google Cloud.", enterprise_infra_legal: "I loghi sono proprietà dei rispettivi titolari.",
         infra_title: "Infrastruttura e sicurezza", infra_google_title: "Google Cloud", infra_google_desc: "Infrastruttura sicura ed elaborazione dati",
-        feature_1_title: "Analisi strutturata istantanea", feature_1_desc: "Spiegazioni chiare dei biomarcatori comuni e di cosa possono indicare — in pochi minuti.",
-        feature_2_title: "Formato report in stile clinico", feature_2_desc: "Layout adatto al medico: intervalli, flag, riepiloghi e suggerimenti di follow-up.",
-        feature_3_title: "Compatibilità lab globali", feature_3_desc: "Supporta molti formati e unità di laboratorio — pensato per utenti internazionali.",
-        feature_4_title: "Privacy e sicurezza by design", feature_4_desc: "Crittografia in transito, controlli di accesso rigorosi e minimizzazione dei dati. Approccio GDPR-ready.",
-        feature_5_title: "Trend e confronti", feature_5_desc: "Segui i cambiamenti nel tempo e confronta i risultati passati in una sola dashboard.",
-        feature_6_title: "Prossimi passi concreti", feature_6_desc: "Consigli pratici su stile di vita e nutrizione adattati ai tuoi marker.",
+        feature_1_title: "Report strutturato", feature_1_desc: "Riepilogo, punti chiave, intervalli di riferimento e follow-up — formattato per output di laboratorio reale.",
+        feature_2_title: "PDF pronto per il medico", feature_2_desc: "Layout clinico pulito per revisione e consegna al paziente — esportazione in un passaggio.",
+        feature_3_title: "Output multilingue", feature_3_desc: "Genera report in 9+ lingue così pazienti e team leggono nella loro lingua.",
+        feature_4_title: "Confronto trend", feature_4_desc: "Vedi come si muovono i marker tra le visite e confronta risultati passati in un'unica vista.",
+        feature_5_title: "Privacy-first", feature_5_desc: "Crittografia in transito, controlli di accesso rigorosi e minimizzazione dei dati. Approccio GDPR-ready.",
+        feature_6_title: "Verifica QR", feature_6_desc: "Controllo di autenticità opzionale così si può fidare che il PDF provenga da Norya.",
         how_section_title: "Come funziona", how_section_desc: "Tre semplici passi per il tuo report strutturato.",
         how_step_1_title: "Carica i risultati delle analisi", how_step_1_desc: "PDF o immagine — accettiamo i formati lab più comuni.",
         how_step_2_title: "Generiamo un report strutturato", how_step_2_desc: "Intervalli chiari, flag, riepiloghi e raccomandazioni.",
@@ -10445,7 +10572,12 @@
         hero_sub: "Resultados de laboratorio explicados en lenguaje claro. No es un diagnóstico — es preparación para tu cita médica.",
         hero_title: "Entiende tu análisis de sangre en pocos minutos",
         hero_desc: "Sube tus resultados y recibe un resumen estructurado con rangos de referencia, explicaciones sencillas y un PDF listo para tu médico.",
-        hero_cta: "Iniciar análisis", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad desde el diseño", hero_global_reach: "Estamos en todas partes — Accesible desde más de 190 países",
+        hero_cta: "Empezar gratis", hero_book_demo: "Reservar demo", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad desde el diseño", hero_global_reach: "Estamos en todas partes — Accesible desde más de 190 países",
+        b2b_strip_label: "Para equipos", b2b_strip_doctors: "Para médicos", b2b_strip_clinics: "Para clínicas", b2b_strip_trust: "Centro de confianza", b2b_strip_compare: "Comparar Norya",
+        why_mini_title: "Por qué Norya", why_mini_sub: "Diseñado para informes de laboratorio — no para chat genérico.",
+        why_mini_1: "Hecho para informes de laboratorio, no chat genérico.", why_mini_2: "Resúmenes claros para el paciente.", why_mini_3: "Salida amigable para el médico.", why_mini_4: "Acceso multilingüe.", why_mini_5: "Arquitectura trust-first.",
+        reviews_physician_heading: "Perspectiva médica", reviews_member_heading: "Experiencias de miembros",
+        sample_report_links_intro: "Explorar:", sample_link_doctors: "Para médicos", sample_link_clinics: "Para clínicas", sample_link_compare: "Comparar Norya",
         hero_sample_label: "Tu informe se verá así", hero_sample_summary: "Valores en nivel moderado: muchos parámetros en rango, algunos en el límite. El informe incluye muchos valores, explicaciones y recomendaciones.", hero_sample_normal: "Normal", hero_sample_border: "Límite", hero_sample_risk: "Atención", hero_sample_cta: "Resumen + valores + recomendaciones + PDF.", hero_sample_btn: "Obtener este informe — Empieza gratis",
         trust_since: "Desde 2017", trust_satisfaction: "100% satisfacción del cliente", trust_users: "Más de 100.000 usuarios atendidos hasta la fecha", trust_badges_heading: "Servicio seguro y conforme",
         trust_badge_ssl: "Protegido con SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK y GDPR", trust_badge_paytr: "Pago seguro con PayTR", trust_badge_qr: "Verificación de informe por QR",
@@ -10459,12 +10591,12 @@
         features_trust_line: "Seguridad de nivel enterprise, comunicación cifrada y arquitectura alineada con el GDPR.",
         enterprise_infra_label: "Infraestructura de confianza", enterprise_infra_title: "Infraestructura y seguridad empresarial", enterprise_infra_subtitle: "Impulsado por proveedores de nube y seguridad de confianza global.", enterprise_infra_tagline: "Entrega global segura mediante CDN de Cloudflare e infraestructura de Google Cloud.", enterprise_infra_legal: "Los logotipos son propiedad de sus respectivos titulares.",
         infra_title: "Infraestructura y seguridad", infra_google_title: "Google Cloud", infra_google_desc: "Infraestructura segura y procesamiento de datos",
-        feature_1_title: "Análisis estructurado al instante", feature_1_desc: "Explicaciones claras de biomarcadores habituales y qué pueden indicar — en minutos.",
-        feature_2_title: "Formato de informe estilo clínico", feature_2_desc: "Diseño amigable para el médico: rangos, señales, resúmenes y sugerencias de seguimiento.",
-        feature_3_title: "Compatibilidad con laboratorios globales", feature_3_desc: "Soporta muchos formatos y unidades de laboratorio — pensado para usuarios internacionales.",
-        feature_4_title: "Privacidad y seguridad desde el diseño", feature_4_desc: "Cifrado en tránsito, controles de acceso estrictos y minimización de datos. Enfoque listo para GDPR.",
-        feature_5_title: "Tendencias y comparaciones", feature_5_desc: "Sigue los cambios en el tiempo y compara resultados pasados en un solo panel.",
-        feature_6_title: "Próximos pasos concretos", feature_6_desc: "Consejos prácticos de estilo de vida y nutrición adaptados a tus marcadores.",
+        feature_1_title: "Informe estructurado", feature_1_desc: "Resumen, hallazgos clave, rangos de referencia y seguimiento — formateado para salida de laboratorio real.",
+        feature_2_title: "PDF listo para el médico", feature_2_desc: "Diseño clínico limpio para revisión y entrega al paciente — exportar en un paso.",
+        feature_3_title: "Salida multilingüe", feature_3_desc: "Genera informes en más de 9 idiomas para que pacientes y equipos lean en su idioma.",
+        feature_4_title: "Comparación de tendencias", feature_4_desc: "Ve cómo cambian los marcadores entre visitas y compara resultados anteriores en una vista.",
+        feature_5_title: "Privacidad primero", feature_5_desc: "Cifrado en tránsito, controles de acceso estrictos y minimización de datos. Enfoque listo para GDPR.",
+        feature_6_title: "Verificación QR", feature_6_desc: "Comprobación de autenticidad opcional para confiar en que el PDF procede de Norya.",
         how_section_title: "Cómo funciona", how_section_desc: "Tres pasos sencillos hasta tu informe estructurado.",
         how_step_1_title: "Sube tus resultados de laboratorio", how_step_1_desc: "PDF o imagen — aceptamos formatos de laboratorio habituales.",
         how_step_2_title: "Generamos un informe estructurado", how_step_2_desc: "Rangos claros, señales, resúmenes y recomendaciones.",
@@ -10760,7 +10892,12 @@
         hero_sub: "Résultats de laboratoire expliqués en langage clair. Pas un diagnostic — une préparation sereine à votre rendez-vous.",
         hero_title: "Comprenez vos analyses sanguines en quelques minutes",
         hero_desc: "Téléchargez vos résultats et recevez un résumé structuré avec plages de référence, explications simples et un PDF prêt pour votre médecin.",
-        hero_cta: "Démarrer l'analyse", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité dès la conception", hero_global_reach: "Nous sommes partout — Accessible depuis plus de 190 pays",
+        hero_cta: "Commencer gratuitement", hero_book_demo: "Réserver une démo", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité dès la conception", hero_global_reach: "Nous sommes partout — Accessible depuis plus de 190 pays",
+        b2b_strip_label: "Pour les équipes", b2b_strip_doctors: "Pour les médecins", b2b_strip_clinics: "Pour les cliniques", b2b_strip_trust: "Centre de confiance", b2b_strip_compare: "Comparer Norya",
+        why_mini_title: "Pourquoi Norya", why_mini_sub: "Conçu pour les comptes rendus de labo — pas pour le chat générique.",
+        why_mini_1: "Pensé pour les rapports de labo, pas le chat générique.", why_mini_2: "Résumés clairs pour les patients.", why_mini_3: "Rendu adapté au médecin.", why_mini_4: "Accès multilingue.", why_mini_5: "Architecture trust-first.",
+        reviews_physician_heading: "Perspective clinique", reviews_member_heading: "Retours membres",
+        sample_report_links_intro: "Explorer :", sample_link_doctors: "Pour les médecins", sample_link_clinics: "Pour les cliniques", sample_link_compare: "Comparer Norya",
         hero_sample_label: "Votre rapport ressemblera à ceci", hero_sample_summary: "Valeurs à niveau modéré: beaucoup de paramètres dans la norme, certains à la limite. Le rapport inclut de nombreuses valeurs et recommandations.", hero_sample_normal: "Normal", hero_sample_border: "Limite", hero_sample_risk: "Attention", hero_sample_cta: "Résumé + valeurs + recommandations + PDF.", hero_sample_btn: "Obtenir ce rapport — Commencer gratuitement",
         trust_since: "Depuis 2017", trust_satisfaction: "100 % satisfaction client", trust_users: "Plus de 100 000 utilisateurs servis à ce jour", trust_badges_heading: "Service sécurisé et conforme",
         trust_badge_ssl: "Protégé SSL 256-bit", trust_badge_kvkk_gdpr: "Conforme KVKK et GDPR", trust_badge_paytr: "Paiement sécurisé PayTR", trust_badge_qr: "Vérification du rapport par QR",
@@ -10774,12 +10911,12 @@
         features_trust_line: "Sécurité niveau enterprise, communication chiffrée et architecture conforme au RGPD.",
         enterprise_infra_label: "Infrastructure de confiance", enterprise_infra_title: "Infrastructure et sécurité enterprise", enterprise_infra_subtitle: "Propulsé par des fournisseurs cloud et de sécurité de confiance mondiale.", enterprise_infra_tagline: "Livraison mondiale sécurisée via CDN Cloudflare et infrastructure Google Cloud.", enterprise_infra_legal: "Les logos sont la propriété de leurs propriétaires respectifs.",
         infra_title: "Infrastructure et sécurité", infra_google_title: "Google Cloud", infra_google_desc: "Infrastructure sécurisée et traitement des données",
-        feature_1_title: "Analyse structurée instantanée", feature_1_desc: "Explications claires des biomarqueurs courants et de ce qu'ils peuvent indiquer — en quelques minutes.",
-        feature_2_title: "Format de rapport style clinique", feature_2_desc: "Présentation adaptée au médecin : plages, indicateurs, résumés et suggestions de suivi.",
-        feature_3_title: "Compatibilité laboratoires internationaux", feature_3_desc: "Prend en charge de nombreux formats et unités — conçu pour les utilisateurs internationaux.",
-        feature_4_title: "Confidentialité et sécurité dès la conception", feature_4_desc: "Chiffrement en transit, contrôles d'accès stricts et minimisation des données. Approche prête RGPD.",
-        feature_5_title: "Tendances et comparaisons", feature_5_desc: "Suivez l'évolution dans le temps et comparez les résultats passés sur un même tableau de bord.",
-        feature_6_title: "Prochaines étapes concrètes", feature_6_desc: "Conseils pratiques lifestyle et nutrition adaptés à vos marqueurs.",
+        feature_1_title: "Rapport structuré", feature_1_desc: "Résumé, points clés, plages de référence et suivi — formaté pour la sortie labo réelle.",
+        feature_2_title: "PDF prêt pour le médecin", feature_2_desc: "Mise en page clinique claire pour relecture et remise au patient — export en une étape.",
+        feature_3_title: "Sortie multilingue", feature_3_desc: "Générez des rapports en 9+ langues pour patients et équipes.",
+        feature_4_title: "Comparaison de tendances", feature_4_desc: "Voyez l'évolution des marqueurs entre les visites et comparez les résultats passés.",
+        feature_5_title: "Confidentialité par design", feature_5_desc: "Chiffrement en transit, contrôles d'accès stricts et minimisation des données. Approche prête RGPD.",
+        feature_6_title: "Vérification QR", feature_6_desc: "Contrôle d'authenticité optionnel pour s'assurer que le PDF provient de Norya.",
         how_section_title: "Comment ça marche", how_section_desc: "Trois étapes simples pour votre rapport structuré.",
         how_step_1_title: "Téléchargez vos résultats d'analyses", how_step_1_desc: "PDF ou image — nous acceptons les formats labo courants.",
         how_step_2_title: "Nous générons un rapport structuré", how_step_2_desc: "Plages claires, indicateurs, résumés et recommandations.",
@@ -11075,7 +11212,12 @@
         hero_sub: "Laborergebnisse verständlich erklärt — keine Diagnose, nur Orientierung.",
         hero_title: "Blutwerte in Minuten verstehen",
         hero_desc: "Befund hochladen, klaren Bericht bekommen: Referenzbereiche, Einordnung und Empfehlungen. Ideal vor dem Arztbesuch. Erste Analyse kostenlos.",
-        hero_cta: "Analyse starten", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "DSGVO-konform · SSL-verschlüsselt", hero_global_reach: "Wir sind überall — Zugang aus über 190 Ländern",
+        hero_cta: "Kostenlos starten", hero_book_demo: "Demo buchen", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "DSGVO-konform · SSL-verschlüsselt", hero_global_reach: "Wir sind überall — Zugang aus über 190 Ländern",
+        b2b_strip_label: "Für Teams", b2b_strip_doctors: "Für Ärztinnen und Ärzte", b2b_strip_clinics: "Für Kliniken", b2b_strip_trust: "Trust Center", b2b_strip_compare: "Norya vergleichen",
+        why_mini_title: "Warum Norya", why_mini_sub: "Für echte Laborberichte — nicht für allgemeinen Chat.",
+        why_mini_1: "Für Laborberichte gebaut, nicht für allgemeinen Chat.", why_mini_2: "Klare Patientenzusammenfassungen.", why_mini_3: "Arztfreundliche Ausgabe.", why_mini_4: "Mehrsprachiger Zugang.", why_mini_5: "Trust-first-Architektur.",
+        reviews_physician_heading: "Ärztliche Perspektive", reviews_member_heading: "Mitgliederstimmen",
+        sample_report_links_intro: "Entdecken:", sample_link_doctors: "Für Ärztinnen und Ärzte", sample_link_clinics: "Für Kliniken", sample_link_compare: "Norya vergleichen",
         hero_sample_label: "So sieht Ihr Bericht aus", hero_sample_summary: "Werte im mittleren Bereich: viele Parameter im Referenzbereich, einige grenzwertig. Der Bericht enthält viele Werte, Erklärungen und Empfehlungen.", hero_sample_normal: "Normal", hero_sample_border: "Grenzwert", hero_sample_risk: "Achtung", hero_sample_cta: "Zusammenfassung + Werte + Empfehlungen + PDF.", hero_sample_btn: "Diesen Bericht erhalten — Kostenlos starten",
         trust_since: "Seit 2017", trust_satisfaction: "100 % Kundenzufriedenheit", trust_users: "Über 100.000 Nutzer bisher bedient", trust_badges_heading: "Sicherer und konformer Service",
         trust_badge_ssl: "SSL-verschlüsselt", trust_badge_kvkk_gdpr: "DSGVO-konform", trust_badge_paytr: "Sichere Zahlung (PayTR)", trust_badge_qr: "QR-Berichtsprüfung",
@@ -11086,12 +11228,12 @@
         features_trust_line: "Sicherheit auf Unternehmensniveau, verschlüsselte Kommunikation und DSGVO-konforme Architektur.",
         enterprise_infra_label: "Vertrauenswürdige Infrastruktur", enterprise_infra_title: "Unternehmens-Infrastruktur & Sicherheit", enterprise_infra_subtitle: "Unterstützt von global vertrauenswürdigen Cloud- und Sicherheitsanbietern.", enterprise_infra_tagline: "Sichere globale Bereitstellung über Cloudflare CDN und Google-Cloud-Infrastruktur.", enterprise_infra_legal: "Logos sind Eigentum der jeweiligen Rechteinhaber.",
         infra_title: "Infrastruktur & Sicherheit", infra_google_title: "Google Cloud", infra_google_desc: "Sichere Infrastruktur und Datenverarbeitung",
-        feature_1_title: "Sofortige, strukturierte Auswertung", feature_1_desc: "Klare Erklärungen gängiger Biomarker und was sie bedeuten können — in Minuten.",
-        feature_2_title: "Klinisches Berichtsformat", feature_2_desc: "Arztfreundliches Layout: Referenzbereiche, Markierungen, Zusammenfassungen und Follow-up-Vorschläge.",
-        feature_3_title: "Globale Labor-Kompatibilität", feature_3_desc: "Unterstützt viele Laborformate und -einheiten — für internationale Nutzer konzipiert.",
-        feature_4_title: "Datenschutz und Sicherheit von Anfang an", feature_4_desc: "Verschlüsselt in der Übertragung, strenge Zugriffskontrollen und Datenminimierung. DSGVO-konform.",
-        feature_5_title: "Trends und Vergleiche", feature_5_desc: "Verfolgen Sie Veränderungen über die Zeit und vergleichen Sie frühere Ergebnisse in einer Übersicht.",
-        feature_6_title: "Umsetzbare nächste Schritte", feature_6_desc: "Praktische Tipps zu Lebensstil und Ernährung, abgestimmt auf Ihre Marker.",
+        feature_1_title: "Strukturierter Bericht", feature_1_desc: "Zusammenfassung, Kernbefunde, Referenzbereiche und Follow-up — für echte Laborausgabe formatiert.",
+        feature_2_title: "Arztbereites PDF", feature_2_desc: "Klares klinisches Layout für Durchsicht und Übergabe an Patientinnen — Export in einem Schritt.",
+        feature_3_title: "Mehrsprachige Ausgabe", feature_3_desc: "Berichte in 9+ Sprachen, damit Patienten und Teams in ihrer Sprache lesen.",
+        feature_4_title: "Trendvergleich", feature_4_desc: "Sehen Sie Marker über Besuche hinweg und vergleichen Sie frühere Werte in einer Ansicht.",
+        feature_5_title: "Privacy-first Design", feature_5_desc: "Verschlüsselt in der Übertragung, strenge Zugriffskontrollen und Datenminimierung. DSGVO-konform.",
+        feature_6_title: "QR-Verifizierung", feature_6_desc: "Optionale Echtheitsprüfung, damit klar ist, dass das PDF von Norya stammt.",
         how_section_title: "So funktioniert's", how_section_desc: "Blutwerte online analysieren — in drei Schritten zu Ihrem Bericht.",
         how_step_1_title: "Laborergebnisse hochladen", how_step_1_desc: "PDF oder Bild — wir akzeptieren gängige Laborformate.",
         how_step_2_title: "Wir erstellen einen strukturierten Bericht", how_step_2_desc: "Klare Bereiche, Markierungen, Zusammenfassungen und Empfehlungen.",

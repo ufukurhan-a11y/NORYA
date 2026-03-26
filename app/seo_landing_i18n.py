@@ -472,8 +472,8 @@ OG_LOCALE_MAP = {
 
 def _tr_kan_tahlili() -> dict:
     return {
-        "meta_title": "Kan Tahlili Sonucu Anlama ve Yorumlama | Norya",
-        "meta_description": "Kan tahlili sonucunuzu anlamak için laboratuvar raporunuzu yükleyin; referans aralıkları ve sade açıklamalarla özet rapor alırsınız. Teşhis değil, yalnızca bilgilendirme.",
+        "meta_title": "Kan Tahlili Sonuçları Açıklandı — PDF veya Fotoğraf Yükle | NoryaAI",
+        "meta_description": "Laboratuvar raporunuzu referans aralıkları ve işaretli değerlere dönüştürün. PDF veya fotoğraf yükleyin — yalnızca bilgilendirme, teşhis değil.",
         "hero_title": "Kan Tahlili Sonucunu Anlama ve Yorumlama",
         "hero_sub": "Laboratuvar sonuçlarınızı yükleyin; referans aralıkları ve anlaşılır açıklamalarla yapılandırılmış rapor alın. Hekim randevunuza hazırlanmak için kullanabilirsiniz.",
         "cta_primary": "Analizi Başlat",
@@ -550,8 +550,8 @@ def _tr_kan_tahlili() -> dict:
 
 def _tr_kan_degerleri() -> dict:
     return {
-        "meta_title": "Kan Değerleri Anlama Rehberi | Norya",
-        "meta_description": "Kan değerlerinizi nasıl okuyacağınızı öğrenin. Raporunuzu yükleyin; referans aralıkları ve sade açıklamalarla değerleri anlayın. Yalnızca bilgilendirme amaçlı.",
+        "meta_title": "Laboratuvar / Kan Değerleri Nasıl Okunur — Aralıklar ve Özet | NoryaAI",
+        "meta_description": "Değerlerinizi bağlamda görün: referans aralıkları, vurgular ve net ifadeler. PDF veya fotoğraf yükleyin. Yalnızca eğitim — teşhis değil.",
         "hero_title": "Kan Değerlerini Anlama",
         "hero_sub": "Laboratuvar raporunuzdaki değerlerin anlamı nedir? Raporunuzu yükleyerek referans aralıkları ve sade açıklamalarla özet alabilirsiniz.",
         "cta_primary": "Analizi Başlat",
@@ -752,8 +752,8 @@ def _tr_hemogram() -> dict:
 
 def _de_blutwerte() -> dict:
     return {
-        "meta_title": "Blutwerte verstehen — Befund einordnen mit Norya",
-        "meta_description": "Blutwerte verstehen: Befund hochladen, klaren Bericht mit Referenzbereichen und Einordnung erhalten. Keine Diagnose — nur Aufklärung. DSGVO-konform.",
+        "meta_title": "Bluttest-Ergebnisse erklärt — PDF oder Foto hochladen | NoryaAI",
+        "meta_description": "Aus Ihrem Laborbefund werden klare Erklärungen mit Referenzbereichen und Markierungen. PDF oder Foto — nur Aufklärung, keine Diagnose.",
         "hero_title": "Blutwerte verstehen — Befund einordnen",
         "hero_sub": "Laden Sie Ihren Laborbefund hoch und erhalten Sie einen strukturierten Bericht mit Referenzbereichen und verständlichen Erklärungen. Zur Orientierung vor dem Arztgespräch.",
         "cta_primary": "Analyse starten",
@@ -828,8 +828,8 @@ def _de_blutwerte() -> dict:
 
 def _de_laborwerte() -> dict:
     return {
-        "meta_title": "Laborwerte verstehen — Befund auswerten mit Norya",
-        "meta_description": "Laborwerte verstehen: Befund hochladen, klaren Bericht mit Referenzbereichen und Einordnung erhalten. Keine Diagnose — nur Aufklärung. DSGVO-konform.",
+        "meta_title": "Laborwerte lesen — Bereiche, Hinweise & Zusammenfassung | NoryaAI",
+        "meta_description": "Laborwerte im Kontext: Referenzbereiche, Hervorhebungen und klare Formulierungen vor dem Arzttermin. PDF oder Foto. Nur Bildung — keine Diagnose.",
         "hero_title": "Laborwerte verstehen — Befund einordnen",
         "hero_sub": "Laden Sie Ihren Laborbefund hoch und erhalten Sie einen klaren Bericht mit Referenzbereichen und verständlichen Erklärungen. Zur Orientierung vor dem Arztbesuch.",
         "cta_primary": "Analyse starten",

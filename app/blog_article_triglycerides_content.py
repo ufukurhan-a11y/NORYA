@@ -125,9 +125,11 @@ def _sections_en() -> list:
                 "<strong>LDL (low-density lipoprotein)</strong> cholesterol&mdash;often called &ldquo;bad&rdquo; cholesterol because elevated levels "
                 "promote plaque formation in arteries&mdash;and <strong>HDL (high-density lipoprotein)</strong> cholesterol, known as &ldquo;good&rdquo; "
                 "cholesterol because it helps remove cholesterol from artery walls. Triglycerides are measured separately but are closely interrelated "
-                "with these cholesterol fractions. For more on LDL and HDL, see our detailed guides on "
-                '<a href="/blog/ldl-cholesterol-high-meaning">high LDL cholesterol</a> and '
-                '<a href="/blog/hdl-cholesterol-low-meaning">low HDL cholesterol</a>.</p>'
+                "with these cholesterol fractions. For more on LDL and HDL, see our guides on "
+                '<a href="/en/blog/ldl-cholesterol-level">LDL cholesterol</a> and '
+                '<a href="/en/blog/ldl-vs-hdl-what-it-means">LDL vs HDL</a>. '
+                "Clinicians often also interpret <a href=\"/en/blog/apob-meaning\">ApoB</a> and "
+                "<a href=\"/en/blog/lpa-meaning\">Lp(a)</a> alongside triglycerides when assessing atherogenic particle load and inherited risk context.</p>"
                 "<p>High triglycerides frequently coexist with <em>low HDL</em> and the presence of <em>small, dense LDL particles</em>&mdash;a combination "
                 "sometimes called the <strong>atherogenic lipid triad</strong> or <strong>lipid triad of metabolic syndrome</strong>. This pattern is "
                 "particularly dangerous because small dense LDL particles penetrate artery walls more easily, accelerating atherosclerosis. Thus, even if "
@@ -347,8 +349,10 @@ def _sections_tr() -> list:
                 "<p>Standart bir lipit panelinde birkaç kolesterolle ilgili ölçüm göreceksiniz: <strong>total kolesterol</strong>, "
                 "<strong>LDL kolesterol</strong>&mdash;atardamarlarda plak oluşumunu teşvik ettiği için &ldquo;kötü&rdquo; kolesterol olarak adlandırılır&mdash;"
                 "ve <strong>HDL kolesterol</strong>&mdash;atardamar duvarlarından kolesterolün uzaklaştırılmasına yardımcı olduğu için &ldquo;iyi&rdquo; kolesterol olarak bilinir. "
-                "Daha fazla bilgi için <a href=\"/blog/ldl-cholesterol-high-meaning\">yüksek LDL kolesterol</a> ve "
-                "<a href=\"/blog/hdl-cholesterol-low-meaning\">düşük HDL kolesterol</a> rehberlerimize bakabilirsiniz.</p>"
+                "Daha fazla bilgi için <a href=\"/tr/blog/ldl-kolesterol-kac-olmali\">LDL kolesterol</a> ve "
+                "<a href=\"/tr/blog/ldl-vs-hdl-what-it-means\">LDL ve HDL</a> rehberlerimize bakabilirsiniz. "
+                "Aterojenik partikül yükü ve kalıtsal risk bağlamında klinisyenler trigliseritlere ek olarak sıklıkla "
+                "<a href=\"/tr/blog/apob-anlama-gelir\">ApoB</a> ve <a href=\"/tr/blog/lpa-anlama-gelir\">Lp(a)</a> sonuçlarını da yorumlar.</p>"
                 "<p>Yüksek trigliseridler sıklıkla <em>düşük HDL</em> ve <em>küçük, yoğun LDL partikülleri</em> ile birlikte görülür&mdash;"
                 "bazen <strong>aterojenik lipit triadı</strong> olarak adlandırılan bu kombinasyon. Bu küçük yoğun LDL partikülleri atardamar duvarlarını "
                 "daha kolay penetre eder ve aterosklerozu hızlandırır.</p>"
@@ -542,8 +546,10 @@ def _sections_es() -> list:
                 "es un componente estructural de las membranas celulares y precursor de hormonas, ácidos biliares y vitamina D.</p>"
                 "<p>En un perfil lipídico estándar verá: <strong>colesterol total</strong>, <strong>colesterol LDL</strong> (&ldquo;malo&rdquo;) y "
                 "<strong>colesterol HDL</strong> (&ldquo;bueno&rdquo;). Para más información, consulte nuestras guías sobre "
-                '<a href="/blog/ldl-cholesterol-high-meaning">colesterol LDL alto</a> y '
-                '<a href="/blog/hdl-cholesterol-low-meaning">colesterol HDL bajo</a>.</p>'
+                '<a href="/es/blog/niveles-colesterol-ldl">colesterol LDL</a> y '
+                '<a href="/es/blog/ldl-vs-hdl-what-it-means">LDL frente a HDL</a>. '
+                "Los profesionales suelen valorar también <a href=\"/es/blog/significado-apob\">ApoB</a> y "
+                "<a href=\"/es/blog/significado-lpa\">Lp(a)</a> junto a los triglicéridos al evaluar la carga de partículas aterogénicas y el contexto de riesgo heredado.</p>"
                 "<p>Los triglicéridos altos frecuentemente coexisten con <em>HDL bajo</em> y <em>partículas LDL pequeñas y densas</em>&mdash;"
                 "una combinación llamada <strong>tríada lipídica aterogénica</strong>. Este patrón es particularmente peligroso porque las "
                 "partículas LDL pequeñas y densas penetran más fácilmente en las paredes arteriales, acelerando la aterosclerosis.</p>"
@@ -728,8 +734,10 @@ def _sections_de() -> list:
                 "der Zellmembranen und Vorläufer von Hormonen (Östrogen, Testosteron, Cortisol), Gallensäuren und Vitamin D.</p>"
                 "<p>Im Lipidprofil finden Sie: <strong>Gesamtcholesterin</strong>, <strong>LDL-Cholesterin</strong> (&bdquo;schlecht&ldquo;) und "
                 "<strong>HDL-Cholesterin</strong> (&bdquo;gut&ldquo;). Weitere Informationen in unseren Leitfäden zu "
-                '<a href="/blog/ldl-cholesterol-high-meaning">hohem LDL-Cholesterin</a> und '
-                '<a href="/blog/hdl-cholesterol-low-meaning">niedrigem HDL-Cholesterin</a>.</p>'
+                '<a href="/de/blog/ldl-cholesterin">LDL-Cholesterin</a> und '
+                '<a href="/de/blog/ldl-vs-hdl-what-it-means">LDL vs. HDL</a>. '
+                "Im klinischen Kontext werden oft auch <a href=\"/de/blog/apob-bedeutung\">ApoB</a> und "
+                "<a href=\"/de/blog/lpa-bedeutung\">Lp(a)</a> neben Triglyceriden betrachtet, um ätherogene Partikelzahl und erbliches Risiko einzuordnen.</p>"
                 "<p>Hohe Triglyceride treten häufig zusammen mit <em>niedrigem HDL</em> und <em>kleinen, dichten LDL-Partikeln</em> auf&mdash;"
                 "die sogenannte <strong>atherogene Lipidtriade</strong>. Dieses Muster ist besonders gefährlich, da kleine dichte LDL-Partikel "
                 "leichter in Arterienwände eindringen und die Atherosklerose beschleunigen.</p>"
@@ -908,8 +916,10 @@ def _sections_fr() -> list:
                 "structurel des membranes cellulaires et un précurseur d'hormones, d'acides biliaires et de vitamine D.</p>"
                 "<p>Le bilan lipidique comprend : <strong>cholestérol total</strong>, <strong>LDL</strong> (&laquo; mauvais &raquo;) et "
                 "<strong>HDL</strong> (&laquo; bon &raquo;). Pour en savoir plus, consultez nos guides sur "
-                '<a href="/blog/ldl-cholesterol-high-meaning">le LDL élevé</a> et '
-                '<a href="/blog/hdl-cholesterol-low-meaning">le HDL bas</a>.</p>'
+                '<a href="/fr/blog/taux-de-ldl-cholesterol">le LDL</a> et '
+                '<a href="/fr/blog/ldl-vs-hdl-what-it-means">LDL vs HDL</a>. '
+                "Dans une approche clinique, on interprète souvent aussi <a href=\"/fr/blog/signification-apob\">l&rsquo;ApoB</a> et "
+                "<a href=\"/fr/blog/signification-lpa\">le Lp(a)</a> avec les triglycérides pour estimer la charge en particules athérogènes et le risque héréditaire.</p>"
                 "<p>Les triglycérides élevés coexistent fréquemment avec un <em>HDL bas</em> et des <em>particules LDL petites et denses</em>&mdash;"
                 "la <strong>triade lipidique athérogène</strong>. Ce profil est particulièrement dangereux car les petites particules LDL denses "
                 "pénètrent plus facilement dans les parois artérielles, accélérant l'athérosclérose.</p>"
@@ -1082,8 +1092,10 @@ def _sections_it() -> list:
                 "strutturale delle membrane cellulari e precursore di ormoni, acidi biliari e vitamina D.</p>"
                 "<p>Nel profilo lipidico si trovano: <strong>colesterolo totale</strong>, <strong>LDL</strong> (&ldquo;cattivo&rdquo;) e "
                 "<strong>HDL</strong> (&ldquo;buono&rdquo;). Per approfondire, consultate le nostre guide su "
-                '<a href="/blog/ldl-cholesterol-high-meaning">LDL alto</a> e '
-                '<a href="/blog/hdl-cholesterol-low-meaning">HDL basso</a>.</p>'
+                '<a href="/it/blog/valori-ldl-colesterolo">LDL</a> e '
+                '<a href="/it/blog/ldl-vs-hdl-what-it-means">LDL vs HDL</a>. '
+                "In ambito clinico si considerano spesso anche <a href=\"/it/blog/significato-apob\">ApoB</a> e "
+                "<a href=\"/it/blog/significato-lpa\">Lp(a)</a> insieme ai trigliceridi per valutare il carico di particelle aterogene e il contesto di rischio ereditario.</p>"
                 "<p>I trigliceridi alti coesistono frequentemente con <em>HDL basso</em> e <em>particelle LDL piccole e dense</em>&mdash;"
                 "la <strong>triade lipidica aterogenica</strong>. Questo profilo è particolarmente pericoloso.</p>"
             ),
@@ -1252,8 +1264,11 @@ def _sections_he() -> list:
                 "תאים ומקדים להורמונים, חומצות מרה וויטמין D.</p>"
                 "<p>בפרופיל שומנים תמצאו: <strong>כולסטרול כללי</strong>, <strong>LDL</strong> (&ldquo;רע&rdquo;) ו-<strong>HDL</strong> "
                 "(&ldquo;טוב&rdquo;). למידע נוסף, ראו את המדריכים שלנו בנושא "
-                '<a href="/blog/ldl-cholesterol-high-meaning">LDL גבוה</a> ו-'
-                '<a href="/blog/hdl-cholesterol-low-meaning">HDL נמוך</a>.</p>'
+                '<a href="/he/blog/ldl-cholesterol-target">כולסטרול LDL</a> ו-'
+                '<a href="/he/blog/ldl-vs-hdl-what-it-means">LDL מול HDL</a>. '
+                "בהקשר קליני משקללים לעתים קרובות גם "
+                '<a href="/he/blog/פירוש-apob">ApoB</a> ו-'
+                '<a href="/he/blog/פירוש-lpa">Lp(a)</a> יחד עם טריגליצרידים בעומס חלקיקים אתרוגניים והקשר סיכון תורשתי.</p>'
                 "<p>טריגליצרידים גבוהים מתקיימים לעתים קרובות יחד עם <em>HDL נמוך</em> ו-<em>חלקיקי LDL קטנים וצפופים</em>&mdash;"
                 "<strong>השלישיה הליפידית האתרוגנית</strong>. דפוס זה מסוכן במיוחד.</p>"
             ),
@@ -1423,8 +1438,10 @@ def _sections_hi() -> list:
                 "कोशिका झिल्ली का संरचनात्मक घटक है और हार्मोन, पित्त अम्ल और विटामिन D का अग्रदूत है।</p>"
                 "<p>लिपिड पैनल में आपको मिलेगा: <strong>कुल कोलेस्ट्रॉल</strong>, <strong>LDL</strong> (&ldquo;खराब&rdquo;) और "
                 "<strong>HDL</strong> (&ldquo;अच्छा&rdquo;)। अधिक जानकारी के लिए "
-                '<a href="/blog/ldl-cholesterol-high-meaning">उच्च LDL कोलेस्ट्रॉल</a> और '
-                '<a href="/blog/hdl-cholesterol-low-meaning">कम HDL कोलेस्ट्रॉल</a> पर हमारी मार्गदर्शिका देखें।</p>'
+                '<a href="/hi/blog/ldl-cholesterol-kitna-hona-chahiye">LDL कोलेस्ट्रॉल</a> और '
+                '<a href="/hi/blog/ldl-vs-hdl-what-it-means">LDL बनाम HDL</a> पर हमारी मार्गदर्शिका देखें। '
+                "क्लिनिशियन अक्सर ट्राइग्लिसराइड्स के साथ <a href=\"/hi/blog/apob-का-मतलब\">ApoB</a> और "
+                "<a href=\"/hi/blog/lpa-का-मतलब\">Lp(a)</a> को भी देखते हैं—एथेरोजेनिक कण बोझ और वंशागत जोखिम संदर्भ में।</p>"
                 "<p>उच्च ट्राइग्लिसराइड्स अक्सर <em>कम HDL</em> और <em>छोटे, घने LDL कणों</em> के साथ सह-अस्तित्व में होते हैं&mdash;"
                 "<strong>एथेरोजेनिक लिपिड ट्रायड</strong>। यह पैटर्न विशेष रूप से खतरनाक है।</p>"
             ),
@@ -1593,8 +1610,11 @@ def _sections_ar() -> list:
                 "وسلف للهرمونات والأحماض الصفراوية وفيتامين D.</p>"
                 "<p>في صورة الدهون ستجد: <strong>الكوليسترول الكلي</strong>، <strong>LDL</strong> (&laquo;السيئ&raquo;) و<strong>HDL</strong> "
                 "(&laquo;الجيد&raquo;). لمزيد من المعلومات، راجع أدلتنا حول "
-                '<a href="/blog/ldl-cholesterol-high-meaning">ارتفاع LDL</a> و'
-                '<a href="/blog/hdl-cholesterol-low-meaning">انخفاض HDL</a>.</p>'
+                '<a href="/ar/blog/ldl-cholesterol-normal-range">كوليسترول LDL</a> و'
+                '<a href="/ar/blog/ldl-vs-hdl-what-it-means">LDL مقابل HDL</a>. '
+                "في السياق السريري يُفسَّر غالباً أيضاً "
+                '<a href="/ar/blog/معنى-apob">ApoB</a> و'
+                '<a href="/ar/blog/معنى-lpa">Lp(a)</a> مع الدهون الثلاثية عند تقييم عبء الجزيئات المُسَبِّبة للتصلب والخطر الوراثي.</p>'
                 "<p>الدهون الثلاثية المرتفعة تتواجد في كثير من الأحيان مع <em>HDL منخفض</em> و<em>جزيئات LDL الصغيرة والكثيفة</em>&mdash;"
                 "<strong>الثالوث الدهني المسبب لتصلب الشرايين</strong>. هذا النمط خطير بشكل خاص.</p>"
             ),

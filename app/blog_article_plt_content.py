@@ -182,7 +182,7 @@ def _sections_tr() -> list:
                 "<p>Yüksek MPV ayrıca kardiyovasküler risk ile de ilişkilendirilmiştir. Büyük trombositler "
                 "daha agregasyona yatkındır ve miyokard enfarktüsü, inme gibi trombotik olaylarda bağımsız "
                 "bir risk faktörü olarak öne çıkmaktadır. MPV ile ilgili ayrıntılı bilgi için "
-                '<a href="/blog/mpv-blood-test">MPV makalemize</a> göz atabilirsiniz.</p>'
+                '<a href="/tr/blog/mpv-high-or-low">MPV makalemize</a> göz atabilirsiniz.</p>'
             ),
         ),
         Section(
@@ -437,7 +437,7 @@ def _sections_en() -> list:
                 "<p>Elevated MPV has also been linked to increased cardiovascular risk. Larger platelets "
                 "are more prone to aggregation and have been identified as an independent risk factor for "
                 "myocardial infarction, stroke, and venous thromboembolism. For more details on MPV, see "
-                'our <a href="/blog/mpv-blood-test">MPV article</a>.</p>'
+                'our <a href="/en/blog/mpv-high-or-low">MPV article</a>.</p>'
             ),
         ),
         Section(
@@ -679,7 +679,7 @@ def _sections_es() -> list:
                 "<p>Un VPM elevado también se ha asociado con mayor riesgo cardiovascular. Las plaquetas "
                 "más grandes son más propensas a la agregación y se han identificado como factor de riesgo "
                 "independiente para infarto de miocardio, ictus y tromboembolismo venoso. Para más detalles, "
-                'consulte nuestro <a href="/blog/mpv-blood-test">artículo sobre VPM</a>.</p>'
+                'consulte nuestro <a href="/es/blog/mpv-high-or-low">artículo sobre VPM</a>.</p>'
             ),
         ),
         Section(
@@ -926,7 +926,7 @@ def _sections_de() -> list:
                 "<p>Ein erhöhtes MPV wurde auch mit einem erhöhten kardiovaskulären Risiko in Verbindung "
                 "gebracht. Größere Thrombozyten neigen stärker zur Aggregation und gelten als unabhängiger "
                 "Risikofaktor für Herzinfarkt, Schlaganfall und venöse Thromboembolien. Weitere Informationen "
-                'finden Sie in unserem <a href="/blog/mpv-blood-test">MPV-Artikel</a>.</p>'
+                'finden Sie in unserem <a href="/de/blog/mpv-high-or-low">MPV-Artikel</a>.</p>'
             ),
         ),
         Section(
@@ -1166,7 +1166,7 @@ def _sections_fr() -> list:
                 "<p>Un VPM élevé a également été associé à un risque cardiovasculaire accru. Les plaquettes "
                 "plus grandes sont plus sujettes à l'agrégation et constituent un facteur de risque "
                 "indépendant d'infarctus, d'AVC et de thromboembolie veineuse. Pour plus de détails, "
-                'consultez notre <a href="/blog/mpv-blood-test">article sur le VPM</a>.</p>'
+                'consultez notre <a href="/fr/blog/mpv-high-or-low">article sur le VPM</a>.</p>'
             ),
         ),
         Section(
@@ -1402,7 +1402,7 @@ def _sections_it() -> list:
                 "<p>Un MPV elevato è stato anche associato a un maggiore rischio cardiovascolare. Le "
                 "piastrine più grandi sono più inclini all'aggregazione e sono un fattore di rischio "
                 "indipendente per infarto, ictus e tromboembolismo venoso. Per maggiori dettagli, consulti "
-                'il nostro <a href="/blog/mpv-blood-test">articolo sull\'MPV</a>.</p>'
+                'il nostro <a href="/it/blog/mpv-high-or-low">articolo sull\'MPV</a>.</p>'
             ),
         ),
         Section(
@@ -1625,7 +1625,7 @@ def _sections_he() -> list:
                 "בתסמונות מיאלודיספלסטיות.</p>"
                 "<p>MPV מוגבר נקשר גם לסיכון קרדיווסקולרי מוגבר. טסיות גדולות יותר נוטות יותר "
                 "לאגרגציה וזוהו כגורם סיכון עצמאי לאוטם שריר הלב, שבץ ותרומבואמבוליזם ורידי. "
-                'לפרטים נוספים, ראו <a href="/blog/mpv-blood-test">מאמר ה-MPV שלנו</a>.</p>'
+                'לפרטים נוספים, ראו <a href="/he/blog/mpv-high-or-low">מאמר ה-MPV שלנו</a>.</p>'
             ),
         ),
         Section(
@@ -1860,7 +1860,7 @@ def _sections_hi() -> list:
                 "<p>उच्च MPV को हृदय-संवहनी जोखिम में वृद्धि से भी जोड़ा गया है। बड़ी प्लेटलेट्स "
                 "एकत्रीकरण (एग्रीगेशन) के लिए अधिक प्रवण होती हैं और मायोकार्डियल इन्फार्क्शन, "
                 "स्ट्रोक और शिरापरक थ्रॉम्बोएम्बोलिज्म के लिए स्वतंत्र जोखिम कारक हैं। अधिक "
-                'जानकारी के लिए हमारा <a href="/blog/mpv-blood-test">MPV लेख</a> देखें।</p>'
+                'जानकारी के लिए हमारा <a href="/hi/blog/mpv-high-or-low">MPV लेख</a> देखें।</p>'
             ),
         ),
         Section(
@@ -2095,7 +2095,7 @@ def _sections_ar() -> list:
                 "<p>ارتبط MPV المرتفع أيضاً بزيادة خطر القلب والأوعية الدموية. الصفائح الأكبر "
                 "أكثر ميلاً للتجمع وعُرّفت كعامل خطر مستقل لاحتشاء عضلة القلب والسكتة الدماغية "
                 "والانصمام الخثاري الوريدي. لمزيد من التفاصيل، راجع "
-                '<a href="/blog/mpv-blood-test">مقالنا عن MPV</a>.</p>'
+                '<a href="/ar/blog/mpv-high-or-low">مقالنا عن MPV</a>.</p>'
             ),
         ),
         Section(
