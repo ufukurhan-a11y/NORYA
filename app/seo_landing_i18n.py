@@ -904,8 +904,8 @@ def _de_laborwerte() -> dict:
 
 def _en_blood_test_results() -> dict:
     return {
-        "meta_title": "Blood Test Interpretation Online | Upload Results & Understand Labs | NoryaAI",
-        "meta_description": "Get blood test interpretation online with reference ranges, flagged markers, and plain-language explanations. Upload a PDF, photo, or lab values and receive a structured report in minutes.",
+        "meta_title": "Blood Test Results Explained — Upload PDF or Photo | NoryaAI",
+        "meta_description": "Turn your lab report into plain-language explanations with reference ranges and flagged markers. Upload a PDF or photo—educational only, not a diagnosis.",
         "hero_title": "Blood Test Interpretation Online",
         "hero_sub": "Upload your blood test and get a structured interpretation with reference ranges, highlighted findings, and plain-language explanations. Built to help you prepare before your doctor visit, not replace it.",
         "cta_primary": "Start analysis",
@@ -980,8 +980,8 @@ def _en_blood_test_results() -> dict:
 
 def _en_understand_lab_results() -> dict:
     return {
-        "meta_title": "Understand Lab Results Online | Reference Ranges & Flags | NoryaAI",
-        "meta_description": "Understand your lab results with a structured report, reference ranges, flagged markers, and clear explanations. Educational only, not a diagnosis.",
+        "meta_title": "How to Read Lab Results — Ranges, Flags & Summary | NoryaAI",
+        "meta_description": "See your lab values in context: reference ranges, highlights, and clear wording before your appointment. Upload a PDF or photo. Educational guidance only—not a diagnosis.",
         "hero_title": "Understand Your Lab Results",
         "hero_sub": "Upload your lab report and get a clear summary with reference ranges and plain-language explanations. For orientation before your doctor appointment.",
         "cta_primary": "Start analysis",
@@ -1057,8 +1057,8 @@ def _en_understand_lab_results() -> dict:
 # (lang, slug) -> content dict
 def _en_ai_blood_test_analyzer() -> dict:
     return {
-        "meta_title": "AI Blood Test Analyzer | Upload Results & Get Structured Report | NoryaAI",
-        "meta_description": "Use an AI blood test analyzer built for lab reports, not generic chat. Upload your results and get reference ranges, flagged markers, plain-language explanations, and a doctor-ready summary.",
+        "meta_title": "AI Blood Test Report Analyzer (PDF & Photo Upload) | NoryaAI",
+        "meta_description": "Purpose-built for real lab reports: structured summary, ranges, and highlighted markers—not generic chat. Upload a PDF or photo. Educational explanations only—not a diagnosis.",
         "hero_title": "AI Blood Test Analyzer for Real Lab Reports",
         "hero_sub": "Upload your lab report and receive a structured, doctor-ready summary. Health score, reference ranges, plain-language explanations, and highlighted findings — all in one clean report built for blood tests.",
         "hero_trust_line": "Purpose-built AI for blood tests, reference ranges, and doctor-ready summaries — not a generic chatbot",

@@ -8,6 +8,11 @@ from __future__ import annotations
 import copy
 from typing import Any, Dict
 
+from app.b2b_locales import LOCALE_BUILDERS, get_full_locale_pages
+
+FULL_LOCALE_LANGS = frozenset(LOCALE_BUILDERS.keys())
+_FULL_LOCALE_CACHE: Dict[str, Dict[str, Dict[str, Any]]] = {}
+
 PAGE_PATHS = frozenset(
     {
         "for-doctors",
@@ -699,265 +704,16 @@ PAGES_TR: Dict[str, Dict[str, Any]] = {
     "clinical-demo": _page_demo_tr(),
 }
 
+def _get_cached_full_locale_pages(lang: str) -> Dict[str, Dict[str, Any]]:
+    if lang not in FULL_LOCALE_LANGS:
+        return {}
+    cached = _FULL_LOCALE_CACHE.get(lang)
+    if cached is not None:
+        return cached
+    built = get_full_locale_pages(lang, PAGES_EN)
+    _FULL_LOCALE_CACHE[lang] = built
+    return built
 
-# Hero + meta overlays for DE FR IT ES HE HI AR (rest inherits EN structure, FAQ stays EN unless tr)
-_LANG_OVERLAY = {
-    "for-doctors": {
-        "de": {
-            "meta_title": "Norya für Ärzt:innen | Laborklarheit in Minuten",
-            "meta_description": "Assistierende Labor-zu-Sprache-Berichte: strukturierte Marker, einfache Sprache, prüfbereite Ausgaben in 9+ Sprachen.",
-            "hero_badge": "Für Kliniker:innen",
-            "hero_title": "Komplexe Labore patientenverständlich erklären—ohne Mehraufwand in der Verwaltung.",
-            "hero_desc": "Norya verwandelt Standard-Laborexporte in zweisprachig vorbereitete, einfache Zusammenfassungen. Für Praxen mit hohem Laboraufkommen im Umfeld von 4.000+ Krankenhäusern und Kliniken.",
-        },
-        "fr": {
-            "meta_title": "Norya pour les médecins | Clarité des analyses",
-            "meta_description": "Rapports assistés laboratoire-langage : marqueurs structurés, langage simple, sortie prête à examen en 9+ langues.",
-            "hero_badge": "Pour les cliniciens",
-            "hero_title": "Expliquez des analyses complexes en langage patient—sans charge administrative supplémentaire.",
-            "hero_desc": "Norya transforme les exports labo standard en résumés clairs, prêts pour le bilinguisme. Pour les pratiques à fort volume au sein de 4 000+ établissements.",
-        },
-        "it": {
-            "meta_title": "Norya per medici | Chiarezza di laboratorio",
-            "meta_description": "Report assistiti laboratorio-linguaggio: marker strutturati, linguaggio semplice, output pronto alla revisione in 9+ lingue.",
-            "hero_badge": "Per clinici",
-            "hero_title": "Spiegare laboratori complessi in linguaggio per il paziente—senza tempo amministrativo extra.",
-            "hero_desc": "Norya trasforma gli export di laboratorio in riassunti chiari e pronti per il multilingue. Per studi ad alto volume nella rete di 4.000+ strutture.",
-        },
-        "es": {
-            "meta_title": "Norya para médicos | Claridad de laboratorio",
-            "meta_description": "Informes asistidos de laboratorio a lenguaje: marcadores estructurados, lenguaje sencillo, listo para revisión en 9+ idiomas.",
-            "hero_badge": "Para clínicos",
-            "hero_title": "Explique análisis complejos en lenguaje comprensible—sin carga administrativa extra.",
-            "hero_desc": "Norya convierte exportaciones estándar en resúmenes claros y multilingües. Para prácticas de alto volumen en la red de 4.000+ hospitales y clínicas.",
-        },
-        "he": {
-            "meta_title": "נוריאה לרופאים | בהירות במעבדה תוך דקות",
-            "meta_description": "דוחות סיעוד ממעבדה לשפה: סמנים מובנים, שפה פשוטה, פלט מוכן לבדיקה ב־9+ שפות.",
-            "hero_badge": "לקלינאים",
-            "hero_title": "להסביר מעבדות מורכבות בשפה מותאמת למטופל—בלי עומס ניהולי נוסף.",
-            "hero_desc": "נוריאה הופכת ייצוא מעבדה סטנדרטי לתקצירים ברורים, רבי־לשון. לקליניקות בעומס גבוה ברשת של 4,000+ בתי חולים ומרפאות.",
-        },
-        "hi": {
-            "meta_title": "डॉक्टरों के लिए Norya | लैब स्पष्टता कुछ ही मिनटों में",
-            "meta_description": "सहायक लैब-से-भाषा रिपोर्ट: संरचित मार्कर, साधारण भाषा, 9+ भाषाओं में समीक्षा-तैयार आउटपुट।",
-            "hero_badge": "क्लिनिशियनों के लिए",
-            "hero_title": "जटिल लैब को मरीज़-अनुकूल भाषा में समझाएँ—बिना अतिरिक्त प्रशासनिक बोझ के।",
-            "hero_desc": "Norya मानक लैब निर्यात को द्विभाषा-तैयार सरल सार में बदलता है। 4,000+ अस्पतालों व क्लिनिक नेटवर्क में उच्च लैब वॉल्यूम वाले अभ्यासों के लिए।",
-        },
-        "ar": {
-            "meta_title": "نوريا للأطباء | وضوح المختبر في دقائق",
-            "meta_description": "تقارير مساعدة من المختبر إلى لغة المريض: مؤشرات منظّمة، لغة بسيطة، مخرجات جاهزة للمراجعة بأكثر من 9 لغات.",
-            "hero_badge": "للكلينيين",
-            "hero_title": "شرح تحاليل معقّدة بلغة يفهمها المريض—بدون زيادة عبء إداري.",
-            "hero_desc": "تحوّل نوريا مخرجات المختبر القياسية إلى ملخصات واضحة ومتعددة اللغات. لعيادات ذات حجم كبير ضمن شبكة تضم أكثر من 4000 مستشفى وعيادة.",
-        },
-    },
-    "for-clinics": {
-        "de": {
-            "meta_title": "Norya für Kliniken | Operative Laborkommunikation",
-            "meta_description": "Patientennahe Laborerklärungen über Anbieter, Sprachen und Schichten standardisieren—ohne zusätzliches Personal.",
-            "hero_badge": "Für Kliniken",
-            "hero_title": "Ein Betriebsrhythmus für die Laborkommunikation in jeder Sprechstunde.",
-            "hero_desc": "Eine Pipeline von Labs zu geprüften, mehrsprachigen Materialien. Skalieren Sie Qualität über 50+ Länder.",
-        },
-        "fr": {
-            "meta_title": "Norya pour les cliniques | Communication labo",
-            "meta_description": "Standardisez les explications des analyses pour les patients—sans embaucher davantage.",
-            "hero_badge": "Pour les cliniques",
-            "hero_title": "Un rythme opérationnel unique pour chaque salle de la clinique.",
-            "hero_desc": "Une pipeline pour transformer les labs en supports multilingues prêts à examen. Même qualité dans 50+ pays.",
-        },
-        "it": {
-            "meta_title": "Norya per le cliniche | Comunicazione di laboratorio",
-            "meta_description": "Standardizzate le spiegazioni degli esami ai pazienti tra provider, lingue e turni senza aumentare il personale.",
-            "hero_badge": "Per le cliniche",
-            "hero_title": "Un solo ritmo operativo per la comunicazione di laboratorio in ogni stanza.",
-            "hero_desc": "Un'unica pipeline verso materiali multilingue pronti alla revisione. Scalate la qualità in 50+ paesi.",
-        },
-        "es": {
-            "meta_title": "Norya para clínicas | Comunicación de laboratorio",
-            "meta_description": "Estandarice explicaciones de laboratorio al paciente entre proveedores, idiomas y turnos sin más personal.",
-            "hero_badge": "Para clínicas",
-            "hero_title": "Un solo ritmo operativo para la comunicación de laboratorio en toda la clínica.",
-            "hero_desc": "Una tubería hacia material multilingue listo para revisión. La misma calidad en 50+ países.",
-        },
-        "he": {
-            "meta_title": "נוריאה למרפאות | תקשורת מעבדה תפעולית",
-            "meta_description": "סטנדרטיזציה של הסברי מעבדה למטופלים בין ספקים, שפות ומשמרות—בלי להגדיל כוח אדם.",
-            "hero_badge": "למרפאות",
-            "hero_title": "קצב תפעול אחד לתקשורת מעבדה בכל חדר במרפאה.",
-            "hero_desc": "צינור אחד ממעבדה לחומר רב־לשוני מוכן לביקורת. אותה איכות ב־50+ מדינות.",
-        },
-        "hi": {
-            "meta_title": "क्लिनिक के लिए Norya | परिचालन लैब संचार",
-            "meta_description": "प्रदाता, भाषाओं और शिफ्टों में रोगी-उन्मुख लैब स्पष्टीकरण को मानकीकृत करें—बिना अतिरिक्त स्टाफ।",
-            "hero_badge": "क्लिनिकों के लिए",
-            "hero_title": "क्लिनिक की हर क्षेत्र में लैब संचार के लिए एक संचालन लय।",
-            "hero_desc": "लैब से समीक्षा-तैय्यार बहुभाषी सामग्री तक एक पाइपलाइन। 50+ देशों में समान गुणवत्ता।",
-        },
-        "ar": {
-            "meta_title": "نوريا للعيادات | تواصل المختبر التشغيلي",
-            "meta_description": "توحيد شروحات المختبر للمرضى عبر مقدمي الخدمة واللغات والورديات—دون زيادة الموظفين.",
-            "hero_badge": "للعيادات",
-            "hero_title": "إيقاع تشغيلي واحد لتواصل المختبر في كل غرفة بالعيادة.",
-            "hero_desc": "مسار واحد من نتائج المختبر إلى مواد متعددة اللغات جاهزة للمراجعة. نفس الجودة في أكثر من 50 دولة.",
-        },
-    },
-    "for-hospitals": {
-        "de": {
-            "meta_title": "Norya für Krankenhäuser | Enterprise-Laborsprache",
-            "meta_description": "Ein governance-fähiger Kommunikationslayer für stationäre, ambulante und verbundene Netzwerke.",
-            "hero_badge": "Krankenhausverbünde",
-            "hero_title": "Ein Governance-Modell für jede Laborergebnis-Linie Ihrer IDN.",
-            "hero_desc": "Einheitliche Terminologie, lokalisierungen und SOC2-orientierter Betrieb für IDN-Beschaffung.",
-        },
-        "fr": {
-            "meta_title": "Norya pour hôpitaux | Couche labo d'entreprise",
-            "meta_description": "Déployez une couche de communication laboratoire avec gouvernance sur tous les réseaux.",
-            "hero_badge": "Systèmes hospitaliers",
-            "hero_title": "Un seul modèle de gouvernance pour chaque résultat quittant votre IDN.",
-            "hero_desc": "Couche assistive unifiée : terminologie cohérente et exploitation alignée SOC2.",
-        },
-        "it": {
-            "meta_title": "Norya per ospedali | Layer linguistico enterprise",
-            "meta_description": "Distribuite comunicazione di laboratorio con governance su interni, esterni e reti affiliate.",
-            "hero_badge": "Sistemi ospedalieri",
-            "hero_title": "Un unico modello di governance per ogni risultato che lascia la vostra rete.",
-            "hero_desc": "Terminologia coerente, varianti localizzate e operazioni orientate SOC2.",
-        },
-        "es": {
-            "meta_title": "Norya para hospitales | Capa de lenguaje empresarial",
-            "meta_description": "Despliegue comunicación de laboratorio con gobernanza en redes hospitalarias y afiliadas.",
-            "hero_badge": "Sistemas hospitalarios",
-            "hero_title": "Un solo modelo de gobernanza para cada resultado que sale de su IDN.",
-            "hero_desc": "Capa asistiva unificada con terminología consistente y operación alineada a SOC2.",
-        },
-        "he": {
-            "meta_title": "נוריאה לבתי חולים | שכבת שפה ארגונית",
-            "meta_description": "פריסת שכבת תקשורת מעבדה עם ממשל על פני חולים פנימיים, חיצוניים ורשתות שותפות.",
-            "hero_badge": "מערכות בתי חולים",
-            "hero_title": "מודל ממשל אחיד לכל תוצאת מעבדה שיוצאת מה־IDN שלכם.",
-            "hero_desc": "שכבה עוזרת מאוחדת: מונחים עקביים והפעלה בהתאם ל־SOC2.",
-        },
-        "hi": {
-            "meta_title": "अस्पतालों के लिए Norya | एंटरप्राइज़ लैब भाषा परत",
-            "meta_description": "भर्ती, बाह्य रोगी और सहयोगी नेटवर्क में गवर्नेंस सहित लैब संचार परत तैनात करें।",
-            "hero_badge": "अस्पताल प्रणाली",
-            "hero_title": "आपके IDN से निकलने वाले प्रत्येक लैब परिणाम के लिए एक गवर्नेंस मॉडल।",
-            "hero_desc": "एकीकृत सहायक परत: सुसंगत शब्दावली, स्थानीयकृत संस्करण और SOC2-उन्मुख संचालन।",
-        },
-        "ar": {
-            "meta_title": "نوريا للمستشفيات | طبقة لغة مؤسسية",
-            "meta_description": "نشر طبقة تواصل مختبر مع حوكمة عبر المنومين والعيادات والشبكات التابعة.",
-            "hero_badge": "أنظمة مستشفيات",
-            "hero_title": "نموذج حوكمة واحد لكل نتيجة مختبر تغادر شبكتكم المتكاملة.",
-            "hero_desc": "طبقة مساعدة موحّدة: مصطلحات ثابتة وعمليات بمواءمة SOC2.",
-        },
-    },
-    "enterprise-security": {
-        "de": {
-            "meta_title": "Enterprise-Sicherheit | Norya",
-            "meta_description": "Verschlüsselung, Zugriffskontrolle und Beschaffungsunterlagen für das assistierende Norya-Layer.",
-            "hero_badge": "Sicherheit",
-            "hero_title": "Sicherheitsarchitektur für Healthcare-Procurement.",
-            "hero_desc": "Gestufte Datenverarbeitung, least privilege und Prüfpfade für ISO/SOC-Zyklen.",
-        },
-        "fr": {
-            "meta_title": "Sécurité entreprise | Norya",
-            "meta_description": "Chiffrement, contrôles d'accès et dossiers d'achat pour l'offre assistive Norya.",
-            "hero_badge": "Sécurité",
-            "hero_title": "Architecture de sécurité validée par les achats santé.",
-            "hero_desc": "Traitement des données par niveaux, moindre privilège et pistes d'audit adaptées.",
-        },
-        "it": {
-            "meta_title": "Sicurezza enterprise | Norya",
-            "meta_description": "Crittografia, controlli di accesso e documentazione per l'adozione del layer assistito Norya.",
-            "hero_badge": "Sicurezza",
-            "hero_title": "Architettura di sicurezza per gli acquisti sanitari.",
-            "hero_desc": "Gestione dei dati a livelli, privilegi minimi e audit per cicli ISO/SOC.",
-        },
-        "es": {
-            "meta_title": "Seguridad empresarial | Norya",
-            "meta_description": "Cifrado, controles de acceso y documentación de compras para la capa asistida de Norya.",
-            "hero_badge": "Seguridad",
-            "hero_title": "Arquitectura de seguridad apta para compras en salud.",
-            "hero_desc": "Datos por capas, mínimo privilegio y huellas de auditoría para revisiones ISO/SOC.",
-        },
-        "he": {
-            "meta_title": "אבטחה ארגונית | נוריאה",
-            "meta_description": "הצפנה, בקרות גישה ותיעוד רכש לצוותים שמאמצים את שכבת נוריאה המסייעת.",
-            "hero_badge": "אבטחה",
-            "hero_title": "ארכיטקטורת אבטחה שעומדת ברכישה בבריאות.",
-            "hero_desc": "טיפול רב-שכבתי בנתונים, הרשאות מינימליות ושבילי ביקורת ל־ISO/SOC.",
-        },
-        "hi": {
-            "meta_title": "एंटरप्राइज़ सुरक्षा | Norya",
-            "meta_description": "एन्क्रिप्शन, एक्सेस नियंत्रण और खरीद दस्तावेज़ — Norya सहायक परत अपनाने वाली टीमों के लिए।",
-            "hero_badge": "सुरक्षा",
-            "hero_title": "स्वास्थ्य खरीद को झेलने वाली सुरक्षा संरचना।",
-            "hero_desc": "स्तरीय डेटा हैंडलिंग, न्यूनतम विशेषाधिकार और ISO/SOC समीक्षा चक्रों के लिए ऑडिट पथ।",
-        },
-        "ar": {
-            "meta_title": "أمن المؤسسات | نوريا",
-            "meta_description": "تشفير وضوابط وصول ووثائق توريد للفرق التي تعتمد طبقة نوريا المساعدة.",
-            "hero_badge": "الأمن",
-            "hero_title": "هندسة أمنية تلائم مشتريات الرعاية الصحية.",
-            "hero_desc": "معالجة بيانات متدرجة وأقل امتيازًا ومسارات تدقيق لدورات ISO/SOC.",
-        },
-    },
-    "clinical-demo": {
-        "de": {
-            "meta_title": "Klinische Demo | Norya-Workflow",
-            "meta_description": "Vom strukturierten Labordatensatz zu mehrsprachigen, prüfbereiten Patientenerklärungen.",
-            "hero_badge": "Evaluation",
-            "hero_title": "Ein echter klinischer Workflow—Von der Labordatei bis zur unterzeichneten Patientenkopie.",
-            "hero_desc": "In 30 Minuten mappen wir Feeds, Sprachen und Review-Modell auf die Norya-Pipeline in 50+ Ländern.",
-        },
-        "fr": {
-            "meta_title": "Démo clinique | Flux Norya",
-            "meta_description": "Des données structurées aux explications patient multilingues prêtes à examen.",
-            "hero_badge": "Évaluation",
-            "hero_title": "Un parcours clinique réel—du fichier labo à la copie patient signée.",
-            "hero_desc": "En 30 minutes nous alignons flux, langues et revalidation sur le pipeline utilisé dans 50+ pays.",
-        },
-        "it": {
-            "meta_title": "Demo clinica | Workflow Norya",
-            "meta_description": "Da dati strutturati a spiegazioni per il paziente multilingue pronte alla revisione.",
-            "hero_badge": "Valutazione guidata",
-            "hero_title": "Un workflow clinico reale—dal file di laboratorio alla copia firmata.",
-            "hero_desc": "In 30 minuti mappiamo feed, lingue e modello di review sulla pipeline in 50+ paesi.",
-        },
-        "es": {
-            "meta_title": "Demo clínica | Flujo Norya",
-            "meta_description": "De datos estructurados a explicaciones multilingües listas para revisión.",
-            "hero_badge": "Evaluación guiada",
-            "hero_title": "Flujo clínico real—desde el archivo de laboratorio hasta la copia firmada.",
-            "hero_desc": "En 30 minutos alineamos feeds, idiomas y revisión con el pipeline en 50+ países.",
-        },
-        "he": {
-            "meta_title": "הדגמה קלינית | זרימת נוריאה",
-            "meta_description": "מנתונים מובנים להסברים רבי־לשון מוכנים לבדיקה.",
-            "hero_badge": "הערכה מודרכת",
-            "hero_title": "זרימה קלינית אמיתית—מקובץ מעבדה עד עותק חתום למטופל.",
-            "hero_desc": "תוך 30 דקות מתאימים הזנות, שפות ומודל בדיקה לצינור בשימוש ב־50+ מדינות.",
-        },
-        "hi": {
-            "meta_title": "क्लिनिकल डेमो | Norya वर्कफ़्लो",
-            "meta_description": "संरचित डेटा से बहुभाषी, समीक्षा-तैय्यार मरीज़ स्पष्टीकरण तक एक वर्कफ़्लो।",
-            "hero_badge": "मार्गदर्शित मूल्यांकन",
-            "hero_title": "वास्तविक क्लिनिकल वर्कफ़्लो—लैब फ़ाइल से हस्ताक्षरित मरीज़ प्रति तक।",
-            "hero_desc": "30 मिनट में हम आपके फ़ीड, भाषाओं और समीक्षा मॉडल को 50+ देशों में उपयोग होने वाली पाइपलाइन पर मैप करते हैं।",
-        },
-        "ar": {
-            "meta_title": "عرض سريري | مسار نوريا",
-            "meta_description": "من بيانات منظّمة إلى شروحات للمرضى بعدة لغات جاهزة للمراجعة.",
-            "hero_badge": "تقييم موجّه",
-            "hero_title": "مسار سريري حقيقي—من ملف المختبر إلى نسخة المريض الموقّعة.",
-            "hero_desc": "خلال 30 دقيقة نربط مغذياتك ولغاتك ونموذج المراجعة بمسار العمل المستخدم في أكثر من 50 دولة.",
-        },
-    },
-}
 
 
 def get_b2b_audience_ui(slug: str, lang_code: str) -> Dict[str, Any]:
@@ -968,11 +724,11 @@ def get_b2b_audience_ui(slug: str, lang_code: str) -> Dict[str, Any]:
         return {}
     if lang == "tr":
         out = copy.deepcopy(PAGES_TR[slug])
+    elif lang in FULL_LOCALE_LANGS:
+        pages = _get_cached_full_locale_pages(lang)
+        page = pages.get(slug)
+        out = copy.deepcopy(page) if page else copy.deepcopy(PAGES_EN[slug])
     else:
         out = copy.deepcopy(PAGES_EN[slug])
-        if lang != "en":
-            overlay = _LANG_OVERLAY.get(slug, {}).get(lang)
-            if overlay:
-                out.update(overlay)
     out.update(CTA_BY_LANG[lang])
     return out
