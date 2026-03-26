@@ -143,11 +143,11 @@
   <!-- Header -->
   <header class="fixed top-0 w-full z-50 bg-[#f8f9fa]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
     <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 sm:py-4 flex justify-between items-center">
-      <a href="/" class="flex items-center gap-2 shrink-0">
+      <a href="{{ localized_home_path(request) }}" class="flex items-center gap-2 shrink-0">
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 sm:h-9 w-auto object-contain" width="180" height="45" loading="eager" />
       </a>
       <nav class="hidden md:flex items-center gap-8">
-        <a href="/" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_home }}</a>
+        <a href="{{ localized_home_path(request) }}" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_home }}</a>
         <a href="/kurumsal" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">{{ t.nav_enterprise }}</a>
         <a href="/legal/gizlilik-politikasi?lang={{ lang }}" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_privacy }}</a>
         <a href="/legal/kullanim-sartlari?lang={{ lang }}" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_terms }}</a>
@@ -187,7 +187,7 @@
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <a href="/" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_home }}</a>
+    <a href="{{ localized_home_path(request) }}" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_home }}</a>
     <a href="/kurumsal" class="block py-3 px-4 rounded-xl font-bold text-primary bg-primary/5">{{ t.nav_enterprise }}</a>
     <a href="/legal/gizlilik-politikasi?lang={{ lang }}" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_privacy }}</a>
     <a href="/legal/kullanim-sartlari?lang={{ lang }}" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_terms }}</a>
@@ -697,7 +697,7 @@
         <p class="text-outline text-xs tracking-wide">{{ t.footer_copyright }}</p>
       </div>
       <div class="flex flex-wrap gap-x-6 sm:gap-x-12 gap-y-4 sm:gap-y-6 md:justify-end">
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/">{{ t.nav_home }}</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="{{ localized_home_path(request) }}">{{ t.nav_home }}</a>
         <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/kurumsal">{{ t.footer_enterprise }}</a>
         <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/gizlilik-politikasi">{{ t.nav_privacy }}</a>
         <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/kullanim-sartlari">{{ t.nav_terms }}</a>

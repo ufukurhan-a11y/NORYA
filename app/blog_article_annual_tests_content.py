@@ -73,6 +73,9 @@ def _sections_en():
                 "<p>A <strong>Basic Metabolic Panel (BMP)</strong> is a shorter version "
                 "that focuses on glucose, electrolytes, and kidney markers. Your doctor "
                 "will choose the appropriate panel based on your history.</p>"
+                "<p>If you want a dedicated walkthrough of <strong>CMP vs BMP</strong>, "
+                "marker groups, and common follow-up patterns, see our "
+                "<a href=\"/en/blog/metabolic-panel-results-explained\">metabolic panel results explained</a> guide.</p>"
             ),
         ),
         Section(

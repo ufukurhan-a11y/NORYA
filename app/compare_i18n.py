@@ -32,37 +32,37 @@ _OG: dict[str, str] = {
 
 _COMPARE_VISUALS: dict[str, dict] = {
     "norya-vs-chatgpt-for-blood-tests": {
-        "image": "/static/images/og-blood-test-explained.png",
+        "image": "",
         "accent": "#10b981",
         "glow": "rgba(16,185,129,0.34)",
         "mark": "GPT",
     },
     "norya-vs-bloodgpt": {
-        "image": "/static/images/og-cbc-guide.png",
+        "image": "",
         "accent": "#ef4444",
         "glow": "rgba(239,68,68,0.30)",
         "mark": "BGT",
     },
     "norya-vs-kantesti": {
-        "image": "/static/images/og-upload-blood-test.png",
+        "image": "",
         "accent": "#f97316",
         "glow": "rgba(249,115,22,0.32)",
         "mark": "TR",
     },
     "norya-vs-siphox-health": {
-        "image": "/static/images/clinic-enterprise-visual.png",
+        "image": "",
         "accent": "#6366f1",
         "glow": "rgba(99,102,241,0.32)",
         "mark": "LAB",
     },
     "norya-vs-wizey": {
-        "image": "/static/images/og-sample-reports.png",
+        "image": "",
         "accent": "#8b5cf6",
         "glow": "rgba(139,92,246,0.32)",
         "mark": "WZ",
     },
     "norya-vs-generic-ai": {
-        "image": "/static/images/hero-globe.png",
+        "image": "",
         "accent": "#0f172a",
         "glow": "rgba(15,23,42,0.28)",
         "mark": "AI",
@@ -71,15 +71,15 @@ _COMPARE_VISUALS: dict[str, dict] = {
 
 # ── Accuracy badge (detail pages) ─────────────────────────────────
 _ACCURACY_BADGE: dict[str, dict] = {
-    "en": {"value": "98.7%", "label": "Result accuracy", "sub": "Verified with laboratory data"},
-    "tr": {"value": "%98,7", "label": "Sonuç doğruluğu", "sub": "Laboratuvar verileriyle doğrulanmış"},
-    "de": {"value": "98,7%", "label": "Ergebnisgenauigkeit", "sub": "Mit Labordaten verifiziert"},
-    "fr": {"value": "98,7%", "label": "Précision des résultats", "sub": "Vérifiée avec des données de laboratoire"},
-    "es": {"value": "98,7%", "label": "Precisión de resultados", "sub": "Verificada con datos de laboratorio"},
-    "it": {"value": "98,7%", "label": "Accuratezza dei risultati", "sub": "Verificata con dati di laboratorio"},
-    "he": {"value": "98.7%", "label": "דיוק תוצאות", "sub": "אומת עם נתוני מעבדה"},
-    "hi": {"value": "98.7%", "label": "परिणाम सटीकता", "sub": "प्रयोगशाला डेटा से सत्यापित"},
-    "ar": {"value": "98.7%", "label": "دقة النتائج", "sub": "تم التحقق منها بواسطة بيانات مخبرية"},
+    "en": {"value": "98.7%", "label": "Classification accuracy", "sub": "Internal platform evaluation"},
+    "tr": {"value": "%98,7", "label": "Sınıflandırma doğruluğu", "sub": "Platform içi değerlendirme"},
+    "de": {"value": "98,7%", "label": "Klassifikationsgenauigkeit", "sub": "Interne Plattformevaluierung"},
+    "fr": {"value": "98,7%", "label": "Précision de classification", "sub": "Évaluation interne de la plateforme"},
+    "es": {"value": "98,7%", "label": "Precisión de clasificación", "sub": "Evaluación interna de la plataforma"},
+    "it": {"value": "98,7%", "label": "Accuratezza di classificazione", "sub": "Valutazione interna della piattaforma"},
+    "he": {"value": "98.7%", "label": "דיוק הסיווג", "sub": "הערכה פנימית של הפלטפורמה"},
+    "hi": {"value": "98.7%", "label": "वर्गीकरण सटीकता", "sub": "आंतरिक प्लेटफ़ॉर्म मूल्यांकन"},
+    "ar": {"value": "98.7%", "label": "دقة التصنيف", "sub": "تقييم داخلي للمنصة"},
 }
 
 # ── UI strings (nav, breadcrumbs, footer, section labels) ────────
@@ -156,12 +156,12 @@ _CTA: dict[str, dict] = {
 # ── Hub page content ─────────────────────────────────────────────
 _HUB: dict[str, dict] = {
     "en": {
-        "meta_title": "Best AI for Blood Test Results? Compare NoryaAI, ChatGPT, and Alternatives | NoryaAI",
-        "meta_description": "Compare NoryaAI with ChatGPT, BloodGPT, Kantesti, SiPhox Health, Wizey, and other AI tools for blood test interpretation. Honest side-by-side comparisons for structured reports, privacy, and reference-range-aware analysis.",
+        "meta_title": "Best AI for Blood Test Results? Compare Top Tools | NoryaAI",
+        "meta_description": "Compare NoryaAI with ChatGPT, BloodGPT, Kantesti, SiPhox Health, Wizey, and other AI tools for blood test interpretation. Honest side-by-side comparisons for structured reports, privacy, uploads, and reference-range-aware analysis.",
         "hero_title": "Compare AI Tools for Blood Test Results",
         "hero_sub": "Trying to decide which AI tool is best for blood test interpretation? Compare NoryaAI with ChatGPT and other alternatives to see which workflow, output format, and privacy approach fit your needs.",
         "trust_stats": [
-            {"value": "98.7%", "label": "Result accuracy", "sub": "Verified with laboratory data"},
+            {"value": "98.7%", "label": "Classification accuracy", "sub": "Internal platform evaluation"},
             {"value": "9+", "label": "Languages", "sub": "Full reports with medical context"},
             {"value": "QR", "label": "Verified PDF", "sub": "Doctor-ready shareable summary"},
         ],
@@ -211,7 +211,7 @@ _HUB: dict[str, dict] = {
             {"norya": "PDF with QR verification", "chatgpt": "Not available", "bloodgpt": "Not clearly disclosed", "kantesti": "Not clearly disclosed", "siphox": "Not clearly disclosed", "wizey": "Not clearly disclosed", "generic": "Not available"},
             {"norya": "GDPR/KVKK · educational only", "chatgpt": "May store for training", "bloodgpt": "See their policy", "kantesti": "See their policy", "siphox": "See their policy", "wizey": "See their policy", "generic": "May store for training"},
             {"norya": "Strong", "chatgpt": "Partial", "bloodgpt": "Partial", "kantesti": "Available", "siphox": "Limited", "wizey": "Not clearly disclosed", "generic": "Partial"},
-            {"norya": "98.7% · lab-verified", "chatgpt": "Not disclosed", "bloodgpt": "Not disclosed", "kantesti": "Not disclosed", "siphox": "Not disclosed", "wizey": "Not disclosed", "generic": "Not disclosed"},
+            {"norya": "98.7% · internal eval", "chatgpt": "Not disclosed", "bloodgpt": "Not disclosed", "kantesti": "Not disclosed", "siphox": "Not disclosed", "wizey": "Not disclosed", "generic": "Not disclosed"},
         ],
         "suits_title": "Which tool suits whom?",
         "suits_items": [
@@ -227,8 +227,8 @@ _COMP: dict[str, dict] = {
     "norya-vs-chatgpt-for-blood-tests": {
         "name": "ChatGPT",
         "en": {
-            "meta_title": "NoryaAI vs ChatGPT for Blood Test Interpretation | NoryaAI",
-            "meta_description": "Compare NoryaAI vs ChatGPT for blood test interpretation. See which tool is better for lab report uploads, reference ranges, structured summaries, privacy, and doctor-ready output.",
+            "meta_title": "NoryaAI vs ChatGPT for Blood Test Results | Honest Comparison",
+            "meta_description": "Compare NoryaAI vs ChatGPT for blood test results. See which tool is better for lab report uploads, reference ranges, structured summaries, privacy, and doctor-ready output.",
             "hero_title": "NoryaAI vs ChatGPT for Blood Test Interpretation",
             "hero_sub": "ChatGPT is useful for general health questions, but NoryaAI is built specifically for blood test results. This comparison shows which tool is better when you need lab-report parsing, structured summaries, and reference-range-aware output.",
             "quick_answer_title": "The short version",
@@ -263,8 +263,8 @@ _COMP: dict[str, dict] = {
     "norya-vs-bloodgpt": {
         "name": "BloodGPT",
         "en": {
-            "meta_title": "NoryaAI vs BloodGPT for Blood Tests — Honest Comparison | NoryaAI",
-            "meta_description": "Compare NoryaAI and BloodGPT for blood test analysis. Structured reports, multilingual output, and doctor-ready PDFs versus a chat-first workflow.",
+            "meta_title": "NoryaAI vs BloodGPT for Blood Test Results | Honest Comparison",
+            "meta_description": "Compare NoryaAI and BloodGPT for blood test results. Structured reports, multilingual output, doctor-ready PDFs, and reference-range-aware analysis versus a chat-first workflow.",
             "hero_title": "NoryaAI vs BloodGPT for Blood Test Analysis",
             "hero_sub": "BloodGPT is positioned as a blood-test-focused AI experience. NoryaAI is built around structured reports, reference-range-aware analysis, and doctor-ready output. Here is how the two approaches differ.",
             "quick_answer_title": "The short version",
@@ -298,8 +298,8 @@ _COMP: dict[str, dict] = {
     "norya-vs-kantesti": {
         "name": "Kantesti",
         "en": {
-            "meta_title": "NoryaAI vs Kantesti — Blood Test Comparison | NoryaAI",
-            "meta_description": "How does NoryaAI compare to Kantesti for blood test analysis? Feature comparison of two platforms — upload workflow, report structure, and multilingual support.",
+            "meta_title": "NoryaAI vs Kantesti for Blood Test Results | Honest Comparison",
+            "meta_description": "How does NoryaAI compare to Kantesti for blood test results? Compare upload workflow, report structure, multilingual support, and doctor-ready output.",
             "hero_title": "NoryaAI vs Kantesti for Blood Test Analysis",
             "hero_sub": "Both NoryaAI and Kantesti help users understand blood test results. Here is an honest comparison of what each platform offers.",
             "quick_answer_title": "The short version",
@@ -334,8 +334,8 @@ _COMP: dict[str, dict] = {
     "norya-vs-siphox-health": {
         "name": "SiPhox Health",
         "en": {
-            "meta_title": "NoryaAI vs SiPhox Health — Blood Test Analysis Comparison | NoryaAI",
-            "meta_description": "NoryaAI vs SiPhox Health: at-home testing kits vs structured lab report analysis. Compare approaches to understanding your blood test results.",
+            "meta_title": "NoryaAI vs SiPhox Health for Blood Test Results | Honest Comparison",
+            "meta_description": "NoryaAI vs SiPhox Health: at-home testing kits versus structured lab report analysis. Compare privacy, workflow, and approaches to understanding blood test results.",
             "hero_title": "NoryaAI vs SiPhox Health",
             "hero_sub": "SiPhox Health offers at-home biomarker testing kits. NoryaAI analyzes your existing lab results and turns them into structured, actionable reports. Here is how they compare.",
             "quick_answer_title": "The short version",
@@ -370,8 +370,8 @@ _COMP: dict[str, dict] = {
     "norya-vs-wizey": {
         "name": "Wizey",
         "en": {
-            "meta_title": "NoryaAI vs Wizey — Blood Test Analysis Comparison | NoryaAI",
-            "meta_description": "How does NoryaAI compare to Wizey for blood test analysis? Side-by-side comparison of structured report features, multilingual support, and workflow.",
+            "meta_title": "NoryaAI vs Wizey for Blood Test Results | Honest Comparison",
+            "meta_description": "How does NoryaAI compare to Wizey for blood test results? Compare structured report features, multilingual support, workflow, and lab report handling side by side.",
             "hero_title": "NoryaAI vs Wizey for Blood Test Analysis",
             "hero_sub": "Both NoryaAI and Wizey help users understand blood test results. Here is an honest, side-by-side comparison of what each platform offers.",
             "quick_answer_title": "The short version",
@@ -405,7 +405,7 @@ _COMP: dict[str, dict] = {
     "norya-vs-generic-ai": {
         "name": "Generic AI",
         "en": {
-            "meta_title": "NoryaAI vs Generic AI Chatbots for Blood Test Results | NoryaAI",
+            "meta_title": "NoryaAI vs Generic AI for Blood Test Results | Honest Comparison",
             "meta_description": "Compare NoryaAI with generic AI chatbots for blood test results. See the difference between structured lab report analysis and free-form AI answers for blood test interpretation.",
             "hero_title": "NoryaAI vs Generic AI for Blood Test Results",
             "hero_sub": "Generic AI chatbots can discuss blood test questions, but they are not built as blood test analyzers. Here is a side-by-side comparison for people choosing between a structured lab-report workflow and open-ended AI chat.",

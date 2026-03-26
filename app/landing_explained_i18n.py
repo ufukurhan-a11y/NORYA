@@ -17,8 +17,8 @@ EXPLAINED_SLUGS: dict[str, str] = {
 
 def _en() -> dict:
     return {
-        "meta_title": "Blood Test Results Explained | How to Read Your Lab Report | NoryaAI",
-        "meta_description": "Learn how to read blood test results, reference ranges, abbreviations, and units. Understand what high, low, and normal values mean before your next doctor visit.",
+        "meta_title": "Blood Test Results Explained | High, Low, and Normal Values | NoryaAI",
+        "meta_description": "Learn how to read blood test results, reference ranges, abbreviations, and units. Understand what high, low, and normal values may mean before your next doctor visit.",
         "hero_title": "Blood Test Results Explained: How to Read Your Lab Report",
         "hero_sub": "If your lab report feels like a wall of abbreviations, numbers, and flagged values, you are not alone. This guide explains how to read blood test results, what reference ranges mean, and how a structured report can help you prepare for your next doctor visit.",
         "cta_hero_primary": "Analyze my blood test",

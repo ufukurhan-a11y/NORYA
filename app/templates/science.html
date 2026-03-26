@@ -4,18 +4,18 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Science & Technology | NoryaAI</title>
-<meta name="description" content="Precision AI for Complex Diagnostics. NoryaAI bridges the gap between raw data and clinical intuition with peer-reviewed methodology."/>
+<meta name="description" content="Science and technology behind NoryaAI. Learn how our blood test analysis platform uses structured biomarker interpretation, internal quality evaluation, and transparent methodology."/>
 <meta name="robots" content="index,follow" />
 {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Science & Technology | NoryaAI" />
-<meta property="og:description" content="Precision AI for Complex Diagnostics. NoryaAI bridges the gap between raw data and clinical intuition with peer-reviewed methodology." />
+<meta property="og:description" content="Science and technology behind NoryaAI. Structured biomarker interpretation, transparent methodology, and platform quality controls for blood test analysis." />
 {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
 {% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% if 'og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}{% endif %}
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Science & Technology | NoryaAI" />
-<meta name="twitter:description" content="Precision AI for Complex Diagnostics. NoryaAI bridges the gap between raw data and clinical intuition with peer-reviewed methodology." />
+<meta name="twitter:description" content="Science and technology behind NoryaAI. Structured biomarker interpretation, transparent methodology, and platform quality controls for blood test analysis." />
 {% if og_image %}<meta name="twitter:image" content="{{ og_image }}" />{% endif %}
 <link rel="llms-txt" href="/llms.txt" />
 <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
@@ -38,7 +38,7 @@
   "name": "NoryaAI",
   "url": "https://noryaai.com",
   "logo": "https://noryaai.com/static/norya_logo_transparent_trim.png",
-  "description": "AI-powered blood test interpretation platform trusted by 20,000+ physicians and used by 4,000+ hospitals and clinics worldwide. Uses precision engineering and peer-reviewed methodology to bridge raw laboratory data and clinical insights.",
+  "description": "AI-powered blood test interpretation platform focused on structured biomarker interpretation, transparent methodology, and quality-controlled report generation.",
   "knowsAbout": [
     "Blood test interpretation",
     "Clinical laboratory analysis",
@@ -59,19 +59,19 @@
 }
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://noryaai.com/"},{"@type":"ListItem","position":2,"name":"Science","item":"https://noryaai.com/science"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}{{ localized_home_path(request) }}"},{"@type":"ListItem","position":2,"name":"Science","item":"{{ canonical_url }}"}]}
 </script>
 </head>
 <body class="bg-surface font-body text-on-surface selection:bg-primary-container/20">
 <!-- Nav -->
 <nav class="fixed top-0 w-full z-50 bg-white/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
 <div class="flex justify-between items-center w-full px-8 py-4 max-w-7xl mx-auto">
-<a href="/" class="flex items-center gap-3">
+<a href="{{ localized_home_path(request) }}" class="flex items-center gap-3">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none" aria-hidden="true" class="w-8 h-8 shrink-0"><defs><linearGradient id="nav-ig" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e3a5f"/><stop offset="50%" style="stop-color:#2d4a6f"/><stop offset="100%" style="stop-color:#0d9488"/></linearGradient></defs><rect width="40" height="40" rx="10" fill="url(#nav-ig)"/><path d="M11 28V11h3l6 11.2V11h3v17h-3L17 18.2V28h-6z" fill="white"/><circle cx="29" cy="26" r="2.5" fill="white" opacity="0.9"/></svg>
 <span class="text-2xl font-bold tracking-tighter text-slate-900 font-headline">NoryaAI</span>
 </a>
 <div class="hidden md:flex items-center gap-10">
-<a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/">Analysis</a>
+<a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="{{ localized_home_path(request) }}">Analysis</a>
 <a class="font-headline tracking-tight text-sm font-semibold text-[#0EA5A4] border-b-2 border-[#0EA5A4] pb-1" href="/science">Science</a>
 <a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/about">About</a>
 <a class="font-headline tracking-tight text-sm font-semibold text-slate-600 hover:text-slate-900 transition-all" href="/security">Security</a>
@@ -79,7 +79,7 @@
 </div>
 <div class="flex items-center gap-4">
 {% include "partials/header_lang.html" %}
-<a href="/#analyze" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:9999px;font-weight:600;text-decoration:none;">
+<a href="{{ localized_home_path(request) }}#analyze" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-6 py-2.5 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:9999px;font-weight:600;text-decoration:none;">
 Get Started
 </a>
 </div>
@@ -102,14 +102,14 @@ NoryaAI bridges the gap between raw data and clinical intuition. Our methodology
 <div class="lg:col-span-4 pb-4">
 <div class="bg-surface-container-low p-8 rounded-xl relative overflow-hidden group">
 <div class="absolute -right-4 -top-4 w-32 h-32 bg-primary/10 rounded-full blur-2xl group-hover:scale-150 transition-transform duration-700"></div>
-<p class="text-sm font-medium mb-4 text-on-surface-variant italic">"We don't just provide numbers; we provide context that saves lives."</p>
+<p class="text-sm font-medium mb-4 text-on-surface-variant italic">"We focus on turning raw lab values into a clearer, more structured report people can review with their clinician."</p>
 <div class="flex items-center gap-3">
 <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center shrink-0" style="background:linear-gradient(135deg,#0d9488,#1e3a5f);">
 <span class="text-white font-bold text-xs leading-none">EV</span>
 </div>
 <div>
-<p class="text-xs font-bold text-on-surface">Dr. Elena Vance</p>
-<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Chief Medical Officer</p>
+<p class="text-xs font-bold text-on-surface">NoryaAI methodology team</p>
+<p class="text-[10px] text-on-surface-variant uppercase tracking-wider">Clinical review principles</p>
 </div>
 </div>
 </div>
@@ -140,13 +140,13 @@ Our proprietary AI models analyze over 150 distinct biomarkers simultaneously, a
 <div class="space-y-6">
 <div class="bg-primary text-on-primary p-8 rounded-xl h-1/2 flex flex-col justify-center">
 <span class="material-symbols-outlined text-4xl mb-6">shield_lock</span>
-<h3 class="text-2xl font-bold mb-2">HIPAA Confirmed</h3>
-<p class="text-on-primary/80 text-sm">Military-grade encryption for all sensitive health data points.</p>
+<h3 class="text-2xl font-bold mb-2">Privacy-first handling</h3>
+<p class="text-on-primary/80 text-sm">Encrypted transport, controlled report access, and platform policies designed for responsible health-data handling.</p>
 </div>
 <div class="bg-surface-container-lowest p-8 rounded-xl h-1/2 flex flex-col justify-center shadow-sm">
 <span class="material-symbols-outlined text-primary-container text-4xl mb-6">analytics</span>
-<h3 class="text-2xl font-bold mb-2">99.8% Accuracy</h3>
-<p class="text-on-surface-variant text-sm">Validated against clinical gold standards across global laboratories.</p>
+<h3 class="text-2xl font-bold mb-2">98.7% Classification Accuracy</h3>
+<p class="text-on-surface-variant text-sm">Internal platform evaluation of biomarker classification against reference ranges. See methodology for scope and limits.</p>
 </div>
 </div>
 </div>
@@ -157,8 +157,8 @@ Our proprietary AI models analyze over 150 distinct biomarkers simultaneously, a
 <div class="max-w-7xl mx-auto px-8">
 <div class="flex flex-col md:flex-row justify-between items-start md:items-end mb-20 gap-8">
 <div class="max-w-xl">
-<h2 class="font-headline text-5xl font-extrabold tracking-tighter mb-6">Global Medical Board</h2>
-<p class="text-on-surface-variant">Our advisory council consists of leading endocrinologists, data scientists, and clinical researchers from the world's top institutions.</p>
+<h2 class="font-headline text-5xl font-extrabold tracking-tighter mb-6">Clinical Review Principles</h2>
+<p class="text-on-surface-variant">NoryaAI is built around reviewable interpretation rules, structured outputs, and transparent limits rather than opaque medical claims.</p>
 </div>
 <div class="flex gap-4">
 <button class="w-12 h-12 rounded-full border border-outline-variant/30 flex items-center justify-center hover:bg-white transition-colors">
@@ -175,36 +175,36 @@ Our proprietary AI models analyze over 150 distinct biomarkers simultaneously, a
 <span class="text-white/90 font-headline font-bold text-5xl select-none group-hover:scale-110 transition-transform duration-700">JT</span>
 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 </div>
-<h4 class="font-headline font-bold text-xl">Dr. Julian Thorne</h4>
-<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Systems Biology</p>
-<p class="text-sm text-on-surface-variant">Oxford University Research Lead</p>
+<h4 class="font-headline font-bold text-xl">Reference-range logic</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Interpretation layer</p>
+<p class="text-sm text-on-surface-variant">Compares biomarkers against structured reference ranges and report context.</p>
 </div>
 <div class="group cursor-pointer">
 <div class="aspect-[4/5] rounded-xl mb-6 overflow-hidden relative flex items-center justify-center" style="background:linear-gradient(135deg,#0d9488 0%,#1e3a5f 100%);">
 <span class="text-white/90 font-headline font-bold text-5xl select-none group-hover:scale-110 transition-transform duration-700">SC</span>
 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 </div>
-<h4 class="font-headline font-bold text-xl">Dr. Sarah Chen</h4>
-<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Machine Learning</p>
-<p class="text-sm text-on-surface-variant">MIT Health AI Department</p>
+<h4 class="font-headline font-bold text-xl">Quality controls</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Platform safeguards</p>
+<p class="text-sm text-on-surface-variant">Flags missing, inconsistent, or hard-to-parse values before final report generation.</p>
 </div>
 <div class="group cursor-pointer">
 <div class="aspect-[4/5] rounded-xl mb-6 overflow-hidden relative flex items-center justify-center" style="background:linear-gradient(135deg,#2d4a6f 0%,#0d9488 100%);">
 <span class="text-white/90 font-headline font-bold text-5xl select-none group-hover:scale-110 transition-transform duration-700">MG</span>
 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 </div>
-<h4 class="font-headline font-bold text-xl">Dr. Marcus G.</h4>
-<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Pathology</p>
-<p class="text-sm text-on-surface-variant">Stanford Medical Center</p>
+<h4 class="font-headline font-bold text-xl">Structured output</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Patient readability</p>
+<p class="text-sm text-on-surface-variant">Turns complex lab data into readable summaries, grouped markers, and follow-up prompts.</p>
 </div>
 <div class="group cursor-pointer">
 <div class="aspect-[4/5] rounded-xl mb-6 overflow-hidden relative flex items-center justify-center" style="background:linear-gradient(135deg,#1e3a5f 0%,#0d9488 50%,#2d4a6f 100%);">
 <span class="text-white/90 font-headline font-bold text-5xl select-none group-hover:scale-110 transition-transform duration-700">AO</span>
 <div class="absolute inset-0 bg-gradient-to-t from-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
 </div>
-<h4 class="font-headline font-bold text-xl">Dr. Amara Okoro</h4>
-<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Preventative Care</p>
-<p class="text-sm text-on-surface-variant">Johns Hopkins Medicine</p>
+<h4 class="font-headline font-bold text-xl">Transparent limits</h4>
+<p class="text-xs text-primary font-bold uppercase tracking-widest mb-2">Safety framing</p>
+<p class="text-sm text-on-surface-variant">Educational support only, with explicit guidance to review abnormal findings with clinicians.</p>
 </div>
 </div>
 </div>
@@ -214,8 +214,8 @@ Our proprietary AI models analyze over 150 distinct biomarkers simultaneously, a
 <section class="max-w-7xl mx-auto px-8 py-48">
 <div class="flex flex-col lg:flex-row gap-24">
 <div class="lg:w-1/3">
-<h2 class="font-headline text-4xl font-extrabold tracking-tighter mb-8 leading-tight">Peer-Reviewed <br/>Foundations</h2>
-<p class="text-on-surface-variant mb-10 leading-relaxed">Our AI models are built upon decades of clinical research. We believe in radical transparency and open scientific discourse.</p>
+<h2 class="font-headline text-4xl font-extrabold tracking-tighter mb-8 leading-tight">Methodology <br/>Foundations</h2>
+<p class="text-on-surface-variant mb-10 leading-relaxed">Our product logic is informed by standard laboratory reference ranges, clinical interpretation patterns, and internal quality evaluation. We aim to explain clearly what our metrics mean and what they do not mean.</p>
 <a href="/methodology" class="flex items-center gap-2 font-headline font-bold text-primary group">
 View Full Publications
 <span class="material-symbols-outlined group-hover:translate-x-2 transition-transform">arrow_right_alt</span>
@@ -224,22 +224,22 @@ View Full Publications
 <div class="lg:w-2/3 space-y-4">
 <div class="p-8 bg-surface-container-lowest rounded-xl flex items-center justify-between group hover:bg-primary transition-colors">
 <div class="flex flex-col gap-1">
-<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">Journal of Clinical AI &middot; 2023</span>
-<h5 class="text-xl font-bold group-hover:text-on-primary">Multi-modal Biomarker Analysis in Early Detection</h5>
+<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">Methodology</span>
+<h5 class="text-xl font-bold group-hover:text-on-primary">How biomarker classification works on NoryaAI</h5>
 </div>
 <span class="material-symbols-outlined text-outline-variant group-hover:text-on-primary">description</span>
 </div>
 <div class="p-8 bg-surface-container-lowest rounded-xl flex items-center justify-between group hover:bg-primary transition-colors">
 <div class="flex flex-col gap-1">
-<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">The Lancet Health-Tech &middot; 2022</span>
-<h5 class="text-xl font-bold group-hover:text-on-primary">Automated Hematology Interpretation Performance</h5>
+<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">Transparency</span>
+<h5 class="text-xl font-bold group-hover:text-on-primary">What our accuracy metric includes and excludes</h5>
 </div>
 <span class="material-symbols-outlined text-outline-variant group-hover:text-on-primary">description</span>
 </div>
 <div class="p-8 bg-surface-container-lowest rounded-xl flex items-center justify-between group hover:bg-primary transition-colors">
 <div class="flex flex-col gap-1">
-<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">Nature Medicine &middot; 2024</span>
-<h5 class="text-xl font-bold group-hover:text-on-primary">Predictive Modeling for Metabolic Syndrome</h5>
+<span class="text-[10px] text-primary group-hover:text-on-primary/70 font-bold uppercase tracking-widest">Medical review</span>
+<h5 class="text-xl font-bold group-hover:text-on-primary">How safety and educational framing are applied</h5>
 </div>
 <span class="material-symbols-outlined text-outline-variant group-hover:text-on-primary">description</span>
 </div>
@@ -252,26 +252,26 @@ View Full Publications
 <div class="relative bg-on-surface rounded-[2rem] p-16 overflow-hidden">
 <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(#ffffff 1px, transparent 1px); background-size: 32px 32px;"></div>
 <div class="relative z-10 max-w-2xl">
-<h2 class="font-headline text-5xl font-extrabold text-white mb-8 tracking-tighter">The Global Reference Database</h2>
+<h2 class="font-headline text-5xl font-extrabold text-white mb-8 tracking-tighter">Platform Reference Coverage</h2>
 <p class="text-white/70 text-lg mb-12 leading-relaxed">
-NoryaAI leverages an anonymized dataset of over 40 million clinical records, allowing our AI to understand geographical nuances and ethnic variability in human biology.
+NoryaAI is designed to work across common blood test formats, multilingual report outputs, and structured biomarker interpretation flows. We focus on explainability and consistency rather than inflated database claims.
 </p>
 <div class="grid grid-cols-2 md:grid-cols-4 gap-8">
 <div>
-<p class="text-3xl font-headline font-bold text-primary-container">40M+</p>
-<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Data Points</p>
+<p class="text-3xl font-headline font-bold text-primary-container">200+</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Biomarkers handled</p>
 </div>
 <div>
-<p class="text-3xl font-headline font-bold text-primary-container">120</p>
-<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Partner Labs</p>
+<p class="text-3xl font-headline font-bold text-primary-container">9+</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Report languages</p>
 </div>
 <div>
-<p class="text-3xl font-headline font-bold text-primary-container">18</p>
-<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Countries</p>
+<p class="text-3xl font-headline font-bold text-primary-container">50+</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Countries reached</p>
 </div>
 <div>
-<p class="text-3xl font-headline font-bold text-primary-container">9</p>
-<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">ISO Certs</p>
+<p class="text-3xl font-headline font-bold text-primary-container">PDF</p>
+<p class="text-[10px] text-white/50 uppercase tracking-widest font-bold">Real lab exports supported</p>
 </div>
 </div>
 </div>
@@ -298,7 +298,7 @@ NoryaAI leverages an anonymized dataset of over 40 million clinical records, all
 <footer class="bg-slate-50 w-full border-t border-slate-200">
 <div class="w-full py-12 px-8 flex flex-col md:flex-row justify-between items-center max-w-7xl mx-auto gap-8">
 <div>
-<a href="/" class="flex items-center gap-2 mb-2">
+<a href="{{ localized_home_path(request) }}" class="flex items-center gap-2 mb-2">
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 40" fill="none" aria-hidden="true" class="w-6 h-6 shrink-0"><defs><linearGradient id="ft-ig" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" style="stop-color:#1e3a5f"/><stop offset="50%" style="stop-color:#2d4a6f"/><stop offset="100%" style="stop-color:#0d9488"/></linearGradient></defs><rect width="40" height="40" rx="10" fill="url(#ft-ig)"/><path d="M11 28V11h3l6 11.2V11h3v17h-3L17 18.2V28h-6z" fill="white"/><circle cx="29" cy="26" r="2.5" fill="white" opacity="0.9"/></svg>
 <span class="font-headline font-bold text-slate-900">NoryaAI</span>
 </a>

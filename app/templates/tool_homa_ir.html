@@ -68,6 +68,7 @@
         <a href="/en" class="text-slate-600 hover:text-teal-600">Home</a>
         <a href="{{ base_url }}/how-it-works?lang=en" class="text-slate-600 hover:text-teal-600">How it works</a>
         <a href="{{ base_url }}/en/blog" class="text-slate-600 hover:text-teal-600">Blog</a>
+        <a href="{{ base_url }}/en/tools" class="text-slate-600 hover:text-teal-600">Tools</a>
         {% include "partials/header_lang.html" %}
         <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">Analyze</a>
       </nav>
@@ -122,6 +123,46 @@
       </div>
     </section>
 
+    {% if lang == 'en' %}
+    <section class="py-10 px-4 bg-white border-y border-slate-100">
+      <div class="max-w-4xl mx-auto">
+        <div class="max-w-3xl">
+          <span class="inline-block text-xs font-semibold tracking-wide uppercase text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-3 py-1 mb-4">Related resources</span>
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">Go deeper on insulin resistance and blood sugar results</h2>
+          <p class="mt-3 text-slate-600 leading-relaxed">Use the calculator for a quick estimate, then move to the guides below for context around fasting glucose, HbA1c, and lab report interpretation.</p>
+        </div>
+        <div class="mt-8 grid gap-4 sm:grid-cols-2">
+          <a href="/en/blog/what-is-homa-ir" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Guide</p>
+            <h3 class="mt-2 text-lg font-semibold text-slate-900">What is HOMA-IR?</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">Read the plain-language article on what HOMA-IR measures and how doctors usually interpret it with other tests.</p>
+          </a>
+          <a href="/en/blog/how-to-read-fasting-blood-sugar-results" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Blood sugar</p>
+            <h3 class="mt-2 text-lg font-semibold text-slate-900">Fasting glucose results</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">Compare fasting glucose ranges and understand how this marker connects with insulin resistance.</p>
+          </a>
+          <a href="/en/blog/what-does-an-hba1c-result-mean" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">HbA1c</p>
+            <h3 class="mt-2 text-lg font-semibold text-slate-900">HbA1c result meaning</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">See how HbA1c adds longer-term context when fasting glucose or HOMA-IR is borderline or high.</p>
+          </a>
+          <a href="/en/tools/unit-converter" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Tool</p>
+            <h3 class="mt-2 text-lg font-semibold text-slate-900">Blood test unit converter</h3>
+            <p class="mt-2 text-sm leading-relaxed text-slate-600">Convert glucose, HbA1c, creatinine, and other blood test values between common lab units.</p>
+          </a>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-x-5 gap-y-2 text-sm text-slate-600">
+          <a href="/en/tools" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Tools hub</a>
+          <a href="/trust?lang=en" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Trust center</a>
+          <a href="/methodology?lang=en" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Methodology</a>
+          <a href="/en/blood-test-results-explained" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Blood test results explained</a>
+        </div>
+      </div>
+    </section>
+    {% endif %}
+
     {% if t.faqs %}
     <section class="py-10 px-4 bg-white">
       <div class="max-w-3xl mx-auto">
@@ -162,11 +203,15 @@
       <a href="/{{ lang }}/blood-test-results-explained" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_explained }}</a>
       <a href="/{{ lang }}/sample-blood-test-reports" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_samples }}</a>
       <a href="/{{ lang }}/ai-blood-test-analyzer" class="text-slate-500 hover:text-teal-700">{{ t.seo_nav_ai }}</a>
+      <a href="/en/tools" class="text-slate-500 hover:text-teal-700">Tools hub</a>
+      <a href="/en/tools/egfr-calculator" class="text-slate-500 hover:text-teal-700">eGFR calculator</a>
+      <a href="/trust?lang={{ lang }}" class="text-slate-500 hover:text-teal-700">Trust Center</a>
+      <a href="/methodology?lang={{ lang }}" class="text-slate-500 hover:text-teal-700">Methodology</a>
     </div>
   </nav>
 
   <footer class="border-t border-slate-200 bg-white py-8 px-4 text-center text-sm text-slate-500">
-    <p>&copy; NoryaAI · <a href="/en/blog" class="text-teal-600 hover:underline">Blog</a> · <a href="/en/tools/unit-converter" class="text-teal-600 hover:underline">Unit Converter</a> · <a href="/pricing" class="text-teal-600 hover:underline">Pricing</a></p>
+    <p>&copy; NoryaAI · <a href="/en/tools" class="text-teal-600 hover:underline">Tools</a> · <a href="/en/blog" class="text-teal-600 hover:underline">Blog</a> · <a href="/en/tools/unit-converter" class="text-teal-600 hover:underline">Unit Converter</a> · <a href="/en/tools/egfr-calculator" class="text-teal-600 hover:underline">eGFR Calculator</a> · <a href="/pricing?lang={{ lang }}" class="text-teal-600 hover:underline">Pricing</a></p>
     <p class="mt-2 text-xs text-slate-400">{{ t.disclaimer|default('This calculator is for educational purposes only. Not a substitute for medical advice.') }}</p>
   </footer>
 

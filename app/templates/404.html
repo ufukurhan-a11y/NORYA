@@ -132,7 +132,7 @@
 </head>
 <body>
   <div class="wrap">
-    <a class="logo-link" href="/" aria-label="{% if lang == 'tr' %}NoryaAI ana sayfa{% else %}NoryaAI home{% endif %}">
+    <a class="logo-link" href="{{ localized_home_path(request, lang) }}" aria-label="{% if lang == 'tr' %}NoryaAI ana sayfa{% else %}NoryaAI home{% endif %}">
       <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" width="200" height="50" loading="eager" />
     </a>
 
@@ -143,22 +143,22 @@
     <p class="lead">Aradığınız sayfa yok veya taşınmış olabilir. Aşağıdaki bağlantılardan devam edebilirsiniz.</p>
     <p class="hint">Belki şunu arıyordunuz…</p>
     <nav class="links" aria-label="Önerilen sayfalar">
-      <a class="primary" href="/">Ana sayfa</a>
+      <a class="primary" href="{{ localized_home_path(request, lang) }}">Ana sayfa</a>
       <a href="/{{ lang|default('en') }}/blog">Blog</a>
       <a href="/pricing">Fiyatlandırma</a>
       <a href="/how-it-works">Nasıl çalışır?</a>
-      <a href="/#analyze">Analiz</a>
+      <a href="{{ localized_home_path(request, lang) }}#analyze">Analiz</a>
     </nav>
     {% else %}
     <h1>Page not found</h1>
     <p class="lead">The page you’re looking for doesn’t exist or may have moved. Try one of the links below.</p>
     <p class="hint">Maybe you were looking for…</p>
     <nav class="links" aria-label="Suggested pages">
-      <a class="primary" href="/">Home</a>
+      <a class="primary" href="{{ localized_home_path(request, lang) }}">Home</a>
       <a href="/{{ lang|default('en') }}/blog">Blog</a>
       <a href="/pricing">Pricing</a>
       <a href="/how-it-works">How it works</a>
-      <a href="/#analyze">Analyze</a>
+      <a href="{{ localized_home_path(request, lang) }}#analyze">Analyze</a>
     </nav>
     {% endif %}
 

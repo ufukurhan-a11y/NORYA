@@ -10,8 +10,8 @@ GERMANY_GUIDE_SLUGS = {
 
 def _en() -> dict:
     return {
-        "meta_title": "Understanding Blood Test Results from Germany | NoryaAI",
-        "meta_description": "Got a Blutbild or Laborwerte report from a German lab? Learn how to read German blood test results, common abbreviations, and how to get a structured English summary.",
+        "meta_title": "German Blood Test Results Explained | Blutbild to English | NoryaAI",
+        "meta_description": "Got a Blutbild or Laborwerte report from a German lab? Learn common abbreviations, how to read German blood test results, and how to get a structured English summary.",
         "badge": "Country Guide · Germany",
         "hero_title": "Understanding Blood Test Results from Germany",
         "hero_sub": "If you have received a Blutbild, großes Blutbild, or Laborwerte report from a German lab, this guide explains what the abbreviations mean, how German reference ranges work, and how to get a clear summary in English.",

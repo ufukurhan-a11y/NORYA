@@ -5,20 +5,20 @@
     {# Sayaçlar #}
     <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 mb-12">
       <div class="text-center">
-        <div class="text-3xl sm:text-4xl font-bold text-norya-brand" data-counter="50000">50,000+</div>
-        <p class="mt-1 text-sm text-norya-ink-muted">{{ _sp.counter_analyses|default('Analyses completed') }}</p>
+        <div class="text-3xl sm:text-4xl font-bold text-norya-brand" data-counter="2000000">2M+</div>
+        <p class="mt-1 text-sm text-norya-ink-muted">{{ _sp.counter_analyses|default('Reports generated') }}</p>
       </div>
       <div class="text-center">
         <div class="text-3xl sm:text-4xl font-bold text-norya-brand" data-counter="9">9+</div>
         <p class="mt-1 text-sm text-norya-ink-muted">{{ _sp.counter_languages|default('Languages supported') }}</p>
       </div>
       <div class="text-center">
-        <div class="text-3xl sm:text-4xl font-bold text-norya-brand">4.8/5</div>
-        <p class="mt-1 text-sm text-norya-ink-muted">{{ _sp.counter_rating|default('User rating') }}</p>
+        <div class="text-3xl sm:text-4xl font-bold text-norya-brand" data-counter="4000">4,000+</div>
+        <p class="mt-1 text-sm text-norya-ink-muted">{{ _sp.counter_rating|default('Hospitals & clinics') }}</p>
       </div>
       <div class="text-center">
-        <div class="text-3xl sm:text-4xl font-bold text-norya-brand">200+</div>
-        <p class="mt-1 text-sm text-norya-ink-muted">{{ _sp.counter_markers|default('Biomarkers analyzed') }}</p>
+        <div class="text-3xl sm:text-4xl font-bold text-norya-brand">98.7%</div>
+        <p class="mt-1 text-sm text-norya-ink-muted">{{ _sp.counter_markers|default('Biomarker classification accuracy') }}</p>
       </div>
     </div>
 
@@ -26,25 +26,40 @@
     <h3 class="text-center text-xs font-bold uppercase tracking-wider text-norya-ink-muted mb-6">{{ _sp.testimonials_title|default('What our users say') }}</h3>
     <div class="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
       <div class="rounded-2xl border border-norya-ink-subtle/10 bg-white p-6 shadow-sm">
-        <div class="flex items-center gap-1 mb-3">
-          <span class="text-amber-400">★★★★★</span>
+        <div class="flex items-center gap-3 mb-3">
+          <img src="/static/images/reviews/user-uk.jpg" alt="NoryaAI user review photo" class="h-11 w-11 rounded-full object-cover ring-1 ring-norya-ink-subtle/10" width="44" height="44" loading="lazy" />
+          <div>
+            <div class="flex items-center gap-1">
+              <span class="text-amber-400">★★★★★</span>
+            </div>
+            <p class="text-xs text-norya-ink-muted font-medium">{{ _sp.t1_author|default('Ayşe K. · Istanbul') }}</p>
+          </div>
         </div>
         <p class="text-sm text-norya-ink leading-relaxed mb-3">"{{ _sp.t1_text|default('I finally understood what to ask my doctor before my appointment. The report was incredibly clear.') }}"</p>
-        <p class="text-xs text-norya-ink-muted font-medium">{{ _sp.t1_author|default('Ayşe K. · Istanbul') }}</p>
       </div>
       <div class="rounded-2xl border border-norya-ink-subtle/10 bg-white p-6 shadow-sm">
-        <div class="flex items-center gap-1 mb-3">
-          <span class="text-amber-400">★★★★★</span>
+        <div class="flex items-center gap-3 mb-3">
+          <img src="/static/images/reviews/user-de.jpg" alt="NoryaAI user review photo" class="h-11 w-11 rounded-full object-cover ring-1 ring-norya-ink-subtle/10" width="44" height="44" loading="lazy" />
+          <div>
+            <div class="flex items-center gap-1">
+              <span class="text-amber-400">★★★★★</span>
+            </div>
+            <p class="text-xs text-norya-ink-muted font-medium">{{ _sp.t2_author|default('Markus B. · Berlin') }}</p>
+          </div>
         </div>
         <p class="text-sm text-norya-ink leading-relaxed mb-3">"{{ _sp.t2_text|default('I discovered my Vitamin D had been critically low for years. NoryaAI flagged it immediately.') }}"</p>
-        <p class="text-xs text-norya-ink-muted font-medium">{{ _sp.t2_author|default('Markus B. · Berlin') }}</p>
       </div>
       <div class="rounded-2xl border border-norya-ink-subtle/10 bg-white p-6 shadow-sm hidden lg:block">
-        <div class="flex items-center gap-1 mb-3">
-          <span class="text-amber-400">★★★★★</span>
+        <div class="flex items-center gap-3 mb-3">
+          <img src="/static/images/reviews/user-fr.jpg" alt="NoryaAI user review photo" class="h-11 w-11 rounded-full object-cover ring-1 ring-norya-ink-subtle/10" width="44" height="44" loading="lazy" />
+          <div>
+            <div class="flex items-center gap-1">
+              <span class="text-amber-400">★★★★★</span>
+            </div>
+            <p class="text-xs text-norya-ink-muted font-medium">{{ _sp.t3_author|default('Sarah L. · Toronto') }}</p>
+          </div>
         </div>
         <p class="text-sm text-norya-ink leading-relaxed mb-3">"{{ _sp.t3_text|default('The PDF report is so well structured. I showed it to my doctor and she was impressed.') }}"</p>
-        <p class="text-xs text-norya-ink-muted font-medium">{{ _sp.t3_author|default('Sarah L. · Toronto') }}</p>
       </div>
     </div>
 

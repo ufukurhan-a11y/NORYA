@@ -22,8 +22,8 @@ LANDING_META = {
         "og_locale": "tr_TR",
     },
     "en": {
-        "meta_title": "NoryaAI | AI Blood Test Analyzer & Lab Results Explanation",
-        "meta_description": "Upload your blood test results and get a clear AI-powered explanation of lab values, biomarkers, and practical follow-up insights with NoryaAI.",
+        "meta_title": "AI Blood Test Analyzer | Upload Results & Understand Labs | NoryaAI",
+        "meta_description": "Upload blood test results and get a structured AI report with reference ranges, flagged markers, plain-language explanations, and practical follow-up guidance.",
         "og_locale": "en_US",
     },
     "en-ca": {

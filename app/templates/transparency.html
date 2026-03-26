@@ -36,18 +36,18 @@
   </style>
   {% include "includes/gtag_google_ads.html" %}
   <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}/"},{"@type":"ListItem","position":2,"name":"Trust Center","item":"{{ base_url }}/trust"},{"@type":"ListItem","position":3,"name":"Transparency","item":"{{ canonical_url }}"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}{{ localized_home_path(request, lang) }}"},{"@type":"ListItem","position":2,"name":"Trust Center","item":"{{ base_url }}/trust?lang={{ lang }}"},{"@type":"ListItem","position":3,"name":"Transparency","item":"{{ canonical_url }}"}]}
   </script>
 </head>
 <body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
   <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
     <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between gap-3">
-      <a href="/" class="flex items-center shrink-0">
+      <a href="{{ localized_home_path(request, lang) }}" class="flex items-center shrink-0">
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
       </a>
       <div class="flex items-center gap-3">
         <nav class="hidden sm:flex items-center gap-4 text-sm font-medium">
-          <a href="/" class="text-slate-600 hover:text-teal-600">Home</a>
+          <a href="{{ localized_home_path(request, lang) }}" class="text-slate-600 hover:text-teal-600">Home</a>
           <a href="{{ base_url }}/trust?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">Trust</a>
           <a href="{{ base_url }}/transparency?lang={{ lang }}" class="text-teal-600 font-semibold">Transparency</a>
         </nav>
@@ -61,7 +61,7 @@
   <aside id="tc-drawer" class="fixed top-0 right-0 h-full w-[min(86vw,340px)] bg-white z-[61] shadow-2xl p-5 transform translate-x-full transition-transform duration-200 flex flex-col" role="dialog">
     <div class="flex justify-between items-center mb-5"><span class="font-semibold text-slate-900">Menu</span><button onclick="document.getElementById('tc-drawer').classList.remove('open');document.getElementById('tc-backdrop').classList.remove('open');document.body.style.overflow=''" class="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center">✕</button></div>
     <a href="{{ base_url }}/analyze" class="block text-center bg-teal-600 text-white font-semibold py-3 rounded-xl mb-3">Analyze</a>
-    <a href="/" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">Home</a>
+    <a href="{{ localized_home_path(request, lang) }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">Home</a>
     <a href="{{ base_url }}/trust?lang={{ lang }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">Trust</a>
     <a href="{{ base_url }}/methodology?lang={{ lang }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">Methodology</a>
     <a href="{{ base_url }}/medical-review?lang={{ lang }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">Medical Review</a>
@@ -157,7 +157,7 @@
   <footer class="bg-slate-50 w-full border-t border-slate-200">
     <div class="w-full py-10 px-6 flex flex-col md:flex-row justify-between items-center max-w-6xl mx-auto gap-6">
       <div>
-        <a href="/" class="flex items-center gap-2 mb-2">
+        <a href="{{ localized_home_path(request, lang) }}" class="flex items-center gap-2 mb-2">
           <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-7 w-auto object-contain" width="140" height="35" loading="lazy" />
         </a>
         <p class="text-xs tracking-wide text-slate-400">&copy; 2018–2026 NoryaAI. Responsible health technology.</p>

@@ -19,8 +19,8 @@ CBC_GUIDE_SLUGS: dict[str, str] = {
 # ---------------------------------------------------------------------------
 def _en() -> dict:
     return {
-        "meta_title": "How to Read a CBC Report | Complete Blood Count Explained | NoryaAI",
-        "meta_description": "Learn how to read CBC results step by step. Understand WBC, RBC, hemoglobin, hematocrit, platelets, MCV, MCH, and RDW with plain-language explanations and reference ranges.",
+        "meta_title": "How to Read CBC Results | WBC, RBC, Hemoglobin Explained | NoryaAI",
+        "meta_description": "Learn how to read CBC results step by step. Understand WBC, RBC, hemoglobin, hematocrit, platelets, MCV, MCH, and RDW with reference ranges and plain-language explanations.",
         "badge": "Lab Guide",
         "hero_title": "How to Read a CBC Report",
         "hero_sub": "A complete blood count (CBC) is one of the most common blood tests ordered worldwide. This guide explains how to read CBC results line by line, what abbreviations like WBC, RBC, HGB, HCT, PLT, and MCV mean, and how to make sense of the numbers on your report.",

@@ -102,7 +102,7 @@ from app.landing_multilingual_i18n import get_multilingual_landing_content, get_
 from app.faq_i18n import get_faq_content, get_faq_slug, FAQ_SLUGS
 from app.guide_cbc_i18n import get_cbc_guide_content, get_cbc_guide_slug, CBC_GUIDE_SLUGS
 from app.guide_germany_i18n import get_germany_guide_content, get_germany_guide_slug, GERMANY_GUIDE_SLUGS
-from app.tools_i18n import get_egfr_content, get_homa_ir_content
+from app.tools_i18n import get_egfr_content, get_homa_ir_content, get_tools_hub_content
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.pricing_page_i18n import PRICING_HREFLANG_LANGS, enrich_pricing_context
 from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_blog_icon_paths, get_related_articles, iter_all_article_paths, list_articles_for_lang
@@ -753,8 +753,13 @@ app.include_router(admin_router)  # Eski API paneli: /admin/stats, /admin/analys
 @app.get("/")
 @app.get("")
 def index(request: Request):
-    """Ana sayfa: tarayıcı GET ile açıldığında index.html döner."""
-    return _index_response(request)
+    """Ana sayfa: kullanıcıyı uygun locale landing'e yönlendirir."""
+    locale = _preferred_landing_locale(request)
+    query = request.url.query
+    target = f"/{locale}"
+    if query:
+        target = f"{target}?{query}"
+    return RedirectResponse(url=target, status_code=302)
 
 
 @app.head("/")
@@ -964,10 +969,10 @@ COUNTRY_TO_LANG = {
     "IL": "he",
     "SA": "ar", "EG": "ar", "AE": "ar", "QA": "ar", "JO": "ar", "LB": "ar", "SY": "ar", "IQ": "ar", "KW": "ar", "BH": "ar", "OM": "ar", "YE": "ar", "PS": "ar", "MA": "ar", "DZ": "ar", "TN": "ar",
     "IN": "hi",
-    "FR": "fr", "ES": "es", "IT": "it", "NL": "nl", "PL": "pl", "RU": "ru",
-    "GR": "el", "CY": "el",
-    "CZ": "cs",
-    "RS": "sr", "BA": "sr", "ME": "sr",
+    "FR": "fr", "ES": "es", "IT": "it", "NL": "en", "PL": "en", "RU": "en",
+    "GR": "en", "CY": "en",
+    "CZ": "en",
+    "RS": "en", "BA": "en", "ME": "en",
 }
 DEFAULT_LANG = "en"
 
@@ -1080,8 +1085,8 @@ def get_locale(request: Request):
     lang_from_browser = _parse_accept_language(accept)
     country = _get_country_from_request(request)
     if country and country in COUNTRY_TO_LANG:
-        return {"suggested": COUNTRY_TO_LANG[country], "countryCode": country}
-    return {"suggested": lang_from_browser, "countryCode": country}
+        return {"suggested": _preferred_landing_locale(request), "countryCode": country}
+    return {"suggested": _normalize_landing_locale(lang_from_browser), "countryCode": country}
 
 
 def _pricing_response(currency: str, rate: float, eur_base: dict[str, float] | None = None) -> dict:
@@ -2031,6 +2036,173 @@ def blog_index(request: Request, lang: str):
         )
     categories = list({p["category"] for p in posts if p.get("category")})
     categories.sort()
+    definition_links = []
+    topic_clusters = []
+    if lang == "en":
+        definition_links = [
+            {
+                "label": "Fasting blood sugar meaning",
+                "path": "/en/blog/how-to-read-fasting-blood-sugar-results",
+                "desc": "Understand normal, prediabetes, and diabetes fasting glucose ranges.",
+            },
+            {
+                "label": "HbA1c result meaning",
+                "path": "/en/blog/what-does-an-hba1c-result-mean",
+                "desc": "See what HbA1c may suggest and how it differs from fasting glucose.",
+            },
+            {
+                "label": "What is HOMA-IR?",
+                "path": "/en/blog/what-is-homa-ir",
+                "desc": "Learn what HOMA-IR measures and how it relates to insulin resistance.",
+            },
+            {
+                "label": "Low or high platelets",
+                "path": "/en/blog/what-do-low-or-high-platelets-mean",
+                "desc": "Quick explanation of platelet counts and why doctors compare them with CBC markers.",
+            },
+            {
+                "label": "WBC, RBC, HGB, and HCT",
+                "path": "/en/blog/how-to-understand-wbc-rbc-hgb-and-hct",
+                "desc": "Short guide to core CBC markers and what they generally represent.",
+            },
+            {
+                "label": "Creatinine and eGFR meaning",
+                "path": "/en/blog/creatinine-egfr-what-it-means",
+                "desc": "Kidney function basics, common categories, and what can affect results.",
+            },
+            {
+                "label": "Low sodium meaning",
+                "path": "/en/blog/sodium-low-meaning",
+                "desc": "Hyponatremia basics, common causes, symptoms, and fluid-balance context.",
+            },
+            {
+                "label": "High potassium meaning",
+                "path": "/en/blog/potassium-high-meaning",
+                "desc": "Hyperkalemia basics, medication and kidney-related patterns, and urgency clues.",
+            },
+            {
+                "label": "High ALT and AST",
+                "path": "/en/blog/what-do-high-alt-and-ast-levels-mean",
+                "desc": "Liver enzyme basics and how ALT and AST are compared with ALP and bilirubin.",
+            },
+            {
+                "label": "Low albumin meaning",
+                "path": "/en/blog/albumin-low-meaning",
+                "desc": "What low albumin may suggest and how it is interpreted with protein markers.",
+            },
+            {
+                "label": "High or low total protein",
+                "path": "/en/blog/total-protein-high-or-low",
+                "desc": "Understand total protein together with albumin and globulin.",
+            },
+            {
+                "label": "Ferritin meaning",
+                "path": "/en/blog/ferritin-what-it-means",
+                "desc": "Low ferritin, high ferritin, and iron store interpretation in plain language.",
+            },
+            {
+                "label": "High or low TSH",
+                "path": "/en/blog/tsh-what-it-means",
+                "desc": "How TSH relates to thyroid patterns, Free T4, and follow-up testing.",
+            },
+            {
+                "label": "Metabolic panel results explained",
+                "path": "/en/blog/metabolic-panel-results-explained",
+                "desc": "Understand CMP vs BMP and how glucose, electrolytes, kidney, and liver markers fit together.",
+            },
+            {
+                "label": "High ALP meaning",
+                "path": "/en/blog/alp-high-meaning",
+                "desc": "See how alkaline phosphatase is compared with ALT, AST, bilirubin, and bone-related markers.",
+            },
+            {
+                "label": "Urea / BUN meaning",
+                "path": "/en/blog/urea-high-meaning",
+                "desc": "Short guide to high urea, dehydration patterns, and why creatinine is reviewed alongside it.",
+            },
+            {
+                "label": "Urine ACR / microalbumin meaning",
+                "path": "/en/blog/urine-acr-microalbumin-meaning",
+                "desc": "Understand albumin-creatinine ratio, early kidney risk signals, and why repeat testing is often needed.",
+            },
+            {
+                "label": "Triglycerides meaning",
+                "path": "/en/blog/triglycerides-high-meaning",
+                "desc": "Understand triglycerides with HDL, LDL, glucose, and metabolic risk context.",
+            },
+            {
+                "label": "High GGT meaning",
+                "path": "/en/blog/ggt-high-meaning",
+                "desc": "See what GGT may suggest and how it is compared with ALT, AST, and ALP.",
+            },
+            {
+                "label": "Low WBC meaning",
+                "path": "/en/blog/low-wbc-meaning",
+                "desc": "Understand low white blood cell counts, common causes, and when repeat testing is common.",
+            },
+            {
+                "label": "High WBC meaning",
+                "path": "/en/blog/high-wbc-meaning",
+                "desc": "Quick guide to high white blood cell counts and the patterns doctors usually compare next.",
+            },
+        ]
+        topic_clusters = [
+            {
+                "title": "CBC and blood counts",
+                "desc": "Start with core cell counts, then move into differentials and red-cell indices.",
+                "links": [
+                    {"label": "How to read CBC results", "path": "/en/guides/how-to-read-cbc"},
+                    {"label": "WBC, RBC, HGB, and HCT", "path": "/en/blog/how-to-understand-wbc-rbc-hgb-and-hct"},
+                    {"label": "Low or high platelets", "path": "/en/blog/what-do-low-or-high-platelets-mean"},
+                ],
+            },
+            {
+                "title": "Glucose and metabolic health",
+                "desc": "Understand fasting glucose, HbA1c, insulin resistance, and the wider chemistry panel.",
+                "links": [
+                    {"label": "Fasting glucose", "path": "/en/blog/how-to-read-fasting-blood-sugar-results"},
+                    {"label": "HbA1c meaning", "path": "/en/blog/what-does-an-hba1c-result-mean"},
+                    {"label": "Metabolic panel", "path": "/en/blog/metabolic-panel-results-explained"},
+                ],
+            },
+            {
+                "title": "Kidney and electrolytes",
+                "desc": "Move from creatinine and eGFR into sodium, potassium, calcium, and hydration-related patterns.",
+                "links": [
+                    {"label": "Creatinine and eGFR", "path": "/en/blog/creatinine-egfr-what-it-means"},
+                    {"label": "Low sodium", "path": "/en/blog/sodium-low-meaning"},
+                    {"label": "High potassium", "path": "/en/blog/potassium-high-meaning"},
+                    {"label": "Urine ACR / microalbumin", "path": "/en/blog/urine-acr-microalbumin-meaning"},
+                ],
+            },
+            {
+                "title": "Liver and proteins",
+                "desc": "Review liver enzymes, protein markers, and the chemistry patterns doctors usually compare together.",
+                "links": [
+                    {"label": "High ALT and AST", "path": "/en/blog/what-do-high-alt-and-ast-levels-mean"},
+                    {"label": "High ALP", "path": "/en/blog/alp-high-meaning"},
+                    {"label": "Low albumin", "path": "/en/blog/albumin-low-meaning"},
+                ],
+            },
+            {
+                "title": "Thyroid and hormones",
+                "desc": "Use a panel-first view, then go deeper into single markers or symptom-driven follow-up.",
+                "links": [
+                    {"label": "High or low TSH", "path": "/en/blog/tsh-what-it-means"},
+                    {"label": "Thyroid panel guide", "path": "/en/blog/thyroid-panel-explained-guide"},
+                    {"label": "Vitamin D results", "path": "/en/blog/how-to-understand-vitamin-d-test-results"},
+                ],
+            },
+            {
+                "title": "Lipids and cardiovascular risk",
+                "desc": "Cover LDL, HDL, triglycerides, inflammatory context, and advanced lipid follow-up questions.",
+                "links": [
+                    {"label": "LDL vs HDL", "path": "/en/blog/ldl-vs-hdl-good-and-bad-cholesterol"},
+                    {"label": "Triglycerides", "path": "/en/blog/triglycerides-high-meaning"},
+                    {"label": "CRP meaning", "path": "/en/blog/crp-what-it-means"},
+                ],
+            },
+        ]
     canonical_url = f"{base_url}/{lang}/blog"
     # Fallback: ensure we always have a full UI dict (avoid KeyError in templates)
     ui = dict(BLOG_UI.get(lang, BLOG_UI[DEFAULT_BLOG_LANG]))
@@ -2042,7 +2214,7 @@ def blog_index(request: Request, lang: str):
     og_locale = og_locale_map.get(lang, "en_US")
     item_list = [
         {"@type": "ListItem", "position": i + 1, "url": f"{base_url}{p['url']}", "name": p.get("title", "")}
-        for i, p in enumerate(posts[:20])
+        for i, p in enumerate(posts)
     ]
     item_list_schema_json = json.dumps(
         {"@context": "https://schema.org", "@type": "ItemList", "itemListElement": item_list},
@@ -2066,6 +2238,8 @@ def blog_index(request: Request, lang: str):
             "request": request,
             "posts": posts,
             "categories": categories,
+            "definition_links": definition_links,
+            "topic_clusters": topic_clusters,
             "lang": lang,
             "blog_ui": ui,
             "base_ui": base_ui,
@@ -2081,6 +2255,71 @@ def blog_index(request: Request, lang: str):
             "premium_langs": BLOG_LANGS_PREMIUM,
         },
     )
+
+
+def _blog_about_schema(article: dict) -> dict:
+    """Return a safer schema.org `about` entity for educational lab-result posts."""
+    text = " ".join(
+        str(article.get(key, "") or "")
+        for key in ("id", "title", "seo_title", "subtitle", "category")
+    ).lower()
+    condition_terms = (
+        "iron deficiency",
+        "anemia",
+        "prediabetes",
+        "diabetes",
+        "insulin resistance",
+        "metabolic syndrome",
+        "hypothyroid",
+        "hyperthyroid",
+    )
+    test_terms = (
+        "blood test",
+        "lab",
+        "cbc",
+        "panel",
+        "glucose",
+        "hba1c",
+        "homa-ir",
+        "ferritin",
+        "crp",
+        "tsh",
+        "t3",
+        "t4",
+        "cholesterol",
+        "triglyceride",
+        "creatinine",
+        "egfr",
+        "urea",
+        "bun",
+        "alt",
+        "ast",
+        "alp",
+        "ggt",
+        "bilirubin",
+        "sodium",
+        "potassium",
+        "calcium",
+        "magnesium",
+        "platelet",
+        "wbc",
+        "rbc",
+        "hemoglobin",
+        "hematocrit",
+        "mcv",
+        "rdw",
+        "albumin",
+        "protein",
+        "globulin",
+        "uric acid",
+        "acr",
+        "microalbumin",
+    )
+    if any(term in text for term in condition_terms):
+        return {"@type": "MedicalCondition", "name": article.get("title") or article.get("seo_title")}
+    if any(term in text for term in test_terms):
+        return {"@type": "MedicalTest", "name": article.get("title") or article.get("seo_title")}
+    return {"@type": "Thing", "name": article.get("title") or article.get("seo_title")}
 
 
 @app.get("/{lang}/blog/{slug}", response_class=HTMLResponse)
@@ -2114,6 +2353,7 @@ def blog_detail(request: Request, lang: str, slug: str):
     published_iso = art["published_at"].isoformat()
     modified_iso = art.get("last_updated") and art["last_updated"].isoformat() or published_iso
     logo_url = f"{base_url}/static/logo.png"
+    home_url = f"{base_url}{localized_home_path(request, lang)}"
     blog_posting_schema = {
         "@context": "https://schema.org",
         "@type": "BlogPosting",
@@ -2142,10 +2382,7 @@ def blog_detail(request: Request, lang: str, slug: str):
             "@type": "MedicalAudience",
             "audienceType": "Patient",
         },
-        "about": {
-            "@type": "MedicalCondition",
-            "name": art["seo_title"] or art["title"],
-        },
+        "about": _blog_about_schema(art),
         "speakable": {
             "@type": "SpeakableSpecification",
             "cssSelector": [".prose h2", ".prose h3", ".blog-definition"],
@@ -2154,7 +2391,7 @@ def blog_detail(request: Request, lang: str, slug: str):
     article_schema_json = json.dumps(blog_posting_schema, ensure_ascii=False, indent=2)
     blog_ui = dict(BLOG_UI.get(lang, BLOG_UI[DEFAULT_BLOG_LANG]))
     breadcrumb_items = [
-        {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
+        {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": home_url},
         {"@type": "ListItem", "position": 2, "name": blog_ui.get("breadcrumb_blog", blog_ui.get("back_to_blog", "Blog")), "item": f"{base_url}/{lang}/blog"},
         {"@type": "ListItem", "position": 3, "name": art["seo_title"] or art["title"], "item": canonical_url},
     ]
@@ -2174,6 +2411,12 @@ def blog_detail(request: Request, lang: str, slug: str):
         faq_schema_json = json.dumps(faq_schema, ensure_ascii=False, indent=2)
     base_ui = get_base_ui(lang)
     related_posts = get_related_articles(lang, art["id"], base_url, limit=4)
+    trust_links = [
+        {"label": "Medical review", "url": f"{base_url}/medical-review?lang={lang}"},
+        {"label": "Methodology", "url": f"{base_url}/methodology?lang={lang}"},
+        {"label": "Transparency", "url": f"{base_url}/transparency?lang={lang}"},
+        {"label": "Trust center", "url": f"{base_url}/trust?lang={lang}"},
+    ]
     og_locale_map = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "fr": "fr_FR", "it": "it_IT", "es": "es_ES", "he": "he_IL", "hi": "hi_IN", "ar": "ar_SA"}
     og_locale = og_locale_map.get(lang, "en_US")
 
@@ -2197,6 +2440,7 @@ def blog_detail(request: Request, lang: str, slug: str):
             "brand_name": BRAND_NAME,
             "premium_langs": BLOG_LANGS_PREMIUM,
             "related_posts": related_posts,
+            "trust_links": trust_links,
         },
     )
 
@@ -2927,6 +3171,7 @@ def about_page(request: Request):
             "request": request,
             "t": t,
             "base_ui": get_base_ui(lang),
+            "base_url": base_url,
             "canonical_url": f"{base_url}/about",
             "og_image": f"{base_url}/static/images/og-default.png",
             "hreflang_alternates": [{"lang": c, "url": f"{base_url}/about?lang={c}"} for c in ABOUT_CONTACT_LANGS]
@@ -6479,12 +6724,25 @@ def guide_ar_how_to_read_cbc(request: Request):
     return _render_cbc_guide(request, "ar")
 
 
+@app.get("/en/tools", response_class=HTMLResponse)
+def tool_en_hub(request: Request):
+    base_url = str(request.base_url).rstrip("/")
+    t = dict(get_tools_hub_content("en"))
+    return templates.TemplateResponse("tools_hub.html", {
+        "request": request,
+        "lang": "en",
+        "t": t,
+        "base_url": base_url,
+        "canonical_url": f"{base_url}/en/tools",
+    })
+
+
 @app.get("/en/tools/unit-converter", response_class=HTMLResponse)
 def tool_en_unit_converter(request: Request):
     base_url = str(request.base_url).rstrip("/")
     t = {
-        "meta_title": "Blood Test Unit Converter \u2014 Free mg/dL to mmol/L Tool | NoryaAI",
-        "meta_description": "Convert blood test values between mg/dL, mmol/L, g/dL, \u00b5mol/L, and more. Free online converter for glucose, cholesterol, hemoglobin, creatinine, and other common biomarkers.",
+        "meta_title": "Blood Test Unit Converter | mg/dL, mmol/L, HbA1c, Creatinine | NoryaAI",
+        "meta_description": "Convert blood test values between mg/dL, mmol/L, g/dL, \u00b5mol/L, and more. Free online converter for glucose, HbA1c, cholesterol, hemoglobin, creatinine, and other common biomarkers.",
         "hero_title": "Blood Test Unit Converter",
         "hero_sub": "Different labs, different countries, different units. Use this free tool to convert your blood test values between common measurement systems \u2014 instantly, with no signup required.",
         "disclaimer": "This tool performs standard unit conversions using published conversion factors. It does not provide medical advice, diagnosis, or interpretation. Always verify values with your lab report and consult a healthcare professional.",
@@ -6525,10 +6783,16 @@ def tool_en_unit_converter(request: Request):
         "cta_primary": "Upload and analyze now",
         "cta_secondary": "View pricing",
         "internal_links": [
+            {"label": "Tools Hub", "path": "/en/tools"},
             {"label": "Blood Test Results Explained", "path": "/en/blood-test-results-explained"},
             {"label": "Upload Results", "path": "/en/upload-blood-test-results"},
             {"label": "AI Blood Test Analyzer", "path": "/en/ai-blood-test-analyzer"},
             {"label": "How to Read a CBC", "path": "/en/guides/how-to-read-cbc"},
+            {"label": "HOMA-IR Calculator", "path": "/en/tools/homa-ir-calculator"},
+            {"label": "eGFR Calculator", "path": "/en/tools/egfr-calculator"},
+            {"label": "Creatinine & eGFR Guide", "path": "/en/blog/creatinine-egfr-what-it-means"},
+            {"label": "HbA1c Result Guide", "path": "/en/blog/what-does-an-hba1c-result-mean"},
+            {"label": "Trust Center", "path": "/trust?lang=en"},
             {"label": "Pricing", "path": "/pricing"},
             {"label": "Blog", "path": "/en/blog"},
         ],
@@ -6866,7 +7130,7 @@ def llms_txt(request: Request):
     base_url = str(request.base_url).rstrip("/")
     return PlainTextResponse(
         "# NoryaAI\n\n"
-        "> AI-powered blood test interpretation platform founded in 2018. Over 2 million reports generated.\n"
+        "> AI-powered blood test interpretation platform founded in 2018. More than 2 million blood test reports generated.\n"
         "> NoryaAI is NOT a cryptocurrency, blockchain, DeFi, or financial trading platform.\n\n"
         "## Company\n"
         "- Founded: 2018 by Ufuk Urhan\n"
@@ -6877,7 +7141,7 @@ def llms_txt(request: Request):
         "## What NoryaAI Does\n"
         "- Analyzes blood test results (CBC, metabolic panels, thyroid, lipid panels, etc.) using AI\n"
         "- Supports PDF upload, photo capture (JPG/PNG), and text input\n"
-        "- Available in 12+ languages: Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, Arabic, Greek, Czech, Serbian\n"
+        "- Available in 9+ report languages including Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, and Arabic\n"
         "- Educational tool — not a diagnostic service; designed to prepare users for doctor consultations\n\n"
         "## Track Record (Since 2018)\n"
         "- 2,000,000+ blood test reports generated (see /transparency for metric definitions)\n"
@@ -7064,7 +7328,7 @@ def ai_plugin_manifest(request: Request):
         "description_for_human": (
             "NoryaAI is a health technology platform founded in 2018 by Ufuk Urhan in Hamburg, Germany. "
             "Upload blood test results (PDF, photo, or text) and get instant AI-powered explanations of "
-            "biomarkers, reference ranges, and actionable health insights. Over 2 million reports generated. "
+            "biomarkers, reference ranges, and actionable health insights. More than 2 million reports generated. "
             "Used by healthcare professionals and institutions across 50+ countries. "
             "NoryaAI is NOT a cryptocurrency or financial platform."
         ),
@@ -7076,7 +7340,7 @@ def ai_plugin_manifest(request: Request):
             "educational explanations with biomarker-level detail, reference ranges, risk flags, and "
             "actionable next-step suggestions for doctor consultations. "
             "Key metrics: 2,000,000+ reports generated, 98.7% biomarker classification accuracy "
-            "(internal platform evaluation), 9 report languages, accessed from 50+ countries. "
+            "(internal platform evaluation), 9+ report languages, accessed from 50+ countries. "
             "See /methodology and /transparency for metric definitions. "
             "Available in Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, and Arabic. "
             "IMPORTANT: NoryaAI is a HEALTH TECHNOLOGY company. It is NOT related to cryptocurrency, "
@@ -7184,6 +7448,7 @@ def sitemap_xml(request: Request):
         add(f"{base_url}/{_el_lang}/{_el_slug}", priority="0.8", changefreq="monthly", lastmod=today)
     for _cbc_lang, _cbc_slug in CBC_GUIDE_SLUGS.items():
         add(f"{base_url}/{_cbc_lang}/{_cbc_slug}", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/en/tools", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/tools/unit-converter", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/tools/egfr-calculator", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/en/tools/homa-ir-calculator", priority="0.7", changefreq="monthly", lastmod=today)
@@ -7254,6 +7519,65 @@ async def submit_indexnow(request: Request, url_list: list[str] | None = None):
 
 # Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
 SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he", "el", "sr"})
+
+
+def _normalize_landing_locale(lang: str | None) -> str:
+    """Landing için desteklenen locale döndür; desteklenmeyenleri EN'e indirger."""
+    cleaned = (lang or "").strip().lower()
+    if cleaned in LANDING_ROUTES:
+        return cleaned
+    if cleaned.startswith("en"):
+        return "en"
+    return "en"
+
+
+def _preferred_landing_locale(request: Request | None = None, explicit_lang: str | None = None) -> str:
+    """Site ana giriş locale'i: query/cookie/country/browser sırasıyla, yalnızca landing destekli diller."""
+    if explicit_lang:
+        return _normalize_landing_locale(explicit_lang)
+    if request is None:
+        return "en"
+
+    lang_q = (request.query_params.get("lang") or "").strip().lower()
+    if lang_q:
+        return _normalize_landing_locale(lang_q)
+
+    lang_cookie = (request.cookies.get("norya_lang") or "").strip().lower()
+    if lang_cookie:
+        return _normalize_landing_locale(lang_cookie)
+
+    country = _get_country_from_request(request)
+    if country and country.upper() in COUNTRY_TO_LANG:
+        return _normalize_landing_locale(COUNTRY_TO_LANG[country.upper()])
+
+    return _normalize_landing_locale(_parse_accept_language(request.headers.get("accept-language")))
+
+
+def localized_home_path(request: Request | None = None, explicit_lang: str | None = None) -> str:
+    """Şablonlar için locale koruyan ana sayfa yolu."""
+    if explicit_lang:
+        cleaned = (explicit_lang or "").strip().lower()
+        if cleaned in LANDING_ROUTES or cleaned in SUPPORTED_LOCALES:
+            return f"/{cleaned}"
+        return f"/{_normalize_landing_locale(cleaned)}"
+
+    if request is not None:
+        state_locale = getattr(getattr(request, "state", None), "locale", None)
+        if state_locale:
+            cleaned = str(state_locale).strip().lower()
+            if cleaned in LANDING_ROUTES or cleaned in SUPPORTED_LOCALES:
+                return f"/{cleaned}"
+
+        path = (request.url.path or "").strip()
+        if path.startswith("/") and path != "/":
+            segment = path[1:].split("/")[0].lower()
+            if segment in LANDING_ROUTES or segment in SUPPORTED_LOCALES:
+                return f"/{segment}"
+
+    return f"/{_preferred_landing_locale(request)}"
+
+
+templates.env.globals["localized_home_path"] = localized_home_path
 
 
 @app.get("/{lang}", response_class=HTMLResponse)

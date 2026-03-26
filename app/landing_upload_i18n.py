@@ -17,8 +17,8 @@ UPLOAD_SLUGS: dict[str, str] = {
 
 def _en() -> dict:
     return {
-        "meta_title": "Upload Blood Test Results Online | AI Lab Report Analysis | NoryaAI",
-        "meta_description": "Upload blood test results from any lab as a PDF, photo, or pasted text and get a structured AI report with reference ranges, flagged markers, and a doctor-ready summary.",
+        "meta_title": "Upload Blood Test Results | PDF, Photo, or Text | NoryaAI",
+        "meta_description": "Upload blood test results from any lab as a PDF, photo, or pasted text and get a structured report with reference ranges, flagged markers, and a doctor-ready summary.",
         "hero_title": "Upload Blood Test Results and Get a Clear AI Report",
         "hero_sub": "Upload a blood test PDF, snap a photo of your lab report, or paste your values directly. NoryaAI turns raw lab data into a structured report with reference ranges, highlighted findings, and a doctor-ready summary.",
         "hero_trust": "Encrypted upload · GDPR & KVKK compliant · No data sharing",

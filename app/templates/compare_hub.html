@@ -11,13 +11,13 @@
   <meta property="og:description" content="{{ t.meta_description }}" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="{{ og_locale }}" />
-  <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  <meta property="og:image" content="{{ base_url }}/static/images/og-ai-analyzer.png" />
   {% include "partials/og_default_dimensions.html" %}
   <meta property="og:url" content="{{ canonical_url }}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ t.meta_title }}" />
   <meta name="twitter:description" content="{{ t.meta_description }}" />
-  <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png" />
+  <meta name="twitter:image" content="{{ base_url }}/static/images/og-ai-analyzer.png" />
   <meta name="theme-color" content="#0EA5A4" />
   <link rel="canonical" href="{{ canonical_url }}" />
   {% for alt in hreflang_alternates %}
@@ -211,7 +211,9 @@
             <div class="grid gap-4 sm:grid-cols-2">
               {% for card in t.cards[:4] %}
               <a href="{{ base_url }}/{{ lang }}/compare/{{ card.slug }}" class="compare-visual-card block" style="background: linear-gradient(135deg, {{ card.visual.glow }}, rgba(255,255,255,0.05));">
+                {% if card.visual.image %}
                 <img src="{{ card.visual.image }}" alt="NoryaAI vs {{ card.name }}" loading="lazy" />
+                {% endif %}
                 <div class="relative z-10 flex h-full flex-col justify-between p-4">
                   <div class="flex items-start justify-between gap-3">
                     <span class="visual-chip">
@@ -260,7 +262,9 @@
           {% for card in t.cards %}
           <a href="{{ base_url }}/{{ lang }}/compare/{{ card.slug }}" class="group compare-card block hover:border-teal-300">
             <div class="compare-visual-card" style="background: linear-gradient(135deg, {{ card.visual.glow }}, rgba(255,255,255,0.04));">
+              {% if card.visual.image %}
               <img src="{{ card.visual.image }}" alt="NoryaAI vs {{ card.name }}" loading="lazy" />
+              {% endif %}
               <div class="relative z-10 flex h-full flex-col justify-between p-5">
                 <div class="flex items-start justify-between gap-3">
                   <span class="visual-chip">

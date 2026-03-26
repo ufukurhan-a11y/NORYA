@@ -11,13 +11,13 @@
   <meta property="og:description" content="{{ t.meta_description }}" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="{{ og_locale }}" />
-  <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  <meta property="og:image" content="{{ base_url }}/static/images/og-ai-analyzer.png" />
   {% include "partials/og_default_dimensions.html" %}
   <meta property="og:url" content="{{ canonical_url }}" />
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ t.meta_title }}" />
   <meta name="twitter:description" content="{{ t.meta_description }}" />
-  <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png" />
+  <meta name="twitter:image" content="{{ base_url }}/static/images/og-ai-analyzer.png" />
   <meta name="theme-color" content="#0EA5A4" />
   <link rel="canonical" href="{{ canonical_url }}" />
   {% for alt in hreflang_alternates %}
@@ -191,7 +191,9 @@
         <div class="relative z-10">
           <div class="premium-panel rounded-[2rem] p-4 sm:p-5">
             <div class="hero-visual rounded-[1.6rem]" style="background: linear-gradient(135deg, {{ t.hero_visual.glow }}, rgba(255,255,255,0.04));">
+              {% if t.hero_visual.image %}
               <img src="{{ t.hero_visual.image }}" alt="NoryaAI vs {{ t.competitor_name }}" loading="lazy" />
+              {% endif %}
               <div class="relative z-10 flex h-full flex-col justify-between p-5 sm:p-6">
                 <div class="flex items-start justify-between gap-3">
                   <span class="visual-chip">NoryaAI</span>
@@ -336,7 +338,9 @@
           {% for rc in related_comparisons %}
           <a href="{{ base_url }}{{ rc.url }}" class="related-card block hover:border-teal-300">
             <div class="related-visual" style="background: linear-gradient(135deg, {{ rc.visual.glow }}, rgba(255,255,255,0.04));">
+              {% if rc.visual.image %}
               <img src="{{ rc.visual.image }}" alt="NoryaAI vs {{ rc.name }}" loading="lazy" />
+              {% endif %}
               <div class="relative z-10 flex h-full items-start justify-between p-4">
                 <span class="visual-chip">NoryaAI</span>
                 <span class="visual-chip">

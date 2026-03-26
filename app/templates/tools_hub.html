@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  {% include "partials/gsc_meta.html" %}
+  <meta name="robots" content="index,follow" />
+  <title>{{ t.meta_title }}</title>
+  <meta name="description" content="{{ t.meta_description }}" />
+  <meta property="og:title" content="{{ t.meta_title }}" />
+  <meta property="og:description" content="{{ t.meta_description }}" />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="{{ canonical_url }}" />
+  <meta property="og:image" content="{{ base_url }}/static/images/og-default.png" />
+  {% include "partials/og_default_dimensions.html" %}
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ t.meta_title }}" />
+  <meta name="twitter:description" content="{{ t.meta_description }}" />
+  <meta name="twitter:image" content="{{ base_url }}/static/images/og-default.png" />
+  <meta name="theme-color" content="#0EA5A4" />
+  <link rel="canonical" href="{{ canonical_url }}" />
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" />
+  <link rel="stylesheet" href="/static/css/app.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "CollectionPage",
+    "name": {{ t.meta_title|tojson }},
+    "url": "{{ canonical_url }}",
+    "isPartOf": {"@type": "WebSite", "name": "NoryaAI", "url": "{{ base_url }}"},
+    "mainEntity": {
+      "@type": "ItemList",
+      "itemListElement": [
+        {% for card in t.cards %}{% if not loop.first %},{% endif %}
+        {"@type": "ListItem", "position": {{ loop.index }}, "url": "{{ base_url }}{{ card.path }}", "name": {{ card.title|tojson }}}
+        {% endfor %}
+      ]
+    }
+  }
+  </script>
+  {% include "includes/gtag_google_ads.html" %}
+</head>
+<body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
+  <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
+    <div class="max-w-6xl mx-auto px-4 py-3 flex items-center justify-between">
+      <a href="/en" class="flex items-center shrink-0" aria-label="NoryaAI home">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
+        <a href="/en" class="text-slate-600 hover:text-teal-600">Home</a>
+        <a href="/en/blog" class="text-slate-600 hover:text-teal-600">Blog</a>
+        <a href="/en/tools" class="text-teal-700 font-semibold">Tools</a>
+        {% include "partials/header_lang.html" %}
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-teal-600 text-white font-semibold hover:bg-teal-700">Analyze</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="flex-1">
+    <section class="py-12 sm:py-16 px-4 bg-gradient-to-b from-teal-50 via-slate-50 to-white">
+      <div class="max-w-4xl mx-auto text-center">
+        <span class="inline-block text-xs font-semibold tracking-wide uppercase text-teal-700 bg-teal-50 border border-teal-100 rounded-full px-3 py-1 mb-5">{{ t.hero_badge }}</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold text-slate-900 leading-tight">{{ t.hero_title }}</h1>
+        <p class="mt-4 text-base sm:text-lg text-slate-600 max-w-3xl mx-auto leading-relaxed">{{ t.hero_sub }}</p>
+      </div>
+    </section>
+
+    <section class="py-12 sm:py-14 px-4 bg-white">
+      <div class="max-w-5xl mx-auto">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.section_title }}</h2>
+          <p class="mt-3 text-slate-600 leading-relaxed">{{ t.section_sub }}</p>
+        </div>
+        <div class="mt-8 grid gap-5 md:grid-cols-3">
+          {% for card in t.cards %}
+          <article class="rounded-2xl border border-slate-200 bg-slate-50 p-6 shadow-sm hover:border-teal-200 hover:bg-teal-50/30 transition-colors">
+            <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">{{ card.label }}</p>
+            <h3 class="mt-3 text-xl font-semibold text-slate-900">{{ card.title }}</h3>
+            <p class="mt-3 text-sm leading-relaxed text-slate-600">{{ card.desc }}</p>
+            <a href="{{ card.path }}" class="mt-5 inline-flex items-center gap-2 text-sm font-semibold text-teal-700 hover:text-teal-800">
+              Open tool
+              <span aria-hidden="true">&rarr;</span>
+            </a>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 px-4 bg-slate-50 border-y border-slate-100">
+      <div class="max-w-4xl mx-auto">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.learn_title }}</h2>
+          <p class="mt-3 text-slate-600 leading-relaxed">{{ t.learn_text }}</p>
+        </div>
+        <div class="mt-6 flex flex-wrap gap-x-5 gap-y-3 text-sm">
+          {% for link in t.learn_links %}
+          <a href="{{ link.path }}" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">{{ link.label }}</a>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 sm:py-16 px-4 bg-gradient-to-b from-teal-50 to-white">
+      <div class="max-w-2xl mx-auto text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-slate-900">{{ t.cta_title }}</h2>
+        <p class="mt-3 text-slate-600 leading-relaxed">{{ t.cta_text }}</p>
+        <div class="mt-6 flex flex-col sm:flex-row items-center justify-center gap-3">
+          <a href="/en/upload-blood-test-results" class="inline-flex items-center justify-center min-h-[48px] px-7 py-3 rounded-2xl bg-teal-600 text-white font-semibold shadow-md hover:bg-teal-700">{{ t.cta_primary }}</a>
+          <a href="/en/sample-blood-test-reports" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border-2 border-teal-500 text-teal-700 font-semibold hover:bg-teal-50">{{ t.cta_secondary }}</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="border-t border-slate-200 bg-slate-50 py-8 px-4">
+    <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-4 text-sm text-slate-600">
+      <a href="/en" class="hover:text-teal-600">Home</a>
+      <a href="/en/blog" class="hover:text-teal-600">Blog</a>
+      <a href="/en/tools" class="hover:text-teal-600">Tools</a>
+      <a href="/en/blood-test-results-explained" class="hover:text-teal-600">Blood test results explained</a>
+      <a href="/trust?lang=en" class="hover:text-teal-600">Trust Center</a>
+      <a href="/methodology?lang=en" class="hover:text-teal-600">Methodology</a>
+    </div>
+    <p class="text-center text-slate-500 text-xs mt-3">Tools are educational only and do not replace medical advice or diagnosis.</p>
+  </footer>
+  {% include "partials/scripts_lang.html" %}
+  {% include "partials/chat_widget.html" %}
+</body>
+</html>

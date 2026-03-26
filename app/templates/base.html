@@ -135,7 +135,7 @@
   {# Navbar: locale from request.state.locale (blog sets en/de/fr/it); base_ui for labels #}
   <header class="site-header sticky top-0 z-50 bg-norya-surface-elevated/95 backdrop-blur border-b border-norya-ink-subtle/20">
     <nav class="max-w-6xl mx-auto h-14 sm:h-16 flex items-center justify-between" aria-label="{{ _base_ui.nav_aria_label|default('Main menu') }}">
-      <a href="/" class="flex items-center shrink-0 min-w-0" aria-label="{{ _brand }} home"><img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 sm:h-9 w-auto object-contain" width="200" height="50" loading="eager" /></a>
+      <a href="{{ localized_home_path(request, _locale) }}" class="flex items-center shrink-0 min-w-0" aria-label="{{ _brand }} home"><img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 sm:h-9 w-auto object-contain" width="200" height="50" loading="eager" /></a>
       <div class="nav-right">
         <div class="nav-links-desktop">
           <a href="/about?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_about|default('About') }}</a>
@@ -167,7 +167,7 @@
     </div>
     <a href="/analyze" onclick="toggleBaseDrawer()" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mb-2 shadow-norya-brand/30">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
     <div class="flex flex-col gap-1">
-      <a href="/" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_home|default('Home') }}</a>
+      <a href="{{ localized_home_path(request, _locale) }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_home|default('Home') }}</a>
       <a href="/about?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_about|default('About') }}</a>
       <a href="/how-it-works?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_how|default('How it works') }}</a>
       <a href="/pricing?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_pricing|default('Pricing') }}</a>
@@ -188,7 +188,7 @@
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
         {# BRAND BLOCK #}
         <div class="sm:col-span-2 lg:col-span-4">
-          <a href="/" class="inline-flex items-center mb-4" aria-label="{{ _brand }} home">
+          <a href="{{ localized_home_path(request, _locale) }}" class="inline-flex items-center mb-4" aria-label="{{ _brand }} home">
             <img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 w-auto object-contain" width="160" height="40" loading="lazy" />
           </a>
           <p class="text-sm text-norya-ink-muted leading-relaxed mb-3 max-w-xs">{{ _base_ui.footer_brand_desc|default('Clear blood test interpretation. Multilingual clarity. Privacy-conscious design.') }}</p>

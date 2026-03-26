@@ -2,8 +2,8 @@
 
 HOMA_IR_CONTENT = {
     "en": {
-        "meta_title": "Free HOMA-IR Calculator — Insulin Resistance Score | NoryaAI",
-        "meta_description": "Calculate your HOMA-IR score online for free. Enter your fasting glucose and insulin to estimate insulin resistance. CKD-EPI formula.",
+        "meta_title": "Free HOMA-IR Calculator | Insulin Resistance Score | NoryaAI",
+        "meta_description": "Calculate your HOMA-IR score online for free. Enter fasting glucose and fasting insulin to estimate insulin resistance in seconds.",
         "badge": "Free Calculator",
         "hero_title": "HOMA-IR Calculator",
         "hero_sub": "Estimate your insulin resistance from fasting glucose and insulin levels. Instant results, no sign-up needed.",
@@ -73,8 +73,8 @@ HOMA_IR_CONTENT = {
 
 EGFR_CONTENT = {
     "en": {
-        "meta_title": "Free eGFR Calculator (CKD-EPI 2021) — Kidney Function | NoryaAI",
-        "meta_description": "Calculate your estimated Glomerular Filtration Rate (eGFR) online for free using the CKD-EPI 2021 formula. Assess your kidney function instantly.",
+        "meta_title": "Free eGFR Calculator (CKD-EPI 2021) | Kidney Function | NoryaAI",
+        "meta_description": "Calculate eGFR online for free using the CKD-EPI 2021 formula. Enter creatinine, age, and sex to estimate kidney function instantly.",
         "badge": "Free Calculator",
         "hero_title": "eGFR Calculator",
         "hero_sub": "Estimate your kidney function using the CKD-EPI 2021 equation. Enter your creatinine, age, and sex for instant results.",
@@ -157,9 +157,59 @@ EGFR_CONTENT = {
 }
 
 
+TOOLS_HUB_CONTENT = {
+    "en": {
+        "meta_title": "Blood Test Tools | eGFR, HOMA-IR, Unit Converter | NoryaAI",
+        "meta_description": "Explore free blood test tools from NoryaAI, including an eGFR calculator, HOMA-IR calculator, and blood test unit converter.",
+        "hero_badge": "Free tools",
+        "hero_title": "Blood Test Tools for Faster Interpretation",
+        "hero_sub": "Use these calculators and utility tools to estimate kidney function, insulin resistance, or convert common lab units before you review the full report with your clinician.",
+        "section_title": "Available tools",
+        "section_sub": "Each tool is educational, free to use, and connected to deeper blood test guides for context.",
+        "cards": [
+            {
+                "label": "Kidney function",
+                "title": "eGFR calculator",
+                "desc": "Estimate kidney filtration from creatinine, age, and sex using the CKD-EPI 2021 equation.",
+                "path": "/en/tools/egfr-calculator",
+            },
+            {
+                "label": "Metabolic health",
+                "title": "HOMA-IR calculator",
+                "desc": "Estimate insulin resistance from fasting glucose and fasting insulin in a few seconds.",
+                "path": "/en/tools/homa-ir-calculator",
+            },
+            {
+                "label": "Lab units",
+                "title": "Blood test unit converter",
+                "desc": "Convert glucose, HbA1c, creatinine, cholesterol, and other common biomarkers between lab units.",
+                "path": "/en/tools/unit-converter",
+            },
+        ],
+        "learn_title": "Use tools with report context",
+        "learn_text": "A calculator helps with one marker. Blood test interpretation usually depends on how markers move together across a full report.",
+        "learn_links": [
+            {"label": "Blood test results explained", "path": "/en/blood-test-results-explained"},
+            {"label": "Metabolic panel guide", "path": "/en/blog/metabolic-panel-results-explained"},
+            {"label": "Creatinine and eGFR explained", "path": "/en/blog/creatinine-egfr-what-it-means"},
+            {"label": "What is HOMA-IR?", "path": "/en/blog/what-is-homa-ir"},
+            {"label": "Blog", "path": "/en/blog"},
+        ],
+        "cta_title": "Need the full report, not one number?",
+        "cta_text": "Upload your lab report and get a structured summary with ranges, flagged markers, and plain-language explanations built for blood tests.",
+        "cta_primary": "Upload blood test results",
+        "cta_secondary": "See sample reports",
+    }
+}
+
+
 def get_homa_ir_content(lang: str = "en") -> dict:
     return HOMA_IR_CONTENT.get(lang, HOMA_IR_CONTENT["en"])
 
 
 def get_egfr_content(lang: str = "en") -> dict:
     return EGFR_CONTENT.get(lang, EGFR_CONTENT["en"])
+
+
+def get_tools_hub_content(lang: str = "en") -> dict:
+    return TOOLS_HUB_CONTENT.get(lang, TOOLS_HUB_CONTENT["en"])

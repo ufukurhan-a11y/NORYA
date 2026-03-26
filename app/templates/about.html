@@ -39,7 +39,7 @@
 }
 </script>
 <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"https://noryaai.com/"},{"@type":"ListItem","position":2,"name":"About","item":"https://noryaai.com/about"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}{{ localized_home_path(request) }}"},{"@type":"ListItem","position":2,"name":"About","item":"{{ canonical_url }}"}]}
 </script>
 {% endblock %}
 

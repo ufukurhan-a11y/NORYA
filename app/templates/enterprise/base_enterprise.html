@@ -132,7 +132,7 @@
       </nav>
 
       <div class="mt-auto px-4 {{ 'pl-6' if is_rtl else 'pr-6' }} pt-4 space-y-2">
-        <a href="/" class="w-full py-3 rounded-xl font-headline font-bold text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] transition-all">
+        <a href="{{ localized_home_path(request) }}" class="w-full py-3 rounded-xl font-headline font-bold text-sm flex items-center justify-center gap-2 bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] transition-all">
           <span class="material-symbols-outlined text-lg">open_in_new</span>
           {{ t.nav_site }}
         </a>

@@ -30,7 +30,7 @@
   <script type="application/ld+json">{{ faq_schema_json|safe }}</script>
   {% endif %}
   <script type="application/ld+json">
-{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}/"},{"@type":"ListItem","position":2,"name":"FAQ","item":"{{ canonical_url }}"}]}
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}{{ localized_home_path(request, lang) }}"},{"@type":"ListItem","position":2,"name":"FAQ","item":"{{ canonical_url }}"}]}
   </script>
   <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -50,14 +50,14 @@
       <a href="/{{ lang }}" class="flex items-center gap-2 shrink-0">
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
       </a>
-      <nav class="hidden sm:flex items-center gap-4 text-sm font-medium">
-        <a href="/{{ lang }}" class="text-slate-600 hover:text-norya-teal">{{ t.nav_home }}</a>
-        <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-slate-600 hover:text-norya-teal">{{ t.nav_how }}</a>
-        <a href="{{ base_url }}/pricing" class="text-slate-600 hover:text-norya-teal">{{ t.nav_pricing }}</a>
+      <nav class="flex items-center gap-2 sm:gap-4 text-sm font-medium">
+        <a href="/{{ lang }}" class="hidden sm:inline text-slate-600 hover:text-norya-teal">{{ t.nav_home }}</a>
+        <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="hidden sm:inline text-slate-600 hover:text-norya-teal">{{ t.nav_how }}</a>
+        <a href="{{ base_url }}/pricing?lang={{ lang }}" class="hidden sm:inline text-slate-600 hover:text-norya-teal">{{ t.nav_pricing }}</a>
+        {% include "partials/header_lang.html" %}
         <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[40px] px-3 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">
           {{ t.nav_analyze }}
         </a>
-        {% include "partials/header_lang.html" %}
       </nav>
     </div>
   </header>
@@ -101,6 +101,8 @@
       </div>
     </section>
 
+    {% include "partials/marketing_trust_strip.html" %}
+
     <section class="py-10 sm:py-16 px-4 bg-white border-t border-slate-200">
       <div class="max-w-3xl mx-auto text-center space-y-4">
         <h2 class="text-2xl font-semibold text-slate-900">
@@ -119,6 +121,8 @@
         </div>
       </div>
     </section>
+
+    {% include "partials/social_proof.html" %}
   </main>
 
   <!-- Internal links for SEO -->
