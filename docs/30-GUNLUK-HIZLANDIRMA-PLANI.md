@@ -38,6 +38,7 @@ Bu dosya, projede tutarlı takip için **30 günlük / fazlı büyüme planını
 | Day 26 | Lipid cluster **iç link** (LDL / LDL–HDL / kolesterol türleri → ApoB & Lp(a)); kırık iç link düzeltmesi (`ldl-vs-hdl` slug) | Tamam |
 | Day 27 | **Trigliserid** makalesi (`blog_article_triglycerides_content.py`) — 9 dilde LDL / LDL vs HDL + ApoB & Lp(a) köprüsü; eski ` /blog/...` LDL–HDL linklerinin locale’li gerçek slug’lara taşınması | Tamam |
 | Day 28 | **PLT** makalesi → MPV iç linkleri: yanlış slug (`mpv-blood-test`) → `mpv-high-or-low` + `/{lang}/blog/`; **Magnezyum (EN)** kalsiyum/potasyum linkleri → `calcium-high-meaning` / `potassium-high-meaning` | Tamam |
+| Day 29 | Locale’siz iç link temizliği: **ürik asit** → `creatinine-egfr-what-it-means`; **ESR** → doğru CRP slug’ları (TR/ES/HI ayrı); **magnezyum** (tr/es/de/fr/it/he/hi/ar) → `calcium-high-meaning` / `potassium-high-meaning` | Tamam |
 
 **Repo içi hızlı doğrulama:** `/en/blog/metabolic-panel-results-explained`, `/en/blog/urine-acr-microalbumin-meaning`, `/en/tools`, `/en/blog/apob-meaning`, `/en/blog/lpa-meaning`, `/llms.txt` ve `app/main.py` içi LLM metinleri mevcut.
 
@@ -53,9 +54,9 @@ Bu dosya, projede tutarlı takip için **30 günlük / fazlı büyüme planını
 | Gün 23–26 answer-ready / AI | FAQ, quick answer, mini bloklar, definitions hub |
 | Gün 27–30 otorite ve büyütme | **Site içi kısım güçlü; dış otorite (backlink, PR, mention) hâlâ ana büyüme kaldıracı** |
 
-### Sıradaki ne? (Day 29+)
+### Sıradaki ne? (Day 30+)
 
-1. **Day 29+ (öneri):** Kalan `href="/blog/..."` (locale’siz) taraması ve cluster içi köprüler; veya yeni yüksek niyetli biomarker sayfası.
+1. **Day 30+ (öneri):** Cluster içi köprüler (`static/`, şablonlar); yeni yüksek niyetli biomarker; veya off-page / ölçüm döngüsü.
 2. **Off-page / dış sinyal:** Kaliteli referring domain, marka mention’ları, tool & rehber alıntıları (spam paket backlink değil).
 3. **Ölçüm döngüsü:** Search Console’da düşük CTR + yüksek impression sayfalarında title/meta revizyonu.
 4. **Operasyon:** Anlamlı commit grupları + deploy.

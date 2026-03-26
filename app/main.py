@@ -82,6 +82,7 @@ from app.how_it_works_i18n import (
 )
 from app.about_contact_i18n import ABOUT_CONTACT_LANGS, get_about_ui, get_contact_ui
 from app.b2b_audience_i18n import PAGE_PATHS as B2B_AUDIENCE_PATHS, get_b2b_audience_ui
+from app.b2b_for_doctors_landing_i18n import get_for_doctors_landing_ui
 from app.base_i18n import get_base_ui, get_trust_strip
 from app.landing_i18n import (
     LANDING_ROUTES,
@@ -3064,6 +3065,35 @@ def contact_page(request: Request):
     )
 
 
+def _for_doctors_landing_response(request: Request):
+    """Premium /for-doctors landing: assistive lab communication (locale-aware)."""
+    lang = _page_lang(request)
+    request.state.locale = lang
+    t = get_for_doctors_landing_ui(lang)
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/for-doctors"
+    slug_sr = get_sample_reports_landing_slug(lang)
+    sample_reports_url = f"{base_url}/{lang}/{slug_sr}"
+    compare_hub_url = f"{base_url}/{lang}/compare/"
+    return templates.TemplateResponse(
+        "b2b/for_doctors_landing.html",
+        {
+            "request": request,
+            "t": t,
+            "lang": lang,
+            "base_ui": get_base_ui(lang),
+            "canonical_url": canonical_url,
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+            "hreflang_alternates": [{"lang": c, "url": f"{canonical_url}?lang={c}"} for c in ABOUT_CONTACT_LANGS]
+                + [{"lang": "x-default", "url": f"{canonical_url}?lang=en"}],
+            "trust_strip_ui": get_trust_strip(lang),
+            "sample_reports_url": sample_reports_url,
+            "compare_hub_url": compare_hub_url,
+        },
+    )
+
+
 def _b2b_audience_response(request: Request, slug: str):
     if slug not in B2B_AUDIENCE_PATHS:
         raise HTTPException(status_code=404, detail="Not found")
@@ -3092,7 +3122,7 @@ def _b2b_audience_response(request: Request, slug: str):
 @app.get("/for-doctors", response_class=HTMLResponse)
 def for_doctors_page(request: Request):
     """B2B audience: clinicians (assistive lab explanations, not diagnostic)."""
-    return _b2b_audience_response(request, "for-doctors")
+    return _for_doctors_landing_response(request)
 
 
 @app.get("/for-clinics", response_class=HTMLResponse)

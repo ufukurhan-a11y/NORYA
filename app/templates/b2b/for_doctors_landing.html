@@ -1,0 +1,252 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.meta_title }}{% endblock %}
+
+{% block lcp_preload %}{% endblock %}
+
+{% block meta_seo %}
+<meta name="description" content="{{ t.meta_description }}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="{{ _brand }}" />
+<meta property="og:title" content="{{ t.meta_title }}" />
+<meta property="og:description" content="{{ t.meta_description }}" />
+{% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
+{% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ t.meta_title }}" />
+<meta name="twitter:description" content="{{ t.meta_description }}" />
+{% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+{% for alt in hreflang_alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
+{% endfor %}
+{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": {{ t.meta_title|tojson }},
+  "description": {{ t.meta_description|tojson }},
+  "url": "{{ canonical_url }}",
+  "inLanguage": "{{ lang }}",
+  "isPartOf": {"@type": "WebSite", "name": "NoryaAI", "url": "{{ base_url }}"}
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":{{ _base_ui.nav_home|default('Home')|tojson }},"item":"{{ base_url }}{{ localized_home_path(request, lang) }}"},
+  {"@type":"ListItem","position":2,"name":{{ t.hero_badge|tojson }},"item":"{{ canonical_url }}?lang={{ lang }}"}
+]}
+</script>
+{% if t.faq %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in t.faq %}{% if not loop.first %},{% endif %}
+    {"@type": "Question", "name": {{ faq.q|tojson }}, "acceptedAnswer": {"@type": "Answer", "text": {{ faq.a|tojson }}}}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="bg-norya-surface text-norya-ink">
+
+  {# --- Hero --- #}
+  <section class="border-b border-norya-ink-subtle/10 bg-norya-surface-elevated/50" aria-labelledby="fd-hero-heading">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20 lg:py-24">
+      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
+        <div class="min-w-0">
+          <p class="text-xs font-semibold uppercase tracking-wider text-norya-brand mb-3">{{ t.hero_badge }}</p>
+          <h1 id="fd-hero-heading" class="text-3xl sm:text-4xl lg:text-[2.5rem] font-bold text-norya-ink leading-tight tracking-tight">{{ t.hero_title }}</h1>
+          <p class="mt-5 text-base sm:text-lg text-norya-ink-muted leading-relaxed">{{ t.hero_desc }}</p>
+          <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
+            <a href="{{ base_url }}/clinical-demo?lang={{ lang }}#workflow" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-white bg-norya-brand hover:bg-norya-brand-hover shadow-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-norya-brand focus-visible:ring-offset-2">{{ t.hero_cta_primary }}</a>
+            <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold border border-norya-ink-subtle/25 text-norya-ink bg-white hover:bg-norya-surface transition focus:outline-none focus-visible:ring-2 focus-visible:ring-norya-brand/40 focus-visible:ring-offset-2">{{ t.hero_cta_secondary }}</a>
+          </div>
+        </div>
+        {# Lightweight report preview mock (no images) #}
+        <div class="relative min-w-0" aria-hidden="true">
+          <div class="rounded-2xl border border-norya-ink-subtle/15 bg-white shadow-sm overflow-hidden">
+            <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-norya-ink-subtle/10 bg-norya-surface-elevated/80">
+              <span class="text-xs font-semibold text-norya-ink-muted uppercase tracking-wide">{{ t.preview_sheet_label }}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-norya-brand/10 text-norya-brand font-medium">PDF</span>
+            </div>
+            <div class="p-4 sm:p-5 space-y-4">
+              <div>
+                <p class="text-[11px] font-semibold uppercase tracking-wide text-norya-ink-muted mb-1">{{ t.preview_patient_block_title }}</p>
+                <p class="text-sm text-norya-ink leading-relaxed border-s-2 border-norya-brand/40 ps-3">{{ t.preview_patient_block_sample }}</p>
+              </div>
+              <div class="grid grid-cols-2 gap-2">
+                <div class="rounded-lg border border-norya-ink-subtle/12 bg-norya-surface px-3 py-2.5">
+                  <p class="text-[10px] text-norya-ink-muted uppercase">Hb</p>
+                  <p class="text-sm font-semibold text-norya-ink flex items-center gap-2">14.2 <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" title="{{ t.preview_range_cue }}" aria-label="{{ t.preview_range_cue }}"></span></p>
+                </div>
+                <div class="rounded-lg border border-norya-ink-subtle/12 bg-norya-surface px-3 py-2.5">
+                  <p class="text-[10px] text-norya-ink-muted uppercase">Glu</p>
+                  <p class="text-sm font-semibold text-norya-ink flex items-center gap-2">99 <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" title="{{ t.preview_range_cue }}" aria-label="{{ t.preview_range_cue }}"></span></p>
+                </div>
+              </div>
+              <p class="text-xs text-norya-ink-muted/80 leading-relaxed">{{ t.preview_desc }}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# --- How --- #}
+  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-how-heading">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 id="fd-how-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink text-center max-w-2xl mx-auto">{{ t.how_title }}</h2>
+      <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+        {% for card in t.how_cards %}
+        <article class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-5 sm:p-6 flex flex-col gap-2 shadow-sm hover:border-norya-brand/20 transition-colors">
+          <span class="text-xl" aria-hidden="true">{{ card.icon }}</span>
+          <h3 class="text-base font-semibold text-norya-ink leading-snug">{{ card.title }}</h3>
+          <p class="text-sm text-norya-ink-muted leading-relaxed flex-1">{{ card.body }}</p>
+        </article>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# --- What you get --- #}
+  <section class="py-14 sm:py-20 bg-norya-surface-elevated/40 border-b border-norya-ink-subtle/10" aria-labelledby="fd-what-heading">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 id="fd-what-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink text-center max-w-2xl mx-auto">{{ t.what_title }}</h2>
+      <ul class="mt-10 grid sm:grid-cols-2 gap-4 sm:gap-5 list-none p-0 m-0">
+        {% for it in t.what_items %}
+        <li class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-5 sm:p-6">
+          <h3 class="text-sm font-semibold text-norya-ink">{{ it.title }}</h3>
+          <p class="mt-2 text-sm text-norya-ink-muted leading-relaxed">{{ it.body }}</p>
+        </li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  {# --- Why --- #}
+  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-why-heading">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center sm:text-start">
+      <h2 id="fd-why-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.why_title }}</h2>
+      <p class="mt-4 text-base text-norya-ink-muted leading-relaxed">{{ t.why_lead }}</p>
+      <ul class="mt-8 space-y-3 text-sm sm:text-base text-norya-ink-muted leading-relaxed text-start list-none p-0 m-0">
+        {% for pt in t.why_points %}
+        <li class="flex gap-3"><span class="mt-2 w-1 h-1 shrink-0 rounded-full bg-norya-brand/70" aria-hidden="true"></span><span>{{ pt }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  {# --- Limits --- #}
+  <section class="py-14 sm:py-20 bg-norya-surface-elevated/40 border-b border-norya-ink-subtle/10" aria-labelledby="fd-limits-heading">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <h2 id="fd-limits-heading" class="text-xl sm:text-2xl font-bold text-norya-ink">{{ t.limits_title }}</h2>
+      <p class="mt-2 text-sm text-norya-ink-muted">{{ t.limits_lead }}</p>
+      <ul class="mt-6 space-y-2.5 text-sm text-norya-ink leading-relaxed list-none p-0 m-0 rounded-2xl border border-norya-ink-subtle/12 bg-white p-6 sm:p-8">
+        {% for li in t.limits_items %}
+        <li class="flex gap-2"><span class="text-norya-brand font-bold shrink-0" aria-hidden="true">—</span><span>{{ li }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </section>
+
+  {# --- Preview / sample link --- #}
+  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-preview-heading">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="max-w-3xl">
+        <h2 id="fd-preview-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.preview_title }}</h2>
+        <p class="mt-3 text-base text-norya-ink-muted leading-relaxed">{{ t.preview_desc }}</p>
+      </div>
+      <div class="mt-8 grid lg:grid-cols-2 gap-6 items-stretch">
+        <div class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-6 space-y-4">
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-norya-ink-muted">{{ t.preview_patient_block_title }}</p>
+            <p class="mt-2 text-sm text-norya-ink leading-relaxed">{{ t.preview_patient_block_sample }}</p>
+          </div>
+          <div>
+            <p class="text-xs font-semibold uppercase tracking-wide text-norya-ink-muted">{{ t.preview_clinical_block_title }}</p>
+            <p class="mt-2 text-sm text-norya-ink-muted leading-relaxed">{{ t.preview_clinical_block_sample }}</p>
+          </div>
+        </div>
+        <div class="rounded-2xl border border-dashed border-norya-ink-subtle/25 bg-norya-surface-elevated/30 p-6 flex flex-col justify-center gap-4">
+          <p class="text-sm text-norya-ink-muted">{{ t.preview_disclaimer }}</p>
+          <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-xl font-semibold text-norya-brand border border-norya-brand/35 hover:bg-norya-brand/5 transition w-fit">{{ t.preview_sample_link }}</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  {# --- Insights (no named testimonials) --- #}
+  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-insights-heading">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <h2 id="fd-insights-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink text-center max-w-2xl mx-auto">{{ t.insights_title }}</h2>
+      <p class="mt-3 text-sm sm:text-base text-norya-ink-muted text-center max-w-2xl mx-auto leading-relaxed">{{ t.insights_intro }}</p>
+      <div class="mt-10 grid md:grid-cols-3 gap-4 sm:gap-5">
+        {% for row in t.insights %}
+        <figure class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-6 flex flex-col gap-3 shadow-sm">
+          <figcaption class="text-xs font-bold uppercase tracking-wide text-norya-brand">{{ row.label }}</figcaption>
+          <blockquote class="text-sm text-norya-ink-muted leading-relaxed m-0 border-0 p-0">{{ row.quote }}</blockquote>
+        </figure>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# --- Internal nav strip --- #}
+  <section class="py-10 sm:py-12 bg-norya-surface-elevated/50 border-b border-norya-ink-subtle/10" aria-label="{{ t.nav_strip_title }}">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <p class="text-xs font-semibold uppercase tracking-wider text-norya-ink-muted mb-4">{{ t.nav_strip_title }}</p>
+      <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm">
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ sample_reports_url }}">{{ t.nav_strip_sample }}</a>
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/trust?lang={{ lang }}">{{ t.nav_strip_trust }}</a>
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/security?lang={{ lang }}">{{ t.nav_strip_security }}</a>
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/methodology?lang={{ lang }}">{{ t.nav_strip_methodology }}</a>
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/pricing?lang={{ lang }}">{{ t.nav_strip_pricing }}</a>
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ compare_hub_url }}">{{ t.nav_strip_compare }}</a>
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/for-clinics?lang={{ lang }}">{{ t.nav_strip_clinics }}</a>
+        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ localized_home_path(request, lang) }}">{{ t.nav_strip_home }}</a>
+      </nav>
+    </div>
+  </section>
+
+  {# --- FAQ --- #}
+  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-faq-heading">
+    <div class="max-w-3xl mx-auto px-4 sm:px-6">
+      <h2 id="fd-faq-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.faq_title }}</h2>
+      <div class="mt-8 space-y-2">
+        {% for item in t.faq %}
+        <details class="group rounded-xl border border-norya-ink-subtle/12 bg-white px-4 sm:px-5 open:shadow-sm">
+          <summary class="cursor-pointer list-none py-4 font-semibold text-norya-ink flex items-center justify-between gap-3">
+            <span>{{ item.q }}</span>
+            <span class="text-norya-ink-muted text-lg leading-none group-open:rotate-45 transition-transform" aria-hidden="true">+</span>
+          </summary>
+          <p class="pb-4 text-sm text-norya-ink-muted leading-relaxed border-t border-norya-ink-subtle/10 pt-3 m-0">{{ item.a }}</p>
+        </details>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+  {# --- Final CTA --- #}
+  <section class="py-14 sm:py-20" aria-labelledby="fd-final-heading">
+    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+      <h2 id="fd-final-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.final_title }}</h2>
+      <p class="mt-4 text-base text-norya-ink-muted leading-relaxed max-w-2xl mx-auto">{{ t.final_desc }}</p>
+      <div class="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3">
+        <a href="{{ base_url }}/clinical-demo?lang={{ lang }}#workflow" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-white bg-norya-brand hover:bg-norya-brand-hover shadow-sm transition">{{ t.final_cta_demo }}</a>
+        <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold border border-norya-ink-subtle/25 text-norya-ink bg-white hover:bg-norya-surface-elevated transition">{{ t.final_cta_sample }}</a>
+        <a href="{{ base_url }}/kurumsal?lang={{ lang }}#contact" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-norya-brand border border-norya-brand/35 bg-norya-brand/[0.06] hover:bg-norya-brand/10 transition">{{ t.final_cta_clinic }}</a>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+{% include "partials/marketing_trust_strip.html" %}
+{% endblock %}

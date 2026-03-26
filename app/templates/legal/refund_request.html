@@ -12,8 +12,14 @@
 {% endblock %}
 {% block content %}
 <div class="max-w-2xl mx-auto">
-  <h1 class="text-2xl font-bold text-accent-900 mb-2">{{ t.refund_request_title }}</h1>
-  <p class="text-accent-500 text-xs mb-2">
+  <section class="legal-panel legal-hero-glow rounded-[28px] overflow-hidden ring-1 ring-white/60 mb-8">
+    <div class="px-6 sm:px-10 py-9 sm:py-10 bg-gradient-to-br from-primary-500/[0.11] via-white to-slate-50/95">
+      <h1 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900 mb-3 tracking-tight">{{ t.refund_request_title }}</h1>
+      <p class="text-accent-600 text-sm sm:text-base leading-relaxed">{{ t.refund_request_intro }}</p>
+    </div>
+  </section>
+
+  <p class="text-accent-500 text-xs mb-6">
     <span class="sr-only">Dil / Language:</span>
     <a href="/iade-talebi?lang=tr" class="{% if lang == 'tr' %}font-semibold text-[#0EA5A4]{% else %}text-accent-600 hover:text-[#0EA5A4]{% endif %}">TR</a>
     <span class="text-accent-300 mx-1">|</span>
@@ -33,30 +39,29 @@
     <span class="text-accent-300 mx-1">|</span>
     <a href="/iade-talebi?lang=ar" class="{% if lang == 'ar' %}font-semibold text-[#0EA5A4]{% else %}text-accent-600 hover:text-[#0EA5A4]{% endif %}">AR</a>
   </p>
-  <p class="text-accent-600 text-sm mb-6">{{ t.refund_request_intro }}</p>
 
   {% if success %}
-  <div class="p-4 rounded-lg bg-green-50 border border-green-200 text-green-800 mb-6" role="alert">
+  <div class="legal-panel p-5 sm:p-6 rounded-2xl bg-emerald-50/90 border border-emerald-200/90 text-emerald-900 mb-6 shadow-sm" role="alert">
     {{ t.refund_request_success }}
   </div>
   <p class="text-accent-600 text-sm">
     <a href="/iade-iptal?lang={{ lang }}" class="text-primary-600 hover:underline">{{ t.footer_refund }}</a> {{ t.refund_request_success_back }}
   </p>
   {% elif error %}
-  <div class="p-4 rounded-lg bg-red-50 border border-red-200 text-red-800 mb-6" role="alert">
+  <div class="legal-panel p-5 sm:p-6 rounded-2xl bg-red-50/90 border border-red-200/90 text-red-900 mb-6 shadow-sm" role="alert">
     {{ error }}
   </div>
   {% endif %}
 
   {% if not success %}
-  <form method="post" action="/iade-talebi" class="space-y-4 p-4 rounded-lg border border-accent-200 bg-accent-50/50">
+  <form method="post" action="/iade-talebi" class="legal-panel space-y-5 p-6 sm:p-8 rounded-[24px] ring-1 ring-white/50">
     <input type="hidden" name="lang" value="{{ lang }}" />
     <div>
       <label for="merchant_oid" class="block text-sm font-medium text-accent-800 mb-1">{{ t.refund_request_merchant_oid }} <span class="text-red-500">*</span></label>
       <input type="text" id="merchant_oid" name="merchant_oid" required
              value="{{ merchant_oid or '' }}"
              placeholder="{{ t.refund_request_merchant_oid_placeholder }}"
-             class="w-full px-3 py-2 rounded-lg border border-accent-300 bg-white text-accent-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+             class="w-full px-4 py-2.5 rounded-xl border border-accent-200 bg-white text-accent-900 shadow-sm focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500" />
       <p class="text-accent-500 text-xs mt-1">{{ t.refund_request_merchant_oid_help }}</p>
     </div>
     <div>
@@ -64,15 +69,15 @@
       <input type="email" id="email" name="email" required
              value="{{ email or '' }}"
              placeholder="{{ t.pay_email_placeholder }}"
-             class="w-full px-3 py-2 rounded-lg border border-accent-300 bg-white text-accent-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500" />
+             class="w-full px-4 py-2.5 rounded-xl border border-accent-200 bg-white text-accent-900 shadow-sm focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500" />
     </div>
     <div>
       <label for="reason" class="block text-sm font-medium text-accent-800 mb-1">{{ t.refund_request_reason }}</label>
       <textarea id="reason" name="reason" rows="3" placeholder="{{ t.refund_request_reason_placeholder }}"
-                class="w-full px-3 py-2 rounded-lg border border-accent-300 bg-white text-accent-900 focus:ring-2 focus:ring-primary-500 focus:border-primary-500">{{ reason or '' }}</textarea>
+                class="w-full px-4 py-2.5 rounded-xl border border-accent-200 bg-white text-accent-900 shadow-sm focus:ring-2 focus:ring-primary-500/30 focus:border-primary-500">{{ reason or '' }}</textarea>
     </div>
     <div class="flex flex-wrap gap-3 items-center">
-      <button type="submit" class="px-4 py-2 rounded-lg bg-[#0EA5A4] hover:bg-[#0d9488] text-white font-medium shadow-[0_2px_8px_rgba(14,165,164,0.3)] hover:shadow-[0_4px_12px_rgba(14,165,164,0.35)] transition-all focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#0EA5A4]">
+      <button type="submit" class="legal-cta-primary px-6 py-3 rounded-xl text-white font-semibold text-sm transition focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500">
         {{ t.refund_request_submit }}
       </button>
       <a href="/iade-iptal?lang={{ lang }}" class="text-accent-600 hover:text-primary-600 text-sm">{{ t.footer_refund }}</a>

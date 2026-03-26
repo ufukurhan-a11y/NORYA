@@ -3758,12 +3758,347 @@
       .header-desktop-only.inline-items { display: inline-flex !important; }
     }
 
+    /* ========== B2B mega navigation (desktop) + CTA cluster ========== */
+    .elite-header { overflow-x: visible; }
+    .header-brand-cluster {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+      min-width: 0;
+      flex-shrink: 0;
+    }
+    .nav-product-tagline {
+      margin: 0;
+      font-size: 0.6875rem;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: rgba(15, 23, 42, 0.5);
+      line-height: 1.25;
+      max-width: 13.5rem;
+    }
+    .dark .nav-product-tagline { color: rgba(255, 255, 255, 0.52); }
+    @media (max-width: 1199px) {
+      .nav-product-tagline { display: none !important; }
+    }
+    .nav-shell.nav-shell--mega {
+      position: relative;
+      align-items: center;
+      flex-wrap: nowrap;
+      overflow: visible;
+      background: rgba(255, 255, 255, 0.55);
+      border: 1px solid rgba(15, 23, 42, 0.07);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+    }
+    .dark .nav-shell.nav-shell--mega {
+      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(255, 255, 255, 0.09);
+      box-shadow: none;
+    }
+    .nav-dd {
+      position: relative;
+      flex-shrink: 0;
+    }
+    .nav-dd-trigger {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.25rem;
+      margin: 0;
+      padding: 8px 12px;
+      border: none;
+      border-radius: 999px;
+      background: transparent;
+      font: inherit;
+      font-weight: 650;
+      font-size: 0.8125rem;
+      letter-spacing: -0.01em;
+      color: rgba(7, 19, 26, 0.82);
+      cursor: pointer;
+      transition: background 0.16s ease, color 0.16s ease;
+      white-space: nowrap;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .dark .nav-dd-trigger { color: rgba(255, 255, 255, 0.82); }
+    .nav-dd-trigger::after {
+      content: "";
+      width: 0;
+      height: 0;
+      border-left: 4px solid transparent;
+      border-right: 4px solid transparent;
+      border-top: 4px solid currentColor;
+      opacity: 0.45;
+      margin-top: 2px;
+    }
+    [dir="rtl"] .nav-dd-trigger { flex-direction: row-reverse; }
+    .nav-dd-trigger:hover,
+    .nav-dd-trigger:focus-visible {
+      background: rgba(14, 165, 164, 0.1);
+      color: rgba(7, 19, 26, 0.95);
+      outline: none;
+    }
+    .dark .nav-dd-trigger:hover,
+    .dark .nav-dd-trigger:focus-visible {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .nav-dd-trigger:focus-visible {
+      box-shadow: 0 0 0 2px rgba(14, 165, 164, 0.35);
+    }
+    .nav-dd--open > .nav-dd-trigger {
+      background: rgba(14, 165, 164, 0.14);
+      color: rgba(7, 19, 26, 0.95);
+    }
+    .dark .nav-dd--open > .nav-dd-trigger {
+      background: rgba(255, 255, 255, 0.12);
+      color: #fff;
+    }
+    .nav-dd-panel {
+      position: absolute;
+      top: calc(100% + 8px);
+      left: 0;
+      min-width: 17.5rem;
+      max-width: min(20rem, calc(100vw - 2rem));
+      padding: 8px;
+      border-radius: 14px;
+      background: rgba(255, 255, 255, 0.98);
+      border: 1px solid rgba(15, 23, 42, 0.08);
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.1), 0 2px 8px rgba(15, 23, 42, 0.04);
+      z-index: 1250;
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+    }
+    [dir="rtl"] .nav-dd-panel {
+      left: auto;
+      right: 0;
+    }
+    .dark .nav-dd-panel {
+      background: rgba(30, 41, 59, 0.98);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 48px rgba(0, 0, 0, 0.35);
+    }
+    .nav-dd-item {
+      display: block;
+      padding: 11px 12px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.875rem;
+      font-weight: 600;
+      color: rgba(15, 23, 42, 0.92);
+      transition: background 0.14s ease;
+    }
+    .nav-dd-item:hover {
+      background: rgba(14, 165, 164, 0.08);
+      color: rgba(15, 23, 42, 0.98);
+    }
+    .dark .nav-dd-item {
+      color: rgba(255, 255, 255, 0.9);
+    }
+    .dark .nav-dd-item:hover {
+      background: rgba(255, 255, 255, 0.08);
+      color: #fff;
+    }
+    .nav-dd-item:focus-visible {
+      outline: none;
+      box-shadow: inset 0 0 0 2px rgba(14, 165, 164, 0.4);
+    }
+    .nav-dd-item__desc {
+      display: block;
+      margin-top: 3px;
+      font-size: 0.75rem;
+      font-weight: 500;
+      color: rgba(15, 23, 42, 0.48);
+      line-height: 1.35;
+    }
+    .dark .nav-dd-item__desc { color: rgba(255, 255, 255, 0.48); }
+    .nav-link-standalone {
+      padding: 8px 11px;
+      border-radius: 999px;
+      font-weight: 650;
+      font-size: 0.8125rem;
+      letter-spacing: -0.01em;
+      color: rgba(7, 19, 26, 0.82);
+      text-decoration: none;
+      white-space: nowrap;
+      transition: background 0.16s ease, color 0.16s ease;
+    }
+    .dark .nav-link-standalone { color: rgba(255, 255, 255, 0.82); }
+    .nav-link-standalone:hover {
+      background: rgba(14, 165, 164, 0.1);
+      color: rgba(7, 19, 26, 0.95);
+    }
+    .dark .nav-link-standalone:hover {
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+    }
+    .nav-link-standalone:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(14, 165, 164, 0.35);
+    }
+    .nav-link-standalone.nav-link-standalone--active {
+      background: rgba(14, 165, 164, 0.16);
+      color: rgba(7, 19, 26, 0.95);
+    }
+    /* Beat `.elite-nav a` defaults for standalone links */
+    .nav-shell--mega a.nav-link-standalone {
+      font-weight: 650;
+      font-size: 0.8125rem;
+      letter-spacing: -0.01em;
+      padding: 8px 11px;
+      border-radius: 999px;
+    }
+    .elite-header.compact {
+      background: rgba(255, 255, 255, 0.94) !important;
+      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
+      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
+    }
+    .dark .elite-header.compact {
+      background: rgba(15, 23, 42, 0.94) !important;
+      border-bottom-color: rgba(255, 255, 255, 0.06);
+      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+    }
+    .header-cta-cluster {
+      display: none;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      gap: 8px;
+      max-width: 22rem;
+    }
+    @media (min-width: 768px) {
+      .header-cta-cluster.header-desktop-only { display: flex !important; }
+    }
+    .header-cta-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 40px;
+      padding: 0 12px;
+      border-radius: 11px;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: rgba(15, 23, 42, 0.72);
+      border: 1px solid rgba(15, 23, 42, 0.1);
+      background: rgba(255, 255, 255, 0.45);
+      text-decoration: none;
+      transition: border-color 0.16s ease, background 0.16s ease, color 0.16s ease;
+      white-space: nowrap;
+    }
+    .dark .header-cta-ghost {
+      color: rgba(255, 255, 255, 0.78);
+      border-color: rgba(255, 255, 255, 0.14);
+      background: rgba(255, 255, 255, 0.04);
+    }
+    .header-cta-ghost:hover {
+      border-color: rgba(14, 165, 164, 0.35);
+      background: rgba(14, 165, 164, 0.06);
+      color: rgba(15, 23, 42, 0.9);
+    }
+    .dark .header-cta-ghost:hover {
+      border-color: rgba(94, 234, 212, 0.35);
+      background: rgba(94, 234, 212, 0.08);
+      color: #fff;
+    }
+    .header-cta-ghost:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(14, 165, 164, 0.35);
+    }
+    .header-cta-cluster .elite-cta-btn,
+    .header-cta-cluster .primary-cta {
+      min-height: 42px;
+      padding-left: 16px;
+      padding-right: 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      box-shadow: 0 10px 26px rgba(14, 165, 164, 0.22);
+    }
+    @media (min-width: 1100px) and (max-width: 1279px) {
+      .nav-shell.nav-shell--mega .nav-link-standalone,
+      .nav-shell.nav-shell--mega .nav-dd-trigger { font-size: 0.78rem; padding-left: 9px; padding-right: 9px; }
+    }
+    /* Mobile drawer accordion */
+    .drawer-details { margin: 0; border-radius: 12px; border: 1px solid rgba(15, 23, 42, 0.06); background: rgba(15, 23, 42, 0.02); }
+    .dark .drawer-details { border-color: rgba(255, 255, 255, 0.08); background: rgba(255, 255, 255, 0.03); }
+    .drawer-details + .drawer-details { margin-top: 6px; }
+    .drawer-details > summary {
+      list-style: none;
+      cursor: pointer;
+      padding: 14px 16px;
+      font-weight: 650;
+      font-size: 0.9375rem;
+      color: rgba(15, 23, 42, 0.88);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 8px;
+      -webkit-tap-highlight-color: transparent;
+    }
+    .drawer-details > summary::-webkit-details-marker { display: none; }
+    .dark .drawer-details > summary { color: rgba(255, 255, 255, 0.9); }
+    .drawer-details > summary::after {
+      content: "";
+      width: 8px;
+      height: 8px;
+      border-right: 2px solid currentColor;
+      border-bottom: 2px solid currentColor;
+      transform: rotate(45deg);
+      opacity: 0.45;
+      flex-shrink: 0;
+    }
+    [dir="rtl"] .drawer-details > summary { flex-direction: row-reverse; }
+    [dir="rtl"] .drawer-details > summary::after {
+      transform: rotate(-135deg);
+    }
+    .drawer-details[open] > summary::after {
+      transform: rotate(225deg);
+      margin-top: 4px;
+    }
+    [dir="rtl"] .drawer-details[open] > summary::after { transform: rotate(45deg); }
+    .drawer-subnav {
+      padding: 4px 8px 12px;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+    .drawer-subnav a {
+      padding: 12px 12px;
+      border-radius: 10px;
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: rgba(15, 23, 42, 0.85);
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.55);
+    }
+    .dark .drawer-subnav a {
+      color: rgba(255, 255, 255, 0.85);
+      background: rgba(0, 0, 0, 0.12);
+    }
+    .drawer-subnav a:hover { background: rgba(14, 165, 164, 0.1); }
+    .drawer-cta-row {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+    .drawer-cta-row .drawer-link--tap { justify-content: center; }
+
   </style>
   <script>
+  window._closeAllNavDropdowns = function() {
+    var h = document.getElementById('main-header');
+    if (!h) return;
+    h.querySelectorAll('[data-nav-dd]').forEach(function(dd) {
+      var panel = dd.querySelector('.nav-dd-panel');
+      var trig = dd.querySelector('.nav-dd-trigger');
+      if (panel) panel.hidden = true;
+      if (trig) trig.setAttribute('aria-expanded', 'false');
+      dd.classList.remove('nav-dd--open');
+    });
+  };
   window._toggleLangDrop = function(menuId, toggleId) {
     var menu = document.getElementById(menuId);
     var btn  = document.getElementById(toggleId);
     if (!menu || !btn) return;
+    if (typeof window._closeAllNavDropdowns === 'function') window._closeAllNavDropdowns();
     var closing = !menu.hidden;
     document.querySelectorAll('.header-lang-menu').forEach(function(m) {
       m.hidden = true;
@@ -3799,6 +4134,9 @@
   document.addEventListener('click', function(e) {
     if (e.target && e.target.closest && e.target.closest('.header-lang-switch')) return;
     if (e.target && e.target.closest && e.target.closest('.header-lang-menu')) return;
+    if (!(e.target && e.target.closest && e.target.closest('#main-header [data-nav-dd]'))) {
+      if (typeof window._closeAllNavDropdowns === 'function') window._closeAllNavDropdowns();
+    }
     document.querySelectorAll('.header-lang-menu').forEach(function(m) {
       m.hidden = true;
       m.style.cssText = '';
@@ -3894,7 +4232,8 @@
         'enterprise-security': '/enterprise-security',
         'clinical-demo': '/clinical-demo',
         technology: '/technology',
-        'privacy-policy': '/privacy-policy'
+        'privacy-policy': '/privacy-policy',
+        kurumsal: '/kurumsal'
       };
       document.querySelectorAll('a[data-locale-link]').forEach(function(a) {
         var key = a.getAttribute('data-locale-link');
@@ -3947,22 +4286,62 @@
     };
   })();
   </script>
-  <!-- Enterprise glass header: sticky + compact on scroll + pill nav + premium CTA -->
+  <!-- Premium B2B header: mega nav + locale-aware links + conversion CTAs -->
   <header id="main-header" class="header elite-header">
     <div class="header-inner elite-header__inner">
-      <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="NoryaAI Ana Sayfa">
-        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
-      </a>
-      <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
-        <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">About us</a>
-        <a href="/how-it-works" class="nav-link" data-nav="how-it-works" data-i18n="nav_how">How it works</a>
-        <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Reviews</a>
-        <a href="/pricing" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
-        <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Corporate</a>
-        <a href="/for-doctors?lang=en" class="nav-link" data-nav="for-doctors" data-i18n="nav_for_doctors" data-locale-link="for-doctors">For Doctors</a>
-        <a href="/for-clinics?lang=en" class="nav-link" data-nav="for-clinics" data-i18n="nav_for_clinics" data-locale-link="for-clinics">For Clinics</a>
-        <a href="/trust?lang=en" class="nav-link" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
-        <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
+      <div class="header-brand-cluster">
+        <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="NoryaAI Ana Sayfa">
+          <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
+        </a>
+        <p class="nav-product-tagline header-desktop-only" data-i18n="nav_product_tagline">Lab reports · Doctor-ready · Multilingual</p>
+      </div>
+      <nav class="nav-shell nav-shell--mega elite-nav header-desktop-only" aria-label="Ana menü">
+        <div class="nav-dd" data-nav-dd>
+          <button type="button" class="nav-dd-trigger" aria-expanded="false" aria-haspopup="true" data-i18n="nav_features">Features</button>
+          <div class="nav-dd-panel" role="menu" hidden>
+            <a role="menuitem" class="nav-dd-item" href="/how-it-works" data-i18n="nav_how">How it works</a>
+            <a role="menuitem" class="nav-dd-item" href="/en/sample-blood-test-reports" data-sample-reports-link="1" data-i18n="hero_see_sample">See sample report</a>
+            <a role="menuitem" class="nav-dd-item" href="/technology?lang=en" data-locale-link="technology" data-i18n="nav_dd_supported_tests">Supported lab tests</a>
+            <a role="menuitem" class="nav-dd-item" href="/trust?lang=en" data-trust-nav-link="1" data-i18n="nav_dd_multilingual_output">Multilingual reports</a>
+          </div>
+        </div>
+        <div class="nav-dd" data-nav-dd>
+          <button type="button" class="nav-dd-trigger" aria-expanded="false" aria-haspopup="true" data-i18n="nav_for_doctors">For Doctors</button>
+          <div class="nav-dd-panel" role="menu" hidden>
+            <a role="menuitem" class="nav-dd-item" href="/for-doctors?lang=en" data-locale-link="for-doctors" data-i18n="nav_dd_doctor_ready_reports">Doctor-ready reports</a>
+            <a role="menuitem" class="nav-dd-item" href="/for-doctors?lang=en" data-locale-link="for-doctors" data-locale-hash="#workflow" data-i18n="nav_dd_patient_communication">Patient communication</a>
+            <a role="menuitem" class="nav-dd-item" href="/medical-review?lang=en" data-locale-link="medical-review" data-i18n="nav_dd_followup_prep">Follow-up prep</a>
+          </div>
+        </div>
+        <div class="nav-dd" data-nav-dd>
+          <button type="button" class="nav-dd-trigger" aria-expanded="false" aria-haspopup="true" data-i18n="nav_for_clinics">For Clinics</button>
+          <div class="nav-dd-panel" role="menu" hidden>
+            <a role="menuitem" class="nav-dd-item" href="/for-clinics?lang=en" data-locale-link="for-clinics" data-i18n="nav_dd_clinic_workflows">Clinic workflows</a>
+            <a role="menuitem" class="nav-dd-item" href="/for-hospitals?lang=en" data-locale-link="for-hospitals" data-i18n="nav_dd_intl_patients">International patients</a>
+            <a role="menuitem" class="nav-dd-item" href="/enterprise-security?lang=en" data-locale-link="enterprise-security" data-i18n="nav_dd_trust_privacy">Trust &amp; privacy</a>
+            <a role="menuitem" class="nav-dd-item" href="/kurumsal?lang=en" data-locale-link="kurumsal" data-i18n="nav_dd_organizations">Organizations &amp; enterprise</a>
+          </div>
+        </div>
+        <a class="nav-link-standalone" href="/clinical-demo?lang=en" data-locale-link="clinical-demo" data-i18n="nav_demo">Demo</a>
+        <div class="nav-dd" data-nav-dd>
+          <button type="button" class="nav-dd-trigger" aria-expanded="false" aria-haspopup="true" data-i18n="nav_trust">Trust</button>
+          <div class="nav-dd-panel" role="menu" hidden>
+            <a role="menuitem" class="nav-dd-item" href="/security?lang=en" data-locale-link="security" data-i18n="nav_dd_security">Security</a>
+            <a role="menuitem" class="nav-dd-item" href="/privacy-policy?lang=en" data-locale-link="privacy-policy" data-i18n="nav_dd_privacy">Privacy</a>
+            <a role="menuitem" class="nav-dd-item" href="/methodology?lang=en" data-locale-link="methodology" data-i18n="nav_dd_methodology">Methodology</a>
+            <a role="menuitem" class="nav-dd-item" href="/trust?lang=en" data-trust-nav-link="1" data-i18n="nav_dd_trust_overview">Trust overview</a>
+          </div>
+        </div>
+        <div class="nav-dd" data-nav-dd>
+          <button type="button" class="nav-dd-trigger" aria-expanded="false" aria-haspopup="true" data-i18n="nav_compare">Compare</button>
+          <div class="nav-dd-panel" role="menu" hidden>
+            <a role="menuitem" class="nav-dd-item" href="/en/compare/" data-compare-nav-link="1" data-i18n="nav_dd_compare_hub">Compare hub</a>
+            <a role="menuitem" class="nav-dd-item" href="/en/compare/norya-vs-generic-ai" data-compare-detail="norya-vs-generic-ai" data-i18n="nav_dd_compare_generic_ai">Norya vs generic AI</a>
+            <a role="menuitem" class="nav-dd-item" href="/en/compare/" data-compare-nav-link="1" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
+          </div>
+        </div>
+        <a class="nav-link-standalone" href="/pricing" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
+        <a class="nav-link-standalone" href="/blog" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="header-right-zone">
         <button type="button" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
@@ -3996,7 +4375,11 @@
           <button type="button" onclick="openAnalyze()" class="primary-cta header-cta-inline header-cta-desktop elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analyze <span class="cta-icon" aria-hidden="true"></span></button>
           <button type="button" onclick="logout()" class="secondary-link header-desktop-only" data-i18n="nav_logout">Log out</button>
         </span>
-        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analyze <span class="cta-icon" aria-hidden="true"></span></a>
+        <div class="header-cta-cluster header-cta-guest-only header-desktop-only">
+          <a href="/en/sample-blood-test-reports" class="header-cta-ghost" data-sample-reports-link="1" data-i18n="hero_see_sample">Sample report</a>
+          <a href="/clinical-demo?lang=en" class="header-cta-ghost" data-locale-link="clinical-demo" data-i18n="hero_book_demo">Book demo</a>
+          <a href="#analyze-section" onclick="openRegister(); scrollToAnalyze(); return false;" class="primary-cta header-cta-inline elite-cta-btn" id="header-cta-analiz" data-i18n="nav_cta_start_analyze">Start free · Analyze</a>
+        </div>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analyze</a>
         <div class="header-lang-switch language-switch header-mobile-only header-mobile-lang-hide" aria-label="Language">
           <button type="button" id="base-lang-toggle-mobile" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu-mobile','base-lang-toggle-mobile')">
@@ -4038,18 +4421,60 @@
       </button>
     </div>
     <div class="drawer-body">
-      <a href="#analyze-section" onclick="openAnalyze(); closeMobileDrawer(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analyze</a>
-      <div class="drawer-section drawer-section--nav">
-        <a href="#hakkimizda" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_about">About us</a>
-        <a href="/how-it-works" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_how">How it works</a>
-        <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Reviews</a>
-        <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Pricing</a>
-        <a href="/kurumsal" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_corporate">Corporate</a>
-        <a href="/for-doctors?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_for_doctors" data-locale-link="for-doctors">For Doctors</a>
-        <a href="/for-clinics?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_for_clinics" data-locale-link="for-clinics">For Clinics</a>
-        <a href="/trust?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
-        <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
+      <div class="drawer-cta-row">
+        <a href="#analyze-section" onclick="openRegister(); scrollToAnalyze(); closeMobileDrawer(); return false;" class="drawer-cta-primary" data-i18n="nav_cta_start_analyze">Start free · Analyze</a>
+        <a href="/en/sample-blood-test-reports" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap header-cta-ghost" style="border-style:dashed;" data-sample-reports-link="1" data-i18n="hero_see_sample">See sample report</a>
+        <a href="/clinical-demo?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap header-cta-ghost" style="border-style:dashed;" data-locale-link="clinical-demo" data-i18n="hero_book_demo">Book demo</a>
       </div>
+      <p class="drawer-trust-meta" style="margin-top:0;margin-bottom:10px;" data-i18n="nav_product_tagline">Lab reports · Doctor-ready · Multilingual</p>
+      <details class="drawer-details">
+        <summary data-i18n="nav_features">Features</summary>
+        <div class="drawer-subnav">
+          <a href="/how-it-works" onclick="closeMobileDrawer()" data-i18n="nav_how">How it works</a>
+          <a href="/en/sample-blood-test-reports" onclick="closeMobileDrawer()" data-sample-reports-link="1" data-i18n="hero_see_sample">See sample report</a>
+          <a href="/technology?lang=en" onclick="closeMobileDrawer()" data-locale-link="technology" data-i18n="nav_dd_supported_tests">Supported lab tests</a>
+          <a href="/trust?lang=en" onclick="closeMobileDrawer()" data-trust-nav-link="1" data-i18n="nav_dd_multilingual_output">Multilingual reports</a>
+        </div>
+      </details>
+      <details class="drawer-details">
+        <summary data-i18n="nav_for_doctors">For Doctors</summary>
+        <div class="drawer-subnav">
+          <a href="/for-doctors?lang=en" onclick="closeMobileDrawer()" data-locale-link="for-doctors" data-i18n="nav_dd_doctor_ready_reports">Doctor-ready reports</a>
+          <a href="/for-doctors?lang=en" onclick="closeMobileDrawer()" data-locale-link="for-doctors" data-locale-hash="#workflow" data-i18n="nav_dd_patient_communication">Patient communication</a>
+          <a href="/medical-review?lang=en" onclick="closeMobileDrawer()" data-locale-link="medical-review" data-i18n="nav_dd_followup_prep">Follow-up prep</a>
+        </div>
+      </details>
+      <details class="drawer-details">
+        <summary data-i18n="nav_for_clinics">For Clinics</summary>
+        <div class="drawer-subnav">
+          <a href="/for-clinics?lang=en" onclick="closeMobileDrawer()" data-locale-link="for-clinics" data-i18n="nav_dd_clinic_workflows">Clinic workflows</a>
+          <a href="/for-hospitals?lang=en" onclick="closeMobileDrawer()" data-locale-link="for-hospitals" data-i18n="nav_dd_intl_patients">International patients</a>
+          <a href="/enterprise-security?lang=en" onclick="closeMobileDrawer()" data-locale-link="enterprise-security" data-i18n="nav_dd_trust_privacy">Trust &amp; privacy</a>
+          <a href="/kurumsal?lang=en" onclick="closeMobileDrawer()" data-locale-link="kurumsal" data-i18n="nav_dd_organizations">Organizations &amp; enterprise</a>
+        </div>
+      </details>
+      <a href="/clinical-demo?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-locale-link="clinical-demo" data-i18n="nav_demo">Demo</a>
+      <details class="drawer-details">
+        <summary data-i18n="nav_trust">Trust</summary>
+        <div class="drawer-subnav">
+          <a href="/security?lang=en" onclick="closeMobileDrawer()" data-locale-link="security" data-i18n="nav_dd_security">Security</a>
+          <a href="/privacy-policy?lang=en" onclick="closeMobileDrawer()" data-locale-link="privacy-policy" data-i18n="nav_dd_privacy">Privacy</a>
+          <a href="/methodology?lang=en" onclick="closeMobileDrawer()" data-locale-link="methodology" data-i18n="nav_dd_methodology">Methodology</a>
+          <a href="/trust?lang=en" onclick="closeMobileDrawer()" data-trust-nav-link="1" data-i18n="nav_dd_trust_overview">Trust overview</a>
+        </div>
+      </details>
+      <details class="drawer-details">
+        <summary data-i18n="nav_compare">Compare</summary>
+        <div class="drawer-subnav">
+          <a href="/en/compare/" onclick="closeMobileDrawer()" data-compare-nav-link="1" data-i18n="nav_dd_compare_hub">Compare hub</a>
+          <a href="/en/compare/norya-vs-generic-ai" onclick="closeMobileDrawer()" data-compare-detail="norya-vs-generic-ai" data-i18n="nav_dd_compare_generic_ai">Norya vs generic AI</a>
+          <a href="/en/compare/" onclick="closeMobileDrawer()" data-compare-nav-link="1" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
+        </div>
+      </details>
+      <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Pricing</a>
+      <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
+      <a href="#hakkimizda" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_about">About</a>
+      <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Reviews</a>
       <div class="drawer-section">
         <div id="drawer-auth-wrap" style="display:flex;flex-direction:column;gap:0.5rem;">
           <button type="button" onclick="openLogin(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary" data-i18n="nav_login">Log in</button>
@@ -4166,11 +4591,11 @@
     <div class="max-w-5xl mx-auto px-4 sm:px-6">
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-6 sm:gap-8 text-center">
         <div class="flex flex-col items-center gap-2">
-          <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums" data-i18n="trust_stat_users">2M+</span>
+          <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums">2M+</span>
           <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase" data-i18n="stat_label_users">Reports Generated</span>
         </div>
         <div class="flex flex-col items-center gap-2">
-          <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums" data-i18n="trust_stat_accuracy">98.7%</span>
+          <span class="text-3xl sm:text-4xl font-extrabold text-[#0ea5a4] tracking-tight tabular-nums">98.7%</span>
           <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase" data-i18n="stat_label_accuracy">Accuracy</span>
         </div>
         <div class="flex flex-col items-center gap-2">
@@ -4183,10 +4608,9 @@
         </div>
       </div>
       <p class="text-center mt-5 text-[11px] text-accent-400 dark:text-accent-500 tracking-wide"><a href="/methodology" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_how_measured" data-locale-link="methodology">How these metrics are measured</a> <span class="mx-1">&middot;</span> <a href="/transparency" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_definitions" data-locale-link="transparency">Metric definitions</a></p>
-      <!-- Örnek canlı gösterim (gerçek metrik değil) -->
+      <!-- Canlı hissi örnek göstergeler (gerçek metrik değil) -->
       <div class="mt-8 flex justify-start">
         <div class="w-full max-w-[320px] rounded-2xl bg-white dark:bg-accent-900/40 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.06)] p-4 sm:p-5">
-          <p class="text-[11px] font-bold tracking-[0.2em] uppercase mb-2" style="color:#0ea5a4;">Örnek canlı gösterim</p>
           <div class="flex items-end justify-between gap-4">
             <div>
               <p class="text-[11px] font-semibold text-accent-500 dark:text-accent-300 uppercase tracking-wide mb-1">Bugün yapılan analiz</p>
@@ -4202,7 +4626,7 @@
             </div>
           </div>
           <p class="text-xs text-accent-500 dark:text-accent-400 mt-2 leading-relaxed">
-            Şu an <span id="live-analysis-people-count-text">—</span> kişi tahlilini analiz ettiriyor (gerçek veri değil).
+            Şu an <span id="live-analysis-people-count-text">—</span> kişi tahlilini analiz ettiriyor.
           </p>
         </div>
       </div>
@@ -5035,11 +5459,9 @@
       return Math.max(min, Math.min(max, v));
     }
 
-    // Reload'da rastgele başlar (çok abartmadan), sonra yavaş yavaş artar.
-    var value = 2430 + randInt(-10, 15); // ~2420..2445
-    value = Math.max(2350, value);
-
-    var people = randInt(8, 18);
+    // Başlangıç: bugünkü analiz ~250 civarı; "şu an" 12 (örnek göstergeler, gerçek veri değil).
+    var value = 250 + randInt(0, 8);
+    var people = 12;
 
     function render() {
       counterEl.textContent = fmt(value);
@@ -5047,12 +5469,8 @@
       peopleTextEl.textContent = String(people);
     }
 
-    render();
-
-    var startedAt = Date.now();
-    var lastTickAt = startedAt;
+    var lastTickAt = Date.now();
     var stagnant = 0;
-    var started = false;
 
     function tick() {
       // Çok sık güncellemeyi azalt: ~900ms civarı.
@@ -5075,14 +5493,15 @@
       }
 
       render();
-      started = true;
     }
 
-    // DOM hazır olunca başla (canlı his için intersection bekleme yok).
+    // İlk bir süre sayılar gösterilmez; sonra 250 / 12 ile başlar ve yavaş artar.
+    var INITIAL_PAUSE_MS = 1600;
     setTimeout(function () {
+      render();
       tick();
       setInterval(tick, 900);
-    }, 350);
+    }, INITIAL_PAUSE_MS);
   })();
   </script>
 
@@ -9340,7 +9759,14 @@
     const T = {
       tr: {
         nav_home: "Ana Sayfa", nav_languages: "Diller", nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü", nav_trust: "Güven", hero_compare_link: "ChatGPT ve diğer AI araçlarıyla karşılaştır",
-        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", nav_start_free: "Ücretsiz Başla", nav_for_doctors: "Doktorlar için", nav_for_clinics: "Klinikler için", nav_demo: "Demo", nav_compare: "Karşılaştır", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
+        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", nav_start_free: "Ücretsiz Başla", nav_for_doctors: "Doktorlar için", nav_for_clinics: "Klinikler için", nav_demo: "Demo", nav_compare: "Karşılaştır",
+        nav_product_tagline: "Lab raporu · Doktora hazır · Çok dilli", nav_cta_start_analyze: "Ücretsiz başla · Analiz",
+        nav_dd_supported_tests: "Desteklenen tahliller", nav_dd_multilingual_output: "Çok dilli raporlar",
+        nav_dd_doctor_ready_reports: "Doktora hazır raporlar", nav_dd_patient_communication: "Hasta iletişimi", nav_dd_followup_prep: "Kontrol öncesi hazırlık",
+        nav_dd_clinic_workflows: "Klinik iş akışları", nav_dd_intl_patients: "Uluslararası hastalar", nav_dd_trust_privacy: "Güven ve gizlilik", nav_dd_organizations: "Kurumlar ve kurumsal",
+        nav_dd_security: "Güvenlik", nav_dd_privacy: "Gizlilik", nav_dd_methodology: "Metodoloji", nav_dd_trust_overview: "Güven özeti",
+        nav_dd_compare_hub: "Karşılaştırma merkezi", nav_dd_compare_generic_ai: "Norya ve genel AI", nav_dd_compare_more_tools: "Norya ve diğer araçlar",
+        drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade bir dille özetleyen ve referans aralıklarına göre yorumlayan bir hizmettir. Sayılar ve kısaltmalar yerine anlaşılır raporlar ve günlük hayata uyarlanabilir kısa öneriler sunuyoruz.",
@@ -9801,7 +10227,14 @@
       },
       en: {
         nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu", nav_trust: "Trust", hero_compare_link: "Compare with ChatGPT and other AI tools",
-        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", nav_start_free: "Start free", nav_for_doctors: "For Doctors", nav_for_clinics: "For Clinics", nav_demo: "Demo", nav_compare: "Compare", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", nav_start_free: "Start free", nav_for_doctors: "For Doctors", nav_for_clinics: "For Clinics", nav_demo: "Demo", nav_compare: "Compare",
+        nav_product_tagline: "Lab reports · Doctor-ready · Multilingual", nav_cta_start_analyze: "Start free · Analyze",
+        nav_dd_supported_tests: "Supported lab tests", nav_dd_multilingual_output: "Multilingual reports",
+        nav_dd_doctor_ready_reports: "Doctor-ready reports", nav_dd_patient_communication: "Patient communication", nav_dd_followup_prep: "Follow-up prep",
+        nav_dd_clinic_workflows: "Clinic workflows", nav_dd_intl_patients: "International patients", nav_dd_trust_privacy: "Trust & privacy", nav_dd_organizations: "Organizations & enterprise",
+        nav_dd_security: "Security", nav_dd_privacy: "Privacy", nav_dd_methodology: "Methodology", nav_dd_trust_overview: "Trust overview",
+        nav_dd_compare_hub: "Compare hub", nav_dd_compare_generic_ai: "Norya vs generic AI", nav_dd_compare_more_tools: "Norya vs other tools",
+        drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
         about_what_1: "Norya explains your blood test results in plain language and interprets them against reference ranges. Instead of numbers and abbreviations, you get clear reports and practical, day-to-day suggestions.",
@@ -10260,7 +10693,14 @@
       },
       it: {
         nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu", nav_trust: "Fiducia", hero_compare_link: "Confronta con ChatGPT e altri strumenti AI",
-        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", nav_start_free: "Inizia gratis", nav_for_doctors: "Per i medici", nav_for_clinics: "Per le cliniche", nav_demo: "Demo", nav_compare: "Confronta", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", nav_start_free: "Inizia gratis", nav_for_doctors: "Per i medici", nav_for_clinics: "Per le cliniche", nav_demo: "Demo", nav_compare: "Confronta",
+        nav_product_tagline: "Referti di laboratorio · Pronti per il medico · Multilingue", nav_cta_start_analyze: "Inizia gratis · Analizza",
+        nav_dd_supported_tests: "Esami supportati", nav_dd_multilingual_output: "Referti multilingue",
+        nav_dd_doctor_ready_reports: "Referti pronti per il medico", nav_dd_patient_communication: "Comunicazione con il paziente", nav_dd_followup_prep: "Preparazione al follow-up",
+        nav_dd_clinic_workflows: "Flussi in clinica", nav_dd_intl_patients: "Pazienti internazionali", nav_dd_trust_privacy: "Fiducia e privacy", nav_dd_organizations: "Organizzazioni e enterprise",
+        nav_dd_security: "Sicurezza", nav_dd_privacy: "Privacy", nav_dd_methodology: "Metodologia", nav_dd_trust_overview: "Panoramica fiducia",
+        nav_dd_compare_hub: "Hub di confronto", nav_dd_compare_generic_ai: "Norya vs IA generica", nav_dd_compare_more_tools: "Norya vs altri strumenti",
+        drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?", company_info_title: "Informazioni aziendali",
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
@@ -10580,7 +11020,14 @@
       },
       es: {
         nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú", nav_trust: "Confianza", hero_compare_link: "Comparar con ChatGPT y otras herramientas de IA",
-        nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", nav_start_free: "Empieza gratis", nav_for_doctors: "Para médicos", nav_for_clinics: "Para clínicas", nav_demo: "Demo", nav_compare: "Comparar", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", nav_start_free: "Empieza gratis", nav_for_doctors: "Para médicos", nav_for_clinics: "Para clínicas", nav_demo: "Demo", nav_compare: "Comparar",
+        nav_product_tagline: "Informes de laboratorio · Listos para el médico · Multilingüe", nav_cta_start_analyze: "Empieza gratis · Analizar",
+        nav_dd_supported_tests: "Pruebas admitidas", nav_dd_multilingual_output: "Informes multilingües",
+        nav_dd_doctor_ready_reports: "Informes listos para el médico", nav_dd_patient_communication: "Comunicación con pacientes", nav_dd_followup_prep: "Preparación del seguimiento",
+        nav_dd_clinic_workflows: "Flujos en clínica", nav_dd_intl_patients: "Pacientes internacionales", nav_dd_trust_privacy: "Confianza y privacidad", nav_dd_organizations: "Organizaciones y empresa",
+        nav_dd_security: "Seguridad", nav_dd_privacy: "Privacidad", nav_dd_methodology: "Metodología", nav_dd_trust_overview: "Resumen de confianza",
+        nav_dd_compare_hub: "Centro de comparación", nav_dd_compare_generic_ai: "Norya vs IA genérica", nav_dd_compare_more_tools: "Norya vs otras herramientas",
+        drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?", company_info_title: "Información de la empresa",
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
@@ -10900,7 +11347,14 @@
       },
       fr: {
         nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu", nav_trust: "Confiance", hero_compare_link: "Comparer avec ChatGPT et d'autres outils IA",
-        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", nav_start_free: "Commencer gratuitement", nav_for_doctors: "Pour les médecins", nav_for_clinics: "Pour les cliniques", nav_demo: "Démo", nav_compare: "Comparer", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", nav_start_free: "Commencer gratuitement", nav_for_doctors: "Pour les médecins", nav_for_clinics: "Pour les cliniques", nav_demo: "Démo", nav_compare: "Comparer",
+        nav_product_tagline: "Rapports de labo · Prêts pour le médecin · Multilingue", nav_cta_start_analyze: "Commencer gratuitement · Analyser",
+        nav_dd_supported_tests: "Analyses prises en charge", nav_dd_multilingual_output: "Rapports multilingues",
+        nav_dd_doctor_ready_reports: "Rapports prêts pour le médecin", nav_dd_patient_communication: "Communication patient", nav_dd_followup_prep: "Préparation du suivi",
+        nav_dd_clinic_workflows: "Flux en clinique", nav_dd_intl_patients: "Patients internationaux", nav_dd_trust_privacy: "Confiance et confidentialité", nav_dd_organizations: "Organisations et entreprise",
+        nav_dd_security: "Sécurité", nav_dd_privacy: "Confidentialité", nav_dd_methodology: "Méthodologie", nav_dd_trust_overview: "Vue d’ensemble confiance",
+        nav_dd_compare_hub: "Hub de comparaison", nav_dd_compare_generic_ai: "Norya vs IA générique", nav_dd_compare_more_tools: "Norya vs autres outils",
+        drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?", company_info_title: "Informations sur l'entreprise",
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
@@ -11220,7 +11674,14 @@
       },
       de: {
         nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü", nav_trust: "Vertrauen", hero_compare_link: "Mit ChatGPT und anderen KI-Tools vergleichen",
-        nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", nav_start_free: "Kostenlos starten", nav_for_doctors: "Für Ärzte", nav_for_clinics: "Für Kliniken", nav_demo: "Demo", nav_compare: "Vergleich", drawer_trust_meta: "DSGVO-konform · SSL-verschlüsselt · Sichere Zahlung (PayTR)",
+        nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", nav_start_free: "Kostenlos starten", nav_for_doctors: "Für Ärzte", nav_for_clinics: "Für Kliniken", nav_demo: "Demo", nav_compare: "Vergleich",
+        nav_product_tagline: "Laborberichte · Arztfertig · Mehrsprachig", nav_cta_start_analyze: "Kostenlos starten · Analysieren",
+        nav_dd_supported_tests: "Unterstützte Labortests", nav_dd_multilingual_output: "Mehrsprachige Berichte",
+        nav_dd_doctor_ready_reports: "Arztfertige Berichte", nav_dd_patient_communication: "Patientenkommunikation", nav_dd_followup_prep: "Vorbereitung auf Folgetermine",
+        nav_dd_clinic_workflows: "Abläufe in der Praxis", nav_dd_intl_patients: "Internationale Patienten", nav_dd_trust_privacy: "Vertrauen & Datenschutz", nav_dd_organizations: "Organisationen & Enterprise",
+        nav_dd_security: "Sicherheit", nav_dd_privacy: "Datenschutz", nav_dd_methodology: "Methodik", nav_dd_trust_overview: "Vertrauensüberblick",
+        nav_dd_compare_hub: "Vergleichsübersicht", nav_dd_compare_generic_ai: "Norya vs. generische KI", nav_dd_compare_more_tools: "Norya vs. andere Tools",
+        drawer_trust_meta: "DSGVO-konform · SSL-verschlüsselt · Sichere Zahlung (PayTR)",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?", company_info_title: "Unternehmensinformationen",
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
@@ -11522,6 +11983,12 @@
       he: {
         nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט", nav_trust: "אמון", hero_compare_link: "השוו מול ChatGPT וכלי AI אחרים",
         nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות", nav_start_free: "התחילו בחינם", nav_for_doctors: "לרופאים", nav_for_clinics: "למרפאות", nav_demo: "דמו", nav_compare: "השוואה",
+        nav_product_tagline: "מסמכי מעבדה · מוכן לרופא · רב־לשוני", nav_cta_start_analyze: "התחילו בחינם · ניתוח",
+        nav_dd_supported_tests: "בדיקות נתמכות", nav_dd_multilingual_output: "דוחות רב־לשוניים",
+        nav_dd_doctor_ready_reports: "דוחות מוכנים לרופא", nav_dd_patient_communication: "תקשורת עם המטופל", nav_dd_followup_prep: "הכנה למעקב",
+        nav_dd_clinic_workflows: "זרימות במרפאה", nav_dd_intl_patients: "מטופלים בינלאומיים", nav_dd_trust_privacy: "אמון ופרטיות", nav_dd_organizations: "ארגונים ועסקים",
+        nav_dd_security: "אבטחה", nav_dd_privacy: "פרטיות", nav_dd_methodology: "מתודולוגיה", nav_dd_trust_overview: "סקירת אמון",
+        nav_dd_compare_hub: "מרכז השוואות", nav_dd_compare_generic_ai: "Norya מול בינה מלאכותית כללית", nav_dd_compare_more_tools: "Norya מול כלים אחרים",
         a2hs_message: "הוסף את Norya למסך הבית והשתמש כמו באפליקציה.", a2hs_later: "אחר כך", a2hs_add: "הוסף", ios_a2hs_message: "הוסף למסך הבית: שתף ⎋ הוסף למסך הבית", ios_a2hs_close: "סגור",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?", company_info_title: "פרטי החברה",
         about_what_1: "נוריה הוא שירות שמסביר את תוצאות בדיקות הדם שלך בשפה ברורה. המספרים והקיצורים מהמעבדה קשים לעתים להבנה; נוריה מייצרת דוחות שמסכמים את התוצאות, מסבירים כל ערך ביחס לטווחי ההתייחסות ונותנים המלצות מעשיות.",
@@ -11794,6 +12261,12 @@
       ar: {
         nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة", nav_trust: "الثقة", hero_compare_link: "قارن مع ChatGPT وأدوات الذكاء الاصطناعي الأخرى",
         nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة", nav_start_free: "ابدأ مجانًا", nav_for_doctors: "للأطباء", nav_for_clinics: "للعيادات", nav_demo: "عرض توضيحي", nav_compare: "مقارنة",
+        nav_product_tagline: "تقارير مخبرية · جاهزة للطبيب · متعددة اللغات", nav_cta_start_analyze: "ابدأ مجانًا · حلّل",
+        nav_dd_supported_tests: "التحاليل المدعومة", nav_dd_multilingual_output: "تقارير متعددة اللغات",
+        nav_dd_doctor_ready_reports: "تقارير جاهزة للطبيب", nav_dd_patient_communication: "التواصل مع المريض", nav_dd_followup_prep: "التحضير للمتابعة",
+        nav_dd_clinic_workflows: "سير العمل في العيادة", nav_dd_intl_patients: "مرضى دوليون", nav_dd_trust_privacy: "الثقة والخصوصية", nav_dd_organizations: "المؤسسات والشركات",
+        nav_dd_security: "الأمان", nav_dd_privacy: "الخصوصية", nav_dd_methodology: "المنهجية", nav_dd_trust_overview: "نظرة على الثقة",
+        nav_dd_compare_hub: "مركز المقارنة", nav_dd_compare_generic_ai: "Norya مقابل ذكاء اصطناعي عام", nav_dd_compare_more_tools: "Norya مقابل أدوات أخرى",
         a2hs_message: "أضف Norya إلى الشاشة الرئيسية واستخدمها كتطبيق.", a2hs_later: "لاحقاً", a2hs_add: "إضافة", ios_a2hs_message: "إضافة إلى الشاشة الرئيسية: مشاركة ⎋ إضافة إلى الشاشة الرئيسية", ios_a2hs_close: "إغلاق",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟", company_info_title: "معلومات الشركة",
         about_what_1: "نوريا خدمة تشرح نتائج تحاليل الدم بلغة واضحة. الأرقام والاختصارات من المختبر غالباً صعبة الفهم؛ نوريا تنتج تقارير تلخص النتائج وتشرح كل قيمة بالنسبة للمرجع وتقدم توصيات عملية.",
@@ -12065,7 +12538,14 @@
       },
       hi: {
         nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू", nav_trust: "विश्वास", hero_compare_link: "ChatGPT और दूसरे AI टूल्स से तुलना करें",
-        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", nav_start_free: "मुफ्त शुरू करें", nav_for_doctors: "डॉक्टरों के लिए", nav_for_clinics: "क्लिनिकों के लिए", nav_demo: "डेमो", nav_compare: "तुलना", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", nav_start_free: "मुफ्त शुरू करें", nav_for_doctors: "डॉक्टरों के लिए", nav_for_clinics: "क्लिनिकों के लिए", nav_demo: "डेमो", nav_compare: "तुलना",
+        nav_product_tagline: "लैब रिपोर्ट · डॉक्टर के लिए तैयार · बहुभाषी", nav_cta_start_analyze: "मुफ्त शुरू करें · विश्लेषण",
+        nav_dd_supported_tests: "समर्थित जाँच", nav_dd_multilingual_output: "बहुभाषी रिपोर्ट",
+        nav_dd_doctor_ready_reports: "डॉक्टर के लिए तैयार रिपोर्ट", nav_dd_patient_communication: "रोगी संचार", nav_dd_followup_prep: "फॉलो-अप तैयारी",
+        nav_dd_clinic_workflows: "क्लिनिक वर्कफ़्लो", nav_dd_intl_patients: "अंतर्राष्ट्रीय मरीज", nav_dd_trust_privacy: "विश्वास और गोपनीयता", nav_dd_organizations: "संस्थाएँ और एंटरप्राइज़",
+        nav_dd_security: "सुरक्षा", nav_dd_privacy: "गोपनीयता", nav_dd_methodology: "कार्यप्रणाली", nav_dd_trust_overview: "विश्वास अवलोकन",
+        nav_dd_compare_hub: "तुलना केंद्र", nav_dd_compare_generic_ai: "Norya बनाम सामान्य AI", nav_dd_compare_more_tools: "Norya बनाम अन्य उपकरण",
+        drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?", company_info_title: "कंपनी की जानकारी",
         about_what_1: "नोरिया एक सेवा है जो रक्त परीक्षण परिणामों को सरल भाषा में समझाती है। लैब के नंबर और संक्षिप्त नाम अक्सर समझने में कठिन होते हैं; नोरिया ऐसी रिपोर्ट बनाती है जो परिणामों को संक्षेप में बताती हैं, हर मान को संदर्भ सीमा के अनुसार समझाती हैं और व्यावहारिक सुझाव देती हैं।",
@@ -13419,6 +13899,22 @@
       }
       window.addEventListener('scroll', onScroll, { passive: true });
       onScroll();
+      header.querySelectorAll('[data-nav-dd]').forEach(function(dd) {
+        var trig = dd.querySelector('.nav-dd-trigger');
+        var panel = dd.querySelector('.nav-dd-panel');
+        if (!trig || !panel) return;
+        trig.addEventListener('click', function(ev) {
+          ev.preventDefault();
+          ev.stopPropagation();
+          var willOpen = !dd.classList.contains('nav-dd--open');
+          if (typeof window._closeAllNavDropdowns === 'function') window._closeAllNavDropdowns();
+          if (willOpen) {
+            dd.classList.add('nav-dd--open');
+            panel.hidden = false;
+            trig.setAttribute('aria-expanded', 'true');
+          }
+        });
+      });
     })();
     (function() {
       function setActiveNav() {
@@ -13429,9 +13925,15 @@
           if (aHash === hash || a.getAttribute('data-nav') === hash) a.classList.add('active');
           else a.classList.remove('active');
         });
+        var path = (typeof getEffectivePath === 'function' ? getEffectivePath() : window.location.pathname) || '';
+        document.querySelectorAll('.nav-link-standalone[data-nav]').forEach(function(a) {
+          var href = (a.getAttribute('href') || '').split('?')[0];
+          if (path === '/pricing' && href === '/pricing') a.classList.add('nav-link-standalone--active');
+          else a.classList.remove('nav-link-standalone--active');
+        });
       }
       window.addEventListener('hashchange', setActiveNav);
-      if (window.location.hash) setActiveNav();
+      setActiveNav();
     })();
     function updateLegalLinksLang() {
       var lang = (typeof getLang === 'function') ? getLang() : 'en';

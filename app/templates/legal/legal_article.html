@@ -55,75 +55,95 @@
 } %}
 {% set labels = legal_labels[lang] if lang in legal_labels else legal_labels["en"] %}
 <style>
-  .legal-body ul { list-style-type: disc; padding-inline-start: 1.5rem; margin-top: 0.75rem; margin-bottom: 0.75rem; }
-  .legal-body ol { list-style-type: decimal; padding-inline-start: 1.5rem; margin-top: 0.75rem; margin-bottom: 0.75rem; }
-  .legal-body li { margin-bottom: 0.45rem; line-height: 1.75; }
-  .legal-body p { margin-bottom: 0.9rem; line-height: 1.85; }
+  .legal-body { font-size: 0.9375rem; line-height: 1.8; }
+  @media (min-width: 640px) { .legal-body { font-size: 1rem; line-height: 1.82; } }
+  .legal-body ul { list-style-type: disc; padding-inline-start: 1.35rem; margin-top: 0.85rem; margin-bottom: 0.85rem; }
+  .legal-body ol { list-style-type: decimal; padding-inline-start: 1.35rem; margin-top: 0.85rem; margin-bottom: 0.85rem; }
+  .legal-body li { margin-bottom: 0.5rem; padding-left: 0.15rem; }
+  .legal-body li::marker { color: rgba(14, 165, 164, 0.85); }
+  .legal-body p { margin-bottom: 1rem; }
   .legal-body p:last-child { margin-bottom: 0; }
-  .legal-body a { color: #0b8d8b; text-decoration: underline; text-underline-offset: 3px; }
-  .legal-body strong { color: #0f172a; }
+  .legal-body a { color: #0b8d8b; text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: 3px; font-weight: 500; transition: color 0.15s ease; }
+  .legal-body a:hover { color: #0a6c6b; }
+  .legal-body strong { color: #0f172a; font-weight: 600; }
+  .legal-body h4 { font-size: 1rem; font-weight: 600; color: #0f172a; margin: 1.25rem 0 0.5rem; }
+  .legal-section-index {
+    box-shadow: inset 0 0 0 1px rgba(14, 165, 164, 0.12);
+  }
   .legal-summary-card {
-    background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,250,252,0.96));
-    border: 1px solid rgba(148, 163, 184, 0.18);
-    box-shadow: 0 14px 34px rgba(15, 23, 42, 0.06);
+    background: linear-gradient(160deg, rgba(255,255,255,0.99) 0%, rgba(248,250,252,0.97) 100%);
+    border: 1px solid rgba(148, 163, 184, 0.16);
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.055), inset 0 1px 0 rgba(255, 255, 255, 0.9);
+    transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  }
+  .legal-summary-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(14, 165, 164, 0.22);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.08), inset 0 1px 0 rgba(255, 255, 255, 0.95);
+  }
+  .legal-toc-link {
+    box-shadow: 0 2px 10px rgba(15, 23, 42, 0.03);
+  }
+  .legal-toc-link:hover {
+    box-shadow: 0 6px 20px rgba(14, 165, 164, 0.1);
   }
 </style>
 <article class="grid grid-cols-1 xl:grid-cols-[minmax(0,1fr)_320px] gap-6 xl:gap-8 items-start">
   <div class="space-y-6 sm:space-y-8 min-w-0">
-    <section class="legal-panel rounded-[28px] overflow-hidden">
-      <div class="px-5 sm:px-8 lg:px-10 py-8 sm:py-10 bg-gradient-to-br from-primary-500/10 via-white to-accent-50">
-        <div class="flex flex-wrap items-center gap-3 mb-5 text-xs sm:text-sm">
-          <span class="inline-flex items-center gap-2 rounded-full border border-primary-500/20 bg-white/90 px-3 py-1.5 font-semibold tracking-wide text-primary-600">
+    <section class="legal-panel legal-hero-glow rounded-[28px] overflow-hidden ring-1 ring-white/60">
+      <div class="px-5 sm:px-8 lg:px-11 py-9 sm:py-11 lg:py-12 bg-gradient-to-br from-primary-500/[0.11] via-white to-slate-50/90">
+        <div class="flex flex-wrap items-center gap-2.5 mb-6 text-xs sm:text-sm">
+          <span class="inline-flex items-center gap-2 rounded-full border border-primary-500/25 bg-white/95 px-3.5 py-1.5 font-semibold tracking-[0.06em] uppercase text-[11px] sm:text-xs text-primary-600 shadow-sm">
             {{ nav_legal }}
           </span>
-          <span class="inline-flex items-center gap-2 rounded-full border border-accent-200 bg-white/70 px-3 py-1.5 text-accent-600">
+          <span class="inline-flex items-center gap-2 rounded-full border border-accent-200/90 bg-white/85 px-3.5 py-1.5 text-accent-600 shadow-sm">
             {{ content.last_updated }}
           </span>
         </div>
-        <h1 class="font-display text-3xl sm:text-4xl lg:text-5xl font-semibold text-accent-900 tracking-tight leading-tight max-w-3xl">
+        <h1 class="font-display text-3xl sm:text-4xl lg:text-[2.75rem] font-semibold text-accent-900 tracking-tight leading-[1.12] max-w-3xl">
           {{ content.title }}
         </h1>
         {% if content.meta_description is defined and content.meta_description %}
-        <p class="mt-4 text-base sm:text-lg text-accent-600 leading-relaxed max-w-3xl">
+        <p class="mt-5 text-base sm:text-lg text-accent-600 leading-relaxed max-w-3xl">
           {{ content.meta_description }}
         </p>
         {% endif %}
-        <div class="mt-6 flex flex-wrap gap-3">
-          <a href="#legal-content" class="inline-flex items-center justify-center min-h-[44px] rounded-xl bg-norya-brand px-5 py-3 text-sm font-semibold text-white shadow-sm transition hover:bg-primary-600">
+        <div class="mt-8 flex flex-wrap gap-3">
+          <a href="#legal-content" class="legal-cta-primary inline-flex items-center justify-center min-h-[46px] rounded-2xl px-6 py-3.5 text-sm font-semibold text-white transition">
             {{ labels.read_document }}
           </a>
-          <a href="/contact?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[44px] rounded-xl border border-accent-200 bg-white px-5 py-3 text-sm font-semibold text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+          <a href="/legal/iletisim?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[46px] rounded-2xl border border-accent-200/90 bg-white/95 px-6 py-3.5 text-sm font-semibold text-accent-800 shadow-sm transition hover:border-primary-400/40 hover:text-primary-700 hover:shadow-md">
             {{ nav_contact }}
           </a>
         </div>
       </div>
     </section>
 
-    <section id="legal-content" class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-7 sm:py-9">
-      <div class="flex items-center justify-between gap-4 mb-6">
+    <section id="legal-content" class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-11 py-8 sm:py-10 ring-1 ring-white/50">
+      <div class="flex items-center justify-between gap-4 mb-7">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.overview }}</p>
-          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900">{{ content.summary_title if content.summary_title is defined and content.summary_title else content.title }}</h2>
+          <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary-600 mb-2.5">{{ labels.overview }}</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900 tracking-tight">{{ content.summary_title if content.summary_title is defined and content.summary_title else content.title }}</h2>
         </div>
       </div>
-      <div class="legal-body text-accent-700 text-sm sm:text-base">{{ content.intro | safe }}</div>
+      <div class="legal-body text-accent-700 max-w-[52rem]">{{ content.intro | safe }}</div>
     </section>
 
   {% if content.summary is defined and content.summary %}
-  <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-7 sm:py-9">
-    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-6">
+  <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-11 py-8 sm:py-10 ring-1 ring-white/50">
+    <div class="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-4 mb-7">
       <div>
-        <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.highlights }}</p>
-        <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900">{{ content.summary_title }}</h2>
+        <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary-600 mb-2.5">{{ labels.highlights }}</p>
+        <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900 tracking-tight">{{ content.summary_title }}</h2>
       </div>
       {% if content.summary_note %}
       <p class="text-sm text-accent-500 max-w-xl">{{ content.summary_note }}</p>
       {% endif %}
     </div>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-5">
       {% for item in content.summary %}
       <div class="legal-summary-card rounded-2xl p-5 sm:p-6">
-        <p class="text-xs font-semibold text-primary-600 uppercase tracking-[0.18em] mb-2">{{ item.label }}</p>
+        <p class="text-[11px] font-bold text-primary-600 uppercase tracking-[0.16em] mb-2.5">{{ item.label }}</p>
         <p class="text-sm sm:text-[15px] text-accent-700 leading-relaxed">{{ item.text }}</p>
       </div>
       {% endfor %}
@@ -131,13 +151,13 @@
   </section>
   {% endif %}
 
-    <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-7 sm:py-9">
-      <div class="flex items-center justify-between gap-4 mb-6">
+    <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-11 py-8 sm:py-10 ring-1 ring-white/50">
+      <div class="flex items-center justify-between gap-4 mb-7">
         <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.full_text }}</p>
-          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900">{{ content.title }}</h2>
+          <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary-600 mb-2.5">{{ labels.full_text }}</p>
+          <h2 class="font-display text-2xl sm:text-3xl font-semibold text-accent-900 tracking-tight">{{ content.title }}</h2>
         </div>
-        <div class="hidden sm:flex items-center gap-2 rounded-full border border-accent-200 bg-accent-50 px-4 py-2 text-xs font-medium text-accent-600">
+        <div class="hidden sm:flex items-center gap-2 rounded-full border border-accent-200/90 bg-gradient-to-b from-white to-accent-50/80 px-4 py-2 text-xs font-medium text-accent-600 shadow-sm">
           <span>{{ labels.status_current }}</span>
           <span class="h-1.5 w-1.5 rounded-full bg-primary-500"></span>
           <span>NoryaAI</span>
@@ -145,45 +165,45 @@
       </div>
 
   {% for section in content.sections %}
-      <section id="section-{{ loop.index }}" class="{% if not loop.first %}border-t border-accent-200/80 pt-7 mt-7{% endif %}">
-        <div class="flex items-start gap-4">
-          <span class="mt-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-primary-500/10 text-sm font-bold text-primary-600">{{ loop.index }}</span>
-          <div class="min-w-0 flex-1">
-            <h3 class="text-lg sm:text-xl font-semibold text-accent-900 mb-3">{{ section.title }}</h3>
-            <div class="legal-body text-accent-700 text-sm sm:text-base">{{ section.body | safe }}</div>
+      <section id="section-{{ loop.index }}" class="{% if not loop.first %}border-t border-accent-200/70 pt-8 mt-8{% endif %} scroll-mt-28">
+        <div class="flex items-start gap-4 sm:gap-5">
+          <span class="legal-section-index mt-0.5 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-gradient-to-b from-primary-500/15 to-primary-500/8 text-sm font-bold text-primary-700 tabular-nums">{{ loop.index }}</span>
+          <div class="min-w-0 flex-1 max-w-[52rem]">
+            <h3 class="text-lg sm:text-xl font-semibold text-accent-900 mb-3.5 tracking-tight">{{ section.title }}</h3>
+            <div class="legal-body text-accent-700">{{ section.body | safe }}</div>
           </div>
         </div>
       </section>
   {% endfor %}
     </section>
 
-    <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-10 py-6 sm:py-7">
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div>
-          <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-2">{{ labels.note }}</p>
+    <section class="legal-panel rounded-[28px] px-5 sm:px-8 lg:px-11 py-7 sm:py-9 ring-1 ring-white/50">
+      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-5">
+        <div class="max-w-3xl">
+          <p class="text-[11px] font-bold uppercase tracking-[0.22em] text-primary-600 mb-2.5">{{ labels.note }}</p>
           <p class="text-accent-600 text-sm sm:text-base leading-relaxed">{{ content.footer_note }}</p>
         </div>
-        <a href="/contact?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[44px] rounded-xl border border-accent-200 px-5 py-3 text-sm font-semibold text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+        <a href="/legal/iletisim?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[46px] shrink-0 rounded-2xl border border-accent-200/90 bg-white px-6 py-3.5 text-sm font-semibold text-accent-800 shadow-sm transition hover:border-primary-400/40 hover:text-primary-700 hover:shadow-md">
           {{ labels.ask_question }}
         </a>
       </div>
     </section>
   </div>
 
-  <aside class="xl:sticky xl:top-24 space-y-4">
-    <section class="legal-panel rounded-[24px] p-5 sm:p-6">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-3">{{ labels.in_this_document }}</p>
+  <aside class="xl:sticky xl:top-[5.5rem] space-y-4">
+    <section class="legal-panel rounded-[24px] p-5 sm:p-6 ring-1 ring-white/50">
+      <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-600 mb-3.5">{{ labels.in_this_document }}</p>
       <nav class="space-y-2" aria-label="Legal sections">
         {% for section in content.sections %}
-        <a href="#section-{{ loop.index }}" class="block rounded-xl border border-accent-200/80 bg-white px-4 py-3 text-sm text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+        <a href="#section-{{ loop.index }}" class="legal-toc-link block rounded-xl border border-accent-200/85 bg-white/95 px-4 py-3 text-sm font-medium text-accent-700 transition hover:border-primary-400/45 hover:text-primary-700">
           {{ loop.index }}. {{ section.title }}
         </a>
         {% endfor %}
       </nav>
     </section>
 
-    <section class="legal-panel rounded-[24px] p-5 sm:p-6">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-3">{{ labels.help }}</p>
+    <section class="legal-panel rounded-[24px] p-5 sm:p-6 ring-1 ring-white/50">
+      <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-600 mb-3.5">{{ labels.help }}</p>
       <div class="space-y-3 text-sm text-accent-600">
         <p>
           {% if lang == "tr" %}
@@ -195,14 +215,14 @@
         <a href="mailto:{{ company_support_email }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-primary-600 transition hover:border-primary-500/30">
           {{ company_support_email }}
         </a>
-        <a href="/contact?lang={{ lang }}" class="block rounded-xl border border-accent-200 bg-white px-4 py-3 font-medium text-accent-700 transition hover:border-primary-500/30 hover:text-primary-600">
+        <a href="/legal/iletisim?lang={{ lang }}" class="block rounded-xl border border-accent-200/90 bg-white px-4 py-3 font-medium text-accent-800 shadow-sm transition hover:border-primary-400/40 hover:text-primary-700">
           {{ labels.contact_page }}
         </a>
       </div>
     </section>
 
-    <section class="legal-panel rounded-[24px] p-5 sm:p-6">
-      <p class="text-xs font-semibold uppercase tracking-[0.2em] text-primary-600 mb-3">{{ labels.trust_title }}</p>
+    <section class="legal-panel rounded-[24px] p-5 sm:p-6 ring-1 ring-white/50">
+      <p class="text-[11px] font-bold uppercase tracking-[0.2em] text-primary-600 mb-3.5">{{ labels.trust_title }}</p>
       <div class="space-y-3 text-sm text-accent-600">
         <p>{{ labels.trust_desc }}</p>
         <nav class="space-y-2" aria-label="{{ labels.trust_title }}">
