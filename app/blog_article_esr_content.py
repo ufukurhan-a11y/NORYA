@@ -140,7 +140,7 @@ def _sections_en() -> list:
                 '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Acute infection detection</td></tr>'
                 "</tbody></table>"
                 "<p>In systemic lupus erythematosus, the ESR often rises while CRP remains normal&mdash;this discordance helps distinguish SLE "
-                "flares from infections. For more on CRP, see our <a href=\"/blog/crp-high-meaning\">CRP guide</a>.</p>"
+                "flares from infections. For more on CRP, see our <a href=\"/en/blog/crp-what-it-means\">CRP guide</a>.</p>"
                 "<p>In practice, many clinicians order both tests together to get a more complete picture of a patient's inflammatory status.</p>"
             ),
         ),
@@ -343,7 +343,7 @@ def _sections_tr() -> list:
                 '<td style="border:1px solid #cbd5e1;padding:8px 12px;">Akut enfeksiyon tespiti</td></tr>'
                 "</tbody></table>"
                 "<p>SLE'de ESR yükselirken CRP normal kalabilir&mdash;bu uyumsuzluk SLE alevlenmelerini enfeksiyonlardan ayırmaya yardımcı olur. "
-                "CRP hakkında daha fazla bilgi için <a href=\"/blog/crp-high-meaning\">CRP rehberimize</a> bakın.</p>"
+                "CRP hakkında daha fazla bilgi için <a href=\"/tr/blog/crp-yuksek-ne-anlama-gelir\">CRP rehberimize</a> bakın.</p>"
             ),
         ),
         Section(
@@ -432,7 +432,7 @@ def _sections_es() -> list:
         Section(id="high-esr-causes", level=2, heading="Causas de VSG elevada",
                 body_html="<p><strong>Infecciones:</strong> neumonía, endocarditis, tuberculosis. <strong>Enfermedades autoinmunes:</strong> arteritis temporal, polimialgia reumática, artritis reumatoide, lupus. <strong>Neoplasias:</strong> mieloma múltiple, linfoma. <strong>Otros:</strong> anemia, embarazo, insuficiencia renal, obesidad, edad avanzada.</p>"),
         Section(id="esr-vs-crp", level=2, heading="VSG vs. PCR",
-                body_html="<p>La VSG responde lentamente (días) y se normaliza en semanas; ideal para inflamación crónica. La PCR responde rápidamente (6-8 horas) y se normaliza en días; ideal para infección aguda. En el lupus, la VSG sube mientras la PCR puede permanecer normal. Para más información, consulte nuestra <a href=\"/blog/crp-high-meaning\">guía de PCR</a>.</p>"),
+                body_html="<p>La VSG responde lentamente (días) y se normaliza en semanas; ideal para inflamación crónica. La PCR responde rápidamente (6-8 horas) y se normaliza en días; ideal para infección aguda. En el lupus, la VSG sube mientras la PCR puede permanecer normal. Para más información, consulte nuestra <a href=\"/es/blog/crp-elevado-significado\">guía de PCR</a>.</p>"),
         Section(id="false-elevations", level=2, heading="Falsas elevaciones y limitaciones de la VSG",
                 body_html="<p>La anemia, la obesidad, el envejecimiento, el embarazo, la insuficiencia renal y la hipergammaglobulinemia pueden elevar falsamente la VSG. La policitemia, la drepanocitosis y la esferocitosis pueden disminuirla falsamente.</p>"),
         Section(id="monitoring-role", level=2, heading="Papel de la VSG en el seguimiento de enfermedades",
@@ -463,7 +463,7 @@ def _sections_de() -> list:
         Section(id="high-esr-causes", level=2, heading="Ursachen einer hohen BSG",
                 body_html="<p><strong>Infektionen:</strong> Pneumonie, Endokarditis, Tuberkulose. <strong>Autoimmunerkrankungen:</strong> Riesenzellarteriitis, Polymyalgia rheumatica, rheumatoide Arthritis, SLE. <strong>Malignome:</strong> Multiples Myelom, Lymphom. <strong>Sonstige:</strong> Anämie, Schwangerschaft, Niereninsuffizienz, Adipositas.</p>"),
         Section(id="esr-vs-crp", level=2, heading="BSG vs. CRP",
-                body_html="<p>BSG reagiert langsam und eignet sich für chronische Entzündungen. CRP reagiert schnell und eignet sich für akute Infektionen. Bei SLE steigt die BSG, während CRP normal bleiben kann. Siehe unseren <a href=\"/blog/crp-high-meaning\">CRP-Leitfaden</a>.</p>"),
+                body_html="<p>BSG reagiert langsam und eignet sich für chronische Entzündungen. CRP reagiert schnell und eignet sich für akute Infektionen. Bei SLE steigt die BSG, während CRP normal bleiben kann. Siehe unseren <a href=\"/de/blog/crp-what-it-means\">CRP-Leitfaden</a>.</p>"),
         Section(id="false-elevations", level=2, heading="Falsche Erhöhungen und Einschränkungen",
                 body_html="<p>Anämie, Adipositas, Alter, Schwangerschaft, Nierenversagen und Hypergammaglobulinämie können die BSG falsch erhöhen. Polyzythämie und Sichelzellkrankheit können sie falsch senken.</p>"),
         Section(id="monitoring-role", level=2, heading="Rolle der BSG bei der Krankheitsüberwachung",
@@ -494,7 +494,7 @@ def _sections_fr() -> list:
         Section(id="high-esr-causes", level=2, heading="Causes d'une VS élevée",
                 body_html="<p><strong>Infections :</strong> pneumonie, endocardite, tuberculose. <strong>Maladies auto-immunes :</strong> artérite temporale, polymyalgie rhumatismale, polyarthrite rhumatoïde, lupus. <strong>Cancers :</strong> myélome multiple, lymphome. <strong>Autres :</strong> anémie, grossesse, insuffisance rénale, obésité.</p>"),
         Section(id="esr-vs-crp", level=2, heading="VS vs. CRP",
-                body_html="<p>La VS est lente (jours) et adaptée à l'inflammation chronique. La CRP est rapide (6-8 h) et adaptée à l'infection aiguë. Dans le lupus, la VS augmente tandis que la CRP reste souvent normale. Voir notre <a href=\"/blog/crp-high-meaning\">guide CRP</a>.</p>"),
+                body_html="<p>La VS est lente (jours) et adaptée à l'inflammation chronique. La CRP est rapide (6-8 h) et adaptée à l'infection aiguë. Dans le lupus, la VS augmente tandis que la CRP reste souvent normale. Voir notre <a href=\"/fr/blog/crp-what-it-means\">guide CRP</a>.</p>"),
         Section(id="false-elevations", level=2, heading="Fausses élévations et limites de la VS",
                 body_html="<p>L'anémie, l'obésité, l'âge, la grossesse, l'insuffisance rénale et l'hypergammaglobulinémie peuvent faussement élever la VS. La polyglobulie et la drépanocytose peuvent la diminuer faussement.</p>"),
         Section(id="monitoring-role", level=2, heading="Rôle de la VS dans le suivi des maladies",
@@ -525,7 +525,7 @@ def _sections_it() -> list:
         Section(id="high-esr-causes", level=2, heading="Cause di VES alta",
                 body_html="<p><strong>Infezioni:</strong> polmonite, endocardite, tubercolosi. <strong>Malattie autoimmuni:</strong> arterite temporale, polimialgia reumatica, artrite reumatoide, LES. <strong>Neoplasie:</strong> mieloma multiplo, linfoma. <strong>Altro:</strong> anemia, gravidanza, insufficienza renale, obesità.</p>"),
         Section(id="esr-vs-crp", level=2, heading="VES vs. PCR",
-                body_html="<p>La VES risponde lentamente ed è adatta per l'infiammazione cronica. La PCR risponde rapidamente ed è ideale per le infezioni acute. Nel lupus, la VES sale mentre la PCR può restare normale. Vedere la nostra <a href=\"/blog/crp-high-meaning\">guida PCR</a>.</p>"),
+                body_html="<p>La VES risponde lentamente ed è adatta per l'infiammazione cronica. La PCR risponde rapidamente ed è ideale per le infezioni acute. Nel lupus, la VES sale mentre la PCR può restare normale. Vedere la nostra <a href=\"/it/blog/crp-what-it-means\">guida PCR</a>.</p>"),
         Section(id="false-elevations", level=2, heading="False elevazioni e limiti della VES",
                 body_html="<p>Anemia, obesità, età, gravidanza, insufficienza renale e ipergammaglobulinemia possono elevare falsamente la VES. Policitemia, drepanocitosi e sferocitosi possono diminuirla falsamente.</p>"),
         Section(id="monitoring-role", level=2, heading="Ruolo della VES nel monitoraggio delle malattie",
@@ -556,7 +556,7 @@ def _sections_he() -> list:
         Section(id="high-esr-causes", level=2, heading="גורמים ל-ESR גבוה",
                 body_html="<p><strong>זיהומים:</strong> דלקת ריאות, אנדוקרדיטיס, שחפת. <strong>מחלות אוטואימוניות:</strong> דלקת עורקים ענקית תאים, פולימיאלגיה ראומטיקה, דלקת מפרקים שגרונית, לופוס. <strong>ממאירויות:</strong> מיאלומה, לימפומה. <strong>אחר:</strong> אנמיה, הריון, אי-ספיקת כליות, השמנה.</p>"),
         Section(id="esr-vs-crp", level=2, heading="ESR לעומת CRP",
-                body_html="<p>ESR מגיב לאט (ימים) ומתאים לדלקת כרונית. CRP מגיב מהר (6-8 שעות) ומתאים לזיהום חריף. בלופוס, ESR עולה בעוד CRP עשוי להישאר תקין. ראו <a href=\"/blog/crp-high-meaning\">מדריך CRP</a>.</p>"),
+                body_html="<p>ESR מגיב לאט (ימים) ומתאים לדלקת כרונית. CRP מגיב מהר (6-8 שעות) ומתאים לזיהום חריף. בלופוס, ESR עולה בעוד CRP עשוי להישאר תקין. ראו <a href=\"/he/blog/crp-what-it-means\">מדריך CRP</a>.</p>"),
         Section(id="false-elevations", level=2, heading="עליות שגויות ומגבלות של ESR",
                 body_html="<p>אנמיה, השמנה, גיל, הריון, אי-ספיקת כליות והיפרגמגלובולינמיה עלולים להעלות ESR באופן שגוי. פוליציטמיה ואנמיה חרמשית עלולות להורידו באופן שגוי.</p>"),
         Section(id="monitoring-role", level=2, heading="תפקיד ESR במעקב אחר מחלות",
@@ -587,7 +587,7 @@ def _sections_hi() -> list:
         Section(id="high-esr-causes", level=2, heading="उच्च ESR के कारण",
                 body_html="<p><strong>संक्रमण:</strong> निमोनिया, एंडोकार्डाइटिस, तपेदिक। <strong>ऑटोइम्यून:</strong> टेम्पोरल आर्टेराइटिस, पॉलीमायल्जिया रूमेटिका, रूमेटॉइड आर्थराइटिस, ल्यूपस। <strong>कैंसर:</strong> मल्टीपल मायलोमा, लिम्फोमा। <strong>अन्य:</strong> एनीमिया, गर्भावस्था, गुर्दे की विफलता, मोटापा।</p>"),
         Section(id="esr-vs-crp", level=2, heading="ESR बनाम CRP",
-                body_html="<p>ESR धीरे प्रतिक्रिया करता है (दिन) और पुरानी सूजन के लिए उपयुक्त है। CRP तेज़ प्रतिक्रिया करता है (6-8 घंटे) और तीव्र संक्रमण के लिए आदर्श है। ल्यूपस में ESR बढ़ता है जबकि CRP सामान्य रह सकता है। <a href=\"/blog/crp-high-meaning\">CRP गाइड</a> देखें।</p>"),
+                body_html="<p>ESR धीरे प्रतिक्रिया करता है (दिन) और पुरानी सूजन के लिए उपयुक्त है। CRP तेज़ प्रतिक्रिया करता है (6-8 घंटे) और तीव्र संक्रमण के लिए आदर्श है। ल्यूपस में ESR बढ़ता है जबकि CRP सामान्य रह सकता है। <a href=\"/hi/blog/crp-high-kya-matlab\">CRP गाइड</a> देखें।</p>"),
         Section(id="false-elevations", level=2, heading="ESR की गलत ऊंचाई और सीमाएँ",
                 body_html="<p>एनीमिया, मोटापा, उम्र, गर्भावस्था, गुर्दे की विफलता और हाइपरगैमाग्लोबुलिनीमिया ESR को गलत तरीके से बढ़ा सकते हैं। पॉलीसिथेमिया और सिकल सेल रोग इसे गलत तरीके से कम कर सकते हैं।</p>"),
         Section(id="monitoring-role", level=2, heading="रोग निगरानी में ESR की भूमिका",
@@ -618,7 +618,7 @@ def _sections_ar() -> list:
         Section(id="high-esr-causes", level=2, heading="أسباب ارتفاع ESR",
                 body_html="<p><strong>عدوى:</strong> التهاب رئوي، التهاب شغاف القلب، سل. <strong>أمراض مناعية:</strong> التهاب الشريان الصدغي، التهاب المفاصل الروماتويدي، الذئبة. <strong>أورام:</strong> المايلوما المتعددة، اللمفومة. <strong>أخرى:</strong> فقر الدم، الحمل، الفشل الكلوي، السمنة.</p>"),
         Section(id="esr-vs-crp", level=2, heading="ESR مقابل CRP",
-                body_html="<p>ESR يستجيب ببطء (أيام) ومناسب للالتهاب المزمن. CRP يستجيب بسرعة (6-8 ساعات) ومناسب للعدوى الحادة. في الذئبة، يرتفع ESR بينما قد يبقى CRP طبيعياً. انظر <a href=\"/blog/crp-high-meaning\">دليل CRP</a>.</p>"),
+                body_html="<p>ESR يستجيب ببطء (أيام) ومناسب للالتهاب المزمن. CRP يستجيب بسرعة (6-8 ساعات) ومناسب للعدوى الحادة. في الذئبة، يرتفع ESR بينما قد يبقى CRP طبيعياً. انظر <a href=\"/ar/blog/crp-what-it-means\">دليل CRP</a>.</p>"),
         Section(id="false-elevations", level=2, heading="ارتفاعات خاطئة وقيود ESR",
                 body_html="<p>فقر الدم، السمنة، التقدم بالعمر، الحمل، الفشل الكلوي وفرط غاماغلوبولينات الدم قد ترفع ESR زوراً. كثرة الحمر وفقر الدم المنجلي قد تخفضه زوراً.</p>"),
         Section(id="monitoring-role", level=2, heading="دور ESR في مراقبة الأمراض",

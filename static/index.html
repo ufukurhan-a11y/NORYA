@@ -3862,6 +3862,14 @@
       if (supported.indexOf(loc) === -1) loc = 'en';
       return '/' + loc + '/compare/';
     };
+    /** Locale-prefixed compare detail URLs (see app/compare_i18n.py COMPARE_SLUGS). */
+    window.NORYA_COMPARE_DETAIL_URL = function(slug) {
+      var loc = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
+      loc = (loc || 'en').slice(0, 2);
+      var supported = ['en','tr','de','fr','es','it','he','hi','ar'];
+      if (supported.indexOf(loc) === -1) loc = 'en';
+      return '/' + loc + '/compare/' + String(slug || '').replace(/^\//, '');
+    };
     window.__noryaApplyReportPaymentUrls = function() {
       var url = (window.NORYA_PAYMENT_REPORT_URL && window.NORYA_PAYMENT_REPORT_URL()) || '/payment?from=report';
       document.querySelectorAll('a[href="/payment?from=report"], a[data-report-payment="1"]').forEach(function(a){ a.href = url; });
@@ -3884,13 +3892,16 @@
         'for-clinics': '/for-clinics',
         'for-hospitals': '/for-hospitals',
         'enterprise-security': '/enterprise-security',
-        'clinical-demo': '/clinical-demo'
+        'clinical-demo': '/clinical-demo',
+        technology: '/technology',
+        'privacy-policy': '/privacy-policy'
       };
       document.querySelectorAll('a[data-locale-link]').forEach(function(a) {
         var key = a.getAttribute('data-locale-link');
         var path = routeMap[key];
         if (!path) return;
-        a.href = window.NORYA_LOCALE_PAGE_URL(path);
+        var hash = a.getAttribute('data-locale-hash') || '';
+        a.href = window.NORYA_LOCALE_PAGE_URL(path) + hash;
       });
     };
     window.__noryaApplySampleReportsUrls = function() {
@@ -3901,12 +3912,21 @@
       var url = (window.NORYA_COMPARE_HUB_URL && window.NORYA_COMPARE_HUB_URL()) || '/en/compare/';
       document.querySelectorAll('a[data-compare-nav-link="1"]').forEach(function(a){ a.href = url; });
     };
+    window.__noryaApplyCompareDetailUrls = function() {
+      if (!window.NORYA_COMPARE_DETAIL_URL) return;
+      document.querySelectorAll('a[data-compare-detail]').forEach(function(a) {
+        var slug = a.getAttribute('data-compare-detail');
+        if (!slug) return;
+        a.href = window.NORYA_COMPARE_DETAIL_URL(slug);
+      });
+    };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){
       if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
       if (window.__noryaApplyTrustUrls) window.__noryaApplyTrustUrls();
       if (window.__noryaApplyLocalePageUrls) window.__noryaApplyLocalePageUrls();
       if (window.__noryaApplySampleReportsUrls) window.__noryaApplySampleReportsUrls();
       if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
+      if (window.__noryaApplyCompareDetailUrls) window.__noryaApplyCompareDetailUrls();
     });
     else {
       if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
@@ -3914,6 +3934,7 @@
       if (window.__noryaApplyLocalePageUrls) window.__noryaApplyLocalePageUrls();
       if (window.__noryaApplySampleReportsUrls) window.__noryaApplySampleReportsUrls();
       if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
+      if (window.__noryaApplyCompareDetailUrls) window.__noryaApplyCompareDetailUrls();
     }
     var SUPPORTED = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
     window.__noryaLangGo = function(locale) {
@@ -11513,7 +11534,12 @@
         hero_sub: "תוצאות מעבדה מוסברות בשפה ברורה. לא אבחנה — הכנה רגועה לפגישה עם הרופא.",
         hero_title: "הבן את תוצאות בדיקת הדם שלך בתוך דקות",
         hero_desc: "העלה את התוצאות וקבל סיכום מובנה עם טווחי התייחסות, הסברים פשוטים ו-PDF שנוח לקחת לרופא.",
-        hero_cta: "התחל ניתוח", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות כברירת מחדל", hero_global_reach: "אנחנו בכל מקום — נגיש מ-190+ מדינות",
+        hero_cta: "התחל בחינם", hero_book_demo: "קבעו הדגמה", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות כברירת מחדל", hero_global_reach: "אנחנו בכל מקום — נגיש מ-190+ מדינות",
+        b2b_strip_label: "לצוותים", b2b_strip_doctors: "לרופאים", b2b_strip_clinics: "למרפאות", b2b_strip_trust: "מרכז האמון", b2b_strip_compare: "השוו ל־Norya",
+        why_mini_title: "למה Norya", why_mini_sub: "נבנה לדוחות מעבדה — לא לצ'אט כללי.",
+        why_mini_1: "נבנה לדוחות מעבדה, לא לצ'אט כללי.", why_mini_2: "סיכומים ברורים למטופלים.", why_mini_3: "פלט ידידותי לרופא.", why_mini_4: "גישה רב-לשונית.", why_mini_5: "אדריכלות ששמה אמון במרכז.",
+        reviews_physician_heading: "פרספקטיבה קלינית", reviews_member_heading: "חוויות משתמשים",
+        sample_report_links_intro: "גלה:", sample_link_doctors: "לרופאים", sample_link_clinics: "למרפאות", sample_link_compare: "השוואת Norya",
         hero_sample_label: "כך ייראה הדוח שלך", hero_sample_summary: "הערכים בטווח התקין. המוגלובין וגלוקוז רגילים.", hero_sample_normal: "תקין", hero_sample_border: "גבול", hero_sample_risk: "תשומת לב", hero_sample_cta: "סיכום + ערכים + המלצות + הורדת PDF.", hero_sample_btn: "קבל דוח כזה — התחל בחינם",
         trust_since: "מאז 2017", trust_satisfaction: "100% שביעות רצון לקוחות", trust_users: "100,000+ משתמשים שירתנו עד כה", trust_badges_heading: "שירות מאובטח ותואם",
         trust_badge_ssl: "מוגן SSL 256-bit", trust_badge_kvkk_gdpr: "תואם KVKK ו-GDPR", trust_badge_paytr: "תשלום מאובטח PayTR", trust_badge_qr: "אימות דוח עם QR", trust_bar_qr: "אימות דוח עם QR",
@@ -11724,12 +11750,12 @@
         features_heading: "תובנות בריאות אמינות, מעוצבות לחיים האמיתיים.",
         features_sub: "העלו את תוצאות המעבדה וקבלו דוח ברור ומובנה עם מגמות, סימני סיכון וצעדים הבאים.",
         features_trust_line: "אבטחה ברמה ארגונית, תקשורת מוצפנת וארכיטקטורה תואמת GDPR.",
-        feature_1_title: "ניתוח מיידי ומובנה", feature_1_desc: "הסברים ברורים על סמנים ביולוגיים נפוצים ומה הם עשויים להצביע — בדקות.",
-        feature_2_title: "פורמט דוח קליני", feature_2_desc: "עיצוב ידידותי לרופא: טווחים, סימונים, סיכומים והמלצות למעקב.",
-        feature_3_title: "תאימות מעבדה גלובלית", feature_3_desc: "תומך בפורמטים ויחידות מעבדה רבים — מעוצב למשתמשים בינלאומיים.",
-        feature_4_title: "פרטיות ואבטחה בתכנון", feature_4_desc: "מוצפן בהעברה, בקרות גישה קפדניות ומינימום נתונים. מוכן ל-GDPR.",
-        feature_5_title: "מגמות והשוואות", feature_5_desc: "עקוב אחר שינויים לאורך זמן והשווה תוצאות קודמות בלוח מחוונים אחד.",
-        feature_6_title: "צעדים הבאים ישימים", feature_6_desc: "טיפים מעשיים לאורח חיים ותזונה המותאמים לסמנים שלך.",
+        feature_1_title: "דוח מובנה", feature_1_desc: "סיכום, ממצאים מרכזיים, טווחי התייחסות ומעקב — בפורמט לפלט מעבדה אמיתי.",
+        feature_2_title: "PDF מוכן לרופא", feature_2_desc: "פריסה קלינית נקייה לבדיקה ולהעברה למטופל — ייצוא בצעד אחד.",
+        feature_3_title: "פלט רב-לשוני", feature_3_desc: "צרו דוחות ב־9+ שפות כדי שמטופלים וצוותים יקראו בשפתם.",
+        feature_4_title: "השוואת מגמות", feature_4_desc: "ראו איך סמנים משתנים בין ביקורים והשוו תוצאות קודמות במבט אחד.",
+        feature_5_title: "פרטיות קודם", feature_5_desc: "מוצפן בהעברה, בקרות גישה קפדניות ומינימום נתונים. מוכן ל-GDPR.",
+        feature_6_title: "אימות QR", feature_6_desc: "בדיקת אימות אופציונלית כדי לוודא שה-PDF הגיע מ-Norya.",
         how_section_title: "איך זה עובד", how_section_desc: "שלושה שלבים פשוטים לדוח המובנה שלך.",
         how_step_1_title: "העלה את תוצאות המעבדה", how_step_1_desc: "PDF או תמונה — אנחנו מקבלים פורמטים נפוצים.",
         how_step_2_title: "אנחנו מייצרים דוח מובנה", how_step_2_desc: "טווחים ברורים, סימונים, סיכומים והמלצות.",
@@ -11780,7 +11806,12 @@
         hero_sub: "نتائج المختبر موضَّحة بلغة بسيطة. ليست تشخيصاً طبياً — بل تحضير هادئ لزيارة الطبيب.",
         hero_title: "افهم نتائج تحليل الدم في دقائق قليلة",
         hero_desc: "ارفع النتائج لتحصل على ملخص منظم مع حدود مرجعية، شروحات واضحة وملف PDF جاهز لتأخذه إلى طبيبك.",
-        hero_cta: "ابدأ التحليل", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • الخصوصية حسب التصميم", hero_global_reach: "نحن في كل مكان — متاح من أكثر من 190 دولة",
+        hero_cta: "ابدأ مجاناً", hero_book_demo: "احجز عرضاً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • الخصوصية حسب التصميم", hero_global_reach: "نحن في كل مكان — متاح من أكثر من 190 دولة",
+        b2b_strip_label: "للفرق", b2b_strip_doctors: "للأطباء", b2b_strip_clinics: "للعيادات", b2b_strip_trust: "مركز الثقة", b2b_strip_compare: "قارن Norya",
+        why_mini_title: "لماذا Norya", why_mini_sub: "مُصمم لتقارير المختبر — وليس للدردشة العامة.",
+        why_mini_1: "مُبنى لتقارير المختبر، ليس للدردشة العامة.", why_mini_2: "ملخصات واضحة للمرضى.", why_mini_3: "مخرجات مناسبة للطبيب.", why_mini_4: "وصول متعدد اللغات.", why_mini_5: "بنية تضع الثقة أولاً.",
+        reviews_physician_heading: "وجهة نظر الطبيب", reviews_member_heading: "تجارب الأعضاء",
+        sample_report_links_intro: "استكشف:", sample_link_doctors: "للأطباء", sample_link_clinics: "للعيادات", sample_link_compare: "قارن Norya",
         hero_sample_label: "تقريرك سيبدو هكذا", hero_sample_summary: "قيمك ضمن النطاق المرجعي. الهيموغلوبين والغلوكوز طبيعيان.", hero_sample_normal: "طبيعي", hero_sample_border: "حدي", hero_sample_risk: "انتباه", hero_sample_cta: "ملخص + قيم + توصيات + تنزيل PDF.", hero_sample_btn: "احصل على هذا التقرير — ابدأ مجاناً",
         trust_since: "منذ 2017", trust_satisfaction: "100% رضا العملاء", trust_users: "أكثر من 100,000 مستخدم خدمناهم حتى الآن", trust_badges_heading: "خدمة آمنة ومتوافقة",
         trust_badge_ssl: "محمي SSL 256-bit", trust_badge_kvkk_gdpr: "متوافق KVKK وGDPR", trust_badge_paytr: "دفع آمن PayTR", trust_badge_qr: "التحقق من التقرير برمز QR", trust_bar_qr: "التحقق من التقرير برمز QR",
@@ -11991,12 +12022,12 @@
         features_heading: "معلومات صحية موثوقة، مصممة للحياة الواقعية.",
         features_sub: "ارفع نتائج المختبر واحصل على تقرير واضح ومنظم مع الاتجاهات وعلامات المخاطر والخطوات التالية.",
         features_trust_line: "أمان بمستوى المؤسسات، اتصال مشفر وبنية متوافقة مع GDPR.",
-        feature_1_title: "تحليل فوري ومنظم", feature_1_desc: "شروحات واضحة للمؤشرات الحيوية الشائعة وما قد تشير إليه — في دقائق.",
-        feature_2_title: "تنسيق تقرير سريري", feature_2_desc: "تصميم ملائم للطبيب: نطاقات، علامات، ملخصات واقتراحات متابعة.",
-        feature_3_title: "توافق مختبري عالمي", feature_3_desc: "يدعم العديد من تنسيقات ووحدات المختبر — مصمم للمستخدمين الدوليين.",
-        feature_4_title: "الخصوصية والأمان حسب التصميم", feature_4_desc: "مشفر أثناء النقل، ضوابط وصول صارمة وتقليل البيانات. متوافق مع GDPR.",
-        feature_5_title: "الاتجاهات والمقارنات", feature_5_desc: "تتبع التغييرات بمرور الوقت وقارن النتائج السابقة في لوحة واحدة.",
-        feature_6_title: "خطوات تالية قابلة للتنفيذ", feature_6_desc: "نصائح عملية لنمط الحياة والتغذية مخصصة لمؤشراتك.",
+        feature_1_title: "تقرير منظم", feature_1_desc: "ملخص، نتائج رئيسية، نطاقات مرجعية ومتابعة — بصيغة مخرجات مختبر فعلية.",
+        feature_2_title: "PDF جاهز للطبيب", feature_2_desc: "تنسيق سريري واضح للمراجعة وتسليم المريض — تصدير بخطوة واحدة.",
+        feature_3_title: "مخرجات متعددة اللغات", feature_3_desc: "أنشئ تقارير بأكثر من 9 لغات ليقرأ المرضى والفرق بلغتهم.",
+        feature_4_title: "مقارنة الاتجاهات", feature_4_desc: "شاهد حركة المؤشرات بين الزيارات وقارن النتائج السابقة في عرض واحد.",
+        feature_5_title: "خصوصية أولاً", feature_5_desc: "مشفر أثناء النقل، ضوابط وصول صارمة وتقليل البيانات. متوافق مع GDPR.",
+        feature_6_title: "التحقق عبر رمز الاستجابة السريعة", feature_6_desc: "تحقق اختياري من الأصالة لتعزيز ثقة المستلمين بأن ملف PDF صادر عن Norya.",
         how_section_title: "كيف يعمل", how_section_desc: "ثلاث خطوات بسيطة للحصول على تقريرك المنظم.",
         how_step_1_title: "ارفع نتائج المختبر", how_step_1_desc: "PDF أو صورة — نقبل التنسيقات الشائعة.",
         how_step_2_title: "نُنشئ تقريراً منظماً", how_step_2_desc: "نطاقات واضحة، علامات، ملخصات وتوصيات.",
@@ -12047,7 +12078,12 @@
         hero_sub: "लैब परिणाम सरल भाषा में समझाए जाते हैं। यह निदान नहीं — डॉक्टर से मिलने की तैयारी है।",
         hero_title: "कुछ ही मिनटों में अपने रक्त परीक्षण को समझें",
         hero_desc: "रिज़ल्ट अपलोड करें और संदर्भ सीमाओं, साफ व्याख्या और डॉक्टर को दिखाने लायक PDF के साथ संरचित सारांश पाएं।",
-        hero_cta: "विश्लेषण शुरू करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • डिजाइन से गोपनीयता", hero_global_reach: "हम हर जगह हैं — 190+ देशों से सुलभ",
+        hero_cta: "मुफ्त शुरू करें", hero_book_demo: "डेमो बुक करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • डिजाइन से गोपनीयता", hero_global_reach: "हम हर जगह हैं — 190+ देशों से सुलभ",
+        b2b_strip_label: "टीमों के लिए", b2b_strip_doctors: "डॉक्टरों के लिए", b2b_strip_clinics: "क्लिनिक के लिए", b2b_strip_trust: "ट्रस्ट सेंटर", b2b_strip_compare: "Norya की तुलना",
+        why_mini_title: "क्यों Norya", why_mini_sub: "लैब रिपोर्ट के लिए बनाया गया — सामान्य चैट के लिए नहीं।",
+        why_mini_1: "लैब रिपोर्ट के लिए, सामान्य चैट के लिए नहीं।", why_mini_2: "रोगियों के लिए स्पष्ट सारांश।", why_mini_3: "डॉक्टर-अनुकूल आउटपुट।", why_mini_4: "बहुभाषी पहुंच।", why_mini_5: "ट्रस्ट-फर्स्ट वास्तुकला।",
+        reviews_physician_heading: "चिकित्सक दृष्टिकोण", reviews_member_heading: "सदस्य अनुभव",
+        sample_report_links_intro: "अन्वेषण:", sample_link_doctors: "डॉक्टरों के लिए", sample_link_clinics: "क्लिनिक के लिए", sample_link_compare: "Norya तुलना",
         hero_sample_label: "आपकी रिपोर्ट ऐसी दिखेगी", hero_sample_summary: "मान सामान्य सीमा में। हीमोग्लोबिन और ग्लूकोज सामान्य।", hero_sample_normal: "सामान्य", hero_sample_border: "सीमा", hero_sample_risk: "ध्यान", hero_sample_cta: "सारांश + मान + सुझाव + PDF डाउनलोड।", hero_sample_btn: "ऐसी रिपोर्ट पाएं — मुफ्त शुरू करें",
         trust_since: "2017 से", trust_satisfaction: "100% ग्राहक संतुष्टि", trust_users: "1,00,000+ उपयोगकर्ताओं को अब तक सेवा दी", trust_badges_heading: "सुरक्षित और अनुपालन सेवा",
         trust_badge_ssl: "256-bit SSL सुरक्षित", trust_badge_kvkk_gdpr: "KVKK और GDPR अनुपालन", trust_badge_paytr: "PayTR से सुरक्षित भुगतान", trust_badge_qr: "QR से रिपोर्ट सत्यापन", trust_bar_qr: "QR से रिपोर्ट सत्यापन",
@@ -12258,12 +12294,12 @@
         features_heading: "विश्वसनीय स्वास्थ्य जानकारी, वास्तविक जीवन के लिए डिज़ाइन की गई।",
         features_sub: "अपने लैब परिणाम अपलोड करें और रुझान, जोखिम संकेत और कार्रवाई योग्य अगले कदमों के साथ स्पष्ट, संरचित रिपोर्ट प्राप्त करें।",
         features_trust_line: "उद्यम-स्तरीय सुरक्षा, एन्क्रिप्टेड संचार और GDPR-संरेखित आर्किटेक्चर।",
-        feature_1_title: "तुरंत, संरचित विश्लेषण", feature_1_desc: "सामान्य बायोमार्कर की स्पष्ट व्याख्या और वे क्या संकेत दे सकते हैं — मिनटों में।",
-        feature_2_title: "क्लिनिकल-शैली रिपोर्ट प्रारूप", feature_2_desc: "डॉक्टर-अनुकूल लेआउट: श्रेणियां, ध्वज, सारांश और अनुवर्ती सुझाव।",
-        feature_3_title: "वैश्विक प्रयोगशाला अनुकूलता", feature_3_desc: "कई लैब प्रारूपों और इकाइयों का समर्थन करता है — अंतर्राष्ट्रीय उपयोगकर्ताओं के लिए।",
-        feature_4_title: "गोपनीयता और सुरक्षा डिज़ाइन में", feature_4_desc: "ट्रांज़िट में एन्क्रिप्टेड, सख्त एक्सेस नियंत्रण और डेटा न्यूनीकरण। GDPR-तैयार।",
-        feature_5_title: "रुझान और तुलनाएं", feature_5_desc: "समय के साथ परिवर्तनों को ट्रैक करें और पिछले परिणामों की एक डैशबोर्ड में तुलना करें।",
-        feature_6_title: "कार्रवाई योग्य अगले कदम", feature_6_desc: "आपके मार्करों के अनुरूप व्यावहारिक जीवनशैली और पोषण सुझाव।",
+        feature_1_title: "संरचित रिपोर्ट", feature_1_desc: "सारांश, मुख्य निष्कर्ष, संदर्भ सीमाएँ और फॉलो-अप — वास्तविक लैब आउटपुट के अनुरूप प्रारूप।",
+        feature_2_title: "डॉक्टर-तैयार PDF", feature_2_desc: "समीक्षा और मरीज़ को सौंपने के लिए स्पष्ट क्लिनिकल लेआउट — एक क्लिक में निर्यात।",
+        feature_3_title: "बहुभाषी आउटपुट", feature_3_desc: "9+ रिपोर्ट भाषाओं में रिपोर्ट बनाएं ताकि मरीज़ और टीमें अपनी भाषा में पढ़ सकें।",
+        feature_4_title: "रुझान तुलना", feature_4_desc: "विज़िट के बीच मार्कर कैसे बदलते हैं देखें और पिछले परिणामों की एक ही दृश्य में तुलना करें।",
+        feature_5_title: "गोपनीयता-प्रथम डिज़ाइन", feature_5_desc: "ट्रांज़िट में एन्क्रिप्टेड, सख्त एक्सेस नियंत्रण और डेटा न्यूनीकरण। GDPR-तैयार।",
+        feature_6_title: "QR सत्यापन", feature_6_desc: "वैकल्पिक प्रामाणिकता जाँच ताकि प्राप्तकर्ता भरोसा कर सकें कि PDF Norya से है।",
         how_section_title: "कैसे काम करता है", how_section_desc: "आपकी संरचित रिपोर्ट के लिए तीन सरल कदम।",
         how_step_1_title: "अपने लैब परिणाम अपलोड करें", how_step_1_desc: "PDF या छवि — हम सामान्य लैब प्रारूप स्वीकार करते हैं।",
         how_step_2_title: "हम एक संरचित रिपोर्ट बनाते हैं", how_step_2_desc: "स्पष्ट श्रेणियां, ध्वज, सारांश और सिफारिशें।",
@@ -13468,6 +13504,7 @@
       if (typeof window.__noryaApplyLocalePageUrls === 'function') window.__noryaApplyLocalePageUrls();
       if (typeof window.__noryaApplySampleReportsUrls === 'function') window.__noryaApplySampleReportsUrls();
       if (typeof window.__noryaApplyCompareUrls === 'function') window.__noryaApplyCompareUrls();
+      if (typeof window.__noryaApplyCompareDetailUrls === 'function') window.__noryaApplyCompareDetailUrls();
       if (typeof window.__noryaApplyReportPaymentUrls === 'function') window.__noryaApplyReportPaymentUrls();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
