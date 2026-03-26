@@ -176,7 +176,7 @@ def _sections_en() -> list:
                 "RF alone does not establish a diagnosis. Approximately 70&ndash;80% of RA patients test RF "
                 "positive, while 20&ndash;30% may be RF negative (seronegative rheumatoid arthritis). For this "
                 "reason the <strong>anti-CCP antibody</strong> test, which has over 95% specificity for RA, "
-                "is often ordered alongside RF to improve diagnostic accuracy.</p>"
+                "is often ordered alongside RF to support clearer clinical interpretation.</p>"
                 "<p>RF levels can naturally increase with age. In 15&ndash;25% of healthy individuals over 65, "
                 "low-level RF positivity may be detected without any underlying disease. Always interpret your "
                 "results alongside clinical findings, anti-CCP, CRP, and ESR.</p>"

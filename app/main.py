@@ -2073,7 +2073,12 @@ def blog_index(request: Request, lang: str):
         for i, p in enumerate(posts)
     ]
     item_list_schema_json = json.dumps(
-        {"@context": "https://schema.org", "@type": "ItemList", "itemListElement": item_list},
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "inLanguage": lang,
+            "itemListElement": item_list,
+        },
         ensure_ascii=False,
         indent=2,
     )
@@ -2259,6 +2264,7 @@ def blog_detail(request: Request, lang: str, slug: str):
         faq_schema = {
             "@context": "https://schema.org",
             "@type": "FAQPage",
+            "inLanguage": lang,
             "mainEntity": [
                 {"@type": "Question", "name": item.get("question", ""), "acceptedAnswer": {"@type": "Answer", "text": item.get("answer", "")}}
                 for item in faq_qa
@@ -7438,9 +7444,39 @@ templates.env.globals["localized_home_path"] = localized_home_path
 @app.get("/{lang}", response_class=HTMLResponse)
 def index_with_locale(request: Request, lang: str):
     """Locale prefix tek segment: /en, /tr → SPA."""
+    # Static path uyumsuzluğu: FastAPI bazı durumlarda /medical-board'u /{lang} rotasına düşürebiliyor.
+    # Bu durumda doğrudan medical-board sayfasını döndürüyoruz.
+    if (lang or "").strip().lower() == "medical-board":
+        resolved_lang = _preferred_landing_locale(request)
+        return templates.TemplateResponse(
+            "medical_board.html",
+            {"request": request, "lang": resolved_lang},
+        )
     if lang.lower() in SUPPORTED_LOCALES:
         return _index_response(request)
     raise HTTPException(status_code=404, detail="Not Found")
+
+
+@app.get("/medical-board", response_class=HTMLResponse)
+def medical_board_page(request: Request):
+    """Tıbbi Danışma Kurulu — YMYL/E-E-A-T sayfası."""
+    lang = _preferred_landing_locale(request)
+    return templates.TemplateResponse(
+        "medical_board.html",
+        {"request": request, "lang": lang},
+    )
+
+
+@app.get("/{lang}/medical-board", response_class=HTMLResponse)
+def medical_board_page_with_lang(request: Request, lang: str):
+    """/{lang}/medical-board: dil prefiksi ile aynı sayfa."""
+    lang_l = (lang or "").strip().lower()
+    if lang_l not in LANDING_ROUTES and lang_l not in SUPPORTED_LOCALES:
+        raise HTTPException(status_code=404, detail="Not Found")
+    return templates.TemplateResponse(
+        "medical_board.html",
+        {"request": request, "lang": lang_l},
+    )
 
 
 _KNOWN_SPA_PATHS = frozenset({

@@ -1122,7 +1122,7 @@ def get_amylase_faq_schema_qa() -> dict:
         ],
         "en": [
             {"question": "What is an amylase test?",
-             "answer": "An amylase test is a blood test that measures the level of amylase, a digestive enzyme that breaks down starch. It is one of the first tests ordered when acute pancreatitis is suspected and is evaluated alongside lipase for improved diagnostic accuracy."},
+             "answer": "An amylase test is a blood test that measures the level of amylase, a digestive enzyme that breaks down starch. It is one of the first tests ordered when acute pancreatitis is suspected and is evaluated alongside lipase to support clearer clinical interpretation."},
             {"question": "What is the normal amylase range?",
              "answer": "The normal adult serum amylase range is generally 28–100 U/L. The pancreas-specific fraction, pancreatic amylase (P-amylase), is typically 13–53 U/L. Always compare your result with the reference range on your own laboratory report."},
             {"question": "Does high amylase always mean pancreatitis?",

@@ -301,7 +301,7 @@ def _sections_en() -> list:
                 "<strong>troponin I</strong> and <strong>troponin T</strong> assays:</p>"
                 + _TROP_TABLE_EN +
                 "<p>High-sensitivity assays use sex-specific cut-offs — separate thresholds for "
-                "women and men — which improves diagnostic accuracy. Always compare your result "
+                "women and men — which supports clearer clinical interpretation. Always compare your result "
                 "with the reference range printed on your own laboratory report.</p>"
             ),
         ),

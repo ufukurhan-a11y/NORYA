@@ -43,6 +43,24 @@ console.log('[debug-file] partials/scripts_lang.html v1 loaded on', window.locat
       return;
     }
 
+    // Blog sayfaları path prefix ile çalıştığı için (`/{lang}/blog/...`),
+    // burada sadece `?lang=` eklemek bazı blog route’larında dili değiştirmeyebilir.
+    // Dil değiştirirken path’i locale'a göre yeniden yöneleceğiz.
+    var blogLocalePathMatch = path.match(/^\/([a-z]{2})\/(blog(?:\/.*)?)$/);
+    if (blogLocalePathMatch) {
+      var blogNewPath = '/' + nextLocale + '/' + blogLocalePathMatch[2];
+      console.log('[lang-debug] blog path redirect to', blogNewPath);
+      window.location.href = blogNewPath + (window.location.search || '') + (window.location.hash || '');
+      return;
+    }
+    var plainBlogPathMatch = path.match(/^(\/)(blog(?:\/.*)?)$/);
+    if (plainBlogPathMatch) {
+      var plainBlogNewPath = '/' + nextLocale + '/' + plainBlogPathMatch[2];
+      console.log('[lang-debug] plain blog path redirect to', plainBlogNewPath);
+      window.location.href = plainBlogNewPath + (window.location.search || '') + (window.location.hash || '');
+      return;
+    }
+
     var isBackendPage = /^\/(pricing|payment|verify|legal|blog|admin|iade-iptal|iade-talebi|kurumsal)/.test(path);
 
     if (!isBackendPage && typeof window.chooseLang === 'function') {

@@ -7211,6 +7211,8 @@ from app.blog_article_liver_panel_content import build_liver_panel_article
 from app.blog_article_annual_tests_content import build_annual_tests_article
 from app.blog_article_metabolic_panel_content import build_metabolic_panel_article
 from app.blog_article_urine_acr_content import build_urine_acr_article
+from app.blog_article_apob_content import build_apob_article
+from app.blog_article_lpa_content import build_lpa_article
 from app.blog_article_blood_sugar_guide_content import build_blood_sugar_article
 from app.blog_article_noryaai_story_content import build_noryaai_story_article
 _ARTICLE_CBC_GUIDE = build_cbc_article()
@@ -7219,6 +7221,8 @@ _ARTICLE_LIVER_PANEL = build_liver_panel_article()
 _ARTICLE_ANNUAL_TESTS = build_annual_tests_article()
 _ARTICLE_METABOLIC_PANEL = build_metabolic_panel_article()
 _ARTICLE_URINE_ACR = build_urine_acr_article()
+_ARTICLE_APOB = build_apob_article()
+_ARTICLE_LPA = build_lpa_article()
 _ARTICLE_BLOOD_SUGAR_GUIDE = build_blood_sugar_article()
 _ARTICLE_NORYAAI_STORY = build_noryaai_story_article()
 
@@ -7311,6 +7315,8 @@ ARTICLES: List[Article] = [
     _ARTICLE_ANNUAL_TESTS,
     _ARTICLE_METABOLIC_PANEL,
     _ARTICLE_URINE_ACR,
+    _ARTICLE_APOB,
+    _ARTICLE_LPA,
     _ARTICLE_BLOOD_SUGAR_GUIDE,
     _ARTICLE_NORYAAI_STORY,
 ]
@@ -7337,6 +7343,8 @@ BLOG_INDEX_DEFINITION_ARTICLE_IDS: tuple[str, ...] = (
     "ure-yuksekligi-ne-anlama-gelir",
     "urine-acr-microalbumin-meaning",
     "triglycerides-high-meaning",
+    "apob-meaning",
+    "lpa-meaning",
     "ggt-high-meaning",
     "low-wbc-meaning",
     "high-wbc-meaning",
@@ -7525,6 +7533,8 @@ _BLOG_TOPIC_CLUSTER_SPECS: List[tuple[Dict[str, str], Dict[str, str], List[tuple
         },
         [
             ("article", "ldl-vs-hdl-what-it-means"),
+            ("article", "apob-meaning"),
+            ("article", "lpa-meaning"),
             ("article", "triglycerides-high-meaning"),
             ("article", "crp-what-it-means"),
         ],

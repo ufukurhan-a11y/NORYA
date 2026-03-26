@@ -1,0 +1,331 @@
+<!DOCTYPE html>
+<html lang="{{ lang }}" id="html-lang"{% if lang in ('ar', 'he') %} dir="rtl"{% endif %}>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, maximum-scale=5" />
+  <meta name="theme-color" content="#0EA5A4" />
+  <title>Tıbbi Danışma Kurulumuz | NoryaAI</title>
+  <link rel="stylesheet" href="/static/css/tailwind.css" />
+  <link rel="stylesheet" href="/static/css/app.css" />
+
+  <script>
+    // Bu sayfa için yalnızca header'daki inline onclick'lerin hata vermemesi için stublar.
+    window.openLogin = window.openLogin || function () {};
+    window.openRegister = window.openRegister || function () {};
+    window.openProfile = window.openProfile || function () {};
+    window.openAnalyze = window.openAnalyze || function () {};
+    window.logout = window.logout || function () {};
+    window.toggleMobileDrawer = window.toggleMobileDrawer || function () {};
+    window.closeMobileDrawer = window.closeMobileDrawer || function () {};
+    window.toggleLangModal = window.toggleLangModal || function () {};
+    window.switchLocale = window.switchLocale || function () {};
+    window._toggleLangDrop = window._toggleLangDrop || function () {};
+    window._pickLang = window._pickLang || function () {};
+  </script>
+</head>
+
+<body class="font-sans text-norya-ink bg-norya-surface antialiased min-h-screen flex flex-col">
+  <!-- Header: index.html'deki elite-header bloğu (birebir aynı görünüm için kopyalandı) -->
+  <header id="main-header" class="header elite-header">
+    <div class="header-inner elite-header__inner">
+      <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="NoryaAI Ana Sayfa">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
+      </a>
+
+      <nav class="nav-shell elite-nav header-desktop-only" aria-label="Ana menü">
+        <a href="#hakkimizda" class="nav-link" data-nav="hakkimizda" data-i18n="nav_about">About us</a>
+        <a href="/how-it-works" class="nav-link" data-nav="how-it-works" data-i18n="nav_how">How it works</a>
+        <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Reviews</a>
+        <a href="/pricing" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
+        <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Corporate</a>
+        <a href="/trust?lang=en" class="nav-link" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
+        <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
+      </nav>
+
+      <div class="header-right-zone">
+        <button type="button" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
+          <span id="theme-icon-dark" class="hidden">🌙</span><span id="theme-icon-light" class="hidden">☀️</span>
+        </button>
+
+        <div class="header-lang-switch language-switch header-desktop-only" aria-label="Language">
+          <button type="button" id="base-lang-toggle" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu','base-lang-toggle')">
+            <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
+            <span class="header-lang-code lang-trigger-code" id="base-lang-current">EN</span>
+            <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
+          </button>
+          <div id="base-lang-menu" class="header-lang-menu" hidden>
+            <a href="/?lang=tr" class="header-lang-option" onclick="window._pickLang('tr');return false">TR</a>
+            <a href="/?lang=en" class="header-lang-option" onclick="window._pickLang('en');return false">EN</a>
+            <a href="/?lang=es" class="header-lang-option" onclick="window._pickLang('es');return false">ES</a>
+            <a href="/?lang=de" class="header-lang-option" onclick="window._pickLang('de');return false">DE</a>
+            <a href="/?lang=fr" class="header-lang-option" onclick="window._pickLang('fr');return false">FR</a>
+            <a href="/?lang=it" class="header-lang-option" onclick="window._pickLang('it');return false">IT</a>
+            <a href="/?lang=he" class="header-lang-option" onclick="window._pickLang('he');return false">HE</a>
+            <a href="/?lang=hi" class="header-lang-option" onclick="window._pickLang('hi');return false">HI</a>
+            <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
+          </div>
+        </div>
+
+        <span id="nav-auth" class="header-auth-always items-center flex-shrink-0 gap-2">
+          <button type="button" onclick="openLogin()" class="secondary-link" data-i18n="nav_login">Log in</button>
+          <button type="button" onclick="openRegister()" class="secondary-link" data-i18n="nav_register">Get started free</button>
+        </span>
+
+        <span id="nav-user" class="hidden items-center gap-2 header-desktop-only">
+          <button type="button" onclick="openProfile()" class="secondary-link header-desktop-only" data-i18n="nav_profile">Profile</button>
+          <button type="button" onclick="openAnalyze()" class="primary-cta header-cta-inline header-cta-desktop elite-cta-btn" id="nav-analyze-btn" data-i18n="nav_analyze">Analyze <span class="cta-icon" aria-hidden="true"></span></button>
+          <button type="button" onclick="logout()" class="secondary-link header-desktop-only" data-i18n="nav_logout">Log out</button>
+        </span>
+
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="primary-cta header-cta-guest-only header-cta-inline header-cta-desktop elite-cta-btn" id="header-cta-analiz" data-i18n="nav_analyze">Analyze <span class="cta-icon" aria-hidden="true"></span></a>
+        <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analyze</a>
+
+        <div class="header-lang-switch language-switch header-mobile-only header-mobile-lang-hide" aria-label="Language">
+          <button type="button" id="base-lang-toggle-mobile" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu-mobile','base-lang-toggle-mobile')">
+            <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
+            <span class="header-lang-code lang-trigger-code" id="base-lang-current-mobile">EN</span>
+            <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
+          </button>
+          <div id="base-lang-menu-mobile" class="header-lang-menu" hidden>
+            <a href="/?lang=tr" class="header-lang-option" onclick="window._pickLang('tr');return false">TR</a>
+            <a href="/?lang=en" class="header-lang-option" onclick="window._pickLang('en');return false">EN</a>
+            <a href="/?lang=es" class="header-lang-option" onclick="window._pickLang('es');return false">ES</a>
+            <a href="/?lang=de" class="header-lang-option" onclick="window._pickLang('de');return false">DE</a>
+            <a href="/?lang=fr" class="header-lang-option" onclick="window._pickLang('fr');return false">FR</a>
+            <a href="/?lang=it" class="header-lang-option" onclick="window._pickLang('it');return false">IT</a>
+            <a href="/?lang=he" class="header-lang-option" onclick="window._pickLang('he');return false">HE</a>
+            <a href="/?lang=hi" class="header-lang-option" onclick="window._pickLang('hi');return false">HI</a>
+            <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
+          </div>
+        </div>
+
+        <button type="button" id="hamburger-btn" class="hamburger" onclick="toggleMobileDrawer()" aria-label="Open menu" data-i18n-aria-label="hamburger_open" aria-expanded="false" aria-controls="mobile-drawer">
+          <span class="hamburger-inner">
+            <span class="hamburger-line hamburger-line--top"></span>
+            <span class="hamburger-line hamburger-line--mid"></span>
+            <span class="hamburger-line hamburger-line--bottom"></span>
+          </span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="mobile-overlay" class="mobile-overlay" onclick="closeMobileDrawer()" aria-hidden="true"></div>
+  <aside id="mobile-drawer" class="mobile-drawer" role="dialog" aria-label="Menu" data-i18n-aria-label="nav_menu" aria-modal="true" tabindex="-1">
+    <div class="drawer-head">
+      <a href="/" class="flex items-center gap-2" aria-label="NoryaAI">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" style="height:28px;width:auto;" width="120" height="30" loading="lazy" />
+      </a>
+      <button type="button" id="drawer-close-btn" onclick="closeMobileDrawer()" class="drawer-close" aria-label="Close menu" data-i18n-aria-label="hamburger_close">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round">
+          <line x1="18" y1="6" x2="6" y2="18"/>
+          <line x1="6" y1="6" x2="18" y2="18"/>
+        </svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+      <a href="#analyze-section" onclick="openAnalyze(); closeMobileDrawer(); return false;" class="drawer-cta-primary" data-i18n="nav_analyze">Analyze</a>
+      <div class="drawer-section drawer-section--nav">
+        <a href="#hakkimizda" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_about">About us</a>
+        <a href="/how-it-works" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_how">How it works</a>
+        <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Reviews</a>
+        <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Pricing</a>
+        <a href="/kurumsal" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_corporate">Corporate</a>
+        <a href="/trust?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
+        <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
+      </div>
+      <div class="drawer-section">
+        <div id="drawer-auth-wrap" style="display:flex;flex-direction:column;gap:0.5rem;">
+          <button type="button" onclick="openLogin(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary">Log in</button>
+          <button type="button" onclick="openRegister(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--cta">Get started free</button>
+        </div>
+        <div id="drawer-user-wrap" style="display:none;flex-direction:column;gap:0.5rem;">
+          <button type="button" onclick="openProfile(); closeMobileDrawer();" class="drawer-link drawer-link--tap drawer-link--primary">Profile</button>
+          <button type="button" onclick="logout(); closeMobileDrawer();" class="drawer-link drawer-link--tap">Log out</button>
+        </div>
+      </div>
+      <div class="drawer-section drawer-section--footer">
+        <button type="button" onclick="toggleLangModal(); closeMobileDrawer();" class="drawer-link drawer-link--tap" style="gap:0.5rem;">
+          <span aria-hidden="true">🌐</span>
+          <span>Languages</span>
+        </button>
+        <button type="button" onclick="document.getElementById('theme-btn').click(); closeMobileDrawer();" class="drawer-link drawer-link--tap" style="gap:0.5rem;">
+          <span aria-hidden="true">🎨</span>
+          <span>Tema</span>
+        </button>
+      </div>
+      <div class="drawer-trust-meta">
+        <span>256-bit SSL · KVKK & GDPR compliant</span>
+      </div>
+    </div>
+  </aside>
+
+  <main class="flex-1">
+    <section class="py-16 sm:py-20 px-4 sm:px-6 bg-[#f5fafa] dark:bg-[#191c1d]">
+      <div class="max-w-6xl mx-auto">
+        <div class="text-center mb-12 sm:mb-16">
+          <span class="inline-flex px-3 py-1.5 rounded-full bg-[#0ea5a4]/10 text-[#006a69] dark:text-[#5eead4] text-xs font-bold uppercase tracking-wider mb-3">
+            Tıbbi Danışma Kurulumuz
+          </span>
+          <h1 class="text-3xl sm:text-4xl font-extrabold text-accent-900 dark:text-white mb-4">
+            Tıbbi Danışma Kurulumuz
+          </h1>
+
+          <p class="text-base sm:text-lg text-accent-600 dark:text-accent-400 max-w-3xl mx-auto leading-relaxed">
+            NoryaAI algoritmaları, <span class="text-[#0ea5a4] font-semibold">sağlık profesyonelleri tarafından periyodik olarak gözden geçirilen</span> raporlama çerçevesi temel alınarak geliştirilmiştir.
+            <br />
+            Bu sayfa bilgilendirme amaçlıdır; sağlık durumunuz için karar verirken mutlaka doktorunuza başvurun.
+          </p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <article class="bg-white dark:bg-accent-800/40 rounded-2xl p-6 border border-accent-200 dark:border-accent-700/40 flex flex-col">
+            <div class="flex flex-col items-center text-center">
+              <img src="/static/images/reviews/doctor-1.jpg" alt="Doktor Profili 1" class="w-24 h-24 rounded-full object-cover border-2 border-[#0ea5a4]/30 shadow-sm" width="96" height="96" loading="lazy" decoding="async" />
+              <p class="mt-5 text-sm font-bold text-accent-900 dark:text-white">Dr. Ayşe K.</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-wider text-[#0ea5a4]">Dahiliye Uzmanı</p>
+              <p class="mt-4 text-sm text-accent-600 dark:text-accent-400 leading-relaxed">
+                Bu kart örnek bir profildir. Uzmanlık alanını ve özgeçmiş detaylarını doğrulanabilir bilgilerle güncelleyin.
+              </p>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center justify-center px-4 py-2 rounded-xl bg-[#0ea5a4] text-white font-semibold text-sm hover:bg-[#0d9488] transition" aria-label="LinkedIn profilini aç (Dr. Ayşe K.)">
+                <span aria-hidden="true" class="mr-2">in</span> LinkedIn
+              </a>
+            </div>
+          </article>
+
+          <article class="bg-white dark:bg-accent-800/40 rounded-2xl p-6 border border-accent-200 dark:border-accent-700/40 flex flex-col">
+            <div class="flex flex-col items-center text-center">
+              <img src="/static/images/reviews/doctor-2.jpg" alt="Doktor Profili 2" class="w-24 h-24 rounded-full object-cover border-2 border-[#0ea5a4]/30 shadow-sm" width="96" height="96" loading="lazy" decoding="async" />
+              <p class="mt-5 text-sm font-bold text-accent-900 dark:text-white">Dr. Markus B.</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-wider text-[#0ea5a4]">Biyokimya Uzmanı</p>
+              <p class="mt-4 text-sm text-accent-600 dark:text-accent-400 leading-relaxed">
+                Bu kart örnek bir profildir. Uzmanlık ve biyografi bilgilerini doğrulanabilir şekilde paylaşın.
+              </p>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center justify-center px-4 py-2 rounded-xl bg-[#0ea5a4] text-white font-semibold text-sm hover:bg-[#0d9488] transition" aria-label="LinkedIn profilini aç (Dr. Markus B.)">
+                <span aria-hidden="true" class="mr-2">in</span> LinkedIn
+              </a>
+            </div>
+          </article>
+
+          <article class="bg-white dark:bg-accent-800/40 rounded-2xl p-6 border border-accent-200 dark:border-accent-700/40 flex flex-col">
+            <div class="flex flex-col items-center text-center">
+              <img src="/static/images/reviews/doctor-3.jpg" alt="Doktor Profili 3" class="w-24 h-24 rounded-full object-cover border-2 border-[#0ea5a4]/30 shadow-sm" width="96" height="96" loading="lazy" decoding="async" />
+              <p class="mt-5 text-sm font-bold text-accent-900 dark:text-white">Dr. Elena V.</p>
+              <p class="mt-1 text-xs font-bold uppercase tracking-wider text-[#0ea5a4]">Klinik Biyoloji Uzmanı</p>
+              <p class="mt-4 text-sm text-accent-600 dark:text-accent-400 leading-relaxed">
+                Bu kart örnek bir profildir. Sağlık alanındaki rolünü ve geçmişini netleştirin.
+              </p>
+              <a href="https://www.linkedin.com/" target="_blank" rel="noopener noreferrer" class="mt-6 inline-flex items-center justify-center px-4 py-2 rounded-xl bg-[#0ea5a4] text-white font-semibold text-sm hover:bg-[#0d9488] transition" aria-label="LinkedIn profilini aç (Dr. Elena V.)">
+                <span aria-hidden="true" class="mr-2">in</span> LinkedIn
+              </a>
+            </div>
+          </article>
+        </div>
+
+        <p class="mt-10 text-xs text-accent-500 dark:text-accent-400 text-center max-w-3xl mx-auto leading-relaxed">
+          Bilgilendirme amaçlıdır. İçerik, tıbbi teşhis veya tedavi yerine geçmez. Şikayetleriniz varsa lütfen doktorunuza başvurun.
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer: index.html'deki kurumsal 4 sütun footer -->
+  <footer class="py-12 sm:py-16 px-4 sm:px-6 border-t border-accent-200 dark:border-accent-800 bg-white dark:bg-[#191c1d]" role="contentinfo">
+    <div class="max-w-6xl mx-auto">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 lg:gap-10 mb-12">
+        <div class="space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]" data-i18n="footer_contact_company">Contact & Company Info</h3>
+          <div class="text-sm text-accent-600 dark:text-accent-400 space-y-1.5 break-words">
+            <p><strong class="text-accent-800 dark:text-accent-200">NoryaAI</strong> · Ufuk Urhan</p>
+            <p>Banaz Vergi Dairesi / 8940311420</p>
+            <p><a href="tel:+905071703564" class="text-[#0ea5a4] hover:underline">+90 507 170 35 64</a></p>
+            <p><a href="mailto:support@noryaai.com" class="text-[#0ea5a4] hover:underline">support@noryaai.com</a> · <a href="mailto:info@noryaai.com" class="text-[#0ea5a4] hover:underline">info@noryaai.com</a></p>
+            <p class="leading-relaxed">31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4, Banaz/Uşak, Türkiye</p>
+          </div>
+          <p class="text-xs text-accent-600 dark:text-accent-400 pt-2 border-t border-accent-200 dark:border-accent-700">
+            <a href="/contact" class="text-[#0ea5a4] hover:underline" data-i18n="footer_contact" data-locale-link="contact">İletişim sayfası</a>
+          </p>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]" data-i18n="footer_col_legal">Yasal</h3>
+          <nav class="flex flex-col gap-2.5" aria-label="Yasal sayfalar">
+            <a href="/legal/kvkk-gdpr" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_kvkk_link">KVKK</a>
+            <a href="/legal/gizlilik-politikasi" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_privacy">Gizlilik Politikası</a>
+            <a href="/legal/mesafeli-satis-sozlesmesi" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_mesafeli">Mesafeli Satış Sözleşmesi</a>
+            <a href="/iade-iptal" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_refund">İade Politikası</a>
+            <a href="/legal/kullanim-sartlari" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_terms">Kullanım Şartları</a>
+          </nav>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]" data-i18n="footer_col_support">Destek</h3>
+          <nav class="flex flex-col gap-2.5" aria-label="Destek">
+            <a href="/pricing" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="nav_pricing">Pricing</a>
+            <a href="/trust" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_trust_center" data-locale-link="trust">Trust Center</a>
+            <a href="/methodology" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_methodology" data-locale-link="methodology">Methodology</a>
+            <a href="/medical-review" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_medical_review" data-locale-link="medical-review">Medical Review</a>
+            <a href="/transparency" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_transparency" data-locale-link="transparency">Transparency</a>
+            <a href="/contact" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_support_center" data-locale-link="contact">Destek Merkezi</a>
+            <a href="#sss" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_faq">Sık Sorulan Sorular</a>
+            <a href="/contact" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_contact" data-locale-link="contact">İletişim</a>
+            <a href="mailto:support@noryaai.com" class="text-sm text-[#0ea5a4] hover:underline">support@noryaai.com</a>
+          </nav>
+        </div>
+
+        <div class="space-y-4">
+          <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]" data-i18n="trust_secure_payment_title">Güvenli Ödeme</h3>
+          <div class="flex items-center gap-2">
+            <img src="/static/logos/paytr.svg" alt="PayTR" class="h-7 w-auto object-contain flex-shrink-0" width="70" height="24" loading="lazy" />
+            <span class="text-sm font-bold text-accent-700 dark:text-accent-300" data-i18n="footer_trust_paytr">PayTR Secure</span>
+          </div>
+          <p class="text-xs text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="footer_paytr_provided">Ödeme altyapısı PayTR 3D Secure güvenli ödeme sistemi ile sağlanmaktadır.</p>
+          <p class="text-xs text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="trust_card_pci">Kart bilgileriniz Norya sunucularında saklanmaz ve PCI DSS güvenlik standartlarına uygun şekilde işlenir.</p>
+          <p class="text-xs text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="trust_3d_secure">Tüm ödemeler 3D Secure doğrulama sistemi ile korunmaktadır.</p>
+        </div>
+      </div>
+
+      <div class="py-6 border-t border-accent-200 dark:border-accent-700">
+        <div class="flex flex-wrap items-center justify-center gap-3">
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f5fafa] dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-xs font-medium text-accent-700 dark:text-accent-300" title="SSL">
+            <span class="text-sm" aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl_connection">SSL Secure Connection</span>
+          </span>
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f5fafa] dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-xs font-medium text-accent-700 dark:text-accent-300">
+            <span class="text-sm" aria-hidden="true">🛡️</span> <span data-i18n="trust_badge_pci_dss">PCI DSS Secure Payment</span>
+          </span>
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f5fafa] dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-xs font-medium text-accent-700 dark:text-accent-300">
+            <span class="text-sm" aria-hidden="true">✓</span> <span data-i18n="trust_badge_3d_secure">3D Secure Payment</span>
+          </span>
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f5fafa] dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-xs font-medium text-accent-700 dark:text-accent-300">
+            <img src="/static/logos/paytr.svg" alt="PayTR" width="16" height="16" class="w-4 h-4 object-contain" /> <span data-i18n="trust_badge_paytr_secure">PayTR Secure Payment</span>
+          </span>
+          <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#f5fafa] dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-xs font-medium text-accent-700 dark:text-accent-300">
+            <img src="/static/logos/cloudflare.svg" alt="Cloudflare" width="16" height="16" class="w-4 h-4 object-contain" /> <span data-i18n="trust_badge_cloudflare">Cloudflare Security Protection</span>
+          </span>
+        </div>
+      </div>
+
+      <div class="py-4 border-t border-accent-200 dark:border-accent-700">
+        <p class="text-center text-xs text-accent-600 dark:text-accent-400 leading-relaxed max-w-2xl mx-auto" data-i18n="trust_data_security">
+          Kişisel verileriniz KVKK ve GDPR veri koruma standartlarına uygun olarak işlenmektedir.
+        </p>
+      </div>
+
+      <div class="pt-4 border-t border-accent-200 dark:border-accent-700">
+        <p class="text-center text-xs text-accent-500 leading-relaxed max-w-3xl mx-auto" data-i18n="footer_health_disclaimer_full">
+          Norya bir tıbbi teşhis veya tedavi hizmeti değildir. Sunulan analizler yalnızca bilgilendirme amaçlıdır. Kesin sağlık kararları için bir doktora danışınız.
+        </p>
+      </div>
+
+      <div class="pt-2 text-center text-xs text-accent-500">
+        <span data-i18n="footer_copyright">© 2026 Norya. Tüm hakları saklıdır.</span>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Chat Widget -->
+  <link rel="stylesheet" href="/static/css/chat-widget.css" />
+  <script src="/static/js/chat-widget.js" defer></script>
+</body>
+</html>
+
