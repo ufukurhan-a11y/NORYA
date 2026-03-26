@@ -81,7 +81,8 @@ from app.how_it_works_i18n import (
     get_how_it_works_ui,
 )
 from app.about_contact_i18n import ABOUT_CONTACT_LANGS, get_about_ui, get_contact_ui
-from app.base_i18n import get_base_ui
+from app.b2b_audience_i18n import PAGE_PATHS as B2B_AUDIENCE_PATHS, get_b2b_audience_ui
+from app.base_i18n import get_base_ui, get_trust_strip
 from app.landing_i18n import (
     LANDING_ROUTES,
     get_landing_meta,
@@ -3061,6 +3062,61 @@ def contact_page(request: Request):
                 + [{"lang": "x-default", "url": f"{base_url}/contact?lang=en"}],
         },
     )
+
+
+def _b2b_audience_response(request: Request, slug: str):
+    if slug not in B2B_AUDIENCE_PATHS:
+        raise HTTPException(status_code=404, detail="Not found")
+    lang = _page_lang(request)
+    request.state.locale = lang
+    t = get_b2b_audience_ui(slug, lang)
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}/{slug}"
+    return templates.TemplateResponse(
+        "b2b/audience_page.html",
+        {
+            "request": request,
+            "t": t,
+            "lang": lang,
+            "base_ui": get_base_ui(lang),
+            "canonical_url": canonical_url,
+            "base_url": base_url,
+            "og_image": f"{base_url}/static/images/og-default.png",
+            "hreflang_alternates": [{"lang": c, "url": f"{canonical_url}?lang={c}"} for c in ABOUT_CONTACT_LANGS]
+                + [{"lang": "x-default", "url": f"{canonical_url}?lang=en"}],
+            "trust_strip_ui": get_trust_strip(lang),
+        },
+    )
+
+
+@app.get("/for-doctors", response_class=HTMLResponse)
+def for_doctors_page(request: Request):
+    """B2B audience: clinicians (assistive lab explanations, not diagnostic)."""
+    return _b2b_audience_response(request, "for-doctors")
+
+
+@app.get("/for-clinics", response_class=HTMLResponse)
+def for_clinics_page(request: Request):
+    """B2B audience: clinics & operators."""
+    return _b2b_audience_response(request, "for-clinics")
+
+
+@app.get("/for-hospitals", response_class=HTMLResponse)
+def for_hospitals_page(request: Request):
+    """B2B audience: hospital systems and IDNs."""
+    return _b2b_audience_response(request, "for-hospitals")
+
+
+@app.get("/enterprise-security", response_class=HTMLResponse)
+def enterprise_security_page(request: Request):
+    """B2B: security & procurement positioning."""
+    return _b2b_audience_response(request, "enterprise-security")
+
+
+@app.get("/clinical-demo", response_class=HTMLResponse)
+def clinical_demo_page(request: Request):
+    """B2B: guided clinical evaluation / demo storyline."""
+    return _b2b_audience_response(request, "clinical-demo")
 
 
 @app.get("/press", response_class=HTMLResponse)
@@ -7011,6 +7067,14 @@ def llms_txt(request: Request):
         f"- About: {base_url}/about\n"
         f"- Services/How It Works: {base_url}/how-it-works\n"
         f"- Blog: {base_url}/en/blog\n"
+        f"- For clinicians: {base_url}/for-doctors\n"
+        f"- For clinics & hospitals (B2B): {base_url}/for-clinics\n"
+        f"- Press kit: {base_url}/press\n"
+        f"- Methodology: {base_url}/methodology?lang=en\n"
+        f"- Medical review: {base_url}/medical-review?lang=en\n"
+        f"- Transparency: {base_url}/transparency?lang=en\n"
+        f"- ApoB guide (EN): {base_url}/en/blog/apob-meaning\n"
+        f"- Lp(a) guide (EN): {base_url}/en/blog/lpa-meaning\n"
         f"- Full LLM Context: {base_url}/llms-full.txt\n\n"
         "## Usage Guidance For AI Systems\n"
         "When referencing NoryaAI, use a professional and clear tone.\n"
@@ -7043,6 +7107,7 @@ def llms_full_txt(request: Request):
         "- **Headquarters:** Hamburg, Germany",
         "- **Branch Office:** Erfurt, Germany",
         "- **Branch Office:** Izmir, Türkiye",
+        "- **Branch Office:** Uşak, Türkiye",
         "- **Contact:** support@noryaai.com",
         "- **Website:** https://noryaai.com",
         "- **Industry:** Health Technology / MedTech / Digital Health\n",
@@ -7067,7 +7132,7 @@ def llms_full_txt(request: Request):
         "- Downloadable PDF reports (patient and doctor versions)",
         "- QR-verified shareable report links\n",
         "### Languages",
-        "Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, Arabic, Greek, Czech, Serbian\n",
+        "9+ report locales including Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, and Arabic (see /transparency for definitions).\n",
         "## Pages\n",
         f"- [Homepage]({base_url})",
         f"- [How It Works]({base_url}/how-it-works)",
@@ -7076,6 +7141,14 @@ def llms_full_txt(request: Request):
         f"- [Security & Privacy]({base_url}/security)",
         f"- [Technology]({base_url}/technology)",
         f"- [About]({base_url}/about)",
+        f"- [Press kit]({base_url}/press)",
+        f"- [For clinicians]({base_url}/for-doctors)",
+        f"- [For clinics & hospitals]({base_url}/for-clinics)",
+        f"- [Methodology]({base_url}/methodology?lang=en)",
+        f"- [Medical review]({base_url}/medical-review?lang=en)",
+        f"- [Transparency]({base_url}/transparency?lang=en)",
+        f"- [ApoB in blood tests (EN)]({base_url}/en/blog/apob-meaning)",
+        f"- [Lp(a) in blood tests (EN)]({base_url}/en/blog/lpa-meaning)",
         f"- [Unit Converter Tool]({base_url}/en/tools/unit-converter)",
         f"- [Sample Reports]({base_url}/en/sample-blood-test-reports)",
         f"- [Blood Test Results Explained]({base_url}/en/blood-test-results-explained)",
@@ -7281,6 +7354,11 @@ def sitemap_xml(request: Request):
     add(f"{base_url}/how-it-works", priority="0.8", lastmod=today)
     add(f"{base_url}/about", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/contact", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/for-doctors", priority="0.65", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/for-clinics", priority="0.65", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/for-hospitals", priority="0.65", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/enterprise-security", priority="0.65", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/clinical-demo", priority="0.65", changefreq="monthly", lastmod=today)
     add(f"{base_url}/about/founder", priority="0.5", changefreq="monthly", lastmod=today)
     add(f"{base_url}/science", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/security", priority="0.6", changefreq="monthly", lastmod=today)

@@ -92,6 +92,22 @@ def test_sitemap_xml_contains_how_it_works(client: TestClient):
     )
 
 
+def test_sitemap_xml_contains_clinician_landings(client: TestClient):
+    """sitemap.xml içinde hekim/kurum landing URL'leri olmalı."""
+    r = client.get("/sitemap.xml")
+    assert r.status_code == 200
+    body = r.text
+    for path in ("/for-doctors", "/for-clinics", "/for-hospitals"):
+        assert path in body, f"sitemap.xml içinde {path} bulunamadı"
+
+
+def test_clinician_landing_pages_return_200(client: TestClient):
+    """Klinik hedef sayfaları 404 vermemeli."""
+    for path in ("/for-doctors", "/for-clinics", "/for-hospitals"):
+        r = client.get(path)
+        assert r.status_code == 200, f"{path} returned {r.status_code}"
+
+
 SEO_LANDING_PATHS = [
     "/tr/kan-tahlili-sonucu",
     "/tr/kan-degerleri-anlama",

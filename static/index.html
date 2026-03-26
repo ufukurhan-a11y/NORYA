@@ -3769,6 +3769,14 @@
       loc = (loc || 'en').slice(0, 2);
       return path + '?lang=' + encodeURIComponent(loc);
     };
+    /** Locale-aware path for /{lang}/{slug} sample reports landing (matches app/landing_sample_reports_i18n.py). */
+    window.NORYA_SAMPLE_REPORTS_URL = function() {
+      var raw = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
+      var loc = String(raw || 'en').toLowerCase().replace(/^([a-z]{2}).*$/i, '$1');
+      var slugs = { en: 'sample-blood-test-reports', tr: 'ornek-kan-tahlili-raporlari', de: 'beispiel-bluttest-berichte' };
+      var slug = slugs[loc] || 'sample-blood-test-reports';
+      return '/' + loc + '/' + slug;
+    };
     window.NORYA_TRUST_CENTER_URL = function() {
       return window.NORYA_LOCALE_PAGE_URL('/trust');
     };
@@ -3796,7 +3804,12 @@
         trust: '/trust',
         methodology: '/methodology',
         'medical-review': '/medical-review',
-        transparency: '/transparency'
+        transparency: '/transparency',
+        'for-doctors': '/for-doctors',
+        'for-clinics': '/for-clinics',
+        'for-hospitals': '/for-hospitals',
+        'enterprise-security': '/enterprise-security',
+        'clinical-demo': '/clinical-demo'
       };
       document.querySelectorAll('a[data-locale-link]').forEach(function(a) {
         var key = a.getAttribute('data-locale-link');
@@ -3804,6 +3817,10 @@
         if (!path) return;
         a.href = window.NORYA_LOCALE_PAGE_URL(path);
       });
+    };
+    window.__noryaApplySampleReportsUrls = function() {
+      var url = (window.NORYA_SAMPLE_REPORTS_URL && window.NORYA_SAMPLE_REPORTS_URL()) || '/en/sample-blood-test-reports';
+      document.querySelectorAll('a[data-sample-reports-link="1"]').forEach(function(a) { a.href = url; });
     };
     window.__noryaApplyCompareUrls = function() {
       var url = (window.NORYA_COMPARE_HUB_URL && window.NORYA_COMPARE_HUB_URL()) || '/en/compare/';
@@ -3813,12 +3830,14 @@
       if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
       if (window.__noryaApplyTrustUrls) window.__noryaApplyTrustUrls();
       if (window.__noryaApplyLocalePageUrls) window.__noryaApplyLocalePageUrls();
+      if (window.__noryaApplySampleReportsUrls) window.__noryaApplySampleReportsUrls();
       if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
     });
     else {
       if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
       if (window.__noryaApplyTrustUrls) window.__noryaApplyTrustUrls();
       if (window.__noryaApplyLocalePageUrls) window.__noryaApplyLocalePageUrls();
+      if (window.__noryaApplySampleReportsUrls) window.__noryaApplySampleReportsUrls();
       if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
     }
     var SUPPORTED = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
@@ -3844,6 +3863,8 @@
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Reviews</a>
         <a href="/pricing" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Corporate</a>
+        <a href="/for-doctors?lang=en" class="nav-link" data-nav="for-doctors" data-i18n="nav_for_doctors" data-locale-link="for-doctors">For Doctors</a>
+        <a href="/for-clinics?lang=en" class="nav-link" data-nav="for-clinics" data-i18n="nav_for_clinics" data-locale-link="for-clinics">For Clinics</a>
         <a href="/trust?lang=en" class="nav-link" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
@@ -3928,6 +3949,8 @@
         <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Reviews</a>
         <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Pricing</a>
         <a href="/kurumsal" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_corporate">Corporate</a>
+        <a href="/for-doctors?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_for_doctors" data-locale-link="for-doctors">For Doctors</a>
+        <a href="/for-clinics?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_for_clinics" data-locale-link="for-clinics">For Clinics</a>
         <a href="/trust?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
         <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
       </div>
@@ -3988,7 +4011,7 @@
           <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 mb-8 sm:mb-12 leading-relaxed max-w-xl" data-i18n="hero_desc">Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused. By NoryaAI.</p>
           <div class="flex flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8">
             <button type="button" onclick="openRegister(); scrollToAnalyze();" class="text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-all" style="background-color:#0EA5A4;box-shadow:0 10px 15px -3px rgba(14,165,164,0.25);" onmouseover="this.style.backgroundColor='#0d9488';this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#0EA5A4';this.style.transform='scale(1)'" data-i18n="hero_cta">Start analysis</button>
-            <a href="#ornek-klinik-rapor" class="border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors" data-i18n="hero_see_sample">See sample report</a>
+            <a href="/en/sample-blood-test-reports" class="border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors" data-i18n="hero_see_sample" data-sample-reports-link="1">See sample report</a>
           </div>
           <div class="mb-5 sm:mb-6">
             <a href="/en/compare/" class="inline-flex items-center gap-2 text-sm sm:text-base text-[#0ea5a4] font-semibold hover:underline underline-offset-4 transition-colors" data-i18n="hero_compare_link" data-compare-nav-link="1">Compare with ChatGPT and other AI tools</a>
@@ -9184,7 +9207,7 @@
     const T = {
       tr: {
         nav_home: "Ana Sayfa", nav_languages: "Diller", nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü", nav_trust: "Güven", hero_compare_link: "ChatGPT ve diğer AI araçlarıyla karşılaştır",
-        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
+        nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", nav_start_free: "Ücretsiz Başla", nav_for_doctors: "Doktorlar için", nav_for_clinics: "Klinikler için", nav_demo: "Demo", nav_compare: "Karşılaştır", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
         about_what_1: "Norya, kan tahlili sonuçlarınızı sade bir dille özetleyen ve referans aralıklarına göre yorumlayan bir hizmettir. Sayılar ve kısaltmalar yerine anlaşılır raporlar ve günlük hayata uyarlanabilir kısa öneriler sunuyoruz.",
@@ -9640,7 +9663,7 @@
       },
       en: {
         nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu", nav_trust: "Trust", hero_compare_link: "Compare with ChatGPT and other AI tools",
-        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", nav_start_free: "Start free", nav_for_doctors: "For Doctors", nav_for_clinics: "For Clinics", nav_demo: "Demo", nav_compare: "Compare", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
         about_what_1: "Norya explains your blood test results in plain language and interprets them against reference ranges. Instead of numbers and abbreviations, you get clear reports and practical, day-to-day suggestions.",
@@ -10094,7 +10117,7 @@
       },
       it: {
         nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu", nav_trust: "Fiducia", hero_compare_link: "Confronta con ChatGPT e altri strumenti AI",
-        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", nav_start_free: "Inizia gratis", nav_for_doctors: "Per i medici", nav_for_clinics: "Per le cliniche", nav_demo: "Demo", nav_compare: "Confronta", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?", company_info_title: "Informazioni aziendali",
         about_what_1: "Norya è un servizio che spiega i risultati delle analisi del sangue in linguaggio chiaro. I numeri e le sigle del laboratorio sono spesso difficili da capire; Norya produce report che riassumono i risultati, spiegano il significato di ogni valore rispetto agli intervalli di riferimento e offrono brevi consigli pratici.",
@@ -10409,7 +10432,7 @@
       },
       es: {
         nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú", nav_trust: "Confianza", hero_compare_link: "Comparar con ChatGPT y otras herramientas de IA",
-        nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", nav_start_free: "Empieza gratis", nav_for_doctors: "Para médicos", nav_for_clinics: "Para clínicas", nav_demo: "Demo", nav_compare: "Comparar", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?", company_info_title: "Información de la empresa",
         about_what_1: "Norya es un servicio que explica los resultados de tus análisis de sangre en lenguaje claro. Los números y abreviaturas del laboratorio suelen ser difíciles de entender; Norya genera informes que resumen los resultados, explican cada valor respecto a los rangos de referencia y ofrecen recomendaciones prácticas.",
@@ -10724,7 +10747,7 @@
       },
       fr: {
         nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu", nav_trust: "Confiance", hero_compare_link: "Comparer avec ChatGPT et d'autres outils IA",
-        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", nav_start_free: "Commencer gratuitement", nav_for_doctors: "Pour les médecins", nav_for_clinics: "Pour les cliniques", nav_demo: "Démo", nav_compare: "Comparer", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?", company_info_title: "Informations sur l'entreprise",
         about_what_1: "Norya est un service qui explique vos résultats d'analyses sanguines en langage clair. Les chiffres et abréviations du laboratoire sont souvent difficiles à comprendre ; Norya produit des rapports qui résument les résultats, expliquent chaque valeur par rapport aux références et proposent des recommandations pratiques.",
@@ -11039,7 +11062,7 @@
       },
       de: {
         nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü", nav_trust: "Vertrauen", hero_compare_link: "Mit ChatGPT und anderen KI-Tools vergleichen",
-        nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", drawer_trust_meta: "DSGVO-konform · SSL-verschlüsselt · Sichere Zahlung (PayTR)",
+        nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", nav_start_free: "Kostenlos starten", nav_for_doctors: "Für Ärzte", nav_for_clinics: "Für Kliniken", nav_demo: "Demo", nav_compare: "Vergleich", drawer_trust_meta: "DSGVO-konform · SSL-verschlüsselt · Sichere Zahlung (PayTR)",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?", company_info_title: "Unternehmensinformationen",
         about_what_1: "Norya ist ein Dienst, der Ihre Blutwerte in verständlicher Sprache erklärt. Die Zahlen und Abkürzungen vom Labor sind oft schwer zu deuten; Norya erstellt Berichte, die Ihre Ergebnisse zusammenfassen, jede Messgröße im Verhältnis zu Referenzbereichen erklären und kurze, praxisnahe Empfehlungen geben.",
@@ -11335,7 +11358,7 @@
       },
       he: {
         nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט", nav_trust: "אמון", hero_compare_link: "השוו מול ChatGPT וכלי AI אחרים",
-        nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
+        nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות", nav_start_free: "התחילו בחינם", nav_for_doctors: "לרופאים", nav_for_clinics: "למרפאות", nav_demo: "דמו", nav_compare: "השוואה",
         a2hs_message: "הוסף את Norya למסך הבית והשתמש כמו באפליקציה.", a2hs_later: "אחר כך", a2hs_add: "הוסף", ios_a2hs_message: "הוסף למסך הבית: שתף ⎋ הוסף למסך הבית", ios_a2hs_close: "סגור",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?", company_info_title: "פרטי החברה",
         about_what_1: "נוריה הוא שירות שמסביר את תוצאות בדיקות הדם שלך בשפה ברורה. המספרים והקיצורים מהמעבדה קשים לעתים להבנה; נוריה מייצרת דוחות שמסכמים את התוצאות, מסבירים כל ערך ביחס לטווחי ההתייחסות ונותנים המלצות מעשיות.",
@@ -11602,7 +11625,7 @@
       },
       ar: {
         nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة", nav_trust: "الثقة", hero_compare_link: "قارن مع ChatGPT وأدوات الذكاء الاصطناعي الأخرى",
-        nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
+        nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة", nav_start_free: "ابدأ مجانًا", nav_for_doctors: "للأطباء", nav_for_clinics: "للعيادات", nav_demo: "عرض توضيحي", nav_compare: "مقارنة",
         a2hs_message: "أضف Norya إلى الشاشة الرئيسية واستخدمها كتطبيق.", a2hs_later: "لاحقاً", a2hs_add: "إضافة", ios_a2hs_message: "إضافة إلى الشاشة الرئيسية: مشاركة ⎋ إضافة إلى الشاشة الرئيسية", ios_a2hs_close: "إغلاق",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟", company_info_title: "معلومات الشركة",
         about_what_1: "نوريا خدمة تشرح نتائج تحاليل الدم بلغة واضحة. الأرقام والاختصارات من المختبر غالباً صعبة الفهم؛ نوريا تنتج تقارير تلخص النتائج وتشرح كل قيمة بالنسبة للمرجع وتقدم توصيات عملية.",
@@ -11869,7 +11892,7 @@
       },
       hi: {
         nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू", nav_trust: "विश्वास", hero_compare_link: "ChatGPT और दूसरे AI टूल्स से तुलना करें",
-        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
+        nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", nav_start_free: "मुफ्त शुरू करें", nav_for_doctors: "डॉक्टरों के लिए", nav_for_clinics: "क्लिनिकों के लिए", nav_demo: "डेमो", nav_compare: "तुलना", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?", company_info_title: "कंपनी की जानकारी",
         about_what_1: "नोरिया एक सेवा है जो रक्त परीक्षण परिणामों को सरल भाषा में समझाती है। लैब के नंबर और संक्षिप्त नाम अक्सर समझने में कठिन होते हैं; नोरिया ऐसी रिपोर्ट बनाती है जो परिणामों को संक्षेप में बताती हैं, हर मान को संदर्भ सीमा के अनुसार समझाती हैं और व्यावहारिक सुझाव देती हैं।",
@@ -13301,6 +13324,7 @@
       if (typeof updateSeoGuideLink === 'function') updateSeoGuideLink();
       if (typeof window.__noryaApplyTrustUrls === 'function') window.__noryaApplyTrustUrls();
       if (typeof window.__noryaApplyLocalePageUrls === 'function') window.__noryaApplyLocalePageUrls();
+      if (typeof window.__noryaApplySampleReportsUrls === 'function') window.__noryaApplySampleReportsUrls();
       if (typeof window.__noryaApplyCompareUrls === 'function') window.__noryaApplyCompareUrls();
       if (typeof window.__noryaApplyReportPaymentUrls === 'function') window.__noryaApplyReportPaymentUrls();
       var cur = document.getElementById("lang-current");

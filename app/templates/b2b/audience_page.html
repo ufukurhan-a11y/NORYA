@@ -1,0 +1,153 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.meta_title }}{% endblock %}
+
+{% block meta_seo %}
+<meta name="description" content="{{ t.meta_description }}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="{{ _brand }}" />
+<meta property="og:title" content="{{ t.meta_title }}" />
+<meta property="og:description" content="{{ t.meta_description }}" />
+{% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
+{% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="{{ t.meta_title }}" />
+<meta name="twitter:description" content="{{ t.meta_description }}" />
+{% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+{% for alt in hreflang_alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
+{% endfor %}
+{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebPage",
+  "name": {{ t.meta_title|tojson }},
+  "description": {{ t.meta_description|tojson }},
+  "url": "{{ canonical_url }}",
+  "inLanguage": "{{ lang }}",
+  "isPartOf": {"@type": "WebSite", "name": "NoryaAI", "url": "{{ base_url }}"}
+}
+</script>
+<script type="application/ld+json">
+{"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[
+  {"@type":"ListItem","position":1,"name":{{ _base_ui.nav_home|default('Home')|tojson }},"item":"{{ base_url }}{{ localized_home_path(request, lang) }}"},
+  {"@type":"ListItem","position":2,"name":{{ t.hero_title|tojson }},"item":"{{ canonical_url }}"}
+]}
+</script>
+{% if t.faq %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  "mainEntity": [
+    {% for faq in t.faq %}{% if not loop.first %},{% endif %}
+    {"@type": "Question", "name": {{ faq.q|tojson }}, "acceptedAnswer": {"@type": "Answer", "text": {{ faq.a|tojson }}}}
+    {% endfor %}
+  ]
+}
+</script>
+{% endif %}
+{% endblock %}
+
+{% block content %}
+<section class="relative overflow-hidden bg-gradient-to-b from-norya-surface via-norya-surface-elevated to-norya-surface">
+  <div class="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(ellipse_80%_60%_at_50%_-10%,rgba(14,165,164,0.14),transparent)]" aria-hidden="true"></div>
+  <div class="relative max-w-5xl mx-auto px-4 sm:px-6 pt-16 sm:pt-24 pb-12 sm:pb-20 text-center">
+    <span class="inline-flex items-center gap-2 rounded-full border border-norya-brand/15 bg-norya-brand/5 px-3 py-1 text-xs font-bold uppercase tracking-wider text-norya-brand">{{ t.hero_badge }}</span>
+    <h1 class="mt-5 text-3xl sm:text-4xl md:text-5xl font-bold text-norya-ink leading-[1.12] tracking-tight">{{ t.hero_title }}</h1>
+    <p class="mt-5 text-base sm:text-lg md:text-xl text-norya-ink-muted max-w-3xl mx-auto leading-relaxed">{{ t.hero_desc }}</p>
+    <div class="mt-8 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3 sm:gap-4">
+      <a href="{{ base_url }}/kurumsal?lang={{ lang }}#contact" class="inline-flex items-center justify-center min-h-[48px] px-6 sm:px-8 rounded-2xl font-semibold text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand/25 shadow-lg transition">{{ t.hero_cta_primary }}</a>
+      <a href="mailto:sales@norya.ai" class="inline-flex items-center justify-center min-h-[48px] px-6 sm:px-8 rounded-2xl font-semibold border-2 border-norya-ink-subtle/25 text-norya-ink bg-white/80 hover:bg-norya-surface-elevated transition">{{ t.hero_cta_secondary }}</a>
+      <a href="#workflow" class="inline-flex items-center justify-center min-h-[48px] px-6 sm:px-8 rounded-2xl font-semibold text-norya-brand border-2 border-norya-brand/35 bg-norya-brand/[0.06] hover:bg-norya-brand/10 transition">{{ t.hero_cta_tertiary }}</a>
+    </div>
+  </div>
+</section>
+
+<section class="bg-norya-surface-elevated border-y border-norya-ink-subtle/10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink text-center mb-3">{{ t.who_title }}</h2>
+    <p class="text-center text-norya-ink-muted max-w-2xl mx-auto mb-10 sm:mb-12 text-sm sm:text-base leading-relaxed">{{ t.who_desc }}</p>
+    <div class="max-w-3xl mx-auto rounded-2xl border border-norya-ink-subtle/12 bg-norya-surface p-6 sm:p-8">
+      <h3 class="font-semibold text-norya-ink text-lg mb-1">{{ t.who_primary }}</h3>
+      <p class="text-sm text-norya-ink-muted mb-5">{{ t.who_secondary }}</p>
+      <ul class="space-y-2.5 text-sm text-norya-ink-muted">
+        {% for pt in t.who_points %}
+        <li class="flex gap-2"><span class="mt-1.5 w-1.5 h-1.5 shrink-0 rounded-full bg-norya-brand/70" aria-hidden="true"></span><span>{{ pt }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="bg-norya-surface">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink text-center mb-12 sm:mb-14">{{ t.benefits_title }}</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+      {% for b in t.benefits %}
+      <div class="rounded-2xl border border-norya-ink-subtle/12 bg-white/70 p-6 sm:p-7 shadow-sm">
+        <h3 class="font-semibold text-norya-ink text-lg mb-2">{{ b.title }}</h3>
+        <p class="text-sm sm:text-base text-norya-ink-muted leading-relaxed mb-4">{{ b.desc }}</p>
+        <ul class="space-y-2">
+          {% for p in b.points %}
+          <li class="flex gap-2 text-sm text-norya-ink-muted"><span class="text-norya-brand font-bold" aria-hidden="true">·</span><span>{{ p }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section id="workflow" class="scroll-mt-24 bg-norya-surface-elevated border-y border-norya-ink-subtle/10">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink text-center mb-12">{{ t.workflow_title }}</h2>
+    <ol class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6 list-none p-0 m-0">
+      {% for step in t.workflow_steps %}
+      <li class="relative rounded-2xl border border-norya-ink-subtle/12 bg-norya-surface p-6">
+        <span class="absolute -top-3 -left-2 flex h-8 w-8 items-center justify-center rounded-full bg-norya-brand text-white text-sm font-bold">{{ loop.index }}</span>
+        <h3 class="mt-2 font-semibold text-norya-ink text-lg mb-2">{{ step.title }}</h3>
+        <p class="text-sm sm:text-base text-norya-ink-muted leading-relaxed">{{ step.desc }}</p>
+      </li>
+      {% endfor %}
+    </ol>
+    <div class="mt-10 flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3">
+      <a href="{{ base_url }}/kurumsal?lang={{ lang }}#contact" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-2xl font-semibold text-white bg-norya-brand hover:bg-norya-brand-hover transition">{{ t.cta_book_demo }}</a>
+      <a href="mailto:sales@norya.ai" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-2xl font-semibold border-2 border-norya-ink-subtle/25 text-norya-ink bg-white hover:bg-norya-surface transition">{{ t.cta_contact_sales }}</a>
+    </div>
+  </div>
+</section>
+
+{% include "partials/marketing_trust_strip.html" %}
+
+<section class="bg-norya-surface">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink text-center mb-10">{{ t.faq_title }}</h2>
+    <div class="space-y-3">
+      {% for item in t.faq %}
+      <details class="group rounded-2xl border border-norya-ink-subtle/12 bg-white/80 px-4 sm:px-5 py-3 open:shadow-md transition-shadow">
+        <summary class="cursor-pointer list-none font-semibold text-norya-ink text-sm sm:text-base flex items-center justify-between gap-3 py-2 marker:content-none [&::-webkit-details-marker]:hidden">
+          <span>{{ item.q }}</span>
+          <span class="text-norya-brand text-lg leading-none group-open:rotate-45 transition-transform" aria-hidden="true">+</span>
+        </summary>
+        <p class="text-sm sm:text-base text-norya-ink-muted leading-relaxed pb-3 border-t border-norya-ink-subtle/10 mt-2 pt-3">{{ item.a }}</p>
+      </details>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<section class="bg-gradient-to-b from-norya-brand/10 to-norya-surface border-t border-norya-brand/10">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 py-16 sm:py-20 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-4">{{ t.cta_book_demo }} — {{ t.cta_contact_sales }}</h2>
+    <p class="text-norya-ink-muted max-w-2xl mx-auto mb-8 text-sm sm:text-base leading-relaxed">{{ t.hero_desc }}</p>
+    <div class="flex flex-col sm:flex-row flex-wrap items-stretch sm:items-center justify-center gap-3">
+      <a href="{{ base_url }}/kurumsal?lang={{ lang }}#contact" class="inline-flex items-center justify-center min-h-[48px] px-8 rounded-2xl font-semibold text-white bg-norya-brand hover:bg-norya-brand-hover shadow-lg transition">{{ t.cta_book_demo }}</a>
+      <a href="mailto:sales@norya.ai" class="inline-flex items-center justify-center min-h-[48px] px-8 rounded-2xl font-semibold border-2 border-norya-ink-subtle/30 text-norya-ink bg-white hover:bg-norya-surface-elevated transition">{{ t.cta_contact_sales }}</a>
+      <a href="#workflow" class="inline-flex items-center justify-center min-h-[48px] px-8 rounded-2xl font-semibold text-norya-brand border-2 border-norya-brand/40 bg-white/90 hover:bg-white transition">{{ t.cta_sample_workflow }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
