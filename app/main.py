@@ -7546,7 +7546,73 @@ def localized_home_path(request: Request | None = None, explicit_lang: str | Non
     return f"/{_preferred_landing_locale(request)}"
 
 
+def _path_lang_for_seo_pages(raw: str | None) -> str:
+    """Map locale strings to /{lang}/... path keys (matches sample + blog + multilingual slugs)."""
+    cleaned = (raw or "").strip().lower()
+    if not cleaned:
+        return "en"
+    if cleaned == "en-ca" or (cleaned.startswith("en-") and cleaned != "en"):
+        return "en"
+    if cleaned in SAMPLE_REPORTS_SLUGS:
+        return cleaned
+    if len(cleaned) >= 2 and cleaned[:2] in SAMPLE_REPORTS_SLUGS:
+        return cleaned[:2]
+    return "en"
+
+
+def _resolved_locale_for_seo_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    if explicit_lang:
+        return _path_lang_for_seo_pages(explicit_lang)
+    if request is not None:
+        state_locale = getattr(getattr(request, "state", None), "locale", None)
+        if state_locale:
+            return _path_lang_for_seo_pages(str(state_locale))
+        path = (request.url.path or "").strip()
+        if path.startswith("/") and path != "/":
+            segment = path[1:].split("/")[0].lower()
+            if segment in LANDING_ROUTES or segment in SUPPORTED_LOCALES:
+                return _path_lang_for_seo_pages(segment)
+        return _path_lang_for_seo_pages(_preferred_landing_locale(request))
+    return "en"
+
+
+def localized_sample_reports_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    """Localized /{lang}/{slug} for sample reports landing."""
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    slug = SAMPLE_REPORTS_SLUGS.get(loc) or SAMPLE_REPORTS_SLUGS["en"]
+    return f"/{loc}/{slug}"
+
+
+def localized_blog_index_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    """Localized blog index: /{lang}/blog for premium locales only."""
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    if loc not in BLOG_LANGS_PREMIUM:
+        loc = "en"
+    return f"/{loc}/blog"
+
+
+def localized_multilingual_landing_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    """Localized multilingual output landing path."""
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    slug = MULTILINGUAL_SLUGS.get(loc) or MULTILINGUAL_SLUGS["en"]
+    if loc not in MULTILINGUAL_SLUGS:
+        loc = "en"
+        slug = MULTILINGUAL_SLUGS["en"]
+    return f"/{loc}/{slug}"
+
+
 templates.env.globals["localized_home_path"] = localized_home_path
+templates.env.globals["localized_sample_reports_path"] = localized_sample_reports_path
+templates.env.globals["localized_blog_index_path"] = localized_blog_index_path
+templates.env.globals["localized_multilingual_landing_path"] = localized_multilingual_landing_path
 
 
 @app.get("/{lang}", response_class=HTMLResponse)

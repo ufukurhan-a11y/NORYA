@@ -2616,6 +2616,7 @@
       border-bottom: 1px solid rgba(15,23,42,.06);
       flex-shrink: 0;
     }
+    [dir="rtl"] .drawer-head { flex-direction: row-reverse; }
     .dark .drawer-head { border-bottom-color: rgba(255,255,255,.06); }
     .drawer-body {
       padding: 16px; padding-bottom: max(16px, env(safe-area-inset-bottom));
@@ -2758,6 +2759,7 @@
         display: flex !important;
         align-items: center !important;
       }
+      [dir="rtl"] #lang-modal .lang-opt { text-align: right; justify-content: flex-end; }
     }
     #nav-menu-dropdown a, #nav-menu-dropdown button { margin: 2px 0; }
     .nav-menu-mobile-only { display: none; }
@@ -4104,7 +4106,8 @@
       dd.classList.remove('nav-dd--open');
     });
   };
-  window._toggleLangDrop = function(menuId, toggleId) {
+  window._toggleLangDrop = function(menuId, toggleId, ev) {
+    if (ev && typeof ev.stopPropagation === 'function') ev.stopPropagation();
     var menu = document.getElementById(menuId);
     var btn  = document.getElementById(toggleId);
     if (!menu || !btn) return;
@@ -4122,15 +4125,21 @@
       menu.style.position = 'fixed';
       menu.style.top = (rect.bottom + 6) + 'px';
       menu.style.zIndex = '99999';
+      document.body.appendChild(menu);
+      var mw = menu.offsetWidth || 220;
+      var pad = 8;
       if (rtl) {
-        menu.style.left = Math.max(8, rect.left) + 'px';
+        var left = Math.min(rect.left, window.innerWidth - mw - pad);
+        left = Math.max(pad, left);
+        menu.style.left = left + 'px';
         menu.style.right = 'auto';
       } else {
-        menu.style.right = (window.innerWidth - rect.right) + 'px';
+        var idealRight = window.innerWidth - rect.right;
+        var right = Math.max(pad, Math.min(idealRight, window.innerWidth - mw - pad));
+        menu.style.right = right + 'px';
         menu.style.left = 'auto';
       }
       btn.setAttribute('aria-expanded', 'true');
-      document.body.appendChild(menu);
     }
   };
   window._pickLang = function(lang) {
@@ -4148,6 +4157,7 @@
     }
   };
   document.addEventListener('click', function(e) {
+    if (e.target && e.target.closest && e.target.closest('.header-lang-toggle')) return;
     if (e.target && e.target.closest && e.target.closest('.header-lang-switch')) return;
     if (e.target && e.target.closest && e.target.closest('.header-lang-menu')) return;
     if (!(e.target && e.target.closest && e.target.closest('#main-header [data-nav-dd]'))) {
@@ -4383,7 +4393,7 @@
           <div class="nav-dd-panel" role="menu" hidden>
             <a role="menuitem" class="nav-dd-item" href="/en/compare/" data-compare-nav-link="1" data-i18n="nav_dd_compare_hub">Compare hub</a>
             <a role="menuitem" class="nav-dd-item" href="/en/compare/norya-vs-generic-ai" data-compare-detail="norya-vs-generic-ai" data-i18n="nav_dd_compare_generic_ai">Norya vs generic AI</a>
-            <a role="menuitem" class="nav-dd-item" href="/en/compare/norya-vs-wizey" data-compare-detail="norya-vs-wizey" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
+            <a role="menuitem" class="nav-dd-item" href="/en/compare/norya-vs-wizey" data-compare-detail="norya-vs-wizey" data-i18n="nav_dd_compare_wizey">Norya vs Wizey</a>
           </div>
         </div>
         <a class="nav-link-standalone" href="/pricing?lang=en" data-locale-link="pricing" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
@@ -4395,21 +4405,21 @@
         </button>
 
         <div class="header-lang-switch language-switch header-desktop-only" aria-label="Language">
-          <button type="button" id="base-lang-toggle" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu','base-lang-toggle')">
+          <button type="button" id="base-lang-toggle" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu','base-lang-toggle', event)">
             <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
             <span class="header-lang-code lang-trigger-code" id="base-lang-current">EN</span>
             <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
           </button>
           <div id="base-lang-menu" class="header-lang-menu" hidden>
-            <a href="/?lang=tr" class="header-lang-option" onclick="window._pickLang('tr');return false">TR</a>
-            <a href="/?lang=en" class="header-lang-option" onclick="window._pickLang('en');return false">EN</a>
-            <a href="/?lang=es" class="header-lang-option" onclick="window._pickLang('es');return false">ES</a>
-            <a href="/?lang=de" class="header-lang-option" onclick="window._pickLang('de');return false">DE</a>
-            <a href="/?lang=fr" class="header-lang-option" onclick="window._pickLang('fr');return false">FR</a>
-            <a href="/?lang=it" class="header-lang-option" onclick="window._pickLang('it');return false">IT</a>
-            <a href="/?lang=he" class="header-lang-option" onclick="window._pickLang('he');return false">HE</a>
-            <a href="/?lang=hi" class="header-lang-option" onclick="window._pickLang('hi');return false">HI</a>
-            <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
+            <a href="/?lang=tr" class="header-lang-option" data-lang="tr" onclick="window._pickLang('tr');return false">TR</a>
+            <a href="/?lang=en" class="header-lang-option" data-lang="en" onclick="window._pickLang('en');return false">EN</a>
+            <a href="/?lang=es" class="header-lang-option" data-lang="es" onclick="window._pickLang('es');return false">ES</a>
+            <a href="/?lang=de" class="header-lang-option" data-lang="de" onclick="window._pickLang('de');return false">DE</a>
+            <a href="/?lang=fr" class="header-lang-option" data-lang="fr" onclick="window._pickLang('fr');return false">FR</a>
+            <a href="/?lang=it" class="header-lang-option" data-lang="it" onclick="window._pickLang('it');return false">IT</a>
+            <a href="/?lang=he" class="header-lang-option" data-lang="he" onclick="window._pickLang('he');return false">HE</a>
+            <a href="/?lang=hi" class="header-lang-option" data-lang="hi" onclick="window._pickLang('hi');return false">HI</a>
+            <a href="/?lang=ar" class="header-lang-option" data-lang="ar" onclick="window._pickLang('ar');return false">AR</a>
           </div>
         </div>
         <span id="nav-auth" class="header-auth-always items-center flex-shrink-0 gap-2">
@@ -4428,21 +4438,21 @@
         </div>
         <a href="#analyze-section" onclick="openAnalyze(); return false;" class="header-mobile-cta primary-cta elite-cta-btn" id="header-mobile-cta" data-i18n="nav_analyze" aria-hidden="true" hidden>Analyze</a>
         <div class="header-lang-switch language-switch header-mobile-only header-mobile-lang-hide" aria-label="Language">
-          <button type="button" id="base-lang-toggle-mobile" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu-mobile','base-lang-toggle-mobile')">
+          <button type="button" id="base-lang-toggle-mobile" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false" onclick="window._toggleLangDrop('base-lang-menu-mobile','base-lang-toggle-mobile', event)">
             <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
             <span class="header-lang-code lang-trigger-code" id="base-lang-current-mobile">EN</span>
             <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
           </button>
           <div id="base-lang-menu-mobile" class="header-lang-menu" hidden>
-            <a href="/?lang=tr" class="header-lang-option" onclick="window._pickLang('tr');return false">TR</a>
-            <a href="/?lang=en" class="header-lang-option" onclick="window._pickLang('en');return false">EN</a>
-            <a href="/?lang=es" class="header-lang-option" onclick="window._pickLang('es');return false">ES</a>
-            <a href="/?lang=de" class="header-lang-option" onclick="window._pickLang('de');return false">DE</a>
-            <a href="/?lang=fr" class="header-lang-option" onclick="window._pickLang('fr');return false">FR</a>
-            <a href="/?lang=it" class="header-lang-option" onclick="window._pickLang('it');return false">IT</a>
-            <a href="/?lang=he" class="header-lang-option" onclick="window._pickLang('he');return false">HE</a>
-            <a href="/?lang=hi" class="header-lang-option" onclick="window._pickLang('hi');return false">HI</a>
-            <a href="/?lang=ar" class="header-lang-option" onclick="window._pickLang('ar');return false">AR</a>
+            <a href="/?lang=tr" class="header-lang-option" data-lang="tr" onclick="window._pickLang('tr');return false">TR</a>
+            <a href="/?lang=en" class="header-lang-option" data-lang="en" onclick="window._pickLang('en');return false">EN</a>
+            <a href="/?lang=es" class="header-lang-option" data-lang="es" onclick="window._pickLang('es');return false">ES</a>
+            <a href="/?lang=de" class="header-lang-option" data-lang="de" onclick="window._pickLang('de');return false">DE</a>
+            <a href="/?lang=fr" class="header-lang-option" data-lang="fr" onclick="window._pickLang('fr');return false">FR</a>
+            <a href="/?lang=it" class="header-lang-option" data-lang="it" onclick="window._pickLang('it');return false">IT</a>
+            <a href="/?lang=he" class="header-lang-option" data-lang="he" onclick="window._pickLang('he');return false">HE</a>
+            <a href="/?lang=hi" class="header-lang-option" data-lang="hi" onclick="window._pickLang('hi');return false">HI</a>
+            <a href="/?lang=ar" class="header-lang-option" data-lang="ar" onclick="window._pickLang('ar');return false">AR</a>
           </div>
         </div>
         <button type="button" id="hamburger-btn" class="hamburger" onclick="toggleMobileDrawer()" aria-label="Open menu" data-i18n-aria-label="hamburger_open" aria-expanded="false" aria-controls="mobile-drawer">
@@ -4514,7 +4524,7 @@
         <div class="drawer-subnav">
           <a href="/en/compare/" onclick="closeMobileDrawer()" data-compare-nav-link="1" data-i18n="nav_dd_compare_hub">Compare hub</a>
           <a href="/en/compare/norya-vs-generic-ai" onclick="closeMobileDrawer()" data-compare-detail="norya-vs-generic-ai" data-i18n="nav_dd_compare_generic_ai">Norya vs generic AI</a>
-          <a href="/en/compare/norya-vs-wizey" onclick="closeMobileDrawer()" data-compare-detail="norya-vs-wizey" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
+          <a href="/en/compare/norya-vs-wizey" onclick="closeMobileDrawer()" data-compare-detail="norya-vs-wizey" data-i18n="nav_dd_compare_wizey">Norya vs Wizey</a>
         </div>
       </details>
       <a href="/pricing?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-locale-link="pricing" data-i18n="nav_pricing">Pricing</a>
@@ -7647,9 +7657,9 @@
   <footer class="py-10 sm:py-12 px-4 sm:px-6 bg-[#f5fafa] dark:bg-[#191c1d] border-t border-accent-200 dark:border-accent-800">
     <div class="max-w-4xl mx-auto">
       <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-accent-600 dark:text-accent-400">
-        <a href="/blog" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_blog">Blog</a>
-        <a href="/how-it-works" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_how">How it works</a>
-        <a href="/pricing" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_pricing">Pricing</a>
+        <a href="/en/blog" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_blog" data-blog-index-link="1">Blog</a>
+        <a href="/how-it-works?lang=en" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_how" data-locale-link="how-it-works">How it works</a>
+        <a href="/pricing?lang=en" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_pricing" data-locale-link="pricing">Pricing</a>
         <a href="/tr/kan-tahlili-sonucu" class="hover:text-[#0ea5a4] font-medium transition-colors seo-guide-link" data-i18n="footer_guide">Kan tahlili rehberi</a>
         <a href="/legal/gizlilik-politikasi" class="hover:text-[#0ea5a4] font-medium transition-colors legal-lang-link" data-i18n="footer_privacy">Gizlilik</a>
         <a href="/legal/mesafeli-satis-sozlesmesi" class="hover:text-[#0ea5a4] font-medium transition-colors legal-lang-link" data-i18n="footer_terms">Kullanım Koşulları</a>
@@ -9806,12 +9816,12 @@
       tr: {
         nav_home: "Ana Sayfa", nav_languages: "Diller", nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü", nav_trust: "Güven", hero_compare_link: "ChatGPT ve diğer AI araçlarıyla karşılaştır",
         nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", nav_start_free: "Ücretsiz Başla", nav_for_doctors: "Doktorlar için", nav_for_clinics: "Klinikler için", nav_demo: "Demo", nav_compare: "Karşılaştır",
-        nav_product_tagline: "Lab odaklı · Klinisyene hazır çıktı · Çok dilli · Güven öncelikli", nav_cta_start_analyze: "Ücretsiz başla · Analiz",
+        nav_product_tagline: "Yapılandırılmış raporlar · Klinisyene uygun · 9+ rapor dili · GDPR odaklı altyapı", nav_cta_start_analyze: "Ücretsiz başla · Analiz",
         nav_dd_supported_tests: "Desteklenen tahliller", nav_dd_multilingual_output: "Çok dilli çıktı",
         nav_dd_doctor_ready_reports: "Doktora hazır raporlar", nav_dd_patient_communication: "Hasta iletişimi", nav_dd_followup_prep: "Kontrol öncesi hazırlık",
         nav_dd_clinic_workflows: "Klinik iş akışları", nav_dd_intl_patients: "Uluslararası hastalar", nav_dd_trust_privacy: "Güven ve gizlilik", nav_dd_organizations: "Kurumlar ve kurumsal",
         nav_dd_security: "Güvenlik", nav_dd_privacy: "Gizlilik", nav_dd_methodology: "Metodoloji", nav_dd_trust_overview: "Güven özeti",
-        nav_dd_compare_hub: "Karşılaştırma merkezi", nav_dd_compare_generic_ai: "Norya ve genel AI", nav_dd_compare_more_tools: "Norya ve diğer araçlar",
+        nav_dd_compare_hub: "Karşılaştırma merkezi", nav_dd_compare_generic_ai: "Norya ve genel AI", nav_dd_compare_wizey: "Norya ve Wizey",
         drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
@@ -10274,12 +10284,12 @@
       en: {
         nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu", nav_trust: "Trust", hero_compare_link: "Compare with ChatGPT and other AI tools",
         nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", nav_start_free: "Start free", nav_for_doctors: "For Doctors", nav_for_clinics: "For Clinics", nav_demo: "Demo", nav_compare: "Compare",
-        nav_product_tagline: "Lab report–focused · Clinician-ready · 9+ languages · Trust-first", nav_cta_start_analyze: "Start free · Analyze",
+        nav_product_tagline: "Structured lab reports · Clinician-ready · 9+ report languages · GDPR-aligned infrastructure", nav_cta_start_analyze: "Start free · Analyze",
         nav_dd_supported_tests: "Supported lab tests", nav_dd_multilingual_output: "Multilingual output",
         nav_dd_doctor_ready_reports: "Doctor-ready reports", nav_dd_patient_communication: "Patient communication", nav_dd_followup_prep: "Follow-up prep",
         nav_dd_clinic_workflows: "Clinic workflows", nav_dd_intl_patients: "International patients", nav_dd_trust_privacy: "Trust & privacy", nav_dd_organizations: "Organizations & enterprise",
         nav_dd_security: "Security", nav_dd_privacy: "Privacy", nav_dd_methodology: "Methodology", nav_dd_trust_overview: "Trust overview",
-        nav_dd_compare_hub: "Compare hub", nav_dd_compare_generic_ai: "Norya vs generic AI", nav_dd_compare_more_tools: "Norya vs other tools",
+        nav_dd_compare_hub: "Compare hub", nav_dd_compare_generic_ai: "Norya vs generic AI", nav_dd_compare_wizey: "Norya vs Wizey",
         drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
@@ -10740,12 +10750,12 @@
       it: {
         nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu", nav_trust: "Fiducia", hero_compare_link: "Confronta con ChatGPT e altri strumenti AI",
         nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", nav_start_free: "Inizia gratis", nav_for_doctors: "Per i medici", nav_for_clinics: "Per le cliniche", nav_demo: "Demo", nav_compare: "Confronta",
-        nav_product_tagline: "Focus referti · Output per clinici · 9+ lingue · Fiducia prima", nav_cta_start_analyze: "Inizia gratis · Analizza",
+        nav_product_tagline: "Referti strutturati · Pronti per il clinico · 9+ lingue di report · Infrastruttura allineata al GDPR", nav_cta_start_analyze: "Inizia gratis · Analizza",
         nav_dd_supported_tests: "Esami supportati", nav_dd_multilingual_output: "Output multilingue",
         nav_dd_doctor_ready_reports: "Referti pronti per il medico", nav_dd_patient_communication: "Comunicazione con il paziente", nav_dd_followup_prep: "Preparazione al follow-up",
         nav_dd_clinic_workflows: "Flussi in clinica", nav_dd_intl_patients: "Pazienti internazionali", nav_dd_trust_privacy: "Fiducia e privacy", nav_dd_organizations: "Organizzazioni e enterprise",
         nav_dd_security: "Sicurezza", nav_dd_privacy: "Privacy", nav_dd_methodology: "Metodologia", nav_dd_trust_overview: "Panoramica fiducia",
-        nav_dd_compare_hub: "Hub di confronto", nav_dd_compare_generic_ai: "Norya vs IA generica", nav_dd_compare_more_tools: "Norya vs altri strumenti",
+        nav_dd_compare_hub: "Hub di confronto", nav_dd_compare_generic_ai: "Norya vs IA generica", nav_dd_compare_wizey: "Norya vs Wizey",
         drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?", company_info_title: "Informazioni aziendali",
@@ -11067,12 +11077,12 @@
       es: {
         nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú", nav_trust: "Confianza", hero_compare_link: "Comparar con ChatGPT y otras herramientas de IA",
         nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", nav_start_free: "Empieza gratis", nav_for_doctors: "Para médicos", nav_for_clinics: "Para clínicas", nav_demo: "Demo", nav_compare: "Comparar",
-        nav_product_tagline: "Informes de laboratorio · Para clínicos · 9+ idiomas · Confianza primero", nav_cta_start_analyze: "Empieza gratis · Analizar",
+        nav_product_tagline: "Informes estructurados · Listos para el clínico · 9+ idiomas de informe · Infraestructura alineada con el GDPR", nav_cta_start_analyze: "Empieza gratis · Analizar",
         nav_dd_supported_tests: "Pruebas admitidas", nav_dd_multilingual_output: "Salida multilingüe",
         nav_dd_doctor_ready_reports: "Informes listos para el médico", nav_dd_patient_communication: "Comunicación con pacientes", nav_dd_followup_prep: "Preparación del seguimiento",
         nav_dd_clinic_workflows: "Flujos en clínica", nav_dd_intl_patients: "Pacientes internacionales", nav_dd_trust_privacy: "Confianza y privacidad", nav_dd_organizations: "Organizaciones y empresa",
         nav_dd_security: "Seguridad", nav_dd_privacy: "Privacidad", nav_dd_methodology: "Metodología", nav_dd_trust_overview: "Resumen de confianza",
-        nav_dd_compare_hub: "Centro de comparación", nav_dd_compare_generic_ai: "Norya vs IA genérica", nav_dd_compare_more_tools: "Norya vs otras herramientas",
+        nav_dd_compare_hub: "Centro de comparación", nav_dd_compare_generic_ai: "Norya vs IA genérica", nav_dd_compare_wizey: "Norya vs Wizey",
         drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?", company_info_title: "Información de la empresa",
@@ -11394,12 +11404,12 @@
       fr: {
         nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu", nav_trust: "Confiance", hero_compare_link: "Comparer avec ChatGPT et d'autres outils IA",
         nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", nav_start_free: "Commencer gratuitement", nav_for_doctors: "Pour les médecins", nav_for_clinics: "Pour les cliniques", nav_demo: "Démo", nav_compare: "Comparer",
-        nav_product_tagline: "Rapports de labo · Prêt pour le soin · 9+ langues · Confiance d’abord", nav_cta_start_analyze: "Commencer gratuitement · Analyser",
+        nav_product_tagline: "Rapports structurés · Prêts pour le soin · 9+ langues de rapport · Infrastructure alignée RGPD", nav_cta_start_analyze: "Commencer gratuitement · Analyser",
         nav_dd_supported_tests: "Analyses prises en charge", nav_dd_multilingual_output: "Sortie multilingue",
         nav_dd_doctor_ready_reports: "Rapports prêts pour le médecin", nav_dd_patient_communication: "Communication patient", nav_dd_followup_prep: "Préparation du suivi",
         nav_dd_clinic_workflows: "Flux en clinique", nav_dd_intl_patients: "Patients internationaux", nav_dd_trust_privacy: "Confiance et confidentialité", nav_dd_organizations: "Organisations et entreprise",
         nav_dd_security: "Sécurité", nav_dd_privacy: "Confidentialité", nav_dd_methodology: "Méthodologie", nav_dd_trust_overview: "Vue d’ensemble confiance",
-        nav_dd_compare_hub: "Hub de comparaison", nav_dd_compare_generic_ai: "Norya vs IA générique", nav_dd_compare_more_tools: "Norya vs autres outils",
+        nav_dd_compare_hub: "Hub de comparaison", nav_dd_compare_generic_ai: "Norya vs IA générique", nav_dd_compare_wizey: "Norya vs Wizey",
         drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?", company_info_title: "Informations sur l'entreprise",
@@ -11721,12 +11731,12 @@
       de: {
         nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü", nav_trust: "Vertrauen", hero_compare_link: "Mit ChatGPT und anderen KI-Tools vergleichen",
         nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", nav_start_free: "Kostenlos starten", nav_for_doctors: "Für Ärzte", nav_for_clinics: "Für Kliniken", nav_demo: "Demo", nav_compare: "Vergleich",
-        nav_product_tagline: "Laborfokus · Klinikfertige Ausgabe · 9+ Sprachen · Vertrauen zuerst", nav_cta_start_analyze: "Kostenlos starten · Analysieren",
+        nav_product_tagline: "Strukturierte Laborberichte · Klinikfertig · 9+ Berichtssprachen · DSGVO-orientierte Infrastruktur", nav_cta_start_analyze: "Kostenlos starten · Analysieren",
         nav_dd_supported_tests: "Unterstützte Labortests", nav_dd_multilingual_output: "Mehrsprachige Ausgabe",
         nav_dd_doctor_ready_reports: "Arztfertige Berichte", nav_dd_patient_communication: "Patientenkommunikation", nav_dd_followup_prep: "Vorbereitung auf Folgetermine",
         nav_dd_clinic_workflows: "Abläufe in der Praxis", nav_dd_intl_patients: "Internationale Patienten", nav_dd_trust_privacy: "Vertrauen & Datenschutz", nav_dd_organizations: "Organisationen & Enterprise",
         nav_dd_security: "Sicherheit", nav_dd_privacy: "Datenschutz", nav_dd_methodology: "Methodik", nav_dd_trust_overview: "Vertrauensüberblick",
-        nav_dd_compare_hub: "Vergleichsübersicht", nav_dd_compare_generic_ai: "Norya vs. generische KI", nav_dd_compare_more_tools: "Norya vs. andere Tools",
+        nav_dd_compare_hub: "Vergleichsübersicht", nav_dd_compare_generic_ai: "Norya vs. generische KI", nav_dd_compare_wizey: "Norya vs. Wizey",
         drawer_trust_meta: "DSGVO-konform · SSL-verschlüsselt · Sichere Zahlung (PayTR)",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?", company_info_title: "Unternehmensinformationen",
@@ -12029,12 +12039,12 @@
       he: {
         nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט", nav_trust: "אמון", hero_compare_link: "השוו מול ChatGPT וכלי AI אחרים",
         nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות", nav_start_free: "התחילו בחינם", nav_for_doctors: "לרופאים", nav_for_clinics: "למרפאות", nav_demo: "דמו", nav_compare: "השוואה",
-        nav_product_tagline: "ממוקד דוחות מעבדה · מוכן לרופאים · 9+ שפות · אמון קודם", nav_cta_start_analyze: "התחילו בחינם · ניתוח",
+        nav_product_tagline: "דוחות מבנה קליני · מוכנים לרופא · 9+ שפות דוח · תשתית מיושרת GDPR", nav_cta_start_analyze: "התחילו בחינם · ניתוח",
         nav_dd_supported_tests: "בדיקות נתמכות", nav_dd_multilingual_output: "פלט רב־לשוני",
         nav_dd_doctor_ready_reports: "דוחות מוכנים לרופא", nav_dd_patient_communication: "תקשורת עם המטופל", nav_dd_followup_prep: "הכנה למעקב",
         nav_dd_clinic_workflows: "זרימות במרפאה", nav_dd_intl_patients: "מטופלים בינלאומיים", nav_dd_trust_privacy: "אמון ופרטיות", nav_dd_organizations: "ארגונים ועסקים",
         nav_dd_security: "אבטחה", nav_dd_privacy: "פרטיות", nav_dd_methodology: "מתודולוגיה", nav_dd_trust_overview: "סקירת אמון",
-        nav_dd_compare_hub: "מרכז השוואות", nav_dd_compare_generic_ai: "Norya מול בינה מלאכותית כללית", nav_dd_compare_more_tools: "Norya מול כלים אחרים",
+        nav_dd_compare_hub: "מרכז השוואות", nav_dd_compare_generic_ai: "Norya מול בינה מלאכותית כללית", nav_dd_compare_wizey: "Norya מול Wizey",
         a2hs_message: "הוסף את Norya למסך הבית והשתמש כמו באפליקציה.", a2hs_later: "אחר כך", a2hs_add: "הוסף", ios_a2hs_message: "הוסף למסך הבית: שתף ⎋ הוסף למסך הבית", ios_a2hs_close: "סגור",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?", company_info_title: "פרטי החברה",
         about_what_1: "נוריה הוא שירות שמסביר את תוצאות בדיקות הדם שלך בשפה ברורה. המספרים והקיצורים מהמעבדה קשים לעתים להבנה; נוריה מייצרת דוחות שמסכמים את התוצאות, מסבירים כל ערך ביחס לטווחי ההתייחסות ונותנים המלצות מעשיות.",
@@ -12307,12 +12317,12 @@
       ar: {
         nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة", nav_trust: "الثقة", hero_compare_link: "قارن مع ChatGPT وأدوات الذكاء الاصطناعي الأخرى",
         nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة", nav_start_free: "ابدأ مجانًا", nav_for_doctors: "للأطباء", nav_for_clinics: "للعيادات", nav_demo: "عرض توضيحي", nav_compare: "مقارنة",
-        nav_product_tagline: "تركيز على تقارير المختبر · جاهز للأطباء · 9+ لغات · الثقة أولاً", nav_cta_start_analyze: "ابدأ مجانًا · حلّل",
+        nav_product_tagline: "تقارير مختبر منظمة · جاهزة للطبيب · 9+ لغات للتقرير · بنية تحتية متوافقة مع GDPR", nav_cta_start_analyze: "ابدأ مجانًا · حلّل",
         nav_dd_supported_tests: "التحاليل المدعومة", nav_dd_multilingual_output: "مخرجات متعددة اللغات",
         nav_dd_doctor_ready_reports: "تقارير جاهزة للطبيب", nav_dd_patient_communication: "التواصل مع المريض", nav_dd_followup_prep: "التحضير للمتابعة",
         nav_dd_clinic_workflows: "سير العمل في العيادة", nav_dd_intl_patients: "مرضى دوليون", nav_dd_trust_privacy: "الثقة والخصوصية", nav_dd_organizations: "المؤسسات والشركات",
         nav_dd_security: "الأمان", nav_dd_privacy: "الخصوصية", nav_dd_methodology: "المنهجية", nav_dd_trust_overview: "نظرة على الثقة",
-        nav_dd_compare_hub: "مركز المقارنة", nav_dd_compare_generic_ai: "Norya مقابل ذكاء اصطناعي عام", nav_dd_compare_more_tools: "Norya مقابل أدوات أخرى",
+        nav_dd_compare_hub: "مركز المقارنة", nav_dd_compare_generic_ai: "Norya مقابل ذكاء اصطناعي عام", nav_dd_compare_wizey: "Norya مقابل Wizey",
         a2hs_message: "أضف Norya إلى الشاشة الرئيسية واستخدمها كتطبيق.", a2hs_later: "لاحقاً", a2hs_add: "إضافة", ios_a2hs_message: "إضافة إلى الشاشة الرئيسية: مشاركة ⎋ إضافة إلى الشاشة الرئيسية", ios_a2hs_close: "إغلاق",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟", company_info_title: "معلومات الشركة",
         about_what_1: "نوريا خدمة تشرح نتائج تحاليل الدم بلغة واضحة. الأرقام والاختصارات من المختبر غالباً صعبة الفهم؛ نوريا تنتج تقارير تلخص النتائج وتشرح كل قيمة بالنسبة للمرجع وتقدم توصيات عملية.",
@@ -12585,12 +12595,12 @@
       hi: {
         nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू", nav_trust: "विश्वास", hero_compare_link: "ChatGPT और दूसरे AI टूल्स से तुलना करें",
         nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", nav_start_free: "मुफ्त शुरू करें", nav_for_doctors: "डॉक्टरों के लिए", nav_for_clinics: "क्लिनिकों के लिए", nav_demo: "डेमो", nav_compare: "तुलना",
-        nav_product_tagline: "लैब रिपोर्ट केंद्रित · क्लिनिशियन-तैयार · 9+ भाषाएँ · विश्वास पहले", nav_cta_start_analyze: "मुफ्त शुरू करें · विश्लेषण",
+        nav_product_tagline: "संरचित लैब रिपोर्ट · क्लिनिशियन-तैयार · 9+ रिपोर्ट भाषाएँ · GDPR-अनुरूप अवसंरचना", nav_cta_start_analyze: "मुफ्त शुरू करें · विश्लेषण",
         nav_dd_supported_tests: "समर्थित जाँच", nav_dd_multilingual_output: "बहुभाषी आउटपुट",
         nav_dd_doctor_ready_reports: "डॉक्टर के लिए तैयार रिपोर्ट", nav_dd_patient_communication: "रोगी संचार", nav_dd_followup_prep: "फॉलो-अप तैयारी",
         nav_dd_clinic_workflows: "क्लिनिक वर्कफ़्लो", nav_dd_intl_patients: "अंतर्राष्ट्रीय मरीज", nav_dd_trust_privacy: "विश्वास और गोपनीयता", nav_dd_organizations: "संस्थाएँ और एंटरप्राइज़",
         nav_dd_security: "सुरक्षा", nav_dd_privacy: "गोपनीयता", nav_dd_methodology: "कार्यप्रणाली", nav_dd_trust_overview: "विश्वास अवलोकन",
-        nav_dd_compare_hub: "तुलना केंद्र", nav_dd_compare_generic_ai: "Norya बनाम सामान्य AI", nav_dd_compare_more_tools: "Norya बनाम अन्य उपकरण",
+        nav_dd_compare_hub: "तुलना केंद्र", nav_dd_compare_generic_ai: "Norya बनाम सामान्य AI", nav_dd_compare_wizey: "Norya बनाम Wizey",
         drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?", company_info_title: "कंपनी की जानकारी",
@@ -13639,15 +13649,24 @@
         m.style.visibility = "visible";
         m.style.maxHeight = "70vh";
         m.style.pointerEvents = "auto";
-        var r = btn ? btn.getBoundingClientRect() : { width: 0, height: 0, right: 0, bottom: 0 };
+        var r = btn ? btn.getBoundingClientRect() : { width: 0, height: 0, right: 0, left: 0, bottom: 0 };
         var triggerVisible = r && r.width > 0 && r.height > 0;
+        var rtlModal = document.documentElement.getAttribute("dir") === "rtl";
         if (btn && triggerVisible) {
-          var w = 208;
-          var left = r.right - w;
-          if (left < 8) left = 8;
-          if (left + w > window.innerWidth - 8) left = window.innerWidth - w - 8;
-          m.style.left = left + "px";
-          m.style.right = "auto";
+          var w = Math.max(m.offsetWidth || 0, 208);
+          var pad = 8;
+          if (rtlModal) {
+            var leftRtl = Math.min(r.left, window.innerWidth - w - pad);
+            leftRtl = Math.max(pad, leftRtl);
+            m.style.left = leftRtl + "px";
+            m.style.right = "auto";
+          } else {
+            var left = r.right - w;
+            if (left < pad) left = pad;
+            if (left + w > window.innerWidth - pad) left = window.innerWidth - w - pad;
+            m.style.left = left + "px";
+            m.style.right = "auto";
+          }
           m.style.top = (r.bottom + 8) + "px";
           m.style.transform = "none";
         } else {
@@ -14064,8 +14083,8 @@
       if (baseCurrent) baseCurrent.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
       var baseMobile = document.getElementById("base-lang-current-mobile");
       if (baseMobile) baseMobile.textContent = (LANG_LABELS[lang] || lang).toUpperCase();
-      document.querySelectorAll('#base-lang-menu .header-lang-option[data-locale], #base-lang-menu-mobile .header-lang-option[data-locale]').forEach(function(btn) {
-        btn.classList.toggle('is-active', btn.getAttribute('data-locale') === lang);
+      document.querySelectorAll('#base-lang-menu .header-lang-option[data-lang], #base-lang-menu-mobile .header-lang-option[data-lang]').forEach(function(btn) {
+        btn.classList.toggle('is-active', btn.getAttribute('data-lang') === lang);
       });
       // Header desktop dropdown: mark active language item
       var headerMenu = document.getElementById("langMenu");
@@ -15689,12 +15708,11 @@
     }
 
     function openProfile() {
+      var token = null;
       try {
-        if (typeof getToken === 'function' && !getToken()) {
-          if (typeof openLogin === 'function') openLogin();
-          return;
-        }
-      } catch (_) {
+        token = (typeof getToken === 'function') ? getToken() : null;
+      } catch (_) { token = null; }
+      if (!token || !String(token).trim()) {
         if (typeof openLogin === 'function') openLogin();
         return;
       }
