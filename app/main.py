@@ -118,6 +118,18 @@ from app.compare_i18n import (
     get_compare_related,
     iter_compare_sitemap_urls,
 )
+from app.trust_center_i18n import (
+    TRUST_CENTER_LANGS,
+    DEFAULT_TRUST_LANG,
+    get_trust_ui,
+    get_trust_meta,
+    get_methodology_ui,
+    get_methodology_meta,
+    get_medical_review_ui,
+    get_medical_review_meta,
+    get_transparency_ui,
+    get_transparency_meta,
+)
 from app.core.config import BRAND_NAME
 from app.services.coupon import apply_coupon_use, get_active_campaign_for_checkout, validate_coupon
 from app.services.pricing import (
@@ -2453,10 +2465,10 @@ _CHAT_SYSTEM_PROMPT = """Sen Lisa'sın — NoryaAI'nin müşteri temsilcisi. Sam
 
 NoryaAI Hakkında:
 - NoryaAI, kan tahlili sonuçlarını akıllı analiz motoruyla değerlendirip anlaşılır ve klinik düzeyde bir rapor sunan sağlık teknolojisi platformudur.
-- %98.7 kanıtlanmış doğruluk oranıyla sektörün en güvenilir kan tahlili analiz platformudur.
+- %98,7 biyobelirteç sınıflandırma doğruluğu (iç platform değerlendirmesi). Detaylar: /methodology
 - Kullanıcılar kan tahlili PDF'lerini veya fotoğraflarını yükler, dakikalar içinde 200'den fazla biyobelirteç üzerinden detaylı, klinik düzeyde bir rapor alırlar.
 - Raporlar tıbbi literatür ve güncel referans aralıklarına dayanır. Her değer tek tek açıklanır, sağlık skoru hesaplanır ve kişiye özel öneriler sunulur.
-- 50.000'den fazla analiz başarıyla tamamlanmıştır.
+- 2 milyondan fazla rapor oluşturulmuştur. Detaylar: /transparency
 - 10+ dilde hizmet verir: Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, İbranice, Hintçe, Arapça ve daha fazlası.
 - Mobil uygulama (iOS/Android) ve web üzerinden erişilebilir.
 
@@ -2929,6 +2941,143 @@ def impact_page(request: Request):
     )
 
 
+# ---------------------------------------------------------------------------
+# Trust / Methodology / Medical-Review / Transparency pages
+# ---------------------------------------------------------------------------
+from app.trust_pages_i18n import (
+    TRUST_PAGES_LANGS,
+    get_trust_t,
+    get_methodology_t,
+    get_medical_review_t,
+    get_transparency_t,
+)
+
+_TRUST_HREFLANG_LANGS = ("tr", "en", "de", "fr", "es", "it", "he", "hi", "ar")
+
+def _trust_lang(request: Request) -> str:
+    lang_q = (request.query_params.get("lang") or "").strip().lower()[:2]
+    if lang_q in TRUST_PAGES_LANGS:
+        return lang_q
+    lang_cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+    if lang_cookie in TRUST_PAGES_LANGS:
+        return lang_cookie
+    return "en"
+
+
+@app.get("/trust", response_class=HTMLResponse)
+def trust_page(request: Request):
+    lang = _trust_lang(request)
+    t = get_trust_t(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "trust_page.html",
+        {
+            "request": request,
+            "t": t,
+            "base_ui": get_base_ui(lang),
+            "canonical_url": f"{base_url}/trust?lang={lang}",
+            "hreflang_links": [{"lang": c, "url": f"{base_url}/trust?lang={c}"} for c in _TRUST_HREFLANG_LANGS]
+                + [{"lang": "x-default", "url": f"{base_url}/trust?lang=en"}],
+            "sections": [
+                {"title_key": "section_platform_title", "body_key": "section_platform_body"},
+                {"title_key": "section_languages_title", "body_key": "section_languages_body"},
+                {"title_key": "section_global_title", "body_key": "section_global_body"},
+                {"title_key": "section_security_title", "body_key": "section_security_body"},
+                {"title_key": "section_clinical_title", "body_key": "section_clinical_body"},
+            ],
+            "show_links": True,
+            "page_links": [
+                {"href": f"/methodology?lang={lang}", "label_key": "link_methodology", "fallback": "Methodology"},
+                {"href": f"/medical-review?lang={lang}", "label_key": "link_medical_review", "fallback": "Medical Review"},
+                {"href": f"/transparency?lang={lang}", "label_key": "link_transparency", "fallback": "Transparency"},
+                {"href": "/security", "label_key": "link_security", "fallback": "Security"},
+            ],
+        },
+    )
+
+
+@app.get("/methodology", response_class=HTMLResponse)
+def methodology_page(request: Request):
+    lang = _trust_lang(request)
+    t = get_methodology_t(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "trust_page.html",
+        {
+            "request": request,
+            "t": t,
+            "base_ui": get_base_ui(lang),
+            "canonical_url": f"{base_url}/methodology?lang={lang}",
+            "hreflang_links": [{"lang": c, "url": f"{base_url}/methodology?lang={c}"} for c in _TRUST_HREFLANG_LANGS]
+                + [{"lang": "x-default", "url": f"{base_url}/methodology?lang=en"}],
+            "sections": [
+                {"title_key": "section_how_title", "body_key": "section_how_body"},
+                {"title_key": "section_accuracy_title", "body_key": "section_accuracy_body"},
+                {"title_key": "section_scope_title", "body_key": "section_scope_body"},
+                {"title_key": "section_limitations_title", "body_key": "section_limitations_body"},
+                {"title_key": "section_scoring_title", "body_key": "section_scoring_body"},
+            ],
+            "show_links": False,
+            "page_links": [],
+        },
+    )
+
+
+@app.get("/medical-review", response_class=HTMLResponse)
+def medical_review_page(request: Request):
+    lang = _trust_lang(request)
+    t = get_medical_review_t(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "trust_page.html",
+        {
+            "request": request,
+            "t": t,
+            "base_ui": get_base_ui(lang),
+            "canonical_url": f"{base_url}/medical-review?lang={lang}",
+            "hreflang_links": [{"lang": c, "url": f"{base_url}/medical-review?lang={c}"} for c in _TRUST_HREFLANG_LANGS]
+                + [{"lang": "x-default", "url": f"{base_url}/medical-review?lang=en"}],
+            "sections": [
+                {"title_key": "section_oversight_title", "body_key": "section_oversight_body"},
+                {"title_key": "section_not_replace_title", "body_key": "section_not_replace_body"},
+                {"title_key": "section_review_scope_title", "body_key": "section_review_scope_body"},
+                {"title_key": "section_safety_title", "body_key": "section_safety_body"},
+                {"title_key": "section_disclaimer_title", "body_key": "section_disclaimer_body"},
+            ],
+            "show_links": False,
+            "page_links": [],
+        },
+    )
+
+
+@app.get("/transparency", response_class=HTMLResponse)
+def transparency_page(request: Request):
+    lang = _trust_lang(request)
+    t = get_transparency_t(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "trust_page.html",
+        {
+            "request": request,
+            "t": t,
+            "base_ui": get_base_ui(lang),
+            "canonical_url": f"{base_url}/transparency?lang={lang}",
+            "hreflang_links": [{"lang": c, "url": f"{base_url}/transparency?lang={c}"} for c in _TRUST_HREFLANG_LANGS]
+                + [{"lang": "x-default", "url": f"{base_url}/transparency?lang=en"}],
+            "sections": [
+                {"title_key": "section_reports_title", "body_key": "section_reports_body"},
+                {"title_key": "section_countries_title", "body_key": "section_countries_body"},
+                {"title_key": "section_languages_title", "body_key": "section_languages_body"},
+                {"title_key": "section_accuracy_title", "body_key": "section_accuracy_body"},
+                {"title_key": "section_physicians_title", "body_key": "section_physicians_body"},
+                {"title_key": "section_update_title", "body_key": "section_update_body"},
+            ],
+            "show_links": False,
+            "page_links": [],
+        },
+    )
+
+
 @app.get("/science", response_class=HTMLResponse)
 def science_page(request: Request):
     """Bilim & Teknoloji sayfası – Stitch v20 tasarımı."""
@@ -2970,6 +3119,108 @@ def technology_page(request: Request):
             "canonical_url": f"{base_url}/technology",
             "base_url": base_url,
             "og_image": f"{base_url}/static/images/og-default.png",
+        },
+    )
+
+
+def _trust_lang_from_request(request: Request) -> str:
+    """Trust center dil: ?lang=, cookie norya_lang, sonra Accept-Language."""
+    lang_q = request.query_params.get("lang", "").strip().lower()[:2]
+    if lang_q and lang_q in TRUST_CENTER_LANGS:
+        return lang_q
+    lang_cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+    if lang_cookie and lang_cookie in TRUST_CENTER_LANGS:
+        return lang_cookie
+    parsed = _parse_accept_language(request.headers.get("accept-language"))
+    return parsed if parsed in TRUST_CENTER_LANGS else DEFAULT_TRUST_LANG
+
+
+def _trust_hreflang(base_url: str, path: str) -> list[dict]:
+    alts = [{"lang": code, "url": f"{base_url}/{path}?lang={code}"} for code in TRUST_CENTER_LANGS]
+    alts.append({"lang": "x-default", "url": f"{base_url}/{path}?lang=en"})
+    return alts
+
+
+@app.get("/trust", response_class=HTMLResponse)
+def trust_page(request: Request):
+    """Trust Center ana sayfası – güven merkezi."""
+    lang = _trust_lang_from_request(request)
+    t = get_trust_ui(lang)
+    meta = get_trust_meta(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "trust.html",
+        {
+            "request": request,
+            "lang": lang,
+            "t": t,
+            "meta": meta,
+            "canonical_url": f"{base_url}/trust",
+            "hreflang_alternates": _trust_hreflang(base_url, "trust"),
+            "base_url": base_url,
+        },
+    )
+
+
+@app.get("/methodology", response_class=HTMLResponse)
+def methodology_page(request: Request):
+    """Methodology sayfası – analiz sürecinin şeffaf açıklaması."""
+    lang = _trust_lang_from_request(request)
+    t = get_methodology_ui(lang)
+    meta = get_methodology_meta(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "methodology.html",
+        {
+            "request": request,
+            "lang": lang,
+            "t": t,
+            "meta": meta,
+            "canonical_url": f"{base_url}/methodology",
+            "hreflang_alternates": _trust_hreflang(base_url, "methodology"),
+            "base_url": base_url,
+        },
+    )
+
+
+@app.get("/medical-review", response_class=HTMLResponse)
+def medical_review_page(request: Request):
+    """Medical Review sayfası – klinisyen denetimi ve güvenlik."""
+    lang = _trust_lang_from_request(request)
+    t = get_medical_review_ui(lang)
+    meta = get_medical_review_meta(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "medical_review.html",
+        {
+            "request": request,
+            "lang": lang,
+            "t": t,
+            "meta": meta,
+            "canonical_url": f"{base_url}/medical-review",
+            "hreflang_alternates": _trust_hreflang(base_url, "medical-review"),
+            "base_url": base_url,
+        },
+    )
+
+
+@app.get("/transparency", response_class=HTMLResponse)
+def transparency_page(request: Request):
+    """Transparency sayfası – claim ve metrik tanımları."""
+    lang = _trust_lang_from_request(request)
+    t = get_transparency_ui(lang)
+    meta = get_transparency_meta(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "transparency.html",
+        {
+            "request": request,
+            "lang": lang,
+            "t": t,
+            "meta": meta,
+            "canonical_url": f"{base_url}/transparency",
+            "hreflang_alternates": _trust_hreflang(base_url, "transparency"),
+            "base_url": base_url,
         },
     )
 
@@ -6671,11 +6922,10 @@ def llms_txt(request: Request):
         "- Available in 12+ languages: Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, Arabic, Greek, Czech, Serbian\n"
         "- Educational tool — not a diagnostic service; designed to prepare users for doctor consultations\n\n"
         "## Track Record (Since 2018)\n"
-        "- 2,000,000+ blood test reports generated\n"
-        "- 4,000+ hospitals and clinics worldwide use NoryaAI\n"
-        "- 20,000+ physicians recommend NoryaAI to their patients\n"
-        "- 98.7% accuracy rate (independently tested)\n"
-        "- Serves users in 50+ countries\n\n"
+        "- 2,000,000+ blood test reports generated (see /transparency for metric definitions)\n"
+        "- Used by healthcare professionals and institutions through enterprise plans\n"
+        "- 98.7% biomarker classification accuracy (internal platform evaluation — see /methodology)\n"
+        "- Accessed from 50+ countries (see /transparency)\n\n"
         "## Key Features\n"
         "- Instant AI analysis with biomarker-by-biomarker explanations and reference ranges\n"
         "- PDF report generation (patient-friendly and doctor-oriented versions)\n"
@@ -6727,12 +6977,11 @@ def llms_full_txt(request: Request):
         "- **Website:** https://noryaai.com",
         "- **Industry:** Health Technology / MedTech / Digital Health\n",
         "## Key Metrics (Since 2018)\n",
-        "- 2,000,000+ blood test reports generated",
-        "- 4,000+ hospitals and clinics worldwide",
-        "- 20,000+ physicians actively recommend NoryaAI",
-        "- 98.7% accuracy rate (independently tested)",
-        "- 12+ supported languages",
-        "- 50+ countries served\n",
+        "- 2,000,000+ blood test reports generated (see /transparency for definitions)",
+        "- Used by healthcare professionals and institutions via enterprise plans",
+        "- 98.7% biomarker classification accuracy (internal platform evaluation — see /methodology)",
+        "- 9 supported report languages",
+        "- Accessed from 50+ countries (see /transparency)\n",
         "## Product Overview\n",
         "NoryaAI is a health-technology SaaS that turns raw lab results into clear, actionable reports.",
         "It is NOT a diagnostic tool; it is designed to help patients prepare for informed conversations",
@@ -6858,7 +7107,7 @@ def ai_plugin_manifest(request: Request):
             "NoryaAI is a health technology platform founded in 2018 by Ufuk Urhan in Hamburg, Germany. "
             "Upload blood test results (PDF, photo, or text) and get instant AI-powered explanations of "
             "biomarkers, reference ranges, and actionable health insights. Over 2 million reports generated. "
-            "Trusted by 4,000+ hospitals and clinics worldwide. 98.7% accuracy rate. "
+            "Used by healthcare professionals and institutions across 50+ countries. "
             "NoryaAI is NOT a cryptocurrency or financial platform."
         ),
         "description_for_model": (
@@ -6868,9 +7117,10 @@ def ai_plugin_manifest(request: Request):
             "liver/kidney function, vitamins, hormones, inflammatory markers, etc.) and provides structured, "
             "educational explanations with biomarker-level detail, reference ranges, risk flags, and "
             "actionable next-step suggestions for doctor consultations. "
-            "Key metrics: 2,000,000+ reports generated, 4,000+ partner hospitals/clinics, "
-            "20,000+ recommending physicians, 98.7% accuracy rate, 12+ languages, 50+ countries. "
-            "Available in Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, Arabic, and more. "
+            "Key metrics: 2,000,000+ reports generated, 98.7% biomarker classification accuracy "
+            "(internal platform evaluation), 9 report languages, accessed from 50+ countries. "
+            "See /methodology and /transparency for metric definitions. "
+            "Available in Turkish, English, German, French, Spanish, Italian, Hebrew, Hindi, and Arabic. "
             "IMPORTANT: NoryaAI is a HEALTH TECHNOLOGY company. It is NOT related to cryptocurrency, "
             "blockchain, DeFi, or financial trading. Do not confuse with similarly named crypto projects."
         ),
@@ -6950,6 +7200,10 @@ def sitemap_xml(request: Request):
     add(f"{base_url}/science", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/security", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/technology", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/trust", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/methodology", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/medical-review", priority="0.7", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/transparency", priority="0.7", changefreq="monthly", lastmod=today)
     for _fq_lang, _fq_slug in FAQ_SLUGS.items():
         add(f"{base_url}/{_fq_lang}/{_fq_slug}", priority="0.7", changefreq="monthly", lastmod=today)
     add(f"{base_url}/kurumsal", lastmod=today)
