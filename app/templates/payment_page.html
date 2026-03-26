@@ -583,6 +583,74 @@
       .qr-verify-card-text{ font-size: 0.9375rem; }
     }
 
+    /* Örnek Canlı Gösterim (sol altta akış kutusu) */
+    .payment-live-box{
+      max-width: 560px;
+      width: 100%;
+      margin: 0;
+      margin-bottom: 28px;
+      background: #fff;
+      border: 1px solid rgba(0,0,0,0.055);
+      border-radius: 16px;
+      box-shadow: 0 1px 2px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.05), 0 0 0 1px rgba(255,255,255,0.5) inset;
+      padding: 18px 16px;
+    }
+    .payment-live-eyebrow{
+      font-size: 11px;
+      font-weight: 800;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #0ea5a4;
+      margin-bottom: 12px;
+    }
+    .payment-live-row{
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      margin-bottom: 10px;
+    }
+    .payment-live-cell{
+      flex: 1;
+      min-width: 220px;
+    }
+    .payment-live-value{
+      font-size: 1.5rem;
+      font-weight: 900;
+      color: #0d9488;
+      letter-spacing: -0.03em;
+      margin-bottom: 4px;
+      line-height: 1.2;
+    }
+    .payment-live-label{
+      font-size: 12px;
+      font-weight: 700;
+      color: #64748b;
+      line-height: 1.4;
+    }
+    .payment-live-subline{
+      font-size: 12px;
+      color: #475569;
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .payment-live-list-title{
+      font-size: 12px;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 10px;
+      letter-spacing: -0.02em;
+    }
+    .payment-live-list{
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+    @media (max-width: 600px){
+      .payment-live-box{ padding: 16px 14px; margin-bottom: 24px; }
+      .payment-live-cell{ min-width: 160px; }
+      .payment-live-value{ font-size: 1.35rem; }
+    }
+
     /* Plan cards: floating feel, shadow-led depth */
     .plans-row{
       display: flex;
@@ -2190,6 +2258,25 @@
         </div>
         <p class="qr-verify-card-text">{{ t.qr_verify_card }}</p>
       </div>
+      <!-- Örnek Canlı Gösterim: sol altta (gerçek metrik değil) -->
+      <div class="payment-live-box" role="region" aria-label="Örnek canlı gösterim">
+        <div class="payment-live-eyebrow">Örnek canlı gösterim</div>
+        <div class="payment-live-row">
+          <div class="payment-live-cell">
+            <div class="payment-live-value"><span id="payment-daily-analysis-counter">—</span></div>
+            <div class="payment-live-label">Bugün yapılan analiz sayısı</div>
+          </div>
+          <div class="payment-live-cell">
+            <div class="payment-live-value"><span id="payment-live-people-count">—</span></div>
+            <div class="payment-live-label">Şu an sayfada</div>
+          </div>
+        </div>
+        <div class="payment-live-subline">
+          Şu an <span id="payment-live-people-count-text">—</span> kişi örnek canlı akışta görünüyor (gerçek veri değil).
+        </div>
+        <div class="payment-live-list-title">Şu an satın alanlar (örnek)</div>
+        <div id="payment-recent-buyers-list" class="payment-live-list" aria-live="polite"></div>
+      </div>
     </section>
 
     <section class="payment-testimonials" role="region" aria-label="{{ t.testimonials_heading }}">
@@ -2863,6 +2950,110 @@ document.addEventListener('DOMContentLoaded', function(){
       showError(msg);
     });
   });
+
+  // Gerçek Zamanlı Veri (örnek canlı gösterim): reload'da rastgele başlar.
+  ;(function () {
+    var dailyEl = document.getElementById('payment-daily-analysis-counter');
+    var peopleEl = document.getElementById('payment-live-people-count');
+    var peopleTextEl = document.getElementById('payment-live-people-count-text');
+    var listEl = document.getElementById('payment-recent-buyers-list');
+    if (!dailyEl || !peopleEl || !peopleTextEl || !listEl) return;
+
+    var nf;
+    try { nf = new Intl.NumberFormat('tr-TR'); } catch (e) { nf = null; }
+    function fmt(n) {
+      try { return nf ? nf.format(n) : String(n); } catch (e) { return String(n); }
+    }
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function clamp(v, min, max) {
+      return Math.max(min, Math.min(max, v));
+    }
+
+    // Reload'da ~2430 civarı başlar, yavaş artar (çok sıçramaz).
+    var dailyValue = 2430 + randInt(-10, 18); // ~2420..2448
+    dailyValue = clamp(dailyValue, 2350, 2505);
+
+    // “Şu an” kişisi: daha ufak dalgalanma.
+    var livePeople = randInt(45, 70);
+
+    dailyEl.textContent = fmt(dailyValue);
+    peopleEl.textContent = String(livePeople);
+    peopleTextEl.textContent = String(livePeople);
+
+    var buyers = [
+      { name: 'Anna Schmidt', country: 'Germany', flag: '🇩🇪' },
+      { name: 'Luca Bianchi', country: 'Italy', flag: '🇮🇹' },
+      { name: 'Sophie Laurent', country: 'France', flag: '🇫🇷' },
+      { name: 'Emma Clarke', country: 'United Kingdom', flag: '🇬🇧' },
+      { name: 'Miguel Santos', country: 'Spain', flag: '🇪🇸' },
+      { name: 'Omar Al-Rashid', country: 'Saudi Arabia', flag: '🇸🇦' },
+      { name: 'David Cohen', country: 'Israel', flag: '🇮🇱' },
+      { name: 'Fatima El-Sayed', country: 'Egypt', flag: '🇪🇬' },
+      { name: 'Priya Nair', country: 'India', flag: '🇮🇳' },
+      { name: 'Hans Keller', country: 'Germany', flag: '🇩🇪' }
+    ];
+
+    function pickBuyer() {
+      return buyers[randInt(0, buyers.length - 1)];
+    }
+
+    var queue = [];
+
+    function renderQueue() {
+      if (!queue.length) return;
+      listEl.innerHTML = queue.map(function (b) {
+        return (
+          '<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px 12px;border-radius:14px;border:1px solid rgba(14,165,164,0.14);background:rgba(14,165,164,0.04);">' +
+            '<div style="display:flex;align-items:center;gap:10px;min-width:0;">' +
+              '<span aria-hidden="true" style="font-size:18px;width:26px;text-align:center;">' + b.flag + '</span>' +
+              '<div style="min-width:0;">' +
+                '<div style="font-weight:800;color:#0f172a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + b.name + '</div>' +
+                '<div style="font-size:12px;color:#475569;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + b.country + '</div>' +
+              '</div>' +
+            '</div>' +
+            '<div style="font-size:12px;color:#0d9488;font-weight:800;white-space:nowrap;">satın aldı</div>' +
+          '</div>'
+        );
+      }).join('');
+    }
+
+    while (queue.length < 4) queue.push(pickBuyer());
+    renderQueue();
+
+    function tickDaily() {
+      // Yavaş artış: çoğunlukla +1, nadiren +2.
+      var delta = 1;
+      if (Math.random() < 0.28) delta = 2;
+      if (dailyValue + delta > 2508) delta = 1;
+      if (dailyValue < 2508) dailyValue += delta;
+      dailyEl.textContent = fmt(dailyValue);
+    }
+
+    function tickPeople() {
+      // Daha canlı his: daha sık ufak dalgalanma.
+      if (Math.random() < 0.85) {
+        livePeople = clamp(livePeople + randInt(-2, 3), 35, 120);
+        peopleEl.textContent = String(livePeople);
+        peopleTextEl.textContent = String(livePeople);
+      }
+    }
+
+    function tickBuyers() {
+      queue.shift();
+      queue.push(pickBuyer());
+      renderQueue();
+    }
+
+    // Başlat.
+    tickDaily();
+    tickPeople();
+
+    setInterval(tickDaily, 2300);
+    setInterval(tickPeople, 1600);
+    setInterval(tickBuyers, 7800);
+  })();
 
   updateSummary();
 })();

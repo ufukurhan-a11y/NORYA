@@ -4053,6 +4053,29 @@
         </div>
       </div>
       <p class="text-center mt-5 text-[11px] text-accent-400 dark:text-accent-500 tracking-wide"><a href="/methodology" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_how_measured" data-locale-link="methodology">How these metrics are measured</a> <span class="mx-1">&middot;</span> <a href="/transparency" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_definitions" data-locale-link="transparency">Metric definitions</a></p>
+      <!-- Örnek canlı gösterim (gerçek metrik değil) -->
+      <div class="mt-8 flex justify-start">
+        <div class="w-full max-w-[320px] rounded-2xl bg-white dark:bg-accent-900/40 border border-accent-100 dark:border-accent-700 shadow-[0_10px_30px_rgba(2,6,23,0.06)] p-4 sm:p-5">
+          <p class="text-[11px] font-bold tracking-[0.2em] uppercase mb-2" style="color:#0ea5a4;">Örnek canlı gösterim</p>
+          <div class="flex items-end justify-between gap-4">
+            <div>
+              <p class="text-[11px] font-semibold text-accent-500 dark:text-accent-300 uppercase tracking-wide mb-1">Bugün yapılan analiz</p>
+              <p class="text-2xl sm:text-3xl font-extrabold text-[#0ea5a4] tabular-nums">
+                <span id="daily-analysis-counter">—</span>
+              </p>
+            </div>
+            <div class="text-right">
+              <p class="text-[11px] font-semibold text-accent-500 dark:text-accent-300 uppercase tracking-wide mb-1">Şu an</p>
+              <p class="text-2xl sm:text-3xl font-extrabold text-[#0ea5a4] tabular-nums">
+                <span id="live-analysis-people-count">—</span>
+              </p>
+            </div>
+          </div>
+          <p class="text-xs text-accent-500 dark:text-accent-400 mt-2 leading-relaxed">
+            Şu an <span id="live-analysis-people-count-text">—</span> kişi tahlilini analiz ettiriyor (gerçek veri değil).
+          </p>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -4163,6 +4186,147 @@
       <p class="text-xs text-accent-400 dark:text-accent-500 mt-2" data-i18n="enterprise_infra_legal">Logos are property of their respective owners.</p>
     </div>
   </section>
+
+  <!-- İnteraktif Before/After Karşılaştırma Kaydırıcısı (Before: eski tahlil kağıdı, After: Norya dijital rapor) -->
+  <section id="before-after-slider" class="py-16 sm:py-20 bg-white dark:bg-accent-900/20 overflow-x-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="text-center mb-12 sm:mb-16">
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="before_after_title">Tahlil Kağıdından Norya Raporuna</h2>
+        <p class="text-base sm:text-lg text-accent-600 dark:text-accent-400 max-w-xl mx-auto" data-i18n="before_after_desc">Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.</p>
+      </div>
+
+      <div class="rounded-3xl border border-accent-100 dark:border-accent-800 bg-white/70 dark:bg-accent-900/30 shadow-[0_18px_60px_rgba(14,165,164,0.12)] p-3 sm:p-4">
+        <div
+          id="ba-slider"
+          class="relative rounded-2xl overflow-hidden border border-accent-100 dark:border-accent-800 bg-accent-50/50 dark:bg-accent-900/20 h-[420px] sm:h-[480px] cursor-ew-resize"
+          style="touch-action:none; user-select:none;"
+        >
+          <!-- After (sağ): Norya dijital rapor görseli -->
+          <div class="absolute inset-0">
+            <img
+              src="/static/images/og-sample-reports.png"
+              alt="Norya örnek raporu (temsilidir)"
+              loading="lazy"
+              class="absolute inset-0 w-full h-full object-cover"
+              style="object-position: 86% 50%; transform: scale(1.35); transform-origin: 86% 50%; filter: saturate(1.2) contrast(1.06) brightness(1.02);"
+            />
+            <div class="absolute inset-0 bg-gradient-to-br from-white/70 via-white/0 to-[#0ea5a4]/20 dark:from-accent-900/40 dark:via-accent-900/0 dark:to-[#0ea5a4]/25"></div>
+            <div class="absolute inset-0 pointer-events-none opacity-25 mix-blend-multiply" style="background: radial-gradient(600px 220px at 70% 30%, rgba(14,165,164,0.55), transparent 60%);"></div>
+            <div class="absolute top-4 left-4 right-4 flex items-center justify-between gap-3">
+              <span class="text-xs font-semibold uppercase tracking-wider text-primary-700 dark:text-primary-300 bg-white/70 dark:bg-accent-900/50 border border-primary-200/70 dark:border-primary-700/70 backdrop-blur px-3 py-1 rounded-full" data-i18n="before_after_after_label">Sonra — Norya raporu</span>
+              <span class="text-[11px] font-bold text-primary-600 dark:text-primary-300 rounded-full bg-primary-50/80 dark:bg-primary-900/30 border border-primary-200/70 dark:border-primary-800 px-3 py-1">Turkuaz • Modern</span>
+            </div>
+          </div>
+
+          <!-- Before (sol): eski/okunması zor tahlil kağıdı hissi -->
+          <div id="ba-before" class="absolute inset-y-0 left-0 overflow-hidden" style="width:50%">
+            <div class="absolute inset-0">
+              <img
+                src="/static/images/blog/how-to-read-blood-test-results.png"
+                alt="Eski usul tahlil kağıdı temsili (okunması zor görsel)"
+                loading="lazy"
+                class="absolute inset-0 w-full h-full object-cover"
+                  style="object-position: 35% 55%; transform: scale(1.14) rotate(-1.6deg); transform-origin: 35% 55%; filter: grayscale(1) contrast(1.28) saturate(0.62) blur(0.32px);"
+              />
+              <!-- scanlines + kağıt dokusu -->
+              <div
+                class="absolute inset-0 pointer-events-none opacity-60 mix-blend-multiply"
+                style="background-image:
+                  repeating-linear-gradient(0deg, rgba(0,0,0,0.07) 0, rgba(0,0,0,0.07) 1px, transparent 1px, transparent 3px),
+                  repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 5px);"
+              ></div>
+              <div class="absolute inset-0 pointer-events-none opacity-30" style="background: radial-gradient(800px 260px at 30% 30%, rgba(0,0,0,0.18), transparent 60%);"></div>
+              <div class="absolute inset-0 pointer-events-none opacity-40 mix-blend-multiply" style="background: linear-gradient(120deg, rgba(239,230,201,0.55), rgba(239,230,201,0) 55%), linear-gradient(0deg, rgba(0,0,0,0.10), transparent 55%);"></div>
+              <div class="absolute top-4 left-4 right-4 flex items-center justify-between gap-3">
+                <span class="text-xs font-semibold uppercase tracking-wider text-amber-900/90 dark:text-amber-200 bg-[#efe6c9]/85 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-800/60 backdrop-blur px-3 py-1 rounded-full" data-i18n="before_after_before_label">Önce — Laboratuvar çıktısı</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Divider + Handle (sürüklenebilir) -->
+          <div id="ba-divider" class="absolute top-0 bottom-0 w-px bg-[#0ea5a4]/70 dark:bg-[#5eead4]/70" style="left:50%"></div>
+          <button
+            id="ba-handle"
+            type="button"
+            class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 h-12 w-12 rounded-full bg-white dark:bg-accent-900 border border-accent-200 dark:border-accent-700 shadow-lg flex items-center justify-center"
+            role="slider"
+            aria-label="Before/After"
+            aria-valuemin="0"
+            aria-valuemax="100"
+            aria-valuenow="50"
+            style="left:50%"
+          >
+            <span class="h-7 w-1 rounded-full bg-[#0ea5a4]" aria-hidden="true"></span>
+          </button>
+
+          <!-- 60 sn etiketi -->
+          <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
+            <span class="text-[11px] font-semibold px-3 py-1 rounded-full bg-white/80 dark:bg-accent-900/70 border border-accent-200/70 dark:border-accent-700/70 text-primary-700 dark:text-primary-300 backdrop-blur" data-i18n="before_after_arrow">↓ 60 sn ↓</span>
+          </div>
+        </div>
+
+        <div class="mt-6 flex items-center justify-between gap-4 text-xs max-w-3xl mx-auto">
+          <span class="text-accent-700 dark:text-accent-300 font-medium" data-i18n="before_after_before_label">Önce — Laboratuvar çıktısı</span>
+          <span class="text-accent-700 dark:text-accent-300 font-medium" data-i18n="before_after_after_label">Sonra — Norya raporu</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    (function () {
+      var slider = document.getElementById('ba-slider');
+      if (!slider) return;
+
+      var before = document.getElementById('ba-before');
+      var divider = document.getElementById('ba-divider');
+      var handle = document.getElementById('ba-handle');
+      if (!before || !divider || !handle) return;
+
+      function setPercent(p) {
+        var percent = Math.max(0, Math.min(100, p));
+        before.style.width = percent + '%';
+        divider.style.left = percent + '%';
+        handle.style.left = percent + '%';
+        handle.setAttribute('aria-valuenow', String(Math.round(percent)));
+      }
+
+      function updateFromClientX(clientX) {
+        var rect = slider.getBoundingClientRect();
+        if (!rect.width) return;
+        var x = clientX - rect.left;
+        var p = (x / rect.width) * 100;
+        setPercent(p);
+      }
+
+      var dragging = false;
+
+      slider.addEventListener('pointerdown', function (e) {
+        dragging = true;
+        updateFromClientX(e.clientX);
+        if (slider.setPointerCapture) slider.setPointerCapture(e.pointerId);
+        e.preventDefault();
+      }, { passive: false });
+
+      window.addEventListener('pointermove', function (e) {
+        if (!dragging) return;
+        updateFromClientX(e.clientX);
+        e.preventDefault();
+      }, { passive: false });
+
+      function endDrag() { dragging = false; }
+      window.addEventListener('pointerup', endDrag, { passive: true });
+      window.addEventListener('pointercancel', endDrag, { passive: true });
+
+      handle.addEventListener('keydown', function (e) {
+        var current = parseFloat(handle.getAttribute('aria-valuenow') || '50');
+        if (e.key === 'ArrowLeft') { setPercent(current - 2); e.preventDefault(); }
+        else if (e.key === 'ArrowRight') { setPercent(current + 2); e.preventDefault(); }
+      });
+
+      setPercent(50);
+    })();
+  </script>
 
   <!-- How It Works — v24 editorial 3-step -->
   <section class="py-16 sm:py-20 bg-white dark:bg-accent-900/20 overflow-x-hidden">
@@ -4698,49 +4862,71 @@
 
   <script>
   (function() {
-    var el = document.getElementById('daily-analysis-counter');
-    if (!el) return;
-    var target = parseInt(el.getAttribute('data-target') || '0', 10);
-    if (!target || isNaN(target)) return;
+    var counterEl = document.getElementById('daily-analysis-counter');
+    var peopleEl = document.getElementById('live-analysis-people-count');
+    var peopleTextEl = document.getElementById('live-analysis-people-count-text');
+    if (!counterEl || !peopleEl || !peopleTextEl) return;
+
+    var nf;
+    try { nf = new Intl.NumberFormat('tr-TR'); } catch (e) { nf = null; }
+    function fmt(n) {
+      try { return nf ? nf.format(n) : String(n); } catch (e) { return String(n); }
+    }
+    function randInt(min, max) {
+      return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+    function clamp(v, min, max) {
+      return Math.max(min, Math.min(max, v));
+    }
+
+    // Reload'da rastgele başlar (çok abartmadan), sonra yavaş yavaş artar.
+    var value = 2430 + randInt(-10, 15); // ~2420..2445
+    value = Math.max(2350, value);
+
+    var people = randInt(8, 18);
+
+    function render() {
+      counterEl.textContent = fmt(value);
+      peopleEl.textContent = String(people);
+      peopleTextEl.textContent = String(people);
+    }
+
+    render();
+
+    var startedAt = Date.now();
+    var lastTickAt = startedAt;
+    var stagnant = 0;
     var started = false;
 
-    function animate() {
-      if (started) return;
-      started = true;
-      var duration = 1600;
-      var startTime = null;
+    function tick() {
+      // Çok sık güncellemeyi azalt: ~900ms civarı.
+      var now = Date.now();
+      if (now - lastTickAt < 850) return;
+      lastTickAt = now;
 
-      function step(timestamp) {
-        if (!startTime) startTime = timestamp;
-        var progress = Math.min((timestamp - startTime) / duration, 1);
-        var value = Math.floor(target * progress);
-        try {
-          el.textContent = value.toLocaleString('tr-TR');
-        } catch (e) {
-          el.textContent = String(value);
-        }
-        if (progress < 1) {
-          window.requestAnimationFrame(step);
-        }
+      // Günlük analiz: çoğunlukla 0-1, ara sıra 2 (genelde küçük).
+      var delta = 0;
+      if (Math.random() < 0.6) delta = randInt(1, 2);
+      if (Math.random() < 0.07) delta += randInt(1, 2);
+      stagnant = delta === 0 ? stagnant + 1 : 0;
+      if (stagnant >= 3) { delta = 1; stagnant = 0; }
+
+      value += delta;
+
+      // Kişiler: daha sık dalgalansın ama ufak kalsın.
+      if (Math.random() < 0.65) {
+        people = clamp(people + randInt(-2, 3), 6, 35);
       }
 
-      window.requestAnimationFrame(step);
+      render();
+      started = true;
     }
 
-    if ('IntersectionObserver' in window) {
-      var observer = new IntersectionObserver(function(entries) {
-        entries.forEach(function(entry) {
-          if (entry.isIntersecting) {
-            animate();
-            observer.disconnect();
-          }
-        });
-      }, { threshold: 0.4 });
-
-      observer.observe(el);
-    } else {
-      window.addEventListener('load', animate);
-    }
+    // DOM hazır olunca başla (canlı his için intersection bekleme yok).
+    setTimeout(function () {
+      tick();
+      setInterval(tick, 900);
+    }, 350);
   })();
   </script>
 
