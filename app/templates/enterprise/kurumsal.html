@@ -82,7 +82,7 @@
     }
     .enterprise-subnav-wrap {
       position: sticky;
-      top: 64px;
+      top: 56px;
       z-index: 45;
       background: rgba(248, 249, 250, 0.86);
       backdrop-filter: blur(14px);
@@ -127,6 +127,9 @@
         font-size: 0.86rem;
         padding: 0.5rem 1rem;
       }
+    }
+    @media (min-width: 640px) {
+      .enterprise-subnav-wrap { top: 64px; }
     }
     @media (min-width: 1024px) {
       .enterprise-subnav-wrap { top: 72px; }

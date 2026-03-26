@@ -65,11 +65,13 @@
       justify-content:space-between;
       gap:12px;
       margin-bottom:32px;
-      flex-wrap:wrap;
+      flex-wrap:nowrap;
     }
     .header a{display:inline-flex;align-items:center;gap:10px;text-decoration:none;color:inherit;}
     .header img{height:32px;width:auto;}
+    .header-right{display:flex;align-items:center;gap:10px;min-width:0;flex-shrink:1;}
     .brand-tagline{font-size:12px;color:#64748b;font-weight:500;}
+    @media(max-width:640px){.brand-tagline{display:none;}.header-right{gap:8px;}}
     .hero{
       background:#ffffff;
       border-radius:24px;
@@ -78,6 +80,7 @@
       margin-bottom:40px;
       text-align:center;
     }
+    @media(max-width:480px){.hero{padding:32px 20px 28px;border-radius:20px;}}
     .hero-badge{
       font-size:11px;
       font-weight:600;
@@ -321,7 +324,7 @@
       </p>
       <div class="hero-ctas">
         <a href="#plans" class="hero-cta hero-cta--primary">{{ t.get("cta_view_plans", "View Plans") }}</a>
-        <a href="{{ base_url }}/#analyze" class="hero-cta hero-cta--secondary" style="display:inline-flex;align-items:center;justify-content:center;background:#0EA5A4;color:#fff;padding:14px 28px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);">{{ t.get("cta_start_free", "Start Free") }}</a>
+        <a href="{{ base_url }}/#analyze" class="hero-cta hero-cta--primary">{{ t.get("cta_start_free", "Start Free") }}</a>
       </div>
     </section>
 
@@ -336,7 +339,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }}{% if t.get('plan_free_limited_note') %} {{ t.get('plan_free_limited_note') }}{% endif %}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("plan_free_feature_secondary", t.get("trust_pdf", "Basic output")) }}</span></li>
           </ul>
-          <a href="{{ base_url }}/#analyze" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;background:#f8fafc;color:#0EA5A4;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #0EA5A4;">{{ t.get("cta_start_free", "Start Free") }}</a>
+          <a href="{{ base_url }}/#analyze" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;">{{ t.get("cta_start_free", "Start Free") }}</a>
         </article>
 
         {% set single = plans.single %}
@@ -352,7 +355,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("plan_premium_feature_pdf", t.get("trust_pdf", "Downloadable PDF report")) }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("kdv_dahil", "VAT included") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=single" class="plan-cta plan-cta--primary" style="display:block;text-align:center;background:#0EA5A4;color:#fff;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 6px 20px rgba(14,165,164,.3);">{{ t.get("cta_get_premium_report", "Get Premium Report") or t.get("cta_single", "Get Premium Report") }}</a>
+          <a href="{{ base_url }}/payment?plan=single" class="plan-cta plan-cta--primary" style="display:block;text-align:center;">{{ t.get("cta_get_premium_report", "Get Premium Report") or t.get("cta_single", "Get Premium Report") }}</a>
         </article>
 
         {% set monthly = plans.monthly %}
@@ -369,7 +372,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("plan_premium_feature_pdf", t.get("trust_pdf", "Downloadable PDF report")) }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("cancel_anytime", "Cancel anytime") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=monthly" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;background:#f8fafc;color:#0EA5A4;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #0EA5A4;">{{ t.get("cta_start_monthly", t.get("cta_monthly", "Start Monthly Plan")) }}</a>
+          <a href="{{ base_url }}/payment?plan=monthly" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;">{{ t.get("cta_start_monthly", t.get("cta_monthly", "Start Monthly Plan")) }}</a>
         </article>
 
         {% set yearly = plans.yearly %}
@@ -387,7 +390,7 @@
             <li><span class="bullet">✓</span><span>{{ t.get("cancel_anytime", "Cancel anytime") }}</span></li>
             <li><span class="bullet">✓</span><span>{{ t.get("active_after_payment", "Active immediately after payment") }}</span></li>
           </ul>
-          <a href="{{ base_url }}/payment?plan=yearly" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;background:#f8fafc;color:#0EA5A4;padding:14px 24px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid #0EA5A4;">{{ t.get("cta_start_yearly", t.get("cta_yearly", "Get Norya Plus")) }}</a>
+          <a href="{{ base_url }}/payment?plan=yearly" class="plan-cta plan-cta--ghost" style="display:block;text-align:center;">{{ t.get("cta_start_yearly", t.get("cta_yearly", "Get Norya Plus")) }}</a>
         </article>
       </div>
 
@@ -479,8 +482,17 @@
       <a href="/trust?lang={{ lang }}" style="color:#64748b;text-decoration:none;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='#64748b'">
         Trust Center
       </a>
+      <a href="/methodology?lang={{ lang }}" style="color:#64748b;text-decoration:none;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='#64748b'">
+        Methodology
+      </a>
       <a href="/transparency?lang={{ lang }}" style="color:#64748b;text-decoration:none;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='#64748b'">
         Transparency
+      </a>
+      <a href="/about" style="color:#64748b;text-decoration:none;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='#64748b'">
+        About
+      </a>
+      <a href="/security" style="color:#64748b;text-decoration:none;" onmouseover="this.style.color='#0f766e'" onmouseout="this.style.color='#64748b'">
+        Security
       </a>
     </div>
   </nav>

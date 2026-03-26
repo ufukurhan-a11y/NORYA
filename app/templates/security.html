@@ -4,18 +4,18 @@
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>Privacy & Security | NoryaAI</title>
-<meta name="description" content="Privacy-First Architecture. At NoryaAI, your biological data is treated with the same reverence as clinical research. Zero-trust, HIPAA & GDPR compliant."/>
+<meta name="description" content="Privacy-first architecture at NoryaAI. Learn how we protect your health data with encryption, access controls, and compliance with GDPR and KVKK regulations."/>
 <meta name="robots" content="index,follow" />
 {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
 <meta property="og:type" content="website" />
 <meta property="og:title" content="Privacy & Security | NoryaAI" />
-<meta property="og:description" content="Privacy-First Architecture. At NoryaAI, your biological data is treated with the same reverence as clinical research. Zero-trust, HIPAA & GDPR compliant." />
+<meta property="og:description" content="Privacy-first architecture at NoryaAI. Learn how we protect your health data with encryption, access controls, and compliance with GDPR and KVKK regulations." />
 {% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
 {% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% if 'og-default.png' in og_image %}{% include "partials/og_default_dimensions.html" %}{% endif %}{% endif %}
 <meta property="og:locale" content="en_US" />
 <meta name="twitter:card" content="summary_large_image" />
 <meta name="twitter:title" content="Privacy & Security | NoryaAI" />
-<meta name="twitter:description" content="Privacy-First Architecture. At NoryaAI, your biological data is treated with the same reverence as clinical research. Zero-trust, HIPAA & GDPR compliant." />
+<meta name="twitter:description" content="Privacy-first architecture at NoryaAI. Learn how we protect your health data with encryption, access controls, and compliance with GDPR and KVKK regulations." />
 {% if og_image %}<meta name="twitter:image" content="{{ og_image }}" />{% endif %}
 <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
@@ -126,12 +126,13 @@
 <a class="text-primary border-b-2 border-primary pb-1" href="/security">Security</a>
 <a class="text-slate-600 hover:text-slate-900 transition-colors" href="/pricing">Pricing</a>
 </div>
-<div class="flex items-center gap-4">
+<div class="flex items-center gap-3">
+{% include "partials/header_lang.html" %}
 <a href="/#analyze" class="hidden md:inline-flex items-center gap-2 bg-primary text-white px-7 py-2.5 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-lg shadow-primary/20">
 Get Started
 <svg class="w-4 h-4"><use href="#i-arrow"/></svg>
 </a>
-<button class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-surface-container transition-colors" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu">
+<button class="md:hidden flex items-center justify-center w-10 h-10 rounded-lg hover:bg-surface-container transition-colors border border-outline-variant/20" onclick="document.getElementById('mobileMenu').classList.toggle('open')" aria-label="Menu">
 <svg class="w-6 h-6"><use href="#i-menu"/></svg>
 </button>
 </div>
@@ -186,12 +187,12 @@ Get Started <svg class="w-4 h-4"><use href="#i-arrow"/></svg>
 <span class="text-primary font-bold tracking-wider text-xs uppercase">Security Excellence</span>
 </div>
 </div>
-<h1 class="reveal reveal-delay-1 text-5xl md:text-6xl lg:text-7xl font-headline font-extrabold tracking-tighter text-on-background leading-[1.08] mb-8">
+<h1 class="reveal reveal-delay-1 text-3xl sm:text-5xl md:text-6xl lg:text-7xl font-headline font-extrabold tracking-tighter text-on-background leading-[1.08] mb-8">
 Privacy-First<br/>
 <span class="gradient-text">Architecture.</span>
 </h1>
 <p class="reveal reveal-delay-2 text-lg md:text-xl text-secondary leading-relaxed mb-10 max-w-2xl">
-At NoryaAI, your biological data is treated with the same reverence as clinical research. We have engineered a zero-trust environment where privacy isn't a feature&mdash;it's the foundation.
+At NoryaAI, your health data is protected by design. We follow a privacy-first approach where data security is built into every layer of our architecture.
 </p>
 <div class="reveal reveal-delay-3 flex flex-wrap gap-4 mb-12">
 <a href="/#analyze" class="inline-flex items-center gap-2 bg-primary text-white px-8 py-4 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-xl shadow-primary/20">
@@ -325,11 +326,11 @@ View Architecture
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
 <svg class="w-4 h-4"><use href="#i-security-badge"/></svg> Defense in Depth
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
+<h2 class="reveal reveal-delay-1 text-2xl sm:text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 Six Layers of <span class="gradient-text">Protection</span>
 </h2>
 <p class="reveal reveal-delay-2 text-secondary text-lg max-w-2xl mx-auto leading-relaxed">
-Every piece of your health data passes through multiple security layers before storage, ensuring military-grade protection at every step.
+Every piece of your health data passes through multiple security layers before storage, providing robust protection at every step.
 </p>
 </div>
 
@@ -372,7 +373,7 @@ Every piece of your health data passes through multiple security layers before s
 <div class="relative z-10">
 <div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-finger"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Multi-Factor Authentication</h3>
-<p class="text-secondary text-sm leading-relaxed mb-6">Biometric, OTP and device-based authentication layers ensure only you can access your health data. Unauthorized access is impossible.</p>
+<p class="text-secondary text-sm leading-relaxed mb-6">Biometric, OTP and device-based authentication layers help ensure only you can access your health data. Multiple verification steps significantly reduce the risk of unauthorized access.</p>
 <div class="flex items-center gap-2 text-xs text-primary font-bold uppercase tracking-wider">
 <span class="w-6 h-[2px] bg-gradient-to-r from-primary to-primary-container rounded-full"></span> Biometric
 </div>
@@ -413,14 +414,14 @@ Every piece of your health data passes through multiple security layers before s
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 border border-white/10 mb-6 text-primary-container font-bold tracking-wider text-xs uppercase">
 <svg class="w-4 h-4"><use href="#i-hub"/></svg> Security Architecture
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
+<h2 class="reveal reveal-delay-1 text-2xl sm:text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 How Your Data <span class="text-inverse-primary">Stays Safe</span>
 </h2>
 <p class="reveal reveal-delay-2 text-inverse-on-surface/60 text-lg max-w-2xl mx-auto leading-relaxed">
 From the moment your lab results enter our system, multiple security layers protect every byte of information through its entire lifecycle.
 </p>
 </div>
-<div class="reveal grid grid-cols-1 md:grid-cols-5 gap-4 md:gap-0 items-start">
+<div class="reveal grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-4 lg:gap-0 items-start">
 <div class="flex flex-col items-center text-center group">
 <div class="w-16 h-16 rounded-2xl bg-white/10 border border-white/10 flex items-center justify-center mb-4 group-hover:bg-primary/30 group-hover:border-primary/30 transition-all duration-500">
 <svg class="w-7 h-7 text-inverse-primary"><use href="#i-upload"/></svg>
@@ -428,7 +429,7 @@ From the moment your lab results enter our system, multiple security layers prot
 <h4 class="font-headline font-bold text-sm mb-2">Data Ingestion</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">TLS 1.3 encrypted upload with certificate pinning</p>
 </div>
-<div class="hidden md:flex items-center justify-center pt-8">
+<div class="hidden lg:flex items-center justify-center pt-8">
 <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-inverse-primary/30 to-transparent relative">
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
@@ -440,7 +441,7 @@ From the moment your lab results enter our system, multiple security layers prot
 <h4 class="font-headline font-bold text-sm mb-2">Encryption Layer</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">AES-256 with per-user unique keys via HSM</p>
 </div>
-<div class="hidden md:flex items-center justify-center pt-8">
+<div class="hidden lg:flex items-center justify-center pt-8">
 <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-inverse-primary/30 to-transparent relative">
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
@@ -452,7 +453,7 @@ From the moment your lab results enter our system, multiple security layers prot
 <h4 class="font-headline font-bold text-sm mb-2">AI Sandbox</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">Zero-knowledge processing in isolated containers</p>
 </div>
-<div class="hidden md:flex items-center justify-center pt-8">
+<div class="hidden lg:flex items-center justify-center pt-8">
 <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-inverse-primary/30 to-transparent relative">
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
@@ -464,7 +465,7 @@ From the moment your lab results enter our system, multiple security layers prot
 <h4 class="font-headline font-bold text-sm mb-2">Secure Storage</h4>
 <p class="text-inverse-on-surface/50 text-xs leading-relaxed px-2">Geo-redundant encrypted storage with auto-backup</p>
 </div>
-<div class="hidden md:flex items-center justify-center pt-8">
+<div class="hidden lg:flex items-center justify-center pt-8">
 <div class="w-full h-[2px] bg-gradient-to-r from-transparent via-inverse-primary/30 to-transparent relative">
 <div class="absolute right-0 top-1/2 -translate-y-1/2 w-2 h-2 bg-inverse-primary rounded-full"></div>
 </div>
@@ -488,7 +489,7 @@ From the moment your lab results enter our system, multiple security layers prot
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
 <svg class="w-4 h-4"><use href="#i-dns"/></svg> Infrastructure
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
+<h2 class="reveal reveal-delay-1 text-2xl sm:text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 World-Class<br/><span class="gradient-text">Infrastructure</span>
 </h2>
 <p class="reveal reveal-delay-2 text-secondary text-lg leading-relaxed mb-10">
@@ -562,7 +563,7 @@ We partner with global leaders in edge security to ensure NoryaAI is resilient a
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
 <svg class="w-4 h-4"><use href="#i-data-rights"/></svg> Data Rights
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
+<h2 class="reveal reveal-delay-1 text-2xl sm:text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">
 Your Data, Your <span class="gradient-text">Sovereignty</span>
 </h2>
 <p class="reveal reveal-delay-2 text-secondary text-lg max-w-2xl mx-auto leading-relaxed">
@@ -580,13 +581,13 @@ We provide the tools and legal frameworks to keep you in total control of your h
 <div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-eye-off"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Zero-Knowledge Encryption</h3>
 <p class="text-secondary text-sm leading-relaxed mb-6">NoryaAI staff cannot view your biomarker results. The AI processes data in an encrypted sandbox, returning insights without exposing raw values.</p>
-<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="#">Technical details <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1"><use href="#i-arrow"/></svg></a>
+<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="/trust">Trust Center <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1"><use href="#i-arrow"/></svg></a>
 </div>
 <div class="reveal reveal-delay-2 card-premium group p-8 md:p-10">
 <div class="card-icon mb-6"><svg class="w-6 h-6 text-primary"><use href="#i-download"/></svg></div>
 <h3 class="text-xl font-headline font-bold mb-3 text-on-surface">Data Portability</h3>
 <p class="text-secondary text-sm leading-relaxed mb-6">Export all your health data in standard formats anytime. Your data is never locked in&mdash;take it wherever you want, whenever you want.</p>
-<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="#">Export options <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1"><use href="#i-arrow"/></svg></a>
+<a class="inline-flex items-center gap-2 text-primary font-bold text-sm hover:gap-3 transition-all group/link" href="/legal/gizlilik-politikasi">Privacy Policy <svg class="w-4 h-4 transition-transform group-hover/link:translate-x-1"><use href="#i-arrow"/></svg></a>
 </div>
 </div>
 </div>
@@ -599,7 +600,7 @@ We provide the tools and legal frameworks to keep you in total control of your h
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
 <svg class="w-4 h-4"><use href="#i-gavel"/></svg> Compliance
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Regulatory <span class="gradient-text">Excellence</span></h2>
+<h2 class="reveal reveal-delay-1 text-2xl sm:text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Regulatory <span class="gradient-text">Excellence</span></h2>
 <p class="reveal reveal-delay-2 text-secondary text-lg max-w-2xl mx-auto leading-relaxed">We don't just meet regulations&mdash;we exceed them. Every feature is designed with compliance built into its DNA.</p>
 </div>
 <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
@@ -674,7 +675,7 @@ We provide the tools and legal frameworks to keep you in total control of your h
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
 <svg class="w-4 h-4"><use href="#i-timeline"/></svg> Milestones
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Security <span class="gradient-text">Milestones</span></h2>
+<h2 class="reveal reveal-delay-1 text-2xl sm:text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Security <span class="gradient-text">Milestones</span></h2>
 </div>
 <div class="relative">
 <div class="absolute left-6 md:left-1/2 top-0 bottom-0 w-[2px] bg-outline-variant/20 md:-translate-x-[1px]"></div>
@@ -711,7 +712,7 @@ We provide the tools and legal frameworks to keep you in total control of your h
 <span class="reveal inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/5 border border-primary/10 mb-6 text-primary font-bold tracking-wider text-xs uppercase">
 <svg class="w-4 h-4"><use href="#i-help"/></svg> FAQ
 </span>
-<h2 class="reveal reveal-delay-1 text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Frequently Asked <span class="gradient-text">Questions</span></h2>
+<h2 class="reveal reveal-delay-1 text-2xl sm:text-4xl md:text-5xl font-headline font-extrabold tracking-tight mb-6">Frequently Asked <span class="gradient-text">Questions</span></h2>
 </div>
 <div class="reveal space-y-4">
 <div class="faq-item bg-white rounded-2xl border border-outline-variant/10 overflow-hidden shadow-sm hover:shadow-md transition-shadow" onclick="toggleFaq(this)">
@@ -750,7 +751,7 @@ We provide the tools and legal frameworks to keep you in total control of your h
 <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[300px] bg-primary/15 rounded-full blur-[120px] pointer-events-none"></div>
 <div class="relative z-10">
 <svg class="w-14 h-14 text-inverse-primary mx-auto mb-6"><use href="#i-shield-check"/></svg>
-<h2 class="text-3xl md:text-5xl font-headline font-extrabold text-white tracking-tight mb-6 leading-tight">Start Your Secure<br/>Health Journey Today</h2>
+<h2 class="text-2xl sm:text-3xl md:text-5xl font-headline font-extrabold text-white tracking-tight mb-6 leading-tight">Start Your Secure<br/>Health Journey Today</h2>
 <p class="text-inverse-on-surface/60 text-lg max-w-xl mx-auto mb-10 leading-relaxed">Join thousands who trust NoryaAI with their most sensitive health data. Your privacy is our promise.</p>
 <div class="flex flex-wrap justify-center gap-4">
 <a href="/#analyze" class="inline-flex items-center gap-2 bg-primary text-white px-10 py-4 rounded-full font-headline font-bold text-sm hover:opacity-90 transition-all active:scale-95 shadow-xl shadow-primary/30">
@@ -771,12 +772,13 @@ Contact Security Team <svg class="w-4 h-4"><use href="#i-mail"/></svg>
   <div class="flex flex-wrap gap-x-6 gap-y-2 text-sm">
     <a href="/analyze" class="text-slate-500 hover:text-teal-700">Analyze</a>
     <a href="/pricing" class="text-slate-500 hover:text-teal-700">Pricing</a>
+    <a href="/trust" class="text-slate-500 hover:text-teal-700">Trust Center</a>
+    <a href="/methodology" class="text-slate-500 hover:text-teal-700">Methodology</a>
+    <a href="/medical-review" class="text-slate-500 hover:text-teal-700">Medical Review</a>
+    <a href="/transparency" class="text-slate-500 hover:text-teal-700">Transparency</a>
+    <a href="/about" class="text-slate-500 hover:text-teal-700">About</a>
     <a href="/how-it-works" class="text-slate-500 hover:text-teal-700">How it works</a>
     <a href="/en/blog" class="text-slate-500 hover:text-teal-700">Blog</a>
-    <a href="/en/upload-blood-test-results" class="text-slate-500 hover:text-teal-700">Upload Results</a>
-    <a href="/en/blood-test-results-explained" class="text-slate-500 hover:text-teal-700">Results Explained</a>
-    <a href="/en/sample-blood-test-reports" class="text-slate-500 hover:text-teal-700">Sample Reports</a>
-    <a href="/en/ai-blood-test-analyzer" class="text-slate-500 hover:text-teal-700">AI Analyzer</a>
   </div>
 </nav>
 
@@ -789,7 +791,7 @@ Contact Security Team <svg class="w-4 h-4"><use href="#i-mail"/></svg>
 </a>
 <p class="text-secondary text-sm leading-relaxed">Personalized AI-driven health analytics powered by your unique biological blueprint.</p>
 <div class="flex gap-3">
-<a class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all" href="#"><svg class="w-4 h-4"><use href="#i-globe"/></svg></a>
+<a class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all" href="/"><svg class="w-4 h-4"><use href="#i-globe"/></svg></a>
 <a class="w-9 h-9 rounded-lg bg-surface-container flex items-center justify-center hover:bg-primary/10 hover:text-primary transition-all" href="mailto:security@noryaai.com"><svg class="w-4 h-4"><use href="#i-mail"/></svg></a>
 </div>
 </div>
@@ -798,7 +800,9 @@ Contact Security Team <svg class="w-4 h-4"><use href="#i-mail"/></svg>
 <ul class="space-y-3 text-sm text-secondary">
 <li><a class="hover:text-primary transition-colors" href="/">Biomarkers</a></li>
 <li><a class="hover:text-primary transition-colors" href="/science">Science</a></li>
-<li><a class="hover:text-primary transition-colors" href="/technology">Clinical Reports</a></li>
+<li><a class="hover:text-primary transition-colors" href="/trust">Trust Center</a></li>
+<li><a class="hover:text-primary transition-colors" href="/methodology">Methodology</a></li>
+<li><a class="hover:text-primary transition-colors" href="/about">About</a></li>
 </ul>
 </div>
 <div class="space-y-5">
@@ -820,7 +824,7 @@ Contact Security Team <svg class="w-4 h-4"><use href="#i-mail"/></svg>
 </div>
 </div>
 <div class="max-w-7xl mx-auto px-6 md:px-8 mt-12 pt-8 border-t border-outline-variant/10 flex flex-col md:flex-row justify-between items-center gap-4">
-<p class="text-secondary text-xs tracking-wide">&copy; 2025 NoryaAI. Clinical Grade Data Encryption.</p>
+<p class="text-secondary text-xs tracking-wide">&copy; 2018–2026 NoryaAI. Clinical Grade Data Encryption.</p>
 <div class="flex items-center gap-4 text-xs text-secondary">
 <a href="/legal/gizlilik-politikasi" class="hover:text-primary transition-colors">Privacy</a>
 <span class="text-outline-variant">|</span>

@@ -80,6 +80,7 @@ from app.how_it_works_i18n import (
     get_how_it_works_meta,
     get_how_it_works_ui,
 )
+from app.about_contact_i18n import ABOUT_CONTACT_LANGS, get_about_ui, get_contact_ui
 from app.base_i18n import get_base_ui
 from app.landing_i18n import (
     LANDING_ROUTES,
@@ -2094,7 +2095,7 @@ def blog_detail(request: Request, lang: str, slug: str):
     logo_url = f"{base_url}/static/logo.png"
     blog_posting_schema = {
         "@context": "https://schema.org",
-        "@type": ["BlogPosting", "MedicalWebPage"],
+        "@type": "BlogPosting",
         "headline": art["seo_title"] or art["title"],
         "description": art["seo_description"] or art["subtitle"],
         "image": cover_absolute,
@@ -2881,17 +2882,55 @@ def _how_it_works_lang_from_request(request: Request) -> str:
     return parsed if parsed in HOW_IT_WORKS_LANGS else DEFAULT_HOW_IT_WORKS_LANG
 
 
+def _page_lang(request: Request) -> str:
+    """Resolve language for about/contact pages from ?lang=, cookie, or fallback."""
+    lang_q = (request.query_params.get("lang") or "").strip().lower()[:2]
+    if lang_q in ABOUT_CONTACT_LANGS:
+        return lang_q
+    lang_cookie = (request.cookies.get("norya_lang") or "").strip().lower()[:2]
+    if lang_cookie in ABOUT_CONTACT_LANGS:
+        return lang_cookie
+    return "en"
+
+
 @app.get("/about", response_class=HTMLResponse)
 def about_page(request: Request):
-    """Hakkımızda / About sayfası – Stitch v21 tasarımı."""
+    """Hakkımızda / About – kurumsal marka sayfası."""
+    lang = _page_lang(request)
+    request.state.locale = lang
+    t = get_about_ui(lang)
     base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
         "about.html",
         {
             "request": request,
+            "t": t,
+            "base_ui": get_base_ui(lang),
             "canonical_url": f"{base_url}/about",
-            "base_url": base_url,
             "og_image": f"{base_url}/static/images/og-default.png",
+            "hreflang_alternates": [{"lang": c, "url": f"{base_url}/about?lang={c}"} for c in ABOUT_CONTACT_LANGS]
+                + [{"lang": "x-default", "url": f"{base_url}/about?lang=en"}],
+        },
+    )
+
+
+@app.get("/contact", response_class=HTMLResponse)
+def contact_page(request: Request):
+    """İletişim – kurumsal contact sayfası."""
+    lang = _page_lang(request)
+    request.state.locale = lang
+    t = get_contact_ui(lang)
+    base_url = str(request.base_url).rstrip("/")
+    return templates.TemplateResponse(
+        "contact.html",
+        {
+            "request": request,
+            "t": t,
+            "base_ui": get_base_ui(lang),
+            "canonical_url": f"{base_url}/contact",
+            "og_image": f"{base_url}/static/images/og-default.png",
+            "hreflang_alternates": [{"lang": c, "url": f"{base_url}/contact?lang={c}"} for c in ABOUT_CONTACT_LANGS]
+                + [{"lang": "x-default", "url": f"{base_url}/contact?lang=en"}],
         },
     )
 
@@ -7066,6 +7105,7 @@ def sitemap_xml(request: Request):
     add(f"{base_url}/pricing", priority="0.8", lastmod=today)
     add(f"{base_url}/how-it-works", priority="0.8", lastmod=today)
     add(f"{base_url}/about", priority="0.6", changefreq="monthly", lastmod=today)
+    add(f"{base_url}/about/founder", priority="0.5", changefreq="monthly", lastmod=today)
     add(f"{base_url}/science", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/security", priority="0.6", changefreq="monthly", lastmod=today)
     add(f"{base_url}/technology", priority="0.6", changefreq="monthly", lastmod=today)

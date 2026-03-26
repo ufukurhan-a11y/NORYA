@@ -3,7 +3,7 @@
 {% set _brand = brand_name|default('NoryaAI') %}
 <!DOCTYPE html>
 <!-- DEBUG_FILE: base.html v1 -->
-<html lang="{{ _locale }}">
+<html lang="{{ _locale }}"{% if _locale in ('ar', 'he') %} dir="rtl"{% endif %}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
@@ -61,6 +61,8 @@
     .mobile-drawer-backdrop.open { opacity: 1; pointer-events: auto; }
     .mobile-drawer { position: fixed; top: 0; right: 0; height: 100%; width: min(86vw, 360px); background: #fff; z-index: 61; box-shadow: -20px 0 60px rgba(0,0,0,.18); padding: 16px; transform: translateX(100%); transition: transform .22s ease; padding-top: env(safe-area-inset-top); display: flex; flex-direction: column; }
     .mobile-drawer.open { transform: translateX(0); }
+    [dir="rtl"] .mobile-drawer { right: auto; left: 0; transform: translateX(-100%); box-shadow: 20px 0 60px rgba(0,0,0,.18); }
+    [dir="rtl"] .mobile-drawer.open { transform: translateX(0); }
     .mobile-drawer a { display: block; padding: 14px 12px; border-radius: 14px; font-weight: 500; color: #0b1b1f; text-decoration: none; }
     .mobile-drawer a:hover { background: rgba(14,165,164,.08); }
     /* WhatsApp FAB: safe-area, içerik kapatmasın, z-index header altında */
@@ -169,6 +171,8 @@
       <a href="/how-it-works?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_how|default('How it works') }}</a>
       <a href="/pricing?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_pricing|default('Pricing') }}</a>
       <a href="/kurumsal" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_corporate|default('Corporate') }}</a>
+      <a href="/legal/iletisim" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_contact|default('Contact') }}</a>
+      <a href="/trust?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
       <a href="/security" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_security|default('Security') }}</a>
       <a href="/{{ _locale }}/blog" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_blog|default('Blog') }}</a>
     </div>
@@ -179,29 +183,63 @@
   </main>
 
   <footer class="border-t border-norya-ink-subtle/20 bg-norya-surface-elevated mt-auto">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-10">
-      <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink-muted mb-3">{{ _base_ui.footer_company_heading|default('Contact & Company Info') }}</h3>
-      <div class="text-sm text-norya-ink-muted space-y-1 mb-6 max-w-full break-words">
-        <p><strong class="text-norya-ink">NoryaAI</strong> · Founded by Ufuk Urhan · Since 2018</p>
-        <p><a href="mailto:support@noryaai.com" class="text-norya-brand hover:underline">support@noryaai.com</a> · <a href="mailto:info@noryaai.com" class="text-norya-brand hover:underline">info@noryaai.com</a></p>
-        <p class="leading-relaxed">Hamburg, Germany (HQ) · Erfurt, Germany · Izmir, Türkiye</p>
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
+      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
+        {# Brand Block #}
+        <div class="col-span-2 lg:col-span-4">
+          <a href="/" class="inline-flex items-center mb-4" aria-label="{{ _brand }} home">
+            <img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 w-auto object-contain" width="160" height="40" loading="lazy" />
+          </a>
+          <p class="text-sm text-norya-ink-muted leading-relaxed mb-4 max-w-xs">{{ _base_ui.footer_brand_desc|default('Clear blood test interpretation. Multilingual clarity. Privacy-first design.') }}</p>
+          <div class="space-y-1 text-sm text-norya-ink-muted">
+            <p><a href="mailto:support@noryaai.com" class="text-norya-brand hover:underline">support@noryaai.com</a></p>
+            <p><a href="mailto:info@noryaai.com" class="text-norya-brand hover:underline">info@noryaai.com</a></p>
+          </div>
+        </div>
+        {# Product #}
+        <div class="lg:col-span-2">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-3">{{ _base_ui.footer_product_heading|default('Product') }}</h3>
+          <nav class="flex flex-col space-y-2.5 text-sm" aria-label="{{ _base_ui.footer_product_heading|default('Product') }}">
+            <a href="/how-it-works?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_how|default('How it works') }}</a>
+            <a href="/pricing?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_pricing|default('Pricing') }}</a>
+            <a href="/kurumsal" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_enterprise|default('Enterprise') }}</a>
+          </nav>
+        </div>
+        {# Trust & Safety #}
+        <div class="lg:col-span-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-3">{{ _base_ui.footer_trust_heading|default('Trust & Safety') }}</h3>
+          <nav class="flex flex-col space-y-2.5 text-sm" aria-label="{{ _base_ui.footer_trust_heading|default('Trust & Safety') }}">
+            <a href="/trust?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
+            <a href="/methodology?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_methodology|default('Methodology') }}</a>
+            <a href="/medical-review?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_medical_review|default('Medical Review') }}</a>
+            <a href="/transparency?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_transparency|default('Transparency') }}</a>
+            <a href="/security" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_security|default('Security') }}</a>
+            <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
+            <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_terms|default('Terms of Use') }}</a>
+          </nav>
+        </div>
+        {# Company #}
+        <div class="lg:col-span-3">
+          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-3">{{ _base_ui.footer_company_links_heading|default('Company') }}</h3>
+          <nav class="flex flex-col space-y-2.5 text-sm" aria-label="{{ _base_ui.footer_company_links_heading|default('Company') }}">
+            <a href="/about" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_about|default('About') }}</a>
+            <a href="/legal/iletisim" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_contact|default('Contact') }}</a>
+            <a href="/{{ _locale }}/blog" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_blog|default('Blog') }}</a>
+          </nav>
+          <div class="mt-4 pt-4 border-t border-norya-ink-subtle/10">
+            <p class="text-sm font-medium text-norya-ink">Hamburg, Germany</p>
+            <p class="text-xs text-norya-ink-muted mt-1">Erfurt, Germany · Izmir, Türkiye</p>
+          </div>
+        </div>
       </div>
-      <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-        <div class="flex items-center shrink-0"><img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 w-auto object-contain" width="160" height="40" loading="lazy" /></div>
-        <p class="text-sm text-norya-ink-muted">{{ _base_ui.footer_tagline|default('Lab results explained in plain language. Not a substitute for medical advice.') }}</p>
-      </div>
-      <div class="mt-6 pt-6 border-t border-norya-ink-subtle/20 flex flex-wrap gap-x-6 gap-y-3 text-sm text-norya-ink-muted">
-        <a href="/{{ _locale }}/blog" class="hover:text-norya-ink">{{ _base_ui.footer_blog|default('Blog') }}</a>
-        <a href="/pricing?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_pricing|default('Pricing') }}</a>
-        <a href="/how-it-works?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_how|default('How it works') }}</a>
-        <a href="/about" class="hover:text-norya-ink">{{ _base_ui.footer_about|default('About') }}</a>
-        <a href="/trust?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
-        <a href="/methodology?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_methodology|default('Methodology') }}</a>
-        <a href="/medical-review?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_medical_review|default('Medical Review') }}</a>
-        <a href="/transparency?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_transparency|default('Transparency') }}</a>
-        <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
-        <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="hover:text-norya-ink">{{ _base_ui.footer_terms|default('Terms of Use') }}</a>
-        <a href="/legal/iletisim" class="hover:text-norya-ink">{{ _base_ui.footer_contact|default('Contact') }}</a>
+      {# Bottom row #}
+      <div class="mt-10 pt-6 border-t border-norya-ink-subtle/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+        <p class="text-xs text-norya-ink-muted">{{ _base_ui.footer_copyright|default('© 2018–2026 NoryaAI. All rights reserved.') }}</p>
+        <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-norya-ink-muted">
+          <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="hover:text-norya-ink transition">{{ _base_ui.footer_privacy|default('Privacy') }}</a>
+          <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="hover:text-norya-ink transition">{{ _base_ui.footer_terms|default('Terms') }}</a>
+          <a href="/security" class="hover:text-norya-ink transition">{{ _base_ui.footer_security|default('Security') }}</a>
+        </div>
       </div>
     </div>
   </footer>
@@ -242,8 +280,8 @@
     <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
       <span id="cookie-text">{{ _base_ui.cookie_text|default('This site uses cookies to improve your experience and for analytics.') }}</span>
       <div style="display:flex;gap:8px;flex-shrink:0;">
-        <button id="cookie-accept" style="background:#2563eb;color:#fff;border:none;padding:8px 22px;border-radius:6px;font-size:14px;cursor:pointer;font-weight:500;">{{ _base_ui.cookie_accept|default('Accept') }}</button>
-        <button id="cookie-reject" style="background:transparent;color:#94a3b8;border:1px solid #475569;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer;">{{ _base_ui.cookie_reject|default('Reject') }}</button>
+        <button id="cookie-accept" style="background:#2563eb;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500;min-height:44px;">{{ _base_ui.cookie_accept|default('Accept') }}</button>
+        <button id="cookie-reject" style="background:transparent;color:#94a3b8;border:1px solid #475569;padding:10px 16px;border-radius:8px;font-size:14px;cursor:pointer;min-height:44px;">{{ _base_ui.cookie_reject|default('Reject') }}</button>
       </div>
     </div>
   </div>

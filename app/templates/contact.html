@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+{% block title %}{{ t.meta_title }}{% endblock %}
+{% block meta_seo %}
+<meta name="description" content="{{ t.meta_desc }}" />
+<meta property="og:type" content="website" />
+<meta property="og:title" content="{{ t.meta_title }}" />
+<meta property="og:description" content="{{ t.meta_desc }}" />
+{% if canonical_url %}<meta property="og:url" content="{{ canonical_url }}" />{% endif %}
+{% if og_image %}<meta property="og:image" content="{{ og_image }}" />{% endif %}
+<meta name="twitter:card" content="summary" />
+<meta name="twitter:title" content="{{ t.meta_title }}" />
+<meta name="twitter:description" content="{{ t.meta_desc }}" />
+{% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+{% for alt in hreflang_alternates %}<link rel="alternate" hreflang="{{ alt.lang }}" href="{{ alt.url }}" />
+{% endfor %}
+{% endblock %}
+
+{% block head %}
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  "name": "{{ t.meta_title }}",
+  "description": "{{ t.meta_desc }}",
+  "url": "{{ canonical_url }}",
+  "publisher": {
+    "@type": "Organization",
+    "name": "NoryaAI",
+    "url": "https://noryaai.com",
+    "email": "support@noryaai.com",
+    "contactPoint": [
+      {"@type": "ContactPoint", "email": "support@noryaai.com", "contactType": "customer support"},
+      {"@type": "ContactPoint", "email": "info@noryaai.com", "contactType": "sales"}
+    ]
+  }
+}
+</script>
+{% endblock %}
+
+{% block content %}
+<!-- Hero -->
+<section class="bg-gradient-to-b from-norya-surface-elevated to-norya-surface py-20 sm:py-28">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <h1 class="text-3xl sm:text-5xl font-bold text-norya-ink leading-tight mb-6">{{ t.hero_title }}</h1>
+    <p class="text-lg sm:text-xl text-norya-ink-muted max-w-2xl mx-auto leading-relaxed">{{ t.hero_desc }}</p>
+  </div>
+</section>
+
+<!-- Contact Paths -->
+<section class="py-16 sm:py-24 bg-norya-surface">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="bg-norya-surface-elevated rounded-2xl p-6 sm:p-8 border border-norya-ink-subtle/10">
+        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M9.879 7.519c1.171-1.025 3.071-1.025 4.242 0 1.172 1.025 1.172 2.687 0 3.712-.203.179-.43.326-.67.442-.745.361-1.45.999-1.45 1.827v.75M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0Zm-9 5.25h.008v.008H12v-.008Z"/></svg>
+        </div>
+        <h3 class="font-semibold text-norya-ink mb-2">{{ t.support_title }}</h3>
+        <p class="text-sm text-norya-ink-muted leading-relaxed mb-4">{{ t.support_desc }}</p>
+        <a href="mailto:support@noryaai.com" class="inline-flex items-center gap-2 text-sm font-medium text-norya-brand hover:underline">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+          {{ t.support_cta }}
+        </a>
+      </div>
+      <div class="bg-norya-surface-elevated rounded-2xl p-6 sm:p-8 border border-norya-ink-subtle/10">
+        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M20.25 14.15v4.25c0 1.094-.787 2.036-1.872 2.18-2.087.277-4.216.42-6.378.42s-4.291-.143-6.378-.42c-1.085-.144-1.872-1.086-1.872-2.18v-4.25m16.5 0a2.18 2.18 0 0 0 .75-1.661V8.706c0-1.081-.768-2.015-1.837-2.175a48.114 48.114 0 0 0-3.413-.387m4.5 8.006c-.194.165-.42.295-.673.38A23.978 23.978 0 0 1 12 15.75c-2.648 0-5.195-.429-7.577-1.22a2.016 2.016 0 0 1-.673-.38m0 0A2.18 2.18 0 0 1 3 12.489V8.706c0-1.081.768-2.015 1.837-2.175a48.111 48.111 0 0 1 3.413-.387m7.5 0V5.25A2.25 2.25 0 0 0 13.5 3h-3a2.25 2.25 0 0 0-2.25 2.25v.894m7.5 0a48.667 48.667 0 0 0-7.5 0M12 12.75h.008v.008H12v-.008Z"/></svg>
+        </div>
+        <h3 class="font-semibold text-norya-ink mb-2">{{ t.sales_title }}</h3>
+        <p class="text-sm text-norya-ink-muted leading-relaxed mb-4">{{ t.sales_desc }}</p>
+        <a href="mailto:info@noryaai.com" class="inline-flex items-center gap-2 text-sm font-medium text-norya-brand hover:underline">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+          {{ t.sales_cta }}
+        </a>
+      </div>
+      <div class="bg-norya-surface-elevated rounded-2xl p-6 sm:p-8 border border-norya-ink-subtle/10">
+        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+        </div>
+        <h3 class="font-semibold text-norya-ink mb-2">{{ t.enterprise_title }}</h3>
+        <p class="text-sm text-norya-ink-muted leading-relaxed mb-4">{{ t.enterprise_desc }}</p>
+        <a href="/kurumsal" class="inline-flex items-center gap-2 text-sm font-medium text-norya-brand hover:underline">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M13.5 6H5.25A2.25 2.25 0 0 0 3 8.25v10.5A2.25 2.25 0 0 0 5.25 21h10.5A2.25 2.25 0 0 0 18 18.75V10.5m-10.5 6L21 3m0 0h-5.25M21 3v5.25"/></svg>
+          {{ t.enterprise_cta }}
+        </a>
+      </div>
+      <div class="bg-norya-surface-elevated rounded-2xl p-6 sm:p-8 border border-norya-ink-subtle/10">
+        <div class="w-10 h-10 rounded-xl bg-norya-brand/10 flex items-center justify-center mb-4">
+          <svg class="w-5 h-5 text-norya-brand" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M8.625 12a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H8.25m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0H12m4.125 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm0 0h-.375M21 12c0 4.556-4.03 8.25-9 8.25a9.764 9.764 0 0 1-2.555-.337A5.972 5.972 0 0 1 5.41 20.97a5.969 5.969 0 0 1-.474-.065 4.48 4.48 0 0 0 .978-2.025c.09-.457-.133-.901-.467-1.226C3.93 16.178 3 14.189 3 12c0-4.556 4.03-8.25 9-8.25s9 3.694 9 8.25Z"/></svg>
+        </div>
+        <h3 class="font-semibold text-norya-ink mb-2">{{ t.general_title }}</h3>
+        <p class="text-sm text-norya-ink-muted leading-relaxed mb-4">{{ t.general_desc }}</p>
+        <a href="mailto:info@noryaai.com" class="inline-flex items-center gap-2 text-sm font-medium text-norya-brand hover:underline">
+          <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 0 1-2.25 2.25h-15a2.25 2.25 0 0 1-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0 0 19.5 4.5h-15a2.25 2.25 0 0 0-2.25 2.25m19.5 0v.243a2.25 2.25 0 0 1-1.07 1.916l-7.5 4.615a2.25 2.25 0 0 1-2.36 0L3.32 8.91a2.25 2.25 0 0 1-1.07-1.916V6.75"/></svg>
+          {{ t.general_cta }}
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Response Expectations -->
+<section class="py-12 sm:py-16 bg-norya-surface-elevated">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-xl font-bold text-norya-ink mb-4">{{ t.response_heading }}</h2>
+    <p class="text-norya-ink-muted leading-relaxed">{{ t.response_desc }}</p>
+  </div>
+</section>
+
+<!-- Company Info -->
+<section class="py-16 sm:py-24 bg-norya-surface">
+  <div class="max-w-3xl mx-auto px-4 sm:px-6">
+    <h2 class="text-xl font-bold text-norya-ink mb-6">{{ t.company_heading }}</h2>
+    <div class="bg-norya-surface-elevated rounded-2xl border border-norya-ink-subtle/10 divide-y divide-norya-ink-subtle/10">
+      <div class="flex items-center justify-between px-6 py-4">
+        <span class="text-sm font-medium text-norya-ink-muted">{{ t.company_name_label }}</span>
+        <span class="text-sm font-medium text-norya-ink">NoryaAI</span>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4">
+        <span class="text-sm font-medium text-norya-ink-muted">{{ t.company_founder_label }}</span>
+        <span class="text-sm font-medium text-norya-ink">Ufuk Urhan</span>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4">
+        <span class="text-sm font-medium text-norya-ink-muted">{{ t.company_founded_label }}</span>
+        <span class="text-sm font-medium text-norya-ink">2018</span>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4">
+        <span class="text-sm font-medium text-norya-ink-muted">{{ t.company_hq_label }}</span>
+        <span class="text-sm font-medium text-norya-ink">Hamburg, Germany</span>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4">
+        <span class="text-sm font-medium text-norya-ink-muted">{{ t.company_offices_label }}</span>
+        <span class="text-sm font-medium text-norya-ink">Erfurt, Germany · Izmir, Türkiye</span>
+      </div>
+      <div class="flex items-center justify-between px-6 py-4">
+        <span class="text-sm font-medium text-norya-ink-muted">{{ t.company_email_label }}</span>
+        <span class="text-sm"><a href="mailto:support@noryaai.com" class="text-norya-brand hover:underline">support@noryaai.com</a></span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Organization CTA -->
+<section class="py-16 sm:py-20 bg-norya-brand/5">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-4">{{ t.org_cta_title }}</h2>
+    <p class="text-norya-ink-muted max-w-2xl mx-auto mb-8 leading-relaxed">{{ t.org_cta_desc }}</p>
+    <div class="flex flex-col sm:flex-row items-center justify-center gap-4">
+      <a href="/kurumsal" class="inline-flex items-center justify-center px-6 py-3 rounded-norya font-medium text-white bg-norya-brand hover:bg-norya-brand-hover shadow-norya-brand transition">{{ t.org_demo }}</a>
+      <a href="mailto:info@noryaai.com" class="inline-flex items-center justify-center px-6 py-3 rounded-norya font-medium text-norya-ink border border-norya-ink-subtle/30 hover:bg-norya-surface-elevated transition">{{ t.org_sales }}</a>
+      <a href="/kurumsal" class="inline-flex items-center justify-center px-6 py-3 rounded-norya font-medium text-norya-brand border border-norya-brand/30 hover:bg-norya-brand/5 transition">{{ t.org_enterprise }}</a>
+    </div>
+  </div>
+</section>
+
+<!-- Trust Links -->
+<section class="py-12 sm:py-16 bg-norya-surface">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <h2 class="text-lg font-bold text-norya-ink mb-4 text-center">{{ t.trust_heading }}</h2>
+    <div class="flex flex-wrap justify-center gap-4 text-sm">
+      <a href="/trust?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-brand transition">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
+      <a href="/security" class="text-norya-ink-muted hover:text-norya-brand transition">{{ _base_ui.footer_security|default('Security') }}</a>
+      <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-brand transition">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
+      <a href="/medical-review?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-brand transition">{{ _base_ui.footer_medical_review|default('Medical Review') }}</a>
+    </div>
+  </div>
+</section>
+{% endblock %}
