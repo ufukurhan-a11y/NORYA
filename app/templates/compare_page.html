@@ -56,7 +56,14 @@
     .related-visual::after { content: ""; position: absolute; inset: 0; background: linear-gradient(180deg, rgba(15,23,42,0.02), rgba(15,23,42,0.72)); }
     @media (max-width: 768px) {
       .header-inner { padding-left: max(1rem, env(safe-area-inset-left)); padding-right: max(1rem, env(safe-area-inset-right)); }
+      .hero-visual { min-height: 360px; }
     }
+    .compare-mobile-backdrop { opacity: 0; pointer-events: none; transition: opacity .2s ease; }
+    .compare-mobile-backdrop.open { opacity: 1; pointer-events: auto; }
+    .compare-mobile-drawer { transform: translateX(100%); transition: transform .2s ease; }
+    .compare-mobile-drawer.open { transform: translateX(0); }
+    [dir="rtl"] .compare-mobile-drawer { transform: translateX(-100%); }
+    [dir="rtl"] .compare-mobile-drawer.open { transform: translateX(0); }
     body { padding-bottom: env(safe-area-inset-bottom, 0); }
     .reveal { opacity: 0; transform: translateY(24px); transition: opacity 0.7s cubic-bezier(.22,1,.36,1), transform 0.7s cubic-bezier(.22,1,.36,1); }
     .reveal.visible { opacity: 1; transform: translateY(0); }
@@ -94,11 +101,14 @@
       <a href="/{{ lang }}" class="flex items-center shrink-0" aria-label="NoryaAI home">
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-9 w-auto object-contain" width="180" height="45" loading="eager" />
       </a>
-      <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
+      <nav class="hidden lg:flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
         <a href="/{{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.ui_home }}</a>
         <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.ui_how_it_works }}</a>
         <a href="{{ base_url }}/pricing?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.ui_pricing }}</a>
         <a href="{{ base_url }}/{{ lang }}/blog" class="text-slate-600 hover:text-teal-600">{{ t.ui_blog }}</a>
+        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">{{ t.ui_analyze }}</a>
+      </nav>
+      <div class="flex items-center gap-3">
         <div class="header-lang-switch language-switch" aria-label="Language">
           <button type="button" id="base-lang-toggle" class="lang-trigger-btn" aria-haspopup="true" aria-expanded="false">
             <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
@@ -117,10 +127,25 @@
             <button type="button" class="header-lang-option" data-locale="ar">AR</button>
           </div>
         </div>
-        <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">{{ t.ui_analyze }}</a>
-      </nav>
+        <a href="{{ base_url }}/analyze" class="hidden sm:inline-flex items-center justify-center min-h-[44px] px-4 py-2 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:8px 18px;border-radius:12px;font-weight:600;text-decoration:none;">{{ t.ui_analyze }}</a>
+        <button type="button" class="lg:hidden w-10 h-10 rounded-lg border border-slate-200 flex items-center justify-center bg-white/80 shrink-0" onclick="document.getElementById('compare-mobile-drawer').classList.add('open');document.getElementById('compare-mobile-backdrop').classList.add('open');document.body.style.overflow='hidden'" aria-label="Open menu">☰</button>
+      </div>
     </div>
   </header>
+  <div id="compare-mobile-backdrop" class="compare-mobile-backdrop fixed inset-0 bg-black/30 z-[60]" onclick="document.getElementById('compare-mobile-drawer').classList.remove('open');this.classList.remove('open');document.body.style.overflow=''"></div>
+  <aside id="compare-mobile-drawer" class="compare-mobile-drawer fixed top-0 right-0 h-full w-[min(86vw,340px)] bg-white z-[61] shadow-2xl p-5 flex flex-col" role="dialog">
+    <div class="flex justify-between items-center mb-5">
+      <span class="font-semibold text-slate-900">Menu</span>
+      <button onclick="document.getElementById('compare-mobile-drawer').classList.remove('open');document.getElementById('compare-mobile-backdrop').classList.remove('open');document.body.style.overflow=''" class="w-9 h-9 rounded-lg border border-slate-200 flex items-center justify-center">✕</button>
+    </div>
+    <a href="{{ base_url }}/analyze" class="block text-center bg-teal-600 text-white font-semibold py-3 rounded-xl mb-3">{{ t.ui_analyze }}</a>
+    <a href="/{{ lang }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">{{ t.ui_home }}</a>
+    <a href="{{ base_url }}/{{ lang }}/compare/" class="block py-3 px-3 rounded-xl text-teal-600 font-semibold bg-teal-50">{{ t.ui_compare }}</a>
+    <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">{{ t.ui_how_it_works }}</a>
+    <a href="{{ base_url }}/pricing?lang={{ lang }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">{{ t.ui_pricing }}</a>
+    <a href="{{ base_url }}/{{ lang }}/blog" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">{{ t.ui_blog }}</a>
+    <a href="{{ base_url }}/trust?lang={{ lang }}" class="block py-3 px-3 rounded-xl text-slate-800 font-medium hover:bg-slate-50">Trust Center</a>
+  </aside>
 
   <main class="flex-1">
     <!-- BREADCRUMB -->
