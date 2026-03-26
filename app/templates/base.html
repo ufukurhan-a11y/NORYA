@@ -1,4 +1,4 @@
-{% set _locale = (request.state.locale if request and request.state and getattr(request.state, 'locale', none) else none) or 'en' %}
+{% set _locale = request.state.locale|default('en', true) %}
 {% set _base_ui = base_ui|default({}) %}
 {% set _brand = brand_name|default('NoryaAI') %}
 <!DOCTYPE html>
@@ -141,6 +141,7 @@
           <a href="/about?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_about|default('About') }}</a>
           <a href="/how-it-works?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_how|default('How it works') }}</a>
           <a href="/pricing?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_pricing|default('Pricing') }}</a>
+          <a href="/trust?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
           <a href="/kurumsal" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_corporate|default('Corporate') }}</a>
           <a href="/{{ _locale }}/blog" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.footer_blog|default('Blog') }}</a>
         </div>
@@ -173,7 +174,7 @@
       <a href="/kurumsal" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_corporate|default('Corporate') }}</a>
       <a href="/contact?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_contact|default('Contact') }}</a>
       <a href="/trust?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
-      <a href="/security" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_security|default('Security') }}</a>
+      <a href="/security?lang={{ _locale }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_security|default('Security') }}</a>
       <a href="/{{ _locale }}/blog" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.footer_blog|default('Blog') }}</a>
     </div>
   </aside>
@@ -213,7 +214,7 @@
             <a href="/methodology?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_methodology|default('Methodology') }}</a>
             <a href="/medical-review?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_medical_review|default('Medical Review') }}</a>
             <a href="/transparency?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_transparency|default('Transparency') }}</a>
-            <a href="/security" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_security|default('Security') }}</a>
+            <a href="/security?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_security|default('Security') }}</a>
             <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
             <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_terms|default('Terms of Use') }}</a>
           </nav>

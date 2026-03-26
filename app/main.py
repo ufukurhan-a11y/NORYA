@@ -807,9 +807,12 @@ def _render_faq(request: Request, lang: str):
     slug = get_faq_slug(lang)
     meta = {"meta_title": faq_data["meta_title"], "meta_description": faq_data["meta_description"]}
     og_image = f"{base_url}/static/images/og-faq.png"
+    # Keep the FAQ page focused on core product questions and avoid duplicating
+    # long-form company claims that are better explained on dedicated trust pages.
+    faq_items = faq_data.get("faqs", [])[:9]
     faq_entities = [
         {"@type": "Question", "name": f["q"], "acceptedAnswer": {"@type": "Answer", "text": f["a"]}}
-        for f in faq_data.get("faqs", [])
+        for f in faq_items
     ]
     faq_schema_json = json.dumps(
         {"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities},
@@ -829,6 +832,7 @@ def _render_faq(request: Request, lang: str):
             "og_locale": _OG_LOCALE_FAQ.get(lang, "en_US"),
             "og_image": og_image,
             "base_url": base_url,
+            "faq_items": faq_items,
             "faq_schema_json": faq_schema_json,
             "hreflang_links": hreflang,
         },
@@ -1740,6 +1744,11 @@ def redirect_kvkk():
     return RedirectResponse(url="/legal/kvkk-gdpr", status_code=302)
 
 
+@app.get("/legal/kvkk-aydinlatma-metni")
+def redirect_legacy_kvkk_notice():
+    return RedirectResponse(url="/legal/kvkk-gdpr", status_code=302)
+
+
 @app.get("/privacy-policy")
 def redirect_privacy():
     return RedirectResponse(url="/legal/gizlilik-politikasi", status_code=302)
@@ -1747,6 +1756,11 @@ def redirect_privacy():
 
 @app.get("/refund-policy")
 def redirect_refund():
+    return RedirectResponse(url="/iade-iptal", status_code=302)
+
+
+@app.get("/legal/iade-iptal")
+def redirect_legacy_refund_page():
     return RedirectResponse(url="/iade-iptal", status_code=302)
 
 
@@ -1796,6 +1810,7 @@ def iade_iptal_page(request: Request):
     content = get_legal_content("iade-iptal-politikasi", lang)
     if not content:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
+    page_title = content.get("title", "Refund") if isinstance(content, dict) else "Refund"
     base_url = str(request.base_url).rstrip("/")
     canonical_url = f"{base_url}/iade-iptal"
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/iade-iptal?lang={code}"} for code in LEGAL_HREFLANG_LANGS]
@@ -1803,7 +1818,7 @@ def iade_iptal_page(request: Request):
     breadcrumb_items = [
         {"@type": "ListItem", "position": 1, "name": BRAND_NAME, "item": base_url},
         {"@type": "ListItem", "position": 2, "name": ui.get("nav_legal", "Legal"), "item": base_url + "/iade-iptal"},
-        {"@type": "ListItem", "position": 3, "name": content.title if content else "Refund", "item": canonical_url},
+        {"@type": "ListItem", "position": 3, "name": page_title, "item": canonical_url},
     ]
     breadcrumb_schema = {"@context": "https://schema.org", "@type": "BreadcrumbList", "itemListElement": breadcrumb_items}
     breadcrumb_schema_json = json.dumps(breadcrumb_schema, ensure_ascii=False, indent=2)

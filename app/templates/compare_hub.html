@@ -116,7 +116,7 @@
       <nav class="flex items-center gap-3 sm:gap-4 text-sm font-medium flex-wrap justify-end">
         <a href="/{{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.ui_home }}</a>
         <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.ui_how_it_works }}</a>
-        <a href="{{ base_url }}/pricing" class="text-slate-600 hover:text-teal-600">{{ t.ui_pricing }}</a>
+        <a href="{{ base_url }}/pricing?lang={{ lang }}" class="text-slate-600 hover:text-teal-600">{{ t.ui_pricing }}</a>
         <a href="{{ base_url }}/{{ lang }}/blog" class="text-slate-600 hover:text-teal-600">{{ t.ui_blog }}</a>
         <div class="header-lang-switch language-switch" aria-label="Language">
           <button type="button" id="base-lang-toggle" class="lang-trigger-btn" aria-haspopup="true" aria-expanded="false">
@@ -387,7 +387,7 @@
         <p class="text-slate-300 text-sm mb-6">{{ t.cta_sub }}</p>
         <div class="flex flex-wrap gap-3 justify-center">
           <a href="{{ base_url }}/analyze" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl bg-norya-teal text-white font-semibold hover:opacity-95" style="background:#0EA5A4;color:#fff;padding:14px 28px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;box-shadow:0 8px 24px rgba(14,165,164,.3);">{{ t.cta_primary }}</a>
-          <a href="{{ base_url }}/pricing" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl border-2 border-white/80 text-white font-semibold hover:bg-white/10" style="padding:14px 28px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid rgba(255,255,255,.8);color:#fff;">{{ t.cta_secondary }}</a>
+          <a href="{{ base_url }}/pricing?lang={{ lang }}" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-xl border-2 border-white/80 text-white font-semibold hover:bg-white/10" style="padding:14px 28px;border-radius:12px;font-weight:700;font-size:16px;text-decoration:none;border:2px solid rgba(255,255,255,.8);color:#fff;">{{ t.cta_secondary }}</a>
         </div>
       </div>
     </section>
@@ -397,7 +397,7 @@
       <div class="max-w-3xl mx-auto">
         <ul class="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
           <li><a href="{{ base_url }}/analyze" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_analyze }}</a></li>
-          <li><a href="{{ base_url }}/pricing" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_pricing }}</a></li>
+          <li><a href="{{ base_url }}/pricing?lang={{ lang }}" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_pricing }}</a></li>
           <li><a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_how_it_works }}</a></li>
           <li><a href="{{ base_url }}/{{ lang }}/blog" class="text-teal-600 hover:text-teal-700 underline">{{ t.ui_blog }}</a></li>
         </ul>
@@ -409,7 +409,7 @@
     <div class="max-w-6xl mx-auto flex flex-wrap justify-center gap-4 text-sm text-slate-600">
       <a href="/{{ lang }}" class="hover:text-teal-600">{{ t.ui_home }}</a>
       <a href="{{ base_url }}/analyze" class="hover:text-teal-600">{{ t.ui_analyze }}</a>
-      <a href="{{ base_url }}/pricing" class="hover:text-teal-600">{{ t.ui_pricing }}</a>
+      <a href="{{ base_url }}/pricing?lang={{ lang }}" class="hover:text-teal-600">{{ t.ui_pricing }}</a>
       <a href="{{ base_url }}/how-it-works?lang={{ lang }}" class="hover:text-teal-600">{{ t.ui_how_it_works }}</a>
       <a href="{{ base_url }}/{{ lang }}/blog" class="hover:text-teal-600">{{ t.ui_blog }}</a>
       <a href="{{ base_url }}/legal/gizlilik-politikasi?lang={{ lang }}" class="hover:text-teal-600">{{ t.ui_privacy }}</a>

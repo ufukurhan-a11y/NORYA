@@ -3743,18 +3743,84 @@
   </div>
   <script>
   (function(){
-    window.NORYA_PAYMENT_REPORT_URL = function() {
+    window.__noryaCurrentLocale = function() {
+      if (typeof window.getLang === 'function') {
+        var active = window.getLang();
+        if (active) return active;
+      }
+      try {
+        var stored = localStorage.getItem('norya_lang');
+        if (stored) return String(stored).toLowerCase().trim();
+      } catch (_) {}
       var loc = (typeof window.__LANDING_LOCALE__ !== 'undefined' && window.__LANDING_LOCALE__) || '';
-      if (!loc) { var m = (window.location.pathname || '').match(/^\/([a-z]{2}(?:-[a-z]{2})?)(?:\/|$)/); loc = m ? m[1] : ''; }
-      return (loc ? '/' + loc : '') + '/payment?from=report';
+      if (!loc) {
+        var m = (window.location.pathname || '').match(/^\/([a-z]{2}(?:-[a-z]{2})?)(?:\/|$)/);
+        loc = m ? m[1] : '';
+      }
+      return String(loc || 'en').toLowerCase().trim();
+    };
+    window.NORYA_PAYMENT_REPORT_URL = function() {
+      var loc = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
+      var routeLoc = loc === 'en-ca' ? 'en' : loc;
+      return (routeLoc ? '/' + routeLoc : '') + '/payment?from=report';
+    };
+    window.NORYA_LOCALE_PAGE_URL = function(path) {
+      var loc = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
+      loc = (loc || 'en').slice(0, 2);
+      return path + '?lang=' + encodeURIComponent(loc);
+    };
+    window.NORYA_TRUST_CENTER_URL = function() {
+      return window.NORYA_LOCALE_PAGE_URL('/trust');
+    };
+    window.NORYA_COMPARE_HUB_URL = function() {
+      var loc = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
+      loc = (loc || 'en').slice(0, 2);
+      var supported = ['en','tr','de','fr','es','it','he','hi','ar'];
+      if (supported.indexOf(loc) === -1) loc = 'en';
+      return '/' + loc + '/compare/';
     };
     window.__noryaApplyReportPaymentUrls = function() {
       var url = (window.NORYA_PAYMENT_REPORT_URL && window.NORYA_PAYMENT_REPORT_URL()) || '/payment?from=report';
       document.querySelectorAll('a[href="/payment?from=report"], a[data-report-payment="1"]').forEach(function(a){ a.href = url; });
       document.querySelectorAll('button[data-report-payment="1"]').forEach(function(b){ b.onclick = function(){ window.location.href = url; }; });
     };
-    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){ if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls(); });
-    else if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
+    window.__noryaApplyTrustUrls = function() {
+      var url = (window.NORYA_TRUST_CENTER_URL && window.NORYA_TRUST_CENTER_URL()) || '/trust?lang=en';
+      document.querySelectorAll('a[data-trust-nav-link="1"]').forEach(function(a){ a.href = url; });
+    };
+    window.__noryaApplyLocalePageUrls = function() {
+      var routeMap = {
+        about: '/about',
+        contact: '/contact',
+        security: '/security',
+        trust: '/trust',
+        methodology: '/methodology',
+        'medical-review': '/medical-review',
+        transparency: '/transparency'
+      };
+      document.querySelectorAll('a[data-locale-link]').forEach(function(a) {
+        var key = a.getAttribute('data-locale-link');
+        var path = routeMap[key];
+        if (!path) return;
+        a.href = window.NORYA_LOCALE_PAGE_URL(path);
+      });
+    };
+    window.__noryaApplyCompareUrls = function() {
+      var url = (window.NORYA_COMPARE_HUB_URL && window.NORYA_COMPARE_HUB_URL()) || '/en/compare/';
+      document.querySelectorAll('a[data-compare-nav-link="1"]').forEach(function(a){ a.href = url; });
+    };
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){
+      if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
+      if (window.__noryaApplyTrustUrls) window.__noryaApplyTrustUrls();
+      if (window.__noryaApplyLocalePageUrls) window.__noryaApplyLocalePageUrls();
+      if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
+    });
+    else {
+      if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
+      if (window.__noryaApplyTrustUrls) window.__noryaApplyTrustUrls();
+      if (window.__noryaApplyLocalePageUrls) window.__noryaApplyLocalePageUrls();
+      if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
+    }
     var SUPPORTED = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
     window.__noryaLangGo = function(locale) {
       if (typeof chooseLang === 'function') { chooseLang(locale); return; }
@@ -3778,6 +3844,7 @@
         <a href="#yorumlar" class="nav-link" data-nav="yorumlar" data-i18n="nav_reviews">Reviews</a>
         <a href="/pricing" class="nav-link" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
         <a href="/kurumsal" class="nav-link" data-nav="kurumsal" data-i18n="nav_corporate">Corporate</a>
+        <a href="/trust?lang=en" class="nav-link" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
         <a href="/blog" class="nav-link" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="header-right-zone">
@@ -3861,6 +3928,7 @@
         <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Reviews</a>
         <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Pricing</a>
         <a href="/kurumsal" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_corporate">Corporate</a>
+        <a href="/trust?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_trust" data-trust-nav-link="1">Trust</a>
         <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
       </div>
       <div class="drawer-section">
@@ -3922,6 +3990,9 @@
             <button type="button" onclick="openRegister(); scrollToAnalyze();" class="text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-all" style="background-color:#0EA5A4;box-shadow:0 10px 15px -3px rgba(14,165,164,0.25);" onmouseover="this.style.backgroundColor='#0d9488';this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#0EA5A4';this.style.transform='scale(1)'" data-i18n="hero_cta">Start analysis</button>
             <a href="#ornek-klinik-rapor" class="border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors" data-i18n="hero_see_sample">See sample report</a>
           </div>
+          <div class="mb-5 sm:mb-6">
+            <a href="/en/compare/" class="inline-flex items-center gap-2 text-sm sm:text-base text-[#0ea5a4] font-semibold hover:underline underline-offset-4 transition-colors" data-i18n="hero_compare_link" data-compare-nav-link="1">Compare with ChatGPT and other AI tools</a>
+          </div>
           <div class="flex flex-wrap gap-3 sm:gap-5" role="group" data-i18n-aria-label="trust_badges_aria" aria-label="Trust and compliance">
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL protected</span></span>
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🛡</span> <span data-i18n="trust_badge_kvkk_gdpr">KVKK & GDPR compliant</span></span>
@@ -3981,7 +4052,7 @@
           <span class="text-xs sm:text-sm font-medium text-accent-500 dark:text-accent-400 tracking-wide uppercase" data-i18n="stat_label_minutes">Minutes</span>
         </div>
       </div>
-      <p class="text-center mt-5 text-[11px] text-accent-400 dark:text-accent-500 tracking-wide"><a href="/methodology" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_how_measured">How these metrics are measured</a> <span class="mx-1">&middot;</span> <a href="/transparency" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_definitions">Metric definitions</a></p>
+      <p class="text-center mt-5 text-[11px] text-accent-400 dark:text-accent-500 tracking-wide"><a href="/methodology" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_how_measured" data-locale-link="methodology">How these metrics are measured</a> <span class="mx-1">&middot;</span> <a href="/transparency" class="hover:text-[#0ea5a4] hover:underline transition-colors" data-i18n="stat_definitions" data-locale-link="transparency">Metric definitions</a></p>
     </div>
   </section>
 
@@ -4605,10 +4676,10 @@
         <span class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 text-sm text-accent-700 dark:text-accent-300"><span aria-hidden="true">📱</span><span data-i18n="trust_block_qr">QR report verification and authenticity</span></span>
       </div>
       <div class="flex flex-wrap justify-center gap-4 mt-6 text-sm">
-        <a href="/trust" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_center">See trust details</a>
-        <a href="/methodology" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_methodology">See methodology</a>
-        <a href="/medical-review" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_oversight">Clinical oversight</a>
-        <a href="/transparency" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_transparency">Transparency</a>
+        <a href="/trust" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_center" data-locale-link="trust">See trust details</a>
+        <a href="/methodology" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_methodology" data-locale-link="methodology">See methodology</a>
+        <a href="/medical-review" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_oversight" data-locale-link="medical-review">Clinical oversight</a>
+        <a href="/transparency" class="text-[#0ea5a4] hover:underline font-medium" data-i18n="trust_link_transparency" data-locale-link="transparency">Transparency</a>
       </div>
     </div>
   </section>
@@ -5347,7 +5418,7 @@
           </div>
           <p class="text-sm text-accent-700 dark:text-accent-300 mb-6 max-w-2xl" data-i18n="corporate_card_paragraph">Norya ile laboratuvar sonuçlarınızı hasta ve hekim için anlaşılır hale getirin. PDF veya metin girişiyle dakikalar içinde rapor; kurumunuza özel kullanıcı sayısı, dil ve logo seçenekleri. Tıbbi teşhis aracı değildir; bilgilendirme ve sağlık okuryazarlığını destekler.</p>
           <div class="flex flex-wrap items-center gap-4">
-            <a href="/legal/iletisim" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-lg hover:shadow-xl transition" data-i18n="corporate_card_cta">Teklif alın — Bize ulaşın</a>
+            <a href="/contact" class="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-primary-600 text-white font-semibold hover:bg-primary-700 shadow-lg hover:shadow-xl transition" data-i18n="corporate_card_cta" data-locale-link="contact">Teklif alın — Bize ulaşın</a>
             <span class="inline-flex items-center gap-2 text-sm text-accent-600 dark:text-accent-400">
               <span aria-hidden="true">📞</span>
               <span data-i18n="corporate_card_contact_hint">support@noryaai.com · İletişim sayfası</span>
@@ -5375,7 +5446,7 @@
                 <td class="px-4 py-4 text-sm">500</td>
                 <td class="px-4 py-4 text-sm" data-i18n="corporate_starter_features">1 klinik, 10 kullanıcı, Türkçe + İngilizce rapor, PDF</td>
                 <td class="px-4 py-4 text-right">
-                  <a href="/legal/iletisim" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 transition" data-i18n="corporate_cta">Teklif alın</a>
+                  <a href="/contact" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 transition" data-i18n="corporate_cta" data-locale-link="contact">Teklif alın</a>
                 </td>
               </tr>
               <tr class="border-b border-accent-200 dark:border-accent-700 hover:bg-accent-50 dark:hover:bg-accent-800/50">
@@ -5385,7 +5456,7 @@
                 <td class="px-4 py-4 text-sm">3.000</td>
                 <td class="px-4 py-4 text-sm" data-i18n="corporate_pro_features">Tüm poliklinikler, 50 kullanıcı, hastane logosu, 9 dil, öncelikli destek</td>
                 <td class="px-4 py-4 text-right">
-                  <a href="/legal/iletisim" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 transition" data-i18n="corporate_cta">Teklif alın</a>
+                  <a href="/contact" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 transition" data-i18n="corporate_cta" data-locale-link="contact">Teklif alın</a>
                 </td>
               </tr>
               <tr class="hover:bg-accent-50 dark:hover:bg-accent-800/50">
@@ -5395,7 +5466,7 @@
                 <td class="px-4 py-4 text-sm" data-i18n="corporate_enterprise_reports">Özel</td>
                 <td class="px-4 py-4 text-sm" data-i18n="corporate_enterprise_features">Çoklu hastane, SLA, özel entegrasyon, KVKK/GDPR sözleşmeleri</td>
                 <td class="px-4 py-4 text-right">
-                  <a href="/legal/iletisim" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 transition" data-i18n="corporate_cta">Teklif alın</a>
+                  <a href="/contact" class="inline-flex items-center gap-1 px-3 py-1.5 rounded-lg bg-primary-600 text-white text-sm font-medium hover:bg-primary-700 transition" data-i18n="corporate_cta" data-locale-link="contact">Teklif alın</a>
                 </td>
               </tr>
             </tbody>
@@ -5403,7 +5474,7 @@
         </div>
         <div class="px-4 py-4 bg-accent-50 dark:bg-accent-800/50 border-t border-accent-200 dark:border-accent-700 text-center">
           <p class="text-sm text-accent-600 dark:text-accent-400 mb-2" data-i18n="corporate_note">Ücret alınmaz. Bilgi ve başvuru için bize ulaşın.</p>
-          <a href="/legal/iletisim" class="text-primary-600 dark:text-primary-400 font-medium hover:underline text-sm" data-i18n="nav_contact">Bize Ulaşın</a>
+          <a href="/contact" class="text-primary-600 dark:text-primary-400 font-medium hover:underline text-sm" data-i18n="nav_contact" data-locale-link="contact">Bize Ulaşın</a>
         </div>
       </div>
     </div>
@@ -6139,7 +6210,7 @@
         </div>
         <!-- PayTR: ödeme/destek/iletişim mini bilgi -->
         <p class="mb-3 text-xs font-semibold text-accent-800 dark:text-accent-200 border-t border-accent-200 dark:border-accent-600 pt-3" data-i18n="merchant_contact_info">For payment, support and contact, please reach out to us.</p>
-        <p class="mb-4 text-xs text-accent-600 dark:text-accent-400"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a> · <a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a> · Banaz/Uşak, Türkiye · <a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">Contact page</a></p>
+        <p class="mb-4 text-xs text-accent-600 dark:text-accent-400"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a> · <a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a> · Banaz/Uşak, Türkiye · <a href="/contact" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page" data-locale-link="contact">Contact page</a></p>
         <button type="submit" id="guest-checkout-submit" disabled class="w-full py-3 rounded-xl bg-primary-600 hover:bg-primary-700 text-white font-semibold disabled:opacity-50 disabled:cursor-not-allowed" data-i18n="checkout_btn">Güvenli ödemeye geç</button>
       </form>
     </div>
@@ -6165,7 +6236,7 @@
       <div class="px-4 py-3 border-b border-accent-200 dark:border-accent-700 bg-accent-50/50 dark:bg-accent-800/50">
         <p class="text-xs font-semibold text-accent-800 dark:text-accent-200 mb-1" data-i18n="merchant_contact_info">For payment, support and contact, please reach out to us.</p>
         <p class="text-xs text-accent-700 dark:text-accent-300"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a> · <a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a> · Banaz/Uşak, Türkiye</p>
-        <p class="text-xs text-accent-600 dark:text-accent-400 mt-0.5"><a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">Contact page</a></p>
+        <p class="text-xs text-accent-600 dark:text-accent-400 mt-0.5"><a href="/contact" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page" data-locale-link="contact">Contact page</a></p>
       </div>
       <div class="flex-1 min-h-[400px] overflow-hidden">
         <iframe id="payment-iframe" src="" title="PayTR ödeme" class="w-full h-full min-h-[450px] border-0 rounded-b-2xl"></iframe>
@@ -6274,7 +6345,7 @@
             <p class="text-xs text-accent-700 dark:text-accent-300 text-center"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a></p>
             <p class="text-xs text-accent-700 dark:text-accent-300 text-center"><a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a></p>
             <p class="text-xs text-accent-700 dark:text-accent-300 text-center">Banaz/Uşak, Türkiye</p>
-            <p class="text-xs text-accent-600 dark:text-accent-400 text-center mt-2"><a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">İletişim sayfası</a></p>
+            <p class="text-xs text-accent-600 dark:text-accent-400 text-center mt-2"><a href="/contact" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page" data-locale-link="contact">İletişim sayfası</a></p>
           </div>
           <p class="mt-3 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-accent-500 dark:text-accent-400">
             <span class="flex items-center gap-2">
@@ -6327,7 +6398,7 @@
         <p class="text-xs text-accent-700 dark:text-accent-300 text-center"><a href="mailto:support@noryaai.com" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">support@noryaai.com</a></p>
         <p class="text-xs text-accent-700 dark:text-accent-300 text-center"><a href="tel:+905071703564" class="text-[#0EA5A4] dark:text-teal-400 hover:underline">+90 507 170 35 64</a></p>
         <p class="text-xs text-accent-700 dark:text-accent-300 text-center">Banaz/Uşak, Türkiye</p>
-        <p class="text-xs text-accent-600 dark:text-accent-400 text-center mt-2"><a href="/legal/iletisim" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page">Contact page</a></p>
+        <p class="text-xs text-accent-600 dark:text-accent-400 text-center mt-2"><a href="/contact" class="text-[#0EA5A4] dark:text-teal-400 hover:underline" data-i18n="merchant_contact_page" data-locale-link="contact">Contact page</a></p>
       </div>
       <!-- Güvenli Ödeme bölümü: fiyatlandırma sayfasında -->
       <div class="mb-8 py-4 px-4 sm:px-5 rounded-2xl bg-white dark:bg-accent-800/60 border border-accent-200 dark:border-accent-700 max-w-3xl mx-auto">
@@ -6775,7 +6846,7 @@
         <a href="/tr/kan-tahlili-sonucu" class="hover:text-[#0ea5a4] font-medium transition-colors seo-guide-link" data-i18n="footer_guide">Kan tahlili rehberi</a>
         <a href="/legal/gizlilik-politikasi" class="hover:text-[#0ea5a4] font-medium transition-colors legal-lang-link" data-i18n="footer_privacy">Gizlilik</a>
         <a href="/legal/mesafeli-satis-sozlesmesi" class="hover:text-[#0ea5a4] font-medium transition-colors legal-lang-link" data-i18n="footer_terms">Kullanım Koşulları</a>
-        <a href="/legal/iletisim" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_contact">Destek / İletişim</a>
+        <a href="/contact" class="hover:text-[#0ea5a4] font-medium transition-colors" data-i18n="nav_contact" data-locale-link="contact">Destek / İletişim</a>
       </div>
       <p class="mt-6 text-center text-xs text-accent-500" data-i18n="footer_desc">Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.</p>
     </div>
@@ -7056,7 +7127,7 @@
             <p class="leading-relaxed">31 Ağustos Mahallesi, Tomurcuk Aysaş Mühendislik No:2 İç Kapı No:4, Banaz/Uşak, Türkiye</p>
           </div>
           <p class="text-xs text-accent-600 dark:text-accent-400 pt-2 border-t border-accent-200 dark:border-accent-700">
-            <a href="/legal/iletisim" class="text-[#0ea5a4] hover:underline" data-i18n="footer_contact">İletişim sayfası</a>
+            <a href="/contact" class="text-[#0ea5a4] hover:underline" data-i18n="footer_contact" data-locale-link="contact">İletişim sayfası</a>
           </p>
         </div>
         <!-- Sütun 2 - Yasal -->
@@ -7075,13 +7146,13 @@
           <h3 class="text-xs font-bold uppercase tracking-[0.2em] text-[#0ea5a4]" data-i18n="footer_col_support">Destek</h3>
           <nav class="flex flex-col gap-2.5" aria-label="Destek">
             <a href="/pricing" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="nav_pricing">Pricing</a>
-            <a href="/trust" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_trust_center">Trust Center</a>
-            <a href="/methodology" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_methodology">Methodology</a>
-            <a href="/medical-review" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_medical_review">Medical Review</a>
-            <a href="/transparency" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_transparency">Transparency</a>
-            <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_support_center">Destek Merkezi</a>
+            <a href="/trust" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_trust_center" data-locale-link="trust">Trust Center</a>
+            <a href="/methodology" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_methodology" data-locale-link="methodology">Methodology</a>
+            <a href="/medical-review" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_medical_review" data-locale-link="medical-review">Medical Review</a>
+            <a href="/transparency" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_transparency" data-locale-link="transparency">Transparency</a>
+            <a href="/contact" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_support_center" data-locale-link="contact">Destek Merkezi</a>
             <a href="#sss" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_faq">Sık Sorulan Sorular</a>
-            <a href="/legal/iletisim" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_contact">İletişim</a>
+            <a href="/contact" class="text-sm text-accent-600 dark:text-accent-400 hover:text-[#0ea5a4] transition-colors" data-i18n="footer_contact" data-locale-link="contact">İletişim</a>
             <a href="mailto:support@noryaai.com" class="text-sm text-[#0ea5a4] hover:underline">support@noryaai.com</a>
           </nav>
         </div>
@@ -8926,7 +8997,7 @@
 
     const T = {
       tr: {
-        nav_home: "Ana Sayfa", nav_languages: "Diller", nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü",
+        nav_home: "Ana Sayfa", nav_languages: "Diller", nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü", nav_trust: "Güven", hero_compare_link: "ChatGPT ve diğer AI araçlarıyla karşılaştır",
         nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
@@ -9382,7 +9453,7 @@
         profile_plan_name: 'Plan',
       },
       en: {
-        nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu",
+        nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu", nav_trust: "Trust", hero_compare_link: "Compare with ChatGPT and other AI tools",
         nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Add Norya to your home screen and use it like an app.", a2hs_later: "Later", a2hs_add: "Add", ios_a2hs_message: "Add to home screen: Share ⎋ Add to Home Screen", ios_a2hs_close: "Close",
         about_title: "What is Norya, Who Are We?", about_what_title: "What is Norya?", about_who_title: "Who are we?", company_info_title: "Company Information",
@@ -9836,7 +9907,7 @@
         profile_plan_name: 'Plan',
       },
       it: {
-        nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu",
+        nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu", nav_trust: "Fiducia", hero_compare_link: "Confronta con ChatGPT e altri strumenti AI",
         nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Aggiungi Norya alla schermata Home e usala come un'app.", a2hs_later: "Dopo", a2hs_add: "Aggiungi", ios_a2hs_message: "Aggiungi a Home: Condividi ⎋ Aggiungi a Home", ios_a2hs_close: "Chiudi",
         about_title: "Cos'è Norya, Chi siamo", about_what_title: "Cos'è Norya?", about_who_title: "Chi siamo?", company_info_title: "Informazioni aziendali",
@@ -10151,7 +10222,7 @@
         profile_plan_name: 'Piano',
       },
       es: {
-        nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú",
+        nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú", nav_trust: "Confianza", hero_compare_link: "Comparar con ChatGPT y otras herramientas de IA",
         nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Añade Norya a la pantalla de inicio y úsala como una app.", a2hs_later: "Después", a2hs_add: "Añadir", ios_a2hs_message: "Añadir a pantalla de inicio: Compartir ⎋ Añadir a la pantalla de inicio", ios_a2hs_close: "Cerrar",
         about_title: "Qué es Norya, Quiénes somos", about_what_title: "¿Qué es Norya?", about_who_title: "¿Quiénes somos?", company_info_title: "Información de la empresa",
@@ -10466,7 +10537,7 @@
         profile_plan_name: 'Plan',
       },
       fr: {
-        nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu",
+        nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu", nav_trust: "Confiance", hero_compare_link: "Comparer avec ChatGPT et d'autres outils IA",
         nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Ajoutez Norya à l'écran d'accueil et utilisez-le comme une app.", a2hs_later: "Plus tard", a2hs_add: "Ajouter", ios_a2hs_message: "Ajouter à l'écran d'accueil : Partager ⎋ Ajouter à l'écran d'accueil", ios_a2hs_close: "Fermer",
         about_title: "Qu'est-ce que Norya, Qui sommes-nous", about_what_title: "Qu'est-ce que Norya ?", about_who_title: "Qui sommes-nous ?", company_info_title: "Informations sur l'entreprise",
@@ -10781,7 +10852,7 @@
         profile_plan_name: 'Plan',
       },
       de: {
-        nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü",
+        nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü", nav_trust: "Vertrauen", hero_compare_link: "Mit ChatGPT und anderen KI-Tools vergleichen",
         nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", drawer_trust_meta: "DSGVO-konform · SSL-verschlüsselt · Sichere Zahlung (PayTR)",
         a2hs_message: "Norya zum Startbildschirm hinzufügen und wie eine App nutzen.", a2hs_later: "Später", a2hs_add: "Hinzufügen", ios_a2hs_message: "Zum Home-Bildschirm: Teilen ⎋ Zum Home-Bildschirm", ios_a2hs_close: "Schließen",
         about_title: "Was ist Norya, Wer wir sind", about_what_title: "Was ist Norya?", about_who_title: "Wer sind wir?", company_info_title: "Unternehmensinformationen",
@@ -11077,7 +11148,7 @@
         profile_plan_name: 'Plan',
       },
       he: {
-        nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט",
+        nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט", nav_trust: "אמון", hero_compare_link: "השוו מול ChatGPT וכלי AI אחרים",
         nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות",
         a2hs_message: "הוסף את Norya למסך הבית והשתמש כמו באפליקציה.", a2hs_later: "אחר כך", a2hs_add: "הוסף", ios_a2hs_message: "הוסף למסך הבית: שתף ⎋ הוסף למסך הבית", ios_a2hs_close: "סגור",
         about_title: "מה זה נוריה, מי אנחנו", about_what_title: "מה זה נוריה?", about_who_title: "מי אנחנו?", company_info_title: "פרטי החברה",
@@ -11344,7 +11415,7 @@
         profile_plan_name: 'תוכנית',
       },
       ar: {
-        nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة",
+        nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة", nav_trust: "الثقة", hero_compare_link: "قارن مع ChatGPT وأدوات الذكاء الاصطناعي الأخرى",
         nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة",
         a2hs_message: "أضف Norya إلى الشاشة الرئيسية واستخدمها كتطبيق.", a2hs_later: "لاحقاً", a2hs_add: "إضافة", ios_a2hs_message: "إضافة إلى الشاشة الرئيسية: مشاركة ⎋ إضافة إلى الشاشة الرئيسية", ios_a2hs_close: "إغلاق",
         about_title: "ما هو نوريا، من نحن", about_what_title: "ما هو نوريا؟", about_who_title: "من نحن؟", company_info_title: "معلومات الشركة",
@@ -11611,7 +11682,7 @@
         profile_plan_name: 'الخطة',
       },
       hi: {
-        nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू",
+        nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू", nav_trust: "विश्वास", hero_compare_link: "ChatGPT और दूसरे AI टूल्स से तुलना करें",
         nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Secure Payment",
         a2hs_message: "Norya को होम स्क्रीन में जोड़ें और ऐप की तरह इस्तेमाल करें।", a2hs_later: "बाद में", a2hs_add: "जोड़ें", ios_a2hs_message: "होम स्क्रीन में जोड़ें: शेयर करें ⎋ होम स्क्रीन में जोड़ें", ios_a2hs_close: "बंद करें",
         about_title: "नोरिया क्या है, हम कौन हैं", about_what_title: "नोरिया क्या है?", about_who_title: "हम कौन हैं?", company_info_title: "कंपनी की जानकारी",
@@ -11878,7 +11949,7 @@
         profile_plan_name: 'योजना',
       },
       el: {
-        nav_home: "Αρχική", nav_languages: "Γλώσσες", nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού",
+        nav_home: "Αρχική", nav_languages: "Γλώσσες", nav_about: "Σχετικά με εμάς", nav_how: "Πώς λειτουργεί", nav_who: "Για ποιους", nav_guide: "Οδηγός εξετάσεων", nav_transparency: "Διαφάνεια", nav_menu: "Μενού", nav_trust: "Εμπιστοσύνη", hero_compare_link: "Σύγκριση με ChatGPT και άλλα εργαλεία AI",
         nav_features: "Λειτουργίες", nav_pricing: "Τιμές", nav_blog: "Ιστολόγιο", nav_checkout: "Πληρωμή", nav_contact: "Επικοινωνία", nav_faq: "Συχνές ερωτήσεις",
         a2hs_message: "Προσθέστε την Norya στην αρχική οθόνη και χρησιμοποιήστε την σαν εφαρμογή.", a2hs_later: "Αργότερα", a2hs_add: "Προσθήκη", ios_a2hs_message: "Προσθήκη στην αρχική: Κοινοποίηση ⎋ Προσθήκη στην αρχική οθόνη", ios_a2hs_close: "Κλείσιμο",
         about_title: "Τι είναι η Norya, Ποιοι είμαστε", about_what_title: "Τι είναι η Norya;", about_who_title: "Ποιοι είμαστε;", company_info_title: "Στοιχεία εταιρείας",
@@ -12088,7 +12159,7 @@
         profile_plan_name: 'Πλάνο',
       },
       cs: {
-        nav_home: "Domů", nav_languages: "Jazyky", nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu",
+        nav_home: "Domů", nav_languages: "Jazyky", nav_about: "O nás", nav_how: "Jak to funguje", nav_who: "Pro koho", nav_guide: "Průvodce vyšetřeními", nav_transparency: "Transparentnost", nav_menu: "Menu", nav_trust: "Důvěra", hero_compare_link: "Porovnat s ChatGPT a dalšími AI nástroji",
         nav_features: "Funkce", nav_pricing: "Ceny", nav_blog: "Blog", nav_checkout: "Platba", nav_contact: "Kontakt", nav_faq: "Časté dotazy",
         a2hs_message: "Přidejte Norya na plochu a používejte ji jako aplikaci.", a2hs_later: "Později", a2hs_add: "Přidat", ios_a2hs_message: "Přidat na plochu: Sdílet ⎋ Přidat na plochu", ios_a2hs_close: "Zavřít",
         about_title: "Co je Norya, Kdo jsme", about_what_title: "Co je Norya?", about_who_title: "Kdo jsme?", company_info_title: "Informace o společnosti",
@@ -12298,7 +12369,7 @@
         profile_plan_name: 'Plán',
       },
       sr: {
-        nav_home: "Početna", nav_languages: "Jezici", nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni",
+        nav_home: "Početna", nav_languages: "Jezici", nav_about: "O nama", nav_how: "Kako funkcioniše", nav_who: "Za koga", nav_guide: "Vodič za analize", nav_transparency: "Transparentnost", nav_menu: "Meni", nav_trust: "Poverenje", hero_compare_link: "Uporedi sa ChatGPT i drugim AI alatima",
         nav_features: "Funkcije", nav_pricing: "Cene", nav_blog: "Blog", nav_checkout: "Plaćanje", nav_contact: "Kontaktirajte nas", nav_faq: "Često postavljana pitanja",
         a2hs_message: "Dodajte Norya na početni ekran i koristite je kao aplikaciju.", a2hs_later: "Kasnije", a2hs_add: "Dodaj", ios_a2hs_message: "Dodaj na početni ekran: Podeli ⎋ Dodaj na početni ekran", ios_a2hs_close: "Zatvori",
         about_title: "Šta je Norya, Ko smo mi", about_what_title: "Šta je Norya?", about_who_title: "Ko smo mi?", company_info_title: "Podaci o kompaniji",
@@ -12519,11 +12590,29 @@
 
     var SUPPORTED_LOCALES = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
     var LANG_LABELS = { tr: "TR", en: "EN", "en-ca": "EN-CA", de: "DE", he: "HE", ar: "AR", hi: "HI", it: "IT", es: "ES", fr: "FR", el: "EL", cs: "CS", sr: "SR" };
+    function normalizeSupportedLocale(value) {
+      value = String(value || '').toLowerCase().trim();
+      if (!value) return '';
+      if (SUPPORTED_LOCALES.indexOf(value) !== -1) return value;
+      var short = value.slice(0, 2);
+      return SUPPORTED_LOCALES.indexOf(short) !== -1 ? short : '';
+    }
     function getLang() {
+      try {
+        var params = new URLSearchParams(window.location.search || '');
+        var queryLang = normalizeSupportedLocale(params.get('lang'));
+        if (queryLang) return queryLang;
+      } catch (_) {}
+      var htmlLang = normalizeSupportedLocale(document.documentElement.lang);
+      if (htmlLang) return htmlLang;
+      try {
+        var storedLang = normalizeSupportedLocale(localStorage.getItem(LANG_KEY));
+        if (storedLang) return storedLang;
+      } catch (_) {}
       var pathname = (typeof window !== 'undefined' && window.location && window.location.pathname) ? window.location.pathname : '';
-      var seg = pathname.replace(/^\/+/, '').split('/')[0];
-      if (seg && SUPPORTED_LOCALES.indexOf(seg) !== -1) return seg;
-      try { return localStorage.getItem(LANG_KEY) || "en"; } catch (_) { return "en"; }
+      var seg = normalizeSupportedLocale(pathname.replace(/^\/+/, '').split('/')[0]);
+      if (seg) return seg;
+      return "en";
     }
     function getEffectivePath() {
       var pathname = window.location.pathname || '/';
@@ -13024,6 +13113,10 @@
       if (typeof updateLegalLinksLang === 'function') updateLegalLinksLang();
       if (typeof updatePaymentLinksLang === 'function') updatePaymentLinksLang();
       if (typeof updateSeoGuideLink === 'function') updateSeoGuideLink();
+      if (typeof window.__noryaApplyTrustUrls === 'function') window.__noryaApplyTrustUrls();
+      if (typeof window.__noryaApplyLocalePageUrls === 'function') window.__noryaApplyLocalePageUrls();
+      if (typeof window.__noryaApplyCompareUrls === 'function') window.__noryaApplyCompareUrls();
+      if (typeof window.__noryaApplyReportPaymentUrls === 'function') window.__noryaApplyReportPaymentUrls();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
       var headerLabel = document.getElementById("currentLangLabel");
