@@ -183,62 +183,68 @@
   </main>
 
   <footer class="border-t border-norya-ink-subtle/20 bg-norya-surface-elevated mt-auto">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-12 sm:py-16">
-      <div class="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-12 gap-8 lg:gap-10">
-        {# Brand Block #}
-        <div class="col-span-2 lg:col-span-4">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 pt-12 pb-8">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-10 lg:gap-8">
+        {# BRAND BLOCK #}
+        <div class="sm:col-span-2 lg:col-span-4">
           <a href="/" class="inline-flex items-center mb-4" aria-label="{{ _brand }} home">
             <img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 w-auto object-contain" width="160" height="40" loading="lazy" />
           </a>
-          <p class="text-sm text-norya-ink-muted leading-relaxed mb-4 max-w-xs">{{ _base_ui.footer_brand_desc|default('Clear blood test interpretation. Multilingual clarity. Privacy-first design.') }}</p>
-          <div class="space-y-1 text-sm text-norya-ink-muted">
-            <p><a href="mailto:support@noryaai.com" class="text-norya-brand hover:underline">support@noryaai.com</a></p>
-            <p><a href="mailto:info@noryaai.com" class="text-norya-brand hover:underline">info@noryaai.com</a></p>
-          </div>
+          <p class="text-sm text-norya-ink-muted leading-relaxed mb-3 max-w-xs">{{ _base_ui.footer_brand_desc|default('Clear blood test interpretation. Multilingual clarity. Privacy-conscious design.') }}</p>
+          <p class="text-xs text-norya-ink-muted/70 max-w-xs">{{ _base_ui.footer_disclaimer|default('Educational tool. Not a substitute for medical advice.') }}</p>
         </div>
-        {# Product #}
+
+        {# PRODUCT LINKS #}
         <div class="lg:col-span-2">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-3">{{ _base_ui.footer_product_heading|default('Product') }}</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-4">{{ _base_ui.footer_product_heading|default('Product') }}</h3>
           <nav class="flex flex-col space-y-2.5 text-sm" aria-label="{{ _base_ui.footer_product_heading|default('Product') }}">
-            <a href="/how-it-works?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_how|default('How it works') }}</a>
-            <a href="/pricing?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_pricing|default('Pricing') }}</a>
-            <a href="/kurumsal" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_enterprise|default('Enterprise') }}</a>
+            <a href="/how-it-works?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_how|default('How it works') }}</a>
+            <a href="/pricing?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_pricing|default('Pricing') }}</a>
+            <a href="/kurumsal" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_enterprise|default('Enterprise') }}</a>
+            <a href="/{{ _locale }}/blog" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_blog|default('Blog') }}</a>
           </nav>
         </div>
-        {# Trust & Safety #}
+
+        {# TRUST & SAFETY LINKS #}
         <div class="lg:col-span-3">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-3">{{ _base_ui.footer_trust_heading|default('Trust & Safety') }}</h3>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-4">{{ _base_ui.footer_trust_heading|default('Trust & Safety') }}</h3>
           <nav class="flex flex-col space-y-2.5 text-sm" aria-label="{{ _base_ui.footer_trust_heading|default('Trust & Safety') }}">
-            <a href="/trust?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
-            <a href="/methodology?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_methodology|default('Methodology') }}</a>
-            <a href="/medical-review?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_medical_review|default('Medical Review') }}</a>
-            <a href="/transparency?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_transparency|default('Transparency') }}</a>
-            <a href="/security" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_security|default('Security') }}</a>
-            <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
-            <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_terms|default('Terms of Use') }}</a>
+            <a href="/trust?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_trust|default('Trust Center') }}</a>
+            <a href="/methodology?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_methodology|default('Methodology') }}</a>
+            <a href="/medical-review?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_medical_review|default('Medical Review') }}</a>
+            <a href="/transparency?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_transparency|default('Transparency') }}</a>
+            <a href="/security" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_security|default('Security') }}</a>
+            <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
+            <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_terms|default('Terms of Use') }}</a>
           </nav>
         </div>
-        {# Company #}
+
+        {# COMPANY + CONTACT MICRO BLOCK #}
         <div class="lg:col-span-3">
-          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-3">{{ _base_ui.footer_company_links_heading|default('Company') }}</h3>
-          <nav class="flex flex-col space-y-2.5 text-sm" aria-label="{{ _base_ui.footer_company_links_heading|default('Company') }}">
-            <a href="/about" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_about|default('About') }}</a>
-            <a href="/legal/iletisim" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_contact|default('Contact') }}</a>
-            <a href="/{{ _locale }}/blog" class="text-norya-ink-muted hover:text-norya-ink transition">{{ _base_ui.footer_blog|default('Blog') }}</a>
+          <h3 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-4">{{ _base_ui.footer_company_heading|default('Company') }}</h3>
+          <nav class="flex flex-col space-y-2.5 text-sm mb-5" aria-label="{{ _base_ui.footer_company_heading|default('Company') }}">
+            <a href="/about" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_about|default('About') }}</a>
+            <a href="/legal/iletisim?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_contact|default('Contact') }}</a>
+            <a href="/legal/iletisim?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_support|default('Support') }}</a>
           </nav>
-          <div class="mt-4 pt-4 border-t border-norya-ink-subtle/10">
-            <p class="text-sm font-medium text-norya-ink">Hamburg, Germany</p>
-            <p class="text-xs text-norya-ink-muted mt-1">Erfurt, Germany · Izmir, Türkiye</p>
+          <div class="pt-4 border-t border-norya-ink-subtle/10">
+            <h4 class="text-xs font-bold uppercase tracking-wider text-norya-ink mb-2">{{ _base_ui.footer_contact_heading|default('Get in Touch') }}</h4>
+            <div class="space-y-1.5 text-sm text-norya-ink-muted">
+              <p><a href="mailto:support@noryaai.com" class="text-norya-brand hover:underline">support@noryaai.com</a></p>
+              <p><a href="mailto:info@noryaai.com" class="text-norya-brand hover:underline">info@noryaai.com</a></p>
+            </div>
+            <p class="text-xs text-norya-ink-muted/70 mt-3">Hamburg, Germany · Erfurt · Izmir</p>
           </div>
         </div>
       </div>
-      {# Bottom row #}
+
+      {# FOOTER BOTTOM ROW #}
       <div class="mt-10 pt-6 border-t border-norya-ink-subtle/20 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
         <p class="text-xs text-norya-ink-muted">{{ _base_ui.footer_copyright|default('© 2018–2026 NoryaAI. All rights reserved.') }}</p>
-        <div class="flex flex-wrap gap-x-4 gap-y-1 text-xs text-norya-ink-muted">
-          <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="hover:text-norya-ink transition">{{ _base_ui.footer_privacy|default('Privacy') }}</a>
-          <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="hover:text-norya-ink transition">{{ _base_ui.footer_terms|default('Terms') }}</a>
-          <a href="/security" class="hover:text-norya-ink transition">{{ _base_ui.footer_security|default('Security') }}</a>
+        <div class="flex flex-wrap gap-x-5 gap-y-2 text-xs text-norya-ink-muted">
+          <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_privacy|default('Privacy') }}</a>
+          <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_terms|default('Terms') }}</a>
+          <a href="/legal/iletisim?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_contact|default('Contact') }}</a>
         </div>
       </div>
     </div>
