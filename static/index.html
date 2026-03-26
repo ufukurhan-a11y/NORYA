@@ -2442,8 +2442,8 @@
       cursor: pointer;
     }
     .primary-cta:hover {
-      transform: translateY(-2px) scale(1.01);
-      box-shadow: 0 18px 36px rgba(14,165,164,.32);
+      transform: translateY(-1px);
+      box-shadow: 0 16px 32px rgba(14,165,164,.28);
     }
     .primary-cta:focus {
       outline: none;
@@ -2600,6 +2600,16 @@
     }
     .dark .mobile-drawer { background: rgba(30,41,59,.98); border-left-color: rgba(255,255,255,.06); }
     .mobile-drawer.open { transform: translateX(0); box-shadow: -24px 0 48px rgba(15,23,42,.12); }
+    [dir="rtl"] .mobile-drawer {
+      right: auto;
+      left: 0;
+      border-left: none;
+      border-right: 1px solid rgba(15,23,42,.06);
+      transform: translateX(-100%);
+      box-shadow: 20px 0 40px rgba(15,23,42,.1);
+    }
+    html.dark[dir="rtl"] .mobile-drawer { border-right-color: rgba(255,255,255,.06); }
+    [dir="rtl"] .mobile-drawer.open { transform: translateX(0); box-shadow: 24px 0 48px rgba(15,23,42,.12); }
     .drawer-head {
       padding: 16px 18px;
       display: flex; align-items: center; justify-content: space-between;
@@ -3775,7 +3785,7 @@
       text-transform: uppercase;
       color: rgba(15, 23, 42, 0.5);
       line-height: 1.25;
-      max-width: 13.5rem;
+      max-width: 22rem;
     }
     .dark .nav-product-tagline { color: rgba(255, 255, 255, 0.52); }
     @media (max-width: 1199px) {
@@ -4098,8 +4108,8 @@
     var menu = document.getElementById(menuId);
     var btn  = document.getElementById(toggleId);
     if (!menu || !btn) return;
-    if (typeof window._closeAllNavDropdowns === 'function') window._closeAllNavDropdowns();
     var closing = !menu.hidden;
+    if (typeof window._closeAllNavDropdowns === 'function') window._closeAllNavDropdowns();
     document.querySelectorAll('.header-lang-menu').forEach(function(m) {
       m.hidden = true;
       m.style.cssText = '';
@@ -4107,12 +4117,18 @@
     document.querySelectorAll('.header-lang-toggle').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
     if (!closing) {
       var rect = btn.getBoundingClientRect();
+      var rtl = document.documentElement.getAttribute('dir') === 'rtl';
       menu.hidden = false;
       menu.style.position = 'fixed';
       menu.style.top = (rect.bottom + 6) + 'px';
-      menu.style.right = (window.innerWidth - rect.right) + 'px';
-      menu.style.left = 'auto';
       menu.style.zIndex = '99999';
+      if (rtl) {
+        menu.style.left = Math.max(8, rect.left) + 'px';
+        menu.style.right = 'auto';
+      } else {
+        menu.style.right = (window.innerWidth - rect.right) + 'px';
+        menu.style.left = 'auto';
+      }
       btn.setAttribute('aria-expanded', 'true');
       document.body.appendChild(menu);
     }
@@ -4186,9 +4202,25 @@
     window.NORYA_SAMPLE_REPORTS_URL = function() {
       var raw = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
       var loc = String(raw || 'en').toLowerCase().replace(/^([a-z]{2}).*$/i, '$1');
-      var slugs = { en: 'sample-blood-test-reports', tr: 'ornek-kan-tahlili-raporlari', de: 'beispiel-bluttest-berichte' };
-      var slug = slugs[loc] || 'sample-blood-test-reports';
+      var slugs = { en: 'sample-blood-test-reports', tr: 'ornek-kan-tahlili-raporlari', de: 'beispiel-bluttest-berichte', es: 'sample-blood-test-reports', fr: 'sample-blood-test-reports', it: 'sample-blood-test-reports', he: 'sample-blood-test-reports', hi: 'sample-blood-test-reports', ar: 'sample-blood-test-reports' };
+      var slug = slugs[loc] || slugs.en;
       return '/' + loc + '/' + slug;
+    };
+    /** Locale path for multilingual output landing (matches app/landing_multilingual_i18n.py MULTILINGUAL_SLUGS). */
+    window.NORYA_MULTILINGUAL_LANDING_URL = function() {
+      var raw = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
+      var loc = String(raw || 'en').toLowerCase().replace(/^([a-z]{2}).*$/i, '$1');
+      var slugs = { en: 'understand-blood-test-results-in-your-language', tr: 'kan-tahlili-kendi-dilinde', de: 'blutwerte-in-deiner-sprache', es: 'understand-blood-test-results-in-your-language', fr: 'understand-blood-test-results-in-your-language', it: 'understand-blood-test-results-in-your-language', he: 'understand-blood-test-results-in-your-language', hi: 'understand-blood-test-results-in-your-language', ar: 'understand-blood-test-results-in-your-language' };
+      var slug = slugs[loc] || slugs.en;
+      return '/' + loc + '/' + slug;
+    };
+    /** Blog index: /{lang}/blog for supported premium locales. */
+    window.NORYA_BLOG_INDEX_URL = function() {
+      var raw = window.__noryaCurrentLocale ? window.__noryaCurrentLocale() : 'en';
+      var loc = String(raw || 'en').toLowerCase().replace(/^([a-z]{2}).*$/i, '$1');
+      var supported = ['en', 'tr', 'de', 'fr', 'it', 'es', 'he', 'hi', 'ar'];
+      if (supported.indexOf(loc) === -1) loc = 'en';
+      return '/' + loc + '/blog';
     };
     window.NORYA_TRUST_CENTER_URL = function() {
       return window.NORYA_LOCALE_PAGE_URL('/trust');
@@ -4233,7 +4265,9 @@
         'clinical-demo': '/clinical-demo',
         technology: '/technology',
         'privacy-policy': '/privacy-policy',
-        kurumsal: '/kurumsal'
+        kurumsal: '/kurumsal',
+        'how-it-works': '/how-it-works',
+        pricing: '/pricing'
       };
       document.querySelectorAll('a[data-locale-link]').forEach(function(a) {
         var key = a.getAttribute('data-locale-link');
@@ -4259,6 +4293,14 @@
         a.href = window.NORYA_COMPARE_DETAIL_URL(slug);
       });
     };
+    window.__noryaApplyMultilingualLandingUrls = function() {
+      var url = (window.NORYA_MULTILINGUAL_LANDING_URL && window.NORYA_MULTILINGUAL_LANDING_URL()) || '/en/understand-blood-test-results-in-your-language';
+      document.querySelectorAll('a[data-multilingual-landing-link="1"]').forEach(function(a) { a.href = url; });
+    };
+    window.__noryaApplyBlogIndexUrls = function() {
+      var url = (window.NORYA_BLOG_INDEX_URL && window.NORYA_BLOG_INDEX_URL()) || '/en/blog';
+      document.querySelectorAll('a[data-blog-index-link="1"]').forEach(function(a) { a.href = url; });
+    };
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function(){
       if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
       if (window.__noryaApplyTrustUrls) window.__noryaApplyTrustUrls();
@@ -4266,6 +4308,8 @@
       if (window.__noryaApplySampleReportsUrls) window.__noryaApplySampleReportsUrls();
       if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
       if (window.__noryaApplyCompareDetailUrls) window.__noryaApplyCompareDetailUrls();
+      if (window.__noryaApplyMultilingualLandingUrls) window.__noryaApplyMultilingualLandingUrls();
+      if (window.__noryaApplyBlogIndexUrls) window.__noryaApplyBlogIndexUrls();
     });
     else {
       if (window.__noryaApplyReportPaymentUrls) window.__noryaApplyReportPaymentUrls();
@@ -4274,6 +4318,8 @@
       if (window.__noryaApplySampleReportsUrls) window.__noryaApplySampleReportsUrls();
       if (window.__noryaApplyCompareUrls) window.__noryaApplyCompareUrls();
       if (window.__noryaApplyCompareDetailUrls) window.__noryaApplyCompareDetailUrls();
+      if (window.__noryaApplyMultilingualLandingUrls) window.__noryaApplyMultilingualLandingUrls();
+      if (window.__noryaApplyBlogIndexUrls) window.__noryaApplyBlogIndexUrls();
     }
     var SUPPORTED = ['en','en-ca','de','it','fr','es','tr','ar','hi','he','el','sr'];
     window.__noryaLangGo = function(locale) {
@@ -4299,17 +4345,17 @@
         <div class="nav-dd" data-nav-dd>
           <button type="button" class="nav-dd-trigger" aria-expanded="false" aria-haspopup="true" data-i18n="nav_features">Features</button>
           <div class="nav-dd-panel" role="menu" hidden>
-            <a role="menuitem" class="nav-dd-item" href="/how-it-works" data-i18n="nav_how">How it works</a>
+            <a role="menuitem" class="nav-dd-item" href="/how-it-works?lang=en" data-locale-link="how-it-works" data-i18n="nav_how">How it works</a>
             <a role="menuitem" class="nav-dd-item" href="/en/sample-blood-test-reports" data-sample-reports-link="1" data-i18n="hero_see_sample">See sample report</a>
             <a role="menuitem" class="nav-dd-item" href="/technology?lang=en" data-locale-link="technology" data-i18n="nav_dd_supported_tests">Supported lab tests</a>
-            <a role="menuitem" class="nav-dd-item" href="/trust?lang=en" data-trust-nav-link="1" data-i18n="nav_dd_multilingual_output">Multilingual reports</a>
+            <a role="menuitem" class="nav-dd-item" href="/en/understand-blood-test-results-in-your-language" data-multilingual-landing-link="1" data-i18n="nav_dd_multilingual_output">Multilingual output</a>
           </div>
         </div>
         <div class="nav-dd" data-nav-dd>
           <button type="button" class="nav-dd-trigger" aria-expanded="false" aria-haspopup="true" data-i18n="nav_for_doctors">For Doctors</button>
           <div class="nav-dd-panel" role="menu" hidden>
             <a role="menuitem" class="nav-dd-item" href="/for-doctors?lang=en" data-locale-link="for-doctors" data-i18n="nav_dd_doctor_ready_reports">Doctor-ready reports</a>
-            <a role="menuitem" class="nav-dd-item" href="/for-doctors?lang=en" data-locale-link="for-doctors" data-locale-hash="#workflow" data-i18n="nav_dd_patient_communication">Patient communication</a>
+            <a role="menuitem" class="nav-dd-item" href="/for-doctors?lang=en" data-locale-link="for-doctors" data-locale-hash="#fd-preview-heading" data-i18n="nav_dd_patient_communication">Patient communication</a>
             <a role="menuitem" class="nav-dd-item" href="/medical-review?lang=en" data-locale-link="medical-review" data-i18n="nav_dd_followup_prep">Follow-up prep</a>
           </div>
         </div>
@@ -4337,11 +4383,11 @@
           <div class="nav-dd-panel" role="menu" hidden>
             <a role="menuitem" class="nav-dd-item" href="/en/compare/" data-compare-nav-link="1" data-i18n="nav_dd_compare_hub">Compare hub</a>
             <a role="menuitem" class="nav-dd-item" href="/en/compare/norya-vs-generic-ai" data-compare-detail="norya-vs-generic-ai" data-i18n="nav_dd_compare_generic_ai">Norya vs generic AI</a>
-            <a role="menuitem" class="nav-dd-item" href="/en/compare/" data-compare-nav-link="1" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
+            <a role="menuitem" class="nav-dd-item" href="/en/compare/norya-vs-wizey" data-compare-detail="norya-vs-wizey" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
           </div>
         </div>
-        <a class="nav-link-standalone" href="/pricing" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
-        <a class="nav-link-standalone" href="/blog" data-i18n="nav_blog">Blog</a>
+        <a class="nav-link-standalone" href="/pricing?lang=en" data-locale-link="pricing" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
+        <a class="nav-link-standalone" href="/en/blog" data-blog-index-link="1" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="header-right-zone">
         <button type="button" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
@@ -4430,17 +4476,17 @@
       <details class="drawer-details">
         <summary data-i18n="nav_features">Features</summary>
         <div class="drawer-subnav">
-          <a href="/how-it-works" onclick="closeMobileDrawer()" data-i18n="nav_how">How it works</a>
+          <a href="/how-it-works?lang=en" onclick="closeMobileDrawer()" data-locale-link="how-it-works" data-i18n="nav_how">How it works</a>
           <a href="/en/sample-blood-test-reports" onclick="closeMobileDrawer()" data-sample-reports-link="1" data-i18n="hero_see_sample">See sample report</a>
           <a href="/technology?lang=en" onclick="closeMobileDrawer()" data-locale-link="technology" data-i18n="nav_dd_supported_tests">Supported lab tests</a>
-          <a href="/trust?lang=en" onclick="closeMobileDrawer()" data-trust-nav-link="1" data-i18n="nav_dd_multilingual_output">Multilingual reports</a>
+          <a href="/en/understand-blood-test-results-in-your-language" onclick="closeMobileDrawer()" data-multilingual-landing-link="1" data-i18n="nav_dd_multilingual_output">Multilingual output</a>
         </div>
       </details>
       <details class="drawer-details">
         <summary data-i18n="nav_for_doctors">For Doctors</summary>
         <div class="drawer-subnav">
           <a href="/for-doctors?lang=en" onclick="closeMobileDrawer()" data-locale-link="for-doctors" data-i18n="nav_dd_doctor_ready_reports">Doctor-ready reports</a>
-          <a href="/for-doctors?lang=en" onclick="closeMobileDrawer()" data-locale-link="for-doctors" data-locale-hash="#workflow" data-i18n="nav_dd_patient_communication">Patient communication</a>
+          <a href="/for-doctors?lang=en" onclick="closeMobileDrawer()" data-locale-link="for-doctors" data-locale-hash="#fd-preview-heading" data-i18n="nav_dd_patient_communication">Patient communication</a>
           <a href="/medical-review?lang=en" onclick="closeMobileDrawer()" data-locale-link="medical-review" data-i18n="nav_dd_followup_prep">Follow-up prep</a>
         </div>
       </details>
@@ -4468,11 +4514,11 @@
         <div class="drawer-subnav">
           <a href="/en/compare/" onclick="closeMobileDrawer()" data-compare-nav-link="1" data-i18n="nav_dd_compare_hub">Compare hub</a>
           <a href="/en/compare/norya-vs-generic-ai" onclick="closeMobileDrawer()" data-compare-detail="norya-vs-generic-ai" data-i18n="nav_dd_compare_generic_ai">Norya vs generic AI</a>
-          <a href="/en/compare/" onclick="closeMobileDrawer()" data-compare-nav-link="1" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
+          <a href="/en/compare/norya-vs-wizey" onclick="closeMobileDrawer()" data-compare-detail="norya-vs-wizey" data-i18n="nav_dd_compare_more_tools">Norya vs other tools</a>
         </div>
       </details>
-      <a href="/pricing" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_pricing">Pricing</a>
-      <a href="/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_blog">Blog</a>
+      <a href="/pricing?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-locale-link="pricing" data-i18n="nav_pricing">Pricing</a>
+      <a href="/en/blog" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-blog-index-link="1" data-i18n="nav_blog">Blog</a>
       <a href="#hakkimizda" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_about">About</a>
       <a href="#yorumlar" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap" data-i18n="nav_reviews">Reviews</a>
       <div class="drawer-section">
@@ -7737,7 +7783,7 @@
           </ul>
         </div>
         <div class="shrink-0">
-          <a href="/kurumsal" class="profile-enterprise-cta" data-i18n="profile_corporate_cta">Contact us for enterprise →</a>
+          <a href="/kurumsal" class="profile-enterprise-cta" data-locale-link="kurumsal" data-i18n="profile_corporate_cta">Contact us for enterprise →</a>
         </div>
       </div>
 
@@ -9760,8 +9806,8 @@
       tr: {
         nav_home: "Ana Sayfa", nav_languages: "Diller", nav_about: "Hakkımızda", nav_how: "Nasıl Çalışır", nav_reviews: "Yorumlar", nav_who: "Kimler İçin", nav_guide: "Tahlil Rehberi", nav_transparency: "Şeffaflık", nav_menu: "Menü", nav_trust: "Güven", hero_compare_link: "ChatGPT ve diğer AI araçlarıyla karşılaştır",
         nav_features: "Özellikler", nav_pricing: "Fiyatlandırma", nav_corporate: "Kurumsal", nav_blog: "Blog", nav_checkout: "Ödeme", nav_contact: "Bize Ulaşın", nav_notifications: "Bildirimleri aç", nav_faq: "SSS", nav_start_free: "Ücretsiz Başla", nav_for_doctors: "Doktorlar için", nav_for_clinics: "Klinikler için", nav_demo: "Demo", nav_compare: "Karşılaştır",
-        nav_product_tagline: "Lab raporu · Doktora hazır · Çok dilli", nav_cta_start_analyze: "Ücretsiz başla · Analiz",
-        nav_dd_supported_tests: "Desteklenen tahliller", nav_dd_multilingual_output: "Çok dilli raporlar",
+        nav_product_tagline: "Lab odaklı · Klinisyene hazır çıktı · Çok dilli · Güven öncelikli", nav_cta_start_analyze: "Ücretsiz başla · Analiz",
+        nav_dd_supported_tests: "Desteklenen tahliller", nav_dd_multilingual_output: "Çok dilli çıktı",
         nav_dd_doctor_ready_reports: "Doktora hazır raporlar", nav_dd_patient_communication: "Hasta iletişimi", nav_dd_followup_prep: "Kontrol öncesi hazırlık",
         nav_dd_clinic_workflows: "Klinik iş akışları", nav_dd_intl_patients: "Uluslararası hastalar", nav_dd_trust_privacy: "Güven ve gizlilik", nav_dd_organizations: "Kurumlar ve kurumsal",
         nav_dd_security: "Güvenlik", nav_dd_privacy: "Gizlilik", nav_dd_methodology: "Metodoloji", nav_dd_trust_overview: "Güven özeti",
@@ -10228,8 +10274,8 @@
       en: {
         nav_home: "Home", nav_languages: "Languages", nav_about: "About us", nav_how: "How it works", nav_reviews: "Reviews", nav_who: "Who for", nav_guide: "Test guide", nav_transparency: "Transparency", nav_menu: "Menu", nav_trust: "Trust", hero_compare_link: "Compare with ChatGPT and other AI tools",
         nav_features: "Features", nav_pricing: "Pricing", nav_corporate: "Corporate", nav_blog: "Blog", nav_checkout: "Checkout", nav_contact: "Contact Us", nav_notifications: "Enable notifications", nav_faq: "FAQ", nav_start_free: "Start free", nav_for_doctors: "For Doctors", nav_for_clinics: "For Clinics", nav_demo: "Demo", nav_compare: "Compare",
-        nav_product_tagline: "Lab reports · Doctor-ready · Multilingual", nav_cta_start_analyze: "Start free · Analyze",
-        nav_dd_supported_tests: "Supported lab tests", nav_dd_multilingual_output: "Multilingual reports",
+        nav_product_tagline: "Lab report–focused · Clinician-ready · 9+ languages · Trust-first", nav_cta_start_analyze: "Start free · Analyze",
+        nav_dd_supported_tests: "Supported lab tests", nav_dd_multilingual_output: "Multilingual output",
         nav_dd_doctor_ready_reports: "Doctor-ready reports", nav_dd_patient_communication: "Patient communication", nav_dd_followup_prep: "Follow-up prep",
         nav_dd_clinic_workflows: "Clinic workflows", nav_dd_intl_patients: "International patients", nav_dd_trust_privacy: "Trust & privacy", nav_dd_organizations: "Organizations & enterprise",
         nav_dd_security: "Security", nav_dd_privacy: "Privacy", nav_dd_methodology: "Methodology", nav_dd_trust_overview: "Trust overview",
@@ -10694,8 +10740,8 @@
       it: {
         nav_home: "Home", nav_languages: "Lingue", nav_about: "Chi siamo", nav_how: "Come funziona", nav_who: "Per chi", nav_guide: "Guida agli esami", nav_transparency: "Trasparenza", nav_menu: "Menu", nav_trust: "Fiducia", hero_compare_link: "Confronta con ChatGPT e altri strumenti AI",
         nav_features: "Funzionalità", nav_pricing: "Prezzi", nav_blog: "Blog", nav_checkout: "Pagamento", nav_contact: "Contattaci", nav_notifications: "Abilita notifiche", nav_faq: "FAQ", nav_start_free: "Inizia gratis", nav_for_doctors: "Per i medici", nav_for_clinics: "Per le cliniche", nav_demo: "Demo", nav_compare: "Confronta",
-        nav_product_tagline: "Referti di laboratorio · Pronti per il medico · Multilingue", nav_cta_start_analyze: "Inizia gratis · Analizza",
-        nav_dd_supported_tests: "Esami supportati", nav_dd_multilingual_output: "Referti multilingue",
+        nav_product_tagline: "Focus referti · Output per clinici · 9+ lingue · Fiducia prima", nav_cta_start_analyze: "Inizia gratis · Analizza",
+        nav_dd_supported_tests: "Esami supportati", nav_dd_multilingual_output: "Output multilingue",
         nav_dd_doctor_ready_reports: "Referti pronti per il medico", nav_dd_patient_communication: "Comunicazione con il paziente", nav_dd_followup_prep: "Preparazione al follow-up",
         nav_dd_clinic_workflows: "Flussi in clinica", nav_dd_intl_patients: "Pazienti internazionali", nav_dd_trust_privacy: "Fiducia e privacy", nav_dd_organizations: "Organizzazioni e enterprise",
         nav_dd_security: "Sicurezza", nav_dd_privacy: "Privacy", nav_dd_methodology: "Metodologia", nav_dd_trust_overview: "Panoramica fiducia",
@@ -11021,8 +11067,8 @@
       es: {
         nav_home: "Inicio", nav_languages: "Idiomas", nav_about: "Sobre nosotros", nav_how: "Cómo funciona", nav_who: "Para quién", nav_guide: "Guía de análisis", nav_transparency: "Transparencia", nav_menu: "Menú", nav_trust: "Confianza", hero_compare_link: "Comparar con ChatGPT y otras herramientas de IA",
         nav_features: "Características", nav_pricing: "Precios", nav_blog: "Blog", nav_checkout: "Pago", nav_contact: "Contáctenos", nav_notifications: "Activar notificaciones", nav_faq: "FAQ", nav_start_free: "Empieza gratis", nav_for_doctors: "Para médicos", nav_for_clinics: "Para clínicas", nav_demo: "Demo", nav_compare: "Comparar",
-        nav_product_tagline: "Informes de laboratorio · Listos para el médico · Multilingüe", nav_cta_start_analyze: "Empieza gratis · Analizar",
-        nav_dd_supported_tests: "Pruebas admitidas", nav_dd_multilingual_output: "Informes multilingües",
+        nav_product_tagline: "Informes de laboratorio · Para clínicos · 9+ idiomas · Confianza primero", nav_cta_start_analyze: "Empieza gratis · Analizar",
+        nav_dd_supported_tests: "Pruebas admitidas", nav_dd_multilingual_output: "Salida multilingüe",
         nav_dd_doctor_ready_reports: "Informes listos para el médico", nav_dd_patient_communication: "Comunicación con pacientes", nav_dd_followup_prep: "Preparación del seguimiento",
         nav_dd_clinic_workflows: "Flujos en clínica", nav_dd_intl_patients: "Pacientes internacionales", nav_dd_trust_privacy: "Confianza y privacidad", nav_dd_organizations: "Organizaciones y empresa",
         nav_dd_security: "Seguridad", nav_dd_privacy: "Privacidad", nav_dd_methodology: "Metodología", nav_dd_trust_overview: "Resumen de confianza",
@@ -11348,8 +11394,8 @@
       fr: {
         nav_home: "Accueil", nav_languages: "Langues", nav_about: "À propos", nav_how: "Comment ça marche", nav_who: "Pour qui", nav_guide: "Guide des analyses", nav_transparency: "Transparence", nav_menu: "Menu", nav_trust: "Confiance", hero_compare_link: "Comparer avec ChatGPT et d'autres outils IA",
         nav_features: "Fonctionnalités", nav_pricing: "Tarifs", nav_blog: "Blog", nav_checkout: "Paiement", nav_contact: "Nous contacter", nav_notifications: "Activer les notifications", nav_faq: "FAQ", nav_start_free: "Commencer gratuitement", nav_for_doctors: "Pour les médecins", nav_for_clinics: "Pour les cliniques", nav_demo: "Démo", nav_compare: "Comparer",
-        nav_product_tagline: "Rapports de labo · Prêts pour le médecin · Multilingue", nav_cta_start_analyze: "Commencer gratuitement · Analyser",
-        nav_dd_supported_tests: "Analyses prises en charge", nav_dd_multilingual_output: "Rapports multilingues",
+        nav_product_tagline: "Rapports de labo · Prêt pour le soin · 9+ langues · Confiance d’abord", nav_cta_start_analyze: "Commencer gratuitement · Analyser",
+        nav_dd_supported_tests: "Analyses prises en charge", nav_dd_multilingual_output: "Sortie multilingue",
         nav_dd_doctor_ready_reports: "Rapports prêts pour le médecin", nav_dd_patient_communication: "Communication patient", nav_dd_followup_prep: "Préparation du suivi",
         nav_dd_clinic_workflows: "Flux en clinique", nav_dd_intl_patients: "Patients internationaux", nav_dd_trust_privacy: "Confiance et confidentialité", nav_dd_organizations: "Organisations et entreprise",
         nav_dd_security: "Sécurité", nav_dd_privacy: "Confidentialité", nav_dd_methodology: "Méthodologie", nav_dd_trust_overview: "Vue d’ensemble confiance",
@@ -11675,8 +11721,8 @@
       de: {
         nav_home: "Startseite", nav_languages: "Sprachen", nav_about: "Über uns", nav_how: "So funktioniert's", nav_who: "Für wen", nav_guide: "Test-Anleitung", nav_transparency: "Transparenz", nav_menu: "Menü", nav_trust: "Vertrauen", hero_compare_link: "Mit ChatGPT und anderen KI-Tools vergleichen",
         nav_features: "Funktionen", nav_pricing: "Preise", nav_blog: "Blog", nav_checkout: "Kasse", nav_contact: "Kontakt", nav_notifications: "Benachrichtigungen aktivieren", nav_faq: "FAQ", nav_start_free: "Kostenlos starten", nav_for_doctors: "Für Ärzte", nav_for_clinics: "Für Kliniken", nav_demo: "Demo", nav_compare: "Vergleich",
-        nav_product_tagline: "Laborberichte · Arztfertig · Mehrsprachig", nav_cta_start_analyze: "Kostenlos starten · Analysieren",
-        nav_dd_supported_tests: "Unterstützte Labortests", nav_dd_multilingual_output: "Mehrsprachige Berichte",
+        nav_product_tagline: "Laborfokus · Klinikfertige Ausgabe · 9+ Sprachen · Vertrauen zuerst", nav_cta_start_analyze: "Kostenlos starten · Analysieren",
+        nav_dd_supported_tests: "Unterstützte Labortests", nav_dd_multilingual_output: "Mehrsprachige Ausgabe",
         nav_dd_doctor_ready_reports: "Arztfertige Berichte", nav_dd_patient_communication: "Patientenkommunikation", nav_dd_followup_prep: "Vorbereitung auf Folgetermine",
         nav_dd_clinic_workflows: "Abläufe in der Praxis", nav_dd_intl_patients: "Internationale Patienten", nav_dd_trust_privacy: "Vertrauen & Datenschutz", nav_dd_organizations: "Organisationen & Enterprise",
         nav_dd_security: "Sicherheit", nav_dd_privacy: "Datenschutz", nav_dd_methodology: "Methodik", nav_dd_trust_overview: "Vertrauensüberblick",
@@ -11983,8 +12029,8 @@
       he: {
         nav_home: "בית", nav_languages: "שפות", nav_about: "אודות", nav_how: "איך זה עובד", nav_who: "למי", nav_guide: "מדריך לבדיקות", nav_transparency: "שקיפות", nav_menu: "תפריט", nav_trust: "אמון", hero_compare_link: "השוו מול ChatGPT וכלי AI אחרים",
         nav_features: "תכונות", nav_pricing: "מחירים", nav_blog: "בלוג", nav_checkout: "תשלום", nav_contact: "צור קשר", nav_faq: "שאלות נפוצות", nav_start_free: "התחילו בחינם", nav_for_doctors: "לרופאים", nav_for_clinics: "למרפאות", nav_demo: "דמו", nav_compare: "השוואה",
-        nav_product_tagline: "מסמכי מעבדה · מוכן לרופא · רב־לשוני", nav_cta_start_analyze: "התחילו בחינם · ניתוח",
-        nav_dd_supported_tests: "בדיקות נתמכות", nav_dd_multilingual_output: "דוחות רב־לשוניים",
+        nav_product_tagline: "ממוקד דוחות מעבדה · מוכן לרופאים · 9+ שפות · אמון קודם", nav_cta_start_analyze: "התחילו בחינם · ניתוח",
+        nav_dd_supported_tests: "בדיקות נתמכות", nav_dd_multilingual_output: "פלט רב־לשוני",
         nav_dd_doctor_ready_reports: "דוחות מוכנים לרופא", nav_dd_patient_communication: "תקשורת עם המטופל", nav_dd_followup_prep: "הכנה למעקב",
         nav_dd_clinic_workflows: "זרימות במרפאה", nav_dd_intl_patients: "מטופלים בינלאומיים", nav_dd_trust_privacy: "אמון ופרטיות", nav_dd_organizations: "ארגונים ועסקים",
         nav_dd_security: "אבטחה", nav_dd_privacy: "פרטיות", nav_dd_methodology: "מתודולוגיה", nav_dd_trust_overview: "סקירת אמון",
@@ -12261,8 +12307,8 @@
       ar: {
         nav_home: "الرئيسية", nav_languages: "اللغات", nav_about: "من نحن", nav_how: "كيف يعمل", nav_who: "لمن", nav_guide: "دليل التحاليل", nav_transparency: "الشفافية", nav_menu: "القائمة", nav_trust: "الثقة", hero_compare_link: "قارن مع ChatGPT وأدوات الذكاء الاصطناعي الأخرى",
         nav_features: "المميزات", nav_pricing: "الأسعار", nav_blog: "المدونة", nav_checkout: "الدفع", nav_contact: "اتصل بنا", nav_faq: "الأسئلة الشائعة", nav_start_free: "ابدأ مجانًا", nav_for_doctors: "للأطباء", nav_for_clinics: "للعيادات", nav_demo: "عرض توضيحي", nav_compare: "مقارنة",
-        nav_product_tagline: "تقارير مخبرية · جاهزة للطبيب · متعددة اللغات", nav_cta_start_analyze: "ابدأ مجانًا · حلّل",
-        nav_dd_supported_tests: "التحاليل المدعومة", nav_dd_multilingual_output: "تقارير متعددة اللغات",
+        nav_product_tagline: "تركيز على تقارير المختبر · جاهز للأطباء · 9+ لغات · الثقة أولاً", nav_cta_start_analyze: "ابدأ مجانًا · حلّل",
+        nav_dd_supported_tests: "التحاليل المدعومة", nav_dd_multilingual_output: "مخرجات متعددة اللغات",
         nav_dd_doctor_ready_reports: "تقارير جاهزة للطبيب", nav_dd_patient_communication: "التواصل مع المريض", nav_dd_followup_prep: "التحضير للمتابعة",
         nav_dd_clinic_workflows: "سير العمل في العيادة", nav_dd_intl_patients: "مرضى دوليون", nav_dd_trust_privacy: "الثقة والخصوصية", nav_dd_organizations: "المؤسسات والشركات",
         nav_dd_security: "الأمان", nav_dd_privacy: "الخصوصية", nav_dd_methodology: "المنهجية", nav_dd_trust_overview: "نظرة على الثقة",
@@ -12539,8 +12585,8 @@
       hi: {
         nav_home: "होम", nav_languages: "भाषाएं", nav_about: "हमारे बारे में", nav_how: "कैसे काम करता है", nav_who: "किसके लिए", nav_guide: "परीक्षण गाइड", nav_transparency: "पारदर्शिता", nav_menu: "मेन्यू", nav_trust: "विश्वास", hero_compare_link: "ChatGPT और दूसरे AI टूल्स से तुलना करें",
         nav_features: "सुविधाएँ", nav_pricing: "मूल्य निर्धारण", nav_blog: "ब्लॉग", nav_checkout: "भुगतान", nav_contact: "संपर्क करें", nav_faq: "FAQ", nav_start_free: "मुफ्त शुरू करें", nav_for_doctors: "डॉक्टरों के लिए", nav_for_clinics: "क्लिनिकों के लिए", nav_demo: "डेमो", nav_compare: "तुलना",
-        nav_product_tagline: "लैब रिपोर्ट · डॉक्टर के लिए तैयार · बहुभाषी", nav_cta_start_analyze: "मुफ्त शुरू करें · विश्लेषण",
-        nav_dd_supported_tests: "समर्थित जाँच", nav_dd_multilingual_output: "बहुभाषी रिपोर्ट",
+        nav_product_tagline: "लैब रिपोर्ट केंद्रित · क्लिनिशियन-तैयार · 9+ भाषाएँ · विश्वास पहले", nav_cta_start_analyze: "मुफ्त शुरू करें · विश्लेषण",
+        nav_dd_supported_tests: "समर्थित जाँच", nav_dd_multilingual_output: "बहुभाषी आउटपुट",
         nav_dd_doctor_ready_reports: "डॉक्टर के लिए तैयार रिपोर्ट", nav_dd_patient_communication: "रोगी संचार", nav_dd_followup_prep: "फॉलो-अप तैयारी",
         nav_dd_clinic_workflows: "क्लिनिक वर्कफ़्लो", nav_dd_intl_patients: "अंतर्राष्ट्रीय मरीज", nav_dd_trust_privacy: "विश्वास और गोपनीयता", nav_dd_organizations: "संस्थाएँ और एंटरप्राइज़",
         nav_dd_security: "सुरक्षा", nav_dd_privacy: "गोपनीयता", nav_dd_methodology: "कार्यप्रणाली", nav_dd_trust_overview: "विश्वास अवलोकन",
@@ -13800,13 +13846,12 @@
       closeMobileDrawer();
     }
     function toggleMobileDrawer() {
-      console.log("[lang] hamburger clicked / toggleMobileDrawer called");
       var drawer = document.getElementById('mobile-drawer');
       if (drawer && drawer.classList.contains('open')) closeMobileDrawer();
       else openMobileDrawer();
     }
     function openMobileDrawer() {
-      console.log("[lang] mobile drawer opened");
+      if (typeof window._closeAllNavDropdowns === 'function') window._closeAllNavDropdowns();
       var overlay = document.getElementById('mobile-overlay');
       var drawer = document.getElementById('mobile-drawer');
       var hamburger = document.getElementById('hamburger-btn');
@@ -13853,7 +13898,8 @@
       if (hamburger) {
         hamburger.classList.remove('active');
         hamburger.setAttribute('aria-expanded', 'false');
-        hamburger.setAttribute('aria-label', 'Menüyü aç');
+        var openLbl = (typeof getTranslation === 'function' && typeof getLang === 'function') ? getTranslation(getLang(), 'hamburger_open') : '';
+        hamburger.setAttribute('aria-label', openLbl || 'Open menu');
         hamburger.focus();
       }
     }
@@ -14007,6 +14053,8 @@
       if (typeof window.__noryaApplySampleReportsUrls === 'function') window.__noryaApplySampleReportsUrls();
       if (typeof window.__noryaApplyCompareUrls === 'function') window.__noryaApplyCompareUrls();
       if (typeof window.__noryaApplyCompareDetailUrls === 'function') window.__noryaApplyCompareDetailUrls();
+      if (typeof window.__noryaApplyMultilingualLandingUrls === 'function') window.__noryaApplyMultilingualLandingUrls();
+      if (typeof window.__noryaApplyBlogIndexUrls === 'function') window.__noryaApplyBlogIndexUrls();
       if (typeof window.__noryaApplyReportPaymentUrls === 'function') window.__noryaApplyReportPaymentUrls();
       var cur = document.getElementById("lang-current");
       if (cur) cur.textContent = LANG_LABELS[lang] || lang.toUpperCase();
@@ -15641,6 +15689,15 @@
     }
 
     function openProfile() {
+      try {
+        if (typeof getToken === 'function' && !getToken()) {
+          if (typeof openLogin === 'function') openLogin();
+          return;
+        }
+      } catch (_) {
+        if (typeof openLogin === 'function') openLogin();
+        return;
+      }
       showProfilePage();
     }
     function showProfilePage() {
