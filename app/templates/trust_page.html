@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}{{ t.h1|default('NoryaAI') }}{% endblock %}
+
+{% block meta_seo %}
+<meta name="description" content="{{ t.meta_desc|default('') }}" />
+<meta property="og:title" content="{{ t.page_title|default('NoryaAI') }}" />
+<meta property="og:description" content="{{ t.meta_desc|default('') }}" />
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="NoryaAI" />
+<link rel="canonical" href="{{ canonical_url }}" />
+{% for hl in hreflang_links %}
+<link rel="alternate" hreflang="{{ hl.lang }}" href="{{ hl.url }}" />
+{% endfor %}
+{% endblock %}
+
+{% block content %}
+<article class="max-w-3xl mx-auto px-4 sm:px-6 py-12 sm:py-16"{% if _locale in ('he', 'ar') %} dir="rtl"{% endif %}>
+  <h1 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-norya-ink mb-4">{{ t.h1 }}</h1>
+  <p class="text-base sm:text-lg text-norya-ink-muted leading-relaxed mb-10">{{ t.intro }}</p>
+
+  {% for sec in sections %}
+  <section class="mb-10">
+    <h2 class="text-xl sm:text-2xl font-bold text-norya-ink mb-3">{{ t[sec.title_key] }}</h2>
+    <p class="text-sm sm:text-base text-norya-ink-muted leading-relaxed">{{ t[sec.body_key] }}</p>
+  </section>
+  {% endfor %}
+
+  {% if show_links %}
+  <section class="mt-12 pt-8 border-t border-norya-ink-subtle/20">
+    <h2 class="text-lg font-bold text-norya-ink mb-4">{{ t.section_links_title|default('Learn More') }}</h2>
+    <ul class="space-y-2 text-sm">
+      {% for lnk in page_links %}
+      <li><a href="{{ lnk.href }}" class="text-norya-brand hover:underline font-medium">{{ t[lnk.label_key]|default(lnk.fallback) }} →</a></li>
+      {% endfor %}
+    </ul>
+  </section>
+  {% endif %}
+
+  <p class="mt-10 text-xs text-norya-ink-muted">
+    <a href="/trust?lang={{ _locale }}" class="hover:underline text-norya-brand">{{ base_ui.footer_trust|default('Trust Center') }}</a>
+    <span class="mx-1">·</span>
+    <a href="/methodology?lang={{ _locale }}" class="hover:underline text-norya-brand">{{ base_ui.footer_methodology|default('Methodology') }}</a>
+    <span class="mx-1">·</span>
+    <a href="/medical-review?lang={{ _locale }}" class="hover:underline text-norya-brand">{{ base_ui.footer_medical_review|default('Medical Review') }}</a>
+    <span class="mx-1">·</span>
+    <a href="/transparency?lang={{ _locale }}" class="hover:underline text-norya-brand">{{ base_ui.footer_transparency|default('Transparency') }}</a>
+  </p>
+</article>
+{% endblock %}

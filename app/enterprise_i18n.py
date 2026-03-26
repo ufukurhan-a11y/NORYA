@@ -14,6 +14,9 @@ ENTERPRISE_UI = {
         "nav_privacy": "Gizlilik",
         "nav_terms": "Kullanım Şartları",
         "footer_enterprise": "Kurumsal",
+        "footer_trust": "Güven Merkezi",
+        "footer_methodology": "Metodoloji",
+        "footer_medical_review": "Tıbbi İnceleme",
         "footer_desc": "Klinisyenleri etik temelli, tıbbi açıdan bilinçli yapay zeka altyapısı ile güçlendiriyoruz.",
 
         "hero_label": "Kurumsal Klinik Zekası",
@@ -198,6 +201,9 @@ ENTERPRISE_UI = {
         "nav_privacy": "Privacy",
         "nav_terms": "Terms of Use",
         "footer_enterprise": "Enterprise",
+        "footer_trust": "Trust Center",
+        "footer_methodology": "Methodology",
+        "footer_medical_review": "Medical Review",
         "footer_desc": "Empowering clinicians with ethically built, medically aware AI infrastructure.",
 
         "hero_label": "Enterprise Clinical Intelligence",
@@ -382,6 +388,9 @@ ENTERPRISE_UI = {
         "nav_privacy": "Datenschutz",
         "nav_terms": "Nutzungsbedingungen",
         "footer_enterprise": "Unternehmen",
+        "footer_trust": "Vertrauenszentrum",
+        "footer_methodology": "Methodik",
+        "footer_medical_review": "Medizinische Prüfung",
         "footer_desc": "Kliniker mit ethisch gebauter, medizinisch bewusster KI-Infrastruktur unterstützen.",
 
         "hero_label": "Klinische Unternehmensintelligenz",
