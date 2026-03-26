@@ -197,7 +197,7 @@
 
       <header class="max-w-3xl">
         <p class="inline-flex items-center gap-2 rounded-full bg-teal-50 text-teal-700 px-3 py-1 text-xs font-semibold tracking-wide">
-          {% if article.icon %}<img src="{{ article.icon }}" alt="" class="h-4 w-4 opacity-90" width="16" height="16" />{% else %}<span class="h-1.5 w-1.5 rounded-full bg-teal-500"></span>{% endif %}
+          {% if article.icon %}<img src="{{ article.icon }}" alt="{{ article.category|default('Category') }}" class="h-4 w-4 opacity-90" width="16" height="16" />{% else %}<span class="h-1.5 w-1.5 rounded-full bg-teal-500"></span>{% endif %}
           {{ article.category }}
         </p>
         <h1 class="mt-4 text-3xl sm:text-4xl lg:text-5xl font-semibold tracking-tight text-slate-900 leading-tight">

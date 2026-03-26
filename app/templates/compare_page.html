@@ -28,6 +28,7 @@
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
   <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  <link rel="preload" href="/hero.webp" as="image" type="image/webp" fetchpriority="high" />
   <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" />
   <link rel="stylesheet" href="/static/css/app.css" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -192,7 +193,7 @@
           <div class="premium-panel rounded-[2rem] p-4 sm:p-5">
             <div class="hero-visual rounded-[1.6rem]" style="background: linear-gradient(135deg, {{ t.hero_visual.glow }}, rgba(255,255,255,0.04));">
               {% if t.hero_visual.image %}
-              <img src="{{ t.hero_visual.image }}" alt="NoryaAI vs {{ t.competitor_name }}" loading="lazy" />
+              <img src="{{ t.hero_visual.image }}" alt="NoryaAI vs {{ t.competitor_name }}" loading="eager" width="1376" height="768" decoding="async" />
               {% endif %}
               <div class="relative z-10 flex h-full flex-col justify-between p-5 sm:p-6">
                 <div class="flex items-start justify-between gap-3">
@@ -339,7 +340,7 @@
           <a href="{{ base_url }}{{ rc.url }}" class="related-card block hover:border-teal-300">
             <div class="related-visual" style="background: linear-gradient(135deg, {{ rc.visual.glow }}, rgba(255,255,255,0.04));">
               {% if rc.visual.image %}
-              <img src="{{ rc.visual.image }}" alt="NoryaAI vs {{ rc.name }}" loading="lazy" />
+              <img src="{{ rc.visual.image }}" alt="NoryaAI vs {{ rc.name }}" loading="lazy" width="1376" height="768" decoding="async" />
               {% endif %}
               <div class="relative z-10 flex h-full items-start justify-between p-4">
                 <span class="visual-chip">NoryaAI</span>

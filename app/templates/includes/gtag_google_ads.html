@@ -1,8 +1,24 @@
 <!-- Google Ads global site tag (gtag.js) — AW-18004536281 -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-18004536281"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'AW-18004536281');
+  (function(){
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+
+    function load(){
+      var s = document.createElement('script');
+      s.src = 'https://www.googletagmanager.com/gtag/js?id=AW-18004536281';
+      s.async = true;
+      s.onload = function(){
+        gtag('js', new Date());
+        gtag('config', 'AW-18004536281');
+      };
+      document.head.appendChild(s);
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(load, { timeout: 3000 });
+    } else {
+      setTimeout(load, 1200);
+    }
+  })();
 </script>

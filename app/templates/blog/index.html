@@ -205,7 +205,7 @@
         <div class="relative max-w-md mx-auto">
           <div class="absolute -inset-6 rounded-3xl bg-teal-500/10 blur-2xl"></div>
           <div class="blog-hero-img-wrap relative overflow-hidden rounded-3xl border border-white/70 shadow-xl shadow-slate-900/5 bg-white aspect-[16/10]">
-            <img src="/static/images/blog/blog-hero.png" alt="{{ blog_ui.hero_title|default('Blood test results explained') }}" loading="lazy" width="800" height="500" sizes="(max-width: 768px) 100vw, 28rem" class="w-full h-full object-cover" />
+            <img src="/static/images/blog/blog-hero.png" alt="{{ blog_ui.hero_title|default('Blood test results explained') }}" loading="eager" width="800" height="500" sizes="(max-width: 768px) 100vw, 28rem" class="w-full h-full object-cover" />
           </div>
         </div>
       </div>
@@ -332,7 +332,7 @@
             {% endif %}
           </div>
           <span class="absolute top-3 left-3 flex items-center gap-2 blog-badge">
-            {% if featured.icon %}<img src="{{ featured.icon }}" alt="" class="h-4 w-4 opacity-90" width="16" height="16" />{% endif %}
+            {% if featured.icon %}<img src="{{ featured.icon }}" alt="{{ featured.category|default('Category') }}" class="h-4 w-4 opacity-90" width="16" height="16" />{% endif %}
             {{ featured.category }}
           </span>
           <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white">
@@ -387,7 +387,7 @@
             </div>
             {% endif %}
             <span class="absolute top-3 left-3 flex items-center gap-2 blog-badge">
-            {% if post.icon %}<img src="{{ post.icon }}" alt="" class="h-4 w-4 opacity-90" width="16" height="16" />{% endif %}
+            {% if post.icon %}<img src="{{ post.icon }}" alt="{{ post.category|default(post.title) }}" class="h-4 w-4 opacity-90" width="16" height="16" />{% endif %}
             {{ post.category }}
           </span>
             <span class="absolute top-3 right-3 flex items-center gap-1 rounded-full bg-black/40 px-2.5 py-1 text-xs font-medium text-white">

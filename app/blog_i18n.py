@@ -7315,6 +7315,268 @@ ARTICLES: List[Article] = [
     _ARTICLE_NORYAAI_STORY,
 ]
 
+_ARTICLE_BY_ID: Dict[str, Article] = {a.id: a for a in ARTICLES}
+
+# Blog index "Quick definitions" — stable order; entries missing in a locale are skipped.
+BLOG_INDEX_DEFINITION_ARTICLE_IDS: tuple[str, ...] = (
+    "aclik-kan-sekeri-sonucu-nasil-degerlendirilir",
+    "hba1c-sonucu-ne-anlama-gelir",
+    "homa-ir-what-it-is",
+    "trombosit-yuksekligi-dusuklugu",
+    "wbc-rbc-hgb-hct-nasil-okunur",
+    "creatinine-egfr-what-it-means",
+    "sodium-low-meaning",
+    "potassium-high-meaning",
+    "alt-ast-yuksekligi-neyi-gosterir",
+    "albumin-low-meaning",
+    "total-protein-high-or-low",
+    "ferritin-what-it-means",
+    "tsh-what-it-means",
+    "metabolic-panel-results-explained",
+    "alp-high-meaning",
+    "ure-yuksekligi-ne-anlama-gelir",
+    "urine-acr-microalbumin-meaning",
+    "triglycerides-high-meaning",
+    "ggt-high-meaning",
+    "low-wbc-meaning",
+    "high-wbc-meaning",
+)
+
+_BLOG_TOPIC_CLUSTER_CBC_GUIDE_LANGS = frozenset({"en", "he", "hi", "ar"})
+
+_CBC_GUIDE_LINK_LABELS: Dict[str, str] = {
+    "en": "How to read CBC results",
+    "tr": "Hemogram sonuçları nasıl okunur?",
+    "es": "Cómo leer un hemograma",
+    "de": "Blutbild richtig lesen",
+    "fr": "Comment lire une numération sanguine",
+    "it": "Come leggere l'emocromo",
+    "he": "איך לקרוא ספירת דם מלאה",
+    "hi": "CBC रिज़ल्ट कैसे पढ़ें",
+    "ar": "كيف تقرأ تحليل الدم الشامل",
+}
+
+# (title_by_lang, desc_by_lang, link_specs) — link_specs: ("cbc_guide",) or ("article", article_id)
+_BLOG_TOPIC_CLUSTER_SPECS: List[tuple[Dict[str, str], Dict[str, str], List[tuple]]] = [
+    (
+        {
+            "en": "CBC and blood counts",
+            "tr": "Hemogram ve kan sayımları",
+            "es": "Hemograma y recuento sanguíneo",
+            "de": "Blutbild und Blutzellwerte",
+            "fr": "Numération sanguine et hémogramme",
+            "it": "Emocromo e formula leucocitaria",
+            "he": "ספירת דם מלאה ותאי דם",
+            "hi": "CBC और ब्लड काउंट",
+            "ar": "صورة دم كاملة وتعداد الخلايا",
+        },
+        {
+            "en": "Start with core cell counts, then move into differentials and red-cell indices.",
+            "tr": "Önce temel hücre sayılarına bakın; ardından diferansiyel ve eritrosit indekslerine geçin.",
+            "es": "Empieza por los recuentos básicos y luego mira el diferencial y los índices eritrocitarios.",
+            "de": "Beginnen Sie mit den Basiswerten des Blutbilds, dann Differenzialblutbild und rote‑Zell‑Indizes.",
+            "fr": "Commencez par les numérations de base, puis le différentiel et les indices érythrocytaires.",
+            "it": "Parti dai conteggi principali, poi differenziale e indici dei globuli rossi.",
+            "he": "התחילו מספירות התאים הבסיסיות, ואז דיפרנציאל ומדדי תאי דם אדומים.",
+            "hi": "पहले मुख्य सेल काउंट, फिर डिफरेंशियल और लाल कोशिका इंडेक्स।",
+            "ar": "ابدأ بعدّ الخلايا الأساسية، ثم الفرقيات ومؤشرات كريات الدم الحمراء.",
+        },
+        [("cbc_guide",), ("article", "wbc-rbc-hgb-hct-nasil-okunur"), ("article", "trombosit-yuksekligi-dusuklugu")],
+    ),
+    (
+        {
+            "en": "Glucose and metabolic health",
+            "tr": "Glikoz ve metabolik sağlık",
+            "es": "Glucosa y salud metabólica",
+            "de": "Glukose und Stoffwechselgesundheit",
+            "fr": "Glycémie et santé métabolique",
+            "it": "Glicemia e salute metabolica",
+            "he": "גלוקוז ובריאות מטבולית",
+            "hi": "ग्लूकोज और मेटाबोलिक हेल्थ",
+            "ar": "الجلوكوز والصحة الأيضية",
+        },
+        {
+            "en": "Understand fasting glucose, HbA1c, insulin resistance, and the wider chemistry panel.",
+            "tr": "Açlık glukozu, HbA1c, insülin direnci ve geniş kimya panelini anlayın.",
+            "es": "Entiende glucosa en ayunas, HbA1c, resistencia a la insulina y el panel metabólico.",
+            "de": "Nüchternglukose, HbA1c, Insulinresistenz und das erweiterte Chemiepanel verstehen.",
+            "fr": "Comprenez la glycémie à jeun, l'HbA1c, l'insulinorésistance et le bilan métabolique.",
+            "it": "Capisci glicemia a digiuno, HbA1c, resistenza insulinica e il pannello metabolico.",
+            "he": "הבנת גלוקוז בצום, HbA1c, עמידות לאינסולין והפאנל המטבולי.",
+            "hi": "फास्टिंग ग्लूकोज, HbA1c, इंसुलिन रेज़िस्टेंस और मेटाबोलिक पैनल समझें।",
+            "ar": "افهم الجلوكوز الصائم، الـHbA1c، مقاومة الأنسولين ولوحة الأيض.",
+        },
+        [
+            ("article", "aclik-kan-sekeri-sonucu-nasil-degerlendirilir"),
+            ("article", "hba1c-sonucu-ne-anlama-gelir"),
+            ("article", "metabolic-panel-results-explained"),
+        ],
+    ),
+    (
+        {
+            "en": "Kidney and electrolytes",
+            "tr": "Böbrek ve elektrolitler",
+            "es": "Riñón y electrolitos",
+            "de": "Nieren und Elektrolyte",
+            "fr": "Reins et électrolytes",
+            "it": "Reni ed elettroliti",
+            "he": "כליות ואלקטרוליטים",
+            "hi": "किडनी और इलेक्ट्रोलाइट",
+            "ar": "الكلى والكهارل",
+        },
+        {
+            "en": "Move from creatinine and eGFR into sodium, potassium, calcium, and hydration-related patterns.",
+            "tr": "Kreatinin ve eGFR'den başlayıp sodyum, potasyum ve sıvı dengesi örüntülerine geçin.",
+            "es": "Desde creatinina y FG hasta sodio, potasio y patrones de hidratación.",
+            "de": "Von Kreatinin und eGFR zu Natrium, Kalzium, Kalium und Flüssigkeitsmustern.",
+            "fr": "De la créatinine et du DFG au sodium, potassium et contexte d'hydratation.",
+            "it": "Da creatinina ed eGFR a sodio, potassio e idratazione.",
+            "he": "מקראטינין ו-eGFR לנתרן, אשלגן ודפוסי נוזלים.",
+            "hi": "क्रिएटिनिन और eGFR से सोडियम, पोटैशियम और हाइड्रेशन पैटर्न तक।",
+            "ar": "من الكرياتينين ومعدل الترشيح إلى الصوديوم والبوتاسيوم وأنماط السوائل.",
+        },
+        [
+            ("article", "creatinine-egfr-what-it-means"),
+            ("article", "sodium-low-meaning"),
+            ("article", "potassium-high-meaning"),
+            ("article", "urine-acr-microalbumin-meaning"),
+        ],
+    ),
+    (
+        {
+            "en": "Liver and proteins",
+            "tr": "Karaciğer ve proteinler",
+            "es": "Hígado y proteínas",
+            "de": "Leber und Proteine",
+            "fr": "Foie et protéines",
+            "it": "Fegato e proteine",
+            "he": "כבד וחלבונים",
+            "hi": "लिवर और प्रोटीन",
+            "ar": "الكبد والبروتينات",
+        },
+        {
+            "en": "Review liver enzymes, protein markers, and the chemistry patterns doctors usually compare together.",
+            "tr": "Karaciğer enzimleri, protein belirteçleri ve birlikte yorumlanan kimya örüntüleri.",
+            "es": "Enzimas hepáticas, proteínas y patrones bioquímicos que suelen leerse juntos.",
+            "de": "Leberenzyme, Eiweißmarker und Chemie‑Muster, die zusammen gelesen werden.",
+            "fr": "Enzymes hépatiques, protéines et schémas de biochimie souvent comparés ensemble.",
+            "it": "Enzimi epatici, proteine e schemi di chimica letti insieme.",
+            "he": "אנזימי כבד, חלבונים ודפוסי כימיה שנקראים יחד.",
+            "hi": "लिवर एंजाइम, प्रोटीन मार्कर और साथ पढ़े जाने वाले पैटर्न।",
+            "ar": "إنزيمات الكبد والبروتينات وأنماط الكيمياء التي تُقارن معاً.",
+        },
+        [
+            ("article", "alt-ast-yuksekligi-neyi-gosterir"),
+            ("article", "alp-high-meaning"),
+            ("article", "albumin-low-meaning"),
+        ],
+    ),
+    (
+        {
+            "en": "Thyroid and hormones",
+            "tr": "Tiroid ve hormonlar",
+            "es": "Tiroides y hormonas",
+            "de": "Schilddrüse und Hormone",
+            "fr": "Thyroïde et hormones",
+            "it": "Tiroide e ormoni",
+            "he": "בלוטת התריס והורמונים",
+            "hi": "थायरॉयड और हार्मोन",
+            "ar": "الغدة الدرقية والهرمونات",
+        },
+        {
+            "en": "Use a panel-first view, then go deeper into single markers or symptom-driven follow-up.",
+            "tr": "Önce panel bakışı; ardından tek belirteçlere veya semptoma göre takibe geçin.",
+            "es": "Primero el panel; luego marcadores puntuales o seguimiento según síntomas.",
+            "de": "Zuerst das Panel, dann Einzelmarker oder symptomgeleitete Nachsorge.",
+            "fr": "D'abord le panel, puis marqueurs ciblés ou suivi selon les symptômes.",
+            "it": "Prima il pannello, poi marker singoli o follow-up sui sintomi.",
+            "he": "קודם תמונת הפאנל, ואז סמנים בודדים או מעקב לפי תסמינים.",
+            "hi": "पहले पैनल दृष्टिकोण, फिर एकल मार्कर या लक्षणों पर फॉलो-अप।",
+            "ar": "ابدأ بلوحة الفحوصات، ثم مؤشرات منفصلة أو متابعة حسب الأعراض.",
+        },
+        [
+            ("article", "tsh-what-it-means"),
+            ("article", "thyroid-panel-guide"),
+            ("article", "d-vitamini-sonucu-nasil-yorumlanir"),
+        ],
+    ),
+    (
+        {
+            "en": "Lipids and cardiovascular risk",
+            "tr": "Lipitler ve kardiyovasküler risk",
+            "es": "Lípidos y riesgo cardiovascular",
+            "de": "Lipide und kardiovaskuläres Risiko",
+            "fr": "Lipides et risque cardiovasculaire",
+            "it": "Lipidi e rischio cardiovascolare",
+            "he": "ליפידים וסיכון לבבי־כלי",
+            "hi": "लिपिड्स और हृदय जोखिम",
+            "ar": "الدهون والخطر القلبي الوعائي",
+        },
+        {
+            "en": "Cover LDL, HDL, triglycerides, inflammatory context, and advanced lipid follow-up questions.",
+            "tr": "LDL, HDL, trigliserit, inflamatuvar bağlam ve ileri lipid soruları.",
+            "es": "LDL, HDL, triglicéridos, inflamación y preguntas de seguimiento lipídico.",
+            "de": "LDL, HDL, Triglyzeride, Entzündungskontext und weiterführende Lipidfragen.",
+            "fr": "LDL, HDL, triglycérides, inflammation et questions de suivi lipidique.",
+            "it": "LDL, HDL, trigliceridi, contesto infiammatorio e follow-up lipidico.",
+            "he": "LDL, HDL, טריגליצרידים, הקשר דלקתי ושאלות המשך.",
+            "hi": "LDL, HDL, ट्राइग्लिसराइड्स, सूजन संदर्भ और आगे के सवाल।",
+            "ar": "LDL وHDL والدهون الثلاثية والسياق الالتهابي ومتابعة الدهون.",
+        },
+        [
+            ("article", "ldl-vs-hdl-what-it-means"),
+            ("article", "triglycerides-high-meaning"),
+            ("article", "crp-what-it-means"),
+        ],
+    ),
+]
+
+
+def _blog_index_card_for_article(lang: str, article_id: str) -> dict | None:
+    """Return label/path/desc for blog index widgets, or None if the article is unavailable in `lang`."""
+    lang = _normalize_lang(lang)
+    art = _ARTICLE_BY_ID.get(article_id)
+    if not art or lang not in art.slugs:
+        return None
+    return {
+        "label": art.titles.get(lang) or art.titles.get(DEFAULT_BLOG_LANG, ""),
+        "path": f"/{lang}/blog/{art.slugs[lang]}",
+        "desc": art.excerpts.get(lang) or art.excerpts.get(DEFAULT_BLOG_LANG, ""),
+    }
+
+
+def build_blog_index_definition_links(lang: str) -> List[dict]:
+    """Localized quick-definition cards for /{lang}/blog (skips articles missing in that locale)."""
+    lang = _normalize_lang(lang)
+    out: List[dict] = []
+    for aid in BLOG_INDEX_DEFINITION_ARTICLE_IDS:
+        row = _blog_index_card_for_article(lang, aid)
+        if row:
+            out.append(row)
+    return out
+
+
+def build_blog_index_topic_clusters(lang: str) -> List[dict]:
+    """Topic cluster cards for /{lang}/blog; links resolve per locale; empty clusters are omitted."""
+    lang = _normalize_lang(lang)
+    clusters: List[dict] = []
+    for titles, descs, specs in _BLOG_TOPIC_CLUSTER_SPECS:
+        title = titles.get(lang) or titles.get("en", "")
+        desc = descs.get(lang) or descs.get("en", "")
+        links: List[dict] = []
+        for spec in specs:
+            if spec[0] == "cbc_guide":
+                if lang in _BLOG_TOPIC_CLUSTER_CBC_GUIDE_LANGS:
+                    lab = _CBC_GUIDE_LINK_LABELS.get(lang) or _CBC_GUIDE_LINK_LABELS["en"]
+                    links.append({"label": lab, "path": f"/{lang}/guides/how-to-read-cbc"})
+            elif spec[0] == "article":
+                card = _blog_index_card_for_article(lang, spec[1])
+                if card:
+                    links.append({"label": card["label"], "path": card["path"]})
+        if links:
+            clusters.append({"title": title, "desc": desc, "links": links})
+    return clusters
+
 
 def get_blog_icon_paths() -> List[str]:
     """Blog makalelerinde referans verilen tüm ikon dosya yollarını döner (/static/ sonrası, static köküne göre).

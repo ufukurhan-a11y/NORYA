@@ -27,12 +27,23 @@
   <meta name="apple-mobile-web-app-capable" content="yes" />
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
   <meta name="apple-mobile-web-app-title" content="{{ _brand }}" />
+  <link rel="dns-prefetch" href="//fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="//fonts.gstatic.com" />
+  <link rel="dns-prefetch" href="//www.googletagmanager.com" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  {% block lcp_preload %}
+  <link rel="preload" href="/hero.webp" as="image" type="image/webp" fetchpriority="high" />
+  {% endblock %}
   <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
   <noscript><link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700&family=Outfit:wght@500;600;700&display=swap" rel="stylesheet" /></noscript>
-  <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" />
-  <link rel="stylesheet" href="/static/css/app.css" />
+  <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" media="print" onload="this.media='all'" />
+  <link rel="stylesheet" href="/static/css/app.css" media="print" onload="this.media='all'" />
+  <noscript>
+    <link rel="stylesheet" href="/static/css/tailwind.css?v={{ css_v|default('1') }}" />
+    <link rel="stylesheet" href="/static/css/app.css" />
+  </noscript>
   <style>
     html, body { overflow-x: hidden; }
     /* Header: mobile-first — mobile: logo + hamburger only; desktop (>=768px): logo + nav + CTA */
@@ -100,22 +111,45 @@
       gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});
     }
   </script>
-  <script async src="https://www.googletagmanager.com/gtag/js?id={{ ga_id or aw_id }}"></script>
   <script>
-    gtag('js', new Date());
-    {% if ga_id %}gtag('config', '{{ ga_id }}');{% endif %}
-    {% if aw_id %}gtag('config', '{{ aw_id }}');{% endif %}
+    (function(){
+      var load = function(){
+        var s = document.createElement('script');
+        s.src = 'https://www.googletagmanager.com/gtag/js?id={{ ga_id or aw_id }}';
+        s.async = true;
+        s.onload = function(){
+          gtag('js', new Date());
+          {% if ga_id %}gtag('config', '{{ ga_id }}');{% endif %}
+          {% if aw_id %}gtag('config', '{{ aw_id }}');{% endif %}
+        };
+        document.head.appendChild(s);
+      };
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(load, { timeout: 3000 });
+      } else {
+        setTimeout(load, 1200);
+      }
+    })();
   </script>
   {% endif %}
   {% if fb_id %}
   <script>
-    !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-    n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-    n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-    t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
-    (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
-    if(document.cookie.indexOf('norya_consent=1')!==-1){fbq('consent','grant');}else{fbq('consent','revoke');}
-    fbq('init','{{ fb_id }}');fbq('track','PageView');
+    (function(){
+      function init(){
+        !function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
+        n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
+        n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
+        t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}
+        (window,document,'script','https://connect.facebook.net/en_US/fbevents.js');
+        if(document.cookie.indexOf('norya_consent=1')!==-1){fbq('consent','grant');}else{fbq('consent','revoke');}
+        fbq('init','{{ fb_id }}');fbq('track','PageView');
+      }
+      if ('requestIdleCallback' in window) {
+        requestIdleCallback(init, { timeout: 3000 });
+      } else {
+        setTimeout(init, 1200);
+      }
+    })();
   </script>
   {% endif %}
   {% set li_id = request.state.linkedin_partner_id|default('', true) %}
@@ -296,20 +330,27 @@
   (function(){
     function gc(n){var m=document.cookie.match('(^|;)\\s*'+n+'=([^;]*)');return m?m[2]:null;}
     function sc(n,v,d){var e=new Date();e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
-    if(gc('norya_consent')!==null) return;
-    var b=document.getElementById('norya-cookie-banner');
-    if(b)b.style.display='block';
-    var btnA=document.getElementById('cookie-accept');
-    var btnR=document.getElementById('cookie-reject');
-    function accept(){
-      sc('norya_consent','1',365);
-      if(typeof gtag==='function')gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});
-      if(typeof fbq==='function')fbq('consent','grant');
-      if(b)b.style.display='none';
+    function initCookieBanner(){
+      if(gc('norya_consent')!==null) return;
+      var b=document.getElementById('norya-cookie-banner');
+      if(b)b.style.display='block';
+      var btnA=document.getElementById('cookie-accept');
+      var btnR=document.getElementById('cookie-reject');
+      function accept(){
+        sc('norya_consent','1',365);
+        if(typeof gtag==='function')gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});
+        if(typeof fbq==='function')fbq('consent','grant');
+        if(b)b.style.display='none';
+      }
+      function reject(){sc('norya_consent','0',365);if(b)b.style.display='none';}
+      if(btnA)btnA.addEventListener('click',accept);
+      if(btnR)btnR.addEventListener('click',reject);
     }
-    function reject(){sc('norya_consent','0',365);if(b)b.style.display='none';}
-    if(btnA)btnA.addEventListener('click',accept);
-    if(btnR)btnR.addEventListener('click',reject);
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(initCookieBanner, { timeout: 3000 });
+    } else {
+      setTimeout(initCookieBanner, 1200);
+    }
   })();
   </script>
 </body>

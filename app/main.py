@@ -105,7 +105,19 @@ from app.guide_germany_i18n import get_germany_guide_content, get_germany_guide_
 from app.tools_i18n import get_egfr_content, get_homa_ir_content, get_tools_hub_content
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.pricing_page_i18n import PRICING_HREFLANG_LANGS, enrich_pricing_context
-from app.blog_i18n import BLOG_LANGS, BLOG_LANGS_PREMIUM, BLOG_UI, DEFAULT_BLOG_LANG, get_article, get_blog_icon_paths, get_related_articles, iter_all_article_paths, list_articles_for_lang
+from app.blog_i18n import (
+    BLOG_LANGS,
+    BLOG_LANGS_PREMIUM,
+    BLOG_UI,
+    DEFAULT_BLOG_LANG,
+    build_blog_index_definition_links,
+    build_blog_index_topic_clusters,
+    get_article,
+    get_blog_icon_paths,
+    get_related_articles,
+    iter_all_article_paths,
+    list_articles_for_lang,
+)
 from app.compare_i18n import (
     COMPARE_LANGS,
     COMPARE_SLUGS,
@@ -388,6 +400,15 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 def favicon():
     """Tarayıcı varsayılan isteği /favicon.ico → mevcut PNG favicon'a yönlendir (konsol 404'ü giderir)."""
     return RedirectResponse(url="/static/icons/favicon-32x32.png", status_code=302)
+
+
+@app.get("/hero.webp", include_in_schema=False)
+def hero_webp():
+    """LCP hero preload için /hero.webp endpoint (static mount sadece /static'i servise eder)."""
+    hero_file = _PROJ_ROOT / "hero.webp"
+    if not hero_file.is_file():
+        return PlainTextResponse("hero.webp not found", status_code=404)
+    return FileResponse(str(hero_file), media_type="image/webp")
 
 
 @app.get("/googlec8b372359ba47dd3.html", include_in_schema=False)
@@ -2019,7 +2040,7 @@ def blog_root(request: Request):
 
 @app.get("/{lang}/blog", response_class=HTMLResponse)
 def blog_index(request: Request, lang: str):
-    """Blog ana sayfa: premium liste, sadece en/de/fr/it."""
+    """Blog ana sayfa: BLOG_LANGS_PREMIUM dillerinde liste + yerelleştirilmiş keşif blokları."""
     lang = (lang or "").lower()[:2]
     if lang not in BLOG_LANGS_PREMIUM:
         raise HTTPException(status_code=404, detail="Blog not available in this language.")
@@ -2036,173 +2057,8 @@ def blog_index(request: Request, lang: str):
         )
     categories = list({p["category"] for p in posts if p.get("category")})
     categories.sort()
-    definition_links = []
-    topic_clusters = []
-    if lang == "en":
-        definition_links = [
-            {
-                "label": "Fasting blood sugar meaning",
-                "path": "/en/blog/how-to-read-fasting-blood-sugar-results",
-                "desc": "Understand normal, prediabetes, and diabetes fasting glucose ranges.",
-            },
-            {
-                "label": "HbA1c result meaning",
-                "path": "/en/blog/what-does-an-hba1c-result-mean",
-                "desc": "See what HbA1c may suggest and how it differs from fasting glucose.",
-            },
-            {
-                "label": "What is HOMA-IR?",
-                "path": "/en/blog/what-is-homa-ir",
-                "desc": "Learn what HOMA-IR measures and how it relates to insulin resistance.",
-            },
-            {
-                "label": "Low or high platelets",
-                "path": "/en/blog/what-do-low-or-high-platelets-mean",
-                "desc": "Quick explanation of platelet counts and why doctors compare them with CBC markers.",
-            },
-            {
-                "label": "WBC, RBC, HGB, and HCT",
-                "path": "/en/blog/how-to-understand-wbc-rbc-hgb-and-hct",
-                "desc": "Short guide to core CBC markers and what they generally represent.",
-            },
-            {
-                "label": "Creatinine and eGFR meaning",
-                "path": "/en/blog/creatinine-egfr-what-it-means",
-                "desc": "Kidney function basics, common categories, and what can affect results.",
-            },
-            {
-                "label": "Low sodium meaning",
-                "path": "/en/blog/sodium-low-meaning",
-                "desc": "Hyponatremia basics, common causes, symptoms, and fluid-balance context.",
-            },
-            {
-                "label": "High potassium meaning",
-                "path": "/en/blog/potassium-high-meaning",
-                "desc": "Hyperkalemia basics, medication and kidney-related patterns, and urgency clues.",
-            },
-            {
-                "label": "High ALT and AST",
-                "path": "/en/blog/what-do-high-alt-and-ast-levels-mean",
-                "desc": "Liver enzyme basics and how ALT and AST are compared with ALP and bilirubin.",
-            },
-            {
-                "label": "Low albumin meaning",
-                "path": "/en/blog/albumin-low-meaning",
-                "desc": "What low albumin may suggest and how it is interpreted with protein markers.",
-            },
-            {
-                "label": "High or low total protein",
-                "path": "/en/blog/total-protein-high-or-low",
-                "desc": "Understand total protein together with albumin and globulin.",
-            },
-            {
-                "label": "Ferritin meaning",
-                "path": "/en/blog/ferritin-what-it-means",
-                "desc": "Low ferritin, high ferritin, and iron store interpretation in plain language.",
-            },
-            {
-                "label": "High or low TSH",
-                "path": "/en/blog/tsh-what-it-means",
-                "desc": "How TSH relates to thyroid patterns, Free T4, and follow-up testing.",
-            },
-            {
-                "label": "Metabolic panel results explained",
-                "path": "/en/blog/metabolic-panel-results-explained",
-                "desc": "Understand CMP vs BMP and how glucose, electrolytes, kidney, and liver markers fit together.",
-            },
-            {
-                "label": "High ALP meaning",
-                "path": "/en/blog/alp-high-meaning",
-                "desc": "See how alkaline phosphatase is compared with ALT, AST, bilirubin, and bone-related markers.",
-            },
-            {
-                "label": "Urea / BUN meaning",
-                "path": "/en/blog/urea-high-meaning",
-                "desc": "Short guide to high urea, dehydration patterns, and why creatinine is reviewed alongside it.",
-            },
-            {
-                "label": "Urine ACR / microalbumin meaning",
-                "path": "/en/blog/urine-acr-microalbumin-meaning",
-                "desc": "Understand albumin-creatinine ratio, early kidney risk signals, and why repeat testing is often needed.",
-            },
-            {
-                "label": "Triglycerides meaning",
-                "path": "/en/blog/triglycerides-high-meaning",
-                "desc": "Understand triglycerides with HDL, LDL, glucose, and metabolic risk context.",
-            },
-            {
-                "label": "High GGT meaning",
-                "path": "/en/blog/ggt-high-meaning",
-                "desc": "See what GGT may suggest and how it is compared with ALT, AST, and ALP.",
-            },
-            {
-                "label": "Low WBC meaning",
-                "path": "/en/blog/low-wbc-meaning",
-                "desc": "Understand low white blood cell counts, common causes, and when repeat testing is common.",
-            },
-            {
-                "label": "High WBC meaning",
-                "path": "/en/blog/high-wbc-meaning",
-                "desc": "Quick guide to high white blood cell counts and the patterns doctors usually compare next.",
-            },
-        ]
-        topic_clusters = [
-            {
-                "title": "CBC and blood counts",
-                "desc": "Start with core cell counts, then move into differentials and red-cell indices.",
-                "links": [
-                    {"label": "How to read CBC results", "path": "/en/guides/how-to-read-cbc"},
-                    {"label": "WBC, RBC, HGB, and HCT", "path": "/en/blog/how-to-understand-wbc-rbc-hgb-and-hct"},
-                    {"label": "Low or high platelets", "path": "/en/blog/what-do-low-or-high-platelets-mean"},
-                ],
-            },
-            {
-                "title": "Glucose and metabolic health",
-                "desc": "Understand fasting glucose, HbA1c, insulin resistance, and the wider chemistry panel.",
-                "links": [
-                    {"label": "Fasting glucose", "path": "/en/blog/how-to-read-fasting-blood-sugar-results"},
-                    {"label": "HbA1c meaning", "path": "/en/blog/what-does-an-hba1c-result-mean"},
-                    {"label": "Metabolic panel", "path": "/en/blog/metabolic-panel-results-explained"},
-                ],
-            },
-            {
-                "title": "Kidney and electrolytes",
-                "desc": "Move from creatinine and eGFR into sodium, potassium, calcium, and hydration-related patterns.",
-                "links": [
-                    {"label": "Creatinine and eGFR", "path": "/en/blog/creatinine-egfr-what-it-means"},
-                    {"label": "Low sodium", "path": "/en/blog/sodium-low-meaning"},
-                    {"label": "High potassium", "path": "/en/blog/potassium-high-meaning"},
-                    {"label": "Urine ACR / microalbumin", "path": "/en/blog/urine-acr-microalbumin-meaning"},
-                ],
-            },
-            {
-                "title": "Liver and proteins",
-                "desc": "Review liver enzymes, protein markers, and the chemistry patterns doctors usually compare together.",
-                "links": [
-                    {"label": "High ALT and AST", "path": "/en/blog/what-do-high-alt-and-ast-levels-mean"},
-                    {"label": "High ALP", "path": "/en/blog/alp-high-meaning"},
-                    {"label": "Low albumin", "path": "/en/blog/albumin-low-meaning"},
-                ],
-            },
-            {
-                "title": "Thyroid and hormones",
-                "desc": "Use a panel-first view, then go deeper into single markers or symptom-driven follow-up.",
-                "links": [
-                    {"label": "High or low TSH", "path": "/en/blog/tsh-what-it-means"},
-                    {"label": "Thyroid panel guide", "path": "/en/blog/thyroid-panel-explained-guide"},
-                    {"label": "Vitamin D results", "path": "/en/blog/how-to-understand-vitamin-d-test-results"},
-                ],
-            },
-            {
-                "title": "Lipids and cardiovascular risk",
-                "desc": "Cover LDL, HDL, triglycerides, inflammatory context, and advanced lipid follow-up questions.",
-                "links": [
-                    {"label": "LDL vs HDL", "path": "/en/blog/ldl-vs-hdl-good-and-bad-cholesterol"},
-                    {"label": "Triglycerides", "path": "/en/blog/triglycerides-high-meaning"},
-                    {"label": "CRP meaning", "path": "/en/blog/crp-what-it-means"},
-                ],
-            },
-        ]
+    definition_links = build_blog_index_definition_links(lang)
+    topic_clusters = build_blog_index_topic_clusters(lang)
     canonical_url = f"{base_url}/{lang}/blog"
     # Fallback: ensure we always have a full UI dict (avoid KeyError in templates)
     ui = dict(BLOG_UI.get(lang, BLOG_UI[DEFAULT_BLOG_LANG]))

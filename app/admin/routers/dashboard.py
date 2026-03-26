@@ -1,4 +1,5 @@
 """Dashboard: özet metrikler, son işlemler, aylık trend grafiği."""
+import logging
 import time as _time
 from datetime import date, datetime, timedelta
 from pathlib import Path
@@ -71,6 +72,7 @@ def _last_24_months_monthly_stats(db: Session, now: datetime) -> tuple[list[str]
 router = APIRouter()
 _APP_DIR = Path(__file__).resolve().parent.parent.parent
 templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
+log = logging.getLogger(__name__)
 
 # AI durumu cache (60 sn) — dashboard'daki "AI Durumu" bu endpoint'i kullanır
 _ai_health_cache: dict = {"ts": 0.0, "data": None}
@@ -209,40 +211,61 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
     failed_payments = db.exec(select(func.count(PaymentOrder.id)).where(PaymentOrder.status == "failed")).one() or 0
 
     # ── OpenAI maliyet metrikleri ──
-    month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    # gpt-4o-mini: input $0.15/1M, output $0.60/1M
-    _INPUT_RATE = 0.15 / 1_000_000
-    _OUTPUT_RATE = 0.60 / 1_000_000
+    # Not: DB şeması eskiyse (özellikle PostgreSQL'de token kolonları yoksa) burası 500'e sebep olabilir.
+    # Bu yüzden metrik hesaplarını try/except ile "boş değerlere" düşürüyoruz.
+    try:
+        month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+        # gpt-4o-mini: input $0.15/1M, output $0.60/1M
+        _INPUT_RATE = 0.15 / 1_000_000
+        _OUTPUT_RATE = 0.60 / 1_000_000
 
-    # Bu ay
-    prompt_sum = db.exec(
-        select(func.coalesce(func.sum(AnalysisJob.prompt_tokens), 0)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
-    ).one() or 0
-    completion_sum = db.exec(
-        select(func.coalesce(func.sum(AnalysisJob.completion_tokens), 0)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
-    ).one() or 0
-    openai_cost_usd = prompt_sum * _INPUT_RATE + completion_sum * _OUTPUT_RATE
-    openai_tokens_month = int(prompt_sum) + int(completion_sum)
-    reports_this_month = db.exec(
-        select(func.count(AnalysisJob.id)).where(AnalysisJob.status == "done").where(AnalysisJob.created_at >= month_start)
-    ).one() or 0
+        # Bu ay
+        prompt_sum = db.exec(
+            select(func.coalesce(func.sum(AnalysisJob.prompt_tokens), 0))
+            .where(AnalysisJob.status == "done")
+            .where(AnalysisJob.created_at >= month_start)
+        ).one() or 0
+        completion_sum = db.exec(
+            select(func.coalesce(func.sum(AnalysisJob.completion_tokens), 0))
+            .where(AnalysisJob.status == "done")
+            .where(AnalysisJob.created_at >= month_start)
+        ).one() or 0
+        openai_cost_usd = prompt_sum * _INPUT_RATE + completion_sum * _OUTPUT_RATE
+        openai_tokens_month = int(prompt_sum) + int(completion_sum)
+        reports_this_month = db.exec(
+            select(func.count(AnalysisJob.id))
+            .where(AnalysisJob.status == "done")
+            .where(AnalysisJob.created_at >= month_start)
+        ).one() or 0
 
-    # Tüm zamanlar
-    all_prompt = db.exec(
-        select(func.coalesce(func.sum(AnalysisJob.prompt_tokens), 0)).where(AnalysisJob.status == "done")
-    ).one() or 0
-    all_completion = db.exec(
-        select(func.coalesce(func.sum(AnalysisJob.completion_tokens), 0)).where(AnalysisJob.status == "done")
-    ).one() or 0
-    all_reports = db.exec(
-        select(func.count(AnalysisJob.id)).where(AnalysisJob.status == "done")
-    ).one() or 0
-    openai_cost_total = all_prompt * _INPUT_RATE + all_completion * _OUTPUT_RATE
-    cost_per_report = (openai_cost_total / all_reports) if all_reports else 0
-    openai_budget = settings.openai_budget_usd or 0
-    openai_remaining = max(openai_budget - openai_cost_total, 0)
-    remaining_reports = int(openai_remaining / cost_per_report) if cost_per_report > 0 else 0
-    budget_pct = min(round((openai_cost_total / openai_budget) * 100, 1), 100) if openai_budget > 0 else 0
+        # Tüm zamanlar
+        all_prompt = db.exec(
+            select(func.coalesce(func.sum(AnalysisJob.prompt_tokens), 0)).where(AnalysisJob.status == "done")
+        ).one() or 0
+        all_completion = db.exec(
+            select(func.coalesce(func.sum(AnalysisJob.completion_tokens), 0)).where(AnalysisJob.status == "done")
+        ).one() or 0
+        all_reports = db.exec(
+            select(func.count(AnalysisJob.id)).where(AnalysisJob.status == "done")
+        ).one() or 0
+        openai_cost_total = all_prompt * _INPUT_RATE + all_completion * _OUTPUT_RATE
+        cost_per_report = (openai_cost_total / all_reports) if all_reports else 0
+        openai_budget = settings.openai_budget_usd or 0
+        openai_remaining = max(openai_budget - openai_cost_total, 0)
+        remaining_reports = int(openai_remaining / cost_per_report) if cost_per_report > 0 else 0
+        budget_pct = min(round((openai_cost_total / openai_budget) * 100, 1), 100) if openai_budget > 0 else 0
+    except Exception as e:
+        log.exception("OpenAI maliyet metrikleri hesaplanamadı: %s", e)
+        openai_tokens_month = 0
+        openai_cost_usd = 0
+        reports_this_month = 0
+        openai_cost_total = 0
+        all_reports = 0
+        cost_per_report = 0
+        openai_budget = settings.openai_budget_usd or 0
+        openai_remaining = max(openai_budget, 0)
+        remaining_reports = 0
+        budget_pct = 0
 
     # Son 10 işlem (payment)
     orders = list(
