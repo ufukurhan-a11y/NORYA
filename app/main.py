@@ -29,7 +29,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-from sqlalchemy import or_, text
+from sqlalchemy import or_
 from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 from sqlmodel import Session, select
 
@@ -317,9 +317,15 @@ def _reset_institution_quotas_if_due():
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     init_db()
-    _seed_pricing_plan()
-    _seed_default_coupon()
-    _reset_institution_quotas_if_due()
+
+    # Render/health-check dostu startup: sadece güvenli init çalışsın.
+    if settings.startup_run_maintenance_tasks:
+        _seed_pricing_plan()
+        _seed_default_coupon()
+        _reset_institution_quotas_if_due()
+    else:
+        log.info("Startup maintenance görevleri kapalı (startup_run_maintenance_tasks=false).")
+
     env_prod = getattr(settings, "environment", "").lower() == "production"
     key_ok = is_openai_configured()
     secret_ok = bool(settings.secret_key) and settings.secret_key != "change-me-in-production"
@@ -330,60 +336,61 @@ async def lifespan(app: FastAPI):
             secret_ok,
         )
     if key_ok:
-        log.info("OPENAI_API_KEY: ok (sk-... ile yüklendi)")
+        log.info("OPENAI_API_KEY: ok (sk-... ile yüklendi).")
     else:
-        log.error(
-            "OPENAI_API_KEY EKSİK VEYA GEÇERSİZ — Analiz çalışmaz. .env dosyasına OPENAI_API_KEY=sk-... ekleyin (başında/sonunda boşluk olmasın)."
-        )
-        if env_prod:
-            raise RuntimeError(
-                "OPENAI_API_KEY tanımlı değil. Production'da analiz servisi açılamaz. .env veya ortam değişkenine OPENAI_API_KEY=sk-... ekleyin."
-            )
+        msg = "OPENAI_API_KEY EKSİK/GEÇERSİZ — analiz uçları çalışmayabilir, fakat servis startup'ı devam eder."
+        if env_prod and settings.startup_enforce_openai_key:
+            raise RuntimeError(msg)
+        log.warning(msg)
+
     if env_prod and not secret_ok:
-        raise RuntimeError(
-            "SECRET_KEY production'da değiştirilmeli. .env içinde SECRET_KEY=<güçlü-rastgele-key> ekleyin (örn. openssl rand -hex 32)."
-        )
-    from app.services.email_sender import is_mail_configured
-    if is_mail_configured():
-        log.info("E-posta (şifre sıfırlama): SMTP yapılandırıldı, gerçek mail gönderilecek.")
+        msg = "SECRET_KEY production için zayıf/default görünüyor; deploy sürer, ama güvenlik için değiştirin."
+        if settings.startup_enforce_secret_key:
+            raise RuntimeError(msg)
+        log.warning(msg)
+
+    # Blog ikon doğrulaması startup'ta opsiyonel (varsayılan kapalı).
+    if settings.startup_verify_blog_icons:
+        try:
+            icon_paths = get_blog_icon_paths()
+            missing = []
+            for rel in icon_paths:
+                full = STATIC_DIR / rel
+                if not full.is_file():
+                    missing.append(rel)
+            if missing:
+                log.error(
+                    "Blog ikonları eksik (sayfada 404 olabilir). Eksik: %s. "
+                    "static/images/blog/icons/ altına ekleyin veya ilgili makaleden icon referansını kaldırın.",
+                    ", ".join(missing),
+                )
+            elif icon_paths:
+                log.info("Blog ikonları doğrulandı (%d dosya).", len(icon_paths))
+        except Exception as e:
+            log.warning("Blog ikon doğrulaması atlandı: %s", e)
     else:
-        log.warning("E-posta (şifre sıfırlama): SMTP yapılandırılmadı — .env içinde SMTP_HOST, SMTP_USER, SMTP_PASSWORD ayarlayın; şifre sıfırlama mailleri GÖNDERİLMEYECEK.")
-    # Blog ikonları: referans verilen dosyalar static altında yoksa uyar (404 olmasın diye); eksik olsa bile sunucu başlasın (deploy kırılmasın)
-    try:
-        icon_paths = get_blog_icon_paths()
-        missing = []
-        for rel in icon_paths:
-            full = STATIC_DIR / rel
-            if not full.is_file():
-                missing.append(rel)
-        if missing:
-            log.error(
-                "Blog ikonları eksik (sayfada 404 olabilir). Eksik: %s. "
-                "static/images/blog/icons/ altına ekleyin veya ilgili makaleden icon referansını kaldırın.",
-                ", ".join(missing),
-            )
-        elif icon_paths:
-            log.info("Blog ikonları doğrulandı (%d dosya).", len(icon_paths))
-    except Exception as e:
-        log.warning("Blog ikon doğrulaması atlandı: %s", e)
+        log.info("Blog ikon doğrulaması startup'ta kapalı (startup_verify_blog_icons=false).")
 
-    # Drip e-posta kampanyası: her saat process_drip_emails() çalıştır (daemon thread — uygulama kapanınca otomatik sonlanır)
-    def _drip_loop():
-        import time as _time
-        _INTERVAL = 3600  # 1 saat
-        _time.sleep(30)  # startup'tan 30s sonra ilk çalıştırma
-        while True:
-            try:
-                from app.services.drip_campaign import process_drip_emails
-                sent = process_drip_emails(batch_size=50)
-                if sent:
-                    log.info("Drip kampanya: %d e-posta gönderildi.", sent)
-            except Exception as exc:
-                log.warning("Drip kampanya hatası: %s", exc)
-            _time.sleep(_INTERVAL)
+    # Drip loop startup'ta otomatik başlamaz (varsayılan kapalı).
+    if settings.startup_run_drip_loop:
+        def _drip_loop():
+            import time as _time
+            _INTERVAL = 3600  # 1 saat
+            _time.sleep(30)  # startup'tan 30s sonra ilk çalıştırma
+            while True:
+                try:
+                    from app.services.drip_campaign import process_drip_emails
+                    sent = process_drip_emails(batch_size=50)
+                    if sent:
+                        log.info("Drip kampanya: %d e-posta gönderildi.", sent)
+                except Exception as exc:
+                    log.warning("Drip kampanya hatası: %s", exc)
+                _time.sleep(_INTERVAL)
 
-    threading.Thread(target=_drip_loop, daemon=True, name="drip-campaign").start()
-    log.info("Drip kampanya thread başlatıldı (saatlik).")
+        threading.Thread(target=_drip_loop, daemon=True, name="drip-campaign").start()
+        log.info("Drip kampanya thread başlatıldı (saatlik).")
+    else:
+        log.info("Drip kampanya otomatik thread kapalı (startup_run_drip_loop=false).")
 
     yield
 
@@ -393,6 +400,8 @@ app = FastAPI(
     description="Kan tahlili açıklama SaaS API",
     lifespan=lifespan,
 )
+# Render start command (önerilen):
+# gunicorn app.main:app -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120
 
 # Statik dosyalar: proje kökünde /static klasöründen servis edilir
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -938,19 +947,8 @@ def ping():
 
 @app.get("/health")
 def health():
-    openai_configured = is_openai_configured()
-    database_status = "ok"
-    try:
-        with Session(engine) as s:
-            s.execute(text("SELECT 1"))
-    except Exception as e:
-        database_status = "error"
-        log.warning("Health check DB failed: %s", e)
-    return {
-        "status": "ok",
-        "openai_configured": openai_configured,
-        "database": database_status,
-    }
+    """Render health-check için ultra hafif endpoint (bağımlılık yok)."""
+    return {"ok": True}
 
 
 # /health/ai: OpenAI erişim kontrolü, 60 sn TTL cache (admin dashboard için)

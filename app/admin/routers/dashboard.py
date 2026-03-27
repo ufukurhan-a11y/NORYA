@@ -128,6 +128,31 @@ def admin_api_health_ai(_=Depends(require_admin_cookie), refresh: bool = False):
     return JSONResponse(data)
 
 
+@router.post("/api/tasks/drip/run", response_class=JSONResponse)
+def admin_run_drip_campaign(
+    _=Depends(require_admin_cookie),
+    batch_size: int = Form(50),
+):
+    """
+    Drip kampanyasını startup yerine sadece açık admin aksiyonuyla çalıştır.
+    """
+    if batch_size < 1:
+        batch_size = 1
+    if batch_size > 500:
+        batch_size = 500
+    try:
+        from app.services.drip_campaign import process_drip_emails
+
+        sent = process_drip_emails(batch_size=batch_size)
+        return JSONResponse({"ok": True, "sent": int(sent or 0), "batch_size": batch_size})
+    except Exception as exc:
+        log.exception("Manual drip run failed: %s", exc)
+        return JSONResponse(
+            status_code=500,
+            content={"ok": False, "error": "drip_run_failed"},
+        )
+
+
 @router.get("/login", response_class=HTMLResponse)
 def admin_login_page(request: Request, err: str | None = None):
     if not (settings.admin_secret or "").strip():

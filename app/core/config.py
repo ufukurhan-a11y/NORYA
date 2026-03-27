@@ -122,6 +122,16 @@ class Settings(BaseSettings):
     minio_secure: bool = True         # HTTPS
     minio_use_for_pdf: bool = False   # True ise PDF MinIO'ya yüklenir ve indirme oradan
 
+    # Startup güvenlik bayrakları (deploy stabilitesi)
+    startup_run_maintenance_tasks: bool = False   # seed/reset gibi ağır işleri startup'ta çalıştırma
+    startup_verify_blog_icons: bool = False       # startup'ta blog ikon dosyası taramasını çalıştırma
+    startup_run_drip_loop: bool = False           # startup'ta drip thread başlatma
+    startup_enforce_openai_key: bool = False      # startup'ta OPENAI_API_KEY yoksa hard-fail verme
+    startup_enforce_secret_key: bool = False      # startup'ta SECRET_KEY hard-fail kontrolü
+
+    # E-posta gönderimi: production'da bile açıkça istenmedikçe kapatılabilir
+    email_send_enabled: bool = True
+
     model_config = {
         "env_file": _ENV_FILE if _ENV_FILE.is_file() else ".env",
         "extra": "ignore",

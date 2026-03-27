@@ -257,6 +257,9 @@ def is_mail_configured() -> bool:
 
 def send_email(to: str, subject: str, html_body: str) -> bool:
     """Tek bir HTML e-posta gönderir. Başarılı ise True."""
+    if not getattr(settings, "email_send_enabled", True):
+        log.info("Email sending disabled by EMAIL_SEND_ENABLED; skipped recipient=%s", to)
+        return False
     if not is_mail_configured():
         log.warning("SMTP not configured; email not sent to %s", to)
         return False
