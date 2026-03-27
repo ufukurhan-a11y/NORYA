@@ -20,7 +20,7 @@ from app.admin.deps import (
 )
 from app.core.config import settings
 from app.core.database import get_db
-from app.models import AnalysisJob, AnalysisRecord, PaymentOrder, Presence, SecurityLog, User
+from app.models import AnalysisJob, AnalysisRecord, ErrorLog, PaymentOrder, Presence, SecurityLog, User
 
 # Ay adları (grafik etiketleri)
 MONTH_NAMES_TR = ("Oca", "Şub", "Mar", "Nis", "May", "Haz", "Tem", "Ağu", "Eyl", "Eki", "Kas", "Ara")
@@ -188,6 +188,8 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
     today_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
     month_start = (now.replace(day=1, hour=0, minute=0, second=0, microsecond=0))
     active_threshold = now - timedelta(minutes=2)
+    day_ago = now - timedelta(hours=24)
+    week_ago = now - timedelta(days=7)
 
     # Günlük/aylık satış (tamamlanan ödemeler, EUR)
     daily = db.exec(
@@ -209,6 +211,28 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
     avg_analysis_time = f"{(avg_duration or 0):.0f} ms" if avg_duration else "-"
 
     failed_payments = db.exec(select(func.count(PaymentOrder.id)).where(PaymentOrder.status == "failed")).one() or 0
+    pending_jobs = db.exec(
+        select(func.count(AnalysisJob.id)).where(AnalysisJob.status.in_(("pending", "processing")))
+    ).one() or 0
+    failed_jobs_24h = db.exec(
+        select(func.count(AnalysisJob.id))
+        .where(AnalysisJob.status == "failed")
+        .where(AnalysisJob.created_at >= day_ago)
+    ).one() or 0
+    errors_24h = db.exec(
+        select(func.count(ErrorLog.id)).where(ErrorLog.created_at >= day_ago)
+    ).one() or 0
+    invoice_pending_count = db.exec(
+        select(func.count(PaymentOrder.id))
+        .where(PaymentOrder.status == "completed")
+        .where(PaymentOrder.invoice_ettn.is_(None))
+    ).one() or 0
+    refunds_7d = db.exec(
+        select(func.count(PaymentOrder.id)).where(PaymentOrder.refunded_at >= week_ago)
+    ).one() or 0
+    security_events_24h = db.exec(
+        select(func.count(SecurityLog.id)).where(SecurityLog.created_at >= day_ago)
+    ).one() or 0
 
     # ── OpenAI maliyet metrikleri ──
     # Not: DB şeması eskiyse (özellikle PostgreSQL'de token kolonları yoksa) burası 500'e sebep olabilir.
@@ -308,6 +332,12 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
             "active_users": active_users,
             "avg_analysis_time": avg_analysis_time,
             "failed_payments": failed_payments,
+            "pending_jobs": pending_jobs,
+            "failed_jobs_24h": failed_jobs_24h,
+            "errors_24h": errors_24h,
+            "invoice_pending_count": invoice_pending_count,
+            "refunds_7d": refunds_7d,
+            "security_events_24h": security_events_24h,
             "last_transactions": last_transactions,
             "chart_labels": chart_labels,
             "chart_analyses": chart_analyses,

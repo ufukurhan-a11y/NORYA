@@ -163,6 +163,48 @@
   </a>
 </div>
 
+{# ── Operational Alerts ── #}
+<div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6 mb-8">
+  <div class="flex items-center justify-between mb-4">
+    <div>
+      <h2 class="text-base font-headline font-bold text-on-surface">Operasyon Uyarıları</h2>
+      <p class="text-on-surface-variant text-xs mt-0.5">Hızlı aksiyon gereken başlıklar</p>
+    </div>
+  </div>
+  <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
+    <a href="/admin/queue?status_filter=pending" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">Kuyrukta bekleyen</p>
+      <p class="text-2xl font-headline font-extrabold mt-1 {% if pending_jobs > 0 %}text-amber-600{% else %}text-on-surface{% endif %}">{{ pending_jobs }}</p>
+      <p class="text-xs text-on-surface-variant mt-1">Analiz işleri (pending + processing)</p>
+    </a>
+    <a href="/admin/queue?status_filter=failed" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">24 saatte başarısız analiz</p>
+      <p class="text-2xl font-headline font-extrabold mt-1 {% if failed_jobs_24h > 0 %}text-red-600{% else %}text-on-surface{% endif %}">{{ failed_jobs_24h }}</p>
+      <p class="text-xs text-on-surface-variant mt-1">Son 24 saatte failed olan joblar</p>
+    </a>
+    <a href="/admin/errors" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">24 saatte uygulama hatası</p>
+      <p class="text-2xl font-headline font-extrabold mt-1 {% if errors_24h > 0 %}text-red-600{% else %}text-on-surface{% endif %}">{{ errors_24h }}</p>
+      <p class="text-xs text-on-surface-variant mt-1">Error log kayıtları</p>
+    </a>
+    <a href="/admin/payments?invoice_pending=1" class="quick-link rounded-xl border border-amber-200/60 bg-amber-50/60 p-4">
+      <p class="text-xs uppercase tracking-wider text-amber-800 font-semibold">Fatura bekleyen ödeme</p>
+      <p class="text-2xl font-headline font-extrabold mt-1 {% if invoice_pending_count > 0 %}text-amber-700{% else %}text-on-surface{% endif %}">{{ invoice_pending_count }}</p>
+      <p class="text-xs text-amber-900/80 mt-1">Tamamlanmış, e-arşiv kesilmemiş</p>
+    </a>
+    <a href="/admin/payments" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">Son 7 günde iade</p>
+      <p class="text-2xl font-headline font-extrabold mt-1 {% if refunds_7d > 0 %}text-amber-600{% else %}text-on-surface{% endif %}">{{ refunds_7d }}</p>
+      <p class="text-xs text-on-surface-variant mt-1">Refund işlemi geçen siparişler</p>
+    </a>
+    <a href="/admin/security" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">24 saatte güvenlik eventi</p>
+      <p class="text-2xl font-headline font-extrabold mt-1 {% if security_events_24h > 0 %}text-amber-600{% else %}text-on-surface{% endif %}">{{ security_events_24h }}</p>
+      <p class="text-xs text-on-surface-variant mt-1">Admin login, lockout ve diğer loglar</p>
+    </a>
+  </div>
+</div>
+
 {# ── System Health + OpenAI Row ── #}
 <div class="grid grid-cols-1 lg:grid-cols-4 gap-5 mb-8">
   <div class="bg-white rounded-2xl shadow-ambient border border-slate-100 p-6">
