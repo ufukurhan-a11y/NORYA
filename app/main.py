@@ -2864,7 +2864,7 @@ def _index_response(request: Request | None = None):
             path_locale = None
             if path.startswith("/") and path != "/":
                 segment = path[1:].split("/")[0].lower()
-                if segment in LANDING_ROUTES or segment in ("fr", "es", "ar", "hi", "he", "el", "sr"):
+                if segment in LANDING_ROUTES or segment in ("fr", "es", "ar", "hi", "he", "el", "sr", "cs"):
                     path_locale = segment
             if path == "/":
                 _locale = "en"
@@ -7512,7 +7512,7 @@ async def submit_indexnow(request: Request, url_list: list[str] | None = None):
 
 
 # Path-based locale: /en, /tr, /en/pricing, /de/report — SPA index.html (dil dropdown navigate için)
-SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he", "el", "sr"})
+SUPPORTED_LOCALES = frozenset({"en", "de", "it", "fr", "es", "tr", "ar", "hi", "he", "el", "sr", "cs"})
 
 
 def _normalize_landing_locale(lang: str | None) -> str:
