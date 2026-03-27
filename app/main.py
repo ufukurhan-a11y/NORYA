@@ -2106,6 +2106,7 @@ def blog_index(request: Request, lang: str):
             "lang": lang,
             "blog_ui": ui,
             "base_ui": base_ui,
+            "base_url": base_url,
             "brand_name": BRAND_NAME,
             "seo_title": seo_title,
             "meta_description": meta_description,
@@ -3081,6 +3082,7 @@ def _for_doctors_landing_response(request: Request):
             "request": request,
             "t": t,
             "lang": lang,
+            "audience_slug": "for-doctors",
             "base_ui": get_base_ui(lang),
             "canonical_url": canonical_url,
             "base_url": base_url,
@@ -7695,6 +7697,39 @@ def localized_faq_path(
     return f"/{loc}/{slug}"
 
 
+def localized_b2b_resource_url(
+    request: Request | None,
+    base_url: str,
+    lang: str,
+    resource: dict,
+) -> str:
+    """Build href for B2B audience resource tiles: locale-prefixed SEO landings or ?lang= paths."""
+    base = (base_url or "").rstrip("/")
+    seo = (resource.get("seo_link") or "").strip().lower()
+    if seo == "hub":
+        return f"{base}{localized_seo_blood_test_hub_path(request, lang)}"
+    if seo == "upload":
+        return f"{base}{localized_upload_landing_path(request, lang)}"
+    if seo == "explained":
+        return f"{base}{localized_explained_landing_path(request, lang)}"
+    if seo == "analyzer":
+        return f"{base}{localized_ai_blood_test_analyzer_path(request, lang)}"
+    if seo == "cbc":
+        return f"{base}{localized_cbc_guide_path(request, lang)}"
+    if seo == "faq":
+        return f"{base}{localized_faq_path(request, lang)}"
+    if seo == "multilingual":
+        return f"{base}{localized_multilingual_landing_path(request, lang)}"
+
+    path = resource.get("path") or "/"
+    if not str(path).startswith("/"):
+        path = f"/{path}"
+    fragment = resource.get("fragment")
+    q = f"?lang={lang}"
+    tail = f"#{fragment}" if fragment else ""
+    return f"{base}{path}{q}{tail}"
+
+
 templates.env.globals["localized_home_path"] = localized_home_path
 templates.env.globals["localized_sample_reports_path"] = localized_sample_reports_path
 templates.env.globals["localized_blog_index_path"] = localized_blog_index_path
@@ -7705,6 +7740,7 @@ templates.env.globals["localized_explained_landing_path"] = localized_explained_
 templates.env.globals["localized_ai_blood_test_analyzer_path"] = localized_ai_blood_test_analyzer_path
 templates.env.globals["localized_cbc_guide_path"] = localized_cbc_guide_path
 templates.env.globals["localized_faq_path"] = localized_faq_path
+templates.env.globals["localized_b2b_resource_url"] = localized_b2b_resource_url
 
 
 @app.get("/{lang}", response_class=HTMLResponse)

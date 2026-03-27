@@ -514,7 +514,7 @@ def _faq_common_tr() -> list:
         },
         {
             "q": "Hangi bölgeler destekleniyor?",
-            "a": "50 ülkedeki ekiplere hizmet veriyoruz; 9 rapor dilinde lokalizasyon sunulur.",
+            "a": "50 ülkedeki ekiplere hizmet veriyoruz; 9+ rapor dilinde lokalizasyon sunulur.",
         },
         {
             "q": "LIMS veya EMR ile entegre olabilir misiniz?",
@@ -1410,6 +1410,362 @@ _FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
 }
 
 
+def _clinic_seo_resource_cards(lang: str) -> list[dict[str, Any]]:
+    """Locale-aware patient/education tiles appended to /for-clinics resources (SEO paths)."""
+    code = (lang or "en").strip().lower()
+    if code not in CTA_BY_LANG:
+        code = "en"
+    rows = _CLINIC_SEO_RESOURCES.get(code) or _CLINIC_SEO_RESOURCES["en"]
+    return [dict(x) for x in rows]
+
+
+# Extra resource tiles: hrefs resolved via localized_b2b_resource_url (locale-prefixed paths).
+_CLINIC_SEO_RESOURCES: Dict[str, list[dict[str, Any]]] = {
+    "en": [
+        {
+            "seo_link": "hub",
+            "title": "Blood test results hub",
+            "desc": "Reference ranges, units, and how to read high/low patterns—useful collateral for front-desk and portal copy.",
+            "cta": "Open hub",
+        },
+        {
+            "seo_link": "explained",
+            "title": "Blood test results explained",
+            "desc": "Plain-language context for panels and flagged values your teams can mirror in discharge education.",
+            "cta": "Open explainer",
+        },
+        {
+            "seo_link": "upload",
+            "title": "Upload blood test results",
+            "desc": "Show patients the structured intake flow behind multilingual drafts and clinician review.",
+            "cta": "See upload",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "AI blood test analyzer",
+            "desc": "Product-shaped workflow for lab reports—not generic chat—when you brief clinical IT.",
+            "cta": "View analyzer",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "How to read CBC results",
+            "desc": "Pillar guide on WBC, RBC, hemoglobin, hematocrit, and platelets for standardized patient education.",
+            "cta": "Open CBC guide",
+        },
+        {
+            "seo_link": "faq",
+            "title": "Blood test analysis FAQ",
+            "desc": "Methodology boundaries, languages, and what the platform does not replace in care delivery.",
+            "cta": "Read FAQ",
+        },
+    ],
+    "tr": [
+        {
+            "seo_link": "hub",
+            "title": "Kan tahlili sonuçları merkezi",
+            "desc": "Referans aralıkları, birimler ve yüksek/düşük yorumlar—önbüro ve portal metinleri için referans.",
+            "cta": "Merkeze git",
+        },
+        {
+            "seo_link": "explained",
+            "title": "Kan tahlili sonuçları açıklandı",
+            "desc": "Paneller ve işaretli değerler için sade dil bağlamı; taburcu eğitiminde aynı çerçeveyi kullanın.",
+            "cta": "Açıklamayı aç",
+        },
+        {
+            "seo_link": "upload",
+            "title": "Kan tahlili sonuçlarını yükle",
+            "desc": "Çok dilli taslaklar ve klinisyen incelemesi arkasındaki yapılandırılmış alım akışını gösterin.",
+            "cta": "Yükleme sayfası",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "Yapay zekâ kan tahlili analizi",
+            "desc": "Klinik BT brifingleri için sohbet değil, laboratuvar raporuna uygun ürün akışı.",
+            "cta": "Analizörü gör",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "Tam kan sayımı nasıl okunur",
+            "desc": "WBC, RBC, hemoglobin, hematokrit ve trombosit için standart hasta eğitimi rehberi.",
+            "cta": "TİT rehberi",
+        },
+        {
+            "seo_link": "faq",
+            "title": "Kan tahlili analizi SSS",
+            "desc": "Yöntembilim sınırları, diller ve platformun bakımda yerini almadığı alanlar.",
+            "cta": "SSS’yi oku",
+        },
+    ],
+    "de": [
+        {
+            "seo_link": "hub",
+            "title": "Blutwerte-Hub",
+            "desc": "Referenzbereiche, Einheiten und Hoch/Tief-Muster—Referenz für Empfang und Portaltexte.",
+            "cta": "Hub öffnen",
+        },
+        {
+            "seo_link": "explained",
+            "title": "Blutwerte erklärt",
+            "desc": "Klartext-Kontext für Profile und auffällige Werte, den Sie in Aufklärung übernehmen können.",
+            "cta": "Erklärung öffnen",
+        },
+        {
+            "seo_link": "upload",
+            "title": "Blutwerte hochladen",
+            "desc": "Zeigen Sie Patientinnen den strukturierten Import hinter mehrsprachigen Entwürfen und ärztlicher Prüfung.",
+            "cta": "Upload ansehen",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "KI-Blutanalyse",
+            "desc": "Produktorientierter Ablauf für Laborberichte—für IT- und Klinik-Briefings.",
+            "cta": "Analyzer ansehen",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "CBC-Befunde lesen",
+            "desc": "Leitfaden zu Leukozyten, Erythrozyten, Hämoglobin, Hämatokrit und Thrombozyten.",
+            "cta": "CBC-Guide",
+        },
+        {
+            "seo_link": "faq",
+            "title": "FAQ zur Blutanalyse",
+            "desc": "Methodik-Grenzen, Sprachen und was die Plattform in der Versorgung nicht ersetzt.",
+            "cta": "FAQ lesen",
+        },
+    ],
+    "fr": [
+        {
+            "seo_link": "hub",
+            "title": "Pilier résultats analyses",
+            "desc": "Valeurs de référence, unités et lectures haut/bas—support pour accueil et portail.",
+            "cta": "Voir le pilier",
+        },
+        {
+            "seo_link": "explained",
+            "title": "Résultats d’analyses expliqués",
+            "desc": "Contexte accessible pour bilans et valeurs signalées, aligné avec l’éducation patient.",
+            "cta": "Voir l’explicateur",
+        },
+        {
+            "seo_link": "upload",
+            "title": "Téléverser ses analyses",
+            "desc": "Le parcours d’import structuré derrière brouillons multilingues et reprise clinique.",
+            "cta": "Voir l’upload",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "Analyseur IA des analyses",
+            "desc": "Parcours produit pour rapports de labo—pas un chat générique—pour brief IT/clinique.",
+            "cta": "Voir l’outil",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "Lire une numération",
+            "desc": "GB, GR, hémoglobine, hématocrite, plaquettes—guide pédagogique unifié.",
+            "cta": "Guide NFS",
+        },
+        {
+            "seo_link": "faq",
+            "title": "FAQ analyses sanguines",
+            "desc": "Limites méthodologiques, langues et ce que la plateforme ne remplace pas.",
+            "cta": "Lire la FAQ",
+        },
+    ],
+    "es": [
+        {
+            "seo_link": "hub",
+            "title": "Centro resultados de análisis",
+            "desc": "Rangos de referencia, unidades y patrones alto/bajo—material para recepción y portal.",
+            "cta": "Abrir centro",
+        },
+        {
+            "seo_link": "explained",
+            "title": "Resultados de análisis explicados",
+            "desc": "Contexto claro para paneles y valores marcados, alineado con educación al alta.",
+            "cta": "Ver explicador",
+        },
+        {
+            "seo_link": "upload",
+            "title": "Subir resultados de análisis",
+            "desc": "El flujo de ingesta estructurada detrás de borradores multilingües y revisión clínica.",
+            "cta": "Ver carga",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "Analizador IA de análisis",
+            "desc": "Flujo de producto para informes de laboratorio—no chat genérico—para IT clínico.",
+            "cta": "Ver analizador",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "Cómo leer el hemograma",
+            "desc": "Leucocitos, eritrocitos, hemoglobina, hematocrito y plaquetas—guía unificada.",
+            "cta": "Guía CBC",
+        },
+        {
+            "seo_link": "faq",
+            "title": "Preguntas frecuentes análisis",
+            "desc": "Límites metodológicos, idiomas y qué no sustituye la plataforma en la atención.",
+            "cta": "Leer FAQ",
+        },
+    ],
+    "it": [
+        {
+            "seo_link": "hub",
+            "title": "Hub risultati esami del sangue",
+            "desc": "Range di riferimento, unità e interpretazione alto/basso—supporto per accettazione e portale.",
+            "cta": "Apri hub",
+        },
+        {
+            "seo_link": "explained",
+            "title": "Risultati spiegati",
+            "desc": "Contesto in linguaggio semplice per pannelli e valori evidenziati, allineato all’educazione.",
+            "cta": "Apri spiegazione",
+        },
+        {
+            "seo_link": "upload",
+            "title": "Carica referti",
+            "desc": "Il flusso di ingestione strutturata dietro bozze multilingue e revisione clinica.",
+            "cta": "Vedi upload",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "Analizzatore IA",
+            "desc": "Percorso prodotto per referti di laboratorio—non chat generica—per briefing clinico/IT.",
+            "cta": "Vedi analizzatore",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "Leggere l’emocromo",
+            "desc": "WBC, RBC, emoglobina, ematocrito, piastrine—guida unificata.",
+            "cta": "Guida CBC",
+        },
+        {
+            "seo_link": "faq",
+            "title": "FAQ analisi del sangue",
+            "desc": "Limiti metodologici, lingue e cosa la piattaforma non sostituisce nella cura.",
+            "cta": "Leggi FAQ",
+        },
+    ],
+    "he": [
+        {
+            "seo_link": "hub",
+            "title": "מרכז תוצאות בדיקות דם",
+            "desc": "טווחי ערכי התייחסות, יחידות ודפוסי גבוה/נמוך—חומר לקבלה ולפורטל.",
+            "cta": "למרכז",
+        },
+        {
+            "seo_link": "explained",
+            "title": "תוצאות בדיקות דם מוסברות",
+            "desc": "הקשר בשפה פשוטה לפאנלים ולערכים מסומנים—מתאים להנחיות שחרור.",
+            "cta": "למספר המסביר",
+        },
+        {
+            "seo_link": "upload",
+            "title": "העלאת תוצאות בדיקות דם",
+            "desc": "תהליך הקליטה המובנה מאחורי טיוטות רב־לשוניות ובדיקה קלינית.",
+            "cta": "לעמוד העלאה",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "מנתח בדיקות דם מבוסס בינה מלאכותית",
+            "desc": "זרימת מוצר לדוחות מעבדה—לא צ׳אט כללי—לתיאום עם מערכות מידע.",
+            "cta": "למנתח",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "איך לקרוא ספירת דם מלאה",
+            "desc": "תאי דם לבנים ואדומים, המוגלובין, המטוקריט וטסיות—מדריך אחיד.",
+            "cta": "מדריך CBC",
+        },
+        {
+            "seo_link": "faq",
+            "title": "שאלות נפוצות — ניתוח בדיקות דם",
+            "desc": "גבולות מתודולוגיה, שפות ומה שהפלטפורמה אינה מחליפה בטיפול.",
+            "cta": "לשאלות נפוצות",
+        },
+    ],
+    "hi": [
+        {
+            "seo_link": "hub",
+            "title": "ब्लड टेस्ट परिणाम केंद्र",
+            "desc": "संदर्भ सीमाएँ, इकाइयाँ और उच्च/निम्न पैटर्न—रिसेप्शन और पोर्टल के लिए संदर्भ.",
+            "cta": "केंद्र खोलें",
+        },
+        {
+            "seo_link": "explained",
+            "title": "ब्लड टेस्ट परिणाम समझाया गया",
+            "desc": "पैनल और चिह्नित मानों के लिए साधारण भाषा संदर्भ—डिस्चार्ज शिक्षा के अनुरूप.",
+            "cta": "व्याख्या खोलें",
+        },
+        {
+            "seo_link": "upload",
+            "title": "ब्लड टेस्ट परिणाम अपलोड करें",
+            "desc": "बहुभाषी ड्राफ़्ट और क्लिनिशियन समीक्षा के पीछे संरचित इनटेक प्रवाह.",
+            "cta": "अपलोड देखें",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "AI ब्लड टेस्ट विश्लेषक",
+            "desc": "लैब रिपोर्ट के लिए उत्पाद-शीर्ष वर्कफ़्लो—सामान्य चैट नहीं—IT ब्रीफ़िंग के लिए.",
+            "cta": "विश्लेषक देखें",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "CBC परिणाम कैसे पढ़ें",
+            "desc": "WBC, RBC, हीमोग्लोबिन, हेमैटोक्रिट, प्लेटलेट्स—एकीकृत मरीज़ शिक्षा गाइड.",
+            "cta": "CBC गाइड",
+        },
+        {
+            "seo_link": "faq",
+            "title": "ब्लड टेस्ट विश्लेषण FAQ",
+            "desc": "कार्यप्रणाली सीमाएँ, भाषाएँ और मंच देखभाल में क्या नहीं बदलता.",
+            "cta": "FAQ पढ़ें",
+        },
+    ],
+    "ar": [
+        {
+            "seo_link": "hub",
+            "title": "مركز نتائج تحاليل الدم",
+            "desc": "المرجعيات والوحدات وأنماط الارتفاع/الانخفاض—مرجع للاستقبال والبوابة.",
+            "cta": "افتح المركز",
+        },
+        {
+            "seo_link": "explained",
+            "title": "شرح نتائج تحاليل الدم",
+            "desc": "سياق مبسّط لللوحات والقيم المُعلّمة، متوافق مع توعية المرضى عند الخروج.",
+            "cta": "افتح الشرح",
+        },
+        {
+            "seo_link": "upload",
+            "title": "رفع نتائج تحاليل الدم",
+            "desc": "تدفق الاستقبال المهيكل وراء المسودات متعددة اللغات والمراجعة السريرية.",
+            "cta": "صفحة الرفع",
+        },
+        {
+            "seo_link": "analyzer",
+            "title": "محلّل تحاليل الدم بالذكاء الاصطناعي",
+            "desc": "مسار منتج لتقارير المختبر—ليست دردشة عامة—لإحاطة تقنية المعلومات السريرية.",
+            "cta": "المحلّل",
+        },
+        {
+            "seo_link": "cbc",
+            "title": "كيف تقرأ نتائج تعداد الدم الكامل",
+            "desc": "كريات بيضاء وحمراء، الهيموغلوبين، الهيماتوكريت والصفائح—دليل تثقيف موحّد.",
+            "cta": "دليل CBC",
+        },
+        {
+            "seo_link": "faq",
+            "title": "الأسئلة الشائعة حول تحليل الدم",
+            "desc": "حدود المنهجية واللغات وما لا تستبدله المنصّة في الرعاية.",
+            "cta": "اقرأ الأسئلة الشائعة",
+        },
+    ],
+}
+
+
 def get_b2b_audience_ui(slug: str, lang_code: str) -> Dict[str, Any]:
     lang = (lang_code or "en").strip().lower()
     if lang not in CTA_BY_LANG:
@@ -1431,4 +1787,6 @@ def get_b2b_audience_ui(slug: str, lang_code: str) -> Dict[str, Any]:
             out.update(patch)
         extras = _FOR_CLINICS_FAQ_EXTRAS.get(lang, _FOR_CLINICS_FAQ_EXTRAS["en"])
         out["faq"] = list(out["faq"]) + list(extras)
+        base_res = list(out.get("resources") or [])
+        out["resources"] = base_res + _clinic_seo_resource_cards(lang)
     return out

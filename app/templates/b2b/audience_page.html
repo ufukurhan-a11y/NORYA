@@ -200,7 +200,7 @@
     {% endif %}
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-5">
       {% for r in t.resources %}
-      <a href="{{ base_url }}{{ r.path }}?lang={{ lang }}{% if r.fragment %}#{{ r.fragment }}{% endif %}" class="group flex flex-col rounded-2xl border border-norya-ink-subtle/12 bg-gradient-to-br from-white to-norya-surface-elevated/80 p-6 sm:p-7 text-left shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-norya-brand/25 hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-norya-brand focus-visible:ring-offset-2">
+      <a href="{{ localized_b2b_resource_url(request, base_url, lang, r) }}" class="group flex flex-col rounded-2xl border border-norya-ink-subtle/12 bg-gradient-to-br from-white to-norya-surface-elevated/80 p-6 sm:p-7 text-left shadow-sm motion-safe:transition motion-safe:duration-200 hover:border-norya-brand/25 hover:shadow-md hover:-translate-y-0.5 focus:outline-none focus-visible:ring-2 focus-visible:ring-norya-brand focus-visible:ring-offset-2">
         <h3 class="font-semibold text-norya-ink text-lg mb-2 group-hover:text-norya-brand motion-safe:transition-colors">{{ r.title }}</h3>
         <p class="text-sm text-norya-ink-muted leading-relaxed flex-1 mb-4">{{ r.desc }}</p>
         <span class="inline-flex items-center gap-1 text-sm font-semibold text-norya-brand">{{ r.cta }}<span class="motion-safe:transition-transform group-hover:translate-x-0.5" aria-hidden="true">→</span></span>
