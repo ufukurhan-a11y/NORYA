@@ -287,7 +287,7 @@
   <link rel="stylesheet" href="/static/css/report.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --norya-bg: #ffffff;
@@ -307,6 +307,8 @@
       --pricing-card-radius: 18px;
       --pricing-card-padding-desk: 22px;
       --pricing-card-padding-mobile: 18px;
+      --font-body: "Inter", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --font-heading: "Manrope", var(--font-body);
     }
     .dark {
       --norya-bg: #0f1729;
@@ -365,7 +367,7 @@
       .header .header-right-zone, .header .right-zone, .header .nav-actions { min-width: 0 !important; max-width: none !important; flex-shrink: 0 !important; }
       .header .elite-cta-btn, .header .primary-cta, .header .secondary-link, .header button { max-width: 100% !important; }
       .header .hamburger { flex-shrink: 0 !important; }
-      .hero, .gradient-hero, .premium-wrap, .premium-section, .trust-global-section, .features-grid-section, .features-bento-section { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+      .hero, .gradient-hero, .premium-wrap, .premium-section, .trust-global-section, .features-grid-section, .features-bento-section, .trust-pro-logo-bar-section { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .hero-inner { width: 100% !important; max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
       .hero-cta-wrap { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .hero-cta-wrap .hero-cta-btn, .hero-cta-wrap button, .hero-cta-wrap a { max-width: 100% !important; min-width: 0 !important; width: 100% !important; }
@@ -715,9 +717,10 @@
     .features-bento-icon svg { width: 1.35rem; height: 1.35rem; }
     .features-bento-icon svg [stroke] { stroke-width: 1.15; }
     .features-bento-title {
+      font-family: var(--font-heading);
       font-size: 1rem;
       font-weight: 700;
-      line-height: 1.35;
+      line-height: 1.38;
       color: #0f172a;
       margin: 0 0 0.4rem 0;
       letter-spacing: -0.02em;
@@ -726,7 +729,7 @@
     .dark .features-bento-title { color: #f1f5f9; }
     .features-bento-desc {
       font-size: 0.8125rem;
-      line-height: 1.55;
+      line-height: 1.68;
       color: #475569;
       margin: 0;
       flex: 1;
@@ -841,10 +844,12 @@
     }
     .hero-saas-premium .max-w-7xl { position: relative; z-index: 2; }
     .hero-home-eyebrow {
+      font-family: var(--font-heading);
       font-size: 0.8rem;
       font-weight: 600;
       letter-spacing: 0.15em;
       text-transform: uppercase;
+      line-height: 1.5;
       color: rgb(15 118 110 / 0.88);
     }
     .dark .hero-home-eyebrow {
@@ -854,9 +859,9 @@
       .hero-home-eyebrow { font-size: 0.8125rem; }
     }
     .hero-home-headline {
-      font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+      font-family: var(--font-heading);
       font-weight: 800;
-      line-height: 1.1;
+      line-height: 1.14;
       letter-spacing: -0.02em;
       color: rgb(15 23 42);
     }
@@ -873,7 +878,7 @@
     .hero-home-sub {
       color: rgba(0, 0, 0, 0.7);
       font-size: 1.125rem;
-      line-height: 1.6;
+      line-height: 1.72;
     }
     @media (min-width: 640px) {
       .hero-home-sub { font-size: 1.2rem; }
@@ -964,10 +969,12 @@
     .hero-global-viz-eyebrow {
       position: relative;
       text-align: center;
+      font-family: var(--font-heading);
       font-size: 0.6875rem;
       font-weight: 800;
       letter-spacing: 0.16em;
       text-transform: uppercase;
+      line-height: 1.5;
       color: rgb(13 148 136);
       margin: 0 0 0.75rem 0;
     }
@@ -980,14 +987,52 @@
       max-width: 36rem;
       margin: 0 auto;
     }
+    .hero-global-viz-img,
     .hero-global-viz-svg {
       display: block;
       width: 100%;
+      max-width: 30rem;
       height: auto;
-      max-height: 5.5rem;
+      margin-left: auto;
+      margin-right: auto;
+      max-height: 6.5rem;
+      object-fit: contain;
+      object-position: 50% 50%;
+      -webkit-mask-image: radial-gradient(ellipse 92% 90% at 50% 50%, #000 26%, rgba(0, 0, 0, 0.75) 56%, transparent 82%);
+      mask-image: radial-gradient(ellipse 92% 90% at 50% 50%, #000 26%, rgba(0, 0, 0, 0.75) 56%, transparent 82%);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      filter: drop-shadow(0 18px 40px rgba(14, 165, 164, 0.2)) drop-shadow(0 6px 16px rgba(15, 23, 42, 0.07));
+    }
+    .hero-global-viz-svg {
+      overflow: visible;
+      shape-rendering: geometricPrecision;
     }
     @media (min-width: 640px) {
-      .hero-global-viz-svg { max-height: 6.25rem; }
+      .hero-global-viz-img,
+      .hero-global-viz-svg { max-height: 8.75rem; max-width: 34rem; }
+    }
+    .dark .hero-global-viz-img,
+    .dark .hero-global-viz-svg {
+      filter:
+        drop-shadow(0 18px 36px rgba(0, 0, 0, 0.55))
+        drop-shadow(0 0 24px rgba(45, 212, 191, 0.14))
+        brightness(1.06)
+        contrast(1.04);
+    }
+    .hero-global-viz-svg .hero-global-viz-chart {
+      stroke-dasharray: none;
+      stroke-dashoffset: 0;
+    }
+    @media (prefers-reduced-motion: no-preference) {
+      .hero-global-viz-svg .hero-global-viz-chart {
+        stroke-dasharray: 520;
+        stroke-dashoffset: 520;
+        animation: hero-global-chart-draw 2.4s cubic-bezier(0.22, 1, 0.36, 1) 0.25s forwards;
+      }
+    }
+    @keyframes hero-global-chart-draw {
+      to { stroke-dashoffset: 0; }
     }
     .hero-global-lang-strip {
       position: relative;
@@ -1020,12 +1065,48 @@
       box-shadow:
         0 1px 0 rgba(255, 255, 255, 0.9) inset,
         0 2px 8px rgba(14, 165, 164, 0.12);
+      cursor: pointer;
+      appearance: none;
+      -webkit-appearance: none;
+      font: inherit;
+      margin: 0;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, border-color 0.15s ease;
+    }
+    .hero-global-lang-pill:hover {
+      transform: translateY(-1px);
+      border-color: rgba(14, 165, 164, 0.45);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 4px 12px rgba(14, 165, 164, 0.22);
+    }
+    .hero-global-lang-pill:focus-visible {
+      outline: 2px solid rgba(13, 148, 136, 0.55);
+      outline-offset: 2px;
+    }
+    .hero-global-lang-pill--active {
+      color: #fff;
+      background: linear-gradient(180deg, #14b8a6 0%, #0d9488 100%);
+      border-color: rgba(13, 148, 136, 0.65);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.22) inset,
+        0 4px 16px rgba(14, 165, 164, 0.38);
+    }
+    .hero-global-lang-pill--active:hover {
+      border-color: rgba(13, 148, 136, 0.75);
     }
     .dark .hero-global-lang-pill {
       color: #5eead4;
       background: linear-gradient(180deg, rgba(51, 65, 85, 0.9) 0%, rgba(30, 41, 59, 0.85) 100%);
       border-color: rgba(94, 234, 212, 0.22);
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    }
+    .dark .hero-global-lang-pill--active {
+      color: #042f2e;
+      background: linear-gradient(180deg, #5eead4 0%, #2dd4bf 100%);
+      border-color: rgba(94, 234, 212, 0.55);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.35) inset,
+        0 4px 18px rgba(45, 212, 191, 0.28);
     }
     .hero-global-reach-footer {
       position: relative;
@@ -1201,7 +1282,7 @@
       z-index: 1;
     }
     .hero-score-ring .hero-score-num {
-      font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+      font-family: var(--font-heading);
       font-size: 1.2rem;
       font-weight: 900;
       color: #0f766e;
@@ -1282,6 +1363,90 @@
     }
     @media (hover: hover) {
       .hero-trusted-logos a:hover img { opacity: 0.55; }
+    }
+    /* Trusted by healthcare professionals — kurumsal logo bar (grayscale → renk hover) */
+    .trust-pro-logo-bar-section {
+      position: relative;
+      z-index: 2;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.55) 0%, rgba(245, 249, 255, 0.92) 100%);
+      border-top: 1px solid rgba(15, 23, 42, 0.05);
+      border-bottom: 1px solid rgba(15, 23, 42, 0.04);
+    }
+    .dark .trust-pro-logo-bar-section {
+      background: linear-gradient(180deg, rgba(25, 28, 29, 0.65) 0%, rgba(25, 28, 29, 0.88) 100%);
+      border-top-color: rgba(255, 255, 255, 0.06);
+      border-bottom-color: rgba(255, 255, 255, 0.04);
+    }
+    .trust-pro-logo-bar__title {
+      margin: 0 0 1.125rem 0;
+      text-align: center;
+      font-family: var(--font-heading);
+      font-size: 0.625rem;
+      font-weight: 700;
+      letter-spacing: 0.22em;
+      text-transform: uppercase;
+      color: rgb(100 116 139 / 0.9);
+      line-height: 1.55;
+    }
+    @media (min-width: 640px) {
+      .trust-pro-logo-bar__title { font-size: 0.6875rem; margin-bottom: 1.25rem; }
+    }
+    .dark .trust-pro-logo-bar__title { color: rgb(148 163 184 / 0.85); }
+    .trust-pro-logo-bar__logos {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: center;
+      gap: 1.75rem 2.25rem;
+      list-style: none;
+      margin: 0;
+      padding: 0;
+    }
+    @media (min-width: 640px) {
+      .trust-pro-logo-bar__logos { gap: 2rem 2.75rem; }
+    }
+    .trust-pro-logo-bar__link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 2rem;
+      text-decoration: none;
+      border-radius: 8px;
+      transition: box-shadow 0.2s ease;
+    }
+    .trust-pro-logo-bar__link:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 2px rgba(14, 165, 164, 0.45);
+    }
+    .trust-pro-logo-bar__logos img {
+      height: 26px;
+      width: auto;
+      max-width: 100px;
+      object-fit: contain;
+      filter: grayscale(1);
+      opacity: 0.5;
+      transition: filter 0.28s ease, opacity 0.28s ease;
+    }
+    @media (min-width: 640px) {
+      .trust-pro-logo-bar__logos img { height: 28px; max-width: 110px; }
+    }
+    .trust-pro-logo-bar__item--hipaa img {
+      height: 34px;
+      max-width: 40px;
+    }
+    @media (min-width: 640px) {
+      .trust-pro-logo-bar__item--hipaa img { height: 36px; max-width: 42px; }
+    }
+    @media (hover: hover) {
+      .trust-pro-logo-bar__link:hover img,
+      .trust-pro-logo-bar__link:focus-visible img {
+        filter: grayscale(0);
+        opacity: 1;
+      }
+      .trust-pro-logo-bar__item--nonlink:hover img {
+        filter: grayscale(0);
+        opacity: 1;
+      }
     }
     #norya-cookie-banner.norya-cookie-float {
       left: auto;
@@ -1679,11 +1844,12 @@
     .feature-card-icon-badge svg { width: 1.375rem; height: 1.375rem; stroke-width: 1.5; }
     .dark .feature-card-icon-badge { background: rgba(14,165,164,0.14); box-shadow: 0 1px 2px rgba(0,0,0,0.15) inset; color: #e2e8f0; }
     .feature-card-title {
-      font-size: 1.0625rem; font-weight: 600; line-height: 1.4; color: #0f172a; margin: 0 0 0.5rem 0;
+      font-family: var(--font-heading);
+      font-size: 1.0625rem; font-weight: 600; line-height: 1.38; color: #0f172a; margin: 0 0 0.5rem 0;
     }
     @media (min-width: 640px) { .feature-card-title { font-size: 1.125rem; font-weight: 600; } }
     .dark .feature-card-title { color: #f1f5f9; }
-    .feature-card-desc { font-size: 0.8125rem; line-height: 1.55; color: #475569; margin: 0; flex-grow: 1; }
+    .feature-card-desc { font-size: 0.8125rem; line-height: 1.68; color: #475569; margin: 0; flex-grow: 1; }
     @media (min-width: 640px) { .feature-card-desc { font-size: 0.875rem; } }
     .dark .feature-card-desc { color: #94a3b8; }
     .features-trust-line { font-size: 0.6875rem; line-height: 1.5; color: #64748b; text-align: center; max-width: 28rem; margin: 1.75rem auto 0; letter-spacing: 0.01em; }
@@ -3683,15 +3849,20 @@
       --stroke: rgba(7,19,26,.10);
     }
 
-    /* Genel tipografi */
+    /* Genel tipografi — gövde Inter, başlıklar Manrope, ferah satır aralığı */
     body{
-      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      font-family: var(--font-body);
+      line-height: 1.65;
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
     }
-    h1,h2,h3{ letter-spacing:-0.6px; }
-    p{ color: var(--ink2); }
+    h1, h2, h3, h4, h5, h6 {
+      font-family: var(--font-heading);
+      letter-spacing: -0.02em;
+      line-height: 1.24;
+    }
+    p{ color: var(--ink2); line-height: 1.68; }
 
     /* ===== HERO BUTONLAR (Elite) ===== */
     .hero-primary-btn{
@@ -5667,42 +5838,104 @@
         <div class="hero-global-reach-card">
           <p id="hero-global-viz-heading" class="hero-global-viz-eyebrow" data-i18n="hero_global_viz_eyebrow">Premium PDF report — 9+ report languages</p>
           <div class="hero-global-viz-slot" aria-hidden="true">
-            <svg class="hero-global-viz-svg" viewBox="0 0 560 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <svg class="hero-global-viz-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 268" fill="none" aria-hidden="true">
               <defs>
-                <linearGradient id="heroGlobeGrad" x1="32" y1="8" x2="528" y2="100" gradientUnits="userSpaceOnUse">
-                  <stop stop-color="#0ea5a4"/>
-                  <stop offset="0.45" stop-color="#22d3ee"/>
-                  <stop offset="1" stop-color="#0f766e"/>
+                <linearGradient id="hgPremAmbient" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.14"/>
+                  <stop offset="55%" stop-color="#14b8a6" stop-opacity="0.05"/>
+                  <stop offset="100%" stop-color="#14b8a6" stop-opacity="0"/>
                 </linearGradient>
-                <filter id="heroGlobeBlur" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
-                  <feGaussianBlur stdDeviation="1.2" result="b"/>
-                  <feMerge>
-                    <feMergeNode in="b"/>
-                    <feMergeNode in="SourceGraphic"/>
-                  </feMerge>
+                <linearGradient id="hgPremPaper" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff"/>
+                  <stop offset="42%" stop-color="#f8fffe"/>
+                  <stop offset="100%" stop-color="#ecfdf5"/>
+                </linearGradient>
+                <linearGradient id="hgPremSheen" x1="50%" y1="0%" x2="50%" y2="100%">
+                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.65"/>
+                  <stop offset="22%" stop-color="#ffffff" stop-opacity="0.2"/>
+                  <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
+                </linearGradient>
+                <linearGradient id="hgPremTeal" x1="0%" y1="0%" x2="100%" y2="0%">
+                  <stop offset="0%" stop-color="#0f766e"/>
+                  <stop offset="40%" stop-color="#14b8a6"/>
+                  <stop offset="100%" stop-color="#5eead4"/>
+                </linearGradient>
+                <linearGradient id="hgPremBar" x1="0%" y1="100%" x2="0%" y2="0%">
+                  <stop offset="0%" stop-color="#0d9488"/>
+                  <stop offset="100%" stop-color="#5eead4"/>
+                </linearGradient>
+                <linearGradient id="hgPremArea" x1="0%" y1="0%" x2="0%" y2="100%">
+                  <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.42"/>
+                  <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.04"/>
+                </linearGradient>
+                <linearGradient id="hgPremBadge" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stop-color="#134e4a"/>
+                  <stop offset="100%" stop-color="#0f766e"/>
+                </linearGradient>
+                <filter id="hgPremStack" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0d9488" flood-opacity="0.2"/>
+                  <feDropShadow dx="0" dy="5" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.09"/>
                 </filter>
+                <filter id="hgPremLift" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+                  <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.06"/>
+                </filter>
+                <clipPath id="hgPremCardClip">
+                  <rect x="72" y="56" width="376" height="236" rx="26"/>
+                </clipPath>
               </defs>
-              <ellipse cx="278" cy="54" rx="102" ry="38" stroke="url(#heroGlobeGrad)" stroke-width="1.15" fill="rgba(14,165,164,0.07)"/>
-              <path d="M176 54h204" stroke="url(#heroGlobeGrad)" stroke-width="0.75" opacity="0.45"/>
-              <path d="M278 19c-52 22-52 66 0 88 52-22 52-66 0-88z" stroke="url(#heroGlobeGrad)" stroke-width="0.7" fill="none" opacity="0.4"/>
-              <path d="M278 21c58 18 58 66 0 84" stroke="url(#heroGlobeGrad)" stroke-width="0.65" fill="none" opacity="0.32"/>
-              <path d="M40 56c72-38 152-38 238-6" stroke="url(#heroGlobeGrad)" stroke-width="1.35" stroke-linecap="round" fill="none" filter="url(#heroGlobeBlur)" opacity="0.92"/>
-              <path d="M520 52c-72 38-150 40-238 10" stroke="url(#heroGlobeGrad)" stroke-width="1.25" stroke-linecap="round" fill="none" opacity="0.88"/>
-              <circle cx="40" cy="56" r="4" fill="#0ea5a4"/>
-              <circle cx="520" cy="52" r="4" fill="#22d3ee"/>
-              <circle cx="278" cy="54" r="2.8" fill="#ecfdf5" stroke="#0d9488" stroke-width="0.9"/>
+              <ellipse cx="260" cy="132" rx="218" ry="112" fill="url(#hgPremAmbient)"/>
+              <g filter="url(#hgPremLift)">
+                <rect x="128" y="40" width="278" height="196" rx="20" fill="#e2e8f0" opacity="0.75" transform="rotate(-8 267 138)"/>
+                <rect x="108" y="46" width="302" height="210" rx="22" fill="#f1f5f9" stroke="rgba(13,148,136,0.18)" stroke-width="1.15" transform="rotate(-4 259 151)"/>
+              </g>
+              <g filter="url(#hgPremStack)">
+                <rect x="72" y="56" width="376" height="236" rx="26" fill="url(#hgPremPaper)" stroke="rgba(13,148,136,0.42)" stroke-width="1.5"/>
+                <rect x="72" y="56" width="376" height="236" rx="26" fill="url(#hgPremSheen)"/>
+              </g>
+              <rect x="72" y="56" width="376" height="236" rx="26" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1" opacity="0.9"/>
+              <g>
+                <rect x="334" y="72" width="72" height="34" rx="10" fill="url(#hgPremBadge)"/>
+                <rect x="336" y="74" width="68" height="10" rx="4" fill="#ffffff" opacity="0.12"/>
+                <text x="370" y="94" text-anchor="middle" fill="#f0fdfa" font-size="11.5" font-weight="800" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" letter-spacing="0.14em">PDF</text>
+              </g>
+              <circle cx="98" cy="88" r="7" fill="url(#hgPremTeal)"/>
+              <rect x="114" y="80" width="128" height="14" rx="7" fill="url(#hgPremTeal)"/>
+              <rect x="114" y="102" width="196" height="8" rx="4" fill="#94a3b8" opacity="0.32"/>
+              <rect x="114" y="116" width="164" height="8" rx="4" fill="#94a3b8" opacity="0.24"/>
+              <rect x="114" y="130" width="208" height="8" rx="4" fill="#94a3b8" opacity="0.18"/>
+              <g opacity="0.9">
+                <rect x="114" y="152" width="14" height="40" rx="4" fill="url(#hgPremBar)" opacity="0.85"/>
+                <rect x="136" y="144" width="14" height="48" rx="4" fill="url(#hgPremBar)" opacity="0.65"/>
+                <rect x="158" y="160" width="14" height="32" rx="4" fill="url(#hgPremBar)" opacity="0.5"/>
+              </g>
+              <g clip-path="url(#hgPremCardClip)">
+                <g stroke="#94a3b8" stroke-opacity="0.14" stroke-width="0.75">
+                  <line x1="220" y1="148" x2="220" y2="232"/>
+                  <line x1="260" y1="148" x2="260" y2="232"/>
+                  <line x1="300" y1="148" x2="300" y2="232"/>
+                  <line x1="340" y1="148" x2="340" y2="232"/>
+                  <line x1="200" y1="176" x2="410" y2="176"/>
+                  <line x1="200" y1="200" x2="410" y2="200"/>
+                </g>
+                <path d="M200 228 L200 188 L232 168 L264 182 L296 152 L328 172 L360 138 L392 148 L418 118 L418 228 Z" fill="url(#hgPremArea)"/>
+                <path class="hero-global-viz-chart" d="M200 188 L232 168 L264 182 L296 152 L328 172 L360 138 L392 148 L418 118" stroke="url(#hgPremTeal)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+                <circle cx="418" cy="118" r="6" fill="#ffffff" stroke="#0d9488" stroke-width="1.75"/>
+                <circle cx="418" cy="118" r="2.5" fill="#14b8a6"/>
+              </g>
+              <line x1="96" y1="244" x2="424" y2="244" stroke="rgba(13,148,136,0.15)" stroke-width="1"/>
+              <circle cx="104" cy="244" r="3" fill="#34d399" opacity="0.85"/>
             </svg>
           </div>
           <ul class="hero-global-lang-strip" role="list" data-i18n-aria-label="hero_global_viz_aria" aria-label="Languages available for report output">
-            <li><span class="hero-global-lang-pill">TR</span></li>
-            <li><span class="hero-global-lang-pill">EN</span></li>
-            <li><span class="hero-global-lang-pill">DE</span></li>
-            <li><span class="hero-global-lang-pill">FR</span></li>
-            <li><span class="hero-global-lang-pill">ES</span></li>
-            <li><span class="hero-global-lang-pill">IT</span></li>
-            <li><span class="hero-global-lang-pill">HE</span></li>
-            <li><span class="hero-global-lang-pill">HI</span></li>
-            <li><span class="hero-global-lang-pill">AR</span></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="tr" aria-pressed="false">TR</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="en" aria-pressed="false">EN</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="de" aria-pressed="false">DE</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="fr" aria-pressed="false">FR</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="es" aria-pressed="false">ES</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="it" aria-pressed="false">IT</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="he" aria-pressed="false">HE</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="hi" aria-pressed="false">HI</button></li>
+            <li><button type="button" class="hero-global-lang-pill" data-hero-lang="ar" aria-pressed="false">AR</button></li>
           </ul>
           <div class="hero-global-reach-footer">
             <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" aria-hidden="true"></span>
@@ -5710,6 +5943,40 @@
           </div>
         </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Kurumsal güven: sağlık profesyonelleri odaklı logo barı -->
+  <section class="trust-pro-logo-bar-section" aria-labelledby="trust-pro-logo-bar-title">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-6 sm:py-7">
+      <h2 id="trust-pro-logo-bar-title" class="trust-pro-logo-bar__title" data-i18n="trust_professionals_title">Trusted by Healthcare Professionals</h2>
+      <ul
+        class="trust-pro-logo-bar__logos"
+        role="list"
+        data-i18n-aria-label="trust_professionals_logos_aria"
+        aria-label="Infrastructure, security and compliance partner logos"
+      >
+        <li class="trust-pro-logo-bar__item">
+          <a href="/enterprise-security?lang=en" class="trust-pro-logo-bar__link" data-locale-link="enterprise-security" aria-label="Google Cloud — enterprise infrastructure">
+            <img src="/static/logos/google.svg" alt="" width="110" height="28" loading="lazy" decoding="async" />
+          </a>
+        </li>
+        <li class="trust-pro-logo-bar__item">
+          <a href="/enterprise-security?lang=en" class="trust-pro-logo-bar__link" data-locale-link="enterprise-security" aria-label="Cloudflare — security and CDN">
+            <img src="/static/logos/cloudflare.svg" alt="" width="110" height="28" loading="lazy" decoding="async" />
+          </a>
+        </li>
+        <li class="trust-pro-logo-bar__item trust-pro-logo-bar__item--nonlink">
+          <span class="trust-pro-logo-bar__link" aria-hidden="true">
+            <img src="/static/logos/paytr.svg" alt="" width="110" height="28" loading="lazy" decoding="async" />
+          </span>
+        </li>
+        <li class="trust-pro-logo-bar__item trust-pro-logo-bar__item--hipaa">
+          <a href="/security?lang=en" class="trust-pro-logo-bar__link" data-locale-link="security" aria-label="Security and compliance overview">
+            <img src="/static/images/hipaa-badge.svg" alt="" width="40" height="40" loading="lazy" decoding="async" />
+          </a>
+        </li>
+      </ul>
     </div>
   </section>
 
@@ -10964,8 +11231,10 @@
         hero_sub: "Laboratuvar sonuçları sade dilde — yapay zekâ ile dakikalar içinde, ücretsiz.",
         hero_title: "Kan tahlili sonuçlarınızı anlayın — NoryaAI",
         hero_desc: "Tahlil raporunuzu yükleyin; CBC, demir, tiroid, vitaminler ve diğer belirteçler için yapay zekâ destekli, anlaşılır bir özet alın. Hızlı, okunaklı ve gizlilik odaklı — klinik kararlar hekiminizdedir.",
-        hero_cta: "Ücretsiz başla", hero_book_demo: "Demo talep et", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek raporu gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu", hero_global_reach: "Dünyanın her yerindeyiz — 190+ ülkeden erişilebilir",
+        hero_cta: "Ücretsiz başla", hero_book_demo: "Demo talep et", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek raporu gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu", hero_global_reach: "Dünyanın her yerindeyiz — 190+ ülkeden erişilebilir", hero_global_viz_eyebrow: "Premium PDF raporu — 9+ rapor dilinde çıktı", hero_global_viz_aria: "Norya rapor çıktısı için sunduğumuz diller",
         hero_trusted_by: "Güvenilen altyapı ve teknoloji ortakları",
+        trust_professionals_title: "Sağlık profesyonelleri tarafından güveniliyor",
+        trust_professionals_logos_aria: "Altyapı, güvenlik ve uyumluluk ortakları logoları",
         hero_patients_trust: "100.000+ HASTA TARAFINDAN GÜVENİLİYOR",
         b2b_strip_label: "Profesyoneller", b2b_strip_doctors: "Doktorlar için", b2b_strip_clinics: "Klinikler için", b2b_strip_trust: "Güven Merkezi", b2b_strip_compare: "Norya karşılaştırması",
         why_mini_title: "Neden Norya?", why_mini_sub: "Genel sohbet için değil — gerçek tahlil akışları için tasarlandı.",
@@ -11434,8 +11703,10 @@
         hero_sub: "Lab results explained in plain language — AI-powered, free in minutes.",
         hero_title: "Understand Your Blood Test Results — NoryaAI",
         hero_desc: "Upload your blood test report and get a clear AI-powered explanation of CBC, iron, thyroid, vitamins and other lab markers. Fast, readable and privacy-focused — clinical decisions stay with your clinician.",
-        hero_cta: "Start free", hero_book_demo: "Book demo", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant", hero_global_reach: "We're everywhere — Accessible from 190+ countries",
+        hero_cta: "Start free", hero_book_demo: "Book demo", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant", hero_global_reach: "We're everywhere — Accessible from 190+ countries", hero_global_viz_eyebrow: "Premium PDF report — 9+ report languages", hero_global_viz_aria: "Languages available for Norya report output",
         hero_trusted_by: "Trusted infrastructure & technology partners",
+        trust_professionals_title: "Trusted by Healthcare Professionals",
+        trust_professionals_logos_aria: "Infrastructure, security and compliance partner logos",
         hero_patients_trust: "Trusted by 10,000+ patients",
         b2b_strip_label: "For teams", b2b_strip_doctors: "For doctors", b2b_strip_clinics: "For clinics", b2b_strip_trust: "Trust Center", b2b_strip_compare: "Compare Norya",
         why_mini_title: "Why Norya", why_mini_sub: "Purpose-built for lab workflows — not open-ended chat.",
@@ -11896,7 +12167,9 @@
         hero_sub: "Referti di laboratorio spiegati in modo chiaro. Non è una diagnosi — solo preparazione alla visita.",
         hero_title: "Comprendi le tue analisi del sangue in pochi minuti",
         hero_desc: "Carica il referto e ricevi un riepilogo strutturato con intervalli di riferimento, spiegazioni semplici e un PDF pronto per il medico.",
-        hero_cta: "Inizia gratis", hero_book_demo: "Prenota demo", hero_see_sample: "Vedi report di esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy dalla progettazione", hero_global_reach: "Siamo ovunque — Accessibile da oltre 190 paesi",
+        hero_cta: "Inizia gratis", hero_book_demo: "Prenota demo", hero_see_sample: "Vedi report di esempio", hero_how: "Come funziona", hero_secure: "Sicuro • Privacy dalla progettazione", hero_global_reach: "Siamo ovunque — Accessibile da oltre 190 paesi", hero_global_viz_eyebrow: "Report PDF premium — 9+ lingue di output", hero_global_viz_aria: "Lingue disponibili per il report Norya",
+        trust_professionals_title: "Scelto dai professionisti della salute",
+        trust_professionals_logos_aria: "Loghi di partner per infrastruttura, sicurezza e conformità",
         b2b_strip_label: "Per i team", b2b_strip_doctors: "Per i medici", b2b_strip_clinics: "Per le cliniche", b2b_strip_trust: "Centro fiducia", b2b_strip_compare: "Confronta Norya",
         why_mini_title: "Perché Norya", why_mini_sub: "Pensato per i referti di laboratorio — non per chat generiche.",
         why_mini_1: "Pensato per i referti, non per chat generiche.", why_mini_2: "Riassunti chiari per i pazienti.", why_mini_3: "Output adatto al medico.", why_mini_4: "Accesso multilingue.", why_mini_5: "Architettura trust-first.",
@@ -12199,6 +12472,27 @@
         checkout_coupon_apply: 'Applica',
         checkout_paytr_note: 'Se PayTR non è configurato, la pagina di pagamento non si aprirà.',
         pricing_yearly_value_midline: 'Massimo risparmio con il piano annuale',
+        sample_cards_heading: "Cosa troverai nel referto",
+        sample_cards_sub: "Dopo l'analisi — sezioni chiave con una vista clinica, in formato premium.",
+        sample_card_badge_glucose: "Nel referto", sample_card_badge_bio: "Nel referto", sample_card_badge_cardio: "Nel referto", sample_card_badge_vitamin: "Nel referto", sample_card_badge_attention: "Nel referto",
+        sample_card_glucose_title: "Glicemia",
+        sample_card_glucose_desc: "Glicemia a digiuno e HbA1c in un'unica schermata; sintesi del rischio diabete e range di riferimento.",
+        sample_card_bio_title: "Età biologica",
+        sample_card_bio_desc: "Età biologica stimata e punteggio di salute generale — stato corporeo rispetto all'età.",
+        sample_card_cardio_title: "Rischio cardiovascolare",
+        sample_card_cardio_desc: "LDL, HDL, trigliceridi; sintesi salute cardiaca con range di riferimento.",
+        sample_card_vitamin_title: "Vitamine e minerali",
+        sample_card_vitamin_desc: "Vitamina D, B12, ferro, ferritina — rischio di carenza e range di riferimento.",
+        sample_card_attention_title: "Valori da monitorare",
+        sample_card_attention_desc: "Parametri in evidenza e argomenti da discutere con il medico — a colpo d'occhio.",
+        sample_card_cta: "Vedi esempio di referto →",
+        sample_cards_main_cta: "Vedi l'esempio completo — Fai l'analisi, ricevi il referto",
+        feature_diet_title: "Suggerimenti su alimentazione e stile di vita",
+        feature_diet_desc: "Riassume alimenti da privilegiare o ridurre e un menu tipo in base a carenze e rischi (solo informativo).",
+        feature_supp_title: "Note su integratori e abitudini",
+        feature_supp_desc: "Quando i valori sono fuori range: note informative su stile di vita e integratori da discutere con il medico.",
+        feature_compare_title: "Confronto avanzato tra analisi",
+        feature_compare_desc: "Metti due referti affiancati: trend nel tempo e segnali di rischio in un'unica schermata.",
         profile_plan_name: 'Piano',
       },
       es: {
@@ -12223,7 +12517,9 @@
         hero_sub: "Resultados de laboratorio explicados en lenguaje claro. No es un diagnóstico — es preparación para tu cita médica.",
         hero_title: "Entiende tu análisis de sangre en pocos minutos",
         hero_desc: "Sube tus resultados y recibe un resumen estructurado con rangos de referencia, explicaciones sencillas y un PDF listo para tu médico.",
-        hero_cta: "Empezar gratis", hero_book_demo: "Reservar demo", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad desde el diseño", hero_global_reach: "Estamos en todas partes — Accesible desde más de 190 países",
+        hero_cta: "Empezar gratis", hero_book_demo: "Reservar demo", hero_see_sample: "Ver informe de ejemplo", hero_how: "Cómo funciona", hero_secure: "Seguro • Privacidad desde el diseño",         hero_global_reach: "Estamos en todas partes — Accesible desde más de 190 países", hero_global_viz_eyebrow: "Informe PDF premium — 9+ idiomas de salida", hero_global_viz_aria: "Idiomas disponibles para el informe Norya",
+        trust_professionals_title: "Con la confianza de profesionales de la salud",
+        trust_professionals_logos_aria: "Logotipos de socios de infraestructura, seguridad y cumplimiento",
         b2b_strip_label: "Para equipos", b2b_strip_doctors: "Para médicos", b2b_strip_clinics: "Para clínicas", b2b_strip_trust: "Centro de confianza", b2b_strip_compare: "Comparar Norya",
         why_mini_title: "Por qué Norya", why_mini_sub: "Diseñado para informes de laboratorio — no para chat genérico.",
         why_mini_1: "Hecho para informes de laboratorio, no chat genérico.", why_mini_2: "Resúmenes claros para el paciente.", why_mini_3: "Salida amigable para el médico.", why_mini_4: "Acceso multilingüe.", why_mini_5: "Arquitectura trust-first.",
@@ -12526,6 +12822,27 @@
         checkout_coupon_apply: 'Aplicar',
         checkout_paytr_note: 'Si PayTR no está configurado, la página de pago no se abrirá.',
         pricing_yearly_value_midline: 'Máximo ahorro con el plan anual',
+        sample_cards_heading: "Qué incluirá tu informe",
+        sample_cards_sub: "Tras el análisis verás estas secciones — visión clínica, formato premium.",
+        sample_card_badge_glucose: "En el informe", sample_card_badge_bio: "En el informe", sample_card_badge_cardio: "En el informe", sample_card_badge_vitamin: "En el informe", sample_card_badge_attention: "En el informe",
+        sample_card_glucose_title: "Nivel de glucosa",
+        sample_card_glucose_desc: "Glucosa en ayunas y HbA1c en una sola vista; resumen del riesgo de diabetes e intervalos de referencia.",
+        sample_card_bio_title: "Edad biológica",
+        sample_card_bio_desc: "Edad biológica estimada y puntuación de salud global — instantánea frente a tu edad cronológica.",
+        sample_card_cardio_title: "Riesgo cardiovascular",
+        sample_card_cardio_desc: "LDL, HDL, triglicéridos; resumen de salud cardiaca con rangos de referencia.",
+        sample_card_vitamin_title: "Vitaminas y minerales",
+        sample_card_vitamin_desc: "Vitamina D, B12, hierro, ferritina — riesgo de déficit y rangos de referencia.",
+        sample_card_attention_title: "Valores que requieren atención",
+        sample_card_attention_desc: "Parámetros resaltados y temas para comentar con tu médico — de un vistazo.",
+        sample_card_cta: "Ver informe de ejemplo →",
+        sample_cards_main_cta: "Ver ejemplo completo — Haz la analítica, recibe tu informe",
+        feature_diet_title: "Orientación dietética y de hábitos",
+        feature_diet_desc: "Resume alimentos a priorizar o reducir y un menú ejemplo según déficits y riesgos (solo informativo).",
+        feature_supp_title: "Notas sobre suplementos y estilo de vida",
+        feature_supp_desc: "Si hay valores fuera de rango: notas para hablar con tu médico sobre hábitos y suplementación.",
+        feature_compare_title: "Comparación avanzada de analíticas",
+        feature_compare_desc: "Pon dos informes lado a lado: evolución y alertas de riesgo en una sola pantalla.",
         profile_plan_name: 'Plan',
       },
       fr: {
@@ -12550,7 +12867,9 @@
         hero_sub: "Résultats de laboratoire expliqués en langage clair. Pas un diagnostic — une préparation sereine à votre rendez-vous.",
         hero_title: "Comprenez vos analyses sanguines en quelques minutes",
         hero_desc: "Téléchargez vos résultats et recevez un résumé structuré avec plages de référence, explications simples et un PDF prêt pour votre médecin.",
-        hero_cta: "Commencer gratuitement", hero_book_demo: "Réserver une démo", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité dès la conception", hero_global_reach: "Nous sommes partout — Accessible depuis plus de 190 pays",
+        hero_cta: "Commencer gratuitement", hero_book_demo: "Réserver une démo", hero_see_sample: "Voir un exemple de rapport", hero_how: "Comment ça marche", hero_secure: "Sécurisé • Confidentialité dès la conception", hero_global_reach: "Nous sommes partout — Accessible depuis plus de 190 pays", hero_global_viz_eyebrow: "Rapport PDF premium — 9+ langues d’export", hero_global_viz_aria: "Langues disponibles pour le rapport Norya",
+        trust_professionals_title: "Plébiscité par les professionnels de santé",
+        trust_professionals_logos_aria: "Logos des partenaires d’infrastructure, sécurité et conformité",
         b2b_strip_label: "Pour les équipes", b2b_strip_doctors: "Pour les médecins", b2b_strip_clinics: "Pour les cliniques", b2b_strip_trust: "Centre de confiance", b2b_strip_compare: "Comparer Norya",
         why_mini_title: "Pourquoi Norya", why_mini_sub: "Conçu pour les comptes rendus de labo — pas pour le chat générique.",
         why_mini_1: "Pensé pour les rapports de labo, pas le chat générique.", why_mini_2: "Résumés clairs pour les patients.", why_mini_3: "Rendu adapté au médecin.", why_mini_4: "Accès multilingue.", why_mini_5: "Architecture trust-first.",
@@ -12853,6 +13172,27 @@
         checkout_coupon_apply: 'Appliquer',
         checkout_paytr_note: 'Si PayTR n\'est pas configuré, la page de paiement ne s\'ouvrira pas.',
         pricing_yearly_value_midline: 'Économies maximales avec le plan annuel',
+        sample_cards_heading: "Que contiendra votre rapport ?",
+        sample_cards_sub: "Après votre analyse — sections clés avec une lecture clinique, format premium.",
+        sample_card_badge_glucose: "Dans le rapport", sample_card_badge_bio: "Dans le rapport", sample_card_badge_cardio: "Dans le rapport", sample_card_badge_vitamin: "Dans le rapport", sample_card_badge_attention: "Dans le rapport",
+        sample_card_glucose_title: "Glycémie",
+        sample_card_glucose_desc: "Glycémie à jeun et HbA1c sur un seul écran ; risque diabète et plages de référence.",
+        sample_card_bio_title: "Âge biologique",
+        sample_card_bio_desc: "Âge biologique estimé et score de santé — aperçu par rapport à votre âge.",
+        sample_card_cardio_title: "Risque cardiovasculaire",
+        sample_card_cardio_desc: "LDL, HDL, triglycérides ; synthèse cardiaque avec plages de référence.",
+        sample_card_vitamin_title: "Vitamines et minéraux",
+        sample_card_vitamin_desc: "Vitamine D, B12, fer, ferritine — risque de carence et plages de référence.",
+        sample_card_attention_title: "Valeurs à surveiller",
+        sample_card_attention_desc: "Paramètres mis en évidence et sujets pour l'entretien médical — en un coup d'œil.",
+        sample_card_cta: "Voir un exemple de rapport →",
+        sample_cards_main_cta: "Voir l'exemple complet — Faites votre analyse, recevez votre rapport",
+        feature_diet_title: "Conseils alimentation et mode de vie",
+        feature_diet_desc: "Aliments à privilégier ou modérer et menu type selon carences et risques (information uniquement).",
+        feature_supp_title: "Notes compléments et hygiène de vie",
+        feature_supp_desc: "Si des valeurs sortent des plages : pistes à aborder avec votre médecin (sans remplacer l'avis médical).",
+        feature_compare_title: "Comparaison avancée d'analyses",
+        feature_compare_desc: "Deux bilans côte à côte : évolution dans le temps et alertes sur un seul écran.",
         profile_plan_name: 'Plan',
       },
       de: {
@@ -12877,7 +13217,9 @@
         hero_sub: "Laborergebnisse verständlich erklärt — keine Diagnose, nur Orientierung.",
         hero_title: "Blutwerte in Minuten verstehen",
         hero_desc: "Befund hochladen, klaren Bericht bekommen: Referenzbereiche, Einordnung und Empfehlungen. Ideal vor dem Arztbesuch. Erste Analyse kostenlos.",
-        hero_cta: "Kostenlos starten", hero_book_demo: "Demo buchen", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "DSGVO-konform · SSL-verschlüsselt", hero_global_reach: "Wir sind überall — Zugang aus über 190 Ländern",
+        hero_cta: "Kostenlos starten", hero_book_demo: "Demo buchen", hero_see_sample: "Beispielbericht ansehen", hero_how: "So funktioniert's", hero_secure: "DSGVO-konform · SSL-verschlüsselt",         hero_global_reach: "Wir sind überall — Zugang aus über 190 Ländern", hero_global_viz_eyebrow: "Premium-PDF-Bericht — 9+ Berichtssprachen", hero_global_viz_aria: "Verfügbare Sprachen für den Norya-Bericht",
+        trust_professionals_title: "Das Vertrauen von Gesundheitsfachkräften",
+        trust_professionals_logos_aria: "Logos der Partner für Infrastruktur, Sicherheit und Compliance",
         b2b_strip_label: "Für Teams", b2b_strip_doctors: "Für Ärztinnen und Ärzte", b2b_strip_clinics: "Für Kliniken", b2b_strip_trust: "Trust Center", b2b_strip_compare: "Norya vergleichen",
         why_mini_title: "Warum Norya", why_mini_sub: "Für echte Laborberichte — nicht für allgemeinen Chat.",
         why_mini_1: "Für Laborberichte gebaut, nicht für allgemeinen Chat.", why_mini_2: "Klare Patientenzusammenfassungen.", why_mini_3: "Arztfreundliche Ausgabe.", why_mini_4: "Mehrsprachiger Zugang.", why_mini_5: "Trust-first-Architektur.",
@@ -13161,6 +13503,27 @@
         checkout_coupon_apply: 'Anwenden',
         checkout_paytr_note: 'Wenn PayTR nicht konfiguriert ist, wird die Zahlungsseite nicht geöffnet.',
         pricing_yearly_value_midline: 'Maximale Ersparnis mit dem Jahresplan',
+        sample_cards_heading: "Was steht in Ihrem Bericht?",
+        sample_cards_sub: "Nach der Analyse — die wichtigsten Abschnitte aus klinischer Sicht, im Premium-Format.",
+        sample_card_badge_glucose: "Im Bericht", sample_card_badge_bio: "Im Bericht", sample_card_badge_cardio: "Im Bericht", sample_card_badge_vitamin: "Im Bericht", sample_card_badge_attention: "Im Bericht",
+        sample_card_glucose_title: "Blutzucker",
+        sample_card_glucose_desc: "Nüchternglukose und HbA1c auf einen Blick; Diabetes-Risiko und Referenzbereiche.",
+        sample_card_bio_title: "Biologisches Alter",
+        sample_card_bio_desc: "Geschätztes biologisches Alter und Gesundheitswert — Einordnung zum Lebensalter.",
+        sample_card_cardio_title: "Herz-Kreislauf-Risiko",
+        sample_card_cardio_desc: "LDL, HDL, Triglyceride; Herzgesundheit mit Referenzbereichen.",
+        sample_card_vitamin_title: "Vitamine & Mineralien",
+        sample_card_vitamin_desc: "Vitamin D, B12, Eisen, Ferritin — Mangelrisiko und Referenzbereiche.",
+        sample_card_attention_title: "Auffällige Werte",
+        sample_card_attention_desc: "Hervorgehobene Parameter und Themen für das Arztgespräch — auf einen Blick.",
+        sample_card_cta: "Beispielbericht ansehen →",
+        sample_cards_main_cta: "Vollständiges Beispiel ansehen — Test gemacht, Bericht erhalten",
+        feature_diet_title: "Ernährung und Lebensstil",
+        feature_diet_desc: "Kurzüberblick zu empfohlenen oder zu reduzierenden Lebensmitteln und einem Beispieltag — nach Befund (nur informativ).",
+        feature_supp_title: "Hinweise zu Nahrungsergänzung",
+        feature_supp_desc: "Wenn Werte außerhalb der Norm: Themen zu Alltag und Nahrungsergänzung mit Ihrem Arzt besprechen.",
+        feature_compare_title: "Erweiterter Befundvergleich",
+        feature_compare_desc: "Zwei Analysen nebeneinander: Veränderungen im Zeitverlauf und Risiko-Hinweise auf einem Bildschirm.",
         profile_plan_name: 'Plan',
       },
       he: {
@@ -13184,7 +13547,9 @@
         hero_sub: "תוצאות מעבדה מוסברות בשפה ברורה. לא אבחנה — הכנה רגועה לפגישה עם הרופא.",
         hero_title: "הבן את תוצאות בדיקת הדם שלך בתוך דקות",
         hero_desc: "העלה את התוצאות וקבל סיכום מובנה עם טווחי התייחסות, הסברים פשוטים ו-PDF שנוח לקחת לרופא.",
-        hero_cta: "התחל בחינם", hero_book_demo: "קבעו הדגמה", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות כברירת מחדל", hero_global_reach: "אנחנו בכל מקום — נגיש מ-190+ מדינות",
+        hero_cta: "התחל בחינם", hero_book_demo: "קבעו הדגמה", hero_see_sample: "צפה בדוח לדוגמה", hero_how: "איך זה עובד", hero_secure: "מאובטח • פרטיות כברירת מחדל",         hero_global_reach: "אנחנו בכל מקום — נגיש מ-190+ מדינות", hero_global_viz_eyebrow: "דוח PDF פרימיום — 9+ שפות פלט", hero_global_viz_aria: "שפות זמינות לפלט הדוח של Norya",
+        trust_professionals_title: "בשימוש על ידי אנשי מקצוע בתחום הבריאות",
+        trust_professionals_logos_aria: "לוגואים של שותפי תשתית, אבטחה ותאימות",
         b2b_strip_label: "לצוותים", b2b_strip_doctors: "לרופאים", b2b_strip_clinics: "למרפאות", b2b_strip_trust: "מרכז האמון", b2b_strip_compare: "השוו ל־Norya",
         why_mini_title: "למה Norya", why_mini_sub: "נבנה לדוחות מעבדה — לא לצ'אט כללי.",
         why_mini_1: "נבנה לדוחות מעבדה, לא לצ'אט כללי.", why_mini_2: "סיכומים ברורים למטופלים.", why_mini_3: "פלט ידידותי לרופא.", why_mini_4: "גישה רב-לשונית.", why_mini_5: "אדריכלות ששמה אמון במרכז.",
@@ -13439,6 +13804,27 @@
         checkout_coupon_apply: 'החל',
         checkout_paytr_note: 'אם PayTR לא מוגדר, דף התשלום לא ייפתח.',
         pricing_yearly_value_midline: 'חיסכון מקסימלי בתוכנית שנתית',
+        sample_cards_heading: "מה יופיע בדוח שלכם?",
+        sample_cards_sub: "אחרי הניתוח — קטעים מרכזיים במבט קליני ובפורמט פרימיום.",
+        sample_card_badge_glucose: "בדוח", sample_card_badge_bio: "בדוח", sample_card_badge_cardio: "בדוח", sample_card_badge_vitamin: "בדוח", sample_card_badge_attention: "בדוח",
+        sample_card_glucose_title: "רמת סוכר",
+        sample_card_glucose_desc: "גלוקוז בצום ו־HbA1c במסך אחד; סיכום סיכון לסוכרת וטווחי ייחוס.",
+        sample_card_bio_title: "גיל ביולוגי",
+        sample_card_bio_desc: "גיל ביולוגי משוער וציון בריאות כללי — תמונת מצב ביחס לגיל.",
+        sample_card_cardio_title: "סיכון לב־כלי",
+        sample_card_cardio_desc: "LDL, HDL, טריגליצרידים; סיכום קרדיו עם טווחי ייחוס.",
+        sample_card_vitamin_title: "ויטמינים ומינרלים",
+        sample_card_vitamin_desc: "ויטמין D, B12, ברזל, פריטין — סיכון למחסור וטווחי ייחוס.",
+        sample_card_attention_title: "ערכים הדורשים תשומת לב",
+        sample_card_attention_desc: "פרמטרים מודגשים ונושאים לשיחה עם הרופא — במבט חד.",
+        sample_card_cta: "לדוגמת דוח →",
+        sample_cards_main_cta: "לדוגמה המלאה — בדיקה, דוח מוכן",
+        feature_diet_title: "המלצות תזונה ואורח חיים",
+        feature_diet_desc: "סיכום מאכלים להעדפה או הפחתה ותפריט לדוגמה לפי חוסרים וסיכונים (להעשרה בלבד).",
+        feature_supp_title: "הערות תוספים ואורח חיים",
+        feature_supp_desc: "כשערכים מחוץ לטווח — נקודות כלליות לשיחה עם הרופא; לא תחליף לייעוץ רפואי.",
+        feature_compare_title: "השוואה מתקדמת בין בדיקות",
+        feature_compare_desc: "שתי בדיקות זו לצד זו — מגמה לאורך זמן והתראות סיכון במסך אחד.",
         profile_plan_name: 'תוכנית',
       },
       ar: {
@@ -13462,7 +13848,9 @@
         hero_sub: "نتائج المختبر موضَّحة بلغة بسيطة. ليست تشخيصاً طبياً — بل تحضير هادئ لزيارة الطبيب.",
         hero_title: "افهم نتائج تحليل الدم في دقائق قليلة",
         hero_desc: "ارفع النتائج لتحصل على ملخص منظم مع حدود مرجعية، شروحات واضحة وملف PDF جاهز لتأخذه إلى طبيبك.",
-        hero_cta: "ابدأ مجاناً", hero_book_demo: "احجز عرضاً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • الخصوصية حسب التصميم", hero_global_reach: "نحن في كل مكان — متاح من أكثر من 190 دولة",
+        hero_cta: "ابدأ مجاناً", hero_book_demo: "احجز عرضاً", hero_see_sample: "عرض تقرير مثال", hero_how: "كيف يعمل", hero_secure: "آمن • الخصوصية حسب التصميم",         hero_global_reach: "نحن في كل مكان — متاح من أكثر من 190 دولة", hero_global_viz_eyebrow: "تقرير PDF مميز — أكثر من 9 لغات للتقرير", hero_global_viz_aria: "اللغات المتاحة لمخرجات تقرير Norya",
+        trust_professionals_title: "موثوق به من قبل المهنيين الصحيين",
+        trust_professionals_logos_aria: "شعارات شركاء البنية التحتية والأمن والامتثال",
         b2b_strip_label: "للفرق", b2b_strip_doctors: "للأطباء", b2b_strip_clinics: "للعيادات", b2b_strip_trust: "مركز الثقة", b2b_strip_compare: "قارن Norya",
         why_mini_title: "لماذا Norya", why_mini_sub: "مُصمم لتقارير المختبر — وليس للدردشة العامة.",
         why_mini_1: "مُبنى لتقارير المختبر، ليس للدردشة العامة.", why_mini_2: "ملخصات واضحة للمرضى.", why_mini_3: "مخرجات مناسبة للطبيب.", why_mini_4: "وصول متعدد اللغات.", why_mini_5: "بنية تضع الثقة أولاً.",
@@ -13717,6 +14105,27 @@
         checkout_coupon_apply: 'تطبيق',
         checkout_paytr_note: 'إذا لم يتم تكوين PayTR، لن تفتح صفحة الدفع.',
         pricing_yearly_value_midline: 'أقصى توفير مع الخطة السنوية',
+        sample_cards_heading: "ماذا سيجري في تقريرك؟",
+        sample_cards_sub: "بعد التحليل — أقسام رئيسية برؤية سريرية وتنسيق بمستوى ممتاز.",
+        sample_card_badge_glucose: "في التقرير", sample_card_badge_bio: "في التقرير", sample_card_badge_cardio: "في التقرير", sample_card_badge_vitamin: "في التقرير", sample_card_badge_attention: "في التقرير",
+        sample_card_glucose_title: "مستوى السكر",
+        sample_card_glucose_desc: "سكر صائم وHbA1c في عرض واحد؛ ملخص خطر السكري والنطاقات المرجعية.",
+        sample_card_bio_title: "العمر البيولوجي",
+        sample_card_bio_desc: "تقدير للعمر البيولوجي ودرجة الصحة العامة — لقطة مقارنة بعمرك.",
+        sample_card_cardio_title: "الخطر القلبي الوعائي",
+        sample_card_cardio_desc: "LDL وHDL والدهون الثلاثية؛ ملخص لصحة القلب مع النطاقات المرجعية.",
+        sample_card_vitamin_title: "الفيتامينات والمعادن",
+        sample_card_vitamin_desc: "فيتامين D وB12 والحديد والفريتين — مخاطر النقص والنطاقات المرجعية.",
+        sample_card_attention_title: "قيم تستحق الانتباه",
+        sample_card_attention_desc: "معاملات مبرزة ومواضيع لمناقشتها مع الطبيب — في لمحة.",
+        sample_card_cta: "اطلع على عينة التقرير ←",
+        sample_cards_main_cta: "العينة الكاملة — حلل، واحصل على تقريرك",
+        feature_diet_title: "إرشادات التغذية ونمط الحياة",
+        feature_diet_desc: "ملخص لأطعمة يُفضّل زيادتها أو تقليلها وقائمة يومية وفق النقص والمخاطر (للإعلام فقط).",
+        feature_supp_title: "ملاحظات المكملات ونمط الحياة",
+        feature_supp_desc: "عند خروج القيم عن المدى: نقاط للمناقشة مع طبيبك حول العادات والمكملات.",
+        feature_compare_title: "مقارنة متقدمة بين التحاليل",
+        feature_compare_desc: "ضع تحليلين جنبًا إلى جنب: التغير بمرور الوقت وتنبيهات الخطر في شاشة واحدة.",
         profile_plan_name: 'الخطة',
       },
       hi: {
@@ -13741,7 +14150,9 @@
         hero_sub: "लैब परिणाम सरल भाषा में समझाए जाते हैं। यह निदान नहीं — डॉक्टर से मिलने की तैयारी है।",
         hero_title: "कुछ ही मिनटों में अपने रक्त परीक्षण को समझें",
         hero_desc: "रिज़ल्ट अपलोड करें और संदर्भ सीमाओं, साफ व्याख्या और डॉक्टर को दिखाने लायक PDF के साथ संरचित सारांश पाएं।",
-        hero_cta: "मुफ्त शुरू करें", hero_book_demo: "डेमो बुक करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • डिजाइन से गोपनीयता", hero_global_reach: "हम हर जगह हैं — 190+ देशों से सुलभ",
+        hero_cta: "मुफ्त शुरू करें", hero_book_demo: "डेमो बुक करें", hero_see_sample: "नमूना रिपोर्ट देखें", hero_how: "कैसे काम करता है", hero_secure: "सुरक्षित • डिजाइन से गोपनीयता",         hero_global_reach: "हम हर जगह हैं — 190+ देशों से सुलभ", hero_global_viz_eyebrow: "प्रीमियम PDF रिपोर्ट — 9+ रिपोर्ट भाषाएँ", hero_global_viz_aria: "Norya रिपोर्ट आउटपुट के लिए उपलब्ध भाषाएँ",
+        trust_professionals_title: "स्वास्थ्य पेशेवरों द्वारा भरोसेमंद",
+        trust_professionals_logos_aria: "अवसंरचना, सुरक्षा और अनुपालन साझेदार लोगो",
         b2b_strip_label: "टीमों के लिए", b2b_strip_doctors: "डॉक्टरों के लिए", b2b_strip_clinics: "क्लिनिक के लिए", b2b_strip_trust: "ट्रस्ट सेंटर", b2b_strip_compare: "Norya की तुलना",
         why_mini_title: "क्यों Norya", why_mini_sub: "लैब रिपोर्ट के लिए बनाया गया — सामान्य चैट के लिए नहीं।",
         why_mini_1: "लैब रिपोर्ट के लिए, सामान्य चैट के लिए नहीं।", why_mini_2: "रोगियों के लिए स्पष्ट सारांश।", why_mini_3: "डॉक्टर-अनुकूल आउटपुट।", why_mini_4: "बहुभाषी पहुंच।", why_mini_5: "ट्रस्ट-फर्स्ट वास्तुकला।",
@@ -13996,6 +14407,27 @@
         checkout_coupon_apply: 'लागू करें',
         checkout_paytr_note: 'यदि PayTR कॉन्फ़िगर नहीं है, तो भुगतान पृष्ठ नहीं खुलेगा।',
         pricing_yearly_value_midline: 'वार्षिक योजना के साथ अधिकतम बचत',
+        sample_cards_heading: "आपकी रिपोर्ट में क्या होगा?",
+        sample_cards_sub: "टेस्ट के बाद — मुख्य खंड क्लिनिकल नजरिए और प्रीमियम फॉर्मेट में।",
+        sample_card_badge_glucose: "रिपोर्ट में", sample_card_badge_bio: "रिपोर्ट में", sample_card_badge_cardio: "रिपोर्ट में", sample_card_badge_vitamin: "रिपोर्ट में", sample_card_badge_attention: "रिपोर्ट में",
+        sample_card_glucose_title: "ब्लड शुगर स्तर",
+        sample_card_glucose_desc: "खाली पेट ग्लूकोज और HbA1c एक स्क्रीन पर; मधुमेह जोखिम सारांश और संदर्भ सीमाएँ।",
+        sample_card_bio_title: "जैविक आयु",
+        sample_card_bio_desc: "अनुमानित जैविक आयु और समग्र स्वास्थ्य स्कोर — उम्र के सापेक्ष त्वरित चित्र।",
+        sample_card_cardio_title: "हृदय जोखिम",
+        sample_card_cardio_desc: "LDL, HDL, ट्राइग्लिसराइड; संदर्भ सीमाओं के साथ हृदय स्वास्थ्य सारांश.",
+        sample_card_vitamin_title: "विटामिन और खनिज",
+        sample_card_vitamin_desc: "विटामिन D, B12, आयरन, फेरिटिन — कमी जोखिम और संदर्भ सीमाएँ।",
+        sample_card_attention_title: "ध्यान देने योग्य मान",
+        sample_card_attention_desc: "हाइलाइटेड पैरामीटर और डॉक्टर से साझा करने के विषय — एक नज़र में।",
+        sample_card_cta: "नमूना रिपोर्ट देखें →",
+        sample_cards_main_cta: "पूर्ण नमूना देखें — टेस्ट कराएँ, रिपोर्ट पाएँ",
+        feature_diet_title: "व्यक्तिगत आहार व जीवनशैली संकेत",
+        feature_diet_desc: "कमियों और जोखिम के अनुसार बढ़ाने/घटाने योग्य खाद्य पदार्थ और नमूना दिनचर्या (केवल शैक्षिक)।",
+        feature_supp_title: "जीवनशैली व पूरक पर जानकारी नोट",
+        feature_supp_desc: "जब मान संदर्भ के बाहर हों — डॉक्टर से चर्चा के लिए सामान्य जीवनशैली/पूरक नोट।",
+        feature_compare_title: "उन्नत ब्लड टेस्ट तुलना",
+        feature_compare_desc: "दो रिपोर्ट साथ-साथ — समय के साथ बदलाव और जोखिम संकेत एक स्क्रीन पर।",
         profile_plan_name: 'योजना',
       },
       el: {
@@ -14013,7 +14445,9 @@
         hero_sub: "Αποτελέσματα εργαστηρίου — σαφής αναφορά",
         hero_title: "Κατανοήστε τα αποτελέσματα αιματολογικών σε 60 δευτερόλεπτα",
         hero_desc: "Επικολλήστε τα αποτελέσματα, η AI τα εξηγεί. Δωρεάν δοκιμή — χωρίς κάρτα.",
-        hero_cta: "Πρώτη ανάλυση δωρεάν", hero_see_sample: "Δείτε παράδειγμα αναφοράς", hero_how: "Πώς λειτουργεί", hero_secure: "Ασφαλές • Προστασία ιδιωτικότητας", hero_global_reach: "Είμαστε παντού — Πρόσβαση από 190+ χώρες",
+        hero_cta: "Πρώτη ανάλυση δωρεάν", hero_see_sample: "Δείτε παράδειγμα αναφοράς", hero_how: "Πώς λειτουργεί", hero_secure: "Ασφαλές • Προστασία ιδιωτικότητας",         hero_global_reach: "Είμαστε παντού — Πρόσβαση από 190+ χώρες", hero_global_viz_eyebrow: "Πολυτελής αναφορά PDF — 9+ γλώσσες αναφοράς", hero_global_viz_aria: "Γλώσσες διαθέσιμες για την έξοδο αναφοράς Norya",
+        trust_professionals_title: "Εμπιστοσύνη από επαγγελματίες υγείας",
+        trust_professionals_logos_aria: "Λογότυπα συνεργατών υποδομών, ασφάλειας και συμμόρφωσης",
         hero_sample_label: "Έτσι θα φαίνεται η αναφορά σας", hero_sample_summary: "Οι τιμές σας εντός φυσιολογικών ορίων. Αιμοσφαιρίνη και γλυκόζη φυσιολογικές.", hero_sample_normal: "Φυσιολογικό", hero_sample_border: "Όριο", hero_sample_risk: "Προσοχή", hero_sample_cta: "Σύνοψη + τιμές + συμβουλές + λήψη PDF.", hero_sample_btn: "Λάβετε αυτή την αναφορά — Ξεκινήστε δωρεάν",
         trust_since: "Από το 2017", trust_satisfaction: "100% ικανοποίηση", trust_users: "100.000+ χρήστες", trust_badges_heading: "Ασφαλής και συμβατή υπηρεσία",
         trust_badge_ssl: "Προστασία SSL 256-bit", trust_badge_kvkk_gdpr: "Συμβατό KVKK & GDPR", trust_badge_paytr: "Ασφαλής πληρωμή PayTR", trust_badge_qr: "Επαλήθευση αναφοράς με QR", trust_bar_qr: "Επαλήθευση αναφοράς με QR",
@@ -14206,6 +14640,27 @@
         checkout_coupon_apply: 'Εφαρμογή',
         checkout_paytr_note: 'Εάν το PayTR δεν έχει ρυθμιστεί, η σελίδα πληρωμής δεν θα ανοίξει.',
         pricing_yearly_value_midline: 'Μέγιστη εξοικονόμηση με ετήσιο πλάνο',
+        sample_cards_heading: "Τι θα περιέχει η αναφορά σας;",
+        sample_cards_sub: "Μετά την ανάλυση — βασικές ενότητες με κλινική ανάγνωση, σε premium μορφή.",
+        sample_card_badge_glucose: "Στην αναφορά", sample_card_badge_bio: "Στην αναφορά", sample_card_badge_cardio: "Στην αναφορά", sample_card_badge_vitamin: "Στην αναφορά", sample_card_badge_attention: "Στην αναφορά",
+        sample_card_glucose_title: "Γλυκόζη / σάκχαρο",
+        sample_card_glucose_desc: "Γλυκόζη νηστείας και HbA1c μαζί· περίληψη κινδύνου διαβήτη και εύρη αναφοράς.",
+        sample_card_bio_title: "Βιολογική ηλικία",
+        sample_card_bio_desc: "Εκτίμηση βιολογικής ηλικίας και συνολικού σκορ υγείας — επισκόπηση σε σχέση με την ηλικία σας.",
+        sample_card_cardio_title: "Καρδιαγγειακός κίνδυνος",
+        sample_card_cardio_desc: "LDL, HDL, τριγλυκερίδια· περίληψη καρδιακής υγείας με εύρη αναφοράς.",
+        sample_card_vitamin_title: "Βιταμίνες & μέταλλα",
+        sample_card_vitamin_desc: "Βιταμίνη D, B12, σίδηρος, φερριτίνη — κίνδυνος έλλειψης και εύρη αναφοράς.",
+        sample_card_attention_title: "Τιμές που απαιτούν προσοχή",
+        sample_card_attention_desc: "Παράμετροι που ξεχωρίζουν και θέματα για τη συζήτηση με το γιατρό σας — με μια ματιά.",
+        sample_card_cta: "Δείτε παράδειγμα αναφοράς →",
+        sample_cards_main_cta: "Δείτε το πλήρες παράδειγμα — Κάντε εξέταση, λάβετε την αναφορά σας",
+        feature_diet_title: "Προσωποποιημένο πλάνο διατροφής",
+        feature_diet_desc: "Συνοψίζει τροφές για αύξηση ή μείωση και ένα απλό ημερήσιο μενού με βάση ελλείψεις και κινδύνους (μόνο ενημερωτικά).",
+        feature_supp_title: "Σημειώσεις τρόπου ζωής και διατροφής",
+        feature_supp_desc: "Όταν οι τιμές βρίσκονται εκτός εύρους, παρέχει ενημερωτικές σημειώσεις για γενικό τρόπο ζωής και διατροφή για συζήτηση με τον γιατρό σας.",
+        feature_compare_title: "Προηγμένη σύγκριση εξετάσεων",
+        feature_compare_desc: "Συγκρίνετε δύο αιματολογικές παράλληλα και δείτε πώς αλλάζουν οι τιμές και οι ενδείξεις κινδύνου με τον χρόνο.",
         profile_plan_name: 'Πλάνο',
       },
       cs: {
@@ -14223,7 +14678,9 @@
         hero_sub: "Laboratorní výsledky — srozumitelná zpráva",
         hero_title: "Pochopte výsledky krevních testů za 60 sekund",
         hero_desc: "Vložte výsledky, AI je vysvětlí. Vyzkoušejte zdarma — bez karty.",
-        hero_cta: "První analýza zdarma", hero_see_sample: "Zobrazit ukázkovou zprávu", hero_how: "Jak to funguje", hero_secure: "Bezpečné • Ochrana soukromí", hero_global_reach: "Jsme všude — Přístupné z více než 190 zemí",
+        hero_cta: "První analýza zdarma", hero_see_sample: "Zobrazit ukázkovou zprávu", hero_how: "Jak to funguje", hero_secure: "Bezpečné • Ochrana soukromí",         hero_global_reach: "Jsme všude — Přístupné z více než 190 zemí", hero_global_viz_eyebrow: "Prémiové PDF — 9+ jazyků zprávy", hero_global_viz_aria: "Jazyky dostupné pro výstup zprávy Norya",
+        trust_professionals_title: "Důvěra zdravotnických profesionálů",
+        trust_professionals_logos_aria: "Loga partnerů pro infrastrukturu, bezpečnost a compliance",
         hero_sample_label: "Tak bude vypadat vaše zpráva", hero_sample_summary: "Vaše hodnoty v referenčním rozsahu. Hemoglobin a glukóza v normě.", hero_sample_normal: "Normální", hero_sample_border: "Mez", hero_sample_risk: "Pozor", hero_sample_cta: "Shrnutí + hodnoty + doporučení + stažení PDF.", hero_sample_btn: "Získat tuto zprávu — Začít zdarma",
         trust_since: "Od 2017", trust_satisfaction: "100% spokojenost", trust_users: "100 000+ uživatelů", trust_badges_heading: "Zabezpečená a compliantní služba",
         trust_badge_ssl: "Chráněno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK a GDPR", trust_badge_paytr: "Zabezpečená platba PayTR", trust_badge_qr: "Ověření reportu pomocí QR", trust_bar_qr: "Ověření reportu pomocí QR",
@@ -14416,6 +14873,27 @@
         checkout_coupon_apply: 'Použít',
         checkout_paytr_note: 'Pokud PayTR není nakonfigurováno, platební stránka se neotevře.',
         pricing_yearly_value_midline: 'Maximální úspora s ročním plánem',
+        sample_cards_heading: "Co najdete ve vaší zprávě?",
+        sample_cards_sub: "Po vyšetření — klíčové sekce s klinickým pohledem, prémiový formát.",
+        sample_card_badge_glucose: "Ve zprávě", sample_card_badge_bio: "Ve zprávě", sample_card_badge_cardio: "Ve zprávě", sample_card_badge_vitamin: "Ve zprávě", sample_card_badge_attention: "Ve zprávě",
+        sample_card_glucose_title: "Glukóza / krevní cukr",
+        sample_card_glucose_desc: "Glykémie nalačno a HbA1c na jednom místě; shrnutí diabetického rizika a referenční rozmezí.",
+        sample_card_bio_title: "Biologický věk",
+        sample_card_bio_desc: "Odhad biologického věku a celkové skóre zdraví — přehled ve vztahu k vašemu věku.",
+        sample_card_cardio_title: "Kardiovaskulární riziko",
+        sample_card_cardio_desc: "LDL, HDL, triglyceridy; shrnutí zdraví srdce s referenčními rozmezími.",
+        sample_card_vitamin_title: "Vitamíny a minerály",
+        sample_card_vitamin_desc: "Vitamin D, B12, železo, ferritin — riziko deficitu a referenční rozmezí.",
+        sample_card_attention_title: "Hodnoty vyžadující pozornost",
+        sample_card_attention_desc: "Zvýrazněné parametry a témata pro rozhovor s lékařem — na první pohled.",
+        sample_card_cta: "Ukázka zprávy →",
+        sample_cards_main_cta: "Celý příklad — nechte si udělat test, získejte zprávu",
+        feature_diet_title: "Personalizovaný jídelníček",
+        feature_diet_desc: "Shrnuje potraviny k většímu / menšímu příjmu a jednoduché denní menu podle nedostatků a rizik (pouze informativní).",
+        feature_supp_title: "Informační poznámky ke životnímu stylu a výživě",
+        feature_supp_desc: "Když hodnoty překročí referenční rozmezí, nabízí obecné informační poznámky pro diskusi s lékařem.",
+        feature_compare_title: "Pokročilé porovnání výsledků",
+        feature_compare_desc: "Dva krevní testy vedle sebe — jak se hodnoty a rizikové značky mění v čase.",
         profile_plan_name: 'Plán',
       },
       sr: {
@@ -14433,7 +14911,9 @@
         hero_sub: "Laboratorijski rezultati — jasan izveštaj",
         hero_title: "Razumite rezultate krvnih testova za 60 sekundi",
         hero_desc: "Nalepite rezultate, AI ih objašnjava. Probajte besplatno — bez kartice.",
-        hero_cta: "Prva analiza besplatno", hero_see_sample: "Pogledaj primer izveštaja", hero_how: "Kako funkcioniše", hero_secure: "Bezbedno • Privatnost", hero_global_reach: "Svuda smo — Dostupno iz više od 190 zemalja",
+        hero_cta: "Prva analiza besplatno", hero_see_sample: "Pogledaj primer izveštaja", hero_how: "Kako funkcioniše", hero_secure: "Bezbedno • Privatnost", hero_global_reach: "Svuda smo — Dostupno iz više od 190 zemalja", hero_global_viz_eyebrow: "Premium PDF izveštaj — 9+ jezika izlaza", hero_global_viz_aria: "Jezici dostupni za Norya izveštaj",
+        trust_professionals_title: "Poverenje zdravstvenih stručnjaka",
+        trust_professionals_logos_aria: "Logotipi partnera za infrastrukturu, bezbednost i usklađenost",
         hero_sample_label: "Ovako će izgledati vaš izveštaj", hero_sample_summary: "Vrednosti u referentnom opsegu. Hemoglobin i glukoza normalni.", hero_sample_normal: "Normalno", hero_sample_border: "Granica", hero_sample_risk: "Pažnja", hero_sample_cta: "Rezime + vrednosti + preporuke + preuzimanje PDF.", hero_sample_btn: "Nabavite ovaj izveštaj — Počnite besplatno",
         trust_since: "Od 2017", trust_satisfaction: "100% zadovoljstvo", trust_users: "100.000+ korisnika", trust_badges_heading: "Sigurna i usklađena usluga",
         trust_badge_ssl: "Zaštićeno SSL 256-bit", trust_badge_kvkk_gdpr: "KVKK i GDPR", trust_badge_paytr: "Sigurna plaćanja PayTR", trust_badge_qr: "Verifikacija izveštaja QR kodom", trust_bar_qr: "Verifikacija izveštaja QR kodom",
@@ -14626,6 +15106,27 @@
         checkout_coupon_apply: 'Primeni',
         checkout_paytr_note: 'Ako PayTR nije konfigurisan, stranica za plaćanje se neće otvoriti.',
         pricing_yearly_value_midline: 'Maksimalna ušteda sa godišnjim planom',
+        sample_cards_heading: "Šta će biti u vašem izveštaju?",
+        sample_cards_sub: "Posle analize — ključne sekcije kliničkog čitanja, premium format.",
+        sample_card_badge_glucose: "U izveštaju", sample_card_badge_bio: "U izveštaju", sample_card_badge_cardio: "U izveštaju", sample_card_badge_vitamin: "U izveštaju", sample_card_badge_attention: "U izveštaju",
+        sample_card_glucose_title: "Glukoza / šećer u krvi",
+        sample_card_glucose_desc: "Glikemija natašte i HbA1c na jednom ekranu; rezime rizika od dijabeta i referentni opsezi.",
+        sample_card_bio_title: "Biološka starost",
+        sample_card_bio_desc: "Procena biološke starosti i ukupnog zdravstvenog skora — pregled u odnosu na vaše godine.",
+        sample_card_cardio_title: "Kardiovaskularni rizik",
+        sample_card_cardio_desc: "LDL, HDL, trigliceridi; rezime zdravlja srca sa referentnim opsezima.",
+        sample_card_vitamin_title: "Vitamini i minerali",
+        sample_card_vitamin_desc: "Vitamin D, B12, gvožđe, feritin — rizik od nedostatka i referentni opsezi.",
+        sample_card_attention_title: "Vrednosti koje treba pratiti",
+        sample_card_attention_desc: "Istaknuti parametri i teme za razgovor sa lekarom — na prvi pogled.",
+        sample_card_cta: "Pogledajte primer izveštaja →",
+        sample_cards_main_cta: "Ceo primer — uradite analizu, primite izveštaj",
+        feature_diet_title: "Personalizovani plan ishrane",
+        feature_diet_desc: "Sažima namirnice za veći / manji unos i jednostavan dnevni jelovnik prema nedostatcima i rizicima (samo informativno).",
+        feature_supp_title: "Informativne napomene o životnom stilu i ishrani",
+        feature_supp_desc: "Kada vrednosti izlaze iz opsega, daje opšte informativne napomene za razgovor sa lekarom.",
+        feature_compare_title: "Napredno poređenje analiza",
+        feature_compare_desc: "Uporedite dva krvna nalaza jedan pored drugog i pratite promene vrednosti i rizika tokom vremena.",
         profile_plan_name: 'Plan',
       }
     };
@@ -14925,6 +15426,16 @@
       function handleAnyLanguagePick(e) {
         var target = e.target;
         if (!target || !target.closest) return;
+        var heroBtn = target.closest('.hero-global-lang-strip [data-hero-lang]');
+        if (heroBtn) {
+          e.preventDefault();
+          e.stopPropagation();
+          var hLang = (heroBtn.getAttribute('data-hero-lang') || '').toLowerCase().trim();
+          if (!hLang) return;
+          console.log('[lang-flow] hero-global-lang-pick', hLang);
+          if (typeof window._pickLang === 'function') window._pickLang(hLang);
+          return;
+        }
         var opt = target.closest('#lang-modal .lang-opt[data-lang], #langMenu .lang-option[data-lang], #langMenu .lang-option[data-locale]');
         if (!opt) return;
         e.preventDefault();
@@ -15279,6 +15790,12 @@
         var isSelected = opt.getAttribute("data-lang") === lang;
         opt.classList.toggle("lang-opt-selected", isSelected);
         opt.setAttribute("aria-selected", isSelected ? "true" : "false");
+      });
+      document.querySelectorAll(".hero-global-lang-strip [data-hero-lang]").forEach(function(btn) {
+        var code = (btn.getAttribute("data-hero-lang") || "").toLowerCase();
+        var isActive = code === lang;
+        btn.classList.toggle("hero-global-lang-pill--active", isActive);
+        btn.setAttribute("aria-pressed", isActive ? "true" : "false");
       });
       var _i18nApplied = 0, _i18nMissing = 0;
       document.querySelectorAll("[data-i18n]").forEach(function(el) {

@@ -8,11 +8,16 @@ module.exports = {
   theme: {
     extend: {
       fontFamily: {
-        sans: ["Inter", "DM Sans", "system-ui", "sans-serif"],
-        display: ["Outfit", "DM Sans", "system-ui", "sans-serif"],
-        headline: ["Manrope", "sans-serif"],
-        body: ["Inter", "sans-serif"],
-        label: ["Inter", "sans-serif"],
+        sans: ["Inter", "system-ui", "sans-serif"],
+        display: ["Manrope", "Inter", "system-ui", "sans-serif"],
+        headline: ["Manrope", "Inter", "system-ui", "sans-serif"],
+        body: ["Inter", "system-ui", "sans-serif"],
+        label: ["Inter", "system-ui", "sans-serif"],
+      },
+      lineHeight: {
+        body: "1.65",
+        copy: "1.7",
+        heading: "1.22",
       },
       colors: {
         primary: {

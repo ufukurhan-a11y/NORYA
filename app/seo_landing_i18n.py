@@ -1288,7 +1288,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
         return [
             {"label": "ניתוח", "url": f"{base_url}/analyze"},
             {"label": "מחירים", "url": f"{base_url}/pricing"},
-            {"label": "איך זה עובד", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "איך זה עובד", "url": f"{base_url}/how-it-works?lang=he"},
             {"label": "השוואה", "url": f"{prefix}/compare/"},
             {"label": "בלוג", "url": f"{prefix}/blog"},
         ]
@@ -1296,7 +1296,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
         return [
             {"label": "विश्लेषण", "url": f"{base_url}/analyze"},
             {"label": "कीमतें", "url": f"{base_url}/pricing"},
-            {"label": "यह कैसे काम करता है", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "यह कैसे काम करता है", "url": f"{base_url}/how-it-works?lang=hi"},
             {"label": "तुलना", "url": f"{prefix}/compare/"},
             {"label": "ब्लॉग", "url": f"{prefix}/blog"},
         ]
@@ -1304,7 +1304,7 @@ def get_related_links(lang: str, base_url: str) -> list[dict]:
         return [
             {"label": "تحليل", "url": f"{base_url}/analyze"},
             {"label": "الأسعار", "url": f"{base_url}/pricing"},
-            {"label": "كيف يعمل", "url": f"{base_url}/how-it-works?lang=en"},
+            {"label": "كيف يعمل", "url": f"{base_url}/how-it-works?lang=ar"},
             {"label": "مقارنة", "url": f"{prefix}/compare/"},
             {"label": "المدوّنة", "url": f"{prefix}/blog"},
         ]

@@ -57,8 +57,8 @@ LANDING_META = {
         "og_locale": "he_IL",
     },
     "hi": {
-        "meta_title": "NoryaAI | AI Blood Test Analysis aur Lab Results Samjhaav",
-        "meta_description": "Apni blood test report upload karein aur NoryaAI ke saath lab values, biomarkers aur follow-up insights ko aasaan bhaasha mein samjhein.",
+        "meta_title": "NoryaAI | एआई ब्लड टेस्ट विश्लेषण और लैब परिणामों की व्याख्या",
+        "meta_description": "अपनी ब्लड टेस्ट रिपोर्ट अपलोड करें और NoryaAI के साथ लैब मान, बायोमार्कर और फ़ॉलो-अप अंतर्दृष्टि को सरल भाषा में समझें।",
         "og_locale": "hi_IN",
     },
     "ar": {
