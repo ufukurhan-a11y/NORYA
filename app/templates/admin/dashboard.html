@@ -170,6 +170,15 @@
       <h2 class="text-base font-headline font-bold text-on-surface">Operasyon Uyarıları</h2>
       <p class="text-on-surface-variant text-xs mt-0.5">Hızlı aksiyon gereken başlıklar</p>
     </div>
+    <button
+      type="button"
+      id="drip-run-btn"
+      class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-200 bg-white text-xs font-semibold text-on-surface-variant hover:border-primary/30 hover:text-primary transition-colors"
+      title="Drip kampanyayı şimdi bir kez çalıştır"
+    >
+      <span class="material-symbols-outlined" style="font-size:15px;">send</span>
+      Drip'i Çalıştır
+    </button>
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
     <a href="/admin/queue?status_filter=pending" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
@@ -608,10 +617,52 @@
     setInterval(fetchAIHealth, 60000);
   }
 
+  function initDripRunAction() {
+    var runBtn = document.getElementById('drip-run-btn');
+    if (!runBtn) return;
+    runBtn.addEventListener('click', function(ev) {
+      ev.preventDefault();
+      if (runBtn.dataset.loading === '1') return;
+      runBtn.dataset.loading = '1';
+      var prevHtml = runBtn.innerHTML;
+      runBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:15px;animation:spin 1s linear infinite;">progress_activity</span> Çalışıyor...';
+      runBtn.setAttribute('disabled', 'disabled');
+      fetch('/admin/api/tasks/drip/run', {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/x-www-form-urlencoded', 'Accept': 'application/json' },
+        body: 'batch_size=50'
+      })
+      .then(function(res) {
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        return res.json();
+      })
+      .then(function(data) {
+        var sent = (data && typeof data.sent === 'number') ? data.sent : 0;
+        runBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:15px;">done</span> Gönderildi: ' + sent;
+      })
+      .catch(function(err) {
+        runBtn.innerHTML = '<span class="material-symbols-outlined" style="font-size:15px;">error</span> Hata';
+        console.error('Drip run failed:', err);
+      })
+      .finally(function() {
+        setTimeout(function() {
+          runBtn.innerHTML = prevHtml;
+          runBtn.removeAttribute('disabled');
+          runBtn.dataset.loading = '0';
+        }, 1800);
+      });
+    });
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initAIStatus);
+    document.addEventListener('DOMContentLoaded', function() {
+      initAIStatus();
+      initDripRunAction();
+    });
   } else {
     initAIStatus();
+    initDripRunAction();
   }
 })();
 </script>
