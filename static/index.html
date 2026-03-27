@@ -287,7 +287,7 @@
   <link rel="stylesheet" href="/static/css/report.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet">
   <style>
     :root {
       --norya-bg: #ffffff;
@@ -638,6 +638,373 @@
       #ozellikler .grid > article { padding: 1.25rem 1.15rem !important; border-radius: 1rem !important; }
       #ozellikler { padding-top: 3rem !important; padding-bottom: 3rem !important; }
     }
+
+    /* Homepage hero: mesh gradient + grain, premium type, globe mask, glass card */
+    .hero-saas-premium {
+      position: relative;
+      isolation: isolate;
+      background: #f5f9ff;
+    }
+    .dark .hero-saas-premium { background: #191c1d; }
+    .hero-saas-premium::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      background:
+        radial-gradient(900px 520px at 18% 22%, rgba(0, 122, 255, 0.14), transparent 55%),
+        radial-gradient(700px 480px at 88% 8%, rgba(0, 209, 255, 0.11), transparent 50%),
+        radial-gradient(600px 400px at 50% 100%, rgba(255, 255, 255, 0.85), transparent 45%),
+        linear-gradient(165deg, #eef6ff 0%, #ffffff 48%, #f2fbff 100%);
+      animation: hero-saas-mesh 22s ease-in-out infinite alternate;
+    }
+    .dark .hero-saas-premium::before {
+      background:
+        radial-gradient(900px 520px at 18% 22%, rgba(0, 122, 255, 0.12), transparent 55%),
+        radial-gradient(700px 480px at 88% 8%, rgba(0, 209, 255, 0.08), transparent 50%),
+        radial-gradient(600px 400px at 50% 100%, rgba(15, 23, 42, 0.5), transparent 50%),
+        linear-gradient(165deg, #141c24 0%, #191c1d 55%, #152028 100%);
+    }
+    @keyframes hero-saas-mesh {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(1.5%, -1%, 0) scale(1.035); }
+    }
+    .hero-saas-premium::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      pointer-events: none;
+      opacity: 0.045;
+      mix-blend-mode: multiply;
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='256' height='256'%3E%3Cfilter id='a'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23a)'/%3E%3C/svg%3E");
+    }
+    .dark .hero-saas-premium::after {
+      opacity: 0.07;
+      mix-blend-mode: soft-light;
+    }
+    .hero-saas-premium .max-w-7xl { position: relative; z-index: 2; }
+    .hero-home-eyebrow {
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: rgb(15 118 110 / 0.88);
+    }
+    .dark .hero-home-eyebrow {
+      color: rgb(45 212 191 / 0.78);
+    }
+    @media (min-width: 640px) {
+      .hero-home-eyebrow { font-size: 0.8125rem; }
+    }
+    .hero-home-headline {
+      font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+      font-weight: 800;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      color: rgb(15 23 42);
+    }
+    .dark .hero-home-headline {
+      color: #fff;
+    }
+    .hero-brand-gradient {
+      background: linear-gradient(135deg, #007aff 0%, #00d1ff 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-home-sub {
+      color: rgba(0, 0, 0, 0.7);
+      font-size: 1.125rem;
+      line-height: 1.6;
+    }
+    @media (min-width: 640px) {
+      .hero-home-sub { font-size: 1.2rem; }
+    }
+    .dark .hero-home-sub {
+      color: rgba(255, 255, 255, 0.72);
+    }
+    /* Hero lead column: headline + body + CTAs share one max width; CTAs flush-left with title */
+    .hero-saas-premium .hero-home-lead .hero-primary-ctas {
+      margin-left: 0;
+      margin-right: 0;
+      padding-left: 0;
+      padding-right: 0;
+      justify-content: flex-start;
+      gap: 1.5rem;
+    }
+    .hero-visual-wrap {
+      position: relative;
+      isolation: isolate;
+    }
+    .hero-globe-mask {
+      position: relative;
+      z-index: 1;
+      -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 60%, transparent 100%);
+      mask-image: radial-gradient(circle at 50% 50%, #000 60%, transparent 100%);
+      -webkit-mask-repeat: no-repeat;
+      mask-repeat: no-repeat;
+      -webkit-mask-size: 100% 100%;
+      mask-size: 100% 100%;
+    }
+    .hero-sample-card-wrap {
+      z-index: 30;
+      pointer-events: none;
+    }
+    .hero-sample-card-wrap .hero-sample-card {
+      pointer-events: auto;
+    }
+    .hero-sample-card {
+      border-radius: 20px;
+      background: rgba(255, 255, 255, 0.7);
+      backdrop-filter: blur(15px);
+      -webkit-backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+      transition: transform 0.32s ease, box-shadow 0.32s ease;
+    }
+    .dark .hero-sample-card {
+      background: rgba(30, 41, 59, 0.62);
+      border-color: rgba(255, 255, 255, 0.22);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.38);
+    }
+    @media (hover: hover) {
+      .hero-sample-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 28px 52px rgba(0, 0, 0, 0.16);
+      }
+      .dark .hero-sample-card:hover {
+        box-shadow: 0 32px 56px rgba(0, 0, 0, 0.48);
+      }
+    }
+    .hero-score-ring {
+      position: relative;
+      width: 4.125rem;
+      height: 4.125rem;
+      flex-shrink: 0;
+    }
+    .hero-score-ring .hero-score-glow-dot {
+      position: absolute;
+      top: 2px;
+      right: 8px;
+      width: 7px;
+      height: 7px;
+      border-radius: 50%;
+      background: #34d399;
+      box-shadow: 0 0 0 2px rgba(255, 255, 255, 0.5), 0 0 14px 4px rgba(52, 211, 153, 0.55);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .dark .hero-score-ring .hero-score-glow-dot {
+      box-shadow: 0 0 0 2px rgba(15, 23, 42, 0.4), 0 0 16px 5px rgba(52, 211, 153, 0.45);
+    }
+    .hero-score-ring svg {
+      width: 100%;
+      height: 100%;
+      transform: rotate(-90deg);
+    }
+    .hero-score-ring .hero-score-track {
+      fill: none;
+      stroke: rgba(14, 165, 164, 0.12);
+      stroke-width: 2;
+    }
+    .dark .hero-score-ring .hero-score-track { stroke: rgba(94, 234, 212, 0.18); }
+    .hero-score-ring .hero-score-fill {
+      fill: none;
+      stroke: #0d9488;
+      stroke-width: 2;
+      stroke-linecap: round;
+      /* r=15.915 → circumference ≈ 100; 84% arc */
+      stroke-dasharray: 84 16;
+      stroke-dashoffset: 0;
+      filter: drop-shadow(0 0 3px rgba(14, 165, 164, 0.35));
+    }
+    .dark .hero-score-ring .hero-score-fill {
+      stroke: #2dd4bf;
+      filter: drop-shadow(0 0 4px rgba(45, 212, 191, 0.4));
+    }
+    .hero-score-ring .hero-score-label {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      line-height: 1;
+      z-index: 1;
+    }
+    .hero-score-ring .hero-score-num {
+      font-family: "Manrope", Inter, ui-sans-serif, system-ui, sans-serif;
+      font-size: 1.2rem;
+      font-weight: 900;
+      color: #0f766e;
+      letter-spacing: -0.03em;
+    }
+    .dark .hero-score-ring .hero-score-num { color: #5eead4; }
+    .hero-score-ring .hero-score-denom {
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #64748b;
+      margin-top: 2px;
+    }
+    .dark .hero-score-ring .hero-score-denom { color: #94a3b8; }
+    .hero-cta-apple {
+      border-radius: 12px;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      background: linear-gradient(180deg, #12cfc8 0%, #0ea5a4 48%, #0b8f8e 100%);
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.22) inset,
+        0 2px 8px rgba(8, 91, 89, 0.22),
+        0 6px 24px rgba(6, 95, 93, 0.28),
+        0 0 0 1px rgba(6, 95, 93, 0.12);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, filter 0.3s ease;
+    }
+    @media (hover: hover) {
+      .hero-cta-apple:hover {
+        transform: scale(1.05);
+        box-shadow:
+          0 0 0 1px rgba(255, 255, 255, 0.28) inset,
+          0 4px 14px rgba(5, 80, 78, 0.32),
+          0 10px 36px rgba(6, 95, 93, 0.38),
+          0 0 0 1px rgba(5, 70, 68, 0.18);
+      }
+    }
+    .hero-cta-apple:active { transform: scale(0.98); }
+    .hero-social-proof { margin-top: 0; }
+    .hero-social-proof-label {
+      letter-spacing: 0.2em;
+    }
+    .hero-ecosystem-logos {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 0.65rem 1.15rem;
+    }
+    .hero-ecosystem-logos li {
+      font-size: 0.5625rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: rgb(148 163 184 / 0.85);
+    }
+    @media (min-width: 640px) {
+      .hero-ecosystem-logos li { font-size: 0.625rem; }
+    }
+    .dark .hero-ecosystem-logos li {
+      color: rgb(148 163 184 / 0.55);
+    }
+    .hero-trusted-strip {
+      margin-top: 3rem;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.06);
+    }
+    .dark .hero-trusted-strip { border-top-color: rgba(255, 255, 255, 0.08); }
+    .hero-trusted-logos img {
+      height: 22px;
+      width: auto;
+      max-width: 88px;
+      object-fit: contain;
+      filter: grayscale(1);
+      opacity: 0.38;
+      transition: opacity 0.2s ease;
+    }
+    @media (hover: hover) {
+      .hero-trusted-logos a:hover img { opacity: 0.55; }
+    }
+    #norya-cookie-banner.norya-cookie-float {
+      left: auto;
+      inset-inline-end: max(12px, env(safe-area-inset-right, 0px));
+      bottom: max(12px, env(safe-area-inset-bottom, 0px));
+      top: auto;
+      width: min(340px, calc(100vw - 24px));
+      max-width: min(340px, calc(100vw - 24px));
+      padding: 0;
+      font-size: 12px;
+      line-height: 1.45;
+      border-radius: 16px;
+      color: #334155;
+      background: rgba(255, 255, 255, 0.76) !important;
+      backdrop-filter: blur(20px) saturate(180%);
+      -webkit-backdrop-filter: blur(20px) saturate(180%);
+      box-shadow:
+        0 10px 40px rgba(15, 23, 42, 0.1),
+        0 0 0 1px rgba(255, 255, 255, 0.9) inset,
+        0 1px 0 rgba(14, 165, 164, 0.12) !important;
+      border: 1px solid rgba(14, 165, 164, 0.14);
+    }
+    .dark #norya-cookie-banner.norya-cookie-float {
+      color: #e2e8f0;
+      background: rgba(30, 41, 59, 0.72) !important;
+      border-color: rgba(148, 163, 184, 0.18);
+      box-shadow:
+        0 12px 44px rgba(0, 0, 0, 0.35),
+        0 0 0 1px rgba(255, 255, 255, 0.06) inset,
+        0 1px 0 rgba(45, 212, 191, 0.1) !important;
+    }
+    #norya-cookie-banner.norya-cookie-float .norya-cookie-inner {
+      display: flex;
+      flex-direction: column;
+      align-items: stretch;
+      gap: 12px;
+      padding: 14px 16px;
+      max-width: none !important;
+      margin: 0 !important;
+    }
+    #norya-cookie-banner.norya-cookie-float #cookie-text,
+    #norya-cookie-banner.norya-cookie-float .norya-cookie-msg {
+      flex: none !important;
+      font-size: 12px !important;
+      line-height: 1.5 !important;
+      color: inherit;
+    }
+    #norya-cookie-banner.norya-cookie-float .norya-cookie-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: flex-end;
+    }
+    #norya-cookie-banner.norya-cookie-float .norya-cookie-btn {
+      font-size: 12px !important;
+      font-weight: 600 !important;
+      padding: 8px 16px !important;
+      border-radius: 10px !important;
+      cursor: pointer;
+      border: none;
+      transition: background 0.2s ease, color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    #norya-cookie-banner.norya-cookie-float .norya-cookie-btn--accept {
+      background: #0ea5a4 !important;
+      color: #fff !important;
+      box-shadow: 0 2px 10px rgba(14, 165, 164, 0.35);
+    }
+    @media (hover: hover) {
+      #norya-cookie-banner.norya-cookie-float .norya-cookie-btn--accept:hover {
+        background: #0d9488 !important;
+        box-shadow: 0 4px 14px rgba(14, 165, 164, 0.42);
+      }
+    }
+    #norya-cookie-banner.norya-cookie-float .norya-cookie-btn--reject {
+      background: transparent !important;
+      color: #0f766e !important;
+      border: 1px solid rgba(14, 165, 164, 0.45) !important;
+    }
+    .dark #norya-cookie-banner.norya-cookie-float .norya-cookie-btn--reject {
+      color: #5eead4 !important;
+      border-color: rgba(94, 234, 212, 0.35) !important;
+    }
+    @media (hover: hover) {
+      #norya-cookie-banner.norya-cookie-float .norya-cookie-btn--reject:hover {
+        background: rgba(14, 165, 164, 0.1) !important;
+      }
+    }
+
     .hero-v2-visual {
       width: 100%;
       max-width: 22rem;
@@ -1270,15 +1637,17 @@
     .elite-cta-panel { background: rgba(248, 250, 252, 0.95); border-radius: 14px; border: 1px solid rgba(226, 232, 240, 0.9); }
     .dark .elite-cta-panel { background: rgba(15, 23, 42, 0.7); border-color: rgba(148, 163, 184, 0.25); }
     .elite-cta-btn {
-      background: #0EA5A4;
+      background: linear-gradient(180deg, #12cfc8 0%, #0ea5a4 52%, #0b8f8e 100%);
       color: #fff;
       font-weight: 600;
-      border-radius: 14px;
-      box-shadow: 0 4px 14px rgba(14, 165, 164, 0.35);
-      transition: background 0.2s, box-shadow 0.2s, transform 0.15s;
+      border-radius: 12px;
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.16) inset,
+        0 2px 10px rgba(6, 95, 93, 0.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease;
     }
-    .elite-cta-btn:hover { background: #0d9488; color: #fff; box-shadow: 0 6px 20px rgba(14, 165, 164, 0.45); transform: translateY(-1px); }
-    .elite-cta-btn:active { transform: translateY(0); }
+    .elite-cta-btn:hover { background: linear-gradient(180deg, #14d8d0 0%, #0d9488 52%, #0a7f7e 100%); color: #fff; box-shadow: 0 3px 14px rgba(14, 165, 164, 0.38); transform: scale(1.03); }
+    .elite-cta-btn:active { transform: scale(0.98); }
     @media (max-width: 1023px) {
       .elite-hero-card { flex-direction: column; }
       .elite-cta-panel { width: 100%; max-width: none; margin-top: 0.25rem; }
@@ -1575,8 +1944,8 @@
     .intake-dropzone:hover { border-color: rgba(14,165,164,0.5); background: rgba(14,165,164,0.06); }
     .dark .intake-dropzone { border-color: rgba(14,165,164,0.25); background: rgba(14,165,164,0.08); }
     /* Analyze wizard: stabilize layout so loading/result alanı zıplamasın; mobil uyumlu */
-    #analyze-section { scroll-margin-top: 96px; }
-    @media (max-width: 767px) { #analyze-section { scroll-margin-top: 56px; } }
+    #analyze-section { scroll-margin-top: 120px; }
+    @media (max-width: 767px) { #analyze-section { scroll-margin-top: 88px; } }
     /* Wizard ana container sabit yükseklikte kalsın; auth modallar her zaman bunun üstünde olsun */
     #analyze-box { position: relative; z-index: 10; }
     #analyze-box .intake-card-inner { min-height: 520px; display: flex; flex-direction: column; }
@@ -1968,7 +2337,7 @@
     .nav-actions button { flex-shrink: 0; display: inline-flex; align-items: center; justify-content: center; line-height: 1.25; }
     #nav-auth { display: inline-flex !important; align-items: center; flex-shrink: 0; gap: 0.75rem; }
     #nav-auth.hidden { display: none !important; }
-    #nav-analyze-btn { display: inline-flex !important; min-height: 44px; }
+    #nav-analyze-btn { display: inline-flex !important; min-height: 40px; }
     @media (max-width: 640px) {
       .nav-actions #theme-btn { padding: 0.5rem; min-width: 44px; min-height: 44px; }
       .nav-actions #nav-auth button { min-height: 44px; min-width: 44px; padding: 0.5rem 0.75rem; font-size: 0.875rem; }
@@ -2951,6 +3320,7 @@
 
     /* Genel tipografi */
     body{
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       color: var(--ink);
       -webkit-font-smoothing: antialiased;
       text-rendering: geometricPrecision;
@@ -3008,23 +3378,58 @@
     /* ===== Ultra Premium Header (ONLY NAV) ===== */
     .elite-header{
       position: sticky;
-      top: 0;
+      top: calc(20px + env(safe-area-inset-top, 0px));
       z-index: 1001;
       width: 100%;
       max-width: 100%;
       overflow-x: clip;
-      padding-top: env(safe-area-inset-top);
-      /* Transparent header so hero background continues behind it */
-      background: transparent;
-      border-bottom: none;
+      padding-top: 0;
+      padding-left: max(12px, env(safe-area-inset-left, 0px));
+      padding-right: max(12px, env(safe-area-inset-right, 0px));
+      /* Shell stays transparent; glass pill is .elite-header__inner */
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
+      backdrop-filter: none;
+      -webkit-backdrop-filter: none;
       transition: background .22s ease, box-shadow .22s ease;
     }
-    .dark .elite-header { background: rgba(15,23,42,.85); border-bottom-color: rgba(255,255,255,.06); }
+    .dark .elite-header { background: transparent !important; border-bottom: none !important; }
     .elite-header.compact {
-      background: rgba(15,23,42,.92);
-      box-shadow: 0 8px 24px rgba(15,23,42,.3);
+      background: transparent !important;
+      box-shadow: none !important;
     }
-    .dark .elite-header.compact { background: rgba(15,23,42,.92); box-shadow: 0 8px 24px rgba(0,0,0,.15); }
+    .dark .elite-header.compact { background: transparent !important; box-shadow: none !important; }
+
+    #main-header.elite-header .header-inner.elite-header__inner,
+    #main-header.elite-header .elite-header__inner {
+      border-radius: clamp(22px, 7vw, 50px);
+      background: rgba(255, 255, 255, 0.48);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow:
+        0 8px 32px rgba(15, 23, 42, 0.08),
+        0 1px 0 rgba(255, 255, 255, 0.88) inset;
+    }
+    .dark #main-header.elite-header .header-inner.elite-header__inner,
+    .dark #main-header.elite-header .elite-header__inner {
+      background: rgba(30, 41, 59, 0.45);
+      border-color: rgba(255, 255, 255, 0.14);
+      box-shadow: 0 12px 40px rgba(0, 0, 0, 0.32), 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    }
+    #main-header.elite-header.compact .header-inner.elite-header__inner,
+    #main-header.elite-header.compact .elite-header__inner {
+      background: rgba(255, 255, 255, 0.72);
+      border-color: rgba(255, 255, 255, 0.88);
+      box-shadow: 0 14px 40px rgba(15, 23, 42, 0.1), 0 1px 0 rgba(255, 255, 255, 0.95) inset;
+    }
+    .dark #main-header.elite-header.compact .header-inner.elite-header__inner,
+    .dark #main-header.elite-header.compact .elite-header__inner {
+      background: rgba(30, 41, 59, 0.78);
+      border-color: rgba(255, 255, 255, 0.18);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, 0.45);
+    }
 
     .elite-header__inner{
       max-width: 1240px;
@@ -3057,58 +3462,66 @@
       .elite-nav a:hover{ background: rgba(14,165,164,.10); }
     }
 
-    /* ===== Ultra Premium “Analiz Yap” CTA ===== */
+    /* ===== Navbar CTA — minimal Apple-style (ana CTA ile uyumlu, sade) ===== */
     .elite-cta-btn{
       position: relative;
       display:inline-flex;
       align-items:center;
       justify-content:center;
-      gap: 10px;
-      height: 44px;
-      padding: 0 14px;
-      border-radius: 999px;
-      font-weight: 900;
-      letter-spacing: -0.2px;
+      gap: 8px;
+      height: 40px;
+      padding: 0 16px;
+      border-radius: 12px;
+      font-weight: 600;
+      letter-spacing: -0.02em;
       color: #fff;
-      border: 1px solid rgba(14,165,164,.42);
-      background: linear-gradient(135deg, var(--brand), var(--brand2));
-      box-shadow: 0 14px 34px rgba(14,165,164,.26);
+      border: 1px solid rgba(14,165,164,.35);
+      background: linear-gradient(180deg, #12cfc8 0%, #0ea5a4 52%, #0b8f8e 100%);
+      box-shadow:
+        0 0 0 1px rgba(255,255,255,0.18) inset,
+        0 2px 10px rgba(6, 95, 93, 0.22),
+        0 4px 16px rgba(14,165,164,.2);
+      transition: transform 0.3s ease, box-shadow 0.3s ease, background 0.2s ease;
       white-space: nowrap;
       -webkit-tap-highlight-color: transparent;
     }
 
-    /* Shine efekti (elite) */
     .elite-cta-btn::before{
       content:"";
       position:absolute;
       inset: 0;
-      border-radius: 999px;
+      border-radius: 12px;
       background: linear-gradient(120deg,
         rgba(255,255,255,0) 0%,
-        rgba(255,255,255,.22) 35%,
-        rgba(255,255,255,0) 70%);
-      transform: translateX(-65%);
-      opacity: .75;
+        rgba(255,255,255,.12) 40%,
+        rgba(255,255,255,0) 75%);
+      transform: translateX(-80%);
+      opacity: .45;
       pointer-events:none;
     }
     @media (hover:hover){
-      .elite-cta-btn:hover::before{ transform: translateX(65%); transition: transform .7s ease; }
-      .elite-cta-btn:hover{ transform: translateY(-1px); transition: transform .18s ease; }
+      .elite-cta-btn:hover::before{ transform: translateX(80%); transition: transform .55s ease; }
+      .elite-cta-btn:hover{
+        transform: scale(1.03);
+        box-shadow:
+          0 0 0 1px rgba(255,255,255,0.22) inset,
+          0 3px 14px rgba(5, 80, 78, 0.28),
+          0 6px 20px rgba(14,165,164,.28);
+      }
     }
 
     .elite-cta-btn:focus{
       outline:none;
-      box-shadow: var(--ring), 0 14px 34px rgba(14,165,164,.26);
+      box-shadow: var(--ring), 0 2px 12px rgba(14,165,164,.28);
     }
 
-    /* CTA ikon (sağ ok) */
     .elite-cta-btn .cta-icon{
-      width: 18px;
-      height: 18px;
+      width: 17px;
+      height: 17px;
       display:inline-block;
-      border-radius: 999px;
-      background: rgba(255,255,255,.18);
-      border: 1px solid rgba(255,255,255,.22);
+      border-radius: 6px;
+      background: rgba(255,255,255,.16);
+      border: 1px solid rgba(255,255,255,.2);
       position: relative;
     }
     .elite-cta-btn .cta-icon::after{
@@ -3962,15 +4375,11 @@
       padding: 8px 11px;
       border-radius: 999px;
     }
-    .elite-header.compact {
-      background: rgba(255, 255, 255, 0.94) !important;
-      border-bottom: 1px solid rgba(15, 23, 42, 0.06);
-      box-shadow: 0 10px 28px rgba(15, 23, 42, 0.06);
-    }
-    .dark .elite-header.compact {
-      background: rgba(15, 23, 42, 0.94) !important;
-      border-bottom-color: rgba(255, 255, 255, 0.06);
-      box-shadow: 0 10px 28px rgba(0, 0, 0, 0.2);
+    /* Compact glass: outer shell stays clear — see #main-header.elite-header.compact .elite-header__inner */
+    #main-header.elite-header.compact {
+      background: transparent !important;
+      border: none !important;
+      box-shadow: none !important;
     }
     .header-cta-cluster {
       display: none;
@@ -4020,12 +4429,16 @@
     }
     .header-cta-cluster .elite-cta-btn,
     .header-cta-cluster .primary-cta {
-      min-height: 42px;
+      min-height: 40px;
+      height: auto;
       padding-left: 16px;
       padding-right: 16px;
       border-radius: 12px;
-      font-weight: 700;
-      box-shadow: 0 10px 26px rgba(14, 165, 164, 0.22);
+      font-weight: 600;
+      box-shadow:
+        0 0 0 1px rgba(255, 255, 255, 0.16) inset,
+        0 2px 10px rgba(6, 95, 93, 0.2),
+        0 4px 16px rgba(14, 165, 164, 0.18);
     }
     @media (min-width: 1100px) and (max-width: 1279px) {
       .nav-shell.nav-shell--mega .nav-link-standalone,
@@ -4587,18 +5000,30 @@
     </div>
   </div>
   <!-- Hero: premium editorial health-tech — v24 Stitch design -->
-  <section class="relative pt-32 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 lg:pb-32 px-4 sm:px-6 overflow-hidden bg-white dark:bg-[#191c1d]" style="padding-top: calc(4.25rem + env(safe-area-inset-top, 0px)); margin-top: -0.5rem;">
+  <section class="hero-saas-premium relative pt-32 sm:pt-36 lg:pt-40 pb-20 sm:pb-24 lg:pb-32 px-4 sm:px-6 overflow-hidden" style="padding-top: calc(4.25rem + env(safe-area-inset-top, 0px)); margin-top: -0.5rem;">
     <div class="max-w-7xl mx-auto px-4 sm:px-8 relative z-10">
       <div class="grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-16 items-center">
         <!-- Left: headline, CTAs, trust -->
         <div class="text-left z-10">
-          <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-4 block" data-i18n="hero_sub">Analyze blood test results with AI — free lab results explanation in minutes.</span>
-          <h1 class="font-['Manrope',sans-serif] text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-extrabold tracking-tight leading-[1.1] mb-6 sm:mb-8 text-accent-900 dark:text-white" data-i18n="hero_title">Free AI Blood Test Analyzer</h1>
-          <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 mb-8 sm:mb-12 leading-relaxed max-w-xl" data-i18n="hero_desc">Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused. By NoryaAI.</p>
-          <div class="hero-primary-ctas flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-4 mb-6 sm:mb-8 w-full max-w-xl">
-            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="hero-cta-pill text-white px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-all" style="background-color:#0EA5A4;box-shadow:0 10px 15px -3px rgba(14,165,164,0.25);" onmouseover="this.style.backgroundColor='#0d9488';this.style.transform='scale(1.05)'" onmouseout="this.style.backgroundColor='#0EA5A4';this.style.transform='scale(1)'" data-i18n="hero_cta">Start free</button>
+          <span class="hero-home-eyebrow mb-5 block" data-i18n="hero_sub">Lab results explained in plain language — AI-powered, free in minutes.</span>
+          <h1 id="hero-home-title" class="hero-home-headline text-4xl sm:text-5xl md:text-6xl lg:text-7xl mb-7 sm:mb-10" data-i18n="hero_title">Understand Your Blood Test Results — NoryaAI</h1>
+          <div class="hero-home-lead w-full max-w-xl">
+          <p id="hero-home-desc" class="hero-home-sub mb-10 sm:mb-14" data-i18n="hero_desc">Upload your blood test report and get a clear AI-powered explanation of CBC, iron, thyroid, vitamins and other lab markers. Fast, readable and privacy-focused — clinical decisions stay with your clinician.</p>
+          <div class="hero-social-proof mb-7 sm:mb-10">
+            <p class="hero-social-proof-label text-[9px] sm:text-[10px] font-semibold uppercase tracking-[0.22em] text-slate-400 dark:text-slate-500 mb-3" data-i18n="hero_patients_trust">Trusted by 10,000+ patients</p>
+            <ul class="hero-ecosystem-logos" aria-label="Health and fitness apps">
+              <li>Apple Health</li>
+              <li>Google Fit</li>
+              <li>Samsung Health</li>
+              <li>Garmin</li>
+              <li>Fitbit</li>
+            </ul>
+          </div>
+          <div class="hero-primary-ctas flex w-full flex-col sm:flex-row flex-wrap mb-7 sm:mb-10">
+            <button type="button" onclick="openRegister(); scrollToAnalyze();" class="hero-cta-pill hero-cta-apple inline-flex items-center justify-center text-white px-8 sm:px-10 py-3.5 sm:py-4 text-base sm:text-lg" data-i18n="hero_cta">Start free</button>
             <a href="/en/sample-blood-test-reports" class="hero-cta-pill border border-accent-200 dark:border-accent-700 px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg text-accent-800 dark:text-accent-200 hover:bg-accent-50 dark:hover:bg-accent-800/50 transition-colors text-center" data-i18n="hero_see_sample" data-sample-reports-link="1">See sample report</a>
             <a href="/clinical-demo?lang=en" class="hero-cta-pill border-2 border-[#0ea5a4] text-[#0ea5a4] dark:text-[#5eead4] dark:border-[#5eead4] px-8 sm:px-10 py-3.5 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-[#0ea5a4]/10 transition-colors text-center" data-i18n="hero_book_demo" data-locale-link="clinical-demo">Book demo</a>
+          </div>
           </div>
           <div class="hero-trust-badges flex flex-wrap gap-3 sm:gap-5" role="group" data-i18n-aria-label="trust_badges_aria" aria-label="Trust and compliance">
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🔒</span> <span data-i18n="trust_badge_ssl">256-bit SSL protected</span></span>
@@ -4606,18 +5031,38 @@
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">💳</span> <span data-i18n="trust_badge_paytr">Secure payment via PayTR</span></span>
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🌐</span> <span data-i18n="trust_cards_langs_title">9+ Language support</span></span>
           </div>
+          <div class="hero-trusted-strip">
+            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-accent-400 dark:text-accent-500 mb-4" data-i18n="hero_trusted_by">Trusted infrastructure &amp; technology partners</p>
+            <div class="hero-trusted-logos flex flex-wrap items-center justify-start gap-6 sm:gap-8">
+              <a href="/enterprise-security?lang=en" class="shrink-0" data-locale-link="enterprise-security" aria-label="Google Cloud — enterprise infrastructure"><img src="/static/logos/google.svg" alt="" width="90" height="24" loading="lazy" /></a>
+              <a href="/enterprise-security?lang=en" class="shrink-0" data-locale-link="enterprise-security" aria-label="Cloudflare — security and CDN"><img src="/static/logos/cloudflare.svg" alt="" width="90" height="24" loading="lazy" /></a>
+              <span class="shrink-0" aria-hidden="true"><img src="/static/logos/paytr.svg" alt="" width="90" height="24" loading="lazy" /></span>
+              <a href="/security?lang=en" class="shrink-0" data-locale-link="security" aria-label="Security and compliance overview"><img src="/static/images/hipaa-badge.svg" alt="" width="32" height="32" loading="lazy" /></a>
+            </div>
+          </div>
         </div>
         <!-- Right: Globe visual + floating report card -->
-        <div class="relative flex justify-center lg:justify-end">
-          <div class="relative w-full max-w-[420px] sm:max-w-[512px]" style="aspect-ratio:1/1;">
+        <div class="hero-visual-wrap relative flex justify-center lg:justify-end min-h-[280px] sm:min-h-[320px]">
+          <div class="relative w-full max-w-[420px] sm:max-w-[512px] hero-globe-mask" style="aspect-ratio:1/1;">
             <img alt="Global health and lab results connection — Norya" data-i18n-alt="hero_globe_alt" class="w-full h-full object-contain" style="filter:drop-shadow(0 25px 25px rgba(0,0,0,.12));" src="/static/images/hero-globe.png" width="512" height="512" loading="eager" decoding="async" />
             <div class="absolute inset-0 rounded-full" style="background:radial-gradient(circle,rgba(14,165,164,0.08) 0%,transparent 70%);z-index:-1;"></div>
           </div>
-          <!-- Floating report card -->
-          <div class="absolute rounded-2xl p-4 sm:p-5 shadow-xl border border-accent-100 dark:border-accent-700" style="bottom:2rem;left:-1rem;max-width:260px;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);z-index:20;" aria-hidden="true">
-            <div class="flex justify-between items-center mb-3">
-              <span class="text-xs font-bold uppercase tracking-wider" style="color:#0EA5A4;" data-i18n="report_preview_badge">Sample report</span>
-              <span class="text-2xl font-extrabold" style="color:#0EA5A4;">84<span class="text-sm font-semibold text-accent-400">/100</span></span>
+          <!-- Floating report card — overlaps globe for depth -->
+          <div class="hero-sample-card-wrap absolute max-w-[270px] w-[min(100%,270px)] bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-0 lg:-right-2 lg:bottom-10" aria-hidden="true">
+            <div class="hero-sample-card p-4 sm:p-5">
+            <div class="flex justify-between items-start gap-3 mb-3">
+              <span class="text-xs font-bold uppercase tracking-wider text-[#0EA5A4] dark:text-teal-300 pt-1" data-i18n="report_preview_badge">Sample report</span>
+              <div class="hero-score-ring" aria-hidden="true">
+                <span class="hero-score-glow-dot" aria-hidden="true"></span>
+                <svg viewBox="0 0 36 36" aria-hidden="true">
+                  <circle class="hero-score-track" cx="18" cy="18" r="15.9155" />
+                  <circle class="hero-score-fill" cx="18" cy="18" r="15.9155" />
+                </svg>
+                <div class="hero-score-label">
+                  <span class="hero-score-num">84</span>
+                  <span class="hero-score-denom">/100</span>
+                </div>
+              </div>
             </div>
             <p class="text-sm font-semibold text-accent-900 dark:text-white mb-2" data-i18n="health_dashboard_title">Premium Health Report</p>
             <div class="flex items-center gap-2 text-xs text-accent-500 mb-1">
@@ -4627,6 +5072,7 @@
             <div class="flex items-center gap-2 text-xs text-accent-500">
               <span class="inline-flex w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
               <span data-i18n="report_preview_line_2">Doctor-ready PDF and optional QR verification for your report.</span>
+            </div>
             </div>
           </div>
         </div>
@@ -4852,27 +5298,52 @@
             </div>
           </div>
 
-          <!-- Before (sol): eski/okunması zor tahlil kağıdı hissi -->
+          <!-- Before (sol): yoğun lab tablosu mockup — inline stiller: prebuild tailwind.css arbitrary sınıfları içermiyor -->
           <div id="ba-before" class="absolute inset-y-0 left-0 overflow-hidden" style="width:50%">
-            <div class="absolute inset-0">
+            <div class="absolute inset-0 p-3 flex flex-col gap-2 box-border" style="background-color:#e8e0cc; min-width:260px;">
               <img
                 src="/static/images/blog/how-to-read-blood-test-results.png"
-                alt="Eski usul tahlil kağıdı temsili (okunması zor görsel)"
+                alt=""
                 loading="lazy"
-                class="absolute inset-0 w-full h-full object-cover"
-                  style="object-position: 35% 55%; transform: scale(1.14) rotate(-1.6deg); transform-origin: 35% 55%; filter: grayscale(1) contrast(1.28) saturate(0.62) blur(0.32px);"
+                class="absolute inset-0 w-full h-full object-cover pointer-events-none"
+                style="opacity:0.12;object-position:35% 55%;filter:grayscale(1) contrast(1.1);"
               />
-              <!-- scanlines + kağıt dokusu -->
               <div
-                class="absolute inset-0 pointer-events-none opacity-60 mix-blend-multiply"
-                style="background-image:
-                  repeating-linear-gradient(0deg, rgba(0,0,0,0.07) 0, rgba(0,0,0,0.07) 1px, transparent 1px, transparent 3px),
-                  repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0, rgba(0,0,0,0.03) 1px, transparent 1px, transparent 5px);"
+                class="absolute inset-0 pointer-events-none opacity-50 mix-blend-multiply"
+                style="background-image:repeating-linear-gradient(0deg,rgba(0,0,0,0.06) 0,rgba(0,0,0,0.06) 1px,transparent 1px,transparent 3px),repeating-linear-gradient(90deg,rgba(0,0,0,0.03) 0,rgba(0,0,0,0.03) 1px,transparent 1px,transparent 5px);"
               ></div>
-              <div class="absolute inset-0 pointer-events-none opacity-30" style="background: radial-gradient(800px 260px at 30% 30%, rgba(0,0,0,0.18), transparent 60%);"></div>
-              <div class="absolute inset-0 pointer-events-none opacity-40 mix-blend-multiply" style="background: linear-gradient(120deg, rgba(239,230,201,0.55), rgba(239,230,201,0) 55%), linear-gradient(0deg, rgba(0,0,0,0.10), transparent 55%);"></div>
-              <div class="absolute top-4 left-4 right-4 flex items-center justify-between gap-3">
-                <span class="text-xs font-semibold uppercase tracking-wider text-amber-900/90 dark:text-amber-200 bg-[#efe6c9]/85 dark:bg-amber-950/20 border border-amber-200/70 dark:border-amber-800/60 backdrop-blur px-3 py-1 rounded-full" data-i18n="before_after_before_label">Önce — Laboratuvar çıktısı</span>
+              <div class="relative z-10 flex flex-col gap-2 flex-1 min-h-0" style="min-height:0;">
+                <div class="shrink-0">
+                  <span class="text-xs font-semibold uppercase tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100 dark:bg-amber-950/40 border border-amber-300 dark:border-amber-700 px-3 py-1 rounded-full" data-i18n="before_after_before_label">Önce — Laboratuvar çıktısı</span>
+                </div>
+                <div
+                  class="rounded-lg border border-amber-800 dark:border-slate-600 bg-amber-50 dark:bg-slate-900 px-2 py-2 font-mono text-xs text-slate-800 dark:text-slate-200 leading-snug overflow-auto flex-1"
+                  style="min-height:200px; box-shadow:inset 0 1px 0 rgba(255,255,255,0.55);"
+                >
+                  <p class="mb-2 tracking-tight" data-i18n="before_after_lab_header">LAB. RAPOR NO: 2024-****    TARİH: **.**.2024</p>
+                  <table class="w-full border-collapse text-left">
+                    <thead>
+                      <tr class="border-b border-slate-300 dark:border-slate-600 text-slate-500 dark:text-slate-400">
+                        <th class="py-1 pr-2 font-semibold" data-i18n="before_after_th_test">Test</th>
+                        <th class="py-1 pr-2 font-semibold" data-i18n="before_after_th_result">Sonuç</th>
+                        <th class="py-1 font-semibold whitespace-nowrap" data-i18n="before_after_th_ref">Referans</th>
+                      </tr>
+                    </thead>
+                    <tbody class="text-slate-700 dark:text-slate-300">
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">WBC</td><td class="py-1 pr-2">7.2</td><td class="py-1">4.5–11.0</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">RBC</td><td class="py-1 pr-2">4.81</td><td class="py-1">4.5–5.9</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">Hgb</td><td class="py-1 pr-2">14.2</td><td class="py-1">12–16 g/dL</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">Hct</td><td class="py-1 pr-2">42.1</td><td class="py-1">36–46%</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">Glucose</td><td class="py-1 pr-2">98</td><td class="py-1">70–100 mg/dL</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">BUN</td><td class="py-1 pr-2">14</td><td class="py-1">7–20 mg/dL</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">Creatinine</td><td class="py-1 pr-2">0.92</td><td class="py-1">0.7–1.3</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">AST / ALT</td><td class="py-1 pr-2">24 / 28</td><td class="py-1">&lt;40 U/L</td></tr>
+                      <tr class="border-b border-slate-200 dark:border-slate-700"><td class="py-1 pr-2">TSH</td><td class="py-1 pr-2">2.1</td><td class="py-1">0.4–4.0</td></tr>
+                      <tr><td class="py-1 pr-2">LDL-C</td><td class="py-1 pr-2">128</td><td class="py-1">&lt;100 mg/dL</td></tr>
+                    </tbody>
+                  </table>
+                  <p class="mt-2 italic text-slate-500 dark:text-slate-400" data-i18n="before_after_before_hint">Kısaltmalar ve sayılar — ne anlama geldiği belirsiz.</p>
+                </div>
               </div>
             </div>
           </div>
@@ -6314,7 +6785,7 @@
         <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="sample_cards_sub">Tahlil sonrası raporunuzda göreceğiniz başlıklar — doktor gözünde, premium formatta.</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 xl:grid-cols-5 gap-4 sm:gap-5">
-        <a href="javascript:void(0)" role="button" data-sample="glucose" onclick="openSampleReportModal('glucose'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="/en/sample-blood-test-reports" data-sample-reports-link="1" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 p-2.5 text-[#0EA5A4]" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
@@ -6325,7 +6796,7 @@
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_glucose_desc">Açlık glukoz ve HbA1c tek ekranda; diyabet riski özeti ve referans aralıkları.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="javascript:void(0)" role="button" data-sample="bio" onclick="openSampleReportModal('bio'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="/en/sample-blood-test-reports" data-sample-reports-link="1" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-violet-500/10 dark:bg-violet-500/20 p-2.5 text-violet-600 dark:text-violet-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
@@ -6336,7 +6807,7 @@
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_bio_desc">Tahmini biyolojik yaş ve genel sağlık skoru — yaşınıza göre vücut durumu özeti.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="javascript:void(0)" role="button" data-sample="cardio" onclick="openSampleReportModal('cardio'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="/en/sample-blood-test-reports" data-sample-reports-link="1" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-rose-500/10 dark:bg-rose-500/20 p-2.5 text-rose-600 dark:text-rose-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z"/></svg>
@@ -6347,7 +6818,7 @@
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_cardio_desc">LDL, HDL, trigliserid; kalp sağlığı özeti ve referans aralıklarıyla birlikte.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="javascript:void(0)" role="button" data-sample="vitamin" onclick="openSampleReportModal('vitamin'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="/en/sample-blood-test-reports" data-sample-reports-link="1" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-amber-500/10 dark:bg-amber-500/20 p-2.5 text-amber-600 dark:text-amber-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19.428 15.428a2 2 0 00-1.022-.547l-2.387-.477a6 6 0 00-3.86.517l-.318.158a6 6 0 01-3.86.517L6.05 15.21a2 2 0 00-1.806.547M8 4h8l-1 1v5.172a2 2 0 00.586 1.414l5 5c1.26 1.26.367 3.414-1.415 3.414H4.828c-1.782 0-2.674-2.154-1.414-3.414l5-5A2 2 0 009 10.172V5L8 4z"/></svg>
@@ -6358,7 +6829,7 @@
           <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed mb-3" data-i18n="sample_card_vitamin_desc">D vitamini, B12, demir, ferritin — eksiklik riski ve referans aralıkları.</p>
           <span class="text-xs font-medium text-[#0EA5A4] group-hover:underline" data-i18n="sample_card_cta">Rapor örneğini gör →</span>
         </a>
-        <a href="javascript:void(0)" role="button" data-sample="attention" onclick="openSampleReportModal('attention'); return false;" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
+        <a href="/en/sample-blood-test-reports" data-sample-reports-link="1" class="sample-premium-card group rounded-2xl border border-accent-200 dark:border-accent-700 bg-white dark:bg-accent-800/80 p-5 sm:p-6 shadow-[0_4px_20px_rgba(15,23,42,0.06)] dark:shadow-none hover:shadow-[0_12px_32px_rgba(14,165,164,0.12)] hover:border-[#0EA5A4]/30 transition-all duration-200 text-left no-underline">
           <div class="flex items-center gap-3 mb-3">
             <span class="sample-card-icon rounded-xl bg-emerald-500/10 dark:bg-emerald-500/20 p-2.5 text-emerald-600 dark:text-emerald-400" aria-hidden="true">
               <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/></svg>
@@ -9848,10 +10319,12 @@
         trust_row_3d: "3D Secure ödeme", trust_row_kvkk: "KVKK / GDPR uyumlu", trust_row_hipaa: "Güvenlik en iyi uygulamaları / HIPAA uyumlu ilkeler", trust_row_invoice: "e-Arşiv fatura",
         history_favorite_only: "Sadece favoriler", history_favorite: "Favorilere ekle", history_unfavorite: "Favoriden çıkar",
         history_login_required: "Geçmişi görmek için giriş yapın.", history_session_expired: "Oturum süreniz dolmuş olabilir. Çıkış yapıp tekrar giriş yapın.",
-        hero_sub: "Kan tahlilinizi yükleyin. Yapay zekâ dakikalar içinde anlaşılır rapor üretsin.",
-        hero_title: "Kan tahlilinizi yükleyin — anlaşılır raporu dakikalar içinde alın",
-        hero_desc: "Sonuçlarınızı yükleyin; yapay zekâ analiz eder. Sağlık skoru, işaretli değerler ve doktora götürebileceğiniz PDF rapor — hızlı, güvenli, şeffaf.",
+        hero_sub: "Laboratuvar sonuçları sade dilde — yapay zekâ ile dakikalar içinde, ücretsiz.",
+        hero_title: "Kan tahlili sonuçlarınızı anlayın — NoryaAI",
+        hero_desc: "Tahlil raporunuzu yükleyin; CBC, demir, tiroid, vitaminler ve diğer belirteçler için yapay zekâ destekli, anlaşılır bir özet alın. Hızlı, okunaklı ve gizlilik odaklı — klinik kararlar hekiminizdedir.",
         hero_cta: "Ücretsiz başla", hero_book_demo: "Demo talep et", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek raporu gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu", hero_global_reach: "Dünyanın her yerindeyiz — 190+ ülkeden erişilebilir",
+        hero_trusted_by: "Güvenilen altyapı ve teknoloji ortakları",
+        hero_patients_trust: "10.000+ HASTA TARAFINDAN GÜVENİLİYOR",
         b2b_strip_label: "Profesyoneller", b2b_strip_doctors: "Doktorlar için", b2b_strip_clinics: "Klinikler için", b2b_strip_trust: "Güven Merkezi", b2b_strip_compare: "Norya karşılaştırması",
         why_mini_title: "Neden Norya?", why_mini_sub: "Genel sohbet için değil — gerçek tahlil akışları için tasarlandı.",
         why_mini_1: "Genel sohbet için değil; laboratuvar raporları için üretildi.", why_mini_2: "Hastalar için net özetler.", why_mini_3: "Hekimlere uygun çıktı.", why_mini_4: "Çok dilli erişim.", why_mini_5: "Güven öncelikli mimari.",
@@ -9918,7 +10391,7 @@
         upload_intake_subtitle_tr: "Secure, structured intake. Your report is generated in minutes.",
         intake_disclaimer: "Yalnızca bilgilendirme amaçlıdır. Bu hizmet profesyonel tıbbi tavsiye, teşhis veya tedavinin yerine geçmez. Sağlık kararları için sağlık uzmanınıza danışın.",
         before_after_title: "Tahlil Kağıdından Norya Raporuna", before_after_desc: "Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.",
-        before_after_before_label: "Önce — Laboratuvar çıktısı", before_after_th_test: "Test", before_after_th_result: "Sonuç", before_after_th_ref: "Referans",
+        before_after_before_label: "Önce — Laboratuvar çıktısı", before_after_lab_header: "LAB. RAPOR NO: 2024-****    TARİH: **.**.2024", before_after_th_test: "Test", before_after_th_result: "Sonuç", before_after_th_ref: "Referans",
         before_after_before_hint: "Kısaltmalar ve sayılar — ne anlama geldiği belirsiz.", before_after_arrow: "60 sn",
         before_after_after_label: "Sonra — Norya raporu", before_after_after_summary: "Kan sayımı ve metabolik panelde orta derecede sonuçlar: birçok parametre referans aralığında, bazıları sınırda. Hemoglobin, glukoz, lipidler, karaciğer ve böbrek değerleri detaylı açıklanır. Rutin takip ve doktor görüşmesi önerilir.",
         before_after_after_tips: "Dengeli beslenme, düzenli kontroller. Demir ve B12 konusunda hekiminizle görüşebilirsiniz. Raporda daha fazla değer ve bilgilendirici not yer alır. Doktorunuzla paylaşın.", before_after_after_trust: "Anlaşılır dil • PDF indir • Doktora götür", before_after_footer: "Gerçek müşteri raporları aynı yapıda; kişisel verileriniz korunur.",
@@ -10316,10 +10789,12 @@
         trust_row_3d: "3D Secure payment", trust_row_kvkk: "KVKK / GDPR compliant", trust_row_hipaa: "Security best practices / HIPAA-aligned principles", trust_row_invoice: "e-Archive invoice",
         history_favorite_only: "Favorites only", history_favorite: "Add to favorites", history_unfavorite: "Remove from favorites",
         history_login_required: "Please log in to see history.", history_session_expired: "Your session may have expired. Try logging out and back in.",
-        hero_sub: "Analyze blood test results with AI — free lab results explanation in minutes.",
-        hero_title: "Free AI Blood Test Analyzer",
-        hero_desc: "Upload your blood test report and get a free AI-powered explanation of CBC, iron, thyroid, vitamins and other lab results. Fast, clear and privacy-focused. By NoryaAI.",
+        hero_sub: "Lab results explained in plain language — AI-powered, free in minutes.",
+        hero_title: "Understand Your Blood Test Results — NoryaAI",
+        hero_desc: "Upload your blood test report and get a clear AI-powered explanation of CBC, iron, thyroid, vitamins and other lab markers. Fast, readable and privacy-focused — clinical decisions stay with your clinician.",
         hero_cta: "Start free", hero_book_demo: "Book demo", hero_how: "How it works", hero_see_sample: "See sample report", hero_secure: "Secure • Privacy-first • GDPR compliant", hero_global_reach: "We're everywhere — Accessible from 190+ countries",
+        hero_trusted_by: "Trusted infrastructure & technology partners",
+        hero_patients_trust: "Trusted by 10,000+ patients",
         b2b_strip_label: "For teams", b2b_strip_doctors: "For doctors", b2b_strip_clinics: "For clinics", b2b_strip_trust: "Trust Center", b2b_strip_compare: "Compare Norya",
         why_mini_title: "Why Norya", why_mini_sub: "Purpose-built for lab workflows — not open-ended chat.",
         why_mini_1: "Built for lab reports, not general chat.", why_mini_2: "Clear patient summaries.", why_mini_3: "Doctor-friendly output.", why_mini_4: "Multilingual access.", why_mini_5: "Trust-first architecture.",
@@ -10381,7 +10856,7 @@
         review_uk_quote: "I use Norya for my annual bloodwork. Clear, professional reports and a PDF that's ready to share with my doctor.",
         customer_review_verified: "Verified Review",
         before_after_title: "From lab sheet to Norya report", before_after_desc: "Same results — first a dense table, 60 seconds later a clear report. Our users see this transformation.",
-        before_after_before_label: "Before — Lab printout", before_after_th_test: "Test", before_after_th_result: "Result", before_after_th_ref: "Reference",
+        before_after_before_label: "Before — Lab printout", before_after_lab_header: "LAB REPORT NO: 2024-****    DATE: **.**.2024", before_after_th_test: "Test", before_after_th_result: "Result", before_after_th_ref: "Reference",
         before_after_before_hint: "Abbreviations and numbers — what they mean is unclear.", before_after_arrow: "60 sec",
         before_after_after_label: "After — Norya report", before_after_after_summary: "Moderate results: many parameters in reference range, some borderline. Hemoglobin, glucose, lipids, liver and kidney values explained in detail. Routine follow-up and doctor visit recommended.",
         before_after_after_tips: "Balanced diet, regular check-ups. Iron and B12 supplements — ask your doctor. Report includes more values and recommendations. Share with your doctor.", before_after_after_trust: "Plain language • Download PDF • Take to doctor", before_after_footer: "Real customer reports look like this; your data stays protected.",
@@ -14069,12 +14544,45 @@
     }
     function applyTranslationToElement(el, text) {
       if (text == null || text === '') return;
+      var hid = el.id;
+      if (hid === 'hero-home-title' || hid === 'hero-home-desc') {
+        el.textContent = String(text);
+        return;
+      }
       var firstText = null;
       for (var i = 0; i < el.childNodes.length; i++) {
         if (el.childNodes[i].nodeType === 3) { firstText = el.childNodes[i]; break; }
       }
       if (firstText) firstText.nodeValue = String(text);
       else el.textContent = String(text);
+    }
+    function wrapHeroBrandGradient() {
+      function esc(s) {
+        return String(s)
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+      }
+      function applyOne(el) {
+        if (!el) return;
+        var s = el.textContent;
+        if (!s) return;
+        var parts = s.split(/(Norya\s*AI|NoryaAI)/gi);
+        if (parts.length < 2) return;
+        var html = '';
+        for (var i = 0; i < parts.length; i++) {
+          if (!parts[i]) continue;
+          if (/^(Norya\s*AI|NoryaAI)$/i.test(parts[i])) {
+            html += '<span class="hero-brand-gradient">' + esc(parts[i]) + '</span>';
+          } else {
+            html += esc(parts[i]);
+          }
+        }
+        el.innerHTML = html;
+      }
+      applyOne(document.getElementById('hero-home-title'));
+      applyOne(document.getElementById('hero-home-desc'));
     }
     function setLang(lang) {
       console.log("[i18n-home] active locale:", lang);
@@ -14137,6 +14645,7 @@
         if (text != null && text !== '') { applyTranslationToElement(el, text); _i18nApplied++; }
         else { _i18nMissing++; }
       });
+      wrapHeroBrandGradient();
       var drawer = document.getElementById("mobile-drawer");
       if (drawer) {
         drawer.querySelectorAll("[data-i18n]").forEach(function(el) {
@@ -14185,6 +14694,7 @@
             if (text) applyTranslationToElement(el, text);
           });
         }
+        wrapHeroBrandGradient();
         var charEl2 = document.getElementById("wizard-preview-char");
         if (charEl2 && wizardCount) {
           var analyzeText2 = document.getElementById("analyze-text");
@@ -14455,6 +14965,8 @@
       if (modal) { modal.classList.add('hidden'); modal.classList.remove('flex'); }
       document.body.style.overflow = '';
     }
+    window.openSampleReportModal = openSampleReportModal;
+    window.closeSampleReportModal = closeSampleReportModal;
 
     function submitLeadForm(e, source) {
       e.preventDefault();
@@ -16327,13 +16839,13 @@
       onStickyCtaScroll();
     })();
   </script>
-<!-- Cookie Consent Banner -->
-<div id="norya-cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1e293b;color:#f1f5f9;padding:14px 20px;font-size:14px;line-height:1.5;box-shadow:0 -2px 12px rgba(0,0,0,.25);font-family:system-ui,sans-serif;">
-  <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
-    <span id="cookie-text" style="flex:1 1 300px;">Bu site, deneyiminizi iyileştirmek ve analiz amacıyla çerez kullanır.</span>
-    <div style="display:flex;gap:8px;flex-shrink:0;">
-      <button id="cookie-accept" style="background:#2563eb;color:#fff;border:none;padding:8px 22px;border-radius:6px;font-size:14px;cursor:pointer;font-weight:500;">Kabul Et</button>
-      <button id="cookie-reject" style="background:transparent;color:#94a3b8;border:1px solid #475569;padding:8px 16px;border-radius:6px;font-size:14px;cursor:pointer;">Reddet</button>
+<!-- Cookie Consent Banner — floating glass toast -->
+<div id="norya-cookie-banner" class="norya-cookie-float" style="display:none;position:fixed;z-index:99999;font-family:system-ui,-apple-system,sans-serif;" role="dialog" aria-live="polite" aria-label="Cookie consent">
+  <div class="norya-cookie-inner">
+    <span id="cookie-text" class="norya-cookie-msg">Bu site, deneyiminizi iyileştirmek ve analiz amacıyla çerez kullanır.</span>
+    <div class="norya-cookie-actions">
+      <button type="button" id="cookie-accept" class="norya-cookie-btn norya-cookie-btn--accept">Kabul Et</button>
+      <button type="button" id="cookie-reject" class="norya-cookie-btn norya-cookie-btn--reject">Reddet</button>
     </div>
   </div>
 </div>
