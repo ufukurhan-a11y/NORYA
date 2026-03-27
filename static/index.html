@@ -365,7 +365,7 @@
       .header .header-right-zone, .header .right-zone, .header .nav-actions { min-width: 0 !important; max-width: none !important; flex-shrink: 0 !important; }
       .header .elite-cta-btn, .header .primary-cta, .header .secondary-link, .header button { max-width: 100% !important; }
       .header .hamburger { flex-shrink: 0 !important; }
-      .hero, .gradient-hero, .premium-wrap, .premium-section, .trust-global-section, .features-grid-section { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
+      .hero, .gradient-hero, .premium-wrap, .premium-section, .trust-global-section, .features-grid-section, .features-bento-section { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .hero-inner { width: 100% !important; max-width: 100% !important; padding-left: 1rem !important; padding-right: 1rem !important; box-sizing: border-box !important; }
       .hero-cta-wrap { width: 100% !important; max-width: 100% !important; min-width: 0 !important; }
       .hero-cta-wrap .hero-cta-btn, .hero-cta-wrap button, .hero-cta-wrap a { max-width: 100% !important; min-width: 0 !important; width: 100% !important; }
@@ -602,6 +602,161 @@
     @media (hover: hover) {
       .home-b2b-strip-links a:hover { border-color: rgba(14,165,164,0.45); background: rgba(14,165,164,0.06); }
     }
+    /* Features Bento — hero altı: 16px radius, cam + iç gölge, ince çizgi ikonlar */
+    .features-bento-section {
+      position: relative;
+      padding: 2.5rem 1rem 3rem;
+      background: linear-gradient(180deg, rgba(245,249,255,0.97) 0%, #f0fafa 42%, #eaf6f6 100%);
+      overflow-x: clip;
+    }
+    .dark .features-bento-section {
+      background: linear-gradient(180deg, rgba(25,28,29,0.98) 0%, #191c1d 45%, #151c1f 100%);
+    }
+    .features-bento-inner { max-width: 72rem; margin: 0 auto; padding-left: 0.25rem; padding-right: 0.25rem; }
+    @media (min-width: 640px) { .features-bento-inner { padding-left: 0.5rem; padding-right: 0.5rem; } }
+    .features-bento-header { text-align: center; max-width: 40rem; margin: 0 auto 1.75rem; }
+    @media (min-width: 640px) { .features-bento-header { margin-bottom: 2.25rem; } }
+    .features-bento-grid {
+      display: grid;
+      gap: 1rem;
+      grid-template-columns: 1fr;
+      grid-template-areas: "a" "b" "c" "d" "e" "f";
+    }
+    @media (min-width: 768px) {
+      .features-bento-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-areas:
+          "a a"
+          "b c"
+          "d d"
+          "e f";
+      }
+    }
+    @media (min-width: 1024px) {
+      .features-bento-grid {
+        grid-template-columns: repeat(4, 1fr);
+        grid-template-rows: auto auto auto;
+        grid-template-areas:
+          "a a b c"
+          "a a d d"
+          "e f f f";
+      }
+    }
+    .features-bento-cell {
+      border-radius: 16px;
+      padding: 1.25rem 1.25rem 1.35rem;
+      min-height: 0;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      text-align: left;
+      background: rgba(255, 255, 255, 0.76);
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+      border: 1px solid rgba(255, 255, 255, 0.72);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 -2px 14px rgba(15, 23, 42, 0.045) inset,
+        0 6px 28px rgba(14, 165, 164, 0.07);
+      transition: transform 0.22s ease, box-shadow 0.22s ease, border-color 0.22s ease;
+    }
+    .dark .features-bento-cell {
+      background: rgba(30, 41, 59, 0.52);
+      border-color: rgba(255, 255, 255, 0.1);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.07) inset,
+        0 -3px 18px rgba(0, 0, 0, 0.28) inset,
+        0 10px 36px rgba(0, 0, 0, 0.22);
+    }
+    @media (hover: hover) {
+      .features-bento-cell:hover {
+        transform: translateY(-3px);
+        border-color: rgba(14, 165, 164, 0.28);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.95) inset,
+          0 -2px 16px rgba(15, 23, 42, 0.05) inset,
+          0 12px 40px rgba(14, 165, 164, 0.12);
+      }
+      .dark .features-bento-cell:hover {
+        border-color: rgba(94, 234, 212, 0.25);
+        box-shadow:
+          0 1px 0 rgba(255, 255, 255, 0.1) inset,
+          0 -3px 20px rgba(0, 0, 0, 0.32) inset,
+          0 14px 44px rgba(0, 0, 0, 0.28);
+      }
+    }
+    .features-bento-cell--a { grid-area: a; min-height: 11rem; }
+    @media (min-width: 1024px) { .features-bento-cell--a { min-height: 13.5rem; } }
+    .features-bento-cell--b { grid-area: b; }
+    .features-bento-cell--c { grid-area: c; }
+    .features-bento-cell--d { grid-area: d; }
+    .features-bento-cell--e { grid-area: e; }
+    .features-bento-cell--f { grid-area: f; }
+    .features-bento-icon {
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 12px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-bottom: 0.875rem;
+      background: rgba(14, 165, 164, 0.1);
+      color: #0f766e;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.65) inset;
+    }
+    .dark .features-bento-icon {
+      background: rgba(14, 165, 164, 0.18);
+      color: #5eead4;
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    }
+    .features-bento-icon svg { width: 1.35rem; height: 1.35rem; }
+    .features-bento-icon svg [stroke] { stroke-width: 1.15; }
+    .features-bento-title {
+      font-size: 1rem;
+      font-weight: 700;
+      line-height: 1.35;
+      color: #0f172a;
+      margin: 0 0 0.4rem 0;
+      letter-spacing: -0.02em;
+    }
+    @media (min-width: 640px) { .features-bento-title { font-size: 1.0625rem; } }
+    .dark .features-bento-title { color: #f1f5f9; }
+    .features-bento-desc {
+      font-size: 0.8125rem;
+      line-height: 1.55;
+      color: #475569;
+      margin: 0;
+      flex: 1;
+    }
+    @media (min-width: 640px) { .features-bento-desc { font-size: 0.875rem; } }
+    .dark .features-bento-desc { color: #94a3b8; }
+    .features-bento-viz {
+      margin-top: auto;
+      padding-top: 1rem;
+      align-self: stretch;
+      opacity: 0.92;
+    }
+    .features-bento-mini-chart { width: 100%; height: 3rem; display: block; }
+    .features-bento-mini-chart .features-bento-chart-line {
+      stroke-dasharray: 56;
+      stroke-dashoffset: 56;
+      animation: features-bento-draw 2.2s ease forwards 0.3s;
+    }
+    @keyframes features-bento-draw {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes features-bento-pulse {
+      0%, 100% { opacity: 0.78; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.04); }
+    }
+    .features-bento-anim-pulse { animation: features-bento-pulse 2.8s ease-in-out infinite; }
+    @media (prefers-reduced-motion: reduce) {
+      .features-bento-mini-chart path[stroke] { animation: none; stroke-dashoffset: 0; }
+      .features-bento-anim-pulse { animation: none; }
+    }
     .why-mini-list li { position: relative; padding-left: 1.25rem; }
     .why-mini-list li::before {
       content: ""; position: absolute; left: 0; top: 0.5rem; width: 6px; height: 6px; border-radius: 50%; background: #0ea5a4;
@@ -635,8 +790,8 @@
       }
       .dark .hero-trust-badges > span { background: rgba(255,255,255,0.06); }
       .hero-primary-ctas .hero-cta-pill { width: 100%; justify-content: center; }
-      #ozellikler .grid > article { padding: 1.25rem 1.15rem !important; border-radius: 1rem !important; }
-      #ozellikler { padding-top: 3rem !important; padding-bottom: 3rem !important; }
+      #ozellikler .features-bento-cell { padding: 1.1rem 1rem !important; }
+      #ozellikler { padding-top: 2.5rem !important; padding-bottom: 2.5rem !important; }
     }
 
     /* Homepage hero: mesh gradient + grain, premium type, globe mask, glass card */
@@ -739,6 +894,159 @@
       padding-right: 0;
       justify-content: flex-start;
       gap: 1.5rem;
+      width: 100%;
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    .hero-saas-premium .hero-home-lead .hero-primary-ctas > .hero-cta-pill,
+    .hero-saas-premium .hero-home-lead .hero-primary-ctas > button.hero-cta-pill {
+      max-width: 100%;
+      min-width: 0;
+      box-sizing: border-box;
+    }
+    @media (max-width: 639px) {
+      .hero-saas-premium .hero-home-lead .hero-primary-ctas > .hero-cta-pill,
+      .hero-saas-premium .hero-home-lead .hero-primary-ctas > button.hero-cta-pill {
+        width: 100%;
+        justify-content: center;
+        text-align: center;
+        padding-left: 1rem;
+        padding-right: 1rem;
+      }
+    }
+    /* Küresel erişim: premium cam kart + vektör + rapor dilleri (9+) */
+    .hero-global-reach-wrap {
+      width: 100%;
+      max-width: 48rem;
+      margin-left: auto;
+      margin-right: auto;
+      margin-top: 2.5rem;
+      padding-left: 0.25rem;
+      padding-right: 0.25rem;
+      box-sizing: border-box;
+    }
+    @media (min-width: 640px) {
+      .hero-global-reach-wrap { margin-top: 3.25rem; }
+    }
+    .hero-global-reach-card {
+      position: relative;
+      border-radius: 1.5rem;
+      padding: 1.35rem 1.15rem 1.2rem;
+      background: linear-gradient(165deg, rgba(255, 255, 255, 0.72) 0%, rgba(240, 253, 250, 0.52) 42%, rgba(255, 255, 255, 0.82) 100%);
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.95) inset,
+        0 12px 40px rgba(14, 165, 164, 0.1),
+        0 4px 18px rgba(15, 23, 42, 0.06);
+      overflow: hidden;
+    }
+    .dark .hero-global-reach-card {
+      background: linear-gradient(165deg, rgba(30, 41, 59, 0.72) 0%, rgba(15, 23, 42, 0.55) 100%);
+      border-color: rgba(255, 255, 255, 0.12);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.06) inset,
+        0 12px 48px rgba(0, 0, 0, 0.35);
+    }
+    .hero-global-reach-card::before {
+      content: "";
+      position: absolute;
+      inset: -40% -20% auto;
+      height: 70%;
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(14, 165, 164, 0.14), transparent 65%);
+      pointer-events: none;
+    }
+    .dark .hero-global-reach-card::before {
+      background: radial-gradient(ellipse 80% 60% at 50% 0%, rgba(45, 212, 191, 0.12), transparent 65%);
+    }
+    .hero-global-viz-eyebrow {
+      position: relative;
+      text-align: center;
+      font-size: 0.6875rem;
+      font-weight: 800;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: rgb(13 148 136);
+      margin: 0 0 0.75rem 0;
+    }
+    .dark .hero-global-viz-eyebrow {
+      color: rgb(94 234 212);
+    }
+    .hero-global-viz-slot {
+      position: relative;
+      width: 100%;
+      max-width: 36rem;
+      margin: 0 auto;
+    }
+    .hero-global-viz-svg {
+      display: block;
+      width: 100%;
+      height: auto;
+      max-height: 5.5rem;
+    }
+    @media (min-width: 640px) {
+      .hero-global-viz-svg { max-height: 6.25rem; }
+    }
+    .hero-global-lang-strip {
+      position: relative;
+      list-style: none;
+      margin: 1rem 0 0 0;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      align-items: center;
+      gap: 0.4rem 0.5rem;
+    }
+    .hero-global-lang-strip li {
+      margin: 0;
+      padding: 0;
+    }
+    .hero-global-lang-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 2.35rem;
+      padding: 0.32rem 0.5rem;
+      border-radius: 999px;
+      font-size: 0.625rem;
+      font-weight: 800;
+      letter-spacing: 0.08em;
+      color: #0f766e;
+      background: linear-gradient(180deg, rgba(255, 255, 255, 0.95) 0%, rgba(240, 253, 250, 0.88) 100%);
+      border: 1px solid rgba(14, 165, 164, 0.28);
+      box-shadow:
+        0 1px 0 rgba(255, 255, 255, 0.9) inset,
+        0 2px 8px rgba(14, 165, 164, 0.12);
+    }
+    .dark .hero-global-lang-pill {
+      color: #5eead4;
+      background: linear-gradient(180deg, rgba(51, 65, 85, 0.9) 0%, rgba(30, 41, 59, 0.85) 100%);
+      border-color: rgba(94, 234, 212, 0.22);
+      box-shadow: 0 1px 0 rgba(255, 255, 255, 0.06) inset;
+    }
+    .hero-global-reach-footer {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.65rem;
+      flex-wrap: wrap;
+      margin-top: 1.15rem;
+      padding-top: 1.05rem;
+      border-top: 1px solid rgba(14, 165, 164, 0.12);
+    }
+    .dark .hero-global-reach-footer {
+      border-top-color: rgba(148, 163, 184, 0.15);
+    }
+    .hero-global-reach-footer p {
+      margin: 0;
+      text-align: center;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-global-reach-footer .animate-pulse { animation: none; }
     }
     .hero-visual-wrap {
       position: relative;
@@ -747,12 +1055,64 @@
     .hero-globe-mask {
       position: relative;
       z-index: 1;
-      -webkit-mask-image: radial-gradient(circle at 50% 50%, #000 60%, transparent 100%);
-      mask-image: radial-gradient(circle at 50% 50%, #000 60%, transparent 100%);
+      -webkit-mask-image: radial-gradient(circle at 50% 48%, #000 58%, transparent 100%);
+      mask-image: radial-gradient(circle at 50% 48%, #000 58%, transparent 100%);
       -webkit-mask-repeat: no-repeat;
       mask-repeat: no-repeat;
       -webkit-mask-size: 100% 100%;
       mask-size: 100% 100%;
+    }
+    .hero-medical-viz-glow { z-index: 0; }
+    .hero-medical-viz {
+      position: absolute;
+      inset: 0;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+    }
+    .hero-medical-svg {
+      width: 100%;
+      height: 100%;
+      display: block;
+      filter: drop-shadow(0 22px 36px rgba(13, 148, 136, 0.18));
+    }
+    .dark .hero-medical-svg {
+      filter: drop-shadow(0 22px 40px rgba(0, 0, 0, 0.45)) drop-shadow(0 0 28px rgba(45, 212, 191, 0.12));
+    }
+    .hero-data-node {
+      animation: hero-data-node-pulse 2.8s ease-in-out infinite;
+      transform-origin: center;
+      transform-box: fill-box;
+    }
+    .hero-data-node--d1 { animation-delay: 0s; }
+    .hero-data-node--d2 { animation-delay: 0.45s; }
+    .hero-data-node--d3 { animation-delay: 0.9s; }
+    .hero-data-node--d4 { animation-delay: 1.2s; }
+    .hero-data-node--d5 { animation-delay: 1.65s; }
+    .hero-data-node--d6 { animation-delay: 2.1s; }
+    .hero-data-node--d7 { animation-delay: 0.25s; }
+    .hero-data-node--d8 { animation-delay: 1.05s; }
+    @keyframes hero-data-node-pulse {
+      0%, 100% { opacity: 0.42; transform: scale(0.88); }
+      50% { opacity: 1; transform: scale(1.12); }
+    }
+    @keyframes hero-data-node-halo {
+      0%, 100% { opacity: 0.2; transform: scale(1); }
+      50% { opacity: 0.55; transform: scale(1.15); }
+    }
+    .hero-data-node-halo {
+      transform-origin: center;
+      transform-box: fill-box;
+      animation: hero-data-node-halo 3.2s ease-in-out infinite;
+    }
+    .hero-data-node-halo--2 { animation-delay: 0.6s; }
+    .hero-data-node-halo--3 { animation-delay: 1.3s; }
+    @media (prefers-reduced-motion: reduce) {
+      .hero-data-node,
+      .hero-data-node-halo { animation: none; }
+      .hero-data-node { opacity: 0.85; transform: none; }
+      .hero-data-node-halo { opacity: 0.25; transform: none; }
     }
     .hero-sample-card-wrap {
       z-index: 30;
@@ -3437,7 +3797,7 @@
     }
 
     .elite-header__inner{
-      max-width: 1240px;
+      max-width: min(1240px, 100%);
       width: 100%;
       margin: 0 auto;
       min-width: 0;
@@ -4194,6 +4554,32 @@
 
     /* ========== B2B mega navigation (desktop) + CTA cluster ========== */
     .elite-header { overflow-x: visible; }
+    @media (min-width: 768px) {
+      #main-header.elite-header .header-inner.elite-header__inner {
+        display: flex;
+        align-items: center;
+        width: 100%;
+        max-width: 100%;
+      }
+      #main-header .header-brand-cluster {
+        flex: 0 0 auto;
+      }
+      #main-header .header-right-zone {
+        flex: 0 0 auto;
+        margin-inline-start: auto;
+      }
+    }
+    /* Geniş ekranda (1920px+) Fiyat + Blog çubukta; daha dar pencerelerde Özellikler menüsünde — taşmayı keser */
+    @media (max-width: 1919px) {
+      .nav-shell.nav-shell--mega .nav-bar-overflow-collapsible {
+        display: none !important;
+      }
+    }
+    @media (min-width: 1920px) {
+      .nav-dd-overflow-pricing-blog {
+        display: none !important;
+      }
+    }
     .header-brand-cluster {
       display: flex;
       flex-direction: column;
@@ -4223,6 +4609,9 @@
       background: rgba(255, 255, 255, 0.55);
       border: 1px solid rgba(15, 23, 42, 0.07);
       box-shadow: 0 1px 0 rgba(255, 255, 255, 0.6) inset;
+      /* Dar pencerede orta kolon küçülsün; base .nav-shell flex-shrink:0 üstünü bastirip taşmayı azaltır */
+      flex: 1 1 0;
+      min-width: 0;
     }
     .dark .nav-shell.nav-shell--mega {
       background: rgba(255, 255, 255, 0.06);
@@ -4445,9 +4834,89 @@
         0 2px 10px rgba(6, 95, 93, 0.2),
         0 4px 16px rgba(14, 165, 164, 0.18);
     }
-    @media (min-width: 1100px) and (max-width: 1279px) {
+    @media (min-width: 768px) and (max-width: 1399px) {
       .nav-shell.nav-shell--mega .nav-link-standalone,
-      .nav-shell.nav-shell--mega .nav-dd-trigger { font-size: 0.78rem; padding-left: 9px; padding-right: 9px; }
+      .nav-shell.nav-shell--mega .nav-dd-trigger {
+        font-size: 0.72rem;
+        padding-left: 7px;
+        padding-right: 7px;
+      }
+    }
+    @media (min-width: 768px) and (max-width: 991px) {
+      .nav-shell.nav-shell--mega .nav-link-standalone,
+      .nav-shell.nav-shell--mega .nav-dd-trigger {
+        font-size: 0.68rem;
+        padding-left: 5px;
+        padding-right: 5px;
+      }
+    }
+    /* Tablet yatay (768–1199): üst yeşil CTA kapat — Giriş + Kayıt + tema + dil; ana CTA hero/drawer’da */
+    @media (min-width: 768px) and (max-width: 1199px) {
+      .header-cta-cluster.header-cta-guest-only.header-desktop-only {
+        display: none !important;
+      }
+      #nav-auth.header-auth-always .secondary-link[data-i18n="nav_register"] {
+        display: inline-flex !important;
+      }
+    }
+    /* Dar masaüstü: ghost CTA gizli; 1200px+ tek satırda kayıt yerine üst ana CTA */
+    @media (min-width: 768px) and (max-width: 1919px) {
+      .header-cta-cluster.header-cta-guest-only .header-cta-ghost {
+        display: none !important;
+      }
+      .header-right-zone {
+        gap: 4px !important;
+        flex-wrap: nowrap;
+      }
+      .header-cta-cluster.header-cta-guest-only {
+        max-width: none;
+      }
+      .header-cta-cluster .elite-cta-btn,
+      .header-cta-cluster .primary-cta {
+        padding-left: 12px !important;
+        padding-right: 12px !important;
+        font-size: 0.78rem !important;
+        white-space: nowrap;
+      }
+      #nav-auth .secondary-link[data-i18n="nav_login"] {
+        padding: 6px 10px !important;
+        font-size: 0.78rem !important;
+        border: 1px solid rgba(15, 23, 42, 0.12);
+        border-radius: 10px;
+        background: rgba(255, 255, 255, 0.35);
+      }
+      .dark #nav-auth .secondary-link[data-i18n="nav_login"] {
+        border-color: rgba(255, 255, 255, 0.14);
+        background: rgba(255, 255, 255, 0.06);
+      }
+      #nav-auth .secondary-link[data-i18n="nav_register"] {
+        padding: 6px 10px !important;
+        font-size: 0.78rem !important;
+      }
+      #theme-btn.secondary-link {
+        padding: 6px 8px !important;
+        min-width: 0;
+      }
+      .header-lang-switch .lang-trigger-btn {
+        padding: 5px 8px !important;
+        font-size: 0.75rem !important;
+      }
+    }
+    @media (min-width: 1200px) and (max-width: 1919px) {
+      #nav-auth.header-auth-always .secondary-link[data-i18n="nav_register"] {
+        display: none !important;
+      }
+    }
+    @media (min-width: 768px) and (max-width: 1199px) {
+      #main-header.elite-header .header-inner.elite-header__inner {
+        gap: 6px !important;
+        padding-left: max(10px, env(safe-area-inset-left)) !important;
+        padding-right: max(10px, env(safe-area-inset-right)) !important;
+      }
+      .nav-shell.nav-shell--mega {
+        padding: 4px !important;
+        gap: 0 !important;
+      }
     }
     /* Mobile drawer accordion */
     .drawer-details { margin: 0; border-radius: 12px; border: 1px solid rgba(15, 23, 42, 0.06); background: rgba(15, 23, 42, 0.02); }
@@ -4782,6 +5251,8 @@
             <a role="menuitem" class="nav-dd-item" href="/en/sample-blood-test-reports" data-sample-reports-link="1" data-i18n="hero_see_sample">See sample report</a>
             <a role="menuitem" class="nav-dd-item" href="/technology?lang=en" data-locale-link="technology" data-i18n="nav_dd_supported_tests">Supported lab tests</a>
             <a role="menuitem" class="nav-dd-item" href="/en/understand-blood-test-results-in-your-language" data-multilingual-landing-link="1" data-i18n="nav_dd_multilingual_output">Multilingual output</a>
+            <a role="menuitem" class="nav-dd-item nav-dd-overflow-pricing-blog" href="/pricing?lang=en" data-locale-link="pricing" data-i18n="nav_pricing">Pricing</a>
+            <a role="menuitem" class="nav-dd-item nav-dd-overflow-pricing-blog" href="/en/blog" data-blog-index-link="1" data-i18n="nav_blog">Blog</a>
           </div>
         </div>
         <div class="nav-dd" data-nav-dd>
@@ -4819,8 +5290,8 @@
             <a role="menuitem" class="nav-dd-item" href="/en/compare/norya-vs-wizey" data-compare-detail="norya-vs-wizey" data-i18n="nav_dd_compare_wizey">Norya vs Wizey</a>
           </div>
         </div>
-        <a class="nav-link-standalone" href="/pricing?lang=en" data-locale-link="pricing" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
-        <a class="nav-link-standalone" href="/en/blog" data-blog-index-link="1" data-i18n="nav_blog">Blog</a>
+        <a class="nav-link-standalone nav-bar-overflow-collapsible" href="/pricing?lang=en" data-locale-link="pricing" data-nav="pay" data-i18n="nav_pricing">Pricing</a>
+        <a class="nav-link-standalone nav-bar-overflow-collapsible" href="/en/blog" data-blog-index-link="1" data-i18n="nav_blog">Blog</a>
       </nav>
       <div class="header-right-zone">
         <button type="button" class="secondary-link header-desktop-only" aria-label="Tema değiştir" id="theme-btn">
@@ -5046,13 +5517,123 @@
             </div>
           </div>
         </div>
-        <!-- Right: Globe visual + floating report card -->
+        <!-- Right: Medical authority visual (glass DNA + data nodes) + floating report card -->
         <div class="hero-visual-wrap relative flex justify-center lg:justify-end min-h-[280px] sm:min-h-[320px]">
-          <div class="relative w-full max-w-[420px] sm:max-w-[512px] hero-globe-mask" style="aspect-ratio:1/1;">
-            <img alt="Global health and lab results connection — Norya" data-i18n-alt="hero_globe_alt" class="w-full h-full object-contain" style="filter:drop-shadow(0 25px 25px rgba(0,0,0,.12));" src="/static/images/hero-globe.png" width="512" height="512" loading="eager" decoding="async" />
-            <div class="absolute inset-0 rounded-full" style="background:radial-gradient(circle,rgba(14,165,164,0.08) 0%,transparent 70%);z-index:-1;"></div>
+          <div
+            class="relative w-full max-w-[420px] sm:max-w-[512px] hero-globe-mask"
+            style="aspect-ratio:1/1;"
+            role="img"
+            aria-label="Stylized DNA helix with data nodes — biomarker and lab insights illustration"
+            data-i18n-aria-label="hero_medical_viz_aria"
+          >
+            <div class="hero-medical-viz" aria-hidden="true">
+              <svg class="hero-medical-svg" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" focusable="false">
+                <defs>
+                  <linearGradient id="heroStrandGlassA" x1="0%" y1="0%" x2="100%" y2="100%">
+                    <stop offset="0%" stop-color="#ecfeff" stop-opacity="0.55"/>
+                    <stop offset="45%" stop-color="#5eead4" stop-opacity="0.35"/>
+                    <stop offset="100%" stop-color="#0d9488" stop-opacity="0.5"/>
+                  </linearGradient>
+                  <linearGradient id="heroStrandGlassB" x1="100%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ffffff" stop-opacity="0.5"/>
+                    <stop offset="40%" stop-color="#2dd4bf" stop-opacity="0.65"/>
+                    <stop offset="100%" stop-color="#0f766e" stop-opacity="0.55"/>
+                  </linearGradient>
+                  <linearGradient id="heroPairGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                    <stop offset="0%" stop-color="#ccfbf1" stop-opacity="0.85"/>
+                    <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.35"/>
+                  </linearGradient>
+                  <radialGradient id="heroTissue1" cx="35%" cy="35%" r="55%">
+                    <stop offset="0%" stop-color="#5eead4" stop-opacity="0.22"/>
+                    <stop offset="70%" stop-color="#0ea5a4" stop-opacity="0.06"/>
+                    <stop offset="100%" stop-color="#0ea5a4" stop-opacity="0"/>
+                  </radialGradient>
+                  <radialGradient id="heroTissue2" cx="70%" cy="62%" r="50%">
+                    <stop offset="0%" stop-color="#67e8f9" stop-opacity="0.14"/>
+                    <stop offset="100%" stop-color="#0891b2" stop-opacity="0"/>
+                  </radialGradient>
+                  <filter id="heroNodeGlow" x="-80%" y="-80%" width="260%" height="260%">
+                    <feGaussianBlur stdDeviation="2.5" result="blur"/>
+                    <feMerge>
+                      <feMergeNode in="blur"/>
+                      <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                  </filter>
+                </defs>
+                <ellipse cx="200" cy="210" rx="160" ry="140" fill="url(#heroTissue1)" transform="rotate(-12 200 210)"/>
+                <ellipse cx="330" cy="300" rx="140" ry="130" fill="url(#heroTissue2)" transform="rotate(8 330 300)"/>
+                <path
+                  fill="none"
+                  stroke="rgba(255,255,255,0.45)"
+                  stroke-width="16"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M86,256 L94.5,303.2 L103,331.2 L111.5,328.5 L120,296.2 L128.5,247.6 L137,202.4 L145.5,179 L154,187.1 L162.5,223.3 L171,272.8 L179.5,315.5 L188,333.9 L196.5,320.6 L205,280.9 L213.5,231.1 L222,191.4 L230.5,178.1 L239,196.6 L247.5,239.3 L256,288.8 L264.5,324.9 L273,333 L281.5,309.6 L290,264.4 L298.5,215.8 L307,183.5 L315.5,180.9 L324,208.8 L332.5,256 L341,303.2 L349.5,331.2 L358,328.4 L366.5,296.2 L375,247.5 L383.5,202.3 L392,179 L400.5,187.1 L409,223.3 L417.5,272.8 L426,315.5"
+                />
+                <path
+                  fill="none"
+                  stroke="rgba(255,255,255,0.35)"
+                  stroke-width="16"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M86,256 L94.5,208.8 L103,180.8 L111.5,183.5 L120,215.8 L128.5,264.4 L137,309.6 L145.5,333 L154,324.9 L162.5,288.7 L171,239.2 L179.5,196.5 L188,178.1 L196.5,191.4 L205,231.1 L213.5,280.9 L222,320.6 L230.5,333.9 L239,315.4 L247.5,272.7 L256,223.2 L264.5,187.1 L273,179 L281.5,202.4 L290,247.6 L298.5,296.2 L307,328.5 L315.5,331.1 L324,303.2 L332.5,256 L341,208.8 L349.5,180.8 L358,183.6 L366.5,215.8 L375,264.5 L383.5,309.7 L392,333 L400.5,324.9 L409,288.7 L417.5,239.2 L426,196.5"
+                />
+                <g stroke="url(#heroPairGrad)" stroke-width="1.35" stroke-linecap="round" opacity="0.85">
+                  <line x1="103" y1="331.2" x2="103" y2="180.8"/>
+                  <line x1="120" y1="296.2" x2="120" y2="215.8"/>
+                  <line x1="137" y1="202.4" x2="137" y2="309.6"/>
+                  <line x1="154" y1="187.1" x2="154" y2="324.9"/>
+                  <line x1="171" y1="272.8" x2="171" y2="239.2"/>
+                  <line x1="188" y1="333.9" x2="188" y2="178.1"/>
+                  <line x1="205" y1="280.9" x2="205" y2="231.1"/>
+                  <line x1="222" y1="191.4" x2="222" y2="320.6"/>
+                  <line x1="239" y1="196.6" x2="239" y2="315.4"/>
+                  <line x1="256" y1="288.8" x2="256" y2="223.2"/>
+                  <line x1="273" y1="333" x2="273" y2="179"/>
+                  <line x1="290" y1="264.4" x2="290" y2="247.6"/>
+                  <line x1="307" y1="183.5" x2="307" y2="328.5"/>
+                  <line x1="324" y1="208.8" x2="324" y2="303.2"/>
+                  <line x1="341" y1="303.2" x2="341" y2="208.8"/>
+                  <line x1="358" y1="328.4" x2="358" y2="183.6"/>
+                  <line x1="375" y1="247.5" x2="375" y2="264.5"/>
+                  <line x1="392" y1="179" x2="392" y2="333"/>
+                  <line x1="409" y1="223.3" x2="409" y2="288.7"/>
+                  <line x1="426" y1="315.5" x2="426" y2="196.5"/>
+                </g>
+                <path
+                  fill="none"
+                  stroke="url(#heroStrandGlassA)"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M86,256 L94.5,303.2 L103,331.2 L111.5,328.5 L120,296.2 L128.5,247.6 L137,202.4 L145.5,179 L154,187.1 L162.5,223.3 L171,272.8 L179.5,315.5 L188,333.9 L196.5,320.6 L205,280.9 L213.5,231.1 L222,191.4 L230.5,178.1 L239,196.6 L247.5,239.3 L256,288.8 L264.5,324.9 L273,333 L281.5,309.6 L290,264.4 L298.5,215.8 L307,183.5 L315.5,180.9 L324,208.8 L332.5,256 L341,303.2 L349.5,331.2 L358,328.4 L366.5,296.2 L375,247.5 L383.5,202.3 L392,179 L400.5,187.1 L409,223.3 L417.5,272.8 L426,315.5"
+                />
+                <path
+                  fill="none"
+                  stroke="url(#heroStrandGlassB)"
+                  stroke-width="5"
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M86,256 L94.5,208.8 L103,180.8 L111.5,183.5 L120,215.8 L128.5,264.4 L137,309.6 L145.5,333 L154,324.9 L162.5,288.7 L171,239.2 L179.5,196.5 L188,178.1 L196.5,191.4 L205,231.1 L213.5,280.9 L222,320.6 L230.5,333.9 L239,315.4 L247.5,272.7 L256,223.2 L264.5,187.1 L273,179 L281.5,202.4 L290,247.6 L298.5,296.2 L307,328.5 L315.5,331.1 L324,303.2 L332.5,256 L341,208.8 L349.5,180.8 L358,183.6 L366.5,215.8 L375,264.5 L383.5,309.7 L392,333 L400.5,324.9 L409,288.7 L417.5,239.2 L426,196.5"
+                />
+                <g filter="url(#heroNodeGlow)">
+                  <circle class="hero-data-node-halo" cx="128" cy="118" r="14" fill="#2dd4bf" opacity="0.15"/>
+                  <circle class="hero-data-node-halo hero-data-node-halo--2" cx="392" cy="132" r="12" fill="#22d3ee" opacity="0.12"/>
+                  <circle class="hero-data-node-halo hero-data-node-halo--3" cx="318" cy="402" r="16" fill="#5eead4" opacity="0.14"/>
+                  <circle class="hero-data-node hero-data-node--d1" cx="118" cy="108" r="6" fill="#f0fdfa" stroke="#0d9488" stroke-width="1.25"/>
+                  <circle class="hero-data-node hero-data-node--d2" cx="402" cy="124" r="5.5" fill="#ecfeff" stroke="#0891b2" stroke-width="1.15"/>
+                  <circle class="hero-data-node hero-data-node--d3" cx="210" cy="78" r="5" fill="#ffffff" stroke="#0f766e" stroke-width="1.1"/>
+                  <circle class="hero-data-node hero-data-node--d4" cx="340" cy="88" r="6" fill="#ccfbf1" stroke="#0d9488" stroke-width="1.2"/>
+                  <circle class="hero-data-node hero-data-node--d5" cx="88" cy="312" r="5.5" fill="#f0fdfa" stroke="#14b8a6" stroke-width="1.1"/>
+                  <circle class="hero-data-node hero-data-node--d6" cx="438" cy="288" r="6" fill="#ecfeff" stroke="#0e7490" stroke-width="1.2"/>
+                  <circle class="hero-data-node hero-data-node--d7" cx="268" cy="418" r="5" fill="#ffffff" stroke="#0d9488" stroke-width="1.1"/>
+                  <circle class="hero-data-node hero-data-node--d8" cx="364" cy="356" r="5.5" fill="#e0f2fe" stroke="#0ea5a4" stroke-width="1.15"/>
+                </g>
+              </svg>
+            </div>
+            <div class="absolute inset-0 pointer-events-none rounded-full hero-medical-viz-glow" style="background:radial-gradient(ellipse 70% 65% at 50% 45%,rgba(14,165,164,0.1) 0%,transparent 72%);" aria-hidden="true"></div>
           </div>
-          <!-- Floating report card — overlaps globe for depth -->
+          <!-- Floating report card — overlaps visual for depth -->
           <div class="hero-sample-card-wrap absolute max-w-[270px] w-[min(100%,270px)] bottom-3 sm:bottom-5 left-1/2 -translate-x-1/2 sm:left-auto sm:translate-x-0 sm:right-0 lg:-right-2 lg:bottom-10" aria-hidden="true">
             <div class="hero-sample-card p-4 sm:p-5">
             <div class="flex justify-between items-start gap-3 mb-3">
@@ -5082,10 +5663,122 @@
           </div>
         </div>
       </div>
-      <div class="flex items-center justify-center gap-2.5 mt-10 sm:mt-14">
-        <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
-        <p class="text-sm sm:text-base text-accent-500 dark:text-accent-400 font-medium tracking-wide" data-i18n="hero_global_reach">We're everywhere — Accessible from 190+ countries</p>
+      <div class="hero-global-reach-wrap" role="region" aria-labelledby="hero-global-viz-heading">
+        <div class="hero-global-reach-card">
+          <p id="hero-global-viz-heading" class="hero-global-viz-eyebrow" data-i18n="hero_global_viz_eyebrow">Premium PDF report — 9+ report languages</p>
+          <div class="hero-global-viz-slot" aria-hidden="true">
+            <svg class="hero-global-viz-svg" viewBox="0 0 560 108" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <defs>
+                <linearGradient id="heroGlobeGrad" x1="32" y1="8" x2="528" y2="100" gradientUnits="userSpaceOnUse">
+                  <stop stop-color="#0ea5a4"/>
+                  <stop offset="0.45" stop-color="#22d3ee"/>
+                  <stop offset="1" stop-color="#0f766e"/>
+                </linearGradient>
+                <filter id="heroGlobeBlur" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
+                  <feGaussianBlur stdDeviation="1.2" result="b"/>
+                  <feMerge>
+                    <feMergeNode in="b"/>
+                    <feMergeNode in="SourceGraphic"/>
+                  </feMerge>
+                </filter>
+              </defs>
+              <ellipse cx="278" cy="54" rx="102" ry="38" stroke="url(#heroGlobeGrad)" stroke-width="1.15" fill="rgba(14,165,164,0.07)"/>
+              <path d="M176 54h204" stroke="url(#heroGlobeGrad)" stroke-width="0.75" opacity="0.45"/>
+              <path d="M278 19c-52 22-52 66 0 88 52-22 52-66 0-88z" stroke="url(#heroGlobeGrad)" stroke-width="0.7" fill="none" opacity="0.4"/>
+              <path d="M278 21c58 18 58 66 0 84" stroke="url(#heroGlobeGrad)" stroke-width="0.65" fill="none" opacity="0.32"/>
+              <path d="M40 56c72-38 152-38 238-6" stroke="url(#heroGlobeGrad)" stroke-width="1.35" stroke-linecap="round" fill="none" filter="url(#heroGlobeBlur)" opacity="0.92"/>
+              <path d="M520 52c-72 38-150 40-238 10" stroke="url(#heroGlobeGrad)" stroke-width="1.25" stroke-linecap="round" fill="none" opacity="0.88"/>
+              <circle cx="40" cy="56" r="4" fill="#0ea5a4"/>
+              <circle cx="520" cy="52" r="4" fill="#22d3ee"/>
+              <circle cx="278" cy="54" r="2.8" fill="#ecfdf5" stroke="#0d9488" stroke-width="0.9"/>
+            </svg>
+          </div>
+          <ul class="hero-global-lang-strip" role="list" data-i18n-aria-label="hero_global_viz_aria" aria-label="Languages available for report output">
+            <li><span class="hero-global-lang-pill">TR</span></li>
+            <li><span class="hero-global-lang-pill">EN</span></li>
+            <li><span class="hero-global-lang-pill">DE</span></li>
+            <li><span class="hero-global-lang-pill">FR</span></li>
+            <li><span class="hero-global-lang-pill">ES</span></li>
+            <li><span class="hero-global-lang-pill">IT</span></li>
+            <li><span class="hero-global-lang-pill">HE</span></li>
+            <li><span class="hero-global-lang-pill">HI</span></li>
+            <li><span class="hero-global-lang-pill">AR</span></li>
+          </ul>
+          <div class="hero-global-reach-footer">
+            <span class="inline-block w-2 h-2 rounded-full bg-emerald-400 animate-pulse shrink-0" aria-hidden="true"></span>
+            <p class="text-sm sm:text-base text-accent-500 dark:text-accent-400 font-medium tracking-wide" data-i18n="hero_global_reach">We're everywhere — Accessible from 190+ countries</p>
+          </div>
+        </div>
       </div>
+    </div>
+  </section>
+
+  <!-- Features — Bento grid (glass + inner shadow, hero altı) -->
+  <section id="ozellikler" class="features-bento-section" aria-labelledby="features-bento-heading">
+    <div class="features-bento-inner px-4 sm:px-6">
+      <div class="features-bento-header">
+        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="features_eyebrow">FEATURES</span>
+        <h2 id="features-bento-heading" class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-accent-900 dark:text-white mb-3 leading-tight" data-i18n="features_heading">Trusted health insights, designed for real life.</h2>
+        <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 leading-relaxed" data-i18n="features_sub">Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.</p>
+      </div>
+      <div class="features-bento-grid">
+        <article class="features-bento-cell features-bento-cell--a">
+          <div class="features-bento-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
+          </div>
+          <h3 class="features-bento-title" data-i18n="feature_1_title">Structured report</h3>
+          <p class="features-bento-desc" data-i18n="feature_1_desc">Summary, key findings, reference ranges, and follow-ups — formatted for real lab output.</p>
+          <div class="features-bento-viz" aria-hidden="true">
+            <svg class="features-bento-mini-chart text-slate-300 dark:text-slate-600" viewBox="0 0 120 40" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+              <path d="M4 32 L24 18 L44 26 L64 10 L84 22 L104 14 L116 20" stroke="#0ea5a4" stroke-width="1.15" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+              <path d="M4 34 L116 34" stroke="currentColor" stroke-width="1"/>
+            </svg>
+          </div>
+        </article>
+        <article class="features-bento-cell features-bento-cell--b">
+          <div class="features-bento-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <h3 class="features-bento-title" data-i18n="feature_2_title">Doctor-ready PDF</h3>
+          <p class="features-bento-desc" data-i18n="feature_2_desc">A clean clinical layout for review and patient handoff — export in one step.</p>
+        </article>
+        <article class="features-bento-cell features-bento-cell--c">
+          <div class="features-bento-icon features-bento-anim-pulse" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <h3 class="features-bento-title" data-i18n="feature_3_title">Multilingual output</h3>
+          <p class="features-bento-desc" data-i18n="feature_3_desc">Generate reports in 9+ languages so patients and teams can read in their language.</p>
+        </article>
+        <article class="features-bento-cell features-bento-cell--d">
+          <div class="features-bento-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
+          </div>
+          <h3 class="features-bento-title" data-i18n="feature_4_title">Trend comparison</h3>
+          <p class="features-bento-desc" data-i18n="feature_4_desc">See how markers move across visits and compare past results in one view.</p>
+          <div class="features-bento-viz flex gap-1.5 items-end h-10 mt-2" aria-hidden="true">
+            <span class="w-2 rounded-sm bg-[#0ea5a4]/35 dark:bg-[#5eead4]/30" style="height:40%"></span>
+            <span class="w-2 rounded-sm bg-[#0ea5a4]/55 dark:bg-[#5eead4]/45" style="height:65%"></span>
+            <span class="w-2 rounded-sm bg-[#0ea5a4]/45 dark:bg-[#5eead4]/38" style="height:50%"></span>
+            <span class="w-2 rounded-sm bg-[#0ea5a4] dark:bg-[#5eead4]" style="height:88%"></span>
+            <span class="w-2 rounded-sm bg-[#0ea5a4]/70 dark:bg-[#5eead4]/55" style="height:72%"></span>
+          </div>
+        </article>
+        <article class="features-bento-cell features-bento-cell--e">
+          <div class="features-bento-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+          </div>
+          <h3 class="features-bento-title" data-i18n="feature_5_title">Privacy-first design</h3>
+          <p class="features-bento-desc" data-i18n="feature_5_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
+        </article>
+        <article class="features-bento-cell features-bento-cell--f">
+          <div class="features-bento-icon" aria-hidden="true">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h4v4H8zM12 12h4v4h-4z"/></svg>
+          </div>
+          <h3 class="features-bento-title" data-i18n="feature_6_title">QR verification</h3>
+          <p class="features-bento-desc" data-i18n="feature_6_desc">Optional authenticity check so recipients can trust the PDF came from Norya.</p>
+        </article>
+      </div>
+      <p class="text-center text-xs sm:text-sm text-accent-500 dark:text-accent-400 mt-8 sm:mt-9" data-i18n="features_trust_line">Enterprise-grade security, encrypted communication and GDPR-aligned architecture.</p>
     </div>
   </section>
 
@@ -5183,62 +5876,6 @@
           <span class="text-xs font-semibold text-accent-700 dark:text-accent-300 text-center" data-i18n="trust_badge_accuracy">Accuracy</span>
         </div>
       </div>
-    </div>
-  </section>
-
-  <!-- Özellikler — v24 editorial feature cards -->
-  <section id="ozellikler" class="py-16 sm:py-20 bg-[#f5fafa] dark:bg-[#191c1d]">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="max-w-3xl mx-auto text-center mb-12 sm:mb-16">
-        <span class="text-[#0ea5a4] font-bold tracking-[0.2em] text-xs uppercase mb-3 block" data-i18n="features_eyebrow">FEATURES</span>
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold tracking-tight text-accent-900 dark:text-white mb-4 leading-tight" data-i18n="features_heading">Trusted health insights, designed for real life.</h2>
-        <p class="text-base sm:text-lg text-accent-600 dark:text-accent-300 leading-relaxed" data-i18n="features_sub">Upload your lab results and get a clear, structured report with trends, risk flags, and actionable next steps.</p>
-      </div>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h10M4 18h16"/></svg>
-          </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_1_title">Structured report</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_1_desc">Summary, key findings, reference ranges, and follow-ups — formatted for real lab output.</p>
-        </article>
-        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
-          </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_2_title">Doctor-ready PDF</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_2_desc">A clean clinical layout for review and patient handoff — export in one step.</p>
-        </article>
-        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
-          </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_3_title">Multilingual output</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_3_desc">Generate reports in 9+ languages so patients and teams can read in their language.</p>
-        </article>
-        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-          </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_4_title">Trend comparison</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_4_desc">See how markers move across visits and compare past results in one view.</p>
-        </article>
-        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
-          </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_5_title">Privacy-first design</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_5_desc">Encrypted in transit, strict access controls, and data minimization. GDPR-ready approach.</p>
-        </article>
-        <article class="group bg-white dark:bg-accent-800/50 rounded-2xl p-6 sm:p-8 border border-accent-100 dark:border-accent-700/40 hover:border-[#0ea5a4]/30 hover:shadow-lg transition-all duration-300">
-          <div class="w-12 h-12 rounded-xl bg-[#0ea5a4]/10 flex items-center justify-center mb-5 text-[#0ea5a4] group-hover:bg-[#0ea5a4] group-hover:text-white transition-colors duration-300" aria-hidden="true">
-            <svg xmlns="http://www.w3.org/2000/svg" class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M8 8h4v4H8zM12 12h4v4h-4z"/></svg>
-          </div>
-          <h3 class="text-lg font-bold text-accent-900 dark:text-white mb-2" data-i18n="feature_6_title">QR verification</h3>
-          <p class="text-sm text-accent-600 dark:text-accent-400 leading-relaxed" data-i18n="feature_6_desc">Optional authenticity check so recipients can trust the PDF came from Norya.</p>
-        </article>
-      </div>
-      <p class="text-center text-xs sm:text-sm text-accent-500 dark:text-accent-400 mt-8 sm:mt-10" data-i18n="features_trust_line">Enterprise-grade security, encrypted communication and GDPR-aligned architecture.</p>
     </div>
   </section>
 
@@ -6229,8 +6866,8 @@
     </div>
   </section>
 
-  <!-- Features -->
-  <section id="ozellikler" class="landing-hidden py-20 px-4">
+  <!-- Features (legacy duplicate — hidden; anchor: #ozellikler üstteki bento bölümde) -->
+  <section class="landing-hidden py-20 px-4" aria-hidden="true">
     <div class="max-w-6xl mx-auto w-full px-4">
       <h2 class="text-3xl font-bold text-center text-accent-900 dark:text-white mb-12" data-i18n="why_title">Neden Norya?</h2>
       <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -10329,7 +10966,7 @@
         hero_desc: "Tahlil raporunuzu yükleyin; CBC, demir, tiroid, vitaminler ve diğer belirteçler için yapay zekâ destekli, anlaşılır bir özet alın. Hızlı, okunaklı ve gizlilik odaklı — klinik kararlar hekiminizdedir.",
         hero_cta: "Ücretsiz başla", hero_book_demo: "Demo talep et", hero_how: "Nasıl Çalışır", hero_see_sample: "Örnek raporu gör", hero_secure: "Güvenli • Gizlilik odaklı • KVKK & GDPR uyumlu", hero_global_reach: "Dünyanın her yerindeyiz — 190+ ülkeden erişilebilir",
         hero_trusted_by: "Güvenilen altyapı ve teknoloji ortakları",
-        hero_patients_trust: "10.000+ HASTA TARAFINDAN GÜVENİLİYOR",
+        hero_patients_trust: "100.000+ HASTA TARAFINDAN GÜVENİLİYOR",
         b2b_strip_label: "Profesyoneller", b2b_strip_doctors: "Doktorlar için", b2b_strip_clinics: "Klinikler için", b2b_strip_trust: "Güven Merkezi", b2b_strip_compare: "Norya karşılaştırması",
         why_mini_title: "Neden Norya?", why_mini_sub: "Genel sohbet için değil — gerçek tahlil akışları için tasarlandı.",
         why_mini_1: "Genel sohbet için değil; laboratuvar raporları için üretildi.", why_mini_2: "Hastalar için net özetler.", why_mini_3: "Hekimlere uygun çıktı.", why_mini_4: "Çok dilli erişim.", why_mini_5: "Güven öncelikli mimari.",
@@ -10758,7 +11395,7 @@
         footer_invoice: 'Fatura / e-Arşiv',
         footer_refund_policy: 'İptal & iade politikası',
         footer_contact_company: 'İletişim ve Şirket Bilgileri',
-        hero_globe_alt: 'NoryaAI küre görseli',
+        hero_medical_viz_aria: 'Stilize DNA çift sarmalı ve parlayan veri düğümleri — biyomarker ve laboratuvar içgörüsü (dekoratif illüstrasyon)',
         alert_medical_text: 'Bilgilendirme amaçlıdır. Bu rapor tıbbi teşhis/tedavi yerine geçmez.',
         checkout_choose_plan: 'Planı değiştir',
         checkout_plan_includes: 'Dahil olanlar',
@@ -11226,7 +11863,7 @@
         footer_invoice: 'Invoice / e-Archive',
         footer_refund_policy: 'Cancellation & refund policy',
         footer_contact_company: 'Contact & Company Info',
-        hero_globe_alt: 'NoryaAI globe visual',
+        hero_medical_viz_aria: 'Stylized DNA double helix with glowing data nodes — biomarker and lab insights illustration',
         alert_medical_text: 'For informational purposes only. This report does not replace medical diagnosis or treatment.',
         checkout_choose_plan: 'Change plan',
         checkout_plan_includes: 'Includes',
@@ -11553,7 +12190,7 @@
         footer_invoice: 'Fattura / e-Archivio',
         footer_refund_policy: 'Politica di cancellazione e rimborso',
         footer_contact_company: 'Contatti e Informazioni Aziendali',
-        hero_globe_alt: 'Immagine del globo NoryaAI',
+        hero_medical_viz_aria: 'Elica del DNA stilizzata con nodi dati luminosi — illustrazione su biomarker e insight di laboratorio',
         alert_medical_text: 'Solo a scopo informativo. Questo rapporto non sostituisce diagnosi o trattamento medico.',
         checkout_choose_plan: 'Cambia piano',
         checkout_plan_includes: 'Include',
@@ -11880,7 +12517,7 @@
         footer_invoice: 'Factura / e-Archivo',
         footer_refund_policy: 'Política de cancelación y reembolso',
         footer_contact_company: 'Contacto e Información de la Empresa',
-        hero_globe_alt: 'Imagen del globo NoryaAI',
+        hero_medical_viz_aria: 'Hélice de ADN estilizada con nodos de datos luminosos — ilustración de biomarcadores e información de laboratorio',
         alert_medical_text: 'Solo con fines informativos. Este informe no reemplaza el diagnóstico o tratamiento médico.',
         checkout_choose_plan: 'Cambiar plan',
         checkout_plan_includes: 'Incluye',
@@ -12207,7 +12844,7 @@
         footer_invoice: 'Facture / e-Archive',
         footer_refund_policy: 'Politique d\'annulation et de remboursement',
         footer_contact_company: 'Contact et Informations Société',
-        hero_globe_alt: 'Image du globe NoryaAI',
+        hero_medical_viz_aria: 'Double hélice d’ADN stylisée et nœuds de données lumineux — illustration sur biomarqueurs et analyses de laboratoire',
         alert_medical_text: 'À titre informatif uniquement. Ce rapport ne remplace pas un diagnostic ou traitement médical.',
         checkout_choose_plan: 'Changer de plan',
         checkout_plan_includes: 'Inclus',
@@ -12515,7 +13152,7 @@
         footer_invoice: 'Rechnung / e-Archiv',
         footer_refund_policy: 'Stornierungs- und Erstattungsrichtlinie',
         footer_contact_company: 'Kontakt & Firmeninformationen',
-        hero_globe_alt: 'NoryaAI Globus-Bild',
+        hero_medical_viz_aria: 'Stilisierte DNA-Doppelhelix mit leuchtenden Datenpunkten — Illustration zu Biomarkern und Laborinsights',
         alert_medical_text: 'Nur zu Informationszwecken. Dieser Bericht ersetzt keine medizinische Diagnose oder Behandlung.',
         checkout_choose_plan: 'Plan ändern',
         checkout_plan_includes: 'Enthält',
@@ -12793,7 +13430,7 @@
         footer_invoice: 'חשבונית / ארכיון דיגיטלי',
         footer_refund_policy: 'מדיניות ביטול והחזר',
         footer_contact_company: 'יצירת קשר ומידע על החברה',
-        hero_globe_alt: 'תמונת גלובוס NoryaAI',
+        hero_medical_viz_aria: 'סליל דנ״א מעוצב עם נקודות נתונים זוהרות — איור להמחשת ביומרקרים ותובנות מעבדה',
         alert_medical_text: 'למטרות מידע בלבד. דוח זה אינו מחליף אבחון או טיפול רפואי.',
         checkout_choose_plan: 'שנה תוכנית',
         checkout_plan_includes: 'כולל',
@@ -13071,7 +13708,7 @@
         footer_invoice: 'فاتورة / أرشيف إلكتروني',
         footer_refund_policy: 'سياسة الإلغاء والاسترداد',
         footer_contact_company: 'التواصل ومعلومات الشركة',
-        hero_globe_alt: 'صورة كرة NoryaAI',
+        hero_medical_viz_aria: 'لولب DNA أسلوبي مع نقاط بيانات متوهجة — رسم توضيحي للمؤشرات الحيوية ورؤى المختبر',
         alert_medical_text: 'لأغراض إعلامية فقط. هذا التقرير لا يحل محل التشخيص أو العلاج الطبي.',
         checkout_choose_plan: 'تغيير الخطة',
         checkout_plan_includes: 'يشمل',
@@ -13350,7 +13987,7 @@
         footer_invoice: 'चालान / ई-आर्काइव',
         footer_refund_policy: 'रद्दीकरण और रिफंड नीति',
         footer_contact_company: 'संपर्क और कंपनी जानकारी',
-        hero_globe_alt: 'NoryaAI ग्लोब इमेज',
+        hero_medical_viz_aria: 'चमकते डेटा नोड्स के साथ शैलीबद्ध DNA हेलिक्स — बायोमार्कर और लैब इनसाइट चित्रण',
         alert_medical_text: 'केवल सूचनात्मक उद्देश्यों के लिए। यह रिपोर्ट चिकित्सा निदान या उपचार का स्थान नहीं लेती।',
         checkout_choose_plan: 'प्लान बदलें',
         checkout_plan_includes: 'शामिल',
@@ -13560,7 +14197,7 @@
         footer_invoice: 'Τιμολόγιο / ψηφιακό αρχείο',
         footer_refund_policy: 'Πολιτική ακύρωσης και επιστροφής',
         footer_contact_company: 'Επικοινωνία & Πληροφορίες Εταιρείας',
-        hero_globe_alt: 'Εικόνα σφαίρας NoryaAI',
+        hero_medical_viz_aria: 'Στυλιζαρισμένη διπλή έλικα DNA με φωτεινούς κόμβους δεδομένων — εικονογράφηση βιοδεικτών και εργαστηριακών δεδομένων',
         alert_medical_text: 'Μόνο για ενημερωτικούς σκοπούς. Αυτή η αναφορά δεν αντικαθιστά ιατρική διάγνωση ή θεραπεία.',
         checkout_choose_plan: 'Αλλαγή πλάνου',
         checkout_plan_includes: 'Περιλαμβάνει',
@@ -13770,7 +14407,7 @@
         footer_invoice: 'Faktura / e-Archiv',
         footer_refund_policy: 'Zásady stornování a vrácení peněz',
         footer_contact_company: 'Kontakt a informace o společnosti',
-        hero_globe_alt: 'Obrázek globusu NoryaAI',
+        hero_medical_viz_aria: 'Stylizovaná dvojitá šroubovice DNA se zářícími datovými uzly — ilustrace biomarkerů a laboratorních poznatků',
         alert_medical_text: 'Pouze pro informační účely. Tato zpráva nenahrazuje lékařskou diagnózu ani léčbu.',
         checkout_choose_plan: 'Změnit plán',
         checkout_plan_includes: 'Zahrnuje',
@@ -13980,7 +14617,7 @@
         footer_invoice: 'Faktura / e-Arhiv',
         footer_refund_policy: 'Politika otkazivanja i povrata',
         footer_contact_company: 'Kontakt i informacije o kompaniji',
-        hero_globe_alt: 'NoryaAI slika globusa',
+        hero_medical_viz_aria: 'Stilizirana dvojna vijačnica DNK s svetlečimi podatkovnimi vozli — ilustracija biomarkerjev in laboratorijskih vpogledov',
         alert_medical_text: 'Samo u informativne svrhe. Ovaj izveštaj ne zamenjuje medicinsku dijagnozu ili lečenje.',
         checkout_choose_plan: 'Promenite plan',
         checkout_plan_includes: 'Uključuje',
