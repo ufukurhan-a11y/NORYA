@@ -69,6 +69,16 @@ def _last_24_months_monthly_stats(db: Session, now: datetime) -> tuple[list[str]
         users.append(n_users)
     return labels, analyses, sales, users
 
+
+def _delta_summary(current: int, previous: int) -> dict:
+    """İki dönem arasındaki farkı kısa trend etiketi olarak döndür."""
+    diff = int(current or 0) - int(previous or 0)
+    if diff > 0:
+        return {"diff": diff, "direction": "up", "label": f"+{diff}"}
+    if diff < 0:
+        return {"diff": diff, "direction": "down", "label": str(diff)}
+    return {"diff": 0, "direction": "flat", "label": "0"}
+
 router = APIRouter()
 _APP_DIR = Path(__file__).resolve().parent.parent.parent
 templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
@@ -189,7 +199,9 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
     month_start = (now.replace(day=1, hour=0, minute=0, second=0, microsecond=0))
     active_threshold = now - timedelta(minutes=2)
     day_ago = now - timedelta(hours=24)
+    prev_24h_start = now - timedelta(hours=48)
     week_ago = now - timedelta(days=7)
+    prev_7d_start = now - timedelta(days=14)
 
     # Günlük/aylık satış (tamamlanan ödemeler, EUR)
     daily = db.exec(
@@ -233,6 +245,60 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
     security_events_24h = db.exec(
         select(func.count(SecurityLog.id)).where(SecurityLog.created_at >= day_ago)
     ).one() or 0
+    failed_jobs_prev_24h = db.exec(
+        select(func.count(AnalysisJob.id))
+        .where(AnalysisJob.status == "failed")
+        .where(AnalysisJob.created_at >= prev_24h_start)
+        .where(AnalysisJob.created_at < day_ago)
+    ).one() or 0
+    errors_prev_24h = db.exec(
+        select(func.count(ErrorLog.id))
+        .where(ErrorLog.created_at >= prev_24h_start)
+        .where(ErrorLog.created_at < day_ago)
+    ).one() or 0
+    queue_new_24h = db.exec(
+        select(func.count(AnalysisJob.id))
+        .where(AnalysisJob.status.in_(("pending", "processing")))
+        .where(AnalysisJob.created_at >= day_ago)
+    ).one() or 0
+    queue_new_prev_24h = db.exec(
+        select(func.count(AnalysisJob.id))
+        .where(AnalysisJob.status.in_(("pending", "processing")))
+        .where(AnalysisJob.created_at >= prev_24h_start)
+        .where(AnalysisJob.created_at < day_ago)
+    ).one() or 0
+    invoice_pending_new_24h = db.exec(
+        select(func.count(PaymentOrder.id))
+        .where(PaymentOrder.status == "completed")
+        .where(PaymentOrder.invoice_ettn.is_(None))
+        .where(PaymentOrder.created_at >= day_ago)
+    ).one() or 0
+    invoice_pending_new_prev_24h = db.exec(
+        select(func.count(PaymentOrder.id))
+        .where(PaymentOrder.status == "completed")
+        .where(PaymentOrder.invoice_ettn.is_(None))
+        .where(PaymentOrder.created_at >= prev_24h_start)
+        .where(PaymentOrder.created_at < day_ago)
+    ).one() or 0
+    refunds_prev_7d = db.exec(
+        select(func.count(PaymentOrder.id))
+        .where(PaymentOrder.refunded_at >= prev_7d_start)
+        .where(PaymentOrder.refunded_at < week_ago)
+    ).one() or 0
+    security_prev_24h = db.exec(
+        select(func.count(SecurityLog.id))
+        .where(SecurityLog.created_at >= prev_24h_start)
+        .where(SecurityLog.created_at < day_ago)
+    ).one() or 0
+
+    alerts_trend = {
+        "queue": _delta_summary(queue_new_24h, queue_new_prev_24h),
+        "failed_jobs_24h": _delta_summary(failed_jobs_24h, failed_jobs_prev_24h),
+        "errors_24h": _delta_summary(errors_24h, errors_prev_24h),
+        "invoice_pending": _delta_summary(invoice_pending_new_24h, invoice_pending_new_prev_24h),
+        "refunds_7d": _delta_summary(refunds_7d, refunds_prev_7d),
+        "security_24h": _delta_summary(security_events_24h, security_prev_24h),
+    }
 
     # ── OpenAI maliyet metrikleri ──
     # Not: DB şeması eskiyse (özellikle PostgreSQL'de token kolonları yoksa) burası 500'e sebep olabilir.
@@ -338,6 +404,7 @@ def admin_dashboard(request: Request, _=Depends(require_admin_cookie), db: Sessi
             "invoice_pending_count": invoice_pending_count,
             "refunds_7d": refunds_7d,
             "security_events_24h": security_events_24h,
+            "alerts_trend": alerts_trend,
             "last_transactions": last_transactions,
             "chart_labels": chart_labels,
             "chart_analyses": chart_analyses,

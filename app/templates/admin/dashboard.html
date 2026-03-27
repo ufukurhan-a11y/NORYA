@@ -173,34 +173,58 @@
   </div>
   <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-3">
     <a href="/admin/queue?status_filter=pending" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      {% set t = alerts_trend.queue %}
       <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">Kuyrukta bekleyen</p>
       <p class="text-2xl font-headline font-extrabold mt-1 {% if pending_jobs > 0 %}text-amber-600{% else %}text-on-surface{% endif %}">{{ pending_jobs }}</p>
       <p class="text-xs text-on-surface-variant mt-1">Analiz işleri (pending + processing)</p>
+      <p class="text-[11px] mt-1.5 {% if t.direction == 'up' %}text-amber-700{% elif t.direction == 'down' %}text-emerald-700{% else %}text-on-surface-variant{% endif %}">
+        {% if t.direction == 'up' %}↑{% elif t.direction == 'down' %}↓{% else %}→{% endif %} {{ t.label }} (son 24s yeni açık iş)
+      </p>
     </a>
     <a href="/admin/queue?status_filter=failed" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      {% set t = alerts_trend.failed_jobs_24h %}
       <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">24 saatte başarısız analiz</p>
       <p class="text-2xl font-headline font-extrabold mt-1 {% if failed_jobs_24h > 0 %}text-red-600{% else %}text-on-surface{% endif %}">{{ failed_jobs_24h }}</p>
       <p class="text-xs text-on-surface-variant mt-1">Son 24 saatte failed olan joblar</p>
+      <p class="text-[11px] mt-1.5 {% if t.direction == 'up' %}text-red-700{% elif t.direction == 'down' %}text-emerald-700{% else %}text-on-surface-variant{% endif %}">
+        {% if t.direction == 'up' %}↑{% elif t.direction == 'down' %}↓{% else %}→{% endif %} {{ t.label }} (önceki 24 saate göre)
+      </p>
     </a>
     <a href="/admin/errors" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      {% set t = alerts_trend.errors_24h %}
       <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">24 saatte uygulama hatası</p>
       <p class="text-2xl font-headline font-extrabold mt-1 {% if errors_24h > 0 %}text-red-600{% else %}text-on-surface{% endif %}">{{ errors_24h }}</p>
       <p class="text-xs text-on-surface-variant mt-1">Error log kayıtları</p>
+      <p class="text-[11px] mt-1.5 {% if t.direction == 'up' %}text-red-700{% elif t.direction == 'down' %}text-emerald-700{% else %}text-on-surface-variant{% endif %}">
+        {% if t.direction == 'up' %}↑{% elif t.direction == 'down' %}↓{% else %}→{% endif %} {{ t.label }} (önceki 24 saate göre)
+      </p>
     </a>
     <a href="/admin/payments?invoice_pending=1" class="quick-link rounded-xl border border-amber-200/60 bg-amber-50/60 p-4">
+      {% set t = alerts_trend.invoice_pending %}
       <p class="text-xs uppercase tracking-wider text-amber-800 font-semibold">Fatura bekleyen ödeme</p>
       <p class="text-2xl font-headline font-extrabold mt-1 {% if invoice_pending_count > 0 %}text-amber-700{% else %}text-on-surface{% endif %}">{{ invoice_pending_count }}</p>
       <p class="text-xs text-amber-900/80 mt-1">Tamamlanmış, e-arşiv kesilmemiş</p>
+      <p class="text-[11px] mt-1.5 {% if t.direction == 'up' %}text-amber-800{% elif t.direction == 'down' %}text-emerald-700{% else %}text-amber-900/70{% endif %}">
+        {% if t.direction == 'up' %}↑{% elif t.direction == 'down' %}↓{% else %}→{% endif %} {{ t.label }} (son 24s yeni bekleyen)
+      </p>
     </a>
     <a href="/admin/payments" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      {% set t = alerts_trend.refunds_7d %}
       <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">Son 7 günde iade</p>
       <p class="text-2xl font-headline font-extrabold mt-1 {% if refunds_7d > 0 %}text-amber-600{% else %}text-on-surface{% endif %}">{{ refunds_7d }}</p>
       <p class="text-xs text-on-surface-variant mt-1">Refund işlemi geçen siparişler</p>
+      <p class="text-[11px] mt-1.5 {% if t.direction == 'up' %}text-amber-700{% elif t.direction == 'down' %}text-emerald-700{% else %}text-on-surface-variant{% endif %}">
+        {% if t.direction == 'up' %}↑{% elif t.direction == 'down' %}↓{% else %}→{% endif %} {{ t.label }} (önceki 7 güne göre)
+      </p>
     </a>
     <a href="/admin/security" class="quick-link rounded-xl border border-slate-100 bg-surface/80 p-4">
+      {% set t = alerts_trend.security_24h %}
       <p class="text-xs uppercase tracking-wider text-on-surface-variant font-semibold">24 saatte güvenlik eventi</p>
       <p class="text-2xl font-headline font-extrabold mt-1 {% if security_events_24h > 0 %}text-amber-600{% else %}text-on-surface{% endif %}">{{ security_events_24h }}</p>
       <p class="text-xs text-on-surface-variant mt-1">Admin login, lockout ve diğer loglar</p>
+      <p class="text-[11px] mt-1.5 {% if t.direction == 'up' %}text-amber-700{% elif t.direction == 'down' %}text-emerald-700{% else %}text-on-surface-variant{% endif %}">
+        {% if t.direction == 'up' %}↑{% elif t.direction == 'down' %}↓{% else %}→{% endif %} {{ t.label }} (önceki 24 saate göre)
+      </p>
     </a>
   </div>
 </div>
