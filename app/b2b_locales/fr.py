@@ -84,7 +84,7 @@ def build_pages(pages_en: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]
                     {
                         "title": "Voix patiente conforme à la marque",
                         "desc": "Verrouillez ton, clauses de non-exonération et glossaire au centre.",
-                        "points": ["9+ langues disponibles", "Extraits versionnés", "Points de contrôle juridique"],
+                        "points": ["9+ langues de rapport", "Extraits versionnés", "Points de contrôle juridique"],
                     },
                     {
                         "title": "Visibilité direction",

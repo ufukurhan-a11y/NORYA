@@ -101,7 +101,7 @@ from app.landing_upload_i18n import get_upload_landing_content, get_upload_landi
 from app.landing_explained_i18n import get_explained_landing_content, get_explained_landing_slug, EXPLAINED_SLUGS
 from app.landing_sample_reports_i18n import get_sample_reports_landing_content, get_sample_reports_landing_slug, SAMPLE_REPORTS_SLUGS
 from app.landing_multilingual_i18n import get_multilingual_landing_content, get_multilingual_landing_slug, MULTILINGUAL_SLUGS
-from app.faq_i18n import get_faq_content, get_faq_slug, FAQ_SLUGS
+from app.faq_i18n import FAQ_SLUGS, get_faq_content, get_faq_slug
 from app.guide_cbc_i18n import get_cbc_guide_content, get_cbc_guide_slug, CBC_GUIDE_SLUGS
 from app.guide_germany_i18n import get_germany_guide_content, get_germany_guide_slug, GERMANY_GUIDE_SLUGS
 from app.tools_i18n import get_egfr_content, get_homa_ir_content, get_tools_hub_content
@@ -3108,6 +3108,7 @@ def _b2b_audience_response(request: Request, slug: str):
             "request": request,
             "t": t,
             "lang": lang,
+            "audience_slug": slug,
             "base_ui": get_base_ui(lang),
             "canonical_url": canonical_url,
             "base_url": base_url,
@@ -6839,10 +6840,34 @@ def landing_hi_sample_reports(request: Request):
 def landing_ar_sample_reports(request: Request):
     return _render_sample_reports_landing(request, "ar")
 
+
+def _resolve_multilingual_internal_links(
+    links: list[dict], request: Request, lang: str
+) -> list[dict]:
+    """Rewrite /en/... paths in multilingual landing internal_links to the active locale."""
+    loc = _path_lang_for_seo_pages(lang)
+    resolvers: dict[str, object] = {
+        "/en/upload-blood-test-results": lambda: f"/{loc}/{(UPLOAD_SLUGS.get(loc) or UPLOAD_SLUGS['en'])}",
+        "/en/ai-blood-test-analyzer": lambda: f"/{loc}/ai-blood-test-analyzer",
+        "/en/sample-blood-test-reports": lambda: f"/{loc}/{(SAMPLE_REPORTS_SLUGS.get(loc) or SAMPLE_REPORTS_SLUGS['en'])}",
+        "/en/blood-test-results-explained": lambda: f"/{loc}/{(EXPLAINED_SLUGS.get(loc) or EXPLAINED_SLUGS['en'])}",
+        "/en/blog": lambda: localized_blog_index_path(request, lang),
+    }
+    out: list[dict] = []
+    for item in links:
+        p = (item.get("path") or "").strip()
+        if p in resolvers:
+            fn = resolvers[p]
+            p = fn() if callable(fn) else str(fn)
+        out.append({"label": item.get("label", ""), "path": p})
+    return out
+
+
 def _render_multilingual_landing(request: Request, lang: str):
     base_url = str(request.base_url).rstrip("/")
     slug = get_multilingual_landing_slug(lang)
-    t = get_multilingual_landing_content(lang)
+    t = dict(get_multilingual_landing_content(lang))
+    t["internal_links"] = _resolve_multilingual_internal_links(t.get("internal_links") or [], request, lang)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_multilingual_landing_slug(la)}"} for la in MULTILINGUAL_SLUGS]
     hreflang.append({"lang": "x-default", "url": f"{base_url}/en/{MULTILINGUAL_SLUGS['en']}"})
     return templates.TemplateResponse("multilingual_landing.html", {
@@ -7609,10 +7634,77 @@ def localized_multilingual_landing_path(
     return f"/{loc}/{slug}"
 
 
+SEO_BLOOD_TEST_HUB_SLUGS: dict[str, str] = {
+    "tr": "kan-tahlili-sonucu",
+    "de": "blutwerte-verstehen",
+    "en": "blood-test-results",
+    "es": "blood-test-results",
+    "fr": "blood-test-results",
+    "it": "blood-test-results",
+    "he": "blood-test-results",
+    "hi": "blood-test-results",
+    "ar": "blood-test-results",
+}
+
+
+def localized_seo_blood_test_hub_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    """Primary SEO blood-test hub (blood-test-results pillar) per locale."""
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    slug = SEO_BLOOD_TEST_HUB_SLUGS.get(loc) or SEO_BLOOD_TEST_HUB_SLUGS["en"]
+    return f"/{loc}/{slug}"
+
+
+def localized_upload_landing_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    slug = UPLOAD_SLUGS.get(loc) or UPLOAD_SLUGS["en"]
+    return f"/{loc}/{slug}"
+
+
+def localized_explained_landing_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    slug = EXPLAINED_SLUGS.get(loc) or EXPLAINED_SLUGS["en"]
+    return f"/{loc}/{slug}"
+
+
+def localized_ai_blood_test_analyzer_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    return f"/{loc}/ai-blood-test-analyzer"
+
+
+def localized_cbc_guide_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    slug = CBC_GUIDE_SLUGS.get(loc) or CBC_GUIDE_SLUGS["en"]
+    return f"/{loc}/{slug}"
+
+
+def localized_faq_path(
+    request: Request | None = None, explicit_lang: str | None = None
+) -> str:
+    loc = _resolved_locale_for_seo_path(request, explicit_lang)
+    slug = FAQ_SLUGS.get(loc) or FAQ_SLUGS["en"]
+    return f"/{loc}/{slug}"
+
+
 templates.env.globals["localized_home_path"] = localized_home_path
 templates.env.globals["localized_sample_reports_path"] = localized_sample_reports_path
 templates.env.globals["localized_blog_index_path"] = localized_blog_index_path
 templates.env.globals["localized_multilingual_landing_path"] = localized_multilingual_landing_path
+templates.env.globals["localized_seo_blood_test_hub_path"] = localized_seo_blood_test_hub_path
+templates.env.globals["localized_upload_landing_path"] = localized_upload_landing_path
+templates.env.globals["localized_explained_landing_path"] = localized_explained_landing_path
+templates.env.globals["localized_ai_blood_test_analyzer_path"] = localized_ai_blood_test_analyzer_path
+templates.env.globals["localized_cbc_guide_path"] = localized_cbc_guide_path
+templates.env.globals["localized_faq_path"] = localized_faq_path
 
 
 @app.get("/{lang}", response_class=HTMLResponse)

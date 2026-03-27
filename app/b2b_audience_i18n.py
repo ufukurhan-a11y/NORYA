@@ -165,6 +165,32 @@ def _faq_common_en() -> list:
     ]
 
 
+def _for_clinics_faq_extras_en() -> list:
+    return [
+        {
+            "q": "Will Norya replace our nurses or patient educators?",
+            "a": "No. Norya produces assistive first drafts of lab explanations for clinicians to review and release. Education staffing stays focused on complex counseling; routing stays under your policies.",
+        },
+        {
+            "q": "Can we centralize tone, disclaimers, and glossary terms?",
+            "a": "Yes. Enterprise clinic programs lock language snippets, legal disclaimers, and biomarker glossaries so every room uses the same guardrails. Sales can map this to your governance model.",
+        },
+    ]
+
+
+def _for_clinics_faq_extras_tr() -> list:
+    return [
+        {
+            "q": "Norya hemşireleri veya hasta eğitimcilerimizin yerini alır mı?",
+            "a": "Hayır. Norya, klinisyenlerin inceleyip yayınlayacağı laboratuvar açıklamaları için yardımcı ilk taslaklar üretir. Eğitim kadrosu karmaşık danışmanlıkta kalır; yönlendirme sizin politikalarınızda kalır.",
+        },
+        {
+            "q": "Ton, feragatnameler ve sözlük terimlerini merkezileştirebilir miyiz?",
+            "a": "Evet. Kurumsal klinik programları dil parçalarını, hukuki feragatları ve biyomarker sözlüklerini kilitleyerek her odanın aynı güvenlik bariyerlerini kullanmasını sağlar. Satış bunu yönetişim modelinize haritalar.",
+        },
+    ]
+
+
 def _page_doctors_en() -> Dict[str, Any]:
     return {
         "meta_title": "Norya for Doctors | Lab clarity in minutes",
@@ -234,11 +260,11 @@ def _page_clinics_en() -> Dict[str, Any]:
                 "desc": "Automate the first draft of patient education tied to each result pattern.",
                 "points": ["Templated escalations", "Shift-friendly handoffs", "Fewer manual edits"],
             },
-            {
-                "title": "Brand-safe patient voice",
-                "desc": "Lock tone, disclaimers, and glossary terms centrally.",
-                "points": ["9+ languages out of the box", "Versioned snippets", "Legal review checkpoints"],
-            },
+                    {
+                        "title": "Brand-safe patient voice",
+                        "desc": "Lock tone, disclaimers, and glossary terms centrally.",
+                        "points": ["9+ report languages", "Versioned snippets", "Legal review checkpoints"],
+                    },
             {
                 "title": "Visibility for leadership",
                 "desc": "Dashboard-ready metrics on turnaround and language coverage.",
@@ -259,6 +285,70 @@ def _page_clinics_en() -> Dict[str, Any]:
         ],
         "faq_title": "Clinic FAQs",
         "faq": _faq_common_en(),
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "Enterprise diagram of clinic locations connected to a unified lab explanation workflow",
+            "caption": "Illustrative visual: one operating rhythm across rooms, providers, and languages—clinicians stay in the review path.",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "reports generated"},
+            {"value": "4,000+", "label": "hospitals and clinics"},
+            {"value": "50+", "label": "countries reached"},
+            {"value": "9+", "label": "report languages"},
+            {"value": "98.7%", "label": "biomarker classification accuracy"},
+        ],
+        "stats_disclaimer": "98.7% is biomarker classification accuracy from internal platform evaluation—not clinical diagnostic accuracy.",
+        "modules_eyebrow": "Operational depth",
+        "modules_title": "Modules operators run every week",
+        "modules_desc": "Assistive drafting with clinician review at every step—designed to scale from a single clinic to regional groups without duplicating manual work.",
+        "modules": [
+            {
+                "title": "Intake & orchestration",
+                "desc": "Queue batched CSV/PDF exports, connector-ready feeds, and site metadata without rewriting your LIMS rhythm.",
+            },
+            {
+                "title": "Language & policy layer",
+                "desc": "Central glossary, disclaimers, and locale packs so every shift speaks with the same clinical and legal guardrails.",
+            },
+            {
+                "title": "Ops telemetry",
+                "desc": "Throughput, language coverage, and QA signals formatted for leadership dashboards and improvement cycles.",
+            },
+            {
+                "title": "Security & procurement path",
+                "desc": "Encryption in transit, enterprise SSO roadmap, and diligence packets aligned with hospital-grade reviews.",
+            },
+        ],
+        "resources_eyebrow": "Continue the evaluation",
+        "resources_title": "Pair this overview with diligence assets",
+        "resources_desc": "Move from narrative to proof: security artifacts, a guided storyline, and corporate contracting in one place.",
+        "resources": [
+            {
+                "title": "Clinical demo storyline",
+                "desc": "Walk ingest, structuring, multilingual drafts, and clinician review with your multidisciplinary team.",
+                "path": "/clinical-demo",
+                "cta": "Open demo page",
+            },
+            {
+                "title": "Enterprise security",
+                "desc": "Architecture narratives, access models, and procurement-ready documentation for IT and legal reviewers.",
+                "path": "/enterprise-security",
+                "cta": "Review security",
+            },
+            {
+                "title": "Trust center",
+                "desc": "Methodology, transparency, and medical-review context that procurement teams expect alongside Norya.",
+                "path": "/trust",
+                "cta": "Visit Trust Center",
+            },
+            {
+                "title": "Corporate programs",
+                "desc": "Rollout planning, onboarding playbooks, and contracting paths for multi-site clinic groups.",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "Contact corporate",
+            },
+        ],
     }
 
 
@@ -516,7 +606,7 @@ def _page_clinics_tr() -> Dict[str, Any]:
                 {
                     "title": "Marka güvenli ses",
                     "desc": "Ton, feragat ve sözlük terimlerini merkezi olarak kilitleyin.",
-                    "points": ["9+ dil", "Sürümlü parçalar", "Hukuk inceleme kontrol noktaları"],
+                    "points": ["9+ rapor dili", "Sürümlü parçalar", "Hukuk inceleme kontrol noktaları"],
                 },
                 {
                     "title": "Liderlik için görünürlük",
@@ -538,6 +628,70 @@ def _page_clinics_tr() -> Dict[str, Any]:
             ],
             "faq_title": "SSS — klinik",
             "faq": _faq_common_tr(),
+            "hero_image": {
+                "src": "/static/images/clinic-enterprise-visual.png",
+                "alt": "Klinik lokasyonlarını birleşik laboratuvar açıklama akışına bağlayan kurumsal diyagram",
+                "caption": "Örnek görsel: odalar, sağlayıcılar ve diller arasında tek ritim—inceleme yolu klinisyenlerde kalır.",
+            },
+            "stats_strip": [
+                {"value": "2M+", "label": "üretilen rapor"},
+                {"value": "4.000+", "label": "hastane ve klinik"},
+                {"value": "50+", "label": "ulaşılan ülke"},
+                {"value": "9+", "label": "rapor dili"},
+                {"value": "%98,7", "label": "biyomarker sınıflandırma doğruluğu"},
+            ],
+            "stats_disclaimer": "%98,7 değeri iç platform değerlendirmesindeki biyomarker sınıflandırma doğruluğudur; klinik tanı doğruluğu değildir.",
+            "modules_eyebrow": "Operasyonel derinlik",
+            "modules_title": "Operatörlerin her hafta kullandığı modüller",
+            "modules_desc": "Her adımda klinisyen incelemesi olan yardımcı taslaklar—tek merkezden bölgesel gruplara ölçeklenir, manuel iş yükünü çoğaltmaz.",
+            "modules": [
+                {
+                    "title": "Alım ve orkestrasyon",
+                    "desc": "LIMS ritminizi yeniden yazmadan toplu CSV/PDF dışa aktarımları, bağlayıcıya hazır beslemeler ve site meta verisini kuyruğa alın.",
+                },
+                {
+                    "title": "Dil ve politika katmanı",
+                    "desc": "Merkezi sözlük, feragatlar ve yerel paketlerle her vardiyanın aynı klinik ve hukuki bariyerlerle konuşmasını sağlayın.",
+                },
+                {
+                    "title": "Operasyon telemetrisi",
+                    "desc": "Liderlik panoları ve iyileştirme döngüleri için hacim, dil kapsamı ve QA sinyalleri.",
+                },
+                {
+                    "title": "Güvenlik ve satın alma yolu",
+                    "desc": "Aktarımda şifreleme, kurumsal SSO yol haritası ve hastane düzeyi incelemelerle uyumlu özen paketleri.",
+                },
+            ],
+            "resources_eyebrow": "Değerlendirmeye devam",
+            "resources_title": "Bu özeti özen varlıklarıyla eşleştirin",
+            "resources_desc": "Anlatıdan kanıta: güvenlik eserleri, rehberli bir hikâye ve kurumsal sözleşme tek yerde.",
+            "resources": [
+                {
+                    "title": "Klinik demo hikâyesi",
+                    "desc": "Alım, yapılandırma, çok dilli taslaklar ve klinisyen incelemesini disiplinler arası ekibinizle adım adım ilerletin.",
+                    "path": "/clinical-demo",
+                    "cta": "Demo sayfasını aç",
+                },
+                {
+                    "title": "Kurumsal güvenlik",
+                    "desc": "BT ve hukuk inceleyicileri için mimari anlatılar, erişim modelleri ve satın almaya hazır dokümantasyon.",
+                    "path": "/enterprise-security",
+                    "cta": "Güvenliği incele",
+                },
+                {
+                    "title": "Güven Merkezi",
+                    "desc": "Yöntembilim, şeffaflık ve tıbbi inceleme bağlamı; satın alma ekiplerinin Norya ile beklediği içerik.",
+                    "path": "/trust",
+                    "cta": "Güven Merkezi",
+                },
+                {
+                    "title": "Kurumsal programlar",
+                    "desc": "Çok merkezli klinik grupları için yayılım planı, onboarding playbook ve sözleşme yolları.",
+                    "path": "/kurumsal",
+                    "fragment": "contact",
+                    "cta": "Kurumsal iletişim",
+                },
+            ],
         }
     )
     return t
@@ -715,6 +869,546 @@ def _get_cached_full_locale_pages(lang: str) -> Dict[str, Dict[str, Any]]:
     return built
 
 
+_FOR_CLINICS_FAQ_EXTRAS: Dict[str, list] = {
+    "en": _for_clinics_faq_extras_en(),
+    "tr": _for_clinics_faq_extras_tr(),
+    "de": [
+        {
+            "q": "Ersetzt Norya unsere Pflegekräfte oder Patientenedukator:innen?",
+            "a": "Nein. Norya erstellt assistierende Erstentwürfe von Laborderklärungen zur ärztlichen Durchsicht und Freigabe. Die Edukationsbesetzung konzentriert sich weiter auf komplexe Beratung; Routing bleibt in Ihren Richtlinien.",
+        },
+        {
+            "q": "Können wir Tonalität, Disclaimer und Glossar zentral steuern?",
+            "a": "Ja. Enterprise-Klinikprogramme verankern Textbausteine, Disclaimer und Biomarker-Glossare, sodass jede Station dieselben Leitplanken nutzt. Der Vertrieb ordnet dies Ihrem Governance-Modell zu.",
+        },
+    ],
+    "fr": [
+        {
+            "q": "Norya remplace-t-il nos infirmières ou éducateurs patients ?",
+            "a": "Non. Norya produit des premiers jets assistés d’explications d’analyses à relire et publier par les cliniciens. L’équipe d’éducation reste sur le conseil complexe ; le routage suit vos politiques.",
+        },
+        {
+            "q": "Pouvons-nous centraliser le ton, les clauses et le glossaire ?",
+            "a": "Oui. Les programmes cliniques entreprise verrouillent extraits, clauses légales et glossaires biomarqueurs pour une même ligne de garde-fous. Les ventes peuvent l’aligner sur votre gouvernance.",
+        },
+    ],
+    "es": [
+        {
+            "q": "¿Norya sustituye a nuestras enfermeras o educadoras de pacientes?",
+            "a": "No. Norya genera borradores asistidos de explicaciones de laboratorio para revisión y publicación clínica. El equipo educativo sigue en consejería compleja; el enrutamiento queda bajo sus políticas.",
+        },
+        {
+            "q": "¿Podemos centralizar tono, descargos de responsabilidad y glosario?",
+            "a": "Sí. Los programas clínicos enterprise fijan fragmentos, descargos y glosarios de biomarcadores para que cada sala use las mismas barreras. Ventas puede alinearlo con su modelo de gobernanza.",
+        },
+    ],
+    "it": [
+        {
+            "q": "Norya sostituisce infermieri o educatori dei pazienti?",
+            "a": "No. Norya produce bozze assistite di spiegazioni di laboratorio per revisione e rilascio clinico. Il personale educativo resta sul counseling complesso; il percorso resta nelle vostre policy.",
+        },
+        {
+            "q": "Possiamo centralizzare tono, disclaimer e glossario?",
+            "a": "Sì. I programmi clinici enterprise bloccano snippet, disclaimer e glossari dei biomarcatori così ogni stanza usa gli stessi guardrail. Le vendite possono mapparlo sul vostro modello di governance.",
+        },
+    ],
+    "he": [
+        {
+            "q": "האם Norya מחליף את האחיות או את צוות חינוך המטופלים שלנו?",
+            "a": "לא. Norya מפיק טיוטות עזר להסברי מעבדה לבדיקה ופרסום קליני. צוות החינוך נשאר במיקוד בייעוץ מורכב; הניתוב נשאר במדיניות שלכם.",
+        },
+        {
+            "q": "האם נוכל למרכז טון, כתבי ויתור ומונחי מילון?",
+            "a": "כן. תוכניות קליניות ארגוניות נועלות קטעי שפה, כתבי ויתור ומילוני ביומרקרים כך שכל חדר משתמש באותן מגבלות. המכירות יכולות למפות זאת למודל הממשל שלכם.",
+        },
+    ],
+    "hi": [
+        {
+            "q": "क्या Norya हमारी नर्सों या रोगी शिक्षकों की जगह लेगी?",
+            "a": "नहीं। Norya प्रयोगशाला स्पष्टीकरण के लिए सहायक प्रारूप तैयार करता है जिनकी क्लिनिशियन समीक्षा करके जारी करते हैं। शिक्षा स्टाफ जटिल परामर्श पर केंद्रित रहता है; रूटिंग आपकी नीतियों के अंतर्गत रहती है।",
+        },
+        {
+            "q": "क्या हम टोन, अस्वीकरण और शब्दावली को केंद्रीकृत कर सकते हैं?",
+            "a": "हाँ। एंटरप्राइज क्लिनिक कार्यक्रम भाषा खंड, कानूनी अस्वीकरण और बायोमार्कर शब्दकोश लॉक करते हैं ताकि हर कक्ष समान सुरक्षा-रेल का उपयोग करे। सेल्स इसे आपके शासन मॉडल से मैप कर सकता है।",
+        },
+    ],
+    "ar": [
+        {
+            "q": "هل تحلّ Norya محلّ ممرّضاتنا أو مُربّي المرضى؟",
+            "a": "لا. تُنشئ Norya مسودات مساعدة لشرح نتائج المختبر لمراجعتها وإصدارها من قبل الطاقم السريري. يبقى فريق التثقيف مركزاً على الاستشارات المعقّدة؛ يبقى التوجيه وفق سياساتكم.",
+        },
+        {
+            "q": "هل يمكننا توحيد النبرة وإخلاء المسؤولية والمصطلحات المعجمية؟",
+            "a": "نعم. تثبّت برامج العيادات المؤسسية مقاطع النص وإخلاء المسؤولية القانونية ومسارد المؤشرات الحيوية ليستخدم كل غرفة نفس الحواجز. يمكن للمبيعات ربط ذلك بنموذج الحوكمة لديكم.",
+        },
+    ],
+}
+
+_FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
+    "de": {
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "Unternehmensdiagramm vernetzter Kliniken mit einem einheitlichen Laborkommunikations-Workflow",
+            "caption": "Illustration: ein Betriebsrhythmus über Räume, Anbieter und Sprachen—ärztliche Prüfung bleibt Pflicht.",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "generierte Berichte"},
+            {"value": "4.000+", "label": "Krankenhäuser und Kliniken"},
+            {"value": "50+", "label": "erreichte Länder"},
+            {"value": "9+", "label": "Berichtssprachen"},
+            {"value": "98,7 %", "label": "Biomarker-Klassifikationsgenauigkeit"},
+        ],
+        "stats_disclaimer": "98,7 % bezieht sich auf die Biomarker-Klassifikation in der internen Plattformbewertung—nicht auf klinische diagnostische Genauigkeit.",
+        "modules_eyebrow": "Operative Tiefe",
+        "modules_title": "Module, die Betriebsteams wöchentlich nutzen",
+        "modules_desc": "Assistierende Entwürfe mit ärztlicher Prüfung in jedem Schritt—skalierbar vom Einzelstandort bis zu regionalen Gruppen.",
+        "modules": [
+            {
+                "title": "Aufnahme & Orchestrierung",
+                "desc": "Stapel-CSV/PDF, connector-fähige Feeds und Standort-Metadaten ohne Umbau Ihres LIMS takten.",
+            },
+            {
+                "title": "Sprach- und Policy-Schicht",
+                "desc": "Zentrales Glossar, Disclaimer und Lokalisierungspakete für einheitliche klinische und rechtliche Leitplanken.",
+            },
+            {
+                "title": "Ops-Telemetrie",
+                "desc": "Durchsatz, Sprachabdeckung und QA-Signale für Führungs-Dashboards und Verbesserungszyklen.",
+            },
+            {
+                "title": "Security- und Beschaffungspfad",
+                "desc": "Verschlüsselung bei Übertragung, Enterprise-SSO-Roadmap und Diligence-Pakete auf Krankenhausniveau.",
+            },
+        ],
+        "resources_eyebrow": "Nächste Schritte",
+        "resources_title": "Vertiefung mit Prüfunterlagen",
+        "resources_desc": "Vom Narrativ zum Nachweis: Security-Artefakte, geführter Ablauf und Enterprise-Vertragspfad an einem Ort.",
+        "resources": [
+            {
+                "title": "Klinische Demo-Storyline",
+                "desc": "Import, Strukturierung, mehrsprachige Entwürfe und ärztliche Prüfung mit Ihrem Team.",
+                "path": "/clinical-demo",
+                "cta": "Demo-Seite öffnen",
+            },
+            {
+                "title": "Enterprise-Sicherheit",
+                "desc": "Architektur, Zugriffsmodelle und beschaffungsreife Dokumentation für IT und Recht.",
+                "path": "/enterprise-security",
+                "cta": "Security prüfen",
+            },
+            {
+                "title": "Trust Center",
+                "desc": "Methodik, Transparenz und medizinischer Review-Kontext für Beschaffungsteams.",
+                "path": "/trust",
+                "cta": "Trust Center",
+            },
+            {
+                "title": "Unternehmensprogramme",
+                "desc": "Rollout, Onboarding-Playbooks und Vertragswege für multistandörtige Klinikgruppen.",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "Corporate kontaktieren",
+            },
+        ],
+    },
+    "fr": {
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "Schéma d’exploitation reliant des sites cliniques à un flux commun d’explications laboratoire",
+            "caption": "Visuel illustratif : un rythme unique salles, praticiens et langues—la reprise clinicien reste obligatoire.",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "rapports générés"},
+            {"value": "4 000+", "label": "hôpitaux et cliniques"},
+            {"value": "50+", "label": "pays couverts"},
+            {"value": "9+", "label": "langues de rapport"},
+            {"value": "98,7 %", "label": "précision classification biomarqueurs"},
+        ],
+        "stats_disclaimer": "98,7 % = précision de classification des biomarqueurs dans notre évaluation interne—pas de précision diagnostique clinique.",
+        "modules_eyebrow": "Profondeur opérationnelle",
+        "modules_title": "Modules utilisés chaque semaine",
+        "modules_desc": "Rédaction assistée avec relecture clinicien à chaque étape—du site unique au réseau régional.",
+        "modules": [
+            {
+                "title": "Entrée & orchestration",
+                "desc": "Files de CSV/PDF groupés, flux prêts connecteurs et métadonnées sans refonte LIMS.",
+            },
+            {
+                "title": "Couche langue & politique",
+                "desc": "Glossaire central, clauses et packs locaux pour les mêmes garde-fous cliniques et juridiques.",
+            },
+            {
+                "title": "Télémétrie ops",
+                "desc": "Débit, couverture linguistique et signaux QA pour tableaux de pilotage et cycles d’amélioration.",
+            },
+            {
+                "title": "Sécurité & achats",
+                "desc": "Chiffrement en transit, feuille de route SSO entreprise et dossiers alignés diligence hôpital.",
+            },
+        ],
+        "resources_eyebrow": "Poursuivre l’évaluation",
+        "resources_title": "Compléter avec les livrables diligence",
+        "resources_desc": "Du récit à la preuve : sécurité, parcours guidé et voie contractuelle enterprise.",
+        "resources": [
+            {
+                "title": "Démo clinique",
+                "desc": "Parcourir ingestion, structuration, brouillons multilingues et relecture avec votre équipe.",
+                "path": "/clinical-demo",
+                "cta": "Ouvrir la démo",
+            },
+            {
+                "title": "Sécurité entreprise",
+                "desc": "Récits d’architecture, accès et documentation achat pour IT et juridique.",
+                "path": "/enterprise-security",
+                "cta": "Voir la sécurité",
+            },
+            {
+                "title": "Trust Center",
+                "desc": "Méthodologie, transparence et contexte revue médicale attendus en achat.",
+                "path": "/trust",
+                "cta": "Trust Center",
+            },
+            {
+                "title": "Programmes corporate",
+                "desc": "Déploiement, playbooks d’onboarding et contrats pour groupes multi-sites.",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "Contacter corporate",
+            },
+        ],
+    },
+    "es": {
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "Diagrama de clínicas conectadas a un flujo unificado de explicaciones de laboratorio",
+            "caption": "Visual ilustrativa: un ritmo operativo en salas, proveedores e idiomas—la revisión clínica sigue siendo obligatoria.",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "informes generados"},
+            {"value": "4.000+", "label": "hospitales y clínicas"},
+            {"value": "50+", "label": "países alcanzados"},
+            {"value": "9+", "label": "idiomas de informe"},
+            {"value": "98,7%", "label": "precisión clasificación biomarcadores"},
+        ],
+        "stats_disclaimer": "98,7% es precisión de clasificación de biomarcadores en evaluación interna de plataforma—no precisión diagnóstica clínica.",
+        "modules_eyebrow": "Profundidad operativa",
+        "modules_title": "Módulos que operaciones usa cada semana",
+        "modules_desc": "Borradores asistidos con revisión clínica en cada paso—de un centro a grupos regionales.",
+        "modules": [
+            {
+                "title": "Ingesta y orquestación",
+                "desc": "Colas de CSV/PDF por lotes, feeds listos para conectores y metadatos sin reescribir el LIMS.",
+            },
+            {
+                "title": "Capa de idioma y política",
+                "desc": "Glosario central, descargos y paquetes locales para las mismas barreras clínicas y legales.",
+            },
+            {
+                "title": "Telemetría de ops",
+                "desc": "Rendimiento, cobertura de idiomas y señales QA para cuadros de mando y ciclos de mejora.",
+            },
+            {
+                "title": "Seguridad y compras",
+                "desc": "Cifrado en tránsito, hoja de ruta SSO enterprise y paquetes de diligencia tipo hospital.",
+            },
+        ],
+        "resources_eyebrow": "Siguiente fase",
+        "resources_title": "Complementar con activos de diligencia",
+        "resources_desc": "De la narrativa a la prueba: seguridad, historia guiada y vía contractual corporativa.",
+        "resources": [
+            {
+                "title": "Historia de demo clínica",
+                "desc": "Recorrer ingesta, estructura, borradores multilingües y revisión con su equipo.",
+                "path": "/clinical-demo",
+                "cta": "Abrir demo",
+            },
+            {
+                "title": "Seguridad enterprise",
+                "desc": "Narrativas de arquitectura y documentación para TI y legal.",
+                "path": "/enterprise-security",
+                "cta": "Ver seguridad",
+            },
+            {
+                "title": "Trust Center",
+                "desc": "Metodología, transparencia y contexto de revisión médica para compras.",
+                "path": "/trust",
+                "cta": "Trust Center",
+            },
+            {
+                "title": "Programas corporativos",
+                "desc": "Despliegue, playbooks de incorporación y contratación multi-sede.",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "Contactar corporate",
+            },
+        ],
+    },
+    "it": {
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "Diagramma di siti clinici collegati a un workflow unico di spiegazioni di laboratorio",
+            "caption": "Immagine illustrativa: un ritmo operativo tra stanze, provider e lingue—la revisione clinica resta obbligatoria.",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "report generati"},
+            {"value": "4.000+", "label": "ospedali e cliniche"},
+            {"value": "50+", "label": "paesi raggiunti"},
+            {"value": "9+", "label": "lingue di report"},
+            {"value": "98,7%", "label": "accuratezza classificazione biomarcatori"},
+        ],
+        "stats_disclaimer": "98,7% è accuratezza di classificazione biomarcatori in valutazione interna della piattaforma—non accuratezza diagnostica clinica.",
+        "modules_eyebrow": "Profondità operativa",
+        "modules_title": "Moduli usati ogni settimana dagli operatori",
+        "modules_desc": "Bozze assistite con revisione clinica ad ogni passo—da sito singolo a gruppi regionali.",
+        "modules": [
+            {
+                "title": "Ingresso e orchestrazione",
+                "desc": "Code di CSV/PDF batch, feed pronti per connettori e metadati senza riscrivere il LIMS.",
+            },
+            {
+                "title": "Strato lingua e policy",
+                "desc": "Glossario centrale, disclaimer e pacchetti locali per gli stessi guardrail clinici e legali.",
+            },
+            {
+                "title": "Telemetria ops",
+                "desc": "Throughput, copertura linguistica e segnali QA per dashboard direzionali e cicli di miglioramento.",
+            },
+            {
+                "title": "Percorso sicurezza e acquisti",
+                "desc": "Crittografia in transito, roadmap SSO enterprise e pacchetti di diligence da contesto ospedaliero.",
+            },
+        ],
+        "resources_eyebrow": "Proseguire la valutazione",
+        "resources_title": "Abbinare a materiali di diligence",
+        "resources_desc": "Dal racconto alla prova: sicurezza, percorso guidato e contrattazione corporate.",
+        "resources": [
+            {
+                "title": "Demo clinica",
+                "desc": "Mostrare ingest, struttura, bozze multilingue e revisione con il team multidisciplinare.",
+                "path": "/clinical-demo",
+                "cta": "Apri demo",
+            },
+            {
+                "title": "Sicurezza enterprise",
+                "desc": "Narrazioni architetturali e documentazione procurement per IT e legal.",
+                "path": "/enterprise-security",
+                "cta": "Vedi sicurezza",
+            },
+            {
+                "title": "Trust Center",
+                "desc": "Metodologia, trasparenza e contesto di medical review per gli acquisti.",
+                "path": "/trust",
+                "cta": "Trust Center",
+            },
+            {
+                "title": "Programmi corporate",
+                "desc": "Rollout, playbook di onboarding e percorsi contrattuali per gruppi multi-sede.",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "Contatta corporate",
+            },
+        ],
+    },
+    "he": {
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "תרשים ארגוני של מרכזים קליניים המחוברים למסלול הסברי מעבדה אחיד",
+            "caption": "איור להמחשה: קצב תפעול אחד בין חדרים, ספקים ושפות—הבדיקה הקלינית נשארת חובה.",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "דוחות שיוצרו בפלטפורמה"},
+            {"value": "4,000+", "label": "בתי חולים ומרפאות"},
+            {"value": "50+", "label": "מדינות נחתו"},
+            {"value": "9+", "label": "שפות דו״ח"},
+            {"value": "98.7%", "label": "דיוק סיווג ביומרקרים"},
+        ],
+        "stats_disclaimer": "98.7% מתייחס לדיוק סיווג ביומרקרים בהערכת פלטפורמה פנימית—לא לדיוק אבחנה קלינית.",
+        "modules_eyebrow": "עומק תפעולי",
+        "modules_title": "מודולים שהמפעילים משתמשים בהם מדי שבוע",
+        "modules_desc": "טיוטות עזר עם בדיקה קלינית בכל שלב—מבנה שניתן להרחבה ממרפאה בודדת לקבוצות אזוריות.",
+        "modules": [
+            {
+                "title": "קליטה ותזמור",
+                "desc": "תורים של ייצוא CSV/PDF בקבוצות, הזנות מוכנות למחברים ומטא-נתוני אתר בלי לשכתב את תהליך ה-LIMS.",
+            },
+            {
+                "title": "שכבת שפה ומדיניות",
+                "desc": "מונחון מרכזי, כתבי ויתור וחבילות לוקליזציה כדי שכל משמרת תעבוד עם אותן מגבלות קליניות ומשפטיות.",
+            },
+            {
+                "title": "טלמטריית תפעול",
+                "desc": "תפוקה, כיסוי שפות ואותות QA מעוצבים ללוחות בקרה להנהלה ולמחזורי שיפור.",
+            },
+            {
+                "title": "מסלול אבטחה ורכש",
+                "desc": "הצפנה במעבר, מפת דרכים ל-SSO ארגוני וחבילות בדיקת נאותות ברמת בית חולים.",
+            },
+        ],
+        "resources_eyebrow": "שלבים הבאים",
+        "resources_title": "העמקה עם חומרי בדיקת נאותות",
+        "resources_desc": "מסיפור לראיה: אבטחה, מסלול מודרך וחוזה ארגוני במקום אחד.",
+        "resources": [
+            {
+                "title": "סיפור דמו קליני",
+                "desc": "קליטה, מבנה, טיוטות רב-לשוניות ובדיקה קלינית עם הצוות הרב-תחומי שלכם.",
+                "path": "/clinical-demo",
+                "cta": "לפתיחת עמוד הדמו",
+            },
+            {
+                "title": "אבטחה ארגונית",
+                "desc": "תיאורי ארכיטקטורה, מודלי גישה ותיעוד מוכן לרכש עבור IT ומשפטים.",
+                "path": "/enterprise-security",
+                "cta": "סקירת אבטחה",
+            },
+            {
+                "title": "מרכז האמון",
+                "desc": "מתודולוגיה, שקיפות והקשר לבדיקה רפואית שצוותי רכש מצפים לו לצד Norya.",
+                "path": "/trust",
+                "cta": "מרכז האמון",
+            },
+            {
+                "title": "תוכניות ארגוניות",
+                "desc": "הרצה, ספריי קליטה ומסלולי חוזים לקבוצות קליניות רב-אתריות.",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "צרו קשר ארגוני",
+            },
+        ],
+    },
+    "hi": {
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "क्लिनिक स्थानों को एकीकृत लैब व्याख्या वर्कफ़्लो से जोड़ता उद्यम आरेख",
+            "caption": "चित्रात्मक: कमरों, प्रदाताओं और भाषाओं में एक संचालन लय—क्लिनिशियन समीक्षा अनिवार्य रहती है।",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "जेनरेट किए गए रिपोर्ट"},
+            {"value": "4,000+", "label": "अस्पताल और क्लिनिक"},
+            {"value": "50+", "label": "देशों तक पहुँच"},
+            {"value": "9+", "label": "रिपोर्ट भाषाएँ"},
+            {"value": "98.7%", "label": "बायोमार्कर वर्गीकरण सटीकता"},
+        ],
+        "stats_disclaimer": "98.7% आंतरिक प्लेटफ़ॉर्म मूल्यांकन में बायोमार्कर वर्गीकरण सटीकता है—क्लिनिक निदान सटीकता नहीं।",
+        "modules_eyebrow": "संचालन गहराई",
+        "modules_title": "मॉड्यूल जो ऑपरेटर हर सप्ताह चलाते हैं",
+        "modules_desc": "हर चरण पर क्लिनिशियन समीक्षा के साथ सहायक ड्राफ़्ट—एक साइट से क्षेत्रीय समूहों तक स्केल करने के लिए।",
+        "modules": [
+            {
+                "title": "इनटेक और ऑर्केस्ट्रेशन",
+                "desc": "बैच CSV/PDF निर्यात, कनेक्टर-तैयार फीड और साइट मेटाडेटा—LIMS वर्कफ़्लो फिर से लिखे बिना।",
+            },
+            {
+                "title": "भाषा और नीति परत",
+                "desc": "केंद्रीय शब्दकोश, अस्वीकरण और लोकेल पैक ताकि हर शिफ्ट वही क्लिनिकल और कानूनी गार्डरेल उपयोग करे।",
+            },
+            {
+                "title": "ऑप्स टेलीमेटरी",
+                "desc": "थ्रूपुट, भाषा कवरेज और QA संकेत—नेतृत्व डैशबोर्ड और सुधार चक्रों के लिए।",
+            },
+            {
+                "title": "सुरक्षा और खरीद पथ",
+                "desc": "ट्रांज़िट में एन्क्रिप्शन, एंटरप्राइज SSO रोडमैप और अस्पताल-स्तर की ड्यू डिलिजेंस पैकेज।",
+            },
+        ],
+        "resources_eyebrow": "आगे का मूल्यांकन",
+        "resources_title": "ड्यू डिलिजेंस सामग्री के साथ जोड़ें",
+        "resources_desc": "कथा से प्रमाण: सुरक्षा, मार्गदर्शित कहानी और कॉर्पोटेट अनुबंध एक ही जगह।",
+        "resources": [
+            {
+                "title": "क्लिनिकल डेमो कहानी",
+                "desc": "अंतःविषय टीम के साथ इनजेस्ट, संरचना, बहुभाषी ड्राफ़्ट और क्लिनिशियन समीक्षा।",
+                "path": "/clinical-demo",
+                "cta": "डेमो पेज खोलें",
+            },
+            {
+                "title": "एंटरप्राइज सुरक्षा",
+                "desc": "आर्किटेक्चर कथन, एक्सेस मॉडल और IT/कानूनी समीक्षकों के लिए खरीद-तैयार दस्तावेज़।",
+                "path": "/enterprise-security",
+                "cta": "सुरक्षा देखें",
+            },
+            {
+                "title": "ट्रस्ट सेंटर",
+                "desc": "कार्यप्रणाली, पारदर्शिता और मेडिकल-रिव्यू संदर्भ जो क्रय टीमें Norya के साथ अपेक्षा करती हैं।",
+                "path": "/trust",
+                "cta": "ट्रस्ट सेंटर",
+            },
+            {
+                "title": "कॉर्पोरेट कार्यक्रम",
+                "desc": "मल्टी-साइट क्लिनिक समूहों के लिए रोलआउट, ऑनबोर्डिंग प्लेबुक और अनुबंध पथ।",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "कॉर्पोरेट संपर्क",
+            },
+        ],
+    },
+    "ar": {
+        "hero_image": {
+            "src": "/static/images/clinic-enterprise-visual.png",
+            "alt": "مخطط مؤسسي يربط مواقع العيادات بمسار موحّد لشرح نتائج المختبر",
+            "caption": "صورة توضيحية: إيقاع تشغيلي واحد عبر الغرف والمزوّدين واللغات—تبقى المراجعة السريرية إلزامية.",
+        },
+        "stats_strip": [
+            {"value": "2M+", "label": "تقارير مُنشأة"},
+            {"value": "4,000+", "label": "مستشفيات وعيادات"},
+            {"value": "50+", "label": "دول تم الوصول إليها"},
+            {"value": "9+", "label": "لغات التقرير"},
+            {"value": "98.7%", "label": "دقة تصنيف المؤشرات الحيوية"},
+        ],
+        "stats_disclaimer": "98.7% هي دقة تصنيف المؤشرات الحيوية في تقييم المنصة الداخلي—وليست دقة تشخيصية سريرية.",
+        "modules_eyebrow": "عمق تشغيلي",
+        "modules_title": "وحدات يستخدمها المشغّلون أسبوعياً",
+        "modules_desc": "مسودات مساعدة مع مراجعة سريرية في كل خطوة—قابلة للتوسع من موقع واحد إلى مجموعات إقليمية.",
+        "modules": [
+            {
+                "title": "الاستقبال والتنسيق",
+                "desc": "طوابير تصدير CSV/PDF المجمّعة، وتغذيات جاهزة للموصلات وبيانات وصفية للموقع دون إعادة كتابة سير عمل LIMS.",
+            },
+            {
+                "title": "طبقة اللغة والسياسة",
+                "desc": "معجم مركزي وإخلاء مسؤولية وحزم توطين بحيث يستخدم كل نوبة نفس الحواجز السريرية والقانونية.",
+            },
+            {
+                "title": "قياسات التشغيل",
+                "desc": "معدلات الإنتاج وتغطية اللغة وإشارات ضبط الجودة منسّقة للوحات القيادة ودورات التحسين.",
+            },
+            {
+                "title": "مسار الأمن والمشتريات",
+                "desc": "تشفير أثناء النقل وخارطة طريق SSO مؤسسية وحزم عناية واجبة بمستوى المستشفى.",
+            },
+        ],
+        "resources_eyebrow": "مواصلة التقييم",
+        "resources_title": "أكمل مع أصول العناية الواجبة",
+        "resources_desc": "من السرد إلى الدليل: الأمن، مسار موجّه وعقد مؤسسي في مكان واحد.",
+        "resources": [
+            {
+                "title": "سردية العرض السريري",
+                "desc": "استقبل البيانات، البنية، المسودات متعددة اللغات والمراجعة السريرية مع فريقكم متعدد التخصصات.",
+                "path": "/clinical-demo",
+                "cta": "فتح صفحة العرض",
+            },
+            {
+                "title": "الأمن المؤسسي",
+                "desc": "سرديات البنية ونماذج الوصول وتوثيق جاهز للمشتريات لفرق تقنية المعلومات والقانون.",
+                "path": "/enterprise-security",
+                "cta": "مراجعة الأمن",
+            },
+            {
+                "title": "مركز الثقة",
+                "desc": "المنهجية والشفافية وسياق المراجعة الطبية التي تتوقعها فرق المشتريات إلى جانب Norya.",
+                "path": "/trust",
+                "cta": "مركز الثقة",
+            },
+            {
+                "title": "البرامج المؤسسية",
+                "desc": "خطة الإطلاق وأدلة الإدماج ومسارات التعاقد لمجموعات عيادات متعددة المواقع.",
+                "path": "/kurumsal",
+                "fragment": "contact",
+                "cta": "تواصل مؤسسي",
+            },
+        ],
+    },
+}
+
 
 def get_b2b_audience_ui(slug: str, lang_code: str) -> Dict[str, Any]:
     lang = (lang_code or "en").strip().lower()
@@ -731,4 +1425,10 @@ def get_b2b_audience_ui(slug: str, lang_code: str) -> Dict[str, Any]:
     else:
         out = copy.deepcopy(PAGES_EN[slug])
     out.update(CTA_BY_LANG[lang])
+    if slug == "for-clinics":
+        patch = _FOR_CLINICS_LANG_PATCH.get(lang)
+        if patch:
+            out.update(patch)
+        extras = _FOR_CLINICS_FAQ_EXTRAS.get(lang, _FOR_CLINICS_FAQ_EXTRAS["en"])
+        out["faq"] = list(out["faq"]) + list(extras)
     return out

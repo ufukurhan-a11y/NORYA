@@ -87,7 +87,7 @@ def build_pages(pages_en: dict[str, dict[str, Any]]) -> dict[str, dict[str, Any]
                     {
                         "title": "Markensichere Patientenstimme",
                         "desc": "Ton, Disclaimer und Glossar zentral festlegen.",
-                        "points": ["9+ Sprachen ab Werk", "Versionierte Snippets", "Juristische Prüfpunkte"],
+                        "points": ["9+ Berichtssprachen", "Versionierte Snippets", "Juristische Prüfpunkte"],
                     },
                     {
                         "title": "Transparenz für die Leitung",

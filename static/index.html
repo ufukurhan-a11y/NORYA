@@ -2141,6 +2141,9 @@
       width: max-content;
       min-width: 220px;
       max-width: calc(100vw - 24px);
+      max-height: min(70vh, 440px);
+      overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       padding: 10px;
       border-radius: var(--lang-radius);
       border: var(--lang-border);
@@ -2213,6 +2216,7 @@
     [dir="rtl"] #base-lang-menu .header-lang-option,
     [dir="rtl"] #base-lang-menu-mobile .header-lang-option {
       text-align: right;
+      flex-direction: row-reverse;
     }
     @media (max-width: 640px) {
       #langMenu,
@@ -4118,10 +4122,11 @@
       m.style.cssText = '';
     });
     document.querySelectorAll('.header-lang-toggle').forEach(function(b) { b.setAttribute('aria-expanded', 'false'); });
-    if (!closing) {
+      if (!closing) {
       var rect = btn.getBoundingClientRect();
       var rtl = document.documentElement.getAttribute('dir') === 'rtl';
       menu.hidden = false;
+      menu.classList.toggle('header-lang-menu--rtl', rtl);
       menu.style.position = 'fixed';
       menu.style.top = (rect.bottom + 6) + 'px';
       menu.style.zIndex = '99999';
@@ -4349,7 +4354,7 @@
         <a href="/" class="flex items-center gap-2 logo shrink-0 min-w-0 elite-brand" aria-label="NoryaAI Ana Sayfa">
           <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 w-auto" width="32" height="32" loading="eager" />
         </a>
-        <p class="nav-product-tagline header-desktop-only" data-i18n="nav_product_tagline">Lab reports · Doctor-ready · Multilingual</p>
+        <p class="nav-product-tagline header-desktop-only" data-i18n="nav_product_tagline">Structured reports · Doctor-ready · 9+ report languages</p>
       </div>
       <nav class="nav-shell nav-shell--mega elite-nav header-desktop-only" aria-label="Ana menü">
         <div class="nav-dd" data-nav-dd>
@@ -4420,6 +4425,8 @@
             <a href="/?lang=he" class="header-lang-option" data-lang="he" onclick="window._pickLang('he');return false">HE</a>
             <a href="/?lang=hi" class="header-lang-option" data-lang="hi" onclick="window._pickLang('hi');return false">HI</a>
             <a href="/?lang=ar" class="header-lang-option" data-lang="ar" onclick="window._pickLang('ar');return false">AR</a>
+            <a href="/?lang=el" class="header-lang-option" data-lang="el" onclick="window._pickLang('el');return false">EL</a>
+            <a href="/?lang=sr" class="header-lang-option" data-lang="sr" onclick="window._pickLang('sr');return false">SR</a>
           </div>
         </div>
         <span id="nav-auth" class="header-auth-always items-center flex-shrink-0 gap-2">
@@ -4453,6 +4460,8 @@
             <a href="/?lang=he" class="header-lang-option" data-lang="he" onclick="window._pickLang('he');return false">HE</a>
             <a href="/?lang=hi" class="header-lang-option" data-lang="hi" onclick="window._pickLang('hi');return false">HI</a>
             <a href="/?lang=ar" class="header-lang-option" data-lang="ar" onclick="window._pickLang('ar');return false">AR</a>
+            <a href="/?lang=el" class="header-lang-option" data-lang="el" onclick="window._pickLang('el');return false">EL</a>
+            <a href="/?lang=sr" class="header-lang-option" data-lang="sr" onclick="window._pickLang('sr');return false">SR</a>
           </div>
         </div>
         <button type="button" id="hamburger-btn" class="hamburger" onclick="toggleMobileDrawer()" aria-label="Open menu" data-i18n-aria-label="hamburger_open" aria-expanded="false" aria-controls="mobile-drawer">
@@ -4482,7 +4491,7 @@
         <a href="/en/sample-blood-test-reports" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap header-cta-ghost" style="border-style:dashed;" data-sample-reports-link="1" data-i18n="hero_see_sample">See sample report</a>
         <a href="/clinical-demo?lang=en" onclick="closeMobileDrawer()" class="drawer-link drawer-link--tap header-cta-ghost" style="border-style:dashed;" data-locale-link="clinical-demo" data-i18n="hero_book_demo">Book demo</a>
       </div>
-      <p class="drawer-trust-meta" style="margin-top:0;margin-bottom:10px;" data-i18n="nav_product_tagline">Lab reports · Doctor-ready · Multilingual</p>
+      <p class="drawer-trust-meta" style="margin-top:0;margin-bottom:10px;" data-i18n="nav_product_tagline">Structured reports · Doctor-ready · 9+ report languages</p>
       <details class="drawer-details">
         <summary data-i18n="nav_features">Features</summary>
         <div class="drawer-subnav">
@@ -9821,7 +9830,7 @@
         nav_dd_doctor_ready_reports: "Doktora hazır raporlar", nav_dd_patient_communication: "Hasta iletişimi", nav_dd_followup_prep: "Kontrol öncesi hazırlık",
         nav_dd_clinic_workflows: "Klinik iş akışları", nav_dd_intl_patients: "Uluslararası hastalar", nav_dd_trust_privacy: "Güven ve gizlilik", nav_dd_organizations: "Kurumlar ve kurumsal",
         nav_dd_security: "Güvenlik", nav_dd_privacy: "Gizlilik", nav_dd_methodology: "Metodoloji", nav_dd_trust_overview: "Güven özeti",
-        nav_dd_compare_hub: "Karşılaştırma merkezi", nav_dd_compare_generic_ai: "Norya ve genel AI", nav_dd_compare_wizey: "Norya ve Wizey",
+        nav_dd_compare_hub: "Karşılaştırma merkezi", nav_dd_compare_generic_ai: "Norya vs genel AI", nav_dd_compare_wizey: "Norya vs Wizey",
         drawer_trust_meta: "KVKK & GDPR · 256-bit SSL · Güvenli Ödeme",
         a2hs_message: "Norya'yı ana ekrana ekleyin, uygulama gibi kullanın.", a2hs_later: "Sonra", a2hs_add: "Ekle", ios_a2hs_message: "Ana ekrana ekle: Paylaş ⎋ Ana Ekrana Ekle", ios_a2hs_close: "Kapat",
         about_title: "Norya Nedir, Biz Kimiz?", about_what_title: "Norya nedir?", about_who_title: "Biz kimiz?", company_info_title: "Şirket Bilgileri",
@@ -10156,7 +10165,7 @@
         compare_title: "Tüm planları karşılaştırın", compare_subtitle: "İhtiyacınıza uygun planı seçin.", compare_feature: "🔎 Özellik", compare_plan_free: "Ücretsiz Deneme", compare_plan_single: "Tek Analiz", compare_plan_monthly: "Aylık", compare_plan_yearly: "Yıllık", compare_analyses: "🧪 Analiz sayısı", compare_analyses_per_month: "10+3 / ay", compare_upload: "📥 Metin, PDF, görsel yükleme", compare_report: "📊 Detaylı rapor (özet, değerler, öneriler)", compare_diet: "🥗 Diyet planı", compare_supplements: "💊 Takviye önerileri", compare_heart: "❤️ Kalp sağlığı yorumu", compare_history: "🕒 Analiz geçmişi", compare_pdf: "📄 PDF indir / Paylaş / Doktora götür", compare_emr_ehr: "🏥 EMR/EHR uyumlu rapor", compare_langs: "🌍 Rapor dili", compare_langs_count: "9 dil", compare_compare: "🔁 İki analizi karşılaştır", compare_qr: "QR ile rapor doğrulama", compare_yearly_benefit: "Yıllık özel: 2 ay bedava", compare_priority_support: "Öncelikli destek (yıllıkta)", compare_price: "💶 Fiyat", compare_btn_select: "Seç", compare_btn_active: "Aktif", compare_btn_upgrade: "Yükselt",
         pricing_health_charts: "✓ Sağlık grafikleri",
         pricing_monthly_most_chosen: "Kullanıcıların çoğu bu planı seçiyor.",
-        footer_guide: "Kan tahlili rehberi", footer_desc: "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.", footer_disclaimer: "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.", made_with_cursor: "Cursor ile yapıldı", footer_trust_center: "Güven Merkezi", footer_methodology: "Metodoloji", footer_medical_review: "Tıbbi İnceleme", footer_transparency: "Şeffaflık",
+        footer_guide: "Kan tahlili rehberi", footer_desc: "Kan tahlili sonuçlarını anlaşılır dilde açıklayan araç.", footer_disclaimer: "Bu araç eğitim amaçlıdır. Tıbbi kararlar için mutlaka bir sağlık uzmanına danışın.", made_with_cursor: "", footer_trust_center: "Güven Merkezi", footer_methodology: "Metodoloji", footer_medical_review: "Tıbbi İnceleme", footer_transparency: "Şeffaflık",
         disclaimer_informative: "Bu analiz yalnızca bilgilendirme amaçlıdır. Tıbbi teşhis yerine geçmez.", medical_disclaimer_full: "Norya bir tıbbi teşhis aracı değildir. Sunulan içerikler bilgilendirme amaçlıdır. Acil durumlarda veya tanı/tedavi için hekiminize başvurun.", doctor_cta_note: "Teşhis yerine geçmez; sonuçları hekiminizle paylaşın.",
         footer_mesafeli: "Mesafeli Satış Sözleşmesi", footer_privacy: "Gizlilik Politikası", footer_refund: "İade Politikası", footer_refund_long: "İade ve İptal Politikası", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_col_norya: "Norya", footer_col_legal: "Yasal", footer_col_support: "Destek", footer_col_payment: "Güvenli Ödeme",
@@ -10623,7 +10632,7 @@
         upgrade_cta_detail: "Unlock more detailed interpretations", upgrade_cta_hematology: "View full haematology cards", upgrade_cta_weekly_plan: "Unlock your personalised weekly plan", upgrade_cta_pdf: "Upgrade to advanced clinical PDF", upgrade_cta_insights: "Upgrade your plan for deeper health insights",
         compare_title: "Compare all plans", compare_subtitle: "Find the plan that fits your needs.", compare_feature: "Feature", compare_plan_free: "Free", compare_plan_single: "Single", compare_plan_monthly: "Monthly", compare_plan_yearly: "Yearly", compare_analyses: "Analyses", compare_analyses_per_month: "10+3 / mo", compare_upload: "Text, PDF, image upload", compare_report: "Detailed report (summary, values, recommendations)", compare_diet: "Diet plan", compare_supplements: "Supplement recommendations", compare_heart: "Heart health interpretation", compare_history: "Analysis history", compare_pdf: "PDF download / Share / For doctor", compare_emr_ehr: "EMR/EHR compatible report", compare_langs: "Report language", compare_langs_count: "9 languages", compare_compare: "Compare two analyses", compare_qr: "QR report verification", compare_yearly_benefit: "Yearly: 2 months free", compare_priority_support: "Priority support (yearly)", compare_price: "Price", compare_btn_select: "Select", compare_btn_active: "Current", compare_btn_upgrade: "Upgrade",
         pricing_health_charts: "✓ Health charts", pricing_monthly_most_chosen: "Most users choose this plan.",
-        footer_guide: "Blood test guide", footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "Made with Cursor", footer_trust_center: "Trust Center", footer_methodology: "Methodology", footer_medical_review: "Medical Review", footer_transparency: "Transparency",
+        footer_guide: "Blood test guide", footer_desc: "Blood test results explained in plain language.", footer_disclaimer: "This tool is for educational purposes. Always consult a healthcare professional for medical decisions.", made_with_cursor: "", footer_trust_center: "Trust Center", footer_methodology: "Methodology", footer_medical_review: "Medical Review", footer_transparency: "Transparency",
         disclaimer_informative: "This analysis is for information only. It does not replace medical diagnosis.", medical_disclaimer_full: "Norya is not a medical diagnosis tool. Content provided is for information only. In emergencies or for diagnosis/treatment, consult your doctor.", doctor_cta_note: "Not a substitute for diagnosis; share results with your doctor.",
         footer_mesafeli: "Distance Sales Agreement", footer_privacy: "Privacy Policy", footer_refund: "Refund Policy", footer_refund_long: "Refund & Cancellation", footer_kvkk_gdpr: "KVKK / GDPR", footer_kvkk_link: "KVKK",
         footer_col_norya: "Norya", footer_col_legal: "Legal", footer_col_support: "Support", footer_col_payment: "Secure Payment",
@@ -10953,7 +10962,7 @@
         plan_monthly_1: "Più analisi; confronto con i risultati precedenti", plan_monthly_2: "Spiegazioni più approfondite su biomarcatori e categorie", plan_monthly_3: "Riepilogo «Cosa è cambiato» e raccomandazioni per il follow-up", plan_monthly_4: "Argomenti da chiedere al medico e valori da monitorare", plan_monthly_5: "Suggerimenti su dieta e stile di vita", plan_monthly_6: "PDF premium — riepilogo più completo da condividere con il medico", plan_monthly_7: "Non un solo report: segui l'evoluzione con un'esperienza premium",
         plan_yearly_1: "Analisi di tendenza a lungo termine; evoluzione nel tempo", plan_yearly_2: "Piano di follow-up avanzato e parametri prioritari", plan_yearly_3: "Spiegazioni più approfondite su biomarcatori e categorie", plan_yearly_4: "Confronto con analisi precedenti e cosa è cambiato", plan_yearly_5: "Riepilogo vista salute a lungo termine", plan_yearly_6: "Sezione approfondimenti prioritari", plan_yearly_7: "PDF più completo da condividere con il medico", plan_yearly_8: "Grafici e sezioni rischio premium", plan_yearly_9: "Integratori e stile di vita", plan_yearly_10: "Commento salute cardiaca e cardiovascolare",
         upgrade_cta_detail: "Sblocca interpretazioni più dettagliate", upgrade_cta_hematology: "Visualizza schede ematologia complete", upgrade_cta_weekly_plan: "Sblocca il piano settimanale personalizzato", upgrade_cta_pdf: "Passa al PDF clinico avanzato", upgrade_cta_insights: "Passa a un piano superiore per insight più completi",
-        footer_guide: "Guida alle analisi del sangue", footer_desc: "Risultati delle analisi del sangue spiegati in linguaggio chiaro.", footer_disclaimer: "Questo strumento è a scopo informativo. Consulta sempre un professionista per decisioni mediche.", made_with_cursor: "Made with Cursor", footer_trust_center: "Centro Fiducia", footer_methodology: "Metodologia", footer_medical_review: "Revisione Medica", footer_transparency: "Trasparenza",
+        footer_guide: "Guida alle analisi del sangue", footer_desc: "Risultati delle analisi del sangue spiegati in linguaggio chiaro.", footer_disclaimer: "Questo strumento è a scopo informativo. Consulta sempre un professionista per decisioni mediche.", made_with_cursor: "", footer_trust_center: "Centro Fiducia", footer_methodology: "Metodologia", footer_medical_review: "Revisione Medica", footer_transparency: "Trasparenza",
         disclaimer_informative: "Questa analisi è solo a scopo informativo. Non sostituisce una diagnosi medica.", medical_disclaimer_full: "Norya non è uno strumento di diagnosi medica. I contenuti sono solo informativi. In emergenze o per diagnosi/terapia consultare il medico.", doctor_cta_note: "Non sostituisce la diagnosi; condividi i risultati con il medico.",
         footer_col_norya: "Norya", footer_col_legal: "Legale", footer_col_support: "Supporto", footer_col_payment: "Pagamento sicuro",
         footer_norya_desc: "Norya è una piattaforma digitale che fornisce report sanitari informativi analizzando i dati degli esami del sangue con l'IA.",
@@ -11280,7 +11289,7 @@
         plan_monthly_1: "Varias analíticas; comparar con resultados anteriores", plan_monthly_2: "Explicaciones más profundas de biomarcadores y categorías", plan_monthly_3: "Resumen «Qué ha cambiado» y recomendaciones de seguimiento", plan_monthly_4: "Temas a preguntar al médico y valores a vigilar", plan_monthly_5: "Sugerencias de dieta y estilo de vida", plan_monthly_6: "PDF premium — resumen más completo para compartir con el médico", plan_monthly_7: "No solo un informe: sigue la evolución con una experiencia premium",
         plan_yearly_1: "Análisis de tendencia a largo plazo; evolución en el tiempo", plan_yearly_2: "Plan de seguimiento avanzado y parámetros prioritarios", plan_yearly_3: "Explicaciones más profundas de biomarcadores y categorías", plan_yearly_4: "Comparación con análisis anteriores y qué ha cambiado", plan_yearly_5: "Resumen de vista de salud a largo plazo", plan_yearly_6: "Sección de información prioritaria", plan_yearly_7: "PDF más completo para compartir con el médico", plan_yearly_8: "Gráficos y secciones de riesgo premium", plan_yearly_9: "Suplementos y estilo de vida", plan_yearly_10: "Comentario salud cardíaca y cardiovascular",
         upgrade_cta_detail: "Desbloquea interpretaciones más detalladas", upgrade_cta_hematology: "Ver tarjetas de hematología completas", upgrade_cta_weekly_plan: "Desbloquea tu plan semanal personalizado", upgrade_cta_pdf: "Actualiza al PDF clínico avanzado", upgrade_cta_insights: "Actualiza tu plan para más información de salud",
-        footer_guide: "Guía de análisis de sangre", footer_desc: "Resultados de análisis de sangre explicados en lenguaje claro.", footer_disclaimer: "Esta herramienta es informativa. Consulta siempre a un profesional para decisiones médicas.", made_with_cursor: "Hecho con Cursor", footer_trust_center: "Centro de Confianza", footer_methodology: "Metodología", footer_medical_review: "Revisión Médica", footer_transparency: "Transparencia",
+        footer_guide: "Guía de análisis de sangre", footer_desc: "Resultados de análisis de sangre explicados en lenguaje claro.", footer_disclaimer: "Esta herramienta es informativa. Consulta siempre a un profesional para decisiones médicas.", made_with_cursor: "", footer_trust_center: "Centro de Confianza", footer_methodology: "Metodología", footer_medical_review: "Revisión Médica", footer_transparency: "Transparencia",
         disclaimer_informative: "Este análisis es solo informativo. No sustituye un diagnóstico médico.", medical_disclaimer_full: "Norya no es una herramienta de diagnóstico médico. El contenido es solo informativo. En emergencias o para diagnóstico/tratamiento consulte a su médico.", doctor_cta_note: "No sustituye el diagnóstico; comparta los resultados con su médico.",
         footer_col_norya: "Norya", footer_col_legal: "Legal", footer_col_support: "Soporte", footer_col_payment: "Pago seguro",
         footer_norya_desc: "Norya es una plataforma digital que ofrece informes de salud informativos analizando los datos de análisis de sangre con IA.",
@@ -11607,7 +11616,7 @@
         plan_monthly_1: "Plusieurs analyses ; comparer aux résultats précédents", plan_monthly_2: "Explications plus approfondies sur biomarqueurs et catégories", plan_monthly_3: "Résumé « Ce qui a changé » et recommandations de suivi", plan_monthly_4: "Sujets à aborder avec le médecin et valeurs à surveiller", plan_monthly_5: "Conseils alimentation et mode de vie", plan_monthly_6: "PDF premium — résumé renforcé pour partager avec le médecin", plan_monthly_7: "Pas qu'un seul rapport : suivez l'évolution avec une expérience premium",
         plan_yearly_1: "Analyse de tendance long terme ; évolution dans le temps", plan_yearly_2: "Plan de suivi avancé et paramètres prioritaires", plan_yearly_3: "Explications les plus approfondies biomarqueurs et catégories", plan_yearly_4: "Comparaison avec analyses précédentes et ce qui a changé", plan_yearly_5: "Résumé vue santé long terme", plan_yearly_6: "Section points clés prioritaires", plan_yearly_7: "PDF le plus complet pour le médecin", plan_yearly_8: "Graphiques et sections risque premium", plan_yearly_9: "Compléments et mode de vie", plan_yearly_10: "Commentaire santé cardiaque et cardiovasculaire",
         upgrade_cta_detail: "Débloquez les interprétations détaillées", upgrade_cta_hematology: "Voir les cartes hématologie complètes", upgrade_cta_weekly_plan: "Débloquez votre plan hebdomadaire personnalisé", upgrade_cta_pdf: "Passez au PDF clinique avancé", upgrade_cta_insights: "Passez à un forfait supérieur pour plus d'aperçus",
-        footer_guide: "Guide analyses sanguines", footer_desc: "Résultats d'analyses sanguines expliqués en langage clair.", footer_disclaimer: "Cet outil est à titre informatif. Consultez toujours un professionnel pour les décisions médicales.", made_with_cursor: "Fait avec Cursor", footer_trust_center: "Centre de Confiance", footer_methodology: "Méthodologie", footer_medical_review: "Examen Médical", footer_transparency: "Transparence",
+        footer_guide: "Guide analyses sanguines", footer_desc: "Résultats d'analyses sanguines expliqués en langage clair.", footer_disclaimer: "Cet outil est à titre informatif. Consultez toujours un professionnel pour les décisions médicales.", made_with_cursor: "", footer_trust_center: "Centre de Confiance", footer_methodology: "Méthodologie", footer_medical_review: "Examen Médical", footer_transparency: "Transparence",
         disclaimer_informative: "Cette analyse est à titre informatif uniquement. Elle ne remplace pas un diagnostic médical.", medical_disclaimer_full: "Norya n'est pas un outil de diagnostic médical. Le contenu est à titre informatif. En cas d'urgence ou pour diagnostic/traitement, consultez votre médecin.", doctor_cta_note: "Ne remplace pas un diagnostic ; partagez les résultats avec votre médecin.",
         footer_col_norya: "Norya", footer_col_legal: "Mentions légales", footer_col_support: "Support", footer_col_payment: "Paiement sécurisé",
         footer_norya_desc: "Norya est une plateforme numérique qui fournit des rapports de santé en analysant les données d'analyses sanguines avec l'IA.",
@@ -11915,7 +11924,7 @@
         plan_monthly_1: "Mehrere Analysen; Vergleich mit vorherigen Ergebnissen", plan_monthly_2: "Vertiefte Biomarker- und Kategorie-Erklärungen", plan_monthly_3: "«Was hat sich geändert»-Überblick und Follow-up-Empfehlungen", plan_monthly_4: "Themen fürs Arztgespräch und zu beobachtende Werte", plan_monthly_5: "Ernährungs- und Lebensstil-Empfehlungen", plan_monthly_6: "Premium-PDF — stärkerer Überblick für den Arzt", plan_monthly_7: "Nicht nur ein Bericht: Verlauf verfolgen mit Premium-Erlebnis",
         plan_yearly_1: "Langzeittrend-Analyse; Entwicklung über die Zeit", plan_yearly_2: "Erweiterter Follow-up-Plan und Prioritätsparameter", plan_yearly_3: "Tiefste Biomarker- und Kategorie-Erklärungen", plan_yearly_4: "Vergleich mit früheren Analysen und was sich geändert hat", plan_yearly_5: "Langfristige Gesundheitsübersicht", plan_yearly_6: "Priorisierte Erkenntnisse", plan_yearly_7: "Umfassendster PDF für den Arzt", plan_yearly_8: "Premium-Grafiken und Risikobereiche", plan_yearly_9: "Nahrungsergänzung und Lebensstil", plan_yearly_10: "Herz- und kardiovaskuläre Bewertung",
         upgrade_cta_detail: "Detailliertere Auswertungen freischalten", upgrade_cta_hematology: "Vollständige Hämatologie-Karten anzeigen", upgrade_cta_weekly_plan: "Personalisierte Wochenplan freischalten", upgrade_cta_pdf: "Auf erweiterten klinischen PDF upgraden", upgrade_cta_insights: "Plan upgraden für tiefere Gesundheitseinblicke",
-        footer_guide: "Blutwerte verstehen", footer_desc: "Laborergebnisse verständlich erklärt. Zur Orientierung — keine Diagnose.", footer_disclaimer: "Nur zur Information. Medizinische Entscheidungen bitte mit dem Arzt besprechen.", made_with_cursor: "Mit Cursor erstellt", footer_trust_center: "Vertrauenszentrum", footer_methodology: "Methodik", footer_medical_review: "Medizinische Prüfung", footer_transparency: "Transparenz",
+        footer_guide: "Blutwerte verstehen", footer_desc: "Laborergebnisse verständlich erklärt. Zur Orientierung — keine Diagnose.", footer_disclaimer: "Nur zur Information. Medizinische Entscheidungen bitte mit dem Arzt besprechen.", made_with_cursor: "", footer_trust_center: "Vertrauenszentrum", footer_methodology: "Methodik", footer_medical_review: "Medizinische Prüfung", footer_transparency: "Transparenz",
         disclaimer_informative: "Diese Analyse dient nur der Information. Sie ersetzt keine medizinische Diagnose.", medical_disclaimer_full: "Norya ist kein medizinisches Diagnoseinstrument. Die Inhalte sind nur zur Information. In Notfällen oder bei Diagnose/Behandlung wenden Sie sich an Ihren Arzt.", doctor_cta_note: "Ersetzt keine Diagnose; teilen Sie die Ergebnisse mit Ihrem Arzt.",
         footer_col_norya: "Norya", footer_col_legal: "Rechtliches", footer_col_support: "Support", footer_col_payment: "Sichere Zahlung",
         footer_norya_desc: "Laborergebnisse verständlich erklärt. KI-Auswertung zur Orientierung — kein Ersatz für den Arzt.",
@@ -12210,7 +12219,7 @@
         lead_trust_unsubscribe: "ביטול בכל עת",
         lead_consent_text: "אני מסכים לקבל עדכונים במייל בהתאם ל-KVKK/GDPR.",
         lead_error_consent: "יש לאשר את הסכמת KVKK/GDPR.",
-        footer_desc: "תוצאות בדיקות דם מוסברות בשפה ברורה.", footer_disclaimer: "הכלי להנחיה בלבד. להחלטות רפואיות יש להתייעץ עם רופא.", made_with_cursor: "Made with Cursor", footer_trust_center: "מרכז אמון", footer_methodology: "מתודולוגיה", footer_medical_review: "בדיקה רפואית", footer_transparency: "שקיפות",
+        footer_desc: "תוצאות בדיקות דם מוסברות בשפה ברורה.", footer_disclaimer: "הכלי להנחיה בלבד. להחלטות רפואיות יש להתייעץ עם רופא.", made_with_cursor: "", footer_trust_center: "מרכז אמון", footer_methodology: "מתודולוגיה", footer_medical_review: "בדיקה רפואית", footer_transparency: "שקיפות",
         disclaimer_informative: "ניתוח זה למידע בלבד. אינו מחליף אבחנה רפואית.", medical_disclaimer_full: "Norya אינה כלי לאבחון רפואי. התוכן למידע בלבד. במקרי חירום או לאבחון/טיפול פנה לרופא.", doctor_cta_note: "אינו מחליף אבחנה; שתף את התוצאות עם הרופא.",
         footer_mesafeli: "הסכם מכר מרחוק", footer_privacy: "פרטיות", footer_refund: "החזרה וביטול", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "תנאי שימוש", footer_payment: "תשלום והחזרים", footer_contact: "צור קשר", back_home: "← בית",
@@ -12488,7 +12497,7 @@
         lead_trust_unsubscribe: "إلغاء الاشتراك في أي وقت",
         lead_consent_text: "أوافق على تلقي تحديثات عبر البريد الإلكتروني وفقًا لـ KVKK/GDPR.",
         lead_error_consent: "يرجى قبول موافقة KVKK/GDPR.",
-        footer_desc: "نتائج تحاليل الدم مفسرة بلغة واضحة.", footer_disclaimer: "هذه الأداة للمعلومات فقط. استشر طبيباً دائماً للقرارات الطبية.", made_with_cursor: "Made with Cursor", footer_trust_center: "مركز الثقة", footer_methodology: "المنهجية", footer_medical_review: "المراجعة الطبية", footer_transparency: "الشفافية",
+        footer_desc: "نتائج تحاليل الدم مفسرة بلغة واضحة.", footer_disclaimer: "هذه الأداة للمعلومات فقط. استشر طبيباً دائماً للقرارات الطبية.", made_with_cursor: "", footer_trust_center: "مركز الثقة", footer_methodology: "المنهجية", footer_medical_review: "المراجعة الطبية", footer_transparency: "الشفافية",
         disclaimer_informative: "هذا التحليل للمعلومات فقط. لا يحل محل التشخيص الطبي.", medical_disclaimer_full: "Norya ليست أداة تشخيص طبي. المحتوى للمعلومات فقط. في الطوارئ أو للتشخيص/العلاج استشر طبيبك.", doctor_cta_note: "لا يحل محل التشخيص؛ شارك النتائج مع طبيبك.",
         footer_mesafeli: "عقد البيع عن بعد", footer_privacy: "الخصوصية", footer_refund: "الاسترداد والإلغاء", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "شروط الاستخدام", footer_payment: "الدفع والاسترداد", footer_contact: "اتصل", back_home: "← الرئيسية",
@@ -12767,7 +12776,7 @@
         lead_trust_unsubscribe: "कभी भी अनसब्सक्राइब करें",
         lead_consent_text: "मैं KVKK/GDPR के अनुसार ईमेल अपडेट प्राप्त करने की सहमति देता/देती हूँ।",
         lead_error_consent: "कृपया KVKK/GDPR सहमति स्वीकार करें।",
-        footer_desc: "रक्त परीक्षण परिणाम सरल भाषा में समझाए गए।", footer_disclaimer: "यह उपकरण शैक्षिक उद्देश्य के लिए है। चिकित्सा निर्णय के लिए हमेशा डॉक्टर से सलाह लें।", made_with_cursor: "Made with Cursor", footer_trust_center: "ट्रस्ट सेंटर", footer_methodology: "कार्यप्रणाली", footer_medical_review: "चिकित्सा समीक्षा", footer_transparency: "पारदर्शिता",
+        footer_desc: "रक्त परीक्षण परिणाम सरल भाषा में समझाए गए।", footer_disclaimer: "यह उपकरण शैक्षिक उद्देश्य के लिए है। चिकित्सा निर्णय के लिए हमेशा डॉक्टर से सलाह लें।", made_with_cursor: "", footer_trust_center: "ट्रस्ट सेंटर", footer_methodology: "कार्यप्रणाली", footer_medical_review: "चिकित्सा समीक्षा", footer_transparency: "पारदर्शिता",
         disclaimer_informative: "यह विश्लेषण केवल सूचनात्मक है। चिकित्सा निदान का विकल्प नहीं है।", medical_disclaimer_full: "Norya चिकित्सा निदान उपकरण नहीं है। सामग्री केवल सूचनात्मक है। आपातकाल या निदान/उपचार के लिए डॉक्टर से सलाह लें।", doctor_cta_note: "निदान का विकल्प नहीं; परिणाम डॉक्टर के साथ साझा करें।",
         footer_mesafeli: "दूरबिक्री समझौता", footer_privacy: "गोपनीयता", footer_refund: "रिफंड और रद्दीकरण", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "उपयोग की शर्तें", footer_payment: "भुगतान और रिफंड", footer_contact: "संपर्क", back_home: "← होम",
@@ -12997,7 +13006,7 @@
         price_single_title: "Μία ανάλυση", price_single_per: "μία φορά", price_single_1: "✓ 1 ανάλυση", price_single_2: "✓ Διατροφή + συμπληρώματα + καρδιακή υγεία", price_single_3: "✓ Λήψη και κοινοποίηση PDF", price_btn_single: " — Μία ανάλυση",
         price_monthly_badge: "Δημοφιλέστερο", pricing_ai_detail: "Επίπεδο λεπτομέρειας AI", price_monthly_title: "Μηνιαίο πλάνο", price_per_month: "/μήνα", price_monthly_per: "5 αναλύσεις / μήνα", price_monthly_1: "✓ 5 πλήρεις αναλύσεις το μήνα", price_monthly_2: "✓ Σχέδιο διατροφής + συμπληρώματα", price_monthly_3: "✓ Ιστορικό και σύγκριση δύο αναλύσεων", price_monthly_4: "✓ Λήψη PDF, κοινοποίηση με τον γιατρό", price_btn_monthly: "/μήνα — Ξεκινήστε",
         price_best_badge: "Καλύτερη αξία", price_best_badge_value: "Καλύτερη αξία", price_yearly_title: "Ετήσιο πλάνο", price_per_year: "/έτος", price_yearly_per: "16 αναλύσεις συνολικά (13 + 3 δώρο)", price_yearly_1: "✓ 16 αναλύσεις το χρόνο (13 + 3 δώρο)", price_yearly_2: "✓ Όλες οι ενότητες διατροφής και συμπληρωμάτων premium", price_yearly_3: "✓ Ιστορικό και προηγμένη σύγκριση", price_yearly_4: "✓ Ιδανικό για επισκέψεις γιατρού", price_btn_yearly: "/έτος — Ξεκινήστε",
-        footer_desc: "Αποτελέσματα αιματολογικών εξηγημένα με απλή γλώσσα.", footer_disclaimer: "Εκπαιδευτικό εργαλείο. Συμβουλευτείτε πάντα επαγγελματία υγείας.", made_with_cursor: "Made with Cursor",
+        footer_desc: "Αποτελέσματα αιματολογικών εξηγημένα με απλή γλώσσα.", footer_disclaimer: "Εκπαιδευτικό εργαλείο. Συμβουλευτείτε πάντα επαγγελματία υγείας.", made_with_cursor: "",
         disclaimer_informative: "Αυτή η ανάλυση είναι μόνο ενημερωτική. Δεν αντικαθιστά ιατρική διάγνωση.", medical_disclaimer_full: "Η Norya δεν είναι ιατρικό εργαλείο διάγνωσης. Το περιεχόμενο είναι μόνο ενημερωτικό. Σε επείγοντα ή για διάγνωση/θεραπεία συμβουλευτείτε το γιατρό σας.", doctor_cta_note: "Δεν αντικαθιστά τη διάγνωση· μοιραστείτε τα αποτελέσματα με το γιατρό σας.",
         footer_mesafeli: "Σύμβαση τηλεπώλησης", footer_privacy: "Απόρρητο", footer_refund: "Επιστροφή και ακύρωση", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Όροι χρήσης", footer_payment: "Πληρωμή και επιστροφές", footer_contact: "Επικοινωνία", back_home: "← Αρχική",
@@ -13207,7 +13216,7 @@
         price_single_title: "Jedna analýza", price_single_per: "jednorázově", price_single_1: "✓ 1 analýza", price_single_2: "✓ Strava + doplňky + zdraví srdce", price_single_3: "✓ Stáhnout a sdílet PDF", price_btn_single: " — Jedna analýza",
         price_monthly_badge: "Nejoblíbenější", pricing_ai_detail: "Úroveň detailu AI", price_monthly_title: "Měsíční plán", price_per_month: "/měsíc", price_monthly_per: "5 analýz / měsíc", price_monthly_1: "✓ 5 plných analýz měsíčně", price_monthly_2: "✓ Jídelníček + doplňky", price_monthly_3: "✓ Historie a porovnání dvou analýz", price_monthly_4: "✓ Stáhnout PDF, sdílet s lékařem", price_btn_monthly: "/měsíc — Začít",
         price_best_badge: "Nejvýhodnější", price_best_badge_value: "Nejlepší hodnota", price_yearly_title: "Roční plán", price_per_year: "/rok", price_yearly_per: "16 analýz celkem (13 + 3 zdarma)", price_yearly_1: "✓ 16 analýz ročně (13 + 3 zdarma)", price_yearly_2: "✓ Všechny prémiové sekce stravy a doplňků", price_yearly_3: "✓ Historie a pokročilé porovnání", price_yearly_4: "✓ Ideální pro návštěvy u lékaře", price_btn_yearly: "/rok — Začít",
-        footer_desc: "Výsledky krevních testů vysvětlené srozumitelným jazykem.", footer_disclaimer: "Vzdělávací nástroj. Vždy se poraďte s lékařem.", made_with_cursor: "Made with Cursor",
+        footer_desc: "Výsledky krevních testů vysvětlené srozumitelným jazykem.", footer_disclaimer: "Vzdělávací nástroj. Vždy se poraďte s lékařem.", made_with_cursor: "",
         disclaimer_informative: "Tato analýza je pouze informativní. Nenahrazuje lékařskou diagnózu.", medical_disclaimer_full: "Norya není nástroj lékařské diagnózy. Obsah je pouze informativní. V nouzi nebo pro diagnózu/léčbu se poraďte s lékařem.", doctor_cta_note: "Nenahrazuje diagnózu; výsledky sdílejte s lékařem.",
         footer_mesafeli: "Smlouva o dálkovém prodeji", footer_privacy: "Soukromí", footer_refund: "Vrácení a zrušení", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Podmínky užití", footer_payment: "Platba a vrácení", footer_contact: "Kontakt", back_home: "← Domů",
@@ -13417,7 +13426,7 @@
         price_single_title: "Jedna analiza", price_single_per: "jednokratno", price_single_1: "✓ 1 analiza", price_single_2: "✓ Dijeta + suplementi + zdravlje srca", price_single_3: "✓ Preuzmi i podeli PDF", price_btn_single: " — Jedna analiza",
         price_monthly_badge: "Najpopularnije", pricing_ai_detail: "Nivo detalja AI", price_monthly_title: "Mesečni plan", price_per_month: "/mesec", price_monthly_per: "5 analiza / mesec", price_monthly_1: "✓ 5 punih analiza mesečno", price_monthly_2: "✓ Dijetetski plan + suplementi", price_monthly_3: "✓ Istorija i uporedi dve analize", price_monthly_4: "✓ Preuzmi PDF, podeli sa lekarom", price_btn_monthly: "/mesec — Počnite",
         price_best_badge: "Najpovoljnije", price_best_badge_value: "Najbolja vrednost", price_yearly_title: "Godišnji plan", price_per_year: "/godinu", price_yearly_per: "16 analiza ukupno (13 + 3 u poklon)", price_yearly_1: "✓ 16 analiza godišnje (13 + 3 u poklon)", price_yearly_2: "✓ Sve premium sekcije dijete i suplementata", price_yearly_3: "✓ Istorija i napredno upoređivanje", price_yearly_4: "✓ Idealno za posete lekaru", price_btn_yearly: "/godinu — Počnite",
-        footer_desc: "Rezultati krvnih testova objašnjeni jasnim jezikom.", footer_disclaimer: "Obrazovni alat. Uvek posavetujte se sa lekarom.", made_with_cursor: "Made with Cursor",
+        footer_desc: "Rezultati krvnih testova objašnjeni jasnim jezikom.", footer_disclaimer: "Obrazovni alat. Uvek posavetujte se sa lekarom.", made_with_cursor: "",
         disclaimer_informative: "Ova analiza je samo informativna. Ne zamenjuje medicinsku dijagnozu.", medical_disclaimer_full: "Norya nije alat za medicinsku dijagnostiku. Sadržaj je samo informativan. U hitnim slučajevima ili za dijagnozu/lečenje obratite se lekaru.", doctor_cta_note: "Ne zamenjuje dijagnozu; podelite rezultate sa lekarom.",
         footer_mesafeli: "Ugovor o prodaji na daljinu", footer_privacy: "Privatnost", footer_refund: "Povrat i otkazivanje", footer_kvkk_gdpr: "KVKK / GDPR",
         footer_terms: "Uslovi korišćenja", footer_payment: "Plaćanje i povrati", footer_contact: "Kontakt", back_home: "← Početna",
@@ -14023,7 +14032,21 @@
         }
       });
     }
-    var SEO_GUIDE_PATHS = { tr: '/tr/kan-tahlili-sonucu', en: '/en/blood-test-results', de: '/de/blutwerte-verstehen' };
+    var SEO_GUIDE_PATHS = {
+      tr: '/tr/kan-tahlili-sonucu',
+      en: '/en/blood-test-results',
+      de: '/de/blutwerte-verstehen',
+      es: '/es/blood-test-results',
+      fr: '/fr/blood-test-results',
+      it: '/it/blood-test-results',
+      he: '/he/blood-test-results',
+      hi: '/hi/blood-test-results',
+      ar: '/ar/blood-test-results',
+      el: '/en/blood-test-results',
+      sr: '/en/blood-test-results',
+      cs: '/en/blood-test-results',
+      'en-ca': '/en/blood-test-results'
+    };
     function updateSeoGuideLink() {
       var lang = (typeof getLang === 'function') ? getLang() : 'en';
       var path = SEO_GUIDE_PATHS[lang] || SEO_GUIDE_PATHS.en;
@@ -15716,7 +15739,10 @@
         if (typeof openLogin === 'function') openLogin();
         return;
       }
-      showProfilePage();
+      if (typeof showProfilePage !== 'function') return;
+      try {
+        showProfilePage();
+      } catch (_) {}
     }
     function showProfilePage() {
       var sec = document.getElementById('profile-section');

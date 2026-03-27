@@ -161,7 +161,7 @@
         <a href="{{ localized_home_path(request, lang) }}" class="text-sm font-medium text-slate-500 hover:text-slate-700 transition-colors">{{ blog_ui.home_link|default(brand_name|default('NoryaAI')) }}</a>
         <nav class="flex flex-wrap items-center gap-1" aria-label="{{ blog_ui.lang_nav_aria|default('Language') }}">
           {% for code in premium_langs %}
-          <a href="/{{ code }}/blog" class="blog-lang-link {% if code == lang %}current{% endif %}">{{ code|upper }}</a>
+          <a href="{{ localized_blog_index_path(request, code) }}" class="blog-lang-link {% if code == lang %}current{% endif %}">{{ code|upper }}</a>
           {% endfor %}
         </nav>
         </div>
@@ -214,51 +214,61 @@
 
   {% include "partials/marketing_trust_strip.html" %}
 
-  {% if lang == 'en' %}
+  {% if lang in premium_langs %}
   <section class="px-4 sm:px-6 py-10 bg-white border-y border-slate-100" aria-label="Start here">
     <div class="max-w-5xl mx-auto">
       <div class="max-w-3xl">
         <p class="blog-badge inline-block mb-4">Start here</p>
         <h2 class="text-2xl sm:text-3xl font-semibold text-slate-900 tracking-tight">Best entry points for blood test interpretation</h2>
-        <p class="mt-3 text-slate-600 leading-relaxed">Use these pages to move from general questions to structured answers: core explainers, upload flow, sample reports, trust pages, and a focused CBC guide.</p>
+        <p class="mt-3 text-slate-600 leading-relaxed">Use these pages to move from general questions to structured answers: core explainers, upload flow, sample reports, multilingual output, trust pages, and a focused CBC guide.</p>
       </div>
       <div class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
-        <a href="/en/blood-test-results-explained" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+        <a href="{{ localized_seo_blood_test_hub_path(request, lang) }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Guide</p>
-          <h3 class="mt-2 text-lg font-semibold text-slate-900">Blood test results explained</h3>
+          <h3 class="mt-2 text-lg font-semibold text-slate-900">Blood test results</h3>
           <p class="mt-2 text-sm leading-relaxed text-slate-600">Learn high, low, and normal values, reference ranges, units, and common lab abbreviations.</p>
         </a>
-        <a href="/en/upload-blood-test-results" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+        <a href="{{ localized_explained_landing_path(request, lang) }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Explainer</p>
+          <h3 class="mt-2 text-lg font-semibold text-slate-900">Blood test results explained</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">Plain-language context for flagged values, panels, and what to ask your clinician.</p>
+        </a>
+        <a href="{{ localized_upload_landing_path(request, lang) }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Upload</p>
           <h3 class="mt-2 text-lg font-semibold text-slate-900">Upload blood test results</h3>
           <p class="mt-2 text-sm leading-relaxed text-slate-600">Send a PDF, photo, or pasted values and get a structured report with flagged markers and summaries.</p>
         </a>
-        <a href="/en/ai-blood-test-analyzer" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
-          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Money page</p>
+        <a href="{{ localized_ai_blood_test_analyzer_path(request, lang) }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Product</p>
           <h3 class="mt-2 text-lg font-semibold text-slate-900">AI blood test analyzer</h3>
-          <p class="mt-2 text-sm leading-relaxed text-slate-600">See the product workflow built for lab reports rather than generic AI chat prompts.</p>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">See the workflow built for lab reports rather than generic AI chat prompts.</p>
         </a>
         <a href="{{ localized_sample_reports_path(request, lang) }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Examples</p>
           <h3 class="mt-2 text-lg font-semibold text-slate-900">Sample blood test reports</h3>
           <p class="mt-2 text-sm leading-relaxed text-slate-600">Preview what a structured NoryaAI report looks like before you upload your own results.</p>
         </a>
-        <a href="/en/guides/how-to-read-cbc" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+        <a href="{{ localized_multilingual_landing_path(request, lang) }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Languages</p>
+          <h3 class="mt-2 text-lg font-semibold text-slate-900">Results in your language</h3>
+          <p class="mt-2 text-sm leading-relaxed text-slate-600">Structured explanations when your original lab report is not in your preferred language.</p>
+        </a>
+        <a href="{{ localized_cbc_guide_path(request, lang) }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Pillar guide</p>
           <h3 class="mt-2 text-lg font-semibold text-slate-900">How to read CBC results</h3>
           <p class="mt-2 text-sm leading-relaxed text-slate-600">Understand WBC, RBC, hemoglobin, hematocrit, platelets, and common CBC indices step by step.</p>
         </a>
-        <a href="/trust?lang=en" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
+        <a href="/trust?lang={{ lang }}" class="rounded-2xl border border-slate-200 bg-slate-50 p-5 hover:border-teal-200 hover:bg-teal-50/40 transition-colors">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-teal-700">Trust</p>
           <h3 class="mt-2 text-lg font-semibold text-slate-900">Trust center and methodology</h3>
           <p class="mt-2 text-sm leading-relaxed text-slate-600">Review how claims are defined, how privacy is handled, and what the platform's limits are.</p>
         </a>
       </div>
       <div class="mt-6 flex flex-wrap items-center gap-x-5 gap-y-2 text-sm text-slate-600">
-        <a href="/en/faq" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Blood test analysis FAQ</a>
-        <a href="/trust?lang=en" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Trust center</a>
-        <a href="/methodology?lang=en" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Methodology</a>
-        <a href="/medical-review?lang=en" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Medical review</a>
+        <a href="{{ localized_faq_path(request, lang) }}" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Blood test analysis FAQ</a>
+        <a href="/trust?lang={{ lang }}" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Trust center</a>
+        <a href="/methodology?lang={{ lang }}" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Methodology</a>
+        <a href="/medical-review?lang={{ lang }}" class="font-medium text-teal-700 hover:text-teal-800 hover:underline">Medical review</a>
       </div>
     </div>
   </section>
