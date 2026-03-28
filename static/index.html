@@ -1346,23 +1346,109 @@
     .dark .hero-ecosystem-logos li {
       color: rgb(148 163 184 / 0.55);
     }
+    /* Premium hero trusted strip with stats */
     .hero-trusted-strip {
-      margin-top: 3rem;
-      padding-top: 2rem;
-      border-top: 1px solid rgba(15, 23, 42, 0.06);
+      margin-top: 2.5rem;
+      padding: 1.5rem;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(255, 255, 255, 0.7) 0%, rgba(248, 250, 252, 0.5) 100%);
+      border: 1px solid rgba(15, 23, 42, 0.06);
+      backdrop-filter: blur(8px);
     }
-    .dark .hero-trusted-strip { border-top-color: rgba(255, 255, 255, 0.08); }
+    .dark .hero-trusted-strip {
+      background: linear-gradient(135deg, rgba(30, 41, 59, 0.4) 0%, rgba(15, 23, 42, 0.3) 100%);
+      border-color: rgba(255, 255, 255, 0.08);
+    }
+    .hero-trusted-title {
+      font-size: 0.6875rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: #0ea5a4;
+      margin-bottom: 1rem;
+    }
+    .dark .hero-trusted-title { color: #5eead4; }
+    .hero-trusted-logos {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 1.5rem;
+      margin-bottom: 1.25rem;
+    }
     .hero-trusted-logos img {
-      height: 22px;
+      height: 26px;
       width: auto;
-      max-width: 88px;
+      max-width: 100px;
       object-fit: contain;
-      filter: grayscale(1);
-      opacity: 0.38;
-      transition: opacity 0.2s ease;
+      filter: grayscale(0.8);
+      opacity: 0.5;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+    .dark .hero-trusted-logos img { filter: grayscale(0.6); opacity: 0.55; }
+    .hero-trusted-logos a:hover img,
+    .hero-trusted-logos img:hover {
+      filter: grayscale(0);
+      opacity: 1;
+      transform: scale(1.05);
     }
     @media (hover: hover) {
-      .hero-trusted-logos a:hover img { opacity: 0.55; }
+      .hero-trusted-logos a:hover img { opacity: 1; }
+    }
+    /* Premium stats bar */
+    .hero-trusted-stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1.25rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid rgba(15, 23, 42, 0.08);
+    }
+    .dark .hero-trusted-stats { border-top-color: rgba(255, 255, 255, 0.1); }
+    .hero-stat-item {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.5rem 0.875rem;
+      background: rgba(255, 255, 255, 0.6);
+      border-radius: 10px;
+      border: 1px solid rgba(15, 23, 42, 0.05);
+      transition: all 0.2s ease;
+    }
+    .hero-stat-item:hover {
+      background: rgba(255, 255, 255, 0.8);
+      border-color: rgba(14, 165, 164, 0.2);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px rgba(14, 165, 164, 0.1);
+    }
+    .dark .hero-stat-item {
+      background: rgba(30, 41, 59, 0.5);
+      border-color: rgba(255, 255, 255, 0.06);
+    }
+    .dark .hero-stat-item:hover {
+      background: rgba(30, 41, 59, 0.7);
+      border-color: rgba(94, 234, 212, 0.25);
+      box-shadow: 0 4px 12px rgba(94, 234, 212, 0.1);
+    }
+    .hero-stat-icon {
+      font-size: 1.125rem;
+      line-height: 1;
+    }
+    .hero-stat-text {
+      font-size: 0.8125rem;
+      font-weight: 600;
+      color: #334155;
+      white-space: nowrap;
+    }
+    .dark .hero-stat-text { color: #e2e8f0; }
+    @media (max-width: 639px) {
+      .hero-trusted-strip {
+        padding: 1.25rem;
+        border-radius: 12px;
+      }
+      .hero-trusted-logos { gap: 1.25rem; margin-bottom: 1rem; }
+      .hero-trusted-logos img { height: 22px; max-width: 80px; }
+      .hero-trusted-stats { gap: 0.75rem; padding-top: 1rem; }
+      .hero-stat-item { padding: 0.4rem 0.75rem; }
+      .hero-stat-text { font-size: 0.75rem; }
     }
     /* Trusted by healthcare professionals — kurumsal logo bar (grayscale → renk hover) */
     .trust-pro-logo-bar-section {
@@ -5679,12 +5765,30 @@
             <span class="inline-flex items-center gap-1.5 text-xs sm:text-sm text-accent-500 dark:text-accent-400 font-medium"><span aria-hidden="true">🌐</span> <span data-i18n="trust_cards_langs_title">9+ Language support</span></span>
           </div>
           <div class="hero-trusted-strip">
-            <p class="text-[10px] sm:text-[11px] font-bold uppercase tracking-[0.2em] text-accent-400 dark:text-accent-500 mb-4" data-i18n="hero_trusted_by">Trusted infrastructure &amp; technology partners</p>
-            <div class="hero-trusted-logos flex flex-wrap items-center justify-start gap-6 sm:gap-8">
-              <a href="/enterprise-security?lang=en" class="shrink-0" data-locale-link="enterprise-security" aria-label="Google Cloud — enterprise infrastructure"><img src="/static/logos/google.svg" alt="" width="90" height="24" loading="lazy" /></a>
-              <a href="/enterprise-security?lang=en" class="shrink-0" data-locale-link="enterprise-security" aria-label="Cloudflare — security and CDN"><img src="/static/logos/cloudflare.svg" alt="" width="90" height="24" loading="lazy" /></a>
-              <span class="shrink-0" aria-hidden="true"><img src="/static/logos/paytr.svg" alt="" width="90" height="24" loading="lazy" /></span>
-              <a href="/security?lang=en" class="shrink-0" data-locale-link="security" aria-label="Security and compliance overview"><img src="/static/images/hipaa-badge.svg" alt="" width="32" height="32" loading="lazy" /></a>
+            <p class="hero-trusted-title" data-i18n="hero_trusted_by">Trusted infrastructure &amp; technology partners</p>
+            <div class="hero-trusted-logos">
+              <a href="/enterprise-security?lang=en" class="shrink-0" data-locale-link="enterprise-security" aria-label="Google Cloud — enterprise infrastructure" title="Google Cloud — Enterprise Infrastructure">
+                <img src="/static/logos/google.svg" alt="Google Cloud" width="100" height="26" loading="lazy" decoding="async" />
+              </a>
+              <a href="/enterprise-security?lang=en" class="shrink-0" data-locale-link="enterprise-security" aria-label="Cloudflare — Security &amp; CDN" title="Cloudflare — Security &amp; CDN">
+                <img src="/static/logos/cloudflare.svg" alt="Cloudflare" width="100" height="26" loading="lazy" decoding="async" />
+              </a>
+              <span class="shrink-0" aria-label="PayTR — Secure Payment Processing" title="PayTR — Secure Payment Processing">
+                <img src="/static/logos/paytr.svg" alt="PayTR" width="100" height="26" loading="lazy" decoding="async" />
+              </span>
+              <a href="/security?lang=en" class="shrink-0" data-locale-link="security" aria-label="HIPAA Compliant — Security and compliance" title="HIPAA Compliant">
+                <img src="/static/images/hipaa-badge.svg" alt="HIPAA Compliant" width="36" height="36" loading="lazy" decoding="async" />
+              </a>
+            </div>
+            <div class="hero-trusted-stats">
+              <div class="hero-stat-item">
+                <span class="hero-stat-icon" aria-hidden="true">📊</span>
+                <span class="hero-stat-text">2M+ Reports Generated</span>
+              </div>
+              <div class="hero-stat-item">
+                <span class="hero-stat-icon" aria-hidden="true">🏥</span>
+                <span class="hero-stat-text">1250+ Clinics</span>
+              </div>
             </div>
           </div>
         </div>
@@ -5838,93 +5942,7 @@
         <div class="hero-global-reach-card">
           <p id="hero-global-viz-heading" class="hero-global-viz-eyebrow" data-i18n="hero_global_viz_eyebrow">Premium PDF report — 9+ report languages</p>
           <div class="hero-global-viz-slot" aria-hidden="true">
-            <svg class="hero-global-viz-svg" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 268" fill="none" aria-hidden="true">
-              <defs>
-                <linearGradient id="hgPremAmbient" x1="50%" y1="0%" x2="50%" y2="100%">
-                  <stop offset="0%" stop-color="#2dd4bf" stop-opacity="0.14"/>
-                  <stop offset="55%" stop-color="#14b8a6" stop-opacity="0.05"/>
-                  <stop offset="100%" stop-color="#14b8a6" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="hgPremPaper" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#ffffff"/>
-                  <stop offset="42%" stop-color="#f8fffe"/>
-                  <stop offset="100%" stop-color="#ecfdf5"/>
-                </linearGradient>
-                <linearGradient id="hgPremSheen" x1="50%" y1="0%" x2="50%" y2="100%">
-                  <stop offset="0%" stop-color="#ffffff" stop-opacity="0.65"/>
-                  <stop offset="22%" stop-color="#ffffff" stop-opacity="0.2"/>
-                  <stop offset="55%" stop-color="#ffffff" stop-opacity="0"/>
-                </linearGradient>
-                <linearGradient id="hgPremTeal" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#0f766e"/>
-                  <stop offset="40%" stop-color="#14b8a6"/>
-                  <stop offset="100%" stop-color="#5eead4"/>
-                </linearGradient>
-                <linearGradient id="hgPremBar" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stop-color="#0d9488"/>
-                  <stop offset="100%" stop-color="#5eead4"/>
-                </linearGradient>
-                <linearGradient id="hgPremArea" x1="0%" y1="0%" x2="0%" y2="100%">
-                  <stop offset="0%" stop-color="#14b8a6" stop-opacity="0.42"/>
-                  <stop offset="100%" stop-color="#14b8a6" stop-opacity="0.04"/>
-                </linearGradient>
-                <linearGradient id="hgPremBadge" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#134e4a"/>
-                  <stop offset="100%" stop-color="#0f766e"/>
-                </linearGradient>
-                <filter id="hgPremStack" x="-12%" y="-12%" width="124%" height="124%" color-interpolation-filters="sRGB">
-                  <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="#0d9488" flood-opacity="0.2"/>
-                  <feDropShadow dx="0" dy="5" stdDeviation="10" flood-color="#0f172a" flood-opacity="0.09"/>
-                </filter>
-                <filter id="hgPremLift" x="-8%" y="-8%" width="116%" height="116%" color-interpolation-filters="sRGB">
-                  <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#0f172a" flood-opacity="0.06"/>
-                </filter>
-                <clipPath id="hgPremCardClip">
-                  <rect x="72" y="56" width="376" height="236" rx="26"/>
-                </clipPath>
-              </defs>
-              <ellipse cx="260" cy="132" rx="218" ry="112" fill="url(#hgPremAmbient)"/>
-              <g filter="url(#hgPremLift)">
-                <rect x="128" y="40" width="278" height="196" rx="20" fill="#e2e8f0" opacity="0.75" transform="rotate(-8 267 138)"/>
-                <rect x="108" y="46" width="302" height="210" rx="22" fill="#f1f5f9" stroke="rgba(13,148,136,0.18)" stroke-width="1.15" transform="rotate(-4 259 151)"/>
-              </g>
-              <g filter="url(#hgPremStack)">
-                <rect x="72" y="56" width="376" height="236" rx="26" fill="url(#hgPremPaper)" stroke="rgba(13,148,136,0.42)" stroke-width="1.5"/>
-                <rect x="72" y="56" width="376" height="236" rx="26" fill="url(#hgPremSheen)"/>
-              </g>
-              <rect x="72" y="56" width="376" height="236" rx="26" fill="none" stroke="rgba(255,255,255,0.55)" stroke-width="1" opacity="0.9"/>
-              <g>
-                <rect x="334" y="72" width="72" height="34" rx="10" fill="url(#hgPremBadge)"/>
-                <rect x="336" y="74" width="68" height="10" rx="4" fill="#ffffff" opacity="0.12"/>
-                <text x="370" y="94" text-anchor="middle" fill="#f0fdfa" font-size="11.5" font-weight="800" font-family="ui-sans-serif, system-ui, -apple-system, sans-serif" letter-spacing="0.14em">PDF</text>
-              </g>
-              <circle cx="98" cy="88" r="7" fill="url(#hgPremTeal)"/>
-              <rect x="114" y="80" width="128" height="14" rx="7" fill="url(#hgPremTeal)"/>
-              <rect x="114" y="102" width="196" height="8" rx="4" fill="#94a3b8" opacity="0.32"/>
-              <rect x="114" y="116" width="164" height="8" rx="4" fill="#94a3b8" opacity="0.24"/>
-              <rect x="114" y="130" width="208" height="8" rx="4" fill="#94a3b8" opacity="0.18"/>
-              <g opacity="0.9">
-                <rect x="114" y="152" width="14" height="40" rx="4" fill="url(#hgPremBar)" opacity="0.85"/>
-                <rect x="136" y="144" width="14" height="48" rx="4" fill="url(#hgPremBar)" opacity="0.65"/>
-                <rect x="158" y="160" width="14" height="32" rx="4" fill="url(#hgPremBar)" opacity="0.5"/>
-              </g>
-              <g clip-path="url(#hgPremCardClip)">
-                <g stroke="#94a3b8" stroke-opacity="0.14" stroke-width="0.75">
-                  <line x1="220" y1="148" x2="220" y2="232"/>
-                  <line x1="260" y1="148" x2="260" y2="232"/>
-                  <line x1="300" y1="148" x2="300" y2="232"/>
-                  <line x1="340" y1="148" x2="340" y2="232"/>
-                  <line x1="200" y1="176" x2="410" y2="176"/>
-                  <line x1="200" y1="200" x2="410" y2="200"/>
-                </g>
-                <path d="M200 228 L200 188 L232 168 L264 182 L296 152 L328 172 L360 138 L392 148 L418 118 L418 228 Z" fill="url(#hgPremArea)"/>
-                <path class="hero-global-viz-chart" d="M200 188 L232 168 L264 182 L296 152 L328 172 L360 138 L392 148 L418 118" stroke="url(#hgPremTeal)" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
-                <circle cx="418" cy="118" r="6" fill="#ffffff" stroke="#0d9488" stroke-width="1.75"/>
-                <circle cx="418" cy="118" r="2.5" fill="#14b8a6"/>
-              </g>
-              <line x1="96" y1="244" x2="424" y2="244" stroke="rgba(13,148,136,0.15)" stroke-width="1"/>
-              <circle cx="104" cy="244" r="3" fill="#34d399" opacity="0.85"/>
-            </svg>
+            <img src="/static/images/premium-pdf-report-mockup.png" alt="Norya premium PDF report sample with biomarker analysis" class="hero-global-viz-img" width="480" height="280" loading="lazy" decoding="async" />
           </div>
           <ul class="hero-global-lang-strip" role="list" data-i18n-aria-label="hero_global_viz_aria" aria-label="Languages available for report output">
             <li><button type="button" class="hero-global-lang-pill" data-hero-lang="tr" aria-pressed="false">TR</button></li>
