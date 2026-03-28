@@ -6194,186 +6194,73 @@
     </div>
   </section>
 
-  <!-- İnteraktif Before/After Karşılaştırma Kaydırıcısı (Before: eski tahlil kağıdı, After: Norya dijital rapor) -->
-  <section id="before-after-slider" class="py-16 sm:py-20 bg-white dark:bg-accent-900/20 overflow-x-hidden">
+  <!-- Before/After: Gerçek laboratuvar → Norya rapor dönüşümü -->
+  <section id="before-after-slider" class="py-16 sm:py-20 bg-gradient-to-b from-white via-[#f0fdfa]/40 to-white dark:from-accent-950 dark:via-accent-900/30 dark:to-accent-950 overflow-x-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="text-center mb-12 sm:mb-16">
-        <div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-gradient-to-r from-[#0ea5a4]/10 to-[#14b8a6]/10 dark:from-[#5eead4]/10 dark:to-[#2dd4bf]/10 border border-[#0ea5a4]/20 dark:border-[#5eead4]/20 mb-4">
-          <span class="relative flex h-2 w-2">
-            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#14b8a6] opacity-75"></span>
-            <span class="relative inline-flex rounded-full h-2 w-2 bg-[#0ea5a4]"></span>
-          </span>
-          <span class="text-[10px] font-bold uppercase tracking-wider text-[#0f766e] dark:text-[#5eead4]">İnteraktif Dönüşüm</span>
-        </div>
+      <div class="text-center mb-10 sm:mb-14">
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold text-accent-900 dark:text-white mb-3 tracking-tight" data-i18n="before_after_title">Tahlil Kağıdından Norya Raporuna</h2>
-        <p class="text-base sm:text-lg text-accent-600 dark:text-accent-400 max-w-xl mx-auto leading-relaxed" data-i18n="before_after_desc">Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.</p>
+        <p class="text-base sm:text-lg text-accent-600 dark:text-accent-400 max-w-2xl mx-auto leading-relaxed" data-i18n="before_after_desc">Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.</p>
       </div>
 
-      <div class="rounded-3xl border border-accent-100/80 dark:border-accent-800/80 bg-gradient-to-br from-white/80 via-white/60 to-[#f0fdfa]/70 dark:from-accent-900/40 dark:via-accent-900/25 dark:to-accent-900/30 shadow-[0_24px_80px_rgba(14,165,164,0.15),inset_0_1px_0_rgba(255,255,255,0.6)] backdrop-blur-sm p-3 sm:p-4">
+      <div class="relative max-w-5xl mx-auto">
+        <!-- Before: Gerçek laboratuvar tahlili -->
+        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-amber-200/60 dark:border-amber-900/40">
+          <img
+            src="/static/images/blog/how-to-read-blood-test-results.png"
+            alt="Laboratuvar tahlil sonucu - karmaşık tablo"
+            class="w-full h-auto block"
+            loading="lazy"
+          />
+          <div class="absolute top-3 left-3">
+            <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-amber-100/95 dark:bg-amber-900/80 border border-amber-300/70 dark:border-amber-700/60 backdrop-blur text-amber-900 dark:text-amber-200 text-xs font-bold uppercase tracking-wider shadow-sm" data-i18n="before_after_before_label">Önce — Laboratuvar</span>
+          </div>
+        </div>
+
+        <!-- After: Norya premium rapor (üstte, slider ile açılır) -->
         <div
           id="ba-slider"
-          class="relative rounded-2xl overflow-hidden border border-accent-100 dark:border-accent-800 bg-accent-50/50 dark:bg-accent-900/20 h-[420px] sm:h-[480px] cursor-ew-resize"
-          style="touch-action:none; user-select:none;"
+          class="absolute inset-0 overflow-hidden rounded-2xl shadow-2xl border border-[#0ea5a4]/30 dark:border-[#5eead4]/25"
+          style="touch-action:none; user-select:none; clip-path: inset(0 50% 0 0 round 1rem);"
         >
-          <!-- After (sağ): Norya dijital rapor görseli -->
-          <div class="absolute inset-0 overflow-hidden">
-            <svg class="absolute inset-0 w-full h-full" viewBox="0 0 640 480" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
-              <defs>
-                <linearGradient id="baPremBg" x1="0%" y1="0%" x2="100%" y2="100%">
-                  <stop offset="0%" stop-color="#f0fdfa"/>
-                  <stop offset="50%" stop-color="#ffffff"/>
-                  <stop offset="100%" stop-color="#ecfdf5"/>
-                </linearGradient>
-                <linearGradient id="baPremTeal" x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stop-color="#0f766e"/>
-                  <stop offset="50%" stop-color="#14b8a6"/>
-                  <stop offset="100%" stop-color="#5eead4"/>
-                </linearGradient>
-                <linearGradient id="baPremGaugeHi" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stop-color="#f59e0b"/>
-                  <stop offset="50%" stop-color="#fbbf24"/>
-                  <stop offset="100%" stop-color="#fcd34d"/>
-                </linearGradient>
-                <linearGradient id="baPremGaugeMid" x1="0%" y1="100%" x2="0%" y2="0%">
-                  <stop offset="0%" stop-color="#10b981"/>
-                  <stop offset="100%" stop-color="#34d399"/>
-                </linearGradient>
-                <filter id="baPremShadow" x="-10%" y="-10%" width="120%" height="120%">
-                  <feDropShadow dx="0" dy="8" stdDeviation="16" flood-color="#0d9488" flood-opacity="0.15"/>
-                  <feDropShadow dx="0" dy="3" stdDeviation="6" flood-color="#0f172a" flood-opacity="0.06"/>
-                </filter>
-                <clipPath id="baPremCardClip"><rect x="48" y="48" width="544" height="384" rx="20"/></clipPath>
-              </defs>
-              <rect width="640" height="480" fill="url(#baPremBg)"/>
-              <g clip-path="url(#baPremCardClip)">
-                <rect x="48" y="48" width="544" height="384" rx="20" fill="url(#baPremBg)" stroke="rgba(13,148,136,0.25)" stroke-width="1.25"/>
-                <rect x="48" y="48" width="544" height="384" rx="20" fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="1"/>
-                <rect x="68" y="68" width="180" height="14" rx="7" fill="url(#baPremTeal)"/>
-                <rect x="68" y="92" width="280" height="7" rx="3.5" fill="#94a3b8" opacity="0.28"/>
-                <rect x="68" y="106" width="220" height="7" rx="3.5" fill="#94a3b8" opacity="0.22"/>
-                <g transform="translate(420,88)">
-                  <circle cx="60" cy="60" r="52" fill="none" stroke="rgba(148,163,184,0.18)" stroke-width="10"/>
-                  <circle cx="60" cy="60" r="52" fill="none" stroke="url(#baPremGaugeMid)" stroke-width="10" stroke-linecap="round" stroke-dasharray="251" stroke-dashoffset="75" transform="rotate(-90 60 60)"/>
-                  <text x="60" y="66" text-anchor="middle" fill="#0f766e" font-size="22" font-weight="800" font-family="ui-sans-serif, system-ui, sans-serif">78</text>
-                  <text x="60" y="82" text-anchor="middle" fill="#64748b" font-size="8" font-weight="600" font-family="ui-sans-serif, system-ui, sans-serif">/100</text>
-                </g>
-                <g transform="translate(68,140)">
-                  <rect width="240" height="110" rx="12" fill="rgba(14,165,164,0.06)" stroke="rgba(13,148,136,0.15)"/>
-                  <text x="12" y="22" fill="#0f766e" font-size="11" font-weight="700" font-family="ui-sans-serif, system-ui, sans-serif">METABOLIC PANEL</text>
-                  <g transform="translate(12,36)">
-                    <rect width="8" height="52" rx="3" fill="url(#baPremTeal)" opacity="0.85"/>
-                    <rect x="14" width="8" height="38" rx="3" fill="url(#baPremTeal)" opacity="0.65"/>
-                    <rect x="28" width="8" height="64" rx="3" fill="url(#baPremTeal)" opacity="0.45"/>
-                    <rect x="42" width="8" height="28" rx="3" fill="url(#baPremTeal)" opacity="0.75"/>
-                    <rect x="56" width="8" height="48" rx="3" fill="url(#baPremTeal)" opacity="0.55"/>
-                    <rect x="70" width="8" height="36" rx="3" fill="url(#baPremTeal)" opacity="0.65"/>
-                    <rect x="84" width="8" height="56" rx="3" fill="url(#baPremTeal)" opacity="0.5"/>
-                    <rect x="98" width="8" height="42" rx="3" fill="url(#baPremTeal)" opacity="0.7"/>
-                  </g>
-                </g>
-                <g transform="translate(328,140)">
-                  <rect width="244" height="110" rx="12" fill="rgba(14,165,164,0.06)" stroke="rgba(13,148,136,0.15)"/>
-                  <text x="12" y="22" fill="#0f766e" font-size="11" font-weight="700" font-family="ui-sans-serif, system-ui, sans-serif">LIVER & KIDNEY</text>
-                  <g transform="translate(12,38)">
-                    <rect width="220" height="8" rx="4" fill="#e2e8f0"/>
-                    <rect width="165" height="8" rx="4" fill="url(#baPremTeal)"/>
-                    <rect y="14" width="220" height="8" rx="4" fill="#e2e8f0"/>
-                    <rect y="14" width="188" height="8" rx="4" fill="url(#baPremTeal)" opacity="0.85"/>
-                    <rect y="28" width="220" height="8" rx="4" fill="#e2e8f0"/>
-                    <rect y="28" width="142" height="8" rx="4" fill="url(#baPremTeal)" opacity="0.7"/>
-                    <rect y="42" width="220" height="8" rx="4" fill="#e2e8f0"/>
-                    <rect y="42" width="176" height="8" rx="4" fill="url(#baPremTeal)" opacity="0.9"/>
-                  </g>
-                </g>
-                <g transform="translate(68,268)">
-                  <rect width="504" height="96" rx="12" fill="rgba(14,165,164,0.05)" stroke="rgba(13,148,136,0.12)"/>
-                  <rect x="12" y="12" width="120" height="10" rx="5" fill="url(#baPremTeal)"/>
-                  <rect x="12" y="30" width="480" height="6" rx="3" fill="#94a3b8" opacity="0.25"/>
-                  <rect x="12" y="42" width="420" height="6" rx="3" fill="#94a3b8" opacity="0.2"/>
-                  <rect x="12" y="54" width="460" height="6" rx="3" fill="#94a3b8" opacity="0.18"/>
-                  <rect x="12" y="66" width="380" height="6" rx="3" fill="#94a3b8" opacity="0.15"/>
-                </g>
-                <g transform="translate(488,68)">
-                  <rect width="84" height="28" rx="8" fill="url(#baPremTeal)"/>
-                  <text x="42" y="17" text-anchor="middle" fill="#ffffff" font-size="10" font-weight="800" font-family="ui-sans-serif, system-ui, sans-serif" letter-spacing="0.08em">PDF</text>
-                </g>
-              </g>
-            </svg>
-            <div class="absolute top-4 left-4 right-4 flex items-center justify-between gap-3">
-              <span class="text-xs font-semibold uppercase tracking-wider text-primary-700 dark:text-primary-300 bg-white/70 dark:bg-accent-900/50 border border-primary-200/70 dark:border-primary-700/70 backdrop-blur px-3 py-1 rounded-full" data-i18n="before_after_after_label">Sonra — Norya raporu</span>
-              <span class="text-[11px] font-bold text-primary-600 dark:text-primary-300 rounded-full bg-primary-50/80 dark:bg-primary-900/30 border border-primary-200/70 dark:border-primary-800 px-3 py-1">Turkuaz • Modern</span>
-            </div>
-          </div>
-
-          <!-- Before (sol): yoğun lab tablosu mockup — premium kağıt dokusu -->
-          <div id="ba-before" class="absolute inset-y-0 left-0 overflow-hidden" style="width:50%">
-            <div class="absolute inset-0 p-3 flex flex-col gap-2 box-border" style="background:linear-gradient(135deg,#f5f0e6 0%,#e8e0d0 100%); min-width:260px;">
-              <div class="absolute inset-0 pointer-events-none opacity-40 mix-blend-multiply" style="background-image:repeating-linear-gradient(0deg,rgba(0,0,0,0.04) 0,rgba(0,0,0,0.04) 1px,transparent 1px,transparent 4px);"></div>
-              <div class="absolute inset-0 pointer-events-none" style="background:radial-gradient(ellipse 80% 60% at 50% 40%,rgba(139,119,87,0.08),transparent 70%);"></div>
-              <div class="relative z-10 flex flex-col gap-2 flex-1 min-h-0" style="min-height:0;">
-                <div class="shrink-0">
-                  <span class="text-xs font-semibold uppercase tracking-wider text-amber-900 dark:text-amber-200 bg-amber-100/90 dark:bg-amber-950/50 border border-amber-300/80 dark:border-amber-700/70 backdrop-blur px-3 py-1 rounded-full shadow-sm" data-i18n="before_after_before_label">Önce — Laboratuvar çıktısı</span>
-                </div>
-                <div
-                  class="rounded-lg border border-amber-900/20 dark:border-slate-600 bg-[#fefbf5]/95 dark:bg-slate-900/90 px-2.5 py-2.5 font-mono text-[10px] sm:text-xs text-slate-800 dark:text-slate-200 leading-snug overflow-auto flex-1 shadow-inner"
-                  style="min-height:200px; box-shadow:inset 0 1px 2px rgba(0,0,0,0.04),inset 0 0 0 1px rgba(255,255,255,0.5);"
-                >
-                  <p class="mb-2.5 tracking-tight text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400" data-i18n="before_after_lab_header">LAB. RAPOR NO: 2024-**** &nbsp;&nbsp;&nbsp; TARİH: **.**.2024</p>
-                  <table class="w-full border-collapse text-left">
-                    <thead>
-                      <tr class="border-b border-slate-300/70 dark:border-slate-600 text-slate-500 dark:text-slate-400">
-                        <th class="py-1.5 pr-2 font-semibold text-[9px] sm:text-[10px]" data-i18n="before_after_th_test">Test</th>
-                        <th class="py-1.5 pr-2 font-semibold text-[9px] sm:text-[10px]" data-i18n="before_after_th_result">Sonuç</th>
-                        <th class="py-1.5 font-semibold text-[9px] sm:text-[10px] whitespace-nowrap" data-i18n="before_after_th_ref">Referans</th>
-                      </tr>
-                    </thead>
-                    <tbody class="text-slate-700 dark:text-slate-300">
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">WBC</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">7.2</td><td class="py-1 text-[9px] sm:text-[10px]">4.5–11.0</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">RBC</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">4.81</td><td class="py-1 text-[9px] sm:text-[10px]">4.5–5.9</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">Hgb</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">14.2</td><td class="py-1 text-[9px] sm:text-[10px]">12–16 g/dL</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">Hct</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">42.1</td><td class="py-1 text-[9px] sm:text-[10px]">36–46%</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">Glucose</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">98</td><td class="py-1 text-[9px] sm:text-[10px]">70–100 mg/dL</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">BUN</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">14</td><td class="py-1 text-[9px] sm:text-[10px]">7–20 mg/dL</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">Creatinine</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">0.92</td><td class="py-1 text-[9px] sm:text-[10px]">0.7–1.3</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">AST / ALT</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">24 / 28</td><td class="py-1 text-[9px] sm:text-[10px]">&lt;40 U/L</td></tr>
-                      <tr class="border-b border-slate-200/60 dark:border-slate-700"><td class="py-1 pr-2 text-[9px] sm:text-[10px]">TSH</td><td class="py-1 pr-2 text-[9px] sm:text-[10px]">2.1</td><td class="py-1 text-[9px] sm:text-[10px]">0.4–4.0</td></tr>
-                      <tr><td class="py-1 pr-2 text-[9px] sm:text-[10px]">LDL-C</td><td class="py-1 pr-2 text-[9px] sm:text-[10px] text-amber-600 dark:text-amber-400 font-semibold">128</td><td class="py-1 text-[9px] sm:text-[10px]">&lt;100 mg/dL</td></tr>
-                    </tbody>
-                  </table>
-                  <p class="mt-2.5 italic text-[9px] sm:text-[10px] text-slate-500 dark:text-slate-400" data-i18n="before_after_before_hint">Kısaltmalar ve sayılar — ne anlama geldiği belirsiz.</p>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <!-- Divider + Handle (sürüklenebilir) -->
-          <div id="ba-divider" class="absolute top-0 bottom-0 w-0.5 bg-gradient-to-b from-[#0ea5a4]/0 via-[#0ea5a4]/60 to-[#0ea5a4]/0 dark:from-[#5eead4]/0 dark:via-[#5eead4]/60 dark:to-[#5eead4]/0" style="left:50%"></div>
-          <button
-            id="ba-handle"
-            type="button"
-            class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 z-20 h-14 w-14 rounded-full bg-gradient-to-br from-white to-accent-50 dark:from-accent-900 dark:to-accent-950 border border-[#0ea5a4]/30 dark:border-[#5eead4]/25 shadow-[0_8px_32px_rgba(14,165,164,0.25),inset_0_1px_0_rgba(255,255,255,0.8)] flex items-center justify-center hover:scale-105 active:scale-95 transition-transform"
-            role="slider"
-            aria-label="Before/After"
-            aria-valuemin="0"
-            aria-valuemax="100"
-            aria-valuenow="50"
-            style="left:50%"
-          >
-            <span class="relative flex items-center justify-center w-8 h-8 rounded-full bg-[#0ea5a4]/10 dark:bg-[#5eead4]/15">
-              <span class="h-5 w-0.5 rounded-full bg-[#0ea5a4] dark:bg-[#5eead4] shadow-[0_0_8px_rgba(14,165,164,0.5)]" aria-hidden="true"></span>
-            </span>
-          </button>
-
-          <!-- 60 sn etiketi -->
-          <div class="absolute inset-x-0 top-1/2 -translate-y-1/2 flex justify-center pointer-events-none">
-            <span class="text-[10px] font-bold px-2.5 py-1 rounded-full bg-gradient-to-br from-white/95 to-white/85 dark:from-accent-900/90 dark:to-accent-900/70 border border-[#0ea5a4]/25 dark:border-[#5eead4]/20 text-[#0f766e] dark:text-[#5eead4] backdrop-blur shadow-[0_4px_16px_rgba(14,165,164,0.15)]" data-i18n="before_after_arrow">⏱ 60 sn</span>
+          <img
+            src="/static/images/og-sample-reports.png"
+            alt="Norya premium sağlık raporu"
+            class="absolute inset-0 w-full h-full object-cover"
+            style="object-position: 50% 50%;"
+            loading="lazy"
+          />
+          <div class="absolute top-3 right-3">
+            <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-[#0ea5a4]/95 dark:bg-[#14b8a6]/90 border border-[#0d9488]/70 dark:border-[#0d9488]/60 backdrop-blur text-white text-xs font-bold uppercase tracking-wider shadow-lg" data-i18n="before_after_after_label">Sonra — Norya</span>
           </div>
         </div>
 
-        <div class="mt-6 flex items-center justify-between gap-4 text-xs max-w-3xl mx-auto">
-          <span class="text-accent-700 dark:text-accent-300 font-medium" data-i18n="before_after_before_label">Önce — Laboratuvar çıktısı</span>
-          <span class="text-accent-700 dark:text-accent-300 font-medium" data-i18n="before_after_after_label">Sonra — Norya raporu</span>
+        <!-- Slider Handle -->
+        <div
+          id="ba-handle"
+          class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white dark:bg-accent-900 border-2 border-[#0ea5a4] dark:border-[#5eead4] shadow-[0_4px_24px_rgba(14,165,164,0.35)] flex items-center justify-center cursor-ew-resize z-10 hover:scale-110 active:scale-95 transition-transform"
+          role="slider"
+          aria-label="Kaydır"
+          aria-valuemin="0"
+          aria-valuemax="100"
+          aria-valuenow="50"
+          style="left: 50%;"
+        >
+          <svg class="w-6 h-6 text-[#0ea5a4] dark:text-[#5eead4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l-4 3 4 3m8-6l4 3-4 3" />
+          </svg>
         </div>
+      </div>
+
+      <div class="mt-8 flex items-center justify-center gap-3 text-sm">
+        <span class="inline-flex items-center gap-2 text-amber-700 dark:text-amber-300">
+          <span class="w-2 h-2 rounded-full bg-amber-500"></span>
+          <span data-i18n="before_after_before_label">Önce — Laboratuvar</span>
+        </span>
+        <span class="w-12 h-px bg-accent-300 dark:bg-accent-700"></span>
+        <span class="inline-flex items-center gap-2 text-[#0f766e] dark:text-[#5eead4]">
+          <span class="w-2 h-2 rounded-full bg-[#0ea5a4]"></span>
+          <span data-i18n="before_after_after_label">Sonra — Norya</span>
+        </span>
       </div>
     </div>
   </section>
@@ -6383,56 +6270,71 @@
       var slider = document.getElementById('ba-slider');
       if (!slider) return;
 
-      var before = document.getElementById('ba-before');
-      var divider = document.getElementById('ba-divider');
       var handle = document.getElementById('ba-handle');
-      if (!before || !divider || !handle) return;
+      if (!handle) return;
 
-      function setPercent(p) {
-        var percent = Math.max(0, Math.min(100, p));
-        before.style.width = percent + '%';
-        divider.style.left = percent + '%';
+      var isDragging = false;
+      var containerRect = null;
+
+      function updateSlider(clientX) {
+        if (!containerRect) containerRect = slider.parentElement.getBoundingClientRect();
+        var x = clientX - containerRect.left;
+        var percent = Math.max(0, Math.min(100, (x / containerRect.width) * 100));
+        slider.style.clipPath = 'inset(0 ' + (100 - percent) + '% 0 0 round 1rem)';
         handle.style.left = percent + '%';
-        handle.setAttribute('aria-valuenow', String(Math.round(percent)));
+        handle.setAttribute('aria-valuenow', Math.round(percent));
       }
 
-      function updateFromClientX(clientX) {
-        var rect = slider.getBoundingClientRect();
-        if (!rect.width) return;
-        var x = clientX - rect.left;
-        var p = (x / rect.width) * 100;
-        setPercent(p);
+      function onPointerDown(e) {
+        isDragging = true;
+        handle.setPointerCapture(e.pointerId);
+        containerRect = slider.parentElement.getBoundingClientRect();
+        e.preventDefault();
       }
 
-      var dragging = false;
+      function onPointerMove(e) {
+        if (!isDragging) return;
+        updateSlider(e.clientX);
+      }
 
-      slider.addEventListener('pointerdown', function (e) {
-        dragging = true;
-        updateFromClientX(e.clientX);
-        if (slider.setPointerCapture) slider.setPointerCapture(e.pointerId);
+      function onPointerUp(e) {
+        isDragging = false;
+        handle.releasePointerCapture(e.pointerId);
+      }
+
+      handle.addEventListener('pointerdown', onPointerDown);
+      handle.addEventListener('pointermove', onPointerMove);
+      handle.addEventListener('pointerup', onPointerUp);
+      handle.addEventListener('pointerleave', onPointerUp);
+
+      // Touch support
+      handle.addEventListener('touchstart', function(e) {
+        isDragging = true;
+        containerRect = slider.parentElement.getBoundingClientRect();
         e.preventDefault();
-      }, { passive: false });
-
-      window.addEventListener('pointermove', function (e) {
-        if (!dragging) return;
-        updateFromClientX(e.clientX);
-        e.preventDefault();
-      }, { passive: false });
-
-      function endDrag() { dragging = false; }
-      window.addEventListener('pointerup', endDrag, { passive: true });
-      window.addEventListener('pointercancel', endDrag, { passive: true });
-
-      handle.addEventListener('keydown', function (e) {
-        var current = parseFloat(handle.getAttribute('aria-valuenow') || '50');
-        if (e.key === 'ArrowLeft') { setPercent(current - 2); e.preventDefault(); }
-        else if (e.key === 'ArrowRight') { setPercent(current + 2); e.preventDefault(); }
       });
 
-      setPercent(50);
+      handle.addEventListener('touchmove', function(e) {
+        if (!isDragging) return;
+        updateSlider(e.touches[0].clientX);
+        e.preventDefault();
+      });
+
+      handle.addEventListener('touchend', onPointerUp);
+
+      // Keyboard support
+      handle.addEventListener('keydown', function(e) {
+        var current = parseInt(handle.getAttribute('aria-valuenow') || '50', 10);
+        if (e.key === 'ArrowLeft') {
+          updateSlider(containerRect.left + (containerRect.width * (current - 5) / 100));
+          e.preventDefault();
+        } else if (e.key === 'ArrowRight') {
+          updateSlider(containerRect.left + (containerRect.width * (current + 5) / 100));
+          e.preventDefault();
+        }
+      });
     })();
   </script>
-
   <!-- How It Works — v24 editorial 3-step -->
   <section class="py-16 sm:py-20 bg-white dark:bg-accent-900/20 overflow-x-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
