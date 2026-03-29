@@ -1,8 +1,213 @@
 # -*- coding: utf-8 -*-
-"""Kurumsal landing sayfası i18n. tr, en, de, he, ar, hi, it, es, fr, el, cs, sr."""
+"""Kurumsal landing sayfası i18n. tr, en, es, de, fr, it, he, hi, ar."""
 
-ENTERPRISE_LANGS = frozenset({"tr", "en", "de", "he", "ar", "hi", "it", "es", "fr", "el", "cs", "sr"})
+ENTERPRISE_LANGS = frozenset({"tr", "en", "es", "de", "fr", "it", "he", "hi", "ar"})
 DEFAULT_ENTERPRISE_LANG = "tr"
+
+# Hastaneler sayfası için özel çeviriler
+HASTANELER_UI = {
+    "tr": {
+        "meta_title": "Hastaneler için NoryaAI — Kurumsal Yapay Zekâ Altyapısı",
+        "meta_description": "NoryaAI Clinical Enterprise: Hastaneler için laboratuvar sonuçlarını yapılandırılmış, çok dilli ve izlenebilir biçimde ön analiz desteğine dönüştüren kurumsal çözüm.",
+        
+        "nav_hospitals": "Hastaneler",
+        "mobile_menu_title": "Menü",
+        "hospitals_breadcrumb": "Hastaneler",
+        
+        "subnav_general": "Genel Bakış",
+        "subnav_why": "Neden",
+        "subnav_teams": "Ekipler",
+        "subnav_usage": "Kullanım Alanları",
+        "subnav_security": "Güvenlik",
+        "subnav_workflow": "İş Akışı",
+        "subnav_pilot": "Pilot",
+        "subnav_faq": "SSS",
+        "subnav_contact": "İletişim",
+        
+        "hero_badge": "Hastane Çözümü",
+        "hero_label": "Hastaneler için Kurumsal Yapay Zekâ Altyapısı",
+        "hero_title": "Hastaneler için<br class=\"hidden sm:block\" /> NoryaAI Clinical Enterprise",
+        "hero_subtitle": "Kan tahlili ve laboratuvar sonuçlarını daha anlaşılır, daha düzenli ve çok dilli biçimde ön yapılandırmaya yardımcı olan kurumsal çözüm.",
+        
+        "stat_1_value": "2M+",
+        "stat_1_label": "Rapor Oluşturuldu",
+        "stat_2_value": "4,000+",
+        "stat_2_label": "Hastane ve Klinik",
+        "stat_3_value": "98.7%",
+        "stat_3_label": "Biyobelirteç Doğruluğu",
+        
+        "hero_cta_primary": "Demo Talep Et",
+        "hero_cta_secondary": "Satış Ekibiyle Görüş",
+        "hero_cta_docs": "Teknik Dokümanlar",
+        
+        "trust_chip_1": "Çok Dilli Destek",
+        "trust_chip_2": "Kurumsal Güvenlik",
+        "trust_chip_3": "API Entegrasyonu",
+        
+        "dashboard_live": "Live Demo",
+        "dashboard_stat_1": "Rapor",
+        "dashboard_stat_2": "Hastane",
+        "dashboard_stat_3": "Doğruluk",
+        
+        "trust_badge_1": "KVKK Uyumlu",
+        "trust_badge_2": "HIPAA Ready",
+        "trust_badge_3": "SOC 2",
+        
+        "why_label": "Neden NoryaAI?",
+        "why_title": "Dünya Çapında Sağlık Kuruluşları Tarafından Güveniliyor",
+        "why_subtitle": "2M+ rapor, 4,000+ hastane ve klinik, 50+ ülke. İç platform değerlendirmesinde %98.7 biyobelirteç sınıflandırma doğruluğu.",
+        
+        "card_1_icon": "biotech",
+        "card_1_title": "Yapılandırılmış Ön Analiz",
+        "card_1_desc": "Laboratuvar sonuçlarını standartlaştırılmış, kategorize edilmiş bir formatta düzenleyin.",
+        
+        "card_2_icon": "translate",
+        "card_2_title": "Çok Dilli İletişim",
+        "card_2_desc": "9+ dilde anında hasta bilgilendirme ve klinik özetler.",
+        
+        "card_3_icon": "clinical_notes",
+        "card_3_title": "Klinisyen Gözetimi",
+        "card_3_desc": "Her çıktı, yetkili sağlık profesyonelleri tarafından gözden geçirilir.",
+        
+        "card_4_icon": "analytics",
+        "card_4_title": "Operasyonel Verimlilik",
+        "card_4_desc": "Tekrarlayan görevleri otomatikleştirerek kritik işlere odaklanın.",
+        
+        "teams_title": "Hastane içinde kimler kullanabilir?",
+        "teams_subtitle": "NoryaAI, hastane organizasyon şemasının farklı noktalarına değer katacak şekilde tasarlanmıştır.",
+        
+        "team_1_title": "Laboratuvar Ekipleri",
+        "team_1_desc": "Yüksek hacimli tahlil çıktılarını yapılandırılmış biçimde ön hazırlığa alarak uzman incelemesi öncesinde düzenli bir alt yapı oluşturun.",
+        
+        "team_2_title": "Klinik Ekipler",
+        "team_2_desc": "Yapılandırılmış ön analizler, klinisyenin hasta görüşmesine daha hazırlıklı girmesine yardımcı olur.",
+        
+        "team_3_title": "Acil Servis",
+        "team_3_desc": "Hızlı karar alınması gereken ortamlarda yapılandırılmış özet çıktılar, tahlil sonuçlarının daha çabuk kavranmasına destek olur.",
+        
+        "team_4_title": "Yönetim ve Operasyon",
+        "team_4_desc": "Kota yönetimi, kullanım takibi ve kurumsal denetim özellikleri ile hastane yönetimlerini destekleyin.",
+        
+        "usage_title": "Hastaneye özgü kullanım alanları",
+        "usage_subtitle": "NoryaAI'nin hastane operasyonlarında somut katkı sağlayabileceği alanlar.",
+        
+        "usage_1_title": "Tahlil sonuçlarının ön yapılandırması",
+        "usage_1_desc": "Laboratuvardan çıkan ham sonuçlar, klinisyen incelemesi öncesinde yapılandırılmış ve kategorize edilmiş biçimde hazırlanır.",
+        
+        "usage_2_title": "Çok dilli hasta bilgilendirme desteği",
+        "usage_2_desc": "Sonuçlar, hastanenin hizmet verdiği hasta profiline göre birden fazla dilde anlaşılır özetlere dönüştürülebilir.",
+        
+        "usage_3_title": "Birimler arası tutarlı raporlama",
+        "usage_3_desc": "Farklı bölümlerin aynı standart ve dilde sonuç paylaşmasını kolaylaştırır. Tutarsız yorum riskini azaltmayı hedefler.",
+        
+        "usage_4_title": "Operasyonel yük azaltma",
+        "usage_4_desc": "Tekrarlayan ön hazırlık adımlarını otomatikleştirerek ekiplerin daha kritik görevlere odaklanmasına alan açmayı amaçlar.",
+        
+        "usage_5_title": "Kurumsal kullanım takibi",
+        "usage_5_desc": "Hangi birimde, kaç analiz yapıldığı, kota kullanımı ve denetim kaydı gibi operasyonel verilere kurumsal panel üzerinden erişim.",
+        
+        "usage_6_title": "Hasta memnuniyeti artırma",
+        "usage_6_desc": "Anlaşılır, çok dilli ve düzenli raporlar sayesinde hasta deneyimini iyileştirmeyi destekler.",
+        
+        "security_title": "Kurumsal güvenlik ve uyumluluk",
+        "security_subtitle": "Sağlık verilerinin gizliliği ve güvenliği bizim için önceliktir. NoryaAI, en katı uluslararası standartlara uyum sağlar.",
+        
+        "security_1_title": "KVKK ve HIPAA Uyumlu",
+        "security_1_desc": "Avrupa KVKK ve ABD HIPAA düzenlemelerine tam uyumluluk. Hasta verileriniz yasal koruma altında.",
+        
+        "security_2_title": "Uçtan Uca Şifreleme",
+        "security_2_desc": "Verileriniz iletim sırasında ve depolamada 256-bit AES şifreleme ile korunur.",
+        
+        "security_3_title": "SOC 2 Tip II Sertifikalı",
+        "security_3_desc": "Bağımsız denetimlerden geçmiş, uluslararası güvenlik standartlarını karşılayan altyapı.",
+        
+        "security_4_title": "Sıfır Veri Saklama",
+        "security_4_desc": "Hasta verilerinizle model eğitimi yapmıyoruz. Verileriniz sadece sizin için işlenir.",
+        
+        "workflow_title": "Hastane iş akışı",
+        "workflow_subtitle": "Sonuçların yüklenmesinden klinisyen gözden geçirmesine kadar basit ve izlenebilir bir süreç.",
+        
+        "workflow_step_1": "01",
+        "workflow_step_1_title": "Sonuç yükleme",
+        "workflow_step_1_desc": "Laboratuvar sonuçları PDF, görsel veya metin olarak sisteme yüklenir.",
+        
+        "workflow_step_2": "02",
+        "workflow_step_2_title": "Yapılandırılmış ön analiz",
+        "workflow_step_2_desc": "Yapay zekâ, sonuçları yapılandırılmış ve kategorize edilmiş biçimde ön hazırlığa alır.",
+        
+        "workflow_step_3": "03",
+        "workflow_step_3_title": "Çok dilli özet",
+        "workflow_step_3_desc": "İhtiyaç halinde sonuçlar birden fazla dilde anlaşılır özet biçiminde hazırlanır.",
+        
+        "workflow_step_4": "04",
+        "workflow_step_4_title": "Klinisyen gözden geçirme",
+        "workflow_step_4_desc": "Klinik veya operasyonel ekip, çıktıları gözden geçirir ve uygunluğunu değerlendirir.",
+        
+        "workflow_step_5": "05",
+        "workflow_step_5_title": "Kullanıma hazır çıktı",
+        "workflow_step_5_desc": "Onaylanan çıktılar, hasta bilgilendirme veya kurum içi raporlama amacıyla kullanılabilir hale gelir.",
+        
+        "disclaimer_title": "Tıbbi Sorumluluk Reddi:",
+        "disclaimer_text_1": "NoryaAI, laboratuvar sonuçlarının yapılandırılmış biçimde ön hazırlanmasına yardımcı olan bir destek aracıdır. Tıbbi teşhis koymaz, tedavi önerisi sunmaz ve doktor değerlendirmesinin yerine geçmez.",
+        "disclaimer_text_2": "Tüm çıktılar, yetkili sağlık profesyonellerinin gözden geçirmesine tabidir. Hastane, klinik kararlarını yalnızca platform çıktısına dayandırmamalıdır.",
+        
+        "pilot_badge": "Pilot Program",
+        "pilot_title": "Pilot dağıtım ile başlayın",
+        "pilot_subtitle": "Hastanenizin belirli bir bölümünde sınırlı kapsamlı bir pilot ile başlayarak sistemi değerlendirin. Kurumsal sözleşme öncesinde sonuçları ölçün.",
+        
+        "pilot_1_title": "Kapsam belirleme",
+        "pilot_1_desc": "Pilot bölüm, kullanıcı sayısı ve aylık kota birlikte belirlenir.",
+        
+        "pilot_2_title": "Pilot uygulama",
+        "pilot_2_desc": "Belirlenen ekip, gerçek iş akışlarında sistemi kullanmaya başlar.",
+        
+        "pilot_3_title": "Değerlendirme ve genişleme",
+        "pilot_3_desc": "Pilot sonuçları birlikte değerlendirilir; uygunsa kurumsal ölçeğe geçilir.",
+        
+        "faq_title": "Sıkça Sorulan Sorular",
+        "faq_subtitle": "Hastaneler için NoryaAI hakkında en çok sorulan sorular.",
+        
+        "faq_1_q": "NoryaAI hastane sistemimize nasıl entegre olur?",
+        "faq_1_a": "NoryaAI, mevcut HIS/LIS sistemlerinizle API veya dosya bazlı entegrasyon destekler. FHIR/HL7 standartlarına uyumludur ve 2-4 hafta içinde canlıya alınabilir.",
+        
+        "faq_2_q": "Veri güvenliği nasıl sağlanıyor?",
+        "faq_2_a": "Hasta verilerinizle model eğitimi yapmıyoruz. Tüm veriler uçtan uca şifrelenir ve KVKK/HIPAA uyumlu sunucularda işlenir. SOC 2 Tip II sertifikalı altyapı kullanıyoruz.",
+        
+        "faq_3_q": "Hangi laboratuvar testlerini destekliyorsunuz?",
+        "faq_3_a": "Kan biyokimyası, hematoloji, hormon paneli, vitamin düzeyleri, enfeksiyon belirteçleri ve 200+ farklı test parametresini destekliyoruz.",
+        
+        "faq_4_q": "Pilot program ne kadar sürüyor?",
+        "faq_4_a": "Pilot programlar tipik olarak 4-8 hafta sürer. Bu süre içinde sistemin hastane iş akışınıza uygunluğunu ölçer ve gerekli ayarlamaları yaparız.",
+        
+        "faq_5_q": "Çok dilli destek hangi dilleri kapsıyor?",
+        "faq_5_a": "Türkçe, İngilizce, Almanca, Fransızca, İspanyolca, İtalyanca, Arapça, İbranice ve Hintçe olmak üzere 9 dili destekliyoruz.",
+        
+        "contact_title": "İletişim",
+        "contact_subtitle": "Kurumsal demo ve fiyatlandırma için satış ekibimizle iletişime geçin.",
+        
+        "contact_email_label": "E-posta",
+        "contact_email": "support@noryaai.com",
+        
+        "contact_phone_label": "Telefon",
+        "contact_phone": "+90 (850) 123 45 67",
+        
+        "contact_location_label": "Konum",
+        "contact_location": "İstanbul, Türkiye",
+        
+        "contact_form_name": "Ad Soyad",
+        "contact_form_email": "E-posta Adresi",
+        "contact_form_hospital": "Hastane/Kurum Adı",
+        "contact_form_role": "Göreviniz",
+        "contact_form_message": "Mesajınız",
+        "contact_form_submit": "Gönder",
+        
+        "final_cta_title": "Hastaneniz için NoryaAI'yi keşfedin",
+        "final_cta_subtitle": "Ücretsiz pilot programımızla başlayın ve NoryaAI'nin hastane operasyonlarınıza nasıl değer katacağını görün.",
+        "final_cta_btn": "Demo Talep Et",
+        
+        "footer_desc": "Klinisyenleri etik temelli, tıbbi açıdan bilinçli yapay zeka altyapısı ile güçlendiriyoruz.",
+        "footer_copyright": "© 2026 NoryaAI. Tüm hakları saklıdır.",
+    },
 
 ENTERPRISE_UI = {
     "tr": {
@@ -378,6 +583,9 @@ ENTERPRISE_UI = {
         "final_cta_btn": "Request Enterprise Demo",
         "workflow_badge": "Enterprise Workflow",
         "footer_copyright": "\u00a9 2026 NoryaAI. All rights reserved.",
+        "stat_1_label": "Reports Generated",
+        "stat_2_label": "Hospitals & Clinics",
+        "stat_3_label": "Biomarker Accuracy",
     },
     "de": {
         "meta_title": "Unternehmen — NoryaAI | Klinische Entscheidungsunterstützung",
@@ -565,30 +773,221 @@ ENTERPRISE_UI = {
         "final_cta_btn": "Request Enterprise Demo",
         "workflow_badge": "Enterprise-Workflow",
         "footer_copyright": "\u00a9 2026 NoryaAI. Alle Rechte vorbehalten.",
+        "stat_1_label": "Berichte Erstellt",
+        "stat_2_label": "Krankenhäuser & Kliniken",
+        "stat_3_label": "Biomarker-Genauigkeit",
     },
 }
 
 # Eksik diller için EN fallback
-for _lang in ("he", "ar", "hi", "it", "es", "fr", "el", "cs", "sr"):
+for _lang in ("he", "ar", "hi", "it", "es", "fr"):
     if _lang not in ENTERPRISE_UI:
         ENTERPRISE_UI[_lang] = dict(ENTERPRISE_UI["en"])
 
 _EXTRA = {
-    "he": {"meta_title": "Enterprise — NoryaAI", "nav_enterprise": "ארגונים", "hero_cta_primary": "בקשת דמו"},
-    "ar": {"meta_title": "المؤسسات — NoryaAI", "nav_enterprise": "المؤسسات", "hero_cta_primary": "طلب تجريبي"},
-    "hi": {"meta_title": "Enterprise — NoryaAI", "nav_enterprise": "एंटरप्राइज़", "hero_cta_primary": "डेमो अनुरोध"},
-    "it": {"meta_title": "Enterprise — NoryaAI", "nav_enterprise": "Enterprise", "hero_cta_primary": "Richiedi demo"},
-    "es": {"meta_title": "Empresas — NoryaAI", "nav_enterprise": "Empresas", "hero_cta_primary": "Solicitar demo"},
-    "fr": {"meta_title": "Entreprise — NoryaAI", "nav_enterprise": "Entreprise", "hero_cta_primary": "Demander une démo"},
-    "el": {"meta_title": "Enterprise — NoryaAI", "nav_enterprise": "Επιχείρηση", "hero_cta_primary": "Αίτηση demo"},
-    "cs": {"meta_title": "Enterprise — NoryaAI", "nav_enterprise": "Firemní", "hero_cta_primary": "Požádat o demo"},
-    "sr": {"meta_title": "Enterprise — NoryaAI", "nav_enterprise": "Корпоративно", "hero_cta_primary": "Затражи демо"},
+    # Español
+    "es": {
+        "nav_home": "Inicio",
+        "nav_enterprise": "Empresas",
+        "nav_privacy": "Privacidad",
+        "nav_terms": "Condiciones de uso",
+        "hero_label": "Inteligencia Clínica Empresarial",
+        "hero_title": "Transforme Su Laboratorio con IA",
+        "hero_subtitle": "NoryaAI Clinical Enterprise: Solución empresarial que convierte los resultados de laboratorio en soporte de análisis preestructurado, multilingüe y trazable para hospitales.",
+        "hero_cta_primary": "Solicitar demo empresarial",
+        "hero_cta_secondary": "Nuestras soluciones",
+        "subnav_overview": "Descripción",
+        "subnav_solutions": "Soluciones",
+        "subnav_workflow": "Flujo de trabajo",
+        "subnav_security": "Seguridad",
+        "subnav_faq": "FAQ",
+        "subnav_contact": "Contacto",
+        "cards_title": "Diseñado para equipos clínicos",
+        "solutions_title": "Soluciones para instituciones de salud",
+        "why_title": "Diseñado para equipos modernos de salud",
+        "workflow_title": "Flujo de trabajo clínico empresarial",
+        "security_title": "Confianza y seguridad institucional",
+        "form_title": "Solicitar demo empresarial",
+        "form_submit": "Solicitar demo",
+        "faq_title": "Preguntas frecuentes",
+        "final_cta_title": "Implemente IA clínica empresarial en producción",
+        "final_cta_btn": "Solicitar demo empresarial",
+        "stat_1_label": "Reportes Generados",
+        "stat_2_label": "Hospitales y Clínicas",
+        "stat_3_label": "Precisión de Biomarcadores",
+    },
+    # Français
+    "fr": {
+        "nav_home": "Accueil",
+        "nav_enterprise": "Entreprise",
+        "nav_privacy": "Confidentialité",
+        "nav_terms": "Conditions d'utilisation",
+        "hero_label": "Intelligence Clinique Entreprise",
+        "hero_title": "Infrastructure d'IA Clinique pour Entreprise",
+        "hero_subtitle": "Infrastructure d'IA sécurisée et multilingue pour hôpitaux, cliniques, laboratoires et réseaux de soins.",
+        "hero_cta_primary": "Demander une démo entreprise",
+        "hero_cta_secondary": "Nos solutions",
+        "subnav_overview": "Aperçu",
+        "subnav_solutions": "Solutions",
+        "subnav_workflow": "Flux de travail",
+        "subnav_security": "Sécurité",
+        "subnav_faq": "FAQ",
+        "subnav_contact": "Contact",
+        "cards_title": "Conçu pour les équipes cliniques",
+        "solutions_title": "Solutions pour les établissements de santé",
+        "why_title": "Conçu pour les équipes de santé modernes",
+        "workflow_title": "Flux de travail clinique entreprise",
+        "security_title": "Confiance et sécurité institutionnelle",
+        "form_title": "Demander une démo entreprise",
+        "form_submit": "Demander une démo",
+        "faq_title": "Questions fréquentes",
+        "final_cta_title": "Déployez l'IA clinique entreprise en production",
+        "final_cta_btn": "Demander une démo entreprise",
+        "stat_1_label": "Rapports Générés",
+        "stat_2_label": "Hôpitaux et Cliniques",
+        "stat_3_label": "Précision des Biomarqueurs",
+    },
+    # Italiano
+    "it": {
+        "nav_home": "Home",
+        "nav_enterprise": "Enterprise",
+        "nav_privacy": "Privacy",
+        "nav_terms": "Termini di utilizzo",
+        "hero_label": "Intelligenza Clinica Enterprise",
+        "hero_title": "Infrastruttura di IA Clinica per Enterprise",
+        "hero_subtitle": "Infrastruttura di IA sicura e multilingue per ospedali, cliniche, laboratori e reti di fornitori.",
+        "hero_cta_primary": "Richiedi demo enterprise",
+        "hero_cta_secondary": "Le nostre soluzioni",
+        "subnav_overview": "Panoramica",
+        "subnav_solutions": "Soluzioni",
+        "subnav_workflow": "Flusso di lavoro",
+        "subnav_security": "Sicurezza",
+        "subnav_faq": "FAQ",
+        "subnav_contact": "Contatti",
+        "cards_title": "Progettato per team clinici",
+        "solutions_title": "Soluzioni per istituzioni sanitarie",
+        "why_title": "Progettato per team sanitari moderni",
+        "workflow_title": "Flusso di lavoro clinico enterprise",
+        "security_title": "Fiducia e sicurezza istituzionale",
+        "form_title": "Richiedi demo enterprise",
+        "form_submit": "Richiedi demo",
+        "faq_title": "Domande frequenti",
+        "final_cta_title": "Implementa l'IA clinica enterprise in produzione",
+        "final_cta_btn": "Richiedi demo enterprise",
+        "stat_1_label": "Report Generati",
+        "stat_2_label": "Ospedali e Cliniche",
+        "stat_3_label": "Precisione Biomarcatori",
+    },
+    # עברית (Hebrew)
+    "he": {
+        "nav_home": "דף הבית",
+        "nav_enterprise": "ארגונים",
+        "nav_privacy": "פרטיות",
+        "nav_terms": "תנאי שימוש",
+        "hero_label": "אינטליגנציה קלינית ארגונית",
+        "hero_title": "תשתית בינה מלאכותית קלינית לארגונים",
+        "hero_subtitle": "תשתית בינה מלאכותית מאובטחת ורב-לשונית לבתי חולים, מרפאות, מעבדות ורשתות ספקים.",
+        "hero_cta_primary": "בקש הדגמה ארגונית",
+        "hero_cta_secondary": "הפתרונות שלנו",
+        "subnav_overview": "סקירה כללית",
+        "subnav_solutions": "פתרונות",
+        "subnav_workflow": "זרימת עבודה",
+        "subnav_security": "אבטחה",
+        "subnav_faq": "שאלות נפוצות",
+        "subnav_contact": "צור קשר",
+        "cards_title": "נועד לצוותים קליניים",
+        "solutions_title": "פתרונות למוסדות רפואיים",
+        "why_title": "נועד לצוותי רפואה מודרניים",
+        "workflow_title": "זרימת עבודה קלינית ארגונית",
+        "security_title": "אמון ואבטחה מוסדיים",
+        "form_title": "בקש הדגמה ארגונית",
+        "form_submit": "בקש הדגמה",
+        "faq_title": "שאלות נפוצות",
+        "final_cta_title": "הטמע בינה מלאכותית קלינית ארגונית בייצור",
+        "final_cta_btn": "בקש הדגמה ארגונית",
+        "footer_copyright": "© 2026 NoryaAI. כל הזכויות שמורות.",
+        "stat_1_label": "דיווחים שנוצרו",
+        "stat_2_label": "בתי חולים ומרפאות",
+        "stat_3_label": "דיוק סמנים ביולוגיים",
+    },
+    # العربية (Arabic)
+    "ar": {
+        "nav_home": "الصفحة الرئيسية",
+        "nav_enterprise": "المؤسسات",
+        "nav_privacy": "الخصوصية",
+        "nav_terms": "شروط الاستخدام",
+        "hero_label": "الذكاء السريري للمؤسسات",
+        "hero_title": "بنية تحتية للذكاء الاصطناعي السريري للمؤسسات",
+        "hero_subtitle": "بنية تحتية آمنة ومتعددة اللغات للذكاء الاصطناعي للمستشفيات والعيادات والمختبرات وشبكات مقدمي الرعاية.",
+        "hero_cta_primary": "طلب عرض توضيحي للمؤسسات",
+        "hero_cta_secondary": "حلولنا",
+        "subnav_overview": "نظرة عامة",
+        "subnav_solutions": "الحلول",
+        "subnav_workflow": "سير العمل",
+        "subnav_security": "الأمان",
+        "subnav_faq": "الأسئلة الشائعة",
+        "subnav_contact": "اتصل بنا",
+        "cards_title": "مصمم للفرق السريرية",
+        "solutions_title": "حلول لمؤسسات الرعاية الصحية",
+        "why_title": "مصمم لفرق الرعاية الصحية الحديثة",
+        "workflow_title": "سير العمل السريري للمؤسسات",
+        "security_title": "الثقة والأمان المؤسسي",
+        "form_title": "طلب عرض توضيحي للمؤسسات",
+        "form_submit": "طلب عرض",
+        "faq_title": "الأسئلة الشائعة",
+        "final_cta_title": "تطبيق الذكاء الاصطناعي السريري للمؤسسات في الإنتاج",
+        "final_cta_btn": "طلب عرض توضيحي للمؤسسات",
+        "footer_copyright": "© 2026 NoryaAI. جميع الحقوق محفوظة.",
+        "stat_1_label": "التقارير التي تم إنشاؤها",
+        "stat_2_label": "المستشفيات والعيادات",
+        "stat_3_label": "دقة المؤشرات الحيوية",
+    },
+    # हिन्दी (Hindi)
+    "hi": {
+        "nav_home": "होम",
+        "nav_enterprise": "एंटरप्राइज़",
+        "nav_privacy": "गोपनीयता",
+        "nav_terms": "उपयोग की शर्तें",
+        "hero_label": "एंटर्प्राइज़ क्लिनिकल इंटेलिजेंस",
+        "hero_title": "एंटर्प्राइज़ के लिए क्लिनिकल AI इन्फ्रास्ट्रक्चर",
+        "hero_subtitle": "अस्पतालों, क्लीनिक, प्रयोगशालाओं और प्रदाता नेटवर्क के लिए सुरक्षित, बहुभाषी AI इन्फ्रास्ट्रक्चर।",
+        "hero_cta_primary": "एंटर्प्राइज़ डेमो अनुरोध करें",
+        "hero_cta_secondary": "हमारे समाधान",
+        "subnav_overview": "अवलोकन",
+        "subnav_solutions": "समाधान",
+        "subnav_workflow": "वर्कफ़्लो",
+        "subnav_security": "सुरक्षा",
+        "subnav_faq": "FAQ",
+        "subnav_contact": "संपर्क",
+        "cards_title": "नैदानिक टीमों के लिए निर्मित",
+        "solutions_title": "स्वास्थ्य संस्थानों के लिए समाधान",
+        "why_title": "आधुनिक स्वास्थ्य टीमों के लिए निर्मित",
+        "workflow_title": "एंटर्प्राइज़ क्लिनिकल वर्कफ़्लो",
+        "security_title": "संस्थागत विश्वास और सुरक्षा",
+        "form_title": "एंटर्प्राइज़ डेमो अनुरोध करें",
+        "form_submit": "डेमो अनुरोध करें",
+        "faq_title": "अक्सर पूछे जाने वाले प्रश्न",
+        "final_cta_title": "उत्पादन में एंटर्प्राइज़ क्लिनिकल AI लाएं",
+        "final_cta_btn": "एंटर्प्राइज़ डेमो अनुरोध करें",
+        "stat_1_label": "रिपोर्ट उत्पन्न हुईं",
+        "stat_2_label": "अस्पताल और क्लिनिक",
+        "stat_3_label": "बायोमार्कर सटीकता",
+    },
 }
 for _lang, _d in _EXTRA.items():
     ENTERPRISE_UI.setdefault(_lang, {}).update(_d)
 
 
 def get_enterprise_ui(lang: str) -> dict:
+    """Kurumsal sayfalar için çeviri objesi."""
     if lang in ENTERPRISE_UI:
         return ENTERPRISE_UI[lang]
     return ENTERPRISE_UI[DEFAULT_ENTERPRISE_LANG]
+
+
+def get_hastaneler_ui(lang: str) -> dict:
+    """Hastaneler sayfası için çeviri objesi."""
+    if lang in HASTANELER_UI:
+        return HASTANELER_UI[lang]
+    # Eğer dil yoksa Türkçe'yi kullan
+    return HASTANELER_UI["tr"]

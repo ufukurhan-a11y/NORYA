@@ -108,7 +108,7 @@
       <nav class="hidden md:flex items-center gap-8">
         <a href="/" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_home }}</a>
         <a href="/kurumsal" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_enterprise }}</a>
-        <a href="/hastaneler-icin" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">Hastaneler</a>
+        <a href="/hastaneler-icin" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">{{ t.nav_hospitals }}</a>
       </nav>
       <!-- Language Switcher -->
       <style>
@@ -222,15 +222,15 @@
   <div class="hosp-subnav-wrap">
     <div class="max-w-7xl mx-auto px-4 sm:px-8">
       <nav class="hosp-subnav" aria-label="Sayfa bölümleri">
-        <a href="#genel" class="hosp-subnav-link active" data-subnav-link>Genel Bakış</a>
-        <a href="#neden" class="hosp-subnav-link" data-subnav-link>Neden</a>
-        <a href="#ekipler" class="hosp-subnav-link" data-subnav-link>Ekipler</a>
-        <a href="#kullanim" class="hosp-subnav-link" data-subnav-link>Kullanım Alanları</a>
-        <a href="#guvenlik" class="hosp-subnav-link" data-subnav-link>Güvenlik</a>
-        <a href="#isakisi" class="hosp-subnav-link" data-subnav-link>İş Akışı</a>
-        <a href="#pilot" class="hosp-subnav-link" data-subnav-link>Pilot</a>
-        <a href="#sss" class="hosp-subnav-link" data-subnav-link>SSS</a>
-        <a href="#iletisim" class="hosp-subnav-link" data-subnav-link>İletişim</a>
+        <a href="#genel" class="hosp-subnav-link active" data-subnav-link>{{ t.subnav_general }}</a>
+        <a href="#neden" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_why }}</a>
+        <a href="#ekipler" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_teams }}</a>
+        <a href="#kullanim" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_usage }}</a>
+        <a href="#guvenlik" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_security }}</a>
+        <a href="#isakisi" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_workflow }}</a>
+        <a href="#pilot" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_pilot }}</a>
+        <a href="#sss" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_faq }}</a>
+        <a href="#iletisim" class="hosp-subnav-link" data-subnav-link>{{ t.subnav_contact }}</a>
       </nav>
     </div>
   </div>
@@ -239,14 +239,14 @@
   <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/30 z-[60] hidden" onclick="toggleMobileMenu()"></div>
   <aside id="mobile-menu" class="fixed top-0 right-0 h-full w-[min(86vw,360px)] bg-surface-container-lowest z-[61] shadow-2xl p-6 transform translate-x-full transition-transform duration-300 flex flex-col">
     <div class="flex justify-between items-center mb-6">
-      <span class="font-headline font-bold text-lg">Menü</span>
+      <span class="font-headline font-bold text-lg">{{ t.mobile_menu_title }}</span>
       <button onclick="toggleMobileMenu()" class="w-9 h-9 rounded-lg border border-outline-variant/20 flex items-center justify-center">
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
     <a href="/" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_home }}</a>
     <a href="/kurumsal" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_enterprise }}</a>
-    <a href="/hastaneler-icin" class="block py-3 px-4 rounded-xl font-bold text-primary bg-primary/5">Hastaneler</a>
+    <a href="/hastaneler-icin" class="block py-3 px-4 rounded-xl font-bold text-primary bg-primary/5">{{ t.hospitals_breadcrumb }}</a>
     <a href="#iletisim" onclick="toggleMobileMenu()" class="mt-4 block py-3 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-center shadow-lg">{{ t.hero_cta_primary }}</a>
   </aside>
 
