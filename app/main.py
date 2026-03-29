@@ -2005,12 +2005,20 @@ def kurumsal_page(request: Request):
 
 
 @app.get("/hastaneler-icin", response_class=HTMLResponse)
-def hastaneler_icin_page(request: Request):
-    """Hastaneye özel kurumsal landing page (Türkçe)."""
+def hastaneler_icin_page(request: Request, lang: str = "tr"):
+    """Hastaneye özel kurumsal landing page (multi-lang)."""
+    from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui, _enterprise_lang_from_request
+    lang = _enterprise_lang_from_request(request)
+    t = get_enterprise_ui(lang)
     base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
         "enterprise/hastaneler.html",
-        {"request": request, "canonical_url": f"{base_url}/hastaneler-icin"},
+        {
+            "request": request,
+            "lang": lang,
+            "t": t,
+            "canonical_url": f"{base_url}/hastaneler-icin",
+        },
     )
 
 
