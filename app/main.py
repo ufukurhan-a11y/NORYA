@@ -4215,7 +4215,11 @@ def analyze_usage(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Giriş yapmış kullanıcının bu ayki kullanım bilgisi (frontend için)."""
+    """Giriş yapmış kullanıcının bu ayki kullanım bilgisi (frontend için).
+    SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
+    """
+    from fastapi.responses import JSONResponse
+    
     plan = getattr(user, "plan", "free") or "free"
     limit = _aylik_limit(plan)
     kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
@@ -4230,14 +4234,17 @@ def analyze_usage(
         ).first()
     )
     last_analysis_at = last_rec.created_at.isoformat() + "Z" if (last_rec and last_rec.created_at) else None
-    return {
-        "kullanilan": kullanilan,
-        "limit": limit,
-        "plan": plan,
-        "extra_credits": extra,
-        "first_analysis_free": total_ever == 0,
-        "last_analysis_at": last_analysis_at,
-    }
+    return JSONResponse(
+        content={
+            "kullanilan": kullanilan,
+            "limit": limit,
+            "plan": plan,
+            "extra_credits": extra,
+            "first_analysis_free": total_ever == 0,
+            "last_analysis_at": last_analysis_at,
+        },
+        headers={"X-Robots-Tag": "noindex, nofollow"},
+    )
 
 
 @app.get("/analyze/history", response_model=list[AnalysisHistoryItem])
@@ -4249,6 +4256,11 @@ def analyze_history(
     q: str | None = Query(None, description="Arama (giriş veya sonuç metninde)"),
     favorite_only: bool = Query(False, description="Sadece favoriler"),
 ):
+    """Kullanıcının analiz geçmişini döner.
+    SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
+    """
+    from fastapi.responses import JSONResponse
+    
     stmt = (
         select(AnalysisRecord)
         .where(AnalysisRecord.user_id == user.id)
@@ -4265,7 +4277,7 @@ def analyze_history(
             or_(AnalysisRecord.input_text.contains(q), AnalysisRecord.result_text.contains(q))
         )
     rows = list(db.exec(stmt).all())
-    return [
+    data = [
         AnalysisHistoryItem(
             id=r.id or 0,
             input_preview=(r.input_text[:120] + "…") if len(r.input_text) > 120 else r.input_text,
@@ -4276,6 +4288,12 @@ def analyze_history(
         )
         for r in rows
     ]
+    return JSONResponse(
+        content=data,
+        headers={
+            "X-Robots-Tag": "noindex, nofollow",
+        },
+    )
 
 
 @app.get("/analyze/export")
@@ -4283,7 +4301,11 @@ def analyze_export(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Kullanıcının tüm analizlerini JSON olarak döner (KVKK/GDPR veri taşınabilirliği)."""
+    """Kullanıcının tüm analizlerini JSON olarak döner (KVKK/GDPR veri taşınabilirliği).
+    SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
+    """
+    from fastapi.responses import JSONResponse
+    
     stmt = (
         select(AnalysisRecord)
         .where(AnalysisRecord.user_id == user.id)
@@ -4304,11 +4326,13 @@ def analyze_export(
             for r in rows
         ],
     }
-    from fastapi.responses import JSONResponse
     return JSONResponse(
         content=data,
         media_type="application/json",
-        headers={"Content-Disposition": "attachment; filename=norya-verilerim.json"},
+        headers={
+            "Content-Disposition": "attachment; filename=norya-verilerim.json",
+            "X-Robots-Tag": "noindex, nofollow",
+        },
     )
 
 
@@ -4318,18 +4342,26 @@ def analyze_history_detail(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
+    """Kullanıcının tek bir analiz detayını döner.
+    SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
+    """
+    from fastapi.responses import JSONResponse
+    
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec or rec.user_id != (user.id or 0):
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
-    return AnalysisDetail(
-        id=rec.id or 0,
-        input_text=rec.input_text,
-        result_text=rec.result_text,
-        source=rec.source,
-        created_at=rec.created_at.isoformat() if hasattr(rec.created_at, "isoformat") else str(rec.created_at),
-        doctor_notes=getattr(rec, "doctor_notes", None),
-        is_favorite=getattr(rec, "is_favorite", False),
-        plan_type=getattr(rec, "plan_type", None) or "single",
+    return JSONResponse(
+        content=AnalysisDetail(
+            id=rec.id or 0,
+            input_text=rec.input_text,
+            result_text=rec.result_text,
+            source=rec.source,
+            created_at=rec.created_at.isoformat() if hasattr(rec.created_at, "isoformat") else str(rec.created_at),
+            doctor_notes=getattr(rec, "doctor_notes", None),
+            is_favorite=getattr(rec, "is_favorite", False),
+            plan_type=getattr(rec, "plan_type", None) or "single",
+        ).model_dump(),
+        headers={"X-Robots-Tag": "noindex, nofollow"},
     )
 
 
@@ -4339,7 +4371,11 @@ def analyze_history_toggle_favorite(
     user: User = Depends(get_current_user),
     db: Session = Depends(get_db),
 ):
-    """Favori işaretini aç/kapa."""
+    """Favori işaretini aç/kapa.
+    SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
+    """
+    from fastapi.responses import JSONResponse
+    
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec or rec.user_id != (user.id or 0):
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
@@ -4347,7 +4383,10 @@ def analyze_history_toggle_favorite(
     db.add(rec)
     db.commit()
     db.refresh(rec)
-    return {"is_favorite": getattr(rec, "is_favorite", False)}
+    return JSONResponse(
+        content={"is_favorite": getattr(rec, "is_favorite", False)},
+        headers={"X-Robots-Tag": "noindex, nofollow"},
+    )
 
 
 def _public_base_url_for_pdf_verify(request: Request) -> str:
@@ -5732,7 +5771,11 @@ def payment_success_page(
     verify_tag: str = Query("", description="1 ise sadece tag doğrulama; conversion tetiklenmez"),
 ):
     """Başarılı ödeme sonrası sayfa. merchant_oid varsa polling ile premium aktivasyonu beklenir.
-    Global tag (AW-18004536281) her zaman yüklenir; conversion sadece API paid/premium_active + gerçek transaction_id ile."""
+    Global tag (AW-18004536281) her zaman yüklenir; conversion sadece API paid/premium_active + gerçek transaction_id ile.
+    SEO: noindex, nofollow — kullanıcıya özel ödeme sonucu sayfası.
+    """
+    from fastapi.responses import HTMLResponse as FastHTMLResponse
+    
     base = _paytr_canonical_base(request)
     # API polling aynı origin'e gitsin (localhost'ta CSP engeli olmasın; production'da da same-origin)
     api_base = str(request.base_url).rstrip("/")
@@ -5766,6 +5809,9 @@ def payment_success_page(
     is_verify_tag = (verify_tag or "").strip() == "1"
     data_verify_val = "1" if is_verify_tag else ""
 
+    # SEO noindex meta tag
+    noindex_meta = '<meta name="robots" content="noindex,nofollow" />'
+
     if not (merchant_oid and merchant_oid.strip()):
         # merchant_oid yok: yine de global tag yüklü; verify_tag=1 ise konsola gtag/dataLayer durumu yazılır
         verify_script = ""
@@ -5782,6 +5828,7 @@ def payment_success_page(
         html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
+{noindex_meta}
 {gtag_script}
 <title>{title} – {BRAND_NAME}</title>
 <style>
@@ -5804,7 +5851,7 @@ def payment_success_page(
   </div>
 </body>
 </html>"""
-        return HTMLResponse(html)
+        return HTMLResponse(html, headers={"X-Robots-Tag": "noindex, nofollow"})
 
     oid = merchant_oid.strip()
     log.info(
@@ -6098,7 +6145,9 @@ def payment_failed_page(
     request: Request,
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
 ):
-    """Ödeme tamamlanamadı sayfası. Tüm dillerde ve mobil uyumlu."""
+    """Ödeme tamamlanamadı sayfası. Tüm dillerde ve mobil uyumlu.
+    SEO: noindex, nofollow — kullanıcıya özel ödeme sonucu sayfası.
+    """
     base = _paytr_canonical_base(request)
     lang = (lang or "tr").lower()[:2]
     if lang not in ("tr", "en", "de", "fr", "it", "es"):
@@ -6108,9 +6157,14 @@ def payment_failed_page(
     msg = t["failed_message"]
     retry_text = t["failed_retry"]
     pricing_text = t["failed_pricing"]
+    
+    # SEO noindex meta tag
+    noindex_meta = '<meta name="robots" content="noindex,nofollow" />'
+    
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
+{noindex_meta}
 <title>{title} – {BRAND_NAME}</title>
 <style>
   body {{ font-family: system-ui, sans-serif; margin: 0; padding: max(16px, env(safe-area-inset-top)); padding-bottom: max(24px, env(safe-area-inset-bottom)); background: linear-gradient(165deg, #0c1222 0%, #0f172a 50%); color: #e2e8f0; min-height: 100vh; min-height: 100dvh; display: flex; align-items: center; justify-content: center; -webkit-tap-highlight-color: transparent; }}
@@ -6135,7 +6189,7 @@ def payment_failed_page(
   </div>
 </body>
 </html>"""
-    return HTMLResponse(html)
+    return HTMLResponse(html, headers={"X-Robots-Tag": "noindex, nofollow"})
 
 
 # --- PayTR callback (Bildirim URL): public, auth yok; POST ile PayTR sunucusu bildirim gönderir; başarıda plain text "OK" döner. ---
@@ -7330,6 +7384,91 @@ def ai_plugin_manifest(request: Request):
     })
 
 
+# ── SEO: Public URL filter helper ─────────────────────────────────────────────
+# Sitemap ve canonical/hreflang üretiminde private URL'leri filtrelemek için merkezi helper
+
+_PRIVATE_PATH_PREFIXES = (
+    "/admin",
+    "/login",
+    "/private",
+    "/search",
+    "/analyze",  # /analyze, /analyze/export, /analyze/history, /analyze/usage
+    "/enterprise",
+    "/pay",
+    "/payment",
+    "/verify",
+    "/api",
+    "/v1",
+    "/report",
+    "/chat",
+)
+
+_PRIVATE_PATH_EXACT = (
+    "/payment/success",
+    "/payment/failed",
+)
+
+_PRIVATE_PATH_CONTAINS = (
+    "/history/",
+    "/export",
+    "/usage",
+    "/share/",
+    "/pdf",
+    "/callback",
+    "/webhook",
+    "/grant",
+    "/token",
+    "/init",
+    "/subscribe",
+    "/unsubscribe",
+)
+
+
+def is_public_indexable_url(path: str) -> bool:
+    """
+    SEO: URL'in sitemap'te ve canonical/hreflang'de yer alıp almaması gerektiğini belirler.
+    
+    Public indexable URL'ler:
+    - Ana sayfa, landing pages, pricing, how-it-works
+    - Blog index ve blog post sayfaları
+    - SEO landing pages (kan-tahlili-sonucu, blood-test-results, vb.)
+    - Compare pages, tools, sample reports
+    - Legal pages (gizlilik, kvkk, iade, vb.)
+    - Public kurumsal sayfalar (about, contact, science, trust, vb.)
+    
+    Private (non-indexable) URL'ler:
+    - Admin, auth, login
+    - /analyze/* (user-specific analysis pages)
+    - /payment/* (success, failed, callback)
+    - /verify/* (QR-based report verification)
+    - /api/*, /v1/* (API endpoints)
+    - /enterprise/* (B2B pages)
+    - /report (authenticated report view)
+    
+    Returns:
+        True: URL sitemap'e eklenebilir, canonical/hreflang'de kullanılabilir
+        False: URL private, sitemap'e eklenmemeli, noindex gerekebilir
+    """
+    path = path.strip().lower()
+    
+    # Exact match kontrolü (özel durumlar)
+    if path in _PRIVATE_PATH_EXACT:
+        return False
+    
+    # Prefix kontrolü
+    for prefix in _PRIVATE_PATH_PREFIXES:
+        if path == prefix or path.startswith(prefix + "/") or path.startswith(prefix + "?"):
+            return False
+    
+    # Contains kontrolü (dinamik parametreli URL'ler)
+    for contains in _PRIVATE_PATH_CONTAINS:
+        if contains in path:
+            return False
+    
+    # Tüm check'lerden geçtiyse public indexable URL
+    return True
+
+
 # SEO: robots.txt ve sitemap.xml — catch-all /{lang} rotasından ÖNCE tanımlanmalı (yoksa /sitemap.xml -> 404)
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt(request: Request):
@@ -7344,13 +7483,14 @@ def robots_txt(request: Request):
         "Disallow: /login/\n"
         "Disallow: /private/\n"
         "Disallow: /search/\n"
-        "Disallow: /analyze/history\n"
-        "Disallow: /analyze/usage\n"
-        "Disallow: /analyze/export\n"
+        "Disallow: /analyze/\n"
         "Disallow: /enterprise/\n"
         "Disallow: /pay\n"
-        "Disallow: /payment\n"
+        "Disallow: /payment/\n"
         "Disallow: /verify/\n"
+        "Disallow: /api/\n"
+        "Disallow: /v1/\n"
+        "Disallow: /report\n"
         "\n# AI Crawlers — explicitly allowed\n"
         "User-agent: GPTBot\n"
         "Allow: /\n"
@@ -7390,11 +7530,17 @@ def sitemap_xml(request: Request):
     - /en/blog, /de/blog, /it/blog, /fr/blog index sayfaları (ve BLOG_LANGS_PREMIUM) dahil.
     - Tüm blog post URL'leri (tüm diller) otomatik eklenir.
     - lastmod = makale updatedAt (last_updated), yoksa published_at.
+    - Sadece public indexable URL'ler eklenir (private route'lar filtrelenir).
     """
     base_url = str(request.base_url).rstrip("/")
     urls: list[str] = []
 
     def add(loc: str, priority: str = "0.8", changefreq: str = "weekly", lastmod: str | None = None):
+        # Sitemap'e eklemeden önce URL'in public indexable olduğundan emin ol
+        # Base URL'den path'i çıkar ve kontrol et
+        path = loc.replace(base_url, "") or "/"
+        if not is_public_indexable_url(path):
+            return  # Private URL'leri sitemap'e ekleme
         last = f"<lastmod>{lastmod}</lastmod>" if lastmod else ""
         urls.append(f"  <url><loc>{loc}</loc>{last}<changefreq>{changefreq}</changefreq><priority>{priority}</priority></url>")
 

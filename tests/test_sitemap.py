@@ -3,6 +3,94 @@ import re
 from fastapi.testclient import TestClient
 
 
+def test_is_public_indexable_url_helper():
+    """is_public_indexable_url helper'ı private URL'leri doğru şekilde filtrelemeli."""
+    from app.main import is_public_indexable_url
+    
+    # Public URL'ler True dönmeli
+    public_urls = [
+        "/",
+        "/en",
+        "/de",
+        "/tr",
+        "/pricing",
+        "/how-it-works",
+        "/about",
+        "/contact",
+        "/for-doctors",
+        "/for-clinics",
+        "/for-hospitals",
+        "/en/blog",
+        "/en/blog/sample-post",
+        "/tr/kan-tahlili-sonucu",
+        "/en/blood-test-results",
+        "/legal/gizlilik",
+        "/legal/kvkk",
+        "/science",
+        "/trust",
+        "/methodology",
+        "/medical-review",
+        "/transparency",
+        "/technology",
+        "/security",
+        "/enterprise-security",
+        "/clinical-demo",
+    ]
+    for url in public_urls:
+        assert is_public_indexable_url(url) is True, f"'{url}' public indexable olmalı"
+    
+    # Private URL'ler False dönmeli
+    private_urls = [
+        "/admin",
+        "/admin/",
+        "/admin/dashboard",
+        "/login",
+        "/login/",
+        "/private",
+        "/search",
+        "/analyze",
+        "/analyze/",
+        "/analyze/export",
+        "/analyze/history",
+        "/analyze/history/123",
+        "/analyze/usage",
+        "/enterprise",
+        "/enterprise/",
+        "/pay",
+        "/payment",
+        "/payment/",
+        "/payment/success",
+        "/payment/failed",
+        "/payment/callback",
+        "/verify",
+        "/verify/",
+        "/verify/abc123",
+        "/api",
+        "/api/",
+        "/api/v1/analyze",
+        "/v1",
+        "/v1/",
+        "/report",
+        "/chat",
+        "/chat/",
+        "/history/123",
+        "/export",
+        "/usage",
+        "/share/abc123",
+        "/pdf",
+        "/pdf/download",
+        "/callback",
+        "/webhook",
+        "/grant",
+        "/token",
+        "/init",
+        "/subscribe",
+        "/unsubscribe",
+    ]
+    for url in private_urls:
+        assert is_public_indexable_url(url) is False, f"'{url}' private olmalı ve sitemap'te yer almamalı"
+
+
 def test_robots_txt_contains_sitemap_url(client: TestClient):
     """robots.txt içinde Sitemap: https://noryaai.com/sitemap.xml satırı olmalı."""
     r = client.get("/robots.txt")
@@ -10,6 +98,61 @@ def test_robots_txt_contains_sitemap_url(client: TestClient):
     text = r.text
     assert "Sitemap:" in text
     assert "https://noryaai.com/sitemap.xml" in text
+
+
+def test_robots_txt_disallows_private_routes(client: TestClient):
+    """robots.txt içinde private route'lar Disallow edilmeli."""
+    r = client.get("/robots.txt")
+    assert r.status_code == 200
+    text = r.text
+    # Private route'lar disallow edilmeli
+    assert "Disallow: /admin/" in text
+    assert "Disallow: /analyze/" in text
+    assert "Disallow: /payment/" in text
+    assert "Disallow: /verify/" in text
+    assert "Disallow: /api/" in text
+    assert "Disallow: /v1/" in text
+
+
+def test_sitemap_xml_does_not_contain_private_routes(client: TestClient):
+    """sitemap.xml içinde private route'lar (/analyze/export, /payment/success, vb.) olmamalı."""
+    r = client.get("/sitemap.xml")
+    assert r.status_code == 200
+    body = r.text
+    
+    # Private URL'ler sitemap'te olmamalı
+    private_paths = [
+        "/analyze/export",
+        "/analyze/history",
+        "/analyze/usage",
+        "/payment/success",
+        "/payment/failed",
+        "/verify/",
+        "/admin",
+        "/api/",
+    ]
+    for path in private_paths:
+        assert path not in body, f"sitemap.xml içinde private route '{path}' bulunmamalı"
+
+
+def test_payment_success_has_noindex_header(client: TestClient):
+    """/payment/success sayfası noindex, nofollow header ve meta tag içermeli."""
+    r = client.get("/payment/success")
+    assert r.status_code == 200
+    # X-Robots-Tag header kontrolü
+    assert "noindex" in r.headers.get("X-Robots-Tag", "").lower() or "noindex" in r.text.lower()
+    # Meta tag kontrolü
+    assert '<meta name="robots" content="noindex,nofollow"' in r.text or "noindex" in r.text
+
+
+def test_payment_failed_has_noindex_header(client: TestClient):
+    """/payment/failed sayfası noindex, nofollow header ve meta tag içermeli."""
+    r = client.get("/payment/failed")
+    assert r.status_code == 200
+    # X-Robots-Tag header kontrolü
+    assert "noindex" in r.headers.get("X-Robots-Tag", "").lower() or "noindex" in r.text.lower()
+    # Meta tag kontrolü
+    assert '<meta name="robots" content="noindex,nofollow"' in r.text or "noindex" in r.text
 
 
 def test_sitemap_xml_contains_blog_index_pages(client: TestClient):

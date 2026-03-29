@@ -1,3 +1,80 @@
+# NoryaAI robots.txt
+# Public SEO sayfalarına izin verilir, private/auth route'lar engellenir
+
 User-agent: *
 Allow: /
+
+# Private/Auth routes - Google indexlememeli
+Disallow: /admin/
+Disallow: /login/
+Disallow: /private/
+Disallow: /search/
+Disallow: /analyze/
+Disallow: /enterprise/
+Disallow: /pay
+Disallow: /payment/
+Disallow: /verify/
+Disallow: /api/
+Disallow: /v1/
+Disallow: /report
+Disallow: /chat/
+
+# AI Crawlers — explicitly allowed for public content
+User-agent: GPTBot
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+User-agent: ChatGPT-User
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+User-agent: Google-Extended
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+User-agent: Anthropic-ai
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+User-agent: Claude-Bot
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+User-agent: ClaudeBot
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+User-agent: PerplexityBot
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+User-agent: Omgilibot
+Allow: /
+Disallow: /admin/
+Disallow: /analyze/
+Disallow: /payment/
+Disallow: /api/
+
+# Sitemap
 Sitemap: https://noryaai.com/sitemap.xml
