@@ -2007,8 +2007,11 @@ def kurumsal_page(request: Request):
 @app.get("/hastaneler-icin", response_class=HTMLResponse)
 def hastaneler_icin_page(request: Request, lang: str = "tr"):
     """Hastaneye özel kurumsal landing page (multi-lang)."""
-    from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui, _enterprise_lang_from_request
+    from app.enterprise_i18n import ENTERPRISE_LANGS, get_enterprise_ui
+    from app.main import _enterprise_lang_from_request
     lang = _enterprise_lang_from_request(request)
+    if lang not in ENTERPRISE_LANGS:
+        lang = "tr"
     t = get_enterprise_ui(lang)
     base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
