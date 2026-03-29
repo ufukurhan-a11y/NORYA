@@ -389,19 +389,19 @@
         <div class="py-6 sm:py-8 px-6 sm:px-10 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
           <div class="flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-12 gap-y-4">
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">translate</span> 9+ Dilde Destek
+              <span class="material-symbols-outlined text-teal-300 text-xl">translate</span> {{ t.trust_chip_1 }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">account_tree</span> Kurumsal İş Akışı
+              <span class="material-symbols-outlined text-teal-300 text-xl">account_tree</span> {{ t.trust_chip_2 }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">clinical_notes</span> Klinik Onay Sistemi
+              <span class="material-symbols-outlined text-teal-300 text-xl">clinical_notes</span> {{ t.trust_chip_3 }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">history</span> Tam İzlenebilirlik
+              <span class="material-symbols-outlined text-teal-300 text-xl">history</span> {{ t.trust_chip_4 }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">api</span> API Entegrasyonu
+              <span class="material-symbols-outlined text-teal-300 text-xl">api</span> {{ t.trust_chip_5 }}
             </span>
           </div>
         </div>
@@ -734,7 +734,7 @@
             </div>
             
             <h3 class="relative text-xl sm:text-2xl font-bold font-headline mb-4 text-slate-900 dark:text-white">
-              Farklı Dillerde<br />Hasta İletişimi
+              Farklı Dillerde<br />Hasta {{ t.contact_title }}i
             </h3>
             <p class="relative text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
               Uluslararası hastalar, sağlık turizmi ve çok kültürlü topluluklar için sonuçları 9+ dilde anlaşılır biçimde sunun.
@@ -1055,36 +1055,36 @@
     <!-- ═══════════════ 3. HANGİ EKİPLER KULLANABİLİR ═══════════════ -->
     <section id="ekipler" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
       <div class="max-w-3xl mb-10 sm:mb-14">
-        <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Hastane içinde kimler kullanabilir?</h2>
-        <p class="text-base sm:text-lg text-on-surface-variant">NoryaAI, hastane organizasyon şemasının farklı noktalarına değer katacak şekilde tasarlanmıştır.</p>
+        <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">{{ t.teams_title }}</h2>
+        <p class="text-base sm:text-lg text-on-surface-variant">{{ t.teams_subtitle }}</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-blue-50 flex items-center justify-center mb-4">
             <span class="material-symbols-outlined text-blue-700">biotech</span>
           </div>
-          <h3 class="font-bold font-headline text-base mb-2">Laboratuvar Ekipleri</h3>
+          <h3 class="font-bold font-headline text-base mb-2">{{ t.team_1_title }}</h3>
           <p class="text-sm text-on-surface-variant leading-relaxed">Yüksek hacimli tahlil çıktılarını yapılandırılmış biçimde ön hazırlığa alarak uzman incelemesi öncesinde düzenli bir alt yapı oluşturur.</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
             <span class="material-symbols-outlined text-emerald-700">stethoscope</span>
           </div>
-          <h3 class="font-bold font-headline text-base mb-2">Klinik Ekipler</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">Yapılandırılmış ön analizler, klinisyenin hasta görüşmesine daha hazırlıklı girmesine yardımcı olabilir.</p>
+          <h3 class="font-bold font-headline text-base mb-2">{{ t.team_2_title }}</h3>
+          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.workflow_step_2_title }}ler, klinisyenin hasta görüşmesine daha hazırlıklı girmesine yardımcı olabilir.</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
             <span class="material-symbols-outlined text-amber-700">emergency</span>
           </div>
-          <h3 class="font-bold font-headline text-base mb-2">Acil Servis</h3>
+          <h3 class="font-bold font-headline text-base mb-2">{{ t.team_3_title }}</h3>
           <p class="text-sm text-on-surface-variant leading-relaxed">Hızlı karar alınması gereken ortamlarda yapılandırılmış özet çıktılar, tahlil sonuçlarının daha çabuk kavranmasına destek olabilir.</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center mb-4">
             <span class="material-symbols-outlined text-violet-700">admin_panel_settings</span>
           </div>
-          <h3 class="font-bold font-headline text-base mb-2">Yönetim ve Operasyon</h3>
+          <h3 class="font-bold font-headline text-base mb-2">{{ t.team_4_title }}</h3>
           <p class="text-sm text-on-surface-variant leading-relaxed">Kota yönetimi, kullanım takibi ve kurumsal denetim özellikleri, hastane yönetim ekiplerinin ihtiyaçlarına göre tasarlanmıştır.</p>
         </div>
       </div>
@@ -1094,8 +1094,8 @@
     <section id="kullanim" class="hosp-anchor bg-surface-container-low py-16 sm:py-24 lg:py-32 px-4 sm:px-8">
       <div class="max-w-7xl mx-auto">
         <div class="max-w-3xl mb-10 sm:mb-14">
-          <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Hastaneye özgü kullanım alanları</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant">NoryaAI'nin hastane operasyonlarında somut katkı sağlayabileceği alanlar.</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">{{ t.usage_title }}</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant">{{ t.usage_subtitle }}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -1103,8 +1103,8 @@
               <span class="material-symbols-outlined">format_list_bulleted</span>
             </div>
             <div>
-              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Tahlil sonuçlarının ön yapılandırması</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">Laboratuvardan çıkan ham sonuçlar, klinisyen incelemesi öncesinde yapılandırılmış ve kategorize edilmiş biçimde hazırlanır.</p>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_1_title }}</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_1_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -1112,8 +1112,8 @@
               <span class="material-symbols-outlined">translate</span>
             </div>
             <div>
-              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Çok dilli hasta bilgilendirme desteği</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">Sonuçlar, hastanenin hizmet verdiği hasta profiline göre birden fazla dilde anlaşılır özetlere dönüştürülebilir.</p>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_2_title }}</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_2_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -1121,8 +1121,8 @@
               <span class="material-symbols-outlined">sync_alt</span>
             </div>
             <div>
-              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Birimler arası tutarlı raporlama</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">Farklı bölümlerin aynı standart ve dilde sonuç paylaşmasını kolaylaştırır. Tutarsız yorum riskini azaltmayı hedefler.</p>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_3_title }}</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_3_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -1130,8 +1130,8 @@
               <span class="material-symbols-outlined">analytics</span>
             </div>
             <div>
-              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Operasyonel yük azaltma</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">Tekrarlayan ön hazırlık adımlarını otomatikleştirerek ekiplerin daha kritik görevlere odaklanmasına alan açmayı amaçlar.</p>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_4_title }}</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_4_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -1139,8 +1139,8 @@
               <span class="material-symbols-outlined">monitoring</span>
             </div>
             <div>
-              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Kurumsal kullanım takibi</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">Hangi birimde, kaç analiz yapıldığı, kota kullanımı ve denetim kaydı gibi operasyonel verilere kurumsal panel üzerinden erişim.</p>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_5_title }}</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_5_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -1270,7 +1270,7 @@
                 
                 <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Sonuç Yükleme</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                  Laboratuvar sonuçları PDF, görsel veya metin olarak sisteme yüklenir.
+                  {{ t.workflow_step_1_desc }}
                 </p>
               </div>
             </div>
@@ -1286,9 +1286,9 @@
                   <span class="material-symbols-outlined text-cyan-600 dark:text-cyan-400 text-3xl">biotech</span>
                 </div>
                 
-                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Yapılandırılmış Ön Analiz</h3>
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.card_1_title }}</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                  Yapay zekâ, sonuçları yapılandırılmış ve kategorize edilmiş biçimde ön hazırlığa alır.
+                  {{ t.workflow_step_2_desc }}
                 </p>
               </div>
             </div>
@@ -1363,9 +1363,9 @@
     <section class="py-8 sm:py-12 px-4 sm:px-8 border-y border-outline-variant/10">
       <div class="max-w-4xl mx-auto">
         <div class="p-6 sm:p-8 bg-surface-container-high rounded-2xl sm:rounded-3xl text-sm text-on-surface-variant leading-relaxed border-l-4 border-primary">
-          <p class="font-bold text-on-surface mb-2">Tıbbi Sorumluluk Reddi:</p>
-          <p class="mb-2">NoryaAI, laboratuvar sonuçlarının yapılandırılmış biçimde ön hazırlanmasına yardımcı olan bir destek aracıdır. Tıbbi teşhis koymaz, tedavi önerisi sunmaz ve doktor değerlendirmesinin yerine geçmez.</p>
-          <p>Tüm çıktılar, yetkili sağlık profesyonellerinin gözden geçirmesine tabidir. Hastane, klinik kararlarını yalnızca platform çıktısına dayandırmamalıdır.</p>
+          <p class="font-bold text-on-surface mb-2">{{ t.disclaimer_title }}</p>
+          <p class="mb-2">{{ t.disclaimer_text_1 }}</p>
+          <p>{{ t.disclaimer_text_2 }}</p>
         </div>
       </div>
     </section>
@@ -1377,7 +1377,7 @@
         <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
           <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
             <span class="material-symbols-outlined text-teal-600 text-sm">mail</span>
-            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">İletişim</span>
+            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">{{ t.contact_title }}</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white">
             Size <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Özel</span> Çözüm
@@ -1397,9 +1397,9 @@
             <p class="text-slate-600 dark:text-slate-300 mb-8 max-w-xl mx-auto">
               Demo talebi, fiyatlandırma bilgisi veya teknik sorularınız için aşağıdaki e-posta adresinden bize ulaşabilirsiniz.
             </p>
-            <a href="mailto:support@noryaai.com" class="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-teal-500/30 hover:scale-105 transition-all duration-300">
+            <a href="mailto:{{ t.contact_email }}" class="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-teal-500/30 hover:scale-105 transition-all duration-300">
               <span class="material-symbols-outlined">send</span>
-              support@noryaai.com
+              {{ t.contact_email }}
             </a>
             <div class="mt-8 flex flex-wrap justify-center gap-4 text-sm text-slate-600 dark:text-slate-400">
               <span class="flex items-center gap-2">
@@ -1451,32 +1451,32 @@
         <div class="max-w-3xl mx-auto text-center mb-10 sm:mb-14">
           <span class="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-primary/15 mb-4">
             <span class="material-symbols-outlined text-sm">rocket_launch</span>
-            Pilot Program
+            {{ t.pilot_badge }}
           </span>
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4">Pilot dağıtım ile başlayın</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">Hastanenizin belirli bir bölümünde sınırlı kapsamlı bir pilot ile başlayarak sistemi değerlendirin. Kurumsal sözleşme öncesinde sonuçları ölçün.</p>
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4">{{ t.pilot_title }}</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">{{ t.pilot_subtitle }}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           <div class="text-center">
             <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
               <span class="material-symbols-outlined text-2xl">tune</span>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Kapsam belirleme</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed">Pilot bölüm, kullanıcı sayısı ve aylık kota birlikte belirlenir.</p>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.pilot_1_title }}</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.pilot_1_desc }}</p>
           </div>
           <div class="text-center">
             <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
               <span class="material-symbols-outlined text-2xl">play_circle</span>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Pilot uygulama</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed">Belirlenen ekip, gerçek iş akışlarında sistemi kullanmaya başlar.</p>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.pilot_2_title }}</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.pilot_2_desc }}</p>
           </div>
           <div class="text-center">
             <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
               <span class="material-symbols-outlined text-2xl">assessment</span>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Değerlendirme ve genişleme</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed">Pilot sonuçları birlikte değerlendirilir; uygunsa kurumsal ölçeğe geçilir.</p>
+            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.pilot_3_title }}</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.pilot_3_desc }}</p>
           </div>
         </div>
       </div>
@@ -1485,7 +1485,7 @@
     <!-- ═══════════════ 9. HASTANE SSS ═══════════════ -->
     <section id="sss" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8">
       <div class="max-w-4xl mx-auto">
-        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline text-center mb-10 sm:mb-14">Sıkça Sorulan Sorular</h2>
+        <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline text-center mb-10 sm:mb-14">{{ t.faq_title }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">NoryaAI doktorların yerine mi geçiyor?</dt>
@@ -1504,7 +1504,7 @@
             <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">NoryaAI, mevcut kurumsal iş akışlarına entegrasyonu destekleyecek şekilde tasarlanmıştır. Pilot süreçte entegrasyon planlaması birlikte yapılır.</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
-            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Veri güvenliği nasıl sağlanıyor?</dt>
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_2_q }}</dt>
             <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Gizlilik odaklı veri işleme, rol bazlı erişim, izlenebilir iş akışları ve kurumsal denetim kaydı altyapısı ile güvenlik desteklenir.</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
@@ -1535,7 +1535,7 @@
         <div class="text-center max-w-4xl mx-auto mb-12 sm:mb-16">
           <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-6">
             <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
-            <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli Pilot Program</span>
+            <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli {{ t.pilot_badge }}</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
             Hastanenizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
@@ -1559,7 +1559,7 @@
                 <span class="text-white text-xs font-bold uppercase tracking-wider">Enterprise Solution</span>
               </div>
               
-              <h3 class="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl mb-4">Neden NoryaAI?</h3>
+              <h3 class="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl mb-4">{{ t.why_label }}</h3>
               <p class="text-white/90 text-base sm:text-lg mb-8 leading-relaxed">
                 50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor. Sıfır riskle başlayın—ücretsiz pilot dağıtım ile sonuçları görün, sonra karar verin.
               </p>
@@ -1668,17 +1668,17 @@
                 <input type="text" id="kurum_adi" name="kurum_adi" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="Örn: Acıbadem Hastanesi" />
               </div>
               <div class="group">
-                <label for="yetkili_ad" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Yetkili Ad Soyad *</label>
+                <label for="yetkili_ad" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Yetkili {{ t.contact_form_name }} *</label>
                 <input type="text" id="yetkili_ad" name="yetkili_ad" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="Örn: Ahmet Yılmaz" />
               </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
               <div class="group">
-                <label for="email" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Kurumsal E-posta *</label>
+                <label for="email" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Kurumsal {{ t.contact_email_label }} *</label>
                 <input type="email" id="email" name="email" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="ahmet@hastane.com" />
               </div>
               <div class="group">
-                <label for="telefon" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Telefon</label>
+                <label for="telefon" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">{{ t.contact_phone_label }}</label>
                 <input type="tel" id="telefon" name="telefon" maxlength="64" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="+90 5xx xxx xx xx" />
               </div>
             </div>
@@ -1721,7 +1721,7 @@
               <button type="submit" id="submit-btn" class="group relative flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-4 px-8 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden">
                 <span class="relative z-10 flex items-center justify-center gap-2">
                   <span class="material-symbols-outlined">rocket_launch</span>
-                  <span>Ücretsiz Demo Talep Et</span>
+                  <span>Ücretsiz {{ t.final_cta_btn }}</span>
                 </span>
                 <span class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </button>
@@ -1761,7 +1761,7 @@
             <!-- Badge -->
             <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
               <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
-              <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli Pilot Program</span>
+              <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli {{ t.pilot_badge }}</span>
             </div>
             
             <!-- Headline -->
@@ -1805,7 +1805,7 @@
               </a>
               <a href="mailto:sales@norya.ai" class="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
                 <span class="material-symbols-outlined">mail</span>
-                <span>Satış ile İletişim</span>
+                <span>Satış ile {{ t.contact_title }}</span>
               </a>
               <a href="/docs" target="_blank" rel="noopener noreferrer" class="group bg-white/5 backdrop-blur-sm border border-white/20 text-white px-6 sm:px-8 py-4 rounded-full font-semibold text-sm hover:bg-white/15 transition-all flex items-center gap-2">
                 <span class="material-symbols-outlined text-base">description</span>
@@ -1875,7 +1875,7 @@
 
       function setLoading(loading) {
         submitBtn.disabled = loading;
-        submitBtn.textContent = loading ? '...' : 'Demo Talep Et';
+        submitBtn.textContent = loading ? '...' : '{{ t.final_cta_btn }}';
       }
 
       form.addEventListener('submit', function(e) {
