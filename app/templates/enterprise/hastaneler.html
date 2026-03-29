@@ -105,7 +105,25 @@
         <a href="/kurumsal" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">Kurumsal</a>
         <a href="/hastaneler-icin" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">Hastaneler</a>
       </nav>
-      {% include "partials/header_lang.html" %}
+      <!-- Language Switcher -->
+      <div class="language-switch" aria-label="Language">
+        <button type="button" id="base-lang-toggle" class="header-lang-toggle" aria-haspopup="true" aria-expanded="false">
+          <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
+          <span class="header-lang-code lang-trigger-code" id="base-lang-current">TR</span>
+          <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
+        </button>
+        <div id="base-lang-menu" class="header-lang-menu" hidden>
+          <button type="button" class="header-lang-option" data-locale="tr">TR</button>
+          <button type="button" class="header-lang-option" data-locale="en">EN</button>
+          <button type="button" class="header-lang-option" data-locale="es">ES</button>
+          <button type="button" class="header-lang-option" data-locale="de">DE</button>
+          <button type="button" class="header-lang-option" data-locale="fr">FR</button>
+          <button type="button" class="header-lang-option" data-locale="it">IT</button>
+          <button type="button" class="header-lang-option" data-locale="he">HE</button>
+          <button type="button" class="header-lang-option" data-locale="hi">HI</button>
+          <button type="button" class="header-lang-option" data-locale="ar">AR</button>
+        </div>
+      </div>
       <div class="flex items-center gap-3">
         <a href="#iletisim" class="hidden sm:inline-flex bg-gradient-to-r from-primary to-primary-container text-on-primary px-5 py-2.5 rounded-full font-bold text-sm shadow-lg transition-transform hover:scale-105 active:scale-95">
           Demo Talep Et
@@ -850,6 +868,46 @@
         }, { rootMargin: '-35% 0px -55% 0px', threshold: 0 });
         sections.forEach(function(section) { observer.observe(section); });
       }
+    })();
+    
+    // Language Switcher
+    (function() {
+      var toggle = document.getElementById('base-lang-toggle');
+      var menu = document.getElementById('base-lang-menu');
+      var current = document.getElementById('base-lang-current');
+      if (!toggle || !menu) return;
+      
+      // Get current lang
+      var lang = new URLSearchParams(window.location.search).get('lang') || 'tr';
+      if (current) current.textContent = lang.toUpperCase();
+      
+      // Mark active
+      menu.querySelectorAll('.header-lang-option').forEach(function(opt) {
+        if (opt.getAttribute('data-locale') === lang) opt.classList.add('is-active');
+      });
+      
+      // Toggle
+      toggle.addEventListener('click', function(e) {
+        e.preventDefault();
+        menu.hidden = !menu.hidden;
+      });
+      
+      // Change lang
+      menu.querySelectorAll('.header-lang-option').forEach(function(opt) {
+        opt.addEventListener('click', function() {
+          var locale = opt.getAttribute('data-locale');
+          var url = new URL(window.location);
+          url.searchParams.set('lang', locale);
+          window.location.href = url.toString();
+        });
+      });
+      
+      // Close outside
+      document.addEventListener('click', function(e) {
+        if (!menu.contains(e.target) && !toggle.contains(e.target)) {
+          menu.hidden = true;
+        }
+      });
     })();
   </script>
 <!-- scripts_lang.html disabled - using header_lang.html only -->
