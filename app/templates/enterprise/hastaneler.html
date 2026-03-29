@@ -335,7 +335,7 @@
               <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/20">
                 <img 
                   src="/static/images/hospital-dashboard-premium.png" 
-                  alt="NoryaAI Hastane Dashboard - Gerçek zamanlı laboratuvar analiz sistemi"
+                  alt="NoryaAI {{ t.hospitals_label }} Dashboard - Gerçek zamanlı laboratuvar analiz sistemi"
                   class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
                   width="600"
                   height="400"
@@ -438,7 +438,7 @@
         <!-- Technology Partners - Premium -->
         <div class="mt-8 sm:mt-12">
           <div class="text-center mb-6">
-            <p class="text-white/70 text-sm font-medium uppercase tracking-widest">Teknoloji Partnerleri & Altyapı</p>
+            <p class="text-white/70 text-sm font-medium uppercase tracking-widest">{{ t.tech_partners_title }}</p>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             <!-- Partner 1: OpenAI -->
@@ -510,7 +510,7 @@
         <!-- International Partners with Map Visual -->
         <div class="mt-12 sm:mt-16">
           <div class="text-center mb-6">
-            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">Uluslararası Ortaklar & 50+ Ülkede Kullanım</p>
+            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.international_partners_title }}</p>
           </div>
           
           <!-- Global Network Map -->
@@ -518,7 +518,7 @@
             <div class="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 z-10"></div>
             <img 
               src="/static/images/global-hospital-network.png" 
-              alt="NoryaAI Global Hastane Ağı - 50+ ülkede 4,000+ hastane ve klinik"
+              alt="NoryaAI Global {{ t.hospitals_label }} Ağı - 50+ ülkede 4,000+ hastane ve klinik"
               class="w-full h-48 sm:h-64 lg:h-80 object-cover opacity-80"
               width="1200"
               height="600"
@@ -530,19 +530,19 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8">
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-white mb-2">50+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">Ülke</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.countries_label }}</div>
                   </div>
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-teal-300 mb-2">4K+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">Hastane</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.hospitals_label }}</div>
                   </div>
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-cyan-300 mb-2">2M+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">Rapor</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.reports_label }}</div>
                   </div>
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-purple-300 mb-2">9+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">Dil</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.languages_label }}</div>
                   </div>
                 </div>
               </div>
@@ -620,19 +620,19 @@
           <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">50+</div>
-              <div class="text-white/60 text-xs">Ülke</div>
+              <div class="text-white/60 text-xs">{{ t.countries_label }}</div>
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">9+</div>
-              <div class="text-white/60 text-xs">Rapor Dili</div>
+              <div class="text-white/60 text-xs">{{ t.reports_label }} {{ t.languages_label }}i</div>
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">2M+</div>
-              <div class="text-white/60 text-xs">Rapor Üretildi</div>
+              <div class="text-white/60 text-xs">{{ t.reports_label }} Üretildi</div>
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">4,000+</div>
-              <div class="text-white/60 text-xs">Hastane & Klinik</div>
+              <div class="text-white/60 text-xs">{{ t.hospitals_label }} & Klinik</div>
             </div>
           </div>
         </div>
@@ -689,7 +689,7 @@
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-extrabold text-cyan-600">500+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">Günlük Analiz</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.daily_analysis }}</div>
                 </div>
               </div>
             </div>
@@ -714,11 +714,11 @@
               <div class="flex items-center justify-between">
                 <div>
                   <div class="text-2xl font-extrabold text-purple-600">100%</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">Standartlaşma</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.standardization }}</div>
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-extrabold text-pink-600">12+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">Departman Desteği</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.department_support }}</div>
                 </div>
               </div>
             </div>
@@ -743,11 +743,11 @@
               <div class="flex items-center justify-between">
                 <div>
                   <div class="text-2xl font-extrabold text-amber-600">12+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">Dil Desteği</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.languages_label }} Desteği</div>
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-extrabold text-orange-600">50+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">Ülke Kapsamı</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.countries_label }} Kapsamı</div>
                 </div>
               </div>
             </div>
@@ -775,12 +775,12 @@
           <div class="order-2 lg:order-1">
             <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
               <span class="material-symbols-outlined text-teal-600 text-sm">auto_awesome</span>
-              <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">AI Technology</span>
+              <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">{{ t.ai_technology_badge }}</span>
             </div>
             
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white leading-tight">
               %98.7 Doğrulukla<br />
-              <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Biyobelirteç Analizi</span>
+              <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">{{ t.biomarker_analysis }}</span>
             </h2>
             
             <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
@@ -791,19 +791,19 @@
             <div class="grid grid-cols-2 gap-4 sm:gap-6">
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-teal-600 mb-2">2M+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Analiz Edilen Rapor</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Analiz Edilen {{ t.reports_label }}</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-cyan-600 mb-2">50+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Ülkede Kullanım</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.countries_label }}de Kullanım</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-purple-600 mb-2">&lt;50ms</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Yanıt Süresi</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.response_time }}</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-amber-600 mb-2">12+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Dil Desteği</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.languages_label }} Desteği</div>
               </div>
             </div>
           </div>
@@ -871,10 +871,10 @@
             <span class="text-white text-xs font-bold uppercase tracking-widest">Premium Enterprise Features</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
-            Kurumsal <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Özellikler</span>
+            {{ t.enterprise_features_title }}
           </h2>
           <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
-            Hastanenizin operasyonel mükemmelliğini destekleyen gelişmiş yapay zekâ özellikleri
+            {{ t.hospitals_label }}nizin operasyonel mükemmelliğini destekleyen gelişmiş yapay zekâ özellikleri
           </p>
         </div>
         
@@ -1162,7 +1162,7 @@
              style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 30px 30px;"></div>
         <div class="lg:w-1/2">
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4 sm:mb-6">Kurumsal güvenlik ve yönetişim</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-6 sm:mb-8">Hastane ortamının gerektirdiği erişim kontrolü, izlenebilirlik ve klinik gözetim altyapısı.</p>
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-6 sm:mb-8">{{ t.hospitals_label }} ortamının gerektirdiği erişim kontrolü, izlenebilirlik ve klinik gözetim altyapısı.</p>
           <div class="rounded-2xl bg-surface/70 border border-outline-variant/15 px-5 sm:px-6 py-4 sm:py-5">
             <p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">Güvenlik kontrolleri, hastane operasyonlarını net sorumluluk sınırları, izlenebilir iş akışları ve klinisyen denetimli gözden geçirme süreçleriyle desteklemek üzere tasarlanmıştır.</p>
           </div>
@@ -1303,7 +1303,7 @@
                   <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-3xl">translate</span>
                 </div>
                 
-                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Çok Dilli Özet</h3>
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Çok {{ t.languages_label }}li Özet</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   İhtiyaç halinde sonuçlar 12+ dilde anlaşılır özet biçiminde hazırlanır.
                 </p>
@@ -1382,7 +1382,7 @@
             Size <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Özel</span> Çözüm
           </h2>
           <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
-            Hastanenizin ihtiyaçlarına göre özelleştirilmiş demo ve bilgi için bize ulaşın
+            {{ t.hospitals_label }}nizin ihtiyaçlarına göre özelleştirilmiş demo ve bilgi için bize ulaşın
           </p>
         </div>
         
@@ -1537,7 +1537,7 @@
             <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli {{ t.pilot_badge }}</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
-            Hastanenizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
+            {{ t.hospitals_label }}nizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
           </h2>
           <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
             Ücretsiz pilot programımızla başlayın, sonuçları görün, sonra karar verin. Kurulum yok, kredi kartı gerekmez.
@@ -1663,8 +1663,8 @@
           <form id="enterprise-lead-form" class="space-y-5 sm:space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
               <div class="group">
-                <label for="kurum_adi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Hastane / Kurum Adı *</label>
-                <input type="text" id="kurum_adi" name="kurum_adi" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="Örn: Acıbadem Hastanesi" />
+                <label for="kurum_adi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">{{ t.hospitals_label }} / Kurum Adı *</label>
+                <input type="text" id="kurum_adi" name="kurum_adi" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="Örn: Acıbadem {{ t.hospitals_label }}si" />
               </div>
               <div class="group">
                 <label for="yetkili_ad" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Yetkili {{ t.contact_form_name }} *</label>
@@ -1683,13 +1683,13 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
               <div class="group">
-                <label for="kurum_tipi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Hastane Türü</label>
+                <label for="kurum_tipi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">{{ t.hospitals_label }} Türü</label>
                 <select id="kurum_tipi" name="kurum_tipi" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white">
                   <option value="">Seçiniz</option>
-                  <option value="hospital">Devlet Hastanesi</option>
-                  <option value="hospital-private">Özel Hastane</option>
-                  <option value="hospital-university">Üniversite Hastanesi</option>
-                  <option value="hospital-group">Hastane Grubu / Zinciri</option>
+                  <option value="hospital">Devlet {{ t.hospitals_label }}si</option>
+                  <option value="hospital-private">Özel {{ t.hospitals_label }}</option>
+                  <option value="hospital-university">Üniversite {{ t.hospitals_label }}si</option>
+                  <option value="hospital-group">{{ t.hospitals_label }} Grubu / Zinciri</option>
                 </select>
               </div>
               <div class="group">
@@ -1765,7 +1765,7 @@
             
             <!-- Headline -->
             <h2 class="text-3xl sm:text-4xl lg:text-6xl font-extrabold font-headline text-white leading-tight">
-              Hastanenizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
+              {{ t.hospitals_label }}nizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
             </h2>
             
             <!-- Subheadline -->
@@ -1777,11 +1777,11 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 pb-8 border-y border-white/10 w-full max-w-4xl">
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">2M+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">Rapor Üretildi</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.reports_label }} Üretildi</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">4K+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">Hastane & Klinik</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.hospitals_label }} & Klinik</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">98.7%</div>
@@ -1789,7 +1789,7 @@
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">50+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">Ülke Kapsamı</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.countries_label }} Kapsamı</div>
               </div>
             </div>
             
@@ -1851,7 +1851,7 @@
       <div class="flex flex-wrap gap-x-6 sm:gap-x-12 gap-y-4 sm:gap-y-6 md:justify-end">
         <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="{{ localized_home_path(request) }}">Ana Sayfa</a>
         <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/kurumsal">Kurumsal</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/hastaneler-icin">Hastaneler</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/hastaneler-icin">{{ t.hospitals_label }}ler</a>
         <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/gizlilik-politikasi">Gizlilik</a>
         <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/kullanim-sartlari">Kullanım Şartları</a>
       </div>
@@ -1883,7 +1883,7 @@
         var yetkiliAd = (document.getElementById('yetkili_ad').value || '').trim();
         var email = (document.getElementById('email').value || '').trim();
         var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!kurumAdi) { showToast('Hastane / kurum adını girin.', true); return; }
+        if (!kurumAdi) { showToast('{{ t.hospitals_label }} / kurum adını girin.', true); return; }
         if (!yetkiliAd) { showToast('Yetkili ad soyadını girin.', true); return; }
         if (!email) { showToast('Kurumsal e-posta adresini girin.', true); return; }
         if (!emailRe.test(email)) { showToast('Geçerli bir e-posta adresi girin.', true); return; }
