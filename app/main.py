@@ -57,7 +57,6 @@ from app.models import (  # noqa: F401
     AnalysisJob,
     AnalysisRecord,
     AuditLog,
-    BlogPost,
     DiscountCode,
     EmailLead,
     EnterpriseLead,
@@ -2007,15 +2006,11 @@ def kurumsal_page(request: Request):
 
 @app.get("/hastaneler-icin", response_class=HTMLResponse)
 def hastaneler_icin_page(request: Request):
-    """Hastaneye özel kurumsal landing page - çoklu dil desteği."""
-    lang = _enterprise_lang_from_request(request)
-    if lang not in ENTERPRISE_LANGS:
-        lang = "tr"
-    t = get_enterprise_ui(lang)
+    """Hastaneye özel kurumsal landing page (Türkçe)."""
     base_url = str(request.base_url).rstrip("/")
     return templates.TemplateResponse(
         "enterprise/hastaneler.html",
-        {"request": request, "lang": lang, "t": t, "canonical_url": f"{base_url}/hastaneler-icin"},
+        {"request": request, "canonical_url": f"{base_url}/hastaneler-icin"},
     )
 
 
@@ -2044,40 +2039,13 @@ def blog_root(request: Request):
 
 
 @app.get("/{lang}/blog", response_class=HTMLResponse)
-def blog_index(request: Request, lang: str, db: Session = Depends(get_db)):
+def blog_index(request: Request, lang: str):
     """Blog ana sayfa: BLOG_LANGS_PREMIUM dillerinde liste + yerelleştirilmiş keşif blokları."""
     lang = (lang or "").lower()[:2]
     if lang not in BLOG_LANGS_PREMIUM:
         raise HTTPException(status_code=404, detail="Blog not available in this language.")
     request.state.locale = lang
-    
-    # Koddaki yazılar
     posts_raw = list_articles_for_lang(lang)
-    
-    # Veritabanındaki yazılar (yayınlanmış olanlar)
-    db_posts = db.exec(
-        select(BlogPost)
-        .where(BlogPost.lang == lang)
-        .where(BlogPost.is_published == True)
-        .order_by(BlogPost.published_at.desc())
-    ).all()
-    
-    # Veritabanı yazılarını dict'e çevir
-    for post in db_posts:
-        posts_raw.append({
-            "id": f"db_{post.id}",
-            "slug": post.slug,
-            "title": post.title,
-            "excerpt": post.meta_description or "",
-            "category": post.category or "",
-            "cover_image": post.cover_image or BLOG_COVER_FALLBACK,
-            "cover_alt": None,
-            "read_minutes": post.reading_time_minutes or 5,
-            "published_at": post.published_at,
-            "is_db_post": True,
-            "db_id": post.id,
-        })
-    
     base_url = str(request.base_url).rstrip("/")
     posts = []
     for p in posts_raw:
@@ -2217,85 +2185,14 @@ def _blog_about_schema(article: dict) -> dict:
 
 
 @app.get("/{lang}/blog/{slug}", response_class=HTMLResponse)
-def blog_detail(request: Request, lang: str, slug: str, db: Session = Depends(get_db)):
+def blog_detail(request: Request, lang: str, slug: str):
     """Blog detay: makale içeriği, CTA; sadece en/de/fr/it."""
     lang = (lang or "").lower()[:2]
     if lang not in BLOG_LANGS_PREMIUM:
         raise HTTPException(status_code=404, detail="Blog not available in this language.")
     art = get_article(lang, slug)
     if not art:
-        # Veritabanında ara
-        stmt = select(BlogPost).where(BlogPost.slug == slug).where(BlogPost.lang == lang)
-        post = db.exec(stmt).first()
-        if not post or not post.is_published:
-            raise HTTPException(status_code=404, detail="Article not found.")
-        
-        # Veritabanı yazısını render et
-        import json as json_module
-        base_url = str(request.base_url).rstrip("/")
-        canonical_url = f"{base_url}/{lang}/blog/{slug}"
-        
-        # JSON'dan içeriği parse et
-        try:
-            sections = json_module.loads(post.content_json)
-        except:
-            sections = []
-        
-        # TOC oluştur
-        toc = []
-        for sec in sections:
-            if isinstance(sec, dict):
-                toc.append({"id": sec.get("id", ""), "level": sec.get("level", 2), "label": sec.get("heading", "")})
-        
-        # UI metinleri
-        ui = dict(BLOG_UI.get(lang, BLOG_UI.get("en", {})))
-        base_ui = get_base_ui(lang)
-        
-        # Related articles (same category)
-        related = []
-        if post.category:
-            related_posts = db.exec(
-                select(BlogPost)
-                .where(BlogPost.lang == lang)
-                .where(BlogPost.is_published == True)
-                .where(BlogPost.category == post.category)
-                .where(BlogPost.slug != slug)
-                .limit(3)
-            ).all()
-            for rp in related_posts:
-                related.append({
-                    "slug": rp.slug,
-                    "title": rp.title,
-                    "url": f"{base_url}/{lang}/blog/{rp.slug}",
-                })
-        
-        return templates.TemplateResponse(
-            "blog/detail.html",
-            {
-                "request": request,
-                "lang": lang,
-                "slug": slug,
-                "title": post.title,
-                "meta_title": post.meta_title or post.title,
-                "meta_description": post.meta_description or "",
-                "cover_image": post.cover_image or BLOG_COVER_FALLBACK,
-                "cover_absolute": post.cover_image if (post.cover_image or "").startswith("http") else f"{base_url}{post.cover_image or BLOG_COVER_FALLBACK}",
-                "sections": sections,
-                "toc": toc,
-                "category": post.category,
-                "author_name": post.author_name,
-                "published_at": post.published_at,
-                "updated_at": post.updated_at,
-                "reading_time_minutes": post.reading_time_minutes,
-                "blog_ui": ui,
-                "base_ui": base_ui,
-                "base_url": base_url,
-                "brand_name": BRAND_NAME,
-                "canonical_url": canonical_url,
-                "related_articles": related,
-                "is_db_post": True,
-            },
-        )
+        raise HTTPException(status_code=404, detail="Article not found.")
     request.state.locale = lang
 
     base_url = str(request.base_url).rstrip("/")
