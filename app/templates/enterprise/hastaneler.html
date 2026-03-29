@@ -327,7 +327,7 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                   </span>
-                  Live Demo
+                  {{ t.dashboard_live }}
                 </span>
               </div>
               
@@ -349,16 +349,16 @@
               <div class="absolute bottom-4 left-4 right-4 z-10">
                 <div class="grid grid-cols-3 gap-2">
                   <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-teal-600">2M+</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">Rapor</div>
+                    <div class="text-lg sm:text-xl font-extrabold text-teal-600">{{ t.stat_1_value }}</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_1 }}</div>
                   </div>
                   <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-cyan-600">4K+</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">Hastane</div>
+                    <div class="text-lg sm:text-xl font-extrabold text-cyan-600">{{ t.stat_2_value }}</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_2 }}</div>
                   </div>
                   <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-purple-600">98.7%</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">Doğruluk</div>
+                    <div class="text-lg sm:text-xl font-extrabold text-purple-600">{{ t.stat_3_value }}</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_3 }}</div>
                   </div>
                 </div>
               </div>
@@ -368,15 +368,15 @@
             <div class="mt-6 flex flex-wrap justify-center gap-3">
               <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
-                <span class="text-white text-xs font-bold">KVKK Uyumlu</span>
+                <span class="text-white text-xs font-bold">{{ t.trust_badge_1 }}</span>
               </div>
               <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">security</span>
-                <span class="text-white text-xs font-bold">HIPAA Ready</span>
+                <span class="text-white text-xs font-bold">{{ t.trust_badge_2 }}</span>
               </div>
               <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-purple-300 text-sm">cloud_done</span>
-                <span class="text-white text-xs font-bold">SOC 2</span>
+                <span class="text-white text-xs font-bold">{{ t.trust_badge_3 }}</span>
               </div>
             </div>
           </div>
@@ -2028,7 +2028,7 @@
       }
     })();
   </script>
-<!-- {% include "partials/scripts_lang.html" %} - Disabled to prevent conflicts -->
+{% include "partials/scripts_lang.html" %}
 {% include "partials/chat_widget.html" %}
 </body>
 </html>
