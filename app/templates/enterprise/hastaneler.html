@@ -1992,7 +1992,7 @@
       options.forEach(function(opt) {
         opt.addEventListener('click', function(e) {
           e.preventDefault();
-          var locale = opt.getAttribute('data-locale');
+          var locale = this.getAttribute('data-locale');
           if (locale) {
             changeLang(locale);
           }
@@ -2028,7 +2028,6 @@
       }
     })();
   </script>
-{% include "partials/scripts_lang.html" %}
 {% include "partials/chat_widget.html" %}
 </body>
 </html>
