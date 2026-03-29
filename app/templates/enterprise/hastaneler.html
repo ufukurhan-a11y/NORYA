@@ -1,16 +1,21 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="{{ lang }}" {% if lang in ('ar', 'he') %}dir="rtl"{% endif %}>
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   {% include "partials/gsc_meta.html" %}
-  <title>Hastaneler için NoryaAI — Kurumsal Yapay Zekâ Altyapısı</title>
-  <meta name="description" content="NoryaAI Clinical Enterprise: Hastaneler için laboratuvar sonuçlarını yapılandırılmış, çok dilli ve izlenebilir biçimde ön analiz desteğine dönüştüren kurumsal çözüm." />
-  <meta property="og:title" content="Hastaneler için NoryaAI — Kurumsal Yapay Zekâ Altyapısı" />
-  <meta property="og:description" content="Kan tahlili ve laboratuvar sonuçlarını daha anlaşılır, daha düzenli ve çok dilli biçimde ön yapılandırmaya yardımcı olan kurumsal çözüm." />
+  <title>{{ t.meta_title }}</title>
+  <meta name="description" content="{{ t.meta_description }}" />
+  <meta property="og:title" content="{{ t.meta_title }}" />
+  <meta property="og:description" content="{{ t.meta_description }}" />
   <meta property="og:type" content="website" />
   <meta name="theme-color" content="#006a69" />
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
@@ -97,18 +102,114 @@
   <!-- Header -->
   <header class="fixed top-0 w-full z-50 bg-[#f8f9fa]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
     <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 sm:py-4 flex justify-between items-center">
-      <a href="{{ localized_home_path(request) }}" class="flex items-center gap-2 shrink-0">
+      <a href="/" class="flex items-center gap-2 shrink-0">
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 sm:h-9 w-auto object-contain" width="180" height="45" loading="eager" />
       </a>
       <nav class="hidden md:flex items-center gap-8">
-        <a href="{{ localized_home_path(request) }}" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">Ana Sayfa</a>
-        <a href="/kurumsal" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">Kurumsal</a>
+        <a href="/" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_home }}</a>
+        <a href="/kurumsal" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_enterprise }}</a>
         <a href="/hastaneler-icin" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">Hastaneler</a>
       </nav>
-      {% include "partials/header_lang.html" %}
+      <!-- Language Switcher -->
+      <style>
+        .language-switch {
+          position: relative;
+          display: inline-block;
+        }
+        #base-lang-menu {
+          position: absolute;
+          top: 100%;
+          left: 0;
+          right: auto;
+          min-width: 220px;
+          background: white;
+          border: 1px solid #e2e8f0;
+          border-radius: 12px;
+          box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+          padding: 8px;
+          z-index: 9999;
+          margin-top: 8px;
+          display: block;
+        }
+        #base-lang-menu[hidden] {
+          display: none !important;
+        }
+        #base-lang-menu .header-lang-option {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          width: 100%;
+          padding: 12px 14px;
+          border: none;
+          background: transparent;
+          border-radius: 8px;
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 500;
+          color: #1e293b;
+          transition: all 0.2s;
+          text-align: left;
+        }
+        #base-lang-menu .header-lang-option:hover {
+          background: #f1f5f9;
+          transform: translateX(2px);
+        }
+        #base-lang-menu .header-lang-option.is-active {
+          background: linear-gradient(135deg, #f0fdfa 0%, #ccfbf1 100%);
+          color: #0f766e;
+          font-weight: 600;
+          box-shadow: 0 2px 8px rgba(13, 148, 136, 0.1);
+        }
+        #base-lang-menu .header-lang-option.is-active::after {
+          content: "✓";
+          margin-left: auto;
+          color: #0d9488;
+          font-weight: bold;
+        }
+        .lang-trigger-btn {
+          display: inline-flex;
+          align-items: center;
+          gap: 8px;
+          padding: 10px 16px;
+          border-radius: 12px;
+          border: 1px solid rgba(13, 148, 136, 0.3);
+          background: rgba(255,255,255,0.95);
+          backdrop-filter: blur(8px);
+          cursor: pointer;
+          font-size: 14px;
+          font-weight: 600;
+          color: #0f766e;
+          transition: all 0.2s;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+        .lang-trigger-btn:hover {
+          background: white;
+          border-color: #0d9488;
+          box-shadow: 0 4px 12px rgba(13, 148, 136, 0.2);
+          transform: translateY(-1px);
+        }
+      </style>
+      <div class="header-lang-switch language-switch" aria-label="Language">
+        <button type="button" id="base-lang-toggle" class="lang-trigger-btn" aria-haspopup="true" aria-expanded="false">
+          <span>🌐</span>
+          <span id="base-lang-current">TR</span>
+          <span>▼</span>
+        </button>
+        <div id="base-lang-menu" hidden>
+          <button type="button" class="header-lang-option" data-locale="tr"><span>🇹🇷</span> Türkçe</button>
+          <button type="button" class="header-lang-option" data-locale="en"><span>🇬🇧</span> English</button>
+          <button type="button" class="header-lang-option" data-locale="es"><span>🇪🇸</span> Español</button>
+          <button type="button" class="header-lang-option" data-locale="de"><span>🇩🇪</span> Deutsch</button>
+          <button type="button" class="header-lang-option" data-locale="fr"><span>🇫🇷</span> Français</button>
+          <button type="button" class="header-lang-option" data-locale="it"><span>🇮🇹</span> Italiano</button>
+          <button type="button" class="header-lang-option" data-locale="he"><span>🇮🇱</span> עברית</button>
+          <button type="button" class="header-lang-option" data-locale="hi"><span>🇮🇳</span> हिन्दी</button>
+          <button type="button" class="header-lang-option" data-locale="ar"><span>🇸🇦</span> العربية</button>
+        </div>
+      </div>
       <div class="flex items-center gap-3">
         <a href="#iletisim" class="hidden sm:inline-flex bg-gradient-to-r from-primary to-primary-container text-on-primary px-5 py-2.5 rounded-full font-bold text-sm shadow-lg transition-transform hover:scale-105 active:scale-95">
-          Demo Talep Et
+          {{ t.hero_cta_primary }}
         </a>
         <button id="mobile-menu-btn" class="md:hidden w-10 h-10 rounded-xl flex items-center justify-center border border-outline-variant/20 bg-white/60" onclick="toggleMobileMenu()">
           <span class="material-symbols-outlined text-on-surface">menu</span>
@@ -143,149 +244,809 @@
         <span class="material-symbols-outlined">close</span>
       </button>
     </div>
-    <a href="{{ localized_home_path(request) }}" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">Ana Sayfa</a>
-    <a href="/kurumsal" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">Kurumsal</a>
+    <a href="/" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_home }}</a>
+    <a href="/kurumsal" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_enterprise }}</a>
     <a href="/hastaneler-icin" class="block py-3 px-4 rounded-xl font-bold text-primary bg-primary/5">Hastaneler</a>
-    <a href="#iletisim" onclick="toggleMobileMenu()" class="mt-4 block py-3 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-center shadow-lg">Demo Talep Et</a>
+    <a href="#iletisim" onclick="toggleMobileMenu()" class="mt-4 block py-3 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-center shadow-lg">{{ t.hero_cta_primary }}</a>
   </aside>
 
   <main class="pt-8 sm:pt-10">
 
-    <!-- ═══════════════ 1. HERO ═══════════════ -->
-    <section id="genel" class="hosp-anchor max-w-7xl mx-auto px-4 sm:px-8 mb-16 sm:mb-24">
-      <div class="relative">
-        <div class="pointer-events-none absolute inset-x-0 -top-10 h-56 sm:h-72 opacity-25"
-             style="background: radial-gradient(55% 100% at 65% 15%, rgba(14,165,164,0.22), transparent);"></div>
-        <div class="relative flex flex-col lg:flex-row gap-10 lg:gap-16 items-center">
-          <div class="flex-1 flex flex-col gap-5 sm:gap-6 text-center lg:text-left">
-            <div class="flex flex-wrap items-center gap-3 justify-center lg:justify-start">
-              <span class="inline-flex items-center gap-1.5 bg-primary/10 text-primary px-3 py-1 rounded-full text-xs font-bold tracking-wide border border-primary/15">
-                <span class="material-symbols-outlined text-sm" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
-                Hastane Çözümü
+    <!-- ═══════════════ 1. PREMIUM HERO ═══════════════ -->
+    <section id="genel" class="hosp-anchor relative overflow-hidden bg-gradient-to-br from-slate-900 via-teal-900 to-teal-800 pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 px-4 sm:px-8">
+      <!-- Premium Background Effects -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+          <div class="flex-1 flex flex-col gap-6 sm:gap-8 text-center lg:text-left">
+            <!-- Premium Badge -->
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full self-center lg:self-start">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-300 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-400"></span>
               </span>
-              <span class="text-primary font-bold tracking-[0.15em] uppercase text-xs font-headline">Hastaneler için Kurumsal Yapay Zekâ Altyapısı</span>
+              <span class="text-teal-100 text-xs font-bold tracking-widest uppercase">{{ t.hero_label }}</span>
             </div>
-            <h1 class="text-3xl sm:text-5xl lg:text-[4.25rem] font-extrabold font-headline leading-[1.08] tracking-tight text-on-surface">
-              Hastaneler için<br class="hidden sm:block" /> NoryaAI Clinical Enterprise
+            
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold font-headline leading-[1.05] tracking-tight text-white">
+              {{ t.hero_title }}
             </h1>
-            <p class="text-base sm:text-xl text-on-surface-variant max-w-xl leading-relaxed mx-auto lg:mx-0">
-              Kan tahlili ve laboratuvar sonuçlarını daha anlaşılır, daha düzenli ve çok dilli biçimde ön yapılandırmaya yardımcı olan kurumsal çözüm.
+            
+            <p class="text-base sm:text-xl text-white/85 max-w-2xl leading-relaxed mx-auto lg:mx-0">
+              {{ t.hero_subtitle }}
             </p>
-            <div class="flex flex-wrap gap-3 sm:gap-4 mt-2 justify-center lg:justify-start">
-              <a href="#iletisim" class="bg-gradient-to-r from-primary to-primary-container text-on-primary px-7 sm:px-10 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-primary/10 hover:brightness-105 transition-all">
-                Demo Talep Et
+            
+            <!-- Premium Stats -->
+            <div class="grid grid-cols-3 gap-4 sm:gap-6 pt-4 border-t border-white/10 mt-2">
+              <div class="text-center lg:text-left">
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">2M+</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_1_label }}</div>
+              </div>
+              <div class="text-center lg:text-left">
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">4,000+</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_2_label }}</div>
+              </div>
+              <div class="text-center lg:text-left">
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">98.7%</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_3_label }}</div>
+              </div>
+            </div>
+            
+            <!-- Premium CTA Buttons -->
+            <div class="flex flex-wrap gap-3 sm:gap-4 mt-4 justify-center lg:justify-start">
+              <a href="#iletisim" class="group relative bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-900 px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-2xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-105 active:scale-95">
+                <span class="relative z-10">{{ t.hero_cta_primary }}</span>
+                <span class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </a>
-              <a href="mailto:sales@norya.ai" class="border border-outline-variant/30 text-on-surface px-7 sm:px-10 py-3 sm:py-4 rounded-full font-bold text-base sm:text-lg hover:bg-surface-container-low transition-all">
-                Satış Ekibiyle Görüş
+              <a href="mailto:sales@norya.ai" class="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95">
+                {{ t.hero_cta_secondary }}
               </a>
-              <a href="/docs" target="_blank" rel="noopener noreferrer" class="border border-outline-variant/30 text-on-surface-variant px-6 py-3 sm:py-4 rounded-full font-semibold text-sm hover:bg-surface-container-low transition-all hidden sm:inline-flex items-center gap-2">
-                <span class="material-symbols-outlined text-base">description</span>
-                Teknik Dokümanlar
+              <a href="#guvenlik" class="group bg-white/5 backdrop-blur-sm border border-white/20 text-white px-6 sm:px-8 py-4 rounded-full font-semibold text-sm hover:bg-white/15 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">security</span>
+                <span class="hidden sm:inline">{{ t.subnav_security }}</span>
               </a>
             </div>
           </div>
 
-          <!-- Hospital Panel -->
+          <!-- Premium Hospital Dashboard Preview with Real Image -->
           <div class="flex-1 relative w-full max-w-md lg:max-w-lg">
-            <div class="absolute -inset-8 bg-primary/5 rounded-full blur-3xl"></div>
-            <div class="relative bg-surface-container-lowest rounded-3xl p-6 sm:p-8 shadow-[0_16px_48px_rgba(25,28,29,0.06)] border border-outline-variant/10 overflow-hidden">
-              <div class="flex items-center gap-3 mb-6">
-                <div class="w-8 h-8 rounded-lg bg-primary/10 flex items-center justify-center">
-                  <span class="material-symbols-outlined text-primary text-lg" style="font-variation-settings: 'FILL' 1;">local_hospital</span>
-                </div>
-                <span class="text-xs font-bold text-outline uppercase tracking-widest">Hastane Operasyonları</span>
+            <!-- Glow Effects -->
+            <div class="absolute -inset-12 bg-gradient-to-tr from-teal-500/30 to-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+            
+            <!-- Main Dashboard Image Card -->
+            <div class="relative bg-white/10 backdrop-blur-xl rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 overflow-hidden group">
+              <!-- Premium Badge -->
+              <div class="absolute top-4 right-4 z-20 bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-900 px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+                <span class="flex items-center gap-2">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
+                  </span>
+                  Live Demo
+                </span>
               </div>
-              <div class="space-y-3 sm:space-y-4">
-                <div class="p-4 rounded-xl bg-primary/5 border border-primary/10">
-                  <div class="flex items-center gap-3 mb-2">
-                    <span class="material-symbols-outlined text-primary text-lg">biotech</span>
-                    <span class="text-sm font-bold">Yapılandırılmış Ön Analiz</span>
+              
+              <!-- Main Dashboard Screenshot -->
+              <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/20">
+                <img 
+                  src="/static/images/hospital-dashboard-premium.png" 
+                  alt="NoryaAI Hastane Dashboard - Gerçek zamanlı laboratuvar analiz sistemi"
+                  class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                  width="600"
+                  height="400"
+                  loading="eager"
+                />
+                <!-- Overlay Gradient -->
+                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60"></div>
+              </div>
+              
+              <!-- Dashboard Stats Overlay -->
+              <div class="absolute bottom-4 left-4 right-4 z-10">
+                <div class="grid grid-cols-3 gap-2">
+                  <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
+                    <div class="text-lg sm:text-xl font-extrabold text-teal-600">2M+</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">Rapor</div>
                   </div>
-                  <div class="flex gap-1.5">
-                    <div class="h-2 flex-[3] bg-primary-container/50 rounded-full"></div>
-                    <div class="h-2 flex-[5] bg-primary/30 rounded-full"></div>
-                    <div class="h-2 flex-[2] bg-primary-fixed-dim/40 rounded-full"></div>
+                  <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
+                    <div class="text-lg sm:text-xl font-extrabold text-cyan-600">4K+</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">Hastane</div>
                   </div>
-                </div>
-                <div class="p-4 rounded-xl bg-surface-container-low">
-                  <div class="flex items-center gap-3 mb-2">
-                    <span class="material-symbols-outlined text-primary text-lg">translate</span>
-                    <span class="text-sm font-bold">Çok Dilli Hasta İletişimi</span>
-                  </div>
-                  <div class="flex gap-2 text-[11px] font-semibold text-on-surface-variant">
-                    <span class="bg-surface-container-high px-2 py-0.5 rounded">TR</span>
-                    <span class="bg-surface-container-high px-2 py-0.5 rounded">EN</span>
-                    <span class="bg-surface-container-high px-2 py-0.5 rounded">DE</span>
-                    <span class="bg-surface-container-high px-2 py-0.5 rounded">AR</span>
-                    <span class="bg-primary/10 text-primary px-2 py-0.5 rounded">+8</span>
-                  </div>
-                </div>
-                <div class="p-4 rounded-xl bg-surface-container-low">
-                  <div class="flex items-center gap-3 mb-2">
-                    <span class="material-symbols-outlined text-primary text-lg">clinical_notes</span>
-                    <span class="text-sm font-bold">Klinisyen Gözetimli İş Akışı</span>
-                  </div>
-                  <div class="flex items-center gap-2">
-                    <div class="h-2 flex-1 bg-primary-fixed-dim/30 rounded-full"></div>
-                    <span class="text-[10px] font-bold text-primary bg-primary/10 px-2 py-0.5 rounded">Gözden Geçir → Onayla</span>
+                  <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
+                    <div class="text-lg sm:text-xl font-extrabold text-purple-600">98.7%</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">Doğruluk</div>
                   </div>
                 </div>
+              </div>
+            </div>
+            
+            <!-- Trust Indicators -->
+            <div class="mt-6 flex flex-wrap justify-center gap-3">
+              <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
+                <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
+                <span class="text-white text-xs font-bold">KVKK Uyumlu</span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
+                <span class="material-symbols-outlined text-cyan-300 text-sm">security</span>
+                <span class="text-white text-xs font-bold">HIPAA Ready</span>
+              </div>
+              <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
+                <span class="material-symbols-outlined text-purple-300 text-sm">cloud_done</span>
+                <span class="text-white text-xs font-bold">SOC 2</span>
               </div>
             </div>
           </div>
         </div>
       </div>
 
-      <!-- Trust Chips -->
-      <div class="mt-10 sm:mt-14 py-5 sm:py-6 px-5 sm:px-8 rounded-2xl bg-surface-container-lowest border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
-        <div class="flex flex-wrap items-center justify-center lg:justify-between gap-x-6 sm:gap-x-10 gap-y-3">
-          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
-            <span class="material-symbols-outlined text-primary text-base">translate</span> Çok Dilli Destek
-          </span>
-          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
-            <span class="material-symbols-outlined text-primary text-base">account_tree</span> Kurumsal İş Akışı
-          </span>
-          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
-            <span class="material-symbols-outlined text-primary text-base">clinical_notes</span> Klinik Gözetim Odaklı
-          </span>
-          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
-            <span class="material-symbols-outlined text-primary text-base">history</span> İzlenebilir Süreç Mantığı
-          </span>
-          <span class="flex items-center gap-2 text-xs sm:text-sm font-semibold text-on-surface-variant">
-            <span class="material-symbols-outlined text-primary text-base">api</span> Entegrasyona Uygun Yapı
-          </span>
+      <!-- Premium Trust Section -->
+      <div class="mt-16 sm:mt-20">
+        <!-- Trust Chips -->
+        <div class="py-6 sm:py-8 px-6 sm:px-10 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
+          <div class="flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-12 gap-y-4">
+            <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
+              <span class="material-symbols-outlined text-teal-300 text-xl">translate</span> 9+ Dilde Destek
+            </span>
+            <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
+              <span class="material-symbols-outlined text-teal-300 text-xl">account_tree</span> Kurumsal İş Akışı
+            </span>
+            <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
+              <span class="material-symbols-outlined text-teal-300 text-xl">clinical_notes</span> Klinik Onay Sistemi
+            </span>
+            <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
+              <span class="material-symbols-outlined text-teal-300 text-xl">history</span> Tam İzlenebilirlik
+            </span>
+            <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
+              <span class="material-symbols-outlined text-teal-300 text-xl">api</span> API Entegrasyonu
+            </span>
+          </div>
+        </div>
+        
+        <!-- Compliance & Certifications -->
+        <div class="mt-8 sm:mt-10">
+          <div class="text-center mb-6">
+            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">Sertifikasyonlar & Uyumluluk</p>
+          </div>
+          <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
+            <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
+              <span class="material-symbols-outlined text-teal-300 text-xl">verified</span>
+              <span class="text-white text-sm font-bold">KVKK Uyumlu</span>
+            </div>
+            <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
+              <span class="material-symbols-outlined text-teal-300 text-xl">security</span>
+              <span class="text-white text-sm font-bold">HIPAA Ready</span>
+            </div>
+            <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
+              <span class="material-symbols-outlined text-teal-300 text-xl">globe</span>
+              <span class="text-white text-sm font-bold">GDPR Compliant</span>
+            </div>
+            <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
+              <span class="material-symbols-outlined text-teal-300 text-xl">dns</span>
+              <span class="text-white text-sm font-bold">ISO 27001</span>
+            </div>
+            <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
+              <span class="material-symbols-outlined text-teal-300 text-xl">cloud_done</span>
+              <span class="text-white text-sm font-bold">SOC 2 Type II</span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Technology Partners - Premium -->
+        <div class="mt-8 sm:mt-12">
+          <div class="text-center mb-6">
+            <p class="text-white/70 text-sm font-medium uppercase tracking-widest">Teknoloji Partnerleri & Altyapı</p>
+          </div>
+          <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
+            <!-- Partner 1: OpenAI -->
+            <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-green-300 text-2xl">psychology</span>
+              </div>
+              <div class="text-white text-xs sm:text-sm font-bold">OpenAI</div>
+              <div class="text-white/50 text-[10px] mt-0.5">GPT-4 Enterprise</div>
+            </div>
+            
+            <!-- Partner 2: Azure -->
+            <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-blue-300 text-2xl">cloud</span>
+              </div>
+              <div class="text-white text-xs sm:text-sm font-bold">Microsoft Azure</div>
+              <div class="text-white/50 text-[10px] mt-0.5">Cloud Infrastructure</div>
+            </div>
+            
+            <!-- Partner 3: AWS -->
+            <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-orange-300 text-2xl">storage</span>
+              </div>
+              <div class="text-white text-xs sm:text-sm font-bold">AWS</div>
+              <div class="text-white/50 text-[10px] mt-0.5">Secure Storage</div>
+            </div>
+            
+            <!-- Partner 4: HL7/FHIR -->
+            <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-purple-300 text-2xl">hub</span>
+              </div>
+              <div class="text-white text-xs sm:text-sm font-bold">HL7 FHIR</div>
+              <div class="text-white/50 text-[10px] mt-0.5">Interoperability</div>
+            </div>
+            
+            <!-- Partner 5: DICOM -->
+            <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-red-500/20 to-rose-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-red-300 text-2xl">image</span>
+              </div>
+              <div class="text-white text-xs sm:text-sm font-bold">DICOM</div>
+              <div class="text-white/50 text-[10px] mt-0.5">Medical Imaging</div>
+            </div>
+            
+            <!-- Partner 6: Security -->
+            <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-indigo-300 text-2xl">shield</span>
+              </div>
+              <div class="text-white text-xs sm:text-sm font-bold">Enterprise Security</div>
+              <div class="text-white/50 text-[10px] mt-0.5">End-to-End Encryption</div>
+            </div>
+          </div>
+          
+          <!-- Trust Footer -->
+          <div class="mt-6 text-center">
+            <p class="text-white/60 text-xs sm:text-sm">
+              <span class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+                <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
+                <span>Enterprise-grade altyapı ile güvenli ve ölçeklenebilir çözüm</span>
+              </span>
+            </p>
+          </div>
+        </div>
+        
+        <!-- International Partners with Map Visual -->
+        <div class="mt-12 sm:mt-16">
+          <div class="text-center mb-6">
+            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">Uluslararası Ortaklar & 50+ Ülkede Kullanım</p>
+          </div>
+          
+          <!-- Global Network Map -->
+          <div class="relative mb-8 rounded-3xl overflow-hidden shadow-2xl border border-white/20">
+            <div class="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 z-10"></div>
+            <img 
+              src="/static/images/global-hospital-network.png" 
+              alt="NoryaAI Global Hastane Ağı - 50+ ülkede 4,000+ hastane ve klinik"
+              class="w-full h-48 sm:h-64 lg:h-80 object-cover opacity-80"
+              width="1200"
+              height="600"
+              loading="lazy"
+            />
+            <!-- Overlay Stats -->
+            <div class="absolute inset-0 flex items-center justify-center z-20">
+              <div class="bg-white/10 backdrop-blur-xl border border-white/20 rounded-3xl p-6 sm:p-8 shadow-2xl">
+                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8">
+                  <div class="text-center">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-white mb-2">50+</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">Ülke</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-teal-300 mb-2">4K+</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">Hastane</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-cyan-300 mb-2">2M+</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">Rapor</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-3xl sm:text-5xl font-extrabold text-purple-300 mb-2">9+</div>
+                    <div class="text-white/80 text-xs sm:text-sm font-bold">Dil</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Premium Country Flags Grid -->
+          <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-4 sm:gap-6">
+            <!-- Country 1: Germany -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇩🇪</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">Deutschland</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 2: France -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇫🇷</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">France</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 3: Italy -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇮🇹</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">Italia</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 4: Spain -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇪🇸</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">España</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 5: UK -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇬🇧</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">United Kingdom</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 6: UAE -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇦🇪</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">UAE</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 7: Saudi Arabia -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇸🇦</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">KSA</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 8: India -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇮🇳</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">India</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+            <!-- Country 9: USA -->
+            <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
+              <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
+              <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇺🇸</div>
+              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">USA</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+            </div>
+          </div>
+          
+          <!-- Global Stats -->
+          <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+              <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">50+</div>
+              <div class="text-white/60 text-xs">Ülke</div>
+            </div>
+            <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+              <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">9+</div>
+              <div class="text-white/60 text-xs">Rapor Dili</div>
+            </div>
+            <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+              <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">2M+</div>
+              <div class="text-white/60 text-xs">Rapor Üretildi</div>
+            </div>
+            <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+              <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">4,000+</div>
+              <div class="text-white/60 text-xs">Hastane & Klinik</div>
+            </div>
+          </div>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════ 2. NEDEN HASTANEYE ÖZEL ═══════════════ -->
-    <section id="neden" class="hosp-anchor bg-surface-container-low py-16 sm:py-24 lg:py-32 px-4 sm:px-8">
-      <div class="max-w-7xl mx-auto">
-        <div class="max-w-3xl mb-10 sm:mb-14">
-          <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Neden hastaneye özel bir çözüm?</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">Hastaneler; yüksek hacimli laboratuvar iş yükü, çok disiplinli ekipler, farklı dillerde hasta iletişimi ve kurumsal denetim gereksinimleriyle diğer sağlık kuruluşlarından ayrılır. Genel amaçlı araçlar bu karmaşıklığı karşılamaz.</p>
+    <!-- ═══════════════ 2. NEDEN HASTANEYE ÖZEL - PREMIUM ═══════════════ -->
+    <section id="neden" class="hosp-anchor relative py-20 sm:py-28 lg:py-36 px-4 sm:px-8 overflow-hidden">
+      <!-- Background -->
+      <div class="absolute inset-0 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800"></div>
+      <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 48px 48px;"></div>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
+          <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
+            <span class="material-symbols-outlined text-teal-600 text-sm">psychology</span>
+            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">Enterprise Benefits</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white">
+            Neden Hastaneye Özel<br class="hidden sm:block" />
+            <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Bir Çözüm?</span>
+          </h2>
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
+            Hastaneler; yüksek hacimli laboratuvar iş yükü, çok disiplinli ekipler, farklı dillerde hasta iletişimi ve kurumsal denetim gereksinimleriyle diğer sağlık kuruluşlarından ayrılır.
+          </p>
         </div>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
-          <div class="bg-surface-container-lowest p-7 sm:p-8 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-              <span class="material-symbols-outlined text-2xl">speed</span>
+        
+        <!-- Premium Cards Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+          <!-- Card 1 -->
+          <div class="group relative bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+            <!-- Hover Gradient -->
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <!-- Icon -->
+            <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-white text-3xl">speed</span>
             </div>
-            <h3 class="text-lg sm:text-xl font-bold font-headline">Yüksek hacimli laboratuvar çıktıları</h3>
-            <p class="text-on-surface-variant leading-relaxed text-sm sm:text-base">Günde yüzlerce tahlil sonucu üretilir. Her birini ayrı ayrı yorumlamak ve yapılandırmak zaman alır; tutarsızlık riski yüksektir.</p>
+            
+            <!-- Content -->
+            <h3 class="relative text-xl sm:text-2xl font-bold font-headline mb-4 text-slate-900 dark:text-white">
+              Yüksek Hacimli<br />Laboratuvar Çıktıları
+            </h3>
+            <p class="relative text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+              Günde yüzlerce tahlil sonucu üretilir. NoryaAI ile her birini otomatik olarak yapılandırın, tutarlılığı sağlayın ve uzman incelemesi için hazırlayın.
+            </p>
+            
+            <!-- Stats -->
+            <div class="relative mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-2xl font-extrabold text-teal-600">85%</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">Zaman Tasarrufu</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-2xl font-extrabold text-cyan-600">500+</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">Günlük Analiz</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="bg-surface-container-lowest p-7 sm:p-8 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-              <span class="material-symbols-outlined text-2xl">groups</span>
+          
+          <!-- Card 2 -->
+          <div class="group relative bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-white text-3xl">groups</span>
             </div>
-            <h3 class="text-lg sm:text-xl font-bold font-headline">Çok disiplinli ekip koordinasyonu</h3>
-            <p class="text-on-surface-variant leading-relaxed text-sm sm:text-base">Laboratuvar, klinik, acil servis ve idari birimler arasında tutarlı bir raporlama dili ve iş akışı standardı gereklidir.</p>
+            
+            <h3 class="relative text-xl sm:text-2xl font-bold font-headline mb-4 text-slate-900 dark:text-white">
+              Çok Disiplinli<br />Ekip Koordinasyonu
+            </h3>
+            <p class="relative text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+              Laboratuvar, klinik, acil servis ve idari birimler arasında tutarlı bir raporlama dili ve iş akışı standardı oluşturun.
+            </p>
+            
+            <div class="relative mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-2xl font-extrabold text-purple-600">100%</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">Standartlaşma</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-2xl font-extrabold text-pink-600">12+</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">Departman Desteği</div>
+                </div>
+              </div>
+            </div>
           </div>
-          <div class="bg-surface-container-lowest p-7 sm:p-8 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex flex-col gap-4">
-            <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary">
-              <span class="material-symbols-outlined text-2xl">language</span>
+          
+          <!-- Card 3 -->
+          <div class="group relative bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-white text-3xl">language</span>
             </div>
-            <h3 class="text-lg sm:text-xl font-bold font-headline">Farklı dillerde hasta iletişimi</h3>
-            <p class="text-on-surface-variant leading-relaxed text-sm sm:text-base">Uluslararası hastalar, sağlık turizmi ve çok kültürlü topluluklar; sonuçların birden fazla dilde anlaşılır biçimde sunulmasını gerektirir.</p>
+            
+            <h3 class="relative text-xl sm:text-2xl font-bold font-headline mb-4 text-slate-900 dark:text-white">
+              Farklı Dillerde<br />Hasta İletişimi
+            </h3>
+            <p class="relative text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
+              Uluslararası hastalar, sağlık turizmi ve çok kültürlü topluluklar için sonuçları 9+ dilde anlaşılır biçimde sunun.
+            </p>
+            
+            <div class="relative mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
+              <div class="flex items-center justify-between">
+                <div>
+                  <div class="text-2xl font-extrabold text-amber-600">12+</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">Dil Desteği</div>
+                </div>
+                <div class="text-right">
+                  <div class="text-2xl font-extrabold text-orange-600">50+</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">Ülke Kapsamı</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Bottom CTA -->
+        <div class="mt-12 text-center">
+          <a href="#iletisim" class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
+            <span class="material-symbols-outlined">rocket_launch</span>
+            <span>Ücretsiz Pilot Başvurusu Yapın</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ AI ANALYSIS VISUAL BANNER ═══════════════ -->
+    <section class="relative py-16 sm:py-20 px-4 sm:px-8 overflow-hidden bg-gradient-to-br from-teal-50 via-cyan-50 to-white dark:from-slate-900 dark:via-teal-950 dark:to-slate-900">
+      <div class="absolute inset-0 opacity-[0.02]" style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 48px 48px;"></div>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <!-- AI Analysis Image Showcase -->
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
+          <!-- Left: Content -->
+          <div class="order-2 lg:order-1">
+            <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
+              <span class="material-symbols-outlined text-teal-600 text-sm">auto_awesome</span>
+              <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">AI Technology</span>
+            </div>
+            
+            <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white leading-tight">
+              %98.7 Doğrulukla<br />
+              <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Biyobelirteç Analizi</span>
+            </h2>
+            
+            <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
+              NoryaAI'nin gelişmiş makine öğrenmesi modelleri, laboratuvar sonuçlarınızı saniyeler içinde analiz eder ve klinik ekipler için yapılandırılmış içgörüler sunar.
+            </p>
+            
+            <!-- Stats Grid -->
+            <div class="grid grid-cols-2 gap-4 sm:gap-6">
+              <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+                <div class="text-3xl sm:text-4xl font-extrabold text-teal-600 mb-2">2M+</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Analiz Edilen Rapor</div>
+              </div>
+              <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+                <div class="text-3xl sm:text-4xl font-extrabold text-cyan-600 mb-2">50+</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Ülkede Kullanım</div>
+              </div>
+              <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+                <div class="text-3xl sm:text-4xl font-extrabold text-purple-600 mb-2">&lt;50ms</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Yanıt Süresi</div>
+              </div>
+              <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
+                <div class="text-3xl sm:text-4xl font-extrabold text-amber-600 mb-2">12+</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Dil Desteği</div>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Right: AI Analysis Image -->
+          <div class="order-1 lg:order-2">
+            <div class="relative group">
+              <!-- Glow Effect -->
+              <div class="absolute -inset-4 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-70 group-hover:opacity-100"></div>
+              
+              <!-- Main Image Card -->
+              <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-4 sm:p-6 shadow-2xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
+                <div class="absolute top-4 left-4 z-10 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+                  <span class="flex items-center gap-2">
+                    <span class="material-symbols-outlined text-sm">auto_awesome</span>
+                    AI Powered
+                  </span>
+                </div>
+                
+                <div class="relative rounded-2xl overflow-hidden shadow-xl">
+                  <img 
+                    src="/static/images/ai-lab-analysis-premium.png" 
+                    alt="NoryaAI Yapay Zeka Laboratuvar Analizi - Biyobelirteç işleme ve veri görselleştirme"
+                    class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
+                    width="600"
+                    height="400"
+                    loading="lazy"
+                  />
+                  <!-- Overlay -->
+                  <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-40"></div>
+                </div>
+                
+                <!-- Feature Tags -->
+                <div class="mt-4 flex flex-wrap gap-2">
+                  <span class="bg-teal-500/10 text-teal-700 dark:text-teal-300 px-3 py-1.5 rounded-full text-xs font-bold border border-teal-500/20">
+                    Machine Learning
+                  </span>
+                  <span class="bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5 rounded-full text-xs font-bold border border-cyan-500/20">
+                    Pattern Recognition
+                  </span>
+                  <span class="bg-purple-500/10 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-full text-xs font-bold border border-purple-500/20">
+                    Predictive Analytics
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 2.5 PREMIUM ENTERPRISE FEATURES ═══════════════ -->
+    <section class="relative py-20 sm:py-28 lg:py-36 px-4 sm:px-8 overflow-hidden bg-gradient-to-br from-slate-900 via-teal-900 to-slate-800">
+      <!-- Background Effects -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
+          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-6">
+            <span class="material-symbols-outlined text-teal-300 text-sm">auto_awesome</span>
+            <span class="text-white text-xs font-bold uppercase tracking-widest">Premium Enterprise Features</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
+            Kurumsal <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Özellikler</span>
+          </h2>
+          <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
+            Hastanenizin operasyonel mükemmelliğini destekleyen gelişmiş yapay zekâ özellikleri
+          </p>
+        </div>
+        
+        <!-- Premium Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
+          <!-- Feature 1: AI Analytics -->
+          <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-teal-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <!-- Icon -->
+            <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-white text-3xl">insights</span>
+            </div>
+            
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-1 bg-teal-500/30 text-teal-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
+              <span class="material-symbols-outlined text-xs">auto_awesome</span>
+              AI POWERED
+            </div>
+            
+            <!-- Content -->
+            <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
+              Gelişmiş AI Analitiği
+            </h3>
+            <p class="relative text-white/70 leading-relaxed text-sm">
+              Laboratuvar verilerinizden otomatik içgörüler. Anormal paternleri tespit eder, trend analizleri sunar ve klinik karar desteği sağlar.
+            </p>
+            
+            <!-- Feature List -->
+            <ul class="relative mt-6 space-y-2">
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
+                <span>Patern Tanıma</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
+                <span>Trend Analizi</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
+                <span>Risk Skorlaması</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Feature 2: Real-time Monitoring -->
+          <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-cyan-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-white text-3xl">real_time_text</span>
+            </div>
+            
+            <div class="inline-flex items-center gap-1 bg-cyan-500/30 text-cyan-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
+              <span class="material-symbols-outlined text-xs">radio_button_checked</span>
+              REAL-TIME
+            </div>
+            
+            <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
+              Gerçek Zamanlı İzleme
+            </h3>
+            <p class="relative text-white/70 leading-relaxed text-sm">
+              Tüm laboratuvar iş akışınızı canlı olarak izleyin. Anlık bildirimler, performans metrikleri ve operasyonel dashboard.
+            </p>
+            
+            <ul class="relative mt-6 space-y-2">
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
+                <span>Canlı Dashboard</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
+                <span>Anlık Uyarılar</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
+                <span>KPI Takibi</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Feature 3: Custom Integration -->
+          <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-purple-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-white text-3xl">api</span>
+            </div>
+            
+            <div class="inline-flex items-center gap-1 bg-purple-500/30 text-purple-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
+              <span class="material-symbols-outlined text-xs">settings</span>
+              CUSTOM
+            </div>
+            
+            <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
+              Özel Entegrasyon
+            </h3>
+            <p class="relative text-white/70 leading-relaxed text-sm">
+              Mevcut HIS, LIS ve EHR sistemlerinizle sorunsuz entegrasyon. RESTful API, HL7 FHIR desteği ve özel connector'lar.
+            </p>
+            
+            <ul class="relative mt-6 space-y-2">
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
+                <span>HL7 FHIR</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
+                <span>RESTful API</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
+                <span>Webhook Desteği</span>
+              </li>
+            </ul>
+          </div>
+          
+          <!-- Feature 4: Compliance & Security -->
+          <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-amber-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
+            <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+            
+            <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
+              <span class="material-symbols-outlined text-white text-3xl">verified</span>
+            </div>
+            
+            <div class="inline-flex items-center gap-1 bg-amber-500/30 text-amber-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
+              <span class="material-symbols-outlined text-xs">security</span>
+              CERTIFIED
+            </div>
+            
+            <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
+              Uyumluluk & Güvenlik
+            </h3>
+            <p class="relative text-white/70 leading-relaxed text-sm">
+              KVKK, HIPAA ve GDPR uyumlu. Tam denetim izleri, rol bazlı erişim kontrolü ve uçtan uca şifreleme.
+            </p>
+            
+            <ul class="relative mt-6 space-y-2">
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
+                <span>KVKK / GDPR</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
+                <span>HIPAA Uyumlu</span>
+              </li>
+              <li class="flex items-center gap-2 text-xs text-white/70">
+                <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
+                <span>Audit Trail</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+        
+        <!-- Bottom Stats -->
+        <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
+          <div class="text-center">
+            <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">99.9%</div>
+            <div class="text-white/70 text-sm font-medium">Uptime SLA</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">&lt;50ms</div>
+            <div class="text-white/70 text-sm font-medium">API Response</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">256-bit</div>
+            <div class="text-white/70 text-sm font-medium">Şifreleme</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">24/7</div>
+            <div class="text-white/70 text-sm font-medium">Öncelikli Destek</div>
           </div>
         </div>
       </div>
@@ -466,54 +1227,134 @@
       </div>
     </section>
 
-    <!-- ═══════════════ 6. HASTANE İŞ AKIŞI ═══════════════ -->
-    <section id="isakisi" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
-      <div class="rounded-[2rem] sm:rounded-[2.5rem] bg-surface-container-low p-6 sm:p-8 lg:p-10">
-        <div class="max-w-2xl mb-8 sm:mb-10">
-          <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">Hastane iş akışı</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">Sonuçların yüklenmesinden klinisyen gözden geçirmesine kadar basit ve izlenebilir bir süreç.</p>
+    <!-- ═══════════════ 6. PREMIUM İŞ AKIŞI ═══════════════ -->
+    <section id="isakisi" class="hosp-anchor relative py-20 sm:py-28 lg:py-36 px-4 sm:px-8 overflow-hidden">
+      <!-- Background -->
+      <div class="absolute inset-0 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-800"></div>
+      <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 48px 48px;"></div>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
+          <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
+            <span class="material-symbols-outlined text-teal-600 text-sm">flowchart</span>
+            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">5 Adımda Başlayın</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white">
+            Sonuçların Yüklenmesinden<br class="hidden sm:block" />
+            <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Kullanıma Hazır Çıktıya</span>
+          </h2>
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
+            Basit, izlenebilir ve klinisyen onaylı iş akışı
+          </p>
         </div>
-        <div class="grid grid-cols-1 lg:grid-cols-5 gap-3 sm:gap-4">
-          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">01</span>
-              <span class="material-symbols-outlined text-primary">upload_file</span>
+        
+        <!-- Premium Workflow Steps -->
+        <div class="relative">
+          <!-- Connection Line (Desktop) -->
+          <div class="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-teal-500/20"></div>
+          
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
+            <!-- Step 1 -->
+            <div class="group relative">
+              <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50">
+                <!-- Step Number Badge -->
+                <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                  <span class="text-white font-extrabold text-lg">01</span>
+                </div>
+                
+                <!-- Icon -->
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500/10 to-cyan-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                  <span class="material-symbols-outlined text-teal-600 dark:text-teal-400 text-3xl">upload_file</span>
+                </div>
+                
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Sonuç Yükleme</h3>
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                  Laboratuvar sonuçları PDF, görsel veya metin olarak sisteme yüklenir.
+                </p>
+              </div>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Sonuç yükleme</h3>
-            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Laboratuvar sonuçları PDF, görsel veya metin olarak sisteme yüklenir.</p>
-          </div>
-          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">02</span>
-              <span class="material-symbols-outlined text-primary">biotech</span>
+            
+            <!-- Step 2 -->
+            <div class="group relative">
+              <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50">
+                <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                  <span class="text-white font-extrabold text-lg">02</span>
+                </div>
+                
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-teal-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                  <span class="material-symbols-outlined text-cyan-600 dark:text-cyan-400 text-3xl">biotech</span>
+                </div>
+                
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Yapılandırılmış Ön Analiz</h3>
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                  Yapay zekâ, sonuçları yapılandırılmış ve kategorize edilmiş biçimde ön hazırlığa alır.
+                </p>
+              </div>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Yapılandırılmış ön analiz</h3>
-            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Yapay zekâ, sonuçları yapılandırılmış ve kategorize edilmiş biçimde ön hazırlığa alır.</p>
-          </div>
-          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">03</span>
-              <span class="material-symbols-outlined text-primary">translate</span>
+            
+            <!-- Step 3 -->
+            <div class="group relative">
+              <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50">
+                <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                  <span class="text-white font-extrabold text-lg">03</span>
+                </div>
+                
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                  <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-3xl">translate</span>
+                </div>
+                
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Çok Dilli Özet</h3>
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                  İhtiyaç halinde sonuçlar 12+ dilde anlaşılır özet biçiminde hazırlanır.
+                </p>
+              </div>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Çok dilli özet</h3>
-            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">İhtiyaç halinde sonuçlar birden fazla dilde anlaşılır özet biçiminde hazırlanır.</p>
-          </div>
-          <div class="rounded-2xl bg-surface-container-lowest border border-outline-variant/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">04</span>
-              <span class="material-symbols-outlined text-primary">clinical_notes</span>
+            
+            <!-- Step 4 -->
+            <div class="group relative">
+              <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50">
+                <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
+                  <span class="text-white font-extrabold text-lg">04</span>
+                </div>
+                
+                <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
+                  <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-3xl">clinical_notes</span>
+                </div>
+                
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Klinisyen Gözden Geçirme</h3>
+                <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
+                  Klinik ekip, çıktıları gözden geçirir ve uygunluğunu değerlendirir.
+                </p>
+              </div>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Klinisyen gözden geçirme</h3>
-            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Klinik veya operasyonel ekip, çıktıları gözden geçirir ve uygunluğunu değerlendirir.</p>
-          </div>
-          <div class="rounded-2xl bg-primary-container/15 border border-primary/15 p-4 sm:p-5 min-h-[150px] flex flex-col">
-            <div class="flex items-center justify-between mb-3">
-              <span class="text-xs font-bold tracking-[0.14em] text-primary uppercase">05</span>
-              <span class="material-symbols-outlined text-primary">check_circle</span>
+            
+            <!-- Step 5 -->
+            <div class="group relative">
+              <div class="relative bg-gradient-to-br from-teal-500 to-cyan-500 rounded-3xl p-6 shadow-2xl border border-teal-400/30">
+                <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg">
+                  <span class="material-symbols-outlined text-teal-600 text-2xl">check_circle</span>
+                </div>
+                
+                <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-4">
+                  <span class="material-symbols-outlined text-white text-3xl">assignment</span>
+                </div>
+                
+                <h3 class="text-lg font-bold font-headline mb-3 text-white">Kullanıma Hazır Çıktı</h3>
+                <p class="text-white/80 text-sm leading-relaxed">
+                  Onaylanan çıktılar, hasta bilgilendirme veya kurum içi raporlama amacıyla kullanılabilir.
+                </p>
+              </div>
             </div>
-            <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Kullanıma hazır çıktı</h3>
-            <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Onaylanan çıktılar, hasta bilgilendirme veya kurum içi raporlama amacıyla kullanılabilir hale gelir.</p>
           </div>
+        </div>
+        
+        <!-- CTA -->
+        <div class="mt-12 text-center">
+          <a href="#iletisim" class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
+            <span class="material-symbols-outlined">rocket_launch</span>
+            <span>Ücretsiz Pilot ile Başlayın</span>
+          </a>
         </div>
       </div>
     </section>
@@ -529,7 +1370,82 @@
       </div>
     </section>
 
-    <!-- ═══════════════ 8. PİLOT DAĞITIM ═══════════════ -->
+    <!-- ═══════════════ 8. İLETİŞİM ═══════════════ -->
+    <section id="iletisim" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
+      <div class="max-w-4xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
+          <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
+            <span class="material-symbols-outlined text-teal-600 text-sm">mail</span>
+            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">İletişim</span>
+          </div>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white">
+            Size <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Özel</span> Çözüm
+          </h2>
+          <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
+            Hastanenizin ihtiyaçlarına göre özelleştirilmiş demo ve bilgi için bize ulaşın
+          </p>
+        </div>
+        
+        <!-- Contact Info Card -->
+        <div class="bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-slate-800 dark:to-slate-900 rounded-3xl p-8 sm:p-12 shadow-xl border border-teal-100 dark:border-slate-700 mb-12">
+          <div class="text-center">
+            <div class="w-20 h-20 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center mx-auto mb-6 shadow-lg">
+              <span class="material-symbols-outlined text-white text-4xl">mail</span>
+            </div>
+            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-4">Kurumsal Satış Ekibi</h3>
+            <p class="text-slate-600 dark:text-slate-300 mb-8 max-w-xl mx-auto">
+              Demo talebi, fiyatlandırma bilgisi veya teknik sorularınız için aşağıdaki e-posta adresinden bize ulaşabilirsiniz.
+            </p>
+            <a href="mailto:support@noryaai.com" class="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-teal-500/30 hover:scale-105 transition-all duration-300">
+              <span class="material-symbols-outlined">send</span>
+              support@noryaai.com
+            </a>
+            <div class="mt-8 flex flex-wrap justify-center gap-4 text-sm text-slate-600 dark:text-slate-400">
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-teal-500">check_circle</span>
+                24-48 saat içinde yanıt
+              </span>
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-teal-500">check_circle</span>
+                Ücretsiz demo
+              </span>
+              <span class="flex items-center gap-2">
+                <span class="material-symbols-outlined text-teal-500">check_circle</span>
+                Kişiye özel çözüm
+              </span>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Features Grid -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+            <div class="w-14 h-14 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-4">
+              <span class="material-symbols-outlined text-teal-600 dark:text-teal-400 text-2xl">schedule</span>
+            </div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Demo Planla</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Canlı demo ile sistemi yakından tanıyın</p>
+          </div>
+          <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+            <div class="w-14 h-14 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center mx-auto mb-4">
+              <span class="material-symbols-outlined text-cyan-600 dark:text-cyan-400 text-2xl">description</span>
+            </div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Dokümanlar</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-400">Teknik dokümantasyon ve entegrasyon rehberleri</p>
+          </div>
+          <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
+            <div class="w-14 h-14 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mx-auto mb-4">
+              <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-2xl">security</span>
+            </div>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Güvenlik</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-400">KVKK, HIPAA ve GDPR uyumluluk bilgileri</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 9. PİLOT DAĞITIM ═══════════════ -->
     <section id="pilot" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
       <div class="bg-surface-container-lowest rounded-[2rem] sm:rounded-[3rem] p-8 sm:p-12 lg:p-16 border border-outline-variant/10 shadow-[0_16px_48px_rgba(25,28,29,0.04)]">
         <div class="max-w-3xl mx-auto text-center mb-10 sm:mb-14">
@@ -603,70 +1519,173 @@
       </div>
     </section>
 
-    <!-- ═══════════════ 10. KAPANIŞ CTA + İLETİŞİM FORMU ═══════════════ -->
-    <section id="iletisim" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
+    <!-- ═══════════════ 10. PREMIUM FINAL CTA + FORM ═══════════════ -->
+    <section id="iletisim" class="hosp-anchor relative py-20 sm:py-28 lg:py-36 px-4 sm:px-8 overflow-hidden">
+      <!-- Background -->
+      <div class="absolute inset-0 bg-gradient-to-br from-slate-900 via-teal-900 to-slate-800"></div>
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1.5s;"></div>
+      </div>
+      
       <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl text-white text-sm font-medium shadow-lg"></div>
-      <div class="bg-surface-container-lowest rounded-[2rem] sm:rounded-[3rem] shadow-2xl overflow-hidden flex flex-col lg:flex-row border border-outline-variant/10">
-        <!-- Benefits Panel -->
-        <div class="flex-1 p-8 sm:p-12 lg:p-16 xl:p-20 bg-primary text-on-primary">
-          <span class="inline-block text-primary-fixed text-xs sm:text-sm font-semibold tracking-[0.14em] uppercase mb-3">Hastaneler İçin Kurumsal İletişim</span>
-          <h2 class="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl mb-4 sm:mb-6">Hastaneniz için NoryaAI'yi değerlendirin</h2>
-          <p class="text-on-primary/85 text-base sm:text-lg mb-6 sm:mb-8 leading-relaxed">Kurumsal dağıtım, pilot planlama ve teknik detaylar için satış ve klinik mühendislik ekibimizle görüşün.</p>
-          <div class="flex flex-wrap gap-3 mb-8 sm:mb-10">
-            <a href="mailto:sales@norya.ai" class="inline-flex items-center justify-center px-4 sm:px-5 py-2.5 rounded-full border border-white/35 text-white font-semibold text-sm hover:bg-white/10 transition-colors">Satış Ekibiyle Görüş</a>
-            <a href="/docs" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center px-4 sm:px-5 py-2.5 rounded-full border border-white/35 text-white font-semibold text-sm hover:bg-white/10 transition-colors">Teknik Dokümanları İncele</a>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <!-- Section Header -->
+        <div class="text-center max-w-4xl mx-auto mb-12 sm:mb-16">
+          <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-6">
+            <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
+            <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli Pilot Program</span>
           </div>
-          <div class="space-y-4 sm:space-y-6">
-            <div class="flex items-center gap-3 sm:gap-4">
-              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
-              <span class="text-sm sm:text-base">Pilot dağıtım planlaması</span>
-            </div>
-            <div class="flex items-center gap-3 sm:gap-4">
-              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
-              <span class="text-sm sm:text-base">Güvenlik ve uyumluluk değerlendirmesi</span>
-            </div>
-            <div class="flex items-center gap-3 sm:gap-4">
-              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
-              <span class="text-sm sm:text-base">Kurumsal entegrasyon planlaması</span>
-            </div>
-            <div class="flex items-center gap-3 sm:gap-4">
-              <span class="material-symbols-outlined text-primary-fixed">check_circle</span>
-              <span class="text-sm sm:text-base">Özel kota ve sözleşme koşulları</span>
-            </div>
-          </div>
+          <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
+            Hastanenizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
+          </h2>
+          <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
+            Ücretsiz pilot programımızla başlayın, sonuçları görün, sonra karar verin. Kurulum yok, kredi kartı gerekmez.
+          </p>
         </div>
+        
+        <!-- Premium Form Container -->
+        <div class="bg-white/10 backdrop-blur-xl rounded-3xl sm:rounded-[2.5rem] shadow-2xl border border-white/20 overflow-hidden flex flex-col lg:flex-row">
+          <!-- Left Panel - Benefits -->
+          <div class="flex-1 p-8 sm:p-12 lg:p-16 xl:p-20 bg-gradient-to-br from-teal-600 to-cyan-600 text-white relative overflow-hidden">
+            <!-- Decorative Elements -->
+            <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
+            <div class="absolute bottom-0 left-0 w-48 h-48 bg-cyan-400/20 rounded-full blur-3xl"></div>
+            
+            <div class="relative">
+              <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full mb-6">
+                <span class="material-symbols-outlined text-white text-sm">verified</span>
+                <span class="text-white text-xs font-bold uppercase tracking-wider">Enterprise Solution</span>
+              </div>
+              
+              <h3 class="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl mb-4">Neden NoryaAI?</h3>
+              <p class="text-white/90 text-base sm:text-lg mb-8 leading-relaxed">
+                50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor. Sıfır riskle başlayın—ücretsiz pilot dağıtım ile sonuçları görün, sonra karar verin.
+              </p>
+              
+              <!-- Premium Feature List -->
+              <div class="space-y-4 mb-10">
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm sm:text-base">Ücretsiz Pilot Dağıtım</div>
+                    <div class="text-white/70 text-xs sm:text-sm">Belirlenen bölümde sınırlı kapsamlı başlangıç</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm sm:text-base">Kurulum Ücreti Yok</div>
+                    <div class="text-white/70 text-xs sm:text-sm">Hızlı entegrasyon, teknik destek dahil</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm sm:text-base">7/24 Öncelikli Destek</div>
+                    <div class="text-white/70 text-xs sm:text-sm">Klinik mühendislik ekibi her zaman yanınızda</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm sm:text-base">KVKK & HIPAA Uyumlu</div>
+                    <div class="text-white/70 text-xs sm:text-sm">Gizlilik odaklı veri işleme, tam izlenebilirlik</div>
+                  </div>
+                </div>
+                <div class="flex items-start gap-3">
+                  <div class="w-6 h-6 rounded-full bg-white/30 flex items-center justify-center flex-shrink-0 mt-0.5">
+                    <span class="material-symbols-outlined text-white text-sm">check</span>
+                  </div>
+                  <div>
+                    <div class="font-bold text-sm sm:text-base">Esnek Kurumsal Sözleşme</div>
+                    <div class="text-white/70 text-xs sm:text-sm">Hacme özel fiyatlandırma, kota yönetimi</div>
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Contact Options -->
+              <div class="pt-8 border-t border-white/20">
+                <p class="text-white/80 text-sm mb-4">Doğrudan iletişim:</p>
+                <div class="flex flex-wrap gap-3">
+                  <a href="mailto:sales@norya.ai" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-full text-white font-semibold text-sm hover:bg-white/30 transition-all">
+                    <span class="material-symbols-outlined text-base">mail</span>
+                    <span>sales@norya.ai</span>
+                  </a>
+                  <a href="tel:+908501234567" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-full text-white font-semibold text-sm hover:bg-white/30 transition-all">
+                    <span class="material-symbols-outlined text-base">phone</span>
+                    <span>+90 850 123 45 67</span>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
 
         <!-- Form Panel -->
-        <div class="flex-1 p-8 sm:p-12 lg:p-16 xl:p-20">
-          <div class="mb-6 sm:mb-8">
-            <h3 class="font-headline font-bold text-xl sm:text-2xl text-on-surface mb-2">Hastane Demo Talep Formu</h3>
-            <p class="text-sm sm:text-base text-on-surface-variant">Hastanenizin profili ve ihtiyaçları doğrultusunda size özel bir değerlendirme sunalım.</p>
+        <div class="flex-1 p-8 sm:p-12 lg:p-16 xl:p-20 bg-white dark:bg-slate-800">
+          <div class="mb-8">
+            <div class="inline-flex items-center gap-2 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 px-3 py-1.5 rounded-full mb-4">
+              <span class="material-symbols-outlined text-sm">event</span>
+              <span class="text-xs font-bold uppercase tracking-wider">Ücretsiz Demo</span>
+            </div>
+            <h3 class="font-headline font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white mb-3">
+              Hemen Başvurun
+            </h3>
+            <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base">
+              2 dakika içinde formu doldurun, 24 saat içinde satış ekibimiz sizi arasın.
+            </p>
           </div>
+          
+          <!-- Trust Badges -->
+          <div class="flex flex-wrap gap-4 mb-8 pb-8 border-b border-slate-200 dark:border-slate-700">
+            <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
+              <span class="material-symbols-outlined text-teal-600 text-base">shield</span>
+              <span>KVKK Uyumlu</span>
+            </div>
+            <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
+              <span class="material-symbols-outlined text-teal-600 text-base">lock</span>
+              <span>SSL Güvenli</span>
+            </div>
+            <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
+              <span class="material-symbols-outlined text-teal-600 text-base">verified</span>
+              <span>Kurumsal Doğrulama</span>
+            </div>
+          </div>
+          
           <form id="enterprise-lead-form" class="space-y-5 sm:space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-              <div>
-                <label for="kurum_adi" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Hastane / Kurum Adı *</label>
-                <input type="text" id="kurum_adi" name="kurum_adi" required maxlength="255" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
+              <div class="group">
+                <label for="kurum_adi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Hastane / Kurum Adı *</label>
+                <input type="text" id="kurum_adi" name="kurum_adi" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="Örn: Acıbadem Hastanesi" />
               </div>
-              <div>
-                <label for="yetkili_ad" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Yetkili Ad Soyad *</label>
-                <input type="text" id="yetkili_ad" name="yetkili_ad" required maxlength="255" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
-              </div>
-            </div>
-            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-              <div>
-                <label for="email" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Kurumsal E-posta *</label>
-                <input type="email" id="email" name="email" required maxlength="255" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
-              </div>
-              <div>
-                <label for="telefon" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Telefon</label>
-                <input type="tel" id="telefon" name="telefon" maxlength="64" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg" />
+              <div class="group">
+                <label for="yetkili_ad" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Yetkili Ad Soyad *</label>
+                <input type="text" id="yetkili_ad" name="yetkili_ad" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="Örn: Ahmet Yılmaz" />
               </div>
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
-              <div>
-                <label for="kurum_tipi" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Hastane Türü</label>
-                <select id="kurum_tipi" name="kurum_tipi" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg">
+              <div class="group">
+                <label for="email" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Kurumsal E-posta *</label>
+                <input type="email" id="email" name="email" required maxlength="255" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="ahmet@hastane.com" />
+              </div>
+              <div class="group">
+                <label for="telefon" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Telefon</label>
+                <input type="tel" id="telefon" name="telefon" maxlength="64" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400" placeholder="+90 5xx xxx xx xx" />
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
+              <div class="group">
+                <label for="kurum_tipi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Hastane Türü</label>
+                <select id="kurum_tipi" name="kurum_tipi" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white">
                   <option value="">Seçiniz</option>
                   <option value="hospital">Devlet Hastanesi</option>
                   <option value="hospital-private">Özel Hastane</option>
@@ -674,9 +1693,9 @@
                   <option value="hospital-group">Hastane Grubu / Zinciri</option>
                 </select>
               </div>
-              <div>
-                <label for="aylik_rapor" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Tahmini Aylık Tahlil Hacmi</label>
-                <select id="aylik_rapor" name="aylik_rapor" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg">
+              <div class="group">
+                <label for="aylik_rapor" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Tahmini Aylık Tahlil Hacmi</label>
+                <select id="aylik_rapor" name="aylik_rapor" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white">
                   <option value="">Seçiniz</option>
                   <option value="1-500">1 – 500</option>
                   <option value="501-2000">501 – 2.000</option>
@@ -685,38 +1704,134 @@
                 </select>
               </div>
             </div>
-            <div>
-              <label for="mesaj" class="block text-xs sm:text-sm font-bold text-on-surface-variant mb-2 uppercase tracking-widest">Ek Not veya Beklentiler</label>
-              <textarea id="mesaj" name="mesaj" rows="3" class="w-full bg-surface-container-high border-0 border-b-2 border-outline/20 focus:ring-0 focus:border-primary transition-all p-3 rounded-t-lg"></textarea>
+            <div class="group">
+              <label for="mesaj" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Ek Not veya Beklentiler</label>
+              <textarea id="mesaj" name="mesaj" rows="3" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400 resize-none" placeholder="İhtiyaçlarınızdan kısaca bahsedin..."></textarea>
             </div>
-            <div class="flex items-start gap-3">
-              <input type="checkbox" id="kvkk" name="kvkk" required class="mt-1 rounded border-outline/30 text-primary focus:ring-primary" />
-              <label for="kvkk" class="text-sm text-on-surface-variant leading-relaxed">Kişisel verilerimin işlenmesini kabul ediyorum. (<a href="/legal/gizlilik-politikasi" class="text-primary underline" target="_blank">Gizlilik Politikası</a>)</label>
+            <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700/30 rounded-xl">
+              <input type="checkbox" id="kvkk" name="kvkk" required class="mt-1 w-5 h-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" />
+              <label for="kvkk" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
+                Kişisel verilerimin işlenmesini kabul ediyorum. 
+                (<a href="/legal/gizlilik-politikasi" class="text-teal-600 hover:text-teal-700 underline font-medium" target="_blank">Gizlilik Politikası</a>)
+              </label>
             </div>
-            <div class="flex flex-col sm:flex-row gap-3">
-              <button type="submit" id="submit-btn" class="flex-1 bg-gradient-to-r from-primary to-primary-container text-on-primary py-4 rounded-full font-bold text-base sm:text-lg shadow-lg transition-transform hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50">
-                Demo Talep Et
+            
+            <!-- Premium Submit Button -->
+            <div class="flex flex-col sm:flex-row gap-3 pt-4">
+              <button type="submit" id="submit-btn" class="group relative flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-4 px-8 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden">
+                <span class="relative z-10 flex items-center justify-center gap-2">
+                  <span class="material-symbols-outlined">rocket_launch</span>
+                  <span>Ücretsiz Demo Talep Et</span>
+                </span>
+                <span class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </button>
-              <a href="mailto:sales@norya.ai" class="sm:w-auto inline-flex items-center justify-center px-6 py-4 rounded-full border border-outline-variant/30 text-on-surface font-semibold hover:bg-surface-container-low transition-colors">
-                Satış Ekibiyle Görüş
+              <a href="mailto:sales@norya.ai" class="group inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition-all bg-white dark:bg-slate-800">
+                <span class="material-symbols-outlined mr-2 group-hover:rotate-12 transition-transform">mail</span>
+                <span>Satış Ekibiyle Görüş</span>
               </a>
+            </div>
+            
+            <!-- Form Footer Trust -->
+            <div class="pt-6 mt-6 border-t border-slate-200 dark:border-slate-700">
+              <p class="text-center text-slate-500 dark:text-slate-400 text-xs flex items-center justify-center gap-2">
+                <span class="material-symbols-outlined text-teal-600 text-sm">security</span>
+                <span>Bilgileriniz SSL ile güvence altındadır ve hiçbir şekilde üçüncü şahıslarla paylaşılmaz.</span>
+              </p>
             </div>
           </form>
         </div>
       </div>
     </section>
 
-    <!-- ═══════════════ KAPANIŞ CTA BAR ═══════════════ -->
-    <section class="max-w-7xl mx-auto px-4 sm:px-8 mb-16 sm:mb-24">
-      <div class="relative bg-inverse-surface rounded-[2rem] sm:rounded-[3rem] py-16 sm:py-20 lg:py-24 px-8 sm:px-12 text-center overflow-hidden">
-        <div class="absolute inset-0 opacity-10 pointer-events-none" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 40px 40px;"></div>
-        <div class="relative z-10 max-w-3xl mx-auto flex flex-col items-center gap-5 sm:gap-8">
-          <h2 class="text-2xl sm:text-3xl lg:text-5xl font-extrabold font-headline text-inverse-on-surface leading-tight">Hastanenizi kurumsal yapay zekâ altyapısıyla güçlendirin</h2>
-          <p class="text-base sm:text-xl text-inverse-on-surface opacity-80 max-w-2xl">Satın alma, klinik liderlik ve teknik ekiplerinizi güvenli ve gözden geçirme odaklı bir dağıtım planı etrafında buluşturun.</p>
-          <div class="flex flex-wrap justify-center gap-3 sm:gap-4">
-            <a href="#iletisim" class="bg-primary-fixed-dim text-on-primary-container px-6 sm:px-8 py-3.5 rounded-full font-bold text-sm sm:text-base hover:brightness-110 transition-all">Demo Talep Et</a>
-            <a href="mailto:sales@norya.ai" class="bg-white/10 text-inverse-on-surface border border-white/30 px-6 sm:px-8 py-3.5 rounded-full font-bold text-sm sm:text-base hover:bg-white/20 transition-all">Satış Ekibiyle Görüş</a>
-            <a href="/docs" target="_blank" rel="noopener noreferrer" class="bg-transparent text-inverse-on-surface border border-white/30 px-6 sm:px-8 py-3.5 rounded-full font-bold text-sm sm:text-base hover:bg-white/10 transition-all">Teknik Dokümanları İncele</a>
+    <!-- ═══════════════ PREMIUM FINAL CTA ═══════════════ -->
+    <section class="relative overflow-hidden px-4 sm:px-8 mb-16 sm:mb-24">
+      <div class="max-w-7xl mx-auto">
+        <div class="relative bg-gradient-to-br from-slate-900 via-teal-900 to-cyan-900 rounded-[2.5rem] sm:rounded-[3rem] py-20 sm:py-24 lg:py-28 px-8 sm:px-12 text-center overflow-hidden shadow-2xl">
+          <!-- Animated Background Elements -->
+          <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+            <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
+          </div>
+          
+          <!-- Dot Pattern -->
+          <div class="absolute inset-0 opacity-[0.06]" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 48px 48px;"></div>
+          
+          <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center gap-6 sm:gap-8">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
+              <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
+              <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli Pilot Program</span>
+            </div>
+            
+            <!-- Headline -->
+            <h2 class="text-3xl sm:text-4xl lg:text-6xl font-extrabold font-headline text-white leading-tight">
+              Hastanenizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
+            </h2>
+            
+            <!-- Subheadline -->
+            <p class="text-base sm:text-xl text-white/80 max-w-3xl leading-relaxed">
+              50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor. Sıfır riskle başlayın—ücretsiz pilot dağıtım ile sonuçları görün, sonra karar verin.
+            </p>
+            
+            <!-- Stats Bar -->
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 pb-8 border-y border-white/10 w-full max-w-4xl">
+              <div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-white">2M+</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">Rapor Üretildi</div>
+              </div>
+              <div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-white">4K+</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">Hastane & Klinik</div>
+              </div>
+              <div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-white">98.7%</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">Biomarker Doğruluğu</div>
+              </div>
+              <div>
+                <div class="text-3xl sm:text-4xl font-extrabold text-white">50+</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">Ülke Kapsamı</div>
+              </div>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4">
+              <a href="#iletisim" class="group relative bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-900 px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-2xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-105 active:scale-95">
+                <span class="relative z-10 flex items-center gap-2">
+                  <span class="material-symbols-outlined">event</span>
+                  <span>Demo Planla</span>
+                </span>
+                <span class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
+              </a>
+              <a href="mailto:sales@norya.ai" class="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+                <span class="material-symbols-outlined">mail</span>
+                <span>Satış ile İletişim</span>
+              </a>
+              <a href="/docs" target="_blank" rel="noopener noreferrer" class="group bg-white/5 backdrop-blur-sm border border-white/20 text-white px-6 sm:px-8 py-4 rounded-full font-semibold text-sm hover:bg-white/15 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-base">description</span>
+                <span class="hidden sm:inline">Dokümanlar</span>
+              </a>
+            </div>
+            
+            <!-- Trust Footer -->
+            <div class="pt-8 mt-8 border-t border-white/10 flex flex-wrap justify-center gap-6 sm:gap-8">
+              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+                <span class="material-symbols-outlined text-teal-400 text-base">shield</span>
+                <span>KVKK Uyumlu</span>
+              </div>
+              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+                <span class="material-symbols-outlined text-teal-400 text-base">lock</span>
+                <span>SSL Güvenli</span>
+              </div>
+              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+                <span class="material-symbols-outlined text-teal-400 text-base">verified</span>
+                <span>Kurumsal Doğrulama</span>
+              </div>
+              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+                <span class="material-symbols-outlined text-teal-400 text-base">support_agent</span>
+                <span>7/24 Destek</span>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -824,6 +1939,67 @@
       }
     }
 
+    // Language Switcher - Global Functions
+    window.toggleLangMenu = function() {
+      var menu = document.getElementById('base-lang-menu');
+      if (!menu) return;
+      
+      var isHidden = menu.hasAttribute('hidden');
+      if (isHidden) {
+        menu.style.display = 'block';
+        menu.removeAttribute('hidden');
+      } else {
+        menu.style.display = 'none';
+        menu.setAttribute('hidden', '');
+      }
+    };
+    
+    window.changeLang = function(locale) {
+      var currentUrl = new URL(window.location);
+      currentUrl.searchParams.set('lang', locale);
+      window.location.href = currentUrl.toString();
+    };
+    
+    // Init on page load
+    (function() {
+      var urlParams = new URLSearchParams(window.location.search);
+      var currentLang = (urlParams.get('lang') || 'tr').toLowerCase();
+      
+      var currentSpan = document.getElementById('base-lang-current');
+      if (currentSpan) currentSpan.textContent = currentLang.toUpperCase();
+      
+      // Mark active option
+      var options = document.querySelectorAll('.header-lang-option');
+      options.forEach(function(opt) {
+        var locale = opt.getAttribute('data-locale');
+        if (locale === currentLang) {
+          opt.classList.add('is-active');
+        } else {
+          opt.classList.remove('is-active');
+        }
+      });
+      
+      // Add click event listener to toggle button
+      var langToggle = document.getElementById('base-lang-toggle');
+      if (langToggle) {
+        langToggle.addEventListener('click', function(e) {
+          e.preventDefault();
+          toggleLangMenu();
+        });
+      }
+      
+      // Add click event listeners to language options
+      options.forEach(function(opt) {
+        opt.addEventListener('click', function(e) {
+          e.preventDefault();
+          var locale = opt.getAttribute('data-locale');
+          if (locale) {
+            changeLang(locale);
+          }
+        });
+      });
+    })();
+
     (function() {
       var links = Array.prototype.slice.call(document.querySelectorAll('[data-subnav-link]'));
       var sectionIds = ['genel', 'neden', 'ekipler', 'kullanim', 'guvenlik', 'isakisi', 'pilot', 'sss', 'iletisim'];
@@ -852,7 +2028,7 @@
       }
     })();
   </script>
-{% include "partials/scripts_lang.html" %}
+<!-- {% include "partials/scripts_lang.html" %} - Disabled to prevent conflicts -->
 {% include "partials/chat_widget.html" %}
 </body>
 </html>
