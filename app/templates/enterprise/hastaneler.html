@@ -6,26 +6,105 @@
   {% include "partials/gsc_meta.html" %}
   <title>{{ t.meta_title }}</title>
   <meta name="description" content="{{ t.meta_description }}" />
+  
+  <!-- Open Graph / Social Media SEO -->
   <meta property="og:title" content="{{ t.meta_title }}" />
   <meta property="og:description" content="{{ t.meta_description }}" />
   <meta property="og:type" content="website" />
+  <meta property="og:locale" content="{{ 'ar_AR' if lang == 'ar' else 'he_IL' if lang == 'he' else 'hi_IN' if lang == 'hi' else lang + '_' + lang|upper }}" />
+  <meta property="og:site_name" content="NoryaAI" />
+  
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:title" content="{{ t.meta_title }}" />
+  <meta name="twitter:description" content="{{ t.meta_description }}" />
+  
   <meta name="theme-color" content="#006a69" />
+  
+  <!-- Hreflang tags for international SEO -->
+  {% if hreflang_tags %}
+  {{ hreflang_tags|safe }}
+  {% else %}
   {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
-  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
-  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
-  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+  {% endif %}
+  
+  <!-- Schema.org Structured Data for Organization -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NoryaAI",
+    "url": "{{ canonical_url|replace('/hastaneler-icin', '') }}",
+    "logo": "{{ canonical_url|replace('/hastaneler-icin', '') }}/static/norya_logo_transparent_trim.png",
+    "description": "{{ t.meta_description }}",
+    "foundingDate": "2018",
+    "founder": {
+      "@type": "Person",
+      "name": "Ufuk Urhan"
+    },
+    "address": {
+      "@type": "PostalAddress",
+      "addressLocality": "Hamburg",
+      "addressCountry": "DE"
+    },
+    "contactPoint": {
+      "@type": "ContactPoint",
+      "email": "support@noryaai.com",
+      "contactType": "customer service"
+    },
+    "sameAs": [
+      "https://www.linkedin.com/company/noryaai",
+      "https://twitter.com/noryaai"
+    ]
+  }
+  </script>
+  
+  <!-- Schema.org for Medical Organization / Hospital Solution -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "MedicalOrganization",
+    "name": "NoryaAI Hospital Solutions",
+    "description": "{{ t.solutions_desc if t.solutions_desc else 'AI-powered clinical decision support for hospitals, clinics, and laboratories' }}",
+    "medicalSpecialty": "Clinical Decision Support",
+    "availableService": {
+      "@type": "MedicalService",
+      "serviceName": "AI Blood Test Analysis",
+      "serviceType": "Clinical Decision Support System"
+    },
+    "areaServed": {
+      "@type": "Country",
+      "name": "Global"
+    }
+  }
+  </script>
+  <!-- Preconnect for performance -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  <link rel="preconnect" href="https://www.googletagmanager.com" />
+  <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
+  <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
+  
+  <!-- Favicon & Icons -->
+  <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
+  <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
+  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
+  
+  <!-- Preload critical resources -->
+  <link rel="preload" href="/static/norya_logo_transparent_trim.png" as="image" fetchpriority="high" />
+  
+  <!-- Fonts with performance optimization -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" media="print" onload="this.media='all'" />
+  <noscript>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
+  </noscript>
+  
+  <!-- Tailwind CSS (defer non-critical) -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" defer></script>
   <script>
     tailwind.config = {
       theme: {
@@ -260,7 +339,7 @@
         <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
       </div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
           <div class="flex-1 flex flex-col gap-6 sm:gap-8 text-center lg:text-left">
@@ -270,33 +349,33 @@
                 <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-300 opacity-75"></span>
                 <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-400"></span>
               </span>
-              <span class="text-teal-100 text-xs font-bold tracking-widest uppercase">{{ t.hero_label }}</span>
+              <span class="text-teal-100 text-xs font-bold tracking-widest uppercase">{{ t.hero_label or 'AI TECHNOLOGY' }}</span>
             </div>
-            
+
             <h1 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold font-headline leading-[1.05] tracking-tight text-white">
-              {{ t.hero_title }}
+              {{ t.hero_title or '98.7% Accuracy Biomarker Analysis' }}
             </h1>
-            
+
             <p class="text-base sm:text-xl text-white/85 max-w-2xl leading-relaxed mx-auto lg:mx-0">
-              {{ t.hero_subtitle }}
+              {{ t.hero_subtitle or 'NoryaAI advanced machine learning models analyze your lab results in seconds and provide actionable insights for clinical teams.' }}
             </p>
-            
+
             <!-- Premium Stats -->
             <div class="grid grid-cols-3 gap-4 sm:gap-6 pt-4 border-t border-white/10 mt-2">
               <div class="text-center lg:text-left">
-                <div class="text-2xl sm:text-3xl font-extrabold text-white">2M+</div>
-                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_1_label }}</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">{{ t.stat_1_value or '2M+' }}</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_1_label or 'Reports Analyzed' }}</div>
               </div>
               <div class="text-center lg:text-left">
-                <div class="text-2xl sm:text-3xl font-extrabold text-white">4,000+</div>
-                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_2_label }}</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">{{ t.stat_2_value or '50+' }}</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_2_label or 'Countries in Use' }}</div>
               </div>
               <div class="text-center lg:text-left">
-                <div class="text-2xl sm:text-3xl font-extrabold text-white">98.7%</div>
-                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_3_label }}</div>
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">{{ t.stat_3_value or '98.7%' }}</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_3_label or 'Biomarker Accuracy' }}</div>
               </div>
             </div>
-            
+
             <!-- Premium CTA Buttons -->
             <div class="flex flex-wrap gap-3 sm:gap-4 mt-4 justify-center lg:justify-start">
               <a href="#iletisim" class="group relative bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-900 px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-2xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-105 active:scale-95">
@@ -317,7 +396,7 @@
           <div class="flex-1 relative w-full max-w-md lg:max-w-lg">
             <!-- Glow Effects -->
             <div class="absolute -inset-12 bg-gradient-to-tr from-teal-500/30 to-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
-            
+
             <!-- Main Dashboard Image Card -->
             <div class="relative bg-white/10 backdrop-blur-xl rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 overflow-hidden group">
               <!-- Premium Badge -->
@@ -327,14 +406,14 @@
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
                     <span class="relative inline-flex rounded-full h-2 w-2 bg-white"></span>
                   </span>
-                  {{ t.dashboard_live }}
+                  {{ t.dashboard_live or 'Canlı' }}
                 </span>
               </div>
-              
+
               <!-- Main Dashboard Screenshot -->
               <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/20">
-                <img 
-                  src="/static/images/hospital-dashboard-premium.png" 
+                <img
+                  src="/static/images/hospital-dashboard-premium.png"
                   alt="NoryaAI {{ t.hospitals_label }} Dashboard - Gerçek zamanlı laboratuvar analiz sistemi"
                   class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
                   width="600"
@@ -344,39 +423,39 @@
                 <!-- Overlay Gradient -->
                 <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60"></div>
               </div>
-              
+
               <!-- Dashboard Stats Overlay -->
               <div class="absolute bottom-4 left-4 right-4 z-10">
                 <div class="grid grid-cols-3 gap-2">
                   <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-teal-600">{{ t.stat_1_value }}</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_1 }}</div>
+                    <div class="text-lg sm:text-xl font-extrabold text-teal-600">{{ t.dashboard_value_1 or '2M+' }}</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_1 or 'Rapor Analiz Edildi' }}</div>
                   </div>
                   <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-cyan-600">{{ t.stat_2_value }}</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_2 }}</div>
+                    <div class="text-lg sm:text-xl font-extrabold text-cyan-600">{{ t.dashboard_value_2 or '50+' }}</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_2 or 'Ülkede Kullanım' }}</div>
                   </div>
                   <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-purple-600">{{ t.stat_3_value }}</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_3 }}</div>
+                    <div class="text-lg sm:text-xl font-extrabold text-purple-600">{{ t.dashboard_value_3 or '<50ms' }}</div>
+                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_3 or 'Yanıt Süresi' }}</div>
                   </div>
                 </div>
               </div>
             </div>
-            
+
             <!-- Trust Indicators -->
             <div class="mt-6 flex flex-wrap justify-center gap-3">
               <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
-                <span class="text-white text-xs font-bold">{{ t.trust_badge_1 }}</span>
+                <span class="text-white text-xs font-bold">{{ t.trust_badge_1 or 'KVKK Uyumlu' }}</span>
               </div>
               <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">security</span>
-                <span class="text-white text-xs font-bold">{{ t.trust_badge_2 }}</span>
+                <span class="text-white text-xs font-bold">{{ t.trust_badge_2 or 'SSL Güvenli' }}</span>
               </div>
               <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-purple-300 text-sm">cloud_done</span>
-                <span class="text-white text-xs font-bold">{{ t.trust_badge_3 }}</span>
+                <span class="text-white text-xs font-bold">{{ t.trust_badge_3 or 'Bulut Altyapı' }}</span>
               </div>
             </div>
           </div>
@@ -389,52 +468,52 @@
         <div class="py-6 sm:py-8 px-6 sm:px-10 rounded-3xl bg-white/10 backdrop-blur-xl border border-white/20 shadow-2xl">
           <div class="flex flex-wrap items-center justify-center gap-x-8 sm:gap-x-12 gap-y-4">
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">translate</span> {{ t.trust_chip_1 }}
+              <span class="material-symbols-outlined text-teal-300 text-xl">translate</span> {{ t.trust_chip_1 or '9+ Dil Desteği' }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">account_tree</span> {{ t.trust_chip_2 }}
+              <span class="material-symbols-outlined text-teal-300 text-xl">account_tree</span> {{ t.trust_chip_2 or 'Merkezi Yönetim' }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">clinical_notes</span> {{ t.trust_chip_3 }}
+              <span class="material-symbols-outlined text-teal-300 text-xl">clinical_notes</span> {{ t.trust_chip_3 or 'Klinik Denetim' }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">history</span> {{ t.trust_chip_4 }}
+              <span class="material-symbols-outlined text-teal-300 text-xl">history</span> {{ t.trust_chip_4 or 'Trend Takibi' }}
             </span>
             <span class="flex items-center gap-2.5 text-sm sm:text-base font-bold text-white">
-              <span class="material-symbols-outlined text-teal-300 text-xl">api</span> {{ t.trust_chip_5 }}
+              <span class="material-symbols-outlined text-teal-300 text-xl">api</span> {{ t.trust_chip_5 or 'API Entegrasyonu' }}
             </span>
           </div>
         </div>
-        
+
         <!-- Compliance & Certifications -->
         <div class="mt-8 sm:mt-10">
           <div class="text-center mb-6">
-            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">Sertifikasyonlar & Uyumluluk</p>
+            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.feature_compliance_title }}</p>
           </div>
           <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
               <span class="material-symbols-outlined text-teal-300 text-xl">verified</span>
-              <span class="text-white text-sm font-bold">KVKK Uyumlu</span>
+              <span class="text-white text-sm font-bold">{{ t.compliance_kvkk or 'KVKK' }}</span>
             </div>
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
               <span class="material-symbols-outlined text-teal-300 text-xl">security</span>
-              <span class="text-white text-sm font-bold">HIPAA Ready</span>
+              <span class="text-white text-sm font-bold">{{ t.compliance_hipaa or 'HIPAA' }}</span>
             </div>
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
               <span class="material-symbols-outlined text-teal-300 text-xl">globe</span>
-              <span class="text-white text-sm font-bold">GDPR Compliant</span>
+              <span class="text-white text-sm font-bold">{{ t.compliance_gdpr or 'GDPR' }}</span>
             </div>
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
               <span class="material-symbols-outlined text-teal-300 text-xl">dns</span>
-              <span class="text-white text-sm font-bold">ISO 27001</span>
+              <span class="text-white text-sm font-bold">{{ t.compliance_iso or 'ISO 27001' }}</span>
             </div>
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
               <span class="material-symbols-outlined text-teal-300 text-xl">cloud_done</span>
-              <span class="text-white text-sm font-bold">SOC 2 Type II</span>
+              <span class="text-white text-sm font-bold">{{ t.compliance_soc or 'SOC 2 Type II' }}</span>
             </div>
           </div>
         </div>
-        
+
         <!-- Technology Partners - Premium -->
         <div class="mt-8 sm:mt-12">
           <div class="text-center mb-6">
@@ -449,7 +528,7 @@
               <div class="text-white text-xs sm:text-sm font-bold">OpenAI</div>
               <div class="text-white/50 text-[10px] mt-0.5">GPT-4 Enterprise</div>
             </div>
-            
+
             <!-- Partner 2: Azure -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
               <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -458,7 +537,7 @@
               <div class="text-white text-xs sm:text-sm font-bold">Microsoft Azure</div>
               <div class="text-white/50 text-[10px] mt-0.5">Cloud Infrastructure</div>
             </div>
-            
+
             <!-- Partner 3: AWS -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
               <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -467,7 +546,7 @@
               <div class="text-white text-xs sm:text-sm font-bold">AWS</div>
               <div class="text-white/50 text-[10px] mt-0.5">Secure Storage</div>
             </div>
-            
+
             <!-- Partner 4: HL7/FHIR -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
               <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -476,7 +555,7 @@
               <div class="text-white text-xs sm:text-sm font-bold">HL7 FHIR</div>
               <div class="text-white/50 text-[10px] mt-0.5">Interoperability</div>
             </div>
-            
+
             <!-- Partner 5: DICOM -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
               <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-red-500/20 to-rose-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -485,7 +564,7 @@
               <div class="text-white text-xs sm:text-sm font-bold">DICOM</div>
               <div class="text-white/50 text-[10px] mt-0.5">Medical Imaging</div>
             </div>
-            
+
             <!-- Partner 6: Security -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
               <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
@@ -495,30 +574,30 @@
               <div class="text-white/50 text-[10px] mt-0.5">End-to-End Encryption</div>
             </div>
           </div>
-          
+
           <!-- Trust Footer -->
           <div class="mt-6 text-center">
             <p class="text-white/60 text-xs sm:text-sm">
               <span class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
-                <span>Enterprise-grade altyapı ile güvenli ve ölçeklenebilir çözüm</span>
+                <span>{{ t.enterprise_features_title }}</span>
               </span>
             </p>
           </div>
         </div>
-        
+
         <!-- International Partners with Map Visual -->
         <div class="mt-12 sm:mt-16">
           <div class="text-center mb-6">
             <p class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.international_partners_title }}</p>
           </div>
-          
+
           <!-- Global Network Map -->
           <div class="relative mb-8 rounded-3xl overflow-hidden shadow-2xl border border-white/20">
             <div class="absolute inset-0 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 z-10"></div>
-            <img 
-              src="/static/images/global-hospital-network.png" 
-              alt="NoryaAI Global {{ t.hospitals_label }} Ağı - 50+ ülkede 4,000+ hastane ve klinik"
+            <img
+              src="/static/images/global-hospital-network.png"
+              alt="NoryaAI Global {{ t.hospitals_label }} Ağı - {{ t.countries_usage }}"
               class="w-full h-48 sm:h-64 lg:h-80 object-cover opacity-80"
               width="1200"
               height="600"
@@ -548,7 +627,7 @@
               </div>
             </div>
           </div>
-          
+
           <!-- Premium Country Flags Grid -->
           <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-9 gap-4 sm:gap-6">
             <!-- Country 1: Germany -->
@@ -556,66 +635,66 @@
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇩🇪</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">Deutschland</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 2: France -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇫🇷</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">France</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 3: Italy -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇮🇹</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">Italia</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 4: Spain -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇪🇸</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">España</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 5: UK -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇬🇧</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">United Kingdom</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 6: UAE -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇦🇪</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">UAE</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 7: Saudi Arabia -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇸🇦</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">KSA</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 8: India -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇮🇳</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">India</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 9: USA -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇺🇸</div>
               <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">USA</div>
-              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">Active Partner</div>
+              <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
           </div>
-          
+
           <!-- Global Stats -->
           <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
@@ -644,7 +723,7 @@
       <!-- Background -->
       <div class="absolute inset-0 bg-gradient-to-b from-slate-50 to-white dark:from-slate-900 dark:to-slate-800"></div>
       <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 48px 48px;"></div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <!-- Section Header -->
         <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
@@ -659,106 +738,106 @@
             {{ t.why_hospitals_subtitle }}
           </p>
         </div>
-        
+
         <!-- Premium Cards Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
           <!-- Card 1 -->
           <div class="group relative bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
             <!-- Hover Gradient -->
             <div class="absolute inset-0 bg-gradient-to-br from-teal-500/5 to-cyan-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
+
             <!-- Icon -->
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
               <span class="material-symbols-outlined text-white text-3xl">speed</span>
             </div>
-            
+
             <!-- Content -->
             <h3 class="relative text-xl sm:text-2xl font-bold font-headline mb-4 text-slate-900 dark:text-white">
-              {{ t.card_hospital_1_title }}
+              {{ t.card_hospital_1_title or 'High-Volume Lab Outputs' }}
             </h3>
             <p class="relative text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-              {{ t.card_hospital_1_desc }}
+              {{ t.card_hospital_1_desc or 'Hundreds of test results are generated daily. Automate each with NoryaAI for consistency and expert review preparation.' }}
             </p>
-            
+
             <!-- Stats -->
             <div class="relative mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
               <div class="flex items-center justify-between">
                 <div>
                   <div class="text-2xl font-extrabold text-teal-600">85%</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">Zaman Tasarrufu</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.time_savings_label or 'Time Saved' }}</div>
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-extrabold text-cyan-600">500+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.daily_analysis }}</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.daily_analysis or 'Daily Analysis' }}</div>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <!-- Card 2 -->
           <div class="group relative bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-purple-500/5 to-pink-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
+
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
               <span class="material-symbols-outlined text-white text-3xl">groups</span>
             </div>
-            
+
             <h3 class="relative text-xl sm:text-2xl font-bold font-headline mb-4 text-slate-900 dark:text-white">
-              {{ t.card_hospital_2_title }}
+              {{ t.card_hospital_2_title or 'Multidisciplinary Team Coordination' }}
             </h3>
             <p class="relative text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-              {{ t.card_hospital_2_desc }}
+              {{ t.card_hospital_2_desc or 'Establish consistent reporting language and workflow standards across lab, clinic, emergency, and administrative units.' }}
             </p>
-            
+
             <div class="relative mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
               <div class="flex items-center justify-between">
                 <div>
                   <div class="text-2xl font-extrabold text-purple-600">100%</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.standardization }}</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.standardization or 'Standardization' }}</div>
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-extrabold text-pink-600">12+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.department_support }}</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.department_support or 'Department Support' }}</div>
                 </div>
               </div>
             </div>
           </div>
-          
+
           <!-- Card 3 -->
           <div class="group relative bg-white dark:bg-slate-800 rounded-3xl p-8 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-amber-500/5 to-orange-500/5 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
+
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
               <span class="material-symbols-outlined text-white text-3xl">language</span>
             </div>
-            
+
             <h3 class="relative text-xl sm:text-2xl font-bold font-headline mb-4 text-slate-900 dark:text-white">
-              {{ t.card_hospital_3_title }}
+              {{ t.card_hospital_3_title or 'Multilingual Patient Communication' }}
             </h3>
             <p class="relative text-slate-600 dark:text-slate-300 leading-relaxed text-sm sm:text-base">
-              {{ t.card_hospital_3_desc }}
+              {{ t.card_hospital_3_desc or 'Present results in 9+ languages for international patients, medical tourism, and multicultural communities.' }}
             </p>
-            
+
             <div class="relative mt-6 pt-6 border-t border-slate-200 dark:border-slate-700">
               <div class="flex items-center justify-between">
                 <div>
                   <div class="text-2xl font-extrabold text-amber-600">12+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.languages_label }} Desteği</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.languages_support_label or 'Language Support' }}</div>
                 </div>
                 <div class="text-right">
                   <div class="text-2xl font-extrabold text-orange-600">50+</div>
-                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.countries_label }} Kapsamı</div>
+                  <div class="text-xs text-slate-500 dark:text-slate-400">{{ t.countries_coverage_label or 'Coverage' }}</div>
                 </div>
               </div>
             </div>
           </div>
         </div>
-        
+
         <!-- Bottom CTA -->
         <div class="mt-12 text-center">
           <a href="#iletisim" class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
             <span class="material-symbols-outlined">rocket_launch</span>
-            <span>Ücretsiz Pilot Başvurusu Yapın</span>
+            <span>{{ t.free_pilot_cta }}</span>
           </a>
         </div>
       </div>
@@ -767,7 +846,7 @@
     <!-- ═══════════════ AI ANALYSIS VISUAL BANNER ═══════════════ -->
     <section class="relative py-16 sm:py-20 px-4 sm:px-8 overflow-hidden bg-gradient-to-br from-teal-50 via-cyan-50 to-white dark:from-slate-900 dark:via-teal-950 dark:to-slate-900">
       <div class="absolute inset-0 opacity-[0.02]" style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 48px 48px;"></div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <!-- AI Analysis Image Showcase -->
         <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 sm:gap-12 items-center">
@@ -777,16 +856,16 @@
               <span class="material-symbols-outlined text-teal-600 text-sm">auto_awesome</span>
               <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">{{ t.ai_technology_badge }}</span>
             </div>
-            
+
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white leading-tight">
               %98.7 Doğrulukla<br />
               <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">{{ t.biomarker_analysis }}</span>
             </h2>
-            
+
             <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
               NoryaAI'nin gelişmiş makine öğrenmesi modelleri, laboratuvar sonuçlarınızı saniyeler içinde analiz eder ve klinik ekipler için yapılandırılmış içgörüler sunar.
             </p>
-            
+
             <!-- Stats Grid -->
             <div class="grid grid-cols-2 gap-4 sm:gap-6">
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
@@ -803,17 +882,17 @@
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-amber-600 mb-2">12+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.languages_label }} Desteği</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.languages_support_label }}</div>
               </div>
             </div>
           </div>
-          
+
           <!-- Right: AI Analysis Image -->
           <div class="order-1 lg:order-2">
             <div class="relative group">
               <!-- Glow Effect -->
               <div class="absolute -inset-4 bg-gradient-to-r from-teal-500/20 to-cyan-500/20 rounded-3xl blur-2xl group-hover:blur-3xl transition-all duration-500 opacity-70 group-hover:opacity-100"></div>
-              
+
               <!-- Main Image Card -->
               <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-4 sm:p-6 shadow-2xl border border-slate-200/50 dark:border-slate-700/50 overflow-hidden">
                 <div class="absolute top-4 left-4 z-10 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
@@ -822,10 +901,10 @@
                     AI Powered
                   </span>
                 </div>
-                
+
                 <div class="relative rounded-2xl overflow-hidden shadow-xl">
-                  <img 
-                    src="/static/images/ai-lab-analysis-premium.png" 
+                  <img
+                    src="/static/images/ai-lab-analysis-premium.png"
                     alt="NoryaAI Yapay Zeka Laboratuvar Analizi - Biyobelirteç işleme ve veri görselleştirme"
                     class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
                     width="600"
@@ -835,17 +914,17 @@
                   <!-- Overlay -->
                   <div class="absolute inset-0 bg-gradient-to-t from-slate-900/40 via-transparent to-transparent opacity-40"></div>
                 </div>
-                
+
                 <!-- Feature Tags -->
                 <div class="mt-4 flex flex-wrap gap-2">
                   <span class="bg-teal-500/10 text-teal-700 dark:text-teal-300 px-3 py-1.5 rounded-full text-xs font-bold border border-teal-500/20">
-                    Machine Learning
+                    {{ t.feature_ml or 'Machine Learning' }}
                   </span>
                   <span class="bg-cyan-500/10 text-cyan-700 dark:text-cyan-300 px-3 py-1.5 rounded-full text-xs font-bold border border-cyan-500/20">
-                    Pattern Recognition
+                    {{ t.feature_pattern_recognition or 'Pattern Recognition' }}
                   </span>
                   <span class="bg-purple-500/10 text-purple-700 dark:text-purple-300 px-3 py-1.5 rounded-full text-xs font-bold border border-purple-500/20">
-                    Predictive Analytics
+                    {{ t.feature_predictive_analytics or 'Predictive Analytics' }}
                   </span>
                 </div>
               </div>
@@ -862,7 +941,7 @@
         <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
       </div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <!-- Section Header -->
         <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
@@ -874,27 +953,27 @@
             {{ t.enterprise_features_title }}
           </h2>
           <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
-            {{ t.hospitals_label }}nizin operasyonel mükemmelliğini destekleyen gelişmiş yapay zekâ özellikleri
+            {{ t.hospital_operations_ai_desc }}
           </p>
         </div>
-        
+
         <!-- Premium Features Grid -->
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           <!-- Feature 1: AI Analytics -->
           <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-teal-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-teal-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
+
             <!-- Icon -->
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-400 to-cyan-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
               <span class="material-symbols-outlined text-white text-3xl">insights</span>
             </div>
-            
+
             <!-- Badge -->
             <div class="inline-flex items-center gap-1 bg-teal-500/30 text-teal-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
               <span class="material-symbols-outlined text-xs">auto_awesome</span>
-              AI POWERED
+              {{ t.ai_powered_badge or 'AI POWERED' }}
             </div>
-            
+
             <!-- Content -->
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_analytics_title }}
@@ -902,80 +981,80 @@
             <p class="relative text-white/70 leading-relaxed text-sm">
               {{ t.feature_analytics_desc }}
             </p>
-            
+
             <!-- Feature List -->
             <ul class="relative mt-6 space-y-2">
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
-                <span>Patern Tanıma</span>
+                <span>{{ t.analytics_feature_1 or 'Pattern Recognition' }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
-                <span>Trend Analizi</span>
+                <span>{{ t.analytics_feature_2 or 'Trend Analysis' }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
-                <span>Risk Skorlaması</span>
+                <span>{{ t.analytics_feature_3 or 'Risk Scoring' }}</span>
               </li>
             </ul>
           </div>
-          
+
           <!-- Feature 2: Real-time Monitoring -->
           <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-cyan-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
+
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
               <span class="material-symbols-outlined text-white text-3xl">real_time_text</span>
             </div>
-            
+
             <div class="inline-flex items-center gap-1 bg-cyan-500/30 text-cyan-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
               <span class="material-symbols-outlined text-xs">radio_button_checked</span>
-              REAL-TIME
+              {{ t.realtime_badge or 'REAL-TIME' }}
             </div>
-            
+
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_monitoring_title }}
             </h3>
             <p class="relative text-white/70 leading-relaxed text-sm">
               {{ t.feature_monitoring_desc }}
             </p>
-            
+
             <ul class="relative mt-6 space-y-2">
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
-                <span>Canlı Dashboard</span>
+                <span>{{ t.monitoring_feature_1 or 'Live Dashboard' }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
-                <span>Anlık Uyarılar</span>
+                <span>{{ t.monitoring_feature_2 or 'Instant Notifications' }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
-                <span>KPI Takibi</span>
+                <span>{{ t.monitoring_feature_3 or 'KPI Tracking' }}</span>
               </li>
             </ul>
           </div>
-          
+
           <!-- Feature 3: Custom Integration -->
           <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-purple-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-purple-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
+
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-400 to-pink-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
               <span class="material-symbols-outlined text-white text-3xl">api</span>
             </div>
-            
+
             <div class="inline-flex items-center gap-1 bg-purple-500/30 text-purple-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
               <span class="material-symbols-outlined text-xs">settings</span>
-              CUSTOM
+              {{ t.custom_badge or 'CUSTOM' }}
             </div>
-            
+
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_integration_title }}
             </h3>
             <p class="relative text-white/70 leading-relaxed text-sm">
               {{ t.feature_integration_desc }}
             </p>
-            
+
             <ul class="relative mt-6 space-y-2">
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
@@ -987,31 +1066,31 @@
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
-                <span>Webhook Desteği</span>
+                <span>{{ t.webhook_support_label }}</span>
               </li>
             </ul>
           </div>
-          
+
           <!-- Feature 4: Compliance & Security -->
           <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-8 shadow-2xl border border-white/20 hover:border-amber-400/50 transition-all duration-500 hover:-translate-y-2 overflow-hidden">
             <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
-            
+
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-400 to-orange-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
               <span class="material-symbols-outlined text-white text-3xl">verified</span>
             </div>
-            
+
             <div class="inline-flex items-center gap-1 bg-amber-500/30 text-amber-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
               <span class="material-symbols-outlined text-xs">security</span>
-              CERTIFIED
+              {{ t.certified_badge or 'CERTIFIED' }}
             </div>
-            
+
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_compliance_title }}
             </h3>
             <p class="relative text-white/70 leading-relaxed text-sm">
               {{ t.feature_compliance_desc }}
             </p>
-            
+
             <ul class="relative mt-6 space-y-2">
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
@@ -1019,16 +1098,16 @@
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
-                <span>HIPAA Uyumlu</span>
+                <span>{{ t.hipaa_compliant_badge }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
-                <span>Audit Trail</span>
+                <span>{{ t.audit_trail_label or 'Audit Trail' }}</span>
               </li>
             </ul>
           </div>
         </div>
-        
+
         <!-- Bottom Stats -->
         <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div class="text-center">
@@ -1045,7 +1124,7 @@
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">24/7</div>
-            <div class="text-white/70 text-sm font-medium">Öncelikli Destek</div>
+            <div class="text-white/70 text-sm font-medium">{{ t.priority_support_label }}</div>
           </div>
         </div>
       </div>
@@ -1077,7 +1156,7 @@
             <span class="material-symbols-outlined text-amber-700">emergency</span>
           </div>
           <h3 class="font-bold font-headline text-base mb-2">{{ t.team_3_title }}</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">Hızlı karar alınması gereken ortamlarda yapılandırılmış özet çıktılar, tahlil sonuçlarının daha çabuk kavranmasına destek olabilir.</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.structured_summary_benefit }}</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center mb-4">
@@ -1147,8 +1226,8 @@
               <span class="material-symbols-outlined">travel_explore</span>
             </div>
             <div>
-              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">Sağlık turizmi desteği</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">Uluslararası hastalara sonuçlarını kendi dillerinde sunarak hastanenin uluslararası hizmet kalitesini desteklemeyi hedefler.</p>
+              <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.health_tourism_title }}</h3>
+              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.multilingual_patient_benefit }}</p>
             </div>
           </div>
         </div>
@@ -1161,10 +1240,10 @@
         <div class="absolute inset-0 opacity-[0.06] pointer-events-none"
              style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 30px 30px;"></div>
         <div class="lg:w-1/2">
-          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4 sm:mb-6">Kurumsal güvenlik ve yönetişim</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-6 sm:mb-8">{{ t.hospitals_label }} ortamının gerektirdiği erişim kontrolü, izlenebilirlik ve klinik gözetim altyapısı.</p>
+          <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4 sm:mb-6">{{ t.security_governance_title }}</h2>
+          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-6 sm:mb-8">{{ t.security_governance_desc }}</p>
           <div class="rounded-2xl bg-surface/70 border border-outline-variant/15 px-5 sm:px-6 py-4 sm:py-5">
-            <p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">Güvenlik kontrolleri, hastane operasyonlarını net sorumluluk sınırları, izlenebilir iş akışları ve klinisyen denetimli gözden geçirme süreçleriyle desteklemek üzere tasarlanmıştır.</p>
+            <p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">{{ t.security_controls_desc }}</p>
           </div>
         </div>
         <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full">
@@ -1172,8 +1251,8 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-primary mt-0.5">lock</span>
               <div>
-                <h5 class="font-bold text-sm sm:text-base mb-1">Gizlilik odaklı veri işleme</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Hassas klinik veriler, veri minimizasyonu ilkeleri ve kapsamlı erişim kısıtlamalarıyla işlenir.</p>
+                <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_privacy_title }}</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_privacy_desc }}</p>
               </div>
             </div>
           </div>
@@ -1181,8 +1260,8 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-primary mt-0.5">badge</span>
               <div>
-                <h5 class="font-bold text-sm sm:text-base mb-1">Rol bazlı erişim kontrolü</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Kullanıcı yetkileri, kurumsal rollere göre yapılandırılarak her ekip yalnızca ilgili iş akışlarına erişir.</p>
+                <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_role_title }}</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_role_desc }}</p>
               </div>
             </div>
           </div>
@@ -1190,8 +1269,8 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-primary mt-0.5">history</span>
               <div>
-                <h5 class="font-bold text-sm sm:text-base mb-1">İzlenebilir iş akışı mantığı</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">İş akışı aksiyonları, izlenebilir gözden geçirme adımlarını ve kurumsal denetim dokümantasyonunu destekleyecek şekilde organize edilmiştir.</p>
+                <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_audit_title }}</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.workflow_actions_desc }}</p>
               </div>
             </div>
           </div>
@@ -1199,8 +1278,8 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-primary mt-0.5">domain_verification</span>
               <div>
-                <h5 class="font-bold text-sm sm:text-base mb-1">Kontrollü kurum içi erişim</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Operasyonel erişim, onaylı kurum içi ekiplerle sınırlandırılarak net hesap verebilirlik sağlanır.</p>
+                <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_access_title }}</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_access_desc }}</p>
               </div>
             </div>
           </div>
@@ -1208,8 +1287,8 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-primary mt-0.5">translate</span>
               <div>
-                <h5 class="font-bold text-sm sm:text-base mb-1">Çok dilli kurumsal destek</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Yapılandırılmış çok dilli çıktılar, sınır ötesi ekipler ve hasta iletişimi bağlamında standartlaşmayı destekler.</p>
+                <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.multilingual_enterprise_support }}</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.multilingual_standardization }}</p>
               </div>
             </div>
           </div>
@@ -1217,8 +1296,8 @@
             <div class="flex items-start gap-3">
               <span class="material-symbols-outlined text-primary mt-0.5">clinical_notes</span>
               <div>
-                <h5 class="font-bold text-sm sm:text-base mb-1">Klinisyen gözetimi</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">Klinik ekipler, hasta iletişiminde kullanılmadan önce tüm çıktıları gözden geçirir ve kontrol eder.</p>
+                <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_oversight_title }}</h5>
+                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_oversight_desc }}</p>
               </div>
             </div>
           </div>
@@ -1231,7 +1310,7 @@
       <!-- Background -->
       <div class="absolute inset-0 bg-gradient-to-b from-white to-slate-50 dark:from-slate-900 dark:to-slate-800"></div>
       <div class="absolute inset-0 opacity-[0.03]" style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 48px 48px;"></div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <!-- Section Header -->
         <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
@@ -1247,12 +1326,12 @@
             Basit, izlenebilir ve klinisyen onaylı iş akışı
           </p>
         </div>
-        
+
         <!-- Premium Workflow Steps -->
         <div class="relative">
           <!-- Connection Line (Desktop) -->
           <div class="hidden lg:block absolute top-24 left-0 right-0 h-0.5 bg-gradient-to-r from-teal-500/20 via-cyan-500/20 to-teal-500/20"></div>
-          
+
           <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-6 sm:gap-8">
             <!-- Step 1 -->
             <div class="group relative">
@@ -1261,84 +1340,84 @@
                 <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
                   <span class="text-white font-extrabold text-lg">01</span>
                 </div>
-                
+
                 <!-- Icon -->
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-teal-500/10 to-cyan-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
                   <span class="material-symbols-outlined text-teal-600 dark:text-teal-400 text-3xl">upload_file</span>
                 </div>
-                
+
                 <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Sonuç Yükleme</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   {{ t.workflow_step_1_desc }}
                 </p>
               </div>
             </div>
-            
+
             <!-- Step 2 -->
             <div class="group relative">
               <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50">
                 <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-cyan-500 to-teal-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
                   <span class="text-white font-extrabold text-lg">02</span>
                 </div>
-                
+
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-500/10 to-teal-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
                   <span class="material-symbols-outlined text-cyan-600 dark:text-cyan-400 text-3xl">biotech</span>
                 </div>
-                
+
                 <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.card_1_title }}</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   {{ t.workflow_step_2_desc }}
                 </p>
               </div>
             </div>
-            
+
             <!-- Step 3 -->
             <div class="group relative">
               <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50">
                 <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-purple-500 to-pink-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
                   <span class="text-white font-extrabold text-lg">03</span>
                 </div>
-                
+
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-purple-500/10 to-pink-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
                   <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-3xl">translate</span>
                 </div>
-                
+
                 <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Çok {{ t.languages_label }}li Özet</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   İhtiyaç halinde sonuçlar 12+ dilde anlaşılır özet biçiminde hazırlanır.
                 </p>
               </div>
             </div>
-            
+
             <!-- Step 4 -->
             <div class="group relative">
               <div class="relative bg-white dark:bg-slate-800 rounded-3xl p-6 shadow-xl hover:shadow-2xl transition-all duration-500 hover:-translate-y-2 border border-slate-200/50 dark:border-slate-700/50">
                 <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-gradient-to-br from-amber-500 to-orange-500 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform duration-500">
                   <span class="text-white font-extrabold text-lg">04</span>
                 </div>
-                
+
                 <div class="w-16 h-16 rounded-2xl bg-gradient-to-br from-amber-500/10 to-orange-500/10 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-500">
                   <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-3xl">clinical_notes</span>
                 </div>
-                
-                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Klinisyen Gözden Geçirme</h3>
+
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.clinician_review_title }}</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                  Klinik ekip, çıktıları gözden geçirir ve uygunluğunu değerlendirir.
+                  {{ t.clinician_review_desc }}
                 </p>
               </div>
             </div>
-            
+
             <!-- Step 5 -->
             <div class="group relative">
               <div class="relative bg-gradient-to-br from-teal-500 to-cyan-500 rounded-3xl p-6 shadow-2xl border border-teal-400/30">
                 <div class="absolute -top-4 -right-4 w-12 h-12 rounded-2xl bg-white flex items-center justify-center shadow-lg">
                   <span class="material-symbols-outlined text-teal-600 text-2xl">check_circle</span>
                 </div>
-                
+
                 <div class="w-16 h-16 rounded-2xl bg-white/20 flex items-center justify-center mb-4">
                   <span class="material-symbols-outlined text-white text-3xl">assignment</span>
                 </div>
-                
+
                 <h3 class="text-lg font-bold font-headline mb-3 text-white">Kullanıma Hazır Çıktı</h3>
                 <p class="text-white/80 text-sm leading-relaxed">
                   Onaylanan çıktılar, hasta bilgilendirme veya kurum içi raporlama amacıyla kullanılabilir.
@@ -1347,12 +1426,12 @@
             </div>
           </div>
         </div>
-        
+
         <!-- CTA -->
         <div class="mt-12 text-center">
           <a href="#iletisim" class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-8 py-4 rounded-full font-bold text-lg shadow-xl hover:shadow-2xl hover:scale-105 transition-all">
             <span class="material-symbols-outlined">rocket_launch</span>
-            <span>Ücretsiz Pilot ile Başlayın</span>
+            <span>{{ t.start_free_pilot }}</span>
           </a>
         </div>
       </div>
@@ -1376,25 +1455,25 @@
         <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
           <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
             <span class="material-symbols-outlined text-teal-600 text-sm">mail</span>
-            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">{{ t.contact_title }}</span>
+            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">{{ t.contact_section_badge or 'Tailored Solution' }}</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white">
-            Size <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Özel</span> Çözüm
+            {{ t.contact_section_title or 'Tailored Solution for Your Hospital' }}
           </h2>
           <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
-            {{ t.hospitals_label }}nizin ihtiyaçlarına göre özelleştirilmiş demo ve bilgi için bize ulaşın
+            {{ t.contact_section_subtitle or 'Contact us for a customized demo and information tailored to your hospital\'s needs' }}
           </p>
         </div>
-        
+
         <!-- Contact Info Card -->
         <div class="bg-gradient-to-br from-teal-50 to-cyan-50 dark:from-slate-800 dark:to-slate-900 rounded-3xl p-8 sm:p-12 shadow-xl border border-teal-100 dark:border-slate-700 mb-12">
           <div class="text-center">
             <div class="w-20 h-20 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center mx-auto mb-6 shadow-lg">
               <span class="material-symbols-outlined text-white text-4xl">mail</span>
             </div>
-            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-4">Kurumsal Satış Ekibi</h3>
+            <h3 class="text-2xl font-extrabold text-slate-900 dark:text-white mb-4">{{ t.sales_team_title or 'Enterprise Sales Team' }}</h3>
             <p class="text-slate-600 dark:text-slate-300 mb-8 max-w-xl mx-auto">
-              Demo talebi, fiyatlandırma bilgisi veya teknik sorularınız için aşağıdaki e-posta adresinden bize ulaşabilirsiniz.
+              {{ t.sales_team_desc or 'For demo requests, pricing information, or technical questions, reach us at the email address below.' }}
             </p>
             <a href="mailto:{{ t.contact_email }}" class="inline-flex items-center gap-3 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-8 py-4 rounded-full font-bold text-lg hover:shadow-2xl hover:shadow-teal-500/30 hover:scale-105 transition-all duration-300">
               <span class="material-symbols-outlined">send</span>
@@ -1403,42 +1482,42 @@
             <div class="mt-8 flex flex-wrap justify-center gap-4 text-sm text-slate-600 dark:text-slate-400">
               <span class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-teal-500">check_circle</span>
-                24-48 saat içinde yanıt
+                {{ t.response_24_48 or 'Response within 24-48 hours' }}
               </span>
               <span class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-teal-500">check_circle</span>
-                Ücretsiz demo
+                {{ t.free_demo or 'Free demo' }}
               </span>
               <span class="flex items-center gap-2">
                 <span class="material-symbols-outlined text-teal-500">check_circle</span>
-                Kişiye özel çözüm
+                {{ t.custom_solution or 'Customized solution' }}
               </span>
             </div>
           </div>
         </div>
-        
+
         <!-- Features Grid -->
         <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
           <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
             <div class="w-14 h-14 rounded-full bg-teal-100 dark:bg-teal-900/30 flex items-center justify-center mx-auto mb-4">
               <span class="material-symbols-outlined text-teal-600 dark:text-teal-400 text-2xl">schedule</span>
             </div>
-            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Demo Planla</h4>
-            <p class="text-sm text-slate-600 dark:text-slate-400">Canlı demo ile sistemi yakından tanıyın</p>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2">{{ t.demo_plan_title or 'Schedule a Demo' }}</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-400">{{ t.demo_plan_desc or 'Get to know the system with a live demo' }}</p>
           </div>
           <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
             <div class="w-14 h-14 rounded-full bg-cyan-100 dark:bg-cyan-900/30 flex items-center justify-center mx-auto mb-4">
               <span class="material-symbols-outlined text-cyan-600 dark:text-cyan-400 text-2xl">description</span>
             </div>
-            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Dokümanlar</h4>
-            <p class="text-sm text-slate-600 dark:text-slate-400">Teknik dokümantasyon ve entegrasyon rehberleri</p>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2">{{ t.docs_title or 'Documentation' }}</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-400">{{ t.docs_desc or 'Technical documentation and integration guides' }}</p>
           </div>
           <div class="text-center p-6 bg-white dark:bg-slate-800 rounded-2xl shadow-lg border border-slate-200 dark:border-slate-700">
             <div class="w-14 h-14 rounded-full bg-purple-100 dark:bg-purple-900/30 flex items-center justify-center mx-auto mb-4">
               <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-2xl">security</span>
             </div>
-            <h4 class="font-bold text-slate-900 dark:text-white mb-2">Güvenlik</h4>
-            <p class="text-sm text-slate-600 dark:text-slate-400">KVKK, HIPAA ve GDPR uyumluluk bilgileri</p>
+            <h4 class="font-bold text-slate-900 dark:text-white mb-2">{{ t.security_title or 'Security' }}</h4>
+            <p class="text-sm text-slate-600 dark:text-slate-400">{{ t.compliance_info_label }}</p>
           </div>
         </div>
       </div>
@@ -1488,23 +1567,23 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">NoryaAI doktorların yerine mi geçiyor?</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Hayır. NoryaAI, laboratuvar sonuçlarının yapılandırılmış biçimde ön hazırlanmasına yardımcı olan bir destek aracıdır. Nihai klinik karar yetkili hekimdedir.</dd>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.is_norya_doctor_answer }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Hangi birimler kullanabilir?</dt>
             <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Laboratuvar, klinik, acil servis ve operasyonel yönetim birimleri; rol bazlı erişim ile her birim kendi ihtiyacına uygun iş akışına erişir.</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
-            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Çok dilli destek nasıl çalışır?</dt>
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.how_multilingual_works }}</dt>
             <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Tahlil sonuçları, Türkçe dahil 12'den fazla dilde yapılandırılmış özet olarak sunulabilir. Bu, özellikle uluslararası hasta profiline sahip hastaneler için faydalıdır.</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
-            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Mevcut hastane sistemleriyle uyumlu mu?</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">NoryaAI, mevcut kurumsal iş akışlarına entegrasyonu destekleyecek şekilde tasarlanmıştır. Pilot süreçte entegrasyon planlaması birlikte yapılır.</dd>
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.compatible_with_hospital_systems }}</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.hospital_systems_compatibility }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_2_q }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Gizlilik odaklı veri işleme, rol bazlı erişim, izlenebilir iş akışları ve kurumsal denetim kaydı altyapısı ile güvenlik desteklenir.</dd>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.how_data_secured_answer }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Pilot başvurusu nasıl yapılır?</dt>
@@ -1526,9 +1605,9 @@
         <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1.5s;"></div>
       </div>
-      
+
       <div id="toast" class="hidden fixed top-4 left-1/2 -translate-x-1/2 z-50 px-4 py-3 rounded-xl text-white text-sm font-medium shadow-lg"></div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <!-- Section Header -->
         <div class="text-center max-w-4xl mx-auto mb-12 sm:mb-16">
@@ -1540,10 +1619,10 @@
             {{ t.hospitals_label }}nizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
           </h2>
           <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
-            Ücretsiz pilot programımızla başlayın, sonuçları görün, sonra karar verin. Kurulum yok, kredi kartı gerekmez.
+            {{ t.free_pilot_program_desc }}
           </p>
         </div>
-        
+
         <!-- Premium Form Container -->
         <div class="bg-white/10 backdrop-blur-xl rounded-3xl sm:rounded-[2.5rem] shadow-2xl border border-white/20 overflow-hidden flex flex-col lg:flex-row">
           <!-- Left Panel - Benefits -->
@@ -1551,18 +1630,18 @@
             <!-- Decorative Elements -->
             <div class="absolute top-0 right-0 w-64 h-64 bg-white/10 rounded-full blur-3xl"></div>
             <div class="absolute bottom-0 left-0 w-48 h-48 bg-cyan-400/20 rounded-full blur-3xl"></div>
-            
+
             <div class="relative">
               <div class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-3 py-1.5 rounded-full mb-6">
                 <span class="material-symbols-outlined text-white text-sm">verified</span>
                 <span class="text-white text-xs font-bold uppercase tracking-wider">Enterprise Solution</span>
               </div>
-              
+
               <h3 class="font-headline font-bold text-2xl sm:text-3xl lg:text-4xl mb-4">{{ t.why_label }}</h3>
               <p class="text-white/90 text-base sm:text-lg mb-8 leading-relaxed">
-                50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor. Sıfır riskle başlayın—ücretsiz pilot dağıtım ile sonuçları görün, sonra karar verin.
+                {{ t.global_network_desc }}
               </p>
-              
+
               <!-- Premium Feature List -->
               <div class="space-y-4 mb-10">
                 <div class="flex items-start gap-3">
@@ -1570,8 +1649,8 @@
                     <span class="material-symbols-outlined text-white text-sm">check</span>
                   </div>
                   <div>
-                    <div class="font-bold text-sm sm:text-base">Ücretsiz Pilot Dağıtım</div>
-                    <div class="text-white/70 text-xs sm:text-sm">Belirlenen bölümde sınırlı kapsamlı başlangıç</div>
+                    <div class="font-bold text-sm sm:text-base">{{ t.free_pilot_label }}</div>
+                    <div class="text-white/70 text-xs sm:text-sm">{{ t.free_pilot_desc }}</div>
                   </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -1579,8 +1658,8 @@
                     <span class="material-symbols-outlined text-white text-sm">check</span>
                   </div>
                   <div>
-                    <div class="font-bold text-sm sm:text-base">Kurulum Ücreti Yok</div>
-                    <div class="text-white/70 text-xs sm:text-sm">Hızlı entegrasyon, teknik destek dahil</div>
+                    <div class="font-bold text-sm sm:text-base">{{ t.no_setup_fee_label }}</div>
+                    <div class="text-white/70 text-xs sm:text-sm">{{ t.no_setup_fee_desc }}</div>
                   </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -1588,8 +1667,8 @@
                     <span class="material-symbols-outlined text-white text-sm">check</span>
                   </div>
                   <div>
-                    <div class="font-bold text-sm sm:text-base">7/24 Öncelikli Destek</div>
-                    <div class="text-white/70 text-xs sm:text-sm">Klinik mühendislik ekibi her zaman yanınızda</div>
+                    <div class="font-bold text-sm sm:text-base">{{ t.support_247_label }}</div>
+                    <div class="text-white/70 text-xs sm:text-sm">{{ t.support_247_desc }}</div>
                   </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -1597,8 +1676,8 @@
                     <span class="material-symbols-outlined text-white text-sm">check</span>
                   </div>
                   <div>
-                    <div class="font-bold text-sm sm:text-base">KVKK & HIPAA Uyumlu</div>
-                    <div class="text-white/70 text-xs sm:text-sm">Gizlilik odaklı veri işleme, tam izlenebilirlik</div>
+                    <div class="font-bold text-sm sm:text-base">{{ t.compliance_kvkk_hipaa_label }}</div>
+                    <div class="text-white/70 text-xs sm:text-sm">{{ t.compliance_kvkk_hipaa_desc }}</div>
                   </div>
                 </div>
                 <div class="flex items-start gap-3">
@@ -1606,15 +1685,15 @@
                     <span class="material-symbols-outlined text-white text-sm">check</span>
                   </div>
                   <div>
-                    <div class="font-bold text-sm sm:text-base">Esnek Kurumsal Sözleşme</div>
-                    <div class="text-white/70 text-xs sm:text-sm">Hacme özel fiyatlandırma, kota yönetimi</div>
+                    <div class="font-bold text-sm sm:text-base">{{ t.flexible_contract_label }}</div>
+                    <div class="text-white/70 text-xs sm:text-sm">{{ t.flexible_contract_desc }}</div>
                   </div>
                 </div>
               </div>
-              
+
               <!-- Contact Options -->
               <div class="pt-8 border-t border-white/20">
-                <p class="text-white/80 text-sm mb-4">Doğrudan iletişim:</p>
+                <p class="text-white/80 text-sm mb-4">{{ t.direct_contact_label }}</p>
                 <div class="flex flex-wrap gap-3">
                   <a href="mailto:sales@norya.ai" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-full text-white font-semibold text-sm hover:bg-white/30 transition-all">
                     <span class="material-symbols-outlined text-base">mail</span>
@@ -1634,21 +1713,21 @@
           <div class="mb-8">
             <div class="inline-flex items-center gap-2 bg-teal-100 dark:bg-teal-900/30 text-teal-700 dark:text-teal-300 px-3 py-1.5 rounded-full mb-4">
               <span class="material-symbols-outlined text-sm">event</span>
-              <span class="text-xs font-bold uppercase tracking-wider">Ücretsiz Demo</span>
+              <span class="text-xs font-bold uppercase tracking-wider">{{ t.free_demo_badge }}</span>
             </div>
             <h3 class="font-headline font-bold text-2xl sm:text-3xl text-slate-900 dark:text-white mb-3">
-              Hemen Başvurun
+              {{ t.apply_now_title }}
             </h3>
             <p class="text-slate-600 dark:text-slate-300 text-sm sm:text-base">
-              2 dakika içinde formu doldurun, 24 saat içinde satış ekibimiz sizi arasın.
+              {{ t.apply_now_desc }}
             </p>
           </div>
-          
+
           <!-- Trust Badges -->
           <div class="flex flex-wrap gap-4 mb-8 pb-8 border-b border-slate-200 dark:border-slate-700">
             <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
               <span class="material-symbols-outlined text-teal-600 text-base">shield</span>
-              <span>KVKK Uyumlu</span>
+              <span>{{ t.kvkk_compliant_badge }}</span>
             </div>
             <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
               <span class="material-symbols-outlined text-teal-600 text-base">lock</span>
@@ -1659,7 +1738,7 @@
               <span>Kurumsal Doğrulama</span>
             </div>
           </div>
-          
+
           <form id="enterprise-lead-form" class="space-y-5 sm:space-y-6">
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
               <div class="group">
@@ -1710,11 +1789,11 @@
             <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700/30 rounded-xl">
               <input type="checkbox" id="kvkk" name="kvkk" required class="mt-1 w-5 h-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" />
               <label for="kvkk" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                Kişisel verilerimin işlenmesini kabul ediyorum. 
+                Kişisel verilerimin işlenmesini kabul ediyorum.
                 (<a href="/legal/gizlilik-politikasi" class="text-teal-600 hover:text-teal-700 underline font-medium" target="_blank">Gizlilik Politikası</a>)
               </label>
             </div>
-            
+
             <!-- Premium Submit Button -->
             <div class="flex flex-col sm:flex-row gap-3 pt-4">
               <button type="submit" id="submit-btn" class="group relative flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-4 px-8 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden">
@@ -1729,7 +1808,7 @@
                 <span>Satış Ekibiyle Görüş</span>
               </a>
             </div>
-            
+
             <!-- Form Footer Trust -->
             <div class="pt-6 mt-6 border-t border-slate-200 dark:border-slate-700">
               <p class="text-center text-slate-500 dark:text-slate-400 text-xs flex items-center justify-center gap-2">
@@ -1752,71 +1831,71 @@
             <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
             <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
           </div>
-          
+
           <!-- Dot Pattern -->
           <div class="absolute inset-0 opacity-[0.06]" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 48px 48px;"></div>
-          
+
           <div class="relative z-10 max-w-4xl mx-auto flex flex-col items-center gap-6 sm:gap-8">
             <!-- Badge -->
             <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
               <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
               <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli {{ t.pilot_badge }}</span>
             </div>
-            
+
             <!-- Headline -->
             <h2 class="text-3xl sm:text-4xl lg:text-6xl font-extrabold font-headline text-white leading-tight">
-              {{ t.hospitals_label }}nizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
+              {{ t.final_cta_hospital_prefix }} <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">{{ t.final_cta_hospital_suffix }}</span><br class="hidden sm:block" /> {{ t.final_cta_hospital_end }}
             </h2>
-            
+
             <!-- Subheadline -->
             <p class="text-base sm:text-xl text-white/80 max-w-3xl leading-relaxed">
               50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor. Sıfır riskle başlayın—ücretsiz pilot dağıtım ile sonuçları görün, sonra karar verin.
             </p>
-            
+
             <!-- Stats Bar -->
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 pb-8 border-y border-white/10 w-full max-w-4xl">
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">2M+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.reports_label }} Üretildi</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.reports_label }} {{ t.reports_produced_label }}</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">4K+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.hospitals_label }} & Klinik</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.hospitals_label }} & {{ t.clinics_label }}</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">98.7%</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">Biomarker Doğruluğu</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.biomarker_accuracy_label }}</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">50+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.countries_label }} Kapsamı</div>
+                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.countries_coverage_label }}</div>
               </div>
             </div>
-            
+
             <!-- CTA Buttons -->
             <div class="flex flex-wrap justify-center gap-3 sm:gap-4 mt-4">
               <a href="#iletisim" class="group relative bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-900 px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-2xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-105 active:scale-95">
                 <span class="relative z-10 flex items-center gap-2">
                   <span class="material-symbols-outlined">event</span>
-                  <span>Demo Planla</span>
+                  <span>{{ t.demo_plan_label }}</span>
                 </span>
                 <span class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </a>
               <a href="mailto:sales@norya.ai" class="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
                 <span class="material-symbols-outlined">mail</span>
-                <span>Satış ile {{ t.contact_title }}</span>
+                <span>{{ t.contact_sales_label }}</span>
               </a>
               <a href="/docs" target="_blank" rel="noopener noreferrer" class="group bg-white/5 backdrop-blur-sm border border-white/20 text-white px-6 sm:px-8 py-4 rounded-full font-semibold text-sm hover:bg-white/15 transition-all flex items-center gap-2">
                 <span class="material-symbols-outlined text-base">description</span>
-                <span class="hidden sm:inline">Dokümanlar</span>
+                <span class="hidden sm:inline">{{ t.docs_label }}</span>
               </a>
             </div>
-            
+
             <!-- Trust Footer -->
             <div class="pt-8 mt-8 border-t border-white/10 flex flex-wrap justify-center gap-6 sm:gap-8">
               <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">shield</span>
-                <span>KVKK Uyumlu</span>
+                <span>{{ t.kvkk_compliant_badge }}</span>
               </div>
               <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">lock</span>
@@ -1828,7 +1907,7 @@
               </div>
               <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">support_agent</span>
-                <span>7/24 Destek</span>
+                <span>{{ t.support_247_badge }}</span>
               </div>
             </div>
           </div>
@@ -1942,7 +2021,7 @@
     window.toggleLangMenu = function() {
       var menu = document.getElementById('base-lang-menu');
       if (!menu) return;
-      
+
       var isHidden = menu.hasAttribute('hidden');
       if (isHidden) {
         menu.style.display = 'block';
@@ -1952,21 +2031,21 @@
         menu.setAttribute('hidden', '');
       }
     };
-    
+
     window.changeLang = function(locale) {
       var currentUrl = new URL(window.location);
       currentUrl.searchParams.set('lang', locale);
       window.location.href = currentUrl.toString();
     };
-    
+
     // Init on page load
     (function() {
       var urlParams = new URLSearchParams(window.location.search);
       var currentLang = (urlParams.get('lang') || 'tr').toLowerCase();
-      
+
       var currentSpan = document.getElementById('base-lang-current');
       if (currentSpan) currentSpan.textContent = currentLang.toUpperCase();
-      
+
       // Mark active option
       var options = document.querySelectorAll('.header-lang-option');
       options.forEach(function(opt) {
@@ -1977,7 +2056,7 @@
           opt.classList.remove('is-active');
         }
       });
-      
+
       // Add click event listener to toggle button
       var langToggle = document.getElementById('base-lang-toggle');
       if (langToggle) {
@@ -1986,7 +2065,7 @@
           toggleLangMenu();
         });
       }
-      
+
       // Add click event listeners to language options
       options.forEach(function(opt) {
         opt.addEventListener('click', function(e) {
