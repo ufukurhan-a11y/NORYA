@@ -2479,6 +2479,12 @@ _EXTRA = {
     "he": {
         "meta_title": "ארגונים — NoryaAI | פלטפורמת תמיכה בהחלטות קליניות",
         "meta_description": "NoryaAI לארגונים: ארגן דוחות בדיקות דם תוך דקות, הדגש אזורים מסוכנים. בקש הדגמה.",
+        
+        # Contact information
+        "contact_email": "support@noryaai.com",
+        "contact_phone": "+90 507 170 35 64",
+        "contact_phone_link": "+905071703564",
+        
         "nav_home": "דף הבית",
         "nav_enterprise": "ארגונים",
         "nav_privacy": "פרטיות",
@@ -2805,6 +2811,12 @@ _EXTRA = {
     "ar": {
         "meta_title": "المؤسسات — NoryaAI | منصة دعم القرارات السريرية",
         "meta_description": "NoryaAI للمؤسسات: هيكلة تقارير تحاليل الدم في دقائق، إبراز المناطق الخطرة. اطلب عرضًا توضيحيًا.",
+        
+        # Contact information
+        "contact_email": "support@noryaai.com",
+        "contact_phone": "+90 507 170 35 64",
+        "contact_phone_link": "+905071703564",
+        
         "nav_home": "الصفحة الرئيسية",
         "nav_enterprise": "المؤسسات",
         "nav_privacy": "الخصوصية",
@@ -3131,6 +3143,12 @@ _EXTRA = {
     "hi": {
         "meta_title": "एंटरप्राइज़ — NoryaAI | नैदानिक निर्णय सहायता प्लेटफॉर्म",
         "meta_description": "NoryaAI एंटरप्राइज़: रक्त परीक्षण रिपोर्टों को मिनटों में संरचित करें, जोखिम क्षेत्रों को उजागर करें। डेमो का अनुरोध करें।",
+        
+        # Contact information
+        "contact_email": "support@noryaai.com",
+        "contact_phone": "+90 507 170 35 64",
+        "contact_phone_link": "+905071703564",
+        
         "nav_home": "होम",
         "nav_enterprise": "एंटरप्राइज़",
         "nav_privacy": "गोपनीयता",
