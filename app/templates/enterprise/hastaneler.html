@@ -103,8 +103,8 @@
     <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   </noscript>
   
-  <!-- Tailwind CSS (defer non-critical) -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries" defer></script>
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
   <script>
     tailwind.config = {
       theme: {
@@ -414,7 +414,7 @@
               <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/20">
                 <img
                   src="/static/images/hospital-dashboard-premium.png"
-                  alt="NoryaAI {{ t.hospitals_label }} Dashboard - Gerçek zamanlı laboratuvar analiz sistemi"
+                  alt="{{ t.image_alt_dashboard or 'NoryaAI Hospital Dashboard - Real-time laboratory analysis system' }}"
                   class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
                   width="600"
                   height="400"
@@ -707,7 +707,7 @@
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">2M+</div>
-              <div class="text-white/60 text-xs">{{ t.reports_label }} Üretildi</div>
+              <div class="text-white/60 text-xs">{{ t.produced_label or 'Produced' }} {{ t.reports_label }}</div>
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">4,000+</div>
@@ -858,12 +858,12 @@
             </div>
 
             <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white leading-tight">
-              %98.7 Doğrulukla<br />
+              {{ t.stat_3_value or '98.7%' }} {{ t.accuracy_label or 'Accuracy' }}<br />
               <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">{{ t.biomarker_analysis }}</span>
             </h2>
 
             <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed mb-8">
-              NoryaAI'nin gelişmiş makine öğrenmesi modelleri, laboratuvar sonuçlarınızı saniyeler içinde analiz eder ve klinik ekipler için yapılandırılmış içgörüler sunar.
+              {{ t.ai_desc or 'NoryaAI\'s advanced machine learning models analyze your laboratory results in seconds and provide structured insights for clinical teams.' }}
             </p>
 
             <!-- Stats Grid -->
@@ -905,7 +905,7 @@
                 <div class="relative rounded-2xl overflow-hidden shadow-xl">
                   <img
                     src="/static/images/ai-lab-analysis-premium.png"
-                    alt="NoryaAI Yapay Zeka Laboratuvar Analizi - Biyobelirteç işleme ve veri görselleştirme"
+                    alt="{{ t.image_alt_ai or 'NoryaAI AI Laboratory Analysis - Biomarker processing and data visualization' }}"
                     class="w-full h-auto object-cover transform group-hover:scale-105 transition-transform duration-700"
                     width="600"
                     height="400"
@@ -1120,7 +1120,7 @@
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">256-bit</div>
-            <div class="text-white/70 text-sm font-medium">Şifreleme</div>
+            <div class="text-white/70 text-sm font-medium">{{ t.encryption_label or 'Encryption' }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">24/7</div>
@@ -1316,14 +1316,14 @@
         <div class="text-center max-w-4xl mx-auto mb-16 sm:mb-20">
           <div class="inline-flex items-center gap-2 bg-gradient-to-r from-teal-500/10 to-cyan-500/10 border border-teal-500/20 px-4 py-2 rounded-full mb-6">
             <span class="material-symbols-outlined text-teal-600 text-sm">flowchart</span>
-            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">5 Adımda Başlayın</span>
+            <span class="text-teal-700 dark:text-teal-300 text-xs font-bold uppercase tracking-widest">{{ t.workflow_start_badge or 'Start in 5 Steps' }}</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-slate-900 dark:text-white">
-            Sonuçların Yüklenmesinden<br class="hidden sm:block" />
-            <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">Kullanıma Hazır Çıktıya</span>
+            {{ t.workflow_step1_title or 'Upload Results' }}<br class="hidden sm:block" />
+            <span class="bg-gradient-to-r from-teal-600 to-cyan-600 bg-clip-text text-transparent">{{ t.workflow_ready_title or 'Ready-to-Use Output' }}</span>
           </h2>
           <p class="text-base sm:text-lg text-slate-600 dark:text-slate-300 leading-relaxed max-w-3xl mx-auto">
-            Basit, izlenebilir ve klinisyen onaylı iş akışı
+            {{ t.workflow_subtitle or 'Simple, traceable, and clinician-approved workflow' }}
           </p>
         </div>
 
@@ -1346,7 +1346,7 @@
                   <span class="material-symbols-outlined text-teal-600 dark:text-teal-400 text-3xl">upload_file</span>
                 </div>
 
-                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Sonuç Yükleme</h3>
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.step1_title or 'Upload Results' }}</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   {{ t.workflow_step_1_desc }}
                 </p>
@@ -1384,7 +1384,7 @@
 
                 <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Çok {{ t.languages_label }}li Özet</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
-                  İhtiyaç halinde sonuçlar 12+ dilde anlaşılır özet biçiminde hazırlanır.
+                  {{ t.step3_desc or 'Results can be prepared as understandable summaries in 12+ languages if needed.' }}
                 </p>
               </div>
             </div>
@@ -1418,9 +1418,9 @@
                   <span class="material-symbols-outlined text-white text-3xl">assignment</span>
                 </div>
 
-                <h3 class="text-lg font-bold font-headline mb-3 text-white">Kullanıma Hazır Çıktı</h3>
+                <h3 class="text-lg font-bold font-headline mb-3 text-white">{{ t.step5_title or 'Ready-to-Use Output' }}</h3>
                 <p class="text-white/80 text-sm leading-relaxed">
-                  Onaylanan çıktılar, hasta bilgilendirme veya kurum içi raporlama amacıyla kullanılabilir.
+                  {{ t.step5_desc or 'Approved outputs can be used for patient communication or internal reporting.' }}
                 </p>
               </div>
             </div>
@@ -1566,16 +1566,16 @@
         <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline text-center mb-10 sm:mb-14">{{ t.faq_title }}</h2>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
-            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">NoryaAI doktorların yerine mi geçiyor?</dt>
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q1 or 'Does NoryaAI replace doctors?' }}</dt>
             <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.is_norya_doctor_answer }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
-            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Hangi birimler kullanabilir?</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Laboratuvar, klinik, acil servis ve operasyonel yönetim birimleri; rol bazlı erişim ile her birim kendi ihtiyacına uygun iş akışına erişir.</dd>
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q2 or 'Which units can use it?' }}</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a2 or 'Laboratory, clinic, emergency, and hospital management units; each unit accesses the workflow suitable for their needs with role-based access.' }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.how_multilingual_works }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Tahlil sonuçları, Türkçe dahil 12'den fazla dilde yapılandırılmış özet olarak sunulabilir. Bu, özellikle uluslararası hasta profiline sahip hastaneler için faydalıdır.</dd>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a3 or 'Test results can be presented as structured summaries in 12+ languages including English. This is especially useful for hospitals with international patient profiles.' }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.compatible_with_hospital_systems }}</dt>
@@ -1586,12 +1586,12 @@
             <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.how_data_secured_answer }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
-            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Pilot başvurusu nasıl yapılır?</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Bu sayfadaki iletişim formunu doldurarak veya satış ekibimizle doğrudan iletişime geçerek pilot başvurusu yapabilirsiniz.</dd>
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q3 or 'How to apply for the pilot?' }}</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a3 or 'You can apply for the pilot by filling out the contact form on this page or by contacting our sales team directly.' }}</dd>
           </div>
           <div class="p-5 sm:p-6 md:col-span-2 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
-            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">Ücretlendirme nasıl çalışır?</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">Kurumsal ücretlendirme, hastanenin hacmine, birim sayısına ve kota ihtiyacına göre özel olarak belirlenir. Pilot süreç için ayrı koşullar sunulabilir.</dd>
+            <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q4 or 'How does pricing work?' }}</dt>
+            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a4 or 'Enterprise pricing is determined based on hospital volume, number of units, and quota needs. Separate conditions may be offered for the pilot process.' }}</dd>
           </div>
         </div>
       </div>
@@ -1613,10 +1613,10 @@
         <div class="text-center max-w-4xl mx-auto mb-12 sm:mb-16">
           <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-6">
             <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
-            <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli {{ t.pilot_badge }}</span>
+            <span class="text-white text-xs font-bold uppercase tracking-widest">{{ t.limited_time_label or 'Limited Time' }} {{ t.pilot_badge }}</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
-            {{ t.hospitals_label }}nizi <span class="bg-gradient-to-r from-teal-300 via-cyan-300 to-teal-200 bg-clip-text text-transparent">Yapay Zekâ ile</span><br class="hidden sm:block" /> Tanıştırın
+            {{ t.final_cta_hospital_title or 'Introduce Your Hospital to AI' }}
           </h2>
           <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
             {{ t.free_pilot_program_desc }}
@@ -1731,11 +1731,11 @@
             </div>
             <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
               <span class="material-symbols-outlined text-teal-600 text-base">lock</span>
-              <span>SSL Güvenli</span>
+              <span>{{ t.ssl_secure_label or 'SSL Secure' }}</span>
             </div>
             <div class="flex items-center gap-2 text-slate-600 dark:text-slate-400 text-xs">
               <span class="material-symbols-outlined text-teal-600 text-base">verified</span>
-              <span>Kurumsal Doğrulama</span>
+              <span>{{ t.enterprise_verified_label or 'Enterprise Verified' }}</span>
             </div>
           </div>
 
@@ -1762,19 +1762,19 @@
             </div>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-5 sm:gap-6">
               <div class="group">
-                <label for="kurum_tipi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">{{ t.hospitals_label }} Türü</label>
+                <label for="kurum_tipi" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">{{ t.form_hospital_type_label or 'Hospital Type' }}</label>
                 <select id="kurum_tipi" name="kurum_tipi" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white">
-                  <option value="">Seçiniz</option>
+                  <option value="">{{ t.form_type_select or 'Select' }}</option>
                   <option value="hospital">Devlet {{ t.hospitals_label }}si</option>
                   <option value="hospital-private">Özel {{ t.hospitals_label }}</option>
-                  <option value="hospital-university">Üniversite {{ t.hospitals_label }}si</option>
+                  <option value="hospital-university">{{ t.form_university_hospital or 'University' }} {{ t.hospitals_label }}si</option>
                   <option value="hospital-group">{{ t.hospitals_label }} Grubu / Zinciri</option>
                 </select>
               </div>
               <div class="group">
-                <label for="aylik_rapor" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Tahmini Aylık Tahlil Hacmi</label>
+                <label for="aylik_rapor" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">{{ t.form_monthly_volume_label or 'Monthly Test Volume' }}</label>
                 <select id="aylik_rapor" name="aylik_rapor" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white">
-                  <option value="">Seçiniz</option>
+                  <option value="">{{ t.form_type_select or 'Select' }}</option>
                   <option value="1-500">1 – 500</option>
                   <option value="501-2000">501 – 2.000</option>
                   <option value="2001-10000">2.001 – 10.000</option>
@@ -1783,14 +1783,14 @@
               </div>
             </div>
             <div class="group">
-              <label for="mesaj" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">Ek Not veya Beklentiler</label>
-              <textarea id="mesaj" name="mesaj" rows="3" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400 resize-none" placeholder="İhtiyaçlarınızdan kısaca bahsedin..."></textarea>
+              <label for="mesaj" class="block text-xs sm:text-sm font-bold text-slate-700 dark:text-slate-300 mb-2 uppercase tracking-widest">{{ t.form_message_label or 'Message' }}</label>
+              <textarea id="mesaj" name="mesaj" rows="3" class="w-full bg-slate-50 dark:bg-slate-700/50 border-2 border-slate-200 dark:border-slate-600 rounded-xl px-4 py-3.5 focus:ring-2 focus:ring-teal-500 focus:border-teal-500 transition-all text-slate-900 dark:text-white placeholder-slate-400 resize-none" placeholder="{{ t.form_message_placeholder or 'Briefly describe your needs...' }}"></textarea>
             </div>
             <div class="flex items-start gap-3 p-4 bg-slate-50 dark:bg-slate-700/30 rounded-xl">
               <input type="checkbox" id="kvkk" name="kvkk" required class="mt-1 w-5 h-5 rounded border-slate-300 text-teal-600 focus:ring-teal-500" />
               <label for="kvkk" class="text-sm text-slate-600 dark:text-slate-300 leading-relaxed">
-                Kişisel verilerimin işlenmesini kabul ediyorum.
-                (<a href="/legal/gizlilik-politikasi" class="text-teal-600 hover:text-teal-700 underline font-medium" target="_blank">Gizlilik Politikası</a>)
+                {{ t.form_privacy_text or 'I consent to the processing of my personal data.' }}
+                (<a href="/legal/gizlilik-politikasi" class="text-teal-600 hover:text-teal-700 underline font-medium" target="_blank">{{ t.privacy_policy_label or 'Privacy Policy' }}</a>)
               </label>
             </div>
 
@@ -1799,13 +1799,13 @@
               <button type="submit" id="submit-btn" class="group relative flex-1 bg-gradient-to-r from-teal-600 to-cyan-600 text-white py-4 px-8 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-[1.02] active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed overflow-hidden">
                 <span class="relative z-10 flex items-center justify-center gap-2">
                   <span class="material-symbols-outlined">rocket_launch</span>
-                  <span>Ücretsiz {{ t.final_cta_btn }}</span>
+                  <span>{{ t.form_free_cta or 'Free' }} {{ t.final_cta_btn }}</span>
                 </span>
                 <span class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </button>
               <a href="mailto:sales@norya.ai" class="group inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition-all bg-white dark:bg-slate-800">
                 <span class="material-symbols-outlined mr-2 group-hover:rotate-12 transition-transform">mail</span>
-                <span>Satış Ekibiyle Görüş</span>
+                <span>{{ t.form_sales_team or 'Talk to Sales Team' }}</span>
               </a>
             </div>
 
@@ -1813,7 +1813,7 @@
             <div class="pt-6 mt-6 border-t border-slate-200 dark:border-slate-700">
               <p class="text-center text-slate-500 dark:text-slate-400 text-xs flex items-center justify-center gap-2">
                 <span class="material-symbols-outlined text-teal-600 text-sm">security</span>
-                <span>Bilgileriniz SSL ile güvence altındadır ve hiçbir şekilde üçüncü şahıslarla paylaşılmaz.</span>
+                <span>{{ t.form_security_note or 'Your information is secured with SSL and never shared with third parties.' }}</span>
               </p>
             </div>
           </form>
@@ -1899,11 +1899,11 @@
               </div>
               <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">lock</span>
-                <span>SSL Güvenli</span>
+                <span>{{ t.ssl_secure_label or 'SSL Secure' }}</span>
               </div>
               <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">verified</span>
-                <span>Kurumsal Doğrulama</span>
+                <span>{{ t.enterprise_verified_label or 'Enterprise Verified' }}</span>
               </div>
               <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">support_agent</span>
