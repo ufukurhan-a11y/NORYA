@@ -5,6 +5,7 @@ from app.admin.routers import (
     pricing_plans,
     analyses,
     billing_links,
+    blog,
     coupons,
     dashboard,
     enterprise_leads,
@@ -42,3 +43,4 @@ admin_router.include_router(billing_links.router, prefix="/billing-links", tags=
 admin_router.include_router(institutions.router, prefix="/institutions", tags=["admin-institutions"])
 admin_router.include_router(enterprise_leads.router, prefix="/enterprise-leads", tags=["admin-enterprise-leads"])
 admin_router.include_router(seo.router, prefix="/seo", tags=["admin-seo"])
+admin_router.include_router(blog.router, tags=["admin-blog"])

@@ -1,6 +1,7 @@
 from .analysis import AnalysisRecord
 from .analysis_job import AnalysisJob
 from .audit import AuditLog
+from .blog import BlogPost
 from .discount import DiscountCode
 from .drip_email import DripEmailLog
 from .enterprise_case import EnterpriseCase, EnterpriseReport
@@ -24,6 +25,7 @@ __all__ = [
     "AnalysisRecord",
     "AnalysisJob",
     "AuditLog",
+    "BlogPost",
     "DiscountCode",
     "DripEmailLog",
     "EnterpriseCase",

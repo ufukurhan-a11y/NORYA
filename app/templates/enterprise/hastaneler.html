@@ -50,6 +50,7 @@
     "contactPoint": {
       "@type": "ContactPoint",
       "email": "support@noryaai.com",
+      "telephone": "+905071703564",
       "contactType": "customer service"
     },
     "sameAs": [
@@ -526,7 +527,7 @@
                 <span class="material-symbols-outlined text-green-300 text-2xl">psychology</span>
               </div>
               <div class="text-white text-xs sm:text-sm font-bold">OpenAI</div>
-              <div class="text-white/50 text-[10px] mt-0.5">GPT-4 Enterprise</div>
+              <div class="text-white/50 text-[10px] mt-0.5">{{ t.gpt4_enterprise }}</div>
             </div>
 
             <!-- Partner 2: Azure -->
@@ -570,7 +571,7 @@
               <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
                 <span class="material-symbols-outlined text-indigo-300 text-2xl">shield</span>
               </div>
-              <div class="text-white text-xs sm:text-sm font-bold">Enterprise Security</div>
+              <div class="text-white text-xs sm:text-sm font-bold">{{ t.enterprise_security_text }}</div>
               <div class="text-white/50 text-[10px] mt-0.5">End-to-End Encryption</div>
             </div>
           </div>
@@ -711,7 +712,7 @@
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">4,000+</div>
-              <div class="text-white/60 text-xs">{{ t.hospitals_label }} & Klinik</div>
+              <div class="text-white/60 text-xs">{{ t.hospitals_label }} {{ t.and_clinics }}</div>
             </div>
           </div>
         </div>
@@ -870,11 +871,11 @@
             <div class="grid grid-cols-2 gap-4 sm:gap-6">
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-teal-600 mb-2">2M+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">Analiz Edilen {{ t.reports_label }}</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.analyzed_reports }}</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-cyan-600 mb-2">50+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.countries_label }}de Kullanım</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.countries_in_use }}</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-purple-600 mb-2">&lt;50ms</div>
@@ -898,7 +899,7 @@
                 <div class="absolute top-4 left-4 z-10 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
                   <span class="flex items-center gap-2">
                     <span class="material-symbols-outlined text-sm">auto_awesome</span>
-                    AI Powered
+                    {{ t.ai_powered_text }}
                   </span>
                 </div>
 
@@ -1062,7 +1063,7 @@
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
-                <span>RESTful API</span>
+                <span>{{ t.restful_api }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
@@ -1112,11 +1113,11 @@
         <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">99.9%</div>
-            <div class="text-white/70 text-sm font-medium">Uptime SLA</div>
+            <div class="text-white/70 text-sm font-medium">{{ t.uptime_sla }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">&lt;50ms</div>
-            <div class="text-white/70 text-sm font-medium">API Response</div>
+            <div class="text-white/70 text-sm font-medium">{{ t.api_response }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">256-bit</div>
@@ -1142,7 +1143,7 @@
             <span class="material-symbols-outlined text-blue-700">biotech</span>
           </div>
           <h3 class="font-bold font-headline text-base mb-2">{{ t.team_1_title }}</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">Yüksek hacimli tahlil çıktılarını yapılandırılmış biçimde ön hazırlığa alarak uzman incelemesi öncesinde düzenli bir alt yapı oluşturur.</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.team_1_desc }}</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
@@ -1163,7 +1164,7 @@
             <span class="material-symbols-outlined text-violet-700">admin_panel_settings</span>
           </div>
           <h3 class="font-bold font-headline text-base mb-2">{{ t.team_4_title }}</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">Kota yönetimi, kullanım takibi ve kurumsal denetim özellikleri, hastane yönetim ekiplerinin ihtiyaçlarına göre tasarlanmıştır.</p>
+          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.team_4_desc }}</p>
         </div>
       </div>
     </section>
@@ -1364,7 +1365,7 @@
                   <span class="material-symbols-outlined text-cyan-600 dark:text-cyan-400 text-3xl">biotech</span>
                 </div>
 
-                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.card_1_title }}</h3>
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.step2_title or 'Clinical Pre-Analysis' }}</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   {{ t.workflow_step_2_desc }}
                 </p>
@@ -1382,7 +1383,7 @@
                   <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-3xl">translate</span>
                 </div>
 
-                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">Çok {{ t.languages_label }}li Özet</h3>
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.step3_title or 'Multilingual Summary' }}</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   {{ t.step3_desc or 'Results can be prepared as understandable summaries in 12+ languages if needed.' }}
                 </p>
@@ -1400,7 +1401,7 @@
                   <span class="material-symbols-outlined text-amber-600 dark:text-amber-400 text-3xl">clinical_notes</span>
                 </div>
 
-                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.clinician_review_title }}</h3>
+                <h3 class="text-lg font-bold font-headline mb-3 text-slate-900 dark:text-white">{{ t.step4_title or 'Clinical Review' }}</h3>
                 <p class="text-slate-600 dark:text-slate-300 text-sm leading-relaxed">
                   {{ t.clinician_review_desc }}
                 </p>
@@ -1695,13 +1696,13 @@
               <div class="pt-8 border-t border-white/20">
                 <p class="text-white/80 text-sm mb-4">{{ t.direct_contact_label }}</p>
                 <div class="flex flex-wrap gap-3">
-                  <a href="mailto:sales@norya.ai" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-full text-white font-semibold text-sm hover:bg-white/30 transition-all">
+                  <a href="mailto:support@noryaai.com" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-full text-white font-semibold text-sm hover:bg-white/30 transition-all">
                     <span class="material-symbols-outlined text-base">mail</span>
-                    <span>sales@norya.ai</span>
+                    <span>support@noryaai.com</span>
                   </a>
-                  <a href="tel:+908501234567" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-full text-white font-semibold text-sm hover:bg-white/30 transition-all">
+                  <a href="tel:+905071703564" class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm px-4 py-2.5 rounded-full text-white font-semibold text-sm hover:bg-white/30 transition-all">
                     <span class="material-symbols-outlined text-base">phone</span>
-                    <span>+90 850 123 45 67</span>
+                    <span>+90 507 170 35 64</span>
                   </a>
                 </div>
               </div>
@@ -1803,7 +1804,7 @@
                 </span>
                 <span class="absolute inset-0 bg-gradient-to-r from-cyan-600 to-teal-600 opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </button>
-              <a href="mailto:sales@norya.ai" class="group inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition-all bg-white dark:bg-slate-800">
+              <a href="mailto:support@noryaai.com" class="group inline-flex items-center justify-center px-8 py-4 rounded-full border-2 border-slate-300 dark:border-slate-600 text-slate-700 dark:text-slate-300 font-bold hover:border-teal-500 hover:text-teal-600 dark:hover:text-teal-400 transition-all bg-white dark:bg-slate-800">
                 <span class="material-symbols-outlined mr-2 group-hover:rotate-12 transition-transform">mail</span>
                 <span>{{ t.form_sales_team or 'Talk to Sales Team' }}</span>
               </a>
@@ -1839,7 +1840,7 @@
             <!-- Badge -->
             <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
               <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
-              <span class="text-white text-xs font-bold uppercase tracking-widest">Sınırlı Süreli {{ t.pilot_badge }}</span>
+              <span class="text-white text-xs font-bold uppercase tracking-widest">{{ t.limited_time_label }} {{ t.pilot_badge }}</span>
             </div>
 
             <!-- Headline -->
@@ -1881,7 +1882,7 @@
                 </span>
                 <span class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </a>
-              <a href="mailto:sales@norya.ai" class="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
+              <a href="mailto:support@noryaai.com" class="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95 flex items-center gap-2">
                 <span class="material-symbols-outlined">mail</span>
                 <span>{{ t.contact_sales_label }}</span>
               </a>
@@ -1924,15 +1925,15 @@
         <div class="flex items-center gap-2">
           <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-7 sm:h-8 w-auto object-contain" width="160" height="40" loading="lazy" />
         </div>
-        <p class="text-on-surface-variant text-xs sm:text-sm tracking-wide max-w-sm">Sağlık kurumları için yapılandırılmış klinik yapay zekâ altyapısı.</p>
-        <p class="text-outline text-xs tracking-wide">&copy; 2026 NoryaAI. Tüm hakları saklıdır.</p>
+        <p class="text-on-surface-variant text-xs sm:text-sm tracking-wide max-w-sm">{{ t.footer_desc }}</p>
+        <p class="text-outline text-xs tracking-wide">{{ t.footer_copyright }}</p>
       </div>
       <div class="flex flex-wrap gap-x-6 sm:gap-x-12 gap-y-4 sm:gap-y-6 md:justify-end">
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="{{ localized_home_path(request) }}">Ana Sayfa</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/kurumsal">Kurumsal</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/hastaneler-icin">{{ t.hospitals_label }}ler</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/gizlilik-politikasi">Gizlilik</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/kullanim-sartlari">Kullanım Şartları</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="{{ localized_home_path(request) }}">{{ t.nav_home }}</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/kurumsal">{{ t.nav_enterprise }}</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/hastaneler-icin">{{ t.hospitals_label }}</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/gizlilik-politikasi">{{ t.nav_privacy }}</a>
+        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/kullanim-sartlari">{{ t.nav_terms }}</a>
       </div>
     </div>
   </footer>
@@ -1962,11 +1963,11 @@
         var yetkiliAd = (document.getElementById('yetkili_ad').value || '').trim();
         var email = (document.getElementById('email').value || '').trim();
         var emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!kurumAdi) { showToast('{{ t.hospitals_label }} / kurum adını girin.', true); return; }
-        if (!yetkiliAd) { showToast('Yetkili ad soyadını girin.', true); return; }
-        if (!email) { showToast('Kurumsal e-posta adresini girin.', true); return; }
-        if (!emailRe.test(email)) { showToast('Geçerli bir e-posta adresi girin.', true); return; }
-        if (!document.getElementById('kvkk').checked) { showToast('KVKK onayı gereklidir.', true); return; }
+        if (!kurumAdi) { showToast('{{ t.form_error_institution_required }}', true); return; }
+        if (!yetkiliAd) { showToast('{{ t.form_error_contact_required }}', true); return; }
+        if (!email) { showToast('{{ t.form_error_email_required }}', true); return; }
+        if (!emailRe.test(email)) { showToast('{{ t.form_error_email_invalid }}', true); return; }
+        if (!document.getElementById('kvkk').checked) { showToast('{{ t.form_error_kvkk_required }}', true); return; }
 
         setLoading(true);
         fetch('/api/enterprise-lead', {
@@ -1984,17 +1985,17 @@
           })
         })
         .then(function(r) {
-          if (r.status === 429) { showToast('Çok fazla istek. Lütfen biraz bekleyin.', true); return; }
+          if (r.status === 429) { showToast('{{ t.form_error_rate_limit }}', true); return; }
           if (!r.ok) throw new Error();
           return r.json();
         })
         .then(function(data) {
           if (data && data.ok) {
-            showToast('Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.', false);
+            showToast('{{ t.form_success_message }}', false);
             form.reset();
-          } else { showToast('Bir hata oluştu. Lütfen tekrar deneyin.', true); }
+          } else { showToast('{{ t.form_error_generic }}', true); }
         })
-        .catch(function() { showToast('Bir hata oluştu. Lütfen tekrar deneyin.', true); })
+        .catch(function() { showToast('{{ t.form_error_generic }}', true); })
         .finally(function() { setLoading(false); });
       });
     })();

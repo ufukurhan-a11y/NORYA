@@ -277,3 +277,30 @@ def test_sitemap_xml_contains_seo_landing_urls(client: TestClient):
     for path in SEO_LANDING_PATHS:
         # <loc>http://.../tr/kan-tahlili-sonucu</loc>
         assert path in body, f"sitemap.xml içinde {path} bulunamadı"
+
+
+def test_analyze_export_has_noindex_header(client: TestClient, auth_headers: dict):
+    """/analyze/export endpoint'i X-Robots-Tag: noindex, nofollow header'ı dönmeli."""
+    # Authenticated istek ile test et (çünkü auth gerektiriyor)
+    r = client.get("/analyze/export", headers=auth_headers)
+    assert r.status_code == 200
+    # X-Robots-Tag header kontrolü
+    assert "noindex" in r.headers.get("X-Robots-Tag", "").lower(), (
+        f"/analyze/export X-Robots-Tag: noindex, nofollow header'ı dönmeli; mevcut: {r.headers.get('X-Robots-Tag')}"
+    )
+    assert "nofollow" in r.headers.get("X-Robots-Tag", "").lower(), (
+        f"/analyze/export X-Robots-Tag: noindex, nofollow header'ı dönmeli; mevcut: {r.headers.get('X-Robots-Tag')}"
+    )
+
+
+def test_analyze_history_endpoints_have_noindex(client: TestClient, auth_headers: dict):
+    """/analyze/history endpoint'leri X-Robots-Tag: noindex, nofollow header'ı dönmeli."""
+    # GET /analyze/history
+    r = client.get("/analyze/history", headers=auth_headers)
+    assert r.status_code == 200
+    assert "noindex" in r.headers.get("X-Robots-Tag", "").lower()
+    
+    # GET /analyze/usage
+    r = client.get("/analyze/usage", headers=auth_headers)
+    assert r.status_code == 200
+    assert "noindex" in r.headers.get("X-Robots-Tag", "").lower()

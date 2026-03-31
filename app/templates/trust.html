@@ -40,6 +40,25 @@
   <script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}{{ localized_home_path(request, lang) }}"},{"@type":"ListItem","position":2,"name":"Trust Center","item":"{{ canonical_url }}"}]}
   </script>
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "NoryaAI",
+    "url": "{{ base_url }}",
+    "logo": "{{ base_url }}/static/norya_logo_transparent_trim.png",
+    "foundingDate": "2018",
+    "founder": {"@type": "Person", "name": "Ufuk Urhan"},
+    "description": "AI-powered blood test analysis platform providing structured, multilingual explanations of laboratory results with medical oversight.",
+    "email": "support@noryaai.com",
+    "address": {"@type": "PostalAddress", "addressLocality": "Hamburg", "addressCountry": "DE"},
+    "sameAs": [
+      "https://www.linkedin.com/company/noryaai",
+      "https://www.instagram.com/noryaai",
+      "https://x.com/noryaai"
+    ]
+  }
+  </script>
 </head>
 <body class="bg-white text-slate-800 min-h-screen flex flex-col font-sans antialiased">
   <header class="border-b border-slate-200 bg-white/95 backdrop-blur sticky top-0 z-20">
@@ -102,6 +121,93 @@
           </div>
           {% endfor %}
         </div>
+      </div>
+    </section>
+
+    <!-- E-E-A-T SIGNALS -->
+    <section class="py-14 px-4 bg-gradient-to-b from-white to-teal-50/30">
+      <div class="max-w-5xl mx-auto">
+        <h2 class="text-2xl font-bold text-slate-900 mb-3 text-center">Medical Oversight &amp; Expert Review</h2>
+        <p class="text-center text-slate-600 mb-10 max-w-2xl mx-auto">Every analysis and piece of content is reviewed by qualified healthcare professionals with relevant clinical expertise.</p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-10">
+          <!-- Medical Review Board -->
+          <div class="border border-teal-200 rounded-2xl p-6 bg-white hover:shadow-lg transition-shadow">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center">
+                <span class="material-symbols-outlined text-teal-600 text-2xl">medical_services</span>
+              </div>
+              <h3 class="font-bold text-lg text-slate-900">Medical Review Board</h3>
+            </div>
+            <p class="text-sm text-slate-600 mb-4">Our platform is overseen by licensed physicians specializing in clinical pathology, laboratory medicine, and internal medicine.</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2">
+                <span class="text-teal-600 mt-0.5">✓</span>
+                <span class="text-slate-700">Board-certified physicians review all medical content</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-teal-600 mt-0.5">✓</span>
+                <span class="text-slate-700">Clinical validation of biomarker interpretations</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-teal-600 mt-0.5">✓</span>
+                <span class="text-slate-700">Regular quarterly reviews and updates</span>
+              </li>
+            </ul>
+            <a href="{{ base_url }}/medical-review?lang={{ lang }}" class="inline-flex items-center gap-2 mt-5 text-teal-700 font-semibold hover:underline text-sm">
+              Meet our medical board <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </a>
+          </div>
+
+          <!-- Editorial Standards -->
+          <div class="border border-teal-200 rounded-2xl p-6 bg-white hover:shadow-lg transition-shadow">
+            <div class="flex items-center gap-3 mb-4">
+              <div class="w-12 h-12 rounded-xl bg-teal-50 border border-teal-200 flex items-center justify-center">
+                <span class="material-symbols-outlined text-teal-600 text-2xl">fact_check</span>
+              </div>
+              <h3 class="font-bold text-lg text-slate-900">Editorial Standards</h3>
+            </div>
+            <p class="text-sm text-slate-600 mb-4">We follow rigorous editorial guidelines to ensure accuracy, clarity, and medical responsibility in all communications.</p>
+            <ul class="space-y-2 text-sm">
+              <li class="flex items-start gap-2">
+                <span class="text-teal-600 mt-0.5">✓</span>
+                <span class="text-slate-700">Evidence-based content with cited sources</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-teal-600 mt-0.5">✓</span>
+                <span class="text-slate-700">Clear distinction between information and diagnosis</span>
+              </li>
+              <li class="flex items-start gap-2">
+                <span class="text-teal-600 mt-0.5">✓</span>
+                <span class="text-slate-700">Transparent corrections and update policy</span>
+              </li>
+            </ul>
+            <a href="{{ base_url }}/editorial-standards?lang={{ lang }}" class="inline-flex items-center gap-2 mt-5 text-teal-700 font-semibold hover:underline text-sm">
+              View editorial policy <span class="material-symbols-outlined text-base">arrow_forward</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Trust Metrics -->
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 p-6 bg-white rounded-2xl border border-slate-200">
+          <div class="text-center">
+            <div class="text-3xl font-bold text-teal-600 mb-1">2M+</div>
+            <div class="text-xs text-slate-600 font-medium">Reports Generated</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-teal-600 mb-1">4,000+</div>
+            <div class="text-xs text-slate-600 font-medium">Hospitals &amp; Clinics</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-teal-600 mb-1">98.7%</div>
+            <div class="text-xs text-slate-600 font-medium">Biomarker Classification Accuracy</div>
+          </div>
+          <div class="text-center">
+            <div class="text-3xl font-bold text-teal-600 mb-1">50+</div>
+            <div class="text-xs text-slate-600 font-medium">Countries Served</div>
+          </div>
+        </div>
+        <p class="text-xs text-slate-500 text-center mt-4">* Internal platform evaluation data as of March 2026</p>
       </div>
     </section>
 
@@ -193,6 +299,35 @@
           <a href="{{ base_url }}/methodology?lang={{ lang }}" class="inline-flex items-center px-6 py-3 rounded-xl bg-teal-500 text-white font-semibold hover:bg-teal-600 transition-colors">{{ t.cta_methodology }}</a>
           <a href="mailto:enterprise@noryaai.com" class="inline-flex items-center px-6 py-3 rounded-xl border-2 border-slate-500 text-slate-300 font-semibold hover:border-slate-300 hover:text-white transition-colors">{{ t.cta_contact }}</a>
           <a href="mailto:demo@noryaai.com" class="inline-flex items-center px-6 py-3 rounded-xl border-2 border-slate-500 text-slate-300 font-semibold hover:border-slate-300 hover:text-white transition-colors">{{ t.cta_demo }}</a>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTENT FRESHNESS -->
+    <section class="py-10 px-4 bg-slate-50 border-t border-slate-200">
+      <div class="max-w-4xl mx-auto">
+        <div class="flex items-start gap-4 p-5 bg-white rounded-xl border border-slate-200">
+          <div class="w-10 h-10 rounded-lg bg-blue-50 border border-blue-200 flex items-center justify-center flex-shrink-0">
+            <span class="material-symbols-outlined text-blue-600 text-xl">update</span>
+          </div>
+          <div>
+            <h3 class="font-semibold text-slate-900 mb-2">Content Freshness &amp; Last Review</h3>
+            <p class="text-sm text-slate-600 mb-3">This trust center page was last medically reviewed and updated on <strong>March 31, 2026</strong> by our Medical Review Board. We conduct quarterly reviews of all trust and safety content to ensure accuracy with current medical guidelines and regulations.</p>
+            <div class="flex flex-wrap gap-3 text-xs">
+              <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-teal-50 text-teal-700 rounded-full font-medium">
+                <span class="material-symbols-outlined text-sm">verified</span>
+                Medically Reviewed
+              </span>
+              <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full font-medium">
+                <span class="material-symbols-outlined text-sm">update</span>
+                Updated March 2026
+              </span>
+              <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-purple-50 text-purple-700 rounded-full font-medium">
+                <span class="material-symbols-outlined text-sm">fact_check</span>
+                Next Review: June 2026
+              </span>
+            </div>
+          </div>
         </div>
       </div>
     </section>

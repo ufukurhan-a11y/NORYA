@@ -21,6 +21,7 @@
 {% endblock %}
 
 {% block head %}
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
@@ -51,201 +52,679 @@
 }
 </script>
 {% endif %}
+<style>
+  html { scroll-behavior: smooth; }
+  .fd-subnav-wrap {
+    position: sticky; top: 64px; z-index: 45;
+    background: rgba(248, 249, 250, 0.86);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+    border-bottom: 1px solid rgba(188, 201, 200, 0.32);
+  }
+  .fd-subnav { display: flex; gap: 0.5rem; overflow-x: auto; scrollbar-width: none; -ms-overflow-style: none; padding: 0.65rem 0; }
+  .fd-subnav::-webkit-scrollbar { display: none; }
+  .fd-subnav-link {
+    white-space: nowrap; border: 1px solid transparent; color: #3d4949;
+    font-size: 0.82rem; font-weight: 600; letter-spacing: 0.01em;
+    border-radius: 9999px; padding: 0.45rem 0.85rem; transition: all 160ms ease;
+  }
+  .fd-subnav-link:hover { color: #0f172a; background: rgba(14, 165, 164, 0.08); }
+  .fd-subnav-link.active {
+    color: #006a69; background: rgba(14, 165, 164, 0.12);
+    border-color: rgba(14, 165, 164, 0.2); box-shadow: 0 1px 0 rgba(14, 165, 164, 0.16) inset;
+  }
+  .fd-anchor { scroll-margin-top: 148px; }
+  @media (min-width: 640px) { .fd-subnav-link { font-size: 0.86rem; padding: 0.5rem 1rem; } }
+  @media (min-width: 1024px) { .fd-subnav-wrap { top: 72px; } .fd-anchor { scroll-margin-top: 162px; } }
+</style>
+<script>
+// Mobile Menu Toggle - For Doctors Specific
+function toggleMobileMenu() {
+  console.log('[for-doctors] toggleMobileMenu called');
+  var backdrop = document.getElementById('mobile-menu-backdrop');
+  var menu = document.getElementById('mobile-menu');
+  if (!backdrop || !menu) {
+    console.error('[for-doctors] Mobile menu elements not found!');
+    return;
+  }
+  var isOpen = menu.classList.contains('translate-x-0');
+  console.log('[for-doctors] Menu isOpen:', isOpen);
+  if (isOpen) {
+    menu.classList.remove('translate-x-0');
+    menu.classList.add('translate-x-full');
+    backdrop.classList.add('hidden');
+    document.body.style.overflow = '';
+  } else {
+    menu.classList.remove('translate-x-full');
+    menu.classList.add('translate-x-0');
+    backdrop.classList.remove('hidden');
+    document.body.style.overflow = 'hidden';
+  }
+}
+
+// Subnav Active Link Handler
+document.addEventListener('DOMContentLoaded', function() {
+  console.log('[for-doctors] DOMContentLoaded - Setting up subnav');
+  
+  // Handle subnav active state on scroll
+  var subnavLinks = document.querySelectorAll('.fd-subnav-link');
+  var sections = document.querySelectorAll('.fd-anchor');
+  
+  function updateActiveLink() {
+    var scrollPos = window.scrollY + 200;
+    
+    sections.forEach(function(section) {
+      var sectionTop = section.offsetTop;
+      var sectionHeight = section.offsetHeight;
+      var sectionId = section.getAttribute('id');
+      
+      if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
+        subnavLinks.forEach(function(link) {
+          link.classList.remove('active');
+          if (link.getAttribute('href') === '#' + sectionId) {
+            link.classList.add('active');
+          }
+        });
+      }
+    });
+  }
+  
+  // Smooth scroll for subnav links
+  subnavLinks.forEach(function(link) {
+    link.addEventListener('click', function(e) {
+      e.preventDefault();
+      var targetId = this.getAttribute('href').substring(1);
+      var targetSection = document.getElementById(targetId);
+      
+      if (targetSection) {
+        var offsetTop = targetSection.offsetTop - 150; // Account for sticky header
+        window.scrollTo({
+          top: offsetTop,
+          behavior: 'smooth'
+        });
+        
+        // Update active state
+        subnavLinks.forEach(function(l) {
+          l.classList.remove('active');
+        });
+        this.classList.add('active');
+      }
+    });
+  });
+  
+  // Language Switcher
+  var langToggle = document.getElementById('base-lang-toggle');
+  var langMenu = document.getElementById('base-lang-menu');
+  var langCurrent = document.getElementById('base-lang-current');
+  var langOptions = document.querySelectorAll('.header-lang-option');
+  var currentLang = '{{ lang|default("tr") }}';
+  
+  console.log('[for-doctors] Current lang:', currentLang);
+  
+  // Set current language display
+  if (langCurrent) {
+    langCurrent.textContent = currentLang.toUpperCase();
+  }
+  
+  // Set active option
+  langOptions.forEach(function(opt) {
+    var locale = opt.getAttribute('data-locale');
+    if (locale === currentLang) {
+      opt.classList.add('is-active');
+    }
+    
+    opt.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      var newLang = this.getAttribute('data-locale');
+      console.log('[for-doctors] Lang clicked:', newLang);
+      
+      // Close menu
+      if (langMenu) {
+        langMenu.style.display = 'none';
+        langMenu.setAttribute('hidden', '');
+      }
+      
+      // Change language
+      if (newLang && newLang !== currentLang) {
+        var url = new URL(window.location.href);
+        url.searchParams.set('lang', newLang);
+        window.location.href = url.toString();
+      }
+    });
+  });
+  
+  // Toggle language menu
+  if (langToggle) {
+    langToggle.addEventListener('click', function(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      console.log('[for-doctors] Lang toggle clicked');
+      
+      if (langMenu) {
+        var isHidden = langMenu.hasAttribute('hidden');
+        if (isHidden) {
+          langMenu.style.display = 'block';
+          langMenu.removeAttribute('hidden');
+        } else {
+          langMenu.style.display = 'none';
+          langMenu.setAttribute('hidden', '');
+        }
+      }
+    });
+  }
+  
+  // Close language menu when clicking outside
+  document.addEventListener('click', function(e) {
+    if (langMenu && !langMenu.hasAttribute('hidden')) {
+      if (!langMenu.contains(e.target) && !langToggle.contains(e.target)) {
+        langMenu.style.display = 'none';
+        langMenu.setAttribute('hidden', '');
+      }
+    }
+  });
+  
+  // Listen for scroll events
+  window.addEventListener('scroll', function() {
+    updateActiveLink();
+  });
+  
+  // Initial call
+  updateActiveLink();
+  
+  console.log('[for-doctors] Subnav setup complete');
+});
+</script>
 {% endblock %}
 
 {% block content %}
-<div class="bg-norya-surface text-norya-ink">
+<div class="bg-surface text-on-surface font-body antialiased">
 
-  {# --- Hero --- #}
-  <section class="border-b border-norya-ink-subtle/10 bg-norya-surface-elevated/50" aria-labelledby="fd-hero-heading">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6 py-14 sm:py-20 lg:py-24">
-      <div class="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
-        <div class="min-w-0">
-          <p class="text-xs font-semibold uppercase tracking-wider text-norya-brand mb-3">{{ t.hero_badge }}</p>
-          <h1 id="fd-hero-heading" class="text-3xl sm:text-4xl lg:text-[2.5rem] font-bold text-norya-ink leading-tight tracking-tight">{{ t.hero_title }}</h1>
-          <p class="mt-5 text-base sm:text-lg text-norya-ink-muted leading-relaxed">{{ t.hero_desc }}</p>
-          <div class="mt-8 flex flex-col sm:flex-row flex-wrap gap-3">
-            <a href="{{ base_url }}/clinical-demo?lang={{ lang }}#workflow" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-white bg-norya-brand hover:bg-norya-brand-hover shadow-sm transition focus:outline-none focus-visible:ring-2 focus-visible:ring-norya-brand focus-visible:ring-offset-2">{{ t.hero_cta_primary }}</a>
-            <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold border border-norya-ink-subtle/25 text-norya-ink bg-white hover:bg-norya-surface transition focus:outline-none focus-visible:ring-2 focus-visible:ring-norya-brand/40 focus-visible:ring-offset-2">{{ t.hero_cta_secondary }}</a>
-          </div>
-        </div>
-        {# Lightweight report preview mock (no images) #}
-        <div class="relative min-w-0" aria-hidden="true">
-          <div class="rounded-2xl border border-norya-ink-subtle/15 bg-white shadow-sm overflow-hidden">
-            <div class="flex items-center justify-between gap-2 px-4 py-3 border-b border-norya-ink-subtle/10 bg-norya-surface-elevated/80">
-              <span class="text-xs font-semibold text-norya-ink-muted uppercase tracking-wide">{{ t.preview_sheet_label }}</span>
-              <span class="text-[10px] px-2 py-0.5 rounded-full bg-norya-brand/10 text-norya-brand font-medium">PDF</span>
-            </div>
-            <div class="p-4 sm:p-5 space-y-4">
-              <div>
-                <p class="text-[11px] font-semibold uppercase tracking-wide text-norya-ink-muted mb-1">{{ t.preview_patient_block_title }}</p>
-                <p class="text-sm text-norya-ink leading-relaxed border-s-2 border-norya-brand/40 ps-3">{{ t.preview_patient_block_sample }}</p>
-              </div>
-              <div class="grid grid-cols-2 gap-2">
-                <div class="rounded-lg border border-norya-ink-subtle/12 bg-norya-surface px-3 py-2.5">
-                  <p class="text-[10px] text-norya-ink-muted uppercase">Hb</p>
-                  <p class="text-sm font-semibold text-norya-ink flex items-center gap-2">14.2 <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" title="{{ t.preview_range_cue }}" aria-label="{{ t.preview_range_cue }}"></span></p>
-                </div>
-                <div class="rounded-lg border border-norya-ink-subtle/12 bg-norya-surface px-3 py-2.5">
-                  <p class="text-[10px] text-norya-ink-muted uppercase">Glu</p>
-                  <p class="text-sm font-semibold text-norya-ink flex items-center gap-2">99 <span class="w-1.5 h-1.5 rounded-full bg-emerald-600 shrink-0" title="{{ t.preview_range_cue }}" aria-label="{{ t.preview_range_cue }}"></span></p>
-                </div>
-              </div>
-              <p class="text-xs text-norya-ink-muted/80 leading-relaxed">{{ t.preview_desc }}</p>
-            </div>
-          </div>
-        </div>
+  <!-- Header -->
+  <header class="fixed top-0 w-full z-50 bg-[#f8f9fa]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8 py-3 sm:py-4 flex justify-between items-center">
+      <a href="{{ localized_home_path(request, lang) }}" class="flex items-center gap-2 shrink-0">
+        <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 sm:h-9 w-auto object-contain" width="180" height="45" loading="eager" />
+      </a>
+      <nav class="hidden md:flex items-center gap-8">
+        <a href="{{ localized_home_path(request, lang) }}" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_strip_home }}</a>
+        <a href="/kurumsal?lang={{ lang }}" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">Kurumsal</a>
+        <a href="/for-doctors?lang={{ lang }}" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">{{ t.hero_badge }}</a>
+      </nav>
+      {% include "partials/header_lang.html" %}
+      <div class="flex items-center gap-3">
+        <a href="#iletisim" class="hidden sm:inline-flex bg-gradient-to-r from-primary to-primary-container text-on-primary px-5 py-2.5 rounded-full font-bold text-sm shadow-lg transition-transform hover:scale-105 active:scale-95">
+          {{ t.hero_cta_primary }}
+        </a>
+        <button id="mobile-menu-btn" class="md:hidden w-10 h-10 rounded-xl flex items-center justify-center border border-outline-variant/20 bg-white/60" onclick="toggleMobileMenu()" aria-expanded="false" aria-controls="mobile-menu">
+          <span class="material-symbols-outlined">menu</span>
+        </button>
       </div>
     </div>
-  </section>
+  </header>
 
-  {# --- How --- #}
-  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-how-heading">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <h2 id="fd-how-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink text-center max-w-2xl mx-auto">{{ t.how_title }}</h2>
-      <div class="mt-10 grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
-        {% for card in t.how_cards %}
-        <article class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-5 sm:p-6 flex flex-col gap-2 shadow-sm hover:border-norya-brand/20 transition-colors">
-          <span class="text-xl" aria-hidden="true">{{ card.icon }}</span>
-          <h3 class="text-base font-semibold text-norya-ink leading-snug">{{ card.title }}</h3>
-          <p class="text-sm text-norya-ink-muted leading-relaxed flex-1">{{ card.body }}</p>
-        </article>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
-  {# --- What you get --- #}
-  <section class="py-14 sm:py-20 bg-norya-surface-elevated/40 border-b border-norya-ink-subtle/10" aria-labelledby="fd-what-heading">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <h2 id="fd-what-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink text-center max-w-2xl mx-auto">{{ t.what_title }}</h2>
-      <ul class="mt-10 grid sm:grid-cols-2 gap-4 sm:gap-5 list-none p-0 m-0">
-        {% for it in t.what_items %}
-        <li class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-5 sm:p-6">
-          <h3 class="text-sm font-semibold text-norya-ink">{{ it.title }}</h3>
-          <p class="mt-2 text-sm text-norya-ink-muted leading-relaxed">{{ it.body }}</p>
-        </li>
-        {% endfor %}
-      </ul>
-    </div>
-  </section>
-
-  {# --- Why --- #}
-  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-why-heading">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6 text-center sm:text-start">
-      <h2 id="fd-why-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.why_title }}</h2>
-      <p class="mt-4 text-base text-norya-ink-muted leading-relaxed">{{ t.why_lead }}</p>
-      <ul class="mt-8 space-y-3 text-sm sm:text-base text-norya-ink-muted leading-relaxed text-start list-none p-0 m-0">
-        {% for pt in t.why_points %}
-        <li class="flex gap-3"><span class="mt-2 w-1 h-1 shrink-0 rounded-full bg-norya-brand/70" aria-hidden="true"></span><span>{{ pt }}</span></li>
-        {% endfor %}
-      </ul>
-    </div>
-  </section>
-
-  {# --- Limits --- #}
-  <section class="py-14 sm:py-20 bg-norya-surface-elevated/40 border-b border-norya-ink-subtle/10" aria-labelledby="fd-limits-heading">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <h2 id="fd-limits-heading" class="text-xl sm:text-2xl font-bold text-norya-ink">{{ t.limits_title }}</h2>
-      <p class="mt-2 text-sm text-norya-ink-muted">{{ t.limits_lead }}</p>
-      <ul class="mt-6 space-y-2.5 text-sm text-norya-ink leading-relaxed list-none p-0 m-0 rounded-2xl border border-norya-ink-subtle/12 bg-white p-6 sm:p-8">
-        {% for li in t.limits_items %}
-        <li class="flex gap-2"><span class="text-norya-brand font-bold shrink-0" aria-hidden="true">—</span><span>{{ li }}</span></li>
-        {% endfor %}
-      </ul>
-    </div>
-  </section>
-
-  {# --- Preview / sample link --- #}
-  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-preview-heading">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <div class="max-w-3xl">
-        <h2 id="fd-preview-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.preview_title }}</h2>
-        <p class="mt-3 text-base text-norya-ink-muted leading-relaxed">{{ t.preview_desc }}</p>
-      </div>
-      <div class="mt-8 grid lg:grid-cols-2 gap-6 items-stretch">
-        <div class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-6 space-y-4">
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-wide text-norya-ink-muted">{{ t.preview_patient_block_title }}</p>
-            <p class="mt-2 text-sm text-norya-ink leading-relaxed">{{ t.preview_patient_block_sample }}</p>
-          </div>
-          <div>
-            <p class="text-xs font-semibold uppercase tracking-wide text-norya-ink-muted">{{ t.preview_clinical_block_title }}</p>
-            <p class="mt-2 text-sm text-norya-ink-muted leading-relaxed">{{ t.preview_clinical_block_sample }}</p>
-          </div>
-        </div>
-        <div class="rounded-2xl border border-dashed border-norya-ink-subtle/25 bg-norya-surface-elevated/30 p-6 flex flex-col justify-center gap-4">
-          <p class="text-sm text-norya-ink-muted">{{ t.preview_disclaimer }}</p>
-          <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-xl font-semibold text-norya-brand border border-norya-brand/35 hover:bg-norya-brand/5 transition w-fit">{{ t.preview_sample_link }}</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  {# --- Insights (no named testimonials) --- #}
-  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-insights-heading">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <h2 id="fd-insights-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink text-center max-w-2xl mx-auto">{{ t.insights_title }}</h2>
-      <p class="mt-3 text-sm sm:text-base text-norya-ink-muted text-center max-w-2xl mx-auto leading-relaxed">{{ t.insights_intro }}</p>
-      <div class="mt-10 grid md:grid-cols-3 gap-4 sm:gap-5">
-        {% for row in t.insights %}
-        <figure class="rounded-2xl border border-norya-ink-subtle/12 bg-white p-6 flex flex-col gap-3 shadow-sm">
-          <figcaption class="text-xs font-bold uppercase tracking-wide text-norya-brand">{{ row.label }}</figcaption>
-          <blockquote class="text-sm text-norya-ink-muted leading-relaxed m-0 border-0 p-0">{{ row.quote }}</blockquote>
-        </figure>
-        {% endfor %}
-      </div>
-    </div>
-  </section>
-
-  {# --- Internal nav strip --- #}
-  <section class="py-10 sm:py-12 bg-norya-surface-elevated/50 border-b border-norya-ink-subtle/10" aria-label="{{ t.nav_strip_title }}">
-    <div class="max-w-6xl mx-auto px-4 sm:px-6">
-      <p class="text-xs font-semibold uppercase tracking-wider text-norya-ink-muted mb-4">{{ t.nav_strip_title }}</p>
-      <nav class="flex flex-wrap gap-x-5 gap-y-2 text-sm">
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ sample_reports_url }}">{{ t.nav_strip_sample }}</a>
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/trust?lang={{ lang }}">{{ t.nav_strip_trust }}</a>
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/security?lang={{ lang }}">{{ t.nav_strip_security }}</a>
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/methodology?lang={{ lang }}">{{ t.nav_strip_methodology }}</a>
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/pricing?lang={{ lang }}">{{ t.nav_strip_pricing }}</a>
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ compare_hub_url }}">{{ t.nav_strip_compare }}</a>
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ base_url }}/for-clinics?lang={{ lang }}">{{ t.nav_strip_clinics }}</a>
-        <a class="text-norya-ink-muted hover:text-norya-brand transition-colors" href="{{ localized_home_path(request, lang) }}">{{ t.nav_strip_home }}</a>
+  <!-- Sub-Navigation -->
+  <div class="fd-subnav-wrap">
+    <div class="max-w-7xl mx-auto px-4 sm:px-8">
+      <nav class="fd-subnav" aria-label="Sayfa bölümleri">
+        <a href="#genel" class="fd-subnav-link active" data-subnav-link>Genel Bakış</a>
+        <a href="#nasil" class="fd-subnav-link" data-subnav-link>Nasıl Çalışır</a>
+        <a href="#ozellikler" class="fd-subnav-link" data-subnav-link>Özellikler</a>
+        <a href="#neden" class="fd-subnav-link" data-subnav-link>Neden</a>
+        <a href="#onizleme" class="fd-subnav-link" data-subnav-link>Önizleme</a>
+        <a href="#icgoruler" class="fd-subnav-link" data-subnav-link>İçgörüler</a>
+        <a href="#sss" class="fd-subnav-link" data-subnav-link>SSS</a>
+        <a href="#iletisim" class="fd-subnav-link" data-subnav-link>İletişim</a>
       </nav>
     </div>
-  </section>
+  </div>
 
-  {# --- FAQ --- #}
-  <section class="py-14 sm:py-20 border-b border-norya-ink-subtle/10" aria-labelledby="fd-faq-heading">
-    <div class="max-w-3xl mx-auto px-4 sm:px-6">
-      <h2 id="fd-faq-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.faq_title }}</h2>
-      <div class="mt-8 space-y-2">
-        {% for item in t.faq %}
-        <details class="group rounded-xl border border-norya-ink-subtle/12 bg-white px-4 sm:px-5 open:shadow-sm">
-          <summary class="cursor-pointer list-none py-4 font-semibold text-norya-ink flex items-center justify-between gap-3">
-            <span>{{ item.q }}</span>
-            <span class="text-norya-ink-muted text-lg leading-none group-open:rotate-45 transition-transform" aria-hidden="true">+</span>
-          </summary>
-          <p class="pb-4 text-sm text-norya-ink-muted leading-relaxed border-t border-norya-ink-subtle/10 pt-3 m-0">{{ item.a }}</p>
-        </details>
-        {% endfor %}
-      </div>
+  <!-- Mobile Menu -->
+  <div id="mobile-menu-backdrop" class="fixed inset-0 bg-black/30 z-[60] hidden" onclick="toggleMobileMenu()"></div>
+  <aside id="mobile-menu" class="fixed top-0 right-0 h-full w-[min(86vw,360px)] bg-surface-container-lowest z-[61] shadow-2xl p-6 transform translate-x-full transition-transform duration-300 flex flex-col">
+    <div class="flex justify-between items-center mb-6">
+      <span class="font-headline font-bold text-lg">Menü</span>
+      <button onclick="toggleMobileMenu()" class="w-9 h-9 rounded-lg border border-outline-variant/20 flex items-center justify-center">
+        <span class="material-symbols-outlined">close</span>
+      </button>
     </div>
-  </section>
+    <a href="{{ localized_home_path(request, lang) }}" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">{{ t.nav_strip_home }}</a>
+    <a href="/kurumsal?lang={{ lang }}" class="block py-3 px-4 rounded-xl font-medium text-on-surface hover:bg-surface-container-low transition-colors">Kurumsal</a>
+    <a href="/for-doctors?lang={{ lang }}" class="block py-3 px-4 rounded-xl font-bold text-primary bg-primary/5">{{ t.hero_badge }}</a>
+    <a href="#iletisim" onclick="toggleMobileMenu()" class="mt-4 block py-3 px-4 rounded-full bg-gradient-to-r from-primary to-primary-container text-on-primary font-bold text-center shadow-lg">{{ t.hero_cta_primary }}</a>
+  </aside>
 
-  {# --- Final CTA --- #}
-  <section class="py-14 sm:py-20" aria-labelledby="fd-final-heading">
-    <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
-      <h2 id="fd-final-heading" class="text-2xl sm:text-3xl font-bold text-norya-ink">{{ t.final_title }}</h2>
-      <p class="mt-4 text-base text-norya-ink-muted leading-relaxed max-w-2xl mx-auto">{{ t.final_desc }}</p>
-      <div class="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3">
-        <a href="{{ base_url }}/clinical-demo?lang={{ lang }}#workflow" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-white bg-norya-brand hover:bg-norya-brand-hover shadow-sm transition">{{ t.final_cta_demo }}</a>
-        <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold border border-norya-ink-subtle/25 text-norya-ink bg-white hover:bg-norya-surface-elevated transition">{{ t.final_cta_sample }}</a>
-        <a href="{{ base_url }}/kurumsal?lang={{ lang }}#contact" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-norya-brand border border-norya-brand/35 bg-norya-brand/[0.06] hover:bg-norya-brand/10 transition">{{ t.final_cta_clinic }}</a>
+  <main class="pt-8 sm:pt-10">
+
+    <!-- ═══════════════ 1. PREMIUM HERO ═══════════════ -->
+    <section id="genel" class="fd-anchor relative overflow-hidden bg-gradient-to-br from-slate-900 via-teal-900 to-teal-800 pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 px-4 sm:px-8">
+      <!-- Premium Background Effects -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
       </div>
-    </div>
-  </section>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
+          <div class="flex-1 flex flex-col gap-6 sm:gap-8 text-center lg:text-left">
+            <!-- Premium Badge -->
+            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full self-center lg:self-start">
+              <span class="relative flex h-2 w-2">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-300 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-400"></span>
+              </span>
+              <span class="text-teal-100 text-xs font-bold tracking-widest uppercase">For Clinicians</span>
+            </div>
+            
+            <h1 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold font-headline leading-[1.05] tracking-tight text-white">
+              {{ t.hero_title }}
+            </h1>
+            
+            <p class="text-base sm:text-xl text-white/85 max-w-2xl leading-relaxed mx-auto lg:mx-0">
+              {{ t.hero_desc }}
+            </p>
+            
+            <!-- Premium Stats -->
+            <div class="grid grid-cols-3 gap-4 sm:gap-6 pt-4 border-t border-white/10 mt-2">
+              <div class="text-center lg:text-left">
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">2M+</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">Rapor Üretildi</div>
+              </div>
+              <div class="text-center lg:text-left">
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">4,000+</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">Hastane & Klinik</div>
+              </div>
+              <div class="text-center lg:text-left">
+                <div class="text-2xl sm:text-3xl font-extrabold text-white">98.7%</div>
+                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">Biomarker Doğruluğu</div>
+              </div>
+            </div>
+            
+            <!-- CTA Buttons -->
+            <div class="flex flex-wrap justify-center lg:justify-start gap-4 mt-4">
+              <a href="{{ base_url }}/clinical-demo?lang={{ lang }}#workflow" class="inline-flex items-center justify-center bg-gradient-to-r from-teal-400 to-cyan-400 hover:from-teal-300 hover:to-cyan-300 text-teal-950 font-bold px-8 py-4 rounded-full shadow-2xl shadow-teal-500/30 transition-all hover:scale-105 active:scale-95">
+                {{ t.hero_cta_primary }}
+              </a>
+              <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center bg-white/10 backdrop-blur-sm border border-white/30 hover:bg-white/20 text-white font-semibold px-8 py-4 rounded-full transition-all hover:scale-105 active:scale-95">
+                {{ t.hero_cta_secondary }}
+              </a>
+            </div>
+          </div>
+          
+          <!-- Premium Visual & Report Preview -->
+          <div class="flex-1 w-full max-w-xl">
+            <!-- Premium Doctor Image -->
+            <div class="relative mb-6 rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/20 group">
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
+              <img 
+                src="/static/images/for-doctors-hero-premium.png" 
+                alt="Doktor AI destekli laboratuvar raporu inceliyor"
+                class="w-full h-64 sm:h-80 object-cover transform group-hover:scale-105 transition-transform duration-700"
+                loading="eager"
+                fetchpriority="high"
+              />
+              <!-- Floating Badge -->
+              <div class="absolute bottom-4 left-4 z-20 flex items-center gap-3 bg-white/95 backdrop-blur-sm rounded-2xl px-4 py-3 shadow-xl">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center shadow-lg">
+                  <span class="text-white text-sm font-bold">AI</span>
+                </div>
+                <div>
+                  <div class="text-xs font-bold text-slate-700">AI-Powered Analysis</div>
+                  <div class="text-[10px] text-slate-500">98.7% Accuracy</div>
+                </div>
+              </div>
+              <!-- Top Right Badge -->
+              <div class="absolute top-4 right-4 z-20">
+                <div class="bg-white/95 backdrop-blur-sm rounded-full px-4 py-2 shadow-xl flex items-center gap-2">
+                  <span class="relative flex h-2 w-2">
+                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                    <span class="relative inline-flex rounded-full h-2 w-2 bg-emerald-500"></span>
+                  </span>
+                  <span class="text-xs font-bold text-slate-700">Live</span>
+                </div>
+              </div>
+            </div>
+            
+            <!-- Premium Report Preview Card -->
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/30 border border-white/30">
+              <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl"></div>
+              <div class="relative bg-white/95 rounded-3xl overflow-hidden">
+                <!-- Preview Header -->
+                <div class="flex items-center justify-between gap-2 px-5 py-4 border-b border-slate-200 bg-gradient-to-r from-slate-50 to-white">
+                  <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center">
+                      <span class="text-white text-xs font-bold">AI</span>
+                    </div>
+                    <div>
+                      <div class="text-xs font-bold text-slate-700">NoryaAI Report</div>
+                      <div class="text-[10px] text-slate-500">{{ t.preview_sheet_label }}</div>
+                    </div>
+                  </div>
+                  <span class="text-[10px] px-2.5 py-1 rounded-full bg-teal-100 text-teal-700 font-bold">PDF</span>
+                </div>
+                
+                <!-- Preview Content -->
+                <div class="p-5 sm:p-6 space-y-4">
+                  <div>
+                    <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-2">{{ t.preview_patient_block_title }}</p>
+                    <p class="text-sm text-slate-800 leading-relaxed border-l-4 border-teal-500 pl-3 bg-teal-50/50 rounded-r-lg p-3">{{ t.preview_patient_block_sample }}</p>
+                  </div>
+                  
+                  <div class="grid grid-cols-2 gap-3">
+                    <div class="rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3 shadow-sm">
+                      <p class="text-[10px] text-slate-500 uppercase font-semibold">Hb</p>
+                      <p class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        14.2 
+                        <span class="w-2 h-2 rounded-full bg-emerald-500" title="{{ t.preview_range_cue }}"></span>
+                      </p>
+                    </div>
+                    <div class="rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3 shadow-sm">
+                      <p class="text-[10px] text-slate-500 uppercase font-semibold">Glu</p>
+                      <p class="text-base font-bold text-slate-800 flex items-center gap-2">
+                        99 
+                        <span class="w-2 h-2 rounded-full bg-emerald-500" title="{{ t.preview_range_cue }}"></span>
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <p class="text-xs text-slate-500 leading-relaxed">{{ t.preview_desc }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
 
+    <!-- ═══════════════ 2. HOW IT WORKS ═══════════════ -->
+    <section id="nasil" class="fd-anchor py-14 sm:py-20 border-b border-outline-variant/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-on-surface text-center max-w-2xl mx-auto mb-4">{{ t.how_title }}</h2>
+        <p class="text-center text-on-surface-variant mb-10 max-w-3xl mx-auto">Laboratuvar sonuçlarınızın AI ile analiz edilerek anlaşılır ve actionable bilgilere dönüşme süreci</p>
+        
+        <!-- Workflow Visual -->
+        <div class="relative mb-12 rounded-3xl overflow-hidden border border-outline-variant/20 shadow-xl max-w-4xl mx-auto">
+          <img 
+            src="/static/images/lab-workflow-premium.png" 
+            alt="Laboratuvar AI analiz süreci - Kan örneğinden rapora"
+            class="w-full h-48 sm:h-64 object-cover"
+            loading="lazy"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent"></div>
+        </div>
+        
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+          {% for card in t.how_cards %}
+          <article class="rounded-2xl border border-outline-variant/20 bg-white p-5 sm:p-6 flex flex-col gap-2 shadow-sm hover:border-primary/20 transition-all hover:shadow-lg">
+            <span class="text-2xl" aria-hidden="true">{{ card.icon }}</span>
+            <h3 class="text-base font-semibold text-on-surface leading-snug">{{ card.title }}</h3>
+            <p class="text-sm text-on-surface-variant leading-relaxed flex-1">{{ card.body }}</p>
+          </article>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 3. FEATURES ═══════════════ -->
+    <section id="ozellikler" class="fd-anchor py-14 sm:py-20 bg-surface-container-low/50 border-b border-outline-variant/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-on-surface text-center max-w-2xl mx-auto mb-10">{{ t.what_title }}</h2>
+        <ul class="grid sm:grid-cols-2 gap-4 sm:gap-5 list-none p-0 m-0">
+          {% for it in t.what_items %}
+          <li class="rounded-2xl border border-outline-variant/20 bg-white p-5 sm:p-6">
+            <h3 class="text-sm font-semibold text-on-surface">{{ it.title }}</h3>
+            <p class="mt-2 text-sm text-on-surface-variant leading-relaxed">{{ it.body }}</p>
+          </li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 4. WHY ═══════════════ -->
+    <section id="neden" class="fd-anchor py-14 sm:py-20 border-b border-outline-variant/20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-8 text-center sm:text-start">
+        <h2 class="text-2xl sm:text-3xl font-bold text-on-surface">{{ t.why_title }}</h2>
+        <p class="mt-4 text-base text-on-surface-variant leading-relaxed">{{ t.why_lead }}</p>
+        <ul class="mt-8 space-y-3 text-sm sm:text-base text-on-surface-variant leading-relaxed text-start list-none p-0 m-0">
+          {% for pt in t.why_points %}
+          <li class="flex gap-3"><span class="mt-2 w-1 h-1 shrink-0 rounded-full bg-primary/70" aria-hidden="true"></span><span>{{ pt }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 5. LIMITS ═══════════════ -->
+    <section class="fd-anchor py-14 sm:py-20 bg-surface-container-low/50 border-b border-outline-variant/20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-8">
+        <h2 class="text-xl sm:text-2xl font-bold text-on-surface">{{ t.limits_title }}</h2>
+        <p class="mt-2 text-sm text-on-surface-variant">{{ t.limits_lead }}</p>
+        <ul class="mt-6 space-y-2.5 text-sm text-on-surface leading-relaxed list-none p-0 m-0 rounded-2xl border border-outline-variant/20 bg-white p-6 sm:p-8">
+          {% for li in t.limits_items %}
+          <li class="flex gap-2"><span class="text-primary font-bold shrink-0" aria-hidden="true">—</span><span>{{ li }}</span></li>
+          {% endfor %}
+        </ul>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 6. PREVIEW ═══════════════ -->
+    <section id="onizleme" class="fd-anchor py-14 sm:py-20 border-b border-outline-variant/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <div class="max-w-3xl">
+          <h2 class="text-2xl sm:text-3xl font-bold text-on-surface">{{ t.preview_title }}</h2>
+          <p class="mt-3 text-base text-on-surface-variant leading-relaxed">{{ t.preview_desc }}</p>
+        </div>
+        <div class="mt-8 grid lg:grid-cols-2 gap-6 items-stretch">
+          <div class="rounded-2xl border border-outline-variant/20 bg-white p-6 space-y-4">
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">{{ t.preview_patient_block_title }}</p>
+              <p class="mt-2 text-sm text-on-surface leading-relaxed">{{ t.preview_patient_block_sample }}</p>
+            </div>
+            <div>
+              <p class="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">{{ t.preview_clinical_block_title }}</p>
+              <p class="mt-2 text-sm text-on-surface-variant leading-relaxed">{{ t.preview_clinical_block_sample }}</p>
+            </div>
+          </div>
+          <div class="rounded-2xl border-2 border-dashed border-outline-variant/25 bg-surface-container-low/30 p-6 flex flex-col justify-center gap-4">
+            <p class="text-sm text-on-surface-variant">{{ t.preview_disclaimer }}</p>
+            <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[44px] px-5 rounded-xl font-semibold text-primary border border-primary/35 hover:bg-primary/5 transition w-fit">{{ t.preview_sample_link }}</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 7. INSIGHTS ═══════════════ -->
+    <section id="icgoruler" class="fd-anchor py-14 sm:py-20 border-b border-outline-variant/20">
+      <div class="max-w-7xl mx-auto px-4 sm:px-8">
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-12 items-center">
+          <div>
+            <h2 class="text-2xl sm:text-3xl font-bold text-on-surface">{{ t.insights_title }}</h2>
+            <p class="mt-3 text-sm sm:text-base text-on-surface-variant leading-relaxed">{{ t.insights_intro }}</p>
+            <div class="mt-10 grid md:grid-cols-1 gap-4 sm:gap-5">
+              {% for row in t.insights %}
+              <figure class="rounded-2xl border border-outline-variant/20 bg-white p-6 flex flex-col gap-3 shadow-sm">
+                <figcaption class="text-xs font-bold uppercase tracking-wide text-primary">{{ row.label }}</figcaption>
+                <blockquote class="text-sm text-on-surface-variant leading-relaxed m-0 border-0 p-0">{{ row.quote }}</blockquote>
+              </figure>
+              {% endfor %}
+            </div>
+          </div>
+          
+          <!-- Premium Consultation Image -->
+          <div class="relative hidden lg:block">
+            <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-outline-variant/20">
+              <img 
+                src="/static/images/doctor-patient-consultation.png" 
+                alt="Doktor-hasta görüşmesi - AI destekli laboratuvar raporu ile"
+                class="w-full h-[600px] object-cover"
+                loading="lazy"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent"></div>
+              <!-- Floating Quote Card -->
+              <div class="absolute bottom-6 left-6 right-6 bg-white/95 backdrop-blur-sm rounded-2xl p-6 shadow-2xl">
+                <div class="flex items-start gap-4">
+                  <div class="w-12 h-12 rounded-full bg-gradient-to-br from-teal-500 to-cyan-500 flex items-center justify-center flex-shrink-0 shadow-lg">
+                    <span class="text-white text-xl font-bold">💬</span>
+                  </div>
+                  <div>
+                    <p class="text-sm font-bold text-slate-700 mb-1">Daha Net İletişim</p>
+                    <p class="text-xs text-slate-600">"Yapılandırılmış raporlar sayesinde hastalarımla daha etkili iletişim kuruyorum."</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+          {% for row in t.insights %}
+          <figure class="rounded-2xl border border-outline-variant/20 bg-white p-6 flex flex-col gap-3 shadow-sm">
+            <figcaption class="text-xs font-bold uppercase tracking-wide text-primary">{{ row.label }}</figcaption>
+            <blockquote class="text-sm text-on-surface-variant leading-relaxed m-0 border-0 p-0">{{ row.quote }}</blockquote>
+          </figure>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 8. INTERNATIONAL ═══════════════ -->
+    <section class="fd-anchor relative overflow-hidden bg-gradient-to-br from-slate-900 via-teal-900 to-teal-800 py-16 sm:py-20 px-4 sm:px-8">
+      <div class="absolute inset-0 overflow-hidden pointer-events-none">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
+      </div>
+      
+      <div class="relative max-w-7xl mx-auto">
+        <div class="text-center mb-10">
+          <p class="text-white/70 text-xs font-medium uppercase tracking-widest mb-2">Uluslararası Ortaklar & 50+ Ülkede Kullanım</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Global Trust & Reach</h2>
+        </div>
+        
+        <!-- Premium Global Map Visual -->
+        <div class="relative mb-10 rounded-3xl overflow-hidden border border-white/20 shadow-2xl">
+          <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
+          <img 
+            src="/static/images/global-network-map.png" 
+            alt="NoryaAI global network - 50+ ülkede aktif"
+            class="w-full h-64 sm:h-96 object-cover"
+            loading="lazy"
+          />
+          <!-- Floating Stats Overlay -->
+          <div class="absolute bottom-0 left-0 right-0 z-20 p-4 sm:p-6">
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-3 sm:gap-4">
+              <div class="bg-white/95 backdrop-blur-sm rounded-xl p-3 text-center shadow-xl">
+                <div class="text-lg sm:text-2xl font-extrabold text-teal-600">50+</div>
+                <div class="text-[10px] sm:text-xs text-slate-600 font-semibold">Ülke</div>
+              </div>
+              <div class="bg-white/95 backdrop-blur-sm rounded-xl p-3 text-center shadow-xl">
+                <div class="text-lg sm:text-2xl font-extrabold text-cyan-600">9+</div>
+                <div class="text-[10px] sm:text-xs text-slate-600 font-semibold">Rapor Dili</div>
+              </div>
+              <div class="bg-white/95 backdrop-blur-sm rounded-xl p-3 text-center shadow-xl">
+                <div class="text-lg sm:text-2xl font-extrabold text-teal-600">2M+</div>
+                <div class="text-[10px] sm:text-xs text-slate-600 font-semibold">Rapor</div>
+              </div>
+              <div class="bg-white/95 backdrop-blur-sm rounded-xl p-3 text-center shadow-xl">
+                <div class="text-lg sm:text-2xl font-extrabold text-cyan-600">98.7%</div>
+                <div class="text-[10px] sm:text-xs text-slate-600 font-semibold">Doğruluk</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Country Flags Grid -->
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-3 sm:gap-4">
+          <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">50+</div>
+            <div class="text-white/60 text-xs">Ülke</div>
+          </div>
+          <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">9+</div>
+            <div class="text-white/60 text-xs">Rapor Dili</div>
+          </div>
+          <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">2M+</div>
+            <div class="text-white/60 text-xs">Rapor</div>
+          </div>
+          <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
+            <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">98.7%</div>
+            <div class="text-white/60 text-xs">Doğruluk</div>
+          </div>
+        </div>
+        
+        <!-- Country Flags Grid -->
+        <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-3 sm:gap-4">
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇹🇷</div>
+            <div class="text-white/90 text-xs font-bold">Türkiye</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇩🇪</div>
+            <div class="text-white/90 text-xs font-bold">Deutschland</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇬🇧</div>
+            <div class="text-white/90 text-xs font-bold">UK</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇺🇸</div>
+            <div class="text-white/90 text-xs font-bold">USA</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇫🇷</div>
+            <div class="text-white/90 text-xs font-bold">France</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇪🇸</div>
+            <div class="text-white/90 text-xs font-bold">España</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇮🇹</div>
+            <div class="text-white/90 text-xs font-bold">Italia</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇮🇱</div>
+            <div class="text-white/90 text-xs font-bold">Israel</div>
+          </div>
+          <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
+            <div class="text-3xl sm:text-4xl mb-2">🇮🇳</div>
+            <div class="text-white/90 text-xs font-bold">India</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 9. FAQ ═══════════════ -->
+    <section id="sss" class="fd-anchor py-14 sm:py-20 border-b border-outline-variant/20">
+      <div class="max-w-3xl mx-auto px-4 sm:px-8">
+        <h2 class="text-2xl sm:text-3xl font-bold text-on-surface">{{ t.faq_title }}</h2>
+        <div class="mt-8 space-y-2">
+          {% for item in t.faq %}
+          <details class="group rounded-xl border border-outline-variant/20 bg-white px-4 sm:px-5 open:shadow-sm">
+            <summary class="cursor-pointer list-none py-4 font-semibold text-on-surface flex items-center justify-between gap-3">
+              <span>{{ item.q }}</span>
+              <span class="text-on-surface-variant text-lg leading-none group-open:rotate-45 transition-transform" aria-hidden="true">+</span>
+            </summary>
+            <p class="pb-4 text-sm text-on-surface-variant leading-relaxed border-t border-outline-variant/20 pt-3 m-0">{{ item.a }}</p>
+          </details>
+          {% endfor %}
+        </div>
+      </div>
+    </section>
+
+    <!-- ═══════════════ 10. FINAL CTA ═══════════════ -->
+    <section id="iletisim" class="fd-anchor py-14 sm:py-20">
+      <div class="max-w-4xl mx-auto px-4 sm:px-8 text-center">
+        <h2 class="text-2xl sm:text-3xl font-bold text-on-surface">{{ t.final_title }}</h2>
+        <p class="mt-4 text-base text-on-surface-variant leading-relaxed max-w-2xl mx-auto">{{ t.final_desc }}</p>
+        <div class="mt-8 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-3">
+          <a href="{{ base_url }}/clinical-demo?lang={{ lang }}#workflow" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-white bg-gradient-to-r from-primary to-primary-container hover:from-primary-container hover:to-primary shadow-lg transition-all hover:scale-105">{{ t.final_cta_demo }}</a>
+          <a href="{{ sample_reports_url }}" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold border border-outline-variant/25 text-on-surface bg-white hover:bg-surface-container-low transition-all hover:scale-105">{{ t.final_cta_sample }}</a>
+          <a href="{{ base_url }}/kurumsal?lang={{ lang }}#contact" class="inline-flex items-center justify-center min-h-[48px] px-6 rounded-xl font-semibold text-primary border border-primary/35 bg-primary/5 hover:bg-primary/10 transition-all hover:scale-105">{{ t.final_cta_clinic }}</a>
+        </div>
+      </div>
+    </section>
+
+  </main>
 </div>
 
 {% include "partials/marketing_trust_strip.html" %}

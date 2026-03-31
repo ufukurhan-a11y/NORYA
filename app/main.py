@@ -785,13 +785,10 @@ app.include_router(admin_router)  # Eski API paneli: /admin/stats, /admin/analys
 @app.get("/")
 @app.get("")
 def index(request: Request):
-    """Ana sayfa: kullanıcıyı uygun locale landing'e yönlendirir."""
-    locale = _preferred_landing_locale(request)
-    query = request.url.query
-    target = f"/{locale}"
-    if query:
-        target = f"{target}?{query}"
-    return RedirectResponse(url=target, status_code=302)
+    """Ana sayfa: static/index.html dosyasını döndürür (redirect yok, SEO için önemli)."""
+    # SEO: Ana sayfa redirect yapmamalı - doğrudan index.html sun
+    # Google "Yönlendirmeli sayfa" hatası önlenir
+    return _index_response(request)
 
 
 @app.head("/")

@@ -17,6 +17,7 @@ from app.admin.deps import (
     _admin_secret_constant_time_compare,
     get_client_ip,
     require_admin_cookie,
+    verify_admin_cookie,
 )
 from app.core.config import settings
 from app.core.database import get_db
@@ -106,9 +107,23 @@ def _ai_error_message(err: str | None) -> str:
 
 
 @router.get("/api/health-ai", response_class=JSONResponse)
-def admin_api_health_ai(_=Depends(require_admin_cookie), refresh: bool = False):
-    """Dashboard'daki AI Durumu kutusu bu endpoint'i çağırır. refresh=1 ile önbellek atlanır."""
+async def admin_api_health_ai(
+    request: Request,
+    refresh: bool = False,
+):
+    """
+    Dashboard'daki AI Durumu kutusu bu endpoint'i çağırır. refresh=1 ile önbellek atlanır.
+    Cookie tabanlı auth kullanır; cookie yoksa veya geçersizse 401 döner.
+    """
     from app.services.analyze import ping_openai
+
+    # Cookie kontrolü (redirect yerine 401 döndürüyoruz ki fetch yakalayabilsin)
+    if not (settings.admin_secret or "").strip():
+        return JSONResponse(status_code=503, content={"status": "fail", "provider": "openai", "error": "Admin yapılandırması eksik (ADMIN_SECRET yok)."})
+    
+    c = request.cookies.get(ADMIN_COOKIE)
+    if not verify_admin_cookie(c):
+        return JSONResponse(status_code=401, content={"status": "fail", "provider": "openai", "error": "Oturum süresi dolmuş. Sayfayı yenileyip tekrar giriş yapın."})
 
     now = _time.time()
     if not refresh and _ai_health_cache["data"] is not None and (now - _ai_health_cache["ts"]) < _AI_CACHE_TTL:

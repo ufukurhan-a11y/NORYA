@@ -39,6 +39,28 @@
 }
 </script>
 <script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Person",
+  "name": "Ufuk Urhan",
+  "jobTitle": "Founder & CEO",
+  "worksFor": {"@type": "Organization", "name": "NoryaAI"},
+  "description": "Founder and CEO of NoryaAI, building health technology platforms since 2018. Expert in biomarker analysis, clinical laboratory standards, and medical informatics. Personal experience with chronic autoimmune condition management across multiple healthcare systems.",
+  "url": "https://www.linkedin.com/in/ufukurhan",
+  "sameAs": [
+    "https://www.linkedin.com/in/ufukurhan"
+  ],
+  "knowsAbout": [
+    "Health Technology",
+    "Biomarker Analysis",
+    "Clinical Laboratory Standards",
+    "Medical Informatics",
+    "AI in Healthcare",
+    "Chronic Disease Management"
+  ]
+}
+</script>
+<script type="application/ld+json">
 {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":1,"name":"Home","item":"{{ base_url }}{{ localized_home_path(request) }}"},{"@type":"ListItem","position":2,"name":"About","item":"{{ canonical_url }}"}]}
 </script>
 {% endblock %}
@@ -153,6 +175,66 @@
       <a href="/medical-review?lang={{ _locale }}" class="inline-flex items-center gap-2 rounded-lg border border-norya-ink-subtle/20 px-4 py-2.5 text-sm font-medium text-norya-ink hover:border-norya-brand/40 hover:text-norya-brand transition-colors">{{ t.trust_medical_review }}</a>
       <a href="/transparency?lang={{ _locale }}" class="inline-flex items-center gap-2 rounded-lg border border-norya-ink-subtle/20 px-4 py-2.5 text-sm font-medium text-norya-ink hover:border-norya-brand/40 hover:text-norya-brand transition-colors">{{ t.trust_transparency }}</a>
       <a href="/security" class="inline-flex items-center gap-2 rounded-lg border border-norya-ink-subtle/20 px-4 py-2.5 text-sm font-medium text-norya-ink hover:border-norya-brand/40 hover:text-norya-brand transition-colors">{{ t.trust_security }}</a>
+    </div>
+  </div>
+</section>
+
+{# ── FOUNDER & EXPERTISE ── #}
+<section class="bg-norya-surface">
+  <div class="max-w-5xl mx-auto px-4 sm:px-6 py-16 sm:py-20">
+    <h2 class="text-2xl sm:text-3xl font-bold text-norya-ink mb-10 text-center">Founded on Expertise &amp; Personal Experience</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-start">
+      <div>
+        <div class="aspect-square rounded-2xl overflow-hidden bg-gradient-to-br from-teal-100 to-slate-100 border border-norya-ink-subtle/10 mb-6">
+          <img src="/static/images/founder-photo.jpg" alt="Ufuk Urhan, Founder &amp; CEO of NoryaAI" class="w-full h-full object-cover" loading="lazy" width="600" height="600" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex'" />
+          <div class="w-full h-full items-center justify-center text-norya-ink-muted/40 text-sm font-medium" style="display:none">Founder photo placeholder</div>
+        </div>
+        <div class="flex items-center gap-3 text-sm text-norya-ink-muted">
+          <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-teal-50 text-teal-700 rounded-full font-medium">
+            <span class="material-symbols-outlined text-sm">verified</span>
+            Founder &amp; CEO
+          </span>
+          <span class="inline-flex items-center gap-1 px-3 py-1.5 bg-blue-50 text-blue-700 rounded-full font-medium">
+            <span class="material-symbols-outlined text-sm">calendar_today</span>
+            Since 2018
+          </span>
+        </div>
+      </div>
+      <div class="space-y-5">
+        <h3 class="text-xl font-bold text-norya-ink">Ufuk Urhan</h3>
+        <p class="text-norya-ink-muted leading-relaxed">NoryaAI was born from a personal challenge: navigating blood test results across different countries, languages, and healthcare systems. As someone managing a chronic autoimmune condition, I experienced firsthand the confusion and anxiety that comes with incomprehensible lab reports.</p>
+        <p class="text-norya-ink-muted leading-relaxed">Since 2018, I've been building NoryaAI with a clear mission: to make laboratory results understandable for everyone, regardless of their medical background or language. Our platform combines advanced AI technology with rigorous medical oversight to provide clear, actionable health insights.</p>
+        <div class="space-y-3 pt-4 border-t border-norya-ink-subtle/10">
+          <h4 class="font-semibold text-norya-ink text-sm uppercase tracking-wide">Expertise &amp; Background</h4>
+          <ul class="space-y-2 text-sm text-norya-ink-muted">
+            <li class="flex items-start gap-2">
+              <span class="text-norya-brand mt-0.5">▸</span>
+              <span>8+ years building health technology platforms with focus on laboratory data interpretation</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-norya-brand mt-0.5">▸</span>
+              <span>Deep expertise in biomarker analysis, clinical laboratory standards, and medical informatics</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-norya-brand mt-0.5">▸</span>
+              <span>Personal lived experience with chronic autoimmune condition management across multiple healthcare systems</span>
+            </li>
+            <li class="flex items-start gap-2">
+              <span class="text-norya-brand mt-0.5">▸</span>
+              <span>Based in Hamburg, Germany; serving users in 50+ countries</span>
+            </li>
+          </ul>
+        </div>
+        <blockquote class="border-l-2 border-norya-brand/30 pl-4 py-2 text-sm text-norya-ink-muted/80 italic">
+          "Health literacy is a fundamental right. Everyone deserves to understand their lab results in their own language, without confusion or anxiety."
+        </blockquote>
+        <div class="flex gap-3 pt-2">
+          <a href="https://www.linkedin.com/in/ufukurhan" target="_blank" rel="noopener" class="inline-flex items-center gap-2 text-sm font-medium text-norya-ink hover:text-norya-brand transition-colors">
+            <span class="material-symbols-outlined text-base">open_in_new</span>
+            LinkedIn Profile
+          </a>
+        </div>
+      </div>
     </div>
   </div>
 </section>

@@ -11,7 +11,7 @@ from sqlmodel import Session, select, func
 from app.admin.deps import _admin_secret_constant_time_compare, require_admin_secret_or_cookie
 from app.core.config import settings
 from app.core.database import get_db
-from app.models import AnalysisRecord, AuditLog, PaymentOrder, Presence, User
+from app.models import AnalysisRecord, AuditLog, BlogPost, PaymentOrder, Presence, User
 from app.services.analyze import analyze_blood_test
 from app.services.report_pdf import build_report_pdf
 
@@ -474,3 +474,219 @@ def admin_payments(
         }
         for o in orders
     ]
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Blog Yönetimi
+# ─────────────────────────────────────────────────────────────────────────────
+
+class BlogPostCreate(BaseModel):
+    """Blog yazısı oluşturma şeması."""
+    slug: str
+    lang: str = "tr"
+    title: str
+    meta_title: str | None = None
+    meta_description: str | None = None
+    content_json: str  # JSON array string
+    cover_image: str | None = None
+    category: str | None = None
+    tags_json: str | None = None
+    author_name: str | None = None
+    is_published: bool = False
+    is_featured: bool = False
+    reading_time_minutes: int | None = None
+
+
+class BlogPostUpdate(BaseModel):
+    """Blog yazısı güncelleme şeması."""
+    title: str | None = None
+    meta_title: str | None = None
+    meta_description: str | None = None
+    content_json: str | None = None
+    cover_image: str | None = None
+    category: str | None = None
+    tags_json: str | None = None
+    author_name: str | None = None
+    is_published: bool | None = None
+    is_featured: bool | None = None
+    reading_time_minutes: int | None = None
+
+
+@router.get("/blog")
+def admin_blog_posts(
+    db: Session = Depends(get_db),
+    _: None = Depends(_require_admin),
+    lang: str | None = Query(None, description="Dil filtresi"),
+    is_published: bool | None = Query(None, description="Yayın durumu filtresi"),
+    limit: int = Query(100, le=500),
+    offset: int = Query(0, ge=0),
+):
+    """Blog yazıları listesi."""
+    stmt = select(BlogPost).order_by(BlogPost.created_at.desc()).offset(offset).limit(limit)
+    
+    if lang:
+        stmt = stmt.where(BlogPost.lang == lang[:2].lower())
+    if is_published is not None:
+        stmt = stmt.where(BlogPost.is_published == is_published)
+    
+    posts = list(db.exec(stmt).all())
+    return [
+        {
+            "id": p.id,
+            "slug": p.slug,
+            "lang": p.lang,
+            "title": p.title,
+            "meta_title": p.meta_title,
+            "meta_description": p.meta_description,
+            "category": p.category,
+            "author_name": p.author_name,
+            "is_published": p.is_published,
+            "is_featured": p.is_featured,
+            "published_at": p.published_at.isoformat() if p.published_at else None,
+            "updated_at": p.updated_at.isoformat() if p.updated_at else None,
+            "created_at": p.created_at.isoformat() if p.created_at else None,
+            "reading_time_minutes": p.reading_time_minutes,
+        }
+        for p in posts
+    ]
+
+
+@router.post("/blog")
+def admin_create_blog_post(
+    body: BlogPostCreate,
+    db: Session = Depends(get_db),
+    _: None = Depends(_require_admin),
+):
+    """Yeni blog yazısı oluştur."""
+    # Slug kontrolü
+    existing = db.get(BlogPost, body.slug)
+    if existing:
+        raise HTTPException(status_code=400, detail=f"Slug '{body.slug}' zaten kullanılıyor.")
+    
+    now = datetime.utcnow()
+    post = BlogPost(
+        slug=body.slug,
+        lang=body.lang[:2].lower(),
+        title=body.title,
+        meta_title=body.meta_title,
+        meta_description=body.meta_description,
+        content_json=body.content_json,
+        cover_image=body.cover_image,
+        category=body.category,
+        tags_json=body.tags_json,
+        author_name=body.author_name,
+        is_published=body.is_published,
+        is_featured=body.is_featured,
+        reading_time_minutes=body.reading_time_minutes,
+        published_at=now if body.is_published else None,
+        updated_at=now,
+        created_at=now,
+    )
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+    return {"id": post.id, "slug": post.slug, "message": "Blog yazısı oluşturuldu."}
+
+
+@router.get("/blog/{post_id}")
+def admin_get_blog_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    _: None = Depends(_require_admin),
+):
+    """Blog yazısı detayı."""
+    post = db.get(BlogPost, post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
+    
+    return {
+        "id": post.id,
+        "slug": post.slug,
+        "lang": post.lang,
+        "title": post.title,
+        "meta_title": post.meta_title,
+        "meta_description": post.meta_description,
+        "content_json": post.content_json,
+        "cover_image": post.cover_image,
+        "category": post.category,
+        "tags_json": post.tags_json,
+        "author_name": post.author_name,
+        "is_published": post.is_published,
+        "is_featured": post.is_featured,
+        "published_at": post.published_at.isoformat() if post.published_at else None,
+        "updated_at": post.updated_at.isoformat() if post.updated_at else None,
+        "created_at": post.created_at.isoformat() if post.created_at else None,
+        "reading_time_minutes": post.reading_time_minutes,
+    }
+
+
+@router.put("/blog/{post_id}")
+def admin_update_blog_post(
+    post_id: int,
+    body: BlogPostUpdate,
+    db: Session = Depends(get_db),
+    _: None = Depends(_require_admin),
+):
+    """Blog yazısı güncelle."""
+    post = db.get(BlogPost, post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
+    
+    update_data = body.model_dump(exclude_unset=True)
+    for field, value in update_data.items():
+        setattr(post, field, value)
+    
+    post.updated_at = datetime.utcnow()
+    
+    # Yayına alındıysa published_at'i set et
+    if body.is_published and not post.published_at:
+        post.published_at = datetime.utcnow()
+    
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+    return {"id": post.id, "slug": post.slug, "message": "Blog yazısı güncellendi."}
+
+
+@router.delete("/blog/{post_id}")
+def admin_delete_blog_post(
+    post_id: int,
+    db: Session = Depends(get_db),
+    _: None = Depends(_require_admin),
+):
+    """Blog yazısı sil."""
+    post = db.get(BlogPost, post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
+    
+    db.delete(post)
+    db.commit()
+    return {"message": "Blog yazısı silindi."}
+
+
+@router.post("/blog/{post_id}/toggle-publish")
+def admin_toggle_blog_post_publish(
+    post_id: int,
+    db: Session = Depends(get_db),
+    _: None = Depends(_require_admin),
+):
+    """Blog yazısını yayına al/yayından kaldır."""
+    post = db.get(BlogPost, post_id)
+    if not post:
+        raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
+    
+    post.is_published = not post.is_published
+    post.updated_at = datetime.utcnow()
+    
+    if post.is_published and not post.published_at:
+        post.published_at = datetime.utcnow()
+    
+    db.add(post)
+    db.commit()
+    db.refresh(post)
+    return {
+        "id": post.id,
+        "is_published": post.is_published,
+        "message": "Yayın durumu değiştirildi.",
+    }
+
