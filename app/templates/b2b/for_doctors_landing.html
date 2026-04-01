@@ -104,19 +104,19 @@ function toggleMobileMenu() {
   // Subnav Active Link Handler
   document.addEventListener('DOMContentLoaded', function() {
     console.log('[for-doctors] DOMContentLoaded - Setting up subnav');
-    
+
     // Handle subnav active state on scroll
     var subnavLinks = document.querySelectorAll('.fd-subnav-link');
     var sections = document.querySelectorAll('.fd-anchor');
-    
+
     function updateActiveLink() {
       var scrollPos = window.scrollY + 200;
-      
+
       sections.forEach(function(section) {
         var sectionTop = section.offsetTop;
         var sectionHeight = section.offsetHeight;
         var sectionId = section.getAttribute('id');
-        
+
         if (scrollPos >= sectionTop && scrollPos < sectionTop + sectionHeight) {
           subnavLinks.forEach(function(link) {
             link.classList.remove('active');
@@ -127,21 +127,21 @@ function toggleMobileMenu() {
         }
       });
     }
-    
+
     // Smooth scroll for subnav links
     subnavLinks.forEach(function(link) {
       link.addEventListener('click', function(e) {
         e.preventDefault();
         var targetId = this.getAttribute('href').substring(1);
         var targetSection = document.getElementById(targetId);
-        
+
         if (targetSection) {
           var offsetTop = targetSection.offsetTop - 150; // Account for sticky header
           window.scrollTo({
             top: offsetTop,
             behavior: 'smooth'
           });
-          
+
           // Update active state
           subnavLinks.forEach(function(l) {
             l.classList.remove('active');
@@ -150,15 +150,15 @@ function toggleMobileMenu() {
         }
       });
     });
-    
+
     // Listen for scroll events
     window.addEventListener('scroll', function() {
       updateActiveLink();
     });
-    
+
     // Initial call
     updateActiveLink();
-    
+
     console.log('[for-doctors] Subnav setup complete');
   });
 </script>
@@ -178,7 +178,7 @@ function toggleMobileMenu() {
         <a href="/kurumsal?lang={{ lang }}" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">Kurumsal</a>
         <a href="/for-doctors?lang={{ lang }}" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">{{ t.hero_badge }}</a>
       </nav>
-      
+
       <!-- Language Switcher -->
       <style>
         .language-switch {
@@ -327,7 +327,7 @@ function toggleMobileMenu() {
         <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
         <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
       </div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
           <div class="flex-1 flex flex-col gap-6 sm:gap-8 text-center lg:text-left">
@@ -339,15 +339,15 @@ function toggleMobileMenu() {
               </span>
               <span class="text-teal-100 text-xs font-bold tracking-widest uppercase">For Clinicians</span>
             </div>
-            
+
             <h1 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold font-headline leading-[1.05] tracking-tight text-white">
               {{ t.hero_title }}
             </h1>
-            
+
             <p class="text-base sm:text-xl text-white/85 max-w-2xl leading-relaxed mx-auto lg:mx-0">
               {{ t.hero_desc }}
             </p>
-            
+
             <!-- Premium Stats -->
             <div class="grid grid-cols-3 gap-4 sm:gap-6 pt-4 border-t border-white/10 mt-2">
               <div class="text-center lg:text-left">
@@ -363,7 +363,7 @@ function toggleMobileMenu() {
                 <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">Biomarker Doğruluğu</div>
               </div>
             </div>
-            
+
             <!-- CTA Buttons -->
             <div class="flex flex-wrap justify-center lg:justify-start gap-4 mt-4">
               <a href="{{ base_url }}/clinical-demo?lang={{ lang }}#workflow" class="inline-flex items-center justify-center bg-gradient-to-r from-teal-400 to-cyan-400 hover:from-teal-300 hover:to-cyan-300 text-teal-950 font-bold px-8 py-4 rounded-full shadow-2xl shadow-teal-500/30 transition-all hover:scale-105 active:scale-95">
@@ -374,14 +374,14 @@ function toggleMobileMenu() {
               </a>
             </div>
           </div>
-          
+
           <!-- Premium Visual & Report Preview -->
           <div class="flex-1 w-full max-w-xl">
             <!-- Premium Doctor Image -->
             <div class="relative mb-6 rounded-3xl overflow-hidden shadow-2xl shadow-black/50 border border-white/20 group">
               <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
-              <img 
-                src="/static/images/for-doctors-hero-premium.png" 
+              <img
+                src="/static/images/for-doctors-hero-premium.png"
                 alt="Doktor AI destekli laboratuvar raporu inceliyor"
                 class="w-full h-64 sm:h-80 object-cover transform group-hover:scale-105 transition-transform duration-700"
                 loading="eager"
@@ -408,7 +408,7 @@ function toggleMobileMenu() {
                 </div>
               </div>
             </div>
-            
+
             <!-- Premium Report Preview Card -->
             <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-black/30 border border-white/30">
               <div class="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl"></div>
@@ -426,31 +426,31 @@ function toggleMobileMenu() {
                   </div>
                   <span class="text-[10px] px-2.5 py-1 rounded-full bg-teal-100 text-teal-700 font-bold">PDF</span>
                 </div>
-                
+
                 <!-- Preview Content -->
                 <div class="p-5 sm:p-6 space-y-4">
                   <div>
                     <p class="text-[11px] font-semibold uppercase tracking-wide text-slate-500 mb-2">{{ t.preview_patient_block_title }}</p>
                     <p class="text-sm text-slate-800 leading-relaxed border-l-4 border-teal-500 pl-3 bg-teal-50/50 rounded-r-lg p-3">{{ t.preview_patient_block_sample }}</p>
                   </div>
-                  
+
                   <div class="grid grid-cols-2 gap-3">
                     <div class="rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3 shadow-sm">
                       <p class="text-[10px] text-slate-500 uppercase font-semibold">Hb</p>
                       <p class="text-base font-bold text-slate-800 flex items-center gap-2">
-                        14.2 
+                        14.2
                         <span class="w-2 h-2 rounded-full bg-emerald-500" title="{{ t.preview_range_cue }}"></span>
                       </p>
                     </div>
                     <div class="rounded-xl border border-slate-200 bg-gradient-to-br from-white to-slate-50 px-4 py-3 shadow-sm">
                       <p class="text-[10px] text-slate-500 uppercase font-semibold">Glu</p>
                       <p class="text-base font-bold text-slate-800 flex items-center gap-2">
-                        99 
+                        99
                         <span class="w-2 h-2 rounded-full bg-emerald-500" title="{{ t.preview_range_cue }}"></span>
                       </p>
                     </div>
                   </div>
-                  
+
                   <p class="text-xs text-slate-500 leading-relaxed">{{ t.preview_desc }}</p>
                 </div>
               </div>
@@ -465,18 +465,18 @@ function toggleMobileMenu() {
       <div class="max-w-7xl mx-auto px-4 sm:px-8">
         <h2 class="text-2xl sm:text-3xl font-bold text-on-surface text-center max-w-2xl mx-auto mb-4">{{ t.how_title }}</h2>
         <p class="text-center text-on-surface-variant mb-10 max-w-3xl mx-auto">Laboratuvar sonuçlarınızın AI ile analiz edilerek anlaşılır ve actionable bilgilere dönüşme süreci</p>
-        
+
         <!-- Workflow Visual -->
         <div class="relative mb-12 rounded-3xl overflow-hidden border border-outline-variant/20 shadow-xl max-w-4xl mx-auto">
-          <img 
-            src="/static/images/lab-workflow-premium.png" 
+          <img
+            src="/static/images/lab-workflow-premium.png"
             alt="Laboratuvar AI analiz süreci - Kan örneğinden rapora"
             class="w-full h-48 sm:h-64 object-cover"
             loading="lazy"
           />
           <div class="absolute inset-0 bg-gradient-to-t from-white/80 to-transparent"></div>
         </div>
-        
+
         <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
           {% for card in t.how_cards %}
           <article class="rounded-2xl border border-outline-variant/20 bg-white p-5 sm:p-6 flex flex-col gap-2 shadow-sm hover:border-primary/20 transition-all hover:shadow-lg">
@@ -572,12 +572,12 @@ function toggleMobileMenu() {
               {% endfor %}
             </div>
           </div>
-          
+
           <!-- Premium Consultation Image -->
           <div class="relative hidden lg:block">
             <div class="relative rounded-3xl overflow-hidden shadow-2xl border border-outline-variant/20">
-              <img 
-                src="/static/images/doctor-patient-consultation.png" 
+              <img
+                src="/static/images/doctor-patient-consultation.png"
                 alt="Doktor-hasta görüşmesi - AI destekli laboratuvar raporu ile"
                 class="w-full h-[600px] object-cover"
                 loading="lazy"
@@ -616,18 +616,18 @@ function toggleMobileMenu() {
         <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
         <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
       </div>
-      
+
       <div class="relative max-w-7xl mx-auto">
         <div class="text-center mb-10">
           <p class="text-white/70 text-xs font-medium uppercase tracking-widest mb-2">Uluslararası Ortaklar & 50+ Ülkede Kullanım</p>
           <h2 class="text-3xl sm:text-4xl font-extrabold text-white">Global Trust & Reach</h2>
         </div>
-        
+
         <!-- Premium Global Map Visual -->
         <div class="relative mb-10 rounded-3xl overflow-hidden border border-white/20 shadow-2xl">
           <div class="absolute inset-0 bg-gradient-to-t from-slate-900/80 via-transparent to-transparent z-10"></div>
-          <img 
-            src="/static/images/global-network-map.png" 
+          <img
+            src="/static/images/global-network-map.png"
             alt="NoryaAI global network - 50+ ülkede aktif"
             class="w-full h-64 sm:h-96 object-cover"
             loading="lazy"
@@ -654,7 +654,7 @@ function toggleMobileMenu() {
             </div>
           </div>
         </div>
-        
+
         <!-- Country Flags Grid -->
         <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-3 sm:gap-4">
           <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
@@ -674,7 +674,7 @@ function toggleMobileMenu() {
             <div class="text-white/60 text-xs">Doğruluk</div>
           </div>
         </div>
-        
+
         <!-- Country Flags Grid -->
         <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-9 gap-3 sm:gap-4">
           <div class="group relative bg-white/10 backdrop-blur-xl border border-white/20 rounded-2xl p-3 sm:p-4 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
@@ -952,7 +952,7 @@ function toggleMobileMenu() {
 
       const lang = resolveLangFromOption(option);
       console.log('[lang-switcher] Language selected:', lang);
-      
+
       if (!lang) {
         console.error('[lang-switcher] No lang found!');
         return;
@@ -963,7 +963,7 @@ function toggleMobileMenu() {
       closeAll();
 
       console.log('[lang-switcher] Applying locale:', lang);
-      
+
       // Direct redirect - no delay
       applyLocale(lang);
     },
