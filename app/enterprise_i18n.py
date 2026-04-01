@@ -1293,6 +1293,20 @@ ENTERPRISE_UI = {
         "pilot_3_desc": "Sehen Sie Zeitersparnis und Genauigkeitsmetriken in detaillierten Berichten.",
         "contact_title": "Kontakt",
         
+        # Usage section
+        "usage_title": "Krankenhausspezifische Anwendungsfälle",
+        "usage_subtitle": "Von Laboren bis zu Notaufnahmen, klinische Forschung bis Gesundheitstourismus.",
+        "usage_1_title": "Routine-Labortests",
+        "usage_1_desc": "Automatisieren Sie tägliche Bluttestergebnisse, entlasten Sie Ärzte.",
+        "usage_2_title": "Mehrsprachige Berichterstattung",
+        "usage_2_desc": "Präsentieren Sie Ergebnisse in 9+ Sprachen für internationale Patienten, unterstützen Sie Gesundheitstourismus.",
+        "usage_3_title": "Notaufnahme-Triage",
+        "usage_3_desc": "Automatische Kennzeichnung kritischer Biomarker für schnellere Entscheidungen in Notfällen.",
+        "usage_4_title": "Klinische Forschung & Analyse",
+        "usage_4_desc": "Longitudinale Analyse von Patientenkohorten, Verlaufskontrolle therapeutischer Wirksamkeit.",
+        "usage_5_title": "Zentrales Labormanagement",
+        "usage_5_desc": "Strukturieren Sie hochvolumige Testergebnisse, unterstützen Sie Qualitätskontrollprozesse.",
+        
         # Contact/CTA section
         "contact_section_badge": "Maßgeschneiderte Lösung",
         "contact_section_title": "Maßgeschneiderte Lösung für Ihr Krankenhaus",
