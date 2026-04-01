@@ -1,6 +1,11 @@
+{% extends "base.html" %}
+{% block title %}{{ t.meta_title }}{% endblock %}
+{% block body_class %}bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container antialiased{% endblock %}
+{% block content %}
 <!DOCTYPE html>
 <html lang="{{ lang }}" {% if lang in ('ar', 'he') %}dir="rtl"{% endif %}>
 <head>
+  <meta name="robots" content="noindex, nofollow" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   {% include "partials/gsc_meta.html" %}
@@ -102,48 +107,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   
-  <!-- Tailwind CSS -->
-  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries&v=20260402"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            "outline-variant": "#bcc9c8",
-            "on-primary-container": "#003333",
-            "inverse-on-surface": "#f0f1f2",
-            "secondary": "#4f5e7e",
-            "surface-bright": "#f8f9fa",
-            "surface-container": "#edeeef",
-            "inverse-primary": "#5ed9d7",
-            "inverse-surface": "#2e3132",
-            "surface-dim": "#d9dadb",
-            "on-primary": "#ffffff",
-            "surface-container-high": "#e7e8e9",
-            "on-surface": "#191c1d",
-            "primary-container": "#0ea5a4",
-            "surface": "#f8f9fa",
-            "error": "#ba1a1a",
-            "surface-container-lowest": "#ffffff",
-            "surface-container-low": "#f3f4f5",
-            "on-surface-variant": "#3d4949",
-            "surface-variant": "#e1e3e4",
-            "primary-fixed-dim": "#5ed9d7",
-            "primary-fixed": "#7df5f4",
-            "primary": "#006a69",
-            "outline": "#6d7a79",
-            "secondary-container": "#cadaff",
-            "surface-container-highest": "#e1e3e4",
-          },
-          fontFamily: {
-            headline: ["Manrope", "system-ui", "sans-serif"],
-            body: ["Inter", "system-ui", "sans-serif"],
-          },
-          borderRadius: { DEFAULT: "0.25rem", lg: "0.5rem", xl: "0.75rem", "2xl": "1rem", "3xl": "1.5rem", full: "9999px" },
-        },
-      },
-    };
-  </script>
+  <!-- Custom styles for hospital page -->
   <style>
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
@@ -188,8 +152,6 @@
         <a href="/kurumsal" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_enterprise }}</a>
         <a href="/hastaneler-icin" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">{{ t.nav_hospitals }}</a>
       </nav>
-      <!-- Language Switcher -->
-      <style>
       <!-- Language Switcher -->
       {% include "partials/header_lang.html" %}
       <div class="flex items-center gap-3">
@@ -2027,3 +1989,4 @@
 {% include "partials/chat_widget.html" %}
 </body>
 </html>
+{% endblock %}
