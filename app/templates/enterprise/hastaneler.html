@@ -2106,6 +2106,18 @@
         sections.forEach(function(section) { observer.observe(section); });
       }
     })();
+
+    // Ensure mobile menu is closed on page load
+    (function() {
+      var backdrop = document.getElementById('mobile-menu-backdrop');
+      var menu = document.getElementById('mobile-menu');
+      if (backdrop && menu) {
+        backdrop.classList.add('hidden');
+        menu.classList.remove('translate-x-0');
+        menu.classList.add('translate-x-full');
+        document.body.style.overflow = '';
+      }
+    })();
   </script>
 {% include "partials/chat_widget.html" %}
 </body>
