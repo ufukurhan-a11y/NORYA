@@ -1,4 +1,4 @@
-<!-- DEBUG_FILE: partials/header_lang.html v2 -->
+<!-- DEBUG_FILE: partials/header_lang.html v3 - PRODUCTION READY -->
 {% raw %}<style>
 :root{--lang-border:1px solid rgba(15,23,42,0.07);--lang-bg:rgba(255,255,255,0.92);--lang-shadow:0 12px 40px rgba(15,23,42,0.08),0 2px 8px rgba(15,23,42,0.03);--lang-radius:16px;--lang-radius-inner:12px;--lang-accent-subtle:rgba(14,165,164,0.08);--lang-accent-active:rgba(14,165,164,0.1);--lang-check:#0d9488}
 .language-switch{position:relative}
@@ -18,22 +18,21 @@
 [dir="rtl"] #base-lang-menu .header-lang-option,[dir="rtl"] #base-lang-menu-mobile .header-lang-option{text-align:right}
 @media(max-width:640px){#base-lang-menu,#base-lang-menu-mobile{min-width:200px;max-width:calc(100vw - 16px);padding:8px;border-radius:16px}#base-lang-menu .header-lang-option,#base-lang-menu-mobile .header-lang-option{min-height:40px;padding:9px 10px;font-size:.9375rem}}
 </style>{% endraw %}
-<div class="header-lang-switch language-switch" aria-label="Language">
-  <button type="button" id="base-lang-toggle" class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false">
+<div class="header-lang-switch language-switch" data-lang-switcher aria-label="Language">
+  <button type="button" id="base-lang-toggle" data-lang-toggle class="header-lang-toggle lang-trigger-btn" aria-haspopup="true" aria-expanded="false">
     <span aria-hidden="true" class="lang-trigger-icon">🌐</span>
     <span class="header-lang-code lang-trigger-code" id="base-lang-current">{{ (lang or 'tr')|upper }}</span>
     <span aria-hidden="true" class="lang-trigger-chevron">▼</span>
   </button>
-  <div id="base-lang-menu" class="header-lang-menu" hidden>
-    <button type="button" class="header-lang-option" data-locale="tr"><span class="mr-2">🇹🇷</span> Türkçe</button>
-    <button type="button" class="header-lang-option" data-locale="en"><span class="mr-2">🇬🇧</span> English</button>
-    <button type="button" class="header-lang-option" data-locale="de"><span class="mr-2">🇩🇪</span> Deutsch</button>
-    <button type="button" class="header-lang-option" data-locale="fr"><span class="mr-2">🇫🇷</span> Français</button>
-    <button type="button" class="header-lang-option" data-locale="es"><span class="mr-2">🇪🇸</span> Español</button>
-    <button type="button" class="header-lang-option" data-locale="it"><span class="mr-2">🇮🇹</span> Italiano</button>
-    <button type="button" class="header-lang-option" data-locale="he"><span class="mr-2">🇮🇱</span> עברית</button>
-    <button type="button" class="header-lang-option" data-locale="hi"><span class="mr-2">🇮🇳</span> हिन्दी</button>
-    <button type="button" class="header-lang-option" data-locale="ar"><span class="mr-2">🇸🇦</span> العربية</button>
+  <div id="base-lang-menu" data-lang-menu class="header-lang-menu" hidden aria-hidden="true">
+    <button type="button" class="header-lang-option" data-lang-option data-lang="tr"><span class="mr-2">🇹</span> Türkçe</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="en"><span class="mr-2">🇬🇧</span> English</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="de"><span class="mr-2">🇩🇪</span> Deutsch</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="fr"><span class="mr-2">🇫🇷</span> Français</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="es"><span class="mr-2">🇪🇸</span> Español</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="it"><span class="mr-2">🇮🇹</span> Italiano</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="he"><span class="mr-2">🇮🇱</span> עברית</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="hi"><span class="mr-2">🇮🇳</span> हिन्दी</button>
+    <button type="button" class="header-lang-option" data-lang-option data-lang="ar"><span class="mr-2">🇸🇦</span> العربية</button>
   </div>
 </div>
-
