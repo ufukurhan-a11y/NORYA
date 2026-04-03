@@ -523,12 +523,12 @@ def admin_blog_posts(
 ):
     """Blog yazıları listesi."""
     stmt = select(BlogPost).order_by(BlogPost.created_at.desc()).offset(offset).limit(limit)
-    
+
     if lang:
         stmt = stmt.where(BlogPost.lang == lang[:2].lower())
     if is_published is not None:
         stmt = stmt.where(BlogPost.is_published == is_published)
-    
+
     posts = list(db.exec(stmt).all())
     return [
         {
@@ -562,7 +562,7 @@ def admin_create_blog_post(
     existing = db.get(BlogPost, body.slug)
     if existing:
         raise HTTPException(status_code=400, detail=f"Slug '{body.slug}' zaten kullanılıyor.")
-    
+
     now = datetime.utcnow()
     post = BlogPost(
         slug=body.slug,
@@ -598,7 +598,7 @@ def admin_get_blog_post(
     post = db.get(BlogPost, post_id)
     if not post:
         raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
-    
+
     return {
         "id": post.id,
         "slug": post.slug,
@@ -631,17 +631,17 @@ def admin_update_blog_post(
     post = db.get(BlogPost, post_id)
     if not post:
         raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
-    
+
     update_data = body.model_dump(exclude_unset=True)
     for field, value in update_data.items():
         setattr(post, field, value)
-    
+
     post.updated_at = datetime.utcnow()
-    
+
     # Yayına alındıysa published_at'i set et
     if body.is_published and not post.published_at:
         post.published_at = datetime.utcnow()
-    
+
     db.add(post)
     db.commit()
     db.refresh(post)
@@ -658,7 +658,7 @@ def admin_delete_blog_post(
     post = db.get(BlogPost, post_id)
     if not post:
         raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
-    
+
     db.delete(post)
     db.commit()
     return {"message": "Blog yazısı silindi."}
@@ -674,13 +674,13 @@ def admin_toggle_blog_post_publish(
     post = db.get(BlogPost, post_id)
     if not post:
         raise HTTPException(status_code=404, detail="Blog yazısı bulunamadı.")
-    
+
     post.is_published = not post.is_published
     post.updated_at = datetime.utcnow()
-    
+
     if post.is_published and not post.published_at:
         post.published_at = datetime.utcnow()
-    
+
     db.add(post)
     db.commit()
     db.refresh(post)
