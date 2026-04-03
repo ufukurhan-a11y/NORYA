@@ -406,6 +406,42 @@ app = FastAPI(
 # Statik dosyalar: proje kökünde /static klasöründen servis edilir
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
+# Static asset Cache-Control middleware
+_STATIC_CACHE_BY_TYPE = {
+    ".css": "public, max-age=31536000, immutable",       # CSS: 1 year
+    ".js": "public, max-age=31536000, immutable",        # JS: 1 year
+    ".woff": "public, max-age=31536000, immutable",      # Fonts: 1 year
+    ".woff2": "public, max-age=31536000, immutable",     # Fonts: 1 year
+    ".ttf": "public, max-age=31536000, immutable",       # Fonts: 1 year
+    ".eot": "public, max-age=31536000, immutable",       # Fonts: 1 year
+    ".otf": "public, max-age=31536000, immutable",       # Fonts: 1 year
+    ".svg": "public, max-age=31536000, immutable",       # SVG: 1 year
+    ".png": "public, max-age=2592000, immutable",        # Images: 30 days
+    ".jpg": "public, max-age=2592000, immutable",
+    ".jpeg": "public, max-age=2592000, immutable",
+    ".gif": "public, max-age=2592000, immutable",
+    ".webp": "public, max-age=2592000, immutable",
+    ".ico": "public, max-age=2592000, immutable",
+    ".webmanifest": "public, max-age=86400",             # Manifest: 1 day
+    ".json": "public, max-age=86400",                    # JSON: 1 day
+}
+
+@app.middleware("http")
+async def static_cache_control(request: Request, call_next):
+    """Add Cache-Control headers for static assets to reduce render-blocking and improve PageSpeed."""
+    response = await call_next(request)
+    if request.url.path.startswith("/static/"):
+        # Extract file extension from path (handle query params)
+        path_no_query = request.url.path.split("?")[0]
+        ext = "." + path_no_query.rsplit(".", 1)[-1].lower() if "." in path_no_query else ""
+        cache_header = _STATIC_CACHE_BY_TYPE.get(ext)
+        if cache_header:
+            response.headers["Cache-Control"] = cache_header
+            # Also set Vary for Accept-Encoding (compression negotiation)
+            if ext in (".css", ".js", ".svg", ".json", ".webmanifest"):
+                response.headers["Vary"] = "Accept-Encoding"
+    return response
+
 
 @app.get("/favicon.ico", include_in_schema=False)
 def favicon():
