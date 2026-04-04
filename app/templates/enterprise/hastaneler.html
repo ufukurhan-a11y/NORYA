@@ -107,8 +107,45 @@
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
   <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
   
-  <!-- Custom styles for hospital page -->
+  <!-- Critical inline styles: prevent FOUC before Tailwind lazy-loads from base.html -->
   <style>
+    /* === Critical text colors — must work before Tailwind CSS loads === */
+    .text-white { color: #fff !important; }
+    .text-white\/85 { color: rgba(255,255,255,.85) !important; }
+    .text-white\/70 { color: rgba(255,255,255,.7) !important; }
+    .text-white\/50 { color: rgba(255,255,255,.5) !important; }
+    .text-white\/90 { color: rgba(255,255,255,.9) !important; }
+    .text-slate-900 { color: #0f172a !important; }
+    .text-slate-600 { color: #475569 !important; }
+    /* Critical text color classes used on hero */
+    .text-teal-100 { color: #ccfbf1 !important; }
+    .text-teal-300 { color: #5eead4 !important; }
+    .text-teal-400 { color: #2dd4bf !important; }
+    .text-teal-600 { color: #0d9488 !important; }
+    .text-teal-100\/90 { color: rgba(204,251,241,.9) !important; }
+    .text-cyan-300 { color: #67e8f9 !important; }
+    .text-cyan-400 { color: #22d3ee !important; }
+    .text-cyan-600 { color: #0891b2 !important; }
+    .text-green-300 { color: #6ee7b7 !important; }
+    .text-purple-300 { color: #d8b4fe !important; }
+    .text-indigo-300 { color: #a5b4fc !important; }
+    .text-orange-300 { color: #fdba74 !important; }
+    .text-red-300 { color: #fca5a5 !important; }
+    .text-blue-300 { color: #93c5fd !important; }
+    /* Ensure on-surface text is visible on light backgrounds */
+    .text-on-surface { color: #191c1d !important; }
+    .text-on-surface-variant { color: #3d4949 !important; }
+    .text-on-primary { color: #fff !important; }
+    .text-primary { color: #006a69 !important; }
+    .bg-surface { background: #f8f9fa !important; }
+    .bg-surface-container-lowest { background: #fff !important; }
+    .bg-surface-container-low { background: #f3f4f5 !important; }
+    .bg-primary { background: #006a69 !important; }
+    .bg-primary-container { background: #0ea5a4 !important; }
+    .font-headline { font-family: Manrope, system-ui, sans-serif !important; }
+    .font-body { font-family: Inter, system-ui, sans-serif !important; }
+    .antialiased { -webkit-font-smoothing: antialiased; }
+
     .material-symbols-outlined {
       font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
     }
