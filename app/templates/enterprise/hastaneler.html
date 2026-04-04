@@ -1,115 +1,38 @@
 {% extends "base.html" %}
 {% block title %}{{ t.meta_title }}{% endblock %}
 {% block body_class %}bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container antialiased{% endblock %}
-{% block content %}
-<!DOCTYPE html>
-<html lang="{{ lang }}" {% if lang in ('ar', 'he') %}dir="rtl"{% endif %}>
-<head>
+
+{% block meta_seo %}
   <meta name="robots" content="noindex, nofollow" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  {% include "partials/gsc_meta.html" %}
-  <title>{{ t.meta_title }}</title>
   <meta name="description" content="{{ t.meta_description }}" />
-  
-  <!-- Open Graph / Social Media SEO -->
   <meta property="og:title" content="{{ t.meta_title }}" />
   <meta property="og:description" content="{{ t.meta_description }}" />
   <meta property="og:type" content="website" />
   <meta property="og:locale" content="{{ 'ar_AR' if lang == 'ar' else 'he_IL' if lang == 'he' else 'hi_IN' if lang == 'hi' else lang + '_' + lang|upper }}" />
   <meta property="og:site_name" content="NoryaAI" />
-  
-  <!-- Twitter Card -->
   <meta name="twitter:card" content="summary_large_image" />
   <meta name="twitter:title" content="{{ t.meta_title }}" />
   <meta name="twitter:description" content="{{ t.meta_description }}" />
-  
   <meta name="theme-color" content="#006a69" />
-  
-  <!-- Hreflang tags for international SEO -->
-  {% if hreflang_tags %}
-  {{ hreflang_tags|safe }}
-  {% else %}
-  {% if canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
-  {% endif %}
-  
-  <!-- Schema.org Structured Data for Organization -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "NoryaAI",
-    "url": "{{ canonical_url|replace('/hastaneler-icin', '') }}",
-    "logo": "{{ canonical_url|replace('/hastaneler-icin', '') }}/static/norya_logo_transparent_trim.png",
-    "description": "{{ t.meta_description }}",
-    "foundingDate": "2018",
-    "founder": {
-      "@type": "Person",
-      "name": "Ufuk Urhan"
-    },
-    "address": {
-      "@type": "PostalAddress",
-      "addressLocality": "Hamburg",
-      "addressCountry": "DE"
-    },
-    "contactPoint": {
-      "@type": "ContactPoint",
-      "email": "support@noryaai.com",
-      "telephone": "+905071703564",
-      "contactType": "customer service"
-    },
-    "sameAs": [
-      "https://www.linkedin.com/company/noryaai",
-      "https://twitter.com/noryaai"
-    ]
-  }
-  </script>
-  
-  <!-- Schema.org for Medical Organization / Hospital Solution -->
-  <script type="application/ld+json">
-  {
-    "@context": "https://schema.org",
-    "@type": "MedicalOrganization",
-    "name": "NoryaAI Hospital Solutions",
-    "description": "{{ t.solutions_desc if t.solutions_desc else 'AI-powered clinical decision support for hospitals, clinics, and laboratories' }}",
-    "medicalSpecialty": "Clinical Decision Support",
-    "availableService": {
-      "@type": "MedicalService",
-      "serviceName": "AI Blood Test Analysis",
-      "serviceType": "Clinical Decision Support System"
-    },
-    "areaServed": {
-      "@type": "Country",
-      "name": "Global"
-    }
-  }
-  </script>
-  <!-- Preconnect for performance -->
+  <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "Organization", "name": "NoryaAI", "url": "{{ canonical_url|replace('/hastaneler-icin', '') }}", "logo": "{{ canonical_url|replace('/hastaneler-icin', '') }}/static/norya_logo_transparent_trim.png", "description": "{{ t.meta_description }}", "foundingDate": "2018", "founder": { "@type": "Person", "name": "Ufuk Urhan" }, "address": { "@type": "PostalAddress", "addressLocality": "Hamburg", "addressCountry": "DE" }, "contactPoint": { "@type": "ContactPoint", "email": "support@noryaai.com", "telephone": "+905071703564", "contactType": "customer service" }, "sameAs": [ "https://www.linkedin.com/company/noryaai", "https://twitter.com/noryaai" ] } </script>
+  <script type="application/ld+json"> { "@context": "https://schema.org", "@type": "MedicalOrganization", "name": "NoryaAI Hospital Solutions", "description": "{{ t.solutions_desc if t.solutions_desc else 'AI-powered clinical decision support for hospitals, clinics, and laboratories' }}", "medicalSpecialty": "Clinical Decision Support", "availableService": { "@type": "MedicalService", "serviceName": "AI Blood Test Analysis", "serviceType": "Clinical Decision Support System" }, "areaServed": { "@type": "Country", "name": "Global" } } </script>
+  {% if hreflang_tags %}{{ hreflang_tags|safe }}
+  {% elif canonical_url %}<link rel="canonical" href="{{ canonical_url }}" />{% endif %}
+{% endblock %}
+
+{% block head %}
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="preconnect" href="https://www.googletagmanager.com" />
   <link rel="dns-prefetch" href="https://fonts.googleapis.com" />
   <link rel="dns-prefetch" href="https://fonts.gstatic.com" />
-  
-  <!-- Favicon & Icons -->
   <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" />
-  <link rel="icon" type="image/png" sizes="32x32" href="/static/icons/favicon-32x32.png" />
   <link rel="icon" type="image/png" sizes="16x16" href="/static/icons/favicon-16x16.png" />
   <link rel="apple-touch-icon" href="/static/icons/apple-touch-icon.png" />
-  <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon.png" />
-  
-  <!-- Preload critical resources -->
   <link rel="preload" href="/static/norya_logo_transparent_trim.png" as="image" fetchpriority="high" />
-  
-  <!-- Fonts -->
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet" />
-  
-  <!-- Critical inline styles: prevent FOUC before Tailwind lazy-loads from base.html -->
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&amp;family=Inter:wght@400;500;600&amp;display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet" />
   <style>
-    /* === Critical text colors — must work before Tailwind CSS loads === */
+/* === Critical text colors — must work before Tailwind CSS loads === */
     .text-white { color: #fff !important; }
     .text-white\/85 { color: rgba(255,255,255,.85) !important; }
     .text-white\/70 { color: rgba(255,255,255,.7) !important; }
@@ -246,8 +169,8 @@
     @media (min-width: 1024px) { .hosp-subnav-wrap { top: 72px; } .hosp-anchor { scroll-margin-top: 162px; } }
   </style>
   {% include "includes/gtag_google_ads.html" %}
-</head>
-<body class="bg-surface font-body text-on-surface selection:bg-primary-container selection:text-on-primary-container antialiased">
+{% endblock %}
+{% block content %}
 
   <!-- Header -->
   <header class="fixed top-0 w-full z-50 bg-[#f8f9fa]/80 backdrop-blur-xl shadow-[0_12px_40px_rgba(25,28,29,0.04)]">
@@ -556,7 +479,7 @@
             <p class="text-white/60 text-xs sm:text-sm">
               <span class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
                 <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
-                <span>{{ t.enterprise_features_title }}</span>
+                <span>{{ t.enterprise_features_title or 'Hospital Ready Enterprise Features' }}</span>
               </span>
             </p>
           </div>
@@ -565,7 +488,7 @@
         <!-- International Partners with Map Visual -->
         <div class="mt-12 sm:mt-16">
           <div class="text-center mb-6">
-            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.international_partners_title }}</p>
+            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.international_partners_title or 'International Hospital Network' }}</p>
           </div>
 
           <!-- Global Network Map -->
@@ -2095,6 +2018,4 @@
     })();
   </script>
 {% include "partials/chat_widget.html" %}
-</body>
-</html>
 {% endblock %}
