@@ -142,6 +142,77 @@
     .bg-surface-container-low { background: #f3f4f5 !important; }
     .bg-primary { background: #006a69 !important; }
     .bg-primary-container { background: #0ea5a4 !important; }
+
+    /* === Enterprise dark section: dark backgrounds that cards sit on === */
+    .bg-gradient-to-br { background-image: linear-gradient(to bottom right, var(--tw-gradient-stops)) !important; }
+    .from-\[\#003030\] { --tw-gradient-from: #003030 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-to, transparent) !important; }
+    .via-\[\#004a4a\] { --tw-gradient-via: #004a4a !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via, #004a4a), var(--tw-gradient-to, transparent) !important; }
+    .to-\[\#006a69\] { --tw-gradient-to: #006a69 !important; --tw-gradient-stops: var(--tw-gradient-from), var(--tw-gradient-via, #004a4a), var(--tw-gradient-to) !important; }
+
+    /* === Dark section transparent card backgrounds === */
+    .bg-white\/95 { background: rgba(255,255,255,0.95) !important; }
+    .bg-white\/60 { background: rgba(255,255,255,0.6) !important; }
+    .bg-white\/20 { background: rgba(255,255,255,0.2) !important; }
+    .bg-white\/10 { background: rgba(255,255,255,0.1) !important; }
+    .bg-white\/5 { background: rgba(255,255,255,0.05) !important; }
+    .bg-white\/15 { background: rgba(255,255,255,0.15) !important; }
+
+    /* === Glass blur for cards on dark section — must work before Tailwind CDN === */
+    .backdrop-blur-xl { backdrop-filter: blur(24px) !important; -webkit-backdrop-filter: blur(24px) !important; }
+    .backdrop-blur-sm { backdrop-filter: blur(4px) !important; -webkit-backdrop-filter: blur(4px) !important; }
+
+    /* === Dark section text colors — MUST be visible === */
+    .text-white\/80 { color: rgba(255,255,255,0.8) !important; }
+    .text-white\/60 { color: rgba(255,255,255,0.6) !important; }
+
+    /* === Dark section borders === */
+    .border-white\/20 { border-color: rgba(255,255,255,0.2) !important; }
+    .border-white\/10 { border-color: rgba(255,255,255,0.1) !important; }
+
+    /* === Card hover border colors === */
+    .hover\:border-teal-400\/50:hover { border-color: rgba(45,212,191,0.5) !important; }
+    .hover\:border-cyan-400\/50:hover { border-color: rgba(34,211,238,0.5) !important; }
+    .hover\:border-purple-400\/50:hover { border-color: rgba(192,132,252,0.5) !important; }
+    .hover\:border-amber-400\/50:hover { border-color: rgba(251,191,36,0.5) !important; }
+
+    /* === Gradient overlay on cards (hover only — default invisible) === */
+    .from-teal-500\/10 { --tw-gradient-from: rgba(20,184,166,0.1) !important; }
+    .from-cyan-500\/10 { --tw-gradient-from: rgba(6,182,212,0.1) !important; }
+    .from-purple-500\/10 { --tw-gradient-from: rgba(168,85,247,0.1) !important; }
+    .from-amber-500\/10 { --tw-gradient-from: rgba(245,158,11,0.1) !important; }
+
+    /* === Badge backgrounds === */
+    .bg-teal-500\/30 { background: rgba(20,184,166,0.3) !important; }
+    .bg-cyan-500\/30 { background: rgba(6,182,212,0.3) !important; }
+    .bg-purple-500\/30 { background: rgba(168,85,247,0.3) !important; }
+    .bg-amber-500\/30 { background: rgba(245,158,11,0.3) !important; }
+
+    /* === Badge text — ensure visibility === */
+    .text-teal-200 { color: #99f6e4 !important; }
+    .text-cyan-200 { color: #a5f3fc !important; }
+    .text-purple-200 { color: #e9d5ff !important; }
+    .text-amber-200 { color: #fde68a !important; }
+
+    /* === Background glow orbs (animate-pulse) === */
+    .from-teal-500\/20 { --tw-gradient-from: rgba(20,184,166,0.2) !important; }
+    .bg-teal-500\/20 { background: rgba(20,184,166,0.2) !important; }
+    .bg-cyan-500\/15 { background: rgba(6,182,212,0.15) !important; }
+    .rounded-full { border-radius: 9999px !important; }
+    .blur-3xl { filter: blur(64px) !important; }
+
+    /* === Hero CTA / gradient utilities === */
+    .from-teal-400 { --tw-gradient-from: #2dd4bf !important; }
+    .to-cyan-400 { --tw-gradient-to: #22d3ee !important; }
+    .to-teal-400 { --tw-gradient-to: #2dd4bf !important; }
+    .from-cyan-400 { --tw-gradient-from: #22d3ee !important; }
+    .shadow-teal-500\/30 { box-shadow: 0 0 30px rgba(20,184,166,0.3) !important; }
+    .shadow-teal-500\/50 { box-shadow: 0 0 50px rgba(20,184,166,0.5) !important; }
+    .rounded-3xl { border-radius: 1.5rem !important; }
+    .rounded-2xl { border-radius: 1rem !important; }
+    .shadow-lg { box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -4px rgba(0,0,0,0.1) !important; }
+    .shadow-2xl { box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25) !important; }
+    .border-white\/30 { border-color: rgba(255,255,255,0.3) !important; }
+
     .font-headline { font-family: Manrope, system-ui, sans-serif !important; }
     .font-body { font-family: Inter, system-ui, sans-serif !important; }
     .antialiased { -webkit-font-smoothing: antialiased; }
@@ -393,7 +464,7 @@
         <!-- Compliance & Certifications -->
         <div class="mt-8 sm:mt-10">
           <div class="text-center mb-6">
-            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.feature_compliance_title }}</p>
+            <span class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.feature_compliance_title or 'Compliance & Security' }}</span>
           </div>
           <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
@@ -422,7 +493,7 @@
         <!-- Technology Partners - Premium -->
         <div class="mt-8 sm:mt-12">
           <div class="text-center mb-6">
-            <p class="text-white/70 text-sm font-medium uppercase tracking-widest">{{ t.tech_partners_title }}</p>
+            <span class="text-white/70 text-sm font-medium uppercase tracking-widest">{{ t.tech_partners_title or 'Technology Partners' }}</span>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             <!-- Partner 1: OpenAI -->
@@ -775,19 +846,19 @@
             <div class="grid grid-cols-2 gap-4 sm:gap-6">
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-teal-600 mb-2">2M+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.analyzed_reports }}</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.analyzed_reports or 'Reports Analyzed' }}</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-cyan-600 mb-2">50+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.countries_in_use }}</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.countries_in_use or 'Countries in Use' }}</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-purple-600 mb-2">&lt;50ms</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.response_time }}</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.response_time or 'Response Time' }}</div>
               </div>
               <div class="bg-white dark:bg-slate-800 rounded-2xl p-4 sm:p-6 shadow-lg border border-slate-200/50 dark:border-slate-700/50">
                 <div class="text-3xl sm:text-4xl font-extrabold text-amber-600 mb-2">12+</div>
-                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.languages_support_label }}</div>
+                <div class="text-sm text-slate-600 dark:text-slate-400 font-medium">{{ t.languages_support_label or 'Languages' }}</div>
               </div>
             </div>
           </div>
@@ -855,10 +926,10 @@
             <span class="text-white text-xs font-bold uppercase tracking-widest">Premium Enterprise Features</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
-            {{ t.enterprise_features_title }}
+            {{ t.enterprise_features_title or 'Premium Enterprise Features' }}
           </h2>
           <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
-            {{ t.hospital_operations_ai_desc }}
+            {{ t.hospital_operations_ai_desc or 'Advanced AI features supporting your hospital\'s operational excellence.' }}
           </p>
         </div>
 
@@ -881,10 +952,10 @@
 
             <!-- Content -->
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
-              {{ t.feature_analytics_title }}
+              {{ t.feature_analytics_title or 'Advanced AI Analytics' }}
             </h3>
             <p class="relative text-white/70 leading-relaxed text-sm">
-              {{ t.feature_analytics_desc }}
+              {{ t.feature_analytics_desc or 'Automatic insights from your lab data.' }}
             </p>
 
             <!-- Feature List -->
@@ -909,7 +980,7 @@
             <div class="absolute inset-0 bg-gradient-to-br from-cyan-500/10 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
 
             <div class="relative w-16 h-16 rounded-2xl bg-gradient-to-br from-cyan-400 to-blue-400 flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-500">
-              <span class="material-symbols-outlined text-white text-3xl">real_time_text</span>
+              <span class="material-symbols-outlined text-white text-3xl" aria-hidden="true">timer</span>
             </div>
 
             <div class="inline-flex items-center gap-1 bg-cyan-500/30 text-cyan-200 px-3 py-1 rounded-full text-xs font-bold mb-4">
@@ -918,10 +989,10 @@
             </div>
 
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
-              {{ t.feature_monitoring_title }}
+              {{ t.feature_monitoring_title or 'Real-Time Monitoring' }}
             </h3>
             <p class="relative text-white/70 leading-relaxed text-sm">
-              {{ t.feature_monitoring_desc }}
+              {{ t.feature_monitoring_desc or 'Monitor your entire lab workflow live.' }}
             </p>
 
             <ul class="relative mt-6 space-y-2">
@@ -954,10 +1025,10 @@
             </div>
 
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
-              {{ t.feature_integration_title }}
+              {{ t.feature_integration_title or 'Custom Integration' }}
             </h3>
             <p class="relative text-white/70 leading-relaxed text-sm">
-              {{ t.feature_integration_desc }}
+              {{ t.feature_integration_desc or 'Seamless integration with your existing systems.' }}
             </p>
 
             <ul class="relative mt-6 space-y-2">
@@ -967,11 +1038,11 @@
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
-                <span>{{ t.restful_api }}</span>
+                <span>{{ t.restful_api or 'RESTful API' }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
-                <span>{{ t.webhook_support_label }}</span>
+                <span>{{ t.webhook_support_label or 'Webhook Support' }}</span>
               </li>
             </ul>
           </div>
@@ -990,10 +1061,10 @@
             </div>
 
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
-              {{ t.feature_compliance_title }}
+              {{ t.feature_compliance_title or 'Compliance & Security' }}
             </h3>
             <p class="relative text-white/70 leading-relaxed text-sm">
-              {{ t.feature_compliance_desc }}
+              {{ t.feature_compliance_desc or 'KVKK, HIPAA, and GDPR compliant with full audit trails.' }}
             </p>
 
             <ul class="relative mt-6 space-y-2">
@@ -1003,7 +1074,7 @@
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
-                <span>{{ t.hipaa_compliant_badge }}</span>
+                <span>{{ t.hipaa_compliant_badge or 'HIPAA Compliant' }}</span>
               </li>
               <li class="flex items-center gap-2 text-xs text-white/70">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
@@ -1017,11 +1088,11 @@
         <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">99.9%</div>
-            <div class="text-white/70 text-sm font-medium">{{ t.uptime_sla }}</div>
+            <div class="text-white/70 text-sm font-medium">{{ t.uptime_sla or 'Uptime SLA' }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">&lt;50ms</div>
-            <div class="text-white/70 text-sm font-medium">{{ t.api_response }}</div>
+            <div class="text-white/70 text-sm font-medium">{{ t.api_response or 'API Response' }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">256-bit</div>
@@ -1029,7 +1100,7 @@
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">24/7</div>
-            <div class="text-white/70 text-sm font-medium">{{ t.priority_support_label }}</div>
+            <div class="text-white/70 text-sm font-medium">{{ t.priority_support_label or 'Priority Support' }}</div>
           </div>
         </div>
       </div>
@@ -1518,7 +1589,7 @@
         <div class="text-center max-w-4xl mx-auto mb-12 sm:mb-16">
           <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full mb-6">
             <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
-            <span class="text-white text-xs font-bold uppercase tracking-widest">{{ t.limited_time_label or 'Limited Time' }} {{ t.pilot_badge }}</span>
+            <span class="text-white text-xs font-bold uppercase tracking-widest">{{ t.limited_time_label or 'Limited Time' }} {{ t.pilot_badge or 'PILOT' }}</span>
           </div>
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
             {{ t.final_cta_hospital_title or 'Introduce Your Hospital to AI' }}
@@ -1744,7 +1815,7 @@
             <!-- Badge -->
             <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
               <span class="material-symbols-outlined text-teal-300 text-sm">rocket_launch</span>
-              <span class="text-white text-xs font-bold uppercase tracking-widest">{{ t.limited_time_label }} {{ t.pilot_badge }}</span>
+              <span class="text-white text-xs font-bold uppercase tracking-widest">{{ t.limited_time_label or 'Limited Time' }} {{ t.pilot_badge or 'PILOT' }}</span>
             </div>
 
             <!-- Headline -->
