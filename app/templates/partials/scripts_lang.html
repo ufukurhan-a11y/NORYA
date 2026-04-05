@@ -41,6 +41,7 @@
     menu.classList.add('hidden');
     menu.classList.remove('is-open', 'open', 'show', 'visible', 'opacity-100', 'translate-y-0', 'scale-100');
     menu.classList.add('opacity-0', 'invisible', 'pointer-events-none');
+    menu.setAttribute('hidden', '');
     menu.setAttribute('aria-hidden', 'true');
     menu.style.display = 'none';
     menu.style.visibility = 'hidden';
@@ -52,6 +53,7 @@
     if (!menu) return;
     menu.classList.remove('hidden', 'opacity-0', 'invisible', 'pointer-events-none');
     menu.classList.add('is-open', 'open', 'show', 'visible', 'opacity-100', 'translate-y-0', 'scale-100');
+    menu.removeAttribute('hidden');
     menu.setAttribute('aria-hidden', 'false');
     menu.style.display = 'block';
     menu.style.visibility = 'visible';
