@@ -131,7 +131,7 @@ const ADMIN_SECRET = sessionStorage.getItem('norya_admin_secret') || '';
 
 async function loadPosts() {
   try {
-    const res = await fetch('/admin/blog?limit=100', {
+    const res = await fetch('/admin/blog/api/posts?limit=100', {
       headers: { 'X-Admin-Secret': ADMIN_SECRET }
     });
     if (!res.ok) throw new Error(res.status);
@@ -185,7 +185,7 @@ function closeModal() {
 
 async function editPost(id) {
   try {
-    const res = await fetch(`/admin/blog/${id}`, {
+    const res = await fetch(`/admin/blog/api/posts/${id}`, {
       headers: { 'X-Admin-Secret': ADMIN_SECRET }
     });
     if (!res.ok) throw new Error(res.status);
@@ -227,7 +227,7 @@ async function savePost(e) {
   };
   
   try {
-    const url = id ? `/admin/blog/${id}` : '/admin/blog';
+    const url = id ? `/admin/blog/api/posts/${id}` : '/admin/blog/api/posts';
     const method = id ? 'PUT' : 'POST';
     const res = await fetch(url, {
       method,
@@ -251,7 +251,7 @@ async function savePost(e) {
 
 async function togglePublish(id) {
   try {
-    const res = await fetch(`/admin/blog/${id}/toggle-publish`, {
+    const res = await fetch(`/admin/blog/api/posts/${id}/toggle-publish`, {
       method: 'POST',
       headers: { 'X-Admin-Secret': ADMIN_SECRET },
     });
@@ -265,7 +265,7 @@ async function togglePublish(id) {
 async function deletePost(id) {
   if (!confirm('Bu yazıyı silmek istediğinize emin misiniz?')) return;
   try {
-    const res = await fetch(`/admin/blog/${id}`, {
+    const res = await fetch(`/admin/blog/api/posts/${id}`, {
       method: 'DELETE',
       headers: { 'X-Admin-Secret': ADMIN_SECRET },
     });
