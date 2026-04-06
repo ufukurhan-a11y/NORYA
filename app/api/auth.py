@@ -16,7 +16,7 @@ from app.core.security import (
     verify_password,
 )
 from app.api.deps import get_current_user
-from app.models import AuditLog, EmailVerifyToken, GuestLoginToken, PasswordResetToken, Presence, SecurityLog, User
+from app.models import AuditLog, EmailVerifyToken, GuestLoginToken, PasswordResetToken, Presence, SecurityLog, User, UserRegistration
 from app.schemas import (
     ChangePasswordRequest,
     DeleteAccountRequest,
@@ -72,6 +72,51 @@ def _send_reset_email(email: str, token: str, lang: str, expiry_hours: int = 1) 
     send_password_reset_email(email, reset_link, lang, expiry_hours)
 
 
+def _upsert_registration(
+    db: Session,
+    email: str,
+    full_name: str,
+    user_id: int | None,
+    status: str,
+    source: str,
+    ip_address: str | None,
+    user_agent: str | None,
+    mail_sent: bool = False,
+    mail_error: str | None = None,
+) -> None:
+    """UserRegistration kaydını oluşturur veya günceller."""
+    try:
+        stmt = select(UserRegistration).where(UserRegistration.email == email).order_by(UserRegistration.created_at.desc()).limit(1)
+        existing = db.exec(stmt).first()
+        now = datetime.utcnow()
+        if existing:
+            existing.status = status
+            existing.user_id = user_id or existing.user_id
+            existing.full_name = full_name or existing.full_name
+            if mail_sent:
+                existing.verification_mail_sent_at = now
+            if mail_error:
+                existing.mail_send_error = mail_error
+            db.add(existing)
+        else:
+            rec = UserRegistration(
+                email=email,
+                full_name=full_name or "",
+                user_id=user_id,
+                status=status,
+                source=source,
+                ip_address=ip_address,
+                user_agent=user_agent,
+                verification_mail_sent_at=now if mail_sent else None,
+                mail_send_error=mail_error,
+            )
+            db.add(rec)
+        db.commit()
+    except Exception as e:
+        log.warning("UserRegistration upsert failed: %s", e)
+
+
+
 @router.post("/register", response_model=UserResponse)
 @limiter.limit(_REGISTER_LIMIT)
 async def register(
@@ -108,10 +153,19 @@ async def register(
             existing.phone = phone or existing.phone
             existing.country = country or existing.country
             existing.account_claimed_at = datetime.utcnow()
+            existing.full_name = full_name or existing.full_name or ""
+            existing.phone = phone or existing.phone
+            existing.country = country or existing.country
             db.add(existing)
             db.commit()
             db.refresh(existing)
             _audit(db, "register_claim", existing.id, _client_ip(request))
+            ip = _client_ip(request)
+            ua = request.headers.get("user-agent", "") or None
+            _upsert_registration(
+                db, email=existing.email, full_name=full_name or "", user_id=existing.id or None,
+                status="pending", source="guest_claim", ip_address=ip, user_agent=ua, mail_sent=False,
+            )
             return UserResponse(
                 id=existing.id or 0,
                 email=existing.email,
@@ -123,6 +177,7 @@ async def register(
                 created_at=getattr(existing, "created_at", None),
                 purchase_linked=True,
             )
+
         user = User(
             email=email,
             hashed_password=hash_password(password),
@@ -147,12 +202,21 @@ async def register(
         from app.services.email_sender import is_mail_configured
 
         verify_email_sent = False
+        mail_error = None
         if is_mail_configured():
             try:
                 _send_verify_email(email, token_str, (get_geo_from_ip(ip)[0] if ip else None))
                 verify_email_sent = True
             except Exception as e:
+                mail_error = str(e)
                 log.warning("Verify email send failed (user created): %s", e)
+
+        _upsert_registration(
+            db, email=email, full_name=full_name, user_id=user.id or None,
+            status="pending", source="signup", ip_address=ip,
+            user_agent=request.headers.get("user-agent", "") or None,
+            mail_sent=verify_email_sent, mail_error=mail_error,
+        )
         _audit(db, "register", user.id, ip)
         country = get_geo_from_ip(ip)[0]
         if country and not getattr(user, "country", None):
@@ -386,6 +450,12 @@ def verify_email(token: str, db: Session = Depends(get_db)):
     if user:
         user.email_verified_at = datetime.utcnow()
         db.add(user)
+        # UserRegistration kaydını verified olarak güncelle
+        _upsert_registration(
+            db, email=user.email, full_name=getattr(user, "full_name", "") or "",
+            user_id=user.id or None, status="verified", source="signup",
+            ip_address=None, user_agent=None, mail_sent=False,
+        )
     db.delete(row)
     db.commit()
     return {"message": "E-posta adresiniz doğrulandı."}

@@ -20,6 +20,7 @@ from .tokens import EmailVerifyToken, GuestLoginToken, PasswordResetToken, Share
 from .push_subscription import PushSubscription
 from .upload_log import UploadLog
 from .user import User
+from .user_registration import UserRegistration
 
 __all__ = [
     "AnalysisRecord",
@@ -51,4 +52,5 @@ __all__ = [
     "PushSubscription",
     "ShareToken",
     "User",
+    "UserRegistration",
 ]

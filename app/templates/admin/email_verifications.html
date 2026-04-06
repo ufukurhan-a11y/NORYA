@@ -1,0 +1,136 @@
+{% extends "admin/base_admin.html" %}
+{% block title %}E-posta Doğrulama - Norya Admin{% endblock %}
+{% block admin_header_title %}E-posta doğrulama kayıtları{% endblock %}
+{% block content %}
+<div class="flex flex-col lg:flex-row lg:items-end lg:justify-between gap-6 mb-8">
+  <div>
+    <h2 class="text-3xl font-extrabold font-headline tracking-tight text-on-surface mb-2">E-posta doğrulama</h2>
+    <p class="text-on-surface-variant max-w-lg text-sm">Kayıt olan kullanıcıların e-posta doğrulama durumunu izleyin. Verify maili gönderilen ama linke tıklamayan kullanıcılar <span class="inline-block px-2 py-0.5 text-xs rounded-full bg-yellow-100 text-yellow-800 font-semibold">pending</span> olarak görünür.</p>
+  </div>
+</div>
+
+<!-- Status filter pills -->
+<div class="flex flex-wrap items-center gap-2 mb-4">
+  <a href="?status_filter=all{{ ('&q=' + q) if q else '' }}{{ ('&sort=' + sort) if sort else '' }}"
+     class="px-4 py-2 rounded-full text-sm font-semibold transition-colors {% if status_filter == 'all' %}bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">
+    All
+  </a>
+  <a href="?status_filter=pending{{ ('&q=' + q) if q else '' }}{{ ('&sort=' + sort) if sort else '' }}"
+     class="px-4 py-2 rounded-full text-sm font-semibold transition-colors {% if status_filter == 'pending' %}bg-yellow-500 text-white{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">
+    Pending
+  </a>
+  <a href="?status_filter=verified{{ ('&q=' + q) if q else '' }}{{ ('&sort=' + sort) if sort else '' }}"
+     class="px-4 py-2 rounded-full text-sm font-semibold transition-colors {% if status_filter == 'verified' %}bg-emerald-600 text-white{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">
+    Verified
+  </a>
+  <a href="?status_filter=failed{{ ('&q=' + q) if q else '' }}{{ ('&sort=' + sort) if sort else '' }}"
+     class="px-4 py-2 rounded-full text-sm font-semibold transition-colors {% if status_filter == 'failed' %}bg-red-600 text-white{% else %}bg-surface-container-high text-on-surface-variant hover:bg-surface-container{% endif %}">
+    Failed
+  </a>
+</div>
+
+<!-- Search + Sort -->
+<form method="get" class="flex flex-wrap items-center gap-3 mb-6">
+  <div class="relative">
+    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-xl">search</span>
+    <input type="text" name="q" value="{{ q }}" placeholder="E-posta ara…" class="pl-11 pr-4 py-2.5 rounded-full bg-surface-container-low border-0 text-sm w-64 max-w-full focus:ring-2 focus:ring-primary-container/25 focus:bg-white transition-all placeholder:text-outline/70" />
+  </div>
+  <button type="submit" class="px-6 py-2.5 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02] transition-all">Ara</button>
+  <select name="sort" class="px-4 py-2.5 rounded-full bg-surface-container-low border-0 text-sm text-on-surface focus:ring-2 focus:ring-primary-container/25 transition-all ml-auto">
+    <option value="newest" {% if sort == "newest" %}selected{% endif %}>En yeni</option>
+    <option value="oldest" {% if sort == "oldest" %}selected{% endif %}>En eski</option>
+  </select>
+</form>
+
+<!-- Table -->
+<div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden">
+  <div class="overflow-x-auto">
+    <table class="w-full text-sm">
+      <thead>
+        <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low/90">
+          <th class="px-5 py-3">ID</th>
+          <th class="px-5 py-3">E-posta</th>
+          <th class="px-5 py-3">Ad</th>
+          <th class="px-5 py-3">Durum</th>
+          <th class="px-5 py-3">Kayıt Tarihi</th>
+          <th class="px-5 py-3">Doğrulama Tarihi</th>
+          <th class="px-5 py-3">Mail Gönderildi</th>
+          <th class="px-5 py-3">Kaynak</th>
+          <th class="px-5 py-3">IP</th>
+          <th class="px-5 py-3"></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for r in records %}
+        <tr class="hover:bg-surface-container-low/50 transition-colors">
+          <td class="px-5 py-3 text-on-surface-variant font-mono text-xs">{{ r.id }}</td>
+          <td class="px-5 py-3 font-medium text-on-surface">
+            <span class="cursor-pointer select-text" onclick="navigator.clipboard.writeText('{{ r.email }}'); this.title='Kopyalandı!';" title="E-postayı kopyalamak için tıklayın">{{ r.email }}</span>
+          </td>
+          <td class="px-5 py-3 text-on-surface-variant text-xs">{{ r.full_name }}</td>
+          <td class="px-5 py-3">
+            {% if r.status == 'verified' %}
+              <span class="inline-block px-3 py-1 text-xs rounded-full bg-emerald-100 text-emerald-800 font-semibold">Verified</span>
+            {% elif r.status == 'pending' %}
+              <span class="inline-block px-3 py-1 text-xs rounded-full bg-yellow-100 text-yellow-800 font-semibold">Pending</span>
+            {% elif r.status == 'failed' %}
+              <span class="inline-block px-3 py-1 text-xs rounded-full bg-red-100 text-red-800 font-semibold">Failed</span>
+            {% else %}
+              <span class="inline-block px-3 py-1 text-xs rounded-full bg-gray-100 text-gray-600 font-semibold">{{ r.status }}</span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-3 text-on-surface-variant text-xs">{{ r.created_at }}</td>
+          <td class="px-5 py-3 text-on-surface-variant text-xs">{{ r.verified_at }}</td>
+          <td class="px-5 py-3 text-on-surface-variant text-xs">{{ r.verification_mail_sent_at }}</td>
+          <td class="px-5 py-3 text-on-surface-variant text-xs">{{ r.source }}</td>
+          <td class="px-5 py-3 text-on-surface-variant text-xs font-mono">{{ r.ip_address }}</td>
+          <td class="px-5 py-3 whitespace-nowrap">
+            {% if r.status == 'pending' or r.status == 'failed' %}
+            <form method="post" action="/admin/email-verifications/{{ r.id }}/resend-verification" class="inline">
+              <button type="submit" class="text-amber-700 font-semibold hover:text-amber-900 text-xs mr-2" title="Tekrar doğrulama maili gönder">
+                ↻ Yeniden Gönder
+              </button>
+            </form>
+            {% endif %}
+            {% if r.user_id and r.user_exists %}
+            <a href="/admin/users/{{ r.user_id }}" class="text-primary font-semibold hover:text-primary-container hover:underline text-xs">Detay</a>
+            {% else %}
+            <span class="text-gray-400 text-xs">—</span>
+            {% endif %}
+          </td>
+        </tr>
+        {% else %}
+        <tr><td colspan="10" class="px-5 py-10 text-center text-on-surface-variant">Kayıt bulunamadı.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- Summary stats -->
+<div class="mt-6 grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
+  {% set ns = namespace(total=0, pending=0, verified=0, failed=0) %}
+  {% for r in records %}
+    {% set ns.total = ns.total + 1 %}
+    {% if r.status == 'pending' %}{% set ns.pending = ns.pending + 1 %}{% endif %}
+    {% if r.status == 'verified' %}{% set ns.verified = ns.verified + 1 %}{% endif %}
+    {% if r.status == 'failed' %}{% set ns.failed = ns.failed + 1 %}{% endif %}
+  {% endfor %}
+  <div class="bg-surface-container-low rounded-xl p-4 text-center">
+    <div class="text-2xl font-bold text-on-surface">{{ ns.total }}</div>
+    <div class="text-xs text-on-surface-variant mt-1">Toplam Kayıt</div>
+  </div>
+  <div class="bg-yellow-50 rounded-xl p-4 text-center">
+    <div class="text-2xl font-bold text-yellow-800">{{ ns.pending }}</div>
+    <div class="text-xs text-yellow-700 mt-1">Pending</div>
+  </div>
+  <div class="bg-emerald-50 rounded-xl p-4 text-center">
+    <div class="text-2xl font-bold text-emerald-800">{{ ns.verified }}</div>
+    <div class="text-xs text-emerald-700 mt-1">Verified</div>
+  </div>
+  <div class="bg-red-50 rounded-xl p-4 text-center">
+    <div class="text-2xl font-bold text-red-800">{{ ns.failed }}</div>
+    <div class="text-xs text-red-700 mt-1">Failed</div>
+  </div>
+</div>
+{% endblock %}

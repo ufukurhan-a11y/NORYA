@@ -190,6 +190,12 @@ def init_db():
             "ALTER TABLE email_leads ADD COLUMN drip_step INTEGER DEFAULT 0",
             "ALTER TABLE email_leads ADD COLUMN drip_last_sent_at DATETIME",
             "ALTER TABLE email_leads ADD COLUMN unsubscribed BOOLEAN DEFAULT 0",
+            # User registration tracking (email verification admin)
+            "CREATE TABLE IF NOT EXISTS userregistration (id INTEGER, email VARCHAR, full_name VARCHAR DEFAULT '', status VARCHAR DEFAULT 'pending', user_id INTEGER, verification_mail_sent_at DATETIME, mail_send_error VARCHAR, source VARCHAR, ip_address VARCHAR, user_agent VARCHAR, created_at DATETIME, verified_at DATETIME, PRIMARY KEY (id))",
+            "CREATE INDEX IF NOT EXISTS ix_userregistration_email ON userregistration (email)",
+            "CREATE INDEX IF NOT EXISTS ix_userregistration_status ON userregistration (status)",
+            "CREATE INDEX IF NOT EXISTS ix_userregistration_user_id ON userregistration (user_id)",
+            "CREATE INDEX IF NOT EXISTS ix_userregistration_created_at ON userregistration (created_at)",
         ):
             try:
                 with engine.connect() as conn:
