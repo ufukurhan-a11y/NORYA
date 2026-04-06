@@ -8,6 +8,7 @@ from app.admin.routers import (
     blog,
     coupons,
     dashboard,
+    email_verifications,
     enterprise_leads,
     errors,
     institutions,
@@ -27,6 +28,7 @@ admin_router = APIRouter(prefix="/admin", tags=["admin"])
 
 admin_router.include_router(dashboard.router, include_in_schema=False)
 admin_router.include_router(users.router, prefix="/users", tags=["admin-users"])
+admin_router.include_router(email_verifications.router, prefix="/email-verifications", tags=["admin-email-verifications"])
 admin_router.include_router(analyses.router, prefix="/analyses", tags=["admin-analyses"])
 admin_router.include_router(reports.router, prefix="/reports", tags=["admin-reports"])
 admin_router.include_router(live.router, prefix="/live", tags=["admin-live"])

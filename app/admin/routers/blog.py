@@ -236,6 +236,122 @@ async def delete_blog_post(
 
 
 # ─────────────────────────────────────────────────────────────────────────────
+# Blog API: konular (topic) listesi — slug prefix'e göre gruplar
+# ─────────────────────────────────────────────────────────────────────────────
+
+@router.get("/api/topics")
+async def list_blog_topics(
+    _=Depends(require_admin_secret_or_cookie),
+    db: Session = Depends(get_db),
+) -> JSONResponse:
+    """Blog yazılarını konu bazlı grupla (slug'un ilk iki parçası topic_id olur)."""
+    import re
+    posts = list(db.exec(select(BlogPost).order_by(BlogPost.created_at.desc())).all())
+
+    # Topic grouping: slug'dan ortak kimlik çıkar
+    # ör: "en-apob-cholesterol-meaning" → "apob-cholesterol-meaning" (dil prefix'i at)
+    BLOG_LANGS = {"tr","en","de","fr","it","es","he","hi","ar"}
+    
+    topics = {}
+    for p in posts:
+        parts = p.slug.split("-", 1)
+        if parts[0] in BLOG_LANGS and len(parts) > 1:
+            topic_key = parts[1]
+        else:
+            topic_key = p.slug
+        
+        if topic_key not in topics:
+            topics[topic_key] = {
+                "topic_id": topic_key,
+                "cover_image": p.cover_image,
+                "category": p.category,
+                "versions": [],
+                "published_count": 0,
+                "total_count": 0,
+                "all_published": True,
+                "first_created": p.created_at,
+                "latest_updated": p.updated_at or p.created_at,
+            }
+        
+        t = topics[topic_key]
+        ver = {
+            "id": p.id,
+            "lang": p.lang,
+            "title": p.title,
+            "slug": p.slug,
+            "is_published": p.is_published,
+            "cover_image": p.cover_image,
+            "published_at": p.published_at.isoformat() if p.published_at else None,
+        }
+        t["versions"].append(ver)
+        t["total_count"] += 1
+        if p.is_published:
+            t["published_count"] += 1
+        else:
+            t["all_published"] = False
+        if p.cover_image and not t["cover_image"]:
+            t["cover_image"] = p.cover_image
+        if p.created_at and p.created_at < t["first_created"]:
+            t["first_created"] = p.created_at
+    # Update latest_updated
+    for t in topics.values():
+        for p in posts:
+            parts = p.slug.split("-", 1)
+            pk = parts[1] if len(parts) > 1 and parts[0] in BLOG_LANGS else p.slug
+            if pk == t["topic_id"]:
+                upd = p.updated_at or p.created_at
+                if upd and upd > t["latest_updated"]:
+                    t["latest_updated"] = upd
+
+    result = sorted(topics.values(), key=lambda x: x["latest_updated"] or "", reverse=True)
+    return JSONResponse(result)
+
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Blog API: bir konudaki TÜM yazıları yayınla / yayından kaldır
+# ─────────────────────────────────────────────────────────────────────────────
+
+@router.post("/api/topics/{topic_id}/publish-all", response_class=JSONResponse)
+async def publish_all_topic(
+    topic_id: str,
+    _=Depends(require_admin_secret_or_cookie),
+    db: Session = Depends(get_db),
+) -> JSONResponse:
+    """Bir konudaki tüm dil versiyonlarını aynı anda yayınla veya yayından kaldır."""
+    BLOG_LANGS = {"tr","en","de","fr","it","es","he","hi","ar"}
+    
+    # Önce bu konuya ait tüm postları bul
+    all_posts = list(db.exec(select(BlogPost).order_by(BlogPost.id)).all())
+    topic_post_ids = []
+    for p in all_posts:
+        parts = p.slug.split("-", 1)
+        pk = parts[1] if len(parts) > 1 and parts[0] in BLOG_LANGS else p.slug
+        if pk == topic_id:
+            topic_post_ids.append(p.id)
+
+    if not topic_post_ids:
+        raise HTTPException(status_code=404, detail=f"Konu bulunamadı: {topic_id}")
+
+    # Mevcut durum: hepsi yayında mı?
+    topic_posts = [db.get(BlogPost, pid) for pid in topic_post_ids]
+    all_published = all(p.is_published for p in topic_posts)
+    
+    # Toggle: hepsi yayındaysa yayından al, değilse yayınla
+    new_state = not all_published
+    now = datetime.utcnow()
+    
+    for p in topic_posts:
+        p.is_published = new_state
+        p.updated_at = now
+        if new_state and not p.published_at:
+            p.published_at = now
+
+    db.commit()
+    action = "yayınlandı" if new_state else "yayından kaldırıldı"
+    return JSONResponse({"ok": True, "is_published": new_state, "count": len(topic_post_ids), "message": f"{len(topic_post_ids)} yazı {action}"})
+
+
+# ─────────────────────────────────────────────────────────────────────────────
 # Blog API: yayın toggle
 # ─────────────────────────────────────────────────────────────────────────────
 

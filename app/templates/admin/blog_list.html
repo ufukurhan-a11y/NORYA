@@ -1,58 +1,99 @@
 {% extends "admin/base_admin.html" %}
-{% block title %}Blog Yönetimi - Norya Admin{% endblock %}
-{% block admin_header_title %}Blog Yönetimi{% endblock %}
+{% block title %}Blog Yöntimi - Norya Admin{% endblock %}
+{% block admin_header_title %}Blog Yöntimi{% endblock %}
 {% block extra_head %}
 <style>
-  .btn { padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; }
+  .btn { padding: 0.5rem 1rem; border-radius: 8px; font-weight: 600; cursor: pointer; border: none; font-size: 0.875rem; }
   .btn-primary { background: #0ea5a4; color: white; }
   .btn-primary:hover { background: #0d9488; }
-  .btn-sm { padding: 0.25rem 0.5rem; font-size: 0.85rem; }
+  .btn-sm { padding: 0.2rem 0.5rem; font-size: 0.8rem; }
+  .btn-xs { padding: 0.15rem 0.35rem; font-size: 0.7rem; }
   .btn-danger { background: #ef4444; color: white; }
   .btn-success { background: #22c55e; color: white; }
-  table { width: 100%; border-collapse: collapse; }
-  th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid #e2e8f0; }
-  th { background: #f8fafc; font-weight: 600; }
-  .status-badge { padding: 0.25rem 0.5rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+  .btn-outline { background: transparent; border: 1px solid #cbd5e1; color: #475569; }
+  .btn-outline:hover { background: #f1f5f9; }
+  .status-badge { padding: 0.2rem 0.6rem; border-radius: 999px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; }
   .status-published { background: #dcfce7; color: #166534; }
   .status-draft { background: #f1f5f9; color: #475569; }
-  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; }
-  .modal.active { display: flex; align-items: center; justify-content: center; }
-  .modal-content { background: white; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 90vh; overflow-y: auto; }
+  .status-partial { background: #fef3c7; color: #92400e; }
+  .topic-card { background: white; border-radius: 12px; border: 1px solid #e2e8f0; margin-bottom: 1rem; overflow: hidden; }
+  .topic-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; user-select: none; border-bottom: 1px solid #f1f5f9; }
+  .topic-header:hover { background: #f8fafc; }
+  .topic-cover { width: 80px; height: 50px; object-fit: cover; border-radius: 6px; background: #f1f5f9; flex-shrink: 0; }
+  .topic-cover-placeholder { width: 80px; height: 50px; border-radius: 6px; background: linear-gradient(135deg, #0ea5a4, #06b6d4); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.75rem; flex-shrink: 0; }
+  .topic-info { flex: 1; min-width: 0; }
+  .topic-title { font-weight: 600; font-size: 0.95rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .topic-meta { font-size: 0.8rem; color: #64748b; margin-top: 0.15rem; }
+  .topic-actions { display: flex; gap: 0.4rem; flex-shrink: 0; }
+  .lang-grid { display: grid; gap: 0.25rem; }
+  .lang-row { display: flex; align-items: center; gap: 0.75rem; padding: 0.5rem 1.25rem 0.5rem 1rem; border-top: 1px solid #f8fafc; font-size: 0.85rem; }
+  .lang-row:hover { background: #f8fafc; }
+  .lang-flag { font-size: 1.1rem; width: 24px; text-align: center; flex-shrink: 0; }
+  .lang-title { flex: 1; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .lang-actions { display: flex; gap: 0.3rem; flex-shrink: 0; }
+  .expand-icon { transition: transform 0.2s; color: #94a3b8; flex-shrink: 0; }
+  .expand-icon.expanded { transform: rotate(90deg); }
+  .hidden { display: none; }
+  .cover-preview-modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.7); z-index: 200; align-items: center; justify-content: center; }
+  .cover-preview-modal.active { display: flex; }
+  .cover-preview-modal img { max-width: 90vw; max-height: 90vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,0.5); }
+  .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; align-items: center; justify-content: center; }
+  .modal.active { display: flex; }
+  .modal-content { background: white; border-radius: 12px; padding: 2rem; max-width: 800px; width: 90%; max-height: 85vh; overflow-y: auto; }
   .form-group { margin-bottom: 1rem; }
-  .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; }
+  .form-group label { display: block; margin-bottom: 0.5rem; font-weight: 600; font-size: 0.875rem; }
   .form-group input, .form-group textarea, .form-group select { width: 100%; padding: 0.5rem; border: 1px solid #cbd5e1; border-radius: 6px; }
-  .form-group textarea { min-height: 200px; font-family: monospace; }
+  .form-group textarea { min-height: 200px; font-family: monospace; font-size: 0.8rem; }
+  .stats-bar { display: flex; gap: 1rem; margin-bottom: 1rem; flex-wrap: wrap; }
+  .stat-chip { background: white; border-radius: 8px; padding: 0.5rem 1rem; border: 1px solid #e2e8f0; font-size: 0.85rem; }
+  .stat-chip strong { color: #0ea5a4; }
+  .cover-thumb { width: 40px; height: 26px; object-fit: cover; border-radius: 3px; cursor: pointer; border: 1px solid #e2e8f0; }
+  .cover-thumb:hover { border-color: #0ea5a4; }
+  .publish-all-badge { background: #0ea5a4; color: white; padding: 0.15rem 0.5rem; border-radius: 999px; font-size: 0.65rem; font-weight: 700; margin-left: 0.5rem; }
 </style>
 {% endblock %}
+
 {% block content %}
 <div class="flex items-center justify-between mb-6">
   <div>
-    <h2 class="text-xl font-bold">Blog Yazıları</h2>
-    <p class="text-sm text-gray-600">Yeni blog yazısı ekleyin veya mevcut yazıları düzenleyin</p>
+    <h2 class="text-xl font-bold">Blog Yönetimi</h2>
+    <p class="text-sm text-gray-600">Konu bazlı görünüm — tek tıkla tüm dillerde yayınla</p>
   </div>
-  <button class="btn btn-primary" onclick="openNewPostModal()">
-    <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">add</span>
-    Yeni Yazı
-  </button>
+  <div class="flex gap-2">
+    <button class="btn btn-outline" onclick="switchView('flat')" id="btn-flat" title="Düz liste görünümü">
+      <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;">list</span>
+    </button>
+    <button class="btn btn-primary" onclick="openNewPostModal()">
+      <span class="material-symbols-outlined" style="font-size:16px;vertical-align:middle;margin-right:4px;">add</span>
+      Yeni Yazı
+    </button>
+  </div>
 </div>
 
-<div class="bg-white rounded-xl shadow overflow-hidden">
-  <table>
-    <thead>
-      <tr>
-        <th>ID</th>
-        <th>Başlık</th>
-        <th>Dil</th>
-        <th>Kategori</th>
-        <th>Durum</th>
-        <th>Yayın Tarihi</th>
-        <th>İşlemler</th>
-      </tr>
-    </thead>
-    <tbody id="blog-posts-body">
-      <tr><td colspan="7" class="text-center py-8">Yükleniyor...</td></tr>
-    </tbody>
-  </table>
+<div id="stats-bar" class="stats-bar"></div>
+
+<!-- Topic Görünümü (varsayılan) -->
+<div id="topic-view">
+  <div id="topics-container"></div>
+</div>
+
+<!-- Düz Liste Görünümü -->
+<div id="flat-view" class="hidden">
+  <div class="bg-white rounded-xl shadow overflow-hidden">
+    <table class="w-full">
+      <thead>
+        <tr>
+          <th style="padding:0.75rem;text-align:left;border-bottom:1px solid #e2e8f0;font-weight:600;">Görsel</th>
+          <th style="padding:0.75rem;text-align:left;border-bottom:1px solid #e2e8f0;font-weight:600;">Başlık</th>
+          <th style="padding:0.75rem;text-align:left;border-bottom:1px solid #e2e8f0;font-weight:600;">Dil</th>
+          <th style="padding:0.75rem;text-align:left;border-bottom:1px solid #e2e8f0;font-weight:600;">Kategori</th>
+          <th style="padding:0.75rem;text-align:left;border-bottom:1px solid #e2e8f0;font-weight:600;">Durum</th>
+          <th style="padding:0.75rem;text-align:left;border-bottom:1px solid #e2e8f0;font-weight:600;">İşlemler</th>
+        </tr>
+      </thead>
+      <tbody id="flat-body"></tbody>
+    </table>
+  </div>
 </div>
 
 <!-- Yeni/Düzenle Modal -->
@@ -60,14 +101,14 @@
   <div class="modal-content">
     <div class="flex items-center justify-between mb-4">
       <h3 id="modal-title" class="text-lg font-bold">Yeni Blog Yazısı</h3>
-      <button class="btn btn-sm" onclick="closeModal()">✕</button>
+      <button class="btn btn-sm btn-outline" onclick="closeModal()">✕</button>
     </div>
     <form id="post-form" onsubmit="savePost(event)">
       <input type="hidden" id="post-id">
       <div class="grid grid-cols-2 gap-4">
         <div class="form-group">
           <label>Slug *</label>
-          <input type="text" id="post-slug" required pattern="[a-z0-9-]+" title="Küçük harf, rakam ve tire only">
+          <input type="text" id="post-slug" required pattern="[a-z0-9\-]+" title="Küçük harf, rakam ve tire only">
         </div>
         <div class="form-group">
           <label>Dil *</label>
@@ -88,9 +129,15 @@
         <label>Başlık *</label>
         <input type="text" id="post-title" required>
       </div>
-      <div class="form-group">
-        <label>Meta Title</label>
-        <input type="text" id="post-meta-title">
+      <div class="grid grid-cols-2 gap-4">
+        <div class="form-group">
+          <label>Meta Title</label>
+          <input type="text" id="post-meta-title">
+        </div>
+        <div class="form-group">
+          <label>Kategori</label>
+          <input type="text" id="post-category">
+        </div>
       </div>
       <div class="form-group">
         <label>Meta Description</label>
@@ -100,81 +147,210 @@
         <label>İçerik (JSON) *</label>
         <textarea id="post-content" required placeholder='[{"id":"intro","level":2,"heading":"Başlık","body_html":"<p>İçerik</p>"}]'></textarea>
       </div>
-      <div class="grid grid-cols-2 gap-4">
-        <div class="form-group">
-          <label>Kategori</label>
-          <input type="text" id="post-category">
-        </div>
-        <div class="form-group">
-          <label>Yazar</label>
-          <input type="text" id="post-author">
-        </div>
+      <div class="form-group">
+        <label>Yazar</label>
+        <input type="text" id="post-author">
       </div>
       <div class="form-group">
         <label>Kapak Görseli</label>
-        <input type="text" id="post-cover" placeholder="/static/images/blog/...">
+        <div style="display:flex;gap:0.5rem;">
+          <input type="text" id="post-cover" placeholder="/static/images/blog/..." style="flex:1;">
+          <button type="button" class="btn btn-outline" onclick="previewCover(document.getElementById('post-cover').value)" title="Önizle">👁</button>
+        </div>
       </div>
       <div class="flex items-center gap-4 mb-4">
         <label><input type="checkbox" id="post-published"> Yayınla</label>
         <label><input type="checkbox" id="post-featured"> Öne Çıkar</label>
       </div>
       <div class="flex justify-end gap-2">
-        <button type="button" class="btn" onclick="closeModal()">İptal</button>
+        <button type="button" class="btn btn-outline" onclick="closeModal()">İptal</button>
         <button type="submit" class="btn btn-primary">Kaydet</button>
       </div>
     </form>
   </div>
 </div>
 
+<!-- Görsel Önizleme Modal -->
+<div id="cover-preview-modal" class="cover-preview-modal" onclick="this.classList.remove('active')">
+  <img id="cover-preview-img" src="" alt="Kapak önizleme">
+</div>
+
 <script>
 const ADMIN_SECRET = sessionStorage.getItem('norya_admin_secret') || '';
+const LANG_FLAGS = {tr:'🇹🇷',en:'🇬🇧',de:'🇩🇪',fr:'🇫🇷',it:'🇮🇹',es:'🇪🇸',he:'🇮🇱',ar:'🇸🇦',hi:'🇮🇳'};
+const LANG_NAMES = {tr:'Türkçe',en:'English',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',he:'עברית',ar:'العربية',hi:'हिन्दी'};
 
-async function loadPosts() {
+let topics = [];
+let flatPosts = [];
+
+async function loadTopics() {
   try {
-    const res = await fetch('/admin/blog/api/posts?limit=100', {
+    const res = await fetch('/admin/blog/api/topics', {
       headers: { 'X-Admin-Secret': ADMIN_SECRET }
     });
     if (!res.ok) throw new Error(res.status);
-    const posts = await res.json();
-    renderPosts(posts);
+    topics = await res.json();
+    renderTopics();
+    renderStats();
   } catch (e) {
-    document.getElementById('blog-posts-body').innerHTML = '<tr><td colspan="7" class="text-center py-8 text-red-600">Yükleme hatası: ' + e.message + '</td></tr>';
+    document.getElementById('topics-container').innerHTML =
+      '<div class="text-center py-8 text-red-600">Yükleme hatası: ' + e.message + '</div>';
   }
 }
 
-function renderPosts(posts) {
-  const tbody = document.getElementById('blog-posts-body');
-  if (!posts || posts.length === 0) {
-    tbody.innerHTML = '<tr><td colspan="7" class="text-center py-8">Henüz blog yazısı yok.</td></tr>';
+async function loadFlat() {
+  try {
+    const res = await fetch('/admin/blog/api/posts?limit=500', {
+      headers: { 'X-Admin-Secret': ADMIN_SECRET }
+    });
+    if (!res.ok) throw new Error(res.status);
+    flatPosts = await res.json();
+    renderFlat();
+  } catch (e) {
+    document.getElementById('flat-body').innerHTML =
+      '<tr><td colspan="6" class="text-center py-8 text-red-600">Yükleme hatası: ' + e.message + '</td></tr>';
+  }
+}
+
+function renderStats() {
+  let total = 0, published = 0, draftCount = 0, topicCount = topics.length;
+  topics.forEach(t => { total += t.total_count; published += t.published_count; draftCount += (t.total_count - t.published_count); });
+  document.getElementById('stats-bar').innerHTML =
+    '<div class="stat-chip"><strong>' + topicCount + '</strong> Konu</div>' +
+    '<div class="stat-chip"><strong>' + total + '</strong> Toplam Yazı</div>' +
+    '<div class="stat-chip"><strong style="color:#22c55e;">' + published + '</strong> Yayında</div>' +
+    '<div class="stat-chip"><strong style="color:#f59e0b;">' + draftCount + '</strong> Taslak</div>';
+}
+
+function renderTopics() {
+  const container = document.getElementById('topics-container');
+  if (!topics || topics.length === 0) {
+    container.innerHTML = '<div class="text-center py-12 text-gray-500 bg-white rounded-xl"><p style="font-size:1.5rem;">📝</p><p>Henüz blog yazısı yok. "Yeni Yazı" butonuyla ekleyin.</p></div>';
     return;
   }
-  tbody.innerHTML = posts.map(p => `
-    <tr>
-      <td>${p.id}</td>
-      <td><strong>${escapeHtml(p.title)}</strong><br><small class="text-gray-500">${p.slug}</small></td>
-      <td>${p.lang}</td>
-      <td>${p.category || '-'}</td>
-      <td><span class="status-badge ${p.is_published ? 'status-published' : 'status-draft'}">${p.is_published ? 'Yayında' : 'Taslak'}</span></td>
-      <td>${p.published_at ? new Date(p.published_at).toLocaleDateString('tr-TR') : '-'}</td>
-      <td>
-        <button class="btn btn-sm btn-primary" onclick="editPost(${p.id})">Düzenle</button>
-        <button class="btn btn-sm ${p.is_published ? 'btn-danger' : 'btn-success'}" onclick="togglePublish(${p.id})">${p.is_published ? 'Yayından Kaldır' : 'Yayınla'}</button>
-        <button class="btn btn-sm btn-danger" onclick="deletePost(${p.id})">Sil</button>
-      </td>
-    </tr>
-  `).join('');
+  container.innerHTML = topics.map((t, idx) => {
+    const allP = t.all_published;
+    const noneP = t.published_count === 0;
+    const someP = !allP && !noneP;
+    let statusClass = allP ? 'status-published' : (someP ? 'status-partial' : 'status-draft');
+    let statusText = allP ? 'Tümü Yayında' : (someP ? (t.published_count + '/' + t.total_count) : 'Tümü Taslak');
+    
+    let coverHTML = t.cover_image
+      ? '<img class="topic-cover" src="' + esc(t.cover_image) + '" alt="Kapak" onclick="previewCover(\'' + esc(t.cover_image) + '\')" title="Görseli büyüt">'
+      : '<div class="topic-cover-placeholder">' + t.topic_id.substring(0, 6).toUpperCase() + '</div>';
+    
+    let versionsHTML = t.versions.map(v =>
+      '<div class="lang-row">' +
+      '<span class="lang-flag">' + (LANG_FLAGS[v.lang] || v.lang) + '</span>' +
+      '<span class="lang-title">' + esc(v.title) + '<br><small style="color:#94a3b8;font-size:0.75rem;">' + esc(v.slug) + '</small></span>' +
+      '<span class="status-badge ' + (v.is_published ? 'status-published' : 'status-draft') + '">' + (v.is_published ? 'Yayında' : 'Taslak') + '</span>' +
+      '<span class="lang-actions">' +
+      '<button class="btn btn-xs btn-outline" onclick="editPost(' + v.id + ')">Düzenle</button>' +
+      '<button class="btn btn-xs ' + (v.is_published ? 'btn-danger' : 'btn-success') + '" onclick="togglePublish(' + v.id + ')">' + (v.is_published ? '✕' : '✓') + '</button>' +
+      '<button class="btn btn-xs btn-danger" onclick="deletePost(' + v.id + ')">Sil</button>' +
+      '</span></div>'
+    ).join('');
+
+    return '<div class="topic-card">' +
+      '<div class="topic-header" onclick="toggleTopic(' + idx + ')">' +
+      '<span class="expand-icon" id="exp-' + idx + '">▶</span>' +
+      coverHTML +
+      '<div class="topic-info">' +
+      '<div class="topic-title">' + esc(t.versions[0]?.title || t.topic_id) + '</div>' +
+      '<div class="topic-meta">' + esc(t.category || '') + ' • ' + t.total_count + ' dil' +
+      (allP ? '<span class="publish-all-badge">TÜM DİLLERDE YAYINDA</span>' : '') +
+      '</div>' +
+      '</div>' +
+      '<div class="topic-actions">' +
+      '<span class="status-badge ' + statusClass + '">' + statusText + '</span>' +
+      '<button class="btn btn-sm ' + (allP ? 'btn-danger' : 'btn-success') + '" onclick="event.stopPropagation();publishAll(\'' + esc(t.topic_id) + '\')">' + (allP ? 'Tümünü Kaldır' : 'Tümünü Yayınla') + '</button>' +
+      '</div>' +
+      '</div>' +
+      '<div class="lang-grid hidden" id="langs-' + idx + '">' + versionsHTML + '</div>' +
+      '</div>';
+  }).join('');
 }
 
-function escapeHtml(s) {
-  if (!s) return '';
-  const d = document.createElement('div');
-  d.textContent = s;
-  return d.innerHTML;
+function renderFlat() {
+  const tbody = document.getElementById('flat-body');
+  if (!flatPosts || flatPosts.length === 0) {
+    tbody.innerHTML = '<tr><td colspan="6" class="text-center py-8">Henüz blog yazısı yok.</td></tr>';
+    return;
+  }
+  tbody.innerHTML = flatPosts.map(p => {
+    let coverImg = p.cover_image ?
+      ('<img class="cover-thumb" src="' + esc(p.cover_image) + '" alt="" onclick="previewCover(\'' + esc(p.cover_image) + '\')">') :
+      '<span style="color:#cbd5e1;font-size:0.75rem;">-</span>';
+    return '<tr>' +
+      '<td style="padding:0.75rem;">' + coverImg + '</td>' +
+      '<td style="padding:0.75rem;"><strong>' + esc(p.title) + '</strong><br><small class="text-gray-500">' + esc(p.slug) + '</small></td>' +
+      '<td style="padding:0.75rem;">' + (LANG_FLAGS[p.lang]||'') + ' ' + (LANG_NAMES[p.lang]||p.lang) + '</td>' +
+      '<td style="padding:0.75rem;">' + esc(p.category || '-') + '</td>' +
+      '<td style="padding:0.75rem;"><span class="status-badge ' + (p.is_published ? 'status-published' : 'status-draft') + '">' + (p.is_published ? 'Yayında' : 'Taslak') + '</span></td>' +
+      '<td style="padding:0.75rem;">' +
+      '<button class="btn btn-sm btn-outline" onclick="editPost(' + p.id + ')">Düzenle</button> ' +
+      '<button class="btn btn-sm ' + (p.is_published ? 'btn-danger' : 'btn-success') + '" onclick="togglePublish(' + p.id + ')">' + (p.is_published ? 'Yayından Kaldır' : 'Yayınla') + '</button> ' +
+      '<button class="btn btn-sm btn-danger" onclick="deletePost(' + p.id + ')">Sil</button>' +
+      '</td></tr>';
+  }).join('');
+}
+
+function toggleTopic(idx) {
+  const grid = document.getElementById('langs-' + idx);
+  const icon = document.getElementById('exp-' + idx);
+  if (grid.classList.contains('hidden')) {
+    grid.classList.remove('hidden');
+    icon.classList.add('expanded');
+  } else {
+    grid.classList.add('hidden');
+    icon.classList.remove('expanded');
+  }
+}
+
+function switchView(view) {
+  if (view === 'flat') {
+    document.getElementById('topic-view').classList.add('hidden');
+    document.getElementById('flat-view').classList.remove('hidden');
+    loadFlat();
+  } else {
+    document.getElementById('flat-view').classList.add('hidden');
+    document.getElementById('topic-view').classList.remove('hidden');
+    loadTopics();
+  }
+}
+
+async function publishAll(topicId) {
+  if (!confirm('Bu konudaki TÜM dil versiyonlarını yayına almak istediğinize emin misiniz?')) return;
+  try {
+    const res = await fetch('/admin/blog/api/topics/' + encodeURIComponent(topicId) + '/publish-all', {
+      method: 'POST',
+      headers: { 'X-Admin-Secret': ADMIN_SECRET }
+    });
+    if (!res.ok) throw new Error(res.status);
+    loadTopics();
+  } catch (e) { alert('Hata: ' + e.message); }
+}
+
+function previewCover(url) {
+  if (!url) return;
+  const img = document.getElementById('cover-preview-img');
+  img.src = url.startsWith('/') ? url : ('/static' + (url.startsWith('/') ? '' : '/') + url);
+  document.getElementById('cover-preview-modal').classList.add('active');
 }
 
 function openNewPostModal() {
   document.getElementById('post-id').value = '';
-  document.getElementById('post-form').reset();
+  document.getElementById('post-slug').value = '';
+  document.getElementById('post-lang').value = 'tr';
+  document.getElementById('post-title').value = '';
+  document.getElementById('post-meta-title').value = '';
+  document.getElementById('post-meta-description').value = '';
+  document.getElementById('post-content').value = '';
+  document.getElementById('post-category').value = '';
+  document.getElementById('post-author').value = '';
+  document.getElementById('post-cover').value = '';
+  document.getElementById('post-published').checked = false;
+  document.getElementById('post-featured').checked = false;
   document.getElementById('modal-title').textContent = 'Yeni Blog Yazısı';
   document.getElementById('post-modal').classList.add('active');
 }
@@ -185,7 +361,7 @@ function closeModal() {
 
 async function editPost(id) {
   try {
-    const res = await fetch(`/admin/blog/api/posts/${id}`, {
+    const res = await fetch('/admin/blog/api/posts/' + id, {
       headers: { 'X-Admin-Secret': ADMIN_SECRET }
     });
     if (!res.ok) throw new Error(res.status);
@@ -204,9 +380,7 @@ async function editPost(id) {
     document.getElementById('post-featured').checked = post.is_featured;
     document.getElementById('modal-title').textContent = 'Blog Yazısını Düzenle';
     document.getElementById('post-modal').classList.add('active');
-  } catch (e) {
-    alert('Yükleme hatası: ' + e.message);
-  }
+  } catch (e) { alert('Yükleme hatası: ' + e.message); }
 }
 
 async function savePost(e) {
@@ -225,58 +399,46 @@ async function savePost(e) {
     is_published: document.getElementById('post-published').checked,
     is_featured: document.getElementById('post-featured').checked,
   };
-  
   try {
-    const url = id ? `/admin/blog/api/posts/${id}` : '/admin/blog/api/posts';
+    const url = id ? '/admin/blog/api/posts/' + id : '/admin/blog/api/posts';
     const method = id ? 'PUT' : 'POST';
     const res = await fetch(url, {
       method,
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Admin-Secret': ADMIN_SECRET,
-      },
+      headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
       body: JSON.stringify(data),
     });
-    if (!res.ok) {
-      const err = await res.json();
-      throw new Error(err.detail || res.status);
-    }
-    closeModal();
-    loadPosts();
+    if (!res.ok) { const err = await res.json(); throw new Error(err.detail || res.status); }
+    closeModal(); loadTopics(); loadFlat();
     alert(id ? 'Güncellendi!' : 'Oluşturuldu!');
-  } catch (e) {
-    alert('Kayıt hatası: ' + e.message);
-  }
+  } catch (e) { alert('Kayıt hatası: ' + e.message); }
 }
 
 async function togglePublish(id) {
   try {
-    const res = await fetch(`/admin/blog/api/posts/${id}/toggle-publish`, {
+    const res = await fetch('/admin/blog/api/posts/' + id + '/toggle-publish', {
       method: 'POST',
       headers: { 'X-Admin-Secret': ADMIN_SECRET },
     });
     if (!res.ok) throw new Error(res.status);
-    loadPosts();
-  } catch (e) {
-    alert('Hata: ' + e.message);
-  }
+    loadTopics(); loadFlat();
+  } catch (e) { alert('Hata: ' + e.message); }
 }
 
 async function deletePost(id) {
   if (!confirm('Bu yazıyı silmek istediğinize emin misiniz?')) return;
   try {
-    const res = await fetch(`/admin/blog/api/posts/${id}`, {
+    const res = await fetch('/admin/blog/api/posts/' + id, {
       method: 'DELETE',
       headers: { 'X-Admin-Secret': ADMIN_SECRET },
     });
     if (!res.ok) throw new Error(res.status);
-    loadPosts();
-  } catch (e) {
-    alert('Silme hatası: ' + e.message);
-  }
+    loadTopics(); loadFlat();
+  } catch (e) { alert('Silme hatası: ' + e.message); }
 }
 
+function esc(s) { if (!s) return ''; const d = document.createElement('div'); d.textContent = s; return d.innerHTML; }
+
 // Init
-loadPosts();
+loadTopics();
 </script>
 {% endblock %}
