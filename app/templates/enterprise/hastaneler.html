@@ -23,7 +23,98 @@
 {% block head %}
   <!-- Hospital-specific utilities not in base.html critical CSS -->
   <style>
-    .text-slate-900{color:#0f172a!important}.text-slate-600{color:#475569!important}.text-teal-100{color:#ccfbf1!important}.text-teal-300{color:#5eead4!important}.text-teal-400{color:#2dd4bf!important}.text-teal-600{color:#0d9488!important}.text-teal-100\/90{color:rgba(204,251,241,.9)!important}.text-teal-200{color:#99f6e4!important}.text-teal-700{color:#0f766e!important}.text-cyan-200{color:#a5f3fc!important}.text-cyan-300{color:#67e8f9!important}.text-cyan-400{color:#22d3ee!important}.text-cyan-600{color:#0891b2!important}.text-green-300{color:#6ee7b7!important}.text-purple-200{color:#e9d5ff!important}.text-purple-300{color:#d8b4fe!important}.text-indigo-300{color:#a5b4fc!important}.text-orange-300{color:#fdba74!important}.text-red-300{color:#fca5a5!important}.text-blue-300{color:#93c5fd!important}.text-amber-200{color:#fde68a!important}.text-amber-300{color:#fcd34d!important}.from-\[\#003030\]{--tw-gradient-from:#003030!important;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to,transparent)!important}.via-\[\#004a4a\]{--tw-gradient-via:#004a4a!important;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-via,#004a4a),var(--tw-gradient-to,transparent)!important}.to-\[\#006a69\]{--tw-gradient-to:#006a69!important;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-via,#004a4a),var(--tw-gradient-to)!important}.backdrop-blur-xl{backdrop-filter:blur(24px)!important;-webkit-backdrop-filter:blur(24px)!important}.backdrop-blur-sm{backdrop-filter:blur(4px)!important;-webkit-backdrop-filter:blur(4px)!important}.bg-white\/10{background:rgba(255,255,255,.1)!important}.bg-white\/5{background:rgba(255,255,255,.05)!important}.bg-white\/20{background:rgba(255,255,255,.2)!important}.bg-white\/60{background:rgba(255,255,255,.6)!important}.bg-white\/95{background:rgba(255,255,255,.95)!important}.bg-white\/15{background:rgba(255,255,255,.15)!important}.text-white{color:#fff!important}.text-white\/85{color:rgba(255,255,255,.85)!important}.text-white\/80{color:rgba(255,255,255,.8)!important}.text-white\/70{color:rgba(255,255,255,.7)!important}.text-white\/60{color:rgba(255,255,255,.6)!important}.text-white\/50{color:rgba(255,255,255,.5)!important}.text-white\/90{color:rgba(255,255,255,.9)!important}.border-white\/30{border-color:rgba(255,255,255,.3)!important}.border-white\/20{border-color:rgba(255,255,255,.2)!important}.border-white\/15{border-color:rgba(255,255,255,.15)!important}.border-white\/10{border-color:rgba(255,255,255,.1)!important}.hover\:border-teal-400\/50:hover{border-color:rgba(45,212,191,.5)!important}.hover\:border-cyan-400\/50:hover{border-color:rgba(34,211,238,.5)!important}.hover\:border-purple-400\/50:hover{border-color:rgba(192,132,252,.5)!important}.hover\:border-amber-400\/50:hover{border-color:rgba(251,191,36,.5)!important}.hover\:bg-white\/20:hover{background:rgba(255,255,255,.2)!important}.from-teal-500\/10{--tw-gradient-from:rgba(20,184,166,.1)!important}.from-cyan-500\/10{--tw-gradient-from:rgba(6,182,212,.1)!important}.from-purple-500\/10{--tw-gradient-from:rgba(168,85,247,.1)!important}.from-amber-500\/10{--tw-gradient-from:rgba(245,158,11,.1)!important}.from-teal-500\/20{--tw-gradient-from:rgba(20,184,166,.2)!important}.from-teal-400{--tw-gradient-from:#2dd4bf!important}.to-cyan-400{--tw-gradient-to:#22d3ee!important}.to-teal-400{--tw-gradient-to:#2dd4bf!important}.from-cyan-400{--tw-gradient-from:#22d3ee!important}.bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))!important}.bg-teal-500\/30{background:rgba(20,184,166,.3)!important}.bg-teal-500\/20{background:rgba(20,184,166,.2)!important}.bg-cyan-500\/30{background:rgba(6,182,212,.3)!important}.bg-cyan-500\/15{background:rgba(6,182,212,.15)!important}.bg-purple-500\/30{background:rgba(168,85,247,.3)!important}.bg-amber-500\/30{background:rgba(245,158,11,.3)!important}.shadow-teal-500\/30{box-shadow:0 0 30px rgba(20,184,166,.3)!important}.shadow-teal-500\/50{box-shadow:0 0 50px rgba(20,184,166,.5)!important}.rounded-full{border-radius:9999px!important}.rounded-3xl{border-radius:1.5rem!important}.rounded-2xl{border-radius:1rem!important}.rounded-xl{border-radius:.75rem!important}.shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1)!important}.shadow-2xl{box-shadow:0 25px 50px -12px rgba(0,0,0,.25)!important}.blur-3xl{filter:blur(64px)!important}.overflow-hidden{overflow:hidden!important}.selection\:bg-primary-container *::selection{background-color:#0ea5a4!important}.selection\:text-on-primary-container *::selection{color:#003434!important}
+    /* === GLOBAL: Ensure ALL headings and text on light sections are dark/visible === */
+    h1,h2,h3,h4,h5,h6{color:#111827!important}
+    /* Light sections: all text dark */
+    .bg-surface{background:#f8f9fa!important}
+    .bg-surface-container{background:#f3f4f5!important}
+    .bg-surface-container-low{background:#f3f4f5!important}
+    .bg-surface-container-lowest{background:#ffffff!important}
+    /* Core text colors — force dark on light backgrounds */
+    .text-on-surface{color:#111827!important}
+    .text-on-surface-variant{color:#1f2937!important}
+    .text-slate-900{color:#0f172a!important}
+    .text-slate-600{color:#334155!important}
+    .text-slate-500{color:#475569!important}
+    .text-slate-400{color:#64748b!important}
+    /* Light-colored accent colors on dark bg (hero, premium sections) */
+    .text-teal-100{color:#ccfbf1!important}.text-teal-300{color:#5eead4!important}.text-teal-400{color:#2dd4bf!important}.text-teal-600{color:#0d9488!important}.text-teal-700{color:#0f766e!important}.text-teal-200{color:#99f6e4!important}
+    .text-teal-100\/90{color:rgba(204,251,241,.95)!important}
+    .text-cyan-200{color:#a5f3fc!important}.text-cyan-300{color:#67e8f9!important}.text-cyan-400{color:#22d3ee!important}.text-cyan-600{color:#0891b2!important}
+    .text-green-300{color:#6ee7b7!important}
+    .text-purple-200{color:#e9d5ff!important}.text-purple-300{color:#d8b4fe!important}
+    .text-indigo-300{color:#a5b4fc!important}
+    .text-orange-300{color:#fdba74!important}
+    .text-red-300{color:#fca5a5!important}
+    .text-blue-300{color:#93c5fd!important}
+    .text-amber-200{color:#fde68a!important}.text-amber-300{color:#fcd34d!important}
+    /* White text on dark backgrounds (hero / premium gradient CTA sections) */
+    .text-white{color:#ffffff!important}
+    .text-white\/90{color:rgba(255,255,255,.93)!important}
+    .text-white\/85{color:rgba(255,255,255,.93)!important}
+    .text-white\/80{color:rgba(255,255,255,.88)!important}
+    .text-white\/70{color:rgba(255,255,255,.82)!important}
+    .text-white\/60{color:rgba(255,255,255,.78)!important}
+    .text-white\/50{color:rgba(255,255,255,.78)!important}
+    /* Brand colors */
+    .text-primary{color:#006a69!important}
+    .text-primary-container{color:#0ea5a4!important}
+    .text-on-primary{color:#ffffff!important}
+    /* Border colors */
+    .border-white\/30{border-color:rgba(255,255,255,.3)!important}
+    .border-white\/20{border-color:rgba(255,255,255,.2)!important}
+    .border-white\/15{border-color:rgba(255,255,255,.15)!important}
+    .border-white\/10{border-color:rgba(255,255,255,.1)!important}
+    /* Background utilities */
+    .bg-white\/10{background:rgba(255,255,255,.1)!important}
+    .bg-white\/5{background:rgba(255,255,255,.05)!important}
+    .bg-white\/20{background:rgba(255,255,255,.2)!important}
+    .bg-white\/60{background:rgba(255,255,255,.6)!important}
+    .bg-white\/95{background:rgba(255,255,255,.95)!important}
+    .bg-white\/15{background:rgba(255,255,255,.15)!important}
+    /* Gradient stop classes */
+    .from-\[\#003030\]{--tw-gradient-from:#003030!important;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-to,transparent)!important}
+    .via-\[\#004a4a\]{--tw-gradient-via:#004a4a!important;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-via,#004a4a),var(--tw-gradient-to,transparent)!important}
+    .to-\[\#006a69\]{--tw-gradient-to:#006a69!important;--tw-gradient-stops:var(--tw-gradient-from),var(--tw-gradient-via,#004a4a),var(--tw-gradient-to)!important}
+    .from-teal-400{--tw-gradient-from:#2dd4bf!important}
+    .to-cyan-400{--tw-gradient-to:#22d3ee!important}
+    .to-teal-400{--tw-gradient-to:#2dd4bf!important}
+    .from-cyan-400{--tw-gradient-from:#22d3ee!important}
+    .bg-gradient-to-br{background-image:linear-gradient(to bottom right,var(--tw-gradient-stops))!important}
+    .from-teal-500\/10{--tw-gradient-from:rgba(20,184,166,.1)!important}
+    .from-cyan-500\/10{--tw-gradient-from:rgba(6,182,212,.1)!important}
+    .from-purple-500\/10{--tw-gradient-from:rgba(168,85,247,.1)!important}
+    .from-amber-500\/10{--tw-gradient-from:rgba(245,158,11,.1)!important}
+    .from-teal-500\/20{--tw-gradient-from:rgba(20,184,166,.2)!important}
+    .bg-teal-500\/30{background:rgba(20,184,166,.3)!important}
+    .bg-teal-500\/20{background:rgba(20,184,166,.2)!important}
+    .bg-cyan-500\/30{background:rgba(6,182,212,.3)!important}
+    .bg-cyan-500\/15{background:rgba(6,182,212,.15)!important}
+    .bg-purple-500\/30{background:rgba(168,85,247,.3)!important}
+    .bg-amber-500\/30{background:rgba(245,158,11,.3)!important}
+    /* Layout / blur helpers */
+    .backdrop-blur-xl{backdrop-filter:blur(24px)!important;-webkit-backdrop-filter:blur(24px)!important}
+    .backdrop-blur-sm{backdrop-filter:blur(4px)!important;-webkit-backdrop-filter:blur(4px)!important}
+    .blur-3xl{filter:blur(64px)!important}
+    .rounded-full{border-radius:9999px!important}
+    .rounded-3xl{border-radius:1.5rem!important}
+    .rounded-2xl{border-radius:1rem!important}
+    .rounded-xl{border-radius:.75rem!important}
+    .overflow-hidden{overflow:hidden!important}
+    /* Shadows */
+    .shadow-lg{box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -4px rgba(0,0,0,.1)!important}
+    .shadow-2xl{box-shadow:0 25px 50px -12px rgba(0,0,0,.25)!important}
+    .shadow-teal-500\/30{box-shadow:0 0 30px rgba(20,184,166,.3)!important}
+    .shadow-teal-500\/50{box-shadow:0 0 50px rgba(20,184,166,.5)!important}
+    /* hover helpers */
+    .hover\:border-teal-400\/50:hover{border-color:rgba(45,212,191,.5)!important}
+    .hover\:border-cyan-400\/50:hover{border-color:rgba(34,211,238,.5)!important}
+    .hover\:border-purple-400\/50:hover{border-color:rgba(192,132,252,.5)!important}
+    .hover\:border-amber-400\/50:hover{border-color:rgba(251,191,36,.5)!important}
+    .hover\:bg-white\/20:hover{background:rgba(255,255,255,.2)!important}
+    /* Selection */
+    .selection\:bg-primary-container *::selection{background-color:#0ea5a4!important}
+    .selection\:text-on-primary-container *::selection{color:#003434!important}
   </style>
 {% endblock %}
 {% block content %}
@@ -35,8 +126,8 @@
         <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-8 sm:h-9 w-auto object-contain" width="180" height="45" loading="eager" />
       </a>
       <nav class="hidden md:flex items-center gap-8">
-        <a href="/" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_home }}</a>
-        <a href="/kurumsal" class="text-on-surface-variant font-medium hover:text-primary transition-colors duration-300">{{ t.nav_enterprise }}</a>
+        <a href="/" class="text-on-surface font-medium hover:text-primary transition-colors duration-300">{{ t.nav_home }}</a>
+        <a href="/kurumsal" class="text-on-surface font-medium hover:text-primary transition-colors duration-300">{{ t.nav_enterprise }}</a>
         <a href="/hastaneler-icin" class="text-primary border-b-2 border-primary font-bold transition-colors duration-300">{{ t.nav_hospitals }}</a>
       </nav>
       <!-- Language Switcher -->
@@ -87,61 +178,59 @@
   <main class="pt-8 sm:pt-10">
 
     <!-- ═══════════════ 1. PREMIUM HERO ═══════════════ -->
-    <section id="genel" class="hosp-anchor relative overflow-hidden bg-gradient-to-br from-teal-900 via-teal-800 to-[#004a4a] pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 px-4 sm:px-8">
-      <!-- Premium Background Effects -->
-      <div class="absolute inset-0 overflow-hidden pointer-events-none">
-        <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-500/20 rounded-full blur-3xl animate-pulse"></div>
-        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-500/15 rounded-full blur-3xl animate-pulse" style="animation-delay: 1s;"></div>
-        <div class="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-gradient-to-r from-teal-500/10 to-cyan-500/10 rounded-full blur-3xl"></div>
+    <section id="genel" class="hosp-anchor relative overflow-hidden bg-gradient-to-b from-white via-teal-50 to-cyan-50 pt-20 pb-16 sm:pt-24 sm:pb-20 lg:pt-28 lg:pb-24 px-4 sm:px-8">
+      <!-- Premium Background Effects — decorative, non-blocking -->
+      <div class="absolute inset-0 overflow-hidden pointer-events-none z-0 opacity-30">
+        <div class="absolute -top-40 -right-40 w-96 h-96 bg-teal-200 rounded-full blur-3xl"></div>
+        <div class="absolute -bottom-40 -left-40 w-80 h-80 bg-cyan-200 rounded-full blur-3xl"></div>
       </div>
 
-      <div class="relative max-w-7xl mx-auto">
+      <div class="relative z-10 max-w-7xl mx-auto">
         <div class="flex flex-col lg:flex-row gap-12 lg:gap-16 items-center">
           <div class="flex-1 flex flex-col gap-6 sm:gap-8 text-center lg:text-left">
             <!-- Premium Badge -->
-            <div class="inline-flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full self-center lg:self-start">
+            <div class="inline-flex items-center gap-2 bg-teal-100/80 border border-teal-200/60 px-4 py-2 rounded-full self-center lg:self-start">
               <span class="relative flex h-2 w-2">
-                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-300 opacity-75"></span>
-                <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-400"></span>
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-teal-500 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-2 w-2 bg-teal-600"></span>
               </span>
-              <span class="text-teal-100 text-xs font-bold tracking-widest uppercase">{{ t.hero_label or 'AI TECHNOLOGY' }}</span>
+              <span class="text-teal-700 text-xs font-bold tracking-widest uppercase">{{ t.hero_label or 'AI TECHNOLOGY' }}</span>
             </div>
 
-            <h1 class="text-3xl sm:text-5xl lg:text-6xl xl:text-7xl font-extrabold font-headline leading-[1.05] tracking-tight text-white">
+            <h1 class="text-4xl md:text-6xl font-semibold tracking-tight text-slate-900 font-headline leading-[1.08]">
               {{ t.hero_title or '98.7% Accuracy Biomarker Analysis' }}
             </h1>
 
-            <p class="text-base sm:text-xl text-white/85 max-w-2xl leading-relaxed mx-auto lg:mx-0">
+            <p class="text-base md:text-lg leading-8 text-slate-600 max-w-2xl mx-auto lg:mx-0">
               {{ t.hero_subtitle or 'NoryaAI advanced machine learning models analyze your lab results in seconds and provide actionable insights for clinical teams.' }}
             </p>
 
             <!-- Premium Stats -->
-            <div class="grid grid-cols-3 gap-4 sm:gap-6 pt-4 border-t border-white/10 mt-2">
+            <div class="grid grid-cols-3 gap-4 sm:gap-6 pt-4 border-t border-slate-200/60 mt-2">
               <div class="text-center lg:text-left">
-                <div class="text-2xl sm:text-3xl font-extrabold text-white">{{ t.stat_1_value or '2M+' }}</div>
-                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_1_label or 'Reports Analyzed' }}</div>
+                <div class="text-2xl sm:text-3xl font-semibold text-slate-900">{{ t.stat_1_value or '2M+' }}</div>
+                <div class="text-xs sm:text-sm text-slate-600 font-medium mt-1">{{ t.stat_1_label or 'Reports Analyzed' }}</div>
               </div>
               <div class="text-center lg:text-left">
-                <div class="text-2xl sm:text-3xl font-extrabold text-white">{{ t.stat_2_value or '50+' }}</div>
-                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_2_label or 'Countries in Use' }}</div>
+                <div class="text-2xl sm:text-3xl font-semibold text-slate-900">{{ t.stat_2_value or '50+' }}</div>
+                <div class="text-xs sm:text-sm text-slate-600 font-medium mt-1">{{ t.stat_2_label or 'Countries in Use' }}</div>
               </div>
               <div class="text-center lg:text-left">
-                <div class="text-2xl sm:text-3xl font-extrabold text-white">{{ t.stat_3_value or '98.7%' }}</div>
-                <div class="text-xs sm:text-sm text-white/70 font-medium mt-1">{{ t.stat_3_label or 'Biomarker Accuracy' }}</div>
+                <div class="text-2xl sm:text-3xl font-semibold text-slate-900">{{ t.stat_3_value or '98.7%' }}</div>
+                <div class="text-xs sm:text-sm text-slate-600 font-medium mt-1">{{ t.stat_3_label or 'Biomarker Accuracy' }}</div>
               </div>
             </div>
 
             <!-- Premium CTA Buttons -->
             <div class="flex flex-wrap gap-3 sm:gap-4 mt-4 justify-center lg:justify-start">
-              <a href="#iletisim" class="group relative bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-900 px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-2xl shadow-teal-500/30 hover:shadow-teal-500/50 transition-all hover:scale-105 active:scale-95">
+              <a href="#iletisim" class="group relative bg-gradient-to-r from-teal-600 to-cyan-600 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg shadow-xl shadow-teal-500/25 transition-all hover:scale-105 active:scale-95">
                 <span class="relative z-10">{{ t.hero_cta_primary }}</span>
-                <span class="absolute inset-0 bg-gradient-to-r from-cyan-400 to-teal-400 rounded-full opacity-0 group-hover:opacity-100 transition-opacity"></span>
               </a>
-              <a href="mailto:sales@norya.ai" class="group bg-white/10 backdrop-blur-sm border border-white/30 text-white px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-white/20 transition-all hover:scale-105 active:scale-95">
+              <a href="mailto:sales@norya.ai" class="group bg-white border border-slate-200 text-slate-900 px-8 sm:px-10 py-4 rounded-full font-bold text-base sm:text-lg hover:bg-teal-50 hover:border-teal-200 transition-all hover:scale-105 active:scale-95">
                 {{ t.hero_cta_secondary }}
               </a>
-              <a href="#guvenlik" class="group bg-white/5 backdrop-blur-sm border border-white/20 text-white px-6 sm:px-8 py-4 rounded-full font-semibold text-sm hover:bg-white/15 transition-all flex items-center gap-2">
-                <span class="material-symbols-outlined text-base">security</span>
+              <a href="#guvenlik" class="group bg-teal-50 border border-teal-200 text-teal-700 px-6 sm:px-8 py-4 rounded-full font-semibold text-sm hover:bg-teal-100 transition-all flex items-center gap-2">
+                <span class="material-symbols-outlined text-sm">security</span>
                 <span class="hidden sm:inline">{{ t.subnav_security }}</span>
               </a>
             </div>
@@ -150,12 +239,12 @@
           <!-- Premium Hospital Dashboard Preview with Real Image -->
           <div class="flex-1 relative w-full max-w-md lg:max-w-lg">
             <!-- Glow Effects -->
-            <div class="absolute -inset-12 bg-gradient-to-tr from-teal-500/30 to-cyan-500/20 rounded-full blur-3xl animate-pulse"></div>
+            <div class="absolute -inset-12 bg-gradient-to-tr from-teal-100/40 to-cyan-100/30 rounded-full blur-3xl"></div>
 
             <!-- Main Dashboard Image Card -->
-            <div class="relative bg-white/10 backdrop-blur-xl rounded-3xl p-4 sm:p-6 shadow-2xl border border-white/20 overflow-hidden group">
+            <div class="relative bg-white/95 backdrop-blur-xl rounded-3xl p-4 sm:p-6 shadow-2xl border border-slate-100 overflow-hidden group">
               <!-- Premium Badge -->
-              <div class="absolute top-4 right-4 z-20 bg-gradient-to-r from-teal-400 to-cyan-400 text-slate-900 px-4 py-2 rounded-full text-xs font-bold shadow-lg">
+              <div class="absolute top-4 right-4 z-20 bg-gradient-to-r from-teal-500 to-cyan-500 text-white px-4 py-2 rounded-full text-xs font-bold shadow-lg">
                 <span class="flex items-center gap-2">
                   <span class="relative flex h-2 w-2">
                     <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-white opacity-75"></span>
@@ -166,7 +255,7 @@
               </div>
 
               <!-- Main Dashboard Screenshot -->
-              <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-white/20">
+              <div class="relative rounded-2xl overflow-hidden shadow-xl border border-slate-100">
                 <img
                   src="/static/images/hospital-dashboard-premium.png"
                   alt="{{ t.image_alt_dashboard or 'NoryaAI Hospital Dashboard - Real-time laboratory analysis system' }}"
@@ -175,42 +264,38 @@
                   height="400"
                   loading="eager"
                 />
-                <!-- Overlay Gradient -->
-                <div class="absolute inset-0 bg-gradient-to-t from-slate-900/60 via-transparent to-transparent opacity-60"></div>
               </div>
 
               <!-- Dashboard Stats Overlay -->
-              <div class="absolute bottom-4 left-4 right-4 z-10">
-                <div class="grid grid-cols-3 gap-2">
-                  <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-teal-600">{{ t.dashboard_value_1 or '2M+' }}</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_1 or 'Rapor Analiz Edildi' }}</div>
-                  </div>
-                  <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-cyan-600">{{ t.dashboard_value_2 or '50+' }}</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_2 or 'Ülkede Kullanım' }}</div>
-                  </div>
-                  <div class="bg-white/95 backdrop-blur-sm rounded-xl p-2 sm:p-3 text-center shadow-lg">
-                    <div class="text-lg sm:text-xl font-extrabold text-purple-600">{{ t.dashboard_value_3 or '<50ms' }}</div>
-                    <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_3 or 'Yanıt Süresi' }}</div>
-                  </div>
+              <div class="mt-4 grid grid-cols-3 gap-2">
+                <div class="bg-teal-50 rounded-xl p-2 sm:p-3 text-center">
+                  <div class="text-lg sm:text-xl font-extrabold text-slate-900">{{ t.dashboard_value_1 or '2M+' }}</div>
+                  <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_1 or 'Rapor Analiz Edildi' }}</div>
+                </div>
+                <div class="bg-teal-50 rounded-xl p-2 sm:p-3 text-center">
+                  <div class="text-lg sm:text-xl font-extrabold text-slate-900">{{ t.dashboard_value_2 or '50+' }}</div>
+                  <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_2 or 'Ülkede Kullanım' }}</div>
+                </div>
+                <div class="bg-teal-50 rounded-xl p-2 sm:p-3 text-center">
+                  <div class="text-lg sm:text-xl font-extrabold text-slate-900">{{ t.dashboard_value_3 or '<50ms' }}</div>
+                  <div class="text-[10px] sm:text-xs text-slate-600 font-medium">{{ t.dashboard_stat_3 or 'Yanıt Süresi' }}</div>
                 </div>
               </div>
             </div>
 
             <!-- Trust Indicators -->
             <div class="mt-6 flex flex-wrap justify-center gap-3">
-              <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
-                <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
-                <span class="text-white text-xs font-bold">{{ t.trust_badge_1 or 'KVKK Uyumlu' }}</span>
+              <div class="flex items-center gap-2 bg-teal-50 border border-teal-200/60 px-4 py-2 rounded-full">
+                <span class="material-symbols-outlined text-teal-600 text-sm">verified</span>
+                <span class="text-slate-900 text-xs font-bold">{{ t.trust_badge_1 or 'KVKK Uyumlu' }}</span>
               </div>
-              <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
-                <span class="material-symbols-outlined text-cyan-300 text-sm">security</span>
-                <span class="text-white text-xs font-bold">{{ t.trust_badge_2 or 'SSL Güvenli' }}</span>
+              <div class="flex items-center gap-2 bg-cyan-50 border border-cyan-200/60 px-4 py-2 rounded-full">
+                <span class="material-symbols-outlined text-cyan-600 text-sm">security</span>
+                <span class="text-slate-900 text-xs font-bold">{{ t.trust_badge_2 or 'SSL Güvenli' }}</span>
               </div>
-              <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2 rounded-full">
-                <span class="material-symbols-outlined text-purple-300 text-sm">cloud_done</span>
-                <span class="text-white text-xs font-bold">{{ t.trust_badge_3 or 'Bulut Altyapı' }}</span>
+              <div class="flex items-center gap-2 bg-purple-50 border border-purple-200/60 px-4 py-2 rounded-full">
+                <span class="material-symbols-outlined text-purple-600 text-sm">cloud_done</span>
+                <span class="text-slate-900 text-xs font-bold">{{ t.trust_badge_3 or 'Bulut Altyapı' }}</span>
               </div>
             </div>
           </div>
@@ -243,7 +328,7 @@
         <!-- Compliance & Certifications -->
         <div class="mt-8 sm:mt-10">
           <div class="text-center mb-6">
-            <span class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.feature_compliance_title or 'Compliance & Security' }}</span>
+            <span class="text-white/85 text-xs font-medium uppercase tracking-widest">{{ t.feature_compliance_title or 'Compliance & Security' }}</span>
           </div>
           <div class="flex flex-wrap justify-center gap-4 sm:gap-6">
             <div class="flex items-center gap-2 bg-white/10 backdrop-blur-sm border border-white/20 px-4 py-2.5 rounded-xl">
@@ -272,79 +357,79 @@
         <!-- Technology Partners - Premium -->
         <div class="mt-8 sm:mt-12">
           <div class="text-center mb-6">
-            <span class="text-white/70 text-sm font-medium uppercase tracking-widest">{{ t.tech_partners_title or 'Technology Partners' }}</span>
+            <span class="text-white/85 text-sm font-medium uppercase tracking-widest">{{ t.tech_partners_title or 'Technology Partners' }}</span>
           </div>
           <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 sm:gap-4">
             <!-- Partner 1: OpenAI -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
-              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-green-500/20 to-emerald-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-green-300 text-2xl">psychology</span>
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-emerald-500/30 to-green-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-emerald-700 dark:text-green-300 text-2xl">psychology</span>
               </div>
               <div class="text-white text-xs sm:text-sm font-bold">OpenAI</div>
-              <div class="text-white/50 text-[10px] mt-0.5">{{ t.gpt4_enterprise }}</div>
+              <div class="text-white/80 text-[10px] mt-0.5">{{ t.gpt4_enterprise }}</div>
             </div>
 
             <!-- Partner 2: Azure -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
-              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-blue-500/20 to-cyan-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-blue-300 text-2xl">cloud</span>
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-blue-500/30 to-cyan-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-blue-700 dark:text-blue-300 text-2xl">cloud</span>
               </div>
               <div class="text-white text-xs sm:text-sm font-bold">Microsoft Azure</div>
-              <div class="text-white/50 text-[10px] mt-0.5">Cloud Infrastructure</div>
+              <div class="text-white/80 text-[10px] mt-0.5">Cloud Infrastructure</div>
             </div>
 
             <!-- Partner 3: AWS -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
-              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-orange-500/20 to-amber-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-orange-300 text-2xl">storage</span>
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-orange-500/30 to-amber-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-orange-700 dark:text-orange-300 text-2xl">storage</span>
               </div>
               <div class="text-white text-xs sm:text-sm font-bold">AWS</div>
-              <div class="text-white/50 text-[10px] mt-0.5">Secure Storage</div>
+              <div class="text-white/80 text-[10px] mt-0.5">Secure Storage</div>
             </div>
 
             <!-- Partner 4: HL7/FHIR -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
-              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-purple-500/20 to-pink-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-purple-300 text-2xl">hub</span>
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-violet-500/30 to-purple-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-violet-700 dark:text-purple-300 text-2xl">hub</span>
               </div>
               <div class="text-white text-xs sm:text-sm font-bold">HL7 FHIR</div>
-              <div class="text-white/50 text-[10px] mt-0.5">Interoperability</div>
+              <div class="text-white/80 text-[10px] mt-0.5">Interoperability</div>
             </div>
 
             <!-- Partner 5: DICOM -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
-              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-red-500/20 to-rose-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-red-300 text-2xl">image</span>
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-rose-500/30 to-pink-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-rose-700 dark:text-red-300 text-2xl">image</span>
               </div>
               <div class="text-white text-xs sm:text-sm font-bold">DICOM</div>
-              <div class="text-white/50 text-[10px] mt-0.5">Medical Imaging</div>
+              <div class="text-white/80 text-[10px] mt-0.5">Medical Imaging</div>
             </div>
 
             <!-- Partner 6: Security -->
             <div class="group bg-white/10 backdrop-blur-sm border border-white/15 rounded-2xl p-4 sm:p-5 text-center hover:bg-white/20 hover:border-teal-400/50 hover:scale-105 transition-all duration-300">
-              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-indigo-500/20 to-blue-500/20 flex items-center justify-center group-hover:scale-110 transition-transform">
-                <span class="material-symbols-outlined text-indigo-300 text-2xl">shield</span>
+              <div class="w-12 h-12 mx-auto mb-2 rounded-xl bg-gradient-to-br from-indigo-500/30 to-blue-500/30 flex items-center justify-center group-hover:scale-110 transition-transform">
+                <span class="material-symbols-outlined text-indigo-700 dark:text-indigo-300 text-2xl">shield</span>
               </div>
               <div class="text-white text-xs sm:text-sm font-bold">{{ t.enterprise_security_text }}</div>
-              <div class="text-white/50 text-[10px] mt-0.5">End-to-End Encryption</div>
+              <div class="text-white/80 text-[10px] mt-0.5">End-to-End Encryption</div>
             </div>
           </div>
 
           <!-- Trust Footer -->
-          <div class="mt-6 text-center">
-            <p class="text-white/60 text-xs sm:text-sm">
-              <span class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
-                <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
-                <span>{{ t.enterprise_features_title or 'Hospital Ready Enterprise Features' }}</span>
-              </span>
-            </p>
-          </div>
+            <div class="mt-6 text-center">
+              <p class="text-white/75 text-xs sm:text-sm">
+                <span class="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full">
+                  <span class="material-symbols-outlined text-teal-300 text-sm">verified</span>
+                  <span>{{ t.enterprise_features_title or 'Hospital Ready Enterprise Features' }}</span>
+                </span>
+              </p>
+            </div>
         </div>
 
         <!-- International Partners with Map Visual -->
         <div class="mt-12 sm:mt-16">
           <div class="text-center mb-6">
-            <p class="text-white/70 text-xs font-medium uppercase tracking-widest">{{ t.international_partners_title or 'International Hospital Network' }}</p>
+            <span class="text-white/85 text-xs font-medium uppercase tracking-widest">{{ t.international_partners_title or 'International Hospital Network' }}</p>
           </div>
 
           <!-- Global Network Map -->
@@ -353,7 +438,7 @@
             <img
               src="/static/images/global-hospital-network.png"
               alt="NoryaAI Global {{ t.hospitals_label }} Ağı - {{ t.countries_usage }}"
-              class="w-full h-48 sm:h-64 lg:h-80 object-cover opacity-80"
+                    class="w-full h-48 sm:h-64 lg:h-80 object-cover opacity-90"
               width="1200"
               height="600"
               loading="lazy"
@@ -364,19 +449,19 @@
                 <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 sm:gap-8">
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-white mb-2">50+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.countries_label }}</div>
+                    <div class="text-white/90 text-xs sm:text-sm font-bold">{{ t.countries_label }}</div>
                   </div>
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-teal-300 mb-2">4K+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.hospitals_label }}</div>
+                    <div class="text-white/90 text-xs sm:text-sm font-bold">{{ t.hospitals_label }}</div>
                   </div>
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-cyan-300 mb-2">2M+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.reports_label }}</div>
+                    <div class="text-white/90 text-xs sm:text-sm font-bold">{{ t.reports_label }}</div>
                   </div>
                   <div class="text-center">
                     <div class="text-3xl sm:text-5xl font-extrabold text-purple-300 mb-2">9+</div>
-                    <div class="text-white/80 text-xs sm:text-sm font-bold">{{ t.languages_label }}</div>
+                    <div class="text-white/90 text-xs sm:text-sm font-bold">{{ t.languages_label }}</div>
                   </div>
                 </div>
               </div>
@@ -389,63 +474,63 @@
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇩🇪</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">Deutschland</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">Deutschland</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 2: France -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇫🇷</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">France</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">France</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 3: Italy -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇮🇹</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">Italia</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">Italia</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 4: Spain -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇪🇸</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">España</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">España</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 5: UK -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇬🇧</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">United Kingdom</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">United Kingdom</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 6: UAE -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇦🇪</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">UAE</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">UAE</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 7: Saudi Arabia -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇸🇦</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">KSA</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">KSA</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 8: India -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇮🇳</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">India</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">India</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
             <!-- Country 9: USA -->
             <div class="group relative bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-xl border border-white/20 rounded-2xl p-4 sm:p-5 text-center hover:bg-gradient-to-br hover:from-teal-500/20 hover:to-cyan-500/20 hover:border-teal-400/50 hover:scale-105 hover:shadow-2xl hover:shadow-teal-500/20 transition-all duration-300">
               <div class="absolute inset-0 bg-gradient-to-br from-teal-400/0 to-cyan-400/0 group-hover:from-teal-400/10 group-hover:to-cyan-400/10 rounded-2xl transition-all duration-300"></div>
               <div class="relative text-4xl sm:text-5xl mb-3 filter drop-shadow-lg group-hover:scale-110 transition-transform duration-300">🇺🇸</div>
-              <div class="relative text-white/90 text-xs sm:text-sm font-bold tracking-wide">USA</div>
+              <div class="relative text-white text-xs sm:text-sm font-bold tracking-wide">USA</div>
               <div class="relative text-teal-300/80 text-[10px] font-medium mt-1">{{ t.active_partner_label }}</div>
             </div>
           </div>
@@ -454,19 +539,19 @@
           <div class="mt-6 grid grid-cols-2 md:grid-cols-4 gap-4">
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">50+</div>
-              <div class="text-white/60 text-xs">{{ t.countries_label }}</div>
+              <div class="text-white/75 text-xs">{{ t.countries_label }}</div>
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">9+</div>
-              <div class="text-white/60 text-xs">{{ t.reports_label }} {{ t.languages_label }}i</div>
+              <div class="text-white/75 text-xs">{{ t.reports_label }} {{ t.languages_label }}i</div>
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">2M+</div>
-              <div class="text-white/60 text-xs">{{ t.produced_label or 'Produced' }} {{ t.reports_label }}</div>
+              <div class="text-white/75 text-xs">{{ t.produced_label or 'Produced' }} {{ t.reports_label }}</div>
             </div>
             <div class="text-center bg-white/5 backdrop-blur-sm border border-white/10 rounded-xl p-4">
               <div class="text-2xl sm:text-3xl font-extrabold text-white mb-1">4,000+</div>
-              <div class="text-white/60 text-xs">{{ t.hospitals_label }} {{ t.and_clinics }}</div>
+              <div class="text-white/75 text-xs">{{ t.hospitals_label }} {{ t.and_clinics }}</div>
             </div>
           </div>
         </div>
@@ -707,8 +792,8 @@
           <h2 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-headline mb-6 text-white">
             {{ t.enterprise_features_title or 'Premium Enterprise Features' }}
           </h2>
-          <p class="text-base sm:text-lg text-white/80 leading-relaxed max-w-3xl mx-auto">
-            {{ t.hospital_operations_ai_desc or 'Advanced AI features supporting your hospital\'s operational excellence.' }}
+            <p class="text-base sm:text-lg text-white/85 leading-relaxed max-w-3xl mx-auto">
+              {{ t.hospital_operations_ai_desc or 'Advanced AI features supporting your hospital\'s operational excellence.' }}
           </p>
         </div>
 
@@ -733,21 +818,21 @@
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_analytics_title or 'Advanced AI Analytics' }}
             </h3>
-            <p class="relative text-white/70 leading-relaxed text-sm">
+            <p class="relative text-white/85 leading-relaxed text-sm">
               {{ t.feature_analytics_desc or 'Automatic insights from your lab data.' }}
             </p>
 
             <!-- Feature List -->
             <ul class="relative mt-6 space-y-2">
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
                 <span>{{ t.analytics_feature_1 or 'Pattern Recognition' }}</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
                 <span>{{ t.analytics_feature_2 or 'Trend Analysis' }}</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-teal-300 text-sm">check_circle</span>
                 <span>{{ t.analytics_feature_3 or 'Risk Scoring' }}</span>
               </li>
@@ -770,20 +855,20 @@
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_monitoring_title or 'Real-Time Monitoring' }}
             </h3>
-            <p class="relative text-white/70 leading-relaxed text-sm">
+            <p class="relative text-white/85 leading-relaxed text-sm">
               {{ t.feature_monitoring_desc or 'Monitor your entire lab workflow live.' }}
             </p>
 
             <ul class="relative mt-6 space-y-2">
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
                 <span>{{ t.monitoring_feature_1 or 'Live Dashboard' }}</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
                 <span>{{ t.monitoring_feature_2 or 'Instant Notifications' }}</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-cyan-300 text-sm">check_circle</span>
                 <span>{{ t.monitoring_feature_3 or 'KPI Tracking' }}</span>
               </li>
@@ -806,20 +891,20 @@
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_integration_title or 'Custom Integration' }}
             </h3>
-            <p class="relative text-white/70 leading-relaxed text-sm">
+            <p class="relative text-white/85 leading-relaxed text-sm">
               {{ t.feature_integration_desc or 'Seamless integration with your existing systems.' }}
             </p>
 
             <ul class="relative mt-6 space-y-2">
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
                 <span>HL7 FHIR</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
                 <span>{{ t.restful_api or 'RESTful API' }}</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-purple-300 text-sm">check_circle</span>
                 <span>{{ t.webhook_support_label or 'Webhook Support' }}</span>
               </li>
@@ -842,20 +927,20 @@
             <h3 class="relative text-xl font-bold font-headline mb-3 text-white">
               {{ t.feature_compliance_title or 'Compliance & Security' }}
             </h3>
-            <p class="relative text-white/70 leading-relaxed text-sm">
+            <p class="relative text-white/85 leading-relaxed text-sm">
               {{ t.feature_compliance_desc or 'KVKK, HIPAA, and GDPR compliant with full audit trails.' }}
             </p>
 
             <ul class="relative mt-6 space-y-2">
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
                 <span>KVKK / GDPR</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
                 <span>{{ t.hipaa_compliant_badge or 'HIPAA Compliant' }}</span>
               </li>
-              <li class="flex items-center gap-2 text-xs text-white/70">
+              <li class="flex items-center gap-2 text-xs text-white/85">
                 <span class="material-symbols-outlined text-amber-300 text-sm">check_circle</span>
                 <span>{{ t.audit_trail_label or 'Audit Trail' }}</span>
               </li>
@@ -867,19 +952,19 @@
         <div class="mt-16 grid grid-cols-2 md:grid-cols-4 gap-6 sm:gap-8">
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">99.9%</div>
-            <div class="text-white/70 text-sm font-medium">{{ t.uptime_sla or 'Uptime SLA' }}</div>
+            <div class="text-white/80 text-sm font-medium">{{ t.uptime_sla or 'Uptime SLA' }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">&lt;50ms</div>
-            <div class="text-white/70 text-sm font-medium">{{ t.api_response or 'API Response' }}</div>
+            <div class="text-white/80 text-sm font-medium">{{ t.api_response or 'API Response' }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">256-bit</div>
-            <div class="text-white/70 text-sm font-medium">{{ t.encryption_label or 'Encryption' }}</div>
+            <div class="text-white/80 text-sm font-medium">{{ t.encryption_label or 'Encryption' }}</div>
           </div>
           <div class="text-center">
             <div class="text-3xl sm:text-4xl font-extrabold text-white mb-2">24/7</div>
-            <div class="text-white/70 text-sm font-medium">{{ t.priority_support_label or 'Priority Support' }}</div>
+            <div class="text-white/80 text-sm font-medium">{{ t.priority_support_label or 'Priority Support' }}</div>
           </div>
         </div>
       </div>
@@ -889,7 +974,7 @@
     <section id="ekipler" class="hosp-anchor py-16 sm:py-24 lg:py-32 px-4 sm:px-8 max-w-7xl mx-auto">
       <div class="max-w-3xl mb-10 sm:mb-14">
         <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">{{ t.teams_title }}</h2>
-        <p class="text-base sm:text-lg text-on-surface-variant">{{ t.teams_subtitle }}</p>
+        <p class="text-base sm:text-lg text-on-surface">{{ t.teams_subtitle }}</p>
       </div>
       <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
@@ -897,28 +982,28 @@
             <span class="material-symbols-outlined text-blue-700">biotech</span>
           </div>
           <h3 class="font-bold font-headline text-base mb-2">{{ t.team_1_title }}</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.team_1_desc }}</p>
+          <p class="text-sm text-on-surface leading-relaxed">{{ t.team_1_desc }}</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-emerald-50 flex items-center justify-center mb-4">
             <span class="material-symbols-outlined text-emerald-700">stethoscope</span>
           </div>
           <h3 class="font-bold font-headline text-base mb-2">{{ t.team_2_title }}</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.team_2_desc }}</p>
+          <p class="text-sm text-on-surface leading-relaxed">{{ t.team_2_desc }}</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-amber-50 flex items-center justify-center mb-4">
             <span class="material-symbols-outlined text-amber-700">emergency</span>
           </div>
           <h3 class="font-bold font-headline text-base mb-2">{{ t.team_3_title }}</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.structured_summary_benefit }}</p>
+          <p class="text-sm text-on-surface leading-relaxed">{{ t.structured_summary_benefit }}</p>
         </div>
         <div class="bg-surface-container-lowest rounded-2xl p-5 sm:p-6 border border-outline-variant/12 shadow-[0_8px_28px_rgba(25,28,29,0.03)]">
           <div class="w-11 h-11 rounded-xl bg-violet-50 flex items-center justify-center mb-4">
             <span class="material-symbols-outlined text-violet-700">admin_panel_settings</span>
           </div>
           <h3 class="font-bold font-headline text-base mb-2">{{ t.team_4_title }}</h3>
-          <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.team_4_desc }}</p>
+          <p class="text-sm text-on-surface leading-relaxed">{{ t.team_4_desc }}</p>
         </div>
       </div>
     </section>
@@ -928,7 +1013,7 @@
       <div class="max-w-7xl mx-auto">
         <div class="max-w-3xl mb-10 sm:mb-14">
           <h2 class="text-3xl sm:text-4xl font-extrabold font-headline mb-3 sm:mb-4">{{ t.usage_title }}</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant">{{ t.usage_subtitle }}</p>
+          <p class="text-base sm:text-lg text-on-surface">{{ t.usage_subtitle }}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-5 sm:gap-6">
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -937,7 +1022,7 @@
             </div>
             <div>
               <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_1_title }}</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_1_desc }}</p>
+              <p class="text-on-surface text-sm leading-relaxed">{{ t.usage_1_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -946,7 +1031,7 @@
             </div>
             <div>
               <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_2_title }}</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_2_desc }}</p>
+              <p class="text-on-surface text-sm leading-relaxed">{{ t.usage_2_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -955,7 +1040,7 @@
             </div>
             <div>
               <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_3_title }}</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_3_desc }}</p>
+              <p class="text-on-surface text-sm leading-relaxed">{{ t.usage_3_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -964,7 +1049,7 @@
             </div>
             <div>
               <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_4_title }}</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_4_desc }}</p>
+              <p class="text-on-surface text-sm leading-relaxed">{{ t.usage_4_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -973,7 +1058,7 @@
             </div>
             <div>
               <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.usage_5_title }}</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.usage_5_desc }}</p>
+              <p class="text-on-surface text-sm leading-relaxed">{{ t.usage_5_desc }}</p>
             </div>
           </div>
           <div class="bg-surface-container-lowest p-6 sm:p-7 rounded-[1.75rem] shadow-[0_12px_36px_rgba(25,28,29,0.04)] flex gap-4">
@@ -982,7 +1067,7 @@
             </div>
             <div>
               <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.health_tourism_title }}</h3>
-              <p class="text-on-surface-variant text-sm leading-relaxed">{{ t.multilingual_patient_benefit }}</p>
+              <p class="text-on-surface text-sm leading-relaxed">{{ t.multilingual_patient_benefit }}</p>
             </div>
           </div>
         </div>
@@ -996,9 +1081,9 @@
              style="background-image: radial-gradient(circle at 2px 2px, #0f172a 1px, transparent 0); background-size: 30px 30px;"></div>
         <div class="lg:w-1/2">
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4 sm:mb-6">{{ t.security_governance_title }}</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed mb-6 sm:mb-8">{{ t.security_governance_desc }}</p>
+            <p class="text-base sm:text-xl text-white/90 leading-relaxed mb-6 sm:mb-8">{{ t.security_governance_desc }}</p>
           <div class="rounded-2xl bg-surface/70 border border-outline-variant/15 px-5 sm:px-6 py-4 sm:py-5">
-            <p class="text-sm sm:text-base text-on-surface-variant leading-relaxed">{{ t.security_controls_desc }}</p>
+            <p class="text-sm sm:text-base text-on-surface leading-relaxed">{{ t.security_controls_desc }}</p>
           </div>
         </div>
         <div class="lg:w-1/2 grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 w-full">
@@ -1007,7 +1092,7 @@
               <span class="material-symbols-outlined text-primary mt-0.5">lock</span>
               <div>
                 <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_privacy_title }}</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_privacy_desc }}</p>
+                <p class="text-xs sm:text-sm text-on-surface leading-relaxed">{{ t.security_privacy_desc }}</p>
               </div>
             </div>
           </div>
@@ -1016,7 +1101,7 @@
               <span class="material-symbols-outlined text-primary mt-0.5">badge</span>
               <div>
                 <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_role_title }}</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_role_desc }}</p>
+                <p class="text-xs sm:text-sm text-on-surface leading-relaxed">{{ t.security_role_desc }}</p>
               </div>
             </div>
           </div>
@@ -1025,7 +1110,7 @@
               <span class="material-symbols-outlined text-primary mt-0.5">history</span>
               <div>
                 <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_audit_title }}</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.workflow_actions_desc }}</p>
+                <p class="text-xs sm:text-sm text-on-surface leading-relaxed">{{ t.workflow_actions_desc }}</p>
               </div>
             </div>
           </div>
@@ -1034,7 +1119,7 @@
               <span class="material-symbols-outlined text-primary mt-0.5">domain_verification</span>
               <div>
                 <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_access_title }}</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_access_desc }}</p>
+                <p class="text-xs sm:text-sm text-on-surface leading-relaxed">{{ t.security_access_desc }}</p>
               </div>
             </div>
           </div>
@@ -1043,7 +1128,7 @@
               <span class="material-symbols-outlined text-primary mt-0.5">translate</span>
               <div>
                 <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.multilingual_enterprise_support }}</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.multilingual_standardization }}</p>
+                <p class="text-xs sm:text-sm text-on-surface leading-relaxed">{{ t.multilingual_standardization }}</p>
               </div>
             </div>
           </div>
@@ -1052,7 +1137,7 @@
               <span class="material-symbols-outlined text-primary mt-0.5">clinical_notes</span>
               <div>
                 <h5 class="font-bold text-sm sm:text-base mb-1">{{ t.security_oversight_title }}</h5>
-                <p class="text-xs sm:text-sm text-on-surface-variant leading-relaxed">{{ t.security_oversight_desc }}</p>
+                <p class="text-xs sm:text-sm text-on-surface leading-relaxed">{{ t.security_oversight_desc }}</p>
               </div>
             </div>
           </div>
@@ -1195,7 +1280,7 @@
     <!-- ═══════════════ 7. TIBBİ SORUMLULUK REDDİ ═══════════════ -->
     <section class="py-8 sm:py-12 px-4 sm:px-8 border-y border-outline-variant/10">
       <div class="max-w-4xl mx-auto">
-        <div class="p-6 sm:p-8 bg-surface-container-high rounded-2xl sm:rounded-3xl text-sm text-on-surface-variant leading-relaxed border-l-4 border-primary">
+        <div class="p-6 sm:p-8 bg-surface-container-high rounded-2xl sm:rounded-3xl text-sm text-on-surface leading-relaxed border-l-4 border-primary">
           <p class="font-bold text-on-surface mb-2">{{ t.disclaimer_title }}</p>
           <p class="mb-2">{{ t.disclaimer_text_1 }}</p>
           <p>{{ t.disclaimer_text_2 }}</p>
@@ -1287,7 +1372,7 @@
             {{ t.pilot_badge }}
           </span>
           <h2 class="text-2xl sm:text-3xl lg:text-4xl font-extrabold font-headline mb-4">{{ t.pilot_title }}</h2>
-          <p class="text-base sm:text-lg text-on-surface-variant leading-relaxed">{{ t.pilot_subtitle }}</p>
+          <p class="text-base sm:text-lg text-on-surface leading-relaxed">{{ t.pilot_subtitle }}</p>
         </div>
         <div class="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           <div class="text-center">
@@ -1295,21 +1380,21 @@
               <span class="material-symbols-outlined text-2xl">tune</span>
             </div>
             <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.pilot_1_title }}</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.pilot_1_desc }}</p>
+            <p class="text-sm text-on-surface leading-relaxed">{{ t.pilot_1_desc }}</p>
           </div>
           <div class="text-center">
             <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
               <span class="material-symbols-outlined text-2xl">play_circle</span>
             </div>
             <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.pilot_2_title }}</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.pilot_2_desc }}</p>
+            <p class="text-sm text-on-surface leading-relaxed">{{ t.pilot_2_desc }}</p>
           </div>
           <div class="text-center">
             <div class="w-14 h-14 rounded-2xl bg-primary/10 flex items-center justify-center text-primary mx-auto mb-4">
               <span class="material-symbols-outlined text-2xl">assessment</span>
             </div>
             <h3 class="font-bold font-headline text-base sm:text-lg mb-2">{{ t.pilot_3_title }}</h3>
-            <p class="text-sm text-on-surface-variant leading-relaxed">{{ t.pilot_3_desc }}</p>
+            <p class="text-sm text-on-surface leading-relaxed">{{ t.pilot_3_desc }}</p>
           </div>
         </div>
       </div>
@@ -1322,31 +1407,31 @@
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q1 or 'Does NoryaAI replace doctors?' }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.is_norya_doctor_answer }}</dd>
+            <dd class="text-on-surface text-sm sm:text-base leading-relaxed">{{ t.is_norya_doctor_answer }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q2 or 'Which units can use it?' }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a2 or 'Laboratory, clinic, emergency, and hospital management units; each unit accesses the workflow suitable for their needs with role-based access.' }}</dd>
+            <dd class="text-on-surface text-sm sm:text-base leading-relaxed">{{ t.faq_a2 or 'Laboratory, clinic, emergency, and hospital management units; each unit accesses the workflow suitable for their needs with role-based access.' }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.how_multilingual_works }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a3 or 'Test results can be presented as structured summaries in 12+ languages including English. This is especially useful for hospitals with international patient profiles.' }}</dd>
+            <dd class="text-on-surface text-sm sm:text-base leading-relaxed">{{ t.faq_a3 or 'Test results can be presented as structured summaries in 12+ languages including English. This is especially useful for hospitals with international patient profiles.' }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.compatible_with_hospital_systems }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.hospital_systems_compatibility }}</dd>
+            <dd class="text-on-surface text-sm sm:text-base leading-relaxed">{{ t.hospital_systems_compatibility }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_2_q }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.how_data_secured_answer }}</dd>
+            <dd class="text-on-surface text-sm sm:text-base leading-relaxed">{{ t.how_data_secured_answer }}</dd>
           </div>
           <div class="p-5 sm:p-6 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q3 or 'How to apply for the pilot?' }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a3 or 'You can apply for the pilot by filling out the contact form on this page or by contacting our sales team directly.' }}</dd>
+            <dd class="text-on-surface text-sm sm:text-base leading-relaxed">{{ t.faq_a3 or 'You can apply for the pilot by filling out the contact form on this page or by contacting our sales team directly.' }}</dd>
           </div>
           <div class="p-5 sm:p-6 md:col-span-2 bg-surface-container-lowest rounded-2xl shadow-[0_12px_36px_rgba(25,28,29,0.04)]">
             <dt class="font-bold text-on-surface text-base sm:text-lg mb-2">{{ t.faq_q4 or 'How does pricing work?' }}</dt>
-            <dd class="text-on-surface-variant text-sm sm:text-base leading-relaxed">{{ t.faq_a4 or 'Enterprise pricing is determined based on hospital volume, number of units, and quota needs. Separate conditions may be offered for the pilot process.' }}</dd>
+            <dd class="text-on-surface text-sm sm:text-base leading-relaxed">{{ t.faq_a4 or 'Enterprise pricing is determined based on hospital volume, number of units, and quota needs. Separate conditions may be offered for the pilot process.' }}</dd>
           </div>
         </div>
       </div>
@@ -1603,7 +1688,7 @@
             </h2>
 
             <!-- Subheadline -->
-            <p class="text-base sm:text-xl text-white/80 max-w-3xl leading-relaxed">
+            <p class="text-base sm:text-xl text-white/90 max-w-3xl leading-relaxed">
               {{ t.free_pilot_program_desc }}
             </p>
 
@@ -1611,19 +1696,19 @@
             <div class="grid grid-cols-2 md:grid-cols-4 gap-4 sm:gap-6 pt-8 pb-8 border-y border-white/10 w-full max-w-4xl">
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">2M+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.reports_label }} {{ t.reports_produced_label }}</div>
+                <div class="text-white/85 text-xs sm:text-sm mt-1">{{ t.reports_label }} {{ t.reports_produced_label }}</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">4K+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.hospitals_label }} & {{ t.clinics_label }}</div>
+                <div class="text-white/85 text-xs sm:text-sm mt-1">{{ t.hospitals_label }} & {{ t.clinics_label }}</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">98.7%</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.biomarker_accuracy_label }}</div>
+                <div class="text-white/85 text-xs sm:text-sm mt-1">{{ t.biomarker_accuracy_label }}</div>
               </div>
               <div>
                 <div class="text-3xl sm:text-4xl font-extrabold text-white">50+</div>
-                <div class="text-white/60 text-xs sm:text-sm mt-1">{{ t.countries_coverage_label }}</div>
+                <div class="text-white/85 text-xs sm:text-sm mt-1">{{ t.countries_coverage_label }}</div>
               </div>
             </div>
 
@@ -1648,19 +1733,19 @@
 
             <!-- Trust Footer -->
             <div class="pt-8 mt-8 border-t border-white/10 flex flex-wrap justify-center gap-6 sm:gap-8">
-              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+              <div class="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">shield</span>
                 <span>{{ t.kvkk_compliant_badge }}</span>
               </div>
-              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+              <div class="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">lock</span>
                 <span>{{ t.ssl_secure_label or 'SSL Secure' }}</span>
               </div>
-              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+              <div class="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">verified</span>
                 <span>{{ t.enterprise_verified_label or 'Enterprise Verified' }}</span>
               </div>
-              <div class="flex items-center gap-2 text-white/60 text-xs sm:text-sm">
+              <div class="flex items-center gap-2 text-white/80 text-xs sm:text-sm">
                 <span class="material-symbols-outlined text-teal-400 text-base">support_agent</span>
                 <span>{{ t.support_247_badge }}</span>
               </div>
@@ -1679,15 +1764,15 @@
         <div class="flex items-center gap-2">
           <img src="/static/norya_logo_transparent_trim.png" alt="NoryaAI" class="h-7 sm:h-8 w-auto object-contain" width="160" height="40" loading="lazy" />
         </div>
-        <p class="text-on-surface-variant text-xs sm:text-sm tracking-wide max-w-sm">{{ t.footer_desc }}</p>
+        <p class="text-on-surface text-xs sm:text-sm tracking-wide max-w-sm">{{ t.footer_desc }}</p>
         <p class="text-outline text-xs tracking-wide">{{ t.footer_copyright }}</p>
       </div>
       <div class="flex flex-wrap gap-x-6 sm:gap-x-12 gap-y-4 sm:gap-y-6 md:justify-end">
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="{{ localized_home_path(request) }}">{{ t.nav_home }}</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/kurumsal">{{ t.nav_enterprise }}</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/hastaneler-icin">{{ t.hospitals_label }}</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/gizlilik-politikasi">{{ t.nav_privacy }}</a>
-        <a class="text-on-surface-variant hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/kullanim-sartlari">{{ t.nav_terms }}</a>
+        <a class="text-on-surface hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="{{ localized_home_path(request) }}">{{ t.nav_home }}</a>
+        <a class="text-on-surface hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/kurumsal">{{ t.nav_enterprise }}</a>
+        <a class="text-on-surface hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/hastaneler-icin">{{ t.hospitals_label }}</a>
+        <a class="text-on-surface hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/gizlilik-politikasi">{{ t.nav_privacy }}</a>
+        <a class="text-on-surface hover:text-on-surface underline-offset-4 hover:underline transition-opacity opacity-80 hover:opacity-100 text-xs sm:text-sm tracking-wide" href="/legal/kullanim-sartlari">{{ t.nav_terms }}</a>
       </div>
     </div>
   </footer>

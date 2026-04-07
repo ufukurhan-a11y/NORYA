@@ -163,7 +163,7 @@
   </script>
   {% endif %}
 </head>
-<body class="font-sans text-norya-ink bg-norya-surface antialiased min-h-screen flex flex-col">
+<body class="{% block body_class %}font-sans text-norya-ink bg-norya-surface antialiased min-h-screen flex flex-col{% endblock %}">
   {# Navbar: locale from request.state.locale (blog sets en/de/fr/it); base_ui for labels #}
   <header class="site-header sticky top-0 z-50 bg-norya-surface-elevated/95 backdrop-blur border-b border-norya-ink-subtle/20">
     <nav class="max-w-6xl mx-auto h-14 sm:h-16 flex items-center justify-between" aria-label="{{ _base_ui.nav_aria_label|default('Main menu') }}">
