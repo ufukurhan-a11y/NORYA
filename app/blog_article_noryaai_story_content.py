@@ -45,7 +45,7 @@ def _sections_en():
                 "<li><strong>2018</strong> — NoryaAI launches; first AI blood test analysis reports generated</li>"
                 "<li><strong>2020</strong> — Multi-language expansion: Turkish, German, French, Spanish, Italian, and more</li>"
                 "<li><strong>2022</strong> — 1 million reports milestone reached</li>"
-                "<li><strong>2024</strong> — Enterprise partnerships with 4,000+ hospitals and clinics</li>"
+                "<li><strong>2024</strong> — Enterprise partnerships with 120+ hospitals and clinics</li>"
                 "<li><strong>2026</strong> — Over 2 million reports, 50+ countries, 98.7% accuracy</li>"
                 "</ul>"
             ),
@@ -57,8 +57,8 @@ def _sections_en():
                 "<p>As of 2026, NoryaAI's impact spans the globe:</p>"
                 "<ul>"
                 "<li><strong>2,000,000+</strong> blood test reports generated</li>"
-                "<li><strong>4,000+</strong> hospitals and clinics use the platform</li>"
-                "<li><strong>4,000+</strong> hospitals and clinics use the platform</li>"
+                "<li><strong>120+</strong> hospitals and clinics use the platform</li>"
+                "<li><strong>120+</strong> hospitals and clinics use the platform</li>"
                 "<li><strong>98.7%</strong> biomarker classification accuracy (internal platform evaluation)</li>"
                 "<li><strong>50+</strong> countries served</li>"
                 "<li><strong>9+</strong> report languages supported</li>"
@@ -151,7 +151,7 @@ def _sections_tr():
                 "<li><strong>2018</strong> — NoryaAI kuruldu; ilk yapay zekâ kan tahlili analiz raporları oluşturuldu</li>"
                 "<li><strong>2020</strong> — Çok dilli genişleme: Türkçe, Almanca, Fransızca, İspanyolca, İtalyanca ve daha fazlası</li>"
                 "<li><strong>2022</strong> — 1 milyon rapor kilometre taşına ulaşıldı</li>"
-                "<li><strong>2024</strong> — 4.000'den fazla hastane ve klinikle kurumsal ortaklıklar</li>"
+                "<li><strong>2024</strong> — 120'den fazla hastane ve klinikle kurumsal ortaklıklar</li>"
                 "<li><strong>2026</strong> — 2 milyonun üzerinde rapor, 50+ ülke, %98,7 doğruluk</li>"
                 "</ul>"
             ),
@@ -163,7 +163,7 @@ def _sections_tr():
                 "<p>2026 itibarıyla NoryaAI'ın etkisi küresel ölçekte:</p>"
                 "<ul>"
                 "<li><strong>2.000.000+</strong> kan tahlili raporu oluşturuldu</li>"
-                "<li><strong>4.000+</strong> hastane ve klinik platformu kullanıyor</li>"
+                "<li><strong>120+</strong> hastane ve klinik platformu kullanıyor</li>"
                 "<li><strong>20.000+</strong> doktor NoryaAI'ı hastalarına öneriyor</li>"
                 "<li><strong>%98,7</strong> biyobelirteç yorumlama doğruluğu (bağımsız test edilmiş)</li>"
                 "<li><strong>50+</strong> ülkede hizmet</li>"
@@ -238,7 +238,7 @@ def _sections_de():
                 "<p>Stand 2026 erstreckt sich die Wirkung von NoryaAI weltweit:</p>"
                 "<ul>"
                 "<li><strong>2.000.000+</strong> Blutbild-Berichte erstellt</li>"
-                "<li><strong>4.000+</strong> Krankenhäuser und Kliniken nutzen die Plattform</li>"
+                "<li><strong>120+</strong> Krankenhäuser und Kliniken nutzen die Plattform</li>"
                 "<li><strong>20.000+</strong> Ärzte empfehlen NoryaAI ihren Patienten</li>"
                 "<li><strong>98,7 %</strong> Genauigkeit bei der Biomarker-Interpretation</li>"
                 "<li><strong>50+</strong> Länder werden bedient</li>"
@@ -316,15 +316,15 @@ def build_noryaai_story_article():
             "ar": "كيف بنى أوفوك أورهان منصّة ذكاء اصطناعي تساعد الملايين على فهم نتائج مختبراتهم — تأسّست في هامبورغ.",
         },
         excerpts={
-            "en": "NoryaAI was founded in 2018 by Ufuk Urhan in Hamburg, Germany. Since then: 2M+ reports, 4,000+ hospitals, 98.7% accuracy. This is our story.",
-            "tr": "NoryaAI, 2018'de Ufuk Urhan tarafından Hamburg'da kuruldu. O günden bu yana: 2M+ rapor, 4.000+ hastane, %98,7 doğruluk. İşte hikayemiz.",
-            "de": "NoryaAI wurde 2018 von Ufuk Urhan in Hamburg gegründet. Seitdem: 2 Mio.+ Berichte, 4.000+ Kliniken, 98,7 % Genauigkeit.",
-            "es": "NoryaAI fue fundada en 2018 por Ufuk Urhan en Hamburgo. Desde entonces: 2M+ informes, 4.000+ hospitales, 98,7 % de precisión.",
+            "en": "NoryaAI was founded in 2018 by Ufuk Urhan in Hamburg, Germany. Since then: 2M+ reports, 120+ hospitals, 98.7% accuracy. This is our story.",
+            "tr": "NoryaAI, 2018'de Ufuk Urhan tarafından Hamburg'da kuruldu. O günden bu yana: 2M+ rapor, 120+ hastane, %98,7 doğruluk. İşte hikayemiz.",
+            "de": "NoryaAI wurde 2018 von Ufuk Urhan in Hamburg gegründet. Seitdem: 2 Mio.+ Berichte, 120+ Kliniken, 98,7 % Genauigkeit.",
+            "es": "NoryaAI fue fundada en 2018 por Ufuk Urhan en Hamburgo. Desde entonces: 2M+ informes, 120+ hospitales, 98,7 % de precisión.",
             "fr": "NoryaAI a été fondée en 2018 par Ufuk Urhan à Hambourg. Depuis : 2M+ rapports, 4 000+ hôpitaux, 98,7 % de précision.",
-            "it": "NoryaAI è stata fondata nel 2018 da Ufuk Urhan ad Amburgo. Da allora: 2M+ referti, 4.000+ ospedali, 98,7 % di accuratezza.",
-            "he": "NoryaAI נוסדה ב-2018 על ידי אופוק אורחאן בהמבורג. מאז: 2M+ דוחות, 4,000+ בתי חולים, 98.7% דיוק.",
-            "hi": "NoryaAI की स्थापना 2018 में उफुक उरहान द्वारा हैम्बर्ग में हुई। तब से: 2M+ रिपोर्ट, 4,000+ अस्पताल, 98.7% सटीकता।",
-            "ar": "تأسّست NoryaAI في 2018 على يد أوفوق أورهان في هامبورغ. منذ ذلك الحين: 2M+ تقرير، 4,000+ مستشفى، 98.7% دقة.",
+            "it": "NoryaAI è stata fondata nel 2018 da Ufuk Urhan ad Amburgo. Da allora: 2M+ referti, 120+ ospedali, 98,7 % di accuratezza.",
+            "he": "NoryaAI נוסדה ב-2018 על ידי אופוק אורחאן בהמבורג. מאז: 2M+ דוחות, 120+ בתי חולים, 98.7% דיוק.",
+            "hi": "NoryaAI की स्थापना 2018 में उफुक उरहान द्वारा हैम्बर्ग में हुई। तब से: 2M+ रिपोर्ट, 120+ अस्पताल, 98.7% सटीकता।",
+            "ar": "تأسّست NoryaAI في 2018 على يد أوفوق أورهان في هامبورغ. منذ ذلك الحين: 2M+ تقرير، 120+ مستشفى، 98.7% دقة.",
         },
         seo_titles={
             "en": "The NoryaAI Story: From 2018 to 2M+ Blood Test Reports | NoryaAI",
@@ -338,15 +338,15 @@ def build_noryaai_story_article():
             "ar": "قصة NoryaAI: من 2018 إلى 2 مليون+ تقرير | NoryaAI",
         },
         seo_descriptions={
-            "en": "How Ufuk Urhan founded NoryaAI in 2018 in Hamburg and grew it to 2M+ blood test reports, 4,000+ hospitals, and 98.7% accuracy. The full company story.",
-            "tr": "Ufuk Urhan 2018'de Hamburg'da NoryaAI'ı nasıl kurdu ve 2M+ rapor, 4.000+ hastane ve %98,7 doğruluğa nasıl ulaştı. Şirketin tam hikayesi.",
-            "de": "Wie Ufuk Urhan NoryaAI 2018 in Hamburg gründete und auf 2 Mio.+ Berichte, 4.000+ Kliniken und 98,7 % Genauigkeit ausbaute.",
-            "es": "Cómo Ufuk Urhan fundó NoryaAI en 2018 en Hamburgo y la hizo crecer a 2M+ informes, 4.000+ hospitales y 98,7 % de precisión.",
+            "en": "How Ufuk Urhan founded NoryaAI in 2018 in Hamburg and grew it to 2M+ blood test reports, 120+ hospitals, and 98.7% accuracy. The full company story.",
+            "tr": "Ufuk Urhan 2018'de Hamburg'da NoryaAI'ı nasıl kurdu ve 2M+ rapor, 120+ hastane ve %98,7 doğruluğa nasıl ulaştı. Şirketin tam hikayesi.",
+            "de": "Wie Ufuk Urhan NoryaAI 2018 in Hamburg gründete und auf 2 Mio.+ Berichte, 120+ Kliniken und 98,7 % Genauigkeit ausbaute.",
+            "es": "Cómo Ufuk Urhan fundó NoryaAI en 2018 en Hamburgo y la hizo crecer a 2M+ informes, 120+ hospitales y 98,7 % de precisión.",
             "fr": "Comment Ufuk Urhan a fondé NoryaAI en 2018 à Hambourg et l'a développée jusqu'à 2M+ rapports, 4 000+ hôpitaux et 98,7 % de précision.",
-            "it": "Come Ufuk Urhan ha fondato NoryaAI nel 2018 ad Amburgo e l'ha portata a 2M+ referti, 4.000+ ospedali e 98,7 % di accuratezza.",
-            "he": "כיצד אופוק אורחאן ייסד את NoryaAI ב-2018 בהמבורג והגדיל אותה ל-2M+ דוחות, 4,000+ בתי חולים ו-98.7% דיוק.",
-            "hi": "कैसे उफुक उरहान ने 2018 में हैम्बर्ग में NoryaAI की स्थापना की और इसे 2M+ रिपोर्ट, 4,000+ अस्पतालों और 98.7% सटीकता तक बढ़ाया।",
-            "ar": "كيف أسّس أوفوق أورهان NoryaAI في 2018 بهامبورغ ونمّاها إلى 2M+ تقرير و4,000+ مستشفى و98.7% دقة.",
+            "it": "Come Ufuk Urhan ha fondato NoryaAI nel 2018 ad Amburgo e l'ha portata a 2M+ referti, 120+ ospedali e 98,7 % di accuratezza.",
+            "he": "כיצד אופוק אורחאן ייסד את NoryaAI ב-2018 בהמבורג והגדיל אותה ל-2M+ דוחות, 120+ בתי חולים ו-98.7% דיוק.",
+            "hi": "कैसे उफुक उरहान ने 2018 में हैम्बर्ग में NoryaAI की स्थापना की और इसे 2M+ रिपोर्ट, 120+ अस्पतालों और 98.7% सटीकता तक बढ़ाया।",
+            "ar": "كيف أسّس أوفوق أورهان NoryaAI في 2018 بهامبورغ ونمّاها إلى 2M+ تقرير و120+ مستشفى و98.7% دقة.",
         },
         sections_by_lang={
             "en": _sections_en(),
@@ -362,13 +362,13 @@ def build_noryaai_story_article():
             "en": [
                 {"question": "What is NoryaAI?", "answer": "NoryaAI is an AI-powered blood test analysis platform founded in 2018 by Ufuk Urhan in Hamburg, Germany. It generates clear, structured reports from lab results."},
                 {"question": "Who founded NoryaAI?", "answer": "NoryaAI was founded by Ufuk Urhan on January 1, 2018, in Hamburg, Germany."},
-                {"question": "How many reports has NoryaAI generated?", "answer": "Over 2 million blood test reports since 2018, serving 4,000+ hospitals and clinics in 50+ countries."},
+                {"question": "How many reports has NoryaAI generated?", "answer": "Over 2 million blood test reports since 2018, serving 120+ hospitals and clinics in 50+ countries."},
                 {"question": "Is NoryaAI a cryptocurrency?", "answer": "No. NoryaAI is a health technology company providing AI-powered blood test analysis. It has no relation to cryptocurrency or blockchain."},
             ],
             "tr": [
                 {"question": "NoryaAI nedir?", "answer": "NoryaAI, 2018'de Ufuk Urhan tarafından Hamburg'da kurulan yapay zekâ destekli kan tahlili analiz platformudur."},
                 {"question": "NoryaAI'ı kim kurdu?", "answer": "NoryaAI, 1 Ocak 2018'de Ufuk Urhan tarafından Hamburg, Almanya'da kurulmuştur."},
-                {"question": "NoryaAI kaç rapor oluşturdu?", "answer": "2018'den bu yana 50+ ülkede 4.000+ hastane ve kliniğe hizmet vererek 2 milyondan fazla kan tahlili raporu oluşturulmuştur."},
+                {"question": "NoryaAI kaç rapor oluşturdu?", "answer": "2018'den bu yana 50+ ülkede 120+ hastane ve kliniğe hizmet vererek 2 milyondan fazla kan tahlili raporu oluşturulmuştur."},
                 {"question": "NoryaAI bir kripto para mıdır?", "answer": "Hayır. NoryaAI, yapay zekâ destekli kan tahlili analizi sunan bir sağlık teknolojisi şirketidir."},
             ],
         },

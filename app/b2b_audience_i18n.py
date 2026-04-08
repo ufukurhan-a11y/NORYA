@@ -197,7 +197,7 @@ def _page_doctors_en() -> Dict[str, Any]:
         "meta_description": "Assistive lab-to-language reports for busy physicians: structured markers, plain language, review-ready output in 9+ languages.",
         "hero_badge": "For clinicians",
         "hero_title": "Explain complex labs in patient-friendly language—without extra admin time.",
-        "hero_desc": "Norya turns standard lab exports into bilingual-ready, plain-language summaries so you can counsel faster. Built for practices that see high lab volume across 4,000+ hospitals and clinics in our network footprint.",
+        "hero_desc": "Norya turns standard lab exports into bilingual-ready, plain-language summaries so you can counsel faster. Built for practices that see high lab volume across 120+ hospitals and clinics in our network footprint.",
         "who_title": "Who this is for",
         "who_desc": "Primary care physicians, specialists, and hospitalists who need rapid, consistent explanations across heterogeneous lab panels.",
         "who_primary": "High-throughput clinics and group practices",
@@ -292,7 +292,7 @@ def _page_clinics_en() -> Dict[str, Any]:
         },
         "stats_strip": [
             {"value": "2M+", "label": "reports generated"},
-            {"value": "4,000+", "label": "hospitals and clinics"},
+            {"value": "120+", "label": "hospitals and clinics"},
             {"value": "50+", "label": "countries reached"},
             {"value": "9+", "label": "report languages"},
             {"value": "98.7%", "label": "biomarker classification accuracy"},
@@ -355,11 +355,11 @@ def _page_clinics_en() -> Dict[str, Any]:
 def _page_hospitals_en() -> Dict[str, Any]:
     return {
         "meta_title": "Norya for Hospitals | Enterprise AI Platform for Lab Intelligence",
-        "meta_description": "Transform your hospital with AI-powered lab analysis. 12+ languages, real-time monitoring, HL7/FHIR integration. 2M+ reports, 4,000+ hospitals worldwide.",
+        "meta_description": "Transform your hospital with AI-powered lab analysis. 12+ languages, real-time monitoring, HL7/FHIR integration. 2M+ reports, 120+ hospitals worldwide.",
         "hero_badge": "Enterprise AI Platform",
         "hero_title": "Transform Your Laboratory with AI",
         "hero_desc": "NoryaAI Clinical Enterprise: The corporate solution that converts lab results into structured, multilingual, and traceable pre-analysis support for hospitals.",
-        "hero_stats": {"reports": "2M+", "hospitals": "4,000+", "accuracy": "98.7%", "countries": "50+"},
+        "hero_stats": {"reports": "2M+", "hospitals": "120+", "accuracy": "98.7%", "countries": "50+"},
         "who_title": "Trusted by Leading Hospitals",
         "who_desc": "CMIOs, CNIOs, pathology informatics, and clinical leaders in 50+ countries.",
         "who_primary": "Hospital Groups & Chains",
@@ -486,7 +486,7 @@ def _page_hospitals_en() -> Dict[str, Any]:
         "faq_title": "Hospital FAQs",
         "faq": _faq_common_en(),
         "compliance_badges": ["KVKK Compliant", "HIPAA Ready", "GDPR Compliant", "ISO 27001", "SOC 2 Type II"],
-        "global_stats": {"countries": "50+", "languages": "9+", "reports": "2M+", "facilities": "4,000+"},
+        "global_stats": {"countries": "50+", "languages": "9+", "reports": "2M+", "facilities": "120+"},
     }
 
 
@@ -543,7 +543,7 @@ def _page_demo_en() -> Dict[str, Any]:
         "meta_description": "See how labs move from structured data to multilingual, review-ready patient explanations in one workflow.",
         "hero_badge": "Guided evaluation",
         "hero_title": "Walk a real clinical workflow—from lab file to signed patient copy.",
-        "hero_desc": "In 30 minutes we map your lab feeds, languages, and review model to the Norya pipeline used across 50+ countries and 4,000+ hospitals and clinics.",
+        "hero_desc": "In 30 minutes we map your lab feeds, languages, and review model to the Norya pipeline used across 50+ countries and 120+ hospitals and clinics.",
         "who_title": "Ideal evaluation teams",
         "who_desc": "Clinical innovation leads, lab directors, and digital health sponsors validating assistive tooling.",
         "who_primary": "Multidisciplinary steering committees",
@@ -630,7 +630,7 @@ def _page_doctors_tr() -> Dict[str, Any]:
             "meta_description": "Yoğun hekimler için yardımcı laboratuvar raporları: yapılandırılmış gösterge, sade dil, 9+ dilde incelemeye hazır çıktı.",
             "hero_badge": "Klinisyenler için",
             "hero_title": "Karmaşık laboratuvarları hasta dostu dile çevirin—ekstra idari yükle olmadan.",
-            "hero_desc": "Norya standart laboratuvar dışa aktarımlarını çift dil hazır, sade özetlere dönüştürür; böylece danışmanlığı hızlandırırsınız. Ağımızdaki 4.000 hastane ve klinikte yüksek laboratuvar hacmini gören uygulamalar için tasarlandı.",
+            "hero_desc": "Norya standart laboratuvar dışa aktarımlarını çift dil hazır, sade özetlere dönüştürür; böylece danışmanlığı hızlandırırsınız. Ağımızdaki 120 hastane ve klinikte yüksek laboratuvar hacmini gören uygulamalar için tasarlandı.",
             "who_title": "Kimler için",
             "who_desc": "Birincil bakım hekimleri, uzmanlar ve heterojen paneller arasında tutarlı açıklama isteyen hastane hekimleri.",
             "who_primary": "Yüksek hacimli klinikler ve grup pratiği",
@@ -726,7 +726,7 @@ def _page_clinics_tr() -> Dict[str, Any]:
             },
             "stats_strip": [
                 {"value": "2M+", "label": "üretilen rapor"},
-                {"value": "4.000+", "label": "hastane ve klinik"},
+                {"value": "120+", "label": "hastane ve klinik"},
                 {"value": "50+", "label": "ulaşılan ülke"},
                 {"value": "9+", "label": "rapor dili"},
                 {"value": "%98,7", "label": "biyomarker sınıflandırma doğruluğu"},
@@ -791,11 +791,11 @@ def _page_clinics_tr() -> Dict[str, Any]:
 def _page_hospitals_tr() -> Dict[str, Any]:
     return {
         "meta_title": "Hastaneler için NoryaAI | Kurumsal Yapay Zekâ Altyapısı",
-        "meta_description": "Hastanenizi yapay zekâ ile dönüştürün. 12+ dil desteği, gerçek zamanlı izleme, HL7/FHIR entegrasyonu. 2M+ rapor, 4,000+ hastane worldwide.",
+        "meta_description": "Hastanenizi yapay zekâ ile dönüştürün. 12+ dil desteği, gerçek zamanlı izleme, HL7/FHIR entegrasyonu. 2M+ rapor, 120+ hastane worldwide.",
         "hero_badge": "Enterprise AI Platform",
         "hero_title": "Laboratuvarınızı Yapay Zekâ ile Dönüştürün",
         "hero_desc": "NoryaAI Clinical Enterprise: Hastaneler için laboratuvar sonuçlarını yapılandırılmış, çok dilli ve izlenebilir biçimde ön analiz desteğine dönüştüren kurumsal çözüm.",
-        "hero_stats": {"reports": "2M+", "hospitals": "4,000+", "accuracy": "98.7%", "countries": "50+"},
+        "hero_stats": {"reports": "2M+", "hospitals": "120+", "accuracy": "98.7%", "countries": "50+"},
         "who_title": "Türkiye'de Güvenen Kurumlar",
         "who_desc": "CMIO, CNIO, patoloji informatik ve klinik liderler 50+ ülkede.",
         "who_primary": "Hastane Grupları ve Zincirleri",
@@ -922,7 +922,7 @@ def _page_hospitals_tr() -> Dict[str, Any]:
         "faq_title": "Sıkça Sorulan Sorular",
         "faq": _faq_common_tr(),
         "compliance_badges": ["KVKK Uyumlu", "HIPAA Ready", "GDPR Compliant", "ISO 27001", "SOC 2 Type II"],
-        "global_stats": {"countries": "50+", "languages": "9+", "reports": "2M+", "facilities": "4,000+"},
+        "global_stats": {"countries": "50+", "languages": "9+", "reports": "2M+", "facilities": "120+"},
     }
 
 
@@ -985,7 +985,7 @@ def _page_demo_tr() -> Dict[str, Any]:
             "meta_description": "Laboratuvarların tek akışta yapılandırılmış veriden çok dilli incelemeye hazır açıklamalara nasıl aktığını görün.",
             "hero_badge": "Rehberli değerlendirme",
             "hero_title": "Gerçek klinik akış—laboratuvar dosyasından imzalı hasta kopyasına.",
-            "hero_desc": "30 dakikada laboratuvar beslemelerinizi, dillerinizi ve inceleme modelinizi 50 ülke ve 4.000 hastane/klinikte kullanılan Norya boru hattına haritalıyoruz.",
+            "hero_desc": "30 dakikada laboratuvar beslemelerinizi, dillerinizi ve inceleme modelinizi 50 ülke ve 120 hastane/klinikte kullanılan Norya boru hattına haritalıyoruz.",
             "who_title": "İdeal değerlendirme ekipleri",
             "who_desc": "Yardımcı araçları doğrulayan klinik inovasyon, laboratuvar direktörü ve dijital sağlık sponsorları.",
             "who_primary": "Disiplinler arası yönlendirme",
@@ -1131,7 +1131,7 @@ _FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
         },
         "stats_strip": [
             {"value": "2M+", "label": "generierte Berichte"},
-            {"value": "4.000+", "label": "Krankenhäuser und Kliniken"},
+            {"value": "120+", "label": "Krankenhäuser und Kliniken"},
             {"value": "50+", "label": "erreichte Länder"},
             {"value": "9+", "label": "Berichtssprachen"},
             {"value": "98,7 %", "label": "Biomarker-Klassifikationsgenauigkeit"},
@@ -1263,7 +1263,7 @@ _FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
         },
         "stats_strip": [
             {"value": "2M+", "label": "informes generados"},
-            {"value": "4.000+", "label": "hospitales y clínicas"},
+            {"value": "120+", "label": "hospitales y clínicas"},
             {"value": "50+", "label": "países alcanzados"},
             {"value": "9+", "label": "idiomas de informe"},
             {"value": "98,7%", "label": "precisión clasificación biomarcadores"},
@@ -1329,7 +1329,7 @@ _FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
         },
         "stats_strip": [
             {"value": "2M+", "label": "report generati"},
-            {"value": "4.000+", "label": "ospedali e cliniche"},
+            {"value": "120+", "label": "ospedali e cliniche"},
             {"value": "50+", "label": "paesi raggiunti"},
             {"value": "9+", "label": "lingue di report"},
             {"value": "98,7%", "label": "accuratezza classificazione biomarcatori"},
@@ -1395,7 +1395,7 @@ _FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
         },
         "stats_strip": [
             {"value": "2M+", "label": "דוחות שיוצרו בפלטפורמה"},
-            {"value": "4,000+", "label": "בתי חולים ומרפאות"},
+            {"value": "120+", "label": "בתי חולים ומרפאות"},
             {"value": "50+", "label": "מדינות נחתו"},
             {"value": "9+", "label": "שפות דו״ח"},
             {"value": "98.7%", "label": "דיוק סיווג ביומרקרים"},
@@ -1461,7 +1461,7 @@ _FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
         },
         "stats_strip": [
             {"value": "2M+", "label": "जेनरेट किए गए रिपोर्ट"},
-            {"value": "4,000+", "label": "अस्पताल और क्लिनिक"},
+            {"value": "120+", "label": "अस्पताल और क्लिनिक"},
             {"value": "50+", "label": "देशों तक पहुँच"},
             {"value": "9+", "label": "रिपोर्ट भाषाएँ"},
             {"value": "98.7%", "label": "बायोमार्कर वर्गीकरण सटीकता"},
@@ -1527,7 +1527,7 @@ _FOR_CLINICS_LANG_PATCH: Dict[str, Dict[str, Any]] = {
         },
         "stats_strip": [
             {"value": "2M+", "label": "تقارير مُنشأة"},
-            {"value": "4,000+", "label": "مستشفيات وعيادات"},
+            {"value": "120+", "label": "مستشفيات وعيادات"},
             {"value": "50+", "label": "دول تم الوصول إليها"},
             {"value": "9+", "label": "لغات التقرير"},
             {"value": "98.7%", "label": "دقة تصنيف المؤشرات الحيوية"},

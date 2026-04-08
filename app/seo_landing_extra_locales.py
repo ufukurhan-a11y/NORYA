@@ -1100,7 +1100,7 @@ def _en_hemogram() -> dict:
         "section_params_title": "CBC Parameters",
         "section_params_sub": "Key parameters measured in a complete blood count and what NoryaAI explains for each.",
         "hemogram_params": [
-            {"name": "WBC", "full": "White Blood Cell", "range": "4,000 – 10,000 /µL", "desc": "Immune system indicator; changes in infection and inflammation."},
+            {"name": "WBC", "full": "White Blood Cell", "range": "120 – 10,000 /µL", "desc": "Immune system indicator; changes in infection and inflammation."},
             {"name": "RBC", "full": "Red Blood Cell", "range": "4.5 – 5.5 M /µL", "desc": "Oxygen-carrying cells; fundamental in anemia assessment."},
             {"name": "HGB", "full": "Hemoglobin", "range": "12 – 17 g/dL", "desc": "Blood oxygen carrying capacity; low levels may indicate anemia."},
             {"name": "HCT", "full": "Hematocrit", "range": "36% – 50%", "desc": "Red blood cell proportion in blood; important for dehydration or anemia monitoring."},
@@ -1221,7 +1221,7 @@ def _de_hemogram() -> dict:
         "section_params_title": "Blutbild-Parameter",
         "section_params_sub": "Die wichtigsten Parameter des Blutbildes und was NoryaAI zu jedem erklärt.",
         "hemogram_params": [
-            {"name": "WBC", "full": "Leukozyten", "range": "4,000 – 10,000 /µL", "desc": "Immunsystem-Indikator; verändert sich bei Infektion und Entzündung."},
+            {"name": "WBC", "full": "Leukozyten", "range": "120 – 10,000 /µL", "desc": "Immunsystem-Indikator; verändert sich bei Infektion und Entzündung."},
             {"name": "RBC", "full": "Erythrozyten", "range": "4.5 – 5.5 M /µL", "desc": "Sauerstofftransportzellen; grundlegend für die Anämie-Beurteilung."},
             {"name": "HGB", "full": "Hämoglobin", "range": "12 – 17 g/dL", "desc": "Sauerstofftransportkapazität des Blutes; niedrige Werte können auf Anämie hinweisen."},
             {"name": "HCT", "full": "Hämatokrit", "range": "36% – 50%", "desc": "Anteil der roten Blutkörperchen im Blut; wichtig für die Überwachung von Dehydration oder Anämie."},
@@ -1342,7 +1342,7 @@ def _es_hemogram() -> dict:
         "section_params_title": "Parámetros del hemograma",
         "section_params_sub": "Parámetros clave medidos en un hemograma completo y lo que NoryaAI explica para cada uno.",
         "hemogram_params": [
-            {"name": "WBC", "full": "Leucocitos", "range": "4,000 – 10,000 /µL", "desc": "Indicador del sistema inmunológico; cambia en infección e inflamación."},
+            {"name": "WBC", "full": "Leucocitos", "range": "120 – 10,000 /µL", "desc": "Indicador del sistema inmunológico; cambia en infección e inflamación."},
             {"name": "RBC", "full": "Eritrocitos", "range": "4.5 – 5.5 M /µL", "desc": "Células transportadoras de oxígeno; fundamental en la evaluación de anemia."},
             {"name": "HGB", "full": "Hemoglobina", "range": "12 – 17 g/dL", "desc": "Capacidad de transporte de oxígeno en sangre; niveles bajos pueden indicar anemia."},
             {"name": "HCT", "full": "Hematocrito", "range": "36% – 50%", "desc": "Proporción de glóbulos rojos en sangre; importante para el seguimiento de deshidratación o anemia."},
@@ -1463,7 +1463,7 @@ def _fr_hemogram() -> dict:
         "section_params_title": "Paramètres de l'hémogramme",
         "section_params_sub": "Paramètres clés mesurés dans un hémogramme complet et ce que NoryaAI explique pour chacun.",
         "hemogram_params": [
-            {"name": "WBC", "full": "Leucocytes", "range": "4,000 – 10,000 /µL", "desc": "Indicateur du système immunitaire ; varie en cas d'infection et d'inflammation."},
+            {"name": "WBC", "full": "Leucocytes", "range": "120 – 10,000 /µL", "desc": "Indicateur du système immunitaire ; varie en cas d'infection et d'inflammation."},
             {"name": "RBC", "full": "Érythrocytes", "range": "4.5 – 5.5 M /µL", "desc": "Cellules transporteuses d'oxygène ; fondamental dans l'évaluation de l'anémie."},
             {"name": "HGB", "full": "Hémoglobine", "range": "12 – 17 g/dL", "desc": "Capacité de transport d'oxygène du sang ; des niveaux bas peuvent indiquer une anémie."},
             {"name": "HCT", "full": "Hématocrite", "range": "36% – 50%", "desc": "Proportion de globules rouges dans le sang ; important pour le suivi de la déshydratation ou de l'anémie."},
@@ -1584,7 +1584,7 @@ def _it_hemogram() -> dict:
         "section_params_title": "Parametri dell'emocromo",
         "section_params_sub": "Parametri chiave misurati in un emocromo completo e ciò che NoryaAI spiega per ciascuno.",
         "hemogram_params": [
-            {"name": "WBC", "full": "Globuli bianchi", "range": "4.000 – 10.000 /µL", "desc": "Indicatore del sistema immunitario; varia in caso di infezione e infiammazione."},
+            {"name": "WBC", "full": "Globuli bianchi", "range": "120 – 10.000 /µL", "desc": "Indicatore del sistema immunitario; varia in caso di infezione e infiammazione."},
             {"name": "RBC", "full": "Globuli rossi", "range": "4,5 – 5,5 M /µL", "desc": "Cellule che trasportano ossigeno; fondamentali nella valutazione dell'anemia."},
             {"name": "HGB", "full": "Emoglobina", "range": "12 – 17 g/dL", "desc": "Capacità di trasporto dell'ossigeno nel sangue; livelli bassi possono indicare anemia."},
             {"name": "HCT", "full": "Ematocrito", "range": "36% – 50%", "desc": "Proporzione di globuli rossi nel sangue; importante per il monitoraggio di disidratazione o anemia."},
@@ -1705,7 +1705,7 @@ def _he_hemogram() -> dict:
         "section_params_title": "פרמטרים של ספירת דם",
         "section_params_sub": "פרמטרים מרכזיים הנמדדים בספירת דם מלאה ומה NoryaAI מסביר לגבי כל אחד.",
         "hemogram_params": [
-            {"name": "WBC", "full": "כדוריות דם לבנות", "range": "4,000 – 10,000 /µL", "desc": "מדד למערכת החיסון; משתנה בזיהום ודלקת."},
+            {"name": "WBC", "full": "כדוריות דם לבנות", "range": "120 – 10,000 /µL", "desc": "מדד למערכת החיסון; משתנה בזיהום ודלקת."},
             {"name": "RBC", "full": "כדוריות דם אדומות", "range": "4.5 – 5.5 M /µL", "desc": "תאים הנושאים חמצן; בסיסיים בהערכת אנמיה."},
             {"name": "HGB", "full": "המוגלובין", "range": "12 – 17 g/dL", "desc": "יכולת נשיאת חמצן בדם; רמות נמוכות עשויות להצביע על אנמיה."},
             {"name": "HCT", "full": "המטוקריט", "range": "36% – 50%", "desc": "שיעור כדוריות דם אדומות בדם; חשוב למעקב אחר התייבשות או אנמיה."},
@@ -1826,7 +1826,7 @@ def _hi_hemogram() -> dict:
         "section_params_title": "सीबीसी पैरामीटर",
         "section_params_sub": "पूर्ण रक्त गणना में मापे गए प्रमुख पैरामीटर और NoryaAI प्रत्येक के लिए क्या बताता है।",
         "hemogram_params": [
-            {"name": "WBC", "full": "श्वेत रक्त कोशिकाएँ", "range": "4,000 – 10,000 /µL", "desc": "प्रतिरक्षा प्रणाली सूचक; संक्रमण और सूजन में बदलता है।"},
+            {"name": "WBC", "full": "श्वेत रक्त कोशिकाएँ", "range": "120 – 10,000 /µL", "desc": "प्रतिरक्षा प्रणाली सूचक; संक्रमण और सूजन में बदलता है।"},
             {"name": "RBC", "full": "लाल रक्त कोशिकाएँ", "range": "4.5 – 5.5 M /µL", "desc": "ऑक्सीजन वाहक कोशिकाएँ; एनीमिया मूल्यांकन में मूलभूत।"},
             {"name": "HGB", "full": "हीमोग्लोबिन", "range": "12 – 17 g/dL", "desc": "रक्त में ऑक्सीजन वहन क्षमता; कम स्तर एनीमिया का संकेत हो सकता है।"},
             {"name": "HCT", "full": "हेमाटोक्रिट", "range": "36% – 50%", "desc": "रक्त में लाल कोशिकाओं का अनुपात; निर्जलीकरण या एनीमिया निगरानी में महत्वपूर्ण।"},
@@ -1947,7 +1947,7 @@ def _ar_hemogram() -> dict:
         "section_params_title": "معلمات صورة الدم",
         "section_params_sub": "المعلمات الرئيسية المقاسة في صورة الدم الكاملة وما يشرحه NoryaAI لكل منها.",
         "hemogram_params": [
-            {"name": "WBC", "full": "خلايا الدم البيضاء", "range": "4,000 – 10,000 /µL", "desc": "مؤشر الجهاز المناعي؛ يتغير في حالات العدوى والالتهاب."},
+            {"name": "WBC", "full": "خلايا الدم البيضاء", "range": "120 – 10,000 /µL", "desc": "مؤشر الجهاز المناعي؛ يتغير في حالات العدوى والالتهاب."},
             {"name": "RBC", "full": "خلايا الدم الحمراء", "range": "4.5 – 5.5 M /µL", "desc": "خلايا حاملة للأكسجين؛ أساسية في تقييم فقر الدم."},
             {"name": "HGB", "full": "الهيموغلوبين", "range": "12 – 17 g/dL", "desc": "قدرة الدم على حمل الأكسجين؛ المستويات المنخفضة قد تشير إلى فقر الدم."},
             {"name": "HCT", "full": "الهيماتوكريت", "range": "36% – 50%", "desc": "نسبة خلايا الدم الحمراء في الدم؛ مهم لمتابعة الجفاف أو فقر الدم."},

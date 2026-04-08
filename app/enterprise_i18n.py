@@ -19,7 +19,7 @@ ENTERPRISE_UI = {
         "footer_medical_review": "Tıbbi İnceleme",
         "footer_desc": "Klinisyenleri etik temelli, tıbbi açıdan bilinçli yapay zeka altyapısı ile güçlendiriyoruz.",
         "footer_copyright": "© 2026 NoryaAI. Tüm hakları saklıdır.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
@@ -237,7 +237,7 @@ ENTERPRISE_UI = {
         "workflow_badge": "Kurumsal İş Akışı",
         "footer_copyright": "\u00a9 2026 NoryaAI. T\u00fcm haklar\u0131 sakl\u0131d\u0131r.",
         "active_partner_label": "Aktif Ortak",
-        "global_network_desc": "50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor. Sıfır riskle başlayın—ücretsiz pilot dağıtım ile sonuçları görün, sonra karar verin.",
+        "global_network_desc": "50+ ülkede 120+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor. Sıfır riskle başlayın—ücretsiz pilot dağıtım ile sonuçları görün, sonra karar verin.",
         "free_pilot_label": "Ücretsiz Pilot Dağıtım",
         "free_pilot_desc": "Belirlenen bölümde sınırlı kapsamlı başlangıç",
         "no_setup_fee_label": "Kurulum Ücreti Yok",
@@ -253,6 +253,7 @@ ENTERPRISE_UI = {
         "apply_now_title": "Hemen Başvurun",
         "apply_now_desc": "2 dakika içinde formu doldurun, 24 saat içinde satış ekibimiz sizi arasın.",
         "free_pilot_cta": "Ücretsiz Pilot Başlat",
+        "hospitals_served_desc": "120+ hastaneye güvenilir klinik yapay zeka altyapısı sunuyoruz.",
         "hospital_operations_ai_desc": "Hastanenizin operasyonel mükemmelliğini destekleyen gelişmiş yapay zeka özellikleri",
         "hipaa_compliant_badge": "HIPAA Uyumlu",
         "priority_support_label": "Öncelikli Destek",
@@ -270,7 +271,7 @@ ENTERPRISE_UI = {
         "compatible_with_hospital_systems": "Mevcut hastane sistemleriyle uyumlu mu?",
         "hospital_systems_compatibility": "NoryaAI, mevcut kurumsal iş akışlarına entegrasyonu destekleyecek şekilde tasarlanmıştır. Pilot süreçte entegrasyon planlaması birlikte yapılır.",
         "how_data_secured_answer": "Gizlilik odaklı veri işleme, rol bazlı erişim, izlenebilir iş akışları ve kurumsal denetim kaydı altyapısı ile güvenlik desteklenir.",
-        "free_pilot_program_desc": "Ücretsiz pilot programımızla başlayın, sonuçları görün, sonra karar verin. 50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor.",
+        "free_pilot_program_desc": "Ücretsiz pilot programımızla başlayın, sonuçları görün, sonra karar verin. 50+ ülkede 120+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor.",
         "kvkk_compliant_badge": "KVKK Uyumlu",
         "support_247_badge": "7/24 Destek",
 
@@ -312,7 +313,7 @@ ENTERPRISE_UI = {
         "pilot_3_title": "Performans Analizi",
         "pilot_3_desc": "Detaylı raporlarla zaman tasarrufu ve doğruluk metriklerini görün.",
         "contact_title": "İletişim",
-        
+
         # Usage section
         "usage_title": "Hastaneye Özgü Kullanım Alanları",
         "usage_subtitle": "Laboratuvarlardan acil servislere, klinik araştırmalardan sağlık turizmine kadar geniş kullanım senaryoları.",
@@ -326,7 +327,7 @@ ENTERPRISE_UI = {
         "usage_4_desc": "Hasta kohortlarının boylamsal analizini yapın, terapötik etkinlik trendlerini izleyin.",
         "usage_5_title": "Merkezi Laboratuvar Yönetimi",
         "usage_5_desc": "Yüksek hacimli test çıktılarını yapılandırın, kalite kontrol süreçlerini destekleyin.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "Size Özel Çözüm",
         "contact_section_title": "Hastanenize Özel Çözüm",
@@ -457,7 +458,7 @@ ENTERPRISE_UI = {
         "compatible_with_hospital_systems": "Mevcut hastane sistemleriyle uyumlu mu?",
         "hospital_systems_compatibility": "NoryaAI, mevcut kurumsal iş akışlarına entegrasyonu destekleyecek şekilde tasarlanmıştır. Pilot süreçte entegrasyon planlaması birlikte yapılır.",
         "how_data_secured_answer": "Gizlilik odaklı veri işleme, rol bazlı erişim, izlenebilir iş akışları ve kurumsal denetim kaydı altyapısı ile güvenlik desteklenir.",
-        "free_pilot_program_desc": "Ücretsiz pilot programımızla başlayın, sonuçları görün, sonra karar verin. 50+ ülkede 4,000+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor.",
+        "free_pilot_program_desc": "Ücretsiz pilot programımızla başlayın, sonuçları görün, sonra karar verin. 50+ ülkede 120+ hastane ve klinik, günde 2M+ tahlil yorumunu NoryaAI ile yapılandırıyor.",
         "kvkk_compliant_badge": "KVKK Uyumlu",
         "support_247_badge": "7/24 Destek",
         "clinician_review_title": "Klinisyen Gözden Geçirme",
@@ -491,11 +492,11 @@ ENTERPRISE_UI = {
         "apply_now_title": "Hemen Başvurun",
         "apply_now_desc": "2 dakika içinde formu doldurun, 24 saat içinde satış ekibimiz sizi arasın.",
         "free_pilot_cta": "Ücretsiz Pilot Başlat",
-        
+
         # Footer
         "footer_desc": "Sağlık kurumları için yapılandırılmış klinik yapay zekâ altyapısı.",
         "footer_copyright": "© 2026 NoryaAI. Tüm hakları saklıdır.",
-        
+
         # AI/Tech badges
         "ai_powered_text": "Yapay Zeka Güçlü",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -503,7 +504,7 @@ ENTERPRISE_UI = {
         "restful_api": "RESTful API",
         "uptime_sla": "Çalışma Süresi SLA",
         "api_response": "API Yanıtı",
-        
+
         # Form validation errors
         "form_error_institution_required": "Kurum/hastane adını girin.",
         "form_error_contact_required": "Yetkili ad soyadını girin.",
@@ -513,17 +514,17 @@ ENTERPRISE_UI = {
         "form_error_rate_limit": "Çok fazla istek. Lütfen biraz bekleyin.",
         "form_success_message": "Talebiniz alındı. En kısa sürede sizinle iletişime geçeceğiz.",
         "form_error_generic": "Bir hata oluştu. Lütfen tekrar deneyin.",
-        
+
         # Mixed language fixes
         "and_clinics": "& Klinik",
         "analyzed_reports": "Rapor Analiz Edildi",
         "countries_in_use": "Ülkede Kullanım",
-        
+
         # Team section descriptions
         "team_1_desc": "Yüksek hacimli laboratuvar çıktılarını yapılandırılmış biçimde hazırlar, uzman incelemesi öncesinde düzenli bir temel oluşturur.",
         "team_2_desc": "Klinisyenlerin hasta görüşmesine daha hazırlıklı girmesine yardımcı olabilir.",
         "team_4_desc": "Kota yönetimi, kullanım takibi ve kurumsal denetim özellikleri hastane yönetim ekiplerinin ihtiyaçlarına göre tasarlanmıştır.",
-        
+
         # Teams section titles
         "teams_title": "Kimler Kullanabilir?",
         "teams_subtitle": "NoryaAI, hastane organizasyon şemasının farklı noktalarına değer katacak şekilde tasarlanmıştır.",
@@ -532,7 +533,7 @@ ENTERPRISE_UI = {
         "team_3_title": "Acil Servis",
         "team_3_desc": "Hızlı karar alınması gereken ortamlarda yapılandırılmış özet çıktılar, tahlil sonuçlarının daha çabuk kavranmasına destek olabilir.",
         "team_4_title": "Yönetim ve Operasyon",
-        
+
         # Form labels
         "contact_form_name": "Ad Soyad",
         "contact_email_label": "E-posta",
@@ -549,12 +550,12 @@ ENTERPRISE_UI = {
     "en": {
         "meta_title": "Enterprise — NoryaAI | Clinical Decision Support Platform",
         "meta_description": "NoryaAI enterprise: Structure blood test reports in minutes, highlight risk areas. Request a demo.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
         "contact_phone_link": "+905071703564",
-        
+
         "hero_cta_secondary": "Our Solutions",
         "mobile_menu_label": "Menu",
         "hero_panel_label": "Enterprise Workflow",
@@ -765,7 +766,7 @@ ENTERPRISE_UI = {
         "stat_1_label": "Reports Generated",
         "stat_2_label": "Hospitals & Clinics",
         "stat_3_label": "Biomarker Accuracy",
-        
+
         # Hospitals page specific
         "why_hospitals_title": "Why a Hospital-Specific Solution?",
         "why_hospitals_subtitle": "Hospitals differ from other healthcare facilities with high-volume lab workload, multidisciplinary teams, multilingual patient communication, and corporate audit requirements.",
@@ -899,7 +900,7 @@ ENTERPRISE_UI = {
         "pilot_3_title": "Performance Analysis",
         "pilot_3_desc": "View time savings and accuracy metrics with detailed reports.",
         "contact_title": "Contact",
-        
+
         # Usage section
         "usage_title": "Hospital-Specific Use Cases",
         "usage_subtitle": "From laboratories to emergency departments, clinical research to health tourism.",
@@ -913,7 +914,7 @@ ENTERPRISE_UI = {
         "usage_4_desc": "Perform longitudinal analysis of patient cohorts, track therapeutic efficacy trends.",
         "usage_5_title": "Central Lab Management",
         "usage_5_desc": "Structure high-volume test outputs, support quality control processes.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "Tailored Solution",
         "contact_section_title": "Tailored Solution for Your Hospital",
@@ -933,17 +934,18 @@ ENTERPRISE_UI = {
         "hospital_operations_ai_desc": "Advanced AI features supporting your hospital's operational excellence.",
         "active_partner_label": "Active Partner",
         "free_pilot_cta": "Start Free Pilot",
+        "hospitals_served_desc": "Trusted by 120+ hospitals with reliable clinical AI infrastructure.",
         "card_hospital_1_title": "High-Volume Lab Outputs",
         "card_hospital_1_desc": "Hundreds of test results are generated daily. Automate each with NoryaAI for consistency and expert review preparation.",
         "card_hospital_2_title": "Multidisciplinary Team Coordination",
         "card_hospital_2_desc": "Establish consistent reporting language and workflow standards across lab, clinic, emergency, and administrative units.",
         "card_hospital_3_title": "Multilingual Patient Communication",
         "card_hospital_3_desc": "Present results in 9+ languages for international patients, medical tourism, and multicultural communities.",
-        
+
         # Footer
         "footer_desc": "Structured clinical AI infrastructure for healthcare institutions.",
         "footer_copyright": "© 2026 NoryaAI. All rights reserved.",
-        
+
         # AI/Tech badges
         "ai_powered_text": "AI Powered",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -951,7 +953,7 @@ ENTERPRISE_UI = {
         "restful_api": "RESTful API",
         "uptime_sla": "Uptime SLA",
         "api_response": "API Response",
-        
+
         # Form validation errors
         "form_error_institution_required": "Enter the institution/hospital name.",
         "form_error_contact_required": "Enter the contact name.",
@@ -961,17 +963,17 @@ ENTERPRISE_UI = {
         "form_error_rate_limit": "Too many requests. Please wait a moment.",
         "form_success_message": "Request received. We will contact you shortly.",
         "form_error_generic": "An error occurred. Please try again.",
-        
+
         # Mixed language fixes
         "and_clinics": "& Clinics",
         "analyzed_reports": "Reports Analyzed",
         "countries_in_use": "Countries in Use",
-        
+
         # Team section descriptions
         "team_1_desc": "Prepares high-volume lab outputs in a structured way, creating an organized foundation before specialist review.",
         "team_2_desc": "Can help clinicians enter patient visits more prepared.",
         "team_4_desc": "Quota management, usage tracking, and enterprise audit features are designed for hospital management team needs.",
-        
+
         # Teams section titles
         "teams_title": "Who Can Use It?",
         "teams_subtitle": "NoryaAI is designed to add value at different points of the hospital organization.",
@@ -980,9 +982,9 @@ ENTERPRISE_UI = {
         "team_3_title": "Emergency Department",
         "team_3_desc": "In fast-decision environments, structured summary outputs support quicker comprehension of lab results.",
         "team_4_title": "Management & Operations",
-        
+
         # Hospitals page - pilot & contact
-        "free_pilot_program_desc": "Start with our free pilot program, see the results, then decide. 4,000+ hospitals and clinics in 50+ countries structure 2M+ test reports daily with NoryaAI.",
+        "free_pilot_program_desc": "Start with our free pilot program, see the results, then decide. 120+ hospitals and clinics in 50+ countries structure 2M+ test reports daily with NoryaAI.",
         "kvkk_compliant_badge": "KVKK Compliant",
         "support_247_badge": "24/7 Support",
     },
@@ -999,7 +1001,7 @@ ENTERPRISE_UI = {
         "footer_methodology": "Methodik",
         "footer_medical_review": "Medizinische Prüfung",
         "footer_desc": "Kliniker mit ethisch gebauter, medizinisch bewusster KI-Infrastruktur unterstützen.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
@@ -1292,7 +1294,7 @@ ENTERPRISE_UI = {
         "pilot_3_title": "Leistungsanalyse",
         "pilot_3_desc": "Sehen Sie Zeitersparnis und Genauigkeitsmetriken in detaillierten Berichten.",
         "contact_title": "Kontakt",
-        
+
         # Usage section
         "usage_title": "Krankenhausspezifische Anwendungsfälle",
         "usage_subtitle": "Von Laboren bis zu Notaufnahmen, klinische Forschung bis Gesundheitstourismus.",
@@ -1306,7 +1308,7 @@ ENTERPRISE_UI = {
         "usage_4_desc": "Longitudinale Analyse von Patientenkohorten, Verlaufskontrolle therapeutischer Wirksamkeit.",
         "usage_5_title": "Zentrales Labormanagement",
         "usage_5_desc": "Strukturieren Sie hochvolumige Testergebnisse, unterstützen Sie Qualitätskontrollprozesse.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "Maßgeschneiderte Lösung",
         "contact_section_title": "Maßgeschneiderte Lösung für Ihr Krankenhaus",
@@ -1397,7 +1399,7 @@ ENTERPRISE_UI = {
         "compatible_with_hospital_systems": "Kompatibel mit bestehenden Krankenhaussystemen?",
         "hospital_systems_compatibility": "NoryaAI wurde entwickelt, um die Integration in bestehende Unternehmens-Workflows zu unterstützen. Die Integrationsplanung erfolgt gemeinsam im Pilotprozess.",
         "how_data_secured_answer": "Datenschutz durch datenschutzorientierte Verarbeitung, rollenbasierten Zugriff, nachvollziehbare Workflows und Unternehmens-Audit-Infrastruktur.",
-        "free_pilot_program_desc": "Beginnen Sie mit unserem kostenlosen Pilotprogramm, sehen Sie die Ergebnisse und entscheiden Sie dann. Über 4.000 Krankenhäuser und Kliniken in 50+ Ländern strukturieren täglich 2M+ Testberichte mit NoryaAI.",
+        "free_pilot_program_desc": "Beginnen Sie mit unserem kostenlosen Pilotprogramm, sehen Sie die Ergebnisse und entscheiden Sie dann. Über 120 Krankenhäuser und Kliniken in 50+ Ländern strukturieren täglich 2M+ Testberichte mit NoryaAI.",
         "kvkk_compliant_badge": "KVKK-Konform",
         "support_247_badge": "7/24 Support",
         "clinician_review_title": "Klinikerprüfung",
@@ -1431,11 +1433,12 @@ ENTERPRISE_UI = {
         "apply_now_title": "Jetzt Bewerben",
         "apply_now_desc": "Formular in 2 Minuten ausfüllen, Vertriebsteam ruft innerhalb von 24 Stunden an.",
         "free_pilot_cta": "Kostenloses Pilot starten",
-        
+        "hospitals_served_desc": "120+ Krankenhäuser vertrauen auf unsere klinische KI-Infrastruktur.",
+
         # Footer
         "footer_desc": "Strukturierte klinische KI-Infrastruktur für Gesundheitseinrichtungen.",
         "footer_copyright": "© 2026 NoryaAI. Alle Rechte vorbehalten.",
-        
+
         # AI/Tech badges
         "ai_powered_text": "KI-Unterstützt",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -1443,7 +1446,7 @@ ENTERPRISE_UI = {
         "restful_api": "RESTful API",
         "uptime_sla": "Verfügbarkeits-SLA",
         "api_response": "API-Antwort",
-        
+
         # Form validation errors
         "form_error_institution_required": "Geben Sie den Namen der Institution/des Krankenhauses ein.",
         "form_error_contact_required": "Geben Sie den Kontaktnamen ein.",
@@ -1453,17 +1456,17 @@ ENTERPRISE_UI = {
         "form_error_rate_limit": "Zu viele Anfragen. Bitte warten Sie einen Moment.",
         "form_success_message": "Anfrage erhalten. Wir melden uns in Kürze bei Ihnen.",
         "form_error_generic": "Ein Fehler ist aufgetreten. Bitte versuchen Sie es erneut.",
-        
+
         # Mixed language fixes
         "and_clinics": "& Kliniken",
         "analyzed_reports": "Berichte Analysiert",
         "countries_in_use": "Länder im Einsatz",
-        
+
         # Team section descriptions
         "team_1_desc": "Bereitet hochvolumige Laborergebnisse strukturiert vor und schafft eine organisierte Basis vor der Fachprüfung.",
         "team_2_desc": "Kann Klinikern helfen, besser vorbereitet in die Patientenvisite zu gehen.",
         "team_4_desc": "Funktionen zur Kontingentverwaltung, Nutzungsnachverfolgung und Unternehmensprüfung sind auf die Bedürfnisse von Krankenhausmanagement-Teams zugeschnitten.",
-        
+
         # Usage section
         "usage_title": "Krankenhausspezifische Anwendungsbereiche",
         "usage_subtitle": "Von Laboren über Notaufnahmen bis hin zu klinischer Forschung und Gesundheitstourismus.",
@@ -1477,7 +1480,7 @@ ENTERPRISE_UI = {
         "usage_4_desc": "Führen Sie longitudinale Analysen von Patientenkohorten durch, verfolgen Sie therapeutische Wirksamkeitstrends.",
         "usage_5_title": "Zentrallabor-Management",
         "usage_5_desc": "Strukturieren Sie hochvolumige Testausgaben, unterstützen Sie Qualitätskontrollprozesse.",
-        
+
         # Teams section titles
         "teams_title": "Wer kann es nutzen?",
         "teams_subtitle": "NoryaAI wurde entwickelt, um an verschiedenen Stellen der Krankenhausorganisation Mehrwert zu bieten.",
@@ -1499,12 +1502,12 @@ _EXTRA = {
     "es": {
         "meta_title": "Empresas — NoryaAI | Plataforma de Soporte de Decisiones Clínicas",
         "meta_description": "NoryaAI empresas: Estructure informes de análisis de sangre en minutos, resalte áreas de riesgo. Solicite una demo.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
         "contact_phone_link": "+905071703564",
-        
+
         "nav_home": "Inicio",
         "nav_enterprise": "Empresas",
         "nav_privacy": "Privacidad",
@@ -1648,7 +1651,7 @@ _EXTRA = {
         "pilot_3_title": "Análisis de Rendimiento",
         "pilot_3_desc": "Vea el ahorro de tiempo y las métricas de precisión en informes detallados.",
         "contact_title": "Contacto",
-        
+
         # Usage section
         "usage_title": "Casos de Uso Específicos del Hospital",
         "usage_subtitle": "Desde laboratorios hasta servicios de urgencias, investigación clínica hasta turismo de salud.",
@@ -1662,7 +1665,7 @@ _EXTRA = {
         "usage_4_desc": "Realice análisis longitudinales de cohortes de pacientes, rastree tendencias de eficacia terapéutica.",
         "usage_5_title": "Gestión de Laboratorio Central",
         "usage_5_desc": "Estructure salidas de pruebas de alto volumen, apoye procesos de control de calidad.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "Solución Personalizada",
         "contact_section_title": "Solución Personalizada para su Hospital",
@@ -1753,7 +1756,7 @@ _EXTRA = {
         "compatible_with_hospital_systems": "¿Compatible con sistemas hospitalarios existentes?",
         "hospital_systems_compatibility": "NoryaAI está diseñado para apoyar la integración con flujos de trabajo empresariales existentes. La planificación de integración se realiza conjuntamente en el proceso piloto.",
         "how_data_secured_answer": "Privacidad a través de procesamiento de datos con privacidad primero, acceso basado en roles, flujos de trabajo rastreables e infraestructura de auditoría empresarial.",
-        "free_pilot_program_desc": "Comience con nuestro programa piloto gratuito, vea los resultados y luego decida. Más de 4,000 hospitales y clínicas en 50+ países estructuran 2M+ informes de pruebas diariamente con NoryaAI.",
+        "free_pilot_program_desc": "Comience con nuestro programa piloto gratuito, vea los resultados y luego decida. Más de 120 hospitales y clínicas en 50+ países estructuran 2M+ informes de pruebas diariamente con NoryaAI.",
         "kvkk_compliant_badge": "Cumple KVKK",
         "support_247_badge": "Soporte 24/7",
         "clinician_review_title": "Revisión Clínica",
@@ -1787,11 +1790,12 @@ _EXTRA = {
         "apply_now_title": "Aplicar Ahora",
         "apply_now_desc": "Complete el formulario en 2 minutos, el equipo de ventas lo llamará en 24 horas.",
         "free_pilot_cta": "Iniciar Piloto Gratuito",
-        
+        "hospitals_served_desc": "Más de 120 hospitales confían en nuestra infraestructura de IA clínica.",
+
         # Footer
         "footer_desc": "Infraestructura de IA clínica estructurada para instituciones sanitarias.",
         "footer_copyright": "© 2026 NoryaAI. Todos los derechos reservados.",
-        
+
         # AI/Tech badges
         "ai_powered_text": "Impulsado por IA",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -1799,7 +1803,7 @@ _EXTRA = {
         "restful_api": "API RESTful",
         "uptime_sla": "SLA de Disponibilidad",
         "api_response": "Respuesta API",
-        
+
         # Form validation errors
         "form_error_institution_required": "Introduzca el nombre de la institución/hospital.",
         "form_error_contact_required": "Introduzca el nombre del contacto.",
@@ -1809,17 +1813,17 @@ _EXTRA = {
         "form_error_rate_limit": "Demasiadas solicitudes. Espere un momento.",
         "form_success_message": "Solicitud recibida. Nos pondremos en contacto con usted pronto.",
         "form_error_generic": "Se produjo un error. Inténtelo de nuevo.",
-        
+
         # Mixed language fixes
         "and_clinics": "y Clínicas",
         "analyzed_reports": "Informes Analizados",
         "countries_in_use": "Países en Uso",
-        
+
         # Team section descriptions
         "team_1_desc": "Prepara resultados de laboratorio de alto volumen de forma estructurada, creando una base organizada antes de la revisión especializada.",
         "team_2_desc": "Puede ayudar a los clínicos a entrar más preparados en la visita del paciente.",
         "team_4_desc": "Las funciones de gestión de cuotas, seguimiento de uso y auditoría empresarial están diseñadas para las necesidades de los equipos de gestión hospitalaria.",
-        
+
         # Teams section titles
         "teams_title": "¿Quién Puede Usarlo?",
         "teams_subtitle": "NoryaAI está diseñado para agregar valor en diferentes puntos de la organización hospitalaria.",
@@ -1833,12 +1837,12 @@ _EXTRA = {
     "fr": {
         "meta_title": "Entreprise — NoryaAI | Plateforme d'Aide à la Décision Clinique",
         "meta_description": "NoryaAI entreprise : Structurez les rapports d'analyses sanguines en quelques minutes, mettez en évidence les zones à risque. Demandez une démo.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
         "contact_phone_link": "+905071703564",
-        
+
         "nav_home": "Accueil",
         "nav_enterprise": "Entreprise",
         "nav_privacy": "Confidentialité",
@@ -1979,7 +1983,7 @@ _EXTRA = {
         "pilot_3_title": "Analyse des Performances",
         "pilot_3_desc": "Consultez les économies de temps et les métriques de précision dans des rapports détaillés.",
         "contact_title": "Contact",
-        
+
         # Usage section
         "usage_title": "Cas d'Usage Spécifiques aux Hôpitaux",
         "usage_subtitle": "Des laboratoires aux services d'urgence, de la recherche clinique au tourisme de santé.",
@@ -1993,7 +1997,7 @@ _EXTRA = {
         "usage_4_desc": "Effectuez des analyses longitudinales de cohortes de patients, suivez les tendances d'efficacité thérapeutique.",
         "usage_5_title": "Gestion de Laboratoire Central",
         "usage_5_desc": "Structurez les sorties de tests à haut volume, soutenez les processus de contrôle qualité.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "Solution Personnalisée",
         "contact_section_title": "Solution Personnalisée pour votre Hôpital",
@@ -2118,11 +2122,12 @@ _EXTRA = {
         "apply_now_title": "Postuler Maintenant",
         "apply_now_desc": "Remplissez le formulaire en 2 minutes, l'équipe de ventes vous appellera dans les 24 heures.",
         "free_pilot_cta": "Démarrer le Pilote Gratuit",
-        
+        "hospitals_served_desc": "Plus de 120 hôpitaux font confiance à notre infrastructure IA clinique.",
+
         # Footer
         "footer_desc": "Infrastructure d'IA clinique structurée pour les établissements de santé.",
         "footer_copyright": "© 2026 NoryaAI. Tous droits réservés.",
-        
+
         # AI/Tech badges
         "ai_powered_text": "Propulsé par l'IA",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -2130,7 +2135,7 @@ _EXTRA = {
         "restful_api": "API RESTful",
         "uptime_sla": "SLA de Disponibilité",
         "api_response": "Réponse API",
-        
+
         # Form validation errors
         "form_error_institution_required": "Veuillez entrer le nom de l'institution/hôpital.",
         "form_error_contact_required": "Veuillez entrer le nom du contact.",
@@ -2140,17 +2145,17 @@ _EXTRA = {
         "form_error_rate_limit": "Trop de demandes. Attendez un instant.",
         "form_success_message": "Demande reçue. Nous vous recontacterons bientôt.",
         "form_error_generic": "Une erreur s'est produite. Veuillez réessayer.",
-        
+
         # Mixed language fixes
         "and_clinics": "et Cliniques",
         "analyzed_reports": "Rapports Analysés",
         "countries_in_use": "Pays en Utilisation",
-        
+
         # Team section descriptions
         "team_1_desc": "Prépare les résultats de laboratoire à haut volume de manière structurée, créant une base organisée avant la révision spécialisée.",
         "team_2_desc": "Peut aider les cliniciens à entrer plus préparés dans la visite du patient.",
         "team_4_desc": "Les fonctions de gestion des quotas, de suivi d'utilisation et d'audit d'entreprise sont conçues pour les besoins des équipes de gestion hospitalière.",
-        
+
         # Teams section titles
         "teams_title": "Qui Peut l'Utiliser ?",
         "teams_subtitle": "NoryaAI est conçu pour ajouter de la valeur à différents points de l'organisation hospitalière.",
@@ -2164,12 +2169,12 @@ _EXTRA = {
     "it": {
         "meta_title": "Enterprise — NoryaAI | Piattaforma di Supporto alle Decisioni Cliniche",
         "meta_description": "NoryaAI enterprise: Struttura i referti delle analisi del sangue in minuti, evidenzia le aree di rischio. Richiedi una demo.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
         "contact_phone_link": "+905071703564",
-        
+
         "nav_home": "Home",
         "nav_enterprise": "Enterprise",
         "nav_privacy": "Privacy",
@@ -2310,7 +2315,7 @@ _EXTRA = {
         "pilot_3_title": "Analisi delle Prestazioni",
         "pilot_3_desc": "Visualizza il risparmio di tempo e le metriche di precisione in rapporti dettagliati.",
         "contact_title": "Contatto",
-        
+
         # Usage section
         "usage_title": "Casi d'Uso Specifici per Ospedali",
         "usage_subtitle": "Dai laboratori ai pronto soccorsi, dalla ricerca clinica al turismo sanitario.",
@@ -2324,7 +2329,7 @@ _EXTRA = {
         "usage_4_desc": "Esegui analisi longitudinali di coorti di pazienti, traccia le tendenze di efficacia terapeutica.",
         "usage_5_title": "Gestione Laboratorio Centrale",
         "usage_5_desc": "Struttura output di test ad alto volume, supporta i processi di controllo qualità.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "Soluzione Personalizzata",
         "contact_section_title": "Soluzione Personalizzata per il tuo Ospedale",
@@ -2415,7 +2420,7 @@ _EXTRA = {
         "compatible_with_hospital_systems": "Compatibile con i sistemi ospedalieri esistenti?",
         "hospital_systems_compatibility": "NoryaAI è progettato per supportare l'integrazione con i flussi di lavoro aziendali esistenti. La pianificazione dell'integrazione viene eseguita congiuntamente nel processo pilota.",
         "how_data_secured_answer": "Privacy attraverso l'elaborazione dei dati con priorità alla privacy, accesso basato sui ruoli, flussi di lavoro tracciabili e infrastruttura di audit aziendale.",
-        "free_pilot_program_desc": "Inizia con il nostro programma pilota gratuito, vedi i risultati e poi decidi. Oltre 4.000 ospedali e cliniche in 50+ paesi strutturano 2M+ rapporti di test quotidianamente con NoryaAI.",
+        "free_pilot_program_desc": "Inizia con il nostro programma pilota gratuito, vedi i risultati e poi decidi. Oltre 120 ospedali e cliniche in 50+ paesi strutturano 2M+ rapporti di test quotidianamente con NoryaAI.",
         "kvkk_compliant_badge": "Conforme KVKK",
         "support_247_badge": "Supporto 24/7",
         "clinician_review_title": "Revisione Clinica",
@@ -2449,14 +2454,15 @@ _EXTRA = {
         "apply_now_title": "Candidati Ora",
         "apply_now_desc": "Compila il modulo in 2 minuti, il team di vendite ti chiamerà entro 24 ore.",
         "free_pilot_cta": "Avvia Pilota Gratuito",
-        
+        "hospitals_served_desc": "Oltre 120 ospedali si affidano alla nostra infrastruttura AI clinica.",
+
         # Footer
         "footer_desc": "Infrastruttura di IA clinica strutturata per istituzioni sanitarie.",
         "footer_copyright": "© 2026 NoryaAI. Tutti i diritti riservati.",
         "nav_home": "Home",
         "nav_privacy": "Privacy",
         "nav_terms": "Termini di Utilizzo",
-        
+
         # AI/Tech badges
         "ai_powered_text": "Alimentato da IA",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -2464,7 +2470,7 @@ _EXTRA = {
         "restful_api": "API RESTful",
         "uptime_sla": "SLA di Disponibilità",
         "api_response": "Risposta API",
-        
+
         # Form validation errors
         "form_error_institution_required": "Inserisci il nome dell'istituzione/ospedale.",
         "form_error_contact_required": "Inserisci il nome del contatto.",
@@ -2474,17 +2480,17 @@ _EXTRA = {
         "form_error_rate_limit": "Troppe richieste. Attendi un momento.",
         "form_success_message": "Richiesta ricevuta. Ti ricontatteremo al più presto.",
         "form_error_generic": "Si è verificato un errore. Riprova.",
-        
+
         # Mixed language fixes
         "and_clinics": "ve Cliniche",
         "analyzed_reports": "Rapporti Analizzati",
         "countries_in_use": "Paesi in Utilizzo",
-        
+
         # Team section descriptions
         "team_1_desc": "Prepara outputs di laboratorio ad alto volume in modo strutturato, creando una base ordinata prima della revisione specialistica.",
         "team_2_desc": "Può aiutare i clinici ad entrare più preparati nella visita del paziente.",
         "team_4_desc": "Le funzionalità di gestione quote, monitoraggio utilizzo e audit aziendale sono progettate per le esigenze dei team di gestione ospedaliera.",
-        
+
         # Teams section titles
         "teams_title": "Chi Può Utilizzarlo?",
         "teams_subtitle": "NoryaAI è progettato per aggiungere valore in diversi punti dell'organizzazione ospedaliera.",
@@ -2498,12 +2504,12 @@ _EXTRA = {
     "he": {
         "meta_title": "ארגונים — NoryaAI | פלטפורמת תמיכה בהחלטות קליניות",
         "meta_description": "NoryaAI לארגונים: ארגן דוחות בדיקות דם תוך דקות, הדגש אזורים מסוכנים. בקש הדגמה.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
         "contact_phone_link": "+905071703564",
-        
+
         "nav_home": "דף הבית",
         "nav_enterprise": "ארגונים",
         "nav_privacy": "פרטיות",
@@ -2645,7 +2651,7 @@ _EXTRA = {
         "pilot_3_title": "ניתוח ביצועים",
         "pilot_3_desc": "צפה בחיסכון בזמן ומדדי דיוק בדוחות מפורטים.",
         "contact_title": "צור קשר",
-        
+
         # Usage section
         "usage_title": "מקרי שימוש ספציפיים לבית חולים",
         "usage_subtitle": "ממעבדות למחלקות מיון, ממחקר קליני לתיירות רפואית.",
@@ -2659,7 +2665,7 @@ _EXTRA = {
         "usage_4_desc": "בצע ניתוח אורכי של קבוצות מטופלים, עקוב אחר מגמות יעילות טיפולית.",
         "usage_5_title": "ניהול מעבדה מרכזית",
         "usage_5_desc": "ארגן פלטי בדיקות בעל נפח גבוה, תמוך בתהליכי בקרת איכות.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "פתרון מותאם אישית",
         "contact_section_title": "פתרון מותאם אישית לבית החולים שלך",
@@ -2750,7 +2756,7 @@ _EXTRA = {
         "compatible_with_hospital_systems": "תואם למערכות בית חולים קיימות?",
         "hospital_systems_compatibility": "NoryaAI מתוכנן לתמוך באינטגרציה עם זרימות עבודה ארגוניות קיימות. תכנון האינטגרציה מתבצע במשותף בתהליך הפיילוט.",
         "how_data_secured_answer": "פרטיות באמצעות עיבוד נתונים עם דגש על פרטיות, גישה מבוססת תפקידים, זרימות עבודה ניתנות למעקב ותשתית ביקורת ארגונית.",
-        "free_pilot_program_desc": "התחל עם תוכנית הפיילוט החינמית שלנו, ראה את התוצאות ואז החלט. יותר מ-4,000 בתי חולים ומרפאות ב-50+ מדינות מבנים 2M+ דוחות בדיקה מדי יום עם NoryaAI.",
+        "free_pilot_program_desc": "התחל עם תוכנית הפיילוט החינמית שלנו, ראה את התוצאות ואז החלט. יותר מ-120 בתי חולים ומרפאות ב-50+ מדינות מבנים 2M+ דוחות בדיקה מדי יום עם NoryaAI.",
         "kvkk_compliant_badge": "תואם KVKK",
         "support_247_badge": "תמיכה 24/7",
         "clinician_review_title": "סקירה קלינית",
@@ -2784,11 +2790,12 @@ _EXTRA = {
         "apply_now_title": "הגש מועמדות עכשיו",
         "apply_now_desc": "מלא את הטופס תוך 2 דקות, צוות המכירות יתקשר אליך תוך 24 שעות.",
         "free_pilot_cta": "התחל פיילוט חינמי",
-        
+        "hospitals_served_desc": "120+ בתי חולים סומכים על תשתית הבינה המלאכותית הקלינית שלנו.",
+
         # Footer
         "footer_desc": "תשתית בינה מלאכותית קלינית מובנית למוסדות רפואיים.",
         "footer_copyright": "© 2026 NoryaAI. כל הזכויות שמורות.",
-        
+
         # AI/Tech badges
         "ai_powered_text": "מופעל על ידי בינה מלאכותית",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -2796,7 +2803,7 @@ _EXTRA = {
         "restful_api": "RESTful API",
         "uptime_sla": "SLA זמן פעילות",
         "api_response": "תגובת API",
-        
+
         # Form validation errors
         "form_error_institution_required": "הזן את שם המוסד/בית החולים.",
         "form_error_contact_required": "הזן את שם איש הקשר.",
@@ -2806,17 +2813,17 @@ _EXTRA = {
         "form_error_rate_limit": "יותר מדי בקשות. המתן מספר רגעים.",
         "form_success_message": "הבקשה התקבלה. ניצור איתך קשר בהקדם.",
         "form_error_generic": "אירעה שגיאה. נסה שוב.",
-        
+
         # Mixed language fixes
         "and_clinics": "ומרפאות",
         "analyzed_reports": "דיווחים שנותחו",
         "countries_in_use": "מדינות בשימוש",
-        
+
         # Team section descriptions
         "team_1_desc": "מכין תוצאות מעבדה בעלות נפח גבוה בצורה מובנית, יוצר בסיס מסודר לפני סקירה מומחית.",
         "team_2_desc": "יכול לעזור לקלינאים להיכנס יותר מוכנים לביקור המטופל.",
         "team_4_desc": "תכונות ניהול מכסות, מעקב שימוש וביקורת ארגונית מתוכננות לצרכי צוותי הניהול של בתי חולים.",
-        
+
         # Teams section titles
         "teams_title": "מי יכול להשתמש?",
         "teams_subtitle": "NoryaAI מתוכנן להוסיף ערך בנקודות שונות של הארגון הבית-חולי.",
@@ -2830,12 +2837,12 @@ _EXTRA = {
     "ar": {
         "meta_title": "المؤسسات — NoryaAI | منصة دعم القرارات السريرية",
         "meta_description": "NoryaAI للمؤسسات: هيكلة تقارير تحاليل الدم في دقائق، إبراز المناطق الخطرة. اطلب عرضًا توضيحيًا.",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
         "contact_phone_link": "+905071703564",
-        
+
         "nav_home": "الصفحة الرئيسية",
         "nav_enterprise": "المؤسسات",
         "nav_privacy": "الخصوصية",
@@ -2977,7 +2984,7 @@ _EXTRA = {
         "pilot_3_title": "تحليل الأداء",
         "pilot_3_desc": "اعرض توفير الوقت ومقاييس الدقة في تقارير مفصلة.",
         "contact_title": "اتصل",
-        
+
         # Usage section
         "usage_title": "حالات استخدام مخصصة للمستشفيات",
         "usage_subtitle": "من المختبرات إلى أقسام الطوارئ، من البحث السريري إلى السياحة الصحية.",
@@ -2991,7 +2998,7 @@ _EXTRA = {
         "usage_4_desc": "قم بإجراء تحليل طولي لمجموعات المرضى، تتبع اتجاهات الفعالية العلاجية.",
         "usage_5_title": "إدارة المختبر المركزي",
         "usage_5_desc": "نظم مخرجات الاختبارات عالية الحجم، ادعم عمليات مراقبة الجودة.",
-        
+
         # Contact/CTA section
         "contact_section_badge": "حل مخصص",
         "contact_section_title": "حل مخصص لمستشفاك",
@@ -3116,11 +3123,12 @@ _EXTRA = {
         "apply_now_title": "قدم الآن",
         "apply_now_desc": "املأ النموذج في دقيقتين، سيتصل بك فريق المبيعات خلال 24 ساعة.",
         "free_pilot_cta": "ابدأ البرنامج التجريبي المجاني",
-        
+        "hospitals_served_desc": "أكثر من 120 مستشفى يثقون في بنية الذكاء الاصطناعي السريري لدينا.",
+
         # Footer
         "footer_desc": "بنية تحتية للذكاء الاصطناعي السريري المهيكلة لمؤسسات الرعاية الصحية.",
         "footer_copyright": "© 2026 NoryaAI. جميع الحقوق محفوظة.",
-        
+
         # AI/Tech badges
         "ai_powered_text": "مدعوم بالذكاء الاصطناعي",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -3128,7 +3136,7 @@ _EXTRA = {
         "restful_api": "RESTful API",
         "uptime_sla": "اتفاقية وقت التشغيل",
         "api_response": "استجابة API",
-        
+
         # Form validation errors
         "form_error_institution_required": "أدخل اسم المؤسسة/المستشفى.",
         "form_error_contact_required": "أدخل اسم جهة الاتصال.",
@@ -3138,17 +3146,17 @@ _EXTRA = {
         "form_error_rate_limit": "طلبات كثيرة جداً. انتظر قليلاً.",
         "form_success_message": "تم استلام الطلب. سنتواصل معك قريباً.",
         "form_error_generic": "حدث خطأ. يرجى المحاولة مرة أخرى.",
-        
+
         # Mixed language fixes
         "and_clinics": "والعيادات",
         "analyzed_reports": "التقارير التي تم تحليلها",
         "countries_in_use": "دول في الاستخدام",
-        
+
         # Team section descriptions
         "team_1_desc": "يُعد نتائج المختبر عالية الحجم بشكل منظم، وينشئ أساسًا منظمًا قبل المراجعة المتخصصة.",
         "team_2_desc": "يمكن أن يساعد الأطباء في الدخول أكثر استعدادًا في زيارة المريض.",
         "team_4_desc": "تم تصميم ميزات إدارة الحصص وتتبع الاستخدام ومراجعة الحسابات المؤسسية وفقًا لاحتياجات فرق إدارة المستشفيات.",
-        
+
         # Teams section titles
         "teams_title": "من يمكنه استخدامه؟",
         "teams_subtitle": "تم تصميم NoryaAI لإضافة القيمة في نقاط مختلفة من منظمة المستشفى.",
@@ -3162,12 +3170,12 @@ _EXTRA = {
     "hi": {
         "meta_title": "एंटरप्राइज़ — NoryaAI | नैदानिक निर्णय सहायता प्लेटफॉर्म",
         "meta_description": "NoryaAI एंटरप्राइज़: रक्त परीक्षण रिपोर्टों को मिनटों में संरचित करें, जोखिम क्षेत्रों को उजागर करें। डेमो का अनुरोध करें।",
-        
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",
         "contact_phone_link": "+905071703564",
-        
+
         "nav_home": "होम",
         "nav_enterprise": "एंटरप्राइज़",
         "nav_privacy": "गोपनीयता",
@@ -3308,7 +3316,7 @@ _EXTRA = {
         "pilot_3_title": "प्रदर्शन विश्लेषण",
         "pilot_3_desc": "विस्तृत रिपोर्ट में समय की बचत और सटीकता मेट्रिक्स देखें।",
         "contact_title": "संपर्क",
-        
+
         # Usage section
         "usage_title": "अस्पताल-विशिष्ट उपयोग के मामले",
         "usage_subtitle": "प्रयोगशालाओं से आपातकालीन विभागों तक, नैदानिक अनुसंधान से स्वास्थ्य पर्यटन तक।",
@@ -3322,7 +3330,7 @@ _EXTRA = {
         "usage_4_desc": "रोगी समूहों का लंबवत विश्लेषण करें, चिकित्सीय प्रभावशीलता प्रवृत्तियों को ट्रैक करें।",
         "usage_5_title": "केंद्रीय प्रयोगशाला प्रबंधन",
         "usage_5_desc": "उच्च-खंड परीक्षण आउटपुट संरचित करें, गुणवत्ता नियंत्रण प्रक्रियाओं का समर्थन करें।",
-        
+
         # Contact/CTA section
         "contact_section_badge": "अनुकूलित समाधान",
         "contact_section_title": "अपने अस्पताल के लिए अनुकूलित समाधान",
@@ -3413,7 +3421,7 @@ _EXTRA = {
         "compatible_with_hospital_systems": "मौजूदा अस्पताल प्रणालियों के साथ संगत?",
         "hospital_systems_compatibility": "NoryaAI को मौजूदा एंटरप्राइज़ वर्कफ़्लो के साथ एकीकरण का समर्थन करने के लिए डिज़ाइन किया गया है। एकीकरण योजना पायलट प्रक्रिया में संयुक्त रूप से की जाती है।",
         "how_data_secured_answer": "गोपनीयता-पहले डेटा प्रसंस्करण, भूमिका-आधारित पहुंच, ट्रेसबल वर्कफ़्लो और एंटरप्राइज़ ऑडिट बुनियादी ढांचे के माध्यम से गोपनीयता।",
-        "free_pilot_program_desc": "हमारे निःशुल्क पायलट कार्यक्रम के साथ शुरू करें, परिणाम देखें और फिर निर्णय लें। 50+ देशों में 4,000+ अस्पताल और क्लिनिक NoryaAI के साथ दैनिक 2M+ टेस्ट रिपोर्ट संरचित करते हैं।",
+        "free_pilot_program_desc": "हमारे निःशुल्क पायलट कार्यक्रम के साथ शुरू करें, परिणाम देखें और फिर निर्णय लें। 50+ देशों में 120+ अस्पताल और क्लिनिक NoryaAI के साथ दैनिक 2M+ टेस्ट रिपोर्ट संरचित करते हैं।",
         "kvkk_compliant_badge": "KVKK अनुपालित",
         "support_247_badge": "24/7 सहायता",
         "clinician_review_title": "नैदानिक समीक्षा",
@@ -3447,11 +3455,12 @@ _EXTRA = {
         "apply_now_title": "अभी आवेदन करें",
         "apply_now_desc": "2 मिनट में फॉर्म भरें, बिक्री टीम 24 घंटे के भीतर आपको कॉल करेगी।",
         "free_pilot_cta": "निःशुल्क पायलट शुरू करें",
-        
+        "hospitals_served_desc": "120+ अस्पताल हमारे क्लिनिकल AI इन्फ्रास्ट्रक्चर पर भरोसा करते हैं।",
+
         # Footer
         "footer_desc": "स्वास्थ्य संस्थानों के लिए संरचित नैदानिक AI अवसंरचना।",
         "footer_copyright": "© 2026 NoryaAI. सर्वाधिकार सुरक्षित।",
-        
+
         # AI/Tech badges
         "ai_powered_text": "AI द्वारा संचालित",
         "gpt4_enterprise": "GPT-4 Enterprise",
@@ -3459,7 +3468,7 @@ _EXTRA = {
         "restful_api": "RESTful API",
         "uptime_sla": "अपटाइम SLA",
         "api_response": "API प्रतिक्रिया",
-        
+
         # Form validation errors
         "form_error_institution_required": "संस्था/अस्पताल का नाम दर्ज करें।",
         "form_error_contact_required": "संपर्क नाम दर्ज करें।",
@@ -3469,17 +3478,17 @@ _EXTRA = {
         "form_error_rate_limit": "बहुत सारे अनुरोध। कुछ क्षण प्रतीक्षा करें।",
         "form_success_message": "अनुरोध प्राप्त हुआ। हम जल्द ही आपसे संपर्क करेंगे।",
         "form_error_generic": "एक त्रुटि हुई। कृपया पुनः प्रयास करें।",
-        
+
         # Mixed language fixes
         "and_clinics": "और क्लिनिक",
         "analyzed_reports": "विश्लेषित रिपोर्टें",
         "countries_in_use": "उपयोग में देश",
-        
+
         # Team section descriptions
         "team_1_desc": "उच्च वॉल्यूम प्रयोगशाला परिणामों को संरचित रूप से तैयार करता है, विशेषज्ञ समीक्षा से पहले एक संगठित आधार बनाता है।",
         "team_2_desc": "चिकित्सकों को मरीज की यात्रा में अधिक तैयार होने में मदद कर सकता है।",
         "team_4_desc": "कोटा प्रबंधन, उपयोग ट्रैकिंग और एंटरप्राइज़ ऑडिट सुविधाएं अस्पताल प्रबंधन टीमों की जरूरतों के अनुसार डिज़ाइन की गई हैं।",
-        
+
         # Teams section titles
         "teams_title": "इसे कौन उपयोग कर सकता है?",
         "teams_subtitle": "NoryaAI को अस्पताल संगठन के विभिन्न बिंदुओं पर मूल्य जोड़ने के लिए डिज़ाइन किया गया है।",
@@ -3496,7 +3505,7 @@ for _lang, _d in _EXTRA.items():
 
 def get_enterprise_ui(lang: str) -> dict:
     """Kurumsal sayfalar için çeviri objesi.
-    
+
     Güvenli fallback:
     - İstenen dil varsa onu döner
     - Yoksa EN'i döner
@@ -3511,7 +3520,7 @@ def get_enterprise_ui(lang: str) -> dict:
 
 def get_hastaneler_ui(lang: str) -> dict:
     """Hastaneler sayfası için çeviri objesi.
-    
+
     Güvenli fallback:
     - İstenen dil varsa onu döner
     - Yoksa EN'i dener
@@ -3529,10 +3538,10 @@ def get_hastaneler_hreflang_urls(base_url: str) -> list:
     urls = []
     # x-default olarak EN
     urls.append({"hreflang": "x-default", "href": f"{base_url}/hastaneler-icen?lang=en"})
-    
+
     for lang in sorted(ENTERPRISE_LANGS):
         urls.append({"hreflang": lang, "href": f"{base_url}/hastaneler-icen?lang={lang}"})
-    
+
     return urls
 
 
@@ -3541,12 +3550,12 @@ def get_hastaneler_hreflang_tags(base_url: str, current_lang: str) -> str:
     lines = []
     # x-default olarak EN
     lines.append(f'<link rel="alternate" hreflang="x-default" href="{base_url}/hastaneler-icen?lang=en" />')
-    
+
     for lang in sorted(ENTERPRISE_LANGS):
         href = f"{base_url}/hastaneler-icen?lang={lang}"
         lines.append(f'<link rel="alternate" hreflang="{lang}" href="{href}" />')
-    
+
     # Canonical
     lines.append(f'<link rel="canonical" href="{base_url}/hastaneler-icen?lang={current_lang}" />')
-    
+
     return "\n  ".join(lines)

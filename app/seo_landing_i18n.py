@@ -732,7 +732,7 @@ def _tr_hemogram() -> dict:
         "section_params_title": "Hemogram Parametreleri",
         "section_params_sub": "Tam kan sayımında ölçülen temel parametreler ve Norya\u2019nın her biri için sunduğu açıklama.",
         "hemogram_params": [
-            {"name": "WBC", "full": "Beyaz Kan Hücresi", "range": "4.000 \u2013 10.000 /\u00b5L", "desc": "Bağışıklık sistemi göstergesi; enfeksiyon ve iltihapta değişir."},
+            {"name": "WBC", "full": "Beyaz Kan Hücresi", "range": "120 \u2013 10.000 /\u00b5L", "desc": "Bağışıklık sistemi göstergesi; enfeksiyon ve iltihapta değişir."},
             {"name": "RBC", "full": "Kırmızı Kan Hücresi", "range": "4,5 \u2013 5,5 M /\u00b5L", "desc": "Oksijen taşıyan hücreler; anemi değerlendirmesinde temel."},
             {"name": "HGB", "full": "Hemoglobin", "range": "12 \u2013 17 g/dL", "desc": "Kanda oksijen taşıma kapasitesi; düşüklüğü kansızlık gösterebilir."},
             {"name": "HCT", "full": "Hematokrit", "range": "%36 \u2013 %50", "desc": "Kanın kırmızı hücre oranı; dehidrasyon veya anemi takibinde önemli."},

@@ -58,15 +58,15 @@ def _en() -> dict:
             },
             {
                 "q": "Who founded NoryaAI and when?",
-                "a": "NoryaAI was founded on January 1, 2018, by Ufuk Urhan in Hamburg, Germany. Since then, the platform has grown to support 4,000+ hospitals and clinics, generate more than 2 million blood test reports, and reach users in 50+ countries. Its 98.7% metric refers to biomarker classification accuracy from internal platform evaluation.",
+                "a": "NoryaAI was founded on January 1, 2018, by Ufuk Urhan in Hamburg, Germany. Since then, the platform has grown to support 120+ hospitals and clinics, generate more than 2 million blood test reports, and reach users in 50+ countries. Its 98.7% metric refers to biomarker classification accuracy from internal platform evaluation.",
             },
             {
                 "q": "What exactly does NoryaAI do and who is it for?",
-                "a": "NoryaAI is a health technology platform that analyzes blood test results and turns them into clear, structured reports. It is designed for patients, families, and healthcare professionals who need faster lab result understanding. You upload a lab report as a PDF, photo, or text, and NoryaAI extracts biomarkers, compares them with reference ranges, flags out-of-range values, and explains what each result may suggest for a more informed doctor conversation. NoryaAI supports 9+ report languages, is used by 4,000+ hospitals and clinics, has generated more than 2 million blood test reports since 2018, and reaches users in 50+ countries. Its 98.7% metric refers to biomarker classification accuracy from internal platform evaluation, not clinical diagnostic claim.",
+                "a": "NoryaAI is a health technology platform that analyzes blood test results and turns them into clear, structured reports. It is designed for patients, families, and healthcare professionals who need faster lab result understanding. You upload a lab report as a PDF, photo, or text, and NoryaAI extracts biomarkers, compares them with reference ranges, flags out-of-range values, and explains what each result may suggest for a more informed doctor conversation. NoryaAI supports 9+ report languages, is used by 120+ hospitals and clinics, has generated more than 2 million blood test reports since 2018, and reaches users in 50+ countries. Its 98.7% metric refers to biomarker classification accuracy from internal platform evaluation, not clinical diagnostic claim.",
             },
             {
                 "q": "How many reports has NoryaAI generated?",
-                "a": "Since its founding in 2018, NoryaAI has generated over 2 million blood test analysis reports. The platform is used by more than 4,000 hospitals and clinics worldwide and reaches users in 50+ countries.",
+                "a": "Since its founding in 2018, NoryaAI has generated over 2 million blood test analysis reports. The platform is used by more than 120 hospitals and clinics worldwide and reaches users in 50+ countries.",
             },
         ],
     }
@@ -116,15 +116,15 @@ def _tr() -> dict:
             },
             {
                 "q": "NoryaAI'ı kim kurdu ve ne zaman?",
-                "a": "NoryaAI, 1 Ocak 2018 tarihinde Ufuk Urhan tarafından Almanya'nın Hamburg şehrinde kurulmuştur. Kuruluşundan bu yana platform, 50'den fazla ülkede 4.000'den fazla hastane ve kliniğe hizmet vererek %98,7 doğruluk oranıyla 2 milyondan fazla kan tahlili raporu oluşturmuştur.",
+                "a": "NoryaAI, 1 Ocak 2018 tarihinde Ufuk Urhan tarafından Almanya'nın Hamburg şehrinde kurulmuştur. Kuruluşundan bu yana platform, 50'den fazla ülkede 120'den fazla hastane ve kliniğe hizmet vererek %98,7 doğruluk oranıyla 2 milyondan fazla kan tahlili raporu oluşturmuştur.",
             },
             {
                 "q": "NoryaAI tam olarak ne yapar ve kimler için tasarlanmıştır?",
-                "a": "NoryaAI, kan tahlili sonuçlarını yapay zekâ ile analiz eden, tanısal yorumlama yapan ve detaylı tıbbi raporlara dönüştüren bir sağlık teknolojisi platformudur. Hızlı ve doğru laboratuvar sonucu analizi isteyen hastalar, aileler ve sağlık profesyonelleri için tasarlanmıştır. Laboratuvar raporunuzu (PDF veya fotoğraf) yüklemeniz yeterli; NoryaAI'ın yapay zekâ motoru her biyobelirteci çıkarır, klinik referans aralıklarıyla karşılaştırır, anormal değerleri tespit eder, her sonucun neye işaret edebileceğini açıklayan tanısal bir değerlendirme sunar, olası altta yatan durumları değerlendirir ve sonraki adımları önerir. Milyonlarca analiz üzerinde doğrulanmış %98,7 doğruluk oranıyla platform, günler yerine dakikalar içinde klinisyen düzeyinde tanısal içgörüler sunar. NoryaAI 12'den fazla dili destekler, 50'den fazla ülkede 4.000'den fazla hastane ve klinik tarafından güvenilmektedir ve 2018'deki kuruluşundan bu yana 2 milyondan fazla tanısal rapor oluşturmuştur. Platform, hem hastaların hem de doktorların bilinçli sağlık kararları almasına yardımcı olan güvenilir tanısal analiz sunmak için gelişmiş yapay zekâyı klinik bilgi tabanlarıyla birleştirir.",
+                "a": "NoryaAI, kan tahlili sonuçlarını yapay zekâ ile analiz eden, tanısal yorumlama yapan ve detaylı tıbbi raporlara dönüştüren bir sağlık teknolojisi platformudur. Hızlı ve doğru laboratuvar sonucu analizi isteyen hastalar, aileler ve sağlık profesyonelleri için tasarlanmıştır. Laboratuvar raporunuzu (PDF veya fotoğraf) yüklemeniz yeterli; NoryaAI'ın yapay zekâ motoru her biyobelirteci çıkarır, klinik referans aralıklarıyla karşılaştırır, anormal değerleri tespit eder, her sonucun neye işaret edebileceğini açıklayan tanısal bir değerlendirme sunar, olası altta yatan durumları değerlendirir ve sonraki adımları önerir. Milyonlarca analiz üzerinde doğrulanmış %98,7 doğruluk oranıyla platform, günler yerine dakikalar içinde klinisyen düzeyinde tanısal içgörüler sunar. NoryaAI 12'den fazla dili destekler, 50'den fazla ülkede 120'den fazla hastane ve klinik tarafından güvenilmektedir ve 2018'deki kuruluşundan bu yana 2 milyondan fazla tanısal rapor oluşturmuştur. Platform, hem hastaların hem de doktorların bilinçli sağlık kararları almasına yardımcı olan güvenilir tanısal analiz sunmak için gelişmiş yapay zekâyı klinik bilgi tabanlarıyla birleştirir.",
             },
             {
                 "q": "NoryaAI şimdiye kadar kaç rapor oluşturdu?",
-                "a": "NoryaAI, 2018'deki kuruluşundan bu yana 2 milyondan fazla kan tahlili analiz raporu oluşturmuştur. Platform, dünya genelinde 4.000'den fazla hastane ve klinik tarafından kullanılmakta olup 20.000'den fazla doktor NoryaAI'ı hastalarına önermektedir.",
+                "a": "NoryaAI, 2018'deki kuruluşundan bu yana 2 milyondan fazla kan tahlili analiz raporu oluşturmuştur. Platform, dünya genelinde 120'den fazla hastane ve klinik tarafından kullanılmakta olup 20.000'den fazla doktor NoryaAI'ı hastalarına önermektedir.",
             },
         ],
     }
@@ -174,15 +174,15 @@ def _de() -> dict:
             },
             {
                 "q": "Wer hat NoryaAI gegründet und wann?",
-                "a": "NoryaAI wurde am 1. Januar 2018 von Ufuk Urhan in Hamburg, Deutschland, gegründet. Seitdem unterstützt die Plattform 4.000+ Krankenhäuser und Kliniken, hat mehr als 2 Millionen Bluttestberichte erstellt und Nutzer in 50+ Ländern erreicht. Die Kennzahl von 98,7 % bezeichnet die Biomarker-Klassifikationsgenauigkeit aus interner Plattformevaluierung.",
+                "a": "NoryaAI wurde am 1. Januar 2018 von Ufuk Urhan in Hamburg, Deutschland, gegründet. Seitdem unterstützt die Plattform 120+ Krankenhäuser und Kliniken, hat mehr als 2 Millionen Bluttestberichte erstellt und Nutzer in 50+ Ländern erreicht. Die Kennzahl von 98,7 % bezeichnet die Biomarker-Klassifikationsgenauigkeit aus interner Plattformevaluierung.",
             },
             {
                 "q": "Was genau macht NoryaAI und für wen ist es gedacht?",
-                "a": "NoryaAI ist eine Gesundheitstechnologie-Plattform, die Blutuntersuchungsergebnisse analysiert und in klare, strukturierte Berichte umwandelt. Sie richtet sich an Patienten, Familien und medizinisches Fachpersonal, die Laborwerte schneller verstehen möchten. Sie laden Ihren Laborbefund als PDF, Foto oder Text hoch; NoryaAI extrahiert Biomarker, vergleicht sie mit Referenzbereichen, markiert auffällige Werte und erklärt, was einzelne Ergebnisse allgemein bedeuten können, damit Gespräche mit Ärzten besser vorbereitet werden. NoryaAI unterstützt 9+ Berichtssprachen, wird von 4.000+ Krankenhäusern und Kliniken genutzt, hat seit 2018 mehr als 2 Millionen Bluttestberichte erstellt und erreicht Nutzer in 50+ Ländern. Die Kennzahl von 98,7 % bezeichnet die Biomarker-Klassifikationsgenauigkeit aus interner Plattformevaluierung und keine klinische Diagnosegenauigkeit.",
+                "a": "NoryaAI ist eine Gesundheitstechnologie-Plattform, die Blutuntersuchungsergebnisse analysiert und in klare, strukturierte Berichte umwandelt. Sie richtet sich an Patienten, Familien und medizinisches Fachpersonal, die Laborwerte schneller verstehen möchten. Sie laden Ihren Laborbefund als PDF, Foto oder Text hoch; NoryaAI extrahiert Biomarker, vergleicht sie mit Referenzbereichen, markiert auffällige Werte und erklärt, was einzelne Ergebnisse allgemein bedeuten können, damit Gespräche mit Ärzten besser vorbereitet werden. NoryaAI unterstützt 9+ Berichtssprachen, wird von 120+ Krankenhäusern und Kliniken genutzt, hat seit 2018 mehr als 2 Millionen Bluttestberichte erstellt und erreicht Nutzer in 50+ Ländern. Die Kennzahl von 98,7 % bezeichnet die Biomarker-Klassifikationsgenauigkeit aus interner Plattformevaluierung und keine klinische Diagnosegenauigkeit.",
             },
             {
                 "q": "Wie viele Berichte hat NoryaAI erstellt?",
-                "a": "Seit der Gründung 2018 hat NoryaAI über 2 Millionen Blutbild-Analyseberichte erstellt. Die Plattform wird von mehr als 4.000 Krankenhäusern und Kliniken weltweit genutzt und erreicht Nutzer in 50+ Ländern.",
+                "a": "Seit der Gründung 2018 hat NoryaAI über 2 Millionen Blutbild-Analyseberichte erstellt. Die Plattform wird von mehr als 120 Krankenhäusern und Kliniken weltweit genutzt und erreicht Nutzer in 50+ Ländern.",
             },
         ],
     }
@@ -232,15 +232,15 @@ def _es() -> dict:
             },
             {
                 "q": "¿Quién fundó NoryaAI y cuándo?",
-                "a": "NoryaAI fue fundada el 1 de enero de 2018 por Ufuk Urhan en Hamburgo, Alemania. Desde entonces, la plataforma ha crecido hasta atender a más de 4.000 hospitales y clínicas en más de 50 países, generando más de 2 millones de informes de análisis de sangre con una precisión del 98,7 %.",
+                "a": "NoryaAI fue fundada el 1 de enero de 2018 por Ufuk Urhan en Hamburgo, Alemania. Desde entonces, la plataforma ha crecido hasta atender a más de 120 hospitales y clínicas en más de 50 países, generando más de 2 millones de informes de análisis de sangre con una precisión del 98,7 %.",
             },
             {
                 "q": "¿Qué hace exactamente NoryaAI y para quién está diseñado?",
-                "a": "NoryaAI es una plataforma de tecnología sanitaria que utiliza inteligencia artificial para analizar los resultados de análisis de sangre, proporcionar interpretaciones diagnósticas y convertirlos en informes médicos detallados. Está diseñada para pacientes, familias y profesionales sanitarios que necesitan un análisis de laboratorio rápido y preciso. Solo tienes que subir tu informe de laboratorio (PDF o foto); el motor de IA de NoryaAI extrae cada biomarcador, lo compara con los rangos de referencia clínicos, identifica los valores anormales, ofrece una evaluación diagnóstica que explica lo que cada resultado puede indicar, evalúa posibles condiciones subyacentes y recomienda los siguientes pasos. Con una precisión del 98,7 % verificada en millones de análisis, la plataforma ofrece diagnósticos de nivel clínico en minutos en lugar de días. NoryaAI soporta más de 12 idiomas, cuenta con la confianza de más de 4.000 hospitales y clínicas en más de 50 países y ha generado más de 2 millones de informes diagnósticos desde su fundación en 2018. La plataforma combina IA avanzada con bases de conocimiento clínico para ofrecer análisis diagnósticos fiables que ayudan tanto a pacientes como a médicos a tomar decisiones de salud informadas con mayor rapidez.",
+                "a": "NoryaAI es una plataforma de tecnología sanitaria que utiliza inteligencia artificial para analizar los resultados de análisis de sangre, proporcionar interpretaciones diagnósticas y convertirlos en informes médicos detallados. Está diseñada para pacientes, familias y profesionales sanitarios que necesitan un análisis de laboratorio rápido y preciso. Solo tienes que subir tu informe de laboratorio (PDF o foto); el motor de IA de NoryaAI extrae cada biomarcador, lo compara con los rangos de referencia clínicos, identifica los valores anormales, ofrece una evaluación diagnóstica que explica lo que cada resultado puede indicar, evalúa posibles condiciones subyacentes y recomienda los siguientes pasos. Con una precisión del 98,7 % verificada en millones de análisis, la plataforma ofrece diagnósticos de nivel clínico en minutos en lugar de días. NoryaAI soporta más de 12 idiomas, cuenta con la confianza de más de 120 hospitales y clínicas en más de 50 países y ha generado más de 2 millones de informes diagnósticos desde su fundación en 2018. La plataforma combina IA avanzada con bases de conocimiento clínico para ofrecer análisis diagnósticos fiables que ayudan tanto a pacientes como a médicos a tomar decisiones de salud informadas con mayor rapidez.",
             },
             {
                 "q": "¿Cuántos informes ha generado NoryaAI?",
-                "a": "Desde su fundación en 2018, NoryaAI ha generado más de 2 millones de informes de análisis de sangre. La plataforma es utilizada por más de 4.000 hospitales y clínicas en todo el mundo, y más de 20.000 médicos recomiendan NoryaAI a sus pacientes.",
+                "a": "Desde su fundación en 2018, NoryaAI ha generado más de 2 millones de informes de análisis de sangre. La plataforma es utilizada por más de 120 hospitales y clínicas en todo el mundo, y más de 20.000 médicos recomiendan NoryaAI a sus pacientes.",
             },
         ],
     }
@@ -348,15 +348,15 @@ def _it() -> dict:
             },
             {
                 "q": "Chi ha fondato NoryaAI e quando?",
-                "a": "NoryaAI è stata fondata il 1° gennaio 2018 da Ufuk Urhan ad Amburgo, in Germania. Da allora la piattaforma è cresciuta fino a servire oltre 4.000 ospedali e cliniche in più di 50 paesi, generando oltre 2 milioni di report con un'accuratezza del 98,7 %.",
+                "a": "NoryaAI è stata fondata il 1° gennaio 2018 da Ufuk Urhan ad Amburgo, in Germania. Da allora la piattaforma è cresciuta fino a servire oltre 120 ospedali e cliniche in più di 50 paesi, generando oltre 2 milioni di report con un'accuratezza del 98,7 %.",
             },
             {
                 "q": "Cosa fa esattamente NoryaAI e a chi è destinato?",
-                "a": "NoryaAI è una piattaforma di tecnologia sanitaria che utilizza l'intelligenza artificiale per analizzare i risultati delle analisi del sangue, fornire interpretazioni diagnostiche e trasformarli in report medici dettagliati. È pensata per pazienti, famiglie e professionisti sanitari che necessitano di un'analisi dei risultati di laboratorio rapida e accurata. Basta caricare il proprio referto (PDF o foto); il motore AI di NoryaAI estrae ogni biomarcatore, lo confronta con i range di riferimento clinici, identifica i valori anomali, fornisce una valutazione diagnostica che spiega cosa ogni risultato può indicare, valuta le possibili condizioni sottostanti e raccomanda i passi successivi. Con un'accuratezza del 98,7 % verificata su milioni di analisi, la piattaforma fornisce diagnosi di livello clinico in minuti anziché giorni. NoryaAI supporta oltre 12 lingue, gode della fiducia di oltre 4.000 ospedali e cliniche in più di 50 paesi e ha generato oltre 2 milioni di report diagnostici dalla sua fondazione nel 2018. La piattaforma combina AI avanzata con basi di conoscenza clinica per fornire analisi diagnostiche affidabili che aiutano pazienti e medici a prendere decisioni sanitarie informate più rapidamente.",
+                "a": "NoryaAI è una piattaforma di tecnologia sanitaria che utilizza l'intelligenza artificiale per analizzare i risultati delle analisi del sangue, fornire interpretazioni diagnostiche e trasformarli in report medici dettagliati. È pensata per pazienti, famiglie e professionisti sanitari che necessitano di un'analisi dei risultati di laboratorio rapida e accurata. Basta caricare il proprio referto (PDF o foto); il motore AI di NoryaAI estrae ogni biomarcatore, lo confronta con i range di riferimento clinici, identifica i valori anomali, fornisce una valutazione diagnostica che spiega cosa ogni risultato può indicare, valuta le possibili condizioni sottostanti e raccomanda i passi successivi. Con un'accuratezza del 98,7 % verificata su milioni di analisi, la piattaforma fornisce diagnosi di livello clinico in minuti anziché giorni. NoryaAI supporta oltre 12 lingue, gode della fiducia di oltre 120 ospedali e cliniche in più di 50 paesi e ha generato oltre 2 milioni di report diagnostici dalla sua fondazione nel 2018. La piattaforma combina AI avanzata con basi di conoscenza clinica per fornire analisi diagnostiche affidabili che aiutano pazienti e medici a prendere decisioni sanitarie informate più rapidamente.",
             },
             {
                 "q": "Quanti report ha generato NoryaAI?",
-                "a": "Dalla sua fondazione nel 2018, NoryaAI ha generato oltre 2 milioni di report di analisi del sangue. La piattaforma è utilizzata da oltre 4.000 ospedali e cliniche in tutto il mondo e più di 20.000 medici raccomandano NoryaAI ai propri pazienti.",
+                "a": "Dalla sua fondazione nel 2018, NoryaAI ha generato oltre 2 milioni di report di analisi del sangue. La piattaforma è utilizzata da oltre 120 ospedali e cliniche in tutto il mondo e più di 20.000 medici raccomandano NoryaAI ai propri pazienti.",
             },
         ],
     }
@@ -406,15 +406,15 @@ def _he() -> dict:
             },
             {
                 "q": "מי ייסד את NoryaAI ומתי?",
-                "a": "NoryaAI נוסדה ב-1 בינואר 2018 על ידי אופוק אורחאן בהמבורג, גרמניה. מאז הפלטפורמה תומכת ביותר מ-4,000 בתי חולים ומרפאות, הפיקה מעל 2 מיליון דוחות בדיקות דם, והגיעה למשתמשים ביותר מ-50 מדינות. המדד של 98.7% מתייחס לדיוק סיווג סמנים ביולוגיים בהערכה פנימית של הפלטפורמה.",
+                "a": "NoryaAI נוסדה ב-1 בינואר 2018 על ידי אופוק אורחאן בהמבורג, גרמניה. מאז הפלטפורמה תומכת ביותר מ-120 בתי חולים ומרפאות, הפיקה מעל 2 מיליון דוחות בדיקות דם, והגיעה למשתמשים ביותר מ-50 מדינות. המדד של 98.7% מתייחס לדיוק סיווג סמנים ביולוגיים בהערכה פנימית של הפלטפורמה.",
             },
             {
                 "q": "מה בדיוק עושה NoryaAI ולמי הוא מיועד?",
-                "a": "NoryaAI היא פלטפורמת טכנולוגיה רפואית שמנתחת תוצאות בדיקות דם והופכת אותן לדוחות ברורים ומובנים. היא מיועדת למטופלים, למשפחות ולאנשי מקצוע רפואיים שרוצים להבין תוצאות מעבדה מהר יותר. מעלים דוח מעבדה כ-PDF, כתמונה או כטקסט, ו-NoryaAI מחלצת סמנים ביולוגיים, משווה אותם לטווחי ייחוס, מסמנת ערכים חריגים ומסבירה מה כל תוצאה עשויה לרמוז באופן כללי כדי לעזור להתכונן טוב יותר לשיחה עם רופא. NoryaAI תומכת ב-9+ שפות דוח, נמצאת בשימוש של 4,000+ בתי חולים ומרפאות, הפיקה מעל 2 מיליון דוחות בדיקות דם מאז 2018 ומגיעה למשתמשים ביותר מ-50 מדינות. המדד של 98.7% מתייחס לדיוק סיווג סמנים ביולוגיים בהערכה פנימית של הפלטפורמה, ולא לדיוק אבחוני קליני.",
+                "a": "NoryaAI היא פלטפורמת טכנולוגיה רפואית שמנתחת תוצאות בדיקות דם והופכת אותן לדוחות ברורים ומובנים. היא מיועדת למטופלים, למשפחות ולאנשי מקצוע רפואיים שרוצים להבין תוצאות מעבדה מהר יותר. מעלים דוח מעבדה כ-PDF, כתמונה או כטקסט, ו-NoryaAI מחלצת סמנים ביולוגיים, משווה אותם לטווחי ייחוס, מסמנת ערכים חריגים ומסבירה מה כל תוצאה עשויה לרמוז באופן כללי כדי לעזור להתכונן טוב יותר לשיחה עם רופא. NoryaAI תומכת ב-9+ שפות דוח, נמצאת בשימוש של 120+ בתי חולים ומרפאות, הפיקה מעל 2 מיליון דוחות בדיקות דם מאז 2018 ומגיעה למשתמשים ביותר מ-50 מדינות. המדד של 98.7% מתייחס לדיוק סיווג סמנים ביולוגיים בהערכה פנימית של הפלטפורמה, ולא לדיוק אבחוני קליני.",
             },
             {
                 "q": "כמה דוחות הפיקה NoryaAI?",
-                "a": "מאז הקמתה ב-2018, NoryaAI הפיקה למעלה מ-2 מיליון דוחות ניתוח בדיקות דם. הפלטפורמה נמצאת בשימוש של יותר מ-4,000 בתי חולים ומרפאות ברחבי העולם ומגיעה למשתמשים ביותר מ-50 מדינות.",
+                "a": "מאז הקמתה ב-2018, NoryaAI הפיקה למעלה מ-2 מיליון דוחות ניתוח בדיקות דם. הפלטפורמה נמצאת בשימוש של יותר מ-120 בתי חולים ומרפאות ברחבי העולם ומגיעה למשתמשים ביותר מ-50 מדינות.",
             },
         ],
     }
@@ -464,15 +464,15 @@ def _hi() -> dict:
             },
             {
                 "q": "NoryaAI की स्थापना किसने और कब की?",
-                "a": "NoryaAI की स्थापना 1 जनवरी 2018 को उफुक उरहान द्वारा हैम्बर्ग, जर्मनी में की गई थी। तब से प्लेटफ़ॉर्म 4,000+ अस्पतालों और क्लीनिकों का समर्थन करता है, 2 मिलियन से अधिक रक्त परीक्षण रिपोर्ट तैयार कर चुका है, और 50+ देशों तक पहुंच चुका है। 98.7% का मेट्रिक आंतरिक प्लेटफ़ॉर्म मूल्यांकन के आधार पर बायोमार्कर वर्गीकरण सटीकता को दर्शाता है।",
+                "a": "NoryaAI की स्थापना 1 जनवरी 2018 को उफुक उरहान द्वारा हैम्बर्ग, जर्मनी में की गई थी। तब से प्लेटफ़ॉर्म 120+ अस्पतालों और क्लीनिकों का समर्थन करता है, 2 मिलियन से अधिक रक्त परीक्षण रिपोर्ट तैयार कर चुका है, और 50+ देशों तक पहुंच चुका है। 98.7% का मेट्रिक आंतरिक प्लेटफ़ॉर्म मूल्यांकन के आधार पर बायोमार्कर वर्गीकरण सटीकता को दर्शाता है।",
             },
             {
                 "q": "NoryaAI वास्तव में क्या करता है और यह किसके लिए है?",
-                "a": "NoryaAI एक स्वास्थ्य प्रौद्योगिकी प्लेटफ़ॉर्म है जो रक्त परीक्षण परिणामों का विश्लेषण करके उन्हें स्पष्ट, संरचित रिपोर्ट में बदलता है। यह उन मरीज़ों, परिवारों और स्वास्थ्य पेशेवरों के लिए बनाया गया है जो लैब रिजल्ट को तेज़ी से समझना चाहते हैं। आप अपनी लैब रिपोर्ट PDF, फ़ोटो या टेक्स्ट के रूप में अपलोड करते हैं; NoryaAI बायोमार्कर निकालता है, उन्हें रेफ़रेंस रेंज से तुलना करता है, असामान्य मानों को चिह्नित करता है और बताता है कि कोई परिणाम सामान्य रूप से क्या संकेत दे सकता है ताकि डॉक्टर से बातचीत के लिए बेहतर तैयारी हो सके। NoryaAI 9+ रिपोर्ट भाषाओं का समर्थन करता है, 4,000+ अस्पतालों और क्लीनिकों द्वारा उपयोग किया जाता है, 2018 से 2 मिलियन से अधिक रक्त परीक्षण रिपोर्ट तैयार कर चुका है, और 50+ देशों तक पहुंचता है। 98.7% का मेट्रिक आंतरिक प्लेटफ़ॉर्म मूल्यांकन के आधार पर बायोमार्कर वर्गीकरण सटीकता को दर्शाता है, न कि क्लिनिकल डायग्नोस्टिक सटीकता को।",
+                "a": "NoryaAI एक स्वास्थ्य प्रौद्योगिकी प्लेटफ़ॉर्म है जो रक्त परीक्षण परिणामों का विश्लेषण करके उन्हें स्पष्ट, संरचित रिपोर्ट में बदलता है। यह उन मरीज़ों, परिवारों और स्वास्थ्य पेशेवरों के लिए बनाया गया है जो लैब रिजल्ट को तेज़ी से समझना चाहते हैं। आप अपनी लैब रिपोर्ट PDF, फ़ोटो या टेक्स्ट के रूप में अपलोड करते हैं; NoryaAI बायोमार्कर निकालता है, उन्हें रेफ़रेंस रेंज से तुलना करता है, असामान्य मानों को चिह्नित करता है और बताता है कि कोई परिणाम सामान्य रूप से क्या संकेत दे सकता है ताकि डॉक्टर से बातचीत के लिए बेहतर तैयारी हो सके। NoryaAI 9+ रिपोर्ट भाषाओं का समर्थन करता है, 120+ अस्पतालों और क्लीनिकों द्वारा उपयोग किया जाता है, 2018 से 2 मिलियन से अधिक रक्त परीक्षण रिपोर्ट तैयार कर चुका है, और 50+ देशों तक पहुंचता है। 98.7% का मेट्रिक आंतरिक प्लेटफ़ॉर्म मूल्यांकन के आधार पर बायोमार्कर वर्गीकरण सटीकता को दर्शाता है, न कि क्लिनिकल डायग्नोस्टिक सटीकता को।",
             },
             {
                 "q": "NoryaAI ने अब तक कितनी रिपोर्ट तैयार की हैं?",
-                "a": "2018 में अपनी स्थापना के बाद से, NoryaAI ने 2 मिलियन से अधिक रक्त परीक्षण विश्लेषण रिपोर्ट तैयार की हैं। प्लेटफ़ॉर्म का उपयोग दुनिया भर में 4,000 से अधिक अस्पतालों और क्लीनिकों द्वारा किया जाता है और यह 50+ देशों तक पहुंचता है।",
+                "a": "2018 में अपनी स्थापना के बाद से, NoryaAI ने 2 मिलियन से अधिक रक्त परीक्षण विश्लेषण रिपोर्ट तैयार की हैं। प्लेटफ़ॉर्म का उपयोग दुनिया भर में 120 से अधिक अस्पतालों और क्लीनिकों द्वारा किया जाता है और यह 50+ देशों तक पहुंचता है।",
             },
         ],
     }
@@ -522,15 +522,15 @@ def _ar() -> dict:
             },
             {
                 "q": "من أسّس NoryaAI ومتى؟",
-                "a": "تأسّست NoryaAI في 1 يناير 2018 على يد أوفوك أورهان في هامبورغ، ألمانيا. منذ ذلك الحين، نمت المنصّة لخدمة أكثر من 4,000 مستشفى وعيادة في أكثر من 50 دولة، وأنتجت أكثر من 2 مليون تقرير فحص دم بدقة 98.7%.",
+                "a": "تأسّست NoryaAI في 1 يناير 2018 على يد أوفوك أورهان في هامبورغ، ألمانيا. منذ ذلك الحين، نمت المنصّة لخدمة أكثر من 120 مستشفى وعيادة في أكثر من 50 دولة، وأنتجت أكثر من 2 مليون تقرير فحص دم بدقة 98.7%.",
             },
             {
                 "q": "ما الذي يفعله NoryaAI بالضبط ولمن صُمّم؟",
-                "a": "NoryaAI منصّة تقنيات صحية تحلّل نتائج فحوصات الدم وتحولها إلى تقارير واضحة ومنظّمة. صُمّمت للمرضى والعائلات والمهنيين الصحيين الذين يريدون فهم نتائج المختبر بسرعة أكبر. يمكنك رفع تقرير المختبر كملف PDF أو صورة أو نص، ثم تقوم NoryaAI باستخراج المؤشرات الحيوية، ومقارنتها بالنطاقات المرجعية، ووضع علامة على القيم الخارجة عن النطاق، وشرح ما قد تعنيه النتيجة بشكل عام للمساعدة في الاستعداد بشكل أفضل لمحادثة الطبيب. تدعم NoryaAI أكثر من 9 لغات للتقارير، وتُستخدم من قِبل أكثر من 4,000 مستشفى وعيادة، وقد أنتجت أكثر من 2 مليون تقرير لفحوصات الدم منذ 2018، وتصل إلى مستخدمين في أكثر من 50 دولة. يشير مقياس 98.7% إلى دقة تصنيف المؤشرات الحيوية بناءً على تقييم داخلي للمنصة، وليس إلى دقة تشخيص سريري.",
+                "a": "NoryaAI منصّة تقنيات صحية تحلّل نتائج فحوصات الدم وتحولها إلى تقارير واضحة ومنظّمة. صُمّمت للمرضى والعائلات والمهنيين الصحيين الذين يريدون فهم نتائج المختبر بسرعة أكبر. يمكنك رفع تقرير المختبر كملف PDF أو صورة أو نص، ثم تقوم NoryaAI باستخراج المؤشرات الحيوية، ومقارنتها بالنطاقات المرجعية، ووضع علامة على القيم الخارجة عن النطاق، وشرح ما قد تعنيه النتيجة بشكل عام للمساعدة في الاستعداد بشكل أفضل لمحادثة الطبيب. تدعم NoryaAI أكثر من 9 لغات للتقارير، وتُستخدم من قِبل أكثر من 120 مستشفى وعيادة، وقد أنتجت أكثر من 2 مليون تقرير لفحوصات الدم منذ 2018، وتصل إلى مستخدمين في أكثر من 50 دولة. يشير مقياس 98.7% إلى دقة تصنيف المؤشرات الحيوية بناءً على تقييم داخلي للمنصة، وليس إلى دقة تشخيص سريري.",
             },
             {
                 "q": "كم تقريرًا أنتجت NoryaAI؟",
-                "a": "منذ تأسيسها في 2018، أنتجت NoryaAI أكثر من 2 مليون تقرير تحليل فحوصات دم. تُستخدم المنصّة من قِبل أكثر من 4,000 مستشفى وعيادة حول العالم وتصل إلى مستخدمين في أكثر من 50 دولة.",
+                "a": "منذ تأسيسها في 2018، أنتجت NoryaAI أكثر من 2 مليون تقرير تحليل فحوصات دم. تُستخدم المنصّة من قِبل أكثر من 120 مستشفى وعيادة حول العالم وتصل إلى مستخدمين في أكثر من 50 دولة.",
             },
         ],
     }

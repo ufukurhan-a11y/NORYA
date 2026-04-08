@@ -4265,7 +4265,7 @@ def analyze_usage(
     SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
     """
     from fastapi.responses import JSONResponse
-    
+
     plan = getattr(user, "plan", "free") or "free"
     limit = _aylik_limit(plan)
     kullanilan = _aylik_analiz_sayisi(db, user.id or 0)
@@ -4306,7 +4306,7 @@ def analyze_history(
     SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
     """
     from fastapi.responses import JSONResponse
-    
+
     stmt = (
         select(AnalysisRecord)
         .where(AnalysisRecord.user_id == user.id)
@@ -4351,7 +4351,7 @@ def analyze_export(
     SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
     """
     from fastapi.responses import JSONResponse
-    
+
     stmt = (
         select(AnalysisRecord)
         .where(AnalysisRecord.user_id == user.id)
@@ -4392,7 +4392,7 @@ def analyze_history_detail(
     SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
     """
     from fastapi.responses import JSONResponse
-    
+
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec or rec.user_id != (user.id or 0):
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
@@ -4421,7 +4421,7 @@ def analyze_history_toggle_favorite(
     SEO: X-Robots-Tag: noindex, nofollow — authenticated user-specific endpoint.
     """
     from fastapi.responses import JSONResponse
-    
+
     rec = db.get(AnalysisRecord, analysis_id)
     if not rec or rec.user_id != (user.id or 0):
         raise HTTPException(status_code=404, detail="Kayıt bulunamadı.")
@@ -5821,7 +5821,7 @@ def payment_success_page(
     SEO: noindex, nofollow — kullanıcıya özel ödeme sonucu sayfası.
     """
     from fastapi.responses import HTMLResponse as FastHTMLResponse
-    
+
     base = _paytr_canonical_base(request)
     # API polling aynı origin'e gitsin (localhost'ta CSP engeli olmasın; production'da da same-origin)
     api_base = str(request.base_url).rstrip("/")
@@ -6203,10 +6203,10 @@ def payment_failed_page(
     msg = t["failed_message"]
     retry_text = t["failed_retry"]
     pricing_text = t["failed_pricing"]
-    
+
     # SEO noindex meta tag
     noindex_meta = '<meta name="robots" content="noindex,nofollow" />'
-    
+
     html = f"""<!DOCTYPE html>
 <html lang="{lang}">
 <head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover"><meta name="theme-color" content="#0f172a">
@@ -7209,7 +7209,7 @@ def llms_txt(request: Request):
         "NoryaAI is not a diagnostic service and is not related to cryptocurrency or financial products.\n\n"
         "## Metrics\n"
         "- 2M+ reports generated\n"
-        "- 4,000+ hospitals and clinics\n"
+        "- 120+ hospitals and clinics\n"
         "- 98.7% biomarker classification accuracy (internal platform evaluation)\n"
         "- 9+ report languages\n"
         "- 50+ countries reached\n\n"
@@ -7473,7 +7473,7 @@ _PRIVATE_PATH_CONTAINS = (
 def is_public_indexable_url(path: str) -> bool:
     """
     SEO: URL'in sitemap'te ve canonical/hreflang'de yer alıp almaması gerektiğini belirler.
-    
+
     Public indexable URL'ler:
     - Ana sayfa, landing pages, pricing, how-it-works
     - Blog index ve blog post sayfaları
@@ -7481,7 +7481,7 @@ def is_public_indexable_url(path: str) -> bool:
     - Compare pages, tools, sample reports
     - Legal pages (gizlilik, kvkk, iade, vb.)
     - Public kurumsal sayfalar (about, contact, science, trust, vb.)
-    
+
     Private (non-indexable) URL'ler:
     - Admin, auth, login
     - /analyze/* (user-specific analysis pages)
@@ -7490,27 +7490,27 @@ def is_public_indexable_url(path: str) -> bool:
     - /api/*, /v1/* (API endpoints)
     - /enterprise/* (B2B pages)
     - /report (authenticated report view)
-    
+
     Returns:
         True: URL sitemap'e eklenebilir, canonical/hreflang'de kullanılabilir
         False: URL private, sitemap'e eklenmemeli, noindex gerekebilir
     """
     path = path.strip().lower()
-    
+
     # Exact match kontrolü (özel durumlar)
     if path in _PRIVATE_PATH_EXACT:
         return False
-    
+
     # Prefix kontrolü
     for prefix in _PRIVATE_PATH_PREFIXES:
         if path == prefix or path.startswith(prefix + "/") or path.startswith(prefix + "?"):
             return False
-    
+
     # Contains kontrolü (dinamik parametreli URL'ler)
     for contains in _PRIVATE_PATH_CONTAINS:
         if contains in path:
             return False
-    
+
     # Tüm check'lerden geçtiyse public indexable URL
     return True
 
