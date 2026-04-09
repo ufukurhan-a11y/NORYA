@@ -365,6 +365,7 @@
         {% for link in nav_links %}
         <a href="{{ link.url }}?lang={{ lang }}" class="text-accent-600 hover:text-norya-brand transition">{{ link.label }}</a>
         {% endfor %}
+        <a href="javascript:void(0)" onclick="if(window.NoryaCookiePreferences)NoryaCookiePreferences();" class="text-accent-600 hover:text-norya-brand transition">Çerez Tercihleri</a>
       </nav>
       <p class="text-accent-500 text-sm"><strong class="text-accent-700">NoryaAI</strong> — {{ footer_desc }}</p>
     </div>
@@ -376,6 +377,100 @@
      aria-label="WhatsApp ile iletişim">
     <img src="/static/images/whatsapp-icon-white.svg" alt="WhatsApp" class="wa-icon" width="32" height="32" />
   </a>
+
+  <!-- Cookie Consent Banner (Legal Pages) -->
+  <div id="norya-cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1e293b;color:#f1f5f9;padding:16px 20px;font-size:14px;line-height:1.6;box-shadow:0 -4px 24px rgba(0,0,0,.3);font-family:system-ui,-apple-system,sans-serif;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px;">
+        <div style="flex:1;min-width:240px;">
+          <p id="cookie-text" style="margin:0 0 4px 0;font-size:14px;color:#e2e8f0;">Bu site, deneyiminizi iyileştirmek, analiz ve içerik kişiselleştirme amacıyla çerez kullanır.</p>
+          <a href="/legal/gizlilik-politikasi?lang={{ lang }}" style="color:#60a5fa;font-size:13px;text-decoration:underline;">Gizlilik Politikası</a>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;align-items:center;">
+          <button id="cookie-accept" style="background:#0EA5A4;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;min-height:44px;">Tümünü kabul et</button>
+          <button id="cookie-preferences-btn" style="background:transparent;color:#94a3b8;border:1px solid #475569;padding:10px 16px;border-radius:8px;font-size:13px;cursor:pointer;min-height:44px;">Tercihleri yönet</button>
+          <button id="cookie-reject" style="background:transparent;color:#64748b;border:none;padding:10px 12px;border-radius:8px;font-size:13px;cursor:pointer;min-height:44px;">Tümünü reddet</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Cookie Preferences Modal (Legal Pages) -->
+  <div id="norya-cookie-modal" style="display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;color:#0f172a;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3);font-family:system-ui,-apple-system,sans-serif;">
+      <div style="padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;">
+        <h2 id="cookie-modal-title" style="margin:0;font-size:18px;font-weight:700;color:#0f172a;">Çerez tercihleri</h2>
+        <button id="cookie-modal-close" style="background:none;border:none;font-size:22px;cursor:pointer;color:#64748b;padding:4px 8px;border-radius:6px;min-height:36px;line-height:1;" aria-label="Kapat">&times;</button>
+      </div>
+      <p id="cookie-modal-desc" style="margin:8px 24px 0;font-size:13px;color:#475569;line-height:1.5;">Onay vermek istediğiniz çerez kategorilerini seçin.</p>
+      <div style="padding:16px 24px 24px;">
+        <div style="border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:14px;font-weight:600;color:#0f172a;">Zorunlu</span>
+            <span style="font-size:11px;font-weight:600;color:#0EA5A4;background:rgba(14,165,164,.1);padding:2px 8px;border-radius:999px;">Her zaman aktif</span>
+          </div>
+          <p style="margin:4px 0 0;font-size:12px;color:#64748b;line-height:1.4;">Sitenin düzgün çalışması için gereklidir.</p>
+        </div>
+        <label style="border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;justify-content:space-between;cursor:pointer;">
+          <div style="flex:1;">
+            <span style="font-size:14px;font-weight:600;color:#0f172a;">Analitik</span>
+            <p style="margin:4px 0 0;font-size:12px;color:#64748b;line-height:1.4;">Ziyaretçilerin sitemizle nasıl etkileşimde bulunduğunu anlamamıza yardımcı olur.</p>
+          </div>
+          <input type="checkbox" id="cookie-analytics" style="margin-left:12px;margin-top:2px;width:18px;height:18px;accent-color:#0EA5A4;flex-shrink:0;" />
+        </label>
+        <label style="border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:flex-start;justify-content:space-between;cursor:pointer;">
+          <div style="flex:1;">
+            <span style="font-size:14px;font-weight:600;color:#0f172a;">Pazarlama</span>
+            <p style="margin:4px 0 0;font-size:12px;color:#64748b;line-height:1.4;">Reklam ortakları tarafından ilgili reklamlar sunmak için kullanılır.</p>
+          </div>
+          <input type="checkbox" id="cookie-marketing" style="margin-left:12px;margin-top:2px;width:18px;height:18px;accent-color:#0EA5A4;flex-shrink:0;" />
+        </label>
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button id="cookie-modal-save" style="background:#0EA5A4;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;min-height:44px;">Tercihleri kaydet</button>
+          <button id="cookie-modal-close-btn" style="background:#f1f5f9;color:#475569;border:none;padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500;min-height:44px;">Kapat</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  (function(){
+    function gc(n){var m=document.cookie.match('(^|;)\\s*'+n+'=([^;]*)');return m?m[2]:null;}
+    function sc(n,v,d){var e=new Date();e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
+    function applyConsent(a,m){
+      if(typeof gtag==='function'){
+        gtag('consent','update',{analytics_storage:a?'granted':'denied',ad_storage:m?'granted':'denied',ad_user_data:m?'granted':'denied',ad_personalization:m?'granted':'denied'});
+      }
+    }
+    function init(){
+      var consent=gc('norya_consent');
+      if(consent!==null) return;
+      var b=document.getElementById('norya-cookie-banner');
+      if(b)b.style.display='block';
+      var btnA=document.getElementById('cookie-accept');
+      var btnR=document.getElementById('cookie-reject');
+      var btnP=document.getElementById('cookie-preferences-btn');
+      var modal=document.getElementById('norya-cookie-modal');
+      var modalClose=document.getElementById('cookie-modal-close');
+      var modalCloseBtn=document.getElementById('cookie-modal-close-btn');
+      var modalSave=document.getElementById('cookie-modal-save');
+      var cbA=document.getElementById('cookie-analytics');
+      var cbM=document.getElementById('cookie-marketing');
+      function hide(){if(b)b.style.display='none';}
+      function openModal(){if(modal){modal.style.display='flex';document.body.style.overflow='hidden';}}
+      function closeModal(){if(modal){modal.style.display='none';document.body.style.overflow='';}}
+      if(btnA)btnA.addEventListener('click',function(){sc('norya_consent','1',365);sc('norya_analytics','1',365);sc('norya_marketing','1',365);applyConsent(true,true);hide();});
+      if(btnR)btnR.addEventListener('click',function(){sc('norya_consent','0',365);sc('norya_analytics','0',365);sc('norya_marketing','0',365);applyConsent(false,false);hide();});
+      if(btnP)btnP.addEventListener('click',function(){if(cbA)cbA.checked=gc('norya_analytics')==='1';if(cbM)cbM.checked=gc('norya_marketing')==='1';openModal();});
+      if(modalClose)modalClose.addEventListener('click',closeModal);
+      if(modalCloseBtn)modalCloseBtn.addEventListener('click',closeModal);
+      if(modal)modal.addEventListener('click',function(e){if(e.target===modal)closeModal();});
+      if(modalSave)modalSave.addEventListener('click',function(){var a=cbA?cbA.checked:false;var m=cbM?cbM.checked:false;sc('norya_consent','1',365);sc('norya_analytics',a?'1':'0',365);sc('norya_marketing',m?'1':'0',365);applyConsent(a,m);hide();closeModal();});
+      window.NoryaCookiePreferences=function(){if(cbA)cbA.checked=gc('norya_analytics')==='1';if(cbM)cbM.checked=gc('norya_marketing')==='1';openModal();};
+    }
+    if('requestIdleCallback' in window){requestIdleCallback(init,{timeout:3000});}else{setTimeout(init,1200);}
+  })();
+  </script>
 {% include "partials/scripts_lang.html" %}
 {% include "partials/chat_widget.html" %}
 </body>

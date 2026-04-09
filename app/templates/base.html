@@ -264,6 +264,7 @@
             <a href="/security?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_security|default('Security') }}</a>
             <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_privacy|default('Privacy Policy') }}</a>
             <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.footer_terms|default('Terms of Use') }}</a>
+          <a href="javascript:void(0)" onclick="if(window.NoryaCookiePreferences)NoryaCookiePreferences();" class="text-norya-ink-muted hover:text-norya-ink transition-colors">{{ _base_ui.cookie_preferences|default('Cookie Preferences') }}</a>
           </nav>
         </div>
 
@@ -295,6 +296,7 @@
           <a href="/for-doctors?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">Doktorlar</a>
           <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_privacy|default('Privacy') }}</a>
           <a href="/legal/kullanim-sartlari?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_terms|default('Terms') }}</a>
+          <a href="javascript:void(0)" onclick="if(window.NoryaCookiePreferences)NoryaCookiePreferences();" class="hover:text-norya-ink transition-colors">{{ _base_ui.cookie_preferences|default('Cookies') }}</a>
           <a href="/contact?lang={{ _locale }}" class="hover:text-norya-ink transition-colors">{{ _base_ui.footer_contact|default('Contact') }}</a>
         </div>
       </div>
@@ -333,34 +335,168 @@
   {% include "partials/chat_widget.html" %}
 
   <!-- Cookie Consent Banner -->
-  <div id="norya-cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1e293b;color:#f1f5f9;padding:14px 20px;font-size:14px;line-height:1.5;box-shadow:0 -2px 12px rgba(0,0,0,.25);font-family:system-ui,sans-serif;">
-    <div style="max-width:1100px;margin:0 auto;display:flex;flex-wrap:wrap;align-items:center;gap:12px;">
-      <span id="cookie-text">{{ _base_ui.cookie_text|default('This site uses cookies to improve your experience and for analytics.') }}</span>
-      <div style="display:flex;gap:8px;flex-shrink:0;">
-        <button id="cookie-accept" style="background:#2563eb;color:#fff;border:none;padding:10px 22px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500;min-height:44px;">{{ _base_ui.cookie_accept|default('Accept') }}</button>
-        <button id="cookie-reject" style="background:transparent;color:#94a3b8;border:1px solid #475569;padding:10px 16px;border-radius:8px;font-size:14px;cursor:pointer;min-height:44px;">{{ _base_ui.cookie_reject|default('Reject') }}</button>
+  <div id="norya-cookie-banner" style="display:none;position:fixed;bottom:0;left:0;right:0;z-index:99999;background:#1e293b;color:#f1f5f9;padding:16px 20px;font-size:14px;line-height:1.6;box-shadow:0 -4px 24px rgba(0,0,0,.3);font-family:system-ui,-apple-system,sans-serif;">
+    <div style="max-width:1100px;margin:0 auto;">
+      <div style="display:flex;flex-wrap:wrap;align-items:flex-start;gap:16px;">
+        <div style="flex:1;min-width:240px;">
+          <p id="cookie-text" style="margin:0 0 4px 0;font-size:14px;color:#e2e8f0;">{{ _base_ui.cookie_text|default('This site uses cookies to improve your experience, for analytics, and to personalize content.') }}</p>
+          <a href="/legal/gizlilik-politikasi?lang={{ _locale }}" style="color:#60a5fa;font-size:13px;text-decoration:underline;">{{ _base_ui.cookie_privacy_link|default('Privacy Policy') }}</a>
+        </div>
+        <div style="display:flex;gap:8px;flex-shrink:0;flex-wrap:wrap;align-items:center;">
+          <button id="cookie-accept" style="background:#0EA5A4;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;min-height:44px;transition:background .15s;">{{ _base_ui.cookie_accept|default('Accept all') }}</button>
+          <button id="cookie-preferences-btn" style="background:transparent;color:#94a3b8;border:1px solid #475569;padding:10px 16px;border-radius:8px;font-size:13px;cursor:pointer;min-height:44px;transition:color .15s,border-color .15s;">{{ _base_ui.cookie_preferences|default('Manage preferences') }}</button>
+          <button id="cookie-reject" style="background:transparent;color:#64748b;border:none;padding:10px 12px;border-radius:8px;font-size:13px;cursor:pointer;min-height:44px;transition:color .15s;">{{ _base_ui.cookie_reject|default('Reject all') }}</button>
+        </div>
       </div>
     </div>
   </div>
+
+  <!-- Cookie Preferences Modal -->
+  <div id="norya-cookie-modal" style="display:none;position:fixed;inset:0;z-index:100000;background:rgba(0,0,0,.55);backdrop-filter:blur(4px);align-items:center;justify-content:center;padding:20px;">
+    <div style="background:#fff;color:#0f172a;border-radius:16px;max-width:520px;width:100%;max-height:90vh;overflow-y:auto;box-shadow:0 24px 64px rgba(0,0,0,.3);font-family:system-ui,-apple-system,sans-serif;">
+      <div style="padding:24px 24px 0;display:flex;align-items:center;justify-content:space-between;">
+        <h2 id="cookie-modal-title" style="margin:0;font-size:18px;font-weight:700;color:#0f172a;">{{ _base_ui.cookie_title|default('Cookie preferences') }}</h2>
+        <button id="cookie-modal-close" style="background:none;border:none;font-size:22px;cursor:pointer;color:#64748b;padding:4px 8px;border-radius:6px;min-height:36px;line-height:1;" aria-label="Close">&times;</button>
+      </div>
+      <p id="cookie-modal-desc" style="margin:8px 24px 0;font-size:13px;color:#475569;line-height:1.5;">{{ _base_ui.cookie_description|default('Select which cookie categories you consent to.') }}</p>
+      <div style="padding:16px 24px 24px;">
+        <!-- Necessary (always on) -->
+        <div style="border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:10px;">
+          <div style="display:flex;align-items:center;justify-content:space-between;">
+            <span style="font-size:14px;font-weight:600;color:#0f172a;">{{ _base_ui.cookie_necessary|default('Necessary') }}</span>
+            <span style="font-size:11px;font-weight:600;color:#0EA5A4;background:rgba(14,165,164,.1);padding:2px 8px;border-radius:999px;">{{ _base_ui.cookie_always_on|default('Always on') }}</span>
+          </div>
+          <p style="margin:4px 0 0;font-size:12px;color:#64748b;line-height:1.4;">{{ _base_ui.cookie_necessary_desc|default('Required for the site to function properly.') }}</p>
+        </div>
+        <!-- Analytics -->
+        <label style="border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:10px;display:flex;align-items:flex-start;justify-content:space-between;cursor:pointer;transition:border-color .15s;">
+          <div style="flex:1;">
+            <span style="font-size:14px;font-weight:600;color:#0f172a;">{{ _base_ui.cookie_analytics|default('Analytics') }}</span>
+            <p style="margin:4px 0 0;font-size:12px;color:#64748b;line-height:1.4;">{{ _base_ui.cookie_analytics_desc|default('Help us understand how visitors interact with our website.') }}</p>
+          </div>
+          <input type="checkbox" id="cookie-analytics" style="margin-left:12px;margin-top:2px;width:18px;height:18px;accent-color:#0EA5A4;flex-shrink:0;" />
+        </label>
+        <!-- Marketing -->
+        <label style="border:1px solid #e2e8f0;border-radius:12px;padding:14px 16px;margin-bottom:16px;display:flex;align-items:flex-start;justify-content:space-between;cursor:pointer;transition:border-color .15s;">
+          <div style="flex:1;">
+            <span style="font-size:14px;font-weight:600;color:#0f172a;">{{ _base_ui.cookie_marketing|default('Marketing') }}</span>
+            <p style="margin:4px 0 0;font-size:12px;color:#64748b;line-height:1.4;">{{ _base_ui.cookie_marketing_desc|default('Used by advertising partners to deliver relevant ads.') }}</p>
+          </div>
+          <input type="checkbox" id="cookie-marketing" style="margin-left:12px;margin-top:2px;width:18px;height:18px;accent-color:#0EA5A4;flex-shrink:0;" />
+        </label>
+        <!-- Actions -->
+        <div style="display:flex;gap:8px;justify-content:flex-end;">
+          <button id="cookie-modal-save" style="background:#0EA5A4;color:#fff;border:none;padding:10px 24px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:600;min-height:44px;">{{ _base_ui.cookie_save|default('Save preferences') }}</button>
+          <button id="cookie-modal-close-btn" style="background:#f1f5f9;color:#475569;border:none;padding:10px 20px;border-radius:8px;font-size:14px;cursor:pointer;font-weight:500;min-height:44px;">{{ _base_ui.cookie_close|default('Close') }}</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
   <script>
   (function(){
     function gc(n){var m=document.cookie.match('(^|;)\\s*'+n+'=([^;]*)');return m?m[2]:null;}
     function sc(n,v,d){var e=new Date();e.setTime(e.getTime()+d*864e5);document.cookie=n+'='+v+';expires='+e.toUTCString()+';path=/;SameSite=Lax';}
-    function initCookieBanner(){
-      if(gc('norya_consent')!==null) return;
-      var b=document.getElementById('norya-cookie-banner');
-      if(b)b.style.display='block';
-      var btnA=document.getElementById('cookie-accept');
-      var btnR=document.getElementById('cookie-reject');
-      function accept(){
-        sc('norya_consent','1',365);
-        if(typeof gtag==='function')gtag('consent','update',{analytics_storage:'granted',ad_storage:'granted',ad_user_data:'granted',ad_personalization:'granted'});
-        if(typeof fbq==='function')fbq('consent','grant');
-        if(b)b.style.display='none';
+
+    function applyConsent(analytics,marketing){
+      if(typeof gtag==='function'){
+        gtag('consent','update',{
+          analytics_storage: analytics ? 'granted' : 'denied',
+          ad_storage: marketing ? 'granted' : 'denied',
+          ad_user_data: marketing ? 'granted' : 'denied',
+          ad_personalization: marketing ? 'granted' : 'denied'
+        });
       }
-      function reject(){sc('norya_consent','0',365);if(b)b.style.display='none';}
-      if(btnA)btnA.addEventListener('click',accept);
-      if(btnR)btnR.addEventListener('click',reject);
+      if(typeof fbq==='function'){
+        fbq('consent', marketing ? 'grant' : 'revoke');
+      }
+    }
+
+    function initCookieBanner(){
+      var consent = gc('norya_consent');
+      if(consent !== null) return;
+      var b = document.getElementById('norya-cookie-banner');
+      if(b) b.style.display = 'block';
+    }
+
+    function openModal(){
+      var m = document.getElementById('norya-cookie-modal');
+      if(m){ m.style.display='flex'; document.body.style.overflow='hidden'; }
+    }
+    function closeModal(){
+      var m = document.getElementById('norya-cookie-modal');
+      if(m){ m.style.display='none'; document.body.style.overflow=''; }
+    }
+
+    function init(){
+      var banner = document.getElementById('norya-cookie-banner');
+      var btnA = document.getElementById('cookie-accept');
+      var btnR = document.getElementById('cookie-reject');
+      var btnP = document.getElementById('cookie-preferences-btn');
+      var modal = document.getElementById('norya-cookie-modal');
+      var modalClose = document.getElementById('cookie-modal-close');
+      var modalCloseBtn = document.getElementById('cookie-modal-close-btn');
+      var modalSave = document.getElementById('cookie-modal-save');
+      var cbAnalytics = document.getElementById('cookie-analytics');
+      var cbMarketing = document.getElementById('cookie-marketing');
+
+      function hideBanner(){ if(banner) banner.style.display='none'; }
+
+      // Accept all
+      if(btnA) btnA.addEventListener('click', function(){
+        sc('norya_consent','1',365);
+        sc('norya_analytics','1',365);
+        sc('norya_marketing','1',365);
+        applyConsent(true, true);
+        hideBanner();
+      });
+
+      // Reject all
+      if(btnR) btnR.addEventListener('click', function(){
+        sc('norya_consent','0',365);
+        sc('norya_analytics','0',365);
+        sc('norya_marketing','0',365);
+        applyConsent(false, false);
+        hideBanner();
+      });
+
+      // Open preferences
+      if(btnP) btnP.addEventListener('click', function(){
+        // Pre-fill from existing cookies
+        if(cbAnalytics) cbAnalytics.checked = gc('norya_analytics') === '1';
+        if(cbMarketing) cbMarketing.checked = gc('norya_marketing') === '1';
+        openModal();
+      });
+
+      // Close modal
+      if(modalClose) modalClose.addEventListener('click', closeModal);
+      if(modalCloseBtn) modalCloseBtn.addEventListener('click', closeModal);
+      if(modal) modal.addEventListener('click', function(e){ if(e.target === modal) closeModal(); });
+
+      // Save preferences
+      if(modalSave) modalSave.addEventListener('click', function(){
+        var a = cbAnalytics ? cbAnalytics.checked : false;
+        var m = cbMarketing ? cbMarketing.checked : false;
+        sc('norya_consent','1',365);
+        sc('norya_analytics', a ? '1' : '0', 365);
+        sc('norya_marketing', m ? '1' : '0', 365);
+        applyConsent(a, m);
+        hideBanner();
+        closeModal();
+      });
+
+      // Global: expose function to reopen banner from footer
+      window.NoryaCookiePreferences = function(){
+        if(cbAnalytics) cbAnalytics.checked = gc('norya_analytics') === '1';
+        if(cbMarketing) cbMarketing.checked = gc('norya_marketing') === '1';
+        openModal();
+      };
+    }
+
+    if ('requestIdleCallback' in window) {
+      requestIdleCallback(init, { timeout: 3000 });
+    } else {
+      setTimeout(init, 1200);
     }
     if ('requestIdleCallback' in window) {
       requestIdleCallback(initCookieBanner, { timeout: 3000 });
