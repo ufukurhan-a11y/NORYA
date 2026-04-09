@@ -8547,6 +8547,10 @@
       <div id="analyze-box" class="intake-card">
         <div class="intake-card-inner">
           <p id="analyze-login-prompt" class="hidden text-center py-3 px-4 mb-4 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600 text-sm font-medium flex flex-wrap items-center justify-center gap-2 text-slate-600 dark:text-slate-300"><span data-i18n="analyze_prompt">Raporu almak için </span><button type="button" onclick="openLogin()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_login">Log in</button><span data-i18n="analyze_prompt_or"> veya </span><button type="button" onclick="openRegister()" class="text-[#0EA5A4] font-semibold hover:underline" data-i18n="nav_register">Kayıt olun</button><span class="opacity-90" data-i18n="analyze_prompt_suffix">— adımlar aşağıda.</span></p>
+          <p id="guest-mode-banner" class="hidden text-center py-2 px-4 mb-4 rounded-xl bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-700 text-sm text-amber-700 dark:text-amber-300">
+            <span aria-hidden="true">👤</span>
+            <span data-i18n="guest_mode_banner">Üye olmadan analiz ediyorsunuz — sınırlı sonuç gösterilecektir.</span>
+          </p>
           <p id="analyze-after-actions-hint" class="text-center py-2 px-4 mb-4 rounded-xl bg-[#0EA5A4]/08 dark:bg-[#0EA5A4]/12 border border-[#0EA5A4]/20 text-sm text-slate-700 dark:text-slate-200 flex flex-wrap items-center justify-center gap-2">
             <span aria-hidden="true">📥</span>
             <span data-i18n="analyze_after_hint">Rapor hazır olunca: Raporu İndir (PDF) ve Doktoruma götür ile hekime özel özet alabilirsiniz.</span>
@@ -8666,6 +8670,69 @@
 
           <!-- Adım 4: Sonuç (ultra premium doctor-grade report UI) -->
           <div id="wizard-step-4" class="wizard-step hidden">
+            <!-- Guest analiz sonucu: sınırlı bilgi + ödeme CTA -->
+            <div id="guest-result-panel" class="hidden">
+              <div class="rounded-3xl border-2 border-amber-300 dark:border-amber-600 bg-white dark:bg-navy-800/90 shadow-xl shadow-amber-900/5 dark:shadow-black/20">
+                <!-- Guest header -->
+                <div class="report-hero">
+                  <div class="report-hero-inner">
+                    <div class="report-hero-badge-wrap">
+                      <span class="report-hero-demo-badge">Önizleme</span>
+                    </div>
+                    <h2 class="report-hero-title" data-i18n="guest_report_title">Tahlil Önizleme</h2>
+                    <p class="report-hero-sub" data-i18n="guest_report_subtitle">Temel değerlendirme — tam rapor için yükseltin</p>
+                  </div>
+                </div>
+                <div class="p-4 sm:p-6">
+                  <!-- Health Score -->
+                  <div id="guest-health-score" class="hidden mb-6 text-center">
+                    <div class="inline-flex items-center justify-center w-20 h-20 rounded-full bg-[#0EA5A4]/10 dark:bg-[#0EA5A4]/20 border-2 border-[#0EA5A4]/30">
+                      <span id="guest-score-value" class="text-2xl font-bold text-[#0EA5A4]">--</span>
+                    </div>
+                    <p class="text-sm text-slate-600 dark:text-slate-300 mt-2" data-i18n="guest_health_score">Genel Sağlık Skoru</p>
+                  </div>
+
+                  <!-- Overview -->
+                  <div id="guest-overview" class="mb-6 p-4 rounded-2xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600">
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2" data-i18n="guest_overview_title">Genel Değerlendirme</h3>
+                    <p id="guest-overview-text" class="text-sm text-slate-600 dark:text-slate-300"></p>
+                  </div>
+
+                  <!-- Highlights -->
+                  <div id="guest-highlights" class="hidden mb-6">
+                    <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-3" data-i18n="guest_highlights_title">Öne Çıkan Değerler</h3>
+                    <div id="guest-highlights-list" class="space-y-2"></div>
+                  </div>
+
+                  <!-- Locked content teaser -->
+                  <div class="mb-6 p-4 rounded-2xl bg-gradient-to-r from-[#0EA5A4]/5 to-[#0EA5A4]/10 dark:from-[#0EA5A4]/10 dark:to-[#0EA5A4]/15 border border-[#0EA5A4]/20">
+                    <div class="flex items-center gap-3 mb-3">
+                      <span class="text-2xl">🔒</span>
+                      <div>
+                        <h3 class="text-sm font-semibold text-slate-700 dark:text-slate-200" data-i18n="guest_locked_title">Tam Rapor Kilitli</h3>
+                        <p class="text-xs text-slate-500 dark:text-slate-400" data-i18n="guest_locked_desc">Detaylı analiz, PDF raporu, doktor özeti ve trend takibi için yükseltin</p>
+                      </div>
+                    </div>
+                    <ul class="text-xs text-slate-600 dark:text-slate-300 space-y-1 mb-4">
+                      <li><span class="text-[#0EA5A4]">✓</span> <span data-i18n="guest_unlock_detail">Tüm parametrelerin detaylı yorumu</span></li>
+                      <li><span class="text-[#0EA5A4]">✓</span> <span data-i18n="guest_unlock_pdf">PDF rapor indir</span></li>
+                      <li><span class="text-[#0EA5A4]">✓</span> <span data-i18n="guest_unlock_doctor">Doktoruma götür özeti</span></li>
+                      <li><span class="text-[#0EA5A4]">✓</span> <span data-i18n="guest_unlock_trend">Trend takibi</span></li>
+                    </ul>
+                    <a href="/payment?from=guest" class="block w-full text-center py-3 rounded-xl bg-[#0EA5A4] text-white font-semibold hover:bg-[#0d9488] transition shadow-lg" data-i18n="guest_upgrade_btn">Tam Raporu Aç — Hemen Yükselt</a>
+                  </div>
+
+                  <!-- Try again CTA -->
+                  <div class="text-center">
+                    <button type="button" onclick="resetGuestAnalysis()" class="text-sm text-[#0EA5A4] hover:underline font-medium" data-i18n="guest_try_again">Yeni tahlil analiz et</button>
+                  </div>
+                </div>
+                <footer class="report-footer">
+                  Norya • <span data-i18n="disclaimer_informative">Bilgilendirme amaçlıdır</span> • support@noryaai.com
+                </footer>
+              </div>
+            </div>
+
             <div id="analyze-result" class="report-page rounded-3xl border-2 border-primary-200 dark:border-primary-800 bg-white dark:bg-navy-800/90 shadow-xl shadow-primary-900/5 dark:shadow-black/20">
               <!-- 1) Sticky report bar -->
               <div id="report-sticky-bar" class="report-sticky-bar no-print">
@@ -9787,6 +9854,10 @@
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700 mt-2" data-i18n="btn_login">Giriş</button>
       </form>
       <p class="mt-4 text-center text-sm text-accent-500 dark:text-accent-400"><span data-i18n="no_account">Hesabınız yok mu? </span><button type="button" onclick="closeLogin(); openRegister()" class="text-primary-600 font-medium hover:underline" data-i18n="nav_register">Kayıt olun</button></p>
+      <div class="mt-3 pt-3 border-t border-accent-200 dark:border-accent-700 text-center">
+        <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="login_or_guest">veya</p>
+        <button type="button" onclick="closeLogin(); startGuestAnalysis()" class="w-full py-2.5 rounded-lg border-2 border-[#0EA5A4] text-[#0EA5A4] font-medium hover:bg-[#0EA5A4]/10 transition text-sm" data-i18n="continue_without_account_login">Üye olmadan devam et →</button>
+      </div>
       <button type="button" onclick="closeLogin()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Giriş penceresini kapat">✕</button>
     </div>
   </div>
@@ -9827,6 +9898,10 @@
         <button type="submit" class="w-full py-3 rounded-lg bg-primary-600 text-white font-semibold hover:bg-primary-700" data-i18n="btn_register">Kayıt Ol</button>
       </form>
       <p class="mt-4 text-center text-sm text-accent-500 dark:text-accent-400"><span data-i18n="have_account">Zaten hesabınız var mı? </span><button type="button" onclick="closeRegister(); openLogin()" class="text-primary-600 font-medium hover:underline" data-i18n="nav_login">Log in yapın</button></p>
+      <div class="mt-3 pt-3 border-t border-accent-200 dark:border-accent-700 text-center">
+        <p class="text-xs text-accent-500 dark:text-accent-400 mb-2" data-i18n="register_or_guest">veya</p>
+        <button type="button" onclick="closeRegister(); startGuestAnalysis()" class="w-full py-2.5 rounded-lg border-2 border-[#0EA5A4] text-[#0EA5A4] font-medium hover:bg-[#0EA5A4]/10 transition text-sm" data-i18n="continue_without_account">Üye olmadan devam et →</button>
+      </div>
       <button type="button" onclick="closeRegister()" class="absolute top-4 right-4 text-accent-400 hover:text-accent-600" aria-label="Kayıt penceresini kapat">✕</button>
     </div>
   </div>
@@ -11992,6 +12067,15 @@
         checkout_back: "← Planı değiştir", checkout_title: "Ödeme özeti", checkout_subtitle: "Norya — Kan tahlili analizi", checkout_plan: "Seçilen plan", checkout_total: "Toplam", checkout_secure: "Ödemeniz 256-bit SSL ile korunur. Kart bilgileriniz bize iletilmez; işlem PayTR altyapısı ile güvenli şekilde tamamlanır.", checkout_consent_required: "Ödeme için aşağıdaki sözleşmeleri kabul etmeniz gerekiyor:", checkout_consent_mesafeli: "Mesafeli Satış Sözleşmesi'ni okudum ve kabul ediyorum.", checkout_consent_kvkk: "Gizlilik/KVKK politikasını okudum ve kabul ediyorum.", checkout_btn: "Güvenli ödemeye geç", checkout_accepted_cards: "Visa, Mastercard, Amex kabul edilir.",         checkout_trust_note: "Norya, standart HTTPS ve PayTR ile güvenli ödeme sunar. Kart bilgileriniz yalnızca ödeme altyapısı tarafından işlenir.",
         paytr_infrastructure_note: "Ödeme altyapısı PayTR ile sağlanacaktır.",
         guest_checkout_title: "Kayıt olmadan tek analiz", guest_checkout_desc: "E-posta adresinizi girin; ödeme sonrası aynı e-posta ile oturum açıp analiz yapabilirsiniz.", guest_checkout_name: "Ad (opsiyonel)",
+        continue_without_account: "Üye olmadan devam et →", continue_without_account_login: "Üye olmadan devam et →",
+        register_or_guest: "veya", login_or_guest: "veya",
+        guest_mode_banner: "Üye olmadan analiz ediyorsunuz — sınırlı sonuç gösterilecektir.",
+        guest_report_title: "Tahlil Önizleme", guest_report_subtitle: "Temel değerlendirme — tam rapor için yükseltin",
+        guest_health_score: "Genel Sağlık Skoru", guest_overview_title: "Genel Değerlendirme", guest_highlights_title: "Öne Çıkan Değerler",
+        guest_locked_title: "Tam Rapor Kilitli", guest_locked_desc: "Detaylı analiz, PDF raporu, doktor özeti ve trend takibi için yükseltin",
+        guest_unlock_detail: "Tüm parametrelerin detaylı yorumu", guest_unlock_pdf: "PDF rapor indir", guest_unlock_doctor: "Doktoruma götür özeti", guest_unlock_trend: "Trend takibi",
+        guest_upgrade_btn: "Tam Raporu Aç — Hemen Yükselt", guest_try_again: "Yeni tahlil analiz et",
+        wizard_char_count: "{n} karakter",
         btn_processing_pdf: "PDF işleniyor...", btn_processing_analyze: "Analiz ediliyor...",
         source_pdf: "PDF", source_image: "Görsel", source_text: "Metin",
         clinical_notice_title: "Klinik Bilgilendirme", clinical_notice_body: "Bu dosyadan yapılandırılmış laboratuvar değerleri doğrulanamadı. Sonuçlarınızı aşağıya manuel girerek klinik formatta rapor oluşturabilirsiniz.", clinical_notice_helper: "Bu yöntem raporun daha doğru ve düzenli hazırlanmasına yardımcı olur.", clinical_notice_cta: "Manuel girişle devam et",
@@ -12465,6 +12549,14 @@
         checkout_back: "← Change plan", checkout_title: "Order summary", checkout_subtitle: "Norya — Blood test analysis", checkout_plan: "Selected plan", checkout_total: "Total", checkout_secure: "Your payment is protected with 256-bit SSL. Card details are not sent to us; the transaction is completed securely via PayTR.", checkout_consent_required: "You must accept the following to proceed to payment:", checkout_consent_mesafeli: "I have read and accept the Distance Selling Agreement.", checkout_consent_kvkk: "I have read and accept the Privacy/KVKK policy.", checkout_btn: "Proceed to secure payment", checkout_accepted_cards: "Visa, Mastercard, Amex accepted.",         checkout_trust_note: "Norya offers secure payment via HTTPS and PayTR. Your card details are processed only by the payment provider.",
         paytr_infrastructure_note: "Payment infrastructure is provided by PayTR.",
         guest_checkout_title: "Single analysis without account", guest_checkout_desc: "Enter your email; after payment you can sign in with the same email and run your analysis.", guest_checkout_name: "Name (optional)",
+        continue_without_account: "Continue without account →", continue_without_account_login: "Continue without account →",
+        register_or_guest: "or", login_or_guest: "or",
+        guest_mode_banner: "Analyzing without an account — limited results will be shown.",
+        guest_report_title: "Lab Preview", guest_report_subtitle: "Basic assessment — upgrade for full report",
+        guest_health_score: "Overall Health Score", guest_overview_title: "General Assessment", guest_highlights_title: "Highlighted Values",
+        guest_locked_title: "Full Report Locked", guest_locked_desc: "Upgrade for detailed analysis, PDF report, doctor summary and trend tracking",
+        guest_unlock_detail: "Detailed interpretation of all parameters", guest_unlock_pdf: "Download PDF report", guest_unlock_doctor: "Doctor summary", guest_unlock_trend: "Trend tracking",
+        guest_upgrade_btn: "Unlock Full Report — Upgrade Now", guest_try_again: "Analyze new lab results",
         btn_processing_pdf: "Processing PDF...", btn_processing_analyze: "Analyzing...",
         source_pdf: "PDF", source_image: "Image", source_text: "Text",
         rc_health_title: "Health Score", rc_page_1: "Page 1 / 5", rc_low_risk: "● Low Risk", rc_health_desc: "Your overall health score is 84/100. Your blood values are largely within reference ranges. Vitamin D supplementation and regular check-ups are recommended.",
@@ -16453,6 +16545,180 @@
         if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
       }
     }
+
+    // ===== GUEST ANALYSIS =====
+    var guestAnalysisMode = false;
+
+    function startGuestAnalysis() {
+      guestAnalysisMode = true;
+      // Analyze bölümüne scroll et
+      scrollToAnalyze();
+      // Formu göster
+      var analyzeForm = document.getElementById('analyze-form');
+      if (analyzeForm) analyzeForm.classList.remove('hidden');
+      // Guest olduğunu göster
+      var guestBanner = document.getElementById('guest-mode-banner');
+      if (guestBanner) guestBanner.classList.remove('hidden');
+      // Wizard'ı sıfırla
+      if (typeof setWizardStep === 'function') setWizardStep(1);
+      if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
+    }
+
+    function resetGuestAnalysis() {
+      guestAnalysisMode = false;
+      // Guest sonuç panelini gizle
+      var guestPanel = document.getElementById('guest-result-panel');
+      if (guestPanel) guestPanel.classList.add('hidden');
+      // Normal sonuç panelini gizle
+      var resultDiv = document.getElementById('analyze-result');
+      if (resultDiv) resultDiv.classList.add('hidden');
+      // Wizard'ı sıfırla
+      if (typeof setWizardStep === 'function') setWizardStep(1);
+      // Form alanlarını temizle
+      var textEl = document.getElementById('analyze-text');
+      if (textEl) textEl.value = '';
+      var fileInput = document.getElementById('analyze-pdf');
+      if (fileInput) fileInput.value = '';
+      var pdfName = document.getElementById('pdf-name');
+      if (pdfName) pdfName.textContent = '';
+      if (typeof updateAnalyzeButtonState === 'function') updateAnalyzeButtonState();
+    }
+
+    function renderGuestResult(data) {
+      // Guest sonuç panelini göster
+      var guestPanel = document.getElementById('guest-result-panel');
+      if (!guestPanel) return;
+      guestPanel.classList.remove('hidden');
+
+      // Normal sonuç panelini gizle
+      var resultDiv = document.getElementById('analyze-result');
+      if (resultDiv) resultDiv.classList.add('hidden');
+
+      // Health score
+      if (data.health_score != null) {
+        var scoreEl = document.getElementById('guest-health-score');
+        var scoreValue = document.getElementById('guest-score-value');
+        if (scoreEl) scoreEl.classList.remove('hidden');
+        if (scoreValue) scoreValue.textContent = data.health_score;
+      }
+
+      // Overview
+      var overviewEl = document.getElementById('guest-overview-text');
+      if (overviewEl && data.overview) {
+        overviewEl.textContent = data.overview;
+      }
+
+      // Highlights
+      var highlightsDiv = document.getElementById('guest-highlights');
+      var highlightsList = document.getElementById('guest-highlights-list');
+      if (highlightsList && data.highlights && data.highlights.length > 0) {
+        if (highlightsDiv) highlightsDiv.classList.remove('hidden');
+        var t = T[getLang()] || T.tr;
+        highlightsList.innerHTML = data.highlights.map(function(h) {
+          var statusColor = h.status === 'low' ? 'text-red-500' : (h.status === 'high' ? 'text-amber-500' : 'text-green-500');
+          var statusIcon = h.status === 'low' ? '↓' : (h.status === 'high' ? '↑' : '→');
+          var label = h.test || h.domain || '';
+          return '<div class="flex items-center justify-between p-3 rounded-xl bg-slate-50 dark:bg-slate-800/50 border border-slate-200 dark:border-slate-600">' +
+            '<span class="text-sm font-medium text-slate-700 dark:text-slate-200">' + escapeHtml(label) + '</span>' +
+            '<span class="text-sm font-semibold ' + statusColor + '">' + statusIcon + ' ' + (h.score != null ? h.score : '') + '</span>' +
+            '</div>';
+        }).join('');
+      } else if (highlightsDiv) {
+        highlightsDiv.classList.add('hidden');
+      }
+
+      // Step 4'e git
+      if (typeof setWizardStep === 'function') setWizardStep(4);
+      scrollToAnalyze();
+    }
+
+    async function runGuestAnalyze() {
+      var textEl = document.getElementById('analyze-text');
+      var text = textEl ? (textEl.value || '').trim() : '';
+      var errEl = document.getElementById('analyze-error');
+      if (errEl) errEl.classList.add('hidden');
+
+      if (!text) {
+        var t = T[getLang()] || T.tr;
+        if (errEl) {
+          errEl.textContent = t.analyze_field_required || 'Lütfen tahlil metnini girin.';
+          errEl.classList.remove('hidden');
+        }
+        return;
+      }
+
+      wizardStartProgress();
+
+      try {
+        var langEl = document.getElementById('wizard-lang');
+        var lang = (langEl && langEl.value) ? String(langEl.value).trim() : (getLang() || 'tr');
+
+        var fd = new FormData();
+        fd.append('text', text);
+        fd.append('lang', lang);
+
+        var res = await fetch(API_BASE + '/analyze/guest', {
+          method: 'POST',
+          body: fd,
+        });
+
+        var responseText = await res.text();
+        var data = {};
+        try { data = responseText ? JSON.parse(responseText) : {}; } catch (e) { data = {}; }
+
+        wizardStopProgress();
+
+        if (!res.ok) {
+          var errorMsg = data.detail || data.error || 'Analiz yapılamadı. Lütfen tekrar deneyin.';
+          if (errEl) {
+            errEl.textContent = errorMsg;
+            errEl.classList.remove('hidden');
+          }
+          toast(errorMsg, 'error');
+          return;
+        }
+
+        // Guest sonucu render et
+        renderGuestResult(data);
+
+      } catch (e) {
+        wizardStopProgress();
+        var t = T[getLang()] || T.tr;
+        var errorMsg = t.analyze_upload_failed || 'Bağlantı hatası. İnternet bağlantınızı kontrol edip tekrar deneyin.';
+        if (errEl) {
+          errEl.textContent = errorMsg;
+          errEl.classList.remove('hidden');
+        }
+        toast(errorMsg, 'error');
+      }
+    }
+
+    // Guest mode'da analyze butonunu override et
+    var _origHandleAnalyzeSubmit = window.handleAnalyzeSubmit;
+    window.handleAnalyzeSubmit = function(event) {
+      if (event) {
+        if (typeof event.preventDefault === 'function') event.preventDefault();
+        if (typeof event.stopPropagation === 'function') event.stopPropagation();
+        if (typeof event.stopImmediatePropagation === 'function') event.stopImmediatePropagation();
+      }
+
+      if (guestAnalysisMode) {
+        // Guest mode'da direkt analiz yap
+        if (wizardCurrentStep === 1) {
+          setWizardStep(2);
+        } else if (wizardCurrentStep === 2) {
+          runGuestAnalyze();
+        }
+        return false;
+      }
+
+      // Normal flow
+      if (typeof _origHandleAnalyzeSubmit === 'function') {
+        return _origHandleAnalyzeSubmit(event);
+      }
+      wizardNext();
+      return false;
+    };
 
     function openLogin() {
       var el = document.getElementById('modal-login');

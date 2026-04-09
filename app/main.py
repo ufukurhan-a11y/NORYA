@@ -25,6 +25,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import FileResponse, HTMLResponse, JSONResponse, PlainTextResponse, RedirectResponse, Response
 from fastapi.staticfiles import StaticFiles
 from app.core.templating import Jinja2Templates
+from pydantic import BaseModel
 from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
@@ -4254,6 +4255,183 @@ async def analyze_upload_json(
         plan=getattr(user, "plan", None) or "free",
         institution_id=_inst_id_for_save,
     )
+
+
+# Guest analiz: kayıt olmadan, sınırlı sonuç + ödeme CTA
+GUEST_ANALYSIS_RATE_LIMIT = "3/hour"  # IP başına saatte 3 guest analiz
+
+
+class GuestAnalyzeRequest(BaseModel):
+    text: str
+    lang: str | None = None
+
+
+class GuestAnalyzeResponse(BaseModel):
+    """Guest analiz yanıtı: sadece temel özet, detaylar gizli."""
+    overview: str  # Kısa genel değerlendirme
+    highlights: list[dict]  # Öne çıkan değerler (test, value, status)
+    health_score: int | None  # 0-100 skor
+    is_limited: bool = True  # Frontend için: bu sınırlı sonuç
+    upgrade_url: str = "/payment?from=guest"  # Ödeme sayfası linki
+    upgrade_message: str = "Tam rapor için ödeme yapın"
+
+
+def _build_guest_response(result_text: str, risk_summary: dict | None) -> GuestAnalyzeResponse:
+    """AI sonucundan guest için sınırlı özet çıkar."""
+    overview = ""
+    highlights = []
+    health_score = None
+
+    # Risk summary'den temel bilgileri al
+    if risk_summary:
+        overall = risk_summary.get("overall", {})
+        health_score = overall.get("score")
+        # Genel değerlendirme - sadece ilk cümle
+        explanation = risk_summary.get("explanation", "")
+        if explanation:
+            # İlk cümleyi al (nokta ile böl)
+            sentences = explanation.split(".")
+            overview = sentences[0].strip() + "." if sentences else explanation[:200]
+
+        # Domain skorlarından öne çıkanları bul
+        domains = risk_summary.get("domains", {})
+        for domain_name, domain_data in domains.items():
+            if isinstance(domain_data, dict):
+                score = domain_data.get("score", 50)
+                if score < 40 or score > 80:  # Sadece çok düşük/yüksek olanları göster
+                    status = "low" if score < 40 else "high"
+                    highlights.append({
+                        "domain": domain_name,
+                        "score": score,
+                        "status": status,
+                    })
+
+        # Highlights listesinden temel bilgileri al
+        raw_highlights = risk_summary.get("highlights", [])
+        for h in raw_highlights[:3]:  # En fazla 3 tane
+            if isinstance(h, dict):
+                highlights.append({
+                    "test": h.get("test", ""),
+                    "level": h.get("level", "mid"),
+                })
+
+    # Eğer overview boşsa, result_text'ten kısa bir özet çıkar
+    if not overview and result_text:
+        lines = result_text.strip().split("\n")
+        for line in lines[:5]:
+            line = line.strip()
+            if line and len(line) > 20 and not line.startswith("**"):
+                overview = line[:200]
+                break
+        if not overview:
+            overview = result_text[:150] + "..."
+
+    return GuestAnalyzeResponse(
+        overview=overview or "Analiz tamamlandı. Tam rapor için ödeme yapın.",
+        highlights=highlights[:5],
+        health_score=health_score,
+        is_limited=True,
+        upgrade_url="/payment?from=guest",
+        upgrade_message="Tam rapor için ödeme yapın",
+    )
+
+
+@app.post("/analyze/guest", response_model=GuestAnalyzeResponse)
+@limiter.limit(GUEST_ANALYSIS_RATE_LIMIT)
+async def analyze_guest(
+    request: Request,
+    db: Session = Depends(get_db),
+):
+    """Kayıt olmadan analiz: sınırlı sonuç döner, tam rapor için ödeme sayfasına yönlendirir."""
+    content_type = (request.headers.get("content-type") or "").lower()
+    if "application/json" in content_type:
+        try:
+            body = await request.json()
+        except Exception:
+            raise HTTPException(status_code=400, detail="Geçersiz JSON.")
+        text = (body.get("text") or "").strip()
+        lang = body.get("lang")
+    else:
+        form = await request.form()
+        text = (form.get("text") or "").strip()
+        lang = form.get("lang")
+
+    if not text:
+        raise HTTPException(status_code=400, detail="Lütfen tahlil metnini girin veya PDF/görsel yükleyin.")
+
+    # IP-based anonymous user oluştur
+    ip = _client_ip_from_request(request)
+    anon_user = _get_or_create_anonymous_user(db, ip)
+
+    # Analiz yap
+    report_lang = _report_lang_from_request(request, lang)
+    t0 = time.perf_counter()
+
+    try:
+        labs_norm = {
+            "t": " ".join(text.split()).strip(),
+            "dn": None,
+        }
+        cache_key = make_cache_key(
+            labs_norm=labs_norm,
+            lang=report_lang,
+            plan="guest",
+            model=OPENAI_ANALYZE_MODEL,
+            prompt_version=AI_CACHE_PROMPT_VERSION,
+        )
+        cached = cache_get(_cache_conn, cache_key)
+        if cached is not None:
+            log.info("GUEST CACHE HIT key=%s", cache_key[:16])
+            result = cached["sonuc"]
+            risk_summary = cached.get("risk_summary")
+        else:
+            log.info("GUEST CACHE MISS key=%s", cache_key[:16])
+            report_payload, usage = analyze_blood_test(
+                text,
+                detailed=True,
+                doctor_notes=None,
+                lang=report_lang,
+                plan="free",
+                labs_norm=labs_norm,
+            )
+            result = report_payload["sonuc"]
+            risk_summary = report_payload.get("risk_summary")
+            cache_set(
+                _cache_conn,
+                cache_key=cache_key,
+                created_at=now_iso(),
+                expires_at=expires_iso(AI_CACHE_TTL_DAYS),
+                model=OPENAI_ANALYZE_MODEL,
+                input_summary={"lang": report_lang, "plan": "guest", "labs_count": len(labs_norm.get("t", ""))},
+                response_obj={
+                    "sonuc": result,
+                    "usage": usage or {},
+                    "risk_summary": risk_summary,
+                    "explanation": report_payload.get("explanation"),
+                    "tables": report_payload.get("tables"),
+                    "meta": report_payload.get("meta"),
+                },
+            )
+
+        # Guest için sınırlı sonuç oluştur
+        guest_response = _build_guest_response(result, risk_summary)
+
+        # Analizi kaydet (anonymous user'a)
+        aid = _save_analysis(db, anon_user.id or 0, text[:2000], result, "text", plan_type="guest")
+
+        log.info("Guest analysis completed: aid=%s, ip=%s", aid, ip)
+        return guest_response
+
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except HTTPException:
+        raise
+    except Exception as e:
+        log.exception("Guest analyze error: %s", e)
+        raise HTTPException(
+            status_code=503,
+            detail="Analiz şu an yapılamadı. Lütfen tekrar deneyin.",
+        )
 
 
 @app.get("/analyze/usage")
