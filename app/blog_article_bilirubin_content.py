@@ -220,7 +220,7 @@ def _sections_tr() -> list:
             heading="Norya nasıl yardımcı olur?",
             body_html=(
                 "<p>Norya teşhis koymaz&mdash;doktor ziyaretinize hazırlanmanıza yardımcı olur. "
-                "Kan tahlili raporunuzu <a href=\"/analyze\">noryaai.com/analyze</a> sayfasına yükleyin; yapay zekâ motorumuz "
+                "Kan tahlili raporunuzu <a href=\"/analyze\">noryaai.com/analyze</a> sayfasına yükleyin; analiz motorumuz "
                 "toplam, direkt ve indirekt bilirubin ile ALT, AST, ALP, GGT ve diğer karaciğer belirteçlerini otomatik "
                 "olarak çıkarır, referans aralıklarıyla karşılaştırır ve yapılandırılmış bir rapor oluşturur.</p>"
                 "<p>Abonelik seçenekleri için <a href=\"/pricing\">fiyatlandırma sayfamızı</a> ziyaret edin.</p>"

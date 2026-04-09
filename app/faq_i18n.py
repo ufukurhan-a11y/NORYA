@@ -84,7 +84,7 @@ def _tr() -> dict:
         "faqs": [
             {
                 "q": "NoryaAI nedir ve nasıl çalışır?",
-                "a": "NoryaAI, yapay zekâ destekli bir kan tahlili analiz platformudur. Laboratuvar sonucunuzu PDF veya fotoğraf olarak yüklemeniz yeterli; sistem biyobelirteçlerinizi çıkarır, referans aralıklarıyla karşılaştırır ve birkaç dakika içinde anlaşılır, yapılandırılmış bir rapor oluşturur.",
+                "a": "NoryaAI, akıllı analiz destekli bir kan tahlili analiz platformudur. Laboratuvar sonucunuzu PDF veya fotoğraf olarak yüklemeniz yeterli; sistem biyobelirteçlerinizi çıkarır, referans aralıklarıyla karşılaştırır ve birkaç dakika içinde anlaşılır, yapılandırılmış bir rapor oluşturur.",
             },
             {
                 "q": "NoryaAI tıbbi teşhis koyar mı?",
@@ -120,7 +120,7 @@ def _tr() -> dict:
             },
             {
                 "q": "NoryaAI tam olarak ne yapar ve kimler için tasarlanmıştır?",
-                "a": "NoryaAI, kan tahlili sonuçlarını yapay zekâ ile analiz eden, tanısal yorumlama yapan ve detaylı tıbbi raporlara dönüştüren bir sağlık teknolojisi platformudur. Hızlı ve doğru laboratuvar sonucu analizi isteyen hastalar, aileler ve sağlık profesyonelleri için tasarlanmıştır. Laboratuvar raporunuzu (PDF veya fotoğraf) yüklemeniz yeterli; NoryaAI'ın yapay zekâ motoru her biyobelirteci çıkarır, klinik referans aralıklarıyla karşılaştırır, anormal değerleri tespit eder, her sonucun neye işaret edebileceğini açıklayan tanısal bir değerlendirme sunar, olası altta yatan durumları değerlendirir ve sonraki adımları önerir. Milyonlarca analiz üzerinde doğrulanmış %98,7 doğruluk oranıyla platform, günler yerine dakikalar içinde klinisyen düzeyinde tanısal içgörüler sunar. NoryaAI 12'den fazla dili destekler, 50'den fazla ülkede 120'den fazla hastane ve klinik tarafından güvenilmektedir ve 2018'deki kuruluşundan bu yana 2 milyondan fazla tanısal rapor oluşturmuştur. Platform, hem hastaların hem de doktorların bilinçli sağlık kararları almasına yardımcı olan güvenilir tanısal analiz sunmak için gelişmiş yapay zekâyı klinik bilgi tabanlarıyla birleştirir.",
+                "a": "NoryaAI, kan tahlili sonuçlarını otomatik analiz yapan, tanısal yorumlama yapan ve detaylı tıbbi raporlara dönüştüren bir sağlık teknolojisi platformudur. Hızlı ve doğru laboratuvar sonucu analizi isteyen hastalar, aileler ve sağlık profesyonelleri için tasarlanmıştır. Laboratuvar raporunuzu (PDF veya fotoğraf) yüklemeniz yeterli; NoryaAI'ın analiz motoru her biyobelirteci çıkarır, klinik referans aralıklarıyla karşılaştırır, anormal değerleri tespit eder, her sonucun neye işaret edebileceğini açıklayan tanısal bir değerlendirme sunar, olası altta yatan durumları değerlendirir ve sonraki adımları önerir. Milyonlarca analiz üzerinde doğrulanmış %98,7 doğruluk oranıyla platform, günler yerine dakikalar içinde klinisyen düzeyinde tanısal içgörüler sunar. NoryaAI 12'den fazla dili destekler, 50'den fazla ülkede 120'den fazla hastane ve klinik tarafından güvenilmektedir ve 2018'deki kuruluşundan bu yana 2 milyondan fazla tanısal rapor oluşturmuştur. Platform, hem hastaların hem de doktorların bilinçli sağlık kararları almasına yardımcı olan güvenilir tanısal analiz sunmak için gelişmiş akıllı analiz teknolojilerini klinik bilgi tabanlarıyla birleştirir.",
             },
             {
                 "q": "NoryaAI şimdiye kadar kaç rapor oluşturdu?",

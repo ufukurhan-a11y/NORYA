@@ -68,10 +68,10 @@ Bunu ileride istersen “ödeme başarı” şablonuna bu event’i ekleyecek ş
 2. **Hedef**: “Satışlar” veya “Web sitesi trafiği”.
 3. **Kampanya türü**: **Arama** (Search).
 4. **Anahtar kelimeler**:  
-   Örn. “kan tahlili yorumlama”, “laboratuvar sonucu analiz”, “kan testi değerlendirme”, “biyobelirteç analiz”, “sağlık raporu yapay zeka”.
+   Örn. “kan tahlili yorumlama”, “laboratuvar sonucu analiz”, “kan testi değerlendirme”, “biyobelirteç analiz”, “sağlık raporu akıllı analiz”.
 5. **Teklif**: “Tıklama başına ödeme” (CPC). Başlangıç için **manuel teklif** ile günlük bütçe (örn. 50–100 TL) ver; sonra “Maksimum tıklama” veya “Dönüşüm” odaklı stratejiye geçebilirsin.
 6. **Reklam grupları**: Her grup 5–15 anahtar kelime, ortak reklam metni. Örn. bir grup “kan tahlili” varyasyonları, bir grup “laboratuvar sonucu” varyasyonları.
-7. **Reklam metni**: Başlık (30 karakter), açıklama (90 karakter). Örn: “Kan Tahlili Yorumlama | Norya AI” / “Laboratuvar sonuçlarınızı anında yapay zeka ile değerlendirin. Deneyin.”
+7. **Reklam metni**: Başlık (30 karakter), açıklama (90 karakter). Örn: “Kan Tahlili Yorumlama | Norya AI” / “Laboratuvar sonuçlarınızı anında akıllı analiz ile değerlendirin. Deneyin.”
 8. **Hedef URL**: `https://noryaai.com` veya doğrudan `https://noryaai.com/upload`, `https://noryaai.com/payment` gibi sayfalar (kampanya hedefine göre).
 
 ---

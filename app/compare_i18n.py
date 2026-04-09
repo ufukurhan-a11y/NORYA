@@ -493,7 +493,7 @@ _CTA["tr"] = {
 }
 _HUB["tr"] = {
     "meta_title": "NoryaAI Karşılaştırma — Kan Tahlili Analiz Alternatifleri | NoryaAI",
-    "meta_description": "NoryaAI'ı ChatGPT, BloodGPT, Kantesti, SiPhox Health, Wizey ve genel yapay zeka sohbet botlarıyla karşılaştırın. Dürüst, yan yana karşılaştırmalar.",
+    "meta_description": "NoryaAI'ı ChatGPT, BloodGPT, Kantesti, SiPhox Health, Wizey ve genel sohbet botlarıyla karşılaştırın. Dürüst, yan yana karşılaştırmalar.",
     "hero_title": "NoryaAI'ı Kan Tahlili Analiz Araçlarıyla Karşılaştırın",
     "hero_sub": "Kan tahlili sonuçlarınızı anlamak için doğru aracı mı arıyorsunuz? Popüler alternatiflerle dürüst, yan yana karşılaştırmalar hazırladık.",
     "trust_stats": [
@@ -502,15 +502,15 @@ _HUB["tr"] = {
         {"value": "QR", "label": "Doğrulanmış PDF", "sub": "Doktora hazır paylaşılabilir özet"},
     ],
     "cards": [
-        {"slug": "norya-vs-chatgpt-for-blood-tests", "name": "ChatGPT", "summary": "Amaca yönelik bir kan tahlili analizörü ile dünyanın en popüler yapay zeka sohbet botunun karşılaştırması.", "link_text": "Tam karşılaştırmayı oku"},
-        {"slug": "norya-vs-bloodgpt", "name": "BloodGPT", "summary": "Kan tahliline odaklı sohbet tabanlı bir yapay zeka deneyimini NoryaAI'ın yapılandırılmış raporları ve doktora hazır çıktılarıyla karşılaştırın.", "link_text": "Tam karşılaştırmayı oku"},
+        {"slug": "norya-vs-chatgpt-for-blood-tests", "name": "ChatGPT", "summary": "Amaca yönelik bir kan tahlili analizörü ile dünyanın en popüler akıllı analiz sohbet botunun karşılaştırması.", "link_text": "Tam karşılaştırmayı oku"},
+        {"slug": "norya-vs-bloodgpt", "name": "BloodGPT", "summary": "Kan tahliline odaklı sohbet tabanlı bir analiz deneyimini NoryaAI'ın yapılandırılmış raporları ve doktora hazır çıktılarıyla karşılaştırın.", "link_text": "Tam karşılaştırmayı oku"},
         {"slug": "norya-vs-kantesti", "name": "Kantesti", "summary": "İki kan tahlili analiz platformu karşılaştırması — çok dilli yapılandırılmış raporlar ve Türkçe odaklı hizmet.", "link_text": "Tam karşılaştırmayı oku"},
         {"slug": "norya-vs-siphox-health", "name": "SiPhox Health", "summary": "Evde biyobelirteç test kitleri ile mevcut laboratuvar sonuçlarınızın yapılandırılmış analizi — iki farklı yaklaşım.", "link_text": "Tam karşılaştırmayı oku"},
         {"slug": "norya-vs-wizey", "name": "Wizey", "summary": "NoryaAI'ın yapılandırılmış rapor iş akışının Wizey'in kan tahlili analiz yaklaşımıyla karşılaştırması.", "link_text": "Tam karşılaştırmayı oku"},
-        {"slug": "norya-vs-generic-ai", "name": "Genel Yapay Zeka", "summary": "Amaca yönelik bir kan tahlili analizörünün genel yapay zeka sohbet botlarına kıyasla sunduklarını keşfedin.", "link_text": "Tam karşılaştırmayı oku"},
+        {"slug": "norya-vs-generic-ai", "name": "Genel Sohbet Botları", "summary": "Amaca yönelik bir kan tahlili analizörünün genel sohbet botlarına kıyasla sunduklarını keşfedin.", "link_text": "Tam karşılaştırmayı oku"},
     ],
     "hub_faqs": [
-        {"q": "Kan tahlili sonuçlarını anlamak için en iyi araç hangisi?", "a": "İhtiyaçlarınıza bağlı. Sağlık puanları ve doktora hazır özetlerle yapılandırılmış, tutarlı raporlar istiyorsanız NoryaAI bunun için tasarlandı. Genel yapay zeka sohbet botları geniş sağlık eğitimi için daha uygundur."},
+        {"q": "Kan tahlili sonuçlarını anlamak için en iyi araç hangisi?", "a": "İhtiyaçlarınıza bağlı. Sağlık puanları ve doktora hazır özetlerle yapılandırılmış, tutarlı raporlar istiyorsanız NoryaAI bunun için tasarlandı. Genel sohbet botları geniş sağlık eğitimi için daha uygundur."},
         {"q": "Bu karşılaştırmalar adil ve dürüst mü?", "a": "Şeffaflığı hedefliyoruz. Bir rakibin özellikleri net olarak açıklanmadığında, tahmin etmek yerine bunu belirtiyoruz. Farklı araçları denemenizi ve kendi deneyiminize göre karar vermenizi teşvik ediyoruz."},
         {"q": "NoryaAI'ı diğer araçlarla birlikte kullanabilir miyim?", "a": "Evet. NoryaAI sağlık iş akışınızı tamamlamak için tasarlanmıştır. Diğer platformlarla birlikte kullanabilirsiniz ve tıbbi kararlar için her zaman nitelikli bir doktora danışmalısınız."},
     ],
@@ -552,7 +552,7 @@ _HUB["tr"] = {
     "suits_title": "Hangi araç kime daha uygun?",
     "suits_items": [
         {"label": "Yapılandırılmış kan tahlili analizi", "text": "Mevcut laboratuvar sonuçlarınızdan tutarlı sağlık puanı, işaretlenmiş belirteçler ve doktora hazır PDF istiyorsanız NoryaAI bunun için özel olarak tasarlanmıştır.", "link_slug": None},
-        {"label": "Genel sağlık soru-cevap", "text": "Açık uçlu sağlık soruları sormak, tıbbi terimler hakkında bilgi edinmek veya doktorunuz için sorular hazırlamak istiyorsanız ChatGPT gibi genel bir yapay zeka sohbet botu güçlü bir seçenektir.", "link_slug": "norya-vs-chatgpt-for-blood-tests"},
+        {"label": "Genel sağlık soru-cevap", "text": "Açık uçlu sağlık soruları sormak, tıbbi terimler hakkında bilgi edinmek veya doktorunuz için sorular hazırlamak istiyorsanız ChatGPT gibi genel bir akıllı analiz sohbet botu güçlü bir seçenektir.", "link_slug": "norya-vs-chatgpt-for-blood-tests"},
         {"label": "Laboratuvar raporu odaklı araçları karşılaştırma", "text": "Özellikle kan tahlili raporlarını analiz eden platformları değerlendiriyorsanız, hangi iş akışı, dil desteği ve çıktı formatının ihtiyaçlarınıza uyduğunu görmek için NoryaAI'ı Kantesti ve Wizey ile karşılaştırın.", "link_slug": "norya-vs-kantesti"},
     ],
 }
@@ -560,7 +560,7 @@ _COMP["norya-vs-chatgpt-for-blood-tests"]["tr"] = {
     "meta_title": "NoryaAI vs ChatGPT — Kan Tahlili Karşılaştırması | NoryaAI",
     "meta_description": "NoryaAI ile ChatGPT'yi kan tahlili analizi için karşılaştırın. Yapılandırılmış rapor ile genel amaçlı sohbet botu — yan yana dürüst karşılaştırma.",
     "hero_title": "Kan Tahlili Analizi için NoryaAI vs ChatGPT",
-    "hero_sub": "ChatGPT güçlü, genel amaçlı bir yapay zeka asistanıdır. NoryaAI ise kan tahlili analizi için özel olarak tasarlanmıştır. İşte her birinin en iyi yaptığına dürüst bir bakış.",
+    "hero_sub": "ChatGPT güçlü, genel amaçlı bir sohbet asistanıdır. NoryaAI ise kan tahlili analizi için özel olarak tasarlanmıştır. İşte her birinin en iyi yaptığına dürüst bir bakış.",
     "quick_answer_title": "Kısa özet",
     "quick_answer": "ChatGPT tıbbi terimleri açıklayabilir ve sohbet halinde sağlık sorularını yanıtlayabilir, ancak laboratuvar raporlarını ayrıştırmak için tasarlanmamıştır. NoryaAI kan tahlili sonuçlarınızı doğrudan okur, değerleri referans aralıklarıyla eşleştirir ve yapılandırılmış, doktora hazır bir özet üretir. Farklı sorunları çözerler.",
     "cells": {
@@ -593,7 +593,7 @@ _COMP["norya-vs-bloodgpt"]["tr"] = {
     "meta_title": "NoryaAI vs BloodGPT — Kan Tahlili Karşılaştırması | NoryaAI",
     "meta_description": "NoryaAI ile BloodGPT'yi kan tahlili analizi için karşılaştırın. Yapılandırılmış raporlar, çok dilli çıktı ve doktora hazır PDF'ler ile sohbet odaklı iş akışı yan yana.",
     "hero_title": "Kan Tahlili Analizi için NoryaAI vs BloodGPT",
-    "hero_sub": "BloodGPT kan tahlili odaklı bir yapay zeka sohbet deneyimi olarak konumlanır. NoryaAI ise yapılandırılmış raporlar, referans aralığı farkındalığı ve doktora hazır çıktılar etrafında inşa edilmiştir. İşte iki yaklaşımın farkı.",
+    "hero_sub": "BloodGPT kan tahlili odaklı bir akıllı analiz sohbet deneyimi olarak konumlanır. NoryaAI ise yapılandırılmış raporlar, referans aralığı farkındalığı ve doktora hazır çıktılar etrafında inşa edilmiştir. İşte iki yaklaşımın farkı.",
     "quick_answer_title": "Kısa özet",
     "quick_answer": "BloodGPT kan tahlili sonuçlarını sohbet içinde tartışmaya odaklanan bir yaklaşımdır. NoryaAI ise yapılandırılmış yükleme ve raporlama iş akışıdır: laboratuvar raporunuzu okur, her belirteci referans aralıklarıyla eşleştirir ve sağlık puanı ile doktora hazır PDF içeren çok dilli bir özet döndürür. Biri sohbet odaklıdır, diğeri tekrar kullanılabilir raporlama için tasarlanmıştır.",
     "cells": {
@@ -604,14 +604,14 @@ _COMP["norya-vs-bloodgpt"]["tr"] = {
         "multilingual": "Dil kapsamı net olarak açıklanmamıştır",
         "doctor_summary": "Doktora hazır PDF veya doğrulanmış dışa aktarma formatı net olarak açıklanmamıştır",
         "privacy": "Saklama, tutma süresi ve model kullanımı ayrıntıları için gizlilik politikasına bakın",
-        "workflow": "Kan tahlili odaklı yapay zeka sohbet deneyimi",
+        "workflow": "Kan tahlili odaklı akıllı analiz sohbet deneyimi",
         "guided_flow": "Kan tahlili sonuçları hakkında soru-cevap odaklı sohbet",
     },
     "helps_title": "BloodGPT ne zaman yine de yardımcı olabilir",
     "helps_sub": "Sohbet odaklı bir kan tahlili aracı, sabit rapor yerine karşılıklı soru-cevap tercih eden kullanıcılara uygun olabilir.",
     "helps_items": [
         {"icon": "💬", "title": "Sohbet öncelikli deneyim", "desc": "Takip sorularını sohbet arayüzünde sormayı tercih ediyorsanız, kan tahlili odaklı bir chatbot sabit rapordan daha doğal gelebilir."},
-        {"icon": "🧪", "title": "Kan tahliline odaklı istemler", "desc": "Odaklı bir chatbot, biyobelirteçleri sohbet içinde tartışmak istediğinizde genel amaçlı yapay zekaya göre daha dar bağlam sunabilir."},
+        {"icon": "🧪", "title": "Kan tahliline odaklı istemler", "desc": "Odaklı bir chatbot, biyobelirteçleri sohbet içinde tartışmak istediğinizde genel amaçlı sohbet botlarına göre daha dar bağlam sunabilir."},
         {"icon": "⚡", "title": "Hızlı keşif amaçlı cevaplar", "desc": "Belirteçler hakkında hızlı ileri-geri düşünme için, resmi bir özet istemeden önce konuşma tabanlı arayüz faydalı olabilir."},
     ],
     "faqs": [
@@ -719,12 +719,12 @@ _COMP["norya-vs-wizey"]["tr"] = {
     ],
 }
 _COMP["norya-vs-generic-ai"]["tr"] = {
-    "meta_title": "NoryaAI vs Genel Yapay Zeka — Kan Tahlili Karşılaştırması | NoryaAI",
-    "meta_description": "NoryaAI ile ChatGPT veya diğer yapay zeka sohbet botlarını kan tahlili sonuçları için karşılaştırın. Yapılandırılmış raporlar ile serbest biçimli sohbet cevapları — yan yana karşılaştırma.",
-    "hero_title": "Kan Tahlilleri için NoryaAI vs Genel Yapay Zeka Sohbet Botları",
+    "meta_title": "NoryaAI vs Genel Sohbet Botları — Kan Tahlili Karşılaştırması | NoryaAI",
+    "meta_description": "NoryaAI ile ChatGPT veya diğer sohbet botlarını kan tahlili sonuçları için karşılaştırın. Yapılandırılmış raporlar ile serbest biçimli sohbet cevapları — yan yana karşılaştırma.",
+    "hero_title": "Kan Tahlilleri için NoryaAI vs Genel Sohbet Botları Sohbet Botları",
     "hero_sub": "Her ikisi de laboratuvar verileriyle çalışabilir — ancak çok farklı yaklaşırlar. İşte kan tahlili sonuçlarınızı anlamanız gerektiğinde her birinin sunduklarına dürüst, yan yana bir bakış.",
     "quick_answer_title": "Kısa özet",
-    "quick_answer": "ChatGPT gibi genel yapay zeka sohbet botları tıbbi terimleri açıklayabilir ve sohbet halinde sağlık sorularını yanıtlayabilir. NoryaAI kan tahlilleri için özel olarak tasarlanmıştır: laboratuvar raporunuzu okur, her değeri referans aralıklarıyla eşleştirir ve sağlık puanlı, yapılandırılmış, doktora hazır bir özet üretir — serbest biçimli bir paragraf değil. Her ikisinin de yeri var, ancak farklı sorunları çözerler.",
+    "quick_answer": "ChatGPT gibi genel sohbet botları tıbbi terimleri açıklayabilir ve sohbet halinde sağlık sorularını yanıtlayabilir. NoryaAI kan tahlilleri için özel olarak tasarlanmıştır: laboratuvar raporunuzu okur, her değeri referans aralıklarıyla eşleştirir ve sağlık puanlı, yapılandırılmış, doktora hazır bir özet üretir — serbest biçimli bir paragraf değil. Her ikisinin de yeri var, ancak farklı sorunları çözerler.",
     "cells": {
         "report_upload": "Değerleri sohbet istemine kopyalayıp yapıştırın ve biçimlendirmenin tutmasını umun",
         "reference_ranges": "Aralıkları tahmin edebilir veya atlayabilir; laboratuvarınızın standartlarıyla eşleşme garantisi yoktur",
@@ -736,12 +736,12 @@ _COMP["norya-vs-generic-ai"]["tr"] = {
         "workflow": "Herhangi bir konu için tasarlanmış genel amaçlı sohbet arayüzü",
         "guided_flow": "Açık uçlu sohbet — kalite isteminizi nasıl yazdığınıza bağlıdır",
     },
-    "helps_title": "Genel yapay zeka sohbet botları ne zaman yine de yardımcı olabilir",
+    "helps_title": "Genel sohbet botları ne zaman yine de yardımcı olabilir",
     "helps_sub": "Bu bir aracın kötü, diğerinin iyi olmasıyla ilgili değil. Farklı amaçlara hizmet ederler.",
     "helps_items": [
         {"icon": "📚", "title": "Genel sağlık eğitimi", "desc": "Sohbet botları bir biyobelirtecin ne anlama geldiğini, bağışıklık sisteminin nasıl çalıştığını veya belirli bir durumun ne içerdiğini öğrenmek için harikadır — geniş eğitici sorular."},
         {"icon": "💡", "title": "Doktorunuza sorular hazırlama", "desc": "Randevudan önce bir sohbet botu ne soracağınızı düşünmenize yardımcı olabilir — gerçek laboratuvar raporunuzu hassasiyetle okuyamasa bile."},
-        {"icon": "🔍", "title": "Tıbbi terminolojiyi anlama", "desc": "Raporunuzda bilmediğiniz bir terimle karşılaşırsanız genel bir yapay zeka sade bir dille hızla açıklayabilir."},
+        {"icon": "🔍", "title": "Tıbbi terminolojiyi anlama", "desc": "Raporunuzda bilmediğiniz bir terimle karşılaşırsanız genel bir sohbet aracı sade bir dille hızla açıklayabilir."},
     ],
     "faqs": [
         {"q": "ChatGPT kan tahlili sonuçlarını açıklayabilir mi?", "a": "Evet, bir dereceye kadar. ChatGPT bireysel değerlerin genel olarak ne anlama geldiğini açıklayabilir. Ancak gerçek laboratuvar raporunuzu ayrıştırmaz, referans aralıklarını uydurabilir ve her sorduğunuzda farklı cevap verir. NoryaAI raporunuzu doğrudan okumak ve tutarlı, yapılandırılmış bir özet çıkarmak için tasarlanmıştır."},
@@ -1152,7 +1152,7 @@ def _inject_bloodgpt_hub_content() -> None:
             "accuracy": "Not disclosed",
         },
         "tr": {
-            "summary": "Kan tahliline odaklı sohbet tabanlı bir yapay zeka deneyimini NoryaAI'ın yapılandırılmış raporları ve doktora hazır çıktılarıyla karşılaştırın.",
+            "summary": "Kan tahliline odaklı sohbet tabanlı bir analiz deneyimini NoryaAI'ın yapılandırılmış raporları ve doktora hazır çıktılarıyla karşılaştırın.",
             "best_use": "Kan tahlili odaklı sohbet",
             "workflow": "Mevcut",
             "upload": "Net olarak açıklanmamış",

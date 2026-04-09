@@ -61,7 +61,7 @@ BLOG_UI = {
         "trust_strip_3": "Anlaşılır sunum",
         "cta_after_brand": " ile kan tahlili sonuçlarınızı yapılandırılmış, hekime hazır bir özet rapora dönüştürün.",
         "mid_cta_title": "Kendi sonuçlarınızı anlamak ister misiniz?",
-        "mid_cta_desc": "Kan tahlili sonuçlarınızı yükleyin, yapay zeka destekli net bir açıklama alın.",
+        "mid_cta_desc": "Kan tahlili sonuçlarınızı yükleyin, akıllı analiz destekli net bir açıklama alın.",
         "mid_cta_btn": "NoryaAI'yı dene",
         "article_edu_note": "Bu rehber bilgilendirme amaçlıdır; tıbbi tavsiye veya teşhis yerine geçmez. Sonuçları mutlaka bir hekimle birlikte değerlendirin.",
         "related_intro": "Laboratuvar değerleri ve akıllı takip için seçilmiş okumalar.",

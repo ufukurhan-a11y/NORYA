@@ -790,8 +790,8 @@ def _page_clinics_tr() -> Dict[str, Any]:
 
 def _page_hospitals_tr() -> Dict[str, Any]:
     return {
-        "meta_title": "Hastaneler için NoryaAI | Kurumsal Yapay Zekâ Altyapısı",
-        "meta_description": "Hastanenizi yapay zekâ ile dönüştürün. 12+ dil desteği, gerçek zamanlı izleme, HL7/FHIR entegrasyonu. 2M+ rapor, 120+ hastane worldwide.",
+        "meta_title": "Hastaneler için NoryaAI | Kurumsal Analiz Altyapısı",
+        "meta_description": "Hastanenizi akıllı analiz ile dönüştürün. 12+ dil desteği, gerçek zamanlı izleme, HL7/FHIR entegrasyonu. 2M+ rapor, 120+ hastane worldwide.",
         "hero_badge": "Enterprise AI Platform",
         "hero_title": "Laboratuvarınızı Yapay Zekâ ile Dönüştürün",
         "hero_desc": "NoryaAI Clinical Enterprise: Hastaneler için laboratuvar sonuçlarını yapılandırılmış, çok dilli ve izlenebilir biçimde ön analiz desteğine dönüştüren kurumsal çözüm.",

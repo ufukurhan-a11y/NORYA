@@ -190,7 +190,7 @@ def _sections_tr() -> list:
             body_html=(
                 "<p>Norya teşhis koymaz&mdash;doktor ziyaretinize hazırlanmanıza yardımcı olur. "
                 "Kan tahlili raporunuzu <a href=\"/analyze\">noryaai.com/analyze</a> sayfasına yükleyin; "
-                "yapay zekâ motorumuz nötrofil mutlak sayısı ve yüzdesini, toplam WBC&rsquo;yi ve diğer lökosit alt tiplerini "
+                "analiz motorumuz nötrofil mutlak sayısı ve yüzdesini, toplam WBC&rsquo;yi ve diğer lökosit alt tiplerini "
                 "otomatik olarak çıkarır, referans aralıklarıyla karşılaştırır ve anlaşılır bir rapor oluşturur.</p>"
                 "<p>Abonelik seçenekleri için <a href=\"/pricing\">fiyatlandırma sayfamızı</a> ziyaret edin.</p>"
             ),

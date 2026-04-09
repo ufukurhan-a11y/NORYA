@@ -111,8 +111,8 @@ Her dil için özgün, o dile özel meta başlıklar ve açıklamalar:
 ### 🇹🇷 Türkiye
 | Anahtar Kelime | Aylık Arama | Zorluk | Hedef Sıralama |
 |---------------|-------------|--------|----------------|
-| kan tahlili yapay zeka | 1.000+ | Orta | Top 3 |
-| hastane yapay zeka çözümleri | 500+ | Orta | Top 5 |
+| kan tahlili akıllı analiz | 1.000+ | Orta | Top 3 |
+| hastane akıllı analiz çözümleri | 500+ | Orta | Top 5 |
 | laboratuvar rapor analizi | 800+ | Düşük | Top 3 |
 | klinik karar destek sistemi | 400+ | Düşük | Top 3 |
 

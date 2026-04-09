@@ -231,7 +231,7 @@ _TR: dict[str, str] = {
     "upl_drag_drop": "Dosya sürükleyin veya seçin",
     "upl_supported": "PDF, görsel (JPG, PNG) desteklenir.",
     "upl_processing": "Analiz ediliyor…",
-    "upl_processing_desc": "Dosya yüklendi, yapay zekâ analizi devam ediyor. Bu işlem birkaç saniye sürebilir.",
+    "upl_processing_desc": "Dosya yüklendi, akıllı analiz devam ediyor. Bu işlem birkaç saniye sürebilir.",
     "upl_lang_label": "Rapor dili",
     "upl_submit": "Yükle ve Analiz Et",
     "upl_filter": "Durum filtresi",

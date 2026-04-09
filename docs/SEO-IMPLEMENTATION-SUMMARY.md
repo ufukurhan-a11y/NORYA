@@ -246,7 +246,7 @@ def hastaneler_icin_page(request: Request, lang: str = "tr"):
 ## 🌍 Country-Specific Recommendations
 
 ### Turkey 🇹🇷
-- **Keywords**: "kan tahlili yapay zeka", "hastane yapay zeka çözümleri"
+- **Keywords**: "kan tahlili akıllı analiz", "hastane akıllı analiz çözümleri"
 - **Local SEO**: Add Turkish phone number, Istanbul address
 - **Content**: Turkish case studies, local partnerships
 

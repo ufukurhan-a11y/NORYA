@@ -1400,7 +1400,7 @@ def _premium_template_labels(lang: str) -> dict[str, str]:
 
 
 def _strip_ai_from_text(text: str) -> str:
-    """PDF'de AI/yapay zeka/model kelimeleri görünmesin (bilgilendirme amaçlı metin)."""
+    """PDF'de AI/akıllı analiz/model kelimeleri görünmesin (bilgilendirme amaçlı metin)."""
     if not text or not text.strip():
         return text
     patterns = [

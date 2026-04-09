@@ -68,7 +68,7 @@ _TRUST_EN = {
 _TRUST_TR = {
     "meta_title": "Güven Merkezi | NoryaAI",
     "meta_description": "Gizlilik, güvenlik, çok dilli destek ve klinik sorumluluk — NoryaAI'nin güven yaklaşımı.",
-    "hero_title": "Güven, netlik ve sorumlu sağlık yapay zekası.",
+    "hero_title": "Güven, netlik ve sorumlu sağlık analizi.",
     "hero_sub": "Yaptığımız her şey tek bir ilkeyle yönlendirilir: sağlık verileriniz en yüksek bakım, şeffaflık ve saygıyı hak eder.",
     "nav_home": "Ana Sayfa",
     "nav_trust": "Güven Merkezi",

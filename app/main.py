@@ -1158,7 +1158,7 @@ def _pricing_response(currency: str, rate: float, eur_base: dict[str, float] | N
     }
 
 
-@app.get("/api/pricing", response_class=JSONResponse)
+@app.get("/api/pricing")
 def get_pricing(
     request: Request,
     country: str | None = None,
@@ -1213,13 +1213,7 @@ def get_pricing(
                 break
     except Exception:
         pass
-    return JSONResponse(
-        content=out,
-        headers={
-            "Cache-Control": "no-store, no-cache, must-revalidate, max-age=0",
-            "Pragma": "no-cache",
-        },
-    )
+    return out
 
 
 @app.get("/api/push/vapid-public")

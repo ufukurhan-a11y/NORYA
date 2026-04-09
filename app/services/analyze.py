@@ -268,7 +268,7 @@ def ai_generate_explanation(
                     abnormal_tests.append(test)
 
         abnormal_tests_str = ", ".join(abnormal_tests) if abnormal_tests else ""
-        # Premium PDF'de `AI/yapay zeka` kelimeleri otomatik temizleniyor; not metninde geçmesin.
+        # Premium PDF'de `AI/akıllı analiz` kelimeleri otomatik temizleniyor; not metninde geçmesin.
         ai_unavailable_note_tr = "Not: Yorum üretimi şu an geçici olarak yapılamadı. Aşağıdaki yorum kural tabanlıdır."
         ai_unavailable_note_en = "Note: Interpretation is temporarily unavailable. The text below is rule-based."
 

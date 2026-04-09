@@ -201,7 +201,7 @@ def _sections_tr() -> list:
             body_html=(
                 "<p>Norya teşhis koymaz&mdash;doktor ziyaretinize hazırlanmanıza yardımcı olur. "
                 "Kan tahlili raporunuzu <a href=\"/analyze\">noryaai.com/analyze</a> sayfasına yükleyin; "
-                "yapay zekâ motorumuz hemoglobin, hematokrit, MCV ve diğer biyobelirteçleri otomatik olarak çıkarır, "
+                "analiz motorumuz hemoglobin, hematokrit, MCV ve diğer biyobelirteçleri otomatik olarak çıkarır, "
                 "referans aralıklarıyla karşılaştırır ve anlaşılır bir rapor oluşturur.</p>"
                 "<p>İster ilk kez kan testi sonuçlarınızı inceliyor olun, ister kronik bir durumu takip ediyor olun, "
                 "Norya sonuçlarınızı yapılandırılmış bir şekilde düzenleyerek doktorunuzla görüşmenize hazırlar. "

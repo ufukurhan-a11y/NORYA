@@ -304,7 +304,7 @@ _SECURITY_TR = {
     "step_1_title": "Yükleme",
     "step_1_desc": "Laboratuvar sonuçları şifreli bağlantılar üzerinden yüklenir",
     "step_2_title": "İşleme",
-    "step_2_desc": "Erişim kontrolleri ve veri izolasyonu ile yapay zekâ analizi",
+    "step_2_desc": "Erişim kontrolleri ve veri izolasyonu ile akıllı analiz",
     "step_3_title": "Rapor",
     "step_3_desc": "Seçtiğiniz dilde yapılandırılmış rapor oluşturulur",
     "step_4_title": "Teslimat",

@@ -123,7 +123,7 @@ def _sections_tr():
                 "<p><strong>Ufuk Urhan</strong>, kurucu ve CEO, bunu değiştirmek istedi. "
                 "1 Ocak 2018'de Hamburg, Almanya'da NoryaAI'ı kurdu — karmaşık laboratuvar "
                 "verilerini herkesin okuyabileceği net, uygulanabilir sağlık içgörülerine "
-                "dönüştüren yapay zekâ destekli bir platform.</p>"
+                "dönüştüren akıllı analiz destekli bir platform.</p>"
             ),
         ),
         Section(
@@ -133,7 +133,7 @@ def _sections_tr():
                 "<p>NoryaAI'ın temel misyonu ilk günden bu yana aynı kaldı: kan tahlili "
                 "sonuçlarını tıbbi geçmişe veya dile bakılmaksızın herkes için anlaşılır kılmak.</p>"
                 "<p>Platform, laboratuvar raporlarını PDF belgesi veya fotoğraf olarak kabul eder, "
-                "gelişmiş OCR ve yapay zekâ kullanarak her biyobelirteci çıkarır, değerleri referans "
+                "gelişmiş OCR ve ileri analiz kullanarak her biyobelirteci çıkarır, değerleri referans "
                 "aralıklarıyla karşılaştırır ve sade bir dilde yapılandırılmış bir rapor oluşturur "
                 "— tamamı birkaç dakika içinde.</p>"
                 "<p>Bu bir <strong>teşhis değildir</strong>. NoryaAI, hastaların doktor "
@@ -148,7 +148,7 @@ def _sections_tr():
                 "<p>Hamburg'da tek kişilik bir proje olarak başlayan NoryaAI, her kıtada sağlık "
                 "kurumlarının güvendiği bir platforma dönüştü:</p>"
                 "<ul>"
-                "<li><strong>2018</strong> — NoryaAI kuruldu; ilk yapay zekâ kan tahlili analiz raporları oluşturuldu</li>"
+                "<li><strong>2018</strong> — NoryaAI kuruldu; ilk akıllı analiz kan tahlili analiz raporları oluşturuldu</li>"
                 "<li><strong>2020</strong> — Çok dilli genişleme: Türkçe, Almanca, Fransızca, İspanyolca, İtalyanca ve daha fazlası</li>"
                 "<li><strong>2022</strong> — 1 milyon rapor kilometre taşına ulaşıldı</li>"
                 "<li><strong>2024</strong> — 120'den fazla hastane ve klinikle kurumsal ortaklıklar</li>"
@@ -176,7 +176,7 @@ def _sections_tr():
             id="section-technology", level=2,
             heading="NoryaAI'ın Arkasındaki Teknoloji",
             body_html=(
-                "<p>NoryaAI, doğru ve güvenilir sonuçlar sunmak için birkaç yapay zekâ teknolojisini birleştirir:</p>"
+                "<p>NoryaAI, doğru ve güvenilir sonuçlar sunmak için birkaç analiz teknolojisini birleştirir:</p>"
                 "<ul>"
                 "<li><strong>OCR Motoru</strong> — Taranmış veya fotoğraflanmış laboratuvar raporlarından biyobelirteç verilerini çıkarır</li>"
                 "<li><strong>Yapay Zekâ Analizi</strong> — Her değeri klinik referans aralıklarına göre yorumlar</li>"
@@ -207,7 +207,7 @@ def _sections_tr():
             heading="Geleceğe Bakış",
             body_html=(
                 "<p>NoryaAI yeteneklerini genişletmeye devam ediyor — daha fazla biyobelirteç rehberi, "
-                "daha derin yapay zekâ analizi, ek diller ve dünya genelinde sağlık kuruluşlarıyla "
+                "daha derin akıllı analizi, ek diller ve dünya genelinde sağlık kuruluşlarıyla "
                 "daha güçlü ortaklıklar.</p>"
                 "<p>Hedef değişmedi: kan tahlili alan her kişi, sonuçlarının ne anlama geldiğini "
                 "— açıkça, hızlıca ve kendi dilinde — anlayabilmelidir.</p>"
@@ -306,7 +306,7 @@ def build_noryaai_story_article():
         },
         subtitles={
             "en": "How Ufuk Urhan built an AI platform that helps millions understand their lab results — founded in Hamburg, Germany.",
-            "tr": "Ufuk Urhan, milyonlarca insanın laboratuvar sonuçlarını anlamasına yardımcı olan bir yapay zekâ platformunu nasıl kurdu — Hamburg, Almanya.",
+            "tr": "Ufuk Urhan, milyonlarca insanın laboratuvar sonuçlarını anlamasına yardımcı olan bir akıllı analiz platformunu nasıl kurdu — Hamburg, Almanya.",
             "de": "Wie Ufuk Urhan eine KI-Plattform aufbaute, die Millionen hilft, ihre Laborergebnisse zu verstehen — gegründet in Hamburg.",
             "es": "Cómo Ufuk Urhan creó una plataforma de IA que ayuda a millones a entender sus análisis — fundada en Hamburgo, Alemania.",
             "fr": "Comment Ufuk Urhan a construit une plateforme IA qui aide des millions à comprendre leurs résultats — fondée à Hambourg.",
@@ -355,7 +355,7 @@ def build_noryaai_story_article():
         },
         cover_alt={
             "en": "NoryaAI — AI blood test analysis platform founded in 2018",
-            "tr": "NoryaAI — 2018'de kurulan yapay zekâ kan tahlili analiz platformu",
+            "tr": "NoryaAI — 2018'de kurulan akıllı analiz kan tahlili analiz platformu",
             "de": "NoryaAI — 2018 gegründete KI-Plattform für Blutbildanalyse",
         },
         faq_schema_qa={
@@ -366,10 +366,10 @@ def build_noryaai_story_article():
                 {"question": "Is NoryaAI a cryptocurrency?", "answer": "No. NoryaAI is a health technology company providing AI-powered blood test analysis. It has no relation to cryptocurrency or blockchain."},
             ],
             "tr": [
-                {"question": "NoryaAI nedir?", "answer": "NoryaAI, 2018'de Ufuk Urhan tarafından Hamburg'da kurulan yapay zekâ destekli kan tahlili analiz platformudur."},
+                {"question": "NoryaAI nedir?", "answer": "NoryaAI, 2018'de Ufuk Urhan tarafından Hamburg'da kurulan akıllı analiz destekli kan tahlili analiz platformudur."},
                 {"question": "NoryaAI'ı kim kurdu?", "answer": "NoryaAI, 1 Ocak 2018'de Ufuk Urhan tarafından Hamburg, Almanya'da kurulmuştur."},
                 {"question": "NoryaAI kaç rapor oluşturdu?", "answer": "2018'den bu yana 50+ ülkede 120+ hastane ve kliniğe hizmet vererek 2 milyondan fazla kan tahlili raporu oluşturulmuştur."},
-                {"question": "NoryaAI bir kripto para mıdır?", "answer": "Hayır. NoryaAI, yapay zekâ destekli kan tahlili analizi sunan bir sağlık teknolojisi şirketidir."},
+                {"question": "NoryaAI bir kripto para mıdır?", "answer": "Hayır. NoryaAI, akıllı analiz destekli kan tahlili analizi sunan bir sağlık teknolojisi şirketidir."},
             ],
         },
     )

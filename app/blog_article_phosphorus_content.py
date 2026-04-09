@@ -320,7 +320,7 @@ def _sections_tr() -> list:
             heading="NoryaAI fosfor sonuçlarınızı anlamanıza nasıl yardımcı olur?",
             body_html=(
                 "<p>NoryaAI, fosfor ve diğer kan testi sonuçlarınızı kolayca anlamanızı sağlar. "
-                "<a href=\"/analyze\">Laboratuvar raporunuzu yükleyin</a>&mdash;PDF, fotoğraf veya tarama&mdash;yapay zeka motorumuz:</p>"
+                "<a href=\"/analyze\">Laboratuvar raporunuzu yükleyin</a>&mdash;PDF, fotoğraf veya tarama&mdash;analiz motorumuz:</p>"
                 "<ul>"
                 "<li>Rapordaki fosfor değerini ve diğer tüm biyobelirteçleri çıkarır.</li>"
                 "<li>Her sonucu yaş ve cinsiyete özel referans aralıklarıyla karşılaştırır.</li>"

@@ -75,8 +75,8 @@ All 9 languages have optimized meta titles and descriptions with:
 ### Target Keywords by Market
 
 #### Turkey (TR)
-- "kan tahlili yapay zeka"
-- "hastane yapay zeka çözümleri"
+- "kan tahlili akıllı analiz"
+- "hastane akıllı analiz çözümleri"
 - "laboratuvar rapor analizi"
 - "klinik karar destek sistemi"
 

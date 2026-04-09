@@ -707,7 +707,7 @@ def _tr_hemogram() -> dict:
         "trust_card_multilang_body": "Hemogram açıklamalarını birden fazla dilde okuyun.",
         # Comparison: Norya vs generic chatbots
         "section_compare_title": "Neden özel bir hemogram analiz aracı?",
-        "section_compare_sub": "Genel amaçlı yapay zeka hemogram hakkında genel bilgi verebilir \u2014 ama tam kan sayımı yapılandırılmış referans verisi, tutarlı skorlama ve doktorunuzun kullanabileceği bir format gerektirir.",
+        "section_compare_sub": "Genel amaçlı sohbet botları hemogram hakkında genel bilgi verebilir — ama tam kan sayımı yapılandırılmış referans verisi, tutarlı skorlama ve doktorunuzun kullanabileceği bir format gerektirir.",
         "compare_chatbot_title": "Genel amaçlı AI chatbot\u2019lar",
         "compare_chatbot_1": "Her seferinde farklı çıktı veren serbest metin yanıtları",
         "compare_chatbot_2": "Tutarlı skorlama veya kategori yapısı yok",
