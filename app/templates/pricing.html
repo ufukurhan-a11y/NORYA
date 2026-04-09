@@ -144,6 +144,73 @@
     }
     .hero-cta--secondary:hover{background:rgba(14,165,164,0.06);transform:translateY(-1px);}
     #plans{padding-top:8px;}
+    /* Campaign / Discount Styles */
+    .campaign-strip{
+      background:linear-gradient(135deg,#f0fdfa 0%,#ecfeff 100%);
+      border:1px solid rgba(14,165,164,0.2);
+      border-radius:16px;
+      padding:16px 20px;
+      margin-bottom:24px;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+      flex-wrap:wrap;
+    }
+    .campaign-strip .campaign-info{flex:1;min-width:0;}
+    .campaign-strip .campaign-badge{
+      display:inline-block;
+      background:linear-gradient(135deg,#0EA5A4,#0d9488);
+      color:#fff;
+      font-size:11px;
+      font-weight:700;
+      padding:4px 10px;
+      border-radius:999px;
+      text-transform:uppercase;
+      letter-spacing:0.05em;
+      margin-bottom:6px;
+    }
+    .campaign-strip .campaign-label{font-size:15px;font-weight:600;color:#0f766e;}
+    .campaign-strip .campaign-note{font-size:13px;color:#64748b;margin-top:2px;}
+    .campaign-strip .campaign-code{
+      background:#fff;
+      border:2px dashed #0EA5A4;
+      border-radius:10px;
+      padding:10px 16px;
+      font-size:16px;
+      font-weight:800;
+      color:#0f766e;
+      letter-spacing:0.08em;
+      cursor:pointer;
+      transition:all 0.2s;
+      white-space:nowrap;
+    }
+    .campaign-strip .campaign-code:hover{background:#f0fdfa;transform:scale(1.03);}
+    .original-price{
+      text-decoration:line-through;
+      color:#94a3b8;
+      font-size:1.125rem;
+      font-weight:600;
+      margin-bottom:4px;
+    }
+    .discounted-price{
+      font-size:2rem;
+      font-weight:800;
+      color:#0f766e;
+      letter-spacing:-0.02em;
+    }
+    .discounted-price span.currency{font-size:1.125rem;font-weight:700;margin-right:2px;}
+    .discounted-price span.period{font-size:13px;font-weight:500;color:#64748b;margin-left:4px;}
+    .savings-badge{
+      display:inline-block;
+      background:#fef3c7;
+      color:#92400e;
+      font-size:11px;
+      font-weight:700;
+      padding:3px 8px;
+      border-radius:999px;
+      margin-top:4px;
+    }
     .pricing-grid{
       display:grid;
       grid-template-columns:repeat(4,minmax(0,1fr));
@@ -329,6 +396,18 @@
     </section>
 
     <section id="plans" class="pricing-section" aria-label="Plans">
+      <!-- Campaign Strip (hidden by default, shown when active campaign exists) -->
+      <div id="pricing-campaign-strip" class="campaign-strip" style="display:none;">
+        <div class="campaign-info">
+          <div id="pricing-campaign-badge" class="campaign-badge"></div>
+          <div id="pricing-campaign-label" class="campaign-label"></div>
+          <div id="pricing-campaign-note" class="campaign-note"></div>
+        </div>
+        <div id="pricing-campaign-code-wrap" style="display:none;">
+          <div id="pricing-campaign-code" class="campaign-code" title="Kopyalamak için tıklayın"></div>
+        </div>
+      </div>
+
       <div class="pricing-grid">
         <article class="plan-card" aria-label="{{ t.get('plan_free_preview', 'Free Preview') }}">
           <h2 class="plan-name">{{ t.get("plan_free_preview", "Free Preview") }}</h2>
@@ -346,9 +425,11 @@
         <article class="plan-card" aria-label="{{ t.get('plan_premium_report', 'Premium Report') }}">
           <h2 class="plan-name">{{ t.get("plan_premium_report", "Premium Report") }}</h2>
           <p class="plan-period">{{ t.get("pricing_single_plan_period", t.get("price_once", t.get("price_single_per", "One-time"))) }}</p>
-          <p class="plan-price">
-            <span class="currency">€</span>{{ "%.2f"|format(single.price_cents / 100) }}
-          </p>
+          <div id="single-price-block">
+            <p class="plan-price">
+              <span class="currency">€</span>{{ "%.2f"|format(single.price_cents / 100) }}
+            </p>
+          </div>
           <p class="plan-desc">{{ t.get("plan_premium_report_desc", "Full analysis, premium PDF, doctor-style summary, health score and recommendations.") }}</p>
           <ul class="plan-features">
             <li><span class="bullet">✓</span><span>{{ t.get("quantity_1_analysis", "1 analysis") }}</span></li>
@@ -362,10 +443,12 @@
         <article class="plan-card" aria-label="{{ t.get('plan_card_monthly', 'Monthly Plan') }}">
           <h2 class="plan-name">{{ t.get("plan_card_monthly", "Monthly Plan") }}</h2>
           <p class="plan-period">{{ t.get("price_monthly_per", t.get("per_month_short", "per month")) }}</p>
-          <p class="plan-price">
-            <span class="currency">€</span>{{ "%.2f"|format(monthly.price_cents / 100) }}
-            <span class="period">{{ t.get("price_monthly_abbr", "/mo") }}</span>
-          </p>
+          <div id="monthly-price-block">
+            <p class="plan-price">
+              <span class="currency">€</span>{{ "%.2f"|format(monthly.price_cents / 100) }}
+              <span class="period">{{ t.get("price_monthly_abbr", "/mo") }}</span>
+            </p>
+          </div>
           <p class="plan-desc">{{ t.get("plan_desc_monthly", "Ideal for regular tracking — multiple analyses each month.") }}</p>
           <ul class="plan-features">
             <li><span class="bullet">✓</span><span>{{ t.get("summary_value_monthly_per_month", "5 analyses/month") }}</span></li>
@@ -380,10 +463,12 @@
           <span class="plan-badge">{{ t.get("most_popular", "Most Popular") }}</span>
           <h2 class="plan-name">{{ t.get("plan_norya_plus", "Norya Plus") }}</h2>
           <p class="plan-period">{{ t.get("price_yearly_per", "per year") }}</p>
-          <p class="plan-price">
-            <span class="currency">€</span>{{ "%.2f"|format(yearly.price_cents / 100) }}
-            <span class="period">{{ t.get("price_yearly_abbr", "/yr") }}</span>
-          </p>
+          <div id="yearly-price-block">
+            <p class="plan-price">
+              <span class="currency">€</span>{{ "%.2f"|format(yearly.price_cents / 100) }}
+              <span class="period">{{ t.get("price_yearly_abbr", "/yr") }}</span>
+            </p>
+          </div>
           <p class="plan-desc">{{ t.get("plan_norya_plus_desc", "Multiple analyses, report history, comparison, priority access.") }}</p>
           <ul class="plan-features">
             <li><span class="bullet">✓</span><span>{{ t.get("summary_value_yearly_1y", "Extended annual quota") }}</span></li>
@@ -498,6 +583,81 @@
   </nav>
 
 {% include "partials/scripts_lang.html" %}
+<script>
+// Pricing page — campaign / discount support
+(function() {
+  var lang = document.documentElement.lang || 'en';
+
+  function fmt(cents) {
+    return (cents / 100).toFixed(2);
+  }
+
+  function updatePlanPrice(planKey, originalCents, discountedCents, periodLabel) {
+    var block = document.getElementById(planKey + '-price-block');
+    if (!block) return;
+    var savingsHTML = '';
+    if (originalCents > discountedCents) {
+      var saved = originalCents - discountedCents;
+      var pct = Math.round((saved / originalCents) * 100);
+      savingsHTML = '<div class="savings-badge">%{{ pct }} ' + (lang === 'tr' ? 'indirim' : lang === 'de' ? 'Rabatt' : lang === 'es' ? 'descuento' : lang === 'fr' ? 'de réduction' : lang === 'it' ? 'di sconto' : 'off') + '</div>';
+    }
+    var periodHTML = periodLabel ? '<span class="period">' + periodLabel + '</span>' : '';
+    block.innerHTML =
+      '<p class="original-price"><span class="currency">€</span>' + fmt(originalCents) + '</p>' +
+      '<p class="discounted-price"><span class="currency">€</span>' + fmt(discountedCents) + ' ' + periodHTML + '</p>' +
+      savingsHTML;
+  }
+
+  fetch('/api/prices?lang=' + encodeURIComponent(lang))
+    .then(function(r) { return r.json(); })
+    .then(function(data) {
+      if (!data || !data.campaign_active) return;
+
+      // Show campaign strip
+      var strip = document.getElementById('pricing-campaign-strip');
+      var badge = document.getElementById('pricing-campaign-badge');
+      var label = document.getElementById('pricing-campaign-label');
+      var note = document.getElementById('pricing-campaign-note');
+      var codeWrap = document.getElementById('pricing-campaign-code-wrap');
+      var codeEl = document.getElementById('pricing-campaign-code');
+
+      if (data.campaign_badge) badge.textContent = data.campaign_badge;
+      if (data.campaign_promo_code) {
+        codeEl.textContent = data.campaign_promo_code;
+        codeWrap.style.display = 'block';
+        codeEl.addEventListener('click', function() {
+          navigator.clipboard.writeText(data.campaign_promo_code).then(function() {
+            codeEl.textContent = '✓ ' + (lang === 'tr' ? 'Kopyalandı!' : 'Copied!');
+            setTimeout(function() { codeEl.textContent = data.campaign_promo_code; }, 2000);
+          });
+        });
+      }
+
+      // Build label from discount info
+      var discType = data.campaign_discount_type || 'percent';
+      var discVal = data.campaign_discount_value || 0;
+      var labelText = discType === 'percent' ? '%' + discVal + ' ' + (lang === 'tr' ? 'İndirim' : lang === 'de' ? 'Rabatt' : lang === 'es' ? 'Descuento' : lang === 'fr' ? 'Réduction' : lang === 'it' ? 'Sconto' : 'Discount') : (lang === 'tr' ? 'Kampanya' : 'Campaign');
+      label.textContent = labelText;
+      note.textContent = lang === 'tr' ? 'Kampanyalı fiyatlar aşağıda gösterilmektedir.' : 'Campaign prices are shown below.';
+
+      strip.style.display = 'flex';
+
+      // Update prices if campaign has old/new prices
+      if (data.single_original && data.single_discounted) {
+        updatePlanPrice('single', data.single_original * 100, data.single_discounted * 100, '');
+      }
+      if (data.monthly_original && data.monthly_discounted) {
+        var moLabel = lang === 'tr' ? '/ay' : lang === 'de' ? '/Mo' : lang === 'es' ? '/mes' : lang === 'fr' ? '/mois' : lang === 'it' ? '/mese' : '/mo';
+        updatePlanPrice('monthly', data.monthly_original * 100, data.monthly_discounted * 100, moLabel);
+      }
+      if (data.yearly_original && data.yearly_discounted) {
+        var yrLabel = lang === 'tr' ? '/yıl' : lang === 'de' ? '/Jr' : lang === 'es' ? '/año' : lang === 'fr' ? '/an' : lang === 'it' ? '/anno' : '/yr';
+        updatePlanPrice('yearly', data.yearly_original * 100, data.yearly_discounted * 100, yrLabel);
+      }
+    })
+    .catch(function() {});
+})();
+</script>
   {% include "partials/chat_widget.html" %}
 </body>
 </html>
