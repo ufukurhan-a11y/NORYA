@@ -1039,3 +1039,117 @@ def send_enterprise_lead_notification(
         mesaj=mesaj,
     )
     return send_email(admin_email, subject, html)
+
+
+# ---------------------------------------------------------------------------
+# Payment confirmation email (ödeme onay maili)
+# ---------------------------------------------------------------------------
+
+def build_payment_confirmation_html(
+    customer_name: str,
+    product: str,
+    amount: str,
+    currency: str,
+    transaction_id: str,
+    lang: str = "tr",
+    base_url: str = "https://noryaai.com",
+) -> tuple[str, str]:
+    """Ödeme onay e-postası HTML içeriği."""
+    product_labels = {
+        "single": {"tr": "Tek Analiz", "en": "Single Analysis"},
+        "monthly": {"tr": "Aylık Pro Plan", "en": "Monthly Pro Plan"},
+        "yearly": {"tr": "Yıllık Pro Plan", "en": "Yearly Pro Plan"},
+    }
+    label = product_labels.get(product, {}).get(lang, product_labels.get(product, {}).get("en", product))
+
+    if lang == "tr":
+        subject = f"Norya — Ödeme Onayı: {label}"
+        greeting = f"Sayın {customer_name},"
+        thank_you = "Ödemeniz başarıyla alındı. İşlem detayları aşağıdadır:"
+        order_summary = "Sipariş Özeti"
+        product_label = "Ürün"
+        amount_label = "Tutar"
+        transaction_label = "İşlem No"
+        next_steps_title = "Sonraki Adımlar"
+        next_steps = [
+            "Hesabınıza giriş yapın veya e-posta adresinizle oturum açın.",
+            "Tahlilinizi yükleyin veya metin olarak yapıştırın.",
+            "AI destekli raporunuz dakikalar içinde hazır olacak.",
+        ]
+        cta_text = "Analize Başla"
+        support_text = "Sorularınız için support@noryaai.com adresinden bize ulaşabilirsiniz."
+    else:
+        subject = f"Norya — Payment Confirmation: {label}"
+        greeting = f"Dear {customer_name},"
+        thank_you = "Your payment has been successfully processed. Transaction details are below:"
+        order_summary = "Order Summary"
+        product_label = "Product"
+        amount_label = "Amount"
+        transaction_label = "Transaction ID"
+        next_steps_title = "Next Steps"
+        next_steps = [
+            "Log in to your account or sign in with your email address.",
+            "Upload your lab test or paste the text.",
+            "Your AI-powered report will be ready in minutes.",
+        ]
+        cta_text = "Start Analysis"
+        support_text = "For questions, contact us at support@noryaai.com."
+
+    next_steps_html = "".join(f'<li style="margin-bottom:8px;color:#334155;">{step}</li>' for step in next_steps)
+
+    html = f"""<!DOCTYPE html>
+<html lang="{lang}">
+<head><meta charset="UTF-8"/><title>{subject}</title></head>
+<body style="margin:0;padding:0;background-color:#f1f5f9;font-family:'Segoe UI',system-ui,sans-serif;">
+  <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="background-color:#f1f5f9;">
+    <tr><td align="center" style="padding:32px 16px;">
+      <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="max-width:520px;background:#ffffff;border-radius:16px;box-shadow:0 4px 24px rgba(10,25,41,0.08);overflow:hidden;">
+        <tr><td style="background:linear-gradient(135deg,#1a2d42 0%,#2d4a6f 50%,#0d9488 100%);padding:24px;text-align:center;">
+          <div style="font-size:14px;letter-spacing:0.12em;color:rgba(255,255,255,0.9);font-weight:700;">NORYA</div>
+          <div style="font-size:18px;font-weight:600;color:#ffffff;margin-top:4px;">{"Ödeme Onayı" if lang == "tr" else "Payment Confirmation"}</div>
+        </td></tr>
+        <tr><td style="padding:24px;">
+          <p style="margin:0 0 16px;font-size:15px;color:#334155;">{greeting}</p>
+          <p style="margin:0 0 24px;font-size:14px;color:#475569;">{thank_you}</p>
+          <table role="presentation" width="100%" cellspacing="0" cellpadding="0" style="border:1px solid #e2e8f0;border-radius:8px;overflow:hidden;font-size:14px;margin-bottom:24px;">
+            <tr style="background:#f8fafc;"><td style="padding:10px 14px;font-weight:600;color:#334155;white-space:nowrap;">{product_label}</td><td style="padding:10px 14px;color:#1e293b;">{label}</td></tr>
+            <tr><td style="padding:10px 14px;font-weight:600;color:#334155;white-space:nowrap;">{amount_label}</td><td style="padding:10px 14px;color:#1e293b;">{amount} {currency}</td></tr>
+            <tr style="background:#f8fafc;"><td style="padding:10px 14px;font-weight:600;color:#334155;white-space:nowrap;">{transaction_label}</td><td style="padding:10px 14px;color:#1e293b;font-family:monospace;font-size:12px;">{transaction_id}</td></tr>
+          </table>
+          <h3 style="margin:0 0 12px;font-size:15px;color:#1e293b;">{next_steps_title}</h3>
+          <ol style="margin:0 0 24px;padding-left:20px;">{next_steps_html}</ol>
+          <p style="margin:0 0 20px;text-align:center;">
+            <a href="{base_url}/#analyze" style="display:inline-block;padding:12px 28px;background:#0d9488;color:#ffffff!important;text-decoration:none;font-weight:600;font-size:15px;border-radius:10px;">{cta_text}</a>
+          </p>
+          <p style="margin:0;font-size:13px;color:#94a3b8;text-align:center;">{support_text}</p>
+        </td></tr>
+        <tr><td style="padding:16px 24px;border-top:1px solid #e2e8f0;font-size:12px;color:#94a3b8;text-align:center;">&copy; Norya — {"Ödeme onay bildirimi" if lang == "tr" else "Payment confirmation"}</td></tr>
+      </table>
+    </td></tr>
+  </table>
+</body>
+</html>"""
+    return subject, html
+
+
+def send_payment_confirmation_email(
+    to_email: str,
+    customer_name: str,
+    product: str,
+    amount: str,
+    currency: str,
+    transaction_id: str,
+    lang: str = "tr",
+    base_url: str = "https://noryaai.com",
+) -> bool:
+    """Ödeme onay e-postası gönderir."""
+    subject, html = build_payment_confirmation_html(
+        customer_name=customer_name,
+        product=product,
+        amount=amount,
+        currency=currency,
+        transaction_id=transaction_id,
+        lang=lang,
+        base_url=base_url,
+    )
+    return send_email(to_email, subject, html)

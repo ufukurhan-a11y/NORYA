@@ -5970,6 +5970,28 @@ async def _paytr_callback_handle(request: Request, db: Session):
             db.add(order)
             if getattr(order, "coupon_code_used", None):
                 apply_coupon_use(db, order.coupon_code_used)
+
+            # Ödeme onay maili gönder
+            try:
+                from app.services.email_sender import send_payment_confirmation_email
+                customer_email = order.customer_email or (user.email if user else None)
+                if customer_email:
+                    customer_name = user.full_name if user else (customer_email.split("@")[0] or "Kullanıcı")
+                    amount_display = order.amount_kurus / 100 if order.amount_kurus else 0
+                    lang_code = "tr"  # Varsayılan; ileride user.country'den çıkarılabilir
+                    send_payment_confirmation_email(
+                        to_email=customer_email,
+                        customer_name=customer_name,
+                        product=order.product,
+                        amount=f"{amount_display:.2f}",
+                        currency=order.currency or "EUR",
+                        transaction_id=transaction_id or order.merchant_oid,
+                        lang=lang_code,
+                        base_url=(getattr(settings, "frontend_url", None) or "").strip().rstrip("/") or "https://noryaai.com",
+                    )
+                    log.info("Payment confirmation email sent: order=%s email=%s", order.merchant_oid, customer_email)
+            except Exception as e:
+                log.warning("Payment confirmation email failed: order=%s error=%s", order.merchant_oid, e)
         else:
             order.status = "failed"
             if transaction_id and not order.paytr_transaction_id:
