@@ -1257,6 +1257,35 @@ async def push_subscribe(
     return {"ok": True}
 
 
+class MobilePushTokenRequest(BaseModel):
+    push_token: str
+
+
+@app.post("/api/push/register-mobile")
+async def register_mobile_push_token(
+    body: MobilePushTokenRequest,
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Mobil uygulama (Expo) push token'ını kaydeder."""
+    token = body.push_token.strip()
+    if not token:
+        raise HTTPException(status_code=400, detail="push_token gerekli.")
+    user_id = user.id or 0
+    existing = db.exec(
+        select(PushSubscription).where(
+            PushSubscription.user_id == user_id,
+            PushSubscription.endpoint == token,
+        )
+    ).first()
+    if existing:
+        db.add(existing)
+    else:
+        db.add(PushSubscription(user_id=user_id, endpoint=token, p256dh="", auth=""))
+    db.commit()
+    return {"ok": True}
+
+
 @app.get("/api-check")
 def api_check():
     """OpenAI ve PayTR ayarları yüklü mü kontrol et (anahtarlar gösterilmez)."""
@@ -3734,6 +3763,29 @@ def _is_test_mode(request: Request) -> bool:
     )
 
 
+def _send_push_if_available(db: Session, user_id: int, user_name: str, analysis_id: int | None = None) -> None:
+    """Kullanıcının mobil push token'ı varsa bildirim gönderir."""
+    try:
+        from app.services.push_notification import send_analysis_complete_notification
+        tokens = db.exec(
+            select(PushSubscription).where(
+                PushSubscription.user_id == user_id,
+                PushSubscription.p256dh == "",  # mobil token'lar boş p256dh ile kaydedilir
+            )
+        ).all()
+        for sub in tokens:
+            try:
+                send_analysis_complete_notification(
+                    push_token=sub.endpoint,
+                    user_name=user_name,
+                    analysis_id=analysis_id,
+                )
+            except Exception:
+                log.warning("Push send failed for user %s token %s", user_id, sub.endpoint[:20])
+    except Exception:
+        pass
+
+
 def _dev_override_plan(request: Request, user: User) -> str:
     """
     Development/test modunda plan önizleme:
@@ -3826,17 +3878,18 @@ async def analyze(
         if cached is not None:
             log.info("CACHE HIT key=%s", cache_key[:16])
             result = cached["sonuc"]
-            aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save)
-            if job:
-                job.status = "done"
-                job.analysis_record_id = aid
-                job.duration_ms = int((time.perf_counter() - t0) * 1000)
-                db.add(job)
-                db.commit()
-            _audit(db, "analyze", user.id, _client_ip(request), institution_id=_inst_id_for_save)
-            return _build_analyze_response(
-                result, aid, cached.get("risk_summary"), plan, user.id or 0, db, cached=True
-            )
+        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save)
+        if job:
+            job.status = "done"
+            job.analysis_record_id = aid
+            job.duration_ms = int((time.perf_counter() - t0) * 1000)
+            db.add(job)
+            db.commit()
+        _audit(db, "analyze", user.id, _client_ip(request), institution_id=_inst_id_for_save)
+        _send_push_if_available(db, user.id or 0, getattr(user, "full_name", ""), aid)
+        return _build_analyze_response(
+            result, aid, cached.get("risk_summary"), plan, user.id or 0, db, cached=True
+        )
         log.info("CACHE MISS key=%s", cache_key[:16])
         report_payload, usage = analyze_blood_test(
             text,
@@ -3874,6 +3927,7 @@ async def analyze(
             db.add(job)
             db.commit()
         _audit(db, "analyze", user.id, _client_ip(request), institution_id=_inst_id_for_save)
+        _send_push_if_available(db, user.id or 0, getattr(user, "full_name", ""), aid)
         return _build_analyze_response(
             result, aid, report_payload.get("risk_summary"), plan, user.id or 0, db, cached=False
         )
@@ -4150,6 +4204,7 @@ def _process_uploaded_content(
                 db.add(ul)
                 db.commit()
             _audit(db, "analyze", user_id, _client_ip(request), institution_id=institution_id)
+            _send_push_if_available(db, user_id, getattr(db.get(User, user_id), "full_name", ""), aid)
             plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
             return _build_analyze_response(result, aid, None, plan, user_id, db, cached=False)
         text = extract_text_from_pdf(content)
@@ -4180,6 +4235,7 @@ def _process_uploaded_content(
             db.add(ul)
             db.commit()
         _audit(db, "analyze", user_id, _client_ip(request), institution_id=institution_id)
+        _send_push_if_available(db, user_id, getattr(db.get(User, user_id), "full_name", ""), aid)
         plan = plan or (getattr(db.get(User, user_id), "plan", None) or "free")
         return _build_analyze_response(result, aid, report_payload.get("risk_summary"), plan, user_id, db, cached=False)
     except Exception as e:

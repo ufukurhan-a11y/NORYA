@@ -2,6 +2,9 @@ import React, { createContext, useCallback, useContext, useEffect, useState } fr
 import type { User } from '../api/auth';
 import * as authApi from '../api/auth';
 import { getStoredToken, setStoredToken } from '../api/client';
+import { registerPushToken } from '../api/push';
+import * as Notifications from 'expo-notifications';
+import * as Device from 'expo-device';
 
 type AuthState = {
   user: User | null;
@@ -40,12 +43,30 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     refreshUser();
   }, [refreshUser]);
 
+  const registerPush = useCallback(async () => {
+    if (!Device.isDevice) return;
+    try {
+      const { status } = await Notifications.getPermissionsAsync();
+      if (status !== 'granted') {
+        const { status: reqStatus } = await Notifications.requestPermissionsAsync();
+        if (reqStatus !== 'granted') return;
+      }
+      const token = (await Notifications.getExpoPushTokenAsync({
+        projectId: process.env.EXPO_PUBLIC_EAS_PROJECT_ID,
+      })).data;
+      await registerPushToken(token);
+    } catch (e) {
+      console.warn('Push registration failed:', e);
+    }
+  }, []);
+
   const login = useCallback(async (email: string, password: string) => {
     const res = await authApi.login(email, password);
     if (res.error) return { error: res.error };
     await refreshUser();
+    await registerPush();
     return {};
-  }, [refreshUser]);
+  }, [refreshUser, registerPush]);
 
   const register = useCallback(
     async (p: { email: string; password: string; full_name: string; phone: string; country: string }) => {
