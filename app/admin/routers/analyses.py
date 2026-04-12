@@ -68,12 +68,13 @@ def analyses_list(
     users_map = {}
     if user_ids:
         for u in db.exec(select(User).where(User.id.in_(user_ids))).all():
-            users_map[u.id] = u.email or ""
+            users_map[u.id] = {"email": u.email or "", "country": u.country or ""}
     rows = [
         {
             "id": r.id,
             "user_id": r.user_id,
-            "email": users_map.get(r.user_id, "-"),
+            "email": users_map.get(r.user_id, {}).get("email", "-"),
+            "country": users_map.get(r.user_id, {}).get("country", "-"),
             "created_at": r.created_at.strftime("%d.%m.%Y %H:%M") if r.created_at else "-",
             "source": r.source or "text",
             "input_preview": (r.input_text or "")[:100] + ("…" if len(r.input_text or "") > 100 else ""),

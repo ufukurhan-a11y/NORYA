@@ -3,6 +3,8 @@
 {% block admin_header_title %}Analiz geçmişi{% endblock %}
 {% block content %}
 <h2 class="text-2xl font-headline font-bold text-on-surface mb-4">Analiz geçmişi</h2>
+
+<!-- Filters -->
 <form method="get" class="mb-6 flex flex-wrap gap-3 items-end">
   <input type="text" name="q" value="{{ q }}" placeholder="E-posta veya kullanıcı ID" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface w-52 max-w-full focus:ring-2 focus:ring-primary-container/25 focus:bg-white placeholder:text-on-surface-variant/60" />
   <input type="date" name="date_from" value="{{ date_from }}" class="px-4 py-2.5 rounded-xl bg-surface-container-low border-0 text-on-surface focus:ring-2 focus:ring-primary-container/25 focus:bg-white" />
@@ -15,31 +17,54 @@
   </select>
   <button type="submit" class="px-5 py-2.5 rounded-full font-headline font-bold text-sm bg-gradient-to-r from-primary to-primary-container text-white shadow-ambient hover:brightness-[1.02]">Filtrele</button>
 </form>
+
+<!-- Table -->
 <div class="bg-surface-container-lowest rounded-xl shadow-ambient overflow-hidden border border-[#bcc9c8]/10">
-  <div class="overflow-x-auto">
-    <table class="w-full text-sm">
+  <div class="overflow-x-auto" style="max-width: 100%;">
+    <table class="w-full text-sm min-w-[1200px]">
       <thead>
         <tr class="text-left text-on-surface-variant text-xs uppercase tracking-wider bg-surface-container-low">
-          <th class="px-5 py-3">ID</th>
-          <th class="px-5 py-3">Kullanıcı</th>
-          <th class="px-5 py-3">Tarih</th>
-          <th class="px-5 py-3">Kaynak</th>
-          <th class="px-5 py-3">Girdi önizleme</th>
-          <th class="px-5 py-3">Sonuç önizleme</th>
-          <th class="px-5 py-3">Belgeler</th>
-          <th class="px-5 py-3"></th>
+          <th class="px-5 py-3 whitespace-nowrap">ID</th>
+          <th class="px-5 py-3 whitespace-nowrap">Kullanıcı</th>
+          <th class="px-5 py-3 whitespace-nowrap">Ülke</th>
+          <th class="px-5 py-3 whitespace-nowrap">Tarih</th>
+          <th class="px-5 py-3 whitespace-nowrap">Kaynak</th>
+          <th class="px-5 py-3 whitespace-nowrap">Girdi önizleme</th>
+          <th class="px-5 py-3 whitespace-nowrap">Sonuç önizleme</th>
+          <th class="px-5 py-3 whitespace-nowrap">Belgeler</th>
+          <th class="px-5 py-3 whitespace-nowrap"></th>
         </tr>
       </thead>
       <tbody>
         {% for a in analyses %}
         <tr class="border-b border-outline-variant/15 hover:bg-surface-container-low/60 transition-colors">
-          <td class="px-5 py-3 text-on-surface font-medium">{{ a.id }}</td>
-          <td class="px-5 py-3 text-on-surface">{{ a.email }} <span class="text-on-surface-variant">({{ a.user_id }})</span></td>
-          <td class="px-5 py-3 text-on-surface text-xs">{{ a.created_at }}</td>
-          <td class="px-5 py-3 text-on-surface">{{ a.source }}</td>
-          <td class="px-5 py-3 max-w-md truncate text-on-surface" title="{{ a.input_preview }}">{{ a.input_preview }}</td>
-          <td class="px-5 py-3 max-w-md truncate text-on-surface-variant text-xs" title="{{ a.result_preview }}">{{ a.result_preview }}</td>
-          <td class="px-5 py-3">
+          <td class="px-5 py-3 text-on-surface font-medium whitespace-nowrap">{{ a.id }}</td>
+          <td class="px-5 py-3 text-on-surface whitespace-nowrap">
+            <span class="font-medium">{{ a.email }}</span>
+            <span class="text-on-surface-variant text-xs ml-1">({{ a.user_id }})</span>
+          </td>
+          <td class="px-5 py-3 whitespace-nowrap">
+            {% if a.country and a.country != '-' %}
+            <span class="inline-flex items-center gap-1 px-2 py-0.5 rounded-full bg-primary-container/10 text-primary text-xs font-semibold">
+              <span class="material-symbols-outlined !text-[14px]">public</span>
+              {{ a.country }}
+            </span>
+            {% else %}
+            <span class="text-on-surface-variant/40 text-xs">—</span>
+            {% endif %}
+          </td>
+          <td class="px-5 py-3 text-on-surface text-xs whitespace-nowrap">{{ a.created_at }}</td>
+          <td class="px-5 py-3 whitespace-nowrap">
+            <span class="inline-flex items-center px-2 py-0.5 rounded-full text-xs font-semibold
+              {% if a.source == 'pdf' %}bg-red-50 text-red-700
+              {% elif a.source == 'image' %}bg-blue-50 text-blue-700
+              {% else %}bg-surface-container-high text-on-surface-variant{% endif %}">
+              {{ a.source }}
+            </span>
+          </td>
+          <td class="px-5 py-3 max-w-[200px] truncate text-on-surface" title="{{ a.input_preview }}">{{ a.input_preview }}</td>
+          <td class="px-5 py-3 max-w-[200px] truncate text-on-surface-variant text-xs" title="{{ a.result_preview }}">{{ a.result_preview }}</td>
+          <td class="px-5 py-3 whitespace-nowrap">
             <a href="/admin/analyses/{{ a.id }}/pdf" target="_blank" class="inline-block px-2.5 py-1 rounded-lg bg-primary-container/15 text-primary text-xs font-semibold hover:bg-primary-container/25 mr-1">Norya raporu</a>
             {% if a.has_original %}
             <a href="/admin/analyses/{{ a.id }}/original" target="_blank" class="inline-block px-2.5 py-1 rounded-lg bg-secondary/15 text-secondary text-xs font-semibold hover:bg-secondary/25">Müşteri belgesi</a>
@@ -47,10 +72,10 @@
             <span class="text-on-surface-variant text-xs">—</span>
             {% endif %}
           </td>
-          <td class="px-5 py-3"><a href="/admin/users/{{ a.user_id }}" class="text-primary font-semibold hover:underline">Kullanıcı</a></td>
+          <td class="px-5 py-3 whitespace-nowrap"><a href="/admin/users/{{ a.user_id }}" class="text-primary font-semibold hover:underline">Kullanıcı</a></td>
         </tr>
         {% else %}
-        <tr><td colspan="8" class="px-5 py-8 text-center text-on-surface-variant">Kayıt yok.</td></tr>
+        <tr><td colspan="9" class="px-5 py-8 text-center text-on-surface-variant">Kayıt yok.</td></tr>
         {% endfor %}
       </tbody>
     </table>
