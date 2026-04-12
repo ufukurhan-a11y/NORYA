@@ -2138,8 +2138,26 @@
               <p class="coupon-msg" id="coupon-msg" aria-live="polite" role="status"></p>
             </div>
             {% if not user_logged_in %}
+            {% if is_guest_flow %}
+            <div class="guest-flow-banner" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(14,165,164,0.06),rgba(14,165,164,0.03));border:1px solid rgba(14,165,164,0.15);margin-bottom:12px;">
+              <svg style="width:18px;height:18px;flex-shrink:0;color:#0EA5A4;margin-top:1px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+              <div>
+                <p style="font-size:0.8125rem;font-weight:600;color:#0f766e;margin:0 0 2px;">{{ t.get("guest_flow_title", "Tam rapor için ödeme yapın") }}</p>
+                <p style="font-size:0.75rem;color:#475569;margin:0;line-height:1.4;">{{ t.get("guest_flow_desc", "E-postanızı girin, güvenli ödeme yapın ve tam raporunuza hemen erişin.") }}</p>
+              </div>
+            </div>
+            {% endif %}
+            {% if is_from_register %}
+            <div class="welcome-banner" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(16,185,129,0.08),rgba(16,185,129,0.03));border:1px solid rgba(16,185,129,0.2);margin-bottom:12px;">
+              <svg style="width:18px;height:18px;flex-shrink:0;color:#10b981;margin-top:1px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="10"/></svg>
+              <div>
+                <p style="font-size:0.8125rem;font-weight:600;color:#065f46;margin:0 0 2px;">{{ t.get("welcome_register_title", "Hoş geldiniz! 🎉") }}</p>
+                <p style="font-size:0.75rem;color:#475569;margin:0;line-height:1.4;">{{ t.get("welcome_register_desc", "İlk analiziniz ücretsizdir. Planınızı seçin ve hemen başlayın.") }}</p>
+              </div>
+            </div>
+            {% endif %}
             <div class="form-group form-row-compact">
-              <input type="email" id="email" class="input input-compact" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" value="{{ user_email }}" aria-label="{{ t.pay_email_label }}">
+              <input type="email" id="email" class="input input-compact" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" value="{{ prefill_email or user_email }}" aria-label="{{ t.pay_email_label }}">
               <input type="text" id="name" class="input input-compact" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" value="{{ user_name }}" aria-label="{{ t.pay_name_label }}">
             </div>
             {% else %}
@@ -2568,6 +2586,17 @@ document.addEventListener('DOMContentLoaded', function(){
     return planConfig[0].planCode;
   })() : null;
 
+  // Guest flow: tek analiz planını otomatik seç
+  var isGuestFlow = {{ 'true' if is_guest_flow else 'false' }};
+  if (isGuestFlow) {
+    for (var i = 0; i < planConfig.length; i++) {
+      if (planConfig[i].product === 'single') {
+        defaultPlanCode = planConfig[i].planCode;
+        break;
+      }
+    }
+  }
+
   function getSelectedCard() { return plansRow && plansRow.querySelector('.plan-card.selected'); }
 
   function updateCampaignUI(cfg) {
@@ -2940,6 +2969,8 @@ document.addEventListener('DOMContentLoaded', function(){
       if (timeoutId) clearTimeout(timeoutId);
       var url = data.redirect_url || ('https://www.paytr.com/odeme/guvenli/' + (data.token || ''));
       if (!data.token) throw new Error('Ödeme sayfası adresi alınamadı.');
+      // Guest token varsa sakla (success sayfasına yönlendirme için)
+      if (data.guest_token) window._noryaGuestToken = data.guest_token;
       window.location.href = url;
     })
     .catch(function(err) {

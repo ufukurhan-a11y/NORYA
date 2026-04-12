@@ -284,6 +284,7 @@ def _seed_pricing_plan():
                 ("single_13eur", "single", 1404, 0),
                 ("monthly_50eur", "monthly", 5400, 1),
                 ("yearly_99eur", "yearly", 10692, 2),
+                ("guest_single_14eur", "guest", 1404, 3),
             ):
                 session.add(PricingPlan(code=code, product=product, price_cents=cents, display_order=order))
             session.commit()
@@ -1082,23 +1083,40 @@ def _fetch_eur_rates_live() -> dict[str, float]:
 
 
 def _parse_accept_language(header: str | None) -> str:
-    """Accept-Language başlığından tercih edilen dili döner."""
+    """Accept-Language başlığını q değerlerine göre parse edip en yüksek öncelikli desteklenen dili döner."""
     if not header:
         return DEFAULT_LANG
+
+    SUPPORTED = ("tr", "en", "de", "he", "ar", "hi", "it", "es", "fr", "el", "cs", "sr")
+
+    # Parse: her dil için (lang_code, q_value) çifti oluştur
+    langs: list[tuple[str, float]] = []
     for part in header.split(","):
-        part = part.strip().split(";")[0].strip().lower()
-        if part.startswith("tr"): return "tr"
-        if part.startswith("en"): return "en"
-        if part.startswith("de"): return "de"
-        if part.startswith("he"): return "he"
-        if part.startswith("ar"): return "ar"
-        if part.startswith("hi"): return "hi"
-        if part.startswith("it"): return "it"
-        if part.startswith("es"): return "es"
-        if part.startswith("fr"): return "fr"
-        if part.startswith("el"): return "el"
-        if part.startswith("cs"): return "cs"
-        if part.startswith("sr"): return "sr"
+        part = part.strip()
+        if ";q=" in part:
+            try:
+                lang_tag, q_str = part.split(";q=", 1)
+                q_val = float(q_str.strip())
+            except (ValueError, TypeError):
+                q_val = 1.0
+        else:
+            lang_tag = part
+            q_val = 1.0
+        langs.append((lang_tag.strip().lower(), q_val))
+
+    # q değerine göre azalan sırala
+    langs.sort(key=lambda x: x[1], reverse=True)
+
+    # En yüksek öncelikli desteklenen dili bul
+    for lang_tag, _ in langs:
+        # Tam eşleşme (örn: "tr", "en-us")
+        if lang_tag in SUPPORTED:
+            return lang_tag
+        # Alt dil eşleşmesi (örn: "tr-tr" -> "tr", "en-us" -> "en")
+        base = lang_tag.split("-")[0]
+        if base in SUPPORTED:
+            return base
+
     return DEFAULT_LANG
 
 
@@ -5062,6 +5080,15 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     merchant_oid = "norya" + uuid.uuid4().hex[:20]
     currency = getattr(settings, "paytr_currency", "EUR") or "EUR"
 
+    # Guest kullanıcı için GuestLoginToken oluştur (ödeme sonrası otomatik giriş)
+    guest_token: str | None = None
+    if current_user is None:
+        guest_token = secrets.token_hex(32)
+        expires_at = datetime.now(timezone.utc) + timedelta(days=7)
+        guest_login = GuestLoginToken(token=guest_token, user_id=user_id, expires_at=expires_at)
+        db.add(guest_login)
+        log.info("PAYTR_INIT: guest token created for user_id=%s merchant_oid=%s", user_id, merchant_oid)
+
     customer_email_val = (user.email or "").strip().lower() if user else None
     coupon_used_trunc = (coupon_used or "")[:64] if coupon_used else None
     order = PaymentOrder(
@@ -5154,6 +5181,9 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
     fail_url = (getattr(settings, "paytr_fail_url", "") or "").strip() or f"{_base}/payment/failed"
     sep_ok = "?" if "?" not in ok_url else "&"
     ok_url = f"{ok_url}{sep_ok}merchant_oid={merchant_oid}&lang={return_lang}"
+    # Guest token varsa success URL'e ekle (ödeme sonrası otomatik giriş için)
+    if guest_token:
+        ok_url = f"{ok_url}&guest_token={guest_token}"
     sep_fail = "?" if "?" not in fail_url else "&"
     fail_url = f"{fail_url}{sep_fail}merchant_oid={merchant_oid}&lang={return_lang}"
 
@@ -5220,7 +5250,7 @@ def _paytr_init_impl(body: PaytrInitRequest, request: Request, current_user: Use
 
     token = result.get("token", "")
     redirect_url = f"https://www.paytr.com/odeme/guvenli/{token}"
-    return {"status": "ok", "token": token, "redirect_url": redirect_url, "merchant_oid": merchant_oid}
+    return {"status": "ok", "token": token, "redirect_url": redirect_url, "merchant_oid": merchant_oid, "guest_token": guest_token}
 
 
 def _validate_merchant_oid(merchant_oid: str) -> str:
@@ -5394,6 +5424,8 @@ def pay_page(
     request: Request,
     plan: str = Query("single_13eur", description="Plan: single_13eur, monthly_50eur, yearly_99eur"),
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+    from_guest: str | None = Query(None, description="Guest analyze'den gelen kullanıcı"),
+    prefill_email: str | None = Query(None, description="Prefill edilecek e-posta"),
     db: Session = Depends(get_db),
 ):
     """Ödeme sayfası: plan seçili; /paytr/init ile token alınıp PayTR iFrame gösterilir. Tüm dillerde ve mobil uyumlu."""
@@ -5447,6 +5479,8 @@ def pay_page(
             "benefits_yearly_js": json.dumps(benefits_yearly),
             "campaign_config": campaign_config,
             "campaign_js": json.dumps(campaign_config),
+            "is_guest_flow": bool(from_guest),
+            "prefill_email": prefill_email or "",
         },
     )
     resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -5496,12 +5530,18 @@ def payment_page_premium(
     request: Request,
     plan: str | None = Query(None, description="Plan seçimi: single, monthly, yearly/annual veya plan kodu"),
     lang: str | None = Query(None, description="Dil override; yoksa tarayıcı diline göre otomatik"),
+    from_guest: str | None = Query(None, description="Guest analyze'den gelen kullanıcı (from=guest veya from=report)"),
+    prefill_email: str | None = Query(None, description="Guest analyze'den prefill edilecek e-posta"),
     current_user: User | None = Depends(get_current_user_optional),
     db: Session = Depends(get_db),
 ):
     """Premium Payment Page: 3 plan cards, PayTR iFrame embed. Kampanya admin’deki aktif kampanyaya bağlı."""
     lang = _payment_lang_from_request(request)
     t = get_pay_ui(lang)
+    # Query parametrelerini al (from=register, from=guest, from=report vb.)
+    from_param = (request.query_params.get("from") or "").strip().lower()
+    is_from_register = from_param == "register"
+    is_from_guest = bool(from_guest) or from_param in ("guest", "report")
     # Canonical domain (linkler, meta); API çağrıları için mevcut origin (localhost'ta CSP 'self' uyumu)
     base_url = _paytr_canonical_base(request)
     api_base = str(request.base_url).rstrip("/")
@@ -5548,6 +5588,13 @@ def payment_page_premium(
         except Exception as e:
             log.warning("payment_page campaign fetch failed: %s", e)
     campaign_config = _payment_campaign_config(campaign_raw, t)
+
+    # Guest flow: default plan = single, prefill email if provided
+    is_guest_flow = (bool(from_guest) or from_param in ("guest", "report")) and not user_logged_in
+    if is_guest_flow:
+        default_plan = next((p for p in plans if p.get("product") == "single"), default_plan)
+    prefill_email_val = prefill_email or ""
+
     resp = templates.TemplateResponse(
         "payment_page.html",
         {
@@ -5573,9 +5620,14 @@ def payment_page_premium(
             "benefits_yearly_js": json.dumps(benefits_yearly),
             "campaign_config": campaign_config,
             "campaign_js": json.dumps(campaign_config),
+            "is_guest_flow": bool(from_guest),
+            "prefill_email": prefill_email or "",
             "user_logged_in": user_logged_in,
             "user_email": user_email,
             "user_name": user_name,
+            "is_guest_flow": is_guest_flow,
+            "prefill_email": prefill_email_val,
+            "is_from_register": is_from_register,
         },
     )
     resp.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
@@ -6446,6 +6498,8 @@ def payment_success_page(
 def payment_failed_page(
     request: Request,
     lang: str = Query("tr", description="Language: tr, en, de, fr, it, es"),
+    from_guest: str | None = Query(None, description="Guest analyze'den gelen kullanıcı"),
+    prefill_email: str | None = Query(None, description="Prefill edilecek e-posta"),
 ):
     """Ödeme tamamlanamadı sayfası. Tüm dillerde ve mobil uyumlu.
     SEO: noindex, nofollow — kullanıcıya özel ödeme sonucu sayfası.

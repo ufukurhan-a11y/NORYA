@@ -16627,6 +16627,15 @@
         highlightsDiv.classList.add('hidden');
       }
 
+      // Upgrade button: include email in payment URL
+      var upgradeBtn = guestPanel.querySelector('[data-i18n="guest_upgrade_btn"]');
+      if (upgradeBtn) {
+        var guestEmail = (document.getElementById('guest-email') && document.getElementById('guest-email').value.trim()) || '';
+        var payUrl = '/payment?from=guest';
+        if (guestEmail) payUrl += '&prefill_email=' + encodeURIComponent(guestEmail);
+        upgradeBtn.href = payUrl;
+      }
+
       // Step 4'e git
       if (typeof setWizardStep === 'function') setWizardStep(4);
       scrollToAnalyze();
@@ -17001,12 +17010,11 @@
           var nextUrlReg = sessionStorage.getItem('norya_after_login_next');
           if (nextUrlReg && nextUrlReg.indexOf('/') === 0) { sessionStorage.removeItem('norya_after_login_next'); window.location.href = nextUrlReg; return; }
         } catch (_) {}
-        var t = (typeof T !== 'undefined' && T[getLang()]) ? T[getLang()] : {};
-        if (data.verify_email_sent === false) {
-          toast(t.toast_register_verify_not_sent || 'E-posta doğrulama linki şu an gönderilemedi. Hesabınız aktiftir; giriş yapabilirsiniz. Sorun yaşarsanız support@noryaai.com ile iletişime geçin.', 'info');
-        } else {
-          toast(t.toast_register_verify_sent || 'E-postanıza doğrulama linki gönderildi. Gelen kutunuzu (ve spam klasörünü) kontrol edin.', 'success');
-        }
+        // Kayıt sonrası ödeme sayfasına yönlendir — ilk analiz ücretsiz mesajıyla
+        var lang = (typeof getLang === 'function') ? getLang() : 'tr';
+        var payUrl = '/payment?from=register&welcome=1&lang=' + lang;
+        window.location.href = payUrl;
+        return;
       } else {
         errEl.textContent = (data.verify_email_sent === false && (typeof T !== 'undefined' && T[getLang()])) ? (T[getLang()].register_done_verify_not_sent || 'Kayıt tamamlandı. Giriş yapın. E-posta doğrulama linki gönderilemedi; destek ile iletişime geçebilirsiniz.') : 'Kayıt tamamlandı. Giriş yapın.';
         errEl.classList.remove('hidden');
