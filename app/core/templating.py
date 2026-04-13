@@ -6,6 +6,7 @@ hatasına (unhashable dict key) yol açıyordu."""
 from __future__ import annotations
 
 from collections.abc import Mapping
+from pathlib import Path
 from typing import Any
 
 from starlette.requests import Request
@@ -28,3 +29,7 @@ class Jinja2Templates(StarletteJinja2Templates):
             ctx = context if isinstance(context, dict) else dict(context)
             return super().TemplateResponse(request, name, ctx, **kwargs)
         return super().TemplateResponse(*args, **kwargs)
+
+
+_APP_DIR = Path(__file__).resolve().parent.parent
+templates = Jinja2Templates(directory=str(_APP_DIR / "templates"))
