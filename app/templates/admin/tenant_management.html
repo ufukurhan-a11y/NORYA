@@ -1,0 +1,167 @@
+{% extends "base.html" %}
+
+{% block title %}Tenant Yönetimi - Norya Admin{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8">
+      <h1 class="text-3xl font-bold text-gray-900">Tenant Yönetimi</h1>
+      <p class="mt-2 text-sm text-gray-600">Hastane tenant'larını yönetin, kredi yükleyin, aktif/pasif yapın.</p>
+    </div>
+
+    <!-- Create New Tenant Form -->
+    <div class="bg-white shadow rounded-lg mb-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Yeni Tenant Oluştur</h2>
+      </div>
+      <form method="POST" action="/admin/tenants/create" class="px-6 py-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Hastane Adı *</label>
+            <input type="text" name="name" required class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="örn: Acıbadem Sağlık Grubu">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Tip</label>
+            <select name="institution_type" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm">
+              <option value="hospital">Hastane</option>
+              <option value="clinic">Klinik</option>
+              <option value="lab">Laboratuvar</option>
+              <option value="network">Sağlayıcı Ağı</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">İletişim Email</label>
+            <input type="email" name="contact_email" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="info@hastane.com">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">İletişim Telefon</label>
+            <input type="text" name="contact_phone" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="+90 555 123 4567">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Başlangıç Kredisi (cent)</label>
+            <input type="number" name="initial_credits_cents" value="0" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="100000 = $1000">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Analiz Başına Maliyet (cent)</label>
+            <input type="number" name="cost_per_analysis" value="100" min="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="100 = $1">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Düşük Bakiye Eşiği (cent)</label>
+            <input type="number" name="wallet_low_threshold" value="20000" min="0" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="20000 = $200">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium text-gray-700">Notlar</label>
+            <textarea name="notes" rows="1" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm" placeholder="İsteğe bağlı notlar..."></textarea>
+          </div>
+        </div>
+        <div class="mt-4">
+          <button type="submit" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Tenant Oluştur
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Tenant List -->
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Tenant Listesi</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Hastane</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Slug</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Cüzdan Bakiyesi</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kalan Analiz</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Vaka Sayısı</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İşlemler</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for td in tenant_data %}
+            {% set inst = td.institution %}
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm font-medium text-gray-900">{{ inst.name }}</div>
+                <div class="text-sm text-gray-500">{{ inst.type }}</div>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <code class="text-sm bg-gray-100 px-2 py-1 rounded">{{ inst.tenant_slug or '-' }}</code>
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                {% if inst.status == 'active' %}
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
+                {% elif inst.status == 'trial' %}
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Deneme</span>
+                {% elif inst.status == 'suspended' %}
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Askıda</span>
+                {% elif inst.status == 'inactive' %}
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Pasif</span>
+                {% else %}
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-gray-100 text-gray-800">{{ inst.status }}</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                <div class="text-sm text-gray-900">
+                  ${{ "%.2f"|format(inst.billing_wallet_balance / 100) }}
+                </div>
+                {% if td.is_low_balance and inst.status == 'active' %}
+                  <span class="text-xs text-red-600 font-medium">⚠ Düşük bakiye</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ td.remaining_analyses }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ td.case_count }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                <!-- Activate -->
+                {% if inst.status != 'active' %}
+                <form method="POST" action="/admin/tenants/{{ inst.id }}/activate" class="inline">
+                  <button type="submit" class="text-green-600 hover:text-green-900">Aktif Yap</button>
+                </form>
+                {% endif %}
+
+                <!-- Suspend -->
+                {% if inst.status == 'active' %}
+                <form method="POST" action="/admin/tenants/{{ inst.id }}/suspend" class="inline">
+                  <button type="submit" class="text-yellow-600 hover:text-yellow-900">Askıya Al</button>
+                </form>
+                {% endif %}
+
+                <!-- Deactivate -->
+                {% if inst.status not in ('inactive',) %}
+                <form method="POST" action="/admin/tenants/{{ inst.id }}/deactivate" class="inline">
+                  <button type="submit" class="text-red-600 hover:text-red-900">Pasif Yap</button>
+                </form>
+                {% endif %}
+
+                <!-- Load Credits -->
+                <form method="POST" action="/admin/tenants/{{ inst.id }}/load-credits" class="inline">
+                  <input type="number" name="amount_cents" placeholder="cent" min="1" class="w-20 text-xs rounded border-gray-300">
+                  <button type="submit" class="text-blue-600 hover:text-blue-900">Kredi Yükle</button>
+                </form>
+
+                <!-- Wallet History -->
+                <a href="/admin/tenants/{{ inst.id }}/wallet-history" class="text-indigo-600 hover:text-indigo-900">Geçmiş</a>
+
+                <!-- Tenant Portal Link -->
+                {% if inst.tenant_slug and inst.status == 'active' %}
+                <a href="/hastane/{{ inst.tenant_slug }}/dashboard" target="_blank" class="text-purple-600 hover:text-purple-900">Portal →</a>
+                {% endif %}
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

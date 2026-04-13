@@ -1,0 +1,219 @@
+{% extends "base.html" %}
+
+{% block title %}Ayarlar - {{ tenant.name }} - Norya{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">Ayarlar</h1>
+        <p class="mt-2 text-sm text-gray-600">{{ tenant.name }}</p>
+      </div>
+      <a href="/hastane/{{ tenant_slug }}/dashboard" class="text-blue-600 hover:text-blue-800 text-sm">← Dashboard'a Dön</a>
+    </div>
+
+    {% if not is_admin %}
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+      <p class="text-sm text-yellow-800">⚠ Ayarları değiştirmek için yönetici yetkisi gereklidir.</p>
+    </div>
+    {% endif %}
+
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+      <!-- Customization Settings -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Görünüm Özelleştirme</h2>
+        </div>
+        <div class="px-6 py-4 space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Logo URL</label>
+            <input type="text" id="logo_url" value="{{ tenant.logo_url or '' }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="https://example.com/logo.png">
+          </div>
+          <div class="grid grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700">Ana Renk</label>
+              <input type="color" id="primary_color" value="{{ tenant.primary_color or '#1a56db' }}" {% if not is_admin %}disabled{% endif %}
+                class="mt-1 block w-full h-10 rounded-md border-gray-300">
+            </div>
+            <div>
+              <label class="block text-sm font-medium text-gray-700">İkincil Renk</label>
+              <input type="color" id="secondary_color" value="{{ tenant.secondary_color or '#6b7280' }}" {% if not is_admin %}disabled{% endif %}
+                class="mt-1 block w-full h-10 rounded-md border-gray-300">
+            </div>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Rapor Başlık Metni</label>
+            <input type="text" id="report_header_text" value="{{ tenant.report_header_text or '' }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="Rapor üstbilgisinde görünecek metin">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Rapor Alt Bilgi Metni</label>
+            <input type="text" id="report_footer_text" value="{{ tenant.report_footer_text or '' }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="Rapor altbilgisinde görünecek metin">
+          </div>
+          {% if is_admin %}
+          <button onclick="saveCustomization()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+            Kaydet
+          </button>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Alert Settings -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Bildirim Ayarları</h2>
+        </div>
+        <div class="px-6 py-4 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <label class="text-sm font-medium text-gray-700">E-posta Uyarıları</label>
+              <p class="text-xs text-gray-500">Düşük bakiye durumunda e-posta gönder</p>
+            </div>
+            <input type="checkbox" id="alert_email_enabled" {% if tenant.alert_email_enabled %}checked{% endif %} {% if not is_admin %}disabled{% endif %}
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+          </div>
+          <div class="flex items-center justify-between">
+            <div>
+              <label class="text-sm font-medium text-gray-700">SMS Uyarıları</label>
+              <p class="text-xs text-gray-500">Düşük bakiye durumunda SMS gönder (yakında)</p>
+            </div>
+            <input type="checkbox" id="alert_sms_enabled" {% if tenant.alert_sms_enabled %}checked{% endif %} disabled
+              class="h-4 w-4 text-gray-400 border-gray-300 rounded">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Uyarı Telefonu</label>
+            <input type="text" id="alert_phone" value="{{ tenant.alert_phone or '' }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="+90 555 123 4567">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Düşük Bakiye Eşiği</label>
+            <input type="number" id="wallet_low_threshold" value="{{ tenant.wallet_low_threshold }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="20000 = $200">
+          </div>
+          {% if is_admin %}
+          <div class="flex space-x-2">
+            <button onclick="saveAlertSettings()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+              Kaydet
+            </button>
+            <button onclick="testAlert()" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50">
+              Test E-postası Gönder
+            </button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Rate Limiting Settings -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Analiz Limitleri</h2>
+        </div>
+        <div class="px-6 py-4 space-y-4">
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Günlük Analiz Limiti</label>
+            <input type="number" id="daily_analysis_limit" value="{{ tenant.daily_analysis_limit or '' }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="Boş = sınırsız">
+            <p class="text-xs text-gray-500 mt-1">Günde maksimum analiz sayısı (boş bırakılırsa sınırsız)</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Saatlik Analiz Limiti</label>
+            <input type="number" id="hourly_analysis_limit" value="{{ tenant.hourly_analysis_limit or '' }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="Boş = sınırsız">
+            <p class="text-xs text-gray-500 mt-1">Saatte maksimum analiz sayısı (boş bırakılırsa sınırsız)</p>
+          </div>
+          {% if is_admin %}
+          <button onclick="saveRateLimits()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+            Kaydet
+          </button>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Quick Links -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Hızlı Erişim</h2>
+        </div>
+        <div class="px-6 py-4 space-y-3">
+          <a href="/hastane/{{ tenant_slug }}/audit-log" class="block p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow transition">
+            <h3 class="text-sm font-medium text-gray-900">📋 Aktivite Günlüğü</h3>
+            <p class="text-xs text-gray-500">Tüm kullanıcı aktivitelerini görüntüle</p>
+          </a>
+          <a href="/hastane/{{ tenant_slug }}/api-keys" class="block p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow transition">
+            <h3 class="text-sm font-medium text-gray-900">🔑 API Anahtarları</h3>
+            <p class="text-xs text-gray-500">Entegrasyon API anahtarlarını yönet</p>
+          </a>
+          <a href="/hastane/{{ tenant_slug }}/billing" class="block p-3 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow transition">
+            <h3 class="text-sm font-medium text-gray-900">💰 Faturalandırma</h3>
+            <p class="text-xs text-gray-500">Cüzdan bakiyesi ve işlem geçmişi</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+async function saveCustomization() {
+  const data = {
+    logo_url: document.getElementById('logo_url').value || null,
+    primary_color: document.getElementById('primary_color').value || null,
+    secondary_color: document.getElementById('secondary_color').value || null,
+    report_header_text: document.getElementById('report_header_text').value || null,
+    report_footer_text: document.getElementById('report_footer_text').value || null,
+  };
+  const res = await fetch('/api/tenant/customization', {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getCookie('access_token') },
+    body: JSON.stringify(data),
+  });
+  if (res.ok) alert('Ayarlar kaydedildi!');
+  else alert('Hata: ' + (await res.json()).detail);
+}
+
+async function saveAlertSettings() {
+  const params = new URLSearchParams({
+    alert_email_enabled: document.getElementById('alert_email_enabled').checked,
+    alert_phone: document.getElementById('alert_phone').value || '',
+  });
+  const res = await fetch('/api/tenant/alerts/settings?' + params, {
+    method: 'PUT',
+    headers: { 'Authorization': 'Bearer ' + getCookie('access_token') },
+  });
+  if (res.ok) alert('Bildirim ayarları kaydedildi!');
+  else alert('Hata: ' + (await res.json()).detail);
+}
+
+async function testAlert() {
+  const res = await fetch('/api/tenant/alerts/test-low-balance', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + getCookie('access_token') },
+  });
+  if (res.ok) alert('Test e-postası gönderildi!');
+  else alert('Hata: ' + (await res.json()).detail);
+}
+
+async function saveRateLimits() {
+  // Rate limits are saved via admin panel
+  alert('Analiz limitleri admin panelinden yönetilir.');
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return '';
+}
+</script>
+{% endblock %}

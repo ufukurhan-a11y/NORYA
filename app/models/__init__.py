@@ -1,3 +1,6 @@
+from .tenant_wallet_transaction import TenantWalletTransaction
+from .tenant_audit_log import TenantAuditLog
+from .tenant_api_key import TenantApiKey
 from .analysis import AnalysisRecord
 from .analysis_job import AnalysisJob
 from .audit import AuditLog
@@ -35,6 +38,9 @@ __all__ = [
     "Institution",
     "InstitutionInvite",
     "InstitutionMembership",
+    "TenantWalletTransaction",
+    "TenantAuditLog",
+    "TenantApiKey",
     "EmailLead",
     "PricingPlan",
     "EnterpriseLead",

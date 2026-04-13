@@ -1,0 +1,172 @@
+{% extends "base.html" %}
+
+{% block title %}{{ tenant.name }} Dashboard - Norya{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">{{ tenant.name }}</h1>
+        <p class="mt-2 text-sm text-gray-600">Analiz Dashboard — Son {{ stats.period_days }} gün</p>
+      </div>
+      <a href="/hastane/{{ tenant_slug }}/settings" class="text-blue-600 hover:text-blue-800 text-sm">⚙ Ayarlar</a>
+    </div>
+
+    <!-- Stats Cards -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+      <!-- Total Cases -->
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <dt class="text-sm font-medium text-gray-500 truncate">Toplam Vaka</dt>
+          <dd class="mt-1 text-3xl font-semibold text-gray-900">{{ total_cases }}</dd>
+          <p class="mt-1 text-xs text-gray-400">Son {{ stats.period_days }} günde: {{ stats.cases_in_period }}</p>
+        </div>
+      </div>
+
+      <!-- Wallet Balance -->
+      <div class="bg-white overflow-hidden shadow rounded-lg {% if is_low_balance %}border-2 border-red-300{% endif %}">
+        <div class="px-4 py-5 sm:p-6">
+          <dt class="text-sm font-medium text-gray-500 truncate">Cüzdan Bakiyesi</dt>
+          <dd class="mt-1 text-3xl font-semibold text-gray-900">{{ wallet_balance_formatted }}</dd>
+          {% if is_low_balance %}
+          <p class="mt-2 text-sm text-red-600">⚠ Düşük bakiye!</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <!-- Active Users -->
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <dt class="text-sm font-medium text-gray-500 truncate">Aktif Kullanıcı</dt>
+          <dd class="mt-1 text-3xl font-semibold text-gray-900">{{ stats.active_users }}</dd>
+          <p class="mt-1 text-xs text-gray-400">Toplam üye: {{ stats.total_members }}</p>
+        </div>
+      </div>
+
+      <!-- Remaining Analyses -->
+      <div class="bg-white overflow-hidden shadow rounded-lg">
+        <div class="px-4 py-5 sm:p-6">
+          <dt class="text-sm font-medium text-gray-500 truncate">Kalan Analiz Hakkı</dt>
+          <dd class="mt-1 text-3xl font-semibold text-gray-900">{{ remaining_analyses }}</dd>
+          <p class="mt-1 text-xs text-gray-400">{{ cost_per_analysis_formatted }}/analiz</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Daily Breakdown Chart -->
+    {% if daily_breakdown %}
+    <div class="bg-white shadow rounded-lg mb-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Son 7 Gün Analiz Sayısı</h2>
+      </div>
+      <div class="px-6 py-4">
+        <div class="flex items-end space-x-2 h-32">
+          {% for day in daily_breakdown %}
+          <div class="flex-1 flex flex-col items-center">
+            <div class="w-full bg-blue-500 rounded-t" style="height: {{ (day.cases / (daily_breakdown | map(attribute='cases') | max) * 100) if (daily_breakdown | map(attribute='cases') | max) > 0 else 0 }}%; min-height: 4px;"></div>
+            <span class="text-xs text-gray-500 mt-1">{{ day.cases }}</span>
+            <span class="text-xs text-gray-400">{{ day.date[5:] }}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- Two Column Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <!-- Case Status Breakdown -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Vaka Durumları</h2>
+        </div>
+        <div class="px-6 py-4">
+          <div class="grid grid-cols-2 gap-4">
+            {% for status, count in status_counts.items() %}
+            <div class="text-center p-3 bg-gray-50 rounded-lg">
+              <div class="text-2xl font-bold text-gray-900">{{ count }}</div>
+              <div class="text-sm text-gray-500">{{ status }}</div>
+            </div>
+            {% endfor %}
+            {% if not status_counts %}
+            <div class="col-span-2 text-center text-gray-500 py-4">Henüz vaka yok</div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+
+      <!-- Top Users -->
+      {% if top_users %}
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">En Aktif Kullanıcılar</h2>
+        </div>
+        <div class="px-6 py-4">
+          {% for user_stat in top_users %}
+          <div class="flex items-center justify-between py-2 border-b border-gray-100 last:border-0">
+            <span class="text-sm text-gray-700">{{ user_stat.name }}</span>
+            <span class="text-sm font-medium text-gray-900">{{ user_stat.actions }} işlem</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Wallet Stats -->
+    <div class="bg-white shadow rounded-lg mb-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Finansal Özet (Son {{ stats.period_days }} Gün)</h2>
+      </div>
+      <div class="px-6 py-4">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <div class="text-sm font-medium text-gray-500">Harcanan</div>
+            <div class="mt-1 text-xl font-bold text-red-600">-{{ stats.wallet_spent_formatted }}</div>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-gray-500">Yüklenen</div>
+            <div class="mt-1 text-xl font-bold text-green-600">+{{ stats.wallet_loaded_formatted }}</div>
+          </div>
+          <div>
+            <div class="text-sm font-medium text-gray-500">Net</div>
+            <div class="mt-1 text-xl font-bold text-gray-900">
+              {% set net = stats.wallet_loaded_cents - stats.wallet_spent_cents %}
+              {% if net >= 0 %}+{% endif %}${{ "%.2f"|format(net / 100) }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Hızlı Erişim</h2>
+      </div>
+      <div class="px-6 py-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+          <a href="/hastane/{{ tenant_slug }}/cases" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow transition">
+            <h3 class="text-lg font-medium text-gray-900">📋 Vakalar</h3>
+            <p class="text-sm text-gray-500">Tüm vakaları görüntüle</p>
+          </a>
+          <a href="/hastane/{{ tenant_slug }}/billing" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow transition">
+            <h3 class="text-lg font-medium text-gray-900">💰 Faturalandırma</h3>
+            <p class="text-sm text-gray-500">Bakiye ve işlem geçmişi</p>
+          </a>
+          <a href="/hastane/{{ tenant_slug }}/audit-log" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow transition">
+            <h3 class="text-lg font-medium text-gray-900">📊 Aktivite Günlüğü</h3>
+            <p class="text-sm text-gray-500">KVKK uyumlu aktivite kayıtları</p>
+          </a>
+          <a href="/hastane/{{ tenant_slug }}/api-keys" class="block p-4 border border-gray-200 rounded-lg hover:border-blue-500 hover:shadow transition">
+            <h3 class="text-lg font-medium text-gray-900">🔑 API Anahtarları</h3>
+            <p class="text-sm text-gray-500">Entegrasyon anahtarlarını yönet</p>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

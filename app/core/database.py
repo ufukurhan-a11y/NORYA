@@ -198,6 +198,38 @@ def init_db():
             "CREATE INDEX IF NOT EXISTS ix_userregistration_created_at ON userregistration (created_at)",
             # Frontend IP (tarayıcı tarafı, cookie'den)
             "ALTER TABLE userregistration ADD COLUMN frontend_ip_address VARCHAR",
+            # Multi-tenant fields
+            "ALTER TABLE institutions ADD COLUMN tenant_slug VARCHAR(128)",
+            "ALTER TABLE institutions ADD COLUMN billing_wallet_balance INTEGER DEFAULT 0",
+            "ALTER TABLE institutions ADD COLUMN cost_per_analysis INTEGER DEFAULT 100",
+            "ALTER TABLE institutions ADD COLUMN subdomain VARCHAR(255)",
+            "ALTER TABLE institutions ADD COLUMN wallet_low_threshold INTEGER DEFAULT 20000",
+            "ALTER TABLE institutions ADD COLUMN wallet_last_alert DATETIME",
+            "CREATE TABLE IF NOT EXISTS tenant_wallet_transactions (id INTEGER, institution_id INTEGER, amount_cents INTEGER, transaction_type VARCHAR(32), description VARCHAR(512), created_at DATETIME, PRIMARY KEY (id), FOREIGN KEY(institution_id) REFERENCES institutions(id))",
+            "CREATE INDEX IF NOT EXISTS ix_tenant_wallet_transactions_institution_id ON tenant_wallet_transactions (institution_id)",
+            # Tenant customization fields
+            "ALTER TABLE institutions ADD COLUMN logo_url VARCHAR(512)",
+            "ALTER TABLE institutions ADD COLUMN primary_color VARCHAR(16)",
+            "ALTER TABLE institutions ADD COLUMN secondary_color VARCHAR(16)",
+            "ALTER TABLE institutions ADD COLUMN report_header_text VARCHAR(256)",
+            "ALTER TABLE institutions ADD COLUMN report_footer_text VARCHAR(256)",
+            "ALTER TABLE institutions ADD COLUMN custom_css TEXT",
+            # Tenant rate limiting
+            "ALTER TABLE institutions ADD COLUMN daily_analysis_limit INTEGER",
+            "ALTER TABLE institutions ADD COLUMN hourly_analysis_limit INTEGER",
+            # Tenant alert settings
+            "ALTER TABLE institutions ADD COLUMN alert_email_enabled BOOLEAN DEFAULT 1",
+            "ALTER TABLE institutions ADD COLUMN alert_sms_enabled BOOLEAN DEFAULT 0",
+            "ALTER TABLE institutions ADD COLUMN alert_phone VARCHAR(64)",
+            # Tenant audit log
+            "CREATE TABLE IF NOT EXISTS tenant_audit_logs (id INTEGER, institution_id INTEGER, user_id INTEGER, action VARCHAR(64), entity_type VARCHAR(64), entity_id INTEGER, ip_address VARCHAR(64), user_agent VARCHAR(512), detail VARCHAR(1024), metadata_json TEXT, created_at DATETIME, PRIMARY KEY (id), FOREIGN KEY(institution_id) REFERENCES institutions(id), FOREIGN KEY(user_id) REFERENCES user(id))",
+            "CREATE INDEX IF NOT EXISTS ix_tenant_audit_logs_institution_id ON tenant_audit_logs (institution_id)",
+            "CREATE INDEX IF NOT EXISTS ix_tenant_audit_logs_user_id ON tenant_audit_logs (user_id)",
+            "CREATE INDEX IF NOT EXISTS ix_tenant_audit_logs_action ON tenant_audit_logs (action)",
+            # Tenant API keys
+            "CREATE TABLE IF NOT EXISTS tenant_api_keys (id INTEGER, institution_id INTEGER, name VARCHAR(128), key_hash VARCHAR(128), key_prefix VARCHAR(16), is_active BOOLEAN DEFAULT 1, last_used_at DATETIME, expires_at DATETIME, created_by_user_id INTEGER, created_at DATETIME, updated_at DATETIME, PRIMARY KEY (id), FOREIGN KEY(institution_id) REFERENCES institutions(id), FOREIGN KEY(created_by_user_id) REFERENCES user(id))",
+            "CREATE UNIQUE INDEX IF NOT EXISTS ix_tenant_api_keys_key_hash ON tenant_api_keys (key_hash)",
+            "CREATE INDEX IF NOT EXISTS ix_tenant_api_keys_institution_id ON tenant_api_keys (institution_id)",
         ):
             try:
                 with engine.connect() as conn:

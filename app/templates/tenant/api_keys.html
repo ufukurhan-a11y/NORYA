@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block title %}API Anahtarları - {{ tenant.name }} - Norya{% endblock %}
+
+{% block content %}
+<div class="min-h-screen bg-gray-50">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+    <!-- Header -->
+    <div class="mb-8 flex items-center justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900">API Anahtarları</h1>
+        <p class="mt-2 text-sm text-gray-600">{{ tenant.name }} — LIS/HIS entegrasyonu için API anahtarları</p>
+      </div>
+      <a href="/hastane/{{ tenant_slug }}/settings" class="text-blue-600 hover:text-blue-800 text-sm">← Ayarlara Dön</a>
+    </div>
+
+    {% if not is_admin %}
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 mb-8">
+      <p class="text-sm text-yellow-800">⚠ API anahtarı oluşturmak için yönetici yetkisi gereklidir.</p>
+    </div>
+    {% endif %}
+
+    <!-- Create New API Key -->
+    {% if is_admin %}
+    <div class="bg-white shadow rounded-lg mb-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Yeni API Anahtarı Oluştur</h2>
+      </div>
+      <div class="px-6 py-4">
+        <div class="flex gap-4 items-end">
+          <div class="flex-1">
+            <label class="block text-sm font-medium text-gray-700">Anahtar Adı</label>
+            <input type="text" id="key_name" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="örn: LIS Entegrasyonu">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Süre (gün)</label>
+            <input type="number" id="key_expires" value="365" min="1"
+              class="mt-1 block w-24 rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="365">
+          </div>
+          <button onclick="createApiKey()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+            Oluştur
+          </button>
+        </div>
+      </div>
+    </div>
+    {% endif %}
+
+    <!-- API Key List -->
+    <div class="bg-white shadow rounded-lg">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">Mevcut Anahtarlar</h2>
+      </div>
+      <div class="overflow-x-auto">
+        <table class="min-w-full divide-y divide-gray-200">
+          <thead class="bg-gray-50">
+            <tr>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ad</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Ön Ek</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Durum</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Son Kullanım</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Son Kullanma</th>
+              <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">İşlem</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white divide-y divide-gray-200">
+            {% for key in api_keys %}
+            <tr>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">
+                {{ key.name }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500 font-mono">
+                {{ key.key_prefix }}...
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap">
+                {% if key.is_active %}
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Aktif</span>
+                {% else %}
+                  <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">İptal</span>
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {{ key.last_used_at.strftime('%Y-%m-%d %H:%M') if key.last_used_at else 'Hiç kullanılmadı' }}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                {% if key.expires_at %}
+                  {{ key.expires_at.strftime('%Y-%m-%d') }}
+                {% else %}
+                  Süresiz
+                {% endif %}
+              </td>
+              <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                {% if key.is_active and is_admin %}
+                <button onclick="revokeKey({{ key.id }})" class="text-red-600 hover:text-red-900">İptal Et</button>
+                {% endif %}
+              </td>
+            </tr>
+            {% else %}
+            <tr>
+              <td colspan="6" class="px-6 py-4 text-center text-sm text-gray-500">
+                Henüz API anahtarı yok
+              </td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- API Documentation -->
+    <div class="bg-white shadow rounded-lg mt-8">
+      <div class="px-6 py-4 border-b border-gray-200">
+        <h2 class="text-lg font-semibold text-gray-900">API Kullanımı</h2>
+      </div>
+      <div class="px-6 py-4">
+        <div class="bg-gray-50 rounded-lg p-4 font-mono text-sm">
+          <p class="text-gray-600 mb-2"># Analiz gönderme örneği:</p>
+          <pre class="text-gray-800">curl -X POST https://noryaai.com/api/tenant/analyze \
+  -H "Authorization: Bearer norya_tk_..." \
+  -H "Content-Type: application/json" \
+  -d '{"text": "HbA1c: 6.5%, Glucose: 110 mg/dL"}'</pre>
+        </div>
+        <p class="mt-4 text-sm text-gray-600">
+          ⚠️ API anahtarınızı güvenli bir yerde saklayın. Bir kez gösterildikten sonra tekrar görüntülenemez.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- New Key Modal -->
+<div id="newKeyModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 flex items-center justify-center z-50">
+  <div class="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+    <h3 class="text-lg font-semibold text-gray-900 mb-4">Yeni API Anahtarı</h3>
+    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+      <p class="text-sm text-yellow-800">⚠️ Bu anahtarı güvenli bir yere kaydedin. Bir daha gösterilmeyecek!</p>
+    </div>
+    <div class="bg-gray-100 rounded-lg p-3 mb-4">
+      <code id="newKeyValue" class="text-sm font-mono break-all"></code>
+    </div>
+    <div class="flex justify-end">
+      <button onclick="closeNewKeyModal()" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">
+        Anladım
+      </button>
+    </div>
+  </div>
+</div>
+
+<script>
+async function createApiKey() {
+  const name = document.getElementById('key_name').value;
+  const expires = document.getElementById('key_expires').value;
+  if (!name) { alert('Anahtar adı gerekli!'); return; }
+
+  const res = await fetch('/api/tenant/api-keys', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getCookie('access_token') },
+    body: JSON.stringify({ name, expires_days: parseInt(expires) || null }),
+  });
+  const data = await res.json();
+  if (data.success) {
+    document.getElementById('newKeyValue').textContent = data.raw_key;
+    document.getElementById('newKeyModal').classList.remove('hidden');
+    document.getElementById('key_name').value = '';
+    setTimeout(() => location.reload(), 100);
+  } else {
+    alert('Hata: ' + (data.detail || 'Bilinmeyen hata'));
+  }
+}
+
+async function revokeKey(keyId) {
+  if (!confirm('Bu API anahtarını iptal etmek istediğinize emin misiniz?')) return;
+  const res = await fetch(`/api/tenant/api-keys/${keyId}/revoke`, {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + getCookie('access_token') },
+  });
+  if (res.ok) location.reload();
+  else alert('Hata!');
+}
+
+function closeNewKeyModal() {
+  document.getElementById('newKeyModal').classList.add('hidden');
+}
+
+function getCookie(name) {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+  return '';
+}
+</script>
+{% endblock %}

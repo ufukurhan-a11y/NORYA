@@ -30,7 +30,7 @@ from slowapi import Limiter
 from slowapi.util import get_remote_address
 from slowapi.errors import RateLimitExceeded
 from slowapi.middleware import SlowAPIMiddleware
-from sqlalchemy import or_
+from sqlalchemy import or_, func
 from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 from sqlmodel import Session, select
 
@@ -62,6 +62,7 @@ from app.models import (  # noqa: F401
     EmailLead,
     EnterpriseLead,
     ErrorLog,
+    Institution,
     PaymentOrder,
     Presence,
     ReportVerification,
@@ -427,6 +428,15 @@ _STATIC_CACHE_BY_TYPE = {
     ".webmanifest": "public, max-age=86400",             # Manifest: 1 day
     ".json": "public, max-age=86400",                    # JSON: 1 day
 }
+
+# Tenant resolution middleware (multi-tenant hospital platform)
+from app.tenants.resolver import tenant_resolver_middleware
+
+@app.middleware("http")
+async def tenant_resolver(request: Request, call_next):
+    """Resolve tenant from /hastane/{slug}/ paths and set up tenant context."""
+    return await tenant_resolver_middleware(request, call_next)
+
 
 @app.middleware("http")
 async def static_cache_control(request: Request, call_next):
@@ -817,6 +827,18 @@ def admin_redirect():
     return RedirectResponse(url="/admin/login", status_code=302)
 
 app.include_router(admin_router)  # Eski API paneli: /admin/stats, /admin/analyses, vb.
+
+# Tenant portal router (multi-tenant hospital paths: /hastane/{slug}/...)
+from app.tenants.routers.tenant_portal import router as tenant_portal_router
+app.include_router(tenant_portal_router)
+
+# Wallet API router
+from app.api.wallet import router as wallet_router
+app.include_router(wallet_router)
+
+# Tenant features API router (audit logs, API keys, customization, stats, alerts)
+from app.api.tenant_features import router as tenant_features_router
+app.include_router(tenant_features_router)
 
 
 # Ana sayfa (/) en başta kaydedilsin; GET, HEAD, OPTIONS, POST desteklensin, 405 önlensin
@@ -3690,6 +3712,82 @@ def _audit(db: Session, event: str, user_id: int | None, ip: str | None, institu
         pass
 
 
+def _check_tenant_rate_limit(
+    db: Session,
+    institution_id: int,
+    user_id: int,
+) -> None:
+    """Check tenant-specific rate limits (daily/hourly analysis limits).
+
+    Raises HTTPException 429 if limits are exceeded.
+    """
+    from datetime import timedelta
+
+    stmt = select(Institution).where(Institution.id == institution_id)
+    inst = db.exec(stmt).first()
+    if not inst:
+        return
+
+    now = datetime.utcnow()
+
+    # Check daily limit
+    if inst.daily_analysis_limit:
+        day_start = now.replace(hour=0, minute=0, second=0, microsecond=0)
+        daily_count = db.exec(
+            select(func.count(AnalysisRecord.id)).where(
+                AnalysisRecord.institution_id == institution_id,
+                AnalysisRecord.created_at >= day_start,
+            )
+        ).first() or 0
+        if daily_count >= inst.daily_analysis_limit:
+            raise HTTPException(
+                status_code=429,
+                detail=f"Daily analysis limit reached ({daily_count}/{inst.daily_analysis_limit}). Try again tomorrow.",
+            )
+
+    # Check hourly limit
+    if inst.hourly_analysis_limit:
+        hour_ago = now - timedelta(hours=1)
+        hourly_count = db.exec(
+            select(func.count(AnalysisRecord.id)).where(
+                AnalysisRecord.institution_id == institution_id,
+                AnalysisRecord.created_at >= hour_ago,
+            )
+        ).first() or 0
+        if hourly_count >= inst.hourly_analysis_limit:
+            raise HTTPException(
+                status_code=429,
+                detail=f"Hourly analysis limit reached ({hourly_count}/{inst.hourly_analysis_limit}). Try again later.",
+            )
+
+
+def _log_tenant_analysis(
+    db: Session,
+    institution_id: int,
+    user_id: int,
+    analysis_id: int,
+    ip_address: str | None = None,
+    user_agent: str | None = None,
+) -> None:
+    """Log tenant analysis action to TenantAuditLog."""
+    try:
+        from app.services import tenant_audit_service
+
+        tenant_audit_service.log_tenant_action(
+            db,
+            institution_id=institution_id,
+            action="analyze",
+            user_id=user_id,
+            entity_type="analysis",
+            entity_id=analysis_id,
+            ip_address=ip_address,
+            user_agent=user_agent,
+            detail=f"Analysis #{analysis_id} performed",
+        )
+    except Exception as e:
+        log.warning(f"Failed to log tenant analysis: {e}")
+
+
 def _save_analysis(
     db: Session,
     user_id: int,
@@ -3699,7 +3797,15 @@ def _save_analysis(
     doctor_notes: str | None = None,
     plan_type: str | None = None,
     institution_id: int | None = None,
+    auto_commit: bool = True,
 ) -> int:
+    """Save an analysis record to the database.
+
+    Args:
+        auto_commit: If False, caller is responsible for committing.
+                     Use False when wallet deduction and analysis save
+                     must be in the same transaction.
+    """
     from app.core.plan_config import normalize_plan_type
 
     pt = normalize_plan_type(plan_type) if plan_type is not None else "single"
@@ -3713,9 +3819,50 @@ def _save_analysis(
         institution_id=institution_id,
     )
     db.add(rec)
-    db.commit()
-    db.refresh(rec)
+    if auto_commit:
+        db.commit()
+        db.refresh(rec)
     return rec.id or 0
+
+
+def _deduct_tenant_wallet(
+    db: Session,
+    user_id: int,
+    institution_id: int | None,
+) -> dict:
+    """Deduct wallet credits for a tenant analysis.
+
+    Uses auto_commit=False so wallet deduction and analysis record creation
+    happen in the SAME transaction. If analysis save fails, wallet charge
+    is rolled back automatically.
+
+    Returns:
+        dict with success status. On failure, caller should rollback and return error.
+    """
+    if not institution_id:
+        return {"success": True}  # B2C user, no wallet needed
+
+    try:
+        from app.services import wallet_service
+
+        inst_stmt = select(Institution).where(Institution.id == institution_id)
+        inst = db.exec(inst_stmt).first()
+        if not inst:
+            return {"success": True}  # Institution not found, don't block
+
+        # auto_commit=False: wallet deduction + analysis record in same transaction
+        wallet_result = wallet_service.check_and_deduct(
+            db,
+            institution_id,
+            inst.cost_per_analysis,
+            description=f"Analysis for user {user_id}",
+            auto_commit=False,
+        )
+        return wallet_result
+    except Exception as e:
+        log.warning(f"Wallet deduction failed for institution {institution_id}: {e}")
+        # Don't block analysis if wallet deduction fails
+        return {"success": True}
 
 
 def _get_trend_for_user(
@@ -3870,6 +4017,11 @@ async def analyze(
             if not ilk_ucretsiz:
                 _use_analysis_credit(db, user, limit, kullanilan)
     _inst_id_for_save = _active_inst.id if _active_inst else None
+
+    # Tenant rate limiting check
+    if _inst_id_for_save and not test_mode:
+        _check_tenant_rate_limit(db, _inst_id_for_save, user.id or 0)
+
     log.info("/analyze payload: text_len=%s, has_doctor_notes=%s, lang=%s", len(text), bool(doctor_notes), lang)
     job = None
     if not test_mode:
@@ -3896,7 +4048,17 @@ async def analyze(
         if cached is not None:
             log.info("CACHE HIT key=%s", cache_key[:16])
             result = cached["sonuc"]
-        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save)
+        # Wallet deduction + analysis record in same transaction (atomicity)
+        wallet_result = _deduct_tenant_wallet(db, user.id or 0, _inst_id_for_save)
+        if not wallet_result["success"]:
+            db.rollback()
+            raise HTTPException(status_code=402, detail=wallet_result.get("error", "Insufficient credits"))
+        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save, auto_commit=False)
+        db.commit()
+        # Refresh the record after commit
+        rec = db.get(AnalysisRecord, aid)
+        if rec:
+            db.refresh(rec)
         if job:
             job.status = "done"
             job.analysis_record_id = aid
@@ -3904,6 +4066,13 @@ async def analyze(
             db.add(job)
             db.commit()
         _audit(db, "analyze", user.id, _client_ip(request), institution_id=_inst_id_for_save)
+        # Tenant audit log
+        if _inst_id_for_save:
+            _log_tenant_analysis(
+                db, _inst_id_for_save, user.id or 0, aid,
+                ip_address=_client_ip(request),
+                user_agent=request.headers.get("user-agent"),
+            )
         _send_push_if_available(db, user.id or 0, getattr(user, "full_name", ""), aid)
         return _build_analyze_response(
             result, aid, cached.get("risk_summary"), plan, user.id or 0, db, cached=True
@@ -3934,7 +4103,17 @@ async def analyze(
                 "meta": report_payload["meta"],
             },
         )
-        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save)
+        # Wallet deduction + analysis record in same transaction (atomicity)
+        wallet_result = _deduct_tenant_wallet(db, user.id or 0, _inst_id_for_save)
+        if not wallet_result["success"]:
+            db.rollback()
+            raise HTTPException(status_code=402, detail=wallet_result.get("error", "Insufficient credits"))
+        aid = _save_analysis(db, user.id or 0, text, result, "text", doctor_notes=doctor_notes, plan_type=plan, institution_id=_inst_id_for_save, auto_commit=False)
+        db.commit()
+        # Refresh the record after commit
+        rec = db.get(AnalysisRecord, aid)
+        if rec:
+            db.refresh(rec)
         if job:
             job.status = "done"
             job.analysis_record_id = aid
@@ -3945,6 +4124,13 @@ async def analyze(
             db.add(job)
             db.commit()
         _audit(db, "analyze", user.id, _client_ip(request), institution_id=_inst_id_for_save)
+        # Tenant audit log
+        if _inst_id_for_save:
+            _log_tenant_analysis(
+                db, _inst_id_for_save, user.id or 0, aid,
+                ip_address=_client_ip(request),
+                user_agent=request.headers.get("user-agent"),
+            )
         _send_push_if_available(db, user.id or 0, getattr(user, "full_name", ""), aid)
         return _build_analyze_response(
             result, aid, report_payload.get("risk_summary"), plan, user.id or 0, db, cached=False
@@ -4205,7 +4391,16 @@ def _process_uploaded_content(
                 db.refresh(job)
             result, usage = analyze_blood_test_from_image(content, mime, lang=report_lang)
             input_preview = f"[Görsel: {filename}]"
-            aid = _save_analysis(db, user_id, input_preview, result, "image", plan_type=plan, institution_id=institution_id)
+            # Wallet deduction + analysis record in same transaction (atomicity)
+            wallet_result = _deduct_tenant_wallet(db, user_id, institution_id)
+            if not wallet_result["success"]:
+                db.rollback()
+                raise HTTPException(status_code=402, detail=wallet_result.get("error", "Insufficient credits"))
+            aid = _save_analysis(db, user_id, input_preview, result, "image", plan_type=plan, institution_id=institution_id, auto_commit=False)
+            db.commit()
+            rec = db.get(AnalysisRecord, aid)
+            if rec:
+                db.refresh(rec)
             if job:
                 job.status = "done"
                 job.analysis_record_id = aid
@@ -4236,7 +4431,16 @@ def _process_uploaded_content(
         labs_norm = {"t": " ".join(text.split()).strip(), "dn": None}
         report_payload, usage = analyze_blood_test(text, lang=report_lang, plan="free", labs_norm=labs_norm)
         result = report_payload["sonuc"]
-        aid = _save_analysis(db, user_id, text[:2000], result, "pdf", plan_type=plan, institution_id=institution_id)
+        # Wallet deduction + analysis record in same transaction (atomicity)
+        wallet_result = _deduct_tenant_wallet(db, user_id, institution_id)
+        if not wallet_result["success"]:
+            db.rollback()
+            raise HTTPException(status_code=402, detail=wallet_result.get("error", "Insufficient credits"))
+        aid = _save_analysis(db, user_id, text[:2000], result, "pdf", plan_type=plan, institution_id=institution_id, auto_commit=False)
+        db.commit()
+        rec = db.get(AnalysisRecord, aid)
+        if rec:
+            db.refresh(rec)
         if job:
             job.status = "done"
             job.analysis_record_id = aid
