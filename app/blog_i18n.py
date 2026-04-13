@@ -7551,12 +7551,13 @@ def _blog_index_card_for_article(lang: str, article_id: str) -> dict | None:
     art = _ARTICLE_BY_ID.get(article_id)
     if not art or lang not in art.slugs:
         return None
+    cover_alt_map = getattr(art, "cover_alt", None) or {}
     return {
         "label": art.titles.get(lang) or art.titles.get(DEFAULT_BLOG_LANG, ""),
         "path": f"/{lang}/blog/{art.slugs[lang]}",
         "desc": art.excerpts.get(lang) or art.excerpts.get(DEFAULT_BLOG_LANG, ""),
         "cover_image": _resolve_cover_image(getattr(art, "cover_image", None)),
-        "cover_alt": getattr(art, "cover_alt", {}).get(lang) or getattr(art, "cover_alt", {}).get(DEFAULT_BLOG_LANG, ""),
+        "cover_alt": cover_alt_map.get(lang) or cover_alt_map.get(DEFAULT_BLOG_LANG, ""),
         "icon": getattr(art, "icon", None),
     }
 
