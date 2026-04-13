@@ -196,6 +196,8 @@ def init_db():
             "CREATE INDEX IF NOT EXISTS ix_userregistration_status ON userregistration (status)",
             "CREATE INDEX IF NOT EXISTS ix_userregistration_user_id ON userregistration (user_id)",
             "CREATE INDEX IF NOT EXISTS ix_userregistration_created_at ON userregistration (created_at)",
+            # Frontend IP (tarayıcı tarafı, cookie'den)
+            "ALTER TABLE userregistration ADD COLUMN frontend_ip_address VARCHAR",
         ):
             try:
                 with engine.connect() as conn:

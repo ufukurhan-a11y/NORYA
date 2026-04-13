@@ -15,7 +15,8 @@ class UserRegistration(SQLModel, table=True):
     verification_mail_sent_at: datetime | None = None
     mail_send_error: str | None = None
     source: str | None = None  # "signup" | "guest_claim" | "admin_manual" | "resend"
-    ip_address: str | None = None
+    ip_address: str | None = None  # Backend IP (sunucu tarafı)
+    frontend_ip_address: str | None = None  # Frontend IP (tarayıcı tarafı, cookie'den)
     user_agent: str | None = None
     created_at: datetime = Field(default_factory=datetime.utcnow, index=True)
     verified_at: datetime | None = None

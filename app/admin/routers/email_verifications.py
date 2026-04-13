@@ -82,6 +82,7 @@ def email_verifications_list(
             "status": rec.status or "pending",
             "source": rec.source or "unknown",
             "ip_address": rec.ip_address or "",
+            "frontend_ip_address": rec.frontend_ip_address or "",
             "user_agent": (rec.user_agent or "")[:120],
             "created_at": (rec.created_at.strftime("%d.%m.%Y %H:%M:%S") if getattr(rec, "created_at", None) else "-"),
             "verified_at": (rec.verified_at.strftime("%d.%m.%Y %H:%M:%S") if getattr(rec, "verified_at", None) else "-"),

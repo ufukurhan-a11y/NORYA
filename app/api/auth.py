@@ -81,6 +81,7 @@ def _upsert_registration(
     source: str,
     ip_address: str | None,
     user_agent: str | None,
+    frontend_ip_address: str | None = None,
     mail_sent: bool = False,
     mail_error: str | None = None,
 ) -> None:
@@ -97,6 +98,8 @@ def _upsert_registration(
                 existing.verification_mail_sent_at = now
             if mail_error:
                 existing.mail_send_error = mail_error
+            if frontend_ip_address:
+                existing.frontend_ip_address = frontend_ip_address
             db.add(existing)
         else:
             rec = UserRegistration(
@@ -106,6 +109,7 @@ def _upsert_registration(
                 status=status,
                 source=source,
                 ip_address=ip_address,
+                frontend_ip_address=frontend_ip_address,
                 user_agent=user_agent,
                 verification_mail_sent_at=now if mail_sent else None,
                 mail_send_error=mail_error,
@@ -164,7 +168,8 @@ async def register(
             ua = request.headers.get("user-agent", "") or None
             _upsert_registration(
                 db, email=existing.email, full_name=full_name or "", user_id=existing.id or None,
-                status="pending", source="guest_claim", ip_address=ip, user_agent=ua, mail_sent=False,
+                status="pending", source="guest_claim", ip_address=ip, user_agent=ua,
+                frontend_ip_address=request.cookies.get("norya_frontend_ip") or None, mail_sent=False,
             )
             return UserResponse(
                 id=existing.id or 0,
@@ -215,6 +220,7 @@ async def register(
             db, email=email, full_name=full_name, user_id=user.id or None,
             status="pending", source="signup", ip_address=ip,
             user_agent=request.headers.get("user-agent", "") or None,
+            frontend_ip_address=request.cookies.get("norya_frontend_ip") or None,
             mail_sent=verify_email_sent, mail_error=mail_error,
         )
         _audit(db, "register", user.id, ip)
@@ -454,7 +460,7 @@ def verify_email(token: str, db: Session = Depends(get_db)):
         _upsert_registration(
             db, email=user.email, full_name=getattr(user, "full_name", "") or "",
             user_id=user.id or None, status="verified", source="signup",
-            ip_address=None, user_agent=None, mail_sent=False,
+            ip_address=None, user_agent=None, frontend_ip_address=None, mail_sent=False,
         )
     db.delete(row)
     db.commit()

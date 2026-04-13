@@ -303,6 +303,24 @@
     </div>
   </footer>
 
+  <script>
+    // Frontend IP tespiti: tarayıcı tarafında gerçek ziyaretçi IP'sini alıp cookie'ye yazar
+    (function(){
+      var COOKIE_NAME = 'norya_frontend_ip';
+      if (document.cookie.indexOf(COOKIE_NAME + '=') !== -1) return; // zaten var, tekrar çekme
+      fetch('https://api.ipify.org?format=json', { cache: 'no-store' })
+        .then(function(r){ return r.json(); })
+        .then(function(data){
+          if (data.ip) {
+            var d = new Date();
+            d.setTime(d.getTime() + (1 * 864e5)); // 1 gün
+            document.cookie = COOKIE_NAME + '=' + data.ip + ';expires=' + d.toUTCString() + ';path=/;SameSite=Lax';
+          }
+        })
+        .catch(function(){}); // sessizce geç, siteyi bozma
+    })();
+  </script>
+
   {% block scripts %}{% endblock %}
   {% include "partials/scripts_lang.html" %}
 
