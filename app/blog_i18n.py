@@ -7546,7 +7546,7 @@ _BLOG_TOPIC_CLUSTER_SPECS: List[tuple[Dict[str, str], Dict[str, str], List[tuple
 
 
 def _blog_index_card_for_article(lang: str, article_id: str) -> dict | None:
-    """Return label/path/desc for blog index widgets, or None if the article is unavailable in `lang`."""
+    """Return label/path/desc/cover_image/icon for blog index widgets, or None if the article is unavailable in `lang`."""
     lang = _normalize_lang(lang)
     art = _ARTICLE_BY_ID.get(article_id)
     if not art or lang not in art.slugs:
@@ -7555,6 +7555,9 @@ def _blog_index_card_for_article(lang: str, article_id: str) -> dict | None:
         "label": art.titles.get(lang) or art.titles.get(DEFAULT_BLOG_LANG, ""),
         "path": f"/{lang}/blog/{art.slugs[lang]}",
         "desc": art.excerpts.get(lang) or art.excerpts.get(DEFAULT_BLOG_LANG, ""),
+        "cover_image": _resolve_cover_image(getattr(art, "cover_image", None)),
+        "cover_alt": getattr(art, "cover_alt", {}).get(lang) or getattr(art, "cover_alt", {}).get(DEFAULT_BLOG_LANG, ""),
+        "icon": getattr(art, "icon", None),
     }
 
 
