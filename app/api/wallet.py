@@ -119,3 +119,71 @@ async def load_credits(
         "new_balance": result["new_balance"],
         "transaction_id": result["transaction"].id,
     }
+
+
+class AutoRenewConfigRequest(BaseModel):
+    enabled: bool
+    amount_cents: int | None = None
+    threshold_cents: int | None = None
+    interval_days: int | None = None
+
+
+class AutoRenewCardRequest(BaseModel):
+    """PayTR kart kaydetme isteği (iframe ile)."""
+    pass
+
+
+@router.get("/auto-renew")
+async def get_auto_renew_config(
+    tenant: Institution = Depends(require_tenant_active),
+    db: Session = Depends(get_db),
+):
+    """Get auto-renew configuration for current tenant."""
+    return {
+        "auto_renew_enabled": tenant.auto_renew_enabled,
+        "auto_renew_amount_cents": tenant.auto_renew_amount_cents,
+        "auto_renew_threshold_cents": tenant.auto_renew_threshold_cents,
+        "auto_renew_interval_days": tenant.auto_renew_interval_days,
+        "auto_renew_last_at": tenant.auto_renew_last_at.isoformat() if tenant.auto_renew_last_at else None,
+        "has_card_saved": bool(tenant.paytr_utoken and tenant.paytr_ctoken),
+    }
+
+
+@router.post("/auto-renew/configure")
+async def configure_auto_renew(
+    request: AutoRenewConfigRequest,
+    tenant: Institution = Depends(require_tenant_active),
+    db: Session = Depends(get_db),
+):
+    """Configure auto-renew settings for current tenant."""
+    if request.amount_cents is not None:
+        tenant.auto_renew_amount_cents = max(1000, request.amount_cents)  # min $10
+    if request.threshold_cents is not None:
+        tenant.auto_renew_threshold_cents = max(0, request.threshold_cents)
+    if request.interval_days is not None:
+        tenant.auto_renew_interval_days = max(1, min(365, request.interval_days))
+
+    tenant.auto_renew_enabled = request.enabled
+    db.add(tenant)
+    db.commit()
+    db.refresh(tenant)
+
+    return {
+        "success": True,
+        "auto_renew_enabled": tenant.auto_renew_enabled,
+        "auto_renew_amount_cents": tenant.auto_renew_amount_cents,
+        "auto_renew_threshold_cents": tenant.auto_renew_threshold_cents,
+        "auto_renew_interval_days": tenant.auto_renew_interval_days,
+    }
+
+
+@router.post("/auto-renew/test")
+async def test_auto_renew(
+    tenant: Institution = Depends(require_tenant_active),
+    db: Session = Depends(get_db),
+):
+    """Test auto-renew for current tenant (manual trigger)."""
+    from app.services.paytr_recurring import process_auto_renew_for_institution
+
+    result = process_auto_renew_for_institution(db, tenant.id)
+    return result

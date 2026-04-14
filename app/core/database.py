@@ -221,6 +221,18 @@ def init_db():
             "ALTER TABLE institutions ADD COLUMN alert_email_enabled BOOLEAN DEFAULT 1",
             "ALTER TABLE institutions ADD COLUMN alert_sms_enabled BOOLEAN DEFAULT 0",
             "ALTER TABLE institutions ADD COLUMN alert_phone VARCHAR(64)",
+            # Tenant auto-renew (recurring payment)
+            "ALTER TABLE institutions ADD COLUMN auto_renew_enabled BOOLEAN DEFAULT 0",
+            "ALTER TABLE institutions ADD COLUMN auto_renew_amount_cents INTEGER DEFAULT 100000",
+            "ALTER TABLE institutions ADD COLUMN auto_renew_threshold_cents INTEGER DEFAULT 20000",
+            "ALTER TABLE institutions ADD COLUMN auto_renew_interval_days INTEGER DEFAULT 30",
+            "ALTER TABLE institutions ADD COLUMN auto_renew_last_at DATETIME",
+            "ALTER TABLE institutions ADD COLUMN paytr_utoken VARCHAR(256)",
+            "ALTER TABLE institutions ADD COLUMN paytr_ctoken VARCHAR(256)",
+            # Tenant user fields
+            "ALTER TABLE user ADD COLUMN institution_id INTEGER",
+            "ALTER TABLE user ADD COLUMN tenant_role VARCHAR(32) DEFAULT 'member'",
+            "ALTER TABLE user ADD COLUMN tenant_is_active BOOLEAN DEFAULT 1",
             # Tenant audit log
             "CREATE TABLE IF NOT EXISTS tenant_audit_logs (id INTEGER, institution_id INTEGER, user_id INTEGER, action VARCHAR(64), entity_type VARCHAR(64), entity_id INTEGER, ip_address VARCHAR(64), user_agent VARCHAR(512), detail VARCHAR(1024), metadata_json TEXT, created_at DATETIME, PRIMARY KEY (id), FOREIGN KEY(institution_id) REFERENCES institutions(id), FOREIGN KEY(user_id) REFERENCES user(id))",
             "CREATE INDEX IF NOT EXISTS ix_tenant_audit_logs_institution_id ON tenant_audit_logs (institution_id)",

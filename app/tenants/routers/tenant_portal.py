@@ -212,3 +212,25 @@ async def tenant_api_keys_page(
             "api_keys": keys,
         },
     )
+
+
+@router.get("/users")
+async def tenant_users_page(
+    request: Request,
+    tenant: Institution = Depends(require_tenant_active),
+    user: User = Depends(get_current_user),
+    db: Session = Depends(get_db),
+):
+    """Tenant user management page (hospital admin panel)."""
+    is_admin = _require_admin(tenant, user, db)
+
+    return templates.TemplateResponse(
+        "tenant/users.html",
+        {
+            "request": request,
+            "tenant": tenant,
+            "tenant_slug": tenant.tenant_slug,
+            "user": user,
+            "is_admin": is_admin,
+        },
+    )

@@ -395,6 +395,35 @@ async def lifespan(app: FastAPI):
     else:
         log.info("Drip kampanya otomatik thread kapalı (startup_run_drip_loop=false).")
 
+    # Auto-renew background task (her 6 saatte bir kontrol)
+    if settings.startup_run_maintenance_tasks:
+        def _auto_renew_loop():
+            import time as _time
+            _INTERVAL = 6 * 3600  # 6 saat
+            _time.sleep(60)  # startup'tan 60s sonra ilk çalıştırma
+            while True:
+                try:
+                    from app.core.database import SessionLocal
+                    from app.services.paytr_recurring import process_all_auto_renewals
+                    db = SessionLocal()
+                    try:
+                        results = process_all_auto_renewals(db)
+                        success_count = sum(1 for r in results if r.get("status") == "success")
+                        if success_count:
+                            log.info("AUTO_RENEW: %d kurum için başarılı yenileme yapıldı.", success_count)
+                    except Exception as exc:
+                        log.warning("AUTO_RENEW background hatası: %s", exc)
+                    finally:
+                        db.close()
+                except Exception as exc:
+                    log.warning("AUTO_RENEW loop genel hata: %s", exc)
+                _time.sleep(_INTERVAL)
+
+        threading.Thread(target=_auto_renew_loop, daemon=True, name="auto-renew").start()
+        log.info("Otomatik kredi yenileme thread başlatıldı (6 saatte bir).")
+    else:
+        log.info("Otomatik kredi yenileme kapalı (startup_run_maintenance_tasks=false).")
+
     yield
 
 
@@ -839,6 +868,8 @@ app.include_router(wallet_router)
 # Tenant features API router (audit logs, API keys, customization, stats, alerts)
 from app.api.tenant_features import router as tenant_features_router
 app.include_router(tenant_features_router)
+from app.api.tenant_users import router as tenant_users_router
+app.include_router(tenant_users_router)
 
 
 # Ana sayfa (/) en başta kaydedilsin; GET, HEAD, OPTIONS, POST desteklensin, 405 önlensin

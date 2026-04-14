@@ -62,6 +62,15 @@ class Institution(SQLModel, table=True):
     alert_sms_enabled: bool = Field(default=False)  # Enable SMS alerts (future)
     alert_phone: str | None = Field(default=None, max_length=64)  # Phone for SMS alerts
 
+    # --- Recurring payment (auto-renew) ---
+    auto_renew_enabled: bool = Field(default=False)  # Enable automatic credit renewal
+    auto_renew_amount_cents: int = Field(default=100000)  # Auto-renew amount in cents (default $1000)
+    auto_renew_threshold_cents: int = Field(default=20000)  # Trigger auto-renew when balance below this
+    auto_renew_interval_days: int = Field(default=30)  # Renew every N days
+    auto_renew_last_at: datetime | None = None  # Last auto-renew timestamp
+    paytr_utoken: str | None = Field(default=None, max_length=256)  # PayTR user token for recurring payments
+    paytr_ctoken: str | None = Field(default=None, max_length=256)  # PayTR card token for recurring payments
+
     def generate_slug(self) -> str:
         """Generate and set tenant_slug from name."""
         if not self.tenant_slug:

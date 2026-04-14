@@ -17,3 +17,8 @@ class User(SQLModel, table=True):
     is_banned: bool = False
     last_login_at: datetime | None = None
     account_claimed_at: datetime | None = None  # None = guest (no password set by user); set when they register/claim
+
+    # --- Hospital tenant association ---
+    institution_id: int | None = Field(default=None, foreign_key="institutions.id", index=True)  # Linked hospital tenant
+    tenant_role: str = Field(default="member", max_length=32)  # "admin" | "doctor" | "member"
+    tenant_is_active: bool = Field(default=True)  # Whether user is active in the tenant

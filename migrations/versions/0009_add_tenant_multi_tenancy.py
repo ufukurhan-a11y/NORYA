@@ -50,6 +50,14 @@ def upgrade() -> None:
         ("alert_email_enabled", sa.Boolean(), False, True),
         ("alert_sms_enabled", sa.Boolean(), False, False),
         ("alert_phone", sa.String(64), True),
+        # Auto-renew (recurring payment)
+        ("auto_renew_enabled", sa.Boolean(), False, False),
+        ("auto_renew_amount_cents", sa.Integer(), False, 100000),
+        ("auto_renew_threshold_cents", sa.Integer(), False, 20000),
+        ("auto_renew_interval_days", sa.Integer(), False, 30),
+        ("auto_renew_last_at", sa.DateTime(), True),
+        ("paytr_utoken", sa.String(256), True),
+        ("paytr_ctoken", sa.String(256), True),
     ]
 
     for col_def in columns_to_add:
@@ -127,6 +135,15 @@ def upgrade() -> None:
             sa.Column("updated_at", sa.DateTime(), nullable=False, server_default=sa.text("CURRENT_TIMESTAMP")),
         )
         op.create_index("ix_tenant_api_keys_institution_id", "tenant_api_keys", ["institution_id"])
+    except Exception:
+        pass
+
+    # Add tenant user fields to user table
+    try:
+        op.add_column("user", sa.Column("institution_id", sa.Integer(), nullable=True))
+        op.add_column("user", sa.Column("tenant_role", sa.String(32), nullable=False, server_default="member"))
+        op.add_column("user", sa.Column("tenant_is_active", sa.Boolean(), nullable=False, server_default="1"))
+        op.create_index("ix_user_institution_id", "user", ["institution_id"])
     except Exception:
         pass
 

@@ -160,6 +160,67 @@
           </a>
         </div>
       </div>
+
+      <!-- Auto-Renew Settings -->
+      <div class="bg-white shadow rounded-lg">
+        <div class="px-6 py-4 border-b border-gray-200">
+          <h2 class="text-lg font-semibold text-gray-900">Otomatik Kredi Yenileme</h2>
+        </div>
+        <div class="px-6 py-4 space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <label class="text-sm font-medium text-gray-700">Otomatik Yenileme</label>
+              <p class="text-xs text-gray-500">Bakiye düştüğünde kredi kartından otomatik yükleme</p>
+            </div>
+            <input type="checkbox" id="auto_renew_enabled" {% if tenant.auto_renew_enabled %}checked{% endif %} {% if not is_admin %}disabled{% endif %}
+              class="h-4 w-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded">
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Yükleme Tutarı ($)</label>
+            <input type="number" id="auto_renew_amount_cents" value="{{ (tenant.auto_renew_amount_cents / 100) | int }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="1000 = $1000">
+            <p class="text-xs text-gray-500 mt-1">Her yenilemede yüklenecek tutar</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Tetikleyici Eşik ($)</label>
+            <input type="number" id="auto_renew_threshold_cents" value="{{ (tenant.auto_renew_threshold_cents / 100) | int }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="200 = $200">
+            <p class="text-xs text-gray-500 mt-1">Bakiye bu değerin altına düştüğünde otomatik yenile</p>
+          </div>
+          <div>
+            <label class="block text-sm font-medium text-gray-700">Yenileme Aralığı (gün)</label>
+            <input type="number" id="auto_renew_interval_days" value="{{ tenant.auto_renew_interval_days }}" {% if not is_admin %}disabled{% endif %}
+              class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 sm:text-sm"
+              placeholder="30">
+            <p class="text-xs text-gray-500 mt-1">İki yenileme arasında minimum gün sayısı</p>
+          </div>
+          {% if tenant.auto_renew_last_at %}
+          <div class="text-xs text-gray-500">
+            Son otomatik yenileme: {{ tenant.auto_renew_last_at.strftime('%d.%m.%Y %H:%M') }}
+          </div>
+          {% endif %}
+          <div class="text-xs text-gray-500 bg-gray-50 p-3 rounded">
+            <p class="font-medium mb-1">💳 Kayıtlı Kart Durumu:</p>
+            {% if tenant.paytr_utoken and tenant.paytr_ctoken %}
+            <p class="text-green-600">✓ Kredi kartı kayıtlı</p>
+            {% else %}
+            <p class="text-yellow-600">⚠ Kredi kartı henüz kaydedilmemiş. Lütfen ilk kredi yüklemenizde "Kaydet ve otomatik yenile" seçeneğini işaretleyin.</p>
+            {% endif %}
+          </div>
+          {% if is_admin %}
+          <div class="flex space-x-2">
+            <button onclick="saveAutoRenewSettings()" class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700">
+              Kaydet
+            </button>
+            <button onclick="testAutoRenew()" class="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50">
+              Test Yenileme
+            </button>
+          </div>
+          {% endif %}
+        </div>
+      </div>
     </div>
   </div>
 </div>
@@ -214,6 +275,41 @@ function getCookie(name) {
   const parts = value.split(`; ${name}=`);
   if (parts.length === 2) return parts.pop().split(';').shift();
   return '';
+}
+
+async function saveAutoRenewSettings() {
+  const data = {
+    enabled: document.getElementById('auto_renew_enabled').checked,
+    amount_cents: Math.round(parseFloat(document.getElementById('auto_renew_amount_cents').value) * 100),
+    threshold_cents: Math.round(parseFloat(document.getElementById('auto_renew_threshold_cents').value) * 100),
+    interval_days: parseInt(document.getElementById('auto_renew_interval_days').value),
+  };
+  const res = await fetch('/api/wallet/auto-renew/configure', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + getCookie('access_token') },
+    body: JSON.stringify(data),
+  });
+  if (res.ok) {
+    alert('Otomatik yenileme ayarları kaydedildi!');
+    location.reload();
+  } else {
+    alert('Hata: ' + (await res.json()).detail);
+  }
+}
+
+async function testAutoRenew() {
+  if (!confirm('Test otomatik yenileme yapılacak. Devam etmek istiyor musunuz?')) return;
+  const res = await fetch('/api/wallet/auto-renew/test', {
+    method: 'POST',
+    headers: { 'Authorization': 'Bearer ' + getCookie('access_token') },
+  });
+  const result = await res.json();
+  if (result.status === 'success') {
+    alert('Test yenileme başarılı! ' + result.message);
+    location.reload();
+  } else {
+    alert('Test yenileme başarısız: ' + result.message);
+  }
 }
 </script>
 {% endblock %}
