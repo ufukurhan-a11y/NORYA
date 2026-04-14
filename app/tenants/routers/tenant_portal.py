@@ -18,8 +18,8 @@ from app.models.tenant_api_key import TenantApiKey
 from app.api.deps import get_current_user
 from app.models.user import User
 from app.services import tenant_stats_service, tenant_audit_service, tenant_api_key_service
-from .context import get_current_tenant
-from .isolation import require_tenant_active, get_current_institution_id
+from app.tenants.context import get_current_tenant
+from app.tenants.isolation import require_tenant_active, get_current_institution_id
 
 logger = logging.getLogger(__name__)
 
