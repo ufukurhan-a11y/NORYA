@@ -176,18 +176,29 @@
 </div>
 
 <script>
-const ADMIN_SECRET = sessionStorage.getItem('norya_admin_secret') || '';
 const LANG_FLAGS = {tr:'🇹🇷',en:'🇬🇧',de:'🇩🇪',fr:'🇫🇷',it:'🇮🇹',es:'🇪🇸',he:'🇮🇱',ar:'🇸🇦',hi:'🇮🇳'};
 const LANG_NAMES = {tr:'Türkçe',en:'English',de:'Deutsch',fr:'Français',it:'Italiano',es:'Español',he:'עברית',ar:'العربية',hi:'हिन्दी'};
 
 let topics = [];
 let flatPosts = [];
 
+async function adminFetch(url, options) {
+  const opts = Object.assign({
+    credentials: 'same-origin',
+    headers: {}
+  }, options || {});
+  opts.headers = Object.assign({}, (options && options.headers) || {});
+  const res = await fetch(url, opts);
+  if (res.status === 401 || res.status === 403) {
+    window.location.href = '/admin/login';
+    throw new Error('Oturum süresi doldu');
+  }
+  return res;
+}
+
 async function loadTopics() {
   try {
-    const res = await fetch('/admin/blog/api/topics', {
-      headers: { 'X-Admin-Secret': ADMIN_SECRET }
-    });
+    const res = await adminFetch('/admin/blog/api/topics');
     if (!res.ok) throw new Error(res.status);
     topics = await res.json();
     renderTopics();
@@ -200,9 +211,7 @@ async function loadTopics() {
 
 async function loadFlat() {
   try {
-    const res = await fetch('/admin/blog/api/posts?limit=500', {
-      headers: { 'X-Admin-Secret': ADMIN_SECRET }
-    });
+    const res = await adminFetch('/admin/blog/api/posts?limit=500');
     if (!res.ok) throw new Error(res.status);
     flatPosts = await res.json();
     renderFlat();
@@ -234,11 +243,11 @@ function renderTopics() {
     const someP = !allP && !noneP;
     let statusClass = allP ? 'status-published' : (someP ? 'status-partial' : 'status-draft');
     let statusText = allP ? 'Tümü Yayında' : (someP ? (t.published_count + '/' + t.total_count) : 'Tümü Taslak');
-    
+
     let coverHTML = t.cover_image
       ? '<img class="topic-cover" src="' + esc(t.cover_image) + '" alt="Kapak" onclick="previewCover(\'' + esc(t.cover_image) + '\')" title="Görseli büyüt">'
       : '<div class="topic-cover-placeholder">' + t.topic_id.substring(0, 6).toUpperCase() + '</div>';
-    
+
     let versionsHTML = t.versions.map(v =>
       '<div class="lang-row">' +
       '<span class="lang-flag">' + (LANG_FLAGS[v.lang] || v.lang) + '</span>' +
@@ -322,9 +331,8 @@ function switchView(view) {
 async function publishAll(topicId) {
   if (!confirm('Bu konudaki TÜM dil versiyonlarını yayına almak istediğinize emin misiniz?')) return;
   try {
-    const res = await fetch('/admin/blog/api/topics/' + encodeURIComponent(topicId) + '/publish-all', {
-      method: 'POST',
-      headers: { 'X-Admin-Secret': ADMIN_SECRET }
+    const res = await adminFetch('/admin/blog/api/topics/' + encodeURIComponent(topicId) + '/publish-all', {
+      method: 'POST'
     });
     if (!res.ok) throw new Error(res.status);
     loadTopics();
@@ -361,9 +369,7 @@ function closeModal() {
 
 async function editPost(id) {
   try {
-    const res = await fetch('/admin/blog/api/posts/' + id, {
-      headers: { 'X-Admin-Secret': ADMIN_SECRET }
-    });
+    const res = await adminFetch('/admin/blog/api/posts/' + id);
     if (!res.ok) throw new Error(res.status);
     const post = await res.json();
     document.getElementById('post-id').value = post.id;
@@ -402,9 +408,9 @@ async function savePost(e) {
   try {
     const url = id ? '/admin/blog/api/posts/' + id : '/admin/blog/api/posts';
     const method = id ? 'PUT' : 'POST';
-    const res = await fetch(url, {
+    const res = await adminFetch(url, {
       method,
-      headers: { 'Content-Type': 'application/json', 'X-Admin-Secret': ADMIN_SECRET },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(data),
     });
     if (!res.ok) { const err = await res.json(); throw new Error(err.detail || res.status); }
@@ -415,9 +421,8 @@ async function savePost(e) {
 
 async function togglePublish(id) {
   try {
-    const res = await fetch('/admin/blog/api/posts/' + id + '/toggle-publish', {
-      method: 'POST',
-      headers: { 'X-Admin-Secret': ADMIN_SECRET },
+    const res = await adminFetch('/admin/blog/api/posts/' + id + '/toggle-publish', {
+      method: 'POST'
     });
     if (!res.ok) throw new Error(res.status);
     loadTopics(); loadFlat();
@@ -427,9 +432,8 @@ async function togglePublish(id) {
 async function deletePost(id) {
   if (!confirm('Bu yazıyı silmek istediğinize emin misiniz?')) return;
   try {
-    const res = await fetch('/admin/blog/api/posts/' + id, {
-      method: 'DELETE',
-      headers: { 'X-Admin-Secret': ADMIN_SECRET },
+    const res = await adminFetch('/admin/blog/api/posts/' + id, {
+      method: 'DELETE'
     });
     if (!res.ok) throw new Error(res.status);
     loadTopics(); loadFlat();

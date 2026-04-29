@@ -674,12 +674,21 @@
                 </div>
                 <div class="form-group">
                   <label for="email">{{ t.pay_email_label }}</label>
-                  <input type="email" id="email" class="input" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" aria-label="{{ t.pay_email_label }}">
+                  <input type="email" id="email" class="input" placeholder="{{ t.pay_email_placeholder }}" autocomplete="email" aria-label="{{ t.pay_email_label }}" value="{{ prefill_email }}">
                 </div>
                 <div class="form-group">
                   <label for="name">{{ t.pay_name_label }}</label>
                   <input type="text" id="name" class="input" placeholder="{{ t.pay_name_placeholder }}" autocomplete="name" aria-label="{{ t.pay_name_label }}">
                 </div>
+                {% if is_guest_flow %}
+                <div class="guest-flow-banner" style="display:flex;align-items:flex-start;gap:10px;padding:12px 14px;border-radius:12px;background:linear-gradient(135deg,rgba(14,165,164,0.06),rgba(14,165,164,0.03));border:1px solid rgba(14,165,164,0.15);">
+                  <svg style="width:18px;height:18px;flex-shrink:0;color:#0EA5A4;margin-top:1px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+                  <div>
+                    <p style="font-size:0.8125rem;font-weight:600;color:#0f766e;margin:0 0 2px;">{{ t.get("guest_flow_title", "Tam rapor için ödeme yapın") }}</p>
+                    <p style="font-size:0.75rem;color:#475569;margin:0;line-height:1.4;">{{ t.get("guest_flow_desc", "E-postanızı girin, güvenli ödeme yapın ve tam raporunuza hemen erişin.") }}</p>
+                  </div>
+                </div>
+                {% endif %}
                 <a href="mailto:support@noryaai.com" class="support-link">{{ t.support_link }}</a>
                 <label class="toggle-row"><input type="checkbox" id="same-page-toggle" aria-label="{{ t.same_page_toggle }}"> {{ t.same_page_toggle }}</label>
               </section>
@@ -1051,6 +1060,7 @@ document.addEventListener('DOMContentLoaded', function(){
       if (res.ok && res.data.token) {
         var url = 'https://www.paytr.com/odeme/guvenli/' + res.data.token;
         if (res.data.merchant_oid) window._lastMerchantOid = res.data.merchant_oid;
+        if (res.data.guest_token) window._lastGuestToken = res.data.guest_token;
         if (useSamePage) {
           window.location.href = url;
           return;
@@ -1080,12 +1090,15 @@ document.addEventListener('DOMContentLoaded', function(){
   if (paymentDoneBtn) paymentDoneBtn.addEventListener('click', function() {
     var oid = window._lastMerchantOid;
     if (!oid) return;
+    var guestToken = window._lastGuestToken || '';
     fetch(baseUrl + '/api/orders/status?merchant_oid=' + encodeURIComponent(oid))
       .then(function(r){ return r.json().then(function(d){ return { ok: r.ok, d: d }; }).catch(function(){ return { ok: false, d: null }; }); })
       .then(function(o){
         var d = o.d;
         if (o.ok && d && (d.status === 'paid' || d.status === 'completed' || d.is_premium_active)) {
-          window.location.href = baseUrl + '/payment/success?merchant_oid=' + encodeURIComponent(oid) + '&lang=' + (document.documentElement.lang || 'tr');
+          var successUrl = baseUrl + '/payment/success?merchant_oid=' + encodeURIComponent(oid) + '&lang=' + (document.documentElement.lang || 'tr');
+          if (guestToken) successUrl += '&guest_token=' + encodeURIComponent(guestToken);
+          window.location.href = successUrl;
         } else if (typeof alert !== 'undefined') alert(d && d.status === 'failed' ? (t.success_payment_failed_short || 'Ödeme tamamlanamadı.') : (!o.ok ? (t.success_invalid_oid || 'Sipariş bulunamadı.') : (t.success_payment_pending_short || 'Ödeme henüz tamamlanmadı.')));
       });
   });

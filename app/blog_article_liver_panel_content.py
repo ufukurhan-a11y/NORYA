@@ -1011,7 +1011,7 @@ def build_liver_panel_article():
     """Build the Liver Function Tests Pillar Article. Called from blog_i18n.py."""
     from app.blog_i18n import Article, Section
     published = date(2026, 3, 25)
-    cover = "/static/images/blog/liver-panel-hero.jpg"
+    cover = "/static/images/blog/ggt-high-hero.png"
     slugs = {
         "en": "liver-function-tests-guide",
         "tr": "karaciger-fonksiyon-testleri-rehberi",

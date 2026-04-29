@@ -551,6 +551,18 @@ ENTERPRISE_UI = {
         "meta_title": "Enterprise — NoryaAI | Clinical Decision Support Platform",
         "meta_description": "NoryaAI enterprise: Structure blood test reports in minutes, highlight risk areas. Request a demo.",
 
+        "nav_home": "Home",
+        "nav_enterprise": "Enterprise",
+        "nav_privacy": "Privacy",
+        "nav_terms": "Terms of Use",
+        "footer_enterprise": "Enterprise",
+        "footer_trust": "Trust Center",
+        "footer_methodology": "Methodology",
+        "hero_label": "Enterprise Clinical Intelligence",
+        "hero_title": "Structured Clinical Analysis Platform for Healthcare Institutions",
+        "hero_subtitle": "Secure, governed, and multilingual AI analysis infrastructure for hospital leaders, clinical directors, laboratory operations, and procurement teams.",
+        "hero_cta_primary": "Request Demo",
+
         # Contact information
         "contact_email": "support@noryaai.com",
         "contact_phone": "+90 507 170 35 64",

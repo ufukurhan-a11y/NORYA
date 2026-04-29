@@ -4874,234 +4874,6 @@
       .lg\:grid-cols-7 { grid-template-columns: repeat(7, minmax(0, 1fr)); }
     }
 
-    /* Report carousel */
-    .report-carousel-wrap {
-      position: relative;
-      max-width: 1200px;
-      margin: 0 auto;
-      padding: 0 2.5rem;
-    }
-    .report-carousel {
-      display: flex;
-      gap: 1.25rem;
-      overflow-x: auto;
-      scroll-snap-type: x mandatory;
-      -webkit-overflow-scrolling: touch;
-      scroll-behavior: smooth;
-      padding: 1rem 0 1.5rem;
-      scrollbar-width: none;
-    }
-    .report-carousel::-webkit-scrollbar { display: none; }
-    .report-card {
-      flex: 0 0 320px;
-      scroll-snap-align: start;
-      background: #fff;
-      border-radius: 1.25rem;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 4px 24px rgba(14,165,164,0.08);
-      overflow: hidden;
-      transition: transform 0.25s, box-shadow 0.25s;
-    }
-    .report-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 8px 32px rgba(14,165,164,0.16);
-    }
-    .report-card-header {
-      background: linear-gradient(135deg, #0ea5a4 0%, #0d9488 100%);
-      padding: 1.25rem 1.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .report-card-header h4 {
-      color: #fff;
-      font-size: 0.875rem;
-      font-weight: 700;
-      letter-spacing: 0.04em;
-    }
-    .report-card-header .rc-page {
-      color: rgba(255,255,255,0.7);
-      font-size: 0.7rem;
-      font-weight: 600;
-    }
-    .report-card-body {
-      padding: 1.5rem;
-    }
-    .rc-gauge-ring {
-      width: 120px;
-      height: 120px;
-      margin: 0 auto 1rem;
-    }
-    .rc-bar-track {
-      background: #e2e8f0;
-      border-radius: 999px;
-      height: 8px;
-      overflow: hidden;
-    }
-    .rc-bar-fill {
-      height: 100%;
-      border-radius: 999px;
-      background: #0ea5a4;
-      transition: width 0.6s ease;
-    }
-    .rc-bar-fill.warn { background: #f59e0b; }
-    .rc-bar-fill.danger { background: #ef4444; }
-    .rc-bar-fill.good { background: #22c55e; }
-    .rc-table-wrap {
-      overflow-x: auto;
-      -webkit-overflow-scrolling: touch;
-      overscroll-behavior-x: contain;
-      margin: 0 -0.35rem;
-      padding: 0 0.35rem 0.25rem;
-      scrollbar-width: thin;
-    }
-    .rc-table-wrap::-webkit-scrollbar { height: 6px; }
-    .rc-table-wrap::-webkit-scrollbar-thumb {
-      background: rgba(14, 165, 164, 0.35);
-      border-radius: 999px;
-    }
-    .rc-table {
-      width: 100%;
-      min-width: 18.5rem;
-      border-collapse: collapse;
-    }
-    .rc-table th {
-      text-align: left;
-      font-size: 0.7rem;
-      font-weight: 700;
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
-      color: #64748b;
-      padding: 0.5rem 0.35rem 0.5rem 0;
-      border-bottom: 1px solid #e2e8f0;
-      white-space: nowrap;
-    }
-    .rc-table th:not(:first-child),
-    .rc-table td:not(:first-child) {
-      padding-left: 0.5rem;
-    }
-    .rc-table td {
-      font-size: 0.8rem;
-      color: #334155;
-      padding: 0.5rem 0.35rem 0.5rem 0;
-      border-bottom: 1px solid #f1f5f9;
-      vertical-align: middle;
-    }
-    .rc-table td .rc-status { white-space: nowrap; }
-    .rc-status {
-      display: inline-flex;
-      align-items: center;
-      gap: 4px;
-      font-size: 0.7rem;
-      font-weight: 600;
-      padding: 2px 8px;
-      border-radius: 999px;
-    }
-    .rc-status.normal { background: #dcfce7; color: #166534; }
-    .rc-status.warn { background: #fef3c7; color: #92400e; }
-    .rc-status.high { background: #fee2e2; color: #991b1b; }
-    .rc-finding {
-      display: flex;
-      align-items: flex-start;
-      gap: 0.5rem;
-      font-size: 0.8rem;
-      color: #334155;
-      line-height: 1.5;
-    }
-    .rc-finding::before {
-      content: '';
-      flex-shrink: 0;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: #0ea5a4;
-      margin-top: 6px;
-    }
-    .carousel-arrow {
-      position: absolute;
-      top: 50%;
-      transform: translateY(-50%);
-      z-index: 10;
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: #fff;
-      border: 1px solid #e2e8f0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: #0ea5a4;
-      font-size: 1.1rem;
-      transition: background 0.2s, box-shadow 0.2s;
-    }
-    .carousel-arrow:hover {
-      background: #f0fdfa;
-      box-shadow: 0 4px 12px rgba(14,165,164,0.2);
-    }
-    .carousel-arrow.left { left: 0; }
-    .carousel-arrow.right { right: 0; }
-    @media (max-width: 640px) {
-      .report-card { flex: 0 0 calc(100vw - 4rem); }
-      .report-carousel-wrap { padding: 0 1rem; }
-      .carousel-arrow { display: none; }
-      .report-card-body { padding: 1.1rem !important; }
-      .report-card .rc-table th {
-        font-size: 0.62rem;
-        letter-spacing: 0.04em;
-        padding-top: 0.35rem;
-        padding-bottom: 0.35rem;
-      }
-      .report-card .rc-table td {
-        font-size: 0.72rem;
-        padding-top: 0.35rem;
-        padding-bottom: 0.35rem;
-      }
-      .report-card .rc-table td .rc-status {
-        font-size: 0.62rem;
-        padding: 1px 6px;
-      }
-      .report-card .rc-table th:first-child,
-      .report-card .rc-table td:first-child {
-        position: sticky;
-        left: 0;
-        z-index: 2;
-        background: #fff;
-        box-shadow: 4px 0 8px -4px rgba(15, 23, 42, 0.12);
-      }
-      .report-card .rc-table thead th:first-child { z-index: 3; }
-      .report-card .rc-finding {
-        font-size: 0.78rem;
-        line-height: 1.45;
-        overflow-wrap: anywhere;
-        word-break: break-word;
-      }
-    }
-    @media (prefers-color-scheme: dark) {
-      .report-card { background: #1e293b; border-color: #334155; }
-      .report-card-body { color: #e2e8f0; }
-      .rc-table th { color: #94a3b8; border-color: #334155; }
-      .rc-table td { color: #cbd5e1; border-color: #1e293b; }
-      .rc-bar-track { background: #334155; }
-      .rc-finding { color: #cbd5e1; }
-      .carousel-arrow { background: #1e293b; border-color: #334155; color: #5eead4; }
-      .carousel-arrow:hover { background: #0f172a; }
-      @media (max-width: 640px) {
-        .report-card .rc-table th:first-child,
-        .report-card .rc-table td:first-child {
-          background: #1e293b;
-          box-shadow: 4px 0 8px -4px rgba(0, 0, 0, 0.35);
-        }
-      }
-    }
-    @media (max-width: 640px) {
-      .dark .report-card .rc-table th:first-child,
-      .dark .report-card .rc-table td:first-child {
-        background: #1e293b;
-        box-shadow: 4px 0 8px -4px rgba(0, 0, 0, 0.35);
-      }
-    }
 
     /* ===== MOBILE NAV FIX: 768px breakpoint — Logo + compact CTA + Hamburger ===== */
     @media (max-width: 767px) {
@@ -6584,62 +6356,81 @@
         <p class="text-base sm:text-lg text-accent-600 dark:text-accent-400 max-w-2xl mx-auto leading-relaxed" data-i18n="before_after_desc">Aynı sonuçlar — önce karmaşık tablo, 60 saniye sonra anlaşılır rapor. Müşterilerimiz bu dönüşümü yaşıyor.</p>
       </div>
 
-      <div class="relative max-w-5xl mx-auto">
-        <!-- Before: Gerçek laboratuvar tahlili -->
-        <div class="relative rounded-2xl overflow-hidden shadow-2xl border border-amber-200/60 dark:border-amber-900/40">
-          <img
-            src="/static/images/blog/how-to-read-blood-test-results.png"
-            alt="Laboratuvar tahlil sonucu - karmaşık tablo"
-            class="w-full h-auto block"
-            loading="lazy"
-          />
-          <div class="absolute top-3 left-3">
-            <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-amber-100/95 dark:bg-amber-900/80 border border-amber-300/70 dark:border-amber-700/60 backdrop-blur text-amber-900 dark:text-amber-200 text-xs font-bold uppercase tracking-wider shadow-sm" data-i18n="before_after_before_label">Önce — Laboratuvar</span>
-          </div>
-        </div>
+      <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 lg:gap-8 max-w-6xl mx-auto items-stretch">
+        <article class="relative rounded-[1.75rem] border border-amber-200/70 dark:border-amber-900/40 bg-white/85 dark:bg-accent-900/45 shadow-[0_20px_60px_rgba(15,23,42,0.10)] overflow-hidden backdrop-blur-sm">
+          <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-amber-100/90 via-white/0 to-transparent dark:from-amber-900/20"></div>
+          <div class="relative p-5 sm:p-6">
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-amber-100/95 dark:bg-amber-900/70 border border-amber-300/70 dark:border-amber-700/50 text-amber-900 dark:text-amber-200 text-xs font-bold uppercase tracking-wider shadow-sm" data-i18n="before_after_before_label">Önce — Laboratuvar</span>
+              <span class="text-xs font-semibold text-amber-700 dark:text-amber-300">PDF / raw sheet</span>
+            </div>
 
-        <!-- After: Norya premium rapor (üstte, slider ile açılır) -->
-        <div
-          id="ba-slider"
-          class="absolute inset-0 overflow-hidden rounded-2xl shadow-2xl border border-[#0ea5a4]/30 dark:border-[#5eead4]/25"
-          style="touch-action:none; user-select:none; clip-path: inset(0 50% 0 0 round 1rem);"
-        >
-          <img
-            src="/static/images/og-sample-reports.png"
-            alt="Norya premium sağlık raporu"
-            class="absolute inset-0 w-full h-full object-cover"
-            style="object-position: 50% 50%;"
-            loading="lazy"
-          />
-          <div class="absolute top-3 right-3">
-            <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-[#0ea5a4]/95 dark:bg-[#14b8a6]/90 border border-[#0d9488]/70 dark:border-[#0d9488]/60 backdrop-blur text-white text-xs font-bold uppercase tracking-wider shadow-lg" data-i18n="before_after_after_label">Sonra — Norya</span>
-          </div>
-        </div>
+            <div class="rounded-[1.4rem] overflow-hidden border border-amber-100 dark:border-amber-900/30 bg-[#fffdf8] dark:bg-accent-950/40">
+              <img
+                src="/static/images/blog/how-to-read-blood-test-results.png"
+                alt="Laboratuvar tahlil sonucu - karmaşık tablo"
+                class="w-full h-auto block"
+                loading="lazy"
+              />
+            </div>
 
-        <!-- Slider Handle -->
-        <div
-          id="ba-handle"
-          class="absolute top-1/2 -translate-x-1/2 -translate-y-1/2 w-14 h-14 rounded-full bg-white dark:bg-accent-900 border-2 border-[#0ea5a4] dark:border-[#5eead4] shadow-[0_4px_24px_rgba(14,165,164,0.35)] flex items-center justify-center cursor-ew-resize z-10 hover:scale-110 active:scale-95 transition-transform"
-          role="slider"
-          aria-label="Kaydır"
-          aria-valuemin="0"
-          aria-valuemax="100"
-          aria-valuenow="50"
-          style="left: 50%;"
-        >
-          <svg class="w-6 h-6 text-[#0ea5a4] dark:text-[#5eead4]" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2.5">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M8 9l-4 3 4 3m8-6l4 3-4 3" />
-          </svg>
-        </div>
+            <div class="mt-4 grid grid-cols-2 gap-3">
+              <div class="rounded-2xl bg-amber-50/80 dark:bg-amber-900/15 border border-amber-100 dark:border-amber-900/30 p-3">
+                <div class="text-[11px] uppercase tracking-[0.16em] font-bold text-amber-700 dark:text-amber-300">Issue</div>
+                <div class="mt-1 text-sm font-semibold text-accent-900 dark:text-white">Dense tables</div>
+              </div>
+              <div class="rounded-2xl bg-amber-50/80 dark:bg-amber-900/15 border border-amber-100 dark:border-amber-900/30 p-3">
+                <div class="text-[11px] uppercase tracking-[0.16em] font-bold text-amber-700 dark:text-amber-300">Reading load</div>
+                <div class="mt-1 text-sm font-semibold text-accent-900 dark:text-white">High cognitive effort</div>
+              </div>
+            </div>
+          </div>
+        </article>
+
+        <article class="relative rounded-[1.75rem] border border-[#0ea5a4]/20 dark:border-[#5eead4]/20 bg-white/90 dark:bg-accent-900/55 shadow-[0_24px_70px_rgba(14,165,164,0.14)] overflow-hidden backdrop-blur-sm">
+          <div class="absolute inset-x-0 top-0 h-28 bg-gradient-to-r from-[#0ea5a4]/12 via-cyan-100/50 to-transparent dark:from-[#0ea5a4]/10 dark:via-cyan-400/5"></div>
+          <div class="relative p-5 sm:p-6">
+            <div class="flex items-center justify-between gap-3 mb-4">
+              <span class="inline-flex items-center px-3 py-1.5 rounded-full bg-[#0ea5a4]/95 dark:bg-[#14b8a6]/90 border border-[#0d9488]/60 dark:border-[#0d9488]/50 text-white text-xs font-bold uppercase tracking-wider shadow-lg" data-i18n="before_after_after_label">Sonra — Norya</span>
+              <span class="inline-flex items-center gap-2 rounded-full border border-emerald-200 dark:border-emerald-800 bg-emerald-50 dark:bg-emerald-900/20 px-3 py-1 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                <span>●</span>
+                <span>Premium summary</span>
+              </span>
+            </div>
+
+            <div class="rounded-[1.4rem] overflow-hidden border border-[#0ea5a4]/10 dark:border-accent-700/40 bg-[#f8fffe] dark:bg-accent-950/30 mb-4">
+              <img
+                src="/static/images/og-sample-reports.png"
+                alt="Norya premium sağlık raporu"
+                class="w-full h-auto block"
+                loading="lazy"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+              <div class="rounded-2xl bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 p-3">
+                <div class="text-[11px] uppercase tracking-[0.16em] font-bold text-accent-500 dark:text-accent-400">Format</div>
+                <div class="mt-1 text-sm font-semibold text-accent-900 dark:text-white">Executive layout</div>
+              </div>
+              <div class="rounded-2xl bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 p-3">
+                <div class="text-[11px] uppercase tracking-[0.16em] font-bold text-accent-500 dark:text-accent-400">Insight</div>
+                <div class="mt-1 text-sm font-semibold text-accent-900 dark:text-white">Risk-first summary</div>
+              </div>
+              <div class="rounded-2xl bg-white dark:bg-accent-800/50 border border-accent-100 dark:border-accent-700/40 p-3">
+                <div class="text-[11px] uppercase tracking-[0.16em] font-bold text-accent-500 dark:text-accent-400">Output</div>
+                <div class="mt-1 text-sm font-semibold text-accent-900 dark:text-white">Patient friendly</div>
+              </div>
+            </div>
+          </div>
+        </article>
       </div>
 
-      <div class="mt-8 flex items-center justify-center gap-3 text-sm">
-        <span class="inline-flex items-center gap-2 text-amber-700 dark:text-amber-300">
+      <div class="mt-8 flex flex-wrap items-center justify-center gap-3 text-sm">
+        <span class="inline-flex items-center gap-2 rounded-full border border-amber-200 dark:border-amber-900/40 bg-amber-50 dark:bg-amber-900/15 px-4 py-2 text-amber-700 dark:text-amber-300">
           <span class="w-2 h-2 rounded-full bg-amber-500"></span>
           <span data-i18n="before_after_before_label">Önce — Laboratuvar</span>
         </span>
-        <span class="w-12 h-px bg-accent-300 dark:bg-accent-700"></span>
-        <span class="inline-flex items-center gap-2 text-[#0f766e] dark:text-[#5eead4]">
+        <span class="inline-flex items-center gap-2 rounded-full border border-[#0ea5a4]/20 dark:border-[#5eead4]/20 bg-[#f0fdfa] dark:bg-[#0ea5a4]/10 px-4 py-2 text-[#0f766e] dark:text-[#5eead4]">
           <span class="w-2 h-2 rounded-full bg-[#0ea5a4]"></span>
           <span data-i18n="before_after_after_label">Sonra — Norya</span>
         </span>
@@ -6647,76 +6438,6 @@
     </div>
   </section>
 
-  <script>
-    (function () {
-      var slider = document.getElementById('ba-slider');
-      if (!slider) return;
-
-      var handle = document.getElementById('ba-handle');
-      if (!handle) return;
-
-      var isDragging = false;
-      var containerRect = null;
-
-      function updateSlider(clientX) {
-        if (!containerRect) containerRect = slider.parentElement.getBoundingClientRect();
-        var x = clientX - containerRect.left;
-        var percent = Math.max(0, Math.min(100, (x / containerRect.width) * 100));
-        slider.style.clipPath = 'inset(0 ' + (100 - percent) + '% 0 0 round 1rem)';
-        handle.style.left = percent + '%';
-        handle.setAttribute('aria-valuenow', Math.round(percent));
-      }
-
-      function onPointerDown(e) {
-        isDragging = true;
-        handle.setPointerCapture(e.pointerId);
-        containerRect = slider.parentElement.getBoundingClientRect();
-        e.preventDefault();
-      }
-
-      function onPointerMove(e) {
-        if (!isDragging) return;
-        updateSlider(e.clientX);
-      }
-
-      function onPointerUp(e) {
-        isDragging = false;
-        handle.releasePointerCapture(e.pointerId);
-      }
-
-      handle.addEventListener('pointerdown', onPointerDown);
-      handle.addEventListener('pointermove', onPointerMove);
-      handle.addEventListener('pointerup', onPointerUp);
-      handle.addEventListener('pointerleave', onPointerUp);
-
-      // Touch support
-      handle.addEventListener('touchstart', function(e) {
-        isDragging = true;
-        containerRect = slider.parentElement.getBoundingClientRect();
-        e.preventDefault();
-      });
-
-      handle.addEventListener('touchmove', function(e) {
-        if (!isDragging) return;
-        updateSlider(e.touches[0].clientX);
-        e.preventDefault();
-      });
-
-      handle.addEventListener('touchend', onPointerUp);
-
-      // Keyboard support
-      handle.addEventListener('keydown', function(e) {
-        var current = parseInt(handle.getAttribute('aria-valuenow') || '50', 10);
-        if (e.key === 'ArrowLeft') {
-          updateSlider(containerRect.left + (containerRect.width * (current - 5) / 100));
-          e.preventDefault();
-        } else if (e.key === 'ArrowRight') {
-          updateSlider(containerRect.left + (containerRect.width * (current + 5) / 100));
-          e.preventDefault();
-        }
-      });
-    })();
-  </script>
   <!-- How It Works — v24 editorial 3-step -->
   <section class="py-16 sm:py-20 bg-white dark:bg-accent-900/20 overflow-x-hidden">
     <div class="max-w-6xl mx-auto px-4 sm:px-6">
@@ -7002,186 +6723,143 @@
 
 
 
-  <!-- 3) Premium Health Report Carousel -->
-  <section id="ornek-klinik-rapor" class="py-16 sm:py-24" style="background:#f8fffe;">
-    <div class="max-w-5xl mx-auto px-4 sm:px-6 text-center mb-10">
-      <p class="text-xs font-bold tracking-[0.2em] uppercase mb-3" style="color:#0ea5a4;" data-i18n="report_preview_badge">Sample report</p>
-      <h2 class="text-2xl sm:text-3xl font-extrabold text-accent-900 dark:text-white mb-3" data-i18n="health_dashboard_title">Premium Health Report Preview</h2>
-      <p class="text-sm sm:text-base text-accent-600 dark:text-accent-400 max-w-2xl mx-auto" data-i18n="sample_report_desc">Your lab results are presented in clinical report format with score, risk indicator and trend.</p>
-      <div class="mt-6 flex flex-col sm:flex-row flex-wrap items-center justify-center gap-2 sm:gap-1 text-sm">
-        <span class="text-accent-500 dark:text-accent-400 font-medium" data-i18n="sample_report_links_intro">Explore:</span>
-        <a href="/for-doctors?lang=en" class="font-semibold text-[#0ea5a4] hover:underline underline-offset-4" data-i18n="sample_link_doctors" data-locale-link="for-doctors">For doctors</a>
-        <span class="hidden sm:inline text-accent-300 dark:text-accent-600" aria-hidden="true">·</span>
-        <a href="/for-clinics?lang=en" class="font-semibold text-[#0ea5a4] hover:underline underline-offset-4" data-i18n="sample_link_clinics" data-locale-link="for-clinics">For clinics</a>
-        <span class="hidden sm:inline text-accent-300 dark:text-accent-600" aria-hidden="true">·</span>
-        <a href="/en/compare/" class="font-semibold text-[#0ea5a4] hover:underline underline-offset-4" data-i18n="sample_link_compare" data-compare-nav-link="1">Compare Norya</a>
-      </div>
-    </div>
+  <!-- 3) Premium report showcase -->
+  <section id="ornek-klinik-rapor" class="py-16 sm:py-24 bg-gradient-to-b from-[#f8fffe] via-white to-[#f3fbfb] dark:from-accent-950 dark:via-accent-900/30 dark:to-accent-950 overflow-hidden">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6">
+      <div class="grid grid-cols-1 lg:grid-cols-[0.92fr_1.08fr] gap-8 lg:gap-12 items-center">
+        <div>
+          <p class="text-xs font-bold tracking-[0.2em] uppercase mb-3 text-[#0ea5a4]" data-i18n="report_preview_badge">Sample report</p>
+          <h2 class="text-3xl sm:text-4xl font-extrabold text-accent-900 dark:text-white leading-tight mb-4" data-i18n="health_dashboard_title">Premium Health Report Preview</h2>
+          <p class="text-sm sm:text-base text-accent-600 dark:text-accent-300 max-w-xl leading-7 mb-6" data-i18n="sample_report_desc">Your lab results are presented in clinical report format with score, risk indicator and trend.</p>
 
-    <div class="report-carousel-wrap">
-      <button type="button" class="carousel-arrow left" id="rcLeft" aria-label="Previous" data-i18n-aria-label="carousel_prev">&#8249;</button>
-      <button type="button" class="carousel-arrow right" id="rcRight" aria-label="Next" data-i18n-aria-label="carousel_next">&#8250;</button>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-6">
+            <div class="rounded-2xl border border-[#0EA5A4]/15 bg-white/90 dark:bg-accent-800/60 dark:border-accent-700/50 p-4 shadow-[0_10px_30px_rgba(14,165,164,0.08)]">
+              <div class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-accent-500 dark:text-accent-400">Health score</div>
+              <div class="mt-2 text-3xl font-extrabold text-accent-900 dark:text-white">84<span class="text-sm font-semibold text-accent-400">/100</span></div>
+              <div class="mt-2 inline-flex items-center rounded-full bg-emerald-50 text-emerald-700 dark:bg-emerald-900/20 dark:text-emerald-300 px-2.5 py-1 text-xs font-semibold">Low risk</div>
+            </div>
+            <div class="rounded-2xl border border-[#0EA5A4]/15 bg-white/90 dark:bg-accent-800/60 dark:border-accent-700/50 p-4 shadow-[0_10px_30px_rgba(14,165,164,0.08)]">
+              <div class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-accent-500 dark:text-accent-400">Clarity</div>
+              <div class="mt-2 text-lg font-bold text-accent-900 dark:text-white">Biomarkers grouped</div>
+              <div class="mt-2 text-sm text-accent-600 dark:text-accent-300">Risk, trends and clinical notes in one clean flow.</div>
+            </div>
+            <div class="rounded-2xl border border-[#0EA5A4]/15 bg-white/90 dark:bg-accent-800/60 dark:border-accent-700/50 p-4 shadow-[0_10px_30px_rgba(14,165,164,0.08)]">
+              <div class="text-[0.7rem] font-semibold uppercase tracking-[0.16em] text-accent-500 dark:text-accent-400">Trust</div>
+              <div class="mt-2 text-lg font-bold text-accent-900 dark:text-white">QR verified</div>
+              <div class="mt-2 text-sm text-accent-600 dark:text-accent-300">Structured output designed for patients and clinics.</div>
+            </div>
+          </div>
 
-      <div class="report-carousel" id="reportCarousel">
-
-        <!-- Card 1: Health Score -->
-        <div class="report-card">
-          <div class="report-card-header">
-            <h4 data-i18n="rc_health_title">Health Score</h4>
-            <span class="rc-page" data-i18n="rc_page_1">Page 1 / 5</span>
-          </div>
-          <div class="report-card-body" style="text-align:center;">
-            <div class="rc-gauge-ring">
-              <svg viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg">
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#e2e8f0" stroke-width="10"/>
-                <circle cx="60" cy="60" r="50" fill="none" stroke="#0ea5a4" stroke-width="10"
-                        stroke-dasharray="264" stroke-dashoffset="42" stroke-linecap="round"
-                        transform="rotate(-90 60 60)"/>
-                <text x="60" y="56" text-anchor="middle" font-size="28" font-weight="800" fill="#0f172a">84</text>
-                <text x="60" y="72" text-anchor="middle" font-size="10" fill="#64748b">/ 100</text>
-              </svg>
-            </div>
-            <div style="display:flex;justify-content:center;gap:0.75rem;margin-bottom:1rem;">
-              <span class="rc-status normal" data-i18n="rc_low_risk">● Low Risk</span>
-            </div>
-            <div style="text-align:left;">
-              <p style="font-size:0.8rem;color:#334155;line-height:1.6;margin:0;" data-i18n="rc_health_desc">Your overall health score is 84/100. Your blood values are largely within reference ranges. Vitamin D supplementation and regular check-ups are recommended.</p>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: Diabetes & Metabolic Risk -->
-        <div class="report-card">
-          <div class="report-card-header">
-            <h4 data-i18n="rc_diabetes_title">Diabetes &amp; Metabolic Risk</h4>
-            <span class="rc-page" data-i18n="rc_page_2">Page 2 / 5</span>
-          </div>
-          <div class="report-card-body">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.75rem;">
-              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_risk_score">Risk Score</span>
-              <span style="font-size:1.5rem;font-weight:800;color:#22c55e;">28<span style="font-size:0.75rem;color:#94a3b8;font-weight:500;"> / 100</span></span>
-            </div>
-            <div style="margin-bottom:1.25rem;">
-              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span data-i18n="rc_glucose">Glucose</span><span style="font-weight:600;">98 mg/dL</span>
-              </div>
-              <div class="rc-bar-track"><div class="rc-bar-fill good" style="width:54%;"></div></div>
-            </div>
-            <div style="margin-bottom:1.25rem;">
-              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span>HbA1c</span><span style="font-weight:600;">5.4%</span>
-              </div>
-              <div class="rc-bar-track"><div class="rc-bar-fill good" style="width:45%;"></div></div>
-            </div>
-            <div style="margin-bottom:1rem;">
-              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span data-i18n="rc_insulin">Insulin</span><span style="font-weight:600;">8.2 µIU/mL</span>
-              </div>
-              <div class="rc-bar-track"><div class="rc-bar-fill good" style="width:41%;"></div></div>
-            </div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <span class="rc-status normal" data-i18n="rc_glucose_normal">● Glucose Normal</span>
-              <span class="rc-status normal" data-i18n="rc_hba1c_normal">● HbA1c Normal</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 3: Heart & Lipid Profile -->
-        <div class="report-card">
-          <div class="report-card-header">
-            <h4 data-i18n="rc_heart_title">Heart &amp; Lipid Profile</h4>
-            <span class="rc-page" data-i18n="rc_page_3">Page 3 / 5</span>
-          </div>
-          <div class="report-card-body">
-            <div style="display:flex;justify-content:space-between;align-items:baseline;margin-bottom:0.75rem;">
-              <span style="font-size:0.75rem;font-weight:700;color:#64748b;text-transform:uppercase;letter-spacing:0.06em;" data-i18n="rc_cardio_risk">Cardiovascular Risk</span>
-              <span style="font-size:1.5rem;font-weight:800;color:#f59e0b;">42<span style="font-size:0.75rem;color:#94a3b8;font-weight:500;"> / 100</span></span>
-            </div>
-            <div style="margin-bottom:1.25rem;">
-              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span>LDL</span><span style="font-weight:600;">128 mg/dL</span>
-              </div>
-              <div class="rc-bar-track"><div class="rc-bar-fill warn" style="width:64%;"></div></div>
-            </div>
-            <div style="margin-bottom:1.25rem;">
-              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span>HDL</span><span style="font-weight:600;">48 mg/dL</span>
-              </div>
-              <div class="rc-bar-track"><div class="rc-bar-fill" style="width:48%;"></div></div>
-            </div>
-            <div style="margin-bottom:1rem;">
-              <div style="display:flex;justify-content:space-between;font-size:0.75rem;color:#475569;margin-bottom:4px;">
-                <span data-i18n="rc_triglyceride">Triglycerides</span><span style="font-weight:600;">142 mg/dL</span>
-              </div>
-              <div class="rc-bar-track"><div class="rc-bar-fill" style="width:57%;"></div></div>
-            </div>
-            <div style="display:flex;gap:0.5rem;flex-wrap:wrap;">
-              <span class="rc-status warn" data-i18n="rc_ldl_borderline">● LDL Borderline</span>
-              <span class="rc-status normal" data-i18n="rc_hdl_normal">● HDL Normal</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 4: Biomarker Table -->
-        <div class="report-card">
-          <div class="report-card-header">
-            <h4 data-i18n="rc_biomarker_title">Biomarker Table</h4>
-            <span class="rc-page" data-i18n="rc_page_4">Page 4 / 5</span>
-          </div>
-          <div class="report-card-body" style="padding:1rem 1.25rem;">
-            <div class="rc-table-wrap" role="region" aria-label="Sample biomarker table" tabindex="0">
-              <table class="rc-table">
-                <thead>
-                  <tr><th data-i18n="rc_th_marker">Marker</th><th data-i18n="rc_th_result">Result</th><th data-i18n="rc_th_reference">Reference</th><th data-i18n="rc_th_status">Status</th></tr>
-                </thead>
-                <tbody>
-                  <tr><td data-i18n="rc_glucose">Glucose</td><td>98 mg/dL</td><td>70–100</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
-                  <tr><td>HbA1c</td><td>5.4%</td><td>&lt; 5.7</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
-                  <tr><td>LDL</td><td>128 mg/dL</td><td>&lt; 130</td><td><span class="rc-status warn" data-i18n="rc_borderline">Borderline</span></td></tr>
-                  <tr><td>HDL</td><td>48 mg/dL</td><td>&gt; 40</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
-                  <tr><td>Vit D</td><td>18 ng/mL</td><td>30–100</td><td><span class="rc-status high" data-i18n="rc_low">Low</span></td></tr>
-                  <tr><td>B12</td><td>240 pg/mL</td><td>200–900</td><td><span class="rc-status warn" data-i18n="rc_borderline">Borderline</span></td></tr>
-                  <tr><td>CRP</td><td>2.1 mg/L</td><td>&lt; 5</td><td><span class="rc-status normal" data-i18n="rc_normal">Normal</span></td></tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 5: Clinical Summary & Recommendations -->
-        <div class="report-card">
-          <div class="report-card-header">
-            <h4 data-i18n="rc_summary_title">Clinical Summary &amp; Recommendations</h4>
-            <span class="rc-page" data-i18n="rc_page_5">Page 5 / 5</span>
-          </div>
-          <div class="report-card-body">
-            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.75rem;" data-i18n="rc_key_findings">Key Findings</p>
-            <div style="display:flex;flex-direction:column;gap:0.6rem;margin-bottom:1.25rem;">
-              <div class="rc-finding" data-i18n="rc_finding_1">LDL cholesterol near the upper reference limit; dietary and activity-based follow-up recommended.</div>
-              <div class="rc-finding" data-i18n="rc_finding_2">Vitamin D is low; sunlight and supplementation should be evaluated with your doctor.</div>
-              <div class="rc-finding" data-i18n="rc_finding_3">B12 is borderline; nutritional or supplemental support may be discussed with your physician.</div>
-            </div>
-            <p style="font-size:0.7rem;font-weight:700;text-transform:uppercase;letter-spacing:0.06em;color:#64748b;margin-bottom:0.5rem;" data-i18n="rc_next_steps">Next Steps</p>
-            <div style="display:flex;flex-direction:column;gap:0.5rem;margin-bottom:1.25rem;">
-              <div class="rc-finding" data-i18n="rc_step_1">Repeat Vitamin D and B12 in 3 months</div>
-              <div class="rc-finding" data-i18n="rc_step_2">Lipid panel check-up in 6 months</div>
-              <div class="rc-finding" data-i18n="rc_step_3">Annual general blood test</div>
-            </div>
-            <div style="display:flex;align-items:center;gap:0.5rem;padding:0.75rem;border-radius:0.75rem;background:#f0fdfa;border:1px solid #ccfbf1;">
-              <span style="font-size:1.25rem;">✅</span>
+          <div class="space-y-3 mb-8">
+            <div class="flex items-start gap-3 rounded-2xl border border-accent-100 dark:border-accent-800 bg-white/80 dark:bg-accent-900/40 p-4">
+              <span class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] font-bold">1</span>
               <div>
-                <p style="font-size:0.75rem;font-weight:700;color:#0f766e;margin:0;" data-i18n="rc_qr_title">QR Verified Report</p>
-                <p style="font-size:0.65rem;color:#64748b;margin:0;" data-i18n="rc_qr_desc">Generated by NoryaAI — authenticity verified</p>
+                <div class="font-semibold text-accent-900 dark:text-white">Clinical summary first</div>
+                <div class="text-sm text-accent-600 dark:text-accent-300">The most important findings are surfaced instantly instead of hiding inside a crowded slider.</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 rounded-2xl border border-accent-100 dark:border-accent-800 bg-white/80 dark:bg-accent-900/40 p-4">
+              <span class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] font-bold">2</span>
+              <div>
+                <div class="font-semibold text-accent-900 dark:text-white">Premium visual hierarchy</div>
+                <div class="text-sm text-accent-600 dark:text-accent-300">Cleaner cards, softer surfaces and more whitespace make the section feel more premium and trustworthy.</div>
+              </div>
+            </div>
+            <div class="flex items-start gap-3 rounded-2xl border border-accent-100 dark:border-accent-800 bg-white/80 dark:bg-accent-900/40 p-4">
+              <span class="mt-0.5 inline-flex h-7 w-7 items-center justify-center rounded-full bg-[#0EA5A4]/10 text-[#0EA5A4] font-bold">3</span>
+              <div>
+                <div class="font-semibold text-accent-900 dark:text-white">No overlap, no fragile carousel</div>
+                <div class="text-sm text-accent-600 dark:text-accent-300">The broken sliding composition is replaced with a stable showcase that reads well on desktop and mobile.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flex flex-col sm:flex-row flex-wrap gap-3">
+            <a href="/upload" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl bg-[#0EA5A4] text-white font-semibold shadow-[0_10px_30px_rgba(14,165,164,0.22)] hover:bg-[#0d9488] transition-colors" data-i18n="example_btn_analyze">Analiz Yap</a>
+            <a href="/payment" class="inline-flex items-center justify-center min-h-[48px] px-6 py-3 rounded-2xl border border-[#0EA5A4]/20 bg-white/85 dark:bg-accent-900/50 dark:border-accent-700 text-[#0d9488] dark:text-[#5eead4] font-semibold hover:bg-[#0EA5A4]/10 transition-colors">View pricing</a>
+          </div>
+        </div>
+
+        <div>
+          <div class="relative rounded-[2rem] border border-[#0EA5A4]/15 dark:border-accent-700/50 bg-white/90 dark:bg-accent-900/60 shadow-[0_30px_80px_rgba(15,23,42,0.12)] overflow-hidden">
+            <div class="absolute inset-x-0 top-0 h-24 bg-gradient-to-r from-[#0EA5A4]/14 via-cyan-100/60 to-transparent dark:from-[#0EA5A4]/10 dark:via-cyan-400/5 dark:to-transparent"></div>
+            <div class="relative p-5 sm:p-7">
+              <div class="flex items-center justify-between gap-4 mb-6">
+                <div>
+                  <div class="text-[0.7rem] uppercase tracking-[0.18em] font-semibold text-accent-500 dark:text-accent-400">Norya premium report</div>
+                  <div class="mt-1 text-xl sm:text-2xl font-bold text-accent-900 dark:text-white">Executive clinical snapshot</div>
+                </div>
+                <div class="inline-flex items-center gap-2 rounded-full border border-emerald-200 bg-emerald-50 dark:bg-emerald-900/20 dark:border-emerald-800 px-3 py-1.5 text-xs font-semibold text-emerald-700 dark:text-emerald-300">
+                  <span>●</span>
+                  <span>Verified</span>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-[180px_1fr] gap-4 mb-5">
+                <div class="rounded-3xl bg-gradient-to-br from-[#0EA5A4] to-[#006a69] text-white p-5 shadow-[0_18px_40px_rgba(14,165,164,0.24)]">
+                  <div class="text-xs uppercase tracking-[0.16em] text-white/70">Health score</div>
+                  <div class="mt-4 text-5xl font-extrabold leading-none">84</div>
+                  <div class="mt-1 text-sm text-white/75">Low overall risk</div>
+                  <div class="mt-5 h-2 rounded-full bg-white/20 overflow-hidden">
+                    <div class="h-full w-[84%] rounded-full bg-white"></div>
+                  </div>
+                </div>
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div class="rounded-2xl border border-accent-100 dark:border-accent-700 bg-[#f8fffe] dark:bg-accent-800/50 p-4">
+                    <div class="text-xs uppercase tracking-[0.14em] font-semibold text-accent-500 dark:text-accent-400">Metabolic</div>
+                    <div class="mt-2 text-2xl font-bold text-emerald-600">28</div>
+                    <div class="mt-1 text-sm text-accent-600 dark:text-accent-300">Glucose and HbA1c within expected range.</div>
+                  </div>
+                  <div class="rounded-2xl border border-accent-100 dark:border-accent-700 bg-[#fffaf0] dark:bg-amber-900/10 p-4">
+                    <div class="text-xs uppercase tracking-[0.14em] font-semibold text-accent-500 dark:text-accent-400">Cardiovascular</div>
+                    <div class="mt-2 text-2xl font-bold text-amber-500">42</div>
+                    <div class="mt-1 text-sm text-accent-600 dark:text-accent-300">LDL is borderline and worth follow-up.</div>
+                  </div>
+                  <div class="rounded-2xl border border-accent-100 dark:border-accent-700 bg-white dark:bg-accent-800/50 p-4 sm:col-span-2">
+                    <div class="flex items-center justify-between gap-4 mb-3">
+                      <div class="text-xs uppercase tracking-[0.14em] font-semibold text-accent-500 dark:text-accent-400">Top biomarkers</div>
+                      <div class="text-xs text-accent-400">Preview</div>
+                    </div>
+                    <div class="space-y-3">
+                      <div>
+                        <div class="flex items-center justify-between text-sm mb-1"><span class="text-accent-700 dark:text-accent-200">Glucose</span><span class="font-semibold text-accent-900 dark:text-white">98 mg/dL</span></div>
+                        <div class="h-2 rounded-full bg-slate-100 dark:bg-accent-700 overflow-hidden"><div class="h-full w-[54%] rounded-full bg-emerald-500"></div></div>
+                      </div>
+                      <div>
+                        <div class="flex items-center justify-between text-sm mb-1"><span class="text-accent-700 dark:text-accent-200">LDL</span><span class="font-semibold text-accent-900 dark:text-white">128 mg/dL</span></div>
+                        <div class="h-2 rounded-full bg-slate-100 dark:bg-accent-700 overflow-hidden"><div class="h-full w-[64%] rounded-full bg-amber-400"></div></div>
+                      </div>
+                      <div>
+                        <div class="flex items-center justify-between text-sm mb-1"><span class="text-accent-700 dark:text-accent-200">Vitamin D</span><span class="font-semibold text-accent-900 dark:text-white">18 ng/mL</span></div>
+                        <div class="h-2 rounded-full bg-slate-100 dark:bg-accent-700 overflow-hidden"><div class="h-full w-[32%] rounded-full bg-rose-400"></div></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div class="rounded-2xl border border-accent-100 dark:border-accent-700 bg-white dark:bg-accent-800/50 p-4">
+                  <div class="text-xs uppercase tracking-[0.14em] font-semibold text-accent-500 dark:text-accent-400 mb-3">Key findings</div>
+                  <div class="space-y-2 text-sm text-accent-700 dark:text-accent-200">
+                    <div class="rounded-xl bg-accent-50 dark:bg-accent-900/40 px-3 py-2">LDL cholesterol is near the upper reference range.</div>
+                    <div class="rounded-xl bg-accent-50 dark:bg-accent-900/40 px-3 py-2">Vitamin D is low and should be reviewed clinically.</div>
+                    <div class="rounded-xl bg-accent-50 dark:bg-accent-900/40 px-3 py-2">B12 is borderline with mild nutritional concern.</div>
+                  </div>
+                </div>
+                <div class="rounded-2xl border border-accent-100 dark:border-accent-700 bg-white dark:bg-accent-800/50 p-4">
+                  <div class="text-xs uppercase tracking-[0.14em] font-semibold text-accent-500 dark:text-accent-400 mb-3">Recommended next steps</div>
+                  <div class="space-y-2 text-sm text-accent-700 dark:text-accent-200">
+                    <div class="rounded-xl border border-emerald-100 dark:border-emerald-900/40 bg-emerald-50/70 dark:bg-emerald-900/10 px-3 py-2">Repeat Vitamin D and B12 in 3 months.</div>
+                    <div class="rounded-xl border border-amber-100 dark:border-amber-900/40 bg-amber-50/70 dark:bg-amber-900/10 px-3 py-2">Review lipid profile again in 6 months.</div>
+                    <div class="rounded-xl border border-sky-100 dark:border-sky-900/40 bg-sky-50/70 dark:bg-sky-900/10 px-3 py-2">Continue annual blood screening follow-up.</div>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-      </div><!-- /.report-carousel -->
-    </div><!-- /.report-carousel-wrap -->
-
-    <div class="text-center mt-8">
-      <a href="/upload" style="display:inline-flex;align-items:center;justify-content:center;min-height:48px;padding:0.75rem 2rem;border-radius:1rem;background:#0ea5a4;color:#fff;font-weight:600;font-size:0.95rem;text-decoration:none;box-shadow:0 4px 14px rgba(14,165,164,0.35);transition:background 0.2s;" onmouseover="this.style.background='#0d9488'" onmouseout="this.style.background='#0ea5a4'" data-i18n="example_btn_analyze">Analiz Yap</a>
+      </div>
     </div>
   </section>
 
@@ -7249,15 +6927,6 @@
   </section>
 
   <script>
-  (function() {
-    var carousel = document.getElementById('reportCarousel');
-    var leftBtn = document.getElementById('rcLeft');
-    var rightBtn = document.getElementById('rcRight');
-    if (!carousel) return;
-    var cardWidth = carousel.querySelector('.report-card') ? carousel.querySelector('.report-card').offsetWidth + 20 : 340;
-    leftBtn.addEventListener('click', function() { carousel.scrollBy({ left: -cardWidth, behavior: 'smooth' }); });
-    rightBtn.addEventListener('click', function() { carousel.scrollBy({ left: cardWidth, behavior: 'smooth' }); });
-  })();
   </script>
 
   <script>

@@ -14,9 +14,9 @@ class CreateSessionRequest(BaseModel):
 
 
 class GrantPaymentRequest(BaseModel):
-    """Destek: Ödedim hak gelmedi durumunda manuel hak tanıma (admin_secret gerekir)."""
+    """Destek: Ödedim hak gelmedi durumunda manuel hak tanıma."""
     merchant_oid: str
-    admin_secret: str
+    admin_secret: str | None = None
 
 
 class GuestSessionRequest(BaseModel):

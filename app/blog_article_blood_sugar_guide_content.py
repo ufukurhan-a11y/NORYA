@@ -1439,7 +1439,7 @@ def build_blood_sugar_article() -> Article:
         id="blood-sugar-levels-guide",
         published_at=date(2026, 3, 25),
         read_minutes=14,
-        cover_image="/static/images/blog/hba1c-hero.jpg",
+        cover_image="/static/images/blog/hba1c-hero.png",
         category={
             "en": "Blood Sugar",
             "tr": "Kan Şekeri",

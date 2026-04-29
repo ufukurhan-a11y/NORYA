@@ -1706,7 +1706,7 @@ def build_annual_tests_article():
         id="essential-annual-blood-tests",
         published_at=date(2026, 3, 25),
         read_minutes=12,
-        cover_image="/static/images/blog/annual-blood-tests-hero.jpg",
+        cover_image="/static/images/blog/how-to-read-blood-test-results.png",
         category={
             "en": "Blood Tests",
             "tr": "Kan Testleri",

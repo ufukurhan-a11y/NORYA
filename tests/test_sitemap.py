@@ -6,7 +6,7 @@ from fastapi.testclient import TestClient
 def test_is_public_indexable_url_helper():
     """is_public_indexable_url helper'ı private URL'leri doğru şekilde filtrelemeli."""
     from app.main import is_public_indexable_url
-    
+
     # Public URL'ler True dönmeli
     public_urls = [
         "/",
@@ -35,10 +35,13 @@ def test_is_public_indexable_url_helper():
         "/security",
         "/enterprise-security",
         "/clinical-demo",
+        "/en/countries/de",
+        "/de/countries/de",
+        "/tr/countries/tr",
     ]
     for url in public_urls:
         assert is_public_indexable_url(url) is True, f"'{url}' public indexable olmalı"
-    
+
     # Private URL'ler False dönmeli
     private_urls = [
         "/admin",
@@ -119,7 +122,7 @@ def test_sitemap_xml_does_not_contain_private_routes(client: TestClient):
     r = client.get("/sitemap.xml")
     assert r.status_code == 200
     body = r.text
-    
+
     # Private URL'ler sitemap'te olmamalı
     private_paths = [
         "/analyze/export",
@@ -279,6 +282,87 @@ def test_sitemap_xml_contains_seo_landing_urls(client: TestClient):
         assert path in body, f"sitemap.xml içinde {path} bulunamadı"
 
 
+COUNTRY_LANDING_PATHS = [
+    "/en/countries/de",
+    "/de/countries/de",
+    "/tr/countries/tr",
+]
+
+
+def test_country_landing_pages_return_200_and_include_country_metadata(client: TestClient):
+    for path in COUNTRY_LANDING_PATHS:
+        r = client.get(path)
+        assert r.status_code == 200, f"{path} returned {r.status_code}"
+        assert "<link rel=\"canonical\"" in r.text
+        assert "/countries/" in r.text
+        assert 'window.__COUNTRY_CONTEXT__=' in r.text
+        assert 'hreflang="x-default"' in r.text
+
+
+
+def test_country_landing_pages_include_country_specific_copy_links_and_sections(client: TestClient):
+    de = client.get("/de/countries/de")
+    assert de.status_code == 200
+    assert "Blutwerte in Deutschland besser verstehen" in de.text
+    assert "Relevante Länder- und Laborleitfäden" in de.text
+    assert '"internalLinks":' in de.text
+    assert 'data-country-sections="true"' in de.text
+    assert '"sections":' in de.text
+    assert "Länderspezifischer Nutzungsleitfaden" in de.text
+    assert "Wie wird Norya in Deutschland genutzt?" in de.text
+    assert '"@type": "BreadcrumbList"' in de.text
+    assert '"@type": "ItemList"' in de.text
+    assert "/de/blog/" in de.text
+    assert "Neuer Blogleitfaden für Deutschland" in de.text
+
+    tr = client.get("/tr/countries/tr")
+    assert tr.status_code == 200
+    assert "Türkiye'de kan tahlili sonuçlarını daha net anlayın" in tr.text
+    assert "İlgili ülke rehberleri" in tr.text
+    assert "Ülkeye özel kullanım rehberi" in tr.text
+    assert "Türkiye için nasıl kullanılır?" in tr.text
+    assert "/tr/blog/" in tr.text
+    assert "Türkiye için yeni blog rehberi" in tr.text
+
+    ar = client.get("/ar/countries/sa")
+    assert ar.status_code == 200
+    assert "افهم نتائج تحاليل الدم في السعودية بشكل أوضح" in ar.text
+    assert "روابط وإرشادات ذات صلة" in ar.text
+    assert "دليل استخدام مخصص حسب الدولة" in ar.text
+    assert "كيف يمكن استخدام Norya في المملكة العربية السعودية؟" in ar.text
+    assert "/ar/blog/" in ar.text
+    assert "دليل مدونة جديد لمستخدمي المملكة العربية السعودية" in ar.text
+
+
+
+def test_country_discovery_helper_builds_country_urls():
+    from app.main import _country_discovery_urls
+
+    urls = _country_discovery_urls("https://noryaai.com")
+    assert urls
+    assert "https://noryaai.com/en/countries/de" in urls
+    assert "https://noryaai.com/de/countries/de" in urls
+    assert all("/countries/" in url for url in urls)
+
+
+def test_country_landing_pages_do_not_geo_redirect(client: TestClient):
+    r = client.get(
+        "/en/countries/de",
+        headers={"x-forwarded-for": "88.198.1.1", "accept-language": "de-DE,de;q=0.9"},
+        follow_redirects=False,
+    )
+    assert r.status_code == 200
+    assert str(r.url).endswith("/en/countries/de")
+
+
+def test_sitemap_xml_contains_country_landing_urls(client: TestClient):
+    r = client.get("/sitemap.xml")
+    assert r.status_code == 200
+    body = r.text
+    for path in COUNTRY_LANDING_PATHS:
+        assert path in body, f"sitemap.xml içinde {path} bulunamadı"
+
+
 def test_analyze_export_has_noindex_header(client: TestClient, auth_headers: dict):
     """/analyze/export endpoint'i X-Robots-Tag: noindex, nofollow header'ı dönmeli."""
     # Authenticated istek ile test et (çünkü auth gerektiriyor)
@@ -299,7 +383,7 @@ def test_analyze_history_endpoints_have_noindex(client: TestClient, auth_headers
     r = client.get("/analyze/history", headers=auth_headers)
     assert r.status_code == 200
     assert "noindex" in r.headers.get("X-Robots-Tag", "").lower()
-    
+
     # GET /analyze/usage
     r = client.get("/analyze/usage", headers=auth_headers)
     assert r.status_code == 200

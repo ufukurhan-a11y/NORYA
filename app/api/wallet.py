@@ -3,18 +3,30 @@ import logging
 
 from fastapi import APIRouter, Depends, HTTPException
 from pydantic import BaseModel
-from sqlmodel import Session
+from sqlmodel import Session, select
 
 from app.core.database import get_db
 from app.api.deps import get_current_user
 from app.models.user import User
 from app.services import wallet_service
 from app.tenants.isolation import require_tenant_active
-from app.models.institution import Institution
+from app.models.institution import Institution, InstitutionMembership
 
 logger = logging.getLogger(__name__)
 
 router = APIRouter(prefix="/api/wallet", tags=["wallet"])
+
+
+
+def _require_tenant_admin(tenant: Institution, user: User, db: Session) -> None:
+    membership_stmt = select(InstitutionMembership).where(
+        InstitutionMembership.institution_id == tenant.id,
+        InstitutionMembership.user_id == user.id,
+        InstitutionMembership.role.in_(["owner", "admin"]),
+        InstitutionMembership.is_active == True,
+    )
+    if db.exec(membership_stmt).first() is None:
+        raise HTTPException(status_code=403, detail="Admin or owner role required")
 
 
 class LoadCreditsRequest(BaseModel):
@@ -86,27 +98,15 @@ async def get_wallet_transactions(
 async def load_credits(
     request: LoadCreditsRequest,
     user: User = Depends(get_current_user),
+    tenant: Institution = Depends(require_tenant_active),
     db: Session = Depends(get_db),
 ):
-    """Load credits to current tenant wallet (admin only).
-
-    Note: In production, this should be protected by admin role check.
-    """
-    # TODO: Add admin role check
-    # if not user.is_admin:
-    #     raise HTTPException(status_code=403, detail="Admin access required")
-
-    # This endpoint loads credits to a specific institution
-    # For tenant-scoped requests, use the current tenant
-    from app.tenants.context import get_current_tenant
-
-    tenant_ctx = get_current_tenant()
-    if not tenant_ctx:
-        raise HTTPException(status_code=400, detail="No tenant context. Use /admin/tenants/{id}/load-credits instead.")
+    """Load credits to current tenant wallet (admin only)."""
+    _require_tenant_admin(tenant, user, db)
 
     result = wallet_service.load_credits(
         db,
-        tenant_ctx.institution_id,
+        tenant.id,
         request.amount_cents,
         request.description,
     )
@@ -128,11 +128,6 @@ class AutoRenewConfigRequest(BaseModel):
     interval_days: int | None = None
 
 
-class AutoRenewCardRequest(BaseModel):
-    """PayTR kart kaydetme isteği (iframe ile)."""
-    pass
-
-
 @router.get("/auto-renew")
 async def get_auto_renew_config(
     tenant: Institution = Depends(require_tenant_active),
@@ -152,10 +147,13 @@ async def get_auto_renew_config(
 @router.post("/auto-renew/configure")
 async def configure_auto_renew(
     request: AutoRenewConfigRequest,
+    user: User = Depends(get_current_user),
     tenant: Institution = Depends(require_tenant_active),
     db: Session = Depends(get_db),
 ):
     """Configure auto-renew settings for current tenant."""
+    _require_tenant_admin(tenant, user, db)
+
     if request.amount_cents is not None:
         tenant.auto_renew_amount_cents = max(1000, request.amount_cents)  # min $10
     if request.threshold_cents is not None:
@@ -179,10 +177,13 @@ async def configure_auto_renew(
 
 @router.post("/auto-renew/test")
 async def test_auto_renew(
+    user: User = Depends(get_current_user),
     tenant: Institution = Depends(require_tenant_active),
     db: Session = Depends(get_db),
 ):
     """Test auto-renew for current tenant (manual trigger)."""
+    _require_tenant_admin(tenant, user, db)
+
     from app.services.paytr_recurring import process_auto_renew_for_institution
 
     result = process_auto_renew_for_institution(db, tenant.id)

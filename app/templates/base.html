@@ -5,6 +5,21 @@
 <!-- DEBUG_FILE: base.html v1 -->
 <html lang="{{ _locale }}"{% if _locale in ('ar', 'he') %} dir="rtl"{% endif %}>
 <head>
+  <script>
+    (function () {
+      try {
+        var stored = localStorage.getItem('norya-theme');
+        var prefersDark = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+        var isDark = stored ? stored === 'dark' : prefersDark;
+        if (isDark) {
+          document.documentElement.classList.add('dark');
+        } else {
+          document.documentElement.classList.remove('dark');
+        }
+        document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+      } catch (e) {}
+    })();
+  </script>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   {% include "partials/gsc_meta.html" %}
@@ -47,6 +62,74 @@
   </noscript>
   <style>
     html, body { overflow-x: hidden; }
+    html.dark { color-scheme: dark; }
+    html.dark body {
+      background: #0f1720;
+      color: #e5eef2;
+    }
+    html.dark .bg-norya-surface,
+    html.dark .bg-surface,
+    html.dark .bg-surface-container,
+    html.dark .bg-surface-container-low,
+    html.dark .bg-surface-container-lowest,
+    html.dark .bg-surface-container-high,
+    html.dark .bg-surface-container-highest {
+      background: #0f1720 !important;
+    }
+    html.dark .text-norya-ink,
+    html.dark .text-on-surface {
+      color: #e5eef2 !important;
+    }
+    html.dark .text-norya-ink-muted,
+    html.dark .text-on-surface-variant {
+      color: #9fb0bb !important;
+    }
+    html.dark header.site-header,
+    html.dark footer,
+    html.dark .mobile-drawer {
+      background: rgba(15, 23, 32, 0.96) !important;
+      color: #e5eef2;
+      border-color: rgba(148, 163, 184, 0.16) !important;
+    }
+    html.dark .mobile-drawer a,
+    html.dark .mobile-drawer button,
+    html.dark header.site-header a,
+    html.dark footer a {
+      color: inherit;
+    }
+    html.dark .mobile-drawer a:hover {
+      background: rgba(14,165,164,.12);
+    }
+    html.dark .border-norya-ink-subtle\/20,
+    html.dark .border-norya-ink-subtle\/10,
+    html.dark .border-outline-variant\/20,
+    html.dark .border-outline-variant\/12,
+    html.dark .border-outline-variant\/10 {
+      border-color: rgba(148, 163, 184, 0.18) !important;
+    }
+    .theme-toggle-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 2.75rem;
+      height: 2.75rem;
+      border-radius: 999px;
+      border: 1px solid rgba(15, 23, 42, 0.12);
+      background: rgba(255,255,255,0.8);
+      color: #0f172a;
+      transition: background .2s ease, color .2s ease, border-color .2s ease, transform .2s ease;
+      flex-shrink: 0;
+    }
+    .theme-toggle-btn:hover { transform: translateY(-1px); }
+    html.dark .theme-toggle-btn {
+      background: rgba(30, 41, 59, 0.9);
+      color: #f8fafc;
+      border-color: rgba(148, 163, 184, 0.18);
+    }
+    .theme-toggle-btn .theme-icon-dark { display: none; }
+    .theme-toggle-btn .theme-icon-light { display: inline; }
+    html.dark .theme-toggle-btn .theme-icon-dark { display: inline; }
+    html.dark .theme-toggle-btn .theme-icon-light { display: none; }
     /* Header: mobile-first — mobile: logo + hamburger only; desktop (>=768px): logo + nav + CTA */
     header.site-header { width: 100%; overflow-x: clip; }
     header.site-header nav {
@@ -169,6 +252,10 @@
     <nav class="max-w-6xl mx-auto h-14 sm:h-16 flex items-center justify-between" aria-label="{{ _base_ui.nav_aria_label|default('Main menu') }}">
       <a href="{{ localized_home_path(request, _locale) }}" class="flex items-center shrink-0 min-w-0" aria-label="{{ _brand }} home"><img src="/static/norya_logo_transparent_trim.png" alt="{{ _brand }}" class="h-8 sm:h-9 w-auto object-contain" width="200" height="50" loading="eager" /></a>
       <div class="nav-right">
+        <button type="button" id="theme-toggle" class="theme-toggle-btn" aria-label="Temayı değiştir" aria-pressed="false" title="Temayı değiştir">
+          <span class="theme-icon-light" aria-hidden="true">☀️</span>
+          <span class="theme-icon-dark" aria-hidden="true">🌙</span>
+        </button>
         <div class="nav-links-desktop">
           <a href="/about?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_about|default('About') }}</a>
           <a href="/how-it-works?lang={{ _locale }}" class="text-sm font-medium text-norya-ink-muted hover:text-norya-ink">{{ _base_ui.nav_how|default('How it works') }}</a>
@@ -202,6 +289,10 @@
       <span class="font-semibold text-norya-ink">{{ _base_ui.nav_menu|default('Menu') }}</span>
       <button type="button" onclick="toggleBaseDrawer()" class="w-9 h-9 rounded-lg border border-norya-ink-subtle/30 flex items-center justify-center" aria-label="{{ _base_ui.nav_close|default('Close') }}">✕</button>
     </div>
+    <button type="button" id="theme-toggle-mobile" onclick="toggleNoryaTheme(); if (window.innerWidth < 768) toggleBaseDrawer();" class="theme-toggle-btn mb-3 self-start" aria-label="Temayı değiştir" aria-pressed="false" title="Temayı değiştir">
+      <span class="theme-icon-light" aria-hidden="true">☀️</span>
+      <span class="theme-icon-dark" aria-hidden="true">🌙</span>
+    </button>
     <a href="/analyze" onclick="toggleBaseDrawer()" class="font-semibold bg-norya-brand text-white hover:bg-norya-brand-hover rounded-xl text-center py-3 mb-2 shadow-norya-brand/30">{{ _base_ui.cta_analyze|default('Analyze') }}</a>
     <div class="flex flex-col gap-1">
       <a href="{{ localized_home_path(request, _locale) }}" onclick="toggleBaseDrawer()" class="hover:bg-norya-brand/5">{{ _base_ui.nav_home|default('Home') }}</a>
@@ -325,6 +416,45 @@
   {% include "partials/scripts_lang.html" %}
 
   <script>
+    function applyNoryaTheme(theme) {
+      var isDark = theme === 'dark';
+      document.documentElement.classList.toggle('dark', isDark);
+      document.documentElement.style.colorScheme = isDark ? 'dark' : 'light';
+      try { localStorage.setItem('norya-theme', theme); } catch (e) {}
+      var toggleIds = ['theme-toggle', 'theme-toggle-mobile'];
+      toggleIds.forEach(function (id) {
+        var btn = document.getElementById(id);
+        if (btn) btn.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+      });
+    }
+
+    function toggleNoryaTheme() {
+      var isDark = document.documentElement.classList.contains('dark');
+      applyNoryaTheme(isDark ? 'light' : 'dark');
+    }
+
+    (function () {
+      var btn = document.getElementById('theme-toggle');
+      var mobileBtn = document.getElementById('theme-toggle-mobile');
+      if (btn) btn.addEventListener('click', toggleNoryaTheme);
+      if (mobileBtn) mobileBtn.addEventListener('click', function () {});
+
+      var mq = window.matchMedia ? window.matchMedia('(prefers-color-scheme: dark)') : null;
+      if (mq) {
+        var onChange = function (e) {
+          try {
+            if (!localStorage.getItem('norya-theme')) {
+              applyNoryaTheme(e.matches ? 'dark' : 'light');
+            }
+          } catch (err) {}
+        };
+        if (mq.addEventListener) mq.addEventListener('change', onChange);
+        else if (mq.addListener) mq.addListener(onChange);
+      }
+
+      applyNoryaTheme(document.documentElement.classList.contains('dark') ? 'dark' : 'light');
+    })();
+
     function toggleBaseDrawer() {
       var back = document.getElementById('base-drawer-backdrop');
       var drawer = document.getElementById('base-drawer');

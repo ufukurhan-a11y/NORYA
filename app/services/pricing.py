@@ -15,6 +15,7 @@ DEFAULT_PLAN_CODE_MAP = {
     "single_13eur": ("single", 1404),
     "monthly_50eur": ("monthly", 5400),
     "yearly_99eur": ("yearly", 10692),
+    "guest_single_14eur": ("guest", 1404),
 }
 
 

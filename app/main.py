@@ -7,6 +7,7 @@ import time
 import uuid
 from datetime import datetime, timedelta, timezone
 from contextlib import asynccontextmanager
+from html import escape
 from pathlib import Path
 from urllib.parse import quote
 from urllib.request import urlopen
@@ -35,6 +36,7 @@ from sqlalchemy.exc import IntegrityError as SQLIntegrityError
 from sqlmodel import Session, select
 
 from app.admin import admin_router as new_admin_router
+from app.admin.deps import ADMIN_COOKIE, require_admin_secret_or_cookie, verify_admin_cookie
 from app.api.admin import get_admin_html, router as admin_router
 from app.api.auth import router as auth_router
 from app.api.institution import router as institution_api_router, page_router as institution_page_router
@@ -110,6 +112,7 @@ from app.tools_i18n import get_egfr_content, get_homa_ir_content, get_tools_hub_
 from app.pay_i18n import get_pay_ui, get_plan_display_name, get_plan_benefits
 from app.pricing_page_i18n import PRICING_HREFLANG_LANGS, enrich_pricing_context
 from app.blog_i18n import (
+    ARTICLES,
     BLOG_LANGS,
     BLOG_LANGS_PREMIUM,
     BLOG_UI,
@@ -1035,8 +1038,18 @@ def ping():
 
 @app.get("/health")
 def health():
-    """Render health-check için ultra hafif endpoint (bağımlılık yok)."""
-    return {"ok": True}
+    """Lightweight health-check with basic dependency visibility for tests and deploy probes."""
+    database_status = "ok"
+    try:
+        with Session(engine) as db:
+            db.exec(select(1))
+    except Exception:
+        database_status = "error"
+    return {
+        "status": "ok",
+        "openai_configured": is_openai_configured(),
+        "database": database_status,
+    }
 
 
 # /health/ai: OpenAI erişim kontrolü, 60 sn TTL cache (admin dashboard için)
@@ -1084,6 +1097,124 @@ COUNTRY_TO_LANG = {
     "RS": "en", "BA": "en", "ME": "en",
 }
 DEFAULT_LANG = "en"
+
+COUNTRY_DISPLAY_NAMES = {
+    "TR": {"en": "Turkey", "tr": "Türkiye"},
+    "DE": {"en": "Germany", "de": "Deutschland"},
+    "GB": {"en": "United Kingdom"},
+    "US": {"en": "United States"},
+    "FR": {"en": "France", "fr": "France"},
+    "ES": {"en": "Spain", "es": "España"},
+    "IT": {"en": "Italy", "it": "Italia"},
+    "IN": {"en": "India", "hi": "भारत"},
+    "AE": {"en": "United Arab Emirates", "ar": "الإمارات العربية المتحدة"},
+    "SA": {"en": "Saudi Arabia", "ar": "المملكة العربية السعودية"},
+    "CA": {"en": "Canada"},
+    "AU": {"en": "Australia"},
+    "AT": {"en": "Austria", "de": "Österreich"},
+    "CH": {"en": "Switzerland", "de": "Schweiz"},
+}
+
+COUNTRY_CONTENT_REGISTRY: dict[str, dict[str, dict[str, object]]] = {
+    "DE": {
+        "en": {
+            "meta_title": "Blood test interpretation for Germany | NoryaAI",
+            "meta_description": "Blood test explanation for people in Germany with doctor-ready summaries, multilingual support and country-aware guidance.",
+            "hero_title": "Understand blood test results in Germany",
+            "hero_sub": "Built for people in Germany who want a clearer explanation before the next GP or specialist visit.",
+            "faq_q1": "Can I use Norya for blood test results from Germany?",
+            "faq_a1": "Yes. Norya is designed for international lab formats and helps people in Germany read common blood test markers in clearer language.",
+            "faq_q2": "Is this useful before a doctor visit in Germany?",
+            "faq_a2": "Yes. Many users in Germany use Norya to organise key markers, reference ranges and questions before speaking with their doctor.",
+            "internal_links": [
+                {"href": "/en/blood-test-results", "label": "Blood test results guide"},
+                {"href": "/en/understand-lab-results", "label": "Understand lab results"},
+                {"href": "/en/tools", "label": "Free lab tools"},
+            ],
+        },
+        "de": {
+            "meta_title": "Blutwerte verstehen in Deutschland | NoryaAI",
+            "meta_description": "Blutwerte für Nutzer in Deutschland verständlich erklärt – mit strukturierter Zusammenfassung, mehrsprachiger Unterstützung und arztfreundlichem PDF.",
+            "hero_title": "Blutwerte in Deutschland besser verstehen",
+            "hero_sub": "Für Menschen in Deutschland, die Laborwerte vor dem nächsten Hausarzt- oder Facharzttermin klarer einordnen möchten.",
+            "faq_q1": "Kann ich Norya für Laborwerte aus Deutschland nutzen?",
+            "faq_a1": "Ja. Norya unterstützt gängige Laborformate und hilft dabei, Blutwerte in Deutschland verständlicher zu lesen.",
+            "faq_q2": "Ist das vor einem Arzttermin in Deutschland hilfreich?",
+            "faq_a2": "Ja. Viele Nutzer in Deutschland nutzen Norya, um Marker, Referenzbereiche und offene Fragen vor dem Arztgespräch zu strukturieren.",
+            "internal_links": [
+                {"href": "/de/blutwerte-verstehen", "label": "Blutwerte verstehen"},
+                {"href": "/de/laborwerte-verstehen", "label": "Laborwerte verstehen"},
+                {"href": "/en/tools", "label": "Kostenlose Labor-Tools"},
+            ],
+        },
+    },
+    "TR": {
+        "tr": {
+            "meta_title": "Türkiye için kan tahlili yorumu | NoryaAI",
+            "meta_description": "Türkiye'deki kullanıcılar için kan tahlili sonuçlarını daha anlaşılır hale getiren, doktor görüşmesine hazırlık odaklı açıklamalar.",
+            "hero_title": "Türkiye'de kan tahlili sonuçlarını daha net anlayın",
+            "hero_sub": "Türkiye'deki kullanıcılar için, doktor randevusundan önce laboratuvar sonuçlarını daha anlaşılır özetleyen yapı.",
+            "faq_q1": "Norya Türkiye'deki laboratuvar sonuçları için kullanılabilir mi?",
+            "faq_a1": "Evet. Norya yaygın laboratuvar formatlarını destekler ve Türkiye'deki kullanıcıların kan değerlerini daha anlaşılır okumasına yardımcı olur.",
+            "faq_q2": "Doktor randevusundan önce faydalı olur mu?",
+            "faq_a2": "Evet. Kullanıcılar önemli belirteçleri, referans aralıklarını ve sorulacak noktaları önceden toparlamak için kullanabilir.",
+            "internal_links": [
+                {"href": "/tr/kan-tahlili-sonucu", "label": "Kan tahlili sonucu rehberi"},
+                {"href": "/tr/kan-degerleri-anlama", "label": "Kan değerlerini anlama"},
+                {"href": "/en/tools", "label": "Ücretsiz laboratuvar araçları"},
+            ],
+        },
+        "en": {
+            "meta_title": "Blood test interpretation for Turkey | NoryaAI",
+            "meta_description": "Clear blood test guidance for users in Turkey with structured summaries and doctor-visit preparation.",
+            "hero_title": "Understand blood test results in Turkey",
+            "hero_sub": "Clearer lab explanations for people in Turkey before the next doctor appointment.",
+            "faq_q1": "Can I use Norya for lab results from Turkey?",
+            "faq_a1": "Yes. Norya helps users in Turkey organise and understand common blood test markers in plain language.",
+            "faq_q2": "Can this help before a doctor visit in Turkey?",
+            "faq_a2": "Yes. It is useful for reviewing markers, reference ranges and follow-up questions before the appointment.",
+            "internal_links": [
+                {"href": "/en/blood-test-results", "label": "Blood test results guide"},
+                {"href": "/en/understand-lab-results", "label": "Understand lab results"},
+                {"href": "/en/tools", "label": "Free lab tools"},
+            ],
+        },
+    },
+    "SA": {
+        "ar": {
+            "meta_title": "شرح نتائج تحاليل الدم في السعودية | NoryaAI",
+            "meta_description": "شرح أوضح لنتائج تحاليل الدم للمستخدمين في السعودية مع ملخصات منظمة وتجهيز أفضل قبل مراجعة الطبيب.",
+            "hero_title": "افهم نتائج تحاليل الدم في السعودية بشكل أوضح",
+            "hero_sub": "مناسب للمستخدمين في السعودية الذين يريدون قراءة أوضح للتحاليل قبل الموعد الطبي القادم.",
+            "faq_q1": "هل يمكن استخدام Norya مع نتائج المختبر في السعودية؟",
+            "faq_a1": "نعم. تساعد Norya على قراءة المؤشرات الشائعة بشكل أوضح وتدعم الاستخدام متعدد اللغات للمستخدمين في السعودية.",
+            "faq_q2": "هل يفيد ذلك قبل زيارة الطبيب؟",
+            "faq_a2": "نعم. يمكن استخدامه لتنظيم المؤشرات المهمة والمجالات المرجعية والأسئلة قبل الموعد الطبي.",
+            "internal_links": [
+                {"href": "/ar", "label": "الصفحة الرئيسية العربية"},
+                {"href": "/en/tools", "label": "أدوات المختبر"},
+                {"href": "/how-it-works?lang=ar", "label": "كيف يعمل"},
+            ],
+        },
+        "en": {
+            "meta_title": "Blood test interpretation for Saudi Arabia | NoryaAI",
+            "meta_description": "Country-specific blood test guidance for users in Saudi Arabia with clearer summaries and multilingual support.",
+            "hero_title": "Understand blood test results in Saudi Arabia",
+            "hero_sub": "Clearer lab explanations for users in Saudi Arabia before the next medical appointment.",
+            "faq_q1": "Can I use Norya for lab results from Saudi Arabia?",
+            "faq_a1": "Yes. Norya helps users in Saudi Arabia understand common blood test markers with structured, plain-language summaries.",
+            "faq_q2": "Is it useful before a medical appointment?",
+            "faq_a2": "Yes. It can help organise markers, reference ranges and questions before speaking with a clinician.",
+            "internal_links": [
+                {"href": "/en/blood-test-results", "label": "Blood test results guide"},
+                {"href": "/en/tools", "label": "Free lab tools"},
+                {"href": "/how-it-works?lang=ar", "label": "How it works in Arabic"},
+            ],
+        },
+    },
+}
+
+COUNTRY_LANDING_INDEXABLE_CODES = frozenset({code.lower() for code in COUNTRY_TO_LANG})
 
 # Ülke kodu -> para birimi (sizin tahsilat EUR; ziyaretçiye kendi para biriminde gösterilir)
 COUNTRY_TO_CURRENCY = {
@@ -2997,6 +3128,571 @@ def _landing_response(locale: str, request: Request):
         raw,
         headers={"Cache-Control": "public, max-age=0, s-maxage=600, must-revalidate"},
     )
+
+
+def _country_landing_supported_locales(country_code: str) -> list[str]:
+    country_upper = (country_code or "").strip().upper()
+    preferred = COUNTRY_TO_LANG.get(country_upper, "en")
+    ordered = [preferred]
+    for loc in ("en", "de", "tr", "fr", "es", "it", "he", "ar", "hi"):
+        if loc not in ordered and loc in LANDING_ROUTES:
+            ordered.append(loc)
+    return [loc for loc in ordered if loc in LANDING_ROUTES]
+
+
+
+def _country_landing_path(locale: str, country_code: str) -> str:
+    return f"/{locale}/countries/{country_code.strip().lower()}"
+
+
+
+def _country_display_name(country_code: str, locale: str) -> str:
+    country_upper = (country_code or "").strip().upper()
+    names = COUNTRY_DISPLAY_NAMES.get(country_upper) or {}
+    lang = (locale or "en").split("-", 1)[0].lower()
+    return names.get(lang) or names.get("en") or country_upper
+
+
+
+def _country_content_for(locale: str, country_code: str) -> dict[str, object]:
+    locale_l = _normalize_landing_locale(locale)
+    country_upper = (country_code or "").strip().upper()
+    country_content = COUNTRY_CONTENT_REGISTRY.get(country_upper, {})
+    if locale_l in country_content:
+        return dict(country_content[locale_l])
+    if "en" in country_content:
+        return dict(country_content["en"])
+    return {}
+
+
+
+def _country_default_faq(locale: str, country_code: str) -> dict[str, str]:
+    locale_l = _normalize_landing_locale(locale)
+    country_name = _country_display_name(country_code, locale_l)
+    templates = {
+        "tr": {
+            "faq_q1": f"{country_name} için Norya nasıl kullanılır?",
+            "faq_a1": f"Norya, {country_name} içindeki kullanıcıların yaygın kan tahlili belirteçlerini daha anlaşılır okumasına yardımcı olur.",
+            "faq_q2": f"{country_name} içinde doktor görüşmesi öncesi faydalı olur mu?",
+            "faq_a2": "Evet. Referans aralıklarını, dikkat çeken belirteçleri ve takip sorularını önceden düzenlemek için kullanılabilir.",
+        },
+        "de": {
+            "faq_q1": f"Wie kann ich Norya für {country_name} nutzen?",
+            "faq_a1": f"Norya hilft Nutzern in {country_name}, häufige Blutwerte verständlicher zu lesen und besser einzuordnen.",
+            "faq_q2": f"Ist das vor einem Arzttermin in {country_name} hilfreich?",
+            "faq_a2": "Ja. Damit lassen sich Referenzbereiche, auffällige Marker und Rückfragen vor dem Termin besser strukturieren.",
+        },
+        "ar": {
+            "faq_q1": f"كيف أستخدم Norya في {country_name}؟",
+            "faq_a1": f"تساعد Norya المستخدمين في {country_name} على قراءة مؤشرات تحليل الدم الشائعة بطريقة أوضح وأسهل.",
+            "faq_q2": f"هل هذا مفيد قبل مراجعة الطبيب في {country_name}؟",
+            "faq_a2": "نعم. يمكن استخدامه لتنظيم المجالات المرجعية والعلامات المهمة والأسئلة قبل الموعد.",
+        },
+        "en": {
+            "faq_q1": f"How can I use Norya for {country_name}?",
+            "faq_a1": f"Norya helps users in {country_name} understand common blood test markers in clearer, plain language.",
+            "faq_q2": f"Is this useful before a doctor visit in {country_name}?",
+            "faq_a2": "Yes. It helps organise reference ranges, flagged markers and follow-up questions before the appointment.",
+        },
+    }
+    return templates.get(locale_l, templates["en"])
+
+
+
+def _country_blog_link_labels(locale: str, country_name: str) -> list[str]:
+    locale_l = _normalize_landing_locale(locale)
+    labels = {
+        "tr": [
+            f"{country_name} için yeni blog rehberi",
+            f"{country_name} kullanıcıları için popüler blog konusu",
+            f"{country_name} için detaylı laboratuvar yazısı",
+        ],
+        "de": [
+            f"Neuer Blogleitfaden für {country_name}",
+            f"Beliebtes Blogthema für Nutzer in {country_name}",
+            f"Detaillierter Laborartikel für {country_name}",
+        ],
+        "ar": [
+            f"دليل مدونة جديد لمستخدمي {country_name}",
+            f"موضوع شائع من المدونة في {country_name}",
+            f"مقال مخبري مفصل لمستخدمي {country_name}",
+        ],
+        "en": [
+            f"New blog guide for {country_name}",
+            f"Popular blog topic for {country_name} users",
+            f"Detailed lab article for {country_name}",
+        ],
+    }
+    return labels.get(locale_l, labels["en"])
+
+
+
+def _country_blog_links(locale: str, country_code: str, limit: int = 3) -> list[dict[str, str]]:
+    locale_l = _normalize_landing_locale(locale)
+    country_name = _country_display_name(country_code, locale_l)
+    blog_candidates: list[dict[str, object]] = []
+    for art in ARTICLES:
+        slug = art.slugs.get(locale_l)
+        if not slug:
+            continue
+        title = str(art.titles.get(locale_l) or art.titles.get(DEFAULT_BLOG_LANG) or "").strip()
+        if not title:
+            continue
+        blog_candidates.append(
+            {
+                "href": f"/{locale_l}/blog/{slug}",
+                "title": title,
+                "published_at": getattr(art, "published_at", None),
+            }
+        )
+    blog_candidates.sort(key=lambda item: item.get("published_at") or date.min, reverse=True)
+    label_templates = _country_blog_link_labels(locale_l, country_name)
+    blog_links: list[dict[str, str]] = []
+    for idx, item in enumerate(blog_candidates[:limit]):
+        title = str(item.get("title") or "").strip()
+        if not title:
+            continue
+        label_prefix = label_templates[min(idx, len(label_templates) - 1)]
+        blog_links.append({"href": str(item["href"]), "label": f"{label_prefix}: {title}"})
+    return blog_links
+
+
+
+def _country_default_internal_links(locale: str, country_code: str) -> list[dict[str, str]]:
+    locale_l = _normalize_landing_locale(locale)
+    country_lower = (country_code or "").strip().lower()
+    country_name = _country_display_name(country_code, locale_l)
+    labels = {
+        "tr": [
+            {"href": f"/{locale_l}", "label": f"{country_name} için ana sayfa"},
+            {"href": "/tr/kan-tahlili-sonucu", "label": "Kan tahlili sonucu rehberi"},
+            {"href": "/tr/kan-degerleri-anlama", "label": "Kan değerleri anlama"},
+            {"href": "/how-it-works?lang=tr", "label": "Nasıl çalışır"},
+            {"href": "/en/tools", "label": "Ücretsiz laboratuvar araçları"},
+            {"href": f"/{locale_l}/countries/{country_lower}", "label": f"{country_name} ülke sayfası"},
+        ],
+        "de": [
+            {"href": f"/{locale_l}", "label": f"Startseite für {country_name}"},
+            {"href": "/de/blutwerte-verstehen", "label": "Blutwerte verstehen"},
+            {"href": "/de/laborwerte-verstehen", "label": "Laborwerte verstehen"},
+            {"href": "/how-it-works?lang=de", "label": "So funktioniert es"},
+            {"href": "/de/deutschland-blutwerte-guide", "label": "Deutschland Blutwerte Guide"},
+            {"href": f"/{locale_l}/countries/{country_lower}", "label": f"Länderseite {country_name}"},
+        ],
+        "ar": [
+            {"href": f"/{locale_l}", "label": f"الصفحة الرئيسية لـ {country_name}"},
+            {"href": "/how-it-works?lang=ar", "label": "كيف يعمل"},
+            {"href": "/en/blood-test-results", "label": "دليل نتائج تحليل الدم"},
+            {"href": "/en/tools", "label": "أدوات المختبر المجانية"},
+            {"href": f"/{locale_l}/countries/{country_lower}", "label": f"صفحة {country_name}"},
+        ],
+        "en": [
+            {"href": f"/{locale_l}", "label": f"{country_name} homepage"},
+            {"href": "/en/blood-test-results", "label": "Blood test results guide"},
+            {"href": "/en/understand-lab-results", "label": "Understand lab results"},
+            {"href": "/how-it-works", "label": "How it works"},
+            {"href": "/en/tools", "label": "Free lab tools"},
+            {"href": "/en/sample-reports", "label": "Sample reports"},
+        ],
+    }
+    return labels.get(locale_l, labels["en"])
+
+
+
+def _merge_country_internal_links(locale: str, country_code: str, configured_links: object) -> list[dict[str, str]]:
+    merged_links: list[dict[str, str]] = []
+    seen: set[tuple[str, str]] = set()
+    sources = []
+    if isinstance(configured_links, list):
+        sources.append(configured_links)
+    else:
+        sources.append(_country_default_internal_links(locale, country_code))
+    sources.append(_country_blog_links(locale, country_code))
+
+    for source in sources:
+        for item in source:
+            if not isinstance(item, dict):
+                continue
+            href = str(item.get("href") or "").strip()
+            label = str(item.get("label") or "").strip()
+            if not href or not label or not href.startswith("/"):
+                continue
+            key = (href, label)
+            if key in seen:
+                continue
+            seen.add(key)
+            merged_links.append({"href": href, "label": label})
+    return merged_links
+
+
+
+def _country_landing_meta(locale: str, country_code: str) -> dict:
+    base_meta = dict(get_landing_meta(locale))
+    country_name = _country_display_name(country_code, locale)
+    content = _country_content_for(locale, country_code)
+    base_title = (base_meta.get("meta_title") or BRAND_NAME).strip()
+    base_desc = (base_meta.get("meta_description") or "").strip()
+    base_meta["meta_title"] = str(content.get("meta_title") or f"{base_title} | {country_name}")
+    if content.get("meta_description"):
+        base_meta["meta_description"] = str(content["meta_description"])
+    elif base_desc:
+        base_meta["meta_description"] = f"{base_desc} Country-specific guidance for users in {country_name}."
+    else:
+        base_meta["meta_description"] = f"Country-specific blood test interpretation guidance for users in {country_name}."
+    return base_meta
+
+
+
+def _country_landing_ui(locale: str, country_code: str) -> dict:
+    ui = dict(get_landing_ui(locale))
+    country_name = _country_display_name(country_code, locale)
+    content = _country_content_for(locale, country_code)
+    hero_title = (ui.get("hero_title") or "").strip()
+    hero_sub = (ui.get("hero_sub") or "").strip()
+    if content.get("hero_title"):
+        ui["hero_title"] = str(content["hero_title"])
+    elif hero_title:
+        ui["hero_title"] = f"{hero_title} — {country_name}"
+    if content.get("hero_sub"):
+        ui["hero_sub"] = str(content["hero_sub"])
+    elif hero_sub:
+        ui["hero_sub"] = f"{hero_sub} Tailored for visitors in {country_name}."
+
+    faq_overrides = _country_default_faq(locale, country_code)
+    for key, value in faq_overrides.items():
+        ui[key] = value
+    for key, value in content.items():
+        if isinstance(key, str) and (key.startswith("faq_") or key.startswith("hero_")):
+            ui[key] = value
+
+    ui["country_name"] = country_name
+    ui["country_code"] = country_code.strip().upper()
+    ui["country_internal_links"] = _merge_country_internal_links(locale, country_code, content.get("internal_links"))
+    ui["country_sections"] = content.get("sections") or _country_default_sections(locale, country_code)
+    return ui
+
+
+
+def _country_default_sections(locale: str, country_code: str) -> list[dict[str, object]]:
+    locale_l = _normalize_landing_locale(locale)
+    country_name = _country_display_name(country_code, locale_l)
+    templates = {
+        "tr": [
+            {
+                "title": f"{country_name} için nasıl kullanılır?",
+                "body": f"Bu sayfa, {country_name} içindeki kullanıcıların kan tahlili sonuçlarını daha hızlı yorumlamasına yardımcı olmak için hazırlandı. Raporunuzu yükleyip biyobelirteç bazında sade açıklamalar alabilirsiniz.",
+                "bullets": [
+                    "CBC, demir, tiroid, lipid ve temel metabolik panel sonuçlarını daha okunur özetler.",
+                    "Doktor randevusu öncesi dikkat çeken değerleri ve sorulabilecek takip başlıklarını netleştirir.",
+                    f"{country_name} odaklı landing yapısı sayesinde arama motorları için daha açık ülke sinyali üretir.",
+                ],
+            },
+            {
+                "title": "Kimler için faydalı?",
+                "body": "Kendi laboratuvar sonucunu anlamak isteyen bireyler, aile üyelerine yardımcı olan kullanıcılar ve sağlık görüşmesi öncesi ön hazırlık yapmak isteyenler için uygundur.",
+                "bullets": [
+                    "Sonuçlarını ilk kez yorumlayan kullanıcılar",
+                    "Belirli bir paneli tekrar tekrar takip eden kronik takip kullanıcıları",
+                    "İkinci görüşme veya kontrol öncesi notlarını düzenlemek isteyenler",
+                ],
+            },
+        ],
+        "de": [
+            {
+                "title": f"Wie wird Norya in {country_name} genutzt?",
+                "body": f"Diese Länderseite wurde dafür aufgebaut, Blutwerte für Nutzer in {country_name} verständlicher zusammenzufassen. Sie können Ihren Befund hochladen und Marker in klarer Sprache einordnen lassen.",
+                "bullets": [
+                    "CBC-, Eisen-, Schilddrüsen-, Lipid- und Stoffwechselwerte werden kompakt erklärt.",
+                    "Auffällige Marker und Rückfragen für den Arzttermin lassen sich vorab strukturieren.",
+                    f"Die Seite sendet für {country_name} klarere SEO- und Relevanzsignale an Suchmaschinen.",
+                ],
+            },
+            {
+                "title": "Für wen ist das hilfreich?",
+                "body": "Geeignet für Personen, die Laborberichte selbst besser verstehen möchten, Familienmitglieder unterstützen oder sich gezielt auf Arztgespräche vorbereiten wollen.",
+                "bullets": [
+                    "Menschen, die Blutwerte zum ersten Mal interpretieren",
+                    "Nutzer mit wiederkehrenden Verlaufskontrollen",
+                    "Personen, die vor dem Termin Fragen und Marker priorisieren möchten",
+                ],
+            },
+        ],
+        "ar": [
+            {
+                "title": f"كيف يمكن استخدام Norya في {country_name}؟",
+                "body": f"تم إعداد هذه الصفحة لمساعدة المستخدمين في {country_name} على فهم نتائج تحاليل الدم بشكل أسرع وأوضح. يمكنك رفع التقرير والحصول على شرح مبسط لكل مؤشر.",
+                "bullets": [
+                    "تلخيص أوضح لتحاليل CBC والحديد والغدة الدرقية والدهون والتمثيل الغذائي.",
+                    "تنظيم المؤشرات المهمة والأسئلة المناسبة قبل زيارة الطبيب.",
+                    f"إرسال إشارات أوضح لمحركات البحث حول ارتباط الصفحة بالمستخدمين في {country_name}.",
+                ],
+            },
+            {
+                "title": "لمن يفيد هذا؟",
+                "body": "مفيد للأشخاص الذين يريدون فهم نتائجهم بأنفسهم، أو مساعدة أحد أفراد العائلة، أو التحضير لموعد طبي بشكل أفضل.",
+                "bullets": [
+                    "المستخدمون الذين يقرؤون النتائج لأول مرة",
+                    "من يتابعون تحاليل متكررة بمرور الوقت",
+                    "من يريدون ترتيب الأسئلة المهمة قبل الموعد",
+                ],
+            },
+        ],
+        "en": [
+            {
+                "title": f"How is Norya used in {country_name}?",
+                "body": f"This country page is designed to help people in {country_name} understand blood test results with less friction. Users can upload a report and review biomarker explanations in plain language.",
+                "bullets": [
+                    "Summarises CBC, iron, thyroid, lipid and metabolic markers in a more readable format.",
+                    "Helps organise flagged markers and follow-up questions before a clinician visit.",
+                    f"Creates clearer country relevance signals for search engines targeting {country_name}.",
+                ],
+            },
+            {
+                "title": "Who is this useful for?",
+                "body": "Useful for people reviewing their own lab report, helping a family member, or preparing questions before an appointment.",
+                "bullets": [
+                    "First-time readers of blood test reports",
+                    "Users tracking repeat panels over time",
+                    "People preparing a more focused clinician discussion",
+                ],
+            },
+        ],
+    }
+    return templates.get(locale_l, templates["en"])
+
+
+
+def _country_body_sections_html(ui: dict) -> str:
+    sections = ui.get("country_sections") or []
+    safe_sections: list[str] = []
+    for section in sections:
+        if not isinstance(section, dict):
+            continue
+        title = str(section.get("title") or "").strip()
+        body = str(section.get("body") or "").strip()
+        bullets = section.get("bullets") or []
+        safe_bullets: list[str] = []
+        if isinstance(bullets, list):
+            for bullet in bullets:
+                bullet_text = str(bullet or "").strip()
+                if bullet_text:
+                    safe_bullets.append(f"<li>{escape(bullet_text)}</li>")
+        if not title and not body and not safe_bullets:
+            continue
+        safe_sections.append(
+            "<article class=\"rounded-3xl border border-slate-200 bg-white p-6 shadow-sm\">"
+            f"<h2 class=\"text-xl font-semibold text-slate-900 mb-3\">{escape(title)}</h2>"
+            f"<p class=\"text-sm sm:text-base text-slate-600 leading-7 mb-4\">{escape(body)}</p>"
+            f"<ul class=\"space-y-2 text-sm text-slate-700 list-disc pl-5\">{''.join(safe_bullets)}</ul>"
+            "</article>"
+        )
+    if not safe_sections:
+        return ""
+    section_title = {
+        "tr": "Ülkeye özel kullanım rehberi",
+        "de": "Länderspezifischer Nutzungsleitfaden",
+        "ar": "دليل استخدام مخصص حسب الدولة",
+    }.get(str(ui.get("country_locale") or ""), "Country-specific usage guide")
+    return (
+        "\n<section data-country-sections=\"true\" class=\"bg-slate-50 border-t border-slate-200/70\">"
+        "<div class=\"max-w-6xl mx-auto px-4 sm:px-6 py-10\">"
+        f"<div class=\"max-w-3xl mb-6\"><h2 class=\"text-2xl font-semibold text-slate-900\">{escape(section_title)}</h2></div>"
+        f"<div class=\"grid gap-5 md:grid-cols-2\">{''.join(safe_sections)}</div>"
+        "</div></section>\n"
+    )
+
+
+
+def _country_structured_data(base_url: str, canonical_url: str, ui: dict) -> list[dict[str, object]]:
+    locale = str(ui.get("country_locale") or "en")
+    country_name = str(ui.get("country_name") or ui.get("country_code") or "")
+    title = str(ui.get("hero_title") or "")
+    description = str(ui.get("hero_sub") or "")
+    country_code = str(ui.get("country_code") or "").upper()
+    breadcrumbs = [
+        {"@type": "ListItem", "position": 1, "name": "Norya", "item": f"{base_url}/{locale}"},
+        {"@type": "ListItem", "position": 2, "name": "Countries", "item": f"{base_url}/{locale}/countries/{country_code.lower()}"},
+        {"@type": "ListItem", "position": 3, "name": country_name, "item": canonical_url},
+    ]
+    item_list = []
+    for idx, item in enumerate(ui.get("country_internal_links") or [], start=1):
+        if not isinstance(item, dict):
+            continue
+        href = str(item.get("href") or "").strip()
+        label = str(item.get("label") or "").strip()
+        if not href.startswith("/") or not label:
+            continue
+        item_list.append({
+            "@type": "ListItem",
+            "position": idx,
+            "url": f"{base_url}{href}",
+            "name": label,
+        })
+    return [
+        {
+            "@context": "https://schema.org",
+            "@type": "WebPage",
+            "name": title or country_name,
+            "description": description,
+            "url": canonical_url,
+            "inLanguage": locale,
+            "about": {
+                "@type": "Place",
+                "name": country_name,
+                "identifier": country_code,
+            },
+            "isPartOf": {"@type": "WebSite", "name": BRAND_NAME, "url": base_url},
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": breadcrumbs,
+        },
+        {
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            "name": f"{country_name} internal resources",
+            "itemListElement": item_list,
+        },
+    ]
+
+
+
+def _country_internal_links_html(ui: dict) -> str:
+    links = ui.get("country_internal_links") or []
+    safe_links: list[str] = []
+    for item in links:
+        if not isinstance(item, dict):
+            continue
+        href = str(item.get("href") or "").strip()
+        label = str(item.get("label") or "").strip()
+        if not href or not label or not href.startswith("/"):
+            continue
+        safe_links.append(
+            f'<a href="{escape(href)}" class="inline-flex items-center rounded-full border border-slate-200 px-4 py-2 text-sm font-medium text-slate-700 hover:border-teal-300 hover:text-teal-700 transition-colors">{escape(label)}</a>'
+        )
+    if not safe_links:
+        return ""
+    section_title = {
+        "tr": "İlgili ülke rehberleri",
+        "de": "Relevante Länder- und Laborleitfäden",
+        "ar": "روابط وإرشادات ذات صلة",
+    }.get(str(ui.get("country_locale") or ""), "Related country resources")
+    return (
+        "\n<section data-country-links=\"true\" class=\"bg-white border-t border-slate-200/70\">"
+        "<div class=\"max-w-6xl mx-auto px-4 sm:px-6 py-8\">"
+        f"<h2 class=\"text-lg font-semibold text-slate-900 mb-4\">{escape(section_title)}</h2>"
+        f"<div class=\"flex flex-wrap gap-3\">{''.join(safe_links)}</div>"
+        "</div></section>\n"
+    )
+
+
+
+def _country_hreflang_urls(base_url: str, country_code: str) -> list[tuple[str, str]]:
+    urls: list[tuple[str, str]] = []
+    for loc in _country_landing_supported_locales(country_code):
+        hreflang = "en-CA" if loc == "en-ca" else loc
+        urls.append((hreflang, f"{base_url}{_country_landing_path(loc, country_code)}"))
+    urls.append(("x-default", f"{base_url}{_country_landing_path('en', country_code)}"))
+    return urls
+
+
+
+def _country_landing_response(locale: str, country_code: str, request: Request):
+    import re
+    from html import escape
+
+    index_file = STATIC_DIR / "index.html"
+    if not index_file.is_file():
+        index_file = Path.cwd() / "static" / "index.html"
+    if not index_file.is_file():
+        return JSONResponse(
+            content={"durum": "hazır", "servis": "norya-api", "mesaj": "static/index.html bulunamadı."},
+            status_code=404,
+        )
+
+    locale = _normalize_landing_locale(locale)
+    country_upper = (country_code or "").strip().upper()
+    if country_upper.lower() not in COUNTRY_LANDING_INDEXABLE_CODES:
+        raise HTTPException(status_code=404, detail="Not Found")
+
+    raw = index_file.read_text(encoding="utf-8")
+    raw = _inject_ga(raw)
+    raw = _inject_whatsapp(raw, locale)
+    raw = _inject_company(raw)
+    raw = _inject_google_site_verification(raw)
+
+    base_url = str(request.base_url).rstrip("/")
+    canonical_url = f"{base_url}{_country_landing_path(locale, country_upper)}"
+    raw = _inject_canonical(raw, canonical_url)
+
+    meta = _country_landing_meta(locale, country_upper)
+    ui = _country_landing_ui(locale, country_upper)
+    title = escape(meta.get("meta_title", BRAND_NAME))
+    desc = escape(meta.get("meta_description", ""))
+    og_locale = meta.get("og_locale", "en_US")
+
+    raw = re.sub(r"<title>[^<]*</title>", f"<title>{title}</title>", raw, count=1)
+    raw = re.sub(r'<meta name="description" content="[^"]*" */?>', f'<meta name="description" content="{desc}" />', raw, count=1)
+    raw = re.sub(r'<meta property="og:title" content="[^"]*" */?>', f'<meta property="og:title" content="{title}" />', raw, count=1)
+    raw = re.sub(r'<meta property="og:description" content="[^"]*" */?>', f'<meta property="og:description" content="{desc}" />', raw, count=1)
+    raw = re.sub(r'<meta property="og:locale" content="[^"]*" */?>', f'<meta property="og:locale" content="{og_locale}" />', raw, count=1)
+    raw = re.sub(r'<meta name="twitter:title" content="[^"]*" */?>', f'<meta name="twitter:title" content="{title}" />', raw, count=1)
+    raw = re.sub(r'<meta name="twitter:description" content="[^"]*" */?>', f'<meta name="twitter:description" content="{desc}" />', raw, count=1)
+    raw = re.sub(r'<meta property="og:url" content="[^"]*" */?>', f'<meta property="og:url" content="{canonical_url}" />', raw, count=1)
+    raw = re.sub(r'<link rel="canonical" href="[^"]*" */?>', f'<link rel="canonical" href="{canonical_url}" />', raw, count=1)
+
+    hreflang_block = "\n".join(
+        f'  <link rel="alternate" hreflang="{code}" href="{href}" />'
+        for code, href in _country_hreflang_urls(base_url, country_upper)
+    )
+    raw = re.sub(
+        r'  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*(?:  <link rel="alternate" hreflang="[^"]*" href="[^"]*" */?>\s*)*',
+        hreflang_block + "\n  ",
+        raw,
+        count=1,
+    )
+
+    lang_attr = "en" if locale == "en-ca" else locale
+    dir_attr = ' dir="rtl"' if locale in ("he", "ar") else ""
+    raw = re.sub(r'<html lang="[^"]*" id="html-lang"', f'<html lang="{lang_attr}" id="html-lang"{dir_attr}', raw, count=1)
+
+    ui["country_locale"] = locale
+    landing_script = (
+        f'<script>window.__LANDING_LOCALE__="{escape(locale)}";'
+        f'window.__COUNTRY_CONTEXT__={{"countryCode":"{escape(country_upper)}","countryName":{json.dumps(ui.get("country_name", country_upper), ensure_ascii=False)},"internalLinks":{json.dumps(ui.get("country_internal_links", []), ensure_ascii=False)},"sections":{json.dumps(ui.get("country_sections", []), ensure_ascii=False)}}};'
+        f"window.__LANDING_T__={json.dumps(ui, ensure_ascii=False)};</script>\n  "
+    )
+    faq_entities = []
+    for i in range(1, 7):
+        q = ui.get(f"faq_q{i}")
+        a = ui.get(f"faq_a{i}")
+        if q and a:
+            faq_entities.append({"@type": "Question", "name": q, "acceptedAnswer": {"@type": "Answer", "text": a}})
+    if faq_entities:
+        faq_schema = json.dumps({"@context": "https://schema.org", "@type": "FAQPage", "mainEntity": faq_entities}, ensure_ascii=False)
+        landing_script += f'\n  <script type="application/ld+json">\n  {faq_schema}\n  </script>\n  '
+    for schema_obj in _country_structured_data(base_url, canonical_url, ui):
+        landing_script += f'\n  <script type="application/ld+json">\n  {json.dumps(schema_obj, ensure_ascii=False)}\n  </script>\n  '
+    raw = raw.replace("</head>", landing_script + "</head>", 1)
+    body_sections_html = _country_body_sections_html(ui)
+    if body_sections_html:
+        raw = raw.replace("</body>", body_sections_html + "</body>", 1)
+    internal_links_html = _country_internal_links_html(ui)
+    if internal_links_html:
+        raw = raw.replace("</body>", internal_links_html + "</body>", 1)
+
+    return HTMLResponse(raw, headers={"Cache-Control": "public, max-age=0, s-maxage=600, must-revalidate"})
+
+
+
+def iter_country_landing_sitemap_urls() -> list[tuple[str, str]]:
+    urls: list[tuple[str, str]] = []
+    for country_code in sorted(COUNTRY_LANDING_INDEXABLE_CODES):
+        for locale in _country_landing_supported_locales(country_code):
+            urls.append((locale, country_code))
+    return urls
+
 
 
 def _index_response(request: Request | None = None):
@@ -6818,10 +7514,12 @@ async def paytr_webhook(request: Request, db: Session = Depends(get_db)):
 
 
 @app.post("/payment/grant")
-def payment_grant(body: GrantPaymentRequest, db: Session = Depends(get_db)):
-    """Destek: merchant_oid ile siparişi bulup kullanıcıya hak tanır (admin_secret gerekir)."""
-    if not settings.admin_secret or body.admin_secret != settings.admin_secret:
-        raise HTTPException(status_code=403, detail="Yetkisiz.")
+def payment_grant(
+    body: GrantPaymentRequest,
+    db: Session = Depends(get_db),
+    _admin: None = Depends(require_admin_secret_or_cookie),
+):
+    """Destek: merchant_oid ile siparişi bulup kullanıcıya hak tanır."""
     stmt = select(PaymentOrder).where(PaymentOrder.merchant_oid == body.merchant_oid)
     order = db.exec(stmt).first()
     if not order:
@@ -6848,10 +7546,8 @@ def payment_grant(body: GrantPaymentRequest, db: Session = Depends(get_db)):
 
 
 @app.post("/admin/cache/purge-expired")
-def admin_cache_purge_expired(x_admin_secret: str | None = Header(None, alias="X-Admin-Secret")):
-    """Süresi dolan ai_cache kayıtlarını siler. X-Admin-Secret header gerekir."""
-    if not settings.admin_secret or x_admin_secret != settings.admin_secret:
-        raise HTTPException(status_code=403, detail="Yetkisiz.")
+def admin_cache_purge_expired(_admin: None = Depends(require_admin_secret_or_cookie)):
+    """Süresi dolan ai_cache kayıtlarını siler."""
     deleted = purge_ai_cache_expired(_cache_conn)
     return {"deleted": deleted}
 
@@ -8190,6 +8886,9 @@ def sitemap_xml(request: Request):
     for _gg_lang, _gg_slug in GERMANY_GUIDE_SLUGS.items():
         add(f"{base_url}/{_gg_lang}/{_gg_slug}", priority="0.7", changefreq="monthly", lastmod=today)
 
+    for _country_lang, _country_code in iter_country_landing_sitemap_urls():
+        add(f"{base_url}{_country_landing_path(_country_lang, _country_code)}", priority="0.65", changefreq="monthly", lastmod=today)
+
     # Blog listeleri: /en/blog, /de/blog, /it/blog, /fr/blog dahil (BLOG_LANGS_PREMIUM)
     for lang in BLOG_LANGS_PREMIUM:
         add(f"{base_url}/{lang}/blog", priority="0.8", lastmod=today)
@@ -8218,32 +8917,47 @@ def indexnow_key_file(key: str):
     return PlainTextResponse(_INDEXNOW_KEY, media_type="text/plain")
 
 
+def _country_discovery_urls(base_url: str) -> list[str]:
+    return [
+        f"{base_url}{_country_landing_path(locale, country_code)}"
+        for locale, country_code in iter_country_landing_sitemap_urls()
+    ]
+
+
 @app.post("/api/indexnow")
 async def submit_indexnow(request: Request, url_list: list[str] | None = None):
-    """Admin: Bing/Yandex'e URL bildirimi gönderir. Body: {"url_list": ["https://..."]}"""
+    """Admin: Bing/Yandex'e URL bildirimi gönderir. Body: {"url_list": ["https://..."], "include_country_urls": true}"""
     if not _INDEXNOW_KEY:
         raise HTTPException(status_code=501, detail="IndexNow key not configured.")
-    admin_cookie = request.cookies.get("norya_admin")
-    if not admin_cookie or admin_cookie != settings.admin_secret:
+    admin_cookie = request.cookies.get(ADMIN_COOKIE)
+    if not verify_admin_cookie(admin_cookie):
         raise HTTPException(status_code=403, detail="Forbidden")
+    base_url = str(request.base_url).rstrip("/")
     if not url_list:
         body = await request.json()
         url_list = body.get("url_list", [])
+        if body.get("include_country_urls"):
+            url_list = list(url_list) + _country_discovery_urls(base_url)
     if not url_list:
         raise HTTPException(status_code=400, detail="url_list is required.")
-    base_url = str(request.base_url).rstrip("/")
+    deduped_url_list = list(dict.fromkeys(str(url).strip() for url in url_list if str(url).strip()))
     host = base_url.replace("https://", "").replace("http://", "")
     payload = {
         "host": host,
         "key": _INDEXNOW_KEY,
         "keyLocation": f"{base_url}/{_INDEXNOW_KEY}.txt",
-        "urlList": url_list[:10000],
+        "urlList": deduped_url_list[:10000],
     }
     import httpx
     try:
         async with httpx.AsyncClient(timeout=10) as client:
             resp = await client.post("https://api.indexnow.org/indexnow", json=payload)
-            return {"ok": True, "status": resp.status_code, "submitted": len(url_list)}
+            return {
+                "ok": True,
+                "status": resp.status_code,
+                "submitted": len(payload["urlList"]),
+                "included_country_urls": sum(1 for url in payload["urlList"] if "/countries/" in url),
+            }
     except Exception as exc:
         return {"ok": False, "error": str(exc)}
 
@@ -8514,6 +9228,18 @@ def medical_board_page_with_lang(request: Request, lang: str):
         "medical_board.html",
         {"request": request, "lang": lang_l},
     )
+
+
+@app.get("/{lang}/countries/{country_code}", response_class=HTMLResponse)
+def country_landing_page(request: Request, lang: str, country_code: str):
+    """Locale-prefixed country landing with stable canonical and hreflang metadata."""
+    lang_l = (lang or "").strip().lower()
+    if lang_l not in LANDING_ROUTES:
+        raise HTTPException(status_code=404, detail="Not Found")
+    country_l = (country_code or "").strip().lower()
+    if country_l not in COUNTRY_LANDING_INDEXABLE_CODES:
+        raise HTTPException(status_code=404, detail="Not Found")
+    return _country_landing_response(lang_l, country_l, request)
 
 
 _KNOWN_SPA_PATHS = frozenset({
