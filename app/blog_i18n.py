@@ -4842,7 +4842,7 @@ def _article_wbc_rbc_hgb_hct() -> Article:
 def _article_fasting_blood_sugar() -> Article:
     """Açlık kan şekeri sonucu / Fasting blood sugar — Second wave."""
     published = date(2026, 3, 15)
-    cover = "/static/images/blog/hba1c-hero.png"
+    cover = "/static/images/blog/fasting-blood-sugar-clinical-review-hero.jpg"
     return Article(
         id="aclik-kan-sekeri-sonucu-nasil-degerlendirilir",
         published_at=published,
@@ -4870,7 +4870,7 @@ def _article_fasting_blood_sugar() -> Article:
 def _article_hba1c_meaning() -> Article:
     """HbA1c sonucu ne anlama gelir? / What does HbA1c result mean? — Second wave (focused)."""
     published = date(2026, 3, 15)
-    cover = "/static/images/blog/hba1c-hero.png"
+    cover = "/static/images/blog/hba1c-long-term-glucose-review-hero.jpg"
     return Article(
         id="hba1c-sonucu-ne-anlama-gelir",
         published_at=published,
@@ -6152,7 +6152,7 @@ def _article_homa_ir() -> Article:
     """HOMA-IR nedir / What is HOMA-IR — 9 dil, full body."""
     from app.blog_article_homa_ir_content import get_homa_ir_sections_by_lang, get_homa_ir_faq_schema_qa
     published = date(2026, 3, 24)
-    cover = "/static/images/blog/hba1c-hero.png"
+    cover = "/static/images/blog/homa-ir-insulin-resistance-consultation-hero.jpg"
     slugs = {
         "tr": "homa-ir-nedir",
         "en": "what-is-homa-ir",
@@ -6258,7 +6258,7 @@ def _article_fasting_insulin_high() -> Article:
     """Açlık insülini yüksekse ne anlama gelir / High fasting insulin meaning — 9 dil, full body."""
     from app.blog_article_fasting_insulin_content import get_fasting_insulin_sections_by_lang, get_fasting_insulin_faq_schema_qa
     published = date(2026, 3, 24)
-    cover = "/static/images/blog/hba1c-hero.png"
+    cover = "/static/images/blog/fasting-insulin-lab-review-hero.jpg"
     slugs = {
         "tr": "aclik-insulini-yuksekse-ne-anlama-gelir",
         "en": "high-fasting-insulin-meaning",

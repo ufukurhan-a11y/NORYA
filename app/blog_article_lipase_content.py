@@ -189,7 +189,7 @@ def _sections_tr() -> list:
             body_html=(
                 "<p><strong>NoryaAI</strong>, kan tahlili raporunuzu yüklediğinizde lipaz dahil tüm "
                 "biyobelirteçlerinizi yaşınıza, cinsiyetinize ve klinik bağlamınıza göre analiz eder. "
-                "Yapay zekâ destekli sistemimiz referans aralık dışı değerleri vurgular, olası nedenleri "
+                "Analiz sistemimiz referans aralık dışı değerleri vurgular, olası nedenleri "
                 "özetler ve hekiminize sormak isteyebileceğiniz soruları önerir.</p>"
                 "<p>Sonuçlarınızı hemen değerlendirmek için <a href=\"/analyze\">lab raporunuzu "
                 "yükleyin</a>. Farklı plan seçeneklerimiz hakkında bilgi almak için "

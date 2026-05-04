@@ -164,7 +164,7 @@ def _en() -> dict:
 def _tr() -> dict:
     return {
         "meta_title": "Kan Tahlili Sonu\u00e7lar\u0131 A\u00e7\u0131klamas\u0131 \u2014 Raporunuz Ger\u00e7ekte Ne Anlat\u0131yor | NoryaAI",
-        "meta_description": "Kan tahlili sonu\u00e7lar\u0131n\u0131z\u0131n ne anlama geldi\u011finden emin de\u011fil misiniz? K\u0131saltmalar\u0131, referans aral\u0131klar\u0131n\u0131 ve birimleri nas\u0131l okuyaca\u011f\u0131n\u0131z\u0131 \u00f6\u011frenin \u2014 ve yap\u0131land\u0131r\u0131lm\u0131\u015f bir yapay zek\u00e2 raporunun bunu nas\u0131l netle\u015ftirdi\u011fini g\u00f6r\u00fcn.",
+        "meta_description": "Kan tahlili sonu\u00e7lar\u0131n\u0131z\u0131n ne anlama geldi\u011finden emin de\u011fil misiniz? K\u0131saltmalar\u0131, referans aral\u0131klar\u0131n\u0131 ve birimleri nas\u0131l okuyaca\u011f\u0131n\u0131z\u0131 \u00f6\u011frenin \u2014 ve yap\u0131land\u0131r\u0131lm\u0131\u015f bir analiz raporunun bunu nas\u0131l netle\u015ftirdi\u011fini g\u00f6r\u00fcn.",
         "hero_title": "Kan Tahlili Sonu\u00e7lar\u0131 A\u00e7\u0131klamas\u0131",
         "hero_sub": "Laboratuvar raporlar\u0131 \u00e7o\u011fu insan\u0131n okumay\u0131 \u00f6\u011frenmedi\u011fi k\u0131saltmalar, say\u0131lar ve aral\u0131klarla doludur. Bu rehber, raporlar\u0131 kafa kar\u0131\u015ft\u0131r\u0131c\u0131 yapan nedenleri, nelere dikkat etmeniz gerekti\u011fini ve yap\u0131land\u0131r\u0131lm\u0131\u015f bir yakla\u015f\u0131m\u0131n bir sonraki doktor ziyaretinizden \u00f6nce sonu\u00e7lar\u0131n\u0131z\u0131 anlaman\u0131za nas\u0131l yard\u0131mc\u0131 olabilece\u011fini kapsar.",
         "cta_hero_primary": "Kan tahlilimi analiz et",
@@ -250,7 +250,7 @@ def _tr() -> dict:
             },
             {
                 "icon": "\U0001f9e0",
-                "title": "Yapay zek\u00e2 verilerinizi yap\u0131land\u0131r\u0131r",
+                "title": "Sistem verilerinizi yap\u0131land\u0131r\u0131r",
                 "desc": "De\u011ferler, birimler ve aral\u0131klar \u00e7\u0131kar\u0131l\u0131r ve net kategoriler halinde d\u00fczenlenir.",
             },
             {
