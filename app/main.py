@@ -439,7 +439,9 @@ app = FastAPI(
 # gunicorn app.main:app -w 1 -k uvicorn.workers.UvicornWorker --bind 0.0.0.0:$PORT --timeout 120
 
 # Statik dosyalar: proje kökünde /static klasöründen servis edilir
-app.mount("/static", StaticFiles(directory="static"), name="static")
+# NOT: İkinci mount (satır ~1029) kaldırıldı; buradaki tek mount yeterli.
+# STATIC_DIR zaten yukarıda Path olarak çözümlendi; string "static" yerine onu kullanıyoruz.
+app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 # Static asset Cache-Control middleware
 _STATIC_CACHE_BY_TYPE = {
@@ -796,10 +798,15 @@ async def request_id_and_latency(request: Request, call_next):
     return response
 
 
+# CORS: allow_origins=["*"] ile allow_credentials=True aynı anda kullanılamaz
+# (CORS spec ihlali — tarayıcılar reddeder). Wildcard geliyorsa credentials kapatılır.
+_cors_origins = _cors_origins_list()
+_cors_allow_credentials = "*" not in _cors_origins
+
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=_cors_origins_list(),
-    allow_credentials=True,
+    allow_origins=_cors_origins,
+    allow_credentials=_cors_allow_credentials,
     allow_methods=["*"],
     allow_headers=["*"],
 )
@@ -930,7 +937,7 @@ def landing_de(request: Request):
 _OG_LOCALE_FAQ = {"tr": "tr_TR", "en": "en_US", "de": "de_DE", "es": "es_ES", "fr": "fr_FR", "it": "it_IT", "he": "he_IL", "hi": "hi_IN", "ar": "ar_SA"}
 
 def _render_faq(request: Request, lang: str):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     faq_data = get_faq_content(lang)
     slug = get_faq_slug(lang)
     meta = {"meta_title": faq_data["meta_title"], "meta_description": faq_data["meta_description"]}
@@ -1017,6 +1024,7 @@ def admin_yonetim():
 
 
 # PWA: Service worker kökten sunulur (scope / için)
+# Duplicate static mount kaldırıldı — /static zaten yukarıda (satır ~441) mount edildi.
 if STATIC_DIR.is_dir():
     _sw_path = STATIC_DIR / "sw.js"
     if _sw_path.is_file():
@@ -1026,7 +1034,6 @@ if STATIC_DIR.is_dir():
                 _sw_path.read_text(encoding="utf-8"),
                 media_type="application/javascript; charset=utf-8",
             )
-    app.mount("/static", StaticFiles(directory=str(STATIC_DIR)), name="static")
 
 
 @app.get("/ping")
@@ -2075,7 +2082,7 @@ def legal_page(request: Request, page: str):
     content = get_legal_content(page, lang)
     if not content:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/legal/{page}"
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/legal/{page}?lang={code}"} for code in LEGAL_HREFLANG_LANGS]
     hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/legal/{page}?lang=en"})
@@ -2102,7 +2109,7 @@ def iade_iptal_page(request: Request):
     if not content:
         raise HTTPException(status_code=404, detail="Sayfa bulunamadı")
     page_title = content.get("title", "Refund") if isinstance(content, dict) else "Refund"
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/iade-iptal"
     hreflang_alternates = [{"lang": code, "url": f"{base_url}/iade-iptal?lang={code}"} for code in LEGAL_HREFLANG_LANGS]
     hreflang_alternates.append({"lang": "x-default", "url": f"{base_url}/iade-iptal?lang=en"})
@@ -2152,7 +2159,7 @@ def refund_request_page(
     lang = _refund_lang_from_request(request)
     t = get_pay_ui(lang)
     ui = get_legal_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/iade-talebi"
     hreflang_alternates = _refund_page_hreflang_alternates(base_url)
     return templates.TemplateResponse(
@@ -2193,7 +2200,7 @@ def refund_request_submit(
     email = (email or "").strip()
     reason = (reason or "").strip()[:500]
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical = f"{base_url}/iade-talebi"
     href_alts = _refund_page_hreflang_alternates(base_url)
     if not merchant_oid or not email:
@@ -2262,7 +2269,7 @@ def kurumsal_page(request: Request):
     if lang not in ENTERPRISE_LANGS:
         lang = "tr"
     t = get_enterprise_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "enterprise/kurumsal.html",
         {"request": request, "lang": lang, "t": t, "canonical_url": f"{base_url}/kurumsal"},
@@ -2278,7 +2285,7 @@ def hastaneler_icin_page(request: Request, lang: str = "tr"):
     if lang not in ENTERPRISE_LANGS:
         lang = "tr"
     t = get_hastaneler_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     hreflang_tags = get_hastaneler_hreflang_tags(base_url, lang)
     return templates.TemplateResponse(
         "enterprise/hastaneler.html",
@@ -2324,7 +2331,7 @@ def blog_index(request: Request, lang: str):
         raise HTTPException(status_code=404, detail="Blog not available in this language.")
     request.state.locale = lang
     posts_raw = list_articles_for_lang(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     posts = []
     for p in posts_raw:
         posts.append(
@@ -2473,7 +2480,7 @@ def blog_detail(request: Request, lang: str, slug: str):
         raise HTTPException(status_code=404, detail="Article not found.")
     request.state.locale = lang
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/{lang}/blog/{slug}"
     cover_absolute = art["cover_image"] if art["cover_image"].startswith("http") else f"{base_url}{art['cover_image']}"
 
@@ -2990,6 +2997,39 @@ async def api_chat(request: Request):
         return JSONResponse(status_code=500, content={"error": "Bir hata oluştu, lütfen tekrar deneyin."})
 
 
+def _canonical_base_url(request: Request | None = None) -> str:
+    """
+    SEO: Canonical base URL döndürür.
+
+    Öncelik sırası:
+    1. settings.canonical_site_url (production'da her zaman bu tanımlı olmalı)
+    2. request'ten X-Forwarded-Proto + Host header'ları (proxy/Render arkası)
+    3. request.base_url (son çare; iç IP dönebilir)
+
+    Render/proxy arkasında request.base_url iç IP verebilir (http://10.x.x.x:PORT).
+    canonical_site_url tanımlıysa daima onu kullan — sitemap ile tutarlılık sağlar.
+    """
+    canon = (getattr(settings, "canonical_site_url", "") or "").strip().rstrip("/")
+    if canon:
+        return canon
+    if request is not None:
+        # Proxy başlıklarından scheme + host çıkar (Render, nginx, Cloudflare)
+        proto = (
+            request.headers.get("x-forwarded-proto")
+            or request.headers.get("x-scheme")
+            or ""
+        ).strip().lower().split(",")[0].strip()
+        host = (
+            request.headers.get("x-forwarded-host")
+            or request.headers.get("host")
+            or ""
+        ).strip().split(",")[0].strip()
+        if proto and host:
+            return f"{proto}://{host}".rstrip("/")
+        return str(request.base_url).rstrip("/")
+    return "https://noryaai.com"
+
+
 def _inject_canonical(raw: str, canonical_url: str) -> str:
     """HTML içinde </head> öncesine canonical link ekler (SEO)."""
     tag = f'<link rel="canonical" href="{canonical_url}" />'
@@ -3018,7 +3058,7 @@ def _landing_response(locale: str, request: Request):
     raw = _inject_company(raw)
     raw = _inject_google_site_verification(raw)
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/{locale}"
     raw = _inject_canonical(raw, canonical_url)
 
@@ -3622,7 +3662,7 @@ def _country_landing_response(locale: str, country_code: str, request: Request):
     raw = _inject_company(raw)
     raw = _inject_google_site_verification(raw)
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}{_country_landing_path(locale, country_upper)}"
     raw = _inject_canonical(raw, canonical_url)
 
@@ -3722,7 +3762,7 @@ def _index_response(request: Request | None = None):
         if request is not None:
             import re
             from html import escape
-            base_url = str(request.base_url).rstrip("/")
+            base_url = _canonical_base_url(request)
             canonical_url = base_url + request.url.path
             raw = re.sub(
                 r'<link rel="canonical" href="[^"]*" */?>',
@@ -3813,7 +3853,7 @@ def report_page(request: Request):
         raw = _inject_whatsapp(raw, _lang)
         raw = _inject_company(raw)
         raw = _inject_google_site_verification(raw)
-        base_url = str(request.base_url).rstrip("/")
+        base_url = _canonical_base_url(request)
         raw = _inject_canonical(raw, f"{base_url}/report")
         return HTMLResponse(
             raw,
@@ -3870,7 +3910,7 @@ def about_page(request: Request):
     lang = _page_lang(request)
     request.state.locale = lang
     t = get_about_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "about.html",
         {
@@ -3892,7 +3932,7 @@ def contact_page(request: Request):
     lang = _page_lang(request)
     request.state.locale = lang
     t = get_contact_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "contact.html",
         {
@@ -3912,7 +3952,7 @@ def _for_doctors_landing_response(request: Request):
     lang = _page_lang(request)
     request.state.locale = lang
     t = get_for_doctors_landing_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/for-doctors"
     slug_sr = get_sample_reports_landing_slug(lang)
     sample_reports_url = f"{base_url}/{lang}/{slug_sr}"
@@ -3943,7 +3983,7 @@ def _b2b_audience_response(request: Request, slug: str):
     lang = _page_lang(request)
     request.state.locale = lang
     t = get_b2b_audience_ui(slug, lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/{slug}"
     return templates.TemplateResponse(
         "b2b/audience_page.html",
@@ -3996,7 +4036,7 @@ def clinical_demo_page(request: Request):
 @app.get("/press", response_class=HTMLResponse)
 def press_page(request: Request):
     """Basın & Medya sayfası."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "press.html",
         {
@@ -4011,7 +4051,7 @@ def press_page(request: Request):
 @app.get("/about/founder", response_class=HTMLResponse)
 def founder_page(request: Request):
     """Kurucu profil sayfası – Ufuk Urhan."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "founder.html",
         {
@@ -4026,7 +4066,7 @@ def founder_page(request: Request):
 @app.get("/impact", response_class=HTMLResponse)
 def impact_page(request: Request):
     """Canlı istatistik / etki sayfası."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "impact.html",
         {
@@ -4047,7 +4087,7 @@ def impact_page(request: Request):
 @app.get("/science", response_class=HTMLResponse)
 def science_page(request: Request):
     """Bilim & Teknoloji sayfası – Stitch v20 tasarımı."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "science.html",
         {
@@ -4074,7 +4114,7 @@ def security_page(request: Request):
             lang = parsed if parsed in SECURITY_LANGS else DEFAULT_SECURITY_LANG
     request.state.locale = lang
     t = get_security_ui(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/security"
     hreflang_alternates = [
         {"lang": loc, "url": f"{base_url}/security?lang={loc}"}
@@ -4097,7 +4137,7 @@ def security_page(request: Request):
 @app.get("/technology", response_class=HTMLResponse)
 def technology_page(request: Request):
     """Teknoloji sayfası – Stitch v22 tasarımı."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "technology.html",
         {
@@ -4134,7 +4174,7 @@ def trust_page(request: Request):
     request.state.locale = lang
     t = get_trust_ui(lang)
     meta = get_trust_meta(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "trust.html",
         {
@@ -4156,7 +4196,7 @@ def methodology_page(request: Request):
     request.state.locale = lang
     t = get_methodology_ui(lang)
     meta = get_methodology_meta(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "methodology.html",
         {
@@ -4178,7 +4218,7 @@ def medical_review_page(request: Request):
     request.state.locale = lang
     t = get_medical_review_ui(lang)
     meta = get_medical_review_meta(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "medical_review.html",
         {
@@ -4200,7 +4240,7 @@ def transparency_page(request: Request):
     request.state.locale = lang
     t = get_transparency_ui(lang)
     meta = get_transparency_meta(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "transparency.html",
         {
@@ -4224,7 +4264,7 @@ def how_it_works_page(request: Request):
     lang = _how_it_works_lang_from_request(request)
     t = get_how_it_works_ui(lang)
     meta = get_how_it_works_meta(lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/how-it-works"
     hreflang_alternates = [
         {"lang": code, "url": f"{base_url}/how-it-works?lang={code}"}
@@ -6331,7 +6371,7 @@ def verify_report_page(
                 except Exception:
                     pass
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return templates.TemplateResponse(
         "verify.html",
         {
@@ -6370,7 +6410,7 @@ def pay_page(
     t = get_pay_ui(lang)
     plan_display = get_plan_display_name(plan_code, lang)
     benefits = get_plan_benefits(plan_code, lang)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     prices = {code: f"{cents / 100:.2f}" for code, (_, cents) in plan_map.items()}
     prices_cents = {code: cents for code, (_, cents) in plan_map.items()}
     benefits_monthly = get_plan_benefits("monthly_50eur", lang)
@@ -7570,7 +7610,7 @@ def _render_seo_landing(request: Request, lang: str, slug: str) -> HTMLResponse:
     seo = get_seo_nav(lang)
     for k, v in seo.items():
         merged.setdefault(k, v)
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/{lang}/{slug}"
     meta = get_seo_landing_meta(lang, slug)
     hreflang_alternates = get_seo_landing_hreflang(lang, slug, base_url)
@@ -7632,7 +7672,7 @@ def _render_compare_hub(request: Request, lang: str) -> HTMLResponse:
     t = get_compare_hub(lang)
     if not t:
         raise HTTPException(status_code=404, detail="Not Found")
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/{lang}/compare/"
     return templates.TemplateResponse("compare_hub.html", {
         "request": request,
@@ -7654,7 +7694,7 @@ def _render_compare_detail(request: Request, lang: str, slug: str) -> HTMLRespon
     t = get_compare_detail(lang, slug)
     if not t:
         raise HTTPException(status_code=404, detail="Not Found")
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/{lang}/compare/{slug}"
     return templates.TemplateResponse("compare_page.html", {
         "request": request,
@@ -7698,7 +7738,7 @@ for _compare_lang in COMPARE_LANGS:
 
 @app.get("/en/why-not-generic-ai-for-blood-test-results", response_class=HTMLResponse)
 def editorial_en_why_not_generic_ai(request: Request):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     t = {
         "meta_title": "Should You Use Generic AI for Blood Test Results? | NoryaAI",
         "meta_description": "Can ChatGPT or other AI chatbots safely explain your blood test results? Learn where general-purpose AI helps, where it falls short, and when a structured tool makes more sense.",
@@ -7847,7 +7887,7 @@ def editorial_en_why_not_generic_ai(request: Request):
 def _render_upload_landing(request: Request, lang: str):
     from app.base_i18n import get_seo_nav
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     slug = get_upload_landing_slug(lang)
     t = dict(get_upload_landing_content(lang))
     for k, v in get_seo_nav(lang).items():
@@ -7905,7 +7945,7 @@ def landing_ar_upload(request: Request):
 def _render_explained_landing(request: Request, lang: str):
     from app.base_i18n import get_seo_nav
 
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     slug = get_explained_landing_slug(lang)
     t = dict(get_explained_landing_content(lang))
     for k, v in get_seo_nav(lang).items():
@@ -7961,7 +8001,7 @@ def landing_ar_explained(request: Request):
 
 
 def _render_cbc_guide(request: Request, lang: str):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     slug = get_cbc_guide_slug(lang)
     t = get_cbc_guide_content(lang)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_cbc_guide_slug(la)}"} for la in CBC_GUIDE_SLUGS]
@@ -8016,7 +8056,7 @@ def guide_ar_how_to_read_cbc(request: Request):
 
 @app.get("/en/tools", response_class=HTMLResponse)
 def tool_en_hub(request: Request):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     t = dict(get_tools_hub_content("en"))
     return templates.TemplateResponse("tools_hub.html", {
         "request": request,
@@ -8029,7 +8069,7 @@ def tool_en_hub(request: Request):
 
 @app.get("/en/tools/unit-converter", response_class=HTMLResponse)
 def tool_en_unit_converter(request: Request):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     t = {
         "meta_title": "Blood Test Unit Converter | mg/dL, mmol/L, HbA1c, Creatinine | NoryaAI",
         "meta_description": "Convert blood test values between mg/dL, mmol/L, g/dL, \u00b5mol/L, and more. Free online converter for glucose, HbA1c, cholesterol, hemoglobin, creatinine, and other common biomarkers.",
@@ -8098,7 +8138,7 @@ def tool_en_unit_converter(request: Request):
 
 @app.get("/en/tools/egfr-calculator", response_class=HTMLResponse)
 def tool_en_egfr(request: Request):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     from app.base_i18n import get_seo_nav
     t = dict(get_egfr_content("en"))
     for k, v in get_seo_nav("en").items():
@@ -8114,7 +8154,7 @@ def tool_en_egfr(request: Request):
 
 @app.get("/en/tools/homa-ir-calculator", response_class=HTMLResponse)
 def tool_en_homa_ir(request: Request):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     from app.base_i18n import get_seo_nav
     t = dict(get_homa_ir_content("en"))
     for k, v in get_seo_nav("en").items():
@@ -8129,7 +8169,7 @@ def tool_en_homa_ir(request: Request):
 
 
 def _render_sample_reports_landing(request: Request, lang: str):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     slug = get_sample_reports_landing_slug(lang)
     t = get_sample_reports_landing_content(lang)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_sample_reports_landing_slug(la)}"} for la in SAMPLE_REPORTS_SLUGS]
@@ -8205,7 +8245,7 @@ def _resolve_multilingual_internal_links(
 
 
 def _render_multilingual_landing(request: Request, lang: str):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     slug = get_multilingual_landing_slug(lang)
     t = dict(get_multilingual_landing_content(lang))
     t["internal_links"] = _resolve_multilingual_internal_links(t.get("internal_links") or [], request, lang)
@@ -8257,7 +8297,7 @@ def landing_ar_multilingual(request: Request):
     return _render_multilingual_landing(request, "ar")
 
 def _render_germany_guide(request: Request, lang: str):
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     slug = get_germany_guide_slug(lang)
     t = get_germany_guide_content(lang)
     hreflang = [{"lang": la, "url": f"{base_url}/{la}/{get_germany_guide_slug(la)}"} for la in GERMANY_GUIDE_SLUGS]
@@ -8441,7 +8481,7 @@ def seo_landing_ar_ai_blood_test_analyzer(request: Request):
 @app.get("/llms.txt", response_class=PlainTextResponse)
 def llms_txt(request: Request):
     """Concise site description for large language models (llmstxt.org)."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     return PlainTextResponse(
         "# NoryaAI\n\n"
         "## Purpose\n"
@@ -8484,7 +8524,7 @@ def llms_txt(request: Request):
 @app.get("/llms-full.txt", response_class=PlainTextResponse)
 def llms_full_txt(request: Request):
     """Extended site description with all blog articles for AI model context."""
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     lines = [
         "# NoryaAI — Full Context\n",
         "> AI-powered blood test interpretation platform founded in 2018 by Ufuk Urhan.",
@@ -8587,7 +8627,7 @@ def blog_rss_feed(request: Request, lang: str):
     lang = (lang or "").lower()[:2]
     if lang not in BLOG_LANGS_PREMIUM:
         raise HTTPException(status_code=404, detail="Feed not available for this language.")
-    base_url = str(request.base_url).rstrip("/")
+    base_url = _canonical_base_url(request)
     posts = list_articles_for_lang(lang)
 
     items_xml: list[str] = []
@@ -8760,24 +8800,28 @@ def is_public_indexable_url(path: str) -> bool:
 @app.get("/robots.txt", response_class=PlainTextResponse)
 def robots_txt(request: Request):
     """SEO: Allow all; Disallow admin ve 401 dönen path'ler; sitemap canonical URL."""
-    canon = (settings.canonical_site_url or "").strip().rstrip("/")
-    if not canon:
-        canon = str(request.base_url).rstrip("/")
+    canon = _canonical_base_url(request)
     return PlainTextResponse(
         "User-agent: *\n"
         "Allow: /\n"
+        # Private uçlar: kullanıcı oturumu / ödeme / API
         "Disallow: /admin/\n"
+        "Disallow: /admin\n"
         "Disallow: /login/\n"
+        "Disallow: /login\n"
         "Disallow: /private/\n"
         "Disallow: /search/\n"
         "Disallow: /analyze/\n"
+        "Disallow: /analyze\n"
         "Disallow: /enterprise/\n"
-        "Disallow: /pay\n"
+        "Disallow: /enterprise\n"
         "Disallow: /payment/\n"
+        "Disallow: /payment\n"
         "Disallow: /verify/\n"
         "Disallow: /api/\n"
         "Disallow: /v1/\n"
         "Disallow: /report\n"
+        "Disallow: /hastane/\n"
         "\n# AI Crawlers — explicitly allowed\n"
         "User-agent: GPTBot\n"
         "Allow: /\n"
@@ -8798,8 +8842,12 @@ def robots_txt(request: Request):
         "Allow: /\n"
         "\nUser-agent: Googlebot\n"
         "Allow: /\n"
+        "Disallow: /admin/\n"
+        "Disallow: /api/\n"
         "\nUser-agent: Bingbot\n"
         "Allow: /\n"
+        "Disallow: /admin/\n"
+        "Disallow: /api/\n"
         "\nUser-agent: Bytespider\n"
         "Allow: /\n"
         "\nUser-agent: CCBot\n"
@@ -8818,8 +8866,13 @@ def sitemap_xml(request: Request):
     - Tüm blog post URL'leri (tüm diller) otomatik eklenir.
     - lastmod = makale updatedAt (last_updated), yoksa published_at.
     - Sadece public indexable URL'ler eklenir (private route'lar filtrelenir).
+    - base_url: canonical_site_url öncelikli (Render/proxy arkasında iç IP yerine gerçek domain).
     """
-    base_url = str(request.base_url).rstrip("/")
+    # canonical_site_url tanımlıysa onu kullan; proxy/Render iç IP'sinden kaçın
+    base_url = (
+        (settings.canonical_site_url or "").strip().rstrip("/")
+        or str(request.base_url).rstrip("/")
+    )
     urls: list[str] = []
 
     def add(loc: str, priority: str = "0.8", changefreq: str = "weekly", lastmod: str | None = None):
