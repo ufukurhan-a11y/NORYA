@@ -3060,7 +3060,10 @@ def _landing_response(locale: str, request: Request):
 
     base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}/{locale}"
-    raw = _inject_canonical(raw, canonical_url)
+    # NOT: _inject_canonical burada çağrılmıyor — index.html'de zaten
+    # <link rel="canonical"> var ve aşağıdaki regex (satır ~3114) onu
+    # doğru URL'e replace ediyor. _inject_canonical ayrıca çağrılırsa
+    # farklı URL nedeniyle duplicate canonical oluşur.
 
     meta = get_landing_meta(locale)
     ui = get_landing_ui(locale)
@@ -3664,7 +3667,10 @@ def _country_landing_response(locale: str, country_code: str, request: Request):
 
     base_url = _canonical_base_url(request)
     canonical_url = f"{base_url}{_country_landing_path(locale, country_upper)}"
-    raw = _inject_canonical(raw, canonical_url)
+    # NOT: _inject_canonical burada çağrılmıyor — index.html'de zaten
+    # <link rel="canonical"> var ve aşağıdaki regex (satır ~3686) onu
+    # doğru URL'e replace ediyor. _inject_canonical ayrıca çağrılırsa
+    # farklı URL nedeniyle duplicate canonical oluşur.
 
     meta = _country_landing_meta(locale, country_upper)
     ui = _country_landing_ui(locale, country_upper)
