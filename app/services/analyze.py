@@ -2,6 +2,7 @@ import base64
 import logging
 import re
 import time
+import threading
 
 from fastapi import HTTPException
 from openai import APIError, APIConnectionError, AuthenticationError, OpenAI, RateLimitError
@@ -20,17 +21,25 @@ OPENAI_RETRY_ONCE = (RateLimitError, APIConnectionError)
 OPENAI_RETRY_TWICE_FOR_CONNECTION = True
 
 # Anahtar başına bir istemci (çoklu anahtar fallback için)
+# Lock: eşzamanlı isteklerde aynı key için çift client oluşturulmasını önler
 _openai_clients: dict[str, OpenAI] = {}
+_openai_clients_lock = threading.Lock()
 
 # Bir anahtar auth/rate limit verince diğerine geçilecek
 OPENAI_FALLBACK_EXCEPTIONS = (AuthenticationError, RateLimitError)
 
 
 def _get_client_for_key(key: str) -> OpenAI:
-    """Verilen anahtar için OpenAI istemcisi döner (önbelleklenmiş)."""
-    if key not in _openai_clients:
-        _openai_clients[key] = OpenAI(api_key=key, timeout=OPENAI_TIMEOUT)
-    return _openai_clients[key]
+    """Verilen anahtar için OpenAI istemcisi döner (thread-safe önbelleklenmiş)."""
+    # Önce lock olmadan oku (fast-path: zaten varsa)
+    client = _openai_clients.get(key)
+    if client is not None:
+        return client
+    # Yoksa lock alarak oluştur (double-checked locking)
+    with _openai_clients_lock:
+        if key not in _openai_clients:
+            _openai_clients[key] = OpenAI(api_key=key, timeout=OPENAI_TIMEOUT)
+        return _openai_clients[key]
 
 
 def _openai_create_with_fallback(create_fn):
@@ -58,11 +67,19 @@ def _openai_create_with_fallback(create_fn):
 
 
 def _openai_safe_call(create_fn):
-    """OpenAI çağrısını timeout ile yapar; RateLimitError/APIConnectionError'da 1–2 kez bekleyip tekrar dener."""
+    """
+    OpenAI çağrısını timeout ile yapar; RateLimitError/APIConnectionError'da
+    1–2 kez bekleyip tekrar dener.
+
+    NOT: Bu fonksiyon senkron context içinde (thread pool worker) çağrılır.
+    FastAPI async endpoint'lerinden çağırırken run_in_executor kullanın;
+    doğrudan async def içinde çağrılmamalıdır (event loop bloklanır).
+    """
     try:
         return create_fn()
     except OPENAI_RETRY_ONCE as e:
         logger.warning("OpenAI retry 1/2 after %s: %s", type(e).__name__, e)
+        # time.sleep burada kasıtlı senkron — bu fonksiyon zaten thread pool'da çalışır
         time.sleep(OPENAI_RETRY_WAIT)
         try:
             return create_fn()

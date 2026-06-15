@@ -65,6 +65,17 @@ ARTICLES = [
         "focus": "left",
     },
     {
+        "slug": "anion-gap-high-meaning",
+        "file": "anion-gap-clinical-lab-review-hero.jpg",
+        "title": "Anion Gap",
+        "subtitle": "Electrolyte and acid-base lab review in clinic",
+        "badge": "Acid-base marker",
+        "source": "static/images/blog/anion-gap-high-meaning-hero.jpg",
+        "accent": (13, 148, 136),
+        "accent_2": (59, 130, 246),
+        "focus": "right",
+    },
+    {
         "slug": "how-to-read-fasting-blood-sugar-results",
         "file": "fasting-blood-sugar-clinical-review-hero.jpg",
         "title": "Fasting Glucose",
